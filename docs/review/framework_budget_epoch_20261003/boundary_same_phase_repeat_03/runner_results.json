@@ -1,0 +1,52 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "death_expiry_overlap_test",
+                        "test_path":  "tests/framework/death_expiry_overlap_test.tscn",
+                        "fixed_fps":  60,
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-03T10:53:54.8045531Z",
+                        "native_exit_observed_utc":  "2026-10-03T10:53:15.7231160Z",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "1297b041-f9b4-4c2f-98f7-9d50ea0f05a5",
+                        "framework_receipt_valid":  true,
+                        "result":  "PASS",
+                        "reason":  ""
+                    },
+                    {
+                        "test_name":  "death_expiry_overlap_cold_test",
+                        "test_path":  "tests/framework/death_expiry_overlap_cold_test.tscn",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-03T10:54:17.3192883Z",
+                        "native_exit_observed_utc":  "2026-10-03T10:53:22.2468727Z",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "9933f16e-c52a-4987-ac16-68a763582a27",
+                        "framework_receipt_valid":  true,
+                        "result":  "PASS",
+                        "reason":  ""
+                    }
+                ],
+    "total":  2,
+    "invocation_id":  "b45b6611-cbcc-4b40-8e03-5abd77810617",
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "passed":  2,
+    "engine_log_errors":  0,
+    "generated_at":  "2026-10-03T18:53:23.7366900+08:00",
+    "failed":  0,
+    "suite":  "adhoc"
+}

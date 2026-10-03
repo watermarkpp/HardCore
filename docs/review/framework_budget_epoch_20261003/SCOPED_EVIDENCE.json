@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "acceptance": "NOT_RUN",
+  "parent": "e7b3e06c53fb5ec2c4c84c321f0fec6725b4564c",
+  "construction_head": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+  "content_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+  "source_files": 3566,
+  "delta_files": 4,
+  "production_files": [
+    "scripts/layers/runtime/execution/frame_budget.gd"
+  ],
+  "engine_version": "4.7.stable.official.5b4e0cb0f",
+  "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+  "engine_child_sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+  "source_zip_bytes": 15146752,
+  "source_zip_sha256": "6f3824fac8ad662558403c36a208f982a2aec829489971f41c7c74646a87fd79",
+  "archived_invocations": 39,
+  "preserved_failed_attempts": 13,
+  "framework_receipts": 89,
+  "framework_checks": 7840,
+  "final_accepted_rows": 0,
+  "scope": "epoch first-service fairness and controlled fixed-step boundary; global final acceptance still NOT_RUN",
+  "scoped_accepted_native_attempts": 118,
+  "scoped_unique_scenes": 98,
+  "scoped_accepted_framework_receipts": 42,
+  "scoped_accepted_framework_checks": 3354
+}

@@ -1,0 +1,10 @@
+[
+  {
+    "path": "tests/framework/death_burst_lifecycle_test.gd",
+    "before_sha256": "c82a8af09e45ba0d8b1ac0e83b294b7a63cef129f6145d175afe1b2314b218e6",
+    "preimage": "burst.before_same_process_phase.bin",
+    "after_sha256": "c1c177cea3428d0c14680d860fda270c2460cdf98c07ab886965a442ce021bf5",
+    "status": "NOT_RUN",
+    "reason": "two real Root/Player inputs are emitted from the same test process callback; frame distance derives from the original state duration, with strict signal/simulation checks"
+  }
+]

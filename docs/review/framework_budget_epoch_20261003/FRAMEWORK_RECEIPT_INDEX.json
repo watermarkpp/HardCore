@@ -1,0 +1,714 @@
+[
+  {
+    "label": "boundary_fixed60_wallpaced",
+    "scene": "tests/framework/death_burst_lifecycle_test.tscn",
+    "run_id": "9a89ab31-fe21-42ca-86c9-064bffec9e2f",
+    "status": "FAIL",
+    "checks": 190,
+    "failed": 2
+  },
+  {
+    "label": "boundary_fixed60_wallpaced",
+    "scene": "tests/framework/death_burst_lifecycle_cold_test.tscn",
+    "run_id": "d5377082-71a1-4da9-bad4-0d62acd0fe39",
+    "status": "FAIL",
+    "checks": 3,
+    "failed": 1
+  },
+  {
+    "label": "boundary_fixed60_wallpaced",
+    "scene": "tests/framework/death_expiry_overlap_test.tscn",
+    "run_id": "8d4f003b-2909-48f7-a028-ceba17e4e6f0",
+    "status": "FAIL",
+    "checks": 194,
+    "failed": 2
+  },
+  {
+    "label": "boundary_fixed60_wallpaced",
+    "scene": "tests/framework/death_expiry_overlap_cold_test.tscn",
+    "run_id": "b6329673-f050-441e-a58c-e63629aefef6",
+    "status": "FAIL",
+    "checks": 3,
+    "failed": 1
+  },
+  {
+    "label": "boundary_fixed60_budget_probe_typed",
+    "scene": "tests/framework/death_burst_lifecycle_test.tscn",
+    "run_id": "fd34b97d-2d39-4a31-b162-e552be65029f",
+    "status": "FAIL",
+    "checks": 190,
+    "failed": 1
+  },
+  {
+    "label": "frame_budget_once_per_epoch_red",
+    "scene": "tests/framework/frame_budget_test.tscn",
+    "run_id": "7a5ea7c0-3557-4c59-9b21-4a96400a433d",
+    "status": "FAIL",
+    "checks": 51,
+    "failed": 3
+  },
+  {
+    "label": "frame_budget_work_conserving_green",
+    "scene": "tests/framework/frame_budget_test.tscn",
+    "run_id": "f9d3dbe1-5057-4958-8f31-e868636b23b3",
+    "status": "PASS",
+    "checks": 51,
+    "failed": 0
+  },
+  {
+    "label": "frame_budget_work_conserving_green",
+    "scene": "tests/framework/budget_producer_admission_test.tscn",
+    "run_id": "e1fd8857-5c24-40cb-9565-e089b6b3bef3",
+    "status": "PASS",
+    "checks": 12,
+    "failed": 0
+  },
+  {
+    "label": "frame_budget_work_conserving_green",
+    "scene": "tests/framework/periodic_delivery_lateness_test.tscn",
+    "run_id": "a692a829-dce2-4471-8009-7cc4021cd1f9",
+    "status": "PASS",
+    "checks": 36,
+    "failed": 0
+  },
+  {
+    "label": "frame_budget_work_conserving_green",
+    "scene": "tests/framework/world_retirement_test.tscn",
+    "run_id": "06119d9e-402b-499a-a400-71eecb25b84d",
+    "status": "PASS",
+    "checks": 9,
+    "failed": 0
+  },
+  {
+    "label": "boundary_work_conserving_green",
+    "scene": "tests/framework/death_burst_lifecycle_test.tscn",
+    "run_id": "85e759bb-f17c-4d5b-be3f-86893e322b23",
+    "status": "PASS",
+    "checks": 192,
+    "failed": 0
+  },
+  {
+    "label": "boundary_work_conserving_green",
+    "scene": "tests/framework/death_burst_lifecycle_cold_test.tscn",
+    "run_id": "0bb5fc62-588e-43bd-86dd-6542c85b96cb",
+    "status": "PASS",
+    "checks": 10,
+    "failed": 0
+  },
+  {
+    "label": "boundary_work_conserving_green",
+    "scene": "tests/framework/death_expiry_overlap_test.tscn",
+    "run_id": "d6f66112-f19e-4a34-a3b4-3756979b16dc",
+    "status": "PASS",
+    "checks": 196,
+    "failed": 0
+  },
+  {
+    "label": "boundary_work_conserving_green",
+    "scene": "tests/framework/death_expiry_overlap_cold_test.tscn",
+    "run_id": "6852c17f-506a-4564-917d-e32f645be45d",
+    "status": "PASS",
+    "checks": 10,
+    "failed": 0
+  },
+  {
+    "label": "budget_denial_unit_red",
+    "scene": "tests/framework/frame_budget_test.tscn",
+    "run_id": "5175c336-f0ac-4eae-b49d-7692e8729fe9",
+    "status": "FAIL",
+    "checks": 69,
+    "failed": 5
+  },
+  {
+    "label": "budget_denial_causal_red",
+    "scene": "tests/framework/death_burst_lifecycle_test.tscn",
+    "run_id": "f4045b0a-7ec5-4f6e-b4e1-94873f710d07",
+    "status": "FAIL",
+    "checks": 190,
+    "failed": 1
+  },
+  {
+    "label": "budget_denial_edges_green",
+    "scene": "tests/framework/frame_budget_test.tscn",
+    "run_id": "180b9c14-c7ca-42de-a5c4-5dc15b7ef594",
+    "status": "PASS",
+    "checks": 69,
+    "failed": 0
+  },
+  {
+    "label": "budget_denial_edges_green",
+    "scene": "tests/framework/budget_producer_admission_test.tscn",
+    "run_id": "fb380565-27bf-4784-af0e-a5c620f24fae",
+    "status": "PASS",
+    "checks": 12,
+    "failed": 0
+  },
+  {
+    "label": "budget_denial_edges_green",
+    "scene": "tests/framework/periodic_delivery_lateness_test.tscn",
+    "run_id": "3efc9f7c-c476-41b5-9ea9-cce3096cb65c",
+    "status": "PASS",
+    "checks": 36,
+    "failed": 0
+  },
+  {
+    "label": "budget_denial_edges_green",
+    "scene": "tests/framework/world_retirement_test.tscn",
+    "run_id": "a23abf59-f8a1-4a19-8f33-e1f69d6313b2",
+    "status": "PASS",
+    "checks": 9,
+    "failed": 0
+  },
+  {
+    "label": "budget_order_lifetime_green",
+    "scene": "tests/framework/frame_budget_test.tscn",
+    "run_id": "c71740fa-4c32-45d8-89c3-e02832279bc4",
+    "status": "PASS",
+    "checks": 126,
+    "failed": 0
+  },
+  {
+    "label": "boundary_same_phase_green",
+    "scene": "tests/framework/death_burst_lifecycle_test.tscn",
+    "run_id": "f857a614-471e-4aaa-9eb4-5487c3df6e89",
+    "status": "PASS",
+    "checks": 192,
+    "failed": 0
+  },
+  {
+    "label": "boundary_same_phase_green",
+    "scene": "tests/framework/death_burst_lifecycle_cold_test.tscn",
+    "run_id": "5128e932-f300-4ebe-b38f-5bc48a81b7dc",
+    "status": "PASS",
+    "checks": 10,
+    "failed": 0
+  },
+  {
+    "label": "boundary_same_phase_green",
+    "scene": "tests/framework/death_expiry_overlap_test.tscn",
+    "run_id": "d34620fb-3b47-4ae5-92a8-afea48f5ae09",
+    "status": "PASS",
+    "checks": 200,
+    "failed": 0
+  },
+  {
+    "label": "boundary_same_phase_green",
+    "scene": "tests/framework/death_expiry_overlap_cold_test.tscn",
+    "run_id": "9a534043-e989-41ab-8315-b8915509498e",
+    "status": "PASS",
+    "checks": 10,
+    "failed": 0
+  },
+  {
+    "label": "budget_denial_final_unit_red",
+    "scene": "tests/framework/frame_budget_test.tscn",
+    "run_id": "15b0a916-3885-4eca-932c-0da2a3f4a591",
+    "status": "FAIL",
+    "checks": 126,
+    "failed": 7
+  },
+  {
+    "label": "budget_denial_final_causal_red",
+    "scene": "tests/framework/death_burst_lifecycle_test.tscn",
+    "run_id": "7ab4505f-0b1f-47f9-9c29-f2a7bfb0fa7b",
+    "status": "FAIL",
+    "checks": 190,
+    "failed": 1
+  },
+  {
+    "label": "final_budget_related",
+    "scene": "tests/framework/frame_budget_test.tscn",
+    "run_id": "dfcef9d2-4c73-4ef6-ab0f-2aa323945535",
+    "status": "PASS",
+    "checks": 126,
+    "failed": 0
+  },
+  {
+    "label": "final_budget_related",
+    "scene": "tests/framework/budget_producer_admission_test.tscn",
+    "run_id": "fcf03688-c42e-41d9-970e-3bc371bb17cf",
+    "status": "PASS",
+    "checks": 12,
+    "failed": 0
+  },
+  {
+    "label": "final_budget_related",
+    "scene": "tests/framework/periodic_delivery_lateness_test.tscn",
+    "run_id": "8818b8fa-ab0b-4261-9284-b62ee4fe2e47",
+    "status": "PASS",
+    "checks": 36,
+    "failed": 0
+  },
+  {
+    "label": "final_budget_related",
+    "scene": "tests/framework/world_retirement_test.tscn",
+    "run_id": "286fe538-53bb-4c08-8025-28339b8d486b",
+    "status": "PASS",
+    "checks": 9,
+    "failed": 0
+  },
+  {
+    "label": "final_budget_related",
+    "scene": "tests/framework/paused_persistence_receipt_test.tscn",
+    "run_id": "4d3dd9fb-f8f6-4b2a-aa5a-56502f718edf",
+    "status": "PASS",
+    "checks": 8,
+    "failed": 0
+  },
+  {
+    "label": "final_layered_critical",
+    "scene": "tests/framework/currency_identity_test.tscn",
+    "run_id": "1db0129f-5e8e-4a81-88cd-0a5c72bdadde",
+    "status": "PASS",
+    "checks": 21,
+    "failed": 0
+  },
+  {
+    "label": "final_layered_critical",
+    "scene": "tests/framework/ui_registry_retirement_test.tscn",
+    "run_id": "e6bfc984-21f0-4702-9186-41fa106116c2",
+    "status": "PASS",
+    "checks": 253,
+    "failed": 0
+  },
+  {
+    "label": "final_layered_critical",
+    "scene": "tests/framework/death_burst_lifecycle_test.tscn",
+    "run_id": "6b419f99-bc85-4268-b4bb-a52591ee78e1",
+    "status": "PASS",
+    "checks": 192,
+    "failed": 0
+  },
+  {
+    "label": "final_layered_critical",
+    "scene": "tests/framework/death_burst_lifecycle_cold_test.tscn",
+    "run_id": "e88a0ee3-a04a-4851-8945-f1de910839b1",
+    "status": "PASS",
+    "checks": 10,
+    "failed": 0
+  },
+  {
+    "label": "final_layered_critical",
+    "scene": "tests/framework/death_expiry_overlap_test.tscn",
+    "run_id": "de0a68d5-f830-45f0-b246-eafbe8305445",
+    "status": "PASS",
+    "checks": 200,
+    "failed": 0
+  },
+  {
+    "label": "final_layered_critical",
+    "scene": "tests/framework/death_expiry_overlap_cold_test.tscn",
+    "run_id": "a20872a7-d106-4127-826c-bc205155ac7f",
+    "status": "PASS",
+    "checks": 10,
+    "failed": 0
+  },
+  {
+    "label": "final_layered_critical",
+    "scene": "tests/framework/ordinary_item_identity_test.tscn",
+    "run_id": "82a5458c-8b01-4cf3-a2a5-dd0430f5e64f",
+    "status": "PASS",
+    "checks": 128,
+    "failed": 0
+  },
+  {
+    "label": "final_layered_critical",
+    "scene": "tests/framework/equipment_identity_test.tscn",
+    "run_id": "2c5c4bf0-1ae1-4895-9d0b-306a1229aba1",
+    "status": "PASS",
+    "checks": 46,
+    "failed": 0
+  },
+  {
+    "label": "final_layered_critical",
+    "scene": "tests/framework/character_identity_save_test.tscn",
+    "run_id": "b7cbe24c-1293-40c5-8641-bb88baf52df5",
+    "status": "PASS",
+    "checks": 34,
+    "failed": 0
+  },
+  {
+    "label": "final_layered_critical",
+    "scene": "tests/framework/item_binding_identity_test.tscn",
+    "run_id": "2448f73b-5cc3-4679-a75e-78826b3d033c",
+    "status": "PASS",
+    "checks": 27,
+    "failed": 0
+  },
+  {
+    "label": "final_layered_critical",
+    "scene": "tests/framework/feature_fire_effect_production_test.tscn",
+    "run_id": "08c9d249-ff9d-482d-939c-0239d4eb4790",
+    "status": "PASS",
+    "checks": 20,
+    "failed": 0
+  },
+  {
+    "label": "final_layered_critical",
+    "scene": "tests/framework/action_config_lease_test.tscn",
+    "run_id": "78d04b96-2ca7-4d18-a4e8-c4567a4dd340",
+    "status": "PASS",
+    "checks": 13,
+    "failed": 0
+  },
+  {
+    "label": "final_layered_critical",
+    "scene": "tests/framework/feature_release_identity_test.tscn",
+    "run_id": "cc0b2ebb-5919-4e49-a5fb-2555278b8a8c",
+    "status": "PASS",
+    "checks": 11,
+    "failed": 0
+  },
+  {
+    "label": "final_layered_critical",
+    "scene": "tests/framework/combined_effect_lifecycle_test.tscn",
+    "run_id": "5f31c701-11c1-4226-ace7-8b066606b89a",
+    "status": "PASS",
+    "checks": 38,
+    "failed": 0
+  },
+  {
+    "label": "final_layered_critical",
+    "scene": "tests/framework/combined_effect_lifecycle_cold_test.tscn",
+    "run_id": "e4ebe470-bd72-46d4-a96d-11409ccd0d08",
+    "status": "PASS",
+    "checks": 10,
+    "failed": 0
+  },
+  {
+    "label": "final_layered_critical",
+    "scene": "tests/framework/periodic_credit_safe_logout_test.tscn",
+    "run_id": "919fe478-c8d4-4819-9e1c-9bd0d06e781c",
+    "status": "PASS",
+    "checks": 37,
+    "failed": 0
+  },
+  {
+    "label": "final_layered_critical",
+    "scene": "tests/framework/periodic_credit_safe_logout_cold_test.tscn",
+    "run_id": "9b9c1093-3262-47f2-893b-d59437a5eb25",
+    "status": "PASS",
+    "checks": 13,
+    "failed": 0
+  },
+  {
+    "label": "boundary_same_phase_repeat_01",
+    "scene": "tests/framework/death_expiry_overlap_test.tscn",
+    "run_id": "23a444b6-fa32-4397-b299-4cac5bc6e6c1",
+    "status": "PASS",
+    "checks": 200,
+    "failed": 0
+  },
+  {
+    "label": "boundary_same_phase_repeat_01",
+    "scene": "tests/framework/death_expiry_overlap_cold_test.tscn",
+    "run_id": "24b9a997-7133-4640-880c-bfd9707f0da9",
+    "status": "PASS",
+    "checks": 10,
+    "failed": 0
+  },
+  {
+    "label": "boundary_same_phase_repeat_02",
+    "scene": "tests/framework/death_expiry_overlap_test.tscn",
+    "run_id": "b44ac567-a775-463a-a688-66882049474e",
+    "status": "PASS",
+    "checks": 200,
+    "failed": 0
+  },
+  {
+    "label": "boundary_same_phase_repeat_02",
+    "scene": "tests/framework/death_expiry_overlap_cold_test.tscn",
+    "run_id": "2b04aeee-366f-42df-8e9f-4794e2955555",
+    "status": "PASS",
+    "checks": 10,
+    "failed": 0
+  },
+  {
+    "label": "boundary_same_phase_repeat_03",
+    "scene": "tests/framework/death_expiry_overlap_test.tscn",
+    "run_id": "1297b041-f9b4-4c2f-98f7-9d50ea0f05a5",
+    "status": "PASS",
+    "checks": 200,
+    "failed": 0
+  },
+  {
+    "label": "boundary_same_phase_repeat_03",
+    "scene": "tests/framework/death_expiry_overlap_cold_test.tscn",
+    "run_id": "9933f16e-c52a-4987-ac16-68a763582a27",
+    "status": "PASS",
+    "checks": 10,
+    "failed": 0
+  },
+  {
+    "label": "boundary_same_phase_repeat_04",
+    "scene": "tests/framework/death_expiry_overlap_test.tscn",
+    "run_id": "b5337af3-ac95-4126-9dae-1b3326e88b5a",
+    "status": "PASS",
+    "checks": 200,
+    "failed": 0
+  },
+  {
+    "label": "boundary_same_phase_repeat_04",
+    "scene": "tests/framework/death_expiry_overlap_cold_test.tscn",
+    "run_id": "c9c8a602-baf3-4b11-b4d5-d8f19182e7eb",
+    "status": "PASS",
+    "checks": 10,
+    "failed": 0
+  },
+  {
+    "label": "boundary_same_phase_repeat_05",
+    "scene": "tests/framework/death_expiry_overlap_test.tscn",
+    "run_id": "f881e6a3-c93b-4397-b8f8-182180c623c8",
+    "status": "PASS",
+    "checks": 200,
+    "failed": 0
+  },
+  {
+    "label": "boundary_same_phase_repeat_05",
+    "scene": "tests/framework/death_expiry_overlap_cold_test.tscn",
+    "run_id": "b4afe4d9-f305-491f-985d-97f9b30d7290",
+    "status": "PASS",
+    "checks": 10,
+    "failed": 0
+  },
+  {
+    "label": "boundary_same_phase_repeat_06",
+    "scene": "tests/framework/death_expiry_overlap_test.tscn",
+    "run_id": "782b5d7d-00bd-485f-ab30-8c5c777b2b8c",
+    "status": "PASS",
+    "checks": 200,
+    "failed": 0
+  },
+  {
+    "label": "boundary_same_phase_repeat_06",
+    "scene": "tests/framework/death_expiry_overlap_cold_test.tscn",
+    "run_id": "a3bf740b-33ee-4488-b5bb-4ef6e1a7b9cf",
+    "status": "PASS",
+    "checks": 10,
+    "failed": 0
+  },
+  {
+    "label": "boundary_same_phase_repeat_07",
+    "scene": "tests/framework/death_expiry_overlap_test.tscn",
+    "run_id": "792bd56f-2598-4e84-be5e-d3a22eb3f89f",
+    "status": "PASS",
+    "checks": 200,
+    "failed": 0
+  },
+  {
+    "label": "boundary_same_phase_repeat_07",
+    "scene": "tests/framework/death_expiry_overlap_cold_test.tscn",
+    "run_id": "b136b162-0c7c-4750-8edc-4fede53dc7b5",
+    "status": "PASS",
+    "checks": 10,
+    "failed": 0
+  },
+  {
+    "label": "boundary_same_phase_repeat_08",
+    "scene": "tests/framework/death_expiry_overlap_test.tscn",
+    "run_id": "96c3fa48-b7fc-49a1-87cb-a08a0a855b1e",
+    "status": "PASS",
+    "checks": 200,
+    "failed": 0
+  },
+  {
+    "label": "boundary_same_phase_repeat_08",
+    "scene": "tests/framework/death_expiry_overlap_cold_test.tscn",
+    "run_id": "c0681736-af44-4a84-8475-9b688e2d6da5",
+    "status": "PASS",
+    "checks": 10,
+    "failed": 0
+  },
+  {
+    "label": "boundary_same_phase_repeat_09",
+    "scene": "tests/framework/death_expiry_overlap_test.tscn",
+    "run_id": "6ee3e7b6-8b9f-4ec8-b2dc-5902cf639266",
+    "status": "PASS",
+    "checks": 200,
+    "failed": 0
+  },
+  {
+    "label": "boundary_same_phase_repeat_09",
+    "scene": "tests/framework/death_expiry_overlap_cold_test.tscn",
+    "run_id": "b5fc9408-6969-4e60-99fb-07bf03c256bd",
+    "status": "PASS",
+    "checks": 10,
+    "failed": 0
+  },
+  {
+    "label": "boundary_same_phase_repeat_10",
+    "scene": "tests/framework/death_expiry_overlap_test.tscn",
+    "run_id": "7ce7aca6-3908-4f6c-9379-79d0def61fba",
+    "status": "PASS",
+    "checks": 200,
+    "failed": 0
+  },
+  {
+    "label": "boundary_same_phase_repeat_10",
+    "scene": "tests/framework/death_expiry_overlap_cold_test.tscn",
+    "run_id": "577df340-75ab-418a-958d-988e1f9fd895",
+    "status": "PASS",
+    "checks": 10,
+    "failed": 0
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_01",
+    "scene": "tests/framework/death_expiry_overlap_test.tscn",
+    "run_id": "cf50e6c6-5c9e-4e19-ba8f-5fa01fc404a6",
+    "status": "PASS",
+    "checks": 200,
+    "failed": 0
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_01",
+    "scene": "tests/framework/death_expiry_overlap_cold_test.tscn",
+    "run_id": "c180b40d-1fc4-40ec-8b12-9255d3cf11fd",
+    "status": "PASS",
+    "checks": 10,
+    "failed": 0
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_02",
+    "scene": "tests/framework/death_expiry_overlap_test.tscn",
+    "run_id": "fdc01fab-4ed1-4620-a4b2-190d5a1cca3c",
+    "status": "PASS",
+    "checks": 200,
+    "failed": 0
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_02",
+    "scene": "tests/framework/death_expiry_overlap_cold_test.tscn",
+    "run_id": "73813517-6c52-4122-a2c4-74b833b578c8",
+    "status": "PASS",
+    "checks": 10,
+    "failed": 0
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_03",
+    "scene": "tests/framework/death_expiry_overlap_test.tscn",
+    "run_id": "e42e0ef6-6f4c-44af-99a9-613050916796",
+    "status": "PASS",
+    "checks": 200,
+    "failed": 0
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_03",
+    "scene": "tests/framework/death_expiry_overlap_cold_test.tscn",
+    "run_id": "2cc78186-b116-4798-9f48-1cecedfc6452",
+    "status": "PASS",
+    "checks": 10,
+    "failed": 0
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_04",
+    "scene": "tests/framework/death_expiry_overlap_test.tscn",
+    "run_id": "e3d32e88-d9f3-4c08-b529-d813b37107fd",
+    "status": "PASS",
+    "checks": 200,
+    "failed": 0
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_04",
+    "scene": "tests/framework/death_expiry_overlap_cold_test.tscn",
+    "run_id": "23a3eb82-0b56-4b97-a878-5d7f30d01234",
+    "status": "PASS",
+    "checks": 10,
+    "failed": 0
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_05",
+    "scene": "tests/framework/death_expiry_overlap_test.tscn",
+    "run_id": "54ad1ffd-c262-43b8-b731-49c84cf3b623",
+    "status": "PASS",
+    "checks": 200,
+    "failed": 0
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_05",
+    "scene": "tests/framework/death_expiry_overlap_cold_test.tscn",
+    "run_id": "e5bd92f4-674d-4ed0-ab6a-3b0616729cd9",
+    "status": "PASS",
+    "checks": 10,
+    "failed": 0
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_06",
+    "scene": "tests/framework/death_expiry_overlap_test.tscn",
+    "run_id": "bb059862-c580-4c5a-a1ff-f1fb4eff6a3f",
+    "status": "PASS",
+    "checks": 200,
+    "failed": 0
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_06",
+    "scene": "tests/framework/death_expiry_overlap_cold_test.tscn",
+    "run_id": "d3221382-628e-4a94-bf72-634d7fb7b4cb",
+    "status": "PASS",
+    "checks": 10,
+    "failed": 0
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_07",
+    "scene": "tests/framework/death_expiry_overlap_test.tscn",
+    "run_id": "b86c7e38-4804-4cee-94e8-11cf1ac7b83b",
+    "status": "PASS",
+    "checks": 200,
+    "failed": 0
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_07",
+    "scene": "tests/framework/death_expiry_overlap_cold_test.tscn",
+    "run_id": "93cbdbe2-ede5-4857-ad6d-2d624f856744",
+    "status": "PASS",
+    "checks": 10,
+    "failed": 0
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_08",
+    "scene": "tests/framework/death_expiry_overlap_test.tscn",
+    "run_id": "859f9c63-288d-48f9-9cc8-d219e1fe51d5",
+    "status": "PASS",
+    "checks": 200,
+    "failed": 0
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_08",
+    "scene": "tests/framework/death_expiry_overlap_cold_test.tscn",
+    "run_id": "415ec890-ae5d-4fba-b135-1e604a9840cd",
+    "status": "PASS",
+    "checks": 10,
+    "failed": 0
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_09",
+    "scene": "tests/framework/death_expiry_overlap_test.tscn",
+    "run_id": "c234a09d-f70f-4605-9f9c-a96d53823a9b",
+    "status": "PASS",
+    "checks": 200,
+    "failed": 0
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_09",
+    "scene": "tests/framework/death_expiry_overlap_cold_test.tscn",
+    "run_id": "6de29dc8-653f-4150-ad1a-3c2644ad18d5",
+    "status": "PASS",
+    "checks": 10,
+    "failed": 0
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_10",
+    "scene": "tests/framework/death_expiry_overlap_test.tscn",
+    "run_id": "5321fcc4-1f2d-4df3-865e-8b4bd2e6392e",
+    "status": "PASS",
+    "checks": 200,
+    "failed": 0
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_10",
+    "scene": "tests/framework/death_expiry_overlap_cold_test.tscn",
+    "run_id": "b50b572b-c0c8-4348-be66-332207c5e687",
+    "status": "PASS",
+    "checks": 10,
+    "failed": 0
+  }
+]

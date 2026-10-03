@@ -1,0 +1,32 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "frame_budget_test",
+                        "test_path":  "tests/framework/frame_budget_test.tscn",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-03T10:48:28.2274897Z",
+                        "native_exit_observed_utc":  "2026-10-03T10:48:03.3781566Z",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "c71740fa-4c32-45d8-89c3-e02832279bc4",
+                        "framework_receipt_valid":  true,
+                        "result":  "PASS",
+                        "reason":  ""
+                    }
+                ],
+    "total":  1,
+    "invocation_id":  "d674c3c9-8849-442e-af5e-b773c341e3f2",
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "passed":  1,
+    "engine_log_errors":  0,
+    "generated_at":  "2026-10-03T18:48:04.9503477+08:00",
+    "failed":  0,
+    "suite":  "adhoc"
+}

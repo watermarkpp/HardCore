@@ -1,0 +1,944 @@
+{
+  "boundary_fixed60_wallpaced": {
+    "local_run": "boundary_fixed60_wallpaced_180624_949406",
+    "source_sha256": "657d6fc18b179139d9a9c27657b3ad25406846c971f77f54b0b6c037abb01e30",
+    "invocation_id": "dafa26ff-5747-489a-a945-eb8569107804",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_burst_lifecycle_test.tscn','tests/framework/death_burst_lifecycle_cold_test.tscn','tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 4,
+      "status": "FAIL"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": false,
+    "adopted_final": false
+  },
+  "boundary_fixed60_budget_probe_typed": {
+    "local_run": "boundary_fixed60_budget_probe_typed_181032_657007",
+    "source_sha256": "17810b9bc48603b6f64fcef74be42def6cad7c182c69e91b15a511f219cac057",
+    "invocation_id": "a3729548-03f3-4e5d-9b0a-44b596afe8ad",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_burst_lifecycle_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": false,
+    "adopted_final": false
+  },
+  "frame_budget_once_per_epoch_red": {
+    "local_run": "frame_budget_once_per_epoch_red_181625_263994",
+    "source_sha256": "3e6bacb71042798000a452519d5a4670200fbee89e96b6c6006595ac07ec3d7d",
+    "invocation_id": "bfdeb3d6-c4ea-409a-8735-77ec0cb5fbb1",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/frame_budget_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": false,
+    "adopted_final": false
+  },
+  "frame_budget_work_conserving_green": {
+    "local_run": "frame_budget_work_conserving_green_182132_163823",
+    "source_sha256": "234852b3529774511d2fc6b7c6642907b6c1b38791606791dab2b26e8819860d",
+    "invocation_id": "68c1e6a4-e9fe-410d-a386-5560b11eb126",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/frame_budget_test.tscn','tests/framework/budget_producer_admission_test.tscn','tests/framework/periodic_delivery_lateness_test.tscn','tests/framework/world_retirement_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 4,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": false,
+    "adopted_final": false
+  },
+  "boundary_work_conserving_green": {
+    "local_run": "boundary_work_conserving_green_182343_440582",
+    "source_sha256": "234852b3529774511d2fc6b7c6642907b6c1b38791606791dab2b26e8819860d",
+    "invocation_id": "8b837175-ff84-48db-be7d-493bd270ac3b",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_burst_lifecycle_test.tscn','tests/framework/death_burst_lifecycle_cold_test.tscn','tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 4,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": false,
+    "adopted_final": false
+  },
+  "budget_denial_unit_red": {
+    "local_run": "budget_denial_unit_red_184138_229964",
+    "source_sha256": "6e93d77b3ab14164fe29617e782686dfd598651354b18c237cfb4165cd746366",
+    "invocation_id": "3e9718cd-8a6c-4a8f-9dbb-4d318464a17e",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/frame_budget_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": false,
+    "adopted_final": false
+  },
+  "budget_denial_causal_red": {
+    "local_run": "budget_denial_causal_red_184148_590739",
+    "source_sha256": "6e93d77b3ab14164fe29617e782686dfd598651354b18c237cfb4165cd746366",
+    "invocation_id": "e6e195e3-d0f3-4868-9391-ef8136e3f59a",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_burst_lifecycle_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": false,
+    "adopted_final": false
+  },
+  "budget_denial_edges_green": {
+    "local_run": "budget_denial_edges_green_184550_669658",
+    "source_sha256": "746613ea856f54b01855a0c53534f6dea48602ea160e347802b93274e32a24c0",
+    "invocation_id": "496b2b24-b32b-4f8d-ba29-a1f6de0433cd",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/frame_budget_test.tscn','tests/framework/budget_producer_admission_test.tscn','tests/framework/periodic_delivery_lateness_test.tscn','tests/framework/world_retirement_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 4,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": false,
+    "adopted_final": false
+  },
+  "budget_order_lifetime_green": {
+    "local_run": "budget_order_lifetime_green_184756_089400",
+    "source_sha256": "d50ac7009e688aca9e2cc90b9627162a1abc07147ef923fece82eaa5bc28b386",
+    "invocation_id": "d674c3c9-8849-442e-af5e-b773c341e3f2",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/frame_budget_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 1,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": false,
+    "adopted_final": false
+  },
+  "boundary_same_phase_green": {
+    "local_run": "boundary_same_phase_green_184907_844679",
+    "source_sha256": "d50ac7009e688aca9e2cc90b9627162a1abc07147ef923fece82eaa5bc28b386",
+    "invocation_id": "e55b8b8a-d48b-4775-96bf-c0d055d2971d",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_burst_lifecycle_test.tscn','tests/framework/death_burst_lifecycle_cold_test.tscn','tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 4,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": false,
+    "adopted_final": false
+  },
+  "budget_denial_final_unit_red": {
+    "local_run": "budget_denial_final_unit_red_185921_323308",
+    "source_sha256": "ea0a43c634155296f0fd1814d752696056c09921b2d9578cdaa0209c61d71cbf",
+    "invocation_id": "1acebec9-0503-43ac-b5d9-ea108541989f",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/frame_budget_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": false,
+    "adopted_final": false
+  },
+  "budget_denial_final_causal_red": {
+    "local_run": "budget_denial_final_causal_red_185931_116129",
+    "source_sha256": "ea0a43c634155296f0fd1814d752696056c09921b2d9578cdaa0209c61d71cbf",
+    "invocation_id": "2dd3a566-3279-4192-b170-9d29da612fec",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_burst_lifecycle_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": false,
+    "adopted_final": false
+  },
+  "streaming_budget_initial_failure": {
+    "local_run": "final_streaming_budget_190047_492159",
+    "source_sha256": "d50ac7009e688aca9e2cc90b9627162a1abc07147ef923fece82eaa5bc28b386",
+    "invocation_id": "84bd148e-11a6-4015-8f5d-94a1d22fb8af",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/monster_streaming_single_poll_per_frame_test.tscn','tests/monster_streaming_request_dedup_test.tscn','tests/monster_streaming_visual_parity_test.tscn','tests/monster_streaming_animation_continuity_test.tscn','tests/monster_streaming_registration_lifecycle_test.tscn','tests/monster_streaming_generation_guard_test.tscn','tests/monster_streaming_failure_contract_test.tscn','tests/monster_streaming_no_visual_queue_test.tscn','tests/monster_streaming_no_sync_load_test.tscn','tests/monster_streaming_spatial_index_non_regression_test.tscn','tests/monster_streaming_scaling_test.tscn','tests/monster_streaming_lifecycle_test.tscn','tests/monster_streaming_active_lease_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 12,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": false,
+    "adopted_final": false
+  },
+  "streaming_single_poll_old_budget": {
+    "local_run": "streaming_single_poll_old_budget_190549_723946",
+    "source_sha256": "e7f12699280070840e5366a72246cd432fc1b59369f00f33a02deef3b383fe29",
+    "invocation_id": "9717d404-134e-49a7-80f4-90e64835470f",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/monster_streaming_single_poll_per_frame_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": false,
+    "adopted_final": false
+  },
+  "streaming_single_poll_setup_probe": {
+    "local_run": "streaming_single_poll_setup_probe_190800_272311",
+    "source_sha256": "73b7940af2a5af9bbfa0843fff35f11d41c2513d5b669555035a3ed776683437",
+    "invocation_id": "8a917d61-6424-4a10-b8da-f118f20e9990",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/monster_streaming_single_poll_per_frame_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": false,
+    "adopted_final": false
+  },
+  "streaming_actual_epoch_green": {
+    "local_run": "streaming_actual_epoch_green_191110_748651",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "invocation_id": "f0cdfe3d-85e1-4f52-a89e-2da7786846ac",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/monster_streaming_single_poll_per_frame_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 1,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": true,
+    "adopted_final": false
+  },
+  "final_budget_related": {
+    "local_run": "final_budget_related_192057_570517",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "invocation_id": "75583cfa-196c-4c02-948e-6c59e103264a",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/frame_budget_test.tscn','tests/framework/budget_producer_admission_test.tscn','tests/framework/periodic_delivery_lateness_test.tscn','tests/framework/world_retirement_test.tscn','tests/framework/paused_persistence_receipt_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 5,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": true,
+    "adopted_final": false
+  },
+  "final_streaming_budget": {
+    "local_run": "final_streaming_budget_192144_512002",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "invocation_id": "41d89745-10b7-43f2-b450-ed1461bd9929",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/monster_streaming_single_poll_per_frame_test.tscn','tests/monster_streaming_request_dedup_test.tscn','tests/monster_streaming_visual_parity_test.tscn','tests/monster_streaming_animation_continuity_test.tscn','tests/monster_streaming_registration_lifecycle_test.tscn','tests/monster_streaming_generation_guard_test.tscn','tests/monster_streaming_failure_contract_test.tscn','tests/monster_streaming_no_visual_queue_test.tscn','tests/monster_streaming_no_sync_load_test.tscn','tests/monster_streaming_spatial_index_non_regression_test.tscn','tests/monster_streaming_scaling_test.tscn','tests/monster_streaming_lifecycle_test.tscn','tests/monster_streaming_active_lease_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 13,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": true,
+    "adopted_final": false
+  },
+  "final_layered_critical": {
+    "local_run": "final_layered_critical_192412_964082",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "invocation_id": "8f14d68e-0013-4b4d-8c8b-562fcc13feb6",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/currency_identity_test.tscn','tests/device_lab_runtime_test.tscn','tests/taoist_support_production_integration_test.tscn','tests/skill_button_assignments_v2_test.tscn','tests/skill_panel_assignment_hint_layout_contract_test.tscn','tests/combat_release_geometry_test.tscn','tests/skill_runtime_integration_test.tscn','tests/melee_lock_fallback_test.tscn','tests/audit_39fe_regressions.tscn','tests/repair_20260913/inventory_error_feedback_real_input_test.tscn','tests/equipment_success_notice_real_input_test.tscn','tests/ui_error_machine_reason_leak_test.tscn','tests/r3_gold_cap_entrypoints_test.tscn','tests/skill_target_context_partition_test.tscn','tests/hc_monster_combat_r2/revival_durability_test.tscn','tests/f03_hot_persistence_test.tscn','tests/f03_async_death_receipt_test.tscn','tests/melee_blocked_query_order_test.tscn','tests/f03_periodic_background_save_test.tscn','tests/new_item_icon_surfaces_test.tscn','tests/synthesis_panel_preview_test.tscn','tests/f03_background_writer_test.tscn','tests/service_home_no_current_position_fallback_test.tscn','tests/death_revival_home_failure_test.tscn','tests/mobile_targeting_test.tscn','tests/game_root_combat_resolution_integration_test.tscn','tests/equipment_special_effects_test.tscn','tests/player_poison_presentation_test.tscn','tests/canonical_summon_integration_test.tscn','tests/player_level_up_effect_runtime_test.tscn','tests/town_music_runtime_test.tscn','tests/f05_settlement_display_separation_test.tscn','tests/framework/ui_registry_retirement_test.tscn','tests/framework/death_burst_lifecycle_test.tscn','tests/framework/death_burst_lifecycle_cold_test.tscn','tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn','tests/bich_environment_test.tscn','tests/orc_tomb_game_visual_geometry_test.tscn','tests/orc_tomb_source_integration_test.tscn','tests/source_collision_chunk_test.tscn','tests/natural_cave_source_integration_test.tscn','tests/vertical_slice_loop_test.tscn','tests/wooma_game_runtime_integration_test.tscn','tests/portal_actual_arrival_guard_test.tscn','tests/skill_production_canonical_entry_test.tscn','tests/source176_r3/eight_direction_admission_test.tscn','tests/source176_r3/source_idle_wake_phase_test.tscn','tests/source176_r3/published_map_approach_test.tscn','tests/user_feedback_20260930/full_surround_24_fractional_test.tscn','tests/user_feedback_20260930/full_surround_64_test.tscn','tests/user_feedback_20260930/full_surround_89_fractional_test.tscn','tests/user_feedback_20260930/full_surround_89_prefilled_test.tscn','tests/user_feedback_20260930/full_surround_89_test.tscn','tests/user_feedback_20260930/full_surround_mixed_test.tscn','tests/user_feedback_20260930/full_surround_moving_test.tscn','tests/user_feedback_20260930/full_surround_native_test.tscn','tests/user_feedback_20260930/full_surround_prefilled_test.tscn','tests/user_feedback_20260930/full_surround_west_wall_test.tscn','tests/user_feedback_20260930/surround_vacancy_refill_89_test.tscn','tests/user_feedback_20260930/surround_vacancy_refill_test.tscn','tests/source176_r3/c05_native_detour_test.tscn','tests/source176_r3/ordinary_body_clearance_test.tscn','tests/user_feedback_20260930/crowd_fractional_escape_test.tscn','tests/framework/ordinary_item_identity_test.tscn','tests/framework/equipment_identity_test.tscn','tests/framework/character_identity_save_test.tscn','tests/framework/item_binding_identity_test.tscn','tests/framework/feature_fire_effect_production_test.tscn','tests/framework/action_config_lease_test.tscn','tests/framework/feature_release_identity_test.tscn','tests/framework/combined_effect_lifecycle_test.tscn','tests/framework/combined_effect_lifecycle_cold_test.tscn','tests/framework/periodic_credit_safe_logout_test.tscn','tests/framework/periodic_credit_safe_logout_cold_test.tscn','tests/user_feedback_20260930/layered_approach_test.tscn','tests/user_feedback_20260930/full_surround_89_fractional_identity0_test.tscn','tests/user_feedback_20260930/full_surround_89_fractional_identity1_test.tscn','tests/user_feedback_20260930/recorded_fractional_flank_test.tscn','tests/user_feedback_20260930/recorded_fractional_wait_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 80,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": [
+      "c05_native_detour.json",
+      "eight_direction_admission.json",
+      "ordinary_body_clearance.json",
+      "published_map_approach.json",
+      "source_idle_wake_phase.json"
+    ],
+    "same_as_wip_bytes": true,
+    "adopted_final": false
+  },
+  "boundary_same_phase_repeat_01": {
+    "local_run": "boundary_same_phase_repeat_01_185147_043985",
+    "source_sha256": "d50ac7009e688aca9e2cc90b9627162a1abc07147ef923fece82eaa5bc28b386",
+    "invocation_id": "98df2236-25b3-49a4-8a7c-8e49b3b03631",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": false,
+    "adopted_final": false
+  },
+  "boundary_same_phase_repeat_02": {
+    "local_run": "boundary_same_phase_repeat_02_185220_154059",
+    "source_sha256": "d50ac7009e688aca9e2cc90b9627162a1abc07147ef923fece82eaa5bc28b386",
+    "invocation_id": "d96dfef7-2d2f-40ff-bdbf-5d791c69f2be",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": false,
+    "adopted_final": false
+  },
+  "boundary_same_phase_repeat_03": {
+    "local_run": "boundary_same_phase_repeat_03_185252_694473",
+    "source_sha256": "d50ac7009e688aca9e2cc90b9627162a1abc07147ef923fece82eaa5bc28b386",
+    "invocation_id": "b45b6611-cbcc-4b40-8e03-5abd77810617",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": false,
+    "adopted_final": false
+  },
+  "boundary_same_phase_repeat_04": {
+    "local_run": "boundary_same_phase_repeat_04_185325_373141",
+    "source_sha256": "d50ac7009e688aca9e2cc90b9627162a1abc07147ef923fece82eaa5bc28b386",
+    "invocation_id": "79d3aaac-9f23-4cf6-ba7f-7ba6bdbef54f",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": false,
+    "adopted_final": false
+  },
+  "boundary_same_phase_repeat_05": {
+    "local_run": "boundary_same_phase_repeat_05_185358_015703",
+    "source_sha256": "d50ac7009e688aca9e2cc90b9627162a1abc07147ef923fece82eaa5bc28b386",
+    "invocation_id": "029b1ef7-2562-4c34-bc9e-c4379671bbc4",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": false,
+    "adopted_final": false
+  },
+  "boundary_same_phase_repeat_06": {
+    "local_run": "boundary_same_phase_repeat_06_185430_575295",
+    "source_sha256": "d50ac7009e688aca9e2cc90b9627162a1abc07147ef923fece82eaa5bc28b386",
+    "invocation_id": "2f5a5913-bf24-4a26-9a30-2adbe0ab6ec6",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": false,
+    "adopted_final": false
+  },
+  "boundary_same_phase_repeat_07": {
+    "local_run": "boundary_same_phase_repeat_07_185503_449236",
+    "source_sha256": "d50ac7009e688aca9e2cc90b9627162a1abc07147ef923fece82eaa5bc28b386",
+    "invocation_id": "2ed1767c-a8b9-400a-8681-63f5c172dc75",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": false,
+    "adopted_final": false
+  },
+  "boundary_same_phase_repeat_08": {
+    "local_run": "boundary_same_phase_repeat_08_185536_188338",
+    "source_sha256": "d50ac7009e688aca9e2cc90b9627162a1abc07147ef923fece82eaa5bc28b386",
+    "invocation_id": "6451659c-5693-4c93-9f3f-df917e5b10a7",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": false,
+    "adopted_final": false
+  },
+  "boundary_same_phase_repeat_09": {
+    "local_run": "boundary_same_phase_repeat_09_185609_022253",
+    "source_sha256": "d50ac7009e688aca9e2cc90b9627162a1abc07147ef923fece82eaa5bc28b386",
+    "invocation_id": "839cc256-70a1-4e30-93ee-6b850106403b",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": false,
+    "adopted_final": false
+  },
+  "boundary_same_phase_repeat_10": {
+    "local_run": "boundary_same_phase_repeat_10_185642_037507",
+    "source_sha256": "d50ac7009e688aca9e2cc90b9627162a1abc07147ef923fece82eaa5bc28b386",
+    "invocation_id": "6ebc05d0-fb93-4fb2-887f-8085e9cce0ab",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": false,
+    "adopted_final": false
+  },
+  "boundary_final_same_phase_repeat_01": {
+    "local_run": "boundary_final_same_phase_repeat_01_191528_794621",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "invocation_id": "45d01e1b-686c-49ec-84f8-04f06d8bcbfe",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": true,
+    "adopted_final": false
+  },
+  "boundary_final_same_phase_repeat_02": {
+    "local_run": "boundary_final_same_phase_repeat_02_191602_395923",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "invocation_id": "9416141d-abde-4a3e-bb1f-c9e1fd861f32",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": true,
+    "adopted_final": false
+  },
+  "boundary_final_same_phase_repeat_03": {
+    "local_run": "boundary_final_same_phase_repeat_03_191635_271511",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "invocation_id": "74e47f74-c222-4713-841c-67b0be6f2526",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": true,
+    "adopted_final": false
+  },
+  "boundary_final_same_phase_repeat_04": {
+    "local_run": "boundary_final_same_phase_repeat_04_191708_070232",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "invocation_id": "e63025b2-cc2f-40a2-9fe0-4c9f8957b396",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": true,
+    "adopted_final": false
+  },
+  "boundary_final_same_phase_repeat_05": {
+    "local_run": "boundary_final_same_phase_repeat_05_191740_887053",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "invocation_id": "08913c77-9c5e-4ddb-9b07-cf3a8ed450f5",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": true,
+    "adopted_final": false
+  },
+  "boundary_final_same_phase_repeat_06": {
+    "local_run": "boundary_final_same_phase_repeat_06_191813_607930",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "invocation_id": "83a9841c-3e64-4121-a991-5d64edea9b68",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": true,
+    "adopted_final": false
+  },
+  "boundary_final_same_phase_repeat_07": {
+    "local_run": "boundary_final_same_phase_repeat_07_191846_122734",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "invocation_id": "8fd76c1d-0b8f-40ea-b77e-4c73f1747cf3",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": true,
+    "adopted_final": false
+  },
+  "boundary_final_same_phase_repeat_08": {
+    "local_run": "boundary_final_same_phase_repeat_08_191919_116420",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "invocation_id": "dbb153d6-e192-464c-b19a-8538917da61f",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": true,
+    "adopted_final": false
+  },
+  "boundary_final_same_phase_repeat_09": {
+    "local_run": "boundary_final_same_phase_repeat_09_191952_032672",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "invocation_id": "3187432c-fa0d-4e81-8108-00c730422a81",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": true,
+    "adopted_final": false
+  },
+  "boundary_final_same_phase_repeat_10": {
+    "local_run": "boundary_final_same_phase_repeat_10_192024_688450",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "invocation_id": "25e45add-1416-43e3-8b4c-3aa2b80430c0",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": true,
+    "adopted_final": false
+  }
+}

@@ -1,0 +1,24 @@
+[
+  {
+    "path": "scripts/layers/runtime/execution/frame_budget.gd",
+    "before_sha256": "45ff46fc6ddf853dc240dc0786bf7cbb46cb1746586799b2062d82ef2db30490",
+    "preimage": "frame_budget.gd.before_work_conserving.bin",
+    "reason": "one serviced epoch owner must not withhold unused budget until a future callback; all unserviced runnable owners retain oldest-first priority",
+    "status": "PASS",
+    "after_sha256": "b5fed7376e83110d3b13f5e934c167bb0f17965d8716f2525c9b98e79b498981",
+    "native_unit_red": "frame_budget_once_per_epoch_red",
+    "native_unit_green": "frame_budget_work_conserving_green",
+    "native_production_green": "boundary_work_conserving_green"
+  },
+  {
+    "path": "tests/framework/frame_budget_test.gd",
+    "before_sha256": "90e17c17b9e515ed87575347d567f4abe4e7323531735790f6e02722a5e48761",
+    "preimage": "frame_budget_test.gd.before_work_conserving.bin",
+    "reason": "one serviced epoch owner must not withhold unused budget until a future callback; all unserviced runnable owners retain oldest-first priority",
+    "status": "PASS",
+    "after_sha256": "4bde249aa70647cfd1f3f7b7b80d1e88cc43063346eedcce8e5d5ae7d2f8090c",
+    "native_unit_red": "frame_budget_once_per_epoch_red",
+    "native_unit_green": "frame_budget_work_conserving_green",
+    "native_production_green": "boundary_work_conserving_green"
+  }
+]

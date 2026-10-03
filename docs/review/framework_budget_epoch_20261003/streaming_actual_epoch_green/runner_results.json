@@ -1,0 +1,32 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "monster_streaming_single_poll_per_frame_test",
+                        "test_path":  "tests/monster_streaming_single_poll_per_frame_test.tscn",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-03T11:11:42.9163866Z",
+                        "native_exit_observed_utc":  "2026-10-03T11:11:33.4852288Z",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "",
+                        "framework_receipt_valid":  null,
+                        "result":  "PASS",
+                        "reason":  ""
+                    }
+                ],
+    "total":  1,
+    "invocation_id":  "f0cdfe3d-85e1-4f52-a89e-2da7786846ac",
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "passed":  1,
+    "engine_log_errors":  0,
+    "generated_at":  "2026-10-03T19:11:35.1201169+08:00",
+    "failed":  0,
+    "suite":  "adhoc"
+}

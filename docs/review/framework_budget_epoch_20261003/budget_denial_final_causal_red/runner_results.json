@@ -1,0 +1,32 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "death_burst_lifecycle_test",
+                        "test_path":  "tests/framework/death_burst_lifecycle_test.tscn",
+                        "fixed_fps":  60,
+                        "pass_marker_found":  false,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  1,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-03T11:00:33.2215031Z",
+                        "native_exit_observed_utc":  "2026-10-03T10:59:57.8137654Z",
+                        "effective_exit_code":  1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "7ab4505f-0b1f-47f9-9c29-f2a7bfb0fa7b",
+                        "framework_receipt_valid":  false,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+                    }
+                ],
+    "total":  1,
+    "invocation_id":  "2dd3a566-3279-4192-b170-9d29da612fec",
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "passed":  0,
+    "engine_log_errors":  0,
+    "generated_at":  "2026-10-03T18:59:59.0579977+08:00",
+    "failed":  1,
+    "suite":  "adhoc"
+}

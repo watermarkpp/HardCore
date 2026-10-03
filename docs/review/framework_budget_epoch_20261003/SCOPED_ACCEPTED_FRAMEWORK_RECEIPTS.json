@@ -1,0 +1,254 @@
+[
+  {
+    "label": "final_budget_related",
+    "scene": "tests/framework/frame_budget_test.tscn",
+    "run_id": "dfcef9d2-4c73-4ef6-ab0f-2aa323945535",
+    "checks": 126
+  },
+  {
+    "label": "final_budget_related",
+    "scene": "tests/framework/budget_producer_admission_test.tscn",
+    "run_id": "fcf03688-c42e-41d9-970e-3bc371bb17cf",
+    "checks": 12
+  },
+  {
+    "label": "final_budget_related",
+    "scene": "tests/framework/periodic_delivery_lateness_test.tscn",
+    "run_id": "8818b8fa-ab0b-4261-9284-b62ee4fe2e47",
+    "checks": 36
+  },
+  {
+    "label": "final_budget_related",
+    "scene": "tests/framework/world_retirement_test.tscn",
+    "run_id": "286fe538-53bb-4c08-8025-28339b8d486b",
+    "checks": 9
+  },
+  {
+    "label": "final_budget_related",
+    "scene": "tests/framework/paused_persistence_receipt_test.tscn",
+    "run_id": "4d3dd9fb-f8f6-4b2a-aa5a-56502f718edf",
+    "checks": 8
+  },
+  {
+    "label": "final_layered_critical",
+    "scene": "tests/framework/currency_identity_test.tscn",
+    "run_id": "1db0129f-5e8e-4a81-88cd-0a5c72bdadde",
+    "checks": 21
+  },
+  {
+    "label": "final_layered_critical",
+    "scene": "tests/framework/ui_registry_retirement_test.tscn",
+    "run_id": "e6bfc984-21f0-4702-9186-41fa106116c2",
+    "checks": 253
+  },
+  {
+    "label": "final_layered_critical",
+    "scene": "tests/framework/death_burst_lifecycle_test.tscn",
+    "run_id": "6b419f99-bc85-4268-b4bb-a52591ee78e1",
+    "checks": 192
+  },
+  {
+    "label": "final_layered_critical",
+    "scene": "tests/framework/death_burst_lifecycle_cold_test.tscn",
+    "run_id": "e88a0ee3-a04a-4851-8945-f1de910839b1",
+    "checks": 10
+  },
+  {
+    "label": "final_layered_critical",
+    "scene": "tests/framework/death_expiry_overlap_test.tscn",
+    "run_id": "de0a68d5-f830-45f0-b246-eafbe8305445",
+    "checks": 200
+  },
+  {
+    "label": "final_layered_critical",
+    "scene": "tests/framework/death_expiry_overlap_cold_test.tscn",
+    "run_id": "a20872a7-d106-4127-826c-bc205155ac7f",
+    "checks": 10
+  },
+  {
+    "label": "final_layered_critical",
+    "scene": "tests/framework/ordinary_item_identity_test.tscn",
+    "run_id": "82a5458c-8b01-4cf3-a2a5-dd0430f5e64f",
+    "checks": 128
+  },
+  {
+    "label": "final_layered_critical",
+    "scene": "tests/framework/equipment_identity_test.tscn",
+    "run_id": "2c5c4bf0-1ae1-4895-9d0b-306a1229aba1",
+    "checks": 46
+  },
+  {
+    "label": "final_layered_critical",
+    "scene": "tests/framework/character_identity_save_test.tscn",
+    "run_id": "b7cbe24c-1293-40c5-8641-bb88baf52df5",
+    "checks": 34
+  },
+  {
+    "label": "final_layered_critical",
+    "scene": "tests/framework/item_binding_identity_test.tscn",
+    "run_id": "2448f73b-5cc3-4679-a75e-78826b3d033c",
+    "checks": 27
+  },
+  {
+    "label": "final_layered_critical",
+    "scene": "tests/framework/feature_fire_effect_production_test.tscn",
+    "run_id": "08c9d249-ff9d-482d-939c-0239d4eb4790",
+    "checks": 20
+  },
+  {
+    "label": "final_layered_critical",
+    "scene": "tests/framework/action_config_lease_test.tscn",
+    "run_id": "78d04b96-2ca7-4d18-a4e8-c4567a4dd340",
+    "checks": 13
+  },
+  {
+    "label": "final_layered_critical",
+    "scene": "tests/framework/feature_release_identity_test.tscn",
+    "run_id": "cc0b2ebb-5919-4e49-a5fb-2555278b8a8c",
+    "checks": 11
+  },
+  {
+    "label": "final_layered_critical",
+    "scene": "tests/framework/combined_effect_lifecycle_test.tscn",
+    "run_id": "5f31c701-11c1-4226-ace7-8b066606b89a",
+    "checks": 38
+  },
+  {
+    "label": "final_layered_critical",
+    "scene": "tests/framework/combined_effect_lifecycle_cold_test.tscn",
+    "run_id": "e4ebe470-bd72-46d4-a96d-11409ccd0d08",
+    "checks": 10
+  },
+  {
+    "label": "final_layered_critical",
+    "scene": "tests/framework/periodic_credit_safe_logout_test.tscn",
+    "run_id": "919fe478-c8d4-4819-9e1c-9bd0d06e781c",
+    "checks": 37
+  },
+  {
+    "label": "final_layered_critical",
+    "scene": "tests/framework/periodic_credit_safe_logout_cold_test.tscn",
+    "run_id": "9b9c1093-3262-47f2-893b-d59437a5eb25",
+    "checks": 13
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_01",
+    "scene": "tests/framework/death_expiry_overlap_test.tscn",
+    "run_id": "cf50e6c6-5c9e-4e19-ba8f-5fa01fc404a6",
+    "checks": 200
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_01",
+    "scene": "tests/framework/death_expiry_overlap_cold_test.tscn",
+    "run_id": "c180b40d-1fc4-40ec-8b12-9255d3cf11fd",
+    "checks": 10
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_02",
+    "scene": "tests/framework/death_expiry_overlap_test.tscn",
+    "run_id": "fdc01fab-4ed1-4620-a4b2-190d5a1cca3c",
+    "checks": 200
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_02",
+    "scene": "tests/framework/death_expiry_overlap_cold_test.tscn",
+    "run_id": "73813517-6c52-4122-a2c4-74b833b578c8",
+    "checks": 10
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_03",
+    "scene": "tests/framework/death_expiry_overlap_test.tscn",
+    "run_id": "e42e0ef6-6f4c-44af-99a9-613050916796",
+    "checks": 200
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_03",
+    "scene": "tests/framework/death_expiry_overlap_cold_test.tscn",
+    "run_id": "2cc78186-b116-4798-9f48-1cecedfc6452",
+    "checks": 10
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_04",
+    "scene": "tests/framework/death_expiry_overlap_test.tscn",
+    "run_id": "e3d32e88-d9f3-4c08-b529-d813b37107fd",
+    "checks": 200
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_04",
+    "scene": "tests/framework/death_expiry_overlap_cold_test.tscn",
+    "run_id": "23a3eb82-0b56-4b97-a878-5d7f30d01234",
+    "checks": 10
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_05",
+    "scene": "tests/framework/death_expiry_overlap_test.tscn",
+    "run_id": "54ad1ffd-c262-43b8-b731-49c84cf3b623",
+    "checks": 200
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_05",
+    "scene": "tests/framework/death_expiry_overlap_cold_test.tscn",
+    "run_id": "e5bd92f4-674d-4ed0-ab6a-3b0616729cd9",
+    "checks": 10
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_06",
+    "scene": "tests/framework/death_expiry_overlap_test.tscn",
+    "run_id": "bb059862-c580-4c5a-a1ff-f1fb4eff6a3f",
+    "checks": 200
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_06",
+    "scene": "tests/framework/death_expiry_overlap_cold_test.tscn",
+    "run_id": "d3221382-628e-4a94-bf72-634d7fb7b4cb",
+    "checks": 10
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_07",
+    "scene": "tests/framework/death_expiry_overlap_test.tscn",
+    "run_id": "b86c7e38-4804-4cee-94e8-11cf1ac7b83b",
+    "checks": 200
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_07",
+    "scene": "tests/framework/death_expiry_overlap_cold_test.tscn",
+    "run_id": "93cbdbe2-ede5-4857-ad6d-2d624f856744",
+    "checks": 10
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_08",
+    "scene": "tests/framework/death_expiry_overlap_test.tscn",
+    "run_id": "859f9c63-288d-48f9-9cc8-d219e1fe51d5",
+    "checks": 200
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_08",
+    "scene": "tests/framework/death_expiry_overlap_cold_test.tscn",
+    "run_id": "415ec890-ae5d-4fba-b135-1e604a9840cd",
+    "checks": 10
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_09",
+    "scene": "tests/framework/death_expiry_overlap_test.tscn",
+    "run_id": "c234a09d-f70f-4605-9f9c-a96d53823a9b",
+    "checks": 200
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_09",
+    "scene": "tests/framework/death_expiry_overlap_cold_test.tscn",
+    "run_id": "6de29dc8-653f-4150-ad1a-3c2644ad18d5",
+    "checks": 10
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_10",
+    "scene": "tests/framework/death_expiry_overlap_test.tscn",
+    "run_id": "5321fcc4-1f2d-4df3-865e-8b4bd2e6392e",
+    "checks": 200
+  },
+  {
+    "label": "boundary_final_same_phase_repeat_10",
+    "scene": "tests/framework/death_expiry_overlap_cold_test.tscn",
+    "run_id": "b50b572b-c0c8-4348-be66-332207c5e687",
+    "checks": 10
+  }
+]

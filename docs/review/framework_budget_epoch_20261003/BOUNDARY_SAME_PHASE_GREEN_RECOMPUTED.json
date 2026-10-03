@@ -1,0 +1,140 @@
+{
+  "death_burst_lifecycle": {
+    "checks": 192,
+    "source": "d50ac7009e688aca9e2cc90b9627162a1abc07147ef923fece82eaa5bc28b386",
+    "inputs": [
+      {
+        "lethal": false,
+        "outcome": "accepted",
+        "phase": "test_node_process_after_root",
+        "physics_frame": 179,
+        "process_frame": 178,
+        "requested_process_frame": -1,
+        "simulation_usec": 0
+      },
+      {
+        "lethal": true,
+        "outcome": "accepted",
+        "phase": "test_node_process_after_root",
+        "physics_frame": 464,
+        "process_frame": 463,
+        "requested_process_frame": -1,
+        "simulation_usec": 4733333
+      }
+    ],
+    "releases": [
+      {
+        "physics_frame": 214,
+        "process_frame": 213,
+        "simulation_usec": 583333,
+        "skill_signal_payload": "\u51b0\u5486\u54ee"
+      },
+      {
+        "physics_frame": 499,
+        "process_frame": 498,
+        "simulation_usec": 5316667,
+        "skill_signal_payload": "\u51b0\u5486\u54ee"
+      }
+    ],
+    "duration_frames": 0,
+    "scheduled_expiry": 4583333,
+    "death_snapshot": 5316667,
+    "due_states": 0,
+    "metrics": {
+      "actual_loss": 2160,
+      "admitted_facts": 30,
+      "expired": 90,
+      "failed": 0,
+      "invalidated": 0,
+      "maximum_tick_delivery_lateness_usec": 150000,
+      "optional_cue_missing": 90,
+      "peak_pending": 30,
+      "peak_receipts": 90,
+      "peak_reservations": 1,
+      "peak_states": 90,
+      "refreshed": 0,
+      "retired_receipts": 90,
+      "started": 90,
+      "tick_delivery_count": 360,
+      "ticks": 360
+    },
+    "pace": {
+      "budget_scopes_closed": true,
+      "frames": 567,
+      "interval_usec": 16667,
+      "kind": "test_owned_host_pace",
+      "maximum_interval_usec": 1198542,
+      "minimum_interval_usec": 16673,
+      "total_wait_usec": 8081311
+    }
+  },
+  "death_expiry_overlap": {
+    "checks": 200,
+    "source": "d50ac7009e688aca9e2cc90b9627162a1abc07147ef923fece82eaa5bc28b386",
+    "inputs": [
+      {
+        "lethal": false,
+        "outcome": "accepted",
+        "phase": "test_node_process_after_root",
+        "physics_frame": 185,
+        "process_frame": 184,
+        "requested_process_frame": -1,
+        "simulation_usec": 0
+      },
+      {
+        "lethal": true,
+        "outcome": "accepted",
+        "phase": "test_node_process_after_root",
+        "physics_frame": 425,
+        "process_frame": 424,
+        "requested_process_frame": 424,
+        "simulation_usec": 4000000
+      }
+    ],
+    "releases": [
+      {
+        "physics_frame": 220,
+        "process_frame": 219,
+        "simulation_usec": 583333,
+        "skill_signal_payload": "\u51b0\u5486\u54ee"
+      },
+      {
+        "physics_frame": 460,
+        "process_frame": 459,
+        "simulation_usec": 4583333,
+        "skill_signal_payload": "\u51b0\u5486\u54ee"
+      }
+    ],
+    "duration_frames": 240,
+    "scheduled_expiry": 4583333,
+    "death_snapshot": 4583333,
+    "due_states": 82,
+    "metrics": {
+      "actual_loss": 1668,
+      "admitted_facts": 30,
+      "expired": 8,
+      "failed": 0,
+      "invalidated": 82,
+      "maximum_tick_delivery_lateness_usec": 150000,
+      "optional_cue_missing": 90,
+      "peak_pending": 30,
+      "peak_receipts": 90,
+      "peak_reservations": 1,
+      "peak_states": 90,
+      "refreshed": 0,
+      "retired_receipts": 90,
+      "started": 90,
+      "tick_delivery_count": 278,
+      "ticks": 278
+    },
+    "pace": {
+      "budget_scopes_closed": true,
+      "frames": 533,
+      "interval_usec": 16667,
+      "kind": "test_owned_host_pace",
+      "maximum_interval_usec": 1093571,
+      "minimum_interval_usec": 16668,
+      "total_wait_usec": 7510971
+    }
+  }
+}

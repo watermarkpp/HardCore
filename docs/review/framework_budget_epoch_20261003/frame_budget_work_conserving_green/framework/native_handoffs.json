@@ -1,0 +1,43 @@
+{
+    "schema_version":  1,
+    "invocation_id":  "68c1e6a4-e9fe-410d-a386-5560b11eb126",
+    "source_content_sha256":  "234852b3529774511d2fc6b7c6642907b6c1b38791606791dab2b26e8819860d",
+    "producers":  {
+                      "frame_budget_test":  {
+                                                "scene_id":  "frame_budget_test",
+                                                "run_id":  "f9d3dbe1-5057-4958-8f31-e868636b23b3",
+                                                "source_content_sha256":  "234852b3529774511d2fc6b7c6642907b6c1b38791606791dab2b26e8819860d",
+                                                "process_exited":  true,
+                                                "effective_exit_code":  0,
+                                                "result":  "PASS",
+                                                "receipt_sha256":  "1ed0f672aada182156df97ad6399d101fa0ebccf1ce4d884e6aa4e81f318ac19"
+                                            },
+                      "budget_producer_admission_test":  {
+                                                             "scene_id":  "budget_producer_admission_test",
+                                                             "run_id":  "e1fd8857-5c24-40cb-9565-e089b6b3bef3",
+                                                             "source_content_sha256":  "234852b3529774511d2fc6b7c6642907b6c1b38791606791dab2b26e8819860d",
+                                                             "process_exited":  true,
+                                                             "effective_exit_code":  0,
+                                                             "result":  "PASS",
+                                                             "receipt_sha256":  "8ff7a0380c73243800b476adfda43fde88d209f8800b70ec7bbd85a0aec9b511"
+                                                         },
+                      "periodic_delivery_lateness_test":  {
+                                                              "scene_id":  "periodic_delivery_lateness_test",
+                                                              "run_id":  "a692a829-dce2-4471-8009-7cc4021cd1f9",
+                                                              "source_content_sha256":  "234852b3529774511d2fc6b7c6642907b6c1b38791606791dab2b26e8819860d",
+                                                              "process_exited":  true,
+                                                              "effective_exit_code":  0,
+                                                              "result":  "PASS",
+                                                              "receipt_sha256":  "b080e843c9ba84001366e39f824f9d932d484ecda13e6c9413d47c3adad59a47"
+                                                          },
+                      "world_retirement_test":  {
+                                                    "scene_id":  "world_retirement_test",
+                                                    "run_id":  "06119d9e-402b-499a-a400-71eecb25b84d",
+                                                    "source_content_sha256":  "234852b3529774511d2fc6b7c6642907b6c1b38791606791dab2b26e8819860d",
+                                                    "process_exited":  true,
+                                                    "effective_exit_code":  0,
+                                                    "result":  "PASS",
+                                                    "receipt_sha256":  "f7fef41a7fb318c1f561b84dee869be4d45b7d70bc991d4aaa581e81b3ad2855"
+                                                }
+                  }
+}

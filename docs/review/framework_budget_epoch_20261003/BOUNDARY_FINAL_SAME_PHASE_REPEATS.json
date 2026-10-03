@@ -1,0 +1,217 @@
+{
+  "planned_pairs": 10,
+  "completed_pairs": 10,
+  "status": "PASS",
+  "rows": [
+    {
+      "iteration": 1,
+      "result": {
+        "evidence": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\boundary_final_same_phase_repeat_01_191528_794621",
+        "command": [
+          "powershell",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-Command",
+          "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+        ],
+        "timeout_seconds": 60,
+        "exit_code": 0,
+        "source_stable_during_run": true,
+        "passed": 2,
+        "failed": 0,
+        "status": "PASS",
+        "controller_native_exit": 0
+      }
+    },
+    {
+      "iteration": 2,
+      "result": {
+        "evidence": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\boundary_final_same_phase_repeat_02_191602_395923",
+        "command": [
+          "powershell",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-Command",
+          "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+        ],
+        "timeout_seconds": 60,
+        "exit_code": 0,
+        "source_stable_during_run": true,
+        "passed": 2,
+        "failed": 0,
+        "status": "PASS",
+        "controller_native_exit": 0
+      }
+    },
+    {
+      "iteration": 3,
+      "result": {
+        "evidence": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\boundary_final_same_phase_repeat_03_191635_271511",
+        "command": [
+          "powershell",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-Command",
+          "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+        ],
+        "timeout_seconds": 60,
+        "exit_code": 0,
+        "source_stable_during_run": true,
+        "passed": 2,
+        "failed": 0,
+        "status": "PASS",
+        "controller_native_exit": 0
+      }
+    },
+    {
+      "iteration": 4,
+      "result": {
+        "evidence": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\boundary_final_same_phase_repeat_04_191708_070232",
+        "command": [
+          "powershell",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-Command",
+          "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+        ],
+        "timeout_seconds": 60,
+        "exit_code": 0,
+        "source_stable_during_run": true,
+        "passed": 2,
+        "failed": 0,
+        "status": "PASS",
+        "controller_native_exit": 0
+      }
+    },
+    {
+      "iteration": 5,
+      "result": {
+        "evidence": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\boundary_final_same_phase_repeat_05_191740_887053",
+        "command": [
+          "powershell",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-Command",
+          "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+        ],
+        "timeout_seconds": 60,
+        "exit_code": 0,
+        "source_stable_during_run": true,
+        "passed": 2,
+        "failed": 0,
+        "status": "PASS",
+        "controller_native_exit": 0
+      }
+    },
+    {
+      "iteration": 6,
+      "result": {
+        "evidence": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\boundary_final_same_phase_repeat_06_191813_607930",
+        "command": [
+          "powershell",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-Command",
+          "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+        ],
+        "timeout_seconds": 60,
+        "exit_code": 0,
+        "source_stable_during_run": true,
+        "passed": 2,
+        "failed": 0,
+        "status": "PASS",
+        "controller_native_exit": 0
+      }
+    },
+    {
+      "iteration": 7,
+      "result": {
+        "evidence": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\boundary_final_same_phase_repeat_07_191846_122734",
+        "command": [
+          "powershell",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-Command",
+          "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+        ],
+        "timeout_seconds": 60,
+        "exit_code": 0,
+        "source_stable_during_run": true,
+        "passed": 2,
+        "failed": 0,
+        "status": "PASS",
+        "controller_native_exit": 0
+      }
+    },
+    {
+      "iteration": 8,
+      "result": {
+        "evidence": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\boundary_final_same_phase_repeat_08_191919_116420",
+        "command": [
+          "powershell",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-Command",
+          "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+        ],
+        "timeout_seconds": 60,
+        "exit_code": 0,
+        "source_stable_during_run": true,
+        "passed": 2,
+        "failed": 0,
+        "status": "PASS",
+        "controller_native_exit": 0
+      }
+    },
+    {
+      "iteration": 9,
+      "result": {
+        "evidence": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\boundary_final_same_phase_repeat_09_191952_032672",
+        "command": [
+          "powershell",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-Command",
+          "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+        ],
+        "timeout_seconds": 60,
+        "exit_code": 0,
+        "source_stable_during_run": true,
+        "passed": 2,
+        "failed": 0,
+        "status": "PASS",
+        "controller_native_exit": 0
+      }
+    },
+    {
+      "iteration": 10,
+      "result": {
+        "evidence": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\boundary_final_same_phase_repeat_10_192024_688450",
+        "command": [
+          "powershell",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-Command",
+          "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+        ],
+        "timeout_seconds": 60,
+        "exit_code": 0,
+        "source_stable_during_run": true,
+        "passed": 2,
+        "failed": 0,
+        "status": "PASS",
+        "controller_native_exit": 0
+      }
+    }
+  ]
+}

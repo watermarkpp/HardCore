@@ -1,0 +1,10 @@
+[
+  {
+    "path": "tests/monster_streaming_single_poll_per_frame_test.gd",
+    "before_sha256": "9d9824190bdcafd2bf4a99fe87877e6127d389420888d1eb9c9d40cb1448f94e",
+    "after_sha256": "ef71448da9cde4862d0cc0cefc15daa507a41f928428e4b6f94feed67051c41b",
+    "preimage": "streaming_single_poll.before_actual_epoch.bin",
+    "reason": "required startup save exhausted epoch0; synthetic input loop invoked two polls in that exhausted epoch. Use unique actual epochs and assert exact one plus repeated-call dedup without resetting budget or altering sample counts",
+    "status": "NOT_RUN"
+  }
+]
