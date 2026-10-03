@@ -1,0 +1,43 @@
+{
+    "schema_version":  1,
+    "invocation_id":  "da8f0763-0b42-4b57-9e9f-cd9ae94922fa",
+    "source_content_sha256":  "0cd8f50096772e8b34d420edc0d3c722a3d9eb2fbe6d94a13580fa27609da64a",
+    "producers":  {
+                      "feature_resource_accepted_lifetime_test":  {
+                                                                      "scene_id":  "feature_resource_accepted_lifetime_test",
+                                                                      "run_id":  "cc0d2902-dc51-4a01-b349-d318213eee71",
+                                                                      "source_content_sha256":  "0cd8f50096772e8b34d420edc0d3c722a3d9eb2fbe6d94a13580fa27609da64a",
+                                                                      "process_exited":  true,
+                                                                      "effective_exit_code":  0,
+                                                                      "result":  "PASS",
+                                                                      "receipt_sha256":  "13f5e9d86d8890c0953383f052d8900a5369b41438a3342c7a5bead519ed9806"
+                                                                  },
+                      "damage_commit_fact_test":  {
+                                                      "scene_id":  "damage_commit_fact_test",
+                                                      "run_id":  "52d57098-1af8-4b91-99ad-262885d7891c",
+                                                      "source_content_sha256":  "0cd8f50096772e8b34d420edc0d3c722a3d9eb2fbe6d94a13580fa27609da64a",
+                                                      "process_exited":  true,
+                                                      "effective_exit_code":  0,
+                                                      "result":  "PASS",
+                                                      "receipt_sha256":  "28e52b63101823224b6627b62ef90cc13eda6445d98f857619a00df5f0c2ef45"
+                                                  },
+                      "feature_reservation_test":  {
+                                                       "scene_id":  "feature_reservation_test",
+                                                       "run_id":  "b214af12-a630-4860-a236-95b3ec8f23de",
+                                                       "source_content_sha256":  "0cd8f50096772e8b34d420edc0d3c722a3d9eb2fbe6d94a13580fa27609da64a",
+                                                       "process_exited":  true,
+                                                       "effective_exit_code":  0,
+                                                       "result":  "PASS",
+                                                       "receipt_sha256":  "3222921d7a644f364d518d1f9a2218a8b840de1adf46673ec853a63d14d3e16d"
+                                                   },
+                      "feature_producing_death_reentry_test":  {
+                                                                   "scene_id":  "feature_producing_death_reentry_test",
+                                                                   "run_id":  "5b2a8fa6-7730-4bcd-a2d9-faa2a401e7d9",
+                                                                   "source_content_sha256":  "0cd8f50096772e8b34d420edc0d3c722a3d9eb2fbe6d94a13580fa27609da64a",
+                                                                   "process_exited":  true,
+                                                                   "effective_exit_code":  0,
+                                                                   "result":  "PASS",
+                                                                   "receipt_sha256":  "aee9ff248eb5f04a57befebe48dee0af7f9f355e3e372fa6ebd5e628c9a9df47"
+                                                               }
+                  }
+}

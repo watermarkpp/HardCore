@@ -6,6 +6,7 @@ var _bundle: Dictionary = {}
 var _signature := ""
 var compile_count := 0
 var last_errors: Array = []
+var _resources: RefCounted
 
 func candidate_copy() -> RefCounted:
 	# The compiled bundle is immutable. A failed candidate must never mutate
@@ -14,7 +15,14 @@ func candidate_copy() -> RefCounted:
 	candidate._bundle = _bundle
 	candidate._signature = _signature
 	candidate.compile_count = compile_count
+	candidate._resources = _resources
 	return candidate
+
+func set_resource_lease(lease: RefCounted) -> void:
+	_resources = lease
+
+func resource_lease() -> RefCounted:
+	return _resources
 
 func synchronize(catalog: Dictionary, sources: Array, authority: Dictionary, base_stats: Dictionary = {}) -> bool:
 	var base_revision := preload("res://scripts/skills/skill_data_loader.gd").configuration_revision()

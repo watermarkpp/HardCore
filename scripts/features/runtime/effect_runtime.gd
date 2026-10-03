@@ -294,6 +294,7 @@ func _apply_command(command: Dictionary, entry: Dictionary) -> void:
 			_error("feature_state_reservation_missing"); return
 		_reservations[admission_id].states -= 1; _reserved_states -= 1
 	var state := {"target":entry.target,"source":entry.source,"command":command,"target_key":target_key,
+		"resource_lease":entry.get("resource_lease"),
 		"raw_per_tick":int(command.raw_per_tick),"period":int(command.period_usec),
 		"next_due":accepted_at+int(command.period_usec),"expires":accepted_at+int(command.duration_usec),"ticks":0}
 	_states[handle] = state

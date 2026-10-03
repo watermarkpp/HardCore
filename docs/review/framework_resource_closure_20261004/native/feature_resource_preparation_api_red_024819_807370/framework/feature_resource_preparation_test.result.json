@@ -1,0 +1,26 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "cold test begins with real primary icon uncached",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "formal publication has a resource preparation entry",
+      "passed": false
+    }
+  ],
+  "count": 2,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "d635c343-762e-4332-80ce-fae80f3fe969",
+  "passed": 1,
+  "reported_checks": 2,
+  "reported_failures": 1,
+  "run_id": "e2cd2a33-c500-42af-8a9f-cd31f3c289a7",
+  "scene_id": "feature_resource_preparation_test",
+  "schema_version": 1,
+  "source_content_sha256": "0b433de3df6cd68b0f59b65bb1b41f0d992065737da528bb8c23ad05871154b5",
+  "status": "FAIL"
+}

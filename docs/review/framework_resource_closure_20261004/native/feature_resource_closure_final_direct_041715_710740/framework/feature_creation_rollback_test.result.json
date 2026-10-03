@@ -1,0 +1,76 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "real production creates isolated warrior A",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "level one warrior has independently expected MP 15",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "register rollback probe through trusted production loader",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "valid feature is active before creation transaction",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "existing owned save failure triggers official creation rollback",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "rollback restores active A and computed stats",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "failed B leaves A and index bytes intact without orphan character",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "rollback restores feature input from A instead of failed B",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "rollback restores original effective bundle and compile generation",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "MP minus sixteen cannot enable on restored warrior MP fifteen",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "rejected post-rollback candidate keeps coherent publication and emits no notification",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "baseline catalog remains restorable",
+      "passed": true
+    }
+  ],
+  "count": 12,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "c21482d1-4458-4a3c-9617-063da32f6d26",
+  "passed": 12,
+  "reported_checks": 12,
+  "reported_failures": 0,
+  "run_id": "249ed1f1-55e4-429e-b685-29502a903df8",
+  "scene_id": "feature_creation_rollback_test",
+  "schema_version": 1,
+  "source_content_sha256": "52beda6709b0a16e9f62877f4d610042aea85751909d903602939b0611e6abfb",
+  "status": "PASS"
+}

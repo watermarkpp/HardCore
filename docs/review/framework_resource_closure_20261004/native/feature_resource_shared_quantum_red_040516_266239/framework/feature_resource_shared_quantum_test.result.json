@@ -1,0 +1,76 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "load legitimate disabled resource definitions without fetching a texture",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "shared cold requests begin without a loaded primary texture",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "thirty-two real callers initially share one pending engine job",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "every shared caller completes without dropping or limiting accepted requests",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "a ready shared job delivers at most one caller per ordinary budget quantum",
+      "passed": false
+    },
+    {
+      "id": 6,
+      "label": "shared cold work acquires and retrieves exactly one physical engine request",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "all independent callers own actual usable readiness leases",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "shared leases refer to one texture after all engine retrieval rights finish",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "completion continuations execute after the preparation scope closes",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "every caller lease retires and the real release queue drains",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "an idle resource owner leaves no recurring frame work or scope",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "ordinary empty configuration remains restorable",
+      "passed": true
+    }
+  ],
+  "count": 12,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "3d2c5218-6717-4e7c-b7cf-895949c469dd",
+  "passed": 11,
+  "reported_checks": 12,
+  "reported_failures": 1,
+  "run_id": "59027577-6d85-4914-a5ce-d51f47fa63d3",
+  "scene_id": "feature_resource_shared_quantum_test",
+  "schema_version": 1,
+  "source_content_sha256": "a7653dc701df179cda9b722f8bc17b0ca3661ebeb9e19ab237afb50b5ff9b307",
+  "status": "FAIL"
+}

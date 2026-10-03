@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "modules": [
+    {
+      "module_id": "hc.ignite",
+      "path": "res://assets/data/features/validation/resource_ignite_probe.json"
+    }
+  ],
+  "bindings": [
+    {
+      "module_id": "hc.ignite",
+      "kind": "rule",
+      "rule_id": "hc.ignite",
+      "mechanic_id": "hc.ignite.ice_storm"
+    },
+    {
+      "module_id": "hc.ignite",
+      "kind": "rule",
+      "rule_id": "hc.ignite",
+      "mechanic_id": "hc.ignite.fire_sword"
+    }
+  ]
+}

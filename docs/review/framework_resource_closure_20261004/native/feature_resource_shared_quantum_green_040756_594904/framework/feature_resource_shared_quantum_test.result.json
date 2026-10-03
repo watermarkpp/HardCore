@@ -1,0 +1,76 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "load legitimate disabled resource definitions without fetching a texture",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "shared cold requests begin without a loaded primary texture",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "thirty-two real callers initially share one pending engine job",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "every shared caller completes without dropping or limiting accepted requests",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "a ready shared job delivers at most one caller per ordinary budget quantum",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "shared cold work acquires and retrieves exactly one physical engine request",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "all independent callers own actual usable readiness leases",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "shared leases refer to one texture after all engine retrieval rights finish",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "completion continuations execute after the preparation scope closes",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "every caller lease retires and the real release queue drains",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "an idle resource owner leaves no recurring frame work or scope",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "ordinary empty configuration remains restorable",
+      "passed": true
+    }
+  ],
+  "count": 12,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "ea8a593f-4374-4eaf-ac92-dd6a5f00f74d",
+  "passed": 12,
+  "reported_checks": 12,
+  "reported_failures": 0,
+  "run_id": "34908921-3648-4d1c-82b5-b834f228a3d0",
+  "scene_id": "feature_resource_shared_quantum_test",
+  "schema_version": 1,
+  "source_content_sha256": "107ecfc473467549dc0b3684d7e5f015571e9c2e3a6411a0377b885a6a5a4e55",
+  "status": "PASS"
+}

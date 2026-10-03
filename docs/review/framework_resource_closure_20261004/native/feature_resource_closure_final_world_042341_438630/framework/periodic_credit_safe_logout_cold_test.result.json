@@ -1,0 +1,81 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "new native process uses actual production persistence",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "cold expectation and producer receipt exist",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "cold expectation binds the successful live producer and this exact source set",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "cold process retains the same actual production storage authority",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "cold process completes official startup preflight before role selection",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "B loaded through real profile service in independent process",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "cold B has neither A experience nor A quest progress",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "cold B retains its own world-clock generation",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "A loaded through real profile/world death-ledger recovery",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "cold A retains exactly one canonical periodic kill gain",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "cold A retains exactly one quest objective gain",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "cold A retains its original world-clock generation",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "independent process has no unfinished profile/world receipt",
+      "passed": true
+    }
+  ],
+  "count": 13,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "0298ed97-eab4-4835-bb45-3ebf9bc2a1e4",
+  "passed": 13,
+  "reported_checks": 13,
+  "reported_failures": 0,
+  "run_id": "1300669b-2418-43f9-a3f6-0f1d325099b7",
+  "scene_id": "periodic_credit_safe_logout_cold_test",
+  "schema_version": 1,
+  "source_content_sha256": "52beda6709b0a16e9f62877f4d610042aea85751909d903602939b0611e6abfb",
+  "status": "PASS"
+}

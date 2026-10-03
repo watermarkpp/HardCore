@@ -14829,6 +14829,10 @@ func _action_configuration_identity() -> Dictionary:
 		"life_generation":player.combat_epoch if is_instance_valid(player) else 0}
 
 
+func feature_publication_scope() -> Dictionary:
+	return {"world":_world_context.capture_world(), "actor":_action_configuration_identity()}
+
+
 var _feature_target_bound := preload("res://scripts/features/adapters/world_target_bound.gd").new()
 
 func feature_world_capacity_bound() -> Dictionary:
@@ -14856,7 +14860,7 @@ func _capture_action_configuration(stable_skill_id: String, melee: Dictionary = 
 		else contract.LEGACY_RELEASE_PRIMARY_STATS)
 	var captured := contract.create(
 		definition, PlayerState.effective_skill_level(stable_skill_id), PlayerState.level, PlayerState.computed_stats,
-		PlayerState.action_configuration_versions(), _action_configuration_identity(), partner, partner_rank, primary_policy, melee,bundle.get("event_index",{}))
+		PlayerState.action_configuration_versions(), _action_configuration_identity(), partner, partner_rank, primary_policy, melee,bundle.get("event_index",{}),PlayerState._feature_loadout.resource_lease())
 	if bool(captured.success): captured.lease.configure_admission(Callable(self,"_reserve_feature_action"))
 	return captured.lease if bool(captured.success) else null
 
@@ -14938,7 +14942,8 @@ func _begin_feature_damage_batch(skill_id: String, release_id: String, configura
 	if configuration == null and _feature_effect_runtime.require_reservations:
 		push_error("Unticketed feature producer cannot enter an admitted action runtime"); return null
 	var created := preload("res://scripts/features/runtime/damage_batch.gd").create(_world_context,release_id,entity_id,
-		bindings,{"profile_id":PlayerState.active_profile_id},_time_domains.simulation_usec(),reservation)
+		bindings,{"profile_id":PlayerState.active_profile_id},_time_domains.simulation_usec(),reservation,
+		configuration.resource_lease() if configuration != null else PlayerState._feature_loadout.resource_lease())
 	if not bool(created.success):
 		push_error("Feature damage batch rejected: " + str(created.reason)); return null
 	var batch: RefCounted = created.batch

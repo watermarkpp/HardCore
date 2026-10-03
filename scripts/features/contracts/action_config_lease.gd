@@ -13,12 +13,15 @@ var _release_started := false
 var _release_id := ""
 var _plan_started := false
 var _producer_closed := false
+var _resources: RefCounted
 
 # Configuration is accepted separately from live target/facing sampling. The
 # old release boundary continues to own positions, receiver life and facing.
 static func create(definition: Dictionary, rank: int, actor_level: int, primary_stats: Dictionary,
 	versions: Dictionary, actor_identity: Dictionary, partner_definition: Dictionary = {}, partner_rank := 0,
-	primary_policy: String = ACCEPTED_PRIMARY_STATS, melee: Dictionary = {}, event_index: Dictionary = {}) -> Dictionary:
+	primary_policy: String = ACCEPTED_PRIMARY_STATS, melee: Dictionary = {}, event_index: Dictionary = {}, resources: RefCounted = null) -> Dictionary:
+	if resources != null and resources.get_script() != preload("res://scripts/features/contracts/feature_resource_lease.gd"):
+		return {"success":false, "reason":"lease_invalid_resources", "lease":null}
 	if not _definition_identity_valid(definition) or (not partner_definition.is_empty() and not _definition_identity_valid(partner_definition)):
 		return {"success": false, "reason": "lease_unknown_skill", "lease": null}
 	if not _versions_valid(versions) or not _actor_valid(actor_identity) or rank < 0 or actor_level < 1 \
@@ -33,6 +36,7 @@ static func create(definition: Dictionary, rank: int, actor_level: int, primary_
 		return {"success": false, "reason": "lease_non_plain_snapshot", "lease": null}
 	var lease := new()
 	lease._snapshot = captured.value
+	lease._resources = resources
 	return {"success": true, "reason": "", "lease": lease}
 
 func current_before_accept(versions: Dictionary, actor_identity: Dictionary) -> bool:
@@ -83,9 +87,12 @@ func begin_plan(actor_identity: Dictionary, release_id: String, from_melee_relea
 
 func effect_reservation() -> RefCounted: return _reservation
 
+func resource_lease() -> RefCounted: return _resources
+
 func finish_producer() -> void:
 	if _reservation != null: _reservation.close()
 	_producer_closed = true
+	_resources = null
 
 func definition_for(skill_id: String) -> Dictionary:
 	var canonical_id := Loader.stable_skill_id(skill_id)

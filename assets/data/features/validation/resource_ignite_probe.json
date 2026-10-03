@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "module_id": "hc.ignite",
+  "module_version": 1,
+  "core_api_version": 1,
+  "requires": [],
+  "conflicts": [],
+  "capabilities": [
+    "combat.post_hit",
+    "effects.periodic"
+  ],
+  "handlers": [
+    "hc.ignite.v1"
+  ],
+  "resource_dependencies": [
+    "res://assets/art/items/service/inventory/client.classic_raw_complete/Items_00014.png"
+  ],
+  "cost": {
+    "commands_per_event": 1,
+    "states_per_target": 1
+  },
+  "default_enabled": true,
+  "scope": "world",
+  "activation_boundary": "startup",
+  "mechanics": [
+    {
+      "mechanic_id": "hc.ignite.ice_storm",
+      "kind": "trigger",
+      "tags": [
+        "hc.periodic"
+      ],
+      "event": "damage_committed",
+      "skill_id": "hc.skill.wizard.ice_storm",
+      "handler_id": "hc.ignite.v1",
+      "source_classes": [
+        "direct"
+      ],
+      "dedup": "per_target_per_release",
+      "lifecycle": "until_expired",
+      "config": {
+        "chance": 1,
+        "fraction": 0.05,
+        "period_usec": 1000000,
+        "duration_usec": 4000000,
+        "max_ticks": 4
+      }
+    },
+    {
+      "mechanic_id": "hc.ignite.fire_sword",
+      "kind": "trigger",
+      "tags": [
+        "hc.periodic"
+      ],
+      "event": "damage_committed",
+      "skill_id": "hc.skill.warrior.fire_sword",
+      "handler_id": "hc.ignite.v1",
+      "source_classes": [
+        "direct"
+      ],
+      "dedup": "per_target_per_release",
+      "lifecycle": "until_expired",
+      "config": {
+        "chance": 1,
+        "fraction": 0.05,
+        "period_usec": 1000000,
+        "duration_usec": 4000000,
+        "max_ticks": 4
+      }
+    }
+  ],
+  "tests": [
+    "tests/framework/feature_compiler_test.tscn",
+    "tests/framework/feature_production_loadout_test.tscn",
+    "tests/framework/periodic_effect_runtime_test.tscn",
+    "tests/framework/feature_effect_production_test.tscn",
+    "tests/framework/feature_fire_effect_production_test.tscn",
+    "tests/framework/feature_resource_accepted_lifetime_test.tscn"
+  ]
+}

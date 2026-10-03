@@ -14,6 +14,8 @@ var _accepted_usec := 0
 var _bindings: Array = []
 var _credit: Dictionary = {}
 var _entries: Array = []
+var _facts: Array = []
+var _resources: RefCounted
 var _depth := 0
 var _sealed := false
 var _consumed := false
@@ -21,7 +23,9 @@ var _reservation: RefCounted
 var _fact_limit := MAX_FACTS
 var errors: Array[String] = []
 
-static func create(world: RefCounted, release_id: String, skill_id: String, bindings: Array, credit: Dictionary, accepted_usec: int = 0, reservation: RefCounted = null) -> Dictionary:
+static func create(world: RefCounted, release_id: String, skill_id: String, bindings: Array, credit: Dictionary, accepted_usec: int = 0, reservation: RefCounted = null, resources: RefCounted = null) -> Dictionary:
+	if resources != null and resources.get_script() != preload("res://scripts/features/contracts/feature_resource_lease.gd"):
+		return {"success":false,"reason":"invalid_batch_resources","batch":null}
 	if world == null or world.capture_world().is_empty() or release_id.is_empty() or Ids.resolve(skill_id,"skill").is_empty() \
 		or bindings.size() > 32 or accepted_usec < 0:
 		return {"success":false,"reason":"invalid_damage_batch_identity","batch":null}
@@ -40,6 +44,7 @@ static func create(world: RefCounted, release_id: String, skill_id: String, bind
 		limit = int(claimed.maximum_facts)
 	var result := new()
 	result._reservation = reservation; result._fact_limit = limit
+	result._resources = resources
 	result._world = world
 	result._world_identity = world.capture_world()
 	result._release_id = release_id
@@ -116,15 +121,14 @@ func capture_commit(target: Node, source: Node, hp_before: int, hp_after: int, r
 		errors.append("non_plain_damage_fact")
 		return false
 	var entry := {"fact":fact.value,"target":target_ref,"source":source_ref,"bindings":_bindings,
-		"admission_id":_reservation.sequence() if _reservation != null else 0}
+		"admission_id":_reservation.sequence() if _reservation != null else 0,"resource_lease":_resources}
 	entry.make_read_only()
 	_entries.append(entry)
+	_facts.append(fact.value)
 	return true
 
 func facts() -> Array:
-	var result: Array = []
-	for entry: Dictionary in _entries:
-		result.append(entry.fact)
+	var result: Array = _facts.duplicate(false)
 	result.make_read_only()
 	return result
 
@@ -137,7 +141,9 @@ func consume() -> Array:
 	if not _sealed or _consumed or not errors.is_empty():
 		return []
 	_consumed = true
-	var result := _entries.duplicate(false)
+	var result := _entries
+	_entries = []
+	_resources = null
 	result.make_read_only()
 	return result
 
@@ -148,6 +154,7 @@ func reservation() -> RefCounted: return _reservation
 
 func finish_production() -> void:
 	if _reservation != null: _reservation.finish_batch()
+	_resources = null
 
 func _notification(what: int) -> void:
 	# A claimed batch can be abandoned before sealing. Its last reference is

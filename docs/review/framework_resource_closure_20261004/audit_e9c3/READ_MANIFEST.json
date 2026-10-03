@@ -1,0 +1,28 @@
+{
+  "request_id": "publication-validation-e9c3-20261004",
+  "sha": "e9c3ac005bc3e079eab6602375abfcd9c1bf3cc9",
+  "read_time": "2026-10-03 18:41:51 UTC",
+  "reports": [
+    {
+      "thread": "01a0f143-1bc9-71c0-91f2-5de4ffd0b01f",
+      "host": "durable",
+      "turn": "01a1030c-79d2-70d8-bd58-127e72f5f277",
+      "item": "exec-01794ca6-a95f-4504-b774-0c35439b2d21",
+      "complete": true
+    },
+    {
+      "thread": "6abbcea3-5fb4-83ea-8732-0cf95e1c4583",
+      "host": null,
+      "turn": "d55ce3cd-1f96-4435-b0a5-484f746f282f",
+      "item": "b8a84287-0162-4fc0-a8a3-df461e7c4b7e",
+      "complete": true
+    }
+  ],
+  "actions": [
+    "Preserve bounded e9c3 fixes; do not repeat closed tests without changed dependency",
+    "Native counterexample: legitimate temporary item buff lost on rejected character creation",
+    "Native counterexample: valid binding.kind with numeric/array skill_id",
+    "Clarify effective failure vs unobserved native exit and staged241 vs final242",
+    "Continue Task3 real resource closure, Task4 heterogeneous combinations, Task5 final delivery"
+  ]
+}

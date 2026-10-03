@@ -23,7 +23,7 @@ func _run() -> void:
 	PlayerState.reset_progress(false)
 	PlayerState.recalculate_stats(false)
 	ContentLayers.feature_catalog_changed.connect(_observe)
-	for variant: String in ["unknown", "missing", "null", "number", "array", "mixed"]:
+	for variant: String in ["unknown", "missing", "null", "number", "array", "mixed", "skill_number", "skill_array"]:
 		check(ContentLayers.reload_feature_catalog(BASE + "publication_registry.json") and ContentLayers.set_feature_module_enabled("hc.publication_probe", true), variant + ": establish valid enabled source")
 		var before := ContentLayers.feature_configuration()
 		var bundle := PlayerState.feature_bundle()
@@ -31,7 +31,7 @@ func _run() -> void:
 		var count: int = PlayerState._feature_loadout.compile_count
 		var errors: Array = PlayerState.feature_errors.duplicate()
 		var old_notifications := notifications
-		check(not ContentLayers.reload_feature_catalog(BASE + "binding_" + variant + "_registry.json"), variant + ": malformed binding kind rejects complete registry")
+		check(not ContentLayers.reload_feature_catalog(BASE + "binding_" + variant + "_registry.json"), variant + ": malformed binding rejects complete registry")
 		check(not ContentLayers.feature_load_errors.is_empty(), variant + ": explicit binding rejection reason")
 		var after := ContentLayers.feature_configuration()
 		check(is_same(after.catalog, before.catalog) and is_same(after.bindings, before.bindings) and after.enabled_modules == before.enabled_modules and is_same(after.authority, before.authority), variant + ": all published registry members remain unchanged")

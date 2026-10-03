@@ -1,0 +1,111 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "real mapped world READY",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "formal mapped receiver",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "formal ignite source enabled",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "real melee configuration includes ignite",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "formal player input accepts nonempty capacity ticket",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "same single release reaches real canonical planner",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "one actual lifesteal notification observes HP commit and producing stage",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "formal take_damage commits player death in synchronous callback",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "captured batch retains promised capacity through player death",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "base target HP was committed once without rollback or repeated hit",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "captured fact transfers after callback before derived processing",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "until-expired ignite installs from already committed hit despite source death",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "committed actual loss delivers exactly one periodic tick 1",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "committed actual loss delivers exactly one periodic tick 2",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "committed actual loss delivers exactly one periodic tick 3",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "committed actual loss delivers exactly one periodic tick 4",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "terminal consumers retire capacity and receipts without leaks",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "committed work never becomes hidden transfer failure",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "world retires before restoring catalog",
+      "passed": true
+    }
+  ],
+  "count": 19,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "45b1f41d-fbb3-41e5-b6ec-0f4adfd24f1d",
+  "passed": 19,
+  "reported_checks": 19,
+  "reported_failures": 0,
+  "run_id": "7ae99e4d-1c5d-48d9-8d50-3ce6f017d5db",
+  "scene_id": "feature_producing_death_reentry_test",
+  "schema_version": 1,
+  "source_content_sha256": "f421996329f7a785dec20909bc2c959f7067325862aca57bd063be58ece5dc5d",
+  "status": "PASS"
+}

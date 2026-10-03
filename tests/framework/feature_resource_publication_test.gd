@@ -3,6 +3,7 @@ extends Node
 const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
 const Compiler := preload("res://scripts/features/compilation/feature_compiler.gd")
 const Authority := preload("res://scripts/features/adapters/feature_authority.gd")
+const Catalog := preload("res://scripts/features/compilation/feature_catalog.gd")
 var proof := Proof.new()
 var checks := 0
 var failures: Array[String] = []
@@ -32,6 +33,15 @@ func _run() -> void:
 	var result := Compiler.compile_catalog([module], Authority.build())
 	print("FEATURE_RESOURCE_CANDIDATE " + JSON.stringify({"path":path, "success":result.success, "errors":result.errors}))
 	check(bool(result.success), "real nonempty dependency can enter the formal feature resource closure")
+	# Controlled data compiler authority isolates the second boundary. It does
+	# not broaden ContentLayers trust, start a load, or publish this directory.
+	var declared_authority := Authority.build().duplicate(true)
+	declared_authority.resource_paths = [path]
+	var candidate := Catalog.new()
+	check(candidate.publish([module], [], declared_authority), "valid declared path can compile as a controlled data-only candidate")
+	var prepared: Dictionary = PlayerState._prepare_feature_configuration({"catalog":candidate.catalog(), "authority":declared_authority, "bindings":[], "enabled_modules":[module.module_id]})
+	print("FEATURE_RESOURCE_PREPARATION " + JSON.stringify({"path":path, "engine_cached":ResourceLoader.has_cached(path), "prepared":prepared.get("success"), "errors":prepared.get("errors", []), "has_preparation_lease":false}))
+	check(not bool(prepared.success), "nonempty enabled resource dependency requires real readiness ownership before player publication")
 	check(is_same(original.catalog, ContentLayers.feature_configuration().catalog) \
 		and is_same(original_bundle, PlayerState.feature_bundle()), "resource compilation never partially publishes player state")
 	if not proof.write_receipt("feature_resource_publication_test", checks, failures.size()):

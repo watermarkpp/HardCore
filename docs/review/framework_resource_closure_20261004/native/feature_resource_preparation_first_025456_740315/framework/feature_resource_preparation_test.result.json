@@ -1,0 +1,76 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "cold test begins with real primary icon uncached",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "formal publication has a resource preparation entry",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "synchronous publication refuses nonempty resources without preparing them",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "unprepared publication retains the entire old effective configuration",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "formal asynchronous publication loads the real icon before promoting the candidate",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "promoted configuration owns a usable real texture",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "ready resource and real rule contribution publish in one configuration",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "effective loadout owns the same readiness lease",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "exact ready lease admits the actual player candidate",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "removing readiness ownership refuses an otherwise valid nonempty candidate",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "empty baseline restores through the original synchronous path",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "retiring the published configuration does not invalidate another lawful holder",
+      "passed": true
+    }
+  ],
+  "count": 12,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "5f0a5cfe-6511-4c65-8e85-b479d3218eff",
+  "passed": 12,
+  "reported_checks": 12,
+  "reported_failures": 0,
+  "run_id": "35eaaad7-797f-4f61-aa78-ce01badeb178",
+  "scene_id": "feature_resource_preparation_test",
+  "schema_version": 1,
+  "source_content_sha256": "6fa3550b8549d58c8f752324c03ac8e70baa5ec7cc7df5e01ce4e2426b399529",
+  "status": "PASS"
+}

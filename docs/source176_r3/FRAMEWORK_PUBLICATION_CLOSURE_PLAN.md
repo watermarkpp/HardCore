@@ -38,6 +38,10 @@ fixture Ruling：旧 fire_cooldown_configuration 关闭人物 physics 后不等�
 
 Task 3：开始 RED；Task 4—5：NOT_RUN。既有 ObjectDB 8 warning 原样保留；本轮原生业务结果不将其当作 Android 或无限耐久证明。
 
+2026-10-04资源续施工：原两条声明/就绪缺口已原生修复，异步准备、typed租约和action→batch→state持有及共享预算应用已实施；原失败和精确RED/GREEN见RESOURCE_CLOSURE_WORKLOG_20261004.md。Texture2D首条声明范围专项通过不替代Task3整体：活世界异步启用、线程已开始后的取消/失败token原生负例、多请求/有限耐久与最终自然链仍继续；Task4—5保持NOT_RUN。
+
+2026-10-04下一固定资源增量：活世界异步启用29检查、实际IN_PROGRESS后的取消13检查、多请求有界交付及四轮持有退休25检查已完成。最终同52beda670内容36场景852检查PASS，具体原始RED/GREEN、原生退出和未覆盖范围见docs/review/framework_resource_closure_20261004。Task3完整范围仍NOT_RUN，继续terminal FAILED清理、更广cue/audio/子资源和资源开启的自然／渲染验证；Task4异构组合、Task5模板／整体验收与APK尚未关闭。
+
 最终自然链 feature_publication_final_world_235850_550131：六场景全部 PASS、独立本轮 producer/cold、同4bbd指纹。合并直接最终采用23唯一场景/682完整检查；58原生尝试中的7失败原样保留。原字节源码与完整回执见 docs/review/framework_publication_20261003。
 
 2026-10-04 检查点：已创建并推送受测快照 8664ef242edcd8bfeca3f599e6478636c0a75ca3，父3a1，157总路径中23源码/测试/作者数据增量，其余为原字节证据和计划；远端确认同 SHA。真实第三树 HEAD/index 未切换或覆盖；主树119/第二树249 status 指纹仍与保护记录一致。Pro原6abbcea3与小可爱原01a0f143（durable）均经官方入口实际接到该范围请求，既有dots每10分钟双拉取ACTIVE，完整读取后各自停扫，两份读到后PAUSED。请求记录在 outputs/framework_v2/publication_closure_20261003/AUDIT_REQUEST_8664.json。

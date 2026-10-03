@@ -34,6 +34,14 @@ func _run() -> void:
 	check(ContentLayers.reload_feature_catalog(REGISTRY), "trusted registry registers existing negative MP probe")
 	check(ContentLayers.set_feature_module_enabled("hc.creation_rollback_probe", true), "minus sixteen is valid for wizard A")
 	check(int(PlayerState.computed_stats.max_mp) == 2, "valid wizard feature result is MP two")
+	var unbuffed_hp: int = PlayerState.computed_stats.max_hp
+	var water: Dictionary = GameData.get_entity_record("hc.item.910001")
+	check(PlayerState.apply_temporary_item_buff("hc.item.910001", water.effectProfile, false).get("ok", false), "A receives the actual primary item effect through its formal interface")
+	check(int(PlayerState.computed_stats.max_hp) == unbuffed_hp + 50, "primary water adds exactly fifty health without changing the invalid MP boundary")
+	PlayerState.advance_temporary_item_buffs(12.25)
+	var buffs := PlayerState.temporary_item_buffs.duplicate(true)
+	var buff_revision: int = PlayerState.temporary_item_buff_revision
+	check(is_equal_approx(float(buffs["hc.item.910001"].remaining), 107.75), "transaction starts with partially elapsed real item duration")
 	check(PlayerState.save_game(), "formal writer persists A before new transaction")
 	var id: String = PlayerState.active_profile_id
 	var equipment := PlayerState.equipment.duplicate(true)
@@ -55,6 +63,9 @@ func _run() -> void:
 	check(is_same(PlayerState._feature_loadout, loadout) and is_same(PlayerState.feature_bundle(), bundle) and loadout.compile_count == count and PlayerState.feature_errors == errors, "rejection restores effective bundle identity compile generation and errors")
 	check(owned_files(owned_root) == disk, "normal I/O invalid candidate changes no owned file and creates no profile or sidecar")
 	check(PlayerState.list_characters().size() == 1, "index still contains exactly A")
+	check(PlayerState.temporary_item_buffs == buffs, "rejected creation retains the original item source start identity and remaining duration")
+	check(PlayerState.temporary_item_buff_revision == buff_revision, "rejected creation retains the original item effect revision")
+	check(PlayerState.recalculate_stats(false) and int(PlayerState.computed_stats.max_hp) == unbuffed_hp + 50 and int(PlayerState.computed_stats.max_mp) == 2, "ordinary recomputation after rollback keeps the real active bonus and original feature result")
 	check(ContentLayers.set_feature_module_enabled("hc.creation_rollback_probe", false), "remove probe through ordinary publication")
 	check(ContentLayers.reload_feature_catalog(), "baseline registry restores")
 	if not proof.write_receipt("feature_creation_invalid_candidate_test", checks, failures.size()): failures.append("receipt")

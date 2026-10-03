@@ -3745,6 +3745,14 @@ func _on_feature_catalog_changed() -> void:
 
 
 func _prepare_feature_configuration(configuration: Dictionary) -> Dictionary:
+	var resource_contract := preload("res://scripts/features/contracts/feature_resource_lease.gd")
+	var requirements := resource_contract.requirements(configuration.catalog, configuration.enabled_modules)
+	if not bool(requirements.success):
+		return {"success":false, "errors":requirements.errors}
+	var lease: Variant = configuration.get("resource_lease")
+	if not requirements.paths.is_empty() and (not lease is RefCounted or lease.get_script() != resource_contract \
+		or not lease.valid_for(configuration.catalog, configuration.enabled_modules)):
+		return {"success":false, "errors":["feature_resource_preparation_required"]}
 	if _feature_base_stats.is_empty():
 		return {"success":false, "errors":["feature_player_base_not_ready"]}
 	var collected := FeatureContributionProvider.collect(configuration.bindings, configuration.enabled_modules,
@@ -3752,6 +3760,7 @@ func _prepare_feature_configuration(configuration: Dictionary) -> Dictionary:
 	if not bool(collected.success):
 		return {"success":false, "errors":collected.errors}
 	var candidate: RefCounted = _feature_loadout.candidate_copy()
+	candidate.set_resource_lease(lease)
 	if not candidate.synchronize(configuration.catalog, collected.sources, configuration.authority, _feature_base_stats):
 		return {"success":false, "errors":candidate.last_errors}
 	var preview: Dictionary = candidate.apply_stats(_feature_base_stats)
@@ -9317,12 +9326,18 @@ func feature_publication_context() -> Dictionary:
 	# replacement. No second world clock, identity or lifecycle coordinator.
 	var active := false
 	var ready := not get_tree().paused
+	var scopes := {}
+	var scope_ready := true
 	for runtime_id: int in _profile_gameplay_owners.keys():
 		var owner: Node = (_profile_gameplay_owners[runtime_id] as WeakRef).get_ref() as Node
 		if not is_instance_valid(owner) or not owner.is_inside_tree():
 			_profile_gameplay_owners.erase(runtime_id)
 			continue
 		active = true
+		if owner.has_method("feature_publication_scope"):
+			scopes[runtime_id] = owner.call("feature_publication_scope")
+		else:
+			scope_ready = false
 		if owner.is_queued_for_deletion() or not owner.has_method("gameplay_input_is_enabled") \
 			or not bool(owner.call("gameplay_input_is_enabled")):
 			ready = false
@@ -9333,7 +9348,8 @@ func feature_publication_context() -> Dictionary:
 			or bool(actor.call("has_pending_combat_release")) \
 			or bool(actor.call("combat_action_snapshot").get("active", true)):
 			ready = false
-	return {"world_active":active, "world_ready":ready}
+	return {"world_active":active, "world_ready":ready, "scope_ready":scope_ready,
+		"scope":{"profile_id":active_profile_id, "owners":scopes}}
 
 
 func _profile_is_owned_by_gameplay() -> bool:
@@ -9714,6 +9730,8 @@ func _creation_runtime_snapshot() -> Dictionary:
 		"feature_base_stats": _feature_base_stats.duplicate(true),
 		"feature_loadout": _feature_loadout,
 		"feature_errors": feature_errors.duplicate(),
+		"temporary_item_buffs": temporary_item_buffs.duplicate(true),
+		"temporary_item_buff_revision": temporary_item_buff_revision,
 		"computed_special_effects": computed_special_effects.duplicate(true),
 		"durability_event_commit_count": durability_event_commit_count,
 		"active_profile_id": active_profile_id,
@@ -9801,6 +9819,8 @@ func _restore_creation_runtime(snapshot: Dictionary) -> void:
 	_feature_base_stats = snapshot.feature_base_stats.duplicate(true)
 	_feature_loadout = feature_loadout
 	feature_errors = snapshot.feature_errors.duplicate()
+	temporary_item_buffs = (snapshot.get("temporary_item_buffs", {}) as Dictionary).duplicate(true)
+	temporary_item_buff_revision = int(snapshot.get("temporary_item_buff_revision", 0))
 	computed_special_effects = (snapshot.get("computed_special_effects", {}) as Dictionary).duplicate(true)
 	durability_event_commit_count = int(snapshot.get("durability_event_commit_count", 0))
 	active_profile_id = str(snapshot.get("active_profile_id", ""))

@@ -1,0 +1,26 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "register disabled resource-backed world-ready modules before attachment",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "formal module activation has a nonempty resource preparation entry",
+      "passed": false
+    }
+  ],
+  "count": 2,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "1be061f3-b023-4740-b525-77bd1662ba79",
+  "passed": 1,
+  "reported_checks": 2,
+  "reported_failures": 1,
+  "run_id": "b5d181ea-cf06-43a2-a92e-e26e56ec5bd5",
+  "scene_id": "feature_resource_world_activation_test",
+  "schema_version": 1,
+  "source_content_sha256": "69507dea3358c0fc077abbea735320cf6f9a333e88ae2faf9561cb04c5358fb6",
+  "status": "FAIL"
+}

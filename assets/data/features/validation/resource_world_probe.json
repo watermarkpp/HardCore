@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "module_id": "hc.resource_world_probe",
+  "module_version": 1,
+  "core_api_version": 1,
+  "requires": [],
+  "conflicts": [],
+  "capabilities": [
+    "stats.contribute"
+  ],
+  "handlers": [],
+  "resource_dependencies": [
+    "res://assets/art/items/service/inventory/client.classic_raw_complete/Items_00014.png"
+  ],
+  "cost": {
+    "commands_per_event": 0,
+    "states_per_target": 0
+  },
+  "mechanics": [
+    {
+      "mechanic_id": "hc.resource_world_probe.accuracy",
+      "kind": "stat",
+      "tags": [
+        "hc.numeric"
+      ],
+      "operations": [
+        {
+          "stat": "accuracy",
+          "op": "add",
+          "value": 1
+        }
+      ]
+    }
+  ],
+  "tests": [
+    "tests/framework/feature_resource_world_activation_test.tscn"
+  ],
+  "default_enabled": false,
+  "activation_boundary": "world_ready"
+}

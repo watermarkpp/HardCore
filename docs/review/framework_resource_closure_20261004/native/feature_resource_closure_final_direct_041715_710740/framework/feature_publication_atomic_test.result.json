@@ -1,0 +1,111 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "inactive schema-valid package may register",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "actual player inverted range is refused before enabling",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "failed enable preserves directory, enabled set, actual player and compile generation",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "failed candidate emits no publication and does not poison the old player",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "return to baseline after failed candidate",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "inactive schema-valid skill contribution may register",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "actual negative skill cost is rejected before enabling",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "invalid effective skill preserves the old complete player publication",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "return to baseline after invalid skill candidate",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "default-on invalid actor range is refused before directory replacement",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "failed reload preserves the complete old publication",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "valid new package remains available after failed reload",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "valid actor candidate publishes",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "every observer sees matching directory and effective actor contribution",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "observer cannot reenter an unfinished publication",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "observer cannot reload the directory during publication",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "reentrant attempt cannot replace the accepted candidate",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "subsequent independent disable remains legal",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "baseline restored without feature errors",
+      "passed": true
+    }
+  ],
+  "count": 19,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "c21482d1-4458-4a3c-9617-063da32f6d26",
+  "passed": 19,
+  "reported_checks": 19,
+  "reported_failures": 0,
+  "run_id": "5311ebe0-1dd8-4cd6-9425-5cffa2d73202",
+  "scene_id": "feature_publication_atomic_test",
+  "schema_version": 1,
+  "source_content_sha256": "52beda6709b0a16e9f62877f4d610042aea85751909d903602939b0611e6abfb",
+  "status": "PASS"
+}

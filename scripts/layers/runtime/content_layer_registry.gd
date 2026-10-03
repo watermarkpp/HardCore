@@ -15,6 +15,9 @@ var _feature_bindings: Array = []
 var _enabled_feature_modules: Array = []
 var feature_load_errors: Array = []
 var _feature_publication_in_progress := false
+var _feature_preparation_sequence := 0
+var _feature_resource_lease: RefCounted
+var _feature_resource_service: Node
 
 const MANIFESTS := {
 	"vanilla_core": "res://assets/data/layers/vanilla_core.json",
@@ -88,6 +91,13 @@ func ensure_feature_catalog() -> bool:
 
 
 func reload_feature_catalog(registry_path: String = FEATURE_REGISTRY) -> bool:
+	if not _feature_reload_boundary(): return false
+	var result := _read_feature_candidate(registry_path)
+	if result.is_empty(): return false
+	return _publish_feature_configuration(result.candidate, result.authority, result.bindings, result.enabled)
+
+
+func _feature_reload_boundary() -> bool:
 	if _feature_publication_in_progress:
 		feature_load_errors = ["feature_publication_in_progress"]
 		return false
@@ -96,16 +106,60 @@ func reload_feature_catalog(registry_path: String = FEATURE_REGISTRY) -> bool:
 	if bool(PlayerState.feature_publication_context().world_active):
 		feature_load_errors = ["feature_directory_requires_world_retirement"]
 		return false
+	return true
+
+
+func reload_feature_catalog_async(registry_path: String = FEATURE_REGISTRY) -> bool:
+	if not _feature_reload_boundary(): return false
+	var result := _read_feature_candidate(registry_path)
+	if result.is_empty(): return false
+	_feature_preparation_sequence += 1
+	var sequence := _feature_preparation_sequence
+	var profile: String = PlayerState.active_profile_id
+	_feature_publication_in_progress = true
+	var service := _feature_resources()
+	var ready: Dictionary = await service.prepare(result.candidate.catalog(), result.enabled)
+	if sequence != _feature_preparation_sequence: return false
+	if not bool(ready.success):
+		_feature_publication_in_progress = false
+		feature_load_errors = ready.errors
+		return false
+	return await service.apply_ready(Callable(self,"_apply_prepared_feature_candidate").bind(result, ready.lease, sequence, profile))
+
+
+func _feature_resources() -> Node:
+	if _feature_resource_service == null:
+		_feature_resource_service = preload("res://scripts/features/runtime/feature_resource_preparation.gd").new()
+		add_child(_feature_resource_service)
+	return _feature_resource_service
+
+
+func _apply_prepared_feature_candidate(result: Dictionary, resource_lease: RefCounted, sequence: int, profile: String) -> bool:
+	if sequence != _feature_preparation_sequence: return false
+	_feature_publication_in_progress = false
+	if PlayerState.active_profile_id != profile or not _feature_reload_boundary():
+		feature_load_errors = ["feature_resource_preparation_stale"]
+		return false
+	return _publish_feature_configuration(result.candidate, result.authority, result.bindings, result.enabled, resource_lease)
+
+
+func cancel_feature_resource_preparation() -> void:
+	_feature_preparation_sequence += 1
+	_feature_publication_in_progress = false
+	if _feature_resource_service != null: _feature_resource_service.cancel_all()
+
+
+func _read_feature_candidate(registry_path: String) -> Dictionary:
 	if not _feature_authoring_path(registry_path):
 		feature_load_errors = ["untrusted_feature_registry_path:" + registry_path]
-		return false
+		return {}
 	var registry := _read_json(registry_path)
 	var errors: Array[String] = []
 	var compiler := preload("res://scripts/features/compilation/feature_compiler.gd")
 	if not compiler._keys(registry, ["schema_version", "modules", "bindings"], [], errors, "feature_registry") \
 		or registry.get("schema_version") != 1 or not registry.get("modules") is Array or not registry.get("bindings") is Array:
 		feature_load_errors = ["invalid_feature_registry"]
-		return false
+		return {}
 	var authority := FeatureAuthority.build()
 	var modules: Array = []
 	for entry: Variant in registry.modules:
@@ -124,11 +178,11 @@ func reload_feature_catalog(registry_path: String = FEATURE_REGISTRY) -> bool:
 	var candidate := FeatureCatalog.new()
 	if not errors.is_empty() or not candidate.publish(modules, [], authority):
 		feature_load_errors = errors + candidate.last_errors
-		return false
+		return {}
 	var bindings := PlainGraph.capture(registry.bindings)
 	if not bool(bindings.success):
 		feature_load_errors = bindings.errors
-		return false
+		return {}
 	var seen := {}
 	for binding: Variant in bindings.value:
 		if not binding is Dictionary:
@@ -158,15 +212,15 @@ func reload_feature_catalog(registry_path: String = FEATURE_REGISTRY) -> bool:
 		seen[handle] = true
 	if not errors.is_empty():
 		feature_load_errors = errors
-		return false
+		return {}
 	var enabled: Array = []
 	for id: String in candidate.catalog().modules:
 		if bool(candidate.catalog().modules[id].get("default_enabled", false)):
 			enabled.append(id)
-	return _publish_feature_configuration(candidate, authority, bindings.value, enabled)
+	return {"candidate":candidate, "authority":authority, "bindings":bindings.value, "enabled":enabled}
 
 
-func _publish_feature_configuration(candidate: RefCounted, authority: Dictionary, bindings: Array, enabled: Array) -> bool:
+func _publish_feature_configuration(candidate: RefCounted, authority: Dictionary, bindings: Array, enabled: Array, resource_lease: RefCounted = null) -> bool:
 	if _feature_publication_in_progress:
 		feature_load_errors = ["feature_publication_in_progress"]
 		return false
@@ -179,7 +233,7 @@ func _publish_feature_configuration(candidate: RefCounted, authority: Dictionary
 				return false
 	_feature_publication_in_progress = true
 	var configuration := {"catalog":candidate.catalog(), "authority":authority,
-		"bindings":bindings, "enabled_modules":enabled}
+		"bindings":bindings, "enabled_modules":enabled, "resource_lease":resource_lease}
 	var prepared: Dictionary = PlayerState._prepare_feature_configuration(configuration)
 	if not bool(prepared.success):
 		feature_load_errors = prepared.errors
@@ -191,6 +245,7 @@ func _publish_feature_configuration(candidate: RefCounted, authority: Dictionary
 	_feature_authority = authority
 	_feature_bindings = bindings
 	_enabled_feature_modules = enabled
+	_feature_resource_lease = resource_lease
 	PlayerState._commit_feature_configuration(prepared)
 	feature_load_errors = []
 	feature_catalog_changed.emit()
@@ -216,32 +271,74 @@ func _feature_authoring_path(value: Variant) -> bool:
 
 
 func set_feature_module_enabled(id: String, enabled: bool) -> bool:
+	var result := _feature_enabled_candidate(id, enabled)
+	if result.is_empty(): return false
+	var retained: RefCounted = null
+	if not enabled and _feature_resource_lease != null:
+		retained = _feature_resource_lease.retain_subset(result.candidate.catalog(), result.enabled)
+	return _publish_feature_configuration(result.candidate, result.authority, result.bindings, result.enabled, retained)
+
+
+func _feature_enabled_candidate(id: String, enabled: bool) -> Dictionary:
 	if _feature_publication_in_progress:
 		feature_load_errors = ["feature_publication_in_progress"]
-		return false
+		return {}
 	if not ensure_feature_catalog() or not _feature_catalog.catalog().modules.has(id):
-		return false
+		return {}
 	var candidate := _enabled_feature_modules.duplicate()
 	if enabled == candidate.has(id):
-		return false
+		return {}
 	if enabled:
 		var context := PlayerState.feature_publication_context()
 		var boundary: String = _feature_catalog.catalog().modules[id].get("activation_boundary", "startup")
 		if not bool(context.world_ready) or (boundary == "startup" and bool(context.world_active)):
 			feature_load_errors = ["feature_activation_boundary:" + id + ":" + boundary]
-			return false
+			return {}
 		candidate.append(id)
 	else:
 		candidate.erase(id)
 	candidate.sort()
-	return _publish_feature_configuration(_feature_catalog, _feature_authority, _feature_bindings, candidate)
+	return {"candidate":_feature_catalog, "authority":_feature_authority, "bindings":_feature_bindings, "enabled":candidate}
+
+
+func set_feature_module_enabled_async(id: String, enabled: bool) -> bool:
+	if not enabled: return set_feature_module_enabled(id, false)
+	var result := _feature_enabled_candidate(id, enabled)
+	if result.is_empty(): return false
+	var context := PlayerState.feature_publication_context()
+	if not bool(context.scope_ready):
+		feature_load_errors = ["feature_resource_preparation_scope_unavailable"]
+		return false
+	_feature_preparation_sequence += 1
+	var sequence := _feature_preparation_sequence
+	var scope: Dictionary = context.scope
+	_feature_publication_in_progress = true
+	var service := _feature_resources()
+	var ready: Dictionary = await service.prepare(result.candidate.catalog(), result.enabled)
+	if sequence != _feature_preparation_sequence: return false
+	if not bool(ready.success):
+		_feature_publication_in_progress = false
+		feature_load_errors = ready.errors
+		return false
+	return await service.apply_ready(Callable(self,"_apply_prepared_feature_module").bind(id, enabled, result, ready.lease, sequence, scope))
+
+
+func _apply_prepared_feature_module(id: String, enabled: bool, result: Dictionary, resource_lease: RefCounted, sequence: int, scope: Dictionary) -> bool:
+	if sequence != _feature_preparation_sequence: return false
+	_feature_publication_in_progress = false
+	var current := _feature_enabled_candidate(id, enabled)
+	var context := PlayerState.feature_publication_context()
+	if current.is_empty() or not bool(context.scope_ready) or context.scope != scope or not is_same(result.candidate, _feature_catalog):
+		feature_load_errors = ["feature_resource_preparation_stale"]
+		return false
+	return _publish_feature_configuration(result.candidate, result.authority, result.bindings, result.enabled, resource_lease)
 
 
 func feature_configuration() -> Dictionary:
 	if not ensure_feature_catalog():
 		return {}
 	return {"catalog":_feature_catalog.catalog(), "authority":_feature_authority,
-		"bindings":_feature_bindings, "enabled_modules":_enabled_feature_modules.duplicate()}
+		"bindings":_feature_bindings, "enabled_modules":_enabled_feature_modules.duplicate(), "resource_lease":_feature_resource_lease}
 
 
 func vanilla_dataset(dataset_id: String) -> String:

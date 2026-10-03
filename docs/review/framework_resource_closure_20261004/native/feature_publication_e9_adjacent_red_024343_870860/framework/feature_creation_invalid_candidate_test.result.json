@@ -1,0 +1,131 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "normal I/O has no save failure injection",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "formal creation writes isolated wizard A",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "level one wizard independently has MP eighteen",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "trusted registry registers existing negative MP probe",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "minus sixteen is valid for wizard A",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "valid wizard feature result is MP two",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "A receives the actual primary item effect through its formal interface",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "primary water adds exactly fifty health without changing the invalid MP boundary",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "transaction starts with partially elapsed real item duration",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "formal writer persists A before new transaction",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "invalid warrior candidate rejects before normal save",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "caller reports explicit candidate validation failure",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "rejection restores original profile and profession",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "rejection restores original equipment and both primary stat snapshots",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "rejection restores coherent pre-feature input",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "rejection restores effective bundle identity compile generation and errors",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "normal I/O invalid candidate changes no owned file and creates no profile or sidecar",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "index still contains exactly A",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "rejected creation retains the original item source start identity and remaining duration",
+      "passed": false
+    },
+    {
+      "id": 20,
+      "label": "rejected creation retains the original item effect revision",
+      "passed": false
+    },
+    {
+      "id": 21,
+      "label": "ordinary recomputation after rollback keeps the real active bonus and original feature result",
+      "passed": false
+    },
+    {
+      "id": 22,
+      "label": "remove probe through ordinary publication",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "baseline registry restores",
+      "passed": true
+    }
+  ],
+  "count": 23,
+  "engine_version": "4.7-stable (official)",
+  "failed": 3,
+  "invocation_id": "a4f2e6ff-987b-4643-b133-bb17724135f0",
+  "passed": 20,
+  "reported_checks": 23,
+  "reported_failures": 3,
+  "run_id": "535a2d2a-8c6e-41f4-82ea-e98b573e3746",
+  "scene_id": "feature_creation_invalid_candidate_test",
+  "schema_version": 1,
+  "source_content_sha256": "0beed71b84db365ef0425652ad849986972b6b8124bbcb715f7d6ab3ae77e51a",
+  "status": "FAIL"
+}

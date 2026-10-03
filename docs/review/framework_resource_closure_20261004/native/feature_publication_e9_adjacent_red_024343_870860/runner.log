@@ -1,0 +1,10 @@
+[FAIL] feature_creation_invalid_candidate_test - missing_pass_marker;non_zero_exit_code_1;framework_checks_failed
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+鏁版嵁搴撹浇鍏ュ畬鎴愶細鍦板浘209 鎬墿156 Boss20 瑁呭175 鎶€鑳界瓑绾?32 鎺夎惤妲?424 浠诲姟9
+INVALID_CREATION_OBSERVATION {"active_profile":"1791053030_5519","base_mp":18,"computed_mp":2,"error":"瑙掕壊灞炴€ч厤缃棤鏁堬紝瑙掕壊鏈垱寤?,"feature_errors":[],"save_reason":"character_stats_rejected"}
+FEATURE_CREATION_INVALID_CANDIDATE_FAIL checks=23 failures=["rejected creation retains the original item source start identity and remaining duration", "rejected creation retains the original item effect revision", "ordinary recomputation after rollback keeps the real active bonus and original feature result", "receipt"]
+[PASS] feature_binding_validation_test
+RUNNER_RESULTS_JSON=C:\Users\Administrator\.codex\worktrees\pluggable-framework-v2\HardCore\outputs\test_logs\runner_results_adhoc_20261004_024359_299_8360.json
+TEST_SUMMARY suite=adhoc passed=1 failed=1 engine_log_errors=0
+FAILED_TESTS=feature_creation_invalid_candidate_test (missing_pass_marker;non_zero_exit_code_1;framework_checks_failed)

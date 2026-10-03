@@ -1,0 +1,86 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "cold test begins with real primary icon uncached",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "formal publication has a resource preparation entry",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "synchronous publication refuses nonempty resources without preparing them",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "unprepared publication retains the entire old effective configuration",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "formal asynchronous publication loads the real icon before promoting the candidate",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "ready candidate validation application and synchronous observers are included in shared frame accounting",
+      "passed": false
+    },
+    {
+      "id": 7,
+      "label": "publication completes with no scope held across await",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "promoted configuration owns a usable real texture",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "ready resource and real rule contribution publish in one configuration",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "effective loadout owns the same readiness lease",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "exact ready lease admits the actual player candidate",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "removing readiness ownership refuses an otherwise valid nonempty candidate",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "empty baseline restores through the original synchronous path",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "retiring the published configuration does not invalidate another lawful holder",
+      "passed": true
+    }
+  ],
+  "count": 14,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "b06af2a6-f130-4bd3-ad13-a23d33e6dbac",
+  "passed": 13,
+  "reported_checks": 14,
+  "reported_failures": 1,
+  "run_id": "7936c6d1-cab1-407d-98ba-f4495a989bf9",
+  "scene_id": "feature_resource_preparation_test",
+  "schema_version": 1,
+  "source_content_sha256": "27e6e8bd1ad85cdf9e425dacd74c2d39c5f904658aabd317157969c9727549da",
+  "status": "FAIL"
+}
