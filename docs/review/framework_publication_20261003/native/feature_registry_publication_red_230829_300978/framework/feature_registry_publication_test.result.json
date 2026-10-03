@@ -1,0 +1,31 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "existing production catalog starts valid",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "formal authoring registry can introduce a new package without a core path edit",
+      "passed": false
+    },
+    {
+      "id": 3,
+      "label": "unsupported publication attempt did not mutate the existing baseline",
+      "passed": true
+    }
+  ],
+  "count": 3,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "fccf64ec-a064-4162-999c-82ade05d6fbb",
+  "passed": 2,
+  "reported_checks": 3,
+  "reported_failures": 1,
+  "run_id": "bb0643dc-8c90-4599-b354-ad311b8c1ab0",
+  "scene_id": "feature_registry_publication_test",
+  "schema_version": 1,
+  "source_content_sha256": "fd923a8dc09bfa24db34fd1154ec9fe1883e554406ae691e9c2595a4e99b7f6f",
+  "status": "FAIL"
+}

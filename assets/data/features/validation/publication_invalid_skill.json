@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "module_id": "hc.publication_invalid_skill",
+  "module_version": 1,
+  "core_api_version": 1,
+  "requires": [],
+  "conflicts": [],
+  "capabilities": [
+    "skills.modify"
+  ],
+  "handlers": [],
+  "resource_dependencies": [],
+  "cost": {
+    "commands_per_event": 0,
+    "states_per_target": 0
+  },
+  "default_enabled": false,
+  "scope": "character",
+  "activation_boundary": "startup",
+  "mechanics": [
+    {
+      "mechanic_id": "hc.publication_invalid_skill.cost",
+      "kind": "skill",
+      "tags": [
+        "hc.numeric"
+      ],
+      "operations": [
+        {
+          "skill_id": "hc.skill.wizard.ice_storm",
+          "field": "mp_cost_by_rank.0",
+          "op": "add",
+          "value": -1000
+        }
+      ]
+    }
+  ],
+  "tests": [
+    "tests/framework/feature_publication_atomic_test.tscn"
+  ]
+}

@@ -10,6 +10,7 @@ const SkillDataLoaderScript := preload("res://scripts/skills/skill_data_loader.g
 const FeatureLoadout := preload("res://scripts/features/compilation/feature_loadout.gd")
 const FeatureContributionProvider := preload("res://scripts/features/adapters/contribution_provider.gd")
 var _feature_loadout := FeatureLoadout.new()
+var _feature_base_stats: Dictionary = {}
 var feature_errors: Array = []
 const SkillProgressionServiceScript := preload("res://scripts/skills/skill_progression_service.gd")
 const SkillRngScript := preload("res://scripts/skills/skill_rng.gd")
@@ -3717,6 +3718,10 @@ func recalculate_stats(emit_profile_change := true) -> void:
 	result["attack_speed_tier"] = int(result.get("attack_speed_tier", 0))
 	_apply_temporary_item_stat_modifiers(result)
 	_apply_relic_proc_stats(result)
+	# Preserve the actual pre-feature result of the existing stat authority.
+	# Publication previews consume this snapshot; they do not recalculate stats
+	# through a second formula or expose a candidate to the current player.
+	_feature_base_stats = result.duplicate(true)
 	if not _synchronize_feature_loadout(result):
 		push_error("Feature loadout rejected: " + JSON.stringify(feature_errors))
 		return
@@ -3733,6 +3738,29 @@ func recalculate_stats(emit_profile_change := true) -> void:
 
 func _on_feature_catalog_changed() -> void:
 	recalculate_stats()
+
+
+func _prepare_feature_configuration(configuration: Dictionary) -> Dictionary:
+	if _feature_base_stats.is_empty():
+		return {"success":false, "errors":["feature_player_base_not_ready"]}
+	var collected := FeatureContributionProvider.collect(configuration.bindings, configuration.enabled_modules,
+		equipment, active_profile_id, GameData.get_item_record, _feature_item_eligible, is_skill_learned)
+	if not bool(collected.success):
+		return {"success":false, "errors":collected.errors}
+	var candidate: RefCounted = _feature_loadout.candidate_copy()
+	if not candidate.synchronize(configuration.catalog, collected.sources, configuration.authority, _feature_base_stats):
+		return {"success":false, "errors":candidate.last_errors}
+	var preview: Dictionary = candidate.apply_stats(_feature_base_stats)
+	if not bool(preview.success):
+		return {"success":false, "errors":[preview.reason]}
+	return {"success":true, "loadout":candidate, "stats":preview.stats, "errors":[]}
+
+
+func _commit_feature_configuration(prepared: Dictionary) -> void:
+	# Called synchronously by ContentLayers before any publication observer.
+	_feature_loadout = prepared.loadout
+	computed_stats = prepared.stats
+	feature_errors = []
 
 
 func _feature_item_eligible(instance: Dictionary) -> bool:
@@ -9269,13 +9297,37 @@ func _default_world_position_fields() -> Dictionary:
 
 
 func register_profile_gameplay_owner(owner: Node) -> void:
-	if is_instance_valid(owner) and owner.is_inside_tree() and not active_profile_id.is_empty():
+	# Even an unsaved profile's live world owns accepted callbacks and package
+	# lifecycle. An empty persistence identity must not bypass that boundary.
+	if is_instance_valid(owner) and owner.is_inside_tree():
 		_profile_gameplay_owners[owner.get_instance_id()] = weakref(owner)
 
 
 func unregister_profile_gameplay_owner(owner: Node) -> void:
 	if is_instance_valid(owner):
 		_profile_gameplay_owners.erase(owner.get_instance_id())
+
+
+func feature_publication_context() -> Dictionary:
+	# Delegate readiness to the same registered worlds that own profile
+	# replacement. No second world clock, identity or lifecycle coordinator.
+	var active := false
+	var ready := not get_tree().paused
+	for runtime_id: int in _profile_gameplay_owners.keys():
+		var owner: Node = (_profile_gameplay_owners[runtime_id] as WeakRef).get_ref() as Node
+		if not is_instance_valid(owner) or not owner.is_inside_tree():
+			_profile_gameplay_owners.erase(runtime_id)
+			continue
+		active = true
+		if owner.is_queued_for_deletion() or not owner.has_method("gameplay_input_is_enabled") \
+			or not bool(owner.call("gameplay_input_is_enabled")):
+			ready = false
+			continue
+		var actor: Variant = owner.get("player")
+		if not is_instance_valid(actor) or not actor.has_method("combat_action_snapshot") \
+			or bool(actor.call("combat_action_snapshot").get("active", true)):
+			ready = false
+	return {"world_active":active, "world_ready":ready}
 
 
 func _profile_is_owned_by_gameplay() -> bool:

@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "module_id": "hc.publication_probe",
+  "module_version": 1,
+  "core_api_version": 1,
+  "requires": [],
+  "conflicts": [],
+  "capabilities": ["stats.contribute"],
+  "handlers": [],
+  "resource_dependencies": [],
+  "cost": {"commands_per_event": 0, "states_per_target": 0},
+  "default_enabled": false,
+  "scope": "character",
+  "activation_boundary": "startup",
+  "mechanics": [
+    {
+      "mechanic_id": "hc.publication_probe.accuracy",
+      "kind": "stat",
+      "tags": ["hc.numeric"],
+      "operations": [{"stat": "accuracy", "op": "add", "value": 3}]
+    }
+  ],
+  "tests": ["tests/framework/feature_registry_publication_test.tscn"]
+}

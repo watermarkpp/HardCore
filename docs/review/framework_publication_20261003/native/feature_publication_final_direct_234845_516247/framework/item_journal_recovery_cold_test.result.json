@@ -1,0 +1,26 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "independent native process uses real persistence",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "successful live producer is confirmed by this runner invocation before cold selection",
+      "passed": false
+    }
+  ],
+  "count": 2,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "b72521e7-7abc-4420-836a-40f0ca44d4d6",
+  "passed": 1,
+  "reported_checks": 2,
+  "reported_failures": 1,
+  "run_id": "2f1e872d-583d-4466-88f9-861ae7ab6d2e",
+  "scene_id": "item_journal_recovery_cold_test",
+  "schema_version": 1,
+  "source_content_sha256": "4bbd5374b510b64aa24cc2b8c875c98f1d16e1b81e6826f52e12328bdd2b31a3",
+  "status": "FAIL"
+}

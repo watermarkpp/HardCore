@@ -72,9 +72,9 @@ func _run() -> void:
 	await _attack(game, target, "legal half cooldown", true, false, false)
 	await _attack(game, target, "accepted half cooldown then module OFF", true, true, false)
 	await _attack(game, target, "accepted half cooldown then cast speed changes", true, false, true)
-	check(ContentLayers.reload_feature_catalog(), "actual authoring catalog restored after fixture")
 	game.queue_free()
 	await get_tree().process_frame
+	check(ContentLayers.reload_feature_catalog(), "actual authoring catalog restored after world retirement")
 	_finish()
 
 func _attack(game: Node, target: EnemyActor, label: String, enabled: bool, disable_after: bool, speed_after: bool) -> void:
@@ -119,6 +119,16 @@ func _attack(game: Node, target: EnemyActor, label: String, enabled: bool, disab
 	measurements.append({"case": label, "base_cooldown_ms": base_cooldown, "accepted_cooldown_ms": expected_definition,
 		"expected_committed_ms": expected_ms, "actual_committed_ms": actual_ms,
 		"actual_hp_loss": before_hp - target.current_hp, "remaining_mp": game.player.current_mp})
+	# The measurement above freezes the cooldown at its real commit. Before
+	# publishing the next case, let the actual actor finish its body action;
+	# disabling physics must not leave a forever-active fixture action.
+	game.player.set_physics_process(true)
+	deadline = Time.get_ticks_msec() + 3000
+	while bool(game.player.combat_action_snapshot().active) and Time.get_ticks_msec() < deadline:
+		await get_tree().physics_frame
+	game.player.set_physics_process(false)
+	check(not bool(game.player.combat_action_snapshot().active), label + ": real actor reaches its finished action boundary")
+	check(game.observed_releases == 1, label + ": body completion does not submit another release")
 
 func _finish() -> void:
 	proof.write_receipt("fire_cooldown_configuration_test", proof.records.size(), failures.size())

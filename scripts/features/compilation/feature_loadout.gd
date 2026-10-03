@@ -7,6 +7,15 @@ var _signature := ""
 var compile_count := 0
 var last_errors: Array = []
 
+func candidate_copy() -> RefCounted:
+	# The compiled bundle is immutable. A failed candidate must never mutate
+	# the effective loadout or its compilation generation.
+	var candidate: RefCounted = get_script().new()
+	candidate._bundle = _bundle
+	candidate._signature = _signature
+	candidate.compile_count = compile_count
+	return candidate
+
 func synchronize(catalog: Dictionary, sources: Array, authority: Dictionary, base_stats: Dictionary = {}) -> bool:
 	var base_revision := preload("res://scripts/skills/skill_data_loader.gd").configuration_revision()
 	var signature := (str(catalog.get("revision", "")) + base_revision + JSON.stringify(sources)).sha256_text()

@@ -1,0 +1,121 @@
+{
+  "parent": "3a1b781b4b10ddb918f6abca955ae4c33985f2e0",
+  "content_sha256": "4bbd5374b510b64aa24cc2b8c875c98f1d16e1b81e6826f52e12328bdd2b31a3",
+  "delta": {
+    "scripts/features/compilation/feature_loadout.gd": {
+      "raw_sha256": "a73013220817420c082ca728ce5f38de4a245482168bbe7e16bdae541959b98b",
+      "git_blob": "f83a3d557415001502a3045c7b4ec8bf0c20b65b",
+      "parent_blob": "153f6c8391ce884ef4ccab9b56dc00c3cb21e3bc"
+    },
+    "scripts/layers/runtime/content_layer_registry.gd": {
+      "raw_sha256": "4d9f6986a85c017eedd34c27b32dac02eb4192c31dab0b7d907458288abdded7",
+      "git_blob": "614ffdfadc0657bd321cf49731d7ee4dc1a819fa",
+      "parent_blob": "e2e67f15de0a28f066b6828e6007e332ac63f239"
+    },
+    "scripts/player_state.gd": {
+      "raw_sha256": "02d29a49f0b650daaaac06f31d39b5050cd54b4c33de095fa52164e431b91e6f",
+      "git_blob": "395d43b1f5f363409597d23077bfc08b25c89fe6",
+      "parent_blob": "31e3ec07c590e04ccd19b5fe4c2fd3ea9918e55c"
+    },
+    "tests/framework/feature_publication_atomic_test.gd": {
+      "raw_sha256": "68b256bbe96ad204be7007924873380ec9d82967a984d8af0999c7d8c3fd91ff",
+      "git_blob": "ef15d8d6dbd47b19691331355ce2b8e3b9213e18",
+      "parent_blob": null
+    },
+    "tests/framework/feature_publication_atomic_test.tscn": {
+      "raw_sha256": "465e104348b4cd9593280e1afede1ddf5c7657748193aa57990e59e7dc96e8f4",
+      "git_blob": "30532afa69dd97762b990e4d1f57d1dc33496af1",
+      "parent_blob": null
+    },
+    "tests/framework/feature_publication_lifecycle_test.gd": {
+      "raw_sha256": "8f4fc20037c755557cb5d7171d18ddae87680fb7464b396f23ab00cdafe262ee",
+      "git_blob": "873f80da615e3f0aafba169635ca01b2ed8f90ce",
+      "parent_blob": null
+    },
+    "tests/framework/feature_publication_lifecycle_test.tscn": {
+      "raw_sha256": "3f9310f7161e29b922ce9741da535ccfd19ac5ba4234c86e53ee3789aed4d4dd",
+      "git_blob": "fc8668235ca89389c53bc66e25509d4fb2d0774d",
+      "parent_blob": null
+    },
+    "tests/framework/feature_registry_publication_test.gd": {
+      "raw_sha256": "a303aa9685fc0f7a8956cba791e0e0bc45894ffbd1272c8290764840c73d26c3",
+      "git_blob": "a5ed95a5614f669075db389bbec0424926a145d5",
+      "parent_blob": null
+    },
+    "tests/framework/feature_registry_publication_test.tscn": {
+      "raw_sha256": "decc33ae0c61cbf330e1eb5fe4a95aabd57efe7ffb6fb8403b57862b8b08bba1",
+      "git_blob": "f3e3f419a60aef195c3f73a6692466cd144b9175",
+      "parent_blob": null
+    },
+    "tests/framework/fire_cooldown_configuration_test.gd": {
+      "raw_sha256": "94a2b47b600a20fa73bbac42b53f4cd914759f7d603762f71e0cf4eb143c4a4e",
+      "git_blob": "7ae06cb7bde21079699803ab85191e5a9be979a1",
+      "parent_blob": "22de762dd529a51e592e185d41e0dd925a41897d"
+    },
+    "assets/data/features/validation/publication_duplicate.json": {
+      "raw_sha256": "b1e42f1ef8b5cadeccf1b6ceb35902ad9966416604de1b287f6b6ac241b09ea0",
+      "git_blob": "385b7118514b696e5d9f40f5a539ece352a23d03",
+      "parent_blob": null
+    },
+    "assets/data/features/validation/publication_invalid_default.json": {
+      "raw_sha256": "650138d2c9b073df7995507e9709592a246c3840b04198fcd49b9c4fea272252",
+      "git_blob": "ddce90ddd0630c8b70991aea578d3f3af41e67f1",
+      "parent_blob": null
+    },
+    "assets/data/features/validation/publication_invalid_default_registry.json": {
+      "raw_sha256": "c630abf73fb3a2d8efaa053ccadb36de530100097224a4b0fef2a371384551b2",
+      "git_blob": "d42bb758c670bb488cd71c648aeb17caeea385e3",
+      "parent_blob": null
+    },
+    "assets/data/features/validation/publication_invalid_identity.json": {
+      "raw_sha256": "9701cf78ee46bcb970829aec22c28cd5f8c2ff6089645a1d005e543bfe1ee83f",
+      "git_blob": "833e0aa7638e4a8c9572da5cb74969a827d58217",
+      "parent_blob": null
+    },
+    "assets/data/features/validation/publication_invalid_path.json": {
+      "raw_sha256": "966e695e6048e0ae2efa83ecd4f42a84dcefa729c5eaa6f0e460a7cb4238b01a",
+      "git_blob": "93c095659584b13fed2675aa93cee5ef470ce032",
+      "parent_blob": null
+    },
+    "assets/data/features/validation/publication_invalid_range.json": {
+      "raw_sha256": "33eabdbac56e695f227722357b25edb317cd2eb3609e3486cd217bf52f0cbe01",
+      "git_blob": "c24d6a4cc17c3d0b7ee4eedd852bcc63fbef55e1",
+      "parent_blob": null
+    },
+    "assets/data/features/validation/publication_invalid_range_registry.json": {
+      "raw_sha256": "c4a2eea0714828301ae1e694d471cf1d9fcaa42547fab699781eca28a47a6a14",
+      "git_blob": "8b8200635774a72d4026d1e35f41d2bb92c16ffc",
+      "parent_blob": null
+    },
+    "assets/data/features/validation/publication_invalid_skill.json": {
+      "raw_sha256": "d90ad17b51b585961d8f1d77a937eb2c00a03831a6b433b69e7e0f789f47e809",
+      "git_blob": "2d588a12c7003a0fbd35b1d4ef448dbb88c548d6",
+      "parent_blob": null
+    },
+    "assets/data/features/validation/publication_invalid_skill_registry.json": {
+      "raw_sha256": "7462582f2796e1cf9625f1032efde778769789be272636ce9886f221fa535be4",
+      "git_blob": "c9c159afa4fb06cde938cd837ad731821dfbd603",
+      "parent_blob": null
+    },
+    "assets/data/features/validation/publication_lifecycle_registry.json": {
+      "raw_sha256": "de7d6fcabb70cffc07ef09371bff4a50ce2aef6a02dda4222b178d722b859469",
+      "git_blob": "d713a4e5b6936e00defea41d19289c81b1d6db07",
+      "parent_blob": null
+    },
+    "assets/data/features/validation/publication_missing_module.json": {
+      "raw_sha256": "19da7b1fe0191b7618d37f1ec669059973f11c9292eb846c3d861b73c946190c",
+      "git_blob": "28d1971a95a5d0214f713fdad74b8192f53bcdac",
+      "parent_blob": null
+    },
+    "assets/data/features/validation/publication_probe.json": {
+      "raw_sha256": "ff330688c8686c1bbd1f3b3665968c03060fe800e0727e4d86f3ea180c68dbda",
+      "git_blob": "79e8279a55768c60cd86400129e02f13c9925526",
+      "parent_blob": null
+    },
+    "assets/data/features/validation/publication_registry.json": {
+      "raw_sha256": "695884703571b4bd97e1000cc5740525b819d316da3897a615555683b92b6bf0",
+      "git_blob": "2975c5eefd9686bff712ad0bfc66e8e5cc9f9646",
+      "parent_blob": null
+    }
+  }
+}

@@ -8,12 +8,13 @@ const FeatureCatalog := preload("res://scripts/features/compilation/feature_cata
 const FeatureAuthority := preload("res://scripts/features/adapters/feature_authority.gd")
 const PlainGraph := preload("res://scripts/features/contracts/plain_graph.gd")
 const FEATURE_REGISTRY := "res://assets/data/features/module_registry.json"
-const FEATURE_MODULE_PATHS := ["res://assets/data/features/numeric_fixture.json", "res://assets/data/features/ignite.json", "res://assets/data/features/socketing_fixture.json"]
+const FEATURE_AUTHORING_ROOT := "res://assets/data/features/"
 var _feature_catalog := FeatureCatalog.new()
 var _feature_authority: Dictionary = {}
 var _feature_bindings: Array = []
 var _enabled_feature_modules: Array = []
 var feature_load_errors: Array = []
+var _feature_publication_in_progress := false
 
 const MANIFESTS := {
 	"vanilla_core": "res://assets/data/layers/vanilla_core.json",
@@ -86,8 +87,19 @@ func ensure_feature_catalog() -> bool:
 	return reload_feature_catalog()
 
 
-func reload_feature_catalog() -> bool:
-	var registry := _read_json(FEATURE_REGISTRY)
+func reload_feature_catalog(registry_path: String = FEATURE_REGISTRY) -> bool:
+	if _feature_publication_in_progress:
+		feature_load_errors = ["feature_publication_in_progress"]
+		return false
+	# Definition/code registration belongs to startup or the interval after the
+	# old world has completed its exit barrier, not a live map/attack callback.
+	if bool(PlayerState.feature_publication_context().world_active):
+		feature_load_errors = ["feature_directory_requires_world_retirement"]
+		return false
+	if not _feature_authoring_path(registry_path):
+		feature_load_errors = ["untrusted_feature_registry_path:" + registry_path]
+		return false
+	var registry := _read_json(registry_path)
 	var errors: Array[String] = []
 	var compiler := preload("res://scripts/features/compilation/feature_compiler.gd")
 	if not compiler._keys(registry, ["schema_version", "modules", "bindings"], [], errors, "feature_registry") \
@@ -99,7 +111,7 @@ func reload_feature_catalog() -> bool:
 	for entry: Variant in registry.modules:
 		if not entry is Dictionary or not compiler._keys(entry, ["module_id", "path"], [], errors, "feature_module_entry"):
 			continue
-		if entry.path not in FEATURE_MODULE_PATHS:
+		if not _feature_authoring_path(entry.path):
 			errors.append("untrusted_feature_module_path:" + str(entry.path))
 			continue
 		var module := _read_json(entry.path)
@@ -145,22 +157,66 @@ func reload_feature_catalog() -> bool:
 	for id: String in candidate.catalog().modules:
 		if bool(candidate.catalog().modules[id].get("default_enabled", false)):
 			enabled.append(id)
+	return _publish_feature_configuration(candidate, authority, bindings.value, enabled)
+
+
+func _publish_feature_configuration(candidate: RefCounted, authority: Dictionary, bindings: Array, enabled: Array) -> bool:
+	if _feature_publication_in_progress:
+		feature_load_errors = ["feature_publication_in_progress"]
+		return false
+	_feature_publication_in_progress = true
+	var configuration := {"catalog":candidate.catalog(), "authority":authority,
+		"bindings":bindings, "enabled_modules":enabled}
+	var prepared: Dictionary = PlayerState._prepare_feature_configuration(configuration)
+	if not bool(prepared.success):
+		feature_load_errors = prepared.errors
+		_feature_publication_in_progress = false
+		return false
+	# No yield or callbacks between these assignments. Observers see both the
+	# effective directory and the validated actor result in the same generation.
 	_feature_catalog = candidate
 	_feature_authority = authority
-	_feature_bindings = bindings.value
+	_feature_bindings = bindings
 	_enabled_feature_modules = enabled
+	PlayerState._commit_feature_configuration(prepared)
 	feature_load_errors = []
 	feature_catalog_changed.emit()
+	_feature_publication_in_progress = false
+	return true
+
+
+func _feature_authoring_path(value: Variant) -> bool:
+	# Definitions shipped by the project may register more L1 packages. Code
+	# remains gated by the compiler's separate trusted-handler allowlist.
+	if not value is String or not value.begins_with(FEATURE_AUTHORING_ROOT) or not value.ends_with(".json"):
+		return false
+	var relative: String = value.trim_prefix(FEATURE_AUTHORING_ROOT)
+	if "\\" in relative or ":" in relative:
+		return false
+	for segment: String in relative.split("/", true):
+		if segment.is_empty() or segment in [".", ".."]:
+			return false
+	for offset: int in range(relative.length()):
+		if relative.unicode_at(offset) < 32:
+			return false
 	return true
 
 
 func set_feature_module_enabled(id: String, enabled: bool) -> bool:
+	if _feature_publication_in_progress:
+		feature_load_errors = ["feature_publication_in_progress"]
+		return false
 	if not ensure_feature_catalog() or not _feature_catalog.catalog().modules.has(id):
 		return false
 	var candidate := _enabled_feature_modules.duplicate()
 	if enabled == candidate.has(id):
 		return false
 	if enabled:
+		var context := PlayerState.feature_publication_context()
+		var boundary: String = _feature_catalog.catalog().modules[id].get("activation_boundary", "startup")
+		if not bool(context.world_ready) or (boundary == "startup" and bool(context.world_active)):
+			feature_load_errors = ["feature_activation_boundary:" + id + ":" + boundary]
+			return false
 		candidate.append(id)
 	else:
 		candidate.erase(id)
@@ -169,9 +225,7 @@ func set_feature_module_enabled(id: String, enabled: bool) -> bool:
 			if dependency not in candidate:
 				return false
 	candidate.sort()
-	_enabled_feature_modules = candidate
-	feature_catalog_changed.emit()
-	return true
+	return _publish_feature_configuration(_feature_catalog, _feature_authority, _feature_bindings, candidate)
 
 
 func feature_configuration() -> Dictionary:

@@ -1,0 +1,86 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "inactive schema-valid package may register",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "actual player inverted range is refused before enabling",
+      "passed": false
+    },
+    {
+      "id": 3,
+      "label": "failed enable preserves directory, enabled set, actual player and compile generation",
+      "passed": false
+    },
+    {
+      "id": 4,
+      "label": "failed candidate emits no publication and does not poison the old player",
+      "passed": false
+    },
+    {
+      "id": 5,
+      "label": "return to baseline after failed candidate",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "default-on invalid actor range is refused before directory replacement",
+      "passed": false
+    },
+    {
+      "id": 7,
+      "label": "failed reload preserves the complete old publication",
+      "passed": false
+    },
+    {
+      "id": 8,
+      "label": "valid new package remains available after failed reload",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "valid actor candidate publishes",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "every observer sees matching directory and effective actor contribution",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "observer cannot reenter an unfinished publication",
+      "passed": false
+    },
+    {
+      "id": 12,
+      "label": "reentrant attempt cannot replace the accepted candidate",
+      "passed": false
+    },
+    {
+      "id": 13,
+      "label": "subsequent independent disable remains legal",
+      "passed": false
+    },
+    {
+      "id": 14,
+      "label": "baseline restored without feature errors",
+      "passed": true
+    }
+  ],
+  "count": 14,
+  "engine_version": "4.7-stable (official)",
+  "failed": 8,
+  "invocation_id": "4dcff046-a1ec-4af4-afe1-77e32f19ca50",
+  "passed": 6,
+  "reported_checks": 14,
+  "reported_failures": 8,
+  "run_id": "79fab209-978a-4a70-86e1-0fe4cbec8c9e",
+  "scene_id": "feature_publication_atomic_test",
+  "schema_version": 1,
+  "source_content_sha256": "9170f9bba15422b40147f51fb1263deea3a58ff8223768421cb660f14c7a17c4",
+  "status": "FAIL"
+}

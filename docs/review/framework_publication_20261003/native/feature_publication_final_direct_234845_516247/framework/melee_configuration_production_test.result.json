@@ -1,0 +1,91 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "mapped melee world READY",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "melee has an explicit accepted configuration owner",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "formal receiver exists",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "formal IDs select the accepted body definition",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "unaccepted candidate uses its real definition for input MP eligibility",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "change relevant configuration before melee acceptance",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "stale melee rejects before facing, MP, RNG and action ownership",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "restore declared configuration before accepted swing",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "natural melee input accepts the supplied lease",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "delayed melee accepts before release",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "same accepted lease reaches the sole melee planner once",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "mid-windup downgrade and toggle changes do not replace accepted body rank",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "same accepted definition quotes and commits melee MP",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "real receiver commits the accepted melee hit",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "passive configuration belongs to the accepted swing",
+      "passed": true
+    }
+  ],
+  "count": 15,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "b72521e7-7abc-4420-836a-40f0ca44d4d6",
+  "passed": 15,
+  "reported_checks": 15,
+  "reported_failures": 0,
+  "run_id": "828ebefd-2ebf-45c8-b96f-1c3d0293f9fa",
+  "scene_id": "melee_configuration_production_test",
+  "schema_version": 1,
+  "source_content_sha256": "4bbd5374b510b64aa24cc2b8c875c98f1d16e1b81e6826f52e12328bdd2b31a3",
+  "status": "PASS"
+}

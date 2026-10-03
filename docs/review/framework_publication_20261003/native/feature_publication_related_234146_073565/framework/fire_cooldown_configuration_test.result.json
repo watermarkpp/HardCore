@@ -1,0 +1,186 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "actual mapped world is READY",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "real exact-ID melee receiver is available",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "cooldown x0.5 is legal under the actual compiler and authority",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "default-OFF fixture makes no contribution",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "empty extension: accepted candidate has a configuration owner",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "empty extension: real qualified definition contains the declared cooldown",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "empty extension: natural melee input accepts this lease",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "empty extension: same configuration reaches the real planner once",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "empty extension: actual target HP was committed",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "empty extension: final cooldown equals the accepted configuration",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "legal half cooldown: activate through actual content owner",
+      "passed": false
+    },
+    {
+      "id": 12,
+      "label": "legal half cooldown: accepted candidate has a configuration owner",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "legal half cooldown: real qualified definition contains the declared cooldown",
+      "passed": false
+    },
+    {
+      "id": 14,
+      "label": "legal half cooldown: natural melee input accepts this lease",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "legal half cooldown: same configuration reaches the real planner once",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "legal half cooldown: actual target HP was committed",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "legal half cooldown: final cooldown equals the accepted configuration",
+      "passed": false
+    },
+    {
+      "id": 18,
+      "label": "accepted half cooldown then module OFF: activate through actual content owner",
+      "passed": false
+    },
+    {
+      "id": 19,
+      "label": "accepted half cooldown then module OFF: accepted candidate has a configuration owner",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "accepted half cooldown then module OFF: real qualified definition contains the declared cooldown",
+      "passed": false
+    },
+    {
+      "id": 21,
+      "label": "accepted half cooldown then module OFF: natural melee input accepts this lease",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "accepted half cooldown then module OFF: content changes after acceptance",
+      "passed": false
+    },
+    {
+      "id": 23,
+      "label": "accepted half cooldown then module OFF: same configuration reaches the real planner once",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "accepted half cooldown then module OFF: actual target HP was committed",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "accepted half cooldown then module OFF: final cooldown equals the accepted configuration",
+      "passed": false
+    },
+    {
+      "id": 26,
+      "label": "accepted half cooldown then cast speed changes: activate through actual content owner",
+      "passed": false
+    },
+    {
+      "id": 27,
+      "label": "accepted half cooldown then cast speed changes: accepted candidate has a configuration owner",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "accepted half cooldown then cast speed changes: real qualified definition contains the declared cooldown",
+      "passed": false
+    },
+    {
+      "id": 29,
+      "label": "accepted half cooldown then cast speed changes: natural melee input accepts this lease",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "accepted half cooldown then cast speed changes: real profile consumer updates live speed",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "accepted half cooldown then cast speed changes: same configuration reaches the real planner once",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "accepted half cooldown then cast speed changes: actual target HP was committed",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "accepted half cooldown then cast speed changes: final cooldown equals the accepted configuration",
+      "passed": false
+    },
+    {
+      "id": 34,
+      "label": "actual authoring catalog restored after fixture",
+      "passed": false
+    }
+  ],
+  "count": 34,
+  "engine_version": "4.7-stable (official)",
+  "failed": 11,
+  "invocation_id": "0604fb05-8a16-4442-84ee-38af02c89648",
+  "passed": 23,
+  "reported_checks": 34,
+  "reported_failures": 11,
+  "run_id": "8d295c2f-2b6a-4016-9f99-7c3284c8ccfb",
+  "scene_id": "fire_cooldown_configuration_test",
+  "schema_version": 1,
+  "source_content_sha256": "c83a9c67a55082f041e5838c8443a4797bd37657c17b3b828b20b463072e83c5",
+  "status": "FAIL"
+}

@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "modules": [
+    {
+      "module_id": "hc.numeric_fixture",
+      "path": "res://assets/data/features/numeric_fixture.json"
+    },
+    {
+      "module_id": "hc.ignite",
+      "path": "res://assets/data/features/ignite.json"
+    },
+    {
+      "module_id": "hc.socketing_fixture",
+      "path": "res://assets/data/features/socketing_fixture.json"
+    },
+    {
+      "module_id": "hc.publication_probe",
+      "path": "res://assets/data/features/validation/publication_probe.json"
+    }
+  ],
+  "bindings": [
+    {
+      "module_id": "hc.socketing_fixture",
+      "kind": "embedded_item",
+      "item_id": "hc.item.990001",
+      "mechanic_id": "hc.socketing.fixture_accuracy"
+    },
+    {
+      "module_id": "hc.numeric_fixture",
+      "kind": "rule",
+      "rule_id": "hc.numeric_fixture",
+      "mechanic_id": "hc.fixture_accuracy"
+    },
+    {
+      "module_id": "hc.numeric_fixture",
+      "kind": "item",
+      "item_id": "hc.item.000085",
+      "mechanic_id": "hc.fixture_accuracy"
+    },
+    {
+      "module_id": "hc.numeric_fixture",
+      "kind": "skill",
+      "skill_id": "hc.skill.wizard.lightning",
+      "mechanic_id": "hc.fixture_lightning"
+    },
+    {
+      "module_id": "hc.ignite",
+      "kind": "rule",
+      "rule_id": "hc.ignite",
+      "mechanic_id": "hc.ignite.ice_storm"
+    },
+    {
+      "module_id": "hc.ignite",
+      "kind": "rule",
+      "rule_id": "hc.ignite",
+      "mechanic_id": "hc.ignite.fire_sword"
+    },
+    {
+      "module_id": "hc.publication_probe",
+      "kind": "rule",
+      "rule_id": "hc.publication_probe",
+      "mechanic_id": "hc.publication_probe.accuracy"
+    }
+  ]
+}

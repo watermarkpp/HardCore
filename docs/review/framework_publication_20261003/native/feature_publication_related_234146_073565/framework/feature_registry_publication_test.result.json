@@ -1,0 +1,156 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "existing production catalog starts valid",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "formal authoring registry can introduce a new package without a core path edit",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "real new JSON module publishes through ContentLayers",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "new package is registered but stays default off",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "loading an inactive package preserves actual player stats",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "activate registered package through the real service",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "PlayerState applies the new declared contribution exactly once",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "new contribution has one qualified source",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "reject non-authoring or absent registry: user://publication_registry.json",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "failed registry leaves current catalog, source and actual player state intact: user://publication_registry.json",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "reject non-authoring or absent registry: res://assets/data/features/../module_registry.json",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "failed registry leaves current catalog, source and actual player state intact: res://assets/data/features/../module_registry.json",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "reject non-authoring or absent registry: res://assets/data/features/validation/publication_registry.gd",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "failed registry leaves current catalog, source and actual player state intact: res://assets/data/features/validation/publication_registry.gd",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "reject non-authoring or absent registry: res://assets/data/features/validation/missing.json",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "failed registry leaves current catalog, source and actual player state intact: res://assets/data/features/validation/missing.json",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "reject non-authoring or absent registry: res://assets/data/features/validation/publication_invalid_path.json",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "failed registry leaves current catalog, source and actual player state intact: res://assets/data/features/validation/publication_invalid_path.json",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "reject non-authoring or absent registry: res://assets/data/features/validation/publication_invalid_identity.json",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "failed registry leaves current catalog, source and actual player state intact: res://assets/data/features/validation/publication_invalid_identity.json",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "reject non-authoring or absent registry: res://assets/data/features/validation/publication_duplicate.json",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "failed registry leaves current catalog, source and actual player state intact: res://assets/data/features/validation/publication_duplicate.json",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "reject non-authoring or absent registry: res://assets/data/features/validation/publication_missing_module.json",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "failed registry leaves current catalog, source and actual player state intact: res://assets/data/features/validation/publication_missing_module.json",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "disable withdraws only the new grant",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "real player returns to the unchanged base",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "original default registry remains valid",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "restoring default registry retains its exact original content identity",
+      "passed": true
+    }
+  ],
+  "count": 28,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "0604fb05-8a16-4442-84ee-38af02c89648",
+  "passed": 28,
+  "reported_checks": 28,
+  "reported_failures": 0,
+  "run_id": "00b056f7-d59e-4119-b007-9b5898d606bd",
+  "scene_id": "feature_registry_publication_test",
+  "schema_version": 1,
+  "source_content_sha256": "c83a9c67a55082f041e5838c8443a4797bd37657c17b3b828b20b463072e83c5",
+  "status": "PASS"
+}

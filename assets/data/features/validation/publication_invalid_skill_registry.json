@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "modules": [
+    {
+      "module_id": "hc.publication_invalid_skill",
+      "path": "res://assets/data/features/validation/publication_invalid_skill.json"
+    }
+  ],
+  "bindings": [
+    {
+      "module_id": "hc.publication_invalid_skill",
+      "kind": "rule",
+      "rule_id": "hc.publication_invalid_skill",
+      "mechanic_id": "hc.publication_invalid_skill.cost"
+    }
+  ]
+}

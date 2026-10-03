@@ -1,0 +1,21 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "real persistence uses the runner's prelaunch isolated account",
+      "passed": false
+    }
+  ],
+  "count": 1,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "b72521e7-7abc-4420-836a-40f0ca44d4d6",
+  "passed": 0,
+  "reported_checks": 1,
+  "reported_failures": 1,
+  "run_id": "e39015a1-0bb0-4d07-85dc-361a7703cb35",
+  "scene_id": "item_journal_recovery_test",
+  "schema_version": 1,
+  "source_content_sha256": "4bbd5374b510b64aa24cc2b8c875c98f1d16e1b81e6826f52e12328bdd2b31a3",
+  "status": "FAIL"
+}
