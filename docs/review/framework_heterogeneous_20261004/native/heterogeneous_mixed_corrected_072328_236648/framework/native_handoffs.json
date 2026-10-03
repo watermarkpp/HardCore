@@ -1,0 +1,34 @@
+{
+    "schema_version":  1,
+    "invocation_id":  "812e71ac-45e0-4c2b-8a35-f811030783b2",
+    "source_content_sha256":  "6f831f917acb90f6a1d46dabcff45b0eb6ca9f793d7e313b4f960ab2a214d24b",
+    "producers":  {
+                      "feature_resource_multi_reentry_test":  {
+                                                                  "scene_id":  "feature_resource_multi_reentry_test",
+                                                                  "run_id":  "75990730-949a-4eaa-a169-2bebe1f897c8",
+                                                                  "source_content_sha256":  "6f831f917acb90f6a1d46dabcff45b0eb6ca9f793d7e313b4f960ab2a214d24b",
+                                                                  "process_exited":  true,
+                                                                  "effective_exit_code":  0,
+                                                                  "result":  "PASS",
+                                                                  "receipt_sha256":  "585a717317a741b246e69a9e643829ccb423e5d4450ac3b8b66ed00652a4cebe"
+                                                              },
+                      "feature_lifesteal_runtime_test":  {
+                                                             "scene_id":  "feature_lifesteal_runtime_test",
+                                                             "run_id":  "b782c3d6-ee4d-417d-9664-3e5681d4c9ec",
+                                                             "source_content_sha256":  "6f831f917acb90f6a1d46dabcff45b0eb6ca9f793d7e313b4f960ab2a214d24b",
+                                                             "process_exited":  true,
+                                                             "effective_exit_code":  0,
+                                                             "result":  "PASS",
+                                                             "receipt_sha256":  "e770a438773ddceab972e005248d73a8dfe3c9400529d71e2136c50169bdbc61"
+                                                         },
+                      "feature_lifesteal_production_test":  {
+                                                                "scene_id":  "feature_lifesteal_production_test",
+                                                                "run_id":  "7cb2cbca-8ed7-455a-b9c4-9fcfc3efd56f",
+                                                                "source_content_sha256":  "6f831f917acb90f6a1d46dabcff45b0eb6ca9f793d7e313b4f960ab2a214d24b",
+                                                                "process_exited":  true,
+                                                                "effective_exit_code":  0,
+                                                                "result":  "PASS",
+                                                                "receipt_sha256":  "1f53d63d0ee1d78800ed11aaf0be2511695eeb985efa74a73ba84731c311ddad"
+                                                            }
+                  }
+}

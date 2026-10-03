@@ -1,0 +1,56 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "production resource registry starts valid",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "real resource-free package supplies an active old configuration",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "synchronous resource-free candidate rejects a failed resource authority",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "publication propagates the original declaration failure",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "declaration failure preserves effective catalog bundle stats compilation and notifications",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "asynchronous resource-free publication also rejects failed declarations",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "failed asynchronous reader never replaces the old configuration",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "restored legitimate reader retains the original empty-resource publication",
+      "passed": true
+    }
+  ],
+  "count": 8,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "cfc6e8d5-0165-4e66-88ed-ad21ffa359b7",
+  "passed": 8,
+  "reported_checks": 8,
+  "reported_failures": 0,
+  "run_id": "5c9151f1-68b7-4918-846c-8224a91bfbde",
+  "scene_id": "feature_resource_registry_rejection_test",
+  "schema_version": 1,
+  "source_content_sha256": "86b48f605b4de129b528dd8bc5649ce85233c2503b2503d573ad7cf304310c91",
+  "status": "PASS"
+}

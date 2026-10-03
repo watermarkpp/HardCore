@@ -1,0 +1,8 @@
+Another Godot test runner owns this worktree. Wait for its explicit handoff before retrying.
+At C:\Users\Administrator\.codex\worktrees\pluggable-framework-v2\HardCore\tools\run_godot_tests.ps1:25 char:9
++         throw 'Another Godot test runner owns this worktree. Wait for ...
++         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (Another Godot t...efore retrying.:String) [], RuntimeException
+    + FullyQualifiedErrorId : Another Godot test runner owns this worktree. Wait for its explicit handoff before retry 
+   ing.
+ 

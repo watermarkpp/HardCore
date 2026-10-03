@@ -1,0 +1,33 @@
+# 异构机制第一条命令与同步派发退休
+
+授权：原RFC v2 §10—11、Task4串行计划。施工仅第三树，单主控；主树、第二树、真实存档、冻结MonsterStreaming不改。
+
+## 本轮固定交接与双审计
+
+资源消费最终ad9681fc内容的51场景/1281检查已固定并非强推到87400315b1accc87dc0592b091dbfcef876453d5。Pro和小可爱本轮完整报告均实际读取，来源/时间保存在outputs/framework_v2/resource_consumption_20261004/audit_87400315，定时扫描官方PAUSED。报告支持关闭两个取消反例，保留实际资源消费及接受资格；新增三来源同步音频clear后旧dispatch续行，要求原生补证。帧回调间隔不称CPU耗时，README已纠正文案。
+
+## 第一条异构命令
+
+新受控handler hc.lifesteal.v1只读已提交actual_loss，输出ModifyResource/hp/restore；既有CombatRuntimeService端口核对ActorRef及同世界/同life存活资格，调用原Player.restore_health。即时回血在基础批次完成之后执行，致死/已移除目标的有效事实仍能回源；零损失不回血、死源不复活、periodic不再次触发。旧装备吸血公式、命中/RNG/HP写入权威不变。
+
+新增trusted handler registry统一声明权限、持续状态成本和生命周期。即时命令预留receipt而不占持续状态槽；持续ignite仍按旧状态/周期/容量兑现。正式主registry不启用新玩法；明确测试registry中的新模块默认关闭，由测试正式启用。
+
+首轮heterogeneous_lifesteal_red_070316_459227：2检查/2FAIL，无引擎错误，旧authority/compiler不识别新权限/handler。第一次GREEN夹具用了不存在的票据方法，原SCRIPT ERROR记录保留，按实际close接口修正；第二次65/69但4FAIL来自独立Player未经过正式combat transition、life=0，ActorRef正确拒绝无合法来源。诊断保留每例事实/HP/epoch；通过真实begin/finish transition建立生命，不放宽ActorRef，validlife场景71项PASS。
+
+同步通知补反例heterogeneous_lifesteal_reentry_red_071241_973140：78检查/1FAIL，unticketed同世界clear后旧事实仍继续第二次恢复。dispatch持有的generation在configure/clear失效，后续binding在写receipt/状态前停止旧栈；带票据场景仍保持原一次性producer终态。
+
+## 既有三来源资源反例
+
+复用resource_natural_registry真实rule/item/learned-skill三来源、正式Player/Root冰咆哮、非空接受票据和同一个实际AudioRuntimeService通知；仅一个receiver，不改目标上限/伤害/周期。临时受测Runtime使用87400315发布字节，候选原字节先保存在本轮outputs；原生terminal后核对旧字节并恢复候选。
+
+resource_multi_audio_retirement_red_072012_398623：23检查/1FAIL，并真实产生effect_runtime:265缺失reservation的SCRIPT ERROR。GREEN同场景23项通过；后续补预算scope关闭检查。基础HP保留，第二/第三binding不继续，heap/receipt/reservation/cue/audio均排空；普通撤回仍保留until_expired承诺。
+
+## 夹具与当前边界
+
+实际Root混合测试首轮用了不存在的公开属性，wrapper原样FAIL；改用现有feature_configuration接口。第二轮25检查/6FAIL由夹具私改Player.max_hp后正式配置通知按原profile重新缩放HP引起。撤掉私改最大HP并保留真实profile，独立检查最大HP足够容纳期望；未改生产profile或回血公式。相关回归与同最终指纹正在继续，不把阶段PASS写成Task4完成。
+
+当前index实际df5a01与staged entries58f820仍匹配；本轮额外保存了当前index原字节及完整git ls-files --stage原输出，位于outputs/framework_v2/heterogeneous_20261004。历史66c505连续性FAIL和旧备份MISSING保留，不重建/restore/reset，不归因。
+
+剩余Task4词缀/嵌入/符文正式来源组合、死亡子连锁及生成式组合尚未实现；Task5完整P6/R3、旧破坏性supervisor安全复用、Android/GPU、APK和原v97B MISSING仍分别开放。
+
+2026-10-04最终同86b48f60内容：直接46/世界8全部原生PASS，53完整receipt/1409检查，退出0且前后源码不变。73次原生尝试保留8FAIL；首次world提前启动被mutex拒绝，原生未开始，单列1个wrapper FAIL，等待直接终态后串行重跑8PASS。完整原字节与保护检查见docs/review/framework_heterogeneous_20261004；当前index完整备份/39611条staged输出再次验证。Task4仍NOT_RUN整体；后续正式词缀/嵌入/符文组合、死亡链与生成式组合继续。

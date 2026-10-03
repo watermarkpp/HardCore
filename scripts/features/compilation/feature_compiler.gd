@@ -2,7 +2,8 @@ extends RefCounted
 
 const Graph := preload("res://scripts/features/contracts/plain_graph.gd")
 const Cues := preload("res://scripts/features/presentation/cue_definitions.gd")
-const BUILTIN_HANDLERS := ["hc.ignite.v1"]
+const Handlers := preload("res://scripts/features/handlers/handler_registry.gd")
+const BUILTIN_HANDLERS := Handlers.IDS
 const MODULE_REQUIRED := ["schema_version", "module_id", "module_version", "core_api_version",
 	"requires", "conflicts", "capabilities", "handlers", "resource_dependencies", "cost", "mechanics", "tests"]
 const MODULE_OPTIONAL := ["default_enabled", "scope", "activation_boundary", "content_hash"]
@@ -296,23 +297,29 @@ static func _mechanic_valid(value: Dictionary, module: Dictionary, authority: Di
 				for operation: Variant in value.operations:
 					_validate_operation(operation, kind, authority, errors)
 		"trigger":
+			var contract := Handlers.contract(str(value.handler_id))
+			if contract.is_empty():
+				errors.append("unknown_handler_contract"); return false
 			if value.has("cue_id") and (not value.cue_id is String or Cues.definition(value.cue_id).is_empty()):
 				errors.append("unknown_trigger_cue")
+			if value.has("cue_id") and not contract.cue:
+				errors.append("unsupported_handler_cue")
 			if value.handler_id not in module.handlers or value.handler_id not in BUILTIN_HANDLERS:
 				errors.append("undeclared_trigger_handler")
-			if "combat.post_hit" not in module.capabilities or "effects.periodic" not in module.capabilities:
-				errors.append("missing_trigger_permission")
+			for permission: String in contract.capabilities:
+				if permission not in module.capabilities: errors.append("missing_trigger_permission:"+permission)
 			if value.event != "damage_committed" or value.skill_id not in authority.skill_ids:
 				errors.append("unknown_trigger_event_or_skill")
 			if value.source_classes != ["direct"] or value.dedup != "per_target_per_release":
 				errors.append("unsupported_trigger_chain")
-			if value.lifecycle != "until_expired":
+			if value.lifecycle != contract.lifecycle:
 				errors.append("unsupported_effect_lifecycle")
 			if module.cost is Dictionary and (
-				float(module.cost.get("commands_per_event", 0)) < 1.0
-				or float(module.cost.get("states_per_target", 0)) < 1.0):
+				float(module.cost.get("commands_per_event", 0)) < int(contract.commands)
+				or float(module.cost.get("states_per_target", 0)) < int(contract.states)):
 				errors.append("undeclared_trigger_capacity")
-			_validate_ignite_config(value.config, errors)
+			if value.handler_id == "hc.ignite.v1": _validate_ignite_config(value.config, errors)
+			else: _validate_lifesteal_config(value.config,errors)
 		"capability":
 			if "actor.capabilities" not in module.capabilities or value.capability not in authority.get("actor_capability_ids", []):
 				errors.append("unknown_actor_capability")
@@ -335,6 +342,13 @@ static func _validate_operation(input: Variant, kind: String, authority: Diction
 	else:
 		if input.skill_id not in authority.skill_ids or input.field not in authority.get("skill_fields", []):
 			errors.append("unknown_skill_or_field")
+
+static func _validate_lifesteal_config(input: Variant, errors: Array[String]) -> void:
+	if not input is Dictionary:
+		errors.append("lifesteal_not_dictionary"); return
+	if not _keys(input,["fraction"],[],errors,"lifesteal"): return
+	if not _number(input.fraction) or float(input.fraction) <= 0 or float(input.fraction) > 1:
+		errors.append("invalid_lifesteal_fraction")
 
 static func _validate_ignite_config(input: Variant, errors: Array[String]) -> void:
 	if not input is Dictionary:

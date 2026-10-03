@@ -4,6 +4,7 @@ const Graph := preload("res://scripts/features/contracts/plain_graph.gd")
 const Actor := preload("res://scripts/features/contracts/actor_ref.gd")
 const Ids := preload("res://scripts/identity/entity_registry.gd")
 const Compiler := preload("res://scripts/features/compilation/feature_compiler.gd")
+const Handlers := preload("res://scripts/features/handlers/handler_registry.gd")
 const MAX_BASE_DEPTH := 8
 const MAX_FACTS := 4096
 var _world: RefCounted
@@ -68,8 +69,10 @@ static func validate_bindings(skill_id: String, bindings: Array) -> bool:
 			if key not in ["slot","instance_id","extension_id","mechanic_id"] \
 				or not binding.source[key] is String or binding.source[key].is_empty(): return false
 		if not binding.source.has("instance_id"): return false
-		if not Compiler._mechanic_valid(binding.definition,{"capabilities":["combat.post_hit","effects.periodic"],
-			"handlers":["hc.ignite.v1"],"cost":{"commands_per_event":1,"states_per_target":1}},authority,binding_errors) \
+		var contract := Handlers.contract(str(binding.definition.get("handler_id","")))
+		if contract.is_empty(): return false
+		if not Compiler._mechanic_valid(binding.definition,{"capabilities":contract.capabilities,
+			"handlers":[binding.definition.handler_id],"cost":{"commands_per_event":contract.commands,"states_per_target":contract.states}},authority,binding_errors) \
 			or binding.definition.get("kind") != "trigger" or binding.definition.get("skill_id") != skill_id \
 			or binding.handle != Compiler.source_handle(binding.source) \
 			or binding.source.get("mechanic_id") != binding.definition.mechanic_id \

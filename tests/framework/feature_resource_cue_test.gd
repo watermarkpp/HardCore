@@ -9,6 +9,7 @@ const PACKAGE := "res://assets/data/features/validation/resource_cue_registry.js
 const AUDIO := "res://assets/audio/sfx/client/137__M26-3.wav"
 @export var cancel_during_audio := false
 @export var check_acceptance_resources := false
+@export var multi_source_reentry := false
 var proof := Proof.new()
 var checks := 0
 var failures: Array[String] = []
@@ -31,12 +32,14 @@ func _observe_audio(event: Dictionary) -> void:
 func _run() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress(false)
-	PlayerState.profession = "战士"
+	PlayerState.profession = "法师" if multi_source_reentry else "战士"
 	PlayerState.level = 50
-	PlayerState.learned_skills = {"hc.skill.warrior.fire_sword":3}
+	PlayerState.learned_skills = {"hc.skill.wizard.ice_storm":3} if multi_source_reentry else {"hc.skill.warrior.fire_sword":3}
+	if multi_source_reentry:
+		PlayerState.equipment["hc.slot.weapon"] = preload("res://scripts/item_drop_instance_rules.gd").create_instance(GameData.get_item_record({"item_id":85}),"resource:multi:weapon")
 	PlayerState.recalculate_stats(false)
-	var parent: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://assets/data/features/validation/resource_cue_parent.json"))
-	var child: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://assets/data/features/validation/resource_cue_child.json"))
+	var parent: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://assets/data/features/validation/resource_natural_parent.json" if multi_source_reentry else "res://assets/data/features/validation/resource_cue_parent.json"))
+	var child: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://assets/data/features/validation/resource_natural_child.json" if multi_source_reentry else "res://assets/data/features/validation/resource_cue_child.json"))
 	check(Compiler.compile_catalog([parent,child],Authority.build()).success, "known critical cue closes its actual sound through a required child module")
 	var missing := child.duplicate(true)
 	missing.resource_dependencies = []
@@ -45,7 +48,7 @@ func _run() -> void:
 		var bad := parent.duplicate(true)
 		bad.mechanics[0].cue_id = invalid
 		check(not Compiler.compile_catalog([bad,child],Authority.build()).success, "unknown or malformed cue identity refuses publication " + str(invalid))
-	var ready: bool = await ContentLayers.reload_feature_catalog_async(PACKAGE)
+	var ready: bool = await ContentLayers.reload_feature_catalog_async("res://assets/data/features/validation/resource_natural_registry.json" if multi_source_reentry else PACKAGE)
 	check(ready, "formal compiler preparation and atomic publication admit critical cue closure")
 	if not ready: _finish(); return
 	var resource_owner: WeakRef = weakref(ContentLayers.feature_configuration().resource_lease)
@@ -70,6 +73,8 @@ func _run() -> void:
 	target.direct_spell_stats_valid = true
 	game.player.attack_min = 100
 	game.player.attack_max = 100
+	if multi_source_reentry:
+		PlayerState.computed_stats.magic_min = 100; PlayerState.computed_stats.magic_max = 100
 	game.player.current_mp = 100
 	game.player.fire_sword_enabled = true
 	game.player.half_moon_enabled = false
@@ -77,9 +82,11 @@ func _run() -> void:
 	game._skill_cast_target = target
 	game._set_magic_locked_target(target,true)
 	game._audio_runtime_service.event_started.connect(_observe_audio)
-	var lease: RefCounted = game._capture_melee_configuration()
+	var lease: RefCounted = game._capture_action_configuration("hc.skill.wizard.ice_storm") if multi_source_reentry else game._capture_melee_configuration()
 	check(lease != null and lease.resource_lease() != null, "real accepted configuration owns its prepared nonempty cue resources")
 	if lease == null: _finish(); return
+	if multi_source_reentry:
+		check(lease.event_bindings_for("hc.skill.wizard.ice_storm").size()==3,"real rule item and learned skill qualify three distinct accepted bindings")
 	if check_acceptance_resources:
 		var resource_type := preload("res://scripts/features/contracts/feature_resource_lease.gd")
 		var empty_plan: Dictionary = resource_type.requirements(ContentLayers.feature_configuration().catalog,[])
@@ -117,7 +124,9 @@ func _run() -> void:
 		check(ContentLayers.reload_feature_catalog(), "resource qualification world retires before ordinary catalog restoration")
 		_finish()
 		return
-	check(game.player.request_attack_toward(Vector2.RIGHT,true,target.get_instance_id(),lease) and lease.effect_reservation() != null, "natural player request accepts nonempty ticket before real windup")
+	var accepted: bool = game.player.request_skill("hc.skill.wizard.ice_storm",target.get_instance_id(),lease) if multi_source_reentry \
+		else game.player.request_attack_toward(Vector2.RIGHT,true,target.get_instance_id(),lease)
+	check(accepted and lease.effect_reservation() != null, "natural player request accepts nonempty ticket before real windup")
 	check(ContentLayers.set_feature_module_enabled("hc.ignite",false) and ContentLayers.set_feature_module_enabled("hc.ignite_cue_assets",false), "withdraw parent then child without revoking already accepted work")
 	deadline = Time.get_ticks_msec()+3000
 	while game.observed_releases == 0 and Time.get_ticks_msec()<deadline: await get_tree().process_frame
@@ -135,6 +144,11 @@ func _run() -> void:
 		check(played.size() == 1, "real prepared audio onset reaches the synchronous cancellation observer once")
 		check(runtime.active_count() == 0 and runtime.pending_count() == 0 and port.node_count() == 0, "synchronous retirement leaves no live effect or native cue")
 		check(port._audio_handles.is_empty(), "retired cue cannot register a late audio ownership record")
+		if multi_source_reentry:
+			check(runtime.heap_count()==0 and runtime.reservation_snapshot().actions==0 and runtime.reservation_snapshot().receipts==0,
+				"synchronous retirement clears heap producer and all receipts before the next binding")
+			check(preload("res://scripts/layers/runtime/execution/frame_budget.gd").snapshot().open_scopes==0,
+				"synchronous retirement returns with all shared budget scopes closed")
 		if played.size() == 1:
 			var request: Dictionary = played[0]
 			var player: AudioStreamPlayer = game._audio_runtime_service._event_players[int(request.pool_index)]
@@ -187,6 +201,7 @@ func _run() -> void:
 func _finish() -> void:
 	var scene_id := "feature_resource_cue_reentry_test" if cancel_during_audio else "feature_resource_cue_test"
 	if check_acceptance_resources: scene_id = "feature_resource_acceptance_test"
+	if multi_source_reentry: scene_id = "feature_resource_multi_reentry_test"
 	if not proof.write_receipt(scene_id,checks,failures.size()): failures.append("receipt")
 	print("FEATURE_RESOURCE_CUE_%s checks=%d failures=%s" % ["PASS" if failures.is_empty() else "FAIL",checks,str(failures)])
 	get_tree().quit(0 if failures.is_empty() else 1)

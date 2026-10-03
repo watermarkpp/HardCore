@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "modules": [
+    {"module_id": "hc.ignite", "path": "res://assets/data/features/ignite.json"},
+    {"module_id": "hc.validation.lifesteal", "path": "res://assets/data/features/validation/lifesteal.json"}
+  ],
+  "bindings": [
+    {"module_id": "hc.ignite", "kind": "rule", "rule_id": "hc.ignite", "mechanic_id": "hc.ignite.ice_storm"},
+    {"module_id": "hc.validation.lifesteal", "kind": "rule", "rule_id": "hc.validation.lifesteal", "mechanic_id": "hc.validation.lifesteal.ice_storm"}
+  ]
+}

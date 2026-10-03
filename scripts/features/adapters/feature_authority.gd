@@ -2,6 +2,7 @@ extends RefCounted
 
 const Loader := preload("res://scripts/skills/skill_data_loader.gd")
 const Graph := preload("res://scripts/features/contracts/plain_graph.gd")
+const Handlers := preload("res://scripts/features/handlers/handler_registry.gd")
 const MAX_STATES_PER_TARGET := 16
 const SKILL_FIELDS := ["geometry.maximum_range_gu", "geometry.radius_grid_steps",
 	"timing.body_cast_ms", "timing.total_action_lock_ms", "timing.cooldown_ms",
@@ -16,8 +17,8 @@ static func build() -> Dictionary:
 	return Graph.capture({"core_api_version":1,
 		"stat_keys":["accuracy","agility","attack_min","attack_max","magic_min","magic_max",
 			"tao_min","tao_max","max_hp","max_mp"], "skill_ids":ids,
-		"capabilities":["stats.contribute","skills.modify","combat.post_hit","effects.periodic","actor.capabilities","items.transact"],
-		"handler_ids":["hc.ignite.v1"], "resource_paths":declared.records.keys(),
+		"capabilities":["stats.contribute","skills.modify","combat.post_hit","effects.periodic","combat.heal","actor.capabilities","items.transact"],
+		"handler_ids":Handlers.IDS, "resource_paths":declared.records.keys(),
 		"skill_fields":SKILL_FIELDS, "tag_keys":["hc.numeric","hc.periodic","hc.sight"],
 		"actor_capability_ids":["hc.can_see_stealth","hc.immune.periodic"],
 		"max_commands_per_event":32,"max_states_per_target":MAX_STATES_PER_TARGET,"max_sources":64}).value

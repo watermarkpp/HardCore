@@ -1,0 +1,772 @@
+diff --git a/assets/data/features/validation/lifesteal.json b/assets/data/features/validation/lifesteal.json
+new file mode 100644
+index 000000000..4e7c7560a
+--- /dev/null
++++ b/assets/data/features/validation/lifesteal.json
+@@ -0,0 +1,28 @@
++{
++  "schema_version": 1,
++  "module_id": "hc.validation.lifesteal",
++  "module_version": 1,
++  "core_api_version": 1,
++  "requires": [],
++  "conflicts": [],
++  "capabilities": ["combat.post_hit", "combat.heal"],
++  "handlers": ["hc.lifesteal.v1"],
++  "resource_dependencies": [],
++  "cost": {"commands_per_event": 1, "states_per_target": 0},
++  "default_enabled": false,
++  "scope": "world",
++  "activation_boundary": "world_ready",
++  "mechanics": [{
++    "mechanic_id": "hc.validation.lifesteal.ice_storm",
++    "kind": "trigger",
++    "tags": ["hc.numeric"],
++    "event": "damage_committed",
++    "skill_id": "hc.skill.wizard.ice_storm",
++    "handler_id": "hc.lifesteal.v1",
++    "source_classes": ["direct"],
++    "dedup": "per_target_per_release",
++    "lifecycle": "immediate",
++    "config": {"fraction": 0.25}
++  }],
++  "tests": ["tests/framework/feature_lifesteal_production_test.tscn"]
++}
+diff --git a/assets/data/features/validation/lifesteal_registry.json b/assets/data/features/validation/lifesteal_registry.json
+new file mode 100644
+index 000000000..f8406da1a
+--- /dev/null
++++ b/assets/data/features/validation/lifesteal_registry.json
+@@ -0,0 +1,11 @@
++{
++  "schema_version": 1,
++  "modules": [
++    {"module_id": "hc.ignite", "path": "res://assets/data/features/ignite.json"},
++    {"module_id": "hc.validation.lifesteal", "path": "res://assets/data/features/validation/lifesteal.json"}
++  ],
++  "bindings": [
++    {"module_id": "hc.ignite", "kind": "rule", "rule_id": "hc.ignite", "mechanic_id": "hc.ignite.ice_storm"},
++    {"module_id": "hc.validation.lifesteal", "kind": "rule", "rule_id": "hc.validation.lifesteal", "mechanic_id": "hc.validation.lifesteal.ice_storm"}
++  ]
++}
+diff --git a/scripts/features/adapters/feature_authority.gd b/scripts/features/adapters/feature_authority.gd
+index c6ad5a95b..c00e45887 100644
+--- a/scripts/features/adapters/feature_authority.gd
++++ b/scripts/features/adapters/feature_authority.gd
+@@ -2,6 +2,7 @@ extends RefCounted
+ 
+ const Loader := preload("res://scripts/skills/skill_data_loader.gd")
+ const Graph := preload("res://scripts/features/contracts/plain_graph.gd")
++const Handlers := preload("res://scripts/features/handlers/handler_registry.gd")
+ const MAX_STATES_PER_TARGET := 16
+ const SKILL_FIELDS := ["geometry.maximum_range_gu", "geometry.radius_grid_steps",
+ 	"timing.body_cast_ms", "timing.total_action_lock_ms", "timing.cooldown_ms",
+@@ -16,8 +17,8 @@ static func build() -> Dictionary:
+ 	return Graph.capture({"core_api_version":1,
+ 		"stat_keys":["accuracy","agility","attack_min","attack_max","magic_min","magic_max",
+ 			"tao_min","tao_max","max_hp","max_mp"], "skill_ids":ids,
+-		"capabilities":["stats.contribute","skills.modify","combat.post_hit","effects.periodic","actor.capabilities","items.transact"],
+-		"handler_ids":["hc.ignite.v1"], "resource_paths":declared.records.keys(),
++		"capabilities":["stats.contribute","skills.modify","combat.post_hit","effects.periodic","combat.heal","actor.capabilities","items.transact"],
++		"handler_ids":Handlers.IDS, "resource_paths":declared.records.keys(),
+ 		"skill_fields":SKILL_FIELDS, "tag_keys":["hc.numeric","hc.periodic","hc.sight"],
+ 		"actor_capability_ids":["hc.can_see_stealth","hc.immune.periodic"],
+ 		"max_commands_per_event":32,"max_states_per_target":MAX_STATES_PER_TARGET,"max_sources":64}).value
+diff --git a/scripts/features/compilation/feature_compiler.gd b/scripts/features/compilation/feature_compiler.gd
+index 57451a8a7..d9a98249f 100644
+--- a/scripts/features/compilation/feature_compiler.gd
++++ b/scripts/features/compilation/feature_compiler.gd
+@@ -2,7 +2,8 @@ extends RefCounted
+ 
+ const Graph := preload("res://scripts/features/contracts/plain_graph.gd")
+ const Cues := preload("res://scripts/features/presentation/cue_definitions.gd")
+-const BUILTIN_HANDLERS := ["hc.ignite.v1"]
++const Handlers := preload("res://scripts/features/handlers/handler_registry.gd")
++const BUILTIN_HANDLERS := Handlers.IDS
+ const MODULE_REQUIRED := ["schema_version", "module_id", "module_version", "core_api_version",
+ 	"requires", "conflicts", "capabilities", "handlers", "resource_dependencies", "cost", "mechanics", "tests"]
+ const MODULE_OPTIONAL := ["default_enabled", "scope", "activation_boundary", "content_hash"]
+@@ -296,23 +297,29 @@ static func _mechanic_valid(value: Dictionary, module: Dictionary, authority: Di
+ 				for operation: Variant in value.operations:
+ 					_validate_operation(operation, kind, authority, errors)
+ 		"trigger":
++			var contract := Handlers.contract(str(value.handler_id))
++			if contract.is_empty():
++				errors.append("unknown_handler_contract"); return false
+ 			if value.has("cue_id") and (not value.cue_id is String or Cues.definition(value.cue_id).is_empty()):
+ 				errors.append("unknown_trigger_cue")
++			if value.has("cue_id") and not contract.cue:
++				errors.append("unsupported_handler_cue")
+ 			if value.handler_id not in module.handlers or value.handler_id not in BUILTIN_HANDLERS:
+ 				errors.append("undeclared_trigger_handler")
+-			if "combat.post_hit" not in module.capabilities or "effects.periodic" not in module.capabilities:
+-				errors.append("missing_trigger_permission")
++			for permission: String in contract.capabilities:
++				if permission not in module.capabilities: errors.append("missing_trigger_permission:"+permission)
+ 			if value.event != "damage_committed" or value.skill_id not in authority.skill_ids:
+ 				errors.append("unknown_trigger_event_or_skill")
+ 			if value.source_classes != ["direct"] or value.dedup != "per_target_per_release":
+ 				errors.append("unsupported_trigger_chain")
+-			if value.lifecycle != "until_expired":
++			if value.lifecycle != contract.lifecycle:
+ 				errors.append("unsupported_effect_lifecycle")
+ 			if module.cost is Dictionary and (
+-				float(module.cost.get("commands_per_event", 0)) < 1.0
+-				or float(module.cost.get("states_per_target", 0)) < 1.0):
++				float(module.cost.get("commands_per_event", 0)) < int(contract.commands)
++				or float(module.cost.get("states_per_target", 0)) < int(contract.states)):
+ 				errors.append("undeclared_trigger_capacity")
+-			_validate_ignite_config(value.config, errors)
++			if value.handler_id == "hc.ignite.v1": _validate_ignite_config(value.config, errors)
++			else: _validate_lifesteal_config(value.config,errors)
+ 		"capability":
+ 			if "actor.capabilities" not in module.capabilities or value.capability not in authority.get("actor_capability_ids", []):
+ 				errors.append("unknown_actor_capability")
+@@ -336,6 +343,13 @@ static func _validate_operation(input: Variant, kind: String, authority: Diction
+ 		if input.skill_id not in authority.skill_ids or input.field not in authority.get("skill_fields", []):
+ 			errors.append("unknown_skill_or_field")
+ 
++static func _validate_lifesteal_config(input: Variant, errors: Array[String]) -> void:
++	if not input is Dictionary:
++		errors.append("lifesteal_not_dictionary"); return
++	if not _keys(input,["fraction"],[],errors,"lifesteal"): return
++	if not _number(input.fraction) or float(input.fraction) <= 0 or float(input.fraction) > 1:
++		errors.append("invalid_lifesteal_fraction")
++
+ static func _validate_ignite_config(input: Variant, errors: Array[String]) -> void:
+ 	if not input is Dictionary:
+ 		errors.append("ignite_not_dictionary")
+diff --git a/scripts/features/handlers/handler_registry.gd b/scripts/features/handlers/handler_registry.gd
+new file mode 100644
+index 000000000..4fe4ebc4b
+--- /dev/null
++++ b/scripts/features/handlers/handler_registry.gd
+@@ -0,0 +1,27 @@
++extends RefCounted
++
++const Ignite := preload("res://scripts/features/handlers/ignite_handler.gd")
++const Lifesteal := preload("res://scripts/features/handlers/lifesteal_handler.gd")
++const Graph := preload("res://scripts/features/contracts/plain_graph.gd")
++const IDS := [Ignite.ID,Lifesteal.ID]
++const CONTRACTS := {
++	"hc.ignite.v1":{"capabilities":["combat.post_hit","effects.periodic"],"commands":1,"states":1,
++		"lifecycle":"until_expired","effect_id":"hc.effect.ignite.v1","cue":true},
++	"hc.lifesteal.v1":{"capabilities":["combat.post_hit","combat.heal"],"commands":1,"states":0,
++		"lifecycle":"immediate","effect_id":"","cue":false}
++}
++
++static func contract(id: String) -> Dictionary:
++	return Graph.capture(CONTRACTS.get(id,{})).value
++
++static func commands(fact: Dictionary, binding: Dictionary) -> Array:
++	match binding.definition.handler_id:
++		Ignite.ID: return Ignite.commands(fact,binding)
++		Lifesteal.ID: return Lifesteal.commands(fact,binding)
++	return []
++
++static func persistent_binding_count(bindings: Array) -> int:
++	var result := 0
++	for binding: Dictionary in bindings:
++		result += int(CONTRACTS.get(binding.definition.handler_id,{}).get("states",0))
++	return result
+diff --git a/scripts/features/handlers/lifesteal_handler.gd b/scripts/features/handlers/lifesteal_handler.gd
+new file mode 100644
+index 000000000..563d8d4c8
+--- /dev/null
++++ b/scripts/features/handlers/lifesteal_handler.gd
+@@ -0,0 +1,17 @@
++extends RefCounted
++
++const Graph := preload("res://scripts/features/contracts/plain_graph.gd")
++const ID := "hc.lifesteal.v1"
++
++# The committed fact is the sole damage basis. This pure handler never
++# touches HP, nodes, RNG, resources or another handler.
++static func commands(fact: Dictionary, binding: Dictionary) -> Array:
++	var definition: Dictionary = binding.definition
++	if definition.handler_id != ID or definition.skill_id != fact.skill_id \
++		or fact.source_class != "direct" or int(fact.actual_loss) <= 0 or fact.source.is_empty(): return []
++	var amount := floori(float(fact.actual_loss)*float(definition.config.fraction))
++	if amount <= 0: return []
++	var command := Graph.capture({"op":"ModifyResource","handler_id":ID,"resource":"hp","mode":"restore",
++		"recipient":fact.source,"amount":amount,"source_handle":binding.handle,"mechanic_id":definition.mechanic_id,
++		"damage_basis":"actual_hp_loss","source_class":"reaction"})
++	return [command.value] if command.success else []
+diff --git a/scripts/features/runtime/damage_batch.gd b/scripts/features/runtime/damage_batch.gd
+index 179befa17..0859f61ed 100644
+--- a/scripts/features/runtime/damage_batch.gd
++++ b/scripts/features/runtime/damage_batch.gd
+@@ -4,6 +4,7 @@ const Graph := preload("res://scripts/features/contracts/plain_graph.gd")
+ const Actor := preload("res://scripts/features/contracts/actor_ref.gd")
+ const Ids := preload("res://scripts/identity/entity_registry.gd")
+ const Compiler := preload("res://scripts/features/compilation/feature_compiler.gd")
++const Handlers := preload("res://scripts/features/handlers/handler_registry.gd")
+ const MAX_BASE_DEPTH := 8
+ const MAX_FACTS := 4096
+ var _world: RefCounted
+@@ -68,8 +69,10 @@ static func validate_bindings(skill_id: String, bindings: Array) -> bool:
+ 			if key not in ["slot","instance_id","extension_id","mechanic_id"] \
+ 				or not binding.source[key] is String or binding.source[key].is_empty(): return false
+ 		if not binding.source.has("instance_id"): return false
+-		if not Compiler._mechanic_valid(binding.definition,{"capabilities":["combat.post_hit","effects.periodic"],
+-			"handlers":["hc.ignite.v1"],"cost":{"commands_per_event":1,"states_per_target":1}},authority,binding_errors) \
++		var contract := Handlers.contract(str(binding.definition.get("handler_id","")))
++		if contract.is_empty(): return false
++		if not Compiler._mechanic_valid(binding.definition,{"capabilities":contract.capabilities,
++			"handlers":[binding.definition.handler_id],"cost":{"commands_per_event":contract.commands,"states_per_target":contract.states}},authority,binding_errors) \
+ 			or binding.definition.get("kind") != "trigger" or binding.definition.get("skill_id") != skill_id \
+ 			or binding.handle != Compiler.source_handle(binding.source) \
+ 			or binding.source.get("mechanic_id") != binding.definition.mechanic_id \
+diff --git a/scripts/features/runtime/effect_runtime.gd b/scripts/features/runtime/effect_runtime.gd
+index 4ba296a1b..cb4a363c5 100644
+--- a/scripts/features/runtime/effect_runtime.gd
++++ b/scripts/features/runtime/effect_runtime.gd
+@@ -2,6 +2,7 @@ extends RefCounted
+ 
+ const Graph := preload("res://scripts/features/contracts/plain_graph.gd")
+ const Handler := preload("res://scripts/features/handlers/ignite_handler.gd")
++const Handlers := preload("res://scripts/features/handlers/handler_registry.gd")
+ const Heap := preload("res://scripts/features/runtime/indexed_due_heap.gd")
+ const Budget := preload("res://scripts/layers/runtime/execution/frame_budget.gd")
+ const Presentation := preload("res://scripts/features/presentation/presentation_port.gd")
+@@ -14,6 +15,7 @@ var _world: RefCounted
+ var _clock: RefCounted
+ var _combat := WeakRef.new()
+ var _world_identity: Dictionary = {}
++var _delivery_generation := 0
+ var _category := ""
+ var _batches: Dictionary = {}
+ var _batch_head := 0
+@@ -32,7 +34,7 @@ var _reserved_states := 0
+ var _reserved_receipts := 0
+ var require_reservations := false
+ var last_admission_reason := ""
+-var _stats := {"ticks":0,"actual_loss":0,"started":0,"refreshed":0,"expired":0,"invalidated":0,"failed":0,"admitted_facts":0,"peak_states":0,"peak_pending":0,"optional_cue_missing":0,
++var _stats := {"ticks":0,"actual_loss":0,"started":0,"refreshed":0,"expired":0,"invalidated":0,"failed":0,"admitted_facts":0,"healing_commands":0,"actual_healing":0,"peak_states":0,"peak_pending":0,"optional_cue_missing":0,
+ 	"peak_receipts":0,"retired_receipts":0,"peak_reservations":0,
+ 	"tick_delivery_count":0,"maximum_tick_delivery_lateness_usec":0}
+ var errors: Array[String] = []
+@@ -44,6 +46,7 @@ func configure(world: RefCounted, clock: RefCounted, combat: Node, presentation:
+ 		or world.current_world_owner() == null:
+ 		return false
+ 	_world = world; _clock = clock; _combat = weakref(combat)
++	_delivery_generation += 1
+ 	var owner: Node = world.current_world_owner()
+ 	_category = "feature_effects:" + str(owner.get_instance_id())
+ 	_presentation = presentation
+@@ -70,6 +73,7 @@ func reserve_action(skill_id: String, bindings: Array, maximum_receivers: int, e
+ 		or bindings.is_empty() or not preload("res://scripts/features/runtime/damage_batch.gd").validate_bindings(skill_id,bindings):
+ 		last_admission_reason = "feature_action_bound_invalid"; return null
+ 	var cost := maximum_receivers*bindings.size()
++	var state_cost := maximum_receivers*Handlers.persistent_binding_count(bindings)
+ 	var queued_cost := _unreserved_queued_cost()
+ 	# Empty legal casts still own a producer record. Bound those records by the
+ 	# existing queue capacity even when their proven fact/state bound is zero.
+@@ -77,9 +81,9 @@ func reserve_action(skill_id: String, bindings: Array, maximum_receivers: int, e
+ 		last_admission_reason = "feature_action_producer_capacity"; return null
+ 	if _pending+_reserved_facts+maximum_receivers > MAX_PENDING_FACTS:
+ 		last_admission_reason = "feature_action_pending_capacity"; return null
+-	if _states.size()+_reserved_states+queued_cost+cost > MAX_ACTIVE_STATES:
++	if _states.size()+_reserved_states+queued_cost.states+state_cost > MAX_ACTIVE_STATES:
+ 		last_admission_reason = "feature_action_state_capacity"; return null
+-	if _receipts.size()+_reserved_receipts+queued_cost+cost > MAX_RECEIPTS:
++	if _receipts.size()+_reserved_receipts+queued_cost.receipts+cost > MAX_RECEIPTS:
+ 		last_admission_reason = "feature_action_receipt_capacity"; return null
+ 	var sources := _binding_sources(bindings) if maximum_receivers > 0 else {}
+ 	if not _target_sources_fit(sources):
+@@ -90,8 +94,8 @@ func reserve_action(skill_id: String, bindings: Array, maximum_receivers: int, e
+ 	_reservations[_next_reservation] = {"stage":"reserved","world":_world_identity,"skill_id":skill_id,
+ 		"expected_release_id":expected_release_id,
+ 		"bindings":Graph.capture(bindings).value,"sources":sources,"facts":maximum_receivers,
+-		"states":cost,"receipt_space":cost,"receipts":[]}
+-	_reserved_facts += maximum_receivers; _reserved_states += cost; _reserved_receipts += cost
++		"states":state_cost,"receipt_space":cost,"receipts":[]}
++	_reserved_facts += maximum_receivers; _reserved_states += state_cost; _reserved_receipts += cost
+ 	_stats.peak_reservations = maxi(int(_stats.peak_reservations),_reservations.size())
+ 	return Reservation.create(self,_next_reservation)
+ 
+@@ -133,17 +137,22 @@ func _retire_reservation(sequence: int) -> void:
+ 		_receipts.erase(receipt); _stats.retired_receipts += 1
+ 	_reservations.erase(sequence)
+ 
+-func _unreserved_queued_cost() -> int:
+-	var result := 0
++func _unreserved_queued_cost() -> Dictionary:
++	var result := {"states":0,"receipts":0}
+ 	for work: Dictionary in _batches.values():
+ 		if int(work.get("admission_id",0)) != 0: continue
+-		for index in range(int(work.cursor),work.entries.size()): result += work.entries[index].bindings.size()
++		for index in range(int(work.cursor),work.entries.size()):
++			var bindings: Array = work.entries[index].bindings
++			result.receipts += bindings.size()
++			result.states += Handlers.persistent_binding_count(bindings)
+ 	return result
+ 
+ static func _binding_sources(bindings: Array) -> Dictionary:
+ 	var result := {}
+ 	for binding: Dictionary in bindings:
+-		result[JSON.stringify([binding.handle,binding.definition.mechanic_id,Handler.EFFECT_ID])] = true
++		var contract := Handlers.contract(binding.definition.handler_id)
++		if int(contract.states) > 0:
++			result[JSON.stringify([binding.handle,binding.definition.mechanic_id,contract.effect_id])] = true
+ 	return result
+ 
+ func _target_sources_fit(additional: Dictionary) -> bool:
+@@ -194,8 +203,10 @@ func submit_batch(batch: RefCounted) -> bool:
+ 	if _pending+_reserved_facts-own_facts+count > MAX_PENDING_FACTS:
+ 		_error("feature_pending_capacity"); return false
+ 	if admission_id == 0 and not _reservations.is_empty():
+-		var cost: int = count*batch.binding_count()+_unreserved_queued_cost()
+-		if _states.size()+_reserved_states+cost > MAX_ACTIVE_STATES \
++		var queued := _unreserved_queued_cost()
++		var cost: int = count*batch.binding_count()+int(queued.receipts)
++		var state_cost: int = count*Handlers.persistent_binding_count(batch.event_bindings())+int(queued.states)
++		if _states.size()+_reserved_states+state_cost > MAX_ACTIVE_STATES \
+ 			or _receipts.size()+_reserved_receipts+cost > MAX_RECEIPTS:
+ 			_error("feature_reserved_capacity_protected"); return false
+ 		if not _target_sources_fit(_binding_sources(batch.event_bindings())):
+@@ -250,10 +261,16 @@ func _dispatch_one_fact() -> void:
+ 
+ func _deliver_fact(entry: Dictionary, admission_id: int) -> void:
+ 	var fact: Dictionary = entry.fact
+-	if not bool(fact.target_survived_commit) or int(fact.actual_loss) <= 0 or entry.target.resolve() == null:
++	var generation := _delivery_generation
++	if int(fact.actual_loss) <= 0:
+ 		return
+ 	_stats.admitted_facts += 1
+ 	for binding: Dictionary in entry.bindings:
++		# Any prior command may synchronously retire the world/runtime. Remaining
++		# old work loses its owner; it cannot mutate a replacement world or ticket.
++		if generation != _delivery_generation or not _world.matches_world(fact.target.world): return
++		if admission_id > 0 and (not _reservations.has(admission_id) or _reservations[admission_id].stage != "queued"):
++			_error("feature_dispatch_reservation_missing"); return
+ 		var producer: Variant = ["reservation",admission_id] if admission_id > 0 else fact.release_id
+ 		var receipt := JSON.stringify([producer,fact.target,binding.handle])
+ 		if _receipts.has(receipt): continue
+@@ -264,10 +281,18 @@ func _deliver_fact(entry: Dictionary, admission_id: int) -> void:
+ 		if admission_id > 0:
+ 			_reservations[admission_id].receipts.append(receipt)
+ 			_reservations[admission_id].receipt_space -= 1; _reserved_receipts -= 1
+-		for command: Dictionary in Handler.commands(fact,binding):
++		for command: Dictionary in Handlers.commands(fact,binding):
+ 			_apply_command(command,entry)
+ 
+ func _apply_command(command: Dictionary, entry: Dictionary) -> void:
++	if command.op == "ModifyResource" and command.handler_id == "hc.lifesteal.v1" \
++		and command.resource == "hp" and command.mode == "restore":
++		var combat: Node = _combat.get_ref() as Node
++		if not is_instance_valid(combat): return
++		var result: Dictionary = combat.apply_feature_source_restore(entry.source,command.recipient,int(command.amount))
++		if not result.success: _error(str(result.reason)); return
++		_stats.healing_commands += 1; _stats.actual_healing += int(result.actual_gain)
++		return
+ 	if command.op != "ApplyStatus" or command.handler_id != Handler.ID or command.effect_id != Handler.EFFECT_ID:
+ 		_error("unknown_feature_command"); return
+ 	var target: Node = entry.target.resolve()
+@@ -346,6 +371,7 @@ func _stop(handle: String) -> void:
+ 	_presentation.stop(handle)
+ 
+ func clear() -> void:
++	_delivery_generation += 1
+ 	# Stop all logic handles, including cues with declared missing visuals.
+ 	# Count cancellation before draining so every started state has a terminal
+ 	# outcome; no target or presentation mutation survives an owner change.
+diff --git a/scripts/layers/runtime/combat_runtime_service.gd b/scripts/layers/runtime/combat_runtime_service.gd
+index 7af8b6adc..e4920954f 100644
+--- a/scripts/layers/runtime/combat_runtime_service.gd
++++ b/scripts/layers/runtime/combat_runtime_service.gd
+@@ -177,6 +177,21 @@ func apply_enemy_direct_spell_damage(
+ 	return result
+ 
+ 
++func apply_feature_source_restore(source_ref: RefCounted, recipient: Dictionary, amount: int) -> Dictionary:
++	if source_ref == null or source_ref.get_script() != preload("res://scripts/features/contracts/actor_ref.gd") \
++		or source_ref.identity() != recipient or amount <= 0:
++		return {"success":false,"reason":"feature_restore_identity","actual_gain":0}
++	var source: Node = source_ref.resolve()
++	if source == null or not source.has_method("restore_health") \
++		or (source.has_method("combat_transition_is_active") and source.combat_transition_is_active()):
++		return {"success":true,"reason":"source_unavailable","actual_gain":0}
++	var before := int(source.get("current_hp"))
++	source.restore_health(amount)
++	# The authority emits synchronous UI/lifecycle notifications. The source
++	# may retire during them; never dereference it after such retirement.
++	var after := int(source.get("current_hp")) if is_instance_valid(source) else before
++	return {"success":true,"reason":"","actual_gain":maxi(0,after-before)}
++
+ func apply_feature_periodic_damage(target: Node, raw_damage: int, source_actor: Node2D,
+ 	tick_rng: RandomNumberGenerator, historical_credit: Dictionary) -> Dictionary:
+ 	if not is_instance_valid(target) or _target_rejects_damage(target) or not target.has_method("take_feature_periodic_damage") \
+diff --git a/tests/framework/feature_lifesteal_production_test.gd b/tests/framework/feature_lifesteal_production_test.gd
+new file mode 100644
+index 000000000..ea5440f6d
+--- /dev/null
++++ b/tests/framework/feature_lifesteal_production_test.gd
+@@ -0,0 +1,81 @@
++extends Node
++
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const Root := preload("res://tests/framework/fixtures/lease_probe_root.gd")
++const Fixture := preload("res://tests/helpers/formal_world_skill_fixture.gd")
++var proof := Proof.new()
++var checks := 0
++var errors: Array[String] = []
++
++func check(value: bool,label: String) -> void:
++	proof.record(value,label); checks += 1
++	if not value: errors.append(label)
++func _ready() -> void: _run.call_deferred()
++
++func _run() -> void:
++	PlayerState.test_mode = true; PlayerState.reset_progress(false)
++	PlayerState.profession = "法师"; PlayerState.level = 50
++	PlayerState.learned_skills = {"hc.skill.wizard.ice_storm":3}; PlayerState.recalculate_stats(false)
++	check(ContentLayers.reload_feature_catalog("res://assets/data/features/validation/lifesteal_registry.json"),"formal trusted registry publishes both heterogeneous definitions")
++	check(ContentLayers.feature_configuration().enabled_modules.is_empty(),"both primitives are default-off until explicit test activation")
++	var game := Root.new(); add_child(game)
++	var deadline := Time.get_ticks_msec()+20000
++	while not game.gameplay_input_is_enabled() and Time.get_ticks_msec()<deadline: await get_tree().process_frame
++	check(game.gameplay_input_is_enabled(),"actual mapped world reaches READY")
++	if not game.gameplay_input_is_enabled(): game.queue_free(); await get_tree().process_frame; _finish(); return
++	var target := await Fixture.prepare_target(self,game,game.player,19,"lifesteal_production")
++	check(target != null,"formal geometry supplies an actual receiver")
++	if target == null: game.queue_free(); await get_tree().process_frame; _finish(); return
++	game.set_process(false); game.set_physics_process(false); game.player.set_physics_process(false)
++	for actor: Node in get_tree().get_nodes_in_group("enemies"): actor.set_physics_process(false)
++	target.max_hp = 10000; target.current_hp = 10000
++	target.direct_spell_anti_magic_points = 0
++	target.direct_spell_magic_defense_min = 0; target.direct_spell_magic_defense_max = 0; target.direct_spell_stats_valid = true
++	PlayerState.computed_stats.magic_min = 100; PlayerState.computed_stats.magic_max = 100
++	game.player.current_hp = 50; game.player.current_mp = 100
++	game._skill_cast_target = target; game._set_magic_locked_target(target,true)
++	check(ContentLayers.set_feature_module_enabled("hc.ignite",true)
++		and ContentLayers.set_feature_module_enabled("hc.validation.lifesteal",true),"formal live source activation compiles both handlers")
++	game.player.current_hp = 50
++	var lease: RefCounted = game._capture_action_configuration("hc.skill.wizard.ice_storm")
++	check(lease != null and lease.event_bindings_for("hc.skill.wizard.ice_storm").size()==2,"accepted action freezes two different handler subscriptions")
++	if lease == null: game.queue_free(); await get_tree().process_frame; _finish(); return
++	check(game.player.request_skill("hc.skill.wizard.ice_storm",target.get_instance_id(),lease)
++		and lease.is_accepted() and lease.effect_reservation()!=null,"real Player windup accepts a nonempty capacity ticket")
++	check(ContentLayers.set_feature_module_enabled("hc.ignite",false)
++		and ContentLayers.set_feature_module_enabled("hc.validation.lifesteal",false),"withdrawal during windup preserves accepted effects")
++	deadline = Time.get_ticks_msec()+3000
++	while game.observed_releases==0 and Time.get_ticks_msec()<deadline: await get_tree().process_frame
++	check(game.observed_releases==1 and is_same(game.observed_configuration,lease),"one real release reaches the single planner")
++	var loss: int = 10000-target.current_hp
++	check(game.player.max_hp>=50+floori(float(loss)*0.25),"real profile maximum leaves space for the literal healing expectation")
++	check(loss>0 and game.player.current_hp==50,"base HP commit finishes before either derived command")
++	var runtime: RefCounted = game._feature_effect_runtime
++	check(runtime!=null and runtime.pending_count()==1,"sole runtime owns the completed base fact")
++	if runtime==null: game.queue_free(); await get_tree().process_frame; _finish(); return
++	var root_rng: int = game._rng.state; var player_rng: int = game.player._rng.state
++	for iteration in range(120):
++		runtime.pump()
++		if runtime.pending_count()==0: break
++		await get_tree().process_frame
++	check(game.player.current_hp==50+floori(float(loss)*0.25),"committed loss restores through the real player authority exactly once")
++	check(runtime.active_count()==1 and runtime.heap_count()==1,"instant healing coexists with one persistent ignite state")
++	check(runtime.metrics().healing_commands==1 and runtime.reservation_snapshot().actions==0,"instant receipt and completed producer retire without losing periodic state")
++	for second in range(1,5):
++		game._time_domains.advance_simulation(float(second*1000000-game._time_domains.simulation_usec())/1000000.0)
++		for iteration in range(120):
++			runtime.pump()
++			if not runtime.has_due(): break
++			await get_tree().process_frame
++		check(target.current_hp==10000-loss-second*roundi(float(loss)*0.05),"old ignite damage is unchanged at tick "+str(second))
++		check(game.player.current_hp==50+floori(float(loss)*0.25),"periodic damage cannot recursively heal at tick "+str(second))
++	check(game._rng.state==root_rng and game.player._rng.state==player_rng,"both handlers preserve old combat random streams")
++	check(runtime.errors.is_empty() and not runtime.has_work(),"mixed commands, states and producers drain without business failure")
++	game.queue_free(); await get_tree().process_frame
++	check(ContentLayers.reload_feature_catalog(),"retired world can restore the original default-off catalog")
++	_finish()
++
++func _finish() -> void:
++	if not proof.write_receipt("feature_lifesteal_production_test",checks,errors.size()): errors.append("receipt")
++	print(("FRAMEWORK_LIFESTEAL_PRODUCTION_PASS" if errors.is_empty() else "FRAMEWORK_LIFESTEAL_PRODUCTION_FAIL")+" checks="+str(checks)+" errors="+str(errors))
++	get_tree().quit(0 if errors.is_empty() else 1)
+diff --git a/tests/framework/feature_lifesteal_production_test.tscn b/tests/framework/feature_lifesteal_production_test.tscn
+new file mode 100644
+index 000000000..75e259614
+--- /dev/null
++++ b/tests/framework/feature_lifesteal_production_test.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/feature_lifesteal_production_test.gd" id="1"]
++
++[node name="FeatureLifestealProductionTest" type="Node"]
++script = ExtResource("1")
+diff --git a/tests/framework/feature_lifesteal_runtime_test.gd b/tests/framework/feature_lifesteal_runtime_test.gd
+new file mode 100644
+index 000000000..9939d7349
+--- /dev/null
++++ b/tests/framework/feature_lifesteal_runtime_test.gd
+@@ -0,0 +1,149 @@
++extends Node
++
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const Compiler := preload("res://scripts/features/compilation/feature_compiler.gd")
++const Authority := preload("res://scripts/features/adapters/feature_authority.gd")
++const World := preload("res://scripts/layers/runtime/execution/world_context.gd")
++const Clock := preload("res://scripts/layers/runtime/execution/time_domains.gd")
++const Batch := preload("res://scripts/features/runtime/damage_batch.gd")
++const Runtime := preload("res://scripts/features/runtime/effect_runtime.gd")
++const Combat := preload("res://scripts/layers/runtime/combat_runtime_service.gd")
++const Player := preload("res://scripts/player.gd")
++const Enemy := preload("res://scripts/enemy.gd")
++const SKILL := "hc.skill.wizard.ice_storm"
++var _zone_generation := 1
++var current_map_id := 910001
++var checks := 0
++var errors: Array[String] = []
++var proof := Proof.new()
++var world: RefCounted
++var clock: RefCounted
++var runtime: RefCounted
++var source: CharacterBody2D
++var combat: Node
++var release_sequence := 0
++
++func _ready() -> void:
++	_run.call_deferred()
++
++func check(value: bool, label: String) -> void:
++	proof.record(value,label); checks += 1
++	if not value: errors.append(label)
++
++func module() -> Dictionary:
++	return {"schema_version":1,"module_id":"hc.validation.lifesteal","module_version":1,"core_api_version":1,
++		"requires":[],"conflicts":[],"capabilities":["combat.post_hit","combat.heal"],"handlers":["hc.lifesteal.v1"],
++		"resource_dependencies":[],"cost":{"commands_per_event":1,"states_per_target":0},"default_enabled":false,
++		"scope":"world","activation_boundary":"world_ready","tests":["tests/framework/feature_lifesteal_runtime_test.tscn"],
++		"mechanics":[{"mechanic_id":"hc.validation.lifesteal.ice_storm","kind":"trigger","tags":["hc.numeric"],
++			"event":"damage_committed","skill_id":SKILL,"handler_id":"hc.lifesteal.v1","source_classes":["direct"],
++			"dedup":"per_target_per_release","lifecycle":"immediate","config":{"fraction":0.25}}]}
++
++func contribution(index: int = 0) -> Dictionary:
++	return {"mechanic_id":"hc.validation.lifesteal.ice_storm",
++		"source":{"slot":"hc.slot.rule","instance_id":"hc.validation.lifesteal.source."+str(index),"mechanic_id":"hc.validation.lifesteal.ice_storm"}}
++
++func _run() -> void:
++	PlayerState.test_mode = true
++	PlayerState.reset_progress(false)
++	var compiled := Compiler.compile([module()],[contribution()],Authority.build())
++	check(bool(compiled.success),"trusted immediate healing handler compiles with zero persistent-state cost")
++	check(FileAccess.file_exists("res://scripts/features/handlers/lifesteal_handler.gd"),"pure lifesteal handler exists")
++	if not compiled.success:
++		print("LIFESTEAL_COMPILER_ERRORS="+JSON.stringify(compiled.errors)); _finish(); return
++	var bindings: Array = compiled.bundle.event_index["damage_committed:"+SKILL]
++	var invalid := module(); invalid.capabilities.erase("combat.heal")
++	check(not Compiler.compile([invalid],[contribution()],Authority.build()).success,"healing permission is mandatory")
++	invalid = module(); invalid.mechanics[0].config.fraction = 1.1
++	check(not Compiler.compile([invalid],[contribution()],Authority.build()).success,"fraction greater than committed loss is rejected")
++	invalid = module(); invalid.mechanics[0].source_classes = ["periodic"]
++	check(not Compiler.compile([invalid],[contribution()],Authority.build()).success,"periodic self-excitation is rejected")
++	invalid = module(); invalid.mechanics[0].cue_id = "hc.cue.ignite.v1"
++	check(not Compiler.compile([invalid],[contribution()],Authority.build()).success,"an instant healing handler cannot borrow an unrelated periodic cue")
++	invalid = module(); invalid.cost.commands_per_event = 0
++	check(not Compiler.compile([invalid],[contribution()],Authority.build()).success,"instant command capacity must be declared")
++	world = World.new(); world.configure(self,PlayerState)
++	clock = Clock.new(); clock.configure(self)
++	combat = Combat.new(); add_child(combat)
++	source = Player.new(); add_child(source); source.set_physics_process(false)
++	source.max_hp = 100; source.current_hp = 50
++	check(source.begin_combat_transition("lifesteal_fixture_start") and source.finish_combat_transition("lifesteal_fixture_start"),
++		"real player transition establishes the source combat life before damage")
++	runtime = Runtime.new(); check(runtime.configure(world,clock,combat),"runtime uses the existing combat mutation port")
++	runtime.require_reservations = true
++	await _case(bindings,1000,100,50,75,"direct","")
++	await _case(bindings,20,100,50,55,"lethal","")
++	await _case(bindings,20,100,50,55,"removed lethal target", "remove_target")
++	await _case(bindings,1000,100,95,100,"full HP clamp", "")
++	await _case(bindings,1000,100,0,0,"dead source", "")
++	await _case(bindings,1000,100,50,50,"changed source life", "change_life")
++	await _case(bindings,1000,100,50,50,"changed world", "change_world")
++	var many: Array = []
++	for index in range(17): many.append(contribution(index))
++	var instant := Compiler.compile([module()],many,Authority.build())
++	check(instant.success,"seventeen distinct instant sources compile")
++	if instant.success:
++		var ticket: RefCounted = runtime.reserve_action(SKILL,instant.bundle.event_index["damage_committed:"+SKILL],1)
++		check(ticket != null,"instant sources do not consume sixteen persistent slots per target")
++		check(runtime.reservation_snapshot().states == 0 and runtime.reservation_snapshot().promised_receipts == 17,"instant capacity reserves seventeen receipts and zero states")
++		if ticket != null: ticket.close()
++	var mixed: Array = [contribution(0),contribution(1)]
++	var paired := Compiler.compile([module()],mixed,Authority.build())
++	check(paired.success,"two distinct healing subscriptions are retained")
++	if paired.success:
++		source.stats_changed.connect(_retire_during_heal,CONNECT_ONE_SHOT)
++		await _case(paired.bundle.event_index["damage_committed:"+SKILL],1000,100,50,75,"synchronous source notification retires runtime", "")
++		runtime.require_reservations = false
++		source.stats_changed.connect(_retire_during_heal,CONNECT_ONE_SHOT)
++		await _case(paired.bundle.event_index["damage_committed:"+SKILL],1000,100,50,75,"unticketed notification retires the same runtime", "unticketed")
++		runtime.require_reservations = true
++	check(runtime.errors.is_empty(),"no late reservation access, unknown command or hidden capacity failure")
++	runtime.clear(); source.queue_free(); combat.queue_free()
++	await get_tree().process_frame
++	_finish()
++
++func _retire_during_heal(_hp: int, _max_hp: int) -> void:
++	runtime.clear()
++
++func _case(bindings: Array, hp: int, damage: int, before: int, expected: int, label: String, action: String) -> void:
++	runtime.clear(); source.current_hp = before
++	var target := Enemy.new(); target.setup(GameData.get_monster_by_id(19),null); add_child(target)
++	target.set_physics_process(false); target.max_hp = hp; target.current_hp = hp
++	release_sequence += 1
++	var id := "lifesteal:"+str(release_sequence)
++	var ticket: RefCounted = null if action == "unticketed" else runtime.reserve_action(SKILL,bindings,1,id)
++	check(ticket != null or action == "unticketed",label+": declared producer admission remains valid")
++	if ticket == null and action != "unticketed": target.queue_free(); await get_tree().process_frame; return
++	var created := Batch.create(world,id,SKILL,bindings,{},0,ticket)
++	check(created.success,label+": admitted real batch owns the ticket")
++	if not created.success:
++		if ticket != null: ticket.close()
++		target.queue_free(); await get_tree().process_frame; return
++	var batch: RefCounted = created.batch
++	batch.begin_base_scope()
++	var rng_before: int = source._rng.state
++	target.take_damage(damage,source,{"feature_damage_batch":batch,"source_class":"direct","damage_channel":"magic_defense"})
++	check(source.current_hp == before,label+": no healing before base release completes")
++	batch.finish_base_scope()
++	check(runtime.submit_batch(batch) and not runtime.submit_batch(batch),label+": batch is accepted exactly once")
++	if action == "remove_target": target.queue_free(); await get_tree().process_frame
++	if action == "change_life":
++		check(source.begin_combat_transition("lifesteal_fixture_next_life") and source.finish_combat_transition("lifesteal_fixture_next_life"),
++			"real transition invalidates the previously captured source life")
++	if action == "change_world": _zone_generation += 1
++	for iteration in range(120):
++		runtime.pump()
++		if not runtime.has_work(): break
++		await get_tree().process_frame
++	print("LIFESTEAL_CASE="+JSON.stringify({"label":label,"actual_hp":source.current_hp,"expected_hp":expected,
++		"source_epoch":source.combat_epoch,"source_max_hp":source.max_hp,"fact":batch.facts(),"metrics":runtime.metrics()}))
++	check(source.current_hp == expected,label+": actual committed loss restores only the valid source")
++	check(source._rng.state == rng_before,label+": old combat RNG remains unchanged")
++	check(runtime.active_count() == 0 and runtime.pending_count() == 0 and runtime.reservation_snapshot().actions == 0,label+": instant work and one-shot producer fully retire")
++	if is_instance_valid(target) and not target.is_queued_for_deletion(): target.queue_free()
++	await get_tree().process_frame
++
++func _finish() -> void:
++	if not proof.write_receipt("feature_lifesteal_runtime_test",checks,errors.size()): errors.append("receipt")
++	print(("FRAMEWORK_LIFESTEAL_PASS" if errors.is_empty() else "FRAMEWORK_LIFESTEAL_FAIL")+" checks="+str(checks)+" errors="+str(errors))
++	get_tree().quit(0 if errors.is_empty() else 1)
+diff --git a/tests/framework/feature_lifesteal_runtime_test.tscn b/tests/framework/feature_lifesteal_runtime_test.tscn
+new file mode 100644
+index 000000000..2f9202468
+--- /dev/null
++++ b/tests/framework/feature_lifesteal_runtime_test.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/feature_lifesteal_runtime_test.gd" id="1"]
++
++[node name="FeatureLifestealRuntimeTest" type="Node"]
++script = ExtResource("1")
+diff --git a/tests/framework/feature_resource_cue_test.gd b/tests/framework/feature_resource_cue_test.gd
+index 86a29baf0..997476da3 100644
+--- a/tests/framework/feature_resource_cue_test.gd
++++ b/tests/framework/feature_resource_cue_test.gd
+@@ -9,6 +9,7 @@ const PACKAGE := "res://assets/data/features/validation/resource_cue_registry.js
+ const AUDIO := "res://assets/audio/sfx/client/137__M26-3.wav"
+ @export var cancel_during_audio := false
+ @export var check_acceptance_resources := false
++@export var multi_source_reentry := false
+ var proof := Proof.new()
+ var checks := 0
+ var failures: Array[String] = []
+@@ -31,12 +32,14 @@ func _observe_audio(event: Dictionary) -> void:
+ func _run() -> void:
+ 	PlayerState.test_mode = true
+ 	PlayerState.reset_progress(false)
+-	PlayerState.profession = "战士"
++	PlayerState.profession = "法师" if multi_source_reentry else "战士"
+ 	PlayerState.level = 50
+-	PlayerState.learned_skills = {"hc.skill.warrior.fire_sword":3}
++	PlayerState.learned_skills = {"hc.skill.wizard.ice_storm":3} if multi_source_reentry else {"hc.skill.warrior.fire_sword":3}
++	if multi_source_reentry:
++		PlayerState.equipment["hc.slot.weapon"] = preload("res://scripts/item_drop_instance_rules.gd").create_instance(GameData.get_item_record({"item_id":85}),"resource:multi:weapon")
+ 	PlayerState.recalculate_stats(false)
+-	var parent: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://assets/data/features/validation/resource_cue_parent.json"))
+-	var child: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://assets/data/features/validation/resource_cue_child.json"))
++	var parent: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://assets/data/features/validation/resource_natural_parent.json" if multi_source_reentry else "res://assets/data/features/validation/resource_cue_parent.json"))
++	var child: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://assets/data/features/validation/resource_natural_child.json" if multi_source_reentry else "res://assets/data/features/validation/resource_cue_child.json"))
+ 	check(Compiler.compile_catalog([parent,child],Authority.build()).success, "known critical cue closes its actual sound through a required child module")
+ 	var missing := child.duplicate(true)
+ 	missing.resource_dependencies = []
+@@ -45,7 +48,7 @@ func _run() -> void:
+ 		var bad := parent.duplicate(true)
+ 		bad.mechanics[0].cue_id = invalid
+ 		check(not Compiler.compile_catalog([bad,child],Authority.build()).success, "unknown or malformed cue identity refuses publication " + str(invalid))
+-	var ready: bool = await ContentLayers.reload_feature_catalog_async(PACKAGE)
++	var ready: bool = await ContentLayers.reload_feature_catalog_async("res://assets/data/features/validation/resource_natural_registry.json" if multi_source_reentry else PACKAGE)
+ 	check(ready, "formal compiler preparation and atomic publication admit critical cue closure")
+ 	if not ready: _finish(); return
+ 	var resource_owner: WeakRef = weakref(ContentLayers.feature_configuration().resource_lease)
+@@ -70,6 +73,8 @@ func _run() -> void:
+ 	target.direct_spell_stats_valid = true
+ 	game.player.attack_min = 100
+ 	game.player.attack_max = 100
++	if multi_source_reentry:
++		PlayerState.computed_stats.magic_min = 100; PlayerState.computed_stats.magic_max = 100
+ 	game.player.current_mp = 100
+ 	game.player.fire_sword_enabled = true
+ 	game.player.half_moon_enabled = false
+@@ -77,9 +82,11 @@ func _run() -> void:
+ 	game._skill_cast_target = target
+ 	game._set_magic_locked_target(target,true)
+ 	game._audio_runtime_service.event_started.connect(_observe_audio)
+-	var lease: RefCounted = game._capture_melee_configuration()
++	var lease: RefCounted = game._capture_action_configuration("hc.skill.wizard.ice_storm") if multi_source_reentry else game._capture_melee_configuration()
+ 	check(lease != null and lease.resource_lease() != null, "real accepted configuration owns its prepared nonempty cue resources")
+ 	if lease == null: _finish(); return
++	if multi_source_reentry:
++		check(lease.event_bindings_for("hc.skill.wizard.ice_storm").size()==3,"real rule item and learned skill qualify three distinct accepted bindings")
+ 	if check_acceptance_resources:
+ 		var resource_type := preload("res://scripts/features/contracts/feature_resource_lease.gd")
+ 		var empty_plan: Dictionary = resource_type.requirements(ContentLayers.feature_configuration().catalog,[])
+@@ -117,7 +124,9 @@ func _run() -> void:
+ 		check(ContentLayers.reload_feature_catalog(), "resource qualification world retires before ordinary catalog restoration")
+ 		_finish()
+ 		return
+-	check(game.player.request_attack_toward(Vector2.RIGHT,true,target.get_instance_id(),lease) and lease.effect_reservation() != null, "natural player request accepts nonempty ticket before real windup")
++	var accepted: bool = game.player.request_skill("hc.skill.wizard.ice_storm",target.get_instance_id(),lease) if multi_source_reentry \
++		else game.player.request_attack_toward(Vector2.RIGHT,true,target.get_instance_id(),lease)
++	check(accepted and lease.effect_reservation() != null, "natural player request accepts nonempty ticket before real windup")
+ 	check(ContentLayers.set_feature_module_enabled("hc.ignite",false) and ContentLayers.set_feature_module_enabled("hc.ignite_cue_assets",false), "withdraw parent then child without revoking already accepted work")
+ 	deadline = Time.get_ticks_msec()+3000
+ 	while game.observed_releases == 0 and Time.get_ticks_msec()<deadline: await get_tree().process_frame
+@@ -135,6 +144,11 @@ func _run() -> void:
+ 		check(played.size() == 1, "real prepared audio onset reaches the synchronous cancellation observer once")
+ 		check(runtime.active_count() == 0 and runtime.pending_count() == 0 and port.node_count() == 0, "synchronous retirement leaves no live effect or native cue")
+ 		check(port._audio_handles.is_empty(), "retired cue cannot register a late audio ownership record")
++		if multi_source_reentry:
++			check(runtime.heap_count()==0 and runtime.reservation_snapshot().actions==0 and runtime.reservation_snapshot().receipts==0,
++				"synchronous retirement clears heap producer and all receipts before the next binding")
++			check(preload("res://scripts/layers/runtime/execution/frame_budget.gd").snapshot().open_scopes==0,
++				"synchronous retirement returns with all shared budget scopes closed")
+ 		if played.size() == 1:
+ 			var request: Dictionary = played[0]
+ 			var player: AudioStreamPlayer = game._audio_runtime_service._event_players[int(request.pool_index)]
+@@ -187,6 +201,7 @@ func _run() -> void:
+ func _finish() -> void:
+ 	var scene_id := "feature_resource_cue_reentry_test" if cancel_during_audio else "feature_resource_cue_test"
+ 	if check_acceptance_resources: scene_id = "feature_resource_acceptance_test"
++	if multi_source_reentry: scene_id = "feature_resource_multi_reentry_test"
+ 	if not proof.write_receipt(scene_id,checks,failures.size()): failures.append("receipt")
+ 	print("FEATURE_RESOURCE_CUE_%s checks=%d failures=%s" % ["PASS" if failures.is_empty() else "FAIL",checks,str(failures)])
+ 	get_tree().quit(0 if failures.is_empty() else 1)
+diff --git a/tests/framework/feature_resource_multi_reentry_test.tscn b/tests/framework/feature_resource_multi_reentry_test.tscn
+new file mode 100644
+index 000000000..2056ec7b2
+--- /dev/null
++++ b/tests/framework/feature_resource_multi_reentry_test.tscn
+@@ -0,0 +1,8 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/feature_resource_cue_test.gd" id="1"]
++
++[node name="FeatureResourceMultiReentryTest" type="Node"]
++script = ExtResource("1")
++cancel_during_audio = true
++multi_source_reentry = true

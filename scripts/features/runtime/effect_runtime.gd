@@ -2,6 +2,7 @@ extends RefCounted
 
 const Graph := preload("res://scripts/features/contracts/plain_graph.gd")
 const Handler := preload("res://scripts/features/handlers/ignite_handler.gd")
+const Handlers := preload("res://scripts/features/handlers/handler_registry.gd")
 const Heap := preload("res://scripts/features/runtime/indexed_due_heap.gd")
 const Budget := preload("res://scripts/layers/runtime/execution/frame_budget.gd")
 const Presentation := preload("res://scripts/features/presentation/presentation_port.gd")
@@ -14,6 +15,7 @@ var _world: RefCounted
 var _clock: RefCounted
 var _combat := WeakRef.new()
 var _world_identity: Dictionary = {}
+var _delivery_generation := 0
 var _category := ""
 var _batches: Dictionary = {}
 var _batch_head := 0
@@ -32,7 +34,7 @@ var _reserved_states := 0
 var _reserved_receipts := 0
 var require_reservations := false
 var last_admission_reason := ""
-var _stats := {"ticks":0,"actual_loss":0,"started":0,"refreshed":0,"expired":0,"invalidated":0,"failed":0,"admitted_facts":0,"peak_states":0,"peak_pending":0,"optional_cue_missing":0,
+var _stats := {"ticks":0,"actual_loss":0,"started":0,"refreshed":0,"expired":0,"invalidated":0,"failed":0,"admitted_facts":0,"healing_commands":0,"actual_healing":0,"peak_states":0,"peak_pending":0,"optional_cue_missing":0,
 	"peak_receipts":0,"retired_receipts":0,"peak_reservations":0,
 	"tick_delivery_count":0,"maximum_tick_delivery_lateness_usec":0}
 var errors: Array[String] = []
@@ -44,6 +46,7 @@ func configure(world: RefCounted, clock: RefCounted, combat: Node, presentation:
 		or world.current_world_owner() == null:
 		return false
 	_world = world; _clock = clock; _combat = weakref(combat)
+	_delivery_generation += 1
 	var owner: Node = world.current_world_owner()
 	_category = "feature_effects:" + str(owner.get_instance_id())
 	_presentation = presentation
@@ -70,6 +73,7 @@ func reserve_action(skill_id: String, bindings: Array, maximum_receivers: int, e
 		or bindings.is_empty() or not preload("res://scripts/features/runtime/damage_batch.gd").validate_bindings(skill_id,bindings):
 		last_admission_reason = "feature_action_bound_invalid"; return null
 	var cost := maximum_receivers*bindings.size()
+	var state_cost := maximum_receivers*Handlers.persistent_binding_count(bindings)
 	var queued_cost := _unreserved_queued_cost()
 	# Empty legal casts still own a producer record. Bound those records by the
 	# existing queue capacity even when their proven fact/state bound is zero.
@@ -77,9 +81,9 @@ func reserve_action(skill_id: String, bindings: Array, maximum_receivers: int, e
 		last_admission_reason = "feature_action_producer_capacity"; return null
 	if _pending+_reserved_facts+maximum_receivers > MAX_PENDING_FACTS:
 		last_admission_reason = "feature_action_pending_capacity"; return null
-	if _states.size()+_reserved_states+queued_cost+cost > MAX_ACTIVE_STATES:
+	if _states.size()+_reserved_states+queued_cost.states+state_cost > MAX_ACTIVE_STATES:
 		last_admission_reason = "feature_action_state_capacity"; return null
-	if _receipts.size()+_reserved_receipts+queued_cost+cost > MAX_RECEIPTS:
+	if _receipts.size()+_reserved_receipts+queued_cost.receipts+cost > MAX_RECEIPTS:
 		last_admission_reason = "feature_action_receipt_capacity"; return null
 	var sources := _binding_sources(bindings) if maximum_receivers > 0 else {}
 	if not _target_sources_fit(sources):
@@ -90,8 +94,8 @@ func reserve_action(skill_id: String, bindings: Array, maximum_receivers: int, e
 	_reservations[_next_reservation] = {"stage":"reserved","world":_world_identity,"skill_id":skill_id,
 		"expected_release_id":expected_release_id,
 		"bindings":Graph.capture(bindings).value,"sources":sources,"facts":maximum_receivers,
-		"states":cost,"receipt_space":cost,"receipts":[]}
-	_reserved_facts += maximum_receivers; _reserved_states += cost; _reserved_receipts += cost
+		"states":state_cost,"receipt_space":cost,"receipts":[]}
+	_reserved_facts += maximum_receivers; _reserved_states += state_cost; _reserved_receipts += cost
 	_stats.peak_reservations = maxi(int(_stats.peak_reservations),_reservations.size())
 	return Reservation.create(self,_next_reservation)
 
@@ -133,17 +137,22 @@ func _retire_reservation(sequence: int) -> void:
 		_receipts.erase(receipt); _stats.retired_receipts += 1
 	_reservations.erase(sequence)
 
-func _unreserved_queued_cost() -> int:
-	var result := 0
+func _unreserved_queued_cost() -> Dictionary:
+	var result := {"states":0,"receipts":0}
 	for work: Dictionary in _batches.values():
 		if int(work.get("admission_id",0)) != 0: continue
-		for index in range(int(work.cursor),work.entries.size()): result += work.entries[index].bindings.size()
+		for index in range(int(work.cursor),work.entries.size()):
+			var bindings: Array = work.entries[index].bindings
+			result.receipts += bindings.size()
+			result.states += Handlers.persistent_binding_count(bindings)
 	return result
 
 static func _binding_sources(bindings: Array) -> Dictionary:
 	var result := {}
 	for binding: Dictionary in bindings:
-		result[JSON.stringify([binding.handle,binding.definition.mechanic_id,Handler.EFFECT_ID])] = true
+		var contract := Handlers.contract(binding.definition.handler_id)
+		if int(contract.states) > 0:
+			result[JSON.stringify([binding.handle,binding.definition.mechanic_id,contract.effect_id])] = true
 	return result
 
 func _target_sources_fit(additional: Dictionary) -> bool:
@@ -194,8 +203,10 @@ func submit_batch(batch: RefCounted) -> bool:
 	if _pending+_reserved_facts-own_facts+count > MAX_PENDING_FACTS:
 		_error("feature_pending_capacity"); return false
 	if admission_id == 0 and not _reservations.is_empty():
-		var cost: int = count*batch.binding_count()+_unreserved_queued_cost()
-		if _states.size()+_reserved_states+cost > MAX_ACTIVE_STATES \
+		var queued := _unreserved_queued_cost()
+		var cost: int = count*batch.binding_count()+int(queued.receipts)
+		var state_cost: int = count*Handlers.persistent_binding_count(batch.event_bindings())+int(queued.states)
+		if _states.size()+_reserved_states+state_cost > MAX_ACTIVE_STATES \
 			or _receipts.size()+_reserved_receipts+cost > MAX_RECEIPTS:
 			_error("feature_reserved_capacity_protected"); return false
 		if not _target_sources_fit(_binding_sources(batch.event_bindings())):
@@ -250,10 +261,16 @@ func _dispatch_one_fact() -> void:
 
 func _deliver_fact(entry: Dictionary, admission_id: int) -> void:
 	var fact: Dictionary = entry.fact
-	if not bool(fact.target_survived_commit) or int(fact.actual_loss) <= 0 or entry.target.resolve() == null:
+	var generation := _delivery_generation
+	if int(fact.actual_loss) <= 0:
 		return
 	_stats.admitted_facts += 1
 	for binding: Dictionary in entry.bindings:
+		# Any prior command may synchronously retire the world/runtime. Remaining
+		# old work loses its owner; it cannot mutate a replacement world or ticket.
+		if generation != _delivery_generation or not _world.matches_world(fact.target.world): return
+		if admission_id > 0 and (not _reservations.has(admission_id) or _reservations[admission_id].stage != "queued"):
+			_error("feature_dispatch_reservation_missing"); return
 		var producer: Variant = ["reservation",admission_id] if admission_id > 0 else fact.release_id
 		var receipt := JSON.stringify([producer,fact.target,binding.handle])
 		if _receipts.has(receipt): continue
@@ -264,10 +281,18 @@ func _deliver_fact(entry: Dictionary, admission_id: int) -> void:
 		if admission_id > 0:
 			_reservations[admission_id].receipts.append(receipt)
 			_reservations[admission_id].receipt_space -= 1; _reserved_receipts -= 1
-		for command: Dictionary in Handler.commands(fact,binding):
+		for command: Dictionary in Handlers.commands(fact,binding):
 			_apply_command(command,entry)
 
 func _apply_command(command: Dictionary, entry: Dictionary) -> void:
+	if command.op == "ModifyResource" and command.handler_id == "hc.lifesteal.v1" \
+		and command.resource == "hp" and command.mode == "restore":
+		var combat: Node = _combat.get_ref() as Node
+		if not is_instance_valid(combat): return
+		var result: Dictionary = combat.apply_feature_source_restore(entry.source,command.recipient,int(command.amount))
+		if not result.success: _error(str(result.reason)); return
+		_stats.healing_commands += 1; _stats.actual_healing += int(result.actual_gain)
+		return
 	if command.op != "ApplyStatus" or command.handler_id != Handler.ID or command.effect_id != Handler.EFFECT_ID:
 		_error("unknown_feature_command"); return
 	var target: Node = entry.target.resolve()
@@ -346,6 +371,7 @@ func _stop(handle: String) -> void:
 	_presentation.stop(handle)
 
 func clear() -> void:
+	_delivery_generation += 1
 	# Stop all logic handles, including cues with declared missing visuals.
 	# Count cancellation before draining so every started state has a terminal
 	# outcome; no target or presentation mutation survives an owner change.

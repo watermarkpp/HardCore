@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "module_id": "hc.validation.lifesteal",
+  "module_version": 1,
+  "core_api_version": 1,
+  "requires": [],
+  "conflicts": [],
+  "capabilities": ["combat.post_hit", "combat.heal"],
+  "handlers": ["hc.lifesteal.v1"],
+  "resource_dependencies": [],
+  "cost": {"commands_per_event": 1, "states_per_target": 0},
+  "default_enabled": false,
+  "scope": "world",
+  "activation_boundary": "world_ready",
+  "mechanics": [{
+    "mechanic_id": "hc.validation.lifesteal.ice_storm",
+    "kind": "trigger",
+    "tags": ["hc.numeric"],
+    "event": "damage_committed",
+    "skill_id": "hc.skill.wizard.ice_storm",
+    "handler_id": "hc.lifesteal.v1",
+    "source_classes": ["direct"],
+    "dedup": "per_target_per_release",
+    "lifecycle": "immediate",
+    "config": {"fraction": 0.25}
+  }],
+  "tests": ["tests/framework/feature_lifesteal_production_test.tscn"]
+}

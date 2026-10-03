@@ -1,0 +1,141 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "the real trusted texture and audio declarations validate through the production parser",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "invalid declaration 0 rejects the entire candidate without partial grants",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "invalid declaration 1 rejects the entire candidate without partial grants",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "invalid declaration 2 rejects the entire candidate without partial grants",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "invalid declaration 3 rejects the entire candidate without partial grants",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "invalid declaration 4 rejects the entire candidate without partial grants",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "invalid declaration 5 rejects the entire candidate without partial grants",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "invalid declaration 6 rejects the entire candidate without partial grants",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "invalid declaration 7 rejects the entire candidate without partial grants",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "invalid declaration 8 rejects the entire candidate without partial grants",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "invalid declaration 9 rejects the entire candidate without partial grants",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "invalid declaration 10 rejects the entire candidate without partial grants",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "invalid declaration 11 rejects the entire candidate without partial grants",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "invalid declaration 12 rejects the entire candidate without partial grants",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "invalid declaration 13 rejects the entire candidate without partial grants",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "invalid declaration 14 rejects the entire candidate without partial grants",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "invalid declaration 15 rejects the entire candidate without partial grants",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "invalid declaration 16 rejects the entire candidate without partial grants",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "invalid declaration 17 rejects the entire candidate without partial grants",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "invalid declaration 18 rejects the entire candidate without partial grants",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "invalid declaration 19 rejects the entire candidate without partial grants",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "invalid declaration 20 rejects the entire candidate without partial grants",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "invalid declaration 21 rejects the entire candidate without partial grants",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "invalid declaration 22 rejects the entire candidate without partial grants",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "pure candidate validation never poisons or replaces the previously published resource authority",
+      "passed": true
+    }
+  ],
+  "count": 25,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "cfc6e8d5-0165-4e66-88ed-ad21ffa359b7",
+  "passed": 25,
+  "reported_checks": 25,
+  "reported_failures": 0,
+  "run_id": "8fa8bea3-de25-4a1e-8848-21f4155b3b54",
+  "scene_id": "feature_resource_declaration_validation_test",
+  "schema_version": 1,
+  "source_content_sha256": "86b48f605b4de129b528dd8bc5649ce85233c2503b2503d573ad7cf304310c91",
+  "status": "PASS"
+}

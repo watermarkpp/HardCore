@@ -1,0 +1,16 @@
+ assets/data/features/validation/lifesteal.json     |  28 ++++
+ .../features/validation/lifesteal_registry.json    |  11 ++
+ scripts/features/adapters/feature_authority.gd     |   5 +-
+ scripts/features/compilation/feature_compiler.gd   |  28 +++-
+ scripts/features/handlers/handler_registry.gd      |  27 ++++
+ scripts/features/handlers/lifesteal_handler.gd     |  17 +++
+ scripts/features/runtime/damage_batch.gd           |   7 +-
+ scripts/features/runtime/effect_runtime.gd         |  52 +++++--
+ scripts/layers/runtime/combat_runtime_service.gd   |  15 +++
+ .../framework/feature_lifesteal_production_test.gd |  81 +++++++++++
+ .../feature_lifesteal_production_test.tscn         |   6 +
+ tests/framework/feature_lifesteal_runtime_test.gd  | 149 +++++++++++++++++++++
+ .../framework/feature_lifesteal_runtime_test.tscn  |   6 +
+ tests/framework/feature_resource_cue_test.gd       |  29 +++-
+ .../feature_resource_multi_reentry_test.tscn       |   8 ++
+ 15 files changed, 438 insertions(+), 31 deletions(-)

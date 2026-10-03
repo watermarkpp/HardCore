@@ -1,0 +1,5 @@
+SCRIPT ERROR: Invalid call. Nonexistent function 'finish_producer' in base 'RefCounted (effect_reservation.gd)'.
+   at: _run (res://tests/framework/feature_lifesteal_runtime_test.gd:87)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/framework/feature_lifesteal_runtime_test.gd:87)
+       [1] _case (res://tests/framework/feature_lifesteal_runtime_test.gd:132)

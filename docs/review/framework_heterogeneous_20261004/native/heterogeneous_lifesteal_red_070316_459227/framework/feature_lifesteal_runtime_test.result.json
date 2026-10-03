@@ -1,0 +1,26 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "trusted immediate healing handler compiles with zero persistent-state cost",
+      "passed": false
+    },
+    {
+      "id": 2,
+      "label": "pure lifesteal handler exists",
+      "passed": false
+    }
+  ],
+  "count": 2,
+  "engine_version": "4.7-stable (official)",
+  "failed": 2,
+  "invocation_id": "6c30014d-4e3e-43f4-bf66-15994c9ff13e",
+  "passed": 0,
+  "reported_checks": 2,
+  "reported_failures": 2,
+  "run_id": "2e9659c4-07ae-4942-9b03-e82931e76458",
+  "scene_id": "feature_lifesteal_runtime_test",
+  "schema_version": 1,
+  "source_content_sha256": "3db56b7a7eaeb83c62f06a754e1e1b4c17ab1e8491027f7c64ff119d631cd9a7",
+  "status": "FAIL"
+}

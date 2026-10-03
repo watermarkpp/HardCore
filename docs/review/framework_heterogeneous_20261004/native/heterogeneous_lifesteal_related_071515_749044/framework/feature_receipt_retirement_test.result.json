@@ -1,0 +1,71 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "actual compiled default-off module enabled for retirement proof",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "actual guaranteed source requires one receipt per delivered receiver",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "all 2200 accepted thirty-receiver releases finish after crossing the old 65536-receipt lifetime bound",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "all 66000 real committed HP facts were consumed exactly once",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "thirty real states start and every subsequent accepted source refresh is retained",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "every target retains the exact completed base damage total",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "receipt and producer storage remain bounded by active work, not historical release count",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "write-boundary telemetry records the true thirty-receipt peak and all 66000 terminal retirements",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "presentation telemetry retains its existing bounded storage",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "delayed retained old batch cannot submit again after thousands of retirements",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "delayed callback cannot reopen the retired producer identity",
+      "passed": true
+    }
+  ],
+  "count": 11,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "a75b0e27-e54c-4d37-883d-9f68babd9cbd",
+  "passed": 11,
+  "reported_checks": 11,
+  "reported_failures": 0,
+  "run_id": "461caf6f-fd4d-4147-8bdb-33548236085f",
+  "scene_id": "feature_receipt_retirement_test",
+  "schema_version": 1,
+  "source_content_sha256": "c289399905cf7b3ed940697e5cd35981e6134e7424f692434133e61159dc6967",
+  "status": "PASS"
+}

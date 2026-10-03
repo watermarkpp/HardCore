@@ -1,0 +1,81 @@
+{
+  "parent": "87400315b1accc87dc0592b091dbfcef876453d5",
+  "source_content_sha256": "86b48f605b4de129b528dd8bc5649ce85233c2503b2503d573ad7cf304310c91",
+  "delta": [
+    {
+      "path": "scripts/features/adapters/feature_authority.gd",
+      "before_sha256": "5bd89fb22f38b65bb035c9f7cbe6987a39cd830107a708adb910d9a8154579bb",
+      "after_sha256": "3438b1ff9b8c915a3b7fb7a8753fc60b937006653d2ebaad3e573874cfc7b168"
+    },
+    {
+      "path": "scripts/features/compilation/feature_compiler.gd",
+      "before_sha256": "d04473ea7ab7286fa6a8f4b95fa22e2ea3b8639280536eb481d5ceb5d697d4b5",
+      "after_sha256": "6f72f1a24762c4af8b698e02e098a98550bcc427fdd18253c6109b534d2682c8"
+    },
+    {
+      "path": "scripts/features/handlers/handler_registry.gd",
+      "before_sha256": null,
+      "after_sha256": "228448ce7d08263b3e28115a62629605757d6365e9ba54f31e9e61305149a507"
+    },
+    {
+      "path": "scripts/features/handlers/lifesteal_handler.gd",
+      "before_sha256": null,
+      "after_sha256": "f850ccb52c1865c25261d6179d80f5582a294c7636dc2cb66faca66d2ba17f4a"
+    },
+    {
+      "path": "scripts/features/runtime/damage_batch.gd",
+      "before_sha256": "ea4ee8b70edebf1de6c83e4fb7f856ef62fdf3466e2b800ee3c0b267166cdc8d",
+      "after_sha256": "0dda5164c7d6aa05d2ce8fbc8cf0b08bac1ff43237531e178f2229afadc392f6"
+    },
+    {
+      "path": "scripts/features/runtime/effect_runtime.gd",
+      "before_sha256": "eb2c19338cc2f1d3f1a7ecc04f23655d390dceaf432845c18f1013b571f85c8b",
+      "after_sha256": "c9191504b9f20b74242d3ee5e9e3a3cff2e15188bc5d3ac1efacc38ae9d25bfa"
+    },
+    {
+      "path": "scripts/layers/runtime/combat_runtime_service.gd",
+      "before_sha256": "2780c59116979e2b4c805f4e6b98970455b9d2b2d4f2be3b8abf13174b1e3eab",
+      "after_sha256": "113bf68d7d7b674ee99a39b7a936a6dadcc72fe7858247c90a765f61af61ff74"
+    },
+    {
+      "path": "tests/framework/feature_lifesteal_production_test.gd",
+      "before_sha256": null,
+      "after_sha256": "3259e089c8b5ec9a2f9e52a95a1895ca501e2bd9f45bfa4e84e6224eb9317ce9"
+    },
+    {
+      "path": "tests/framework/feature_lifesteal_production_test.tscn",
+      "before_sha256": null,
+      "after_sha256": "d1c3d6799db8e9c57a37b839f3d674865e6666f8c3f48fcf965ba0c09cb4bbc0"
+    },
+    {
+      "path": "tests/framework/feature_lifesteal_runtime_test.gd",
+      "before_sha256": null,
+      "after_sha256": "4ef0def108dc41d9ae7fff7434fc6f30e5c9b9e0bd686356744a26aad78acc9d"
+    },
+    {
+      "path": "tests/framework/feature_lifesteal_runtime_test.tscn",
+      "before_sha256": null,
+      "after_sha256": "ac13684a4b7aa7f9feb7e112608b7bb41059e83e8baf601493547100aa6f0649"
+    },
+    {
+      "path": "tests/framework/feature_resource_cue_test.gd",
+      "before_sha256": "dda7a6ba7f6faa1688d03e3d44a50947081c6057ddd1453bd113ad35584aa343",
+      "after_sha256": "a625245a176e404c1758225d0435c270ab299f77c2b5d1fd699f7501ddcd0e69"
+    },
+    {
+      "path": "tests/framework/feature_resource_multi_reentry_test.tscn",
+      "before_sha256": null,
+      "after_sha256": "63af2ce954fe076ab90adbfb67ae50b23ec6818e455f46b9449b40d1252d1905"
+    },
+    {
+      "path": "assets/data/features/validation/lifesteal.json",
+      "before_sha256": null,
+      "after_sha256": "5da7fc3136ad2bdd99e5df520751e6fe91121963c29a7a1bb0b2da50dda3f56e"
+    },
+    {
+      "path": "assets/data/features/validation/lifesteal_registry.json",
+      "before_sha256": null,
+      "after_sha256": "199c61adddfde06abd94a75d4dbc6fa22761ec6957fc9366c0ed34e0a372c6bd"
+    }
+  ]
+}

@@ -177,6 +177,21 @@ func apply_enemy_direct_spell_damage(
 	return result
 
 
+func apply_feature_source_restore(source_ref: RefCounted, recipient: Dictionary, amount: int) -> Dictionary:
+	if source_ref == null or source_ref.get_script() != preload("res://scripts/features/contracts/actor_ref.gd") \
+		or source_ref.identity() != recipient or amount <= 0:
+		return {"success":false,"reason":"feature_restore_identity","actual_gain":0}
+	var source: Node = source_ref.resolve()
+	if source == null or not source.has_method("restore_health") \
+		or (source.has_method("combat_transition_is_active") and source.combat_transition_is_active()):
+		return {"success":true,"reason":"source_unavailable","actual_gain":0}
+	var before := int(source.get("current_hp"))
+	source.restore_health(amount)
+	# The authority emits synchronous UI/lifecycle notifications. The source
+	# may retire during them; never dereference it after such retirement.
+	var after := int(source.get("current_hp")) if is_instance_valid(source) else before
+	return {"success":true,"reason":"","actual_gain":maxi(0,after-before)}
+
 func apply_feature_periodic_damage(target: Node, raw_damage: int, source_actor: Node2D,
 	tick_rng: RandomNumberGenerator, historical_credit: Dictionary) -> Dictionary:
 	if not is_instance_valid(target) or _target_rejects_damage(target) or not target.has_method("take_feature_periodic_damage") \

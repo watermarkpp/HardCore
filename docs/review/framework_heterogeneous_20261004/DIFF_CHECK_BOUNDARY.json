@@ -1,0 +1,11 @@
+{
+  "default_full_check_exit": 2,
+  "crlf_aware_full_check_exit": 2,
+  "source_check_exit": 0,
+  "raw_evidence_warning_paths": [
+    "docs/review/framework_heterogeneous_20261004/audit_parent_87400315/PRO_REPORT.md",
+    "docs/review/framework_heterogeneous_20261004/native/heterogeneous_final_world_073046_225871/runner.log",
+    "docs/review/framework_heterogeneous_20261004/source_review.diff"
+  ],
+  "handling": "Preserve original audit whitespace, truncated failed-engine stdout and literal patch context. These are reviewed original evidence bytes, not source whitespace. Full check FAIL remains recorded; source gate PASS."
+}

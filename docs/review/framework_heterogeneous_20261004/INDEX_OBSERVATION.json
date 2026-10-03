@@ -1,0 +1,13 @@
+{
+  "verified_at_utc": "2026-10-03T23:41:31.276982+00:00",
+  "current_backup_status": "PASS",
+  "historical_byte_continuity": "FAIL",
+  "historical_original_backup": "MISSING",
+  "hash_method": "SHA256 over unmodified file bytes and subprocess git ls-files --stage stdout bytes",
+  "index_backup": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\framework_v2\\heterogeneous_20261004\\observed_index.bin",
+  "index_backup_sha256": "df5a01dd0d87c14620e0021d70c25a830eb2cc37aa7b012eeb14ee1f2c58c5fb",
+  "staged_entries_backup": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\framework_v2\\heterogeneous_20261004\\observed_staged_entries.txt",
+  "staged_entries_sha256": "58f820e21ad45db9ee7606bcf143de644314f2b70b7551548475756dfd0f7733",
+  "staged_entries_count": 39611,
+  "scope": "Current full observation backup only; does not re-establish missing historical continuity."
+}

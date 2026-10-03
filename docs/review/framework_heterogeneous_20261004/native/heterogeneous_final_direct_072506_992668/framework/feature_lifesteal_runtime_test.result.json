@@ -1,0 +1,406 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "trusted immediate healing handler compiles with zero persistent-state cost",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "pure lifesteal handler exists",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "healing permission is mandatory",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "fraction greater than committed loss is rejected",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "periodic self-excitation is rejected",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "an instant healing handler cannot borrow an unrelated periodic cue",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "instant command capacity must be declared",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "real player transition establishes the source combat life before damage",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "runtime uses the existing combat mutation port",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "direct: declared producer admission remains valid",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "direct: admitted real batch owns the ticket",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "direct: no healing before base release completes",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "direct: batch is accepted exactly once",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "direct: actual committed loss restores only the valid source",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "direct: old combat RNG remains unchanged",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "direct: instant work and one-shot producer fully retire",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "lethal: declared producer admission remains valid",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "lethal: admitted real batch owns the ticket",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "lethal: no healing before base release completes",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "lethal: batch is accepted exactly once",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "lethal: actual committed loss restores only the valid source",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "lethal: old combat RNG remains unchanged",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "lethal: instant work and one-shot producer fully retire",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "removed lethal target: declared producer admission remains valid",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "removed lethal target: admitted real batch owns the ticket",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "removed lethal target: no healing before base release completes",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "removed lethal target: batch is accepted exactly once",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "removed lethal target: actual committed loss restores only the valid source",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "removed lethal target: old combat RNG remains unchanged",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "removed lethal target: instant work and one-shot producer fully retire",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "full HP clamp: declared producer admission remains valid",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "full HP clamp: admitted real batch owns the ticket",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "full HP clamp: no healing before base release completes",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "full HP clamp: batch is accepted exactly once",
+      "passed": true
+    },
+    {
+      "id": 35,
+      "label": "full HP clamp: actual committed loss restores only the valid source",
+      "passed": true
+    },
+    {
+      "id": 36,
+      "label": "full HP clamp: old combat RNG remains unchanged",
+      "passed": true
+    },
+    {
+      "id": 37,
+      "label": "full HP clamp: instant work and one-shot producer fully retire",
+      "passed": true
+    },
+    {
+      "id": 38,
+      "label": "dead source: declared producer admission remains valid",
+      "passed": true
+    },
+    {
+      "id": 39,
+      "label": "dead source: admitted real batch owns the ticket",
+      "passed": true
+    },
+    {
+      "id": 40,
+      "label": "dead source: no healing before base release completes",
+      "passed": true
+    },
+    {
+      "id": 41,
+      "label": "dead source: batch is accepted exactly once",
+      "passed": true
+    },
+    {
+      "id": 42,
+      "label": "dead source: actual committed loss restores only the valid source",
+      "passed": true
+    },
+    {
+      "id": 43,
+      "label": "dead source: old combat RNG remains unchanged",
+      "passed": true
+    },
+    {
+      "id": 44,
+      "label": "dead source: instant work and one-shot producer fully retire",
+      "passed": true
+    },
+    {
+      "id": 45,
+      "label": "changed source life: declared producer admission remains valid",
+      "passed": true
+    },
+    {
+      "id": 46,
+      "label": "changed source life: admitted real batch owns the ticket",
+      "passed": true
+    },
+    {
+      "id": 47,
+      "label": "changed source life: no healing before base release completes",
+      "passed": true
+    },
+    {
+      "id": 48,
+      "label": "changed source life: batch is accepted exactly once",
+      "passed": true
+    },
+    {
+      "id": 49,
+      "label": "real transition invalidates the previously captured source life",
+      "passed": true
+    },
+    {
+      "id": 50,
+      "label": "changed source life: actual committed loss restores only the valid source",
+      "passed": true
+    },
+    {
+      "id": 51,
+      "label": "changed source life: old combat RNG remains unchanged",
+      "passed": true
+    },
+    {
+      "id": 52,
+      "label": "changed source life: instant work and one-shot producer fully retire",
+      "passed": true
+    },
+    {
+      "id": 53,
+      "label": "changed world: declared producer admission remains valid",
+      "passed": true
+    },
+    {
+      "id": 54,
+      "label": "changed world: admitted real batch owns the ticket",
+      "passed": true
+    },
+    {
+      "id": 55,
+      "label": "changed world: no healing before base release completes",
+      "passed": true
+    },
+    {
+      "id": 56,
+      "label": "changed world: batch is accepted exactly once",
+      "passed": true
+    },
+    {
+      "id": 57,
+      "label": "changed world: actual committed loss restores only the valid source",
+      "passed": true
+    },
+    {
+      "id": 58,
+      "label": "changed world: old combat RNG remains unchanged",
+      "passed": true
+    },
+    {
+      "id": 59,
+      "label": "changed world: instant work and one-shot producer fully retire",
+      "passed": true
+    },
+    {
+      "id": 60,
+      "label": "seventeen distinct instant sources compile",
+      "passed": true
+    },
+    {
+      "id": 61,
+      "label": "instant sources do not consume sixteen persistent slots per target",
+      "passed": true
+    },
+    {
+      "id": 62,
+      "label": "instant capacity reserves seventeen receipts and zero states",
+      "passed": true
+    },
+    {
+      "id": 63,
+      "label": "two distinct healing subscriptions are retained",
+      "passed": true
+    },
+    {
+      "id": 64,
+      "label": "synchronous source notification retires runtime: declared producer admission remains valid",
+      "passed": true
+    },
+    {
+      "id": 65,
+      "label": "synchronous source notification retires runtime: admitted real batch owns the ticket",
+      "passed": true
+    },
+    {
+      "id": 66,
+      "label": "synchronous source notification retires runtime: no healing before base release completes",
+      "passed": true
+    },
+    {
+      "id": 67,
+      "label": "synchronous source notification retires runtime: batch is accepted exactly once",
+      "passed": true
+    },
+    {
+      "id": 68,
+      "label": "synchronous source notification retires runtime: actual committed loss restores only the valid source",
+      "passed": true
+    },
+    {
+      "id": 69,
+      "label": "synchronous source notification retires runtime: old combat RNG remains unchanged",
+      "passed": true
+    },
+    {
+      "id": 70,
+      "label": "synchronous source notification retires runtime: instant work and one-shot producer fully retire",
+      "passed": true
+    },
+    {
+      "id": 71,
+      "label": "unticketed notification retires the same runtime: declared producer admission remains valid",
+      "passed": true
+    },
+    {
+      "id": 72,
+      "label": "unticketed notification retires the same runtime: admitted real batch owns the ticket",
+      "passed": true
+    },
+    {
+      "id": 73,
+      "label": "unticketed notification retires the same runtime: no healing before base release completes",
+      "passed": true
+    },
+    {
+      "id": 74,
+      "label": "unticketed notification retires the same runtime: batch is accepted exactly once",
+      "passed": true
+    },
+    {
+      "id": 75,
+      "label": "unticketed notification retires the same runtime: actual committed loss restores only the valid source",
+      "passed": true
+    },
+    {
+      "id": 76,
+      "label": "unticketed notification retires the same runtime: old combat RNG remains unchanged",
+      "passed": true
+    },
+    {
+      "id": 77,
+      "label": "unticketed notification retires the same runtime: instant work and one-shot producer fully retire",
+      "passed": true
+    },
+    {
+      "id": 78,
+      "label": "no late reservation access, unknown command or hidden capacity failure",
+      "passed": true
+    }
+  ],
+  "count": 78,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "cfc6e8d5-0165-4e66-88ed-ad21ffa359b7",
+  "passed": 78,
+  "reported_checks": 78,
+  "reported_failures": 0,
+  "run_id": "d6b7c280-bc20-4ff0-961a-d7f1948ad1de",
+  "scene_id": "feature_lifesteal_runtime_test",
+  "schema_version": 1,
+  "source_content_sha256": "86b48f605b4de129b528dd8bc5649ce85233c2503b2503d573ad7cf304310c91",
+  "status": "PASS"
+}
