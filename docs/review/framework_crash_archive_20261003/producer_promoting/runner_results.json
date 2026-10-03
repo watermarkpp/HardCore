@@ -1,0 +1,32 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "controlled_process_crash_test",
+                        "test_path":  "tests/framework/controlled_process_crash_test.tscn",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  false,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  -1,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-03T12:39:38.4407440Z",
+                        "native_exit_observed_utc":  "2026-10-03T12:39:14.4616936Z",
+                        "effective_exit_code":  -1,
+                        "timeout":  false,
+                        "stdout_failure_count":  1,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  1,
+                        "framework_run_id":  "62aa7cdf-b4cc-4be1-9f40-3b2feef6e898",
+                        "framework_receipt_valid":  false,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;non_zero_exit_code_-1;stdout_failures_1;engine_log_failures_1;framework_receipt_missing"
+                    }
+                ],
+    "total":  1,
+    "invocation_id":  "36b990ed-6be0-48b3-ac2a-8617db9c7b61",
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "passed":  0,
+    "engine_log_errors":  1,
+    "generated_at":  "2026-10-03T20:39:15.6601637+08:00",
+    "failed":  1,
+    "suite":  "adhoc"
+}

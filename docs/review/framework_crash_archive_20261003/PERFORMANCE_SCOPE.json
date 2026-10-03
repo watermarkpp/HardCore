@@ -1,0 +1,75 @@
+{
+  "original_comparison_sha256": "8fa8d2f87218aefb04f2878d898dfbaf326b792f7538b59f9ebf8aaa6235ed18",
+  "original_comparison": "../framework_layered_critical_20261003/FINAL_LAYERED_ABBA_COMPARISON.json",
+  "gate_scope": "CPU P95/P99 only; enemy_physics_usec callback counter delta, not process CPU or whole-frame cost",
+  "cpu_p50_descriptive_separations": [
+    {
+      "case": [
+        20,
+        "cold",
+        "reverse"
+      ],
+      "metric": "cpu_p50_ms",
+      "a": [
+        4.057,
+        4.077
+      ],
+      "b": [
+        4.136,
+        4.081
+      ],
+      "a_median": 4.067,
+      "b_median": 4.1085,
+      "candidate_delta_pct": 1.0204081632653184,
+      "candidate_both_above_baseline_both": true
+    },
+    {
+      "case": [
+        20,
+        "cold",
+        "static"
+      ],
+      "metric": "cpu_p50_ms",
+      "a": [
+        3.869,
+        3.892
+      ],
+      "b": [
+        3.9,
+        3.912
+      ],
+      "a_median": 3.8805,
+      "b_median": 3.9059999999999997,
+      "candidate_delta_pct": 0.657131812910694,
+      "candidate_both_above_baseline_both": true
+    }
+  ],
+  "frame_interval_descriptive_separations": [
+    {
+      "case": [
+        10,
+        "cold",
+        "static"
+      ],
+      "metric": "frame_interval_p95_ms"
+    },
+    {
+      "case": [
+        10,
+        "cold",
+        "static"
+      ],
+      "metric": "frame_interval_p99_ms"
+    },
+    {
+      "case": [
+        20,
+        "warm",
+        "static"
+      ],
+      "metric": "frame_interval_p95_ms"
+    }
+  ],
+  "workload": "18 PC headless movement conditions; 72 samplesets have starts=0 and hp_delta=0; cold/warm are resource cache states, not device temperatures.",
+  "inference_limit": "Two repeats descriptive; no statistical significance or combat, GPU, Android, thermal acceptance."
+}

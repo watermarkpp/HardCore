@@ -54,7 +54,7 @@
 
 正式R3完整75场景与反馈29场景按清单覆盖，只复用同字节已完成场景，剩余逐项补跑。精确清单和採用行见`FINAL_R3_COMPLETION_LIST`/`FINAL_ACCEPTED_ROWS`。
 
-ABBA复用原10/20/30规模、cold/warm、static/lateral/reverse，共18条件，每条件60预热/180原始样本。A/B只一个enemy生产文件不同，其他源字节及引擎相同。原始CPU与frame interval按原floor算法独立复算；CPU判定与帧间隔例外分开，完整数值在`FINAL_LAYERED_ABBA_COMPARISON`。这些是PC headless移动策略，starts/HP为0，不能外推战斗CPU、GPU、Android或热机。两轮属于描述性对比，不宣称统计显著或全性能无退步。
+ABBA复用原10/20/30规模、cold/warm、static/lateral/reverse，共18条件，每条件60预热/180原始样本。A/B只一个enemy生产文件不同，其他源字节及引擎相同。原始CPU与frame interval按原floor算法独立复算；CPU门禁仅检查P95/P99尾部分离；P50在20/cold/reverse与20/cold/static分别有+1.020408%与+0.657132%的描述性分离。CPU取enemy_physics_usec回调计数差值，不是整进程CPU。帧间隔例外分别保留，完整数值在`FINAL_LAYERED_ABBA_COMPARISON`，补充范围见`../framework_crash_archive_20261003/PERFORMANCE_SCOPE.json`。这些是PC headless移动策略，starts/HP为0，不能外推战斗CPU、GPU、Android或热机。两轮属于描述性对比，不宣称统计显著或全性能无退步。
 
 R4仅用户授权的all_damage_lost/natural_cadence24/76使用90秒上限；保留20真实起手、原攻击间隔和全部业务断言。真实cadence决定完成时间，窗口不是改变性能。每场记录有界墙钟样本与实际起手模拟钟，60秒前后分布、样本量和不足都在`FINAL_R4_TIMING_RECOMPUTED`，不能用少量尾样本保证无退步。
 
