@@ -1,0 +1,171 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "trusted default-off timing test package registers before world",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "legal test-only timing contribution enables before world",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "production world reaches input READY",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "formal mapped target fixture establishes controlled combat location",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "A captures actual production configuration",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "test contribution delays only release, retaining original body and action lock",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "A enters the real accepted healing path",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "original action lock permits B while accepted A is still pending",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "B is a real legally accepted short attack",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "B supersedes the presentation slot with its own identity",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "real B completes once before old A release",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "READY input plus inactive latest slot still has legitimate older producer",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "world-ready publication refuses every pending accepted producer including superseded A",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "refused publication preserves the full current configuration",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "original superseded A reaches actual Root planner once",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "completed A closes its production lease",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "all producers retire independently of the newest body slot",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "world-ready publication resumes after all real producers finish",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "published grant can withdraw independently",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "publication never replays either release",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "another actual accepted A owns a new delayed producer",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "accepted producer is visible before any visual or delayed callback",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "existing lifecycle owner starts transition while paused",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "paused transition immediately closes producers without waiting for wall clock timer",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "original transition owner completes normally",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "cancelled old identity cannot block a legal READY publication",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "post-transition grant withdrawal remains legal",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "old timer after transition cannot deliver or retain producer",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "world teardown begins with actual accepted producer pending",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "world retirement closes producer before its timer can deliver",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "catalog restores after complete world retirement",
+      "passed": true
+    }
+  ],
+  "count": 31,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "b910c5f7-68e2-4ed7-92ba-b5ee20f3981b",
+  "passed": 31,
+  "reported_checks": 31,
+  "reported_failures": 0,
+  "run_id": "40cf1385-c90d-407c-a45a-900b9bb20da5",
+  "scene_id": "feature_delayed_producer_publication_test",
+  "schema_version": 1,
+  "source_content_sha256": "ad9681fc02a35ae84ed6d432aa979cad632f5f05b0ee3efd356961147ca529eb",
+  "status": "PASS"
+}

@@ -29,6 +29,9 @@ static func create(definition: Dictionary, rank: int, actor_level: int, primary_
 		return {"success": false, "reason": "lease_invalid_identity", "lease": null}
 	if not _melee_valid(melee) or not _events_valid(event_index):
 		return {"success":false,"reason":"lease_invalid_melee_configuration","lease":null}
+	for bindings: Array in event_index.values():
+		if not preload("res://scripts/features/contracts/feature_resource_lease.gd").supports_bindings(resources,bindings):
+			return {"success":false,"reason":"lease_invalid_resources","lease":null}
 	var captured := Graph.capture({"definition": definition, "rank": rank, "actor_level": actor_level,
 		"primary_stats": primary_stats, "versions": versions, "actor_identity": actor_identity,
 		"partner_definition": partner_definition, "partner_rank":partner_rank, "primary_policy":primary_policy, "melee":melee,"event_index":event_index})

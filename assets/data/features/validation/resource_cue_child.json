@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "module_id": "hc.ignite_cue_assets",
+  "module_version": 1,
+  "core_api_version": 1,
+  "requires": [],
+  "conflicts": [],
+  "capabilities": [],
+  "handlers": [],
+  "resource_dependencies": ["res://assets/audio/sfx/client/137__M26-3.wav"],
+  "cost": {"commands_per_event": 0, "states_per_target": 0},
+  "default_enabled": true,
+  "scope": "world",
+  "activation_boundary": "startup",
+  "mechanics": [],
+  "tests": ["tests/framework/feature_resource_cue_test.tscn"]
+}

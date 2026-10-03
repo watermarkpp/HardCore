@@ -1,0 +1,1258 @@
+diff --git a/assets/data/features/resource_registry.json b/assets/data/features/resource_registry.json
+index f50899d1e..52a3a2588 100644
+--- a/assets/data/features/resource_registry.json
++++ b/assets/data/features/resource_registry.json
+@@ -12,6 +12,12 @@
+       "path": "res://assets/audio/sfx/client/137__M26-3.wav",
+       "type": "AudioStream",
+       "origin": {"lane": "client_assets", "event_id": "player.skill.fire_sword", "sound_id": 137}
++    },
++    {
++      "resource_id": "hc.resource.sound.ice_storm.effect",
++      "path": "res://assets/audio/sfx/client/10332__M33-3.wav",
++      "type": "AudioStream",
++      "origin": {"lane": "client_assets", "event_id": "skill.wizard.ice_storm.effect", "sound_id": 10332}
+     }
+   ]
+ }
+diff --git a/assets/data/features/validation/resource_cue_child.json b/assets/data/features/validation/resource_cue_child.json
+new file mode 100644
+index 000000000..f9a713f8e
+--- /dev/null
++++ b/assets/data/features/validation/resource_cue_child.json
+@@ -0,0 +1,17 @@
++{
++  "schema_version": 1,
++  "module_id": "hc.ignite_cue_assets",
++  "module_version": 1,
++  "core_api_version": 1,
++  "requires": [],
++  "conflicts": [],
++  "capabilities": [],
++  "handlers": [],
++  "resource_dependencies": ["res://assets/audio/sfx/client/137__M26-3.wav"],
++  "cost": {"commands_per_event": 0, "states_per_target": 0},
++  "default_enabled": true,
++  "scope": "world",
++  "activation_boundary": "startup",
++  "mechanics": [],
++  "tests": ["tests/framework/feature_resource_cue_test.tscn"]
++}
+diff --git a/assets/data/features/validation/resource_cue_parent.json b/assets/data/features/validation/resource_cue_parent.json
+new file mode 100644
+index 000000000..2a2cf4525
+--- /dev/null
++++ b/assets/data/features/validation/resource_cue_parent.json
+@@ -0,0 +1,29 @@
++{
++  "schema_version": 1,
++  "module_id": "hc.ignite",
++  "module_version": 1,
++  "core_api_version": 1,
++  "requires": ["hc.ignite_cue_assets"],
++  "conflicts": [],
++  "capabilities": ["combat.post_hit", "effects.periodic"],
++  "handlers": ["hc.ignite.v1"],
++  "resource_dependencies": [],
++  "cost": {"commands_per_event": 1, "states_per_target": 1},
++  "default_enabled": true,
++  "scope": "world",
++  "activation_boundary": "startup",
++  "mechanics": [{
++    "mechanic_id": "hc.ignite.fire_sword",
++    "kind": "trigger",
++    "tags": ["hc.periodic"],
++    "event": "damage_committed",
++    "skill_id": "hc.skill.warrior.fire_sword",
++    "handler_id": "hc.ignite.v1",
++    "source_classes": ["direct"],
++    "dedup": "per_target_per_release",
++    "lifecycle": "until_expired",
++    "cue_id": "hc.cue.ignite.fire_sword.v1",
++    "config": {"chance": 1, "fraction": 0.05, "period_usec": 1000000, "duration_usec": 4000000, "max_ticks": 4}
++  }],
++  "tests": ["tests/framework/feature_resource_cue_test.tscn"]
++}
+diff --git a/assets/data/features/validation/resource_cue_registry.json b/assets/data/features/validation/resource_cue_registry.json
+new file mode 100644
+index 000000000..edd2d48f6
+--- /dev/null
++++ b/assets/data/features/validation/resource_cue_registry.json
+@@ -0,0 +1,8 @@
++{
++  "schema_version": 1,
++  "modules": [
++    {"module_id": "hc.ignite", "path": "res://assets/data/features/validation/resource_cue_parent.json"},
++    {"module_id": "hc.ignite_cue_assets", "path": "res://assets/data/features/validation/resource_cue_child.json"}
++  ],
++  "bindings": [{"module_id": "hc.ignite", "kind": "rule", "rule_id": "hc.ignite", "mechanic_id": "hc.ignite.fire_sword"}]
++}
+diff --git a/assets/data/features/validation/resource_natural_child.json b/assets/data/features/validation/resource_natural_child.json
+new file mode 100644
+index 000000000..ff051c2f4
+--- /dev/null
++++ b/assets/data/features/validation/resource_natural_child.json
+@@ -0,0 +1,25 @@
++{
++  "schema_version": 1,
++  "module_id": "hc.ignite_cue_assets",
++  "module_version": 1,
++  "core_api_version": 1,
++  "requires": [],
++  "conflicts": [],
++  "capabilities": [],
++  "handlers": [],
++  "resource_dependencies": [
++    "res://assets/audio/sfx/client/137__M26-3.wav",
++    "res://assets/audio/sfx/client/10332__M33-3.wav"
++  ],
++  "cost": {
++    "commands_per_event": 0,
++    "states_per_target": 0
++  },
++  "default_enabled": true,
++  "scope": "world",
++  "activation_boundary": "startup",
++  "mechanics": [],
++  "tests": [
++    "tests/framework/feature_resource_cue_test.tscn"
++  ]
++}
+diff --git a/assets/data/features/validation/resource_natural_parent.json b/assets/data/features/validation/resource_natural_parent.json
+new file mode 100644
+index 000000000..f5684a63d
+--- /dev/null
++++ b/assets/data/features/validation/resource_natural_parent.json
+@@ -0,0 +1,80 @@
++{
++  "schema_version": 1,
++  "module_id": "hc.ignite",
++  "module_version": 1,
++  "core_api_version": 1,
++  "requires": [
++    "hc.ignite_cue_assets"
++  ],
++  "conflicts": [],
++  "capabilities": [
++    "combat.post_hit",
++    "effects.periodic"
++  ],
++  "handlers": [
++    "hc.ignite.v1"
++  ],
++  "resource_dependencies": [],
++  "cost": {
++    "commands_per_event": 1,
++    "states_per_target": 1
++  },
++  "default_enabled": true,
++  "scope": "world",
++  "activation_boundary": "startup",
++  "mechanics": [
++    {
++      "mechanic_id": "hc.ignite.ice_storm",
++      "kind": "trigger",
++      "tags": [
++        "hc.periodic"
++      ],
++      "event": "damage_committed",
++      "skill_id": "hc.skill.wizard.ice_storm",
++      "handler_id": "hc.ignite.v1",
++      "source_classes": [
++        "direct"
++      ],
++      "dedup": "per_target_per_release",
++      "lifecycle": "until_expired",
++      "config": {
++        "chance": 1,
++        "fraction": 0.05,
++        "period_usec": 1000000,
++        "duration_usec": 4000000,
++        "max_ticks": 4
++      },
++      "cue_id": "hc.cue.ignite.ice_storm.v1"
++    },
++    {
++      "mechanic_id": "hc.ignite.fire_sword",
++      "kind": "trigger",
++      "tags": [
++        "hc.periodic"
++      ],
++      "event": "damage_committed",
++      "skill_id": "hc.skill.warrior.fire_sword",
++      "handler_id": "hc.ignite.v1",
++      "source_classes": [
++        "direct"
++      ],
++      "dedup": "per_target_per_release",
++      "lifecycle": "until_expired",
++      "config": {
++        "chance": 1,
++        "fraction": 0.05,
++        "period_usec": 1000000,
++        "duration_usec": 4000000,
++        "max_ticks": 4
++      },
++      "cue_id": "hc.cue.ignite.fire_sword.v1"
++    }
++  ],
++  "tests": [
++    "tests/framework/feature_compiler_test.tscn",
++    "tests/framework/feature_production_loadout_test.tscn",
++    "tests/framework/periodic_effect_runtime_test.tscn",
++    "tests/framework/feature_effect_production_test.tscn",
++    "tests/framework/feature_fire_effect_production_test.tscn"
++  ]
++}
+diff --git a/assets/data/features/validation/resource_natural_registry.json b/assets/data/features/validation/resource_natural_registry.json
+new file mode 100644
+index 000000000..2bc6f9dee
+--- /dev/null
++++ b/assets/data/features/validation/resource_natural_registry.json
+@@ -0,0 +1,33 @@
++{
++  "schema_version": 1,
++  "modules": [
++    {
++      "module_id": "hc.ignite",
++      "path": "res://assets/data/features/validation/resource_natural_parent.json"
++    },
++    {
++      "module_id": "hc.ignite_cue_assets",
++      "path": "res://assets/data/features/validation/resource_natural_child.json"
++    }
++  ],
++  "bindings": [
++    {
++      "module_id": "hc.ignite",
++      "kind": "rule",
++      "rule_id": "hc.ignite",
++      "mechanic_id": "hc.ignite.ice_storm"
++    },
++    {
++      "module_id": "hc.ignite",
++      "kind": "item",
++      "item_id": "hc.item.000085",
++      "mechanic_id": "hc.ignite.ice_storm"
++    },
++    {
++      "module_id": "hc.ignite",
++      "kind": "skill",
++      "skill_id": "hc.skill.wizard.ice_storm",
++      "mechanic_id": "hc.ignite.ice_storm"
++    }
++  ]
++}
+diff --git a/scripts/audio_runtime_service.gd b/scripts/audio_runtime_service.gd
+index 57d341708..cbcece44e 100644
+--- a/scripts/audio_runtime_service.gd
++++ b/scripts/audio_runtime_service.gd
+@@ -416,11 +416,36 @@ func play_event(event_id: String, context: Dictionary = {}) -> Dictionary:
+ 	return _play_event_internal(event_id, context, false, "")
+ 
+ 
++## An accepted feature already owns this exact single-sample resource. Reuse
++## the audited event, preference and pool authority without a new lookup/RNG.
++func play_prepared_event(event_id: String, stream: AudioStream, context: Dictionary = {}) -> Dictionary:
++	var binding: Dictionary = _events.get(event_id, {})
++	var paths: Variant = binding.get("runtime_paths", [])
++	if stream == null or stream.get_length() <= 0 or not paths is Array or paths.size() != 1 \
++		or paths[0] != stream.resource_path or binding.get("mapping_status") != "EXACT":
++		return _reject_event("invalid_prepared_stream",event_id,context)
++	return _play_event_internal(event_id,context,false,"",stream)
++
++
++func stop_prepared_event(request: Dictionary) -> bool:
++	var index: int = request.get("pool_index",-1)
++	if index < 0 or index >= _event_slots.size(): return false
++	var slot: Dictionary = _event_slots[index]
++	if not slot.get("prepared",false) or slot.get("request_serial") != request.get("request_serial") \
++		or slot.get("event_id") != request.get("event_id"): return false
++	var player := _event_players[index]
++	player.stop()
++	player.stream = null
++	_event_slots[index] = {}
++	return true
++
++
+ func _play_event_internal(
+ 	event_id: String,
+ 	context: Dictionary,
+ 	allow_restricted_monster_source: bool,
+ 	requested_semantic_event: String,
++	prepared_stream: AudioStream = null,
+ ) -> Dictionary:
+ 	_metrics["requests"] = int(_metrics.get("requests", 0)) + 1
+ 	var binding: Dictionary = _events.get(event_id, {}) as Dictionary
+@@ -468,7 +493,7 @@ func _play_event_internal(
+ 		return _reject_event("missing_mapping", event_id, context)
+ 	var selected_index := _select_event_variant(event_id, binding, runtime_paths.size(), context)
+ 	var runtime_path := str(runtime_paths[selected_index])
+-	var stream := _stream_for(runtime_path)
++	var stream := prepared_stream if prepared_stream != null else _stream_for(runtime_path)
+ 	if stream == null:
+ 		return _reject_event("load_failed", event_id, context, runtime_path)
+ 	var pool_index := _acquire_event_player(priority)
+@@ -490,6 +515,7 @@ func _play_event_internal(
+ 		"owner_kind": owner_kind,
+ 		"semantic_event": semantic_event,
+ 		"owner_release_key": owner_release_key,
++		"prepared":prepared_stream != null,
+ 	}
+ 	player.play()
+ 	if not owner_release_key.is_empty():
+@@ -768,6 +794,7 @@ func stop_all_events(_reason := "cancelled") -> void:
+ 		var player := _event_players[pool_index]
+ 		if player.playing:
+ 			player.stop()
++		if bool(_event_slots[pool_index].get("prepared",false)): player.stream = null
+ 		_event_slots[pool_index] = {}
+ 
+ 
+@@ -1211,6 +1238,7 @@ func _on_event_finished(pool_index: int) -> void:
+ 		return
+ 	var slot := _event_slots[pool_index].duplicate(true)
+ 	_event_slots[pool_index] = {}
++	if bool(slot.get("prepared",false)): _event_players[pool_index].stream = null
+ 	if slot.is_empty():
+ 		return
+ 	slot["contract_id"] = CONTRACT_ID
+diff --git a/scripts/features/compilation/feature_compiler.gd b/scripts/features/compilation/feature_compiler.gd
+index ac066f9a3..57451a8a7 100644
+--- a/scripts/features/compilation/feature_compiler.gd
++++ b/scripts/features/compilation/feature_compiler.gd
+@@ -1,6 +1,7 @@
+ extends RefCounted
+ 
+ const Graph := preload("res://scripts/features/contracts/plain_graph.gd")
++const Cues := preload("res://scripts/features/presentation/cue_definitions.gd")
+ const BUILTIN_HANDLERS := ["hc.ignite.v1"]
+ const MODULE_REQUIRED := ["schema_version", "module_id", "module_version", "core_api_version",
+ 	"requires", "conflicts", "capabilities", "handlers", "resource_dependencies", "cost", "mechanics", "tests"]
+@@ -99,6 +100,10 @@ static func compile_catalog(modules: Array, authority: Dictionary) -> Dictionary
+ 	var visited := {}
+ 	for module_id: String in by_module:
+ 		_visit_dependency(module_id, by_module, visiting, visited, errors, 0)
++	if errors.is_empty():
++		for entry: Dictionary in mechanics.values():
++			if entry.definition.has("cue_id") and not _cue_closure_valid(entry.module_id,entry.definition.cue_id,by_module):
++				errors.append("missing_cue_resource_closure:" + entry.definition.cue_id)
+ 	if not errors.is_empty():
+ 		return _failure(errors)
+ 	var catalog := {"schema_version": 1, "modules": by_module, "mechanics": mechanics,
+@@ -236,8 +241,32 @@ static func _selected_entry(catalog: Dictionary, id: String, authority: Dictiona
+ 		errors.append("selected_mechanic_identity:" + id)
+ 	else:
+ 		_mechanic_valid(entry.value.definition, header.value, authority, errors)
++		if entry.value.definition.has("cue_id") and entry.value.definition.cue_id is String \
++			and not _cue_closure_valid(raw.module_id,entry.value.definition.cue_id,catalog.modules):
++			errors.append("missing_selected_cue_resource_closure:" + id)
+ 	return entry.value if errors.size() == initial else {}
+ 
++static func _cue_closure_valid(module_id: String, cue_id: String, modules: Dictionary) -> bool:
++	var required := Cues.requirements(cue_id)
++	if not required.success: return false
++	var paths := {}
++	var visited := {}
++	var pending: Array = [module_id]
++	while not pending.is_empty():
++		var id: Variant = pending.pop_back()
++		if not id is String: return false
++		if visited.has(id): continue
++		visited[id] = true
++		var module: Variant = modules.get(id)
++		if not module is Dictionary or not module.get("resource_dependencies") is Array or not module.get("requires") is Array: return false
++		for path: Variant in module.resource_dependencies:
++			if not path is String: return false
++			paths[path] = true
++		pending.append_array(module.requires)
++	for path: String in required.paths:
++		if not paths.has(path): return false
++	return true
++
+ static func _mechanic_valid(value: Dictionary, module: Dictionary, authority: Dictionary, errors: Array[String]) -> bool:
+ 	var initial := errors.size()
+ 	var kind: Variant = value.get("kind")
+@@ -247,7 +276,7 @@ static func _mechanic_valid(value: Dictionary, module: Dictionary, authority: Di
+ 		"trigger": required.append_array(["event", "skill_id", "handler_id", "source_classes", "dedup", "config", "lifecycle"])
+ 		"capability": required.append("capability")
+ 		_: errors.append("unknown_mechanic_kind:" + str(kind)); return false
+-	if not _keys(value, required, [], errors, "mechanic"):
++	if not _keys(value, required, ["cue_id"] if kind == "trigger" else [], errors, "mechanic"):
+ 		return false
+ 	if not value.mechanic_id is String or not _stable_id(value.mechanic_id):
+ 		errors.append("invalid_mechanic_id")
+@@ -267,6 +296,8 @@ static func _mechanic_valid(value: Dictionary, module: Dictionary, authority: Di
+ 				for operation: Variant in value.operations:
+ 					_validate_operation(operation, kind, authority, errors)
+ 		"trigger":
++			if value.has("cue_id") and (not value.cue_id is String or Cues.definition(value.cue_id).is_empty()):
++				errors.append("unknown_trigger_cue")
+ 			if value.handler_id not in module.handlers or value.handler_id not in BUILTIN_HANDLERS:
+ 				errors.append("undeclared_trigger_handler")
+ 			if "combat.post_hit" not in module.capabilities or "effects.periodic" not in module.capabilities:
+diff --git a/scripts/features/compilation/feature_resource_registry.gd b/scripts/features/compilation/feature_resource_registry.gd
+index cccd5d670..aa6315ecf 100644
+--- a/scripts/features/compilation/feature_resource_registry.gd
++++ b/scripts/features/compilation/feature_resource_registry.gd
+@@ -60,7 +60,10 @@ static func validate(input: Variant) -> Dictionary:
+ 	if not errors.is_empty(): return _reject(errors)
+ 	var owned := Graph.capture(records)
+ 	if not owned.success: return _reject(owned.errors)
+-	return {"success":true, "records":owned.value, "errors":[]}
++	var identity_paths := {}
++	for path: String in owned.value: identity_paths[owned.value[path].resource_id] = path
++	identity_paths.make_read_only()
++	return {"success":true, "records":owned.value, "identity_paths":identity_paths, "errors":[]}
+ 
+ static func _reject(errors: Array) -> Dictionary:
+ 	return {"success":false, "records":{}, "errors":errors}
+@@ -69,6 +72,11 @@ static func resource_type(path: String) -> String:
+ 	var declared := declarations()
+ 	return str(declared.records.get(path, {}).get("type", "")) if declared.success else ""
+ 
++static func record_by_id(id: String) -> Dictionary:
++	var declared := declarations()
++	if not declared.success: return {}
++	return declared.records.get(declared.get("identity_paths", {}).get(id, ""), {})
++
+ static func valid_resource(path: String, resource: Variant) -> bool:
+ 	if not resource is Resource or resource.resource_path != path: return false
+ 	match resource_type(path):
+diff --git a/scripts/features/contracts/action_config_lease.gd b/scripts/features/contracts/action_config_lease.gd
+index 375d0da84..c5fcc8c29 100644
+--- a/scripts/features/contracts/action_config_lease.gd
++++ b/scripts/features/contracts/action_config_lease.gd
+@@ -29,6 +29,9 @@ static func create(definition: Dictionary, rank: int, actor_level: int, primary_
+ 		return {"success": false, "reason": "lease_invalid_identity", "lease": null}
+ 	if not _melee_valid(melee) or not _events_valid(event_index):
+ 		return {"success":false,"reason":"lease_invalid_melee_configuration","lease":null}
++	for bindings: Array in event_index.values():
++		if not preload("res://scripts/features/contracts/feature_resource_lease.gd").supports_bindings(resources,bindings):
++			return {"success":false,"reason":"lease_invalid_resources","lease":null}
+ 	var captured := Graph.capture({"definition": definition, "rank": rank, "actor_level": actor_level,
+ 		"primary_stats": primary_stats, "versions": versions, "actor_identity": actor_identity,
+ 		"partner_definition": partner_definition, "partner_rank":partner_rank, "primary_policy":primary_policy, "melee":melee,"event_index":event_index})
+diff --git a/scripts/features/contracts/feature_resource_lease.gd b/scripts/features/contracts/feature_resource_lease.gd
+index c0909c0de..9f5bb2e91 100644
+--- a/scripts/features/contracts/feature_resource_lease.gd
++++ b/scripts/features/contracts/feature_resource_lease.gd
+@@ -50,6 +50,18 @@ func valid_for(catalog: Dictionary, enabled: Array) -> bool:
+ func resource_at(path: String) -> Resource:
+ 	return _resources.get(path)
+ 
++static func supports_bindings(resources: RefCounted, bindings: Array) -> bool:
++	# A typed lease alone is insufficient: every declared possible cue must
++	# already be held before acceptance or a one-shot producer claim.
++	for binding: Dictionary in bindings:
++		var definition: Dictionary = binding.definition
++		if not definition.has("cue_id"): continue
++		var required := preload("res://scripts/features/presentation/cue_definitions.gd").requirements(definition.cue_id)
++		if not required.success: return false
++		for path: String in required.paths:
++			if resources == null or not Registry.valid_resource(path,resources.resource_at(path)): return false
++	return true
++
+ func diagnostics() -> Dictionary:
+ 	return _diagnostics.duplicate(true)
+ 
+diff --git a/scripts/features/handlers/ignite_handler.gd b/scripts/features/handlers/ignite_handler.gd
+index 92e19b6ab..80d2cb038 100644
+--- a/scripts/features/handlers/ignite_handler.gd
++++ b/scripts/features/handlers/ignite_handler.gd
+@@ -1,5 +1,6 @@
+ extends RefCounted
+ const Graph := preload("res://scripts/features/contracts/plain_graph.gd")
++const Cues := preload("res://scripts/features/presentation/cue_definitions.gd")
+ const ID := "hc.ignite.v1"
+ const EFFECT_ID := "hc.effect.ignite.v1"
+ 
+@@ -18,6 +19,9 @@ static func commands(fact: Dictionary, binding: Dictionary) -> Array:
+ 	if rng.randf() >= float(config.chance): return []
+ 	var raw := roundi(float(fact.actual_loss)*float(config.fraction))
+ 	if raw <= 0: return []
++	var cue_id: String = definition.get("cue_id","hc.cue.ignite.v1")
++	var cue := Cues.definition(cue_id)
++	if cue.is_empty(): return []
+ 	var command := Graph.capture({"op":"ApplyStatus","effect_id":EFFECT_ID,"handler_id":ID,
+ 		"source_handle":binding.handle,"mechanic_id":definition.mechanic_id,"target":fact.target,
+ 		"historical_credit":fact.historical_credit,"raw_per_tick":raw,"period_usec":int(config.period_usec),
+@@ -25,5 +29,5 @@ static func commands(fact: Dictionary, binding: Dictionary) -> Array:
+ 		"damage_channel":"magic_defense","source_class":"periodic","causes_struck":false,
+ 		"direct_magic_walk_delay":false,"refresh_policy":"strongest_keep_phase","source_removed":"until_expired",
+ 		"target_defense_sampling":"per_tick","expires_order":"tick_before_expiry",
+-		"cue_id":"hc.cue.ignite.v1","cue_policy":"optional_procedural"})
++		"cue_id":cue_id,"cue_policy":cue.policy})
+ 	return [command.value] if bool(command.success) else []
+diff --git a/scripts/features/presentation/cue_definitions.gd b/scripts/features/presentation/cue_definitions.gd
+new file mode 100644
+index 000000000..59096fd12
+--- /dev/null
++++ b/scripts/features/presentation/cue_definitions.gd
+@@ -0,0 +1,26 @@
++extends RefCounted
++
++const Registry := preload("res://scripts/features/compilation/feature_resource_registry.gd")
++
++# Trusted built-in presentation handlers. Authoring selects a stable cue;
++# it cannot load arbitrary scripts or introduce a second audio mapping.
++const DEFINITIONS := {
++	"hc.cue.ignite.v1":{"policy":"optional_procedural","resource_ids":[]},
++	"hc.cue.ignite.fire_sword.v1":{"policy":"required_procedural","resource_ids":["hc.resource.sound.fire_sword.attack"]},
++	"hc.cue.ignite.ice_storm.v1":{"policy":"required_procedural","resource_ids":["hc.resource.sound.ice_storm.effect"]}
++}
++
++static func definition(id: String) -> Dictionary:
++	return DEFINITIONS.get(id,{})
++
++static func requirements(id: String) -> Dictionary:
++	var cue := definition(id)
++	if cue.is_empty(): return {"success":false,"paths":[],"records":[]}
++	var records: Array = []
++	var paths: Array = []
++	for resource_id: String in cue.resource_ids:
++		var record := Registry.record_by_id(resource_id)
++		if record.is_empty(): return {"success":false,"paths":[],"records":[]}
++		records.append(record)
++		paths.append(record.path)
++	return {"success":true,"paths":paths,"records":records}
+diff --git a/scripts/features/presentation/ignite_cue.gd b/scripts/features/presentation/ignite_cue.gd
+index d1b8bfcc7..12f37206b 100644
+--- a/scripts/features/presentation/ignite_cue.gd
++++ b/scripts/features/presentation/ignite_cue.gd
+@@ -3,6 +3,7 @@ extends Node2D
+ var actor_ref: RefCounted
+ var effect_handle := ""
+ var strength := 0
++var resource_lease: RefCounted
+ func _ready() -> void:
+ 	position = Vector2(0,-34)
+ 	z_index = 5
+diff --git a/scripts/features/presentation/presentation_port.gd b/scripts/features/presentation/presentation_port.gd
+index a61957845..1f897877a 100644
+--- a/scripts/features/presentation/presentation_port.gd
++++ b/scripts/features/presentation/presentation_port.gd
+@@ -1,23 +1,48 @@
+ extends RefCounted
+ 
+ const Cue := preload("res://scripts/features/presentation/ignite_cue.gd")
+-const CUE_ID := "hc.cue.ignite.v1"
++const Definitions := preload("res://scripts/features/presentation/cue_definitions.gd")
++const Lease := preload("res://scripts/features/contracts/feature_resource_lease.gd")
+ var _world: RefCounted
+ var _supported := true
+ var _nodes: Dictionary = {}
++var _audio_handles: Dictionary = {}
+ var events: Array[Dictionary] = []
+ func configure(world: RefCounted, supported: bool = true) -> void:
+ 	_world = world; _supported = supported
+-func start(handle: String, target: RefCounted, command: Dictionary) -> bool:
+-	if command.get("cue_id") != CUE_ID or command.get("cue_policy") != "optional_procedural" or _nodes.has(handle): return false
++func start(handle: String, target: RefCounted, command: Dictionary, resources: RefCounted = null) -> bool:
++	var definition := Definitions.definition(str(command.get("cue_id", "")))
++	if definition.is_empty() or command.get("cue_policy") != definition.policy or _nodes.has(handle): return false
++	var requirements := Definitions.requirements(command.cue_id)
++	if not requirements.success: return false
++	if not requirements.paths.is_empty():
++		if resources == null or resources.get_script() != Lease: return false
++		for path: String in requirements.paths:
++			if resources.resource_at(path) == null: return false
+ 	_record("start",handle)
+-	if not _supported: return false
++	# Optional decoration may be suppressed. A required readability cue still
++	# creates its actual CanvasItem, including in CPU-only headless validation.
++	if not _supported and definition.policy == "optional_procedural": return false
+ 	var actor: Node = target.resolve()
+ 	if actor == null: return false
++	var owner: Node = _world.current_world_owner()
++	var audio: Node = owner.get("_audio_runtime_service") if not requirements.records.is_empty() and owner != null else null
++	if not requirements.records.is_empty() and (not is_instance_valid(audio) or not audio.has_method("play_prepared_event")): return false
+ 	var cue := Cue.new()
+ 	cue.effect_handle = handle; cue.actor_ref = target; cue.strength = int(command.raw_per_tick)
++	if not requirements.paths.is_empty(): cue.resource_lease = resources
+ 	actor.add_child(cue)
+ 	_nodes[handle] = weakref(cue)
++	for record: Dictionary in requirements.records:
++		var request: Dictionary = audio.play_prepared_event(record.origin.event_id,resources.resource_at(record.path),
++			{"feature_effect_handle":handle,"audio_owner_key":handle,"release_id":str(cue.get_instance_id())})
++		if request.get("status") == "played":
++			# Playback notification can synchronously retire this effect. The
++			# returned request belongs to the old onset, never a replacement cue.
++			if not _nodes.has(handle) or not is_same(_nodes[handle].get_ref(),cue) or cue.is_queued_for_deletion():
++				if is_instance_valid(audio): audio.stop_prepared_event(request)
++				return true
++			_audio_handles[handle] = {"service":weakref(audio),"request":request}
+ 	return true
+ func refresh(handle: String, strength: int) -> void:
+ 	_record("refresh",handle)
+@@ -26,6 +51,11 @@ func refresh(handle: String, strength: int) -> void:
+ 	if is_instance_valid(cue): cue.strength = strength; cue.queue_redraw()
+ func stop(handle: String) -> void:
+ 	_record("stop",handle)
++	if _audio_handles.has(handle):
++		var value: Dictionary = _audio_handles[handle]
++		var audio: Node = value.service.get_ref()
++		if is_instance_valid(audio): audio.stop_prepared_event(value.request)
++		_audio_handles.erase(handle)
+ 	if not _nodes.has(handle): return
+ 	var cue: Node = _nodes[handle].get_ref() as Node
+ 	if is_instance_valid(cue) and not cue.is_queued_for_deletion(): cue.queue_free()
+diff --git a/scripts/features/runtime/damage_batch.gd b/scripts/features/runtime/damage_batch.gd
+index bbcc37060..179befa17 100644
+--- a/scripts/features/runtime/damage_batch.gd
++++ b/scripts/features/runtime/damage_batch.gd
+@@ -34,6 +34,8 @@ static func create(world: RefCounted, release_id: String, skill_id: String, bind
+ 		return {"success":false,"reason":"non_plain_damage_batch_configuration","batch":null}
+ 	if not validate_bindings(skill_id,captured.value.bindings):
+ 		return {"success":false,"reason":"invalid_event_binding","batch":null}
++	if not preload("res://scripts/features/contracts/feature_resource_lease.gd").supports_bindings(resources,captured.value.bindings):
++		return {"success":false,"reason":"invalid_batch_resources","batch":null}
+ 	var limit := MAX_FACTS
+ 	if reservation != null:
+ 		if reservation.get_script() != preload("res://scripts/features/contracts/effect_reservation.gd"):
+diff --git a/scripts/features/runtime/effect_runtime.gd b/scripts/features/runtime/effect_runtime.gd
+index 124e108f6..4ba296a1b 100644
+--- a/scripts/features/runtime/effect_runtime.gd
++++ b/scripts/features/runtime/effect_runtime.gd
+@@ -301,7 +301,9 @@ func _apply_command(command: Dictionary, entry: Dictionary) -> void:
+ 	_states_per_target[target_key] = int(_states_per_target.get(target_key,0))+1
+ 	_heap.put(handle,int(state.next_due))
+ 	_stats.started += 1; _stats.peak_states = maxi(int(_stats.peak_states),_states.size())
+-	if not _presentation.start(handle,entry.target,command): _stats.optional_cue_missing += 1
++	if not _presentation.start(handle,entry.target,command,entry.get("resource_lease")):
++		if command.cue_policy == "required_procedural": _error("feature_required_cue_failed")
++		else: _stats.optional_cue_missing += 1
+ 
+ func _tick_one() -> void:
+ 	var handle := _heap.pop()
+diff --git a/scripts/features/runtime/feature_resource_preparation.gd b/scripts/features/runtime/feature_resource_preparation.gd
+index c15a8f466..45d724abd 100644
+--- a/scripts/features/runtime/feature_resource_preparation.gd
++++ b/scripts/features/runtime/feature_resource_preparation.gd
+@@ -138,8 +138,14 @@ func _process(_delta: float) -> void:
+ 	# optional preparation scope closes and never across an await.
+ 	var cancelled := _deferred_completions
+ 	_deferred_completions = []
+-	for item: Dictionary in cancelled: _complete(item.id,item.result)
+-	for item: Dictionary in finished: _complete(item.id, item.result)
++	# Resolve every terminal owner before notifying any waiter. A cancelled
++	# waiter's synchronous continuation can cancel again, but cannot relabel
++	# another result which already crossed its commit/readiness boundary.
++	var deliveries: Array = []
++	for item: Dictionary in cancelled + finished:
++		var delivery := _take_completion(item.id,item.result)
++		if not delivery.is_empty(): deliveries.append(delivery)
++	for delivery: Dictionary in deliveries: delivery.request.completed.emit(delivery.result)
+ 	_activate()
+ 
+ func _step(path: String, finished: Array) -> void:
+@@ -235,12 +241,16 @@ func _deliver_one(path: String, job: Dictionary, finished: Array) -> void:
+ 	else:
+ 		_queue(path)
+ 
+-func _complete(id: int, result: Dictionary) -> void:
+-	if not _requests.has(id): return
++func _take_completion(id: int, result: Dictionary) -> Dictionary:
++	if not _requests.has(id): return {}
+ 	var request: Request = _requests[id]
+ 	_requests.erase(id)
+ 	if not bool(result.success): retire_resources(request.resources)
+-	request.completed.emit(result)
++	return {"request":request,"result":result}
++
++func _complete(id: int, result: Dictionary) -> void:
++	var delivery := _take_completion(id,result)
++	if not delivery.is_empty(): delivery.request.completed.emit(delivery.result)
+ 
+ func pending_count() -> int:
+ 	return _jobs.size() + _retirements.size() + _applications.size()
+diff --git a/scripts/layers/runtime/content_layer_registry.gd b/scripts/layers/runtime/content_layer_registry.gd
+index b04f56c82..9d9113097 100644
+--- a/scripts/layers/runtime/content_layer_registry.gd
++++ b/scripts/layers/runtime/content_layer_registry.gd
+@@ -125,7 +125,17 @@ func reload_feature_catalog_async(registry_path: String = FEATURE_REGISTRY) -> b
+ 		_feature_publication_in_progress = false
+ 		feature_load_errors = ready.errors
+ 		return false
+-	return await service.apply_ready(Callable(self,"_apply_prepared_feature_candidate").bind(result, ready.lease, sequence, profile))
++	return await _await_feature_application(service, Callable(self,"_apply_prepared_feature_candidate").bind(result, ready.lease, sequence, profile), sequence)
++
++
++func _await_feature_application(service: Node, callback: Callable, sequence: int) -> bool:
++	var success: bool = await service.apply_ready(callback)
++	# Direct service cancellation may terminate a queued application before
++	# its callback clears this request's lock. Never unlock a newer producer.
++	if sequence == _feature_preparation_sequence and _feature_publication_in_progress:
++		_feature_publication_in_progress = false
++		feature_load_errors = ["feature_resource_application_cancelled"]
++	return success
+ 
+ 
+ func _feature_resources() -> Node:
+@@ -330,7 +340,7 @@ func set_feature_module_enabled_async(id: String, enabled: bool) -> bool:
+ 		_feature_publication_in_progress = false
+ 		feature_load_errors = ready.errors
+ 		return false
+-	return await service.apply_ready(Callable(self,"_apply_prepared_feature_module").bind(id, enabled, result, ready.lease, sequence, scope))
++	return await _await_feature_application(service, Callable(self,"_apply_prepared_feature_module").bind(id, enabled, result, ready.lease, sequence, scope), sequence)
+ 
+ 
+ func _apply_prepared_feature_module(id: String, enabled: bool, result: Dictionary, resource_lease: RefCounted, sequence: int, scope: Dictionary) -> bool:
+diff --git a/tests/framework/feature_resource_acceptance_test.tscn b/tests/framework/feature_resource_acceptance_test.tscn
+new file mode 100644
+index 000000000..52ee6fa76
+--- /dev/null
++++ b/tests/framework/feature_resource_acceptance_test.tscn
+@@ -0,0 +1,7 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/feature_resource_cue_test.gd" id="1"]
++
++[node name="FeatureResourceAcceptanceTest" type="Node"]
++script = ExtResource("1")
++check_acceptance_resources = true
+diff --git a/tests/framework/feature_resource_cue_reentry_test.tscn b/tests/framework/feature_resource_cue_reentry_test.tscn
+new file mode 100644
+index 000000000..44c77cc91
+--- /dev/null
++++ b/tests/framework/feature_resource_cue_reentry_test.tscn
+@@ -0,0 +1,7 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/feature_resource_cue_test.gd" id="1"]
++
++[node name="FeatureResourceCueReentryTest" type="Node"]
++script = ExtResource("1")
++cancel_during_audio = true
+diff --git a/tests/framework/feature_resource_cue_test.gd b/tests/framework/feature_resource_cue_test.gd
+new file mode 100644
+index 000000000..86a29baf0
+--- /dev/null
++++ b/tests/framework/feature_resource_cue_test.gd
+@@ -0,0 +1,192 @@
++extends Node
++
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const Compiler := preload("res://scripts/features/compilation/feature_compiler.gd")
++const Authority := preload("res://scripts/features/adapters/feature_authority.gd")
++const Root := preload("res://tests/framework/fixtures/lease_probe_root.gd")
++const Fixture := preload("res://tests/helpers/formal_world_skill_fixture.gd")
++const PACKAGE := "res://assets/data/features/validation/resource_cue_registry.json"
++const AUDIO := "res://assets/audio/sfx/client/137__M26-3.wav"
++@export var cancel_during_audio := false
++@export var check_acceptance_resources := false
++var proof := Proof.new()
++var checks := 0
++var failures: Array[String] = []
++var game: Node
++var played: Array[Dictionary] = []
++
++func check(value: bool, label: String) -> void:
++	proof.record(value,label)
++	checks += 1
++	if not value: failures.append(label)
++
++func _ready() -> void:
++	_run.call_deferred()
++
++func _observe_audio(event: Dictionary) -> void:
++	if event.context.has("feature_effect_handle"):
++		played.append(event)
++		if cancel_during_audio: game._feature_effect_runtime.clear()
++
++func _run() -> void:
++	PlayerState.test_mode = true
++	PlayerState.reset_progress(false)
++	PlayerState.profession = "战士"
++	PlayerState.level = 50
++	PlayerState.learned_skills = {"hc.skill.warrior.fire_sword":3}
++	PlayerState.recalculate_stats(false)
++	var parent: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://assets/data/features/validation/resource_cue_parent.json"))
++	var child: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://assets/data/features/validation/resource_cue_child.json"))
++	check(Compiler.compile_catalog([parent,child],Authority.build()).success, "known critical cue closes its actual sound through a required child module")
++	var missing := child.duplicate(true)
++	missing.resource_dependencies = []
++	check(not Compiler.compile_catalog([parent,missing],Authority.build()).success, "missing possible cue sound rejects the whole otherwise legal candidate")
++	for invalid: Variant in [null, 137, "hc.cue.unknown.v1", "player.skill.fire_sword"]:
++		var bad := parent.duplicate(true)
++		bad.mechanics[0].cue_id = invalid
++		check(not Compiler.compile_catalog([bad,child],Authority.build()).success, "unknown or malformed cue identity refuses publication " + str(invalid))
++	var ready: bool = await ContentLayers.reload_feature_catalog_async(PACKAGE)
++	check(ready, "formal compiler preparation and atomic publication admit critical cue closure")
++	if not ready: _finish(); return
++	var resource_owner: WeakRef = weakref(ContentLayers.feature_configuration().resource_lease)
++	game = Root.new()
++	add_child(game)
++	var deadline := Time.get_ticks_msec()+20000
++	while not game.gameplay_input_is_enabled() and Time.get_ticks_msec()<deadline: await get_tree().process_frame
++	check(game.gameplay_input_is_enabled(), "actual mapped world reaches READY with prepared cue")
++	if not game.gameplay_input_is_enabled(): _finish(); return
++	var target := await Fixture.prepare_target(self,game,game.player,19,"feature_resource_cue")
++	check(target != null, "real projected receiver")
++	if target == null: _finish(); return
++	game.set_process(false)
++	game.set_physics_process(false)
++	game.player.set_physics_process(false)
++	for actor: Node in get_tree().get_nodes_in_group("enemies"): actor.set_physics_process(false)
++	target.max_hp = 10000
++	target.current_hp = 10000
++	target.direct_spell_anti_magic_points = 0
++	target.direct_spell_magic_defense_min = 0
++	target.direct_spell_magic_defense_max = 0
++	target.direct_spell_stats_valid = true
++	game.player.attack_min = 100
++	game.player.attack_max = 100
++	game.player.current_mp = 100
++	game.player.fire_sword_enabled = true
++	game.player.half_moon_enabled = false
++	game.player.thrusting_enabled = false
++	game._skill_cast_target = target
++	game._set_magic_locked_target(target,true)
++	game._audio_runtime_service.event_started.connect(_observe_audio)
++	var lease: RefCounted = game._capture_melee_configuration()
++	check(lease != null and lease.resource_lease() != null, "real accepted configuration owns its prepared nonempty cue resources")
++	if lease == null: _finish(); return
++	if check_acceptance_resources:
++		var resource_type := preload("res://scripts/features/contracts/feature_resource_lease.gd")
++		var empty_plan: Dictionary = resource_type.requirements(ContentLayers.feature_configuration().catalog,[])
++		var empty_lease: RefCounted = resource_type.issue(empty_plan,{},ContentLayers._feature_resource_service,{})
++		check(empty_lease != null, "legitimate typed empty lease exists for resource-free configurations")
++		var action_type := preload("res://scripts/features/contracts/action_config_lease.gd")
++		var batch_type := preload("res://scripts/features/runtime/damage_batch.gd")
++		var snapshot: Dictionary = lease._snapshot
++		var bindings: Array = lease.event_bindings_for("hc.skill.warrior.fire_sword")
++		var hp_before: int = target.current_hp
++		var mp_before: int = game.player.current_mp
++		var rng_before: int = game._rng.state
++		for invalid_resources: RefCounted in [null,empty_lease]:
++			var invalid_action: Dictionary = action_type.create(snapshot.definition,snapshot.rank,snapshot.actor_level,
++				snapshot.primary_stats,snapshot.versions,snapshot.actor_identity,snapshot.partner_definition,
++				snapshot.partner_rank,snapshot.primary_policy,snapshot.melee,snapshot.event_index,invalid_resources)
++			check(not invalid_action.success, "critical configuration refuses missing accepted resource closure " + str(invalid_resources != null))
++			var ticket: RefCounted = game._reserve_feature_bindings("hc.skill.warrior.fire_sword",bindings)
++			check(ticket != null, "valid otherwise unchanged bindings receive a real capacity promise")
++			if ticket == null: continue
++			var release_id: String = game._feature_effect_runtime._reservations[ticket.sequence()].expected_release_id
++			var invalid_batch: Dictionary = batch_type.create(game._world_context,release_id,"hc.skill.warrior.fire_sword",bindings,{},0,ticket,invalid_resources)
++			check(not invalid_batch.success, "critical batch refuses missing resources before taking its producer promise")
++			check(ticket.can_begin_release(release_id), "missing resources do not consume the lawful producer's only release qualification")
++			var valid_batch: Dictionary = batch_type.create(game._world_context,release_id,"hc.skill.warrior.fire_sword",bindings,{},0,ticket,lease.resource_lease())
++			check(valid_batch.success, "same lawful promise still accepts the correctly prepared resource owner")
++			if valid_batch.success: valid_batch.batch.finish_production()
++			if invalid_batch.success: invalid_batch.batch.finish_production()
++			ticket.close()
++		check(target.current_hp == hp_before and game.player.current_mp == mp_before and game._rng.state == rng_before,
++			"qualification rejection and corrected empty producer have no HP MP or RNG side effects")
++		check(game._feature_effect_runtime.reservation_snapshot().actions == 0, "resource qualification probes leave no unfinished producer capacity")
++		game.queue_free()
++		await get_tree().process_frame
++		check(ContentLayers.reload_feature_catalog(), "resource qualification world retires before ordinary catalog restoration")
++		_finish()
++		return
++	check(game.player.request_attack_toward(Vector2.RIGHT,true,target.get_instance_id(),lease) and lease.effect_reservation() != null, "natural player request accepts nonempty ticket before real windup")
++	check(ContentLayers.set_feature_module_enabled("hc.ignite",false) and ContentLayers.set_feature_module_enabled("hc.ignite_cue_assets",false), "withdraw parent then child without revoking already accepted work")
++	deadline = Time.get_ticks_msec()+3000
++	while game.observed_releases == 0 and Time.get_ticks_msec()<deadline: await get_tree().process_frame
++	check(game.observed_releases == 1 and target.current_hp < 10000, "single canonical release commits actual base HP once")
++	var base_hp: int = target.current_hp
++	var raw := roundi(float(10000-base_hp)*0.05)
++	var runtime: RefCounted = game._feature_effect_runtime
++	var rng: int = game._rng.state
++	for frame in range(120):
++		runtime.pump()
++		if runtime.pending_count() == 0: break
++		await get_tree().process_frame
++	var port: RefCounted = runtime.presentation()
++	if cancel_during_audio:
++		check(played.size() == 1, "real prepared audio onset reaches the synchronous cancellation observer once")
++		check(runtime.active_count() == 0 and runtime.pending_count() == 0 and port.node_count() == 0, "synchronous retirement leaves no live effect or native cue")
++		check(port._audio_handles.is_empty(), "retired cue cannot register a late audio ownership record")
++		if played.size() == 1:
++			var request: Dictionary = played[0]
++			var player: AudioStreamPlayer = game._audio_runtime_service._event_players[int(request.pool_index)]
++			check(not player.playing and player.stream == null, "synchronously retired onset stops its exact real player and releases the prepared stream")
++		check(game._rng.state == rng and target.current_hp == base_hp, "retirement observation preserves committed base HP and gameplay RNG")
++		lease = null
++		await get_tree().process_frame
++		check(resource_owner.get_ref() == null, "synchronous cancellation retires the accepted lease after native cue destruction")
++		game._time_domains.advance_simulation(1.0)
++		runtime.pump()
++		check(target.current_hp == base_hp and runtime.errors.is_empty(), "retired onset neither schedules periodic damage nor reports a missing required cue")
++		game.queue_free()
++		await get_tree().process_frame
++		check(ContentLayers.reload_feature_catalog(), "retired world restores the default catalog after onset cancellation")
++		_finish()
++		return
++	check(runtime.active_count() == 1 and port.node_count() == 1, "required procedural cue actually instantiates even when optional headless decoration is suppressed")
++	check(played.size() == 1, "actual accepted effect sends exactly one prepared stream to existing audio service")
++	if played.size() == 1:
++		var request: Dictionary = played[0]
++		var player: AudioStreamPlayer = game._audio_runtime_service._event_players[int(request.pool_index)]
++		check(player.playing and is_same(player.stream,resource_owner.get_ref().resource_at(AUDIO)), "real engine player consumes the exact accepted AudioStream rather than a later lookup")
++		check(request.event_id == "player.skill.fire_sword" and request.runtime_path == AUDIO, "stable cue uses the exact existing primary sound event")
++		check(game._audio_runtime_service.has_method("stop_prepared_event"), "prepared playback has identity-scoped stop")
++		if game._audio_runtime_service.has_method("stop_prepared_event"):
++			var wrong := request.duplicate(true)
++			wrong.request_serial = int(request.request_serial)+1
++			check(not game._audio_runtime_service.stop_prepared_event(wrong) and player.playing, "stale playback identity cannot stop another pooled owner")
++		var handle: String = runtime._states.keys()[0]
++		port.refresh(handle,raw+1)
++		check(played.size() == 1 and port.node_count() == 1, "refresh preserves one cue and does not replay onset sound")
++	check(game._rng.state == rng and target.current_hp == base_hp, "presentation consumption neither rerolls gameplay nor changes HP")
++	lease = null
++	for second in range(1,5):
++		game._time_domains.advance_simulation(float(second*1000000-game._time_domains.simulation_usec())/1000000.0)
++		for frame in range(120):
++			runtime.pump()
++			if not runtime.has_due(): break
++			await get_tree().process_frame
++		check(target.current_hp == base_hp-second*raw, "original periodic damage completes unchanged at tick " + str(second))
++	check(runtime.active_count() == 0 and port.node_count() == 0, "terminal effect stops its native critical cue")
++	await get_tree().process_frame
++	check(resource_owner.get_ref() == null, "last accepted cue and state retire the lease after actual node destruction")
++	check(runtime.errors.is_empty() and game._rng.state == rng, "resource-backed presentation preserves original periodic authority and RNG")
++	game.queue_free()
++	await get_tree().process_frame
++	check(ContentLayers.reload_feature_catalog(), "world retirement restores ordinary default-off source")
++	_finish()
++
++func _finish() -> void:
++	var scene_id := "feature_resource_cue_reentry_test" if cancel_during_audio else "feature_resource_cue_test"
++	if check_acceptance_resources: scene_id = "feature_resource_acceptance_test"
++	if not proof.write_receipt(scene_id,checks,failures.size()): failures.append("receipt")
++	print("FEATURE_RESOURCE_CUE_%s checks=%d failures=%s" % ["PASS" if failures.is_empty() else "FAIL",checks,str(failures)])
++	get_tree().quit(0 if failures.is_empty() else 1)
+diff --git a/tests/framework/feature_resource_cue_test.tscn b/tests/framework/feature_resource_cue_test.tscn
+new file mode 100644
+index 000000000..bb77150c1
+--- /dev/null
++++ b/tests/framework/feature_resource_cue_test.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/feature_resource_cue_test.gd" id="1"]
++
++[node name="FeatureResourceCueTest" type="Node"]
++script = ExtResource("1")
+diff --git a/tests/framework/feature_resource_natural_cold_test.tscn b/tests/framework/feature_resource_natural_cold_test.tscn
+new file mode 100644
+index 000000000..6986182f7
+--- /dev/null
++++ b/tests/framework/feature_resource_natural_cold_test.tscn
+@@ -0,0 +1,7 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/natural_effect_lifecycle_cold_test.gd" id="1"]
++
++[node name="FeatureResourceNaturalColdTest" type="Node"]
++script = ExtResource("1")
++resource_backed = true
+diff --git a/tests/framework/feature_resource_natural_test.tscn b/tests/framework/feature_resource_natural_test.tscn
+new file mode 100644
+index 000000000..f81a99bbf
+--- /dev/null
++++ b/tests/framework/feature_resource_natural_test.tscn
+@@ -0,0 +1,7 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/natural_effect_lifecycle_test.gd" id="1"]
++
++[node name="FeatureResourceNaturalTest" type="Node"]
++script = ExtResource("1")
++resource_backed = true
+diff --git a/tests/framework/feature_resource_promotion_cancel_test.gd b/tests/framework/feature_resource_promotion_cancel_test.gd
+index c3b2ec760..65a42d013 100644
+--- a/tests/framework/feature_resource_promotion_cancel_test.gd
++++ b/tests/framework/feature_resource_promotion_cancel_test.gd
+@@ -23,15 +23,17 @@ func _capture(box: Dictionary) -> void:
+ func _capture_other(box: Dictionary) -> void:
+ 	box.result = await ContentLayers._feature_resource_service.prepare(ContentLayers.feature_configuration().catalog,["hc.resource_ready_probe"])
+ 	box.resume_scopes = Budget.snapshot().open_scopes
++	if box.get("cancel_again", "") == "formal_again": ContentLayers.cancel_feature_resource_preparation()
++	elif box.get("cancel_again", "") == "service_again": ContentLayers._feature_resource_service.cancel_all()
+ 	box.finished = true
+ 
+ func _run() -> void:
+ 	PlayerState.test_mode = true
+ 	PlayerState.reset_progress(false)
+ 	PlayerState.recalculate_stats(false)
+-	for mode: String in ["formal", "service"]:
++	for mode: String in ["formal", "service", "formal_again", "service_again"]:
+ 		var accuracy: int = PlayerState.computed_stats.accuracy
+-		var other := {"finished":false,"result":{},"resume_scopes":-1,"cancel_deferred":false}
++		var other := {"finished":false,"result":{},"resume_scopes":-1,"cancel_deferred":false,"cancel_again":mode}
+ 		var observation := {"calls":0,"scope":0,"promoted":false,"nested":true,"locked":false}
+ 		var observe := func() -> void:
+ 			observation.calls += 1
+@@ -58,7 +60,7 @@ func _run() -> void:
+ 		check(observation.locked and not observation.nested and observation.calls == 1, mode + " cancellation retains the outer publication lock and rejects notification reentry")
+ 		check(int(PlayerState.computed_stats.accuracy) == accuracy + 1 and ContentLayers.feature_configuration().enabled_modules == ["hc.resource_ready_probe"], mode + " committed actor result and enabled source match successful completion")
+ 		check(not ContentLayers._feature_publication_in_progress and Budget.snapshot().open_scopes == 0, mode + " application ownership finishes normally after notification")
+-		if mode == "service":
++		if mode != "formal":
+ 			check(other.cancel_deferred, "reentrant cancellation of another pending caller does not resume it inside the application scope")
+ 			check(other.finished and not bool(other.result.get("success",true)) and int(other.resume_scopes) == 0,
+ 				"other cancelled caller receives exactly the rejected result after scope closure")
+diff --git a/tests/framework/feature_resource_queued_cancel_test.gd b/tests/framework/feature_resource_queued_cancel_test.gd
+new file mode 100644
+index 000000000..16b154f27
+--- /dev/null
++++ b/tests/framework/feature_resource_queued_cancel_test.gd
+@@ -0,0 +1,61 @@
++extends Node
++
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const Budget := preload("res://scripts/layers/runtime/execution/frame_budget.gd")
++const REGISTRY := "res://assets/data/features/validation/resource_ready_registry.json"
++var proof := Proof.new()
++var checks := 0
++var failures: Array[String] = []
++
++func check(value: bool, label: String) -> void:
++	proof.record(value,label)
++	checks += 1
++	if not value: failures.append(label)
++
++func _ready() -> void:
++	_run.call_deferred()
++
++func _capture(box: Dictionary) -> void:
++	box.success = await ContentLayers.reload_feature_catalog_async(REGISTRY)
++	box.resume_scopes = Budget.snapshot().open_scopes
++	box.finished = true
++
++func _run() -> void:
++	PlayerState.test_mode = true
++	PlayerState.reset_progress(false)
++	PlayerState.recalculate_stats(false)
++	var before := ContentLayers.feature_configuration()
++	var stats := PlayerState.computed_stats.duplicate(true)
++	var bundle := PlayerState.feature_bundle()
++	var observer := {"calls":0}
++	var observe := func() -> void: observer.calls += 1
++	ContentLayers.feature_catalog_changed.connect(observe)
++	for mode: String in ["formal", "service"]:
++		var box := {"success":true,"finished":false,"resume_scopes":-1}
++		_capture(box)
++		var service: Node = ContentLayers._feature_resource_service
++		for frame in range(180):
++			if int(service.metrics().applications) > 0 or box.finished: break
++			await get_tree().process_frame
++		check(not box.finished and int(service.metrics().applications) == 1 and not service.is_applying(), mode + " real resources ready with application queued before callback starts")
++		if mode == "formal": ContentLayers.cancel_feature_resource_preparation()
++		else: service.cancel_all()
++		check(box.finished and not box.success and int(box.resume_scopes) == 0, mode + " queued cancellation rejects once outside scope")
++		check(not ContentLayers._feature_publication_in_progress, mode + " rejected application retires outer publication ownership")
++		check(is_same(before.catalog,ContentLayers.feature_configuration().catalog) and is_same(bundle,PlayerState.feature_bundle()) and stats == PlayerState.computed_stats and observer.calls == 0, mode + " cancelled candidate never mutates directory actor or notification")
++		check(ContentLayers.reload_feature_catalog(), mode + " next lawful publication is not permanently locked")
++		# Restoration publishes a fresh equivalent catalog; capture its identity
++		# before checking the next independent cancelled candidate.
++		before = ContentLayers.feature_configuration()
++		bundle = PlayerState.feature_bundle()
++		observer.calls = 0
++		for frame in range(180):
++			if service.pending_count() == 0: break
++			await get_tree().process_frame
++		check(service.pending_count() == 0 and Budget.snapshot().open_scopes == 0, mode + " stale callback and resources reach terminal drain")
++	ContentLayers.feature_catalog_changed.disconnect(observe)
++	check(await ContentLayers.reload_feature_catalog_async(REGISTRY), "fresh asynchronous producer succeeds after both cancellation paths")
++	check(ContentLayers.reload_feature_catalog(), "fixture restores original configuration")
++	if not proof.write_receipt("feature_resource_queued_cancel_test",checks,failures.size()): failures.append("receipt")
++	print("FEATURE_RESOURCE_QUEUED_CANCEL_%s checks=%d failures=%s" % ["PASS" if failures.is_empty() else "FAIL",checks,str(failures)])
++	get_tree().quit(0 if failures.is_empty() else 1)
+diff --git a/tests/framework/feature_resource_queued_cancel_test.tscn b/tests/framework/feature_resource_queued_cancel_test.tscn
+new file mode 100644
+index 000000000..a56defd56
+--- /dev/null
++++ b/tests/framework/feature_resource_queued_cancel_test.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/feature_resource_queued_cancel_test.gd" id="1"]
++
++[node name="FeatureResourceQueuedCancelTest" type="Node"]
++script = ExtResource("1")
+diff --git a/tests/framework/natural_effect_lifecycle_cold_test.gd b/tests/framework/natural_effect_lifecycle_cold_test.gd
+index cdfe89d9e..fe67cd14a 100644
+--- a/tests/framework/natural_effect_lifecycle_cold_test.gd
++++ b/tests/framework/natural_effect_lifecycle_cold_test.gd
+@@ -4,6 +4,7 @@ const Gate := preload("res://tests/framework/helpers/native_producer_gate.gd")
+ const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
+ const EXPECTED := "res://outputs/test_logs/framework/natural_effect_lifecycle_expected.json"
+ const PRODUCER := "res://outputs/test_logs/framework/natural_effect_lifecycle_test.result.json"
++@export var resource_backed := false
+ var proof := Proof.new()
+ var checks := 0
+ var failures: Array[String] = []
+@@ -13,10 +14,11 @@ func check(value: bool,label: String) -> void:
+ func _ready() -> void: _run.call_deferred()
+ func _run() -> void:
+ 	check(not PlayerState.test_mode,"cold process uses actual persistence")
+-	var expected: Variant = JSON.parse_string(FileAccess.get_file_as_string(EXPECTED)) if FileAccess.file_exists(EXPECTED) else null
++	var expected_path := "res://outputs/test_logs/framework/feature_resource_natural_expected.json" if resource_backed else EXPECTED
++	var expected: Variant = JSON.parse_string(FileAccess.get_file_as_string(expected_path)) if FileAccess.file_exists(expected_path) else null
+ 	check(expected is Dictionary,"successful live producer supplied explicit expectation")
+ 	if not expected is Dictionary: _finish(); return
+-	var valid := Gate.accepts(expected,"natural_effect_lifecycle_test")
++	var valid := Gate.accepts(expected,"feature_resource_natural_test" if resource_backed else "natural_effect_lifecycle_test")
+ 	check(valid,"cold expectation binds the runner-confirmed successful native producer in this invocation")
+ 	if not valid: _finish(); return
+ 	check(expected.source_content_sha256 == OS.get_environment("HARDCORE_R3_CONTENT_SHA256"),"cold source matches the producing test source")
+@@ -29,6 +31,6 @@ func _run() -> void:
+ 	check(PlayerState._json_persistence.pending_count() == 0 and PlayerState._world_json_persistence.pending_count() == 0,"cold replay consumes all persistence receipts")
+ 	_finish()
+ func _finish() -> void:
+-	if not proof.write_receipt("natural_effect_lifecycle_cold_test",checks,failures.size()): failures.append("receipt")
++	if not proof.write_receipt("feature_resource_natural_cold_test" if resource_backed else "natural_effect_lifecycle_cold_test",checks,failures.size()): failures.append("receipt")
+ 	print("NATURAL_EFFECT_LIFECYCLE_COLD_%s checks=%d failures=%s" % ["PASS" if failures.is_empty() else "FAIL",checks,str(failures)])
+ 	get_tree().quit(0 if failures.is_empty() else 1)
+diff --git a/tests/framework/natural_effect_lifecycle_test.gd b/tests/framework/natural_effect_lifecycle_test.gd
+index 0595a1afc..e6eaf83b7 100644
+--- a/tests/framework/natural_effect_lifecycle_test.gd
++++ b/tests/framework/natural_effect_lifecycle_test.gd
+@@ -10,6 +10,13 @@ const Runtime := preload("res://scripts/features/runtime/effect_runtime.gd")
+ const Budget := preload("res://scripts/layers/runtime/execution/frame_budget.gd")
+ const REPORT := "res://outputs/test_logs/framework/natural_effect_lifecycle_trace.json"
+ const EXPECTED := "res://outputs/test_logs/framework/natural_effect_lifecycle_expected.json"
++@export var resource_backed := false
++var report_path := REPORT
++var expected_path := EXPECTED
++var resource_owner: WeakRef
++var audio_cue_starts := 0
++var exact_prepared_streams := 0
++var peak_cue_nodes := 0
+ var proof := Proof.new()
+ var checks := 0
+ var failures: Array[String] = []
+@@ -55,6 +62,9 @@ func check(value: bool, label: String) -> void:
+ 	if not value: failures.append(label)
+ 
+ func _ready() -> void:
++	if resource_backed:
++		report_path = "res://outputs/test_logs/framework/feature_resource_natural_trace.json"
++		expected_path = "res://outputs/test_logs/framework/feature_resource_natural_expected.json"
+ 	process_priority = 10000
+ 	_run.call_deferred()
+ 
+@@ -69,6 +79,7 @@ func _process(_delta: float) -> void:
+ 		monster_movement_gu += location.distance_to(previous_actors.get(id,location))
+ 		previous_actors[id] = location
+ 	var now := Time.get_ticks_usec()
++	if resource_backed: peak_cue_nodes = maxi(peak_cue_nodes,runtime.presentation().node_count())
+ 	if previous_frame_usec > 0 and samples.size() < 12000:
+ 		samples.append({"wall_usec":now-previous_frame_usec,"memory_static":int(Performance.get_monitor(Performance.MEMORY_STATIC)),"object_count":int(Performance.get_monitor(Performance.OBJECT_COUNT)),
+ 			"simulation_usec":game._time_domains.simulation_usec(),"ticks":runtime.metrics().ticks,
+@@ -98,19 +109,29 @@ func _process(_delta: float) -> void:
+ func _run() -> void:
+ 	check(not PlayerState.test_mode and OS.get_environment("APPDATA").replace("\\","/").contains("/.godot/runtime_appdata/"),"natural production run owns an isolated account")
+ 	PlayerState.begin_startup_save_upgrade()
+-	check(PlayerState.finish_startup_save_upgrade() and PlayerState.create_character("自然战斗压力","hc.profession.wizard").is_empty(),"real startup and profile creation")
++	var startup_ready: bool = PlayerState.finish_startup_save_upgrade()
++	var profile_name := "资源协同战斗" if resource_backed else "自然战斗压力"
++	var creation_error: String = PlayerState.create_character(profile_name,"hc.profession.wizard") if startup_ready else "startup not ready"
++	check(startup_ready and creation_error.is_empty(),"real startup and profile creation: " + creation_error)
++	if not startup_ready or not creation_error.is_empty(): _finish(); return
+ 	PlayerState.level = 50; PlayerState.learned_skills = {"hc.skill.wizard.ice_storm":3}
+ 	PlayerState.equipment["hc.slot.weapon"] = Drop.create_instance(GameData.get_item_record({"item_id":85}),"natural:weapon")
+ 	PlayerState.recalculate_stats(false)
+ 	check(PlayerState.save_game(true,true,true),"production profile and equipment baseline saved")
+ 	var profile: String = PlayerState.active_profile_id
+ 	var xp_before: int = PlayerState.experience
++	if resource_backed:
++		check(await ContentLayers.reload_feature_catalog_async("res://assets/data/features/validation/resource_natural_registry.json"),"resource-backed natural sources prepare all parent and child cues before world entry")
++		resource_owner = weakref(ContentLayers.feature_configuration().resource_lease)
++		check(resource_owner.get_ref() != null,"natural source has a nonempty accepted resource closure")
++		if resource_owner.get_ref() == null: _finish(); return
+ 	get_tree().node_added.connect(_observe_spawn)
+ 	game = Root.new(); add_child(game)
+ 	var deadline := Time.get_ticks_msec()+20000
+ 	while not game.gameplay_input_is_enabled() and Time.get_ticks_msec()<deadline: await get_tree().process_frame
+ 	check(game.gameplay_input_is_enabled(),"real mapped world reaches READY")
+ 	if not game.gameplay_input_is_enabled(): _finish(); return
++	if resource_backed: game._audio_runtime_service.event_started.connect(_observe_feature_audio)
+ 	# Test-owned source authoring input goes through real qualification and
+ 	# compiler. The mechanic, period, geometry and action timing are unchanged.
+ 	var bindings: Array = ContentLayers.feature_configuration().bindings.duplicate(true)
+@@ -119,8 +140,11 @@ func _run() -> void:
+ 	var captured := Graph.capture(bindings)
+ 	check(bool(captured.success),"three legal sources are plain authoring inputs")
+ 	if not bool(captured.success): _finish(); return
+-	ContentLayers._feature_bindings = captured.value
+-	check(ContentLayers.set_feature_module_enabled("hc.ignite",true),"default-off module enabled through real service")
++	if not resource_backed:
++		ContentLayers._feature_bindings = captured.value
++		check(ContentLayers.set_feature_module_enabled("hc.ignite",true),"default-off module enabled through real service")
++	else:
++		check(ContentLayers.feature_configuration().bindings.size() == 3 and "hc.ignite" in ContentLayers.feature_configuration().enabled_modules,"formal resource registry alone publishes three legal natural sources")
+ 	var event: Array = PlayerState.feature_bundle().event_index.get("damage_committed:hc.skill.wizard.ice_storm",[])
+ 	check(PlayerState.feature_errors.is_empty() and event.size() == 3,"equipment, learned skill and rule compile to three actual qualified sources")
+ 	if event.size() != 3: _finish(); return
+@@ -221,13 +245,17 @@ func _run() -> void:
+ 	check(game._enemy_death_terminal_total_count == observed_deaths.size(),"every observed death has exactly one completed production job")
+ 	check(PlayerState.experience == expected_xp,"canonical rewards equal the exact sum of unique observed world and fixture deaths: actual=%d expected=%d fixture_only=%d" % [PlayerState.experience,expected_xp,minimum_xp])
+ 	check(scopes_closed and samples.size() >= 120 and samples.size()<12000,"bounded raw frame observation includes no open budget scopes")
+-	_write(REPORT,{"run_id":OS.get_environment("HARDCORE_FRAMEWORK_RUN_ID"),"source_content_sha256":OS.get_environment("HARDCORE_R3_CONTENT_SHA256"),
++	if resource_backed:
++		check(peak_cue_nodes >= 90 and audio_cue_starts > 0 and exact_prepared_streams == audio_cue_starts,"natural workload actually creates required cues and consumes only exact accepted streams")
++		check(runtime.presentation().node_count() == 0 and ContentLayers._feature_resource_service.pending_count() == 0,"natural effects and resource work reach terminal drain")
++	_write(report_path,{"run_id":OS.get_environment("HARDCORE_FRAMEWORK_RUN_ID"),"source_content_sha256":OS.get_environment("HARDCORE_R3_CONTENT_SHA256"),
+ 		"scope":"PC headless natural Player/Root input, original cooldown/geometry, moving AI and formal world; declared initial stress HP/stats; single sustained cohort; not Android/GPU or infinite-memory proof",
+ 		"phase":"before final save and cold handoff","phase_status":"PASS" if failures.is_empty() else "FAIL","phase_failures":failures,
+ 		"accepted_casts":accepted_casts,"rejected_inputs":rejected_inputs,"player_movement_gu":movement_gu,"monster_movement_gu":monster_movement_gu,
+ 		"deaths":deaths,"peak_states":peak_states,"peak_state_evidence":peak_state_evidence,"resource_evidence":resource_evidence,"peak_deaths":peak_deaths,"peak_persistence":peak_persistence,"metrics":runtime.metrics(),
+ 		"xp_before":xp_before,"xp_after":PlayerState.experience,"expected_xp":expected_xp,"fixture_only_xp":minimum_xp,"observed_deaths":observed_deaths.values(),
+ 		"terminal_death_jobs":game._enemy_death_terminal_jobs,
++		"resource_backed":resource_backed,"peak_cue_nodes":peak_cue_nodes,"audio_cue_starts":audio_cue_starts,"exact_prepared_streams":exact_prepared_streams,
+ 		"wall_frame_usec":_percentiles("wall_usec"),"samples":samples,"memory_checkpoints":memory_checkpoints,
+ 		"maximum_pending_age_frames":maximum_pending_age,"maximum_service_age_frames":maximum_service_age})
+ 	game._streaming_coordinator.unregister_visual(get_instance_id())
+@@ -236,8 +264,14 @@ func _run() -> void:
+ 	var generation: String = PlayerState._world_clock_generation
+ 	game.queue_free(); await get_tree().process_frame
+ 	check(not runtime.has_work() and runtime._receipts.is_empty(),"world teardown drops final owners")
++	if resource_backed:
++		check(ContentLayers.reload_feature_catalog(),"retired world withdraws prepared authoring source through original lifecycle")
++		for frame in 180:
++			if resource_owner.get_ref() == null and ContentLayers._feature_resource_service.pending_count() == 0: break
++			await get_tree().process_frame
++		check(resource_owner.get_ref() == null and ContentLayers._feature_resource_service.pending_count() == 0,"natural closure leases and budgeted retirement drain after source withdrawal")
+ 	check(PlayerState.select_character(profile) and PlayerState.experience == xp,"production reload retains exact final rewards")
+-	if failures.is_empty(): _write(EXPECTED,{"profile_id":profile,"experience":xp,"generation":generation,"invocation_id":OS.get_environment("HARDCORE_FRAMEWORK_INVOCATION_ID"),"producer_run_id":OS.get_environment("HARDCORE_FRAMEWORK_RUN_ID"),"source_content_sha256":OS.get_environment("HARDCORE_R3_CONTENT_SHA256")})
++	if failures.is_empty(): _write(expected_path,{"profile_id":profile,"experience":xp,"generation":generation,"invocation_id":OS.get_environment("HARDCORE_FRAMEWORK_INVOCATION_ID"),"producer_run_id":OS.get_environment("HARDCORE_FRAMEWORK_RUN_ID"),"source_content_sha256":OS.get_environment("HARDCORE_R3_CONTENT_SHA256")})
+ 	var cleanup := {"sample_count":samples.size(),"memory_before_observation_clear":int(Performance.get_monitor(Performance.MEMORY_STATIC)),"objects_before_clear":int(Performance.get_monitor(Performance.OBJECT_COUNT))}
+ 	samples.clear(); targets.clear(); previous_actors.clear(); cast_targets.clear(); runtime = null
+ 	for frame in 4: await get_tree().process_frame
+@@ -246,13 +280,23 @@ func _run() -> void:
+ 	cleanup["orphan_nodes_after_clear"] = int(Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT))
+ 	# Measure after releasing bounded observation arrays. Reopen the already
+ 	# saved phase trace only after measurement; its allocation is not gameplay.
+-	var phase_trace: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(REPORT))
++	var phase_trace: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(report_path))
+ 	phase_trace["cleanup"] = cleanup
+ 	phase_trace["final_checks_before_trace_write"] = checks
+ 	phase_trace["final_status_before_trace_write"] = "PASS" if failures.is_empty() else "FAIL"
+-	_write(REPORT,phase_trace)
++	_write(report_path,phase_trace)
+ 	_finish()
+ 
++func _observe_feature_audio(event: Dictionary) -> void:
++	var handle: String = event.context.get("feature_effect_handle","")
++	if handle.is_empty(): return
++	audio_cue_starts += 1
++	var effects: RefCounted = game._feature_effect_runtime
++	var state: Dictionary = effects._states.get(handle,{})
++	var lease: RefCounted = state.get("resource_lease")
++	var player: AudioStreamPlayer = game._audio_runtime_service._event_players[int(event.pool_index)]
++	if lease != null and is_same(player.stream,lease.resource_at(event.runtime_path)): exact_prepared_streams += 1
++
+ func _observe_spawn(node: Node) -> void:
+ 	if node is EnemyActor:
+ 		node.died.connect(_on_world_died)
+@@ -380,6 +424,6 @@ func _write(path: String, value: Dictionary) -> void:
+ func _finish() -> void:
+ 	observing = false
+ 	if is_instance_valid(game): game.queue_free()
+-	if not proof.write_receipt("natural_effect_lifecycle_test",checks,failures.size()): failures.append("receipt")
++	if not proof.write_receipt("feature_resource_natural_test" if resource_backed else "natural_effect_lifecycle_test",checks,failures.size()): failures.append("receipt")
+ 	print("NATURAL_EFFECT_LIFECYCLE_%s checks=%d failures=%s" % ["PASS" if failures.is_empty() else "FAIL",checks,str(failures)])
+ 	get_tree().quit(0 if failures.is_empty() else 1)

@@ -1,0 +1,34 @@
+{
+    "schema_version":  1,
+    "invocation_id":  "ac67344c-b9af-4d3a-bbbe-6694c6f90b4a",
+    "source_content_sha256":  "3b967463c83f9b957add6d3b7b5f83bdb677fba6346bf962772aaf7f1eeaa119",
+    "producers":  {
+                      "feature_resource_cue_reentry_test":  {
+                                                                "scene_id":  "feature_resource_cue_reentry_test",
+                                                                "run_id":  "25d2e487-1db4-4253-b0cd-4506ebf3a6bd",
+                                                                "source_content_sha256":  "3b967463c83f9b957add6d3b7b5f83bdb677fba6346bf962772aaf7f1eeaa119",
+                                                                "process_exited":  true,
+                                                                "effective_exit_code":  0,
+                                                                "result":  "PASS",
+                                                                "receipt_sha256":  "09d9d15b5f2aa2e92693aca865e1bfb7eb792ed6bacf4de4e2bbbeff7360c38e"
+                                                            },
+                      "feature_resource_cue_test":  {
+                                                        "scene_id":  "feature_resource_cue_test",
+                                                        "run_id":  "4e35fed6-5005-419d-b0ba-7528254abf97",
+                                                        "source_content_sha256":  "3b967463c83f9b957add6d3b7b5f83bdb677fba6346bf962772aaf7f1eeaa119",
+                                                        "process_exited":  true,
+                                                        "effective_exit_code":  0,
+                                                        "result":  "PASS",
+                                                        "receipt_sha256":  "7658b0470fa9ee3e4adc8eeca9af2173bfd29477235af97db15b9f25430e572b"
+                                                    },
+                      "feature_resource_audio_closure_test":  {
+                                                                  "scene_id":  "feature_resource_audio_closure_test",
+                                                                  "run_id":  "b76738a9-dcd3-44da-ac7e-f6147aae3100",
+                                                                  "source_content_sha256":  "3b967463c83f9b957add6d3b7b5f83bdb677fba6346bf962772aaf7f1eeaa119",
+                                                                  "process_exited":  true,
+                                                                  "effective_exit_code":  0,
+                                                                  "result":  "PASS",
+                                                                  "receipt_sha256":  "c1a3cdb0373ec280f357c6ca2e08e93e98d1ddac031b852bc074d09e19c054f4"
+                                                              }
+                  }
+}

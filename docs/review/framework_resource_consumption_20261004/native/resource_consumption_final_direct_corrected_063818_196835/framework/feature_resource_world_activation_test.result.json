@@ -1,0 +1,161 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "register disabled resource-backed world-ready modules before attachment",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "formal module activation has a nonempty resource preparation entry",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "real mapped world reaches its existing READY input boundary",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "async preparation cannot bypass startup-only activation inside a live world",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "locked input rejects activation before preparing any resource",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "paused world rejects activation before resource preparation",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "real preparation is pending before any candidate is exposed",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "old effective directory bundle and stats remain intact while resources prepare",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "a second activation cannot supersede the in-flight candidate",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "input becoming locked during preparation rejects final promotion",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "failed ready promotion retains the entire previous publication",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "lawful world-ready grant prepares and publishes through the real active world",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "real ready texture and its +1 rule publish atomically",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "a retained subset cannot add a new grant even when both modules declare the same path",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "module promotion is accounted without a frame scope surviving the await",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "existing player transition authority advances the accepted actor generation",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "the same formal transition token closes without replacing the player",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "old and new life boundaries can both be READY before completion",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "prepared work from a retired actor generation cannot grant the new generation",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "life-stale work preserves the current published grant",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "a fresh legal request can enable the second shared-resource source",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "independent +1 and +2 grants share a ready texture without another physical request",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "withdrawing one source stays synchronous when another source owns the same prepared resource",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "withdrawal keeps the remaining grant and its exact ready resource closure",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "world retirement case begins with a distinct real pending activation",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "world retirement cannot turn an old pending activation into a startup grant",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "world-stale completion preserves the prior configuration",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "retired world restores the original empty configuration",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "all failed candidates and retired shared leases drain their owned work",
+      "passed": true
+    }
+  ],
+  "count": 29,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "b910c5f7-68e2-4ed7-92ba-b5ee20f3981b",
+  "passed": 29,
+  "reported_checks": 29,
+  "reported_failures": 0,
+  "run_id": "b1f27dd1-eeb1-4002-8fc5-7f883fc6b6c4",
+  "scene_id": "feature_resource_world_activation_test",
+  "schema_version": 1,
+  "source_content_sha256": "ad9681fc02a35ae84ed6d432aa979cad632f5f05b0ee3efd356961147ca529eb",
+  "status": "PASS"
+}

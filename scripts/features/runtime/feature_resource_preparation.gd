@@ -138,8 +138,14 @@ func _process(_delta: float) -> void:
 	# optional preparation scope closes and never across an await.
 	var cancelled := _deferred_completions
 	_deferred_completions = []
-	for item: Dictionary in cancelled: _complete(item.id,item.result)
-	for item: Dictionary in finished: _complete(item.id, item.result)
+	# Resolve every terminal owner before notifying any waiter. A cancelled
+	# waiter's synchronous continuation can cancel again, but cannot relabel
+	# another result which already crossed its commit/readiness boundary.
+	var deliveries: Array = []
+	for item: Dictionary in cancelled + finished:
+		var delivery := _take_completion(item.id,item.result)
+		if not delivery.is_empty(): deliveries.append(delivery)
+	for delivery: Dictionary in deliveries: delivery.request.completed.emit(delivery.result)
 	_activate()
 
 func _step(path: String, finished: Array) -> void:
@@ -235,12 +241,16 @@ func _deliver_one(path: String, job: Dictionary, finished: Array) -> void:
 	else:
 		_queue(path)
 
-func _complete(id: int, result: Dictionary) -> void:
-	if not _requests.has(id): return
+func _take_completion(id: int, result: Dictionary) -> Dictionary:
+	if not _requests.has(id): return {}
 	var request: Request = _requests[id]
 	_requests.erase(id)
 	if not bool(result.success): retire_resources(request.resources)
-	request.completed.emit(result)
+	return {"request":request,"result":result}
+
+func _complete(id: int, result: Dictionary) -> void:
+	var delivery := _take_completion(id,result)
+	if not delivery.is_empty(): delivery.request.completed.emit(delivery.result)
 
 func pending_count() -> int:
 	return _jobs.size() + _retirements.size() + _applications.size()

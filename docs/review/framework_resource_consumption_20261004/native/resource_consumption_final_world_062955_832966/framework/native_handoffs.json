@@ -1,0 +1,61 @@
+{
+    "schema_version":  1,
+    "invocation_id":  "2d1f6590-ef1e-4bc4-8c09-d9e6ad73bcc0",
+    "source_content_sha256":  "0078e0edc58d2d9b9255263eb482c5dce0f681027344751b9e332f783d9b1f39",
+    "producers":  {
+                      "combined_effect_lifecycle_test":  {
+                                                             "scene_id":  "combined_effect_lifecycle_test",
+                                                             "run_id":  "9ac362bb-d47f-4915-857d-ccd7c887b9e7",
+                                                             "source_content_sha256":  "0078e0edc58d2d9b9255263eb482c5dce0f681027344751b9e332f783d9b1f39",
+                                                             "process_exited":  true,
+                                                             "effective_exit_code":  0,
+                                                             "result":  "PASS",
+                                                             "receipt_sha256":  "34c99821262438ddb2e56058de866aa4449a69e5aa2fc1b52b9db19751d89076"
+                                                         },
+                      "combined_effect_lifecycle_cold_test":  {
+                                                                  "scene_id":  "combined_effect_lifecycle_cold_test",
+                                                                  "run_id":  "04a03fce-ff3b-463b-9d8e-18f4d23a4583",
+                                                                  "source_content_sha256":  "0078e0edc58d2d9b9255263eb482c5dce0f681027344751b9e332f783d9b1f39",
+                                                                  "process_exited":  true,
+                                                                  "effective_exit_code":  0,
+                                                                  "result":  "PASS",
+                                                                  "receipt_sha256":  "f05f48bc0c350f5285f2ffd7d8399f9ea1dd4d0d19210470f876cdad90ff1187"
+                                                              },
+                      "periodic_credit_safe_logout_test":  {
+                                                               "scene_id":  "periodic_credit_safe_logout_test",
+                                                               "run_id":  "d564ddc4-6527-4c89-b548-82672c57dd9e",
+                                                               "source_content_sha256":  "0078e0edc58d2d9b9255263eb482c5dce0f681027344751b9e332f783d9b1f39",
+                                                               "process_exited":  true,
+                                                               "effective_exit_code":  0,
+                                                               "result":  "PASS",
+                                                               "receipt_sha256":  "bb00045dcfea9565b3e9b27f7141e761022e6b06b7af0d374eb09b748dde9296"
+                                                           },
+                      "periodic_credit_safe_logout_cold_test":  {
+                                                                    "scene_id":  "periodic_credit_safe_logout_cold_test",
+                                                                    "run_id":  "f2f15880-8de9-4a35-9c28-5c253a0bb77c",
+                                                                    "source_content_sha256":  "0078e0edc58d2d9b9255263eb482c5dce0f681027344751b9e332f783d9b1f39",
+                                                                    "process_exited":  true,
+                                                                    "effective_exit_code":  0,
+                                                                    "result":  "PASS",
+                                                                    "receipt_sha256":  "e6fc14d8dad7b96f695cda3554b613e3fc8516235b5bc0155f0eae9c1557f73f"
+                                                                },
+                      "natural_effect_lifecycle_test":  {
+                                                            "scene_id":  "natural_effect_lifecycle_test",
+                                                            "run_id":  "346a0f27-2116-4dee-8ca5-298f8d451fdc",
+                                                            "source_content_sha256":  "0078e0edc58d2d9b9255263eb482c5dce0f681027344751b9e332f783d9b1f39",
+                                                            "process_exited":  true,
+                                                            "effective_exit_code":  0,
+                                                            "result":  "PASS",
+                                                            "receipt_sha256":  "adaffaecb1e6980483745509a291ffb1ff99489094a1dd586a485866bfeb7f23"
+                                                        },
+                      "natural_effect_lifecycle_cold_test":  {
+                                                                 "scene_id":  "natural_effect_lifecycle_cold_test",
+                                                                 "run_id":  "e88157c1-48ca-4f35-aa2a-24e70b07b12a",
+                                                                 "source_content_sha256":  "0078e0edc58d2d9b9255263eb482c5dce0f681027344751b9e332f783d9b1f39",
+                                                                 "process_exited":  true,
+                                                                 "effective_exit_code":  0,
+                                                                 "result":  "PASS",
+                                                                 "receipt_sha256":  "8be9a2dfb61a66009b89e568448e5bd8a422790c20625072ec450ffecebdc9c9"
+                                                             }
+                  }
+}

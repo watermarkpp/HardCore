@@ -1,0 +1,30 @@
+{
+  "request_id": "resource-followup-6aab18ff-20261004",
+  "sha": "6aab18ff1588b879e1fad659fba4b71fff6f6c75",
+  "thread_id": "01a0f143-1bc9-71c0-91f2-5de4ffd0b01f",
+  "host_id": "durable",
+  "turn_id": "01a103b7-1d47-71bd-a85f-87abe8077a20",
+  "item_id": "exec-e6437f04-9d04-4697-9db0-ab7d0aa2d782",
+  "source_type": "mcpToolCall user_message.send_message arguments.text in target conversation",
+  "read_at_utc": "2026-10-03 22:10:01 UTC",
+  "complete": true,
+  "actions": [
+    {
+      "item": 1,
+      "native_red": "resource_completion_cancel_red_054130_772242",
+      "green": "resource_completion_cancel_green_054304_707309",
+      "status": "Final same-source regression pending"
+    },
+    {
+      "item": 2,
+      "native_red": "resource_completion_cancel_red_054130_772242",
+      "green": "resource_completion_cancel_green_054304_707309",
+      "status": "Sequence-owned cleanup implemented; final same-source regression pending"
+    },
+    {
+      "item": 6,
+      "status": "Review root resolution, exclusive ownership, best-effort diagnostic and mandatory restore before any new destructive replay"
+    }
+  ],
+  "scope": "Independent fixed-remote material; not native execution by auditor or full framework acceptance. Both required 6aab reports actually read; stop both scans."
+}

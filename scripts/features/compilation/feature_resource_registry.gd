@@ -60,7 +60,10 @@ static func validate(input: Variant) -> Dictionary:
 	if not errors.is_empty(): return _reject(errors)
 	var owned := Graph.capture(records)
 	if not owned.success: return _reject(owned.errors)
-	return {"success":true, "records":owned.value, "errors":[]}
+	var identity_paths := {}
+	for path: String in owned.value: identity_paths[owned.value[path].resource_id] = path
+	identity_paths.make_read_only()
+	return {"success":true, "records":owned.value, "identity_paths":identity_paths, "errors":[]}
 
 static func _reject(errors: Array) -> Dictionary:
 	return {"success":false, "records":{}, "errors":errors}
@@ -68,6 +71,11 @@ static func _reject(errors: Array) -> Dictionary:
 static func resource_type(path: String) -> String:
 	var declared := declarations()
 	return str(declared.records.get(path, {}).get("type", "")) if declared.success else ""
+
+static func record_by_id(id: String) -> Dictionary:
+	var declared := declarations()
+	if not declared.success: return {}
+	return declared.records.get(declared.get("identity_paths", {}).get(id, ""), {})
 
 static func valid_resource(path: String, resource: Variant) -> bool:
 	if not resource is Resource or resource.resource_path != path: return false

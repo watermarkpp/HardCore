@@ -1,5 +1,6 @@
 extends RefCounted
 const Graph := preload("res://scripts/features/contracts/plain_graph.gd")
+const Cues := preload("res://scripts/features/presentation/cue_definitions.gd")
 const ID := "hc.ignite.v1"
 const EFFECT_ID := "hc.effect.ignite.v1"
 
@@ -18,6 +19,9 @@ static func commands(fact: Dictionary, binding: Dictionary) -> Array:
 	if rng.randf() >= float(config.chance): return []
 	var raw := roundi(float(fact.actual_loss)*float(config.fraction))
 	if raw <= 0: return []
+	var cue_id: String = definition.get("cue_id","hc.cue.ignite.v1")
+	var cue := Cues.definition(cue_id)
+	if cue.is_empty(): return []
 	var command := Graph.capture({"op":"ApplyStatus","effect_id":EFFECT_ID,"handler_id":ID,
 		"source_handle":binding.handle,"mechanic_id":definition.mechanic_id,"target":fact.target,
 		"historical_credit":fact.historical_credit,"raw_per_tick":raw,"period_usec":int(config.period_usec),
@@ -25,5 +29,5 @@ static func commands(fact: Dictionary, binding: Dictionary) -> Array:
 		"damage_channel":"magic_defense","source_class":"periodic","causes_struck":false,
 		"direct_magic_walk_delay":false,"refresh_policy":"strongest_keep_phase","source_removed":"until_expired",
 		"target_defense_sampling":"per_tick","expires_order":"tick_before_expiry",
-		"cue_id":"hc.cue.ignite.v1","cue_policy":"optional_procedural"})
+		"cue_id":cue_id,"cue_policy":cue.policy})
 	return [command.value] if bool(command.success) else []

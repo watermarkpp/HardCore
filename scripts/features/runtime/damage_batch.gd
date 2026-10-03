@@ -34,6 +34,8 @@ static func create(world: RefCounted, release_id: String, skill_id: String, bind
 		return {"success":false,"reason":"non_plain_damage_batch_configuration","batch":null}
 	if not validate_bindings(skill_id,captured.value.bindings):
 		return {"success":false,"reason":"invalid_event_binding","batch":null}
+	if not preload("res://scripts/features/contracts/feature_resource_lease.gd").supports_bindings(resources,captured.value.bindings):
+		return {"success":false,"reason":"invalid_batch_resources","batch":null}
 	var limit := MAX_FACTS
 	if reservation != null:
 		if reservation.get_script() != preload("res://scripts/features/contracts/effect_reservation.gd"):

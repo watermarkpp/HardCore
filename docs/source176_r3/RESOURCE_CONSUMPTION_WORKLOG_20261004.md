@@ -1,0 +1,37 @@
+# 第三树资源消费与取消终态续施工
+
+沿用已授权RFC v2 §16—17和FRAMEWORK_PUBLICATION_CLOSURE_PLAN Task3。父审查快照6aab18ff1588b879e1fad659fba4b71fff6f6c75；第三树真实HEAD/index保持，主树、第二树、真实存档和冻结MonsterStreaming不改。
+
+## 已复现与修复
+
+小可爱原对话的本轮中间材料已读取，完整报告仍未收到，两位扫描继续。原生resource_completion_cancel_red_054130_772242：34项通知取消测试有2项失败（正式/服务再次取消均把已提交结果改成false）；14项排队取消测试有4项失败（服务直接取消遗留发布锁、后续同步与异步发布被拒）。没有引擎错误；受测源码保持。
+
+修复把本量子的终态请求全部从可取消集合移出，再在关闭原budget scope后通知各等待者；取消等待者的同步续体不能重判另一已确定结果。正式异步入口为尚未执行的应用收尾自己的sequence/发布锁，不能解锁较新producer。resource_completion_cancel_green_054304_707309五个场景PASS，含原准备、持续服务和已开始线程取消回归；最终同源码增量回归仍待后续固定。
+
+## Task3表现消费实现边界
+
+Ruling：这是既有RFC/书面串行计划的表现协议接入，不新增正式技能或数值，不另建音频播放权威。使用受控内置cue映射和稳定resource ID，compiler验证所有可能消费的资源都在模块及requires闭包内；未知cue/遗漏子依赖整个候选拒绝。运行时只消费已接受action→batch→state带来的typed lease，不冷加载、不改HP/RNG/释放时间。
+
+Ruling：已存在AudioRuntimeService的池、SFX偏好和事件权威继续负责声音。新增prepared入口消费租约里的确切AudioStream，并复用相同pool/admission；不再查缓存/抽新随机variant、不增第二stream cache。视觉延续既有ignite程序图形；critical cue不受可选装饰的抑制开关影响。headless只能证明节点/播放器/资源消费与生命周期，GPU首次绘制及设备声音仍NOT_RUN。
+
+Ruling：第一条非空资源消费样例只用于明确测试注册表，主默认目录不启用。已有主源player.skill.fire_sword声源137保持原字节；资源依赖通过required子模块声明，不用疗伤药图标冒充点燃视觉。刷新不再次播放或复制节点；停止只关闭自己request_serial仍匹配的音频槽位，不能停止后来复用该槽位的声音。
+
+## 本轮未完成
+
+关键cue编译/真实消费反例与实现正在进行；资源开启自然移动混合压力、更多子效果/异构机制、模板和完整P6/R3、APK/安卓交付均未关闭。原v97B MISSING保持。阶段结果不作整套升级完成证明。
+
+## 后续检查点
+
+原Pro和小可爱完整6aab报告均已从原对话实际读取并保存，来源与UTC在outputs/framework_v2/resource_followup_20261004/audit_6aab18ff；官方dots任务已PAUSED。本轮停止两位扫描，旧1a3完整正文未补到，不以本轮报告冒充。两个取消窗口已对应原生RED/GREEN；监督脚本第6项安全复用仍开放，再次破坏性执行前必须处理，旧已归档正常恢复证据保留。
+
+实际关键cue首轮有两次夹具parse FAIL，已保留；显式WeakRef类型修正后回到七条生产原字节建立resource_cue_native_red_055330_643204：7检查/2业务FAIL。恢复候选实现后的resource_cue_native_green_055454_263369三个场景PASS。正式action/batch/state持有非空AudioStream租约；真实带票据近战提交后创建CanvasItem并交既有AudioStreamPlayer播放确切租约资源。刷新不重播，过期停止仅自己的serial槽位，保持旧HP、周期和RNG。
+
+资源开启自然链resource_natural_red_060038_183325：5检查/2FAIL，缺少明确冰咆哮关键cue；补登记hc.cue.ignite.ice_storm.v1和精确既有声源hc.resource.sound.ice_storm.effect后，resource_natural_green_060204_655082 live141/cold10检查PASS。仍保留30目标每目标3来源、90状态与原周期/伤害/时效门槛；CPU headless不代替GPU首次绘制、听感或Android。
+
+新同步回调反例resource_cue_reentry_red_061126_090162：21检查/2FAIL，真实event_started观察者clear后晚登记旧音频并继续播放；在返回请求后只核对同一cue身份、对已退休onset停其确切request，resource_cue_reentry_green_061249_475317三个场景PASS。已成功开始后同步退休返回成功，不误报关键cue缺失。
+
+接受资源反例resource_acceptance_red_061553_309522：24检查/8FAIL；非空关键cue配null或合法空租约被ActionConfigLease/Batch接纳，还消费容量票据。支持资格现在在事件验证后、票据claim前核对所有明确cue资源，保留合法producer资格。resource_acceptance_green_061725_044699六场景PASS。此为真实API控制反例，不描述为自然UI已出现。
+
+上述不同阶段指纹分开保留。最终同源码直接和自然live/cold回归正在运行，待固定后补最终采用索引；整套Task3、Task4—5和APK仍未关闭。
+
+最终world首轮resource_consumption_final_world_062955_832966：6PASS/2FAIL，原生正常退出但业务失败。原自然夹具与资源变体在同一隔离账号中都创建固定名“自然战斗压力”，正式建角重名守卫正确拒绝；随后夹具未停止而继续修改未创建的新角色，造成death_baseline_unavailable及保存失败。隔离character_profiles.json确含原自然角色，无资源角色；不是资源伤害或调度性能反例。保留109检查7FAIL与cold拒绝失败producer的3检查1FAIL。仅令资源变体使用明显不同的“资源协同战斗”，记录实际creation reason并立即终止非法前置状态；不改生产重名守卫、伤害/目标数/周期/MP/时效断言。修正后重跑正式同账号八场景，当前43场景直接通过仍是前一阶段指纹，不能冒充修正后的最终源码。

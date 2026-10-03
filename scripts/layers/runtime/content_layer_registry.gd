@@ -125,7 +125,17 @@ func reload_feature_catalog_async(registry_path: String = FEATURE_REGISTRY) -> b
 		_feature_publication_in_progress = false
 		feature_load_errors = ready.errors
 		return false
-	return await service.apply_ready(Callable(self,"_apply_prepared_feature_candidate").bind(result, ready.lease, sequence, profile))
+	return await _await_feature_application(service, Callable(self,"_apply_prepared_feature_candidate").bind(result, ready.lease, sequence, profile), sequence)
+
+
+func _await_feature_application(service: Node, callback: Callable, sequence: int) -> bool:
+	var success: bool = await service.apply_ready(callback)
+	# Direct service cancellation may terminate a queued application before
+	# its callback clears this request's lock. Never unlock a newer producer.
+	if sequence == _feature_preparation_sequence and _feature_publication_in_progress:
+		_feature_publication_in_progress = false
+		feature_load_errors = ["feature_resource_application_cancelled"]
+	return success
 
 
 func _feature_resources() -> Node:
@@ -330,7 +340,7 @@ func set_feature_module_enabled_async(id: String, enabled: bool) -> bool:
 		_feature_publication_in_progress = false
 		feature_load_errors = ready.errors
 		return false
-	return await service.apply_ready(Callable(self,"_apply_prepared_feature_module").bind(id, enabled, result, ready.lease, sequence, scope))
+	return await _await_feature_application(service, Callable(self,"_apply_prepared_feature_module").bind(id, enabled, result, ready.lease, sequence, scope), sequence)
 
 
 func _apply_prepared_feature_module(id: String, enabled: bool, result: Dictionary, resource_lease: RefCounted, sequence: int, scope: Dictionary) -> bool:

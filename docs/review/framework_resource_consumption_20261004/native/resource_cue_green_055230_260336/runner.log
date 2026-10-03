@@ -1,0 +1,11 @@
+[FAIL] feature_resource_cue_test - missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2;framework_receipt_missing
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+SCRIPT ERROR: Parse Error: The variable type is being inferred from a Variant value, so it will be typed as Variant. (Warning treated as error.)
+   at: GDScript::reload (res://tests/framework/feature_resource_cue_test.gd:47)
+ERROR: Failed to load script "res://tests/framework/feature_resource_cue_test.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+[PASS] feature_compiler_test
+[PASS] feature_resource_audio_closure_test
+RUNNER_RESULTS_JSON=C:\Users\Administrator\.codex\worktrees\pluggable-framework-v2\HardCore\outputs\test_logs\runner_results_adhoc_20261004_055249_678_9640.json
+TEST_SUMMARY suite=adhoc passed=2 failed=1 engine_log_errors=2
+FAILED_TESTS=feature_resource_cue_test (missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2;framework_receipt_missing)

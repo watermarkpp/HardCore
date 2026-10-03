@@ -12,6 +12,12 @@
       "path": "res://assets/audio/sfx/client/137__M26-3.wav",
       "type": "AudioStream",
       "origin": {"lane": "client_assets", "event_id": "player.skill.fire_sword", "sound_id": 137}
+    },
+    {
+      "resource_id": "hc.resource.sound.ice_storm.effect",
+      "path": "res://assets/audio/sfx/client/10332__M33-3.wav",
+      "type": "AudioStream",
+      "origin": {"lane": "client_assets", "event_id": "skill.wizard.ice_storm.effect", "sound_id": 10332}
     }
   ]
 }

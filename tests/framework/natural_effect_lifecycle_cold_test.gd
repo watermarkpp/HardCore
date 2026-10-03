@@ -4,6 +4,7 @@ const Gate := preload("res://tests/framework/helpers/native_producer_gate.gd")
 const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
 const EXPECTED := "res://outputs/test_logs/framework/natural_effect_lifecycle_expected.json"
 const PRODUCER := "res://outputs/test_logs/framework/natural_effect_lifecycle_test.result.json"
+@export var resource_backed := false
 var proof := Proof.new()
 var checks := 0
 var failures: Array[String] = []
@@ -13,10 +14,11 @@ func check(value: bool,label: String) -> void:
 func _ready() -> void: _run.call_deferred()
 func _run() -> void:
 	check(not PlayerState.test_mode,"cold process uses actual persistence")
-	var expected: Variant = JSON.parse_string(FileAccess.get_file_as_string(EXPECTED)) if FileAccess.file_exists(EXPECTED) else null
+	var expected_path := "res://outputs/test_logs/framework/feature_resource_natural_expected.json" if resource_backed else EXPECTED
+	var expected: Variant = JSON.parse_string(FileAccess.get_file_as_string(expected_path)) if FileAccess.file_exists(expected_path) else null
 	check(expected is Dictionary,"successful live producer supplied explicit expectation")
 	if not expected is Dictionary: _finish(); return
-	var valid := Gate.accepts(expected,"natural_effect_lifecycle_test")
+	var valid := Gate.accepts(expected,"feature_resource_natural_test" if resource_backed else "natural_effect_lifecycle_test")
 	check(valid,"cold expectation binds the runner-confirmed successful native producer in this invocation")
 	if not valid: _finish(); return
 	check(expected.source_content_sha256 == OS.get_environment("HARDCORE_R3_CONTENT_SHA256"),"cold source matches the producing test source")
@@ -29,6 +31,6 @@ func _run() -> void:
 	check(PlayerState._json_persistence.pending_count() == 0 and PlayerState._world_json_persistence.pending_count() == 0,"cold replay consumes all persistence receipts")
 	_finish()
 func _finish() -> void:
-	if not proof.write_receipt("natural_effect_lifecycle_cold_test",checks,failures.size()): failures.append("receipt")
+	if not proof.write_receipt("feature_resource_natural_cold_test" if resource_backed else "natural_effect_lifecycle_cold_test",checks,failures.size()): failures.append("receipt")
 	print("NATURAL_EFFECT_LIFECYCLE_COLD_%s checks=%d failures=%s" % ["PASS" if failures.is_empty() else "FAIL",checks,str(failures)])
 	get_tree().quit(0 if failures.is_empty() else 1)

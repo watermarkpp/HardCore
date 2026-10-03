@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "modules": [
+    {"module_id": "hc.ignite", "path": "res://assets/data/features/validation/resource_cue_parent.json"},
+    {"module_id": "hc.ignite_cue_assets", "path": "res://assets/data/features/validation/resource_cue_child.json"}
+  ],
+  "bindings": [{"module_id": "hc.ignite", "kind": "rule", "rule_id": "hc.ignite", "mechanic_id": "hc.ignite.fire_sword"}]
+}

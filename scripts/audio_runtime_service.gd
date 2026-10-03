@@ -416,11 +416,36 @@ func play_event(event_id: String, context: Dictionary = {}) -> Dictionary:
 	return _play_event_internal(event_id, context, false, "")
 
 
+## An accepted feature already owns this exact single-sample resource. Reuse
+## the audited event, preference and pool authority without a new lookup/RNG.
+func play_prepared_event(event_id: String, stream: AudioStream, context: Dictionary = {}) -> Dictionary:
+	var binding: Dictionary = _events.get(event_id, {})
+	var paths: Variant = binding.get("runtime_paths", [])
+	if stream == null or stream.get_length() <= 0 or not paths is Array or paths.size() != 1 \
+		or paths[0] != stream.resource_path or binding.get("mapping_status") != "EXACT":
+		return _reject_event("invalid_prepared_stream",event_id,context)
+	return _play_event_internal(event_id,context,false,"",stream)
+
+
+func stop_prepared_event(request: Dictionary) -> bool:
+	var index: int = request.get("pool_index",-1)
+	if index < 0 or index >= _event_slots.size(): return false
+	var slot: Dictionary = _event_slots[index]
+	if not slot.get("prepared",false) or slot.get("request_serial") != request.get("request_serial") \
+		or slot.get("event_id") != request.get("event_id"): return false
+	var player := _event_players[index]
+	player.stop()
+	player.stream = null
+	_event_slots[index] = {}
+	return true
+
+
 func _play_event_internal(
 	event_id: String,
 	context: Dictionary,
 	allow_restricted_monster_source: bool,
 	requested_semantic_event: String,
+	prepared_stream: AudioStream = null,
 ) -> Dictionary:
 	_metrics["requests"] = int(_metrics.get("requests", 0)) + 1
 	var binding: Dictionary = _events.get(event_id, {}) as Dictionary
@@ -468,7 +493,7 @@ func _play_event_internal(
 		return _reject_event("missing_mapping", event_id, context)
 	var selected_index := _select_event_variant(event_id, binding, runtime_paths.size(), context)
 	var runtime_path := str(runtime_paths[selected_index])
-	var stream := _stream_for(runtime_path)
+	var stream := prepared_stream if prepared_stream != null else _stream_for(runtime_path)
 	if stream == null:
 		return _reject_event("load_failed", event_id, context, runtime_path)
 	var pool_index := _acquire_event_player(priority)
@@ -490,6 +515,7 @@ func _play_event_internal(
 		"owner_kind": owner_kind,
 		"semantic_event": semantic_event,
 		"owner_release_key": owner_release_key,
+		"prepared":prepared_stream != null,
 	}
 	player.play()
 	if not owner_release_key.is_empty():
@@ -768,6 +794,7 @@ func stop_all_events(_reason := "cancelled") -> void:
 		var player := _event_players[pool_index]
 		if player.playing:
 			player.stop()
+		if bool(_event_slots[pool_index].get("prepared",false)): player.stream = null
 		_event_slots[pool_index] = {}
 
 
@@ -1211,6 +1238,7 @@ func _on_event_finished(pool_index: int) -> void:
 		return
 	var slot := _event_slots[pool_index].duplicate(true)
 	_event_slots[pool_index] = {}
+	if bool(slot.get("prepared",false)): _event_players[pool_index].stream = null
 	if slot.is_empty():
 		return
 	slot["contract_id"] = CONTRACT_ID

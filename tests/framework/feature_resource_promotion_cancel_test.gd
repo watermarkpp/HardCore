@@ -23,15 +23,17 @@ func _capture(box: Dictionary) -> void:
 func _capture_other(box: Dictionary) -> void:
 	box.result = await ContentLayers._feature_resource_service.prepare(ContentLayers.feature_configuration().catalog,["hc.resource_ready_probe"])
 	box.resume_scopes = Budget.snapshot().open_scopes
+	if box.get("cancel_again", "") == "formal_again": ContentLayers.cancel_feature_resource_preparation()
+	elif box.get("cancel_again", "") == "service_again": ContentLayers._feature_resource_service.cancel_all()
 	box.finished = true
 
 func _run() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress(false)
 	PlayerState.recalculate_stats(false)
-	for mode: String in ["formal", "service"]:
+	for mode: String in ["formal", "service", "formal_again", "service_again"]:
 		var accuracy: int = PlayerState.computed_stats.accuracy
-		var other := {"finished":false,"result":{},"resume_scopes":-1,"cancel_deferred":false}
+		var other := {"finished":false,"result":{},"resume_scopes":-1,"cancel_deferred":false,"cancel_again":mode}
 		var observation := {"calls":0,"scope":0,"promoted":false,"nested":true,"locked":false}
 		var observe := func() -> void:
 			observation.calls += 1
@@ -58,7 +60,7 @@ func _run() -> void:
 		check(observation.locked and not observation.nested and observation.calls == 1, mode + " cancellation retains the outer publication lock and rejects notification reentry")
 		check(int(PlayerState.computed_stats.accuracy) == accuracy + 1 and ContentLayers.feature_configuration().enabled_modules == ["hc.resource_ready_probe"], mode + " committed actor result and enabled source match successful completion")
 		check(not ContentLayers._feature_publication_in_progress and Budget.snapshot().open_scopes == 0, mode + " application ownership finishes normally after notification")
-		if mode == "service":
+		if mode != "formal":
 			check(other.cancel_deferred, "reentrant cancellation of another pending caller does not resume it inside the application scope")
 			check(other.finished and not bool(other.result.get("success",true)) and int(other.resume_scopes) == 0,
 				"other cancelled caller receives exactly the rejected result after scope closure")

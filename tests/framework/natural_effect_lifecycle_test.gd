@@ -10,6 +10,13 @@ const Runtime := preload("res://scripts/features/runtime/effect_runtime.gd")
 const Budget := preload("res://scripts/layers/runtime/execution/frame_budget.gd")
 const REPORT := "res://outputs/test_logs/framework/natural_effect_lifecycle_trace.json"
 const EXPECTED := "res://outputs/test_logs/framework/natural_effect_lifecycle_expected.json"
+@export var resource_backed := false
+var report_path := REPORT
+var expected_path := EXPECTED
+var resource_owner: WeakRef
+var audio_cue_starts := 0
+var exact_prepared_streams := 0
+var peak_cue_nodes := 0
 var proof := Proof.new()
 var checks := 0
 var failures: Array[String] = []
@@ -55,6 +62,9 @@ func check(value: bool, label: String) -> void:
 	if not value: failures.append(label)
 
 func _ready() -> void:
+	if resource_backed:
+		report_path = "res://outputs/test_logs/framework/feature_resource_natural_trace.json"
+		expected_path = "res://outputs/test_logs/framework/feature_resource_natural_expected.json"
 	process_priority = 10000
 	_run.call_deferred()
 
@@ -69,6 +79,7 @@ func _process(_delta: float) -> void:
 		monster_movement_gu += location.distance_to(previous_actors.get(id,location))
 		previous_actors[id] = location
 	var now := Time.get_ticks_usec()
+	if resource_backed: peak_cue_nodes = maxi(peak_cue_nodes,runtime.presentation().node_count())
 	if previous_frame_usec > 0 and samples.size() < 12000:
 		samples.append({"wall_usec":now-previous_frame_usec,"memory_static":int(Performance.get_monitor(Performance.MEMORY_STATIC)),"object_count":int(Performance.get_monitor(Performance.OBJECT_COUNT)),
 			"simulation_usec":game._time_domains.simulation_usec(),"ticks":runtime.metrics().ticks,
@@ -98,19 +109,29 @@ func _process(_delta: float) -> void:
 func _run() -> void:
 	check(not PlayerState.test_mode and OS.get_environment("APPDATA").replace("\\","/").contains("/.godot/runtime_appdata/"),"natural production run owns an isolated account")
 	PlayerState.begin_startup_save_upgrade()
-	check(PlayerState.finish_startup_save_upgrade() and PlayerState.create_character("自然战斗压力","hc.profession.wizard").is_empty(),"real startup and profile creation")
+	var startup_ready: bool = PlayerState.finish_startup_save_upgrade()
+	var profile_name := "资源协同战斗" if resource_backed else "自然战斗压力"
+	var creation_error: String = PlayerState.create_character(profile_name,"hc.profession.wizard") if startup_ready else "startup not ready"
+	check(startup_ready and creation_error.is_empty(),"real startup and profile creation: " + creation_error)
+	if not startup_ready or not creation_error.is_empty(): _finish(); return
 	PlayerState.level = 50; PlayerState.learned_skills = {"hc.skill.wizard.ice_storm":3}
 	PlayerState.equipment["hc.slot.weapon"] = Drop.create_instance(GameData.get_item_record({"item_id":85}),"natural:weapon")
 	PlayerState.recalculate_stats(false)
 	check(PlayerState.save_game(true,true,true),"production profile and equipment baseline saved")
 	var profile: String = PlayerState.active_profile_id
 	var xp_before: int = PlayerState.experience
+	if resource_backed:
+		check(await ContentLayers.reload_feature_catalog_async("res://assets/data/features/validation/resource_natural_registry.json"),"resource-backed natural sources prepare all parent and child cues before world entry")
+		resource_owner = weakref(ContentLayers.feature_configuration().resource_lease)
+		check(resource_owner.get_ref() != null,"natural source has a nonempty accepted resource closure")
+		if resource_owner.get_ref() == null: _finish(); return
 	get_tree().node_added.connect(_observe_spawn)
 	game = Root.new(); add_child(game)
 	var deadline := Time.get_ticks_msec()+20000
 	while not game.gameplay_input_is_enabled() and Time.get_ticks_msec()<deadline: await get_tree().process_frame
 	check(game.gameplay_input_is_enabled(),"real mapped world reaches READY")
 	if not game.gameplay_input_is_enabled(): _finish(); return
+	if resource_backed: game._audio_runtime_service.event_started.connect(_observe_feature_audio)
 	# Test-owned source authoring input goes through real qualification and
 	# compiler. The mechanic, period, geometry and action timing are unchanged.
 	var bindings: Array = ContentLayers.feature_configuration().bindings.duplicate(true)
@@ -119,8 +140,11 @@ func _run() -> void:
 	var captured := Graph.capture(bindings)
 	check(bool(captured.success),"three legal sources are plain authoring inputs")
 	if not bool(captured.success): _finish(); return
-	ContentLayers._feature_bindings = captured.value
-	check(ContentLayers.set_feature_module_enabled("hc.ignite",true),"default-off module enabled through real service")
+	if not resource_backed:
+		ContentLayers._feature_bindings = captured.value
+		check(ContentLayers.set_feature_module_enabled("hc.ignite",true),"default-off module enabled through real service")
+	else:
+		check(ContentLayers.feature_configuration().bindings.size() == 3 and "hc.ignite" in ContentLayers.feature_configuration().enabled_modules,"formal resource registry alone publishes three legal natural sources")
 	var event: Array = PlayerState.feature_bundle().event_index.get("damage_committed:hc.skill.wizard.ice_storm",[])
 	check(PlayerState.feature_errors.is_empty() and event.size() == 3,"equipment, learned skill and rule compile to three actual qualified sources")
 	if event.size() != 3: _finish(); return
@@ -221,13 +245,17 @@ func _run() -> void:
 	check(game._enemy_death_terminal_total_count == observed_deaths.size(),"every observed death has exactly one completed production job")
 	check(PlayerState.experience == expected_xp,"canonical rewards equal the exact sum of unique observed world and fixture deaths: actual=%d expected=%d fixture_only=%d" % [PlayerState.experience,expected_xp,minimum_xp])
 	check(scopes_closed and samples.size() >= 120 and samples.size()<12000,"bounded raw frame observation includes no open budget scopes")
-	_write(REPORT,{"run_id":OS.get_environment("HARDCORE_FRAMEWORK_RUN_ID"),"source_content_sha256":OS.get_environment("HARDCORE_R3_CONTENT_SHA256"),
+	if resource_backed:
+		check(peak_cue_nodes >= 90 and audio_cue_starts > 0 and exact_prepared_streams == audio_cue_starts,"natural workload actually creates required cues and consumes only exact accepted streams")
+		check(runtime.presentation().node_count() == 0 and ContentLayers._feature_resource_service.pending_count() == 0,"natural effects and resource work reach terminal drain")
+	_write(report_path,{"run_id":OS.get_environment("HARDCORE_FRAMEWORK_RUN_ID"),"source_content_sha256":OS.get_environment("HARDCORE_R3_CONTENT_SHA256"),
 		"scope":"PC headless natural Player/Root input, original cooldown/geometry, moving AI and formal world; declared initial stress HP/stats; single sustained cohort; not Android/GPU or infinite-memory proof",
 		"phase":"before final save and cold handoff","phase_status":"PASS" if failures.is_empty() else "FAIL","phase_failures":failures,
 		"accepted_casts":accepted_casts,"rejected_inputs":rejected_inputs,"player_movement_gu":movement_gu,"monster_movement_gu":monster_movement_gu,
 		"deaths":deaths,"peak_states":peak_states,"peak_state_evidence":peak_state_evidence,"resource_evidence":resource_evidence,"peak_deaths":peak_deaths,"peak_persistence":peak_persistence,"metrics":runtime.metrics(),
 		"xp_before":xp_before,"xp_after":PlayerState.experience,"expected_xp":expected_xp,"fixture_only_xp":minimum_xp,"observed_deaths":observed_deaths.values(),
 		"terminal_death_jobs":game._enemy_death_terminal_jobs,
+		"resource_backed":resource_backed,"peak_cue_nodes":peak_cue_nodes,"audio_cue_starts":audio_cue_starts,"exact_prepared_streams":exact_prepared_streams,
 		"wall_frame_usec":_percentiles("wall_usec"),"samples":samples,"memory_checkpoints":memory_checkpoints,
 		"maximum_pending_age_frames":maximum_pending_age,"maximum_service_age_frames":maximum_service_age})
 	game._streaming_coordinator.unregister_visual(get_instance_id())
@@ -236,8 +264,14 @@ func _run() -> void:
 	var generation: String = PlayerState._world_clock_generation
 	game.queue_free(); await get_tree().process_frame
 	check(not runtime.has_work() and runtime._receipts.is_empty(),"world teardown drops final owners")
+	if resource_backed:
+		check(ContentLayers.reload_feature_catalog(),"retired world withdraws prepared authoring source through original lifecycle")
+		for frame in 180:
+			if resource_owner.get_ref() == null and ContentLayers._feature_resource_service.pending_count() == 0: break
+			await get_tree().process_frame
+		check(resource_owner.get_ref() == null and ContentLayers._feature_resource_service.pending_count() == 0,"natural closure leases and budgeted retirement drain after source withdrawal")
 	check(PlayerState.select_character(profile) and PlayerState.experience == xp,"production reload retains exact final rewards")
-	if failures.is_empty(): _write(EXPECTED,{"profile_id":profile,"experience":xp,"generation":generation,"invocation_id":OS.get_environment("HARDCORE_FRAMEWORK_INVOCATION_ID"),"producer_run_id":OS.get_environment("HARDCORE_FRAMEWORK_RUN_ID"),"source_content_sha256":OS.get_environment("HARDCORE_R3_CONTENT_SHA256")})
+	if failures.is_empty(): _write(expected_path,{"profile_id":profile,"experience":xp,"generation":generation,"invocation_id":OS.get_environment("HARDCORE_FRAMEWORK_INVOCATION_ID"),"producer_run_id":OS.get_environment("HARDCORE_FRAMEWORK_RUN_ID"),"source_content_sha256":OS.get_environment("HARDCORE_R3_CONTENT_SHA256")})
 	var cleanup := {"sample_count":samples.size(),"memory_before_observation_clear":int(Performance.get_monitor(Performance.MEMORY_STATIC)),"objects_before_clear":int(Performance.get_monitor(Performance.OBJECT_COUNT))}
 	samples.clear(); targets.clear(); previous_actors.clear(); cast_targets.clear(); runtime = null
 	for frame in 4: await get_tree().process_frame
@@ -246,12 +280,22 @@ func _run() -> void:
 	cleanup["orphan_nodes_after_clear"] = int(Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT))
 	# Measure after releasing bounded observation arrays. Reopen the already
 	# saved phase trace only after measurement; its allocation is not gameplay.
-	var phase_trace: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(REPORT))
+	var phase_trace: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(report_path))
 	phase_trace["cleanup"] = cleanup
 	phase_trace["final_checks_before_trace_write"] = checks
 	phase_trace["final_status_before_trace_write"] = "PASS" if failures.is_empty() else "FAIL"
-	_write(REPORT,phase_trace)
+	_write(report_path,phase_trace)
 	_finish()
+
+func _observe_feature_audio(event: Dictionary) -> void:
+	var handle: String = event.context.get("feature_effect_handle","")
+	if handle.is_empty(): return
+	audio_cue_starts += 1
+	var effects: RefCounted = game._feature_effect_runtime
+	var state: Dictionary = effects._states.get(handle,{})
+	var lease: RefCounted = state.get("resource_lease")
+	var player: AudioStreamPlayer = game._audio_runtime_service._event_players[int(event.pool_index)]
+	if lease != null and is_same(player.stream,lease.resource_at(event.runtime_path)): exact_prepared_streams += 1
 
 func _observe_spawn(node: Node) -> void:
 	if node is EnemyActor:
@@ -380,6 +424,6 @@ func _write(path: String, value: Dictionary) -> void:
 func _finish() -> void:
 	observing = false
 	if is_instance_valid(game): game.queue_free()
-	if not proof.write_receipt("natural_effect_lifecycle_test",checks,failures.size()): failures.append("receipt")
+	if not proof.write_receipt("feature_resource_natural_test" if resource_backed else "natural_effect_lifecycle_test",checks,failures.size()): failures.append("receipt")
 	print("NATURAL_EFFECT_LIFECYCLE_%s checks=%d failures=%s" % ["PASS" if failures.is_empty() else "FAIL",checks,str(failures)])
 	get_tree().quit(0 if failures.is_empty() else 1)

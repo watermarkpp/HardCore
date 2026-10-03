@@ -1,6 +1,7 @@
 extends RefCounted
 
 const Graph := preload("res://scripts/features/contracts/plain_graph.gd")
+const Cues := preload("res://scripts/features/presentation/cue_definitions.gd")
 const BUILTIN_HANDLERS := ["hc.ignite.v1"]
 const MODULE_REQUIRED := ["schema_version", "module_id", "module_version", "core_api_version",
 	"requires", "conflicts", "capabilities", "handlers", "resource_dependencies", "cost", "mechanics", "tests"]
@@ -99,6 +100,10 @@ static func compile_catalog(modules: Array, authority: Dictionary) -> Dictionary
 	var visited := {}
 	for module_id: String in by_module:
 		_visit_dependency(module_id, by_module, visiting, visited, errors, 0)
+	if errors.is_empty():
+		for entry: Dictionary in mechanics.values():
+			if entry.definition.has("cue_id") and not _cue_closure_valid(entry.module_id,entry.definition.cue_id,by_module):
+				errors.append("missing_cue_resource_closure:" + entry.definition.cue_id)
 	if not errors.is_empty():
 		return _failure(errors)
 	var catalog := {"schema_version": 1, "modules": by_module, "mechanics": mechanics,
@@ -236,7 +241,31 @@ static func _selected_entry(catalog: Dictionary, id: String, authority: Dictiona
 		errors.append("selected_mechanic_identity:" + id)
 	else:
 		_mechanic_valid(entry.value.definition, header.value, authority, errors)
+		if entry.value.definition.has("cue_id") and entry.value.definition.cue_id is String \
+			and not _cue_closure_valid(raw.module_id,entry.value.definition.cue_id,catalog.modules):
+			errors.append("missing_selected_cue_resource_closure:" + id)
 	return entry.value if errors.size() == initial else {}
+
+static func _cue_closure_valid(module_id: String, cue_id: String, modules: Dictionary) -> bool:
+	var required := Cues.requirements(cue_id)
+	if not required.success: return false
+	var paths := {}
+	var visited := {}
+	var pending: Array = [module_id]
+	while not pending.is_empty():
+		var id: Variant = pending.pop_back()
+		if not id is String: return false
+		if visited.has(id): continue
+		visited[id] = true
+		var module: Variant = modules.get(id)
+		if not module is Dictionary or not module.get("resource_dependencies") is Array or not module.get("requires") is Array: return false
+		for path: Variant in module.resource_dependencies:
+			if not path is String: return false
+			paths[path] = true
+		pending.append_array(module.requires)
+	for path: String in required.paths:
+		if not paths.has(path): return false
+	return true
 
 static func _mechanic_valid(value: Dictionary, module: Dictionary, authority: Dictionary, errors: Array[String]) -> bool:
 	var initial := errors.size()
@@ -247,7 +276,7 @@ static func _mechanic_valid(value: Dictionary, module: Dictionary, authority: Di
 		"trigger": required.append_array(["event", "skill_id", "handler_id", "source_classes", "dedup", "config", "lifecycle"])
 		"capability": required.append("capability")
 		_: errors.append("unknown_mechanic_kind:" + str(kind)); return false
-	if not _keys(value, required, [], errors, "mechanic"):
+	if not _keys(value, required, ["cue_id"] if kind == "trigger" else [], errors, "mechanic"):
 		return false
 	if not value.mechanic_id is String or not _stable_id(value.mechanic_id):
 		errors.append("invalid_mechanic_id")
@@ -267,6 +296,8 @@ static func _mechanic_valid(value: Dictionary, module: Dictionary, authority: Di
 				for operation: Variant in value.operations:
 					_validate_operation(operation, kind, authority, errors)
 		"trigger":
+			if value.has("cue_id") and (not value.cue_id is String or Cues.definition(value.cue_id).is_empty()):
+				errors.append("unknown_trigger_cue")
 			if value.handler_id not in module.handlers or value.handler_id not in BUILTIN_HANDLERS:
 				errors.append("undeclared_trigger_handler")
 			if "combat.post_hit" not in module.capabilities or "effects.periodic" not in module.capabilities:

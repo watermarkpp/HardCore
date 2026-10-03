@@ -1,0 +1,51 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "known critical cue closes its actual sound through a required child module",
+      "passed": false
+    },
+    {
+      "id": 2,
+      "label": "missing possible cue sound rejects the whole otherwise legal candidate",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "unknown or malformed cue identity refuses publication <null>",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "unknown or malformed cue identity refuses publication 137",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "unknown or malformed cue identity refuses publication hc.cue.unknown.v1",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "unknown or malformed cue identity refuses publication player.skill.fire_sword",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "formal compiler preparation and atomic publication admit critical cue closure",
+      "passed": false
+    }
+  ],
+  "count": 7,
+  "engine_version": "4.7-stable (official)",
+  "failed": 2,
+  "invocation_id": "5632ad5c-38c0-4888-bada-976ebdf143e4",
+  "passed": 5,
+  "reported_checks": 7,
+  "reported_failures": 2,
+  "run_id": "571b653c-e080-4df7-93d7-1094f39b4e0b",
+  "scene_id": "feature_resource_cue_test",
+  "schema_version": 1,
+  "source_content_sha256": "b27eee825a19fa5128badb39c275974ce0e9fc3494a3294e1e084eed6aced355",
+  "status": "FAIL"
+}

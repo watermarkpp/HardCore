@@ -1,0 +1,41 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "natural production run owns an isolated account",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "real startup and profile creation",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "production profile and equipment baseline saved",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "resource-backed natural sources prepare all parent and child cues before world entry",
+      "passed": false
+    },
+    {
+      "id": 5,
+      "label": "natural source has a nonempty accepted resource closure",
+      "passed": false
+    }
+  ],
+  "count": 5,
+  "engine_version": "4.7-stable (official)",
+  "failed": 2,
+  "invocation_id": "ce29bd72-5de8-4791-a3ad-7fb88ae0045a",
+  "passed": 3,
+  "reported_checks": 5,
+  "reported_failures": 2,
+  "run_id": "989ad00b-d761-4291-a043-6b606b0249c7",
+  "scene_id": "feature_resource_natural_test",
+  "schema_version": 1,
+  "source_content_sha256": "01ca553b8cebe4d99be56212f41d12cc9fc1e32faa5f3c671cb2df694f5864d3",
+  "status": "FAIL"
+}

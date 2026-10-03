@@ -50,6 +50,18 @@ func valid_for(catalog: Dictionary, enabled: Array) -> bool:
 func resource_at(path: String) -> Resource:
 	return _resources.get(path)
 
+static func supports_bindings(resources: RefCounted, bindings: Array) -> bool:
+	# A typed lease alone is insufficient: every declared possible cue must
+	# already be held before acceptance or a one-shot producer claim.
+	for binding: Dictionary in bindings:
+		var definition: Dictionary = binding.definition
+		if not definition.has("cue_id"): continue
+		var required := preload("res://scripts/features/presentation/cue_definitions.gd").requirements(definition.cue_id)
+		if not required.success: return false
+		for path: String in required.paths:
+			if resources == null or not Registry.valid_resource(path,resources.resource_at(path)): return false
+	return true
+
 func diagnostics() -> Dictionary:
 	return _diagnostics.duplicate(true)
 

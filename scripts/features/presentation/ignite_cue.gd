@@ -3,6 +3,7 @@ extends Node2D
 var actor_ref: RefCounted
 var effect_handle := ""
 var strength := 0
+var resource_lease: RefCounted
 func _ready() -> void:
 	position = Vector2(0,-34)
 	z_index = 5

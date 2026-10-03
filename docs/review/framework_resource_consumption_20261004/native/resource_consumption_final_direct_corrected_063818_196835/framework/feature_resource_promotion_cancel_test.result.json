@@ -1,0 +1,186 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "formal cancellation observes actual committed publication within its accounted notification",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "formal cancellation cannot relabel an already committed application as a failed preparation",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "formal application waiter resumes only after the shared scope closes",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "formal cancellation retains the outer publication lock and rejects notification reentry",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "formal committed actor result and enabled source match successful completion",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "formal application ownership finishes normally after notification",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "formal fixture restores through the original synchronous empty path",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "service cancellation observes actual committed publication within its accounted notification",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "service cancellation cannot relabel an already committed application as a failed preparation",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "service application waiter resumes only after the shared scope closes",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "service cancellation retains the outer publication lock and rejects notification reentry",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "service committed actor result and enabled source match successful completion",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "service application ownership finishes normally after notification",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "reentrant cancellation of another pending caller does not resume it inside the application scope",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "other cancelled caller receives exactly the rejected result after scope closure",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "service fixture restores through the original synchronous empty path",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "formal_again cancellation observes actual committed publication within its accounted notification",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "formal_again cancellation cannot relabel an already committed application as a failed preparation",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "formal_again application waiter resumes only after the shared scope closes",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "formal_again cancellation retains the outer publication lock and rejects notification reentry",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "formal_again committed actor result and enabled source match successful completion",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "formal_again application ownership finishes normally after notification",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "reentrant cancellation of another pending caller does not resume it inside the application scope",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "other cancelled caller receives exactly the rejected result after scope closure",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "formal_again fixture restores through the original synchronous empty path",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "service_again cancellation observes actual committed publication within its accounted notification",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "service_again cancellation cannot relabel an already committed application as a failed preparation",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "service_again application waiter resumes only after the shared scope closes",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "service_again cancellation retains the outer publication lock and rejects notification reentry",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "service_again committed actor result and enabled source match successful completion",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "service_again application ownership finishes normally after notification",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "reentrant cancellation of another pending caller does not resume it inside the application scope",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "other cancelled caller receives exactly the rejected result after scope closure",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "service_again fixture restores through the original synchronous empty path",
+      "passed": true
+    }
+  ],
+  "count": 34,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "b910c5f7-68e2-4ed7-92ba-b5ee20f3981b",
+  "passed": 34,
+  "reported_checks": 34,
+  "reported_failures": 0,
+  "run_id": "0759a80c-2eb7-4805-8ed5-0b2679b8cca3",
+  "scene_id": "feature_resource_promotion_cancel_test",
+  "schema_version": 1,
+  "source_content_sha256": "ad9681fc02a35ae84ed6d432aa979cad632f5f05b0ee3efd356961147ca529eb",
+  "status": "PASS"
+}

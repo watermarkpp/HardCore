@@ -1,0 +1,161 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "known critical cue closes its actual sound through a required child module",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "missing possible cue sound rejects the whole otherwise legal candidate",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "unknown or malformed cue identity refuses publication <null>",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "unknown or malformed cue identity refuses publication 137",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "unknown or malformed cue identity refuses publication hc.cue.unknown.v1",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "unknown or malformed cue identity refuses publication player.skill.fire_sword",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "formal compiler preparation and atomic publication admit critical cue closure",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "actual mapped world reaches READY with prepared cue",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "real projected receiver",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "real accepted configuration owns its prepared nonempty cue resources",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "natural player request accepts nonempty ticket before real windup",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "withdraw parent then child without revoking already accepted work",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "single canonical release commits actual base HP once",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "required procedural cue actually instantiates even when optional headless decoration is suppressed",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "actual accepted effect sends exactly one prepared stream to existing audio service",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "real engine player consumes the exact accepted AudioStream rather than a later lookup",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "stable cue uses the exact existing primary sound event",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "prepared playback has identity-scoped stop",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "stale playback identity cannot stop another pooled owner",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "refresh preserves one cue and does not replay onset sound",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "presentation consumption neither rerolls gameplay nor changes HP",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "original periodic damage completes unchanged at tick 1",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "original periodic damage completes unchanged at tick 2",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "original periodic damage completes unchanged at tick 3",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "original periodic damage completes unchanged at tick 4",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "terminal effect stops its native critical cue",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "last accepted cue and state retire the lease after actual node destruction",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "resource-backed presentation preserves original periodic authority and RNG",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "world retirement restores ordinary default-off source",
+      "passed": true
+    }
+  ],
+  "count": 29,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "75bf85b6-1817-4d99-aaf7-b28b3a76840f",
+  "passed": 29,
+  "reported_checks": 29,
+  "reported_failures": 0,
+  "run_id": "471254ea-a3d7-4ee6-a2a1-bfe3fe288868",
+  "scene_id": "feature_resource_cue_test",
+  "schema_version": 1,
+  "source_content_sha256": "175a5b9bec10c37064e3c8ed08c38a07a1fbae0a0f00fffe33e4f7b143e3d28f",
+  "status": "PASS"
+}

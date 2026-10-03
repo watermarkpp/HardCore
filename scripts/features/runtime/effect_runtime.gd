@@ -301,7 +301,9 @@ func _apply_command(command: Dictionary, entry: Dictionary) -> void:
 	_states_per_target[target_key] = int(_states_per_target.get(target_key,0))+1
 	_heap.put(handle,int(state.next_due))
 	_stats.started += 1; _stats.peak_states = maxi(int(_stats.peak_states),_states.size())
-	if not _presentation.start(handle,entry.target,command): _stats.optional_cue_missing += 1
+	if not _presentation.start(handle,entry.target,command,entry.get("resource_lease")):
+		if command.cue_policy == "required_procedural": _error("feature_required_cue_failed")
+		else: _stats.optional_cue_missing += 1
 
 func _tick_one() -> void:
 	var handle := _heap.pop()

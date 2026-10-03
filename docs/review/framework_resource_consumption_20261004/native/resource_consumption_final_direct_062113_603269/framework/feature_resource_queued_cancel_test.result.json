@@ -1,0 +1,86 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "formal real resources ready with application queued before callback starts",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "formal queued cancellation rejects once outside scope",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "formal rejected application retires outer publication ownership",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "formal cancelled candidate never mutates directory actor or notification",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "formal next lawful publication is not permanently locked",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "formal stale callback and resources reach terminal drain",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "service real resources ready with application queued before callback starts",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "service queued cancellation rejects once outside scope",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "service rejected application retires outer publication ownership",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "service cancelled candidate never mutates directory actor or notification",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "service next lawful publication is not permanently locked",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "service stale callback and resources reach terminal drain",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "fresh asynchronous producer succeeds after both cancellation paths",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "fixture restores original configuration",
+      "passed": true
+    }
+  ],
+  "count": 14,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "6674e49d-4d38-4b75-b6e6-939aaf904025",
+  "passed": 14,
+  "reported_checks": 14,
+  "reported_failures": 0,
+  "run_id": "b710d7ae-69f2-4600-9755-136ff7974431",
+  "scene_id": "feature_resource_queued_cancel_test",
+  "schema_version": 1,
+  "source_content_sha256": "0078e0edc58d2d9b9255263eb482c5dce0f681027344751b9e332f783d9b1f39",
+  "status": "PASS"
+}

@@ -1,0 +1,22 @@
+{
+  "request_id": "resource-followup-6aab18ff-20261004",
+  "sha": "6aab18ff1588b879e1fad659fba4b71fff6f6c75",
+  "thread_id": "6abbcea3-5fb4-83ea-8732-0cf95e1c4583",
+  "turn_id": "6b394f4d-bf6d-4091-bd47-f222b5bdcdc4",
+  "item_id": "a42c5a80-b0ba-4318-9a4e-7a4637cb78d0",
+  "read_at_utc": "2026-10-03 21:54:53 UTC",
+  "complete": true,
+  "actions": [
+    {
+      "candidate": "cancelled waiter continuation cancels committed application",
+      "native_red": "resource_completion_cancel_red_054130_772242",
+      "green": "resource_completion_cancel_green_054304_707309",
+      "handling": "Native RED then terminal ownership detached before any completion callback; final same-source regression pending."
+    },
+    {
+      "candidate": "negative supervisor replay protection",
+      "handling": "Await dot full detail; preserve original expected-failure evidence. Review supervisor backup before future fault replay."
+    }
+  ],
+  "remaining": "Stop Pro scans for this request. Dot full 6aab and prior 1a3 report still pending. New implementation is outside audited SHA."
+}

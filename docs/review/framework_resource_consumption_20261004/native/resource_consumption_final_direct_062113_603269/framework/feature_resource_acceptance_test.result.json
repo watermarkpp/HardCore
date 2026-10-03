@@ -1,0 +1,136 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "known critical cue closes its actual sound through a required child module",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "missing possible cue sound rejects the whole otherwise legal candidate",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "unknown or malformed cue identity refuses publication <null>",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "unknown or malformed cue identity refuses publication 137",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "unknown or malformed cue identity refuses publication hc.cue.unknown.v1",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "unknown or malformed cue identity refuses publication player.skill.fire_sword",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "formal compiler preparation and atomic publication admit critical cue closure",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "actual mapped world reaches READY with prepared cue",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "real projected receiver",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "real accepted configuration owns its prepared nonempty cue resources",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "legitimate typed empty lease exists for resource-free configurations",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "critical configuration refuses missing accepted resource closure false",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "valid otherwise unchanged bindings receive a real capacity promise",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "critical batch refuses missing resources before taking its producer promise",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "missing resources do not consume the lawful producer's only release qualification",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "same lawful promise still accepts the correctly prepared resource owner",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "critical configuration refuses missing accepted resource closure true",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "valid otherwise unchanged bindings receive a real capacity promise",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "critical batch refuses missing resources before taking its producer promise",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "missing resources do not consume the lawful producer's only release qualification",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "same lawful promise still accepts the correctly prepared resource owner",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "qualification rejection and corrected empty producer have no HP MP or RNG side effects",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "resource qualification probes leave no unfinished producer capacity",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "resource qualification world retires before ordinary catalog restoration",
+      "passed": true
+    }
+  ],
+  "count": 24,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "6674e49d-4d38-4b75-b6e6-939aaf904025",
+  "passed": 24,
+  "reported_checks": 24,
+  "reported_failures": 0,
+  "run_id": "32915109-5787-458e-a68a-f0459c7afc98",
+  "scene_id": "feature_resource_acceptance_test",
+  "schema_version": 1,
+  "source_content_sha256": "0078e0edc58d2d9b9255263eb482c5dce0f681027344751b9e332f783d9b1f39",
+  "status": "PASS"
+}

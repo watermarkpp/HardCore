@@ -1,0 +1,101 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "existing exact primary fire-sword sound starts as a real uncached engine resource",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "exact audited audio identity enters the same trusted resource registry",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "nonempty audio and icon dependencies cannot publish synchronously without readiness",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "unprepared multi-type closure preserves the old player configuration",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "formal async publication prepares parent audio and required child icon as one closure",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "readiness owns a typed playable stream at the exact declared path",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "required child owns its real primary texture in the same lease",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "both required modules and real contributions promote atomically",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "dependency closure includes both unique resource types with exact catalog identity",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "a usable texture cannot substitute for a declared audio stream",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "preparation cannot silently omit the parent's required child",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "live dependency contract forbids withdrawing a still-required child",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "withdrawal retains only the remaining legitimate icon closure",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "remaining module neither retains removed audio nor reloads the shared texture",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "old lawful lease still owns audio after future source withdrawal",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "audio preparation and publication leave no shared budget scope across await",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "ordinary empty baseline remains usable after mixed typed resource preparation",
+      "passed": true
+    }
+  ],
+  "count": 17,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "b910c5f7-68e2-4ed7-92ba-b5ee20f3981b",
+  "passed": 17,
+  "reported_checks": 17,
+  "reported_failures": 0,
+  "run_id": "0af5d129-0f00-430e-8112-7447c9af9297",
+  "scene_id": "feature_resource_audio_closure_test",
+  "schema_version": 1,
+  "source_content_sha256": "ad9681fc02a35ae84ed6d432aa979cad632f5f05b0ee3efd356961147ca529eb",
+  "status": "PASS"
+}

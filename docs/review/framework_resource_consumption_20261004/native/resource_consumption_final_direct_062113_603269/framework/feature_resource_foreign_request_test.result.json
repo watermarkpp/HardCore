@@ -1,0 +1,56 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "foreign producer starts with actual primary path uncached",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "external producer owns one real engine threaded request",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "actual external request is loaded but its separate retrieval remains outstanding",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "feature preparation joins the same real engine resource",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "feature consumer never spends the foreign producer retrieval right",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "both consumers retrieve the shared actual resource through their own engine request",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "all owned retrieval rights finish without a leaked engine request",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "fixture restores the ordinary empty configuration",
+      "passed": true
+    }
+  ],
+  "count": 8,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "6674e49d-4d38-4b75-b6e6-939aaf904025",
+  "passed": 8,
+  "reported_checks": 8,
+  "reported_failures": 0,
+  "run_id": "3f17fce7-6724-4f15-9e50-7f39cc355412",
+  "scene_id": "feature_resource_foreign_request_test",
+  "schema_version": 1,
+  "source_content_sha256": "0078e0edc58d2d9b9255263eb482c5dce0f681027344751b9e332f783d9b1f39",
+  "status": "PASS"
+}
