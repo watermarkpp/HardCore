@@ -143,6 +143,7 @@ var _pending_combat_action_committed := false
 # when the actor is alive and back inside the tree by the time the timer fires.
 var _pending_combat_action_epoch := 0
 var _pending_combat_action_kind := ""
+var _accepted_release_producers: Dictionary = {}
 var _test_combat_time_ms := -1
 var _last_temporary_item_buff_revision := -1
 var _last_revival_at_ms := -60000
@@ -200,6 +201,7 @@ func _exit_tree() -> void:
 	# freezes a new epoch at acceptance time. The epoch is only compared for
 	# equality by release ownership, so advancing it here has no other effect.
 	combat_epoch += 1
+	_close_accepted_releases()
 	_pending_combat_action_active = false
 	_pending_combat_action_committed = false
 	_pending_combat_action_kind = ""
@@ -464,6 +466,7 @@ func request_attack(has_combat_target := false, locked_target_instance_id := 0, 
 	# observer may finish a begin/finish transition and bump the live epoch
 	# before the delayed release reads it (RV14-R2 reentry boundary).
 	var accepted_action_epoch := _pending_combat_action_epoch
+	_accepted_release_producers[action_id] = {"epoch": accepted_action_epoch, "configuration": configuration}
 	var animation_name := str(context.get("skill_name", "attack"))
 	visual.play_action(animation_name, action_duration)
 	var attack_stats: Dictionary = (configuration.primary_stats() if configuration != null \
@@ -704,6 +707,7 @@ func _request_active_skill(skill_name: String, locked_target_instance_id := 0, c
 	# a synchronous observer may complete a begin/finish transition and bump
 	# the live epoch before the delayed release reads it (RV14-R2 boundary).
 	var accepted_action_epoch := _pending_combat_action_epoch
+	_accepted_release_producers[action_id] = {"epoch": accepted_action_epoch, "configuration": configuration}
 	visual.play_action(skill_name if PlayerState.profession_id == "hc.profession.warrior" else "cast", action_duration)
 	skill_cast_started.emit(stable_skill_id)
 	_emit_skill_after_windup(
@@ -765,6 +769,7 @@ func begin_combat_transition(token: String, allow_dead := false) -> bool:
 		return false
 	_combat_transition_token = token
 	combat_epoch += 1
+	_close_accepted_releases()
 	_pending_combat_action_active = false
 	_pending_combat_action_committed = false
 	_pending_attack_context.clear()
@@ -1097,6 +1102,7 @@ func _apply_resolved_damage(
 			poison_time = 0.0
 			poison_damage = 0
 			combat_epoch += 1
+			_close_accepted_releases()
 			reset_locomotion()
 			velocity = Vector2.ZERO
 			touch_vector = Vector2.ZERO
@@ -1234,7 +1240,7 @@ func _emit_attack_after_windup(
 	):
 		if configuration != null and (not hc_action_configuration_identity.is_valid() \
 			or not configuration.valid_for_release(hc_action_configuration_identity.call())):
-			configuration.finish_producer()
+			_finish_accepted_release(action_id, configuration)
 			return
 		if action_id == _pending_combat_action_id and _pending_combat_action_active:
 			_pending_combat_action_committed = true
@@ -1259,7 +1265,7 @@ func _emit_attack_after_windup(
 			damage
 		)
 		_pending_attack_context.clear()
-	if configuration != null: configuration.finish_producer()
+	_finish_accepted_release(action_id, configuration)
 
 
 func _emit_skill_after_windup(
@@ -1330,7 +1336,7 @@ func _emit_skill_after_windup(
 			)
 		if configuration != null:
 			if not hc_action_configuration_identity.is_valid() or not configuration.valid_for_release(hc_action_configuration_identity.call()):
-				configuration.finish_producer()
+				_finish_accepted_release(action_id, configuration)
 				return
 		_pending_skill_context = {"release_geometry": release_geometry}
 		if configuration != null:
@@ -1345,7 +1351,7 @@ func _emit_skill_after_windup(
 			damage
 		)
 		_pending_skill_context.clear()
-	if configuration != null: configuration.finish_producer()
+	_finish_accepted_release(action_id, configuration)
 
 
 static func combat_release_signal_payload(
@@ -1439,6 +1445,27 @@ func _start_struck_reaction() -> void:
 func _start_queued_struck_reaction() -> void:
 	_queued_struck_reaction = false
 	_start_struck_reaction()
+
+
+func has_pending_combat_release() -> bool:
+	# A newer body action may replace the presentation slot while an older
+	# accepted timer still owns a release. Only its terminal path retires it.
+	return not _accepted_release_producers.is_empty()
+
+
+func _finish_accepted_release(action_id: int, configuration: RefCounted = null) -> void:
+	var producer: Dictionary = _accepted_release_producers.get(action_id, {})
+	_accepted_release_producers.erase(action_id)
+	var lease: RefCounted = producer.get("configuration", configuration)
+	if lease != null:
+		lease.finish_producer()
+
+
+func _close_accepted_releases() -> void:
+	# Advancing the existing lifecycle epoch prevents any old timer from
+	# producing again. Close its capacity owner immediately, even if paused.
+	for action_id: int in _accepted_release_producers.keys():
+		_finish_accepted_release(action_id)
 
 
 func combat_action_snapshot() -> Dictionary:

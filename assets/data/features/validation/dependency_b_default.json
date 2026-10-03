@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "module_id": "hc.dependency_b",
+  "module_version": 1,
+  "core_api_version": 1,
+  "requires": [],
+  "conflicts": [],
+  "capabilities": [
+    "stats.contribute"
+  ],
+  "handlers": [],
+  "resource_dependencies": [],
+  "cost": {
+    "commands_per_event": 0,
+    "states_per_target": 0
+  },
+  "default_enabled": true,
+  "scope": "character",
+  "activation_boundary": "startup",
+  "mechanics": [
+    {
+      "mechanic_id": "hc.dependency_b.accuracy",
+      "kind": "stat",
+      "tags": [
+        "hc.numeric"
+      ],
+      "operations": [
+        {
+          "stat": "accuracy",
+          "op": "add",
+          "value": 1
+        }
+      ]
+    }
+  ],
+  "tests": [
+    "tests/framework/feature_publication_dependencies_test.tscn"
+  ]
+}

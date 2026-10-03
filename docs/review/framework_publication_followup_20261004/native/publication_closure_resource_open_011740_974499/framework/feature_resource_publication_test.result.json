@@ -1,0 +1,31 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "existing production healing icon is a real project resource",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "real nonempty dependency can enter the formal feature resource closure",
+      "passed": false
+    },
+    {
+      "id": 3,
+      "label": "resource compilation never partially publishes player state",
+      "passed": true
+    }
+  ],
+  "count": 3,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "47e7afc0-1274-4307-846c-2c805468650a",
+  "passed": 2,
+  "reported_checks": 3,
+  "reported_failures": 1,
+  "run_id": "0bd4e7b0-0276-44c7-b47f-e7e1b3bd9b5d",
+  "scene_id": "feature_resource_publication_test",
+  "schema_version": 1,
+  "source_content_sha256": "38ec41d299455904882003ce2a874320b98e53d9018ede9b67306952477df1f3",
+  "status": "FAIL"
+}

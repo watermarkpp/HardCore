@@ -1,0 +1,5 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+数据库载入完成：地图209 怪物156 Boss20 装备175 技能等级132 掉落槽3424 任务9
+CREATION_ROLLBACK_OBSERVATION profile=1791046027_3575 base_mp=15 enabled=true save_reason=atomic_character_creation_failed
+FEATURE_CREATION_ROLLBACK_FAIL checks=12 failures=["rollback restores feature input from A instead of failed B", "rollback restores original effective bundle and compile generation", "MP minus sixteen cannot enable on restored warrior MP fifteen", "rejected post-rollback candidate keeps coherent publication and emits no notification", "receipt"]

@@ -1,0 +1,76 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "real production creates isolated warrior A",
+      "passed": false
+    },
+    {
+      "id": 2,
+      "label": "level one warrior has independently expected MP 15",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "register rollback probe through trusted production loader",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "valid feature is active before creation transaction",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "existing owned save failure triggers official creation rollback",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "rollback restores active A and computed stats",
+      "passed": false
+    },
+    {
+      "id": 7,
+      "label": "failed B leaves A and index bytes intact without orphan character",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "rollback restores feature input from A instead of failed B",
+      "passed": false
+    },
+    {
+      "id": 9,
+      "label": "rollback restores original effective bundle and compile generation",
+      "passed": false
+    },
+    {
+      "id": 10,
+      "label": "MP minus sixteen cannot enable on restored warrior MP fifteen",
+      "passed": false
+    },
+    {
+      "id": 11,
+      "label": "rejected post-rollback candidate keeps coherent publication and emits no notification",
+      "passed": false
+    },
+    {
+      "id": 12,
+      "label": "baseline catalog remains restorable",
+      "passed": true
+    }
+  ],
+  "count": 12,
+  "engine_version": "4.7-stable (official)",
+  "failed": 6,
+  "invocation_id": "b8cfbe43-ce43-4cd1-9463-5c05fc28af74",
+  "passed": 6,
+  "reported_checks": 12,
+  "reported_failures": 6,
+  "run_id": "829f2cbc-be6f-4be2-bb8f-657dd81b8971",
+  "scene_id": "feature_creation_rollback_test",
+  "schema_version": 1,
+  "source_content_sha256": "0c3a14b9fcf9d1cf86dcab807838599a54055196e68af2f375db8cbcf0e6c2a0",
+  "status": "FAIL"
+}

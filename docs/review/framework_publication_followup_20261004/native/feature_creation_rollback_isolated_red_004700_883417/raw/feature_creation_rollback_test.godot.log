@@ -1,0 +1,13 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+数据库载入完成：地图209 怪物156 Boss20 装备175 技能等级132 掉落槽3424 任务9
+ERROR: Feature loadout rejected: ["feature_stat_range:max_mp"]
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] recalculate_stats (res://scripts/player_state.gd:3726)
+       [1] _on_feature_catalog_changed (res://scripts/player_state.gd:3740)
+       [2] _publish_feature_configuration (res://scripts/layers/runtime/content_layer_registry.gd:183)
+       [3] set_feature_module_enabled (res://scripts/layers/runtime/content_layer_registry.gd:228)
+       [4] _run (res://tests/framework/feature_creation_rollback_test.gd:53)
+CREATION_ROLLBACK_OBSERVATION profile=1791046027_3575 base_mp=15 enabled=true save_reason=atomic_character_creation_failed
+FEATURE_CREATION_ROLLBACK_FAIL checks=12 failures=["rollback restores feature input from A instead of failed B", "rollback restores original effective bundle and compile generation", "MP minus sixteen cannot enable on restored warrior MP fifteen", "rejected post-rollback candidate keeps coherent publication and emits no notification", "receipt"]

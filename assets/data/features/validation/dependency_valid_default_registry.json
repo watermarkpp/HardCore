@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "modules": [
+    {
+      "module_id": "hc.dependency_a",
+      "path": "res://assets/data/features/validation/dependency_a_default.json"
+    },
+    {
+      "module_id": "hc.dependency_b",
+      "path": "res://assets/data/features/validation/dependency_b_default.json"
+    }
+  ],
+  "bindings": [
+    {
+      "module_id": "hc.dependency_a",
+      "kind": "rule",
+      "rule_id": "hc.dependency_a",
+      "mechanic_id": "hc.dependency_a.accuracy"
+    },
+    {
+      "module_id": "hc.dependency_b",
+      "kind": "rule",
+      "rule_id": "hc.dependency_b",
+      "mechanic_id": "hc.dependency_b.accuracy"
+    }
+  ]
+}

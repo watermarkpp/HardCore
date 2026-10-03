@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "modules": [
+    {
+      "module_id": "hc.delayed_release_probe",
+      "path": "res://assets/data/features/validation/delayed_release_probe.json"
+    },
+    {
+      "module_id": "hc.numeric_fixture",
+      "path": "res://assets/data/features/numeric_fixture.json"
+    }
+  ],
+  "bindings": [
+    {
+      "module_id": "hc.delayed_release_probe",
+      "kind": "skill",
+      "skill_id": "hc.skill.taoist.healing",
+      "mechanic_id": "hc.delayed_release_probe.healing"
+    },
+    {
+      "module_id": "hc.numeric_fixture",
+      "kind": "rule",
+      "rule_id": "hc.numeric_fixture",
+      "mechanic_id": "hc.fixture_accuracy"
+    }
+  ]
+}

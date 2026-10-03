@@ -1,0 +1,32 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "feature_delayed_producer_publication_test",
+                        "test_path":  "tests/framework/feature_delayed_producer_publication_test.tscn",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-03T17:03:13.4038603Z",
+                        "native_exit_observed_utc":  "2026-10-03T17:03:07.7631337Z",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "3c331510-a031-420b-abeb-db5ea9442f70",
+                        "framework_receipt_valid":  true,
+                        "result":  "PASS",
+                        "reason":  ""
+                    }
+                ],
+    "total":  1,
+    "invocation_id":  "1106d34a-17a2-46d5-b450-5ec8689d82e5",
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "passed":  1,
+    "engine_log_errors":  0,
+    "generated_at":  "2026-10-04T01:03:09.1911626+08:00",
+    "failed":  0,
+    "suite":  "adhoc"
+}

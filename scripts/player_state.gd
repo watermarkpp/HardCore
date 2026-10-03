@@ -9325,6 +9325,8 @@ func feature_publication_context() -> Dictionary:
 			continue
 		var actor: Variant = owner.get("player")
 		if not is_instance_valid(actor) or not actor.has_method("combat_action_snapshot") \
+			or not actor.has_method("has_pending_combat_release") \
+			or bool(actor.call("has_pending_combat_release")) \
 			or bool(actor.call("combat_action_snapshot").get("active", true)):
 			ready = false
 	return {"world_active":active, "world_ready":ready}
@@ -9371,6 +9373,9 @@ func create_character(new_name: String, new_profession := "战士", new_gender :
 	if _durability_save_pending and not _commit_save(true, true):
 		return "当前角色耐久存档失败，暂不能创建角色"
 	var previous_runtime := _creation_runtime_snapshot()
+	# Compile the candidate character independently; rollback retains the old
+	# immutable bundle, derived inputs and compilation generation as one state.
+	_feature_loadout = _feature_loadout.candidate_copy()
 	active_profile_id = new_profile_id
 	character_name = clean_name
 	reset_progress(false)
@@ -9690,6 +9695,9 @@ func _creation_runtime_snapshot() -> Dictionary:
 		"saved_ground_position_gu": saved_ground_position_gu,
 		"saved_ground_position_gu_valid": saved_ground_position_gu_valid,
 		"computed_stats": computed_stats.duplicate(true),
+		"feature_base_stats": _feature_base_stats.duplicate(true),
+		"feature_loadout": _feature_loadout,
+		"feature_errors": feature_errors.duplicate(),
 		"computed_special_effects": computed_special_effects.duplicate(true),
 		"durability_event_commit_count": durability_event_commit_count,
 		"active_profile_id": active_profile_id,
@@ -9706,6 +9714,13 @@ func _creation_runtime_snapshot() -> Dictionary:
 
 
 func _restore_creation_runtime(snapshot: Dictionary) -> void:
+	# This transaction-only reference is never an item/save wire field.
+	var feature_loadout: Variant = snapshot.get("feature_loadout")
+	if not feature_loadout is RefCounted or feature_loadout.get_script() != FeatureLoadout \
+		or not snapshot.get("feature_base_stats") is Dictionary or not snapshot.get("feature_errors") is Array:
+		return
+	snapshot = snapshot.duplicate(false)
+	snapshot.erase("feature_loadout")
 	if snapshot.get(ItemTransactionJournal.FIELD, {}).is_empty():
 		snapshot = snapshot.duplicate(false)
 		snapshot.erase(ItemTransactionJournal.FIELD)
@@ -9766,6 +9781,9 @@ func _restore_creation_runtime(snapshot: Dictionary) -> void:
 	saved_ground_position_gu = snapshot.get("saved_ground_position_gu", Vector2.ZERO)
 	saved_ground_position_gu_valid = bool(snapshot.get("saved_ground_position_gu_valid", false))
 	computed_stats = (snapshot.get("computed_stats", {}) as Dictionary).duplicate(true)
+	_feature_base_stats = snapshot.feature_base_stats.duplicate(true)
+	_feature_loadout = feature_loadout
+	feature_errors = snapshot.feature_errors.duplicate()
 	computed_special_effects = (snapshot.get("computed_special_effects", {}) as Dictionary).duplicate(true)
 	durability_event_commit_count = int(snapshot.get("durability_event_commit_count", 0))
 	active_profile_id = str(snapshot.get("active_profile_id", ""))

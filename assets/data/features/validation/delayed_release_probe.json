@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "module_id": "hc.delayed_release_probe",
+  "module_version": 1,
+  "core_api_version": 1,
+  "requires": [],
+  "conflicts": [],
+  "capabilities": [
+    "skills.modify"
+  ],
+  "handlers": [],
+  "resource_dependencies": [],
+  "cost": {
+    "commands_per_event": 0,
+    "states_per_target": 0
+  },
+  "default_enabled": false,
+  "scope": "character",
+  "activation_boundary": "startup",
+  "mechanics": [
+    {
+      "mechanic_id": "hc.delayed_release_probe.healing",
+      "kind": "skill",
+      "tags": [
+        "hc.numeric"
+      ],
+      "operations": [
+        {
+          "skill_id": "hc.skill.taoist.healing",
+          "field": "timing.effect_resolve_ms_from_cast_start",
+          "op": "add",
+          "value": 4200
+        }
+      ]
+    }
+  ],
+  "tests": [
+    "tests/framework/feature_delayed_producer_publication_test.tscn"
+  ]
+}

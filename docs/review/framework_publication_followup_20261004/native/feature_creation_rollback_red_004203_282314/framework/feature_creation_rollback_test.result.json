@@ -1,0 +1,76 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "real production creates isolated warrior A",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "level one warrior has independently expected MP 15",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "register rollback probe through trusted production loader",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "valid feature is active before creation transaction",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "existing owned save failure triggers official creation rollback",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "rollback restores active A and computed stats",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "failed B leaves A and index bytes intact without orphan character",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "rollback restores feature input from A instead of failed B",
+      "passed": false
+    },
+    {
+      "id": 9,
+      "label": "rollback restores original effective bundle and compile generation",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "MP minus sixteen cannot enable on restored warrior MP fifteen",
+      "passed": false
+    },
+    {
+      "id": 11,
+      "label": "rejected post-rollback candidate keeps coherent publication and emits no notification",
+      "passed": false
+    },
+    {
+      "id": 12,
+      "label": "baseline catalog remains restorable",
+      "passed": true
+    }
+  ],
+  "count": 12,
+  "engine_version": "4.7-stable (official)",
+  "failed": 3,
+  "invocation_id": "0c275fa2-9271-4ea8-a73f-745019d17af1",
+  "passed": 9,
+  "reported_checks": 12,
+  "reported_failures": 3,
+  "run_id": "ec2fdc47-1ca2-4f61-ac84-0b21048591f4",
+  "scene_id": "feature_creation_rollback_test",
+  "schema_version": 1,
+  "source_content_sha256": "6c73a1c1196ea10d1fe1893582eec54b11fed565bc23bdf874a425bd0829d162",
+  "status": "FAIL"
+}

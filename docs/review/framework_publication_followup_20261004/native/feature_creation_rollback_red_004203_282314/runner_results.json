@@ -1,0 +1,32 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "feature_creation_rollback_test",
+                        "test_path":  "tests/framework/feature_creation_rollback_test.tscn",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  false,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  1,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-03T16:42:35.6306212Z",
+                        "native_exit_observed_utc":  "2026-10-03T16:42:10.7403910Z",
+                        "effective_exit_code":  1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  1,
+                        "engine_log_failure_count":  1,
+                        "framework_run_id":  "ec2fdc47-1ca2-4f61-ac84-0b21048591f4",
+                        "framework_receipt_valid":  false,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;non_zero_exit_code_1;stderr_failures_1;engine_log_failures_1;framework_checks_failed"
+                    }
+                ],
+    "total":  1,
+    "invocation_id":  "0c275fa2-9271-4ea8-a73f-745019d17af1",
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "passed":  0,
+    "engine_log_errors":  1,
+    "generated_at":  "2026-10-04T00:42:11.8324708+08:00",
+    "failed":  1,
+    "suite":  "adhoc"
+}

@@ -1,0 +1,86 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "independent native process uses real persistence",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "successful live producer is confirmed by this runner invocation before cold selection",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "actual independent startup and profile load recover the sequenced journal",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "cold aggregate recovers the exact durable epoch, contiguous frontier and recent results",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "all 64 original opaque outcomes survive independent cold recovery",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "old retired identity remains terminal across process restart before module activation",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "recent exact outcome replays after restart without another writer job",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "legacy exact outcome replays after restart without another writer job",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "all replay/refusal paths preserve current item ownership and perform no writes",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "new transaction explicitly enables the original default-off module",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "independent process issues the next original epoch serial rather than recycling a retired identity",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "the next real ownership operation commits after independent recovery",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "cold continuation preserves one exact gear and one original gem",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "cold continuation consumes every actual persistence receipt",
+      "passed": true
+    }
+  ],
+  "count": 14,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "e3410742-ad68-444f-8fdd-304615b1df6f",
+  "passed": 14,
+  "reported_checks": 14,
+  "reported_failures": 0,
+  "run_id": "af7d73d9-53b1-4848-9530-2e3e42e4544e",
+  "scene_id": "item_journal_recovery_cold_test",
+  "schema_version": 1,
+  "source_content_sha256": "38ec41d299455904882003ce2a874320b98e53d9018ede9b67306952477df1f3",
+  "status": "PASS"
+}

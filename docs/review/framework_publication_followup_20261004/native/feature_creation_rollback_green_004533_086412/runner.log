@@ -1,0 +1,13 @@
+[FAIL] feature_creation_rollback_test - missing_pass_marker;non_zero_exit_code_1;framework_checks_failed
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+鏁版嵁搴撹浇鍏ュ畬鎴愶細鍦板浘209 鎬墿156 Boss20 瑁呭175 鎶€鑳界瓑绾?32 鎺夎惤妲?424 浠诲姟9
+CREATION_ROLLBACK_OBSERVATION profile= base_mp=15 enabled=false save_reason=atomic_character_creation_failed
+FEATURE_CREATION_ROLLBACK_FAIL checks=12 failures=["real production creates isolated warrior A", "rollback restores active A and computed stats", "receipt"]
+[PASS] new_character_starter_loadout_test
+[PASS] character_identity_save_test
+[PASS] profile_identity_generation_test
+[PASS] feature_publication_atomic_test
+RUNNER_RESULTS_JSON=C:\Users\Administrator\.codex\worktrees\pluggable-framework-v2\HardCore\outputs\test_logs\runner_results_adhoc_20261004_004607_891_8452.json
+TEST_SUMMARY suite=adhoc passed=4 failed=1 engine_log_errors=0
+FAILED_TESTS=feature_creation_rollback_test (missing_pass_marker;non_zero_exit_code_1;framework_checks_failed)

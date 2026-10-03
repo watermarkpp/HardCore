@@ -1,0 +1,34 @@
+{
+    "schema_version":  1,
+    "invocation_id":  "3105ec0a-fb53-4dba-9189-6627ec70dc42",
+    "source_content_sha256":  "dcce874c1bb212476ced7e5bdccd5b33a68da8299f74466bde68169c3c6a515b",
+    "producers":  {
+                      "character_identity_save_test":  {
+                                                           "scene_id":  "character_identity_save_test",
+                                                           "run_id":  "beac1d6b-deab-4000-875c-1e31b6a78ce5",
+                                                           "source_content_sha256":  "dcce874c1bb212476ced7e5bdccd5b33a68da8299f74466bde68169c3c6a515b",
+                                                           "process_exited":  true,
+                                                           "effective_exit_code":  0,
+                                                           "result":  "PASS",
+                                                           "receipt_sha256":  "fdc1cdaed9e0eb722571f5b65991ea1b3f040d609e8222fb049098b6add24bab"
+                                                       },
+                      "profile_identity_generation_test":  {
+                                                               "scene_id":  "profile_identity_generation_test",
+                                                               "run_id":  "2c67850e-51f6-4947-8c58-e81848d078fd",
+                                                               "source_content_sha256":  "dcce874c1bb212476ced7e5bdccd5b33a68da8299f74466bde68169c3c6a515b",
+                                                               "process_exited":  true,
+                                                               "effective_exit_code":  0,
+                                                               "result":  "PASS",
+                                                               "receipt_sha256":  "3f578d9319d4b781d75981e4cbd14c2db40bba2b066a35f5646258950f22c8dc"
+                                                           },
+                      "feature_publication_atomic_test":  {
+                                                              "scene_id":  "feature_publication_atomic_test",
+                                                              "run_id":  "461c5a5a-216b-4311-b069-c1bfd2e0a72a",
+                                                              "source_content_sha256":  "dcce874c1bb212476ced7e5bdccd5b33a68da8299f74466bde68169c3c6a515b",
+                                                              "process_exited":  true,
+                                                              "effective_exit_code":  0,
+                                                              "result":  "PASS",
+                                                              "receipt_sha256":  "81ff02d9a995957f4649a874ea1b7b7b29604283db515f5c8c5b6212de92dc4a"
+                                                          }
+                  }
+}

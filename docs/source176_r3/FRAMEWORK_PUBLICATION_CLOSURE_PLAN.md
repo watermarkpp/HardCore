@@ -30,12 +30,22 @@ Task 1：PASS（本增量受控数据接入范围）。原生反例 feature_regi
 
 Task 2：PASS（本增量原子发布与生命周期范围，整套框架仍未完成）。feature_publication_atomic_red_233123_164923：14检查/8 FAIL，正式启用与默认启用目录能先暴露无效人物候选，发布观察者可重入；修复后14项通过，最终补技能耗蓝范围与重入 reload 后19项通过。feature_publication_lifecycle_red_233728_069955：27检查/12 FAIL；最终30项通过，含无保存身份的真实世界、启动包、输入锁、暂停、多所有者、真实 accepted 技能及非空票据、停用后兑现和 queued-free 收尾。
 
-fixture Ruling：旧 fire_cooldown_configuration 关闭人物 physics 后不等待动作终态，且在活世界内恢复目录。原34项/11 FAIL保留于 feature_publication_related_234146_073565；只修改夹具让真实 physics 完成动作、观察测量后的单次释放，并在退出世界后恢复目录。全部伤害/MP/冷却断言保留，现41项通过。feature_publication_cooldown_fixture_green_234533_265241：3场景 PASS。
+fixture Ruling：旧 fire_cooldown_configuration 关闭人物 physics 后不等待动作终态，且在活世界内恢复目录。原34项/11 FAIL保留于 feature_publication_related_234146_073565；只修改夹具让真实 physics 完成动作、观察测量后的单次释放，并在退出世界后恢复目录。原伤害与冷却断言、MP观测保留，现41项通过；该夹具原无独立精确MP期望断言，不单称MP公式验收。feature_publication_cooldown_fixture_green_234533_265241：3场景 PASS。
 
 最终直接同指纹 4bbd5374b510b64aa24cc2b8c875c98f1d16e1b81e6826f52e12328bdd2b31a3：feature_publication_final_direct_234845_516247 的15采用场景/400检查 PASS；两 journal 恢复因默认 APPDATA 根不满足夹具要求原 FAIL 保留。按正式 wrapper 的 HARDCORE_AUDIT_RUNTIME_APPDATA 指定新隔离子目录后 feature_publication_journal_isolated_235316_172622 两场景/39检查 PASS，未改源码或断言，producer/cold仍依本轮原生 handoff。
 
 生命周期 Ruling：定义/代码目录替换只在未附着世界或世界完全退休后进行；已注册可信 world_ready 包的来源启用在原世界输入 READY、未暂停、无未结束动作、所有登记 owner 合格的同步事务中进行。startup 包不允许活世界启用。停用撤后续来源，并保留旧 accepted lease/效果/事务的既有去向。此边界委托唯一 PlayerState 世界登记与原 Root/Player 状态，不设置第二生命周期或更改战斗节拍。若 scope 解读或后续资源准备要求更严格，先由固定 SHA 双审计复核。
 
-Task 3—5：NOT_RUN。既有 ObjectDB 8 warning 原样保留；本轮原生业务结果不将其当作 Android 或无限耐久证明。
+Task 3：开始 RED；Task 4—5：NOT_RUN。既有 ObjectDB 8 warning 原样保留；本轮原生业务结果不将其当作 Android 或无限耐久证明。
 
 最终自然链 feature_publication_final_world_235850_550131：六场景全部 PASS、独立本轮 producer/cold、同4bbd指纹。合并直接最终采用23唯一场景/682完整检查；58原生尝试中的7失败原样保留。原字节源码与完整回执见 docs/review/framework_publication_20261003。
+
+2026-10-04 检查点：已创建并推送受测快照 8664ef242edcd8bfeca3f599e6478636c0a75ca3，父3a1，157总路径中23源码/测试/作者数据增量，其余为原字节证据和计划；远端确认同 SHA。真实第三树 HEAD/index 未切换或覆盖；主树119/第二树249 status 指纹仍与保护记录一致。Pro原6abbcea3与小可爱原01a0f143（durable）均经官方入口实际接到该范围请求，既有dots每10分钟双拉取ACTIVE，完整读取后各自停扫，两份读到后PAUSED。请求记录在 outputs/framework_v2/publication_closure_20261003/AUDIT_REQUEST_8664.json。
+
+资源闭包首个反例 feature_resource_publication_red_001532_569172：真实 GameData 疗伤药图标确实存在；合法非空资源声明无法在正式 Authority/Compiler 目录闭合；旧目录/装配未改变。该测试只定位入口缺口，不作为完整资源功能验收。后续必须补发布前实际线程准备、失败/撤销、已接受动作和状态的租约、共享资源、冷热时序及子效果依赖，不以放宽 resource_paths 枚举就关闭 Task 3。
+
+Task 3 诊断反例 feature_resource_publication_diagnostic_red_002004_334986：3检查/1 FAIL、原生退出1、运行源码固定ff66e4f4。真实路径 res://assets/art/items/service/inventory/client.classic_raw_complete/Items_00014.png；Compiler返回精确 missing_declared_resource。目录/人物保留检查 PASS。还未实现准备与租约，不把此定位当完整闭合。
+
+2026-10-04 续施工：8664两位完整报告已从原对话实际读取并保存，来源消息和正文在 outputs/framework_v2/publication_closure_20261003/audit_8664，旧双拉取任务已官方PAUSED。四项发布边界均先原生证伪再补修：隔离真实建角失败使旧角色base/bundle遗漏恢复（12检查/4 FAIL→12 PASS）；合法旧治疗A待释放、新攻击B已真实结束时仅查最新槽位（20/2 FAIL→含转场/退出31 PASS）；六类错误目录条目被静默跳过（25/18 FAIL→25 PASS）；默认启用依赖与手动路径不一致（16/3 FAIL→16 PASS）。来源是独立审计，根因及修复由单主控核验，保持原HP/planner/writer/动作时序。
+
+本轮最终同内容35场景分组回归及固定增量证据见 docs/review/framework_publication_followup_20261004。此处不预先宣称完整资源/异构组合、模板/整体验收或APK通过；Task 3仍有公开失败反例，Task 4—5继续施工。角色职业切换的临时属性预览也存在直接恢复computed_stats路径，后续需独立核验派生输入一致性，不能把此次建角反例外推为所有属性回滚证明。

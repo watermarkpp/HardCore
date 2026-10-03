@@ -1,0 +1,9 @@
+[FAIL] feature_resource_publication_test - missing_pass_marker;non_zero_exit_code_1;framework_checks_failed
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+鏁版嵁搴撹浇鍏ュ畬鎴愶細鍦板浘209 鎬墿156 Boss20 瑁呭175 鎶€鑳界瓑绾?32 鎺夎惤妲?424 浠诲姟9
+FEATURE_RESOURCE_CANDIDATE {"errors":["missing_declared_resource:res://assets/art/items/service/inventory/client.classic_raw_complete/Items_00014.png"],"path":"res://assets/art/items/service/inventory/client.classic_raw_complete/Items_00014.png","success":false}
+FRAMEWORK_FEATURE_RESOURCE_PUBLICATION_FAIL checks=3 failures=["real nonempty dependency can enter the formal feature resource closure", "receipt"]
+RUNNER_RESULTS_JSON=C:\Users\Administrator\.codex\worktrees\pluggable-framework-v2\HardCore\outputs\test_logs\runner_results_adhoc_20261004_002012_971_400.json
+TEST_SUMMARY suite=adhoc passed=0 failed=1 engine_log_errors=0
+FAILED_TESTS=feature_resource_publication_test (missing_pass_marker;non_zero_exit_code_1;framework_checks_failed)

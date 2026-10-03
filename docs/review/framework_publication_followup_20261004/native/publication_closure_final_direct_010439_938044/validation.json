@@ -1,0 +1,16 @@
+{
+  "command": [
+    "powershell",
+    "-NoProfile",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_creation_rollback_test.tscn','tests/framework/feature_registry_structure_test.tscn','tests/framework/feature_publication_dependencies_test.tscn','tests/framework/feature_registry_publication_test.tscn','tests/framework/feature_publication_atomic_test.tscn','tests/framework/feature_compiler_test.tscn','tests/framework/feature_loadout_atomic_test.tscn','tests/framework/character_identity_save_test.tscn','tests/framework/profile_identity_generation_test.tscn','tests/framework/socket_transaction_test.tscn','tests/new_character_starter_loadout_test.tscn','tests/framework/frame_budget_test.tscn','tests/framework/feature_queue_retention_test.tscn' -TimeoutSeconds 30"
+  ],
+  "timeout_seconds": 30,
+  "exit_code": 0,
+  "source_stable_during_run": true,
+  "passed": 13,
+  "failed": 0,
+  "status": "PASS"
+}

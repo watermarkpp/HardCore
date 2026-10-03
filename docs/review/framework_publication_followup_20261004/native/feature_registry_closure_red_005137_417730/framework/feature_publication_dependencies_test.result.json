@@ -1,0 +1,96 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "baseline prepared",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "default A cannot publish while required B is disabled",
+      "passed": false
+    },
+    {
+      "id": 3,
+      "label": "invalid default dependency preserves complete old publication",
+      "passed": false
+    },
+    {
+      "id": 4,
+      "label": "invalid enabled dependency has explicit diagnostic",
+      "passed": false
+    },
+    {
+      "id": 5,
+      "label": "default A and B with closed dependencies publish legally",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "valid two default grants contribute exactly four accuracy",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "same definitions can register with neither enabled",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "manual A obeys same dependency rule",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "manual failed dependency preserves old publication",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "explicitly enabling B remains legal",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "explicitly enabling A after B remains legal",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "manual closed dependency gives same effective result as defaults",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "required B cannot be withdrawn under enabled A",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "failed dependency withdrawal preserves accepted configuration",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "dependent then dependency can withdraw in legal order",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "baseline restores original attributes",
+      "passed": true
+    }
+  ],
+  "count": 16,
+  "engine_version": "4.7-stable (official)",
+  "failed": 3,
+  "invocation_id": "947ca115-b764-43e9-8eed-e83b1ab6eedb",
+  "passed": 13,
+  "reported_checks": 16,
+  "reported_failures": 3,
+  "run_id": "07f85279-b3a3-4279-be81-9fc968d0282a",
+  "scene_id": "feature_publication_dependencies_test",
+  "schema_version": 1,
+  "source_content_sha256": "dc4a7909eebd76fc26be29b1e266b190e2dddaf94f8dbc074bf995d5b99ee655",
+  "status": "FAIL"
+}

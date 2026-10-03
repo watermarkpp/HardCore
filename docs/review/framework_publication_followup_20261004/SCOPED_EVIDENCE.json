@@ -1,0 +1,28 @@
+{
+  "parent": "8664ef242edcd8bfeca3f599e6478636c0a75ca3",
+  "construction_head": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+  "content_sha256": "38ec41d299455904882003ce2a874320b98e53d9018ede9b67306952477df1f3",
+  "source_files": 3612,
+  "delta_files": 30,
+  "engine_version": "4.7.stable.official.5b4e0cb0f",
+  "engine_console_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+  "engine_child_file_sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+  "engine_child_scope": "file hash declaration only; no new per-invocation mapped-binary witness",
+  "final_unique_scenes": 35,
+  "final_framework_receipts": 32,
+  "final_complete_framework_checks": 990,
+  "native_attempts": 64,
+  "preserved_failed_attempts": 10,
+  "resource_closure_status": "FAIL",
+  "whole_framework_status": "NOT_RUN",
+  "source_zip": {
+    "bytes": 15153524,
+    "sha256": "28a8679f11244bac44543b3c3f973c7c39066c8fcf05cf5d3ffcaf061c7405fe"
+  },
+  "native_zip": {
+    "bytes": 7000627,
+    "sha256": "3a2b198f77990ddf565e1310238d7da25f3098cc1531c7c94329fe73b05b06c6"
+  },
+  "status": "PASS",
+  "scope": "Four publication counterexamples and 35 selected regressions; nonempty resources, heterogeneous combinations and APK remain open."
+}

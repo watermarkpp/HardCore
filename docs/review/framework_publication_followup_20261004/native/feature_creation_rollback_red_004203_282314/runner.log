@@ -1,0 +1,17 @@
+[FAIL] feature_creation_rollback_test - missing_pass_marker;non_zero_exit_code_1;stderr_failures_1;engine_log_failures_1;framework_checks_failed
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+鏁版嵁搴撹浇鍏ュ畬鎴愶細鍦板浘209 鎬墿156 Boss20 瑁呭175 鎶€鑳界瓑绾?32 鎺夎惤妲?424 浠诲姟9
+CREATION_ROLLBACK_OBSERVATION profile=1791045730_3363 base_mp=15 enabled=true save_reason=atomic_character_creation_failed
+FEATURE_CREATION_ROLLBACK_FAIL checks=12 failures=["rollback restores feature input from A instead of failed B", "MP minus sixteen cannot enable on restored warrior MP fifteen", "rejected post-rollback candidate keeps coherent publication and emits no notification", "receipt"]
+ERROR: Feature loadout rejected: ["feature_stat_range:max_mp"]
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] recalculate_stats (res://scripts/player_state.gd:3726)
+       [1] _on_feature_catalog_changed (res://scripts/player_state.gd:3740)
+       [2] _publish_feature_configuration (res://scripts/layers/runtime/content_layer_registry.gd:183)
+       [3] set_feature_module_enabled (res://scripts/layers/runtime/content_layer_registry.gd:228)
+       [4] _run (res://tests/framework/feature_creation_rollback_test.gd:52)
+RUNNER_RESULTS_JSON=C:\Users\Administrator\.codex\worktrees\pluggable-framework-v2\HardCore\outputs\test_logs\runner_results_adhoc_20261004_004211_832_22532.json
+TEST_SUMMARY suite=adhoc passed=0 failed=1 engine_log_errors=1
+FAILED_TESTS=feature_creation_rollback_test (missing_pass_marker;non_zero_exit_code_1;stderr_failures_1;engine_log_failures_1;framework_checks_failed)

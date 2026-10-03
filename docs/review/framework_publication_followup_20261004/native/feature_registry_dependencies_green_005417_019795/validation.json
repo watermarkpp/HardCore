@@ -1,0 +1,16 @@
+{
+  "command": [
+    "powershell",
+    "-NoProfile",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_publication_dependencies_test.tscn','tests/framework/feature_registry_structure_test.tscn','tests/framework/feature_registry_publication_test.tscn','tests/framework/feature_publication_atomic_test.tscn' -TimeoutSeconds 30"
+  ],
+  "timeout_seconds": 30,
+  "exit_code": 0,
+  "source_stable_during_run": true,
+  "passed": 4,
+  "failed": 0,
+  "status": "PASS"
+}

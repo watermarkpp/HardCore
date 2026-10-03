@@ -109,7 +109,10 @@ func reload_feature_catalog(registry_path: String = FEATURE_REGISTRY) -> bool:
 	var authority := FeatureAuthority.build()
 	var modules: Array = []
 	for entry: Variant in registry.modules:
-		if not entry is Dictionary or not compiler._keys(entry, ["module_id", "path"], [], errors, "feature_module_entry"):
+		if not entry is Dictionary:
+			errors.append("feature_module_entry_not_dictionary")
+			continue
+		if not compiler._keys(entry, ["module_id", "path"], [], errors, "feature_module_entry"):
 			continue
 		if not _feature_authoring_path(entry.path):
 			errors.append("untrusted_feature_module_path:" + str(entry.path))
@@ -164,6 +167,13 @@ func _publish_feature_configuration(candidate: RefCounted, authority: Dictionary
 	if _feature_publication_in_progress:
 		feature_load_errors = ["feature_publication_in_progress"]
 		return false
+	# Defaults, activation and withdrawal publish the same closed enabled set.
+	# Registration alone never implicitly activates a required dependency.
+	for selected: String in enabled:
+		for dependency: String in candidate.catalog().modules[selected].requires:
+			if dependency not in enabled:
+				feature_load_errors = ["feature_disabled_dependency:" + selected + ":" + dependency]
+				return false
 	_feature_publication_in_progress = true
 	var configuration := {"catalog":candidate.catalog(), "authority":authority,
 		"bindings":bindings, "enabled_modules":enabled}
@@ -220,10 +230,6 @@ func set_feature_module_enabled(id: String, enabled: bool) -> bool:
 		candidate.append(id)
 	else:
 		candidate.erase(id)
-	for selected: String in candidate:
-		for dependency: String in _feature_catalog.catalog().modules[selected].requires:
-			if dependency not in candidate:
-				return false
 	candidate.sort()
 	return _publish_feature_configuration(_feature_catalog, _feature_authority, _feature_bindings, candidate)
 

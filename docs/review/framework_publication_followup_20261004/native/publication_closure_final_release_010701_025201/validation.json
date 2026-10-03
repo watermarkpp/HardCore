@@ -1,0 +1,16 @@
+{
+  "command": [
+    "powershell",
+    "-NoProfile",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_delayed_producer_publication_test.tscn','tests/framework/feature_publication_lifecycle_test.tscn','tests/framework/action_configuration_production_test.tscn','tests/framework/melee_configuration_production_test.tscn','tests/framework/fire_cooldown_configuration_test.tscn','tests/framework/feature_admission_release_test.tscn','tests/framework/feature_production_loadout_test.tscn','tests/framework/feature_effect_production_test.tscn','tests/framework/feature_fire_effect_production_test.tscn','tests/framework/profile_gameplay_owner_test.tscn','tests/framework/empty_extension_behavior_test.tscn','tests/framework/item_journal_sequence_test.tscn','tests/hc_monster_combat_r4/synchronous_revive_death_token_test.tscn','tests/hc_monster_combat_r2/revival_durability_test.tscn' -TimeoutSeconds 30"
+  ],
+  "timeout_seconds": 30,
+  "exit_code": 0,
+  "source_stable_during_run": true,
+  "passed": 14,
+  "failed": 0,
+  "status": "PASS"
+}
