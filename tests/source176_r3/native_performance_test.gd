@@ -2,6 +2,58 @@ extends Node2D
 const F := preload("res://tests/source176_r3/helpers/runtime_fixture.gd")
 const Diagnostics := preload("res://scripts/runtime_diagnostics.gd")
 @export var monster_count := 10
+@export var profile_hot_paths := false
+const HOT_NAMES: Array[String] = ["neighbor", "crowd_goal", "motion_clear", "footprint_miss", "contact_flank", "near_batch"]
+class ProfiledActor extends EnemyActor:
+	var hot: Dictionary = {}
+	func add_hot(key: String, started: int) -> void:
+		var row: Array = hot.get(key,[0,0])
+		row[0] += 1
+		row[1] += maxi(0,Time.get_ticks_usec()-started)
+		hot[key] = row
+	func _hc_neighbor(current: Vector2,hit_target: Node2D,direct: Vector2i) -> Vector2i:
+		var started := Time.get_ticks_usec()
+		var result := super._hc_neighbor(current,hit_target,direct)
+		add_hot("neighbor",started)
+		return result
+	func _hc_crowd_position_goal(hit_target: Node2D) -> Vector2:
+		var started := Time.get_ticks_usec()
+		var result := super._hc_crowd_position_goal(hit_target)
+		add_hot("crowd_goal",started)
+		return result
+	func _hc_motion_clear(a: Vector2,b: Vector2) -> bool:
+		var started := Time.get_ticks_usec()
+		var result := super._hc_motion_clear(a,b)
+		add_hot("motion_clear",started)
+		return result
+	func _hc_point_walkable_uncached(point: Vector2) -> bool:
+		var started := Time.get_ticks_usec()
+		var result := super._hc_point_walkable_uncached(point)
+		add_hot("footprint_miss",started)
+		return result
+	func _hc_contact_flank(current: Vector2,anchor: Vector2,victim_anchor: Vector2,hit_target: Node2D,cell: Vector2i,preferred_sign: float) -> Vector2:
+		var started := Time.get_ticks_usec()
+		var result := super._hc_contact_flank(current,anchor,victim_anchor,hit_target,cell,preferred_sign)
+		add_hot("contact_flank",started)
+		return result
+	func _hc_prepare_flank_batch(current: Vector2,anchor: Vector2,cell: Vector2i) -> bool:
+		var started := Time.get_ticks_usec()
+		var result := super._hc_prepare_flank_batch(current,anchor,cell)
+		add_hot("near_batch",started)
+		return result
+
+var hot_samples: Array = []
+var last_hot: Dictionary = {}
+func hot_totals() -> Dictionary:
+	var result: Dictionary = {}
+	for key: String in HOT_NAMES: result[key] = [0,0]
+	for actor: EnemyActor in actors:
+		if actor is ProfiledActor:
+			for key: String in HOT_NAMES:
+				var row: Array = actor.hot.get(key,[0,0])
+				result[key][0] += int(row[0])
+				result[key][1] += int(row[1])
+	return result
 var actors: Array[EnemyActor] = []
 var victim: PlayerCharacter
 var collecting := false
@@ -31,6 +83,13 @@ func _physics_process(delta: float) -> void:
 	frame_wall_us.append(maxi(0,wall-last_wall))
 	last_cpu = cpu
 	last_wall = wall
+	if profile_hot_paths:
+		var totals := hot_totals()
+		var sample: Dictionary = {}
+		for key: String in HOT_NAMES:
+			sample[key] = [int(totals[key][0])-int(last_hot[key][0]),int(totals[key][1])-int(last_hot[key][1])]
+		last_hot = totals
+		if hot_samples.size()<180: hot_samples.append(sample)
 	sample_tick += 1
 	# Explicit benchmark trajectory, identical in baseline and candidate.
 	# This is measurement input, not a natural-approach acceptance fixture.
@@ -48,7 +107,7 @@ func run() -> void:
 			victim = F.player(self,origin)
 			for n in range(monster_count):
 				var p := origin+Vector2.from_angle(TAU*n/float(monster_count))*4.5
-				var actor := F.enemy(self,64,p,victim)
+				var actor := F.enemy(self,64,p,victim,{},ProfiledActor.new()) if profile_hot_paths else F.enemy(self,64,p,victim)
 				actor.combat_spatial_index.unregister(actor.spatial_actor_runtime_id)
 				actor.combat_spatial_index = index
 				index.register(actor.spatial_actor_runtime_id,1,F.to_ground(actor.global_position),actor.combat_radius_gu,1,actor)
@@ -68,6 +127,8 @@ func run() -> void:
 			frame_cpu_us = []
 			frame_wall_us = []
 			sample_tick = 0
+			hot_samples = []
+			last_hot = hot_totals() if profile_hot_paths else {}
 			collecting = true
 			for n in range(180):
 				await get_tree().physics_frame
@@ -89,12 +150,15 @@ func run() -> void:
 				"frame_interval_p95_ms":percentile(frame_wall_us,.95),"frame_interval_p99_ms":percentile(frame_wall_us,.99),
 				"starts":starts,"hp_delta":victim.max_hp-victim.current_hp,"motion_gu":movement,"counters":counters,
 				"cpu_samples_us":frame_cpu_us,"frame_intervals_us":frame_wall_us})
+			if profile_hot_paths:
+				if hot_samples.size()!=180: errors.append("bounded hot-path samples incomplete")
+				rows[-1]["hot_path_samples"] = hot_samples
 			for actor: EnemyActor in actors:
 				index.unregister(actor.spatial_actor_runtime_id)
 				actor.free()
 			actors.clear()
 			victim.free()
-	F.write_evidence("native_performance_"+str(monster_count),{"errors":errors,"rows":rows,
-		"scope":"PC headless native physics 60; drawing disabled; explicit same benchmark trajectory; DEVICE TEST NOT_RUN"})
+	F.write_evidence(("profiled_performance_" if profile_hot_paths else "native_performance_")+str(monster_count),{"errors":errors,"rows":rows,
+		"profile_hot_paths":profile_hot_paths,"profile_scope":"inclusive nested diagnostic times only; matching instrumentation; not uninstrumented performance acceptance","scope":"PC headless native physics 60; drawing disabled; explicit same benchmark trajectory; DEVICE TEST NOT_RUN"})
 	print(("R3_NATIVE_PERF_PASS" if errors.is_empty() else "R3_NATIVE_PERF_FAIL")+" count="+str(monster_count)+" cases="+str(rows.size())+" errors="+str(errors))
 	get_tree().quit(0 if errors.is_empty() else 1)

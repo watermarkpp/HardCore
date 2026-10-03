@@ -1,0 +1,28 @@
+{
+  "command": [
+    "C:\\Users\\Administrator\\.codex\\tools\\glm-mcp\\.venv\\Scripts\\python.exe",
+    "C:\\Users\\Administrator\\.codex\\tools\\glm-mcp\\server.py",
+    "--settings",
+    "C:\\Users\\Administrator\\.codex\\tools\\glm-mcp\\settings.json",
+    "--once"
+  ],
+  "native_exit": 0,
+  "wall_seconds": 13.031,
+  "task_id": "0cce54f2-5080-4b33-a788-a507f835493e",
+  "source_sha256": "3005654b1658e17c93c221b85c4252f3359c8b2ee7aaade14cf253b78f1ff7d8",
+  "model_requested": "glm-5.3-flash",
+  "response_model": "glm-5-3-flash",
+  "endpoint_requested": "https://ark.cn-beijing.volces.com/api/coding/v3/responses",
+  "reasoning_effort_requested": "low",
+  "reasoning_effort_reported": "low",
+  "response_status": "completed",
+  "usage": {
+    "input_tokens": 8616,
+    "output_tokens": 616,
+    "total_tokens": 9232,
+    "reasoning_tokens": 248
+  },
+  "ok": true,
+  "complete": true,
+  "status": "FAIL"
+}

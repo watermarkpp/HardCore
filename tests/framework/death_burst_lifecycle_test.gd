@@ -8,6 +8,9 @@ var first_expiry_usec := 0
 var maximum_death_age_usec := 0
 var second_input_usec := 0
 var original_release_delay_usec := 0
+var first_input_usec := 0
+var first_effect_started_usec := 0
+var observed_initial_release_latency_usec := 0
 
 func _scene_id() -> String:
 	return "death_expiry_overlap_test" if overlap_expiry else "death_burst_lifecycle_test"
@@ -16,6 +19,18 @@ func _artifact_path(suffix: String) -> String:
 	return "res://outputs/test_logs/framework/"+_scene_id().trim_suffix("_test")+suffix+".json"
 
 func _run() -> void:
+	var engine_arguments := OS.get_cmdline_args()
+	var clock_deltas: Array[float] = []
+	var fixed_deltas := true
+	for frame in 3:
+		await get_tree().process_frame
+		var observed_delta := get_process_delta_time()
+		clock_deltas.append(observed_delta)
+		fixed_deltas = fixed_deltas and absf(observed_delta-1.0/60.0) < 0.000000001
+	print("BOUNDARY_CLOCK_ENVIRONMENT "+JSON.stringify({"engine_arguments":Array(engine_arguments),"observed_process_delta":clock_deltas,"physics_tps":Engine.physics_ticks_per_second,"time_scale":Engine.time_scale}))
+	check(fixed_deltas and Engine.max_fps == 60 and Engine.physics_ticks_per_second == 60
+		and Engine.time_scale == 1.0,"static boundary uses explicit fixed60 engine stepping with original timers and scale")
+	if not failures.is_empty(): _finish(); return
 	check(not PlayerState.test_mode and OS.get_environment("APPDATA").replace("\\","/").contains("/.godot/runtime_appdata/"),"burst owns isolated production persistence")
 	PlayerState.begin_startup_save_upgrade()
 	check(PlayerState.finish_startup_save_upgrade() and PlayerState.create_character("死亡同刻验证" if overlap_expiry else "死亡突发验证","hc.profession.wizard").is_empty(),"real startup creates the burst profile")
@@ -80,6 +95,7 @@ func _run() -> void:
 	if not nonoverlap: _finish(); return
 	game._set_magic_locked_target(targets[0],true)
 	check(game._canonical_screen_px_to_grid_cell(targets[0].global_position) == Vector2i(center),"fixture center equals the production rounded target cell")
+	first_input_usec = game._time_domains.simulation_usec()
 	check(game._try_release_skill("hc.skill.wizard.ice_storm",false) == &"accepted","first action accepts through Root and Player")
 	runtime = game._feature_effect_runtime
 	check(runtime != null and int(runtime.reservation_snapshot().actions) == 1,"accepted first action owns a nonempty capacity reservation")
@@ -98,15 +114,23 @@ func _run() -> void:
 	for state: Dictionary in runtime._states.values(): expiries[int(state.expires)] = true
 	check(expiries.size() == 1,"all ninety accepted states share the same scheduled expiration tick")
 	first_expiry_usec = int(expiries.keys()[0])
+	var first_state: Dictionary = runtime._states.values()[0]
+	first_effect_started_usec = int(first_state.expires)-int(first_state.command.duration_usec)
+	observed_initial_release_latency_usec = first_effect_started_usec-first_input_usec
 	deadline = Time.get_ticks_msec()+8000
 	if overlap_expiry:
-		var timing: Dictionary = PlayerState.effective_skill_definition("wizard.ice_storm").timing
+		var timing: Dictionary = PlayerState.effective_skill_definition("hc.skill.wizard.ice_storm").timing
 		# Match Player's formal timing resolution; this optional field falls
 		# back to the declared body cast duration in the production consumer.
 		var body_ms := int(timing.get("body_cast_ms",roundi(ProfessionRules.CASTER_SPELL_ACTION_DURATION*1000.0)))
 		original_release_delay_usec = int(timing.get("effect_resolve_ms_from_cast_start",body_ms))*1000
 		check(game.player._equipment_spell_time_scale == 1.0,"controlled fixture retains the original release time scale")
-		while game._time_domains.simulation_usec()<first_expiry_usec-original_release_delay_usec and Time.get_ticks_msec()<deadline: await get_tree().process_frame
+		# Player's declared SceneTreeTimer delay is process-time, not an exact
+		# integer offset in Root's physics simulation clock. Observe the first
+		# real accepted input/committed state offset in that same clock; schedule
+		# the second natural input against it. No timer, clock or pump is changed.
+		check(observed_initial_release_latency_usec>0 and observed_initial_release_latency_usec<int(first_state.command.duration_usec),"first real release supplies a valid observed simulation offset")
+		while game._time_domains.simulation_usec()<first_expiry_usec-observed_initial_release_latency_usec and Time.get_ticks_msec()<deadline: await get_tree().process_frame
 		check(runtime.active_count() == 90,"all ninety states are still owned when the collision input is requested")
 	else:
 		while runtime.has_work() and Time.get_ticks_msec()<deadline: await get_tree().process_frame
@@ -144,6 +168,29 @@ func _run() -> void:
 		terminal_keys[job.death_key] = true
 		materialized_nodes += int(job.materialized_node_count)
 	check(jobs.size() == 30 and observed_deaths.size() == 30 and PlayerState.experience == expected_xp,"exactly thirty deaths and rewards pass through the sole settlement owner")
+	var queued_identities: Dictionary = burst_snapshot.get("identities",{})
+	var alignment_errors := _death_identity_errors(queued_identities,jobs)
+	check(alignment_errors.is_empty(),"queued and committed identity/slot/sequence sets match, and every snapshot state is QUEUED: "+str(alignment_errors))
+	# Counterexamples alter observer-owned copies only. They prove a same-size
+	# identity substitution or wrong state cannot pass this evidence gate.
+	if not queued_identities.is_empty():
+		var first_key: String = str(queued_identities.keys()[0])
+		var wrong_key := queued_identities.duplicate(true)
+		wrong_key["test:substituted-death-key"] = wrong_key[first_key]
+		wrong_key.erase(first_key)
+		check(_death_identity_errors(wrong_key,jobs).has("death_key_set_mismatch"),"identity gate rejects a substituted key despite unchanged unique count")
+		var wrong_state := queued_identities.duplicate(true)
+		wrong_state[first_key]["state"] = "COMMITTED"
+		check(_death_identity_errors(wrong_state,jobs).has("not_queued:"+first_key),"identity gate rejects non-QUEUED snapshot state")
+		var wrong_slot := queued_identities.duplicate(true)
+		wrong_slot[first_key]["slot"] = "test:wrong-slot"
+		check(_death_identity_errors(wrong_slot,jobs).has("slot_mismatch:"+first_key),"identity gate rejects the right key paired with the wrong slot")
+		var wrong_sequence := queued_identities.duplicate(true)
+		wrong_sequence[first_key]["sequence"] = int(wrong_sequence[first_key].sequence)+1
+		check(_death_identity_errors(wrong_sequence,jobs).has("sequence_mismatch:"+first_key),"identity gate rejects the right key paired with the wrong sequence")
+	else:
+		check(false,"identity counterexamples require the actual observed queue snapshot")
+
 	var drops := _live_drop_count()
 	check(materialized_nodes>0 and drops == materialized_nodes,"real canonical drop plans materialize exactly the observed nonempty ground-node set")
 	for frame in 8: await get_tree().process_frame
@@ -152,13 +199,16 @@ func _run() -> void:
 	check(int(runtime.metrics().started) == 90 and int(runtime.metrics().ticks)<=360 and int(runtime.metrics().expired)+int(runtime.metrics().invalidated) == 90,"each accepted state reaches its own expiry or target-death terminal result; lethal facts start no extra states")
 	var xp: int = PlayerState.experience
 	var trace := {"run_id":OS.get_environment("HARDCORE_FRAMEWORK_RUN_ID"),"source_content_sha256":OS.get_environment("HARDCORE_R3_CONTENT_SHA256"),
-		"scope":"controlled stationary disjoint receivers; natural Player release and Root pumps; not natural movement, Android or GPU",
+		"scope":"controlled stationary disjoint receivers, engine fixed60 stepping; real Player release and Root pumps; wall samples are not real-time performance, natural movement, Android or GPU",
+		"clock_environment":{"fixed_fps":60,"max_fps":Engine.max_fps,"real_time_synchronization":false,"physics_tps":Engine.physics_ticks_per_second,"time_scale":Engine.time_scale,"arguments":Array(OS.get_cmdline_args()),"observed_process_delta":clock_deltas},
 		"overlap_expiry":overlap_expiry,"second_input_usec":second_input_usec,"original_release_delay_usec":original_release_delay_usec,
+		"first_input_usec":first_input_usec,"first_effect_started_usec":first_effect_started_usec,"observed_initial_release_latency_usec":observed_initial_release_latency_usec,
 		"phase":"before final save/teardown/cold handoff","phase_status":"PASS" if failures.is_empty() else "FAIL","phase_failures":failures.duplicate(),
 		"scheduled_expiry_usec":first_expiry_usec,"observed_expiry_drained_usec":expiration_simulation_usec,"peak_state_evidence":peak_state_evidence,
 		"burst_snapshot":burst_snapshot,"death_frames":death_frames,"metrics":runtime.metrics(),"terminal_jobs":jobs.duplicate(true),
 		"resource_evidence":resource_evidence,"maximum_observed_death_age_usec":maximum_death_age_usec,"wall_frame_usec":_percentiles("wall_usec"),"samples":samples,
 		"death_latency_usec":death_finished_usec-death_started_usec,"experience":xp,"materialized_drop_nodes":materialized_nodes,"actual_drop_nodes":drops,"category_scopes":category_scopes,"maximum_runnable_service_age_frames":maximum_service_age}
+	print("BURST_INPUT_PHASE_OBSERVATION "+JSON.stringify({"first_input_usec":first_input_usec,"first_effect_started_usec":first_effect_started_usec,"observed_initial_release_latency_usec":observed_initial_release_latency_usec,"configured_release_delay_usec":original_release_delay_usec,"second_input_usec":second_input_usec,"scheduled_expiry_usec":first_expiry_usec,"death_snapshot_usec":burst_snapshot.get("simulation_usec",-1),"due_at_death":burst_snapshot.get("due_states",-1)}))
 	_write(_artifact_path("_trace"),trace)
 	game._streaming_coordinator.unregister_visual(get_instance_id())
 	check(PlayerState.save_game(true,true,true),"final durability checkpoint succeeds")
@@ -192,3 +242,26 @@ func _finish() -> void:
 	if not proof.write_receipt(_scene_id(),checks,failures.size()): failures.append("receipt")
 	print("DEATH_BURST_LIFECYCLE_%s checks=%d failures=%s" % ["PASS" if failures.is_empty() else "FAIL",checks,str(failures)])
 	get_tree().quit(0 if failures.is_empty() else 1)
+
+
+static func _death_identity_errors(queued: Dictionary,jobs: Array) -> Array[String]:
+	# Test observation only; never authorizes or changes production death work.
+	var errors: Array[String] = []
+	var terminal := {}
+	for job: Dictionary in jobs:
+		var key := str(job.get("death_key",""))
+		if key.is_empty() or terminal.has(key): errors.append("duplicate_terminal:"+key)
+		terminal[key] = job
+	var queued_keys := queued.keys(); queued_keys.sort()
+	var terminal_keys := terminal.keys(); terminal_keys.sort()
+	if queued_keys != terminal_keys: errors.append("death_key_set_mismatch")
+	for raw_key: Variant in queued:
+		var key := str(raw_key)
+		var observed: Dictionary = queued[raw_key]
+		if observed.get("state") != "QUEUED": errors.append("not_queued:"+key)
+		if not terminal.has(key): continue
+		var job: Dictionary = terminal[key]
+		if job.get("state") != "COMMITTED": errors.append("not_committed:"+key)
+		if observed.get("slot") != job.get("spawn_context",{}).get("spawn_slot_id"): errors.append("slot_mismatch:"+key)
+		if observed.get("sequence") != job.get("sequence"): errors.append("sequence_mismatch:"+key)
+	return errors

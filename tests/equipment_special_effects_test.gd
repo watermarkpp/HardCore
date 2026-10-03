@@ -47,8 +47,7 @@ func _run() -> void:
 	var stealth_ring := _equip_only("隐身戒指")
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	await preload("res://tests/helpers/formal_world_skill_fixture.gd").wait_for_formal_world(self, game, "equipment_special_effects")
 	var player: PlayerCharacter = game.player
 	assert(player.is_stealthed(), "隐身戒指没有让怪物识别为隐身")
 	PlayerState.damage_equipment_durability("hc.slot.ring_left", int(stealth_ring.get("max_durability", 1)))

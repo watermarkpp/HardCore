@@ -1,0 +1,3249 @@
+{
+  "checks": 2641,
+  "errors": [],
+  "reported_tested_sha": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+  "rows": [
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p0:d0:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p0:d0:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p0:d0:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p0:d1:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p0:d1:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p0:d1:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p0:d2:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p0:d2:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p0:d2:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p0:d3:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p0:d3:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p0:d3:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p0:d4:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p0:d4:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p0:d4:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p0:d5:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p0:d5:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p0:d5:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p0:d6:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p0:d6:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p0:d6:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p0:d7:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p0:d7:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p0:d7:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p1:d0:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p1:d0:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p1:d0:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p1:d1:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p1:d1:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p1:d1:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p1:d2:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p1:d2:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p1:d2:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p1:d3:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p1:d3:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p1:d3:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p1:d4:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p1:d4:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p1:d4:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p1:d5:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p1:d5:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p1:d5:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p1:d6:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p1:d6:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p1:d6:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p1:d7:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p1:d7:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p1:d7:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p2:d0:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p2:d0:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p2:d0:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p2:d1:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p2:d1:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p2:d1:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p2:d2:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p2:d2:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p2:d2:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p2:d3:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p2:d3:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p2:d3:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p2:d4:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p2:d4:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p2:d4:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p2:d5:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p2:d5:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p2:d5:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p2:d6:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p2:d6:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p2:d6:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p2:d7:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p2:d7:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "64:p2:d7:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p0:d0:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p0:d0:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p0:d0:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p0:d1:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p0:d1:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p0:d1:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p0:d2:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p0:d2:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p0:d2:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p0:d3:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p0:d3:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p0:d3:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p0:d4:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p0:d4:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p0:d4:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p0:d5:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p0:d5:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p0:d5:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p0:d6:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p0:d6:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p0:d6:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p0:d7:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p0:d7:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p0:d7:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p1:d0:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p1:d0:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p1:d0:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p1:d1:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p1:d1:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p1:d1:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p1:d2:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p1:d2:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p1:d2:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p1:d3:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p1:d3:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p1:d3:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p1:d4:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p1:d4:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p1:d4:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p1:d5:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p1:d5:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p1:d5:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p1:d6:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p1:d6:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p1:d6:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p1:d7:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p1:d7:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p1:d7:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p2:d0:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p2:d0:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p2:d0:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p2:d1:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p2:d1:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p2:d1:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p2:d2:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p2:d2:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p2:d2:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p2:d3:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p2:d3:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p2:d3:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p2:d4:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p2:d4:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p2:d4:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p2:d5:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p2:d5:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p2:d5:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p2:d6:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p2:d6:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p2:d6:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p2:d7:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p2:d7:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "89:p2:d7:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p0:d0:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p0:d0:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p0:d0:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p0:d1:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p0:d1:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p0:d1:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p0:d2:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p0:d2:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p0:d2:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p0:d3:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p0:d3:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p0:d3:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p0:d4:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p0:d4:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p0:d4:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p0:d5:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p0:d5:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p0:d5:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p0:d6:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p0:d6:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p0:d6:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p0:d7:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p0:d7:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p0:d7:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p1:d0:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p1:d0:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p1:d0:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p1:d1:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p1:d1:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p1:d1:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p1:d2:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p1:d2:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p1:d2:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p1:d3:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p1:d3:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p1:d3:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p1:d4:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p1:d4:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p1:d4:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p1:d5:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p1:d5:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p1:d5:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p1:d6:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p1:d6:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p1:d6:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p1:d7:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p1:d7:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p1:d7:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p2:d0:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p2:d0:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p2:d0:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p2:d1:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p2:d1:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p2:d1:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p2:d2:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p2:d2:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p2:d2:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p2:d3:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p2:d3:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p2:d3:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p2:d4:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p2:d4:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p2:d4:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p2:d5:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p2:d5:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p2:d5:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p2:d6:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p2:d6:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p2:d6:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p2:d7:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p2:d7:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_24/64:p2:d7:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p0:d0:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p0:d0:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p0:d0:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p0:d1:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p0:d1:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p0:d1:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p0:d2:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p0:d2:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p0:d2:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p0:d3:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p0:d3:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p0:d3:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p0:d4:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p0:d4:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p0:d4:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p0:d5:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p0:d5:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p0:d5:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p0:d6:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p0:d6:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p0:d6:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p0:d7:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p0:d7:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p0:d7:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p1:d0:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p1:d0:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p1:d0:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p1:d1:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p1:d1:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p1:d1:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p1:d2:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p1:d2:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p1:d2:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p1:d3:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p1:d3:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p1:d3:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p1:d4:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p1:d4:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p1:d4:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p1:d5:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p1:d5:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p1:d5:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p1:d6:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p1:d6:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p1:d6:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p1:d7:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p1:d7:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p1:d7:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p2:d0:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p2:d0:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p2:d0:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p2:d1:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p2:d1:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p2:d1:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p2:d2:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p2:d2:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p2:d2:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p2:d3:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p2:d3:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p2:d3:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p2:d4:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p2:d4:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p2:d4:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p2:d5:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p2:d5:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p2:d5:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p2:d6:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p2:d6:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p2:d6:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p2:d7:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p2:d7:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_81/64:p2:d7:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p0:d0:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p0:d0:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p0:d0:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p0:d1:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p0:d1:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p0:d1:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p0:d2:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p0:d2:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p0:d2:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p0:d3:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p0:d3:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p0:d3:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p0:d4:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p0:d4:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p0:d4:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p0:d5:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p0:d5:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p0:d5:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p0:d6:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p0:d6:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p0:d6:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p0:d7:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p0:d7:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p0:d7:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p1:d0:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p1:d0:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p1:d0:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p1:d1:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p1:d1:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p1:d1:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p1:d2:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p1:d2:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p1:d2:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p1:d3:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p1:d3:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p1:d3:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p1:d4:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p1:d4:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p1:d4:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p1:d5:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p1:d5:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p1:d5:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p1:d6:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p1:d6:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p1:d6:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p1:d7:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p1:d7:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p1:d7:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p2:d0:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p2:d0:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p2:d0:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p2:d1:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p2:d1:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p2:d1:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p2:d2:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p2:d2:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p2:d2:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p2:d3:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p2:d3:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p2:d3:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p2:d4:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p2:d4:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p2:d4:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p2:d5:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p2:d5:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p2:d5:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p2:d6:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p2:d6:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p2:d6:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p2:d7:inside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": true,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p2:d7:equal",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "accepted": false,
+      "actual_pose_verified": true,
+      "body_overlap": false,
+      "case_id": "identity_238/64:p2:d7:outside",
+      "expected_from_independent_oracle": true,
+      "source_radius": 0.5,
+      "target_radius": 0.397747564417433
+    }
+  ],
+  "runtime_content_sha256": "db50a12ee1deb2a25eb4f0ffe807f9da1bd6539dfe5b1e1b982680a8102c1c66",
+  "schema": "source176.r3.boundary_observation.v1"
+}

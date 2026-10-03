@@ -17,8 +17,7 @@ func _run() -> void:
 	PlayerState.create_character("Q0B1回城测试", "战士", "男")
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	await preload("res://tests/helpers/formal_world_skill_fixture.gd").wait_for_formal_world(self, game, "service_home_no_current_position_fallback")
 	game.set_safe_logout_error_reporter(
 		Callable(self, "_capture_safe_logout_error")
 	)

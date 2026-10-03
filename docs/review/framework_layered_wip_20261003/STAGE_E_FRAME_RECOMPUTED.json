@@ -1,0 +1,1043 @@
+{
+  "source_sha256": "fff09f90078c59d9cc6bb89cf45a0d21dbf937e46e7f692fa5e9fe192b093501",
+  "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+  "traces": {
+    "combined_effect_lifecycle": {
+      "run_id": "063258ba-21ad-4047-a12d-434b2eef4250",
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\final_layered_critical_153329_114018\\framework\\combined_effect_lifecycle_trace.json",
+      "sha256": "4744ef9071c9f17da9c3754a6987412c17f4e4d2c8a7e1046d21989235ab8984",
+      "samples": 686,
+      "wall_usec": {
+        "p50": 6908,
+        "p95": 7520,
+        "p99": 9007,
+        "max": 9758
+      },
+      "above_thresholds": {
+        "33333": 0,
+        "50000": 0,
+        "100000": 0
+      },
+      "longest_slow_frame_chain": {
+        "33333": 0,
+        "50000": 0,
+        "100000": 0
+      },
+      "metrics": {
+        "actual_loss": 1800,
+        "admitted_facts": 30,
+        "expired": 60,
+        "failed": 0,
+        "invalidated": 30,
+        "maximum_tick_delivery_lateness_usec": 750000,
+        "optional_cue_missing": 90,
+        "peak_pending": 30,
+        "peak_receipts": 90,
+        "peak_reservations": 0,
+        "peak_states": 90,
+        "refreshed": 0,
+        "retired_receipts": 0,
+        "started": 90,
+        "tick_delivery_count": 360,
+        "ticks": 360
+      },
+      "scope": "PC headless; 30 fixed receivers, 3 independent sources of the existing ignite handler; natural Root clock/pumps; no GPU/device or whole-game performance claim",
+      "maximum_pending_age_frames": {
+        "death_work:319287199312": 100,
+        "feature_effects:319287199312": 109,
+        "persistence:-9223371967262882328": 5,
+        "resource_completion:-9223371717282363778": 955
+      },
+      "maximum_runnable_service_age_frames": {
+        "death_work:319287199312": 4,
+        "feature_effects:319287199312": 2,
+        "persistence:-9223371967262882328": 2,
+        "resource_completion:-9223371717282363778": 2
+      },
+      "maximum_remaining_due_backlog_usec": 750000,
+      "death_latency_usec": 793786,
+      "resource_latency_usec": 28069,
+      "peak_deaths": 3,
+      "peak_persistence": 1
+    },
+    "death_burst_lifecycle": {
+      "run_id": "4509b618-15f4-45a8-824f-32b0ac4a4e7c",
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\final_layered_critical_153329_114018\\framework\\death_burst_lifecycle_trace.json",
+      "sha256": "88c2e82056b6d7ba8d0938db98ab1064d1385e6bbe3fb428b9c19e801593672c",
+      "samples": 890,
+      "wall_usec": {
+        "p50": 6890,
+        "p95": 7429,
+        "p99": 8795,
+        "max": 23622
+      },
+      "above_thresholds": {
+        "33333": 0,
+        "50000": 0,
+        "100000": 0
+      },
+      "longest_slow_frame_chain": {
+        "33333": 0,
+        "50000": 0,
+        "100000": 0
+      },
+      "metrics": {
+        "actual_loss": 2160,
+        "admitted_facts": 30,
+        "expired": 90,
+        "failed": 0,
+        "invalidated": 0,
+        "maximum_tick_delivery_lateness_usec": 600000,
+        "optional_cue_missing": 90,
+        "peak_pending": 30,
+        "peak_receipts": 90,
+        "peak_reservations": 1,
+        "peak_states": 90,
+        "refreshed": 0,
+        "retired_receipts": 90,
+        "started": 90,
+        "tick_delivery_count": 360,
+        "ticks": 360
+      },
+      "scope": "controlled stationary disjoint receivers; natural Player release and Root pumps; not natural movement, Android or GPU",
+      "maximum_runnable_service_age_frames": {
+        "death_work:328699217494": 6,
+        "feature_effects:328699217494": 2,
+        "resource_completion:-9223371707870345608": 2
+      },
+      "maximum_observed_death_age_usec": 401402,
+      "death_latency_usec": 412443,
+      "named_peak_targets": 30,
+      "named_peak_states": 90,
+      "resource": {
+        "cache_empty_at_demand": true,
+        "completion_usec": 19266180,
+        "demand_death_identity": 896893204486,
+        "failure_seen": false,
+        "five_textures_available": true,
+        "get_delta": 5,
+        "global_pending_at_completion": 0,
+        "job_map_generation": 1,
+        "job_state_after_request": "loading",
+        "key": "320x256|133,109|mir2_directional|[]|res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_idle.png:4|res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_walk.png:6|res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_attack.png:6|res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_hit.png:2|res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_death.png:10",
+        "latency_usec": 29988,
+        "monster_id": 64,
+        "paths": {
+          "attack": "res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_attack.png",
+          "death": "res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_death.png",
+          "hit": "res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_hit.png",
+          "idle": "res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_idle.png",
+          "walk": "res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_walk.png"
+        },
+        "request_delta": 5,
+        "request_kind": "threaded_new_job",
+        "request_sequence": 9,
+        "textures": {
+          "attack": {
+            "actual_size": [
+              1920,
+              2048
+            ],
+            "available": true,
+            "expected_size": [
+              1920,
+              2048
+            ],
+            "path": "res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_attack.png"
+          },
+          "death": {
+            "actual_size": [
+              3200,
+              2048
+            ],
+            "available": true,
+            "expected_size": [
+              3200,
+              2048
+            ],
+            "path": "res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_death.png"
+          },
+          "hit": {
+            "actual_size": [
+              640,
+              2048
+            ],
+            "available": true,
+            "expected_size": [
+              640,
+              2048
+            ],
+            "path": "res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_hit.png"
+          },
+          "idle": {
+            "actual_size": [
+              1280,
+              2048
+            ],
+            "available": true,
+            "expected_size": [
+              1280,
+              2048
+            ],
+            "path": "res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_idle.png"
+          },
+          "walk": {
+            "actual_size": [
+              1920,
+              2048
+            ],
+            "available": true,
+            "expected_size": [
+              1920,
+              2048
+            ],
+            "path": "res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_walk.png"
+          }
+        }
+      },
+      "queued_deaths": 30,
+      "terminal_deaths": 30,
+      "death_sets_equal": true,
+      "live_drop_nodes": 21,
+      "experience": 450,
+      "original_release_delay_usec": 0,
+      "scheduled_expiry_usec": 4600000,
+      "death_snapshot_simulation_usec": 5800000,
+      "death_snapshot_due_states": 0
+    },
+    "death_expiry_overlap": {
+      "run_id": "78f60443-7f45-4a24-be33-379585c98aea",
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\final_layered_critical_153329_114018\\framework\\death_expiry_overlap_trace.json",
+      "sha256": "da1456ad966b5a81edfaeb01a80209afeb42ff6dbc2740e4e87cb4a41721bd31",
+      "samples": 804,
+      "wall_usec": {
+        "p50": 6898,
+        "p95": 7896,
+        "p99": 9745,
+        "max": 24553
+      },
+      "above_thresholds": {
+        "33333": 0,
+        "50000": 0,
+        "100000": 0
+      },
+      "longest_slow_frame_chain": {
+        "33333": 0,
+        "50000": 0,
+        "100000": 0
+      },
+      "metrics": {
+        "actual_loss": 1632,
+        "admitted_facts": 30,
+        "expired": 2,
+        "failed": 0,
+        "invalidated": 88,
+        "maximum_tick_delivery_lateness_usec": 600000,
+        "optional_cue_missing": 90,
+        "peak_pending": 30,
+        "peak_receipts": 90,
+        "peak_reservations": 1,
+        "peak_states": 90,
+        "refreshed": 0,
+        "retired_receipts": 90,
+        "started": 90,
+        "tick_delivery_count": 272,
+        "ticks": 272
+      },
+      "scope": "controlled stationary disjoint receivers; natural Player release and Root pumps; not natural movement, Android or GPU",
+      "maximum_runnable_service_age_frames": {
+        "death_work:322357429814": 6,
+        "feature_effects:322357429814": 2,
+        "persistence:-9223371967262882328": 2,
+        "resource_completion:-9223371714212133256": 2
+      },
+      "maximum_observed_death_age_usec": 588315,
+      "death_latency_usec": 601423,
+      "named_peak_targets": 30,
+      "named_peak_states": 90,
+      "resource": {
+        "cache_empty_at_demand": true,
+        "completion_usec": 17809528,
+        "demand_death_identity": 885467920390,
+        "failure_seen": false,
+        "five_textures_available": true,
+        "get_delta": 5,
+        "global_pending_at_completion": 0,
+        "job_map_generation": 1,
+        "job_state_after_request": "loading",
+        "key": "320x256|133,109|mir2_directional|[]|res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_idle.png:4|res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_walk.png:6|res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_attack.png:6|res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_hit.png:2|res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_death.png:10",
+        "latency_usec": 32234,
+        "monster_id": 64,
+        "paths": {
+          "attack": "res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_attack.png",
+          "death": "res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_death.png",
+          "hit": "res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_hit.png",
+          "idle": "res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_idle.png",
+          "walk": "res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_walk.png"
+        },
+        "request_delta": 5,
+        "request_kind": "threaded_new_job",
+        "request_sequence": 9,
+        "textures": {
+          "attack": {
+            "actual_size": [
+              1920,
+              2048
+            ],
+            "available": true,
+            "expected_size": [
+              1920,
+              2048
+            ],
+            "path": "res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_attack.png"
+          },
+          "death": {
+            "actual_size": [
+              3200,
+              2048
+            ],
+            "available": true,
+            "expected_size": [
+              3200,
+              2048
+            ],
+            "path": "res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_death.png"
+          },
+          "hit": {
+            "actual_size": [
+              640,
+              2048
+            ],
+            "available": true,
+            "expected_size": [
+              640,
+              2048
+            ],
+            "path": "res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_hit.png"
+          },
+          "idle": {
+            "actual_size": [
+              1280,
+              2048
+            ],
+            "available": true,
+            "expected_size": [
+              1280,
+              2048
+            ],
+            "path": "res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_idle.png"
+          },
+          "walk": {
+            "actual_size": [
+              1920,
+              2048
+            ],
+            "available": true,
+            "expected_size": [
+              1920,
+              2048
+            ],
+            "path": "res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_walk.png"
+          }
+        }
+      },
+      "queued_deaths": 30,
+      "terminal_deaths": 30,
+      "death_sets_equal": true,
+      "live_drop_nodes": 34,
+      "experience": 450,
+      "original_release_delay_usec": 600000,
+      "scheduled_expiry_usec": 4600000,
+      "death_snapshot_simulation_usec": 4600000,
+      "death_snapshot_due_states": 88
+    },
+    "natural_effect_lifecycle": {
+      "run_id": "803c1207-1a81-4db0-9558-521a869caa30",
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\final_natural_lifecycle_160041_263194\\framework\\natural_effect_lifecycle_trace.json",
+      "sha256": "b7ebb5d538845adec34251f7f253ce7c0fd6c5dad352bc35f9aeee4381daf613",
+      "samples": 4373,
+      "wall_usec": {
+        "p50": 6804,
+        "p95": 14698,
+        "p99": 18437,
+        "max": 29322
+      },
+      "above_thresholds": {
+        "33333": 0,
+        "50000": 0,
+        "100000": 0
+      },
+      "longest_slow_frame_chain": {
+        "33333": 0,
+        "50000": 0,
+        "100000": 0
+      },
+      "metrics": {
+        "actual_loss": 9196.0,
+        "admitted_facts": 178.0,
+        "expired": 56.0,
+        "failed": 0.0,
+        "invalidated": 70.0,
+        "maximum_tick_delivery_lateness_usec": 683333.0,
+        "optional_cue_missing": 126.0,
+        "peak_pending": 26.0,
+        "peak_receipts": 75.0,
+        "peak_reservations": 1.0,
+        "peak_states": 90.0,
+        "refreshed": 408.0,
+        "retired_receipts": 534.0,
+        "started": 126.0,
+        "tick_delivery_count": 921.0,
+        "ticks": 921.0
+      },
+      "scope": "PC headless natural Player/Root input, original cooldown/geometry, moving AI and formal world; declared initial stress HP/stats; single sustained cohort; not Android/GPU or infinite-memory proof",
+      "maximum_pending_age_frames": {
+        "death_work:317424928342": 28.0,
+        "feature_effects:317424928342": 111.0,
+        "persistence:-9223371967212550676": 5.0,
+        "persistence:-9223371967246105112": 13.0,
+        "resource_completion:-9223371719144634754": 4667.0
+      },
+      "maximum_service_age_frames": {
+        "death_work:317424928342": 5.0,
+        "feature_effects:317424928342": 2.0,
+        "persistence:-9223371967212550676": 0.0,
+        "persistence:-9223371967246105112": 0.0,
+        "resource_completion:-9223371719144634754": 2.0
+      },
+      "xp_after": 512.0,
+      "expected_xp": 512.0,
+      "accepted_casts": 20.0,
+      "monster_movement_gu": 98.7732312481148,
+      "player_movement_gu": 32.5770595143549,
+      "memory_checkpoints": [
+        {
+          "elapsed_ms": 0.0,
+          "memory_static": 1501209192.0,
+          "objects": 16481.0,
+          "samples": 0.0,
+          "states": 0.0
+        },
+        {
+          "elapsed_ms": 5010.0,
+          "memory_static": 1442380880.0,
+          "objects": 16641.0,
+          "samples": 710.0,
+          "states": 72.0
+        },
+        {
+          "elapsed_ms": 10011.0,
+          "memory_static": 1519415008.0,
+          "objects": 16789.0,
+          "samples": 1408.0,
+          "states": 50.0
+        },
+        {
+          "elapsed_ms": 15013.0,
+          "memory_static": 1518549657.0,
+          "objects": 16404.0,
+          "samples": 2129.0,
+          "states": 21.0
+        },
+        {
+          "elapsed_ms": 20017.0,
+          "memory_static": 1520766638.0,
+          "objects": 16351.0,
+          "samples": 2853.0,
+          "states": 9.0
+        },
+        {
+          "elapsed_ms": 25017.0,
+          "memory_static": 1520472142.0,
+          "objects": 16166.0,
+          "samples": 3577.0,
+          "states": 3.0
+        },
+        {
+          "elapsed_ms": 30022.0,
+          "memory_static": 1520806726.0,
+          "objects": 16091.0,
+          "samples": 4303.0,
+          "states": 3.0
+        }
+      ],
+      "peak_deaths": 14.0,
+      "peak_persistence": 2.0,
+      "named_peak_targets": 30,
+      "named_peak_states": 90,
+      "resource": {
+        "cache_empty_at_demand": true,
+        "completion_usec": 24009394.0,
+        "demand_death_identity": 882162810434.0,
+        "failure_seen": false,
+        "five_textures_available": true,
+        "get_delta": 5.0,
+        "global_pending_at_completion": 0.0,
+        "job_map_generation": 1.0,
+        "job_state_after_request": "loading",
+        "key": "320x256|133,109|mir2_directional|[]|res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_idle.png:4|res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_walk.png:6|res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_attack.png:6|res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_hit.png:2|res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_death.png:10",
+        "latency_usec": 30404.0,
+        "monster_id": 64.0,
+        "paths": {
+          "attack": "res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_attack.png",
+          "death": "res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_death.png",
+          "hit": "res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_hit.png",
+          "idle": "res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_idle.png",
+          "walk": "res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_walk.png"
+        },
+        "request_delta": 5.0,
+        "request_kind": "threaded_new_job",
+        "request_sequence": 9.0,
+        "textures": {
+          "attack": {
+            "actual_size": [
+              1920.0,
+              2048.0
+            ],
+            "available": true,
+            "expected_size": [
+              1920.0,
+              2048.0
+            ],
+            "path": "res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_attack.png"
+          },
+          "death": {
+            "actual_size": [
+              3200.0,
+              2048.0
+            ],
+            "available": true,
+            "expected_size": [
+              3200.0,
+              2048.0
+            ],
+            "path": "res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_death.png"
+          },
+          "hit": {
+            "actual_size": [
+              640.0,
+              2048.0
+            ],
+            "available": true,
+            "expected_size": [
+              640.0,
+              2048.0
+            ],
+            "path": "res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_hit.png"
+          },
+          "idle": {
+            "actual_size": [
+              1280.0,
+              2048.0
+            ],
+            "available": true,
+            "expected_size": [
+              1280.0,
+              2048.0
+            ],
+            "path": "res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_idle.png"
+          },
+          "walk": {
+            "actual_size": [
+              1920.0,
+              2048.0
+            ],
+            "available": true,
+            "expected_size": [
+              1920.0,
+              2048.0
+            ],
+            "path": "res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_walk.png"
+          }
+        }
+      }
+    }
+  },
+  "recovery_cycles": {
+    "run_id": "e2454df1-cf0e-4b8b-9089-151980556c85",
+    "rounds": [
+      {
+        "accepted": 3,
+        "all_owners_released": true,
+        "context_cache_count": 1,
+        "context_cache_limit": 64,
+        "cycle": 0,
+        "map_cache_objects": {
+          "-9223371582812975216": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582829752433": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582846529650": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582863306867": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582880084084": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582896861301": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582913638518": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582930415735": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582947192952": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582963970169": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582980747386": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582997524603": "res://scripts/map_editor/polygon/poly_index.gd",
+          "-9223371583081410684": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583098187901": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583114965118": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583131742335": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583148519552": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583165296769": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583182073986": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583198851203": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583215628420": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583232405637": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583249182854": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583265960071": "res://scripts/map_editor/polygon/poly_index.gd"
+        },
+        "maximum_tick_delivery_lateness_usec": 500000,
+        "memory_static": 920311468,
+        "motion_gu": 5.0278491973877,
+        "objects": 3957,
+        "orphans": 0,
+        "owner_state": {
+          "clock": {
+            "released": true
+          },
+          "effects": {
+            "released": true
+          },
+          "root": {
+            "released": true
+          },
+          "streaming": {
+            "released": true
+          },
+          "world": {
+            "released": true
+          }
+        },
+        "peak_states": 75,
+        "persistent_observers": {
+          "audio_refs": 1,
+          "budget_pending": {},
+          "context_fields": {
+            "blocked_cells": "Dictionary",
+            "blocked_count": "int",
+            "build_sha256": "String",
+            "contract_id": "String",
+            "coordinate_contract_id": "String",
+            "design_size": "Vector2i",
+            "poly_graphs": "Dictionary",
+            "poly_index": "RefCounted",
+            "reason": "String",
+            "runtime_map_id": "int",
+            "valid": "bool"
+          },
+          "layout_token_owner": "individual Control metadata",
+          "physics_frame_connections": 0,
+          "process_frame_connections": 0,
+          "profile_owners": 0
+        },
+        "recovery_samples": [
+          {
+            "elapsed_ms": 0,
+            "memory_static": 920514584,
+            "nodes": 21,
+            "objects": 3962,
+            "tweens": 0
+          },
+          {
+            "elapsed_ms": 504,
+            "memory_static": 920276844,
+            "nodes": 21,
+            "objects": 3957,
+            "tweens": 0
+          },
+          {
+            "elapsed_ms": 1001,
+            "memory_static": 920277568,
+            "nodes": 21,
+            "objects": 3957,
+            "tweens": 0
+          }
+        ],
+        "resources": 937,
+        "ticks": 195,
+        "ui_refs": {
+          "TouchScrollSupport_registered_controls": {
+            "dead": 0,
+            "total": 0
+          },
+          "UISelectionDismissGuard_functional": {
+            "dead": 0,
+            "total": 0
+          },
+          "UISelectionDismissGuard_modals": {
+            "dead": 0,
+            "total": 0
+          },
+          "UISelectionDismissGuard_scopes": {
+            "dead": 0,
+            "total": 0
+          }
+        }
+      },
+      {
+        "accepted": 3,
+        "all_owners_released": true,
+        "context_cache_count": 2,
+        "context_cache_limit": 64,
+        "cycle": 1,
+        "map_cache_objects": {
+          "-9223371582812975216": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582829752433": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582846529650": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582863306867": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582880084084": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582896861301": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582913638518": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582930415735": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582947192952": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582963970169": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582980747386": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582997524603": "res://scripts/map_editor/polygon/poly_index.gd",
+          "-9223371583081410684": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583098187901": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583114965118": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583131742335": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583148519552": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583165296769": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583182073986": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583198851203": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583215628420": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583232405637": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583249182854": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583265960071": "res://scripts/map_editor/polygon/poly_index.gd"
+        },
+        "maximum_tick_delivery_lateness_usec": 500000,
+        "memory_static": 920491208,
+        "motion_gu": 5.08340454101563,
+        "objects": 3961,
+        "orphans": 0,
+        "owner_state": {
+          "clock": {
+            "released": true
+          },
+          "effects": {
+            "released": true
+          },
+          "root": {
+            "released": true
+          },
+          "streaming": {
+            "released": true
+          },
+          "world": {
+            "released": true
+          }
+        },
+        "peak_states": 75,
+        "persistent_observers": {
+          "audio_refs": 1,
+          "budget_pending": {},
+          "context_fields": {
+            "blocked_cells": "Dictionary",
+            "blocked_count": "int",
+            "build_sha256": "String",
+            "contract_id": "String",
+            "coordinate_contract_id": "String",
+            "design_size": "Vector2i",
+            "poly_graphs": "Dictionary",
+            "poly_index": "RefCounted",
+            "reason": "String",
+            "runtime_map_id": "int",
+            "valid": "bool"
+          },
+          "layout_token_owner": "individual Control metadata",
+          "physics_frame_connections": 0,
+          "process_frame_connections": 0,
+          "profile_owners": 0
+        },
+        "recovery_samples": [
+          {
+            "elapsed_ms": 0,
+            "memory_static": 920471616,
+            "nodes": 21,
+            "objects": 3961,
+            "tweens": 0
+          },
+          {
+            "elapsed_ms": 504,
+            "memory_static": 920472420,
+            "nodes": 21,
+            "objects": 3961,
+            "tweens": 0
+          },
+          {
+            "elapsed_ms": 1001,
+            "memory_static": 920473144,
+            "nodes": 21,
+            "objects": 3961,
+            "tweens": 0
+          }
+        ],
+        "resources": 937,
+        "ticks": 194,
+        "ui_refs": {
+          "TouchScrollSupport_registered_controls": {
+            "dead": 0,
+            "total": 0
+          },
+          "UISelectionDismissGuard_functional": {
+            "dead": 0,
+            "total": 0
+          },
+          "UISelectionDismissGuard_modals": {
+            "dead": 0,
+            "total": 0
+          },
+          "UISelectionDismissGuard_scopes": {
+            "dead": 0,
+            "total": 0
+          }
+        }
+      },
+      {
+        "accepted": 3,
+        "all_owners_released": true,
+        "context_cache_count": 3,
+        "context_cache_limit": 64,
+        "cycle": 2,
+        "map_cache_objects": {
+          "-9223371582812975216": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582829752433": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582846529650": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582863306867": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582880084084": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582896861301": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582913638518": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582930415735": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582947192952": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582963970169": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582980747386": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582997524603": "res://scripts/map_editor/polygon/poly_index.gd",
+          "-9223371583081410684": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583098187901": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583114965118": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583131742335": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583148519552": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583165296769": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583182073986": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583198851203": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583215628420": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583232405637": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583249182854": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583265960071": "res://scripts/map_editor/polygon/poly_index.gd"
+        },
+        "maximum_tick_delivery_lateness_usec": 500000,
+        "memory_static": 920523756,
+        "motion_gu": 5.11118125915527,
+        "objects": 3961,
+        "orphans": 0,
+        "owner_state": {
+          "clock": {
+            "released": true
+          },
+          "effects": {
+            "released": true
+          },
+          "root": {
+            "released": true
+          },
+          "streaming": {
+            "released": true
+          },
+          "world": {
+            "released": true
+          }
+        },
+        "peak_states": 75,
+        "persistent_observers": {
+          "audio_refs": 1,
+          "budget_pending": {},
+          "context_fields": {
+            "blocked_cells": "Dictionary",
+            "blocked_count": "int",
+            "build_sha256": "String",
+            "contract_id": "String",
+            "coordinate_contract_id": "String",
+            "design_size": "Vector2i",
+            "poly_graphs": "Dictionary",
+            "poly_index": "RefCounted",
+            "reason": "String",
+            "runtime_map_id": "int",
+            "valid": "bool"
+          },
+          "layout_token_owner": "individual Control metadata",
+          "physics_frame_connections": 0,
+          "process_frame_connections": 0,
+          "profile_owners": 0
+        },
+        "recovery_samples": [
+          {
+            "elapsed_ms": 0,
+            "memory_static": 920742620,
+            "nodes": 21,
+            "objects": 3966,
+            "tweens": 0
+          },
+          {
+            "elapsed_ms": 503,
+            "memory_static": 920504880,
+            "nodes": 21,
+            "objects": 3961,
+            "tweens": 0
+          },
+          {
+            "elapsed_ms": 1000,
+            "memory_static": 920505604,
+            "nodes": 21,
+            "objects": 3961,
+            "tweens": 0
+          }
+        ],
+        "resources": 937,
+        "ticks": 194,
+        "ui_refs": {
+          "TouchScrollSupport_registered_controls": {
+            "dead": 0,
+            "total": 0
+          },
+          "UISelectionDismissGuard_functional": {
+            "dead": 0,
+            "total": 0
+          },
+          "UISelectionDismissGuard_modals": {
+            "dead": 0,
+            "total": 0
+          },
+          "UISelectionDismissGuard_scopes": {
+            "dead": 0,
+            "total": 0
+          }
+        }
+      },
+      {
+        "accepted": 3,
+        "all_owners_released": true,
+        "context_cache_count": 4,
+        "context_cache_limit": 64,
+        "cycle": 3,
+        "map_cache_objects": {
+          "-9223371582812975216": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582829752433": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582846529650": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582863306867": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582880084084": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582896861301": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582913638518": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582930415735": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582947192952": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582963970169": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582980747386": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371582997524603": "res://scripts/map_editor/polygon/poly_index.gd",
+          "-9223371583081410684": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583098187901": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583114965118": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583131742335": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583148519552": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583165296769": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583182073986": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583198851203": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583215628420": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583232405637": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583249182854": "res://scripts/map_editor/polygon/poly_nav_graph.gd",
+          "-9223371583265960071": "res://scripts/map_editor/polygon/poly_index.gd"
+        },
+        "maximum_tick_delivery_lateness_usec": 500000,
+        "memory_static": 920801720,
+        "motion_gu": 5.13895797729492,
+        "objects": 3961,
+        "orphans": 0,
+        "owner_state": {
+          "clock": {
+            "released": true
+          },
+          "effects": {
+            "released": true
+          },
+          "root": {
+            "released": true
+          },
+          "streaming": {
+            "released": true
+          },
+          "world": {
+            "released": true
+          }
+        },
+        "peak_states": 75,
+        "persistent_observers": {
+          "audio_refs": 1,
+          "budget_pending": {},
+          "context_fields": {
+            "blocked_cells": "Dictionary",
+            "blocked_count": "int",
+            "build_sha256": "String",
+            "contract_id": "String",
+            "coordinate_contract_id": "String",
+            "design_size": "Vector2i",
+            "poly_graphs": "Dictionary",
+            "poly_index": "RefCounted",
+            "reason": "String",
+            "runtime_map_id": "int",
+            "valid": "bool"
+          },
+          "layout_token_owner": "individual Control metadata",
+          "physics_frame_connections": 0,
+          "process_frame_connections": 0,
+          "profile_owners": 0
+        },
+        "recovery_samples": [
+          {
+            "elapsed_ms": 0,
+            "memory_static": 920782544,
+            "nodes": 21,
+            "objects": 3961,
+            "tweens": 0
+          },
+          {
+            "elapsed_ms": 504,
+            "memory_static": 920783348,
+            "nodes": 21,
+            "objects": 3961,
+            "tweens": 0
+          },
+          {
+            "elapsed_ms": 1001,
+            "memory_static": 920784072,
+            "nodes": 21,
+            "objects": 3961,
+            "tweens": 0
+          }
+        ],
+        "resources": 937,
+        "ticks": 195,
+        "ui_refs": {
+          "TouchScrollSupport_registered_controls": {
+            "dead": 0,
+            "total": 0
+          },
+          "UISelectionDismissGuard_functional": {
+            "dead": 0,
+            "total": 0
+          },
+          "UISelectionDismissGuard_modals": {
+            "dead": 0,
+            "total": 0
+          },
+          "UISelectionDismissGuard_scopes": {
+            "dead": 0,
+            "total": 0
+          }
+        }
+      }
+    ],
+    "memory_scope": "static allocation includes bounded receipt/trace growth and shared caches; exact owner weakrefs plus ObjectDB/resource counts are separate gates",
+    "scope": "PC headless four same-process real input/AI worlds; 30 receivers each, 1500 initial HP; original cooldown/geometry; intentional live-effect world retirement and real logout/save/reload, not four full kill cohorts or unlimited-duration memory proof"
+  }
+}

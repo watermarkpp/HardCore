@@ -70,6 +70,7 @@ func _run() -> void:
 	await _detached_destruction(guard,support,false)
 	await _detached_destruction(guard,support,true)
 	await _unclaimed_copy_retention(guard,support)
+	await _unclaimed_copy_destroy_first(guard,support)
 	await _layout_lifetimes()
 	if not proof.write_receipt("ui_registry_retirement_test",checks,failures.size()): failures.append("receipt")
 	print("UI_REGISTRY_RETIREMENT_%s checks=%d failures=%s" % ["PASS" if failures.is_empty() else "FAIL",checks,str(failures)])
@@ -172,3 +173,25 @@ func _identity_count(refs: Array,target: Node) -> int:
 	for reference: WeakRef in refs:
 		if reference.get_ref() == target: count += 1
 	return count
+
+
+func _unclaimed_copy_destroy_first(guard: Node,support: Node) -> void:
+	# Opposite ordering with the copy still unclaimed: its destruction cannot
+	# retire the original identity or disable its later destruction notice.
+	for scrolling in [false,true]:
+		var original: Control = ScrollContainer.new() if scrolling else Button.new()
+		add_child(original)
+		if scrolling: Scroll.attach_tree(original)
+		for frame in 3: await get_tree().process_frame
+		var refs: Array = support._registered_controls if scrolling else guard._functional
+		check(_identity_count(refs,original) == 1,"original identity exists before unclaimed-copy-first ordering: "+str(scrolling))
+		var copied := original.duplicate() as Control
+		check(not copied.is_inside_tree(),"first-destroyed copy has never entered the tree or claimed a registration: "+str(scrolling))
+		var copied_ref: WeakRef = weakref(copied)
+		copied.free()
+		for frame in 4: await get_tree().process_frame
+		check(copied_ref.get_ref() == null and is_instance_valid(original),"unclaimed copy is destroyed while original survives: "+str(scrolling))
+		check(_identity_count(refs,original) == 1 and _dead(refs) == 0,"copy destruction retains the live original's only registration: "+str(scrolling))
+		original.queue_free()
+		for frame in 4: await get_tree().process_frame
+		check(_dead(refs) == 0,"original subsequently retires without input or another registered target destruction: "+str(scrolling))

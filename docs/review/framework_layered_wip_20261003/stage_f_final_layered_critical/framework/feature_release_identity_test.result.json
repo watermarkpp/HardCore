@@ -1,0 +1,71 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "formal world ready",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "actual selected receiver exists",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "actual default-off module enabled",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "formal Player accepts the pending action",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "actual capacity ticket exists before the legitimate release callback",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "wrong old action ID is a business refusal at the actual Root entry",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "wrong callback preserves resources, both RNG owners and HP before any commit",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "refusal preserves accepted cooldown and does not consume the valid pending release right",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "the original Player callback still performs exactly one legitimate base release",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "the valid base hit retains its one promised derived state",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "even the correct old ID cannot reopen the consumed configuration",
+      "passed": true
+    }
+  ],
+  "count": 11,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "4b39d578-b9ce-470e-8ff2-c2b2675c2d11",
+  "passed": 11,
+  "reported_checks": 11,
+  "reported_failures": 0,
+  "run_id": "0d7dcc7f-7c5b-4590-a2f7-7574586881a9",
+  "scene_id": "feature_release_identity_test",
+  "schema_version": 1,
+  "source_content_sha256": "db50a12ee1deb2a25eb4f0ffe807f9da1bd6539dfe5b1e1b982680a8102c1c66",
+  "status": "PASS"
+}

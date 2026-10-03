@@ -21,8 +21,7 @@ func _run() -> void:
 		func(request: Dictionary) -> void: started.append(request.duplicate(true))
 	)
 
-	for _frame: int in range(4):
-		await get_tree().process_frame
+	await preload("res://tests/helpers/formal_world_skill_fixture.gd").wait_for_formal_world(self, game, "town_music")
 	assert(game.current_map_id == HOME_MAP_ID, "initial world did not enter Bich runtime map")
 	assert(not game._map_transition_in_progress, "initial world transition remained active")
 	assert(

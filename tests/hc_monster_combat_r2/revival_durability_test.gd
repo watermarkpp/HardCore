@@ -58,7 +58,7 @@ func _ready() -> void:
 	# point is too coarse (ceil) to discriminate; the raw field is exact.
 	var durability_context := {
 		"armor_roll": 0,
-		"slot_rolls": {"左戒指": 0},
+		"slot_rolls": {"hc.slot.ring_left": 0},
 	}
 	player.take_damage(999999, true, durability_context)
 

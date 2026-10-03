@@ -190,7 +190,10 @@ func _verify_vanished_lock_never_allows_retarget() -> void:
 
 func _verify_wild_rush_preserves_original_selected_target() -> void:
 	_prepare_warrior()
-	PlayerState.learned_skills["warrior.wild_rush"] = 3
+	var fixture_skills: Dictionary = PlayerState.learned_skills.duplicate(true)
+	fixture_skills["hc.skill.warrior.wild_rush"] = 3
+	PlayerState.learned_skills = fixture_skills
+	assert(PlayerState.skill_identity_errors.is_empty(), "fixture skill import must succeed")
 	assert(
 		ReleaseGeometry.WILD_RUSH_RELEASE_TARGET_POLICY_ID
 		== "gameplay.warrior.wild_rush.original_locked_target_release.v1"

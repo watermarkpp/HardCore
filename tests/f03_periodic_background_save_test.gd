@@ -43,11 +43,11 @@ func _run() -> void:
 	state._json_persistence.drain()
 	assert(state._durability_save_pending, "older receipt incorrectly cleared newer wear")
 	assert(int(state.equipment["hc.slot.weapon"].durability_raw) == 3996)
-	assert(int(JSON.parse_string(FileAccess.get_file_as_string(profile)).equipment["武器"].durability_raw) == 3998)
+	assert(int(JSON.parse_string(FileAccess.get_file_as_string(profile)).equipment["hc.slot.weapon"].durability_raw) == 3998)
 	state._advance_durability_runtime(state.DURABILITY_SAVE_INTERVAL)
 	state._json_persistence.drain()
 	assert(not state._durability_save_pending)
-	assert(int(JSON.parse_string(FileAccess.get_file_as_string(profile)).equipment["武器"].durability_raw) == 3996)
+	assert(int(JSON.parse_string(FileAccess.get_file_as_string(profile)).equipment["hc.slot.weapon"].durability_raw) == 3996)
 	# Recover the index from a real valid backup, retaining every other role.
 	var valid_index := {"version": 1, "profiles": [index.profiles[0], {"id": "another", "name": "另一个角色", "level": 3}]}
 	assert(state._write_json_atomic(state.profile_index_path, valid_index))

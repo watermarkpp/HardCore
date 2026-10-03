@@ -7,6 +7,8 @@ const Combat := preload("res://scripts/layers/runtime/combat_runtime_service.gd"
 @export var case_body_ids: Array[int] = []
 @export var moving_start := false
 @export var west_wall := false
+@export_range(0, 1) var identity_padding := 0
+@export var evidence_suffix := ""
 const STANDS := [Vector2(1, 0), Vector2(1, 1), Vector2(0, 1), Vector2(-1, 1), Vector2(-1, 0), Vector2(-1, -1), Vector2(0, -1), Vector2(1, -1)]
 
 class Probe extends EnemyActor:
@@ -36,6 +38,13 @@ func _spawn(mid: int, position: Vector2) -> EnemyActor:
 func _run() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress(false)
+	# A test-owned inert node varies native identity only; geometry, actor order,
+	# attacks, cadence and the2700-frame completion assertion stay identical.
+	assert(identity_padding >= 0 and identity_padding <= 1)
+	for offset in identity_padding:
+		var padding := Node.new()
+		padding.name = "IdentityPadding" + str(offset)
+		add_child(padding)
 	var center := CENTER + target_phase
 	var initial_center := center
 	player = PlayerCharacter.new()
@@ -114,7 +123,7 @@ func _run() -> void:
 						occupant = actor.spatial_actor_runtime_id
 				stands.append({"offset": str(offset), "nearest_clear_distance_gu": nearest, "actor": occupant, "occupied": nearest <= 0.4, "available": not west_wall or offset.x >= 0.0})
 			for actor in actors:
-				positions.append({"id": actor.spatial_actor_runtime_id, "position": str(actor.spatial_index_position()), "access": actor._hc_access(player), "starts": actor._hc_starts, "reason": actor._hc_last_reason,
+				positions.append({"id": actor.spatial_actor_runtime_id, "instance_id": actor.get_instance_id(), "position": str(actor.spatial_index_position()), "access": actor._hc_access(player), "starts": actor._hc_starts, "reason": actor._hc_last_reason,
 					"clock": actor._combat_action_time_s, "physics": actor.is_physics_processing(), "target": actor.target.get_instance_id() if is_instance_valid(actor.target) else 0,
 					"step_active": actor._movement_step_active, "leg_target": str(actor._movement_step_target_ground_gu), "flank": str(actor._hc_flank_waypoint), "velocity": str(actor.velocity), "pursuit": actor._hc_pursuit_session,
 					"focus_ms": actor._target_focus_tick_ms, "now_ms": Time.get_ticks_msec(), "observed": actor._hc_observed, "sleeping": actor._background_deep_sleeping})
@@ -136,6 +145,7 @@ func _run() -> void:
 	if not case_body_ids.is_empty(): label += "_mixed"
 	if moving_start: label += "_moving"
 	if west_wall: label += "_west_wall"
+	label += evidence_suffix
 	var navigation: Array = []
 	for actor in actors: navigation.append({"id": actor.spatial_actor_runtime_id, "decisions": actor.navigation})
 	FileAccess.open("res://outputs/test_logs/full_surround_" + label + ".json", FileAccess.WRITE).store_string(JSON.stringify({"monster_id": case_monster_id, "body_ids": case_body_ids, "moving_start": moving_start, "west_wall": west_wall, "target_ground_gu": str(center), "body_radius_gu": actors[0].combat_radius_gu, "occupied": occupied, "failures": failures, "snapshots": snapshots, "navigation": navigation}, "  "))

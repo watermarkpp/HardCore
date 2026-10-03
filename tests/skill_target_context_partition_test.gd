@@ -23,8 +23,11 @@ func _run() -> void:
 	PlayerState.reset_progress(false)
 	PlayerState.level = 99
 	PlayerState.profession = "法师"
+	var fixture_skills: Dictionary = PlayerState.learned_skills.duplicate(true)
 	for skill_id: String in Loader.skill_ids():
-		PlayerState.learned_skills[Loader.display_name(skill_id)] = 3
+		fixture_skills[skill_id] = 3
+	PlayerState.learned_skills = fixture_skills
+	assert(PlayerState.skill_identity_errors.is_empty(), "fixture canonical skill import must succeed")
 	PlayerState.recalculate_stats()
 	_game = load("res://scenes/main.tscn").instantiate()
 	add_child(_game)

@@ -27,8 +27,7 @@ func _run() -> void:
 	PlayerState.recalculate_stats()
 	_game = load("res://scenes/main.tscn").instantiate()
 	add_child(_game)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	await preload("res://tests/helpers/formal_world_skill_fixture.gd").wait_for_formal_world(self, _game, "canonical_summon")
 	_player = _game.player
 	_player.set_physics_process(false)
 	_player.global_position = Vector2(240.0, 240.0)

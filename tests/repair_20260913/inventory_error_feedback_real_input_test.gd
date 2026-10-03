@@ -162,7 +162,7 @@ func _run() -> void:
 	await tap_bag(0)
 	var expected_level := EquipmentRulesScript.requirement_error(level_item, PlayerState.level, PlayerState.computed_stats)
 	expect(not expected_level.is_empty(), "level fixture yields a requirement rejection")
-	await tap_slot("武器")
+	await tap_slot("hc.slot.weapon")
 	await assert_error(expected_level, "level short")
 	expect((PlayerState.equipment.get("hc.slot.weapon", {}) as Dictionary).is_empty(), "level short leaves weapon empty")
 	expect(panel.selected_inventory_index == 0, "level short keeps the source selected")
@@ -236,7 +236,7 @@ func _run() -> void:
 		"测试法师限定法袍",
 		str(EquipmentRulesScript.effective_profession(GameData.get_item("测试法师限定法袍"))),
 	]
-	await tap_slot("衣服")
+	await tap_slot("hc.slot.armor")
 	await assert_error(profession_expected, "profession mismatch")
 	expect((PlayerState.equipment.get("hc.slot.armor", {}) as Dictionary).is_empty(), "profession mismatch leaves slot empty")
 	GameData.items.erase(profession_item)
@@ -266,7 +266,7 @@ func _run() -> void:
 	await settle()
 	await tap_bag(0)
 	expect(panel.selected_inventory_index == 0, "wrong-slot case has the weapon selected")
-	await tap_slot("衣服")
+	await tap_slot("hc.slot.armor")
 	await assert_error("%s不能装备到%s位置。" % ["木剑", "衣服"], "wrong slot")
 	expect(panel.selected_inventory_index == 0, "wrong slot keeps selection")
 	expect(panel.item_detail_presenter.visible, "wrong slot keeps detail")
@@ -280,8 +280,8 @@ func _run() -> void:
 	expect(PlayerState.inventory.size() >= InventoryPanel.BAG_CAPACITY, "bag is full for unequip case")
 	panel.refresh()
 	await settle()
-	await tap_slot("武器")
-	expect(panel.selected_equipment_slot == "武器", "equipped weapon selected for unequip")
+	await tap_slot("hc.slot.weapon")
+	expect(panel.selected_equipment_slot == "hc.slot.weapon", "equipped weapon selected for unequip")
 	await tap_bag(0)
 	await assert_error("背包已满，没有空位可以卸下装备。", "bag full unequip")
 	expect(not (PlayerState.equipment.get("hc.slot.weapon", {}) as Dictionary).is_empty(), "weapon still equipped")
@@ -297,7 +297,7 @@ func _run() -> void:
 	# refresh (a concurrent mutation): the tap still carries the stale
 	# instance id, which the authority must reject with the center error.
 	PlayerState.inventory = [PlayerState._make_item_instance(str(new_weapon.name), new_weapon, 102302)]
-	await tap_slot("武器")
+	await tap_slot("hc.slot.weapon")
 	await assert_error("所选装备已变化", "stale instance")
 	expect((PlayerState.equipment.get("hc.slot.weapon", {}) as Dictionary).is_empty(), "stale instance leaves weapon empty")
 
@@ -309,7 +309,7 @@ func _run() -> void:
 	var previous_flag := PlayerState._test_force_atomic_write_failure
 	PlayerState._test_force_atomic_write_failure = true
 	await tap_bag(0)
-	await tap_slot("武器")
+	await tap_slot("hc.slot.weapon")
 	await assert_error("装备存档失败，装备和背包均未改变", "save failure")
 	expect((PlayerState.equipment.get("hc.slot.weapon", {}) as Dictionary).is_empty(), "save failure rolls back equipment")
 	expect(PlayerState.inventory.size() == 1 and not (PlayerState.inventory[0] as Dictionary).is_empty(), "save failure keeps the bag item")

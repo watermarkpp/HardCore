@@ -14,10 +14,14 @@ const VerifierScript := preload("res://tests/hc_monster_combat_r4/damage_attribu
 
 const SAMPLE_TARGET := 20
 const BOOT_BUDGET_S := 8.0
-## Twenty 2.5s natural intervals need about 48s of sampling. The runner's
-## 60s wall budget includes autoloads, boot and cleanup; phase timings and
-## the runner exit status must both pass. A printed marker is insufficient.
+## Other identities keep the existing48s sample window. Identity24's
+## real1500ms decision grants produce3.033s gaps despite its2.5s cooldown;
+## its user-approved90s process window must cover all20 actual releases.
+## Counts, cadence, attribution, phase evidence and native exit still gate.
 const SAMPLE_BUDGET_S := 48.0
+const FrameObservation := preload("res://tests/hc_monster_combat_r4/bounded_frame_observation.gd")
+# Only the explicitly approved24 scene sets this. Other scenes keep48s.
+var approved_process_window_seconds := 0
 const FOREIGN_DAMAGE := 7
 
 ## Subclasses pin these; the formal per-identity scenes must NOT be
@@ -61,9 +65,12 @@ func _run() -> void:
 	PlayerState.reset_progress()
 	game = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
+	# Observe the asynchronous READY owner after synchronous scene setup.
+	# The total sampling/approved process deadline below stays unchanged.
+	var boot_observation_started_ms := Time.get_ticks_msec()
 	await get_tree().process_frame
 	await get_tree().process_frame
-	var boot_deadline := run_started_ms + int(BOOT_BUDGET_S * 1000.0)
+	var boot_deadline := boot_observation_started_ms + int(BOOT_BUDGET_S * 1000.0)
 	while Time.get_ticks_msec() < boot_deadline:
 		if int(game.get("current_map_id")) >= 0 and bool(game.call("gameplay_input_is_enabled")):
 			break
@@ -71,6 +78,21 @@ func _run() -> void:
 	boot_ok = int(game.get("current_map_id")) == GameData.service_runtime_map_id(0) and bool(game.call("gameplay_input_is_enabled"))
 	if not boot_ok:
 		failures.append("world_not_ready")
+		var boot_evidence := {"schema":"r4_natural_cadence_v5_explicit_delivery", "phase":"boot_failed",
+			"expected_monster_id":_expected_monster_id(), "world_ready":false, "failures":failures,
+			"phase_timing_ms":{"ready_engine_ms":run_started_ms,
+				"synchronous_scene_setup_ms":boot_observation_started_ms-run_started_ms,
+				"boot_observation_ms":Time.get_ticks_msec()-boot_observation_started_ms},
+			"input_gate":game.gameplay_input_gate_snapshot()}
+		var boot_file := FileAccess.open("res://outputs/test_logs/r4_cadence_%d.json" % _expected_monster_id(),FileAccess.WRITE)
+		assert(boot_file != null, "failed READY evidence must be writable")
+		boot_file.store_string(JSON.stringify(boot_evidence,"  "))
+		boot_file.close()
+		game.queue_free()
+		await get_tree().process_frame
+		printerr("R4_NATURAL_CADENCE_FAIL: monster=%d world_not_ready before any combat fixture" % _expected_monster_id())
+		get_tree().quit(1)
+		return
 
 	player = game.player
 	player.set_physics_process(false)
@@ -117,9 +139,17 @@ func _run() -> void:
 	# Sample real admissions and their committed terminal results.
 	var sampling_started_ms := Time.get_ticks_msec()
 	var sample_deadline := run_started_ms + int((BOOT_BUDGET_S + SAMPLE_BUDGET_S) * 1000.0)
+	if approved_process_window_seconds != 0:
+		assert(_expected_monster_id() == 24 and not chase_mode and approved_process_window_seconds == 90)
+		# Engine time includes startup. Reserve the runner's2s cleanup plus1s
+		# exit confirmation; no additional execution beyond the approved90s.
+		sample_deadline = approved_process_window_seconds * 1000 - 3000
+	var frame_observation := FrameObservation.new()
+	frame_observation.begin()
 	var next_foreign_ms := Time.get_ticks_msec() + (3000 if chase_mode else 9000)
 	while Time.get_ticks_msec() < sample_deadline:
 		await get_tree().physics_frame
+		frame_observation.record_frame()
 		sampled_frames += 1
 		if not is_instance_valid(enemy):
 			break
@@ -149,6 +179,8 @@ func _run() -> void:
 				break
 
 	var sampling_finished_ms := Time.get_ticks_msec()
+	if frame_observation.overflowed:
+		failures.append("frame_observation_overflow")
 	# --- Assertions ---
 	var snapshot: Dictionary = enemy.hc_package_policy_snapshot() if is_instance_valid(enemy) else {}
 	var target_count := 1 if chase_mode else SAMPLE_TARGET
@@ -227,7 +259,12 @@ func _run() -> void:
 			raw_amount += int(event.get("actual_hp_delta", 0))
 	var evidence := {
 		"schema": "r4_natural_cadence_v5_explicit_delivery",
-		"phase_timing_ms": {"ready_engine_ms": run_started_ms, "boot_ms": boot_finished_ms - run_started_ms, "sampling_ms": sampling_finished_ms - sampling_started_ms},
+		"frame_observation": frame_observation.snapshot(),
+		"approved_process_window_seconds": approved_process_window_seconds,
+		"phase_timing_ms": {"ready_engine_ms": run_started_ms, "boot_ms": boot_finished_ms - run_started_ms,
+			"synchronous_scene_setup_ms":boot_observation_started_ms-run_started_ms,
+			"boot_observation_ms":boot_finished_ms-boot_observation_started_ms,
+			"sampling_ms": sampling_finished_ms - sampling_started_ms},
 		"expected_monster_id": _expected_monster_id(),
 		"chase_mode": chase_mode,
 		"git_head": "see delivery manifest; runner JSON carries git_head",

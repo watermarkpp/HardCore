@@ -24,6 +24,7 @@ func _run() -> void:
 		"烈火剑法": 3,
 		"野蛮冲撞": 3,
 	}
+	assert(PlayerState.skill_identity_errors.is_empty(), "legacy fixture import must be atomic")
 	PlayerState.attack_skill_slots = [""]
 	PlayerState.attack_ring_slots = [
 		"刺杀剑术",
@@ -48,8 +49,8 @@ func _run() -> void:
 		"slot_id": "hud.attack_ring_skill.2",
 		"skill_id": "warrior.wild_rush",
 	})
-	assert(PlayerState.attack_ring_slots[1] == "野蛮冲撞", "六环槽未保存主动技能")
-	assert(PlayerState.attack_ring_slots[0] == "刺杀剑术", "修改单一六环槽污染了其他槽")
+	assert(PlayerState.attack_ring_slots[1] == "hc.skill.warrior.wild_rush", "六环槽未保存主动技能")
+	assert(PlayerState.attack_ring_slots[0] == "hc.skill.warrior.thrusting", "修改单一六环槽污染了其他槽")
 	assert(PlayerState.attack_skill_slots == [""], "修改六环槽污染了攻击主键")
 	assert(_assignment_change_count == 1, "六环置换没有发出唯一状态信号")
 	assert(
@@ -64,7 +65,7 @@ func _run() -> void:
 		"slot_id": "hud.attack.primary",
 		"skill_id": "warrior.wild_rush",
 	})
-	assert(PlayerState.attack_skill_slots == ["野蛮冲撞"], "主动技能不能绑定攻击主键")
+	assert(PlayerState.attack_skill_slots == ["hc.skill.warrior.wild_rush"], "主动技能不能绑定攻击主键")
 	assert(game.hud.attack_button.get_meta("bound_skill_name", "") == "野蛮冲撞")
 	game.hud.skill_button_assignment_requested.emit({
 		"contract_id": "ui.skill.button.assignment.v3",
@@ -73,7 +74,7 @@ func _run() -> void:
 		"slot_id": "hud.attack.primary",
 		"clear": true,
 	})
-	assert(PlayerState.attack_skill_slots == ["野蛮冲撞"], "错误合同不应清空攻击主键")
+	assert(PlayerState.attack_skill_slots == ["hc.skill.warrior.wild_rush"], "错误合同不应清空攻击主键")
 	game.hud.skill_button_assignment_requested.emit({
 		"contract_id": "ui.skill.button_assignment.v3",
 		"slot_group": "attack",

@@ -1,0 +1,19 @@
+{
+  "source_sha256": "db50a12ee1deb2a25eb4f0ffe807f9da1bd6539dfe5b1e1b982680a8102c1c66",
+  "native": "final_layered_critical_164454_574994",
+  "original_result": {
+    "passed": 78,
+    "failed": 2
+  },
+  "files": {
+    "tools/run_godot_tests.ps1": "361e4f569bedfc0dddaf976db08262068a2b8be9e1f9702ec5219d306f936ab1",
+    "tests/framework/death_burst_lifecycle_test.gd": "ee012812a990d4413977442568489d9916eccd60616d543c7b974ad925caa5c1"
+  },
+  "observed_first_latency_usec": 583333,
+  "second_input_usec": 4000000,
+  "scheduled_expiry_usec": 4583333,
+  "death_snapshot_usec": 4600000,
+  "difference_usec": 16667,
+  "due_at_death": 85,
+  "classification": "fixture used first process timer offset as exact prediction of a later release in independent physics clock"
+}

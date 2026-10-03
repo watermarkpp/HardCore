@@ -1,0 +1,86 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "this native successful cold producer owns the recovered epochs",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "owned isolated account and production persistence only",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "real startup migration gate",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "explicit default-off module activation",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "independent restart loads recovered profile",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "recovery epoch is durable rather than a temporary issuer cache",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "old missing result never regains eligibility across another restart",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "new epoch completed result stays exactly replayable",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "restart replay/refusal creates no writer and changes no resources or file",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "independent restart loads recovered profile",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "recovery epoch is durable rather than a temporary issuer cache",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "old missing result never regains eligibility across another restart",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "new epoch completed result stays exactly replayable",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "restart replay/refusal creates no writer and changes no resources or file",
+      "passed": true
+    }
+  ],
+  "count": 14,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "1b461301-cc85-4fcb-918c-db864c0ad9fd",
+  "passed": 14,
+  "reported_checks": 14,
+  "reported_failures": 0,
+  "run_id": "9dc37f08-1c08-489c-8fd0-23f83443fc3c",
+  "scene_id": "item_journal_v2_backup_restart_test",
+  "schema_version": 1,
+  "source_content_sha256": "fff09f90078c59d9cc6bb89cf45a0d21dbf937e46e7f692fa5e9fe192b093501",
+  "status": "PASS"
+}

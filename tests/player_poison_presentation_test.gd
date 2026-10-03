@@ -73,8 +73,7 @@ func _run() -> void:
 
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	await preload("res://tests/helpers/formal_world_skill_fixture.gd").wait_for_formal_world(self, game, "player_poison_presentation")
 	var player: Node = game.player
 	var hud: Node = game.hud
 	assert(player != null and hud != null, "runtime boot must expose player and hud")

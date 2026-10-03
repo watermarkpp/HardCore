@@ -9028,6 +9028,10 @@ func _test_character_payload(loadout: Dictionary, skill_profile: Dictionary, pro
 	var equipment_names := EquipmentTestLoadoutCatalogScript.equipment_names(loadout)
 	for slot: String in EQUIPMENT_SLOTS:
 		var item_name := str(equipment_names.get(slot, ""))
+		# Unconfigured slots have no item instance or identity to encode.
+		if item_name.is_empty():
+			equipment_data[slot] = {}
+			continue
 		equipment_data[slot] = _developer_item(
 			item_name,
 			"%s.%s" % [str(skill_profile.get("character_profile_id", "")), slot]

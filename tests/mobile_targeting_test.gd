@@ -16,8 +16,7 @@ func _run() -> void:
 	PlayerState.reset_progress()
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	await preload("res://tests/helpers/formal_world_skill_fixture.gd").wait_for_formal_world(self, game, "mobile_targeting")
 	# Targeting is isolated from the Bich safe-zone displacement policy here.
 	# Safe-zone GU projection has its own contract tests.
 	game._active_safe_zones = []

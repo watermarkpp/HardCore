@@ -56,12 +56,10 @@ func _run() -> void:
 	# FREEZE-P0.2R: natural-cave source audit runs in explicit reference mode
 	# (maps 248/249 are planned_unbuilt, not formal gameplay).
 	game.reference_audit_mode = true
-	await get_tree().process_frame
-	await get_tree().process_frame
+	await preload("res://tests/helpers/world_ready_fixture.gd").wait_for_world(self, game, GameData.service_runtime_map_id(0), "reference initial map")
 	for map_id: int in EXPECTED:
 		game.travel_to_map(map_id)
-		await get_tree().process_frame
-		await get_tree().process_frame
+		await preload("res://tests/helpers/world_ready_fixture.gd").wait_for_world(self, game, map_id, "reference map")
 		var background: WorldBackground = game.background
 		assert(background.uses_natural_cave_art(), "地图%d运行时未加载天然洞穴专用资源" % map_id)
 		var sizes := background.natural_cave_atlas_sizes()

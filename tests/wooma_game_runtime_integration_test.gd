@@ -56,9 +56,9 @@ func _run() -> void:
 	assert(packed != null)
 	var game := packed.instantiate()
 	add_child(game)
-	await get_tree().process_frame
+	await preload("res://tests/helpers/world_ready_fixture.gd").wait_for_world(self, game, GameData.service_runtime_map_id(0), "initial map")
 	game.travel_to_map(forest_id)
-	await get_tree().process_frame
+	await preload("res://tests/helpers/world_ready_fixture.gd").wait_for_world(self, game, forest_id, "wooma forest")
 	assert(game.current_map_id == forest_id)
 	assert(
 		game.background.editor_runtime_chunk_texture_count() > 0,
@@ -78,7 +78,7 @@ func _run() -> void:
 		assert(forward != null, "forward portal missing:%d" % target_map_id)
 		var target_portal_id := str(forward.portal_data.target_portal_id)
 		assert(game.travel_via_portal(forward, true))
-		await get_tree().process_frame
+		await preload("res://tests/helpers/world_ready_fixture.gd").wait_for_world(self, game, target_map_id, "wooma forward portal")
 		assert(game.current_map_id == target_map_id)
 		assert(game.background.editor_runtime_chunk_texture_count() > 0)
 		var expected_arrival := MapEditorRuntimeBridge.portal_screen_position_px(
@@ -89,20 +89,22 @@ func _run() -> void:
 			floor_1_id: forest_id,
 			floor_2_id: floor_1_id,
 			boss_hall_id: floor_2_id,
-		}[target_map_id])
+		}[target_map_id], target_portal_id)
 		assert(immediate_return != null)
 		assert(not game.travel_via_portal(immediate_return, true))
 		assert(game.current_map_id == target_map_id)
 
 	_move_from_arrival(game, boss_hall_id)
 	assert(game.travel_via_portal(_portal_to(floor_2_id), true))
-	await get_tree().process_frame
+	await preload("res://tests/helpers/world_ready_fixture.gd").wait_for_world(self, game, floor_2_id, "wooma return portal")
 	assert(game.current_map_id == floor_2_id)
+	_move_from_arrival(game, floor_2_id)
 	assert(game.travel_via_portal(_portal_to(floor_1_id), true))
-	await get_tree().process_frame
+	await preload("res://tests/helpers/world_ready_fixture.gd").wait_for_world(self, game, floor_1_id, "wooma return portal")
 	assert(game.current_map_id == floor_1_id)
+	_move_from_arrival(game, floor_1_id)
 	assert(game.travel_via_portal(_portal_to(forest_id), true))
-	await get_tree().process_frame
+	await preload("res://tests/helpers/world_ready_fixture.gd").wait_for_world(self, game, forest_id, "wooma return portal")
 	assert(game.current_map_id == forest_id)
 
 	print(
@@ -114,9 +116,9 @@ func _run() -> void:
 	get_tree().quit(0)
 
 
-func _portal_to(target_map_id: int) -> ZonePortal:
+func _portal_to(target_map_id: int, source_portal_id := "") -> ZonePortal:
 	for node: Node in get_tree().get_nodes_in_group("zone_content"):
-		if node is ZonePortal and node.target_map_id == target_map_id:
+		if node is ZonePortal and node.target_map_id == target_map_id and (source_portal_id.is_empty() or str(node.portal_data.get("source_portal_id", "")) == source_portal_id):
 			return node
 	return null
 

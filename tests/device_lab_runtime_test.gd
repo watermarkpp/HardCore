@@ -227,6 +227,12 @@ func _test_chiyue_test_roster_append_only() -> void:
 		warrior_entry,
 		222222
 	)
+	for slot: String in ["hc.slot.relic", "hc.slot.badge"]:
+		assert(warrior_payload.equipment[slot].is_empty(), "unconfigured optional slot must stay empty: " + slot)
+	for slot: String in EquipmentTestLoadoutCatalog.REQUIRED_SLOTS:
+		assert(not warrior_payload.equipment[slot].is_empty(), "configured equipment must retain its real instance: " + slot)
+	var encoded_payload: Dictionary = preload("res://scripts/items/item_extension_codec.gd").encode_document(warrior_payload)
+	assert(encoded_payload.status == "KNOWN_VALID", "debug roster must pass the unchanged item identity codec: %s" % encoded_payload)
 	warrior_payload["gold"] = 24681357
 	assert(PlayerState._write_json_atomic(
 		PlayerState._profile_path(warrior_id),

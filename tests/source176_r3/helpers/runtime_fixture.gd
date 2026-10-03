@@ -53,8 +53,8 @@ static func player(owner_node: Node, ground: Vector2) -> PlayerCharacter:
 	return result
 
 static func enemy(owner_node: Node, id: int, ground: Vector2, victim: PlayerCharacter,
-	context: Dictionary = {}) -> EnemyActor:
-	var result := EnemyActor.new()
+	context: Dictionary = {}, owned_actor: EnemyActor = null) -> EnemyActor:
+	var result := owned_actor if owned_actor != null else EnemyActor.new()
 	result.setup(GameData.get_monster_by_id(id), victim, false)
 	result.global_position = to_screen(ground)
 	result.set_meta("spawn_position", result.global_position)

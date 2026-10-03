@@ -48,7 +48,11 @@ func _run() -> void:
 	first.drop_plan.requests = requests
 	first.drop_plan.next_request_index = 0
 	first.remaining_request_count = requests.size()
-	game._pump_enemy_death_work_queue()
+	var first_materialization_deadline := Time.get_ticks_msec() + 5000
+	while first.materialized_node_count == 0 and Time.get_ticks_msec() < first_materialization_deadline:
+		game._pump_enemy_death_work_queue()
+		if first.materialized_node_count == 0:
+			await get_tree().process_frame
 	assert(first.state == "MATERIALIZING" and first.materialized_node_count == 1)
 	var experience_before: int = PlayerState.experience
 	var sequence_before: int = PlayerState._death_event_sequence

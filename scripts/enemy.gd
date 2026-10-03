@@ -9746,6 +9746,10 @@ func _hc_neighbor(current: Vector2, hit_target: Node2D, direct: Vector2i) -> Vec
 		return Vector2i.ZERO
 	var anchor := _hc_surround_goal if _hc_surround_goal.is_finite() else _hc_known_ground
 	var victim_anchor := _hc_known_ground
+	var far_approach := _source176_ordinary_melee() and not _hc_surround_goal.is_finite() and (
+		maxf(absf(current.x - victim_anchor.x), absf(current.y - victim_anchor.y))
+		> Source176Melee.HALF_EXTENT_GU + combat_radius_gu * 2.0
+	)
 	var cell := MonsterNeighborStepPolicyScript.temporary_cell(current)
 	var preferred := _hc_preferred(hit_target)
 	if _hc_flank_waypoint.is_finite():
@@ -9753,10 +9757,15 @@ func _hc_neighbor(current: Vector2, hit_target: Node2D, direct: Vector2i) -> Vec
 		# waypoint across its fractional diagonal and remaining axis leg;
 		# heading back to the victim after only the first prefix creates a
 		# two-point loop behind an already occupied front row.
-		if _hc_flank_anchor != anchor or current.distance_squared_to(_hc_flank_waypoint) <= GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
+		if (not far_approach and _hc_flank_anchor != anchor) or current.distance_squared_to(_hc_flank_waypoint) <= GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
 			_hc_flank_waypoint = Vector2.INF
 			_hc_flank_anchor = Vector2.INF
 		else:
+			# Far pursuit finishes this bounded usable local waypoint when the
+			# observed player moves. New target/world/context still cancels it;
+			# every next leg is rechecked against current bodies and terrain.
+			if far_approach:
+				_hc_flank_anchor = anchor
 			var flank_leg := SourceStepPlan.next_leg(current, _hc_flank_waypoint, 1.0, GroundUnitSpace.EPSILON_GU)
 			var flank_cell := MonsterNeighborStepPolicyScript.temporary_cell(flank_leg)
 			if flank_leg.is_finite() and _hc_motion_clear(current, flank_leg) and _hc_polygon_neighbor_clear(current, flank_leg, cell, flank_cell) and not _hc_edge_blocked(cell, flank_cell) and _hc_point_walkable(flank_leg):
@@ -9780,6 +9789,8 @@ func _hc_neighbor(current: Vector2, hit_target: Node2D, direct: Vector2i) -> Vec
 			# here the neighbor contract still requires an ADJACENT cell step,
 			# so only the leg's first-segment direction picks the cell.
 			var planned_leg := SourceStepPlan.next_leg(current, anchor, 1.0, GroundUnitSpace.EPSILON_GU)
+			var fallback_direction := anchor - current
+			var fallback_intended := current + fallback_direction.normalized() * minf(1.0, fallback_direction.length())
 			var leg_adopted := false
 			if planned_leg.is_finite():
 				var leg_neighbor := MonsterNeighborStepPolicyScript.neighbor_for_desired_ground_direction(
@@ -9792,7 +9803,10 @@ func _hc_neighbor(current: Vector2, hit_target: Node2D, direct: Vector2i) -> Vec
 					var leg_intended := planned_leg
 					var leg_next := MonsterNeighborStepPolicyScript.temporary_cell(leg_intended)
 					# Adopt only the exact segment that the owner will commit.
-					if (
+					# When both plans select the exact same segment, their static
+					# result cannot change candidate selection. Defer its one
+					# validation until after the live-body check below.
+					if planned_leg == fallback_intended or (
 						_hc_polygon_neighbor_clear(current, leg_intended, cell, leg_next)
 						and not _hc_edge_blocked(cell, leg_next)
 						and _hc_point_walkable(leg_intended)
@@ -9804,8 +9818,7 @@ func _hc_neighbor(current: Vector2, hit_target: Node2D, direct: Vector2i) -> Vec
 				# docs/02 F sanctioned fallback: when the monotone leg's first
 				# cell is blocked, the pre-existing 1-GU anchor cut keeps the
 				# real step starting on this tick (legacy behaviour kept).
-				var fallback_direction := anchor - current
-				intended = current + fallback_direction.normalized() * minf(1.0, fallback_direction.length())
+				intended = fallback_intended
 		else:
 			if _terrain_navigation_context.has("poly_index"):
 				var hc_direction := anchor - current
@@ -9822,6 +9835,12 @@ func _hc_neighbor(current: Vector2, hit_target: Node2D, direct: Vector2i) -> Vec
 		# unused polygon/footprint checks during the existing flank retry window.
 		# Never cache the body result: a newly clear lane moves immediately.
 		var r6_motion_clear := _hc_motion_clear(current, intended)
+		# An unassigned rear body's waiting point is a complete navigation
+		# destination. A tiny clear first prefix must not keep driving toward
+		# that point when a live peer already occupies it. Reuse the existing
+		# bounded detour selection; the movement owner still checks each leg.
+		if r6_motion_clear and _hc_surround_goal.is_finite() and _hc_surround_slot < 0:
+			r6_motion_clear = _hc_flank_destination_clear(anchor)
 		if r6_motion_clear and _hc_polygon_neighbor_clear(current, intended, cell, next) and not _hc_edge_blocked(cell, next) and _hc_point_walkable(intended):
 			_hc_step_override = intended
 			_hc_route.clear()
@@ -9835,6 +9854,26 @@ func _hc_neighbor(current: Vector2, hit_target: Node2D, direct: Vector2i) -> Vec
 			var best := Vector2i.ZERO
 			var best_cost := INF
 			var preferred_sign := 1.0 if posmod(get_instance_id(), 2) == 0 else -1.0
+			if far_approach:
+				var approach := _hc_far_approach_waypoint(current, anchor, cell, preferred_sign)
+				if approach.is_finite():
+					_hc_flank_waypoint = approach
+					_hc_flank_anchor = anchor
+					_hc_step_override = _hc_flank_leg_endpoint(current, approach)
+					return MonsterNeighborStepPolicyScript.neighbor_for_desired_ground_direction(_hc_step_override - current)
+				# No full direction can leave this live crowd. The same bounded
+				# contact-ray escape remains available without attack-slot ranking.
+				var relief := _hc_contact_flank(current, anchor, victim_anchor, hit_target, cell, preferred_sign)
+				if relief.is_finite():
+					_hc_flank_waypoint = relief
+					_hc_flank_anchor = anchor
+					_hc_step_override = relief
+					return MonsterNeighborStepPolicyScript.neighbor_for_desired_ground_direction(relief - current)
+				_hc_last_reason = "FRONTLINE_BLOCKED"
+				_hc_blocked_wait_target_id = hit_target.get_instance_id()
+				_hc_blocked_wait_self = current
+				_hc_blocked_wait_target = victim_anchor
+				return Vector2i.ZERO
 			# Query the exact sixteen bucket envelopes once. Preserve option order,
 			# static legality, live narrow phases and the original cost tie-break.
 			var batched := _hc_prepare_flank_batch(current, victim_anchor, cell)
@@ -9853,6 +9892,15 @@ func _hc_neighbor(current: Vector2, hit_target: Node2D, direct: Vector2i) -> Vec
 					if batched else _hc_motion_clear(current, committed_endpoint)
 				)
 				if not motion_clear:
+					continue
+				# A legal canonical prefix does not make an occupied destination
+				# reachable. Retaining that waypoint can alternate tiny prefixes
+				# forever while the next axis leg remains inside a rear body.
+				var destination_clear := (
+					_hc_flank_destination_candidates_clear(endpoint, _hc_flank_outputs[query_offset])
+					if batched else _hc_flank_destination_clear(endpoint)
+				)
+				if not destination_clear:
 					continue
 				var cost := endpoint.distance_to(anchor) + (0.05 if Vector2(option).cross(anchor - current) * preferred_sign < 0.0 else 0.0)
 				var blocked := (
@@ -10036,6 +10084,58 @@ func _hc_motion_candidates(a: Vector2, b: Vector2, candidates: Array) -> bool:
 			return false
 	return true
 
+var _hc_flank_destination_scratch: Array = []
+
+func _hc_flank_destination_clear(point: Vector2) -> bool:
+	if combat_spatial_index == null or runtime_map_id < 0 or not point.is_finite():
+		return false
+	combat_spatial_index.query_enemy_nodes_bucket_segment_into(runtime_map_id, point, point, combat_radius_gu, _hc_flank_destination_scratch)
+	return _hc_flank_destination_candidates_clear(point, _hc_flank_destination_scratch)
+
+func _hc_flank_destination_candidates_clear(point: Vector2, candidates: Array) -> bool:
+	for raw: Variant in candidates:
+		if not is_instance_valid(raw) or not raw is EnemyActor:
+			continue
+		var other := raw as EnemyActor
+		if other == self or other == target or other.runtime_map_id != runtime_map_id:
+			continue
+		var radius := maxf(0.0, combat_radius_gu + other.combat_radius_gu)
+		if point.distance_squared_to(other.spatial_index_position()) >= radius * radius - HCPolicy.EPS:
+			continue
+		if other.can_receive_damage() and bool(other.behavior_profile.get("worldCollision", true)):
+			return false
+	return true
+
+# Direction ordering only; this adds no path service, position writer or
+# cadence grant. Far bodies stop at the first usable local direction.
+const HC_APPROACH_DIRECTIONS: Array[Vector2i] = [Vector2i(1,0),Vector2i(1,1),Vector2i(0,1),Vector2i(-1,1),Vector2i(-1,0),Vector2i(-1,-1),Vector2i(0,-1),Vector2i(1,-1)]
+const HC_APPROACH_SIDE_ORDER: Array[int] = [1,-1,2,-2,3,-3,4]
+
+func _hc_far_approach_waypoint(current: Vector2, anchor: Vector2, cell: Vector2i, preferred_sign: float) -> Vector2:
+	var direct := MonsterNeighborStepPolicyScript.neighbor_for_desired_ground_direction(anchor - current)
+	var heading := HC_APPROACH_DIRECTIONS.find(direct)
+	if heading < 0:
+		return Vector2.INF
+	for side: int in HC_APPROACH_SIDE_ORDER:
+		var direction := HC_APPROACH_DIRECTIONS[posmod(heading + side * int(preferred_sign), HC_APPROACH_DIRECTIONS.size())]
+		# Share the existing neighbouring cell destinations. Fractional origins
+		# otherwise create private endpoints and more short follow-up legs.
+		var point := Vector2(cell + direction) + Vector2(0.5, 0.5)
+		var leg := _hc_flank_leg_endpoint(current, point)
+		if not leg.is_finite() or not _hc_motion_clear(current, point):
+			continue
+		# The motion query's complete coarse identities include this endpoint.
+		# Reuse identities only; both predicates read current body positions.
+		# The canonical prefix is contained in this complete bucket envelope,
+		# but its segment geometry differs from the waypoint chord. Read live
+		# bodies again for that exact leg; never reuse the chord's hit result.
+		if not _hc_motion_candidates(current, leg, _hc_motion_scratch) or not _hc_flank_destination_candidates_clear(point, _hc_motion_scratch):
+			continue
+		var next := MonsterNeighborStepPolicyScript.temporary_cell(leg)
+		if _hc_polygon_neighbor_clear(current, leg, cell, next) and not _hc_edge_blocked(cell, next) and _hc_point_walkable(leg) and _hc_point_walkable(point):
+			return point
+	return Vector2.INF
+
 var _hc_contact_flank_scratch: Array = []
 
 func _hc_contact_flank(current: Vector2, anchor: Vector2, victim_anchor: Vector2, hit_target: Node2D, cell: Vector2i, preferred_sign: float) -> Vector2:
@@ -10044,6 +10144,11 @@ func _hc_contact_flank(current: Vector2, anchor: Vector2, victim_anchor: Vector2
 	combat_spatial_index.query_enemy_nodes_bucket_segment_into(runtime_map_id, current - Vector2.ONE, current + Vector2.ONE, combat_radius_gu, _hc_contact_flank_scratch)
 	var best := Vector2.INF
 	var best_cost := INF
+	# Unassigned rear bodies need room to leave a jam, not the smallest
+	# reduction of distance to an occupied waiting point. Prefer the longest
+	# already-legal bounded contact leg, then the existing heading tie-break.
+	var rear_relief := _source176_ordinary_melee() and _hc_surround_slot < 0
+	var best_extent_squared := -1.0
 	for option: Vector2i in MonsterNeighborStepPolicyScript.NEIGHBOR_DELTAS:
 		var direction := Vector2(option)
 		var point := CrowdAttackPosition.contact_leg(self, hit_target, current, direction, _hc_contact_flank_scratch)
@@ -10053,10 +10158,14 @@ func _hc_contact_flank(current: Vector2, anchor: Vector2, victim_anchor: Vector2
 		if not _hc_motion_clear(current, point) or not _hc_polygon_neighbor_clear(current, point, cell, next) or _hc_edge_blocked(cell, next) or not _hc_point_walkable(point):
 			continue
 		var cost := point.distance_to(anchor) + (0.05 if direction.cross(anchor - current) * preferred_sign < 0.0 else 0.0)
-		if _hc_frontline_at(point, victim_anchor, hit_target) != 0:
+		if not rear_relief and _hc_frontline_at(point, victim_anchor, hit_target) != 0:
 			cost += 2.0
-		if cost < best_cost:
+		var extent_squared := current.distance_squared_to(point)
+		if (rear_relief and extent_squared > best_extent_squared) or (
+			(not rear_relief or extent_squared == best_extent_squared) and cost < best_cost
+		):
 			best_cost = cost
+			best_extent_squared = extent_squared
 			best = point
 	return best
 
@@ -10090,7 +10199,9 @@ func _hc_prepare_flank_batch(current: Vector2, anchor: Vector2, cell: Vector2i) 
 			continue
 		_hc_flank_option_offsets.append(_hc_flank_starts.size())
 		_hc_flank_starts.append(current)
-		_hc_flank_ends.append(committed_endpoint)
+		# Broadphase identities cover both the actual prefix and retained
+		# destination. Both predicates still read live positions separately.
+		_hc_flank_ends.append(endpoint)
 		_hc_flank_expansions.append(combat_radius_gu)
 		_hc_flank_starts.append(endpoint)
 		_hc_flank_ends.append(anchor)

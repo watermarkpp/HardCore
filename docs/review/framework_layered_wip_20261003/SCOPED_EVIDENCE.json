@@ -1,0 +1,25 @@
+{
+  "status": "FAIL",
+  "acceptance": "NOT_RUN",
+  "parent": "dc1ebf3fea1d047d4e18b352140a50b593223cea",
+  "construction_head": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+  "content_sha256": "d615e31c07d3cd6ac14dee5e9f1a2889aa77ff85c490928f0390add9f7c5f86f",
+  "source_files": 3566,
+  "delta_files": 73,
+  "production_files": [
+    "scripts/enemy.gd",
+    "scripts/game_data.gd",
+    "scripts/inventory_panel.gd",
+    "scripts/player_state.gd"
+  ],
+  "engine_version": "4.7.stable.official.5b4e0cb0f",
+  "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+  "engine_child_sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+  "source_zip_bytes": 15142244,
+  "source_zip_sha256": "e22830a7684e9262a3cdde9804f7cdf2729ef60386f7763ee596f1d95c629286",
+  "archived_invocations": 15,
+  "preserved_failed_attempts": 15,
+  "framework_receipts": 66,
+  "framework_checks": 3695,
+  "final_accepted_rows": 0
+}

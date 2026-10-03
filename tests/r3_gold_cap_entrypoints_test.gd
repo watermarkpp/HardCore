@@ -286,11 +286,11 @@ func _test_quest_entrypoint() -> void:
 	var augmented := _saved_quest.duplicate(true)
 	var rewards: Dictionary = augmented.get("rewards", {}).duplicate(true)
 	var reward_items: Array = rewards.get("items", []).duplicate(true)
-	reward_items.append({"name": "金币", "count": 1})
+	reward_items.append({"entity_id": "hc.currency.gold", "count": 1})
 	rewards["items"] = reward_items
 	augmented["rewards"] = rewards
 	GameData._bich_quests_by_id[QUEST_ID] = augmented
-	var currency_record: Dictionary = GameData.get_item_record("金币")
+	var currency_record: Dictionary = GameData.get_entity_record("hc.currency.gold")
 	assert(str(currency_record.get("kind", "")) == "currency", "formal currency catalog record missing")
 	PlayerState.gold = 0
 	var preview: Dictionary = PlayerState._build_receive_batch_result(reward_items, [])

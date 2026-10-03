@@ -1,0 +1,28 @@
+{
+  "status": "PASS",
+  "scope": "Locally verified mechanical values and adapter completion only",
+  "tool_task_id": "0cce54f2-5080-4b33-a788-a507f835493e",
+  "counts": {
+    "total_status_rows": 382,
+    "pass": 360,
+    "fail": 22,
+    "error_rows": 22
+  },
+  "source_sha256": "3005654b1658e17c93c221b85c4252f3359c8b2ee7aaade14cf253b78f1ff7d8",
+  "endpoint_requested": "https://ark.cn-beijing.volces.com/api/coding/v3/responses",
+  "response_model": "glm-5-3-flash",
+  "model_identity": "unverified; response model field is recorded, not an attestation",
+  "elapsed_seconds": 12.266,
+  "usage": {
+    "input_tokens": 8616,
+    "output_tokens": 616,
+    "total_tokens": 9232,
+    "reasoning_tokens": 248
+  },
+  "reasoning_requested_and_reported": "low",
+  "strict_requested_output_schema": "FAIL",
+  "output_schema_difference": "Counts used scalar/list forms and text after one JSON fence; no mechanical value mismatch.",
+  "prior_local_parser_result": "FAIL retained in GLM_POSTFIX_LOCAL_VERIFICATION.json",
+  "remote_retries": 0,
+  "interrupted_native_invocation": "FAIL; final native exit MISSING"
+}

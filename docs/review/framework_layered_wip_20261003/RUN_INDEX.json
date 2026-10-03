@@ -1,0 +1,394 @@
+{
+  "stage_e_final_layered_critical": {
+    "local_run": "final_layered_critical_153329_114018",
+    "source_sha256": "fff09f90078c59d9cc6bb89cf45a0d21dbf937e46e7f692fa5e9fe192b093501",
+    "invocation_id": "6a9101e4-5922-49fe-8317-c2046f9781ef",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/currency_identity_test.tscn','tests/device_lab_runtime_test.tscn','tests/taoist_support_production_integration_test.tscn','tests/skill_button_assignments_v2_test.tscn','tests/skill_panel_assignment_hint_layout_contract_test.tscn','tests/combat_release_geometry_test.tscn','tests/skill_runtime_integration_test.tscn','tests/melee_lock_fallback_test.tscn','tests/audit_39fe_regressions.tscn','tests/repair_20260913/inventory_error_feedback_real_input_test.tscn','tests/equipment_success_notice_real_input_test.tscn','tests/ui_error_machine_reason_leak_test.tscn','tests/r3_gold_cap_entrypoints_test.tscn','tests/skill_target_context_partition_test.tscn','tests/hc_monster_combat_r2/revival_durability_test.tscn','tests/f03_hot_persistence_test.tscn','tests/f03_async_death_receipt_test.tscn','tests/melee_blocked_query_order_test.tscn','tests/f03_periodic_background_save_test.tscn','tests/new_item_icon_surfaces_test.tscn','tests/synthesis_panel_preview_test.tscn','tests/f03_background_writer_test.tscn','tests/service_home_no_current_position_fallback_test.tscn','tests/death_revival_home_failure_test.tscn','tests/mobile_targeting_test.tscn','tests/game_root_combat_resolution_integration_test.tscn','tests/equipment_special_effects_test.tscn','tests/player_poison_presentation_test.tscn','tests/canonical_summon_integration_test.tscn','tests/player_level_up_effect_runtime_test.tscn','tests/town_music_runtime_test.tscn','tests/f05_settlement_display_separation_test.tscn','tests/framework/ui_registry_retirement_test.tscn','tests/framework/death_burst_lifecycle_test.tscn','tests/framework/death_burst_lifecycle_cold_test.tscn','tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn','tests/bich_environment_test.tscn','tests/orc_tomb_game_visual_geometry_test.tscn','tests/orc_tomb_source_integration_test.tscn','tests/source_collision_chunk_test.tscn','tests/natural_cave_source_integration_test.tscn','tests/vertical_slice_loop_test.tscn','tests/wooma_game_runtime_integration_test.tscn','tests/portal_actual_arrival_guard_test.tscn','tests/skill_production_canonical_entry_test.tscn','tests/source176_r3/eight_direction_admission_test.tscn','tests/source176_r3/source_idle_wake_phase_test.tscn','tests/source176_r3/published_map_approach_test.tscn','tests/user_feedback_20260930/full_surround_24_fractional_test.tscn','tests/user_feedback_20260930/full_surround_64_test.tscn','tests/user_feedback_20260930/full_surround_89_fractional_test.tscn','tests/user_feedback_20260930/full_surround_89_prefilled_test.tscn','tests/user_feedback_20260930/full_surround_89_test.tscn','tests/user_feedback_20260930/full_surround_mixed_test.tscn','tests/user_feedback_20260930/full_surround_moving_test.tscn','tests/user_feedback_20260930/full_surround_native_test.tscn','tests/user_feedback_20260930/full_surround_prefilled_test.tscn','tests/user_feedback_20260930/full_surround_west_wall_test.tscn','tests/user_feedback_20260930/surround_vacancy_refill_89_test.tscn','tests/user_feedback_20260930/surround_vacancy_refill_test.tscn','tests/source176_r3/c05_native_detour_test.tscn','tests/source176_r3/ordinary_body_clearance_test.tscn','tests/user_feedback_20260930/crowd_fractional_escape_test.tscn','tests/framework/ordinary_item_identity_test.tscn','tests/framework/equipment_identity_test.tscn','tests/framework/character_identity_save_test.tscn','tests/framework/item_binding_identity_test.tscn','tests/framework/feature_fire_effect_production_test.tscn','tests/framework/action_config_lease_test.tscn','tests/framework/feature_release_identity_test.tscn','tests/framework/combined_effect_lifecycle_test.tscn','tests/framework/combined_effect_lifecycle_cold_test.tscn','tests/framework/periodic_credit_safe_logout_test.tscn','tests/framework/periodic_credit_safe_logout_cold_test.tscn','tests/user_feedback_20260930/layered_approach_test.tscn','tests/user_feedback_20260930/full_surround_89_fractional_identity0_test.tscn','tests/user_feedback_20260930/full_surround_89_fractional_identity1_test.tscn','tests/user_feedback_20260930/recorded_fractional_flank_test.tscn','tests/user_feedback_20260930/recorded_fractional_wait_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 80,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": [
+      "c05_native_detour.json",
+      "eight_direction_admission.json",
+      "ordinary_body_clearance.json",
+      "published_map_approach.json",
+      "source_idle_wake_phase.json"
+    ],
+    "same_as_wip_bytes": false,
+    "adopted_final": false
+  },
+  "stage_e_final_natural_lifecycle": {
+    "local_run": "final_natural_lifecycle_160041_263194",
+    "source_sha256": "fff09f90078c59d9cc6bb89cf45a0d21dbf937e46e7f692fa5e9fe192b093501",
+    "invocation_id": "744a4d3f-e932-4ba7-82de-345045c950d4",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/natural_effect_lifecycle_test.tscn','tests/framework/natural_effect_lifecycle_cold_test.tscn','tests/framework/natural_effect_recovery_cycles_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 3,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": false,
+    "adopted_final": false
+  },
+  "stage_e_final_framework_boundaries": {
+    "local_run": "final_framework_boundaries_160221_371015",
+    "source_sha256": "fff09f90078c59d9cc6bb89cf45a0d21dbf937e46e7f692fa5e9fe192b093501",
+    "invocation_id": "5353e5de-2519-4f87-8d5e-ca642f7eee3c",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_world_capacity_bound_test.tscn','tests/framework/feature_capacity_admission_test.tscn','tests/framework/feature_capacity_atomic_test.tscn','tests/framework/feature_receipt_retirement_test.tscn','tests/framework/feature_admission_release_test.tscn','tests/framework/profile_identity_generation_test.tscn','tests/framework/periodic_credit_profile_switch_test.tscn','tests/framework/future_item_ownership_terminal_test.tscn','tests/framework/world_generation_persistence_test.tscn','tests/framework/world_generation_persistence_cold_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 10,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": false,
+    "adopted_final": false
+  },
+  "stage_e_final_journal_recovery": {
+    "local_run": "final_journal_recovery_160430_733673",
+    "source_sha256": "fff09f90078c59d9cc6bb89cf45a0d21dbf937e46e7f692fa5e9fe192b093501",
+    "invocation_id": "7687346e-3ebb-495a-b039-8318ebdaf595",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/item_journal_sequence_test.tscn','tests/framework/item_journal_recovery_test.tscn','tests/framework/item_journal_recovery_cold_test.tscn','tests/framework/item_journal_v2_backup_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 4,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": false,
+    "adopted_final": false
+  },
+  "stage_e_final_journal_cold_isolated": {
+    "local_run": "final_journal_cold_isolated_160530_318119",
+    "source_sha256": "fff09f90078c59d9cc6bb89cf45a0d21dbf937e46e7f692fa5e9fe192b093501",
+    "invocation_id": "1b461301-cc85-4fcb-918c-db864c0ad9fd",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/item_journal_v2_backup_seed_test.tscn','tests/framework/item_journal_v2_backup_cold_test.tscn','tests/framework/item_journal_v2_backup_restart_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 3,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": false,
+    "adopted_final": false
+  },
+  "stage_e_final_original_feedback": {
+    "local_run": "final_original_feedback_160607_023018",
+    "source_sha256": "fff09f90078c59d9cc6bb89cf45a0d21dbf937e46e7f692fa5e9fe192b093501",
+    "invocation_id": "c8c9ced4-108b-4d9a-bcb5-4d2e6548d9e1",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/user_feedback_20260930/player_blocked_locomotion_test.tscn','tests/user_feedback_20260930/monster_blocked_locomotion_test.tscn','tests/user_feedback_20260930/warrior_toggle_camera_native_test.tscn','tests/user_feedback_20260930/immediate_warrior_toggle_save_test.tscn','tests/user_feedback_20260930/consumable_icon_surfaces_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 5,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": false,
+    "adopted_final": false
+  },
+  "stage_e_final_crowd_recovery": {
+    "local_run": "final_crowd_recovery_160710_457645",
+    "source_sha256": "fff09f90078c59d9cc6bb89cf45a0d21dbf937e46e7f692fa5e9fe192b093501",
+    "invocation_id": "dc587fa2-8b4b-48f4-9fc7-6e639e405a70",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/user_feedback_20260930/crowd_recovery_test.tscn','tests/user_feedback_20260930/crowd_recovery_4_test.tscn','tests/user_feedback_20260930/crowd_recovery_8_test.tscn','tests/user_feedback_20260930/crowd_recovery_30_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 4,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": false,
+    "adopted_final": false
+  },
+  "stage_e_final_immediate_death": {
+    "local_run": "final_immediate_death_160847_601155",
+    "source_sha256": "fff09f90078c59d9cc6bb89cf45a0d21dbf937e46e7f692fa5e9fe192b093501",
+    "invocation_id": "7e745a2f-c823-42cc-b2a6-a3616404e002",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/aoe_death_phase_boundary_test.tscn','tests/enemy_mass_death_batch_pipeline_test.tscn','tests/death_queue_lifecycle_rework_test.tscn','tests/new_character_starter_loadout_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 4,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": false,
+    "adopted_final": false
+  },
+  "stage_e_final_r3_remaining": {
+    "local_run": "final_r3_remaining_160944_338873",
+    "source_sha256": "fff09f90078c59d9cc6bb89cf45a0d21dbf937e46e7f692fa5e9fe192b093501",
+    "invocation_id": "73e9e2bc-7f7d-4c81-a56d-8d065a3ab1dc",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/source176_r2/shared_permission_runtime_test.tscn','tests/source176_r2/exact_leg_runtime_test.tscn','tests/source176_r2/natural_approach_runtime_test.tscn','tests/source176_r3/exact_leg_and_corridor_test.tscn','tests/source176_r3/box_snapshot_consumer_test.tscn','tests/source176_r3/source_permission_lifecycle_test.tscn','tests/source176_r3/source_game_clock_trace_test.tscn','tests/source176_r3/source_idle_3_test.tscn','tests/source176_r3/source_idle_10_test.tscn','tests/source176_r3/source_direct_phase_trace_test.tscn','tests/source176_r3/cold_hot_action_phase_test.tscn','tests/source176_r3/body_action_owner_matrix_test.tscn','tests/source176_r3/area_parent_admission_test.tscn','tests/source176_r3/movement_frame_budget_test.tscn','tests/source176_r3/all_skill_reaction_paths_test.tscn','tests/source176_r3/identity_export_test.tscn','tests/source176_r3/target_magic_admission_test.tscn','tests/source176_r3/direct_reception_edges_test.tscn','tests/source176_r3/release_lifecycle_test.tscn','tests/source176_r3/render_sequence_test.tscn','tests/source176_r3/point_motor_path_test.tscn','tests/source176_r3/cadence_fast_path_test.tscn','tests/source176_r3/natural_64_p0_d0.tscn','tests/source176_r3/natural_64_p0_d1.tscn','tests/source176_r3/natural_64_p0_d2.tscn','tests/source176_r3/natural_64_p0_d3.tscn','tests/source176_r3/natural_64_p0_d4.tscn','tests/source176_r3/natural_64_p0_d5.tscn','tests/source176_r3/natural_64_p0_d6.tscn','tests/source176_r3/natural_64_p0_d7.tscn','tests/source176_r3/natural_64_p1_d0.tscn','tests/source176_r3/natural_64_p1_d1.tscn','tests/source176_r3/natural_64_p1_d2.tscn','tests/source176_r3/natural_64_p1_d3.tscn','tests/source176_r3/natural_64_p1_d4.tscn','tests/source176_r3/natural_64_p1_d5.tscn','tests/source176_r3/natural_64_p1_d6.tscn','tests/source176_r3/natural_64_p1_d7.tscn','tests/source176_r3/natural_64_p2_d0.tscn','tests/source176_r3/natural_64_p2_d1.tscn','tests/source176_r3/natural_64_p2_d2.tscn','tests/source176_r3/natural_64_p2_d3.tscn','tests/source176_r3/natural_64_p2_d4.tscn','tests/source176_r3/natural_64_p2_d5.tscn','tests/source176_r3/natural_64_p2_d6.tscn','tests/source176_r3/natural_64_p2_d7.tscn','tests/source176_r3/natural_89_p0_d0.tscn','tests/source176_r3/natural_89_p0_d1.tscn','tests/source176_r3/natural_89_p0_d2.tscn','tests/source176_r3/natural_89_p0_d3.tscn','tests/source176_r3/natural_89_p0_d4.tscn','tests/source176_r3/natural_89_p0_d5.tscn','tests/source176_r3/natural_89_p0_d6.tscn','tests/source176_r3/natural_89_p0_d7.tscn','tests/source176_r3/natural_89_p1_d0.tscn','tests/source176_r3/natural_89_p1_d1.tscn','tests/source176_r3/natural_89_p1_d2.tscn','tests/source176_r3/natural_89_p1_d3.tscn','tests/source176_r3/natural_89_p1_d4.tscn','tests/source176_r3/natural_89_p1_d5.tscn','tests/source176_r3/natural_89_p1_d6.tscn','tests/source176_r3/natural_89_p1_d7.tscn','tests/source176_r3/natural_89_p2_d0.tscn','tests/source176_r3/natural_89_p2_d1.tscn','tests/source176_r3/natural_89_p2_d2.tscn','tests/source176_r3/natural_89_p2_d3.tscn','tests/source176_r3/natural_89_p2_d4.tscn','tests/source176_r3/natural_89_p2_d5.tscn','tests/source176_r3/natural_89_p2_d6.tscn','tests/source176_r3/natural_89_p2_d7.tscn','tests/user_feedback_20260930/corner_wait_requirement_test.tscn','tests/user_feedback_20260930/crowd_position_candidates_test.tscn','tests/user_feedback_20260930/flank_committed_segment_test.tscn','tests/user_feedback_20260930/flank_projection_residual_test.tscn','tests/user_feedback_20260930/large_surround_packing_test.tscn','tests/user_feedback_20260930/motion_candidate_reuse_test.tscn','tests/user_feedback_20260930/surround_target_body_route_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 77,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": [
+      "APPEARANCE_MATRIX.json",
+      "area_parent_admission.json",
+      "body_action_owner_matrix.json",
+      "box_snapshot_consumer.json",
+      "cadence_fast_path.json",
+      "cold_hot_action_phase.json",
+      "direct_reception_edges.json",
+      "exact_leg_and_corridor.json",
+      "MONSTER_IDENTITY_MATRIX.json",
+      "movement_frame_budget.json",
+      "point_motor_path.json",
+      "release_lifecycle.json",
+      "render_sequence.json",
+      "SKILL_EXECUTION_MATRIX.json",
+      "source_direct_phase_trace.json",
+      "source_game_clock_trace.json",
+      "source_idle_wake_phase.json",
+      "source_permission_lifecycle.json",
+      "target_magic_admission.json"
+    ],
+    "same_as_wip_bytes": false,
+    "adopted_final": false
+  },
+  "stage_e_r4_final_layered": {
+    "local_run": "r4_final_layered_162958_579618",
+    "source_sha256": "fff09f90078c59d9cc6bb89cf45a0d21dbf937e46e7f692fa5e9fe192b093501",
+    "invocation_id": "6b7e51ee-b5ea-48c0-8a77-379c7b21d27d",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/hc_monster_combat_r4/all_damage_lost_test.tscn','tests/hc_monster_combat_r4/natural_cadence_24_test.tscn','tests/hc_monster_combat_r4/natural_cadence_76_test.tscn' -TimeoutSeconds 90"
+      ],
+      "timeout_seconds": 90,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": false,
+    "adopted_final": false
+  },
+  "stage_f_r4_final_layered": {
+    "local_run": "r4_final_layered_164117_289017",
+    "source_sha256": "db50a12ee1deb2a25eb4f0ffe807f9da1bd6539dfe5b1e1b982680a8102c1c66",
+    "invocation_id": "abb6ab81-efc5-488e-9355-92bf6c18f1c2",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/hc_monster_combat_r4/all_damage_lost_test.tscn','tests/hc_monster_combat_r4/natural_cadence_24_test.tscn','tests/hc_monster_combat_r4/natural_cadence_76_test.tscn' -TimeoutSeconds 90"
+      ],
+      "timeout_seconds": 90,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 3,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": false,
+    "adopted_final": false
+  },
+  "stage_f_final_layered_critical": {
+    "local_run": "final_layered_critical_164454_574994",
+    "source_sha256": "db50a12ee1deb2a25eb4f0ffe807f9da1bd6539dfe5b1e1b982680a8102c1c66",
+    "invocation_id": "4b39d578-b9ce-470e-8ff2-c2b2675c2d11",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/currency_identity_test.tscn','tests/device_lab_runtime_test.tscn','tests/taoist_support_production_integration_test.tscn','tests/skill_button_assignments_v2_test.tscn','tests/skill_panel_assignment_hint_layout_contract_test.tscn','tests/combat_release_geometry_test.tscn','tests/skill_runtime_integration_test.tscn','tests/melee_lock_fallback_test.tscn','tests/audit_39fe_regressions.tscn','tests/repair_20260913/inventory_error_feedback_real_input_test.tscn','tests/equipment_success_notice_real_input_test.tscn','tests/ui_error_machine_reason_leak_test.tscn','tests/r3_gold_cap_entrypoints_test.tscn','tests/skill_target_context_partition_test.tscn','tests/hc_monster_combat_r2/revival_durability_test.tscn','tests/f03_hot_persistence_test.tscn','tests/f03_async_death_receipt_test.tscn','tests/melee_blocked_query_order_test.tscn','tests/f03_periodic_background_save_test.tscn','tests/new_item_icon_surfaces_test.tscn','tests/synthesis_panel_preview_test.tscn','tests/f03_background_writer_test.tscn','tests/service_home_no_current_position_fallback_test.tscn','tests/death_revival_home_failure_test.tscn','tests/mobile_targeting_test.tscn','tests/game_root_combat_resolution_integration_test.tscn','tests/equipment_special_effects_test.tscn','tests/player_poison_presentation_test.tscn','tests/canonical_summon_integration_test.tscn','tests/player_level_up_effect_runtime_test.tscn','tests/town_music_runtime_test.tscn','tests/f05_settlement_display_separation_test.tscn','tests/framework/ui_registry_retirement_test.tscn','tests/framework/death_burst_lifecycle_test.tscn','tests/framework/death_burst_lifecycle_cold_test.tscn','tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn','tests/bich_environment_test.tscn','tests/orc_tomb_game_visual_geometry_test.tscn','tests/orc_tomb_source_integration_test.tscn','tests/source_collision_chunk_test.tscn','tests/natural_cave_source_integration_test.tscn','tests/vertical_slice_loop_test.tscn','tests/wooma_game_runtime_integration_test.tscn','tests/portal_actual_arrival_guard_test.tscn','tests/skill_production_canonical_entry_test.tscn','tests/source176_r3/eight_direction_admission_test.tscn','tests/source176_r3/source_idle_wake_phase_test.tscn','tests/source176_r3/published_map_approach_test.tscn','tests/user_feedback_20260930/full_surround_24_fractional_test.tscn','tests/user_feedback_20260930/full_surround_64_test.tscn','tests/user_feedback_20260930/full_surround_89_fractional_test.tscn','tests/user_feedback_20260930/full_surround_89_prefilled_test.tscn','tests/user_feedback_20260930/full_surround_89_test.tscn','tests/user_feedback_20260930/full_surround_mixed_test.tscn','tests/user_feedback_20260930/full_surround_moving_test.tscn','tests/user_feedback_20260930/full_surround_native_test.tscn','tests/user_feedback_20260930/full_surround_prefilled_test.tscn','tests/user_feedback_20260930/full_surround_west_wall_test.tscn','tests/user_feedback_20260930/surround_vacancy_refill_89_test.tscn','tests/user_feedback_20260930/surround_vacancy_refill_test.tscn','tests/source176_r3/c05_native_detour_test.tscn','tests/source176_r3/ordinary_body_clearance_test.tscn','tests/user_feedback_20260930/crowd_fractional_escape_test.tscn','tests/framework/ordinary_item_identity_test.tscn','tests/framework/equipment_identity_test.tscn','tests/framework/character_identity_save_test.tscn','tests/framework/item_binding_identity_test.tscn','tests/framework/feature_fire_effect_production_test.tscn','tests/framework/action_config_lease_test.tscn','tests/framework/feature_release_identity_test.tscn','tests/framework/combined_effect_lifecycle_test.tscn','tests/framework/combined_effect_lifecycle_cold_test.tscn','tests/framework/periodic_credit_safe_logout_test.tscn','tests/framework/periodic_credit_safe_logout_cold_test.tscn','tests/user_feedback_20260930/layered_approach_test.tscn','tests/user_feedback_20260930/full_surround_89_fractional_identity0_test.tscn','tests/user_feedback_20260930/full_surround_89_fractional_identity1_test.tscn','tests/user_feedback_20260930/recorded_fractional_flank_test.tscn','tests/user_feedback_20260930/recorded_fractional_wait_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 78,
+      "failed": 2,
+      "status": "FAIL"
+    },
+    "owned_traces": [
+      "c05_native_detour.json",
+      "eight_direction_admission.json",
+      "ordinary_body_clearance.json",
+      "published_map_approach.json",
+      "source_idle_wake_phase.json"
+    ],
+    "same_as_wip_bytes": false,
+    "adopted_final": false
+  },
+  "boundary_fixed_step_direct": {
+    "local_run": "boundary_fixed_step_direct_172147_538047",
+    "source_sha256": "a44ad1ab06faa220c88ca65448b2adea0c1665454b01fb88b6e1c1a0a329885d",
+    "invocation_id": "3268ab89-78e3-46b7-ab8b-61f77a1eadff",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_burst_lifecycle_test.tscn','tests/framework/death_burst_lifecycle_cold_test.tscn','tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 4,
+      "status": "FAIL"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": false,
+    "adopted_final": false
+  },
+  "boundary_fixed_step_clock_probe": {
+    "local_run": "boundary_fixed_step_clock_probe_172738_741244",
+    "source_sha256": "318cacf64ab4c26a9bc3b8537861206abe6fc3f476e1ac2e9a7b40655d31f1bc",
+    "invocation_id": "b21de656-d5f0-4666-a436-b29248781a5f",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_burst_lifecycle_test.tscn','tests/framework/death_burst_lifecycle_cold_test.tscn','tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 4,
+      "status": "FAIL"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": false,
+    "adopted_final": false
+  },
+  "boundary_fixed_step_paced60": {
+    "local_run": "boundary_fixed_step_paced60_173926_131192",
+    "source_sha256": "d615e31c07d3cd6ac14dee5e9f1a2889aa77ff85c490928f0390add9f7c5f86f",
+    "invocation_id": "e3243efd-bf25-4f9b-abab-87d830c0ac82",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_burst_lifecycle_test.tscn','tests/framework/death_burst_lifecycle_cold_test.tscn','tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 4,
+      "status": "FAIL"
+    },
+    "owned_traces": [],
+    "same_as_wip_bytes": true,
+    "adopted_final": false
+  }
+}
