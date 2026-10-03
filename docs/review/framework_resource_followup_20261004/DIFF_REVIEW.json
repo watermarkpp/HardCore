@@ -1,0 +1,28 @@
+{
+  "status": "PASS",
+  "scope": "20 source/test/authoring paths and owned evidence only",
+  "source_diff_check": "PASS",
+  "full_diff_check": "FAIL",
+  "preserved_whitespace_diagnostics": [
+    "docs/review/framework_resource_followup_20261004/audit_1a3e6263/PRO_REPORT.md"
+  ],
+  "reason": "Original Pro report retained including trailing whitespace; raw native CRLF separately identified.",
+  "staged_paths_before_adding_this_record": 355,
+  "final_expected_paths": 356,
+  "unrelated_staged_paths": [],
+  "source_self_review": [
+    "exact primary audio authoring/generated/policy/hash chain",
+    "typed resource checks and dependency subset",
+    "committed cancellation and other continuation scope",
+    "three-class service opportunities under original budget",
+    "native terminal FAILED and exact cache restoration",
+    "six independent live/cold associations"
+  ],
+  "limitations": [
+    "whole Task3/4/5 NOT_RUN",
+    "original B MISSING",
+    "APK/DEVICE NOT_RUN",
+    "no clean checkout run",
+    "all-source EOL mapping, not semantic changes"
+  ]
+}

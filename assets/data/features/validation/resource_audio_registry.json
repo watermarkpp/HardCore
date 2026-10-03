@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "modules": [
+    {"module_id": "hc.resource_audio_parent", "path": "res://assets/data/features/validation/resource_audio_parent.json"},
+    {"module_id": "hc.resource_audio_child", "path": "res://assets/data/features/validation/resource_audio_child.json"}
+  ],
+  "bindings": [
+    {"module_id": "hc.resource_audio_parent", "kind": "rule", "rule_id": "hc.resource_audio_parent", "mechanic_id": "hc.resource_audio_parent.accuracy"},
+    {"module_id": "hc.resource_audio_child", "kind": "rule", "rule_id": "hc.resource_audio_child", "mechanic_id": "hc.resource_audio_child.accuracy"}
+  ]
+}

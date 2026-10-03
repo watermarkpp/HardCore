@@ -1,0 +1,14 @@
+[FAIL] feature_resource_promotion_cancel_test - missing_pass_marker;non_zero_exit_code_1;framework_checks_failed
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+鏁版嵁搴撹浇鍏ュ畬鎴愶細鍦板浘209 鎬墿156 Boss20 瑁呭175 鎶€鑳界瓑绾?32 鎺夎惤妲?424 浠诲姟9
+FEATURE_RESOURCE_PROMOTION_CANCEL_FAIL checks=14 failures=["formal cancellation cannot relabel an already committed application as a failed preparation", "formal application waiter resumes only after the shared scope closes", "formal cancellation retains the outer publication lock and rejects notification reentry", "formal committed actor result and enabled source match successful completion", "service cancellation cannot relabel an already committed application as a failed preparation", "service application waiter resumes only after the shared scope closes", "receipt"]
+[FAIL] feature_resource_continuous_service_test - missing_pass_marker;non_zero_exit_code_1;framework_checks_failed
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+鏁版嵁搴撹浇鍏ュ畬鎴愶細鍦板浘209 鎬墿156 Boss20 瑁呭175 鎶€鑳界瓑绾?32 鎺夎惤妲?424 浠诲姟9
+FEATURE_RESOURCE_CONTINUOUS_OBSERVATION {"completed":176,"completion_epoch":-1,"first_ready_epoch":7,"peak_retirements":174}
+FEATURE_RESOURCE_CONTINUOUS_SERVICE_FAIL checks=8 failures=["ready formal publication receives service within six epochs while input continues", "continuous bounded producers cannot grow an unserviced resource retirement backlog", "receipt"]
+RUNNER_RESULTS_JSON=C:\Users\Administrator\.codex\worktrees\pluggable-framework-v2\HardCore\outputs\test_logs\runner_results_adhoc_20261004_050745_544_23632.json
+TEST_SUMMARY suite=adhoc passed=0 failed=2 engine_log_errors=0
+FAILED_TESTS=feature_resource_promotion_cancel_test (missing_pass_marker;non_zero_exit_code_1;framework_checks_failed); feature_resource_continuous_service_test (missing_pass_marker;non_zero_exit_code_1;framework_checks_failed)

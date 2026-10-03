@@ -1,0 +1,91 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "primary image has its existing importer mapping",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "fault targets only this worktree's uncached imported artifact",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "original imported bytes are captured before fault injection",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "test can write its selected disposable imported artifact",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "formal service owns one started engine request before terminal retrieval",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "real engine worker reaches THREAD_LOAD_FAILED on corrupt imported bytes",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "terminal engine failure ends the original waiting producer with rejection",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "formal publication propagates the resource-specific business failure",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "load failure preserves old catalog actual bundle and computed stats",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "terminal failure retrieves once and releases its engine user token",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "failed jobs requests retirement and shared budget scopes all finish",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "test restores exact original imported bytes before a fresh lawful attempt",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "fresh lawful preparation succeeds after terminal failure without a stale task",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "retry through the unchanged production API owns a usable actual primary texture",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "empty baseline can restore after actual engine failure and recovery",
+      "passed": true
+    }
+  ],
+  "count": 15,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "16800799-dcaa-4c2b-af3d-7a7fce424b2a",
+  "passed": 15,
+  "reported_checks": 15,
+  "reported_failures": 0,
+  "run_id": "4a68bdb5-21dd-4c78-a102-4ea06d7838dd",
+  "scene_id": "feature_resource_terminal_failure_test",
+  "schema_version": 1,
+  "source_content_sha256": "7acfe4aef78a10a3a258fa53b6e63a60a58602478487ff239fcdaf079ae0bb4b",
+  "status": "PASS"
+}

@@ -1,0 +1,43 @@
+{
+  "parent": "1a3e6263a094b9ed004465be12b5a9c22b97ca9c",
+  "construction_head": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+  "source_content_sha256": "7acfe4aef78a10a3a258fa53b6e63a60a58602478487ff239fcdaf079ae0bb4b",
+  "source_files": 3668,
+  "delta_files": 20,
+  "final_unique_positive_scenes": 41,
+  "final_framework_receipts": 40,
+  "final_framework_checks": 926,
+  "expected_engine_error_negative": {
+    "gate": "PASS",
+    "original_runner": "FAIL",
+    "business_checks": 15,
+    "run_id": "4a68bdb5-21dd-4c78-a102-4ea06d7838dd"
+  },
+  "native_attempts": 61,
+  "preserved_failed_attempts": 6,
+  "status": "PASS",
+  "whole_resource_task_status": "NOT_RUN",
+  "whole_framework_status": "NOT_RUN",
+  "apk_status": "NOT_RUN",
+  "device_status": "NOT_RUN",
+  "engine_version": "4.7.stable.official.5b4e0cb0f",
+  "engine_console_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+  "engine_child_file_sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+  "scope": "Declaration rejection, exact primary AudioStream plus required texture, committed cancellation, continuing-input service, native terminal FAILED negative, selected regressions.",
+  "open": [
+    "critical cue/child-effect production consumption",
+    "resource-enabled natural workload/render/device budgets",
+    "Task4 heterogeneous mechanisms",
+    "Task5 templates/generated combinations/whole acceptance",
+    "original v97 B input MISSING",
+    "APK/Android delivery"
+  ],
+  "TESTED_SOURCE.zip": {
+    "bytes": 15331549,
+    "sha256": "e8e6a366d02f5c35aa8180c890416d77c0d4d4fab0839db6519dbdd65b594567"
+  },
+  "NATIVE_EVIDENCE.zip": {
+    "bytes": 4456195,
+    "sha256": "cec211ab3e0e05f4552b9e0c8938dded98acaf523ba6327fcc47f1cf6f2abfcf"
+  }
+}

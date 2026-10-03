@@ -1,0 +1,81 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "damage batch contract exists at the real HP commit boundary",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "batch owns frozen formal skill, release and historical credit",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "base scope opens explicitly",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "nested scope does not publish early",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "synchronous legacy callback actually heals after HP commit",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "fact captures actual HP write before synchronous healing",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "fact recursively freezes only plain data",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "nested finish cannot flush while outer base work remains",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "overkill uses actual loss and commit-time death despite later healing",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "outer base completion seals facts",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "completed batch can be consumed once in stable HP order",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "weak actor ref delegates current world and life authority",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "world invalidates actor mutation while preserving historical fact",
+      "passed": true
+    }
+  ],
+  "count": 13,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "764efc1d-da1e-4818-bcde-41b19950c5f0",
+  "passed": 13,
+  "reported_checks": 13,
+  "reported_failures": 0,
+  "run_id": "cc013f83-b0be-4515-994c-077e2df2adb0",
+  "scene_id": "damage_commit_fact_test",
+  "schema_version": 1,
+  "source_content_sha256": "7acfe4aef78a10a3a258fa53b6e63a60a58602478487ff239fcdaf079ae0bb4b",
+  "status": "PASS"
+}

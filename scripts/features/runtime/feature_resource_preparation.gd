@@ -26,6 +26,10 @@ var _apply_head := 0
 var _apply_tail := 0
 var _request_calls := 0
 var _get_calls := 0
+var _next_queue := 0
+var _applying_request := 0
+var _quantum_active := false
+var _deferred_completions: Array = []
 
 func _ready() -> void:
 	set_process(false)
@@ -47,7 +51,7 @@ func prepare(catalog: Dictionary, enabled: Array) -> Dictionary:
 		request.remaining[path] = true
 		if not _jobs.has(path):
 			_jobs[path] = {"started":false, "clients":{}, "delivering":false,
-				"resource":null, "failure":"", "mode":"", "joined":false, "retained":false}
+				"resource":null, "failure":"", "mode":"", "joined":false, "retained":false, "type":declared.records[path].type}
 			_queue(path)
 		_jobs[path].clients[id] = true
 	_activate()
@@ -57,8 +61,14 @@ func cancel_all() -> void:
 	# Engine threaded requests cannot be cancelled. Their jobs remain owned
 	# until status is terminal and any loaded resource is acquired and retired.
 	for id: int in _requests.keys():
-		_complete(id, {"success":false, "errors":["feature_resource_preparation_cancelled"], "lease":null})
+		if id == _applying_request: continue
+		var result := {"success":false, "errors":["feature_resource_preparation_cancelled"], "lease":null}
+		if _quantum_active: _deferred_completions.append({"id":id,"result":result})
+		else: _complete(id,result)
 	_activate()
+
+func is_applying() -> bool:
+	return _applying_request != 0
 
 func apply_ready(callback: Callable) -> bool:
 	if not callback.is_valid(): return false
@@ -91,28 +101,44 @@ func _process(_delta: float) -> void:
 	Budget.mark_pending(CATEGORY, true, true, false, self)
 	var token := Budget.begin(CATEGORY)
 	if token == 0: return
+	_quantum_active = true
 	var finished: Array = []
-	if _head < _tail:
+	# Each nonempty class receives one opportunity in at most three granted
+	# service quanta. Continuous loading cannot starve promotion or retirement.
+	var queue := -1
+	for offset in range(3):
+		var candidate := (_next_queue + offset) % 3
+		if (candidate == 0 and _head < _tail) or (candidate == 1 and _apply_head < _apply_tail) or (candidate == 2 and _retire_head < _retire_tail):
+			queue = candidate
+			_next_queue = (candidate + 1) % 3
+			break
+	if queue == 0:
 		var path: String = _work[_head]
 		_work.erase(_head)
 		_head += 1
 		_step(path, finished)
-	elif _apply_head < _apply_tail:
+	elif queue == 1:
 		var application: Dictionary = _applications[_apply_head]
 		_applications.erase(_apply_head)
 		_apply_head += 1
 		if _requests.has(application.id):
+			_applying_request = application.id
 			var success: bool = application.callback.call() if application.callback.is_valid() else false
+			_applying_request = 0
 			finished.append({"id":application.id, "result":{"success":success, "errors":[], "lease":null}})
-	elif _retire_head < _retire_tail:
+	elif queue == 2:
 		var resources: Dictionary = _retirements[_retire_head]
 		if not resources.is_empty(): resources.erase(resources.keys()[0])
 		if resources.is_empty():
 			_retirements.erase(_retire_head)
 			_retire_head += 1
 	Budget.end(token)
+	_quantum_active = false
 	# Completion may publish config and notify observers, always after the
 	# optional preparation scope closes and never across an await.
+	var cancelled := _deferred_completions
+	_deferred_completions = []
+	for item: Dictionary in cancelled: _complete(item.id,item.result)
 	for item: Dictionary in finished: _complete(item.id, item.result)
 	_activate()
 
@@ -140,14 +166,14 @@ func _step(path: String, finished: Array) -> void:
 		resource = ResourceLoader.get_cached_ref(path)
 		if resource != null:
 			mode = "cache_hits"
-		elif not ResourceLoader.exists(path, "Texture2D"):
+		elif not ResourceLoader.exists(path, job.type):
 			failure = "feature_resource_missing:" + path
 		else:
 			var status := ResourceLoader.load_threaded_get_status(path)
 			# A matching engine task still requires this owner's own user token.
 			# Merely observing another owner's status and calling get would spend
 			# its retrieval right. ResourceLoader joins the existing task itself.
-			var error := ResourceLoader.load_threaded_request(path, "Texture2D", false)
+			var error := ResourceLoader.load_threaded_request(path, job.type, false)
 			_request_calls += 1
 			if error != OK: failure = "feature_resource_request_failed:" + path
 			else:
@@ -172,7 +198,7 @@ func _step(path: String, finished: Array) -> void:
 		else:
 			_queue(path)
 			return
-	if failure.is_empty() and (not resource is Texture2D or resource.resource_path != path or resource.get_width() <= 0 or resource.get_height() <= 0):
+	if failure.is_empty() and not Registry.valid_resource(path, resource):
 		failure = "feature_resource_type_or_shape:" + path
 	job.resource = resource
 	job.failure = failure

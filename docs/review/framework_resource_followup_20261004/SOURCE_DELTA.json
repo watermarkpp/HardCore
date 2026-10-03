@@ -1,0 +1,106 @@
+{
+  "parent": "1a3e6263a094b9ed004465be12b5a9c22b97ca9c",
+  "source_content_sha256": "7acfe4aef78a10a3a258fa53b6e63a60a58602478487ff239fcdaf079ae0bb4b",
+  "delta": [
+    {
+      "path": "scripts/features/compilation/feature_resource_registry.gd",
+      "before_sha256": "8c683d3a162521320d8d0e88ec6140217dd5c5def4002ba600ccaf5b5b2bfe1c",
+      "after_sha256": "fd5331f9abd9e041c034cc4e32b8598cf1af45b1221f2562f530236491854e22"
+    },
+    {
+      "path": "scripts/features/contracts/feature_resource_lease.gd",
+      "before_sha256": "3a4216c1e827f4fd7d13bcf64f8cb71571a3b59a4f2e51fc7c7c6505c9a4cfe5",
+      "after_sha256": "a45c25194a22710b7f5e1454d07a748e5b400894a2fa8c6ca48dfdf14afdbb7c"
+    },
+    {
+      "path": "scripts/features/runtime/feature_resource_preparation.gd",
+      "before_sha256": "f26848a55d4cf3d487e0010ffb59f850afddcb4a577e8eac0fb7656648464cd4",
+      "after_sha256": "34a81b12fd929a55dd94a6a15c778c70a0bf28feadf8be12d5a49e01db785d45"
+    },
+    {
+      "path": "scripts/layers/runtime/content_layer_registry.gd",
+      "before_sha256": "6b7516e000d4ea2d5f0b7b966b23165ab68c0d4f17587d3b5b2e95809b49f60d",
+      "after_sha256": "bc281dc8ccb886955111b0f72cc3450bd53c5e4f60dff0cbe8a2f29e0ac99b49"
+    },
+    {
+      "path": "tests/framework/feature_resource_audio_closure_test.gd",
+      "before_sha256": null,
+      "after_sha256": "2e37985a9bc1a887d4d2b0fe80db6a08cd67a2371f5ece34435ebef0c3c71a63"
+    },
+    {
+      "path": "tests/framework/feature_resource_audio_closure_test.tscn",
+      "before_sha256": null,
+      "after_sha256": "5d3111352bf67539f074c78abed4c81e2f37ae9ca32b94fa940aea823da88b3c"
+    },
+    {
+      "path": "tests/framework/feature_resource_continuous_service_test.gd",
+      "before_sha256": null,
+      "after_sha256": "63f2271030f3370ae0dd60f5593698a4b5ed83f6a1ea0e6d8e05c9e8a066189f"
+    },
+    {
+      "path": "tests/framework/feature_resource_continuous_service_test.tscn",
+      "before_sha256": null,
+      "after_sha256": "cb54cd9ad70af2da5325c01eb1247245c1526ee313d9da6e08c6ac425fcf38a7"
+    },
+    {
+      "path": "tests/framework/feature_resource_declaration_validation_test.gd",
+      "before_sha256": null,
+      "after_sha256": "3156d73f764825fb7e2f32f46cccaa7c10be0691f95d88081bf2e9dff373e6c5"
+    },
+    {
+      "path": "tests/framework/feature_resource_declaration_validation_test.tscn",
+      "before_sha256": null,
+      "after_sha256": "ab388caa0a53881a3e5aeef7bb8c60558ca961e40be51b4159c2dac95f8d6525"
+    },
+    {
+      "path": "tests/framework/feature_resource_promotion_cancel_test.gd",
+      "before_sha256": null,
+      "after_sha256": "9058ebed858ea032f4345ebe6fbdd8ea3c0af96a275f73ddd1849a8a7e76cb9c"
+    },
+    {
+      "path": "tests/framework/feature_resource_promotion_cancel_test.tscn",
+      "before_sha256": null,
+      "after_sha256": "0f1e96f695c14bb872d234f35f1b8143b932433ec56c8b734a0c57fb74236f82"
+    },
+    {
+      "path": "tests/framework/feature_resource_registry_rejection_test.gd",
+      "before_sha256": null,
+      "after_sha256": "32efab5300da11f26e709a6c10b3346e667396280fc0edc36552b2ce52daa166"
+    },
+    {
+      "path": "tests/framework/feature_resource_registry_rejection_test.tscn",
+      "before_sha256": null,
+      "after_sha256": "1264ca2de6c6577b61da59c412530b1faf46017228d4b6a1e1164b8964cfa9a9"
+    },
+    {
+      "path": "tests/framework/feature_resource_terminal_failure_test.gd",
+      "before_sha256": null,
+      "after_sha256": "f843a501508e4c6bee5f58eb41e091942ed8d8ffb13fe7e96f148105887d1be3"
+    },
+    {
+      "path": "tests/framework/feature_resource_terminal_failure_test.tscn",
+      "before_sha256": null,
+      "after_sha256": "8afea04472a31a1ab10406c9fe937e8ab052a1224328c766f15984d3275b57c9"
+    },
+    {
+      "path": "assets/data/features/resource_registry.json",
+      "before_sha256": "5dff8829fdfb81e5ec6b08673f0a3eb3f6edf77b1b74e49e786a41737ff477a1",
+      "after_sha256": "e445a6e34a4cb55d9dc2a018d90bdc25c65dd2e069564cfc8ec912b0906d1dc4"
+    },
+    {
+      "path": "assets/data/features/validation/resource_audio_child.json",
+      "before_sha256": null,
+      "after_sha256": "a22a605e0968eb5450af59af504ae58f1dee2b5ce7702141fc715a40a2f351e2"
+    },
+    {
+      "path": "assets/data/features/validation/resource_audio_parent.json",
+      "before_sha256": null,
+      "after_sha256": "ea67d535912c80b0e57e7451c98e7e747ac059b6e5a5c0f06367cc83b819d791"
+    },
+    {
+      "path": "assets/data/features/validation/resource_audio_registry.json",
+      "before_sha256": null,
+      "after_sha256": "303b2d2a81f5d9b2f5f859e16c26c159b2c2cbffb4c382af874680ae9d8ea1b5"
+    }
+  ]
+}

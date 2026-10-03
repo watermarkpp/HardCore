@@ -15,6 +15,7 @@ var _feature_bindings: Array = []
 var _enabled_feature_modules: Array = []
 var feature_load_errors: Array = []
 var _feature_publication_in_progress := false
+var _feature_commit_in_progress := false
 var _feature_preparation_sequence := 0
 var _feature_resource_lease: RefCounted
 var _feature_resource_service: Node
@@ -144,6 +145,9 @@ func _apply_prepared_feature_candidate(result: Dictionary, resource_lease: RefCo
 
 
 func cancel_feature_resource_preparation() -> void:
+	# Synchronous promotion is no longer a cancellable preparation. Its
+	# notification retains the publication lock and reports the committed result.
+	if _feature_commit_in_progress or (_feature_resource_service != null and _feature_resource_service.is_applying()): return
 	_feature_preparation_sequence += 1
 	_feature_publication_in_progress = false
 	if _feature_resource_service != null: _feature_resource_service.cancel_all()
@@ -159,6 +163,10 @@ func _read_feature_candidate(registry_path: String) -> Dictionary:
 	if not compiler._keys(registry, ["schema_version", "modules", "bindings"], [], errors, "feature_registry") \
 		or registry.get("schema_version") != 1 or not registry.get("modules") is Array or not registry.get("bindings") is Array:
 		feature_load_errors = ["invalid_feature_registry"]
+		return {}
+	var declarations := preload("res://scripts/features/compilation/feature_resource_registry.gd").declarations()
+	if not bool(declarations.success):
+		feature_load_errors = declarations.errors
 		return {}
 	var authority := FeatureAuthority.build()
 	var modules: Array = []
@@ -241,6 +249,7 @@ func _publish_feature_configuration(candidate: RefCounted, authority: Dictionary
 		return false
 	# No yield or callbacks between these assignments. Observers see both the
 	# effective directory and the validated actor result in the same generation.
+	_feature_commit_in_progress = true
 	_feature_catalog = candidate
 	_feature_authority = authority
 	_feature_bindings = bindings
@@ -249,6 +258,7 @@ func _publish_feature_configuration(candidate: RefCounted, authority: Dictionary
 	PlayerState._commit_feature_configuration(prepared)
 	feature_load_errors = []
 	feature_catalog_changed.emit()
+	_feature_commit_in_progress = false
 	_feature_publication_in_progress = false
 	return true
 

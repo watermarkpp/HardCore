@@ -1,0 +1,81 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "cancellation case begins with the actual primary texture uncached",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "real asynchronous publication owns one pending resource job",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "cancellation occurs after this service starts its engine request and before retrieval",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "the owned engine request still has a live retrieval right regardless of worker speed",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "explicit cancellation terminates the original waiting publisher immediately",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "cancellation keeps ownership of the already started engine job until terminal cleanup",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "cancellation never publishes partial directory or player results",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "cancelled engine job and acquired resource retire through ordinary processing",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "the cancelled owner releases exactly its one engine retrieval token",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "terminal cleanup leaves no abandoned threaded retrieval right",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "late worker completion cannot turn cancellation into a successful publication",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "cancelled preparation returns to idle with all budget scopes closed",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "ordinary empty publication remains available after cancellation",
+      "passed": true
+    }
+  ],
+  "count": 13,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "133488e2-f7d2-478e-aead-caec35e67037",
+  "passed": 13,
+  "reported_checks": 13,
+  "reported_failures": 0,
+  "run_id": "b88abc18-73a5-4bd6-b78b-da682502bc3b",
+  "scene_id": "feature_resource_started_cancel_test",
+  "schema_version": 1,
+  "source_content_sha256": "fe1d98b73f06e8c0ec0182e391eebf204098f2c706eb6ca1c3f54f70184a5ee1",
+  "status": "PASS"
+}

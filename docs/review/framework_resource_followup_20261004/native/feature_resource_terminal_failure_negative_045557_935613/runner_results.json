@@ -1,0 +1,32 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "feature_resource_terminal_failure_test",
+                        "test_path":  "tests/framework/feature_resource_terminal_failure_test.tscn",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-03T20:56:30.2584643Z",
+                        "native_exit_observed_utc":  "2026-10-03T20:56:05.5581880Z",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  3,
+                        "engine_log_failure_count":  3,
+                        "framework_run_id":  "3cd54875-b2a5-4414-b379-3b3db85beb64",
+                        "framework_receipt_valid":  true,
+                        "result":  "FAIL",
+                        "reason":  "stderr_failures_3;engine_log_failures_3"
+                    }
+                ],
+    "total":  1,
+    "invocation_id":  "ec6a4ccb-618e-4193-8b74-48482d6c786b",
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "passed":  0,
+    "engine_log_errors":  3,
+    "generated_at":  "2026-10-04T04:56:07.1337280+08:00",
+    "failed":  1,
+    "suite":  "adhoc"
+}

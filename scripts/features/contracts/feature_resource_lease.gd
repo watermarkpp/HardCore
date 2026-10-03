@@ -1,5 +1,7 @@
 extends RefCounted
 
+const Registry := preload("res://scripts/features/compilation/feature_resource_registry.gd")
+
 var _signature := ""
 var _catalog_revision := ""
 var _enabled_modules: Array = []
@@ -28,7 +30,7 @@ static func issue(plan: Dictionary, resources: Dictionary, owner: Node, diagnost
 	if not bool(plan.get("success", false)) or resources.size() != plan.paths.size(): return null
 	for path: String in plan.paths:
 		var resource: Variant = resources.get(path)
-		if not resource is Texture2D or resource.resource_path != path or resource.get_width() <= 0 or resource.get_height() <= 0:
+		if not Registry.valid_resource(path, resource):
 			return null
 	var result := new()
 	result._signature = plan.signature

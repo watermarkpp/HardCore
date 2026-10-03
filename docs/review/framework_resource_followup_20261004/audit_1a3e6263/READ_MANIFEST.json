@@ -1,0 +1,16 @@
+{
+  "request_id": "resource-closure-1a3e6263-20261004",
+  "sha": "1a3e6263a094b9ed004465be12b5a9c22b97ca9c",
+  "source_thread": "6abbcea3-5fb4-83ea-8732-0cf95e1c4583",
+  "source_turn": "c7c1c706-222c-4ef0-832d-f11e16efd341",
+  "source_item": "201d0ff9-11a3-4668-8e8f-4cdbbde496d2",
+  "read_at_utc": "2026-10-03 21:05:01 UTC",
+  "characters": 6472,
+  "pro_complete": true,
+  "dot_complete": false,
+  "actions": [
+    "原生复现并修复发布通知中取消导致已发布却返回失败/提前恢复/发布锁重入",
+    "原生持续有界输入复现资源内部应用及退休饥饿，补有界服务机会",
+    "本轮已推进FAILED原生负例和AudioStream闭包，与旧SHA报告分开"
+  ]
+}

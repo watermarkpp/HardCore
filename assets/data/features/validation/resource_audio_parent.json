@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "module_id": "hc.resource_audio_parent",
+  "module_version": 1,
+  "core_api_version": 1,
+  "requires": ["hc.resource_audio_child"],
+  "conflicts": [],
+  "capabilities": ["stats.contribute"],
+  "handlers": [],
+  "resource_dependencies": ["res://assets/audio/sfx/client/137__M26-3.wav"],
+  "cost": {"commands_per_event": 0, "states_per_target": 0},
+  "mechanics": [{"mechanic_id": "hc.resource_audio_parent.accuracy", "kind": "stat", "tags": ["hc.numeric"], "operations": [{"stat": "accuracy", "op": "add", "value": 2}]}],
+  "tests": ["tests/framework/feature_resource_audio_closure_test.tscn"],
+  "default_enabled": true,
+  "activation_boundary": "startup"
+}

@@ -1,0 +1,86 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "formal cancellation observes actual committed publication within its accounted notification",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "formal cancellation cannot relabel an already committed application as a failed preparation",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "formal application waiter resumes only after the shared scope closes",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "formal cancellation retains the outer publication lock and rejects notification reentry",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "formal committed actor result and enabled source match successful completion",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "formal application ownership finishes normally after notification",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "formal fixture restores through the original synchronous empty path",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "service cancellation observes actual committed publication within its accounted notification",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "service cancellation cannot relabel an already committed application as a failed preparation",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "service application waiter resumes only after the shared scope closes",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "service cancellation retains the outer publication lock and rejects notification reentry",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "service committed actor result and enabled source match successful completion",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "service application ownership finishes normally after notification",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "service fixture restores through the original synchronous empty path",
+      "passed": true
+    }
+  ],
+  "count": 14,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "133488e2-f7d2-478e-aead-caec35e67037",
+  "passed": 14,
+  "reported_checks": 14,
+  "reported_failures": 0,
+  "run_id": "ba932a03-268c-4097-84cf-0585e1340e02",
+  "scene_id": "feature_resource_promotion_cancel_test",
+  "schema_version": 1,
+  "source_content_sha256": "fe1d98b73f06e8c0ec0182e391eebf204098f2c706eb6ca1c3f54f70184a5ee1",
+  "status": "PASS"
+}

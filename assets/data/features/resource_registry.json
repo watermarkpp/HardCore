@@ -6,6 +6,12 @@
       "path": "res://assets/art/items/service/inventory/client.classic_raw_complete/Items_00014.png",
       "type": "Texture2D",
       "origin": {"lane": "client_assets", "entity_id": "hc.item.910007", "surface": "inventoryIcon"}
+    },
+    {
+      "resource_id": "hc.resource.sound.fire_sword.attack",
+      "path": "res://assets/audio/sfx/client/137__M26-3.wav",
+      "type": "AudioStream",
+      "origin": {"lane": "client_assets", "event_id": "player.skill.fire_sword", "sound_id": 137}
     }
   ]
 }

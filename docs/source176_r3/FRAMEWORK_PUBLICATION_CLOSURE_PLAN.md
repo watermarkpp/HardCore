@@ -42,6 +42,8 @@ Task 3：开始 RED；Task 4—5：NOT_RUN。既有 ObjectDB 8 warning 原样保
 
 2026-10-04下一固定资源增量：活世界异步启用29检查、实际IN_PROGRESS后的取消13检查、多请求有界交付及四轮持有退休25检查已完成。最终同52beda670内容36场景852检查PASS，具体原始RED/GREEN、原生退出和未覆盖范围见docs/review/framework_resource_closure_20261004。Task3完整范围仍NOT_RUN，继续terminal FAILED清理、更广cue/audio/子资源和资源开启的自然／渲染验证；Task4异构组合、Task5模板／整体验收与APK尚未关闭。
 
+2026-10-04资源后续：声明失败不得发布8/4FAIL→8PASS；Pro本轮通知取消14/6FAIL→最终16PASS，持续两个合法调用者8/2FAIL→8PASS（原就绪未完成/退休峰174→就绪后1帧完成/峰1）；真实主源AudioStream与required图标闭包6/2FAIL→17PASS，声明负例25PASS。最终同7acfe4aef内容41正常场景/926完整框架检查PASS，另15业务检查的真实THREAD_LOAD_FAILED负例：原通用runner保留FAIL、精确预期错误/身份/终态/字节恢复门禁PASS，未放宽allowlist。详情见RESOURCE_FOLLOWUP_WORKLOG_20261004.md及docs/review/framework_resource_followup_20261004。Task3的实际关键cue/子效果消费与资源启用自然/渲染继续，Task4—5/APK未关闭。
+
 最终自然链 feature_publication_final_world_235850_550131：六场景全部 PASS、独立本轮 producer/cold、同4bbd指纹。合并直接最终采用23唯一场景/682完整检查；58原生尝试中的7失败原样保留。原字节源码与完整回执见 docs/review/framework_publication_20261003。
 
 2026-10-04 检查点：已创建并推送受测快照 8664ef242edcd8bfeca3f599e6478636c0a75ca3，父3a1，157总路径中23源码/测试/作者数据增量，其余为原字节证据和计划；远端确认同 SHA。真实第三树 HEAD/index 未切换或覆盖；主树119/第二树249 status 指纹仍与保护记录一致。Pro原6abbcea3与小可爱原01a0f143（durable）均经官方入口实际接到该范围请求，既有dots每10分钟双拉取ACTIVE，完整读取后各自停扫，两份读到后PAUSED。请求记录在 outputs/framework_v2/publication_closure_20261003/AUDIT_REQUEST_8664.json。

@@ -1,0 +1,201 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "real production persistence without test_mode bypass",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "official startup upgrade gate completes in isolated production user data { \"success\": true, \"reason\": \"already_completed\", \"backup_path\": \"user://save_upgrades/framework_identity_v1\", \"profiles\": [\"1791062522_8274\"] }",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "A created through official profile service",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "A accepts registered prerequisite-free kill quest through its sole owner",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "real durable A baseline",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "B created through official profile service",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "real durable B baseline",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "A/B have distinct profile identities and contract-valid clock generations, including legacy empty namespaces",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "A officially selected before world creation { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"primary\", \"path\": \"user://characters/1791062550_8436.json\" }",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "actual authored world ready",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "registered quest receiver uses real mapped spawn and death signal",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "initial queue uses its real idle flags without forced suppression",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "default-off module explicitly enabled only for this test",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "qualified batch is owned by actual Root",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "actual committed fact admits exactly one pending lethal periodic state",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "accepted state retains exact A credit",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "withdrawal leaves the accepted state alive and restores default-off qualification",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "narrow boundary is real lethal HP before deferred actor callback",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "real return handler reaches visual transition only after guard success",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "logout guard synchronously closes the deferred actor death exactly once",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "actual death settlement and prepared writer drain before transition",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "A is still active when its sole reward owner applies exactly one kill",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "A quest objective increments exactly once in the real reward plan",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "logout has an actual durable save success",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "A death and logout leave B profile bytes unchanged",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "accepted effect terminates without leftover mutation handles or hidden failure",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "real death/drop pipeline has exactly one committed terminal job",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "original queued callback neither repeats rewards nor consumes old drop RNG",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "B officially selected after guarded old-world retirement",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "B XP is not contaminated by A",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "B quests are not contaminated by A",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "B world identity is not contaminated by A",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "A reloads through the real saved profile/world ledger",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "A owner and persisted kill gain survive role reload",
+      "passed": true
+    },
+    {
+      "id": 35,
+      "label": "A persisted quest gain remains exactly one",
+      "passed": true
+    },
+    {
+      "id": 36,
+      "label": "real profile/world receipts are fully consumed",
+      "passed": true
+    },
+    {
+      "id": 37,
+      "label": "write cold-process expectation from this successful producer only",
+      "passed": true
+    }
+  ],
+  "count": 37,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "5423e810-5742-424c-8067-aee4f01bf800",
+  "passed": 37,
+  "reported_checks": 37,
+  "reported_failures": 0,
+  "run_id": "c5cccdc6-bf84-42ce-8549-94401e7b9962",
+  "scene_id": "periodic_credit_safe_logout_test",
+  "schema_version": 1,
+  "source_content_sha256": "7acfe4aef78a10a3a258fa53b6e63a60a58602478487ff239fcdaf079ae0bb4b",
+  "status": "PASS"
+}

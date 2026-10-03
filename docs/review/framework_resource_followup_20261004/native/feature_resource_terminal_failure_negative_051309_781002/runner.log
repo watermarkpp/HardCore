@@ -1,0 +1,14 @@
+[FAIL] feature_resource_terminal_failure_test - stderr_failures_3;engine_log_failures_3
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+鏁版嵁搴撹浇鍏ュ畬鎴愶細鍦板浘209 鎬墿156 Boss20 瑁呭175 鎶€鑳界瓑绾?32 鎺夎惤妲?424 浠诲姟9
+FEATURE_RESOURCE_TERMINAL_FAILURE_PASS checks=15 failures=[]
+ERROR: Compressed texture file is corrupt (Bad header).
+   at: _load_data (scene/resources/compressed_texture.cpp:50)
+ERROR: Failed loading resource: res://.godot/imported/Items_00014.png-1c66ca0142223b1fe999bb38a562b0d9.ctex.
+   at: _load (core/io/resource_loader.cpp:317)
+ERROR: Failed loading resource: res://assets/art/items/service/inventory/client.classic_raw_complete/Items_00014.png.
+   at: _load (core/io/resource_loader.cpp:317)
+RUNNER_RESULTS_JSON=C:\Users\Administrator\.codex\worktrees\pluggable-framework-v2\HardCore\outputs\test_logs\runner_results_adhoc_20261004_051318_757_2344.json
+TEST_SUMMARY suite=adhoc passed=0 failed=1 engine_log_errors=3
+FAILED_TESTS=feature_resource_terminal_failure_test (stderr_failures_3;engine_log_failures_3)
