@@ -1,0 +1,16 @@
+{
+  "command": [
+    "powershell",
+    "-NoProfile",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "& './tools/run_godot_tests.ps1' -TestPaths 'tests/user_feedback_20260930/recorded_fractional_flank_test.tscn' -TimeoutSeconds 30"
+  ],
+  "timeout_seconds": 30,
+  "exit_code": 1,
+  "source_stable_during_run": true,
+  "passed": 0,
+  "failed": 1,
+  "status": "FAIL"
+}

@@ -1,0 +1,16 @@
+{
+  "command": [
+    "powershell",
+    "-NoProfile",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "& './tools/run_godot_tests.ps1' -TestPaths 'tests/service_home_no_current_position_fallback_test.tscn','tests/death_revival_home_failure_test.tscn','tests/mobile_targeting_test.tscn','tests/player_level_up_effect_runtime_test.tscn','tests/game_root_combat_resolution_integration_test.tscn','tests/equipment_special_effects_test.tscn','tests/melee_lock_fallback_test.tscn','tests/device_lab_runtime_test.tscn','tests/canonical_summon_integration_test.tscn','tests/skill_production_canonical_entry_test.tscn','tests/f03_background_writer_test.tscn','tests/player_poison_presentation_test.tscn','tests/town_music_runtime_test.tscn','tests/f05_settlement_display_separation_test.tscn','tests/framework/currency_identity_test.tscn' -TimeoutSeconds 30"
+  ],
+  "timeout_seconds": 30,
+  "exit_code": 1,
+  "source_stable_during_run": true,
+  "passed": 1,
+  "failed": 14,
+  "status": "FAIL"
+}

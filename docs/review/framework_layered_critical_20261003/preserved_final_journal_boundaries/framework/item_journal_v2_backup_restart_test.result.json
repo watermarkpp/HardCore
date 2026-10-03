@@ -1,0 +1,26 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "this native successful cold producer owns the recovered epochs",
+      "passed": false
+    },
+    {
+      "id": 2,
+      "label": "owned isolated account and production persistence only",
+      "passed": true
+    }
+  ],
+  "count": 2,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "94b4dac2-1d59-4a8a-a484-9ad85cb0aaca",
+  "passed": 1,
+  "reported_checks": 2,
+  "reported_failures": 1,
+  "run_id": "0f897f8e-ba88-4516-b893-20577ff74d74",
+  "scene_id": "item_journal_v2_backup_restart_test",
+  "schema_version": 1,
+  "source_content_sha256": "3b88ff1498d77df6db258fc8bcdd18b86222400f0a028d8f590421d5dba12fab",
+  "status": "FAIL"
+}

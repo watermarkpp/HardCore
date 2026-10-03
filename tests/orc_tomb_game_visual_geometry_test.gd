@@ -18,16 +18,16 @@ func _run() -> void:
 	PlayerState.reset_progress()
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
-	await get_tree().process_frame
+	await preload("res://tests/helpers/world_ready_fixture.gd").wait_for_world(self, game, GameData.service_runtime_map_id(0), "initial map")
 	var verified_commands := 0
 	for map_id: int in MAP_IDS:
 		game.travel_to_map(map_id)
-		await get_tree().process_frame
+		await preload("res://tests/helpers/world_ready_fixture.gd").wait_for_world(self, game, map_id, "orc draw commands")
 		var runtime := RuntimeBridge.load_map(map_id)
 		var raw_size: Array = runtime.design.get("design_size", [0, 0])
 		var design_size := Vector2i(int(raw_size[0]), int(raw_size[1]))
 		var commands := GeometryService.sorted_draw_commands(
-			runtime.get("instances", [])
+			runtime.get("instances", []), runtime.get("visual_asset_snapshot", {})
 		)
 		var sprites_by_index: Dictionary = {}
 		for child: Node in game.background.get_children():

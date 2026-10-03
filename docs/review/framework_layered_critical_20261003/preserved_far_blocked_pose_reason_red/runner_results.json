@@ -1,0 +1,31 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "monster_blocked_locomotion_test",
+                        "test_path":  "tests/user_feedback_20260930/monster_blocked_locomotion_test.tscn",
+                        "pass_marker_found":  false,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  1,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-03T07:26:35.5137702Z",
+                        "native_exit_observed_utc":  "2026-10-03T07:26:16.3303900Z",
+                        "effective_exit_code":  1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "",
+                        "framework_receipt_valid":  null,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;non_zero_exit_code_1"
+                    }
+                ],
+    "total":  1,
+    "invocation_id":  "7a44011f-b925-48f2-8c0a-03941fbe9c16",
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "passed":  0,
+    "engine_log_errors":  0,
+    "generated_at":  "2026-10-03T15:26:17.5197448+08:00",
+    "failed":  1,
+    "suite":  "adhoc"
+}

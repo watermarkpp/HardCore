@@ -1,0 +1,123 @@
+{
+  "errors": [],
+  "reported_tested_sha": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+  "rows": [
+    {
+      "clock": 3.99999999999999,
+      "hp_delta": 33,
+      "long_visual_gap": false,
+      "observed_render_frames": 228,
+      "physics_frames": 240,
+      "render_cap": 60,
+      "rng": "5894598248568635829",
+      "sequence": [
+        {
+          "parent": 1,
+          "rng": "-8415190168459699922",
+          "time": 1.01666666666667
+        },
+        {
+          "parent": 2,
+          "rng": "5894598248568635829",
+          "time": 3.04999999999999
+        }
+      ],
+      "starts": 2,
+      "timer": 1.05
+    },
+    {
+      "clock": 3.99999999999999,
+      "hp_delta": 33,
+      "long_visual_gap": false,
+      "observed_render_frames": 120,
+      "physics_frames": 240,
+      "render_cap": 30,
+      "rng": "5894598248568635829",
+      "sequence": [
+        {
+          "parent": 1,
+          "rng": "-8415190168459699922",
+          "time": 1.01666666666667
+        },
+        {
+          "parent": 2,
+          "rng": "5894598248568635829",
+          "time": 3.04999999999999
+        }
+      ],
+      "starts": 2,
+      "timer": 1.05
+    },
+    {
+      "clock": 3.99999999999999,
+      "hp_delta": 33,
+      "long_visual_gap": false,
+      "observed_render_frames": 80,
+      "physics_frames": 240,
+      "render_cap": 20,
+      "rng": "5894598248568635829",
+      "sequence": [
+        {
+          "parent": 1,
+          "rng": "-8415190168459699922",
+          "time": 1.01666666666667
+        },
+        {
+          "parent": 2,
+          "rng": "5894598248568635829",
+          "time": 3.04999999999999
+        }
+      ],
+      "starts": 2,
+      "timer": 1.05
+    },
+    {
+      "clock": 3.99999999999999,
+      "hp_delta": 33,
+      "long_visual_gap": false,
+      "observed_render_frames": 60,
+      "physics_frames": 240,
+      "render_cap": 15,
+      "rng": "5894598248568635829",
+      "sequence": [
+        {
+          "parent": 1,
+          "rng": "-8415190168459699922",
+          "time": 1.01666666666667
+        },
+        {
+          "parent": 2,
+          "rng": "5894598248568635829",
+          "time": 3.04999999999999
+        }
+      ],
+      "starts": 2,
+      "timer": 1.05
+    },
+    {
+      "clock": 3.99999999999999,
+      "hp_delta": 33,
+      "long_visual_gap": true,
+      "observed_render_frames": 234,
+      "physics_frames": 240,
+      "render_cap": 60,
+      "rng": "5894598248568635829",
+      "sequence": [
+        {
+          "parent": 1,
+          "rng": "-8415190168459699922",
+          "time": 1.01666666666667
+        },
+        {
+          "parent": 2,
+          "rng": "5894598248568635829",
+          "time": 3.04999999999999
+        }
+      ],
+      "starts": 2,
+      "timer": 1.05
+    }
+  ],
+  "runtime_content_sha256": "98f09b09b3f8048285571ff5524b6ace1711c99d0f2c80347d20e8acb1fcbe01",
+  "scope": "native physics60; actual render caps and a 120-physics-frame presentation gap"
+}

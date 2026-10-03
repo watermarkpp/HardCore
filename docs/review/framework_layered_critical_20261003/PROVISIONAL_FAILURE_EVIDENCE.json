@@ -1,0 +1,859 @@
+{
+  "scope": "Provisional progress only; native suite still owns final result. No name-only baseline classification.",
+  "captured_utc": "2026-10-03T01:34:57.548877+00:00",
+  "source_hash": "98f09b09b3f8048285571ff5524b6ace1711c99d0f2c80347d20e8acb1fcbe01",
+  "planned_scene_count": 683,
+  "completed_count": 382,
+  "pass_count": 360,
+  "fail_count": 22,
+  "rows": [
+    {
+      "test_path": "tests/canonical_summon_integration_test.tscn",
+      "status": "FAIL",
+      "runner_reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1",
+      "errors": [
+        "SCRIPT ERROR: Assertion failed: zero-MP same-type recall was rejected by production preflight"
+      ],
+      "current_files": {
+        "tests/canonical_summon_integration_test.tscn": "e3a2ea66cd732c2ee4769940d374d0be2d4fb099818e490d9ea9ac9c63fcea27",
+        "tests/canonical_summon_integration_test.gd": "f596eb1dc63b706dbc3ef403d5fe5794e2aa28444561f0322c5e140269159cf3"
+      },
+      "preserved_second_files": {
+        "tests/canonical_summon_integration_test.tscn": "e3a2ea66cd732c2ee4769940d374d0be2d4fb099818e490d9ea9ac9c63fcea27",
+        "tests/canonical_summon_integration_test.gd": "f596eb1dc63b706dbc3ef403d5fe5794e2aa28444561f0322c5e140269159cf3"
+      },
+      "same_test_bytes_as_preserved_second": true,
+      "same_test_bytes_as_invocation_start": true,
+      "baseline_failure_record_present": true,
+      "baseline_stderr": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\glm53-r1-20260929\\outputs\\r3_takeover\\20260930\\baseline_validation\\critical_failures_baseline_201052_784322\\raw\\canonical_summon_integration_test.stderr.log",
+      "baseline_stderr_sha256": "da9c3fbaec59f972e47ccfa59ecdf6c3c410152aa7d13fa3462bfdb069880ec9",
+      "current_stderr_sha256": "da9c3fbaec59f972e47ccfa59ecdf6c3c410152aa7d13fa3462bfdb069880ec9",
+      "identical_baseline_error_bytes": true,
+      "root_cause_status": "NOT_RUN",
+      "evidence_copies": [
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/canonical_summon_integration_test.stderr.log",
+          "sha256": "da9c3fbaec59f972e47ccfa59ecdf6c3c410152aa7d13fa3462bfdb069880ec9"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/canonical_summon_integration_test.stdout.log",
+          "sha256": "8051fddea794675d72c43e513887c4cf5c9b0075aa3513caae7620b6cdb62f06"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/canonical_summon_integration_test.godot.log",
+          "sha256": "cebc3ff2c2b3782b2497fc64b68ee85eb9aa3cb2573505fdc48ad8c07e0b3cf3"
+        }
+      ]
+    },
+    {
+      "test_path": "tests/taoist_support_production_integration_test.tscn",
+      "status": "FAIL",
+      "runner_reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_4;engine_log_failures_4",
+      "errors": [
+        "ERROR: Dictionary is in read-only state.",
+        "SCRIPT ERROR: Assertion failed: single AC defence must not grant MAC",
+        "ERROR: Dictionary is in read-only state.",
+        "SCRIPT ERROR: Invalid assignment on read-only value (on base: 'Dictionary')."
+      ],
+      "current_files": {
+        "tests/taoist_support_production_integration_test.tscn": "011c9eb46cb698f9f5fcfa9de6c165b763387d3e936165a3a03bdfa85f1d37a7",
+        "tests/taoist_support_production_integration_test.gd": "40e8be14e3cc86d5a4dcdc297efd5a20c20e6eb65e2868536d92358da75e13bc"
+      },
+      "preserved_second_files": {
+        "tests/taoist_support_production_integration_test.tscn": "011c9eb46cb698f9f5fcfa9de6c165b763387d3e936165a3a03bdfa85f1d37a7",
+        "tests/taoist_support_production_integration_test.gd": "40e8be14e3cc86d5a4dcdc297efd5a20c20e6eb65e2868536d92358da75e13bc"
+      },
+      "same_test_bytes_as_preserved_second": true,
+      "same_test_bytes_as_invocation_start": true,
+      "baseline_failure_record_present": false,
+      "baseline_stderr": null,
+      "baseline_stderr_sha256": null,
+      "current_stderr_sha256": "4e28cfdbb1114c2fd43039023b18943bf7835f732cf597c004834a011f1b9e11",
+      "identical_baseline_error_bytes": false,
+      "root_cause_status": "NOT_RUN",
+      "evidence_copies": [
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/taoist_support_production_integration_test.stderr.log",
+          "sha256": "4e28cfdbb1114c2fd43039023b18943bf7835f732cf597c004834a011f1b9e11"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/taoist_support_production_integration_test.stdout.log",
+          "sha256": "92d17abbfed34215c6da3f8598b5b8d0dbea63fda212af85da23c0f24e2e8e0e"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/taoist_support_production_integration_test.godot.log",
+          "sha256": "ce83adb1ad18cf37257915a0268c827c94c812435df72862c26de83c9cb660ae"
+        }
+      ]
+    },
+    {
+      "test_path": "tests/skill_button_assignments_v2_test.tscn",
+      "status": "FAIL",
+      "runner_reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1",
+      "errors": [
+        "SCRIPT ERROR: Assertion failed: 旧四快捷槽必须迁移到六环前四槽"
+      ],
+      "current_files": {
+        "tests/skill_button_assignments_v2_test.tscn": "20c5b9908f0e1aec1ded562eb2e63bc56440ef503be1a4c9ae4ceafea6cd734c",
+        "tests/skill_button_assignments_v2_test.gd": "0fcefb98f0fab4f92e090965694ee7c119a1664e4865f1b844447bec233d76e2"
+      },
+      "preserved_second_files": {
+        "tests/skill_button_assignments_v2_test.tscn": "20c5b9908f0e1aec1ded562eb2e63bc56440ef503be1a4c9ae4ceafea6cd734c",
+        "tests/skill_button_assignments_v2_test.gd": "0fcefb98f0fab4f92e090965694ee7c119a1664e4865f1b844447bec233d76e2"
+      },
+      "same_test_bytes_as_preserved_second": true,
+      "same_test_bytes_as_invocation_start": true,
+      "baseline_failure_record_present": false,
+      "baseline_stderr": null,
+      "baseline_stderr_sha256": null,
+      "current_stderr_sha256": "aa7ebd763c4e859d682318a635982f90e972d46a94fa68498c4e146770da3e7e",
+      "identical_baseline_error_bytes": false,
+      "root_cause_status": "NOT_RUN",
+      "evidence_copies": [
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/skill_button_assignments_v2_test.stderr.log",
+          "sha256": "aa7ebd763c4e859d682318a635982f90e972d46a94fa68498c4e146770da3e7e"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/skill_button_assignments_v2_test.stdout.log",
+          "sha256": "0f6eb4c7547500684fe45c1bff6e37d2e359cca519623dd7fc7f41461623693f"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/skill_button_assignments_v2_test.godot.log",
+          "sha256": "4b62c2278f20992d038d8e2a4086494f56930c530ac49d7ba78f895af46c974f"
+        }
+      ]
+    },
+    {
+      "test_path": "tests/service_home_no_current_position_fallback_test.tscn",
+      "status": "FAIL",
+      "runner_reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1",
+      "errors": [
+        "SCRIPT ERROR: Assertion failed: no map transition may start"
+      ],
+      "current_files": {
+        "tests/service_home_no_current_position_fallback_test.tscn": "454ee3d588f79ae93d469bcec5c81f541298a7bba3d570df24b81aae1fd4732a",
+        "tests/service_home_no_current_position_fallback_test.gd": "df77c26dfe456757dbc655cbc3534c61b25933a2b95d8112ffcc8674f7893c48"
+      },
+      "preserved_second_files": {
+        "tests/service_home_no_current_position_fallback_test.tscn": "454ee3d588f79ae93d469bcec5c81f541298a7bba3d570df24b81aae1fd4732a",
+        "tests/service_home_no_current_position_fallback_test.gd": "df77c26dfe456757dbc655cbc3534c61b25933a2b95d8112ffcc8674f7893c48"
+      },
+      "same_test_bytes_as_preserved_second": true,
+      "same_test_bytes_as_invocation_start": true,
+      "baseline_failure_record_present": true,
+      "baseline_stderr": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\glm53-r1-20260929\\outputs\\r3_takeover\\20260930\\baseline_validation\\critical_failures_baseline_201052_784322\\raw\\service_home_no_current_position_fallback_test.stderr.log",
+      "baseline_stderr_sha256": "e06af9ab26ee5aba0194e31a051639124f36e3e2aed536ebedbbdf8bbda8df9e",
+      "current_stderr_sha256": "e06af9ab26ee5aba0194e31a051639124f36e3e2aed536ebedbbdf8bbda8df9e",
+      "identical_baseline_error_bytes": true,
+      "root_cause_status": "NOT_RUN",
+      "evidence_copies": [
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/service_home_no_current_position_fallback_test.stderr.log",
+          "sha256": "e06af9ab26ee5aba0194e31a051639124f36e3e2aed536ebedbbdf8bbda8df9e"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/service_home_no_current_position_fallback_test.stdout.log",
+          "sha256": "39cd14dd35159b19445f21b9adcfbb50cb86887db6614669a0d60fb1997d1fcc"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/service_home_no_current_position_fallback_test.godot.log",
+          "sha256": "c6f7cfde12fd7c5fa8a261353ddd6d24197a61bae26b6304e294332a31ec93d5"
+        }
+      ]
+    },
+    {
+      "test_path": "tests/death_revival_home_failure_test.tscn",
+      "status": "FAIL",
+      "runner_reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1",
+      "errors": [
+        "SCRIPT ERROR: Assertion failed: death lifecycle test requires gameplay input enabled"
+      ],
+      "current_files": {
+        "tests/death_revival_home_failure_test.tscn": "0fb2296cc45746efe81540c7702872c7265885d5b52dec815da407c7eec56a45",
+        "tests/death_revival_home_failure_test.gd": "5f5f847e47361c2fe74bd3b7a07f1751ed2b6f97b1207a5684c83a7dfffb4557"
+      },
+      "preserved_second_files": {
+        "tests/death_revival_home_failure_test.tscn": "0fb2296cc45746efe81540c7702872c7265885d5b52dec815da407c7eec56a45",
+        "tests/death_revival_home_failure_test.gd": "5f5f847e47361c2fe74bd3b7a07f1751ed2b6f97b1207a5684c83a7dfffb4557"
+      },
+      "same_test_bytes_as_preserved_second": true,
+      "same_test_bytes_as_invocation_start": true,
+      "baseline_failure_record_present": true,
+      "baseline_stderr": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\glm53-r1-20260929\\outputs\\r3_takeover\\20260930\\baseline_validation\\critical_failures_baseline_201052_784322\\raw\\death_revival_home_failure_test.stderr.log",
+      "baseline_stderr_sha256": "cc591d579e1ff58c6fe9a43998f0f86f5bcecd1252c99bdc995da00f9c5ba795",
+      "current_stderr_sha256": "cc591d579e1ff58c6fe9a43998f0f86f5bcecd1252c99bdc995da00f9c5ba795",
+      "identical_baseline_error_bytes": true,
+      "root_cause_status": "NOT_RUN",
+      "evidence_copies": [
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/death_revival_home_failure_test.stderr.log",
+          "sha256": "cc591d579e1ff58c6fe9a43998f0f86f5bcecd1252c99bdc995da00f9c5ba795"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/death_revival_home_failure_test.stdout.log",
+          "sha256": "9e45fdcc87694eab58968862de759c72ec7f29d41b15863c9e35d358e231e353"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/death_revival_home_failure_test.godot.log",
+          "sha256": "095b15c62541232bca7b41729d0fafee69c0d4981dd95a108d5d3b23999ed464"
+        }
+      ]
+    },
+    {
+      "test_path": "tests/skill_production_canonical_entry_test.tscn",
+      "status": "FAIL",
+      "runner_reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2",
+      "errors": [
+        "SCRIPT ERROR: Assertion failed: skill_production_canonical_entry must wait for READY input",
+        "SCRIPT ERROR: Assertion failed: skill_production_canonical_entry target must have a clear WORLD path"
+      ],
+      "current_files": {
+        "tests/skill_production_canonical_entry_test.tscn": "73286f6d66aecac20cb89ca5abb3c0cb96d062da6f0bfd75a119f38f8c2d9d8d",
+        "tests/skill_production_canonical_entry_test.gd": "2eb0ad1964f9347bc2a801877cb0b33be78951ab53f7664269a7023cc5e1d52c"
+      },
+      "preserved_second_files": {
+        "tests/skill_production_canonical_entry_test.tscn": "73286f6d66aecac20cb89ca5abb3c0cb96d062da6f0bfd75a119f38f8c2d9d8d",
+        "tests/skill_production_canonical_entry_test.gd": "2eb0ad1964f9347bc2a801877cb0b33be78951ab53f7664269a7023cc5e1d52c"
+      },
+      "same_test_bytes_as_preserved_second": true,
+      "same_test_bytes_as_invocation_start": true,
+      "baseline_failure_record_present": false,
+      "baseline_stderr": null,
+      "baseline_stderr_sha256": null,
+      "current_stderr_sha256": "d881fe2399a62f14960a9855f682d4ecd459a830a298e9fd0fd4ba13be62fa1f",
+      "identical_baseline_error_bytes": false,
+      "root_cause_status": "NOT_RUN",
+      "evidence_copies": [
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/skill_production_canonical_entry_test.stderr.log",
+          "sha256": "d881fe2399a62f14960a9855f682d4ecd459a830a298e9fd0fd4ba13be62fa1f"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/skill_production_canonical_entry_test.stdout.log",
+          "sha256": "625adfc2e5c5d66f084b0854eb8d56cb7f5ccd20a6ec76d800a81ec9a2962c90"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/skill_production_canonical_entry_test.godot.log",
+          "sha256": "e63b3c4e4371ad3204e3b9bb11198e03439b0756236ba644df15c900e96817ec"
+        }
+      ]
+    },
+    {
+      "test_path": "tests/skill_panel_assignment_hint_layout_contract_test.tscn",
+      "status": "FAIL",
+      "runner_reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2",
+      "errors": [
+        "ERROR: Dictionary is in read-only state.",
+        "SCRIPT ERROR: Invalid assignment on read-only value (on base: 'Dictionary')."
+      ],
+      "current_files": {
+        "tests/skill_panel_assignment_hint_layout_contract_test.tscn": "967ba80a80cf65ff2cd3f09c8fca5718b77f0440c6d92cf90fc1c9f96232a69b",
+        "tests/skill_panel_assignment_hint_layout_contract_test.gd": "44c11a91d9f275e75199cfeccc08e0bbd95e739f76b5d19706114076950b6653"
+      },
+      "preserved_second_files": {
+        "tests/skill_panel_assignment_hint_layout_contract_test.tscn": "967ba80a80cf65ff2cd3f09c8fca5718b77f0440c6d92cf90fc1c9f96232a69b",
+        "tests/skill_panel_assignment_hint_layout_contract_test.gd": "44c11a91d9f275e75199cfeccc08e0bbd95e739f76b5d19706114076950b6653"
+      },
+      "same_test_bytes_as_preserved_second": true,
+      "same_test_bytes_as_invocation_start": true,
+      "baseline_failure_record_present": false,
+      "baseline_stderr": null,
+      "baseline_stderr_sha256": null,
+      "current_stderr_sha256": "c1f6dd6affe1abe4e28d9a068259c2023a411ac775a8f7dd7b5cc20eb5a654fb",
+      "identical_baseline_error_bytes": false,
+      "root_cause_status": "NOT_RUN",
+      "evidence_copies": [
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/skill_panel_assignment_hint_layout_contract_test.stderr.log",
+          "sha256": "c1f6dd6affe1abe4e28d9a068259c2023a411ac775a8f7dd7b5cc20eb5a654fb"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/skill_panel_assignment_hint_layout_contract_test.stdout.log",
+          "sha256": "0f6eb4c7547500684fe45c1bff6e37d2e359cca519623dd7fc7f41461623693f"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/skill_panel_assignment_hint_layout_contract_test.godot.log",
+          "sha256": "1f1833e7d6831634f6496c4391e34aaf36b152f1fb9939ab39a6eaec4bba4e0e"
+        }
+      ]
+    },
+    {
+      "test_path": "tests/device_lab_runtime_test.tscn",
+      "status": "FAIL",
+      "runner_reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1",
+      "errors": [
+        "SCRIPT ERROR: Assertion failed."
+      ],
+      "current_files": {
+        "tests/device_lab_runtime_test.tscn": "daf672ee6799233abebf75c025a69a8bbfea32322b3ffb32c723e0e4277bd01e",
+        "tests/device_lab_runtime_test.gd": "4f6bec6d68fb87912f982acef395a6f95a0c26b940f65431b7130b9614681b08"
+      },
+      "preserved_second_files": {
+        "tests/device_lab_runtime_test.tscn": "daf672ee6799233abebf75c025a69a8bbfea32322b3ffb32c723e0e4277bd01e",
+        "tests/device_lab_runtime_test.gd": "4f6bec6d68fb87912f982acef395a6f95a0c26b940f65431b7130b9614681b08"
+      },
+      "same_test_bytes_as_preserved_second": true,
+      "same_test_bytes_as_invocation_start": true,
+      "baseline_failure_record_present": false,
+      "baseline_stderr": null,
+      "baseline_stderr_sha256": null,
+      "current_stderr_sha256": "6ebe682b119f731a716e39cf07259f055092a3dfddb47351a41bccd0439131f0",
+      "identical_baseline_error_bytes": false,
+      "root_cause_status": "NOT_RUN",
+      "evidence_copies": [
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/device_lab_runtime_test.stderr.log",
+          "sha256": "6ebe682b119f731a716e39cf07259f055092a3dfddb47351a41bccd0439131f0"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/device_lab_runtime_test.stdout.log",
+          "sha256": "0f6eb4c7547500684fe45c1bff6e37d2e359cca519623dd7fc7f41461623693f"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/device_lab_runtime_test.godot.log",
+          "sha256": "191af044b23b73741b02a76f2040efafd20b987a3e1643ba5c5e4ef6e644610e"
+        }
+      ]
+    },
+    {
+      "test_path": "tests/audit_39fe_regressions.tscn",
+      "status": "FAIL",
+      "runner_reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2",
+      "errors": [
+        "SCRIPT ERROR: Parse Error: The function signature doesn't match the parent. Parent signature is \"_commit_save(bool = <default>, bool = <default>) -> bool\".",
+        "ERROR: Failed to load script \"res://tests/audit_39fe_regressions.gd\" with error \"Parse error\"."
+      ],
+      "current_files": {
+        "tests/audit_39fe_regressions.tscn": "616cb9cbaf4a11053c2a25ad0d209de821bc6cb50f197552b188d01dde6d8ee2",
+        "tests/audit_39fe_regressions.gd": "645bf9ef7c2f28eb1a564b31ef9d5fb691dca435c107dc42765c2777d0c8b865"
+      },
+      "preserved_second_files": {
+        "tests/audit_39fe_regressions.tscn": "616cb9cbaf4a11053c2a25ad0d209de821bc6cb50f197552b188d01dde6d8ee2",
+        "tests/audit_39fe_regressions.gd": "645bf9ef7c2f28eb1a564b31ef9d5fb691dca435c107dc42765c2777d0c8b865"
+      },
+      "same_test_bytes_as_preserved_second": true,
+      "same_test_bytes_as_invocation_start": true,
+      "baseline_failure_record_present": true,
+      "baseline_stderr": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\glm53-r1-20260929\\outputs\\r3_takeover\\20260930\\baseline_validation\\critical_failures_baseline_201052_784322\\raw\\audit_39fe_regressions.stderr.log",
+      "baseline_stderr_sha256": "78141a35b9fcf244b6b13b47da4f83344c5dfc70cbb640b145d47af3ec03f429",
+      "current_stderr_sha256": "78141a35b9fcf244b6b13b47da4f83344c5dfc70cbb640b145d47af3ec03f429",
+      "identical_baseline_error_bytes": true,
+      "root_cause_status": "NOT_RUN",
+      "evidence_copies": [
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/audit_39fe_regressions.stderr.log",
+          "sha256": "78141a35b9fcf244b6b13b47da4f83344c5dfc70cbb640b145d47af3ec03f429"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/audit_39fe_regressions.stdout.log",
+          "sha256": "bb3bcf7181e550fe37f9235c4aecf24a81b757eddfeff554d88e7974feb2ed1d"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/audit_39fe_regressions.godot.log",
+          "sha256": "8c5b71a8f4f977ebabc0d1715524c83341a2c248a1d6dc2b15eb189f7f45a4cc"
+        }
+      ]
+    },
+    {
+      "test_path": "tests/skill_runtime_integration_test.tscn",
+      "status": "FAIL",
+      "runner_reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1",
+      "errors": [
+        "SCRIPT ERROR: Assertion failed: 六环槽未保存主动技能"
+      ],
+      "current_files": {
+        "tests/skill_runtime_integration_test.tscn": "0ca61059ca589545ab2939a6b1d4bfa9d0ab4716a1202cea1770229c9445f85b",
+        "tests/skill_runtime_integration_test.gd": "97ead285f74b80a963db702e94224570d3fd86cee455b6b05a9be44913601d68"
+      },
+      "preserved_second_files": {
+        "tests/skill_runtime_integration_test.tscn": "0ca61059ca589545ab2939a6b1d4bfa9d0ab4716a1202cea1770229c9445f85b",
+        "tests/skill_runtime_integration_test.gd": "97ead285f74b80a963db702e94224570d3fd86cee455b6b05a9be44913601d68"
+      },
+      "same_test_bytes_as_preserved_second": true,
+      "same_test_bytes_as_invocation_start": true,
+      "baseline_failure_record_present": false,
+      "baseline_stderr": null,
+      "baseline_stderr_sha256": null,
+      "current_stderr_sha256": "1a9e08ab00b49dcac5a3d01e952d18a299a2557222d9f40da216a2a07e7a2e68",
+      "identical_baseline_error_bytes": false,
+      "root_cause_status": "NOT_RUN",
+      "evidence_copies": [
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/skill_runtime_integration_test.stderr.log",
+          "sha256": "1a9e08ab00b49dcac5a3d01e952d18a299a2557222d9f40da216a2a07e7a2e68"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/skill_runtime_integration_test.stdout.log",
+          "sha256": "c474740322b6b44680d3cbbd69522e70b4b2d240a0240c22c0f007fbadcfeaa1"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/skill_runtime_integration_test.godot.log",
+          "sha256": "382d67dde885b4cfc3904ff7162699cf6e012261c7d14a2c81fcd0ea166e516e"
+        }
+      ]
+    },
+    {
+      "test_path": "tests/combat_release_geometry_test.tscn",
+      "status": "FAIL",
+      "runner_reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2",
+      "errors": [
+        "ERROR: Dictionary is in read-only state.",
+        "SCRIPT ERROR: Invalid assignment on read-only value (on base: 'Dictionary')."
+      ],
+      "current_files": {
+        "tests/combat_release_geometry_test.tscn": "a127c3caa849daac4fa38f0d4075389f37cbf39aa9a849ab3c65943de1b820b0",
+        "tests/combat_release_geometry_test.gd": "e5bfa1f6e6ee852dc7dfdc3dd84218d4868385095944daf70aba203289effbd9"
+      },
+      "preserved_second_files": {
+        "tests/combat_release_geometry_test.tscn": "a127c3caa849daac4fa38f0d4075389f37cbf39aa9a849ab3c65943de1b820b0",
+        "tests/combat_release_geometry_test.gd": "e5bfa1f6e6ee852dc7dfdc3dd84218d4868385095944daf70aba203289effbd9"
+      },
+      "same_test_bytes_as_preserved_second": true,
+      "same_test_bytes_as_invocation_start": true,
+      "baseline_failure_record_present": false,
+      "baseline_stderr": null,
+      "baseline_stderr_sha256": null,
+      "current_stderr_sha256": "65ae21de0eb74a446c90df3cd082f3584be1669fa08892b144dd0314550ecc3e",
+      "identical_baseline_error_bytes": false,
+      "root_cause_status": "NOT_RUN",
+      "evidence_copies": [
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/combat_release_geometry_test.stderr.log",
+          "sha256": "65ae21de0eb74a446c90df3cd082f3584be1669fa08892b144dd0314550ecc3e"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/combat_release_geometry_test.stdout.log",
+          "sha256": "0f6eb4c7547500684fe45c1bff6e37d2e359cca519623dd7fc7f41461623693f"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/combat_release_geometry_test.godot.log",
+          "sha256": "835583177f17e1816b4a62831a85c53b7e3aa064f87e4cf6f4d95decd7362689"
+        }
+      ]
+    },
+    {
+      "test_path": "tests/melee_lock_fallback_test.tscn",
+      "status": "FAIL",
+      "runner_reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1",
+      "errors": [
+        "SCRIPT ERROR: Assertion failed: 刺杀连续轴近段未命中"
+      ],
+      "current_files": {
+        "tests/melee_lock_fallback_test.tscn": "921bbe28c51d0b90f6abb3f5d0e505ca3a845aa35e1d4a0a36cae97235158bdb",
+        "tests/melee_lock_fallback_test.gd": "e489e1c7482070d25be0aa9401f9122fdbe34af2f73679dda067145e4af8ed1d"
+      },
+      "preserved_second_files": {
+        "tests/melee_lock_fallback_test.tscn": "921bbe28c51d0b90f6abb3f5d0e505ca3a845aa35e1d4a0a36cae97235158bdb",
+        "tests/melee_lock_fallback_test.gd": "e489e1c7482070d25be0aa9401f9122fdbe34af2f73679dda067145e4af8ed1d"
+      },
+      "same_test_bytes_as_preserved_second": true,
+      "same_test_bytes_as_invocation_start": true,
+      "baseline_failure_record_present": false,
+      "baseline_stderr": null,
+      "baseline_stderr_sha256": null,
+      "current_stderr_sha256": "095aea0a459d1970c2e3048b24ad034d45789dbb5d232df6716c8df78cc7931f",
+      "identical_baseline_error_bytes": false,
+      "root_cause_status": "NOT_RUN",
+      "evidence_copies": [
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/melee_lock_fallback_test.stderr.log",
+          "sha256": "095aea0a459d1970c2e3048b24ad034d45789dbb5d232df6716c8df78cc7931f"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/melee_lock_fallback_test.stdout.log",
+          "sha256": "8cb0d7ed0e8fa8d34a8d337ba00e96ff306f4f8714b804fb866aea497d1b147f"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/melee_lock_fallback_test.godot.log",
+          "sha256": "cd0e2e55b2def92086aa09adb685f8d3ff72aeb271b656393226e35cc49b76e8"
+        }
+      ]
+    },
+    {
+      "test_path": "tests/mobile_targeting_test.tscn",
+      "status": "FAIL",
+      "runner_reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1",
+      "errors": [
+        "SCRIPT ERROR: Assertion failed: 无攻击锁定时没有从周围10格选择最近怪物"
+      ],
+      "current_files": {
+        "tests/mobile_targeting_test.tscn": "e2af363c3b0f223c07f386af378960712c974463d684824134167848b7957afe",
+        "tests/mobile_targeting_test.gd": "2801a81876fed1ce1fc2057fa550b8df3fad76123ec423c0b4d1f92630573381"
+      },
+      "preserved_second_files": {
+        "tests/mobile_targeting_test.tscn": "e2af363c3b0f223c07f386af378960712c974463d684824134167848b7957afe",
+        "tests/mobile_targeting_test.gd": "2801a81876fed1ce1fc2057fa550b8df3fad76123ec423c0b4d1f92630573381"
+      },
+      "same_test_bytes_as_preserved_second": true,
+      "same_test_bytes_as_invocation_start": true,
+      "baseline_failure_record_present": true,
+      "baseline_stderr": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\glm53-r1-20260929\\outputs\\r3_takeover\\20260930\\baseline_validation\\critical_failures_baseline_201052_784322\\raw\\mobile_targeting_test.stderr.log",
+      "baseline_stderr_sha256": "5d01871d77a0d9ec6faa8bfbac10af8fafa58307b88431b0f0269781b06e3e67",
+      "current_stderr_sha256": "5d01871d77a0d9ec6faa8bfbac10af8fafa58307b88431b0f0269781b06e3e67",
+      "identical_baseline_error_bytes": true,
+      "root_cause_status": "NOT_RUN",
+      "evidence_copies": [
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/mobile_targeting_test.stderr.log",
+          "sha256": "5d01871d77a0d9ec6faa8bfbac10af8fafa58307b88431b0f0269781b06e3e67"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/mobile_targeting_test.stdout.log",
+          "sha256": "0529617c04124d8be6d46473b9a8fe3b43815ccdd0f82f95d96d1799ead3848a"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/mobile_targeting_test.godot.log",
+          "sha256": "eba36cc61c16b733acb274bd577f0e9cea65e64b3fbd6b3ab8f1d649d16d613c"
+        }
+      ]
+    },
+    {
+      "test_path": "tests/wooma_game_runtime_integration_test.tscn",
+      "status": "FAIL",
+      "runner_reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1",
+      "errors": [
+        "SCRIPT ERROR: Assertion failed."
+      ],
+      "current_files": {
+        "tests/wooma_game_runtime_integration_test.tscn": "89e38dafa13f8646e23e43207e00c08ea3114ad4e326b14a65298ca401e6bca8",
+        "tests/wooma_game_runtime_integration_test.gd": "e43321f03c7b13c6b331a55babf5cc329cb5086e6da51a03d590c4308f3ad503"
+      },
+      "preserved_second_files": {
+        "tests/wooma_game_runtime_integration_test.tscn": "89e38dafa13f8646e23e43207e00c08ea3114ad4e326b14a65298ca401e6bca8",
+        "tests/wooma_game_runtime_integration_test.gd": "e43321f03c7b13c6b331a55babf5cc329cb5086e6da51a03d590c4308f3ad503"
+      },
+      "same_test_bytes_as_preserved_second": true,
+      "same_test_bytes_as_invocation_start": true,
+      "baseline_failure_record_present": true,
+      "baseline_stderr": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\glm53-r1-20260929\\outputs\\r3_takeover\\20260930\\baseline_validation\\critical_failures_baseline_201052_784322\\raw\\wooma_game_runtime_integration_test.stderr.log",
+      "baseline_stderr_sha256": "e2cdb6a009ccac9d78c1d181b48fbe0e38640ac04cee52c9ce68ade7442d5da1",
+      "current_stderr_sha256": "e2cdb6a009ccac9d78c1d181b48fbe0e38640ac04cee52c9ce68ade7442d5da1",
+      "identical_baseline_error_bytes": true,
+      "root_cause_status": "NOT_RUN",
+      "evidence_copies": [
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/wooma_game_runtime_integration_test.stderr.log",
+          "sha256": "e2cdb6a009ccac9d78c1d181b48fbe0e38640ac04cee52c9ce68ade7442d5da1"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/wooma_game_runtime_integration_test.stdout.log",
+          "sha256": "3d9e12bc009b474bfb695534437d9d3d6196bd5dd281953bb06593db9af11eb4"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/wooma_game_runtime_integration_test.godot.log",
+          "sha256": "116aa3af52c9bc5422a75119092dfe21868865a71b0c0126f32733b0d7eaebca"
+        }
+      ]
+    },
+    {
+      "test_path": "tests/orc_tomb_game_visual_geometry_test.tscn",
+      "status": "FAIL",
+      "runner_reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1",
+      "errors": [
+        "SCRIPT ERROR: Assertion failed: map 911001 runtime flattened/dropped draw commands: 55/575"
+      ],
+      "current_files": {
+        "tests/orc_tomb_game_visual_geometry_test.tscn": "3a7858f91b03268df7adfd3477cae7a96847451dd77501d82c9d6cee21844571",
+        "tests/orc_tomb_game_visual_geometry_test.gd": "07df8073fd38ed72aea7126ff27e1eb92465cf92660e0c321f3df64ee4d82ad4"
+      },
+      "preserved_second_files": {
+        "tests/orc_tomb_game_visual_geometry_test.tscn": "3a7858f91b03268df7adfd3477cae7a96847451dd77501d82c9d6cee21844571",
+        "tests/orc_tomb_game_visual_geometry_test.gd": "07df8073fd38ed72aea7126ff27e1eb92465cf92660e0c321f3df64ee4d82ad4"
+      },
+      "same_test_bytes_as_preserved_second": true,
+      "same_test_bytes_as_invocation_start": true,
+      "baseline_failure_record_present": true,
+      "baseline_stderr": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\glm53-r1-20260929\\outputs\\r3_takeover\\20260930\\baseline_validation\\critical_failures_baseline_201052_784322\\raw\\orc_tomb_game_visual_geometry_test.stderr.log",
+      "baseline_stderr_sha256": "aea04da61630f316801c9a8588eb4de5e1497d35e5d2a422e08fe649d3a6d2b2",
+      "current_stderr_sha256": "aea04da61630f316801c9a8588eb4de5e1497d35e5d2a422e08fe649d3a6d2b2",
+      "identical_baseline_error_bytes": true,
+      "root_cause_status": "NOT_RUN",
+      "evidence_copies": [
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/orc_tomb_game_visual_geometry_test.stderr.log",
+          "sha256": "aea04da61630f316801c9a8588eb4de5e1497d35e5d2a422e08fe649d3a6d2b2"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/orc_tomb_game_visual_geometry_test.stdout.log",
+          "sha256": "e4994f0e40408840f18e72e971ac8c6e7713b50cd29e0713c117042861fc71bf"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/orc_tomb_game_visual_geometry_test.godot.log",
+          "sha256": "dc8d44f02bab285a9e21c10980636d54504bb56cf4d9d234a53df8abdc4b8eba"
+        }
+      ]
+    },
+    {
+      "test_path": "tests/source_collision_chunk_test.tscn",
+      "status": "FAIL",
+      "runner_reason": "process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_4;engine_log_failures_4",
+      "errors": [
+        "SCRIPT ERROR: Assertion failed: 地图911001切换未完成",
+        "SCRIPT ERROR: Assertion failed: 地图401切换未完成",
+        "SCRIPT ERROR: Assertion failed: 地图402切换未完成",
+        "SCRIPT ERROR: Assertion failed: 地图911103切换未完成"
+      ],
+      "current_files": {
+        "tests/source_collision_chunk_test.tscn": "3def6dde72082b6258ff3a410294341069111fab76ebbccd481d3aacabddb8b4",
+        "tests/source_collision_chunk_test.gd": "10eb073c2aa390d77909db66fa4547f0ccc13246ff50478ada35bb845f614cec"
+      },
+      "preserved_second_files": {
+        "tests/source_collision_chunk_test.tscn": "3def6dde72082b6258ff3a410294341069111fab76ebbccd481d3aacabddb8b4",
+        "tests/source_collision_chunk_test.gd": "10eb073c2aa390d77909db66fa4547f0ccc13246ff50478ada35bb845f614cec"
+      },
+      "same_test_bytes_as_preserved_second": true,
+      "same_test_bytes_as_invocation_start": true,
+      "baseline_failure_record_present": true,
+      "baseline_stderr": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\glm53-r1-20260929\\outputs\\r3_takeover\\20260930\\baseline_validation\\critical_failures_baseline_201052_784322\\raw\\source_collision_chunk_test.stderr.log",
+      "baseline_stderr_sha256": "966aa3226226ebeb619d49d1058d98f3e6027beed088a6e04609bed5132792db",
+      "current_stderr_sha256": "966aa3226226ebeb619d49d1058d98f3e6027beed088a6e04609bed5132792db",
+      "identical_baseline_error_bytes": true,
+      "root_cause_status": "NOT_RUN",
+      "evidence_copies": [
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/source_collision_chunk_test.stderr.log",
+          "sha256": "966aa3226226ebeb619d49d1058d98f3e6027beed088a6e04609bed5132792db"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/source_collision_chunk_test.stdout.log",
+          "sha256": "7fedc8f03b54139439c3b563f2f42fe8b42da9b3e9caa7723de20b41417d7e11"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/source_collision_chunk_test.godot.log",
+          "sha256": "0254a9f8111197a10aec4d22ef3c72ac709d0839ff41941f0d51f88144d19d63"
+        }
+      ]
+    },
+    {
+      "test_path": "tests/orc_tomb_source_integration_test.tscn",
+      "status": "FAIL",
+      "runner_reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1",
+      "errors": [
+        "SCRIPT ERROR: Assertion failed: 正式兽人古墓切图失败:911001"
+      ],
+      "current_files": {
+        "tests/orc_tomb_source_integration_test.tscn": "5b0d7c06dce32811e700151b6bcd0d05b9f108f6d9c8c398174f0069b7d29170",
+        "tests/orc_tomb_source_integration_test.gd": "aec060f009ca4d2302fa7bf0a3415c20fc813411399d4bc44145e70b72ae5fa3"
+      },
+      "preserved_second_files": {
+        "tests/orc_tomb_source_integration_test.tscn": "5b0d7c06dce32811e700151b6bcd0d05b9f108f6d9c8c398174f0069b7d29170",
+        "tests/orc_tomb_source_integration_test.gd": "aec060f009ca4d2302fa7bf0a3415c20fc813411399d4bc44145e70b72ae5fa3"
+      },
+      "same_test_bytes_as_preserved_second": true,
+      "same_test_bytes_as_invocation_start": true,
+      "baseline_failure_record_present": true,
+      "baseline_stderr": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\glm53-r1-20260929\\outputs\\r3_takeover\\20260930\\baseline_validation\\critical_failures_baseline_201052_784322\\raw\\orc_tomb_source_integration_test.stderr.log",
+      "baseline_stderr_sha256": "577cb228470ee97886a315a8e514e781741c5a5229c134c9bed46361fc89cfe6",
+      "current_stderr_sha256": "577cb228470ee97886a315a8e514e781741c5a5229c134c9bed46361fc89cfe6",
+      "identical_baseline_error_bytes": true,
+      "root_cause_status": "NOT_RUN",
+      "evidence_copies": [
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/orc_tomb_source_integration_test.stderr.log",
+          "sha256": "577cb228470ee97886a315a8e514e781741c5a5229c134c9bed46361fc89cfe6"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/orc_tomb_source_integration_test.stdout.log",
+          "sha256": "d94150fa27b4bf7bf73161916a134f5a2e9c4713f3cc9992c27570cf92138bc8"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/orc_tomb_source_integration_test.godot.log",
+          "sha256": "8513d3c0ea70ce9717d3e4e8df58200579b983dd6bfd33d863b497e0b8aa8d7d"
+        }
+      ]
+    },
+    {
+      "test_path": "tests/natural_cave_source_integration_test.tscn",
+      "status": "FAIL",
+      "runner_reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1",
+      "errors": [
+        "SCRIPT ERROR: Assertion failed: 地图248运行时未加载天然洞穴专用资源"
+      ],
+      "current_files": {
+        "tests/natural_cave_source_integration_test.tscn": "c776e4bda1f01e1364f9c92e00f2292c7dc424cff15d639708b57ba82461d060",
+        "tests/natural_cave_source_integration_test.gd": "bb3d5e33afe76fb37276e003902b68bdb430caf4abc699f4bcd8e350579da93e"
+      },
+      "preserved_second_files": {
+        "tests/natural_cave_source_integration_test.tscn": "c776e4bda1f01e1364f9c92e00f2292c7dc424cff15d639708b57ba82461d060",
+        "tests/natural_cave_source_integration_test.gd": "bb3d5e33afe76fb37276e003902b68bdb430caf4abc699f4bcd8e350579da93e"
+      },
+      "same_test_bytes_as_preserved_second": true,
+      "same_test_bytes_as_invocation_start": true,
+      "baseline_failure_record_present": true,
+      "baseline_stderr": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\glm53-r1-20260929\\outputs\\r3_takeover\\20260930\\baseline_validation\\critical_failures_baseline_201052_784322\\raw\\natural_cave_source_integration_test.stderr.log",
+      "baseline_stderr_sha256": "8f3fd145e0ca685187d8eb3e2cb4b8531fd658aec70a133e5f3118476588073b",
+      "current_stderr_sha256": "8f3fd145e0ca685187d8eb3e2cb4b8531fd658aec70a133e5f3118476588073b",
+      "identical_baseline_error_bytes": true,
+      "root_cause_status": "NOT_RUN",
+      "evidence_copies": [
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/natural_cave_source_integration_test.stderr.log",
+          "sha256": "8f3fd145e0ca685187d8eb3e2cb4b8531fd658aec70a133e5f3118476588073b"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/natural_cave_source_integration_test.stdout.log",
+          "sha256": "28a2958408aae04775d429a3025127ea184d546ff24d6f06cbcd03c123558f52"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/natural_cave_source_integration_test.godot.log",
+          "sha256": "14715ec6a020826a0799e8c338eff26e2ffda254429376b259a05236923fd478"
+        }
+      ]
+    },
+    {
+      "test_path": "tests/bich_environment_test.tscn",
+      "status": "FAIL",
+      "runner_reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1",
+      "errors": [
+        "SCRIPT ERROR: Assertion failed: formal orc tomb map change failed"
+      ],
+      "current_files": {
+        "tests/bich_environment_test.tscn": "5ffa834083fe17fd9585730e9935ad652795b84cf98765f748098f8c5c4b89b3",
+        "tests/bich_environment_test.gd": "df0694aa0b250833306d26695ba9ec336502c31d8f524ca235420ba8b6fc6527"
+      },
+      "preserved_second_files": {
+        "tests/bich_environment_test.tscn": "5ffa834083fe17fd9585730e9935ad652795b84cf98765f748098f8c5c4b89b3",
+        "tests/bich_environment_test.gd": "df0694aa0b250833306d26695ba9ec336502c31d8f524ca235420ba8b6fc6527"
+      },
+      "same_test_bytes_as_preserved_second": true,
+      "same_test_bytes_as_invocation_start": true,
+      "baseline_failure_record_present": true,
+      "baseline_stderr": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\glm53-r1-20260929\\outputs\\r3_takeover\\20260930\\baseline_validation\\critical_failures_baseline_201052_784322\\raw\\bich_environment_test.stderr.log",
+      "baseline_stderr_sha256": "ff946e5874c4786bdec3e56dadb3d0f27ff79b64f236b8ecf52994ffb086f0b0",
+      "current_stderr_sha256": "ff946e5874c4786bdec3e56dadb3d0f27ff79b64f236b8ecf52994ffb086f0b0",
+      "identical_baseline_error_bytes": true,
+      "root_cause_status": "NOT_RUN",
+      "evidence_copies": [
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/bich_environment_test.stderr.log",
+          "sha256": "ff946e5874c4786bdec3e56dadb3d0f27ff79b64f236b8ecf52994ffb086f0b0"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/bich_environment_test.stdout.log",
+          "sha256": "40120d1e997bd7a60a6d4f36cfd072c1c3fc0fa54efee496444705b708f768a3"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/bich_environment_test.godot.log",
+          "sha256": "13d3423e0050afe91c15b8ee765084b297d62e613f0f30ad12a5301e3f0c14c4"
+        }
+      ]
+    },
+    {
+      "test_path": "tests/vertical_slice_loop_test.tscn",
+      "status": "FAIL",
+      "runner_reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_3;engine_log_failures_3",
+      "errors": [
+        "SCRIPT ERROR: Assertion failed: 统一门点旅行失败:911001",
+        "SCRIPT ERROR: Assertion failed: 没有进入目标地图911001",
+        "SCRIPT ERROR: Assertion failed: 一层编辑器运行时碰撞未加载"
+      ],
+      "current_files": {
+        "tests/vertical_slice_loop_test.tscn": "960d273aeb1f1d8c18c5245be54eddcf9debe82fcdd9cede2ff4ad4db85d87c2",
+        "tests/vertical_slice_loop_test.gd": "81bd91fb5400a39682b0a8256f6b4ff8ac13a3fae30deab7462e40fb89891427"
+      },
+      "preserved_second_files": {
+        "tests/vertical_slice_loop_test.tscn": "960d273aeb1f1d8c18c5245be54eddcf9debe82fcdd9cede2ff4ad4db85d87c2",
+        "tests/vertical_slice_loop_test.gd": "ba54bde5ed0c856bc20fff6c23a218d4412a15ec0c65e0cac00a23724700c0c9"
+      },
+      "same_test_bytes_as_preserved_second": false,
+      "same_test_bytes_as_invocation_start": true,
+      "baseline_failure_record_present": true,
+      "baseline_stderr": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\glm53-r1-20260929\\outputs\\r3_takeover\\20260930\\baseline_validation\\critical_failures_baseline_201052_784322\\raw\\vertical_slice_loop_test.stderr.log",
+      "baseline_stderr_sha256": "2496c9ad21d0e79c51527bf81209714073d1dd842c31dcd9279ad7009f96be3e",
+      "current_stderr_sha256": "2496c9ad21d0e79c51527bf81209714073d1dd842c31dcd9279ad7009f96be3e",
+      "identical_baseline_error_bytes": true,
+      "root_cause_status": "NOT_RUN",
+      "evidence_copies": [
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/vertical_slice_loop_test.stderr.log",
+          "sha256": "2496c9ad21d0e79c51527bf81209714073d1dd842c31dcd9279ad7009f96be3e"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/vertical_slice_loop_test.stdout.log",
+          "sha256": "158cd42d0e2574a0a4aed9017b455521342292b561b2ee35ad363f51c209a326"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/vertical_slice_loop_test.godot.log",
+          "sha256": "8939d34ac6746725525fc7e3ac3b252cb425062b8bf20629fe50157ed9834871"
+        }
+      ]
+    },
+    {
+      "test_path": "tests/equipment_special_effects_test.tscn",
+      "status": "FAIL",
+      "runner_reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1",
+      "errors": [
+        "SCRIPT ERROR: Assertion failed: 护身戒指没有按1.5倍魔法值抵伤"
+      ],
+      "current_files": {
+        "tests/equipment_special_effects_test.tscn": "dd4b52bc1701aee3f1fe9954224d1b9f60f67acdb78a32281c6fb24e4cc96de2",
+        "tests/equipment_special_effects_test.gd": "e11a96a8ec090a7c1e73b6a5a2c04488da150e543b39cc10de2e7bc544500e4d"
+      },
+      "preserved_second_files": {
+        "tests/equipment_special_effects_test.tscn": "dd4b52bc1701aee3f1fe9954224d1b9f60f67acdb78a32281c6fb24e4cc96de2",
+        "tests/equipment_special_effects_test.gd": "3008b8c85a6232459da0bab5310c57bb73d8e564eb7ae7539caadf598ab8f574"
+      },
+      "same_test_bytes_as_preserved_second": false,
+      "same_test_bytes_as_invocation_start": true,
+      "baseline_failure_record_present": true,
+      "baseline_stderr": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\glm53-r1-20260929\\outputs\\r3_takeover\\20260930\\baseline_validation\\critical_failures_baseline_201052_784322\\raw\\equipment_special_effects_test.stderr.log",
+      "baseline_stderr_sha256": "e08e448ec501fa958410de3bba7e5fc91da5ecaa584e46855a4cf98892568b48",
+      "current_stderr_sha256": "e08e448ec501fa958410de3bba7e5fc91da5ecaa584e46855a4cf98892568b48",
+      "identical_baseline_error_bytes": true,
+      "root_cause_status": "NOT_RUN",
+      "evidence_copies": [
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/equipment_special_effects_test.stderr.log",
+          "sha256": "e08e448ec501fa958410de3bba7e5fc91da5ecaa584e46855a4cf98892568b48"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/equipment_special_effects_test.stdout.log",
+          "sha256": "fc7b3a8679a4a292fef018fa9a85abde5b4add17f942aa9901a07fd073e789d7"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/equipment_special_effects_test.godot.log",
+          "sha256": "ce719c27ea0d5f453e2bc7366fa0fc04eb73feb7cfd609f586961c9918ed797b"
+        }
+      ]
+    },
+    {
+      "test_path": "tests/game_root_combat_resolution_integration_test.tscn",
+      "status": "FAIL",
+      "runner_reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1",
+      "errors": [
+        "SCRIPT ERROR: Invalid access to property or key 'magic_evaded' on a base object of type 'Dictionary'."
+      ],
+      "current_files": {
+        "tests/game_root_combat_resolution_integration_test.tscn": "b1003d449fbf06b869e5c9ec6989fc4172dbe8caeacb47250ff8c7448190fb0e",
+        "tests/game_root_combat_resolution_integration_test.gd": "fc2affd3b92a2d7fe0de38967a55f8ac3b61622e2c78a7852062c01ef1252848"
+      },
+      "preserved_second_files": {
+        "tests/game_root_combat_resolution_integration_test.tscn": "b1003d449fbf06b869e5c9ec6989fc4172dbe8caeacb47250ff8c7448190fb0e",
+        "tests/game_root_combat_resolution_integration_test.gd": "fc2affd3b92a2d7fe0de38967a55f8ac3b61622e2c78a7852062c01ef1252848"
+      },
+      "same_test_bytes_as_preserved_second": true,
+      "same_test_bytes_as_invocation_start": true,
+      "baseline_failure_record_present": true,
+      "baseline_stderr": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\glm53-r1-20260929\\outputs\\r3_takeover\\20260930\\baseline_validation\\critical_failures_baseline_201052_784322\\raw\\game_root_combat_resolution_integration_test.stderr.log",
+      "baseline_stderr_sha256": "edbd1d7754d12bceefd08063e4e4b2b28cb88080c1303a27d5026861e244c4c6",
+      "current_stderr_sha256": "edbd1d7754d12bceefd08063e4e4b2b28cb88080c1303a27d5026861e244c4c6",
+      "identical_baseline_error_bytes": true,
+      "root_cause_status": "NOT_RUN",
+      "evidence_copies": [
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/game_root_combat_resolution_integration_test.stderr.log",
+          "sha256": "edbd1d7754d12bceefd08063e4e4b2b28cb88080c1303a27d5026861e244c4c6"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/game_root_combat_resolution_integration_test.stdout.log",
+          "sha256": "f5dac444ad774550678b26e47a48bef3ccab4b8afca4e4b7f67fc94629a417cb"
+        },
+        {
+          "path": "outputs/framework_v2/critical_98f09_followup/game_root_combat_resolution_integration_test.godot.log",
+          "sha256": "4fd73e99ff5c21e92a716ce896cfc87155ede513f9f1831398d3e876d290b603"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "static boundary uses explicit fixed60 engine stepping with original timers and scale",
+      "passed": false
+    }
+  ],
+  "count": 1,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "3268ab89-78e3-46b7-ab8b-61f77a1eadff",
+  "passed": 0,
+  "reported_checks": 1,
+  "reported_failures": 1,
+  "run_id": "c8c3c55c-b213-4d8a-acfe-6880e3b9478c",
+  "scene_id": "death_expiry_overlap_test",
+  "schema_version": 1,
+  "source_content_sha256": "a44ad1ab06faa220c88ca65448b2adea0c1665454b01fb88b6e1c1a0a329885d",
+  "status": "FAIL"
+}

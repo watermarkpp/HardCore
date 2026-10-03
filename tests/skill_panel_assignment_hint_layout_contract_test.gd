@@ -12,7 +12,10 @@ func _ready() -> void:
 func _run() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
-	PlayerState.learned_skills["基本剑术"] = 0
+	var fixture_skills: Dictionary = PlayerState.learned_skills.duplicate(true)
+	fixture_skills["hc.skill.warrior.basic_swordsmanship"] = 0
+	PlayerState.learned_skills = fixture_skills
+	assert(PlayerState.skill_identity_errors.is_empty(), "fixture skill import must succeed")
 	var viewport := SubViewport.new()
 	viewport.size = RESOLUTION
 	var root := Control.new()

@@ -1,0 +1,16 @@
+{
+  "command": [
+    "powershell",
+    "-NoProfile",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "& './tools/run_godot_tests.ps1' -TestPaths 'tests/aoe_death_phase_boundary_test.tscn','tests/enemy_mass_death_batch_pipeline_test.tscn','tests/death_queue_lifecycle_rework_test.tscn','tests/new_character_starter_loadout_test.tscn' -TimeoutSeconds 30"
+  ],
+  "timeout_seconds": 30,
+  "exit_code": 0,
+  "source_stable_during_run": true,
+  "passed": 4,
+  "failed": 0,
+  "status": "PASS"
+}

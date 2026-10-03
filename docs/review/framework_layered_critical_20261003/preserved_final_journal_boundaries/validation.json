@@ -1,0 +1,16 @@
+{
+  "command": [
+    "powershell",
+    "-NoProfile",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/item_journal_sequence_test.tscn','tests/framework/item_journal_recovery_test.tscn','tests/framework/item_journal_recovery_cold_test.tscn','tests/framework/item_journal_v2_backup_test.tscn','tests/framework/item_journal_v2_backup_seed_test.tscn','tests/framework/item_journal_v2_backup_cold_test.tscn','tests/framework/item_journal_v2_backup_restart_test.tscn' -TimeoutSeconds 60"
+  ],
+  "timeout_seconds": 60,
+  "exit_code": 1,
+  "source_stable_during_run": true,
+  "passed": 4,
+  "failed": 3,
+  "status": "FAIL"
+}

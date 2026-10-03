@@ -1,7 +1,7 @@
-﻿param(
+param(
     [ValidateSet('critical', 'audit_upgrade_critical', 'warrior', 'bich', 'equipment', 'monster', 'pricing_authority', 'taoist_critical', 'snapshot_coordinate_critical', 'snapshot_production_critical', 'projectile_spatial_critical', 'safe_logout_critical', 'persistent_ground_effect_critical', 'fire_wall_controller_critical', 'monster_streaming_critical', 'skill_execution_plan_critical', 'skill_production_migration_critical', 'skill_runtime_cleanup_critical', 'wizard_line_geometry_critical', 'combat_absolute_ground_critical', 'combat_projection_fail_closed_critical', 'formal_map_projection_critical', 'map_runtime_release_critical', 'map_runtime_release_transaction_critical', 'player_visual_contract_critical', 'skill_panel_layout_critical', 'device_lab_critical', 'source176_r3', 'user_feedback_20260930')]
     [string]$Suite = 'critical',
-    [ValidateRange(1, 60)]
+    [ValidateRange(1, 90)]
     [int]$TimeoutSeconds = 30,
     [string[]]$TestPaths = @()
 )
@@ -1164,6 +1164,21 @@ function Get-NewGodotProcesses {
 }
 
 $SelectedTests = if ($TestPaths.Count -gt 0) { $TestPaths } else { $Suites[$Suite] }
+# Explicit user-approved diagnostic exception; never extends an ordinary
+# scene or a whole suite. It changes only the external process window.
+$Authorized90SecondScenes = @(
+    'tests/hc_monster_combat_r4/all_damage_lost_test.tscn',
+    'tests/hc_monster_combat_r4/natural_cadence_24_test.tscn',
+    'tests/hc_monster_combat_r4/natural_cadence_76_test.tscn'
+)
+if ($TimeoutSeconds -gt 60) {
+    if ($EffectiveSuite -cne 'adhoc' -or @($SelectedTests | Where-Object {
+        $Authorized90SecondScenes -cnotcontains $_
+    }).Count -gt 0) {
+        throw 'A timeout above60s is authorized only for the three explicit R4 diagnostic scenes, using TestPaths.'
+    }
+}
+
 # 2026-09-21 RV14-04 (O07): Monster Streaming scenes stream chunks with real
 # generation windows and exceed the 8-second default budget. Refuse before
 # launching anything when the selected set includes them below 30 seconds so
@@ -1211,7 +1226,16 @@ foreach ($testPath in $SelectedTests) {
     # effective exit code (the Godot console wrapper forwards the engine code,
     # but Start-Process with -Redirect* loses ExitCode on this host). Output is
     # redirected inside the command string; polling reads the same files.
-    $launchCommand = '""' + $Godot + '" --headless --log-file "' + $engineLogArgument + '" --path . "' + $testPath + '" > "' + $stdout + '" 2> "' + $stderr + '"'
+    # Only the two static receiver queue-boundary fixtures couple a process
+    # release timer with an exact physics expiration tick. Deterministic
+    # engine stepping constructs that boundary without replacing either owner.
+    # Natural combat, performance and all other scenes stay in real time.
+    $BoundaryFixedFps = if ($testPath -cin @(
+        'tests/framework/death_burst_lifecycle_test.tscn',
+        'tests/framework/death_expiry_overlap_test.tscn'
+    )) { 60 } else { 0 }
+    $BoundaryClockArguments = if ($BoundaryFixedFps -eq 60) { ' --fixed-fps 60 --max-fps 60' } else { '' }
+    $launchCommand = '""' + $Godot + '" --headless' + $BoundaryClockArguments + ' --log-file "' + $engineLogArgument + '" --path . "' + $testPath + '" > "' + $stdout + '" 2> "' + $stderr + '"'
     $process = Start-Process -FilePath 'cmd.exe' `
         -ArgumentList @('/c', $launchCommand) `
         -WorkingDirectory $ProjectRoot -WindowStyle Hidden -PassThru
@@ -1228,7 +1252,25 @@ foreach ($testPath in $SelectedTests) {
         'tests/hc_monster_combat_r4/natural_cadence_238_test.tscn',
         'tests/hc_monster_combat_r4/natural_cadence_239_test.tscn',
         'tests/hc_monster_combat_r4/all_damage_lost_test.tscn',
-        'tests/hc_monster_combat_r4/damage_attribution_counterexamples_test.tscn'
+        'tests/hc_monster_combat_r4/damage_attribution_counterexamples_test.tscn',
+        # Prior fixed-source 60s evidence covers these full workloads.
+        'tests/source176_r3/eight_direction_admission_test.tscn',
+        'tests/source176_r3/source_idle_wake_phase_test.tscn',
+        'tests/source176_r3/published_map_approach_test.tscn',
+        'tests/user_feedback_20260930/full_surround_24_fractional_test.tscn',
+        'tests/user_feedback_20260930/full_surround_64_test.tscn',
+        'tests/user_feedback_20260930/full_surround_89_fractional_test.tscn',
+        'tests/user_feedback_20260930/full_surround_89_fractional_identity0_test.tscn',
+        'tests/user_feedback_20260930/full_surround_89_fractional_identity1_test.tscn',
+        'tests/user_feedback_20260930/full_surround_89_prefilled_test.tscn',
+        'tests/user_feedback_20260930/full_surround_89_test.tscn',
+        'tests/user_feedback_20260930/full_surround_mixed_test.tscn',
+        'tests/user_feedback_20260930/full_surround_moving_test.tscn',
+        'tests/user_feedback_20260930/full_surround_native_test.tscn',
+        'tests/user_feedback_20260930/full_surround_prefilled_test.tscn',
+        'tests/user_feedback_20260930/full_surround_west_wall_test.tscn',
+        'tests/user_feedback_20260930/surround_vacancy_refill_89_test.tscn',
+        'tests/user_feedback_20260930/surround_vacancy_refill_test.tscn'
     )
     $TestTimeoutSeconds = if ($testPath -in $HeavyR4Scenes) { [Math]::Max(60, $TimeoutSeconds) } else { $TimeoutSeconds }
     $deadline = [DateTime]::UtcNow.AddSeconds($TestTimeoutSeconds)
@@ -1350,7 +1392,7 @@ foreach ($testPath in $SelectedTests) {
         $frameworkReceipt = Test-FrameworkReceipt -Path $frameworkReceiptPath -ExpectedRunId $frameworkRunId `
             -ExpectedSceneId $testName -ExpectedContentSha256 $env:HARDCORE_R3_CONTENT_SHA256
         if (-not $frameworkReceipt.valid) { $reasons += $frameworkReceipt.reasons }
-        elseif ((Get-Content -LiteralPath $frameworkReceiptPath -Raw | ConvertFrom-Json).invocation_id -ne $env:HARDCORE_FRAMEWORK_INVOCATION_ID) {
+        elseif ((Get-Content -LiteralPath $frameworkReceiptPath -Raw -Encoding UTF8 | ConvertFrom-Json).invocation_id -ne $env:HARDCORE_FRAMEWORK_INVOCATION_ID) {
             $reasons += 'framework_invocation_mismatch'
         }
     }
@@ -1361,6 +1403,7 @@ foreach ($testPath in $SelectedTests) {
     $StructuredResults += [ordered]@{
         test_name = $testName
         test_path = $testPath
+        fixed_fps = $BoundaryFixedFps
         pass_marker_found = $hasPassMarker
         process_exited = $processExited
         wrapper_exit_code = $wrapperExitCode

@@ -10,10 +10,10 @@ const Enemy := preload("res://scripts/enemy.gd")
 
 class FailingInventory:
 	extends "res://scripts/player_state.gd"
-	func _commit_save(_update_profile_index := true) -> bool:
+	var commit_calls := 0
+	func _commit_save(_update_profile_index := true, _checkpoint_world := true) -> bool:
+		commit_calls += 1
 		return false
-	func _inventory_records_mergeable(a: Dictionary, b: Dictionary) -> bool:
-		return a.get("name") == b.get("name")
 
 var _failed := 0
 var _checked := 0
@@ -132,11 +132,20 @@ func _claim_gc() -> void:
 
 func _inventory() -> void:
 	var state := FailingInventory.new()
-	state.inventory = [{"name": "audit_item", "count": 2}]
+	var item_id := GameData.item_entity_id("强效太阳水") # Explicit legacy fixture import only.
+	_check(not item_id.is_empty(), "rollback fixture uses a real registered item")
+	var received: Dictionary = state._build_receive_result(item_id, 2, [])
+	_check(bool(received.success), "rollback fixture builds through the real receive owner")
+	state.inventory = received.inventory
 	_check(not state._consume_inventory_index(0, 1), "consume returns failure on save failure")
 	_check(state.inventory[0].count == 2, "consume restores inventory")
-	state.inventory = [{"name": "audit_item", "count": 10}, {"name": "audit_item", "count": 20}]
+	_check(state.commit_calls == 1, "consume failure reached exactly one save attempt")
+	var template: Dictionary = state.inventory[0].duplicate(true)
+	state.inventory = [template.duplicate(true), template.duplicate(true)]
+	state.inventory[0].count = 10
+	state.inventory[1].count = 20
 	var result := state.sort_inventory_deterministic()
-	_check(not result.success, "sort reports failed save")
+	_check(not result.success and result.get("reason") == "save_failed", "sort reports actual failed save")
+	_check(state.commit_calls == 2, "sort failure reached its own single save attempt")
 	_check(state.inventory.size() == 2 and state.inventory[0].count == 10 and state.inventory[1].count == 20, "sort rollback keeps deep quantities 10+20, not 30+20")
 	state.free()

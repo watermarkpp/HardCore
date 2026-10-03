@@ -1,0 +1,31 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "layered_approach_test",
+                        "test_path":  "tests/user_feedback_20260930/layered_approach_test.tscn",
+                        "pass_marker_found":  false,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  1,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-03T04:53:15.8846536Z",
+                        "native_exit_observed_utc":  "2026-10-03T04:52:53.0584214Z",
+                        "effective_exit_code":  1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "",
+                        "framework_receipt_valid":  null,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;non_zero_exit_code_1"
+                    }
+                ],
+    "total":  1,
+    "invocation_id":  "f20a173f-e27f-4ad7-a94d-97c2efe85e69",
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "passed":  0,
+    "engine_log_errors":  0,
+    "generated_at":  "2026-10-03T12:52:54.1116266+08:00",
+    "failed":  1,
+    "suite":  "adhoc"
+}

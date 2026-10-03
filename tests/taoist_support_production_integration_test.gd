@@ -5,6 +5,9 @@ const GroundUnit := preload("res://scripts/ground_unit_space.gd")
 
 var game: Node
 var player: PlayerCharacter
+var _release_observations: Array[Dictionary] = []
+var _single_accept_ms := -1
+var _single_action_id := -1
 
 
 func _ready() -> void:
@@ -55,7 +58,8 @@ func _run() -> void:
 				player.global_position + Vector2(5000, 5000)
 			)
 
-	_verify_input_rejection_and_selection()
+	player.skill_requested.connect(_observe_real_release)
+	await _verify_input_rejection_and_selection()
 	await _verify_heal_release_timing_and_summon_redraw()
 	await _verify_release_footpoint_and_reselect()
 	await _verify_area_effects_and_defence()
@@ -88,6 +92,9 @@ func _verify_input_rejection_and_selection() -> void:
 	assert(player.skill_cooldown_remaining_ms("taoist.healing") > 0)
 	assert(player.facing == facing_before, "healing must not auto-turn")
 	assert(player.current_mp == 999, "input must not spend MP")
+	# Finishing presentation does not cancel an accepted R2-W5 release.
+	# Let this real input complete before beginning the independent next case.
+	await _await_real_release(player._pending_combat_action_id)
 	player._finish_combat_action(player._pending_combat_action_id)
 	_reset_cast_state()
 
@@ -104,6 +111,9 @@ func _verify_input_rejection_and_selection() -> void:
 	assert(player._attack_timer > 0.0)
 	assert(player.skill_cooldown_remaining_ms("taoist.healing") > 0)
 	assert(player.current_mp == mp_before)
+	# Finishing presentation does not cancel an accepted R2-W5 release.
+	# Let this real input complete before beginning the independent next case.
+	await _await_real_release(player._pending_combat_action_id)
 	player._finish_combat_action(player._pending_combat_action_id)
 	_reset_cast_state()
 
@@ -130,13 +140,18 @@ func _verify_heal_release_timing_and_summon_redraw() -> void:
 	single_target.current_hp = 20
 	single_target.reset_performance_diagnostics_for_tests()
 	var single_mp_before: int = player.current_mp
+	var prior_release_count := _release_observations.size()
+	_single_accept_ms = Time.get_ticks_msec()
 	assert(game._try_release_skill(_display("taoist.healing")) == &"accepted")
+	_single_action_id = player._pending_combat_action_id
 	await get_tree().create_timer(0.70).timeout
+	print("TAOIST_SINGLE_TIMING_OBSERVATION "+JSON.stringify({"accepted_ms":_single_accept_ms,"expected_action_id":_single_action_id,"observed_ms":Time.get_ticks_msec(),"elapsed_ms":Time.get_ticks_msec()-_single_accept_ms,"hp":single_target.current_hp,"mp":player.current_mp,"releases":_release_observations}))
 	assert(single_target.current_hp == 20, "single heal resolved before 800 ms")
 	assert(player.current_mp == single_mp_before, "single heal spent MP before release")
 	await get_tree().create_timer(0.20).timeout
 	assert(single_target.current_hp > 20, "single heal did not resolve after 800 ms")
 	assert(player.current_mp < single_mp_before, "single heal did not spend MP at release")
+	assert(_release_observations.size() == prior_release_count+1 and _release_observations.back().release_id == _expected_release_id(_single_action_id), "single heal window must contain exactly its own accepted release")
 	single_target.free()
 
 	## Mass healing keeps the ordinary 600 ms release. Its selected summon must
@@ -401,9 +416,8 @@ func _verify_area_effects_and_defence() -> void:
 	_reset_cast_state()
 
 	## Single defence: only AC applies, player and own summon, 7x7 self center.
-	PlayerState.learned_skills.erase(_display("taoist.magic_defense"))
+	_set_fixture_magic_defense(-1)
 	PlayerState.recalculate_stats()
-	PlayerState._skill_progression.load_snapshot(PlayerState.learned_skills)
 	assert(own_summon.owner_level == 21)
 	assert(
 		own_summon.summon_exp_level != own_summon.owner_level,
@@ -433,7 +447,7 @@ func _verify_area_effects_and_defence() -> void:
 
 
 func _verify_dual_defence_production() -> void:
-	PlayerState.learned_skills[_display("taoist.magic_defense")] = 3
+	_set_fixture_magic_defense(3)
 	PlayerState.recalculate_stats()
 	## magic_defense base 3 + equipment 2 -> effective 5; defense stays 3.
 	PlayerState.computed_stats["skill_level_affix"] = {
@@ -496,9 +510,8 @@ func _verify_dual_defence_production() -> void:
 	assert(player.defense_buff > 0 and player.mac_buff > 0)
 
 	## Only one skill learned: normal single-price defence, no combined fields.
-	PlayerState.learned_skills.erase(_display("taoist.magic_defense"))
+	_set_fixture_magic_defense(-1)
 	PlayerState.recalculate_stats()
-	PlayerState._skill_progression.load_snapshot(PlayerState.learned_skills)
 	PlayerState.computed_stats["skill_level_affix"] = {"contributions": {}}
 	player.defense_buff = 0
 	player.defense_buff_time = 0.0
@@ -528,7 +541,6 @@ func _verify_rank_zero_dual_defence() -> void:
 		_display("taoist.defense"): 0,
 	}
 	PlayerState.recalculate_stats()
-	PlayerState._skill_progression.load_snapshot(PlayerState.learned_skills)
 	PlayerState.computed_stats["skill_level_affix"] = {"contributions": {}}
 	player.defense_buff = 0
 	player.defense_buff_time = 0.0
@@ -569,8 +581,7 @@ func _verify_rank_zero_dual_defence() -> void:
 	assert(int(components[1].get("rank", -1)) == 0)
 
 	## Only one rank-0 skill learned: no combination, single rank-0 MP.
-	PlayerState.learned_skills.erase(_display("taoist.magic_defense"))
-	PlayerState._skill_progression.load_snapshot(PlayerState.learned_skills)
+	_set_fixture_magic_defense(-1)
 	PlayerState.recalculate_stats()
 	var single_execution: Dictionary = game._execute_canonical_skill(
 		_display("taoist.defense"),
@@ -835,3 +846,37 @@ func _reset_cast_state() -> void:
 
 func _display(stable_skill_id: String) -> String:
 	return ProfessionRules.skill_display_name(stable_skill_id)
+
+
+func _set_fixture_magic_defense(rank: int) -> void:
+	# The projection is immutable; import an owned canonical snapshot through
+	# the same sole progression owner used by normal loading and learning.
+	var skills: Dictionary = PlayerState.learned_skills.duplicate(true)
+	if rank < 0:
+		skills.erase("hc.skill.taoist.magic_defense")
+	else:
+		skills["hc.skill.taoist.magic_defense"] = rank
+	PlayerState.learned_skills = skills
+	assert(PlayerState.skill_identity_errors.is_empty(), "fixture skill import must succeed atomically")
+	assert(PlayerState.learned_skills.is_read_only(), "fixture must preserve the immutable projection")
+	assert(PlayerState.is_skill_learned("taoist.magic_defense") == (rank >= 0))
+
+
+func _observe_real_release(skill_name: String, _origin: Vector2, _direction: Vector2, _damage: int) -> void:
+	var context := player.consume_skill_context()
+	var row := {"at_ms":Time.get_ticks_msec(),"skill_id":ProfessionRules.skill_id(skill_name),"release_id":context.get("release_geometry",{}).get("release_id",""),"pending_action_id":player._pending_combat_action_id,"selected_friendly":game._selected_friendly_instance_id}
+	if _release_observations.size() < 64: _release_observations.append(row)
+	print("TAOIST_REAL_RELEASE_OBSERVATION "+JSON.stringify(row))
+
+
+func _expected_release_id(action_id: int) -> String:
+	return "player:%d:action:%d" % [player.get_instance_id(),action_id]
+
+func _await_real_release(action_id: int) -> void:
+	var expected := _expected_release_id(action_id)
+	var deadline := Time.get_ticks_msec()+3000
+	while Time.get_ticks_msec()<deadline:
+		for row: Dictionary in _release_observations:
+			if row.release_id == expected: return
+		await get_tree().process_frame
+	assert(false,"accepted preflight release did not finish through the real Player signal: "+expected)

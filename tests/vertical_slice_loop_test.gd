@@ -1,5 +1,7 @@
 extends Node
 
+var expected_arrival_portal_id := ""
+
 
 
 func _ready() -> void:
@@ -14,34 +16,33 @@ func _run() -> void:
 	assert(PlayerState.accept_quest("bich_beginner_gear").begins_with("已接受"), "初级装备任务无法接受")
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	await preload("res://tests/helpers/world_ready_fixture.gd").wait_for_world(self, game, GameData.service_runtime_map_id(0), "initial map")
 
 	game.travel_to_map(910001)
-	await _settle()
+	await _settle(game, 910001)
 	assert(game.current_map_id == 910001 and game.background.uses_bich_art(), "刷装路线没有从正式比奇省开始")
 	_kill_three_strawmen(game)
 	await get_tree().process_frame
 	assert(PlayerState.quest_progress("bich_beginner_gear") == 3, "三只稻草人没有推进任务")
 
 	_travel_via_portal(game, 911001)
-	await _settle()
+	await _settle(game, 911001)
 	_assert_arrival(game, 911001, game.route_arrival_position(911001, 910001))
 	assert(game.background._editor_runtime_size == Vector2i(38, 38), "一层编辑器运行时碰撞未加载")
 	_assert_editor_runtime_collision(game, 911001)
 
 	_travel_via_portal(game, 911002)
-	await _settle()
+	await _settle(game, 911002)
 	_assert_arrival(game, 911002, game.route_arrival_position(911002, 911001))
 
 	_travel_via_portal(game, 911003)
-	await _settle()
+	await _settle(game, 911003)
 	_assert_arrival(game, 911003, game.route_arrival_position(911003, 911002))
 
 	PlayerState.add_item("回城卷")
 	var scroll_index := _inventory_index("回城卷")
 	assert(scroll_index >= 0 and PlayerState.use_inventory_index(scroll_index).begins_with("使用"), "Boss后无法使用回城卷")
-	await _settle()
+	await _settle(game, 910001)
 	assert(game.current_zone.begins_with("比奇省") and game.current_map_id == 910001, "回城卷没有返回服务端HomeMap=0对应的正式比奇省")
 	var gold_before := PlayerState.gold
 	assert(PlayerState.claim_quest("bich_beginner_gear").begins_with("已领取"), "回城后无法领取任务奖励")
@@ -90,17 +91,10 @@ func _assert_arrival(game: Node, map_id: int, expected: Vector2) -> void:
 	assert(game.current_map_id == map_id, "没有进入目标地图%d" % map_id)
 	assert(game.player.global_position.distance_to(expected) < 0.1, "地图%d落脚点错误：期望%s，实际%s" % [map_id, expected, game.player.global_position])
 	assert(not game.background.is_orc_tomb_point_blocked(game.player.global_position), "地图%d落脚点被环境堵塞" % map_id)
-	for node: Node in get_tree().get_nodes_in_group("interactable"):
-		if node is ZonePortal:
-			if game.player.global_position.distance_to(node.global_position) <= 105.0:
-				var expected_lock := "%d:%s" % [
-					map_id,
-					str(node.portal_data.get("source_portal_id", "")),
-				]
-				assert(
-					str(game._portal_guard_state.get("locked_portal_id", "")) == expected_lock,
-					"地图%d精确门点落脚缺少防回弹锁" % map_id
-				)
+	assert(not expected_arrival_portal_id.is_empty(), "arrival check must bind the originating portal request")
+	var expected_lock := "%d:%s" % [map_id, expected_arrival_portal_id]
+	assert(str(game._portal_guard_state.get("locked_portal_id", "")) == expected_lock,
+		"exact requested arrival portal must own the return guard: " + expected_lock)
 	var beacons := get_tree().get_nodes_in_group("route_guidance")
 	assert(beacons.is_empty(), "地图%d不应再生成额外的单箭头导航信标" % map_id)
 
@@ -120,6 +114,8 @@ func _assert_editor_runtime_collision(game: Node, map_id: int) -> void:
 func _travel_via_portal(game: Node, target_map_id: int) -> void:
 	for node: Node in get_tree().get_nodes_in_group("zone_content"):
 		if node is ZonePortal and node.target_map_id == target_map_id:
+			expected_arrival_portal_id = str(node.portal_data.get("target_portal_id", ""))
+			assert(not expected_arrival_portal_id.is_empty(), "travel request needs an exact target portal identity")
 			assert(game.travel_via_portal(node, true), "统一门点旅行失败:%d" % target_map_id)
 			return
 	assert(false, "统一门点缺失:%d" % target_map_id)
@@ -131,7 +127,7 @@ func _run_reentry_stability(game: Node) -> void:
 	# 里程碑只采样一次完整往返；长时间压力测试不混入日常功能验收。
 	for map_id in [910001, 911001, 911002, 911003, 910001]:
 		game.travel_to_map(map_id)
-		await _settle()
+		await _settle(game, map_id)
 		var environment_count: int = game.background.environment_node_count()
 		var child_count: int = game.background.get_child_count()
 		var actor_occluder_count := 0
@@ -160,6 +156,5 @@ func _inventory_index(item_name: String) -> int:
 	return -1
 
 
-func _settle() -> void:
-	await get_tree().process_frame
-	await get_tree().process_frame
+func _settle(game: Node, expected_map_id: int) -> void:
+	await preload("res://tests/helpers/world_ready_fixture.gd").wait_for_world(self, game, expected_map_id, "vertical slice transition")

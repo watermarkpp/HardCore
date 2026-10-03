@@ -1,0 +1,50 @@
+{
+  "checks": 21,
+  "errors": [],
+  "reported_tested_sha": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+  "rows": [
+    {
+      "cold_phase": 0.6,
+      "frames": 4,
+      "hot_phase": 0.6,
+      "monster_id": 33
+    },
+    {
+      "cold_phase": 0.4,
+      "frames": 6,
+      "hot_phase": 0.4,
+      "monster_id": 64
+    },
+    {
+      "cold_phase": 0.4,
+      "frames": 6,
+      "hot_phase": 0.4,
+      "monster_id": 89
+    },
+    {
+      "cold_duration": 0.9,
+      "expected_duration": 0.9,
+      "frame_ms": 150,
+      "frames": 6,
+      "hot_duration": 0.9,
+      "monster_id": 124
+    },
+    {
+      "cold_duration": 0.72,
+      "expected_duration": 0.72,
+      "frame_ms": 120,
+      "frames": 6,
+      "hot_duration": 0.72,
+      "monster_id": 180
+    },
+    {
+      "cold_duration": 0.72,
+      "expected_duration": 0.72,
+      "frame_ms": 120,
+      "frames": 6,
+      "hot_duration": 0.72,
+      "monster_id": 195
+    }
+  ],
+  "runtime_content_sha256": "98f09b09b3f8048285571ff5524b6ace1711c99d0f2c80347d20e8acb1fcbe01"
+}

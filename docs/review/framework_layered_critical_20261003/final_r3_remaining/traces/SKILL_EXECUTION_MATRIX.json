@@ -1,0 +1,1446 @@
+{
+  "checks": 99,
+  "errors": [],
+  "reported_tested_sha": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+  "rows": [
+    {
+      "evidence_scope": "planner and reception; dedicated sinks require critical semantic regressions",
+      "evidence_status": "PASS",
+      "family": "PASSIVE",
+      "operation": [
+        {
+          "affects": [
+            "physical_melee_hit_checks"
+          ],
+          "stat": "accuracy",
+          "type": "passive_stat_modifier",
+          "value": 9
+        }
+      ],
+      "plan_rejection": {
+        "accepted": true,
+        "reason": "accepted"
+      },
+      "producer": "scripts/skills/skill_runtime_router.gd::build_canonical_plan",
+      "reception_evidence": {
+        "failure_reason": "source176_delivery_kind_rejected",
+        "final_damage": 0,
+        "stable_skill_id": "warrior.basic_swordsmanship",
+        "success": false
+      },
+      "required_semantic_tests": [
+        "basic_swordsmanship_accuracy_by_rank",
+        "basic_swordsmanship_never_casts",
+        "basic_swordsmanship_physical_only"
+      ],
+      "sink": "dedicated production operation; direct sink rejected",
+      "skill_id": "warrior.basic_swordsmanship",
+      "walk_tick_after": 0,
+      "walk_tick_before": 0
+    },
+    {
+      "evidence_scope": "planner and reception; dedicated sinks require critical semantic regressions",
+      "evidence_status": "PASS",
+      "family": "PHYSICAL_MODIFIER",
+      "operation": [
+        {
+          "accuracy_always_applies": true,
+          "damage_bonus_applies_after_body_formula": true,
+          "defence_type": "AC",
+          "flat_accuracy_bonus": 3,
+          "flat_damage_bonus": 8,
+          "proc": false,
+          "proc_denominator": 4,
+          "proc_roll": -1,
+          "success_probability": 0.25,
+          "type": "melee_proc_modifier",
+          "valid_melee_action": false
+        }
+      ],
+      "plan_rejection": {
+        "accepted": true,
+        "reason": "accepted"
+      },
+      "producer": "scripts/skills/skill_runtime_router.gd::build_canonical_plan",
+      "reception_evidence": {
+        "failure_reason": "source176_delivery_kind_rejected",
+        "final_damage": 0,
+        "stable_skill_id": "warrior.slaying_swordsmanship",
+        "success": false
+      },
+      "required_semantic_tests": [
+        "slaying_proc_table_exact",
+        "slaying_dc_bonus_exact",
+        "slaying_accuracy_bonus_exact",
+        "slaying_scope_all_body_modes",
+        "slaying_training_only_on_proc"
+      ],
+      "sink": "dedicated production operation; direct sink rejected",
+      "skill_id": "warrior.slaying_swordsmanship",
+      "walk_tick_after": 0,
+      "walk_tick_before": 0
+    },
+    {
+      "evidence_scope": "planner and reception; dedicated sinks require critical semantic regressions",
+      "evidence_status": "PASS",
+      "family": "PHYSICAL",
+      "operation": [
+        {
+          "cell": 1,
+          "ignore_ac": false,
+          "maximum_targets": -1,
+          "multiplier": 1.0,
+          "target_count_policy_id": "gameplay.warrior.melee_target_count.v1",
+          "type": "melee_hit"
+        },
+        {
+          "cell": 2,
+          "ignore_ac": true,
+          "maximum_targets": -1,
+          "multiplier": 1.0,
+          "target_count_policy_id": "gameplay.warrior.melee_target_count.v1",
+          "type": "melee_hit"
+        }
+      ],
+      "plan_rejection": {
+        "accepted": true,
+        "reason": "accepted"
+      },
+      "producer": "scripts/skills/skill_runtime_router.gd::build_canonical_plan",
+      "reception_evidence": {
+        "failure_reason": "source176_delivery_kind_rejected",
+        "final_damage": 0,
+        "stable_skill_id": "warrior.thrusting",
+        "success": false
+      },
+      "required_semantic_tests": [
+        "thrusting_two_cell_line",
+        "thrusting_second_cell_multiplier",
+        "thrusting_second_cell_ignores_ac",
+        "thrusting_one_training_event_per_swing"
+      ],
+      "sink": "dedicated production operation; direct sink rejected",
+      "skill_id": "warrior.thrusting",
+      "walk_tick_after": 0,
+      "walk_tick_before": 0
+    },
+    {
+      "evidence_scope": "planner and reception; dedicated sinks require critical semantic regressions",
+      "evidence_status": "PASS",
+      "family": "PHYSICAL",
+      "operation": [
+        {
+          "max_resource_commits": 1,
+          "max_training_events": 1,
+          "maximum_targets": -1,
+          "primary_multiplier": 1.0,
+          "side_multiplier": 0.3846153846,
+          "target_count_policy_id": "gameplay.warrior.melee_target_count.v1",
+          "type": "melee_arc"
+        }
+      ],
+      "plan_rejection": {
+        "accepted": true,
+        "reason": "accepted"
+      },
+      "producer": "scripts/skills/skill_runtime_router.gd::build_canonical_plan",
+      "reception_evidence": {
+        "failure_reason": "source176_delivery_kind_rejected",
+        "final_damage": 0,
+        "stable_skill_id": "warrior.half_moon",
+        "success": false
+      },
+      "required_semantic_tests": [
+        "half_moon_primary_full_damage",
+        "half_moon_side_multiplier",
+        "half_moon_rotates_all_8_directions",
+        "half_moon_mp_once_per_swing",
+        "half_moon_training_once_per_swing"
+      ],
+      "sink": "dedicated production operation; direct sink rejected",
+      "skill_id": "warrior.half_moon",
+      "walk_tick_after": 0,
+      "walk_tick_before": 0
+    },
+    {
+      "evidence_scope": "planner and reception; dedicated sinks require critical semantic regressions",
+      "evidence_status": "PASS",
+      "family": "PUSH",
+      "operation": [
+        {
+          "atomic_path_preflight_required": true,
+          "caster_moves_into_vacated_path": true,
+          "damage_amount": 0,
+          "displaced": true,
+          "dynamic_blocker_cancels_all_displacement": true,
+          "push_distance_gu": 3.0,
+          "resolved_push_distance_gu": 3.0,
+          "self_damage_amount": 0,
+          "static_obstacle_stops_before_blocker": true,
+          "success_probability": 1.0,
+          "type": "level_gated_push"
+        }
+      ],
+      "plan_rejection": {
+        "accepted": true,
+        "reason": "accepted"
+      },
+      "producer": "scripts/skills/skill_runtime_router.gd::build_canonical_plan",
+      "reception_evidence": {
+        "failure_reason": "source176_delivery_kind_rejected",
+        "final_damage": 0,
+        "stable_skill_id": "warrior.wild_rush",
+        "success": false
+      },
+      "required_semantic_tests": [
+        "wild_rush_lower_level_only",
+        "wild_rush_probability_formula",
+        "wild_rush_distance_by_rank",
+        "wild_rush_collision_self_damage",
+        "wild_rush_boss_immune",
+        "wild_rush_training_only_on_displacement"
+      ],
+      "sink": "dedicated production operation; direct sink rejected",
+      "skill_id": "warrior.wild_rush",
+      "walk_tick_after": 0,
+      "walk_tick_before": 0
+    },
+    {
+      "evidence_scope": "planner and reception; dedicated sinks require critical semantic regressions",
+      "evidence_status": "PASS",
+      "family": "PHYSICAL",
+      "operation": [
+        {
+          "auto_cast": false,
+          "charge_lifetime_ms": 10000,
+          "consume_on": "next_valid_melee_damage_attempt",
+          "damage_multiplier": 2.6,
+          "stack_count_max": 1,
+          "type": "next_melee_charge"
+        }
+      ],
+      "plan_rejection": {
+        "accepted": true,
+        "reason": "accepted"
+      },
+      "producer": "scripts/skills/skill_runtime_router.gd::build_canonical_plan",
+      "reception_evidence": {
+        "failure_reason": "source176_delivery_kind_rejected",
+        "final_damage": 0,
+        "stable_skill_id": "warrior.fire_sword",
+        "success": false
+      },
+      "required_semantic_tests": [
+        "fire_sword_never_auto_casts",
+        "fire_sword_multiplier_exact",
+        "fire_sword_requires_target_before_action",
+        "fire_sword_charge_expires",
+        "fire_sword_consumed_once",
+        "fire_sword_cooldown_independent_from_charge_lifetime"
+      ],
+      "sink": "dedicated production operation; direct sink rejected",
+      "skill_id": "warrior.fire_sword",
+      "walk_tick_after": 0,
+      "walk_tick_before": 0
+    },
+    {
+      "evidence_scope": "planner and reception; dedicated sinks require critical semantic regressions",
+      "evidence_status": "PASS",
+      "family": "DIRECT",
+      "operation": [
+        {
+          "damage_type": "magic",
+          "defence_type": "MAC",
+          "raw_power": 5,
+          "server_authoritative": true,
+          "type": "projectile_damage"
+        }
+      ],
+      "plan_rejection": {
+        "accepted": true,
+        "reason": "accepted"
+      },
+      "producer": "scripts/skills/skill_runtime_router.gd::build_canonical_plan",
+      "reception_evidence": {
+        "anti_magic_checked": true,
+        "anti_magic_eligible": true,
+        "anti_magic_points": 0,
+        "anti_magic_roll": 9,
+        "contract_id": "magic.evasion.anti_magic.direct_spell.v1",
+        "damage_after_evasion": 50,
+        "enters_magic_defense_stage": true,
+        "evasion_channel": "anti_magic",
+        "final_damage": 50,
+        "magic_defense_checked": false,
+        "magic_evaded": false,
+        "magic_evasion_percent": 0,
+        "stage_order": [
+          "anti_magic",
+          "magic_defense",
+          "take_damage"
+        ],
+        "success": true
+      },
+      "required_semantic_tests": [
+        "fireball_uses_target_and_los",
+        "fireball_power_formula",
+        "fireball_rank_increases_expected_power",
+        "fireball_mac_defence"
+      ],
+      "sink": "CombatRuntimeService.apply_enemy_direct_spell_damage",
+      "skill_id": "wizard.fireball",
+      "walk_tick_after": 893,
+      "walk_tick_before": 0
+    },
+    {
+      "evidence_scope": "planner and reception; dedicated sinks require critical semantic regressions",
+      "evidence_status": "PASS",
+      "family": "PUSH",
+      "operation": [],
+      "plan_rejection": {
+        "accepted": true,
+        "reason": "accepted"
+      },
+      "producer": "scripts/skills/skill_runtime_router.gd::build_canonical_plan",
+      "reception_evidence": {
+        "failure_reason": "source176_delivery_kind_rejected",
+        "final_damage": 0,
+        "stable_skill_id": "wizard.repulsion_ring",
+        "success": false
+      },
+      "required_semantic_tests": [
+        "repulsion_no_damage",
+        "repulsion_lower_level_only",
+        "repulsion_probability",
+        "repulsion_push_distance",
+        "repulsion_collision"
+      ],
+      "sink": "dedicated production operation; direct sink rejected",
+      "skill_id": "wizard.repulsion_ring",
+      "walk_tick_after": 0,
+      "walk_tick_before": 0
+    },
+    {
+      "evidence_scope": "planner and reception; dedicated sinks require critical semantic regressions",
+      "evidence_status": "PASS",
+      "family": "CONTROL",
+      "operation": [
+        {
+          "duration_seconds": 3,
+          "outcome": "rooted",
+          "pet_cap": 5,
+          "pet_group": "wizard_tamed_pet",
+          "pet_make_level": 3,
+          "server_authoritative": true,
+          "type": "temptation_resolution"
+        }
+      ],
+      "plan_rejection": {
+        "accepted": true,
+        "reason": "accepted"
+      },
+      "producer": "scripts/skills/skill_runtime_router.gd::build_canonical_plan",
+      "reception_evidence": {
+        "failure_reason": "source176_delivery_kind_rejected",
+        "final_damage": 0,
+        "stable_skill_id": "wizard.temptation_light",
+        "success": false
+      },
+      "required_semantic_tests": [
+        "temptation_monster_only",
+        "temptation_boss_immune",
+        "temptation_pet_cap",
+        "temptation_tame_probability_deterministic",
+        "temptation_failure_control",
+        "temptation_not_six_second_generic_charm"
+      ],
+      "sink": "dedicated production operation; direct sink rejected",
+      "skill_id": "wizard.temptation_light",
+      "walk_tick_after": 0,
+      "walk_tick_before": 0
+    },
+    {
+      "evidence_scope": "planner and reception; dedicated sinks require critical semantic regressions",
+      "evidence_status": "PASS",
+      "family": "DIRECT",
+      "operation": [
+        {
+          "cast_input_contract": "skills.wizard.hellfire.discrete_cast_hold_repeats_after_recast_gate.v1",
+          "channeled": false,
+          "damage_type": "magic",
+          "defence_type": "MAC",
+          "effect_length_gu": 5.0,
+          "effect_width_gu": 1.0,
+          "line_geometry_contract": "skills.wizard.line.continuous_tile_axis_footprint_sat.v1",
+          "maximum_targets": 0,
+          "pierces_units": false,
+          "raw_power": 20,
+          "server_authoritative": true,
+          "stops_on_terrain": true,
+          "target_limit_policy": "all_intersecting_effect_cells",
+          "target_selection_contract": "skills.wizard.hellfire.all_intersecting_5x1.v1",
+          "type": "line_damage"
+        }
+      ],
+      "plan_rejection": {
+        "accepted": true,
+        "reason": "accepted"
+      },
+      "producer": "scripts/skills/skill_runtime_router.gd::build_canonical_plan",
+      "reception_evidence": {
+        "anti_magic_checked": false,
+        "anti_magic_eligible": false,
+        "anti_magic_points": 0,
+        "anti_magic_roll": 9,
+        "contract_id": "magic.evasion.anti_magic.direct_spell.v1",
+        "damage_after_evasion": 50,
+        "enters_magic_defense_stage": true,
+        "evasion_channel": "none",
+        "final_damage": 50,
+        "magic_defense_checked": false,
+        "magic_evaded": false,
+        "magic_evasion_percent": 0,
+        "stage_order": [
+          "anti_magic",
+          "magic_defense",
+          "take_damage"
+        ],
+        "success": true
+      },
+      "required_semantic_tests": [
+        "hellfire_exact_five_tile_line",
+        "hellfire_width_one",
+        "hellfire_stops_on_terrain",
+        "hellfire_power_formula"
+      ],
+      "sink": "CombatRuntimeService.apply_enemy_direct_spell_damage",
+      "skill_id": "wizard.hellfire",
+      "walk_tick_after": 1093,
+      "walk_tick_before": 0
+    },
+    {
+      "evidence_scope": "planner and reception; dedicated sinks require critical semantic regressions",
+      "evidence_status": "PASS",
+      "family": "DIRECT",
+      "operation": [
+        {
+          "damage_type": "lightning_magic",
+          "defence_type": "MAC",
+          "horizontal_projectile": false,
+          "race_multiplier": 1.5,
+          "raw_power": 22,
+          "raw_power_after_race": 33,
+          "server_authoritative": true,
+          "type": "targeted_sky_strike"
+        }
+      ],
+      "plan_rejection": {
+        "accepted": true,
+        "reason": "accepted"
+      },
+      "producer": "scripts/skills/skill_runtime_router.gd::build_canonical_plan",
+      "reception_evidence": {
+        "anti_magic_checked": true,
+        "anti_magic_eligible": true,
+        "anti_magic_points": 0,
+        "anti_magic_roll": 9,
+        "contract_id": "magic.evasion.anti_magic.direct_spell.v1",
+        "damage_after_evasion": 50,
+        "enters_magic_defense_stage": true,
+        "evasion_channel": "anti_magic",
+        "final_damage": 50,
+        "magic_defense_checked": false,
+        "magic_evaded": false,
+        "magic_evasion_percent": 0,
+        "stage_order": [
+          "anti_magic",
+          "magic_defense",
+          "take_damage"
+        ],
+        "success": true
+      },
+      "required_semantic_tests": [
+        "lightning_is_sky_strike",
+        "lightning_no_horizontal_projectile",
+        "lightning_undead_multiplier",
+        "lightning_power_formula"
+      ],
+      "sink": "CombatRuntimeService.apply_enemy_direct_spell_damage",
+      "skill_id": "wizard.lightning",
+      "walk_tick_after": 1659,
+      "walk_tick_before": 0
+    },
+    {
+      "evidence_scope": "planner and reception; dedicated sinks require critical semantic regressions",
+      "evidence_status": "PASS",
+      "family": "DIRECT",
+      "operation": [
+        {
+          "damage_type": "magic",
+          "defence_type": "MAC",
+          "raw_power": 16,
+          "server_authoritative": true,
+          "type": "projectile_damage"
+        }
+      ],
+      "plan_rejection": {
+        "accepted": true,
+        "reason": "accepted"
+      },
+      "producer": "scripts/skills/skill_runtime_router.gd::build_canonical_plan",
+      "reception_evidence": {
+        "anti_magic_checked": true,
+        "anti_magic_eligible": true,
+        "anti_magic_points": 0,
+        "anti_magic_roll": 9,
+        "contract_id": "magic.evasion.anti_magic.direct_spell.v1",
+        "damage_after_evasion": 50,
+        "enters_magic_defense_stage": true,
+        "evasion_channel": "anti_magic",
+        "final_damage": 50,
+        "magic_defense_checked": false,
+        "magic_evaded": false,
+        "magic_evasion_percent": 0,
+        "stage_order": [
+          "anti_magic",
+          "magic_defense",
+          "take_damage"
+        ],
+        "success": true
+      },
+      "required_semantic_tests": [
+        "great_fireball_los",
+        "great_fireball_power_formula",
+        "great_fireball_expected_power_exceeds_or_differs_from_fireball"
+      ],
+      "sink": "CombatRuntimeService.apply_enemy_direct_spell_damage",
+      "skill_id": "wizard.great_fireball",
+      "walk_tick_after": 1383,
+      "walk_tick_before": 0
+    },
+    {
+      "evidence_scope": "planner and reception; dedicated sinks require critical semantic regressions",
+      "evidence_status": "PASS",
+      "family": "SELF_UTILITY",
+      "operation": [
+        {
+          "destination": null,
+          "destination_ground_gu": "(inf, inf)",
+          "forward_dash": false,
+          "moved": true,
+          "remain_in_place_on_failure": true,
+          "server_authoritative": true,
+          "success_probability": 0.909090909090909,
+          "type": "server_random_teleport"
+        }
+      ],
+      "plan_rejection": {
+        "accepted": true,
+        "reason": "accepted"
+      },
+      "producer": "scripts/skills/skill_runtime_router.gd::build_canonical_plan",
+      "reception_evidence": {
+        "failure_reason": "source176_delivery_kind_rejected",
+        "final_damage": 0,
+        "stable_skill_id": "wizard.teleport",
+        "success": false
+      },
+      "required_semantic_tests": [
+        "teleport_never_forward_dash",
+        "teleport_probability_exact",
+        "teleport_failure_stays_in_place",
+        "teleport_destination_valid",
+        "teleport_server_authoritative"
+      ],
+      "sink": "dedicated production operation; direct sink rejected",
+      "skill_id": "wizard.teleport",
+      "walk_tick_after": 0,
+      "walk_tick_before": 0
+    },
+    {
+      "evidence_scope": "planner and reception; dedicated sinks require critical semantic regressions",
+      "evidence_status": "PASS",
+      "family": "DIRECT",
+      "operation": [
+        {
+          "damage_type": "fire_magic",
+          "defence_type": "MAC",
+          "height_grid_steps": 3,
+          "raw_power": 14,
+          "server_authoritative": true,
+          "type": "area_damage",
+          "width_grid_steps": 3
+        }
+      ],
+      "plan_rejection": {
+        "accepted": true,
+        "reason": "accepted"
+      },
+      "producer": "scripts/skills/skill_runtime_router.gd::build_canonical_plan",
+      "reception_evidence": {
+        "anti_magic_checked": false,
+        "anti_magic_eligible": false,
+        "anti_magic_points": 0,
+        "anti_magic_roll": 9,
+        "contract_id": "magic.evasion.anti_magic.direct_spell.v1",
+        "damage_after_evasion": 50,
+        "enters_magic_defense_stage": true,
+        "evasion_channel": "none",
+        "final_damage": 50,
+        "magic_defense_checked": false,
+        "magic_evaded": false,
+        "magic_evasion_percent": 0,
+        "stage_order": [
+          "anti_magic",
+          "magic_defense",
+          "take_damage"
+        ],
+        "success": true
+      },
+      "required_semantic_tests": [
+        "exploding_flame_target_centered",
+        "exploding_flame_exact_3x3",
+        "exploding_flame_power_formula"
+      ],
+      "sink": "CombatRuntimeService.apply_enemy_direct_spell_damage",
+      "skill_id": "wizard.exploding_flame",
+      "walk_tick_after": 1104,
+      "walk_tick_before": 0
+    },
+    {
+      "evidence_scope": "planner and reception; dedicated sinks require critical semantic regressions",
+      "evidence_status": "PASS",
+      "family": "MINE",
+      "operation": [
+        {
+          "cap_policy": "evict_oldest",
+          "damage_type": "fire_magic",
+          "defence_type": "MAC",
+          "duration_seconds": 10,
+          "height_grid_steps": 3,
+          "max_active_fields_per_caster": "config_required_default_8",
+          "max_ticks_per_target_per_caster": 1,
+          "raw_power": 6,
+          "server_authoritative": true,
+          "stacking_policy": "same_caster_same_tile_refreshes_duration; one target takes at most one tick per caster per tick",
+          "tick_interval_ms": 1000,
+          "type": "persistent_ground_damage",
+          "width_grid_steps": 3
+        }
+      ],
+      "plan_rejection": {
+        "accepted": true,
+        "reason": "accepted"
+      },
+      "producer": "scripts/skills/skill_runtime_router.gd::build_canonical_plan",
+      "reception_evidence": {
+        "anti_magic_checked": false,
+        "anti_magic_eligible": false,
+        "anti_magic_points": 0,
+        "anti_magic_roll": 9,
+        "contract_id": "magic.evasion.anti_magic.direct_spell.v1",
+        "damage_after_evasion": 50,
+        "enters_magic_defense_stage": true,
+        "evasion_channel": "none",
+        "final_damage": 50,
+        "magic_defense_checked": false,
+        "magic_evaded": false,
+        "magic_evasion_percent": 0,
+        "stage_order": [
+          "anti_magic",
+          "magic_defense",
+          "take_damage"
+        ],
+        "success": true
+      },
+      "required_semantic_tests": [
+        "fire_wall_exact_3x3",
+        "fire_wall_duration_scales",
+        "fire_wall_tick_once_per_caster",
+        "fire_wall_refresh_not_stack",
+        "fire_wall_not_circle_or_cross"
+      ],
+      "sink": "CombatRuntimeService.apply_enemy_direct_spell_damage",
+      "skill_id": "wizard.fire_wall",
+      "walk_tick_after": 0,
+      "walk_tick_before": 0
+    },
+    {
+      "evidence_scope": "planner and reception; dedicated sinks require critical semantic regressions",
+      "evidence_status": "PASS",
+      "family": "DIRECT",
+      "operation": [
+        {
+          "damage_type": "magic",
+          "defence_type": "MAC",
+          "effect_length_gu": 8.0,
+          "effect_width_gu": 1.0,
+          "line_geometry_contract": "skills.wizard.line.continuous_tile_axis_footprint_sat.v1",
+          "pierces_units": true,
+          "raw_power": 24,
+          "server_authoritative": true,
+          "stops_on_terrain": true,
+          "type": "piercing_line_damage"
+        }
+      ],
+      "plan_rejection": {
+        "accepted": true,
+        "reason": "accepted"
+      },
+      "producer": "scripts/skills/skill_runtime_router.gd::build_canonical_plan",
+      "reception_evidence": {
+        "anti_magic_checked": false,
+        "anti_magic_eligible": false,
+        "anti_magic_points": 0,
+        "anti_magic_roll": 9,
+        "contract_id": "magic.evasion.anti_magic.direct_spell.v1",
+        "damage_after_evasion": 50,
+        "enters_magic_defense_stage": true,
+        "evasion_channel": "none",
+        "final_damage": 50,
+        "magic_defense_checked": false,
+        "magic_evaded": false,
+        "magic_evasion_percent": 0,
+        "stage_order": [
+          "anti_magic",
+          "magic_defense",
+          "take_damage"
+        ],
+        "success": true
+      },
+      "required_semantic_tests": [
+        "laser_exact_eight_tile_line",
+        "laser_width_one",
+        "laser_pierces_units",
+        "laser_stops_on_terrain",
+        "laser_no_undead_bonus"
+      ],
+      "sink": "CombatRuntimeService.apply_enemy_direct_spell_damage",
+      "skill_id": "wizard.laser",
+      "walk_tick_after": 1144,
+      "walk_tick_before": 0
+    },
+    {
+      "evidence_scope": "planner and reception; dedicated sinks require critical semantic regressions",
+      "evidence_status": "PASS",
+      "family": "DIRECT",
+      "operation": [
+        {
+          "damage_type": "lightning_magic",
+          "defence_type": "MAC",
+          "exclude_center": true,
+          "maximum_targets": 24,
+          "radius_grid_steps": 2,
+          "raw_power": 30,
+          "server_authoritative": true,
+          "type": "caster_centered_area_damage"
+        }
+      ],
+      "plan_rejection": {
+        "accepted": true,
+        "reason": "accepted"
+      },
+      "producer": "scripts/skills/skill_runtime_router.gd::build_canonical_plan",
+      "reception_evidence": {
+        "anti_magic_checked": false,
+        "anti_magic_eligible": false,
+        "anti_magic_points": 0,
+        "anti_magic_roll": 9,
+        "contract_id": "magic.evasion.anti_magic.direct_spell.v1",
+        "damage_after_evasion": 50,
+        "enters_magic_defense_stage": true,
+        "evasion_channel": "none",
+        "final_damage": 50,
+        "magic_defense_checked": false,
+        "magic_evaded": false,
+        "magic_evasion_percent": 0,
+        "stage_order": [
+          "anti_magic",
+          "magic_defense",
+          "take_damage"
+        ],
+        "success": true
+      },
+      "required_semantic_tests": [
+        "hell_lightning_max_24",
+        "hell_lightning_caster_centered_radius_2",
+        "hell_lightning_excludes_center",
+        "hell_lightning_power_formula"
+      ],
+      "sink": "CombatRuntimeService.apply_enemy_direct_spell_damage",
+      "skill_id": "wizard.hell_lightning",
+      "walk_tick_after": 1229,
+      "walk_tick_before": 0
+    },
+    {
+      "evidence_scope": "planner and reception; dedicated sinks require critical semantic regressions",
+      "evidence_status": "PASS",
+      "family": "BUFF",
+      "operation": [
+        {
+          "affected_damage_types": [
+            "physical",
+            "magic"
+          ],
+          "buff_id": "buff.wizard.magic_shield",
+          "damage_reduction": 0.6,
+          "duration_seconds": 15,
+          "stack_count_max": 1,
+          "stacking_policy": "refresh_same_buff_no_stacking",
+          "type": "refreshable_damage_reduction_buff"
+        }
+      ],
+      "plan_rejection": {
+        "accepted": true,
+        "reason": "accepted"
+      },
+      "producer": "scripts/skills/skill_runtime_router.gd::build_canonical_plan",
+      "reception_evidence": {
+        "failure_reason": "source176_delivery_kind_rejected",
+        "final_damage": 0,
+        "stable_skill_id": "wizard.magic_shield",
+        "success": false
+      },
+      "required_semantic_tests": [
+        "magic_shield_reduction_increases_by_rank",
+        "magic_shield_reduces_physical_and_magic",
+        "magic_shield_duration_uses_mc",
+        "magic_shield_refresh_not_stack"
+      ],
+      "sink": "dedicated production operation; direct sink rejected",
+      "skill_id": "wizard.magic_shield",
+      "walk_tick_after": 0,
+      "walk_tick_before": 0
+    },
+    {
+      "evidence_scope": "planner and reception; dedicated sinks require critical semantic regressions",
+      "evidence_status": "PASS",
+      "family": "INSTANT_KILL",
+      "operation": [
+        {
+          "eligible": true,
+          "instant_kill": true,
+          "kill_probability": 0.85,
+          "normal_damage": 0,
+          "precheck_passed": true,
+          "type": "holy_word_resolution"
+        }
+      ],
+      "plan_rejection": {
+        "accepted": true,
+        "reason": "accepted"
+      },
+      "producer": "scripts/skills/skill_runtime_router.gd::build_canonical_plan",
+      "reception_evidence": {
+        "failure_reason": "source176_delivery_kind_rejected",
+        "final_damage": 0,
+        "stable_skill_id": "wizard.holy_word",
+        "success": false
+      },
+      "required_semantic_tests": [
+        "holy_word_undead_only",
+        "holy_word_boss_immune",
+        "holy_word_probability_exact",
+        "holy_word_success_kills",
+        "holy_word_failure_no_damage",
+        "holy_word_training_on_success_only"
+      ],
+      "sink": "dedicated production operation; direct sink rejected",
+      "skill_id": "wizard.holy_word",
+      "walk_tick_after": 0,
+      "walk_tick_before": 0
+    },
+    {
+      "evidence_scope": "planner and reception; dedicated sinks require critical semantic regressions",
+      "evidence_status": "PASS",
+      "family": "DIRECT",
+      "operation": [
+        {
+          "damage_type": "ice_magic",
+          "defence_type": "MAC",
+          "height_grid_steps": 3,
+          "raw_power": 19,
+          "server_authoritative": true,
+          "type": "area_damage",
+          "width_grid_steps": 3
+        }
+      ],
+      "plan_rejection": {
+        "accepted": true,
+        "reason": "accepted"
+      },
+      "producer": "scripts/skills/skill_runtime_router.gd::build_canonical_plan",
+      "reception_evidence": {
+        "anti_magic_checked": false,
+        "anti_magic_eligible": false,
+        "anti_magic_points": 0,
+        "anti_magic_roll": 9,
+        "contract_id": "magic.evasion.anti_magic.direct_spell.v1",
+        "damage_after_evasion": 50,
+        "enters_magic_defense_stage": true,
+        "evasion_channel": "none",
+        "final_damage": 50,
+        "magic_defense_checked": false,
+        "magic_evaded": false,
+        "magic_evasion_percent": 0,
+        "stage_order": [
+          "anti_magic",
+          "magic_defense",
+          "take_damage"
+        ],
+        "success": true
+      },
+      "required_semantic_tests": [
+        "ice_storm_target_centered",
+        "ice_storm_exact_3x3",
+        "ice_storm_power_formula"
+      ],
+      "sink": "CombatRuntimeService.apply_enemy_direct_spell_damage",
+      "skill_id": "wizard.ice_storm",
+      "walk_tick_after": 1657,
+      "walk_tick_before": 0
+    },
+    {
+      "evidence_scope": "planner and reception; dedicated sinks require critical semantic regressions",
+      "evidence_status": "PASS",
+      "family": "HEAL",
+      "operation": [
+        {
+          "actual_hp_restored": 0,
+          "cap_at_max_hp": true,
+          "negative_damage": false,
+          "ongoing_heal": {
+            "contract_id": "skills.taoist.ongoing_heal.v1",
+            "heal_per_tick": 7,
+            "source_skill_id": "taoist.healing",
+            "target_instance_id": 0,
+            "tick_count": 3,
+            "tick_interval_seconds": 0.8
+          },
+          "rank": 3,
+          "raw_heal": 19,
+          "selection_contract_id": "skills.taoist.support_targeting.v1",
+          "selection_range_gu": 9.0,
+          "skill_id": "taoist.healing",
+          "target_instance_id": 0,
+          "target_is_self": false,
+          "type": "dedicated_heal"
+        }
+      ],
+      "plan_rejection": {
+        "accepted": true,
+        "reason": "accepted"
+      },
+      "producer": "scripts/skills/skill_runtime_router.gd::build_canonical_plan",
+      "reception_evidence": {
+        "failure_reason": "source176_delivery_kind_rejected",
+        "final_damage": 0,
+        "stable_skill_id": "taoist.healing",
+        "success": false
+      },
+      "required_semantic_tests": [
+        "healing_self_or_friendly",
+        "healing_rejects_hostile",
+        "healing_formula",
+        "healing_training_only_if_hp_restored"
+      ],
+      "sink": "dedicated production operation; direct sink rejected",
+      "skill_id": "taoist.healing",
+      "walk_tick_after": 0,
+      "walk_tick_before": 0
+    },
+    {
+      "evidence_scope": "planner and reception; dedicated sinks require critical semantic regressions",
+      "evidence_status": "PASS",
+      "family": "PASSIVE",
+      "operation": [
+        {
+          "affects": [
+            "physical_melee_hit_checks"
+          ],
+          "stat": "accuracy",
+          "type": "passive_stat_modifier",
+          "value": 8
+        }
+      ],
+      "plan_rejection": {
+        "accepted": true,
+        "reason": "accepted"
+      },
+      "producer": "scripts/skills/skill_runtime_router.gd::build_canonical_plan",
+      "reception_evidence": {
+        "failure_reason": "source176_delivery_kind_rejected",
+        "final_damage": 0,
+        "stable_skill_id": "taoist.spiritual_warfare",
+        "success": false
+      },
+      "required_semantic_tests": [
+        "spiritual_warfare_accuracy_exact",
+        "spiritual_warfare_never_casts",
+        "spiritual_warfare_no_cooldown",
+        "spiritual_warfare_physical_only"
+      ],
+      "sink": "dedicated production operation; direct sink rejected",
+      "skill_id": "taoist.spiritual_warfare",
+      "walk_tick_after": 0,
+      "walk_tick_before": 0
+    },
+    {
+      "evidence_scope": "planner and reception; dedicated sinks require critical semantic regressions",
+      "evidence_status": "PASS",
+      "family": "POISON",
+      "operation": [
+        {
+          "apply_probability": 1.0,
+          "damage_per_tick": 4,
+          "duration_seconds": 20,
+          "poison_type": "green_poison",
+          "resisted": false,
+          "stacking_policy": "green_and_red_coexist_same_type_refresh",
+          "tick_interval_ms": 2000,
+          "type": "poison_resolution"
+        },
+        {
+          "apply_probability": 1.0,
+          "duration_seconds": 20,
+          "extra_durability_loss_per_hit": 1,
+          "flat_ac_reduction": 3,
+          "flat_mac_reduction": 3,
+          "poison_type": "red_poison",
+          "resisted": false,
+          "stacking_policy": "green_and_red_coexist_same_type_refresh",
+          "type": "poison_resolution"
+        }
+      ],
+      "plan_rejection": {
+        "accepted": true,
+        "reason": "accepted"
+      },
+      "producer": "scripts/skills/skill_runtime_router.gd::build_canonical_plan",
+      "reception_evidence": {
+        "failure_reason": "source176_delivery_kind_rejected",
+        "final_damage": 0,
+        "stable_skill_id": "taoist.poison",
+        "success": false
+      },
+      "required_semantic_tests": [
+        "poison_consumes_selected_powder",
+        "poison_green_and_red_separate",
+        "poison_resist_formula",
+        "poison_green_ticks",
+        "poison_red_reduces_ac_mac",
+        "poison_same_type_refreshes"
+      ],
+      "sink": "dedicated production operation; direct sink rejected",
+      "skill_id": "taoist.poison",
+      "walk_tick_after": 0,
+      "walk_tick_before": 0
+    },
+    {
+      "evidence_scope": "planner and reception; dedicated sinks require critical semantic regressions",
+      "evidence_status": "PASS",
+      "family": "DIRECT",
+      "operation": [
+        {
+          "damage_type": "spirit_magic",
+          "defence_type": "MAC",
+          "raw_power": 15,
+          "server_authoritative": true,
+          "type": "talisman_projectile_damage"
+        }
+      ],
+      "plan_rejection": {
+        "accepted": true,
+        "reason": "accepted"
+      },
+      "producer": "scripts/skills/skill_runtime_router.gd::build_canonical_plan",
+      "reception_evidence": {
+        "anti_magic_checked": true,
+        "anti_magic_eligible": true,
+        "anti_magic_points": 0,
+        "anti_magic_roll": 9,
+        "contract_id": "magic.evasion.anti_magic.direct_spell.v1",
+        "damage_after_evasion": 50,
+        "enters_magic_defense_stage": true,
+        "evasion_channel": "anti_magic",
+        "final_damage": 50,
+        "magic_defense_checked": false,
+        "magic_evaded": false,
+        "magic_evasion_percent": 0,
+        "stage_order": [
+          "anti_magic",
+          "magic_defense",
+          "take_damage"
+        ],
+        "success": true
+      },
+      "required_semantic_tests": [
+        "soul_fire_requires_one_amulet",
+        "soul_fire_requires_los",
+        "soul_fire_power_formula",
+        "soul_fire_no_material_loss_on_invalid_target"
+      ],
+      "sink": "CombatRuntimeService.apply_enemy_direct_spell_damage",
+      "skill_id": "taoist.soul_fire_talisman",
+      "walk_tick_after": 1479,
+      "walk_tick_before": 0
+    },
+    {
+      "evidence_scope": "planner and reception; dedicated sinks require critical semantic regressions",
+      "evidence_status": "PASS",
+      "family": "SUMMON",
+      "operation": [
+        {
+          "delete_existing": false,
+          "group_limit": 1,
+          "group_limit_scope": "summon_id",
+          "initial_pet_level": 3,
+          "max_pet_level": 7,
+          "pet_group": "taoist_main_pet",
+          "pet_slot_index": 0,
+          "skill_rank_is_pet_level": false,
+          "spawned": true,
+          "template_id": "skeleton",
+          "type": "main_pet_spawn"
+        }
+      ],
+      "plan_rejection": {
+        "accepted": true,
+        "reason": "accepted"
+      },
+      "producer": "scripts/skills/skill_runtime_router.gd::build_canonical_plan",
+      "reception_evidence": {
+        "failure_reason": "source176_delivery_kind_rejected",
+        "final_damage": 0,
+        "stable_skill_id": "taoist.summon_skeleton",
+        "success": false
+      },
+      "required_semantic_tests": [
+        "summon_skeleton_consumes_one_amulet_only_on_new_spawn",
+        "summon_skeleton_recast_recalls",
+        "taoist_main_pet_limit_one",
+        "summon_skill_rank_separate_pet_level",
+        "summon_skeleton_no_forced_delete"
+      ],
+      "sink": "dedicated production operation; direct sink rejected",
+      "skill_id": "taoist.summon_skeleton",
+      "walk_tick_after": 0,
+      "walk_tick_before": 0
+    },
+    {
+      "evidence_scope": "planner and reception; dedicated sinks require critical semantic regressions",
+      "evidence_status": "PASS",
+      "family": "BUFF",
+      "operation": [
+        {
+          "break_on_damage": false,
+          "break_on_melee_attack": true,
+          "break_on_ranged_spell_cast": true,
+          "break_on_tile_movement": true,
+          "buff_id": "buff.taoist.invisibility",
+          "duration_seconds": 30,
+          "invulnerable": false,
+          "pvp_invisibility": false,
+          "type": "monster_aggro_stealth",
+          "untargetable": false
+        }
+      ],
+      "plan_rejection": {
+        "accepted": true,
+        "reason": "accepted"
+      },
+      "producer": "scripts/skills/skill_runtime_router.gd::build_canonical_plan",
+      "reception_evidence": {
+        "failure_reason": "source176_delivery_kind_rejected",
+        "final_damage": 0,
+        "stable_skill_id": "taoist.invisibility",
+        "success": false
+      },
+      "required_semantic_tests": [
+        "invisibility_consumes_amulet",
+        "invisibility_monster_aggro_only",
+        "invisibility_not_pvp_untargetable",
+        "invisibility_duration_formula",
+        "invisibility_breaks_on_move",
+        "invisibility_spell_cast_does_not_break"
+      ],
+      "sink": "dedicated production operation; direct sink rejected",
+      "skill_id": "taoist.invisibility",
+      "walk_tick_after": 0,
+      "walk_tick_before": 0
+    },
+    {
+      "evidence_scope": "planner and reception; dedicated sinks require critical semantic regressions",
+      "evidence_status": "PASS",
+      "family": "BUFF",
+      "operation": [
+        {
+          "affected_count": 0,
+          "break_on_damage": false,
+          "break_on_melee_attack": true,
+          "break_on_ranged_spell_cast": true,
+          "break_on_tile_movement": true,
+          "buff_id": "buff.taoist.mass_invisibility",
+          "duration_seconds": 30,
+          "height_grid_steps": 3,
+          "invulnerable": false,
+          "pvp_invisibility": false,
+          "target_instance_ids": [],
+          "type": "area_monster_aggro_stealth",
+          "untargetable": false,
+          "width_grid_steps": 3
+        }
+      ],
+      "plan_rejection": {
+        "accepted": true,
+        "reason": "accepted"
+      },
+      "producer": "scripts/skills/skill_runtime_router.gd::build_canonical_plan",
+      "reception_evidence": {
+        "failure_reason": "source176_delivery_kind_rejected",
+        "final_damage": 0,
+        "stable_skill_id": "taoist.mass_invisibility",
+        "success": false
+      },
+      "required_semantic_tests": [
+        "mass_invisibility_exact_3x3",
+        "mass_invisibility_affects_friendlies",
+        "mass_invisibility_not_self_only",
+        "mass_invisibility_consumes_one_amulet_on_success"
+      ],
+      "sink": "dedicated production operation; direct sink rejected",
+      "skill_id": "taoist.mass_invisibility",
+      "walk_tick_after": 0,
+      "walk_tick_before": 0
+    },
+    {
+      "evidence_scope": "planner and reception; dedicated sinks require critical semantic regressions",
+      "evidence_status": "PASS",
+      "family": "BUFF",
+      "operation": [],
+      "plan_rejection": {
+        "accepted": true,
+        "reason": "accepted"
+      },
+      "producer": "scripts/skills/skill_runtime_router.gd::build_canonical_plan",
+      "reception_evidence": {
+        "failure_reason": "source176_delivery_kind_rejected",
+        "final_damage": 0,
+        "stable_skill_id": "taoist.magic_defense",
+        "success": false
+      },
+      "required_semantic_tests": [
+        "soul_shield_modifies_mac_only",
+        "soul_shield_area_radius_3",
+        "soul_shield_coexists_with_blessed_armour",
+        "soul_shield_consumes_amulet_on_success"
+      ],
+      "sink": "dedicated production operation; direct sink rejected",
+      "skill_id": "taoist.magic_defense",
+      "walk_tick_after": 0,
+      "walk_tick_before": 0
+    },
+    {
+      "evidence_scope": "planner and reception; dedicated sinks require critical semantic regressions",
+      "evidence_status": "PASS",
+      "family": "BUFF",
+      "operation": [],
+      "plan_rejection": {
+        "accepted": true,
+        "reason": "accepted"
+      },
+      "producer": "scripts/skills/skill_runtime_router.gd::build_canonical_plan",
+      "reception_evidence": {
+        "failure_reason": "source176_delivery_kind_rejected",
+        "final_damage": 0,
+        "stable_skill_id": "taoist.defense",
+        "success": false
+      },
+      "required_semantic_tests": [
+        "blessed_armour_modifies_ac_only",
+        "blessed_armour_area_radius_3",
+        "blessed_armour_coexists_with_soul_shield",
+        "blessed_armour_consumes_amulet_on_success"
+      ],
+      "sink": "dedicated production operation; direct sink rejected",
+      "skill_id": "taoist.defense",
+      "walk_tick_after": 0,
+      "walk_tick_before": 0
+    },
+    {
+      "evidence_scope": "planner and reception; dedicated sinks require critical semantic regressions",
+      "evidence_status": "PASS",
+      "family": "UTILITY",
+      "operation": [
+        {
+          "damage": 0,
+          "duration_ms": 30000,
+          "fields": [
+            "current_hp",
+            "max_hp"
+          ],
+          "revealed": true,
+          "success_probability": 1.0,
+          "target_stat_modification": false,
+          "type": "hp_information_reveal"
+        }
+      ],
+      "plan_rejection": {
+        "accepted": true,
+        "reason": "accepted"
+      },
+      "producer": "scripts/skills/skill_runtime_router.gd::build_canonical_plan",
+      "reception_evidence": {
+        "failure_reason": "source176_delivery_kind_rejected",
+        "final_damage": 0,
+        "stable_skill_id": "taoist.revelation",
+        "success": false
+      },
+      "required_semantic_tests": [
+        "revelation_manual_target",
+        "revelation_targets_player_or_monster",
+        "revelation_probability_exact",
+        "revelation_duration_formula",
+        "revelation_no_damage"
+      ],
+      "sink": "dedicated production operation; direct sink rejected",
+      "skill_id": "taoist.revelation",
+      "walk_tick_after": 0,
+      "walk_tick_before": 0
+    },
+    {
+      "evidence_scope": "planner and reception; dedicated sinks require critical semantic regressions",
+      "evidence_status": "PASS",
+      "family": "CONTROL",
+      "operation": [
+        {
+          "boundary_cell_count": 0,
+          "boundary_ring_candidate_count": 0,
+          "boundary_ring_candidates_are_not_trap_targets": true,
+          "boundary_snapshot": {},
+          "break_on_any_player_entry": true,
+          "break_on_damage": false,
+          "break_on_map_transition": true,
+          "caster_instance_id": 0,
+          "controller_contract_id": "skills.taoist.entrapment.boundary_controller.v1",
+          "duration_seconds": 40,
+          "external_attack_behavior": "summon_actor_rejected_other_sources_allowed",
+          "footprint": "canonical_3x3_boundary",
+          "generic_root": false,
+          "prevents_boundary_exit": true,
+          "required_snapshot_validation_policy": "strict_v2",
+          "runtime_map_id": -1,
+          "target_instance_ids": [],
+          "trapped_count": 0,
+          "type": "monster_boundary_control"
+        }
+      ],
+      "plan_rejection": {
+        "accepted": true,
+        "reason": "accepted"
+      },
+      "producer": "scripts/skills/skill_runtime_router.gd::build_canonical_plan",
+      "reception_evidence": {
+        "failure_reason": "source176_delivery_kind_rejected",
+        "final_damage": 0,
+        "stable_skill_id": "taoist.entrapment",
+        "success": false
+      },
+      "required_semantic_tests": [
+        "entrapment_monsters_only",
+        "entrapment_boss_immune",
+        "entrapment_boundary_prevents_exit",
+        "entrapment_breaks_on_player_entry",
+        "entrapment_consumes_amulet_only_on_success",
+        "entrapment_not_generic_root"
+      ],
+      "sink": "dedicated production operation; direct sink rejected",
+      "skill_id": "taoist.entrapment",
+      "walk_tick_after": 0,
+      "walk_tick_before": 0
+    },
+    {
+      "evidence_scope": "planner and reception; dedicated sinks require critical semantic regressions",
+      "evidence_status": "PASS",
+      "family": "HEAL",
+      "operation": [
+        {
+          "actual_hp_restored_by_target": [],
+          "height_grid_steps": 3,
+          "negative_damage": false,
+          "raw_heal_per_target": 14,
+          "target_instance_ids": [],
+          "target_results": [],
+          "total_actual_hp_restored": 0,
+          "type": "dedicated_area_heal",
+          "width_grid_steps": 3
+        }
+      ],
+      "plan_rejection": {
+        "accepted": true,
+        "reason": "accepted"
+      },
+      "producer": "scripts/skills/skill_runtime_router.gd::build_canonical_plan",
+      "reception_evidence": {
+        "failure_reason": "source176_delivery_kind_rejected",
+        "final_damage": 0,
+        "stable_skill_id": "taoist.mass_healing",
+        "success": false
+      },
+      "required_semantic_tests": [
+        "mass_healing_exact_3x3",
+        "mass_healing_friendlies_not_self_only",
+        "mass_healing_formula",
+        "mass_healing_training_only_if_actual_heal",
+        "mass_healing_not_negative_damage"
+      ],
+      "sink": "dedicated production operation; direct sink rejected",
+      "skill_id": "taoist.mass_healing",
+      "walk_tick_after": 0,
+      "walk_tick_before": 0
+    },
+    {
+      "evidence_scope": "planner and reception; dedicated sinks require critical semantic regressions",
+      "evidence_status": "PASS",
+      "family": "SUMMON",
+      "operation": [
+        {
+          "delete_existing": false,
+          "group_limit": 1,
+          "group_limit_scope": "summon_id",
+          "initial_pet_level": 3,
+          "max_pet_level": 7,
+          "pet_group": "taoist_main_pet",
+          "pet_slot_index": 0,
+          "skill_rank_is_pet_level": false,
+          "spawned": true,
+          "template_id": "divine_beast",
+          "type": "main_pet_spawn"
+        }
+      ],
+      "plan_rejection": {
+        "accepted": true,
+        "reason": "accepted"
+      },
+      "producer": "scripts/skills/skill_runtime_router.gd::build_canonical_plan",
+      "reception_evidence": {
+        "failure_reason": "source176_delivery_kind_rejected",
+        "final_damage": 0,
+        "stable_skill_id": "taoist.summon_divine_beast",
+        "success": false
+      },
+      "required_semantic_tests": [
+        "summon_divine_beast_consumes_five_amulets_only_on_new_spawn",
+        "summon_divine_beast_recast_recalls",
+        "taoist_main_pet_limit_one",
+        "divine_beast_skill_rank_separate_pet_level",
+        "summon_divine_beast_no_forced_delete"
+      ],
+      "sink": "dedicated production operation; direct sink rejected",
+      "skill_id": "taoist.summon_divine_beast",
+      "walk_tick_after": 0,
+      "walk_tick_before": 0
+    }
+  ],
+  "runtime_content_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca"
+}

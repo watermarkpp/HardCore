@@ -1,0 +1,151 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "actual production persistence, test_mode=false",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "initialize actual isolated shared warehouse",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "create A through real profile service",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "A production profile/world checkpoint",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "create B through real profile service",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "two real distinct profile identities",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "official select A before world boot",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "formal world ready",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "real mapped target and sole death signal connection",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "formal source enabled",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "qualified actual production damage batch",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "A accepted effect has exactly one pending lethal tick",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "accepted historical credit is A",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "real lethal HP commit precedes deferred death callback",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "official switch result agrees with active identity",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "running world prevents profile replacement before its exit barrier",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "accepted lethal tick emits one actual death",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "existing death queue completes at its real barrier",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "active role production checkpoint after settlement",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "B receives no A kill experience 0.0",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "A retains exactly one accepted kill experience 15",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "real profile/world receipts drained",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "effect lifecycle has no hidden failure",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "source restored",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "official reload A for owner receipt after world retirement",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "A accepted kill remains durable after official reload",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "official B selection succeeds after old world retirement with no foreign gain",
+      "passed": true
+    }
+  ],
+  "count": 27,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "3ae95cd6-67e4-4511-a613-742b2d8c9b90",
+  "passed": 27,
+  "reported_checks": 27,
+  "reported_failures": 0,
+  "run_id": "1c520065-3801-46b8-bfda-76845d588e20",
+  "scene_id": "periodic_credit_profile_switch_test",
+  "schema_version": 1,
+  "source_content_sha256": "3b88ff1498d77df6db258fc8bcdd18b86222400f0a028d8f590421d5dba12fab",
+  "status": "PASS"
+}

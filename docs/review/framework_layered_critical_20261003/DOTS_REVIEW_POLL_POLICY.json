@@ -1,0 +1,17 @@
+{
+  "policy_source": "Direct user instructions in this engineering conversation, 2026-10-03",
+  "automation_id": "dots",
+  "automation_name": "等待小可爱审计结果",
+  "status": "PAUSED",
+  "interval_minutes": 10,
+  "source_thread_id": "01a0f143-1bc9-71c0-91f2-5de4ffd0b01f",
+  "source_host_id": "durable",
+  "target_thread_id": "01a0efe3-5441-7d61-b9d5-00e1ab1040a5",
+  "read_entry": "official read_thread",
+  "lifecycle": "After the controller actually sends an audit/research request, activate this existing heartbeat for that request. Read the results in the source thread every ten minutes. Save the needed complete result and its message identity; pause the same heartbeat after the requested result has been read. Reactivate only for the next actual request.",
+  "current_pending_request": null,
+  "last_completed_audit_sha": "bce41b09716e401cacb5394e16828a2b3fd03184",
+  "last_read_audit_turn": "01a101ae-f623-72f0-9d1c-3bb4f573d6b4",
+  "queue_deletion": "No internal queue scanning or deletion. No need for source thread to forward its results.",
+  "usage": "Periodic model invocations and result processing can consume allowance; not guaranteed zero usage."
+}

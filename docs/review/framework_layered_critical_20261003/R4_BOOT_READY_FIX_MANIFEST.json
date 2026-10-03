@@ -1,0 +1,8 @@
+[
+  {
+    "path": "tests/hc_monster_combat_r4/natural_cadence_base.gd",
+    "before_sha256": "d647c810a6081b938a87d1b0d8271cde54667c97e597e60ee5440acfc05dcca3",
+    "after_sha256": "756d14136b6169f4b7f1a1bbdecb0faacd9331622acdd0b93cb9ece5aa08ddf7",
+    "reason": "observe original8s READY budget only after synchronous scene setup; unchanged sample/count/cadence/total windows; fail before combat if READY missing"
+  }
+]

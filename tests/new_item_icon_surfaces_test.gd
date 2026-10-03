@@ -44,7 +44,7 @@ func _run() -> void:
 		_check_icon(bank._bag_cells[index].get_node("ItemButton/CenteredPixelIcon"), bound, "warehouse_bag", ids[index])
 		_check_icon(bank._stash_cells[index].get_node("ItemButton/CenteredPixelIcon"), bound, "warehouse", ids[index])
 		if custom and int(ids[index]) != 950001:
-			var slot := "圣物" if int(ids[index]) < 950200 else "徽章"
+			var slot := "hc.slot.relic" if int(ids[index]) < 950200 else "hc.slot.badge"
 			PlayerState.equipment[slot] = stack
 			bag._refresh_equipment_slots()
 			_check_icon(bag.equipment_buttons[slot].get_node("CenteredPixelIcon"), bound, "equipped", ids[index])

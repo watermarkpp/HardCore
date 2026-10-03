@@ -3,6 +3,7 @@ extends Node
 const Observer := preload("res://scripts/damage_ledger_observer.gd")
 const Verifier := preload("res://tests/hc_monster_combat_r4/damage_attribution_verifier.gd")
 const Fault := preload("res://tests/hc_monster_combat_r4/damage_write_fault_fixture.gd")
+const FrameObservation := preload("res://tests/hc_monster_combat_r4/bounded_frame_observation.gd")
 var game: Node
 var player: PlayerCharacter
 var enemy: EnemyActor
@@ -64,7 +65,11 @@ func _case(name: String) -> Dictionary:
 	player.test_damage_write_hook = fault.write_count
 	var starts: Array = []
 	var n := 20 if all_lost_only else 2
-	var deadline := Time.get_ticks_msec() + (52000 if all_lost_only else 16000)
+	# Only all_lost_only has the explicit user90s exception. Preserve every
+	# ordinary counterexample's16s window and the20-real-write assertions.
+	var deadline := 87000 if all_lost_only else Time.get_ticks_msec() + 16000
+	var frame_observation := FrameObservation.new() if all_lost_only else null
+	if frame_observation != null: frame_observation.begin()
 	var rejection_injections := [0]
 	if name in ["legal_reject", "cross_life_reject"]:
 		enemy.test_attack_admission_hook = func(record: Dictionary) -> void:
@@ -78,6 +83,7 @@ func _case(name: String) -> Dictionary:
 					failures.append("real_lifecycle_transition_failed")
 	while Time.get_ticks_msec() < deadline:
 		await get_tree().physics_frame
+		if frame_observation != null: frame_observation.record_frame()
 		starts = []
 		for admission: Dictionary in Observer.admissions:
 			if int(admission.source_instance_id) == source_id:
@@ -129,6 +135,9 @@ func _case(name: String) -> Dictionary:
 		if not found:
 			failures.append("real_terminal_branch_not_reached")
 	var result := {"starts": starts.duplicate(true), "deliveries": Observer.deliveries.duplicate(true), "raw_events": Observer.events.duplicate(true), "terminal_events": Observer.terminal_events.duplicate(true), "audit": audit, "fault_facts": fault.facts, "failures": failures}
+	if frame_observation != null:
+		result["frame_observation"] = frame_observation.snapshot()
+		if frame_observation.overflowed: failures.append("frame_observation_overflow")
 	player.test_damage_write_hook = Callable()
 	enemy.free()
 	return result

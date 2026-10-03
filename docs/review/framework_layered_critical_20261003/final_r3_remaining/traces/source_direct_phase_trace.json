@@ -1,0 +1,105 @@
+{
+  "checks": 629,
+  "errors": [],
+  "events": [
+    {
+      "event_time": 0.6,
+      "game_s": 0.6,
+      "oracle_tick": 800,
+      "roll": 0,
+      "tick": 37,
+      "walk_tick": 800
+    },
+    {
+      "event_time": 1.2,
+      "game_s": 1.2,
+      "oracle_tick": 1600,
+      "roll": 0,
+      "tick": 73,
+      "walk_tick": 1600
+    },
+    {
+      "event_time": 1.5,
+      "game_s": 1.51666666666667,
+      "oracle_tick": 2400,
+      "roll": 0,
+      "tick": 92,
+      "walk_tick": 2400
+    },
+    {
+      "event_time": 2.0,
+      "game_s": 2.01666666666666,
+      "oracle_tick": 3200,
+      "roll": 0,
+      "tick": 122,
+      "walk_tick": 3200
+    },
+    {
+      "event_time": 0.6,
+      "game_s": 0.6,
+      "oracle_tick": 1350,
+      "roll": 550,
+      "tick": 246,
+      "walk_tick": 1350
+    },
+    {
+      "event_time": 1.2,
+      "game_s": 1.2,
+      "oracle_tick": 2700,
+      "roll": 550,
+      "tick": 282,
+      "walk_tick": 2700
+    },
+    {
+      "event_time": 1.5,
+      "game_s": 1.51666666666667,
+      "oracle_tick": 4050,
+      "roll": 550,
+      "tick": 301,
+      "walk_tick": 4050
+    },
+    {
+      "event_time": 2.0,
+      "game_s": 2.01666666666666,
+      "oracle_tick": 5400,
+      "roll": 550,
+      "tick": 331,
+      "walk_tick": 5400
+    },
+    {
+      "event_time": 0.6,
+      "game_s": 0.6,
+      "oracle_tick": 1799,
+      "roll": 999,
+      "tick": 456,
+      "walk_tick": 1799
+    },
+    {
+      "event_time": 1.2,
+      "game_s": 1.2,
+      "oracle_tick": 3598,
+      "roll": 999,
+      "tick": 492,
+      "walk_tick": 3598
+    },
+    {
+      "event_time": 1.5,
+      "game_s": 1.51666666666667,
+      "oracle_tick": 5397,
+      "roll": 999,
+      "tick": 511,
+      "walk_tick": 5397
+    },
+    {
+      "event_time": 2.0,
+      "game_s": 2.01666666666666,
+      "oracle_tick": 7196,
+      "roll": 999,
+      "tick": 541,
+      "walk_tick": 7196
+    }
+  ],
+  "reported_tested_sha": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+  "runtime_content_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+  "scope": "native physics with explicit source-message rolls; independent cadence oracle"
+}

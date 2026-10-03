@@ -1,0 +1,569 @@
+{
+  "checks": 5,
+  "errors": [],
+  "fixture": "structural idle acquisition disabled, real background Timer",
+  "reported_tested_sha": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+  "rows": [
+    {
+      "background": true,
+      "clock": 0.483333333333333,
+      "elapsed": 0.483333333333333,
+      "oracle_walk_tick": 0,
+      "tick": 30,
+      "walk_tick": 0
+    },
+    {
+      "background": true,
+      "clock": 0.983333333333335,
+      "elapsed": 0.983333333333335,
+      "oracle_walk_tick": 0,
+      "tick": 60,
+      "walk_tick": 0
+    },
+    {
+      "background": true,
+      "clock": 1.48333333333333,
+      "elapsed": 1.48333333333333,
+      "oracle_walk_tick": 1016,
+      "tick": 90,
+      "walk_tick": 1016
+    },
+    {
+      "background": true,
+      "clock": 1.98333333333333,
+      "elapsed": 1.98333333333333,
+      "oracle_walk_tick": 1016,
+      "tick": 120,
+      "walk_tick": 1016
+    },
+    {
+      "background": true,
+      "clock": 2.48333333333333,
+      "elapsed": 2.48333333333333,
+      "oracle_walk_tick": 2033,
+      "tick": 150,
+      "walk_tick": 2033
+    },
+    {
+      "background": true,
+      "clock": 2.98333333333333,
+      "elapsed": 2.98333333333333,
+      "oracle_walk_tick": 2033,
+      "tick": 180,
+      "walk_tick": 2033
+    },
+    {
+      "background": true,
+      "clock": 3.48333333333333,
+      "elapsed": 3.48333333333333,
+      "oracle_walk_tick": 3049,
+      "tick": 210,
+      "walk_tick": 3049
+    },
+    {
+      "background": true,
+      "clock": 3.98333333333332,
+      "elapsed": 3.98333333333332,
+      "oracle_walk_tick": 3049,
+      "tick": 240,
+      "walk_tick": 3049
+    },
+    {
+      "background": true,
+      "clock": 4.48333333333332,
+      "elapsed": 4.48333333333332,
+      "oracle_walk_tick": 4066,
+      "tick": 270,
+      "walk_tick": 4066
+    },
+    {
+      "background": true,
+      "clock": 4.98333333333332,
+      "elapsed": 4.98333333333332,
+      "oracle_walk_tick": 4066,
+      "tick": 300,
+      "walk_tick": 4066
+    },
+    {
+      "background": true,
+      "clock": 5.48333333333332,
+      "elapsed": 5.48333333333332,
+      "oracle_walk_tick": 5083,
+      "tick": 330,
+      "walk_tick": 5083
+    },
+    {
+      "background": true,
+      "clock": 5.98333333333332,
+      "elapsed": 5.98333333333332,
+      "oracle_walk_tick": 5083,
+      "tick": 360,
+      "walk_tick": 5083
+    },
+    {
+      "background": true,
+      "clock": 6.48333333333332,
+      "elapsed": 6.48333333333332,
+      "oracle_walk_tick": 6099,
+      "tick": 390,
+      "walk_tick": 6099
+    },
+    {
+      "background": true,
+      "clock": 6.98333333333331,
+      "elapsed": 6.98333333333331,
+      "oracle_walk_tick": 6099,
+      "tick": 420,
+      "walk_tick": 6099
+    },
+    {
+      "background": true,
+      "clock": 7.48333333333331,
+      "elapsed": 7.48333333333331,
+      "oracle_walk_tick": 7116,
+      "tick": 450,
+      "walk_tick": 7116
+    },
+    {
+      "background": true,
+      "clock": 7.98333333333331,
+      "elapsed": 7.98333333333331,
+      "oracle_walk_tick": 7116,
+      "tick": 480,
+      "walk_tick": 7116
+    },
+    {
+      "background": true,
+      "clock": 8.48333333333333,
+      "elapsed": 8.48333333333333,
+      "oracle_walk_tick": 8133,
+      "tick": 510,
+      "walk_tick": 8133
+    },
+    {
+      "background": true,
+      "clock": 8.98333333333336,
+      "elapsed": 8.98333333333336,
+      "oracle_walk_tick": 8133,
+      "tick": 540,
+      "walk_tick": 8133
+    },
+    {
+      "background": true,
+      "clock": 9.48333333333338,
+      "elapsed": 9.48333333333338,
+      "oracle_walk_tick": 9150,
+      "tick": 570,
+      "walk_tick": 9150
+    },
+    {
+      "background": true,
+      "clock": 9.98333333333341,
+      "elapsed": 9.98333333333341,
+      "oracle_walk_tick": 9150,
+      "tick": 600,
+      "walk_tick": 9150
+    },
+    {
+      "background": true,
+      "clock": 10.4833333333334,
+      "elapsed": 10.4833333333334,
+      "oracle_walk_tick": 10166,
+      "tick": 630,
+      "walk_tick": 10166
+    },
+    {
+      "background": true,
+      "clock": 10.9833333333335,
+      "elapsed": 10.9833333333335,
+      "oracle_walk_tick": 10166,
+      "tick": 660,
+      "walk_tick": 10166
+    },
+    {
+      "background": true,
+      "clock": 11.4833333333335,
+      "elapsed": 11.4833333333335,
+      "oracle_walk_tick": 11183,
+      "tick": 690,
+      "walk_tick": 11183
+    },
+    {
+      "background": true,
+      "clock": 11.9833333333335,
+      "elapsed": 11.9833333333335,
+      "oracle_walk_tick": 11183,
+      "tick": 720,
+      "walk_tick": 11183
+    },
+    {
+      "background": true,
+      "clock": 12.4833333333335,
+      "elapsed": 12.4833333333335,
+      "oracle_walk_tick": 12200,
+      "tick": 750,
+      "walk_tick": 12200
+    },
+    {
+      "background": true,
+      "clock": 12.9833333333336,
+      "elapsed": 12.9833333333336,
+      "oracle_walk_tick": 12200,
+      "tick": 780,
+      "walk_tick": 12200
+    },
+    {
+      "background": true,
+      "clock": 13.4833333333336,
+      "elapsed": 13.4833333333336,
+      "oracle_walk_tick": 13216,
+      "tick": 810,
+      "walk_tick": 13216
+    },
+    {
+      "background": true,
+      "clock": 13.9833333333336,
+      "elapsed": 13.9833333333336,
+      "oracle_walk_tick": 13216,
+      "tick": 840,
+      "walk_tick": 13216
+    },
+    {
+      "background": true,
+      "clock": 14.4833333333336,
+      "elapsed": 14.4833333333336,
+      "oracle_walk_tick": 14233,
+      "tick": 870,
+      "walk_tick": 14233
+    },
+    {
+      "background": true,
+      "clock": 14.9833333333337,
+      "elapsed": 14.9833333333337,
+      "oracle_walk_tick": 14233,
+      "tick": 900,
+      "walk_tick": 14233
+    },
+    {
+      "background": true,
+      "clock": 15.4833333333337,
+      "elapsed": 15.4833333333337,
+      "oracle_walk_tick": 15250,
+      "tick": 930,
+      "walk_tick": 15250
+    },
+    {
+      "background": true,
+      "clock": 15.9833333333337,
+      "elapsed": 15.9833333333337,
+      "oracle_walk_tick": 15250,
+      "tick": 960,
+      "walk_tick": 15250
+    },
+    {
+      "background": true,
+      "clock": 16.4833333333337,
+      "elapsed": 16.4833333333337,
+      "oracle_walk_tick": 16266,
+      "tick": 990,
+      "walk_tick": 16266
+    },
+    {
+      "background": true,
+      "clock": 16.9833333333337,
+      "elapsed": 16.9833333333337,
+      "oracle_walk_tick": 16266,
+      "tick": 1020,
+      "walk_tick": 16266
+    },
+    {
+      "background": true,
+      "clock": 17.4833333333336,
+      "elapsed": 17.4833333333336,
+      "oracle_walk_tick": 17283,
+      "tick": 1050,
+      "walk_tick": 17283
+    },
+    {
+      "background": true,
+      "clock": 17.9833333333336,
+      "elapsed": 17.9833333333336,
+      "oracle_walk_tick": 17283,
+      "tick": 1080,
+      "walk_tick": 17283
+    },
+    {
+      "background": true,
+      "clock": 18.4833333333336,
+      "elapsed": 18.4833333333336,
+      "oracle_walk_tick": 18300,
+      "tick": 1110,
+      "walk_tick": 18300
+    },
+    {
+      "background": true,
+      "clock": 18.9833333333335,
+      "elapsed": 18.9833333333335,
+      "oracle_walk_tick": 18300,
+      "tick": 1140,
+      "walk_tick": 18300
+    },
+    {
+      "background": true,
+      "clock": 19.4833333333335,
+      "elapsed": 19.4833333333335,
+      "oracle_walk_tick": 19316,
+      "tick": 1170,
+      "walk_tick": 19316
+    },
+    {
+      "background": true,
+      "clock": 19.9833333333335,
+      "elapsed": 19.9833333333335,
+      "oracle_walk_tick": 19316,
+      "tick": 1200,
+      "walk_tick": 19316
+    },
+    {
+      "background": true,
+      "clock": 20.4833333333335,
+      "elapsed": 20.4833333333335,
+      "oracle_walk_tick": 20333,
+      "tick": 1230,
+      "walk_tick": 20333
+    },
+    {
+      "background": true,
+      "clock": 20.9833333333334,
+      "elapsed": 20.9833333333334,
+      "oracle_walk_tick": 20333,
+      "tick": 1260,
+      "walk_tick": 20333
+    },
+    {
+      "background": true,
+      "clock": 21.4833333333334,
+      "elapsed": 21.4833333333334,
+      "oracle_walk_tick": 21350,
+      "tick": 1290,
+      "walk_tick": 21350
+    },
+    {
+      "background": true,
+      "clock": 21.9833333333334,
+      "elapsed": 21.9833333333334,
+      "oracle_walk_tick": 21350,
+      "tick": 1320,
+      "walk_tick": 21350
+    },
+    {
+      "background": true,
+      "clock": 22.4833333333333,
+      "elapsed": 22.4833333333333,
+      "oracle_walk_tick": 22366,
+      "tick": 1350,
+      "walk_tick": 22366
+    },
+    {
+      "background": true,
+      "clock": 22.9833333333333,
+      "elapsed": 22.9833333333333,
+      "oracle_walk_tick": 22366,
+      "tick": 1380,
+      "walk_tick": 22366
+    },
+    {
+      "background": true,
+      "clock": 23.4833333333333,
+      "elapsed": 23.4833333333333,
+      "oracle_walk_tick": 23383,
+      "tick": 1410,
+      "walk_tick": 23383
+    },
+    {
+      "background": true,
+      "clock": 23.9833333333333,
+      "elapsed": 23.9833333333333,
+      "oracle_walk_tick": 23383,
+      "tick": 1440,
+      "walk_tick": 23383
+    },
+    {
+      "background": true,
+      "clock": 24.4833333333332,
+      "elapsed": 24.4833333333332,
+      "oracle_walk_tick": 24399,
+      "tick": 1470,
+      "walk_tick": 24399
+    },
+    {
+      "background": true,
+      "clock": 24.9833333333332,
+      "elapsed": 24.9833333333332,
+      "oracle_walk_tick": 24399,
+      "tick": 1500,
+      "walk_tick": 24399
+    },
+    {
+      "background": true,
+      "clock": 25.4833333333332,
+      "elapsed": 25.4833333333332,
+      "oracle_walk_tick": 25416,
+      "tick": 1530,
+      "walk_tick": 25416
+    },
+    {
+      "background": true,
+      "clock": 25.9833333333331,
+      "elapsed": 25.9833333333331,
+      "oracle_walk_tick": 25416,
+      "tick": 1560,
+      "walk_tick": 25416
+    },
+    {
+      "background": true,
+      "clock": 26.4833333333331,
+      "elapsed": 26.4833333333331,
+      "oracle_walk_tick": 26433,
+      "tick": 1590,
+      "walk_tick": 26433
+    },
+    {
+      "background": true,
+      "clock": 26.9833333333331,
+      "elapsed": 26.9833333333331,
+      "oracle_walk_tick": 26433,
+      "tick": 1620,
+      "walk_tick": 26433
+    },
+    {
+      "background": true,
+      "clock": 27.4833333333331,
+      "elapsed": 27.4833333333331,
+      "oracle_walk_tick": 27449,
+      "tick": 1650,
+      "walk_tick": 27449
+    },
+    {
+      "background": true,
+      "clock": 27.983333333333,
+      "elapsed": 27.983333333333,
+      "oracle_walk_tick": 27449,
+      "tick": 1680,
+      "walk_tick": 27449
+    },
+    {
+      "background": true,
+      "clock": 28.483333333333,
+      "elapsed": 28.483333333333,
+      "oracle_walk_tick": 28466,
+      "tick": 1710,
+      "walk_tick": 28466
+    },
+    {
+      "background": true,
+      "clock": 28.983333333333,
+      "elapsed": 28.983333333333,
+      "oracle_walk_tick": 28466,
+      "tick": 1740,
+      "walk_tick": 28466
+    },
+    {
+      "background": true,
+      "clock": 29.4833333333329,
+      "elapsed": 29.4833333333329,
+      "oracle_walk_tick": 29483,
+      "tick": 1770,
+      "walk_tick": 29483
+    },
+    {
+      "background": true,
+      "clock": 29.9833333333329,
+      "elapsed": 29.9833333333329,
+      "oracle_walk_tick": 29483,
+      "tick": 1800,
+      "walk_tick": 29483
+    },
+    {
+      "background": false,
+      "clock": 30.4833333333329,
+      "elapsed": 30.4833333333329,
+      "oracle_walk_tick": 29483,
+      "tick": 1830,
+      "walk_tick": 29483
+    },
+    {
+      "background": false,
+      "clock": 30.9833333333329,
+      "elapsed": 30.9833333333329,
+      "oracle_walk_tick": 30499,
+      "tick": 1860,
+      "walk_tick": 30499
+    },
+    {
+      "background": false,
+      "clock": 31.4833333333328,
+      "elapsed": 31.4833333333328,
+      "oracle_walk_tick": 30499,
+      "tick": 1890,
+      "walk_tick": 30499
+    },
+    {
+      "background": false,
+      "clock": 31.9833333333328,
+      "elapsed": 31.9833333333328,
+      "oracle_walk_tick": 31516,
+      "tick": 1920,
+      "walk_tick": 31516
+    },
+    {
+      "background": false,
+      "clock": 32.4833333333328,
+      "elapsed": 32.4833333333328,
+      "oracle_walk_tick": 31516,
+      "tick": 1950,
+      "walk_tick": 31516
+    },
+    {
+      "background": false,
+      "clock": 32.9833333333327,
+      "elapsed": 32.9833333333327,
+      "oracle_walk_tick": 32533,
+      "tick": 1980,
+      "walk_tick": 32533
+    },
+    {
+      "background": false,
+      "clock": 33.4833333333327,
+      "elapsed": 33.4833333333327,
+      "oracle_walk_tick": 32533,
+      "tick": 2010,
+      "walk_tick": 32533
+    },
+    {
+      "background": false,
+      "clock": 33.9833333333327,
+      "elapsed": 33.9833333333327,
+      "oracle_walk_tick": 33549,
+      "tick": 2040,
+      "walk_tick": 33549
+    },
+    {
+      "background": false,
+      "clock": 34.4833333333327,
+      "elapsed": 34.4833333333327,
+      "oracle_walk_tick": 33549,
+      "tick": 2070,
+      "walk_tick": 33549
+    },
+    {
+      "background": false,
+      "clock": 34.9833333333326,
+      "elapsed": 34.9833333333326,
+      "oracle_walk_tick": 34566,
+      "tick": 2100,
+      "walk_tick": 34566
+    }
+  ],
+  "runtime_content_sha256": "3b88ff1498d77df6db258fc8bcdd18b86222400f0a028d8f590421d5dba12fab"
+}

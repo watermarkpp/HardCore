@@ -1,0 +1,151 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "this explicitly expected OS-terminated producer owns the cold boundary",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "isolated production account only",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "cold refuses mismatched nonce",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "cold refuses mismatched source_content_sha256",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "cold refuses mismatched producer_run_id",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "cold refuses mismatched producer_invocation_id",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "cold refuses mismatched armed_sha256",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "cold refuses mismatched producer_native_status",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "cold refuses mismatched control_status",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "normal exit cannot masquerade as this controlled termination",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "live and cold cannot have the same run identity",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "real cold startup gate",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "explicit fixture permission",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "independent process selects the producer's exact profile",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "same isolated profile path",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "cold restores the actual durable journal frontier and same healthy epoch",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "cold ownership identities and exact multiplicities match durable primary",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "unique owned instance drop:v1:80:edea460697ba383114966ad6",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "unique owned instance rollback:1:gem",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "no money or XP drift on recovery",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "uncommitted intent is eligible once; promoted identity is read-only replay",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "promoted operation cannot open another writer",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "promoted retry changes no inventory/completion/file bytes",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "both boundaries end at the exact once-committed sequence2",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "original completed identity remains read-only replayable",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "changed contents cannot recycle the completed operation ID",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "completed replay and changed request create no second ownership/resource/writer/file change",
+      "passed": true
+    }
+  ],
+  "count": 27,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "94720dca-69ed-4160-9a34-e288e1a64bd8",
+  "passed": 27,
+  "reported_checks": 27,
+  "reported_failures": 0,
+  "run_id": "d88634f8-989d-46cf-bc29-9c82f516e5d2",
+  "scene_id": "controlled_process_crash_cold_test",
+  "schema_version": 1,
+  "source_content_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+  "status": "PASS"
+}

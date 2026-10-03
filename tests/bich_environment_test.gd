@@ -10,8 +10,7 @@ func _run() -> void:
 	PlayerState.reset_progress()
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	await preload("res://tests/helpers/world_ready_fixture.gd").wait_for_world(self, game, GameData.service_runtime_map_id(0), "initial map")
 
 	var background: WorldBackground = game.background
 	assert(background.uses_bich_art(), "Bich presentation art is not active")
@@ -82,8 +81,7 @@ func _run() -> void:
 		"repeated negative lookups must be cache hits, not re-resolutions"
 	)
 	game.travel_to_map(orc_tomb_f1_id)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	await preload("res://tests/helpers/world_ready_fixture.gd").wait_for_world(self, game, orc_tomb_f1_id, "bich to orc tomb")
 	assert(game.current_map_id == orc_tomb_f1_id, "formal orc tomb map change failed")
 	assert(background.editor_runtime_ground_ready(), "formal orc tomb ground is not ready")
 	assert(not background.uses_bich_art(), "Bich presentation remained active after map change")

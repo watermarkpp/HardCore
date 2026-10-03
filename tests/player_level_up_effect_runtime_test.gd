@@ -12,8 +12,7 @@ func _run() -> void:
 	PlayerState.reset_progress()
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
-	for _frame in range(4):
-		await get_tree().process_frame
+	await preload("res://tests/helpers/formal_world_skill_fixture.gd").wait_for_formal_world(self, game, "player_level_up")
 	assert(not game._map_transition_in_progress)
 	var effect: Node2D = game._player_level_up_effect
 	assert(effect != null and effect.get_parent() == game.player)

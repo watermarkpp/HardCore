@@ -1,0 +1,151 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "owned isolated profile directory is created before real file tests",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "actual existing potion has a typed registered identity",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "formal binding uses actual inventory identity instead of comparing display name",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "formal assignment rejects a display name without changing another slot",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "display accessor projects the registered item name",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "HUD mirrors formal item identities",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "actual picker carries typed ID with independent display and count",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "actual potion use resolves the same ID after inventory reordering",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "display text cannot authorize a stale use request",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "actual writer emits the versioned formal item binding contract",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "unknown or cross-kind saved item binding stops aggregate recovery 太阳水",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "unknown or cross-kind saved item binding stops aggregate recovery hc.item.999999",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "unknown or cross-kind saved item binding stops aggregate recovery hc.profession.wizard",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "explicit old binding migration preserves known candidates and old unbound layout semantics",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "malformed or future formal item bindings reject before backup recovery",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "malformed or future formal item bindings reject before backup recovery",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "malformed or future formal item bindings reject before backup recovery",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "malformed or future formal item bindings reject before backup recovery",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "owned primary binding fixture opens",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "owned backup binding fixture opens",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "real future binding load preserves the live aggregate",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "future binding primary and older backup preserve every raw byte",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "future binding aggregate remains write locked",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "actual formal binding reload restores its sole ID owner",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "same registered potion remains available after reload",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "typed use fixture carries the exact registered catalog identity",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "typed inventory identity selects and dispatches its actual ID despite a changed display label",
+      "passed": true
+    }
+  ],
+  "count": 27,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "2c92e4b2-372e-4c09-aaba-58a3625296b3",
+  "passed": 27,
+  "reported_checks": 27,
+  "reported_failures": 0,
+  "run_id": "bf90841c-f087-4a6a-9a1f-3af31d5701ef",
+  "scene_id": "item_binding_identity_test",
+  "schema_version": 1,
+  "source_content_sha256": "3b88ff1498d77df6db258fc8bcdd18b86222400f0a028d8f590421d5dba12fab",
+  "status": "PASS"
+}

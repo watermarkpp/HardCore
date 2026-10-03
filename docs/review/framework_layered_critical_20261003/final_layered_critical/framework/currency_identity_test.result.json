@@ -1,0 +1,121 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "real catalog loads",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "gold already has one registered stable identity",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "existing exact legacy currency source remains available",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "registered currency resolves through the real entity consumer",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "the item consumer resolves the same catalog currency",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "stable currency round-trips its identity",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "constructed catalog record owns its explicit currency ID",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "exact legacy source import retains the same amount and gains the registered identity",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "authoritative existing currency amount is unchanged",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "typed currency reference resolves without a display name",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "malformed/unknown/conflicting currency reference cannot fall back to its display name: {\"currency_id\":\"hc.currency.missing\",\"name\":\"金币\"}",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "malformed/unknown/conflicting currency reference cannot fall back to its display name: {\"currency_id\":1,\"name\":\"金币\"}",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "malformed/unknown/conflicting currency reference cannot fall back to its display name: {\"currency_id\":\"hc.currency.gold\",\"item_id\":80,\"name\":\"金币\"}",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "malformed/unknown/conflicting currency reference cannot fall back to its display name: {\"currency_id\":\"hc.currency.gold\",\"name\":\"金币\",\"service_index\":123}",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "unknown registered-namespace query is rejected",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "caller edits cannot alter the catalog owner",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "formal ID-only reward credits its exact catalog amount without an item stack",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "quantity still multiplies the existing currency amount",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "canonical currency cannot bypass the existing gold cap",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "explicit unknown reward ID does not fall back to a matching Chinese label",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "pure admission/rejection checks create no resource, ownership or writer changes",
+      "passed": true
+    }
+  ],
+  "count": 21,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "8f14d68e-0013-4b4d-8c8b-562fcc13feb6",
+  "passed": 21,
+  "reported_checks": 21,
+  "reported_failures": 0,
+  "run_id": "1db0129f-5e8e-4a81-88cd-0a5c72bdadde",
+  "scene_id": "currency_identity_test",
+  "schema_version": 1,
+  "source_content_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+  "status": "PASS"
+}

@@ -1,0 +1,31 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "recorded_fractional_flank_test",
+                        "test_path":  "tests/user_feedback_20260930/recorded_fractional_flank_test.tscn",
+                        "pass_marker_found":  false,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  1,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-03T04:20:10.5897422Z",
+                        "native_exit_observed_utc":  "2026-10-03T04:19:47.6275419Z",
+                        "effective_exit_code":  1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "",
+                        "framework_receipt_valid":  null,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;non_zero_exit_code_1"
+                    }
+                ],
+    "total":  1,
+    "invocation_id":  "0ef8c141-4a58-49be-8df8-6bc34d4465ce",
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "passed":  0,
+    "engine_log_errors":  0,
+    "generated_at":  "2026-10-03T12:19:48.8209821+08:00",
+    "failed":  1,
+    "suite":  "adhoc"
+}

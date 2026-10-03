@@ -145,7 +145,7 @@ func _run() -> void:
 	await settle()
 	var context_ok := false
 	for attempt in range(2):
-		panel._on_context_action(_next_action_id({"action": "equip", "index": 0, "slot": "武器"}))
+		panel._on_context_action(_next_action_id({"action": "equip", "index": 0, "slot": "hc.slot.weapon"}))
 		await settle()
 		context_ok = str((PlayerState.equipment.get("hc.slot.weapon", {}) as Dictionary).get("name", "")) == "井中月"
 		if context_ok:
@@ -164,14 +164,14 @@ func _run() -> void:
 	await settle()
 	# 井中月 was consumed from the bag by the previous equip, so the new
 	# weapon occupies slot 0.
-	panel._on_context_action(_next_action_id({"action": "equip", "index": 0, "slot": "武器"}))
+	panel._on_context_action(_next_action_id({"action": "equip", "index": 0, "slot": "hc.slot.weapon"}))
 	await settle()
 	expect(str((PlayerState.equipment.get("hc.slot.weapon", {}) as Dictionary).get("name", "")) == "裁决之杖", "replace commits the new weapon")
 	expect(hud.notice_presenter.full_text() == "已装备 裁决之杖", "replace reports only the new equip")
 	expect(hud.notice_presenter.queue_size() == 0, "replace never shows an extra unequip notice")
 
 	# --- Context-action unequip reports once with the official style ---------
-	panel._on_context_action(_next_action_id({"action": "unequip", "slot": "武器"}))
+	panel._on_context_action(_next_action_id({"action": "unequip", "slot": "hc.slot.weapon"}))
 	await settle()
 	expect((PlayerState.equipment.get("hc.slot.weapon", {}) as Dictionary).is_empty(), "unequip commits: weapon slot empty")
 	expect(hud.notice_presenter.full_text() == "已卸下 裁决之杖", "unequip shows one central notice")

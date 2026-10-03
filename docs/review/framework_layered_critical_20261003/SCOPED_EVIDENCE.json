@@ -1,0 +1,24 @@
+{
+  "parent": "dc1ebf3fea1d047d4e18b352140a50b593223cea",
+  "construction_head": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+  "source_files": 3566,
+  "content_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+  "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+  "engine_child_sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+  "delta_files": 76,
+  "production_files": [
+    "scripts/enemy.gd",
+    "scripts/game_data.gd",
+    "scripts/inventory_panel.gd",
+    "scripts/layers/runtime/execution/frame_budget.gd",
+    "scripts/player_state.gd"
+  ],
+  "native_attempts": 239,
+  "unique_native_scenes": 215,
+  "framework_receipts": 64,
+  "framework_checks": 4221,
+  "preserved_failed_attempts": 121,
+  "original_failure_scenes": 55,
+  "source_zip_bytes": 15146752,
+  "source_zip_sha256": "142978c9589863e5a47cf2b46c0e1c034deb10812c26d18568dd282963f4a470"
+}

@@ -1,0 +1,107 @@
+{
+  "rows": [
+    {
+      "camera": "(958.6197, -432.0)",
+      "frame": 0,
+      "slot": 0,
+      "state": {
+        "contract_id": "gameplay.warrior.skill_runtime.v2",
+        "fire_armed": false,
+        "fire_cooldown_remaining_ms": 0,
+        "fire_enabled": false,
+        "fire_expires_remaining_ms": 0,
+        "half_moon": false,
+        "slaying_auto": false,
+        "slaying_remaining": 0,
+        "slaying_trigger": -1,
+        "thrusting": true
+      }
+    },
+    {
+      "camera": "(1033.766, -431.9967)",
+      "frame": 30,
+      "slot": 1,
+      "state": {
+        "contract_id": "gameplay.warrior.skill_runtime.v2",
+        "fire_armed": false,
+        "fire_cooldown_remaining_ms": 0,
+        "fire_enabled": false,
+        "fire_expires_remaining_ms": 0,
+        "half_moon": true,
+        "slaying_auto": false,
+        "slaying_remaining": 0,
+        "slaying_trigger": -1,
+        "thrusting": true
+      }
+    },
+    {
+      "camera": "(1097.641, -409.8032)",
+      "frame": 60,
+      "slot": 2,
+      "state": {
+        "contract_id": "gameplay.warrior.skill_runtime.v2",
+        "fire_armed": false,
+        "fire_cooldown_remaining_ms": 0,
+        "fire_enabled": true,
+        "fire_expires_remaining_ms": 0,
+        "half_moon": true,
+        "slaying_auto": false,
+        "slaying_remaining": 0,
+        "slaying_trigger": -1,
+        "thrusting": true
+      }
+    },
+    {
+      "camera": "(1158.518, -379.6662)",
+      "frame": 90,
+      "slot": 0,
+      "state": {
+        "contract_id": "gameplay.warrior.skill_runtime.v2",
+        "fire_armed": false,
+        "fire_cooldown_remaining_ms": 0,
+        "fire_enabled": true,
+        "fire_expires_remaining_ms": 0,
+        "half_moon": true,
+        "slaying_auto": false,
+        "slaying_remaining": 0,
+        "slaying_trigger": -1,
+        "thrusting": false
+      }
+    },
+    {
+      "camera": "(1218.47, -349.6986)",
+      "frame": 120,
+      "slot": 1,
+      "state": {
+        "contract_id": "gameplay.warrior.skill_runtime.v2",
+        "fire_armed": false,
+        "fire_cooldown_remaining_ms": 0,
+        "fire_enabled": true,
+        "fire_expires_remaining_ms": 0,
+        "half_moon": false,
+        "slaying_auto": false,
+        "slaying_remaining": 0,
+        "slaying_trigger": -1,
+        "thrusting": false
+      }
+    },
+    {
+      "camera": "(1279.286, -319.291)",
+      "frame": 150,
+      "slot": 2,
+      "state": {
+        "contract_id": "gameplay.warrior.skill_runtime.v2",
+        "fire_armed": false,
+        "fire_cooldown_remaining_ms": 0,
+        "fire_enabled": false,
+        "fire_expires_remaining_ms": 0,
+        "half_moon": false,
+        "slaying_auto": false,
+        "slaying_remaining": 0,
+        "slaying_trigger": -1,
+        "thrusting": false
+      }
+    }
+  ],
+  "status": "PASS"
+}

@@ -1,0 +1,43 @@
+{
+    "schema_version":  1,
+    "invocation_id":  "45d9eb9d-7f0c-4a7a-bd97-25441380b4b2",
+    "source_content_sha256":  "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "producers":  {
+                      "item_journal_sequence_test":  {
+                                                         "scene_id":  "item_journal_sequence_test",
+                                                         "run_id":  "9a777ea5-8b62-423e-9b2c-da784cf26f76",
+                                                         "source_content_sha256":  "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+                                                         "process_exited":  true,
+                                                         "effective_exit_code":  0,
+                                                         "result":  "PASS",
+                                                         "receipt_sha256":  "36d8de2f49f53b882c74257f9e6c7956365c8cf7e32e89b02c064d3edcb89ddf"
+                                                     },
+                      "item_journal_recovery_test":  {
+                                                         "scene_id":  "item_journal_recovery_test",
+                                                         "run_id":  "59d7afe2-5411-40ea-88ee-a63319109d07",
+                                                         "source_content_sha256":  "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+                                                         "process_exited":  true,
+                                                         "effective_exit_code":  0,
+                                                         "result":  "PASS",
+                                                         "receipt_sha256":  "35bc2fa7bdb788915068404f5f539661c24abe3c9c34f9851985c7ae67ebff9b"
+                                                     },
+                      "item_journal_recovery_cold_test":  {
+                                                              "scene_id":  "item_journal_recovery_cold_test",
+                                                              "run_id":  "9150a0a4-f025-4369-9af3-27ee0dc12b97",
+                                                              "source_content_sha256":  "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+                                                              "process_exited":  true,
+                                                              "effective_exit_code":  0,
+                                                              "result":  "PASS",
+                                                              "receipt_sha256":  "166d0c9e682c7f57b5498e577077d96bdaf1c43df61a0eea7e9573cc9a825dab"
+                                                          },
+                      "item_journal_v2_backup_test":  {
+                                                          "scene_id":  "item_journal_v2_backup_test",
+                                                          "run_id":  "10b4d7a0-35db-4d17-b9ae-b5bac97f36d7",
+                                                          "source_content_sha256":  "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+                                                          "process_exited":  true,
+                                                          "effective_exit_code":  0,
+                                                          "result":  "PASS",
+                                                          "receipt_sha256":  "e35017213e1c7c6fa388e6b3f085ba828c9444e9c4340960a5acc4a1bd3e9787"
+                                                      }
+                  }
+}

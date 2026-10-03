@@ -16,12 +16,15 @@ func _run() -> void:
 	PlayerState.profession = "战士"
 	PlayerState.level = 50
 	PlayerState.learned_skills = {
-		"warrior.basic_sword": 3,
-		"warrior.slaying": 3,
-		"warrior.thrusting": 3,
-		"warrior.half_moon": 3,
-		"warrior.fire_sword": 3,
+		"hc.skill.warrior.basic_swordsmanship": 3,
+		"hc.skill.warrior.slaying_swordsmanship": 3,
+		"hc.skill.warrior.thrusting": 3,
+		"hc.skill.warrior.half_moon": 3,
+		"hc.skill.warrior.fire_sword": 3,
 	}
+	assert(PlayerState.skill_identity_errors.is_empty(), "fixture skill identities must all be registered")
+	for fixture_id: String in ["hc.skill.warrior.basic_swordsmanship", "hc.skill.warrior.slaying_swordsmanship", "hc.skill.warrior.thrusting", "hc.skill.warrior.half_moon", "hc.skill.warrior.fire_sword"]:
+		assert(PlayerState.is_skill_learned(fixture_id), "fixture must learn every specified skill")
 	PlayerState.recalculate_stats()
 
 	var game: Node = load("res://scenes/main.tscn").instantiate()

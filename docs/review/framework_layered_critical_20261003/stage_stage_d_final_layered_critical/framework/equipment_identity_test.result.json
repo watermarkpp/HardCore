@@ -1,0 +1,246 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "actual equipment owner has exactly the existing ten registered slots in original order",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "actual owner has one canonical slot and no Chinese-key shadow: hc.slot.weapon",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "actual owner has one canonical slot and no Chinese-key shadow: hc.slot.armor",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "actual owner has one canonical slot and no Chinese-key shadow: hc.slot.helmet",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "actual owner has one canonical slot and no Chinese-key shadow: hc.slot.necklace",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "actual owner has one canonical slot and no Chinese-key shadow: hc.slot.bracelet_left",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "actual owner has one canonical slot and no Chinese-key shadow: hc.slot.bracelet_right",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "actual owner has one canonical slot and no Chinese-key shadow: hc.slot.ring_left",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "actual owner has one canonical slot and no Chinese-key shadow: hc.slot.ring_right",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "actual owner has one canonical slot and no Chinese-key shadow: hc.slot.relic",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "actual owner has one canonical slot and no Chinese-key shadow: hc.slot.badge",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "two-slot cursor is owned by registered slot IDs",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "legacy exact/generic slots migrate once at the document boundary",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "legacy slot import preserves original caller evidence",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "legacy cursor import preserves its next physical slot exactly",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "real aggregate encoder emits the formal equipment identity contract",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "formal equipment slots retain item bytes without a second equipment owner",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "formal slot contract cannot reenter Chinese legacy mapping",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "registered contribution pseudo-slot cannot become a physical equipment owner",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "two occupied aliases fail the entire migration even when item bytes match",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "legacy empty left hole does not discard its occupied generic bracelet",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "a cycle cannot select a slot from another equipment group",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "future slot identity precedes corrupt known item fields",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "all actual nine authoring loadouts translate their supported slots at one ingress",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "actual source loadout preserves its eight item records behind formal slot keys: test.loadout.warrior.wooma.v1",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "actual source loadout preserves its eight item records behind formal slot keys: test.loadout.warrior.zuma.v1",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "actual source loadout preserves its eight item records behind formal slot keys: test.loadout.warrior.chiyue.v1",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "actual source loadout preserves its eight item records behind formal slot keys: test.loadout.wizard.wooma.v1",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "actual source loadout preserves its eight item records behind formal slot keys: test.loadout.wizard.zuma.v1",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "actual source loadout preserves its eight item records behind formal slot keys: test.loadout.wizard.chiyue.v1",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "actual source loadout preserves its eight item records behind formal slot keys: test.loadout.taoist.wooma.v1",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "actual source loadout preserves its eight item records behind formal slot keys: test.loadout.taoist.zuma.v1",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "actual source loadout preserves its eight item records behind formal slot keys: test.loadout.taoist.chiyue.v1",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "actual equip command writes the canonical slot owner",
+      "passed": true
+    },
+    {
+      "id": 35,
+      "label": "actual equip has no name-key mirror",
+      "passed": true
+    },
+    {
+      "id": 36,
+      "label": "actual character writer saves equipment identity",
+      "passed": true
+    },
+    {
+      "id": 37,
+      "label": "disk document contains only formal equipment ownership and explicit version",
+      "passed": true
+    },
+    {
+      "id": 38,
+      "label": "actual reload preserves equipped instance identity",
+      "passed": true
+    },
+    {
+      "id": 39,
+      "label": "actual migration archive accepts supported old slot ownership",
+      "passed": true
+    },
+    {
+      "id": 40,
+      "label": "migration before-image retains exact identity shape and source digest",
+      "passed": true
+    },
+    {
+      "id": 41,
+      "label": "a repeated legacy migration finds its same verified original archive",
+      "passed": true
+    },
+    {
+      "id": 42,
+      "label": "actual old disk slots and next-cycle selection import without losing gear",
+      "passed": true
+    },
+    {
+      "id": 43,
+      "label": "first legitimate save persists the imported formal slots",
+      "passed": true
+    },
+    {
+      "id": 44,
+      "label": "actual future slot identity preserves live equipment even with a good backup",
+      "passed": true
+    },
+    {
+      "id": 45,
+      "label": "unsupported slot identity preserves both original file bytes",
+      "passed": true
+    },
+    {
+      "id": 46,
+      "label": "future equipment identity blocks subsequent character writes",
+      "passed": true
+    }
+  ],
+  "count": 46,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "2c92e4b2-372e-4c09-aaba-58a3625296b3",
+  "passed": 46,
+  "reported_checks": 46,
+  "reported_failures": 0,
+  "run_id": "9e3ff6c2-7c61-4b15-a5c7-75f8da957774",
+  "scene_id": "equipment_identity_test",
+  "schema_version": 1,
+  "source_content_sha256": "3b88ff1498d77df6db258fc8bcdd18b86222400f0a028d8f590421d5dba12fab",
+  "status": "PASS"
+}

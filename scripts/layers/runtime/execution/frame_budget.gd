@@ -46,7 +46,8 @@ static func remaining_usec() -> int:
 static func _category(name: String) -> Dictionary:
 	if not _categories.has(name):
 		_categories[name] = {"inclusive_usec": 0, "self_usec": 0, "maximum_quantum_usec": 0,
-			"scopes": 0, "denied": 0, "necessary_scopes": 0}
+			"scopes": 0, "denied": 0, "necessary_scopes": 0,
+			"denied_budget": 0, "denied_fairness": 0, "denied_unrunnable": 0, "last_denial": {}}
 	return _categories[name]
 
 static func mark_pending(category: String, has_pending: bool, runnable := true, runs_when_paused := false, process_owner: Node = null, physics_owner := false) -> void:
@@ -86,35 +87,55 @@ static func _eligible(item: Dictionary, is_calling_owner := false) -> bool:
 		return owner.is_processing()
 	return true
 
-static func _fair_turn(category: String) -> bool:
+static func _fair_blocker(category: String) -> String:
 	if not _pending.has(category) or not _stack.is_empty():
-		return true
+		return ""
 	var own: Dictionary = _pending[category]
 	if not _eligible(own, true):
-		return false
+		return category
 	for other: String in _pending:
 		if other == category:
 			continue
 		var item: Dictionary = _pending[other]
 		if not _eligible(item):
 			continue
+		# Every unserved runnable owner retains its oldest-first turn. Once
+		# all eligible owners have been served in this actual epoch, a caller
+		# may consume unused allowance without requiring another callback from
+		# an owner whose callback opportunity already passed. Next epoch the
+		# preserved service order again puts older owners before a prolific one.
+		if int(item.last_service_epoch) == _epoch:
+			continue
 		if int(item.last_service_epoch) < int(own.last_service_epoch):
-			return false
+			return other
 		if int(item.last_service_epoch) == int(own.last_service_epoch):
 			if int(item.last_service_sequence) < int(own.last_service_sequence) or (
 				int(item.last_service_sequence) == int(own.last_service_sequence)
 				and int(item.sequence) < int(own.sequence)):
-				return false
-	return true
+				return other
+	return ""
 
 static func begin(category: String, necessary := false) -> int:
 	assert(OS.get_thread_caller_id() == OS.get_main_thread_id(), "frame budget belongs to main")
 	if not _sync_epoch():
 		return 0
 	var counters := _category(category)
-	if not necessary and (remaining_usec() <= 0 or not _fair_turn(category)):
-		counters.denied += 1
-		return 0
+	if not necessary:
+		var remaining := remaining_usec()
+		var blocker := "" if remaining <= 0 else _fair_blocker(category)
+		if remaining <= 0 or not blocker.is_empty():
+			var reason := "budget" if remaining <= 0 else ("unrunnable" if blocker == category else "fairness")
+			counters.denied += 1
+			counters["denied_" + reason] += 1
+			# One scalar record per category/epoch; never a per-quantum log.
+			counters.last_denial = {"reason": reason, "blocking_category": blocker,
+				"epoch": _epoch, "remaining_usec": remaining, "spent_usec": _spent_usec,
+				"inflight_usec": 0 if _stack.is_empty() else maxi(0, _now_usec() - int(_stack[0].started_usec)),
+				"own_service_epoch": _pending.get(category, {}).get("last_service_epoch", -1),
+				"own_service_sequence": _pending.get(category, {}).get("last_service_sequence", -1),
+				"blocker_service_epoch": _pending.get(blocker, {}).get("last_service_epoch", -1),
+				"blocker_service_sequence": _pending.get(blocker, {}).get("last_service_sequence", -1)}
+			return 0
 	_next_token += 1
 	_stack.append({"token": _next_token, "category": category, "started_usec": _now_usec(),
 		"child_usec": 0, "necessary": necessary})

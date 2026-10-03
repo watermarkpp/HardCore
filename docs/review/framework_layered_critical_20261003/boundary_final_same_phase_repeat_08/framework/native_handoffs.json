@@ -1,0 +1,25 @@
+{
+    "schema_version":  1,
+    "invocation_id":  "dbb153d6-e192-464c-b19a-8538917da61f",
+    "source_content_sha256":  "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "producers":  {
+                      "death_expiry_overlap_test":  {
+                                                        "scene_id":  "death_expiry_overlap_test",
+                                                        "run_id":  "859f9c63-288d-48f9-9cc8-d219e1fe51d5",
+                                                        "source_content_sha256":  "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+                                                        "process_exited":  true,
+                                                        "effective_exit_code":  0,
+                                                        "result":  "PASS",
+                                                        "receipt_sha256":  "7243b1579980a7bc63cf96ea166f5bddb15ff641f7224579bdc5c1a441ab1bff"
+                                                    },
+                      "death_expiry_overlap_cold_test":  {
+                                                             "scene_id":  "death_expiry_overlap_cold_test",
+                                                             "run_id":  "415ec890-ae5d-4fba-b135-1e604a9840cd",
+                                                             "source_content_sha256":  "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+                                                             "process_exited":  true,
+                                                             "effective_exit_code":  0,
+                                                             "result":  "PASS",
+                                                             "receipt_sha256":  "3334cc7657ffef1b09d9a12f7bb1c7cb8edafe1ceb97edacafddc88de0857e80"
+                                                         }
+                  }
+}

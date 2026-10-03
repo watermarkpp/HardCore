@@ -39,12 +39,14 @@ func _run() -> void:
 		assert(cell.get_theme_stylebox("disabled") == panel.forge_slots[0].get_theme_stylebox("disabled"), "recipe cells must match inventory cells")
 		if index < 12:
 			var recipe: Dictionary = panel._synthesis_recipe_previews[index]
-			assert((cell.get_node("RecipeProfession") as Label).text == str(recipe.get("profession", "")).left(1))
+			var profession_identity := preload("res://scripts/identity/entity_registry.gd").resolve(str(recipe.get("profession", "")), "profession")
+			assert(not profession_identity.is_empty(), "recipe must use a registered profession ID")
+			assert((cell.get_node("RecipeProfession") as Label).text == str(profession_identity.display_name).left(1))
 	assert(int(panel._synthesis_recipe_previews[9].get("item_id", -1)) == 950201)
 	assert(int(panel._synthesis_recipe_previews[10].get("item_id", -1)) == 950202)
 	assert(int(panel._synthesis_recipe_previews[11].get("item_id", -1)) == 950203)
 	var heart := GameData.get_item_record({"item_id": 950102})
-	assert(preload("res://scripts/item_detail_presenter.gd").format_item(heart, {}, {"recipe_profession": "法师"}).contains("随机法师技能等级 +1"))
+	assert(preload("res://scripts/item_detail_presenter.gd").format_item(heart, {}, {"recipe_profession": "hc.profession.wizard"}).contains("随机法师技能等级 +1"))
 	for art: TextureRect in panel.forge_artwork.values():
 		assert(not art.visible, "forge result art must be absent in synthesis mode")
 	assert(panel.forge_button.text == "开始合成" and panel.forge_button.disabled, "missing recipe must keep action disabled")

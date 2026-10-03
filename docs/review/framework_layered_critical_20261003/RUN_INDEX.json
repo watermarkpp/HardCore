@@ -1,0 +1,2174 @@
+{
+  "final_layered_critical": {
+    "local_run": "final_layered_critical_192412_964082",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/currency_identity_test.tscn','tests/device_lab_runtime_test.tscn','tests/taoist_support_production_integration_test.tscn','tests/skill_button_assignments_v2_test.tscn','tests/skill_panel_assignment_hint_layout_contract_test.tscn','tests/combat_release_geometry_test.tscn','tests/skill_runtime_integration_test.tscn','tests/melee_lock_fallback_test.tscn','tests/audit_39fe_regressions.tscn','tests/repair_20260913/inventory_error_feedback_real_input_test.tscn','tests/equipment_success_notice_real_input_test.tscn','tests/ui_error_machine_reason_leak_test.tscn','tests/r3_gold_cap_entrypoints_test.tscn','tests/skill_target_context_partition_test.tscn','tests/hc_monster_combat_r2/revival_durability_test.tscn','tests/f03_hot_persistence_test.tscn','tests/f03_async_death_receipt_test.tscn','tests/melee_blocked_query_order_test.tscn','tests/f03_periodic_background_save_test.tscn','tests/new_item_icon_surfaces_test.tscn','tests/synthesis_panel_preview_test.tscn','tests/f03_background_writer_test.tscn','tests/service_home_no_current_position_fallback_test.tscn','tests/death_revival_home_failure_test.tscn','tests/mobile_targeting_test.tscn','tests/game_root_combat_resolution_integration_test.tscn','tests/equipment_special_effects_test.tscn','tests/player_poison_presentation_test.tscn','tests/canonical_summon_integration_test.tscn','tests/player_level_up_effect_runtime_test.tscn','tests/town_music_runtime_test.tscn','tests/f05_settlement_display_separation_test.tscn','tests/framework/ui_registry_retirement_test.tscn','tests/framework/death_burst_lifecycle_test.tscn','tests/framework/death_burst_lifecycle_cold_test.tscn','tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn','tests/bich_environment_test.tscn','tests/orc_tomb_game_visual_geometry_test.tscn','tests/orc_tomb_source_integration_test.tscn','tests/source_collision_chunk_test.tscn','tests/natural_cave_source_integration_test.tscn','tests/vertical_slice_loop_test.tscn','tests/wooma_game_runtime_integration_test.tscn','tests/portal_actual_arrival_guard_test.tscn','tests/skill_production_canonical_entry_test.tscn','tests/source176_r3/eight_direction_admission_test.tscn','tests/source176_r3/source_idle_wake_phase_test.tscn','tests/source176_r3/published_map_approach_test.tscn','tests/user_feedback_20260930/full_surround_24_fractional_test.tscn','tests/user_feedback_20260930/full_surround_64_test.tscn','tests/user_feedback_20260930/full_surround_89_fractional_test.tscn','tests/user_feedback_20260930/full_surround_89_prefilled_test.tscn','tests/user_feedback_20260930/full_surround_89_test.tscn','tests/user_feedback_20260930/full_surround_mixed_test.tscn','tests/user_feedback_20260930/full_surround_moving_test.tscn','tests/user_feedback_20260930/full_surround_native_test.tscn','tests/user_feedback_20260930/full_surround_prefilled_test.tscn','tests/user_feedback_20260930/full_surround_west_wall_test.tscn','tests/user_feedback_20260930/surround_vacancy_refill_89_test.tscn','tests/user_feedback_20260930/surround_vacancy_refill_test.tscn','tests/source176_r3/c05_native_detour_test.tscn','tests/source176_r3/ordinary_body_clearance_test.tscn','tests/user_feedback_20260930/crowd_fractional_escape_test.tscn','tests/framework/ordinary_item_identity_test.tscn','tests/framework/equipment_identity_test.tscn','tests/framework/character_identity_save_test.tscn','tests/framework/item_binding_identity_test.tscn','tests/framework/feature_fire_effect_production_test.tscn','tests/framework/action_config_lease_test.tscn','tests/framework/feature_release_identity_test.tscn','tests/framework/combined_effect_lifecycle_test.tscn','tests/framework/combined_effect_lifecycle_cold_test.tscn','tests/framework/periodic_credit_safe_logout_test.tscn','tests/framework/periodic_credit_safe_logout_cold_test.tscn','tests/user_feedback_20260930/layered_approach_test.tscn','tests/user_feedback_20260930/full_surround_89_fractional_identity0_test.tscn','tests/user_feedback_20260930/full_surround_89_fractional_identity1_test.tscn','tests/user_feedback_20260930/recorded_fractional_flank_test.tscn','tests/user_feedback_20260930/recorded_fractional_wait_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 80,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "8f14d68e-0013-4b4d-8c8b-562fcc13feb6",
+    "owned_traces": [
+      "c05_native_detour.json",
+      "eight_direction_admission.json",
+      "ordinary_body_clearance.json",
+      "published_map_approach.json",
+      "source_idle_wake_phase.json"
+    ],
+    "adopted_final": true
+  },
+  "final_natural_lifecycle": {
+    "local_run": "final_natural_lifecycle_200927_054077",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/natural_effect_lifecycle_test.tscn','tests/framework/natural_effect_lifecycle_cold_test.tscn','tests/framework/natural_effect_recovery_cycles_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 3,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "1f60dfe6-0456-4ec1-aedb-d536d9526bbb",
+    "owned_traces": [],
+    "adopted_final": true
+  },
+  "final_framework_boundaries": {
+    "local_run": "final_framework_boundaries_201106_849430",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_world_capacity_bound_test.tscn','tests/framework/feature_capacity_admission_test.tscn','tests/framework/feature_capacity_atomic_test.tscn','tests/framework/feature_receipt_retirement_test.tscn','tests/framework/feature_admission_release_test.tscn','tests/framework/profile_identity_generation_test.tscn','tests/framework/periodic_credit_profile_switch_test.tscn','tests/framework/future_item_ownership_terminal_test.tscn','tests/framework/world_generation_persistence_test.tscn','tests/framework/world_generation_persistence_cold_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 10,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "39c4489e-bb57-4e92-98be-81e443b9757a",
+    "owned_traces": [],
+    "adopted_final": true
+  },
+  "final_journal_recovery": {
+    "local_run": "final_journal_recovery_201316_673704",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/item_journal_sequence_test.tscn','tests/framework/item_journal_recovery_test.tscn','tests/framework/item_journal_recovery_cold_test.tscn','tests/framework/item_journal_v2_backup_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 4,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "45d9eb9d-7f0c-4a7a-bd97-25441380b4b2",
+    "owned_traces": [],
+    "adopted_final": true
+  },
+  "final_journal_cold_isolated": {
+    "local_run": "final_journal_cold_isolated_201416_569069",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/item_journal_v2_backup_seed_test.tscn','tests/framework/item_journal_v2_backup_cold_test.tscn','tests/framework/item_journal_v2_backup_restart_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 3,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "4a7a87e4-2a42-4220-9222-3618bdc6255a",
+    "owned_traces": [],
+    "adopted_final": true
+  },
+  "final_original_feedback": {
+    "local_run": "final_original_feedback_201453_036214",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/user_feedback_20260930/player_blocked_locomotion_test.tscn','tests/user_feedback_20260930/monster_blocked_locomotion_test.tscn','tests/user_feedback_20260930/warrior_toggle_camera_native_test.tscn','tests/user_feedback_20260930/immediate_warrior_toggle_save_test.tscn','tests/user_feedback_20260930/consumable_icon_surfaces_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 5,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "3f81ace8-3cda-41b9-8e3f-6c377d15aa0f",
+    "owned_traces": [],
+    "adopted_final": true
+  },
+  "final_crowd_recovery": {
+    "local_run": "final_crowd_recovery_201555_065705",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/user_feedback_20260930/crowd_recovery_test.tscn','tests/user_feedback_20260930/crowd_recovery_4_test.tscn','tests/user_feedback_20260930/crowd_recovery_8_test.tscn','tests/user_feedback_20260930/crowd_recovery_30_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 4,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "85ef18e6-0a6f-46ec-a78b-8c8950d5ccda",
+    "owned_traces": [],
+    "adopted_final": true
+  },
+  "final_r3_remaining": {
+    "local_run": "final_r3_remaining_201828_906410",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/source176_r2/shared_permission_runtime_test.tscn','tests/source176_r2/exact_leg_runtime_test.tscn','tests/source176_r2/natural_approach_runtime_test.tscn','tests/source176_r3/exact_leg_and_corridor_test.tscn','tests/source176_r3/box_snapshot_consumer_test.tscn','tests/source176_r3/source_permission_lifecycle_test.tscn','tests/source176_r3/source_game_clock_trace_test.tscn','tests/source176_r3/source_idle_3_test.tscn','tests/source176_r3/source_idle_10_test.tscn','tests/source176_r3/source_direct_phase_trace_test.tscn','tests/source176_r3/cold_hot_action_phase_test.tscn','tests/source176_r3/body_action_owner_matrix_test.tscn','tests/source176_r3/area_parent_admission_test.tscn','tests/source176_r3/movement_frame_budget_test.tscn','tests/source176_r3/all_skill_reaction_paths_test.tscn','tests/source176_r3/identity_export_test.tscn','tests/source176_r3/target_magic_admission_test.tscn','tests/source176_r3/direct_reception_edges_test.tscn','tests/source176_r3/release_lifecycle_test.tscn','tests/source176_r3/render_sequence_test.tscn','tests/source176_r3/point_motor_path_test.tscn','tests/source176_r3/cadence_fast_path_test.tscn','tests/source176_r3/natural_64_p0_d0.tscn','tests/source176_r3/natural_64_p0_d1.tscn','tests/source176_r3/natural_64_p0_d2.tscn','tests/source176_r3/natural_64_p0_d3.tscn','tests/source176_r3/natural_64_p0_d4.tscn','tests/source176_r3/natural_64_p0_d5.tscn','tests/source176_r3/natural_64_p0_d6.tscn','tests/source176_r3/natural_64_p0_d7.tscn','tests/source176_r3/natural_64_p1_d0.tscn','tests/source176_r3/natural_64_p1_d1.tscn','tests/source176_r3/natural_64_p1_d2.tscn','tests/source176_r3/natural_64_p1_d3.tscn','tests/source176_r3/natural_64_p1_d4.tscn','tests/source176_r3/natural_64_p1_d5.tscn','tests/source176_r3/natural_64_p1_d6.tscn','tests/source176_r3/natural_64_p1_d7.tscn','tests/source176_r3/natural_64_p2_d0.tscn','tests/source176_r3/natural_64_p2_d1.tscn','tests/source176_r3/natural_64_p2_d2.tscn','tests/source176_r3/natural_64_p2_d3.tscn','tests/source176_r3/natural_64_p2_d4.tscn','tests/source176_r3/natural_64_p2_d5.tscn','tests/source176_r3/natural_64_p2_d6.tscn','tests/source176_r3/natural_64_p2_d7.tscn','tests/source176_r3/natural_89_p0_d0.tscn','tests/source176_r3/natural_89_p0_d1.tscn','tests/source176_r3/natural_89_p0_d2.tscn','tests/source176_r3/natural_89_p0_d3.tscn','tests/source176_r3/natural_89_p0_d4.tscn','tests/source176_r3/natural_89_p0_d5.tscn','tests/source176_r3/natural_89_p0_d6.tscn','tests/source176_r3/natural_89_p0_d7.tscn','tests/source176_r3/natural_89_p1_d0.tscn','tests/source176_r3/natural_89_p1_d1.tscn','tests/source176_r3/natural_89_p1_d2.tscn','tests/source176_r3/natural_89_p1_d3.tscn','tests/source176_r3/natural_89_p1_d4.tscn','tests/source176_r3/natural_89_p1_d5.tscn','tests/source176_r3/natural_89_p1_d6.tscn','tests/source176_r3/natural_89_p1_d7.tscn','tests/source176_r3/natural_89_p2_d0.tscn','tests/source176_r3/natural_89_p2_d1.tscn','tests/source176_r3/natural_89_p2_d2.tscn','tests/source176_r3/natural_89_p2_d3.tscn','tests/source176_r3/natural_89_p2_d4.tscn','tests/source176_r3/natural_89_p2_d5.tscn','tests/source176_r3/natural_89_p2_d6.tscn','tests/source176_r3/natural_89_p2_d7.tscn','tests/user_feedback_20260930/corner_wait_requirement_test.tscn','tests/user_feedback_20260930/crowd_position_candidates_test.tscn','tests/user_feedback_20260930/flank_committed_segment_test.tscn','tests/user_feedback_20260930/flank_projection_residual_test.tscn','tests/user_feedback_20260930/large_surround_packing_test.tscn','tests/user_feedback_20260930/motion_candidate_reuse_test.tscn','tests/user_feedback_20260930/surround_target_body_route_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 77,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "5d2ba1ea-298b-4fe6-bec8-aa9f046c205e",
+    "owned_traces": [
+      "APPEARANCE_MATRIX.json",
+      "area_parent_admission.json",
+      "body_action_owner_matrix.json",
+      "box_snapshot_consumer.json",
+      "cadence_fast_path.json",
+      "cold_hot_action_phase.json",
+      "direct_reception_edges.json",
+      "exact_leg_and_corridor.json",
+      "MONSTER_IDENTITY_MATRIX.json",
+      "movement_frame_budget.json",
+      "point_motor_path.json",
+      "release_lifecycle.json",
+      "render_sequence.json",
+      "SKILL_EXECUTION_MATRIX.json",
+      "source_direct_phase_trace.json",
+      "source_game_clock_trace.json",
+      "source_idle_wake_phase.json",
+      "source_permission_lifecycle.json",
+      "target_magic_admission.json"
+    ],
+    "adopted_final": true
+  },
+  "r4_final_layered": {
+    "local_run": "r4_final_layered_200550_078957",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/hc_monster_combat_r4/all_damage_lost_test.tscn','tests/hc_monster_combat_r4/natural_cadence_24_test.tscn','tests/hc_monster_combat_r4/natural_cadence_76_test.tscn' -TimeoutSeconds 90"
+      ],
+      "timeout_seconds": 90,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 3,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "a02566f3-a50b-42eb-8601-017e25fff2fc",
+    "owned_traces": [],
+    "adopted_final": true
+  },
+  "final_immediate_death": {
+    "local_run": "final_immediate_death_201731_922173",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/aoe_death_phase_boundary_test.tscn','tests/enemy_mass_death_batch_pipeline_test.tscn','tests/death_queue_lifecycle_rework_test.tscn','tests/new_character_starter_loadout_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 4,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "482520c6-f1be-4635-a21e-0988e030ace5",
+    "owned_traces": [],
+    "adopted_final": true
+  },
+  "final_layered_abba_b1": {
+    "local_run": "final_layered_abba_b1_204120_718495",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/source176_r3/native_performance_10.tscn','tests/source176_r3/native_performance_20.tscn','tests/source176_r3/native_performance_30.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 3,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "c405e880-1739-4e09-925f-0c40150f33b0",
+    "owned_traces": [
+      "native_performance_10.json",
+      "native_performance_20.json",
+      "native_performance_30.json"
+    ],
+    "adopted_final": true
+  },
+  "final_layered_abba_b2": {
+    "local_run": "final_layered_abba_b2_204308_108414",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/source176_r3/native_performance_10.tscn','tests/source176_r3/native_performance_20.tscn','tests/source176_r3/native_performance_30.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 3,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "b4793f9f-a4bd-4672-85e0-859485271c38",
+    "owned_traces": [
+      "native_performance_10.json",
+      "native_performance_20.json",
+      "native_performance_30.json"
+    ],
+    "adopted_final": true
+  },
+  "final_budget_related": {
+    "local_run": "final_budget_related_192057_570517",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/frame_budget_test.tscn','tests/framework/budget_producer_admission_test.tscn','tests/framework/periodic_delivery_lateness_test.tscn','tests/framework/world_retirement_test.tscn','tests/framework/paused_persistence_receipt_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 5,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "75583cfa-196c-4c02-948e-6c59e103264a",
+    "owned_traces": [],
+    "adopted_final": true
+  },
+  "final_streaming_budget": {
+    "local_run": "final_streaming_budget_192144_512002",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/monster_streaming_single_poll_per_frame_test.tscn','tests/monster_streaming_request_dedup_test.tscn','tests/monster_streaming_visual_parity_test.tscn','tests/monster_streaming_animation_continuity_test.tscn','tests/monster_streaming_registration_lifecycle_test.tscn','tests/monster_streaming_generation_guard_test.tscn','tests/monster_streaming_failure_contract_test.tscn','tests/monster_streaming_no_visual_queue_test.tscn','tests/monster_streaming_no_sync_load_test.tscn','tests/monster_streaming_spatial_index_non_regression_test.tscn','tests/monster_streaming_scaling_test.tscn','tests/monster_streaming_lifecycle_test.tscn','tests/monster_streaming_active_lease_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 13,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "41d89745-10b7-43f2-b450-ed1461bd9929",
+    "owned_traces": [],
+    "adopted_final": true
+  },
+  "boundary_final_same_phase_repeat_01": {
+    "local_run": "boundary_final_same_phase_repeat_01_191528_794621",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "45d01e1b-686c-49ec-84f8-04f06d8bcbfe",
+    "owned_traces": [],
+    "adopted_final": true
+  },
+  "boundary_final_same_phase_repeat_02": {
+    "local_run": "boundary_final_same_phase_repeat_02_191602_395923",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "9416141d-abde-4a3e-bb1f-c9e1fd861f32",
+    "owned_traces": [],
+    "adopted_final": true
+  },
+  "boundary_final_same_phase_repeat_03": {
+    "local_run": "boundary_final_same_phase_repeat_03_191635_271511",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "74e47f74-c222-4713-841c-67b0be6f2526",
+    "owned_traces": [],
+    "adopted_final": true
+  },
+  "boundary_final_same_phase_repeat_04": {
+    "local_run": "boundary_final_same_phase_repeat_04_191708_070232",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "e63025b2-cc2f-40a2-9fe0-4c9f8957b396",
+    "owned_traces": [],
+    "adopted_final": true
+  },
+  "boundary_final_same_phase_repeat_05": {
+    "local_run": "boundary_final_same_phase_repeat_05_191740_887053",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "08913c77-9c5e-4ddb-9b07-cf3a8ed450f5",
+    "owned_traces": [],
+    "adopted_final": true
+  },
+  "boundary_final_same_phase_repeat_06": {
+    "local_run": "boundary_final_same_phase_repeat_06_191813_607930",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "83a9841c-3e64-4121-a991-5d64edea9b68",
+    "owned_traces": [],
+    "adopted_final": true
+  },
+  "boundary_final_same_phase_repeat_07": {
+    "local_run": "boundary_final_same_phase_repeat_07_191846_122734",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "8fd76c1d-0b8f-40ea-b77e-4c73f1747cf3",
+    "owned_traces": [],
+    "adopted_final": true
+  },
+  "boundary_final_same_phase_repeat_08": {
+    "local_run": "boundary_final_same_phase_repeat_08_191919_116420",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "dbb153d6-e192-464c-b19a-8538917da61f",
+    "owned_traces": [],
+    "adopted_final": true
+  },
+  "boundary_final_same_phase_repeat_09": {
+    "local_run": "boundary_final_same_phase_repeat_09_191952_032672",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "3187432c-fa0d-4e81-8108-00c730422a81",
+    "owned_traces": [],
+    "adopted_final": true
+  },
+  "boundary_final_same_phase_repeat_10": {
+    "local_run": "boundary_final_same_phase_repeat_10_192024_688450",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "25e45add-1416-43e3-8b4c-3aa2b80430c0",
+    "owned_traces": [],
+    "adopted_final": true
+  },
+  "final_crash_cold_prepared": {
+    "local_run": "crash_cold_prepared_0525098a_203854_526691",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/controlled_process_crash_cold_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 1,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "738e2675-7f8a-4760-aa0f-7aa5d8228763",
+    "owned_traces": [],
+    "adopted_final": true
+  },
+  "final_crash_cold_promoting": {
+    "local_run": "crash_cold_promoting_ea668aed_203917_192895",
+    "source_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/controlled_process_crash_cold_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 1,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "94720dca-69ed-4160-9a34-e288e1a64bd8",
+    "owned_traces": [],
+    "adopted_final": true
+  },
+  "preserved_boundary_fixed60_budget_probe": {
+    "local_run": "boundary_fixed60_budget_probe_180959_649922",
+    "source_sha256": "50a475f2ff55686c6b1b810002e91e6f8d3eafb44c00106bf76170373c041b23",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_burst_lifecycle_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "invocation_id": "3e9d239c-d2e7-48d9-a5fb-bf2aa2f8f7a4",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "preserved_boundary_fixed60_budget_probe_typed": {
+    "local_run": "boundary_fixed60_budget_probe_typed_181032_657007",
+    "source_sha256": "17810b9bc48603b6f64fcef74be42def6cad7c182c69e91b15a511f219cac057",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_burst_lifecycle_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "invocation_id": "a3729548-03f3-4e5d-9b0a-44b596afe8ad",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "preserved_boundary_fixed60_wallpaced": {
+    "local_run": "boundary_fixed60_wallpaced_180624_949406",
+    "source_sha256": "657d6fc18b179139d9a9c27657b3ad25406846c971f77f54b0b6c037abb01e30",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_burst_lifecycle_test.tscn','tests/framework/death_burst_lifecycle_cold_test.tscn','tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 4,
+      "status": "FAIL"
+    },
+    "invocation_id": "dafa26ff-5747-489a-a945-eb8569107804",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "preserved_boundary_fixed_step_clock_probe": {
+    "local_run": "boundary_fixed_step_clock_probe_172738_741244",
+    "source_sha256": "318cacf64ab4c26a9bc3b8537861206abe6fc3f476e1ac2e9a7b40655d31f1bc",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_burst_lifecycle_test.tscn','tests/framework/death_burst_lifecycle_cold_test.tscn','tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 4,
+      "status": "FAIL"
+    },
+    "invocation_id": "b21de656-d5f0-4666-a436-b29248781a5f",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "preserved_boundary_fixed_step_direct": {
+    "local_run": "boundary_fixed_step_direct_172147_538047",
+    "source_sha256": "a44ad1ab06faa220c88ca65448b2adea0c1665454b01fb88b6e1c1a0a329885d",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_burst_lifecycle_test.tscn','tests/framework/death_burst_lifecycle_cold_test.tscn','tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 4,
+      "status": "FAIL"
+    },
+    "invocation_id": "3268ab89-78e3-46b7-ab8b-61f77a1eadff",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "preserved_boundary_fixed_step_paced60": {
+    "local_run": "boundary_fixed_step_paced60_173926_131192",
+    "source_sha256": "d615e31c07d3cd6ac14dee5e9f1a2889aa77ff85c490928f0390add9f7c5f86f",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_burst_lifecycle_test.tscn','tests/framework/death_burst_lifecycle_cold_test.tscn','tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 4,
+      "status": "FAIL"
+    },
+    "invocation_id": "e3243efd-bf25-4f9b-abab-87d830c0ac82",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "preserved_budget_denial_causal_red": {
+    "local_run": "budget_denial_causal_red_184148_590739",
+    "source_sha256": "6e93d77b3ab14164fe29617e782686dfd598651354b18c237cfb4165cd746366",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_burst_lifecycle_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "invocation_id": "e6e195e3-d0f3-4868-9391-ef8136e3f59a",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "preserved_budget_denial_final_causal_red": {
+    "local_run": "budget_denial_final_causal_red_185931_116129",
+    "source_sha256": "ea0a43c634155296f0fd1814d752696056c09921b2d9578cdaa0209c61d71cbf",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_burst_lifecycle_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "invocation_id": "2dd3a566-3279-4192-b170-9d29da612fec",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "preserved_budget_denial_final_unit_red": {
+    "local_run": "budget_denial_final_unit_red_185921_323308",
+    "source_sha256": "ea0a43c634155296f0fd1814d752696056c09921b2d9578cdaa0209c61d71cbf",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/frame_budget_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "invocation_id": "1acebec9-0503-43ac-b5d9-ea108541989f",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "preserved_budget_denial_unit_red": {
+    "local_run": "budget_denial_unit_red_184138_229964",
+    "source_sha256": "6e93d77b3ab14164fe29617e782686dfd598651354b18c237cfb4165cd746366",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/frame_budget_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "invocation_id": "3e9718cd-8a6c-4a8f-9dbb-4d318464a17e",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "preserved_critical_causal_diagnostics": {
+    "local_run": "critical_causal_diagnostics_104829_652929",
+    "source_sha256": "09d3c37e7cd7652137f34fa2ef2f600c2e852e473d799c7a20dd5c388571952d",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/service_home_no_current_position_fallback_test.tscn','tests/death_revival_home_failure_test.tscn','tests/mobile_targeting_test.tscn','tests/player_level_up_effect_runtime_test.tscn','tests/game_root_combat_resolution_integration_test.tscn','tests/equipment_special_effects_test.tscn','tests/melee_lock_fallback_test.tscn','tests/device_lab_runtime_test.tscn','tests/canonical_summon_integration_test.tscn','tests/skill_production_canonical_entry_test.tscn','tests/f03_background_writer_test.tscn','tests/player_poison_presentation_test.tscn','tests/town_music_runtime_test.tscn','tests/f05_settlement_display_separation_test.tscn','tests/framework/currency_identity_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 1,
+      "failed": 14,
+      "status": "FAIL"
+    },
+    "invocation_id": "457841e3-fd11-4624-9b9b-4264e930ed5c",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "preserved_critical_contract_phase_native": {
+    "local_run": "critical_contract_phase_native_110416_721226",
+    "source_sha256": "b8dc4923fcdf3aabc1d2f7f2ba2a60febe63f98cb0971b51e184a02fc56c5936",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/currency_identity_test.tscn','tests/device_lab_runtime_test.tscn','tests/taoist_support_production_integration_test.tscn','tests/skill_button_assignments_v2_test.tscn','tests/skill_panel_assignment_hint_layout_contract_test.tscn','tests/combat_release_geometry_test.tscn','tests/skill_runtime_integration_test.tscn','tests/melee_lock_fallback_test.tscn','tests/audit_39fe_regressions.tscn','tests/repair_20260913/inventory_error_feedback_real_input_test.tscn','tests/equipment_success_notice_real_input_test.tscn','tests/ui_error_machine_reason_leak_test.tscn','tests/r3_gold_cap_entrypoints_test.tscn','tests/skill_target_context_partition_test.tscn','tests/hc_monster_combat_r2/revival_durability_test.tscn','tests/f03_hot_persistence_test.tscn','tests/f03_async_death_receipt_test.tscn','tests/melee_blocked_query_order_test.tscn','tests/f03_periodic_background_save_test.tscn','tests/new_item_icon_surfaces_test.tscn','tests/synthesis_panel_preview_test.tscn','tests/f03_background_writer_test.tscn','tests/service_home_no_current_position_fallback_test.tscn','tests/death_revival_home_failure_test.tscn','tests/mobile_targeting_test.tscn','tests/game_root_combat_resolution_integration_test.tscn','tests/equipment_special_effects_test.tscn','tests/player_poison_presentation_test.tscn','tests/canonical_summon_integration_test.tscn','tests/player_level_up_effect_runtime_test.tscn','tests/town_music_runtime_test.tscn','tests/f05_settlement_display_separation_test.tscn','tests/framework/ui_registry_retirement_test.tscn','tests/framework/death_burst_lifecycle_test.tscn','tests/framework/death_expiry_overlap_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 32,
+      "failed": 3,
+      "status": "FAIL"
+    },
+    "invocation_id": "ecb9ebb6-d5fc-4123-ac5f-9130e0e25234",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "preserved_critical_map_query_writer_fix": {
+    "local_run": "critical_map_query_writer_fix_111412_214761",
+    "source_sha256": "9ee73a62ae0d257ebbd9a74822282b2afd7c719841b07c6507bbd6225bc206fd",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/repair_20260913/inventory_error_feedback_real_input_test.tscn','tests/melee_blocked_query_order_test.tscn','tests/f03_background_writer_test.tscn','tests/audit_39fe_regressions.tscn','tests/bich_environment_test.tscn','tests/orc_tomb_game_visual_geometry_test.tscn','tests/orc_tomb_source_integration_test.tscn','tests/source_collision_chunk_test.tscn','tests/natural_cave_source_integration_test.tscn','tests/vertical_slice_loop_test.tscn','tests/wooma_game_runtime_integration_test.tscn','tests/hc_monster_combat_r4/all_damage_lost_test.tscn','tests/hc_monster_combat_r4/natural_cadence_24_test.tscn','tests/hc_monster_combat_r4/natural_cadence_76_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 7,
+      "failed": 7,
+      "status": "FAIL"
+    },
+    "invocation_id": "40853c34-5c9b-4ff0-88e8-8c72aa2c368e",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "preserved_currency_device_fix": {
+    "local_run": "currency_device_fix_105939_485969",
+    "source_sha256": "33dfedb5fbcb5440603d814b81476099d2fad39821f48ec135c95c33679153e9",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/currency_identity_test.tscn','tests/device_lab_runtime_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 1,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "invocation_id": "5f05284e-b03a-4e45-b22a-f68b710e479c",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "preserved_death_character_boundary_precheck": {
+    "local_run": "death_character_boundary_precheck_152302_473017",
+    "source_sha256": "3b88ff1498d77df6db258fc8bcdd18b86222400f0a028d8f590421d5dba12fab",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/aoe_death_phase_boundary_test.tscn','tests/enemy_mass_death_batch_pipeline_test.tscn','tests/death_queue_lifecycle_rework_test.tscn','tests/new_character_starter_loadout_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 3,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "invocation_id": "f597feef-3ed2-40d2-93ad-c99ac7cc427e",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "preserved_far_blocked_pose_reason_red": {
+    "local_run": "far_blocked_pose_reason_red_152602_722326",
+    "source_sha256": "02694ee52fdf8da5c208b9a96f16975634beff5af7de3e718b36f2d8bbf11c9e",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/user_feedback_20260930/monster_blocked_locomotion_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "invocation_id": "7a44011f-b925-48f2-8c0a-03941fbe9c16",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "preserved_final_critical_grid": {
+    "local_run": "final_critical_grid_135528_573804",
+    "source_sha256": "ea35e35f3c376085e08c850e56b778323a946a2c3f019d297e789722bc440a81",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/currency_identity_test.tscn','tests/device_lab_runtime_test.tscn','tests/taoist_support_production_integration_test.tscn','tests/skill_button_assignments_v2_test.tscn','tests/skill_panel_assignment_hint_layout_contract_test.tscn','tests/combat_release_geometry_test.tscn','tests/skill_runtime_integration_test.tscn','tests/melee_lock_fallback_test.tscn','tests/audit_39fe_regressions.tscn','tests/repair_20260913/inventory_error_feedback_real_input_test.tscn','tests/equipment_success_notice_real_input_test.tscn','tests/ui_error_machine_reason_leak_test.tscn','tests/r3_gold_cap_entrypoints_test.tscn','tests/skill_target_context_partition_test.tscn','tests/hc_monster_combat_r2/revival_durability_test.tscn','tests/f03_hot_persistence_test.tscn','tests/f03_async_death_receipt_test.tscn','tests/melee_blocked_query_order_test.tscn','tests/f03_periodic_background_save_test.tscn','tests/new_item_icon_surfaces_test.tscn','tests/synthesis_panel_preview_test.tscn','tests/f03_background_writer_test.tscn','tests/service_home_no_current_position_fallback_test.tscn','tests/death_revival_home_failure_test.tscn','tests/mobile_targeting_test.tscn','tests/game_root_combat_resolution_integration_test.tscn','tests/equipment_special_effects_test.tscn','tests/player_poison_presentation_test.tscn','tests/canonical_summon_integration_test.tscn','tests/player_level_up_effect_runtime_test.tscn','tests/town_music_runtime_test.tscn','tests/f05_settlement_display_separation_test.tscn','tests/framework/ui_registry_retirement_test.tscn','tests/framework/death_burst_lifecycle_test.tscn','tests/framework/death_burst_lifecycle_cold_test.tscn','tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn','tests/bich_environment_test.tscn','tests/orc_tomb_game_visual_geometry_test.tscn','tests/orc_tomb_source_integration_test.tscn','tests/source_collision_chunk_test.tscn','tests/natural_cave_source_integration_test.tscn','tests/vertical_slice_loop_test.tscn','tests/wooma_game_runtime_integration_test.tscn','tests/portal_actual_arrival_guard_test.tscn','tests/skill_production_canonical_entry_test.tscn','tests/source176_r3/eight_direction_admission_test.tscn','tests/source176_r3/source_idle_wake_phase_test.tscn','tests/source176_r3/published_map_approach_test.tscn','tests/user_feedback_20260930/full_surround_24_fractional_test.tscn','tests/user_feedback_20260930/full_surround_64_test.tscn','tests/user_feedback_20260930/full_surround_89_test.tscn','tests/user_feedback_20260930/full_surround_native_test.tscn','tests/user_feedback_20260930/full_surround_prefilled_test.tscn','tests/user_feedback_20260930/surround_vacancy_refill_test.tscn','tests/source176_r3/ordinary_body_clearance_test.tscn','tests/user_feedback_20260930/crowd_fractional_escape_test.tscn','tests/framework/ordinary_item_identity_test.tscn','tests/framework/equipment_identity_test.tscn','tests/framework/character_identity_save_test.tscn','tests/framework/item_binding_identity_test.tscn','tests/framework/feature_fire_effect_production_test.tscn','tests/framework/action_config_lease_test.tscn','tests/framework/feature_release_identity_test.tscn','tests/framework/combined_effect_lifecycle_test.tscn','tests/framework/combined_effect_lifecycle_cold_test.tscn','tests/framework/periodic_credit_safe_logout_test.tscn','tests/framework/periodic_credit_safe_logout_cold_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 65,
+      "failed": 3,
+      "status": "FAIL"
+    },
+    "invocation_id": "f5113a10-43f1-427f-868c-c44d0a193367",
+    "owned_traces": [
+      "eight_direction_admission.json",
+      "ordinary_body_clearance.json",
+      "published_map_approach.json",
+      "source_idle_wake_phase.json"
+    ],
+    "adopted_final": false
+  },
+  "preserved_final_journal_boundaries": {
+    "local_run": "final_journal_boundaries_150853_987930",
+    "source_sha256": "3b88ff1498d77df6db258fc8bcdd18b86222400f0a028d8f590421d5dba12fab",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/item_journal_sequence_test.tscn','tests/framework/item_journal_recovery_test.tscn','tests/framework/item_journal_recovery_cold_test.tscn','tests/framework/item_journal_v2_backup_test.tscn','tests/framework/item_journal_v2_backup_seed_test.tscn','tests/framework/item_journal_v2_backup_cold_test.tscn','tests/framework/item_journal_v2_backup_restart_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 4,
+      "failed": 3,
+      "status": "FAIL"
+    },
+    "invocation_id": "94b4dac2-1d59-4a8a-a484-9ad85cb0aaca",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "preserved_flank_full_surround_regression": {
+    "local_run": "flank_full_surround_regression_122440_267073",
+    "source_sha256": "efd7b92870c1614b765568c31523739095496714117f1e237e9262d0d98d1580",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/user_feedback_20260930/recorded_fractional_flank_test.tscn','tests/user_feedback_20260930/full_surround_89_fractional_test.tscn','tests/user_feedback_20260930/full_surround_89_fractional_identity0_test.tscn','tests/user_feedback_20260930/full_surround_89_fractional_identity1_test.tscn','tests/user_feedback_20260930/full_surround_mixed_test.tscn','tests/user_feedback_20260930/full_surround_moving_test.tscn','tests/user_feedback_20260930/full_surround_west_wall_test.tscn','tests/melee_blocked_query_order_test.tscn','tests/source176_r3/c05_native_detour_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 8,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "invocation_id": "b35574b4-b727-48da-bfa4-545dcde45ac9",
+    "owned_traces": [
+      "c05_native_detour.json"
+    ],
+    "adopted_final": false
+  },
+  "preserved_frame_budget_once_per_epoch_red": {
+    "local_run": "frame_budget_once_per_epoch_red_181625_263994",
+    "source_sha256": "3e6bacb71042798000a452519d5a4670200fbee89e96b6c6006595ac07ec3d7d",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/frame_budget_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "invocation_id": "bfdeb3d6-c4ea-409a-8735-77ec0cb5fbb1",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "preserved_grid_approach_red": {
+    "local_run": "grid_approach_red_133646_806172",
+    "source_sha256": "59083e0f542e84cbf4b4813543f515aa7f54baa649d7d5ec1bf8c4f6d1f39a6b",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/user_feedback_20260930/layered_approach_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "invocation_id": "53b95570-63cc-400a-8d00-4d0f5b94e787",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "preserved_immediate_death_blocked_green": {
+    "local_run": "immediate_death_blocked_green_152801_657105",
+    "source_sha256": "bcdeeb094df419091ab9076614668a2ed239c8e25b7ed1cb4ceea2d26dc5e5e6",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/user_feedback_20260930/monster_blocked_locomotion_test.tscn','tests/aoe_death_phase_boundary_test.tscn','tests/new_character_starter_loadout_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "invocation_id": "32e2e967-3732-4eae-b3ac-79ffbd547795",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "preserved_layered_abba_a1": {
+    "local_run": "layered_abba_a1_130400_012564",
+    "source_sha256": "35c067d7fca3a4b4b0f93fb0a513ef6180ce8b7f7b90fdc4259642becd653b43",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/source176_r3/native_performance_10.tscn','tests/source176_r3/native_performance_20.tscn','tests/source176_r3/native_performance_30.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 3,
+      "status": "FAIL"
+    },
+    "invocation_id": "1e9cec6d-7490-40da-b324-44686c6beeff",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "preserved_layered_approach_red": {
+    "local_run": "layered_approach_red_125243_400742",
+    "source_sha256": "fe359fd7ee81497bf0e896bdbea441283ac753aff44857c512c1bc2c36c8a9e2",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/user_feedback_20260930/layered_approach_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "invocation_id": "f20a173f-e27f-4ad7-a94d-97c2efe85e69",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "preserved_map_followup_observation": {
+    "local_run": "map_followup_observation_112219_790265",
+    "source_sha256": "0c3a381efc4444186044026a172e4850bb4fc35be583bdedb4b09ab7cba5f121",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/orc_tomb_game_visual_geometry_test.tscn','tests/source_collision_chunk_test.tscn','tests/vertical_slice_loop_test.tscn','tests/wooma_game_runtime_integration_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 1,
+      "failed": 3,
+      "status": "FAIL"
+    },
+    "invocation_id": "c58364ad-f2e0-45c4-9733-4faf6225ac26",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "preserved_portal_identity_observation": {
+    "local_run": "portal_identity_observation_112629_234729",
+    "source_sha256": "ab8cf63553c5f3e83d4f21fe3a57411f0b5cf337906ab53f5303dd520e788897",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/wooma_game_runtime_integration_test.tscn','tests/vertical_slice_loop_test.tscn','tests/orc_tomb_game_visual_geometry_test.tscn','tests/portal_actual_arrival_guard_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 1,
+      "failed": 3,
+      "status": "FAIL"
+    },
+    "invocation_id": "4e6b2375-559a-41aa-b40c-1fd4965febd5",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "preserved_r4_authorized90_diagnostic": {
+    "local_run": "r4_authorized90_diagnostic_120150_631979",
+    "source_sha256": "41cbd38a8cb51390d8adb1435bebfd53c0ebbd21bdf78bf6526edbcae75d1034",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/hc_monster_combat_r4/all_damage_lost_test.tscn','tests/hc_monster_combat_r4/natural_cadence_24_test.tscn','tests/hc_monster_combat_r4/natural_cadence_76_test.tscn' -TimeoutSeconds 90"
+      ],
+      "timeout_seconds": 90,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 1,
+      "failed": 2,
+      "status": "FAIL"
+    },
+    "invocation_id": "ed70d683-072a-46f8-b2be-7371e62dccd2",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "preserved_recorded_flank_causal_red": {
+    "local_run": "recorded_flank_causal_red_121938_206057",
+    "source_sha256": "dee4c9e21366e45cb14f8e16be6679fbe608446fc50f1ec6151e88c9ce5a38df",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/user_feedback_20260930/recorded_fractional_flank_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "invocation_id": "0ef8c141-4a58-49be-8df8-6bc34d4465ce",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "preserved_recorded_flank_red": {
+    "local_run": "recorded_flank_red_121834_246392",
+    "source_sha256": "865c04f38af6088c46ee327538a5c5cc80fe6ce29405e7f310bbb4a50de36f4c",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/user_feedback_20260930/recorded_fractional_flank_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "invocation_id": "d34a8ca4-770f-4a21-bccd-b67de77dd6e1",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "preserved_recorded_wait_destination_green": {
+    "local_run": "recorded_wait_destination_green_124552_793738",
+    "source_sha256": "5db652f0635bf66ca6a0580c8ca020db9b4c73c42ffb3d56dcc1b7742765e5b7",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/user_feedback_20260930/recorded_fractional_wait_test.tscn','tests/user_feedback_20260930/recorded_fractional_flank_test.tscn','tests/melee_blocked_query_order_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "invocation_id": "693f52e6-458e-4483-a8f3-6a85b01d76c7",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "preserved_recorded_wait_destination_red": {
+    "local_run": "recorded_wait_destination_red_124436_930409",
+    "source_sha256": "4f2af5133c242530bbe2b5be85a4dc89129908ffabd11ee83040a69faf1d71ef",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/user_feedback_20260930/recorded_fractional_wait_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "invocation_id": "1d84b7b8-3a81-4d76-a11c-d4378689749a",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "preserved_recorded_wait_isolated_green": {
+    "local_run": "recorded_wait_isolated_green_124900_164294",
+    "source_sha256": "b99d3e00a5c5b082b916775152a78a99bafcf38f2bfb8306632850413a2c74e1",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/user_feedback_20260930/recorded_fractional_wait_test.tscn','tests/user_feedback_20260930/recorded_fractional_flank_test.tscn','tests/melee_blocked_query_order_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "invocation_id": "0912349b-7ab6-4765-b275-b30c6acefd4c",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "preserved_recorded_wait_isolated_red": {
+    "local_run": "recorded_wait_isolated_red_124805_294772",
+    "source_sha256": "52ef13ee2f6057412654c20d9bc3886a817a4899dcd3e9b73f27043b1a698fc6",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/user_feedback_20260930/recorded_fractional_wait_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "invocation_id": "f6d20c1f-f367-4e47-9161-d9e8b180fa0d",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "preserved_recorded_wait_observed_red": {
+    "local_run": "recorded_wait_observed_red_124034_344813",
+    "source_sha256": "4d32c37066a519a52fa6e7630c8f23c5809445da42c0344b36705a0aec676195",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/user_feedback_20260930/recorded_fractional_wait_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "invocation_id": "d9fc43d5-dc44-4289-a5dc-503d2d9ab70c",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "preserved_recorded_wait_physics_red": {
+    "local_run": "recorded_wait_physics_red_124213_981022",
+    "source_sha256": "a54b0c22b3ad30986f52d3764e4c72711f6d8fac53ef831d968ba83a63532217",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/user_feedback_20260930/recorded_fractional_wait_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "invocation_id": "af8e4c64-087e-4516-be5f-9e2212f7d9d2",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "preserved_recorded_wait_red": {
+    "local_run": "recorded_wait_red_123904_068525",
+    "source_sha256": "ef47a3e3242a4c1a1cc4e86a6b2d8627f7dd4c851be3f11886ce96e7580384cd",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/user_feedback_20260930/recorded_fractional_wait_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "invocation_id": "74b1d84e-009c-40fa-8598-1834f93537e6",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "preserved_stage_d_final_original_feedback": {
+    "local_run": "final_original_feedback_151957_749232",
+    "source_sha256": "3b88ff1498d77df6db258fc8bcdd18b86222400f0a028d8f590421d5dba12fab",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/user_feedback_20260930/player_blocked_locomotion_test.tscn','tests/user_feedback_20260930/monster_blocked_locomotion_test.tscn','tests/user_feedback_20260930/warrior_toggle_camera_native_test.tscn','tests/user_feedback_20260930/immediate_warrior_toggle_save_test.tscn','tests/user_feedback_20260930/consumable_icon_surfaces_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 4,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "invocation_id": "3e847325-abfe-43ed-942e-57da05dc7204",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "preserved_stage_e_r4_final_layered": {
+    "local_run": "r4_final_layered_162958_579618",
+    "source_sha256": "fff09f90078c59d9cc6bb89cf45a0d21dbf937e46e7f692fa5e9fe192b093501",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/hc_monster_combat_r4/all_damage_lost_test.tscn','tests/hc_monster_combat_r4/natural_cadence_24_test.tscn','tests/hc_monster_combat_r4/natural_cadence_76_test.tscn' -TimeoutSeconds 90"
+      ],
+      "timeout_seconds": 90,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "invocation_id": "6b7e51ee-b5ea-48c0-8a77-379c7b21d27d",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "preserved_stage_f_final_layered_critical": {
+    "local_run": "final_layered_critical_164454_574994",
+    "source_sha256": "db50a12ee1deb2a25eb4f0ffe807f9da1bd6539dfe5b1e1b982680a8102c1c66",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/currency_identity_test.tscn','tests/device_lab_runtime_test.tscn','tests/taoist_support_production_integration_test.tscn','tests/skill_button_assignments_v2_test.tscn','tests/skill_panel_assignment_hint_layout_contract_test.tscn','tests/combat_release_geometry_test.tscn','tests/skill_runtime_integration_test.tscn','tests/melee_lock_fallback_test.tscn','tests/audit_39fe_regressions.tscn','tests/repair_20260913/inventory_error_feedback_real_input_test.tscn','tests/equipment_success_notice_real_input_test.tscn','tests/ui_error_machine_reason_leak_test.tscn','tests/r3_gold_cap_entrypoints_test.tscn','tests/skill_target_context_partition_test.tscn','tests/hc_monster_combat_r2/revival_durability_test.tscn','tests/f03_hot_persistence_test.tscn','tests/f03_async_death_receipt_test.tscn','tests/melee_blocked_query_order_test.tscn','tests/f03_periodic_background_save_test.tscn','tests/new_item_icon_surfaces_test.tscn','tests/synthesis_panel_preview_test.tscn','tests/f03_background_writer_test.tscn','tests/service_home_no_current_position_fallback_test.tscn','tests/death_revival_home_failure_test.tscn','tests/mobile_targeting_test.tscn','tests/game_root_combat_resolution_integration_test.tscn','tests/equipment_special_effects_test.tscn','tests/player_poison_presentation_test.tscn','tests/canonical_summon_integration_test.tscn','tests/player_level_up_effect_runtime_test.tscn','tests/town_music_runtime_test.tscn','tests/f05_settlement_display_separation_test.tscn','tests/framework/ui_registry_retirement_test.tscn','tests/framework/death_burst_lifecycle_test.tscn','tests/framework/death_burst_lifecycle_cold_test.tscn','tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn','tests/bich_environment_test.tscn','tests/orc_tomb_game_visual_geometry_test.tscn','tests/orc_tomb_source_integration_test.tscn','tests/source_collision_chunk_test.tscn','tests/natural_cave_source_integration_test.tscn','tests/vertical_slice_loop_test.tscn','tests/wooma_game_runtime_integration_test.tscn','tests/portal_actual_arrival_guard_test.tscn','tests/skill_production_canonical_entry_test.tscn','tests/source176_r3/eight_direction_admission_test.tscn','tests/source176_r3/source_idle_wake_phase_test.tscn','tests/source176_r3/published_map_approach_test.tscn','tests/user_feedback_20260930/full_surround_24_fractional_test.tscn','tests/user_feedback_20260930/full_surround_64_test.tscn','tests/user_feedback_20260930/full_surround_89_fractional_test.tscn','tests/user_feedback_20260930/full_surround_89_prefilled_test.tscn','tests/user_feedback_20260930/full_surround_89_test.tscn','tests/user_feedback_20260930/full_surround_mixed_test.tscn','tests/user_feedback_20260930/full_surround_moving_test.tscn','tests/user_feedback_20260930/full_surround_native_test.tscn','tests/user_feedback_20260930/full_surround_prefilled_test.tscn','tests/user_feedback_20260930/full_surround_west_wall_test.tscn','tests/user_feedback_20260930/surround_vacancy_refill_89_test.tscn','tests/user_feedback_20260930/surround_vacancy_refill_test.tscn','tests/source176_r3/c05_native_detour_test.tscn','tests/source176_r3/ordinary_body_clearance_test.tscn','tests/user_feedback_20260930/crowd_fractional_escape_test.tscn','tests/framework/ordinary_item_identity_test.tscn','tests/framework/equipment_identity_test.tscn','tests/framework/character_identity_save_test.tscn','tests/framework/item_binding_identity_test.tscn','tests/framework/feature_fire_effect_production_test.tscn','tests/framework/action_config_lease_test.tscn','tests/framework/feature_release_identity_test.tscn','tests/framework/combined_effect_lifecycle_test.tscn','tests/framework/combined_effect_lifecycle_cold_test.tscn','tests/framework/periodic_credit_safe_logout_test.tscn','tests/framework/periodic_credit_safe_logout_cold_test.tscn','tests/user_feedback_20260930/layered_approach_test.tscn','tests/user_feedback_20260930/full_surround_89_fractional_identity0_test.tscn','tests/user_feedback_20260930/full_surround_89_fractional_identity1_test.tscn','tests/user_feedback_20260930/recorded_fractional_flank_test.tscn','tests/user_feedback_20260930/recorded_fractional_wait_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 78,
+      "failed": 2,
+      "status": "FAIL"
+    },
+    "invocation_id": "4b39d578-b9ce-470e-8ff2-c2b2675c2d11",
+    "owned_traces": [
+      "c05_native_detour.json",
+      "eight_direction_admission.json",
+      "ordinary_body_clearance.json",
+      "published_map_approach.json",
+      "source_idle_wake_phase.json"
+    ],
+    "adopted_final": false
+  },
+  "preserved_streaming_budget_initial_failure": {
+    "local_run": "final_streaming_budget_190047_492159",
+    "source_sha256": "d50ac7009e688aca9e2cc90b9627162a1abc07147ef923fece82eaa5bc28b386",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/monster_streaming_single_poll_per_frame_test.tscn','tests/monster_streaming_request_dedup_test.tscn','tests/monster_streaming_visual_parity_test.tscn','tests/monster_streaming_animation_continuity_test.tscn','tests/monster_streaming_registration_lifecycle_test.tscn','tests/monster_streaming_generation_guard_test.tscn','tests/monster_streaming_failure_contract_test.tscn','tests/monster_streaming_no_visual_queue_test.tscn','tests/monster_streaming_no_sync_load_test.tscn','tests/monster_streaming_spatial_index_non_regression_test.tscn','tests/monster_streaming_scaling_test.tscn','tests/monster_streaming_lifecycle_test.tscn','tests/monster_streaming_active_lease_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 12,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "invocation_id": "84bd148e-11a6-4015-8f5d-94a1d22fb8af",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "preserved_streaming_single_poll_old_budget": {
+    "local_run": "streaming_single_poll_old_budget_190549_723946",
+    "source_sha256": "e7f12699280070840e5366a72246cd432fc1b59369f00f33a02deef3b383fe29",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/monster_streaming_single_poll_per_frame_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "invocation_id": "9717d404-134e-49a7-80f4-90e64835470f",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "preserved_streaming_single_poll_setup_probe": {
+    "local_run": "streaming_single_poll_setup_probe_190800_272311",
+    "source_sha256": "73b7940af2a5af9bbfa0843fff35f11d41c2513d5b669555035a3ed776683437",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/monster_streaming_single_poll_per_frame_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "invocation_id": "8a917d61-6424-4a10-b8da-f118f20e9990",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "preserved_timing_and_leg_causal_red": {
+    "local_run": "timing_and_leg_causal_red_141609_260764",
+    "source_sha256": "d1a3ec3749df25dee52329b0c9f5f0ce6de21568d6f7ad6893399d3995e83742",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/user_feedback_20260930/layered_approach_test.tscn','tests/taoist_support_production_integration_test.tscn','tests/framework/death_expiry_overlap_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "invocation_id": "7b95d598-1643-4c1d-8142-139d6420710c",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "stage_final_layered_abba_a1": {
+    "local_run": "final_layered_abba_a1_203930_979022",
+    "source_sha256": "4b92173f8b08a4c945bad3db02c878f51f0a2127bddd8cbd5fe7aec22433229b",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/source176_r3/native_performance_10.tscn','tests/source176_r3/native_performance_20.tscn','tests/source176_r3/native_performance_30.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 3,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "e8aa4e97-f4f7-4e00-b849-12b1f483b9fb",
+    "owned_traces": [
+      "native_performance_10.json",
+      "native_performance_20.json",
+      "native_performance_30.json"
+    ],
+    "adopted_final": false
+  },
+  "stage_final_layered_abba_a2": {
+    "local_run": "final_layered_abba_a2_204457_815692",
+    "source_sha256": "4b92173f8b08a4c945bad3db02c878f51f0a2127bddd8cbd5fe7aec22433229b",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/source176_r3/native_performance_10.tscn','tests/source176_r3/native_performance_20.tscn','tests/source176_r3/native_performance_30.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 3,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "4e8ec826-73f0-43ef-990c-6ad894768f2c",
+    "owned_traces": [
+      "native_performance_10.json",
+      "native_performance_20.json",
+      "native_performance_30.json"
+    ],
+    "adopted_final": false
+  },
+  "stage_grid60_abba_a1": {
+    "local_run": "grid60_abba_a1_134700_512049",
+    "source_sha256": "cb43ca4f052289acd86b1998eee569694d261b9704af38725f1745d3d98d4df5",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/source176_r3/native_performance_10.tscn','tests/source176_r3/native_performance_20.tscn','tests/source176_r3/native_performance_30.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 3,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "f5aac3bb-9d5f-4d95-ab47-e62fd836ec98",
+    "owned_traces": [
+      "native_performance_10.json",
+      "native_performance_20.json",
+      "native_performance_30.json"
+    ],
+    "adopted_final": false
+  },
+  "stage_grid60_abba_b1": {
+    "local_run": "grid60_abba_b1_134855_382109",
+    "source_sha256": "ea35e35f3c376085e08c850e56b778323a946a2c3f019d297e789722bc440a81",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/source176_r3/native_performance_10.tscn','tests/source176_r3/native_performance_20.tscn','tests/source176_r3/native_performance_30.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 3,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "58b9634f-1c0a-45b7-b025-5ae409751cbd",
+    "owned_traces": [
+      "native_performance_10.json",
+      "native_performance_20.json",
+      "native_performance_30.json"
+    ],
+    "adopted_final": false
+  },
+  "stage_grid60_abba_b2": {
+    "local_run": "grid60_abba_b2_135046_055869",
+    "source_sha256": "ea35e35f3c376085e08c850e56b778323a946a2c3f019d297e789722bc440a81",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/source176_r3/native_performance_10.tscn','tests/source176_r3/native_performance_20.tscn','tests/source176_r3/native_performance_30.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 3,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "aafd2ab5-9d22-45f2-bd96-c4731419b4a2",
+    "owned_traces": [
+      "native_performance_10.json",
+      "native_performance_20.json",
+      "native_performance_30.json"
+    ],
+    "adopted_final": false
+  },
+  "stage_grid60_abba_a2": {
+    "local_run": "grid60_abba_a2_135241_764704",
+    "source_sha256": "cb43ca4f052289acd86b1998eee569694d261b9704af38725f1745d3d98d4df5",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/source176_r3/native_performance_10.tscn','tests/source176_r3/native_performance_20.tscn','tests/source176_r3/native_performance_30.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 3,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "36457dc0-2906-4bec-8ab6-4d957b8266f3",
+    "owned_traces": [
+      "native_performance_10.json",
+      "native_performance_20.json",
+      "native_performance_30.json"
+    ],
+    "adopted_final": false
+  },
+  "stage_stage_d_final_layered_critical": {
+    "local_run": "final_layered_critical_143629_787639",
+    "source_sha256": "3b88ff1498d77df6db258fc8bcdd18b86222400f0a028d8f590421d5dba12fab",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/currency_identity_test.tscn','tests/device_lab_runtime_test.tscn','tests/taoist_support_production_integration_test.tscn','tests/skill_button_assignments_v2_test.tscn','tests/skill_panel_assignment_hint_layout_contract_test.tscn','tests/combat_release_geometry_test.tscn','tests/skill_runtime_integration_test.tscn','tests/melee_lock_fallback_test.tscn','tests/audit_39fe_regressions.tscn','tests/repair_20260913/inventory_error_feedback_real_input_test.tscn','tests/equipment_success_notice_real_input_test.tscn','tests/ui_error_machine_reason_leak_test.tscn','tests/r3_gold_cap_entrypoints_test.tscn','tests/skill_target_context_partition_test.tscn','tests/hc_monster_combat_r2/revival_durability_test.tscn','tests/f03_hot_persistence_test.tscn','tests/f03_async_death_receipt_test.tscn','tests/melee_blocked_query_order_test.tscn','tests/f03_periodic_background_save_test.tscn','tests/new_item_icon_surfaces_test.tscn','tests/synthesis_panel_preview_test.tscn','tests/f03_background_writer_test.tscn','tests/service_home_no_current_position_fallback_test.tscn','tests/death_revival_home_failure_test.tscn','tests/mobile_targeting_test.tscn','tests/game_root_combat_resolution_integration_test.tscn','tests/equipment_special_effects_test.tscn','tests/player_poison_presentation_test.tscn','tests/canonical_summon_integration_test.tscn','tests/player_level_up_effect_runtime_test.tscn','tests/town_music_runtime_test.tscn','tests/f05_settlement_display_separation_test.tscn','tests/framework/ui_registry_retirement_test.tscn','tests/framework/death_burst_lifecycle_test.tscn','tests/framework/death_burst_lifecycle_cold_test.tscn','tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn','tests/bich_environment_test.tscn','tests/orc_tomb_game_visual_geometry_test.tscn','tests/orc_tomb_source_integration_test.tscn','tests/source_collision_chunk_test.tscn','tests/natural_cave_source_integration_test.tscn','tests/vertical_slice_loop_test.tscn','tests/wooma_game_runtime_integration_test.tscn','tests/portal_actual_arrival_guard_test.tscn','tests/skill_production_canonical_entry_test.tscn','tests/source176_r3/eight_direction_admission_test.tscn','tests/source176_r3/source_idle_wake_phase_test.tscn','tests/source176_r3/published_map_approach_test.tscn','tests/user_feedback_20260930/full_surround_24_fractional_test.tscn','tests/user_feedback_20260930/full_surround_64_test.tscn','tests/user_feedback_20260930/full_surround_89_fractional_test.tscn','tests/user_feedback_20260930/full_surround_89_prefilled_test.tscn','tests/user_feedback_20260930/full_surround_89_test.tscn','tests/user_feedback_20260930/full_surround_mixed_test.tscn','tests/user_feedback_20260930/full_surround_moving_test.tscn','tests/user_feedback_20260930/full_surround_native_test.tscn','tests/user_feedback_20260930/full_surround_prefilled_test.tscn','tests/user_feedback_20260930/full_surround_west_wall_test.tscn','tests/user_feedback_20260930/surround_vacancy_refill_89_test.tscn','tests/user_feedback_20260930/surround_vacancy_refill_test.tscn','tests/source176_r3/c05_native_detour_test.tscn','tests/source176_r3/ordinary_body_clearance_test.tscn','tests/user_feedback_20260930/crowd_fractional_escape_test.tscn','tests/framework/ordinary_item_identity_test.tscn','tests/framework/equipment_identity_test.tscn','tests/framework/character_identity_save_test.tscn','tests/framework/item_binding_identity_test.tscn','tests/framework/feature_fire_effect_production_test.tscn','tests/framework/action_config_lease_test.tscn','tests/framework/feature_release_identity_test.tscn','tests/framework/combined_effect_lifecycle_test.tscn','tests/framework/combined_effect_lifecycle_cold_test.tscn','tests/framework/periodic_credit_safe_logout_test.tscn','tests/framework/periodic_credit_safe_logout_cold_test.tscn','tests/user_feedback_20260930/layered_approach_test.tscn','tests/user_feedback_20260930/full_surround_89_fractional_identity0_test.tscn','tests/user_feedback_20260930/full_surround_89_fractional_identity1_test.tscn','tests/user_feedback_20260930/recorded_fractional_flank_test.tscn','tests/user_feedback_20260930/recorded_fractional_wait_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 80,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "2c92e4b2-372e-4c09-aaba-58a3625296b3",
+    "owned_traces": [
+      "c05_native_detour.json",
+      "eight_direction_admission.json",
+      "ordinary_body_clearance.json",
+      "published_map_approach.json",
+      "source_idle_wake_phase.json"
+    ],
+    "adopted_final": false
+  },
+  "stage_stage_d_final_natural_lifecycle": {
+    "local_run": "final_natural_lifecycle_150430_945842",
+    "source_sha256": "3b88ff1498d77df6db258fc8bcdd18b86222400f0a028d8f590421d5dba12fab",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/natural_effect_lifecycle_test.tscn','tests/framework/natural_effect_lifecycle_cold_test.tscn','tests/framework/natural_effect_recovery_cycles_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 3,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "33b68f2b-599e-4643-8daa-430a9bcc44d6",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "stage_stage_d_final_framework_boundaries": {
+    "local_run": "final_framework_boundaries_150614_142107",
+    "source_sha256": "3b88ff1498d77df6db258fc8bcdd18b86222400f0a028d8f590421d5dba12fab",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_world_capacity_bound_test.tscn','tests/framework/feature_capacity_admission_test.tscn','tests/framework/feature_capacity_atomic_test.tscn','tests/framework/feature_receipt_retirement_test.tscn','tests/framework/feature_admission_release_test.tscn','tests/framework/profile_identity_generation_test.tscn','tests/framework/periodic_credit_profile_switch_test.tscn','tests/framework/future_item_ownership_terminal_test.tscn','tests/framework/world_generation_persistence_test.tscn','tests/framework/world_generation_persistence_cold_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 10,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "3ae95cd6-67e4-4511-a613-742b2d8c9b90",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "stage_stage_d_final_journal_cold_isolated": {
+    "local_run": "final_journal_cold_isolated_151914_517161",
+    "source_sha256": "3b88ff1498d77df6db258fc8bcdd18b86222400f0a028d8f590421d5dba12fab",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/item_journal_v2_backup_seed_test.tscn','tests/framework/item_journal_v2_backup_cold_test.tscn','tests/framework/item_journal_v2_backup_restart_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 3,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "8ed11727-7f69-4e96-b483-29e81441747e",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "stage_stage_e_final_layered_critical": {
+    "local_run": "final_layered_critical_153329_114018",
+    "source_sha256": "fff09f90078c59d9cc6bb89cf45a0d21dbf937e46e7f692fa5e9fe192b093501",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/currency_identity_test.tscn','tests/device_lab_runtime_test.tscn','tests/taoist_support_production_integration_test.tscn','tests/skill_button_assignments_v2_test.tscn','tests/skill_panel_assignment_hint_layout_contract_test.tscn','tests/combat_release_geometry_test.tscn','tests/skill_runtime_integration_test.tscn','tests/melee_lock_fallback_test.tscn','tests/audit_39fe_regressions.tscn','tests/repair_20260913/inventory_error_feedback_real_input_test.tscn','tests/equipment_success_notice_real_input_test.tscn','tests/ui_error_machine_reason_leak_test.tscn','tests/r3_gold_cap_entrypoints_test.tscn','tests/skill_target_context_partition_test.tscn','tests/hc_monster_combat_r2/revival_durability_test.tscn','tests/f03_hot_persistence_test.tscn','tests/f03_async_death_receipt_test.tscn','tests/melee_blocked_query_order_test.tscn','tests/f03_periodic_background_save_test.tscn','tests/new_item_icon_surfaces_test.tscn','tests/synthesis_panel_preview_test.tscn','tests/f03_background_writer_test.tscn','tests/service_home_no_current_position_fallback_test.tscn','tests/death_revival_home_failure_test.tscn','tests/mobile_targeting_test.tscn','tests/game_root_combat_resolution_integration_test.tscn','tests/equipment_special_effects_test.tscn','tests/player_poison_presentation_test.tscn','tests/canonical_summon_integration_test.tscn','tests/player_level_up_effect_runtime_test.tscn','tests/town_music_runtime_test.tscn','tests/f05_settlement_display_separation_test.tscn','tests/framework/ui_registry_retirement_test.tscn','tests/framework/death_burst_lifecycle_test.tscn','tests/framework/death_burst_lifecycle_cold_test.tscn','tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn','tests/bich_environment_test.tscn','tests/orc_tomb_game_visual_geometry_test.tscn','tests/orc_tomb_source_integration_test.tscn','tests/source_collision_chunk_test.tscn','tests/natural_cave_source_integration_test.tscn','tests/vertical_slice_loop_test.tscn','tests/wooma_game_runtime_integration_test.tscn','tests/portal_actual_arrival_guard_test.tscn','tests/skill_production_canonical_entry_test.tscn','tests/source176_r3/eight_direction_admission_test.tscn','tests/source176_r3/source_idle_wake_phase_test.tscn','tests/source176_r3/published_map_approach_test.tscn','tests/user_feedback_20260930/full_surround_24_fractional_test.tscn','tests/user_feedback_20260930/full_surround_64_test.tscn','tests/user_feedback_20260930/full_surround_89_fractional_test.tscn','tests/user_feedback_20260930/full_surround_89_prefilled_test.tscn','tests/user_feedback_20260930/full_surround_89_test.tscn','tests/user_feedback_20260930/full_surround_mixed_test.tscn','tests/user_feedback_20260930/full_surround_moving_test.tscn','tests/user_feedback_20260930/full_surround_native_test.tscn','tests/user_feedback_20260930/full_surround_prefilled_test.tscn','tests/user_feedback_20260930/full_surround_west_wall_test.tscn','tests/user_feedback_20260930/surround_vacancy_refill_89_test.tscn','tests/user_feedback_20260930/surround_vacancy_refill_test.tscn','tests/source176_r3/c05_native_detour_test.tscn','tests/source176_r3/ordinary_body_clearance_test.tscn','tests/user_feedback_20260930/crowd_fractional_escape_test.tscn','tests/framework/ordinary_item_identity_test.tscn','tests/framework/equipment_identity_test.tscn','tests/framework/character_identity_save_test.tscn','tests/framework/item_binding_identity_test.tscn','tests/framework/feature_fire_effect_production_test.tscn','tests/framework/action_config_lease_test.tscn','tests/framework/feature_release_identity_test.tscn','tests/framework/combined_effect_lifecycle_test.tscn','tests/framework/combined_effect_lifecycle_cold_test.tscn','tests/framework/periodic_credit_safe_logout_test.tscn','tests/framework/periodic_credit_safe_logout_cold_test.tscn','tests/user_feedback_20260930/layered_approach_test.tscn','tests/user_feedback_20260930/full_surround_89_fractional_identity0_test.tscn','tests/user_feedback_20260930/full_surround_89_fractional_identity1_test.tscn','tests/user_feedback_20260930/recorded_fractional_flank_test.tscn','tests/user_feedback_20260930/recorded_fractional_wait_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 80,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "6a9101e4-5922-49fe-8317-c2046f9781ef",
+    "owned_traces": [
+      "c05_native_detour.json",
+      "eight_direction_admission.json",
+      "ordinary_body_clearance.json",
+      "published_map_approach.json",
+      "source_idle_wake_phase.json"
+    ],
+    "adopted_final": false
+  },
+  "stage_stage_e_final_natural_lifecycle": {
+    "local_run": "final_natural_lifecycle_160041_263194",
+    "source_sha256": "fff09f90078c59d9cc6bb89cf45a0d21dbf937e46e7f692fa5e9fe192b093501",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/natural_effect_lifecycle_test.tscn','tests/framework/natural_effect_lifecycle_cold_test.tscn','tests/framework/natural_effect_recovery_cycles_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 3,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "744a4d3f-e932-4ba7-82de-345045c950d4",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "stage_stage_e_final_framework_boundaries": {
+    "local_run": "final_framework_boundaries_160221_371015",
+    "source_sha256": "fff09f90078c59d9cc6bb89cf45a0d21dbf937e46e7f692fa5e9fe192b093501",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_world_capacity_bound_test.tscn','tests/framework/feature_capacity_admission_test.tscn','tests/framework/feature_capacity_atomic_test.tscn','tests/framework/feature_receipt_retirement_test.tscn','tests/framework/feature_admission_release_test.tscn','tests/framework/profile_identity_generation_test.tscn','tests/framework/periodic_credit_profile_switch_test.tscn','tests/framework/future_item_ownership_terminal_test.tscn','tests/framework/world_generation_persistence_test.tscn','tests/framework/world_generation_persistence_cold_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 10,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "5353e5de-2519-4f87-8d5e-ca642f7eee3c",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "stage_stage_e_final_journal_recovery": {
+    "local_run": "final_journal_recovery_160430_733673",
+    "source_sha256": "fff09f90078c59d9cc6bb89cf45a0d21dbf937e46e7f692fa5e9fe192b093501",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/item_journal_sequence_test.tscn','tests/framework/item_journal_recovery_test.tscn','tests/framework/item_journal_recovery_cold_test.tscn','tests/framework/item_journal_v2_backup_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 4,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "7687346e-3ebb-495a-b039-8318ebdaf595",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "stage_stage_e_final_journal_cold_isolated": {
+    "local_run": "final_journal_cold_isolated_160530_318119",
+    "source_sha256": "fff09f90078c59d9cc6bb89cf45a0d21dbf937e46e7f692fa5e9fe192b093501",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/item_journal_v2_backup_seed_test.tscn','tests/framework/item_journal_v2_backup_cold_test.tscn','tests/framework/item_journal_v2_backup_restart_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 3,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "1b461301-cc85-4fcb-918c-db864c0ad9fd",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "stage_stage_e_final_original_feedback": {
+    "local_run": "final_original_feedback_160607_023018",
+    "source_sha256": "fff09f90078c59d9cc6bb89cf45a0d21dbf937e46e7f692fa5e9fe192b093501",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/user_feedback_20260930/player_blocked_locomotion_test.tscn','tests/user_feedback_20260930/monster_blocked_locomotion_test.tscn','tests/user_feedback_20260930/warrior_toggle_camera_native_test.tscn','tests/user_feedback_20260930/immediate_warrior_toggle_save_test.tscn','tests/user_feedback_20260930/consumable_icon_surfaces_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 5,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "c8c9ced4-108b-4d9a-bcb5-4d2e6548d9e1",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "stage_stage_e_final_crowd_recovery": {
+    "local_run": "final_crowd_recovery_160710_457645",
+    "source_sha256": "fff09f90078c59d9cc6bb89cf45a0d21dbf937e46e7f692fa5e9fe192b093501",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/user_feedback_20260930/crowd_recovery_test.tscn','tests/user_feedback_20260930/crowd_recovery_4_test.tscn','tests/user_feedback_20260930/crowd_recovery_8_test.tscn','tests/user_feedback_20260930/crowd_recovery_30_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 4,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "dc587fa2-8b4b-48f4-9fc7-6e639e405a70",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "stage_stage_e_final_immediate_death": {
+    "local_run": "final_immediate_death_160847_601155",
+    "source_sha256": "fff09f90078c59d9cc6bb89cf45a0d21dbf937e46e7f692fa5e9fe192b093501",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/aoe_death_phase_boundary_test.tscn','tests/enemy_mass_death_batch_pipeline_test.tscn','tests/death_queue_lifecycle_rework_test.tscn','tests/new_character_starter_loadout_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 4,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "7e745a2f-c823-42cc-b2a6-a3616404e002",
+    "owned_traces": [],
+    "adopted_final": false
+  },
+  "stage_stage_e_final_r3_remaining": {
+    "local_run": "final_r3_remaining_160944_338873",
+    "source_sha256": "fff09f90078c59d9cc6bb89cf45a0d21dbf937e46e7f692fa5e9fe192b093501",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/source176_r2/shared_permission_runtime_test.tscn','tests/source176_r2/exact_leg_runtime_test.tscn','tests/source176_r2/natural_approach_runtime_test.tscn','tests/source176_r3/exact_leg_and_corridor_test.tscn','tests/source176_r3/box_snapshot_consumer_test.tscn','tests/source176_r3/source_permission_lifecycle_test.tscn','tests/source176_r3/source_game_clock_trace_test.tscn','tests/source176_r3/source_idle_3_test.tscn','tests/source176_r3/source_idle_10_test.tscn','tests/source176_r3/source_direct_phase_trace_test.tscn','tests/source176_r3/cold_hot_action_phase_test.tscn','tests/source176_r3/body_action_owner_matrix_test.tscn','tests/source176_r3/area_parent_admission_test.tscn','tests/source176_r3/movement_frame_budget_test.tscn','tests/source176_r3/all_skill_reaction_paths_test.tscn','tests/source176_r3/identity_export_test.tscn','tests/source176_r3/target_magic_admission_test.tscn','tests/source176_r3/direct_reception_edges_test.tscn','tests/source176_r3/release_lifecycle_test.tscn','tests/source176_r3/render_sequence_test.tscn','tests/source176_r3/point_motor_path_test.tscn','tests/source176_r3/cadence_fast_path_test.tscn','tests/source176_r3/natural_64_p0_d0.tscn','tests/source176_r3/natural_64_p0_d1.tscn','tests/source176_r3/natural_64_p0_d2.tscn','tests/source176_r3/natural_64_p0_d3.tscn','tests/source176_r3/natural_64_p0_d4.tscn','tests/source176_r3/natural_64_p0_d5.tscn','tests/source176_r3/natural_64_p0_d6.tscn','tests/source176_r3/natural_64_p0_d7.tscn','tests/source176_r3/natural_64_p1_d0.tscn','tests/source176_r3/natural_64_p1_d1.tscn','tests/source176_r3/natural_64_p1_d2.tscn','tests/source176_r3/natural_64_p1_d3.tscn','tests/source176_r3/natural_64_p1_d4.tscn','tests/source176_r3/natural_64_p1_d5.tscn','tests/source176_r3/natural_64_p1_d6.tscn','tests/source176_r3/natural_64_p1_d7.tscn','tests/source176_r3/natural_64_p2_d0.tscn','tests/source176_r3/natural_64_p2_d1.tscn','tests/source176_r3/natural_64_p2_d2.tscn','tests/source176_r3/natural_64_p2_d3.tscn','tests/source176_r3/natural_64_p2_d4.tscn','tests/source176_r3/natural_64_p2_d5.tscn','tests/source176_r3/natural_64_p2_d6.tscn','tests/source176_r3/natural_64_p2_d7.tscn','tests/source176_r3/natural_89_p0_d0.tscn','tests/source176_r3/natural_89_p0_d1.tscn','tests/source176_r3/natural_89_p0_d2.tscn','tests/source176_r3/natural_89_p0_d3.tscn','tests/source176_r3/natural_89_p0_d4.tscn','tests/source176_r3/natural_89_p0_d5.tscn','tests/source176_r3/natural_89_p0_d6.tscn','tests/source176_r3/natural_89_p0_d7.tscn','tests/source176_r3/natural_89_p1_d0.tscn','tests/source176_r3/natural_89_p1_d1.tscn','tests/source176_r3/natural_89_p1_d2.tscn','tests/source176_r3/natural_89_p1_d3.tscn','tests/source176_r3/natural_89_p1_d4.tscn','tests/source176_r3/natural_89_p1_d5.tscn','tests/source176_r3/natural_89_p1_d6.tscn','tests/source176_r3/natural_89_p1_d7.tscn','tests/source176_r3/natural_89_p2_d0.tscn','tests/source176_r3/natural_89_p2_d1.tscn','tests/source176_r3/natural_89_p2_d2.tscn','tests/source176_r3/natural_89_p2_d3.tscn','tests/source176_r3/natural_89_p2_d4.tscn','tests/source176_r3/natural_89_p2_d5.tscn','tests/source176_r3/natural_89_p2_d6.tscn','tests/source176_r3/natural_89_p2_d7.tscn','tests/user_feedback_20260930/corner_wait_requirement_test.tscn','tests/user_feedback_20260930/crowd_position_candidates_test.tscn','tests/user_feedback_20260930/flank_committed_segment_test.tscn','tests/user_feedback_20260930/flank_projection_residual_test.tscn','tests/user_feedback_20260930/large_surround_packing_test.tscn','tests/user_feedback_20260930/motion_candidate_reuse_test.tscn','tests/user_feedback_20260930/surround_target_body_route_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 77,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "invocation_id": "73e9e2bc-7f7d-4c81-a56d-8d065a3ab1dc",
+    "owned_traces": [
+      "APPEARANCE_MATRIX.json",
+      "area_parent_admission.json",
+      "body_action_owner_matrix.json",
+      "box_snapshot_consumer.json",
+      "cadence_fast_path.json",
+      "cold_hot_action_phase.json",
+      "direct_reception_edges.json",
+      "exact_leg_and_corridor.json",
+      "MONSTER_IDENTITY_MATRIX.json",
+      "movement_frame_budget.json",
+      "point_motor_path.json",
+      "release_lifecycle.json",
+      "render_sequence.json",
+      "SKILL_EXECUTION_MATRIX.json",
+      "source_direct_phase_trace.json",
+      "source_game_clock_trace.json",
+      "source_idle_wake_phase.json",
+      "source_permission_lifecycle.json",
+      "target_magic_admission.json"
+    ],
+    "adopted_final": false
+  },
+  "original_critical_resume": {
+    "local_run": "framework_critical_resume_093938_563003",
+    "source_sha256": "98f09b09b3f8048285571ff5524b6ace1711c99d0f2c80347d20e8acb1fcbe01",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/source176_r3/natural_89_p0_d5.tscn','tests/source176_r3/natural_89_p0_d6.tscn','tests/source176_r3/natural_89_p0_d7.tscn','tests/source176_r3/natural_89_p1_d0.tscn','tests/source176_r3/natural_89_p1_d1.tscn','tests/source176_r3/natural_89_p1_d2.tscn','tests/source176_r3/natural_89_p1_d3.tscn','tests/source176_r3/natural_89_p1_d4.tscn','tests/source176_r3/natural_89_p1_d5.tscn','tests/source176_r3/natural_89_p1_d6.tscn','tests/source176_r3/natural_89_p1_d7.tscn','tests/source176_r3/natural_89_p2_d0.tscn','tests/source176_r3/natural_89_p2_d1.tscn','tests/source176_r3/natural_89_p2_d2.tscn','tests/source176_r3/natural_89_p2_d3.tscn','tests/source176_r3/natural_89_p2_d4.tscn','tests/source176_r3/natural_89_p2_d5.tscn','tests/source176_r3/natural_89_p2_d6.tscn','tests/source176_r3/natural_89_p2_d7.tscn','tests/random_teleport_map_extent_test.tscn','tests/loot_stable_identity_save_test.tscn','tests/loot_inventory_transaction_batch_test.tscn','tests/loot_runtime_item_policy_test.tscn','tests/combat_unit_source_priority_test.tscn','tests/skill_book_rank_upgrade_integration_test.tscn','tests/player_level_up_effect_runtime_test.tscn','tests/town_music_controller_test.tscn','tests/audio_runtime_service_test.tscn','tests/player_core_audio_hook_test.tscn','tests/skills/warrior_thrust_defense_runtime_test.tscn','tests/skills/warrior_melee_entry_runtime_test.tscn','tests/skills/summon_owner_teleport_runtime_test.tscn','tests/skills/summon_incoming_damage_runtime_test.tscn','tests/skills/summon_audio_hook_test.tscn','tests/monster_audio_hook_test.tscn','tests/projectile_audio_lifecycle_test.tscn','tests/player_item_audio_event_test.tscn','tests/skills/skill_contract_manifest_test.tscn','tests/skills/skill_source_of_truth_test.tscn','tests/hc_monster_combat_r3/attack_facing_freeze_test.tscn','tests/hc_monster_combat_r3/attack_game_clock_test.tscn','tests/hc_monster_combat_r3/attack_parent_release_identity_test.tscn','tests/hc_monster_combat_r3/audio_stale_frame_test.tscn','tests/hc_monster_combat_r3/body_rejection_world_isolation_test.tscn','tests/hc_monster_combat_r3/body_rule_tier_cross_test.tscn','tests/hc_monster_combat_r3/real_admission_census_test.tscn','tests/hc_monster_combat_r3/stale_death_notification_test.tscn','tests/hc_monster_combat_r4/attack_expiry_without_render_test.tscn','tests/hc_monster_combat_r4/attack_owner_idempotence_test.tscn','tests/hc_monster_combat_r4/body_rejected_factory_isolation_test.tscn','tests/hc_monster_combat_r4/body_rejected_query_contract_test.tscn','tests/hc_monster_combat_r4/overhead_property_scan_test.tscn','tests/monster_overhead_return_regression_test.tscn','tests/monster_overhead_cold_activation_test.tscn','tests/hc_monster_combat_r4/double_generation_death_test.tscn','tests/hc_monster_combat_r4/perf_unit_determinism_test.tscn','tests/hc_monster_combat_r4/native_physics_sampling_test.tscn','tests/hc_monster_combat_r4/synchronous_revive_death_token_test.tscn','tests/hc_monster_combat_r4/observer_integrity_test.tscn','tests/hc_monster_combat_r4/mp_payment_observation_test.tscn','tests/hc_monster_combat_r4/d3_boundary_runtime_test.tscn','tests/hc_monster_combat_r4/d3_motion_pressure_runtime_test.tscn','tests/hc_monster_combat_r4/body_multitarget_lifecycle_test.tscn','tests/hc_monster_combat_r4/async_line_lifecycle_test.tscn','tests/hc_monster_combat_r4/cancelled_release_observation_test.tscn','tests/hc_monster_combat_r4/source_destroyed_pending_test.tscn','tests/hc_monster_combat_r4/explicit_zero_attack_timing_test.tscn','tests/hc_monster_combat_r4/runtime_capability_inventory_test.tscn','tests/hc_monster_combat_r4/summon_planner_radius_test.tscn','tests/hc_monster_combat_r4/damage_attribution_counterexamples_test.tscn','tests/hc_monster_combat_r4/all_damage_lost_test.tscn','tests/hc_monster_combat_r4/natural_cadence_24_test.tscn','tests/hc_monster_combat_r4/natural_cadence_76_test.tscn','tests/hc_monster_combat_r4/natural_cadence_238_test.tscn','tests/hc_monster_combat_r4/natural_cadence_239_test.tscn','tests/hc_monster_combat_r4/natural_cadence_24_chase_test.tscn','tests/audio_w4_actor_service_test.tscn','tests/game_root_loading_transition_test.tscn','tests/r3_gold_cap_entrypoints_test.tscn','tests/w1_exact_ranged_delivery_test.tscn','tests/monster_mixed_damage_atomic_test.tscn','tests/monster_source_status_test.tscn','tests/headless_prefetch_compatibility_test.tscn','tests/hc_monster_ai/geometry_test.tscn','tests/hc_monster_ai/crowd_surround_runtime_test.tscn','tests/hc_monster_ai/w1_delivery_geometry_test.tscn','tests/hc_monster_ai/w1_special_delivery_runtime_test.tscn','tests/hc_monster_ai/inventory_test.tscn','tests/hc_monster_ai/lightning_test.tscn','tests/hc_monster_ai/path_test.tscn','tests/hc_monster_ai/scheduler_storm_test.tscn','tests/hc_monster_ai/runtime_test.tscn','tests/hc_monster_ai/world_obstacle_runtime_test.tscn','tests/hc_monster_ai/combat_epoch_delivery_test.tscn','tests/w6_visual_contract_test.tscn','tests/equipment_inventory_slot_swap_test.tscn','tests/combat_environment_request_integration_test.tscn','tests/loot_world_placement_integration_test.tscn','tests/item_drop_instance_rules_test.tscn','tests/item_drop_instance_persistence_test.tscn','tests/warrior_slaying_release_integration_test.tscn','tests/audio_w4_contract_test.tscn','tests/warehouse_gothic_ui_test.tscn','tests/shop_gothic_ui_test.tscn','tests/ui_error_feedback_scope_guard_test.tscn','tests/ui_error_machine_reason_leak_test.tscn','tests/ui_error_feedback_overlay_test.tscn','tests/repair_20260913/inventory_error_feedback_real_input_test.tscn','tests/player_poison_presentation_test.tscn','tests/player_health_bar_status_marker_test.tscn','tests/player_notice_overlay_test.tscn','tests/player_notice_item_style_test.tscn','tests/player_notice_dedupe_priority_test.tscn','tests/player_notice_action_result_contract_test.tscn','tests/equipment_success_notice_real_input_test.tscn','tests/skill_learning_notice_real_input_test.tscn','tests/user_loot_sheet_authority_test.tscn','tests/dpv2_drop_runtime_policy_test.tscn','tests/formal_map_destination_regression_test.tscn','tests/game_root_fail_map_transition_test.tscn','tests/formal_map_spawn_policy_test.tscn','tests/wall_render_binding_test.tscn','tests/monster_continuous_step_facing_test.tscn','tests/monster_empty_safe_zone_fast_path_test.tscn','tests/monster_idle_acquisition_budget_test.tscn','tests/monster_idle_scan_cadence_test.tscn','tests/boss_respawn_map_reentry_test.tscn','tests/skill_visual_cold_lifecycle_test.tscn','tests/magic_shield_map_lifecycle_test.tscn','tests/wall_render_publisher_snapshot_test.tscn','tests/hud_script_prefetch_exit_test.tscn','tests/random_teleport_destination_contract_test.tscn','tests/player_struck_release_order_test.tscn','tests/player_skill_struck_chain_test.tscn','tests/player_hit_reaction_policy_test.tscn','tests/player_enemy_struck_chain_e2e_test.tscn','tests/player_struck_scene_sweep_test.tscn','tests/player_struck_lock_test.tscn','tests/camera_black_budget_region_test.tscn','tests/map_diamond_camera_constraint_test.tscn','tests/map_diamond_camera_strict_edge_test.tscn','tests/game_root_diamond_camera_constraint_test.tscn','tests/live_map_loot_authority_export_test.tscn','tests/armor_single_slot_authority_test.tscn','tests/repair_20260913/loot_async_durability_test.tscn','tests/player_growth_live_runtime_test.tscn','tests/skill_runtime_classification_test.tscn','tests/skill_target_context_partition_test.tscn','tests/fire_wall_animation_batch_test.tscn','tests/fire_wall_release_owner_result_test.tscn','tests/hellfire_catchup_batch_test.tscn','tests/player_physical_defense_production_test.tscn','tests/taoist_passive_accuracy_production_test.tscn','tests/summon_outgoing_defense_production_test.tscn','tests/summon_growth_rank_upgrade_test.tscn','tests/taoist_summon_growth_contract_test.tscn','tests/ui_result_feedback_timing_test.tscn','tests/hidden_inventory_stats_refresh_test.tscn','tests/progression_loot_20260913/drop_balance_test.tscn','tests/loot_ui_20260914/runtime_followup_test.tscn','tests/repair_20260913/warehouse_prepared_transaction_test.tscn','tests/repair_20260913/bank_prepared_transaction_test.tscn','tests/character_delete_transaction_test.tscn','tests/player_world_position_unit_migration_test.tscn','tests/loot_ui_20260914/settings_function_test.tscn','tests/ui_r5_audio_config_strict_test.tscn','tests/ui_r5_audio_test.tscn','tests/touch_scroll_support_test.tscn','tests/character_select_touch_scroll_test.tscn','tests/r6_1_review/shop_selection_identity_test.tscn','tests/quest_gothic_ui_test.tscn','tests/death_revival_gothic_ui_test.tscn','tests/system_menu_gothic_ui_test.tscn','tests/town_music_runtime_test.tscn','tests/equipment_skill_level_affix_test.tscn','tests/world_background_staged_map_build_test.tscn','tests/mse_collision_grid_alignment_test.tscn','tests/hc_monster_combat_r1/boss_interval_test.tscn','tests/hc_monster_combat_r1/player_visual_duration_test.tscn','tests/hc_monster_combat_r1/player_poison_reapply_test.tscn','tests/hc_monster_combat_r1/attack_presentation_backlog_test.tscn','tests/hc_monster_combat_r1/continuous_magic_walk_delay_test.tscn','tests/hc_monster_combat_r1/damage_boundary_test.tscn','tests/hc_monster_combat_r1/death_reentry_test.tscn','tests/hc_monster_combat_r1/actor_body_policy_contract_test.tscn','tests/hc_monster_combat_r1/actor_body_projection_test.tscn','tests/hc_monster_combat_r1/monster_melee_body_pair_test.tscn','tests/hc_monster_combat_r1/summon_body_spawn_consistency_test.tscn','tests/hc_monster_combat_r1/monster_crowd_scale_performance_probe_test.tscn','tests/hc_monster_combat_r2/monster_body_rejection_test.tscn','tests/hc_monster_combat_r2/revival_durability_test.tscn','tests/hc_monster_combat_r2/attack_presentation_identity_test.tscn','tests/hc_monster_combat_r2/attack_clock_red_test.tscn','tests/hc_monster_combat_r2/direct_magic_step_chain_test.tscn','tests/hc_monster_combat_r2/player_struck_poison_chain_test.tscn','tests/hc_monster_combat_r2/monster_runtime_census_test.tscn','tests/hc_monster_combat_r2/large_body_swing_cadence_test.tscn','tests/melee_blocked_query_order_test.tscn','tests/polygon_query_streaming_test.tscn','tests/world_monster_clock_ledger_test.tscn','tests/world_monster_clock_persistence_test.tscn','tests/world_monster_clock_legacy_migration_test.tscn','tests/f03_hot_persistence_test.tscn','tests/f03_world_delta_compatibility_test.tscn','tests/f03_background_writer_test.tscn','tests/f03_pickup_receipt_lifecycle_test.tscn','tests/f03_warehouse_receipt_boundary_test.tscn','tests/f03_native_pickup_lifecycle_test.tscn','tests/f03_ordered_cleanup_test.tscn','tests/f03_periodic_background_save_test.tscn','tests/f05_settlement_display_separation_test.tscn','tests/f03_async_death_receipt_test.tscn','tests/f03_native_death_lifecycle_test.tscn','tests/portal_actual_arrival_guard_test.tscn','tests/portal_all_map_authoring_footprint_test.tscn','tests/hc_monster_combat_r4/body_radius_bucket_boundary_test.tscn','tests/hc_monster_combat_r4/body_radius_index_consistency_test.tscn','tests/classic_boss_area_magic_outcomes_test.tscn','tests/ancient_relic_fragment_test.tscn','tests/equipment_enhancement_black_iron_test.tscn','tests/equipment_enhancement_display_test.tscn','tests/equipment_enhancement_grade_test.tscn','tests/equipment_enhancement_material_notice_test.tscn','tests/equipment_enhancement_panel_flow_test.tscn','tests/equipment_enhancement_rules_test.tscn','tests/equipment_enhancement_transaction_test.tscn','tests/forge_persistence_roundtrip_test.tscn','tests/new_item_icon_surfaces_test.tscn','tests/equipment_skill_level_affix_rollout_test.tscn','tests/forge_calibrator_save_test.tscn','tests/forge_hud_target_occlusion_test.tscn','tests/forge_panel_layout_test.tscn','tests/relic_synthesis_runtime_test.tscn','tests/skeleton_multi_performance_test.tscn','tests/skeleton_multi_summon_contract_test.tscn','tests/skills/skill_rank_zero_three_matrix_test.tscn','tests/synthesis_panel_preview_test.tscn','tests/f03_workbench_receipt_boundary_test.tscn','tests/immediate_item_save_test.tscn','tests/player_bich_roadblock_escape_test.tscn','tests/skills/player_character_ground_movement_test.tscn','tests/workbench_any_slot_test.tscn','tests/relic_equipped_actor_test.tscn','tests/relic_combat_entry_test.tscn','tests/skill_mechanics_description_test.tscn','tests/skill_panel_combat_unit_test.tscn','tests/source176_r2/shared_permission_runtime_test.tscn','tests/source176_r2/exact_leg_runtime_test.tscn','tests/source176_r3/exact_leg_and_corridor_test.tscn','tests/source176_r3/eight_direction_admission_test.tscn','tests/source176_r3/box_snapshot_consumer_test.tscn','tests/source176_r3/source_permission_lifecycle_test.tscn','tests/source176_r3/source_game_clock_trace_test.tscn','tests/source176_r3/source_idle_wake_phase_test.tscn','tests/source176_r3/source_idle_3_test.tscn','tests/source176_r3/source_idle_10_test.tscn','tests/source176_r3/source_direct_phase_trace_test.tscn','tests/source176_r3/cold_hot_action_phase_test.tscn','tests/source176_r3/body_action_owner_matrix_test.tscn','tests/source176_r3/area_parent_admission_test.tscn','tests/source176_r3/movement_frame_budget_test.tscn','tests/source176_r3/published_map_approach_test.tscn','tests/source176_r3/all_skill_reaction_paths_test.tscn','tests/source176_r3/identity_export_test.tscn','tests/source176_r3/target_magic_admission_test.tscn','tests/source176_r3/direct_reception_edges_test.tscn','tests/source176_r3/release_lifecycle_test.tscn','tests/source176_r3/render_sequence_test.tscn','tests/source176_r3/ordinary_body_clearance_test.tscn','tests/source176_r3/point_motor_path_test.tscn','tests/source176_r3/cadence_fast_path_test.tscn','tests/source176_r3/c05_native_detour_test.tscn','tests/user_feedback_20260930/consumable_icon_surfaces_test.tscn','tests/user_feedback_20260930/corner_wait_requirement_test.tscn','tests/user_feedback_20260930/crowd_fractional_escape_test.tscn','tests/user_feedback_20260930/crowd_position_candidates_test.tscn','tests/user_feedback_20260930/crowd_recovery_30_test.tscn','tests/user_feedback_20260930/crowd_recovery_4_test.tscn','tests/user_feedback_20260930/crowd_recovery_8_test.tscn','tests/user_feedback_20260930/crowd_recovery_test.tscn','tests/user_feedback_20260930/flank_committed_segment_test.tscn','tests/user_feedback_20260930/flank_projection_residual_test.tscn','tests/user_feedback_20260930/full_surround_24_fractional_test.tscn','tests/user_feedback_20260930/full_surround_64_test.tscn','tests/user_feedback_20260930/full_surround_89_fractional_test.tscn','tests/user_feedback_20260930/full_surround_89_prefilled_test.tscn','tests/user_feedback_20260930/full_surround_89_test.tscn','tests/user_feedback_20260930/full_surround_mixed_test.tscn','tests/user_feedback_20260930/full_surround_moving_test.tscn','tests/user_feedback_20260930/full_surround_native_test.tscn','tests/user_feedback_20260930/full_surround_prefilled_test.tscn','tests/user_feedback_20260930/full_surround_west_wall_test.tscn','tests/user_feedback_20260930/immediate_warrior_toggle_save_test.tscn','tests/user_feedback_20260930/large_surround_packing_test.tscn','tests/user_feedback_20260930/monster_blocked_locomotion_test.tscn','tests/user_feedback_20260930/motion_candidate_reuse_test.tscn','tests/user_feedback_20260930/player_blocked_locomotion_test.tscn','tests/user_feedback_20260930/surround_vacancy_refill_89_test.tscn','tests/user_feedback_20260930/surround_target_body_route_test.tscn','tests/user_feedback_20260930/surround_vacancy_refill_test.tscn','tests/user_feedback_20260930/warrior_toggle_camera_native_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 268,
+      "failed": 33,
+      "status": "FAIL"
+    },
+    "invocation_id": "c1c8e3f1-07e6-470b-aac7-dda8b439fb11",
+    "owned_traces": [
+      "APPEARANCE_MATRIX.json",
+      "area_parent_admission.json",
+      "body_action_owner_matrix.json",
+      "box_snapshot_consumer.json",
+      "c05_native_detour.json",
+      "cadence_fast_path.json",
+      "cold_hot_action_phase.json",
+      "direct_reception_edges.json",
+      "exact_leg_and_corridor.json",
+      "MONSTER_IDENTITY_MATRIX.json",
+      "movement_frame_budget.json",
+      "ordinary_body_clearance.json",
+      "point_motor_path.json",
+      "release_lifecycle.json",
+      "render_sequence.json",
+      "SKILL_EXECUTION_MATRIX.json",
+      "source_direct_phase_trace.json",
+      "source_game_clock_trace.json",
+      "source_idle_wake_phase.json",
+      "source_permission_lifecycle.json",
+      "target_magic_admission.json"
+    ],
+    "adopted_final": false
+  }
+}

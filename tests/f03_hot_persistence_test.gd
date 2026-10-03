@@ -5,9 +5,9 @@ const Ledger := preload("res://scripts/world_monster_clock_ledger.gd")
 
 class ObservedState extends StateScript:
 	var synchronous_atomic_entries: Array[String] = []
-	func _write_json_atomic(target: String, document: Dictionary) -> bool:
+	func _write_json_atomic(target: String, document: Dictionary, preserve_known_wire := false) -> bool:
 		synchronous_atomic_entries.append(target)
-		return super._write_json_atomic(target, document)
+		return super._write_json_atomic(target, document, preserve_known_wire)
 
 var failures: Array[String] = []
 var measurements: Array[Dictionary] = []

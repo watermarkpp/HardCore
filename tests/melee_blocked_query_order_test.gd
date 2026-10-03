@@ -23,6 +23,7 @@ class Probe extends EnemyActor:
 	func _hc_frontline_at(_a: Vector2, _b: Vector2, _hit_target: Node2D) -> int: return 1
 
 func _ready() -> void:
+	var target := Node2D.new()
 	var enemy := Probe.new()
 	enemy.runtime_map_id = 1
 	enemy._terrain_navigation_context = {"valid": true, "contract_id": Terrain.CONTRACT_ID,
@@ -35,19 +36,20 @@ func _ready() -> void:
 	enemy._hc_next_side_retry_ms = Time.get_ticks_msec() + 10000
 	var a := Vector2(20.5,20.5)
 	for repeat in range(60):
-		assert(enemy._hc_neighbor(a, null, Vector2i.RIGHT) == Vector2i.ZERO)
+		assert(enemy._hc_neighbor(a, target, Vector2i.RIGHT) == Vector2i.ZERO)
 	assert(enemy.motion_calls == 60)
 	assert(enemy.terrain_calls == 0 and enemy.endpoint_calls == 0,
 		"body-blocked retries must short-circuit unused static geometry")
 	enemy.body_clear = true
-	assert(enemy._hc_neighbor(a, null, Vector2i.RIGHT) == Vector2i.RIGHT,
+	assert(enemy._hc_neighbor(a, target, Vector2i.RIGHT) == Vector2i.RIGHT,
 		"moving/dead/unregistered blocker must open the path immediately")
 	assert(enemy.terrain_calls == 1 and enemy.endpoint_calls == 1)
 	assert(enemy._hc_step_override == Vector2(21.5,20.5))
 	enemy.terrain_clear = false
-	assert(enemy._hc_neighbor(a, null, Vector2i.RIGHT) == Vector2i.ZERO,
+	assert(enemy._hc_neighbor(a, target, Vector2i.RIGHT) == Vector2i.ZERO,
 		"a clear body lane must never bypass static collision")
 	assert(enemy.terrain_calls == 2 and enemy.endpoint_calls == 1)
 	enemy.free()
+	target.free()
 	print("MELEE_BLOCKED_QUERY_ORDER_PASS")
 	get_tree().quit(0)

@@ -1,0 +1,16 @@
+{
+  "command": [
+    "powershell",
+    "-NoProfile",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "& './tools/run_godot_tests.ps1' -TestPaths 'tests/user_feedback_20260930/crowd_recovery_test.tscn','tests/user_feedback_20260930/crowd_recovery_4_test.tscn','tests/user_feedback_20260930/crowd_recovery_8_test.tscn','tests/user_feedback_20260930/crowd_recovery_30_test.tscn' -TimeoutSeconds 60"
+  ],
+  "timeout_seconds": 60,
+  "exit_code": 0,
+  "source_stable_during_run": true,
+  "passed": 4,
+  "failed": 0,
+  "status": "PASS"
+}

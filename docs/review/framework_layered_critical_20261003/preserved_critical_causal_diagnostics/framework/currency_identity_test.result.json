@@ -1,0 +1,46 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "real catalog loads",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "gold already has one registered stable identity",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "existing exact legacy currency source remains available",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "registered currency resolves through the real entity consumer",
+      "passed": false
+    },
+    {
+      "id": 5,
+      "label": "the item consumer resolves the same catalog currency",
+      "passed": false
+    },
+    {
+      "id": 6,
+      "label": "stable currency round-trips its identity",
+      "passed": false
+    }
+  ],
+  "count": 6,
+  "engine_version": "4.7-stable (official)",
+  "failed": 3,
+  "invocation_id": "457841e3-fd11-4624-9b9b-4264e930ed5c",
+  "passed": 3,
+  "reported_checks": 6,
+  "reported_failures": 3,
+  "run_id": "0073ecf0-26b1-4e90-b937-40e3a7278c86",
+  "scene_id": "currency_identity_test",
+  "schema_version": 1,
+  "source_content_sha256": "09d3c37e7cd7652137f34fa2ef2f600c2e852e473d799c7a20dd5c388571952d",
+  "status": "FAIL"
+}

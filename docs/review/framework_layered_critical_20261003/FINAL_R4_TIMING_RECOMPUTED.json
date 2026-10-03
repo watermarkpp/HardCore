@@ -1,0 +1,173 @@
+{
+  "r4_counterexamples_all_lost.json": {
+    "status": "PASS",
+    "starts": 20,
+    "production_game_gaps_s": [
+      3.03333333333332,
+      3.03333333333332,
+      3.0333333333334904,
+      3.0333333333335,
+      3.033333333333399,
+      3.0333333333331005,
+      3.0333333333332,
+      3.0333333333332,
+      3.0333333333331005,
+      3.0333333333332,
+      3.0333333333331005,
+      3.0333333333331964,
+      3.0333333333332035,
+      3.033333333333097,
+      3.0333333333332035,
+      3.033333333333097,
+      3.0333333333332035,
+      3.0333333333331964,
+      3.033333333333104
+    ],
+    "all_sampling": {
+      "n": 3550,
+      "p50_usec": 13803,
+      "p95_usec": 20703,
+      "p99_usec": 20705,
+      "max_usec": 21029,
+      "mean_usec": 16669.07661971831
+    },
+    "before_engine_60s": {
+      "n": 2810,
+      "p50_usec": 13803,
+      "p95_usec": 20703,
+      "p99_usec": 20706,
+      "max_usec": 21029,
+      "mean_usec": 16670.790391459075
+    },
+    "after_engine_60s": {
+      "n": 740,
+      "p50_usec": 13802,
+      "p95_usec": 20703,
+      "p99_usec": 20704,
+      "max_usec": 20707,
+      "mean_usec": 16662.568918918918
+    },
+    "phase_timing_ms": null,
+    "scope": "Same-run descriptive wall intervals during combat sampling; not CPU/GPU/device or ABBA speed proof."
+  },
+  "r4_cadence_24.json": {
+    "status": "PASS",
+    "starts": 20,
+    "production_game_gaps_s": [
+      3.03333333333332,
+      3.03333333333332,
+      3.0333333333334904,
+      3.0333333333335,
+      3.033333333333399,
+      3.0333333333331005,
+      3.0333333333332,
+      3.0333333333332,
+      3.0333333333331005,
+      3.0333333333332,
+      3.0333333333331005,
+      3.0333333333331964,
+      3.0333333333332035,
+      3.033333333333097,
+      3.0333333333332035,
+      3.033333333333097,
+      3.0333333333332035,
+      3.0333333333331964,
+      3.033333333333104
+    ],
+    "all_sampling": {
+      "n": 3549,
+      "p50_usec": 13802,
+      "p95_usec": 20703,
+      "p99_usec": 20717,
+      "max_usec": 24489,
+      "mean_usec": 16669.209354747818
+    },
+    "before_engine_60s": {
+      "n": 2807,
+      "p50_usec": 13802,
+      "p95_usec": 20703,
+      "p99_usec": 20710,
+      "max_usec": 22136,
+      "mean_usec": 16671.109725685787
+    },
+    "after_engine_60s": {
+      "n": 742,
+      "p50_usec": 13804,
+      "p95_usec": 20707,
+      "p99_usec": 20768,
+      "max_usec": 24489,
+      "mean_usec": 16662.020215633424
+    },
+    "phase_timing_ms": {
+      "boot_ms": 7550,
+      "boot_observation_ms": 4208,
+      "cleanup_ms": 92,
+      "initial_evidence_write_ms": 5,
+      "quit_requested_engine_ms": 72460,
+      "ready_engine_ms": 5640,
+      "sampling_ms": 59160,
+      "synchronous_scene_setup_ms": 3342
+    },
+    "scope": "Same-run descriptive wall intervals during combat sampling; not CPU/GPU/device or ABBA speed proof."
+  },
+  "r4_cadence_76.json": {
+    "status": "PASS",
+    "starts": 20,
+    "production_game_gaps_s": [
+      2.5166666666666635,
+      2.51666666666666,
+      2.5166666666666604,
+      2.516666666666749,
+      2.5166666666668007,
+      2.516666666666799,
+      2.5166666666666,
+      2.5166666666665023,
+      2.516666666666598,
+      2.5166666666664987,
+      2.5166666666665023,
+      2.5166666666664987,
+      2.5166666666666018,
+      2.516666666666495,
+      2.5166666666665023,
+      2.5166666666665023,
+      2.5166666666666018,
+      2.516666666666495,
+      2.5166666666665023
+    ],
+    "all_sampling": {
+      "n": 2870,
+      "p50_usec": 13802,
+      "p95_usec": 20703,
+      "p99_usec": 20707,
+      "max_usec": 20858,
+      "mean_usec": 16648.724041811845
+    },
+    "before_engine_60s": {
+      "n": 2779,
+      "p50_usec": 13802,
+      "p95_usec": 20703,
+      "p99_usec": 20707,
+      "max_usec": 20858,
+      "mean_usec": 16647.65635120547
+    },
+    "after_engine_60s": {
+      "n": 91,
+      "p50_usec": 13802,
+      "p95_usec": 20705,
+      "p99_usec": 20759,
+      "max_usec": 20759,
+      "mean_usec": 16681.32967032967
+    },
+    "phase_timing_ms": {
+      "boot_ms": 7870,
+      "boot_observation_ms": 4304,
+      "cleanup_ms": 72,
+      "initial_evidence_write_ms": 5,
+      "quit_requested_engine_ms": 61595,
+      "ready_engine_ms": 5802,
+      "sampling_ms": 47782,
+      "synchronous_scene_setup_ms": 3566
+    },
+    "scope": "Same-run descriptive wall intervals during combat sampling; not CPU/GPU/device or ABBA speed proof."
+  }
+}

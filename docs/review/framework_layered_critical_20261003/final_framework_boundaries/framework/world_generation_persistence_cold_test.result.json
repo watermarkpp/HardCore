@@ -1,0 +1,81 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "independent native process uses production persistence",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "runner confirms this invocation's successful live producer before profile loading",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "producer expectation requires a nonempty canonical generation",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "actual independent startup upgrade gate completes",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "actual profile service loads the producer's durable character",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "independent cold process restores the nonempty production generation exactly",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "cold progress is exact without repeated migration or reward",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "independent world ledger replay retains the real imported deadline",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "cold primary retains the same nonempty namespace",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "cold recovery backup retains the same nonempty namespace",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "cold world snapshot validates against the expected nonempty namespace",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "cold load leaves the original legacy archive bytes unchanged",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "cold load drains both actual persistence services",
+      "passed": true
+    }
+  ],
+  "count": 13,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "39c4489e-bb57-4e92-98be-81e443b9757a",
+  "passed": 13,
+  "reported_checks": 13,
+  "reported_failures": 0,
+  "run_id": "b1b0b9af-934c-4859-9516-205799a168f1",
+  "scene_id": "world_generation_persistence_cold_test",
+  "schema_version": 1,
+  "source_content_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+  "status": "PASS"
+}

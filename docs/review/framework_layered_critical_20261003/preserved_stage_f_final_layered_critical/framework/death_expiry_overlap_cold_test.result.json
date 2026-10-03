@@ -1,0 +1,31 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "cold process uses actual persistence",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "successful live producer supplied explicit expectation",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "cold expectation binds the runner-confirmed successful native producer in this invocation",
+      "passed": false
+    }
+  ],
+  "count": 3,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "4b39d578-b9ce-470e-8ff2-c2b2675c2d11",
+  "passed": 2,
+  "reported_checks": 3,
+  "reported_failures": 1,
+  "run_id": "d49bbc22-f0d4-4939-8e09-cbc08674bd7a",
+  "scene_id": "death_expiry_overlap_cold_test",
+  "schema_version": 1,
+  "source_content_sha256": "db50a12ee1deb2a25eb4f0ffe807f9da1bd6539dfe5b1e1b982680a8102c1c66",
+  "status": "FAIL"
+}

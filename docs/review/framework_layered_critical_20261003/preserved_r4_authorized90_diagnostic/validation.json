@@ -1,0 +1,16 @@
+{
+  "command": [
+    "powershell",
+    "-NoProfile",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "& './tools/run_godot_tests.ps1' -TestPaths 'tests/hc_monster_combat_r4/all_damage_lost_test.tscn','tests/hc_monster_combat_r4/natural_cadence_24_test.tscn','tests/hc_monster_combat_r4/natural_cadence_76_test.tscn' -TimeoutSeconds 90"
+  ],
+  "timeout_seconds": 90,
+  "exit_code": 1,
+  "source_stable_during_run": true,
+  "passed": 1,
+  "failed": 2,
+  "status": "FAIL"
+}

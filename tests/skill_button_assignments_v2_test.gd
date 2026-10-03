@@ -12,10 +12,11 @@ const EXPECTED_SKILL_COUNTS := {
 func _ready() -> void:
 	var legacy_slots: Array[String] = ["雷电术", "火墙", "魔法盾", "冰咆哮"]
 	var migrated_legacy := LoadoutRules.normalize_assignments({}, legacy_slots)
+	assert(migrated_legacy.valid and migrated_legacy.errors.is_empty())
 	assert(migrated_legacy.contract_id == LoadoutRules.BUTTON_ASSIGNMENTS_CONTRACT_ID)
 	assert(migrated_legacy.attack == [""], "旧存档迁移不得擅自占用攻击主键")
 	assert(
-		migrated_legacy.attack_ring == ["雷电术", "火墙", "魔法盾", "冰咆哮", "", ""],
+		migrated_legacy.attack_ring == ["hc.skill.wizard.lightning", "hc.skill.wizard.fire_wall", "hc.skill.wizard.magic_shield", "hc.skill.wizard.ice_storm", "", ""],
 		"旧四快捷槽必须迁移到六环前四槽"
 	)
 	assert(migrated_legacy.migration == "legacy_quick_slots_to_attack_ring")
@@ -25,16 +26,18 @@ func _ready() -> void:
 		"center": ["雷电术", "火墙", "魔法盾", "冰咆哮"],
 		"attack_ring": ["野蛮冲撞", "雷电术", "火墙"],
 	})
+	assert(migrated_v2.valid and migrated_v2.errors.is_empty())
 	assert(migrated_v2.attack == [""])
-	assert(migrated_v2.attack_ring == ["野蛮冲撞", "雷电术", "火墙", "", "", ""])
+	assert(migrated_v2.attack_ring == ["hc.skill.warrior.wild_rush", "hc.skill.wizard.lightning", "hc.skill.wizard.fire_wall", "", "", ""])
 	assert(migrated_v2.migration == "v2_attack_ring_preserved")
 
+	# Legacy input names above migrate once; runtime learned identities are canonical.
 	var learned := {
-		"野蛮冲撞": 3,
-		"雷电术": 3,
-		"火墙": 3,
-		"基本剑术": 3,
-		"攻杀剑术": 3,
+		"hc.skill.warrior.wild_rush": 3,
+		"hc.skill.wizard.lightning": 3,
+		"hc.skill.wizard.fire_wall": 3,
+		"hc.skill.warrior.basic_swordsmanship": 3,
+		"hc.skill.warrior.slaying_swordsmanship": 3,
 	}
 	var attack_result := LoadoutRules.assign_button_slot(migrated_v2, learned, {
 		"contract_id": "ui.skill.button_assignment.v3",
@@ -43,7 +46,7 @@ func _ready() -> void:
 		"slot_id": "hud.attack.primary",
 		"skill_name": "雷电术",
 	})
-	assert(attack_result.ok and attack_result.assignments.attack == ["雷电术"])
+	assert(attack_result.ok and attack_result.assignments.attack == ["hc.skill.wizard.lightning"])
 	assert(attack_result.assignments.attack_ring == migrated_v2.attack_ring)
 
 	var ring_result := LoadoutRules.assign_button_slot(
@@ -57,8 +60,8 @@ func _ready() -> void:
 			"skill_name": "火墙",
 		}
 	)
-	assert(ring_result.ok and ring_result.assignments.attack_ring[5] == "火墙")
-	assert(ring_result.assignments.attack == ["雷电术"], "六环修改污染攻击主键")
+	assert(ring_result.ok and ring_result.assignments.attack_ring[5] == "hc.skill.wizard.fire_wall")
+	assert(ring_result.assignments.attack == ["hc.skill.wizard.lightning"], "六环修改污染攻击主键")
 	for passive_name: String in ["基本剑术", "攻杀剑术"]:
 		var rejected := LoadoutRules.assign_button_slot(
 			ring_result.assignments,
@@ -111,7 +114,7 @@ func _ready() -> void:
 
 	## Hidden skills (e.g. taoist.revelation) cannot be newly assigned, but
 	## bindings saved in older profiles stay loadable untouched.
-	var learned_with_revelation := {"心灵启示": 3}
+	var learned_with_revelation := {"hc.skill.taoist.revelation": 3}
 	var hidden_assignment := LoadoutRules.assign_button_slot(
 		migrated_v2,
 		learned_with_revelation,
@@ -132,7 +135,7 @@ func _ready() -> void:
 		"attack_ring": ["心灵启示"],
 	})
 	assert(
-		legacy_hidden.attack_ring[0] == "心灵启示",
+		legacy_hidden.attack_ring[0] == "hc.skill.taoist.revelation",
 		"old hidden-skill bindings must be preserved for save compatibility"
 	)
 

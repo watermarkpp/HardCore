@@ -57,14 +57,12 @@ func _run() -> void:
 
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	await preload("res://tests/helpers/world_ready_fixture.gd").wait_for_world(self, game, GameData.service_runtime_map_id(0), "initial map")
 	for source_map_id: int in EXPECTED:
 		var expected: Dictionary = EXPECTED[source_map_id]
 		var runtime_map_id := _runtime_map_id(str(expected.map_key))
 		game.travel_to_map(runtime_map_id)
-		await get_tree().process_frame
-		await get_tree().process_frame
+		await preload("res://tests/helpers/world_ready_fixture.gd").wait_for_world(self, game, runtime_map_id, "orc source")
 		assert(game.current_map_id == runtime_map_id, "正式兽人古墓切图失败:%d" % runtime_map_id)
 		var background: WorldBackground = game.background
 		assert(background.uses_orc_tomb_art() and background.environment_source_map_code() == expected.code, "地图%d运行时客户端古墓资源未加载" % runtime_map_id)

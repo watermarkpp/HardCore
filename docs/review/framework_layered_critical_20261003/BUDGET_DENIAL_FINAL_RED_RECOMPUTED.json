@@ -1,0 +1,313 @@
+{
+  "status": "PASS",
+  "counterexample_native_status": "FAIL",
+  "native_directory": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\budget_denial_final_causal_red_185931_116129",
+  "source_content_sha256": "ea0a43c634155296f0fd1814d752696056c09921b2d9578cdaa0209c61d71cbf",
+  "same_epoch_completed_poll_blocker_matches": [
+    {
+      "phase": "after_root_process",
+      "epoch": 277,
+      "resource_last_poll_frame": 277,
+      "due_states": 88,
+      "resource_subscription_count": 112,
+      "denial": {
+        "blocker_service_epoch": 277,
+        "blocker_service_sequence": 340,
+        "blocking_category": "resource_completion:-9223371715201988993",
+        "epoch": 277,
+        "inflight_usec": 0,
+        "own_service_epoch": 277,
+        "own_service_sequence": 341,
+        "reason": "fairness",
+        "remaining_usec": 665,
+        "spent_usec": 535
+      }
+    },
+    {
+      "phase": "after_root_process",
+      "epoch": 278,
+      "resource_last_poll_frame": 278,
+      "due_states": 87,
+      "resource_subscription_count": 112,
+      "denial": {
+        "blocker_service_epoch": 278,
+        "blocker_service_sequence": 342,
+        "blocking_category": "resource_completion:-9223371715201988993",
+        "epoch": 278,
+        "inflight_usec": 0,
+        "own_service_epoch": 278,
+        "own_service_sequence": 343,
+        "reason": "fairness",
+        "remaining_usec": 890,
+        "spent_usec": 310
+      }
+    },
+    {
+      "phase": "after_root_process",
+      "epoch": 279,
+      "resource_last_poll_frame": 279,
+      "due_states": 86,
+      "resource_subscription_count": 112,
+      "denial": {
+        "blocker_service_epoch": 279,
+        "blocker_service_sequence": 344,
+        "blocking_category": "resource_completion:-9223371715201988993",
+        "epoch": 279,
+        "inflight_usec": 0,
+        "own_service_epoch": 279,
+        "own_service_sequence": 345,
+        "reason": "fairness",
+        "remaining_usec": 893,
+        "spent_usec": 307
+      }
+    },
+    {
+      "phase": "after_root_process",
+      "epoch": 280,
+      "resource_last_poll_frame": 280,
+      "due_states": 85,
+      "resource_subscription_count": 112,
+      "denial": {
+        "blocker_service_epoch": 280,
+        "blocker_service_sequence": 346,
+        "blocking_category": "resource_completion:-9223371715201988993",
+        "epoch": 280,
+        "inflight_usec": 0,
+        "own_service_epoch": 280,
+        "own_service_sequence": 347,
+        "reason": "fairness",
+        "remaining_usec": 922,
+        "spent_usec": 278
+      }
+    },
+    {
+      "phase": "after_root_process",
+      "epoch": 281,
+      "resource_last_poll_frame": 281,
+      "due_states": 84,
+      "resource_subscription_count": 112,
+      "denial": {
+        "blocker_service_epoch": 281,
+        "blocker_service_sequence": 348,
+        "blocking_category": "resource_completion:-9223371715201988993",
+        "epoch": 281,
+        "inflight_usec": 0,
+        "own_service_epoch": 281,
+        "own_service_sequence": 349,
+        "reason": "fairness",
+        "remaining_usec": 900,
+        "spent_usec": 300
+      }
+    },
+    {
+      "phase": "after_root_process",
+      "epoch": 282,
+      "resource_last_poll_frame": 282,
+      "due_states": 83,
+      "resource_subscription_count": 112,
+      "denial": {
+        "blocker_service_epoch": 282,
+        "blocker_service_sequence": 350,
+        "blocking_category": "resource_completion:-9223371715201988993",
+        "epoch": 282,
+        "inflight_usec": 0,
+        "own_service_epoch": 282,
+        "own_service_sequence": 351,
+        "reason": "fairness",
+        "remaining_usec": 951,
+        "spent_usec": 249
+      }
+    },
+    {
+      "phase": "after_root_process",
+      "epoch": 283,
+      "resource_last_poll_frame": 283,
+      "due_states": 82,
+      "resource_subscription_count": 112,
+      "denial": {
+        "blocker_service_epoch": 283,
+        "blocker_service_sequence": 352,
+        "blocking_category": "resource_completion:-9223371715201988993",
+        "epoch": 283,
+        "inflight_usec": 0,
+        "own_service_epoch": 283,
+        "own_service_sequence": 353,
+        "reason": "fairness",
+        "remaining_usec": 898,
+        "spent_usec": 302
+      }
+    },
+    {
+      "phase": "after_root_process",
+      "epoch": 284,
+      "resource_last_poll_frame": 284,
+      "due_states": 81,
+      "resource_subscription_count": 112,
+      "denial": {
+        "blocker_service_epoch": 284,
+        "blocker_service_sequence": 354,
+        "blocking_category": "resource_completion:-9223371715201988993",
+        "epoch": 284,
+        "inflight_usec": 0,
+        "own_service_epoch": 284,
+        "own_service_sequence": 355,
+        "reason": "fairness",
+        "remaining_usec": 849,
+        "spent_usec": 351
+      }
+    },
+    {
+      "phase": "after_root_process",
+      "epoch": 285,
+      "resource_last_poll_frame": 285,
+      "due_states": 80,
+      "resource_subscription_count": 112,
+      "denial": {
+        "blocker_service_epoch": 285,
+        "blocker_service_sequence": 356,
+        "blocking_category": "resource_completion:-9223371715201988993",
+        "epoch": 285,
+        "inflight_usec": 0,
+        "own_service_epoch": 285,
+        "own_service_sequence": 357,
+        "reason": "fairness",
+        "remaining_usec": 859,
+        "spent_usec": 341
+      }
+    },
+    {
+      "phase": "after_root_process",
+      "epoch": 286,
+      "resource_last_poll_frame": 286,
+      "due_states": 79,
+      "resource_subscription_count": 112,
+      "denial": {
+        "blocker_service_epoch": 286,
+        "blocker_service_sequence": 358,
+        "blocking_category": "resource_completion:-9223371715201988993",
+        "epoch": 286,
+        "inflight_usec": 0,
+        "own_service_epoch": 286,
+        "own_service_sequence": 359,
+        "reason": "fairness",
+        "remaining_usec": 872,
+        "spent_usec": 328
+      }
+    },
+    {
+      "phase": "after_root_process",
+      "epoch": 287,
+      "resource_last_poll_frame": 287,
+      "due_states": 78,
+      "resource_subscription_count": 112,
+      "denial": {
+        "blocker_service_epoch": 287,
+        "blocker_service_sequence": 360,
+        "blocking_category": "resource_completion:-9223371715201988993",
+        "epoch": 287,
+        "inflight_usec": 0,
+        "own_service_epoch": 287,
+        "own_service_sequence": 361,
+        "reason": "fairness",
+        "remaining_usec": 936,
+        "spent_usec": 264
+      }
+    },
+    {
+      "phase": "after_root_process",
+      "epoch": 288,
+      "resource_last_poll_frame": 288,
+      "due_states": 77,
+      "resource_subscription_count": 112,
+      "denial": {
+        "blocker_service_epoch": 288,
+        "blocker_service_sequence": 362,
+        "blocking_category": "resource_completion:-9223371715201988993",
+        "epoch": 288,
+        "inflight_usec": 0,
+        "own_service_epoch": 288,
+        "own_service_sequence": 363,
+        "reason": "fairness",
+        "remaining_usec": 887,
+        "spent_usec": 313
+      }
+    },
+    {
+      "phase": "after_root_process",
+      "epoch": 289,
+      "resource_last_poll_frame": 289,
+      "due_states": 76,
+      "resource_subscription_count": 112,
+      "denial": {
+        "blocker_service_epoch": 289,
+        "blocker_service_sequence": 364,
+        "blocking_category": "resource_completion:-9223371715201988993",
+        "epoch": 289,
+        "inflight_usec": 0,
+        "own_service_epoch": 289,
+        "own_service_sequence": 365,
+        "reason": "fairness",
+        "remaining_usec": 904,
+        "spent_usec": 296
+      }
+    },
+    {
+      "phase": "after_root_process",
+      "epoch": 290,
+      "resource_last_poll_frame": 290,
+      "due_states": 75,
+      "resource_subscription_count": 112,
+      "denial": {
+        "blocker_service_epoch": 290,
+        "blocker_service_sequence": 366,
+        "blocking_category": "resource_completion:-9223371715201988993",
+        "epoch": 290,
+        "inflight_usec": 0,
+        "own_service_epoch": 290,
+        "own_service_sequence": 367,
+        "reason": "fairness",
+        "remaining_usec": 917,
+        "spent_usec": 283
+      }
+    },
+    {
+      "phase": "after_root_process",
+      "epoch": 291,
+      "resource_last_poll_frame": 291,
+      "due_states": 74,
+      "resource_subscription_count": 112,
+      "denial": {
+        "blocker_service_epoch": 291,
+        "blocker_service_sequence": 368,
+        "blocking_category": "resource_completion:-9223371715201988993",
+        "epoch": 291,
+        "inflight_usec": 0,
+        "own_service_epoch": 291,
+        "own_service_sequence": 369,
+        "reason": "fairness",
+        "remaining_usec": 922,
+        "spent_usec": 278
+      }
+    },
+    {
+      "phase": "after_root_process",
+      "epoch": 292,
+      "resource_last_poll_frame": 292,
+      "due_states": 73,
+      "resource_subscription_count": 112,
+      "denial": {
+        "blocker_service_epoch": 292,
+        "blocker_service_sequence": 370,
+        "blocking_category": "resource_completion:-9223371715201988993",
+        "epoch": 292,
+        "inflight_usec": 0,
+        "own_service_epoch": 292,
+        "own_service_sequence": 371,
+        "reason": "fairness",
+        "remaining_usec": 882,
+        "spent_usec": 318
+      }
+    }
+  ],
+  "maximum_tick_delivery_lateness_usec": 2966667
+}

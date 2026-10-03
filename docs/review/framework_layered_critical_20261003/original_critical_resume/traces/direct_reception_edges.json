@@ -1,0 +1,216 @@
+{
+  "checks": 17,
+  "errors": [],
+  "reported_tested_sha": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+  "rows": [
+    {
+      "kind": "DIRECT",
+      "level": 49,
+      "result": {
+        "anti_magic_checked": true,
+        "anti_magic_eligible": true,
+        "anti_magic_points": 0,
+        "anti_magic_roll": 0,
+        "contract_id": "magic.evasion.anti_magic.direct_spell.v1",
+        "damage_after_evasion": 20,
+        "enters_magic_defense_stage": true,
+        "evasion_channel": "anti_magic",
+        "final_damage": 20,
+        "magic_defense_checked": false,
+        "magic_evaded": false,
+        "magic_evasion_percent": 0,
+        "stage_order": [
+          "anti_magic",
+          "magic_defense",
+          "take_damage"
+        ],
+        "success": true
+      },
+      "tick_after": 1075,
+      "tick_before": 0
+    },
+    {
+      "kind": "MINE",
+      "level": 49,
+      "result": {
+        "anti_magic_checked": false,
+        "anti_magic_eligible": false,
+        "anti_magic_points": 0,
+        "anti_magic_roll": 0,
+        "contract_id": "magic.evasion.anti_magic.direct_spell.v1",
+        "damage_after_evasion": 20,
+        "enters_magic_defense_stage": true,
+        "evasion_channel": "none",
+        "final_damage": 20,
+        "magic_defense_checked": false,
+        "magic_evaded": false,
+        "magic_evasion_percent": 0,
+        "stage_order": [
+          "anti_magic",
+          "magic_defense",
+          "take_damage"
+        ],
+        "success": true
+      },
+      "tick_after": 0,
+      "tick_before": 0
+    },
+    {
+      "kind": "EVADED",
+      "level": 49,
+      "result": {
+        "anti_magic_checked": true,
+        "anti_magic_eligible": true,
+        "anti_magic_points": 10,
+        "anti_magic_roll": 0,
+        "contract_id": "magic.evasion.anti_magic.direct_spell.v1",
+        "damage_after_evasion": 0,
+        "enters_magic_defense_stage": false,
+        "evasion_channel": "anti_magic",
+        "final_damage": 0,
+        "magic_defense_checked": false,
+        "magic_evaded": true,
+        "magic_evasion_percent": 100,
+        "stage_order": [
+          "anti_magic",
+          "magic_defense",
+          "take_damage"
+        ],
+        "success": false
+      },
+      "tick_after": 0,
+      "tick_before": 0
+    },
+    {
+      "kind": "MAC_ZERO",
+      "level": 49,
+      "result": {
+        "anti_magic_checked": true,
+        "anti_magic_eligible": true,
+        "anti_magic_points": 0,
+        "anti_magic_roll": 0,
+        "contract_id": "magic.evasion.anti_magic.direct_spell.v1",
+        "damage_after_evasion": 20,
+        "enters_magic_defense_stage": true,
+        "evasion_channel": "anti_magic",
+        "final_damage": 0,
+        "magic_defense_checked": true,
+        "magic_evaded": false,
+        "magic_evasion_percent": 0,
+        "stage_order": [
+          "anti_magic",
+          "magic_defense",
+          "take_damage"
+        ],
+        "success": false
+      },
+      "tick_after": 1075,
+      "tick_before": 0
+    },
+    {
+      "kind": "DIRECT",
+      "level": 50,
+      "result": {
+        "anti_magic_checked": true,
+        "anti_magic_eligible": true,
+        "anti_magic_points": 0,
+        "anti_magic_roll": 0,
+        "contract_id": "magic.evasion.anti_magic.direct_spell.v1",
+        "damage_after_evasion": 20,
+        "enters_magic_defense_stage": true,
+        "evasion_channel": "anti_magic",
+        "final_damage": 20,
+        "magic_defense_checked": false,
+        "magic_evaded": false,
+        "magic_evasion_percent": 0,
+        "stage_order": [
+          "anti_magic",
+          "magic_defense",
+          "take_damage"
+        ],
+        "success": true
+      },
+      "tick_after": 0,
+      "tick_before": 0
+    },
+    {
+      "kind": "MINE",
+      "level": 50,
+      "result": {
+        "anti_magic_checked": false,
+        "anti_magic_eligible": false,
+        "anti_magic_points": 0,
+        "anti_magic_roll": 0,
+        "contract_id": "magic.evasion.anti_magic.direct_spell.v1",
+        "damage_after_evasion": 20,
+        "enters_magic_defense_stage": true,
+        "evasion_channel": "none",
+        "final_damage": 20,
+        "magic_defense_checked": false,
+        "magic_evaded": false,
+        "magic_evasion_percent": 0,
+        "stage_order": [
+          "anti_magic",
+          "magic_defense",
+          "take_damage"
+        ],
+        "success": true
+      },
+      "tick_after": 0,
+      "tick_before": 0
+    },
+    {
+      "kind": "EVADED",
+      "level": 50,
+      "result": {
+        "anti_magic_checked": true,
+        "anti_magic_eligible": true,
+        "anti_magic_points": 10,
+        "anti_magic_roll": 0,
+        "contract_id": "magic.evasion.anti_magic.direct_spell.v1",
+        "damage_after_evasion": 0,
+        "enters_magic_defense_stage": false,
+        "evasion_channel": "anti_magic",
+        "final_damage": 0,
+        "magic_defense_checked": false,
+        "magic_evaded": true,
+        "magic_evasion_percent": 100,
+        "stage_order": [
+          "anti_magic",
+          "magic_defense",
+          "take_damage"
+        ],
+        "success": false
+      },
+      "tick_after": 0,
+      "tick_before": 0
+    },
+    {
+      "kind": "MAC_ZERO",
+      "level": 50,
+      "result": {
+        "anti_magic_checked": true,
+        "anti_magic_eligible": true,
+        "anti_magic_points": 0,
+        "anti_magic_roll": 0,
+        "contract_id": "magic.evasion.anti_magic.direct_spell.v1",
+        "damage_after_evasion": 20,
+        "enters_magic_defense_stage": true,
+        "evasion_channel": "anti_magic",
+        "final_damage": 0,
+        "magic_defense_checked": true,
+        "magic_evaded": false,
+        "magic_evasion_percent": 0,
+        "stage_order": [
+          "anti_magic",
+          "magic_defense",
+          "take_damage"
+        ],
+        "success": false
+      },
+      "tick_after": 0,
+      "tick_before": 0
+    }
+  ],
+  "runtime_content_sha256": "98f09b09b3f8048285571ff5524b6ace1711c99d0f2c80347d20e8acb1fcbe01"
+}

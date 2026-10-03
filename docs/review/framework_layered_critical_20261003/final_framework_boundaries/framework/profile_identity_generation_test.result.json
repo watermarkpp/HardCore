@@ -1,0 +1,46 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "profile identity preserves exact actual string generation without coercion",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "current profile receipt identity matches its original owner",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "ordinary map transition changes mutation identity and preserves profile receipt owner",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "actual restore replaces the character clock ledger identity",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "same profile ID after character restore rejects prior economic lifecycle",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "new quote binds exact new generation rather than a numeric truncation",
+      "passed": true
+    }
+  ],
+  "count": 6,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "39c4489e-bb57-4e92-98be-81e443b9757a",
+  "passed": 6,
+  "reported_checks": 6,
+  "reported_failures": 0,
+  "run_id": "6d003981-91cb-4f2d-b238-8a531cedbfb8",
+  "scene_id": "profile_identity_generation_test",
+  "schema_version": 1,
+  "source_content_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+  "status": "PASS"
+}

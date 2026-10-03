@@ -6,6 +6,7 @@ extends Node
 const Fixtures := preload(
 	"res://tests/helpers/monster_streaming_test_fixtures.gd"
 )
+const Budget := preload("res://scripts/layers/runtime/execution/frame_budget.gd")
 const GroundUnit := preload("res://scripts/ground_unit_space.gd")
 
 var _coordinator
@@ -42,12 +43,25 @@ func _run_size(monster_count: int, frames: int) -> void:
 				i + 1
 			)
 		)
-	var frame_id := 0
+	print("STREAMING_SINGLE_POLL_SETUP "+JSON.stringify({"monsters":monster_count,"process_epoch":Engine.get_process_frames(),"budget":Budget.snapshot()}))
+	# Startup's necessary save is charged to the same real epoch. Begin
+	# measurement only after an actual epoch transition, never by resetting
+	# the ledger or inventing frame IDs. Keep all original 900 sample frames.
+	var previous_epoch := Engine.get_process_frames()
 	for _frame: int in range(frames):
-		frame_id += 1
+		while Engine.get_process_frames() == previous_epoch:
+			await get_tree().process_frame
+		var frame_id := Engine.get_process_frames()
+		var before_poll: int = _coordinator.coordinator_poll_count
 		_coordinator.poll_once(frame_id)
-		await get_tree().process_frame
+		assert(_coordinator.coordinator_poll_count == before_poll+1,
+			"a fresh actual epoch admits one formal poll without a second budget")
+		_coordinator.poll_once(frame_id)
+		assert(_coordinator.coordinator_poll_count == before_poll+1,
+			"a same-epoch repeated call cannot execute a second heavy poll")
+		previous_epoch = frame_id
 	var diag: Dictionary = _coordinator.monster_streaming_diagnostics()
+	print("STREAMING_SINGLE_POLL_RESULT "+JSON.stringify({"monsters":monster_count,"expected_frames":frames,"process_epoch":Engine.get_process_frames(),"diagnostics":diag,"budget":Budget.snapshot()}))
 	assert(
 		int(diag.get("per_instance_poll_call_count", -1)) == 0,
 		"MonsterVisual must never call the global streaming poll"

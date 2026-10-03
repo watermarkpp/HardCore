@@ -93,7 +93,14 @@ func _run() -> void:
 	var raced: RefCounted = service.submit(path, {"profile_id": "owner"}, {"value": 110}, _validate, _guard, false, null, Callable(), true)
 	assert(service.finish_preparation(raced, true).success)
 	service.authorize(raced)
-	service.pump() # Start READ_PREVIOUS.
+	# An optional pump may yield under the shared frame budget. Observe the
+	# exact request phase before editing the already-read authoritative bytes.
+	var read_deadline_ms := Time.get_ticks_msec() + 5000
+	while str(service._queue[0].phase) != "READING" and Time.get_ticks_msec() < read_deadline_ms:
+		service.pump()
+		if str(service._queue[0].phase) != "READING":
+			await get_tree().process_frame
+	assert(service._queue[0].job == raced and str(service._queue[0].phase) == "READING", "CAS fault must follow the actual previous-document read")
 	assert(raced.stage_result(true).result.success)
 	_write(path, {"value": 101})
 	assert(not service.finish(raced, true).success and _read(path).value == 101)
@@ -110,8 +117,7 @@ func _run() -> void:
 	var committing: RefCounted = service.submit(path, {"profile_id": "owner"}, {"value": 150}, _validate, _guard, false, null, Callable(), true)
 	assert(service.finish_preparation(committing, true).success)
 	service.authorize(committing)
-	service.pump()
-	service.pump(true) # Read receipt starts PROMOTE.
+	await _await_phase(service, committing, "PROMOTING")
 	assert(committing.stage_result(true).result.success)
 	assert(not service.cancel(committing))
 	assert(service.finish(committing, true).success and _read(path).value == 150)
@@ -137,8 +143,9 @@ func _run() -> void:
 	await _finish(service, updated)
 	assert(updated.response.success and _read(path).value == 171 and _read(path).preserved == "other-owner")
 	var changed: RefCounted = service.submit(path, {"profile_id": current_profile}, {}, _validate, _guard, false, null, Callable(), false, null, "", false, _increment_update)
+	await _await_phase(service, changed, "READ_UPDATE")
 	assert(changed.stage_result(true).result.success)
-	service.pump() # Derive from the original read; the external file is newer.
+	await _await_phase(service, changed, "NEW") # Derived from the completed original read.
 	_write(path, {"value": 190, "preserved": "external"})
 	await _finish(service, changed)
 	assert(not changed.response.success and changed.response.reason == "update_source_changed")
@@ -146,6 +153,14 @@ func _run() -> void:
 	print("F03_WRITER_METRICS " + JSON.stringify({"validation_calls": approvals, "nonblocking_poll_usec": polling_usec}))
 	print("F03_BACKGROUND_WRITER_PASS")
 	get_tree().quit(0)
+
+func _await_phase(service: RefCounted, job: RefCounted, phase: String) -> void:
+	var deadline := Time.get_ticks_msec() + 5000
+	while not service._queue.is_empty() and service._queue[0].job == job and service._queue[0].phase != phase and Time.get_ticks_msec() < deadline:
+		service.pump()
+		if service._queue.is_empty() or service._queue[0].phase != phase:
+			await get_tree().process_frame
+	assert(not service._queue.is_empty() and service._queue[0].job == job and service._queue[0].phase == phase, "fault observation requires the exact writer phase: " + phase)
 
 func _finish(service: RefCounted, job: RefCounted) -> void:
 	var deadline := Time.get_ticks_msec() + 5000

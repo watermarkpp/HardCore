@@ -1,0 +1,41 @@
+{
+  "checks": 9,
+  "errors": [],
+  "reported_tested_sha": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+  "rows": [
+    {
+      "center_distance": 0.99,
+      "kind": "player",
+      "parent": 1,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.397747564417433
+    },
+    {
+      "center_distance": 0.99,
+      "kind": "skeleton",
+      "parent": 1,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.353553390593274
+    },
+    {
+      "center_distance": 0.99,
+      "kind": "beast",
+      "parent": 1,
+      "source_radius": 0.353553390593274,
+      "target_radius": 0.5
+    },
+    {
+      "hp_after": 1000000,
+      "hp_before": 1000000,
+      "kind": "wall",
+      "parent_after": 0,
+      "parent_before": 0,
+      "rng_after": "5210737035328134003",
+      "rng_before": "5210737035328134003",
+      "timer_after": -0.0166666666666667,
+      "timer_before": -0.0166666666666667
+    }
+  ],
+  "runtime_content_sha256": "ea35e35f3c376085e08c850e56b778323a946a2c3f019d297e789722bc440a81",
+  "scope": "structural admission with actual player/skeleton/beast radii and WORLD wall; native crowd proof is d3_motion_pressure"
+}

@@ -38,10 +38,13 @@ func _run() -> void:
 	var blocked := 0
 	var frames := {}
 	var samples: Array = []
+	var diagnostic_samples: Array = []
 	for frame in 180:
 		await get_tree().physics_frame
 		await get_tree().process_frame
 		_check(actor.spatial_index_position().distance_to(center) <= GU.EPSILON_GU, "closed body cage allowed continuing displacement")
+		if frame % 15 == 0:
+			diagnostic_samples.append({"frame":frame,"reason":actor._hc_last_reason,"pose":actor.visual.current_state,"pose_frame":actor.visual.current_frame,"intent":actor._locomotion_pose_intent,"session":actor._hc_pursuit_session,"actual_gu":str(actor.actual_ground_motion_gu)})
 		if actor.actual_ground_motion_gu.length_squared() < 0.000000000001 and actor._hc_last_reason in ["FRONTLINE_BLOCKED", "MOTION_BLOCKED"]:
 			blocked += 1
 			frames[actor.visual.current_frame] = true
@@ -64,7 +67,7 @@ func _run() -> void:
 		await get_tree().physics_frame
 		await get_tree().process_frame
 	_check(actor.visual.current_state == "idle", "control lock kept blocked locomotion active")
-	FileAccess.open("res://outputs/test_logs/monster_blocked_locomotion.json", FileAccess.WRITE).store_string(JSON.stringify({"body_spacing_gu": body_spacing, "blocked_frames": blocked, "animation_frames": frames.keys(), "samples": samples, "failures": failures}, "  "))
+	FileAccess.open("res://outputs/test_logs/monster_blocked_locomotion.json", FileAccess.WRITE).store_string(JSON.stringify({"body_spacing_gu": body_spacing, "blocked_frames": blocked, "animation_frames": frames.keys(), "samples": samples, "diagnostic_samples": diagnostic_samples, "failures": failures}, "  "))
 	for body in blockers:
 		index.unregister(body.spatial_actor_runtime_id)
 		body.queue_free()

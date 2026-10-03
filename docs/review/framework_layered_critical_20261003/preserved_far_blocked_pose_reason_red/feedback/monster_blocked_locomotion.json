@@ -1,0 +1,120 @@
+{
+  "animation_frames": [],
+  "blocked_frames": 0,
+  "body_spacing_gu": 0.707106781186547,
+  "diagnostic_samples": [
+    {
+      "actual_gu": "(0.0, 0.0)",
+      "frame": 0,
+      "intent": false,
+      "pose": "idle",
+      "pose_frame": 0,
+      "reason": "IDLE",
+      "session": false
+    },
+    {
+      "actual_gu": "(0.0, 0.0)",
+      "frame": 15,
+      "intent": false,
+      "pose": "idle",
+      "pose_frame": 2,
+      "reason": "IDLE",
+      "session": false
+    },
+    {
+      "actual_gu": "(0.0, 0.0)",
+      "frame": 30,
+      "intent": false,
+      "pose": "idle",
+      "pose_frame": 0,
+      "reason": "IDLE",
+      "session": false
+    },
+    {
+      "actual_gu": "(0.0, 0.0)",
+      "frame": 45,
+      "intent": false,
+      "pose": "idle",
+      "pose_frame": 1,
+      "reason": "IDLE",
+      "session": false
+    },
+    {
+      "actual_gu": "(0.0, 0.0)",
+      "frame": 60,
+      "intent": true,
+      "pose": "walk",
+      "pose_frame": 2,
+      "reason": "OUT_OF_RANGE",
+      "session": true
+    },
+    {
+      "actual_gu": "(0.0, 0.0)",
+      "frame": 75,
+      "intent": true,
+      "pose": "walk",
+      "pose_frame": 5,
+      "reason": "OUT_OF_RANGE",
+      "session": true
+    },
+    {
+      "actual_gu": "(0.0, 0.0)",
+      "frame": 90,
+      "intent": true,
+      "pose": "walk",
+      "pose_frame": 2,
+      "reason": "OUT_OF_RANGE",
+      "session": true
+    },
+    {
+      "actual_gu": "(0.0, 0.0)",
+      "frame": 105,
+      "intent": true,
+      "pose": "walk",
+      "pose_frame": 5,
+      "reason": "OUT_OF_RANGE",
+      "session": true
+    },
+    {
+      "actual_gu": "(0.0, 0.0)",
+      "frame": 120,
+      "intent": true,
+      "pose": "walk",
+      "pose_frame": 2,
+      "reason": "OUT_OF_RANGE",
+      "session": true
+    },
+    {
+      "actual_gu": "(0.0, 0.0)",
+      "frame": 135,
+      "intent": true,
+      "pose": "walk",
+      "pose_frame": 5,
+      "reason": "OUT_OF_RANGE",
+      "session": true
+    },
+    {
+      "actual_gu": "(0.0, 0.0)",
+      "frame": 150,
+      "intent": true,
+      "pose": "walk",
+      "pose_frame": 2,
+      "reason": "OUT_OF_RANGE",
+      "session": true
+    },
+    {
+      "actual_gu": "(0.0, 0.0)",
+      "frame": 165,
+      "intent": true,
+      "pose": "walk",
+      "pose_frame": 5,
+      "reason": "OUT_OF_RANGE",
+      "session": true
+    }
+  ],
+  "failures": [
+    "fixture did not sustain real body-blocked pursuit",
+    "blocked walk pose did not advance"
+  ],
+  "samples": []
+}

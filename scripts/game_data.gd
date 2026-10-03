@@ -182,6 +182,7 @@ var _maps_by_name: Dictionary = {}
 var _catalog_by_name: Dictionary = {}
 var _catalog_by_item_id: Dictionary = {}
 var _catalog_by_service_index: Dictionary = {}
+var _catalog_by_currency_id: Dictionary = {}
 var _skill_books_by_skill: Dictionary = {}
 var _price_by_name: Dictionary = {}
 var _price_by_item_id: Dictionary = {}
@@ -2409,6 +2410,7 @@ func _build_indexes() -> bool:
 		_catalog_by_name.clear()
 		_catalog_by_item_id.clear()
 		_catalog_by_service_index.clear()
+		_catalog_by_currency_id.clear()
 		_price_by_name.clear()
 		_price_by_item_id.clear()
 		_price_by_service_index.clear()
@@ -2521,6 +2523,7 @@ func _build_item_catalog() -> void:
 	_catalog_by_name.clear()
 	_catalog_by_item_id.clear()
 	_catalog_by_service_index.clear()
+	_catalog_by_currency_id.clear()
 	_build_price_index()
 	var skill_names := {}
 	for skill: Variant in skills:
@@ -2741,6 +2744,20 @@ func _register_catalog_item(record: Dictionary) -> void:
 	var item_name := str(record.get("name", ""))
 	if item_name.is_empty() or _catalog_by_name.has(item_name):
 		return
+	# Import the exact legacy authoring identity once for every catalog source.
+	# The primary gold record is a service special, not a fallback item.
+	if record.get("kind") == "currency" and not record.has("currency_id"):
+		var gold_identity := EntityRegistry.resolve("hc.currency.gold", "currency")
+		if item_name == str(gold_identity.get("display_name", "")):
+			record["currency_id"] = str(gold_identity.get("id", ""))
+	# This is an index of the existing catalog, never a second currency owner.
+	if record.has("currency_id"):
+		var currency: Variant = record.currency_id
+		if not currency is String or record.get("kind") != "currency" \
+			or EntityRegistry.resolve(currency, "currency").is_empty() or _catalog_by_currency_id.has(currency):
+			_item_category_error = "unknown_or_duplicate_currency_identity"
+			return
+		_catalog_by_currency_id[currency] = record
 	_catalog_by_name[item_name] = record
 	var item_id := _stable_item_id(record)
 	if item_id >= 0 and not _catalog_by_item_id.has(item_id):
@@ -3641,6 +3658,8 @@ func get_entity_record(entity_id: String) -> Dictionary:
 			return get_monster_by_id(int(identity.legacy_id))
 		"map":
 			return get_map_by_id(int(identity.legacy_id))
+		"currency":
+			return get_item_record(entity_id)
 	return {}
 
 
@@ -3648,6 +3667,8 @@ func item_entity_id(item_ref: Variant) -> String:
 	var record := _item_record_for_read(item_ref)
 	if record.is_empty():
 		return ""
+	if record.get("kind") == "currency" and record.get("currency_id") is String:
+		return str(record.currency_id) if not EntityRegistry.resolve(record.currency_id, "currency").is_empty() else ""
 	var item_id := _stable_item_id(record)
 	if item_id >= 0:
 		return EntityRegistry.canonical(EntityRegistry.from_legacy("item", item_id))
@@ -3719,7 +3740,11 @@ func _item_record_for_read(item_ref: Variant) -> Dictionary:
 			return _item_record_for_read({"item_id":int(registered.legacy_id)})
 		if registered.get("kind") == "service_item":
 			return _item_record_for_read({"service_index":int(registered.legacy_id)})
+		if registered.get("kind") == "currency":
+			return _catalog_by_currency_id.get(item_ref, {}) as Dictionary
 		return {}
+	if item_ref is Dictionary and item_ref.has("currency_id"):
+		return _catalog_by_currency_id.get(item_ref.currency_id, {}) as Dictionary
 	var identity := _stable_identity(item_ref)
 	var item_id := int(identity.get("item_id", -1))
 	if item_id == SocketGemRules.ITEM_ID:
@@ -3751,6 +3776,12 @@ func _valid_explicit_item_reference(value: Variant, runtime_membership := true) 
 		return is_finite(float(value)) and float(value) == floor(float(value)) and float(value) >= 0 and float(value) <= 2147483647
 	if not value is Dictionary:
 		return true
+	if value.has("currency_id"):
+		if not value.currency_id is String or EntityRegistry.resolve(value.currency_id, "currency").is_empty():
+			return false
+		for item_key: String in ["item_id", "itemId", "service_index", "serviceIndex"]:
+			if value.has(item_key): return false
+		return not runtime_membership or _catalog_by_currency_id.has(value.currency_id)
 	# A malformed explicit runtime identity never falls through to presentation
 	# text. Authoring aliases are resolved by their existing primary indexes.
 	for key: String in ["item_id", "service_index"]:

@@ -6,9 +6,9 @@ const State := preload("res://scripts/player_state.gd")
 const Ledger := preload("res://scripts/world_monster_clock_ledger.gd")
 class ObservedState extends State:
 	var synchronous_file_writes := 0
-	func _write_json_atomic(path: String, document: Dictionary) -> bool:
+	func _write_json_atomic(path: String, document: Dictionary, preserve_known_wire := false) -> bool:
 		synchronous_file_writes += 1
-		return super._write_json_atomic(path, document)
+		return super._write_json_atomic(path, document, preserve_known_wire)
 var signals_seen := 0
 
 func _ready() -> void:

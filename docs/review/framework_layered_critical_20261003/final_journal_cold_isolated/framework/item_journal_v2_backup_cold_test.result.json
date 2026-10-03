@@ -1,0 +1,181 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "this native successful producer owns the corrupt-primary/old-v2 inputs",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "owned isolated account and production persistence only",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "real startup migration gate: { \"success\": true, \"reason\": \"already_completed\", \"backup_path\": \"user://save_upgrades/framework_identity_v1\", \"profiles\": [\"1791029663_3989\", \"1791029663_5325\"] }",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "explicit default-off module activation",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "actual cold selection recovers the requested owned profile",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "2.0->1.0: actual loader restores the older sequenced ownership checkpoint: { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"primary\", \"path\": \"user://characters/1791029663_5325.json\" }",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "2.0->1.0: old producer epoch is closed durably with the restored inventory before accepting commands",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "2.0->1.0: every retained old outcome is preserved exactly",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "2.0->1.0: original lost completed ID is refused before rules or inputs",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "2.0->1.0: changing request contents cannot recycle the old ID",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "2.0->1.0: refreshed rejected request cannot create another writer",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "2.0->1.0: original cached successful quote is revalidated and cannot create a writer",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "2.0->1.0: refusals cause zero ownership/resource/journal/file/completion changes",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "2.0->1.0: retained old result is read-only replayable",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "2.0->1.0: retained ID still detects changed request",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "2.0->1.0: new user intent has a distinct durable epoch and next logical serial",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "2.0->1.0: actual sole writer continues the recovered stream",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "2.0->1.0: mixed retained history remains validated and bounded",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "actual cold selection recovers the requested owned profile",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "130.0->65.0: actual loader restores the older sequenced ownership checkpoint: { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"primary\", \"path\": \"user://characters/1791029663_3989.json\" }",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "130.0->65.0: old producer epoch is closed durably with the restored inventory before accepting commands",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "130.0->65.0: every retained old outcome is preserved exactly",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "130.0->65.0: original lost completed ID is refused before rules or inputs",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "130.0->65.0: changing request contents cannot recycle the old ID",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "130.0->65.0: refreshed rejected request cannot create another writer",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "130.0->65.0: original cached successful quote is revalidated and cannot create a writer",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "130.0->65.0: refusals cause zero ownership/resource/journal/file/completion changes",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "130.0->65.0: retained old result is read-only replayable",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "130.0->65.0: retained ID still detects changed request",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "130.0->65.0: new user intent has a distinct durable epoch and next logical serial",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "130.0->65.0: actual sole writer continues the recovered stream",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "130.0->65.0: mixed retained history remains validated and bounded",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "complete owned handoff written",
+      "passed": true
+    }
+  ],
+  "count": 33,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "4a7a87e4-2a42-4220-9222-3618bdc6255a",
+  "passed": 33,
+  "reported_checks": 33,
+  "reported_failures": 0,
+  "run_id": "447df189-2731-4c1a-8fc7-fd7a74143d0b",
+  "scene_id": "item_journal_v2_backup_cold_test",
+  "schema_version": 1,
+  "source_content_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+  "status": "PASS"
+}

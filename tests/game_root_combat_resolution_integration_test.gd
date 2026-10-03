@@ -18,8 +18,7 @@ func _run() -> void:
 
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	await preload("res://tests/helpers/formal_world_skill_fixture.gd").wait_for_formal_world(self, game, "game_root_combat_resolution_integration")
 	# The integration fixture is interested in direct resolver calls only. Freeze
 	# the unrelated world loop after bootstrap so no map/death maintenance can
 	# move or remove the manually-owned target while assertions run.

@@ -18,8 +18,7 @@ func _run() -> void:
 	_run_experience_penalty_contract()
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	await preload("res://tests/helpers/formal_world_skill_fixture.gd").wait_for_formal_world(self, game, "death_revival_home_failure")
 	assert(game.gameplay_input_is_enabled(), "death lifecycle test requires gameplay input enabled")
 	game.set_safe_logout_error_reporter(
 		Callable(self, "_capture_safe_logout_error")

@@ -1,0 +1,16 @@
+{
+  "command": [
+    "powershell",
+    "-NoProfile",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "& './tools/run_godot_tests.ps1' -TestPaths 'tests/repair_20260913/inventory_error_feedback_real_input_test.tscn','tests/melee_blocked_query_order_test.tscn','tests/f03_background_writer_test.tscn','tests/audit_39fe_regressions.tscn','tests/bich_environment_test.tscn','tests/orc_tomb_game_visual_geometry_test.tscn','tests/orc_tomb_source_integration_test.tscn','tests/source_collision_chunk_test.tscn','tests/natural_cave_source_integration_test.tscn','tests/vertical_slice_loop_test.tscn','tests/wooma_game_runtime_integration_test.tscn','tests/hc_monster_combat_r4/all_damage_lost_test.tscn','tests/hc_monster_combat_r4/natural_cadence_24_test.tscn','tests/hc_monster_combat_r4/natural_cadence_76_test.tscn' -TimeoutSeconds 30"
+  ],
+  "timeout_seconds": 30,
+  "exit_code": 1,
+  "source_stable_during_run": true,
+  "passed": 7,
+  "failed": 7,
+  "status": "FAIL"
+}

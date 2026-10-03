@@ -169,7 +169,7 @@ func _run() -> void:
 	# --- R1.1 closure: item-use authority reports structured results ---------
 	var player_state := _read_script("res://scripts/player_state.gd")
 	assert(
-		player_state.contains("func use_inventory_index_result(index: int) -> Dictionary:"),
+		player_state.contains("func use_inventory_index_result(index: int, save_in_background := false) -> Dictionary:"),
 		"use authority must expose the structured result entrypoint"
 	)
 	assert(
@@ -185,7 +185,7 @@ func _run() -> void:
 		"temporary buff failures must classify through the error boundary"
 	)
 	assert(
-		player_state.contains("func _learn_skill_result(skill_name: String, inventory_index := -1) -> Dictionary:"),
+		player_state.contains("func _learn_skill_result(skill_ref: String, inventory_index := -1, save_in_background := false) -> Dictionary:"),
 		"skill learning must expose the structured result contract"
 	)
 	assert(

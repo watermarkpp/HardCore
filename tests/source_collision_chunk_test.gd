@@ -15,8 +15,7 @@ func _run() -> void:
 	# FREEZE-P0.2R: legacy source-collision audit runs in explicit reference
 	# mode (maps 401/402 are planned_unbuilt, not formal gameplay).
 	game.reference_audit_mode = true
-	await get_tree().process_frame
-	await get_tree().process_frame
+	await preload("res://tests/helpers/world_ready_fixture.gd").wait_for_world(self, game, GameData.service_runtime_map_id(0), "reference initial map")
 
 	await _verify_map(game, _runtime_map_id("world_bich_province"), Vector2i.ZERO)
 	await _verify_map(game, _runtime_map_id("bich_orc_tomb_f1"), Vector2i.ZERO)
@@ -29,8 +28,7 @@ func _run() -> void:
 
 func _verify_map(game: Node, map_id: int, expected_size: Vector2i) -> void:
 	game.travel_to_map(map_id)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	await preload("res://tests/helpers/world_ready_fixture.gd").wait_for_world(self, game, map_id, "reference map")
 	assert(game.current_map_id == map_id, "地图%d切换未完成" % map_id)
 	var background: WorldBackground = game.background
 	var content := RegionContent.get_map_content(map_id)
@@ -58,6 +56,13 @@ func _verify_map(game: Node, map_id: int, expected_size: Vector2i) -> void:
 			)
 			assert(MapEditorRuntimeBridge.game_content_for_map(map_id).portals.is_empty(), "尸王殿不应生成出口")
 		return
+	var collision_deadline := Time.get_ticks_msec() + 5000
+	while background.source_collision_shape_count() == 0 and Time.get_ticks_msec() < collision_deadline:
+		await get_tree().process_frame
+	if background.source_collision_shape_count() == 0:
+		print("SOURCE_COLLISION_PHASE " + JSON.stringify({"map_id":map_id,"position":str(game.player.global_position),
+			"focus_source":str(background._collision_focus_source),"pending_focus":str(background._pending_collision_focus),
+			"pending":background._collision_rebuild_pending,"mask_size":str(background.source_collision_mask_size())}))
 	assert(background.source_collision_mask_size() == expected_size, "地图%d阻挡掩码尺寸错误" % map_id)
 	assert(background.source_collision_shape_count() > 0 and background.source_collision_shape_count() <= 703, "地图%d局部合并碰撞数量异常：%d" % [map_id, background.source_collision_shape_count()])
 	for group_name: String in ["spawns", "bosses", "npcs", "portals"]:

@@ -1,0 +1,141 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "real persistence uses the runner's prelaunch isolated account",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "actual startup upgrade gate completes",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "actual profile service creates the owned character",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "sole writer persists valid full v1 history and test-owned inputs",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "default-off fixture enabled through its real module service",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "issued identity crosses the strict plain-String boundary with a complete quote, never a partial success",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "duplicate click owns one pending writer job",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "actual durable sequence boundary 64 retains its bounded recent window and all opaque history",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "delayed old callback cannot publish or clear another accepted writer job at the retirement boundary",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "actual durable sequence boundary 65 retains its bounded recent window and all opaque history",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "actual durable sequence boundary 130 retains its bounded recent window and all opaque history",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "all 130 real ownership transactions complete beyond journal64 without losing a gem",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "old sequence is explicitly retired and can never consume again",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "changing a retired request cannot reopen its old identity",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "retained recent result still replays its exact durable outcome",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "v1 opaque result remains exactly replayable after sequenced retirement",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "terminal old callback cannot roll back inventory or durable retirement watermark",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "one gear and original gem remain singly owned after all insert/remove cycles",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "next sequence enters the actual writer before a controlled prepromotion cancellation",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "prepromotion failure does not advance frontier or mutate owned inputs/primary bytes",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "uncommitted next serial remains retryable after its producer regains permission",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "final ordinary checkpoint uses the existing character writer",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "all owned writer jobs and callbacks drain before cold handoff",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "successful live producer opens its cold handoff expectation",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "complete cold expectation reaches its test-owned file",
+      "passed": true
+    }
+  ],
+  "count": 25,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "7687346e-3ebb-495a-b039-8318ebdaf595",
+  "passed": 25,
+  "reported_checks": 25,
+  "reported_failures": 0,
+  "run_id": "93d8297f-975f-4afe-ba45-dee5e4538943",
+  "scene_id": "item_journal_recovery_test",
+  "schema_version": 1,
+  "source_content_sha256": "fff09f90078c59d9cc6bb89cf45a0d21dbf937e46e7f692fa5e9fe192b093501",
+  "status": "PASS"
+}

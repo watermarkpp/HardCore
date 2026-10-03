@@ -1023,7 +1023,7 @@ func _select_equipment_slot(slot: String) -> void:
 				_show_error_message(
 					"%s不能装备到%s位置。" % [
 						str(item.get("name", "该装备")),
-						slot,
+						_slot_name(slot),
 					]
 				)
 				return

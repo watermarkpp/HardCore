@@ -1,0 +1,31 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "recorded_fractional_wait_test",
+                        "test_path":  "tests/user_feedback_20260930/recorded_fractional_wait_test.tscn",
+                        "pass_marker_found":  false,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  1,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-03T04:48:37.8291181Z",
+                        "native_exit_observed_utc":  "2026-10-03T04:48:15.0896078Z",
+                        "effective_exit_code":  1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "",
+                        "framework_receipt_valid":  null,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;non_zero_exit_code_1"
+                    }
+                ],
+    "total":  1,
+    "invocation_id":  "f6d20c1f-f367-4e47-9161-d9e8b180fa0d",
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "passed":  0,
+    "engine_log_errors":  0,
+    "generated_at":  "2026-10-03T12:48:16.1486272+08:00",
+    "failed":  1,
+    "suite":  "adhoc"
+}
