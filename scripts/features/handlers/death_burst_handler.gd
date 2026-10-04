@@ -34,6 +34,8 @@ static func commands(fact: Dictionary, binding: Dictionary) -> Array:
 		or chain.release_id!=fact.get("release_id") or chain.root_skill_id!=definition.get("skill_id"): return []
 	var generation:=int(chain.generation)
 	if generation==0 and (chain.release_id!=chain.root_release_id or not chain.parent_release_id.is_empty()): return []
+	if not fact.get("skill_id") is String or fact.skill_id.is_empty(): return []
+	if generation==0 and fact.source_class=="direct" and fact.skill_id!=chain.root_skill_id: return []
 	if generation>0 and (chain.parent_release_id.is_empty() or chain.release_id==chain.root_release_id): return []
 	if (fact.source_class=="direct" and generation!=0) or (fact.source_class=="child" and generation==0): return []
 	# This is the authored finite transition rule. Its entire potential work

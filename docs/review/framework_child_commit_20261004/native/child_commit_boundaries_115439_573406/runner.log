@@ -1,0 +1,15 @@
+[PASS] feature_chain_commit_test
+[PASS] damage_commit_fact_test
+[PASS] periodic_effect_runtime_test
+[FAIL] periodic_effect_boundaries_test - missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2;framework_receipt_wrong_run;framework_receipt_wrong_source
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+SCRIPT ERROR: Parse Error: The function signature doesn't match the parent. Parent signature is "take_feature_periodic_damage(int, Node2D, Dictionary, Dictionary, RefCounted = <default>) -> void".
+   at: GDScript::reload (res://tests/framework/periodic_effect_boundaries_test.gd:24)
+ERROR: Failed to load script "res://tests/framework/periodic_effect_boundaries_test.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+[PASS] feature_binding_validation_test
+[PASS] feature_capacity_admission_test
+[PASS] feature_receipt_retirement_test
+RUNNER_RESULTS_JSON=C:\Users\Administrator\.codex\worktrees\pluggable-framework-v2\HardCore\outputs\test_logs\runner_results_adhoc_20261004_115558_084_22584.json
+TEST_SUMMARY suite=adhoc passed=6 failed=1 engine_log_errors=2
+FAILED_TESTS=periodic_effect_boundaries_test (missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2;framework_receipt_wrong_run;framework_receipt_wrong_source)

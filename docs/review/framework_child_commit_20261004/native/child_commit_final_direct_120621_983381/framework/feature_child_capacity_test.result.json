@@ -1,0 +1,167 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "one declared child generation includes all three root and nine potential child receivers",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "hand-derived N3 B1 G1 L2 S1 reserves 12 facts, 24 receipts, 12 states and 3 child actions",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "accepted cost is immutable and independent of caller mutations",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "two independent child sources and two generations retain full 3+18+108 facts and 42 child actions",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "a persistent binding count larger than the declared total cannot underwrite a valid cost",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "30 is a fixture size, with all 900 potential child receivers and three sources counted",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "a third layer is refused before gameplay, rather than truncating a committed chain",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "global fact space does not imply enough persistent state capacity",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "immediate child actions still require every source receipt",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "empty legal world has zero work even for a large finite program",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "large single-receiver lineage is rejected without a billion-step loop",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "exponential declared work cannot overflow into a small accepted value",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "a program with no child producer owns only its original work",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "invalid program fields fail closed: null",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "invalid program fields fail closed: []",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "invalid program fields fail closed: {\"binding_count\":2,\"child_bindings\":1,\"maximum_generation\":1,\"maximum_receivers\":-1,\"persistent_bindings\":1}",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "invalid program fields fail closed: {\"binding_count\":2,\"child_bindings\":1,\"maximum_generation\":1,\"maximum_receivers\":1.5,\"persistent_bindings\":1}",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "invalid program fields fail closed: {\"binding_count\":2,\"child_bindings\":1,\"maximum_generation\":1,\"maximum_receivers\":true,\"persistent_bindings\":1}",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "invalid program fields fail closed: {\"binding_count\":2,\"child_bindings\":3,\"maximum_generation\":1,\"maximum_receivers\":3,\"persistent_bindings\":1}",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "invalid program fields fail closed: {\"binding_count\":2,\"child_bindings\":1,\"maximum_generation\":-1,\"maximum_receivers\":3,\"persistent_bindings\":1}",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "invalid program fields fail closed: {\"binding_count\":0,\"child_bindings\":1,\"maximum_generation\":1,\"maximum_receivers\":3,\"persistent_bindings\":0}",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "unknown executable or future request fields are not silently ignored",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "caller must supply the complete nonnegative runtime capacities",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "caller must supply the complete nonnegative runtime capacities",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "caller must supply the complete nonnegative runtime capacities",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "caller must supply the complete nonnegative runtime capacities",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "caller must supply the complete nonnegative runtime capacities",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "an exact capacity boundary admits the complete chain",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "one missing fact slot rejects the whole promise",
+      "passed": true
+    }
+  ],
+  "count": 29,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+  "passed": 29,
+  "reported_checks": 29,
+  "reported_failures": 0,
+  "run_id": "1705c14f-1f7e-4d5d-aed3-de6c48ff24e7",
+  "runtime_environment": {
+    "native_process_id": 4716,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\child_commit_final_direct_9bb8cf51b4aa4106b453759ed0361d70",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_commit_final_direct_9bb8cf51b4aa4106b453759ed0361d70/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "feature_child_capacity_test",
+  "schema_version": 1,
+  "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+  "status": "PASS"
+}

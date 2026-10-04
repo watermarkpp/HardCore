@@ -1,0 +1,237 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "the real HP batch must own a frozen finite lineage before death children can be produced",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "typed direct lineage enters the existing batch",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "accepted direct lineage cannot be enlarged by caller mutation",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "direct base HP scope opens",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "direct post-commit callback really moves and heals the actor",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "direct commits exactly one fact",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "direct death is captured before a callback restores HP",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "direct retains exact damage classification and finite lineage",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "direct captures authoritative mapped Ground GU before callbacks and ignores caller geometry",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "direct retains the original profile credit after caller mutation",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "direct buffer finishes and transfers once without fake HP work",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "typed periodic lineage enters the existing batch",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "accepted periodic lineage cannot be enlarged by caller mutation",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "periodic base HP scope opens",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "periodic uses the real MAC and actor HP port with commit-time receipt",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "periodic does not request STRUCK or direct magic walk-delay RNG",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "periodic post-commit callback really moves and heals the actor",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "periodic commits exactly one fact",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "periodic death is captured before a callback restores HP",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "periodic retains exact damage classification and finite lineage",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "periodic captures authoritative mapped Ground GU before callbacks and ignores caller geometry",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "periodic retains the original profile credit after caller mutation",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "periodic buffer finishes and transfers once without fake HP work",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "typed child lineage enters the existing batch",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "accepted child lineage cannot be enlarged by caller mutation",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "child base HP scope opens",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "child uses the real MAC and actor HP port with commit-time receipt",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "child does not request STRUCK or direct magic walk-delay RNG",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "child post-commit callback really moves and heals the actor",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "child commits exactly one fact",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "child death is captured before a callback restores HP",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "child retains exact damage classification and finite lineage",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "child captures authoritative mapped Ground GU before callbacks and ignores caller geometry",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "child retains the original profile credit after caller mutation",
+      "passed": true
+    },
+    {
+      "id": 35,
+      "label": "child buffer finishes and transfers once without fake HP work",
+      "passed": true
+    },
+    {
+      "id": 36,
+      "label": "invalid root lineage rejected before HP: {\"contract_id\":\"hardcore.combat.chain_context.v1\",\"generation\":1,\"maximum_generation\":2,\"parent_release_id\":\"\",\"release_id\":\"chain:root:1\",\"root_release_id\":\"chain:root:1\",\"root_skill_id\":\"hc.skill.wizard.ice_storm\"}",
+      "passed": true
+    },
+    {
+      "id": 37,
+      "label": "invalid root lineage rejected before HP: {\"contract_id\":\"hardcore.combat.chain_context.v1\",\"generation\":0,\"maximum_generation\":-1,\"parent_release_id\":\"\",\"release_id\":\"chain:root:1\",\"root_release_id\":\"chain:root:1\",\"root_skill_id\":\"hc.skill.wizard.ice_storm\"}",
+      "passed": true
+    },
+    {
+      "id": 38,
+      "label": "invalid root lineage rejected before HP: {\"contract_id\":\"hardcore.combat.chain_context.v1\",\"generation\":0,\"maximum_generation\":true,\"parent_release_id\":\"\",\"release_id\":\"chain:root:1\",\"root_release_id\":\"chain:root:1\",\"root_skill_id\":\"hc.skill.wizard.ice_storm\"}",
+      "passed": true
+    },
+    {
+      "id": 39,
+      "label": "invalid root lineage rejected before HP: {\"contract_id\":\"hardcore.combat.chain_context.v1\",\"generation\":0,\"maximum_generation\":2,\"parent_release_id\":\"\",\"release_id\":\"foreign\",\"root_release_id\":\"chain:root:1\",\"root_skill_id\":\"hc.skill.wizard.ice_storm\"}",
+      "passed": true
+    },
+    {
+      "id": 40,
+      "label": "invalid root lineage rejected before HP: {\"contract_id\":\"hardcore.combat.chain_context.v1\",\"generation\":0,\"maximum_generation\":2,\"parent_release_id\":\"\",\"release_id\":\"chain:root:1\",\"root_release_id\":\"chain:root:1\",\"root_skill_id\":\"hc.skill.warrior.fire_sword\"}",
+      "passed": true
+    },
+    {
+      "id": 41,
+      "label": "invalid root lineage rejected before HP: {\"contract_id\":\"hardcore.combat.chain_context.v1\",\"generation\":0,\"maximum_generation\":2,\"parent_release_id\":\"\",\"release_id\":\"chain:root:1\",\"root_release_id\":\"chain:root:1\",\"root_skill_id\":\"hc.skill.wizard.ice_storm\",\"unknown\":true}",
+      "passed": true
+    },
+    {
+      "id": 42,
+      "label": "unscoped child damage cannot impersonate a root direct batch",
+      "passed": true
+    },
+    {
+      "id": 43,
+      "label": "missing mapped geometry refuses the chain commit before HP with no identity fallback",
+      "passed": true
+    }
+  ],
+  "count": 43,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "126c3752-9a44-419e-acc8-1f55d29315b5",
+  "passed": 43,
+  "reported_checks": 43,
+  "reported_failures": 0,
+  "run_id": "465b2924-c4a1-4822-a921-94cdfb1e6bbe",
+  "runtime_environment": {
+    "native_process_id": 18600,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\child_commit_green_bb4f5a9adc164097b1f9e61ba1a2f17c",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_commit_green_bb4f5a9adc164097b1f9e61ba1a2f17c/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "feature_chain_commit_test",
+  "schema_version": 1,
+  "source_content_sha256": "5f37356d05c711bf72d85773fa6bce69d97f5cc5a6db1f5a33c083bb7c18831c",
+  "status": "PASS"
+}

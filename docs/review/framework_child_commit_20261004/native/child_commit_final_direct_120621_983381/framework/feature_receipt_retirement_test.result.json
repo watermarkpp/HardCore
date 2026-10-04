@@ -1,0 +1,77 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "actual compiled default-off module enabled for retirement proof",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "actual guaranteed source requires one receipt per delivered receiver",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "all 2200 accepted thirty-receiver releases finish after crossing the old 65536-receipt lifetime bound",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "all 66000 real committed HP facts were consumed exactly once",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "thirty real states start and every subsequent accepted source refresh is retained",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "every target retains the exact completed base damage total",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "receipt and producer storage remain bounded by active work, not historical release count",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "write-boundary telemetry records the true thirty-receipt peak and all 66000 terminal retirements",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "presentation telemetry retains its existing bounded storage",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "delayed retained old batch cannot submit again after thousands of retirements",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "delayed callback cannot reopen the retired producer identity",
+      "passed": true
+    }
+  ],
+  "count": 11,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+  "passed": 11,
+  "reported_checks": 11,
+  "reported_failures": 0,
+  "run_id": "a20e8762-c776-435d-a890-1c474ce54bda",
+  "runtime_environment": {
+    "native_process_id": 21532,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\child_commit_final_direct_9bb8cf51b4aa4106b453759ed0361d70",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_commit_final_direct_9bb8cf51b4aa4106b453759ed0361d70/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "feature_receipt_retirement_test",
+  "schema_version": 1,
+  "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+  "status": "PASS"
+}

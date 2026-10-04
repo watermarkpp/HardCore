@@ -1,0 +1,61 @@
+{
+  "rows": [
+    {
+      "invocation": "child_commit_boundaries_115439_573406",
+      "test_path": "tests/framework/periodic_effect_boundaries_test.tscn",
+      "run_id": "eae730dd-988b-4cea-ae6e-19860fe4edfc",
+      "invocation_id": "00a91241-c223-4808-9169-0011cb4a730f",
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2;framework_receipt_wrong_run;framework_receipt_wrong_source",
+      "source_content_sha256": "a2135d459ff7d19ec8b5949cb131b45ef3ec563edd864977e1542b8cf3acf7c5",
+      "native_exit": -1,
+      "timeout": false,
+      "receipt_count": null,
+      "classification": "introduced_public_signature_regression",
+      "explanation": "新增可选参数改变既有Enemy周期接口签名，旧合法子类无法解析；原始错误/失配回执保留，不采纳旧回执。恢复原4参数，另设chain端口；Combat原5参数同样保持。"
+    },
+    {
+      "invocation": "child_commit_callback_red_115103_463522",
+      "test_path": "tests/framework/feature_chain_commit_test.tscn",
+      "run_id": "84ba0bbe-2b81-4292-8fba-aa537441eb3e",
+      "invocation_id": "00372425-6cef-4dff-849b-b7c3c94dec3f",
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+      "source_content_sha256": "50c87a6d21f3ad4d629d566739ade3becee5dfdc7a24698eb8d438cadffd3427",
+      "native_exit": 1,
+      "timeout": false,
+      "receipt_count": 37,
+      "classification": "introduced_callback_rejection_regression",
+      "explanation": "错误回调污染合法批次，导致后续合法提交也被拒；37检查/14FAIL。拒绝改为无副作用。"
+    },
+    {
+      "invocation": "child_commit_red_114539_036626",
+      "test_path": "tests/framework/feature_chain_commit_test.tscn",
+      "run_id": "ff719030-45d0-473e-ae32-cee56db43634",
+      "invocation_id": "b7587ab4-c2dd-41e9-b365-3b515256cb33",
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+      "source_content_sha256": "1e7c5db8fffcc4f4037d979073c60fccffcac6f2af188b433bd3875da008249d",
+      "native_exit": 1,
+      "timeout": false,
+      "receipt_count": 1,
+      "classification": "production_contract_gap",
+      "explanation": "缺少有限链身份与提交时几何所有权；1检查/1FAIL。"
+    },
+    {
+      "invocation": "child_root_identity_red_120155_225276",
+      "test_path": "tests/framework/feature_death_child_command_test.tscn",
+      "run_id": "489e794e-dd0d-46a0-8494-94c202912e27",
+      "invocation_id": "77864acf-4177-45d3-b7ae-2094a71ba8ed",
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+      "source_content_sha256": "76092d08af853bce412c066ff4d312f8b78eb47566bee44bce19624cb798bc87",
+      "native_exit": 1,
+      "timeout": false,
+      "receipt_count": 31,
+      "classification": "pure_handler_identity_gap",
+      "explanation": "根事实缺失或冒用技能身份仍生成子命令；31检查/2FAIL。后代不同技能身份正例保留。"
+    }
+  ],
+  "scope": "Original four native failures retained; intermediate successes are phase evidence only."
+}

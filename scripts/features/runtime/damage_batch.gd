@@ -14,6 +14,8 @@ var _skill_id := ""
 var _accepted_usec := 0
 var _bindings: Array = []
 var _credit: Dictionary = {}
+var _chain_context: Dictionary = {}
+var _source_class := "direct"
 var _entries: Array = []
 var _facts: Array = []
 var _resources: RefCounted
@@ -24,13 +26,15 @@ var _reservation: RefCounted
 var _fact_limit := MAX_FACTS
 var errors: Array[String] = []
 
-static func create(world: RefCounted, release_id: String, skill_id: String, bindings: Array, credit: Dictionary, accepted_usec: int = 0, reservation: RefCounted = null, resources: RefCounted = null) -> Dictionary:
+static func create(world: RefCounted, release_id: String, skill_id: String, bindings: Array, credit: Dictionary, accepted_usec: int = 0, reservation: RefCounted = null, resources: RefCounted = null, chain: Dictionary = {}, source_class := "direct") -> Dictionary:
 	if resources != null and resources.get_script() != preload("res://scripts/features/contracts/feature_resource_lease.gd"):
 		return {"success":false,"reason":"invalid_batch_resources","batch":null}
 	if world == null or world.capture_world().is_empty() or release_id.is_empty() or Ids.resolve(skill_id,"skill").is_empty() \
 		or bindings.size() > 32 or accepted_usec < 0:
 		return {"success":false,"reason":"invalid_damage_batch_identity","batch":null}
-	var captured := Graph.capture({"bindings":bindings,"credit":credit})
+	if not _lineage_valid(chain,release_id,skill_id,source_class):
+		return {"success":false,"reason":"invalid_damage_batch_lineage","batch":null}
+	var captured := Graph.capture({"bindings":bindings,"credit":credit,"chain":chain})
 	if not bool(captured.success):
 		return {"success":false,"reason":"non_plain_damage_batch_configuration","batch":null}
 	if not validate_bindings(skill_id,captured.value.bindings):
@@ -55,7 +59,54 @@ static func create(world: RefCounted, release_id: String, skill_id: String, bind
 	result._accepted_usec = accepted_usec
 	result._bindings = captured.value.bindings
 	result._credit = captured.value.credit
+	result._chain_context = captured.value.chain
+	result._source_class = source_class
 	return {"success":true,"reason":"","batch":result}
+
+static func _lineage_valid(chain: Dictionary, release_id: String, skill_id: String, source_class: String) -> bool:
+	if chain.is_empty(): return source_class == "direct"
+	var fields := ["contract_id","root_release_id","release_id","parent_release_id","root_skill_id","generation","maximum_generation"]
+	if chain.size() != fields.size(): return false
+	for field: String in fields:
+		if not chain.has(field): return false
+	if chain.contract_id != "hardcore.combat.chain_context.v1" or source_class not in ["direct","periodic","child"]:
+		return false
+	for field: String in ["root_release_id","release_id","root_skill_id"]:
+		if not chain[field] is String or chain[field].is_empty(): return false
+	if not chain.parent_release_id is String or chain.release_id != release_id or chain.root_skill_id != skill_id:
+		return false
+	for field: String in ["generation","maximum_generation"]:
+		var value: Variant = chain[field]
+		if not (value is int or value is float) or not is_finite(float(value)) or float(value) < 0.0 \
+			or float(value) > 9007199254740991.0 or float(value) != floor(float(value)): return false
+	if chain.generation > chain.maximum_generation: return false
+	if int(chain.generation) == 0:
+		return source_class != "child" and chain.release_id == chain.root_release_id and chain.parent_release_id.is_empty()
+	return source_class != "direct" and chain.release_id != chain.root_release_id and not chain.parent_release_id.is_empty()
+
+func chain_context() -> Dictionary: return _chain_context
+
+func requires_commit_context() -> bool: return not _chain_context.is_empty()
+
+# Only the actual actor HP boundary supplies the geometry. No release-time
+# target list or death observer can replace this commit-time mapped position.
+func prepare_commit_context(target: Node, context: Dictionary) -> Dictionary:
+	if _chain_context.is_empty(): return {"success":true,"context":context}
+	if _depth <= 0 or _sealed or _consumed or not errors.is_empty() or _entries.size() >= _fact_limit \
+		or not _world.matches_world(_world_identity) or Actor.capture(_world,target) == null \
+		or context.get("source_class") != _source_class or context.get("damage_channel") not in ["physical","magic_defense"]:
+		return {"success":false,"reason":"damage_chain_commit_context_rejected"}
+	if not target is Node2D or target.get("runtime_map_id") != _world_identity.runtime_map_id \
+		or not target.has_method("try_screen_position_px_to_ground_position_gu"):
+		return {"success":false,"reason":"damage_chain_commit_projection_rejected"}
+	var projection: Dictionary = target.call("try_screen_position_px_to_ground_position_gu",target.global_position)
+	var origin: Variant = projection.get("value")
+	if not bool(projection.get("success",false)) or not origin is Vector2 or not origin.is_finite():
+		return {"success":false,"reason":"damage_chain_commit_projection_rejected"}
+	var owned := context.duplicate(false)
+	owned["commit_ground_origin"] = {"x":float(origin.x),"y":float(origin.y)}
+	owned["historical_credit"] = _credit
+	return {"success":true,"context":owned}
 
 static func validate_bindings(skill_id: String, bindings: Array) -> bool:
 	if bindings.size() > 32: return false
@@ -103,7 +154,7 @@ func capture_commit(target: Node, source: Node, hp_before: int, hp_after: int, r
 	if _entries.size() >= _fact_limit:
 		errors.append("damage_batch_capacity")
 		return false
-	if not _world.matches_world(_world_identity) or context.get("source_class") != "direct" \
+	if not _world.matches_world(_world_identity) or context.get("source_class") != _source_class \
 		or context.get("damage_channel") not in ["physical","magic_defense"] \
 		or requested <= 0 or hp_before < 0 or hp_after < 0 or hp_after > hp_before:
 		errors.append("damage_fact_contract_rejected")
@@ -117,11 +168,17 @@ func capture_commit(target: Node, source: Node, hp_before: int, hp_after: int, r
 		var life_authority: String = Actor.LIFE_PLAYER if source.has_method("combat_transition_is_active") else Actor.LIFE_METADATA
 		source_ref = Actor.capture(_world,source,life_authority)
 	var source_identity: Dictionary = source_ref.identity() if source_ref != null else {}
-	var fact := Graph.capture({"contract_id":"hardcore.combat.damage_fact.v1",
+	var value := {"contract_id":"hardcore.combat.damage_fact.v1",
 		"fact_id":_release_id + ":hp:" + str(_entries.size()),"release_id":_release_id,"skill_id":_skill_id,"accepted_simulation_usec":_accepted_usec,
-		"source_class":"direct","damage_channel":context.damage_channel,"requested_damage":requested,
+		"source_class":_source_class,"damage_channel":context.damage_channel,"requested_damage":requested,
 		"hp_before":hp_before,"hp_after":hp_after,"actual_loss":hp_before-hp_after,"target_survived_commit":hp_after > 0,
-		"target":target_ref.identity(),"source":source_identity,"historical_credit":_credit})
+		"target":target_ref.identity(),"source":source_identity,"historical_credit":_credit}
+	if not _chain_context.is_empty():
+		if not context.get("commit_ground_origin") is Dictionary:
+			errors.append("damage_chain_commit_origin_missing"); return false
+		value["chain_context"] = _chain_context
+		value["commit_ground_origin"] = context.commit_ground_origin
+	var fact := Graph.capture(value)
 	if not bool(fact.success):
 		errors.append("non_plain_damage_fact")
 		return false

@@ -1,0 +1,4 @@
+SCRIPT ERROR: Parse Error: The function signature doesn't match the parent. Parent signature is "take_feature_periodic_damage(int, Node2D, Dictionary, Dictionary, RefCounted = <default>) -> void".
+   at: GDScript::reload (res://tests/framework/periodic_effect_boundaries_test.gd:24)
+ERROR: Failed to load script "res://tests/framework/periodic_effect_boundaries_test.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)

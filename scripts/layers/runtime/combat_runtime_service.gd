@@ -192,22 +192,47 @@ func apply_feature_source_restore(source_ref: RefCounted, recipient: Dictionary,
 
 func apply_feature_periodic_damage(target: Node, raw_damage: int, source_actor: Node2D,
 	tick_rng: RandomNumberGenerator, historical_credit: Dictionary) -> Dictionary:
-	if not is_instance_valid(target) or _target_rejects_damage(target) or not target.has_method("take_feature_periodic_damage") \
+	return _apply_feature_magic_damage(target,raw_damage,source_actor,tick_rng,historical_credit,null,"periodic")
+
+func apply_feature_periodic_chain_damage(target: Node, raw_damage: int, source_actor: Node2D,
+	tick_rng: RandomNumberGenerator, historical_credit: Dictionary, batch: RefCounted) -> Dictionary:
+	if batch == null:
+		return {"success":false,"reason":"periodic_batch_contract","actual_loss":0}
+	return _apply_feature_magic_damage(target,raw_damage,source_actor,tick_rng,historical_credit,batch,"periodic")
+
+func apply_feature_child_damage(target: Node, raw_damage: int, source_actor: Node2D,
+	child_rng: RandomNumberGenerator, historical_credit: Dictionary, batch: RefCounted) -> Dictionary:
+	if batch == null:
+		return {"success":false,"reason":"child_batch_contract","actual_loss":0}
+	return _apply_feature_magic_damage(target,raw_damage,source_actor,child_rng,historical_credit,batch,"child")
+
+func _apply_feature_magic_damage(target: Node, raw_damage: int, source_actor: Node2D,
+	tick_rng: RandomNumberGenerator, historical_credit: Dictionary, batch: RefCounted, source_class: String) -> Dictionary:
+	var method := "take_feature_periodic_damage" if source_class == "periodic" else "take_feature_child_damage"
+	if source_class == "periodic" and batch != null: method = "take_feature_periodic_chain_damage"
+	if not is_instance_valid(target) or _target_rejects_damage(target) or not target.has_method(method) \
 		or not target.has_method("has_actor_capability") or tick_rng == null:
-		return {"success":false,"reason":"periodic_target_contract","actual_loss":0}
-	if raw_damage <= 0 or bool(target.call("has_actor_capability","hc.immune.periodic")):
+		return {"success":false,"reason":source_class+"_target_contract","actual_loss":0}
+	if batch != null:
+		if batch.get_script() != preload("res://scripts/features/runtime/damage_batch.gd") or not batch.requires_commit_context():
+			return {"success":false,"reason":source_class+"_batch_contract","actual_loss":0}
+		var prepared: Dictionary = batch.prepare_commit_context(target,{"source_class":source_class,"damage_channel":"magic_defense"})
+		if not bool(prepared.get("success",false)):
+			return {"success":false,"reason":source_class+"_batch_context","actual_loss":0}
+	if raw_damage <= 0 or (source_class == "periodic" and bool(target.call("has_actor_capability","hc.immune.periodic"))):
 		return {"success":true,"reason":"zero_or_immune","actual_loss":0}
 	var stats: Dictionary = {}
 	if not _target_stats_with_runtime_buffs_into(target,stats):
-		return {"success":false,"reason":"periodic_target_stats","actual_loss":0}
+		return {"success":false,"reason":source_class+"_target_stats","actual_loss":0}
 	var low := int(stats.get("magic_defense_min",-1))
 	var high := int(stats.get("magic_defense_max",-1))
 	if low < 0 or high < low:
-		return {"success":false,"reason":"periodic_mac_bounds","actual_loss":0}
+		return {"success":false,"reason":source_class+"_mac_bounds","actual_loss":0}
 	var resolved := maxi(0,raw_damage-tick_rng.randi_range(low,high))
 	var receipt := {"hp_before":0,"hp_after":0,"actual_loss":0}
 	if resolved > 0:
-		target.call("take_feature_periodic_damage",resolved,source_actor,historical_credit,receipt)
+		if batch == null: target.call(method,resolved,source_actor,historical_credit,receipt)
+		else: target.call(method,resolved,source_actor,historical_credit,receipt,batch)
 	return {"success":true,"reason":"","actual_loss":receipt.actual_loss,"resolved_damage":resolved}
 
 

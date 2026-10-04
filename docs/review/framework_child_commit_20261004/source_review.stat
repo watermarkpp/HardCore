@@ -1,0 +1,8 @@
+ scripts/enemy.gd                                   |  21 ++-
+ scripts/features/handlers/death_burst_handler.gd   |   2 +
+ scripts/features/runtime/damage_batch.gd           |  69 ++++++++-
+ scripts/layers/runtime/combat_runtime_service.gd   |  37 ++++-
+ tests/framework/feature_chain_commit_test.gd       | 156 +++++++++++++++++++++
+ tests/framework/feature_chain_commit_test.tscn     |   4 +
+ .../framework/feature_death_child_command_test.gd  |  11 ++
+ 7 files changed, 286 insertions(+), 14 deletions(-)

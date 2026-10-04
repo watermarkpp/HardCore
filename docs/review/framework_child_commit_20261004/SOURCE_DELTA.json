@@ -1,0 +1,41 @@
+{
+  "parent": "e22fe0951f28c55620399b453f116cb09120af4b",
+  "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+  "delta": [
+    {
+      "path": "scripts/enemy.gd",
+      "before_sha256": "2ab3b255a681bc306fe8869eabbaf312f16689983d5bebbc4aab66f35885f8ec",
+      "after_sha256": "0b6f85e3878339b393e5f998de76739b32da97e0996f94ee425048097a766633"
+    },
+    {
+      "path": "scripts/features/handlers/death_burst_handler.gd",
+      "before_sha256": "1f00c08ccd1fec8cc66410cb4d104ba90340a28ad795ac62e500fff8a4c7951a",
+      "after_sha256": "97879b79132d39bfc80579a4f71e805b48d7e9af9002d6f889bd3ae2292ab6d1"
+    },
+    {
+      "path": "scripts/features/runtime/damage_batch.gd",
+      "before_sha256": "0dda5164c7d6aa05d2ce8fbc8cf0b08bac1ff43237531e178f2229afadc392f6",
+      "after_sha256": "45ede49caea6f671cec0cc5e87bb38a8b4765a6fd9bf0391893445afc741084c"
+    },
+    {
+      "path": "scripts/layers/runtime/combat_runtime_service.gd",
+      "before_sha256": "1ed17b4d8f3e8d2634326955e47b389c6d2b32008647c642ea40bc9050e296e4",
+      "after_sha256": "fbdf1d13b2383a80515c1324332bbe46ebe3211388925f0eb8ebf7989c5f04f2"
+    },
+    {
+      "path": "tests/framework/feature_chain_commit_test.gd",
+      "before_sha256": null,
+      "after_sha256": "a5ea5b10b1a5f47ac2960d97a731cfb5d90ff5207fbbe2dba1e3522028b84c2a"
+    },
+    {
+      "path": "tests/framework/feature_chain_commit_test.tscn",
+      "before_sha256": null,
+      "after_sha256": "97efddaff49eaed85e448bbba5e685abee78df64cf13575c859537c4674ebbc4"
+    },
+    {
+      "path": "tests/framework/feature_death_child_command_test.gd",
+      "before_sha256": "d028de14214071ecd676df7d042b61863ac7c93e595d9a1c1048dd69bbe9d9bf",
+      "after_sha256": "fa464e63b3bef4b2794aca95ae048fb2560457bc50e0ae736a9bf91a5164b4aa"
+    }
+  ]
+}

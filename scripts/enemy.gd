@@ -7089,6 +7089,18 @@ func take_feature_periodic_damage(amount: int, attacker: Node2D, historical_cred
 		"historical_credit":historical_credit,"feature_periodic_receipt":receipt}, false)
 
 
+func take_feature_periodic_chain_damage(amount: int, attacker: Node2D, historical_credit: Dictionary, receipt: Dictionary, batch: RefCounted) -> void:
+	if batch == null or batch.get_script() != FeatureDamageBatchScript or not batch.requires_commit_context(): return
+	_apply_damage_core(amount, attacker, {"source_class":"periodic","damage_channel":"magic_defense",
+		"historical_credit":historical_credit,"feature_periodic_receipt":receipt,"feature_damage_batch":batch}, false)
+
+
+func take_feature_child_damage(amount: int, attacker: Node2D, historical_credit: Dictionary, receipt: Dictionary, batch: RefCounted) -> void:
+	if batch == null or batch.get_script() != FeatureDamageBatchScript or not batch.requires_commit_context(): return
+	_apply_damage_core(amount, attacker, {"source_class":"child","damage_channel":"magic_defense",
+		"historical_credit":historical_credit,"feature_damage_receipt":receipt,"feature_damage_batch":batch}, false)
+
+
 ## Proximity is not the only authored wake condition for static dormant
 ## monsters: an actually received HP loss from a live attacker must wake them
 ## too, otherwise a ranged hit only builds threat while the actor stays
@@ -7148,6 +7160,12 @@ func _apply_damage_core(
 			&"monster_damage_rejected_nonpositive"
 		)
 		return
+	var feature_batch: Variant = damage_context.get("feature_damage_batch")
+	if feature_batch is RefCounted and feature_batch.get_script() == FeatureDamageBatchScript \
+		and feature_batch.requires_commit_context():
+		var prepared: Dictionary = feature_batch.prepare_commit_context(self,damage_context)
+		if not bool(prepared.get("success",false)): return
+		damage_context = prepared.context
 	_record_performance_counter(&"take_damage_calls")
 	_leave_background_deep_sleep()
 	var hp_before_damage := current_hp
@@ -7156,13 +7174,12 @@ func _apply_damage_core(
 	var hp_at_commit := current_hp
 	current_hp = maxi(0, current_hp - amount)
 	if not causes_struck:
-		var periodic_receipt: Variant = damage_context.get("feature_periodic_receipt")
+		var periodic_receipt: Variant = damage_context.get("feature_damage_receipt",damage_context.get("feature_periodic_receipt"))
 		if periodic_receipt is Dictionary and not periodic_receipt.is_read_only() and periodic_receipt.size() == 3 \
 			and periodic_receipt.has("hp_before") and periodic_receipt.has("hp_after") and periodic_receipt.has("actual_loss"):
 			periodic_receipt["hp_before"] = hp_at_commit
 			periodic_receipt["hp_after"] = current_hp
 			periodic_receipt["actual_loss"] = hp_at_commit-current_hp
-	var feature_batch: Variant = damage_context.get("feature_damage_batch")
 	if feature_batch is RefCounted and feature_batch.get_script() == FeatureDamageBatchScript:
 		feature_batch.capture_commit(self, attacker, hp_at_commit, current_hp, amount, damage_context)
 	var actual_damage := hp_before_damage - current_hp

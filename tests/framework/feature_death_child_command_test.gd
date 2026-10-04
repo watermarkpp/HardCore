@@ -75,6 +75,17 @@ func _run() -> void:
 	_check(Handlers.commands(wrong,_binding()).is_empty(),"a foreign current release cannot reuse this lineage")
 	wrong=_fact(); wrong.chain_context.root_skill_id="hc.skill.warrior.fire_sword"
 	_check(Handlers.commands(wrong,_binding()).is_empty(),"root skill scope cannot be inferred from a display name or another source")
+	wrong=_fact(); wrong.skill_id="hc.skill.warrior.fire_sword"
+	_check(Handlers.commands(wrong,_binding()).is_empty(),"a generation-zero direct fact cannot contradict its accepted root skill identity")
+	wrong=_fact(); wrong.erase("skill_id")
+	_check(Handlers.commands(wrong,_binding()).is_empty(),"a missing actual root skill cannot be manufactured from the binding or lineage")
+	var descendant:=_fact(); descendant.skill_id="hc.child.death_burst.v1"; descendant.source_class="child"
+	descendant.release_id="child:identity:1"; descendant.chain_context.release_id=descendant.release_id
+	descendant.chain_context.parent_release_id=descendant.chain_context.root_release_id
+	descendant.chain_context.generation=1; descendant.chain_context.maximum_generation=2
+	var descendant_binding:=_binding(); descendant_binding.definition.config.maximum_generation=2
+	_check(Handlers.commands(descendant,descendant_binding).size()==1,
+		"an explicitly classified descendant action identity may differ from its accepted root skill")
 	wrong=_fact(); wrong.chain_context.parent_release_id="unexpected-parent"
 	_check(Handlers.commands(wrong,_binding()).is_empty(),"a root generation cannot claim an undeclared parent")
 	wrong=_fact(); wrong.source_class="ambient"

@@ -1,0 +1,87 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "damage batch contract exists at the real HP commit boundary",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "batch owns frozen formal skill, release and historical credit",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "base scope opens explicitly",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "nested scope does not publish early",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "synchronous legacy callback actually heals after HP commit",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "fact captures actual HP write before synchronous healing",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "fact recursively freezes only plain data",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "nested finish cannot flush while outer base work remains",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "overkill uses actual loss and commit-time death despite later healing",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "outer base completion seals facts",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "completed batch can be consumed once in stable HP order",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "weak actor ref delegates current world and life authority",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "world invalidates actor mutation while preserving historical fact",
+      "passed": true
+    }
+  ],
+  "count": 13,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "126c3752-9a44-419e-acc8-1f55d29315b5",
+  "passed": 13,
+  "reported_checks": 13,
+  "reported_failures": 0,
+  "run_id": "18bcbb65-74a3-4a5a-9c2c-1a931ef50fcd",
+  "runtime_environment": {
+    "native_process_id": 6060,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\child_commit_green_bb4f5a9adc164097b1f9e61ba1a2f17c",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_commit_green_bb4f5a9adc164097b1f9e61ba1a2f17c/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "damage_commit_fact_test",
+  "schema_version": 1,
+  "source_content_sha256": "5f37356d05c711bf72d85773fa6bce69d97f5cc5a6db1f5a33c083bb7c18831c",
+  "status": "PASS"
+}

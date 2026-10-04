@@ -1,0 +1,27 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "the real HP batch must own a frozen finite lineage before death children can be produced",
+      "passed": false
+    }
+  ],
+  "count": 1,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "b7587ab4-c2dd-41e9-b365-3b515256cb33",
+  "passed": 0,
+  "reported_checks": 1,
+  "reported_failures": 1,
+  "run_id": "ff719030-45d0-473e-ae32-cee56db43634",
+  "runtime_environment": {
+    "native_process_id": 15316,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\child_commit_red_cf795eb2739746f0ad24a2c9f257967d",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_commit_red_cf795eb2739746f0ad24a2c9f257967d/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "feature_chain_commit_test",
+  "schema_version": 1,
+  "source_content_sha256": "1e7c5db8fffcc4f4037d979073c60fccffcac6f2af188b433bd3875da008249d",
+  "status": "FAIL"
+}

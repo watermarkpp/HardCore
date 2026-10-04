@@ -1,0 +1,433 @@
+diff --git a/scripts/enemy.gd b/scripts/enemy.gd
+index 33c852ae1..6fdf79874 100644
+--- a/scripts/enemy.gd
++++ b/scripts/enemy.gd
+@@ -7089,6 +7089,18 @@ func take_feature_periodic_damage(amount: int, attacker: Node2D, historical_cred
+ 		"historical_credit":historical_credit,"feature_periodic_receipt":receipt}, false)
+ 
+ 
++func take_feature_periodic_chain_damage(amount: int, attacker: Node2D, historical_credit: Dictionary, receipt: Dictionary, batch: RefCounted) -> void:
++	if batch == null or batch.get_script() != FeatureDamageBatchScript or not batch.requires_commit_context(): return
++	_apply_damage_core(amount, attacker, {"source_class":"periodic","damage_channel":"magic_defense",
++		"historical_credit":historical_credit,"feature_periodic_receipt":receipt,"feature_damage_batch":batch}, false)
++
++
++func take_feature_child_damage(amount: int, attacker: Node2D, historical_credit: Dictionary, receipt: Dictionary, batch: RefCounted) -> void:
++	if batch == null or batch.get_script() != FeatureDamageBatchScript or not batch.requires_commit_context(): return
++	_apply_damage_core(amount, attacker, {"source_class":"child","damage_channel":"magic_defense",
++		"historical_credit":historical_credit,"feature_damage_receipt":receipt,"feature_damage_batch":batch}, false)
++
++
+ ## Proximity is not the only authored wake condition for static dormant
+ ## monsters: an actually received HP loss from a live attacker must wake them
+ ## too, otherwise a ranged hit only builds threat while the actor stays
+@@ -7148,6 +7160,12 @@ func _apply_damage_core(
+ 			&"monster_damage_rejected_nonpositive"
+ 		)
+ 		return
++	var feature_batch: Variant = damage_context.get("feature_damage_batch")
++	if feature_batch is RefCounted and feature_batch.get_script() == FeatureDamageBatchScript \
++		and feature_batch.requires_commit_context():
++		var prepared: Dictionary = feature_batch.prepare_commit_context(self,damage_context)
++		if not bool(prepared.get("success",false)): return
++		damage_context = prepared.context
+ 	_record_performance_counter(&"take_damage_calls")
+ 	_leave_background_deep_sleep()
+ 	var hp_before_damage := current_hp
+@@ -7156,13 +7174,12 @@ func _apply_damage_core(
+ 	var hp_at_commit := current_hp
+ 	current_hp = maxi(0, current_hp - amount)
+ 	if not causes_struck:
+-		var periodic_receipt: Variant = damage_context.get("feature_periodic_receipt")
++		var periodic_receipt: Variant = damage_context.get("feature_damage_receipt",damage_context.get("feature_periodic_receipt"))
+ 		if periodic_receipt is Dictionary and not periodic_receipt.is_read_only() and periodic_receipt.size() == 3 \
+ 			and periodic_receipt.has("hp_before") and periodic_receipt.has("hp_after") and periodic_receipt.has("actual_loss"):
+ 			periodic_receipt["hp_before"] = hp_at_commit
+ 			periodic_receipt["hp_after"] = current_hp
+ 			periodic_receipt["actual_loss"] = hp_at_commit-current_hp
+-	var feature_batch: Variant = damage_context.get("feature_damage_batch")
+ 	if feature_batch is RefCounted and feature_batch.get_script() == FeatureDamageBatchScript:
+ 		feature_batch.capture_commit(self, attacker, hp_at_commit, current_hp, amount, damage_context)
+ 	var actual_damage := hp_before_damage - current_hp
+diff --git a/scripts/features/handlers/death_burst_handler.gd b/scripts/features/handlers/death_burst_handler.gd
+index ebb2a17e7..08b9d5fd0 100644
+--- a/scripts/features/handlers/death_burst_handler.gd
++++ b/scripts/features/handlers/death_burst_handler.gd
+@@ -34,6 +34,8 @@ static func commands(fact: Dictionary, binding: Dictionary) -> Array:
+ 		or chain.release_id!=fact.get("release_id") or chain.root_skill_id!=definition.get("skill_id"): return []
+ 	var generation:=int(chain.generation)
+ 	if generation==0 and (chain.release_id!=chain.root_release_id or not chain.parent_release_id.is_empty()): return []
++	if not fact.get("skill_id") is String or fact.skill_id.is_empty(): return []
++	if generation==0 and fact.source_class=="direct" and fact.skill_id!=chain.root_skill_id: return []
+ 	if generation>0 and (chain.parent_release_id.is_empty() or chain.release_id==chain.root_release_id): return []
+ 	if (fact.source_class=="direct" and generation!=0) or (fact.source_class=="child" and generation==0): return []
+ 	# This is the authored finite transition rule. Its entire potential work
+diff --git a/scripts/features/runtime/damage_batch.gd b/scripts/features/runtime/damage_batch.gd
+index 0859f61ed..8e3a5bcc2 100644
+--- a/scripts/features/runtime/damage_batch.gd
++++ b/scripts/features/runtime/damage_batch.gd
+@@ -14,6 +14,8 @@ var _skill_id := ""
+ var _accepted_usec := 0
+ var _bindings: Array = []
+ var _credit: Dictionary = {}
++var _chain_context: Dictionary = {}
++var _source_class := "direct"
+ var _entries: Array = []
+ var _facts: Array = []
+ var _resources: RefCounted
+@@ -24,13 +26,15 @@ var _reservation: RefCounted
+ var _fact_limit := MAX_FACTS
+ var errors: Array[String] = []
+ 
+-static func create(world: RefCounted, release_id: String, skill_id: String, bindings: Array, credit: Dictionary, accepted_usec: int = 0, reservation: RefCounted = null, resources: RefCounted = null) -> Dictionary:
++static func create(world: RefCounted, release_id: String, skill_id: String, bindings: Array, credit: Dictionary, accepted_usec: int = 0, reservation: RefCounted = null, resources: RefCounted = null, chain: Dictionary = {}, source_class := "direct") -> Dictionary:
+ 	if resources != null and resources.get_script() != preload("res://scripts/features/contracts/feature_resource_lease.gd"):
+ 		return {"success":false,"reason":"invalid_batch_resources","batch":null}
+ 	if world == null or world.capture_world().is_empty() or release_id.is_empty() or Ids.resolve(skill_id,"skill").is_empty() \
+ 		or bindings.size() > 32 or accepted_usec < 0:
+ 		return {"success":false,"reason":"invalid_damage_batch_identity","batch":null}
+-	var captured := Graph.capture({"bindings":bindings,"credit":credit})
++	if not _lineage_valid(chain,release_id,skill_id,source_class):
++		return {"success":false,"reason":"invalid_damage_batch_lineage","batch":null}
++	var captured := Graph.capture({"bindings":bindings,"credit":credit,"chain":chain})
+ 	if not bool(captured.success):
+ 		return {"success":false,"reason":"non_plain_damage_batch_configuration","batch":null}
+ 	if not validate_bindings(skill_id,captured.value.bindings):
+@@ -55,8 +59,55 @@ static func create(world: RefCounted, release_id: String, skill_id: String, bind
+ 	result._accepted_usec = accepted_usec
+ 	result._bindings = captured.value.bindings
+ 	result._credit = captured.value.credit
++	result._chain_context = captured.value.chain
++	result._source_class = source_class
+ 	return {"success":true,"reason":"","batch":result}
+ 
++static func _lineage_valid(chain: Dictionary, release_id: String, skill_id: String, source_class: String) -> bool:
++	if chain.is_empty(): return source_class == "direct"
++	var fields := ["contract_id","root_release_id","release_id","parent_release_id","root_skill_id","generation","maximum_generation"]
++	if chain.size() != fields.size(): return false
++	for field: String in fields:
++		if not chain.has(field): return false
++	if chain.contract_id != "hardcore.combat.chain_context.v1" or source_class not in ["direct","periodic","child"]:
++		return false
++	for field: String in ["root_release_id","release_id","root_skill_id"]:
++		if not chain[field] is String or chain[field].is_empty(): return false
++	if not chain.parent_release_id is String or chain.release_id != release_id or chain.root_skill_id != skill_id:
++		return false
++	for field: String in ["generation","maximum_generation"]:
++		var value: Variant = chain[field]
++		if not (value is int or value is float) or not is_finite(float(value)) or float(value) < 0.0 \
++			or float(value) > 9007199254740991.0 or float(value) != floor(float(value)): return false
++	if chain.generation > chain.maximum_generation: return false
++	if int(chain.generation) == 0:
++		return source_class != "child" and chain.release_id == chain.root_release_id and chain.parent_release_id.is_empty()
++	return source_class != "direct" and chain.release_id != chain.root_release_id and not chain.parent_release_id.is_empty()
++
++func chain_context() -> Dictionary: return _chain_context
++
++func requires_commit_context() -> bool: return not _chain_context.is_empty()
++
++# Only the actual actor HP boundary supplies the geometry. No release-time
++# target list or death observer can replace this commit-time mapped position.
++func prepare_commit_context(target: Node, context: Dictionary) -> Dictionary:
++	if _chain_context.is_empty(): return {"success":true,"context":context}
++	if _depth <= 0 or _sealed or _consumed or not errors.is_empty() or _entries.size() >= _fact_limit \
++		or not _world.matches_world(_world_identity) or Actor.capture(_world,target) == null \
++		or context.get("source_class") != _source_class or context.get("damage_channel") not in ["physical","magic_defense"]:
++		return {"success":false,"reason":"damage_chain_commit_context_rejected"}
++	if not target is Node2D or target.get("runtime_map_id") != _world_identity.runtime_map_id \
++		or not target.has_method("try_screen_position_px_to_ground_position_gu"):
++		return {"success":false,"reason":"damage_chain_commit_projection_rejected"}
++	var projection: Dictionary = target.call("try_screen_position_px_to_ground_position_gu",target.global_position)
++	var origin: Variant = projection.get("value")
++	if not bool(projection.get("success",false)) or not origin is Vector2 or not origin.is_finite():
++		return {"success":false,"reason":"damage_chain_commit_projection_rejected"}
++	var owned := context.duplicate(false)
++	owned["commit_ground_origin"] = {"x":float(origin.x),"y":float(origin.y)}
++	owned["historical_credit"] = _credit
++	return {"success":true,"context":owned}
++
+ static func validate_bindings(skill_id: String, bindings: Array) -> bool:
+ 	if bindings.size() > 32: return false
+ 	var binding_errors: Array[String] = []
+@@ -103,7 +154,7 @@ func capture_commit(target: Node, source: Node, hp_before: int, hp_after: int, r
+ 	if _entries.size() >= _fact_limit:
+ 		errors.append("damage_batch_capacity")
+ 		return false
+-	if not _world.matches_world(_world_identity) or context.get("source_class") != "direct" \
++	if not _world.matches_world(_world_identity) or context.get("source_class") != _source_class \
+ 		or context.get("damage_channel") not in ["physical","magic_defense"] \
+ 		or requested <= 0 or hp_before < 0 or hp_after < 0 or hp_after > hp_before:
+ 		errors.append("damage_fact_contract_rejected")
+@@ -117,11 +168,17 @@ func capture_commit(target: Node, source: Node, hp_before: int, hp_after: int, r
+ 		var life_authority: String = Actor.LIFE_PLAYER if source.has_method("combat_transition_is_active") else Actor.LIFE_METADATA
+ 		source_ref = Actor.capture(_world,source,life_authority)
+ 	var source_identity: Dictionary = source_ref.identity() if source_ref != null else {}
+-	var fact := Graph.capture({"contract_id":"hardcore.combat.damage_fact.v1",
++	var value := {"contract_id":"hardcore.combat.damage_fact.v1",
+ 		"fact_id":_release_id + ":hp:" + str(_entries.size()),"release_id":_release_id,"skill_id":_skill_id,"accepted_simulation_usec":_accepted_usec,
+-		"source_class":"direct","damage_channel":context.damage_channel,"requested_damage":requested,
++		"source_class":_source_class,"damage_channel":context.damage_channel,"requested_damage":requested,
+ 		"hp_before":hp_before,"hp_after":hp_after,"actual_loss":hp_before-hp_after,"target_survived_commit":hp_after > 0,
+-		"target":target_ref.identity(),"source":source_identity,"historical_credit":_credit})
++		"target":target_ref.identity(),"source":source_identity,"historical_credit":_credit}
++	if not _chain_context.is_empty():
++		if not context.get("commit_ground_origin") is Dictionary:
++			errors.append("damage_chain_commit_origin_missing"); return false
++		value["chain_context"] = _chain_context
++		value["commit_ground_origin"] = context.commit_ground_origin
++	var fact := Graph.capture(value)
+ 	if not bool(fact.success):
+ 		errors.append("non_plain_damage_fact")
+ 		return false
+diff --git a/scripts/layers/runtime/combat_runtime_service.gd b/scripts/layers/runtime/combat_runtime_service.gd
+index 83382a433..5c7065619 100644
+--- a/scripts/layers/runtime/combat_runtime_service.gd
++++ b/scripts/layers/runtime/combat_runtime_service.gd
+@@ -192,22 +192,47 @@ func apply_feature_source_restore(source_ref: RefCounted, recipient: Dictionary,
+ 
+ func apply_feature_periodic_damage(target: Node, raw_damage: int, source_actor: Node2D,
+ 	tick_rng: RandomNumberGenerator, historical_credit: Dictionary) -> Dictionary:
+-	if not is_instance_valid(target) or _target_rejects_damage(target) or not target.has_method("take_feature_periodic_damage") \
++	return _apply_feature_magic_damage(target,raw_damage,source_actor,tick_rng,historical_credit,null,"periodic")
++
++func apply_feature_periodic_chain_damage(target: Node, raw_damage: int, source_actor: Node2D,
++	tick_rng: RandomNumberGenerator, historical_credit: Dictionary, batch: RefCounted) -> Dictionary:
++	if batch == null:
++		return {"success":false,"reason":"periodic_batch_contract","actual_loss":0}
++	return _apply_feature_magic_damage(target,raw_damage,source_actor,tick_rng,historical_credit,batch,"periodic")
++
++func apply_feature_child_damage(target: Node, raw_damage: int, source_actor: Node2D,
++	child_rng: RandomNumberGenerator, historical_credit: Dictionary, batch: RefCounted) -> Dictionary:
++	if batch == null:
++		return {"success":false,"reason":"child_batch_contract","actual_loss":0}
++	return _apply_feature_magic_damage(target,raw_damage,source_actor,child_rng,historical_credit,batch,"child")
++
++func _apply_feature_magic_damage(target: Node, raw_damage: int, source_actor: Node2D,
++	tick_rng: RandomNumberGenerator, historical_credit: Dictionary, batch: RefCounted, source_class: String) -> Dictionary:
++	var method := "take_feature_periodic_damage" if source_class == "periodic" else "take_feature_child_damage"
++	if source_class == "periodic" and batch != null: method = "take_feature_periodic_chain_damage"
++	if not is_instance_valid(target) or _target_rejects_damage(target) or not target.has_method(method) \
+ 		or not target.has_method("has_actor_capability") or tick_rng == null:
+-		return {"success":false,"reason":"periodic_target_contract","actual_loss":0}
+-	if raw_damage <= 0 or bool(target.call("has_actor_capability","hc.immune.periodic")):
++		return {"success":false,"reason":source_class+"_target_contract","actual_loss":0}
++	if batch != null:
++		if batch.get_script() != preload("res://scripts/features/runtime/damage_batch.gd") or not batch.requires_commit_context():
++			return {"success":false,"reason":source_class+"_batch_contract","actual_loss":0}
++		var prepared: Dictionary = batch.prepare_commit_context(target,{"source_class":source_class,"damage_channel":"magic_defense"})
++		if not bool(prepared.get("success",false)):
++			return {"success":false,"reason":source_class+"_batch_context","actual_loss":0}
++	if raw_damage <= 0 or (source_class == "periodic" and bool(target.call("has_actor_capability","hc.immune.periodic"))):
+ 		return {"success":true,"reason":"zero_or_immune","actual_loss":0}
+ 	var stats: Dictionary = {}
+ 	if not _target_stats_with_runtime_buffs_into(target,stats):
+-		return {"success":false,"reason":"periodic_target_stats","actual_loss":0}
++		return {"success":false,"reason":source_class+"_target_stats","actual_loss":0}
+ 	var low := int(stats.get("magic_defense_min",-1))
+ 	var high := int(stats.get("magic_defense_max",-1))
+ 	if low < 0 or high < low:
+-		return {"success":false,"reason":"periodic_mac_bounds","actual_loss":0}
++		return {"success":false,"reason":source_class+"_mac_bounds","actual_loss":0}
+ 	var resolved := maxi(0,raw_damage-tick_rng.randi_range(low,high))
+ 	var receipt := {"hp_before":0,"hp_after":0,"actual_loss":0}
+ 	if resolved > 0:
+-		target.call("take_feature_periodic_damage",resolved,source_actor,historical_credit,receipt)
++		if batch == null: target.call(method,resolved,source_actor,historical_credit,receipt)
++		else: target.call(method,resolved,source_actor,historical_credit,receipt,batch)
+ 	return {"success":true,"reason":"","actual_loss":receipt.actual_loss,"resolved_damage":resolved}
+ 
+ 
+diff --git a/tests/framework/feature_chain_commit_test.gd b/tests/framework/feature_chain_commit_test.gd
+new file mode 100644
+index 000000000..4dce51bcc
+--- /dev/null
++++ b/tests/framework/feature_chain_commit_test.gd
+@@ -0,0 +1,156 @@
++extends Node
++
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const Enemy := preload("res://scripts/enemy.gd")
++const World := preload("res://scripts/layers/runtime/execution/world_context.gd")
++const Batch := preload("res://scripts/features/runtime/damage_batch.gd")
++const Combat := preload("res://scripts/layers/runtime/combat_runtime_service.gd")
++var _zone_generation := 1
++var current_map_id := 910001
++var proof := Proof.new()
++var checks := 0
++var errors: Array[String] = []
++var batch_type: Variant = Batch
++
++class MovingObserverEnemy extends Enemy:
++
++	var move_after_commit := false
++	var heal_after_commit := false
++	func _refresh_overhead_health() -> void:
++		if move_after_commit: global_position = Vector2(777,888)
++		if heal_after_commit: current_hp = max_hp
++		super._refresh_overhead_health()
++
++func _ready() -> void: _run.call_deferred()
++
++func _check(value: bool,label: String) -> void:
++	checks += 1; proof.record(value,label)
++	if not value: errors.append(label)
++
++func _ground_to_screen(value: Vector2) -> Vector2: return value*10.0-Vector2(50,25)
++func _screen_to_ground(value: Vector2) -> Vector2: return (value+Vector2(50,25))/10.0
++
++func _lineage(release: String,source_class: String) -> Dictionary:
++	return {"contract_id":"hardcore.combat.chain_context.v1","root_release_id":"chain:root:1",
++		"release_id":release,"parent_release_id":"chain:root:1" if source_class=="child" else "",
++		"root_skill_id":"hc.skill.wizard.ice_storm","generation":1 if source_class=="child" else 0,
++		"maximum_generation":2}
++
++func _target() -> MovingObserverEnemy:
++	var actor := MovingObserverEnemy.new()
++	actor.setup(GameData.get_monster_by_id(19),null); add_child(actor)
++	actor.set_physics_process(false)
++	actor.configure_runtime_map_projection(current_map_id,_ground_to_screen,_screen_to_ground)
++	actor.global_position = _ground_to_screen(Vector2(12.5,-3.0))
++	actor.max_hp = 100; actor.current_hp = 30
++	actor.direct_spell_anti_magic_points = 0
++	actor.direct_spell_magic_defense_min = 0; actor.direct_spell_magic_defense_max = 0
++	actor.direct_spell_stats_valid = true
++	return actor
++
++func _run() -> void:
++	PlayerState.test_mode = true; PlayerState.reset_progress(false)
++	var world := World.new(); world.configure(self,PlayerState)
++	_check(Batch.new().has_method("chain_context"),"the real HP batch must own a frozen finite lineage before death children can be produced")
++	if not Batch.new().has_method("chain_context"):
++		_finish(); return
++	var combat: Variant = Combat.new()
++	add_child(combat)
++	for source_class: String in ["direct","periodic","child"]:
++		var release := "chain:child:1" if source_class=="child" else "chain:root:1"
++		var lineage := _lineage(release,source_class)
++		var credit := {"profile_id":PlayerState.active_profile_id}
++		var created: Dictionary = batch_type.create(world,release,"hc.skill.wizard.ice_storm",[],credit,0,null,null,lineage,source_class)
++		_check(created.success,"typed "+source_class+" lineage enters the existing batch")
++		if not created.success: continue
++		var batch: RefCounted = created.batch
++		lineage.maximum_generation = 99; credit.profile_id = "later:owner"
++		_check(batch.chain_context().is_read_only() and batch.chain_context().maximum_generation==2,
++			"accepted "+source_class+" lineage cannot be enlarged by caller mutation")
++		_check(batch.begin_base_scope(),source_class+" base HP scope opens")
++		var actor := _target(); actor.move_after_commit=true; actor.heal_after_commit=true
++		var cadence_before: Variant = actor.get("_attack_timer")
++		var rng := RandomNumberGenerator.new(); rng.seed = 481516
++		var source_rng_before: int = actor.get("_rng").state
++		var rng_before: int = rng.state
++		var wrong: Dictionary = (combat.apply_feature_periodic_chain_damage(actor,100,null,rng,{},batch)
++			if source_class=="child" else combat.apply_feature_child_damage(actor,100,null,rng,{},batch))
++		_check(not wrong.success and actor.current_hp==30 and rng.state==rng_before,
++			source_class+" wrong callback rejects before HP and independent RNG")
++		_check(batch.errors.is_empty() and batch.facts().is_empty(),
++			source_class+" wrong callback must not steal or poison the original legal commit qualification")
++		if source_class=="direct":
++			actor.take_damage(100,null,{"feature_damage_batch":batch,"source_class":"direct","damage_channel":"magic_defense",
++				"commit_ground_origin":{"x":999.0,"y":999.0}})
++		else:
++			var delivered: Dictionary = (combat.apply_feature_child_damage(actor,100,null,rng,{"profile_id":PlayerState.active_profile_id},batch)
++				if source_class=="child" else combat.apply_feature_periodic_chain_damage(actor,100,null,rng,{"profile_id":PlayerState.active_profile_id},batch))
++			_check(delivered.success and delivered.actual_loss==30,source_class+" uses the real MAC and actor HP port with commit-time receipt")
++			_check(actor.get("_attack_timer")==cadence_before and actor.get("_rng").state==source_rng_before,
++				source_class+" does not request STRUCK or direct magic walk-delay RNG")
++		var facts: Array = batch.facts()
++		_check(actor.current_hp==100 and actor.global_position==Vector2(777,888),source_class+" post-commit callback really moves and heals the actor")
++		_check(facts.size()==1,source_class+" commits exactly one fact")
++		if facts.size()==1:
++			var fact: Dictionary = facts[0]
++			_check(fact.hp_before==30 and fact.hp_after==0 and fact.actual_loss==30 and not fact.target_survived_commit,
++				source_class+" death is captured before a callback restores HP")
++			_check(fact.source_class==source_class and fact.chain_context==batch.chain_context(),source_class+" retains exact damage classification and finite lineage")
++			_check(fact.commit_ground_origin=={"x":12.5,"y":-3.0} and fact.commit_ground_origin.is_read_only(),
++				source_class+" captures authoritative mapped Ground GU before callbacks and ignores caller geometry")
++			_check(fact.historical_credit.profile_id==PlayerState.active_profile_id,
++				source_class+" retains the original profile credit after caller mutation")
++		_check(batch.errors.is_empty() and batch.finish_base_scope() and batch.consume().size()==1,
++			source_class+" buffer finishes and transfers once without fake HP work")
++		actor.queue_free(); await get_tree().process_frame
++	var broken := _lineage("chain:root:1","direct")
++	var cases: Array = [broken.merged({"generation":1},true),broken.merged({"maximum_generation":-1},true),
++		broken.merged({"maximum_generation":true},true),broken.merged({"release_id":"foreign"},true),
++		broken.merged({"root_skill_id":"hc.skill.warrior.fire_sword"},true),broken.merged({"unknown":true},true)]
++	for candidate: Dictionary in cases:
++		_check(not batch_type.create(world,"chain:root:1","hc.skill.wizard.ice_storm",[],{},0,null,null,candidate,"direct").success,
++			"invalid root lineage rejected before HP: "+JSON.stringify(candidate))
++	_check(not batch_type.create(world,"chain:root:1","hc.skill.wizard.ice_storm",[],{},0,null,null,{},"child").success,
++		"unscoped child damage cannot impersonate a root direct batch")
++	var periodic: Dictionary = batch_type.create(world,"chain:root:1","hc.skill.wizard.ice_storm",[],{},0,null,null,_lineage("chain:root:1","periodic"),"periodic")
++	periodic.batch.begin_base_scope()
++	var immune := _target(); immune.replace_actor_capability_source("fixture:periodic:immune",["hc.immune.periodic"])
++	var independent := RandomNumberGenerator.new(); independent.seed=93827
++	var initial_rng: int=independent.state
++	var immune_result: Dictionary=combat.apply_feature_periodic_chain_damage(immune,100,null,independent,{},periodic.batch)
++	_check(immune_result.success and immune_result.actual_loss==0 and immune.current_hp==30
++		and independent.state==initial_rng and periodic.batch.facts().is_empty(),
++		"real periodic immunity produces no fake committed death and consumes no random roll")
++	immune.replace_actor_capability_source("fixture:periodic:immune",[])
++	var zero_result: Dictionary=combat.apply_feature_periodic_chain_damage(immune,0,null,independent,{},periodic.batch)
++	_check(zero_result.success and zero_result.actual_loss==0 and independent.state==initial_rng and immune.current_hp==30,
++		"zero damage stays zero without consuming the original legal periodic qualification")
++	var final_periodic: Dictionary=combat.apply_feature_periodic_chain_damage(immune,100,null,independent,{},periodic.batch)
++	_check(final_periodic.success and final_periodic.actual_loss==30 and periodic.batch.facts().size()==1,
++		"after immune and zero no-ops the same legal periodic batch delivers one actual first death")
++	_check(immune.collision_layer==0 and immune.collision_mask==0 and not immune.is_in_group("enemies"),
++		"periodic first death immediately removes collision and live targeting membership")
++	periodic.batch.finish_base_scope(); immune.queue_free(); await get_tree().process_frame
++	var child: Dictionary=batch_type.create(world,"chain:child:1","hc.skill.wizard.ice_storm",[],{},0,null,null,_lineage("chain:child:1","child"),"child")
++	child.batch.begin_base_scope(); var dying:=_target()
++	var old_life: int=int(dying.get_meta("hc_combat_life_epoch"))
++	var lethal: Dictionary=combat.apply_feature_child_damage(dying,100,null,independent,{},child.batch)
++	_check(lethal.success and lethal.actual_loss==30 and dying.current_hp==0 and child.batch.facts().size()==1,
++		"child first death traverses the existing MAC and HP mutation authority")
++	_check(dying.collision_layer==0 and dying.collision_mask==0 and not dying.is_in_group("enemies"),
++		"child first death immediately removes collision before deferred death art and rewards")
++	_check(child.batch.facts()[0].target.life_generation==old_life and int(dying.get_meta("hc_combat_life_epoch"))==old_life+1,
++		"child fact owns the committed old life while the death authority retires that life exactly once")
++	child.batch.finish_base_scope(); dying.queue_free(); await get_tree().process_frame
++	var valid: Dictionary = batch_type.create(world,"chain:root:1","hc.skill.wizard.ice_storm",[],{},0,null,null,_lineage("chain:root:1","direct"),"direct")
++	var invalid_actor := _target(); invalid_actor.configure_runtime_map_projection(current_map_id,Callable(),Callable())
++	valid.batch.begin_base_scope(); var hp_before: int = invalid_actor.current_hp
++	invalid_actor.take_damage(10,null,{"feature_damage_batch":valid.batch,"source_class":"direct","damage_channel":"magic_defense"})
++	_check(invalid_actor.current_hp==hp_before and valid.batch.facts().is_empty(),"missing mapped geometry refuses the chain commit before HP with no identity fallback")
++	invalid_actor.queue_free(); await get_tree().process_frame
++	_finish()
++
++func _finish() -> void:
++	if not proof.write_receipt("feature_chain_commit_test",checks,errors.size()): errors.append("receipt_write")
++	print(("FRAMEWORK_CHAIN_COMMIT_PASS" if errors.is_empty() else "FRAMEWORK_CHAIN_COMMIT_FAIL")+" checks="+str(checks)+" errors="+str(errors))
++	get_tree().quit(0 if errors.is_empty() else 1)
+diff --git a/tests/framework/feature_chain_commit_test.tscn b/tests/framework/feature_chain_commit_test.tscn
+new file mode 100644
+index 000000000..3df1700f6
+--- /dev/null
++++ b/tests/framework/feature_chain_commit_test.tscn
+@@ -0,0 +1,4 @@
++[gd_scene load_steps=2 format=3]
++[ext_resource type="Script" path="res://tests/framework/feature_chain_commit_test.gd" id="1"]
++[node name="FeatureChainCommitTest" type="Node"]
++script = ExtResource("1")
+diff --git a/tests/framework/feature_death_child_command_test.gd b/tests/framework/feature_death_child_command_test.gd
+index 78ca2a493..ff631060b 100644
+--- a/tests/framework/feature_death_child_command_test.gd
++++ b/tests/framework/feature_death_child_command_test.gd
+@@ -75,6 +75,17 @@ func _run() -> void:
+ 	_check(Handlers.commands(wrong,_binding()).is_empty(),"a foreign current release cannot reuse this lineage")
+ 	wrong=_fact(); wrong.chain_context.root_skill_id="hc.skill.warrior.fire_sword"
+ 	_check(Handlers.commands(wrong,_binding()).is_empty(),"root skill scope cannot be inferred from a display name or another source")
++	wrong=_fact(); wrong.skill_id="hc.skill.warrior.fire_sword"
++	_check(Handlers.commands(wrong,_binding()).is_empty(),"a generation-zero direct fact cannot contradict its accepted root skill identity")
++	wrong=_fact(); wrong.erase("skill_id")
++	_check(Handlers.commands(wrong,_binding()).is_empty(),"a missing actual root skill cannot be manufactured from the binding or lineage")
++	var descendant:=_fact(); descendant.skill_id="hc.child.death_burst.v1"; descendant.source_class="child"
++	descendant.release_id="child:identity:1"; descendant.chain_context.release_id=descendant.release_id
++	descendant.chain_context.parent_release_id=descendant.chain_context.root_release_id
++	descendant.chain_context.generation=1; descendant.chain_context.maximum_generation=2
++	var descendant_binding:=_binding(); descendant_binding.definition.config.maximum_generation=2
++	_check(Handlers.commands(descendant,descendant_binding).size()==1,
++		"an explicitly classified descendant action identity may differ from its accepted root skill")
+ 	wrong=_fact(); wrong.chain_context.parent_release_id="unexpected-parent"
+ 	_check(Handlers.commands(wrong,_binding()).is_empty(),"a root generation cannot claim an undeclared parent")
+ 	wrong=_fact(); wrong.source_class="ambient"

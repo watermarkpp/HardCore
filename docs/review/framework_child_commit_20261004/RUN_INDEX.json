@@ -1,0 +1,1229 @@
+{
+  "recorded_at_utc": "2026-10-04T04:17:09.608135+00:00",
+  "parent": "e22fe0951f28c55620399b453f116cb09120af4b",
+  "runs": [
+    {
+      "name": "child_commit_boundaries_115439_573406",
+      "status": "FAIL",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_chain_commit_test.tscn','tests/framework/damage_commit_fact_test.tscn','tests/framework/periodic_effect_runtime_test.tscn','tests/framework/periodic_effect_boundaries_test.tscn','tests/framework/feature_binding_validation_test.tscn','tests/framework/feature_capacity_admission_test.tscn','tests/framework/feature_receipt_retirement_test.tscn' -TimeoutSeconds 30"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "child_commit_boundaries_115439_573406",
+          "test_path": "tests/framework/feature_chain_commit_test.tscn",
+          "run_id": "6a8c1e72-38fb-48e2-95e5-00223b0cb497",
+          "invocation_id": "00a91241-c223-4808-9169-0011cb4a730f",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "a2135d459ff7d19ec8b5949cb131b45ef3ec563edd864977e1542b8cf3acf7c5",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 56
+        },
+        {
+          "invocation": "child_commit_boundaries_115439_573406",
+          "test_path": "tests/framework/damage_commit_fact_test.tscn",
+          "run_id": "d2e707e2-17a6-4758-ab24-0b5a82c47984",
+          "invocation_id": "00a91241-c223-4808-9169-0011cb4a730f",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "a2135d459ff7d19ec8b5949cb131b45ef3ec563edd864977e1542b8cf3acf7c5",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 13
+        },
+        {
+          "invocation": "child_commit_boundaries_115439_573406",
+          "test_path": "tests/framework/periodic_effect_runtime_test.tscn",
+          "run_id": "e0294ee3-2a7d-4622-b01f-a4e065e4c52e",
+          "invocation_id": "00a91241-c223-4808-9169-0011cb4a730f",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "a2135d459ff7d19ec8b5949cb131b45ef3ec563edd864977e1542b8cf3acf7c5",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 13
+        },
+        {
+          "invocation": "child_commit_boundaries_115439_573406",
+          "test_path": "tests/framework/periodic_effect_boundaries_test.tscn",
+          "run_id": "eae730dd-988b-4cea-ae6e-19860fe4edfc",
+          "invocation_id": "00a91241-c223-4808-9169-0011cb4a730f",
+          "result": "FAIL",
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2;framework_receipt_wrong_run;framework_receipt_wrong_source",
+          "source_content_sha256": "a2135d459ff7d19ec8b5949cb131b45ef3ec563edd864977e1542b8cf3acf7c5",
+          "native_exit": -1,
+          "timeout": false,
+          "receipt_count": null
+        },
+        {
+          "invocation": "child_commit_boundaries_115439_573406",
+          "test_path": "tests/framework/feature_binding_validation_test.tscn",
+          "run_id": "91990c5d-d5af-4bba-b2b0-799aa03439af",
+          "invocation_id": "00a91241-c223-4808-9169-0011cb4a730f",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "a2135d459ff7d19ec8b5949cb131b45ef3ec563edd864977e1542b8cf3acf7c5",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 41
+        },
+        {
+          "invocation": "child_commit_boundaries_115439_573406",
+          "test_path": "tests/framework/feature_capacity_admission_test.tscn",
+          "run_id": "42854dd9-2fb7-41e8-a3bf-b75dc131a1e9",
+          "invocation_id": "00a91241-c223-4808-9169-0011cb4a730f",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "a2135d459ff7d19ec8b5949cb131b45ef3ec563edd864977e1542b8cf3acf7c5",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 15
+        },
+        {
+          "invocation": "child_commit_boundaries_115439_573406",
+          "test_path": "tests/framework/feature_receipt_retirement_test.tscn",
+          "run_id": "ad1110dd-ef6b-49ca-b5f9-a17a71893085",
+          "invocation_id": "00a91241-c223-4808-9169-0011cb4a730f",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "a2135d459ff7d19ec8b5949cb131b45ef3ec563edd864977e1542b8cf3acf7c5",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 11
+        }
+      ]
+    },
+    {
+      "name": "child_commit_callback_green_115246_962439",
+      "status": "PASS",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_chain_commit_test.tscn','tests/framework/damage_commit_fact_test.tscn','tests/framework/periodic_effect_runtime_test.tscn','tests/framework/periodic_delivery_lateness_test.tscn','tests/framework/feature_death_child_command_test.tscn' -TimeoutSeconds 30"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "child_commit_callback_green_115246_962439",
+          "test_path": "tests/framework/feature_chain_commit_test.tscn",
+          "run_id": "aa5e0398-321c-4d6d-9e32-43d96dc38622",
+          "invocation_id": "579131c0-794a-4002-9083-8a8ac72c6da9",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "610ffa3986e34de5d38064d4db9f7f4998e0aea75679c47199900bc73d82e1f4",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 49
+        },
+        {
+          "invocation": "child_commit_callback_green_115246_962439",
+          "test_path": "tests/framework/damage_commit_fact_test.tscn",
+          "run_id": "7afd779f-b631-405a-96e4-ce58c8f070fc",
+          "invocation_id": "579131c0-794a-4002-9083-8a8ac72c6da9",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "610ffa3986e34de5d38064d4db9f7f4998e0aea75679c47199900bc73d82e1f4",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 13
+        },
+        {
+          "invocation": "child_commit_callback_green_115246_962439",
+          "test_path": "tests/framework/periodic_effect_runtime_test.tscn",
+          "run_id": "89b308bd-7c40-4838-a56c-d21c1f1b454f",
+          "invocation_id": "579131c0-794a-4002-9083-8a8ac72c6da9",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "610ffa3986e34de5d38064d4db9f7f4998e0aea75679c47199900bc73d82e1f4",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 13
+        },
+        {
+          "invocation": "child_commit_callback_green_115246_962439",
+          "test_path": "tests/framework/periodic_delivery_lateness_test.tscn",
+          "run_id": "6e20405f-74ab-4bb1-a343-937d58aff08f",
+          "invocation_id": "579131c0-794a-4002-9083-8a8ac72c6da9",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "610ffa3986e34de5d38064d4db9f7f4998e0aea75679c47199900bc73d82e1f4",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 36
+        },
+        {
+          "invocation": "child_commit_callback_green_115246_962439",
+          "test_path": "tests/framework/feature_death_child_command_test.tscn",
+          "run_id": "480e50af-6d12-4993-9d08-b1ad78682450",
+          "invocation_id": "579131c0-794a-4002-9083-8a8ac72c6da9",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "610ffa3986e34de5d38064d4db9f7f4998e0aea75679c47199900bc73d82e1f4",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 28
+        }
+      ]
+    },
+    {
+      "name": "child_commit_callback_red_115103_463522",
+      "status": "FAIL",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_chain_commit_test.tscn' -TimeoutSeconds 30"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "child_commit_callback_red_115103_463522",
+          "test_path": "tests/framework/feature_chain_commit_test.tscn",
+          "run_id": "84ba0bbe-2b81-4292-8fba-aa537441eb3e",
+          "invocation_id": "00372425-6cef-4dff-849b-b7c3c94dec3f",
+          "result": "FAIL",
+          "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+          "source_content_sha256": "50c87a6d21f3ad4d629d566739ade3becee5dfdc7a24698eb8d438cadffd3427",
+          "native_exit": 1,
+          "timeout": false,
+          "receipt_count": 37
+        }
+      ]
+    },
+    {
+      "name": "child_commit_final_direct_120621_983381",
+      "status": "PASS",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_chain_commit_test.tscn','tests/framework/damage_commit_fact_test.tscn','tests/framework/feature_death_child_command_test.tscn','tests/framework/feature_child_capacity_test.tscn','tests/framework/feature_binding_validation_test.tscn','tests/framework/feature_compiler_test.tscn','tests/framework/feature_capacity_admission_test.tscn','tests/framework/feature_world_capacity_bound_test.tscn','tests/framework/feature_receipt_retirement_test.tscn','tests/framework/feature_fire_effect_production_test.tscn','tests/framework/feature_lifesteal_production_test.tscn','tests/framework/periodic_effect_runtime_test.tscn','tests/framework/periodic_effect_boundaries_test.tscn','tests/framework/periodic_effect_death_production_test.tscn','tests/framework/periodic_delivery_lateness_test.tscn','tests/framework/feature_queue_retention_test.tscn','tests/framework/feature_source_composition_test.tscn','tests/framework/feature_source_composition_cold_test.tscn','tests/framework/rune_source_composition_test.tscn','tests/framework/rune_source_composition_cold_test.tscn' -TimeoutSeconds 30"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "child_commit_final_direct_120621_983381",
+          "test_path": "tests/framework/feature_chain_commit_test.tscn",
+          "run_id": "fa2994b9-5297-4aa7-abdb-b4e52783c985",
+          "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 56
+        },
+        {
+          "invocation": "child_commit_final_direct_120621_983381",
+          "test_path": "tests/framework/damage_commit_fact_test.tscn",
+          "run_id": "69bca711-be34-411b-9c62-377445334b08",
+          "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 13
+        },
+        {
+          "invocation": "child_commit_final_direct_120621_983381",
+          "test_path": "tests/framework/feature_death_child_command_test.tscn",
+          "run_id": "948676b2-d205-4668-85e7-8ca2889877d4",
+          "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 31
+        },
+        {
+          "invocation": "child_commit_final_direct_120621_983381",
+          "test_path": "tests/framework/feature_child_capacity_test.tscn",
+          "run_id": "1705c14f-1f7e-4d5d-aed3-de6c48ff24e7",
+          "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 29
+        },
+        {
+          "invocation": "child_commit_final_direct_120621_983381",
+          "test_path": "tests/framework/feature_binding_validation_test.tscn",
+          "run_id": "48dbaf5a-69b6-4d19-acf8-335eb06b0de3",
+          "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 41
+        },
+        {
+          "invocation": "child_commit_final_direct_120621_983381",
+          "test_path": "tests/framework/feature_compiler_test.tscn",
+          "run_id": "003f3139-524d-474c-bfb5-2acf142f5c9d",
+          "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 36
+        },
+        {
+          "invocation": "child_commit_final_direct_120621_983381",
+          "test_path": "tests/framework/feature_capacity_admission_test.tscn",
+          "run_id": "c011aec6-d8f8-4a2c-a30d-fd6496cbfb10",
+          "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 15
+        },
+        {
+          "invocation": "child_commit_final_direct_120621_983381",
+          "test_path": "tests/framework/feature_world_capacity_bound_test.tscn",
+          "run_id": "5ea986f8-7a8c-421b-8dad-60a6b4283672",
+          "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 13
+        },
+        {
+          "invocation": "child_commit_final_direct_120621_983381",
+          "test_path": "tests/framework/feature_receipt_retirement_test.tscn",
+          "run_id": "a20e8762-c776-435d-a890-1c474ce54bda",
+          "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 11
+        },
+        {
+          "invocation": "child_commit_final_direct_120621_983381",
+          "test_path": "tests/framework/feature_fire_effect_production_test.tscn",
+          "run_id": "2f21a184-21cb-4463-a330-33bb3aa14f1e",
+          "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 20
+        },
+        {
+          "invocation": "child_commit_final_direct_120621_983381",
+          "test_path": "tests/framework/feature_lifesteal_production_test.tscn",
+          "run_id": "b99074f4-638e-45ae-8901-5fa94eb35621",
+          "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 26
+        },
+        {
+          "invocation": "child_commit_final_direct_120621_983381",
+          "test_path": "tests/framework/periodic_effect_runtime_test.tscn",
+          "run_id": "ce505066-c78c-4177-8ab5-0ef922432b08",
+          "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 13
+        },
+        {
+          "invocation": "child_commit_final_direct_120621_983381",
+          "test_path": "tests/framework/periodic_effect_boundaries_test.tscn",
+          "run_id": "40a9dd90-a189-4bdd-83b1-bfbbde5c670d",
+          "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 22
+        },
+        {
+          "invocation": "child_commit_final_direct_120621_983381",
+          "test_path": "tests/framework/periodic_effect_death_production_test.tscn",
+          "run_id": "d04a7c71-b8f2-4019-b697-927eb11c477f",
+          "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 16
+        },
+        {
+          "invocation": "child_commit_final_direct_120621_983381",
+          "test_path": "tests/framework/periodic_delivery_lateness_test.tscn",
+          "run_id": "86103ad7-629c-4c0b-a837-7782aa5f6cdc",
+          "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 36
+        },
+        {
+          "invocation": "child_commit_final_direct_120621_983381",
+          "test_path": "tests/framework/feature_queue_retention_test.tscn",
+          "run_id": "44660b68-d50c-40b7-8ed8-76a08f2257ed",
+          "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 18
+        },
+        {
+          "invocation": "child_commit_final_direct_120621_983381",
+          "test_path": "tests/framework/feature_source_composition_test.tscn",
+          "run_id": "95bd0058-69c2-4339-967a-250e44cf30f1",
+          "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 34
+        },
+        {
+          "invocation": "child_commit_final_direct_120621_983381",
+          "test_path": "tests/framework/feature_source_composition_cold_test.tscn",
+          "run_id": "0906ffad-378d-407c-984f-2040d9c539fe",
+          "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 12
+        },
+        {
+          "invocation": "child_commit_final_direct_120621_983381",
+          "test_path": "tests/framework/rune_source_composition_test.tscn",
+          "run_id": "2e7dd1b1-2937-4deb-9a2e-cf52abaf9520",
+          "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 35
+        },
+        {
+          "invocation": "child_commit_final_direct_120621_983381",
+          "test_path": "tests/framework/rune_source_composition_cold_test.tscn",
+          "run_id": "30a123e6-cd0f-49c1-b22a-88a5b338f6a0",
+          "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 14
+        }
+      ]
+    },
+    {
+      "name": "child_commit_final_world_121015_050665",
+      "status": "PASS",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/combined_effect_lifecycle_test.tscn','tests/framework/combined_effect_lifecycle_cold_test.tscn','tests/framework/periodic_credit_safe_logout_test.tscn','tests/framework/periodic_credit_safe_logout_cold_test.tscn','tests/framework/natural_effect_lifecycle_test.tscn','tests/framework/natural_effect_lifecycle_cold_test.tscn','tests/framework/feature_resource_natural_test.tscn','tests/framework/feature_resource_natural_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "child_commit_final_world_121015_050665",
+          "test_path": "tests/framework/combined_effect_lifecycle_test.tscn",
+          "run_id": "1aac8da5-9e54-4879-bacc-fee1b2a151a4",
+          "invocation_id": "a1182044-2fcc-4e6b-b5c8-1893caf501ab",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 38
+        },
+        {
+          "invocation": "child_commit_final_world_121015_050665",
+          "test_path": "tests/framework/combined_effect_lifecycle_cold_test.tscn",
+          "run_id": "46a4bc3f-52da-4e91-b9a5-403cafbc50cf",
+          "invocation_id": "a1182044-2fcc-4e6b-b5c8-1893caf501ab",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 10
+        },
+        {
+          "invocation": "child_commit_final_world_121015_050665",
+          "test_path": "tests/framework/periodic_credit_safe_logout_test.tscn",
+          "run_id": "a418f26b-8cdb-41fc-b95d-e5a4b2de0b74",
+          "invocation_id": "a1182044-2fcc-4e6b-b5c8-1893caf501ab",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 37
+        },
+        {
+          "invocation": "child_commit_final_world_121015_050665",
+          "test_path": "tests/framework/periodic_credit_safe_logout_cold_test.tscn",
+          "run_id": "cbf45b3a-a362-40ea-bc69-37c267194674",
+          "invocation_id": "a1182044-2fcc-4e6b-b5c8-1893caf501ab",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 13
+        },
+        {
+          "invocation": "child_commit_final_world_121015_050665",
+          "test_path": "tests/framework/natural_effect_lifecycle_test.tscn",
+          "run_id": "73474b44-66c3-4607-90b8-a8d179d5cd05",
+          "invocation_id": "a1182044-2fcc-4e6b-b5c8-1893caf501ab",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 135
+        },
+        {
+          "invocation": "child_commit_final_world_121015_050665",
+          "test_path": "tests/framework/natural_effect_lifecycle_cold_test.tscn",
+          "run_id": "0e3e11b8-06ac-4488-9b9c-6ccb61e3eb07",
+          "invocation_id": "a1182044-2fcc-4e6b-b5c8-1893caf501ab",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 10
+        },
+        {
+          "invocation": "child_commit_final_world_121015_050665",
+          "test_path": "tests/framework/feature_resource_natural_test.tscn",
+          "run_id": "4879dce9-0068-48d0-bc15-c90b02f827c2",
+          "invocation_id": "a1182044-2fcc-4e6b-b5c8-1893caf501ab",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 141
+        },
+        {
+          "invocation": "child_commit_final_world_121015_050665",
+          "test_path": "tests/framework/feature_resource_natural_cold_test.tscn",
+          "run_id": "1e5bf757-f6df-4f65-9a60-e2a6506a149a",
+          "invocation_id": "a1182044-2fcc-4e6b-b5c8-1893caf501ab",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 10
+        }
+      ]
+    },
+    {
+      "name": "child_commit_green_114847_335188",
+      "status": "PASS",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_chain_commit_test.tscn','tests/framework/damage_commit_fact_test.tscn','tests/framework/periodic_effect_runtime_test.tscn' -TimeoutSeconds 30"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "child_commit_green_114847_335188",
+          "test_path": "tests/framework/feature_chain_commit_test.tscn",
+          "run_id": "465b2924-c4a1-4822-a921-94cdfb1e6bbe",
+          "invocation_id": "126c3752-9a44-419e-acc8-1f55d29315b5",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "5f37356d05c711bf72d85773fa6bce69d97f5cc5a6db1f5a33c083bb7c18831c",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 43
+        },
+        {
+          "invocation": "child_commit_green_114847_335188",
+          "test_path": "tests/framework/damage_commit_fact_test.tscn",
+          "run_id": "18bcbb65-74a3-4a5a-9c2c-1a931ef50fcd",
+          "invocation_id": "126c3752-9a44-419e-acc8-1f55d29315b5",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "5f37356d05c711bf72d85773fa6bce69d97f5cc5a6db1f5a33c083bb7c18831c",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 13
+        },
+        {
+          "invocation": "child_commit_green_114847_335188",
+          "test_path": "tests/framework/periodic_effect_runtime_test.tscn",
+          "run_id": "2d1cf0ee-1099-4978-9513-77643f15b475",
+          "invocation_id": "126c3752-9a44-419e-acc8-1f55d29315b5",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "5f37356d05c711bf72d85773fa6bce69d97f5cc5a6db1f5a33c083bb7c18831c",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 13
+        }
+      ]
+    },
+    {
+      "name": "child_commit_identity_green_120425_646758",
+      "status": "PASS",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_chain_commit_test.tscn','tests/framework/feature_death_child_command_test.tscn','tests/framework/damage_commit_fact_test.tscn','tests/framework/periodic_effect_boundaries_test.tscn' -TimeoutSeconds 30"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "child_commit_identity_green_120425_646758",
+          "test_path": "tests/framework/feature_chain_commit_test.tscn",
+          "run_id": "b2c88874-dd75-4e9f-9507-a6b52e9e79ac",
+          "invocation_id": "13f7333f-bdc7-4698-971b-cb7f3ba44148",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 56
+        },
+        {
+          "invocation": "child_commit_identity_green_120425_646758",
+          "test_path": "tests/framework/feature_death_child_command_test.tscn",
+          "run_id": "79ec038e-bad1-4e3a-a273-c5d20ae54cc4",
+          "invocation_id": "13f7333f-bdc7-4698-971b-cb7f3ba44148",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 31
+        },
+        {
+          "invocation": "child_commit_identity_green_120425_646758",
+          "test_path": "tests/framework/damage_commit_fact_test.tscn",
+          "run_id": "89e70ad7-9928-4b1d-92d0-f794b1550689",
+          "invocation_id": "13f7333f-bdc7-4698-971b-cb7f3ba44148",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 13
+        },
+        {
+          "invocation": "child_commit_identity_green_120425_646758",
+          "test_path": "tests/framework/periodic_effect_boundaries_test.tscn",
+          "run_id": "b7750f0f-f19b-48b0-99cd-5a26a8dcd759",
+          "invocation_id": "13f7333f-bdc7-4698-971b-cb7f3ba44148",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 22
+        }
+      ]
+    },
+    {
+      "name": "child_commit_red_114539_036626",
+      "status": "FAIL",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_chain_commit_test.tscn' -TimeoutSeconds 30"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "child_commit_red_114539_036626",
+          "test_path": "tests/framework/feature_chain_commit_test.tscn",
+          "run_id": "ff719030-45d0-473e-ae32-cee56db43634",
+          "invocation_id": "b7587ab4-c2dd-41e9-b365-3b515256cb33",
+          "result": "FAIL",
+          "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+          "source_content_sha256": "1e7c5db8fffcc4f4037d979073c60fccffcac6f2af188b433bd3875da008249d",
+          "native_exit": 1,
+          "timeout": false,
+          "receipt_count": 1
+        }
+      ]
+    },
+    {
+      "name": "child_commit_signature_green_115801_147170",
+      "status": "PASS",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_chain_commit_test.tscn','tests/framework/damage_commit_fact_test.tscn','tests/framework/periodic_effect_runtime_test.tscn','tests/framework/periodic_effect_boundaries_test.tscn','tests/framework/feature_binding_validation_test.tscn','tests/framework/feature_capacity_admission_test.tscn','tests/framework/feature_receipt_retirement_test.tscn' -TimeoutSeconds 30"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "child_commit_signature_green_115801_147170",
+          "test_path": "tests/framework/feature_chain_commit_test.tscn",
+          "run_id": "0dfabdfb-a4b6-45db-91c8-573f40d41824",
+          "invocation_id": "77c6b0aa-0cbf-4de2-acf2-74f05fcc469c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "3f803a8b2f8279b09157cfc0867ba63b8d83ddc577dc9b1a0315f54dfae51292",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 56
+        },
+        {
+          "invocation": "child_commit_signature_green_115801_147170",
+          "test_path": "tests/framework/damage_commit_fact_test.tscn",
+          "run_id": "07b3d7b7-d813-40b6-846e-cc7013f8a85c",
+          "invocation_id": "77c6b0aa-0cbf-4de2-acf2-74f05fcc469c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "3f803a8b2f8279b09157cfc0867ba63b8d83ddc577dc9b1a0315f54dfae51292",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 13
+        },
+        {
+          "invocation": "child_commit_signature_green_115801_147170",
+          "test_path": "tests/framework/periodic_effect_runtime_test.tscn",
+          "run_id": "b6cc0ffd-a574-4afa-8e9a-6ad7ca86dc1b",
+          "invocation_id": "77c6b0aa-0cbf-4de2-acf2-74f05fcc469c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "3f803a8b2f8279b09157cfc0867ba63b8d83ddc577dc9b1a0315f54dfae51292",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 13
+        },
+        {
+          "invocation": "child_commit_signature_green_115801_147170",
+          "test_path": "tests/framework/periodic_effect_boundaries_test.tscn",
+          "run_id": "25152ca8-c86a-46e7-9050-17903a80eb3c",
+          "invocation_id": "77c6b0aa-0cbf-4de2-acf2-74f05fcc469c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "3f803a8b2f8279b09157cfc0867ba63b8d83ddc577dc9b1a0315f54dfae51292",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 22
+        },
+        {
+          "invocation": "child_commit_signature_green_115801_147170",
+          "test_path": "tests/framework/feature_binding_validation_test.tscn",
+          "run_id": "5fcde372-e90a-4ca8-9951-2f4474f1421d",
+          "invocation_id": "77c6b0aa-0cbf-4de2-acf2-74f05fcc469c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "3f803a8b2f8279b09157cfc0867ba63b8d83ddc577dc9b1a0315f54dfae51292",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 41
+        },
+        {
+          "invocation": "child_commit_signature_green_115801_147170",
+          "test_path": "tests/framework/feature_capacity_admission_test.tscn",
+          "run_id": "8cad9321-ee8a-4a34-be88-3973cfec2764",
+          "invocation_id": "77c6b0aa-0cbf-4de2-acf2-74f05fcc469c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "3f803a8b2f8279b09157cfc0867ba63b8d83ddc577dc9b1a0315f54dfae51292",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 15
+        },
+        {
+          "invocation": "child_commit_signature_green_115801_147170",
+          "test_path": "tests/framework/feature_receipt_retirement_test.tscn",
+          "run_id": "35c96259-9c48-401e-ac4b-4629c326313a",
+          "invocation_id": "77c6b0aa-0cbf-4de2-acf2-74f05fcc469c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "3f803a8b2f8279b09157cfc0867ba63b8d83ddc577dc9b1a0315f54dfae51292",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 11
+        }
+      ]
+    },
+    {
+      "name": "child_root_identity_red_120155_225276",
+      "status": "FAIL",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_death_child_command_test.tscn' -TimeoutSeconds 30"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "child_root_identity_red_120155_225276",
+          "test_path": "tests/framework/feature_death_child_command_test.tscn",
+          "run_id": "489e794e-dd0d-46a0-8494-94c202912e27",
+          "invocation_id": "77864acf-4177-45d3-b7ae-2094a71ba8ed",
+          "result": "FAIL",
+          "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+          "source_content_sha256": "76092d08af853bce412c066ff4d312f8b78eb47566bee44bce19624cb798bc87",
+          "native_exit": 1,
+          "timeout": false,
+          "receipt_count": 31
+        }
+      ]
+    }
+  ],
+  "final_adopted_rows": [
+    {
+      "invocation": "child_commit_final_direct_120621_983381",
+      "test_path": "tests/framework/feature_chain_commit_test.tscn",
+      "run_id": "fa2994b9-5297-4aa7-abdb-b4e52783c985",
+      "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 56
+    },
+    {
+      "invocation": "child_commit_final_direct_120621_983381",
+      "test_path": "tests/framework/damage_commit_fact_test.tscn",
+      "run_id": "69bca711-be34-411b-9c62-377445334b08",
+      "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 13
+    },
+    {
+      "invocation": "child_commit_final_direct_120621_983381",
+      "test_path": "tests/framework/feature_death_child_command_test.tscn",
+      "run_id": "948676b2-d205-4668-85e7-8ca2889877d4",
+      "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 31
+    },
+    {
+      "invocation": "child_commit_final_direct_120621_983381",
+      "test_path": "tests/framework/feature_child_capacity_test.tscn",
+      "run_id": "1705c14f-1f7e-4d5d-aed3-de6c48ff24e7",
+      "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 29
+    },
+    {
+      "invocation": "child_commit_final_direct_120621_983381",
+      "test_path": "tests/framework/feature_binding_validation_test.tscn",
+      "run_id": "48dbaf5a-69b6-4d19-acf8-335eb06b0de3",
+      "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 41
+    },
+    {
+      "invocation": "child_commit_final_direct_120621_983381",
+      "test_path": "tests/framework/feature_compiler_test.tscn",
+      "run_id": "003f3139-524d-474c-bfb5-2acf142f5c9d",
+      "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 36
+    },
+    {
+      "invocation": "child_commit_final_direct_120621_983381",
+      "test_path": "tests/framework/feature_capacity_admission_test.tscn",
+      "run_id": "c011aec6-d8f8-4a2c-a30d-fd6496cbfb10",
+      "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 15
+    },
+    {
+      "invocation": "child_commit_final_direct_120621_983381",
+      "test_path": "tests/framework/feature_world_capacity_bound_test.tscn",
+      "run_id": "5ea986f8-7a8c-421b-8dad-60a6b4283672",
+      "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 13
+    },
+    {
+      "invocation": "child_commit_final_direct_120621_983381",
+      "test_path": "tests/framework/feature_receipt_retirement_test.tscn",
+      "run_id": "a20e8762-c776-435d-a890-1c474ce54bda",
+      "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 11
+    },
+    {
+      "invocation": "child_commit_final_direct_120621_983381",
+      "test_path": "tests/framework/feature_fire_effect_production_test.tscn",
+      "run_id": "2f21a184-21cb-4463-a330-33bb3aa14f1e",
+      "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 20
+    },
+    {
+      "invocation": "child_commit_final_direct_120621_983381",
+      "test_path": "tests/framework/feature_lifesteal_production_test.tscn",
+      "run_id": "b99074f4-638e-45ae-8901-5fa94eb35621",
+      "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 26
+    },
+    {
+      "invocation": "child_commit_final_direct_120621_983381",
+      "test_path": "tests/framework/periodic_effect_runtime_test.tscn",
+      "run_id": "ce505066-c78c-4177-8ab5-0ef922432b08",
+      "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 13
+    },
+    {
+      "invocation": "child_commit_final_direct_120621_983381",
+      "test_path": "tests/framework/periodic_effect_boundaries_test.tscn",
+      "run_id": "40a9dd90-a189-4bdd-83b1-bfbbde5c670d",
+      "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 22
+    },
+    {
+      "invocation": "child_commit_final_direct_120621_983381",
+      "test_path": "tests/framework/periodic_effect_death_production_test.tscn",
+      "run_id": "d04a7c71-b8f2-4019-b697-927eb11c477f",
+      "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 16
+    },
+    {
+      "invocation": "child_commit_final_direct_120621_983381",
+      "test_path": "tests/framework/periodic_delivery_lateness_test.tscn",
+      "run_id": "86103ad7-629c-4c0b-a837-7782aa5f6cdc",
+      "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 36
+    },
+    {
+      "invocation": "child_commit_final_direct_120621_983381",
+      "test_path": "tests/framework/feature_queue_retention_test.tscn",
+      "run_id": "44660b68-d50c-40b7-8ed8-76a08f2257ed",
+      "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 18
+    },
+    {
+      "invocation": "child_commit_final_direct_120621_983381",
+      "test_path": "tests/framework/feature_source_composition_test.tscn",
+      "run_id": "95bd0058-69c2-4339-967a-250e44cf30f1",
+      "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 34
+    },
+    {
+      "invocation": "child_commit_final_direct_120621_983381",
+      "test_path": "tests/framework/feature_source_composition_cold_test.tscn",
+      "run_id": "0906ffad-378d-407c-984f-2040d9c539fe",
+      "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 12
+    },
+    {
+      "invocation": "child_commit_final_direct_120621_983381",
+      "test_path": "tests/framework/rune_source_composition_test.tscn",
+      "run_id": "2e7dd1b1-2937-4deb-9a2e-cf52abaf9520",
+      "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 35
+    },
+    {
+      "invocation": "child_commit_final_direct_120621_983381",
+      "test_path": "tests/framework/rune_source_composition_cold_test.tscn",
+      "run_id": "30a123e6-cd0f-49c1-b22a-88a5b338f6a0",
+      "invocation_id": "9711e940-cf64-4b5e-853a-53796eeaee0e",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 14
+    },
+    {
+      "invocation": "child_commit_final_world_121015_050665",
+      "test_path": "tests/framework/combined_effect_lifecycle_test.tscn",
+      "run_id": "1aac8da5-9e54-4879-bacc-fee1b2a151a4",
+      "invocation_id": "a1182044-2fcc-4e6b-b5c8-1893caf501ab",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 38
+    },
+    {
+      "invocation": "child_commit_final_world_121015_050665",
+      "test_path": "tests/framework/combined_effect_lifecycle_cold_test.tscn",
+      "run_id": "46a4bc3f-52da-4e91-b9a5-403cafbc50cf",
+      "invocation_id": "a1182044-2fcc-4e6b-b5c8-1893caf501ab",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 10
+    },
+    {
+      "invocation": "child_commit_final_world_121015_050665",
+      "test_path": "tests/framework/periodic_credit_safe_logout_test.tscn",
+      "run_id": "a418f26b-8cdb-41fc-b95d-e5a4b2de0b74",
+      "invocation_id": "a1182044-2fcc-4e6b-b5c8-1893caf501ab",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 37
+    },
+    {
+      "invocation": "child_commit_final_world_121015_050665",
+      "test_path": "tests/framework/periodic_credit_safe_logout_cold_test.tscn",
+      "run_id": "cbf45b3a-a362-40ea-bc69-37c267194674",
+      "invocation_id": "a1182044-2fcc-4e6b-b5c8-1893caf501ab",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 13
+    },
+    {
+      "invocation": "child_commit_final_world_121015_050665",
+      "test_path": "tests/framework/natural_effect_lifecycle_test.tscn",
+      "run_id": "73474b44-66c3-4607-90b8-a8d179d5cd05",
+      "invocation_id": "a1182044-2fcc-4e6b-b5c8-1893caf501ab",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 135
+    },
+    {
+      "invocation": "child_commit_final_world_121015_050665",
+      "test_path": "tests/framework/natural_effect_lifecycle_cold_test.tscn",
+      "run_id": "0e3e11b8-06ac-4488-9b9c-6ccb61e3eb07",
+      "invocation_id": "a1182044-2fcc-4e6b-b5c8-1893caf501ab",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 10
+    },
+    {
+      "invocation": "child_commit_final_world_121015_050665",
+      "test_path": "tests/framework/feature_resource_natural_test.tscn",
+      "run_id": "4879dce9-0068-48d0-bc15-c90b02f827c2",
+      "invocation_id": "a1182044-2fcc-4e6b-b5c8-1893caf501ab",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 141
+    },
+    {
+      "invocation": "child_commit_final_world_121015_050665",
+      "test_path": "tests/framework/feature_resource_natural_cold_test.tscn",
+      "run_id": "1e5bf757-f6df-4f65-9a60-e2a6506a149a",
+      "invocation_id": "a1182044-2fcc-4e6b-b5c8-1893caf501ab",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 10
+    }
+  ],
+  "preserved_failed_rows": [
+    {
+      "invocation": "child_commit_boundaries_115439_573406",
+      "test_path": "tests/framework/periodic_effect_boundaries_test.tscn",
+      "run_id": "eae730dd-988b-4cea-ae6e-19860fe4edfc",
+      "invocation_id": "00a91241-c223-4808-9169-0011cb4a730f",
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2;framework_receipt_wrong_run;framework_receipt_wrong_source",
+      "source_content_sha256": "a2135d459ff7d19ec8b5949cb131b45ef3ec563edd864977e1542b8cf3acf7c5",
+      "native_exit": -1,
+      "timeout": false,
+      "receipt_count": null
+    },
+    {
+      "invocation": "child_commit_callback_red_115103_463522",
+      "test_path": "tests/framework/feature_chain_commit_test.tscn",
+      "run_id": "84ba0bbe-2b81-4292-8fba-aa537441eb3e",
+      "invocation_id": "00372425-6cef-4dff-849b-b7c3c94dec3f",
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+      "source_content_sha256": "50c87a6d21f3ad4d629d566739ade3becee5dfdc7a24698eb8d438cadffd3427",
+      "native_exit": 1,
+      "timeout": false,
+      "receipt_count": 37
+    },
+    {
+      "invocation": "child_commit_red_114539_036626",
+      "test_path": "tests/framework/feature_chain_commit_test.tscn",
+      "run_id": "ff719030-45d0-473e-ae32-cee56db43634",
+      "invocation_id": "b7587ab4-c2dd-41e9-b365-3b515256cb33",
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+      "source_content_sha256": "1e7c5db8fffcc4f4037d979073c60fccffcac6f2af188b433bd3875da008249d",
+      "native_exit": 1,
+      "timeout": false,
+      "receipt_count": 1
+    },
+    {
+      "invocation": "child_root_identity_red_120155_225276",
+      "test_path": "tests/framework/feature_death_child_command_test.tscn",
+      "run_id": "489e794e-dd0d-46a0-8494-94c202912e27",
+      "invocation_id": "77864acf-4177-45d3-b7ae-2094a71ba8ed",
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+      "source_content_sha256": "76092d08af853bce412c066ff4d312f8b78eb47566bee44bce19624cb798bc87",
+      "native_exit": 1,
+      "timeout": false,
+      "receipt_count": 31
+    }
+  ],
+  "scope": "Final chain-port/direct and independent world live/cold groups only; prior RED and signature regression remain raw failures."
+}
