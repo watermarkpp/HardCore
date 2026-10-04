@@ -1,0 +1,142 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "known critical cue closes its actual sound through a required child module",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "missing possible cue sound rejects the whole otherwise legal candidate",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "unknown or malformed cue identity refuses publication <null>",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "unknown or malformed cue identity refuses publication 137",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "unknown or malformed cue identity refuses publication hc.cue.unknown.v1",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "unknown or malformed cue identity refuses publication player.skill.fire_sword",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "formal compiler preparation and atomic publication admit critical cue closure",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "actual mapped world reaches READY with prepared cue",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "real projected receiver",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "real accepted configuration owns its prepared nonempty cue resources",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "real rule item and learned skill qualify three distinct accepted bindings",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "natural player request accepts nonempty ticket before real windup",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "withdraw parent then child without revoking already accepted work",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "single canonical release commits actual base HP once",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "real prepared audio onset reaches the synchronous cancellation observer once",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "synchronous retirement leaves no live effect or native cue",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "retired cue cannot register a late audio ownership record",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "synchronous retirement clears heap producer and all receipts before the next binding",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "synchronous retirement returns with all shared budget scopes closed",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "synchronously retired onset stops its exact real player and releases the prepared stream",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "retirement observation preserves committed base HP and gameplay RNG",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "synchronous cancellation retires the accepted lease after native cue destruction",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "retired onset neither schedules periodic damage nor reports a missing required cue",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "retired world restores the default catalog after onset cancellation",
+      "passed": true
+    }
+  ],
+  "count": 24,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+  "passed": 24,
+  "reported_checks": 24,
+  "reported_failures": 0,
+  "run_id": "5290eccb-d9f7-4142-a3f8-300be30fc061",
+  "runtime_environment": {
+    "native_process_id": 23040,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\rune_guard_final_direct_ca595fc6a75948e6b661dd6acbae7e29",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/rune_guard_final_direct_ca595fc6a75948e6b661dd6acbae7e29/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "feature_resource_multi_reentry_test",
+  "schema_version": 1,
+  "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+  "status": "PASS"
+}

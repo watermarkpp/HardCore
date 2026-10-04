@@ -1,0 +1,161 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "one declared child generation includes all three root and nine potential child receivers",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "hand-derived N3 B1 G1 L2 S1 reserves 12 facts, 24 receipts, 12 states and 3 child actions",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "accepted cost is immutable and independent of caller mutations",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "two independent child sources and two generations retain full 3+18+108 facts and 42 child actions",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "a persistent binding count larger than the declared total cannot underwrite a valid cost",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "30 is a fixture size, with all 900 potential child receivers and three sources counted",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "a third layer is refused before gameplay, rather than truncating a committed chain",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "global fact space does not imply enough persistent state capacity",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "immediate child actions still require every source receipt",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "empty legal world has zero work even for a large finite program",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "large single-receiver lineage is rejected without a billion-step loop",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "exponential declared work cannot overflow into a small accepted value",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "a program with no child producer owns only its original work",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "invalid program fields fail closed: null",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "invalid program fields fail closed: []",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "invalid program fields fail closed: {\"binding_count\":2,\"child_bindings\":1,\"maximum_generation\":1,\"maximum_receivers\":-1,\"persistent_bindings\":1}",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "invalid program fields fail closed: {\"binding_count\":2,\"child_bindings\":1,\"maximum_generation\":1,\"maximum_receivers\":1.5,\"persistent_bindings\":1}",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "invalid program fields fail closed: {\"binding_count\":2,\"child_bindings\":1,\"maximum_generation\":1,\"maximum_receivers\":true,\"persistent_bindings\":1}",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "invalid program fields fail closed: {\"binding_count\":2,\"child_bindings\":3,\"maximum_generation\":1,\"maximum_receivers\":3,\"persistent_bindings\":1}",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "invalid program fields fail closed: {\"binding_count\":2,\"child_bindings\":1,\"maximum_generation\":-1,\"maximum_receivers\":3,\"persistent_bindings\":1}",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "invalid program fields fail closed: {\"binding_count\":0,\"child_bindings\":1,\"maximum_generation\":1,\"maximum_receivers\":3,\"persistent_bindings\":0}",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "unknown executable or future request fields are not silently ignored",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "caller must supply the complete nonnegative runtime capacities",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "caller must supply the complete nonnegative runtime capacities",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "caller must supply the complete nonnegative runtime capacities",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "caller must supply the complete nonnegative runtime capacities",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "caller must supply the complete nonnegative runtime capacities",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "an exact capacity boundary admits the complete chain",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "one missing fact slot rejects the whole promise",
+      "passed": true
+    }
+  ],
+  "count": 29,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "9dde8d37-317d-4169-a524-d8e3629b2400",
+  "passed": 29,
+  "reported_checks": 29,
+  "reported_failures": 0,
+  "run_id": "565b7e34-30ef-478b-bab4-c1fde2dd38b4",
+  "scene_id": "feature_child_capacity_test",
+  "schema_version": 1,
+  "source_content_sha256": "ad6f3a6f0bec7fe67f089794e670321d3e46100e44ca3ccc343689b391eb59da",
+  "status": "PASS"
+}

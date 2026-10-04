@@ -1,0 +1,15 @@
+ .../features/compilation/child_capacity_proof.gd   |  79 +++++++++++++++
+ scripts/features/compilation/feature_compiler.gd   |   5 +
+ scripts/features/handlers/death_burst_handler.gd   |  81 +++++++++++++++
+ scripts/features/handlers/handler_registry.gd      |   2 +
+ scripts/items/item_extension_codec.gd              |  14 ++-
+ scripts/player_state.gd                            |   9 +-
+ tests/framework/feature_child_capacity_test.gd     |  90 +++++++++++++++++
+ tests/framework/feature_child_capacity_test.tscn   |   4 +
+ .../framework/feature_death_child_command_test.gd  | 109 +++++++++++++++++++++
+ .../feature_death_child_command_test.tscn          |   4 +
+ .../future_item_ownership_terminal_test.gd         |  45 ++++++++-
+ tests/framework/helpers/check_receipt.gd           |   3 +
+ tests/framework/rune_transaction_test.gd           |  75 ++++++++++++++
+ tools/run_godot_tests.ps1                          |  12 +++
+ 14 files changed, 522 insertions(+), 10 deletions(-)

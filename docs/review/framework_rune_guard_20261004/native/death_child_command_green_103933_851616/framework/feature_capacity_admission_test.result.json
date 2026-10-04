@@ -1,0 +1,91 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "registered wizard identity",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "real mapped world READY",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "formal first AOE receiver",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "formal AOE receiver 1",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "formal AOE receiver 2",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "actual declared module enabled only for test",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "all sixteen retained historical sources satisfy production binding validation",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "complete prior AOE batch admitted",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "actual accepted states fill each receiver's sixteen state slots",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "prior legal states were admitted without capacity failures",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "state capacity refuses a new distinct source before action acceptance",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "capacity rejection leaves MP and cooldown untouched",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "capacity rejection happens before old RNG consumption",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "no capacity refusal remains after an already accepted damage commit",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "necessary queues terminate",
+      "passed": true
+    }
+  ],
+  "count": 15,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "abab1b7b-da80-40e8-853a-02d1e871effe",
+  "passed": 15,
+  "reported_checks": 15,
+  "reported_failures": 0,
+  "run_id": "cac3accb-1bc9-415e-9a12-3ef3743c2169",
+  "scene_id": "feature_capacity_admission_test",
+  "schema_version": 1,
+  "source_content_sha256": "23e5b1fd8575e5663f22728e17f89c09357f49920249425b4dfdab9a45823066",
+  "status": "PASS"
+}

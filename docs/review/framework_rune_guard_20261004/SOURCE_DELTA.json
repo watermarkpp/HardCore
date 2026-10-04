@@ -1,0 +1,76 @@
+{
+  "parent": "37612de204c42fe3b4fd6a89137e90f3449bc0c2",
+  "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+  "delta": [
+    {
+      "path": "scripts/features/compilation/child_capacity_proof.gd",
+      "before_sha256": null,
+      "after_sha256": "d36eade0f01eff9b45bba86283732c564fd89e2206782f391f131458bae3981e"
+    },
+    {
+      "path": "scripts/features/compilation/feature_compiler.gd",
+      "before_sha256": "6f72f1a24762c4af8b698e02e098a98550bcc427fdd18253c6109b534d2682c8",
+      "after_sha256": "452667030968a22b26e6219488d76cb9c57a0648820a28db352aecd3653b24bc"
+    },
+    {
+      "path": "scripts/features/handlers/death_burst_handler.gd",
+      "before_sha256": null,
+      "after_sha256": "1f00c08ccd1fec8cc66410cb4d104ba90340a28ad795ac62e500fff8a4c7951a"
+    },
+    {
+      "path": "scripts/features/handlers/handler_registry.gd",
+      "before_sha256": "228448ce7d08263b3e28115a62629605757d6365e9ba54f31e9e61305149a507",
+      "after_sha256": "11cbda8b962bd5ec9a53b661eda523961417dc8880f93a970826bb898c0db422"
+    },
+    {
+      "path": "scripts/items/item_extension_codec.gd",
+      "before_sha256": "913f38c39e4697f969d52d7940dfd374dbb35fb71b21454d8485812543c7a87f",
+      "after_sha256": "795e52523f5e66680375ce61516102888061db76944e25c710ce539acfd7a709"
+    },
+    {
+      "path": "scripts/player_state.gd",
+      "before_sha256": "97d658aeb1a806d694391c4f033748333e20808623c1fbb40d8f3522fca5d242",
+      "after_sha256": "0fc05df5bb93e9ee8cc623556f67d2508f2e4cde824b7e9ae56dd18142d3299b"
+    },
+    {
+      "path": "tests/framework/feature_child_capacity_test.gd",
+      "before_sha256": null,
+      "after_sha256": "52aae7de4d090b86c4a3a60cfc8583376734a431559dc0e94169c3833bdfac83"
+    },
+    {
+      "path": "tests/framework/feature_child_capacity_test.tscn",
+      "before_sha256": null,
+      "after_sha256": "fa21338b8b91cd8b14021487331a4bde7a5ac6f9b3cab5bfadc549f25b2a4fd7"
+    },
+    {
+      "path": "tests/framework/feature_death_child_command_test.gd",
+      "before_sha256": null,
+      "after_sha256": "d028de14214071ecd676df7d042b61863ac7c93e595d9a1c1048dd69bbe9d9bf"
+    },
+    {
+      "path": "tests/framework/feature_death_child_command_test.tscn",
+      "before_sha256": null,
+      "after_sha256": "eb3403843204119d8349a9e8888fd3d6be9ab3630c9ff337859c242d98f33c51"
+    },
+    {
+      "path": "tests/framework/future_item_ownership_terminal_test.gd",
+      "before_sha256": "175edf9442cd871d267ca63d69326df6094ce9be5c213aa3e2c1818319ef3e6f",
+      "after_sha256": "1bf1341d257172d296f6fa194af5616fb999c55af0eabded3a7bda1faac9e689"
+    },
+    {
+      "path": "tests/framework/helpers/check_receipt.gd",
+      "before_sha256": "488899817f85ca4475aea67c5ec7252661a971dad0285850e7b2fe7b59c3e9f3",
+      "after_sha256": "ff09e7eff5ae62b3707f27303ff845620017f9058a2e254b296f17efcb74cf52"
+    },
+    {
+      "path": "tests/framework/rune_transaction_test.gd",
+      "before_sha256": "c2aea541b0a32bf9f57477f540030d8d3095107cdb04f94d3925a310374ea688",
+      "after_sha256": "eeb9919206673f09bfcac46c9afbb0056dd101f0e984fe3396dc402a1fba7a3c"
+    },
+    {
+      "path": "tools/run_godot_tests.ps1",
+      "before_sha256": "9e1f9e31f5fd6273c5ecc4888adfcfd7332156988ea7745b554e22ee9f66726f",
+      "after_sha256": "e0f09c500a6395cee6dd876d977c275eb9a66387b3a362cafc8bf8e0052aa956"
+    }
+  ]
+}

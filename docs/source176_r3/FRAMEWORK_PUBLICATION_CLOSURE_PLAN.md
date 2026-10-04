@@ -63,3 +63,5 @@ Task 3 诊断反例 feature_resource_publication_diagnostic_red_002004_334986：
 2026-10-04 Task4来源增量：正式登记词缀与原宝石经济归属/贡献组合、独立本轮producer绑定cold，以及自身恢复增量在通知前冻结，已原生RED/GREEN和最终同d82f0011内容28场景/1123检查。父6ae8双报告已实际读取保存，当前index原始备份补为可远端核对的ZIP，历史连续性FAIL/MISSING保留。符文、死亡子连锁、防自激与动态完整承诺、生成式组合、Task5与APK仍未关闭，见docs/review/framework_source_composition_20261004。
 
 2026-10-04 Task4符文增量：两个正式登记验证符文共用同一数据creator，hc.runes v1与原Gem扩展共存，经唯一ItemTransactionPort/Journal/writer持久插拔；词缀/宝石/符文三个来源实际受控释放及独立cold/replay通过。父08cc P2伪造affix来源与销毁入口先drain预留事务两项均有原生RED→最小修复→GREEN。最终同5b996731内容40唯一场景/36完整receipt1537检查PASS，原113尝试16FAIL全部保留；原1240身份业务字段保持。证据见docs/review/framework_rune_sources_20261004。死亡子连锁、防自激、动态完整接受承诺、生成式组合、Task5/P6R3/设备/APK仍未完成，继续串行施工。
+
+2026-10-04 Rune guard检查点：37612双审计两缺口已原生证伪并最小修复。未来身份优先分类有效754/117FAIL→754PASS；待取出槽销毁入口有效119/38FAIL→119PASS。实际APPDATA/native用户根/run/process关联由4组owned账户逐份验证；父历史隔离关联MISSING保留。原子链纯容量29与死亡子命令28项通过，但handler未正式发布、Root/runtime未执行。最终同8d6d10f1内容42唯一场景/38完整receipt2150检查PASS；79尝试12FAIL原样保留，详见docs/review/framework_rune_guard_20261004及RUNE_GUARD_WORKLOG_20261004.md。完整Task3资源消费、Task4生产子连锁/动态全承诺/生成组合、Task5模板/P6R3/设备/APK仍未完成，继续原串行目标。

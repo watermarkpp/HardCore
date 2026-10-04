@@ -1,0 +1,52 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "empty bundle publishes without stat inputs",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "numeric schema alone cannot prove actual actor range invariant",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "stat candidate cannot publish without actual base validation",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "actual inverted range rejects and preserves previous bundle",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "valid boundary stat candidate publishes atomically",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "valid contribution applies once after validation",
+      "passed": true
+    }
+  ],
+  "count": 6,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+  "passed": 6,
+  "reported_checks": 6,
+  "reported_failures": 0,
+  "run_id": "e1bb7cc7-2a2e-4733-86f1-83c409a82baa",
+  "runtime_environment": {
+    "native_process_id": 17004,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\rune_guard_final_direct_ca595fc6a75948e6b661dd6acbae7e29",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/rune_guard_final_direct_ca595fc6a75948e6b661dd6acbae7e29/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "feature_loadout_atomic_test",
+  "schema_version": 1,
+  "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+  "status": "PASS"
+}

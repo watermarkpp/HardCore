@@ -1,0 +1,21 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "one declared child generation includes all three root and nine potential child receivers",
+      "passed": false
+    }
+  ],
+  "count": 1,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "2b7179fc-7ac1-4fda-885c-c6ffac7f31eb",
+  "passed": 0,
+  "reported_checks": 1,
+  "reported_failures": 1,
+  "run_id": "72f689b0-55aa-4cc0-ae21-d11df66ccb5f",
+  "scene_id": "feature_child_capacity_test",
+  "schema_version": 1,
+  "source_content_sha256": "80e96826b8ebbb557d5f8ddee1fd3bb4793fda757241cdea1bb4a68472445bff",
+  "status": "FAIL"
+}

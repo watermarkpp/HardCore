@@ -1,0 +1,21 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "a committed first death with an explicit finite chain produces one closed child request",
+      "passed": false
+    }
+  ],
+  "count": 1,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "8e52b88d-b581-4910-8a78-d27c71e1a0dc",
+  "passed": 0,
+  "reported_checks": 1,
+  "reported_failures": 1,
+  "run_id": "26487795-fe3f-42ef-a961-4ac21a48ed43",
+  "scene_id": "feature_death_child_command_test",
+  "schema_version": 1,
+  "source_content_sha256": "e4e477228116decc13ca230782cec75a5660f226b73fd8fb2cf7dd9e1ed0a35a",
+  "status": "FAIL"
+}

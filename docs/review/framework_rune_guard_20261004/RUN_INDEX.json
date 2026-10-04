@@ -1,0 +1,1922 @@
+{
+  "recorded_at_utc": "2026-10-04T03:26:09.096631+00:00",
+  "parent": "37612de204c42fe3b4fd6a89137e90f3449bc0c2",
+  "runs": [
+    {
+      "name": "child_capacity_green_103234_463445",
+      "status": "PASS",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_child_capacity_test.tscn','tests/framework/feature_compiler_test.tscn','tests/framework/feature_capacity_admission_test.tscn' -TimeoutSeconds 30"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "child_capacity_green_103234_463445",
+          "test_path": "tests/framework/feature_child_capacity_test.tscn",
+          "run_id": "ebb3abe4-2e54-4a68-963f-a1ae5411c091",
+          "invocation_id": "07b06484-6339-4031-b346-7293b53044e3",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8fa4da18e6fae2a4aecbb1142fa22b7dbc13ae82ad40c86b15ffe8d2342bad04",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 29
+        },
+        {
+          "invocation": "child_capacity_green_103234_463445",
+          "test_path": "tests/framework/feature_compiler_test.tscn",
+          "run_id": "0ae6a636-0340-4ac0-b9e2-a4b15363cc92",
+          "invocation_id": "07b06484-6339-4031-b346-7293b53044e3",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8fa4da18e6fae2a4aecbb1142fa22b7dbc13ae82ad40c86b15ffe8d2342bad04",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 36
+        },
+        {
+          "invocation": "child_capacity_green_103234_463445",
+          "test_path": "tests/framework/feature_capacity_admission_test.tscn",
+          "run_id": "be0b5c31-fea1-45f5-8af5-e0e9a2f81e66",
+          "invocation_id": "07b06484-6339-4031-b346-7293b53044e3",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8fa4da18e6fae2a4aecbb1142fa22b7dbc13ae82ad40c86b15ffe8d2342bad04",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 15
+        }
+      ]
+    },
+    {
+      "name": "child_capacity_red_103001_476964",
+      "status": "FAIL",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_child_capacity_test.tscn' -TimeoutSeconds 30"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "child_capacity_red_103001_476964",
+          "test_path": "tests/framework/feature_child_capacity_test.tscn",
+          "run_id": "72f689b0-55aa-4cc0-ae21-d11df66ccb5f",
+          "invocation_id": "2b7179fc-7ac1-4fda-885c-c6ffac7f31eb",
+          "result": "FAIL",
+          "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+          "source_content_sha256": "80e96826b8ebbb557d5f8ddee1fd3bb4793fda757241cdea1bb4a68472445bff",
+          "native_exit": 1,
+          "timeout": false,
+          "receipt_count": 1
+        }
+      ]
+    },
+    {
+      "name": "death_child_command_boundary_green_104728_971849",
+      "status": "PASS",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_death_child_command_test.tscn','tests/framework/feature_child_capacity_test.tscn','tests/framework/feature_compiler_test.tscn' -TimeoutSeconds 30"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "death_child_command_boundary_green_104728_971849",
+          "test_path": "tests/framework/feature_death_child_command_test.tscn",
+          "run_id": "97934c4e-f632-4d77-b6e7-d188abe072d5",
+          "invocation_id": "526bbb0a-3836-4347-8d3f-3b2bff6f13c8",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "b7f8b422757f2208281921919679c2687cfdff7baff9a2ba507fa249eb14478f",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 28
+        },
+        {
+          "invocation": "death_child_command_boundary_green_104728_971849",
+          "test_path": "tests/framework/feature_child_capacity_test.tscn",
+          "run_id": "9c990f30-8a98-4414-ab1d-366ae583444f",
+          "invocation_id": "526bbb0a-3836-4347-8d3f-3b2bff6f13c8",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "b7f8b422757f2208281921919679c2687cfdff7baff9a2ba507fa249eb14478f",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 29
+        },
+        {
+          "invocation": "death_child_command_boundary_green_104728_971849",
+          "test_path": "tests/framework/feature_compiler_test.tscn",
+          "run_id": "c21e48d4-52f9-4de9-8c86-3b97360f381f",
+          "invocation_id": "526bbb0a-3836-4347-8d3f-3b2bff6f13c8",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "b7f8b422757f2208281921919679c2687cfdff7baff9a2ba507fa249eb14478f",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 36
+        }
+      ]
+    },
+    {
+      "name": "death_child_command_boundary_red_104451_537568",
+      "status": "FAIL",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_death_child_command_test.tscn' -TimeoutSeconds 30"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "death_child_command_boundary_red_104451_537568",
+          "test_path": "tests/framework/feature_death_child_command_test.tscn",
+          "run_id": "6d808a4e-77e8-4f0a-89a6-ddadde8d54c9",
+          "invocation_id": "9c67f549-fe1e-487c-b3dd-202332e5c06e",
+          "result": "FAIL",
+          "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+          "source_content_sha256": "ca53c11debe3881d7f8e7c2d8356ede3552a14f42515753cd20c5ec0ea720be5",
+          "native_exit": 1,
+          "timeout": false,
+          "receipt_count": 28
+        }
+      ]
+    },
+    {
+      "name": "death_child_command_green_103933_851616",
+      "status": "FAIL",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_death_child_command_test.tscn','tests/framework/feature_child_capacity_test.tscn','tests/framework/feature_compiler_test.tscn','tests/framework/feature_capacity_admission_test.tscn' -TimeoutSeconds 30"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "death_child_command_green_103933_851616",
+          "test_path": "tests/framework/feature_death_child_command_test.tscn",
+          "run_id": "35a76163-d3fa-4b1d-ae85-6e801f484fd3",
+          "invocation_id": "abab1b7b-da80-40e8-853a-02d1e871effe",
+          "result": "FAIL",
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2;framework_receipt_missing",
+          "source_content_sha256": "23e5b1fd8575e5663f22728e17f89c09357f49920249425b4dfdab9a45823066",
+          "native_exit": -1,
+          "timeout": false,
+          "receipt_count": null
+        },
+        {
+          "invocation": "death_child_command_green_103933_851616",
+          "test_path": "tests/framework/feature_child_capacity_test.tscn",
+          "run_id": "aaa2ecd6-788b-4615-b852-50f090a091bf",
+          "invocation_id": "abab1b7b-da80-40e8-853a-02d1e871effe",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "23e5b1fd8575e5663f22728e17f89c09357f49920249425b4dfdab9a45823066",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 29
+        },
+        {
+          "invocation": "death_child_command_green_103933_851616",
+          "test_path": "tests/framework/feature_compiler_test.tscn",
+          "run_id": "2be89da2-fd24-4cab-b96f-329837950e5a",
+          "invocation_id": "abab1b7b-da80-40e8-853a-02d1e871effe",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "23e5b1fd8575e5663f22728e17f89c09357f49920249425b4dfdab9a45823066",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 36
+        },
+        {
+          "invocation": "death_child_command_green_103933_851616",
+          "test_path": "tests/framework/feature_capacity_admission_test.tscn",
+          "run_id": "cac3accb-1bc9-415e-9a12-3ef3743c2169",
+          "invocation_id": "abab1b7b-da80-40e8-853a-02d1e871effe",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "23e5b1fd8575e5663f22728e17f89c09357f49920249425b4dfdab9a45823066",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 15
+        }
+      ]
+    },
+    {
+      "name": "death_child_command_red_103747_525245",
+      "status": "FAIL",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_death_child_command_test.tscn' -TimeoutSeconds 30"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "death_child_command_red_103747_525245",
+          "test_path": "tests/framework/feature_death_child_command_test.tscn",
+          "run_id": "2b13a401-81a3-4402-8698-1fc3abdcbb90",
+          "invocation_id": "d5ed2631-5d74-484e-b05d-a49fe66c1d53",
+          "result": "FAIL",
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2;framework_receipt_missing",
+          "source_content_sha256": "ae872d464c5f8b0a4fd4ec1f78d53b3a6fa0c3630e888bf40b0870004f4b4b94",
+          "native_exit": -1,
+          "timeout": false,
+          "receipt_count": null
+        }
+      ]
+    },
+    {
+      "name": "death_child_command_typed_green_104149_166360",
+      "status": "PASS",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_death_child_command_test.tscn','tests/framework/feature_child_capacity_test.tscn','tests/framework/feature_compiler_test.tscn','tests/framework/feature_capacity_admission_test.tscn','tests/framework/periodic_effect_runtime_test.tscn','tests/framework/feature_lifesteal_runtime_test.tscn','tests/framework/empty_extension_behavior_test.tscn' -TimeoutSeconds 30"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "death_child_command_typed_green_104149_166360",
+          "test_path": "tests/framework/feature_death_child_command_test.tscn",
+          "run_id": "34eb4830-5f72-4c06-b130-44af63d8877a",
+          "invocation_id": "9dde8d37-317d-4169-a524-d8e3629b2400",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "ad6f3a6f0bec7fe67f089794e670321d3e46100e44ca3ccc343689b391eb59da",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 25
+        },
+        {
+          "invocation": "death_child_command_typed_green_104149_166360",
+          "test_path": "tests/framework/feature_child_capacity_test.tscn",
+          "run_id": "565b7e34-30ef-478b-bab4-c1fde2dd38b4",
+          "invocation_id": "9dde8d37-317d-4169-a524-d8e3629b2400",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "ad6f3a6f0bec7fe67f089794e670321d3e46100e44ca3ccc343689b391eb59da",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 29
+        },
+        {
+          "invocation": "death_child_command_typed_green_104149_166360",
+          "test_path": "tests/framework/feature_compiler_test.tscn",
+          "run_id": "c3150957-bc5d-4dc2-87f5-2346b67a75b1",
+          "invocation_id": "9dde8d37-317d-4169-a524-d8e3629b2400",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "ad6f3a6f0bec7fe67f089794e670321d3e46100e44ca3ccc343689b391eb59da",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 36
+        },
+        {
+          "invocation": "death_child_command_typed_green_104149_166360",
+          "test_path": "tests/framework/feature_capacity_admission_test.tscn",
+          "run_id": "7bb794ba-e112-4e83-a2f3-3920656b2007",
+          "invocation_id": "9dde8d37-317d-4169-a524-d8e3629b2400",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "ad6f3a6f0bec7fe67f089794e670321d3e46100e44ca3ccc343689b391eb59da",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 15
+        },
+        {
+          "invocation": "death_child_command_typed_green_104149_166360",
+          "test_path": "tests/framework/periodic_effect_runtime_test.tscn",
+          "run_id": "cac91a7c-7e8c-44b3-93e7-18ffec293f24",
+          "invocation_id": "9dde8d37-317d-4169-a524-d8e3629b2400",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "ad6f3a6f0bec7fe67f089794e670321d3e46100e44ca3ccc343689b391eb59da",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 13
+        },
+        {
+          "invocation": "death_child_command_typed_green_104149_166360",
+          "test_path": "tests/framework/feature_lifesteal_runtime_test.tscn",
+          "run_id": "182a437d-84c7-4183-88da-9fb11bc8047d",
+          "invocation_id": "9dde8d37-317d-4169-a524-d8e3629b2400",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "ad6f3a6f0bec7fe67f089794e670321d3e46100e44ca3ccc343689b391eb59da",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 94
+        },
+        {
+          "invocation": "death_child_command_typed_green_104149_166360",
+          "test_path": "tests/framework/empty_extension_behavior_test.tscn",
+          "run_id": "624599e0-b750-4812-b3de-6b9ad8325090",
+          "invocation_id": "9dde8d37-317d-4169-a524-d8e3629b2400",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "ad6f3a6f0bec7fe67f089794e670321d3e46100e44ca3ccc343689b391eb59da",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 30
+        }
+      ]
+    },
+    {
+      "name": "death_child_command_typed_red_104046_166757",
+      "status": "FAIL",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_death_child_command_test.tscn' -TimeoutSeconds 30"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "death_child_command_typed_red_104046_166757",
+          "test_path": "tests/framework/feature_death_child_command_test.tscn",
+          "run_id": "26487795-fe3f-42ef-a961-4ac21a48ed43",
+          "invocation_id": "8e52b88d-b581-4910-8a78-d27c71e1a0dc",
+          "result": "FAIL",
+          "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+          "source_content_sha256": "e4e477228116decc13ca230782cec75a5660f226b73fd8fb2cf7dd9e1ed0a35a",
+          "native_exit": 1,
+          "timeout": false,
+          "receipt_count": 1
+        }
+      ]
+    },
+    {
+      "name": "rune_future_order_green_110544_039654",
+      "status": "PASS",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/future_item_ownership_terminal_test.tscn','tests/framework/rune_extension_codec_test.tscn','tests/framework/item_extension_codec_test.tscn','tests/framework/rune_transaction_test.tscn','tests/framework/socket_transaction_test.tscn' -TimeoutSeconds 30"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "rune_future_order_green_110544_039654",
+          "test_path": "tests/framework/future_item_ownership_terminal_test.tscn",
+          "run_id": "33196a71-538f-488d-b09b-8b5efdb9a3dc",
+          "invocation_id": "2951549a-4665-449c-966b-335b7a00d6b9",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "6e7fe2058ac20761c0bb959283dbf3126683947d417e84b81dd3cf398e1157cd",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 754
+        },
+        {
+          "invocation": "rune_future_order_green_110544_039654",
+          "test_path": "tests/framework/rune_extension_codec_test.tscn",
+          "run_id": "4b04bb5c-541c-4354-965a-b6ca5eca5436",
+          "invocation_id": "2951549a-4665-449c-966b-335b7a00d6b9",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "6e7fe2058ac20761c0bb959283dbf3126683947d417e84b81dd3cf398e1157cd",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 14
+        },
+        {
+          "invocation": "rune_future_order_green_110544_039654",
+          "test_path": "tests/framework/item_extension_codec_test.tscn",
+          "run_id": "0af307a5-d1ef-4760-846f-fc593a4d704b",
+          "invocation_id": "2951549a-4665-449c-966b-335b7a00d6b9",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "6e7fe2058ac20761c0bb959283dbf3126683947d417e84b81dd3cf398e1157cd",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 87
+        },
+        {
+          "invocation": "rune_future_order_green_110544_039654",
+          "test_path": "tests/framework/rune_transaction_test.tscn",
+          "run_id": "9d4a4c16-8b31-465e-9ff1-7f053bad809d",
+          "invocation_id": "2951549a-4665-449c-966b-335b7a00d6b9",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "6e7fe2058ac20761c0bb959283dbf3126683947d417e84b81dd3cf398e1157cd",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 35
+        },
+        {
+          "invocation": "rune_future_order_green_110544_039654",
+          "test_path": "tests/framework/socket_transaction_test.tscn",
+          "run_id": "9ce9060c-e18f-422b-9afd-2e88538ec6ce",
+          "invocation_id": "2951549a-4665-449c-966b-335b7a00d6b9",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "6e7fe2058ac20761c0bb959283dbf3126683947d417e84b81dd3cf398e1157cd",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 51
+        }
+      ]
+    },
+    {
+      "name": "rune_future_order_isolated_red_110329_137699",
+      "status": "FAIL",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/future_item_ownership_terminal_test.tscn' -TimeoutSeconds 30"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "rune_future_order_isolated_red_110329_137699",
+          "test_path": "tests/framework/future_item_ownership_terminal_test.tscn",
+          "run_id": "0e6577e4-2085-4e2d-ae41-e21b861ce361",
+          "invocation_id": "b55668ec-3a6f-42b4-81cf-ef6e7e3bc885",
+          "result": "FAIL",
+          "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+          "source_content_sha256": "0c5cf1607fc4b1182adb2851c48469d9a56b5bc72aa8c18c1edba920c094074f",
+          "native_exit": 1,
+          "timeout": false,
+          "receipt_count": 754
+        }
+      ]
+    },
+    {
+      "name": "rune_future_order_red_105017_905748",
+      "status": "FAIL",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/future_item_ownership_terminal_test.tscn' -TimeoutSeconds 30"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "rune_future_order_red_105017_905748",
+          "test_path": "tests/framework/future_item_ownership_terminal_test.tscn",
+          "run_id": "d7216d44-5cd3-4238-aa42-eca3b7731c61",
+          "invocation_id": "16c4cc10-6bab-4389-a5e9-66a9108e5751",
+          "result": "FAIL",
+          "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+          "source_content_sha256": "8e82de94d7116eedf2be4398be864585fe694c90f822ee147eba2660a19f8f37",
+          "native_exit": 1,
+          "timeout": false,
+          "receipt_count": 535
+        }
+      ]
+    },
+    {
+      "name": "rune_future_order_trace_red_110043_665731",
+      "status": "FAIL",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/future_item_ownership_terminal_test.tscn' -TimeoutSeconds 30"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "rune_future_order_trace_red_110043_665731",
+          "test_path": "tests/framework/future_item_ownership_terminal_test.tscn",
+          "run_id": "e7d39b0f-c190-498b-b34a-ae545b3b8b6a",
+          "invocation_id": "99a0e602-80d0-4533-a486-585093591daf",
+          "result": "FAIL",
+          "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+          "source_content_sha256": "09cb30a746a6373418873e5050fc850a46e3da38d89621e61bdc296d84f4b8ce",
+          "native_exit": 1,
+          "timeout": false,
+          "receipt_count": 631
+        }
+      ]
+    },
+    {
+      "name": "rune_future_order_typed_red_105851_596106",
+      "status": "FAIL",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/future_item_ownership_terminal_test.tscn' -TimeoutSeconds 30"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "rune_future_order_typed_red_105851_596106",
+          "test_path": "tests/framework/future_item_ownership_terminal_test.tscn",
+          "run_id": "e352b8a9-f1d0-426d-9121-690cf4c4ff38",
+          "invocation_id": "36a00f3b-3e01-40c5-8ef1-7823239cc629",
+          "result": "FAIL",
+          "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+          "source_content_sha256": "3bc9fa4f6b229268629b509e8b6d96497903ae4a2b1033629ced661056fac7a7",
+          "native_exit": 1,
+          "timeout": false,
+          "receipt_count": 631
+        }
+      ]
+    },
+    {
+      "name": "rune_guard_final_direct_111614_807975",
+      "status": "PASS",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_source_composition_test.tscn','tests/framework/feature_source_composition_cold_test.tscn','tests/framework/socket_transaction_test.tscn','tests/framework/socket_gem_identity_test.tscn','tests/framework/item_extension_codec_test.tscn','tests/framework/future_item_ownership_terminal_test.tscn','tests/framework/feature_loadout_atomic_test.tscn','tests/framework/feature_production_loadout_test.tscn','tests/framework/feature_compiler_test.tscn','tests/framework/feature_binding_validation_test.tscn','tests/framework/feature_registry_structure_test.tscn','tests/framework/feature_registry_publication_test.tscn','tests/framework/feature_lifesteal_runtime_test.tscn','tests/framework/feature_lifesteal_production_test.tscn','tests/framework/feature_resource_multi_reentry_test.tscn','tests/framework/feature_capacity_admission_test.tscn','tests/player_movement_respawn_test.tscn','tests/death_revival_touch_input_test.tscn','tests/summon_actor_state_machine_test.tscn','tests/pricing_authority_test.tscn','tests/framework/rune_catalog_data_test.tscn','tests/framework/rune_extension_codec_test.tscn','tests/framework/rune_transaction_test.tscn','tests/framework/feature_affix_admission_test.tscn','tests/framework/rune_source_composition_test.tscn','tests/framework/rune_source_composition_cold_test.tscn','tests/framework/item_journal_sequence_test.tscn','tests/framework/item_journal_legacy_backup_test.tscn','tests/framework/feature_child_capacity_test.tscn','tests/framework/feature_death_child_command_test.tscn' -TimeoutSeconds 30"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "rune_guard_final_direct_111614_807975",
+          "test_path": "tests/framework/feature_source_composition_test.tscn",
+          "run_id": "5fe50920-e5ec-4404-8d37-bfe655f26b43",
+          "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 34
+        },
+        {
+          "invocation": "rune_guard_final_direct_111614_807975",
+          "test_path": "tests/framework/feature_source_composition_cold_test.tscn",
+          "run_id": "642d30a3-2828-471a-aa38-88642c0cc6f8",
+          "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 12
+        },
+        {
+          "invocation": "rune_guard_final_direct_111614_807975",
+          "test_path": "tests/framework/socket_transaction_test.tscn",
+          "run_id": "4f93d7b4-7057-4d76-bc13-f14ad5055f44",
+          "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 51
+        },
+        {
+          "invocation": "rune_guard_final_direct_111614_807975",
+          "test_path": "tests/framework/socket_gem_identity_test.tscn",
+          "run_id": "be639680-55a3-45ef-941f-10bce9fee02b",
+          "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 22
+        },
+        {
+          "invocation": "rune_guard_final_direct_111614_807975",
+          "test_path": "tests/framework/item_extension_codec_test.tscn",
+          "run_id": "1dfc83cb-9623-4a82-bbab-d2aa445ab44f",
+          "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 87
+        },
+        {
+          "invocation": "rune_guard_final_direct_111614_807975",
+          "test_path": "tests/framework/future_item_ownership_terminal_test.tscn",
+          "run_id": "18916033-f994-4cb9-bae8-2c926513286f",
+          "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 754
+        },
+        {
+          "invocation": "rune_guard_final_direct_111614_807975",
+          "test_path": "tests/framework/feature_loadout_atomic_test.tscn",
+          "run_id": "e1bb7cc7-2a2e-4733-86f1-83c409a82baa",
+          "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 6
+        },
+        {
+          "invocation": "rune_guard_final_direct_111614_807975",
+          "test_path": "tests/framework/feature_production_loadout_test.tscn",
+          "run_id": "ce415190-c831-4f68-ac13-878d6f1f4bab",
+          "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 19
+        },
+        {
+          "invocation": "rune_guard_final_direct_111614_807975",
+          "test_path": "tests/framework/feature_compiler_test.tscn",
+          "run_id": "561db2c0-9192-48f7-a264-518eb1c1e54f",
+          "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 36
+        },
+        {
+          "invocation": "rune_guard_final_direct_111614_807975",
+          "test_path": "tests/framework/feature_binding_validation_test.tscn",
+          "run_id": "8878cb1f-b1f6-4056-9e8b-5ec874a1a551",
+          "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 41
+        },
+        {
+          "invocation": "rune_guard_final_direct_111614_807975",
+          "test_path": "tests/framework/feature_registry_structure_test.tscn",
+          "run_id": "03242872-e0eb-4dd3-bd63-c2af11161a28",
+          "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 25
+        },
+        {
+          "invocation": "rune_guard_final_direct_111614_807975",
+          "test_path": "tests/framework/feature_registry_publication_test.tscn",
+          "run_id": "70562d01-5e4b-4d01-8ac3-c18d2cea6fb4",
+          "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 28
+        },
+        {
+          "invocation": "rune_guard_final_direct_111614_807975",
+          "test_path": "tests/framework/feature_lifesteal_runtime_test.tscn",
+          "run_id": "90c1c8f4-e900-4574-b69f-ae72b08c24ee",
+          "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 94
+        },
+        {
+          "invocation": "rune_guard_final_direct_111614_807975",
+          "test_path": "tests/framework/feature_lifesteal_production_test.tscn",
+          "run_id": "397b92b9-93a0-4419-9f1b-baa0ad986fb1",
+          "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 26
+        },
+        {
+          "invocation": "rune_guard_final_direct_111614_807975",
+          "test_path": "tests/framework/feature_resource_multi_reentry_test.tscn",
+          "run_id": "5290eccb-d9f7-4142-a3f8-300be30fc061",
+          "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 24
+        },
+        {
+          "invocation": "rune_guard_final_direct_111614_807975",
+          "test_path": "tests/framework/feature_capacity_admission_test.tscn",
+          "run_id": "2bb53ded-9c7f-48a4-a1c5-db0b20de537b",
+          "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 15
+        },
+        {
+          "invocation": "rune_guard_final_direct_111614_807975",
+          "test_path": "tests/player_movement_respawn_test.tscn",
+          "run_id": "",
+          "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": null
+        },
+        {
+          "invocation": "rune_guard_final_direct_111614_807975",
+          "test_path": "tests/death_revival_touch_input_test.tscn",
+          "run_id": "",
+          "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": null
+        },
+        {
+          "invocation": "rune_guard_final_direct_111614_807975",
+          "test_path": "tests/summon_actor_state_machine_test.tscn",
+          "run_id": "",
+          "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": null
+        },
+        {
+          "invocation": "rune_guard_final_direct_111614_807975",
+          "test_path": "tests/pricing_authority_test.tscn",
+          "run_id": "",
+          "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": null
+        },
+        {
+          "invocation": "rune_guard_final_direct_111614_807975",
+          "test_path": "tests/framework/rune_catalog_data_test.tscn",
+          "run_id": "15c044f1-d23e-4c1c-a6d2-34923b5300e1",
+          "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 3
+        },
+        {
+          "invocation": "rune_guard_final_direct_111614_807975",
+          "test_path": "tests/framework/rune_extension_codec_test.tscn",
+          "run_id": "29f0fd51-93cc-41a1-8f85-0e88f7808ef1",
+          "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 14
+        },
+        {
+          "invocation": "rune_guard_final_direct_111614_807975",
+          "test_path": "tests/framework/rune_transaction_test.tscn",
+          "run_id": "887f9fff-a3e7-4439-bd73-4aa94a4b5096",
+          "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 119
+        },
+        {
+          "invocation": "rune_guard_final_direct_111614_807975",
+          "test_path": "tests/framework/feature_affix_admission_test.tscn",
+          "run_id": "d34c4c08-8713-4838-beee-0b849fadac78",
+          "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 29
+        },
+        {
+          "invocation": "rune_guard_final_direct_111614_807975",
+          "test_path": "tests/framework/rune_source_composition_test.tscn",
+          "run_id": "3abaec80-5063-4b2d-a10d-0348c7db9ff2",
+          "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 35
+        },
+        {
+          "invocation": "rune_guard_final_direct_111614_807975",
+          "test_path": "tests/framework/rune_source_composition_cold_test.tscn",
+          "run_id": "2e7f728c-c51b-4743-a15f-3325f54606cf",
+          "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 14
+        },
+        {
+          "invocation": "rune_guard_final_direct_111614_807975",
+          "test_path": "tests/framework/item_journal_sequence_test.tscn",
+          "run_id": "d7fd5381-c45e-46fe-bace-3b511294c014",
+          "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 31
+        },
+        {
+          "invocation": "rune_guard_final_direct_111614_807975",
+          "test_path": "tests/framework/item_journal_legacy_backup_test.tscn",
+          "run_id": "ab446887-8f18-49de-9c8c-7cd79a863a4c",
+          "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 20
+        },
+        {
+          "invocation": "rune_guard_final_direct_111614_807975",
+          "test_path": "tests/framework/feature_child_capacity_test.tscn",
+          "run_id": "bd0c2130-76bb-4189-b39f-fa5c03c2293f",
+          "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 29
+        },
+        {
+          "invocation": "rune_guard_final_direct_111614_807975",
+          "test_path": "tests/framework/feature_death_child_command_test.tscn",
+          "run_id": "1e50e0db-8b70-4dd1-a721-c7a2ad7e7c38",
+          "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 28
+        }
+      ]
+    },
+    {
+      "name": "rune_guard_final_journal_chain_112120_965820",
+      "status": "PASS",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/item_journal_v2_backup_seed_test.tscn','tests/framework/item_journal_v2_backup_cold_test.tscn','tests/framework/item_journal_v2_backup_restart_test.tscn' -TimeoutSeconds 30"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "rune_guard_final_journal_chain_112120_965820",
+          "test_path": "tests/framework/item_journal_v2_backup_seed_test.tscn",
+          "run_id": "740c8d42-3b47-4bf4-a8eb-bfb1b60534cd",
+          "invocation_id": "3d042c5d-0a0c-4d95-ab82-6e49629a844c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 14
+        },
+        {
+          "invocation": "rune_guard_final_journal_chain_112120_965820",
+          "test_path": "tests/framework/item_journal_v2_backup_cold_test.tscn",
+          "run_id": "0bdc01e9-6a62-4a81-8764-c244ddd6d391",
+          "invocation_id": "3d042c5d-0a0c-4d95-ab82-6e49629a844c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 33
+        },
+        {
+          "invocation": "rune_guard_final_journal_chain_112120_965820",
+          "test_path": "tests/framework/item_journal_v2_backup_restart_test.tscn",
+          "run_id": "728637cd-b2e0-41af-895c-259dc05e3430",
+          "invocation_id": "3d042c5d-0a0c-4d95-ab82-6e49629a844c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 14
+        }
+      ]
+    },
+    {
+      "name": "rune_guard_final_journal_single_112056_139794",
+      "status": "PASS",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/item_journal_v2_backup_test.tscn' -TimeoutSeconds 60"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "rune_guard_final_journal_single_112056_139794",
+          "test_path": "tests/framework/item_journal_v2_backup_test.tscn",
+          "run_id": "40cdfb0c-3635-491d-ad02-fdfe9e9e29f5",
+          "invocation_id": "23a3abcf-fcf4-433f-8a44-3f5b51ccef4d",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 99
+        }
+      ]
+    },
+    {
+      "name": "rune_guard_final_world_112158_737678",
+      "status": "PASS",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/combined_effect_lifecycle_test.tscn','tests/framework/combined_effect_lifecycle_cold_test.tscn','tests/framework/periodic_credit_safe_logout_test.tscn','tests/framework/periodic_credit_safe_logout_cold_test.tscn','tests/framework/natural_effect_lifecycle_test.tscn','tests/framework/natural_effect_lifecycle_cold_test.tscn','tests/framework/feature_resource_natural_test.tscn','tests/framework/feature_resource_natural_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "rune_guard_final_world_112158_737678",
+          "test_path": "tests/framework/combined_effect_lifecycle_test.tscn",
+          "run_id": "60ec1289-d36d-44f7-bb81-27bf163c9b5b",
+          "invocation_id": "3b259d8f-7839-4c00-8c8f-e7a01bfe8773",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 38
+        },
+        {
+          "invocation": "rune_guard_final_world_112158_737678",
+          "test_path": "tests/framework/combined_effect_lifecycle_cold_test.tscn",
+          "run_id": "36f0acf4-c083-4b36-9c64-65487e231d8b",
+          "invocation_id": "3b259d8f-7839-4c00-8c8f-e7a01bfe8773",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 10
+        },
+        {
+          "invocation": "rune_guard_final_world_112158_737678",
+          "test_path": "tests/framework/periodic_credit_safe_logout_test.tscn",
+          "run_id": "e4699811-c993-4e68-b54c-52201787b864",
+          "invocation_id": "3b259d8f-7839-4c00-8c8f-e7a01bfe8773",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 37
+        },
+        {
+          "invocation": "rune_guard_final_world_112158_737678",
+          "test_path": "tests/framework/periodic_credit_safe_logout_cold_test.tscn",
+          "run_id": "1a8695db-9bb7-4eda-a9af-1642f209a7d3",
+          "invocation_id": "3b259d8f-7839-4c00-8c8f-e7a01bfe8773",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 13
+        },
+        {
+          "invocation": "rune_guard_final_world_112158_737678",
+          "test_path": "tests/framework/natural_effect_lifecycle_test.tscn",
+          "run_id": "8940f0eb-21d4-4df7-9acb-98d3087510ed",
+          "invocation_id": "3b259d8f-7839-4c00-8c8f-e7a01bfe8773",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 135
+        },
+        {
+          "invocation": "rune_guard_final_world_112158_737678",
+          "test_path": "tests/framework/natural_effect_lifecycle_cold_test.tscn",
+          "run_id": "1f972952-b8d4-4a6a-9016-25807dff8e3f",
+          "invocation_id": "3b259d8f-7839-4c00-8c8f-e7a01bfe8773",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 10
+        },
+        {
+          "invocation": "rune_guard_final_world_112158_737678",
+          "test_path": "tests/framework/feature_resource_natural_test.tscn",
+          "run_id": "d25f0b54-72f8-4bca-9ae7-4d828472ccc0",
+          "invocation_id": "3b259d8f-7839-4c00-8c8f-e7a01bfe8773",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 141
+        },
+        {
+          "invocation": "rune_guard_final_world_112158_737678",
+          "test_path": "tests/framework/feature_resource_natural_cold_test.tscn",
+          "run_id": "b57ff3c6-2140-4fe5-9e99-592c18552010",
+          "invocation_id": "3b259d8f-7839-4c00-8c8f-e7a01bfe8773",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 10
+        }
+      ]
+    },
+    {
+      "name": "rune_remove_destination_green_111208_701022",
+      "status": "PASS",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/rune_transaction_test.tscn','tests/framework/socket_transaction_test.tscn','tests/framework/item_journal_sequence_test.tscn','tests/framework/future_item_ownership_terminal_test.tscn' -TimeoutSeconds 30"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "rune_remove_destination_green_111208_701022",
+          "test_path": "tests/framework/rune_transaction_test.tscn",
+          "run_id": "301b9d4c-1b48-4aba-8f13-24252a11ffe1",
+          "invocation_id": "84c2de62-46ed-477f-b521-1c5fa3edc5ec",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "5ae8613bbd223a8d0b33081e78b8050f51dca51bf1676dee11857659e5be4fe2",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 119
+        },
+        {
+          "invocation": "rune_remove_destination_green_111208_701022",
+          "test_path": "tests/framework/socket_transaction_test.tscn",
+          "run_id": "62dc5c70-9f90-4f8c-ac64-faaca9273d35",
+          "invocation_id": "84c2de62-46ed-477f-b521-1c5fa3edc5ec",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "5ae8613bbd223a8d0b33081e78b8050f51dca51bf1676dee11857659e5be4fe2",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 51
+        },
+        {
+          "invocation": "rune_remove_destination_green_111208_701022",
+          "test_path": "tests/framework/item_journal_sequence_test.tscn",
+          "run_id": "9dc9a76e-eec2-4a61-9a7b-1e7056b58847",
+          "invocation_id": "84c2de62-46ed-477f-b521-1c5fa3edc5ec",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "5ae8613bbd223a8d0b33081e78b8050f51dca51bf1676dee11857659e5be4fe2",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 31
+        },
+        {
+          "invocation": "rune_remove_destination_green_111208_701022",
+          "test_path": "tests/framework/future_item_ownership_terminal_test.tscn",
+          "run_id": "61ae2500-7978-4ef1-ab6d-b443b598aa66",
+          "invocation_id": "84c2de62-46ed-477f-b521-1c5fa3edc5ec",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "5ae8613bbd223a8d0b33081e78b8050f51dca51bf1676dee11857659e5be4fe2",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 754
+        }
+      ]
+    },
+    {
+      "name": "rune_remove_destination_owned_red_111046_543026",
+      "status": "FAIL",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/rune_transaction_test.tscn' -TimeoutSeconds 30"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "rune_remove_destination_owned_red_111046_543026",
+          "test_path": "tests/framework/rune_transaction_test.tscn",
+          "run_id": "fbf6affb-c8e1-4c00-98e4-4820c5db40b1",
+          "invocation_id": "3785e7ff-b5e7-48ff-af47-2c9c2636188c",
+          "result": "FAIL",
+          "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+          "source_content_sha256": "1659176623173d2a5d23107404b704efdb4c486224d058495fbcfc0b4df4e29d",
+          "native_exit": 1,
+          "timeout": false,
+          "receipt_count": 119
+        }
+      ]
+    },
+    {
+      "name": "rune_remove_destination_red_110805_940728",
+      "status": "FAIL",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/rune_transaction_test.tscn' -TimeoutSeconds 30"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "rune_remove_destination_red_110805_940728",
+          "test_path": "tests/framework/rune_transaction_test.tscn",
+          "run_id": "ccb1bef5-5eb6-4f01-97e8-bb5efc039163",
+          "invocation_id": "897ce093-5683-4154-a757-f398b2f01d14",
+          "result": "FAIL",
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2;framework_receipt_wrong_run;framework_receipt_wrong_source",
+          "source_content_sha256": "e8b9cd82a01781a14d0804c8d9c19dc8054fefd16126f1e1e749c5512376d616",
+          "native_exit": -1,
+          "timeout": false,
+          "receipt_count": null
+        }
+      ]
+    },
+    {
+      "name": "rune_remove_destination_typed_red_110906_522818",
+      "status": "FAIL",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/rune_transaction_test.tscn' -TimeoutSeconds 30"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "rune_remove_destination_typed_red_110906_522818",
+          "test_path": "tests/framework/rune_transaction_test.tscn",
+          "run_id": "0c0ac90a-aeb3-48f6-9c79-6c7266ac2374",
+          "invocation_id": "6e723d22-90a4-4684-af75-2ec8df95b40e",
+          "result": "FAIL",
+          "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+          "source_content_sha256": "f85fa5eee3ab4ee20b15f6b3b0bc010736887cdd9e3aacf2b0cd221aecc46e58",
+          "native_exit": 1,
+          "timeout": false,
+          "receipt_count": 41
+        }
+      ]
+    }
+  ],
+  "final_adopted_rows": [
+    {
+      "invocation": "rune_guard_final_direct_111614_807975",
+      "test_path": "tests/framework/feature_source_composition_test.tscn",
+      "run_id": "5fe50920-e5ec-4404-8d37-bfe655f26b43",
+      "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 34
+    },
+    {
+      "invocation": "rune_guard_final_direct_111614_807975",
+      "test_path": "tests/framework/feature_source_composition_cold_test.tscn",
+      "run_id": "642d30a3-2828-471a-aa38-88642c0cc6f8",
+      "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 12
+    },
+    {
+      "invocation": "rune_guard_final_direct_111614_807975",
+      "test_path": "tests/framework/socket_transaction_test.tscn",
+      "run_id": "4f93d7b4-7057-4d76-bc13-f14ad5055f44",
+      "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 51
+    },
+    {
+      "invocation": "rune_guard_final_direct_111614_807975",
+      "test_path": "tests/framework/socket_gem_identity_test.tscn",
+      "run_id": "be639680-55a3-45ef-941f-10bce9fee02b",
+      "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 22
+    },
+    {
+      "invocation": "rune_guard_final_direct_111614_807975",
+      "test_path": "tests/framework/item_extension_codec_test.tscn",
+      "run_id": "1dfc83cb-9623-4a82-bbab-d2aa445ab44f",
+      "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 87
+    },
+    {
+      "invocation": "rune_guard_final_direct_111614_807975",
+      "test_path": "tests/framework/future_item_ownership_terminal_test.tscn",
+      "run_id": "18916033-f994-4cb9-bae8-2c926513286f",
+      "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 754
+    },
+    {
+      "invocation": "rune_guard_final_direct_111614_807975",
+      "test_path": "tests/framework/feature_loadout_atomic_test.tscn",
+      "run_id": "e1bb7cc7-2a2e-4733-86f1-83c409a82baa",
+      "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 6
+    },
+    {
+      "invocation": "rune_guard_final_direct_111614_807975",
+      "test_path": "tests/framework/feature_production_loadout_test.tscn",
+      "run_id": "ce415190-c831-4f68-ac13-878d6f1f4bab",
+      "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 19
+    },
+    {
+      "invocation": "rune_guard_final_direct_111614_807975",
+      "test_path": "tests/framework/feature_compiler_test.tscn",
+      "run_id": "561db2c0-9192-48f7-a264-518eb1c1e54f",
+      "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 36
+    },
+    {
+      "invocation": "rune_guard_final_direct_111614_807975",
+      "test_path": "tests/framework/feature_binding_validation_test.tscn",
+      "run_id": "8878cb1f-b1f6-4056-9e8b-5ec874a1a551",
+      "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 41
+    },
+    {
+      "invocation": "rune_guard_final_direct_111614_807975",
+      "test_path": "tests/framework/feature_registry_structure_test.tscn",
+      "run_id": "03242872-e0eb-4dd3-bd63-c2af11161a28",
+      "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 25
+    },
+    {
+      "invocation": "rune_guard_final_direct_111614_807975",
+      "test_path": "tests/framework/feature_registry_publication_test.tscn",
+      "run_id": "70562d01-5e4b-4d01-8ac3-c18d2cea6fb4",
+      "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 28
+    },
+    {
+      "invocation": "rune_guard_final_direct_111614_807975",
+      "test_path": "tests/framework/feature_lifesteal_runtime_test.tscn",
+      "run_id": "90c1c8f4-e900-4574-b69f-ae72b08c24ee",
+      "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 94
+    },
+    {
+      "invocation": "rune_guard_final_direct_111614_807975",
+      "test_path": "tests/framework/feature_lifesteal_production_test.tscn",
+      "run_id": "397b92b9-93a0-4419-9f1b-baa0ad986fb1",
+      "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 26
+    },
+    {
+      "invocation": "rune_guard_final_direct_111614_807975",
+      "test_path": "tests/framework/feature_resource_multi_reentry_test.tscn",
+      "run_id": "5290eccb-d9f7-4142-a3f8-300be30fc061",
+      "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 24
+    },
+    {
+      "invocation": "rune_guard_final_direct_111614_807975",
+      "test_path": "tests/framework/feature_capacity_admission_test.tscn",
+      "run_id": "2bb53ded-9c7f-48a4-a1c5-db0b20de537b",
+      "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 15
+    },
+    {
+      "invocation": "rune_guard_final_direct_111614_807975",
+      "test_path": "tests/player_movement_respawn_test.tscn",
+      "run_id": "",
+      "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": null
+    },
+    {
+      "invocation": "rune_guard_final_direct_111614_807975",
+      "test_path": "tests/death_revival_touch_input_test.tscn",
+      "run_id": "",
+      "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": null
+    },
+    {
+      "invocation": "rune_guard_final_direct_111614_807975",
+      "test_path": "tests/summon_actor_state_machine_test.tscn",
+      "run_id": "",
+      "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": null
+    },
+    {
+      "invocation": "rune_guard_final_direct_111614_807975",
+      "test_path": "tests/pricing_authority_test.tscn",
+      "run_id": "",
+      "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": null
+    },
+    {
+      "invocation": "rune_guard_final_direct_111614_807975",
+      "test_path": "tests/framework/rune_catalog_data_test.tscn",
+      "run_id": "15c044f1-d23e-4c1c-a6d2-34923b5300e1",
+      "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 3
+    },
+    {
+      "invocation": "rune_guard_final_direct_111614_807975",
+      "test_path": "tests/framework/rune_extension_codec_test.tscn",
+      "run_id": "29f0fd51-93cc-41a1-8f85-0e88f7808ef1",
+      "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 14
+    },
+    {
+      "invocation": "rune_guard_final_direct_111614_807975",
+      "test_path": "tests/framework/rune_transaction_test.tscn",
+      "run_id": "887f9fff-a3e7-4439-bd73-4aa94a4b5096",
+      "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 119
+    },
+    {
+      "invocation": "rune_guard_final_direct_111614_807975",
+      "test_path": "tests/framework/feature_affix_admission_test.tscn",
+      "run_id": "d34c4c08-8713-4838-beee-0b849fadac78",
+      "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 29
+    },
+    {
+      "invocation": "rune_guard_final_direct_111614_807975",
+      "test_path": "tests/framework/rune_source_composition_test.tscn",
+      "run_id": "3abaec80-5063-4b2d-a10d-0348c7db9ff2",
+      "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 35
+    },
+    {
+      "invocation": "rune_guard_final_direct_111614_807975",
+      "test_path": "tests/framework/rune_source_composition_cold_test.tscn",
+      "run_id": "2e7f728c-c51b-4743-a15f-3325f54606cf",
+      "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 14
+    },
+    {
+      "invocation": "rune_guard_final_direct_111614_807975",
+      "test_path": "tests/framework/item_journal_sequence_test.tscn",
+      "run_id": "d7fd5381-c45e-46fe-bace-3b511294c014",
+      "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 31
+    },
+    {
+      "invocation": "rune_guard_final_direct_111614_807975",
+      "test_path": "tests/framework/item_journal_legacy_backup_test.tscn",
+      "run_id": "ab446887-8f18-49de-9c8c-7cd79a863a4c",
+      "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 20
+    },
+    {
+      "invocation": "rune_guard_final_direct_111614_807975",
+      "test_path": "tests/framework/feature_child_capacity_test.tscn",
+      "run_id": "bd0c2130-76bb-4189-b39f-fa5c03c2293f",
+      "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 29
+    },
+    {
+      "invocation": "rune_guard_final_direct_111614_807975",
+      "test_path": "tests/framework/feature_death_child_command_test.tscn",
+      "run_id": "1e50e0db-8b70-4dd1-a721-c7a2ad7e7c38",
+      "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 28
+    },
+    {
+      "invocation": "rune_guard_final_journal_chain_112120_965820",
+      "test_path": "tests/framework/item_journal_v2_backup_seed_test.tscn",
+      "run_id": "740c8d42-3b47-4bf4-a8eb-bfb1b60534cd",
+      "invocation_id": "3d042c5d-0a0c-4d95-ab82-6e49629a844c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 14
+    },
+    {
+      "invocation": "rune_guard_final_journal_chain_112120_965820",
+      "test_path": "tests/framework/item_journal_v2_backup_cold_test.tscn",
+      "run_id": "0bdc01e9-6a62-4a81-8764-c244ddd6d391",
+      "invocation_id": "3d042c5d-0a0c-4d95-ab82-6e49629a844c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 33
+    },
+    {
+      "invocation": "rune_guard_final_journal_chain_112120_965820",
+      "test_path": "tests/framework/item_journal_v2_backup_restart_test.tscn",
+      "run_id": "728637cd-b2e0-41af-895c-259dc05e3430",
+      "invocation_id": "3d042c5d-0a0c-4d95-ab82-6e49629a844c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 14
+    },
+    {
+      "invocation": "rune_guard_final_journal_single_112056_139794",
+      "test_path": "tests/framework/item_journal_v2_backup_test.tscn",
+      "run_id": "40cdfb0c-3635-491d-ad02-fdfe9e9e29f5",
+      "invocation_id": "23a3abcf-fcf4-433f-8a44-3f5b51ccef4d",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 99
+    },
+    {
+      "invocation": "rune_guard_final_world_112158_737678",
+      "test_path": "tests/framework/combined_effect_lifecycle_test.tscn",
+      "run_id": "60ec1289-d36d-44f7-bb81-27bf163c9b5b",
+      "invocation_id": "3b259d8f-7839-4c00-8c8f-e7a01bfe8773",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 38
+    },
+    {
+      "invocation": "rune_guard_final_world_112158_737678",
+      "test_path": "tests/framework/combined_effect_lifecycle_cold_test.tscn",
+      "run_id": "36f0acf4-c083-4b36-9c64-65487e231d8b",
+      "invocation_id": "3b259d8f-7839-4c00-8c8f-e7a01bfe8773",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 10
+    },
+    {
+      "invocation": "rune_guard_final_world_112158_737678",
+      "test_path": "tests/framework/periodic_credit_safe_logout_test.tscn",
+      "run_id": "e4699811-c993-4e68-b54c-52201787b864",
+      "invocation_id": "3b259d8f-7839-4c00-8c8f-e7a01bfe8773",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 37
+    },
+    {
+      "invocation": "rune_guard_final_world_112158_737678",
+      "test_path": "tests/framework/periodic_credit_safe_logout_cold_test.tscn",
+      "run_id": "1a8695db-9bb7-4eda-a9af-1642f209a7d3",
+      "invocation_id": "3b259d8f-7839-4c00-8c8f-e7a01bfe8773",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 13
+    },
+    {
+      "invocation": "rune_guard_final_world_112158_737678",
+      "test_path": "tests/framework/natural_effect_lifecycle_test.tscn",
+      "run_id": "8940f0eb-21d4-4df7-9acb-98d3087510ed",
+      "invocation_id": "3b259d8f-7839-4c00-8c8f-e7a01bfe8773",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 135
+    },
+    {
+      "invocation": "rune_guard_final_world_112158_737678",
+      "test_path": "tests/framework/natural_effect_lifecycle_cold_test.tscn",
+      "run_id": "1f972952-b8d4-4a6a-9016-25807dff8e3f",
+      "invocation_id": "3b259d8f-7839-4c00-8c8f-e7a01bfe8773",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 10
+    },
+    {
+      "invocation": "rune_guard_final_world_112158_737678",
+      "test_path": "tests/framework/feature_resource_natural_test.tscn",
+      "run_id": "d25f0b54-72f8-4bca-9ae7-4d828472ccc0",
+      "invocation_id": "3b259d8f-7839-4c00-8c8f-e7a01bfe8773",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 141
+    },
+    {
+      "invocation": "rune_guard_final_world_112158_737678",
+      "test_path": "tests/framework/feature_resource_natural_cold_test.tscn",
+      "run_id": "b57ff3c6-2140-4fe5-9e99-592c18552010",
+      "invocation_id": "3b259d8f-7839-4c00-8c8f-e7a01bfe8773",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 10
+    }
+  ],
+  "preserved_failed_rows": [
+    {
+      "invocation": "child_capacity_red_103001_476964",
+      "test_path": "tests/framework/feature_child_capacity_test.tscn",
+      "run_id": "72f689b0-55aa-4cc0-ae21-d11df66ccb5f",
+      "invocation_id": "2b7179fc-7ac1-4fda-885c-c6ffac7f31eb",
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+      "source_content_sha256": "80e96826b8ebbb557d5f8ddee1fd3bb4793fda757241cdea1bb4a68472445bff",
+      "native_exit": 1,
+      "timeout": false,
+      "receipt_count": 1
+    },
+    {
+      "invocation": "death_child_command_boundary_red_104451_537568",
+      "test_path": "tests/framework/feature_death_child_command_test.tscn",
+      "run_id": "6d808a4e-77e8-4f0a-89a6-ddadde8d54c9",
+      "invocation_id": "9c67f549-fe1e-487c-b3dd-202332e5c06e",
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+      "source_content_sha256": "ca53c11debe3881d7f8e7c2d8356ede3552a14f42515753cd20c5ec0ea720be5",
+      "native_exit": 1,
+      "timeout": false,
+      "receipt_count": 28
+    },
+    {
+      "invocation": "death_child_command_green_103933_851616",
+      "test_path": "tests/framework/feature_death_child_command_test.tscn",
+      "run_id": "35a76163-d3fa-4b1d-ae85-6e801f484fd3",
+      "invocation_id": "abab1b7b-da80-40e8-853a-02d1e871effe",
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2;framework_receipt_missing",
+      "source_content_sha256": "23e5b1fd8575e5663f22728e17f89c09357f49920249425b4dfdab9a45823066",
+      "native_exit": -1,
+      "timeout": false,
+      "receipt_count": null
+    },
+    {
+      "invocation": "death_child_command_red_103747_525245",
+      "test_path": "tests/framework/feature_death_child_command_test.tscn",
+      "run_id": "2b13a401-81a3-4402-8698-1fc3abdcbb90",
+      "invocation_id": "d5ed2631-5d74-484e-b05d-a49fe66c1d53",
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2;framework_receipt_missing",
+      "source_content_sha256": "ae872d464c5f8b0a4fd4ec1f78d53b3a6fa0c3630e888bf40b0870004f4b4b94",
+      "native_exit": -1,
+      "timeout": false,
+      "receipt_count": null
+    },
+    {
+      "invocation": "death_child_command_typed_red_104046_166757",
+      "test_path": "tests/framework/feature_death_child_command_test.tscn",
+      "run_id": "26487795-fe3f-42ef-a961-4ac21a48ed43",
+      "invocation_id": "8e52b88d-b581-4910-8a78-d27c71e1a0dc",
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+      "source_content_sha256": "e4e477228116decc13ca230782cec75a5660f226b73fd8fb2cf7dd9e1ed0a35a",
+      "native_exit": 1,
+      "timeout": false,
+      "receipt_count": 1
+    },
+    {
+      "invocation": "rune_future_order_isolated_red_110329_137699",
+      "test_path": "tests/framework/future_item_ownership_terminal_test.tscn",
+      "run_id": "0e6577e4-2085-4e2d-ae41-e21b861ce361",
+      "invocation_id": "b55668ec-3a6f-42b4-81cf-ef6e7e3bc885",
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+      "source_content_sha256": "0c5cf1607fc4b1182adb2851c48469d9a56b5bc72aa8c18c1edba920c094074f",
+      "native_exit": 1,
+      "timeout": false,
+      "receipt_count": 754
+    },
+    {
+      "invocation": "rune_future_order_red_105017_905748",
+      "test_path": "tests/framework/future_item_ownership_terminal_test.tscn",
+      "run_id": "d7216d44-5cd3-4238-aa42-eca3b7731c61",
+      "invocation_id": "16c4cc10-6bab-4389-a5e9-66a9108e5751",
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+      "source_content_sha256": "8e82de94d7116eedf2be4398be864585fe694c90f822ee147eba2660a19f8f37",
+      "native_exit": 1,
+      "timeout": false,
+      "receipt_count": 535
+    },
+    {
+      "invocation": "rune_future_order_trace_red_110043_665731",
+      "test_path": "tests/framework/future_item_ownership_terminal_test.tscn",
+      "run_id": "e7d39b0f-c190-498b-b34a-ae545b3b8b6a",
+      "invocation_id": "99a0e602-80d0-4533-a486-585093591daf",
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+      "source_content_sha256": "09cb30a746a6373418873e5050fc850a46e3da38d89621e61bdc296d84f4b8ce",
+      "native_exit": 1,
+      "timeout": false,
+      "receipt_count": 631
+    },
+    {
+      "invocation": "rune_future_order_typed_red_105851_596106",
+      "test_path": "tests/framework/future_item_ownership_terminal_test.tscn",
+      "run_id": "e352b8a9-f1d0-426d-9121-690cf4c4ff38",
+      "invocation_id": "36a00f3b-3e01-40c5-8ef1-7823239cc629",
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+      "source_content_sha256": "3bc9fa4f6b229268629b509e8b6d96497903ae4a2b1033629ced661056fac7a7",
+      "native_exit": 1,
+      "timeout": false,
+      "receipt_count": 631
+    },
+    {
+      "invocation": "rune_remove_destination_owned_red_111046_543026",
+      "test_path": "tests/framework/rune_transaction_test.tscn",
+      "run_id": "fbf6affb-c8e1-4c00-98e4-4820c5db40b1",
+      "invocation_id": "3785e7ff-b5e7-48ff-af47-2c9c2636188c",
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+      "source_content_sha256": "1659176623173d2a5d23107404b704efdb4c486224d058495fbcfc0b4df4e29d",
+      "native_exit": 1,
+      "timeout": false,
+      "receipt_count": 119
+    },
+    {
+      "invocation": "rune_remove_destination_red_110805_940728",
+      "test_path": "tests/framework/rune_transaction_test.tscn",
+      "run_id": "ccb1bef5-5eb6-4f01-97e8-bb5efc039163",
+      "invocation_id": "897ce093-5683-4154-a757-f398b2f01d14",
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2;framework_receipt_wrong_run;framework_receipt_wrong_source",
+      "source_content_sha256": "e8b9cd82a01781a14d0804c8d9c19dc8054fefd16126f1e1e749c5512376d616",
+      "native_exit": -1,
+      "timeout": false,
+      "receipt_count": null
+    },
+    {
+      "invocation": "rune_remove_destination_typed_red_110906_522818",
+      "test_path": "tests/framework/rune_transaction_test.tscn",
+      "run_id": "0c0ac90a-aeb3-48f6-9c79-6c7266ac2374",
+      "invocation_id": "6e723d22-90a4-4684-af75-2ec8df95b40e",
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+      "source_content_sha256": "f85fa5eee3ab4ee20b15f6b3b0bc010736887cdd9e3aacf2b0cd221aecc46e58",
+      "native_exit": 1,
+      "timeout": false,
+      "receipt_count": 41
+    }
+  ],
+  "scope": "Final direct, independently isolated journal single/chain and world positive invocations only; earlier RED, source stages and shared-test-account failures remain raw failures."
+}

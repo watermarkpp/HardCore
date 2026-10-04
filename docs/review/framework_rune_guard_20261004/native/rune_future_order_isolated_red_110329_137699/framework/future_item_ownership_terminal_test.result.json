@@ -1,0 +1,3786 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "fixture owns a fresh profile and account directory",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "fixture uses a real registered drop and supported extension",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "real writer produces the known profile and shared owner",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "known backup bytes exist on disk",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "known profile backup passes the real aggregate validator",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "known shared backup passes the real aggregate validator",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "new rune cases begin with a real registered uniquely owned supported asset",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "shared standalone ownership cases use a registered original gem",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "unsupported owner precedes current graph or private-field rules 0",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "normal startup refuses this sole future profile input without promoting any old backup 0",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "future item locks whole profile before corrupt sibling 0",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "real loader rejects future profile with a valid old backup 0",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "future profile never publishes backup or partial live state 0",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "future profile prevents real writer after failed load 0",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "future profile primary and backup remain byte identical 0",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "future shared item 0 is terminal",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "future shared item 0 is refused as the targeted owner by the actual startup preflight before initialization",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "future shared item 0 cannot initialize from old backup",
+      "passed": true
+    },
+    {
+      "id": 35,
+      "label": "future shared item 0 never publishes or initializes another owner",
+      "passed": true
+    },
+    {
+      "id": 36,
+      "label": "future shared item 0 blocks the actual shared writer",
+      "passed": true
+    },
+    {
+      "id": 37,
+      "label": "future shared item 0 primary and backup remain byte identical",
+      "passed": true
+    },
+    {
+      "id": 38,
+      "label": "unsupported owner precedes current graph or private-field rules 1",
+      "passed": true
+    },
+    {
+      "id": 39,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 40,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 41,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 42,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 43,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 44,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 45,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 46,
+      "label": "normal startup refuses this sole future profile input without promoting any old backup 1",
+      "passed": true
+    },
+    {
+      "id": 47,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 48,
+      "label": "future item locks whole profile before corrupt sibling 1",
+      "passed": true
+    },
+    {
+      "id": 49,
+      "label": "real loader rejects future profile with a valid old backup 1",
+      "passed": true
+    },
+    {
+      "id": 50,
+      "label": "future profile never publishes backup or partial live state 1",
+      "passed": true
+    },
+    {
+      "id": 51,
+      "label": "future profile prevents real writer after failed load 1",
+      "passed": true
+    },
+    {
+      "id": 52,
+      "label": "future profile primary and backup remain byte identical 1",
+      "passed": true
+    },
+    {
+      "id": 53,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 54,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 55,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 56,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 57,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 58,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 59,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 60,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 61,
+      "label": "future shared item 1 is terminal",
+      "passed": true
+    },
+    {
+      "id": 62,
+      "label": "future shared item 1 is refused as the targeted owner by the actual startup preflight before initialization",
+      "passed": true
+    },
+    {
+      "id": 63,
+      "label": "future shared item 1 cannot initialize from old backup",
+      "passed": true
+    },
+    {
+      "id": 64,
+      "label": "future shared item 1 never publishes or initializes another owner",
+      "passed": true
+    },
+    {
+      "id": 65,
+      "label": "future shared item 1 blocks the actual shared writer",
+      "passed": true
+    },
+    {
+      "id": 66,
+      "label": "future shared item 1 primary and backup remain byte identical",
+      "passed": true
+    },
+    {
+      "id": 67,
+      "label": "unsupported owner precedes current graph or private-field rules 2",
+      "passed": true
+    },
+    {
+      "id": 68,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 69,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 70,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 71,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 72,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 73,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 74,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 75,
+      "label": "normal startup refuses this sole future profile input without promoting any old backup 2",
+      "passed": true
+    },
+    {
+      "id": 76,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 77,
+      "label": "future item locks whole profile before corrupt sibling 2",
+      "passed": true
+    },
+    {
+      "id": 78,
+      "label": "real loader rejects future profile with a valid old backup 2",
+      "passed": true
+    },
+    {
+      "id": 79,
+      "label": "future profile never publishes backup or partial live state 2",
+      "passed": true
+    },
+    {
+      "id": 80,
+      "label": "future profile prevents real writer after failed load 2",
+      "passed": true
+    },
+    {
+      "id": 81,
+      "label": "future profile primary and backup remain byte identical 2",
+      "passed": true
+    },
+    {
+      "id": 82,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 83,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 84,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 85,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 86,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 87,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 88,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 89,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 90,
+      "label": "future shared item 2 is terminal",
+      "passed": true
+    },
+    {
+      "id": 91,
+      "label": "future shared item 2 is refused as the targeted owner by the actual startup preflight before initialization",
+      "passed": true
+    },
+    {
+      "id": 92,
+      "label": "future shared item 2 cannot initialize from old backup",
+      "passed": true
+    },
+    {
+      "id": 93,
+      "label": "future shared item 2 never publishes or initializes another owner",
+      "passed": true
+    },
+    {
+      "id": 94,
+      "label": "future shared item 2 blocks the actual shared writer",
+      "passed": true
+    },
+    {
+      "id": 95,
+      "label": "future shared item 2 primary and backup remain byte identical",
+      "passed": true
+    },
+    {
+      "id": 96,
+      "label": "unsupported owner precedes current graph or private-field rules 3",
+      "passed": true
+    },
+    {
+      "id": 97,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 98,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 99,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 100,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 101,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 102,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 103,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 104,
+      "label": "normal startup refuses this sole future profile input without promoting any old backup 3",
+      "passed": true
+    },
+    {
+      "id": 105,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 106,
+      "label": "future item locks whole profile before corrupt sibling 3",
+      "passed": true
+    },
+    {
+      "id": 107,
+      "label": "real loader rejects future profile with a valid old backup 3",
+      "passed": true
+    },
+    {
+      "id": 108,
+      "label": "future profile never publishes backup or partial live state 3",
+      "passed": true
+    },
+    {
+      "id": 109,
+      "label": "future profile prevents real writer after failed load 3",
+      "passed": true
+    },
+    {
+      "id": 110,
+      "label": "future profile primary and backup remain byte identical 3",
+      "passed": true
+    },
+    {
+      "id": 111,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 112,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 113,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 114,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 115,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 116,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 117,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 118,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 119,
+      "label": "future shared item 3 is terminal",
+      "passed": true
+    },
+    {
+      "id": 120,
+      "label": "future shared item 3 is refused as the targeted owner by the actual startup preflight before initialization",
+      "passed": true
+    },
+    {
+      "id": 121,
+      "label": "future shared item 3 cannot initialize from old backup",
+      "passed": true
+    },
+    {
+      "id": 122,
+      "label": "future shared item 3 never publishes or initializes another owner",
+      "passed": true
+    },
+    {
+      "id": 123,
+      "label": "future shared item 3 blocks the actual shared writer",
+      "passed": true
+    },
+    {
+      "id": 124,
+      "label": "future shared item 3 primary and backup remain byte identical",
+      "passed": true
+    },
+    {
+      "id": 125,
+      "label": "unsupported owner precedes current graph or private-field rules 4",
+      "passed": true
+    },
+    {
+      "id": 126,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 127,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 128,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 129,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 130,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 131,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 132,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 133,
+      "label": "normal startup refuses this sole future profile input without promoting any old backup 4",
+      "passed": true
+    },
+    {
+      "id": 134,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 135,
+      "label": "future item locks whole profile before corrupt sibling 4",
+      "passed": true
+    },
+    {
+      "id": 136,
+      "label": "real loader rejects future profile with a valid old backup 4",
+      "passed": true
+    },
+    {
+      "id": 137,
+      "label": "future profile never publishes backup or partial live state 4",
+      "passed": true
+    },
+    {
+      "id": 138,
+      "label": "future profile prevents real writer after failed load 4",
+      "passed": true
+    },
+    {
+      "id": 139,
+      "label": "future profile primary and backup remain byte identical 4",
+      "passed": true
+    },
+    {
+      "id": 140,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 141,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 142,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 143,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 144,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 145,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 146,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 147,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 148,
+      "label": "future shared item 4 is terminal",
+      "passed": true
+    },
+    {
+      "id": 149,
+      "label": "future shared item 4 is refused as the targeted owner by the actual startup preflight before initialization",
+      "passed": true
+    },
+    {
+      "id": 150,
+      "label": "future shared item 4 cannot initialize from old backup",
+      "passed": true
+    },
+    {
+      "id": 151,
+      "label": "future shared item 4 never publishes or initializes another owner",
+      "passed": true
+    },
+    {
+      "id": 152,
+      "label": "future shared item 4 blocks the actual shared writer",
+      "passed": true
+    },
+    {
+      "id": 153,
+      "label": "future shared item 4 primary and backup remain byte identical",
+      "passed": true
+    },
+    {
+      "id": 154,
+      "label": "unsupported owner precedes current graph or private-field rules 5",
+      "passed": true
+    },
+    {
+      "id": 155,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 156,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 157,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 158,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 159,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 160,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 161,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 162,
+      "label": "normal startup refuses this sole future profile input without promoting any old backup 5",
+      "passed": true
+    },
+    {
+      "id": 163,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 164,
+      "label": "future item locks whole profile before corrupt sibling 5",
+      "passed": true
+    },
+    {
+      "id": 165,
+      "label": "real loader rejects future profile with a valid old backup 5",
+      "passed": true
+    },
+    {
+      "id": 166,
+      "label": "future profile never publishes backup or partial live state 5",
+      "passed": true
+    },
+    {
+      "id": 167,
+      "label": "future profile prevents real writer after failed load 5",
+      "passed": true
+    },
+    {
+      "id": 168,
+      "label": "future profile primary and backup remain byte identical 5",
+      "passed": true
+    },
+    {
+      "id": 169,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 170,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 171,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 172,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 173,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 174,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 175,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 176,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 177,
+      "label": "future shared item 5 is terminal",
+      "passed": true
+    },
+    {
+      "id": 178,
+      "label": "future shared item 5 is refused as the targeted owner by the actual startup preflight before initialization",
+      "passed": true
+    },
+    {
+      "id": 179,
+      "label": "future shared item 5 cannot initialize from old backup",
+      "passed": true
+    },
+    {
+      "id": 180,
+      "label": "future shared item 5 never publishes or initializes another owner",
+      "passed": true
+    },
+    {
+      "id": 181,
+      "label": "future shared item 5 blocks the actual shared writer",
+      "passed": true
+    },
+    {
+      "id": 182,
+      "label": "future shared item 5 primary and backup remain byte identical",
+      "passed": true
+    },
+    {
+      "id": 183,
+      "label": "unsupported owner precedes current graph or private-field rules 6",
+      "passed": true
+    },
+    {
+      "id": 184,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 185,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 186,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 187,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 188,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 189,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 190,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 191,
+      "label": "normal startup refuses this sole future profile input without promoting any old backup 6",
+      "passed": true
+    },
+    {
+      "id": 192,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 193,
+      "label": "future item locks whole profile before corrupt sibling 6",
+      "passed": true
+    },
+    {
+      "id": 194,
+      "label": "real loader rejects future profile with a valid old backup 6",
+      "passed": true
+    },
+    {
+      "id": 195,
+      "label": "future profile never publishes backup or partial live state 6",
+      "passed": true
+    },
+    {
+      "id": 196,
+      "label": "future profile prevents real writer after failed load 6",
+      "passed": true
+    },
+    {
+      "id": 197,
+      "label": "future profile primary and backup remain byte identical 6",
+      "passed": true
+    },
+    {
+      "id": 198,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 199,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 200,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 201,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 202,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 203,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 204,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 205,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 206,
+      "label": "future shared item 6 is terminal",
+      "passed": true
+    },
+    {
+      "id": 207,
+      "label": "future shared item 6 is refused as the targeted owner by the actual startup preflight before initialization",
+      "passed": true
+    },
+    {
+      "id": 208,
+      "label": "future shared item 6 cannot initialize from old backup",
+      "passed": true
+    },
+    {
+      "id": 209,
+      "label": "future shared item 6 never publishes or initializes another owner",
+      "passed": true
+    },
+    {
+      "id": 210,
+      "label": "future shared item 6 blocks the actual shared writer",
+      "passed": true
+    },
+    {
+      "id": 211,
+      "label": "future shared item 6 primary and backup remain byte identical",
+      "passed": true
+    },
+    {
+      "id": 212,
+      "label": "unsupported owner precedes current graph or private-field rules 7",
+      "passed": true
+    },
+    {
+      "id": 213,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 214,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 215,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 216,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 217,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 218,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 219,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 220,
+      "label": "normal startup refuses this sole future profile input without promoting any old backup 7",
+      "passed": true
+    },
+    {
+      "id": 221,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 222,
+      "label": "future item locks whole profile before corrupt sibling 7",
+      "passed": true
+    },
+    {
+      "id": 223,
+      "label": "real loader rejects future profile with a valid old backup 7",
+      "passed": true
+    },
+    {
+      "id": 224,
+      "label": "future profile never publishes backup or partial live state 7",
+      "passed": true
+    },
+    {
+      "id": 225,
+      "label": "future profile prevents real writer after failed load 7",
+      "passed": true
+    },
+    {
+      "id": 226,
+      "label": "future profile primary and backup remain byte identical 7",
+      "passed": true
+    },
+    {
+      "id": 227,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 228,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 229,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 230,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 231,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 232,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 233,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 234,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 235,
+      "label": "future shared item 7 is terminal",
+      "passed": true
+    },
+    {
+      "id": 236,
+      "label": "future shared item 7 is refused as the targeted owner by the actual startup preflight before initialization",
+      "passed": true
+    },
+    {
+      "id": 237,
+      "label": "future shared item 7 cannot initialize from old backup",
+      "passed": true
+    },
+    {
+      "id": 238,
+      "label": "future shared item 7 never publishes or initializes another owner",
+      "passed": true
+    },
+    {
+      "id": 239,
+      "label": "future shared item 7 blocks the actual shared writer",
+      "passed": true
+    },
+    {
+      "id": 240,
+      "label": "future shared item 7 primary and backup remain byte identical",
+      "passed": true
+    },
+    {
+      "id": 241,
+      "label": "unsupported owner precedes current graph or private-field rules 8",
+      "passed": true
+    },
+    {
+      "id": 242,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 243,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 244,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 245,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 246,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 247,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 248,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 249,
+      "label": "normal startup refuses this sole future profile input without promoting any old backup 8",
+      "passed": true
+    },
+    {
+      "id": 250,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 251,
+      "label": "future item locks whole profile before corrupt sibling 8",
+      "passed": true
+    },
+    {
+      "id": 252,
+      "label": "real loader rejects future profile with a valid old backup 8",
+      "passed": true
+    },
+    {
+      "id": 253,
+      "label": "future profile never publishes backup or partial live state 8",
+      "passed": true
+    },
+    {
+      "id": 254,
+      "label": "future profile prevents real writer after failed load 8",
+      "passed": true
+    },
+    {
+      "id": 255,
+      "label": "future profile primary and backup remain byte identical 8",
+      "passed": true
+    },
+    {
+      "id": 256,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 257,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 258,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 259,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 260,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 261,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 262,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 263,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 264,
+      "label": "future shared item 8 is terminal",
+      "passed": true
+    },
+    {
+      "id": 265,
+      "label": "future shared item 8 is refused as the targeted owner by the actual startup preflight before initialization",
+      "passed": true
+    },
+    {
+      "id": 266,
+      "label": "future shared item 8 cannot initialize from old backup",
+      "passed": true
+    },
+    {
+      "id": 267,
+      "label": "future shared item 8 never publishes or initializes another owner",
+      "passed": true
+    },
+    {
+      "id": 268,
+      "label": "future shared item 8 blocks the actual shared writer",
+      "passed": true
+    },
+    {
+      "id": 269,
+      "label": "future shared item 8 primary and backup remain byte identical",
+      "passed": true
+    },
+    {
+      "id": 270,
+      "label": "unsupported owner precedes current graph or private-field rules 9",
+      "passed": true
+    },
+    {
+      "id": 271,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 272,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 273,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 274,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 275,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 276,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 277,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 278,
+      "label": "normal startup refuses this sole future profile input without promoting any old backup 9",
+      "passed": true
+    },
+    {
+      "id": 279,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 280,
+      "label": "future item locks whole profile before corrupt sibling 9",
+      "passed": true
+    },
+    {
+      "id": 281,
+      "label": "real loader rejects future profile with a valid old backup 9",
+      "passed": true
+    },
+    {
+      "id": 282,
+      "label": "future profile never publishes backup or partial live state 9",
+      "passed": true
+    },
+    {
+      "id": 283,
+      "label": "future profile prevents real writer after failed load 9",
+      "passed": true
+    },
+    {
+      "id": 284,
+      "label": "future profile primary and backup remain byte identical 9",
+      "passed": true
+    },
+    {
+      "id": 285,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 286,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 287,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 288,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 289,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 290,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 291,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 292,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 293,
+      "label": "future shared item 9 is terminal",
+      "passed": true
+    },
+    {
+      "id": 294,
+      "label": "future shared item 9 is refused as the targeted owner by the actual startup preflight before initialization",
+      "passed": true
+    },
+    {
+      "id": 295,
+      "label": "future shared item 9 cannot initialize from old backup",
+      "passed": true
+    },
+    {
+      "id": 296,
+      "label": "future shared item 9 never publishes or initializes another owner",
+      "passed": true
+    },
+    {
+      "id": 297,
+      "label": "future shared item 9 blocks the actual shared writer",
+      "passed": true
+    },
+    {
+      "id": 298,
+      "label": "future shared item 9 primary and backup remain byte identical",
+      "passed": true
+    },
+    {
+      "id": 299,
+      "label": "unsupported owner precedes current graph or private-field rules 10",
+      "passed": true
+    },
+    {
+      "id": 300,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 301,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 302,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 303,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 304,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 305,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 306,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 307,
+      "label": "normal startup refuses this sole future profile input without promoting any old backup 10",
+      "passed": true
+    },
+    {
+      "id": 308,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 309,
+      "label": "future item locks whole profile before corrupt sibling 10",
+      "passed": true
+    },
+    {
+      "id": 310,
+      "label": "real loader rejects future profile with a valid old backup 10",
+      "passed": true
+    },
+    {
+      "id": 311,
+      "label": "future profile never publishes backup or partial live state 10",
+      "passed": true
+    },
+    {
+      "id": 312,
+      "label": "future profile prevents real writer after failed load 10",
+      "passed": true
+    },
+    {
+      "id": 313,
+      "label": "future profile primary and backup remain byte identical 10",
+      "passed": true
+    },
+    {
+      "id": 314,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 315,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 316,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 317,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 318,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 319,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 320,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 321,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 322,
+      "label": "future shared item 10 is terminal",
+      "passed": true
+    },
+    {
+      "id": 323,
+      "label": "future shared item 10 is refused as the targeted owner by the actual startup preflight before initialization",
+      "passed": true
+    },
+    {
+      "id": 324,
+      "label": "future shared item 10 cannot initialize from old backup",
+      "passed": true
+    },
+    {
+      "id": 325,
+      "label": "future shared item 10 never publishes or initializes another owner",
+      "passed": true
+    },
+    {
+      "id": 326,
+      "label": "future shared item 10 blocks the actual shared writer",
+      "passed": true
+    },
+    {
+      "id": 327,
+      "label": "future shared item 10 primary and backup remain byte identical",
+      "passed": true
+    },
+    {
+      "id": 328,
+      "label": "unsupported owner precedes current graph or private-field rules 11",
+      "passed": true
+    },
+    {
+      "id": 329,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 330,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 331,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 332,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 333,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 334,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 335,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 336,
+      "label": "normal startup refuses this sole future profile input without promoting any old backup 11",
+      "passed": true
+    },
+    {
+      "id": 337,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 338,
+      "label": "future item locks whole profile before corrupt sibling 11",
+      "passed": true
+    },
+    {
+      "id": 339,
+      "label": "real loader rejects future profile with a valid old backup 11",
+      "passed": true
+    },
+    {
+      "id": 340,
+      "label": "future profile never publishes backup or partial live state 11",
+      "passed": true
+    },
+    {
+      "id": 341,
+      "label": "future profile prevents real writer after failed load 11",
+      "passed": true
+    },
+    {
+      "id": 342,
+      "label": "future profile primary and backup remain byte identical 11",
+      "passed": true
+    },
+    {
+      "id": 343,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 344,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 345,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 346,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 347,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 348,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 349,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 350,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 351,
+      "label": "future shared item 11 is terminal",
+      "passed": true
+    },
+    {
+      "id": 352,
+      "label": "future shared item 11 is refused as the targeted owner by the actual startup preflight before initialization",
+      "passed": true
+    },
+    {
+      "id": 353,
+      "label": "future shared item 11 cannot initialize from old backup",
+      "passed": true
+    },
+    {
+      "id": 354,
+      "label": "future shared item 11 never publishes or initializes another owner",
+      "passed": true
+    },
+    {
+      "id": 355,
+      "label": "future shared item 11 blocks the actual shared writer",
+      "passed": true
+    },
+    {
+      "id": 356,
+      "label": "future shared item 11 primary and backup remain byte identical",
+      "passed": true
+    },
+    {
+      "id": 357,
+      "label": "unsupported owner precedes current graph or private-field rules 12",
+      "passed": false
+    },
+    {
+      "id": 358,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 359,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 360,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 361,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 362,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 363,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 364,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 365,
+      "label": "normal startup refuses this sole future profile input without promoting any old backup 12",
+      "passed": false
+    },
+    {
+      "id": 366,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 367,
+      "label": "future item locks whole profile before corrupt sibling 12",
+      "passed": false
+    },
+    {
+      "id": 368,
+      "label": "real loader rejects future profile with a valid old backup 12",
+      "passed": false
+    },
+    {
+      "id": 369,
+      "label": "future profile never publishes backup or partial live state 12",
+      "passed": false
+    },
+    {
+      "id": 370,
+      "label": "future profile prevents real writer after failed load 12",
+      "passed": false
+    },
+    {
+      "id": 371,
+      "label": "future profile primary and backup remain byte identical 12",
+      "passed": false
+    },
+    {
+      "id": 372,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 373,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 374,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 375,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 376,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 377,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 378,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 379,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 380,
+      "label": "future shared item 12 is terminal",
+      "passed": false
+    },
+    {
+      "id": 381,
+      "label": "future shared item 12 is refused as the targeted owner by the actual startup preflight before initialization",
+      "passed": false
+    },
+    {
+      "id": 382,
+      "label": "future shared item 12 cannot initialize from old backup",
+      "passed": false
+    },
+    {
+      "id": 383,
+      "label": "future shared item 12 never publishes or initializes another owner",
+      "passed": false
+    },
+    {
+      "id": 384,
+      "label": "future shared item 12 blocks the actual shared writer",
+      "passed": false
+    },
+    {
+      "id": 385,
+      "label": "future shared item 12 primary and backup remain byte identical",
+      "passed": false
+    },
+    {
+      "id": 386,
+      "label": "unsupported owner precedes current graph or private-field rules 13",
+      "passed": false
+    },
+    {
+      "id": 387,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 388,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 389,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 390,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 391,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 392,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 393,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 394,
+      "label": "normal startup refuses this sole future profile input without promoting any old backup 13",
+      "passed": false
+    },
+    {
+      "id": 395,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 396,
+      "label": "future item locks whole profile before corrupt sibling 13",
+      "passed": false
+    },
+    {
+      "id": 397,
+      "label": "real loader rejects future profile with a valid old backup 13",
+      "passed": false
+    },
+    {
+      "id": 398,
+      "label": "future profile never publishes backup or partial live state 13",
+      "passed": false
+    },
+    {
+      "id": 399,
+      "label": "future profile prevents real writer after failed load 13",
+      "passed": false
+    },
+    {
+      "id": 400,
+      "label": "future profile primary and backup remain byte identical 13",
+      "passed": false
+    },
+    {
+      "id": 401,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 402,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 403,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 404,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 405,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 406,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 407,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 408,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 409,
+      "label": "future shared item 13 is terminal",
+      "passed": false
+    },
+    {
+      "id": 410,
+      "label": "future shared item 13 is refused as the targeted owner by the actual startup preflight before initialization",
+      "passed": false
+    },
+    {
+      "id": 411,
+      "label": "future shared item 13 cannot initialize from old backup",
+      "passed": false
+    },
+    {
+      "id": 412,
+      "label": "future shared item 13 never publishes or initializes another owner",
+      "passed": false
+    },
+    {
+      "id": 413,
+      "label": "future shared item 13 blocks the actual shared writer",
+      "passed": false
+    },
+    {
+      "id": 414,
+      "label": "future shared item 13 primary and backup remain byte identical",
+      "passed": false
+    },
+    {
+      "id": 415,
+      "label": "unsupported owner precedes current graph or private-field rules 14",
+      "passed": false
+    },
+    {
+      "id": 416,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 417,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 418,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 419,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 420,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 421,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 422,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 423,
+      "label": "normal startup refuses this sole future profile input without promoting any old backup 14",
+      "passed": false
+    },
+    {
+      "id": 424,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 425,
+      "label": "future item locks whole profile before corrupt sibling 14",
+      "passed": false
+    },
+    {
+      "id": 426,
+      "label": "real loader rejects future profile with a valid old backup 14",
+      "passed": false
+    },
+    {
+      "id": 427,
+      "label": "future profile never publishes backup or partial live state 14",
+      "passed": false
+    },
+    {
+      "id": 428,
+      "label": "future profile prevents real writer after failed load 14",
+      "passed": false
+    },
+    {
+      "id": 429,
+      "label": "future profile primary and backup remain byte identical 14",
+      "passed": false
+    },
+    {
+      "id": 430,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 431,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 432,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 433,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 434,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 435,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 436,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 437,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 438,
+      "label": "future shared item 14 is terminal",
+      "passed": false
+    },
+    {
+      "id": 439,
+      "label": "future shared item 14 is refused as the targeted owner by the actual startup preflight before initialization",
+      "passed": false
+    },
+    {
+      "id": 440,
+      "label": "future shared item 14 cannot initialize from old backup",
+      "passed": false
+    },
+    {
+      "id": 441,
+      "label": "future shared item 14 never publishes or initializes another owner",
+      "passed": false
+    },
+    {
+      "id": 442,
+      "label": "future shared item 14 blocks the actual shared writer",
+      "passed": false
+    },
+    {
+      "id": 443,
+      "label": "future shared item 14 primary and backup remain byte identical",
+      "passed": false
+    },
+    {
+      "id": 444,
+      "label": "unsupported owner precedes current graph or private-field rules 15",
+      "passed": false
+    },
+    {
+      "id": 445,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 446,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 447,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 448,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 449,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 450,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 451,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 452,
+      "label": "normal startup refuses this sole future profile input without promoting any old backup 15",
+      "passed": false
+    },
+    {
+      "id": 453,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 454,
+      "label": "future item locks whole profile before corrupt sibling 15",
+      "passed": false
+    },
+    {
+      "id": 455,
+      "label": "real loader rejects future profile with a valid old backup 15",
+      "passed": false
+    },
+    {
+      "id": 456,
+      "label": "future profile never publishes backup or partial live state 15",
+      "passed": false
+    },
+    {
+      "id": 457,
+      "label": "future profile prevents real writer after failed load 15",
+      "passed": false
+    },
+    {
+      "id": 458,
+      "label": "future profile primary and backup remain byte identical 15",
+      "passed": false
+    },
+    {
+      "id": 459,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 460,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 461,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 462,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 463,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 464,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 465,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 466,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 467,
+      "label": "future shared item 15 is terminal",
+      "passed": false
+    },
+    {
+      "id": 468,
+      "label": "future shared item 15 is refused as the targeted owner by the actual startup preflight before initialization",
+      "passed": false
+    },
+    {
+      "id": 469,
+      "label": "future shared item 15 cannot initialize from old backup",
+      "passed": false
+    },
+    {
+      "id": 470,
+      "label": "future shared item 15 never publishes or initializes another owner",
+      "passed": false
+    },
+    {
+      "id": 471,
+      "label": "future shared item 15 blocks the actual shared writer",
+      "passed": false
+    },
+    {
+      "id": 472,
+      "label": "future shared item 15 primary and backup remain byte identical",
+      "passed": false
+    },
+    {
+      "id": 473,
+      "label": "unsupported owner precedes current graph or private-field rules 16",
+      "passed": false
+    },
+    {
+      "id": 474,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 475,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 476,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 477,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 478,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 479,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 480,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 481,
+      "label": "normal startup refuses this sole future profile input without promoting any old backup 16",
+      "passed": false
+    },
+    {
+      "id": 482,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 483,
+      "label": "future item locks whole profile before corrupt sibling 16",
+      "passed": false
+    },
+    {
+      "id": 484,
+      "label": "real loader rejects future profile with a valid old backup 16",
+      "passed": false
+    },
+    {
+      "id": 485,
+      "label": "future profile never publishes backup or partial live state 16",
+      "passed": false
+    },
+    {
+      "id": 486,
+      "label": "future profile prevents real writer after failed load 16",
+      "passed": false
+    },
+    {
+      "id": 487,
+      "label": "future profile primary and backup remain byte identical 16",
+      "passed": false
+    },
+    {
+      "id": 488,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 489,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 490,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 491,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 492,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 493,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 494,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 495,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 496,
+      "label": "future shared item 16 is terminal",
+      "passed": false
+    },
+    {
+      "id": 497,
+      "label": "future shared item 16 is refused as the targeted owner by the actual startup preflight before initialization",
+      "passed": false
+    },
+    {
+      "id": 498,
+      "label": "future shared item 16 cannot initialize from old backup",
+      "passed": false
+    },
+    {
+      "id": 499,
+      "label": "future shared item 16 never publishes or initializes another owner",
+      "passed": false
+    },
+    {
+      "id": 500,
+      "label": "future shared item 16 blocks the actual shared writer",
+      "passed": false
+    },
+    {
+      "id": 501,
+      "label": "future shared item 16 primary and backup remain byte identical",
+      "passed": false
+    },
+    {
+      "id": 502,
+      "label": "unsupported owner precedes current graph or private-field rules 17",
+      "passed": false
+    },
+    {
+      "id": 503,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 504,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 505,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 506,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 507,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 508,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 509,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 510,
+      "label": "normal startup refuses this sole future profile input without promoting any old backup 17",
+      "passed": false
+    },
+    {
+      "id": 511,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 512,
+      "label": "future item locks whole profile before corrupt sibling 17",
+      "passed": false
+    },
+    {
+      "id": 513,
+      "label": "real loader rejects future profile with a valid old backup 17",
+      "passed": false
+    },
+    {
+      "id": 514,
+      "label": "future profile never publishes backup or partial live state 17",
+      "passed": false
+    },
+    {
+      "id": 515,
+      "label": "future profile prevents real writer after failed load 17",
+      "passed": false
+    },
+    {
+      "id": 516,
+      "label": "future profile primary and backup remain byte identical 17",
+      "passed": false
+    },
+    {
+      "id": 517,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 518,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 519,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 520,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 521,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 522,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 523,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 524,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 525,
+      "label": "future shared item 17 is terminal",
+      "passed": false
+    },
+    {
+      "id": 526,
+      "label": "future shared item 17 is refused as the targeted owner by the actual startup preflight before initialization",
+      "passed": false
+    },
+    {
+      "id": 527,
+      "label": "future shared item 17 cannot initialize from old backup",
+      "passed": false
+    },
+    {
+      "id": 528,
+      "label": "future shared item 17 never publishes or initializes another owner",
+      "passed": false
+    },
+    {
+      "id": 529,
+      "label": "future shared item 17 blocks the actual shared writer",
+      "passed": false
+    },
+    {
+      "id": 530,
+      "label": "future shared item 17 primary and backup remain byte identical",
+      "passed": false
+    },
+    {
+      "id": 531,
+      "label": "unsupported owner precedes current graph or private-field rules 18",
+      "passed": false
+    },
+    {
+      "id": 532,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 533,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 534,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 535,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 536,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 537,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 538,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 539,
+      "label": "normal startup refuses this sole future profile input without promoting any old backup 18",
+      "passed": false
+    },
+    {
+      "id": 540,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 541,
+      "label": "future item locks whole profile before corrupt sibling 18",
+      "passed": false
+    },
+    {
+      "id": 542,
+      "label": "real loader rejects future profile with a valid old backup 18",
+      "passed": false
+    },
+    {
+      "id": 543,
+      "label": "future profile never publishes backup or partial live state 18",
+      "passed": false
+    },
+    {
+      "id": 544,
+      "label": "future profile prevents real writer after failed load 18",
+      "passed": false
+    },
+    {
+      "id": 545,
+      "label": "future profile primary and backup remain byte identical 18",
+      "passed": false
+    },
+    {
+      "id": 546,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 547,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 548,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 549,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 550,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 551,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 552,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 553,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 554,
+      "label": "future shared item 18 is terminal",
+      "passed": false
+    },
+    {
+      "id": 555,
+      "label": "future shared item 18 is refused as the targeted owner by the actual startup preflight before initialization",
+      "passed": false
+    },
+    {
+      "id": 556,
+      "label": "future shared item 18 cannot initialize from old backup",
+      "passed": false
+    },
+    {
+      "id": 557,
+      "label": "future shared item 18 never publishes or initializes another owner",
+      "passed": false
+    },
+    {
+      "id": 558,
+      "label": "future shared item 18 blocks the actual shared writer",
+      "passed": false
+    },
+    {
+      "id": 559,
+      "label": "future shared item 18 primary and backup remain byte identical",
+      "passed": false
+    },
+    {
+      "id": 560,
+      "label": "unsupported owner precedes current graph or private-field rules 19",
+      "passed": false
+    },
+    {
+      "id": 561,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 562,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 563,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 564,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 565,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 566,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 567,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 568,
+      "label": "normal startup refuses this sole future profile input without promoting any old backup 19",
+      "passed": false
+    },
+    {
+      "id": 569,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 570,
+      "label": "future item locks whole profile before corrupt sibling 19",
+      "passed": false
+    },
+    {
+      "id": 571,
+      "label": "real loader rejects future profile with a valid old backup 19",
+      "passed": false
+    },
+    {
+      "id": 572,
+      "label": "future profile never publishes backup or partial live state 19",
+      "passed": false
+    },
+    {
+      "id": 573,
+      "label": "future profile prevents real writer after failed load 19",
+      "passed": false
+    },
+    {
+      "id": 574,
+      "label": "future profile primary and backup remain byte identical 19",
+      "passed": false
+    },
+    {
+      "id": 575,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 576,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 577,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 578,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 579,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 580,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 581,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 582,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 583,
+      "label": "future shared item 19 is terminal",
+      "passed": false
+    },
+    {
+      "id": 584,
+      "label": "future shared item 19 is refused as the targeted owner by the actual startup preflight before initialization",
+      "passed": false
+    },
+    {
+      "id": 585,
+      "label": "future shared item 19 cannot initialize from old backup",
+      "passed": false
+    },
+    {
+      "id": 586,
+      "label": "future shared item 19 never publishes or initializes another owner",
+      "passed": false
+    },
+    {
+      "id": 587,
+      "label": "future shared item 19 blocks the actual shared writer",
+      "passed": false
+    },
+    {
+      "id": 588,
+      "label": "future shared item 19 primary and backup remain byte identical",
+      "passed": false
+    },
+    {
+      "id": 589,
+      "label": "unsupported owner precedes current graph or private-field rules 20",
+      "passed": false
+    },
+    {
+      "id": 590,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 591,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 592,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 593,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 594,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 595,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 596,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 597,
+      "label": "normal startup refuses this sole future profile input without promoting any old backup 20",
+      "passed": false
+    },
+    {
+      "id": 598,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 599,
+      "label": "future item locks whole profile before corrupt sibling 20",
+      "passed": false
+    },
+    {
+      "id": 600,
+      "label": "real loader rejects future profile with a valid old backup 20",
+      "passed": false
+    },
+    {
+      "id": 601,
+      "label": "future profile never publishes backup or partial live state 20",
+      "passed": false
+    },
+    {
+      "id": 602,
+      "label": "future profile prevents real writer after failed load 20",
+      "passed": false
+    },
+    {
+      "id": 603,
+      "label": "future profile primary and backup remain byte identical 20",
+      "passed": false
+    },
+    {
+      "id": 604,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 605,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 606,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 607,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 608,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 609,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 610,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 611,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 612,
+      "label": "future shared item 20 is terminal",
+      "passed": false
+    },
+    {
+      "id": 613,
+      "label": "future shared item 20 is refused as the targeted owner by the actual startup preflight before initialization",
+      "passed": false
+    },
+    {
+      "id": 614,
+      "label": "future shared item 20 cannot initialize from old backup",
+      "passed": false
+    },
+    {
+      "id": 615,
+      "label": "future shared item 20 never publishes or initializes another owner",
+      "passed": false
+    },
+    {
+      "id": 616,
+      "label": "future shared item 20 blocks the actual shared writer",
+      "passed": false
+    },
+    {
+      "id": 617,
+      "label": "future shared item 20 primary and backup remain byte identical",
+      "passed": false
+    },
+    {
+      "id": 618,
+      "label": "known version still enforces its exact graph capacity",
+      "passed": true
+    },
+    {
+      "id": 619,
+      "label": "known version still enforces its exact depth capacity",
+      "passed": true
+    },
+    {
+      "id": 620,
+      "label": "known malformed typed identity remains invalid",
+      "passed": true
+    },
+    {
+      "id": 621,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 622,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 623,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 624,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 625,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 626,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 627,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 628,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 629,
+      "label": "future warehouse with corrupt known item is terminal",
+      "passed": true
+    },
+    {
+      "id": 630,
+      "label": "future warehouse with corrupt known item is refused as the targeted owner by the actual startup preflight before initialization",
+      "passed": true
+    },
+    {
+      "id": 631,
+      "label": "future warehouse with corrupt known item cannot initialize from old backup",
+      "passed": true
+    },
+    {
+      "id": 632,
+      "label": "future warehouse with corrupt known item never publishes or initializes another owner",
+      "passed": true
+    },
+    {
+      "id": 633,
+      "label": "future warehouse with corrupt known item blocks the actual shared writer",
+      "passed": true
+    },
+    {
+      "id": 634,
+      "label": "future warehouse with corrupt known item primary and backup remain byte identical",
+      "passed": true
+    },
+    {
+      "id": 635,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 636,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 637,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 638,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 639,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 640,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 641,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 642,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 643,
+      "label": "future warehouse version outside int64 with corrupt known item is terminal",
+      "passed": true
+    },
+    {
+      "id": 644,
+      "label": "future warehouse version outside int64 with corrupt known item is refused as the targeted owner by the actual startup preflight before initialization",
+      "passed": true
+    },
+    {
+      "id": 645,
+      "label": "future warehouse version outside int64 with corrupt known item cannot initialize from old backup",
+      "passed": true
+    },
+    {
+      "id": 646,
+      "label": "future warehouse version outside int64 with corrupt known item never publishes or initializes another owner",
+      "passed": true
+    },
+    {
+      "id": 647,
+      "label": "future warehouse version outside int64 with corrupt known item blocks the actual shared writer",
+      "passed": true
+    },
+    {
+      "id": 648,
+      "label": "future warehouse version outside int64 with corrupt known item primary and backup remain byte identical",
+      "passed": true
+    },
+    {
+      "id": 649,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 650,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 651,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 652,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 653,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 654,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 655,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 656,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 657,
+      "label": "future item still owns aggregate with malformed warehouse schema is terminal",
+      "passed": true
+    },
+    {
+      "id": 658,
+      "label": "future item still owns aggregate with malformed warehouse schema is refused as the targeted owner by the actual startup preflight before initialization",
+      "passed": true
+    },
+    {
+      "id": 659,
+      "label": "future item still owns aggregate with malformed warehouse schema cannot initialize from old backup",
+      "passed": true
+    },
+    {
+      "id": 660,
+      "label": "future item still owns aggregate with malformed warehouse schema never publishes or initializes another owner",
+      "passed": true
+    },
+    {
+      "id": 661,
+      "label": "future item still owns aggregate with malformed warehouse schema blocks the actual shared writer",
+      "passed": true
+    },
+    {
+      "id": 662,
+      "label": "future item still owns aggregate with malformed warehouse schema primary and backup remain byte identical",
+      "passed": true
+    },
+    {
+      "id": 663,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 664,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 665,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 666,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 667,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 668,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 669,
+      "label": "known profile corruption remains recoverable",
+      "passed": true
+    },
+    {
+      "id": 670,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 671,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 672,
+      "label": "known corrupt profile still uses actual backup recovery",
+      "passed": true
+    },
+    {
+      "id": 673,
+      "label": "known profile recovery publishes the validated backup exactly",
+      "passed": true
+    },
+    {
+      "id": 674,
+      "label": "known warehouse corruption remains recoverable",
+      "passed": true
+    },
+    {
+      "id": 675,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 676,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 677,
+      "label": "known corrupt warehouse still uses actual backup recovery",
+      "passed": true
+    },
+    {
+      "id": 678,
+      "label": "known warehouse recovery publishes the validated backup exactly",
+      "passed": true
+    },
+    {
+      "id": 679,
+      "label": "known Rune v1 extra field remains corruption rather than opaque ownership: _hc_item_extension",
+      "passed": true
+    },
+    {
+      "id": 680,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 681,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 682,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 683,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 684,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 685,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 686,
+      "label": "known profile corruption remains recoverable",
+      "passed": true
+    },
+    {
+      "id": 687,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 688,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 689,
+      "label": "known corrupt profile still uses actual backup recovery",
+      "passed": true
+    },
+    {
+      "id": 690,
+      "label": "known profile recovery publishes the validated backup exactly",
+      "passed": true
+    },
+    {
+      "id": 691,
+      "label": "known warehouse corruption remains recoverable",
+      "passed": true
+    },
+    {
+      "id": 692,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 693,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 694,
+      "label": "known corrupt warehouse still uses actual backup recovery",
+      "passed": true
+    },
+    {
+      "id": 695,
+      "label": "known warehouse recovery publishes the validated backup exactly",
+      "passed": true
+    },
+    {
+      "id": 696,
+      "label": "known Rune v1 extra field remains corruption rather than opaque ownership: base",
+      "passed": true
+    },
+    {
+      "id": 697,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 698,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 699,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 700,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 701,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 702,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 703,
+      "label": "known profile corruption remains recoverable",
+      "passed": true
+    },
+    {
+      "id": 704,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 705,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 706,
+      "label": "known corrupt profile still uses actual backup recovery",
+      "passed": true
+    },
+    {
+      "id": 707,
+      "label": "known profile recovery publishes the validated backup exactly",
+      "passed": true
+    },
+    {
+      "id": 708,
+      "label": "known warehouse corruption remains recoverable",
+      "passed": true
+    },
+    {
+      "id": 709,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 710,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 711,
+      "label": "known corrupt warehouse still uses actual backup recovery",
+      "passed": true
+    },
+    {
+      "id": 712,
+      "label": "known warehouse recovery publishes the validated backup exactly",
+      "passed": true
+    },
+    {
+      "id": 713,
+      "label": "known Rune v1 extra field remains corruption rather than opaque ownership: extensions",
+      "passed": true
+    },
+    {
+      "id": 714,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 715,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 716,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 717,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 718,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 719,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 720,
+      "label": "known profile corruption remains recoverable",
+      "passed": true
+    },
+    {
+      "id": 721,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 722,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 723,
+      "label": "known corrupt profile still uses actual backup recovery",
+      "passed": true
+    },
+    {
+      "id": 724,
+      "label": "known profile recovery publishes the validated backup exactly",
+      "passed": true
+    },
+    {
+      "id": 725,
+      "label": "known warehouse corruption remains recoverable",
+      "passed": true
+    },
+    {
+      "id": 726,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 727,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 728,
+      "label": "known corrupt warehouse still uses actual backup recovery",
+      "passed": true
+    },
+    {
+      "id": 729,
+      "label": "known warehouse recovery publishes the validated backup exactly",
+      "passed": true
+    },
+    {
+      "id": 730,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 731,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 732,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 733,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 734,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 735,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 736,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 737,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 738,
+      "label": "actual world clock import accepts known legacy string equipment before formal runtime save",
+      "passed": true
+    },
+    {
+      "id": 739,
+      "label": "world clock migration archive preserves all original legacy identity and equipment fields",
+      "passed": true
+    },
+    {
+      "id": 740,
+      "label": "known legacy weapon receives its actual typed identity at the existing runtime import",
+      "passed": true
+    },
+    {
+      "id": 741,
+      "label": "known legacy import retains exact worn durability and paired slot placement",
+      "passed": true
+    },
+    {
+      "id": 742,
+      "label": "legitimate post-import save emits the formal item and slot owners",
+      "passed": true
+    },
+    {
+      "id": 743,
+      "label": "formal disk writer never stores a name-only equipment owner",
+      "passed": true
+    },
+    {
+      "id": 744,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 745,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 746,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 747,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 748,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 749,
+      "label": "supported account passes the actual startup preflight before injecting this case",
+      "passed": true
+    },
+    {
+      "id": 750,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 751,
+      "label": "unknown legacy string identity locks the entire aggregate",
+      "passed": true
+    },
+    {
+      "id": 752,
+      "label": "unknown legacy string publishes neither a guessed item nor the old backup",
+      "passed": true
+    },
+    {
+      "id": 753,
+      "label": "unknown legacy equipment locks the real profile writer",
+      "passed": true
+    },
+    {
+      "id": 754,
+      "label": "unknown legacy string preserves exact primary and backup bytes",
+      "passed": true
+    }
+  ],
+  "count": 754,
+  "engine_version": "4.7-stable (official)",
+  "failed": 117,
+  "invocation_id": "b55668ec-3a6f-42b4-81cf-ef6e7e3bc885",
+  "passed": 637,
+  "reported_checks": 754,
+  "reported_failures": 117,
+  "run_id": "0e6577e4-2085-4e2d-ae41-e21b861ce361",
+  "scene_id": "future_item_ownership_terminal_test",
+  "schema_version": 1,
+  "source_content_sha256": "0c5cf1607fc4b1182adb2851c48469d9a56b5bc72aa8c18c1edba920c094074f",
+  "status": "FAIL"
+}

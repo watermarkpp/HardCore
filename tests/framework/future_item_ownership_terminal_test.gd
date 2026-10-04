@@ -3,6 +3,7 @@ extends Node
 const Codec := preload("res://scripts/items/item_extension_codec.gd")
 const DropRules := preload("res://scripts/item_drop_instance_rules.gd")
 const Rune := preload("res://scripts/items/rune_item_rules.gd")
+const Gem := preload("res://scripts/items/socket_gem_rules.gd")
 const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
 var proof := Proof.new()
 var checks := 0
@@ -111,6 +112,22 @@ func _run() -> void:
 	unknown_rune.base["corrupt_known_base"]=1
 	var unknown_plain_rune:=rune.duplicate(true); unknown_plain_rune.item_id=990999
 	candidates.append_array([future_rune_namespace,future_rune_contract,unknown_rune,unknown_plain_rune])
+	# An explicit unsupported standalone owner keeps authority even when its
+	# payload contains keys used by the current runtime/container classifier.
+	for field: String in [Codec.RUNTIME_EXTENSION,"base","extensions","format_version"]:
+		var future_standalone:=rune.duplicate(true)
+		future_standalone.rune_instance_contract_id="hc.runes.fixture.rune.v2"
+		future_standalone[field]=2 if field=="format_version" else {}
+		candidates.append(future_standalone)
+	for field: String in [Codec.RUNTIME_EXTENSION,"base"]:
+		var future_identity:=unknown_plain_rune.duplicate(true); future_identity[field]={}
+		candidates.append(future_identity)
+	var standalone_gem:=Gem.create_instance("future-owner:gem-extra",true)
+	check(not standalone_gem.is_empty(),"shared standalone ownership cases use a registered original gem")
+	for field: String in [Codec.RUNTIME_EXTENSION,"base","extensions"]:
+		var future_gem:=standalone_gem.duplicate(true)
+		future_gem.gem_instance_contract_id="hc.socketing.fixture.gem.v2"
+		future_gem[field]={}; candidates.append(future_gem)
 	for index in candidates.size():
 		var candidate := candidates[index]
 		check(Codec.decode_wire(candidate).status == Codec.OPAQUE_UNSUPPORTED,
@@ -142,24 +159,44 @@ func _run() -> void:
 	mixed.warehouse_inventory = [corrupt, future_namespace]
 	_verify_shared(mixed, "future item still owns aggregate with malformed warehouse schema")
 	_verify_known_recovery(known_profile, known_shared, corrupt)
+	for field: String in [Codec.RUNTIME_EXTENSION,"base","extensions"]:
+		var known_rune_damage:=rune.duplicate(true); known_rune_damage[field]={}
+		check(Codec.decode_wire(known_rune_damage).status==Codec.INVALID,
+			"known Rune v1 extra field remains corruption rather than opaque ownership: "+field)
+		_verify_known_recovery(known_profile,known_shared,known_rune_damage)
 	_verify_legacy_equipment_clock_import(known_profile)
 	PlayerState.test_mode = true
 	_finish()
 
 func _restore_known_profile() -> void:
 	put(PlayerState.shared_warehouse_path, shared_bytes)
+	put(PlayerState.shared_warehouse_path + ".bak", shared_bytes)
 	put(profile_path, profile_bytes)
 	put(profile_path + ".bak", profile_bytes)
 	PlayerState.load_save()
 	check(bool(PlayerState.last_load_result.get("success", false)),
 		"independent case begins with real supported profile load")
+	check(PlayerState._startup_upgrade_preflight().get("success",false),
+		"supported account passes the actual startup preflight before injecting this case")
 
 func _verify_profile(candidate: Dictionary, index: int) -> void:
 	_restore_known_profile()
 	var document: Dictionary = JSON.parse_string(profile_bytes)
 	document.inventory = [candidate]
-	document.level = "corrupt known sibling"
 	var raw := JSON.stringify(document, "\t") + "\n"
+	put(profile_path, raw)
+	var startup: Dictionary=PlayerState._startup_upgrade_preflight()
+	print("FUTURE_PROFILE_STARTUP_TRACE="+JSON.stringify({"case":index,"expected_path":profile_path,
+		"success":startup.get("success",false),"path":startup.get("path",""),"reason":startup.get("reason","")}))
+	# The shared migration validator also reads this profile. Its rejection may
+	# name the shared aggregate, but must preserve this sole changed input.
+	check(not startup.get("success",false) and startup.get("path","") in [profile_path,PlayerState.shared_warehouse_path]
+		and FileAccess.get_file_as_string(profile_path)==raw
+		and FileAccess.get_file_as_string(profile_path+".bak")==profile_bytes
+		and FileAccess.get_file_as_string(PlayerState.shared_warehouse_path)==shared_bytes,
+		"normal startup refuses this sole future profile input without promoting any old backup "+str(index))
+	document.level = "corrupt known sibling"
+	raw = JSON.stringify(document, "\t") + "\n"
 	put(profile_path, raw)
 	PlayerState.gold = 4321
 	var inventory_before := PlayerState.inventory.duplicate(true)
@@ -183,6 +220,7 @@ func _verify_shared_item(candidate: Dictionary, known_shared: Dictionary, index:
 	_verify_shared(document, "future shared item " + str(index))
 
 func _verify_shared(document: Dictionary, label: String) -> void:
+	_restore_known_profile()
 	var raw := JSON.stringify(document, "\t") + "\n"
 	put(PlayerState.shared_warehouse_path, raw)
 	put(PlayerState.shared_warehouse_path + ".bak", shared_bytes)
@@ -192,6 +230,11 @@ func _verify_shared(document: Dictionary, label: String) -> void:
 	PlayerState._shared_warehouse_initialized = false
 	var status: Dictionary = PlayerState._validate_shared_warehouse_document_status(document)
 	check(not bool(status.valid) and bool(status.terminal), label + " is terminal")
+	var startup: Dictionary=PlayerState._startup_upgrade_preflight()
+	print("FUTURE_SHARED_STARTUP_TRACE="+JSON.stringify({"case":label,"expected_path":PlayerState.shared_warehouse_path,
+		"success":startup.get("success",false),"path":startup.get("path",""),"reason":startup.get("reason","")}))
+	check(not startup.get("success",false) and startup.get("path","")==PlayerState.shared_warehouse_path,
+		label+" is refused as the targeted owner by the actual startup preflight before initialization")
 	check(not PlayerState._initialize_shared_warehouse(), label + " cannot initialize from old backup")
 	check(json_equal(PlayerState.warehouse_inventory, inventory_before)
 		and not PlayerState._shared_warehouse_initialized, label + " never publishes or initializes another owner")

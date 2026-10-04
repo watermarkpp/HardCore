@@ -1,0 +1,166 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "real mapped world becomes READY before baseline work",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "first target uses exact canonical mapped spawn",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "AOE target 1 uses canonical identity and projection",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "AOE target 2 uses canonical identity and projection",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "all three independent real AOE targets exist",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "baseline traverses sole canonical planner and actual release",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "real base AOE writes exactly three target HP records",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "baseline records actual canonical timing and effective rank",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "real drop rule generates validated stable item 80",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "real drop rule generates validated stable item 85",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "real drop rule generates validated stable item 81",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "empty extensions use actual legacy version 10 character payload",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "real ordered character writer accepts canonical payload",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "real validated writer completes exactly once and drains",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "persisted legacy bytes are read from actual committed file",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "comparison requires preserved pre-framework baseline",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "original byte baseline remains intact before identity migration",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "preserved legacy skill IDs migrate explicitly",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "save identity lane has one explicit field: learned_skills",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "save identity lane has one explicit field: skill_progression",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "save identity lane has one explicit field: skill_button_assignments",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "preserved legacy profession migrates explicitly",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "new character identity has one exact insertion boundary",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "new item binding identity has one exact insertion boundary",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "authorized formal item identity has one exact insertion boundary",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "preserved equipment slots import only their explicit identity lanes",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "save identity lane has one explicit field: equipment",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "save identity lane has one explicit field: equip_cycle_cursor",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "authorized equipment identity has one exact insertion boundary",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "default-off damage/order/RNG/drop and all save bytes except explicit identity lanes equal baseline",
+      "passed": true
+    }
+  ],
+  "count": 30,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "9dde8d37-317d-4169-a524-d8e3629b2400",
+  "passed": 30,
+  "reported_checks": 30,
+  "reported_failures": 0,
+  "run_id": "624599e0-b750-4812-b3de-6b9ad8325090",
+  "scene_id": "empty_extension_behavior_test",
+  "schema_version": 1,
+  "source_content_sha256": "ad6f3a6f0bec7fe67f089794e670321d3e46100e44ca3ccc343689b391eb59da",
+  "status": "PASS"
+}

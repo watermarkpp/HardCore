@@ -24,6 +24,15 @@ const RUNE_ID := "hc.runes.primary"
 # flat item record; this private field owns extensions only, never attributes.
 # Old records retain their exact wire shape and old strict validators.
 static func decode_wire(record: Dictionary) -> Dictionary:
+	# An explicit standalone owner also owns keys that today's container or
+	# runtime classifier reserves. Never recover an older asset over that owner.
+	if record.get("rune_instance_contract_id") is String:
+		if record.rune_instance_contract_id != RuneRules.INSTANCE_CONTRACT:
+			return _failure(OPAQUE_UNSUPPORTED, "unsupported_rune_instance_contract")
+		if _integer(record.get("item_id")) and Registry.from_legacy("item",int(record.item_id)).is_empty():
+			return _failure(OPAQUE_UNSUPPORTED, "unknown_rune_item_identity")
+	if record.get("gem_instance_contract_id") is String and record.gem_instance_contract_id != GemRules.INSTANCE_CONTRACT:
+		return _failure(OPAQUE_UNSUPPORTED, "unsupported_gem_instance_contract")
 	var is_container := _is_wire_container(record)
 	# An unsupported owner defines its own graph and field limits. Recognize
 	# that shallow header before applying today's corruption/recovery rules.
@@ -42,17 +51,12 @@ static func decode_wire(record: Dictionary) -> Dictionary:
 	if not is_container:
 		if record.has("rune_instance_contract_id"):
 			if not record.rune_instance_contract_id is String: return _failure(INVALID,"invalid_rune_instance_contract")
-			if record.rune_instance_contract_id!=RuneRules.INSTANCE_CONTRACT: return _failure(OPAQUE_UNSUPPORTED,"unsupported_rune_instance_contract")
-			if _integer(record.get("item_id")) and Registry.from_legacy("item",int(record.item_id)).is_empty():
-				return _failure(OPAQUE_UNSUPPORTED,"unknown_rune_item_identity")
 			return _success(record) if RuneRules.valid_instance(record) else _failure(INVALID,"invalid_rune_instance")
 		if _integer(record.get("item_id")) and not RuneRules.record_for_id(int(record.item_id)).is_empty():
 			return _failure(INVALID,"missing_rune_instance_contract")
 		if record.has("gem_instance_contract_id"):
 			if not record.gem_instance_contract_id is String:
 				return _failure(INVALID, "invalid_gem_instance_contract")
-			if record.gem_instance_contract_id != GemRules.INSTANCE_CONTRACT:
-				return _failure(OPAQUE_UNSUPPORTED, "unsupported_gem_instance_contract")
 			return _success(record) if GemRules.valid_instance(record) else _failure(INVALID, "invalid_gem_instance")
 		if _integer(record.get("item_id")) and int(record.item_id) == GemRules.ITEM_ID:
 			return _failure(INVALID, "missing_gem_instance_contract")

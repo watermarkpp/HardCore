@@ -1446,13 +1446,14 @@ func _consume_inventory_index_without_commit(index: int, amount := 1) -> bool:
 
 
 func destroy_inventory_indices(indices: Array) -> Dictionary:
-	# Reject the selected reserved identities before the synchronous save barrier
-	# can complete their transaction and replace the caller's inventory indices.
+	# Protect both selected identities and promised removal output slots before
+	# the save barrier can publish a new asset into the caller's empty index.
 	if _item_transaction_port != null:
 		for raw_index: Variant in indices:
 			var index := int(raw_index)
-			if index >= 0 and index < inventory.size() and inventory[index] is Dictionary \
-				and _item_transaction_port.record_reserved(inventory[index]):
+			if index >= 0 and (_item_transaction_port.slot_reserved(index) \
+				or (index < inventory.size() and inventory[index] is Dictionary \
+				and _item_transaction_port.record_reserved(inventory[index]))):
 				return {"success":false, "destroyed":0, "reason":"item_transaction_pending", "message":"物品操作处理中，请稍后再试。"}
 	_before_state_transaction()
 	var targets: Array[int] = []

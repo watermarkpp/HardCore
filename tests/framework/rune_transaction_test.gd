@@ -99,8 +99,83 @@ func _run() -> void:
 	check(PlayerState.last_load_result.success and _handles()==all,"production save and reload preserve all three source handles")
 	check(PlayerState._validate_extended_item_ownership({"inventory":PlayerState.inventory,"equipment":PlayerState.equipment})
 		and Journal.validate_document(PlayerState._prepare_character_save_payload(false)).valid,"both namespaces and new rune operation records share the original aggregate and journal authorities")
+	for extension_namespace: String in ["hc.runes","hc.socketing"]:
+		for layout: String in ["empty","append","mixed"]:
+			await _verify_remove_destination(extension_namespace,layout)
 	PlayerState.test_mode=true; PlayerState.set_process(true); check(ContentLayers.reload_feature_catalog(),"isolated transaction restores original default-off registry")
 	_finish()
+func _verify_remove_destination(extension_namespace: String,layout: String) -> void:
+	var label:=extension_namespace+":"+layout
+	var identity_tag:=extension_namespace.replace(".","_")+":"+layout
+	var host:=Drop.create_instance(GameData.get_item_record({"item_id":85}),"remove-destination:host:"+label)
+	var gem:=Gem.create_instance("remove-destination:gem:"+identity_tag,true)
+	var rune:=Rune.create_instance("remove-destination:rune:"+identity_tag,true)
+	var unrelated:=Drop.create_instance(GameData.get_item_record({"item_id":80}),"remove-destination:unrelated:"+label)
+	var created:=Codec.with_extensions(host,{
+		"hc.socketing":{"schema_version":1,"sockets":[{"socket_id":Codec.SOCKET_ID,"item":gem}]},
+		"hc.runes":{"schema_version":1,"runes":[{"rune_slot_id":Codec.RUNE_ID,"item":rune}]}})
+	check(created.status==Codec.KNOWN_VALID,label+" begins with real independently owned assets in both namespaces")
+	if created.status!=Codec.KNOWN_VALID: print("REMOVE_DESTINATION_CREATOR="+JSON.stringify({"case":label,"reason":created.reason})); return
+	PlayerState.equipment["hc.slot.weapon"]={}
+	PlayerState.inventory=[created.item,unrelated] if layout=="append" else [created.item,{},unrelated]
+	PlayerState.recalculate_stats(false)
+	check(PlayerState.save_game(false,false,false),label+" persists the original controlled inventory through the real writer")
+	var destination:=2 if layout=="append" else 1
+	var selected: Array=[destination,2] if layout=="mixed" else [destination]
+	var inventory_before:=PlayerState.inventory.duplicate(true)
+	var invalid:=PlayerState.destroy_inventory_indices(selected)
+	check(not invalid.get("success",false) and invalid.get("reason")=="invalid_inventory_index"
+		and PlayerState.inventory==inventory_before,label+" same unoccupied selection is invalid without a pending removal")
+	var field: String="rune_instance_id" if extension_namespace=="hc.runes" else "gem_instance_id"
+	var request: Dictionary={"action":extension_namespace+".remove","target_instance_id":host.instance_id};request[field]=""
+	var quote:=PlayerState.quote_new_item_transaction(request)
+	var pending:=PlayerState.commit_item_transaction(quote)
+	check(quote.get("success",false) and pending.get("pending",false)
+		and not pending.job.response.get("finished",false),label+" accepts the original removal without publishing the output")
+	if not pending.get("pending",false): print("REMOVE_DESTINATION_SETUP="+JSON.stringify({"case":label,"quote":quote,"result":pending})); return
+	var job: RefCounted=pending.job
+	var journal_before:=PlayerState._item_transaction_journal.duplicate(true)
+	var equipment_before:=PlayerState.equipment.duplicate(true)
+	var path: String=PlayerState._profile_path(PlayerState.active_profile_id)
+	var primary_before:=FileAccess.get_file_as_string(path)
+	var backup_before:=FileAccess.get_file_as_string(path+".bak")
+	check(PlayerState._item_transaction_port.slot_reserved(destination)
+		and not PlayerState._item_transaction_port.record_reserved(unrelated),label+" reserves the empty output slot independently of the unrelated record")
+	var result:=PlayerState.destroy_inventory_indices(selected)
+	print("REMOVE_DESTINATION_TRACE="+JSON.stringify({"case":label,"destination":destination,"result":result,
+		"inventory_unchanged":PlayerState.inventory==inventory_before,"writer_finished":job.response.get("finished",false)}))
+	check(not result.get("success",false) and result.get("destroyed",-1)==0
+		and result.get("reason")=="item_transaction_pending",label+" rejects destruction of the promised output before draining its writer")
+	check(PlayerState.inventory==inventory_before and PlayerState.equipment==equipment_before
+		and PlayerState._item_transaction_journal==journal_before and not job.response.get("finished",false),
+		label+" rejected destruction changes no live asset, journal or accepted writer")
+	check(PlayerState._json_persistence.pending_count()==1 and PlayerState._item_transaction_port.slot_reserved(destination)
+		and PlayerState.commit_item_transaction(quote).get("job")==job,
+		label+" refusal preserves exactly the original pending job and destination reservation")
+	check(FileAccess.get_file_as_string(path)==primary_before and FileAccess.get_file_as_string(path+".bak")==backup_before,
+		label+" rejected destruction changes neither primary nor backup bytes")
+	check(await _wait(job),label+" the original removal subsequently reaches a real durable receipt")
+	var extracted: Dictionary=rune if extension_namespace=="hc.runes" else gem
+	var retained: Dictionary=gem if extension_namespace=="hc.runes" else rune
+	var extracted_owners:=0
+	for record: Dictionary in PlayerState.inventory:
+		if Codec.ownership_ids(record).has(extracted.instance_id): extracted_owners+=1
+	check(extracted_owners==1 and PlayerState.inventory.size()>destination
+		and PlayerState.inventory[destination].get("instance_id")==extracted.instance_id
+		and Codec.ownership_ids(PlayerState.inventory[0])==[host.instance_id,retained.instance_id],
+		label+" durable publication owns exactly one original output and retains the other namespace")
+	var unrelated_index:=1 if layout=="append" else 2
+	check(PlayerState.inventory.size()>unrelated_index and PlayerState.inventory[unrelated_index]==unrelated,
+		label+" the unrelated asset survives both refusal and completion")
+	PlayerState.load_save()
+	check(PlayerState.last_load_result.get("success",false) and PlayerState.inventory.size()>destination
+		and PlayerState.inventory[destination].get("instance_id")==extracted.instance_id
+		and Codec.ownership_ids(PlayerState.inventory[0])==[host.instance_id,retained.instance_id],
+		label+" actual reload restores the completed output and the other embedded owner")
+	var completed:=PlayerState.inventory.duplicate(true)
+	check(PlayerState.commit_item_transaction(quote).get("durable",false)
+		and PlayerState._json_persistence.pending_count()==0 and PlayerState.inventory==completed,
+		label+" cached original quote replays without another writer or asset change")
 func _handles() -> Array:
 	var result: Array=[]
 	for binding: Dictionary in PlayerState.feature_bundle().get("event_index",{}).get("damage_committed:hc.skill.wizard.ice_storm",[]): result.append(binding.handle)

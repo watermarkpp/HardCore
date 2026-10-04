@@ -1,0 +1,756 @@
+diff --git a/scripts/features/compilation/child_capacity_proof.gd b/scripts/features/compilation/child_capacity_proof.gd
+new file mode 100644
+index 000000000..160a10555
+--- /dev/null
++++ b/scripts/features/compilation/child_capacity_proof.gd
+@@ -0,0 +1,79 @@
++extends RefCounted
++
++const Graph := preload("res://scripts/features/contracts/plain_graph.gd")
++const MAX_EXACT_INTEGER := 9007199254740991
++
++# A conservative derived cost only. The caller still owns trusted handler
++# contracts, legal world bounds, per-target slots and the actual reservation.
++# No actor, target list, mutation port, clock or gameplay limiter is created.
++static func compile(request: Variant, limits: Variant) -> Dictionary:
++	if not request is Dictionary or not _keys(request,["maximum_receivers","child_bindings",
++		"maximum_generation","binding_count","persistent_bindings"]):
++		return _failure("invalid_child_capacity_request")
++	for key: String in request:
++		if not _integer(request[key]): return _failure("invalid_child_capacity_request")
++	var n := int(request.maximum_receivers)
++	var b := int(request.child_bindings)
++	var g := int(request.maximum_generation)
++	var l := int(request.binding_count)
++	var s := int(request.persistent_bindings)
++	if l <= 0 or b > l or s > l: return _failure("invalid_child_capacity_request")
++	if not limits is Dictionary or not _keys(limits,["pending_facts","active_states","receipts"]):
++		return _failure("invalid_child_capacity_limits")
++	for key: String in limits:
++		if not _integer(limits[key]): return _failure("invalid_child_capacity_limits")
++	# One beyond the greatest capacity is sufficient to prove rejection; never
++	# build an enormous integer or walk G individual generations to discover it.
++	var ceiling := maxi(int(limits.pending_facts),maxi(int(limits.active_states),int(limits.receipts)))+1
++	var factor := _multiply(n,b,ceiling)
++	var generations := _power_sum(factor,g+1,ceiling)
++	var facts := _multiply(n,int(generations.sum),ceiling)
++	var states := _multiply(facts,s,ceiling)
++	var receipts := _multiply(facts,l,ceiling)
++	if facts > int(limits.pending_facts): return _failure("child_fact_capacity")
++	if states > int(limits.active_states): return _failure("child_state_capacity")
++	if receipts > int(limits.receipts): return _failure("child_receipt_capacity")
++	var parents := _power_sum(factor,g,ceiling)
++	var children := _multiply(_multiply(n,b,ceiling),int(parents.sum),ceiling)
++	var captured := Graph.capture({"facts":facts,"states":states,"receipts":receipts,
++		"child_actions":children,"maximum_generation":g},16,2)
++	return {"success":true,"reason":"","cost":captured.value}
++
++static func _power_sum(factor: int, terms: int, ceiling: int) -> Dictionary:
++	# Compose geometric-series blocks in O(log terms):
++	# S(a+b)=S(a)+P(a)*S(b), P(a+b)=P(a)*P(b).
++	var power := 1
++	var sum := 0
++	var block_power := mini(factor,ceiling)
++	var block_sum := 1
++	while terms > 0:
++		if (terms & 1) != 0:
++			sum=_add(sum,_multiply(power,block_sum,ceiling),ceiling)
++			power=_multiply(power,block_power,ceiling)
++		terms >>= 1
++		if terms == 0: break
++		block_sum=_add(block_sum,_multiply(block_power,block_sum,ceiling),ceiling)
++		block_power=_multiply(block_power,block_power,ceiling)
++	return {"power":power,"sum":sum}
++
++static func _multiply(a: int, b: int, ceiling: int) -> int:
++	if a == 0 or b == 0: return 0
++	@warning_ignore("integer_division")
++	if a > ceiling/b: return ceiling
++	return mini(a*b,ceiling)
++
++static func _add(a: int, b: int, ceiling: int) -> int:
++	return ceiling if a >= ceiling-b else a+b
++
++static func _integer(value: Variant) -> bool:
++	return (value is int or value is float) and is_finite(float(value)) \
++		and float(value)>=0 and float(value)<=MAX_EXACT_INTEGER and float(value)==floor(float(value))
++
++static func _keys(value: Dictionary, required: Array) -> bool:
++	if value.size()!=required.size(): return false
++	for key: String in required:
++		if not value.has(key): return false
++	return true
++
++static func _failure(reason: String) -> Dictionary:
++	return {"success":false,"reason":reason,"cost":{}}
+diff --git a/scripts/features/compilation/feature_compiler.gd b/scripts/features/compilation/feature_compiler.gd
+index d9a98249f..1ac922f9c 100644
+--- a/scripts/features/compilation/feature_compiler.gd
++++ b/scripts/features/compilation/feature_compiler.gd
+@@ -8,6 +8,11 @@ const MODULE_REQUIRED := ["schema_version", "module_id", "module_version", "core
+ 	"requires", "conflicts", "capabilities", "handlers", "resource_dependencies", "cost", "mechanics", "tests"]
+ const MODULE_OPTIONAL := ["default_enabled", "scope", "activation_boundary", "content_hash"]
+ 
++# Complete derived child work is assessed before any action is promised.
++# This pure helper does not itself publish handlers or grant runtime admission.
++static func compile_child_capacity(request: Variant, limits: Variant) -> Dictionary:
++	return preload("res://scripts/features/compilation/child_capacity_proof.gd").compile(request,limits)
++
+ # This is a compiler of immutable derived records. Canonical base definitions
+ # remain owned by ContentLayers and their existing rules, never by this catalog.
+ static func compile(modules: Array, contributions: Array, authority: Dictionary) -> Dictionary:
+diff --git a/scripts/features/handlers/death_burst_handler.gd b/scripts/features/handlers/death_burst_handler.gd
+new file mode 100644
+index 000000000..ebb2a17e7
+--- /dev/null
++++ b/scripts/features/handlers/death_burst_handler.gd
+@@ -0,0 +1,81 @@
++extends RefCounted
++
++const Graph := preload("res://scripts/features/contracts/plain_graph.gd")
++const ID := "hc.death_burst.v1"
++const ACTION_ID := "hc.child.death_burst.v1"
++const CHAIN_CONTEXT := "hardcore.combat.chain_context.v1"
++const MAX_EXACT_INTEGER := 9007199254740991
++
++# Pure closed-command construction. It has no actor, HP, planner, signal,
++# random stream or queue authority. Registry publication stays disabled until
++# the complete admitted child port and producer lifecycle are installed.
++static func commands(fact: Dictionary, binding: Dictionary) -> Array:
++	var definition: Variant=binding.get("definition")
++	if not definition is Dictionary or definition.get("handler_id")!=ID \
++		or not definition.get("mechanic_id") is String or definition.mechanic_id.is_empty() \
++		or not binding.get("handle") is String or binding.handle.is_empty(): return []
++	var config: Variant=definition.get("config")
++	if not config is Dictionary or not _keys(config,["fraction","radius_gu","maximum_generation"]) \
++		or not _number(config.fraction) or float(config.fraction)<=0 or float(config.fraction)>1 \
++		or not _number(config.radius_gu) or float(config.radius_gu)<=0 \
++		or not _integer(config.maximum_generation) or int(config.maximum_generation)<=0: return []
++	if not Vector2(float(config.radius_gu),0.0).is_finite(): return []
++	if not _first_death(fact) or not definition.get("source_classes") is Array \
++		or fact.get("source_class") not in ["direct","periodic","child"] \
++		or fact.source_class not in definition.source_classes: return []
++	var chain: Variant=fact.get("chain_context")
++	if not chain is Dictionary or not _keys(chain,["contract_id","root_release_id","release_id",
++		"parent_release_id","root_skill_id","generation","maximum_generation"]) \
++		or chain.contract_id!=CHAIN_CONTEXT: return []
++	for key: String in ["root_release_id","release_id","root_skill_id"]:
++		if not chain[key] is String or chain[key].is_empty(): return []
++	if not chain.parent_release_id is String or not _integer(chain.generation) or not _integer(chain.maximum_generation) \
++		or chain.maximum_generation!=config.maximum_generation or chain.generation>chain.maximum_generation \
++		or chain.release_id!=fact.get("release_id") or chain.root_skill_id!=definition.get("skill_id"): return []
++	var generation:=int(chain.generation)
++	if generation==0 and (chain.release_id!=chain.root_release_id or not chain.parent_release_id.is_empty()): return []
++	if generation>0 and (chain.parent_release_id.is_empty() or chain.release_id==chain.root_release_id): return []
++	if (fact.source_class=="direct" and generation!=0) or (fact.source_class=="child" and generation==0): return []
++	# This is the authored finite transition rule. Its entire potential work
++	# must already have been compiled and reserved by the eventual root port.
++	if generation==int(chain.maximum_generation): return []
++	if not fact.get("fact_id") is String or fact.fact_id.is_empty() or not fact.get("historical_credit") is Dictionary \
++		or not fact.get("target") is Dictionary or not _keys(fact.target,["world","runtime_id","life_generation"]) \
++		or not fact.target.world is Dictionary or fact.target.world.is_empty() \
++		or not _integer(fact.target.runtime_id) or int(fact.target.runtime_id)<=0 \
++		or not _integer(fact.target.life_generation) or int(fact.target.life_generation)<=0: return []
++	var origin: Variant=fact.get("commit_ground_origin")
++	if not origin is Dictionary or not _keys(origin,["x","y"]) or not _number(origin.x) or not _number(origin.y): return []
++	if not Vector2(float(origin.x),float(origin.y)).is_finite(): return []
++	var raw:=roundi(float(fact.actual_loss)*float(config.fraction))
++	if raw<=0: return []
++	var captured:=Graph.capture({"op":"RequestChildAction","handler_id":ID,"action_id":ACTION_ID,
++		"source_handle":binding.handle,"mechanic_id":definition.mechanic_id,
++		"root_release_id":chain.root_release_id,"root_skill_id":chain.root_skill_id,
++		"parent_release_id":fact.release_id,"parent_fact_id":fact.fact_id,"parent_target":fact.target,
++		"generation":generation+1,"maximum_generation":int(chain.maximum_generation),
++		"origin":origin,"radius_gu":float(config.radius_gu),"raw_damage":raw,"damage_basis":"actual_hp_loss",
++		"historical_credit":fact.historical_credit,"source_class":"child","damage_channel":"magic_defense",
++		"causes_struck":false,"direct_magic_walk_delay":false},128,8)
++	return [captured.value] if captured.success else []
++
++static func _first_death(fact: Dictionary) -> bool:
++	if fact.get("contract_id")!="hardcore.combat.damage_fact.v1" \
++		or fact.get("damage_channel") not in ["physical","magic_defense"] \
++		or not fact.get("target_survived_commit") is bool or fact.target_survived_commit: return false
++	for field: String in ["hp_before","hp_after","actual_loss","requested_damage"]:
++		if not _integer(fact.get(field)): return false
++	return int(fact.hp_before)>0 and int(fact.hp_after)==0 and int(fact.actual_loss)==int(fact.hp_before) \
++		and int(fact.requested_damage)>=int(fact.actual_loss)
++
++static func _number(value: Variant) -> bool:
++	return (value is int or value is float) and is_finite(float(value))
++
++static func _integer(value: Variant) -> bool:
++	return _number(value) and float(value)>=0 and float(value)<=MAX_EXACT_INTEGER and float(value)==floor(float(value))
++
++static func _keys(value: Dictionary, required: Array) -> bool:
++	if value.size()!=required.size(): return false
++	for key: String in required:
++		if not value.has(key): return false
++	return true
+diff --git a/scripts/features/handlers/handler_registry.gd b/scripts/features/handlers/handler_registry.gd
+index 4fe4ebc4b..0021049fb 100644
+--- a/scripts/features/handlers/handler_registry.gd
++++ b/scripts/features/handlers/handler_registry.gd
+@@ -2,6 +2,7 @@ extends RefCounted
+ 
+ const Ignite := preload("res://scripts/features/handlers/ignite_handler.gd")
+ const Lifesteal := preload("res://scripts/features/handlers/lifesteal_handler.gd")
++const DeathBurst := preload("res://scripts/features/handlers/death_burst_handler.gd")
+ const Graph := preload("res://scripts/features/contracts/plain_graph.gd")
+ const IDS := [Ignite.ID,Lifesteal.ID]
+ const CONTRACTS := {
+@@ -18,6 +19,7 @@ static func commands(fact: Dictionary, binding: Dictionary) -> Array:
+ 	match binding.definition.handler_id:
+ 		Ignite.ID: return Ignite.commands(fact,binding)
+ 		Lifesteal.ID: return Lifesteal.commands(fact,binding)
++		DeathBurst.ID: return DeathBurst.commands(fact,binding)
+ 	return []
+ 
+ static func persistent_binding_count(bindings: Array) -> int:
+diff --git a/scripts/items/item_extension_codec.gd b/scripts/items/item_extension_codec.gd
+index 4ea15b601..59ec205ae 100644
+--- a/scripts/items/item_extension_codec.gd
++++ b/scripts/items/item_extension_codec.gd
+@@ -24,6 +24,15 @@ const RUNE_ID := "hc.runes.primary"
+ # flat item record; this private field owns extensions only, never attributes.
+ # Old records retain their exact wire shape and old strict validators.
+ static func decode_wire(record: Dictionary) -> Dictionary:
++	# An explicit standalone owner also owns keys that today's container or
++	# runtime classifier reserves. Never recover an older asset over that owner.
++	if record.get("rune_instance_contract_id") is String:
++		if record.rune_instance_contract_id != RuneRules.INSTANCE_CONTRACT:
++			return _failure(OPAQUE_UNSUPPORTED, "unsupported_rune_instance_contract")
++		if _integer(record.get("item_id")) and Registry.from_legacy("item",int(record.item_id)).is_empty():
++			return _failure(OPAQUE_UNSUPPORTED, "unknown_rune_item_identity")
++	if record.get("gem_instance_contract_id") is String and record.gem_instance_contract_id != GemRules.INSTANCE_CONTRACT:
++		return _failure(OPAQUE_UNSUPPORTED, "unsupported_gem_instance_contract")
+ 	var is_container := _is_wire_container(record)
+ 	# An unsupported owner defines its own graph and field limits. Recognize
+ 	# that shallow header before applying today's corruption/recovery rules.
+@@ -42,17 +51,12 @@ static func decode_wire(record: Dictionary) -> Dictionary:
+ 	if not is_container:
+ 		if record.has("rune_instance_contract_id"):
+ 			if not record.rune_instance_contract_id is String: return _failure(INVALID,"invalid_rune_instance_contract")
+-			if record.rune_instance_contract_id!=RuneRules.INSTANCE_CONTRACT: return _failure(OPAQUE_UNSUPPORTED,"unsupported_rune_instance_contract")
+-			if _integer(record.get("item_id")) and Registry.from_legacy("item",int(record.item_id)).is_empty():
+-				return _failure(OPAQUE_UNSUPPORTED,"unknown_rune_item_identity")
+ 			return _success(record) if RuneRules.valid_instance(record) else _failure(INVALID,"invalid_rune_instance")
+ 		if _integer(record.get("item_id")) and not RuneRules.record_for_id(int(record.item_id)).is_empty():
+ 			return _failure(INVALID,"missing_rune_instance_contract")
+ 		if record.has("gem_instance_contract_id"):
+ 			if not record.gem_instance_contract_id is String:
+ 				return _failure(INVALID, "invalid_gem_instance_contract")
+-			if record.gem_instance_contract_id != GemRules.INSTANCE_CONTRACT:
+-				return _failure(OPAQUE_UNSUPPORTED, "unsupported_gem_instance_contract")
+ 			return _success(record) if GemRules.valid_instance(record) else _failure(INVALID, "invalid_gem_instance")
+ 		if _integer(record.get("item_id")) and int(record.item_id) == GemRules.ITEM_ID:
+ 			return _failure(INVALID, "missing_gem_instance_contract")
+diff --git a/scripts/player_state.gd b/scripts/player_state.gd
+index d7df4dee5..59415747e 100644
+--- a/scripts/player_state.gd
++++ b/scripts/player_state.gd
+@@ -1446,13 +1446,14 @@ func _consume_inventory_index_without_commit(index: int, amount := 1) -> bool:
+ 
+ 
+ func destroy_inventory_indices(indices: Array) -> Dictionary:
+-	# Reject the selected reserved identities before the synchronous save barrier
+-	# can complete their transaction and replace the caller's inventory indices.
++	# Protect both selected identities and promised removal output slots before
++	# the save barrier can publish a new asset into the caller's empty index.
+ 	if _item_transaction_port != null:
+ 		for raw_index: Variant in indices:
+ 			var index := int(raw_index)
+-			if index >= 0 and index < inventory.size() and inventory[index] is Dictionary \
+-				and _item_transaction_port.record_reserved(inventory[index]):
++			if index >= 0 and (_item_transaction_port.slot_reserved(index) \
++				or (index < inventory.size() and inventory[index] is Dictionary \
++				and _item_transaction_port.record_reserved(inventory[index]))):
+ 				return {"success":false, "destroyed":0, "reason":"item_transaction_pending", "message":"物品操作处理中，请稍后再试。"}
+ 	_before_state_transaction()
+ 	var targets: Array[int] = []
+diff --git a/tests/framework/feature_child_capacity_test.gd b/tests/framework/feature_child_capacity_test.gd
+new file mode 100644
+index 000000000..7ee138f0a
+--- /dev/null
++++ b/tests/framework/feature_child_capacity_test.gd
+@@ -0,0 +1,90 @@
++extends Node
++
++const Compiler := preload("res://scripts/features/compilation/feature_compiler.gd")
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++var proof := Proof.new()
++var checks := 0
++var errors: Array[String] = []
++var compiler := Compiler.new()
++
++func _ready() -> void:
++	_run.call_deferred()
++
++func _limits() -> Dictionary:
++	return {"pending_facts":8192,"active_states":4096,"receipts":65536}
++
++func _request(n: Variant, b: Variant, g: Variant, l: Variant, s: Variant) -> Dictionary:
++	return {"maximum_receivers":n,"child_bindings":b,"maximum_generation":g,
++		"binding_count":l,"persistent_bindings":s}
++
++func _compile(request: Variant, limits: Variant) -> Dictionary:
++	# Missing production protocol remains a typed RED, not a script error.
++	if not compiler.has_method("compile_child_capacity"):
++		return {"success":false,"reason":"child_capacity_protocol_missing"}
++	return compiler.call("compile_child_capacity",request,limits)
++
++func _check(value: bool, label: String) -> void:
++	checks += 1; proof.record(value,label)
++	if not value: errors.append(label)
++
++func _run() -> void:
++	var request := _request(3,1,1,2,1)
++	var result := _compile(request,_limits())
++	_check(bool(result.get("success",false)),"one declared child generation includes all three root and nine potential child receivers")
++	if not bool(result.get("success",false)):
++		print("CHILD_CAPACITY_RED_REASON="+str(result.get("reason")))
++		_finish(); return
++	var cost: Dictionary = result.cost
++	_check(cost.facts==12 and cost.receipts==24 and cost.states==12 and cost.child_actions==3,
++		"hand-derived N3 B1 G1 L2 S1 reserves 12 facts, 24 receipts, 12 states and 3 child actions")
++	request.maximum_receivers=999
++	_check(cost.is_read_only() and cost.facts==12,"accepted cost is immutable and independent of caller mutations")
++	result=_compile(_request(3,2,2,3,1),_limits())
++	_check(result.success and result.cost.facts==129 and result.cost.receipts==387
++		and result.cost.states==129 and result.cost.child_actions==42,
++		"two independent child sources and two generations retain full 3+18+108 facts and 42 child actions")
++	result=_compile(_request(30,1,1,2,3),_limits())
++	_check(not result.success and result.reason=="invalid_child_capacity_request",
++		"a persistent binding count larger than the declared total cannot underwrite a valid cost")
++	result=_compile(_request(30,1,1,3,3),_limits())
++	_check(result.success and result.cost.facts==930 and result.cost.receipts==2790
++		and result.cost.states==2790 and result.cost.child_actions==30,
++		"30 is a fixture size, with all 900 potential child receivers and three sources counted")
++	result=_compile(_request(30,1,2,3,3),_limits())
++	_check(not result.success and result.reason=="child_fact_capacity",
++		"a third layer is refused before gameplay, rather than truncating a committed chain")
++	result=_compile(_request(30,1,1,5,5),_limits())
++	_check(not result.success and result.reason=="child_state_capacity","global fact space does not imply enough persistent state capacity")
++	result=_compile(_request(30,1,1,3,0),{"pending_facts":8192,"active_states":4096,"receipts":2000})
++	_check(not result.success and result.reason=="child_receipt_capacity","immediate child actions still require every source receipt")
++	result=_compile(_request(0,1,9007199254740991,2,1),_limits())
++	_check(result.success and result.cost.facts==0 and result.cost.states==0
++		and result.cost.receipts==0 and result.cost.child_actions==0,"empty legal world has zero work even for a large finite program")
++	result=_compile(_request(1,1,1000000000,1,0),_limits())
++	_check(not result.success and result.reason=="child_fact_capacity","large single-receiver lineage is rejected without a billion-step loop")
++	result=_compile(_request(4096,2,9007199254740991,2,1),_limits())
++	_check(not result.success and result.reason=="child_fact_capacity","exponential declared work cannot overflow into a small accepted value")
++	result=_compile(_request(4,0,9007199254740991,2,1),_limits())
++	_check(result.success and result.cost.facts==4 and result.cost.receipts==8
++		and result.cost.states==4 and result.cost.child_actions==0,"a program with no child producer owns only its original work")
++	for malformed: Variant in [null,[],_request(-1,1,1,2,1),_request(1.5,1,1,2,1),
++		_request(true,1,1,2,1),_request(3,3,1,2,1),_request(3,1,-1,2,1),_request(3,1,1,0,0)]:
++		result=_compile(malformed,_limits())
++		_check(not result.success and result.reason=="invalid_child_capacity_request","invalid program fields fail closed: "+JSON.stringify(malformed))
++	var extra:=_request(3,1,1,2,1); extra.execute="arbitrary"
++	result=_compile(extra,_limits())
++	_check(not result.success and result.reason=="invalid_child_capacity_request","unknown executable or future request fields are not silently ignored")
++	for malformed_limits: Variant in [null,{},_limits().merged({"receipts":-1},true),
++		_limits().merged({"pending_facts":1.5},true),_limits().merged({"fallback":true},true)]:
++		result=_compile(_request(3,1,1,2,1),malformed_limits)
++		_check(not result.success and result.reason=="invalid_child_capacity_limits","caller must supply the complete nonnegative runtime capacities")
++	result=_compile(_request(3,1,1,2,1),{"pending_facts":12,"active_states":12,"receipts":24})
++	_check(result.success,"an exact capacity boundary admits the complete chain")
++	result=_compile(_request(3,1,1,2,1),{"pending_facts":11,"active_states":12,"receipts":24})
++	_check(not result.success and result.reason=="child_fact_capacity","one missing fact slot rejects the whole promise")
++	_finish()
++
++func _finish() -> void:
++	if not proof.write_receipt("feature_child_capacity_test",checks,errors.size()): errors.append("receipt_write")
++	print(("FRAMEWORK_CHILD_CAPACITY_PASS" if errors.is_empty() else "FRAMEWORK_CHILD_CAPACITY_FAIL")+" checks="+str(checks)+" errors="+str(errors))
++	get_tree().quit(0 if errors.is_empty() else 1)
+diff --git a/tests/framework/feature_child_capacity_test.tscn b/tests/framework/feature_child_capacity_test.tscn
+new file mode 100644
+index 000000000..75926bed3
+--- /dev/null
++++ b/tests/framework/feature_child_capacity_test.tscn
+@@ -0,0 +1,4 @@
++[gd_scene load_steps=2 format=3]
++[ext_resource type="Script" path="res://tests/framework/feature_child_capacity_test.gd" id="1"]
++[node name="FeatureChildCapacityTest" type="Node"]
++script = ExtResource("1")
+diff --git a/tests/framework/feature_death_child_command_test.gd b/tests/framework/feature_death_child_command_test.gd
+new file mode 100644
+index 000000000..78ca2a493
+--- /dev/null
++++ b/tests/framework/feature_death_child_command_test.gd
+@@ -0,0 +1,109 @@
++extends Node
++
++const Handlers := preload("res://scripts/features/handlers/handler_registry.gd")
++const Compiler := preload("res://scripts/features/compilation/feature_compiler.gd")
++const Authority := preload("res://scripts/features/adapters/feature_authority.gd")
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++var proof := Proof.new()
++var checks := 0
++var errors: Array[String] = []
++
++func _ready() -> void:
++	_run.call_deferred()
++
++func _binding() -> Dictionary:
++	return {"handle":"death:source:1","source":{"instance_id":"death:item:1","slot":"hc.slot.weapon","mechanic_id":"hc.death_burst.fixture"},
++		"definition":{"mechanic_id":"hc.death_burst.fixture","kind":"trigger","event":"damage_committed",
++		"skill_id":"hc.skill.wizard.ice_storm","handler_id":"hc.death_burst.v1","tags":[],
++		"source_classes":["direct","periodic","child"],"dedup":"per_target_life_per_root_death",
++		"lifecycle":"child_chain","config":{"fraction":0.5,"radius_gu":2.0,"maximum_generation":1}}}
++
++func _fact() -> Dictionary:
++	return {"contract_id":"hardcore.combat.damage_fact.v1","fact_id":"player:1:action:2:hp:0",
++		"release_id":"player:1:action:2","skill_id":"hc.skill.wizard.ice_storm",
++		"source_class":"direct","damage_channel":"magic_defense","requested_damage":15,
++		"hp_before":10,"hp_after":0,"actual_loss":10,"target_survived_commit":false,
++		"target":{"world":{"epoch":1},"runtime_id":20,"life_generation":3},"source":{},
++		"historical_credit":{"profile_id":"fixture-owner"},"commit_ground_origin":{"x":2.0,"y":3.0},
++		"chain_context":{"contract_id":"hardcore.combat.chain_context.v1",
++		"root_release_id":"player:1:action:2","release_id":"player:1:action:2","parent_release_id":"",
++		"root_skill_id":"hc.skill.wizard.ice_storm","generation":0,"maximum_generation":1}}
++
++func _check(value: bool, label: String) -> void:
++	checks+=1; proof.record(value,label)
++	if not value: errors.append(label)
++
++func _run() -> void:
++	var fact := _fact(); var binding := _binding()
++	var commands: Array = Handlers.commands(fact,binding)
++	_check(commands.size()==1,"a committed first death with an explicit finite chain produces one closed child request")
++	if commands.size()!=1:
++		_finish(); return
++	var command: Dictionary=commands[0]
++	_check(command.op=="RequestChildAction" and command.action_id=="hc.child.death_burst.v1"
++		and command.raw_damage==5 and command.radius_gu==2.0 and command.source_class=="child",
++		"child describes the authored actual-loss damage and radius, without submitting HP itself")
++	_check(command.root_release_id=="player:1:action:2" and command.parent_release_id=="player:1:action:2"
++		and command.parent_fact_id=="player:1:action:2:hp:0" and command.generation==1 and command.maximum_generation==1,
++		"root, parent fact and next generation stay separate and explicit")
++	_check(command.origin=={"x":2.0,"y":3.0} and command.historical_credit=={"profile_id":"fixture-owner"}
++		and command.parent_target==fact.target and command.source_handle=="death:source:1",
++		"death location, historical credit, old life identity and exact contribution remain owned values")
++	fact.commit_ground_origin.x=99.0; fact.historical_credit.profile_id="later-profile"
++	binding.definition.config.fraction=1.0
++	_check(command.is_read_only() and command.origin.is_read_only() and command.parent_target.is_read_only()
++		and command.origin.x==2.0 and command.historical_credit.profile_id=="fixture-owner" and command.raw_damage==5,
++		"later position, profile or configuration mutations cannot rewrite a queued child")
++	var periodic:=_fact(); periodic.source_class="periodic"
++	_check(Handlers.commands(periodic,_binding()).size()==1,"a real periodic lethal fact remains eligible without posing as direct damage")
++	var last:=_fact(); last.source_class="child"; last.chain_context.generation=1
++	last.release_id="child:1"; last.chain_context.release_id="child:1"; last.chain_context.parent_release_id="player:1:action:2"
++	_check(Handlers.commands(last,_binding()).is_empty(),"authored terminal generation emits no further child; it is not a hidden queue truncation")
++	var unsafe:=_binding(); unsafe.definition.config.erase("maximum_generation")
++	_check(Handlers.commands(_fact(),unsafe).is_empty(),"undeclared or infinite recurrence has no executable request")
++	unsafe=_binding(); unsafe.definition.config.maximum_generation=2
++	_check(Handlers.commands(_fact(),unsafe).is_empty(),"a live definition cannot enlarge the already accepted finite chain")
++	for field: String in ["actual_loss","hp_before","requested_damage"]:
++		var broken:=_fact(); broken[field]=0
++		_check(Handlers.commands(broken,_binding()).is_empty(),"nonlethal or invalid committed loss is rejected: "+field)
++	var survived:=_fact(); survived.hp_after=1; survived.actual_loss=9; survived.target_survived_commit=true
++	_check(Handlers.commands(survived,_binding()).is_empty(),"a surviving target is not a death trigger")
++	for field: String in ["chain_context","commit_ground_origin","historical_credit"]:
++		var missing:=_fact(); missing.erase(field)
++		_check(Handlers.commands(missing,_binding()).is_empty(),"missing frozen ownership field is rejected: "+field)
++	var wrong:=_fact(); wrong.chain_context.release_id="wrong-action"
++	_check(Handlers.commands(wrong,_binding()).is_empty(),"a foreign current release cannot reuse this lineage")
++	wrong=_fact(); wrong.chain_context.root_skill_id="hc.skill.warrior.fire_sword"
++	_check(Handlers.commands(wrong,_binding()).is_empty(),"root skill scope cannot be inferred from a display name or another source")
++	wrong=_fact(); wrong.chain_context.parent_release_id="unexpected-parent"
++	_check(Handlers.commands(wrong,_binding()).is_empty(),"a root generation cannot claim an undeclared parent")
++	wrong=_fact(); wrong.source_class="ambient"
++	_check(Handlers.commands(wrong,_binding()).is_empty(),"unknown damage classification never defaults to direct")
++	wrong=_fact(); wrong.commit_ground_origin.x=INF
++	_check(Handlers.commands(wrong,_binding()).is_empty(),"nonfinite death geometry is rejected before any planner call")
++	wrong=_fact(); wrong.commit_ground_origin.x=1.0e300
++	_check(Handlers.commands(wrong,_binding()).is_empty(),"JSON-finite origin must also fit the actual engine geometry representation")
++	unsafe=_binding(); unsafe.definition.config.radius_gu=1.0e300
++	_check(Handlers.commands(_fact(),unsafe).is_empty(),"JSON-finite radius cannot overflow the actual engine geometry")
++	wrong=_fact(); wrong.damage_channel="unclassified"
++	_check(Handlers.commands(wrong,_binding()).is_empty(),"unknown committed damage channel cannot authorize a magic child")
++	unsafe=_binding(); unsafe.definition.config.execute="arbitrary"
++	_check(Handlers.commands(_fact(),unsafe).is_empty(),"unknown config execution fields are rejected")
++	unsafe=_binding(); unsafe.definition.config.fraction=0.01
++	_check(Handlers.commands(_fact(),unsafe).is_empty(),"rounded zero child damage remains zero rather than inventing a minimum hit")
++	seed(72143); var expected:=randi(); seed(72143)
++	Handlers.commands(_fact(),_binding()); var observed:=randi()
++	_check(expected==observed,"pure child preparation leaves the existing global RNG stream unchanged")
++	var incomplete: Dictionary=_binding().definition; incomplete.config.erase("maximum_generation")
++	var module: Dictionary={"schema_version":1,"module_id":"hc.death_burst.fixture","module_version":1,"core_api_version":1,
++		"requires":[],"conflicts":[],"capabilities":["combat.post_hit","combat.child"],"handlers":["hc.death_burst.v1"],
++		"resource_dependencies":[],"cost":{"commands_per_event":1,"states_per_target":0},"mechanics":[incomplete],
++		"tests":["tests/framework/feature_death_child_command_test.tscn"]}
++	_check(not Compiler.compile_catalog([module],Authority.build()).success,
++		"a module lacking a finite contract and complete production port cannot be published by the pure command probe")
++	_finish()
++
++func _finish() -> void:
++	if not proof.write_receipt("feature_death_child_command_test",checks,errors.size()): errors.append("receipt_write")
++	print(("FRAMEWORK_DEATH_CHILD_COMMAND_PASS" if errors.is_empty() else "FRAMEWORK_DEATH_CHILD_COMMAND_FAIL")+" checks="+str(checks)+" errors="+str(errors))
++	get_tree().quit(0 if errors.is_empty() else 1)
+diff --git a/tests/framework/feature_death_child_command_test.tscn b/tests/framework/feature_death_child_command_test.tscn
+new file mode 100644
+index 000000000..5ee23f176
+--- /dev/null
++++ b/tests/framework/feature_death_child_command_test.tscn
+@@ -0,0 +1,4 @@
++[gd_scene load_steps=2 format=3]
++[ext_resource type="Script" path="res://tests/framework/feature_death_child_command_test.gd" id="1"]
++[node name="FeatureDeathChildCommandTest" type="Node"]
++script = ExtResource("1")
+diff --git a/tests/framework/future_item_ownership_terminal_test.gd b/tests/framework/future_item_ownership_terminal_test.gd
+index 4c47e6194..f62d6fe7b 100644
+--- a/tests/framework/future_item_ownership_terminal_test.gd
++++ b/tests/framework/future_item_ownership_terminal_test.gd
+@@ -3,6 +3,7 @@ extends Node
+ const Codec := preload("res://scripts/items/item_extension_codec.gd")
+ const DropRules := preload("res://scripts/item_drop_instance_rules.gd")
+ const Rune := preload("res://scripts/items/rune_item_rules.gd")
++const Gem := preload("res://scripts/items/socket_gem_rules.gd")
+ const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
+ var proof := Proof.new()
+ var checks := 0
+@@ -111,6 +112,22 @@ func _run() -> void:
+ 	unknown_rune.base["corrupt_known_base"]=1
+ 	var unknown_plain_rune:=rune.duplicate(true); unknown_plain_rune.item_id=990999
+ 	candidates.append_array([future_rune_namespace,future_rune_contract,unknown_rune,unknown_plain_rune])
++	# An explicit unsupported standalone owner keeps authority even when its
++	# payload contains keys used by the current runtime/container classifier.
++	for field: String in [Codec.RUNTIME_EXTENSION,"base","extensions","format_version"]:
++		var future_standalone:=rune.duplicate(true)
++		future_standalone.rune_instance_contract_id="hc.runes.fixture.rune.v2"
++		future_standalone[field]=2 if field=="format_version" else {}
++		candidates.append(future_standalone)
++	for field: String in [Codec.RUNTIME_EXTENSION,"base"]:
++		var future_identity:=unknown_plain_rune.duplicate(true); future_identity[field]={}
++		candidates.append(future_identity)
++	var standalone_gem:=Gem.create_instance("future-owner:gem-extra",true)
++	check(not standalone_gem.is_empty(),"shared standalone ownership cases use a registered original gem")
++	for field: String in [Codec.RUNTIME_EXTENSION,"base","extensions"]:
++		var future_gem:=standalone_gem.duplicate(true)
++		future_gem.gem_instance_contract_id="hc.socketing.fixture.gem.v2"
++		future_gem[field]={}; candidates.append(future_gem)
+ 	for index in candidates.size():
+ 		var candidate := candidates[index]
+ 		check(Codec.decode_wire(candidate).status == Codec.OPAQUE_UNSUPPORTED,
+@@ -142,25 +159,45 @@ func _run() -> void:
+ 	mixed.warehouse_inventory = [corrupt, future_namespace]
+ 	_verify_shared(mixed, "future item still owns aggregate with malformed warehouse schema")
+ 	_verify_known_recovery(known_profile, known_shared, corrupt)
++	for field: String in [Codec.RUNTIME_EXTENSION,"base","extensions"]:
++		var known_rune_damage:=rune.duplicate(true); known_rune_damage[field]={}
++		check(Codec.decode_wire(known_rune_damage).status==Codec.INVALID,
++			"known Rune v1 extra field remains corruption rather than opaque ownership: "+field)
++		_verify_known_recovery(known_profile,known_shared,known_rune_damage)
+ 	_verify_legacy_equipment_clock_import(known_profile)
+ 	PlayerState.test_mode = true
+ 	_finish()
+ 
+ func _restore_known_profile() -> void:
+ 	put(PlayerState.shared_warehouse_path, shared_bytes)
++	put(PlayerState.shared_warehouse_path + ".bak", shared_bytes)
+ 	put(profile_path, profile_bytes)
+ 	put(profile_path + ".bak", profile_bytes)
+ 	PlayerState.load_save()
+ 	check(bool(PlayerState.last_load_result.get("success", false)),
+ 		"independent case begins with real supported profile load")
++	check(PlayerState._startup_upgrade_preflight().get("success",false),
++		"supported account passes the actual startup preflight before injecting this case")
+ 
+ func _verify_profile(candidate: Dictionary, index: int) -> void:
+ 	_restore_known_profile()
+ 	var document: Dictionary = JSON.parse_string(profile_bytes)
+ 	document.inventory = [candidate]
+-	document.level = "corrupt known sibling"
+ 	var raw := JSON.stringify(document, "\t") + "\n"
+ 	put(profile_path, raw)
++	var startup: Dictionary=PlayerState._startup_upgrade_preflight()
++	print("FUTURE_PROFILE_STARTUP_TRACE="+JSON.stringify({"case":index,"expected_path":profile_path,
++		"success":startup.get("success",false),"path":startup.get("path",""),"reason":startup.get("reason","")}))
++	# The shared migration validator also reads this profile. Its rejection may
++	# name the shared aggregate, but must preserve this sole changed input.
++	check(not startup.get("success",false) and startup.get("path","") in [profile_path,PlayerState.shared_warehouse_path]
++		and FileAccess.get_file_as_string(profile_path)==raw
++		and FileAccess.get_file_as_string(profile_path+".bak")==profile_bytes
++		and FileAccess.get_file_as_string(PlayerState.shared_warehouse_path)==shared_bytes,
++		"normal startup refuses this sole future profile input without promoting any old backup "+str(index))
++	document.level = "corrupt known sibling"
++	raw = JSON.stringify(document, "\t") + "\n"
++	put(profile_path, raw)
+ 	PlayerState.gold = 4321
+ 	var inventory_before := PlayerState.inventory.duplicate(true)
+ 	var status: Dictionary = PlayerState._validate_profile_document_status(document, PlayerState.active_profile_id, false)
+@@ -183,6 +220,7 @@ func _verify_shared_item(candidate: Dictionary, known_shared: Dictionary, index:
+ 	_verify_shared(document, "future shared item " + str(index))
+ 
+ func _verify_shared(document: Dictionary, label: String) -> void:
++	_restore_known_profile()
+ 	var raw := JSON.stringify(document, "\t") + "\n"
+ 	put(PlayerState.shared_warehouse_path, raw)
+ 	put(PlayerState.shared_warehouse_path + ".bak", shared_bytes)
+@@ -192,6 +230,11 @@ func _verify_shared(document: Dictionary, label: String) -> void:
+ 	PlayerState._shared_warehouse_initialized = false
+ 	var status: Dictionary = PlayerState._validate_shared_warehouse_document_status(document)
+ 	check(not bool(status.valid) and bool(status.terminal), label + " is terminal")
++	var startup: Dictionary=PlayerState._startup_upgrade_preflight()
++	print("FUTURE_SHARED_STARTUP_TRACE="+JSON.stringify({"case":label,"expected_path":PlayerState.shared_warehouse_path,
++		"success":startup.get("success",false),"path":startup.get("path",""),"reason":startup.get("reason","")}))
++	check(not startup.get("success",false) and startup.get("path","")==PlayerState.shared_warehouse_path,
++		label+" is refused as the targeted owner by the actual startup preflight before initialization")
+ 	check(not PlayerState._initialize_shared_warehouse(), label + " cannot initialize from old backup")
+ 	check(json_equal(PlayerState.warehouse_inventory, inventory_before)
+ 		and not PlayerState._shared_warehouse_initialized, label + " never publishes or initializes another owner")
+diff --git a/tests/framework/helpers/check_receipt.gd b/tests/framework/helpers/check_receipt.gd
+index bf36cdf61..a8f53081a 100644
+--- a/tests/framework/helpers/check_receipt.gd
++++ b/tests/framework/helpers/check_receipt.gd
+@@ -15,6 +15,9 @@ func write_receipt(scene_id: String, reported_checks: int, reported_failures: in
+ 	valid = valid and reported_checks == records.size() and reported_failures == failed
+ 	var receipt := {"schema_version": 1, "run_id": nonce, "scene_id": scene_id,
+ 		"invocation_id": OS.get_environment("HARDCORE_FRAMEWORK_INVOCATION_ID"),
++		"runtime_environment": {"runtime_appdata": OS.get_environment("APPDATA"),
++			"user_data_directory": OS.get_user_data_dir(), "project_root": ProjectSettings.globalize_path("res://"),
++			"native_process_id": OS.get_process_id()},
+ 		"source_content_sha256": OS.get_environment("HARDCORE_R3_CONTENT_SHA256"),
+ 		"engine_version": Engine.get_version_info().string, "checks": records,
+ 		"count": records.size(), "passed": passed, "failed": failed,
+diff --git a/tests/framework/rune_transaction_test.gd b/tests/framework/rune_transaction_test.gd
+index 477f391ed..bf3810dce 100644
+--- a/tests/framework/rune_transaction_test.gd
++++ b/tests/framework/rune_transaction_test.gd
+@@ -99,8 +99,83 @@ func _run() -> void:
+ 	check(PlayerState.last_load_result.success and _handles()==all,"production save and reload preserve all three source handles")
+ 	check(PlayerState._validate_extended_item_ownership({"inventory":PlayerState.inventory,"equipment":PlayerState.equipment})
+ 		and Journal.validate_document(PlayerState._prepare_character_save_payload(false)).valid,"both namespaces and new rune operation records share the original aggregate and journal authorities")
++	for extension_namespace: String in ["hc.runes","hc.socketing"]:
++		for layout: String in ["empty","append","mixed"]:
++			await _verify_remove_destination(extension_namespace,layout)
+ 	PlayerState.test_mode=true; PlayerState.set_process(true); check(ContentLayers.reload_feature_catalog(),"isolated transaction restores original default-off registry")
+ 	_finish()
++func _verify_remove_destination(extension_namespace: String,layout: String) -> void:
++	var label:=extension_namespace+":"+layout
++	var identity_tag:=extension_namespace.replace(".","_")+":"+layout
++	var host:=Drop.create_instance(GameData.get_item_record({"item_id":85}),"remove-destination:host:"+label)
++	var gem:=Gem.create_instance("remove-destination:gem:"+identity_tag,true)
++	var rune:=Rune.create_instance("remove-destination:rune:"+identity_tag,true)
++	var unrelated:=Drop.create_instance(GameData.get_item_record({"item_id":80}),"remove-destination:unrelated:"+label)
++	var created:=Codec.with_extensions(host,{
++		"hc.socketing":{"schema_version":1,"sockets":[{"socket_id":Codec.SOCKET_ID,"item":gem}]},
++		"hc.runes":{"schema_version":1,"runes":[{"rune_slot_id":Codec.RUNE_ID,"item":rune}]}})
++	check(created.status==Codec.KNOWN_VALID,label+" begins with real independently owned assets in both namespaces")
++	if created.status!=Codec.KNOWN_VALID: print("REMOVE_DESTINATION_CREATOR="+JSON.stringify({"case":label,"reason":created.reason})); return
++	PlayerState.equipment["hc.slot.weapon"]={}
++	PlayerState.inventory=[created.item,unrelated] if layout=="append" else [created.item,{},unrelated]
++	PlayerState.recalculate_stats(false)
++	check(PlayerState.save_game(false,false,false),label+" persists the original controlled inventory through the real writer")
++	var destination:=2 if layout=="append" else 1
++	var selected: Array=[destination,2] if layout=="mixed" else [destination]
++	var inventory_before:=PlayerState.inventory.duplicate(true)
++	var invalid:=PlayerState.destroy_inventory_indices(selected)
++	check(not invalid.get("success",false) and invalid.get("reason")=="invalid_inventory_index"
++		and PlayerState.inventory==inventory_before,label+" same unoccupied selection is invalid without a pending removal")
++	var field: String="rune_instance_id" if extension_namespace=="hc.runes" else "gem_instance_id"
++	var request: Dictionary={"action":extension_namespace+".remove","target_instance_id":host.instance_id};request[field]=""
++	var quote:=PlayerState.quote_new_item_transaction(request)
++	var pending:=PlayerState.commit_item_transaction(quote)
++	check(quote.get("success",false) and pending.get("pending",false)
++		and not pending.job.response.get("finished",false),label+" accepts the original removal without publishing the output")
++	if not pending.get("pending",false): print("REMOVE_DESTINATION_SETUP="+JSON.stringify({"case":label,"quote":quote,"result":pending})); return
++	var job: RefCounted=pending.job
++	var journal_before:=PlayerState._item_transaction_journal.duplicate(true)
++	var equipment_before:=PlayerState.equipment.duplicate(true)
++	var path: String=PlayerState._profile_path(PlayerState.active_profile_id)
++	var primary_before:=FileAccess.get_file_as_string(path)
++	var backup_before:=FileAccess.get_file_as_string(path+".bak")
++	check(PlayerState._item_transaction_port.slot_reserved(destination)
++		and not PlayerState._item_transaction_port.record_reserved(unrelated),label+" reserves the empty output slot independently of the unrelated record")
++	var result:=PlayerState.destroy_inventory_indices(selected)
++	print("REMOVE_DESTINATION_TRACE="+JSON.stringify({"case":label,"destination":destination,"result":result,
++		"inventory_unchanged":PlayerState.inventory==inventory_before,"writer_finished":job.response.get("finished",false)}))
++	check(not result.get("success",false) and result.get("destroyed",-1)==0
++		and result.get("reason")=="item_transaction_pending",label+" rejects destruction of the promised output before draining its writer")
++	check(PlayerState.inventory==inventory_before and PlayerState.equipment==equipment_before
++		and PlayerState._item_transaction_journal==journal_before and not job.response.get("finished",false),
++		label+" rejected destruction changes no live asset, journal or accepted writer")
++	check(PlayerState._json_persistence.pending_count()==1 and PlayerState._item_transaction_port.slot_reserved(destination)
++		and PlayerState.commit_item_transaction(quote).get("job")==job,
++		label+" refusal preserves exactly the original pending job and destination reservation")
++	check(FileAccess.get_file_as_string(path)==primary_before and FileAccess.get_file_as_string(path+".bak")==backup_before,
++		label+" rejected destruction changes neither primary nor backup bytes")
++	check(await _wait(job),label+" the original removal subsequently reaches a real durable receipt")
++	var extracted: Dictionary=rune if extension_namespace=="hc.runes" else gem
++	var retained: Dictionary=gem if extension_namespace=="hc.runes" else rune
++	var extracted_owners:=0
++	for record: Dictionary in PlayerState.inventory:
++		if Codec.ownership_ids(record).has(extracted.instance_id): extracted_owners+=1
++	check(extracted_owners==1 and PlayerState.inventory.size()>destination
++		and PlayerState.inventory[destination].get("instance_id")==extracted.instance_id
++		and Codec.ownership_ids(PlayerState.inventory[0])==[host.instance_id,retained.instance_id],
++		label+" durable publication owns exactly one original output and retains the other namespace")
++	var unrelated_index:=1 if layout=="append" else 2
++	check(PlayerState.inventory.size()>unrelated_index and PlayerState.inventory[unrelated_index]==unrelated,
++		label+" the unrelated asset survives both refusal and completion")
++	PlayerState.load_save()
++	check(PlayerState.last_load_result.get("success",false) and PlayerState.inventory.size()>destination
++		and PlayerState.inventory[destination].get("instance_id")==extracted.instance_id
++		and Codec.ownership_ids(PlayerState.inventory[0])==[host.instance_id,retained.instance_id],
++		label+" actual reload restores the completed output and the other embedded owner")
++	var completed:=PlayerState.inventory.duplicate(true)
++	check(PlayerState.commit_item_transaction(quote).get("durable",false)
++		and PlayerState._json_persistence.pending_count()==0 and PlayerState.inventory==completed,
++		label+" cached original quote replays without another writer or asset change")
+ func _handles() -> Array:
+ 	var result: Array=[]
+ 	for binding: Dictionary in PlayerState.feature_bundle().get("event_index",{}).get("damage_committed:hc.skill.wizard.ice_storm",[]): result.append(binding.handle)
+diff --git a/tools/run_godot_tests.ps1 b/tools/run_godot_tests.ps1
+index a615917de..f2caf7e4e 100644
+--- a/tools/run_godot_tests.ps1
++++ b/tools/run_godot_tests.ps1
+@@ -82,7 +82,13 @@ if ($TestPaths.Count -gt 0) {
+ # the current worktree so every professional tree remains isolated and the
+ # engine can shut down cleanly without an application-error dialog.
+ New-Item -ItemType Directory -Path $RuntimeAppData -Force | Out-Null
++$RuntimeAppData = (Get-Item -LiteralPath $RuntimeAppData).FullName
+ [Environment]::SetEnvironmentVariable('APPDATA', $RuntimeAppData, 'Process')
++$RuntimeEnvironmentRecord = [ordered]@{
++    project_root = $ProjectRoot
++    runtime_appdata = [Environment]::GetEnvironmentVariable('APPDATA', 'Process')
++    runner_process_id = $PID
++}
+ 
+ $Suites = @{
+     monster = @(
+@@ -1200,6 +1206,7 @@ $NativeHandoffPath = Join-Path $ProjectReportRoot 'framework\native_handoffs.jso
+ New-Item -ItemType Directory -Path (Split-Path -Parent $NativeHandoffPath) -Force | Out-Null
+ $NativeHandoffs = [ordered]@{
+     schema_version = 1
++    runtime_environment = $RuntimeEnvironmentRecord
+     invocation_id = $env:HARDCORE_FRAMEWORK_INVOCATION_ID
+     source_content_sha256 = $env:HARDCORE_R3_CONTENT_SHA256
+     producers = [ordered]@{}
+@@ -1239,6 +1246,7 @@ foreach ($testPath in $SelectedTests) {
+     $process = Start-Process -FilePath 'cmd.exe' `
+         -ArgumentList @('/c', $launchCommand) `
+         -WorkingDirectory $ProjectRoot -WindowStyle Hidden -PassThru
++    $wrapperStartedUtc = $process.StartTime.ToUniversalTime().ToString('o')
+     # Natural cadence scenes observe six real 4-second attack windows plus
+     # pursuit/detour physics. The 1/100/300-monster streaming scale scene
+     # also runs 1800 real frames and exits normally in roughly 38 seconds.
+@@ -1403,6 +1411,9 @@ foreach ($testPath in $SelectedTests) {
+     $StructuredResults += [ordered]@{
+         test_name = $testName
+         test_path = $testPath
++        wrapper_process_id = $process.Id
++        wrapper_started_utc = $wrapperStartedUtc
++        runtime_appdata = $RuntimeAppData
+         fixed_fps = $BoundaryFixedFps
+         pass_marker_found = $hasPassMarker
+         process_exited = $processExited
+@@ -1457,6 +1468,7 @@ $resultsFilePath = Join-Path $LogRoot ("runner_results_{0}_{1}_{2}.json" -f $Eff
+ @{
+     suite = $EffectiveSuite
+     invocation_id = $env:HARDCORE_FRAMEWORK_INVOCATION_ID
++    runtime_environment = $RuntimeEnvironmentRecord
+     generated_at = (Get-Date -Format o)
+     git_head = (& git -C $ProjectRoot rev-parse HEAD 2>$null | Out-String).Trim()
+     total = $StructuredResults.Count

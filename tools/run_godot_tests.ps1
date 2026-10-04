@@ -82,7 +82,13 @@ if ($TestPaths.Count -gt 0) {
 # the current worktree so every professional tree remains isolated and the
 # engine can shut down cleanly without an application-error dialog.
 New-Item -ItemType Directory -Path $RuntimeAppData -Force | Out-Null
+$RuntimeAppData = (Get-Item -LiteralPath $RuntimeAppData).FullName
 [Environment]::SetEnvironmentVariable('APPDATA', $RuntimeAppData, 'Process')
+$RuntimeEnvironmentRecord = [ordered]@{
+    project_root = $ProjectRoot
+    runtime_appdata = [Environment]::GetEnvironmentVariable('APPDATA', 'Process')
+    runner_process_id = $PID
+}
 
 $Suites = @{
     monster = @(
@@ -1200,6 +1206,7 @@ $NativeHandoffPath = Join-Path $ProjectReportRoot 'framework\native_handoffs.jso
 New-Item -ItemType Directory -Path (Split-Path -Parent $NativeHandoffPath) -Force | Out-Null
 $NativeHandoffs = [ordered]@{
     schema_version = 1
+    runtime_environment = $RuntimeEnvironmentRecord
     invocation_id = $env:HARDCORE_FRAMEWORK_INVOCATION_ID
     source_content_sha256 = $env:HARDCORE_R3_CONTENT_SHA256
     producers = [ordered]@{}
@@ -1239,6 +1246,7 @@ foreach ($testPath in $SelectedTests) {
     $process = Start-Process -FilePath 'cmd.exe' `
         -ArgumentList @('/c', $launchCommand) `
         -WorkingDirectory $ProjectRoot -WindowStyle Hidden -PassThru
+    $wrapperStartedUtc = $process.StartTime.ToUniversalTime().ToString('o')
     # Natural cadence scenes observe six real 4-second attack windows plus
     # pursuit/detour physics. The 1/100/300-monster streaming scale scene
     # also runs 1800 real frames and exits normally in roughly 38 seconds.
@@ -1403,6 +1411,9 @@ foreach ($testPath in $SelectedTests) {
     $StructuredResults += [ordered]@{
         test_name = $testName
         test_path = $testPath
+        wrapper_process_id = $process.Id
+        wrapper_started_utc = $wrapperStartedUtc
+        runtime_appdata = $RuntimeAppData
         fixed_fps = $BoundaryFixedFps
         pass_marker_found = $hasPassMarker
         process_exited = $processExited
@@ -1457,6 +1468,7 @@ $resultsFilePath = Join-Path $LogRoot ("runner_results_{0}_{1}_{2}.json" -f $Eff
 @{
     suite = $EffectiveSuite
     invocation_id = $env:HARDCORE_FRAMEWORK_INVOCATION_ID
+    runtime_environment = $RuntimeEnvironmentRecord
     generated_at = (Get-Date -Format o)
     git_head = (& git -C $ProjectRoot rev-parse HEAD 2>$null | Out-String).Trim()
     total = $StructuredResults.Count

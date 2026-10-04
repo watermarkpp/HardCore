@@ -1,0 +1,167 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "actual catalog registers the default-off affix mechanism",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "real drop generator supplies the complete validated immutable affix payload",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "valid original affix grants exactly one source through actual atomic publication",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "normal source can be withdrawn before invalid candidate probes",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "missing_drop_contract: exact legacy ingress reaches the new source boundary",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "missing_drop_contract: source boundary returns a typed rejection without granting provenance",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "missing_drop_contract: actual publication rejects the whole invalid source candidate",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "missing_drop_contract: rejected candidate preserves the complete old publication",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "duplicate_forged_modifiers: exact legacy ingress reaches the new source boundary",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "duplicate_forged_modifiers: source boundary returns a typed rejection without granting provenance",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "duplicate_forged_modifiers: actual publication rejects the whole invalid source candidate",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "duplicate_forged_modifiers: rejected candidate preserves the complete old publication",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "forged_modifier_value: exact legacy ingress reaches the new source boundary",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "forged_modifier_value: source boundary returns a typed rejection without granting provenance",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "forged_modifier_value: actual publication rejects the whole invalid source candidate",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "forged_modifier_value: rejected candidate preserves the complete old publication",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "wrong_persistent_instance: exact legacy ingress reaches the new source boundary",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "wrong_persistent_instance: source boundary returns a typed rejection without granting provenance",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "wrong_persistent_instance: actual publication rejects the whole invalid source candidate",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "wrong_persistent_instance: rejected candidate preserves the complete old publication",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "missing_persistent_instance: exact legacy ingress reaches the new source boundary",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "missing_persistent_instance: source boundary returns a typed rejection without granting provenance",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "missing_persistent_instance: actual publication rejects the whole invalid source candidate",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "missing_persistent_instance: rejected candidate preserves the complete old publication",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "ordinary historical non-affix gear retains its existing compatibility",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "compatible plain historical gear enables the module without fabricating affix sources",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "plain historical gear can withdraw the module normally",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "valid original source remains available after every failed candidate",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "owned fixture restores original default-off configuration",
+      "passed": true
+    }
+  ],
+  "count": 29,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+  "passed": 29,
+  "reported_checks": 29,
+  "reported_failures": 0,
+  "run_id": "d34c4c08-8713-4838-beee-0b849fadac78",
+  "runtime_environment": {
+    "native_process_id": 4708,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\rune_guard_final_direct_ca595fc6a75948e6b661dd6acbae7e29",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/rune_guard_final_direct_ca595fc6a75948e6b661dd6acbae7e29/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "feature_affix_admission_test",
+  "schema_version": 1,
+  "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+  "status": "PASS"
+}

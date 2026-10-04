@@ -1,0 +1,16 @@
+{
+  "group": "rune_guard_final_journal_single",
+  "launcher_pid": 22280,
+  "requested_at_utc": "2026-10-04T03:20:56.030319+00:00",
+  "requested_runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\rune_guard_final_journal_single_b70f0ab30ed54e9d89964f8cd2118360",
+  "command": [
+    "py",
+    "-3.12",
+    "tools/source176_r3_validation.py",
+    "rune_guard_final_journal_single",
+    "--tests",
+    "tests/framework/item_journal_v2_backup_test.tscn",
+    "--timeout",
+    "60"
+  ]
+}

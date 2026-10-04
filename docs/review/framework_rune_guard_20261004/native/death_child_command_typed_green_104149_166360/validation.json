@@ -1,0 +1,16 @@
+{
+  "command": [
+    "powershell",
+    "-NoProfile",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_death_child_command_test.tscn','tests/framework/feature_child_capacity_test.tscn','tests/framework/feature_compiler_test.tscn','tests/framework/feature_capacity_admission_test.tscn','tests/framework/periodic_effect_runtime_test.tscn','tests/framework/feature_lifesteal_runtime_test.tscn','tests/framework/empty_extension_behavior_test.tscn' -TimeoutSeconds 30"
+  ],
+  "timeout_seconds": 30,
+  "exit_code": 0,
+  "source_stable_during_run": true,
+  "passed": 7,
+  "failed": 0,
+  "status": "PASS"
+}

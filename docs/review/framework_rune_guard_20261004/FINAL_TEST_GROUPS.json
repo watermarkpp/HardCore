@@ -1,0 +1,72 @@
+[
+  {
+    "label": "rune_guard_final_direct",
+    "tests": [
+      "tests/framework/feature_source_composition_test.tscn",
+      "tests/framework/feature_source_composition_cold_test.tscn",
+      "tests/framework/socket_transaction_test.tscn",
+      "tests/framework/socket_gem_identity_test.tscn",
+      "tests/framework/item_extension_codec_test.tscn",
+      "tests/framework/future_item_ownership_terminal_test.tscn",
+      "tests/framework/feature_loadout_atomic_test.tscn",
+      "tests/framework/feature_production_loadout_test.tscn",
+      "tests/framework/feature_compiler_test.tscn",
+      "tests/framework/feature_binding_validation_test.tscn",
+      "tests/framework/feature_registry_structure_test.tscn",
+      "tests/framework/feature_registry_publication_test.tscn",
+      "tests/framework/feature_lifesteal_runtime_test.tscn",
+      "tests/framework/feature_lifesteal_production_test.tscn",
+      "tests/framework/feature_resource_multi_reentry_test.tscn",
+      "tests/framework/feature_capacity_admission_test.tscn",
+      "tests/player_movement_respawn_test.tscn",
+      "tests/death_revival_touch_input_test.tscn",
+      "tests/summon_actor_state_machine_test.tscn",
+      "tests/pricing_authority_test.tscn",
+      "tests/framework/rune_catalog_data_test.tscn",
+      "tests/framework/rune_extension_codec_test.tscn",
+      "tests/framework/rune_transaction_test.tscn",
+      "tests/framework/feature_affix_admission_test.tscn",
+      "tests/framework/rune_source_composition_test.tscn",
+      "tests/framework/rune_source_composition_cold_test.tscn",
+      "tests/framework/item_journal_sequence_test.tscn",
+      "tests/framework/item_journal_legacy_backup_test.tscn",
+      "tests/framework/feature_child_capacity_test.tscn",
+      "tests/framework/feature_death_child_command_test.tscn"
+    ],
+    "timeout": 30,
+    "parent_evidence": "rune_delivery_clean_direct_095540_552855"
+  },
+  {
+    "label": "rune_guard_final_journal_single",
+    "tests": [
+      "tests/framework/item_journal_v2_backup_test.tscn"
+    ],
+    "timeout": 60,
+    "parent_evidence": "rune_delivery_journal_single_100515_109933"
+  },
+  {
+    "label": "rune_guard_final_journal_chain",
+    "tests": [
+      "tests/framework/item_journal_v2_backup_seed_test.tscn",
+      "tests/framework/item_journal_v2_backup_cold_test.tscn",
+      "tests/framework/item_journal_v2_backup_restart_test.tscn"
+    ],
+    "timeout": 30,
+    "parent_evidence": "rune_delivery_journal_chain_100711_955151"
+  },
+  {
+    "label": "rune_guard_final_world",
+    "tests": [
+      "tests/framework/combined_effect_lifecycle_test.tscn",
+      "tests/framework/combined_effect_lifecycle_cold_test.tscn",
+      "tests/framework/periodic_credit_safe_logout_test.tscn",
+      "tests/framework/periodic_credit_safe_logout_cold_test.tscn",
+      "tests/framework/natural_effect_lifecycle_test.tscn",
+      "tests/framework/natural_effect_lifecycle_cold_test.tscn",
+      "tests/framework/feature_resource_natural_test.tscn",
+      "tests/framework/feature_resource_natural_cold_test.tscn"
+    ],
+    "timeout": 60,
+    "parent_evidence": "rune_delivery_final_world_100856_061086"
+  }
+]

@@ -1,0 +1,37 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "two primary data-defined rune records resolve without a new GameData branch or a new instance schema",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "second data-defined rune uses the existing creator, identity schema and actual GameData consumer",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "disabled fixture creation and undeclared data identities stay unavailable",
+      "passed": true
+    }
+  ],
+  "count": 3,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+  "passed": 3,
+  "reported_checks": 3,
+  "reported_failures": 0,
+  "run_id": "15c044f1-d23e-4c1c-a6d2-34923b5300e1",
+  "runtime_environment": {
+    "native_process_id": 17516,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\rune_guard_final_direct_ca595fc6a75948e6b661dd6acbae7e29",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/rune_guard_final_direct_ca595fc6a75948e6b661dd6acbae7e29/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "rune_catalog_data_test",
+  "schema_version": 1,
+  "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+  "status": "PASS"
+}

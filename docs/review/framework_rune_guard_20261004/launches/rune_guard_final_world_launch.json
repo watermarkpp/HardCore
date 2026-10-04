@@ -1,0 +1,23 @@
+{
+  "group": "rune_guard_final_world",
+  "launcher_pid": 22280,
+  "requested_at_utc": "2026-10-04T03:21:58.627797+00:00",
+  "requested_runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\rune_guard_final_world_242b6ffc8f4b408a9de4868dc4174985",
+  "command": [
+    "py",
+    "-3.12",
+    "tools/source176_r3_validation.py",
+    "rune_guard_final_world",
+    "--tests",
+    "tests/framework/combined_effect_lifecycle_test.tscn",
+    "tests/framework/combined_effect_lifecycle_cold_test.tscn",
+    "tests/framework/periodic_credit_safe_logout_test.tscn",
+    "tests/framework/periodic_credit_safe_logout_cold_test.tscn",
+    "tests/framework/natural_effect_lifecycle_test.tscn",
+    "tests/framework/natural_effect_lifecycle_cold_test.tscn",
+    "tests/framework/feature_resource_natural_test.tscn",
+    "tests/framework/feature_resource_natural_cold_test.tscn",
+    "--timeout",
+    "60"
+  ]
+}

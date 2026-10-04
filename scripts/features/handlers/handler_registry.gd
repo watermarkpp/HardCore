@@ -2,6 +2,7 @@ extends RefCounted
 
 const Ignite := preload("res://scripts/features/handlers/ignite_handler.gd")
 const Lifesteal := preload("res://scripts/features/handlers/lifesteal_handler.gd")
+const DeathBurst := preload("res://scripts/features/handlers/death_burst_handler.gd")
 const Graph := preload("res://scripts/features/contracts/plain_graph.gd")
 const IDS := [Ignite.ID,Lifesteal.ID]
 const CONTRACTS := {
@@ -18,6 +19,7 @@ static func commands(fact: Dictionary, binding: Dictionary) -> Array:
 	match binding.definition.handler_id:
 		Ignite.ID: return Ignite.commands(fact,binding)
 		Lifesteal.ID: return Lifesteal.commands(fact,binding)
+		DeathBurst.ID: return DeathBurst.commands(fact,binding)
 	return []
 
 static func persistent_binding_count(bindings: Array) -> int:

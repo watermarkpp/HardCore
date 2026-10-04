@@ -1,0 +1,34 @@
+{
+    "schema_version":  1,
+    "invocation_id":  "07b06484-6339-4031-b346-7293b53044e3",
+    "source_content_sha256":  "8fa4da18e6fae2a4aecbb1142fa22b7dbc13ae82ad40c86b15ffe8d2342bad04",
+    "producers":  {
+                      "feature_child_capacity_test":  {
+                                                          "scene_id":  "feature_child_capacity_test",
+                                                          "run_id":  "ebb3abe4-2e54-4a68-963f-a1ae5411c091",
+                                                          "source_content_sha256":  "8fa4da18e6fae2a4aecbb1142fa22b7dbc13ae82ad40c86b15ffe8d2342bad04",
+                                                          "process_exited":  true,
+                                                          "effective_exit_code":  0,
+                                                          "result":  "PASS",
+                                                          "receipt_sha256":  "eb26e94e9da58d2dd72f1b31ff7bb5199d5f52d22ee608794a3f5022905c2c7a"
+                                                      },
+                      "feature_compiler_test":  {
+                                                    "scene_id":  "feature_compiler_test",
+                                                    "run_id":  "0ae6a636-0340-4ac0-b9e2-a4b15363cc92",
+                                                    "source_content_sha256":  "8fa4da18e6fae2a4aecbb1142fa22b7dbc13ae82ad40c86b15ffe8d2342bad04",
+                                                    "process_exited":  true,
+                                                    "effective_exit_code":  0,
+                                                    "result":  "PASS",
+                                                    "receipt_sha256":  "aafac3e5acaae0051bc37d7df35af0d1709d665698d8f7ef22df31a490c20a4d"
+                                                },
+                      "feature_capacity_admission_test":  {
+                                                              "scene_id":  "feature_capacity_admission_test",
+                                                              "run_id":  "be0b5c31-fea1-45f5-8af5-e0e9a2f81e66",
+                                                              "source_content_sha256":  "8fa4da18e6fae2a4aecbb1142fa22b7dbc13ae82ad40c86b15ffe8d2342bad04",
+                                                              "process_exited":  true,
+                                                              "effective_exit_code":  0,
+                                                              "result":  "PASS",
+                                                              "receipt_sha256":  "458098fcb810e71bada259bf794fd5f63fe1d6a01313dbb398063d24674e5a35"
+                                                          }
+                  }
+}

@@ -8,6 +8,11 @@ const MODULE_REQUIRED := ["schema_version", "module_id", "module_version", "core
 	"requires", "conflicts", "capabilities", "handlers", "resource_dependencies", "cost", "mechanics", "tests"]
 const MODULE_OPTIONAL := ["default_enabled", "scope", "activation_boundary", "content_hash"]
 
+# Complete derived child work is assessed before any action is promised.
+# This pure helper does not itself publish handlers or grant runtime admission.
+static func compile_child_capacity(request: Variant, limits: Variant) -> Dictionary:
+	return preload("res://scripts/features/compilation/child_capacity_proof.gd").compile(request,limits)
+
 # This is a compiler of immutable derived records. Canonical base definitions
 # remain owned by ContentLayers and their existing rules, never by this catalog.
 static func compile(modules: Array, contributions: Array, authority: Dictionary) -> Dictionary:

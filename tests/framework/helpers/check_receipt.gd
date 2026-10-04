@@ -15,6 +15,9 @@ func write_receipt(scene_id: String, reported_checks: int, reported_failures: in
 	valid = valid and reported_checks == records.size() and reported_failures == failed
 	var receipt := {"schema_version": 1, "run_id": nonce, "scene_id": scene_id,
 		"invocation_id": OS.get_environment("HARDCORE_FRAMEWORK_INVOCATION_ID"),
+		"runtime_environment": {"runtime_appdata": OS.get_environment("APPDATA"),
+			"user_data_directory": OS.get_user_data_dir(), "project_root": ProjectSettings.globalize_path("res://"),
+			"native_process_id": OS.get_process_id()},
 		"source_content_sha256": OS.get_environment("HARDCORE_R3_CONTENT_SHA256"),
 		"engine_version": Engine.get_version_info().string, "checks": records,
 		"count": records.size(), "passed": passed, "failed": failed,

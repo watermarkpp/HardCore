@@ -1,0 +1,11 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+数据库载入完成：地图209 怪物156 Boss20 装备175 技能等级132 掉落槽3424 任务9
+RUNE_RESERVED_DESTRUCTION={"inventory_unchanged":true,"reserved_before":true,"result":{"destroyed":0,"message":"物品操作处理中，请稍后再试。","reason":"item_transaction_pending","success":false},"writer_finished":false}
+REMOVE_DESTINATION_TRACE={"case":"hc.runes:empty","destination":1,"inventory_unchanged":true,"result":{"destroyed":0,"message":"物品操作处理中，请稍后再试。","reason":"item_transaction_pending","success":false},"writer_finished":false}
+REMOVE_DESTINATION_TRACE={"case":"hc.runes:append","destination":2,"inventory_unchanged":true,"result":{"destroyed":0,"message":"物品操作处理中，请稍后再试。","reason":"item_transaction_pending","success":false},"writer_finished":false}
+REMOVE_DESTINATION_TRACE={"case":"hc.runes:mixed","destination":1,"inventory_unchanged":true,"result":{"destroyed":0,"message":"物品操作处理中，请稍后再试。","reason":"item_transaction_pending","success":false},"writer_finished":false}
+REMOVE_DESTINATION_TRACE={"case":"hc.socketing:empty","destination":1,"inventory_unchanged":true,"result":{"destroyed":0,"message":"物品操作处理中，请稍后再试。","reason":"item_transaction_pending","success":false},"writer_finished":false}
+REMOVE_DESTINATION_TRACE={"case":"hc.socketing:append","destination":2,"inventory_unchanged":true,"result":{"destroyed":0,"message":"物品操作处理中，请稍后再试。","reason":"item_transaction_pending","success":false},"writer_finished":false}
+REMOVE_DESTINATION_TRACE={"case":"hc.socketing:mixed","destination":1,"inventory_unchanged":true,"result":{"destroyed":0,"message":"物品操作处理中，请稍后再试。","reason":"item_transaction_pending","success":false},"writer_finished":false}
+FRAMEWORK_RUNE_TRANSACTION_PASS checks=119 errors=[]

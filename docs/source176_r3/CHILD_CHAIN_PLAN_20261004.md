@@ -1,0 +1,24 @@
+# 死亡子连锁：原 RFC Task4 的串行接入
+
+原批准来源为 RFC v2 §9—11、§17、§20、§23 和 FRAMEWORK_PUBLICATION_CLOSURE_PLAN Task4；父受测固定提交37612de204c42fe3b4fd6a89137e90f3449bc0c2。沿用第三树、唯一主控及原HP/技能planner/writer，不增加正式掉落、技能收费或平衡。此文件细化已经授权的架构实现，不修改玩法上限。
+
+## 当前生产断点
+
+damage_batch在Enemy现有HP提交后冻结actual_loss和target_survived_commit，当前只接direct；periodic只经CombatRuntime回传HP receipt。EffectRuntime只识别ApplyStatus和ModifyResource，父票据在基础batch消费完后退休。编译器只接受direct的damage_committed。现状不能声称已支持点燃→死亡爆炸→再点燃。
+
+## 接入不变量
+
+1. 内容声明有限的子动作代次和每个可信处理器的最大子动作扇出，编译时验证；运行时执行该声明。未知、无终止条件或零时间自激配置在发布/接受前拒绝。有限验证原语默认关闭，正式参数仍不投放。
+2. 每次查询仍在该子动作实际释放时使用既有空间索引和精确几何，不预取/冻结目标、不新增任意30目标上限。世界合法receiver上界来自既有factory/summon证明；动态出生、换代及历史状态和并发预留分别验证。
+3. 完整成本包含根命中、全部潜在子命中、状态、receipt和异步持有。仅“根动作有票”不能代替后续承诺。容量不足必须在扣资源/冷却/HP前拒绝；不得回滚已经提交HP。
+4. RequestChildAction携带root/parent release及fact身份、明确代次、历史credit和死亡提交时的地图位置值。实际子攻击仍由唯一SkillRuntimeRouter合法端口计划，最终HP由现有CombatRuntime/Enemy提交。纯handler不写HP、不发信号递归进入Root。
+5. 基础释放完成后，受控队列按广度和稳定次序处理子命令；周期致死也冻结事实。保留既有多目标death-pending保护，死亡碰撞仍立即消失，死亡/奖励只提交一次。
+6. 根票据的退休扩展到所有生产者、子消费者、状态和异步引用都终态之后；旧identity不能重新进入。换世界、生命代次失效和重复回调均有反例；不使用TTL/LRU或简单清空。
+
+## 串行实施与证据
+
+先实现纯的容量上界证明并原生证伪：按N个合法receiver、L个绑定、S个持久绑定、B个每事实子动作和G个明确子代次，保守上界为F=N×sum((N×B)^g,g=0..G)、receipt=L×F、state=S×F；child action=B×N×sum((N×B)^g,g=0..G-1)。N=0和B=0必须正确；计算不得对巨大G迭代，也不得整数溢出误接受。容量数字由现有runtime调用方提供，不新增一份全局容量权威。多来源同槽刷新可能让实际成本更低，初版不能拿这种可能性削减承诺。
+
+这项纯证明先作为Compiler的独立派生成本工具，不启用新handler、不给动作票据、也不自称已在Root保证兑现。随后接入可信child描述、唯一planner端口和原生事实；再将完整预留生命周期接入runtime，最后跑点燃/致死/再点燃、真实几何变化、并发历史状态、RNG/原死亡集合、暂停/卸装/换图/换代/重复提交与容量反例。每一步RED→最小实现→GREEN，生产完整接入前不发布半成品玩法。
+
+首项测试须能发现漏算下一代、漏乘独立来源或状态、巨大代次溢出/挂死、非法类型和缺少容量字段。literal期望独立手算；只用测试owned APPDATA和正式wrapper。其后最终同源码回归、固定SHA、原Pro/小可爱双审计；本文件不代表已完成。

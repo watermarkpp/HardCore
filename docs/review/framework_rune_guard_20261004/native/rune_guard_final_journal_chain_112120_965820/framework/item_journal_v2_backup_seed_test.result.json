@@ -1,0 +1,92 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "owned isolated account and production persistence only",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "real startup migration gate",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "explicit default-off module activation",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "2->1: actual profile creation",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "2->1: actual initial save",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "2->1: all real transactions and receipts complete",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "2->1: healthy v2 stream reaches its real frontier",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "130->65: actual profile creation",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "130->65: actual initial save",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "130->65: all real transactions and receipts complete",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "130->65: healthy v2 stream reaches its real frontier",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "2: owned v2 checkpoint and corrupt primary installed",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "130: owned v2 checkpoint and corrupt primary installed",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "complete owned handoff written",
+      "passed": true
+    }
+  ],
+  "count": 14,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "3d042c5d-0a0c-4d95-ab82-6e49629a844c",
+  "passed": 14,
+  "reported_checks": 14,
+  "reported_failures": 0,
+  "run_id": "740c8d42-3b47-4bf4-a8eb-bfb1b60534cd",
+  "runtime_environment": {
+    "native_process_id": 3616,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\rune_guard_final_journal_chain_7504a94013f344a98b7fb1fd33e0856f",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/rune_guard_final_journal_chain_7504a94013f344a98b7fb1fd33e0856f/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "item_journal_v2_backup_seed_test",
+  "schema_version": 1,
+  "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+  "status": "PASS"
+}

@@ -1,0 +1,162 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "a committed first death with an explicit finite chain produces one closed child request",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "child describes the authored actual-loss damage and radius, without submitting HP itself",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "root, parent fact and next generation stay separate and explicit",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "death location, historical credit, old life identity and exact contribution remain owned values",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "later position, profile or configuration mutations cannot rewrite a queued child",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "a real periodic lethal fact remains eligible without posing as direct damage",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "authored terminal generation emits no further child; it is not a hidden queue truncation",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "undeclared or infinite recurrence has no executable request",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "a live definition cannot enlarge the already accepted finite chain",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "nonlethal or invalid committed loss is rejected: actual_loss",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "nonlethal or invalid committed loss is rejected: hp_before",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "nonlethal or invalid committed loss is rejected: requested_damage",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "a surviving target is not a death trigger",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "missing frozen ownership field is rejected: chain_context",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "missing frozen ownership field is rejected: commit_ground_origin",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "missing frozen ownership field is rejected: historical_credit",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "a foreign current release cannot reuse this lineage",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "root skill scope cannot be inferred from a display name or another source",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "a root generation cannot claim an undeclared parent",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "unknown damage classification never defaults to direct",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "nonfinite death geometry is rejected before any planner call",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "JSON-finite origin must also fit the actual engine geometry representation",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "JSON-finite radius cannot overflow the actual engine geometry",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "unknown committed damage channel cannot authorize a magic child",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "unknown config execution fields are rejected",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "rounded zero child damage remains zero rather than inventing a minimum hit",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "pure child preparation leaves the existing global RNG stream unchanged",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "a module lacking a finite contract and complete production port cannot be published by the pure command probe",
+      "passed": true
+    }
+  ],
+  "count": 28,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "aaff3e16-97f0-4f22-8738-aa2cbd17f88c",
+  "passed": 28,
+  "reported_checks": 28,
+  "reported_failures": 0,
+  "run_id": "1e50e0db-8b70-4dd1-a721-c7a2ad7e7c38",
+  "runtime_environment": {
+    "native_process_id": 22572,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\rune_guard_final_direct_ca595fc6a75948e6b661dd6acbae7e29",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/rune_guard_final_direct_ca595fc6a75948e6b661dd6acbae7e29/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "feature_death_child_command_test",
+  "schema_version": 1,
+  "source_content_sha256": "8d6d10f179f364584f0928cb76f16d45b777fe4019b6a8ce1aff7b9821bcd812",
+  "status": "PASS"
+}
