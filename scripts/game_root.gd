@@ -5020,6 +5020,13 @@ func _spawn_enemy(
 			missing_projection_rejection_count += 1
 			_staged_actor_spawn_failure_reason = "missing_spawn_projection"
 			return null
+	var explicit_slot := str(spawn_context.get("spawn_slot_id",spawn_context.get("spawn_group_id","")))
+	if not explicit_slot.is_empty() and str(spawn_context.get("summoner_spawn_slot","")).is_empty() \
+		and _spawn_slot_is_alive(explicit_slot,_zone_generation,true):
+		# The old body owns its base slot until queued retirement. A deferred
+		# death/revival callback cannot reopen it alongside a replacement.
+		_staged_actor_spawn_failure_reason = "occupied_base_spawn_slot"
+		return null
 	_runtime_spawn_serial += 1
 	var context := spawn_context.duplicate(true)
 	var respawn_enabled := bool(context.get("respawn_enabled", true))
@@ -14775,11 +14782,15 @@ func _cancel_respawn_wakeups() -> void:
 		wakeup.time_left = 0.0
 
 
-func _spawn_slot_is_alive(slot_id: String, generation: int) -> bool:
-	for value: Variant in get_tree().get_nodes_in_group("enemies"):
+func _spawn_slot_is_alive(slot_id: String, generation: int, owned_only := false) -> bool:
+	# Fatal HP removes the receiver from `enemies` immediately; its body and
+	# deferred callbacks still belong to this factory until queued retirement.
+	var candidates: Array=get_children() if owned_only else get_tree().get_nodes_in_group("enemies")
+	for value: Variant in candidates:
 		if value is EnemyActor and not value.is_queued_for_deletion():
 			if str(value.get_meta("spawn_slot_id", "")) == slot_id and int(value.get_meta("zone_generation", -1)) == generation:
-				return true
+				if not owned_only or is_ancestor_of(value):
+					return true
 	return false
 
 # HC-MELEE-AI-PACKAGE: lightning legality stays in the canonical pipeline.

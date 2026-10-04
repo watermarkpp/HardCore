@@ -1,0 +1,77 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "production mapped world reaches READY",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "first actual life occupies its stable base factory slot",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "the base slot contributes exactly one legal receiver to the original world proof",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "a still-live base slot cannot materialize a second receiver without another declared allowance",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "duplicate rejection precedes actor allocation, registration and birth serial changes",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "the original receiver and frozen declared world bound remain intact",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "real fatal HP immediately removes collision while the old body still awaits its deferred death",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "a not-yet-retired body cannot share its base slot with a replacement during deferred death or revival",
+      "passed": false
+    },
+    {
+      "id": 9,
+      "label": "queued retirement revokes the old life immediately while a legal replacement uses the same slot",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "replacement does not grow or erase the accepted factory allowance",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "replacement has a distinct actual actor identity",
+      "passed": true
+    }
+  ],
+  "count": 11,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "ffc32a60-b6e0-47b0-a21b-01c8dd335007",
+  "passed": 10,
+  "reported_checks": 11,
+  "reported_failures": 1,
+  "run_id": "769598f5-495b-4cac-ab1b-f9ff1ce152d6",
+  "runtime_environment": {
+    "native_process_id": 25464,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\chain_state_pool_birth_retirement_red_d80ef3ebf407426c893249e6a084a039",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/chain_state_pool_birth_retirement_red_d80ef3ebf407426c893249e6a084a039/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "feature_birth_slot_identity_test",
+  "schema_version": 1,
+  "source_content_sha256": "006dc44f664293ae3b766cc66230e6fceeb00aa8430a5bc64f950b42dc720a3a",
+  "status": "FAIL"
+}

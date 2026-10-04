@@ -1,0 +1,36 @@
+{
+  "parent": "2b4ab20a142fe09117b9b996c2d85bc1d6d742f9",
+  "source_content_sha256": "d94ee4b474239cd21ccdc07080ea713db712cbb69122708b3e3527b164ebe0ba",
+  "delta": [
+    {
+      "path": "scripts/features/runtime/effect_runtime.gd",
+      "before_sha256": "c3b022ab5321edb3972b7475c3ea9d55ad36772d8990daeebc37063eaff9e5e2",
+      "after_sha256": "955ceeb282038836527cc2bce96c3e0e1ab1cfe815ba2a32492417af8267bcc0"
+    },
+    {
+      "path": "scripts/game_root.gd",
+      "before_sha256": "2cae962803e876e302279c960daeb06ec23192e563bcddd6147c6e9a4ab2858f",
+      "after_sha256": "6dca0707d8ad5846143e9b0c934bd3f928063a6a8146bad0ff7930f03b60c0ff"
+    },
+    {
+      "path": "tests/framework/feature_birth_slot_identity_test.gd",
+      "before_sha256": null,
+      "after_sha256": "6a10d314215e76d110f2cbef785bb132fb96e4bc93d3f8c7f92636e2ff3f2076"
+    },
+    {
+      "path": "tests/framework/feature_birth_slot_identity_test.tscn",
+      "before_sha256": null,
+      "after_sha256": "f9250fef2edbd35d16cf85b7336450760e0ae90ae3a63ee0247cdd9147c9b933"
+    },
+    {
+      "path": "tests/framework/periodic_callback_retirement_test.gd",
+      "before_sha256": null,
+      "after_sha256": "1836b519e760527bc7ad5d76231e14bd12b16fc64665eb244d545ee46eb5a6f8"
+    },
+    {
+      "path": "tests/framework/periodic_callback_retirement_test.tscn",
+      "before_sha256": null,
+      "after_sha256": "2eb1cf6dc57e06bc593d372c8e18c8eece41d769ebdcd237504925e64e1c67b9"
+    }
+  ]
+}

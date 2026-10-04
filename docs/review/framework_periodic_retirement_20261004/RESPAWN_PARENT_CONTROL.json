@@ -1,0 +1,25 @@
+{
+  "time_utc": "2026-10-04T07:19:48.524736+00:00",
+  "scope": "Only owned GameRoot source reverted temporarily to exact recorded 2b4 baseline for one isolated policy scene. This is not a full parent checkout/run.",
+  "before_sha256": "6dca0707d8ad5846143e9b0c934bd3f928063a6a8146bad0ff7930f03b60c0ff",
+  "control_sha256": "2cae962803e876e302279c960daeb06ec23192e563bcddd6147c6e9a4ab2858f",
+  "launcher_exit": 1,
+  "runner_summary": {
+    "evidence": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\chain_state_pool_respawn_parent_control_151948_783764",
+    "command": [
+      "powershell",
+      "-NoProfile",
+      "-ExecutionPolicy",
+      "Bypass",
+      "-Command",
+      "& './tools/run_godot_tests.ps1' -TestPaths 'tests/monster_formal_respawn_policy_audit_test.tscn' -TimeoutSeconds 30"
+    ],
+    "timeout_seconds": 30,
+    "exit_code": 1,
+    "source_stable_during_run": true,
+    "passed": 0,
+    "failed": 1,
+    "status": "FAIL"
+  },
+  "restored_exact_current_bytes": true
+}

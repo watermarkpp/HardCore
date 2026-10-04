@@ -1,0 +1,16 @@
+{
+  "request_id": "child-chain-admission-2b4ab20a-20261004",
+  "fixed_sha": "2b4ab20a142fe09117b9b996c2d85bc1d6d742f9",
+  "thread_id": "01a0f143-1bc9-71c0-91f2-5de4ffd0b01f",
+  "host_id": "durable",
+  "read_at_utc": "2026-10-04 07:13:20 UTC",
+  "source_turn_id": "01a105b7-9b01-73ee-ad13-b06983c3587c",
+  "source_status": "failed",
+  "error": {
+    "message": "This content was flagged for possible cybersecurity risk. If this seems wrong, try rephrasing your request. If you’re doing authorized security work that requires more cyber permissive safeguards, apply for Daybreak access via https://platform.openai.com/settings/organization/status-and-access before retrying.",
+    "additionalDetails": null
+  },
+  "audit_status": "FAIL",
+  "full_report_status": "MISSING",
+  "action": "Record the terminal external audit failure once; stop scanning this object and do not retry or resend automatically. Continue Pro pull and independent serial engineering."
+}

@@ -474,6 +474,7 @@ func _tick_one() -> void:
 	if handle.is_empty() or not _states.has(handle):
 		_error("feature_heap_state_mismatch"); return
 	var state: Dictionary = _states[handle]
+	var generation := _delivery_generation
 	var target: Node = state.target.resolve()
 	var combat: Node = _combat.get_ref() as Node
 	if target == null or not is_instance_valid(combat):
@@ -491,9 +492,15 @@ func _tick_one() -> void:
 	_stats.maximum_tick_delivery_lateness_usec = maxi(int(_stats.maximum_tick_delivery_lateness_usec),
 		maxi(0,_clock.simulation_usec()-int(state.next_due)))
 	var result: Dictionary = combat.apply_feature_periodic_damage(target,int(state.raw_per_tick),source,rng,state.command.historical_credit)
+	# The real HP port can synchronously retire this runtime or state. Its
+	# committed result still counts, but the old tick no longer owns scheduling.
+	var current_owner := generation == _delivery_generation and _states.has(handle) and is_same(_states[handle],state)
 	if not bool(result.success):
-		_error(str(result.reason)); _stats.failed += 1; _stop(handle); return
+		_error(str(result.reason)); _stats.failed += 1
+		if current_owner: _stop(handle)
+		return
 	_stats.ticks += 1; _stats.actual_loss += int(result.actual_loss)
+	if not current_owner: return
 	state.ticks += 1; state.next_due += int(state.period)
 	if state.target.resolve() == null:
 		_stats.invalidated += 1; _stop(handle)

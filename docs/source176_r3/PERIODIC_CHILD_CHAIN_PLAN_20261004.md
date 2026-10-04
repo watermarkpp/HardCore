@@ -9,3 +9,6 @@
 周期事实经过原Combat periodic-chain端口与DamageBatch；伤害前已拥有branch票据和累计工作配额，不在HP后申请容量。每次实际tick独立release，保留根skill/generation、实际提交位置、历史credit及确定性周期RNG；禁止周期点燃自激。死亡handler只读已提交事实，子请求继续同Root实际释放查询。
 
 先证明接通与完整容量，不假定所有未知场景已覆盖。目标死亡立即无碰撞；周期致死事实须先捕获，状态终止不能销毁尚未消费的已提交分支；旧root/branch不可重入后才退receipt。来源撤销/玩家死亡不取消until_expired，换世界停止旧能力。最终同源码回归和新SHA双审计后再推进模板/自然性能/APK。
+
+
+2026-10-04 周期回调与出生槽检查点：父2b4 Pro完整报告已实际读取；小可爱该请求平台终止FAIL/报告MISSING，不宣称双通过。正式周期HP回调clear原32检查4FAIL→32PASS；同base slot重复出生原9/2FAIL→9PASS，补死亡离group的身体窗口11/1FAIL→11PASS。最终同d94ee4b474239cd21ccdc07080ea713db712cbb69122708b3e3527b164ebe0ba内容45场景/1420检查，见PERIODIC_RETIREMENT_WORKLOG_20261004.md及docs/review/framework_periodic_retirement_20261004。地图formal respawn audit FAIL和父Root单文件对照同FAIL保留，未改authoring。N*S池/完整periodic child、Task3/4/5/P6/设备/APK均继续，不关闭整体目标。

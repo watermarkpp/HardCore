@@ -1,0 +1,7 @@
+ scripts/features/runtime/effect_runtime.gd         |   9 +-
+ scripts/game_root.gd                               |  17 ++-
+ .../framework/feature_birth_slot_identity_test.gd  |  67 ++++++++++
+ .../feature_birth_slot_identity_test.tscn          |   6 +
+ .../framework/periodic_callback_retirement_test.gd | 138 +++++++++++++++++++++
+ .../periodic_callback_retirement_test.tscn         |   6 +
+ 6 files changed, 239 insertions(+), 4 deletions(-)
