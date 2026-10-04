@@ -22,3 +22,6 @@ damage_batch在Enemy现有HP提交后冻结actual_loss和target_survived_commit�
 这项纯证明先作为Compiler的独立派生成本工具，不启用新handler、不给动作票据、也不自称已在Root保证兑现。随后接入可信child描述、唯一planner端口和原生事实；再将完整预留生命周期接入runtime，最后跑点燃/致死/再点燃、真实几何变化、并发历史状态、RNG/原死亡集合、暂停/卸装/换图/换代/重复提交与容量反例。每一步RED→最小实现→GREEN，生产完整接入前不发布半成品玩法。
 
 首项测试须能发现漏算下一代、漏乘独立来源或状态、巨大代次溢出/挂死、非法类型和缺少容量字段。literal期望独立手算；只用测试owned APPDATA和正式wrapper。其后最终同源码回归、固定SHA、原Pro/小可爱双审计；本文件不代表已完成。
+
+
+2026-10-04 Root子动作续施工：实际同Root规划/查询/HP入口、完整finite immediate链预留、累计工作与串行驻留分离、封口消费分支receipt退休已实施。真实85槽、接受后声明槽换代/晚进入范围、负地图46/2FAIL→46PASS、伪造parent22/4FAIL→合法后续各一次均原生验证。最终同9efaa6ab内容38唯一场景、33receipt1113检查PASS；56原生51PASS/5FAIL保留。详情docs/review/framework_child_execution_20261004及CHILD_EXECUTION_WORKLOG_20261004.md。周期致死→子动作→再点燃、A/B刷新credit与根容量所有权、子资源表现/模板/生成式与自然P6R3/APK仍开放，不关闭Task4整体。

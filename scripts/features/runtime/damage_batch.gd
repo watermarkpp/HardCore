@@ -26,18 +26,21 @@ var _reservation: RefCounted
 var _fact_limit := MAX_FACTS
 var errors: Array[String] = []
 
-static func create(world: RefCounted, release_id: String, skill_id: String, bindings: Array, credit: Dictionary, accepted_usec: int = 0, reservation: RefCounted = null, resources: RefCounted = null, chain: Dictionary = {}, source_class := "direct") -> Dictionary:
+static func create(world: RefCounted, release_id: String, skill_id: String, bindings: Array, credit: Dictionary, accepted_usec: int = 0, reservation: RefCounted = null, resources: RefCounted = null, chain: Dictionary = {}, source_class := "direct", binding_skill_id := "") -> Dictionary:
 	if resources != null and resources.get_script() != preload("res://scripts/features/contracts/feature_resource_lease.gd"):
 		return {"success":false,"reason":"invalid_batch_resources","batch":null}
-	if world == null or world.capture_world().is_empty() or release_id.is_empty() or Ids.resolve(skill_id,"skill").is_empty() \
+	var is_child: bool = skill_id == "hc.child.death_burst.v1" and source_class == "child" and not binding_skill_id.is_empty()
+	if world == null or world.capture_world().is_empty() or release_id.is_empty() or (Ids.resolve(skill_id,"skill").is_empty() and not is_child) \
 		or bindings.size() > 32 or accepted_usec < 0:
 		return {"success":false,"reason":"invalid_damage_batch_identity","batch":null}
-	if not _lineage_valid(chain,release_id,skill_id,source_class):
+	var root_skill: String=binding_skill_id if is_child else skill_id
+	if (not binding_skill_id.is_empty() and not is_child) or Ids.resolve(root_skill,"skill").is_empty() \
+		or not _lineage_valid(chain,release_id,root_skill,source_class):
 		return {"success":false,"reason":"invalid_damage_batch_lineage","batch":null}
 	var captured := Graph.capture({"bindings":bindings,"credit":credit,"chain":chain})
 	if not bool(captured.success):
 		return {"success":false,"reason":"non_plain_damage_batch_configuration","batch":null}
-	if not validate_bindings(skill_id,captured.value.bindings):
+	if not validate_bindings(root_skill,captured.value.bindings):
 		return {"success":false,"reason":"invalid_event_binding","batch":null}
 	if not preload("res://scripts/features/contracts/feature_resource_lease.gd").supports_bindings(resources,captured.value.bindings):
 		return {"success":false,"reason":"invalid_batch_resources","batch":null}

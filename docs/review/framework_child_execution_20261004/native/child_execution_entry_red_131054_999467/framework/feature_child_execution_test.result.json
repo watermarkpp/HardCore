@@ -1,0 +1,27 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "the actual Root has an admitted child execution entry using the existing planner and HP port",
+      "passed": false
+    }
+  ],
+  "count": 1,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "9d3baa12-86e1-472e-a838-81bc6b7137a7",
+  "passed": 0,
+  "reported_checks": 1,
+  "reported_failures": 1,
+  "run_id": "6de9e0e7-1e30-43ed-ba76-0ff15fb99c87",
+  "runtime_environment": {
+    "native_process_id": 5080,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\child_execution_entry_red_c72320bdfe214468b16838c27ab372bb",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_execution_entry_red_c72320bdfe214468b16838c27ab372bb/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "feature_child_execution_test",
+  "schema_version": 1,
+  "source_content_sha256": "68eae81309341bc98a4c61478420f487c45a345cdb6067b9f401dcea5e22c212",
+  "status": "FAIL"
+}

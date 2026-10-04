@@ -1,0 +1,18 @@
+ .../data/features/validation/child_execution.json  |  12 ++
+ .../validation/child_execution_registry.json       |   5 +
+ scripts/features/adapters/feature_authority.gd     |   2 +-
+ .../features/compilation/child_capacity_proof.gd   |  25 +++
+ scripts/features/compilation/feature_compiler.gd   |  14 +-
+ scripts/features/contracts/child_action_lease.gd   |   2 +
+ scripts/features/contracts/effect_reservation.gd   |  26 ++-
+ scripts/features/handlers/handler_registry.gd      |   6 +-
+ scripts/features/handlers/ignite_handler.gd        |   7 +-
+ scripts/features/runtime/damage_batch.gd           |  11 +-
+ scripts/features/runtime/effect_runtime.gd         | 214 +++++++++++++++++++--
+ scripts/game_root.gd                               |  53 ++++-
+ tests/framework/feature_child_capacity_test.gd     |  13 ++
+ tests/framework/feature_child_execution_test.gd    | 121 ++++++++++++
+ tests/framework/feature_child_execution_test.tscn  |   4 +
+ tests/framework/feature_child_planner_test.gd      |  11 ++
+ .../fixtures/child_execution_probe_root.gd         |  25 +++
+ 17 files changed, 513 insertions(+), 38 deletions(-)

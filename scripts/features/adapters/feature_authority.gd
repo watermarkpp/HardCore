@@ -17,7 +17,7 @@ static func build() -> Dictionary:
 	return Graph.capture({"core_api_version":1,
 		"stat_keys":["accuracy","agility","attack_min","attack_max","magic_min","magic_max",
 			"tao_min","tao_max","max_hp","max_mp"], "skill_ids":ids,
-		"capabilities":["stats.contribute","skills.modify","combat.post_hit","effects.periodic","combat.heal","actor.capabilities","items.transact"],
+		"capabilities":["stats.contribute","skills.modify","combat.post_hit","effects.periodic","combat.heal","combat.child_action","actor.capabilities","items.transact"],
 		"handler_ids":Handlers.IDS, "resource_paths":declared.records.keys(),
 		"skill_fields":SKILL_FIELDS, "tag_keys":["hc.numeric","hc.periodic","hc.sight"],
 		"actor_capability_ids":["hc.can_see_stealth","hc.immune.periodic"],

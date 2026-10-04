@@ -1,0 +1,40 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "feature_child_execution_test",
+                        "test_path":  "tests/framework/feature_child_execution_test.tscn",
+                        "wrapper_process_id":  13464,
+                        "wrapper_started_utc":  "2026-10-04T05:20:52.5290063Z",
+                        "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\child_execution_residency_green_e0ce2107d8b54e9aaee4f9cb30d5543d",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-04T05:21:22.5359362Z",
+                        "native_exit_observed_utc":  "2026-10-04T05:21:07.6043246Z",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "a17d9b27-36e7-424a-baf5-f023641b614c",
+                        "framework_receipt_valid":  true,
+                        "result":  "PASS",
+                        "reason":  ""
+                    }
+                ],
+    "total":  1,
+    "invocation_id":  "da97bd53-b8cc-4dc5-87a8-a4395665283e",
+    "runtime_environment":  {
+                                "project_root":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+                                "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\child_execution_residency_green_e0ce2107d8b54e9aaee4f9cb30d5543d",
+                                "runner_process_id":  2196
+                            },
+    "passed":  1,
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "engine_log_errors":  0,
+    "generated_at":  "2026-10-04T13:21:09.0773824+08:00",
+    "failed":  0,
+    "suite":  "adhoc"
+}

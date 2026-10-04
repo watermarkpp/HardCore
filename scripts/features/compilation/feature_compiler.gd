@@ -315,7 +315,9 @@ static func _mechanic_valid(value: Dictionary, module: Dictionary, authority: Di
 				if permission not in module.capabilities: errors.append("missing_trigger_permission:"+permission)
 			if value.event != "damage_committed" or value.skill_id not in authority.skill_ids:
 				errors.append("unknown_trigger_event_or_skill")
-			if value.source_classes != ["direct"] or value.dedup != "per_target_per_release":
+			var chain_sources: bool = value.handler_id == "hc.death_burst.v1" and value.source_classes == ["direct","child"]
+			var child_status_sources: bool = value.handler_id == "hc.ignite.v1" and value.source_classes == ["direct","child"]
+			if (value.source_classes != ["direct"] and not chain_sources and not child_status_sources) or value.dedup != "per_target_per_release":
 				errors.append("unsupported_trigger_chain")
 			if value.lifecycle != contract.lifecycle:
 				errors.append("unsupported_effect_lifecycle")
@@ -324,6 +326,7 @@ static func _mechanic_valid(value: Dictionary, module: Dictionary, authority: Di
 				or float(module.cost.get("states_per_target", 0)) < int(contract.states)):
 				errors.append("undeclared_trigger_capacity")
 			if value.handler_id == "hc.ignite.v1": _validate_ignite_config(value.config, errors)
+			elif value.handler_id == "hc.death_burst.v1": _validate_child_config(value.config,errors)
 			else: _validate_lifesteal_config(value.config,errors)
 		"capability":
 			if "actor.capabilities" not in module.capabilities or value.capability not in authority.get("actor_capability_ids", []):
@@ -347,6 +350,15 @@ static func _validate_operation(input: Variant, kind: String, authority: Diction
 	else:
 		if input.skill_id not in authority.skill_ids or input.field not in authority.get("skill_fields", []):
 			errors.append("unknown_skill_or_field")
+
+static func _validate_child_config(input: Variant, errors: Array[String]) -> void:
+	if not input is Dictionary or not _keys(input,["fraction","radius_gu","maximum_generation"],[],errors,"child"):
+		errors.append("invalid_child_config"); return
+	if not _number(input.fraction) or float(input.fraction)<=0 or float(input.fraction)>1 \
+		or not _number(input.radius_gu) or float(input.radius_gu)<=0 \
+		or not Vector2(float(input.radius_gu),0.0).is_finite() \
+		or not _integer(input.maximum_generation,1,9007199254740991):
+		errors.append("invalid_child_config")
 
 static func _validate_lifesteal_config(input: Variant, errors: Array[String]) -> void:
 	if not input is Dictionary:

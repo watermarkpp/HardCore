@@ -14892,11 +14892,12 @@ func _reserve_feature_bindings(skill_id: String, bindings: Array) -> RefCounted:
 	if _feature_effect_runtime == null:
 		_feature_effect_runtime = preload("res://scripts/features/runtime/effect_runtime.gd").new()
 		if not _feature_effect_runtime.configure(_world_context,_time_domains,_combat_runtime): return null
+		if not _feature_effect_runtime.configure_child_executor(Callable(self,"_execute_feature_child_action")): return null
 	_feature_effect_runtime.require_reservations = true
 	# Player increments this existing serial synchronously after acceptance and
 	# before any release signal. A fresh ticket cannot be attached to an old label.
 	var release_id := "player:%d:action:%d" % [player.get_instance_id(),player._combat_action_sequence+1]
-	return _feature_effect_runtime.reserve_action(SkillDataLoaderScript.entity_skill_id(skill_id),bindings,maximum,release_id)
+	return _feature_effect_runtime.reserve_action(SkillDataLoaderScript.entity_skill_id(skill_id),bindings,maximum,release_id,int(bound.maximum_receivers))
 
 
 func _capture_melee_configuration() -> RefCounted:
@@ -14938,12 +14939,14 @@ func _begin_feature_damage_batch(skill_id: String, release_id: String, configura
 		push_error("Feature producer has no accepted capacity reservation"); return null
 	if _feature_effect_runtime == null:
 		_feature_effect_runtime = preload("res://scripts/features/runtime/effect_runtime.gd").new()
-		_feature_effect_runtime.configure(_world_context,_time_domains,_combat_runtime)
+		if not _feature_effect_runtime.configure(_world_context,_time_domains,_combat_runtime): return null
+		if not _feature_effect_runtime.configure_child_executor(Callable(self,"_execute_feature_child_action")): return null
 	if configuration == null and _feature_effect_runtime.require_reservations:
 		push_error("Unticketed feature producer cannot enter an admitted action runtime"); return null
 	var created := preload("res://scripts/features/runtime/damage_batch.gd").create(_world_context,release_id,entity_id,
 		bindings,{"profile_id":PlayerState.active_profile_id},_time_domains.simulation_usec(),reservation,
-		configuration.resource_lease() if configuration != null else PlayerState._feature_loadout.resource_lease())
+		configuration.resource_lease() if configuration != null else PlayerState._feature_loadout.resource_lease(),
+		reservation.chain_context(release_id) if reservation!=null else {})
 	if not bool(created.success):
 		push_error("Feature damage batch rejected: " + str(created.reason)); return null
 	var batch: RefCounted = created.batch
@@ -14964,6 +14967,50 @@ func _finish_feature_damage_batch(batch: RefCounted) -> void:
 	if not _feature_effect_runtime.submit_batch(batch):
 		push_error("Feature damage batch submission rejected: " + str(_feature_effect_runtime.errors))
 	batch.finish_production()
+
+
+# Only the same admitted runtime owns this entry. It passes an already minted
+# branch ticket; no child may acquire capacity after its parent's HP commit.
+func _execute_feature_child_action(request: Dictionary, ticket: RefCounted, bindings: Array,
+	source: Node2D, resources: RefCounted) -> Dictionary:
+	var child: RefCounted=preload("res://scripts/features/contracts/child_action_lease.gd").from_request(request)
+	if child==null or ticket==null or ticket.get_script()!=preload("res://scripts/features/contracts/effect_reservation.gd") \
+		or _feature_effect_runtime==null or not ticket.belongs_to(_feature_effect_runtime) \
+		or not ticket.authorizes_child_request(request):
+		return {"success":false,"reason":"child_owner_rejected"}
+	var release_id: String=ticket.branch()
+	var lineage: Dictionary=ticket.chain_context(release_id)
+	if lineage.is_empty() or lineage!=child.chain_context(): return {"success":false,"reason":"child_lineage_rejected"}
+	var context: Dictionary={"release_id":release_id,"runtime_map_id":current_map_id,
+		"screen_to_ground_position_px":Callable(self,"_canonical_screen_px_to_ground_gu"),
+		"ground_gu_to_screen_position_px":Callable(self,"_canonical_ground_gu_to_screen_px")}
+	var plan: Dictionary=SkillRuntimeRouterScript.build_canonical_plan(request,context)
+	if not bool(plan.rejection.accepted): return {"success":false,"reason":plan.rejection.reason}
+	var snapshot: Dictionary=plan.canonical_snapshot
+	var cache: Dictionary={}
+	var origin: Vector2=snapshot.center_ground_gu
+	var query: Dictionary=_aoe_spell_query_plan(plan.skill_id,[],plan.gameplay_actions[0],{},snapshot,origin,cache)
+	if not _aoe_plan_is_ready(query) or not _aoe_query_enemy_candidates_aabb(query,query.get("ground_aabb",Rect2()),false):
+		return {"success":false,"reason":"child_query_rejected"}
+	var targets: Array[EnemyActor]=[]; var ids: Array[int]=[]
+	for enemy: EnemyActor in _aoe_candidate_scratch:
+		if enemy.current_hp>0 and not enemy.is_queued_for_deletion() and _aoe_validated_snapshot_intersects(query,enemy):
+			_aoe_insert_by_instance_id(targets,ids,enemy)
+	var made: Dictionary=preload("res://scripts/features/runtime/damage_batch.gd").create(_world_context,
+		release_id,plan.skill_id,bindings,plan.historical_credit,_time_domains.simulation_usec(),ticket,resources,
+		plan.chain_context,"child",str(plan.chain_context.root_skill_id))
+	if not made.success: return {"success":false,"reason":made.reason}
+	var batch: RefCounted=made.batch
+	if not batch.begin_base_scope(): batch.finish_production(); return {"success":false,"reason":"child_scope_rejected"}
+	var rng:=RandomNumberGenerator.new(); rng.seed=int(request.seed)
+	var succeeded:=true
+	for enemy: EnemyActor in targets:
+		if not is_instance_valid(enemy) or enemy.current_hp<=0 or enemy.is_queued_for_deletion(): continue
+		var hit: Dictionary=_combat_runtime.apply_feature_child_damage(enemy,int(plan.gameplay_actions[0].raw_power),
+			source,rng,plan.historical_credit,batch)
+		if not hit.success: succeeded=false
+	_finish_feature_damage_batch(batch)
+	return {"success":succeeded and batch.errors.is_empty(),"reason":"" if succeeded else "child_commit_rejected"}
 
 
 func _ordinary_attack_owner_matches(

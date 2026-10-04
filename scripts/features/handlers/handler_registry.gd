@@ -4,12 +4,14 @@ const Ignite := preload("res://scripts/features/handlers/ignite_handler.gd")
 const Lifesteal := preload("res://scripts/features/handlers/lifesteal_handler.gd")
 const DeathBurst := preload("res://scripts/features/handlers/death_burst_handler.gd")
 const Graph := preload("res://scripts/features/contracts/plain_graph.gd")
-const IDS := [Ignite.ID,Lifesteal.ID]
+const IDS := [Ignite.ID,Lifesteal.ID,DeathBurst.ID]
 const CONTRACTS := {
 	"hc.ignite.v1":{"capabilities":["combat.post_hit","effects.periodic"],"commands":1,"states":1,
 		"lifecycle":"until_expired","effect_id":"hc.effect.ignite.v1","cue":true},
 	"hc.lifesteal.v1":{"capabilities":["combat.post_hit","combat.heal"],"commands":1,"states":0,
-		"lifecycle":"immediate","effect_id":"","cue":false}
+		"lifecycle":"immediate","effect_id":"","cue":false},
+	"hc.death_burst.v1":{"capabilities":["combat.post_hit","combat.child_action"],"commands":1,"states":0,
+		"lifecycle":"finite_chain","effect_id":"","cue":false}
 }
 
 static func contract(id: String) -> Dictionary:

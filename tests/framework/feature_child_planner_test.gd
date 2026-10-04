@@ -126,6 +126,17 @@ func _run() -> void:
 	_check(not router.create_child_request(unrelated,world,"child:bad").success,"first child parent must match root")
 	unrelated=command.duplicate(true); unrelated.parent_fact_id="unrelated:hp:0"
 	_check(not router.create_child_request(unrelated,world,"child:bad").success,"parent fact must belong to the declared release")
+	var mapped_id:=current_map_id
+	current_map_id=-1
+	var unmapped: Dictionary=router.create_child_request(_command(world),world,"child:unmapped")
+	var unmapped_plan: Dictionary={}
+	if unmapped.success: unmapped_plan=Router.build_canonical_plan(unmapped.request,_context("child:unmapped"))
+	var unmapped_accepted: bool=not unmapped_plan.is_empty() and bool(unmapped_plan.rejection.accepted)
+	_check(not unmapped_accepted,"child cannot enter the old unbound-map compatibility branch as an accepted plan")
+	_check(not unmapped_accepted or bool(Snapshot.validate_for_consumer(unmapped_plan.canonical_snapshot,
+		{"expected_runtime_map_id":-1,"ground_position_gu_to_screen_position_px":_to_screen},Snapshot.VALIDATION_STRICT_V2).valid),
+		"every accepted child snapshot remains STRICT_V2 even when the owner's map is unbound")
+	current_map_id=mapped_id
 	_zone_generation+=1
 	_check(not Router.build_canonical_plan(request,_context("child:1")).rejection.accepted,
 		"world generation change invalidates an already-owned child before it can be planned")

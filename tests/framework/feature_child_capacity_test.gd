@@ -82,6 +82,19 @@ func _run() -> void:
 	_check(result.success,"an exact capacity boundary admits the complete chain")
 	result=_compile(_request(3,1,1,2,1),{"pending_facts":11,"active_states":12,"receipts":24})
 	_check(not result.success and result.reason=="child_fact_capacity","one missing fact slot rejects the whole promise")
+	var serial:=preload("res://scripts/features/compilation/child_capacity_proof.gd")
+	result=serial.compile_serial_residency(_request(85,1,2,1,0),_limits())
+	_check(result.success and result.cost.total_facts==621435 and result.cost.total_receipts==621435 \
+		and result.cost.facts==170 and result.cost.receipts==170 and result.cost.child_actions==7310,
+		"the real 85-slot world retains all 621435 potential facts but serial storage and closed-branch retirement reserve 170 slots")
+	result=serial.compile_serial_residency(_request(90,1,2,1,0),{"pending_facts":8190,"active_states":0,"receipts":180})
+	_check(result.success and result.cost.child_actions==8190,"exact resident frontier boundary retains all 90+8100 child actions")
+	result=serial.compile_serial_residency(_request(90,1,2,1,0),{"pending_facts":8189,"active_states":0,"receipts":180})
+	_check(not result.success and result.reason=="child_fact_capacity","one missing command-frontier slot still rejects before commitment")
+	result=serial.compile_serial_residency(_request(85,1,2,2,1),_limits())
+	_check(not result.success and result.reason=="child_state_capacity","serial fact storage does not reduce persistent state lifetime promises")
+	result=serial.compile_serial_residency(_request(1,1,1000000000,1,0),_limits())
+	_check(not result.success,"large finite frontier is rejected in logarithmic work rather than a billion iterations")
 	_finish()
 
 func _finish() -> void:

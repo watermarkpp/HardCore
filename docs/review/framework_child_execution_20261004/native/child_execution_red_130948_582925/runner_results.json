@@ -1,0 +1,40 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "feature_child_execution_test",
+                        "test_path":  "tests/framework/feature_child_execution_test.tscn",
+                        "wrapper_process_id":  21816,
+                        "wrapper_started_utc":  "2026-10-04T05:09:51.0826035Z",
+                        "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\child_execution_red_e5776c611cbd4819a53a0616b11c2ecc",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  false,
+                        "process_exited":  false,
+                        "wrapper_exit_code":  -1,
+                        "child_process_exit_state":  "forced_termination",
+                        "execution_deadline_utc":  "2026-10-04T05:10:21.0966520Z",
+                        "native_exit_observed_utc":  null,
+                        "effective_exit_code":  -1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  2,
+                        "engine_log_failure_count":  2,
+                        "framework_run_id":  "6ffd44b3-0eb4-4bdc-b647-33f856b08fef",
+                        "framework_receipt_valid":  false,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2;framework_receipt_missing"
+                    }
+                ],
+    "total":  1,
+    "invocation_id":  "3ad2f17f-cee1-4053-b808-dea67787b917",
+    "runtime_environment":  {
+                                "project_root":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+                                "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\child_execution_red_e5776c611cbd4819a53a0616b11c2ecc",
+                                "runner_process_id":  23360
+                            },
+    "passed":  0,
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "engine_log_errors":  2,
+    "generated_at":  "2026-10-04T13:09:54.1717307+08:00",
+    "failed":  1,
+    "suite":  "adhoc"
+}

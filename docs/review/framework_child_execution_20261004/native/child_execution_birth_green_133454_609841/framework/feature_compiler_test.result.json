@@ -1,0 +1,202 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "valid numeric module compiles",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "both exact sources contribute",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "tag references count by source",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "nested bundle and source handles are frozen",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "caller mutations cannot alter an accepted bundle",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "revoke one source preserves the other",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "duplicate stable source handle fails explicitly",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "unknown canonical stat is rejected",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "unknown operation is rejected",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "unknown manifest field is rejected",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "missing dependency is rejected",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "dependency cycle is rejected",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "ungranted capability is rejected",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "declared active-combination capacity is bounded",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "null mechanic fails rather than disappearing",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "non-dictionary cost fails closed",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "null contribution fails closed",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "unknown operation field fails",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "declared conflicting catalog is rejected",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "unknown authoritative tag fails",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "non-hex declared content hash fails",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "wrong declared content hash fails",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "canonical declared content hash verifies",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "optional authority must be a string allowlist",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "unknown authority fields fail",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "public loadout rejects a forged selected definition",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "selected entry identity must equal the contribution ID",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "selected entry cannot inject a negative cost",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "Node cannot enter immutable definition graph",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "cyclic graph is rejected before duplication",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "atomic catalog publishes valid candidate",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "failed catalog candidate leaves exact previous catalog and bundle active",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "failed source compile keeps prior immutable bundle and published revision",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "10000 inactive definitions compile",
+      "passed": true
+    },
+    {
+      "id": 35,
+      "label": "active bundle contains exact source contributions rather than whole catalog",
+      "passed": true
+    },
+    {
+      "id": 36,
+      "label": "inactive definitions have no event subscriptions",
+      "passed": true
+    }
+  ],
+  "count": 36,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "a26bcf25-1031-4c26-8a35-d3cc4ab523aa",
+  "passed": 36,
+  "reported_checks": 36,
+  "reported_failures": 0,
+  "run_id": "d223bf66-1ba4-40ab-ac5f-512725bb2543",
+  "runtime_environment": {
+    "native_process_id": 8648,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\child_execution_birth_green_8bba5f2174c64c33ab8fd7f2d9e05bee",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_execution_birth_green_8bba5f2174c64c33ab8fd7f2d9e05bee/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "feature_compiler_test",
+  "schema_version": 1,
+  "source_content_sha256": "e6b45793b828e18bffc254cc16b314556949a768d7a8d4c84926b445dc6139fa",
+  "status": "PASS"
+}

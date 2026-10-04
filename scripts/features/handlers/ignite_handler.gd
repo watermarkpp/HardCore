@@ -8,7 +8,12 @@ const EFFECT_ID := "hc.effect.ignite.v1"
 # global random stream, lifecycle, timer or source registration.
 static func commands(fact: Dictionary, binding: Dictionary) -> Array:
 	var definition: Dictionary = binding.get("definition", {})
-	if definition.get("handler_id") != ID or definition.get("skill_id") != fact.get("skill_id") \
+	var input_skill: Variant=fact.get("skill_id")
+	if fact.get("source_class")=="child" and input_skill=="hc.child.death_burst.v1" \
+		and fact.get("chain_context") is Dictionary \
+		and fact.chain_context.get("contract_id")=="hardcore.combat.chain_context.v1":
+		input_skill=fact.chain_context.get("root_skill_id")
+	if definition.get("handler_id") != ID or definition.get("skill_id") != input_skill \
 		or fact.get("source_class") not in definition.get("source_classes", []) \
 		or not bool(fact.get("target_survived_commit",false)) or int(fact.get("actual_loss",0)) <= 0:
 		return []

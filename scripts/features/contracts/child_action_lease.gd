@@ -24,6 +24,8 @@ static func create(command: Dictionary, world: RefCounted, release_id: String) -
 	var rejected := {"success":false,"reason":"invalid_child_request","request":{}}
 	if world == null or world.get_script()!=preload("res://scripts/layers/runtime/execution/world_context.gd") \
 		or release_id.is_empty() or not _keys(command,COMMAND_FIELDS): return rejected
+	var bound_world: Dictionary=world.capture_world()
+	if not bound_world.get("runtime_map_id") is int or int(bound_world.runtime_map_id)<0: return rejected
 	var row := _definition_for(command.get("action_id"))
 	if row.is_empty() or command.op!="RequestChildAction" or command.handler_id!=row.handler_id \
 		or command.damage_basis!="actual_hp_loss": return rejected

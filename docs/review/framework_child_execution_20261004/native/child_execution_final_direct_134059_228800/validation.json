@@ -1,0 +1,16 @@
+{
+  "command": [
+    "powershell",
+    "-NoProfile",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_chain_commit_test.tscn','tests/framework/damage_commit_fact_test.tscn','tests/framework/feature_death_child_command_test.tscn','tests/framework/feature_child_capacity_test.tscn','tests/framework/feature_binding_validation_test.tscn','tests/framework/feature_compiler_test.tscn','tests/framework/feature_capacity_admission_test.tscn','tests/framework/feature_world_capacity_bound_test.tscn','tests/framework/feature_receipt_retirement_test.tscn','tests/framework/feature_fire_effect_production_test.tscn','tests/framework/feature_lifesteal_production_test.tscn','tests/framework/periodic_effect_runtime_test.tscn','tests/framework/periodic_effect_boundaries_test.tscn','tests/framework/periodic_effect_death_production_test.tscn','tests/framework/periodic_delivery_lateness_test.tscn','tests/framework/feature_queue_retention_test.tscn','tests/framework/feature_source_composition_test.tscn','tests/framework/feature_source_composition_cold_test.tscn','tests/framework/rune_source_composition_test.tscn','tests/framework/rune_source_composition_cold_test.tscn','tests/framework/feature_child_planner_test.tscn','tests/mapped_skill_plan_missing_projection_rejected_test.tscn','tests/canonical_snapshot_identity_production_test.tscn','tests/canonical_snapshot_propagation_test.tscn','tests/fire_wall_cap_policy_canonical_plan_test.tscn','tests/caster_runtime_canonical_plan_adapter_test.tscn','tests/framework/feature_child_execution_test.tscn','tests/framework/feature_producing_death_reentry_test.tscn','tests/framework/feature_resource_accepted_lifetime_test.tscn','tests/framework/feature_lifesteal_runtime_test.tscn' -TimeoutSeconds 30"
+  ],
+  "timeout_seconds": 30,
+  "exit_code": 0,
+  "source_stable_during_run": true,
+  "passed": 30,
+  "failed": 0,
+  "status": "PASS"
+}

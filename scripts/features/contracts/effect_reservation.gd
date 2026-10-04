@@ -6,15 +6,21 @@ var _owner: WeakRef
 var _sequence := 0
 var _closed := false
 var _batch_open := false
+var _branch := ""
 
 static func create(owner: RefCounted, sequence: int) -> RefCounted:
 	var result := new(); result._owner = weakref(owner); result._sequence = sequence
 	return result
 
+static func create_child(owner: RefCounted, sequence: int, release_id: String) -> RefCounted:
+	var result: RefCounted=create(owner,sequence)
+	result._branch=release_id
+	return result
+
 func claim(world: Dictionary, release_id: String, skill_id: String, bindings: Array) -> Dictionary:
 	var owner: RefCounted = _owner.get_ref() as RefCounted if _owner != null else null
 	if _closed or owner == null: return {"success":false}
-	var result: Dictionary = owner.call("_claim_reservation",_sequence,world,release_id,skill_id,bindings)
+	var result: Dictionary = owner.call("_claim_reservation",_sequence,world,release_id,skill_id,bindings,_branch,get_instance_id())
 	if bool(result.get("success", false)): _batch_open = true
 	return result
 
@@ -26,12 +32,22 @@ func can_begin_release(release_id: String) -> bool:
 	return not _closed and owner != null and owner.call("_reservation_release_is_valid",_sequence,release_id)
 
 func sequence() -> int: return _sequence
+func branch() -> String: return _branch
+
+func authorizes_child_request(request: Dictionary) -> bool:
+	var owner: RefCounted=_owner.get_ref() as RefCounted if _owner!=null else null
+	return not _closed and not _branch.is_empty() and owner!=null \
+		and bool(owner.call("_child_request_authorized",_sequence,_branch,get_instance_id(),request))
+
+func chain_context(release_id: String) -> Dictionary:
+	var owner: RefCounted=_owner.get_ref() as RefCounted if _owner!=null else null
+	return owner.call("_reservation_chain_context",_sequence,release_id,_branch) if owner!=null else {}
 
 func close() -> void:
 	if _closed: return
 	_closed = true
 	var owner: RefCounted = _owner.get_ref() as RefCounted if _owner != null else null
-	if owner != null: owner.call("_close_reservation_producer",_sequence)
+	if owner != null and _branch.is_empty(): owner.call("_close_reservation_producer",_sequence)
 
 func finish_batch() -> void:
 	# The successful claim handed synchronous production to DamageBatch.
@@ -40,7 +56,7 @@ func finish_batch() -> void:
 	if not _batch_open: return
 	_batch_open = false
 	var owner: RefCounted = _owner.get_ref() as RefCounted if _owner != null else null
-	if owner != null: owner.call("_close_reservation_batch", _sequence)
+	if owner != null: owner.call("_close_reservation_batch", _sequence,_branch)
 
 func _notification(what: int) -> void:
 	# A zero-refcount GDScript instance cannot dispatch another method on self.
@@ -48,5 +64,5 @@ func _notification(what: int) -> void:
 		_closed = true
 		var owner: RefCounted = _owner.get_ref() as RefCounted if _owner != null else null
 		if owner != null:
-			owner.call("_close_reservation_producer",_sequence)
-			if _batch_open: owner.call("_close_reservation_batch", _sequence)
+			if _branch.is_empty(): owner.call("_close_reservation_producer",_sequence)
+			if _batch_open: owner.call("_close_reservation_batch", _sequence,_branch)

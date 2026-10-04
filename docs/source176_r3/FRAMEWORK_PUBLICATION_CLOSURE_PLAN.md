@@ -69,3 +69,6 @@ Task 3 诊断反例 feature_resource_publication_diagnostic_red_002004_334986：
 2026-10-04 子链提交基础：父e22两份完整报告已读取并保存，双拉取PAUSED。有限身份/正式投影/提交前拒绝与提交后不可变事实经真实Enemy/Combat端口原生验证，原周期公共签名保持；四个原生失败原样保留。最终同3a10de2c4c889a74b642a865e1430bcee595bf5e59fa714eb513d082c6439322内容28场景/28receipt/885检查PASS，57尝试53PASS/4FAIL，两组owned APPDATA逐份关联。纯根技能身份31检查补证，不要求后代技能等于根；handler仍不可发布。Root子planner、整链动态/逐目标容量、全生产者退休、防自激/生成组合及Task3/5/P6/APK仍未完成，继续CHILD_CHAIN_PLAN；证据见docs/review/framework_child_commit_20261004。
 
 2026-10-04 子动作正式规划：父5b两份完整报告已读取保存。注册子输入经过原唯一planner/STRICT_V2，44项专项通过；误direct入口68/8FAIL→68PASS，并补Combat错误投影不丢资格。最终同bad34a53内容34唯一场景/29完整receipt/937检查PASS，56原生尝试50PASS/6FAIL原样保留。一次canonical READY失败归因未明，两文件旧字节对照和新源码重试通过不改原FAIL。Root真实子执行、整链动态及逐目标容量、全生产者退休、防自激/生成组合、Task3/5/P6/APK仍未完成，继续CHILD_CHAIN_PLAN。证据见docs/review/framework_child_planner_20261004。
+
+
+2026-10-04 Root子动作续施工：实际同Root规划/查询/HP入口、完整finite immediate链预留、累计工作与串行驻留分离、封口消费分支receipt退休已实施。真实85槽、接受后声明槽换代/晚进入范围、负地图46/2FAIL→46PASS、伪造parent22/4FAIL→合法后续各一次均原生验证。最终同9efaa6ab内容38唯一场景、33receipt1113检查PASS；56原生51PASS/5FAIL保留。详情docs/review/framework_child_execution_20261004及CHILD_EXECUTION_WORKLOG_20261004.md。周期致死→子动作→再点燃、A/B刷新credit与根容量所有权、子资源表现/模板/生成式与自然P6R3/APK仍开放，不关闭Task4整体。

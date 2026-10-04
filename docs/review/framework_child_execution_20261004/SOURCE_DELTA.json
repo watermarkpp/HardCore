@@ -1,0 +1,91 @@
+{
+  "parent": "171bffbb69aa7d59b7f0ab30238e8032d67a6ad7",
+  "source_content_sha256": "9efaa6abf58436350b65354856476d635059e6d28d26502dba2b92f3ecb5f404",
+  "delta": [
+    {
+      "path": "scripts/features/adapters/feature_authority.gd",
+      "before_sha256": "3438b1ff9b8c915a3b7fb7a8753fc60b937006653d2ebaad3e573874cfc7b168",
+      "after_sha256": "6a58d2a713cf5c8cd18c3b5a8c427ae838e4596aba303fac5395ea01d00dc4b1"
+    },
+    {
+      "path": "scripts/features/compilation/child_capacity_proof.gd",
+      "before_sha256": "d36eade0f01eff9b45bba86283732c564fd89e2206782f391f131458bae3981e",
+      "after_sha256": "9e577867b51ff7e18664dc53bb962e76f4085c144b8ca33fcab10d790f2730e5"
+    },
+    {
+      "path": "scripts/features/compilation/feature_compiler.gd",
+      "before_sha256": "452667030968a22b26e6219488d76cb9c57a0648820a28db352aecd3653b24bc",
+      "after_sha256": "29791c9a603a5fa9c5cba1ed6b5712a6274e388cf0fc563d5f67eac5fdddacce"
+    },
+    {
+      "path": "scripts/features/contracts/child_action_lease.gd",
+      "before_sha256": "5677b1e9f01f94db0164093f19cb2e55650e689bed38c23870552607cbbe01ac",
+      "after_sha256": "9c17dfca49f7a19ba0cd758d4ac0c2f74d51914bb874817f8a6ecb9c8b661449"
+    },
+    {
+      "path": "scripts/features/contracts/effect_reservation.gd",
+      "before_sha256": "62e724a990a974a6afc87ab23eb14667c9c8b8ac47c95400c48ef63095612a5f",
+      "after_sha256": "480970391a310439256bbaf38c9f15e526a9b350b042d8c6dbdc7e46f67c03bb"
+    },
+    {
+      "path": "scripts/features/handlers/handler_registry.gd",
+      "before_sha256": "11cbda8b962bd5ec9a53b661eda523961417dc8880f93a970826bb898c0db422",
+      "after_sha256": "2a88235a1ae6dd89035d60a22d82c00b94e28a569d955dc88997641ccc4ea67f"
+    },
+    {
+      "path": "scripts/features/handlers/ignite_handler.gd",
+      "before_sha256": "7a3abf78d19272db9bbeb1ba05fc6783a82e00073ef5c6dd84b35c43c74ee2db",
+      "after_sha256": "bfdaac80986404b3fe3adbf8d2cf01a1c9bbc4cfc61a8633ca3fd56d6807167d"
+    },
+    {
+      "path": "scripts/features/runtime/damage_batch.gd",
+      "before_sha256": "45ede49caea6f671cec0cc5e87bb38a8b4765a6fd9bf0391893445afc741084c",
+      "after_sha256": "ca9eca5a84db7862265ebec7b35ab0cc30cdadb485c89b292a70af7cf1735b9d"
+    },
+    {
+      "path": "scripts/features/runtime/effect_runtime.gd",
+      "before_sha256": "c9191504b9f20b74242d3ee5e9e3a3cff2e15188bc5d3ac1efacc38ae9d25bfa",
+      "after_sha256": "6f6f1810cd87f1e687bb04ceca951433f005b0accc432cc7184e6b99a329ced5"
+    },
+    {
+      "path": "scripts/game_root.gd",
+      "before_sha256": "db45679f158bec3ef4563b6e91dc9fb21b97dfd1119b43773135738c48302709",
+      "after_sha256": "96dcd0f1d3b7908316450700f4b95df686471e891d38bc930be77cb4f6abc948"
+    },
+    {
+      "path": "tests/framework/feature_child_capacity_test.gd",
+      "before_sha256": "52aae7de4d090b86c4a3a60cfc8583376734a431559dc0e94169c3833bdfac83",
+      "after_sha256": "de5e27fe6d93095d45907b687555b6a057749ef81e1a8f4e01c56e5245c52da0"
+    },
+    {
+      "path": "tests/framework/feature_child_execution_test.gd",
+      "before_sha256": null,
+      "after_sha256": "ae6d943798feba71957c397a6983fe84a30b9f14d333238ea3bbec8556986e34"
+    },
+    {
+      "path": "tests/framework/feature_child_execution_test.tscn",
+      "before_sha256": null,
+      "after_sha256": "e68258fc15839451652f6e2eea86d1f3f12772e60c850698dc6dddbc7fbc86c3"
+    },
+    {
+      "path": "tests/framework/feature_child_planner_test.gd",
+      "before_sha256": "31288d57b574ba28db58596275260cbef4f04d10c876b3bff75a614de2ae76ab",
+      "after_sha256": "d598dc90ec35d9ac139ee85952178681cdcdf59e4db95b8c95f77f32afdd52bc"
+    },
+    {
+      "path": "tests/framework/fixtures/child_execution_probe_root.gd",
+      "before_sha256": null,
+      "after_sha256": "f267da783b81265a5bf20d1c9178a6fc08a446d348a373ed408e771fee3dcafa"
+    },
+    {
+      "path": "assets/data/features/validation/child_execution.json",
+      "before_sha256": null,
+      "after_sha256": "802a2abea2e62fd5661426f084ed6a335a1817e1b3705a6c84b47dc3b6b5900e"
+    },
+    {
+      "path": "assets/data/features/validation/child_execution_registry.json",
+      "before_sha256": null,
+      "after_sha256": "31e7907d97dcfd7aa791efbf3845688e93e6d7e36b9f5c42297a69ea51c2e395"
+    }
+  ]
+}

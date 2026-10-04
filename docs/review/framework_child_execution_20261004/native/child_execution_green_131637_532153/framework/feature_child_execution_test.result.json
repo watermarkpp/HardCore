@@ -1,0 +1,72 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "the actual Root has an admitted child execution entry using the existing planner and HP port",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "registered wizard identity",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "finite default-off chain uses the formal registry",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "production mapped world reaches READY",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "real factory, spatial index and mapped first receiver",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "production later-wave receiver 0",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "production later-wave receiver 1",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "real READY publication enables only this bounded test primitive",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "actual source freezes one death handler",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "Player accepts the entire finite chain before MP/cooldown/HP",
+      "passed": false
+    }
+  ],
+  "count": 10,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "2676edca-4c52-4a92-a79a-44164fd5fc55",
+  "passed": 9,
+  "reported_checks": 10,
+  "reported_failures": 1,
+  "run_id": "a7aeb06d-485e-4750-9a07-cdc74f0a2bba",
+  "runtime_environment": {
+    "native_process_id": 23212,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\child_execution_green_a5ec0cea5b8449cc85f0100e304c98dc",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_execution_green_a5ec0cea5b8449cc85f0100e304c98dc/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "feature_child_execution_test",
+  "schema_version": 1,
+  "source_content_sha256": "f6f5cb37d01515030792c26564e03e0e449a2f9b87a5d00d3aaad81ed03402d7",
+  "status": "FAIL"
+}

@@ -56,6 +56,31 @@ static func _power_sum(factor: int, terms: int, ceiling: int) -> Dictionary:
 		block_power=_multiply(block_power,block_power,ceiling)
 	return {"power":power,"sum":sum}
 
+# The serial runtime consumes all current facts before starting another child
+# and retires each closed branch's dedup receipts. Total work is still bounded
+# by the original geometric proof; it is not all resident at the same time.
+# States and the complete breadth-first command frontier remain conservatively
+# reserved. No receiver set or gameplay depth is truncated by this distinction.
+static func compile_serial_residency(request: Variant, limits: Variant) -> Dictionary:
+	var total:=compile(request,{"pending_facts":MAX_EXACT_INTEGER-1,
+		"active_states":MAX_EXACT_INTEGER-1,"receipts":MAX_EXACT_INTEGER-1})
+	if not total.success: return total
+	if not limits is Dictionary or not _keys(limits,["pending_facts","active_states","receipts"]):
+		return _failure("invalid_child_capacity_limits")
+	for key: String in limits:
+		if not _integer(limits[key]): return _failure("invalid_child_capacity_limits")
+	var n:=int(request.maximum_receivers)
+	var resident_facts:=n*2 if int(request.child_bindings)>0 and int(request.maximum_generation)>0 else n
+	var resident_receipts:=_multiply(resident_facts,int(request.binding_count),MAX_EXACT_INTEGER)
+	if resident_facts>int(limits.pending_facts) or int(total.cost.child_actions)>int(limits.pending_facts):
+		return _failure("child_fact_capacity")
+	if int(total.cost.states)>int(limits.active_states): return _failure("child_state_capacity")
+	if resident_receipts>int(limits.receipts): return _failure("child_receipt_capacity")
+	var cost:=Graph.capture({"facts":resident_facts,"states":int(total.cost.states),"receipts":resident_receipts,
+		"child_actions":int(total.cost.child_actions),"maximum_generation":int(total.cost.maximum_generation),
+		"total_facts":int(total.cost.facts),"total_receipts":int(total.cost.receipts)},24,2)
+	return {"success":true,"reason":"","cost":cost.value}
+
 static func _multiply(a: int, b: int, ceiling: int) -> int:
 	if a == 0 or b == 0: return 0
 	@warning_ignore("integer_division")

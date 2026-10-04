@@ -1,0 +1,12 @@
+{
+  "schema_version":1,"module_id":"hc.validation.child_execution","module_version":1,"core_api_version":1,
+  "requires":[],"conflicts":[],"capabilities":["combat.post_hit","combat.child_action"],
+  "handlers":["hc.death_burst.v1"],"resource_dependencies":[],
+  "cost":{"commands_per_event":1,"states_per_target":0},"default_enabled":false,
+  "scope":"world","activation_boundary":"world_ready",
+  "mechanics":[{"mechanic_id":"hc.validation.child_execution.ice_storm","kind":"trigger","tags":[],
+    "event":"damage_committed","skill_id":"hc.skill.wizard.ice_storm","handler_id":"hc.death_burst.v1",
+    "source_classes":["direct","child"],"dedup":"per_target_per_release","lifecycle":"finite_chain",
+    "config":{"fraction":0.5,"radius_gu":3.0,"maximum_generation":2}}],
+  "tests":["tests/framework/feature_child_execution_test.tscn"]
+}
