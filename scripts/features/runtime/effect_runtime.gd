@@ -125,6 +125,7 @@ func reserve_action(skill_id: String, bindings: Array, maximum_receivers: int, e
 			"release_id":expected_release_id,"parent_release_id":"","root_skill_id":skill_id,
 			"generation":0,"maximum_generation":chain.value.maximum_generation}}}
 		value.state_owners=0; value.child_space=int(chain.value.cost.child_actions)
+		value.state_loan_handles={}
 		value.total_fact_space=int(chain.value.cost.total_facts)
 		_reserved_children+=value.child_space
 	_reserved_facts += fact_cost; _reserved_states += state_cost; _reserved_receipts += cost
@@ -143,7 +144,7 @@ func _chain_cost(bindings: Array, maximum: int) -> Dictionary:
 	if count==0: return {"success":true,"value":{}}
 	if maximum<0 or maximum>preload("res://scripts/features/runtime/damage_batch.gd").MAX_FACTS:
 		return {"success":false,"reason":"feature_child_receiver_bound_invalid"}
-	var proof:=preload("res://scripts/features/compilation/child_capacity_proof.gd").compile_serial_residency({
+	var proof:=preload("res://scripts/features/compilation/child_capacity_proof.gd").compile_state_loan_residency({
 		"maximum_receivers":maximum,"child_bindings":count,"maximum_generation":generations,
 		"binding_count":bindings.size(),"persistent_bindings":Handlers.persistent_binding_count(bindings)},
 		{"pending_facts":MAX_PENDING_FACTS,"active_states":MAX_ACTIVE_STATES,"receipts":MAX_RECEIPTS})
@@ -449,17 +450,26 @@ func _apply_command(command: Dictionary, entry: Dictionary) -> void:
 		_stats.refreshed += 1
 		_presentation.refresh(handle,int(state.raw_per_tick))
 		return
+	var admission_id := int(entry.get("admission_id",0))
+	if admission_id>0 and _reservations.has(admission_id) and not _reservations[admission_id].chain.is_empty() \
+		and int(_reservations[admission_id].states)<=0:
+		var generation:=_delivery_generation
+		_reclaim_invalid_state_loan(admission_id)
+		# Stopping an old cue can synchronously retire its owner. Reclamation
+		# cannot grant an old command authority over that replacement runtime.
+		if generation!=_delivery_generation or not _reservations.has(admission_id) or entry.target.resolve()==null: return
 	if _states.size() >= MAX_ACTIVE_STATES or int(_states_per_target.get(target_key,0)) >= MAX_STATES_PER_TARGET:
 		_error("feature_state_capacity"); return
-	var admission_id := int(entry.get("admission_id",0))
 	if admission_id > 0:
 		if not _reservations.has(admission_id) or int(_reservations[admission_id].states) <= 0:
 			_error("feature_state_reservation_missing"); return
 		_reservations[admission_id].states -= 1; _reserved_states -= 1
 	var state := {"target":entry.target,"source":entry.source,"command":command,"target_key":target_key,
 		"resource_lease":entry.get("resource_lease"),
+		"state_loan_origin":admission_id if admission_id>0 and not _reservations[admission_id].chain.is_empty() else 0,
 		"raw_per_tick":int(command.raw_per_tick),"period":int(command.period_usec),
 		"next_due":accepted_at+int(command.period_usec),"expires":accepted_at+int(command.duration_usec),"ticks":0,"chain_owners":{}}
+	if int(state.state_loan_origin)>0: _reservations[admission_id].state_loan_handles[handle]=true
 	_hold_chain_state(state,admission_id)
 	_states[handle] = state
 	_states_per_target[target_key] = int(_states_per_target.get(target_key,0))+1
@@ -514,11 +524,24 @@ func _stop(handle: String) -> void:
 	_states_per_target[key] = int(_states_per_target[key])-1
 	if int(_states_per_target[key]) == 0: _states_per_target.erase(key)
 	var owners: Dictionary=_states[handle].get("chain_owners",{})
+	var origin:=int(_states[handle].get("state_loan_origin",0))
 	_states.erase(handle); _heap.remove(handle)
+	if origin>0 and _reservations.has(origin):
+		_reservations[origin].state_loan_handles.erase(handle)
+		_reservations[origin].states+=1; _reserved_states+=1
 	_presentation.stop(handle)
 	for sequence: int in owners:
 		if _reservations.has(sequence):
 			_reservations[sequence].state_owners-=1; _retire_chain_if_terminal(sequence)
+
+func _reclaim_invalid_state_loan(sequence: int) -> void:
+	# Reclaim one origin loan only when its next accepted command needs it.
+	# Existing committed facts/child branches are separate owners and remain
+	# queued; no receipt or still-valid state is evicted to make room.
+	for handle: String in _reservations[sequence].state_loan_handles.keys():
+		if _states[handle].target.resolve()!=null: continue
+		_stats.invalidated+=1; _stop(handle)
+		return
 
 func _hold_chain_state(state: Dictionary, sequence: int) -> void:
 	if sequence==0 or not _reservations.has(sequence) or _reservations[sequence].chain.is_empty(): return

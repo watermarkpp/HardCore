@@ -1,0 +1,67 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "registered wizard identity",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "formal default-off loan module uses only supported direct and child sources",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "actual mapped world reaches READY",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "actual mapped first receiver comes from the sole Root factory",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "all later-wave slots are materialized before acceptance",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "READY publication explicitly enables the test module",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "full authored world bound includes every predeclared slot, rather than the three observed receivers",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "actual source freezes persistent and death subscriptions",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "real Player acceptance reserves the entire world-derived chain before MP/cooldown/HP",
+      "passed": false
+    }
+  ],
+  "count": 9,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "1fd32c6a-5f83-4e5c-99ab-73d723b97a87",
+  "passed": 8,
+  "reported_checks": 9,
+  "reported_failures": 1,
+  "run_id": "c6e63be4-5d95-4955-96d7-96f0ecc4a8da",
+  "runtime_environment": {
+    "native_process_id": 8428,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\state_loan_root_parent_red_1c10d8b9bb69476ea3b22606d3918c01",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/state_loan_root_parent_red_1c10d8b9bb69476ea3b22606d3918c01/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "feature_state_loan_root_test",
+  "schema_version": 1,
+  "source_content_sha256": "44bd4244440c8c4a8e040ebb0fcb220873bd573c64d556e581f29783fff4162c",
+  "status": "FAIL"
+}

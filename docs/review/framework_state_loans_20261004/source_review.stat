@@ -1,0 +1,10 @@
+ .../features/validation/state_loan_lifetime.json   |  18 ++
+ .../validation/state_loan_lifetime_registry.json   |   8 +
+ .../features/compilation/child_capacity_proof.gd   |  24 +++
+ scripts/features/runtime/effect_runtime.gd         |  27 ++-
+ tests/framework/feature_child_capacity_test.gd     |  29 +++
+ .../framework/feature_state_loan_lifetime_test.gd  | 221 +++++++++++++++++++++
+ .../feature_state_loan_lifetime_test.tscn          |   6 +
+ tests/framework/feature_state_loan_root_test.gd    | 127 ++++++++++++
+ tests/framework/feature_state_loan_root_test.tscn  |   6 +
+ 9 files changed, 464 insertions(+), 2 deletions(-)

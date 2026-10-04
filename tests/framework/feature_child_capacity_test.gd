@@ -95,6 +95,35 @@ func _run() -> void:
 	_check(not result.success and result.reason=="child_state_capacity","serial fact storage does not reduce persistent state lifetime promises")
 	result=serial.compile_serial_residency(_request(1,1,1000000000,1,0),_limits())
 	_check(not result.success,"large finite frontier is rejected in logarithmic work rather than a billion iterations")
+	# Returned state loans change storage only. The conservative cumulative and
+	# serial-only APIs above retain their contracts for callers without loans.
+	result=serial.compile_state_loan_residency(_request(85,1,2,2,1),_limits())
+	_check(result.success and result.cost.states==85 and result.cost.facts==170
+		and result.cost.receipts==340 and result.cost.child_actions==7310
+		and result.cost.total_facts==621435 and result.cost.total_receipts==1242870
+		and result.cost.total_state_creations==621435,
+		"origin loans reserve85 resident states while retaining the full three-layer work and7310 frontier")
+	_check(result.cost.is_read_only() and result.cost.state_residency=="returned_origin_loans",
+		"the immutable reduced cost explicitly requires returned-origin storage authority")
+	result=serial.compile_state_loan_residency(_request(85,1,2,2,1),
+		{"pending_facts":7310,"active_states":85,"receipts":340})
+	_check(result.success,"exact loan/frontier/receipt capacities accept the complete finite program")
+	for boundary: Dictionary in [
+		{"limits":{"pending_facts":7310,"active_states":84,"receipts":340},"reason":"child_state_capacity"},
+		{"limits":{"pending_facts":7309,"active_states":85,"receipts":340},"reason":"child_fact_capacity"},
+		{"limits":{"pending_facts":7310,"active_states":85,"receipts":339},"reason":"child_receipt_capacity"}]:
+		result=serial.compile_state_loan_residency(_request(85,1,2,2,1),boundary.limits)
+		_check(not result.success and result.reason==boundary.reason,"one missing promised slot rejects before acceptance: "+boundary.reason)
+	result=serial.compile_state_loan_residency(_request(3,1,1,2,1),
+		{"pending_facts":5,"active_states":3,"receipts":12})
+	_check(not result.success and result.reason=="child_fact_capacity","returned states do not erase simultaneous fact storage obligations")
+	result=serial.compile_state_loan_residency(_request(0,1,9007199254740991,2,1),_limits())
+	_check(result.success and result.cost.states==0 and result.cost.total_state_creations==0,
+		"empty world loan pool remains zero without iterating enormous generations")
+	result=serial.compile_state_loan_residency(_request(3,1,1,2,1),_limits().merged({"fallback":true}))
+	_check(not result.success and result.reason=="invalid_child_capacity_limits","loan proof rejects unknown capacity fields")
+	result=serial.compile_state_loan_residency(_request(3,1,1,2,3),_limits())
+	_check(not result.success and result.reason=="invalid_child_capacity_request","loan storage cannot accept impossible persistent-source counts")
 	_finish()
 
 func _finish() -> void:

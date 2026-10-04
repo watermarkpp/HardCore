@@ -1,0 +1,1774 @@
+{
+  "files": [
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/before.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/before.json",
+      "bytes": 513714,
+      "sha256": "41e8be0191ba677cd09752725b53319531afd01d8febb5b32d41ed8e366886bb"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/after.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/after.json",
+      "bytes": 513714,
+      "sha256": "ba7de078dd3119a291fc6a0c86050c1ff8a3398adbbbd29fff9a72f3074562d3"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/validation.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/validation.json",
+      "bytes": 2425,
+      "sha256": "12b97c790efc072f93411a37dc68b8204142e8973fd1265548522e2155e7c5fd"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/runner_results.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/runner_results.json",
+      "bytes": 58148,
+      "sha256": "2e0ebaceaa6c6ddbd4e6ef001ac50cb7088780b73cdfb1b6674008d609220ae2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/runner.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/runner.log",
+      "bytes": 1762,
+      "sha256": "576d7dd0a4e99d9d35423fc6545ca2854e3bd8a7e28c3267a789f494e9230eb3"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/budget_producer_admission_test.godot.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/budget_producer_admission_test.godot.log",
+      "bytes": 2146,
+      "sha256": "9d8aa239c7f2670e295f47836739cc022ea4e1c91fe12d18de536931a9e095b4"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/budget_producer_admission_test.stderr.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/budget_producer_admission_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/budget_producer_admission_test.stdout.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/budget_producer_admission_test.stdout.log",
+      "bytes": 2152,
+      "sha256": "00d9bb1049b71e0b867ade5ff223156b123a0180f769de93584a8ff86b0e5298"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/canonical_snapshot_identity_production_test.godot.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/canonical_snapshot_identity_production_test.godot.log",
+      "bytes": 5124,
+      "sha256": "6d9a12374caf94831d3da269fa119dac8b07ba186a11c94a5a9f3e156d4fa33b"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/canonical_snapshot_identity_production_test.stderr.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/canonical_snapshot_identity_production_test.stderr.log",
+      "bytes": 134,
+      "sha256": "d38569d944cfe31ff158c736946a05eb57d6417155a94d713e80fb615b637c85"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/canonical_snapshot_identity_production_test.stdout.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/canonical_snapshot_identity_production_test.stdout.log",
+      "bytes": 5134,
+      "sha256": "124535e94d2c481fafd05e854a8080a7393b23f652dda3ef06cb4b53bfcc5ff4"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/canonical_snapshot_propagation_test.godot.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/canonical_snapshot_propagation_test.godot.log",
+      "bytes": 5253,
+      "sha256": "2d76302a96fd06916e0f4f81b5aae633fae51d3ef90a60e5a0117b7821cf8719"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/canonical_snapshot_propagation_test.stderr.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/canonical_snapshot_propagation_test.stderr.log",
+      "bytes": 134,
+      "sha256": "d38569d944cfe31ff158c736946a05eb57d6417155a94d713e80fb615b637c85"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/canonical_snapshot_propagation_test.stdout.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/canonical_snapshot_propagation_test.stdout.log",
+      "bytes": 5263,
+      "sha256": "969e59e3ea9ace3d9289521f5fa3bf488e730d70e4546aa388a900cf5f789e26"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/caster_runtime_canonical_plan_adapter_test.godot.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/caster_runtime_canonical_plan_adapter_test.godot.log",
+      "bytes": 244,
+      "sha256": "d48efe6f331a145133e9c5e66cc998a99f0b160356a1ff6d743ddfda96deef78"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/caster_runtime_canonical_plan_adapter_test.stderr.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/caster_runtime_canonical_plan_adapter_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/caster_runtime_canonical_plan_adapter_test.stdout.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/caster_runtime_canonical_plan_adapter_test.stdout.log",
+      "bytes": 248,
+      "sha256": "f3f706374a2cbaa4251013f9902ed437da42c18debfa2c47dae8ef2b84272005"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/damage_commit_fact_test.godot.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/damage_commit_fact_test.godot.log",
+      "bytes": 224,
+      "sha256": "6d27f5f90b2ed25d722b0187996cd34f6160b3131b4e3e7dbedcd4e8a705e260"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/damage_commit_fact_test.stderr.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/damage_commit_fact_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/damage_commit_fact_test.stdout.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/damage_commit_fact_test.stdout.log",
+      "bytes": 228,
+      "sha256": "8e68088dbc69813e2fa94fa921ed5b43e100778646c995b7c64ca8cfc7406391"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_binding_validation_test.godot.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_binding_validation_test.godot.log",
+      "bytes": 224,
+      "sha256": "03438d30a513b565d00409617c7e5be44e96ef5692fabcd69f884bef9ed6b09d"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_binding_validation_test.stderr.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_binding_validation_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_binding_validation_test.stdout.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_binding_validation_test.stdout.log",
+      "bytes": 228,
+      "sha256": "34a70ad479e32d8292a7f40f506ea472567edfd2fb23ea1ad7af5a79f0f24ee5"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_birth_slot_identity_test.godot.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_birth_slot_identity_test.godot.log",
+      "bytes": 5127,
+      "sha256": "bfc311af21d9a482f675a5e757ed92768e4455a5cec2dddfa01c561439ef3bcf"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_birth_slot_identity_test.stderr.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_birth_slot_identity_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_birth_slot_identity_test.stdout.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_birth_slot_identity_test.stdout.log",
+      "bytes": 5137,
+      "sha256": "11295175157267ef5c7db1554b13f11e8553045ca2998cd42d5105cba0825e60"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_capacity_admission_test.godot.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_capacity_admission_test.godot.log",
+      "bytes": 5126,
+      "sha256": "2b637cc96e60105e0405538023e7c9314685e2942ba0035dc7dc300188a5c103"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_capacity_admission_test.stderr.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_capacity_admission_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_capacity_admission_test.stdout.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_capacity_admission_test.stdout.log",
+      "bytes": 5136,
+      "sha256": "a533a306622828b43bba00ed5d5816cd1f546b36853cc4285c036ed98d58082e"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_chain_commit_test.godot.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_chain_commit_test.godot.log",
+      "bytes": 218,
+      "sha256": "14c2d0f73fbc19c21dde87dacdb5a25c3c61c51193d88f96db96c4b9be578f5f"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_chain_commit_test.stderr.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_chain_commit_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_chain_commit_test.stdout.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_chain_commit_test.stdout.log",
+      "bytes": 222,
+      "sha256": "e059e5c07572913cb6d0e68b22e0b9d7185e087f12bfa956cc77b09dd36f2d29"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_child_capacity_test.godot.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_child_capacity_test.godot.log",
+      "bytes": 220,
+      "sha256": "2b3aca5d9649f02ae32155a5d6e7589353eee5481e8a11b2a525eba41ec9aaed"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_child_capacity_test.stderr.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_child_capacity_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_child_capacity_test.stdout.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_child_capacity_test.stdout.log",
+      "bytes": 224,
+      "sha256": "75cfadc3653095afa0271c07e3fcef22f226377aa5720201e0a7a2d9dc127607"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_child_chain_admission_test.godot.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_child_chain_admission_test.godot.log",
+      "bytes": 5136,
+      "sha256": "dae5061686ff1bf705882b2202a063e376173d41854a969d14df328f523e7af4"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_child_chain_admission_test.stderr.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_child_chain_admission_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_child_chain_admission_test.stdout.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_child_chain_admission_test.stdout.log",
+      "bytes": 5146,
+      "sha256": "d4aa9c1b315733c9fd29ba20ac881a028e6b9ddb893fca90be11eadff0476268"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_child_execution_test.godot.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_child_execution_test.godot.log",
+      "bytes": 5363,
+      "sha256": "5987d03165cbf026d29e5b8992b43269a0a9e9938652cdab4fea039550b3c3b2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_child_execution_test.stderr.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_child_execution_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_child_execution_test.stdout.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_child_execution_test.stdout.log",
+      "bytes": 5374,
+      "sha256": "74b15eb239609d30441696b6540dd2d0dadcc6924bd6538ae85cbb455072d205"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_child_planner_test.godot.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_child_planner_test.godot.log",
+      "bytes": 207,
+      "sha256": "88c8fd8fae630cf8c689dc90a71755fb3571e3e07102a689ffaf6eab72608399"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_child_planner_test.stderr.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_child_planner_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_child_planner_test.stdout.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_child_planner_test.stdout.log",
+      "bytes": 211,
+      "sha256": "077f8e85c2754d184e6b1ac5c3d86ca3ddbb3d0c4e749231d9bac64c7819a300"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_compiler_test.godot.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_compiler_test.godot.log",
+      "bytes": 222,
+      "sha256": "d8715ca729222fa3a65a75038cd58eeae95c0d9cec7b5fd3cd51b7f3ac95e0ef"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_compiler_test.stderr.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_compiler_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_compiler_test.stdout.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_compiler_test.stdout.log",
+      "bytes": 226,
+      "sha256": "7aafd2c3d05732fcc7b9c2c1eb1556836b473df4c44952a8179ba8cddc0e93be"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_death_child_command_test.godot.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_death_child_command_test.godot.log",
+      "bytes": 225,
+      "sha256": "ed12d6400020c04dea10ede87f8ffe021a0bdda6e5a942598f43116e2ca341f9"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_death_child_command_test.stderr.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_death_child_command_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_death_child_command_test.stdout.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_death_child_command_test.stdout.log",
+      "bytes": 229,
+      "sha256": "f08e77ebd6dcd516a4a6338926ceedcc9d1eb242677dd806776d8e7a0201b9e6"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_fire_effect_production_test.godot.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_fire_effect_production_test.godot.log",
+      "bytes": 5138,
+      "sha256": "538ec1a87bf2ff5e0757b6e8ac99e70f8b7be6cdf5c17d3baf0fb3ee8a5aef81"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_fire_effect_production_test.stderr.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_fire_effect_production_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_fire_effect_production_test.stdout.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_fire_effect_production_test.stdout.log",
+      "bytes": 5148,
+      "sha256": "c9a4f8727781289dd3a2ccba7833b0a88b79275d11f117666b76f84f2ff3bf93"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_lifesteal_production_test.godot.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_lifesteal_production_test.godot.log",
+      "bytes": 5129,
+      "sha256": "315a0cefbd456d01b1bcdff5665d1d814e44894a61e227b977dde52623ffa6df"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_lifesteal_production_test.stderr.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_lifesteal_production_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_lifesteal_production_test.stdout.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_lifesteal_production_test.stdout.log",
+      "bytes": 5139,
+      "sha256": "83f1eea28b57e5703db1e8b11771314f3c2ded3320da870e5b0bfa2e3fb32915"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_lifesteal_runtime_test.godot.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_lifesteal_runtime_test.godot.log",
+      "bytes": 14359,
+      "sha256": "b1cef6c7297359acbaecc4706a20c911f74f2f32efa0a22d9bfe2f3d51487679"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_lifesteal_runtime_test.stderr.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_lifesteal_runtime_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_lifesteal_runtime_test.stdout.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_lifesteal_runtime_test.stdout.log",
+      "bytes": 14374,
+      "sha256": "934fc6ff58e9aa229a5212640b13cebd3c9e286842925b24ae2ef3366ea020e7"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_producing_death_reentry_test.godot.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_producing_death_reentry_test.godot.log",
+      "bytes": 6009,
+      "sha256": "91bf41e73e58ab00377a656526ae8bb6438c1451a559e338a4adde9920a81f92"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_producing_death_reentry_test.stderr.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_producing_death_reentry_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_producing_death_reentry_test.stdout.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_producing_death_reentry_test.stdout.log",
+      "bytes": 6021,
+      "sha256": "4195cbbd399672cb5a0207e16c0a6cdba01897f7e88d6979e7a6e73cf8c9e3c7"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_queue_retention_test.godot.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_queue_retention_test.godot.log",
+      "bytes": 219,
+      "sha256": "49e4f2f33207b6e5010f80d51376975184a13729e2125d4882d32a287fe6f232"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_queue_retention_test.stderr.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_queue_retention_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_queue_retention_test.stdout.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_queue_retention_test.stdout.log",
+      "bytes": 223,
+      "sha256": "ebfbe54924244e4ca6690901205c2754f04152a8db5cb2bb6c65d0dff257c709"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_receipt_retirement_test.godot.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_receipt_retirement_test.godot.log",
+      "bytes": 1748,
+      "sha256": "b577198b48416362021bf3ea338380b77542ea97a7ef3ef4dd70305c8dbc6d4f"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_receipt_retirement_test.stderr.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_receipt_retirement_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_receipt_retirement_test.stdout.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_receipt_retirement_test.stdout.log",
+      "bytes": 1753,
+      "sha256": "24080a7a92224d0484b6ebdd62a14be32faaf51b8d3d486d924b026d7fc11c87"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_resource_accepted_lifetime_test.godot.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_resource_accepted_lifetime_test.godot.log",
+      "bytes": 6020,
+      "sha256": "af95ca52afe6358bff57b4b2fc435e974cfb5edd772bf54886773dfb0adae612"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_resource_accepted_lifetime_test.stderr.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_resource_accepted_lifetime_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_resource_accepted_lifetime_test.stdout.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_resource_accepted_lifetime_test.stdout.log",
+      "bytes": 6032,
+      "sha256": "32b5c01953da04928b2450b48624becf2f2b96ec0c354a738013f0b3ac95ba6d"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_source_composition_cold_test.godot.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_source_composition_cold_test.godot.log",
+      "bytes": 576,
+      "sha256": "17dde13c09e3526f7f57e99844f82372a2fd041dbe57bf16e78f9020582b5fb1"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_source_composition_cold_test.stderr.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_source_composition_cold_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_source_composition_cold_test.stdout.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_source_composition_cold_test.stdout.log",
+      "bytes": 581,
+      "sha256": "a36619668b15bcdfb4d3cac22b23f8d5451f76aed2d6213c4a06100805dbdbad"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_source_composition_test.godot.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_source_composition_test.godot.log",
+      "bytes": 5129,
+      "sha256": "38c1c6ac97d1756cb7af33fe788e2fc0f1fb81ebf6ba9adfe4ec7bafea537ac0"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_source_composition_test.stderr.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_source_composition_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_source_composition_test.stdout.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_source_composition_test.stdout.log",
+      "bytes": 5139,
+      "sha256": "e2bd750c84c7691fb6119b5ef96788d96f87261b29baab122718a55abcf932d8"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_state_loan_lifetime_test.godot.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_state_loan_lifetime_test.godot.log",
+      "bytes": 270,
+      "sha256": "be9cf5ca284465b4cf91329380d99da763976039d0f73e491e35ae406eed7072"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_state_loan_lifetime_test.stderr.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_state_loan_lifetime_test.stderr.log",
+      "bytes": 250,
+      "sha256": "9abaeb31deca888a59de0b38bc60a768363cc109851192c3f5b8906753d9296d"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_state_loan_lifetime_test.stdout.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_state_loan_lifetime_test.stdout.log",
+      "bytes": 276,
+      "sha256": "01c8ce31c0c5d750176765cdd9d0589edaca6280594586d428d9dacbc515178e"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_state_loan_root_test.godot.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_state_loan_root_test.godot.log",
+      "bytes": 5409,
+      "sha256": "d2ee7ab6d3be3f6cc90e88bdbd497e054f65a3fc8ee9ecd234ab4dee199df9f6"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_state_loan_root_test.stderr.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_state_loan_root_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_state_loan_root_test.stdout.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_state_loan_root_test.stdout.log",
+      "bytes": 5420,
+      "sha256": "bb50a96f715a1e944714c2da6eabf4f62fcbf5c990f91df371f39171d596ab8a"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_world_capacity_bound_test.godot.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_world_capacity_bound_test.godot.log",
+      "bytes": 5848,
+      "sha256": "07c901bd2bdcb77fa56b4ee82852fe88eea8a4431aa337028e756b5d0974dab6"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_world_capacity_bound_test.stderr.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_world_capacity_bound_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/feature_world_capacity_bound_test.stdout.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/feature_world_capacity_bound_test.stdout.log",
+      "bytes": 5859,
+      "sha256": "8ba7cd7d9267e6b4543d8d89511271802cb99233c5932f21c2e6aa8f1f5834f8"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/fire_wall_cap_policy_canonical_plan_test.godot.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/fire_wall_cap_policy_canonical_plan_test.godot.log",
+      "bytes": 211,
+      "sha256": "758c34b5ce449050ae9f36484d10a5f581e1f1baf8976cddfcb14056a03e8e19"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/fire_wall_cap_policy_canonical_plan_test.stderr.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/fire_wall_cap_policy_canonical_plan_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/fire_wall_cap_policy_canonical_plan_test.stdout.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/fire_wall_cap_policy_canonical_plan_test.stdout.log",
+      "bytes": 215,
+      "sha256": "c5685a397488074503a57ae73b3e07399dbf620fadb299190cb8fa487dee05e5"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/frame_budget_test.godot.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/frame_budget_test.godot.log",
+      "bytes": 219,
+      "sha256": "9bf90411a76c6c2bd41009fe80f59997ad9a060e5ca2292b241f470a6ee9422f"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/frame_budget_test.stderr.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/frame_budget_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/frame_budget_test.stdout.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/frame_budget_test.stdout.log",
+      "bytes": 223,
+      "sha256": "7d387fb308fdfb7068c2bda0c71cc81dc02301439046c59e00a1e143235245b8"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/frame_epoch_test.godot.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/frame_epoch_test.godot.log",
+      "bytes": 224,
+      "sha256": "bd518aad8e66ceb7ad8e64a69a699a3c21ce4a9928efcb4df5dd7866a87b8755"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/frame_epoch_test.stderr.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/frame_epoch_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/frame_epoch_test.stdout.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/frame_epoch_test.stdout.log",
+      "bytes": 228,
+      "sha256": "c753fb781adbb79af5eb5c83de4ffd5f45f1f4b70ef91da58646fe16b0279d67"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/mapped_skill_plan_missing_projection_rejected_test.godot.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/mapped_skill_plan_missing_projection_rejected_test.godot.log",
+      "bytes": 255,
+      "sha256": "2a960e552fc731f183177e3b67d944f4535a9e922d558d213b2f2f3099d47b78"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/mapped_skill_plan_missing_projection_rejected_test.stderr.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/mapped_skill_plan_missing_projection_rejected_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/mapped_skill_plan_missing_projection_rejected_test.stdout.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/mapped_skill_plan_missing_projection_rejected_test.stdout.log",
+      "bytes": 259,
+      "sha256": "dc18a474e997cc8937935576fbc3ff0159fa11c511dbf02d20a872c8b70396e6"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/monster_summon_hard_cap_test.godot.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/monster_summon_hard_cap_test.godot.log",
+      "bytes": 221,
+      "sha256": "22028067c7787f80ab7b5bf29e990c55d01393afe63f75e58a5c37ac2f2a7f97"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/monster_summon_hard_cap_test.stderr.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/monster_summon_hard_cap_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/monster_summon_hard_cap_test.stdout.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/monster_summon_hard_cap_test.stdout.log",
+      "bytes": 225,
+      "sha256": "05937657851fc66a718dbfc62d1854a0d051615d416a4c7ec9656cb8efe46c0d"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/periodic_callback_retirement_test.godot.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/periodic_callback_retirement_test.godot.log",
+      "bytes": 234,
+      "sha256": "355903ee2ba46ebf9bdecebfe08bdcc0ea1813601ff9411ca60ad5432f054da0"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/periodic_callback_retirement_test.stderr.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/periodic_callback_retirement_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/periodic_callback_retirement_test.stdout.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/periodic_callback_retirement_test.stdout.log",
+      "bytes": 238,
+      "sha256": "cfd2e0ba6e03abad2266d3a795b420e779bf585628072a74f20633b182176a5b"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/periodic_delivery_lateness_test.godot.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/periodic_delivery_lateness_test.godot.log",
+      "bytes": 222,
+      "sha256": "14984e7e790d9f8739ed8b0670b213d1c9d288904cac5b33f5d93189ada0949b"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/periodic_delivery_lateness_test.stderr.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/periodic_delivery_lateness_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/periodic_delivery_lateness_test.stdout.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/periodic_delivery_lateness_test.stdout.log",
+      "bytes": 226,
+      "sha256": "68d1dae38133af6bccc756b82ae655ba3e38341c7aa06442cc838c86bec45d90"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/periodic_effect_boundaries_test.godot.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/periodic_effect_boundaries_test.godot.log",
+      "bytes": 225,
+      "sha256": "d0f9f83ccc34a6d0d4721644c48c7fae9036bfb960f1c3e907b65e552b69fb1d"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/periodic_effect_boundaries_test.stderr.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/periodic_effect_boundaries_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/periodic_effect_boundaries_test.stdout.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/periodic_effect_boundaries_test.stdout.log",
+      "bytes": 229,
+      "sha256": "f8caa51e349268c690e05529e179c26d604b297788534f3da57fb6739f58e404"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/periodic_effect_death_production_test.godot.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/periodic_effect_death_production_test.godot.log",
+      "bytes": 5138,
+      "sha256": "9ebc545813f127978ebc436f148bb263d7c78295a3d7c00b979ab30bcc653d82"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/periodic_effect_death_production_test.stderr.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/periodic_effect_death_production_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/periodic_effect_death_production_test.stdout.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/periodic_effect_death_production_test.stdout.log",
+      "bytes": 5148,
+      "sha256": "dd7ade2f8f977e9481fd9a12905962b92a428fd966cff9169f5efee29eee4976"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/periodic_effect_runtime_test.godot.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/periodic_effect_runtime_test.godot.log",
+      "bytes": 221,
+      "sha256": "1feca48b2526026bd701ebbc3f96ed4b24c9e73538bfbb9453a399aee3944595"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/periodic_effect_runtime_test.stderr.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/periodic_effect_runtime_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/periodic_effect_runtime_test.stdout.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/periodic_effect_runtime_test.stdout.log",
+      "bytes": 225,
+      "sha256": "d50f6d703a34af1193acf9b0ab19cc712545a27b8b2ae9006da6a2516aed4796"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/rune_source_composition_cold_test.godot.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/rune_source_composition_cold_test.godot.log",
+      "bytes": 581,
+      "sha256": "2dfe7b879c4d72052a8c222e7ea42d8c0841c0cfbfa40a8b05f451b1b960b708"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/rune_source_composition_cold_test.stderr.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/rune_source_composition_cold_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/rune_source_composition_cold_test.stdout.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/rune_source_composition_cold_test.stdout.log",
+      "bytes": 586,
+      "sha256": "8ed1cf27d72ba107a88b3337ae0f32b0912c9e59b3d0784762a35e7ac5945b2d"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/rune_source_composition_test.godot.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/rune_source_composition_test.godot.log",
+      "bytes": 5136,
+      "sha256": "31b346d81819c6c5942016f315644d7889f7a11e1184dbd7ca46d36f61df0f4a"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/rune_source_composition_test.stderr.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/rune_source_composition_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/raw/rune_source_composition_test.stdout.log",
+      "archive_path": "native/state_loan_final_direct_163045_610239/raw/rune_source_composition_test.stdout.log",
+      "bytes": 5146,
+      "sha256": "6968c62a8f433170bba34a8e6b4c6a0ee3e7bb6aa029c29aac5d2ee938a65844"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/framework/budget_producer_admission_test.result.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/framework/budget_producer_admission_test.result.json",
+      "bytes": 2599,
+      "sha256": "9ad3f8862895f67a4e190d73c5a87d588fc28e6db3d6c216db296ba066dbaa3b"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/framework/damage_commit_fact_test.result.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/framework/damage_commit_fact_test.result.json",
+      "bytes": 2567,
+      "sha256": "9c68fc90a26be547a4aa9b0b908cd73c1ef51fb3b9d22af7f82b2484f3802e14"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/framework/feature_binding_validation_test.result.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/framework/feature_binding_validation_test.result.json",
+      "bytes": 5914,
+      "sha256": "414ef78cd6562e4357148c1c9f00223400c4bfa3405572d7ced759f72299ce96"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/framework/feature_birth_slot_identity_test.result.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/framework/feature_birth_slot_identity_test.result.json",
+      "bytes": 2587,
+      "sha256": "efc1b9dc13a7aef7f803f0bc0296d93d45ad1583d3910a3fbfef046b9c962195"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/framework/feature_capacity_admission_test.result.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/framework/feature_capacity_admission_test.result.json",
+      "bytes": 2698,
+      "sha256": "85815809489a25f8a35c7c6bf18896e69ac28abda39b231a1411b6c08dc437e4"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/framework/feature_chain_commit_test.result.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/framework/feature_chain_commit_test.result.json",
+      "bytes": 11468,
+      "sha256": "ffc58c92f2920535e556a108414342f38e4a4dbbc5514813408cc4254a42b0d9"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/framework/feature_child_capacity_test.result.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/framework/feature_child_capacity_test.result.json",
+      "bytes": 7618,
+      "sha256": "1c5c0ca35bd2012606fd0c3f5a51a2f02536a134a8da1b84ebf836df123158a9"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/framework/feature_child_chain_admission_test.result.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/framework/feature_child_chain_admission_test.result.json",
+      "bytes": 6668,
+      "sha256": "58fefb63dbe32261263329d5fe34b23f46febee06e46b7425478f0c111f9e759"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/framework/feature_child_execution_test.result.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/framework/feature_child_execution_test.result.json",
+      "bytes": 4409,
+      "sha256": "07307f717cb1e5791e7b50f311b3f4ae9af7452c6f2336ebbacdb60fdd1f1b27"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/framework/feature_child_planner_test.result.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/framework/feature_child_planner_test.result.json",
+      "bytes": 7078,
+      "sha256": "888cdf8ca047b0f4e4e0d0efae7c188eea7d21794e575d791fb9d89f0f9b2741"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/framework/feature_compiler_test.result.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/framework/feature_compiler_test.result.json",
+      "bytes": 4943,
+      "sha256": "df68ee630a294eadb4dd0cc609c595e29a2b2833c0b7266b44e59f8a3612c37c"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/framework/feature_death_child_command_test.result.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/framework/feature_death_child_command_test.result.json",
+      "bytes": 5288,
+      "sha256": "b4624647f7a072514cbab617039da158fd009534375dafc68f6855709524eb6c"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/framework/feature_fire_effect_production_test.result.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/framework/feature_fire_effect_production_test.result.json",
+      "bytes": 3377,
+      "sha256": "e657c1d3d99b3fe5d283003c56ba039e9a9f8c71472d6d1909251524d90f75c2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/framework/feature_lifesteal_production_test.result.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/framework/feature_lifesteal_production_test.result.json",
+      "bytes": 4157,
+      "sha256": "3f45c7bf5ff899f3919a78f92af08415406d721625e98089c4aa820657151adc"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/framework/feature_lifesteal_runtime_test.result.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/framework/feature_lifesteal_runtime_test.result.json",
+      "bytes": 13743,
+      "sha256": "09c8fdcffcdebe5f6a059e9d1ceaf161166795d301c3e670af1c9b7641e1dfb4"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/framework/feature_producing_death_reentry_test.result.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/framework/feature_producing_death_reentry_test.result.json",
+      "bytes": 3323,
+      "sha256": "c8a8617524be2e9207f67025e0c47159907f33f8e19fd78f1d27dfe64e851976"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/framework/feature_queue_retention_test.result.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/framework/feature_queue_retention_test.result.json",
+      "bytes": 3231,
+      "sha256": "73f3bcc0a8a51fc916e58b10bb82acb6f295dff2bf60c5c3e3d1650659d9f189"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/framework/feature_receipt_retirement_test.result.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/framework/feature_receipt_retirement_test.result.json",
+      "bytes": 2577,
+      "sha256": "ea8c287283380d22ff2aae3a7361c501cdcfdfb30620e663c0ded3b1c00eef23"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/framework/feature_resource_accepted_lifetime_test.result.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/framework/feature_resource_accepted_lifetime_test.result.json",
+      "bytes": 4329,
+      "sha256": "2440b09184f2f3e856f088ac6a6871093d16a19de3521278acdc6d7a013936f5"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/framework/feature_source_composition_cold_test.result.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/framework/feature_source_composition_cold_test.result.json",
+      "bytes": 2653,
+      "sha256": "90bb2533e123e14fed1e96b1f6a66a05739b67088b3eb3229895f623274195e6"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/framework/feature_source_composition_expected.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/framework/feature_source_composition_expected.json",
+      "bytes": 2116,
+      "sha256": "f0f17b3b92f73740de5d16bfd0a23e57ecbdd006ee7b72296d539e8ecdfeace6"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/framework/feature_source_composition_test.result.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/framework/feature_source_composition_test.result.json",
+      "bytes": 5704,
+      "sha256": "7207aa3ee4b9c289433805676ae53866f8871b45d20a78cc64f69122171a594a"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/framework/feature_state_loan_lifetime_test.result.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/framework/feature_state_loan_lifetime_test.result.json",
+      "bytes": 5728,
+      "sha256": "23d4d545467e58ee539dd8653f57bb3ba219e56920bc14fa645fb76be4b652c5"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/framework/feature_state_loan_root_test.result.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/framework/feature_state_loan_root_test.result.json",
+      "bytes": 4434,
+      "sha256": "003e40d4bb34617182fbe00fda20f0404b58ffb1006595d2dfca27319b93c820"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/framework/feature_world_capacity_bound_test.result.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/framework/feature_world_capacity_bound_test.result.json",
+      "bytes": 2783,
+      "sha256": "2aa5fc2947acd912db82a0b0cc8e940c14bff04ee5a77abffd279af4e469149f"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/framework/frame_budget_test.result.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/framework/frame_budget_test.result.json",
+      "bytes": 24182,
+      "sha256": "a9b26954f7389385ce17e6e490952cb9aae3f33d41a33111d9f0da92af758d4e"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/framework/frame_epoch_test.result.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/framework/frame_epoch_test.result.json",
+      "bytes": 8159,
+      "sha256": "476d94fec18302d7c6f97a2671359b039d281e7ddf03bc72c84cc7070640c68f"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/framework/native_handoffs.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/framework/native_handoffs.json",
+      "bytes": 30498,
+      "sha256": "a63f44822fd58f6122fb3bb72cfbc1a418fe33b69b8df33779173e1ce54b4a2d"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/framework/periodic_callback_retirement_test.result.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/framework/periodic_callback_retirement_test.result.json",
+      "bytes": 5051,
+      "sha256": "6b4f8c84debf71f0e359bb13a81b20144d470c54d5b00091d3454860231bc5f9"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/framework/periodic_delivery_lateness_test.result.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/framework/periodic_delivery_lateness_test.result.json",
+      "bytes": 5355,
+      "sha256": "360a7d234ae5f73e180d40498e7d7cf7cc6bf68ded84bef0c9d303ac8645cbd5"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/framework/periodic_effect_boundaries_test.result.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/framework/periodic_effect_boundaries_test.result.json",
+      "bytes": 3769,
+      "sha256": "21c59fe5a4af2618b68bcc0f9c1eb4f298ceb13e50f6d3f35cb9a9e2859d3048"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/framework/periodic_effect_death_production_test.result.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/framework/periodic_effect_death_production_test.result.json",
+      "bytes": 2969,
+      "sha256": "ab78622f722f86e40d6b5b3113e8c0cf52e71240c87fcf80f33cbc443be33a28"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/framework/periodic_effect_runtime_test.result.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/framework/periodic_effect_runtime_test.result.json",
+      "bytes": 2622,
+      "sha256": "65d64a4ae9665954c3c4f12b8d7192159c8fed9bf7d893efe59740d8296e3ff9"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/framework/rune_source_composition_cold_test.result.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/framework/rune_source_composition_cold_test.result.json",
+      "bytes": 2988,
+      "sha256": "49e5d9bc0fa1024bab6281c5798455e6c9c2a2cf4184110d955b35f20f7f97ac"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/framework/rune_source_composition_expected.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/framework/rune_source_composition_expected.json",
+      "bytes": 2763,
+      "sha256": "ee2a7b16f6dabdb89a8b4061e287574db385382b67593297e67667f57fd20a5b"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_direct_163045_610239/framework/rune_source_composition_test.result.json",
+      "archive_path": "native/state_loan_final_direct_163045_610239/framework/rune_source_composition_test.result.json",
+      "bytes": 5887,
+      "sha256": "4b0d0c166811d0f0200fb59fd36a69fbe70d3c825b5812c361ffa45791ee5b22"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/before.json",
+      "archive_path": "native/state_loan_final_world_163822_943595/before.json",
+      "bytes": 513714,
+      "sha256": "a3bb3c704703192d5f3a3cf0d0103a404c4e299671ed161a059c0f362afba399"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/after.json",
+      "archive_path": "native/state_loan_final_world_163822_943595/after.json",
+      "bytes": 513714,
+      "sha256": "4474e976d2b5abdb4fd26b7c84241a5c1f53a5c08a10cd411f2550ac6cbd3e35"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/validation.json",
+      "archive_path": "native/state_loan_final_world_163822_943595/validation.json",
+      "bytes": 776,
+      "sha256": "952c414b50d9f04c9b7a6fbafc246f497deac56ed6be4bda454a0df217a29db2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/runner_results.json",
+      "archive_path": "native/state_loan_final_world_163822_943595/runner_results.json",
+      "bytes": 12641,
+      "sha256": "65ffc7c60c1a7c321bced0e701be015785216371867b458171ba5e7271775f34"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/runner.log",
+      "archive_path": "native/state_loan_final_world_163822_943595/runner.log",
+      "bytes": 549,
+      "sha256": "f1abe3226ce37cca4e1e089e3531314f4c9fa41c5e6c70b4361a858a4422fa04"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/raw/combined_effect_lifecycle_cold_test.godot.log",
+      "archive_path": "native/state_loan_final_world_163822_943595/raw/combined_effect_lifecycle_cold_test.godot.log",
+      "bytes": 228,
+      "sha256": "cd1a56188af419b2da657e1e559b7901e6a557d9ee50297716d0c1ff30bde1e1"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/raw/combined_effect_lifecycle_cold_test.stderr.log",
+      "archive_path": "native/state_loan_final_world_163822_943595/raw/combined_effect_lifecycle_cold_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/raw/combined_effect_lifecycle_cold_test.stdout.log",
+      "archive_path": "native/state_loan_final_world_163822_943595/raw/combined_effect_lifecycle_cold_test.stdout.log",
+      "bytes": 232,
+      "sha256": "15095675e9cdc7402f8003cc725eb630e6a6ddcad18e531c5f2cf2aaf563c987"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/raw/combined_effect_lifecycle_test.godot.log",
+      "archive_path": "native/state_loan_final_world_163822_943595/raw/combined_effect_lifecycle_test.godot.log",
+      "bytes": 5142,
+      "sha256": "9c8951f72eff5fa9538de56a30e505619f3dff719d3aaf0f15f565c87b9e83af"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/raw/combined_effect_lifecycle_test.stderr.log",
+      "archive_path": "native/state_loan_final_world_163822_943595/raw/combined_effect_lifecycle_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/raw/combined_effect_lifecycle_test.stdout.log",
+      "archive_path": "native/state_loan_final_world_163822_943595/raw/combined_effect_lifecycle_test.stdout.log",
+      "bytes": 5152,
+      "sha256": "173bd09cb68728aad5feb026d5d93c409e6a76bbfe8bd49fe3df2e7a1f270676"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/raw/feature_resource_natural_cold_test.godot.log",
+      "archive_path": "native/state_loan_final_world_163822_943595/raw/feature_resource_natural_cold_test.godot.log",
+      "bytes": 227,
+      "sha256": "3c0a3a4377122ab25da969530b7ffaa9e49c17071bcf9f27e940daa274846c7f"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/raw/feature_resource_natural_cold_test.stderr.log",
+      "archive_path": "native/state_loan_final_world_163822_943595/raw/feature_resource_natural_cold_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/raw/feature_resource_natural_cold_test.stdout.log",
+      "archive_path": "native/state_loan_final_world_163822_943595/raw/feature_resource_natural_cold_test.stdout.log",
+      "bytes": 231,
+      "sha256": "597c057aeb71dcb17acef603a39033def31a2da73346fc055907885156abcfea"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/raw/feature_resource_natural_test.godot.log",
+      "archive_path": "native/state_loan_final_world_163822_943595/raw/feature_resource_natural_test.godot.log",
+      "bytes": 5148,
+      "sha256": "a4ac2f265b4d534ab6c6831e6df213b7294c4835c3e1f3eabe3b39095c9538fa"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/raw/feature_resource_natural_test.stderr.log",
+      "archive_path": "native/state_loan_final_world_163822_943595/raw/feature_resource_natural_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/raw/feature_resource_natural_test.stdout.log",
+      "archive_path": "native/state_loan_final_world_163822_943595/raw/feature_resource_natural_test.stdout.log",
+      "bytes": 5158,
+      "sha256": "462962ecb71023fc9df17f5ce1b2bba4214aa2dea6d732fb1385bf81cde82b0e"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/raw/natural_effect_lifecycle_cold_test.godot.log",
+      "archive_path": "native/state_loan_final_world_163822_943595/raw/natural_effect_lifecycle_cold_test.godot.log",
+      "bytes": 227,
+      "sha256": "3c0a3a4377122ab25da969530b7ffaa9e49c17071bcf9f27e940daa274846c7f"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/raw/natural_effect_lifecycle_cold_test.stderr.log",
+      "archive_path": "native/state_loan_final_world_163822_943595/raw/natural_effect_lifecycle_cold_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/raw/natural_effect_lifecycle_cold_test.stdout.log",
+      "archive_path": "native/state_loan_final_world_163822_943595/raw/natural_effect_lifecycle_cold_test.stdout.log",
+      "bytes": 231,
+      "sha256": "597c057aeb71dcb17acef603a39033def31a2da73346fc055907885156abcfea"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/raw/natural_effect_lifecycle_test.godot.log",
+      "archive_path": "native/state_loan_final_world_163822_943595/raw/natural_effect_lifecycle_test.godot.log",
+      "bytes": 5143,
+      "sha256": "560c7f6726c34b3fcba8097c696d5679cab0250cacf1d27a169b08b77e79a8a0"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/raw/natural_effect_lifecycle_test.stderr.log",
+      "archive_path": "native/state_loan_final_world_163822_943595/raw/natural_effect_lifecycle_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/raw/natural_effect_lifecycle_test.stdout.log",
+      "archive_path": "native/state_loan_final_world_163822_943595/raw/natural_effect_lifecycle_test.stdout.log",
+      "bytes": 5153,
+      "sha256": "f33b18c524c431705314fe03e6d838e76f66d8d9a7d7157da39de04a5469c3fe"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/raw/periodic_credit_safe_logout_cold_test.godot.log",
+      "archive_path": "native/state_loan_final_world_163822_943595/raw/periodic_credit_safe_logout_cold_test.godot.log",
+      "bytes": 655,
+      "sha256": "e5485dde611ab05018da172892a0feee749e9cd9c9434fa3d84640b87e16397e"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/raw/periodic_credit_safe_logout_cold_test.stderr.log",
+      "archive_path": "native/state_loan_final_world_163822_943595/raw/periodic_credit_safe_logout_cold_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/raw/periodic_credit_safe_logout_cold_test.stdout.log",
+      "archive_path": "native/state_loan_final_world_163822_943595/raw/periodic_credit_safe_logout_cold_test.stdout.log",
+      "bytes": 660,
+      "sha256": "94d29d0bf691e18d476529803948e1efb33ee29f82ebbaa151979bcce494b270"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/raw/periodic_credit_safe_logout_test.godot.log",
+      "archive_path": "native/state_loan_final_world_163822_943595/raw/periodic_credit_safe_logout_test.godot.log",
+      "bytes": 35338,
+      "sha256": "39cb814b66654b017a55fdeb468b3eab89851c14e2bad5effb6f3081a12bfcfd"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/raw/periodic_credit_safe_logout_test.stderr.log",
+      "archive_path": "native/state_loan_final_world_163822_943595/raw/periodic_credit_safe_logout_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/raw/periodic_credit_safe_logout_test.stdout.log",
+      "archive_path": "native/state_loan_final_world_163822_943595/raw/periodic_credit_safe_logout_test.stdout.log",
+      "bytes": 35350,
+      "sha256": "7391c28e4415dfb4c13bbb54c561caab713100e57e91ac6412e17b7d03ed3b03"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/framework/combined_effect_lifecycle_cold_test.result.json",
+      "archive_path": "native/state_loan_final_world_163822_943595/framework/combined_effect_lifecycle_cold_test.result.json",
+      "bytes": 2262,
+      "sha256": "e69e221ec3b1659bc3e1e2a2e5bebe3938bf0ced367bce1130cd648973320664"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/framework/combined_effect_lifecycle_expected.json",
+      "archive_path": "native/state_loan_final_world_163822_943595/framework/combined_effect_lifecycle_expected.json",
+      "bytes": 268,
+      "sha256": "ce68ed17caabb3852c835d03755f004e08719688aed726331f66278adcc8aceb"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/framework/combined_effect_lifecycle_test.result.json",
+      "archive_path": "native/state_loan_final_world_163822_943595/framework/combined_effect_lifecycle_test.result.json",
+      "bytes": 5784,
+      "sha256": "8de8ae0a5c426f0811faa694238552e16b074a32a8dde55e09d0a3b1723fc152"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/framework/combined_effect_lifecycle_trace.json",
+      "archive_path": "native/state_loan_final_world_163822_943595/framework/combined_effect_lifecycle_trace.json",
+      "bytes": 71807,
+      "sha256": "d391244064f8dcfd3e09109edff5fbde16cad1a424bff59a604631f59c13db9a"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/framework/feature_resource_natural_cold_test.result.json",
+      "archive_path": "native/state_loan_final_world_163822_943595/framework/feature_resource_natural_cold_test.result.json",
+      "bytes": 2290,
+      "sha256": "79b79f741abb202083e4c6e48979affc03b2c1f056b64274a89e3b997ab8cfd3"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/framework/feature_resource_natural_expected.json",
+      "archive_path": "native/state_loan_final_world_163822_943595/framework/feature_resource_natural_expected.json",
+      "bytes": 268,
+      "sha256": "45dc8ddeb7758483227e2546abc5c5a176e8846ff6d86f3edac074c7278633b0"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/framework/feature_resource_natural_test.result.json",
+      "archive_path": "native/state_loan_final_world_163822_943595/framework/feature_resource_natural_test.result.json",
+      "bytes": 19017,
+      "sha256": "a3bdc8582247181303c7204aa8c3f5a87f64c6d8faf1b517d5ac88bd9cb3becb"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/framework/feature_resource_natural_trace.json",
+      "archive_path": "native/state_loan_final_world_163822_943595/framework/feature_resource_natural_trace.json",
+      "bytes": 1063871,
+      "sha256": "bb059b9a655c489d64843aa9bc3c6dfd237563b9657ed7b5a31c5a4fe2076381"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/framework/native_handoffs.json",
+      "archive_path": "native/state_loan_final_world_163822_943595/framework/native_handoffs.json",
+      "bytes": 8137,
+      "sha256": "e70d5d31dd63ca04a2f7fa9a51b76e92ecbae6bd78e69d0dc7a00e80619b300c"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/framework/natural_effect_lifecycle_cold_test.result.json",
+      "archive_path": "native/state_loan_final_world_163822_943595/framework/natural_effect_lifecycle_cold_test.result.json",
+      "bytes": 2289,
+      "sha256": "7603ef97f480b75bdb82357cbb866e356714c4c70a176bf2d523460911521f93"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/framework/natural_effect_lifecycle_expected.json",
+      "archive_path": "native/state_loan_final_world_163822_943595/framework/natural_effect_lifecycle_expected.json",
+      "bytes": 268,
+      "sha256": "07449c28a9e0745f8fa6f4cc24677a83d35bf0feda98c6be14a12839f0ead726"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/framework/natural_effect_lifecycle_test.result.json",
+      "archive_path": "native/state_loan_final_world_163822_943595/framework/natural_effect_lifecycle_test.result.json",
+      "bytes": 18144,
+      "sha256": "986d3751ed4e68d3ed3467b2afdd1392a7e5df77e55db254f170b41c7dadb56c"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/framework/natural_effect_lifecycle_trace.json",
+      "archive_path": "native/state_loan_final_world_163822_943595/framework/natural_effect_lifecycle_trace.json",
+      "bytes": 1243271,
+      "sha256": "6f623f89c9c6c75c732dbcd28a924a215175f62c7fdf753c3739a1f5bb4641ae"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/framework/periodic_credit_safe_logout_cold_test.result.json",
+      "archive_path": "native/state_loan_final_world_163822_943595/framework/periodic_credit_safe_logout_cold_test.result.json",
+      "bytes": 2641,
+      "sha256": "14a075daf0277441a1d97f6688caee5949242ef0dafb2bda1dbf86d51679c82c"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/framework/periodic_credit_safe_logout_expected.json",
+      "archive_path": "native/state_loan_final_world_163822_943595/framework/periodic_credit_safe_logout_expected.json",
+      "bytes": 613,
+      "sha256": "e86f461fbb8eacb5f16d17954962011739c4402cecfe63272098310672444950"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_final_world_163822_943595/framework/periodic_credit_safe_logout_test.result.json",
+      "archive_path": "native/state_loan_final_world_163822_943595/framework/periodic_credit_safe_logout_test.result.json",
+      "bytes": 5914,
+      "sha256": "aca88adfd6a4b91bc6bd41304f2509d0b2679762de959f0d18175e1a2058455b"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_green_161140_604381/before.json",
+      "archive_path": "native/state_loan_lifetime_green_161140_604381/before.json",
+      "bytes": 513358,
+      "sha256": "0e205e20ea899779e3a38772d79f1c3ac30d651be8e36585f81096daf427c899"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_green_161140_604381/after.json",
+      "archive_path": "native/state_loan_lifetime_green_161140_604381/after.json",
+      "bytes": 513358,
+      "sha256": "a80d958ccd0e472e70eeb337b0625a95635eff19b4a87966c72ab136046b9401"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_green_161140_604381/validation.json",
+      "archive_path": "native/state_loan_lifetime_green_161140_604381/validation.json",
+      "bytes": 540,
+      "sha256": "cec06088687d9a2de29f2e576aae89c52f8e1075653a356449874f1c7bf3f471"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_green_161140_604381/runner_results.json",
+      "archive_path": "native/state_loan_lifetime_green_161140_604381/runner_results.json",
+      "bytes": 6721,
+      "sha256": "8d9deb01d3c2c6151f49ec0a8ffec4c852f59b28f5de78d590ebb0af94249847"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_green_161140_604381/runner.log",
+      "archive_path": "native/state_loan_lifetime_green_161140_604381/runner.log",
+      "bytes": 376,
+      "sha256": "292ce0b4e2cc1aadfeb19c57c340b5d7302b1b7d8a6d2f32e2a05c94f53095f3"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_green_161140_604381/raw/feature_child_capacity_test.godot.log",
+      "archive_path": "native/state_loan_lifetime_green_161140_604381/raw/feature_child_capacity_test.godot.log",
+      "bytes": 220,
+      "sha256": "cef3fb096b623e53ef146784179145bff8418e8930394a4a837d77320e9e70c2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_green_161140_604381/raw/feature_child_capacity_test.stderr.log",
+      "archive_path": "native/state_loan_lifetime_green_161140_604381/raw/feature_child_capacity_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_green_161140_604381/raw/feature_child_capacity_test.stdout.log",
+      "archive_path": "native/state_loan_lifetime_green_161140_604381/raw/feature_child_capacity_test.stdout.log",
+      "bytes": 224,
+      "sha256": "3a4c87184d6a335dbc768664a89c8f5a469b15d4d9667f7ec1e1fabb4e507691"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_green_161140_604381/raw/feature_child_execution_test.godot.log",
+      "archive_path": "native/state_loan_lifetime_green_161140_604381/raw/feature_child_execution_test.godot.log",
+      "bytes": 5361,
+      "sha256": "cb41f669c0e52db2bb065cda50a996ae4cd2e44ce761e46b3791189105ef6d30"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_green_161140_604381/raw/feature_child_execution_test.stderr.log",
+      "archive_path": "native/state_loan_lifetime_green_161140_604381/raw/feature_child_execution_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_green_161140_604381/raw/feature_child_execution_test.stdout.log",
+      "archive_path": "native/state_loan_lifetime_green_161140_604381/raw/feature_child_execution_test.stdout.log",
+      "bytes": 5372,
+      "sha256": "5a61ae17e24233ab2e165934d531a88d73364f3e964c1047af5777f96a825ce6"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_green_161140_604381/raw/feature_state_loan_lifetime_test.godot.log",
+      "archive_path": "native/state_loan_lifetime_green_161140_604381/raw/feature_state_loan_lifetime_test.godot.log",
+      "bytes": 270,
+      "sha256": "aa2a52d4343bd0c3d06d0630d99df52183aee8921ce4eaab87b48801b3c9b2e2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_green_161140_604381/raw/feature_state_loan_lifetime_test.stderr.log",
+      "archive_path": "native/state_loan_lifetime_green_161140_604381/raw/feature_state_loan_lifetime_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_green_161140_604381/raw/feature_state_loan_lifetime_test.stdout.log",
+      "archive_path": "native/state_loan_lifetime_green_161140_604381/raw/feature_state_loan_lifetime_test.stdout.log",
+      "bytes": 276,
+      "sha256": "9575c2ea562442df5a9d66e32c19b9ae5b103ab74c66c8e2ed0882e7c2445976"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_green_161140_604381/raw/periodic_callback_retirement_test.godot.log",
+      "archive_path": "native/state_loan_lifetime_green_161140_604381/raw/periodic_callback_retirement_test.godot.log",
+      "bytes": 234,
+      "sha256": "355903ee2ba46ebf9bdecebfe08bdcc0ea1813601ff9411ca60ad5432f054da0"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_green_161140_604381/raw/periodic_callback_retirement_test.stderr.log",
+      "archive_path": "native/state_loan_lifetime_green_161140_604381/raw/periodic_callback_retirement_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_green_161140_604381/raw/periodic_callback_retirement_test.stdout.log",
+      "archive_path": "native/state_loan_lifetime_green_161140_604381/raw/periodic_callback_retirement_test.stdout.log",
+      "bytes": 238,
+      "sha256": "cfd2e0ba6e03abad2266d3a795b420e779bf585628072a74f20633b182176a5b"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_green_161140_604381/framework/feature_child_capacity_test.result.json",
+      "archive_path": "native/state_loan_lifetime_green_161140_604381/framework/feature_child_capacity_test.result.json",
+      "bytes": 6218,
+      "sha256": "594ce2c84d874ad623542e2560d6f654ed73aa4a806d35edb6388b0f1ded94bc"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_green_161140_604381/framework/feature_child_execution_test.result.json",
+      "archive_path": "native/state_loan_lifetime_green_161140_604381/framework/feature_child_execution_test.result.json",
+      "bytes": 4413,
+      "sha256": "43b54a9c0b2f3dea62eed63d5e46e859a8e8763df8e0c90d2cb3f4847b483303"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_green_161140_604381/framework/feature_state_loan_lifetime_test.result.json",
+      "archive_path": "native/state_loan_lifetime_green_161140_604381/framework/feature_state_loan_lifetime_test.result.json",
+      "bytes": 4942,
+      "sha256": "2553416dc42c7acfaa6c80c3ed4dd62864e185784527f7f973b9ec809d34a104"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_green_161140_604381/framework/native_handoffs.json",
+      "archive_path": "native/state_loan_lifetime_green_161140_604381/framework/native_handoffs.json",
+      "bytes": 4323,
+      "sha256": "e4befe1420943b990f9824bc212741475ee6e0dff4467f4f29d270903723ab71"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_green_161140_604381/framework/periodic_callback_retirement_test.result.json",
+      "archive_path": "native/state_loan_lifetime_green_161140_604381/framework/periodic_callback_retirement_test.result.json",
+      "bytes": 5055,
+      "sha256": "e71ab914b53bcc897baae8ce5485d7000e6c7f93147e36188e7c97b76063758c"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_native_red_160649_988767/before.json",
+      "archive_path": "native/state_loan_lifetime_native_red_160649_988767/before.json",
+      "bytes": 513358,
+      "sha256": "f457f338e55242617b2e1c057544a86f5384a34220123e51c81cb15075bc8128"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_native_red_160649_988767/after.json",
+      "archive_path": "native/state_loan_lifetime_native_red_160649_988767/after.json",
+      "bytes": 513358,
+      "sha256": "9c19b7fda1b86c7234e7e677f2f2212d45ddb951f21b457cc675cf33212966f0"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_native_red_160649_988767/validation.json",
+      "archive_path": "native/state_loan_lifetime_native_red_160649_988767/validation.json",
+      "bytes": 380,
+      "sha256": "93cf694e810a04d253884da09ef2627bb2fdb3f6d1a35c0a2cd3b050dadf9f7b"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_native_red_160649_988767/runner_results.json",
+      "archive_path": "native/state_loan_lifetime_native_red_160649_988767/runner_results.json",
+      "bytes": 2370,
+      "sha256": "fa5ee79b6b1d4159fee608fbadd0f43410695dca5db1b24a4d5ea0f3a6035999"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_native_red_160649_988767/runner.log",
+      "archive_path": "native/state_loan_lifetime_native_red_160649_988767/runner.log",
+      "bytes": 1230,
+      "sha256": "ac180a1bd876d9da9926136f288ae8b6be25ac564dee5de284b6f7f24e702f8f"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_native_red_160649_988767/raw/feature_state_loan_lifetime_test.godot.log",
+      "archive_path": "native/state_loan_lifetime_native_red_160649_988767/raw/feature_state_loan_lifetime_test.godot.log",
+      "bytes": 748,
+      "sha256": "d5dd1e3f4c06e1011db6183ad5443349703403874beeef4c86babe5fe134fef7"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_native_red_160649_988767/raw/feature_state_loan_lifetime_test.stderr.log",
+      "archive_path": "native/state_loan_lifetime_native_red_160649_988767/raw/feature_state_loan_lifetime_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_native_red_160649_988767/raw/feature_state_loan_lifetime_test.stdout.log",
+      "archive_path": "native/state_loan_lifetime_native_red_160649_988767/raw/feature_state_loan_lifetime_test.stdout.log",
+      "bytes": 754,
+      "sha256": "d8ce38a3a1b246d0352018490e6dbd2ff72a4be92992479111134614be9e7e81"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_native_red_160649_988767/framework/feature_state_loan_lifetime_test.result.json",
+      "archive_path": "native/state_loan_lifetime_native_red_160649_988767/framework/feature_state_loan_lifetime_test.result.json",
+      "bytes": 4835,
+      "sha256": "836ab382d67336ecc3b82fce0fe7ca6720a64301205363cb32887958b0a0c6f7"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_native_red_160649_988767/framework/native_handoffs.json",
+      "archive_path": "native/state_loan_lifetime_native_red_160649_988767/framework/native_handoffs.json",
+      "bytes": 715,
+      "sha256": "0572596c7c3204af2a7fb68359ee22bdeb542bf3bcf4f360a62d597452c1e4db"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_red_160309_099082/before.json",
+      "archive_path": "native/state_loan_lifetime_red_160309_099082/before.json",
+      "bytes": 513358,
+      "sha256": "5089c570906dad7d173033dd3d76e2af229f301ddd39c6c5fe89da694cf1cc0b"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_red_160309_099082/after.json",
+      "archive_path": "native/state_loan_lifetime_red_160309_099082/after.json",
+      "bytes": 513358,
+      "sha256": "ab801ee1bd136d66819594eff10b5a586919b2d5006061a280ada1e09121ab4e"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_red_160309_099082/validation.json",
+      "archive_path": "native/state_loan_lifetime_red_160309_099082/validation.json",
+      "bytes": 380,
+      "sha256": "93cf694e810a04d253884da09ef2627bb2fdb3f6d1a35c0a2cd3b050dadf9f7b"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_red_160309_099082/runner_results.json",
+      "archive_path": "native/state_loan_lifetime_red_160309_099082/runner_results.json",
+      "bytes": 2428,
+      "sha256": "016e1a666d18b77235455fff28af6b5d4445ece05769d690cee52ab8e8cc6be9"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_red_160309_099082/runner.log",
+      "archive_path": "native/state_loan_lifetime_red_160309_099082/runner.log",
+      "bytes": 1269,
+      "sha256": "364371705a9e7f09d2c91ae7b7f365b0d3cc3c5cddbd9ac2e9f7a69234f92e8c"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_red_160309_099082/raw/feature_state_loan_lifetime_test.godot.log",
+      "archive_path": "native/state_loan_lifetime_red_160309_099082/raw/feature_state_loan_lifetime_test.godot.log",
+      "bytes": 654,
+      "sha256": "d4a9634fbe818d1bc4f363622c2f155dd4830fa69c0bdc8c37d335338937dc0e"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_red_160309_099082/raw/feature_state_loan_lifetime_test.stderr.log",
+      "archive_path": "native/state_loan_lifetime_red_160309_099082/raw/feature_state_loan_lifetime_test.stderr.log",
+      "bytes": 589,
+      "sha256": "0eaa1d65d34391854fddbdd64acc278d8358f8ae023b745ca01e2f78a182eb74"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_red_160309_099082/raw/feature_state_loan_lifetime_test.stdout.log",
+      "archive_path": "native/state_loan_lifetime_red_160309_099082/raw/feature_state_loan_lifetime_test.stdout.log",
+      "bytes": 73,
+      "sha256": "bb3bcf7181e550fe37f9235c4aecf24a81b757eddfeff554d88e7974feb2ed1d"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_red_160309_099082/framework/native_handoffs.json",
+      "archive_path": "native/state_loan_lifetime_red_160309_099082/framework/native_handoffs.json",
+      "bytes": 709,
+      "sha256": "9f358b821ff0e618fd4c6b022055f9a6637e37300732aab40ad0cb73554d6831"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_valid_red_160406_210642/before.json",
+      "archive_path": "native/state_loan_lifetime_valid_red_160406_210642/before.json",
+      "bytes": 513358,
+      "sha256": "c57e2d8aa86e8c0bac099e4d083ea40a0a824f583c71bb04cc5014d9dbc38f75"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_valid_red_160406_210642/after.json",
+      "archive_path": "native/state_loan_lifetime_valid_red_160406_210642/after.json",
+      "bytes": 513358,
+      "sha256": "f34f6341b5168cd9b683fbc43575de8a7b6c51109541825e3da9f3f97525f911"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_valid_red_160406_210642/validation.json",
+      "archive_path": "native/state_loan_lifetime_valid_red_160406_210642/validation.json",
+      "bytes": 380,
+      "sha256": "93cf694e810a04d253884da09ef2627bb2fdb3f6d1a35c0a2cd3b050dadf9f7b"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_valid_red_160406_210642/runner_results.json",
+      "archive_path": "native/state_loan_lifetime_valid_red_160406_210642/runner_results.json",
+      "bytes": 2441,
+      "sha256": "80657289b9ecc73c67d3970e830f538a94ac88a5067338569a12bf091c2795ab"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_valid_red_160406_210642/runner.log",
+      "archive_path": "native/state_loan_lifetime_valid_red_160406_210642/runner.log",
+      "bytes": 1167,
+      "sha256": "9a97ce96d0774eef06581443a50e63f2d6174c59a94e59c2b3c27037275f030f"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_valid_red_160406_210642/raw/feature_state_loan_lifetime_test.godot.log",
+      "archive_path": "native/state_loan_lifetime_valid_red_160406_210642/raw/feature_state_loan_lifetime_test.godot.log",
+      "bytes": 516,
+      "sha256": "2de0c52d59fc5797a13f6882ff8aa370d1de87b78a226f0b7b5e690cb1adec52"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_valid_red_160406_210642/raw/feature_state_loan_lifetime_test.stderr.log",
+      "archive_path": "native/state_loan_lifetime_valid_red_160406_210642/raw/feature_state_loan_lifetime_test.stderr.log",
+      "bytes": 283,
+      "sha256": "fc11d1e592f96c262b7025191d0ce60b3d48ee26d785d69ef42e21cf800c4eb2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_valid_red_160406_210642/raw/feature_state_loan_lifetime_test.stdout.log",
+      "archive_path": "native/state_loan_lifetime_valid_red_160406_210642/raw/feature_state_loan_lifetime_test.stdout.log",
+      "bytes": 242,
+      "sha256": "919e2e3e7e3591fad664fc0965a5fc4d02ab3e5fcb13959075e49175613b254e"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_lifetime_valid_red_160406_210642/framework/native_handoffs.json",
+      "archive_path": "native/state_loan_lifetime_valid_red_160406_210642/framework/native_handoffs.json",
+      "bytes": 715,
+      "sha256": "f045b86c7923e24e7f18a5cab8bf844916113e5802a8ed5ed0a6828c1fe65f4b"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_reclaim_clear_candidate_162810_378902/before.json",
+      "archive_path": "native/state_loan_reclaim_clear_candidate_162810_378902/before.json",
+      "bytes": 513714,
+      "sha256": "b1fcb683756c0abf22092dbf97e323a71baa2816157ad320d452969c21089612"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_reclaim_clear_candidate_162810_378902/after.json",
+      "archive_path": "native/state_loan_reclaim_clear_candidate_162810_378902/after.json",
+      "bytes": 513714,
+      "sha256": "94efb16a0d688d41c90495b98a941ff18ba4f670b8884986713146d54ecbe2bd"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_reclaim_clear_candidate_162810_378902/validation.json",
+      "archive_path": "native/state_loan_reclaim_clear_candidate_162810_378902/validation.json",
+      "bytes": 483,
+      "sha256": "8455fb0b9fafe25236dd8c85113d036684b696b60e9ca83f31b6270d541005a9"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_reclaim_clear_candidate_162810_378902/runner_results.json",
+      "archive_path": "native/state_loan_reclaim_clear_candidate_162810_378902/runner_results.json",
+      "bytes": 5273,
+      "sha256": "3cbc3e2efd88f8bae173404df7303080b15a1f49559b80e2183e4fc12aa7b070"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_reclaim_clear_candidate_162810_378902/runner.log",
+      "archive_path": "native/state_loan_reclaim_clear_candidate_162810_378902/runner.log",
+      "bytes": 336,
+      "sha256": "7c732035959025659564f71483c78464410ff66e3e79e093af8df3e19b227ca5"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_reclaim_clear_candidate_162810_378902/raw/feature_child_capacity_test.godot.log",
+      "archive_path": "native/state_loan_reclaim_clear_candidate_162810_378902/raw/feature_child_capacity_test.godot.log",
+      "bytes": 220,
+      "sha256": "2b3aca5d9649f02ae32155a5d6e7589353eee5481e8a11b2a525eba41ec9aaed"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_reclaim_clear_candidate_162810_378902/raw/feature_child_capacity_test.stderr.log",
+      "archive_path": "native/state_loan_reclaim_clear_candidate_162810_378902/raw/feature_child_capacity_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_reclaim_clear_candidate_162810_378902/raw/feature_child_capacity_test.stdout.log",
+      "archive_path": "native/state_loan_reclaim_clear_candidate_162810_378902/raw/feature_child_capacity_test.stdout.log",
+      "bytes": 224,
+      "sha256": "75cfadc3653095afa0271c07e3fcef22f226377aa5720201e0a7a2d9dc127607"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_reclaim_clear_candidate_162810_378902/raw/feature_state_loan_lifetime_test.godot.log",
+      "archive_path": "native/state_loan_reclaim_clear_candidate_162810_378902/raw/feature_state_loan_lifetime_test.godot.log",
+      "bytes": 270,
+      "sha256": "be9cf5ca284465b4cf91329380d99da763976039d0f73e491e35ae406eed7072"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_reclaim_clear_candidate_162810_378902/raw/feature_state_loan_lifetime_test.stderr.log",
+      "archive_path": "native/state_loan_reclaim_clear_candidate_162810_378902/raw/feature_state_loan_lifetime_test.stderr.log",
+      "bytes": 250,
+      "sha256": "9abaeb31deca888a59de0b38bc60a768363cc109851192c3f5b8906753d9296d"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_reclaim_clear_candidate_162810_378902/raw/feature_state_loan_lifetime_test.stdout.log",
+      "archive_path": "native/state_loan_reclaim_clear_candidate_162810_378902/raw/feature_state_loan_lifetime_test.stdout.log",
+      "bytes": 276,
+      "sha256": "01c8ce31c0c5d750176765cdd9d0589edaca6280594586d428d9dacbc515178e"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_reclaim_clear_candidate_162810_378902/raw/feature_state_loan_root_test.godot.log",
+      "archive_path": "native/state_loan_reclaim_clear_candidate_162810_378902/raw/feature_state_loan_root_test.godot.log",
+      "bytes": 5407,
+      "sha256": "d95a7951588784690ea13979b5ff6ea4ab0e68800c41c86c800f5b8d49694fa5"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_reclaim_clear_candidate_162810_378902/raw/feature_state_loan_root_test.stderr.log",
+      "archive_path": "native/state_loan_reclaim_clear_candidate_162810_378902/raw/feature_state_loan_root_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_reclaim_clear_candidate_162810_378902/raw/feature_state_loan_root_test.stdout.log",
+      "archive_path": "native/state_loan_reclaim_clear_candidate_162810_378902/raw/feature_state_loan_root_test.stdout.log",
+      "bytes": 5418,
+      "sha256": "e9555a9d7b9bdb7bfe5ce267c20c0dcbb324648a0a03b28060179758cc3e7000"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_reclaim_clear_candidate_162810_378902/framework/feature_child_capacity_test.result.json",
+      "archive_path": "native/state_loan_reclaim_clear_candidate_162810_378902/framework/feature_child_capacity_test.result.json",
+      "bytes": 7640,
+      "sha256": "5afc3e76d085214d55faf8fc90d3f1eb81d4bc08975d0b700c89a85f5a370c63"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_reclaim_clear_candidate_162810_378902/framework/feature_state_loan_lifetime_test.result.json",
+      "archive_path": "native/state_loan_reclaim_clear_candidate_162810_378902/framework/feature_state_loan_lifetime_test.result.json",
+      "bytes": 5751,
+      "sha256": "13d9c9874bd18be8f8e1bb9f6cd7b68f8e4b744eda96e6c47bd8f860d10f53f7"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_reclaim_clear_candidate_162810_378902/framework/feature_state_loan_root_test.result.json",
+      "archive_path": "native/state_loan_reclaim_clear_candidate_162810_378902/framework/feature_state_loan_root_test.result.json",
+      "bytes": 4456,
+      "sha256": "0e831c57b97566ed4d5bb1478a193c068133517c8999884ed64572aee88c414c"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_reclaim_clear_candidate_162810_378902/framework/native_handoffs.json",
+      "archive_path": "native/state_loan_reclaim_clear_candidate_162810_378902/framework/native_handoffs.json",
+      "bytes": 3399,
+      "sha256": "728ff85c9a5c934b124e2491febbd6eb6ee74466e43c9e303f01e1cdc59cfdae"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_root_candidate_162330_694565/before.json",
+      "archive_path": "native/state_loan_root_candidate_162330_694565/before.json",
+      "bytes": 513714,
+      "sha256": "1953fdf3c81ebcbeefd8d973d84612f9f7d14d5798ae9ebdccee804c891a7939"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_root_candidate_162330_694565/after.json",
+      "archive_path": "native/state_loan_root_candidate_162330_694565/after.json",
+      "bytes": 513714,
+      "sha256": "84628a25d29f42213f99b448e3600c4bc4e778aaa17d6b777093040d841fe432"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_root_candidate_162330_694565/validation.json",
+      "archive_path": "native/state_loan_root_candidate_162330_694565/validation.json",
+      "bytes": 427,
+      "sha256": "41671d2b84e1a059535bc05088368900a9eb230b83d5a530a6de1a4183b36417"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_root_candidate_162330_694565/runner_results.json",
+      "archive_path": "native/state_loan_root_candidate_162330_694565/runner_results.json",
+      "bytes": 3757,
+      "sha256": "f3f38d56555d6b3e1ee8952ff8093f7ba647174ef1ad333d5ae41030a27dcaa8"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_root_candidate_162330_694565/runner.log",
+      "archive_path": "native/state_loan_root_candidate_162330_694565/runner.log",
+      "bytes": 296,
+      "sha256": "588224a41170f7b0210e9970f486d1959c7be1b52bdde1352437f4fb7264bb1a"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_root_candidate_162330_694565/raw/feature_child_capacity_test.godot.log",
+      "archive_path": "native/state_loan_root_candidate_162330_694565/raw/feature_child_capacity_test.godot.log",
+      "bytes": 220,
+      "sha256": "2b3aca5d9649f02ae32155a5d6e7589353eee5481e8a11b2a525eba41ec9aaed"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_root_candidate_162330_694565/raw/feature_child_capacity_test.stderr.log",
+      "archive_path": "native/state_loan_root_candidate_162330_694565/raw/feature_child_capacity_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_root_candidate_162330_694565/raw/feature_child_capacity_test.stdout.log",
+      "archive_path": "native/state_loan_root_candidate_162330_694565/raw/feature_child_capacity_test.stdout.log",
+      "bytes": 224,
+      "sha256": "75cfadc3653095afa0271c07e3fcef22f226377aa5720201e0a7a2d9dc127607"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_root_candidate_162330_694565/raw/feature_state_loan_root_test.godot.log",
+      "archive_path": "native/state_loan_root_candidate_162330_694565/raw/feature_state_loan_root_test.godot.log",
+      "bytes": 5130,
+      "sha256": "36e9084f47c34a58fc60c3232161666938e83993242e0051969ae4f966226961"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_root_candidate_162330_694565/raw/feature_state_loan_root_test.stderr.log",
+      "archive_path": "native/state_loan_root_candidate_162330_694565/raw/feature_state_loan_root_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_root_candidate_162330_694565/raw/feature_state_loan_root_test.stdout.log",
+      "archive_path": "native/state_loan_root_candidate_162330_694565/raw/feature_state_loan_root_test.stdout.log",
+      "bytes": 5140,
+      "sha256": "14d35e57ce915bdfd02f47d85d719cd288243f20b726cc3eefbf3e47fd64996f"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_root_candidate_162330_694565/framework/feature_child_capacity_test.result.json",
+      "archive_path": "native/state_loan_root_candidate_162330_694565/framework/feature_child_capacity_test.result.json",
+      "bytes": 7622,
+      "sha256": "9ace0945567df4b1b81e40bfaf093249681f6686614ce27907f79ab7fe964eb4"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_root_candidate_162330_694565/framework/feature_state_loan_root_test.result.json",
+      "archive_path": "native/state_loan_root_candidate_162330_694565/framework/feature_state_loan_root_test.result.json",
+      "bytes": 4439,
+      "sha256": "c81a7b9c6074ff64d6e70ee08966da68c8f9501c02fccbdd4c00dcce8d972369"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_root_candidate_162330_694565/framework/native_handoffs.json",
+      "archive_path": "native/state_loan_root_candidate_162330_694565/framework/native_handoffs.json",
+      "bytes": 2466,
+      "sha256": "3a50bf8b5669b097bb0e3dab0523427abe38858c491670e3397201d07dc5710b"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_root_parent_red_162533_861628/before.json",
+      "archive_path": "native/state_loan_root_parent_red_162533_861628/before.json",
+      "bytes": 513714,
+      "sha256": "264a42a653e34b963267c496a430f00478b768de23d2f86ee817e36bb003893f"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_root_parent_red_162533_861628/after.json",
+      "archive_path": "native/state_loan_root_parent_red_162533_861628/after.json",
+      "bytes": 513714,
+      "sha256": "509ca9729172e777827ee2b33025e1fb3c3835981c15050ee67403f971d72955"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_root_parent_red_162533_861628/validation.json",
+      "archive_path": "native/state_loan_root_parent_red_162533_861628/validation.json",
+      "bytes": 376,
+      "sha256": "7e18a75ddef4481decbbb13153bdaabbbda621bcaa89a6ecd64551438e86469f"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_root_parent_red_162533_861628/runner_results.json",
+      "archive_path": "native/state_loan_root_parent_red_162533_861628/runner_results.json",
+      "bytes": 2354,
+      "sha256": "8b5681b85235a8f9ad8013b85e1ebeacbdf9a809109abfa80e0bd17cca5aafde"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_root_parent_red_162533_861628/runner.log",
+      "archive_path": "native/state_loan_root_parent_red_162533_861628/runner.log",
+      "bytes": 6129,
+      "sha256": "b16263907240a2e0ad4729451b57d66d76eef73c55cb1c86b1610fd5c27ce2b7"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_root_parent_red_162533_861628/raw/feature_state_loan_root_test.godot.log",
+      "archive_path": "native/state_loan_root_parent_red_162533_861628/raw/feature_state_loan_root_test.godot.log",
+      "bytes": 5515,
+      "sha256": "ff95e3d74b3c38387c47e51aa5a3818806ac8447caf143cd7da80e021af1e705"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_root_parent_red_162533_861628/raw/feature_state_loan_root_test.stderr.log",
+      "archive_path": "native/state_loan_root_parent_red_162533_861628/raw/feature_state_loan_root_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_root_parent_red_162533_861628/raw/feature_state_loan_root_test.stdout.log",
+      "archive_path": "native/state_loan_root_parent_red_162533_861628/raw/feature_state_loan_root_test.stdout.log",
+      "bytes": 5526,
+      "sha256": "84053437fc88ee05711af05f45931731668c7cde44be14c9e53e7f3cccb0a4e6"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_root_parent_red_162533_861628/framework/feature_state_loan_root_test.result.json",
+      "archive_path": "native/state_loan_root_parent_red_162533_861628/framework/feature_state_loan_root_test.result.json",
+      "bytes": 2169,
+      "sha256": "19d43a5b423673600ded18b13ac3f5c6fe4111b76963fe901a68637797704771"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/state_loan_root_parent_red_162533_861628/framework/native_handoffs.json",
+      "archive_path": "native/state_loan_root_parent_red_162533_861628/framework/native_handoffs.json",
+      "bytes": 711,
+      "sha256": "acbdf59370c764cb86a857581863c06aef215476681c9ac4189c948e0fe0e2c7"
+    }
+  ]
+}

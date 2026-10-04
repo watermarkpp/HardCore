@@ -31,3 +31,6 @@ damage_batch在Enemy现有HP提交后冻结actual_loss和target_survived_commit�
 
 
 2026-10-04 周期回调与出生槽检查点：父2b4 Pro完整报告已实际读取；小可爱该请求平台终止FAIL/报告MISSING，不宣称双通过。正式周期HP回调clear原32检查4FAIL→32PASS；同base slot重复出生原9/2FAIL→9PASS，补死亡离group的身体窗口11/1FAIL→11PASS。最终同d94ee4b474239cd21ccdc07080ea713db712cbb69122708b3e3527b164ebe0ba内容45场景/1420检查，见PERIODIC_RETIREMENT_WORKLOG_20261004.md及docs/review/framework_periodic_retirement_20261004。地图formal respawn audit FAIL和父Root单文件对照同FAIL保留，未改authoring。N*S池/完整periodic child、Task3/4/5/P6/设备/APK均继续，不关闭整体目标。
+
+
+2026-10-04 原根状态槽归还检查点：父800两份完整独立正文已实际读取，原小可爱发送FAIL保留但本次直接拉取全文，不重发。203为待补政策槽位总数，360是最低投递门禁。有限direct/child驻留池与原根归还已实施，原有效28/6FAIL→29PASS的计数差明确说明；真实Root两文件父控制85槽child_state_capacity的9/1FAIL→25检查路径完成。新增stop-clear及A/B/C共享owner/历史credit保留。最终同61eede69a13173fe99d41b44ae2cc24d82e82bc1d65af467a692d0abdb8f36de内容47场景/1492检查，见STATE_LOAN_WORKLOG_20261004.md及docs/review/framework_state_loans_20261004。未开放periodic child，累计刷新tickgrant、服务时效/量子、Task3实际资源消费/Task5自然P6R3/设备/APK继续；主树第二树及旧FAIL/MISSING保留。

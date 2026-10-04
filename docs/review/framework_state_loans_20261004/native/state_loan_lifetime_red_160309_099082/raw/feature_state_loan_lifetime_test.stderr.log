@@ -1,0 +1,6 @@
+SCRIPT ERROR: Parse Error: Cannot infer the type of "sealed" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/framework/feature_state_loan_lifetime_test.gd:164)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "submitted" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/framework/feature_state_loan_lifetime_test.gd:165)
+ERROR: Failed to load script "res://tests/framework/feature_state_loan_lifetime_test.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)

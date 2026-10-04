@@ -1,0 +1,8 @@
+{
+  "schema_version":1,
+  "modules":[{"module_id":"hc.validation.state_loan_lifetime","path":"res://assets/data/features/validation/state_loan_lifetime.json"}],
+  "bindings":[
+    {"module_id":"hc.validation.state_loan_lifetime","kind":"rule","rule_id":"hc.validation.state_loan_lifetime","mechanic_id":"hc.validation.state_loan_lifetime.ignite"},
+    {"module_id":"hc.validation.state_loan_lifetime","kind":"rule","rule_id":"hc.validation.state_loan_lifetime","mechanic_id":"hc.validation.state_loan_lifetime.death"}
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "fixture exhausts the actual shared ledger before production entry",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "ready resource admission cannot acquire a second frame allowance",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "optional death settlement cannot bypass exhaustion with a first-job exception",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "explicit death lifecycle barrier drains preserved work",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "exhaustion preserves the accepted ordered request",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "ordinary JSON entry cannot start optional work after another owner exhausts the frame",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "explicit lifecycle barrier completes real durable IO despite exhaustion",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "explicit barrier consumes all receipt ownership",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "real path scheduler cannot reset the exhausted process-frame allowance",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "deferred real path eventually completes exactly once after fresh admission",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "all production entries close synchronous scopes",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "ready resource is delivered exactly once after fresh admission",
+      "passed": true
+    }
+  ],
+  "count": 12,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "b91aa64a-74bf-4b29-92ce-c7419d7a3d64",
+  "passed": 12,
+  "reported_checks": 12,
+  "reported_failures": 0,
+  "run_id": "84c2d8e1-6a78-4f41-9ed3-87a11a72a7fe",
+  "runtime_environment": {
+    "native_process_id": 10720,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\state_loan_final_direct_9029e27890e84e819229f42dd2f5b208",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/state_loan_final_direct_9029e27890e84e819229f42dd2f5b208/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "budget_producer_admission_test",
+  "schema_version": 1,
+  "source_content_sha256": "61eede69a13173fe99d41b44ae2cc24d82e82bc1d65af467a692d0abdb8f36de",
+  "status": "PASS"
+}

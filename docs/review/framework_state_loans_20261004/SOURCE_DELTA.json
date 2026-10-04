@@ -1,0 +1,51 @@
+{
+  "parent": "800cca3cdb7cf21bc0802ae2650d982ec6cc0c9e",
+  "source_content_sha256": "61eede69a13173fe99d41b44ae2cc24d82e82bc1d65af467a692d0abdb8f36de",
+  "delta": [
+    {
+      "path": "scripts/features/compilation/child_capacity_proof.gd",
+      "before_sha256": "9e577867b51ff7e18664dc53bb962e76f4085c144b8ca33fcab10d790f2730e5",
+      "after_sha256": "9c060eb8ca72becaf2d9a589a539e7cc0a28ccff8abb461cc76c41f5123be973"
+    },
+    {
+      "path": "scripts/features/runtime/effect_runtime.gd",
+      "before_sha256": "955ceeb282038836527cc2bce96c3e0e1ab1cfe815ba2a32492417af8267bcc0",
+      "after_sha256": "667f7855dd428fa821227682082e910a7f3f02cc73a13f0b7a80a66df069deae"
+    },
+    {
+      "path": "tests/framework/feature_child_capacity_test.gd",
+      "before_sha256": "de5e27fe6d93095d45907b687555b6a057749ef81e1a8f4e01c56e5245c52da0",
+      "after_sha256": "a9f98a16ba7a105c1d76c0c1c44e7e4dc5578dec918226659bd8df5ae6b1fe2c"
+    },
+    {
+      "path": "tests/framework/feature_state_loan_lifetime_test.gd",
+      "before_sha256": null,
+      "after_sha256": "9b674942ddce29082561a0f15007fb814be234f1787138d702f9e7f05ad601f6"
+    },
+    {
+      "path": "tests/framework/feature_state_loan_lifetime_test.tscn",
+      "before_sha256": null,
+      "after_sha256": "cc30e5c6afeff7381ed2b89630e07baa8e83e2841410546562ad27095aa21dd1"
+    },
+    {
+      "path": "tests/framework/feature_state_loan_root_test.gd",
+      "before_sha256": null,
+      "after_sha256": "31f04305d014a989b5b508f34aaf116ee878a4f00366cda9050443d349536346"
+    },
+    {
+      "path": "tests/framework/feature_state_loan_root_test.tscn",
+      "before_sha256": null,
+      "after_sha256": "2f452ca5fe1605df32197e9676f4645e9370df8dc0fd93cbcf359d8a9451ed9a"
+    },
+    {
+      "path": "assets/data/features/validation/state_loan_lifetime.json",
+      "before_sha256": null,
+      "after_sha256": "31a4d3b6410065727e14f02db609009f3bc08f950687be5a39125431e5a06b26"
+    },
+    {
+      "path": "assets/data/features/validation/state_loan_lifetime_registry.json",
+      "before_sha256": null,
+      "after_sha256": "e8041146e768407d0c0cd813434c02e7439b8e4a8e96f6ee871108bca4fef5d7"
+    }
+  ]
+}

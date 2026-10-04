@@ -1,0 +1,13 @@
+[FAIL] feature_state_loan_lifetime_test - missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1;framework_receipt_missing
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+鏁版嵁搴撹浇鍏ュ畬鎴愶細鍦板浘209 鎬墿156 Boss20 瑁呭175 鎶€鑳界瓑绾?32 鎺夎惤妲?424 浠诲姟9
+STATE_LOAN_CATALOG []
+STATE_LOAN_85_ADMISSION child_state_capacity
+SCRIPT ERROR: Invalid call. Nonexistent function 'identity' in base 'Nil'.
+   at: _run (res://tests/framework/feature_state_loan_lifetime_test.gd:121)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/framework/feature_state_loan_lifetime_test.gd:121)
+RUNNER_RESULTS_JSON=C:\Users\Administrator\.codex\worktrees\pluggable-framework-v2\HardCore\outputs\test_logs\runner_results_adhoc_20261004_160416_171_17708.json
+TEST_SUMMARY suite=adhoc passed=0 failed=1 engine_log_errors=1
+FAILED_TESTS=feature_state_loan_lifetime_test (missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1;framework_receipt_missing)

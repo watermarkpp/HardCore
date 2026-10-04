@@ -81,6 +81,30 @@ static func compile_serial_residency(request: Variant, limits: Variant) -> Dicti
 		"total_facts":int(total.cost.facts),"total_receipts":int(total.cost.receipts)},24,2)
 	return {"success":true,"reason":"","cost":cost.value}
 
+# Only the runtime's returned-origin-loan protocol can use this resident cost.
+# Every root holds N*S loans throughout its remaining production lifetime;
+# dead/retired receiver states return their origin loan before a new life uses
+# it. Refresh roots retain their own full pool and all shared state owners.
+# Cumulative creations/work and the complete command frontier are unchanged.
+static func compile_state_loan_residency(request: Variant, limits: Variant) -> Dictionary:
+	var total:=compile_serial_residency(request,{"pending_facts":MAX_EXACT_INTEGER-1,
+		"active_states":MAX_EXACT_INTEGER-1,"receipts":MAX_EXACT_INTEGER-1})
+	if not total.success: return total
+	if not limits is Dictionary or not _keys(limits,["pending_facts","active_states","receipts"]):
+		return _failure("invalid_child_capacity_limits")
+	for key: String in limits:
+		if not _integer(limits[key]): return _failure("invalid_child_capacity_limits")
+	var resident_states:=_multiply(int(request.maximum_receivers),int(request.persistent_bindings),MAX_EXACT_INTEGER)
+	if int(total.cost.facts)>int(limits.pending_facts) or int(total.cost.child_actions)>int(limits.pending_facts):
+		return _failure("child_fact_capacity")
+	if resident_states>int(limits.active_states): return _failure("child_state_capacity")
+	if int(total.cost.receipts)>int(limits.receipts): return _failure("child_receipt_capacity")
+	var cost:=Graph.capture({"facts":int(total.cost.facts),"states":resident_states,"receipts":int(total.cost.receipts),
+		"child_actions":int(total.cost.child_actions),"maximum_generation":int(total.cost.maximum_generation),
+		"total_facts":int(total.cost.total_facts),"total_receipts":int(total.cost.total_receipts),
+		"total_state_creations":int(total.cost.states),"state_residency":"returned_origin_loans"},32,2)
+	return {"success":true,"reason":"","cost":cost.value}
+
 static func _multiply(a: int, b: int, ceiling: int) -> int:
 	if a == 0 or b == 0: return 0
 	@warning_ignore("integer_division")

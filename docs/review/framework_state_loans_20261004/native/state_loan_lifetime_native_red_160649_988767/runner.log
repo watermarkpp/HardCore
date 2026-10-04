@@ -1,0 +1,10 @@
+[FAIL] feature_state_loan_lifetime_test - missing_pass_marker;non_zero_exit_code_1;framework_checks_failed
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+鏁版嵁搴撹浇鍏ュ畬鎴愶細鍦板浘209 鎬墿156 Boss20 瑁呭175 鎶€鑳界瓑绾?32 鎺夎惤妲?424 浠诲姟9
+STATE_LOAN_CATALOG []
+STATE_LOAN_85_ADMISSION child_state_capacity
+FEATURE_STATE_LOAN_LIFETIME_FAIL checks=28 errors=["85 receiver finite chain admits resident states rather than reserving every historical state creation", "one origin state spends one of the two resident loans", "replacement consumes returned origin loans without retaining the invalid old-life state", "the two live replacement states hold both origin loans", "loan reclamation gives the old life one explicit terminal outcome", "shared state ownership and two spare refresh-root loan pools remain separate"]
+RUNNER_RESULTS_JSON=C:\Users\Administrator\.codex\worktrees\pluggable-framework-v2\HardCore\outputs\test_logs\runner_results_adhoc_20261004_160700_939_3612.json
+TEST_SUMMARY suite=adhoc passed=0 failed=1 engine_log_errors=0
+FAILED_TESTS=feature_state_loan_lifetime_test (missing_pass_marker;non_zero_exit_code_1;framework_checks_failed)

@@ -1,0 +1,20 @@
+{
+  "request_id": "periodic-retirement-800cca3c-20261004",
+  "fixed_sha": "800cca3cdb7cf21bc0802ae2650d982ec6cc0c9e",
+  "thread_id": "01a0f143-1bc9-71c0-91f2-5de4ffd0b01f",
+  "host_id": "durable",
+  "turn_id": "01a105e2-a786-714d-ace5-eacb048cb17d",
+  "source_message_id": "exec-930156cd-c82d-45ac-beb1-da3c3ea4f776",
+  "source_type": "mcpToolCall",
+  "turn_status": "interrupted",
+  "original_delivery_status": "failed",
+  "full_body_read": true,
+  "body_chars": 4477,
+  "read_at_utc": "2026-10-04 08:19:07 UTC",
+  "actions": [
+    "Preserve scoped two-fix closure for 800cca3c; no new confirmed blocker in the reported scope",
+    "Correct ambiguous authoring203 text to 203 total authored-policy slots per local log and Pro source verification",
+    "State loans, multi-root credit/leases and cumulative periodic grants remain separate proof",
+    "Do not label failed outbound delivery as a missing full report after this direct pull; do not rewrite original delivery failure"
+  ]
+}
