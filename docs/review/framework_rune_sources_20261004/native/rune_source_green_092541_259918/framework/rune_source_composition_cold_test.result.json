@@ -1,0 +1,76 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "independent cold process starts with actual persistence",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "successful live composition supplies an explicit owned handoff",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "expectation binds this invocation's native exit-zero complete live producer",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "cold restoration has a different native execution identity",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "fresh process resolves the same registered sources through the production configuration",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "real cold loader restores the producer's isolated durable profile",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "cold equipment keeps the complete validated persisted wire content exactly",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "cold gear owns the same original gem and rune exactly once",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "cold aggregate has no second accessible copy of the embedded gem",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "cold compiler reconstructs the three exact affix, gem and rune provenance handles",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "cold retry of the original insertion returns the recorded outcome without a new writer",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "cold replay neither duplicates the gem nor replaces either source",
+      "passed": true
+    }
+  ],
+  "count": 12,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "fa8a65c3-ad0d-43ef-83a4-9d9388e1b4d5",
+  "passed": 12,
+  "reported_checks": 12,
+  "reported_failures": 0,
+  "run_id": "5192e0bd-e211-4cfc-acb5-85a256f8cc33",
+  "scene_id": "rune_source_composition_cold_test",
+  "schema_version": 1,
+  "source_content_sha256": "22d6b5c5311749f70c3edaf70c2a189a6f56bb21a895d6fbcb6698144f0d3621",
+  "status": "PASS"
+}

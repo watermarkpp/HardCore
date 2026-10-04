@@ -1,0 +1,141 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "null: establish known valid directory",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "null: malformed module entry rejects whole registry",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "null: rejection has explicit business error",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "null: malformed entry cannot publish empty or partial directory",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "number: establish known valid directory",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "number: malformed module entry rejects whole registry",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "number: rejection has explicit business error",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "number: malformed entry cannot publish empty or partial directory",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "string: establish known valid directory",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "string: malformed module entry rejects whole registry",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "string: rejection has explicit business error",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "string: malformed entry cannot publish empty or partial directory",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "array: establish known valid directory",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "array: malformed module entry rejects whole registry",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "array: rejection has explicit business error",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "array: malformed entry cannot publish empty or partial directory",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "boolean: establish known valid directory",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "boolean: malformed module entry rejects whole registry",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "boolean: rejection has explicit business error",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "boolean: malformed entry cannot publish empty or partial directory",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "mixed: establish known valid directory",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "mixed: malformed module entry rejects whole registry",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "mixed: rejection has explicit business error",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "mixed: malformed entry cannot publish empty or partial directory",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "baseline restored",
+      "passed": true
+    }
+  ],
+  "count": 25,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "65b99757-53d1-49ca-946a-78692bce500e",
+  "passed": 25,
+  "reported_checks": 25,
+  "reported_failures": 0,
+  "run_id": "c3b9f4c0-d7a7-4b6b-a963-dfa0d1a079ed",
+  "scene_id": "feature_registry_structure_test",
+  "schema_version": 1,
+  "source_content_sha256": "5b9967313469bd7f30178a76f0e72b7de01e99b58ca47052a43fecd0edaf49ee",
+  "status": "PASS"
+}

@@ -1,0 +1,46 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "trusted registry resolves a separately registered default-off rune business module",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "actual registered creators supply immutable gear and independently identified gem and rune",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "original three assets use the actual isolated profile writer",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "rune operation is unavailable before explicit module enablement",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "formal module activation enables the three declared source permissions",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "real common transaction port admits the correctly identified rune input",
+      "passed": false
+    }
+  ],
+  "count": 6,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "e5dc4791-9f0f-4713-afad-bb4b4509a1fa",
+  "passed": 5,
+  "reported_checks": 6,
+  "reported_failures": 1,
+  "run_id": "658a68e7-7103-4a0a-a712-d4ceb06da0ce",
+  "scene_id": "rune_transaction_test",
+  "schema_version": 1,
+  "source_content_sha256": "f20a325701a06e54f276456b0f9e70defbc2af1527455b52de78246f9b2026ad",
+  "status": "FAIL"
+}

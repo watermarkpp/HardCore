@@ -1,0 +1,19 @@
+[PASS] item_journal_v2_backup_test
+[FAIL] item_journal_v2_backup_seed_test - missing_pass_marker;non_zero_exit_code_1;framework_checks_failed
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+鏁版嵁搴撹浇鍏ュ畬鎴愶細鍦板浘209 鎬墿156 Boss20 瑁呭175 鎶€鑳界瓑绾?32 鎺夎惤妲?424 浠诲姟9
+item_journal_v2_backup_seed_test_FAIL checks=6 failures=["2->1: actual profile creation", "2->1: actual initial save", "2->1: actual transaction 1 failed { \"success\": false }", "receipt"]
+[FAIL] item_journal_v2_backup_cold_test - missing_pass_marker;non_zero_exit_code_1;framework_checks_failed
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+鏁版嵁搴撹浇鍏ュ畬鎴愶細鍦板浘209 鎬墿156 Boss20 瑁呭175 鎶€鑳界瓑绾?32 鎺夎惤妲?424 浠诲姟9
+item_journal_v2_backup_cold_test_FAIL checks=2 failures=["this native successful producer owns the corrupt-primary/old-v2 inputs", "receipt"]
+[FAIL] item_journal_v2_backup_restart_test - missing_pass_marker;non_zero_exit_code_1;framework_checks_failed
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+鏁版嵁搴撹浇鍏ュ畬鎴愶細鍦板浘209 鎬墿156 Boss20 瑁呭175 鎶€鑳界瓑绾?32 鎺夎惤妲?424 浠诲姟9
+item_journal_v2_backup_restart_test_FAIL checks=2 failures=["this native successful cold producer owns the recovered epochs", "receipt"]
+RUNNER_RESULTS_JSON=C:\Users\Administrator\.codex\worktrees\pluggable-framework-v2\HardCore\outputs\test_logs\runner_results_adhoc_20261004_100236_014_6084.json
+TEST_SUMMARY suite=adhoc passed=1 failed=3 engine_log_errors=0
+FAILED_TESTS=item_journal_v2_backup_seed_test (missing_pass_marker;non_zero_exit_code_1;framework_checks_failed); item_journal_v2_backup_cold_test (missing_pass_marker;non_zero_exit_code_1;framework_checks_failed); item_journal_v2_backup_restart_test (missing_pass_marker;non_zero_exit_code_1;framework_checks_failed)

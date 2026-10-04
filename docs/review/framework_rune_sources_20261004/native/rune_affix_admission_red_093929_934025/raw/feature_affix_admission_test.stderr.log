@@ -1,0 +1,11 @@
+SCRIPT ERROR: Invalid access to property or key 'instance_id' on a base object of type 'Dictionary'.
+   at: collect (res://scripts/features/adapters/contribution_provider.gd:30)
+   GDScript backtrace (most recent call first):
+       [0] collect (res://scripts/features/adapters/contribution_provider.gd:30)
+       [1] _probe (res://tests/framework/feature_affix_admission_test.gd:71)
+       [2] _run (res://tests/framework/feature_affix_admission_test.gd:49)
+SCRIPT ERROR: Invalid access to property or key 'success' on a base object of type 'Dictionary'.
+   at: _probe (res://tests/framework/feature_affix_admission_test.gd:73)
+   GDScript backtrace (most recent call first):
+       [0] _probe (res://tests/framework/feature_affix_admission_test.gd:73)
+       [1] _run (res://tests/framework/feature_affix_admission_test.gd:49)

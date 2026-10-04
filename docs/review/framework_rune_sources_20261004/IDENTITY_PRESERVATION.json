@@ -1,0 +1,59 @@
+{
+  "status": "PASS",
+  "time_utc": "2026-10-04T01:57:18.784003+00:00",
+  "parent": "08ccdf29e1be5897fa1ffdb6964f58300ad55c3b",
+  "old_records_unchanged_in_identity_and_display": 1240,
+  "added": [
+    "hc.item.990002",
+    "hc.item.990003",
+    "hc.item_category.rune"
+  ],
+  "category_evidence_pointers_updated_by_generator": [
+    "hc.item_category.awakening",
+    "hc.item_category.badge",
+    "hc.item_category.consumable",
+    "hc.item_category.crafting_material",
+    "hc.item_category.currency",
+    "hc.item_category.equipment_reference",
+    "hc.item_category.fish",
+    "hc.item_category.food",
+    "hc.item_category.health_potion",
+    "hc.item_category.hero",
+    "hc.item_category.mana_potion",
+    "hc.item_category.material",
+    "hc.item_category.meat",
+    "hc.item_category.mixed_potion",
+    "hc.item_category.ore",
+    "hc.item_category.pet",
+    "hc.item_category.quest",
+    "hc.item_category.relic",
+    "hc.item_category.skill_book",
+    "hc.item_category.temporary_potion",
+    "hc.item_category.transformation"
+  ],
+  "old_counts": {
+    "currency": 1,
+    "item": 256,
+    "item_category": 32,
+    "map": 209,
+    "monster": 156,
+    "profession": 3,
+    "service_item": 538,
+    "skill": 33,
+    "slot": 12
+  },
+  "current_counts": {
+    "currency": 1,
+    "item": 258,
+    "item_category": 33,
+    "map": 209,
+    "monster": 156,
+    "profession": 3,
+    "service_item": 538,
+    "skill": 33,
+    "slot": 12
+  },
+  "generator_check": "PASS",
+  "generator_unit_checks": 27,
+  "scope": "All prior registry identities and non-provenance fields identical; category array insertion legitimately changes source pointers. No authoring or runtime file written by this verifier."
+}

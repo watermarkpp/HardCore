@@ -1,0 +1,34 @@
+{
+    "schema_version":  1,
+    "invocation_id":  "00b37566-2ce1-4537-a7ce-8609279760a8",
+    "source_content_sha256":  "20ff35e9906c48706082927b942fe1c3d226b8dab3af485e1d5a703e6b23242e",
+    "producers":  {
+                      "feature_affix_admission_test":  {
+                                                           "scene_id":  "feature_affix_admission_test",
+                                                           "run_id":  "23cb1cc7-074a-4d80-b0fe-ba3b662c62ce",
+                                                           "source_content_sha256":  "20ff35e9906c48706082927b942fe1c3d226b8dab3af485e1d5a703e6b23242e",
+                                                           "process_exited":  true,
+                                                           "effective_exit_code":  0,
+                                                           "result":  "PASS",
+                                                           "receipt_sha256":  "7a208fbaa0a94e21d4099f15c7ab6236899391cbf432a89dfa4ac1996219ff67"
+                                                       },
+                      "rune_transaction_test":  {
+                                                    "scene_id":  "rune_transaction_test",
+                                                    "run_id":  "65ec47b0-89cd-4308-b801-cd181eff6fbf",
+                                                    "source_content_sha256":  "20ff35e9906c48706082927b942fe1c3d226b8dab3af485e1d5a703e6b23242e",
+                                                    "process_exited":  true,
+                                                    "effective_exit_code":  0,
+                                                    "result":  "PASS",
+                                                    "receipt_sha256":  "6ae6fd30b5a0f3d6c2bfb28c806fcb732917e3bfa521aeb1ed734086d4a7cc29"
+                                                },
+                      "feature_publication_atomic_test":  {
+                                                              "scene_id":  "feature_publication_atomic_test",
+                                                              "run_id":  "23ea43bd-ee85-408a-9d9d-038851d7f319",
+                                                              "source_content_sha256":  "20ff35e9906c48706082927b942fe1c3d226b8dab3af485e1d5a703e6b23242e",
+                                                              "process_exited":  true,
+                                                              "effective_exit_code":  0,
+                                                              "result":  "PASS",
+                                                              "receipt_sha256":  "0269a8f31253501cbf96427888b6be39c64aa8ac19719b2caf999f4a4d172904"
+                                                          }
+                  }
+}

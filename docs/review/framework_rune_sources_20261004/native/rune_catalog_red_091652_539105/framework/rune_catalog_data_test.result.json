@@ -1,0 +1,21 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "two primary data-defined rune records resolve without a new GameData branch or a new instance schema",
+      "passed": false
+    }
+  ],
+  "count": 1,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "b81edc94-d49a-4b4c-84b6-8c32e70cbfb0",
+  "passed": 0,
+  "reported_checks": 1,
+  "reported_failures": 1,
+  "run_id": "3612fc75-b9a9-43a5-a22a-1ef02d9805c6",
+  "scene_id": "rune_catalog_data_test",
+  "schema_version": 1,
+  "source_content_sha256": "958da61eb7f141de753bbcb30472d02b42f2f1e3b00d34890b35b3403735649d",
+  "status": "FAIL"
+}

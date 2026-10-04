@@ -61,3 +61,5 @@ Task 3 诊断反例 feature_resource_publication_diagnostic_red_002004_334986：
 2026-10-04 Task4第一异构增量：hc.lifesteal.v1、trusted handler成本/生命周期注册、同步派发退休已完成有界原生验证；最终54唯一场景/53receipt/1409检查同内容通过。正式词缀/已嵌宝石/符文组合、死亡子连锁及完整生成式组合仍未完成；Task4整体NOT_RUN，Task5和APK仍继续，不把第一异构命令当整套架构完成。证据见docs/review/framework_heterogeneous_20261004。
 
 2026-10-04 Task4来源增量：正式登记词缀与原宝石经济归属/贡献组合、独立本轮producer绑定cold，以及自身恢复增量在通知前冻结，已原生RED/GREEN和最终同d82f0011内容28场景/1123检查。父6ae8双报告已实际读取保存，当前index原始备份补为可远端核对的ZIP，历史连续性FAIL/MISSING保留。符文、死亡子连锁、防自激与动态完整承诺、生成式组合、Task5与APK仍未关闭，见docs/review/framework_source_composition_20261004。
+
+2026-10-04 Task4符文增量：两个正式登记验证符文共用同一数据creator，hc.runes v1与原Gem扩展共存，经唯一ItemTransactionPort/Journal/writer持久插拔；词缀/宝石/符文三个来源实际受控释放及独立cold/replay通过。父08cc P2伪造affix来源与销毁入口先drain预留事务两项均有原生RED→最小修复→GREEN。最终同5b996731内容40唯一场景/36完整receipt1537检查PASS，原113尝试16FAIL全部保留；原1240身份业务字段保持。证据见docs/review/framework_rune_sources_20261004。死亡子连锁、防自激、动态完整接受承诺、生成式组合、Task5/P6R3/设备/APK仍未完成，继续串行施工。

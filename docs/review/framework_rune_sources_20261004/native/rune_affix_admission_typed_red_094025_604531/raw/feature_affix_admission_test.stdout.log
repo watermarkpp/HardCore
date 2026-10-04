@@ -1,0 +1,9 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+数据库载入完成：地图209 怪物156 Boss20 装备175 技能等级132 掉落槽3424 任务9
+AFFIX_ADMISSION_PROBE={"case":"missing_drop_contract","source_count":1,"typed_result":true}
+AFFIX_ADMISSION_PROBE={"case":"duplicate_forged_modifiers","source_count":2,"typed_result":true}
+AFFIX_ADMISSION_PROBE={"case":"forged_modifier_value","source_count":1,"typed_result":true}
+AFFIX_ADMISSION_PROBE={"case":"wrong_persistent_instance","source_count":1,"typed_result":true}
+AFFIX_ADMISSION_PROBE={"case":"missing_persistent_instance","source_count":0,"typed_result":true}
+FRAMEWORK_FEATURE_AFFIX_ADMISSION_FAIL checks=27 failures=["missing_drop_contract: source boundary returns a typed rejection without granting provenance", "missing_drop_contract: actual publication rejects the whole invalid source candidate", "missing_drop_contract: rejected candidate preserves the complete old publication", "duplicate_forged_modifiers: source boundary returns a typed rejection without granting provenance", "duplicate_forged_modifiers: actual publication rejects the whole invalid source candidate", "duplicate_forged_modifiers: rejected candidate preserves the complete old publication", "forged_modifier_value: source boundary returns a typed rejection without granting provenance", "forged_modifier_value: actual publication rejects the whole invalid source candidate", "forged_modifier_value: rejected candidate preserves the complete old publication", "wrong_persistent_instance: source boundary returns a typed rejection without granting provenance", "wrong_persistent_instance: actual publication rejects the whole invalid source candidate", "wrong_persistent_instance: rejected candidate preserves the complete old publication", "missing_persistent_instance: source boundary returns a typed rejection without granting provenance", "receipt"]

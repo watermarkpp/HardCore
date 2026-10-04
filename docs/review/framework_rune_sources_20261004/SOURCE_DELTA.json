@@ -1,0 +1,141 @@
+{
+  "parent": "08ccdf29e1be5897fa1ffdb6964f58300ad55c3b",
+  "source_content_sha256": "5b9967313469bd7f30178a76f0e72b7de01e99b58ca47052a43fecd0edaf49ee",
+  "delta": [
+    {
+      "path": "scripts/features/adapters/contribution_provider.gd",
+      "before_sha256": "4d34d59a1d39ad2b79e0d035eccecb918528c0f0ff485c5f0ffbb409daee620e",
+      "after_sha256": "07d567bab03393045a8a04361a31778def4ff2b3614ac81c323fb7d620c4d92d"
+    },
+    {
+      "path": "scripts/game_data.gd",
+      "before_sha256": "5aafb7c6619fb4827daed376f7fc00069e1fc7d625403dc3bb489ba2ffd5b733",
+      "after_sha256": "0199795c4e076b980323fdfa08f5e5f3f125be1d0bb9ca150adfdee8cde3026f"
+    },
+    {
+      "path": "scripts/items/item_extension_codec.gd",
+      "before_sha256": "66af453471fb38a54a46e157db3e142d4f7fc8901da93b8ff4c10595a55925d5",
+      "after_sha256": "913f38c39e4697f969d52d7940dfd374dbb35fb71b21454d8485812543c7a87f"
+    },
+    {
+      "path": "scripts/items/item_transaction_journal.gd",
+      "before_sha256": "1ae3d69f829fb82b61939aa84f85f50edf1386047648cf878c6d7187e0783c4c",
+      "after_sha256": "d92b00422f4a03562f3049c378c2e0ea640e16a8f010d8ce08c7320a0625fad6"
+    },
+    {
+      "path": "scripts/items/item_transaction_port.gd",
+      "before_sha256": "e60bceed9c2be3bd65b136e2cd9c1ae2da4fd386df512a4f4913ccd3af73f23b",
+      "after_sha256": "68a9eb74ca1ef01bbf32635bec020a8094e67a4de9d659392edc8d068f19a501"
+    },
+    {
+      "path": "scripts/items/rune_item_rules.gd",
+      "before_sha256": null,
+      "after_sha256": "30cd2d03d7e473b96414f858ae7a5f70373170a328b4e67431ef8f7cf9d5580c"
+    },
+    {
+      "path": "scripts/player_state.gd",
+      "before_sha256": "a26e0820d963edaabb5acc4bb3df88e725fec49b309381a719c5b829358a2185",
+      "after_sha256": "97d658aeb1a806d694391c4f033748333e20808623c1fbb40d8f3522fca5d242"
+    },
+    {
+      "path": "tests/framework/feature_affix_admission_test.gd",
+      "before_sha256": null,
+      "after_sha256": "8a77a029f5aca7ccecee31e088b1029eacd4302bb10219688833f4f349d54579"
+    },
+    {
+      "path": "tests/framework/feature_affix_admission_test.tscn",
+      "before_sha256": null,
+      "after_sha256": "6388ba358372ef74c70bbb3747a51ce11cb50ecda9e96cc323219098e33ff968"
+    },
+    {
+      "path": "tests/framework/future_item_ownership_terminal_test.gd",
+      "before_sha256": "c5707e130a495ecc21095c9013c76fb5e662aee00459c7f8819581aac9501c65",
+      "after_sha256": "175edf9442cd871d267ca63d69326df6094ce9be5c213aa3e2c1818319ef3e6f"
+    },
+    {
+      "path": "tests/framework/rune_catalog_data_test.gd",
+      "before_sha256": null,
+      "after_sha256": "086939fc757364f29c26d6ab37de2fd324199f39e19ce395878dc17b36f889a4"
+    },
+    {
+      "path": "tests/framework/rune_catalog_data_test.tscn",
+      "before_sha256": null,
+      "after_sha256": "008468d6c1ef74021fa3581bdd5b21179c83e5e8a9a2ada12366d8f44f2a5058"
+    },
+    {
+      "path": "tests/framework/rune_extension_codec_test.gd",
+      "before_sha256": null,
+      "after_sha256": "d0d68daafb6b5741c26d52e1bdaa63806dd8311c3adb2b5eaebee8510f70866d"
+    },
+    {
+      "path": "tests/framework/rune_extension_codec_test.tscn",
+      "before_sha256": null,
+      "after_sha256": "89a8c571a3b2320d349582d8e5765e2b7aabdddab8b90be8d3ad90bce13c7905"
+    },
+    {
+      "path": "tests/framework/rune_source_composition_cold_test.gd",
+      "before_sha256": null,
+      "after_sha256": "4f3be560d55b91ae19c1e07981d7cf3e74a8b978365aa98edfea5a1d6625a859"
+    },
+    {
+      "path": "tests/framework/rune_source_composition_cold_test.tscn",
+      "before_sha256": null,
+      "after_sha256": "e0d8e6b49a7dd79ac6ffa867176836e3f78745161c393f147acf6077f8265cb2"
+    },
+    {
+      "path": "tests/framework/rune_source_composition_test.gd",
+      "before_sha256": null,
+      "after_sha256": "22138cc286fb3ceba4ebe465338181960d07d4a3081b0b222a9e6f54ae6f1898"
+    },
+    {
+      "path": "tests/framework/rune_source_composition_test.tscn",
+      "before_sha256": null,
+      "after_sha256": "e5ee964c71c954d1e8a0dfd5d137de381f5383e1d6bf8bd27bff96b3161f4304"
+    },
+    {
+      "path": "tests/framework/rune_transaction_test.gd",
+      "before_sha256": null,
+      "after_sha256": "c2aea541b0a32bf9f57477f540030d8d3095107cdb04f94d3925a310374ea688"
+    },
+    {
+      "path": "tests/framework/rune_transaction_test.tscn",
+      "before_sha256": null,
+      "after_sha256": "e0edfd2b4e5f667095704538aaa4bf843d45a55a1fa57324de8d6f08a08eb672"
+    },
+    {
+      "path": "assets/data/features/rune_fixture.json",
+      "before_sha256": null,
+      "after_sha256": "557777eaf17c1e9e204091c15ae68549b73ccfc7d834a274666d87f63c2a5afc"
+    },
+    {
+      "path": "assets/data/features/rune_fixture_items.json",
+      "before_sha256": null,
+      "after_sha256": "ea00bdd36122ae0275f64ee7a73746bbd3866c5fdd174625a7915cb9c885a68d"
+    },
+    {
+      "path": "assets/data/features/validation/rune_composition_registry.json",
+      "before_sha256": null,
+      "after_sha256": "3147b4cb8edc29b3a009c41b9b0e6b751775368e2f221a298be337c782763461"
+    },
+    {
+      "path": "assets/data/identity/entity_registry_source.json",
+      "before_sha256": "ef36ccd584e73f58d86fe793eb5b421721fe7db0153dfe41d809b90bc5e6b6c2",
+      "after_sha256": "4d2c6674fb6c37dda246a10f1ae0f2396298c31e968d40929dc2c86ddf49265a"
+    },
+    {
+      "path": "assets/data/identity/item_categories_v1.json",
+      "before_sha256": "6dd144266aa3f0ec91338c0c3f8a4d8d41788b8db81be1ae83c2fd29834caf04",
+      "after_sha256": "c60d00da6b19047e87ea80b6c973e42a26c01f543d489fdb8b3ab64473adbb8a"
+    },
+    {
+      "path": "assets/data/runtime/entity_registry_v1.json",
+      "before_sha256": "4bb463b11af2ecef39278b7d7493f354936674d63311d51750464ebaf7077d3b",
+      "after_sha256": "4ec947750e011dc84b7585d374c8e38606caa79aafed79670c260b725a8cca83"
+    },
+    {
+      "path": "assets/data/source_priority_policy.json",
+      "before_sha256": "c63273c0984e6daba91a590e9ec45c3f29477ae51c416d449557f18c0cb5ef67",
+      "after_sha256": "58adf6e75eea5549c4a535098e568505408efa621901a1dadb868798739ac3c7"
+    }
+  ]
+}

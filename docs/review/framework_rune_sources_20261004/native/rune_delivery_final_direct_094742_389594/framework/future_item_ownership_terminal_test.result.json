@@ -1,0 +1,1426 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "fixture owns a fresh profile and account directory",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "fixture uses a real registered drop and supported extension",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "real writer produces the known profile and shared owner",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "known backup bytes exist on disk",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "known profile backup passes the real aggregate validator",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "known shared backup passes the real aggregate validator",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "new rune cases begin with a real registered uniquely owned supported asset",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "unsupported owner precedes current graph or private-field rules 0",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "future item locks whole profile before corrupt sibling 0",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "real loader rejects future profile with a valid old backup 0",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "future profile never publishes backup or partial live state 0",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "future profile prevents real writer after failed load 0",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "future profile primary and backup remain byte identical 0",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "future shared item 0 is terminal",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "future shared item 0 cannot initialize from old backup",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "future shared item 0 never publishes or initializes another owner",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "future shared item 0 blocks the actual shared writer",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "future shared item 0 primary and backup remain byte identical",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "unsupported owner precedes current graph or private-field rules 1",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "future item locks whole profile before corrupt sibling 1",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "real loader rejects future profile with a valid old backup 1",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "future profile never publishes backup or partial live state 1",
+      "passed": true
+    },
+    {
+      "id": 35,
+      "label": "future profile prevents real writer after failed load 1",
+      "passed": true
+    },
+    {
+      "id": 36,
+      "label": "future profile primary and backup remain byte identical 1",
+      "passed": true
+    },
+    {
+      "id": 37,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 38,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 39,
+      "label": "future shared item 1 is terminal",
+      "passed": true
+    },
+    {
+      "id": 40,
+      "label": "future shared item 1 cannot initialize from old backup",
+      "passed": true
+    },
+    {
+      "id": 41,
+      "label": "future shared item 1 never publishes or initializes another owner",
+      "passed": true
+    },
+    {
+      "id": 42,
+      "label": "future shared item 1 blocks the actual shared writer",
+      "passed": true
+    },
+    {
+      "id": 43,
+      "label": "future shared item 1 primary and backup remain byte identical",
+      "passed": true
+    },
+    {
+      "id": 44,
+      "label": "unsupported owner precedes current graph or private-field rules 2",
+      "passed": true
+    },
+    {
+      "id": 45,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 46,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 47,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 48,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 49,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 50,
+      "label": "future item locks whole profile before corrupt sibling 2",
+      "passed": true
+    },
+    {
+      "id": 51,
+      "label": "real loader rejects future profile with a valid old backup 2",
+      "passed": true
+    },
+    {
+      "id": 52,
+      "label": "future profile never publishes backup or partial live state 2",
+      "passed": true
+    },
+    {
+      "id": 53,
+      "label": "future profile prevents real writer after failed load 2",
+      "passed": true
+    },
+    {
+      "id": 54,
+      "label": "future profile primary and backup remain byte identical 2",
+      "passed": true
+    },
+    {
+      "id": 55,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 56,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 57,
+      "label": "future shared item 2 is terminal",
+      "passed": true
+    },
+    {
+      "id": 58,
+      "label": "future shared item 2 cannot initialize from old backup",
+      "passed": true
+    },
+    {
+      "id": 59,
+      "label": "future shared item 2 never publishes or initializes another owner",
+      "passed": true
+    },
+    {
+      "id": 60,
+      "label": "future shared item 2 blocks the actual shared writer",
+      "passed": true
+    },
+    {
+      "id": 61,
+      "label": "future shared item 2 primary and backup remain byte identical",
+      "passed": true
+    },
+    {
+      "id": 62,
+      "label": "unsupported owner precedes current graph or private-field rules 3",
+      "passed": true
+    },
+    {
+      "id": 63,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 64,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 65,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 66,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 67,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 68,
+      "label": "future item locks whole profile before corrupt sibling 3",
+      "passed": true
+    },
+    {
+      "id": 69,
+      "label": "real loader rejects future profile with a valid old backup 3",
+      "passed": true
+    },
+    {
+      "id": 70,
+      "label": "future profile never publishes backup or partial live state 3",
+      "passed": true
+    },
+    {
+      "id": 71,
+      "label": "future profile prevents real writer after failed load 3",
+      "passed": true
+    },
+    {
+      "id": 72,
+      "label": "future profile primary and backup remain byte identical 3",
+      "passed": true
+    },
+    {
+      "id": 73,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 74,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 75,
+      "label": "future shared item 3 is terminal",
+      "passed": true
+    },
+    {
+      "id": 76,
+      "label": "future shared item 3 cannot initialize from old backup",
+      "passed": true
+    },
+    {
+      "id": 77,
+      "label": "future shared item 3 never publishes or initializes another owner",
+      "passed": true
+    },
+    {
+      "id": 78,
+      "label": "future shared item 3 blocks the actual shared writer",
+      "passed": true
+    },
+    {
+      "id": 79,
+      "label": "future shared item 3 primary and backup remain byte identical",
+      "passed": true
+    },
+    {
+      "id": 80,
+      "label": "unsupported owner precedes current graph or private-field rules 4",
+      "passed": true
+    },
+    {
+      "id": 81,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 82,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 83,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 84,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 85,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 86,
+      "label": "future item locks whole profile before corrupt sibling 4",
+      "passed": true
+    },
+    {
+      "id": 87,
+      "label": "real loader rejects future profile with a valid old backup 4",
+      "passed": true
+    },
+    {
+      "id": 88,
+      "label": "future profile never publishes backup or partial live state 4",
+      "passed": true
+    },
+    {
+      "id": 89,
+      "label": "future profile prevents real writer after failed load 4",
+      "passed": true
+    },
+    {
+      "id": 90,
+      "label": "future profile primary and backup remain byte identical 4",
+      "passed": true
+    },
+    {
+      "id": 91,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 92,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 93,
+      "label": "future shared item 4 is terminal",
+      "passed": true
+    },
+    {
+      "id": 94,
+      "label": "future shared item 4 cannot initialize from old backup",
+      "passed": true
+    },
+    {
+      "id": 95,
+      "label": "future shared item 4 never publishes or initializes another owner",
+      "passed": true
+    },
+    {
+      "id": 96,
+      "label": "future shared item 4 blocks the actual shared writer",
+      "passed": true
+    },
+    {
+      "id": 97,
+      "label": "future shared item 4 primary and backup remain byte identical",
+      "passed": true
+    },
+    {
+      "id": 98,
+      "label": "unsupported owner precedes current graph or private-field rules 5",
+      "passed": true
+    },
+    {
+      "id": 99,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 100,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 101,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 102,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 103,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 104,
+      "label": "future item locks whole profile before corrupt sibling 5",
+      "passed": true
+    },
+    {
+      "id": 105,
+      "label": "real loader rejects future profile with a valid old backup 5",
+      "passed": true
+    },
+    {
+      "id": 106,
+      "label": "future profile never publishes backup or partial live state 5",
+      "passed": true
+    },
+    {
+      "id": 107,
+      "label": "future profile prevents real writer after failed load 5",
+      "passed": true
+    },
+    {
+      "id": 108,
+      "label": "future profile primary and backup remain byte identical 5",
+      "passed": true
+    },
+    {
+      "id": 109,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 110,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 111,
+      "label": "future shared item 5 is terminal",
+      "passed": true
+    },
+    {
+      "id": 112,
+      "label": "future shared item 5 cannot initialize from old backup",
+      "passed": true
+    },
+    {
+      "id": 113,
+      "label": "future shared item 5 never publishes or initializes another owner",
+      "passed": true
+    },
+    {
+      "id": 114,
+      "label": "future shared item 5 blocks the actual shared writer",
+      "passed": true
+    },
+    {
+      "id": 115,
+      "label": "future shared item 5 primary and backup remain byte identical",
+      "passed": true
+    },
+    {
+      "id": 116,
+      "label": "unsupported owner precedes current graph or private-field rules 6",
+      "passed": true
+    },
+    {
+      "id": 117,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 118,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 119,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 120,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 121,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 122,
+      "label": "future item locks whole profile before corrupt sibling 6",
+      "passed": true
+    },
+    {
+      "id": 123,
+      "label": "real loader rejects future profile with a valid old backup 6",
+      "passed": true
+    },
+    {
+      "id": 124,
+      "label": "future profile never publishes backup or partial live state 6",
+      "passed": true
+    },
+    {
+      "id": 125,
+      "label": "future profile prevents real writer after failed load 6",
+      "passed": true
+    },
+    {
+      "id": 126,
+      "label": "future profile primary and backup remain byte identical 6",
+      "passed": true
+    },
+    {
+      "id": 127,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 128,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 129,
+      "label": "future shared item 6 is terminal",
+      "passed": true
+    },
+    {
+      "id": 130,
+      "label": "future shared item 6 cannot initialize from old backup",
+      "passed": true
+    },
+    {
+      "id": 131,
+      "label": "future shared item 6 never publishes or initializes another owner",
+      "passed": true
+    },
+    {
+      "id": 132,
+      "label": "future shared item 6 blocks the actual shared writer",
+      "passed": true
+    },
+    {
+      "id": 133,
+      "label": "future shared item 6 primary and backup remain byte identical",
+      "passed": true
+    },
+    {
+      "id": 134,
+      "label": "unsupported owner precedes current graph or private-field rules 7",
+      "passed": true
+    },
+    {
+      "id": 135,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 136,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 137,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 138,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 139,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 140,
+      "label": "future item locks whole profile before corrupt sibling 7",
+      "passed": true
+    },
+    {
+      "id": 141,
+      "label": "real loader rejects future profile with a valid old backup 7",
+      "passed": true
+    },
+    {
+      "id": 142,
+      "label": "future profile never publishes backup or partial live state 7",
+      "passed": true
+    },
+    {
+      "id": 143,
+      "label": "future profile prevents real writer after failed load 7",
+      "passed": true
+    },
+    {
+      "id": 144,
+      "label": "future profile primary and backup remain byte identical 7",
+      "passed": true
+    },
+    {
+      "id": 145,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 146,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 147,
+      "label": "future shared item 7 is terminal",
+      "passed": true
+    },
+    {
+      "id": 148,
+      "label": "future shared item 7 cannot initialize from old backup",
+      "passed": true
+    },
+    {
+      "id": 149,
+      "label": "future shared item 7 never publishes or initializes another owner",
+      "passed": true
+    },
+    {
+      "id": 150,
+      "label": "future shared item 7 blocks the actual shared writer",
+      "passed": true
+    },
+    {
+      "id": 151,
+      "label": "future shared item 7 primary and backup remain byte identical",
+      "passed": true
+    },
+    {
+      "id": 152,
+      "label": "unsupported owner precedes current graph or private-field rules 8",
+      "passed": true
+    },
+    {
+      "id": 153,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 154,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 155,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 156,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 157,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 158,
+      "label": "future item locks whole profile before corrupt sibling 8",
+      "passed": true
+    },
+    {
+      "id": 159,
+      "label": "real loader rejects future profile with a valid old backup 8",
+      "passed": true
+    },
+    {
+      "id": 160,
+      "label": "future profile never publishes backup or partial live state 8",
+      "passed": true
+    },
+    {
+      "id": 161,
+      "label": "future profile prevents real writer after failed load 8",
+      "passed": true
+    },
+    {
+      "id": 162,
+      "label": "future profile primary and backup remain byte identical 8",
+      "passed": true
+    },
+    {
+      "id": 163,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 164,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 165,
+      "label": "future shared item 8 is terminal",
+      "passed": true
+    },
+    {
+      "id": 166,
+      "label": "future shared item 8 cannot initialize from old backup",
+      "passed": true
+    },
+    {
+      "id": 167,
+      "label": "future shared item 8 never publishes or initializes another owner",
+      "passed": true
+    },
+    {
+      "id": 168,
+      "label": "future shared item 8 blocks the actual shared writer",
+      "passed": true
+    },
+    {
+      "id": 169,
+      "label": "future shared item 8 primary and backup remain byte identical",
+      "passed": true
+    },
+    {
+      "id": 170,
+      "label": "unsupported owner precedes current graph or private-field rules 9",
+      "passed": true
+    },
+    {
+      "id": 171,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 172,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 173,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 174,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 175,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 176,
+      "label": "future item locks whole profile before corrupt sibling 9",
+      "passed": true
+    },
+    {
+      "id": 177,
+      "label": "real loader rejects future profile with a valid old backup 9",
+      "passed": true
+    },
+    {
+      "id": 178,
+      "label": "future profile never publishes backup or partial live state 9",
+      "passed": true
+    },
+    {
+      "id": 179,
+      "label": "future profile prevents real writer after failed load 9",
+      "passed": true
+    },
+    {
+      "id": 180,
+      "label": "future profile primary and backup remain byte identical 9",
+      "passed": true
+    },
+    {
+      "id": 181,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 182,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 183,
+      "label": "future shared item 9 is terminal",
+      "passed": true
+    },
+    {
+      "id": 184,
+      "label": "future shared item 9 cannot initialize from old backup",
+      "passed": true
+    },
+    {
+      "id": 185,
+      "label": "future shared item 9 never publishes or initializes another owner",
+      "passed": true
+    },
+    {
+      "id": 186,
+      "label": "future shared item 9 blocks the actual shared writer",
+      "passed": true
+    },
+    {
+      "id": 187,
+      "label": "future shared item 9 primary and backup remain byte identical",
+      "passed": true
+    },
+    {
+      "id": 188,
+      "label": "unsupported owner precedes current graph or private-field rules 10",
+      "passed": true
+    },
+    {
+      "id": 189,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 190,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 191,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 192,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 193,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 194,
+      "label": "future item locks whole profile before corrupt sibling 10",
+      "passed": true
+    },
+    {
+      "id": 195,
+      "label": "real loader rejects future profile with a valid old backup 10",
+      "passed": true
+    },
+    {
+      "id": 196,
+      "label": "future profile never publishes backup or partial live state 10",
+      "passed": true
+    },
+    {
+      "id": 197,
+      "label": "future profile prevents real writer after failed load 10",
+      "passed": true
+    },
+    {
+      "id": 198,
+      "label": "future profile primary and backup remain byte identical 10",
+      "passed": true
+    },
+    {
+      "id": 199,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 200,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 201,
+      "label": "future shared item 10 is terminal",
+      "passed": true
+    },
+    {
+      "id": 202,
+      "label": "future shared item 10 cannot initialize from old backup",
+      "passed": true
+    },
+    {
+      "id": 203,
+      "label": "future shared item 10 never publishes or initializes another owner",
+      "passed": true
+    },
+    {
+      "id": 204,
+      "label": "future shared item 10 blocks the actual shared writer",
+      "passed": true
+    },
+    {
+      "id": 205,
+      "label": "future shared item 10 primary and backup remain byte identical",
+      "passed": true
+    },
+    {
+      "id": 206,
+      "label": "unsupported owner precedes current graph or private-field rules 11",
+      "passed": true
+    },
+    {
+      "id": 207,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 208,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 209,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 210,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 211,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 212,
+      "label": "future item locks whole profile before corrupt sibling 11",
+      "passed": true
+    },
+    {
+      "id": 213,
+      "label": "real loader rejects future profile with a valid old backup 11",
+      "passed": true
+    },
+    {
+      "id": 214,
+      "label": "future profile never publishes backup or partial live state 11",
+      "passed": true
+    },
+    {
+      "id": 215,
+      "label": "future profile prevents real writer after failed load 11",
+      "passed": true
+    },
+    {
+      "id": 216,
+      "label": "future profile primary and backup remain byte identical 11",
+      "passed": true
+    },
+    {
+      "id": 217,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 218,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 219,
+      "label": "future shared item 11 is terminal",
+      "passed": true
+    },
+    {
+      "id": 220,
+      "label": "future shared item 11 cannot initialize from old backup",
+      "passed": true
+    },
+    {
+      "id": 221,
+      "label": "future shared item 11 never publishes or initializes another owner",
+      "passed": true
+    },
+    {
+      "id": 222,
+      "label": "future shared item 11 blocks the actual shared writer",
+      "passed": true
+    },
+    {
+      "id": 223,
+      "label": "future shared item 11 primary and backup remain byte identical",
+      "passed": true
+    },
+    {
+      "id": 224,
+      "label": "known version still enforces its exact graph capacity",
+      "passed": true
+    },
+    {
+      "id": 225,
+      "label": "known version still enforces its exact depth capacity",
+      "passed": true
+    },
+    {
+      "id": 226,
+      "label": "known malformed typed identity remains invalid",
+      "passed": true
+    },
+    {
+      "id": 227,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 228,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 229,
+      "label": "future warehouse with corrupt known item is terminal",
+      "passed": true
+    },
+    {
+      "id": 230,
+      "label": "future warehouse with corrupt known item cannot initialize from old backup",
+      "passed": true
+    },
+    {
+      "id": 231,
+      "label": "future warehouse with corrupt known item never publishes or initializes another owner",
+      "passed": true
+    },
+    {
+      "id": 232,
+      "label": "future warehouse with corrupt known item blocks the actual shared writer",
+      "passed": true
+    },
+    {
+      "id": 233,
+      "label": "future warehouse with corrupt known item primary and backup remain byte identical",
+      "passed": true
+    },
+    {
+      "id": 234,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 235,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 236,
+      "label": "future warehouse version outside int64 with corrupt known item is terminal",
+      "passed": true
+    },
+    {
+      "id": 237,
+      "label": "future warehouse version outside int64 with corrupt known item cannot initialize from old backup",
+      "passed": true
+    },
+    {
+      "id": 238,
+      "label": "future warehouse version outside int64 with corrupt known item never publishes or initializes another owner",
+      "passed": true
+    },
+    {
+      "id": 239,
+      "label": "future warehouse version outside int64 with corrupt known item blocks the actual shared writer",
+      "passed": true
+    },
+    {
+      "id": 240,
+      "label": "future warehouse version outside int64 with corrupt known item primary and backup remain byte identical",
+      "passed": true
+    },
+    {
+      "id": 241,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 242,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 243,
+      "label": "future item still owns aggregate with malformed warehouse schema is terminal",
+      "passed": true
+    },
+    {
+      "id": 244,
+      "label": "future item still owns aggregate with malformed warehouse schema cannot initialize from old backup",
+      "passed": true
+    },
+    {
+      "id": 245,
+      "label": "future item still owns aggregate with malformed warehouse schema never publishes or initializes another owner",
+      "passed": true
+    },
+    {
+      "id": 246,
+      "label": "future item still owns aggregate with malformed warehouse schema blocks the actual shared writer",
+      "passed": true
+    },
+    {
+      "id": 247,
+      "label": "future item still owns aggregate with malformed warehouse schema primary and backup remain byte identical",
+      "passed": true
+    },
+    {
+      "id": 248,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 249,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 250,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 251,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 252,
+      "label": "known profile corruption remains recoverable",
+      "passed": true
+    },
+    {
+      "id": 253,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 254,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 255,
+      "label": "known corrupt profile still uses actual backup recovery",
+      "passed": true
+    },
+    {
+      "id": 256,
+      "label": "known profile recovery publishes the validated backup exactly",
+      "passed": true
+    },
+    {
+      "id": 257,
+      "label": "known warehouse corruption remains recoverable",
+      "passed": true
+    },
+    {
+      "id": 258,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 259,
+      "label": "owned file opens shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 260,
+      "label": "known corrupt warehouse still uses actual backup recovery",
+      "passed": true
+    },
+    {
+      "id": 261,
+      "label": "known warehouse recovery publishes the validated backup exactly",
+      "passed": true
+    },
+    {
+      "id": 262,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 263,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 264,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 265,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 266,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 267,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 268,
+      "label": "actual world clock import accepts known legacy string equipment before formal runtime save",
+      "passed": true
+    },
+    {
+      "id": 269,
+      "label": "world clock migration archive preserves all original legacy identity and equipment fields",
+      "passed": true
+    },
+    {
+      "id": 270,
+      "label": "known legacy weapon receives its actual typed identity at the existing runtime import",
+      "passed": true
+    },
+    {
+      "id": 271,
+      "label": "known legacy import retains exact worn durability and paired slot placement",
+      "passed": true
+    },
+    {
+      "id": 272,
+      "label": "legitimate post-import save emits the formal item and slot owners",
+      "passed": true
+    },
+    {
+      "id": 273,
+      "label": "formal disk writer never stores a name-only equipment owner",
+      "passed": true
+    },
+    {
+      "id": 274,
+      "label": "owned file opens shared.json",
+      "passed": true
+    },
+    {
+      "id": 275,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 276,
+      "label": "owned file opens future-owner.json.bak",
+      "passed": true
+    },
+    {
+      "id": 277,
+      "label": "independent case begins with real supported profile load",
+      "passed": true
+    },
+    {
+      "id": 278,
+      "label": "owned file opens future-owner.json",
+      "passed": true
+    },
+    {
+      "id": 279,
+      "label": "unknown legacy string identity locks the entire aggregate",
+      "passed": true
+    },
+    {
+      "id": 280,
+      "label": "unknown legacy string publishes neither a guessed item nor the old backup",
+      "passed": true
+    },
+    {
+      "id": 281,
+      "label": "unknown legacy equipment locks the real profile writer",
+      "passed": true
+    },
+    {
+      "id": 282,
+      "label": "unknown legacy string preserves exact primary and backup bytes",
+      "passed": true
+    }
+  ],
+  "count": 282,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "f1d80fa7-0717-44e2-b3f1-011b0508e7c0",
+  "passed": 282,
+  "reported_checks": 282,
+  "reported_failures": 0,
+  "run_id": "6f998d21-647d-45ad-bf01-2b0565a17866",
+  "scene_id": "future_item_ownership_terminal_test",
+  "schema_version": 1,
+  "source_content_sha256": "814e81b17b698180888af55edbf271c4ecb6e2938fede117665c57d39051f942",
+  "status": "PASS"
+}

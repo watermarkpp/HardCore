@@ -2,6 +2,7 @@ extends Node
 
 const Codec := preload("res://scripts/items/item_extension_codec.gd")
 const DropRules := preload("res://scripts/item_drop_instance_rules.gd")
+const Rune := preload("res://scripts/items/rune_item_rules.gd")
 const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
 var proof := Proof.new()
 var checks := 0
@@ -94,6 +95,22 @@ func _run() -> void:
 	future_version_contract.erase("contract_id")
 	var candidates: Array[Dictionary] = [future_large, future_deep, future_namespace,
 		future_socket, future_contract, future_private, future_contract_version, future_version_contract]
+	var rune:=Rune.create_instance("future-owner:rune",true)
+	var rune_created:=Codec.with_extensions(base,{"hc.runes":{"schema_version":1,"runes":[{"rune_slot_id":Codec.RUNE_ID,"item":rune}]}})
+	check(rune_created.status==Codec.KNOWN_VALID,"new rune cases begin with a real registered uniquely owned supported asset")
+	if rune_created.status!=Codec.KNOWN_VALID: _finish(); return
+	var rune_wire: Dictionary=Codec.encode_runtime(rune_created.item).item
+	var future_rune_namespace:=rune_wire.duplicate(true)
+	future_rune_namespace.extensions["hc.runes"]={"schema_version":2,"opaque_body":large}
+	future_rune_namespace.base["corrupt_known_base"]=1
+	var future_rune_contract:=rune_wire.duplicate(true)
+	future_rune_contract.extensions["hc.runes"].runes[0].item.rune_instance_contract_id="hc.runes.fixture.rune.v2"
+	future_rune_contract.base["corrupt_known_base"]=1
+	var unknown_rune:=rune_wire.duplicate(true)
+	unknown_rune.extensions["hc.runes"].runes[0].item.item_id=990999
+	unknown_rune.base["corrupt_known_base"]=1
+	var unknown_plain_rune:=rune.duplicate(true); unknown_plain_rune.item_id=990999
+	candidates.append_array([future_rune_namespace,future_rune_contract,unknown_rune,unknown_plain_rune])
 	for index in candidates.size():
 		var candidate := candidates[index]
 		check(Codec.decode_wire(candidate).status == Codec.OPAQUE_UNSUPPORTED,

@@ -4,6 +4,7 @@
   "sources": [
     {"kind":"item_category","path":"assets/data/identity/item_categories_v1.json","records":"records","id_field":"category_id","display_field":"display_name"},
     {"kind":"item","path":"assets/data/features/socketing_fixture_items.json","records":"records","id_field":"itemId","display_field":"name"},
+    {"kind":"item","path":"assets/data/features/rune_fixture_items.json","records":"records","id_field":"itemId","display_field":"name"},
     {"kind":"skill","path":"assets/data/vanilla_176/skills_source_of_truth_v1.json","records":"skills","id_field":"skill_id","display_field":"display_name"},
     {"kind":"item","path":"assets/data/equipment_attribute_master.json","records":"records","id_field":"itemId","display_field":"name"},
     {"kind":"item","path":"assets/data/item_runtime_authority_v1.json","records":"newItems","id_field":"itemId","display_field":"name"},

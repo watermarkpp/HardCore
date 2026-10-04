@@ -35,7 +35,8 @@
     "combat_movement_ai_timing_protocol": "server_rules",
     "combat_movement_ai_projectile_distance_units": "combat_units",
     "monster_drop_probability_and_post_rng_overflow": "monster_drop_probability",
-    "framework_default_off_test_item_identity_and_rules": "framework_fixture_items"
+    "framework_default_off_test_item_identity_and_rules": "framework_fixture_items",
+    "framework_default_off_rune_identity_and_rules": "framework_rune_fixture_items"
   },
   "lanes": {
     "item_categories": {
@@ -53,7 +54,26 @@
           "authority": "project_master",
           "sourceKind": "tracked_authoring_source",
           "originalPath": "assets/data/identity/item_categories_v1.json",
-          "evidenceSha256": "6DD144266AA3F0EC91338C0C3F8A4D8D41788B8DB81BE1AE83C2FD29834CAF04"
+          "evidenceSha256": "C60D00DA6B19047E87EA80B6C973E42A26C01F543D489FDB8B3AB64473ADBB8A"
+        }
+      ]
+    },
+    "framework_rune_fixture_items": {
+      "description": "Default-off registered rune fixture; no production fees, loot or balance",
+      "sources": [
+        {
+          "distribution": "hardcore.framework.rune_fixture",
+          "tier": "primary",
+          "order": 0,
+          "weight": 100,
+          "eligible": true,
+          "catalogRequired": false,
+          "rootPrefix": "assets/data/features/rune_fixture_items.json",
+          "contractId": "hc.runes.fixture.items.v1",
+          "authority": "project_master",
+          "sourceKind": "tracked_authoring_source",
+          "originalPath": "assets/data/features/rune_fixture_items.json",
+          "evidenceSha256": "EA00BDD36122AE0275F64EE7A73746BBD3866C5FDD174625A7915CB9C885A68D"
         }
       ]
     },

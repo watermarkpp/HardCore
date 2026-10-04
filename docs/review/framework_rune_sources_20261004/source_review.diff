@@ -1,0 +1,1567 @@
+diff --git a/assets/data/features/rune_fixture.json b/assets/data/features/rune_fixture.json
+new file mode 100644
+index 000000000..7a53d7c6e
+--- /dev/null
++++ b/assets/data/features/rune_fixture.json
+@@ -0,0 +1,9 @@
++{
++  "schema_version": 1, "module_id": "hc.runes.fixture", "module_version": 1, "core_api_version": 1,
++  "requires": [], "conflicts": [], "capabilities": ["stats.contribute", "items.transact"],
++  "handlers": [], "resource_dependencies": [], "cost": {"commands_per_event": 0, "states_per_target": 0},
++  "default_enabled": false, "scope": "equipment", "activation_boundary": "world_ready",
++  "mechanics": [{"mechanic_id": "hc.runes.fixture_accuracy", "kind": "stat", "tags": ["hc.numeric"],
++    "operations": [{"stat": "accuracy", "op": "add", "value": 1}]}],
++  "tests": ["tests/framework/rune_extension_codec_test.tscn"]
++}
+diff --git a/assets/data/features/rune_fixture_items.json b/assets/data/features/rune_fixture_items.json
+new file mode 100644
+index 000000000..734f3eb4c
+--- /dev/null
++++ b/assets/data/features/rune_fixture_items.json
+@@ -0,0 +1,30 @@
++{
++  "schema_version": 1,
++  "contract_id": "hc.runes.fixture.items.v1",
++  "module_id": "hc.runes.fixture",
++  "default_enabled": false,
++  "records": [
++    {
++      "itemId": 990002,
++      "name": "验证符文",
++      "kind": "rune",
++      "category": "符文",
++      "stackable": false,
++      "weight": 0,
++      "usable": false,
++      "sellable": false,
++      "fixtureOnly": true
++    },
++    {
++      "itemId": 990003,
++      "name": "验证符文乙",
++      "kind": "rune",
++      "category": "符文",
++      "stackable": false,
++      "weight": 0,
++      "usable": false,
++      "sellable": false,
++      "fixtureOnly": true
++    }
++  ]
++}
+diff --git a/assets/data/features/validation/rune_composition_registry.json b/assets/data/features/validation/rune_composition_registry.json
+new file mode 100644
+index 000000000..383d68e5d
+--- /dev/null
++++ b/assets/data/features/validation/rune_composition_registry.json
+@@ -0,0 +1,15 @@
++{
++  "schema_version": 1,
++  "modules": [
++    {"module_id": "hc.ignite", "path": "res://assets/data/features/ignite.json"},
++    {"module_id": "hc.socketing_fixture", "path": "res://assets/data/features/socketing_fixture.json"},
++    {"module_id": "hc.runes.fixture", "path": "res://assets/data/features/rune_fixture.json"}
++  ],
++  "bindings": [
++    {"module_id": "hc.ignite", "kind": "affix", "affix_id": "hc.affix.validation.magic_bonus.v1", "mechanic_id": "hc.ignite.ice_storm"},
++    {"module_id": "hc.ignite", "kind": "embedded_item", "item_id": "hc.item.990001", "mechanic_id": "hc.ignite.ice_storm"},
++    {"module_id": "hc.ignite", "kind": "embedded_item", "item_id": "hc.item.990002", "mechanic_id": "hc.ignite.ice_storm"},
++    {"module_id": "hc.socketing_fixture", "kind": "embedded_item", "item_id": "hc.item.990001", "mechanic_id": "hc.socketing.fixture_accuracy"},
++    {"module_id": "hc.runes.fixture", "kind": "embedded_item", "item_id": "hc.item.990002", "mechanic_id": "hc.runes.fixture_accuracy"}
++  ]
++}
+diff --git a/assets/data/identity/entity_registry_source.json b/assets/data/identity/entity_registry_source.json
+index f5392da61..c8e8f110b 100644
+--- a/assets/data/identity/entity_registry_source.json
++++ b/assets/data/identity/entity_registry_source.json
+@@ -4,6 +4,7 @@
+   "sources": [
+     {"kind":"item_category","path":"assets/data/identity/item_categories_v1.json","records":"records","id_field":"category_id","display_field":"display_name"},
+     {"kind":"item","path":"assets/data/features/socketing_fixture_items.json","records":"records","id_field":"itemId","display_field":"name"},
++    {"kind":"item","path":"assets/data/features/rune_fixture_items.json","records":"records","id_field":"itemId","display_field":"name"},
+     {"kind":"skill","path":"assets/data/vanilla_176/skills_source_of_truth_v1.json","records":"skills","id_field":"skill_id","display_field":"display_name"},
+     {"kind":"item","path":"assets/data/equipment_attribute_master.json","records":"records","id_field":"itemId","display_field":"name"},
+     {"kind":"item","path":"assets/data/item_runtime_authority_v1.json","records":"newItems","id_field":"itemId","display_field":"name"},
+diff --git a/assets/data/identity/item_categories_v1.json b/assets/data/identity/item_categories_v1.json
+index 07dffe4ab..92e7b094e 100644
+--- a/assets/data/identity/item_categories_v1.json
++++ b/assets/data/identity/item_categories_v1.json
+@@ -13,6 +13,7 @@
+     {"category_id":"misc","display_name":"其他物品","legacy_categories":["其他物品"],"equipment_slots":[]},
+     {"category_id":"script_item","display_name":"脚本道具","legacy_categories":["脚本道具"],"equipment_slots":[]},
+     {"category_id":"gems","display_name":"宝石","legacy_categories":["宝石","测试宝石"],"equipment_slots":[]},
++    {"category_id":"rune","display_name":"符文","legacy_categories":["符文"],"equipment_slots":[]},
+     {"category_id":"food","display_name":"食物","legacy_categories":["食物"],"equipment_slots":[]},
+     {"category_id":"fish","display_name":"鱼类","legacy_categories":["鱼类"],"equipment_slots":[]},
+     {"category_id":"crafting_material","display_name":"制作材料","legacy_categories":["制作材料"],"equipment_slots":[]},
+diff --git a/assets/data/runtime/entity_registry_v1.json b/assets/data/runtime/entity_registry_v1.json
+index c29d15810..d755d9ba0 100644
+--- a/assets/data/runtime/entity_registry_v1.json
++++ b/assets/data/runtime/entity_registry_v1.json
+@@ -6,9 +6,10 @@
+     "res://assets/data/drop/dpv2_21cq_item_mapping_v1.json": "4fec8ddeca9a835ce144fe2ed2c70a15d837090523824b0647252e96d5a61f6f",
+     "res://assets/data/equipment_attribute_master.json": "223c96df954077aa8970a277efe229d9dbc16609d2503a0033e60197f7e00701",
+     "res://assets/data/equipment_enhancement_black_iron_v1.json": "3ccd9e7e7d774dcc9655f2b6d5edf1eea2d97f50e77880ff07750012d0ba9732",
++    "res://assets/data/features/rune_fixture_items.json": "ea00bdd36122ae0275f64ee7a73746bbd3866c5fdd174625a7915cb9c885a68d",
+     "res://assets/data/features/socketing_fixture_items.json": "ae2c7adbcf0ee9ed8e88f4e2dd8d4c4e2c55af6b49a7bcffc0828c8a29e23043",
+-    "res://assets/data/identity/entity_registry_source.json": "ef36ccd584e73f58d86fe793eb5b421721fe7db0153dfe41d809b90bc5e6b6c2",
+-    "res://assets/data/identity/item_categories_v1.json": "6dd144266aa3f0ec91338c0c3f8a4d8d41788b8db81be1ae83c2fd29834caf04",
++    "res://assets/data/identity/entity_registry_source.json": "4d2c6674fb6c37dda246a10f1ae0f2396298c31e968d40929dc2c86ddf49265a",
++    "res://assets/data/identity/item_categories_v1.json": "c60d00da6b19047e87ea80b6c973e42a26c01f543d489fdb8b3ab64473adbb8a",
+     "res://assets/data/item_runtime_authority_v1.json": "4232baf42256fa1ef0e5ab6e53f9b4ae452a4614fc09ca51902e4220d908f1dc",
+     "res://assets/data/map_design/map_identity_registry.json": "7e50073a4a20918e234587af284f009ff92b9d6d845ad46dfc997be60d9128d8",
+     "res://assets/data/relic_synthesis_v1.json": "9d7cb4f2b09c80f7dbe63782d757ce1532a0ce99c7ae32d3cfaf1fe45fbfd5df",
+@@ -3822,6 +3823,30 @@
+         }
+       ]
+     },
++    {
++      "id": "hc.item.990002",
++      "kind": "item",
++      "legacy_id": 990002,
++      "display_name": "验证符文",
++      "evidence": [
++        {
++          "path": "res://assets/data/features/rune_fixture_items.json",
++          "pointer": "/records/0"
++        }
++      ]
++    },
++    {
++      "id": "hc.item.990003",
++      "kind": "item",
++      "legacy_id": 990003,
++      "display_name": "验证符文乙",
++      "evidence": [
++        {
++          "path": "res://assets/data/features/rune_fixture_items.json",
++          "pointer": "/records/1"
++        }
++      ]
++    },
+     {
+       "id": "hc.item_category.armor",
+       "kind": "item_category",
+@@ -3842,7 +3867,7 @@
+       "evidence": [
+         {
+           "path": "res://assets/data/identity/item_categories_v1.json",
+-          "pointer": "/records/17"
++          "pointer": "/records/18"
+         }
+       ]
+     },
+@@ -3854,7 +3879,7 @@
+       "evidence": [
+         {
+           "path": "res://assets/data/identity/item_categories_v1.json",
+-          "pointer": "/records/23"
++          "pointer": "/records/24"
+         }
+       ]
+     },
+@@ -3878,7 +3903,7 @@
+       "evidence": [
+         {
+           "path": "res://assets/data/identity/item_categories_v1.json",
+-          "pointer": "/records/31"
++          "pointer": "/records/32"
+         }
+       ]
+     },
+@@ -3890,7 +3915,7 @@
+       "evidence": [
+         {
+           "path": "res://assets/data/identity/item_categories_v1.json",
+-          "pointer": "/records/13"
++          "pointer": "/records/14"
+         }
+       ]
+     },
+@@ -3902,7 +3927,7 @@
+       "evidence": [
+         {
+           "path": "res://assets/data/identity/item_categories_v1.json",
+-          "pointer": "/records/27"
++          "pointer": "/records/28"
+         }
+       ]
+     },
+@@ -3914,7 +3939,7 @@
+       "evidence": [
+         {
+           "path": "res://assets/data/identity/item_categories_v1.json",
+-          "pointer": "/records/30"
++          "pointer": "/records/31"
+         }
+       ]
+     },
+@@ -3926,7 +3951,7 @@
+       "evidence": [
+         {
+           "path": "res://assets/data/identity/item_categories_v1.json",
+-          "pointer": "/records/12"
++          "pointer": "/records/13"
+         }
+       ]
+     },
+@@ -3938,7 +3963,7 @@
+       "evidence": [
+         {
+           "path": "res://assets/data/identity/item_categories_v1.json",
+-          "pointer": "/records/11"
++          "pointer": "/records/12"
+         }
+       ]
+     },
+@@ -3962,7 +3987,7 @@
+       "evidence": [
+         {
+           "path": "res://assets/data/identity/item_categories_v1.json",
+-          "pointer": "/records/28"
++          "pointer": "/records/29"
+         }
+       ]
+     },
+@@ -3986,7 +4011,7 @@
+       "evidence": [
+         {
+           "path": "res://assets/data/identity/item_categories_v1.json",
+-          "pointer": "/records/21"
++          "pointer": "/records/22"
+         }
+       ]
+     },
+@@ -3998,7 +4023,7 @@
+       "evidence": [
+         {
+           "path": "res://assets/data/identity/item_categories_v1.json",
+-          "pointer": "/records/29"
++          "pointer": "/records/30"
+         }
+       ]
+     },
+@@ -4010,7 +4035,7 @@
+       "evidence": [
+         {
+           "path": "res://assets/data/identity/item_categories_v1.json",
+-          "pointer": "/records/25"
++          "pointer": "/records/26"
+         }
+       ]
+     },
+@@ -4022,7 +4047,7 @@
+       "evidence": [
+         {
+           "path": "res://assets/data/identity/item_categories_v1.json",
+-          "pointer": "/records/15"
++          "pointer": "/records/16"
+         }
+       ]
+     },
+@@ -4046,7 +4071,7 @@
+       "evidence": [
+         {
+           "path": "res://assets/data/identity/item_categories_v1.json",
+-          "pointer": "/records/26"
++          "pointer": "/records/27"
+         }
+       ]
+     },
+@@ -4070,7 +4095,7 @@
+       "evidence": [
+         {
+           "path": "res://assets/data/identity/item_categories_v1.json",
+-          "pointer": "/records/14"
++          "pointer": "/records/15"
+         }
+       ]
+     },
+@@ -4082,7 +4107,7 @@
+       "evidence": [
+         {
+           "path": "res://assets/data/identity/item_categories_v1.json",
+-          "pointer": "/records/18"
++          "pointer": "/records/19"
+         }
+       ]
+     },
+@@ -4106,7 +4131,7 @@
+       "evidence": [
+         {
+           "path": "res://assets/data/identity/item_categories_v1.json",
+-          "pointer": "/records/16"
++          "pointer": "/records/17"
+         }
+       ]
+     },
+@@ -4118,7 +4143,7 @@
+       "evidence": [
+         {
+           "path": "res://assets/data/identity/item_categories_v1.json",
+-          "pointer": "/records/22"
++          "pointer": "/records/23"
+         }
+       ]
+     },
+@@ -4134,6 +4159,18 @@
+         }
+       ]
+     },
++    {
++      "id": "hc.item_category.rune",
++      "kind": "item_category",
++      "legacy_id": "rune",
++      "display_name": "符文",
++      "evidence": [
++        {
++          "path": "res://assets/data/identity/item_categories_v1.json",
++          "pointer": "/records/11"
++        }
++      ]
++    },
+     {
+       "id": "hc.item_category.script_item",
+       "kind": "item_category",
+@@ -4166,7 +4203,7 @@
+       "evidence": [
+         {
+           "path": "res://assets/data/identity/item_categories_v1.json",
+-          "pointer": "/records/19"
++          "pointer": "/records/20"
+         }
+       ]
+     },
+@@ -4178,7 +4215,7 @@
+       "evidence": [
+         {
+           "path": "res://assets/data/identity/item_categories_v1.json",
+-          "pointer": "/records/24"
++          "pointer": "/records/25"
+         }
+       ]
+     },
+@@ -4190,7 +4227,7 @@
+       "evidence": [
+         {
+           "path": "res://assets/data/identity/item_categories_v1.json",
+-          "pointer": "/records/20"
++          "pointer": "/records/21"
+         }
+       ]
+     },
+@@ -15866,8 +15903,8 @@
+   ],
+   "counts": {
+     "currency": 1,
+-    "item": 256,
+-    "item_category": 32,
++    "item": 258,
++    "item_category": 33,
+     "map": 209,
+     "monster": 156,
+     "profession": 3,
+diff --git a/assets/data/source_priority_policy.json b/assets/data/source_priority_policy.json
+index 545bd8d04..2ddef8902 100644
+--- a/assets/data/source_priority_policy.json
++++ b/assets/data/source_priority_policy.json
+@@ -35,7 +35,8 @@
+     "combat_movement_ai_timing_protocol": "server_rules",
+     "combat_movement_ai_projectile_distance_units": "combat_units",
+     "monster_drop_probability_and_post_rng_overflow": "monster_drop_probability",
+-    "framework_default_off_test_item_identity_and_rules": "framework_fixture_items"
++    "framework_default_off_test_item_identity_and_rules": "framework_fixture_items",
++    "framework_default_off_rune_identity_and_rules": "framework_rune_fixture_items"
+   },
+   "lanes": {
+     "item_categories": {
+@@ -53,7 +54,26 @@
+           "authority": "project_master",
+           "sourceKind": "tracked_authoring_source",
+           "originalPath": "assets/data/identity/item_categories_v1.json",
+-          "evidenceSha256": "6DD144266AA3F0EC91338C0C3F8A4D8D41788B8DB81BE1AE83C2FD29834CAF04"
++          "evidenceSha256": "C60D00DA6B19047E87EA80B6C973E42A26C01F543D489FDB8B3AB64473ADBB8A"
++        }
++      ]
++    },
++    "framework_rune_fixture_items": {
++      "description": "Default-off registered rune fixture; no production fees, loot or balance",
++      "sources": [
++        {
++          "distribution": "hardcore.framework.rune_fixture",
++          "tier": "primary",
++          "order": 0,
++          "weight": 100,
++          "eligible": true,
++          "catalogRequired": false,
++          "rootPrefix": "assets/data/features/rune_fixture_items.json",
++          "contractId": "hc.runes.fixture.items.v1",
++          "authority": "project_master",
++          "sourceKind": "tracked_authoring_source",
++          "originalPath": "assets/data/features/rune_fixture_items.json",
++          "evidenceSha256": "EA00BDD36122AE0275F64EE7A73746BBD3866C5FDD174625A7915CB9C885A68D"
+         }
+       ]
+     },
+diff --git a/scripts/features/adapters/contribution_provider.gd b/scripts/features/adapters/contribution_provider.gd
+index 156a9348f..09a5b9e54 100644
+--- a/scripts/features/adapters/contribution_provider.gd
++++ b/scripts/features/adapters/contribution_provider.gd
+@@ -24,6 +24,10 @@ static func collect(bindings: Array, enabled: Array, equipment: Dictionary, prof
+ 					var instance: Variant=equipment[slot]
+ 					if not instance is Dictionary or not bool(item_eligible.call(instance)): continue
+ 					var base:=Items.base_record(instance)
++					# Legacy gear compatibility does not authorize new affix provenance.
++					# A claimed affix must retain its complete immutable drop contract.
++					if base.has("drop_affix") and not GameData.validate_item_drop_instance(base):
++						errors.append("invalid_feature_affix_source:"+slot); continue
+ 					var slot_id:=str(Ids.resolve(slot,"slot").get("id",""))
+ 					if slot_id.is_empty(): errors.append("unregistered_feature_slot:"+slot); continue
+ 					for ordinal: int in SourceRules.matching_affix_indices(base,definition):
+@@ -39,12 +43,12 @@ static func collect(bindings: Array, enabled: Array, equipment: Dictionary, prof
+ 					if slot_id.is_empty():
+ 						errors.append("unregistered_feature_slot:" + slot)
+ 						continue
+-					for socket: Dictionary in Items.extensions(instance).get(Items.SOCKET_NAMESPACE, {}).get("sockets", []):
++					for socket: Dictionary in Items.embedded_records(instance):
+ 						var gem: Dictionary = socket.item
+ 						var record: Dictionary = item_record.call(gem)
+ 						if Ids.from_legacy("item", record.get("itemId", -1)) != binding.item_id: continue
+ 						var source := {"slot": slot_id, "instance_id": gem.instance_id, "mechanic_id": binding.mechanic_id,
+-							"extension_id": JSON.stringify([instance.instance_id, socket.socket_id])}
++							"extension_id": JSON.stringify([instance.instance_id, socket.slot_id])}
+ 						sources.append({"source": source, "mechanic_id": binding.mechanic_id})
+ 			"item":
+ 				for slot: String in equipment:
+diff --git a/scripts/game_data.gd b/scripts/game_data.gd
+index 5eddf5324..cd30fc93c 100644
+--- a/scripts/game_data.gd
++++ b/scripts/game_data.gd
+@@ -5,6 +5,7 @@ const EntityRegistry := preload("res://scripts/identity/entity_registry.gd")
+ const ItemCategories := preload("res://scripts/identity/item_category_identity.gd")
+ const ItemExtensionCodec := preload("res://scripts/items/item_extension_codec.gd")
+ const SocketGemRules := preload("res://scripts/items/socket_gem_rules.gd")
++const RuneItemRules := preload("res://scripts/items/rune_item_rules.gd")
+ const CanonicalSkills := preload("res://scripts/skills/skill_data_loader.gd")
+ 
+ const EquipmentRulesScript = preload("res://scripts/equipment_rules.gd")
+@@ -3749,6 +3750,8 @@ func _item_record_for_read(item_ref: Variant) -> Dictionary:
+ 	var item_id := int(identity.get("item_id", -1))
+ 	if item_id == SocketGemRules.ITEM_ID:
+ 		return SocketGemRules.record_for_id(item_id)
++	var rune_record:=RuneItemRules.record_for_id(item_id)
++	if not rune_record.is_empty(): return rune_record
+ 	if item_id >= 0 and _catalog_by_item_id.has(item_id):
+ 		return _catalog_by_item_id.get(item_id, {}) as Dictionary
+ 	# The registry declares the exact service source for these reserved direct
+diff --git a/scripts/items/item_extension_codec.gd b/scripts/items/item_extension_codec.gd
+index 1a68a80d0..4ea15b601 100644
+--- a/scripts/items/item_extension_codec.gd
++++ b/scripts/items/item_extension_codec.gd
+@@ -4,6 +4,8 @@ const DropRules := preload("res://scripts/item_drop_instance_rules.gd")
+ const RelicRules := preload("res://scripts/layers/rules/relic_synthesis_rules.gd")
+ const PlainGraph := preload("res://scripts/features/contracts/plain_graph.gd")
+ const GemRules := preload("res://scripts/items/socket_gem_rules.gd")
++const RuneRules := preload("res://scripts/items/rune_item_rules.gd")
++const Registry := preload("res://scripts/identity/entity_registry.gd")
+ const Identity := preload("res://scripts/identity/item_identity_codec.gd")
+ const EquipmentIdentity := preload("res://scripts/identity/equipment_identity_codec.gd")
+ const CONTRACT := "hardcore.item.container.v2"
+@@ -15,6 +17,8 @@ const OPAQUE_UNSUPPORTED := "OPAQUE_UNSUPPORTED"
+ const ARRAY_FIELDS := ["inventory", "warehouse_inventory", "forge_tray", "synthesis_tray"]
+ const SOCKET_NAMESPACE := "hc.socketing"
+ const SOCKET_ID := "hc.socketing.primary"
++const RUNE_NAMESPACE := "hc.runes"
++const RUNE_ID := "hc.runes.primary"
+ 
+ # Wire containers have one base. Runtime keeps that same base as the existing
+ # flat item record; this private field owns extensions only, never attributes.
+@@ -36,6 +40,14 @@ static func decode_wire(record: Dictionary) -> Dictionary:
+ 	if record.has(RUNTIME_EXTENSION):
+ 		return _failure(INVALID, "private_runtime_item_field_on_wire")
+ 	if not is_container:
++		if record.has("rune_instance_contract_id"):
++			if not record.rune_instance_contract_id is String: return _failure(INVALID,"invalid_rune_instance_contract")
++			if record.rune_instance_contract_id!=RuneRules.INSTANCE_CONTRACT: return _failure(OPAQUE_UNSUPPORTED,"unsupported_rune_instance_contract")
++			if _integer(record.get("item_id")) and Registry.from_legacy("item",int(record.item_id)).is_empty():
++				return _failure(OPAQUE_UNSUPPORTED,"unknown_rune_item_identity")
++			return _success(record) if RuneRules.valid_instance(record) else _failure(INVALID,"invalid_rune_instance")
++		if _integer(record.get("item_id")) and not RuneRules.record_for_id(int(record.item_id)).is_empty():
++			return _failure(INVALID,"missing_rune_instance_contract")
+ 		if record.has("gem_instance_contract_id"):
+ 			if not record.gem_instance_contract_id is String:
+ 				return _failure(INVALID, "invalid_gem_instance_contract")
+@@ -201,13 +213,22 @@ static func document_items(document: Dictionary) -> Array[Dictionary]:
+ 	return records
+ 
+ static func has_extensions(record: Dictionary) -> bool:
+-	return record.has(RUNTIME_EXTENSION) or _is_wire_container(record) or record.has("gem_instance_contract_id")
++	return record.has(RUNTIME_EXTENSION) or _is_wire_container(record) or record.has("gem_instance_contract_id") or record.has("rune_instance_contract_id")
+ 
+ static func can_release_ownership(record: Dictionary) -> bool:
+ 	# Selling, destruction and material consumption cannot silently destroy an
+ 	# independently owned embedded item. Remove it through the common port first.
+ 	var normalized := normalize_runtime(record)
+-	return normalized.status == KNOWN_VALID and extensions(normalized.item).get(SOCKET_NAMESPACE, {}).get("sockets", []).is_empty()
++	return normalized.status == KNOWN_VALID and embedded_records(normalized.item).is_empty()
++
++static func embedded_records(record: Dictionary) -> Array[Dictionary]:
++	var result: Array[Dictionary]=[]
++	var owned:=extensions(record)
++	for socket: Dictionary in owned.get(SOCKET_NAMESPACE,{}).get("sockets",[]):
++		result.append({"slot_id":socket.socket_id,"namespace_id":SOCKET_NAMESPACE,"item":socket.item})
++	for rune: Dictionary in owned.get(RUNE_NAMESPACE,{}).get("runes",[]):
++		result.append({"slot_id":rune.rune_slot_id,"namespace_id":RUNE_NAMESPACE,"item":rune.item})
++	return result
+ 
+ static func ownership_ids(record: Dictionary) -> Array[String]:
+ 	var base := base_record(record)
+@@ -217,7 +238,7 @@ static func ownership_ids(record: Dictionary) -> Array[String]:
+ 	var instance: Variant = base.get("instance_id")
+ 	if instance is String and not instance.is_empty():
+ 		result.append(instance)
+-	for socket: Dictionary in extensions(record).get(SOCKET_NAMESPACE, {}).get("sockets", []):
++	for socket: Dictionary in embedded_records(record):
+ 		var gem := decode_wire(socket.item)
+ 		if gem.status == KNOWN_VALID:
+ 			result.append(str(gem.item.instance_id))
+@@ -241,9 +262,17 @@ static func _valid_extended_base(base: Dictionary, entity_id: String) -> bool:
+ 	return _integer(base.get("item_id")) and int(base.item_id) == numeric_id
+ 
+ static func _validate_extensions(base: Dictionary, value: Dictionary) -> Dictionary:
+-	if value.size() > 1:
++	if value.size() > 2:
+ 		return _failure(INVALID, "item_extension_namespace_capacity")
++	var seen: Dictionary={}; seen[base.instance_id]=true
+ 	for namespace_id: Variant in value:
++		if namespace_id==RUNE_NAMESPACE:
++			var rune_status:=_validate_rune_extension(base,value[namespace_id])
++			if rune_status.status!=KNOWN_VALID: return rune_status
++			for rune: Dictionary in value[namespace_id].runes:
++				if seen.has(rune.item.instance_id): return _failure(INVALID,"duplicate_embedded_instance_identity")
++				seen[rune.item.instance_id]=true
++			continue
+ 		if namespace_id != SOCKET_NAMESPACE:
+ 			return _failure(OPAQUE_UNSUPPORTED, "unsupported_item_extension_namespace")
+ 		var extension: Variant = value[namespace_id]
+@@ -266,19 +295,48 @@ static func _validate_extensions(base: Dictionary, value: Dictionary) -> Diction
+ 				or not _integer(gem.item.get("count")) or gem.item.count != 1 \
+ 				or not GemRules.valid_instance(gem.item):
+ 				return _failure(INVALID, "invalid_socket_gem")
++			if seen.has(gem.item.instance_id): return _failure(INVALID,"duplicate_embedded_instance_identity")
++			seen[gem.item.instance_id]=true
+ 	return {"status": KNOWN_VALID, "reason": ""}
+ 
+ static func _extension_support_status(value: Dictionary) -> Dictionary:
+ 	# Recognize unsupported ownership before judging a known base/capacity. A
+ 	# corrupted sibling must never authorize recovery over a future extension.
+ 	for namespace_id: Variant in value:
+-		if namespace_id != SOCKET_NAMESPACE:
++		if namespace_id not in [SOCKET_NAMESPACE,RUNE_NAMESPACE]:
+ 			return _failure(OPAQUE_UNSUPPORTED, "unsupported_item_extension_namespace")
+ 		var extension: Variant = value[namespace_id]
+ 		if extension is Dictionary and _integer(extension.get("schema_version")) and extension.schema_version > 1:
+-			return _failure(OPAQUE_UNSUPPORTED, "unsupported_socket_extension_version")
++			return _failure(OPAQUE_UNSUPPORTED, "unsupported_rune_extension_version" if namespace_id==RUNE_NAMESPACE else "unsupported_socket_extension_version")
++		if extension is Dictionary:
++			var entries: Variant=extension.get("runes" if namespace_id==RUNE_NAMESPACE else "sockets")
++			if entries is Array:
++				for entry: Variant in entries:
++					if not entry is Dictionary or not entry.get("item") is Dictionary: continue
++					var item: Dictionary=entry.item
++					if item.get("rune_instance_contract_id") is String and item.rune_instance_contract_id!=RuneRules.INSTANCE_CONTRACT:
++						return _failure(OPAQUE_UNSUPPORTED,"unsupported_rune_instance_contract")
++					if item.get("rune_instance_contract_id") is String and _integer(item.get("item_id")) \
++						and Registry.from_legacy("item",int(item.item_id)).is_empty():
++						return _failure(OPAQUE_UNSUPPORTED,"unknown_rune_item_identity")
++					if item.get("gem_instance_contract_id") is String and item.gem_instance_contract_id!=GemRules.INSTANCE_CONTRACT:
++						return _failure(OPAQUE_UNSUPPORTED,"unsupported_gem_instance_contract")
++					if _is_wire_container(item) and ((_integer(item.get("format_version")) and item.format_version>VERSION) \
++						or (item.get("contract_id") is String and item.contract_id!=CONTRACT)):
++						return _failure(OPAQUE_UNSUPPORTED,"unsupported_embedded_item_container")
+ 	return {"status": KNOWN_VALID, "reason": ""}
+ 
++static func _validate_rune_extension(base: Dictionary,value: Variant) -> Dictionary:
++	if not value is Dictionary or not _keys(value,["schema_version","runes"]) or not _integer(value.schema_version) \
++		or value.schema_version!=1 or not value.runes is Array or value.runes.size()>1: return _failure(INVALID,"invalid_rune_extension")
++	for rune: Variant in value.runes:
++		if not rune is Dictionary or not _keys(rune,["rune_slot_id","item"]) or rune.rune_slot_id!=RUNE_ID or not rune.item is Dictionary:
++			return _failure(INVALID,"invalid_rune_slot")
++		var item:=decode_wire(rune.item)
++		if item.status!=KNOWN_VALID: return item
++		if not RuneRules.valid_instance(item.item) or item.item.instance_id==base.instance_id: return _failure(INVALID,"invalid_embedded_rune")
++	return {"status":KNOWN_VALID,"reason":""}
++
+ static func _is_wire_container(record: Dictionary) -> bool:
+ 	return record.has("format_version") or record.has("base") or record.has("extensions") \
+ 		or (record.get("contract_id") is String and record.contract_id.begins_with("hardcore.item.container."))
+diff --git a/scripts/items/item_transaction_journal.gd b/scripts/items/item_transaction_journal.gd
+index 71ccb8019..8a7cf06ef 100644
+--- a/scripts/items/item_transaction_journal.gd
++++ b/scripts/items/item_transaction_journal.gd
+@@ -7,7 +7,10 @@ const SEQUENCE_PREFIX := "hc:itemtx:"
+ const MAX_SEQUENCE := 9007199254740991
+ const FIELD := "item_transactions"
+ const LIMIT := 64
+-const ACTIONS := ["hc.socketing.insert", "hc.socketing.remove"]
++const ACTIONS := ["hc.socketing.insert", "hc.socketing.remove", "hc.runes.insert", "hc.runes.remove"]
++
++static func input_field(action: String) -> String:
++	return "rune_instance_id" if action in ["hc.runes.insert","hc.runes.remove"] else "gem_instance_id"
+ 
+ # Legacy opaque outcomes are never retired. The separate sequenced protocol
+ # retains a contiguous durable watermark: an omitted old ID remains terminal.
+@@ -70,12 +73,15 @@ static func recovered(journal: Dictionary) -> Dictionary:
+ 
+ static func _entries_valid(entries: Array, seen: Dictionary) -> Dictionary:
+ 	for raw: Variant in entries:
+-		if not raw is Dictionary or not _keys(raw, ["operation_id", "request_digest", "action", "target_instance_id", "gem_instance_id", "rules_revision"]):
++		if not raw is Dictionary or not raw.get("action") is String:
++			return _status(false)
++		if raw.action not in ACTIONS: return _status(false, true)
++		var asset_field:=input_field(raw.action)
++		if not _keys(raw, ["operation_id", "request_digest", "action", "target_instance_id", asset_field, "rules_revision"]):
+ 			return _status(false)
+ 		for key: String in raw:
+ 			if not raw[key] is String: return _status(false)
+-		if raw.action not in ACTIONS: return _status(false, true)
+-		if not identity_valid(raw.operation_id) or not identity_valid(raw.target_instance_id) or not identity_valid(raw.gem_instance_id) \
++		if not identity_valid(raw.operation_id) or not identity_valid(raw.target_instance_id) or not identity_valid(raw[asset_field]) \
+ 			or not _hash(raw.request_digest) or not _hash(raw.rules_revision) or seen.has(raw.operation_id):
+ 			return _status(false)
+ 		seen[raw.operation_id] = true
+diff --git a/scripts/items/item_transaction_port.gd b/scripts/items/item_transaction_port.gd
+index dfbe42581..2477ee53e 100644
+--- a/scripts/items/item_transaction_port.gd
++++ b/scripts/items/item_transaction_port.gd
+@@ -2,6 +2,7 @@ extends RefCounted
+ 
+ const Codec := preload("res://scripts/items/item_extension_codec.gd")
+ const Gem := preload("res://scripts/items/socket_gem_rules.gd")
++const Rune := preload("res://scripts/items/rune_item_rules.gd")
+ const Journal := preload("res://scripts/items/item_transaction_journal.gd")
+ const Graph := preload("res://scripts/features/contracts/plain_graph.gd")
+ var _owner: WeakRef
+@@ -9,6 +10,13 @@ var _active: Dictionary = {}
+ var _issued_context := ""
+ var _issued_epoch := ""
+ 
++const OPERATIONS := {
++	"hc.socketing.insert":{"module_id":Gem.MODULE,"namespace_id":Codec.SOCKET_NAMESPACE,"entries_field":"sockets","slot_field":"socket_id","slot_id":Codec.SOCKET_ID},
++	"hc.socketing.remove":{"module_id":Gem.MODULE,"namespace_id":Codec.SOCKET_NAMESPACE,"entries_field":"sockets","slot_field":"socket_id","slot_id":Codec.SOCKET_ID},
++	"hc.runes.insert":{"module_id":Rune.MODULE,"namespace_id":Codec.RUNE_NAMESPACE,"entries_field":"runes","slot_field":"rune_slot_id","slot_id":Codec.RUNE_ID},
++	"hc.runes.remove":{"module_id":Rune.MODULE,"namespace_id":Codec.RUNE_NAMESPACE,"entries_field":"runes","slot_field":"rune_slot_id","slot_id":Codec.RUNE_ID}
++}
++
+ func _init(owner: Node) -> void:
+ 	_owner = weakref(owner)
+ 
+@@ -37,7 +45,9 @@ func _epoch_for(player: Node) -> String:
+ func quote(request: Dictionary) -> Dictionary:
+ 	var player: Node = _owner.get_ref()
+ 	if player == null or not _request_valid(request): return _failure("invalid_item_command")
+-	var digest := JSON.stringify([player.active_profile_id, request.action, request.target_instance_id, request.gem_instance_id]).sha256_text()
++	var spec: Dictionary=OPERATIONS[request.action]
++	var input_id: String=request[Journal.input_field(request.action)]
++	var digest := JSON.stringify([player.active_profile_id, request.action, request.target_instance_id, input_id]).sha256_text()
+ 	var recorded := Journal.lookup(player._item_transaction_journal, request.operation_id)
+ 	if not recorded.is_empty():
+ 		if recorded.request_digest != digest: return _failure("operation_identity_conflict")
+@@ -46,8 +56,8 @@ func quote(request: Dictionary) -> Dictionary:
+ 	var admission := Journal.admission(player._item_transaction_journal,request.operation_id,epoch)
+ 	if not bool(admission.success): return _failure(admission.reason)
+ 	var config := ContentLayers.feature_configuration()
+-	if Gem.MODULE not in config.get("enabled_modules", []): return _failure("socket_fixture_disabled")
+-	if "items.transact" not in config.catalog.modules[Gem.MODULE].capabilities: return _failure("missing_item_transaction_permission")
++	if spec.module_id not in config.get("enabled_modules", []): return _failure("rune_fixture_disabled" if spec.module_id==Rune.MODULE else "socket_fixture_disabled")
++	if "items.transact" not in config.catalog.modules[spec.module_id].capabilities: return _failure("missing_item_transaction_permission")
+ 	if not player._valid_profile_storage_id(player.active_profile_id) or player.active_profile_id == player._save_blocked_profile_id \
+ 		or not player._can_accept_immediate_item_use() or player._world_clock_snapshot_sequence < 0:
+ 		return _failure("item_transaction_unavailable")
+@@ -60,27 +70,26 @@ func quote(request: Dictionary) -> Dictionary:
+ 	if base.is_empty() or not base.get("count") in [1, 1.0] or GameData.get_item_record(base).get("kind") != "equipment" \
+ 		or not base.has("item_id") or GameData.item_entity_id(base).is_empty(): return _failure("invalid_socket_target")
+ 	var existing := Codec.extensions(target.record)
+-	var sockets: Array = existing.get(Codec.SOCKET_NAMESPACE, {}).get("sockets", [])
++	var sockets: Array = existing.get(spec.namespace_id, {}).get(spec.entries_field, [])
+ 	var gem: Dictionary = {}
+-	if request.action == "hc.socketing.insert":
+-		var input := _find(request.gem_instance_id)
+-		if not sockets.is_empty() or input.is_empty() or input.container != "inventory" or not Gem.valid_instance(input.record):
++	if _is_insert(request):
++		var input := _find(input_id)
++		if not sockets.is_empty() or input.is_empty() or input.container != "inventory" \
++			or not (Rune.valid_instance(input.record) if spec.module_id==Rune.MODULE else Gem.valid_instance(input.record)):
+ 			return _failure("socket_input_unavailable")
+ 		gem = input.record
+ 	else:
+ 		if sockets.size() != 1: return _failure("socket_is_empty")
+ 		gem = sockets[0].item
+ 		if _free_inventory_slot() < 0: return _failure("inventory_full")
+-	var extension := {Codec.SOCKET_NAMESPACE: {"schema_version": 1, "sockets": (
+-		[{"socket_id": Codec.SOCKET_ID, "item": gem}] if request.action == "hc.socketing.insert" else [])}}
+-	var output := Codec.with_extensions(base, extension)
++	var output := _compose_target(target.record,gem,spec,_is_insert(request))
+ 	if output.status != Codec.KNOWN_VALID: return _failure(output.reason)
+ 	var result := {"success": true, "replay": false, "request": request.duplicate(true),
+ 		"protocol_epoch":epoch,
+ 		"profile_id": player.active_profile_id, "world_clock_generation": player._world_clock_generation,
+ 		"rules_revision": config.catalog.revision, "request_digest": digest,
+-		"target_digest": _target_digest(target.record), "gem_digest": _item_digest(gem),
+-		"target_entity_id": GameData.item_entity_id(base), "gem_instance_id": gem.instance_id}
++		"target_digest": _target_digest(target.record), "input_digest": _item_digest(gem),
++		"target_entity_id": GameData.item_entity_id(base), "input_instance_id": gem.instance_id}
+ 	var captured := Graph.capture(result)
+ 	return captured.value if bool(captured.success) else _failure("non_plain_item_quote")
+ 
+@@ -100,7 +109,7 @@ func commit(quoted: Dictionary) -> Dictionary:
+ 	if player._json_persistence.pending_count() > 0 or player._workbench_transfer_pending:
+ 		return _failure("character_writer_busy")
+ 	var path: String = player._profile_path(player.active_profile_id)
+-	var plan := {"quote": quoted.duplicate(true), "destination": _free_inventory_slot() if request.action == "hc.socketing.remove" else -1,
++	var plan := {"quote": quoted.duplicate(true), "destination": _free_inventory_slot() if not _is_insert(request) else -1,
+ 		"output": {}, "journal": {}, "reason": "", "job": null}
+ 	_active = plan
+ 	var identity := {"domain": "item_transaction", "path": path, "profile_id": quoted.profile_id,
+@@ -116,7 +125,7 @@ func commit(quoted: Dictionary) -> Dictionary:
+ func record_reserved(record: Dictionary) -> bool:
+ 	if _active.is_empty(): return false
+ 	var ids := Codec.ownership_ids(record)
+-	return ids.has(_active.quote.request.target_instance_id) or ids.has(_active.quote.gem_instance_id)
++	return ids.has(_active.quote.request.target_instance_id) or ids.has(_active.quote.input_instance_id)
+ 
+ func slot_reserved(index: int) -> bool:
+ 	return not _active.is_empty() and int(_active.destination) >= 0 and (index < 0 or index == int(_active.destination))
+@@ -132,13 +141,14 @@ func _receipt_context_matches(plan: Dictionary) -> bool:
+ 	var target := _find(plan.quote.request.target_instance_id)
+ 	if target.is_empty() or _target_digest(target.record) != plan.quote.target_digest: return false
+ 	var gem: Dictionary = {}
+-	if plan.quote.request.action == "hc.socketing.insert":
+-		gem = _find(plan.quote.gem_instance_id).get("record", {})
++	if _is_insert(plan.quote.request):
++		gem = _find(plan.quote.input_instance_id).get("record", {})
+ 	else:
+-		var sockets: Array = Codec.extensions(target.record).get(Codec.SOCKET_NAMESPACE, {}).get("sockets", [])
++		var spec: Dictionary=OPERATIONS[plan.quote.request.action]
++		var sockets: Array = Codec.extensions(target.record).get(spec.namespace_id, {}).get(spec.entries_field, [])
+ 		if sockets.size() != 1: return false
+ 		gem = sockets[0].item
+-	if _item_digest(gem) != plan.quote.gem_digest: return false
++	if _item_digest(gem) != plan.quote.input_digest: return false
+ 	if int(plan.destination) >= 0 and int(plan.destination) < player.inventory.size() and not player.inventory[plan.destination].is_empty(): return false
+ 	return true
+ 
+@@ -151,16 +161,17 @@ func _build_document(previous: Dictionary, identity: Dictionary, plan: Dictionar
+ 		plan.reason = "item_journal_authority_changed"
+ 		return null
+ 	var target := _find(plan.quote.request.target_instance_id)
+-	var gem: Dictionary = (_find(plan.quote.gem_instance_id).get("record", {}) if plan.quote.request.action == "hc.socketing.insert"
+-		else Codec.extensions(target.record)[Codec.SOCKET_NAMESPACE].sockets[0].item)
+-	var output := Codec.with_extensions(Codec.base_record(target.record), {Codec.SOCKET_NAMESPACE: {"schema_version": 1,
+-		"sockets": [{"socket_id": Codec.SOCKET_ID, "item": gem}] if plan.quote.request.action == "hc.socketing.insert" else []}})
++	var spec: Dictionary=OPERATIONS[plan.quote.request.action]
++	var gem: Dictionary = (_find(plan.quote.input_instance_id).get("record", {}) if _is_insert(plan.quote.request)
++		else Codec.extensions(target.record)[spec.namespace_id][spec.entries_field][0].item)
++	var output := _compose_target(target.record,gem,spec,_is_insert(plan.quote.request))
+ 	if output.status != Codec.KNOWN_VALID: return null
+ 	plan.output = output.item
+ 	plan.gem = gem.duplicate(true)
+ 	var entry := {"operation_id": identity.operation_id, "request_digest": plan.quote.request_digest,
+ 		"action": plan.quote.request.action, "target_instance_id": plan.quote.request.target_instance_id,
+-		"gem_instance_id": plan.quote.gem_instance_id, "rules_revision": plan.quote.rules_revision}
++		"rules_revision": plan.quote.rules_revision}
++	entry[Journal.input_field(plan.quote.request.action)] = plan.quote.input_instance_id
+ 	plan.journal = Journal.appended(player._item_transaction_journal, player.active_profile_id, entry,plan.quote.protocol_epoch)
+ 	if plan.journal.is_empty(): return null
+ 	var document: Dictionary = player._prepare_character_save_payload(false).duplicate(true)
+@@ -220,8 +231,8 @@ func _apply_item_delta(inventory: Array, equipment: Dictionary, target: Dictiona
+ 	current[Codec.RUNTIME_EXTENSION] = plan.output[Codec.RUNTIME_EXTENSION].duplicate(true)
+ 	if target.container == "inventory": inventory[target.index] = current
+ 	else: equipment[target.slot] = current
+-	if plan.quote.request.action == "hc.socketing.insert":
+-		var gem_index: int = _find(plan.quote.gem_instance_id).get("index", -1)
++	if _is_insert(plan.quote.request):
++		var gem_index: int = _find(plan.quote.input_instance_id).get("index", -1)
+ 		assert(gem_index >= 0)
+ 		inventory[gem_index] = {}
+ 	else:
+@@ -268,11 +279,24 @@ static func _target_digest(record: Dictionary) -> String:
+ 
+ static func _request_valid(request: Dictionary) -> bool:
+ 	if request.size() != 4: return false
+-	for field: String in ["operation_id", "action", "target_instance_id", "gem_instance_id"]:
++	if not request.get("action") is String or request.action not in Journal.ACTIONS: return false
++	var field_name:=Journal.input_field(request.action)
++	for field: String in ["operation_id", "action", "target_instance_id", field_name]:
+ 		if not request.get(field) is String: return false
+ 	return request.action in Journal.ACTIONS and Journal.identity_valid(request.operation_id) \
+ 		and Journal.identity_valid(request.target_instance_id) and (
+-			Journal.identity_valid(request.gem_instance_id) if request.action == "hc.socketing.insert" else request.gem_instance_id.is_empty())
++			Journal.identity_valid(request[field_name]) if _is_insert(request) else request[field_name].is_empty())
++
++static func _is_insert(request: Dictionary) -> bool:
++	return request.action in ["hc.socketing.insert","hc.runes.insert"]
++
++static func _compose_target(record: Dictionary,input: Dictionary,spec: Dictionary,insert: bool) -> Dictionary:
++	# Modify only this business namespace; the other module keeps its assets.
++	var extensions:=Codec.extensions(record)
++	var entry: Dictionary={"item":input}; entry[spec.slot_field]=spec.slot_id
++	var value: Dictionary={"schema_version":1}; value[spec.entries_field]=[entry] if insert else []
++	extensions[spec.namespace_id]=value
++	return Codec.with_extensions(Codec.base_record(record),extensions)
+ 
+ static func _outcome(entry: Dictionary) -> Dictionary:
+ 	return {"success": true, "pending": false, "durable": true, "applied_in_memory": true, "outcome": entry.duplicate(true)}
+diff --git a/scripts/items/rune_item_rules.gd b/scripts/items/rune_item_rules.gd
+new file mode 100644
+index 000000000..39f17a23a
+--- /dev/null
++++ b/scripts/items/rune_item_rules.gd
+@@ -0,0 +1,67 @@
++extends RefCounted
++
++const Registry := preload("res://scripts/identity/entity_registry.gd")
++const Categories := preload("res://scripts/identity/item_category_identity.gd")
++const Graph := preload("res://scripts/features/contracts/plain_graph.gd")
++const PATH := "res://assets/data/features/rune_fixture_items.json"
++const POLICY := "res://assets/data/source_priority_policy.json"
++const SOURCE_CONTRACT := "hc.runes.fixture.items.v1"
++const INSTANCE_CONTRACT := "hc.runes.fixture.rune.v1"
++const MODULE := "hc.runes.fixture"
++const ITEM_ID := 990002
++static var _records: Dictionary={}
++
++static func ensure_loaded() -> bool:
++	if not _records.is_empty(): return true
++	var document: Variant=JSON.parse_string(FileAccess.get_file_as_string(PATH))
++	var policy: Variant=JSON.parse_string(FileAccess.get_file_as_string(POLICY))
++	if not document is Dictionary or not policy is Dictionary or not _keys(document,["schema_version","contract_id","module_id","default_enabled","records"]) \
++		or not _integer(document.schema_version) or document.schema_version!=1 or document.contract_id!=SOURCE_CONTRACT \
++		or not document.module_id is String or document.module_id!=MODULE or not document.default_enabled is bool or document.default_enabled!=false \
++		or not document.records is Array or document.records.is_empty(): return false
++	if not Graph.capture(document,16384,8).success: return false
++	var lanes: Variant=policy.get("lanes")
++	if not lanes is Dictionary: return false
++	var lane: Variant=lanes.get("framework_rune_fixture_items",{})
++	if not lane is Dictionary or not lane.get("sources") is Array or lane.sources.size()!=1: return false
++	var source: Variant=lane.sources[0]
++	if not source is Dictionary or source.get("tier")!="primary" or source.get("eligible")!=true \
++		or source.get("rootPrefix")!=PATH.trim_prefix("res://") or source.get("contractId")!=SOURCE_CONTRACT \
++		or source.get("evidenceSha256")!=FileAccess.get_sha256(PATH).to_upper(): return false
++	var records: Dictionary={}
++	for record: Variant in document.records:
++		if not record is Dictionary or not _keys(record,["itemId","name","kind","category","stackable","weight","usable","sellable","fixtureOnly"]) \
++			or not _integer(record.itemId) or not record.name is String or record.name.is_empty() \
++			or record.kind!="rune" or not record.category is String or not record.stackable is bool or record.stackable \
++			or not record.usable is bool or record.usable or not record.sellable is bool or record.sellable \
++			or not record.fixtureOnly is bool or not record.fixtureOnly or not _integer(record.weight) or record.weight!=0 \
++			or Registry.from_legacy("item",int(record.itemId)).is_empty() or records.has(int(record.itemId)): return false
++		var bound: Dictionary=record.duplicate(true)
++		if not Categories.attach_source_category(bound) or bound.category_id!="hc.item_category.rune": return false
++		var captured:=Graph.capture(bound,32,4)
++		if not captured.success: return false
++		records[int(record.itemId)]=captured.value
++	_records=records; return true
++
++static func record_for_id(item_id: int) -> Dictionary:
++	return _records.get(item_id,{}).duplicate(true) if ensure_loaded() else {}
++static func create_instance(instance_id: String,fixture_enabled:=false,item_id:=ITEM_ID) -> Dictionary:
++	var record:=record_for_id(item_id) if fixture_enabled else {}
++	if record.is_empty(): return {}
++	var instance: Dictionary={"rune_instance_contract_id":INSTANCE_CONTRACT,"item_id":item_id,
++		"name":record.name,"count":1,"instance_id":instance_id}
++	return instance if valid_instance(instance) else {}
++static func valid_instance(instance: Dictionary) -> bool:
++	if not ensure_loaded() or not _keys(instance,["rune_instance_contract_id","item_id","name","count","instance_id"]) \
++		or instance.rune_instance_contract_id!=INSTANCE_CONTRACT or not _integer(instance.item_id) or not _records.has(int(instance.item_id)) \
++		or not _integer(instance.count) or instance.count!=1 or not instance.name is String or instance.name.length()>256 \
++		or not instance.instance_id is String or instance.instance_id.is_empty() or instance.instance_id.length()>128: return false
++	var pattern:=RegEx.new(); pattern.compile("^[a-z0-9:_-]+$")
++	return pattern.search(instance.instance_id)!=null
++static func _keys(value: Dictionary,fields: Array) -> bool:
++	if value.size()!=fields.size(): return false
++	for field: String in fields:
++		if not value.has(field): return false
++	return true
++static func _integer(value: Variant) -> bool:
++	return (value is int or value is float) and is_finite(float(value)) and float(value)==floor(float(value))
+diff --git a/scripts/player_state.gd b/scripts/player_state.gd
+index d8b7f9441..d7df4dee5 100644
+--- a/scripts/player_state.gd
++++ b/scripts/player_state.gd
+@@ -1446,6 +1446,14 @@ func _consume_inventory_index_without_commit(index: int, amount := 1) -> bool:
+ 
+ 
+ func destroy_inventory_indices(indices: Array) -> Dictionary:
++	# Reject the selected reserved identities before the synchronous save barrier
++	# can complete their transaction and replace the caller's inventory indices.
++	if _item_transaction_port != null:
++		for raw_index: Variant in indices:
++			var index := int(raw_index)
++			if index >= 0 and index < inventory.size() and inventory[index] is Dictionary \
++				and _item_transaction_port.record_reserved(inventory[index]):
++				return {"success":false, "destroyed":0, "reason":"item_transaction_pending", "message":"物品操作处理中，请稍后再试。"}
+ 	_before_state_transaction()
+ 	var targets: Array[int] = []
+ 	for raw_index: Variant in indices:
+diff --git a/tests/framework/feature_affix_admission_test.gd b/tests/framework/feature_affix_admission_test.gd
+new file mode 100644
+index 000000000..72c2d92eb
+--- /dev/null
++++ b/tests/framework/feature_affix_admission_test.gd
+@@ -0,0 +1,94 @@
++extends Node
++
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const Provider := preload("res://scripts/features/adapters/contribution_provider.gd")
++const Codec := preload("res://scripts/items/item_extension_codec.gd")
++const Drop := preload("res://scripts/item_drop_instance_rules.gd")
++const REGISTRY := "res://assets/data/features/validation/source_composition_registry.json"
++var proof := Proof.new()
++var checks := 0
++var failures: Array[String] = []
++
++func check(value: bool, label: String) -> void:
++	proof.record(value, label); checks += 1
++	if not value: failures.append(label)
++
++func _ready() -> void: _run.call_deferred()
++
++func _run() -> void:
++	PlayerState.test_mode = true; PlayerState.reset_progress(false)
++	PlayerState.profession = "法师"; PlayerState.level = 50
++	PlayerState.learned_skills = {"hc.skill.wizard.ice_storm":3}
++	PlayerState.recalculate_stats(false)
++	check(ContentLayers.reload_feature_catalog(REGISTRY), "actual catalog registers the default-off affix mechanism")
++	var base: Dictionary = {}
++	for index in range(256):
++		var candidate := Drop.create_instance(GameData.get_item_record({"item_id":85}), "affix-admission:"+str(index))
++		for modifier: Dictionary in candidate.get("modifiers", []):
++			if modifier.stat == "magic_max" and modifier.op == "add" and float(modifier.value)>0:
++				base = candidate; break
++		if not base.is_empty(): break
++	check(not base.is_empty() and GameData.validate_item_drop_instance(base), "real drop generator supplies the complete validated immutable affix payload")
++	if base.is_empty(): _finish(); return
++	PlayerState.equipment = {"hc.slot.weapon":base}
++	PlayerState.recalculate_stats(false)
++	check(ContentLayers.set_feature_module_enabled("hc.ignite",true)
++		and PlayerState.feature_bundle().sources.size()==1, "valid original affix grants exactly one source through actual atomic publication")
++	check(ContentLayers.set_feature_module_enabled("hc.ignite",false), "normal source can be withdrawn before invalid candidate probes")
++	var missing_contract := base.duplicate(true); missing_contract.erase("drop_instance_contract_id")
++	_probe(missing_contract, "missing_drop_contract")
++	var duplicate := missing_contract.duplicate(true)
++	duplicate.modifiers = [{"stat":"magic_max","op":"add","value":1},{"stat":"magic_max","op":"add","value":1}]
++	_probe(duplicate, "duplicate_forged_modifiers")
++	var forged := missing_contract.duplicate(true)
++	forged.modifiers = [{"stat":"magic_max","op":"add","value":1000}]
++	_probe(forged, "forged_modifier_value")
++	var wrong_identity := missing_contract.duplicate(true); wrong_identity.instance_id = "affix-admission:forged"
++	_probe(wrong_identity, "wrong_persistent_instance")
++	var missing_identity := missing_contract.duplicate(true); missing_identity.erase("instance_id")
++	_probe(missing_identity, "missing_persistent_instance")
++	# Compatibility authorizes old equipment use, never new affix provenance.
++	var legacy := base.duplicate(true)
++	for field: String in ["drop_instance_contract_id","drop_rules_contract_id","drop_key_digest","drop_affix","modifiers","instance_id"]:
++		legacy.erase(field)
++	PlayerState.equipment = {"hc.slot.weapon":legacy}; PlayerState.recalculate_stats(false)
++	check(Codec.decode_wire(legacy).status==Codec.KNOWN_VALID and PlayerState._feature_item_eligible(legacy),
++		"ordinary historical non-affix gear retains its existing compatibility")
++	check(ContentLayers.set_feature_module_enabled("hc.ignite",true) and PlayerState.feature_bundle().sources.is_empty(),
++		"compatible plain historical gear enables the module without fabricating affix sources")
++	check(ContentLayers.set_feature_module_enabled("hc.ignite",false), "plain historical gear can withdraw the module normally")
++	PlayerState.equipment = {"hc.slot.weapon":base}; PlayerState.recalculate_stats(false)
++	check(ContentLayers.set_feature_module_enabled("hc.ignite",true) and PlayerState.feature_bundle().sources.size()==1,
++		"valid original source remains available after every failed candidate")
++	PlayerState.equipment = {}; PlayerState.recalculate_stats(false)
++	check(ContentLayers.reload_feature_catalog(), "owned fixture restores original default-off configuration")
++	_finish()
++
++func _probe(instance: Dictionary, label: String) -> void:
++	check(not GameData.validate_item_drop_instance(instance) and PlayerState._feature_item_eligible(instance)
++		and Codec.decode_wire(instance).status==Codec.KNOWN_VALID, label+": exact legacy ingress reaches the new source boundary")
++	var configuration := ContentLayers.feature_configuration()
++	var collected: Variant = Provider.collect(configuration.bindings, ["hc.ignite"], {"hc.slot.weapon":instance},
++		PlayerState.active_profile_id, GameData.get_item_record, PlayerState._feature_item_eligible, PlayerState.is_skill_learned)
++	check(collected is Dictionary and collected.get("success")==false and collected.get("sources") is Array
++		and collected.sources.is_empty(), label+": source boundary returns a typed rejection without granting provenance")
++	print("AFFIX_ADMISSION_PROBE="+JSON.stringify({"case":label,"typed_result":collected is Dictionary,
++		"source_count":collected.get("sources",[]).size() if collected is Dictionary else -1}))
++	if not collected is Dictionary or not collected.has("success"): return # Original script error is retained by the native runner.
++	PlayerState.equipment = {"hc.slot.weapon":instance}; PlayerState.recalculate_stats(false)
++	var before := ContentLayers.feature_configuration()
++	var bundle := PlayerState.feature_bundle()
++	var stats := PlayerState.computed_stats.duplicate(true)
++	var count: int = PlayerState._feature_loadout.compile_count
++	check(not ContentLayers.set_feature_module_enabled("hc.ignite",true), label+": actual publication rejects the whole invalid source candidate")
++	var after := ContentLayers.feature_configuration()
++	check(is_same(after.catalog,before.catalog) and after.enabled_modules==before.enabled_modules
++		and is_same(PlayerState.feature_bundle(),bundle) and PlayerState.computed_stats==stats
++		and PlayerState._feature_loadout.compile_count==count, label+": rejected candidate preserves the complete old publication")
++	ContentLayers.set_feature_module_enabled("hc.ignite",false)
++
++func _finish() -> void:
++	if not proof.write_receipt("feature_affix_admission_test",checks,failures.size()): failures.append("receipt")
++	print(("FRAMEWORK_FEATURE_AFFIX_ADMISSION_PASS" if failures.is_empty() else "FRAMEWORK_FEATURE_AFFIX_ADMISSION_FAIL")
++		+" checks="+str(checks)+" failures="+str(failures))
++	get_tree().quit(0 if failures.is_empty() else 1)
+diff --git a/tests/framework/feature_affix_admission_test.tscn b/tests/framework/feature_affix_admission_test.tscn
+new file mode 100644
+index 000000000..cd7f13b6b
+--- /dev/null
++++ b/tests/framework/feature_affix_admission_test.tscn
+@@ -0,0 +1,4 @@
++[gd_scene load_steps=2 format=3]
++[ext_resource type="Script" path="res://tests/framework/feature_affix_admission_test.gd" id="1"]
++[node name="FeatureAffixAdmissionTest" type="Node"]
++script = ExtResource("1")
+diff --git a/tests/framework/future_item_ownership_terminal_test.gd b/tests/framework/future_item_ownership_terminal_test.gd
+index 1ca2d7b82..4c47e6194 100644
+--- a/tests/framework/future_item_ownership_terminal_test.gd
++++ b/tests/framework/future_item_ownership_terminal_test.gd
+@@ -2,6 +2,7 @@ extends Node
+ 
+ const Codec := preload("res://scripts/items/item_extension_codec.gd")
+ const DropRules := preload("res://scripts/item_drop_instance_rules.gd")
++const Rune := preload("res://scripts/items/rune_item_rules.gd")
+ const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
+ var proof := Proof.new()
+ var checks := 0
+@@ -94,6 +95,22 @@ func _run() -> void:
+ 	future_version_contract.erase("contract_id")
+ 	var candidates: Array[Dictionary] = [future_large, future_deep, future_namespace,
+ 		future_socket, future_contract, future_private, future_contract_version, future_version_contract]
++	var rune:=Rune.create_instance("future-owner:rune",true)
++	var rune_created:=Codec.with_extensions(base,{"hc.runes":{"schema_version":1,"runes":[{"rune_slot_id":Codec.RUNE_ID,"item":rune}]}})
++	check(rune_created.status==Codec.KNOWN_VALID,"new rune cases begin with a real registered uniquely owned supported asset")
++	if rune_created.status!=Codec.KNOWN_VALID: _finish(); return
++	var rune_wire: Dictionary=Codec.encode_runtime(rune_created.item).item
++	var future_rune_namespace:=rune_wire.duplicate(true)
++	future_rune_namespace.extensions["hc.runes"]={"schema_version":2,"opaque_body":large}
++	future_rune_namespace.base["corrupt_known_base"]=1
++	var future_rune_contract:=rune_wire.duplicate(true)
++	future_rune_contract.extensions["hc.runes"].runes[0].item.rune_instance_contract_id="hc.runes.fixture.rune.v2"
++	future_rune_contract.base["corrupt_known_base"]=1
++	var unknown_rune:=rune_wire.duplicate(true)
++	unknown_rune.extensions["hc.runes"].runes[0].item.item_id=990999
++	unknown_rune.base["corrupt_known_base"]=1
++	var unknown_plain_rune:=rune.duplicate(true); unknown_plain_rune.item_id=990999
++	candidates.append_array([future_rune_namespace,future_rune_contract,unknown_rune,unknown_plain_rune])
+ 	for index in candidates.size():
+ 		var candidate := candidates[index]
+ 		check(Codec.decode_wire(candidate).status == Codec.OPAQUE_UNSUPPORTED,
+diff --git a/tests/framework/rune_catalog_data_test.gd b/tests/framework/rune_catalog_data_test.gd
+new file mode 100644
+index 000000000..6c2e8a4bb
+--- /dev/null
++++ b/tests/framework/rune_catalog_data_test.gd
+@@ -0,0 +1,20 @@
++extends Node
++const Rune:=preload("res://scripts/items/rune_item_rules.gd")
++const Proof:=preload("res://tests/framework/helpers/check_receipt.gd")
++var proof:=Proof.new()
++func _ready() -> void:
++	var first:=Rune.record_for_id(990002); var second:=Rune.record_for_id(990003)
++	var passed: bool=not first.is_empty() and not second.is_empty() and first.itemId!=second.itemId \
++		and first.kind=="rune" and second.kind=="rune" and first.category_id==second.category_id
++	proof.record(passed,"two primary data-defined rune records resolve without a new GameData branch or a new instance schema")
++	var errors:=0 if passed else 1
++	var variant:=Rune.create_instance("rune:second-data-only",true,990003)
++	passed=not variant.is_empty() and Rune.valid_instance(variant) and GameData.get_item_record(variant).get("itemId")==990003
++	proof.record(passed,"second data-defined rune uses the existing creator, identity schema and actual GameData consumer")
++	if not passed: errors+=1
++	passed=Rune.create_instance("rune:disabled",false,990003).is_empty() and Rune.record_for_id(990999).is_empty()
++	proof.record(passed,"disabled fixture creation and undeclared data identities stay unavailable")
++	if not passed: errors+=1
++	if not proof.write_receipt("rune_catalog_data_test",3,errors): errors+=1
++	print("FRAMEWORK_RUNE_CATALOG_"+("PASS" if errors==0 else "FAIL")+" checks=3")
++	get_tree().quit(0 if errors==0 else 1)
+diff --git a/tests/framework/rune_catalog_data_test.tscn b/tests/framework/rune_catalog_data_test.tscn
+new file mode 100644
+index 000000000..1c5b825f6
+--- /dev/null
++++ b/tests/framework/rune_catalog_data_test.tscn
+@@ -0,0 +1,4 @@
++[gd_scene load_steps=2 format=3]
++[ext_resource type="Script" path="res://tests/framework/rune_catalog_data_test.gd" id="1"]
++[node name="RuneCatalogDataTest" type="Node"]
++script = ExtResource("1")
+diff --git a/tests/framework/rune_extension_codec_test.gd b/tests/framework/rune_extension_codec_test.gd
+new file mode 100644
+index 000000000..17d6e4fd1
+--- /dev/null
++++ b/tests/framework/rune_extension_codec_test.gd
+@@ -0,0 +1,57 @@
++extends Node
++
++const Codec := preload("res://scripts/items/item_extension_codec.gd")
++const Gem := preload("res://scripts/items/socket_gem_rules.gd")
++const Drop := preload("res://scripts/item_drop_instance_rules.gd")
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++var proof := Proof.new()
++var checks := 0
++var failures: Array[String]=[]
++func check(value: bool,label: String) -> void:
++	proof.record(value,label); checks+=1
++	if not value: failures.append(label)
++func _ready() -> void: _run.call_deferred()
++func _run() -> void:
++	PlayerState.test_mode=true; PlayerState.reset_progress(false)
++	var base:=Drop.create_instance(GameData.get_item_record({"item_id":85}),"rune:base")
++	var rune: Dictionary={"rune_instance_contract_id":"hc.runes.fixture.rune.v1","item_id":990002,
++		"name":"验证符文","count":1,"instance_id":"rune:asset"}
++	var gem:=Gem.create_instance("rune:gem",true)
++	var extensions: Dictionary={"hc.socketing":{"schema_version":1,"sockets":[{"socket_id":Codec.SOCKET_ID,"item":gem}]},
++		"hc.runes":{"schema_version":1,"runes":[{"rune_slot_id":"hc.runes.primary","item":rune}]}}
++	var made:=Codec.with_extensions(base,extensions)
++	check(made.status==Codec.KNOWN_VALID,"registered rune and original socket namespaces coexist on one unchanged authoritative base")
++	if made.status!=Codec.KNOWN_VALID:
++		print("RUNE_EXTENSION_RED_REASON="+str(made.reason)); _finish(); return
++	check(Codec.base_record(made.item)==base,"adding a rune never rerolls the historical drop")
++	check(Codec.ownership_ids(made.item)==[base.instance_id,gem.instance_id,rune.instance_id],"all three original instances have explicit independent ownership")
++	check(not Codec.can_release_ownership(made.item),"destruction or sale cannot discard either embedded asset")
++	var encoded:=Codec.encode_runtime(made.item)
++	check(encoded.status==Codec.KNOWN_VALID and Codec.decode_wire(encoded.item).item==made.item,"complete two-namespace wire roundtrip retains all original fields")
++	check(PlayerState._validate_extended_item_ownership({"inventory":[made.item]}),"single owner aggregate accepts both original assets")
++	check(not PlayerState._validate_extended_item_ownership({"inventory":[made.item,rune]}),"an accessible copy of the embedded rune is rejected")
++	var future: Dictionary=encoded.item.duplicate(true)
++	future.extensions["hc.runes"].schema_version=2; future.base["unknown_base_field"]=1
++	check(Codec.decode_wire(future).status==Codec.OPAQUE_UNSUPPORTED,"future rune ownership wins before known-base corruption")
++	future=encoded.item.duplicate(true)
++	future.extensions["hc.runes"].runes[0].item.rune_instance_contract_id="hc.runes.fixture.rune.v2"
++	future.base["unknown_base_field"]=1
++	check(Codec.decode_wire(future).status==Codec.OPAQUE_UNSUPPORTED,"future embedded rune instance remains opaque even beside a corrupted old base")
++	var unknown: Dictionary=rune.duplicate(true); unknown.item_id=990999
++	check(Codec.decode_wire(unknown).status==Codec.OPAQUE_UNSUPPORTED,"an unregistered future rune identity is not recoverable known corruption")
++	future=encoded.item.duplicate(true); future.extensions["hc.runes"].runes[0].item=unknown
++	future.base["unknown_base_field"]=1
++	check(Codec.decode_wire(future).status==Codec.OPAQUE_UNSUPPORTED,"unknown embedded rune identity takes priority over a corrupted known base")
++	var collision: Dictionary=encoded.item.duplicate(true)
++	collision.extensions["hc.runes"].runes[0].item.instance_id=gem.instance_id
++	check(Codec.decode_wire(collision).status==Codec.INVALID,"one instance identity cannot be owned by both registered namespaces")
++	var invalid: Dictionary=encoded.item.duplicate(true)
++	invalid.extensions["hc.runes"].runes[0].item.count=2
++	check(Codec.decode_wire(invalid).status==Codec.INVALID,"known rune instances cannot stack an independently owned asset")
++	invalid=encoded.item.duplicate(true); invalid.extensions["hc.runes"].runes[0].item["extra"]=1
++	check(Codec.decode_wire(invalid).status==Codec.INVALID,"registered rune contract keeps its exact field whitelist")
++	_finish()
++func _finish() -> void:
++	if not proof.write_receipt("rune_extension_codec_test",checks,failures.size()): failures.append("receipt")
++	print(("FRAMEWORK_RUNE_EXTENSION_PASS" if failures.is_empty() else "FRAMEWORK_RUNE_EXTENSION_FAIL")+" checks="+str(checks)+" errors="+str(failures))
++	get_tree().quit(0 if failures.is_empty() else 1)
+diff --git a/tests/framework/rune_extension_codec_test.tscn b/tests/framework/rune_extension_codec_test.tscn
+new file mode 100644
+index 000000000..e9afa1def
+--- /dev/null
++++ b/tests/framework/rune_extension_codec_test.tscn
+@@ -0,0 +1,4 @@
++[gd_scene load_steps=2 format=3]
++[ext_resource type="Script" path="res://tests/framework/rune_extension_codec_test.gd" id="1"]
++[node name="RuneExtensionCodecTest" type="Node"]
++script = ExtResource("1")
+diff --git a/tests/framework/rune_source_composition_cold_test.gd b/tests/framework/rune_source_composition_cold_test.gd
+new file mode 100644
+index 000000000..9f0070b17
+--- /dev/null
++++ b/tests/framework/rune_source_composition_cold_test.gd
+@@ -0,0 +1,71 @@
++extends Node
++
++const Gate := preload("res://tests/framework/helpers/native_producer_gate.gd")
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const Codec := preload("res://scripts/items/item_extension_codec.gd")
++const Gem := preload("res://scripts/items/socket_gem_rules.gd")
++const Rune := preload("res://scripts/items/rune_item_rules.gd")
++const EXPECTED := "res://outputs/test_logs/framework/rune_source_composition_expected.json"
++var proof := Proof.new()
++var checks := 0
++var errors: Array[String]=[]
++
++func check(value: bool,label: String) -> void:
++	proof.record(value,label); checks+=1
++	if not value: errors.append(label)
++func _ready() -> void: _run.call_deferred()
++func _run() -> void:
++	check(not PlayerState.test_mode,"independent cold process starts with actual persistence")
++	var expected: Variant=JSON.parse_string(FileAccess.get_file_as_string(EXPECTED)) if FileAccess.file_exists(EXPECTED) else null
++	check(expected is Dictionary,"successful live composition supplies an explicit owned handoff")
++	if not expected is Dictionary: _finish(); return
++	var valid:=Gate.accepts(expected,"rune_source_composition_test")
++	check(valid,"expectation binds this invocation's native exit-zero complete live producer")
++	if not valid: _finish(); return
++	check(expected.producer_run_id!=OS.get_environment("HARDCORE_FRAMEWORK_RUN_ID"),"cold restoration has a different native execution identity")
++	PlayerState.test_mode=true; PlayerState.reset_progress(false)
++	check(ContentLayers.reload_feature_catalog("res://assets/data/features/validation/rune_composition_registry.json")
++		and ContentLayers.set_feature_module_enabled(Gem.MODULE,true) and ContentLayers.set_feature_module_enabled(Rune.MODULE,true) and ContentLayers.set_feature_module_enabled("hc.ignite",true),
++		"fresh process resolves the same registered sources through the production configuration")
++	PlayerState.profile_directory=expected.profile_directory; PlayerState.profile_index_path=expected.profile_index_path
++	PlayerState.shared_warehouse_path=expected.shared_warehouse_path
++	PlayerState.shared_warehouse_transaction_log_path=expected.shared_warehouse_transaction_log_path
++	PlayerState.active_profile_id=expected.profile_id; PlayerState._shared_warehouse_initialized=false
++	PlayerState.test_mode=false; PlayerState.load_save()
++	check(PlayerState.last_load_result.success,"real cold loader restores the producer's isolated durable profile")
++	var gear: Dictionary=PlayerState.equipment.get("hc.slot.weapon",{})
++	var encoded:=Codec.encode_runtime(gear)
++	var expected_encoded:=Codec.encode_runtime(expected.gear)
++	if gear!=expected.gear:
++		var type_differences: Array=[]
++		for key: String in expected.gear:
++			if typeof(expected.gear[key])!=typeof(gear.get(key)): type_differences.append({"field":key,"expected_type":typeof(expected.gear[key]),"actual_type":typeof(gear.get(key))})
++		type_differences.append({"field":"extension.format_version","expected_type":typeof(expected.gear[Codec.RUNTIME_EXTENSION].format_version),"actual_type":typeof(gear[Codec.RUNTIME_EXTENSION].format_version)})
++		print("SOURCE_COMPOSITION_COLD_TYPES="+JSON.stringify(type_differences))
++	# Persistence owns JSON wire values. Compare every field after the same
++	# JSON boundary used by the transaction guard, not parser float/int tags.
++	check(encoded.status==Codec.KNOWN_VALID and expected_encoded.status==Codec.KNOWN_VALID
++		and JSON.parse_string(JSON.stringify(encoded.item))==JSON.parse_string(JSON.stringify(expected_encoded.item)),
++		"cold equipment keeps the complete validated persisted wire content exactly")
++	check(Codec.ownership_ids(gear)==[expected.gear.instance_id,expected.gem_instance_id,expected.rune_instance_id],"cold gear owns the same original gem and rune exactly once")
++	check(PlayerState._validate_extended_item_ownership({"inventory":PlayerState.inventory,"equipment":PlayerState.equipment}),"cold aggregate has no second accessible copy of either embedded asset")
++	var handles: Array=[]
++	for binding: Dictionary in PlayerState.feature_bundle().get("event_index",{}).get("damage_committed:hc.skill.wizard.ice_storm",[]): handles.append(binding.handle)
++	handles.sort()
++	check(handles.size()==3 and handles==expected.source_handles,"cold compiler reconstructs the three exact affix, gem and rune provenance handles")
++	var inventory_before:=PlayerState.inventory.duplicate(true); var equipment_before:=PlayerState.equipment.duplicate(true)
++	var replay:=PlayerState.commit_item_transaction(PlayerState.quote_item_transaction(expected.last_request))
++	check(replay.get("durable",false) and not replay.get("pending",false) and PlayerState._json_persistence.pending_count()==0,
++		"cold retry of the original insertion returns the recorded outcome without a new writer")
++	check(PlayerState.inventory==inventory_before and PlayerState.equipment==equipment_before,"cold gem replay preserves all three sources and both original assets")
++	var rune_replay:=PlayerState.commit_item_transaction(PlayerState.quote_item_transaction(expected.last_rune_request))
++	check(rune_replay.get("durable",false) and not rune_replay.get("pending",false)
++		and PlayerState._json_persistence.pending_count()==0,"cold retry of the original rune operation also reuses the persisted journal result without a writer")
++	check(PlayerState.inventory==inventory_before and PlayerState.equipment==equipment_before,
++		"cold rune replay preserves the original rune, gem and equipment exactly once")
++	_finish()
++
++func _finish() -> void:
++	if not proof.write_receipt("rune_source_composition_cold_test",checks,errors.size()): errors.append("receipt")
++	print(("FRAMEWORK_RUNE_SOURCE_COMPOSITION_COLD_PASS" if errors.is_empty() else "FRAMEWORK_RUNE_SOURCE_COMPOSITION_COLD_FAIL")+" checks="+str(checks)+" errors="+str(errors))
++	get_tree().quit(0 if errors.is_empty() else 1)
+diff --git a/tests/framework/rune_source_composition_cold_test.tscn b/tests/framework/rune_source_composition_cold_test.tscn
+new file mode 100644
+index 000000000..3a92ae814
+--- /dev/null
++++ b/tests/framework/rune_source_composition_cold_test.tscn
+@@ -0,0 +1,4 @@
++[gd_scene load_steps=2 format=3]
++[ext_resource type="Script" path="res://tests/framework/rune_source_composition_cold_test.gd" id="1"]
++[node name="RuneCompositionTest" type="Node"]
++script = ExtResource("1")
+diff --git a/tests/framework/rune_source_composition_test.gd b/tests/framework/rune_source_composition_test.gd
+new file mode 100644
+index 000000000..32d59a9ec
+--- /dev/null
++++ b/tests/framework/rune_source_composition_test.gd
+@@ -0,0 +1,159 @@
++extends Node
++
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const Root := preload("res://tests/framework/fixtures/lease_probe_root.gd")
++const Fixture := preload("res://tests/helpers/formal_world_skill_fixture.gd")
++const Codec := preload("res://scripts/items/item_extension_codec.gd")
++const Gem := preload("res://scripts/items/socket_gem_rules.gd")
++const Rune := preload("res://scripts/items/rune_item_rules.gd")
++const Drop := preload("res://scripts/item_drop_instance_rules.gd")
++const SKILL := "hc.skill.wizard.ice_storm"
++const EXPECTED := "res://outputs/test_logs/framework/rune_source_composition_expected.json"
++var proof := Proof.new()
++var checks := 0
++var errors: Array[String] = []
++var _last_item_request: Dictionary={}
++var _last_rune_request: Dictionary={}
++
++func check(value: bool,label: String) -> void:
++	proof.record(value,label); checks += 1
++	if not value: errors.append(label)
++func _ready() -> void: _run.call_deferred()
++
++func _run() -> void:
++	PlayerState.test_mode = true; PlayerState.reset_progress(false)
++	PlayerState.profession = "法师"; PlayerState.level = 50
++	PlayerState.learned_skills = {SKILL:3}; PlayerState.recalculate_stats(false)
++	check(ContentLayers.reload_feature_catalog("res://assets/data/features/validation/rune_composition_registry.json"),
++		"trusted registry accepts the independently registered affix, embedded gem and rune sources")
++	if not errors.is_empty():
++		print("SOURCE_COMPOSITION_PUBLICATION_ERRORS="+JSON.stringify(ContentLayers.feature_load_errors)); _finish(); return
++	var published: Dictionary = ContentLayers.feature_configuration()
++	check(published.enabled_modules.is_empty(),"composition stays default-off before explicit fixture activation")
++	check(not ContentLayers.reload_feature_catalog("res://assets/data/features/validation/source_composition_unknown_registry.json")
++		and ContentLayers.feature_configuration()==published,"unknown affix identity rejects the whole candidate and preserves the published catalog")
++	check(ContentLayers.set_feature_module_enabled(Gem.MODULE,true) and ContentLayers.set_feature_module_enabled(Rune.MODULE,true) and ContentLayers.set_feature_module_enabled("hc.ignite",true),
++		"gem and rune business permissions and existing ignite activate through the formal configuration boundary")
++	var base: Dictionary = {}
++	for index in range(256):
++		var candidate := Drop.create_instance(GameData.get_item_record({"item_id":85}),"source-composition:"+str(index))
++		for modifier: Dictionary in candidate.get("modifiers",[]):
++			if modifier.stat=="magic_max" and modifier.op=="add" and float(modifier.value)>0: base=candidate; break
++		if not base.is_empty(): break
++	check(not base.is_empty() and GameData.validate_item_drop_instance(base),"real immutable v3 drop generation supplies a validated positive magic affix")
++	if base.is_empty(): _finish(); return
++	var original_base := base.duplicate(true)
++	var gem := Gem.create_instance("source-composition:gem",true)
++	var rune := Rune.create_instance("source-composition:rune",true)
++	var directory := "user://framework_source_composition_%d" % Time.get_ticks_usec()
++	PlayerState.profile_directory = directory.path_join("characters")
++	PlayerState.profile_index_path = directory.path_join("profiles.json")
++	PlayerState.shared_warehouse_path = directory.path_join("shared.json")
++	PlayerState.shared_warehouse_transaction_log_path = directory.path_join("shared.transaction.json")
++	PlayerState.active_profile_id = "source-composition"; PlayerState.character_name = "来源组合验收"
++	PlayerState._shared_warehouse_initialized = false; PlayerState.set_process(false)
++	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(PlayerState.profile_directory))
++	PlayerState.inventory = [base,gem,rune]; PlayerState.test_mode = false
++	check(PlayerState.save_game(false,false),"production writer persists isolated real equipment and original gem and rune inputs")
++	check(await _transaction("hc.socketing.insert",base.instance_id,gem.instance_id),"formal durable insertion gives the original gem one equipment owner")
++	check(await _transaction("hc.runes.insert",base.instance_id,rune.instance_id),"the separate rune module durably owns its original asset beside the original gem")
++	check(PlayerState.equip_inventory_index_result(0,"hc.slot.weapon",base.instance_id).get("success",false),"production equip compiles the actual affix and embedded sources")
++	check(_handles().size()==3,"exactly three independent sources subscribe to the same ignite mechanism")
++	var first_handles := _handles()
++	if first_handles.size()!=3: _finish(); return
++	check(first_handles[0]!=first_handles[1] and first_handles[1]!=first_handles[2] and first_handles[0]!=first_handles[2],"affix, gem and rune have distinct stable provenance handles")
++	check(await _transaction("hc.socketing.remove",base.instance_id,""),"formal removal returns the original gem through the single writer")
++	check(_handles().size()==2,"removing the gem withdraws its ignite contribution and preserves the real affix and rune")
++	check(Codec.base_record(PlayerState.equipment["hc.slot.weapon"])==original_base,"socket removal does not reroll or edit historical v3 modifiers")
++	check(await _transaction("hc.socketing.insert",base.instance_id,gem.instance_id),"a new issued operation reinserts the same uniquely owned gem")
++	check(_handles()==first_handles,"reinsert reconstructs the same three logical source identities")
++	PlayerState._start_item_save(); PlayerState._json_persistence.drain()
++	check(PlayerState._json_persistence.pending_count()==0,"accepted item receipts and ordinary save fully drain")
++	PlayerState.load_save()
++	check(PlayerState.last_load_result.success and _handles()==first_handles,"production reload rebuilds identical source provenance from the durable original items")
++	check(Codec.ownership_ids(PlayerState.equipment["hc.slot.weapon"])==[base.instance_id,gem.instance_id,rune.instance_id]
++		and PlayerState._validate_extended_item_ownership({"inventory":PlayerState.inventory,"equipment":PlayerState.equipment}),"saved and loaded composition has no duplicated embedded asset")
++	var game := Root.new(); add_child(game)
++	var deadline := Time.get_ticks_msec()+15000
++	while not game.gameplay_input_is_enabled() and Time.get_ticks_msec()<deadline: await get_tree().process_frame
++	check(game.gameplay_input_is_enabled(),"real production world reaches READY with the composed equipment")
++	if not game.gameplay_input_is_enabled(): game.queue_free(); await get_tree().process_frame; _finish(); return
++	var target := await Fixture.prepare_target(self,game,game.player,19,"source_composition")
++	check(target!=null,"actual mapped geometry supplies the receiver")
++	if target==null: game.queue_free(); await get_tree().process_frame; _finish(); return
++	game.set_process(false); game.set_physics_process(false); game.player.set_physics_process(false)
++	for actor: Node in get_tree().get_nodes_in_group("enemies"): actor.set_physics_process(false)
++	target.max_hp=10000; target.current_hp=10000; target.direct_spell_anti_magic_points=0
++	target.direct_spell_magic_defense_min=0; target.direct_spell_magic_defense_max=0; target.direct_spell_stats_valid=true
++	game.player.current_mp=100; game._skill_cast_target=target; game._set_magic_locked_target(target,true)
++	var lease: RefCounted = game._capture_action_configuration(SKILL)
++	check(lease!=null and lease.event_bindings_for(SKILL).size()==3,"real action captures all three formal contributions in one immutable lease")
++	if lease==null: game.queue_free(); await get_tree().process_frame; _finish(); return
++	check(game.player.request_skill(SKILL,target.get_instance_id(),lease) and lease.effect_reservation()!=null,"real windup accepts capacity for all three derived states")
++	deadline=Time.get_ticks_msec()+3000
++	while game.observed_releases==0 and Time.get_ticks_msec()<deadline: await get_tree().process_frame
++	check(game.observed_releases==1 and is_same(game.observed_configuration,lease),"composed sources still use one actual release and planner")
++	var loss: int = 10000-target.current_hp
++	var runtime: RefCounted = game._feature_effect_runtime
++	var root_rng: int=game._rng.state; var player_rng: int=game.player._rng.state
++	for iteration in range(120):
++		runtime.pump()
++		if runtime.pending_count()==0: break
++		await get_tree().process_frame
++	check(loss>0 and runtime.active_count()==3,"one committed base hit starts three separately owned ignite states")
++	check(ContentLayers.set_feature_module_enabled("hc.ignite",false) and _handles().is_empty(),"formal withdrawal removes future subscriptions without cancelling accepted states")
++	for second in range(1,5):
++		game._time_domains.advance_simulation(float(second*1000000-game._time_domains.simulation_usec())/1000000.0)
++		for iteration in range(120):
++			runtime.pump()
++			if not runtime.has_due(): break
++			await get_tree().process_frame
++		check(target.current_hp==10000-loss-3*second*roundi(float(loss)*0.05),"three original source states each deliver their unchanged periodic damage at tick "+str(second))
++	check(game._rng.state==root_rng and game.player._rng.state==player_rng,"source composition does not consume legacy combat random streams")
++	check(runtime.errors.is_empty() and not runtime.has_work(),"composed producers, receipts and persistent states reach their terminal boundary")
++	game.queue_free(); await get_tree().process_frame
++	PlayerState._start_item_save(); PlayerState._json_persistence.drain()
++	if errors.is_empty():
++		var expected: Dictionary={"producer_run_id":OS.get_environment("HARDCORE_FRAMEWORK_RUN_ID"),
++			"invocation_id":OS.get_environment("HARDCORE_FRAMEWORK_INVOCATION_ID"),
++			"source_content_sha256":OS.get_environment("HARDCORE_R3_CONTENT_SHA256"),
++			"profile_id":PlayerState.active_profile_id,"profile_directory":PlayerState.profile_directory,
++			"profile_index_path":PlayerState.profile_index_path,"shared_warehouse_path":PlayerState.shared_warehouse_path,
++			"shared_warehouse_transaction_log_path":PlayerState.shared_warehouse_transaction_log_path,
++			"gear":PlayerState.equipment["hc.slot.weapon"],"gem_instance_id":gem.instance_id,"rune_instance_id":rune.instance_id,
++			"source_handles":first_handles,"last_request":_last_item_request,"last_rune_request":_last_rune_request}
++		var file:=FileAccess.open(EXPECTED,FileAccess.WRITE)
++		check(file!=null,"this producer can write its owned cold expectation")
++		if file!=null:
++			file.store_string(JSON.stringify(expected)); file.flush()
++			check(file.get_error()==OK,"complete cold expectation is written without ignoring I/O failure")
++			file.close()
++	PlayerState.test_mode=true; PlayerState.set_process(true)
++	check(ContentLayers.reload_feature_catalog(),"retired world restores the original default-off registry")
++	_finish()
++
++func _handles() -> Array:
++	var handles: Array=[]
++	for binding: Dictionary in PlayerState.feature_bundle().get("event_index",{}).get("damage_committed:"+SKILL,[]): handles.append(binding.handle)
++	handles.sort(); return handles
++
++func _transaction(action: String,target: String,gem: String) -> bool:
++	PlayerState._start_item_save(); PlayerState._json_persistence.drain()
++	var request: Dictionary={"action":action,"target_instance_id":target}
++	request["rune_instance_id" if action.begins_with("hc.runes.") else "gem_instance_id"]=gem
++	var quote: Dictionary=PlayerState.quote_new_item_transaction(request)
++	if quote.get("success",false):
++		_last_item_request=quote.request.duplicate(true)
++		if action.begins_with("hc.runes."): _last_rune_request=quote.request.duplicate(true)
++	var pending: Dictionary=PlayerState.commit_item_transaction(quote)
++	var job: Variant=pending.get("job")
++	if job==null: print("SOURCE_COMPOSITION_TRANSACTION="+JSON.stringify({"quote":quote,"pending":pending})); return false
++	var deadline=Time.get_ticks_msec()+5000
++	while not job.response.get("finished",false) and Time.get_ticks_msec()<deadline:
++		PlayerState._json_persistence.pump(); await get_tree().process_frame
++	return job.response.get("success",false)
++
++func _finish() -> void:
++	if not proof.write_receipt("rune_source_composition_test",checks,errors.size()): errors.append("receipt")
++	print(("FRAMEWORK_RUNE_SOURCE_COMPOSITION_PASS" if errors.is_empty() else "FRAMEWORK_RUNE_SOURCE_COMPOSITION_FAIL")+" checks="+str(checks)+" errors="+str(errors))
++	get_tree().quit(0 if errors.is_empty() else 1)
+diff --git a/tests/framework/rune_source_composition_test.tscn b/tests/framework/rune_source_composition_test.tscn
+new file mode 100644
+index 000000000..730f427f2
+--- /dev/null
++++ b/tests/framework/rune_source_composition_test.tscn
+@@ -0,0 +1,4 @@
++[gd_scene load_steps=2 format=3]
++[ext_resource type="Script" path="res://tests/framework/rune_source_composition_test.gd" id="1"]
++[node name="RuneCompositionTest" type="Node"]
++script = ExtResource("1")
+diff --git a/tests/framework/rune_transaction_test.gd b/tests/framework/rune_transaction_test.gd
+new file mode 100644
+index 000000000..477f391ed
+--- /dev/null
++++ b/tests/framework/rune_transaction_test.gd
+@@ -0,0 +1,129 @@
++extends Node
++const Codec := preload("res://scripts/items/item_extension_codec.gd")
++const Gem := preload("res://scripts/items/socket_gem_rules.gd")
++const Rune := preload("res://scripts/items/rune_item_rules.gd")
++const Drop := preload("res://scripts/item_drop_instance_rules.gd")
++const Journal := preload("res://scripts/items/item_transaction_journal.gd")
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++var proof:=Proof.new()
++var checks:=0
++var failures: Array[String]=[]
++func check(value: bool,label: String) -> void:
++	proof.record(value,label); checks+=1
++	if not value: failures.append(label)
++func _ready() -> void: _run.call_deferred()
++func _run() -> void:
++	PlayerState.test_mode=true; PlayerState.reset_progress(false); PlayerState.set_process(false)
++	check(ContentLayers.reload_feature_catalog("res://assets/data/features/validation/rune_composition_registry.json"),"trusted registry resolves a separately registered default-off rune business module")
++	var base: Dictionary={}
++	for index in range(256):
++		var candidate:=Drop.create_instance(GameData.get_item_record({"item_id":85}),"rune-transaction:"+str(index))
++		for modifier: Dictionary in candidate.get("modifiers",[]):
++			if modifier.stat=="magic_max" and modifier.op=="add" and float(modifier.value)>0: base=candidate; break
++		if not base.is_empty(): break
++	var gem:=Gem.create_instance("rune-transaction:gem",true)
++	var rune:=Rune.create_instance("rune-transaction:rune",true)
++	check(not base.is_empty() and not gem.is_empty() and not rune.is_empty(),"actual registered creators supply immutable gear and independently identified gem and rune")
++	if not failures.is_empty(): _finish(); return
++	var directory: String="user://framework_rune_transaction_%d" % Time.get_ticks_usec()
++	PlayerState.profile_directory=directory.path_join("characters"); PlayerState.profile_index_path=directory.path_join("profiles.json")
++	PlayerState.shared_warehouse_path=directory.path_join("shared.json"); PlayerState.shared_warehouse_transaction_log_path=directory.path_join("shared.transaction.json")
++	PlayerState.active_profile_id="rune-transaction"; PlayerState.character_name="符文事务验收"
++	PlayerState._shared_warehouse_initialized=false
++	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(PlayerState.profile_directory))
++	PlayerState.profession="法师"; PlayerState.level=50; PlayerState.learned_skills={"hc.skill.wizard.ice_storm":3}
++	PlayerState.inventory=[base,gem,rune]; PlayerState.gold=500; PlayerState.recalculate_stats(false); PlayerState.test_mode=false
++	check(PlayerState.save_game(false,false),"original three assets use the actual isolated profile writer")
++	var input: Dictionary={"action":"hc.runes.insert","target_instance_id":base.instance_id,"rune_instance_id":rune.instance_id}
++	check(not PlayerState.quote_new_item_transaction(input).get("success",false),"rune operation is unavailable before explicit module enablement")
++	check(ContentLayers.set_feature_module_enabled(Rune.MODULE,true) and ContentLayers.set_feature_module_enabled(Gem.MODULE,true)
++		and ContentLayers.set_feature_module_enabled("hc.ignite",true),"formal module activation enables the three declared source permissions")
++	var wrong_field: Dictionary={"action":"hc.runes.insert","target_instance_id":base.instance_id,"gem_instance_id":rune.instance_id}
++	check(not PlayerState.quote_new_item_transaction(wrong_field).get("success",false)
++		and PlayerState._json_persistence.pending_count()==0,"rune commands refuse the gem field without scheduling a writer")
++	var wrong_type:=input.duplicate(true); wrong_type.rune_instance_id=42
++	check(not PlayerState.quote_new_item_transaction(wrong_type).get("success",false)
++		and PlayerState._json_persistence.pending_count()==0,"rune commands refuse non-string instance identity without scheduling a writer")
++	var quote:=PlayerState.quote_new_item_transaction(input)
++	check(quote.get("success",false),"real common transaction port admits the correctly identified rune input")
++	if not quote.get("success",false): print("RUNE_TRANSACTION_RED_REASON="+str(quote.get("reason"))); _finish(); return
++	var before:=PlayerState.inventory.duplicate(true)
++	var pending:=PlayerState.commit_item_transaction(quote)
++	check(pending.get("pending",false) and PlayerState.inventory==before,"accepted rune stays pending without exposing or consuming assets before durability")
++	check(PlayerState.commit_item_transaction(quote).get("job")==pending.get("job") and PlayerState._json_persistence.pending_count()==1,"double submission shares the sole accepted writer")
++	var reserved_before: bool=PlayerState._item_transaction_port.record_reserved(rune)
++	var destruction:=PlayerState.destroy_inventory_indices([2])
++	print("RUNE_RESERVED_DESTRUCTION="+JSON.stringify({"reserved_before":reserved_before,"result":destruction,
++		"inventory_unchanged":PlayerState.inventory==before,"writer_finished":pending.job.response.get("finished",false)}))
++	check(not destruction.get("success",false) and PlayerState.inventory==before and not pending.job.response.get("finished",false),"actual destruction cannot consume the reserved original rune or complete its pending writer")
++	check(destruction.get("reason")=="item_transaction_pending" and PlayerState._json_persistence.pending_count()==1
++		and PlayerState._item_transaction_port.record_reserved(rune),"refusal preserves the sole writer and the original rune reservation")
++	check(not PlayerState.destroy_inventory_indices([1,2]).get("success",false) and PlayerState.inventory==before
++		and not pending.job.response.get("finished",false),"mixed selection containing a reserved rune destroys neither the unrelated gem nor the rune")
++	check(not PlayerState.destroy_inventory_indices([0]).get("success",false) and PlayerState.inventory==before
++		and not pending.job.response.get("finished",false),"the reserved original equipment is protected at the same pre-drain boundary")
++	check(await _wait(pending.get("job")),"real ordered writer returns the durable rune receipt")
++	check(Codec.ownership_ids(PlayerState.inventory[0])==[base.instance_id,rune.instance_id] and PlayerState.inventory[2].is_empty(),"durable publication moves the original rune into exactly one owner")
++	before=PlayerState.inventory.duplicate(true)
++	check(not PlayerState.destroy_inventory_indices([0]).get("success",false) and PlayerState.inventory==before,"actual destruction of a rune-only host cannot lose the original embedded asset")
++	check(PlayerState.commit_item_transaction(quote).get("durable",false) and PlayerState._json_persistence.pending_count()==0,"old success replays without another writer")
++	check(await _transaction("hc.socketing.insert",base.instance_id,gem.instance_id),"original socket operation remains usable after a rune is embedded")
++	check(Codec.ownership_ids(PlayerState.inventory[0])==[base.instance_id,gem.instance_id,rune.instance_id],"socket insertion preserves the independently owned rune namespace")
++	check(PlayerState.equip_inventory_index_result(0,"hc.slot.weapon",base.instance_id).get("success",false),"actual production equip compiles the original gear with all three sources")
++	var all:=_handles()
++	check(all.size()==3,"real compiler retains distinct affix, gem and rune subscriptions to one ignite mechanism")
++	PlayerState._start_item_save(); PlayerState._json_persistence.drain()
++	var available_inventory:=PlayerState.inventory.duplicate(true)
++	PlayerState.inventory.resize(PlayerState.INVENTORY_CAPACITY)
++	for index in PlayerState.inventory.size():
++		if not PlayerState.inventory[index] is Dictionary or PlayerState.inventory[index].is_empty():
++			PlayerState.inventory[index]={"item_id":88,"name":GameData.get_item_record({"item_id":88}).name,"count":1}
++	var full_inventory:=PlayerState.inventory.duplicate(true)
++	var full_equipment:=PlayerState.equipment.duplicate(true)
++	var no_room:=PlayerState.quote_new_item_transaction({"action":"hc.runes.remove","target_instance_id":base.instance_id,"rune_instance_id":""})
++	check(not no_room.get("success",false) and no_room.get("reason")=="inventory_full"
++		and PlayerState._json_persistence.pending_count()==0 and PlayerState.inventory==full_inventory
++		and PlayerState.equipment==full_equipment,"full inventory refuses rune extraction before consuming ownership or starting a writer")
++	PlayerState.inventory=available_inventory
++	check(await _transaction("hc.runes.remove",base.instance_id,""),"common writer removes the rune while keeping socket ownership")
++	var without_rune:=_handles()
++	check(without_rune.size()==2 and _subset(without_rune,all),"removing rune withdraws only its source and keeps the original two handles")
++	check(Codec.ownership_ids(PlayerState.equipment["hc.slot.weapon"])==[base.instance_id,gem.instance_id],"rune removal never discards the original gem")
++	check(await _transaction("hc.runes.insert",base.instance_id,rune.instance_id) and _handles()==all,"reinserting the exact rune rebuilds all three original source identities")
++	check(await _transaction("hc.socketing.remove",base.instance_id,""),"socket removal coexists with an embedded rune")
++	check(_handles().size()==2 and _subset(_handles(),all) and Codec.ownership_ids(PlayerState.equipment["hc.slot.weapon"])==[base.instance_id,rune.instance_id],"socket removal preserves rune ownership and contribution")
++	check(await _transaction("hc.socketing.insert",base.instance_id,gem.instance_id) and _handles()==all,"returning the original gem restores the exact three logical handles")
++	check(Codec.base_record(PlayerState.equipment["hc.slot.weapon"])==base and PlayerState.gold==500,"neither module rerolls the old base or introduces a formal fee")
++	check(not Codec.can_release_ownership(PlayerState.equipment["hc.slot.weapon"]),"shared ownership gate refuses discarding either original embedded asset")
++	PlayerState._start_item_save(); PlayerState._json_persistence.drain(); PlayerState.load_save()
++	check(PlayerState.last_load_result.success and _handles()==all,"production save and reload preserve all three source handles")
++	check(PlayerState._validate_extended_item_ownership({"inventory":PlayerState.inventory,"equipment":PlayerState.equipment})
++		and Journal.validate_document(PlayerState._prepare_character_save_payload(false)).valid,"both namespaces and new rune operation records share the original aggregate and journal authorities")
++	PlayerState.test_mode=true; PlayerState.set_process(true); check(ContentLayers.reload_feature_catalog(),"isolated transaction restores original default-off registry")
++	_finish()
++func _handles() -> Array:
++	var result: Array=[]
++	for binding: Dictionary in PlayerState.feature_bundle().get("event_index",{}).get("damage_committed:hc.skill.wizard.ice_storm",[]): result.append(binding.handle)
++	result.sort(); return result
++func _subset(values: Array,all: Array) -> bool:
++	for value: Variant in values:
++		if value not in all: return false
++	return true
++func _transaction(action: String,target: String,input: String) -> bool:
++	PlayerState._start_item_save(); PlayerState._json_persistence.drain()
++	var field: String="rune_instance_id" if action.begins_with("hc.runes.") else "gem_instance_id"
++	var request: Dictionary={"action":action,"target_instance_id":target}; request[field]=input
++	var quote:=PlayerState.quote_new_item_transaction(request)
++	var pending:=PlayerState.commit_item_transaction(quote)
++	if not pending.get("pending",false): print("RUNE_TRANSACTION_ERROR="+JSON.stringify({"quote":quote,"result":pending})); return false
++	return await _wait(pending.job)
++func _wait(job: Variant) -> bool:
++	if job==null: return false
++	var deadline:=Time.get_ticks_msec()+5000
++	while not job.response.get("finished",false) and Time.get_ticks_msec()<deadline:
++		PlayerState._json_persistence.pump(); await get_tree().process_frame
++	return job.response.get("success",false)
++func _finish() -> void:
++	if not proof.write_receipt("rune_transaction_test",checks,failures.size()): failures.append("receipt")
++	print(("FRAMEWORK_RUNE_TRANSACTION_PASS" if failures.is_empty() else "FRAMEWORK_RUNE_TRANSACTION_FAIL")+" checks="+str(checks)+" errors="+str(failures))
++	get_tree().quit(0 if failures.is_empty() else 1)
+diff --git a/tests/framework/rune_transaction_test.tscn b/tests/framework/rune_transaction_test.tscn
+new file mode 100644
+index 000000000..c0fd30057
+--- /dev/null
++++ b/tests/framework/rune_transaction_test.tscn
+@@ -0,0 +1,4 @@
++[gd_scene load_steps=2 format=3]
++[ext_resource type="Script" path="res://tests/framework/rune_transaction_test.gd" id="1"]
++[node name="RuneTransactionTest" type="Node"]
++script = ExtResource("1")

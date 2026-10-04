@@ -1,0 +1,86 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "owned isolated account and production persistence only",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "real startup migration gate",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "explicit default-off module activation",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "2->1: actual profile creation",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "2->1: actual initial save",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "2->1: all real transactions and receipts complete",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "2->1: healthy v2 stream reaches its real frontier",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "130->65: actual profile creation",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "130->65: actual initial save",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "130->65: all real transactions and receipts complete",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "130->65: healthy v2 stream reaches its real frontier",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "2: owned v2 checkpoint and corrupt primary installed",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "130: owned v2 checkpoint and corrupt primary installed",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "complete owned handoff written",
+      "passed": true
+    }
+  ],
+  "count": 14,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "0f152950-f210-4542-99a2-230c2f1718b9",
+  "passed": 14,
+  "reported_checks": 14,
+  "reported_failures": 0,
+  "run_id": "aa28bae7-5d77-4e7c-90a5-af51f6136b7d",
+  "scene_id": "item_journal_v2_backup_seed_test",
+  "schema_version": 1,
+  "source_content_sha256": "5b9967313469bd7f30178a76f0e72b7de01e99b58ca47052a43fecd0edaf49ee",
+  "status": "PASS"
+}

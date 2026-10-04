@@ -1,0 +1,31 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "two primary data-defined rune records resolve without a new GameData branch or a new instance schema",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "second data-defined rune uses the existing creator, identity schema and actual GameData consumer",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "disabled fixture creation and undeclared data identities stay unavailable",
+      "passed": true
+    }
+  ],
+  "count": 3,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "fa8a65c3-ad0d-43ef-83a4-9d9388e1b4d5",
+  "passed": 3,
+  "reported_checks": 3,
+  "reported_failures": 0,
+  "run_id": "cc8708e4-2bb1-4d93-bc1c-d8c33731348e",
+  "scene_id": "rune_catalog_data_test",
+  "schema_version": 1,
+  "source_content_sha256": "22d6b5c5311749f70c3edaf70c2a189a6f56bb21a895d6fbcb6698144f0d3621",
+  "status": "PASS"
+}

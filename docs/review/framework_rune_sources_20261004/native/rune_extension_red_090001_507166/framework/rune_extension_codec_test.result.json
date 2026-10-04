@@ -1,0 +1,21 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "registered rune and original socket namespaces coexist on one unchanged authoritative base",
+      "passed": false
+    }
+  ],
+  "count": 1,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "f965c020-3de3-4d47-812d-b49f9defebab",
+  "passed": 0,
+  "reported_checks": 1,
+  "reported_failures": 1,
+  "run_id": "2d6d4f46-b096-4880-8012-9f67c6f0bd01",
+  "scene_id": "rune_extension_codec_test",
+  "schema_version": 1,
+  "source_content_sha256": "a06cbfd04213898670237e3ec31cd4c178c380aec5e62b5d42d75bc5d187d5f7",
+  "status": "FAIL"
+}

@@ -1,0 +1,86 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "registered rune and original socket namespaces coexist on one unchanged authoritative base",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "adding a rune never rerolls the historical drop",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "all three original instances have explicit independent ownership",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "destruction or sale cannot discard either embedded asset",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "complete two-namespace wire roundtrip retains all original fields",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "single owner aggregate accepts both original assets",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "an accessible copy of the embedded rune is rejected",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "future rune ownership wins before known-base corruption",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "future embedded rune instance remains opaque even beside a corrupted old base",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "an unregistered future rune identity is not recoverable known corruption",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "unknown embedded rune identity takes priority over a corrupted known base",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "one instance identity cannot be owned by both registered namespaces",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "known rune instances cannot stack an independently owned asset",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "registered rune contract keeps its exact field whitelist",
+      "passed": true
+    }
+  ],
+  "count": 14,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "fa8a65c3-ad0d-43ef-83a4-9d9388e1b4d5",
+  "passed": 14,
+  "reported_checks": 14,
+  "reported_failures": 0,
+  "run_id": "1d3473c3-588e-44e0-a8e2-2a558e5e0c31",
+  "scene_id": "rune_extension_codec_test",
+  "schema_version": 1,
+  "source_content_sha256": "22d6b5c5311749f70c3edaf70c2a189a6f56bb21a895d6fbcb6698144f0d3621",
+  "status": "PASS"
+}

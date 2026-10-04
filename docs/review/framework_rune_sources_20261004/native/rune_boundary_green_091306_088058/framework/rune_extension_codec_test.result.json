@@ -1,0 +1,76 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "registered rune and original socket namespaces coexist on one unchanged authoritative base",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "adding a rune never rerolls the historical drop",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "all three original instances have explicit independent ownership",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "destruction or sale cannot discard either embedded asset",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "complete two-namespace wire roundtrip retains all original fields",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "single owner aggregate accepts both original assets",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "an accessible copy of the embedded rune is rejected",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "future rune ownership wins before known-base corruption",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "future embedded rune instance remains opaque even beside a corrupted old base",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "one instance identity cannot be owned by both registered namespaces",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "known rune instances cannot stack an independently owned asset",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "registered rune contract keeps its exact field whitelist",
+      "passed": true
+    }
+  ],
+  "count": 12,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "e974003a-7083-4d2b-8711-04141d3340f3",
+  "passed": 12,
+  "reported_checks": 12,
+  "reported_failures": 0,
+  "run_id": "81601713-1637-4b5a-b04f-6c2dac9bdc46",
+  "scene_id": "rune_extension_codec_test",
+  "schema_version": 1,
+  "source_content_sha256": "b0388f7bf68a72dc6d0e2292661adcc299a92b83c1700b67c9ece2c0beb171ce",
+  "status": "PASS"
+}

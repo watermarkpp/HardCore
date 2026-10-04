@@ -6,9 +6,10 @@
     "res://assets/data/drop/dpv2_21cq_item_mapping_v1.json": "4fec8ddeca9a835ce144fe2ed2c70a15d837090523824b0647252e96d5a61f6f",
     "res://assets/data/equipment_attribute_master.json": "223c96df954077aa8970a277efe229d9dbc16609d2503a0033e60197f7e00701",
     "res://assets/data/equipment_enhancement_black_iron_v1.json": "3ccd9e7e7d774dcc9655f2b6d5edf1eea2d97f50e77880ff07750012d0ba9732",
+    "res://assets/data/features/rune_fixture_items.json": "ea00bdd36122ae0275f64ee7a73746bbd3866c5fdd174625a7915cb9c885a68d",
     "res://assets/data/features/socketing_fixture_items.json": "ae2c7adbcf0ee9ed8e88f4e2dd8d4c4e2c55af6b49a7bcffc0828c8a29e23043",
-    "res://assets/data/identity/entity_registry_source.json": "ef36ccd584e73f58d86fe793eb5b421721fe7db0153dfe41d809b90bc5e6b6c2",
-    "res://assets/data/identity/item_categories_v1.json": "6dd144266aa3f0ec91338c0c3f8a4d8d41788b8db81be1ae83c2fd29834caf04",
+    "res://assets/data/identity/entity_registry_source.json": "4d2c6674fb6c37dda246a10f1ae0f2396298c31e968d40929dc2c86ddf49265a",
+    "res://assets/data/identity/item_categories_v1.json": "c60d00da6b19047e87ea80b6c973e42a26c01f543d489fdb8b3ab64473adbb8a",
     "res://assets/data/item_runtime_authority_v1.json": "4232baf42256fa1ef0e5ab6e53f9b4ae452a4614fc09ca51902e4220d908f1dc",
     "res://assets/data/map_design/map_identity_registry.json": "7e50073a4a20918e234587af284f009ff92b9d6d845ad46dfc997be60d9128d8",
     "res://assets/data/relic_synthesis_v1.json": "9d7cb4f2b09c80f7dbe63782d757ce1532a0ce99c7ae32d3cfaf1fe45fbfd5df",
@@ -3823,6 +3824,30 @@
       ]
     },
     {
+      "id": "hc.item.990002",
+      "kind": "item",
+      "legacy_id": 990002,
+      "display_name": "验证符文",
+      "evidence": [
+        {
+          "path": "res://assets/data/features/rune_fixture_items.json",
+          "pointer": "/records/0"
+        }
+      ]
+    },
+    {
+      "id": "hc.item.990003",
+      "kind": "item",
+      "legacy_id": 990003,
+      "display_name": "验证符文乙",
+      "evidence": [
+        {
+          "path": "res://assets/data/features/rune_fixture_items.json",
+          "pointer": "/records/1"
+        }
+      ]
+    },
+    {
       "id": "hc.item_category.armor",
       "kind": "item_category",
       "legacy_id": "armor",
@@ -3842,7 +3867,7 @@
       "evidence": [
         {
           "path": "res://assets/data/identity/item_categories_v1.json",
-          "pointer": "/records/17"
+          "pointer": "/records/18"
         }
       ]
     },
@@ -3854,7 +3879,7 @@
       "evidence": [
         {
           "path": "res://assets/data/identity/item_categories_v1.json",
-          "pointer": "/records/23"
+          "pointer": "/records/24"
         }
       ]
     },
@@ -3878,7 +3903,7 @@
       "evidence": [
         {
           "path": "res://assets/data/identity/item_categories_v1.json",
-          "pointer": "/records/31"
+          "pointer": "/records/32"
         }
       ]
     },
@@ -3890,7 +3915,7 @@
       "evidence": [
         {
           "path": "res://assets/data/identity/item_categories_v1.json",
-          "pointer": "/records/13"
+          "pointer": "/records/14"
         }
       ]
     },
@@ -3902,7 +3927,7 @@
       "evidence": [
         {
           "path": "res://assets/data/identity/item_categories_v1.json",
-          "pointer": "/records/27"
+          "pointer": "/records/28"
         }
       ]
     },
@@ -3914,7 +3939,7 @@
       "evidence": [
         {
           "path": "res://assets/data/identity/item_categories_v1.json",
-          "pointer": "/records/30"
+          "pointer": "/records/31"
         }
       ]
     },
@@ -3926,7 +3951,7 @@
       "evidence": [
         {
           "path": "res://assets/data/identity/item_categories_v1.json",
-          "pointer": "/records/12"
+          "pointer": "/records/13"
         }
       ]
     },
@@ -3938,7 +3963,7 @@
       "evidence": [
         {
           "path": "res://assets/data/identity/item_categories_v1.json",
-          "pointer": "/records/11"
+          "pointer": "/records/12"
         }
       ]
     },
@@ -3962,7 +3987,7 @@
       "evidence": [
         {
           "path": "res://assets/data/identity/item_categories_v1.json",
-          "pointer": "/records/28"
+          "pointer": "/records/29"
         }
       ]
     },
@@ -3986,7 +4011,7 @@
       "evidence": [
         {
           "path": "res://assets/data/identity/item_categories_v1.json",
-          "pointer": "/records/21"
+          "pointer": "/records/22"
         }
       ]
     },
@@ -3998,7 +4023,7 @@
       "evidence": [
         {
           "path": "res://assets/data/identity/item_categories_v1.json",
-          "pointer": "/records/29"
+          "pointer": "/records/30"
         }
       ]
     },
@@ -4010,7 +4035,7 @@
       "evidence": [
         {
           "path": "res://assets/data/identity/item_categories_v1.json",
-          "pointer": "/records/25"
+          "pointer": "/records/26"
         }
       ]
     },
@@ -4022,7 +4047,7 @@
       "evidence": [
         {
           "path": "res://assets/data/identity/item_categories_v1.json",
-          "pointer": "/records/15"
+          "pointer": "/records/16"
         }
       ]
     },
@@ -4046,7 +4071,7 @@
       "evidence": [
         {
           "path": "res://assets/data/identity/item_categories_v1.json",
-          "pointer": "/records/26"
+          "pointer": "/records/27"
         }
       ]
     },
@@ -4070,7 +4095,7 @@
       "evidence": [
         {
           "path": "res://assets/data/identity/item_categories_v1.json",
-          "pointer": "/records/14"
+          "pointer": "/records/15"
         }
       ]
     },
@@ -4082,7 +4107,7 @@
       "evidence": [
         {
           "path": "res://assets/data/identity/item_categories_v1.json",
-          "pointer": "/records/18"
+          "pointer": "/records/19"
         }
       ]
     },
@@ -4106,7 +4131,7 @@
       "evidence": [
         {
           "path": "res://assets/data/identity/item_categories_v1.json",
-          "pointer": "/records/16"
+          "pointer": "/records/17"
         }
       ]
     },
@@ -4118,7 +4143,7 @@
       "evidence": [
         {
           "path": "res://assets/data/identity/item_categories_v1.json",
-          "pointer": "/records/22"
+          "pointer": "/records/23"
         }
       ]
     },
@@ -4131,6 +4156,18 @@
         {
           "path": "res://assets/data/identity/item_categories_v1.json",
           "pointer": "/records/5"
+        }
+      ]
+    },
+    {
+      "id": "hc.item_category.rune",
+      "kind": "item_category",
+      "legacy_id": "rune",
+      "display_name": "符文",
+      "evidence": [
+        {
+          "path": "res://assets/data/identity/item_categories_v1.json",
+          "pointer": "/records/11"
         }
       ]
     },
@@ -4166,7 +4203,7 @@
       "evidence": [
         {
           "path": "res://assets/data/identity/item_categories_v1.json",
-          "pointer": "/records/19"
+          "pointer": "/records/20"
         }
       ]
     },
@@ -4178,7 +4215,7 @@
       "evidence": [
         {
           "path": "res://assets/data/identity/item_categories_v1.json",
-          "pointer": "/records/24"
+          "pointer": "/records/25"
         }
       ]
     },
@@ -4190,7 +4227,7 @@
       "evidence": [
         {
           "path": "res://assets/data/identity/item_categories_v1.json",
-          "pointer": "/records/20"
+          "pointer": "/records/21"
         }
       ]
     },
@@ -15866,8 +15903,8 @@
   ],
   "counts": {
     "currency": 1,
-    "item": 256,
-    "item_category": 32,
+    "item": 258,
+    "item_category": 33,
     "map": 209,
     "monster": 156,
     "profession": 3,

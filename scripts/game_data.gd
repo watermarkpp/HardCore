@@ -5,6 +5,7 @@ const EntityRegistry := preload("res://scripts/identity/entity_registry.gd")
 const ItemCategories := preload("res://scripts/identity/item_category_identity.gd")
 const ItemExtensionCodec := preload("res://scripts/items/item_extension_codec.gd")
 const SocketGemRules := preload("res://scripts/items/socket_gem_rules.gd")
+const RuneItemRules := preload("res://scripts/items/rune_item_rules.gd")
 const CanonicalSkills := preload("res://scripts/skills/skill_data_loader.gd")
 
 const EquipmentRulesScript = preload("res://scripts/equipment_rules.gd")
@@ -3749,6 +3750,8 @@ func _item_record_for_read(item_ref: Variant) -> Dictionary:
 	var item_id := int(identity.get("item_id", -1))
 	if item_id == SocketGemRules.ITEM_ID:
 		return SocketGemRules.record_for_id(item_id)
+	var rune_record:=RuneItemRules.record_for_id(item_id)
+	if not rune_record.is_empty(): return rune_record
 	if item_id >= 0 and _catalog_by_item_id.has(item_id):
 		return _catalog_by_item_id.get(item_id, {}) as Dictionary
 	# The registry declares the exact service source for these reserved direct

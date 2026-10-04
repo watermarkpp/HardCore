@@ -1,0 +1,76 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "registered rune and original socket namespaces coexist on one unchanged authoritative base",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "adding a rune never rerolls the historical drop",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "all three original instances have explicit independent ownership",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "destruction or sale cannot discard either embedded asset",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "complete two-namespace wire roundtrip retains all original fields",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "single owner aggregate accepts both original assets",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "an accessible copy of the embedded rune is rejected",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "future rune ownership wins before known-base corruption",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "future embedded rune instance remains opaque even beside a corrupted old base",
+      "passed": false
+    },
+    {
+      "id": 10,
+      "label": "one instance identity cannot be owned by both registered namespaces",
+      "passed": false
+    },
+    {
+      "id": 11,
+      "label": "known rune instances cannot stack an independently owned asset",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "registered rune contract keeps its exact field whitelist",
+      "passed": true
+    }
+  ],
+  "count": 12,
+  "engine_version": "4.7-stable (official)",
+  "failed": 2,
+  "invocation_id": "18cacc1c-2bf9-43e9-b814-803c19248142",
+  "passed": 10,
+  "reported_checks": 12,
+  "reported_failures": 2,
+  "run_id": "b600cf67-7df0-464c-89d2-c5fe493e6dbc",
+  "scene_id": "rune_extension_codec_test",
+  "schema_version": 1,
+  "source_content_sha256": "43b4bb8a9460144d9e6bb1d9148c5f6783167936ecea6f245ea8311a5b550f0a",
+  "status": "FAIL"
+}

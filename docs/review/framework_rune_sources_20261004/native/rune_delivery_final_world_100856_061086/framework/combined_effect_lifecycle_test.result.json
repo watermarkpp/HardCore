@@ -1,0 +1,206 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "production persistence enabled in isolated APPDATA",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "real startup migration gate completes",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "real account and profile created",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "durable profile baseline",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "real mapped world reaches READY",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "first receiver uses formal spawn and real death connections",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "all thirty actual mapped receivers created",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "Root retains normal frame and physics pumps",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "registered uncached five-action resource selected for simultaneous completion",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "default-off test module explicitly enabled",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "real compiled mechanic binding found",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "actual runtime owns production world clock and damage port",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "three independent source identities pass production mechanic validation",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "all thirty real HP writes enter the necessary fact queue",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "source withdrawal keeps accepted states and restores default-off content",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "thirty targets retain all ninety independent accepted states",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "all four phases settle 360 actual ticks and 1800 HP loss",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "all thirty real deaths terminate every effect and due node",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "all necessary effect queues drain without refusal",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "ninety dedup receipts remain owned until explicit world teardown",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "actual resource work overlaps actual death settlement or persistence queues",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "five real threaded action textures complete through the existing coordinator",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "complete validated resource becomes visible in production cache",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "all thirty real reward jobs reach terminal drain",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "every terminal death receipt is COMMITTED",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "sole production reward owner grants exactly thirty canonical rewards",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "real frame samples span the workload without open budget scopes",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "necessary death and resource completion latencies are observed",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "every actual periodic delivery is included in the consumption-boundary latency metric",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "this bounded headless cohort delivers every tick before it falls one complete configured period behind: 283333",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "write owned evidence combined_effect_lifecycle_trace.json",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "owned evidence write completed combined_effect_lifecycle_trace.json",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "known explicit final-stage fixture fault",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "final production durability checkpoint succeeds: ",
+      "passed": true
+    },
+    {
+      "id": 35,
+      "label": "explicit world teardown releases final receipt ownership",
+      "passed": true
+    },
+    {
+      "id": 36,
+      "label": "official reload retains exactly the combined reward",
+      "passed": true
+    },
+    {
+      "id": 37,
+      "label": "write owned evidence combined_effect_lifecycle_expected.json",
+      "passed": true
+    },
+    {
+      "id": 38,
+      "label": "owned evidence write completed combined_effect_lifecycle_expected.json",
+      "passed": true
+    }
+  ],
+  "count": 38,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "74c5ff36-3f36-4d22-a231-de4723d2509e",
+  "passed": 38,
+  "reported_checks": 38,
+  "reported_failures": 0,
+  "run_id": "d2f241f0-2906-4456-8b94-4a96de41dd53",
+  "scene_id": "combined_effect_lifecycle_test",
+  "schema_version": 1,
+  "source_content_sha256": "5b9967313469bd7f30178a76f0e72b7de01e99b58ca47052a43fecd0edaf49ee",
+  "status": "PASS"
+}

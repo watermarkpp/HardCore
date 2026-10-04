@@ -1,0 +1,66 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "registered rune and original socket namespaces coexist on one unchanged authoritative base",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "adding a rune never rerolls the historical drop",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "all three original instances have explicit independent ownership",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "destruction or sale cannot discard either embedded asset",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "complete two-namespace wire roundtrip retains all original fields",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "single owner aggregate accepts both original assets",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "an accessible copy of the embedded rune is rejected",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "future rune ownership wins before known-base corruption",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "known rune instances cannot stack an independently owned asset",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "registered rune contract keeps its exact field whitelist",
+      "passed": true
+    }
+  ],
+  "count": 10,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "ed8be346-eccd-49fe-a306-b9219cfab48a",
+  "passed": 10,
+  "reported_checks": 10,
+  "reported_failures": 0,
+  "run_id": "87af2d6b-454e-4d8f-b089-a72b192e9921",
+  "scene_id": "rune_extension_codec_test",
+  "schema_version": 1,
+  "source_content_sha256": "bf48e7038ac66d70a8ecf86199fb4080bc72ba5bad3d4bc1df3c0920fb0c5640",
+  "status": "PASS"
+}

@@ -1,0 +1,43 @@
+{
+    "schema_version":  1,
+    "invocation_id":  "fa8a65c3-ad0d-43ef-83a4-9d9388e1b4d5",
+    "source_content_sha256":  "22d6b5c5311749f70c3edaf70c2a189a6f56bb21a895d6fbcb6698144f0d3621",
+    "producers":  {
+                      "rune_extension_codec_test":  {
+                                                        "scene_id":  "rune_extension_codec_test",
+                                                        "run_id":  "1d3473c3-588e-44e0-a8e2-2a558e5e0c31",
+                                                        "source_content_sha256":  "22d6b5c5311749f70c3edaf70c2a189a6f56bb21a895d6fbcb6698144f0d3621",
+                                                        "process_exited":  true,
+                                                        "effective_exit_code":  0,
+                                                        "result":  "PASS",
+                                                        "receipt_sha256":  "55832a7fa6ede3702dfb9a661628313571663b16a9454cb495d9426d08813a3b"
+                                                    },
+                      "rune_catalog_data_test":  {
+                                                     "scene_id":  "rune_catalog_data_test",
+                                                     "run_id":  "cc8708e4-2bb1-4d93-bc1c-d8c33731348e",
+                                                     "source_content_sha256":  "22d6b5c5311749f70c3edaf70c2a189a6f56bb21a895d6fbcb6698144f0d3621",
+                                                     "process_exited":  true,
+                                                     "effective_exit_code":  0,
+                                                     "result":  "PASS",
+                                                     "receipt_sha256":  "cc6a7fa5154b16865f36a88cc315c32100b04757a24fb30d24cd90d4b78df355"
+                                                 },
+                      "rune_source_composition_test":  {
+                                                           "scene_id":  "rune_source_composition_test",
+                                                           "run_id":  "95610186-910d-4615-92d8-1bb9eced8edf",
+                                                           "source_content_sha256":  "22d6b5c5311749f70c3edaf70c2a189a6f56bb21a895d6fbcb6698144f0d3621",
+                                                           "process_exited":  true,
+                                                           "effective_exit_code":  0,
+                                                           "result":  "PASS",
+                                                           "receipt_sha256":  "d9e0318dd0d257b3fc392011e2eced6b92f11619995892164e23a26840ec5ff5"
+                                                       },
+                      "rune_source_composition_cold_test":  {
+                                                                "scene_id":  "rune_source_composition_cold_test",
+                                                                "run_id":  "5192e0bd-e211-4cfc-acb5-85a256f8cc33",
+                                                                "source_content_sha256":  "22d6b5c5311749f70c3edaf70c2a189a6f56bb21a895d6fbcb6698144f0d3621",
+                                                                "process_exited":  true,
+                                                                "effective_exit_code":  0,
+                                                                "result":  "PASS",
+                                                                "receipt_sha256":  "bc6a93bd692c18a7427c3c92e934ddca1997557169b04ba33ca79ebca1aae667"
+                                                            }
+                  }
+}

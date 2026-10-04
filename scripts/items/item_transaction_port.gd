@@ -2,12 +2,20 @@ extends RefCounted
 
 const Codec := preload("res://scripts/items/item_extension_codec.gd")
 const Gem := preload("res://scripts/items/socket_gem_rules.gd")
+const Rune := preload("res://scripts/items/rune_item_rules.gd")
 const Journal := preload("res://scripts/items/item_transaction_journal.gd")
 const Graph := preload("res://scripts/features/contracts/plain_graph.gd")
 var _owner: WeakRef
 var _active: Dictionary = {}
 var _issued_context := ""
 var _issued_epoch := ""
+
+const OPERATIONS := {
+	"hc.socketing.insert":{"module_id":Gem.MODULE,"namespace_id":Codec.SOCKET_NAMESPACE,"entries_field":"sockets","slot_field":"socket_id","slot_id":Codec.SOCKET_ID},
+	"hc.socketing.remove":{"module_id":Gem.MODULE,"namespace_id":Codec.SOCKET_NAMESPACE,"entries_field":"sockets","slot_field":"socket_id","slot_id":Codec.SOCKET_ID},
+	"hc.runes.insert":{"module_id":Rune.MODULE,"namespace_id":Codec.RUNE_NAMESPACE,"entries_field":"runes","slot_field":"rune_slot_id","slot_id":Codec.RUNE_ID},
+	"hc.runes.remove":{"module_id":Rune.MODULE,"namespace_id":Codec.RUNE_NAMESPACE,"entries_field":"runes","slot_field":"rune_slot_id","slot_id":Codec.RUNE_ID}
+}
 
 func _init(owner: Node) -> void:
 	_owner = weakref(owner)
@@ -37,7 +45,9 @@ func _epoch_for(player: Node) -> String:
 func quote(request: Dictionary) -> Dictionary:
 	var player: Node = _owner.get_ref()
 	if player == null or not _request_valid(request): return _failure("invalid_item_command")
-	var digest := JSON.stringify([player.active_profile_id, request.action, request.target_instance_id, request.gem_instance_id]).sha256_text()
+	var spec: Dictionary=OPERATIONS[request.action]
+	var input_id: String=request[Journal.input_field(request.action)]
+	var digest := JSON.stringify([player.active_profile_id, request.action, request.target_instance_id, input_id]).sha256_text()
 	var recorded := Journal.lookup(player._item_transaction_journal, request.operation_id)
 	if not recorded.is_empty():
 		if recorded.request_digest != digest: return _failure("operation_identity_conflict")
@@ -46,8 +56,8 @@ func quote(request: Dictionary) -> Dictionary:
 	var admission := Journal.admission(player._item_transaction_journal,request.operation_id,epoch)
 	if not bool(admission.success): return _failure(admission.reason)
 	var config := ContentLayers.feature_configuration()
-	if Gem.MODULE not in config.get("enabled_modules", []): return _failure("socket_fixture_disabled")
-	if "items.transact" not in config.catalog.modules[Gem.MODULE].capabilities: return _failure("missing_item_transaction_permission")
+	if spec.module_id not in config.get("enabled_modules", []): return _failure("rune_fixture_disabled" if spec.module_id==Rune.MODULE else "socket_fixture_disabled")
+	if "items.transact" not in config.catalog.modules[spec.module_id].capabilities: return _failure("missing_item_transaction_permission")
 	if not player._valid_profile_storage_id(player.active_profile_id) or player.active_profile_id == player._save_blocked_profile_id \
 		or not player._can_accept_immediate_item_use() or player._world_clock_snapshot_sequence < 0:
 		return _failure("item_transaction_unavailable")
@@ -60,27 +70,26 @@ func quote(request: Dictionary) -> Dictionary:
 	if base.is_empty() or not base.get("count") in [1, 1.0] or GameData.get_item_record(base).get("kind") != "equipment" \
 		or not base.has("item_id") or GameData.item_entity_id(base).is_empty(): return _failure("invalid_socket_target")
 	var existing := Codec.extensions(target.record)
-	var sockets: Array = existing.get(Codec.SOCKET_NAMESPACE, {}).get("sockets", [])
+	var sockets: Array = existing.get(spec.namespace_id, {}).get(spec.entries_field, [])
 	var gem: Dictionary = {}
-	if request.action == "hc.socketing.insert":
-		var input := _find(request.gem_instance_id)
-		if not sockets.is_empty() or input.is_empty() or input.container != "inventory" or not Gem.valid_instance(input.record):
+	if _is_insert(request):
+		var input := _find(input_id)
+		if not sockets.is_empty() or input.is_empty() or input.container != "inventory" \
+			or not (Rune.valid_instance(input.record) if spec.module_id==Rune.MODULE else Gem.valid_instance(input.record)):
 			return _failure("socket_input_unavailable")
 		gem = input.record
 	else:
 		if sockets.size() != 1: return _failure("socket_is_empty")
 		gem = sockets[0].item
 		if _free_inventory_slot() < 0: return _failure("inventory_full")
-	var extension := {Codec.SOCKET_NAMESPACE: {"schema_version": 1, "sockets": (
-		[{"socket_id": Codec.SOCKET_ID, "item": gem}] if request.action == "hc.socketing.insert" else [])}}
-	var output := Codec.with_extensions(base, extension)
+	var output := _compose_target(target.record,gem,spec,_is_insert(request))
 	if output.status != Codec.KNOWN_VALID: return _failure(output.reason)
 	var result := {"success": true, "replay": false, "request": request.duplicate(true),
 		"protocol_epoch":epoch,
 		"profile_id": player.active_profile_id, "world_clock_generation": player._world_clock_generation,
 		"rules_revision": config.catalog.revision, "request_digest": digest,
-		"target_digest": _target_digest(target.record), "gem_digest": _item_digest(gem),
-		"target_entity_id": GameData.item_entity_id(base), "gem_instance_id": gem.instance_id}
+		"target_digest": _target_digest(target.record), "input_digest": _item_digest(gem),
+		"target_entity_id": GameData.item_entity_id(base), "input_instance_id": gem.instance_id}
 	var captured := Graph.capture(result)
 	return captured.value if bool(captured.success) else _failure("non_plain_item_quote")
 
@@ -100,7 +109,7 @@ func commit(quoted: Dictionary) -> Dictionary:
 	if player._json_persistence.pending_count() > 0 or player._workbench_transfer_pending:
 		return _failure("character_writer_busy")
 	var path: String = player._profile_path(player.active_profile_id)
-	var plan := {"quote": quoted.duplicate(true), "destination": _free_inventory_slot() if request.action == "hc.socketing.remove" else -1,
+	var plan := {"quote": quoted.duplicate(true), "destination": _free_inventory_slot() if not _is_insert(request) else -1,
 		"output": {}, "journal": {}, "reason": "", "job": null}
 	_active = plan
 	var identity := {"domain": "item_transaction", "path": path, "profile_id": quoted.profile_id,
@@ -116,7 +125,7 @@ func commit(quoted: Dictionary) -> Dictionary:
 func record_reserved(record: Dictionary) -> bool:
 	if _active.is_empty(): return false
 	var ids := Codec.ownership_ids(record)
-	return ids.has(_active.quote.request.target_instance_id) or ids.has(_active.quote.gem_instance_id)
+	return ids.has(_active.quote.request.target_instance_id) or ids.has(_active.quote.input_instance_id)
 
 func slot_reserved(index: int) -> bool:
 	return not _active.is_empty() and int(_active.destination) >= 0 and (index < 0 or index == int(_active.destination))
@@ -132,13 +141,14 @@ func _receipt_context_matches(plan: Dictionary) -> bool:
 	var target := _find(plan.quote.request.target_instance_id)
 	if target.is_empty() or _target_digest(target.record) != plan.quote.target_digest: return false
 	var gem: Dictionary = {}
-	if plan.quote.request.action == "hc.socketing.insert":
-		gem = _find(plan.quote.gem_instance_id).get("record", {})
+	if _is_insert(plan.quote.request):
+		gem = _find(plan.quote.input_instance_id).get("record", {})
 	else:
-		var sockets: Array = Codec.extensions(target.record).get(Codec.SOCKET_NAMESPACE, {}).get("sockets", [])
+		var spec: Dictionary=OPERATIONS[plan.quote.request.action]
+		var sockets: Array = Codec.extensions(target.record).get(spec.namespace_id, {}).get(spec.entries_field, [])
 		if sockets.size() != 1: return false
 		gem = sockets[0].item
-	if _item_digest(gem) != plan.quote.gem_digest: return false
+	if _item_digest(gem) != plan.quote.input_digest: return false
 	if int(plan.destination) >= 0 and int(plan.destination) < player.inventory.size() and not player.inventory[plan.destination].is_empty(): return false
 	return true
 
@@ -151,16 +161,17 @@ func _build_document(previous: Dictionary, identity: Dictionary, plan: Dictionar
 		plan.reason = "item_journal_authority_changed"
 		return null
 	var target := _find(plan.quote.request.target_instance_id)
-	var gem: Dictionary = (_find(plan.quote.gem_instance_id).get("record", {}) if plan.quote.request.action == "hc.socketing.insert"
-		else Codec.extensions(target.record)[Codec.SOCKET_NAMESPACE].sockets[0].item)
-	var output := Codec.with_extensions(Codec.base_record(target.record), {Codec.SOCKET_NAMESPACE: {"schema_version": 1,
-		"sockets": [{"socket_id": Codec.SOCKET_ID, "item": gem}] if plan.quote.request.action == "hc.socketing.insert" else []}})
+	var spec: Dictionary=OPERATIONS[plan.quote.request.action]
+	var gem: Dictionary = (_find(plan.quote.input_instance_id).get("record", {}) if _is_insert(plan.quote.request)
+		else Codec.extensions(target.record)[spec.namespace_id][spec.entries_field][0].item)
+	var output := _compose_target(target.record,gem,spec,_is_insert(plan.quote.request))
 	if output.status != Codec.KNOWN_VALID: return null
 	plan.output = output.item
 	plan.gem = gem.duplicate(true)
 	var entry := {"operation_id": identity.operation_id, "request_digest": plan.quote.request_digest,
 		"action": plan.quote.request.action, "target_instance_id": plan.quote.request.target_instance_id,
-		"gem_instance_id": plan.quote.gem_instance_id, "rules_revision": plan.quote.rules_revision}
+		"rules_revision": plan.quote.rules_revision}
+	entry[Journal.input_field(plan.quote.request.action)] = plan.quote.input_instance_id
 	plan.journal = Journal.appended(player._item_transaction_journal, player.active_profile_id, entry,plan.quote.protocol_epoch)
 	if plan.journal.is_empty(): return null
 	var document: Dictionary = player._prepare_character_save_payload(false).duplicate(true)
@@ -220,8 +231,8 @@ func _apply_item_delta(inventory: Array, equipment: Dictionary, target: Dictiona
 	current[Codec.RUNTIME_EXTENSION] = plan.output[Codec.RUNTIME_EXTENSION].duplicate(true)
 	if target.container == "inventory": inventory[target.index] = current
 	else: equipment[target.slot] = current
-	if plan.quote.request.action == "hc.socketing.insert":
-		var gem_index: int = _find(plan.quote.gem_instance_id).get("index", -1)
+	if _is_insert(plan.quote.request):
+		var gem_index: int = _find(plan.quote.input_instance_id).get("index", -1)
 		assert(gem_index >= 0)
 		inventory[gem_index] = {}
 	else:
@@ -268,11 +279,24 @@ static func _target_digest(record: Dictionary) -> String:
 
 static func _request_valid(request: Dictionary) -> bool:
 	if request.size() != 4: return false
-	for field: String in ["operation_id", "action", "target_instance_id", "gem_instance_id"]:
+	if not request.get("action") is String or request.action not in Journal.ACTIONS: return false
+	var field_name:=Journal.input_field(request.action)
+	for field: String in ["operation_id", "action", "target_instance_id", field_name]:
 		if not request.get(field) is String: return false
 	return request.action in Journal.ACTIONS and Journal.identity_valid(request.operation_id) \
 		and Journal.identity_valid(request.target_instance_id) and (
-			Journal.identity_valid(request.gem_instance_id) if request.action == "hc.socketing.insert" else request.gem_instance_id.is_empty())
+			Journal.identity_valid(request[field_name]) if _is_insert(request) else request[field_name].is_empty())
+
+static func _is_insert(request: Dictionary) -> bool:
+	return request.action in ["hc.socketing.insert","hc.runes.insert"]
+
+static func _compose_target(record: Dictionary,input: Dictionary,spec: Dictionary,insert: bool) -> Dictionary:
+	# Modify only this business namespace; the other module keeps its assets.
+	var extensions:=Codec.extensions(record)
+	var entry: Dictionary={"item":input}; entry[spec.slot_field]=spec.slot_id
+	var value: Dictionary={"schema_version":1}; value[spec.entries_field]=[entry] if insert else []
+	extensions[spec.namespace_id]=value
+	return Codec.with_extensions(Codec.base_record(record),extensions)
 
 static func _outcome(entry: Dictionary) -> Dictionary:
 	return {"success": true, "pending": false, "durable": true, "applied_in_memory": true, "outcome": entry.duplicate(true)}

@@ -1,0 +1,34 @@
+{
+    "schema_version":  1,
+    "invocation_id":  "fa5984ec-ba8c-405c-820d-ebfc54aba223",
+    "source_content_sha256":  "268cdffb7a3c1fe91bd9e19c7c4b5fca77d99b492989e07de7990842e974b5aa",
+    "producers":  {
+                      "rune_transaction_test":  {
+                                                    "scene_id":  "rune_transaction_test",
+                                                    "run_id":  "9ecfdfab-2a61-44d5-a2ae-c3b8a53a58fc",
+                                                    "source_content_sha256":  "268cdffb7a3c1fe91bd9e19c7c4b5fca77d99b492989e07de7990842e974b5aa",
+                                                    "process_exited":  true,
+                                                    "effective_exit_code":  0,
+                                                    "result":  "PASS",
+                                                    "receipt_sha256":  "f6decf3b61513ac29beed77f0f8bd3dc02fae946872720bb6d270c90a741bd79"
+                                                },
+                      "socket_transaction_test":  {
+                                                      "scene_id":  "socket_transaction_test",
+                                                      "run_id":  "1c69d94b-dfab-47c0-a7e5-50bba8b580fe",
+                                                      "source_content_sha256":  "268cdffb7a3c1fe91bd9e19c7c4b5fca77d99b492989e07de7990842e974b5aa",
+                                                      "process_exited":  true,
+                                                      "effective_exit_code":  0,
+                                                      "result":  "PASS",
+                                                      "receipt_sha256":  "85a660208f4bc98bfa9d2c8633a21d51eda015f7f4c699c708636813536e9edb"
+                                                  },
+                      "item_journal_sequence_test":  {
+                                                         "scene_id":  "item_journal_sequence_test",
+                                                         "run_id":  "efb1601f-657c-4e5e-a7f4-60818388cbf0",
+                                                         "source_content_sha256":  "268cdffb7a3c1fe91bd9e19c7c4b5fca77d99b492989e07de7990842e974b5aa",
+                                                         "process_exited":  true,
+                                                         "effective_exit_code":  0,
+                                                         "result":  "PASS",
+                                                         "receipt_sha256":  "f7b24b6a742cd06f13f6e3111cb636ef679b20347e270bc87c3b40c79e8cbb56"
+                                                     }
+                  }
+}

@@ -1,0 +1,40 @@
+# Rune来源与事务接入施工记录
+
+2026-10-04，第三树单主控；父固定08ccdf29e1be5897fa1ffdb6964f58300ad55c3b。依据已批准RFC v2及原Task4，继续保持唯一HP、技能planner、物品ordered writer；新增验证模块默认关闭，不投放正式收费、掉落或平衡。
+
+## 实现与范围
+
+正式作者数据登记hc.item.990002、hc.item.990003及hc.item_category.rune，主源经source_priority_policy路由。第二条符文仅增数据便由同一creator、schema和GameData读到；旧1240个registry身份及非provenance字段全部相同，类别插入引起的21个证据pointer由正式生成器更新。build_entity_registry.py --check与27项生成器单元检查通过。逐项证明见本增量IDENTITY_PRESERVATION.json。
+
+现有hardcore.item.container.v2登记hc.runes v1，仅一个明确验证槽hc.runes.primary；保留原hc.socketing v1及原base。嵌入资产统一由codec枚举，拒绝跨namespace重复实例；未来namespace、未来rune实例、未知rune身份仍为整个aggregate只读，已知损坏与旧备份不得覆盖它。正式符文槽数、消费与平衡不由此验证槽决定。
+
+hc.runes.insert/remove复用原ItemTransactionPort、Journal和ordered writer。Rune请求/日志使用rune_instance_id，原gem请求/日志字段与digest值保持；quote内部共同输入视图不建立新经济权威。每次只改所属namespace；gem拆卸/重插保持rune，反向也成立。保存回执之前不发布归属，重试复用相同job或既有持久结果，满背包与错误字段/类型拒绝在writer之前。
+
+ContributionProvider从正式嵌入入口生成独立来源，来源含自身实例、宿主实例与扩展槽。词缀+原宝石+原符文同机制三来源：实际Root/Player起手、非空接受票据、一次基础释放、三个持久状态各四次原周期结算、旧随机流保持、停用只撤后续来源。组合夹具控制AI并手动推进生产时钟/pump，不冒充自然连续战斗或OS/UI输入。独立cold绑定本轮完整receipt、原生退出、source/run/invocation，核验完整wire、唯一归属、三句柄及gem/rune原操作重试；不声称恢复战斗状态、地面掉落或持久化module启用配置。
+
+## 原生失败与最小修复
+
+全部失败记录保留，最终采用入口另列于RUN_INDEX；不同源码的阶段结果不合并成最终证明。
+
+- rune_extension_red_090001_507166：旧codec不认识已登记rune namespace，1检查/1FAIL。接入后原base及socket不变。
+- rune_transaction_red_090606_763992：已登记rune实例到实际事务入口仍invalid_item_command，6检查/1FAIL；共同操作描述接入原事务后通过。
+- rune_boundary_red_091118_975288：未来嵌入rune实例被已知base损坏掩盖、gem/rune同instance_id未拒绝，12检查/2FAIL；先识别未来所有权、统一归属集合后通过。
+- rune_catalog_red_091652_539105：仅增第二条正式数据记录不能加载，1检查/1FAIL；改为读取主源注册记录后原生通过，保留默认关闭。
+- rune_unknown_identity_red_092305_739225：未知rune身份被当作可恢复的已知损坏，14检查/2FAIL；先识别未注册未来身份，再执行已知schema校验。
+- rune_source_green_092541_259918：三来源live/cold分别35/12项通过，但事务新增销毁保护检查失败，整调用FAIL。不得拿live/cold替代事务通过。
+- rune_reserved_destruction_red_093459_058564：原生记录reserved_before=true、销毁返回invalid_inventory_index、inventory_unchanged=false、writer_finished=true。原因是destroy_inventory_indices先drain后取索引；未证明资产销毁，但拒绝操作已完成另一个事务并改变背包。仅在原入口drain前检查所选稳定预留身份。GREEN新增原rune、目标装备及混合选择不变、sole writer未完成；随后实际持久提交正常。原宝石及journal回归保持。
+- rune_affix_admission_typed_red_094025_604531：父08cc二审P2原生复现。缺drop合同、重复/伪造modifier、错误实例可授予新词缀来源；缺instance_id在Provider脚本报错。27检查/13FAIL及1个生产脚本错误保留。更早rune_affix_admission_red_093929_934025还包含测试自身二次不安全解引用，原样保留，已修测试读结果保护再证伪。最小修复只在新affix来源入口调用既有GameData完整drop验证；普通无affix旧装备兼容不收紧。GREEN29项、无引擎错误，失败候选保留旧目录、装配与统计。
+
+## 真实测试账户边界
+
+rune_delivery_final_direct_094742_389594为28PASS+4FAIL，不列为最终通过。item_journal_legacy_backup_test按既有负例故意在默认owned root留下未来journal v3和损坏已知物品；紧随其后的四个v2恢复场景共用这个账户，正式startup门禁拒绝，cold拒绝失败producer。保留FAIL和原日志。
+
+rune_delivery_clean_journal_100153_687290中独立v2矩阵通过，但随后seed还共用它的账户；两个producer都正式创建“事务回退2”和“事务回退130”，磁盘索引已存在同名角色，生产建角入口拒绝，seed/cold/restart原3FAIL保留。最终单进程矩阵使用自己的新APPDATA；seed→cold→restart使用另外一个新APPDATA并维持本轮handoff。不得为合跑删除原角色、改变同名规则、放松startup门禁或清掉故障证据。
+
+## 最终采用与未完成范围
+
+最终同源码结果、实际命令、引擎指纹、原生退出、完整回执与阶段失败原件，统一固定在docs/review/framework_rune_sources_20261004。最后回归未完整结束时不得提前标PASS或发布；以下剩余原范围继续施工。
+
+四个最终分组已原生结束：clean_direct 28、journal_single 1、journal_chain 3、final_world 8，共40唯一场景、36完整框架回执1537检查PASS，全部同5b9967313469bd7f30178a76f0e72b7de01e99b58ca47052a43fecd0edaf49ee内容。113原生尝试中的16FAIL保留；两次测试账户分组错误只通过新owned隔离账户重跑，不改生产startup/同名保护。3716受测文件、27增量及源码/原生ZIP逐成员复核见本增量目录；下一固定提交以Git对账与双审计核验，不代表Task4整体闭合。
+
+Task4死亡子连锁、防自激、动态几何完整接受承诺及生成式组合尚未关闭。Task5新增功能模板、自然持续P6/R3、设备/GPU、旧故障supervisor安全复用、原v97B输入MISSING、APK和Android交付仍独立开放。真实index当前观察与历史66c505连续性FAIL/旧原件MISSING分别保留；本增量不恢复index、不改主树/第二树、不碰真实存档。

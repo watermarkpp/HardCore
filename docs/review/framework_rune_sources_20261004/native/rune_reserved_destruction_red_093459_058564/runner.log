@@ -1,0 +1,9 @@
+[FAIL] rune_transaction_test - missing_pass_marker;non_zero_exit_code_1;framework_checks_failed
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+鏁版嵁搴撹浇鍏ュ畬鎴愶細鍦板浘209 鎬墿156 Boss20 瑁呭175 鎶€鑳界瓑绾?32 鎺夎惤妲?424 浠诲姟9
+RUNE_RESERVED_DESTRUCTION={"inventory_unchanged":false,"reserved_before":true,"result":{"destroyed":0,"reason":"invalid_inventory_index","success":false},"writer_finished":true}
+FRAMEWORK_RUNE_TRANSACTION_FAIL checks=29 errors=["actual destruction cannot consume the reserved original rune or complete its pending writer", "receipt"]
+RUNNER_RESULTS_JSON=C:\Users\Administrator\.codex\worktrees\pluggable-framework-v2\HardCore\outputs\test_logs\runner_results_adhoc_20261004_093508_702_6636.json
+TEST_SUMMARY suite=adhoc passed=0 failed=1 engine_log_errors=0
+FAILED_TESTS=rune_transaction_test (missing_pass_marker;non_zero_exit_code_1;framework_checks_failed)

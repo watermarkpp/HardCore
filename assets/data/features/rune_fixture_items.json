@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "contract_id": "hc.runes.fixture.items.v1",
+  "module_id": "hc.runes.fixture",
+  "default_enabled": false,
+  "records": [
+    {
+      "itemId": 990002,
+      "name": "验证符文",
+      "kind": "rune",
+      "category": "符文",
+      "stackable": false,
+      "weight": 0,
+      "usable": false,
+      "sellable": false,
+      "fixtureOnly": true
+    },
+    {
+      "itemId": 990003,
+      "name": "验证符文乙",
+      "kind": "rune",
+      "category": "符文",
+      "stackable": false,
+      "weight": 0,
+      "usable": false,
+      "sellable": false,
+      "fixtureOnly": true
+    }
+  ]
+}

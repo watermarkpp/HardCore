@@ -7,7 +7,10 @@ const SEQUENCE_PREFIX := "hc:itemtx:"
 const MAX_SEQUENCE := 9007199254740991
 const FIELD := "item_transactions"
 const LIMIT := 64
-const ACTIONS := ["hc.socketing.insert", "hc.socketing.remove"]
+const ACTIONS := ["hc.socketing.insert", "hc.socketing.remove", "hc.runes.insert", "hc.runes.remove"]
+
+static func input_field(action: String) -> String:
+	return "rune_instance_id" if action in ["hc.runes.insert","hc.runes.remove"] else "gem_instance_id"
 
 # Legacy opaque outcomes are never retired. The separate sequenced protocol
 # retains a contiguous durable watermark: an omitted old ID remains terminal.
@@ -70,12 +73,15 @@ static func recovered(journal: Dictionary) -> Dictionary:
 
 static func _entries_valid(entries: Array, seen: Dictionary) -> Dictionary:
 	for raw: Variant in entries:
-		if not raw is Dictionary or not _keys(raw, ["operation_id", "request_digest", "action", "target_instance_id", "gem_instance_id", "rules_revision"]):
+		if not raw is Dictionary or not raw.get("action") is String:
+			return _status(false)
+		if raw.action not in ACTIONS: return _status(false, true)
+		var asset_field:=input_field(raw.action)
+		if not _keys(raw, ["operation_id", "request_digest", "action", "target_instance_id", asset_field, "rules_revision"]):
 			return _status(false)
 		for key: String in raw:
 			if not raw[key] is String: return _status(false)
-		if raw.action not in ACTIONS: return _status(false, true)
-		if not identity_valid(raw.operation_id) or not identity_valid(raw.target_instance_id) or not identity_valid(raw.gem_instance_id) \
+		if not identity_valid(raw.operation_id) or not identity_valid(raw.target_instance_id) or not identity_valid(raw[asset_field]) \
 			or not _hash(raw.request_digest) or not _hash(raw.rules_revision) or seen.has(raw.operation_id):
 			return _status(false)
 		seen[raw.operation_id] = true

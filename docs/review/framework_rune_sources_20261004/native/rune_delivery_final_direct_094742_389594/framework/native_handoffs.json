@@ -1,0 +1,223 @@
+{
+    "schema_version":  1,
+    "invocation_id":  "f1d80fa7-0717-44e2-b3f1-011b0508e7c0",
+    "source_content_sha256":  "814e81b17b698180888af55edbf271c4ecb6e2938fede117665c57d39051f942",
+    "producers":  {
+                      "feature_source_composition_test":  {
+                                                              "scene_id":  "feature_source_composition_test",
+                                                              "run_id":  "184171f1-d471-4f56-b58e-267b856b131c",
+                                                              "source_content_sha256":  "814e81b17b698180888af55edbf271c4ecb6e2938fede117665c57d39051f942",
+                                                              "process_exited":  true,
+                                                              "effective_exit_code":  0,
+                                                              "result":  "PASS",
+                                                              "receipt_sha256":  "b2ecde878754ffcc9022ddd54c91456bc8701f1554e91708d1a63e516085959a"
+                                                          },
+                      "feature_source_composition_cold_test":  {
+                                                                   "scene_id":  "feature_source_composition_cold_test",
+                                                                   "run_id":  "63482cc6-8e90-4e98-bce2-4081470d0538",
+                                                                   "source_content_sha256":  "814e81b17b698180888af55edbf271c4ecb6e2938fede117665c57d39051f942",
+                                                                   "process_exited":  true,
+                                                                   "effective_exit_code":  0,
+                                                                   "result":  "PASS",
+                                                                   "receipt_sha256":  "eb7303c9fbca66991e5d61c425a4774dd08d179ace5c8f151da2359cdfbacd34"
+                                                               },
+                      "socket_transaction_test":  {
+                                                      "scene_id":  "socket_transaction_test",
+                                                      "run_id":  "ead3b6cb-5c2e-4a65-bdec-b0072a615e7b",
+                                                      "source_content_sha256":  "814e81b17b698180888af55edbf271c4ecb6e2938fede117665c57d39051f942",
+                                                      "process_exited":  true,
+                                                      "effective_exit_code":  0,
+                                                      "result":  "PASS",
+                                                      "receipt_sha256":  "ebaf637b9a32f17fe133994acf17b89d04df67d13f39431d77f4356faef88f8a"
+                                                  },
+                      "socket_gem_identity_test":  {
+                                                       "scene_id":  "socket_gem_identity_test",
+                                                       "run_id":  "a9d25671-3701-48db-b225-c1307c4c13d5",
+                                                       "source_content_sha256":  "814e81b17b698180888af55edbf271c4ecb6e2938fede117665c57d39051f942",
+                                                       "process_exited":  true,
+                                                       "effective_exit_code":  0,
+                                                       "result":  "PASS",
+                                                       "receipt_sha256":  "1b56c2954a56ef22a070e6497371b18e92f91a3107cd49a9033e3269813a98e2"
+                                                   },
+                      "item_extension_codec_test":  {
+                                                        "scene_id":  "item_extension_codec_test",
+                                                        "run_id":  "6bcc939e-5742-4973-b782-d60a10c245ff",
+                                                        "source_content_sha256":  "814e81b17b698180888af55edbf271c4ecb6e2938fede117665c57d39051f942",
+                                                        "process_exited":  true,
+                                                        "effective_exit_code":  0,
+                                                        "result":  "PASS",
+                                                        "receipt_sha256":  "e439387e9abf400801e34673c50c353ccec926d60394cf0834cac176454e70a5"
+                                                    },
+                      "future_item_ownership_terminal_test":  {
+                                                                  "scene_id":  "future_item_ownership_terminal_test",
+                                                                  "run_id":  "6f998d21-647d-45ad-bf01-2b0565a17866",
+                                                                  "source_content_sha256":  "814e81b17b698180888af55edbf271c4ecb6e2938fede117665c57d39051f942",
+                                                                  "process_exited":  true,
+                                                                  "effective_exit_code":  0,
+                                                                  "result":  "PASS",
+                                                                  "receipt_sha256":  "f0e906e61412c6882e997d2f37ec69fd1df5948d2a5f38c9ce7827f1eaeb940a"
+                                                              },
+                      "feature_loadout_atomic_test":  {
+                                                          "scene_id":  "feature_loadout_atomic_test",
+                                                          "run_id":  "2bd4f311-4351-48bf-bdca-4f13254f2d37",
+                                                          "source_content_sha256":  "814e81b17b698180888af55edbf271c4ecb6e2938fede117665c57d39051f942",
+                                                          "process_exited":  true,
+                                                          "effective_exit_code":  0,
+                                                          "result":  "PASS",
+                                                          "receipt_sha256":  "22ae84b55fcd4008a26659f7c410a8dae97c3e5fff3301d192291b7c0abee23f"
+                                                      },
+                      "feature_production_loadout_test":  {
+                                                              "scene_id":  "feature_production_loadout_test",
+                                                              "run_id":  "0d81979d-641d-4790-b950-b17f1a48b5de",
+                                                              "source_content_sha256":  "814e81b17b698180888af55edbf271c4ecb6e2938fede117665c57d39051f942",
+                                                              "process_exited":  true,
+                                                              "effective_exit_code":  0,
+                                                              "result":  "PASS",
+                                                              "receipt_sha256":  "6547921dffdb00624bdd2a60bfa43b9a09fd8fd72083ff57000d68ac2f2dcd02"
+                                                          },
+                      "feature_compiler_test":  {
+                                                    "scene_id":  "feature_compiler_test",
+                                                    "run_id":  "c8c6faec-1270-4e2c-bc31-62673e10b0ed",
+                                                    "source_content_sha256":  "814e81b17b698180888af55edbf271c4ecb6e2938fede117665c57d39051f942",
+                                                    "process_exited":  true,
+                                                    "effective_exit_code":  0,
+                                                    "result":  "PASS",
+                                                    "receipt_sha256":  "5b115aafa2734843088b0f96d77f69054e9294c8b5ecaa34234d4080fa4f559b"
+                                                },
+                      "feature_binding_validation_test":  {
+                                                              "scene_id":  "feature_binding_validation_test",
+                                                              "run_id":  "b8146484-c520-4f81-924f-b26bc96d1867",
+                                                              "source_content_sha256":  "814e81b17b698180888af55edbf271c4ecb6e2938fede117665c57d39051f942",
+                                                              "process_exited":  true,
+                                                              "effective_exit_code":  0,
+                                                              "result":  "PASS",
+                                                              "receipt_sha256":  "011afedcb99e7866e6733ea1ecfabc3b80541738acf33ec76211c6d9dadb1dc4"
+                                                          },
+                      "feature_registry_structure_test":  {
+                                                              "scene_id":  "feature_registry_structure_test",
+                                                              "run_id":  "f571eddc-1d62-402f-9fb5-b8b9f175dcff",
+                                                              "source_content_sha256":  "814e81b17b698180888af55edbf271c4ecb6e2938fede117665c57d39051f942",
+                                                              "process_exited":  true,
+                                                              "effective_exit_code":  0,
+                                                              "result":  "PASS",
+                                                              "receipt_sha256":  "03c17f3675e9a26dd6af530217e2c874439431786b872c4bb77e843988726838"
+                                                          },
+                      "feature_registry_publication_test":  {
+                                                                "scene_id":  "feature_registry_publication_test",
+                                                                "run_id":  "0600fb2b-a71f-4f45-9cd5-d1878d62edd8",
+                                                                "source_content_sha256":  "814e81b17b698180888af55edbf271c4ecb6e2938fede117665c57d39051f942",
+                                                                "process_exited":  true,
+                                                                "effective_exit_code":  0,
+                                                                "result":  "PASS",
+                                                                "receipt_sha256":  "e07e694a0e6012c1dff8477feb5ca08fb7b73f8d0f29be2f72b6d406a8c72583"
+                                                            },
+                      "feature_lifesteal_runtime_test":  {
+                                                             "scene_id":  "feature_lifesteal_runtime_test",
+                                                             "run_id":  "0af1fe8d-bc37-4e4f-a732-07e5639f2f3f",
+                                                             "source_content_sha256":  "814e81b17b698180888af55edbf271c4ecb6e2938fede117665c57d39051f942",
+                                                             "process_exited":  true,
+                                                             "effective_exit_code":  0,
+                                                             "result":  "PASS",
+                                                             "receipt_sha256":  "cc05bd2230a9b135d0af331040dc4dc1b6365be57bcebed48a668c3678a27698"
+                                                         },
+                      "feature_lifesteal_production_test":  {
+                                                                "scene_id":  "feature_lifesteal_production_test",
+                                                                "run_id":  "35b64d18-37df-4331-837e-2c514cb6c520",
+                                                                "source_content_sha256":  "814e81b17b698180888af55edbf271c4ecb6e2938fede117665c57d39051f942",
+                                                                "process_exited":  true,
+                                                                "effective_exit_code":  0,
+                                                                "result":  "PASS",
+                                                                "receipt_sha256":  "041fb3facf92dee702158df04752daf34c7b444a708498efeb41bd4f25e94228"
+                                                            },
+                      "feature_resource_multi_reentry_test":  {
+                                                                  "scene_id":  "feature_resource_multi_reentry_test",
+                                                                  "run_id":  "d4bd3893-fc6d-4883-b14b-08c2f2851a94",
+                                                                  "source_content_sha256":  "814e81b17b698180888af55edbf271c4ecb6e2938fede117665c57d39051f942",
+                                                                  "process_exited":  true,
+                                                                  "effective_exit_code":  0,
+                                                                  "result":  "PASS",
+                                                                  "receipt_sha256":  "8d4675b2beeb846356d2af66c8a8797517798e63fd9e6141623972c449ca2caa"
+                                                              },
+                      "feature_capacity_admission_test":  {
+                                                              "scene_id":  "feature_capacity_admission_test",
+                                                              "run_id":  "c79cfbb1-8b7a-42bd-baeb-57589a92e2d5",
+                                                              "source_content_sha256":  "814e81b17b698180888af55edbf271c4ecb6e2938fede117665c57d39051f942",
+                                                              "process_exited":  true,
+                                                              "effective_exit_code":  0,
+                                                              "result":  "PASS",
+                                                              "receipt_sha256":  "020a7a8c2527167c8c8cac6b49f4d364accb703d886709f5d05adfbe02316e6a"
+                                                          },
+                      "rune_catalog_data_test":  {
+                                                     "scene_id":  "rune_catalog_data_test",
+                                                     "run_id":  "a165c5b2-43a6-4f06-b9db-858e18592047",
+                                                     "source_content_sha256":  "814e81b17b698180888af55edbf271c4ecb6e2938fede117665c57d39051f942",
+                                                     "process_exited":  true,
+                                                     "effective_exit_code":  0,
+                                                     "result":  "PASS",
+                                                     "receipt_sha256":  "51abe2219aeedd2ae269075eeb414e13e201079a9cd38d41fc99eec402814c1b"
+                                                 },
+                      "rune_extension_codec_test":  {
+                                                        "scene_id":  "rune_extension_codec_test",
+                                                        "run_id":  "b1a36d18-25f4-42ff-be02-b9dca17b1519",
+                                                        "source_content_sha256":  "814e81b17b698180888af55edbf271c4ecb6e2938fede117665c57d39051f942",
+                                                        "process_exited":  true,
+                                                        "effective_exit_code":  0,
+                                                        "result":  "PASS",
+                                                        "receipt_sha256":  "fe4efffb0617148e080cd55c8beed677ba51743b71a1ca02fe0c2a84574ed493"
+                                                    },
+                      "rune_transaction_test":  {
+                                                    "scene_id":  "rune_transaction_test",
+                                                    "run_id":  "29cb7a6d-97ad-486c-baf6-6449dd00c14a",
+                                                    "source_content_sha256":  "814e81b17b698180888af55edbf271c4ecb6e2938fede117665c57d39051f942",
+                                                    "process_exited":  true,
+                                                    "effective_exit_code":  0,
+                                                    "result":  "PASS",
+                                                    "receipt_sha256":  "626f50f308690587812df586c73cf7713b94fdcce2fc792cdb11f3180708f024"
+                                                },
+                      "feature_affix_admission_test":  {
+                                                           "scene_id":  "feature_affix_admission_test",
+                                                           "run_id":  "dbb1a39a-622e-4a7e-8a8d-0e36afcff469",
+                                                           "source_content_sha256":  "814e81b17b698180888af55edbf271c4ecb6e2938fede117665c57d39051f942",
+                                                           "process_exited":  true,
+                                                           "effective_exit_code":  0,
+                                                           "result":  "PASS",
+                                                           "receipt_sha256":  "d8eef55a6b45950ab787633c54622767d58ba46873b74fe93812eb0d8a8cb08e"
+                                                       },
+                      "rune_source_composition_test":  {
+                                                           "scene_id":  "rune_source_composition_test",
+                                                           "run_id":  "10239c65-5367-4c86-8503-074d49befb5d",
+                                                           "source_content_sha256":  "814e81b17b698180888af55edbf271c4ecb6e2938fede117665c57d39051f942",
+                                                           "process_exited":  true,
+                                                           "effective_exit_code":  0,
+                                                           "result":  "PASS",
+                                                           "receipt_sha256":  "07c6c9ac79634b08883719100e8a3b569b5e578d20490b1ef01871684a3ba3fa"
+                                                       },
+                      "rune_source_composition_cold_test":  {
+                                                                "scene_id":  "rune_source_composition_cold_test",
+                                                                "run_id":  "359387e8-d54c-4069-8104-c7763966797e",
+                                                                "source_content_sha256":  "814e81b17b698180888af55edbf271c4ecb6e2938fede117665c57d39051f942",
+                                                                "process_exited":  true,
+                                                                "effective_exit_code":  0,
+                                                                "result":  "PASS",
+                                                                "receipt_sha256":  "278cf6403afd9eb9095d769da674a3b49c3a099c38fd3a6970c73c1c66ebdab7"
+                                                            },
+                      "item_journal_sequence_test":  {
+                                                         "scene_id":  "item_journal_sequence_test",
+                                                         "run_id":  "38b42eeb-627c-4300-8c99-c83af9ebed2b",
+                                                         "source_content_sha256":  "814e81b17b698180888af55edbf271c4ecb6e2938fede117665c57d39051f942",
+                                                         "process_exited":  true,
+                                                         "effective_exit_code":  0,
+                                                         "result":  "PASS",
+                                                         "receipt_sha256":  "8927fec64b8af757d53cbefef088eb62347e68fdfe4675fe9cb4f7418f748917"
+                                                     },
+                      "item_journal_legacy_backup_test":  {
+                                                              "scene_id":  "item_journal_legacy_backup_test",
+                                                              "run_id":  "90c53b42-88e1-4b1a-96a1-697cddac85f2",
+                                                              "source_content_sha256":  "814e81b17b698180888af55edbf271c4ecb6e2938fede117665c57d39051f942",
+                                                              "process_exited":  true,
+                                                              "effective_exit_code":  0,
+                                                              "result":  "PASS",
+                                                              "receipt_sha256":  "623bdf9c4e1187fe387a09692da1ed37d84eb4611be26843513a166360d08853"
+                                                          }
+                  }
+}

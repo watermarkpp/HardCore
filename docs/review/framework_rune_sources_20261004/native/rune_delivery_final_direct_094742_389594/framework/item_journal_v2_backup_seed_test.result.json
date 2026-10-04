@@ -1,0 +1,31 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "owned isolated account and production persistence only",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "real startup migration gate",
+      "passed": false
+    },
+    {
+      "id": 3,
+      "label": "explicit default-off module activation",
+      "passed": true
+    }
+  ],
+  "count": 3,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "f1d80fa7-0717-44e2-b3f1-011b0508e7c0",
+  "passed": 2,
+  "reported_checks": 3,
+  "reported_failures": 1,
+  "run_id": "fc230de4-1f23-41ee-b44f-4fd2985ee071",
+  "scene_id": "item_journal_v2_backup_seed_test",
+  "schema_version": 1,
+  "source_content_sha256": "814e81b17b698180888af55edbf271c4ecb6e2938fede117665c57d39051f942",
+  "status": "FAIL"
+}

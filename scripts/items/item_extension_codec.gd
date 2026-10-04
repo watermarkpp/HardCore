@@ -4,6 +4,8 @@ const DropRules := preload("res://scripts/item_drop_instance_rules.gd")
 const RelicRules := preload("res://scripts/layers/rules/relic_synthesis_rules.gd")
 const PlainGraph := preload("res://scripts/features/contracts/plain_graph.gd")
 const GemRules := preload("res://scripts/items/socket_gem_rules.gd")
+const RuneRules := preload("res://scripts/items/rune_item_rules.gd")
+const Registry := preload("res://scripts/identity/entity_registry.gd")
 const Identity := preload("res://scripts/identity/item_identity_codec.gd")
 const EquipmentIdentity := preload("res://scripts/identity/equipment_identity_codec.gd")
 const CONTRACT := "hardcore.item.container.v2"
@@ -15,6 +17,8 @@ const OPAQUE_UNSUPPORTED := "OPAQUE_UNSUPPORTED"
 const ARRAY_FIELDS := ["inventory", "warehouse_inventory", "forge_tray", "synthesis_tray"]
 const SOCKET_NAMESPACE := "hc.socketing"
 const SOCKET_ID := "hc.socketing.primary"
+const RUNE_NAMESPACE := "hc.runes"
+const RUNE_ID := "hc.runes.primary"
 
 # Wire containers have one base. Runtime keeps that same base as the existing
 # flat item record; this private field owns extensions only, never attributes.
@@ -36,6 +40,14 @@ static func decode_wire(record: Dictionary) -> Dictionary:
 	if record.has(RUNTIME_EXTENSION):
 		return _failure(INVALID, "private_runtime_item_field_on_wire")
 	if not is_container:
+		if record.has("rune_instance_contract_id"):
+			if not record.rune_instance_contract_id is String: return _failure(INVALID,"invalid_rune_instance_contract")
+			if record.rune_instance_contract_id!=RuneRules.INSTANCE_CONTRACT: return _failure(OPAQUE_UNSUPPORTED,"unsupported_rune_instance_contract")
+			if _integer(record.get("item_id")) and Registry.from_legacy("item",int(record.item_id)).is_empty():
+				return _failure(OPAQUE_UNSUPPORTED,"unknown_rune_item_identity")
+			return _success(record) if RuneRules.valid_instance(record) else _failure(INVALID,"invalid_rune_instance")
+		if _integer(record.get("item_id")) and not RuneRules.record_for_id(int(record.item_id)).is_empty():
+			return _failure(INVALID,"missing_rune_instance_contract")
 		if record.has("gem_instance_contract_id"):
 			if not record.gem_instance_contract_id is String:
 				return _failure(INVALID, "invalid_gem_instance_contract")
@@ -201,13 +213,22 @@ static func document_items(document: Dictionary) -> Array[Dictionary]:
 	return records
 
 static func has_extensions(record: Dictionary) -> bool:
-	return record.has(RUNTIME_EXTENSION) or _is_wire_container(record) or record.has("gem_instance_contract_id")
+	return record.has(RUNTIME_EXTENSION) or _is_wire_container(record) or record.has("gem_instance_contract_id") or record.has("rune_instance_contract_id")
 
 static func can_release_ownership(record: Dictionary) -> bool:
 	# Selling, destruction and material consumption cannot silently destroy an
 	# independently owned embedded item. Remove it through the common port first.
 	var normalized := normalize_runtime(record)
-	return normalized.status == KNOWN_VALID and extensions(normalized.item).get(SOCKET_NAMESPACE, {}).get("sockets", []).is_empty()
+	return normalized.status == KNOWN_VALID and embedded_records(normalized.item).is_empty()
+
+static func embedded_records(record: Dictionary) -> Array[Dictionary]:
+	var result: Array[Dictionary]=[]
+	var owned:=extensions(record)
+	for socket: Dictionary in owned.get(SOCKET_NAMESPACE,{}).get("sockets",[]):
+		result.append({"slot_id":socket.socket_id,"namespace_id":SOCKET_NAMESPACE,"item":socket.item})
+	for rune: Dictionary in owned.get(RUNE_NAMESPACE,{}).get("runes",[]):
+		result.append({"slot_id":rune.rune_slot_id,"namespace_id":RUNE_NAMESPACE,"item":rune.item})
+	return result
 
 static func ownership_ids(record: Dictionary) -> Array[String]:
 	var base := base_record(record)
@@ -217,7 +238,7 @@ static func ownership_ids(record: Dictionary) -> Array[String]:
 	var instance: Variant = base.get("instance_id")
 	if instance is String and not instance.is_empty():
 		result.append(instance)
-	for socket: Dictionary in extensions(record).get(SOCKET_NAMESPACE, {}).get("sockets", []):
+	for socket: Dictionary in embedded_records(record):
 		var gem := decode_wire(socket.item)
 		if gem.status == KNOWN_VALID:
 			result.append(str(gem.item.instance_id))
@@ -241,9 +262,17 @@ static func _valid_extended_base(base: Dictionary, entity_id: String) -> bool:
 	return _integer(base.get("item_id")) and int(base.item_id) == numeric_id
 
 static func _validate_extensions(base: Dictionary, value: Dictionary) -> Dictionary:
-	if value.size() > 1:
+	if value.size() > 2:
 		return _failure(INVALID, "item_extension_namespace_capacity")
+	var seen: Dictionary={}; seen[base.instance_id]=true
 	for namespace_id: Variant in value:
+		if namespace_id==RUNE_NAMESPACE:
+			var rune_status:=_validate_rune_extension(base,value[namespace_id])
+			if rune_status.status!=KNOWN_VALID: return rune_status
+			for rune: Dictionary in value[namespace_id].runes:
+				if seen.has(rune.item.instance_id): return _failure(INVALID,"duplicate_embedded_instance_identity")
+				seen[rune.item.instance_id]=true
+			continue
 		if namespace_id != SOCKET_NAMESPACE:
 			return _failure(OPAQUE_UNSUPPORTED, "unsupported_item_extension_namespace")
 		var extension: Variant = value[namespace_id]
@@ -266,18 +295,47 @@ static func _validate_extensions(base: Dictionary, value: Dictionary) -> Diction
 				or not _integer(gem.item.get("count")) or gem.item.count != 1 \
 				or not GemRules.valid_instance(gem.item):
 				return _failure(INVALID, "invalid_socket_gem")
+			if seen.has(gem.item.instance_id): return _failure(INVALID,"duplicate_embedded_instance_identity")
+			seen[gem.item.instance_id]=true
 	return {"status": KNOWN_VALID, "reason": ""}
 
 static func _extension_support_status(value: Dictionary) -> Dictionary:
 	# Recognize unsupported ownership before judging a known base/capacity. A
 	# corrupted sibling must never authorize recovery over a future extension.
 	for namespace_id: Variant in value:
-		if namespace_id != SOCKET_NAMESPACE:
+		if namespace_id not in [SOCKET_NAMESPACE,RUNE_NAMESPACE]:
 			return _failure(OPAQUE_UNSUPPORTED, "unsupported_item_extension_namespace")
 		var extension: Variant = value[namespace_id]
 		if extension is Dictionary and _integer(extension.get("schema_version")) and extension.schema_version > 1:
-			return _failure(OPAQUE_UNSUPPORTED, "unsupported_socket_extension_version")
+			return _failure(OPAQUE_UNSUPPORTED, "unsupported_rune_extension_version" if namespace_id==RUNE_NAMESPACE else "unsupported_socket_extension_version")
+		if extension is Dictionary:
+			var entries: Variant=extension.get("runes" if namespace_id==RUNE_NAMESPACE else "sockets")
+			if entries is Array:
+				for entry: Variant in entries:
+					if not entry is Dictionary or not entry.get("item") is Dictionary: continue
+					var item: Dictionary=entry.item
+					if item.get("rune_instance_contract_id") is String and item.rune_instance_contract_id!=RuneRules.INSTANCE_CONTRACT:
+						return _failure(OPAQUE_UNSUPPORTED,"unsupported_rune_instance_contract")
+					if item.get("rune_instance_contract_id") is String and _integer(item.get("item_id")) \
+						and Registry.from_legacy("item",int(item.item_id)).is_empty():
+						return _failure(OPAQUE_UNSUPPORTED,"unknown_rune_item_identity")
+					if item.get("gem_instance_contract_id") is String and item.gem_instance_contract_id!=GemRules.INSTANCE_CONTRACT:
+						return _failure(OPAQUE_UNSUPPORTED,"unsupported_gem_instance_contract")
+					if _is_wire_container(item) and ((_integer(item.get("format_version")) and item.format_version>VERSION) \
+						or (item.get("contract_id") is String and item.contract_id!=CONTRACT)):
+						return _failure(OPAQUE_UNSUPPORTED,"unsupported_embedded_item_container")
 	return {"status": KNOWN_VALID, "reason": ""}
+
+static func _validate_rune_extension(base: Dictionary,value: Variant) -> Dictionary:
+	if not value is Dictionary or not _keys(value,["schema_version","runes"]) or not _integer(value.schema_version) \
+		or value.schema_version!=1 or not value.runes is Array or value.runes.size()>1: return _failure(INVALID,"invalid_rune_extension")
+	for rune: Variant in value.runes:
+		if not rune is Dictionary or not _keys(rune,["rune_slot_id","item"]) or rune.rune_slot_id!=RUNE_ID or not rune.item is Dictionary:
+			return _failure(INVALID,"invalid_rune_slot")
+		var item:=decode_wire(rune.item)
+		if item.status!=KNOWN_VALID: return item
+		if not RuneRules.valid_instance(item.item) or item.item.instance_id==base.instance_id: return _failure(INVALID,"invalid_embedded_rune")
+	return {"status":KNOWN_VALID,"reason":""}
 
 static func _is_wire_container(record: Dictionary) -> bool:
 	return record.has("format_version") or record.has("base") or record.has("extensions") \

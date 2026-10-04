@@ -24,6 +24,10 @@ static func collect(bindings: Array, enabled: Array, equipment: Dictionary, prof
 					var instance: Variant=equipment[slot]
 					if not instance is Dictionary or not bool(item_eligible.call(instance)): continue
 					var base:=Items.base_record(instance)
+					# Legacy gear compatibility does not authorize new affix provenance.
+					# A claimed affix must retain its complete immutable drop contract.
+					if base.has("drop_affix") and not GameData.validate_item_drop_instance(base):
+						errors.append("invalid_feature_affix_source:"+slot); continue
 					var slot_id:=str(Ids.resolve(slot,"slot").get("id",""))
 					if slot_id.is_empty(): errors.append("unregistered_feature_slot:"+slot); continue
 					for ordinal: int in SourceRules.matching_affix_indices(base,definition):
@@ -39,12 +43,12 @@ static func collect(bindings: Array, enabled: Array, equipment: Dictionary, prof
 					if slot_id.is_empty():
 						errors.append("unregistered_feature_slot:" + slot)
 						continue
-					for socket: Dictionary in Items.extensions(instance).get(Items.SOCKET_NAMESPACE, {}).get("sockets", []):
+					for socket: Dictionary in Items.embedded_records(instance):
 						var gem: Dictionary = socket.item
 						var record: Dictionary = item_record.call(gem)
 						if Ids.from_legacy("item", record.get("itemId", -1)) != binding.item_id: continue
 						var source := {"slot": slot_id, "instance_id": gem.instance_id, "mechanic_id": binding.mechanic_id,
-							"extension_id": JSON.stringify([instance.instance_id, socket.socket_id])}
+							"extension_id": JSON.stringify([instance.instance_id, socket.slot_id])}
 						sources.append({"source": source, "mechanic_id": binding.mechanic_id})
 			"item":
 				for slot: String in equipment:
