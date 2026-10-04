@@ -1,0 +1,9 @@
+ assets/data/features/child_actions_v1.json       |  16 +++
+ scripts/enemy.gd                                 |   3 +
+ scripts/features/contracts/child_action_lease.gd | 148 +++++++++++++++++++++++
+ scripts/skills/skill_execution_plan_contract.gd  |  14 ++-
+ scripts/skills/skill_runtime_router.gd           |  32 ++++-
+ tests/framework/feature_chain_commit_test.gd     |  30 +++++
+ tests/framework/feature_child_planner_test.gd    | 138 +++++++++++++++++++++
+ tests/framework/feature_child_planner_test.tscn  |   4 +
+ 8 files changed, 378 insertions(+), 7 deletions(-)

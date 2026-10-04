@@ -1,0 +1,1328 @@
+{
+  "recorded_at_utc": "2026-10-04T04:56:48.130015+00:00",
+  "parent": "5b8288f773d0659b2d1e45538f93fc9a2556dfba",
+  "runs": [
+    {
+      "name": "child_planner_class_green_124430_371106",
+      "status": "PASS",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_chain_commit_test.tscn','tests/framework/feature_child_planner_test.tscn','tests/canonical_snapshot_identity_production_test.tscn','tests/framework/periodic_effect_boundaries_test.tscn','tests/framework/periodic_effect_runtime_test.tscn','tests/framework/periodic_effect_death_production_test.tscn' -TimeoutSeconds 30"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "child_planner_class_green_124430_371106",
+          "test_path": "tests/framework/feature_chain_commit_test.tscn",
+          "run_id": "14d6f6d8-86cd-4a69-bdf4-fa36f8d70122",
+          "invocation_id": "f72a436b-0b6f-4009-b81a-df0adce6e40c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 68
+        },
+        {
+          "invocation": "child_planner_class_green_124430_371106",
+          "test_path": "tests/framework/feature_child_planner_test.tscn",
+          "run_id": "06cbf6de-e4e9-4532-afaf-b79c227a9c81",
+          "invocation_id": "f72a436b-0b6f-4009-b81a-df0adce6e40c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 44
+        },
+        {
+          "invocation": "child_planner_class_green_124430_371106",
+          "test_path": "tests/canonical_snapshot_identity_production_test.tscn",
+          "run_id": "",
+          "invocation_id": "f72a436b-0b6f-4009-b81a-df0adce6e40c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": null
+        },
+        {
+          "invocation": "child_planner_class_green_124430_371106",
+          "test_path": "tests/framework/periodic_effect_boundaries_test.tscn",
+          "run_id": "d64f559d-e62e-47e3-891e-39c9d9be5dd6",
+          "invocation_id": "f72a436b-0b6f-4009-b81a-df0adce6e40c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 22
+        },
+        {
+          "invocation": "child_planner_class_green_124430_371106",
+          "test_path": "tests/framework/periodic_effect_runtime_test.tscn",
+          "run_id": "e34e9e39-04b2-4ff0-8029-bb3d937b112c",
+          "invocation_id": "f72a436b-0b6f-4009-b81a-df0adce6e40c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 13
+        },
+        {
+          "invocation": "child_planner_class_green_124430_371106",
+          "test_path": "tests/framework/periodic_effect_death_production_test.tscn",
+          "run_id": "34eee231-3a55-465c-8e4e-f4d1b57cac84",
+          "invocation_id": "f72a436b-0b6f-4009-b81a-df0adce6e40c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 16
+        }
+      ]
+    },
+    {
+      "name": "child_planner_diagnostic_123342_686363",
+      "status": "FAIL",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_child_planner_test.tscn' -TimeoutSeconds 30"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "child_planner_diagnostic_123342_686363",
+          "test_path": "tests/framework/feature_child_planner_test.tscn",
+          "run_id": "549c8ded-41eb-4524-9c37-ac27fba7eefd",
+          "invocation_id": "ae35c955-afab-4e2d-ad57-f94ce2461509",
+          "result": "FAIL",
+          "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+          "source_content_sha256": "bf706ffa0ba87704c13d5e804c9e275ef68da045f3aa9a79b4c726e50afeff2d",
+          "native_exit": 1,
+          "timeout": false,
+          "receipt_count": 5
+        }
+      ]
+    },
+    {
+      "name": "child_planner_entry_class_red_124108_522428",
+      "status": "FAIL",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_chain_commit_test.tscn' -TimeoutSeconds 30"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "child_planner_entry_class_red_124108_522428",
+          "test_path": "tests/framework/feature_chain_commit_test.tscn",
+          "run_id": "40c70c76-78ff-462a-b421-28f4cb8d439d",
+          "invocation_id": "cca02dc6-1fb6-4e78-8e99-ab44ed8f228e",
+          "result": "FAIL",
+          "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+          "source_content_sha256": "bd3dc8e2aae9ced6669138b93a9a0db362f9e2c530e45590e12b6593a6a13438",
+          "native_exit": 1,
+          "timeout": false,
+          "receipt_count": 68
+        }
+      ]
+    },
+    {
+      "name": "child_planner_entry_red_122915_169984",
+      "status": "FAIL",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_child_planner_test.tscn' -TimeoutSeconds 30"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "child_planner_entry_red_122915_169984",
+          "test_path": "tests/framework/feature_child_planner_test.tscn",
+          "run_id": "c4251c31-d717-4d39-b3b3-853cac8d14c7",
+          "invocation_id": "dde9ac1d-641a-4be3-b81c-d72f70779a6b",
+          "result": "FAIL",
+          "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+          "source_content_sha256": "212b1232eb28d9a1b97c2fae2cb3ee0aa4b9ae810ec9e6616fac5341c884d895",
+          "native_exit": 1,
+          "timeout": false,
+          "receipt_count": 1
+        }
+      ]
+    },
+    {
+      "name": "child_planner_final_direct_124839_685091",
+      "status": "PASS",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_chain_commit_test.tscn','tests/framework/damage_commit_fact_test.tscn','tests/framework/feature_death_child_command_test.tscn','tests/framework/feature_child_capacity_test.tscn','tests/framework/feature_binding_validation_test.tscn','tests/framework/feature_compiler_test.tscn','tests/framework/feature_capacity_admission_test.tscn','tests/framework/feature_world_capacity_bound_test.tscn','tests/framework/feature_receipt_retirement_test.tscn','tests/framework/feature_fire_effect_production_test.tscn','tests/framework/feature_lifesteal_production_test.tscn','tests/framework/periodic_effect_runtime_test.tscn','tests/framework/periodic_effect_boundaries_test.tscn','tests/framework/periodic_effect_death_production_test.tscn','tests/framework/periodic_delivery_lateness_test.tscn','tests/framework/feature_queue_retention_test.tscn','tests/framework/feature_source_composition_test.tscn','tests/framework/feature_source_composition_cold_test.tscn','tests/framework/rune_source_composition_test.tscn','tests/framework/rune_source_composition_cold_test.tscn','tests/framework/feature_child_planner_test.tscn','tests/mapped_skill_plan_missing_projection_rejected_test.tscn','tests/canonical_snapshot_identity_production_test.tscn','tests/canonical_snapshot_propagation_test.tscn','tests/fire_wall_cap_policy_canonical_plan_test.tscn','tests/caster_runtime_canonical_plan_adapter_test.tscn' -TimeoutSeconds 30"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "child_planner_final_direct_124839_685091",
+          "test_path": "tests/framework/feature_chain_commit_test.tscn",
+          "run_id": "22471f4a-e800-4f23-8dbe-bfb48e5a9bbf",
+          "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 68
+        },
+        {
+          "invocation": "child_planner_final_direct_124839_685091",
+          "test_path": "tests/framework/damage_commit_fact_test.tscn",
+          "run_id": "34886e60-5848-4b7b-96a9-8f7e0fecc7ad",
+          "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 13
+        },
+        {
+          "invocation": "child_planner_final_direct_124839_685091",
+          "test_path": "tests/framework/feature_death_child_command_test.tscn",
+          "run_id": "5a144882-fc70-4a7a-8111-32a0482a94e8",
+          "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 31
+        },
+        {
+          "invocation": "child_planner_final_direct_124839_685091",
+          "test_path": "tests/framework/feature_child_capacity_test.tscn",
+          "run_id": "e853ea97-f0c2-4261-8100-5a1b22ea8fdf",
+          "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 29
+        },
+        {
+          "invocation": "child_planner_final_direct_124839_685091",
+          "test_path": "tests/framework/feature_binding_validation_test.tscn",
+          "run_id": "b0b4d88e-bacd-432d-94f3-c402cb5c559d",
+          "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 41
+        },
+        {
+          "invocation": "child_planner_final_direct_124839_685091",
+          "test_path": "tests/framework/feature_compiler_test.tscn",
+          "run_id": "91e22d3a-ea25-4441-8634-c90783287adc",
+          "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 36
+        },
+        {
+          "invocation": "child_planner_final_direct_124839_685091",
+          "test_path": "tests/framework/feature_capacity_admission_test.tscn",
+          "run_id": "50b010e8-0fc9-477d-b91a-abffb4afeac9",
+          "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 15
+        },
+        {
+          "invocation": "child_planner_final_direct_124839_685091",
+          "test_path": "tests/framework/feature_world_capacity_bound_test.tscn",
+          "run_id": "fe11dd9d-fc98-4000-ae99-67213fbdb9e5",
+          "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 13
+        },
+        {
+          "invocation": "child_planner_final_direct_124839_685091",
+          "test_path": "tests/framework/feature_receipt_retirement_test.tscn",
+          "run_id": "be8ce37f-d688-41b7-911e-4340debbf1c7",
+          "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 11
+        },
+        {
+          "invocation": "child_planner_final_direct_124839_685091",
+          "test_path": "tests/framework/feature_fire_effect_production_test.tscn",
+          "run_id": "78142bd8-2584-4039-af14-929a101cb230",
+          "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 20
+        },
+        {
+          "invocation": "child_planner_final_direct_124839_685091",
+          "test_path": "tests/framework/feature_lifesteal_production_test.tscn",
+          "run_id": "500e52fb-d6d7-47a4-973a-ab2678c732b0",
+          "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 26
+        },
+        {
+          "invocation": "child_planner_final_direct_124839_685091",
+          "test_path": "tests/framework/periodic_effect_runtime_test.tscn",
+          "run_id": "1091e3b5-5ff5-4109-96ee-f0f71568e2e8",
+          "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 13
+        },
+        {
+          "invocation": "child_planner_final_direct_124839_685091",
+          "test_path": "tests/framework/periodic_effect_boundaries_test.tscn",
+          "run_id": "3b57f0a4-c180-4193-ac21-5ba584bd7228",
+          "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 22
+        },
+        {
+          "invocation": "child_planner_final_direct_124839_685091",
+          "test_path": "tests/framework/periodic_effect_death_production_test.tscn",
+          "run_id": "f7bf9682-ae96-4d08-9f25-d68d3e463363",
+          "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 16
+        },
+        {
+          "invocation": "child_planner_final_direct_124839_685091",
+          "test_path": "tests/framework/periodic_delivery_lateness_test.tscn",
+          "run_id": "9339396c-a314-4846-a11b-7cc93b904dac",
+          "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 36
+        },
+        {
+          "invocation": "child_planner_final_direct_124839_685091",
+          "test_path": "tests/framework/feature_queue_retention_test.tscn",
+          "run_id": "8ffa26d3-fd90-4116-902d-eed9f79bd5ab",
+          "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 18
+        },
+        {
+          "invocation": "child_planner_final_direct_124839_685091",
+          "test_path": "tests/framework/feature_source_composition_test.tscn",
+          "run_id": "f532ec16-8e43-4186-b854-e3792128d5e5",
+          "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 34
+        },
+        {
+          "invocation": "child_planner_final_direct_124839_685091",
+          "test_path": "tests/framework/feature_source_composition_cold_test.tscn",
+          "run_id": "35aa485c-60e1-4875-9180-d4d9049da965",
+          "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 12
+        },
+        {
+          "invocation": "child_planner_final_direct_124839_685091",
+          "test_path": "tests/framework/rune_source_composition_test.tscn",
+          "run_id": "2d5378be-84c0-45b0-b00c-9384853c285a",
+          "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 35
+        },
+        {
+          "invocation": "child_planner_final_direct_124839_685091",
+          "test_path": "tests/framework/rune_source_composition_cold_test.tscn",
+          "run_id": "492376aa-c000-486c-bd7f-12fee900199d",
+          "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 14
+        },
+        {
+          "invocation": "child_planner_final_direct_124839_685091",
+          "test_path": "tests/framework/feature_child_planner_test.tscn",
+          "run_id": "dd24bc0e-7d0d-481e-88e8-0ae9913da383",
+          "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 44
+        },
+        {
+          "invocation": "child_planner_final_direct_124839_685091",
+          "test_path": "tests/mapped_skill_plan_missing_projection_rejected_test.tscn",
+          "run_id": "",
+          "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": null
+        },
+        {
+          "invocation": "child_planner_final_direct_124839_685091",
+          "test_path": "tests/canonical_snapshot_identity_production_test.tscn",
+          "run_id": "",
+          "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": null
+        },
+        {
+          "invocation": "child_planner_final_direct_124839_685091",
+          "test_path": "tests/canonical_snapshot_propagation_test.tscn",
+          "run_id": "",
+          "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": null
+        },
+        {
+          "invocation": "child_planner_final_direct_124839_685091",
+          "test_path": "tests/fire_wall_cap_policy_canonical_plan_test.tscn",
+          "run_id": "",
+          "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": null
+        },
+        {
+          "invocation": "child_planner_final_direct_124839_685091",
+          "test_path": "tests/caster_runtime_canonical_plan_adapter_test.tscn",
+          "run_id": "",
+          "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": null
+        }
+      ]
+    },
+    {
+      "name": "child_planner_final_world_125334_816129",
+      "status": "PASS",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/combined_effect_lifecycle_test.tscn','tests/framework/combined_effect_lifecycle_cold_test.tscn','tests/framework/periodic_credit_safe_logout_test.tscn','tests/framework/periodic_credit_safe_logout_cold_test.tscn','tests/framework/natural_effect_lifecycle_test.tscn','tests/framework/natural_effect_lifecycle_cold_test.tscn','tests/framework/feature_resource_natural_test.tscn','tests/framework/feature_resource_natural_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "child_planner_final_world_125334_816129",
+          "test_path": "tests/framework/combined_effect_lifecycle_test.tscn",
+          "run_id": "b6f10641-4897-4093-9922-0f0d227b58a7",
+          "invocation_id": "8c21e6f7-2470-4c0f-9fa3-5a7ef0eb6702",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 38
+        },
+        {
+          "invocation": "child_planner_final_world_125334_816129",
+          "test_path": "tests/framework/combined_effect_lifecycle_cold_test.tscn",
+          "run_id": "2c16789a-0263-4fcf-97e3-4089c610c99b",
+          "invocation_id": "8c21e6f7-2470-4c0f-9fa3-5a7ef0eb6702",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 10
+        },
+        {
+          "invocation": "child_planner_final_world_125334_816129",
+          "test_path": "tests/framework/periodic_credit_safe_logout_test.tscn",
+          "run_id": "1095cca4-5f7a-4936-8824-f90be1aa2647",
+          "invocation_id": "8c21e6f7-2470-4c0f-9fa3-5a7ef0eb6702",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 37
+        },
+        {
+          "invocation": "child_planner_final_world_125334_816129",
+          "test_path": "tests/framework/periodic_credit_safe_logout_cold_test.tscn",
+          "run_id": "8b3f5ac6-6fca-4a2a-822a-553e8da3bf6c",
+          "invocation_id": "8c21e6f7-2470-4c0f-9fa3-5a7ef0eb6702",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 13
+        },
+        {
+          "invocation": "child_planner_final_world_125334_816129",
+          "test_path": "tests/framework/natural_effect_lifecycle_test.tscn",
+          "run_id": "4f397b73-8f82-4048-b370-bcba194c302c",
+          "invocation_id": "8c21e6f7-2470-4c0f-9fa3-5a7ef0eb6702",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 131
+        },
+        {
+          "invocation": "child_planner_final_world_125334_816129",
+          "test_path": "tests/framework/natural_effect_lifecycle_cold_test.tscn",
+          "run_id": "b59821b9-88a0-4b47-b43e-b084b59c4561",
+          "invocation_id": "8c21e6f7-2470-4c0f-9fa3-5a7ef0eb6702",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 10
+        },
+        {
+          "invocation": "child_planner_final_world_125334_816129",
+          "test_path": "tests/framework/feature_resource_natural_test.tscn",
+          "run_id": "7a006339-b3b7-4b0d-a646-07a74fe567db",
+          "invocation_id": "8c21e6f7-2470-4c0f-9fa3-5a7ef0eb6702",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 141
+        },
+        {
+          "invocation": "child_planner_final_world_125334_816129",
+          "test_path": "tests/framework/feature_resource_natural_cold_test.tscn",
+          "run_id": "0afdd8ba-31a8-49bd-b81e-720f8f20f60d",
+          "invocation_id": "8c21e6f7-2470-4c0f-9fa3-5a7ef0eb6702",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 10
+        }
+      ]
+    },
+    {
+      "name": "child_planner_green_123208_702616",
+      "status": "FAIL",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_child_planner_test.tscn' -TimeoutSeconds 30"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "child_planner_green_123208_702616",
+          "test_path": "tests/framework/feature_child_planner_test.tscn",
+          "run_id": "da2bb9df-272c-49c1-aff3-e317991d583a",
+          "invocation_id": "c756d3a1-0130-411f-a540-f36214259de2",
+          "result": "FAIL",
+          "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+          "source_content_sha256": "467fb26a4a015e6bad6c593d343403c809f5ba755ad98ac7c3c760d91c7f4599",
+          "native_exit": 1,
+          "timeout": false,
+          "receipt_count": 5
+        }
+      ]
+    },
+    {
+      "name": "child_planner_projection_green_123428_208753",
+      "status": "PASS",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_child_planner_test.tscn' -TimeoutSeconds 30"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "child_planner_projection_green_123428_208753",
+          "test_path": "tests/framework/feature_child_planner_test.tscn",
+          "run_id": "5e1a598f-b70d-49e4-a526-7509f248f867",
+          "invocation_id": "c8ec0c29-d099-43d5-b44a-dd38f99e6d27",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "d001d27d0df1cfeaa04b9e348cb28873de6234994b3407b1507103b74a07793e",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 37
+        }
+      ]
+    },
+    {
+      "name": "child_planner_red_122807_529063",
+      "status": "FAIL",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_child_planner_test.tscn' -TimeoutSeconds 30"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "child_planner_red_122807_529063",
+          "test_path": "tests/framework/feature_child_planner_test.tscn",
+          "run_id": "6703a11c-ecc9-401b-8f0d-a6ca7017852d",
+          "invocation_id": "70692d3e-aab6-45d4-9678-609ae9d8ef29",
+          "result": "FAIL",
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2;framework_receipt_missing",
+          "source_content_sha256": "9d8d4237c77be08d48801cfe8406491a3fc48f34bdc221a4f3e3bb016b99d532",
+          "native_exit": -1,
+          "timeout": false,
+          "receipt_count": null
+        }
+      ]
+    },
+    {
+      "name": "child_planner_related_123641_364370",
+      "status": "FAIL",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_child_planner_test.tscn','tests/framework/feature_chain_commit_test.tscn','tests/framework/feature_death_child_command_test.tscn','tests/mapped_skill_plan_missing_projection_rejected_test.tscn','tests/canonical_snapshot_identity_production_test.tscn','tests/canonical_snapshot_propagation_test.tscn','tests/fire_wall_cap_policy_canonical_plan_test.tscn','tests/caster_runtime_canonical_plan_adapter_test.tscn','tests/framework/feature_fire_effect_production_test.tscn' -TimeoutSeconds 30"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "child_planner_related_123641_364370",
+          "test_path": "tests/framework/feature_child_planner_test.tscn",
+          "run_id": "2e6596e3-b0ea-453b-9497-21c9c3dd1639",
+          "invocation_id": "62234dc1-2533-4cbd-afb6-753c0707988b",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "a9fba6cab9829482b3caad5aa131d4cedf7d806181b50a89960ca20db28bb688",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 44
+        },
+        {
+          "invocation": "child_planner_related_123641_364370",
+          "test_path": "tests/framework/feature_chain_commit_test.tscn",
+          "run_id": "e99cc701-4dc2-4e3c-bf26-86ad3cc13a84",
+          "invocation_id": "62234dc1-2533-4cbd-afb6-753c0707988b",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "a9fba6cab9829482b3caad5aa131d4cedf7d806181b50a89960ca20db28bb688",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 56
+        },
+        {
+          "invocation": "child_planner_related_123641_364370",
+          "test_path": "tests/framework/feature_death_child_command_test.tscn",
+          "run_id": "ea4a75f7-7ae2-40d2-b46c-ea7634af2836",
+          "invocation_id": "62234dc1-2533-4cbd-afb6-753c0707988b",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "a9fba6cab9829482b3caad5aa131d4cedf7d806181b50a89960ca20db28bb688",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 31
+        },
+        {
+          "invocation": "child_planner_related_123641_364370",
+          "test_path": "tests/mapped_skill_plan_missing_projection_rejected_test.tscn",
+          "run_id": "",
+          "invocation_id": "62234dc1-2533-4cbd-afb6-753c0707988b",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "a9fba6cab9829482b3caad5aa131d4cedf7d806181b50a89960ca20db28bb688",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": null
+        },
+        {
+          "invocation": "child_planner_related_123641_364370",
+          "test_path": "tests/canonical_snapshot_identity_production_test.tscn",
+          "run_id": "",
+          "invocation_id": "62234dc1-2533-4cbd-afb6-753c0707988b",
+          "result": "FAIL",
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2",
+          "source_content_sha256": "a9fba6cab9829482b3caad5aa131d4cedf7d806181b50a89960ca20db28bb688",
+          "native_exit": -1,
+          "timeout": false,
+          "receipt_count": null
+        },
+        {
+          "invocation": "child_planner_related_123641_364370",
+          "test_path": "tests/canonical_snapshot_propagation_test.tscn",
+          "run_id": "",
+          "invocation_id": "62234dc1-2533-4cbd-afb6-753c0707988b",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "a9fba6cab9829482b3caad5aa131d4cedf7d806181b50a89960ca20db28bb688",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": null
+        },
+        {
+          "invocation": "child_planner_related_123641_364370",
+          "test_path": "tests/fire_wall_cap_policy_canonical_plan_test.tscn",
+          "run_id": "",
+          "invocation_id": "62234dc1-2533-4cbd-afb6-753c0707988b",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "a9fba6cab9829482b3caad5aa131d4cedf7d806181b50a89960ca20db28bb688",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": null
+        },
+        {
+          "invocation": "child_planner_related_123641_364370",
+          "test_path": "tests/caster_runtime_canonical_plan_adapter_test.tscn",
+          "run_id": "",
+          "invocation_id": "62234dc1-2533-4cbd-afb6-753c0707988b",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "a9fba6cab9829482b3caad5aa131d4cedf7d806181b50a89960ca20db28bb688",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": null
+        },
+        {
+          "invocation": "child_planner_related_123641_364370",
+          "test_path": "tests/framework/feature_fire_effect_production_test.tscn",
+          "run_id": "09ba15f9-702f-4cb1-bed4-16e25163c1b5",
+          "invocation_id": "62234dc1-2533-4cbd-afb6-753c0707988b",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "a9fba6cab9829482b3caad5aa131d4cedf7d806181b50a89960ca20db28bb688",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 20
+        }
+      ]
+    },
+    {
+      "name": "child_planner_snapshot_baseline_124306_290156",
+      "status": "PASS",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/canonical_snapshot_identity_production_test.tscn' -TimeoutSeconds 30"
+      ],
+      "source_stable_during_run": true,
+      "rows": [
+        {
+          "invocation": "child_planner_snapshot_baseline_124306_290156",
+          "test_path": "tests/canonical_snapshot_identity_production_test.tscn",
+          "run_id": "",
+          "invocation_id": "4d6f1130-a0be-4e98-86a5-cddf5e51dd20",
+          "result": "PASS",
+          "reason": "",
+          "source_content_sha256": "f226e94e4d76c20a87ab185882eb3d9a50a58b4705755ea7e749d3b21a0f9c07",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": null
+        }
+      ]
+    }
+  ],
+  "final_adopted_rows": [
+    {
+      "invocation": "child_planner_final_direct_124839_685091",
+      "test_path": "tests/framework/feature_chain_commit_test.tscn",
+      "run_id": "22471f4a-e800-4f23-8dbe-bfb48e5a9bbf",
+      "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 68
+    },
+    {
+      "invocation": "child_planner_final_direct_124839_685091",
+      "test_path": "tests/framework/damage_commit_fact_test.tscn",
+      "run_id": "34886e60-5848-4b7b-96a9-8f7e0fecc7ad",
+      "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 13
+    },
+    {
+      "invocation": "child_planner_final_direct_124839_685091",
+      "test_path": "tests/framework/feature_death_child_command_test.tscn",
+      "run_id": "5a144882-fc70-4a7a-8111-32a0482a94e8",
+      "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 31
+    },
+    {
+      "invocation": "child_planner_final_direct_124839_685091",
+      "test_path": "tests/framework/feature_child_capacity_test.tscn",
+      "run_id": "e853ea97-f0c2-4261-8100-5a1b22ea8fdf",
+      "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 29
+    },
+    {
+      "invocation": "child_planner_final_direct_124839_685091",
+      "test_path": "tests/framework/feature_binding_validation_test.tscn",
+      "run_id": "b0b4d88e-bacd-432d-94f3-c402cb5c559d",
+      "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 41
+    },
+    {
+      "invocation": "child_planner_final_direct_124839_685091",
+      "test_path": "tests/framework/feature_compiler_test.tscn",
+      "run_id": "91e22d3a-ea25-4441-8634-c90783287adc",
+      "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 36
+    },
+    {
+      "invocation": "child_planner_final_direct_124839_685091",
+      "test_path": "tests/framework/feature_capacity_admission_test.tscn",
+      "run_id": "50b010e8-0fc9-477d-b91a-abffb4afeac9",
+      "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 15
+    },
+    {
+      "invocation": "child_planner_final_direct_124839_685091",
+      "test_path": "tests/framework/feature_world_capacity_bound_test.tscn",
+      "run_id": "fe11dd9d-fc98-4000-ae99-67213fbdb9e5",
+      "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 13
+    },
+    {
+      "invocation": "child_planner_final_direct_124839_685091",
+      "test_path": "tests/framework/feature_receipt_retirement_test.tscn",
+      "run_id": "be8ce37f-d688-41b7-911e-4340debbf1c7",
+      "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 11
+    },
+    {
+      "invocation": "child_planner_final_direct_124839_685091",
+      "test_path": "tests/framework/feature_fire_effect_production_test.tscn",
+      "run_id": "78142bd8-2584-4039-af14-929a101cb230",
+      "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 20
+    },
+    {
+      "invocation": "child_planner_final_direct_124839_685091",
+      "test_path": "tests/framework/feature_lifesteal_production_test.tscn",
+      "run_id": "500e52fb-d6d7-47a4-973a-ab2678c732b0",
+      "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 26
+    },
+    {
+      "invocation": "child_planner_final_direct_124839_685091",
+      "test_path": "tests/framework/periodic_effect_runtime_test.tscn",
+      "run_id": "1091e3b5-5ff5-4109-96ee-f0f71568e2e8",
+      "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 13
+    },
+    {
+      "invocation": "child_planner_final_direct_124839_685091",
+      "test_path": "tests/framework/periodic_effect_boundaries_test.tscn",
+      "run_id": "3b57f0a4-c180-4193-ac21-5ba584bd7228",
+      "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 22
+    },
+    {
+      "invocation": "child_planner_final_direct_124839_685091",
+      "test_path": "tests/framework/periodic_effect_death_production_test.tscn",
+      "run_id": "f7bf9682-ae96-4d08-9f25-d68d3e463363",
+      "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 16
+    },
+    {
+      "invocation": "child_planner_final_direct_124839_685091",
+      "test_path": "tests/framework/periodic_delivery_lateness_test.tscn",
+      "run_id": "9339396c-a314-4846-a11b-7cc93b904dac",
+      "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 36
+    },
+    {
+      "invocation": "child_planner_final_direct_124839_685091",
+      "test_path": "tests/framework/feature_queue_retention_test.tscn",
+      "run_id": "8ffa26d3-fd90-4116-902d-eed9f79bd5ab",
+      "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 18
+    },
+    {
+      "invocation": "child_planner_final_direct_124839_685091",
+      "test_path": "tests/framework/feature_source_composition_test.tscn",
+      "run_id": "f532ec16-8e43-4186-b854-e3792128d5e5",
+      "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 34
+    },
+    {
+      "invocation": "child_planner_final_direct_124839_685091",
+      "test_path": "tests/framework/feature_source_composition_cold_test.tscn",
+      "run_id": "35aa485c-60e1-4875-9180-d4d9049da965",
+      "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 12
+    },
+    {
+      "invocation": "child_planner_final_direct_124839_685091",
+      "test_path": "tests/framework/rune_source_composition_test.tscn",
+      "run_id": "2d5378be-84c0-45b0-b00c-9384853c285a",
+      "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 35
+    },
+    {
+      "invocation": "child_planner_final_direct_124839_685091",
+      "test_path": "tests/framework/rune_source_composition_cold_test.tscn",
+      "run_id": "492376aa-c000-486c-bd7f-12fee900199d",
+      "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 14
+    },
+    {
+      "invocation": "child_planner_final_direct_124839_685091",
+      "test_path": "tests/framework/feature_child_planner_test.tscn",
+      "run_id": "dd24bc0e-7d0d-481e-88e8-0ae9913da383",
+      "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 44
+    },
+    {
+      "invocation": "child_planner_final_direct_124839_685091",
+      "test_path": "tests/mapped_skill_plan_missing_projection_rejected_test.tscn",
+      "run_id": "",
+      "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": null
+    },
+    {
+      "invocation": "child_planner_final_direct_124839_685091",
+      "test_path": "tests/canonical_snapshot_identity_production_test.tscn",
+      "run_id": "",
+      "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": null
+    },
+    {
+      "invocation": "child_planner_final_direct_124839_685091",
+      "test_path": "tests/canonical_snapshot_propagation_test.tscn",
+      "run_id": "",
+      "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": null
+    },
+    {
+      "invocation": "child_planner_final_direct_124839_685091",
+      "test_path": "tests/fire_wall_cap_policy_canonical_plan_test.tscn",
+      "run_id": "",
+      "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": null
+    },
+    {
+      "invocation": "child_planner_final_direct_124839_685091",
+      "test_path": "tests/caster_runtime_canonical_plan_adapter_test.tscn",
+      "run_id": "",
+      "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": null
+    },
+    {
+      "invocation": "child_planner_final_world_125334_816129",
+      "test_path": "tests/framework/combined_effect_lifecycle_test.tscn",
+      "run_id": "b6f10641-4897-4093-9922-0f0d227b58a7",
+      "invocation_id": "8c21e6f7-2470-4c0f-9fa3-5a7ef0eb6702",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 38
+    },
+    {
+      "invocation": "child_planner_final_world_125334_816129",
+      "test_path": "tests/framework/combined_effect_lifecycle_cold_test.tscn",
+      "run_id": "2c16789a-0263-4fcf-97e3-4089c610c99b",
+      "invocation_id": "8c21e6f7-2470-4c0f-9fa3-5a7ef0eb6702",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 10
+    },
+    {
+      "invocation": "child_planner_final_world_125334_816129",
+      "test_path": "tests/framework/periodic_credit_safe_logout_test.tscn",
+      "run_id": "1095cca4-5f7a-4936-8824-f90be1aa2647",
+      "invocation_id": "8c21e6f7-2470-4c0f-9fa3-5a7ef0eb6702",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 37
+    },
+    {
+      "invocation": "child_planner_final_world_125334_816129",
+      "test_path": "tests/framework/periodic_credit_safe_logout_cold_test.tscn",
+      "run_id": "8b3f5ac6-6fca-4a2a-822a-553e8da3bf6c",
+      "invocation_id": "8c21e6f7-2470-4c0f-9fa3-5a7ef0eb6702",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 13
+    },
+    {
+      "invocation": "child_planner_final_world_125334_816129",
+      "test_path": "tests/framework/natural_effect_lifecycle_test.tscn",
+      "run_id": "4f397b73-8f82-4048-b370-bcba194c302c",
+      "invocation_id": "8c21e6f7-2470-4c0f-9fa3-5a7ef0eb6702",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 131
+    },
+    {
+      "invocation": "child_planner_final_world_125334_816129",
+      "test_path": "tests/framework/natural_effect_lifecycle_cold_test.tscn",
+      "run_id": "b59821b9-88a0-4b47-b43e-b084b59c4561",
+      "invocation_id": "8c21e6f7-2470-4c0f-9fa3-5a7ef0eb6702",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 10
+    },
+    {
+      "invocation": "child_planner_final_world_125334_816129",
+      "test_path": "tests/framework/feature_resource_natural_test.tscn",
+      "run_id": "7a006339-b3b7-4b0d-a646-07a74fe567db",
+      "invocation_id": "8c21e6f7-2470-4c0f-9fa3-5a7ef0eb6702",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 141
+    },
+    {
+      "invocation": "child_planner_final_world_125334_816129",
+      "test_path": "tests/framework/feature_resource_natural_cold_test.tscn",
+      "run_id": "0afdd8ba-31a8-49bd-b81e-720f8f20f60d",
+      "invocation_id": "8c21e6f7-2470-4c0f-9fa3-5a7ef0eb6702",
+      "result": "PASS",
+      "reason": "",
+      "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_count": 10
+    }
+  ],
+  "preserved_failed_rows": [
+    {
+      "invocation": "child_planner_diagnostic_123342_686363",
+      "test_path": "tests/framework/feature_child_planner_test.tscn",
+      "run_id": "549c8ded-41eb-4524-9c37-ac27fba7eefd",
+      "invocation_id": "ae35c955-afab-4e2d-ad57-f94ce2461509",
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+      "source_content_sha256": "bf706ffa0ba87704c13d5e804c9e275ef68da045f3aa9a79b4c726e50afeff2d",
+      "native_exit": 1,
+      "timeout": false,
+      "receipt_count": 5
+    },
+    {
+      "invocation": "child_planner_entry_class_red_124108_522428",
+      "test_path": "tests/framework/feature_chain_commit_test.tscn",
+      "run_id": "40c70c76-78ff-462a-b421-28f4cb8d439d",
+      "invocation_id": "cca02dc6-1fb6-4e78-8e99-ab44ed8f228e",
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+      "source_content_sha256": "bd3dc8e2aae9ced6669138b93a9a0db362f9e2c530e45590e12b6593a6a13438",
+      "native_exit": 1,
+      "timeout": false,
+      "receipt_count": 68
+    },
+    {
+      "invocation": "child_planner_entry_red_122915_169984",
+      "test_path": "tests/framework/feature_child_planner_test.tscn",
+      "run_id": "c4251c31-d717-4d39-b3b3-853cac8d14c7",
+      "invocation_id": "dde9ac1d-641a-4be3-b81c-d72f70779a6b",
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+      "source_content_sha256": "212b1232eb28d9a1b97c2fae2cb3ee0aa4b9ae810ec9e6616fac5341c884d895",
+      "native_exit": 1,
+      "timeout": false,
+      "receipt_count": 1
+    },
+    {
+      "invocation": "child_planner_green_123208_702616",
+      "test_path": "tests/framework/feature_child_planner_test.tscn",
+      "run_id": "da2bb9df-272c-49c1-aff3-e317991d583a",
+      "invocation_id": "c756d3a1-0130-411f-a540-f36214259de2",
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+      "source_content_sha256": "467fb26a4a015e6bad6c593d343403c809f5ba755ad98ac7c3c760d91c7f4599",
+      "native_exit": 1,
+      "timeout": false,
+      "receipt_count": 5
+    },
+    {
+      "invocation": "child_planner_red_122807_529063",
+      "test_path": "tests/framework/feature_child_planner_test.tscn",
+      "run_id": "6703a11c-ecc9-401b-8f0d-a6ca7017852d",
+      "invocation_id": "70692d3e-aab6-45d4-9678-609ae9d8ef29",
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2;framework_receipt_missing",
+      "source_content_sha256": "9d8d4237c77be08d48801cfe8406491a3fc48f34bdc221a4f3e3bb016b99d532",
+      "native_exit": -1,
+      "timeout": false,
+      "receipt_count": null
+    },
+    {
+      "invocation": "child_planner_related_123641_364370",
+      "test_path": "tests/canonical_snapshot_identity_production_test.tscn",
+      "run_id": "",
+      "invocation_id": "62234dc1-2533-4cbd-afb6-753c0707988b",
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2",
+      "source_content_sha256": "a9fba6cab9829482b3caad5aa131d4cedf7d806181b50a89960ca20db28bb688",
+      "native_exit": -1,
+      "timeout": false,
+      "receipt_count": null
+    }
+  ],
+  "scope": "Final child planner/direct and existing world live-cold only; raw fixture parse, missing entry, projection, wrong damage entry and READY-stage failures remain preserved. Temporary two-file old-planner control is not a complete parent run."
+}

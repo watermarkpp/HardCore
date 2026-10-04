@@ -1,0 +1,47 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "the one formal router must accept a registered, owned child request instead of a Chinese or vanilla alias",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "the pure first-death handler supplies the closed finite command",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "finite command owns a registered child request",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "child identity stays separate and request is immutable",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "child uses the existing build_canonical_plan entry",
+      "passed": false
+    }
+  ],
+  "count": 5,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "c756d3a1-0130-411f-a540-f36214259de2",
+  "passed": 4,
+  "reported_checks": 5,
+  "reported_failures": 1,
+  "run_id": "da2bb9df-272c-49c1-aff3-e317991d583a",
+  "runtime_environment": {
+    "native_process_id": 21056,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\child_planner_green_f2f779d5b47a4859b5221f64e1ddecd6",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_planner_green_f2f779d5b47a4859b5221f64e1ddecd6/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "feature_child_planner_test",
+  "schema_version": 1,
+  "source_content_sha256": "467fb26a4a015e6bad6c593d343403c809f5ba755ad98ac7c3c760d91c7f4599",
+  "status": "FAIL"
+}

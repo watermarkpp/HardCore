@@ -1,0 +1,27 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "the one formal router must accept a registered, owned child request instead of a Chinese or vanilla alias",
+      "passed": false
+    }
+  ],
+  "count": 1,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "dde9ac1d-641a-4be3-b81c-d72f70779a6b",
+  "passed": 0,
+  "reported_checks": 1,
+  "reported_failures": 1,
+  "run_id": "c4251c31-d717-4d39-b3b3-853cac8d14c7",
+  "runtime_environment": {
+    "native_process_id": 5280,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\child_planner_entry_red_dccaca4fae0942a08d385bb6be602b64",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_planner_entry_red_dccaca4fae0942a08d385bb6be602b64/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "feature_child_planner_test",
+  "schema_version": 1,
+  "source_content_sha256": "212b1232eb28d9a1b97c2fae2cb3ee0aa4b9ae810ec9e6616fac5341c884d895",
+  "status": "FAIL"
+}

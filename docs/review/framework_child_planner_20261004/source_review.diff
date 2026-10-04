@@ -1,0 +1,525 @@
+diff --git a/assets/data/features/child_actions_v1.json b/assets/data/features/child_actions_v1.json
+new file mode 100644
+index 000000000..5992984d4
+--- /dev/null
++++ b/assets/data/features/child_actions_v1.json
+@@ -0,0 +1,16 @@
++{
++  "schema_version": 1,
++  "contract_id": "hardcore.child_action_definitions.v1",
++  "actions": [
++    {
++      "action_id": "hc.child.death_burst.v1",
++      "handler_id": "hc.death_burst.v1",
++      "revision": 1,
++      "operation": "area_damage",
++      "source_class": "child",
++      "damage_channel": "magic_defense",
++      "causes_struck": false,
++      "direct_magic_walk_delay": false
++    }
++  ]
++}
+diff --git a/scripts/enemy.gd b/scripts/enemy.gd
+index 6fdf79874..b6000d9d5 100644
+--- a/scripts/enemy.gd
++++ b/scripts/enemy.gd
+@@ -7163,6 +7163,9 @@ func _apply_damage_core(
+ 	var feature_batch: Variant = damage_context.get("feature_damage_batch")
+ 	if feature_batch is RefCounted and feature_batch.get_script() == FeatureDamageBatchScript \
+ 		and feature_batch.requires_commit_context():
++		# The public direct entry owns STRUCK semantics. A caller label cannot
++		# turn it into a periodic/child entry and retain the direct side effects.
++		if causes_struck and damage_context.get("source_class") != "direct": return
+ 		var prepared: Dictionary = feature_batch.prepare_commit_context(self,damage_context)
+ 		if not bool(prepared.get("success",false)): return
+ 		damage_context = prepared.context
+diff --git a/scripts/features/contracts/child_action_lease.gd b/scripts/features/contracts/child_action_lease.gd
+new file mode 100644
+index 000000000..66b0301c7
+--- /dev/null
++++ b/scripts/features/contracts/child_action_lease.gd
+@@ -0,0 +1,148 @@
++extends RefCounted
++
++# A pure request owner. It does not accept gameplay, reserve capacity, query
++# targets, write HP or allocate another planner. Root admission is a separate
++# prerequisite before the eventual domain consumer executes a planned child.
++const Graph := preload("res://scripts/features/contracts/plain_graph.gd")
++const Ids := preload("res://scripts/identity/entity_registry.gd")
++const Cast := preload("res://scripts/skills/skill_cast_request.gd")
++const PATH := "res://assets/data/features/child_actions_v1.json"
++const CONTRACT := "hardcore.child_action_definitions.v1"
++const COMMAND_FIELDS := ["op","handler_id","action_id","source_handle","mechanic_id",
++	"root_release_id","root_skill_id","parent_release_id","parent_fact_id","parent_target",
++	"generation","maximum_generation","origin","radius_gu","raw_damage","damage_basis",
++	"historical_credit","source_class","damage_channel","causes_struck","direct_magic_walk_delay"]
++var _world: RefCounted
++var _command: Dictionary = {}
++var _definition: Dictionary = {}
++var _release_id := ""
++var _seed := 0
++static var _definitions: Dictionary = {}
++static var _catalog_attempted := false
++
++static func create(command: Dictionary, world: RefCounted, release_id: String) -> Dictionary:
++	var rejected := {"success":false,"reason":"invalid_child_request","request":{}}
++	if world == null or world.get_script()!=preload("res://scripts/layers/runtime/execution/world_context.gd") \
++		or release_id.is_empty() or not _keys(command,COMMAND_FIELDS): return rejected
++	var row := _definition_for(command.get("action_id"))
++	if row.is_empty() or command.op!="RequestChildAction" or command.handler_id!=row.handler_id \
++		or command.damage_basis!="actual_hp_loss": return rejected
++	for field: String in ["source_class","damage_channel","causes_struck","direct_magic_walk_delay"]:
++		if typeof(command[field])!=typeof(row[field]) or command[field]!=row[field]: return rejected
++	for field: String in ["source_handle","mechanic_id","root_release_id","root_skill_id","parent_release_id","parent_fact_id"]:
++		if not command[field] is String or command[field].is_empty(): return rejected
++	if Ids.resolve(command.root_skill_id,"skill").is_empty() or release_id in [command.root_release_id,command.parent_release_id]: return rejected
++	for field: String in ["generation","maximum_generation","raw_damage"]:
++		if not _positive_integer(command[field]): return rejected
++	if command.generation>command.maximum_generation or not _number(command.radius_gu) or float(command.radius_gu)<=0: return rejected
++	if (int(command.generation)==1 and command.parent_release_id!=command.root_release_id) \
++		or (int(command.generation)>1 and command.parent_release_id==command.root_release_id): return rejected
++	var prefix: String=command.parent_release_id+":hp:"
++	if not command.parent_fact_id.begins_with(prefix): return rejected
++	var fact_index: String=command.parent_fact_id.trim_prefix(prefix)
++	if not fact_index.is_valid_int() or int(fact_index)<0 or str(int(fact_index))!=fact_index: return rejected
++	if not command.origin is Dictionary or not _keys(command.origin,["x","y"]) \
++		or not _number(command.origin.x) or not _number(command.origin.y) \
++		or not Vector2(float(command.origin.x),float(command.origin.y)).is_finite() \
++		or not Vector2(float(command.radius_gu),0).is_finite(): return rejected
++	if not command.parent_target is Dictionary or not _keys(command.parent_target,["world","runtime_id","life_generation"]) \
++		or not command.parent_target.world is Dictionary or not world.matches_world(command.parent_target.world) \
++		or not _positive_integer(command.parent_target.runtime_id) or not _positive_integer(command.parent_target.life_generation) \
++		or not command.historical_credit is Dictionary: return rejected
++	var captured := Graph.capture(command,128,8)
++	if not captured.success: return rejected
++	var lease := new()
++	lease._world=world; lease._command=captured.value; lease._release_id=release_id
++	lease._definition=Graph.capture({"skill_id":row.action_id,"class":"child_action",
++		"child_definition":row,"timing":{},"target":{"mode":"caster_surrounding_area","relation":"hostile"},
++		"resource":{},"mp_cost_by_rank":[0,0,0,0],"geometry":{"shape":"continuous_circle"},
++		"mechanics":{"runtime_family":"finite_death_child"}}).value
++	lease._seed=JSON.stringify([command.root_release_id,command.parent_fact_id,command.source_handle,
++		command.action_id,command.generation,release_id]).sha256_text().substr(0,15).hex_to_int()
++	var target_context := {"has_target":true}; target_context.make_read_only()
++	var resource_context := {}; resource_context.make_read_only()
++	var request := {"contract_id":Cast.CONTRACT_ID,"skill_id":row.action_id,"rank":0,"caster_level":1,
++		"origin_tile":Vector2i.ZERO,"facing":Vector2i.DOWN,"target_context":target_context,
++		"resource_context":resource_context,"seed":lease._seed,"client_claimed_damage":null,
++		"client_claimed_success":null,"child_action_lease":lease}
++	request.make_read_only()
++	return {"success":true,"reason":"","request":request}
++
++static func from_request(request: Variant) -> RefCounted:
++	if not request is Dictionary: return null
++	var lease: Variant=request.get("child_action_lease")
++	if not lease is RefCounted or lease.get_script()!=load("res://scripts/features/contracts/child_action_lease.gd"): return null
++	return lease if lease.matches_request(request) else null
++
++func matches_request(request: Dictionary) -> bool:
++	if _world==null or _command.is_empty() or not _world.matches_world(_command.parent_target.world) \
++		or not _keys(request,["contract_id","skill_id","rank","caster_level","origin_tile","facing",
++		"target_context","resource_context","seed","client_claimed_damage","client_claimed_success","child_action_lease"]): return false
++	return request.contract_id is String and request.contract_id==Cast.CONTRACT_ID \
++		and request.skill_id is String and request.skill_id==_definition.skill_id \
++		and request.rank is int and request.rank==0 and request.caster_level is int and request.caster_level==1 \
++		and request.origin_tile is Vector2i and request.origin_tile==Vector2i.ZERO \
++		and request.facing is Vector2i and request.facing==Vector2i.DOWN \
++		and request.target_context is Dictionary and request.target_context=={"has_target":true} \
++		and request.resource_context is Dictionary and request.resource_context=={} \
++		and request.seed is int and request.seed==_seed and request.client_claimed_damage==null \
++		and request.client_claimed_success==null and request.child_action_lease==self
++
++func definition() -> Dictionary: return _definition
++func command() -> Dictionary: return _command
++
++func planning_context(context: Dictionary) -> Dictionary:
++	if _world==null or not _world.matches_world(_command.parent_target.world) \
++		or context.get("release_id")!=_release_id or not context.get("runtime_map_id") is int \
++		or context.runtime_map_id!=_command.parent_target.world.runtime_map_id: return {}
++	var to_screen: Variant=context.get("ground_gu_to_screen_position_px")
++	var to_ground: Variant=context.get("screen_to_ground_position_px")
++	if not to_screen is Callable or not to_screen.is_valid() or not to_ground is Callable or not to_ground.is_valid(): return {}
++	var origin := Vector2(float(_command.origin.x),float(_command.origin.y))
++	var screen: Variant=to_screen.call(origin)
++	if not screen is Vector2 or not screen.is_finite(): return {}
++	var restored: Variant=to_ground.call(screen)
++	if not restored is Vector2 or not restored.is_finite() or not restored.is_equal_approx(origin): return {}
++	var owned := context.duplicate(false)
++	# Supplied snapshots and custom geometry builders must never replace the
++	# command-owned child center/radius. Build one new snapshot on release.
++	for key: String in ["canonical_snapshot","line_strip_builder","effective_cells_builder"]: owned.erase(key)
++	owned["origin_screen_px"]=screen; owned["target_position_screen_px"]=screen
++	owned["snapshot_validation_context"]={"expected_runtime_map_id":context.runtime_map_id,
++		"ground_position_gu_to_screen_position_px":to_screen}
++	return owned
++
++func chain_context() -> Dictionary:
++	return Graph.capture({"contract_id":"hardcore.combat.chain_context.v1","root_release_id":_command.root_release_id,
++		"release_id":_release_id,"parent_release_id":_command.parent_release_id,"root_skill_id":_command.root_skill_id,
++		"generation":int(_command.generation),"maximum_generation":int(_command.maximum_generation)}).value
++
++static func _definition_for(id: Variant) -> Dictionary:
++	if not id is String: return {}
++	if _catalog_attempted: return _definitions.get(id,{})
++	_catalog_attempted=true
++	var parsed: Variant=JSON.parse_string(FileAccess.get_file_as_string(PATH))
++	if not parsed is Dictionary or not _keys(parsed,["schema_version","contract_id","actions"]) \
++		or parsed.schema_version!=1 or parsed.contract_id!=CONTRACT or not parsed.actions is Array: return {}
++	var ids := {}
++	for row: Variant in parsed.actions:
++		if not row is Dictionary or not _keys(row,["action_id","handler_id","revision","operation",
++			"source_class","damage_channel","causes_struck","direct_magic_walk_delay"]) \
++			or row.action_id!="hc.child.death_burst.v1" or row.handler_id!="hc.death_burst.v1" \
++			or row.revision!=1 or row.operation!="area_damage" or row.source_class!="child" \
++			or row.damage_channel!="magic_defense" or not row.causes_struck is bool or row.causes_struck \
++			or not row.direct_magic_walk_delay is bool or row.direct_magic_walk_delay or ids.has(row.action_id): return {}
++		ids[row.action_id]=row
++	var captured := Graph.capture(ids,1024,8)
++	if not captured.success: return {}
++	_definitions=captured.value
++	return _definitions.get(id,{})
++
++static func _number(value: Variant) -> bool: return (value is int or value is float) and is_finite(float(value))
++static func _positive_integer(value: Variant) -> bool:
++	return _number(value) and float(value)>0 and float(value)<=9007199254740991.0 and floor(float(value))==float(value)
++static func _keys(value: Dictionary, fields: Array) -> bool:
++	if value.size()!=fields.size(): return false
++	for key: String in fields:
++		if not value.has(key): return false
++	return true
+diff --git a/scripts/skills/skill_execution_plan_contract.gd b/scripts/skills/skill_execution_plan_contract.gd
+index 5ae8fc2f0..a23aa414e 100644
+--- a/scripts/skills/skill_execution_plan_contract.gd
++++ b/scripts/skills/skill_execution_plan_contract.gd
+@@ -7,6 +7,7 @@ extends RefCounted
+ ## one planner entry. Also owns the formal sentinel counters.
+ 
+ const SkillDataLoaderScript := preload("res://scripts/skills/skill_data_loader.gd")
++const ChildLease := preload("res://scripts/features/contracts/child_action_lease.gd")
+ const SkillFootprintSnapshotScript := preload(
+ 	"res://scripts/skills/skill_footprint_snapshot.gd"
+ )
+@@ -130,10 +131,11 @@ static func build_canonical_plan(
+ 	## canonical contract, builds the single release snapshot when needed and
+ 	## attaches the presentation geometry. Never performs side effects.
+ 	canonical_plan_build_count += 1
+-	var skill_id := SkillDataLoaderScript.stable_skill_id(
++	var child: RefCounted = ChildLease.from_request(request)
++	var skill_id := str(request.skill_id) if child!=null else SkillDataLoaderScript.stable_skill_id(
+ 		str(request.get("skill_id", ""))
+ 	)
+-	var definition := preload("res://scripts/features/contracts/action_config_lease.gd").resolve_definition(skill_id, request.get("action_config_lease"))
++	var definition: Dictionary = child.definition() if child!=null else preload("res://scripts/features/contracts/action_config_lease.gd").resolve_definition(skill_id, request.get("action_config_lease"))
+ 	var accepted := bool(legacy_result.get("accepted", false))
+ 	var reason := normalize_reason(str(legacy_result.get("reason", "")))
+ 	var release_id := str(
+@@ -335,6 +337,10 @@ static func build_canonical_plan(
+ 		plan["support_area_geometry"] = (
+ 			support_area_geometry as Dictionary
+ 		).duplicate(true)
++	if child!=null:
++		plan["chain_context"]=child.chain_context()
++		plan["historical_credit"]=child.command().historical_credit
++		plan["child_command"]=child.command()
+ 	plan["plan_hash"] = plan_hash(plan)
+ 	return plan
+ 
+@@ -671,6 +677,8 @@ static func plan_hash(plan: Dictionary) -> String:
+ 		and not (support_area_geometry as Dictionary).is_empty()
+ 	):
+ 		protected["support_area_geometry"] = support_area_geometry
++	for field: String in ["chain_context","historical_credit","child_command"]:
++		if plan.has(field): protected[field]=plan[field]
+ 	return "%d" % hash(_canonicalize(protected))
+ 
+ 
+@@ -805,6 +813,8 @@ static func _plan_id(
+ 
+ 
+ static func _definition_revision(definition: Dictionary) -> String:
++	if definition.get("child_definition") is Dictionary:
++		return JSON.stringify(definition.child_definition).sha256_text()
+ 	return "%d" % hash(
+ 		str(definition.get("skill_id", ""))
+ 		+ str(definition.get("class", ""))
+diff --git a/scripts/skills/skill_runtime_router.gd b/scripts/skills/skill_runtime_router.gd
+index 27e52bf2e..880df78d5 100644
+--- a/scripts/skills/skill_runtime_router.gd
++++ b/scripts/skills/skill_runtime_router.gd
+@@ -3,6 +3,7 @@ extends RefCounted
+ 
+ const SkillDataLoaderScript := preload("res://scripts/skills/skill_data_loader.gd")
+ const ActionLease := preload("res://scripts/features/contracts/action_config_lease.gd")
++const ChildLease := preload("res://scripts/features/contracts/child_action_lease.gd")
+ const SkillCastRequestScript := preload("res://scripts/skills/skill_cast_request.gd")
+ const SkillTargetServiceScript := preload("res://scripts/skills/skill_target_service.gd")
+ const SkillResourceServiceScript := preload("res://scripts/skills/skill_resource_service.gd")
+@@ -37,13 +38,16 @@ static func _plan(request: Variant, definition: Dictionary = {}) -> Dictionary:
+ 				request_validation.get("reason", "invalid_request")
+ 			),
+ 		}
+-	var skill_id := SkillDataLoaderScript.stable_skill_id(str(request.get("skill_id", "")))
++	var child: RefCounted = ChildLease.from_request(request)
++	if request.has("child_action_lease") and child==null:
++		return {"accepted":false,"effect_success":false,"resource_commit":false,"reason":"invalid_request"}
++	var skill_id := str(request.skill_id) if child!=null else SkillDataLoaderScript.stable_skill_id(str(request.get("skill_id", "")))
+ 	var resolved_request: Dictionary = request
+ 	if SkillRankResolverScript.mode_for(skill_id) == "EXCLUDED" and int(request.get("rank", 0)) > 3:
+ 		resolved_request = request.duplicate(false)
+ 		resolved_request["rank"] = SkillRankResolverScript.formula_rank(request.get("rank", 0))
+ 	if definition.is_empty():
+-		definition = ActionLease.resolve_definition(skill_id, request.get("action_config_lease"))
++		definition = child.definition() if child!=null else ActionLease.resolve_definition(skill_id, request.get("action_config_lease"))
+ 	if definition.is_empty():
+ 		return {
+ 			"accepted": false,
+@@ -85,6 +89,13 @@ static func _plan(request: Variant, definition: Dictionary = {}) -> Dictionary:
+ 	var rng := SkillRngScript.new(int(resolved_request.get("seed", 0)))
+ 	var plan: Dictionary
+ 	match str(definition.get("class", "")):
++		"child_action":
++			if child==null: return {"accepted":false,"reason":"invalid_request"}
++			var command: Dictionary=child.command()
++			plan={"accepted":true,"effect_success":true,"resource_commit_required":false,
++				"effects":[{"type":"area_damage","raw_power":int(command.raw_damage),
++					"radius_gu":float(command.radius_gu),"source_class":"child","damage_channel":"magic_defense",
++					"causes_struck":false,"direct_magic_walk_delay":false}]}
+ 		"warrior":
+ 			plan = WarriorRuntimeScript.execute(definition, resolved_request, rng)
+ 		"wizard":
+@@ -110,7 +121,7 @@ static func _plan(request: Variant, definition: Dictionary = {}) -> Dictionary:
+ 	plan["target"] = definition.get("target", {}).duplicate(true)
+ 	plan["resource"] = resource_quote.duplicate(true)
+ 	plan["mechanics"] = definition.get("mechanics", {}).duplicate(true)
+-	plan["geometry_cells"] = SkillGeometryServiceScript.cells(
++	plan["geometry_cells"] = [] if child!=null else SkillGeometryServiceScript.cells(
+ 		definition,
+ 		request.get("origin_tile", Vector2i.ZERO),
+ 		request.get("facing", Vector2i.DOWN),
+@@ -139,10 +150,15 @@ static func build_canonical_plan(
+ 			request,
+ 			context
+ 		)
+-	var skill_id := SkillDataLoaderScript.stable_skill_id(
++	var child: RefCounted = ChildLease.from_request(request)
++	if request.has("child_action_lease"):
++		if child==null: return _canonical_rejection_plan("","invalid_request",request,context)
++		context=child.planning_context(context)
++		if context.is_empty(): return _canonical_rejection_plan(str(request.skill_id),"invalid_request",request,{})
++	var skill_id := str(request.skill_id) if child!=null else SkillDataLoaderScript.stable_skill_id(
+ 		str(request.get("skill_id", ""))
+ 	)
+-	var definition := ActionLease.resolve_definition(skill_id, request.get("action_config_lease"))
++	var definition: Dictionary = child.definition() if child!=null else ActionLease.resolve_definition(skill_id, request.get("action_config_lease"))
+ 	if definition.is_empty():
+ 		return _canonical_rejection_plan(
+ 			skill_id,
+@@ -162,6 +178,12 @@ static func build_canonical_plan(
+ 	)
+ 
+ 
++# Only constructs immutable input. All planning still goes through the one
++# build_canonical_plan entry and its existing domain/snapshot envelope.
++static func create_child_request(command: Dictionary, world: RefCounted, release_id: String) -> Dictionary:
++	return ChildLease.create(command,world,release_id)
++
++
+ static func _canonical_rejection_plan(
+ 	skill_id: String,
+ 	reason: String,
+diff --git a/tests/framework/feature_chain_commit_test.gd b/tests/framework/feature_chain_commit_test.gd
+index 4dce51bcc..a2a80cfed 100644
+--- a/tests/framework/feature_chain_commit_test.gd
++++ b/tests/framework/feature_chain_commit_test.gd
+@@ -148,6 +148,36 @@ func _run() -> void:
+ 	invalid_actor.take_damage(10,null,{"feature_damage_batch":valid.batch,"source_class":"direct","damage_channel":"magic_defense"})
+ 	_check(invalid_actor.current_hp==hp_before and valid.batch.facts().is_empty(),"missing mapped geometry refuses the chain commit before HP with no identity fallback")
+ 	invalid_actor.queue_free(); await get_tree().process_frame
++	# Audited wrong-public-entry and Combat projection recovery boundaries.
++	for source_class: String in ["periodic","child"]:
++		var release := "chain:child:1" if source_class=="child" else "chain:root:1"
++		var made: Dictionary=batch_type.create(world,release,"hc.skill.wizard.ice_storm",[],{},0,null,null,_lineage(release,source_class),source_class)
++		_check(made.success,source_class+" wrong-entry probe owns a legal finite batch")
++		if not made.success: continue
++		var batch: RefCounted=made.batch; batch.begin_base_scope()
++		var actor:=_target()
++		var attack_before: float=float(actor.get("_attack_timer"))
++		var actor_rng: int=actor.get("_rng").state
++		actor.take_damage(10,null,{"feature_damage_batch":batch,"source_class":source_class,"damage_channel":"magic_defense"})
++		_check(actor.current_hp==30 and float(actor.get("_attack_timer"))==attack_before and actor.get("_rng").state==actor_rng,
++			"matching "+source_class+" caller label cannot turn the direct public entry into a chain HP or STRUCK entry")
++		_check(batch.facts().is_empty() and batch.errors.is_empty(),source_class+" wrong public entry preserves the legal batch qualification")
++		actor.configure_runtime_map_projection(current_map_id,Callable(),Callable())
++		var rng:=RandomNumberGenerator.new(); rng.seed=54892
++		var rng_before: int=rng.state
++		var result: Dictionary=combat.apply_feature_child_damage(actor,100,null,rng,{},batch) if source_class=="child" \
++			else combat.apply_feature_periodic_chain_damage(actor,100,null,rng,{},batch)
++		_check(not result.success and rng.state==rng_before and actor.current_hp==30 \
++			and batch.errors.is_empty() and batch.facts().is_empty(),
++			"bad projection through Combat "+source_class+" refuses before RNG/HP and keeps qualification")
++		actor.configure_runtime_map_projection(current_map_id,_ground_to_screen,_screen_to_ground)
++		result=combat.apply_feature_child_damage(actor,100,null,rng,{},batch) if source_class=="child" \
++			else combat.apply_feature_periodic_chain_damage(actor,100,null,rng,{},batch)
++		_check(result.success and result.actual_loss==30 and batch.facts().size()==1 and batch.errors.is_empty(),
++			"after wrong entry and bad projection the same "+source_class+" batch legally commits exactly once")
++		_check(actor.collision_layer==0 and actor.collision_mask==0,source_class+" recovered death still removes collision immediately")
++		batch.finish_base_scope(); batch.consume()
++		actor.queue_free(); await get_tree().process_frame
+ 	_finish()
+ 
+ func _finish() -> void:
+diff --git a/tests/framework/feature_child_planner_test.gd b/tests/framework/feature_child_planner_test.gd
+new file mode 100644
+index 000000000..dbba4f537
+--- /dev/null
++++ b/tests/framework/feature_child_planner_test.gd
+@@ -0,0 +1,138 @@
++extends Node
++
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const Router := preload("res://scripts/skills/skill_runtime_router.gd")
++const Plan := preload("res://scripts/skills/skill_execution_plan_contract.gd")
++const Snapshot := preload("res://scripts/skills/skill_footprint_snapshot.gd")
++const World := preload("res://scripts/layers/runtime/execution/world_context.gd")
++const Handlers := preload("res://scripts/features/handlers/handler_registry.gd")
++const Loader := preload("res://scripts/skills/skill_data_loader.gd")
++var _zone_generation := 1
++var current_map_id := 910002
++var proof := Proof.new()
++var checks := 0
++var errors: Array[String] = []
++var router: Variant = Router
++
++func _ready() -> void: _run.call_deferred()
++func _check(ok: bool, label: String) -> void:
++	checks += 1; proof.record(ok,label)
++	if not ok: errors.append(label)
++func _to_screen(p: Vector2) -> Vector2: return p*10.0-Vector2(50,25)
++func _to_ground(p: Vector2) -> Vector2: return (p+Vector2(50,25))/10.0
++
++func _command(world: RefCounted) -> Dictionary:
++	var fact := {"contract_id":"hardcore.combat.damage_fact.v1","fact_id":"root:1:hp:0",
++		"release_id":"root:1","skill_id":"hc.skill.wizard.ice_storm","source_class":"direct",
++		"damage_channel":"magic_defense","requested_damage":30,"hp_before":24,"hp_after":0,
++		"actual_loss":24,"target_survived_commit":false,
++		"target":{"world":world.capture_world(),"runtime_id":123,"life_generation":1},
++		"historical_credit":{"profile_id":PlayerState.active_profile_id},
++		"commit_ground_origin":{"x":12.5,"y":-3.0},
++		"chain_context":{"contract_id":"hardcore.combat.chain_context.v1","root_release_id":"root:1",
++		"release_id":"root:1","parent_release_id":"","root_skill_id":"hc.skill.wizard.ice_storm",
++		"generation":0,"maximum_generation":2}}
++	var binding := {"handle":"child:source:1","definition":{"handler_id":"hc.death_burst.v1",
++		"mechanic_id":"hc.death_burst.fixture","skill_id":"hc.skill.wizard.ice_storm",
++		"source_classes":["direct","periodic","child"],
++		"config":{"fraction":0.5,"radius_gu":2.0,"maximum_generation":2}}}
++	var commands := Handlers.commands(fact,binding)
++	return commands[0] if commands.size()==1 else {}
++
++func _context(release: String) -> Dictionary:
++	return {"release_id":release,"runtime_map_id":current_map_id,
++		"origin_screen_px":Vector2(999,999),"target_position_screen_px":Vector2(999,999),
++		"screen_to_ground_position_px":_to_ground,"ground_gu_to_screen_position_px":_to_screen,
++		"snapshot_validation_context":{"expected_runtime_map_id":current_map_id}}
++
++func _run() -> void:
++	PlayerState.test_mode=true; PlayerState.reset_progress(false)
++	var supported := false
++	for method: Dictionary in Router.new().get_script().get_script_method_list():
++		if method.name=="create_child_request": supported=true
++	_check(supported,"the one formal router must accept a registered, owned child request instead of a Chinese or vanilla alias")
++	if not supported: _finish(); return
++	var world := World.new(); world.configure(self,PlayerState)
++	var command := _command(world)
++	_check(not command.is_empty(),"the pure first-death handler supplies the closed finite command")
++	var made: Dictionary = router.create_child_request(command,world,"child:1")
++	_check(made.success,"finite command owns a registered child request")
++	if not made.success: _finish(); return
++	var request: Dictionary = made.request
++	_check(request.is_read_only() and request.skill_id=="hc.child.death_burst.v1",
++		"child identity stays separate and request is immutable")
++	var counts_before := Plan.canonical_plan_build_count
++	var snapshot_before := Plan.snapshot_build_count
++	var plan: Dictionary = Router.build_canonical_plan(request,_context("child:1"))
++	_check(plan.rejection.accepted,"child uses the existing build_canonical_plan entry: "+str(plan.rejection.reason))
++	if not plan.rejection.accepted: print("CHILD_PLAN_DIAGNOSTIC ",JSON.stringify(plan))
++	if not plan.rejection.accepted: _finish(); return
++	_check(plan.created_by==Plan.CANONICAL_PLANNER_ID and Plan.canonical_plan_build_count==counts_before+1,
++		"the same canonical envelope is built exactly once")
++	_check(Plan.snapshot_build_count==snapshot_before+1,"one fresh release snapshot is built by the existing builder")
++	_check(plan.skill_id=="hc.child.death_burst.v1" and plan.release_id=="child:1",
++		"plan preserves the actual child ID and release, not the root player spell")
++	_check(plan.gameplay_actions.size()==1 and plan.gameplay_actions[0].raw_power==12,
++		"child damage basis remains the original committed HP loss fraction")
++	_check(plan.canonical_snapshot.center_ground_gu==Vector2(12.5,-3.0)
++		and plan.canonical_snapshot.radius_gu==2.0,
++		"caller-provided later screen position cannot replace committed death geometry")
++	_check(bool(Snapshot.validate_for_consumer(plan.canonical_snapshot,
++		{"expected_runtime_map_id":current_map_id,"ground_position_gu_to_screen_position_px":_to_screen},Snapshot.VALIDATION_STRICT_V2).valid),
++		"child circle is an absolute mapped STRICT_V2 footprint")
++	_check(not plan.resource_commit_required and plan.resource_cost.mp_cost==0,
++		"child does not charge player resources or initiate another cooldown")
++	_check(plan.chain_context.root_release_id=="root:1" and plan.chain_context.parent_release_id=="root:1"
++		and plan.chain_context.generation==1 and plan.chain_context.maximum_generation==2,
++		"canonical plan hash owns complete root/parent/child finite lineage")
++	_check(Loader.stable_skill_id("hc.child.death_burst.v1").is_empty() and Loader.skill_ids().size()==33,
++		"the frozen 33-skill table is not expanded with a fake player spell")
++	var repeated := Router.build_canonical_plan(request,_context("child:1"))
++	_check(plan.plan_hash==repeated.plan_hash,"pure repeated planning has deterministic independent child seed")
++	_check(plan.skill_definition_revision.length()==64,"child revision fingerprints its exact registered descriptor")
++	for field: String in ["chain_context","historical_credit","child_command"]:
++		var changed := plan.duplicate(true)
++		changed[field]={"changed":true}
++		_check(Plan.plan_hash(changed)!=plan.plan_hash,"child ownership field is protected by the existing plan hash: "+field)
++	for field: String in ["skill_id","seed","rank","client_claimed_damage"]:
++		var forged := request.duplicate(false)
++		forged[field] = "wizard.ice_storm" if field=="skill_id" else 999
++		var rejected := Router.build_canonical_plan(forged,_context("child:1"))
++		_check(not rejected.rejection.accepted,"altered child request is rejected before planning side effects: "+field)
++	var plain := request.duplicate(false); plain.erase("child_action_lease")
++	_check(not Router.build_canonical_plan(plain,_context("child:1")).rejection.accepted,
++		"a raw child ID without its typed owner never becomes a vanilla fallback")
++	var wrong := _context("other:release")
++	_check(not Router.build_canonical_plan(request,wrong).rejection.accepted,"another release cannot adopt this child")
++	wrong=_context("child:1"); wrong.runtime_map_id=910003
++	_check(not Router.build_canonical_plan(request,wrong).rejection.accepted,"another map cannot adopt this geometry")
++	wrong=_context("child:1"); wrong.erase("screen_to_ground_position_px")
++	_check(not Router.build_canonical_plan(request,wrong).rejection.accepted,"missing map projection fails closed")
++	wrong=_context("child:1"); wrong.erase("ground_gu_to_screen_position_px")
++	_check(not Router.build_canonical_plan(request,wrong).rejection.accepted,"missing reverse projection fails closed")
++	wrong=_context("child:1"); wrong.canonical_snapshot=Snapshot.create_circle("forged","old",Vector2.ZERO,99.0)
++	var overridden := Router.build_canonical_plan(request,wrong)
++	_check(overridden.rejection.accepted and overridden.canonical_snapshot.center_ground_gu==Vector2(12.5,-3.0)
++		and overridden.canonical_snapshot.radius_gu==2.0,"a supplied old snapshot cannot override child geometry")
++	for field: String in ["action_id","source_class","damage_channel","causes_struck","direct_magic_walk_delay","damage_basis","generation","maximum_generation","raw_damage","radius_gu"]:
++		var bad := command.duplicate(true)
++		bad[field] = 0 if field in ["generation","maximum_generation","raw_damage","radius_gu"] else true if field in ["causes_struck","direct_magic_walk_delay"] else "wrong"
++		_check(not router.create_child_request(bad,world,"child:bad").success,
++			"unsupported child contract never produces a request: "+field)
++	var replay := command.duplicate(true); replay.parent_target.world.world_epoch+=1
++	_check(not router.create_child_request(replay,world,"child:bad").success,"foreign parent world cannot produce a child")
++	_check(not router.create_child_request(command,world,"root:1").success,"child cannot reuse root/parent release identity")
++	var unrelated := command.duplicate(true); unrelated.parent_release_id="unrelated"
++	_check(not router.create_child_request(unrelated,world,"child:bad").success,"first child parent must match root")
++	unrelated=command.duplicate(true); unrelated.parent_fact_id="unrelated:hp:0"
++	_check(not router.create_child_request(unrelated,world,"child:bad").success,"parent fact must belong to the declared release")
++	_zone_generation+=1
++	_check(not Router.build_canonical_plan(request,_context("child:1")).rejection.accepted,
++		"world generation change invalidates an already-owned child before it can be planned")
++	_finish()
++
++func _finish() -> void:
++	var written := proof.write_receipt("feature_child_planner_test",checks,errors.size())
++	if written and errors.is_empty(): print("FEATURE_CHILD_PLANNER_PASS checks=",checks)
++	else: print("FEATURE_CHILD_PLANNER_FAIL checks=",checks," errors=",errors)
++	get_tree().quit(0 if written and errors.is_empty() else 1)
+diff --git a/tests/framework/feature_child_planner_test.tscn b/tests/framework/feature_child_planner_test.tscn
+new file mode 100644
+index 000000000..e30847cf1
+--- /dev/null
++++ b/tests/framework/feature_child_planner_test.tscn
+@@ -0,0 +1,4 @@
++[gd_scene load_steps=2 format=3]
++[ext_resource type="Script" path="res://tests/framework/feature_child_planner_test.gd" id="1"]
++[node name="FeatureChildPlannerTest" type="Node"]
++script = ExtResource("1")

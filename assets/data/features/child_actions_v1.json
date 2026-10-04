@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "contract_id": "hardcore.child_action_definitions.v1",
+  "actions": [
+    {
+      "action_id": "hc.child.death_burst.v1",
+      "handler_id": "hc.death_burst.v1",
+      "revision": 1,
+      "operation": "area_damage",
+      "source_class": "child",
+      "damage_channel": "magic_defense",
+      "causes_struck": false,
+      "direct_magic_walk_delay": false
+    }
+  ]
+}

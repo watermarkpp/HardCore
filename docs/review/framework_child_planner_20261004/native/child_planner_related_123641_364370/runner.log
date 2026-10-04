@@ -1,0 +1,27 @@
+[PASS] feature_child_planner_test
+[PASS] feature_chain_commit_test
+[PASS] feature_death_child_command_test
+[PASS] mapped_skill_plan_missing_projection_rejected_test
+[FAIL] canonical_snapshot_identity_production_test - missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+鏁版嵁搴撹浇鍏ュ畬鎴愶細鍦板浘209 鎬墿156 Boss20 瑁呭175 鎶€鑳界瓑绾?32 鎺夎惤妲?424 浠诲姟9
+[InitialHUDProfile] {"origin":"GameHUD._ready","pre_ready_boundary":"GameHUD_static_script_preloads_before_ready_not_instrumented","stages_ms":{"attach_touch_scroll_support":{"duration_ms":0.467,"start_ms":160.458},"build_bottom_chassis":{"duration_ms":31.886,"start_ms":119.802},"build_combat_controls":{"duration_ms":8.185,"start_ms":151.688},"build_hidden_compatibility_info":{"duration_ms":9.826,"start_ms":105.213},"build_item_quick_slot_menu":{"duration_ms":0.585,"start_ms":159.873},"build_loading_transition":{"duration_ms":2.144,"start_ms":160.925},"build_loot_feedback":{"duration_ms":0.742,"start_ms":115.692},"build_right_utility_stack":{"duration_ms":3.368,"start_ms":116.434},"build_target_bar":{"duration_ms":0.653,"start_ms":115.039},"initial_state_sync":{"duration_ms":0.565,"start_ms":163.081},"root_and_theme":{"duration_ms":105.19,"start_ms":0.0},"safe_area_setup":{"duration_ms":0.023,"start_ms":105.19},"wire_player_state_signals":{"duration_ms":0.012,"start_ms":163.069}},"total_ms":163.65}
+[InitialGameRootProfile] {"lifecycle_ms":{"enter_tree_to_ready":0.019,"init_to_enter_tree":0.056},"origin":"GameRoot._init","pre_ready_boundary":"scene_resource_loading_and_instantiation_before_GameRoot._init_not_instrumented","stages_ms":{"background_construct_and_attach":{"duration_ms":0.16,"start_ms":6.45},"bootstrap_dispatch":{"duration_ms":0.132,"start_ms":4082.208},"camera_construct_and_attach":{"duration_ms":0.047,"start_ms":203.524},"hud_attach_and_ready":{"duration_ms":3822.603,"start_ms":203.641},"hud_construct":{"duration_ms":0.037,"start_ms":203.571},"hud_post_ready_setup":{"duration_ms":2.668,"start_ms":4026.244},"hud_signal_wiring":{"duration_ms":0.033,"start_ms":203.608},"player_construct_wire_attach_restore":{"duration_ms":196.914,"start_ms":6.61},"pre_background_setup":{"duration_ms":6.375,"start_ms":0.075},"system_menu_build":{"duration_ms":53.296,"start_ms":4028.912}},"total_ms":4082.342}
+[UIPanelPrewarmProfile] {"background_mode":false,"catalog_icon_pending":0,"catalog_icon_prewarm_complete":false,"completed":true,"confirmation_wait_frames":0,"construction_ms":3589.52,"construction_ms_by_panel":{"death_revival":4.663,"enhancement":194.752,"inventory":97.807,"map":22.825,"quest":14.727,"shop":8.926,"skill":17.568,"warehouse":43.876},"initial_profiles_elapsed_ms":3589.581,"initial_profiles_wait_frames":0,"script_prefetch":{"failures":[],"loaded":7,"pending":[],"requested":7,"waited_frames":242},"shop_alternate_profile_warmed":true,"shop_buy_wait_frames":0,"shop_profiles_elapsed_ms":3921.159,"shop_sell_wait_frames":3,"started_at_usec":17581500,"total_ms":4051.016}
+SCRIPT ERROR: Assertion failed: canonical snapshot fixture must wait for READY input
+   at: _wait_for_formal_world (res://tests/canonical_snapshot_identity_production_test.gd:218)
+   GDScript backtrace (most recent call first):
+       [0] _wait_for_formal_world (res://tests/canonical_snapshot_identity_production_test.gd:218)
+SCRIPT ERROR: Assertion failed: canonical snapshot target must have a clear WORLD path
+   at: _run (res://tests/canonical_snapshot_identity_production_test.gd:58)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/canonical_snapshot_identity_production_test.gd:58)
+       [1] _wait_for_formal_world (res://tests/canonical_snapshot_identity_production_test.gd:218)
+[PASS] canonical_snapshot_propagation_test
+[PASS] fire_wall_cap_policy_canonical_plan_test
+[PASS] caster_runtime_canonical_plan_adapter_test
+[PASS] feature_fire_effect_production_test
+RUNNER_RESULTS_JSON=C:\Users\Administrator\.codex\worktrees\pluggable-framework-v2\HardCore\outputs\test_logs\runner_results_adhoc_20261004_123827_898_22064.json
+TEST_SUMMARY suite=adhoc passed=8 failed=1 engine_log_errors=2
+FAILED_TESTS=canonical_snapshot_identity_production_test (missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2)

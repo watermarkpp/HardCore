@@ -3,6 +3,7 @@ extends RefCounted
 
 const SkillDataLoaderScript := preload("res://scripts/skills/skill_data_loader.gd")
 const ActionLease := preload("res://scripts/features/contracts/action_config_lease.gd")
+const ChildLease := preload("res://scripts/features/contracts/child_action_lease.gd")
 const SkillCastRequestScript := preload("res://scripts/skills/skill_cast_request.gd")
 const SkillTargetServiceScript := preload("res://scripts/skills/skill_target_service.gd")
 const SkillResourceServiceScript := preload("res://scripts/skills/skill_resource_service.gd")
@@ -37,13 +38,16 @@ static func _plan(request: Variant, definition: Dictionary = {}) -> Dictionary:
 				request_validation.get("reason", "invalid_request")
 			),
 		}
-	var skill_id := SkillDataLoaderScript.stable_skill_id(str(request.get("skill_id", "")))
+	var child: RefCounted = ChildLease.from_request(request)
+	if request.has("child_action_lease") and child==null:
+		return {"accepted":false,"effect_success":false,"resource_commit":false,"reason":"invalid_request"}
+	var skill_id := str(request.skill_id) if child!=null else SkillDataLoaderScript.stable_skill_id(str(request.get("skill_id", "")))
 	var resolved_request: Dictionary = request
 	if SkillRankResolverScript.mode_for(skill_id) == "EXCLUDED" and int(request.get("rank", 0)) > 3:
 		resolved_request = request.duplicate(false)
 		resolved_request["rank"] = SkillRankResolverScript.formula_rank(request.get("rank", 0))
 	if definition.is_empty():
-		definition = ActionLease.resolve_definition(skill_id, request.get("action_config_lease"))
+		definition = child.definition() if child!=null else ActionLease.resolve_definition(skill_id, request.get("action_config_lease"))
 	if definition.is_empty():
 		return {
 			"accepted": false,
@@ -85,6 +89,13 @@ static func _plan(request: Variant, definition: Dictionary = {}) -> Dictionary:
 	var rng := SkillRngScript.new(int(resolved_request.get("seed", 0)))
 	var plan: Dictionary
 	match str(definition.get("class", "")):
+		"child_action":
+			if child==null: return {"accepted":false,"reason":"invalid_request"}
+			var command: Dictionary=child.command()
+			plan={"accepted":true,"effect_success":true,"resource_commit_required":false,
+				"effects":[{"type":"area_damage","raw_power":int(command.raw_damage),
+					"radius_gu":float(command.radius_gu),"source_class":"child","damage_channel":"magic_defense",
+					"causes_struck":false,"direct_magic_walk_delay":false}]}
 		"warrior":
 			plan = WarriorRuntimeScript.execute(definition, resolved_request, rng)
 		"wizard":
@@ -110,7 +121,7 @@ static func _plan(request: Variant, definition: Dictionary = {}) -> Dictionary:
 	plan["target"] = definition.get("target", {}).duplicate(true)
 	plan["resource"] = resource_quote.duplicate(true)
 	plan["mechanics"] = definition.get("mechanics", {}).duplicate(true)
-	plan["geometry_cells"] = SkillGeometryServiceScript.cells(
+	plan["geometry_cells"] = [] if child!=null else SkillGeometryServiceScript.cells(
 		definition,
 		request.get("origin_tile", Vector2i.ZERO),
 		request.get("facing", Vector2i.DOWN),
@@ -139,10 +150,15 @@ static func build_canonical_plan(
 			request,
 			context
 		)
-	var skill_id := SkillDataLoaderScript.stable_skill_id(
+	var child: RefCounted = ChildLease.from_request(request)
+	if request.has("child_action_lease"):
+		if child==null: return _canonical_rejection_plan("","invalid_request",request,context)
+		context=child.planning_context(context)
+		if context.is_empty(): return _canonical_rejection_plan(str(request.skill_id),"invalid_request",request,{})
+	var skill_id := str(request.skill_id) if child!=null else SkillDataLoaderScript.stable_skill_id(
 		str(request.get("skill_id", ""))
 	)
-	var definition := ActionLease.resolve_definition(skill_id, request.get("action_config_lease"))
+	var definition: Dictionary = child.definition() if child!=null else ActionLease.resolve_definition(skill_id, request.get("action_config_lease"))
 	if definition.is_empty():
 		return _canonical_rejection_plan(
 			skill_id,
@@ -160,6 +176,12 @@ static func build_canonical_plan(
 		resolved_request,
 		context
 	)
+
+
+# Only constructs immutable input. All planning still goes through the one
+# build_canonical_plan entry and its existing domain/snapshot envelope.
+static func create_child_request(command: Dictionary, world: RefCounted, release_id: String) -> Dictionary:
+	return ChildLease.create(command,world,release_id)
 
 
 static func _canonical_rejection_plan(

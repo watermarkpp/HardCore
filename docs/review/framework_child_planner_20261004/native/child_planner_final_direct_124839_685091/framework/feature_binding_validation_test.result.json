@@ -1,0 +1,227 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "unknown: establish valid enabled source",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "unknown: malformed binding rejects complete registry",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "unknown: explicit binding rejection reason",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "unknown: all published registry members remain unchanged",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "unknown: no partial contribution generation or observer notification",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "missing: establish valid enabled source",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "missing: malformed binding rejects complete registry",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "missing: explicit binding rejection reason",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "missing: all published registry members remain unchanged",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "missing: no partial contribution generation or observer notification",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "null: establish valid enabled source",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "null: malformed binding rejects complete registry",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "null: explicit binding rejection reason",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "null: all published registry members remain unchanged",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "null: no partial contribution generation or observer notification",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "number: establish valid enabled source",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "number: malformed binding rejects complete registry",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "number: explicit binding rejection reason",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "number: all published registry members remain unchanged",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "number: no partial contribution generation or observer notification",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "array: establish valid enabled source",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "array: malformed binding rejects complete registry",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "array: explicit binding rejection reason",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "array: all published registry members remain unchanged",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "array: no partial contribution generation or observer notification",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "mixed: establish valid enabled source",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "mixed: malformed binding rejects complete registry",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "mixed: explicit binding rejection reason",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "mixed: all published registry members remain unchanged",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "mixed: no partial contribution generation or observer notification",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "skill_number: establish valid enabled source",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "skill_number: malformed binding rejects complete registry",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "skill_number: explicit binding rejection reason",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "skill_number: all published registry members remain unchanged",
+      "passed": true
+    },
+    {
+      "id": 35,
+      "label": "skill_number: no partial contribution generation or observer notification",
+      "passed": true
+    },
+    {
+      "id": 36,
+      "label": "skill_array: establish valid enabled source",
+      "passed": true
+    },
+    {
+      "id": 37,
+      "label": "skill_array: malformed binding rejects complete registry",
+      "passed": true
+    },
+    {
+      "id": 38,
+      "label": "skill_array: explicit binding rejection reason",
+      "passed": true
+    },
+    {
+      "id": 39,
+      "label": "skill_array: all published registry members remain unchanged",
+      "passed": true
+    },
+    {
+      "id": 40,
+      "label": "skill_array: no partial contribution generation or observer notification",
+      "passed": true
+    },
+    {
+      "id": 41,
+      "label": "baseline restored",
+      "passed": true
+    }
+  ],
+  "count": 41,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+  "passed": 41,
+  "reported_checks": 41,
+  "reported_failures": 0,
+  "run_id": "b0b4d88e-bacd-432d-94f3-c402cb5c559d",
+  "runtime_environment": {
+    "native_process_id": 8360,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\child_planner_final_direct_8f9b84198ca04a54bff07678d0b14ae6",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_planner_final_direct_8f9b84198ca04a54bff07678d0b14ae6/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "feature_binding_validation_test",
+  "schema_version": 1,
+  "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+  "status": "PASS"
+}

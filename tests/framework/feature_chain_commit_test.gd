@@ -148,6 +148,36 @@ func _run() -> void:
 	invalid_actor.take_damage(10,null,{"feature_damage_batch":valid.batch,"source_class":"direct","damage_channel":"magic_defense"})
 	_check(invalid_actor.current_hp==hp_before and valid.batch.facts().is_empty(),"missing mapped geometry refuses the chain commit before HP with no identity fallback")
 	invalid_actor.queue_free(); await get_tree().process_frame
+	# Audited wrong-public-entry and Combat projection recovery boundaries.
+	for source_class: String in ["periodic","child"]:
+		var release := "chain:child:1" if source_class=="child" else "chain:root:1"
+		var made: Dictionary=batch_type.create(world,release,"hc.skill.wizard.ice_storm",[],{},0,null,null,_lineage(release,source_class),source_class)
+		_check(made.success,source_class+" wrong-entry probe owns a legal finite batch")
+		if not made.success: continue
+		var batch: RefCounted=made.batch; batch.begin_base_scope()
+		var actor:=_target()
+		var attack_before: float=float(actor.get("_attack_timer"))
+		var actor_rng: int=actor.get("_rng").state
+		actor.take_damage(10,null,{"feature_damage_batch":batch,"source_class":source_class,"damage_channel":"magic_defense"})
+		_check(actor.current_hp==30 and float(actor.get("_attack_timer"))==attack_before and actor.get("_rng").state==actor_rng,
+			"matching "+source_class+" caller label cannot turn the direct public entry into a chain HP or STRUCK entry")
+		_check(batch.facts().is_empty() and batch.errors.is_empty(),source_class+" wrong public entry preserves the legal batch qualification")
+		actor.configure_runtime_map_projection(current_map_id,Callable(),Callable())
+		var rng:=RandomNumberGenerator.new(); rng.seed=54892
+		var rng_before: int=rng.state
+		var result: Dictionary=combat.apply_feature_child_damage(actor,100,null,rng,{},batch) if source_class=="child" \
+			else combat.apply_feature_periodic_chain_damage(actor,100,null,rng,{},batch)
+		_check(not result.success and rng.state==rng_before and actor.current_hp==30 \
+			and batch.errors.is_empty() and batch.facts().is_empty(),
+			"bad projection through Combat "+source_class+" refuses before RNG/HP and keeps qualification")
+		actor.configure_runtime_map_projection(current_map_id,_ground_to_screen,_screen_to_ground)
+		result=combat.apply_feature_child_damage(actor,100,null,rng,{},batch) if source_class=="child" \
+			else combat.apply_feature_periodic_chain_damage(actor,100,null,rng,{},batch)
+		_check(result.success and result.actual_loss==30 and batch.facts().size()==1 and batch.errors.is_empty(),
+			"after wrong entry and bad projection the same "+source_class+" batch legally commits exactly once")
+		_check(actor.collision_layer==0 and actor.collision_mask==0,source_class+" recovered death still removes collision immediately")
+		batch.finish_base_scope(); batch.consume()
+		actor.queue_free(); await get_tree().process_frame
 	_finish()
 
 func _finish() -> void:

@@ -1,0 +1,24 @@
+{
+  "scope": "Only two planner files temporarily use exact saved parent bytes; all other production/fixture bytes kept. Not a complete parent checkout run.",
+  "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\child_planner_baseline_84621d8b4c3e41109ea49c2801835cad",
+  "command": [
+    "py",
+    "-3.12",
+    "tools/source176_r3_validation.py",
+    "child_planner_snapshot_baseline",
+    "--tests",
+    "tests/canonical_snapshot_identity_production_test.tscn",
+    "--timeout",
+    "30"
+  ],
+  "original_sha256": {
+    "scripts/skills/skill_runtime_router.gd": "1abd850db05601cd989550b0ac5f1574eb6ffa988c06e8a82a3312d67f83be2b",
+    "scripts/skills/skill_execution_plan_contract.gd": "1f8a3831aaa715b7aff294a205ade55b2a65c6bce01211a35915902f8efa657c"
+  },
+  "tested_planner_sha256": {
+    "scripts/skills/skill_runtime_router.gd": "48c06f5450832836018147a22a7310e2053ed2f17cab6531f4233ee0e1f831bf",
+    "scripts/skills/skill_execution_plan_contract.gd": "4dec266dd314025ea3a54f4ffc13c5964f51457ede5264b60d35d871230bbc4b"
+  },
+  "exit_code": 0,
+  "restored": true
+}

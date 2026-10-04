@@ -1,0 +1,7 @@
+WARNING: 未实现的技能几何形状：continuous_circle
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] cells (res://scripts/skills/skill_geometry_service.gd:80)
+       [1] _plan (res://scripts/skills/skill_runtime_router.gd:124)
+       [2] build_canonical_plan (res://scripts/skills/skill_runtime_router.gd:173)
+       [3] _run (res://tests/framework/feature_child_planner_test.gd:66)

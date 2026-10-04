@@ -1,0 +1,12 @@
+{
+  "request": "child-commit-5b8288f7-20261004",
+  "sha": "5b8288f773d0659b2d1e45538f93fc9a2556dfba",
+  "thread_id": "01a0f143-1bc9-71c0-91f2-5de4ffd0b01f",
+  "host_id": "durable",
+  "turn_id": "01a1052e-54fd-75e0-90bb-381f7a88bc56",
+  "item_id": "exec-e0ef25e2-f7f1-4fbe-b9c4-8f67419f4b71",
+  "source_status": "completed",
+  "full_body_chars": 5599,
+  "actually_read_at_utc": "2026-10-04T04:38:59.775Z",
+  "followup": "原生证伪合法periodic/child batch误走直接take_damage，若复现则入口绑定语义且拒绝不污染；不重做已认可事实冻结。"
+}

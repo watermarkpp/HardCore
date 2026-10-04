@@ -1,0 +1,40 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "feature_child_planner_test",
+                        "test_path":  "tests/framework/feature_child_planner_test.tscn",
+                        "wrapper_process_id":  21100,
+                        "wrapper_started_utc":  "2026-10-04T04:28:27.9631031Z",
+                        "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\child_planner_red_be416ab5e9cf4f889872dea75945645c",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  false,
+                        "process_exited":  false,
+                        "wrapper_exit_code":  -1,
+                        "child_process_exit_state":  "forced_termination",
+                        "execution_deadline_utc":  "2026-10-04T04:28:57.9736749Z",
+                        "native_exit_observed_utc":  null,
+                        "effective_exit_code":  -1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  2,
+                        "engine_log_failure_count":  2,
+                        "framework_run_id":  "6703a11c-ecc9-401b-8f0d-a6ca7017852d",
+                        "framework_receipt_valid":  false,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2;framework_receipt_missing"
+                    }
+                ],
+    "total":  1,
+    "invocation_id":  "70692d3e-aab6-45d4-9678-609ae9d8ef29",
+    "runtime_environment":  {
+                                "project_root":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+                                "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\child_planner_red_be416ab5e9cf4f889872dea75945645c",
+                                "runner_process_id":  2344
+                            },
+    "passed":  0,
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "engine_log_errors":  2,
+    "generated_at":  "2026-10-04T12:28:31.5022134+08:00",
+    "failed":  1,
+    "suite":  "adhoc"
+}

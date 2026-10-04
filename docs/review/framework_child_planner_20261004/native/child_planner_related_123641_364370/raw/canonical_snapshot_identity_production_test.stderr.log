@@ -1,0 +1,9 @@
+SCRIPT ERROR: Assertion failed: canonical snapshot fixture must wait for READY input
+   at: _wait_for_formal_world (res://tests/canonical_snapshot_identity_production_test.gd:218)
+   GDScript backtrace (most recent call first):
+       [0] _wait_for_formal_world (res://tests/canonical_snapshot_identity_production_test.gd:218)
+SCRIPT ERROR: Assertion failed: canonical snapshot target must have a clear WORLD path
+   at: _run (res://tests/canonical_snapshot_identity_production_test.gd:58)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/canonical_snapshot_identity_production_test.gd:58)
+       [1] _wait_for_formal_world (res://tests/canonical_snapshot_identity_production_test.gd:218)

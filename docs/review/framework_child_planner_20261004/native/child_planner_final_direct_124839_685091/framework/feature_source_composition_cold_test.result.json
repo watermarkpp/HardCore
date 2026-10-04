@@ -1,0 +1,82 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "independent cold process starts with actual persistence",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "successful live composition supplies an explicit owned handoff",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "expectation binds this invocation's native exit-zero complete live producer",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "cold restoration has a different native execution identity",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "fresh process resolves the same registered sources through the production configuration",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "real cold loader restores the producer's isolated durable profile",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "cold equipment keeps the complete validated persisted wire content exactly",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "cold gear owns the same original gem exactly once",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "cold aggregate has no second accessible copy of the embedded gem",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "cold compiler reconstructs the two exact affix and gem provenance handles",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "cold retry of the original insertion returns the recorded outcome without a new writer",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "cold replay neither duplicates the gem nor replaces either source",
+      "passed": true
+    }
+  ],
+  "count": 12,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+  "passed": 12,
+  "reported_checks": 12,
+  "reported_failures": 0,
+  "run_id": "35aa485c-60e1-4875-9180-d4d9049da965",
+  "runtime_environment": {
+    "native_process_id": 12636,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\child_planner_final_direct_8f9b84198ca04a54bff07678d0b14ae6",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_planner_final_direct_8f9b84198ca04a54bff07678d0b14ae6/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "feature_source_composition_cold_test",
+  "schema_version": 1,
+  "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+  "status": "PASS"
+}

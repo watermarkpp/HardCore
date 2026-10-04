@@ -1,0 +1,46 @@
+{
+  "parent": "5b8288f773d0659b2d1e45538f93fc9a2556dfba",
+  "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+  "delta": [
+    {
+      "path": "scripts/enemy.gd",
+      "before_sha256": "0b6f85e3878339b393e5f998de76739b32da97e0996f94ee425048097a766633",
+      "after_sha256": "897d108e642c21f3fcb3145e7abc15799974dc69b4acb3d774af758c9de636cc"
+    },
+    {
+      "path": "scripts/features/contracts/child_action_lease.gd",
+      "before_sha256": null,
+      "after_sha256": "5677b1e9f01f94db0164093f19cb2e55650e689bed38c23870552607cbbe01ac"
+    },
+    {
+      "path": "scripts/skills/skill_execution_plan_contract.gd",
+      "before_sha256": "4dec266dd314025ea3a54f4ffc13c5964f51457ede5264b60d35d871230bbc4b",
+      "after_sha256": "1f8a3831aaa715b7aff294a205ade55b2a65c6bce01211a35915902f8efa657c"
+    },
+    {
+      "path": "scripts/skills/skill_runtime_router.gd",
+      "before_sha256": "48c06f5450832836018147a22a7310e2053ed2f17cab6531f4233ee0e1f831bf",
+      "after_sha256": "1abd850db05601cd989550b0ac5f1574eb6ffa988c06e8a82a3312d67f83be2b"
+    },
+    {
+      "path": "tests/framework/feature_chain_commit_test.gd",
+      "before_sha256": "a5ea5b10b1a5f47ac2960d97a731cfb5d90ff5207fbbe2dba1e3522028b84c2a",
+      "after_sha256": "7186dbf733a54da696c2a05205d162f40560649af91db3189c47bf275c798499"
+    },
+    {
+      "path": "tests/framework/feature_child_planner_test.gd",
+      "before_sha256": null,
+      "after_sha256": "31288d57b574ba28db58596275260cbef4f04d10c876b3bff75a614de2ae76ab"
+    },
+    {
+      "path": "tests/framework/feature_child_planner_test.tscn",
+      "before_sha256": null,
+      "after_sha256": "33fa469bf8328967870fcd13afad7c53f6b74628dc2f3bac8a8a0393f7d91cb7"
+    },
+    {
+      "path": "assets/data/features/child_actions_v1.json",
+      "before_sha256": null,
+      "after_sha256": "ea2b2def6fa906b4f5891f0ddec020fc52831a61df8b778aff96858a80802e05"
+    }
+  ]
+}

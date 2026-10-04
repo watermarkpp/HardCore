@@ -1,0 +1,1720 @@
+{
+  "files": [
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_class_green_124430_371106/before.json",
+      "archive_path": "native/child_planner_class_green_124430_371106/before.json",
+      "bytes": 509558,
+      "sha256": "941b9c2ac0ce600a645793f8d36a2051af64434b08b7686e97a1433c084c5a52"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_class_green_124430_371106/after.json",
+      "archive_path": "native/child_planner_class_green_124430_371106/after.json",
+      "bytes": 509558,
+      "sha256": "2136b543042de15908768c98c16c289f0c852b4f3748aac068cde82829a397df"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_class_green_124430_371106/validation.json",
+      "archive_path": "native/child_planner_class_green_124430_371106/validation.json",
+      "bytes": 648,
+      "sha256": "07d0deff03f659b38771ccbd350750c5ffe849f8975b26bb41a296deee05847c"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_class_green_124430_371106/runner_results.json",
+      "archive_path": "native/child_planner_class_green_124430_371106/runner_results.json",
+      "bytes": 9646,
+      "sha256": "54bab32ccf83fa7caaf908b42bd45401b55e1d3e005186066e4fa9e6208769d3"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_class_green_124430_371106/runner.log",
+      "archive_path": "native/child_planner_class_green_124430_371106/runner.log",
+      "bytes": 462,
+      "sha256": "26c3946a0e27c6e4263acf2b0fbffa9d20132db05d307b2c1bef4eb76c970402"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_class_green_124430_371106/raw/canonical_snapshot_identity_production_test.godot.log",
+      "archive_path": "native/child_planner_class_green_124430_371106/raw/canonical_snapshot_identity_production_test.godot.log",
+      "bytes": 5120,
+      "sha256": "2102b9f7b6d20595bcb3cc7b8038203f9ab40d43b0dd7bb7db67356ccf380202"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_class_green_124430_371106/raw/canonical_snapshot_identity_production_test.stderr.log",
+      "archive_path": "native/child_planner_class_green_124430_371106/raw/canonical_snapshot_identity_production_test.stderr.log",
+      "bytes": 134,
+      "sha256": "d38569d944cfe31ff158c736946a05eb57d6417155a94d713e80fb615b637c85"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_class_green_124430_371106/raw/canonical_snapshot_identity_production_test.stdout.log",
+      "archive_path": "native/child_planner_class_green_124430_371106/raw/canonical_snapshot_identity_production_test.stdout.log",
+      "bytes": 5130,
+      "sha256": "17527a19f0b0d63d88f03264e00fad24f6032f374e394d8b4d9409f40721fd69"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_class_green_124430_371106/raw/feature_chain_commit_test.godot.log",
+      "archive_path": "native/child_planner_class_green_124430_371106/raw/feature_chain_commit_test.godot.log",
+      "bytes": 218,
+      "sha256": "14c2d0f73fbc19c21dde87dacdb5a25c3c61c51193d88f96db96c4b9be578f5f"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_class_green_124430_371106/raw/feature_chain_commit_test.stderr.log",
+      "archive_path": "native/child_planner_class_green_124430_371106/raw/feature_chain_commit_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_class_green_124430_371106/raw/feature_chain_commit_test.stdout.log",
+      "archive_path": "native/child_planner_class_green_124430_371106/raw/feature_chain_commit_test.stdout.log",
+      "bytes": 222,
+      "sha256": "e059e5c07572913cb6d0e68b22e0b9d7185e087f12bfa956cc77b09dd36f2d29"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_class_green_124430_371106/raw/feature_child_planner_test.godot.log",
+      "archive_path": "native/child_planner_class_green_124430_371106/raw/feature_child_planner_test.godot.log",
+      "bytes": 207,
+      "sha256": "9864787607e87938b62c2cb3d08438cc570ea4b8c1a4dca5330ac89592e6dbbc"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_class_green_124430_371106/raw/feature_child_planner_test.stderr.log",
+      "archive_path": "native/child_planner_class_green_124430_371106/raw/feature_child_planner_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_class_green_124430_371106/raw/feature_child_planner_test.stdout.log",
+      "archive_path": "native/child_planner_class_green_124430_371106/raw/feature_child_planner_test.stdout.log",
+      "bytes": 211,
+      "sha256": "45ebcbe4b8870d057f5a7f23d41163ccb0554c82074fa21a3dc0be5af0416b57"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_class_green_124430_371106/raw/periodic_effect_boundaries_test.godot.log",
+      "archive_path": "native/child_planner_class_green_124430_371106/raw/periodic_effect_boundaries_test.godot.log",
+      "bytes": 225,
+      "sha256": "d0f9f83ccc34a6d0d4721644c48c7fae9036bfb960f1c3e907b65e552b69fb1d"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_class_green_124430_371106/raw/periodic_effect_boundaries_test.stderr.log",
+      "archive_path": "native/child_planner_class_green_124430_371106/raw/periodic_effect_boundaries_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_class_green_124430_371106/raw/periodic_effect_boundaries_test.stdout.log",
+      "archive_path": "native/child_planner_class_green_124430_371106/raw/periodic_effect_boundaries_test.stdout.log",
+      "bytes": 229,
+      "sha256": "f8caa51e349268c690e05529e179c26d604b297788534f3da57fb6739f58e404"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_class_green_124430_371106/raw/periodic_effect_death_production_test.godot.log",
+      "archive_path": "native/child_planner_class_green_124430_371106/raw/periodic_effect_death_production_test.godot.log",
+      "bytes": 5136,
+      "sha256": "832332cfc858fe68674f9b272aae930574ec5b7e99d22cc00b199ef514d34865"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_class_green_124430_371106/raw/periodic_effect_death_production_test.stderr.log",
+      "archive_path": "native/child_planner_class_green_124430_371106/raw/periodic_effect_death_production_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_class_green_124430_371106/raw/periodic_effect_death_production_test.stdout.log",
+      "archive_path": "native/child_planner_class_green_124430_371106/raw/periodic_effect_death_production_test.stdout.log",
+      "bytes": 5146,
+      "sha256": "e268736d165afffa05fa330c735969bd77c15c541437def074b7c70e58c4fdab"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_class_green_124430_371106/raw/periodic_effect_runtime_test.godot.log",
+      "archive_path": "native/child_planner_class_green_124430_371106/raw/periodic_effect_runtime_test.godot.log",
+      "bytes": 221,
+      "sha256": "1feca48b2526026bd701ebbc3f96ed4b24c9e73538bfbb9453a399aee3944595"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_class_green_124430_371106/raw/periodic_effect_runtime_test.stderr.log",
+      "archive_path": "native/child_planner_class_green_124430_371106/raw/periodic_effect_runtime_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_class_green_124430_371106/raw/periodic_effect_runtime_test.stdout.log",
+      "archive_path": "native/child_planner_class_green_124430_371106/raw/periodic_effect_runtime_test.stdout.log",
+      "bytes": 225,
+      "sha256": "d50f6d703a34af1193acf9b0ab19cc712545a27b8b2ae9006da6a2516aed4796"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_class_green_124430_371106/framework/feature_chain_commit_test.result.json",
+      "archive_path": "native/child_planner_class_green_124430_371106/framework/feature_chain_commit_test.result.json",
+      "bytes": 11473,
+      "sha256": "cfe59fe43b11e58b69caa6f8298dcf8a13af80e146363dc01ca8fa1c9060e756"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_class_green_124430_371106/framework/feature_child_planner_test.result.json",
+      "archive_path": "native/child_planner_class_green_124430_371106/framework/feature_child_planner_test.result.json",
+      "bytes": 6780,
+      "sha256": "414386577087afcbf80836065a68fb56cd379da07df0c4284a0222ee98098024"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_class_green_124430_371106/framework/native_handoffs.json",
+      "archive_path": "native/child_planner_class_green_124430_371106/framework/native_handoffs.json",
+      "bytes": 5197,
+      "sha256": "444fa8b520c2129d77589b0d35603c2aef33d8a2deee85bb2dae8725f122353e"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_class_green_124430_371106/framework/periodic_effect_boundaries_test.result.json",
+      "archive_path": "native/child_planner_class_green_124430_371106/framework/periodic_effect_boundaries_test.result.json",
+      "bytes": 3774,
+      "sha256": "f973bace4a4aab07b003db53245fc92826f658d0d4803fd135bccb6305837d17"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_class_green_124430_371106/framework/periodic_effect_death_production_test.result.json",
+      "archive_path": "native/child_planner_class_green_124430_371106/framework/periodic_effect_death_production_test.result.json",
+      "bytes": 2972,
+      "sha256": "975d2c8399282d3c9150d2078dd25fd316a2089c81572b78d67538b408915fc6"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_class_green_124430_371106/framework/periodic_effect_runtime_test.result.json",
+      "archive_path": "native/child_planner_class_green_124430_371106/framework/periodic_effect_runtime_test.result.json",
+      "bytes": 2627,
+      "sha256": "72d52c58c9636c91faeed5cfbf555e1b54cd5130e8db2d4337e746c37557ffe0"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_diagnostic_123342_686363/before.json",
+      "archive_path": "native/child_planner_diagnostic_123342_686363/before.json",
+      "bytes": 509558,
+      "sha256": "974fd651582403b00081dc5011db6134bafd14e97340683605be0bbe98fe5aad"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_diagnostic_123342_686363/after.json",
+      "archive_path": "native/child_planner_diagnostic_123342_686363/after.json",
+      "bytes": 509558,
+      "sha256": "6453e45f62a1dbbf5d57157828e7d5c8ec5b01ebefaebd397bfc443268af0b07"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_diagnostic_123342_686363/validation.json",
+      "archive_path": "native/child_planner_diagnostic_123342_686363/validation.json",
+      "bytes": 374,
+      "sha256": "2f791d688ba5f32e260a4527ff8f571edba73c7637892774acd86dcbc9be3f73"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_diagnostic_123342_686363/runner_results.json",
+      "archive_path": "native/child_planner_diagnostic_123342_686363/runner_results.json",
+      "bytes": 2347,
+      "sha256": "3db7da2ce33e0114043d89dc4770d13fd562a29df81b23169d2de6f51c029d1e"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_diagnostic_123342_686363/runner.log",
+      "archive_path": "native/child_planner_diagnostic_123342_686363/runner.log",
+      "bytes": 6898,
+      "sha256": "795ff0430e6a19dab854ecf666a025a3bebd2807fe0234f30738e628772c54bf"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_diagnostic_123342_686363/raw/feature_child_planner_test.godot.log",
+      "archive_path": "native/child_planner_diagnostic_123342_686363/raw/feature_child_planner_test.godot.log",
+      "bytes": 6428,
+      "sha256": "8fccbc896c972c8a33fd2fc11b83e9b4f940894b5d70f7701e58342bc27bec8e"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_diagnostic_123342_686363/raw/feature_child_planner_test.stderr.log",
+      "archive_path": "native/child_planner_diagnostic_123342_686363/raw/feature_child_planner_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_diagnostic_123342_686363/raw/feature_child_planner_test.stdout.log",
+      "archive_path": "native/child_planner_diagnostic_123342_686363/raw/feature_child_planner_test.stdout.log",
+      "bytes": 6433,
+      "sha256": "9c006d2bb4ad9970716681d545a6c51250908385d41213dc2e775583a9a8ada3"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_diagnostic_123342_686363/framework/feature_child_planner_test.result.json",
+      "archive_path": "native/child_planner_diagnostic_123342_686363/framework/feature_child_planner_test.result.json",
+      "bytes": 1686,
+      "sha256": "023d9d831bdd53b348b5d2959dedb9fe898a5509faa38688878ab7284524cd4f"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_diagnostic_123342_686363/framework/native_handoffs.json",
+      "archive_path": "native/child_planner_diagnostic_123342_686363/framework/native_handoffs.json",
+      "bytes": 710,
+      "sha256": "1f6ebda2c2a20d067268c3feb4f61beb4bb1ca57c8319d33b4d429611f5b9710"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_entry_class_red_124108_522428/before.json",
+      "archive_path": "native/child_planner_entry_class_red_124108_522428/before.json",
+      "bytes": 509558,
+      "sha256": "c0058c09ee0284e5a5cd1adea74575d47b347b49d8763dc544134c17c2b203ee"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_entry_class_red_124108_522428/after.json",
+      "archive_path": "native/child_planner_entry_class_red_124108_522428/after.json",
+      "bytes": 509558,
+      "sha256": "72d9aef104eb11a98d5cd5b657c565c72f3d35a60380f92fc8289a658f57165a"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_entry_class_red_124108_522428/validation.json",
+      "archive_path": "native/child_planner_entry_class_red_124108_522428/validation.json",
+      "bytes": 373,
+      "sha256": "21d163caa98d0074ee5522e833a4f6d5dd75ee83639e53aec1336e7607c24bd3"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_entry_class_red_124108_522428/runner_results.json",
+      "archive_path": "native/child_planner_entry_class_red_124108_522428/runner_results.json",
+      "bytes": 2354,
+      "sha256": "b903880237f34fe19372fabff82a9cb1dd81260eb529dee42ece7682f6625ae7"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_entry_class_red_124108_522428/runner.log",
+      "archive_path": "native/child_planner_entry_class_red_124108_522428/runner.log",
+      "bytes": 1395,
+      "sha256": "2b27d20f41546cf2fa09ffe0e92a400791086656250d04783b4ac52a0867a7d8"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_entry_class_red_124108_522428/raw/feature_chain_commit_test.godot.log",
+      "archive_path": "native/child_planner_entry_class_red_124108_522428/raw/feature_chain_commit_test.godot.log",
+      "bytes": 929,
+      "sha256": "c3fe241b29196ee26c797c158ca4460efc011d2d7478cf05dcc941901bda2d17"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_entry_class_red_124108_522428/raw/feature_chain_commit_test.stderr.log",
+      "archive_path": "native/child_planner_entry_class_red_124108_522428/raw/feature_chain_commit_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_entry_class_red_124108_522428/raw/feature_chain_commit_test.stdout.log",
+      "archive_path": "native/child_planner_entry_class_red_124108_522428/raw/feature_chain_commit_test.stdout.log",
+      "bytes": 933,
+      "sha256": "13118f4a14e86a322d200bc9f16a5106573875a62ed66fa88c830d383a504932"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_entry_class_red_124108_522428/framework/feature_chain_commit_test.result.json",
+      "archive_path": "native/child_planner_entry_class_red_124108_522428/framework/feature_chain_commit_test.result.json",
+      "bytes": 11488,
+      "sha256": "b057253697407e16786f672adb1a989f6e1ce8f26bb32c7dc464fb12a916f0fb"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_entry_class_red_124108_522428/framework/native_handoffs.json",
+      "archive_path": "native/child_planner_entry_class_red_124108_522428/framework/native_handoffs.json",
+      "bytes": 714,
+      "sha256": "9cf05f4cadd89f131995063d8de28837f98d7a5a4770750fbe10abd107382a7d"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_entry_red_122915_169984/before.json",
+      "archive_path": "native/child_planner_entry_red_122915_169984/before.json",
+      "bytes": 509314,
+      "sha256": "d3fb78c394288d311375eb54035ac84501bc19e81ecf107b68b6b4af88887670"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_entry_red_122915_169984/after.json",
+      "archive_path": "native/child_planner_entry_red_122915_169984/after.json",
+      "bytes": 509314,
+      "sha256": "254a7def89046b9dd64db5dc71cc330dcad678cf73ffbb3f8184fbbe1d01d473"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_entry_red_122915_169984/validation.json",
+      "archive_path": "native/child_planner_entry_red_122915_169984/validation.json",
+      "bytes": 374,
+      "sha256": "2f791d688ba5f32e260a4527ff8f571edba73c7637892774acd86dcbc9be3f73"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_entry_red_122915_169984/runner_results.json",
+      "archive_path": "native/child_planner_entry_red_122915_169984/runner_results.json",
+      "bytes": 2345,
+      "sha256": "4b54c70afc1840e6d520ee52d68a1e70fc5e915f3a8749ad8708712ec47002d5"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_entry_red_122915_169984/runner.log",
+      "archive_path": "native/child_planner_entry_red_122915_169984/runner.log",
+      "bytes": 792,
+      "sha256": "dee14da864d3258af07602ee05c0442639bc758447ae1bd54b55acf7439ce7ce"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_entry_red_122915_169984/raw/feature_child_planner_test.godot.log",
+      "archive_path": "native/child_planner_entry_red_122915_169984/raw/feature_child_planner_test.godot.log",
+      "bytes": 323,
+      "sha256": "11b31ca4aa85f5e293e808e89d00d6709ae1286482df4181052e2fa19dcfd9c1"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_entry_red_122915_169984/raw/feature_child_planner_test.stderr.log",
+      "archive_path": "native/child_planner_entry_red_122915_169984/raw/feature_child_planner_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_entry_red_122915_169984/raw/feature_child_planner_test.stdout.log",
+      "archive_path": "native/child_planner_entry_red_122915_169984/raw/feature_child_planner_test.stdout.log",
+      "bytes": 327,
+      "sha256": "b0cf8bd7325f1fb357d9016d3ac0965b9f650382c39753bd9cdda01b7fda8139"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_entry_red_122915_169984/framework/feature_child_planner_test.result.json",
+      "archive_path": "native/child_planner_entry_red_122915_169984/framework/feature_child_planner_test.result.json",
+      "bytes": 1181,
+      "sha256": "fcd625633a66e9219577e8ce94966a774f680e21b6eb5fe3968a55cd9c48180a"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_entry_red_122915_169984/framework/native_handoffs.json",
+      "archive_path": "native/child_planner_entry_red_122915_169984/framework/native_handoffs.json",
+      "bytes": 709,
+      "sha256": "6b265cce9c55a11514cb2c060232165c2b06ca35ab1a716c9759eb7578a33303"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/before.json",
+      "archive_path": "native/child_planner_final_direct_124839_685091/before.json",
+      "bytes": 509558,
+      "sha256": "f65555c120cab50368ed25139c3633a82a6dae06a3a53b5fad3523cd38a79cf9"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/after.json",
+      "archive_path": "native/child_planner_final_direct_124839_685091/after.json",
+      "bytes": 509558,
+      "sha256": "73db827d7981149e27a2b188e9efdaa56504c82078366a475b06edec4ff9960b"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/validation.json",
+      "archive_path": "native/child_planner_final_direct_124839_685091/validation.json",
+      "bytes": 1740,
+      "sha256": "cfa74ce832aafda7df36f061c1f7f5e2ee8be20450fdc0ce50b60bf9fb629c47"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/runner_results.json",
+      "archive_path": "native/child_planner_final_direct_124839_685091/runner_results.json",
+      "bytes": 39131,
+      "sha256": "60ee994e21309e03b1e527ba3f62ee77da54f21e5df68ac31ddcee01c801ce86"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/runner.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/runner.log",
+      "bytes": 1275,
+      "sha256": "c43a410b9e4d987a968cc3dca2c3f722750a5324c992f21284fc4c4e2fd02f22"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/canonical_snapshot_identity_production_test.godot.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/canonical_snapshot_identity_production_test.godot.log",
+      "bytes": 5123,
+      "sha256": "c8363ffafd051ff133760e47c4f7dfd81af2dd7d29442a0d09f1209045e9d433"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/canonical_snapshot_identity_production_test.stderr.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/canonical_snapshot_identity_production_test.stderr.log",
+      "bytes": 134,
+      "sha256": "d38569d944cfe31ff158c736946a05eb57d6417155a94d713e80fb615b637c85"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/canonical_snapshot_identity_production_test.stdout.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/canonical_snapshot_identity_production_test.stdout.log",
+      "bytes": 5133,
+      "sha256": "8521de3ff7f5c71bab08cb9be5c48cb77936c5c9714683c219028d535e8afc92"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/canonical_snapshot_propagation_test.godot.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/canonical_snapshot_propagation_test.godot.log",
+      "bytes": 5251,
+      "sha256": "20a11f1eeb152b80150fdc78f367d69cbfb9656ea5928aa841cbbda54dfa78ad"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/canonical_snapshot_propagation_test.stderr.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/canonical_snapshot_propagation_test.stderr.log",
+      "bytes": 134,
+      "sha256": "d38569d944cfe31ff158c736946a05eb57d6417155a94d713e80fb615b637c85"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/canonical_snapshot_propagation_test.stdout.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/canonical_snapshot_propagation_test.stdout.log",
+      "bytes": 5261,
+      "sha256": "3b2239e0efaa0764e6677e2f70d1988ef43c583106d62e1dfdf5b531038b3895"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/caster_runtime_canonical_plan_adapter_test.godot.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/caster_runtime_canonical_plan_adapter_test.godot.log",
+      "bytes": 244,
+      "sha256": "d48efe6f331a145133e9c5e66cc998a99f0b160356a1ff6d743ddfda96deef78"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/caster_runtime_canonical_plan_adapter_test.stderr.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/caster_runtime_canonical_plan_adapter_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/caster_runtime_canonical_plan_adapter_test.stdout.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/caster_runtime_canonical_plan_adapter_test.stdout.log",
+      "bytes": 248,
+      "sha256": "f3f706374a2cbaa4251013f9902ed437da42c18debfa2c47dae8ef2b84272005"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/damage_commit_fact_test.godot.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/damage_commit_fact_test.godot.log",
+      "bytes": 224,
+      "sha256": "6d27f5f90b2ed25d722b0187996cd34f6160b3131b4e3e7dbedcd4e8a705e260"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/damage_commit_fact_test.stderr.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/damage_commit_fact_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/damage_commit_fact_test.stdout.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/damage_commit_fact_test.stdout.log",
+      "bytes": 228,
+      "sha256": "8e68088dbc69813e2fa94fa921ed5b43e100778646c995b7c64ca8cfc7406391"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_binding_validation_test.godot.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_binding_validation_test.godot.log",
+      "bytes": 224,
+      "sha256": "03438d30a513b565d00409617c7e5be44e96ef5692fabcd69f884bef9ed6b09d"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_binding_validation_test.stderr.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_binding_validation_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_binding_validation_test.stdout.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_binding_validation_test.stdout.log",
+      "bytes": 228,
+      "sha256": "34a70ad479e32d8292a7f40f506ea472567edfd2fb23ea1ad7af5a79f0f24ee5"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_capacity_admission_test.godot.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_capacity_admission_test.godot.log",
+      "bytes": 5131,
+      "sha256": "5d31c6d004fb35f6333e36f6b49bdde256d48fdb03f43751c08ec74601749b36"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_capacity_admission_test.stderr.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_capacity_admission_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_capacity_admission_test.stdout.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_capacity_admission_test.stdout.log",
+      "bytes": 5141,
+      "sha256": "7fd04c106399239386d5d85a860262ce158d3678e9c4d17fc1317708109b632f"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_chain_commit_test.godot.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_chain_commit_test.godot.log",
+      "bytes": 218,
+      "sha256": "14c2d0f73fbc19c21dde87dacdb5a25c3c61c51193d88f96db96c4b9be578f5f"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_chain_commit_test.stderr.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_chain_commit_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_chain_commit_test.stdout.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_chain_commit_test.stdout.log",
+      "bytes": 222,
+      "sha256": "e059e5c07572913cb6d0e68b22e0b9d7185e087f12bfa956cc77b09dd36f2d29"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_child_capacity_test.godot.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_child_capacity_test.godot.log",
+      "bytes": 220,
+      "sha256": "0c3247afddb204df6baddad936cfa9f16a0b542979dc0bf7a8636072f8902f75"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_child_capacity_test.stderr.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_child_capacity_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_child_capacity_test.stdout.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_child_capacity_test.stdout.log",
+      "bytes": 224,
+      "sha256": "49e459b911129f0e629ecba7e2d4a8f64a9282f5d4ddb528ef66eebb8bb56b3f"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_child_planner_test.godot.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_child_planner_test.godot.log",
+      "bytes": 207,
+      "sha256": "9864787607e87938b62c2cb3d08438cc570ea4b8c1a4dca5330ac89592e6dbbc"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_child_planner_test.stderr.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_child_planner_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_child_planner_test.stdout.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_child_planner_test.stdout.log",
+      "bytes": 211,
+      "sha256": "45ebcbe4b8870d057f5a7f23d41163ccb0554c82074fa21a3dc0be5af0416b57"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_compiler_test.godot.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_compiler_test.godot.log",
+      "bytes": 222,
+      "sha256": "d8715ca729222fa3a65a75038cd58eeae95c0d9cec7b5fd3cd51b7f3ac95e0ef"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_compiler_test.stderr.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_compiler_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_compiler_test.stdout.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_compiler_test.stdout.log",
+      "bytes": 226,
+      "sha256": "7aafd2c3d05732fcc7b9c2c1eb1556836b473df4c44952a8179ba8cddc0e93be"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_death_child_command_test.godot.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_death_child_command_test.godot.log",
+      "bytes": 225,
+      "sha256": "ed12d6400020c04dea10ede87f8ffe021a0bdda6e5a942598f43116e2ca341f9"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_death_child_command_test.stderr.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_death_child_command_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_death_child_command_test.stdout.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_death_child_command_test.stdout.log",
+      "bytes": 229,
+      "sha256": "f08e77ebd6dcd516a4a6338926ceedcc9d1eb242677dd806776d8e7a0201b9e6"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_fire_effect_production_test.godot.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_fire_effect_production_test.godot.log",
+      "bytes": 5144,
+      "sha256": "f87532aae3938350b3e455c78efda7b72fdc0f8293b041cb09f4fe4d9e6e8f58"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_fire_effect_production_test.stderr.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_fire_effect_production_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_fire_effect_production_test.stdout.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_fire_effect_production_test.stdout.log",
+      "bytes": 5154,
+      "sha256": "d31c0126aea7da2d7adea9e2658bc8cc9c9b0ca55a9ef91ec2e71e3dd3cf0b50"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_lifesteal_production_test.godot.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_lifesteal_production_test.godot.log",
+      "bytes": 5122,
+      "sha256": "b9824e30a8984339a35eba993763875971271fd0d346c6435dacd1fb5b8b7825"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_lifesteal_production_test.stderr.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_lifesteal_production_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_lifesteal_production_test.stdout.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_lifesteal_production_test.stdout.log",
+      "bytes": 5132,
+      "sha256": "27c92f66fa801ca982fc24fb96ba088a4a5547073e571f7872e4c83883eb2f52"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_queue_retention_test.godot.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_queue_retention_test.godot.log",
+      "bytes": 219,
+      "sha256": "49e4f2f33207b6e5010f80d51376975184a13729e2125d4882d32a287fe6f232"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_queue_retention_test.stderr.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_queue_retention_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_queue_retention_test.stdout.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_queue_retention_test.stdout.log",
+      "bytes": 223,
+      "sha256": "ebfbe54924244e4ca6690901205c2754f04152a8db5cb2bb6c65d0dff257c709"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_receipt_retirement_test.godot.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_receipt_retirement_test.godot.log",
+      "bytes": 1712,
+      "sha256": "7fe1b70898d9dfc6f3a0742bf712a23244f25f1f186a9c82cde233d85a50e0e2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_receipt_retirement_test.stderr.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_receipt_retirement_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_receipt_retirement_test.stdout.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_receipt_retirement_test.stdout.log",
+      "bytes": 1717,
+      "sha256": "be94828ac22d69f418cfb727d27f167efb2ca6cf6807c3602f968d1b5342855f"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_source_composition_cold_test.godot.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_source_composition_cold_test.godot.log",
+      "bytes": 576,
+      "sha256": "17dde13c09e3526f7f57e99844f82372a2fd041dbe57bf16e78f9020582b5fb1"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_source_composition_cold_test.stderr.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_source_composition_cold_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_source_composition_cold_test.stdout.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_source_composition_cold_test.stdout.log",
+      "bytes": 581,
+      "sha256": "a36619668b15bcdfb4d3cac22b23f8d5451f76aed2d6213c4a06100805dbdbad"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_source_composition_test.godot.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_source_composition_test.godot.log",
+      "bytes": 5131,
+      "sha256": "d828d53a937f61e04c14139e3814d6bf68574cfd52d7ba24b2dda7c3d7cfced7"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_source_composition_test.stderr.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_source_composition_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_source_composition_test.stdout.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_source_composition_test.stdout.log",
+      "bytes": 5141,
+      "sha256": "230a66de9766e0607febee8450642be713c4bab6ec8455e9d59eb459487c237e"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_world_capacity_bound_test.godot.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_world_capacity_bound_test.godot.log",
+      "bytes": 5850,
+      "sha256": "06c99cb53f06f204f542146be72665bb547930bf90fbac2cc56c5b6fad3bfe91"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_world_capacity_bound_test.stderr.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_world_capacity_bound_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/feature_world_capacity_bound_test.stdout.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/feature_world_capacity_bound_test.stdout.log",
+      "bytes": 5861,
+      "sha256": "698e679184670582483b447387b7c80808498a14249b3b35c1e0dae879a71c96"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/fire_wall_cap_policy_canonical_plan_test.godot.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/fire_wall_cap_policy_canonical_plan_test.godot.log",
+      "bytes": 211,
+      "sha256": "758c34b5ce449050ae9f36484d10a5f581e1f1baf8976cddfcb14056a03e8e19"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/fire_wall_cap_policy_canonical_plan_test.stderr.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/fire_wall_cap_policy_canonical_plan_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/fire_wall_cap_policy_canonical_plan_test.stdout.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/fire_wall_cap_policy_canonical_plan_test.stdout.log",
+      "bytes": 215,
+      "sha256": "c5685a397488074503a57ae73b3e07399dbf620fadb299190cb8fa487dee05e5"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/mapped_skill_plan_missing_projection_rejected_test.godot.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/mapped_skill_plan_missing_projection_rejected_test.godot.log",
+      "bytes": 255,
+      "sha256": "2a960e552fc731f183177e3b67d944f4535a9e922d558d213b2f2f3099d47b78"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/mapped_skill_plan_missing_projection_rejected_test.stderr.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/mapped_skill_plan_missing_projection_rejected_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/mapped_skill_plan_missing_projection_rejected_test.stdout.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/mapped_skill_plan_missing_projection_rejected_test.stdout.log",
+      "bytes": 259,
+      "sha256": "dc18a474e997cc8937935576fbc3ff0159fa11c511dbf02d20a872c8b70396e6"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/periodic_delivery_lateness_test.godot.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/periodic_delivery_lateness_test.godot.log",
+      "bytes": 222,
+      "sha256": "14984e7e790d9f8739ed8b0670b213d1c9d288904cac5b33f5d93189ada0949b"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/periodic_delivery_lateness_test.stderr.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/periodic_delivery_lateness_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/periodic_delivery_lateness_test.stdout.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/periodic_delivery_lateness_test.stdout.log",
+      "bytes": 226,
+      "sha256": "68d1dae38133af6bccc756b82ae655ba3e38341c7aa06442cc838c86bec45d90"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/periodic_effect_boundaries_test.godot.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/periodic_effect_boundaries_test.godot.log",
+      "bytes": 225,
+      "sha256": "d0f9f83ccc34a6d0d4721644c48c7fae9036bfb960f1c3e907b65e552b69fb1d"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/periodic_effect_boundaries_test.stderr.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/periodic_effect_boundaries_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/periodic_effect_boundaries_test.stdout.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/periodic_effect_boundaries_test.stdout.log",
+      "bytes": 229,
+      "sha256": "f8caa51e349268c690e05529e179c26d604b297788534f3da57fb6739f58e404"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/periodic_effect_death_production_test.godot.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/periodic_effect_death_production_test.godot.log",
+      "bytes": 5135,
+      "sha256": "6da2adaa4f6deff13f0b5a90fa1a9a5aff26ce178cf8d920728f1192694c8be3"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/periodic_effect_death_production_test.stderr.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/periodic_effect_death_production_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/periodic_effect_death_production_test.stdout.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/periodic_effect_death_production_test.stdout.log",
+      "bytes": 5145,
+      "sha256": "af4f2b0a596f9305e841df03179a64ef752108882c8c4122bdbc8263960eefbd"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/periodic_effect_runtime_test.godot.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/periodic_effect_runtime_test.godot.log",
+      "bytes": 221,
+      "sha256": "1feca48b2526026bd701ebbc3f96ed4b24c9e73538bfbb9453a399aee3944595"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/periodic_effect_runtime_test.stderr.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/periodic_effect_runtime_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/periodic_effect_runtime_test.stdout.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/periodic_effect_runtime_test.stdout.log",
+      "bytes": 225,
+      "sha256": "d50f6d703a34af1193acf9b0ab19cc712545a27b8b2ae9006da6a2516aed4796"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/rune_source_composition_cold_test.godot.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/rune_source_composition_cold_test.godot.log",
+      "bytes": 581,
+      "sha256": "2dfe7b879c4d72052a8c222e7ea42d8c0841c0cfbfa40a8b05f451b1b960b708"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/rune_source_composition_cold_test.stderr.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/rune_source_composition_cold_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/rune_source_composition_cold_test.stdout.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/rune_source_composition_cold_test.stdout.log",
+      "bytes": 586,
+      "sha256": "8ed1cf27d72ba107a88b3337ae0f32b0912c9e59b3d0784762a35e7ac5945b2d"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/rune_source_composition_test.godot.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/rune_source_composition_test.godot.log",
+      "bytes": 5130,
+      "sha256": "2d57aeede6205ca7d6ff1c4e02cdefd6eb10088d5cf90c1c6d47c4a9721b4cec"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/rune_source_composition_test.stderr.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/rune_source_composition_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/raw/rune_source_composition_test.stdout.log",
+      "archive_path": "native/child_planner_final_direct_124839_685091/raw/rune_source_composition_test.stdout.log",
+      "bytes": 5140,
+      "sha256": "0f835c33289f17ab360268869126add79b66f9b2db5158f6fb5afef900978e8e"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/framework/damage_commit_fact_test.result.json",
+      "archive_path": "native/child_planner_final_direct_124839_685091/framework/damage_commit_fact_test.result.json",
+      "bytes": 2573,
+      "sha256": "fdaf9ab66a0eeb54c05b56ce41097c1e0fa178b08a38f549cecc0b9729879180"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/framework/feature_binding_validation_test.result.json",
+      "archive_path": "native/child_planner_final_direct_124839_685091/framework/feature_binding_validation_test.result.json",
+      "bytes": 5919,
+      "sha256": "3aa5e7f2d7fa4517c7ffd8de06f85e5120551fd28960af9db92bd3e83c283068"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/framework/feature_capacity_admission_test.result.json",
+      "archive_path": "native/child_planner_final_direct_124839_685091/framework/feature_capacity_admission_test.result.json",
+      "bytes": 2705,
+      "sha256": "eca4ada0c554c2abd4c51a9ebb43b3f45d70fc4b0dcde1bbc7ab2e5e8a4d6532"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/framework/feature_chain_commit_test.result.json",
+      "archive_path": "native/child_planner_final_direct_124839_685091/framework/feature_chain_commit_test.result.json",
+      "bytes": 11474,
+      "sha256": "f59838af2d360f98be6284f576a4256d4911732d515a88bfbaadd14a1a5d7448"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/framework/feature_child_capacity_test.result.json",
+      "archive_path": "native/child_planner_final_direct_124839_685091/framework/feature_child_capacity_test.result.json",
+      "bytes": 5466,
+      "sha256": "a6b05bc4f9d4a7cf9ed1e7506e7fda8e19196a1007cd82873e2f6eaa7b1d41f9"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/framework/feature_child_planner_test.result.json",
+      "archive_path": "native/child_planner_final_direct_124839_685091/framework/feature_child_planner_test.result.json",
+      "bytes": 6782,
+      "sha256": "86cfe867c3494a2e4e7f0faa6624defb4269c645e3fdedfd5fef88e78f83cf19"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/framework/feature_compiler_test.result.json",
+      "archive_path": "native/child_planner_final_direct_124839_685091/framework/feature_compiler_test.result.json",
+      "bytes": 4950,
+      "sha256": "ecdea0facda862652be2a2eaaf080bbea2141b5e7c149e728c5a8b516130d8e2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/framework/feature_death_child_command_test.result.json",
+      "archive_path": "native/child_planner_final_direct_124839_685091/framework/feature_death_child_command_test.result.json",
+      "bytes": 5295,
+      "sha256": "6890429e9e53fbc04fe9dacbb4f0bd06ecb817d8db43f22355bfeb9705a753cb"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/framework/feature_fire_effect_production_test.result.json",
+      "archive_path": "native/child_planner_final_direct_124839_685091/framework/feature_fire_effect_production_test.result.json",
+      "bytes": 3384,
+      "sha256": "0934046d2554477c37e5019382e89eda208482d1172f88723541681b9cc194b0"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/framework/feature_lifesteal_production_test.result.json",
+      "archive_path": "native/child_planner_final_direct_124839_685091/framework/feature_lifesteal_production_test.result.json",
+      "bytes": 4163,
+      "sha256": "dd637707b6e27f3640a3fc960692fd74b088e1eab27f1132950919a672d8d296"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/framework/feature_queue_retention_test.result.json",
+      "archive_path": "native/child_planner_final_direct_124839_685091/framework/feature_queue_retention_test.result.json",
+      "bytes": 3238,
+      "sha256": "7bbfa1dbcd2f6ef9695a3154548b2fcd739175b314da62418518b54303dc39d8"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/framework/feature_receipt_retirement_test.result.json",
+      "archive_path": "native/child_planner_final_direct_124839_685091/framework/feature_receipt_retirement_test.result.json",
+      "bytes": 2582,
+      "sha256": "fdde0138b7e3b9c7498094c4e7e9d60a434df19d20d76393d9961fdc4a60d959"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/framework/feature_source_composition_cold_test.result.json",
+      "archive_path": "native/child_planner_final_direct_124839_685091/framework/feature_source_composition_cold_test.result.json",
+      "bytes": 2659,
+      "sha256": "c775fde166ce33058aebfd7255275ad8d0efc4bbd9cd29ab17ac89a38493db9e"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/framework/feature_source_composition_expected.json",
+      "archive_path": "native/child_planner_final_direct_124839_685091/framework/feature_source_composition_expected.json",
+      "bytes": 2116,
+      "sha256": "63c6fd5393f705728ff70acc17b4954ab072e5231ec4a1ef8671c9d8765a73e9"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/framework/feature_source_composition_test.result.json",
+      "archive_path": "native/child_planner_final_direct_124839_685091/framework/feature_source_composition_test.result.json",
+      "bytes": 5710,
+      "sha256": "7c157ec0033afe8ca310a2a5231f98d7f52ce0079a52be664a5eb0c6fdd30651"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/framework/feature_world_capacity_bound_test.result.json",
+      "archive_path": "native/child_planner_final_direct_124839_685091/framework/feature_world_capacity_bound_test.result.json",
+      "bytes": 2789,
+      "sha256": "2a7fccc9fc0e4dffbf30d0a8e0c1204190850c4597133fbcf9c29aed128d5baa"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/framework/native_handoffs.json",
+      "archive_path": "native/child_planner_final_direct_124839_685091/framework/native_handoffs.json",
+      "bytes": 19703,
+      "sha256": "4d7d1daa1161a62046c74d48500590df1c6082dc525d61ef1efbae557ccc1cc7"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/framework/periodic_delivery_lateness_test.result.json",
+      "archive_path": "native/child_planner_final_direct_124839_685091/framework/periodic_delivery_lateness_test.result.json",
+      "bytes": 5361,
+      "sha256": "7ec9f2ddd464d732706175644fe8620730797aff35b05a97fb6e841d5f50f69a"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/framework/periodic_effect_boundaries_test.result.json",
+      "archive_path": "native/child_planner_final_direct_124839_685091/framework/periodic_effect_boundaries_test.result.json",
+      "bytes": 3775,
+      "sha256": "a258b59ea22954e38ebf41ee58dbed22e1b8038e4249825c0426230f9416aabb"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/framework/periodic_effect_death_production_test.result.json",
+      "archive_path": "native/child_planner_final_direct_124839_685091/framework/periodic_effect_death_production_test.result.json",
+      "bytes": 2974,
+      "sha256": "1f011ebaa17bdf5b838fe39103e12a59e695d07819e178a59e8d8a8f317481b1"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/framework/periodic_effect_runtime_test.result.json",
+      "archive_path": "native/child_planner_final_direct_124839_685091/framework/periodic_effect_runtime_test.result.json",
+      "bytes": 2629,
+      "sha256": "7956242adc3cb837a944fda75b577ee24aaef395bd410550eec24d19cc72f00d"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/framework/rune_source_composition_cold_test.result.json",
+      "archive_path": "native/child_planner_final_direct_124839_685091/framework/rune_source_composition_cold_test.result.json",
+      "bytes": 2993,
+      "sha256": "e879ac072658b2fcde806800b0dfc6984a9673f228c525883034706224e07b99"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/framework/rune_source_composition_expected.json",
+      "archive_path": "native/child_planner_final_direct_124839_685091/framework/rune_source_composition_expected.json",
+      "bytes": 2763,
+      "sha256": "8202f9ca6fe25d871953c6349d9375036a0c2228ad5df85b5714ea4b1032f111"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_direct_124839_685091/framework/rune_source_composition_test.result.json",
+      "archive_path": "native/child_planner_final_direct_124839_685091/framework/rune_source_composition_test.result.json",
+      "bytes": 5893,
+      "sha256": "b7551be320afaea06be26b24bf7f969990ddadf075e95f8bbdd3cf90c44080c5"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/before.json",
+      "archive_path": "native/child_planner_final_world_125334_816129/before.json",
+      "bytes": 509558,
+      "sha256": "babf538d0a9f88b9873f023063d044287cdff6cdd5e47a2f83aeb8426e945557"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/after.json",
+      "archive_path": "native/child_planner_final_world_125334_816129/after.json",
+      "bytes": 509558,
+      "sha256": "5bdead6a247a21c6d1c41eda891ede6a765f462996dca4924453d044ac5526c8"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/validation.json",
+      "archive_path": "native/child_planner_final_world_125334_816129/validation.json",
+      "bytes": 776,
+      "sha256": "952c414b50d9f04c9b7a6fbafc246f497deac56ed6be4bda454a0df217a29db2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/runner_results.json",
+      "archive_path": "native/child_planner_final_world_125334_816129/runner_results.json",
+      "bytes": 12669,
+      "sha256": "c033ce9c143549e5354bf4a6232922500d160b2c16d75aa426760c6c5f781eeb"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/runner.log",
+      "archive_path": "native/child_planner_final_world_125334_816129/runner.log",
+      "bytes": 549,
+      "sha256": "79acb553e97eb3a511456e82e44dc9f69fcc5d8154d7adf0fa0553a5aa4a51ad"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/raw/combined_effect_lifecycle_cold_test.godot.log",
+      "archive_path": "native/child_planner_final_world_125334_816129/raw/combined_effect_lifecycle_cold_test.godot.log",
+      "bytes": 228,
+      "sha256": "cd1a56188af419b2da657e1e559b7901e6a557d9ee50297716d0c1ff30bde1e1"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/raw/combined_effect_lifecycle_cold_test.stderr.log",
+      "archive_path": "native/child_planner_final_world_125334_816129/raw/combined_effect_lifecycle_cold_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/raw/combined_effect_lifecycle_cold_test.stdout.log",
+      "archive_path": "native/child_planner_final_world_125334_816129/raw/combined_effect_lifecycle_cold_test.stdout.log",
+      "bytes": 232,
+      "sha256": "15095675e9cdc7402f8003cc725eb630e6a6ddcad18e531c5f2cf2aaf563c987"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/raw/combined_effect_lifecycle_test.godot.log",
+      "archive_path": "native/child_planner_final_world_125334_816129/raw/combined_effect_lifecycle_test.godot.log",
+      "bytes": 5150,
+      "sha256": "d185d5b2608288445acfc49c267d6774c7fe3162090e02161c4a0ff35f530632"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/raw/combined_effect_lifecycle_test.stderr.log",
+      "archive_path": "native/child_planner_final_world_125334_816129/raw/combined_effect_lifecycle_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/raw/combined_effect_lifecycle_test.stdout.log",
+      "archive_path": "native/child_planner_final_world_125334_816129/raw/combined_effect_lifecycle_test.stdout.log",
+      "bytes": 5160,
+      "sha256": "b6886c2e15323a41a5be4ad60aed6b3aa51d3e5212ec5edace148f7ad3cdc440"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/raw/feature_resource_natural_cold_test.godot.log",
+      "archive_path": "native/child_planner_final_world_125334_816129/raw/feature_resource_natural_cold_test.godot.log",
+      "bytes": 227,
+      "sha256": "3c0a3a4377122ab25da969530b7ffaa9e49c17071bcf9f27e940daa274846c7f"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/raw/feature_resource_natural_cold_test.stderr.log",
+      "archive_path": "native/child_planner_final_world_125334_816129/raw/feature_resource_natural_cold_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/raw/feature_resource_natural_cold_test.stdout.log",
+      "archive_path": "native/child_planner_final_world_125334_816129/raw/feature_resource_natural_cold_test.stdout.log",
+      "bytes": 231,
+      "sha256": "597c057aeb71dcb17acef603a39033def31a2da73346fc055907885156abcfea"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/raw/feature_resource_natural_test.godot.log",
+      "archive_path": "native/child_planner_final_world_125334_816129/raw/feature_resource_natural_test.godot.log",
+      "bytes": 5137,
+      "sha256": "38f88318c243add98071915b349a6d3fcbe1cac0b0442811a9fc4f0adae39b2f"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/raw/feature_resource_natural_test.stderr.log",
+      "archive_path": "native/child_planner_final_world_125334_816129/raw/feature_resource_natural_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/raw/feature_resource_natural_test.stdout.log",
+      "archive_path": "native/child_planner_final_world_125334_816129/raw/feature_resource_natural_test.stdout.log",
+      "bytes": 5147,
+      "sha256": "2b94b34bf7972d4e1f4eb987de993263e79878fcc0d9a439c6ec682f601e7d37"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/raw/natural_effect_lifecycle_cold_test.godot.log",
+      "archive_path": "native/child_planner_final_world_125334_816129/raw/natural_effect_lifecycle_cold_test.godot.log",
+      "bytes": 227,
+      "sha256": "3c0a3a4377122ab25da969530b7ffaa9e49c17071bcf9f27e940daa274846c7f"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/raw/natural_effect_lifecycle_cold_test.stderr.log",
+      "archive_path": "native/child_planner_final_world_125334_816129/raw/natural_effect_lifecycle_cold_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/raw/natural_effect_lifecycle_cold_test.stdout.log",
+      "archive_path": "native/child_planner_final_world_125334_816129/raw/natural_effect_lifecycle_cold_test.stdout.log",
+      "bytes": 231,
+      "sha256": "597c057aeb71dcb17acef603a39033def31a2da73346fc055907885156abcfea"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/raw/natural_effect_lifecycle_test.godot.log",
+      "archive_path": "native/child_planner_final_world_125334_816129/raw/natural_effect_lifecycle_test.godot.log",
+      "bytes": 5147,
+      "sha256": "3eb3389bebdd0146d7add2bc7f48e76e484ffd1a34ce45520b185db994f1351b"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/raw/natural_effect_lifecycle_test.stderr.log",
+      "archive_path": "native/child_planner_final_world_125334_816129/raw/natural_effect_lifecycle_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/raw/natural_effect_lifecycle_test.stdout.log",
+      "archive_path": "native/child_planner_final_world_125334_816129/raw/natural_effect_lifecycle_test.stdout.log",
+      "bytes": 5157,
+      "sha256": "710a71c48d5bd4811e5fb9ef8c5d1d0b5f3456c5c17f625b6a0ca1d05f8ad4db"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/raw/periodic_credit_safe_logout_cold_test.godot.log",
+      "archive_path": "native/child_planner_final_world_125334_816129/raw/periodic_credit_safe_logout_cold_test.godot.log",
+      "bytes": 655,
+      "sha256": "4f1fee282435b536854c9af56ca4a0b988dfa6c4897a09fe7b4fef6fffe77a34"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/raw/periodic_credit_safe_logout_cold_test.stderr.log",
+      "archive_path": "native/child_planner_final_world_125334_816129/raw/periodic_credit_safe_logout_cold_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/raw/periodic_credit_safe_logout_cold_test.stdout.log",
+      "archive_path": "native/child_planner_final_world_125334_816129/raw/periodic_credit_safe_logout_cold_test.stdout.log",
+      "bytes": 660,
+      "sha256": "6ec33b9a1e9d6c257e4ff8a1091970f8cea474b586c124adefc734987bad1a23"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/raw/periodic_credit_safe_logout_test.godot.log",
+      "archive_path": "native/child_planner_final_world_125334_816129/raw/periodic_credit_safe_logout_test.godot.log",
+      "bytes": 14801,
+      "sha256": "6939fd807a9300f9e0deb7ce415e9b026da4caca2e01b3fd1a3116409105356c"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/raw/periodic_credit_safe_logout_test.stderr.log",
+      "archive_path": "native/child_planner_final_world_125334_816129/raw/periodic_credit_safe_logout_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/raw/periodic_credit_safe_logout_test.stdout.log",
+      "archive_path": "native/child_planner_final_world_125334_816129/raw/periodic_credit_safe_logout_test.stdout.log",
+      "bytes": 14813,
+      "sha256": "77ac4c666c2090af1c52551865816892f3960ca50cdd3eaa15a51f3d6b3ba48c"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/framework/combined_effect_lifecycle_cold_test.result.json",
+      "archive_path": "native/child_planner_final_world_125334_816129/framework/combined_effect_lifecycle_cold_test.result.json",
+      "bytes": 2269,
+      "sha256": "8fe5a684fd1de751e9ae81c275b29bd8aa997a9b7a973833ca5551f650d378ab"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/framework/combined_effect_lifecycle_expected.json",
+      "archive_path": "native/child_planner_final_world_125334_816129/framework/combined_effect_lifecycle_expected.json",
+      "bytes": 268,
+      "sha256": "95f8ac37ce58ed9ee6776155ed849ef1dc8bb1675c3c04bff58bb2fc5432b7f9"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/framework/combined_effect_lifecycle_test.result.json",
+      "archive_path": "native/child_planner_final_world_125334_816129/framework/combined_effect_lifecycle_test.result.json",
+      "bytes": 5790,
+      "sha256": "0f249724b6a08691a7897fe02ac0cd9296b6af4331e2f8f8f1873f53cfe0a8b0"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/framework/combined_effect_lifecycle_trace.json",
+      "archive_path": "native/child_planner_final_world_125334_816129/framework/combined_effect_lifecycle_trace.json",
+      "bytes": 72822,
+      "sha256": "fe6d8d9b525c6e2423bc89eb2607034c017920ffb07fb142abfa13a62f2f4df4"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/framework/feature_resource_natural_cold_test.result.json",
+      "archive_path": "native/child_planner_final_world_125334_816129/framework/feature_resource_natural_cold_test.result.json",
+      "bytes": 2295,
+      "sha256": "ace34e52e1fbb805ceac30fcad68174d1b185fe157274a1cda8c375c3cb4506e"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/framework/feature_resource_natural_expected.json",
+      "archive_path": "native/child_planner_final_world_125334_816129/framework/feature_resource_natural_expected.json",
+      "bytes": 268,
+      "sha256": "30a507700380d63c69990c3b46fa485994c4ad99299105666c4743672532e47d"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/framework/feature_resource_natural_test.result.json",
+      "archive_path": "native/child_planner_final_world_125334_816129/framework/feature_resource_natural_test.result.json",
+      "bytes": 19023,
+      "sha256": "31a2112aeddcb8b742ed126004e9a0c81ad02f2576de9dff7a652e7ef0641cb9"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/framework/feature_resource_natural_trace.json",
+      "archive_path": "native/child_planner_final_world_125334_816129/framework/feature_resource_natural_trace.json",
+      "bytes": 1195700,
+      "sha256": "66a2050988e7efe1414dcfae9b4e152bac00f8ed3510a90c1b9d4ab005502fb6"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/framework/native_handoffs.json",
+      "archive_path": "native/child_planner_final_world_125334_816129/framework/native_handoffs.json",
+      "bytes": 8140,
+      "sha256": "16fff913b6c242112ee4b3d79e60928e51ce6f17c7fec713c36e985e39c5ec91"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/framework/natural_effect_lifecycle_cold_test.result.json",
+      "archive_path": "native/child_planner_final_world_125334_816129/framework/natural_effect_lifecycle_cold_test.result.json",
+      "bytes": 2296,
+      "sha256": "c5ef06403d71e7b22ee7144a6ee5f4a4b1f8ac43bdf7b1826449403283a092fa"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/framework/natural_effect_lifecycle_expected.json",
+      "archive_path": "native/child_planner_final_world_125334_816129/framework/natural_effect_lifecycle_expected.json",
+      "bytes": 268,
+      "sha256": "a1da10cf8199375ddceeb8f3b0ebc1c2849d5008f648b03e08bbcbb709658c90"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/framework/natural_effect_lifecycle_test.result.json",
+      "archive_path": "native/child_planner_final_world_125334_816129/framework/natural_effect_lifecycle_test.result.json",
+      "bytes": 17679,
+      "sha256": "489743566af4df8fb605c440bb04c629ba059fd05b01f7bdbd1b3b792de8bbd4"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/framework/natural_effect_lifecycle_trace.json",
+      "archive_path": "native/child_planner_final_world_125334_816129/framework/natural_effect_lifecycle_trace.json",
+      "bytes": 937854,
+      "sha256": "63ab75362535a637f2d28ccca64960e11d8fb6fe727fc433da910b2059f74de1"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/framework/periodic_credit_safe_logout_cold_test.result.json",
+      "archive_path": "native/child_planner_final_world_125334_816129/framework/periodic_credit_safe_logout_cold_test.result.json",
+      "bytes": 2647,
+      "sha256": "f182b364998d69ff12e4a6b5b10814bd4152e303f24d889ed6321b0d3e65d690"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/framework/periodic_credit_safe_logout_expected.json",
+      "archive_path": "native/child_planner_final_world_125334_816129/framework/periodic_credit_safe_logout_expected.json",
+      "bytes": 613,
+      "sha256": "56dbe68648e6fa806bc305ab8fc147d97ff72b90d0b6f0f372cc446d63a74563"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_final_world_125334_816129/framework/periodic_credit_safe_logout_test.result.json",
+      "archive_path": "native/child_planner_final_world_125334_816129/framework/periodic_credit_safe_logout_test.result.json",
+      "bytes": 5921,
+      "sha256": "e4c9403f8ee57fffe6b134e0dcdcfd6ce5eda278fb79efd2b69117bfa0d000af"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_green_123208_702616/before.json",
+      "archive_path": "native/child_planner_green_123208_702616/before.json",
+      "bytes": 509558,
+      "sha256": "a67c1398dd6718396aab6d1379fef2da881a3b40ca7f95039aff133764c2898d"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_green_123208_702616/after.json",
+      "archive_path": "native/child_planner_green_123208_702616/after.json",
+      "bytes": 509558,
+      "sha256": "584c570ba190215b183147aa308cca9ac1972c09ba33b6a957db664e2f99c512"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_green_123208_702616/validation.json",
+      "archive_path": "native/child_planner_green_123208_702616/validation.json",
+      "bytes": 374,
+      "sha256": "2f791d688ba5f32e260a4527ff8f571edba73c7637892774acd86dcbc9be3f73"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_green_123208_702616/runner_results.json",
+      "archive_path": "native/child_planner_green_123208_702616/runner_results.json",
+      "bytes": 2337,
+      "sha256": "6a4afe9317e28014b2deef094a19eeda43e7d51fd13256a4670684c08d3cc062"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_green_123208_702616/runner.log",
+      "archive_path": "native/child_planner_green_123208_702616/runner.log",
+      "bytes": 1222,
+      "sha256": "3844187b2ecfb1e118f6fa17de73cf11298998bda2201d11f30af9034bc24a6b"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_green_123208_702616/raw/feature_child_planner_test.godot.log",
+      "archive_path": "native/child_planner_green_123208_702616/raw/feature_child_planner_test.godot.log",
+      "bytes": 729,
+      "sha256": "b2314a7f67ad809e2af5fed88b81c6a8c4405eaeb507c89f6445e3161a5065ff"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_green_123208_702616/raw/feature_child_planner_test.stderr.log",
+      "archive_path": "native/child_planner_green_123208_702616/raw/feature_child_planner_test.stderr.log",
+      "bytes": 468,
+      "sha256": "25cde9d348b1d79878935c8188992023661807e25f2bc5599cc4be31f19c6133"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_green_123208_702616/raw/feature_child_planner_test.stdout.log",
+      "archive_path": "native/child_planner_green_123208_702616/raw/feature_child_planner_test.stdout.log",
+      "bytes": 272,
+      "sha256": "e53c8bd9f290c22981014efa1cb8fb1d94d1b76efcfbc04486ef4d89c11ad880"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_green_123208_702616/framework/feature_child_planner_test.result.json",
+      "archive_path": "native/child_planner_green_123208_702616/framework/feature_child_planner_test.result.json",
+      "bytes": 1659,
+      "sha256": "793affa818cdaa99988531e919eb232a9dc4395cce42182adf7465bc95b40c58"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_green_123208_702616/framework/native_handoffs.json",
+      "archive_path": "native/child_planner_green_123208_702616/framework/native_handoffs.json",
+      "bytes": 705,
+      "sha256": "cd4c924197f8ccd0d0ab0e8fa66cf304eb04f291786fd1f04b89c9f2efd0ac1f"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_projection_green_123428_208753/before.json",
+      "archive_path": "native/child_planner_projection_green_123428_208753/before.json",
+      "bytes": 509558,
+      "sha256": "c65125ded5b4ef6b8c34e0637b81d70a5a116a564a8e69c3b4bc712d7c35b6f5"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_projection_green_123428_208753/after.json",
+      "archive_path": "native/child_planner_projection_green_123428_208753/after.json",
+      "bytes": 509558,
+      "sha256": "450c75dd8922a29b22e29005a6b6d5e062588132ade22b1d4f1c530e0e53cdb6"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_projection_green_123428_208753/validation.json",
+      "archive_path": "native/child_planner_projection_green_123428_208753/validation.json",
+      "bytes": 374,
+      "sha256": "908bcb4b58c6f3ba8024451aaede2e9b1a3b716a7c3d390445a17e75112f15f6"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_projection_green_123428_208753/runner_results.json",
+      "archive_path": "native/child_planner_projection_green_123428_208753/runner_results.json",
+      "bytes": 2291,
+      "sha256": "f20ce808a4a3634ea25eec9c269bbf3ce60c77ccb76f764a47e899eadcc71578"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_projection_green_123428_208753/runner.log",
+      "archive_path": "native/child_planner_projection_green_123428_208753/runner.log",
+      "bytes": 258,
+      "sha256": "d6496d4ec6878f169b10228c0b6068b4b2992f3409c6bee3e638779f34fe1fd6"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_projection_green_123428_208753/raw/feature_child_planner_test.godot.log",
+      "archive_path": "native/child_planner_projection_green_123428_208753/raw/feature_child_planner_test.godot.log",
+      "bytes": 207,
+      "sha256": "0cc596702a45776e9785f4104e39c3e5bec602fb5b40520c370f3825b35c4e12"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_projection_green_123428_208753/raw/feature_child_planner_test.stderr.log",
+      "archive_path": "native/child_planner_projection_green_123428_208753/raw/feature_child_planner_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_projection_green_123428_208753/raw/feature_child_planner_test.stdout.log",
+      "archive_path": "native/child_planner_projection_green_123428_208753/raw/feature_child_planner_test.stdout.log",
+      "bytes": 211,
+      "sha256": "6f5551ebaa6e8ddf050d33334f50bc66c6ea22c8ec01e152d6943b7a8ed45ef1"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_projection_green_123428_208753/framework/feature_child_planner_test.result.json",
+      "archive_path": "native/child_planner_projection_green_123428_208753/framework/feature_child_planner_test.result.json",
+      "bytes": 5885,
+      "sha256": "77570e5021d1f7a5d7a88dcdb145db9298fb13586b6e5a484301d4d17475a898"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_projection_green_123428_208753/framework/native_handoffs.json",
+      "archive_path": "native/child_planner_projection_green_123428_208753/framework/native_handoffs.json",
+      "bytes": 1576,
+      "sha256": "d2b747b571b40db4fa5453e46f3e0d190e83a8bdf9465afa38da2e8ce0257c46"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_red_122807_529063/before.json",
+      "archive_path": "native/child_planner_red_122807_529063/before.json",
+      "bytes": 509314,
+      "sha256": "968a8386de30e98e11d89b784412171e7c1a5b10c615780168de78f996e2fc0f"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_red_122807_529063/after.json",
+      "archive_path": "native/child_planner_red_122807_529063/after.json",
+      "bytes": 509314,
+      "sha256": "50226a77cba0cbfd38c5345e60cb8596a324e1963668e77aa89b0cbf9bce0d9d"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_red_122807_529063/validation.json",
+      "archive_path": "native/child_planner_red_122807_529063/validation.json",
+      "bytes": 374,
+      "sha256": "2f791d688ba5f32e260a4527ff8f571edba73c7637892774acd86dcbc9be3f73"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_red_122807_529063/runner_results.json",
+      "archive_path": "native/child_planner_red_122807_529063/runner_results.json",
+      "bytes": 2404,
+      "sha256": "0636f6d5b22526b6635683090868842003d0d6df3fc9673d4ba8443c8637f6d0"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_red_122807_529063/runner.log",
+      "archive_path": "native/child_planner_red_122807_529063/runner.log",
+      "bytes": 1080,
+      "sha256": "60797813d0757681625b510c2ec10d88eb2d09b9967988661735ea44251e11a6"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_red_122807_529063/raw/feature_child_planner_test.godot.log",
+      "archive_path": "native/child_planner_red_122807_529063/raw/feature_child_planner_test.godot.log",
+      "bytes": 480,
+      "sha256": "5c7f0993553794e00d167fd248a6f8c7843521fe2cb2c9e0f895289797ba740b"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_red_122807_529063/raw/feature_child_planner_test.stderr.log",
+      "archive_path": "native/child_planner_red_122807_529063/raw/feature_child_planner_test.stderr.log",
+      "bytes": 413,
+      "sha256": "2f563da392a25d1a0256bd2c98dece711ee7a626324c11b0b937870cf2fd8e53"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_red_122807_529063/raw/feature_child_planner_test.stdout.log",
+      "archive_path": "native/child_planner_red_122807_529063/raw/feature_child_planner_test.stdout.log",
+      "bytes": 73,
+      "sha256": "bb3bcf7181e550fe37f9235c4aecf24a81b757eddfeff554d88e7974feb2ed1d"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_red_122807_529063/framework/native_handoffs.json",
+      "archive_path": "native/child_planner_red_122807_529063/framework/native_handoffs.json",
+      "bytes": 702,
+      "sha256": "ad9b7bbafcb3263dac516a60b6830a72fa27ee37b4c7c2c1c55c38cdeec0beed"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_related_123641_364370/before.json",
+      "archive_path": "native/child_planner_related_123641_364370/before.json",
+      "bytes": 509558,
+      "sha256": "7ffd3a34144f10ea62888183e0ce780397227099b03326c6074b95342f88dc24"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_related_123641_364370/after.json",
+      "archive_path": "native/child_planner_related_123641_364370/after.json",
+      "bytes": 509558,
+      "sha256": "6570ab5675c86df12bb702a754ff07305ec46aaae70fd0d920deca4f8d84df3e"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_related_123641_364370/validation.json",
+      "archive_path": "native/child_planner_related_123641_364370/validation.json",
+      "bytes": 818,
+      "sha256": "cb3f52511cab61042f74ea92e0679496a32868592f2afa964f8757ebafa60127"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_related_123641_364370/runner_results.json",
+      "archive_path": "native/child_planner_related_123641_364370/runner_results.json",
+      "bytes": 14059,
+      "sha256": "2b54e3646b30f7d3ce90b2147a287bf7cce2aeaed001f4626e0b100fc5b9e474"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_related_123641_364370/runner.log",
+      "archive_path": "native/child_planner_related_123641_364370/runner.log",
+      "bytes": 4485,
+      "sha256": "caeac2a926648f7a96b0ace31e8babcf45c93f93c39c31aba12606adf8cbff3f"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_related_123641_364370/raw/canonical_snapshot_identity_production_test.godot.log",
+      "archive_path": "native/child_planner_related_123641_364370/raw/canonical_snapshot_identity_production_test.godot.log",
+      "bytes": 3509,
+      "sha256": "42ab5ee3e1153be179776ea2e7c523b5a91a65d42701a4596d9089c50214b688"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_related_123641_364370/raw/canonical_snapshot_identity_production_test.stderr.log",
+      "archive_path": "native/child_planner_related_123641_364370/raw/canonical_snapshot_identity_production_test.stderr.log",
+      "bytes": 726,
+      "sha256": "c003bdea2c6da98b99a1220cbc71a54cf035743ea4dd3c3ac062111adeb44adb"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_related_123641_364370/raw/canonical_snapshot_identity_production_test.stdout.log",
+      "archive_path": "native/child_planner_related_123641_364370/raw/canonical_snapshot_identity_production_test.stdout.log",
+      "bytes": 2798,
+      "sha256": "89986f0f53b2df777bf3dfdca40cf0d62d600ea25f36c32f27922026f6d6fd4f"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_related_123641_364370/raw/canonical_snapshot_propagation_test.godot.log",
+      "archive_path": "native/child_planner_related_123641_364370/raw/canonical_snapshot_propagation_test.godot.log",
+      "bytes": 5252,
+      "sha256": "154e7bf1f42366b63e3111ad88f0f7291c4d62423284211d175d9e135474d4c2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_related_123641_364370/raw/canonical_snapshot_propagation_test.stderr.log",
+      "archive_path": "native/child_planner_related_123641_364370/raw/canonical_snapshot_propagation_test.stderr.log",
+      "bytes": 134,
+      "sha256": "d38569d944cfe31ff158c736946a05eb57d6417155a94d713e80fb615b637c85"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_related_123641_364370/raw/canonical_snapshot_propagation_test.stdout.log",
+      "archive_path": "native/child_planner_related_123641_364370/raw/canonical_snapshot_propagation_test.stdout.log",
+      "bytes": 5262,
+      "sha256": "5b008b6812c814d7c852ce81cadd181fab65b3dbcfba5384f30f905507724f41"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_related_123641_364370/raw/caster_runtime_canonical_plan_adapter_test.godot.log",
+      "archive_path": "native/child_planner_related_123641_364370/raw/caster_runtime_canonical_plan_adapter_test.godot.log",
+      "bytes": 244,
+      "sha256": "d48efe6f331a145133e9c5e66cc998a99f0b160356a1ff6d743ddfda96deef78"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_related_123641_364370/raw/caster_runtime_canonical_plan_adapter_test.stderr.log",
+      "archive_path": "native/child_planner_related_123641_364370/raw/caster_runtime_canonical_plan_adapter_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_related_123641_364370/raw/caster_runtime_canonical_plan_adapter_test.stdout.log",
+      "archive_path": "native/child_planner_related_123641_364370/raw/caster_runtime_canonical_plan_adapter_test.stdout.log",
+      "bytes": 248,
+      "sha256": "f3f706374a2cbaa4251013f9902ed437da42c18debfa2c47dae8ef2b84272005"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_related_123641_364370/raw/feature_chain_commit_test.godot.log",
+      "archive_path": "native/child_planner_related_123641_364370/raw/feature_chain_commit_test.godot.log",
+      "bytes": 218,
+      "sha256": "e506422fdc3f098892b49174c9d893705a6a49ffdb605e4378d42a720603db64"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_related_123641_364370/raw/feature_chain_commit_test.stderr.log",
+      "archive_path": "native/child_planner_related_123641_364370/raw/feature_chain_commit_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_related_123641_364370/raw/feature_chain_commit_test.stdout.log",
+      "archive_path": "native/child_planner_related_123641_364370/raw/feature_chain_commit_test.stdout.log",
+      "bytes": 222,
+      "sha256": "2ed0130ed0fbe0e7b0afaeeee01f885edf752a420fecd7c3c2fde4ddc9d74cc4"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_related_123641_364370/raw/feature_child_planner_test.godot.log",
+      "archive_path": "native/child_planner_related_123641_364370/raw/feature_child_planner_test.godot.log",
+      "bytes": 207,
+      "sha256": "9864787607e87938b62c2cb3d08438cc570ea4b8c1a4dca5330ac89592e6dbbc"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_related_123641_364370/raw/feature_child_planner_test.stderr.log",
+      "archive_path": "native/child_planner_related_123641_364370/raw/feature_child_planner_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_related_123641_364370/raw/feature_child_planner_test.stdout.log",
+      "archive_path": "native/child_planner_related_123641_364370/raw/feature_child_planner_test.stdout.log",
+      "bytes": 211,
+      "sha256": "45ebcbe4b8870d057f5a7f23d41163ccb0554c82074fa21a3dc0be5af0416b57"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_related_123641_364370/raw/feature_death_child_command_test.godot.log",
+      "archive_path": "native/child_planner_related_123641_364370/raw/feature_death_child_command_test.godot.log",
+      "bytes": 225,
+      "sha256": "ed12d6400020c04dea10ede87f8ffe021a0bdda6e5a942598f43116e2ca341f9"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_related_123641_364370/raw/feature_death_child_command_test.stderr.log",
+      "archive_path": "native/child_planner_related_123641_364370/raw/feature_death_child_command_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_related_123641_364370/raw/feature_death_child_command_test.stdout.log",
+      "archive_path": "native/child_planner_related_123641_364370/raw/feature_death_child_command_test.stdout.log",
+      "bytes": 229,
+      "sha256": "f08e77ebd6dcd516a4a6338926ceedcc9d1eb242677dd806776d8e7a0201b9e6"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_related_123641_364370/raw/feature_fire_effect_production_test.godot.log",
+      "archive_path": "native/child_planner_related_123641_364370/raw/feature_fire_effect_production_test.godot.log",
+      "bytes": 5146,
+      "sha256": "6cde96df53af088a860a7862ae9320c3f06874b80f9a115da9952a07a9fd3b82"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_related_123641_364370/raw/feature_fire_effect_production_test.stderr.log",
+      "archive_path": "native/child_planner_related_123641_364370/raw/feature_fire_effect_production_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_related_123641_364370/raw/feature_fire_effect_production_test.stdout.log",
+      "archive_path": "native/child_planner_related_123641_364370/raw/feature_fire_effect_production_test.stdout.log",
+      "bytes": 5156,
+      "sha256": "304cc702472b3360cd7c9bff9c20729475179a1317c96933776397f95a9ab98a"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_related_123641_364370/raw/fire_wall_cap_policy_canonical_plan_test.godot.log",
+      "archive_path": "native/child_planner_related_123641_364370/raw/fire_wall_cap_policy_canonical_plan_test.godot.log",
+      "bytes": 211,
+      "sha256": "758c34b5ce449050ae9f36484d10a5f581e1f1baf8976cddfcb14056a03e8e19"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_related_123641_364370/raw/fire_wall_cap_policy_canonical_plan_test.stderr.log",
+      "archive_path": "native/child_planner_related_123641_364370/raw/fire_wall_cap_policy_canonical_plan_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_related_123641_364370/raw/fire_wall_cap_policy_canonical_plan_test.stdout.log",
+      "archive_path": "native/child_planner_related_123641_364370/raw/fire_wall_cap_policy_canonical_plan_test.stdout.log",
+      "bytes": 215,
+      "sha256": "c5685a397488074503a57ae73b3e07399dbf620fadb299190cb8fa487dee05e5"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_related_123641_364370/raw/mapped_skill_plan_missing_projection_rejected_test.godot.log",
+      "archive_path": "native/child_planner_related_123641_364370/raw/mapped_skill_plan_missing_projection_rejected_test.godot.log",
+      "bytes": 255,
+      "sha256": "2a960e552fc731f183177e3b67d944f4535a9e922d558d213b2f2f3099d47b78"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_related_123641_364370/raw/mapped_skill_plan_missing_projection_rejected_test.stderr.log",
+      "archive_path": "native/child_planner_related_123641_364370/raw/mapped_skill_plan_missing_projection_rejected_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_related_123641_364370/raw/mapped_skill_plan_missing_projection_rejected_test.stdout.log",
+      "archive_path": "native/child_planner_related_123641_364370/raw/mapped_skill_plan_missing_projection_rejected_test.stdout.log",
+      "bytes": 259,
+      "sha256": "dc18a474e997cc8937935576fbc3ff0159fa11c511dbf02d20a872c8b70396e6"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_related_123641_364370/framework/feature_chain_commit_test.result.json",
+      "archive_path": "native/child_planner_related_123641_364370/framework/feature_chain_commit_test.result.json",
+      "bytes": 9755,
+      "sha256": "7efb7085878ef384a52ccf2922de099db9e41ee95989a8757b92e0485d533504"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_related_123641_364370/framework/feature_child_planner_test.result.json",
+      "archive_path": "native/child_planner_related_123641_364370/framework/feature_child_planner_test.result.json",
+      "bytes": 6773,
+      "sha256": "ca7f95e5676f419b0b21a0812cdfff77cd1d5a5fee250b51f6f664142e0ce049"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_related_123641_364370/framework/feature_death_child_command_test.result.json",
+      "archive_path": "native/child_planner_related_123641_364370/framework/feature_death_child_command_test.result.json",
+      "bytes": 5285,
+      "sha256": "19e08c3091731b545e49c7f9a43fe6547a6d9db65fdf9ecae8a281ad95821305"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_related_123641_364370/framework/feature_fire_effect_production_test.result.json",
+      "archive_path": "native/child_planner_related_123641_364370/framework/feature_fire_effect_production_test.result.json",
+      "bytes": 3373,
+      "sha256": "987bb6fe28935bf87b96c18a5790d78add7523fca7d71f6eda1f2ae48c5b4ee8"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_related_123641_364370/framework/native_handoffs.json",
+      "archive_path": "native/child_planner_related_123641_364370/framework/native_handoffs.json",
+      "bytes": 4300,
+      "sha256": "c05482f3b2aced98b3cca0fafe97d0bb081352b700c7299fbc77ee50b2767944"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_snapshot_baseline_124306_290156/before.json",
+      "archive_path": "native/child_planner_snapshot_baseline_124306_290156/before.json",
+      "bytes": 509558,
+      "sha256": "61a6a1c96ed95f5e204faff96c0fd500ca3b200dd4130854908a8c4af93080f1"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_snapshot_baseline_124306_290156/after.json",
+      "archive_path": "native/child_planner_snapshot_baseline_124306_290156/after.json",
+      "bytes": 509558,
+      "sha256": "9155384aeca33d2b07a554c1d605a83eaf74bb5224c65e7511377b0d9a17f36b"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_snapshot_baseline_124306_290156/validation.json",
+      "archive_path": "native/child_planner_snapshot_baseline_124306_290156/validation.json",
+      "bytes": 381,
+      "sha256": "277f914eaa84ff5b34338e4b79632777c0fb45c1257c1257274840bd943bd955"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_snapshot_baseline_124306_290156/runner_results.json",
+      "archive_path": "native/child_planner_snapshot_baseline_124306_290156/runner_results.json",
+      "bytes": 2264,
+      "sha256": "3e492ab78c89fa6243b494d4995b396c48ca5bc81e7670ddd4c713b477a28c90"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_snapshot_baseline_124306_290156/runner.log",
+      "archive_path": "native/child_planner_snapshot_baseline_124306_290156/runner.log",
+      "bytes": 276,
+      "sha256": "64b44eb0ccc29e4af3c9e7febb909d57cbfb6784857d894681b279881a4ac196"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_snapshot_baseline_124306_290156/raw/canonical_snapshot_identity_production_test.godot.log",
+      "archive_path": "native/child_planner_snapshot_baseline_124306_290156/raw/canonical_snapshot_identity_production_test.godot.log",
+      "bytes": 5117,
+      "sha256": "379da3b814102c9d3349eabb5c9a9f22e5916d5c820be75df115f8a464e31308"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_snapshot_baseline_124306_290156/raw/canonical_snapshot_identity_production_test.stderr.log",
+      "archive_path": "native/child_planner_snapshot_baseline_124306_290156/raw/canonical_snapshot_identity_production_test.stderr.log",
+      "bytes": 134,
+      "sha256": "d38569d944cfe31ff158c736946a05eb57d6417155a94d713e80fb615b637c85"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_snapshot_baseline_124306_290156/raw/canonical_snapshot_identity_production_test.stdout.log",
+      "archive_path": "native/child_planner_snapshot_baseline_124306_290156/raw/canonical_snapshot_identity_production_test.stdout.log",
+      "bytes": 5127,
+      "sha256": "6194dd6106e8a95601507d990975031c16fc13b82abdcbae6c025f221b37e6b7"
+    },
+    {
+      "original_path": "outputs/r3_takeover/20260930/validation/child_planner_snapshot_baseline_124306_290156/framework/native_handoffs.json",
+      "archive_path": "native/child_planner_snapshot_baseline_124306_290156/framework/native_handoffs.json",
+      "bytes": 708,
+      "sha256": "1d42e9b0e719f369e452d7c41ad49c8f449fd3ed367d6cf88f8f7cbbd3869d18"
+    }
+  ]
+}

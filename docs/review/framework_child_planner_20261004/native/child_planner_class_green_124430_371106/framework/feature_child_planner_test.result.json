@@ -1,0 +1,242 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "the one formal router must accept a registered, owned child request instead of a Chinese or vanilla alias",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "the pure first-death handler supplies the closed finite command",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "finite command owns a registered child request",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "child identity stays separate and request is immutable",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "child uses the existing build_canonical_plan entry: accepted",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "the same canonical envelope is built exactly once",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "one fresh release snapshot is built by the existing builder",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "plan preserves the actual child ID and release, not the root player spell",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "child damage basis remains the original committed HP loss fraction",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "caller-provided later screen position cannot replace committed death geometry",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "child circle is an absolute mapped STRICT_V2 footprint",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "child does not charge player resources or initiate another cooldown",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "canonical plan hash owns complete root/parent/child finite lineage",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "the frozen 33-skill table is not expanded with a fake player spell",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "pure repeated planning has deterministic independent child seed",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "child revision fingerprints its exact registered descriptor",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "child ownership field is protected by the existing plan hash: chain_context",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "child ownership field is protected by the existing plan hash: historical_credit",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "child ownership field is protected by the existing plan hash: child_command",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "altered child request is rejected before planning side effects: skill_id",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "altered child request is rejected before planning side effects: seed",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "altered child request is rejected before planning side effects: rank",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "altered child request is rejected before planning side effects: client_claimed_damage",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "a raw child ID without its typed owner never becomes a vanilla fallback",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "another release cannot adopt this child",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "another map cannot adopt this geometry",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "missing map projection fails closed",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "missing reverse projection fails closed",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "a supplied old snapshot cannot override child geometry",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "unsupported child contract never produces a request: action_id",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "unsupported child contract never produces a request: source_class",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "unsupported child contract never produces a request: damage_channel",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "unsupported child contract never produces a request: causes_struck",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "unsupported child contract never produces a request: direct_magic_walk_delay",
+      "passed": true
+    },
+    {
+      "id": 35,
+      "label": "unsupported child contract never produces a request: damage_basis",
+      "passed": true
+    },
+    {
+      "id": 36,
+      "label": "unsupported child contract never produces a request: generation",
+      "passed": true
+    },
+    {
+      "id": 37,
+      "label": "unsupported child contract never produces a request: maximum_generation",
+      "passed": true
+    },
+    {
+      "id": 38,
+      "label": "unsupported child contract never produces a request: raw_damage",
+      "passed": true
+    },
+    {
+      "id": 39,
+      "label": "unsupported child contract never produces a request: radius_gu",
+      "passed": true
+    },
+    {
+      "id": 40,
+      "label": "foreign parent world cannot produce a child",
+      "passed": true
+    },
+    {
+      "id": 41,
+      "label": "child cannot reuse root/parent release identity",
+      "passed": true
+    },
+    {
+      "id": 42,
+      "label": "first child parent must match root",
+      "passed": true
+    },
+    {
+      "id": 43,
+      "label": "parent fact must belong to the declared release",
+      "passed": true
+    },
+    {
+      "id": 44,
+      "label": "world generation change invalidates an already-owned child before it can be planned",
+      "passed": true
+    }
+  ],
+  "count": 44,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "f72a436b-0b6f-4009-b81a-df0adce6e40c",
+  "passed": 44,
+  "reported_checks": 44,
+  "reported_failures": 0,
+  "run_id": "06cbf6de-e4e9-4532-afaf-b79c227a9c81",
+  "runtime_environment": {
+    "native_process_id": 3064,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\child_planner_class_green_2f87d8e0912941cc90a8a28fce97fc7d",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_planner_class_green_2f87d8e0912941cc90a8a28fce97fc7d/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "feature_child_planner_test",
+  "schema_version": 1,
+  "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+  "status": "PASS"
+}

@@ -7163,6 +7163,9 @@ func _apply_damage_core(
 	var feature_batch: Variant = damage_context.get("feature_damage_batch")
 	if feature_batch is RefCounted and feature_batch.get_script() == FeatureDamageBatchScript \
 		and feature_batch.requires_commit_context():
+		# The public direct entry owns STRUCK semantics. A caller label cannot
+		# turn it into a periodic/child entry and retain the direct side effects.
+		if causes_struck and damage_context.get("source_class") != "direct": return
 		var prepared: Dictionary = feature_batch.prepare_commit_context(self,damage_context)
 		if not bool(prepared.get("success",false)): return
 		damage_context = prepared.context

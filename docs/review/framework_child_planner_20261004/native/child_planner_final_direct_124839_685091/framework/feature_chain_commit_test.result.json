@@ -1,0 +1,362 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "the real HP batch must own a frozen finite lineage before death children can be produced",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "typed direct lineage enters the existing batch",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "accepted direct lineage cannot be enlarged by caller mutation",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "direct base HP scope opens",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "direct wrong callback rejects before HP and independent RNG",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "direct wrong callback must not steal or poison the original legal commit qualification",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "direct post-commit callback really moves and heals the actor",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "direct commits exactly one fact",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "direct death is captured before a callback restores HP",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "direct retains exact damage classification and finite lineage",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "direct captures authoritative mapped Ground GU before callbacks and ignores caller geometry",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "direct retains the original profile credit after caller mutation",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "direct buffer finishes and transfers once without fake HP work",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "typed periodic lineage enters the existing batch",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "accepted periodic lineage cannot be enlarged by caller mutation",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "periodic base HP scope opens",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "periodic wrong callback rejects before HP and independent RNG",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "periodic wrong callback must not steal or poison the original legal commit qualification",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "periodic uses the real MAC and actor HP port with commit-time receipt",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "periodic does not request STRUCK or direct magic walk-delay RNG",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "periodic post-commit callback really moves and heals the actor",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "periodic commits exactly one fact",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "periodic death is captured before a callback restores HP",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "periodic retains exact damage classification and finite lineage",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "periodic captures authoritative mapped Ground GU before callbacks and ignores caller geometry",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "periodic retains the original profile credit after caller mutation",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "periodic buffer finishes and transfers once without fake HP work",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "typed child lineage enters the existing batch",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "accepted child lineage cannot be enlarged by caller mutation",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "child base HP scope opens",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "child wrong callback rejects before HP and independent RNG",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "child wrong callback must not steal or poison the original legal commit qualification",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "child uses the real MAC and actor HP port with commit-time receipt",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "child does not request STRUCK or direct magic walk-delay RNG",
+      "passed": true
+    },
+    {
+      "id": 35,
+      "label": "child post-commit callback really moves and heals the actor",
+      "passed": true
+    },
+    {
+      "id": 36,
+      "label": "child commits exactly one fact",
+      "passed": true
+    },
+    {
+      "id": 37,
+      "label": "child death is captured before a callback restores HP",
+      "passed": true
+    },
+    {
+      "id": 38,
+      "label": "child retains exact damage classification and finite lineage",
+      "passed": true
+    },
+    {
+      "id": 39,
+      "label": "child captures authoritative mapped Ground GU before callbacks and ignores caller geometry",
+      "passed": true
+    },
+    {
+      "id": 40,
+      "label": "child retains the original profile credit after caller mutation",
+      "passed": true
+    },
+    {
+      "id": 41,
+      "label": "child buffer finishes and transfers once without fake HP work",
+      "passed": true
+    },
+    {
+      "id": 42,
+      "label": "invalid root lineage rejected before HP: {\"contract_id\":\"hardcore.combat.chain_context.v1\",\"generation\":1,\"maximum_generation\":2,\"parent_release_id\":\"\",\"release_id\":\"chain:root:1\",\"root_release_id\":\"chain:root:1\",\"root_skill_id\":\"hc.skill.wizard.ice_storm\"}",
+      "passed": true
+    },
+    {
+      "id": 43,
+      "label": "invalid root lineage rejected before HP: {\"contract_id\":\"hardcore.combat.chain_context.v1\",\"generation\":0,\"maximum_generation\":-1,\"parent_release_id\":\"\",\"release_id\":\"chain:root:1\",\"root_release_id\":\"chain:root:1\",\"root_skill_id\":\"hc.skill.wizard.ice_storm\"}",
+      "passed": true
+    },
+    {
+      "id": 44,
+      "label": "invalid root lineage rejected before HP: {\"contract_id\":\"hardcore.combat.chain_context.v1\",\"generation\":0,\"maximum_generation\":true,\"parent_release_id\":\"\",\"release_id\":\"chain:root:1\",\"root_release_id\":\"chain:root:1\",\"root_skill_id\":\"hc.skill.wizard.ice_storm\"}",
+      "passed": true
+    },
+    {
+      "id": 45,
+      "label": "invalid root lineage rejected before HP: {\"contract_id\":\"hardcore.combat.chain_context.v1\",\"generation\":0,\"maximum_generation\":2,\"parent_release_id\":\"\",\"release_id\":\"foreign\",\"root_release_id\":\"chain:root:1\",\"root_skill_id\":\"hc.skill.wizard.ice_storm\"}",
+      "passed": true
+    },
+    {
+      "id": 46,
+      "label": "invalid root lineage rejected before HP: {\"contract_id\":\"hardcore.combat.chain_context.v1\",\"generation\":0,\"maximum_generation\":2,\"parent_release_id\":\"\",\"release_id\":\"chain:root:1\",\"root_release_id\":\"chain:root:1\",\"root_skill_id\":\"hc.skill.warrior.fire_sword\"}",
+      "passed": true
+    },
+    {
+      "id": 47,
+      "label": "invalid root lineage rejected before HP: {\"contract_id\":\"hardcore.combat.chain_context.v1\",\"generation\":0,\"maximum_generation\":2,\"parent_release_id\":\"\",\"release_id\":\"chain:root:1\",\"root_release_id\":\"chain:root:1\",\"root_skill_id\":\"hc.skill.wizard.ice_storm\",\"unknown\":true}",
+      "passed": true
+    },
+    {
+      "id": 48,
+      "label": "unscoped child damage cannot impersonate a root direct batch",
+      "passed": true
+    },
+    {
+      "id": 49,
+      "label": "real periodic immunity produces no fake committed death and consumes no random roll",
+      "passed": true
+    },
+    {
+      "id": 50,
+      "label": "zero damage stays zero without consuming the original legal periodic qualification",
+      "passed": true
+    },
+    {
+      "id": 51,
+      "label": "after immune and zero no-ops the same legal periodic batch delivers one actual first death",
+      "passed": true
+    },
+    {
+      "id": 52,
+      "label": "periodic first death immediately removes collision and live targeting membership",
+      "passed": true
+    },
+    {
+      "id": 53,
+      "label": "child first death traverses the existing MAC and HP mutation authority",
+      "passed": true
+    },
+    {
+      "id": 54,
+      "label": "child first death immediately removes collision before deferred death art and rewards",
+      "passed": true
+    },
+    {
+      "id": 55,
+      "label": "child fact owns the committed old life while the death authority retires that life exactly once",
+      "passed": true
+    },
+    {
+      "id": 56,
+      "label": "missing mapped geometry refuses the chain commit before HP with no identity fallback",
+      "passed": true
+    },
+    {
+      "id": 57,
+      "label": "periodic wrong-entry probe owns a legal finite batch",
+      "passed": true
+    },
+    {
+      "id": 58,
+      "label": "matching periodic caller label cannot turn the direct public entry into a chain HP or STRUCK entry",
+      "passed": true
+    },
+    {
+      "id": 59,
+      "label": "periodic wrong public entry preserves the legal batch qualification",
+      "passed": true
+    },
+    {
+      "id": 60,
+      "label": "bad projection through Combat periodic refuses before RNG/HP and keeps qualification",
+      "passed": true
+    },
+    {
+      "id": 61,
+      "label": "after wrong entry and bad projection the same periodic batch legally commits exactly once",
+      "passed": true
+    },
+    {
+      "id": 62,
+      "label": "periodic recovered death still removes collision immediately",
+      "passed": true
+    },
+    {
+      "id": 63,
+      "label": "child wrong-entry probe owns a legal finite batch",
+      "passed": true
+    },
+    {
+      "id": 64,
+      "label": "matching child caller label cannot turn the direct public entry into a chain HP or STRUCK entry",
+      "passed": true
+    },
+    {
+      "id": 65,
+      "label": "child wrong public entry preserves the legal batch qualification",
+      "passed": true
+    },
+    {
+      "id": 66,
+      "label": "bad projection through Combat child refuses before RNG/HP and keeps qualification",
+      "passed": true
+    },
+    {
+      "id": 67,
+      "label": "after wrong entry and bad projection the same child batch legally commits exactly once",
+      "passed": true
+    },
+    {
+      "id": 68,
+      "label": "child recovered death still removes collision immediately",
+      "passed": true
+    }
+  ],
+  "count": 68,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "704bc0c3-e9af-4713-a681-3c001c35a85c",
+  "passed": 68,
+  "reported_checks": 68,
+  "reported_failures": 0,
+  "run_id": "22471f4a-e800-4f23-8dbe-bfb48e5a9bbf",
+  "runtime_environment": {
+    "native_process_id": 4744,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\child_planner_final_direct_8f9b84198ca04a54bff07678d0b14ae6",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_planner_final_direct_8f9b84198ca04a54bff07678d0b14ae6/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "feature_chain_commit_test",
+  "schema_version": 1,
+  "source_content_sha256": "bad34a5317297c53c3f827dd208efdc482f2b35a868c4efa2fee0e3a0ca2e673",
+  "status": "PASS"
+}

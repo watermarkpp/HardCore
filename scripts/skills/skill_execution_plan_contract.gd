@@ -7,6 +7,7 @@ extends RefCounted
 ## one planner entry. Also owns the formal sentinel counters.
 
 const SkillDataLoaderScript := preload("res://scripts/skills/skill_data_loader.gd")
+const ChildLease := preload("res://scripts/features/contracts/child_action_lease.gd")
 const SkillFootprintSnapshotScript := preload(
 	"res://scripts/skills/skill_footprint_snapshot.gd"
 )
@@ -130,10 +131,11 @@ static func build_canonical_plan(
 	## canonical contract, builds the single release snapshot when needed and
 	## attaches the presentation geometry. Never performs side effects.
 	canonical_plan_build_count += 1
-	var skill_id := SkillDataLoaderScript.stable_skill_id(
+	var child: RefCounted = ChildLease.from_request(request)
+	var skill_id := str(request.skill_id) if child!=null else SkillDataLoaderScript.stable_skill_id(
 		str(request.get("skill_id", ""))
 	)
-	var definition := preload("res://scripts/features/contracts/action_config_lease.gd").resolve_definition(skill_id, request.get("action_config_lease"))
+	var definition: Dictionary = child.definition() if child!=null else preload("res://scripts/features/contracts/action_config_lease.gd").resolve_definition(skill_id, request.get("action_config_lease"))
 	var accepted := bool(legacy_result.get("accepted", false))
 	var reason := normalize_reason(str(legacy_result.get("reason", "")))
 	var release_id := str(
@@ -335,6 +337,10 @@ static func build_canonical_plan(
 		plan["support_area_geometry"] = (
 			support_area_geometry as Dictionary
 		).duplicate(true)
+	if child!=null:
+		plan["chain_context"]=child.chain_context()
+		plan["historical_credit"]=child.command().historical_credit
+		plan["child_command"]=child.command()
 	plan["plan_hash"] = plan_hash(plan)
 	return plan
 
@@ -671,6 +677,8 @@ static func plan_hash(plan: Dictionary) -> String:
 		and not (support_area_geometry as Dictionary).is_empty()
 	):
 		protected["support_area_geometry"] = support_area_geometry
+	for field: String in ["chain_context","historical_credit","child_command"]:
+		if plan.has(field): protected[field]=plan[field]
 	return "%d" % hash(_canonicalize(protected))
 
 
@@ -805,6 +813,8 @@ static func _plan_id(
 
 
 static func _definition_revision(definition: Dictionary) -> String:
+	if definition.get("child_definition") is Dictionary:
+		return JSON.stringify(definition.child_definition).sha256_text()
 	return "%d" % hash(
 		str(definition.get("skill_id", ""))
 		+ str(definition.get("class", ""))

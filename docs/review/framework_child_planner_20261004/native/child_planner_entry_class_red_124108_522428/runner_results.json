@@ -1,0 +1,40 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "feature_chain_commit_test",
+                        "test_path":  "tests/framework/feature_chain_commit_test.tscn",
+                        "wrapper_process_id":  24572,
+                        "wrapper_started_utc":  "2026-10-04T04:41:10.8056041Z",
+                        "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\child_planner_entry_class_red_e4c09c3e5ead40a2ba2bf47a745f2459",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  false,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  1,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-04T04:41:40.8177296Z",
+                        "native_exit_observed_utc":  "2026-10-04T04:41:18.1327859Z",
+                        "effective_exit_code":  1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "40c70c76-78ff-462a-b421-28f4cb8d439d",
+                        "framework_receipt_valid":  false,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+                    }
+                ],
+    "total":  1,
+    "invocation_id":  "cca02dc6-1fb6-4e78-8e99-ab44ed8f228e",
+    "runtime_environment":  {
+                                "project_root":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+                                "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\child_planner_entry_class_red_e4c09c3e5ead40a2ba2bf47a745f2459",
+                                "runner_process_id":  6740
+                            },
+    "passed":  0,
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "engine_log_errors":  0,
+    "generated_at":  "2026-10-04T12:41:19.2156800+08:00",
+    "failed":  1,
+    "suite":  "adhoc"
+}
