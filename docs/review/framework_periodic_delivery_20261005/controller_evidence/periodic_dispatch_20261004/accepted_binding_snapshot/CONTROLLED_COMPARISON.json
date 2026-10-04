@@ -1,0 +1,105 @@
+{
+  "status": "PASS",
+  "read_utc": "2026-10-04T16:23:18.785383+00:00",
+  "scope": "Exact same controlled 4000/1024 real HP workload, 1200us budget and test/pump path, two original and two candidate observations. Descriptive comparison, no natural/GPU/Android/statistical confidence or CPU-only claim.",
+  "order": [
+    "A2",
+    "B1",
+    "B2",
+    "A3"
+  ],
+  "rows": [
+    {
+      "original_period_usec": 1000,
+      "ticks_each": 4000,
+      "hp_each": 1959989,
+      "natural_deadline": "NOT_RUN",
+      "elapsed_wall_usec": {
+        "A": [
+          14067963,
+          13943814
+        ],
+        "B": [
+          9713784,
+          9915150
+        ],
+        "mean_change_percent": -29.92613785266104,
+        "ranges_separated": true
+      },
+      "pump_elapsed_usec": {
+        "A": [
+          4054616,
+          4023582
+        ],
+        "B": [
+          2416024,
+          2426122
+        ],
+        "mean_change_percent": -40.05908248349446,
+        "ranges_separated": true
+      },
+      "service_epochs": {
+        "A": [
+          2041,
+          2023
+        ],
+        "B": [
+          1410,
+          1439
+        ],
+        "mean_change_percent": -29.89665354330708,
+        "ranges_separated": true
+      }
+    },
+    {
+      "original_period_usec": 1,
+      "ticks_each": 1024,
+      "hp_each": 1989749,
+      "natural_deadline": "NOT_RUN",
+      "elapsed_wall_usec": {
+        "A": [
+          3535560,
+          3522727
+        ],
+        "B": [
+          2438372,
+          2479709
+        ],
+        "mean_change_percent": -30.321889716300852,
+        "ranges_separated": true
+      },
+      "pump_elapsed_usec": {
+        "A": [
+          1019053,
+          1023563
+        ],
+        "B": [
+          612065,
+          616416
+        ],
+        "mean_change_percent": -39.85746709122028,
+        "ranges_separated": true
+      },
+      "service_epochs": {
+        "A": [
+          515,
+          513
+        ],
+        "B": [
+          356,
+          362
+        ],
+        "mean_change_percent": -30.155642023346307,
+        "ranges_separated": true
+      }
+    }
+  ],
+  "phase_associations": [
+    "BASELINE_A2_ASSOCIATIONS.json",
+    "CANDIDATE_B1_ASSOCIATIONS.json",
+    "CANDIDATE_B2_ASSOCIATIONS.json",
+    "ORIGINAL_A3_ASSOCIATIONS.json"
+  ],
+  "source_caveat": "A2 predates the correction of the separate accepted_binding_snapshot_test ordinary-handler fixture; that scene is not loaded by this benchmark. A3/B1/B2 otherwise differ only in the exact three production variant files.",
+  "candidate_restored": true
+}

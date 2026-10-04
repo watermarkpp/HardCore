@@ -1,0 +1,40 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "periodic_refresh_service_boundary_test",
+                        "test_path":  "tests/framework/periodic_refresh_service_boundary_test.tscn",
+                        "wrapper_process_id":  25380,
+                        "wrapper_started_utc":  "2026-10-04T16:19:23.0823855Z",
+                        "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_candidate_b2_20261005",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-04T16:20:23.0931430Z",
+                        "native_exit_observed_utc":  "2026-10-04T16:19:43.0602001Z",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "19955292-9d07-4ffd-b4bf-6059052a1cbe",
+                        "framework_receipt_valid":  true,
+                        "result":  "PASS",
+                        "reason":  ""
+                    }
+                ],
+    "total":  1,
+    "invocation_id":  "bc5f48da-69d5-42f6-8ea4-7bdccfcf99c1",
+    "runtime_environment":  {
+                                "project_root":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+                                "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_candidate_b2_20261005",
+                                "runner_process_id":  22960
+                            },
+    "passed":  1,
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "engine_log_errors":  0,
+    "generated_at":  "2026-10-05T00:19:44.6158067+08:00",
+    "failed":  0,
+    "suite":  "adhoc"
+}

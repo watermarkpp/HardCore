@@ -1,0 +1,1962 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "mask=0 registered profession",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "mask=0 formal async preparation closes base and child sound dependencies",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "mask=0 formal resource-ready activation before item operations: hc.socketing_fixture",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "mask=0 formal resource-ready activation before item operations: hc.runes.fixture",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "mask=0 formal resource-ready activation before item operations: hc.validation.mixed_delivery_chain",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "mask=0 formal v3 drop provides a validated affix",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "mask=0 production writer stores original isolated inputs",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "mask=0 original equip publishes the composed sources",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "mask=0 durable load restores exact distinct affix/gem/rune provenance",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "mask=0 embedding preserves historical modifiers and unique asset ownership",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "mask=0 mapped production world reaches READY",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "mask=0 sole Root factory creates the initial receiver",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "mask=0 declared child receiver starts outside the direct footprint",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "mask=0 one immutable action captures the complete mixed binding set",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "mask=0 accepted resource closure contains the actual child sound",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "mask=0 real windup reserves complete world and per-target derived capacity",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "mask=0 withdraw future source hc.ignite",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "mask=0 withdraw future source hc.validation.mixed_delivery_chain",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "mask=0 withdraw future source hc.socketing_fixture",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "mask=0 withdraw future source hc.runes.fixture",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "mask=0 withdraw future source hc.ignite_cue_assets",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "mask=0 withdrawal removes future work while retaining accepted obligations",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "mask=0 real SceneTreeTimer releases exactly once through the sole planner",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "mask=0 base commit uses actual loss and does not pre-execute the child",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "mask=0 production consumer completes base and finite child facts",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "mask=0 every surviving declared source has one actual native cue",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "mask=0 finite child uses committed loss exactly once and existing Root geometry",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "mask=0 fatal base commit immediately removes collision",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "mask=0 direct healing uses actual loss once without child feedback",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "mask=0 existing audio service consumes the exact accepted stream for native cues",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "mask=0 original period work completes at tick 1",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "mask=0 all original periodic sources deliver unchanged damage at tick 1",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "mask=0 periodic work cannot recursively heal at tick 1",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "mask=0 original period work completes at tick 2",
+      "passed": true
+    },
+    {
+      "id": 35,
+      "label": "mask=0 all original periodic sources deliver unchanged damage at tick 2",
+      "passed": true
+    },
+    {
+      "id": 36,
+      "label": "mask=0 periodic work cannot recursively heal at tick 2",
+      "passed": true
+    },
+    {
+      "id": 37,
+      "label": "mask=0 original period work completes at tick 3",
+      "passed": true
+    },
+    {
+      "id": 38,
+      "label": "mask=0 all original periodic sources deliver unchanged damage at tick 3",
+      "passed": true
+    },
+    {
+      "id": 39,
+      "label": "mask=0 periodic work cannot recursively heal at tick 3",
+      "passed": true
+    },
+    {
+      "id": 40,
+      "label": "mask=0 original period work completes at tick 4",
+      "passed": true
+    },
+    {
+      "id": 41,
+      "label": "mask=0 all original periodic sources deliver unchanged damage at tick 4",
+      "passed": true
+    },
+    {
+      "id": 42,
+      "label": "mask=0 periodic work cannot recursively heal at tick 4",
+      "passed": true
+    },
+    {
+      "id": 43,
+      "label": "mask=0 complete delivery counts retain the authored finite bounds",
+      "passed": true
+    },
+    {
+      "id": 44,
+      "label": "mask=0 all promises states heaps receipts and cues terminate",
+      "passed": true
+    },
+    {
+      "id": 45,
+      "label": "mask=0 last accepted state and native cue release their prepared resource owner",
+      "passed": true
+    },
+    {
+      "id": 46,
+      "label": "mask=0 derived work preserves old RNG and player resource charges",
+      "passed": true
+    },
+    {
+      "id": 47,
+      "label": "mask=1 registered profession",
+      "passed": true
+    },
+    {
+      "id": 48,
+      "label": "mask=1 formal async preparation closes base and child sound dependencies",
+      "passed": true
+    },
+    {
+      "id": 49,
+      "label": "mask=1 formal resource-ready activation before item operations: hc.socketing_fixture",
+      "passed": true
+    },
+    {
+      "id": 50,
+      "label": "mask=1 formal resource-ready activation before item operations: hc.runes.fixture",
+      "passed": true
+    },
+    {
+      "id": 51,
+      "label": "mask=1 formal resource-ready activation before item operations: hc.validation.mixed_delivery_chain",
+      "passed": true
+    },
+    {
+      "id": 52,
+      "label": "mask=1 formal v3 drop provides a validated affix",
+      "passed": true
+    },
+    {
+      "id": 53,
+      "label": "mask=1 production writer stores original isolated inputs",
+      "passed": true
+    },
+    {
+      "id": 54,
+      "label": "mask=1 gem transfers through the original durable transaction port",
+      "passed": true
+    },
+    {
+      "id": 55,
+      "label": "mask=1 original equip publishes the composed sources",
+      "passed": true
+    },
+    {
+      "id": 56,
+      "label": "mask=1 durable load restores exact distinct affix/gem/rune provenance",
+      "passed": true
+    },
+    {
+      "id": 57,
+      "label": "mask=1 embedding preserves historical modifiers and unique asset ownership",
+      "passed": true
+    },
+    {
+      "id": 58,
+      "label": "mask=1 mapped production world reaches READY",
+      "passed": true
+    },
+    {
+      "id": 59,
+      "label": "mask=1 sole Root factory creates the initial receiver",
+      "passed": true
+    },
+    {
+      "id": 60,
+      "label": "mask=1 declared child receiver starts outside the direct footprint",
+      "passed": true
+    },
+    {
+      "id": 61,
+      "label": "mask=1 one immutable action captures the complete mixed binding set",
+      "passed": true
+    },
+    {
+      "id": 62,
+      "label": "mask=1 accepted resource closure contains the actual child sound",
+      "passed": true
+    },
+    {
+      "id": 63,
+      "label": "mask=1 real windup reserves complete world and per-target derived capacity",
+      "passed": true
+    },
+    {
+      "id": 64,
+      "label": "mask=1 withdraw future source hc.ignite",
+      "passed": true
+    },
+    {
+      "id": 65,
+      "label": "mask=1 withdraw future source hc.validation.mixed_delivery_chain",
+      "passed": true
+    },
+    {
+      "id": 66,
+      "label": "mask=1 withdraw future source hc.socketing_fixture",
+      "passed": true
+    },
+    {
+      "id": 67,
+      "label": "mask=1 withdraw future source hc.runes.fixture",
+      "passed": true
+    },
+    {
+      "id": 68,
+      "label": "mask=1 withdraw future source hc.ignite_cue_assets",
+      "passed": true
+    },
+    {
+      "id": 69,
+      "label": "mask=1 withdrawal removes future work while retaining accepted obligations",
+      "passed": true
+    },
+    {
+      "id": 70,
+      "label": "mask=1 real SceneTreeTimer releases exactly once through the sole planner",
+      "passed": true
+    },
+    {
+      "id": 71,
+      "label": "mask=1 base commit uses actual loss and does not pre-execute the child",
+      "passed": true
+    },
+    {
+      "id": 72,
+      "label": "mask=1 production consumer completes base and finite child facts",
+      "passed": true
+    },
+    {
+      "id": 73,
+      "label": "mask=1 every surviving declared source has one actual native cue",
+      "passed": true
+    },
+    {
+      "id": 74,
+      "label": "mask=1 finite child uses committed loss exactly once and existing Root geometry",
+      "passed": true
+    },
+    {
+      "id": 75,
+      "label": "mask=1 fatal base commit immediately removes collision",
+      "passed": true
+    },
+    {
+      "id": 76,
+      "label": "mask=1 direct healing uses actual loss once without child feedback",
+      "passed": true
+    },
+    {
+      "id": 77,
+      "label": "mask=1 existing audio service consumes the exact accepted stream for native cues",
+      "passed": true
+    },
+    {
+      "id": 78,
+      "label": "mask=1 original period work completes at tick 1",
+      "passed": true
+    },
+    {
+      "id": 79,
+      "label": "mask=1 all original periodic sources deliver unchanged damage at tick 1",
+      "passed": true
+    },
+    {
+      "id": 80,
+      "label": "mask=1 periodic work cannot recursively heal at tick 1",
+      "passed": true
+    },
+    {
+      "id": 81,
+      "label": "mask=1 original period work completes at tick 2",
+      "passed": true
+    },
+    {
+      "id": 82,
+      "label": "mask=1 all original periodic sources deliver unchanged damage at tick 2",
+      "passed": true
+    },
+    {
+      "id": 83,
+      "label": "mask=1 periodic work cannot recursively heal at tick 2",
+      "passed": true
+    },
+    {
+      "id": 84,
+      "label": "mask=1 original period work completes at tick 3",
+      "passed": true
+    },
+    {
+      "id": 85,
+      "label": "mask=1 all original periodic sources deliver unchanged damage at tick 3",
+      "passed": true
+    },
+    {
+      "id": 86,
+      "label": "mask=1 periodic work cannot recursively heal at tick 3",
+      "passed": true
+    },
+    {
+      "id": 87,
+      "label": "mask=1 original period work completes at tick 4",
+      "passed": true
+    },
+    {
+      "id": 88,
+      "label": "mask=1 all original periodic sources deliver unchanged damage at tick 4",
+      "passed": true
+    },
+    {
+      "id": 89,
+      "label": "mask=1 periodic work cannot recursively heal at tick 4",
+      "passed": true
+    },
+    {
+      "id": 90,
+      "label": "mask=1 complete delivery counts retain the authored finite bounds",
+      "passed": true
+    },
+    {
+      "id": 91,
+      "label": "mask=1 all promises states heaps receipts and cues terminate",
+      "passed": true
+    },
+    {
+      "id": 92,
+      "label": "mask=1 last accepted state and native cue release their prepared resource owner",
+      "passed": true
+    },
+    {
+      "id": 93,
+      "label": "mask=1 derived work preserves old RNG and player resource charges",
+      "passed": true
+    },
+    {
+      "id": 94,
+      "label": "mask=2 registered profession",
+      "passed": true
+    },
+    {
+      "id": 95,
+      "label": "mask=2 formal async preparation closes base and child sound dependencies",
+      "passed": true
+    },
+    {
+      "id": 96,
+      "label": "mask=2 formal resource-ready activation before item operations: hc.socketing_fixture",
+      "passed": true
+    },
+    {
+      "id": 97,
+      "label": "mask=2 formal resource-ready activation before item operations: hc.runes.fixture",
+      "passed": true
+    },
+    {
+      "id": 98,
+      "label": "mask=2 formal resource-ready activation before item operations: hc.validation.mixed_delivery_chain",
+      "passed": true
+    },
+    {
+      "id": 99,
+      "label": "mask=2 formal v3 drop provides a validated affix",
+      "passed": true
+    },
+    {
+      "id": 100,
+      "label": "mask=2 production writer stores original isolated inputs",
+      "passed": true
+    },
+    {
+      "id": 101,
+      "label": "mask=2 rune transfers through the original durable transaction port",
+      "passed": true
+    },
+    {
+      "id": 102,
+      "label": "mask=2 original equip publishes the composed sources",
+      "passed": true
+    },
+    {
+      "id": 103,
+      "label": "mask=2 durable load restores exact distinct affix/gem/rune provenance",
+      "passed": true
+    },
+    {
+      "id": 104,
+      "label": "mask=2 embedding preserves historical modifiers and unique asset ownership",
+      "passed": true
+    },
+    {
+      "id": 105,
+      "label": "mask=2 mapped production world reaches READY",
+      "passed": true
+    },
+    {
+      "id": 106,
+      "label": "mask=2 sole Root factory creates the initial receiver",
+      "passed": true
+    },
+    {
+      "id": 107,
+      "label": "mask=2 declared child receiver starts outside the direct footprint",
+      "passed": true
+    },
+    {
+      "id": 108,
+      "label": "mask=2 one immutable action captures the complete mixed binding set",
+      "passed": true
+    },
+    {
+      "id": 109,
+      "label": "mask=2 accepted resource closure contains the actual child sound",
+      "passed": true
+    },
+    {
+      "id": 110,
+      "label": "mask=2 real windup reserves complete world and per-target derived capacity",
+      "passed": true
+    },
+    {
+      "id": 111,
+      "label": "mask=2 withdraw future source hc.ignite",
+      "passed": true
+    },
+    {
+      "id": 112,
+      "label": "mask=2 withdraw future source hc.validation.mixed_delivery_chain",
+      "passed": true
+    },
+    {
+      "id": 113,
+      "label": "mask=2 withdraw future source hc.socketing_fixture",
+      "passed": true
+    },
+    {
+      "id": 114,
+      "label": "mask=2 withdraw future source hc.runes.fixture",
+      "passed": true
+    },
+    {
+      "id": 115,
+      "label": "mask=2 withdraw future source hc.ignite_cue_assets",
+      "passed": true
+    },
+    {
+      "id": 116,
+      "label": "mask=2 withdrawal removes future work while retaining accepted obligations",
+      "passed": true
+    },
+    {
+      "id": 117,
+      "label": "mask=2 real SceneTreeTimer releases exactly once through the sole planner",
+      "passed": true
+    },
+    {
+      "id": 118,
+      "label": "mask=2 base commit uses actual loss and does not pre-execute the child",
+      "passed": true
+    },
+    {
+      "id": 119,
+      "label": "mask=2 production consumer completes base and finite child facts",
+      "passed": true
+    },
+    {
+      "id": 120,
+      "label": "mask=2 every surviving declared source has one actual native cue",
+      "passed": true
+    },
+    {
+      "id": 121,
+      "label": "mask=2 finite child uses committed loss exactly once and existing Root geometry",
+      "passed": true
+    },
+    {
+      "id": 122,
+      "label": "mask=2 fatal base commit immediately removes collision",
+      "passed": true
+    },
+    {
+      "id": 123,
+      "label": "mask=2 direct healing uses actual loss once without child feedback",
+      "passed": true
+    },
+    {
+      "id": 124,
+      "label": "mask=2 existing audio service consumes the exact accepted stream for native cues",
+      "passed": true
+    },
+    {
+      "id": 125,
+      "label": "mask=2 original period work completes at tick 1",
+      "passed": true
+    },
+    {
+      "id": 126,
+      "label": "mask=2 all original periodic sources deliver unchanged damage at tick 1",
+      "passed": true
+    },
+    {
+      "id": 127,
+      "label": "mask=2 periodic work cannot recursively heal at tick 1",
+      "passed": true
+    },
+    {
+      "id": 128,
+      "label": "mask=2 original period work completes at tick 2",
+      "passed": true
+    },
+    {
+      "id": 129,
+      "label": "mask=2 all original periodic sources deliver unchanged damage at tick 2",
+      "passed": true
+    },
+    {
+      "id": 130,
+      "label": "mask=2 periodic work cannot recursively heal at tick 2",
+      "passed": true
+    },
+    {
+      "id": 131,
+      "label": "mask=2 original period work completes at tick 3",
+      "passed": true
+    },
+    {
+      "id": 132,
+      "label": "mask=2 all original periodic sources deliver unchanged damage at tick 3",
+      "passed": true
+    },
+    {
+      "id": 133,
+      "label": "mask=2 periodic work cannot recursively heal at tick 3",
+      "passed": true
+    },
+    {
+      "id": 134,
+      "label": "mask=2 original period work completes at tick 4",
+      "passed": true
+    },
+    {
+      "id": 135,
+      "label": "mask=2 all original periodic sources deliver unchanged damage at tick 4",
+      "passed": true
+    },
+    {
+      "id": 136,
+      "label": "mask=2 periodic work cannot recursively heal at tick 4",
+      "passed": true
+    },
+    {
+      "id": 137,
+      "label": "mask=2 complete delivery counts retain the authored finite bounds",
+      "passed": true
+    },
+    {
+      "id": 138,
+      "label": "mask=2 all promises states heaps receipts and cues terminate",
+      "passed": true
+    },
+    {
+      "id": 139,
+      "label": "mask=2 last accepted state and native cue release their prepared resource owner",
+      "passed": true
+    },
+    {
+      "id": 140,
+      "label": "mask=2 derived work preserves old RNG and player resource charges",
+      "passed": true
+    },
+    {
+      "id": 141,
+      "label": "mask=3 registered profession",
+      "passed": true
+    },
+    {
+      "id": 142,
+      "label": "mask=3 formal async preparation closes base and child sound dependencies",
+      "passed": true
+    },
+    {
+      "id": 143,
+      "label": "mask=3 formal resource-ready activation before item operations: hc.socketing_fixture",
+      "passed": true
+    },
+    {
+      "id": 144,
+      "label": "mask=3 formal resource-ready activation before item operations: hc.runes.fixture",
+      "passed": true
+    },
+    {
+      "id": 145,
+      "label": "mask=3 formal resource-ready activation before item operations: hc.validation.mixed_delivery_chain",
+      "passed": true
+    },
+    {
+      "id": 146,
+      "label": "mask=3 formal v3 drop provides a validated affix",
+      "passed": true
+    },
+    {
+      "id": 147,
+      "label": "mask=3 production writer stores original isolated inputs",
+      "passed": true
+    },
+    {
+      "id": 148,
+      "label": "mask=3 gem transfers through the original durable transaction port",
+      "passed": true
+    },
+    {
+      "id": 149,
+      "label": "mask=3 rune transfers through the original durable transaction port",
+      "passed": true
+    },
+    {
+      "id": 150,
+      "label": "mask=3 original equip publishes the composed sources",
+      "passed": true
+    },
+    {
+      "id": 151,
+      "label": "mask=3 durable load restores exact distinct affix/gem/rune provenance",
+      "passed": true
+    },
+    {
+      "id": 152,
+      "label": "mask=3 embedding preserves historical modifiers and unique asset ownership",
+      "passed": true
+    },
+    {
+      "id": 153,
+      "label": "mask=3 mapped production world reaches READY",
+      "passed": true
+    },
+    {
+      "id": 154,
+      "label": "mask=3 sole Root factory creates the initial receiver",
+      "passed": true
+    },
+    {
+      "id": 155,
+      "label": "mask=3 declared child receiver starts outside the direct footprint",
+      "passed": true
+    },
+    {
+      "id": 156,
+      "label": "mask=3 one immutable action captures the complete mixed binding set",
+      "passed": true
+    },
+    {
+      "id": 157,
+      "label": "mask=3 accepted resource closure contains the actual child sound",
+      "passed": true
+    },
+    {
+      "id": 158,
+      "label": "mask=3 real windup reserves complete world and per-target derived capacity",
+      "passed": true
+    },
+    {
+      "id": 159,
+      "label": "mask=3 withdraw future source hc.ignite",
+      "passed": true
+    },
+    {
+      "id": 160,
+      "label": "mask=3 withdraw future source hc.validation.mixed_delivery_chain",
+      "passed": true
+    },
+    {
+      "id": 161,
+      "label": "mask=3 withdraw future source hc.socketing_fixture",
+      "passed": true
+    },
+    {
+      "id": 162,
+      "label": "mask=3 withdraw future source hc.runes.fixture",
+      "passed": true
+    },
+    {
+      "id": 163,
+      "label": "mask=3 withdraw future source hc.ignite_cue_assets",
+      "passed": true
+    },
+    {
+      "id": 164,
+      "label": "mask=3 withdrawal removes future work while retaining accepted obligations",
+      "passed": true
+    },
+    {
+      "id": 165,
+      "label": "mask=3 real SceneTreeTimer releases exactly once through the sole planner",
+      "passed": true
+    },
+    {
+      "id": 166,
+      "label": "mask=3 base commit uses actual loss and does not pre-execute the child",
+      "passed": true
+    },
+    {
+      "id": 167,
+      "label": "mask=3 production consumer completes base and finite child facts",
+      "passed": true
+    },
+    {
+      "id": 168,
+      "label": "mask=3 every surviving declared source has one actual native cue",
+      "passed": true
+    },
+    {
+      "id": 169,
+      "label": "mask=3 finite child uses committed loss exactly once and existing Root geometry",
+      "passed": true
+    },
+    {
+      "id": 170,
+      "label": "mask=3 fatal base commit immediately removes collision",
+      "passed": true
+    },
+    {
+      "id": 171,
+      "label": "mask=3 direct healing uses actual loss once without child feedback",
+      "passed": true
+    },
+    {
+      "id": 172,
+      "label": "mask=3 existing audio service consumes the exact accepted stream for native cues",
+      "passed": true
+    },
+    {
+      "id": 173,
+      "label": "mask=3 original period work completes at tick 1",
+      "passed": true
+    },
+    {
+      "id": 174,
+      "label": "mask=3 all original periodic sources deliver unchanged damage at tick 1",
+      "passed": true
+    },
+    {
+      "id": 175,
+      "label": "mask=3 periodic work cannot recursively heal at tick 1",
+      "passed": true
+    },
+    {
+      "id": 176,
+      "label": "mask=3 original period work completes at tick 2",
+      "passed": true
+    },
+    {
+      "id": 177,
+      "label": "mask=3 all original periodic sources deliver unchanged damage at tick 2",
+      "passed": true
+    },
+    {
+      "id": 178,
+      "label": "mask=3 periodic work cannot recursively heal at tick 2",
+      "passed": true
+    },
+    {
+      "id": 179,
+      "label": "mask=3 original period work completes at tick 3",
+      "passed": true
+    },
+    {
+      "id": 180,
+      "label": "mask=3 all original periodic sources deliver unchanged damage at tick 3",
+      "passed": true
+    },
+    {
+      "id": 181,
+      "label": "mask=3 periodic work cannot recursively heal at tick 3",
+      "passed": true
+    },
+    {
+      "id": 182,
+      "label": "mask=3 original period work completes at tick 4",
+      "passed": true
+    },
+    {
+      "id": 183,
+      "label": "mask=3 all original periodic sources deliver unchanged damage at tick 4",
+      "passed": true
+    },
+    {
+      "id": 184,
+      "label": "mask=3 periodic work cannot recursively heal at tick 4",
+      "passed": true
+    },
+    {
+      "id": 185,
+      "label": "mask=3 complete delivery counts retain the authored finite bounds",
+      "passed": true
+    },
+    {
+      "id": 186,
+      "label": "mask=3 all promises states heaps receipts and cues terminate",
+      "passed": true
+    },
+    {
+      "id": 187,
+      "label": "mask=3 last accepted state and native cue release their prepared resource owner",
+      "passed": true
+    },
+    {
+      "id": 188,
+      "label": "mask=3 derived work preserves old RNG and player resource charges",
+      "passed": true
+    },
+    {
+      "id": 189,
+      "label": "mask=4 registered profession",
+      "passed": true
+    },
+    {
+      "id": 190,
+      "label": "mask=4 formal async preparation closes base and child sound dependencies",
+      "passed": true
+    },
+    {
+      "id": 191,
+      "label": "mask=4 formal resource-ready activation before item operations: hc.socketing_fixture",
+      "passed": true
+    },
+    {
+      "id": 192,
+      "label": "mask=4 formal resource-ready activation before item operations: hc.runes.fixture",
+      "passed": true
+    },
+    {
+      "id": 193,
+      "label": "mask=4 formal resource-ready activation before item operations: hc.validation.mixed_delivery_chain",
+      "passed": true
+    },
+    {
+      "id": 194,
+      "label": "mask=4 independent healing contribution activates with the same ready resource closure",
+      "passed": true
+    },
+    {
+      "id": 195,
+      "label": "mask=4 formal v3 drop provides a validated affix",
+      "passed": true
+    },
+    {
+      "id": 196,
+      "label": "mask=4 production writer stores original isolated inputs",
+      "passed": true
+    },
+    {
+      "id": 197,
+      "label": "mask=4 original equip publishes the composed sources",
+      "passed": true
+    },
+    {
+      "id": 198,
+      "label": "mask=4 durable load restores exact distinct affix/gem/rune provenance",
+      "passed": true
+    },
+    {
+      "id": 199,
+      "label": "mask=4 embedding preserves historical modifiers and unique asset ownership",
+      "passed": true
+    },
+    {
+      "id": 200,
+      "label": "mask=4 mapped production world reaches READY",
+      "passed": true
+    },
+    {
+      "id": 201,
+      "label": "mask=4 sole Root factory creates the initial receiver",
+      "passed": true
+    },
+    {
+      "id": 202,
+      "label": "mask=4 declared child receiver starts outside the direct footprint",
+      "passed": true
+    },
+    {
+      "id": 203,
+      "label": "mask=4 one immutable action captures the complete mixed binding set",
+      "passed": true
+    },
+    {
+      "id": 204,
+      "label": "mask=4 accepted resource closure contains the actual child sound",
+      "passed": true
+    },
+    {
+      "id": 205,
+      "label": "mask=4 real windup reserves complete world and per-target derived capacity",
+      "passed": true
+    },
+    {
+      "id": 206,
+      "label": "mask=4 withdraw future source hc.ignite",
+      "passed": true
+    },
+    {
+      "id": 207,
+      "label": "mask=4 withdraw future source hc.validation.mixed_delivery_chain",
+      "passed": true
+    },
+    {
+      "id": 208,
+      "label": "mask=4 withdraw future source hc.validation.lifesteal",
+      "passed": true
+    },
+    {
+      "id": 209,
+      "label": "mask=4 withdraw future source hc.socketing_fixture",
+      "passed": true
+    },
+    {
+      "id": 210,
+      "label": "mask=4 withdraw future source hc.runes.fixture",
+      "passed": true
+    },
+    {
+      "id": 211,
+      "label": "mask=4 withdraw future source hc.ignite_cue_assets",
+      "passed": true
+    },
+    {
+      "id": 212,
+      "label": "mask=4 withdrawal removes future work while retaining accepted obligations",
+      "passed": true
+    },
+    {
+      "id": 213,
+      "label": "mask=4 real SceneTreeTimer releases exactly once through the sole planner",
+      "passed": true
+    },
+    {
+      "id": 214,
+      "label": "mask=4 base commit uses actual loss and does not pre-execute the child",
+      "passed": true
+    },
+    {
+      "id": 215,
+      "label": "mask=4 production consumer completes base and finite child facts",
+      "passed": true
+    },
+    {
+      "id": 216,
+      "label": "mask=4 every surviving declared source has one actual native cue",
+      "passed": true
+    },
+    {
+      "id": 217,
+      "label": "mask=4 finite child uses committed loss exactly once and existing Root geometry",
+      "passed": true
+    },
+    {
+      "id": 218,
+      "label": "mask=4 fatal base commit immediately removes collision",
+      "passed": true
+    },
+    {
+      "id": 219,
+      "label": "mask=4 direct healing uses actual loss once without child feedback",
+      "passed": true
+    },
+    {
+      "id": 220,
+      "label": "mask=4 existing audio service consumes the exact accepted stream for native cues",
+      "passed": true
+    },
+    {
+      "id": 221,
+      "label": "mask=4 original period work completes at tick 1",
+      "passed": true
+    },
+    {
+      "id": 222,
+      "label": "mask=4 all original periodic sources deliver unchanged damage at tick 1",
+      "passed": true
+    },
+    {
+      "id": 223,
+      "label": "mask=4 periodic work cannot recursively heal at tick 1",
+      "passed": true
+    },
+    {
+      "id": 224,
+      "label": "mask=4 original period work completes at tick 2",
+      "passed": true
+    },
+    {
+      "id": 225,
+      "label": "mask=4 all original periodic sources deliver unchanged damage at tick 2",
+      "passed": true
+    },
+    {
+      "id": 226,
+      "label": "mask=4 periodic work cannot recursively heal at tick 2",
+      "passed": true
+    },
+    {
+      "id": 227,
+      "label": "mask=4 original period work completes at tick 3",
+      "passed": true
+    },
+    {
+      "id": 228,
+      "label": "mask=4 all original periodic sources deliver unchanged damage at tick 3",
+      "passed": true
+    },
+    {
+      "id": 229,
+      "label": "mask=4 periodic work cannot recursively heal at tick 3",
+      "passed": true
+    },
+    {
+      "id": 230,
+      "label": "mask=4 original period work completes at tick 4",
+      "passed": true
+    },
+    {
+      "id": 231,
+      "label": "mask=4 all original periodic sources deliver unchanged damage at tick 4",
+      "passed": true
+    },
+    {
+      "id": 232,
+      "label": "mask=4 periodic work cannot recursively heal at tick 4",
+      "passed": true
+    },
+    {
+      "id": 233,
+      "label": "mask=4 complete delivery counts retain the authored finite bounds",
+      "passed": true
+    },
+    {
+      "id": 234,
+      "label": "mask=4 all promises states heaps receipts and cues terminate",
+      "passed": true
+    },
+    {
+      "id": 235,
+      "label": "mask=4 last accepted state and native cue release their prepared resource owner",
+      "passed": true
+    },
+    {
+      "id": 236,
+      "label": "mask=4 derived work preserves old RNG and player resource charges",
+      "passed": true
+    },
+    {
+      "id": 237,
+      "label": "mask=5 registered profession",
+      "passed": true
+    },
+    {
+      "id": 238,
+      "label": "mask=5 formal async preparation closes base and child sound dependencies",
+      "passed": true
+    },
+    {
+      "id": 239,
+      "label": "mask=5 formal resource-ready activation before item operations: hc.socketing_fixture",
+      "passed": true
+    },
+    {
+      "id": 240,
+      "label": "mask=5 formal resource-ready activation before item operations: hc.runes.fixture",
+      "passed": true
+    },
+    {
+      "id": 241,
+      "label": "mask=5 formal resource-ready activation before item operations: hc.validation.mixed_delivery_chain",
+      "passed": true
+    },
+    {
+      "id": 242,
+      "label": "mask=5 independent healing contribution activates with the same ready resource closure",
+      "passed": true
+    },
+    {
+      "id": 243,
+      "label": "mask=5 formal v3 drop provides a validated affix",
+      "passed": true
+    },
+    {
+      "id": 244,
+      "label": "mask=5 production writer stores original isolated inputs",
+      "passed": true
+    },
+    {
+      "id": 245,
+      "label": "mask=5 gem transfers through the original durable transaction port",
+      "passed": true
+    },
+    {
+      "id": 246,
+      "label": "mask=5 original equip publishes the composed sources",
+      "passed": true
+    },
+    {
+      "id": 247,
+      "label": "mask=5 durable load restores exact distinct affix/gem/rune provenance",
+      "passed": true
+    },
+    {
+      "id": 248,
+      "label": "mask=5 embedding preserves historical modifiers and unique asset ownership",
+      "passed": true
+    },
+    {
+      "id": 249,
+      "label": "mask=5 mapped production world reaches READY",
+      "passed": true
+    },
+    {
+      "id": 250,
+      "label": "mask=5 sole Root factory creates the initial receiver",
+      "passed": true
+    },
+    {
+      "id": 251,
+      "label": "mask=5 declared child receiver starts outside the direct footprint",
+      "passed": true
+    },
+    {
+      "id": 252,
+      "label": "mask=5 one immutable action captures the complete mixed binding set",
+      "passed": true
+    },
+    {
+      "id": 253,
+      "label": "mask=5 accepted resource closure contains the actual child sound",
+      "passed": true
+    },
+    {
+      "id": 254,
+      "label": "mask=5 real windup reserves complete world and per-target derived capacity",
+      "passed": true
+    },
+    {
+      "id": 255,
+      "label": "mask=5 withdraw future source hc.ignite",
+      "passed": true
+    },
+    {
+      "id": 256,
+      "label": "mask=5 withdraw future source hc.validation.mixed_delivery_chain",
+      "passed": true
+    },
+    {
+      "id": 257,
+      "label": "mask=5 withdraw future source hc.validation.lifesteal",
+      "passed": true
+    },
+    {
+      "id": 258,
+      "label": "mask=5 withdraw future source hc.socketing_fixture",
+      "passed": true
+    },
+    {
+      "id": 259,
+      "label": "mask=5 withdraw future source hc.runes.fixture",
+      "passed": true
+    },
+    {
+      "id": 260,
+      "label": "mask=5 withdraw future source hc.ignite_cue_assets",
+      "passed": true
+    },
+    {
+      "id": 261,
+      "label": "mask=5 withdrawal removes future work while retaining accepted obligations",
+      "passed": true
+    },
+    {
+      "id": 262,
+      "label": "mask=5 real SceneTreeTimer releases exactly once through the sole planner",
+      "passed": true
+    },
+    {
+      "id": 263,
+      "label": "mask=5 base commit uses actual loss and does not pre-execute the child",
+      "passed": true
+    },
+    {
+      "id": 264,
+      "label": "mask=5 production consumer completes base and finite child facts",
+      "passed": true
+    },
+    {
+      "id": 265,
+      "label": "mask=5 every surviving declared source has one actual native cue",
+      "passed": true
+    },
+    {
+      "id": 266,
+      "label": "mask=5 finite child uses committed loss exactly once and existing Root geometry",
+      "passed": true
+    },
+    {
+      "id": 267,
+      "label": "mask=5 fatal base commit immediately removes collision",
+      "passed": true
+    },
+    {
+      "id": 268,
+      "label": "mask=5 direct healing uses actual loss once without child feedback",
+      "passed": true
+    },
+    {
+      "id": 269,
+      "label": "mask=5 existing audio service consumes the exact accepted stream for native cues",
+      "passed": true
+    },
+    {
+      "id": 270,
+      "label": "mask=5 original period work completes at tick 1",
+      "passed": true
+    },
+    {
+      "id": 271,
+      "label": "mask=5 all original periodic sources deliver unchanged damage at tick 1",
+      "passed": true
+    },
+    {
+      "id": 272,
+      "label": "mask=5 periodic work cannot recursively heal at tick 1",
+      "passed": true
+    },
+    {
+      "id": 273,
+      "label": "mask=5 original period work completes at tick 2",
+      "passed": true
+    },
+    {
+      "id": 274,
+      "label": "mask=5 all original periodic sources deliver unchanged damage at tick 2",
+      "passed": true
+    },
+    {
+      "id": 275,
+      "label": "mask=5 periodic work cannot recursively heal at tick 2",
+      "passed": true
+    },
+    {
+      "id": 276,
+      "label": "mask=5 original period work completes at tick 3",
+      "passed": true
+    },
+    {
+      "id": 277,
+      "label": "mask=5 all original periodic sources deliver unchanged damage at tick 3",
+      "passed": true
+    },
+    {
+      "id": 278,
+      "label": "mask=5 periodic work cannot recursively heal at tick 3",
+      "passed": true
+    },
+    {
+      "id": 279,
+      "label": "mask=5 original period work completes at tick 4",
+      "passed": true
+    },
+    {
+      "id": 280,
+      "label": "mask=5 all original periodic sources deliver unchanged damage at tick 4",
+      "passed": true
+    },
+    {
+      "id": 281,
+      "label": "mask=5 periodic work cannot recursively heal at tick 4",
+      "passed": true
+    },
+    {
+      "id": 282,
+      "label": "mask=5 complete delivery counts retain the authored finite bounds",
+      "passed": true
+    },
+    {
+      "id": 283,
+      "label": "mask=5 all promises states heaps receipts and cues terminate",
+      "passed": true
+    },
+    {
+      "id": 284,
+      "label": "mask=5 last accepted state and native cue release their prepared resource owner",
+      "passed": true
+    },
+    {
+      "id": 285,
+      "label": "mask=5 derived work preserves old RNG and player resource charges",
+      "passed": true
+    },
+    {
+      "id": 286,
+      "label": "mask=6 registered profession",
+      "passed": true
+    },
+    {
+      "id": 287,
+      "label": "mask=6 formal async preparation closes base and child sound dependencies",
+      "passed": true
+    },
+    {
+      "id": 288,
+      "label": "mask=6 formal resource-ready activation before item operations: hc.socketing_fixture",
+      "passed": true
+    },
+    {
+      "id": 289,
+      "label": "mask=6 formal resource-ready activation before item operations: hc.runes.fixture",
+      "passed": true
+    },
+    {
+      "id": 290,
+      "label": "mask=6 formal resource-ready activation before item operations: hc.validation.mixed_delivery_chain",
+      "passed": true
+    },
+    {
+      "id": 291,
+      "label": "mask=6 independent healing contribution activates with the same ready resource closure",
+      "passed": true
+    },
+    {
+      "id": 292,
+      "label": "mask=6 formal v3 drop provides a validated affix",
+      "passed": true
+    },
+    {
+      "id": 293,
+      "label": "mask=6 production writer stores original isolated inputs",
+      "passed": true
+    },
+    {
+      "id": 294,
+      "label": "mask=6 rune transfers through the original durable transaction port",
+      "passed": true
+    },
+    {
+      "id": 295,
+      "label": "mask=6 original equip publishes the composed sources",
+      "passed": true
+    },
+    {
+      "id": 296,
+      "label": "mask=6 durable load restores exact distinct affix/gem/rune provenance",
+      "passed": true
+    },
+    {
+      "id": 297,
+      "label": "mask=6 embedding preserves historical modifiers and unique asset ownership",
+      "passed": true
+    },
+    {
+      "id": 298,
+      "label": "mask=6 mapped production world reaches READY",
+      "passed": true
+    },
+    {
+      "id": 299,
+      "label": "mask=6 sole Root factory creates the initial receiver",
+      "passed": true
+    },
+    {
+      "id": 300,
+      "label": "mask=6 declared child receiver starts outside the direct footprint",
+      "passed": true
+    },
+    {
+      "id": 301,
+      "label": "mask=6 one immutable action captures the complete mixed binding set",
+      "passed": true
+    },
+    {
+      "id": 302,
+      "label": "mask=6 accepted resource closure contains the actual child sound",
+      "passed": true
+    },
+    {
+      "id": 303,
+      "label": "mask=6 real windup reserves complete world and per-target derived capacity",
+      "passed": true
+    },
+    {
+      "id": 304,
+      "label": "mask=6 withdraw future source hc.ignite",
+      "passed": true
+    },
+    {
+      "id": 305,
+      "label": "mask=6 withdraw future source hc.validation.mixed_delivery_chain",
+      "passed": true
+    },
+    {
+      "id": 306,
+      "label": "mask=6 withdraw future source hc.validation.lifesteal",
+      "passed": true
+    },
+    {
+      "id": 307,
+      "label": "mask=6 withdraw future source hc.socketing_fixture",
+      "passed": true
+    },
+    {
+      "id": 308,
+      "label": "mask=6 withdraw future source hc.runes.fixture",
+      "passed": true
+    },
+    {
+      "id": 309,
+      "label": "mask=6 withdraw future source hc.ignite_cue_assets",
+      "passed": true
+    },
+    {
+      "id": 310,
+      "label": "mask=6 withdrawal removes future work while retaining accepted obligations",
+      "passed": true
+    },
+    {
+      "id": 311,
+      "label": "mask=6 real SceneTreeTimer releases exactly once through the sole planner",
+      "passed": true
+    },
+    {
+      "id": 312,
+      "label": "mask=6 base commit uses actual loss and does not pre-execute the child",
+      "passed": true
+    },
+    {
+      "id": 313,
+      "label": "mask=6 production consumer completes base and finite child facts",
+      "passed": true
+    },
+    {
+      "id": 314,
+      "label": "mask=6 every surviving declared source has one actual native cue",
+      "passed": true
+    },
+    {
+      "id": 315,
+      "label": "mask=6 finite child uses committed loss exactly once and existing Root geometry",
+      "passed": true
+    },
+    {
+      "id": 316,
+      "label": "mask=6 fatal base commit immediately removes collision",
+      "passed": true
+    },
+    {
+      "id": 317,
+      "label": "mask=6 direct healing uses actual loss once without child feedback",
+      "passed": true
+    },
+    {
+      "id": 318,
+      "label": "mask=6 existing audio service consumes the exact accepted stream for native cues",
+      "passed": true
+    },
+    {
+      "id": 319,
+      "label": "mask=6 original period work completes at tick 1",
+      "passed": true
+    },
+    {
+      "id": 320,
+      "label": "mask=6 all original periodic sources deliver unchanged damage at tick 1",
+      "passed": true
+    },
+    {
+      "id": 321,
+      "label": "mask=6 periodic work cannot recursively heal at tick 1",
+      "passed": true
+    },
+    {
+      "id": 322,
+      "label": "mask=6 original period work completes at tick 2",
+      "passed": true
+    },
+    {
+      "id": 323,
+      "label": "mask=6 all original periodic sources deliver unchanged damage at tick 2",
+      "passed": true
+    },
+    {
+      "id": 324,
+      "label": "mask=6 periodic work cannot recursively heal at tick 2",
+      "passed": true
+    },
+    {
+      "id": 325,
+      "label": "mask=6 original period work completes at tick 3",
+      "passed": true
+    },
+    {
+      "id": 326,
+      "label": "mask=6 all original periodic sources deliver unchanged damage at tick 3",
+      "passed": true
+    },
+    {
+      "id": 327,
+      "label": "mask=6 periodic work cannot recursively heal at tick 3",
+      "passed": true
+    },
+    {
+      "id": 328,
+      "label": "mask=6 original period work completes at tick 4",
+      "passed": true
+    },
+    {
+      "id": 329,
+      "label": "mask=6 all original periodic sources deliver unchanged damage at tick 4",
+      "passed": true
+    },
+    {
+      "id": 330,
+      "label": "mask=6 periodic work cannot recursively heal at tick 4",
+      "passed": true
+    },
+    {
+      "id": 331,
+      "label": "mask=6 complete delivery counts retain the authored finite bounds",
+      "passed": true
+    },
+    {
+      "id": 332,
+      "label": "mask=6 all promises states heaps receipts and cues terminate",
+      "passed": true
+    },
+    {
+      "id": 333,
+      "label": "mask=6 last accepted state and native cue release their prepared resource owner",
+      "passed": true
+    },
+    {
+      "id": 334,
+      "label": "mask=6 derived work preserves old RNG and player resource charges",
+      "passed": true
+    },
+    {
+      "id": 335,
+      "label": "mask=7 registered profession",
+      "passed": true
+    },
+    {
+      "id": 336,
+      "label": "mask=7 formal async preparation closes base and child sound dependencies",
+      "passed": true
+    },
+    {
+      "id": 337,
+      "label": "mask=7 formal resource-ready activation before item operations: hc.socketing_fixture",
+      "passed": true
+    },
+    {
+      "id": 338,
+      "label": "mask=7 formal resource-ready activation before item operations: hc.runes.fixture",
+      "passed": true
+    },
+    {
+      "id": 339,
+      "label": "mask=7 formal resource-ready activation before item operations: hc.validation.mixed_delivery_chain",
+      "passed": true
+    },
+    {
+      "id": 340,
+      "label": "mask=7 independent healing contribution activates with the same ready resource closure",
+      "passed": true
+    },
+    {
+      "id": 341,
+      "label": "mask=7 formal v3 drop provides a validated affix",
+      "passed": true
+    },
+    {
+      "id": 342,
+      "label": "mask=7 production writer stores original isolated inputs",
+      "passed": true
+    },
+    {
+      "id": 343,
+      "label": "mask=7 gem transfers through the original durable transaction port",
+      "passed": true
+    },
+    {
+      "id": 344,
+      "label": "mask=7 rune transfers through the original durable transaction port",
+      "passed": true
+    },
+    {
+      "id": 345,
+      "label": "mask=7 original equip publishes the composed sources",
+      "passed": true
+    },
+    {
+      "id": 346,
+      "label": "mask=7 durable load restores exact distinct affix/gem/rune provenance",
+      "passed": true
+    },
+    {
+      "id": 347,
+      "label": "mask=7 embedding preserves historical modifiers and unique asset ownership",
+      "passed": true
+    },
+    {
+      "id": 348,
+      "label": "mask=7 mapped production world reaches READY",
+      "passed": true
+    },
+    {
+      "id": 349,
+      "label": "mask=7 sole Root factory creates the initial receiver",
+      "passed": true
+    },
+    {
+      "id": 350,
+      "label": "mask=7 declared child receiver starts outside the direct footprint",
+      "passed": true
+    },
+    {
+      "id": 351,
+      "label": "mask=7 one immutable action captures the complete mixed binding set",
+      "passed": true
+    },
+    {
+      "id": 352,
+      "label": "mask=7 accepted resource closure contains the actual child sound",
+      "passed": true
+    },
+    {
+      "id": 353,
+      "label": "mask=7 real windup reserves complete world and per-target derived capacity",
+      "passed": true
+    },
+    {
+      "id": 354,
+      "label": "mask=7 withdraw future source hc.ignite",
+      "passed": true
+    },
+    {
+      "id": 355,
+      "label": "mask=7 withdraw future source hc.validation.mixed_delivery_chain",
+      "passed": true
+    },
+    {
+      "id": 356,
+      "label": "mask=7 withdraw future source hc.validation.lifesteal",
+      "passed": true
+    },
+    {
+      "id": 357,
+      "label": "mask=7 withdraw future source hc.socketing_fixture",
+      "passed": true
+    },
+    {
+      "id": 358,
+      "label": "mask=7 withdraw future source hc.runes.fixture",
+      "passed": true
+    },
+    {
+      "id": 359,
+      "label": "mask=7 withdraw future source hc.ignite_cue_assets",
+      "passed": true
+    },
+    {
+      "id": 360,
+      "label": "mask=7 withdrawal removes future work while retaining accepted obligations",
+      "passed": true
+    },
+    {
+      "id": 361,
+      "label": "mask=7 real SceneTreeTimer releases exactly once through the sole planner",
+      "passed": true
+    },
+    {
+      "id": 362,
+      "label": "mask=7 base commit uses actual loss and does not pre-execute the child",
+      "passed": true
+    },
+    {
+      "id": 363,
+      "label": "mask=7 production consumer completes base and finite child facts",
+      "passed": true
+    },
+    {
+      "id": 364,
+      "label": "mask=7 every surviving declared source has one actual native cue",
+      "passed": true
+    },
+    {
+      "id": 365,
+      "label": "mask=7 finite child uses committed loss exactly once and existing Root geometry",
+      "passed": true
+    },
+    {
+      "id": 366,
+      "label": "mask=7 fatal base commit immediately removes collision",
+      "passed": true
+    },
+    {
+      "id": 367,
+      "label": "mask=7 direct healing uses actual loss once without child feedback",
+      "passed": true
+    },
+    {
+      "id": 368,
+      "label": "mask=7 existing audio service consumes the exact accepted stream for native cues",
+      "passed": true
+    },
+    {
+      "id": 369,
+      "label": "mask=7 original period work completes at tick 1",
+      "passed": true
+    },
+    {
+      "id": 370,
+      "label": "mask=7 all original periodic sources deliver unchanged damage at tick 1",
+      "passed": true
+    },
+    {
+      "id": 371,
+      "label": "mask=7 periodic work cannot recursively heal at tick 1",
+      "passed": true
+    },
+    {
+      "id": 372,
+      "label": "mask=7 original period work completes at tick 2",
+      "passed": true
+    },
+    {
+      "id": 373,
+      "label": "mask=7 all original periodic sources deliver unchanged damage at tick 2",
+      "passed": true
+    },
+    {
+      "id": 374,
+      "label": "mask=7 periodic work cannot recursively heal at tick 2",
+      "passed": true
+    },
+    {
+      "id": 375,
+      "label": "mask=7 original period work completes at tick 3",
+      "passed": true
+    },
+    {
+      "id": 376,
+      "label": "mask=7 all original periodic sources deliver unchanged damage at tick 3",
+      "passed": true
+    },
+    {
+      "id": 377,
+      "label": "mask=7 periodic work cannot recursively heal at tick 3",
+      "passed": true
+    },
+    {
+      "id": 378,
+      "label": "mask=7 original period work completes at tick 4",
+      "passed": true
+    },
+    {
+      "id": 379,
+      "label": "mask=7 all original periodic sources deliver unchanged damage at tick 4",
+      "passed": true
+    },
+    {
+      "id": 380,
+      "label": "mask=7 periodic work cannot recursively heal at tick 4",
+      "passed": true
+    },
+    {
+      "id": 381,
+      "label": "mask=7 complete delivery counts retain the authored finite bounds",
+      "passed": true
+    },
+    {
+      "id": 382,
+      "label": "mask=7 all promises states heaps receipts and cues terminate",
+      "passed": true
+    },
+    {
+      "id": 383,
+      "label": "mask=7 last accepted state and native cue release their prepared resource owner",
+      "passed": true
+    },
+    {
+      "id": 384,
+      "label": "mask=7 derived work preserves old RNG and player resource charges",
+      "passed": true
+    },
+    {
+      "id": 385,
+      "label": "all controlled worlds retire before restoring the formal default registry",
+      "passed": true
+    },
+    {
+      "id": 386,
+      "label": "bounded eight-case evidence has an owned output file",
+      "passed": true
+    },
+    {
+      "id": 387,
+      "label": "bounded combination trace writes without ignoring I/O failure",
+      "passed": true
+    },
+    {
+      "id": 388,
+      "label": "all eight generated gem/rune/healing selections complete",
+      "passed": true
+    }
+  ],
+  "count": 388,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "35e62eee-3888-4664-a0f5-62f032a66c6e",
+  "passed": 388,
+  "reported_checks": 388,
+  "reported_failures": 0,
+  "run_id": "357227e0-0d45-41b6-8cdf-dab212891d24",
+  "runtime_environment": {
+    "native_process_id": 24976,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_mixed_20261005_0138",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_mixed_20261005_0138/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "feature_mixed_child_resource_test",
+  "schema_version": 1,
+  "source_content_sha256": "04d29b688db3419bd9e19a7161f9d9a36b32d37f5fcad4fffedaec4fdaae577a",
+  "status": "PASS"
+}

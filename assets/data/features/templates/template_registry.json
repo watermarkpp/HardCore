@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "modules": [
+    {"module_id": "hc.template.numeric_skills", "path": "res://assets/data/features/templates/numeric_skills.json"},
+    {"module_id": "hc.template.direct_ignite", "path": "res://assets/data/features/templates/direct_ignite.json"},
+    {"module_id": "hc.template.finite_chain", "path": "res://assets/data/features/templates/finite_chain.json"}
+  ],
+  "bindings": [
+    {"module_id": "hc.template.numeric_skills", "kind": "rule", "rule_id": "hc.template.numeric_skills", "mechanic_id": "hc.template.numeric_skills.accuracy"},
+    {"module_id": "hc.template.numeric_skills", "kind": "rule", "rule_id": "hc.template.numeric_skills", "mechanic_id": "hc.template.numeric_skills.fire_cooldown"},
+    {"module_id": "hc.template.direct_ignite", "kind": "rule", "rule_id": "hc.template.direct_ignite", "mechanic_id": "hc.template.direct_ignite.ice_storm"},
+    {"module_id": "hc.template.finite_chain", "kind": "rule", "rule_id": "hc.template.finite_chain", "mechanic_id": "hc.template.finite_chain.ignite"},
+    {"module_id": "hc.template.finite_chain", "kind": "rule", "rule_id": "hc.template.finite_chain", "mechanic_id": "hc.template.finite_chain.death"}
+  ]
+}

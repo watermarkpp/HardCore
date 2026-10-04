@@ -1,0 +1,107 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "existing formal module preserves the original four-second period contract",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "horizon unit uses actual formal direct/child bindings, not a fabricated periodic producer",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "actual source lifetimes are entered by the existing transition service",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "existing runtime and real Combat HP port own the diagnostic",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "first accepted root creates its real ten-point periodic state",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "original phase and expiry begin at one and four simulation seconds",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "test-owned simulation advance exposes a controlled overdue state",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "later accepted root commits a weaker refresh through the same real HP chain",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "strongest_keep_phase preserves the old due time and extends the shared accepted horizon",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "the real port delivers all hundred overdue original-phase ticks without a hidden max_ticks cap",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "remaining four ticks retain the original one-second phase",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "simulation reaches the last refreshed expiry boundary",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "all 104 owed ticks commit exact HP, exceeding the two independent authored four-tick durations",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "stronger original raw and historical credit survive the weaker new accepted refresh",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "diagnostic explicitly retains actual overdue lateness rather than calling this a service-deadline PASS",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "all original and refresh owners retire only after the shared work horizon ends",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "diagnostic owner restores the formal default registry",
+      "passed": true
+    }
+  ],
+  "count": 17,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "956c29fb-1a1c-4520-b683-5ae91897b1be",
+  "passed": 17,
+  "reported_checks": 17,
+  "reported_failures": 0,
+  "run_id": "98e50834-8c50-4444-9580-3666bdfc491d",
+  "runtime_environment": {
+    "native_process_id": 9452,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_horizon_diagnostic_1a60e2c9febf4910aefc796ff22f551c",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_dispatch_horizon_diagnostic_1a60e2c9febf4910aefc796ff22f551c/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "periodic_refresh_horizon_test",
+  "schema_version": 1,
+  "source_content_sha256": "fcd1e4bbb8eac60955bec46ebee59cf8f5220edc1ce29532e0047284a40c2a92",
+  "status": "PASS"
+}

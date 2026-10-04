@@ -1,0 +1,32 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "registered wizard identity",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "formal default-off package admits direct/periodic/child death and direct/child ignition without self-excitation",
+      "passed": false
+    }
+  ],
+  "count": 2,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "6fd0e467-88e6-498e-ad16-e10b98048b27",
+  "passed": 1,
+  "reported_checks": 2,
+  "reported_failures": 1,
+  "run_id": "c429679c-c17f-4191-978a-dc568dac1a39",
+  "runtime_environment": {
+    "native_process_id": 8664,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_root_registry_red_cab98b5e612d44b4a179e35a717fff37",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_dispatch_root_registry_red_cab98b5e612d44b4a179e35a717fff37/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "periodic_child_root_test",
+  "schema_version": 1,
+  "source_content_sha256": "51bb9fd049fad0e52a508278bb09e5998fa4c7e094c63f50e8053206beaa9c30",
+  "status": "FAIL"
+}

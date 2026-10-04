@@ -1,0 +1,8 @@
+{
+  "schema_version":1,
+  "modules":[{"module_id":"hc.validation.periodic_chain","path":"res://assets/data/features/validation/periodic_chain.json"}],
+  "bindings":[
+    {"module_id":"hc.validation.periodic_chain","kind":"rule","rule_id":"hc.validation.periodic_chain","mechanic_id":"hc.validation.periodic_chain.ignite"},
+    {"module_id":"hc.validation.periodic_chain","kind":"rule","rule_id":"hc.validation.periodic_chain","mechanic_id":"hc.validation.periodic_chain.death"}
+  ]
+}

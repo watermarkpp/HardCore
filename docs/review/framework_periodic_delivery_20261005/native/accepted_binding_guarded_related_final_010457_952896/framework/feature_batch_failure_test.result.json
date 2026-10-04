@@ -1,0 +1,82 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "formal world ready",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "actual selected receiver exists",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "actual default-off module enabled",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "formal Player accepts the pending action",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "actual capacity ticket exists before the legitimate release callback",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "failure comparison begins after the original accepted cooldown",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "original Player callback reaches the explicit batch-creation failure exactly once",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "missing promised batch is an explicit Root business refusal",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "batch refusal never enters the existing planning body or requests a canonical seed",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "after acceptance, failed release changes no MP, target HP, Root RNG or target RNG",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "real Player callback tail closes the failed producer and returns unused capacity",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "failed promised batch leaves no effect work or hidden runtime error",
+      "passed": true
+    }
+  ],
+  "count": 12,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "15463c7a-1e30-4605-bc1a-7344e23d0b6e",
+  "passed": 12,
+  "reported_checks": 12,
+  "reported_failures": 0,
+  "run_id": "39261e1f-5577-4269-8b9a-06250d83fe30",
+  "runtime_environment": {
+    "native_process_id": 13380,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/accepted_binding_guarded_related_20261005_0108/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "feature_batch_failure_test",
+  "schema_version": 1,
+  "source_content_sha256": "2da0511645338738205df66bb658df973b2be5802f76dac68eff43045d793f3d",
+  "status": "PASS"
+}

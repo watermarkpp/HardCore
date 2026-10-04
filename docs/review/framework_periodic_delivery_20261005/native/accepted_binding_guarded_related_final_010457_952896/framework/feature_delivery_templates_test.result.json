@@ -1,0 +1,307 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "reusable module templates load through the original production catalog publisher",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "three registered templates remain default-off and do not install new gameplay",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "unselected templates contribute no source or hit subscription",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "template declares its activation, core version and verification: hc.template.numeric_skills",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "formal activation compiles the template: hc.template.numeric_skills",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "template declares its activation, core version and verification: hc.template.direct_ignite",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "formal activation compiles the template: hc.template.direct_ignite",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "template declares its activation, core version and verification: hc.template.finite_chain",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "formal activation compiles the template: hc.template.finite_chain",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "five stable sources populate exactly the declared numeric, skill and trigger indices",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "two independent status definitions and one finite death binding retain the compiler's conservative declared cost",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "template consumers receive the original deeply frozen compiled graph",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "the same template payloads and exact production sources compile through the single compiler",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "duplicate template module identity is explicitly rejected",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "duplicate stable contribution identity is rejected before publication",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "unknown template mechanism does not fall back to a display name",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "withdraw finite-chain template through the original publisher",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "withdrawal removes only its two sources and preserves independent numeric and direct status grants",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "an already captured compiled graph remains unchanged after a later publication",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "re-activation restores the same exact stable source handles",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "template safely withdraws at its declared boundary: hc.template.numeric_skills",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "template safely withdraws at its declared boundary: hc.template.direct_ignite",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "template safely withdraws at its declared boundary: hc.template.finite_chain",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "all templates off restores the existing empty extension indices",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "combination changes selection or preserves a no-op revision through the production boundary: 0/hc.template.numeric_skills",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "combination changes selection or preserves a no-op revision through the production boundary: 0/hc.template.direct_ignite",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "combination changes selection or preserves a no-op revision through the production boundary: 0/hc.template.finite_chain",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "all eight combinations preserve exact stable sources and independent subscriptions: 0",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "combination changes selection or preserves a no-op revision through the production boundary: 1/hc.template.numeric_skills",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "combination changes selection or preserves a no-op revision through the production boundary: 1/hc.template.direct_ignite",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "combination changes selection or preserves a no-op revision through the production boundary: 1/hc.template.finite_chain",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "all eight combinations preserve exact stable sources and independent subscriptions: 1",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "combination changes selection or preserves a no-op revision through the production boundary: 2/hc.template.numeric_skills",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "combination changes selection or preserves a no-op revision through the production boundary: 2/hc.template.direct_ignite",
+      "passed": true
+    },
+    {
+      "id": 35,
+      "label": "combination changes selection or preserves a no-op revision through the production boundary: 2/hc.template.finite_chain",
+      "passed": true
+    },
+    {
+      "id": 36,
+      "label": "all eight combinations preserve exact stable sources and independent subscriptions: 2",
+      "passed": true
+    },
+    {
+      "id": 37,
+      "label": "combination changes selection or preserves a no-op revision through the production boundary: 3/hc.template.numeric_skills",
+      "passed": true
+    },
+    {
+      "id": 38,
+      "label": "combination changes selection or preserves a no-op revision through the production boundary: 3/hc.template.direct_ignite",
+      "passed": true
+    },
+    {
+      "id": 39,
+      "label": "combination changes selection or preserves a no-op revision through the production boundary: 3/hc.template.finite_chain",
+      "passed": true
+    },
+    {
+      "id": 40,
+      "label": "all eight combinations preserve exact stable sources and independent subscriptions: 3",
+      "passed": true
+    },
+    {
+      "id": 41,
+      "label": "combination changes selection or preserves a no-op revision through the production boundary: 4/hc.template.numeric_skills",
+      "passed": true
+    },
+    {
+      "id": 42,
+      "label": "combination changes selection or preserves a no-op revision through the production boundary: 4/hc.template.direct_ignite",
+      "passed": true
+    },
+    {
+      "id": 43,
+      "label": "combination changes selection or preserves a no-op revision through the production boundary: 4/hc.template.finite_chain",
+      "passed": true
+    },
+    {
+      "id": 44,
+      "label": "all eight combinations preserve exact stable sources and independent subscriptions: 4",
+      "passed": true
+    },
+    {
+      "id": 45,
+      "label": "combination changes selection or preserves a no-op revision through the production boundary: 5/hc.template.numeric_skills",
+      "passed": true
+    },
+    {
+      "id": 46,
+      "label": "combination changes selection or preserves a no-op revision through the production boundary: 5/hc.template.direct_ignite",
+      "passed": true
+    },
+    {
+      "id": 47,
+      "label": "combination changes selection or preserves a no-op revision through the production boundary: 5/hc.template.finite_chain",
+      "passed": true
+    },
+    {
+      "id": 48,
+      "label": "all eight combinations preserve exact stable sources and independent subscriptions: 5",
+      "passed": true
+    },
+    {
+      "id": 49,
+      "label": "combination changes selection or preserves a no-op revision through the production boundary: 6/hc.template.numeric_skills",
+      "passed": true
+    },
+    {
+      "id": 50,
+      "label": "combination changes selection or preserves a no-op revision through the production boundary: 6/hc.template.direct_ignite",
+      "passed": true
+    },
+    {
+      "id": 51,
+      "label": "combination changes selection or preserves a no-op revision through the production boundary: 6/hc.template.finite_chain",
+      "passed": true
+    },
+    {
+      "id": 52,
+      "label": "all eight combinations preserve exact stable sources and independent subscriptions: 6",
+      "passed": true
+    },
+    {
+      "id": 53,
+      "label": "combination changes selection or preserves a no-op revision through the production boundary: 7/hc.template.numeric_skills",
+      "passed": true
+    },
+    {
+      "id": 54,
+      "label": "combination changes selection or preserves a no-op revision through the production boundary: 7/hc.template.direct_ignite",
+      "passed": true
+    },
+    {
+      "id": 55,
+      "label": "combination changes selection or preserves a no-op revision through the production boundary: 7/hc.template.finite_chain",
+      "passed": true
+    },
+    {
+      "id": 56,
+      "label": "all eight combinations preserve exact stable sources and independent subscriptions: 7",
+      "passed": true
+    },
+    {
+      "id": 57,
+      "label": "test restores the formal default registry",
+      "passed": true
+    }
+  ],
+  "count": 57,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "15463c7a-1e30-4605-bc1a-7344e23d0b6e",
+  "passed": 57,
+  "reported_checks": 57,
+  "reported_failures": 0,
+  "run_id": "4b76e26d-696c-4ce5-b89b-2cbe166824c9",
+  "runtime_environment": {
+    "native_process_id": 12652,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/accepted_binding_guarded_related_20261005_0108/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "feature_delivery_templates_test",
+  "schema_version": 1,
+  "source_content_sha256": "2da0511645338738205df66bb658df973b2be5802f76dac68eff43045d793f3d",
+  "status": "PASS"
+}

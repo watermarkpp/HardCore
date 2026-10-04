@@ -1,0 +1,8 @@
+{
+  "schema_version":1,
+  "modules":[{"module_id":"hc.validation.periodic_chain_g2","path":"res://assets/data/features/validation/periodic_chain_g2.json"}],
+  "bindings":[
+    {"module_id":"hc.validation.periodic_chain_g2","kind":"rule","rule_id":"hc.validation.periodic_chain_g2","mechanic_id":"hc.validation.periodic_chain_g2.ignite"},
+    {"module_id":"hc.validation.periodic_chain_g2","kind":"rule","rule_id":"hc.validation.periodic_chain_g2","mechanic_id":"hc.validation.periodic_chain_g2.death"}
+  ]
+}

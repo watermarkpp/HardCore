@@ -1,0 +1,933 @@
+ M AGENTS.md
+ M assets/data/equipment_price_candidates_v1.json
+ M assets/data/item_runtime_authority_v1.json
+ M assets/data/pricing_policy_v1.json
+ M assets/data/relic_synthesis_v1.json
+ M assets/data/source_priority_policy.json
+ M docs/bugfix24/20260909/monster_delivery_inventory.actor.translation
+ M docs/bugfix24/20260909/monster_delivery_inventory.ai.translation
+ M docs/bugfix24/20260909/monster_delivery_inventory.attack.translation
+ M docs/bugfix24/20260909/monster_delivery_inventory.canonical.translation
+ M docs/bugfix24/20260909/monster_delivery_inventory.classification.translation
+ M docs/bugfix24/20260909/monster_delivery_inventory.delivery.translation
+ M docs/bugfix24/20260909/monster_delivery_inventory.implementation.translation
+ M docs/bugfix24/20260909/monster_delivery_inventory.runtime.translation
+ M docs/bugfix24/20260909/monster_delivery_inventory.server.translation
+ M docs/bugfix24/20260909/monster_delivery_inventory.shared.translation
+ M docs/bugfix24/20260909/monster_delivery_inventory.source.translation
+ M docs/bugfix24/20260909/monster_delivery_inventory.stationary.translation
+ M scripts/audio_runtime_service.gd
+ M scripts/caster_skill_runtime.gd
+ M scripts/character_select.gd
+ M scripts/enemy.gd
+ M scripts/enhancement_panel.gd
+ M scripts/equipment_character_preview.gd
+ M scripts/equipment_rules.gd
+ M scripts/equipment_test_loadout_catalog.gd
+ M scripts/game_data.gd
+ M scripts/game_root.gd
+ M scripts/ground_effect.gd
+ M scripts/hud.gd
+ M scripts/inventory_panel.gd
+ M scripts/item_detail_presenter.gd
+ M scripts/item_drop_instance_rules.gd
+AM scripts/items/item_extension_codec.gd
+ M scripts/json_persistence_job.gd
+ M scripts/json_persistence_service.gd
+ M scripts/layers/rules/equipment_enhancement_grade.gd
+ M scripts/layers/rules/equipment_enhancement_rules.gd
+ M scripts/layers/rules/relic_synthesis_rules.gd
+ M scripts/layers/runtime/combat_runtime_service.gd
+ M scripts/layers/runtime/content_layer_registry.gd
+ M scripts/layers/runtime/equipment_enhancement_service.gd
+ M scripts/layers/runtime/relic_synthesis_service.gd
+ M scripts/loot_visual_effect.gd
+ M scripts/monster_ai_package/m30/summon_queue.gd
+ M scripts/monster_ai_package/path_scheduler.gd
+ M scripts/monster_ai_package/path_search.gd
+ M scripts/monster_identity.gd
+ M scripts/monster_movement_cadence.gd
+ M scripts/monster_source176/source_step_plan.gd
+ M scripts/monster_visual.gd
+ M scripts/monster_visual_streaming_coordinator.gd
+ M scripts/npc_actor.gd
+ M scripts/player.gd
+ M scripts/player_state.gd
+ M scripts/player_visual.gd
+ M scripts/pricing_service.gd
+ M scripts/profession_rules.gd
+ M scripts/runtime_combat_spatial_index.gd
+ M scripts/skill_input_policy.gd
+ M scripts/skill_loadout_rules.gd
+ M scripts/skill_panel.gd
+ M scripts/skill_projectile.gd
+ M scripts/skills/skill_data_loader.gd
+ M scripts/skills/skill_execution_plan_contract.gd
+ M scripts/skills/skill_footprint_snapshot.gd
+ M scripts/skills/skill_progression_service.gd
+ M scripts/skills/skill_resource_service.gd
+ M scripts/skills/skill_runtime_router.gd
+ M scripts/startup_loading.gd
+ M scripts/test_character_skill_profiles.gd
+ M scripts/touch_scroll_support.gd
+ M scripts/ui_item_name_style.gd
+ M scripts/ui_runtime_layout_overrides.gd
+ M scripts/ui_selection_dismiss_guard.gd
+ M scripts/warehouse_prepared_transaction.gd
+ M tests/aoe_death_phase_boundary_test.gd
+ M tests/audit_39fe_regressions.gd
+ M tests/bich_common_client_art_test.gd
+ M tests/bich_environment_test.gd
+ M tests/bich_monster_visual_test.gd
+ M tests/canonical_drop_item_alias_test.gd
+ M tests/canonical_summon_integration_test.gd
+ M tests/character_select_paper_doll_profile_test.gd
+ M tests/combat_release_geometry_test.gd
+ M tests/combat_resolution_contract_test.gd
+ M tests/death_drop_budget_queue_test.gd
+ M tests/death_revival_home_failure_test.gd
+ M tests/developer_character_test.gd
+A  tests/device_lab_layout_regression_test.gd
+A  tests/device_lab_layout_regression_test.tscn
+ M tests/device_lab_runtime_test.gd
+ M tests/equipment_durability_policy_test.gd
+ M tests/equipment_future_modifiers_test.gd
+ M tests/equipment_helmet_direction_capture.gd
+ M tests/equipment_helmet_final_runtime_capture.gd
+ M tests/equipment_inventory_slot_swap_test.gd
+ M tests/equipment_luck_test.gd
+ M tests/equipment_precise_durability_test.gd
+ M tests/equipment_slot_migration_test.gd
+ M tests/equipment_special_effects_test.gd
+ M tests/equipment_special_phase2_test.gd
+ M tests/equipment_success_notice_real_input_test.gd
+ M tests/equipment_test_loadout_catalog_test.gd
+ M tests/equipment_warrior_chiyue_world_dress_capture.gd
+ M tests/equipment_warrior_chiyue_world_dress_test.gd
+ M tests/equipment_world_helmet_hidden_hair_test.gd
+ M tests/f03_async_death_receipt_test.gd
+ M tests/f03_background_writer_test.gd
+ M tests/f03_hot_persistence_test.gd
+ M tests/f03_native_death_lifecycle_test.gd
+ M tests/f03_native_pickup_lifecycle_test.gd
+ M tests/f03_periodic_background_save_test.gd
+ M tests/f03_pickup_receipt_lifecycle_test.gd
+ M tests/f03_warehouse_receipt_boundary_test.gd
+ M tests/f05_settlement_display_separation_test.gd
+AM tests/framework/action_config_lease_test.gd
+A  tests/framework/action_config_lease_test.tscn
+AM tests/framework/action_configuration_production_test.gd
+A  tests/framework/action_configuration_production_test.tscn
+A  tests/framework/actor_capability_owner_test.gd
+A  tests/framework/actor_capability_owner_test.tscn
+AM tests/framework/budget_producer_admission_test.gd
+A  tests/framework/budget_producer_admission_test.tscn
+AM tests/framework/character_identity_save_test.gd
+A  tests/framework/character_identity_save_test.tscn
+AM tests/framework/character_launch_resource_lifecycle_test.gd
+A  tests/framework/character_launch_resource_lifecycle_test.tscn
+AM tests/framework/combined_cold_receipt_gate_test.gd
+A  tests/framework/combined_cold_receipt_gate_test.tscn
+AM tests/framework/combined_effect_lifecycle_cold_test.gd
+A  tests/framework/combined_effect_lifecycle_cold_test.tscn
+AM tests/framework/combined_effect_lifecycle_test.gd
+A  tests/framework/combined_effect_lifecycle_test.tscn
+ A tests/framework/controlled_process_crash_cold_test.tscn
+ A tests/framework/controlled_process_crash_test.tscn
+ A tests/framework/currency_identity_test.gd
+ A tests/framework/currency_identity_test.tscn
+A  tests/framework/damage_commit_fact_test.gd
+A  tests/framework/damage_commit_fact_test.tscn
+A  tests/framework/death_burst_lifecycle_cold_test.gd
+A  tests/framework/death_burst_lifecycle_cold_test.tscn
+AM tests/framework/death_burst_lifecycle_test.gd
+A  tests/framework/death_burst_lifecycle_test.tscn
+A  tests/framework/death_expiry_overlap_cold_test.gd
+A  tests/framework/death_expiry_overlap_cold_test.tscn
+A  tests/framework/death_expiry_overlap_test.tscn
+A  tests/framework/default_root_upgrade_archived_cold_test.gd
+A  tests/framework/default_root_upgrade_archived_cold_test.tscn
+A  tests/framework/default_root_upgrade_archived_test.gd
+A  tests/framework/default_root_upgrade_archived_test.tscn
+A  tests/framework/default_root_upgrade_existing_cold_test.tscn
+A  tests/framework/default_root_upgrade_existing_test.tscn
+AM tests/framework/empty_extension_behavior_test.gd
+A  tests/framework/empty_extension_behavior_test.tscn
+AM tests/framework/entity_registry_test.gd
+A  tests/framework/entity_registry_test.tscn
+AM tests/framework/equipment_identity_test.gd
+A  tests/framework/equipment_identity_test.tscn
+AM tests/framework/feature_admission_release_test.gd
+A  tests/framework/feature_admission_release_test.tscn
+A  tests/framework/feature_batch_failure_test.gd
+A  tests/framework/feature_batch_failure_test.tscn
+A  tests/framework/feature_capacity_admission_test.tscn
+A  tests/framework/feature_capacity_atomic_test.tscn
+AM tests/framework/feature_compiler_test.gd
+A  tests/framework/feature_compiler_test.tscn
+AM tests/framework/feature_effect_production_test.gd
+A  tests/framework/feature_effect_production_test.tscn
+A  tests/framework/feature_fire_effect_production_test.tscn
+AM tests/framework/feature_loadout_atomic_test.gd
+A  tests/framework/feature_loadout_atomic_test.tscn
+AM tests/framework/feature_melee_ticket_paths_test.gd
+A  tests/framework/feature_melee_ticket_paths_test.tscn
+AM tests/framework/feature_production_loadout_test.gd
+A  tests/framework/feature_production_loadout_test.tscn
+A  tests/framework/feature_queue_retention_test.gd
+A  tests/framework/feature_queue_retention_test.tscn
+AM tests/framework/feature_receipt_retirement_test.gd
+A  tests/framework/feature_receipt_retirement_test.tscn
+A  tests/framework/feature_release_identity_test.gd
+A  tests/framework/feature_release_identity_test.tscn
+AM tests/framework/feature_reservation_test.gd
+A  tests/framework/feature_reservation_test.tscn
+A  tests/framework/feature_world_capacity_bound_test.gd
+A  tests/framework/feature_world_capacity_bound_test.tscn
+AM tests/framework/fire_cooldown_configuration_test.gd
+A  tests/framework/fire_cooldown_configuration_test.tscn
+A  tests/framework/fixtures/feature_batch_failure_root.gd
+A  tests/framework/fixtures/lease_probe_root.gd
+A  tests/framework/fixtures/legacy_baseline_root.gd
+A  tests/framework/fixtures/proof_false_marker.gd
+A  tests/framework/fixtures/proof_false_marker.tscn
+A  tests/framework/fixtures/proof_marker_only.gd
+A  tests/framework/fixtures/proof_marker_only.tscn
+A  tests/framework/fixtures/proof_positive_control.gd
+A  tests/framework/fixtures/proof_positive_control.tscn
+A  tests/framework/fixtures/proof_source_changed.gd
+A  tests/framework/fixtures/proof_source_changed.tscn
+A  tests/framework/fixtures/proof_zero_checks.gd
+A  tests/framework/fixtures/proof_zero_checks.tscn
+A  tests/framework/fixtures/source_mutation_marker.gd
+AM tests/framework/frame_budget_test.gd
+A  tests/framework/frame_budget_test.tscn
+A  tests/framework/frame_epoch_test.gd
+A  tests/framework/frame_epoch_test.tscn
+AM tests/framework/future_item_ownership_terminal_test.gd
+A  tests/framework/future_item_ownership_terminal_test.tscn
+AM tests/framework/helpers/check_receipt.gd
+AM tests/framework/helpers/journal_backup_fixture.gd
+A  tests/framework/helpers/native_producer_gate.gd
+AM tests/framework/item_binding_identity_test.gd
+A  tests/framework/item_binding_identity_test.tscn
+AM tests/framework/item_category_identity_test.gd
+A  tests/framework/item_category_identity_test.tscn
+A  tests/framework/item_extension_codec_test.gd
+A  tests/framework/item_extension_codec_test.tscn
+AM tests/framework/item_journal_legacy_backup_test.gd
+A  tests/framework/item_journal_legacy_backup_test.tscn
+A  tests/framework/item_journal_recovery_cold_test.gd
+A  tests/framework/item_journal_recovery_cold_test.tscn
+AM tests/framework/item_journal_recovery_test.gd
+A  tests/framework/item_journal_recovery_test.tscn
+AM tests/framework/item_journal_sequence_test.gd
+A  tests/framework/item_journal_sequence_test.tscn
+AM tests/framework/item_journal_v2_backup_cold_test.gd
+A  tests/framework/item_journal_v2_backup_cold_test.tscn
+A  tests/framework/item_journal_v2_backup_restart_test.gd
+A  tests/framework/item_journal_v2_backup_restart_test.tscn
+A  tests/framework/item_journal_v2_backup_seed_test.gd
+A  tests/framework/item_journal_v2_backup_seed_test.tscn
+AM tests/framework/item_journal_v2_backup_test.gd
+A  tests/framework/item_journal_v2_backup_test.tscn
+AM tests/framework/item_use_action_identity_test.gd
+A  tests/framework/item_use_action_identity_test.tscn
+A  tests/framework/legacy_item_transaction_identity_test.gd
+A  tests/framework/legacy_item_transaction_identity_test.tscn
+AM tests/framework/legacy_release_stat_test.gd
+A  tests/framework/legacy_release_stat_test.tscn
+AM tests/framework/melee_configuration_production_test.gd
+A  tests/framework/melee_configuration_production_test.tscn
+A  tests/framework/mobile_save_upgrade_restart_test.gd
+A  tests/framework/mobile_save_upgrade_restart_test.tscn
+A  tests/framework/mobile_save_upgrade_startup_test.gd
+A  tests/framework/mobile_save_upgrade_startup_test.tscn
+AM tests/framework/mobile_save_upgrade_test.gd
+A  tests/framework/mobile_save_upgrade_test.tscn
+AM tests/framework/natural_effect_lifecycle_cold_test.gd
+A  tests/framework/natural_effect_lifecycle_cold_test.tscn
+AM tests/framework/natural_effect_lifecycle_test.gd
+A  tests/framework/natural_effect_lifecycle_test.tscn
+AM tests/framework/natural_effect_recovery_cycles_test.gd
+A  tests/framework/natural_effect_recovery_cycles_test.tscn
+AM tests/framework/ordinary_item_identity_test.gd
+A  tests/framework/ordinary_item_identity_test.tscn
+A  tests/framework/path_frontier_cursor_test.gd
+A  tests/framework/path_frontier_cursor_test.tscn
+A  tests/framework/paused_persistence_receipt_test.gd
+A  tests/framework/paused_persistence_receipt_test.tscn
+AM tests/framework/periodic_credit_profile_switch_test.gd
+A  tests/framework/periodic_credit_profile_switch_test.tscn
+A  tests/framework/periodic_credit_safe_logout_cold_test.tscn
+A  tests/framework/periodic_credit_safe_logout_test.tscn
+AM tests/framework/periodic_delivery_lateness_test.gd
+A  tests/framework/periodic_delivery_lateness_test.tscn
+A  tests/framework/periodic_effect_boundaries_test.gd
+A  tests/framework/periodic_effect_boundaries_test.tscn
+A  tests/framework/periodic_effect_death_production_test.gd
+A  tests/framework/periodic_effect_death_production_test.tscn
+A  tests/framework/periodic_effect_lifecycle_test.gd
+A  tests/framework/periodic_effect_lifecycle_test.tscn
+AM tests/framework/periodic_effect_runtime_test.gd
+A  tests/framework/periodic_effect_runtime_test.tscn
+A  tests/framework/persistence_completion_boundary_test.gd
+A  tests/framework/persistence_completion_boundary_test.tscn
+A  tests/framework/persistence_owned_transfer_test.gd
+A  tests/framework/persistence_owned_transfer_test.tscn
+AM tests/framework/pricing_identity_test.gd
+A  tests/framework/pricing_identity_test.tscn
+AM tests/framework/profession_identity_owner_test.gd
+A  tests/framework/profession_identity_owner_test.tscn
+A  tests/framework/profile_gameplay_owner_test.gd
+A  tests/framework/profile_gameplay_owner_test.tscn
+AM tests/framework/profile_identity_generation_test.gd
+A  tests/framework/profile_identity_generation_test.tscn
+AM tests/framework/relic_identity_relation_test.gd
+A  tests/framework/relic_identity_relation_test.tscn
+A  tests/framework/relic_multi_profile_cold_persistence_test.gd
+A  tests/framework/relic_multi_profile_cold_persistence_test.tscn
+AM tests/framework/relic_multi_profile_live_persistence_test.gd
+A  tests/framework/relic_multi_profile_live_persistence_test.tscn
+AM tests/framework/resource_completion_cursor_test.gd
+A  tests/framework/resource_completion_cursor_test.tscn
+AM tests/framework/skill_book_identity_test.gd
+A  tests/framework/skill_book_identity_test.tscn
+AM tests/framework/skill_identity_authority_test.gd
+A  tests/framework/skill_identity_authority_test.tscn
+AM tests/framework/socket_gem_identity_test.gd
+A  tests/framework/socket_gem_identity_test.tscn
+AM tests/framework/socket_transaction_test.gd
+A  tests/framework/socket_transaction_test.tscn
+AM tests/framework/temporary_item_buff_identity_test.gd
+A  tests/framework/temporary_item_buff_identity_test.tscn
+AM tests/framework/ui_registry_retirement_test.gd
+A  tests/framework/ui_registry_retirement_test.tscn
+A  tests/framework/warehouse_completion_boundary_test.gd
+A  tests/framework/warehouse_completion_boundary_test.tscn
+A  tests/framework/world_generation_persistence_cold_test.gd
+A  tests/framework/world_generation_persistence_cold_test.tscn
+A  tests/framework/world_generation_persistence_test.gd
+A  tests/framework/world_generation_persistence_test.tscn
+AM tests/framework/world_retirement_test.gd
+A  tests/framework/world_retirement_test.tscn
+AM tests/framework/world_time_contract_test.gd
+A  tests/framework/world_time_contract_test.tscn
+ M tests/game_root_combat_resolution_integration_test.gd
+ M tests/game_root_loading_transition_test.gd
+ M tests/hc_monster_ai/combat_epoch_delivery_test.gd
+ M tests/hc_monster_ai/crowd_surround_runtime_test.gd
+ M tests/hc_monster_ai/runtime_test.gd
+ M tests/hc_monster_ai/world_obstacle_runtime_test.gd
+ M tests/hc_monster_combat_r2/revival_durability_test.gd
+ A tests/hc_monster_combat_r4/bounded_frame_observation.gd
+ M tests/hc_monster_combat_r4/d3_motion_pressure_runtime_test.gd
+ M tests/hc_monster_combat_r4/damage_attribution_counterexamples_test.gd
+ M tests/hc_monster_combat_r4/natural_cadence_24_test.gd
+ M tests/hc_monster_combat_r4/natural_cadence_base.gd
+ A tests/helpers/world_ready_fixture.gd
+ M tests/hud_gothic_runtime_test.gd
+ M tests/immediate_item_save_test.gd
+ M tests/inventory_equipment_ui_test.gd
+ M tests/item_catalog_test.gd
+ M tests/item_drop_instance_persistence_test.gd
+ M tests/item_drop_instance_rules_test.gd
+ M tests/loot_stable_identity_save_test.gd
+ M tests/loot_ui_20260914/buff_expiry_test.gd
+ M tests/loot_ui_20260914/buff_strip_test.gd
+ M tests/loot_ui_20260914/presentation_capture.gd
+ M tests/m30_r4/test_m30_eight_direction_steps.gd
+ M tests/melee_blocked_query_order_test.gd
+ M tests/melee_lock_fallback_test.gd
+ M tests/mobile_targeting_test.gd
+ M tests/monster_anti_stealth_runtime_test.gd
+ M tests/monster_idle_scan_cadence_test.gd
+ M tests/monster_melee_contact_geometry_test.gd
+ M tests/monster_overhead_return_regression_test.gd
+ M tests/monster_streaming_single_poll_per_frame_test.gd
+ M tests/monster_summon_formal_birth_test.gd
+ M tests/monster_target_magic_attack_test.gd
+ M tests/multi_character_save_test.gd
+ M tests/natural_cave_source_integration_test.gd
+ M tests/new_character_starter_loadout_test.gd
+ M tests/new_item_icon_surfaces_test.gd
+ M tests/orc_tomb_game_visual_geometry_test.gd
+ M tests/orc_tomb_source_integration_test.gd
+ M tests/persistence_business_transactions_test.gd
+ M tests/phase1_game_runtime_integration_test.gd
+ M tests/player_core_audio_hook_test.gd
+ M tests/player_item_audio_event_test.gd
+ M tests/player_level_up_effect_runtime_test.gd
+ M tests/player_movement_respawn_test.gd
+ M tests/player_poison_presentation_test.gd
+ M tests/player_three_profession_visual_catalog_test.gd
+ M tests/pricing_authority_test.gd
+ M tests/profile_business_validation_recovery_test.gd
+ M tests/progression_loot_20260913/base_growth_test.gd
+ M tests/progression_loot_20260913/map_growth_test.gd
+ M tests/quick_item_game_root_wiring_test.gd
+ M tests/quick_item_slots_test.gd
+ M tests/r3_gold_cap_entrypoints_test.gd
+ M tests/r6_3/close_selection_test.gd
+ M tests/random_teleport_destination_contract_test.gd
+ M tests/relic_combat_entry_test.gd
+ M tests/relic_equipped_actor_test.gd
+ M tests/relic_synthesis_runtime_test.gd
+ M tests/repair_20260913/affix_distribution_test.gd
+ M tests/repair_20260913/blessing_rule_test.gd
+ M tests/repair_20260913/equipment_spell_speed_test.gd
+ M tests/repair_20260913/inventory_error_feedback_real_input_test.gd
+ M tests/repair_20260913/inventory_real_input_test.gd
+ M tests/repair_20260913/weapon_frame_order_test.gd
+ M tests/service_home_no_current_position_fallback_test.gd
+ M tests/shared_warehouse_transaction_test.gd
+ M tests/skill_book_rank_upgrade_integration_test.gd
+ M tests/skill_button_assignments_v2_test.gd
+ M tests/skill_effective_rank_integration_test.gd
+ M tests/skill_input_policy_test.gd
+ M tests/skill_learning_notice_real_input_test.gd
+ M tests/skill_loadout_rules_test.gd
+ M tests/skill_panel_assignment_hint_layout_contract_test.gd
+ M tests/skill_panel_combat_unit_test.gd
+ M tests/skill_progression_save_integration_test.gd
+ M tests/skill_runtime_integration_test.gd
+ M tests/skill_target_context_partition_test.gd
+ M tests/skills/professions_combat_gu_contract_test.gd
+ M tests/skills/skill_progression_service_test.gd
+ M tests/skills/warrior_melee_entry_runtime_test.gd
+ M tests/source176_decision_gate_test.gd
+M  tests/source176_r2/natural_approach_runtime_test.gd
+A  tests/source176_r3/all_skill_reaction_paths_test.gd
+A  tests/source176_r3/all_skill_reaction_paths_test.tscn
+A  tests/source176_r3/area_parent_admission_test.gd
+A  tests/source176_r3/area_parent_admission_test.tscn
+A  tests/source176_r3/body_action_owner_matrix_test.gd
+A  tests/source176_r3/body_action_owner_matrix_test.tscn
+A  tests/source176_r3/box_snapshot_consumer_test.gd
+A  tests/source176_r3/box_snapshot_consumer_test.tscn
+A  tests/source176_r3/c05_native_detour_test.gd
+A  tests/source176_r3/c05_native_detour_test.tscn
+A  tests/source176_r3/cadence_fast_path_test.gd
+A  tests/source176_r3/cadence_fast_path_test.tscn
+A  tests/source176_r3/cold_hot_action_phase_test.gd
+A  tests/source176_r3/cold_hot_action_phase_test.tscn
+A  tests/source176_r3/direct_reception_edges_test.gd
+A  tests/source176_r3/direct_reception_edges_test.tscn
+A  tests/source176_r3/eight_direction_admission_test.gd
+A  tests/source176_r3/eight_direction_admission_test.tscn
+A  tests/source176_r3/exact_leg_and_corridor_test.gd
+A  tests/source176_r3/exact_leg_and_corridor_test.tscn
+AM tests/source176_r3/helpers/runtime_fixture.gd
+A  tests/source176_r3/identity_export_test.gd
+A  tests/source176_r3/identity_export_test.tscn
+A  tests/source176_r3/movement_frame_budget_test.gd
+A  tests/source176_r3/movement_frame_budget_test.tscn
+A  tests/source176_r3/native_performance_10.tscn
+A  tests/source176_r3/native_performance_20.tscn
+A  tests/source176_r3/native_performance_30.tscn
+AM tests/source176_r3/native_performance_test.gd
+A  tests/source176_r3/natural_64_p0_d0.tscn
+A  tests/source176_r3/natural_64_p0_d1.tscn
+A  tests/source176_r3/natural_64_p0_d2.tscn
+A  tests/source176_r3/natural_64_p0_d3.tscn
+A  tests/source176_r3/natural_64_p0_d4.tscn
+A  tests/source176_r3/natural_64_p0_d5.tscn
+A  tests/source176_r3/natural_64_p0_d6.tscn
+A  tests/source176_r3/natural_64_p0_d7.tscn
+A  tests/source176_r3/natural_64_p1_d0.tscn
+A  tests/source176_r3/natural_64_p1_d1.tscn
+A  tests/source176_r3/natural_64_p1_d2.tscn
+A  tests/source176_r3/natural_64_p1_d3.tscn
+A  tests/source176_r3/natural_64_p1_d4.tscn
+A  tests/source176_r3/natural_64_p1_d5.tscn
+A  tests/source176_r3/natural_64_p1_d6.tscn
+A  tests/source176_r3/natural_64_p1_d7.tscn
+A  tests/source176_r3/natural_64_p2_d0.tscn
+A  tests/source176_r3/natural_64_p2_d1.tscn
+A  tests/source176_r3/natural_64_p2_d2.tscn
+A  tests/source176_r3/natural_64_p2_d3.tscn
+A  tests/source176_r3/natural_64_p2_d4.tscn
+A  tests/source176_r3/natural_64_p2_d5.tscn
+A  tests/source176_r3/natural_64_p2_d6.tscn
+A  tests/source176_r3/natural_64_p2_d7.tscn
+A  tests/source176_r3/natural_89_p0_d0.tscn
+A  tests/source176_r3/natural_89_p0_d1.tscn
+A  tests/source176_r3/natural_89_p0_d2.tscn
+A  tests/source176_r3/natural_89_p0_d3.tscn
+A  tests/source176_r3/natural_89_p0_d4.tscn
+A  tests/source176_r3/natural_89_p0_d5.tscn
+A  tests/source176_r3/natural_89_p0_d6.tscn
+A  tests/source176_r3/natural_89_p0_d7.tscn
+A  tests/source176_r3/natural_89_p1_d0.tscn
+A  tests/source176_r3/natural_89_p1_d1.tscn
+A  tests/source176_r3/natural_89_p1_d2.tscn
+A  tests/source176_r3/natural_89_p1_d3.tscn
+A  tests/source176_r3/natural_89_p1_d4.tscn
+A  tests/source176_r3/natural_89_p1_d5.tscn
+A  tests/source176_r3/natural_89_p1_d6.tscn
+A  tests/source176_r3/natural_89_p1_d7.tscn
+A  tests/source176_r3/natural_89_p2_d0.tscn
+A  tests/source176_r3/natural_89_p2_d1.tscn
+A  tests/source176_r3/natural_89_p2_d2.tscn
+A  tests/source176_r3/natural_89_p2_d3.tscn
+A  tests/source176_r3/natural_89_p2_d4.tscn
+A  tests/source176_r3/natural_89_p2_d5.tscn
+A  tests/source176_r3/natural_89_p2_d6.tscn
+A  tests/source176_r3/natural_89_p2_d7.tscn
+A  tests/source176_r3/ordinary_body_clearance_test.gd
+A  tests/source176_r3/ordinary_body_clearance_test.tscn
+A  tests/source176_r3/point_motor_path_test.gd
+A  tests/source176_r3/point_motor_path_test.tscn
+ A tests/source176_r3/profiled_performance_30.tscn
+A  tests/source176_r3/published_map_approach_test.gd
+A  tests/source176_r3/published_map_approach_test.tscn
+A  tests/source176_r3/real_frame_case_test.gd
+A  tests/source176_r3/release_lifecycle_test.gd
+A  tests/source176_r3/release_lifecycle_test.tscn
+A  tests/source176_r3/render_sequence_test.gd
+A  tests/source176_r3/render_sequence_test.tscn
+A  tests/source176_r3/source_direct_phase_trace_test.gd
+A  tests/source176_r3/source_direct_phase_trace_test.tscn
+A  tests/source176_r3/source_game_clock_trace_test.gd
+A  tests/source176_r3/source_game_clock_trace_test.tscn
+A  tests/source176_r3/source_idle_10_test.tscn
+A  tests/source176_r3/source_idle_3_test.tscn
+A  tests/source176_r3/source_idle_wake_phase_test.gd
+A  tests/source176_r3/source_idle_wake_phase_test.tscn
+A  tests/source176_r3/source_permission_lifecycle_test.gd
+A  tests/source176_r3/source_permission_lifecycle_test.tscn
+A  tests/source176_r3/target_magic_admission_test.gd
+A  tests/source176_r3/target_magic_admission_test.tscn
+ M tests/source_collision_chunk_test.gd
+ M tests/synthesis_panel_preview_test.gd
+ M tests/taoist_passive_accuracy_production_test.gd
+ M tests/taoist_support_production_integration_test.gd
+ M tests/town_music_runtime_test.gd
+ M tests/ui_error_machine_reason_leak_test.gd
+ M tests/ui_l1/price_quote_parity_test.gd
+A  tests/user_feedback_20260930/consumable_icon_surfaces_test.gd
+A  tests/user_feedback_20260930/consumable_icon_surfaces_test.tscn
+A  tests/user_feedback_20260930/corner_wait_requirement_test.gd
+A  tests/user_feedback_20260930/corner_wait_requirement_test.tscn
+A  tests/user_feedback_20260930/crowd_fractional_escape_test.gd
+A  tests/user_feedback_20260930/crowd_fractional_escape_test.tscn
+A  tests/user_feedback_20260930/crowd_position_candidates_test.gd
+A  tests/user_feedback_20260930/crowd_position_candidates_test.tscn
+A  tests/user_feedback_20260930/crowd_recovery_30_test.tscn
+A  tests/user_feedback_20260930/crowd_recovery_4_test.tscn
+A  tests/user_feedback_20260930/crowd_recovery_8_test.tscn
+A  tests/user_feedback_20260930/crowd_recovery_test.gd
+A  tests/user_feedback_20260930/crowd_recovery_test.tscn
+A  tests/user_feedback_20260930/flank_committed_segment_test.gd
+A  tests/user_feedback_20260930/flank_committed_segment_test.tscn
+A  tests/user_feedback_20260930/flank_projection_residual_test.gd
+A  tests/user_feedback_20260930/flank_projection_residual_test.tscn
+A  tests/user_feedback_20260930/full_surround_24_fractional_test.tscn
+A  tests/user_feedback_20260930/full_surround_64_test.tscn
+ A tests/user_feedback_20260930/full_surround_89_fractional_identity0_test.tscn
+ A tests/user_feedback_20260930/full_surround_89_fractional_identity1_test.tscn
+A  tests/user_feedback_20260930/full_surround_89_fractional_test.tscn
+A  tests/user_feedback_20260930/full_surround_89_prefilled_test.tscn
+A  tests/user_feedback_20260930/full_surround_89_test.tscn
+A  tests/user_feedback_20260930/full_surround_mixed_test.tscn
+A  tests/user_feedback_20260930/full_surround_moving_test.tscn
+AM tests/user_feedback_20260930/full_surround_native_test.gd
+A  tests/user_feedback_20260930/full_surround_native_test.tscn
+A  tests/user_feedback_20260930/full_surround_prefilled_test.tscn
+A  tests/user_feedback_20260930/full_surround_west_wall_test.tscn
+A  tests/user_feedback_20260930/immediate_warrior_toggle_save_test.gd
+A  tests/user_feedback_20260930/immediate_warrior_toggle_save_test.tscn
+A  tests/user_feedback_20260930/large_surround_packing_test.gd
+A  tests/user_feedback_20260930/large_surround_packing_test.tscn
+ A tests/user_feedback_20260930/layered_approach_test.gd
+ A tests/user_feedback_20260930/layered_approach_test.tscn
+AM tests/user_feedback_20260930/monster_blocked_locomotion_test.gd
+A  tests/user_feedback_20260930/monster_blocked_locomotion_test.tscn
+A  tests/user_feedback_20260930/motion_candidate_reuse_test.gd
+A  tests/user_feedback_20260930/motion_candidate_reuse_test.tscn
+A  tests/user_feedback_20260930/player_blocked_locomotion_test.gd
+A  tests/user_feedback_20260930/player_blocked_locomotion_test.tscn
+ A tests/user_feedback_20260930/recorded_fractional_flank_test.gd
+ A tests/user_feedback_20260930/recorded_fractional_flank_test.tscn
+ A tests/user_feedback_20260930/recorded_fractional_surround_fixture.json
+ A tests/user_feedback_20260930/recorded_fractional_wait_fixture.json
+ A tests/user_feedback_20260930/recorded_fractional_wait_test.gd
+ A tests/user_feedback_20260930/recorded_fractional_wait_test.tscn
+A  tests/user_feedback_20260930/surround_target_body_route_test.gd
+A  tests/user_feedback_20260930/surround_target_body_route_test.tscn
+A  tests/user_feedback_20260930/surround_vacancy_refill_89_test.tscn
+A  tests/user_feedback_20260930/surround_vacancy_refill_test.gd
+A  tests/user_feedback_20260930/surround_vacancy_refill_test.tscn
+A  tests/user_feedback_20260930/warrior_toggle_camera_native_test.gd
+A  tests/user_feedback_20260930/warrior_toggle_camera_native_test.tscn
+ M tests/vertical_slice_loop_test.gd
+ M tests/visual_capture_v08.gd
+ M tests/w1_exact_ranged_delivery_test.gd
+ M tests/warrior_attack_priority_policy_test.gd
+ M tests/warrior_client_art_test.gd
+ M tests/warrior_skill_direction_capture.gd
+ M tests/warrior_slaying_release_integration_test.gd
+ M tests/warrior_visual_test.gd
+ M tests/warrior_wear_mapping_test.gd
+ M tests/wooma_game_runtime_integration_test.gd
+ M tests/world_monster_clock_legacy_migration_test.gd
+ M tools/run_godot_tests.ps1
+?? assets/data/features/
+?? assets/data/identity/
+?? assets/data/runtime/entity_registry_v1.json
+?? docs/WORKSPACE_CURRENT_STATUS.md
+?? docs/architecture/
+?? docs/features/
+?? docs/review/framework_admission_20261002/
+?? docs/review/framework_audit_closure_20261002/
+?? docs/review/framework_budget_epoch_20261003/
+?? docs/review/framework_capacity_20261002/
+?? docs/review/framework_child_chain_admission_20261004/
+?? docs/review/framework_child_commit_20261004/
+?? docs/review/framework_child_execution_20261004/
+?? docs/review/framework_child_planner_20261004/
+?? docs/review/framework_copy_burst_20261002/
+?? docs/review/framework_crash_archive_20261003/
+?? docs/review/framework_credit_20261002/
+?? docs/review/framework_empty_category_20261003/
+?? docs/review/framework_heterogeneous_20261004/
+?? docs/review/framework_identity_proof_20261002/
+?? docs/review/framework_journal_generation_20261002/
+?? docs/review/framework_journal_recovery_20261002/
+?? docs/review/framework_layered_critical_20261003/
+?? docs/review/framework_layered_wip_20261003/
+?? docs/review/framework_lifecycle_20261002/
+?? docs/review/framework_natural_lifecycle_20261002/
+?? docs/review/framework_periodic_retirement_20261004/
+?? docs/review/framework_publication_20261003/
+?? docs/review/framework_publication_followup_20261004/
+?? docs/review/framework_publication_validation_20261004/
+?? docs/review/framework_registry_r3_20261002/
+?? docs/review/framework_release_20261002/
+?? docs/review/framework_release_boundaries_20261002/
+?? docs/review/framework_resource_closure_20261004/
+?? docs/review/framework_resource_consumption_20261004/
+?? docs/review/framework_resource_followup_20261004/
+?? docs/review/framework_rune_guard_20261004/
+?? docs/review/framework_rune_sources_20261004/
+?? docs/review/framework_snapshot_20261001/
+?? docs/review/framework_snapshot_20261002/
+?? docs/review/framework_source_composition_20261004/
+?? docs/review/framework_state_loans_20261004/
+?? docs/source176_r3/
+?? docs/superpowers/
+?? scripts/damage_ledger_observer.gd.uid
+?? scripts/drop/boss_material_drop_resolver.gd.uid
+?? scripts/features/
+?? scripts/identity/
+?? scripts/items/item_transaction_journal.gd
+?? scripts/items/item_transaction_port.gd
+?? scripts/items/rune_item_rules.gd
+?? scripts/items/socket_gem_rules.gd
+?? scripts/json_persistence_job.gd.uid
+?? scripts/json_persistence_service.gd.uid
+?? scripts/json_prepared_request.gd.uid
+?? scripts/layers/runtime/execution/
+?? scripts/monster_attack_timing.gd.uid
+?? scripts/monster_crowd_attack_position_policy.gd
+?? scripts/monster_crowd_attack_position_policy.gd.uid
+?? scripts/monster_source176/action_boundary.gd.uid
+?? scripts/monster_source176/frame_cursor.gd.uid
+?? scripts/monster_source176/reaction_policy.gd.uid
+?? scripts/monster_source176/skill_reaction_registry.gd.uid
+?? scripts/monster_source176/source_melee_geometry.gd.uid
+?? scripts/monster_source176/source_step_plan.gd.uid
+?? scripts/monster_source176/step_budget.gd.uid
+?? scripts/save_upgrade_backup.gd
+?? scripts/skills/skill_player_description.gd.uid
+?? scripts/ui_registration_lifetime.gd
+?? scripts/warehouse_commit_operation.gd.uid
+?? scripts/world_camera_follow.gd.uid
+?? scripts/world_clock_delta.gd.uid
+?? tests/classic_boss_area_magic_outcomes_test.gd.uid
+?? tests/consumable_save_latency_test.gd.uid
+?? tests/f03_async_death_receipt_test.gd.uid
+?? tests/f03_background_writer_test.gd.uid
+?? tests/f03_hot_persistence_test.gd.uid
+?? tests/f03_native_death_lifecycle_test.gd.uid
+?? tests/f03_native_pickup_lifecycle_test.gd.uid
+?? tests/f03_ordered_cleanup_test.gd.uid
+?? tests/f03_periodic_background_save_test.gd.uid
+?? tests/f03_pickup_receipt_lifecycle_test.gd.uid
+?? tests/f03_warehouse_receipt_boundary_test.gd.uid
+?? tests/f03_workbench_receipt_boundary_test.gd.uid
+?? tests/f03_world_delta_compatibility_test.gd.uid
+?? tests/f05_settlement_display_separation_test.gd.uid
+?? tests/forge_persistence_roundtrip_test.gd.uid
+?? tests/framework/controlled_process_crash_cold_test.gd
+?? tests/framework/controlled_process_crash_test.gd
+?? tests/framework/default_root_upgrade_existing_cold_test.gd
+?? tests/framework/default_root_upgrade_existing_test.gd
+?? tests/framework/empty_extension_behavior_test.gd.uid
+?? tests/framework/feature_affix_admission_test.gd
+?? tests/framework/feature_affix_admission_test.tscn
+?? tests/framework/feature_batch_capacity_ownership_test.gd
+?? tests/framework/feature_batch_capacity_ownership_test.tscn
+?? tests/framework/feature_binding_validation_test.gd
+?? tests/framework/feature_binding_validation_test.tscn
+?? tests/framework/feature_birth_slot_identity_test.gd
+?? tests/framework/feature_birth_slot_identity_test.tscn
+?? tests/framework/feature_capacity_admission_test.gd
+?? tests/framework/feature_capacity_atomic_test.gd
+?? tests/framework/feature_chain_commit_test.gd
+?? tests/framework/feature_chain_commit_test.tscn
+?? tests/framework/feature_child_capacity_test.gd
+?? tests/framework/feature_child_capacity_test.tscn
+?? tests/framework/feature_child_chain_admission_test.gd
+?? tests/framework/feature_child_chain_admission_test.tscn
+?? tests/framework/feature_child_execution_test.gd
+?? tests/framework/feature_child_execution_test.tscn
+?? tests/framework/feature_child_planner_test.gd
+?? tests/framework/feature_child_planner_test.tscn
+?? tests/framework/feature_creation_invalid_candidate_test.gd
+?? tests/framework/feature_creation_invalid_candidate_test.tscn
+?? tests/framework/feature_creation_rollback_test.gd
+?? tests/framework/feature_creation_rollback_test.tscn
+?? tests/framework/feature_death_child_command_test.gd
+?? tests/framework/feature_death_child_command_test.tscn
+?? tests/framework/feature_delayed_producer_publication_test.gd
+?? tests/framework/feature_delayed_producer_publication_test.tscn
+?? tests/framework/feature_delivery_templates_test.gd
+?? tests/framework/feature_delivery_templates_test.tscn
+?? tests/framework/feature_lifesteal_production_test.gd
+?? tests/framework/feature_lifesteal_production_test.tscn
+?? tests/framework/feature_lifesteal_runtime_test.gd
+?? tests/framework/feature_lifesteal_runtime_test.tscn
+?? tests/framework/feature_periodic_child_chain_test.gd
+?? tests/framework/feature_periodic_child_chain_test.tscn
+?? tests/framework/feature_producing_death_reentry_test.gd
+?? tests/framework/feature_producing_death_reentry_test.tscn
+?? tests/framework/feature_publication_atomic_test.gd
+?? tests/framework/feature_publication_atomic_test.tscn
+?? tests/framework/feature_publication_dependencies_test.gd
+?? tests/framework/feature_publication_dependencies_test.tscn
+?? tests/framework/feature_publication_lifecycle_test.gd
+?? tests/framework/feature_publication_lifecycle_test.tscn
+?? tests/framework/feature_registry_publication_test.gd
+?? tests/framework/feature_registry_publication_test.tscn
+?? tests/framework/feature_registry_structure_test.gd
+?? tests/framework/feature_registry_structure_test.tscn
+?? tests/framework/feature_resource_acceptance_test.tscn
+?? tests/framework/feature_resource_accepted_lifetime_test.gd
+?? tests/framework/feature_resource_accepted_lifetime_test.tscn
+?? tests/framework/feature_resource_audio_closure_test.gd
+?? tests/framework/feature_resource_audio_closure_test.tscn
+?? tests/framework/feature_resource_continuous_service_test.gd
+?? tests/framework/feature_resource_continuous_service_test.tscn
+?? tests/framework/feature_resource_cue_reentry_test.tscn
+?? tests/framework/feature_resource_cue_test.gd
+?? tests/framework/feature_resource_cue_test.tscn
+?? tests/framework/feature_resource_declaration_validation_test.gd
+?? tests/framework/feature_resource_declaration_validation_test.tscn
+?? tests/framework/feature_resource_foreign_request_test.gd
+?? tests/framework/feature_resource_foreign_request_test.tscn
+?? tests/framework/feature_resource_lifecycle_test.gd
+?? tests/framework/feature_resource_lifecycle_test.tscn
+?? tests/framework/feature_resource_multi_reentry_test.tscn
+?? tests/framework/feature_resource_natural_cold_test.tscn
+?? tests/framework/feature_resource_natural_test.tscn
+?? tests/framework/feature_resource_preparation_test.gd
+?? tests/framework/feature_resource_preparation_test.tscn
+?? tests/framework/feature_resource_promotion_cancel_test.gd
+?? tests/framework/feature_resource_promotion_cancel_test.tscn
+?? tests/framework/feature_resource_publication_test.gd
+?? tests/framework/feature_resource_publication_test.tscn
+?? tests/framework/feature_resource_queued_cancel_test.gd
+?? tests/framework/feature_resource_queued_cancel_test.tscn
+?? tests/framework/feature_resource_registry_rejection_test.gd
+?? tests/framework/feature_resource_registry_rejection_test.tscn
+?? tests/framework/feature_resource_shared_quantum_test.gd
+?? tests/framework/feature_resource_shared_quantum_test.tscn
+?? tests/framework/feature_resource_started_cancel_test.gd
+?? tests/framework/feature_resource_started_cancel_test.tscn
+?? tests/framework/feature_resource_terminal_failure_test.gd
+?? tests/framework/feature_resource_terminal_failure_test.tscn
+?? tests/framework/feature_resource_world_activation_test.gd
+?? tests/framework/feature_resource_world_activation_test.tscn
+?? tests/framework/feature_source_composition_cold_test.gd
+?? tests/framework/feature_source_composition_cold_test.tscn
+?? tests/framework/feature_source_composition_test.gd
+?? tests/framework/feature_source_composition_test.tscn
+?? tests/framework/feature_state_loan_lifetime_test.gd
+?? tests/framework/feature_state_loan_lifetime_test.tscn
+?? tests/framework/feature_state_loan_root_test.gd
+?? tests/framework/feature_state_loan_root_test.tscn
+?? tests/framework/fixtures/default_root_upgrade_seed.json
+?? tests/framework/fixtures/legacy_baseline_root.gd.uid
+?? tests/framework/fixtures/proof_false_marker.gd.uid
+?? tests/framework/fixtures/proof_marker_only.gd.uid
+?? tests/framework/fixtures/proof_positive_control.gd.uid
+?? tests/framework/fixtures/proof_source_changed.gd.uid
+?? tests/framework/fixtures/proof_zero_checks.gd.uid
+?? tests/framework/fixtures/source_mutation_marker.gd.uid
+?? tests/framework/frame_epoch_test.gd.uid
+?? tests/framework/helpers/check_receipt.gd.uid
+?? tests/framework/helpers/controlled_crash_gate.gd
+?? tests/framework/periodic_callback_retirement_test.gd
+?? tests/framework/periodic_callback_retirement_test.tscn
+?? tests/framework/periodic_child_g2_root_test.tscn
+?? tests/framework/periodic_child_root_test.gd
+?? tests/framework/periodic_child_root_test.tscn
+?? tests/framework/periodic_credit_safe_logout_cold_test.gd
+?? tests/framework/periodic_credit_safe_logout_test.gd
+?? tests/framework/periodic_dispatch_lifecycle_test.gd
+?? tests/framework/periodic_dispatch_lifecycle_test.tscn
+?? tests/framework/periodic_producer_identity_test.gd
+?? tests/framework/periodic_producer_identity_test.tscn
+?? tests/framework/periodic_refresh_horizon_test.gd
+?? tests/framework/periodic_refresh_horizon_test.tscn
+?? tests/framework/periodic_refresh_period_boundary_test.gd
+?? tests/framework/periodic_refresh_period_boundary_test.tscn
+?? tests/framework/rune_catalog_data_test.gd
+?? tests/framework/rune_catalog_data_test.tscn
+?? tests/framework/rune_extension_codec_test.gd
+?? tests/framework/rune_extension_codec_test.tscn
+?? tests/framework/rune_source_composition_cold_test.gd
+?? tests/framework/rune_source_composition_cold_test.tscn
+?? tests/framework/rune_source_composition_test.gd
+?? tests/framework/rune_source_composition_test.tscn
+?? tests/framework/rune_transaction_test.gd
+?? tests/framework/rune_transaction_test.tscn
+?? tests/hc_monster_ai/crowd_surround_runtime_test.gd.uid
+?? tests/hc_monster_combat_r1/monster_crowd_scale_performance_probe_test.gd.uid
+?? tests/hc_monster_combat_r2/attack_clock_red_test.gd.uid
+?? tests/hc_monster_combat_r2/attack_presentation_identity_test.gd.uid
+?? tests/hc_monster_combat_r2/body_pair_eight_direction_test.gd.uid
+?? tests/hc_monster_combat_r2/direct_magic_step_chain_test.gd.uid
+?? tests/hc_monster_combat_r2/large_body_swing_cadence_test.gd.uid
+?? tests/hc_monster_combat_r2/monster_body_rejection_test.gd.uid
+?? tests/hc_monster_combat_r2/monster_runtime_census_test.gd.uid
+?? tests/hc_monster_combat_r2/paired_perf_probe_test.gd.uid
+?? tests/hc_monster_combat_r2/player_struck_poison_chain_test.gd.uid
+?? tests/hc_monster_combat_r2/revival_durability_test.gd.uid
+?? tests/hc_monster_combat_r2/runtime_census_deep_test.gd.uid
+?? tests/hc_monster_combat_r3/attack_facing_freeze_test.gd.uid
+?? tests/hc_monster_combat_r3/attack_game_clock_test.gd.uid
+?? tests/hc_monster_combat_r3/attack_parent_release_identity_test.gd.uid
+?? tests/hc_monster_combat_r3/audio_stale_frame_test.gd.uid
+?? tests/hc_monster_combat_r3/body_rejection_world_isolation_test.gd.uid
+?? tests/hc_monster_combat_r3/body_rule_tier_cross_test.gd.uid
+?? tests/hc_monster_combat_r3/paired_load_realism_test.gd.uid
+?? tests/hc_monster_combat_r3/real_admission_census_test.gd.uid
+?? tests/hc_monster_combat_r3/stale_death_notification_test.gd.uid
+?? tests/hc_monster_combat_r4/all_damage_lost_test.gd.uid
+?? tests/hc_monster_combat_r4/async_line_lifecycle_test.gd.uid
+?? tests/hc_monster_combat_r4/attack_expiry_without_render_test.gd.uid
+?? tests/hc_monster_combat_r4/attack_owner_idempotence_test.gd.uid
+?? tests/hc_monster_combat_r4/body_multitarget_lifecycle_test.gd.uid
+?? tests/hc_monster_combat_r4/body_radius_bucket_boundary_test.gd.uid
+?? tests/hc_monster_combat_r4/body_radius_index_consistency_test.gd.uid
+?? tests/hc_monster_combat_r4/body_rejected_factory_isolation_test.gd.uid
+?? tests/hc_monster_combat_r4/body_rejected_query_contract_test.gd.uid
+?? tests/hc_monster_combat_r4/cancelled_release_observation_test.gd.uid
+?? tests/hc_monster_combat_r4/d3_boundary_runtime_test.gd.uid
+?? tests/hc_monster_combat_r4/d3_motion_pressure_runtime_test.gd.uid
+?? tests/hc_monster_combat_r4/damage_attribution_counterexamples_test.gd.uid
+?? tests/hc_monster_combat_r4/damage_attribution_verifier.gd.uid
+?? tests/hc_monster_combat_r4/damage_write_fault_fixture.gd.uid
+?? tests/hc_monster_combat_r4/double_generation_death_test.gd.uid
+?? tests/hc_monster_combat_r4/explicit_zero_attack_timing_test.gd.uid
+?? tests/hc_monster_combat_r4/mp_payment_observation_test.gd.uid
+?? tests/hc_monster_combat_r4/native_physics_sampling_test.gd.uid
+?? tests/hc_monster_combat_r4/natural_cadence_238_test.gd.uid
+?? tests/hc_monster_combat_r4/natural_cadence_239_test.gd.uid
+?? tests/hc_monster_combat_r4/natural_cadence_24_chase_test.gd.uid
+?? tests/hc_monster_combat_r4/natural_cadence_24_test.gd.uid
+?? tests/hc_monster_combat_r4/natural_cadence_76_test.gd.uid
+?? tests/hc_monster_combat_r4/natural_cadence_base.gd.uid
+?? tests/hc_monster_combat_r4/natural_cadence_fault_variants_test.gd.uid
+?? tests/hc_monster_combat_r4/natural_cadence_test.gd.uid
+?? tests/hc_monster_combat_r4/observer_integrity_test.gd.uid
+?? tests/hc_monster_combat_r4/overhead_property_scan_test.gd.uid
+?? tests/hc_monster_combat_r4/perf_unit_determinism_test.gd.uid
+?? tests/hc_monster_combat_r4/r3_common_natural_probe.gd.uid
+?? tests/hc_monster_combat_r4/runtime_capability_inventory_test.gd.uid
+?? tests/hc_monster_combat_r4/source_destroyed_pending_test.gd.uid
+?? tests/hc_monster_combat_r4/summon_planner_radius_test.gd.uid
+?? tests/hc_monster_combat_r4/synchronous_revive_death_token_test.gd.uid
+?? tests/hc_monster_combat_r4/t6_real_load_probe.gd.uid
+?? tests/helpers/ordered_json_stage_fixture.gd
+?? tests/helpers/source_cadence_reference.gd.uid
+?? tests/immediate_item_save_test.gd.uid
+?? tests/laser_chest_translation_test.gd.uid
+?? tests/monster_explosion_spider_runtime_test.gd.uid
+?? tests/monster_magic_lifesteal_test.gd.uid
+?? tests/new_item_icon_surfaces_test.gd.uid
+?? tests/player_bich_roadblock_escape_test.gd.uid
+?? tests/portal_actual_arrival_guard_test.gd.uid
+?? tests/portal_all_map_authoring_footprint_test.gd.uid
+?? tests/relic_combat_entry_test.gd.uid
+?? tests/relic_equipped_actor_test.gd.uid
+?? tests/source176_decision_gate_test.gd.uid
+?? tests/source176_delivery_gate_test.gd.uid
+?? tests/source176_foundation_test.gd.uid
+?? tests/source176_geometry_action_test.gd.uid
+?? tests/source176_r2/exact_leg_runtime_test.gd.uid
+?? tests/source176_r2/identity_export_test.gd
+?? tests/source176_r2/identity_export_test.gd.uid
+?? tests/source176_r2/identity_export_test.tscn
+?? tests/source176_r2/natural_approach_runtime_test.gd.uid
+?? tests/source176_r2/shared_permission_runtime_test.gd.uid
+?? tests/source176_r3/all_skill_reaction_paths_test.gd.uid
+?? tests/source176_r3/area_parent_admission_test.gd.uid
+?? tests/source176_r3/body_action_owner_matrix_test.gd.uid
+?? tests/source176_r3/box_snapshot_consumer_test.gd.uid
+?? tests/source176_r3/c05_native_detour_test.gd.uid
+?? tests/source176_r3/cadence_fast_path_test.gd.uid
+?? tests/source176_r3/cases/
+?? tests/source176_r3/cold_hot_action_phase_test.gd.uid
+?? tests/source176_r3/direct_reception_edges_test.gd.uid
+?? tests/source176_r3/eight_direction_admission_test.gd.uid
+?? tests/source176_r3/exact_leg_and_corridor_test.gd.uid
+?? tests/source176_r3/helpers/cadence_reference_r2.gd
+?? tests/source176_r3/helpers/cadence_reference_r2.gd.uid
+?? tests/source176_r3/helpers/case_oracle.gd
+?? tests/source176_r3/helpers/case_oracle.gd.uid
+?? tests/source176_r3/helpers/runtime_fixture.gd.uid
+?? tests/source176_r3/identity_export_test.gd.uid
+?? tests/source176_r3/movement_frame_budget_test.gd.uid
+?? tests/source176_r3/mutation_deny_attack.tscn
+?? tests/source176_r3/mutation_double_clock.tscn
+?? tests/source176_r3/mutation_frozen_tick.tscn
+?? tests/source176_r3/native_performance_test.gd.uid
+?? tests/source176_r3/native_scene_manifest.json
+?? tests/source176_r3/ordinary_body_clearance_test.gd.uid
+?? tests/source176_r3/point_motor_path_test.gd.uid
+?? tests/source176_r3/published_map_approach_test.gd.uid
+?? tests/source176_r3/real_frame_case_test.gd.uid
+?? tests/source176_r3/release_lifecycle_test.gd.uid
+?? tests/source176_r3/render_sequence_test.gd.uid
+?? tests/source176_r3/source_direct_phase_trace_test.gd.uid
+?? tests/source176_r3/source_game_clock_trace_test.gd.uid
+?? tests/source176_r3/source_idle_wake_phase_test.gd.uid
+?? tests/source176_r3/source_permission_lifecycle_test.gd.uid
+?? tests/source176_r3/target_magic_admission_test.gd.uid
+?? tests/user_feedback_20260930/consumable_icon_surfaces_test.gd.uid
+?? tests/user_feedback_20260930/corner_wait_requirement_test.gd.uid
+?? tests/user_feedback_20260930/crowd_fractional_escape_test.gd.uid
+?? tests/user_feedback_20260930/crowd_position_candidates_test.gd.uid
+?? tests/user_feedback_20260930/crowd_recovery_test.gd.uid
+?? tests/user_feedback_20260930/flank_committed_segment_test.gd.uid
+?? tests/user_feedback_20260930/flank_projection_residual_test.gd.uid
+?? tests/user_feedback_20260930/full_surround_native_test.gd.uid
+?? tests/user_feedback_20260930/immediate_warrior_toggle_save_test.gd.uid
+?? tests/user_feedback_20260930/large_surround_packing_test.gd.uid
+?? tests/user_feedback_20260930/monster_blocked_locomotion_test.gd.uid
+?? tests/user_feedback_20260930/motion_candidate_reuse_test.gd.uid
+?? tests/user_feedback_20260930/player_blocked_locomotion_test.gd.uid
+?? tests/user_feedback_20260930/surround_target_body_route_test.gd.uid
+?? tests/user_feedback_20260930/surround_vacancy_refill_test.gd.uid
+?? tests/user_feedback_20260930/warrior_toggle_camera_native_test.gd.uid
+?? tests/workbench_any_slot_test.gd.uid
+?? tools/build_entity_registry.py
+?? tools/extract_authority_item_art.py
+?? tools/run_combined_evidence_fault_tests.py
+?? tools/run_default_root_upgrade_tests.py
+?? tools/source176_r3_validation.py
+?? tools/test_framework_receipt.ps1
+?? tools/tests/test_entity_registry.py

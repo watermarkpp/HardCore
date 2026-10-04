@@ -1,0 +1,16 @@
+{
+  "time_utc": "2026-10-04T10:16:34.401952+00:00",
+  "launcher_pid": 25088,
+  "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_runtime_red_fdcfdc61a80c422b9694c921bdbfd109",
+  "command": [
+    "py",
+    "-3.12",
+    "tools/source176_r3_validation.py",
+    "periodic_dispatch_runtime_red",
+    "--tests",
+    "tests/framework/periodic_child_root_test.tscn",
+    "--timeout",
+    "30"
+  ],
+  "true_index_sha256": "df5a01dd0d87c14620e0021d70c25a830eb2cc37aa7b012eeb14ee1f2c58c5fb"
+}

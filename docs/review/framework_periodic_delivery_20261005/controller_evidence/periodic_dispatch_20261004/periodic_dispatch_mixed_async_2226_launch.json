@@ -1,0 +1,18 @@
+{
+  "time_utc": "2026-10-04T14:27:02.568333+00:00",
+  "launcher_pid": 8432,
+  "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_mixed_async_2226_d72edc7ea02946aeadec43ac31a34847",
+  "command": [
+    "py",
+    "-3.12",
+    "tools/source176_r3_validation.py",
+    "periodic_dispatch_mixed_async_2226",
+    "--tests",
+    "tests/framework/feature_mixed_delivery_test.tscn",
+    "tests/framework/feature_mixed_child_resource_test.tscn",
+    "--timeout",
+    "60"
+  ],
+  "timeout_seconds": 60,
+  "true_index_sha256": "df5a01dd0d87c14620e0021d70c25a830eb2cc37aa7b012eeb14ee1f2c58c5fb"
+}

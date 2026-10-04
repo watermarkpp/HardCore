@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "modules": [
+    {"module_id": "hc.ignite", "path": "res://assets/data/features/validation/resource_natural_parent.json"},
+    {"module_id": "hc.ignite_cue_assets", "path": "res://assets/data/features/validation/resource_natural_child.json"},
+    {"module_id": "hc.socketing_fixture", "path": "res://assets/data/features/socketing_fixture.json"},
+    {"module_id": "hc.runes.fixture", "path": "res://assets/data/features/rune_fixture.json"},
+    {"module_id": "hc.validation.lifesteal", "path": "res://assets/data/features/validation/lifesteal.json"},
+    {"module_id": "hc.validation.mixed_delivery_chain", "path": "res://assets/data/features/validation/mixed_delivery_chain.json"}
+  ],
+  "bindings": [
+    {"module_id": "hc.ignite", "kind": "affix", "affix_id": "hc.affix.validation.magic_bonus.v1", "mechanic_id": "hc.ignite.ice_storm"},
+    {"module_id": "hc.ignite", "kind": "embedded_item", "item_id": "hc.item.990001", "mechanic_id": "hc.ignite.ice_storm"},
+    {"module_id": "hc.ignite", "kind": "embedded_item", "item_id": "hc.item.990002", "mechanic_id": "hc.ignite.ice_storm"},
+    {"module_id": "hc.socketing_fixture", "kind": "embedded_item", "item_id": "hc.item.990001", "mechanic_id": "hc.socketing.fixture_accuracy"},
+    {"module_id": "hc.runes.fixture", "kind": "embedded_item", "item_id": "hc.item.990002", "mechanic_id": "hc.runes.fixture_accuracy"},
+    {"module_id": "hc.validation.lifesteal", "kind": "rule", "rule_id": "hc.validation.lifesteal", "mechanic_id": "hc.validation.lifesteal.ice_storm"},
+    {"module_id": "hc.validation.mixed_delivery_chain", "kind": "rule", "rule_id": "hc.validation.mixed_delivery_chain", "mechanic_id": "hc.validation.mixed_delivery_chain.ignite"},
+    {"module_id": "hc.validation.mixed_delivery_chain", "kind": "rule", "rule_id": "hc.validation.mixed_delivery_chain", "mechanic_id": "hc.validation.mixed_delivery_chain.death"}
+  ]
+}

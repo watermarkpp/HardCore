@@ -42,8 +42,9 @@ func _run() -> void:
 		actor.max_hp=1000; actor.current_hp=1000
 		actor.direct_spell_anti_magic_points=0; actor.direct_spell_magic_defense_min=0
 		actor.direct_spell_magic_defense_max=0; actor.direct_spell_stats_valid=true
-	first.current_hp=200; second.current_hp=24
-	PlayerState.computed_stats.magic_min=100; PlayerState.computed_stats.magic_max=100
+	# The second receiver must survive its first child hit so the next death
+	# wave originates from a child-created periodic state, not an immediate hit.
+	first.current_hp=200; second.current_hp=120
 	game.player.current_mp=100; game._skill_cast_target=first; game._set_magic_locked_target(first,true)
 	check(ContentLayers.set_feature_module_enabled("hc.validation.periodic_child_chain",true),"READY enables only the default-off test module")
 	var lease: RefCounted=game._capture_action_configuration("hc.skill.wizard.ice_storm")
@@ -56,6 +57,9 @@ func _run() -> void:
 		"real 85-slot world accepts the full state and finite child promise before MP/cooldown/HP")
 	if not accepted: game.queue_free(); await get_tree().process_frame; _finish(); return
 	check(ContentLayers.set_feature_module_enabled("hc.validation.periodic_child_chain",false),"source withdrawal preserves accepted periodic producers")
+	# This trigger-only module retains release-time primary stats. Publication
+	# rebuilds them; supply the controlled input after the last publication.
+	PlayerState.computed_stats.magic_min=50; PlayerState.computed_stats.magic_max=50
 	deadline=Time.get_ticks_msec()+3000
 	while game.observed_releases==0 and Time.get_ticks_msec()<deadline: await get_tree().process_frame
 	var root_loss:=200-int(first.current_hp)
@@ -66,7 +70,7 @@ func _run() -> void:
 	await _settle(runtime)
 	check(runtime.active_count()==1 and runtime.reservation_snapshot().actions==1,
 		"root batch is gone while its accepted state still retains future child capacity")
-	for second_index in range(1,9):
+	for second_index in range(1,10):
 		game._time_domains.advance_simulation(1.0)
 		await _settle(runtime)
 	print("PERIODIC_CHILD_RESULT ",JSON.stringify({"root_loss":root_loss,"first":first.current_hp,"second":second.current_hp,

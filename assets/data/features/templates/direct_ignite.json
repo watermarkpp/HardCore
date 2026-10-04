@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "module_id": "hc.template.direct_ignite",
+  "module_version": 1,
+  "core_api_version": 1,
+  "requires": [],
+  "conflicts": [],
+  "capabilities": ["combat.post_hit", "effects.periodic"],
+  "handlers": ["hc.ignite.v1"],
+  "resource_dependencies": [],
+  "cost": {"commands_per_event": 1, "states_per_target": 1},
+  "default_enabled": false,
+  "scope": "world",
+  "activation_boundary": "world_ready",
+  "mechanics": [
+    {
+      "mechanic_id": "hc.template.direct_ignite.ice_storm",
+      "kind": "trigger",
+      "tags": ["hc.periodic"],
+      "event": "damage_committed",
+      "skill_id": "hc.skill.wizard.ice_storm",
+      "handler_id": "hc.ignite.v1",
+      "source_classes": ["direct"],
+      "dedup": "per_target_per_release",
+      "lifecycle": "until_expired",
+      "config": {"chance": 1, "fraction": 0.05, "period_usec": 1000000, "duration_usec": 4000000, "max_ticks": 4}
+    }
+  ],
+  "tests": ["tests/framework/feature_delivery_templates_test.tscn"]
+}

@@ -1,0 +1,135 @@
+{
+  "status": "PASS",
+  "read_utc": "2026-10-04T13:18:17.096795+00:00",
+  "source_content_sha256": "d1781a0f05ab5c2c765785b0167979141aeb1b6e6d4918c4d55a05bf732c600b",
+  "source_files": 3773,
+  "engine_version": "4.7.stable.official.5b4e0cb0f",
+  "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+  "checks": 159,
+  "scenes": 4,
+  "green_rows": [
+    {
+      "scene": "periodic_refresh_period_boundary_test",
+      "checks": 52,
+      "run_id": "a104d894-f4cf-446f-8387-bd6003a95fcf",
+      "invocation_id": "305be499-7c3b-4b80-8ca2-c3949bc71918",
+      "receipt_sha256": "94351673f4f372af545c6cc0646f188310d7b1c2c24f00b14aca52f8ae8e59c0",
+      "native_exit": 0,
+      "logs": [
+        {
+          "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_period_policy_green_2102_210019_464305/native_logs/periodic_refresh_period_boundary_test.stdout.log",
+          "sha256": "6a18a3ee4ec9b57c05d9bcf8106fb78240556be19aa5939ea4eb3bebd3f31646"
+        },
+        {
+          "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_period_policy_green_2102_210019_464305/native_logs/periodic_refresh_period_boundary_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_period_policy_green_2102_210019_464305/native_logs/periodic_refresh_period_boundary_test.godot.log",
+          "sha256": "7f528d918530c0201965015574de0a7c2061445d3d558442ab009193c24244ce"
+        }
+      ]
+    },
+    {
+      "scene": "feature_delivery_templates_test",
+      "checks": 57,
+      "run_id": "51b040cc-d3b0-4278-babc-8a7e5ab5a654",
+      "invocation_id": "305be499-7c3b-4b80-8ca2-c3949bc71918",
+      "receipt_sha256": "c54082521e4e5755b76ef46df22c6e071f9f471cc6bec5b6f7a4c38ba1a426ea",
+      "native_exit": 0,
+      "logs": [
+        {
+          "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_period_policy_green_2102_210019_464305/native_logs/feature_delivery_templates_test.stdout.log",
+          "sha256": "4ffb3bb6c03b011a3f898c95fea01b8c3ac3a0852196507c90d56c5e661bcc2b"
+        },
+        {
+          "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_period_policy_green_2102_210019_464305/native_logs/feature_delivery_templates_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_period_policy_green_2102_210019_464305/native_logs/feature_delivery_templates_test.godot.log",
+          "sha256": "6d4b8bb22ffbc62a1e7c63b42747c0fcdaf45f02c5e56d1469d6e34f7162201d"
+        }
+      ]
+    },
+    {
+      "scene": "periodic_refresh_horizon_test",
+      "checks": 37,
+      "run_id": "54827915-89b2-4421-975b-17413fe578b8",
+      "invocation_id": "305be499-7c3b-4b80-8ca2-c3949bc71918",
+      "receipt_sha256": "9fda069671bf3023476b6d839df89e60453e8e769c89d1daf59ea5fabb5641f0",
+      "native_exit": 0,
+      "logs": [
+        {
+          "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_period_policy_green_2102_210019_464305/native_logs/periodic_refresh_horizon_test.stdout.log",
+          "sha256": "28d895af8bcbad7e8cc4988b674af4112c1ac88082b4b5fab6aa8a35b2d66cc4"
+        },
+        {
+          "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_period_policy_green_2102_210019_464305/native_logs/periodic_refresh_horizon_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_period_policy_green_2102_210019_464305/native_logs/periodic_refresh_horizon_test.godot.log",
+          "sha256": "c8f708c5d4991701ee7398f47ad167d6c91361f08e0d5f9c462afdfc1f91f3fe"
+        }
+      ]
+    },
+    {
+      "scene": "periodic_effect_runtime_test",
+      "checks": 13,
+      "run_id": "2b5ffe57-8cef-4d8c-9692-3dec2b04610f",
+      "invocation_id": "305be499-7c3b-4b80-8ca2-c3949bc71918",
+      "receipt_sha256": "59b9f97b8dbacc8d37fcdbbf692fdf6cb49cea7023701ed50269819af77f4d3f",
+      "native_exit": 0,
+      "logs": [
+        {
+          "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_period_policy_green_2102_210019_464305/native_logs/periodic_effect_runtime_test.stdout.log",
+          "sha256": "d50f6d703a34af1193acf9b0ab19cc712545a27b8b2ae9006da6a2516aed4796"
+        },
+        {
+          "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_period_policy_green_2102_210019_464305/native_logs/periodic_effect_runtime_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_period_policy_green_2102_210019_464305/native_logs/periodic_effect_runtime_test.godot.log",
+          "sha256": "1feca48b2526026bd701ebbc3f96ed4b24c9e73538bfbb9453a399aee3944595"
+        }
+      ]
+    }
+  ],
+  "red_failures": [
+    {
+      "scene": "periodic_refresh_period_boundary_test",
+      "count": 26,
+      "failed": 2,
+      "run_id": "bb2cbc20-f6ae-4ef6-8b78-56036ff8c0ad",
+      "labels": [
+        "refresh preserves the original period when the new period is shorter",
+        "refresh preserves the original period when the new period is longer"
+      ]
+    },
+    {
+      "scene": "feature_delivery_templates_test",
+      "count": 57,
+      "failed": 13,
+      "run_id": "e6d46c1c-ba7f-40a7-b61b-e401203454bc",
+      "labels": [
+        "combination publishes through the production boundary: 0/hc.template.numeric_skills",
+        "combination publishes through the production boundary: 0/hc.template.direct_ignite",
+        "combination publishes through the production boundary: 0/hc.template.finite_chain",
+        "combination publishes through the production boundary: 1/hc.template.direct_ignite",
+        "combination publishes through the production boundary: 1/hc.template.finite_chain",
+        "combination publishes through the production boundary: 2/hc.template.finite_chain",
+        "combination publishes through the production boundary: 3/hc.template.direct_ignite",
+        "combination publishes through the production boundary: 3/hc.template.finite_chain",
+        "combination publishes through the production boundary: 5/hc.template.direct_ignite",
+        "combination publishes through the production boundary: 5/hc.template.finite_chain",
+        "combination publishes through the production boundary: 6/hc.template.finite_chain",
+        "combination publishes through the production boundary: 7/hc.template.direct_ignite",
+        "combination publishes through the production boundary: 7/hc.template.finite_chain"
+      ]
+    }
+  ],
+  "red_scope": "26/2 policy failures are the confirmed contract mismatch; 57/13 template failures are no-op setter fixture expectations, all eight source-index assertions passed",
+  "scope": "controlled compiled refresh with original HP/Batch ports and complete expiry/new-state identity checks; template formal compiler/publisher and eight combinations; not natural deadline/GPU/Android acceptance"
+}

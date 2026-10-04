@@ -1,0 +1,39 @@
+{
+    "schema_version":  1,
+    "runtime_environment":  {
+                                "project_root":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+                                "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_service_complete_20261004_1536_04ba429da139450b95874605cdd83576",
+                                "runner_process_id":  3964
+                            },
+    "invocation_id":  "9842699f-5f16-4f57-9d33-0a0c418d28b2",
+    "source_content_sha256":  "fa554a647d48d0fe644c59a37e7fb6cf087ebe25efd74b4a9bab34279f00c7e9",
+    "producers":  {
+                      "periodic_refresh_service_boundary_test":  {
+                                                                     "scene_id":  "periodic_refresh_service_boundary_test",
+                                                                     "run_id":  "ed8a6e16-5eac-498b-93dc-e66c4cb68fa8",
+                                                                     "source_content_sha256":  "fa554a647d48d0fe644c59a37e7fb6cf087ebe25efd74b4a9bab34279f00c7e9",
+                                                                     "process_exited":  true,
+                                                                     "effective_exit_code":  0,
+                                                                     "result":  "PASS",
+                                                                     "receipt_sha256":  "e39e84b35dbee32851c9c3d13b015c8f3884841b482f77f6f11e22d5385a74e2"
+                                                                 },
+                      "feature_mixed_delivery_test":  {
+                                                          "scene_id":  "feature_mixed_delivery_test",
+                                                          "run_id":  "bf6ec619-f022-40fe-a2e6-2d283a8e8fae",
+                                                          "source_content_sha256":  "fa554a647d48d0fe644c59a37e7fb6cf087ebe25efd74b4a9bab34279f00c7e9",
+                                                          "process_exited":  true,
+                                                          "effective_exit_code":  0,
+                                                          "result":  "PASS",
+                                                          "receipt_sha256":  "0c82e0c0dbf7dcc90422c2816620e393c605d7b9fa9b5cf4559cfee65c5414d6"
+                                                      },
+                      "feature_mixed_child_resource_test":  {
+                                                                "scene_id":  "feature_mixed_child_resource_test",
+                                                                "run_id":  "663b4b1c-bb08-4a1c-a1c0-a8e38872cdc8",
+                                                                "source_content_sha256":  "fa554a647d48d0fe644c59a37e7fb6cf087ebe25efd74b4a9bab34279f00c7e9",
+                                                                "process_exited":  true,
+                                                                "effective_exit_code":  0,
+                                                                "result":  "PASS",
+                                                                "receipt_sha256":  "cd773ed23addfd2313bea5a3728037d7a860d43524a9eca7e52a00e4a4584f03"
+                                                            }
+                  }
+}

@@ -1,0 +1,113 @@
+{
+  "read_utc": "2026-10-04T14:38:55.525150+00:00",
+  "status": "PASS",
+  "correction_scope": "raw archived log extraction only, previous substring omitted Godot was/were wording; does not change native business exits or receipts",
+  "rows": [
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/periodic_child_root_test.stderr.log",
+      "previous_counter": 0,
+      "corrected_lines": 1,
+      "lines": [
+        "WARNING: 8 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+      ]
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/periodic_child_g2_root_test.stderr.log",
+      "previous_counter": 0,
+      "corrected_lines": 1,
+      "lines": [
+        "WARNING: 8 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+      ]
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_periodic_child_chain_test.stderr.log",
+      "previous_counter": 0,
+      "corrected_lines": 1,
+      "lines": [
+        "WARNING: 8 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+      ]
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_child_chain_admission_test.stderr.log",
+      "previous_counter": 0,
+      "corrected_lines": 1,
+      "lines": [
+        "WARNING: 8 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+      ]
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_state_loan_lifetime_test.stderr.log",
+      "previous_counter": 0,
+      "corrected_lines": 1,
+      "lines": [
+        "WARNING: 16 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+      ]
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_state_loan_root_test.stderr.log",
+      "previous_counter": 0,
+      "corrected_lines": 1,
+      "lines": [
+        "WARNING: 8 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+      ]
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_capacity_admission_test.stderr.log",
+      "previous_counter": 0,
+      "corrected_lines": 1,
+      "lines": [
+        "WARNING: 8 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+      ]
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_batch_failure_test.stderr.log",
+      "previous_counter": 0,
+      "corrected_lines": 1,
+      "lines": [
+        "WARNING: 8 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+      ]
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/empty_extension_behavior_test.stderr.log",
+      "previous_counter": 0,
+      "corrected_lines": 1,
+      "lines": [
+        "WARNING: 8 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+      ]
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/native_logs/combined_effect_lifecycle_test.stderr.log",
+      "previous_counter": 0,
+      "corrected_lines": 1,
+      "lines": [
+        "WARNING: 8 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+      ]
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/native_logs/periodic_credit_safe_logout_test.stderr.log",
+      "previous_counter": 0,
+      "corrected_lines": 1,
+      "lines": [
+        "WARNING: 8 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+      ]
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/native_logs/natural_effect_lifecycle_test.stderr.log",
+      "previous_counter": 0,
+      "corrected_lines": 1,
+      "lines": [
+        "WARNING: 8 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+      ]
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/native_logs/feature_resource_natural_test.stderr.log",
+      "previous_counter": 0,
+      "corrected_lines": 1,
+      "lines": [
+        "WARNING: 8 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+      ]
+    }
+  ],
+  "warning_log_files": 13,
+  "unique_scenes": 13
+}

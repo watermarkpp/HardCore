@@ -1,0 +1,182 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "runtime has the real world, clock, HP port and cue owner",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "normal production ignite is enabled explicitly",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "fixture uses the normal single ignite binding",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "unreserved creates the real damage batch",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "unreserved begins its actual base HP scope",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "unreserved transfers the committed HP fact",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "unreserved owns exactly one scheduled state and actual cue before the callback",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "unreserved preserves the already committed five HP loss",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "unreserved callback retires inside one outer consumer and cannot reenter pump",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "unreserved retains exactly one successful damage delivery in the existing metrics",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "unreserved cannot reinsert the retired tick into the heap",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "unreserved retires the original cue",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "unreserved drains all promises and closes the original consumer and budget scope",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "unreserved a later original period cannot write HP or count another delivery",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "unreserved a later pump has no orphan heap or state mismatch",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "unreserved cancelled state reports one terminal outcome",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "unreserved fully retired runtime can be configured again",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "reserved action obtains a real admission ticket",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "reserved creates the real damage batch",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "reserved begins its actual base HP scope",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "reserved transfers the committed HP fact",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "reserved owns exactly one scheduled state and actual cue before the callback",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "reserved preserves the already committed five HP loss",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "reserved callback retires inside one outer consumer and cannot reenter pump",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "reserved retains exactly one successful damage delivery in the existing metrics",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "reserved cannot reinsert the retired tick into the heap",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "reserved retires the original cue",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "reserved drains all promises and closes the original consumer and budget scope",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "reserved a later original period cannot write HP or count another delivery",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "reserved a later pump has no orphan heap or state mismatch",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "reserved cancelled state reports one terminal outcome",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "reserved fully retired runtime can be configured again",
+      "passed": true
+    }
+  ],
+  "count": 32,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "15463c7a-1e30-4605-bc1a-7344e23d0b6e",
+  "passed": 32,
+  "reported_checks": 32,
+  "reported_failures": 0,
+  "run_id": "6e51108d-8feb-4418-833b-7d48322d3301",
+  "runtime_environment": {
+    "native_process_id": 13904,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/accepted_binding_guarded_related_20261005_0108/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "periodic_callback_retirement_test",
+  "schema_version": 1,
+  "source_content_sha256": "2da0511645338738205df66bb658df973b2be5802f76dac68eff43045d793f3d",
+  "status": "PASS"
+}

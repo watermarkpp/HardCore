@@ -1,0 +1,117 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "registered warrior identity",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "existing default-off critical cue registry prepares its declared resources",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "actual mapped Root reaches READY",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "actual factory creates the mapped receiver",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "receiver has actual world and life qualification",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "actual action configuration owns its nonempty resource lease",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "real Player accepts a capacity ticket before windup",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "source withdrawal leaves accepted resource ownership intact",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "original timer and Root pipeline commit base HP exactly once",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "one actual CanvasItem enters the receiver tree",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "cue lifecycle preserves committed HP and gameplay RNG",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "synchronous actor-tree observer retires logic before cue attachment returns",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "retired onset cannot register a late live cue after add_child callback",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "retirement before audio onset cannot start or register old playback",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "retired actual cue is destroyed after deferred deletion",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "retired accepted lease is released without a surviving cue",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "retired onset never produces a later periodic mutation",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "public consumer closes all shared budget scopes",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "retired test world restores the ordinary catalog",
+      "passed": true
+    }
+  ],
+  "count": 19,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "66b12233-c6e4-443c-98db-df70bf9550a3",
+  "passed": 19,
+  "reported_checks": 19,
+  "reported_failures": 0,
+  "run_id": "9637258e-68a1-4d7e-b502-e6803f2b3b92",
+  "runtime_environment": {
+    "native_process_id": 18284,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\cue_integration_green_20261005_0134",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/cue_integration_green_20261005_0134/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "feature_cue_actor_retirement_reentry_test",
+  "schema_version": 1,
+  "source_content_sha256": "04d29b688db3419bd9e19a7161f9d9a36b32d37f5fcad4fffedaec4fdaae577a",
+  "status": "PASS"
+}

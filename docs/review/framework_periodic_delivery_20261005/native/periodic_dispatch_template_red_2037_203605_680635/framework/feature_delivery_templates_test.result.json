@@ -1,0 +1,27 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "reusable module templates load through the original production catalog publisher",
+      "passed": false
+    }
+  ],
+  "count": 1,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "c9dad165-fb4d-47cd-90bf-d7c10eeb0cee",
+  "passed": 0,
+  "reported_checks": 1,
+  "reported_failures": 1,
+  "run_id": "99ddab95-0444-4ab5-8342-5374d7dabb83",
+  "runtime_environment": {
+    "native_process_id": 23740,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_template_red_2037_f12bdcf6ffb3497bb8e16bcd01ee7eb0",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_dispatch_template_red_2037_f12bdcf6ffb3497bb8e16bcd01ee7eb0/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "feature_delivery_templates_test",
+  "schema_version": 1,
+  "source_content_sha256": "c0b241d4910b47832e66b3db38a54757fa270c0aa5d02dc4642a9300178a14ce",
+  "status": "FAIL"
+}

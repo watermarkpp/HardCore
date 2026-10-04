@@ -1,0 +1,30 @@
+{
+    "schema_version":  1,
+    "runtime_environment":  {
+                                "project_root":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+                                "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_g2_initial_e0f288c3deb34cf5b5d953cd2bab8cf1",
+                                "runner_process_id":  4344
+                            },
+    "invocation_id":  "b64fa551-474f-4a1e-a3f2-6655afbb27df",
+    "source_content_sha256":  "e11f156ffd6c5b174cb73aae61f1dd93a7c52eebc087c78b785e89995d1762d3",
+    "producers":  {
+                      "periodic_child_g2_root_test":  {
+                                                          "scene_id":  "periodic_child_g2_root_test",
+                                                          "run_id":  "29b91c5b-128e-4dc2-a170-ce93b9bd6cf3",
+                                                          "source_content_sha256":  "e11f156ffd6c5b174cb73aae61f1dd93a7c52eebc087c78b785e89995d1762d3",
+                                                          "process_exited":  true,
+                                                          "effective_exit_code":  0,
+                                                          "result":  "PASS",
+                                                          "receipt_sha256":  "416beed3123373fa1d16bed5e15691721dc74ffb70e5cb05699a97525d1056eb"
+                                                      },
+                      "periodic_child_root_test":  {
+                                                       "scene_id":  "periodic_child_root_test",
+                                                       "run_id":  "c5d4ddb0-2675-43bf-8165-25074b267d99",
+                                                       "source_content_sha256":  "e11f156ffd6c5b174cb73aae61f1dd93a7c52eebc087c78b785e89995d1762d3",
+                                                       "process_exited":  true,
+                                                       "effective_exit_code":  0,
+                                                       "result":  "PASS",
+                                                       "receipt_sha256":  "dd9a2114b4818f495d26925ea4b6fbc6396c7b9777f9e49e760c5a5877f90985"
+                                                   }
+                  }
+}

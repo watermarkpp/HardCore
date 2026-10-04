@@ -1,0 +1,33 @@
+# 混合来源与子资源组合验收
+
+2026-10-04，第三树单主控，继续原Task3—5。当前真实HEAD 5d9ceb0121980ca9636d9d1cc2e19982949fbf63加继承dirty；本增量尚未commit/push或审计。主树、第二树、真实存档、冻结Streaming与真实index保持。已有原周期合同33场景1252项属于d1781a0f阶段，不能外推新增混合专项源码。
+
+## 验收范围
+
+两个显式测试场景，各生成8种宝石／符文／即时恢复选择。词缀取唯一Drop v3生产creator的有效实例，宝石／符文按既有ItemTransactionPort／Journal／writer完成实际持久插入；装备与load_save重建正式贡献。实际Root/Player/SceneTreeTimer与唯一planner、HP、空间查询执行已接受动作，再撤回来源，检验派生义务仍兑现。
+
+第一场保留存活目标，完整交付所有不同源的四周期状态及即时恢复。第二场真实直接致死，立即撤碰撞，由正式动态Root子动作命中初始范围外的合法接收者、点燃并消费已接受的确切AudioStream。新验证模块hc.validation.mixed_delivery_chain默认关闭，机制ID为hc.validation.mixed_delivery_chain.ignite/death；只在显式测试registry选用，不激活正式主registry、收费或平衡。
+
+状态、回执、根承诺、子动作、资源所有权与原RNG/MP分别断言；音频沿既有池和入场规则，观察实际开始的播放器资源，不要求每一并发源都绕过原音频规则。8行trace是有界测试证据，不是生产日志或第二伤害/时钟权威。模拟钟由夹具推进、AI停用；本专项不宣称自然持续战斗、GPU/听感、Android或整个Task3—5完成。
+
+## 第一原生记录与分类
+
+periodic_dispatch_mixed_first_2204_220356_655728，内容ef641304646b6c1eaad43c13a0ee64fa66644f80ec663e567df581346cdc48b2；两场均完整native exit1、无超时与引擎错误，source保持。
+
+- feature_mixed_delivery_test：336检查110FAIL，run4800c749-3337-42e2-a40a-23a5ebf2d79e。
+- feature_mixed_child_resource_test：344检查94FAIL，runb8bc1758-b687-48a8-a0c8-b82fc3df00d9。
+- 共同invocation fd5b3756-8375-44ec-ad5a-83a28d4fdaf2。两原trace已与完整receipt/native原日志归档，失败不改标签。
+
+首先确认夹具同步启用额外模块时没有携带当前非空资源准备租约，正式入口拒绝；其后事务返回socket_fixture_disabled等是上游前置失败的结果。正式PlayerState要求完整有效resource lease，且已有异步启用接口；本次只令新夹具使用正式异步准备，不放宽生产校验。另有基础装备保存前后严格字典相等失败，当前已增加精确字段及类型诊断，原因尚未结案。原HP、周期、伤害、目标数、来源、经济所有权和资源断言保持，后续原生结果NOT_RUN。
+
+本次退出两日志各有8 ObjectDB告警实例，原样保留，不称零泄漏或长期有限内存已通过。GLM mixed-delivery-identity-12调用因本地INVALID_LINE_RANGE未推理完成，原请求及FAIL保存，无自动重试、返回模型或usage声明；主控按七份实际文件完整JSON核对为6模块／7机制／8登记绑定，无缺失或身份错配，该本地表不替代原生验收。
+
+## 实际异步路径、精确数据诊断和最终有界交付
+
+异步复测periodic_dispatch_mixed_async_2226_222702_676084，受测内容afe81d8e0c753f348d352fff1a2476538b69a245332a53be855d344ad1a4a480：存活场380检查8FAIL，致死子效果场388检查40FAIL，两原生exit1、无超时或引擎错误，完整receipt与原trace保留。八组历史装备的精确JSON值均一致；失败的直接Dictionary比较来自原JSON存储边界int到float的类型表示，未发现字段重洗或数值变更。新夹具现在比较全部精确序列化字段并重新通过原物品validator，未改Codec或存档格式。
+
+致死夹具最初用40HP，但正式装备与原伤害公式的六组实际损失25—29，没有形成预定的首次致死。移除人工computed_stats覆盖，保留真实装备派生与释放时主属性权威，只把测试拥有的初始目标HP设为20，以确实进入首次致死边界；目标数、四个原周期、来源集合、原伤害公式、资源和经济断言均保持。旧FAIL保留，不把夹具未触发致死写成生产子链缺陷。
+
+GREEN periodic_dispatch_mixed_green_2236_223603_472401：受测内容e34257402209922606d0b0ebae9a97b5892e12ad62f82451d6e41f35a69b781b，3778运行文件，两场16组共768检查PASS。存活场380项，run22c88004-f292-4170-b513-64a2ebc88c4c；致死场388项，run4dbf82d8-56bc-4221-81bc-9a27bb1b38a7。共同invocation651160b8-7e16-492d-85bd-dbbc3c09f374，原生exit0、无超时或引擎错误。主控已核对完整checks、两个mask0—7集合、真实来源身份、每来源四次周期HP、一次直接恢复、致死20点提交与20点子损失、即时碰撞移除、真实AudioStream身份、原RNG/MP及全部所有者收尾。完整身份、trace/receipt/native日志SHA和当前原字节复核在outputs/framework_v2/mixed_delivery_20261004/GREEN_ASSOCIATIONS.json。
+
+两场各有8 ObjectDB退出告警实例，保持开放。测试模拟钟由夹具有界推进，属于真实生产API/保存/装备/起手/HP/资源消费链的受控组合；不称自然服务截止时间、GPU、Android或整体Task3—5验收。之后仅将正常JSON表示差异的诊断打印条件改为真正的精确序列化值不同，断言不变；该改动后的最终同源码回归尚NOT_RUN，前述GREEN只绑定其受测指纹。

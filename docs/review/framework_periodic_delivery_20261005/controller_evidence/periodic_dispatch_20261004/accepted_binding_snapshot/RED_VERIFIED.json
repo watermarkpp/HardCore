@@ -1,0 +1,20 @@
+{
+  "status": "PASS",
+  "classification": "Verified native RED; acceptance-proof API absent. Native remains FAIL. No parse/environment failure.",
+  "read_utc": "2026-10-04T16:04:00.940507+00:00",
+  "native_exit": 1,
+  "complete_checks": 8,
+  "failed_checks": 1,
+  "run_id": "76fff047-e500-4702-9d26-e750ce1404e2",
+  "invocation_id": "5b6e0ef3-6a7c-43d1-999e-9e9bd4b02c0b",
+  "source_content_sha256": "5a02fdffd14807043b427c002797884fb4df86d1fe88fae761c90b8d4d301d23",
+  "failure": [
+    {
+      "id": 6,
+      "label": "a runtime-issued ticket can inspect its accepted binding snapshot without consuming release",
+      "passed": false
+    }
+  ],
+  "receipt_sha256": "09f76277be3e547ffd31a892f4bf1d1a336dc525838ab5920f9851ec8d199271",
+  "evidence": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_snapshot_red_20261005_000223_406798"
+}

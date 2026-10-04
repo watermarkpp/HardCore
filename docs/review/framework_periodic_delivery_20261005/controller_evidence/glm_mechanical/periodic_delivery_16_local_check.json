@@ -1,0 +1,97 @@
+{
+  "status": "PASS",
+  "recorded_utc": "2026-10-04T18:28:07.498048+00:00",
+  "task_id": "periodic-delivery-id-table-16-20261005",
+  "server_task_id": "df882d0a-3806-41eb-b3a6-d98ca888cc46",
+  "file_count": 10,
+  "module_count": 6,
+  "mechanic_count": 11,
+  "supplied_registry_bindings": 11,
+  "sources": [
+    {
+      "path": "assets\\data\\features\\validation\\periodic_chain.json",
+      "start_line": 1,
+      "end_line": 18,
+      "sha256": "3b1adbb4ffe2fb2c536f9ba789d713b70ab8dc6f429f5b6612b9281a7bec15bc",
+      "bytes": 1285
+    },
+    {
+      "path": "assets\\data\\features\\validation\\periodic_chain_registry.json",
+      "start_line": 1,
+      "end_line": 8,
+      "sha256": "2cd1aa36f9c364d1aa09e960c4d7067fc6cc0f5c0cb77ec8899dccf5bdc6fad1",
+      "bytes": 484
+    },
+    {
+      "path": "assets\\data\\features\\validation\\periodic_chain_g2.json",
+      "start_line": 1,
+      "end_line": 18,
+      "sha256": "f49786024efd0a13fd9a4169ed025280638d2f667cefcda549066d3e5ce25a06",
+      "bytes": 1297
+    },
+    {
+      "path": "assets\\data\\features\\validation\\periodic_chain_g2_registry.json",
+      "start_line": 1,
+      "end_line": 8,
+      "sha256": "1f5360d4ef261b13c4f8954f9199b2120457b76dee7cea741343374770a311c2",
+      "bytes": 508
+    },
+    {
+      "path": "assets\\data\\features\\templates\\numeric_skills.json",
+      "start_line": 1,
+      "end_line": 32,
+      "sha256": "20a143faa1ae83d4cb749e30e0cabf729406c7a0bcfd02d61722628cdb48d94c",
+      "bytes": 974
+    },
+    {
+      "path": "assets\\data\\features\\templates\\direct_ignite.json",
+      "start_line": 1,
+      "end_line": 30,
+      "sha256": "9e707452817391bafaa63e85162774b354f201e1f7e7fe17d3fd6cdb7871f3a3",
+      "bytes": 990
+    },
+    {
+      "path": "assets\\data\\features\\templates\\finite_chain.json",
+      "start_line": 1,
+      "end_line": 42,
+      "sha256": "3e785bf533ff281be2969bdb3d64d0efa0a25eb53a2393fe547baaedd0a5397a",
+      "bytes": 1478
+    },
+    {
+      "path": "assets\\data\\features\\templates\\template_registry.json",
+      "start_line": 1,
+      "end_line": 15,
+      "sha256": "3445d9bd1886ef9bfa80572c2d4677a4a5f814f49e1108604568483a5123ec55",
+      "bytes": 1196
+    },
+    {
+      "path": "assets\\data\\features\\validation\\mixed_delivery_chain.json",
+      "start_line": 1,
+      "end_line": 43,
+      "sha256": "1846a4c2138e4209016a8336ae2e236ee1e69f26457de2bf4f83ba73d48ae9cf",
+      "bytes": 1630
+    },
+    {
+      "path": "assets\\data\\features\\validation\\mixed_delivery_registry.json",
+      "start_line": 1,
+      "end_line": 21,
+      "sha256": "db04e7bb2e4489c6f232b4b5096405684e2b6c8963dae5ef481cf6cd5c9161fa",
+      "bytes": 1918
+    }
+  ],
+  "elapsed_seconds": 21.547,
+  "endpoint": "https://ark.cn-beijing.volces.com/api/coding/v3/responses",
+  "model_requested": "glm-5.3-flash",
+  "response_model": "glm-5-3-flash",
+  "returned_identity": "unverified",
+  "usage": {
+    "input_tokens": 5496,
+    "output_tokens": 1440,
+    "total_tokens": 6936,
+    "reasoning_tokens": 227
+  },
+  "complete": true,
+  "truncated": false,
+  "candidate_matches_local_bytes_and_lines": true,
+  "scope": "Only mechanical IDs and literal bindings within the ten supplied authoring JSON files. External references are excluded, not declared absent. No engineering/acceptance approval."
+}

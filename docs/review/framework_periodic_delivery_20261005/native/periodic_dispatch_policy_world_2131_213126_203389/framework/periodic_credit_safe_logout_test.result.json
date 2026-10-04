@@ -1,0 +1,207 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "real production persistence without test_mode bypass",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "official startup upgrade gate completes in isolated production user data { \"success\": true, \"reason\": \"already_completed\", \"backup_path\": \"user://save_upgrades/framework_identity_v1\", \"profiles\": [\"1791120697_9556\"] }",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "A created through official profile service",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "A accepts registered prerequisite-free kill quest through its sole owner",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "real durable A baseline",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "B created through official profile service",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "real durable B baseline",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "A/B have distinct profile identities and contract-valid clock generations, including legacy empty namespaces",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "A officially selected before world creation { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"primary\", \"path\": \"user://characters/1791120724_1232.json\" }",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "actual authored world ready",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "registered quest receiver uses real mapped spawn and death signal",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "initial queue uses its real idle flags without forced suppression",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "default-off module explicitly enabled only for this test",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "qualified batch is owned by actual Root",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "actual committed fact admits exactly one pending lethal periodic state",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "accepted state retains exact A credit",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "withdrawal leaves the accepted state alive and restores default-off qualification",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "narrow boundary is real lethal HP before deferred actor callback",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "real return handler reaches visual transition only after guard success",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "logout guard synchronously closes the deferred actor death exactly once",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "actual death settlement and prepared writer drain before transition",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "A is still active when its sole reward owner applies exactly one kill",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "A quest objective increments exactly once in the real reward plan",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "logout has an actual durable save success",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "A death and logout leave B profile bytes unchanged",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "accepted effect terminates without leftover mutation handles or hidden failure",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "real death/drop pipeline has exactly one committed terminal job",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "original queued callback neither repeats rewards nor consumes old drop RNG",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "B officially selected after guarded old-world retirement",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "B XP is not contaminated by A",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "B quests are not contaminated by A",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "B world identity is not contaminated by A",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "A reloads through the real saved profile/world ledger",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "A owner and persisted kill gain survive role reload",
+      "passed": true
+    },
+    {
+      "id": 35,
+      "label": "A persisted quest gain remains exactly one",
+      "passed": true
+    },
+    {
+      "id": 36,
+      "label": "real profile/world receipts are fully consumed",
+      "passed": true
+    },
+    {
+      "id": 37,
+      "label": "write cold-process expectation from this successful producer only",
+      "passed": true
+    }
+  ],
+  "count": 37,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "f4641a2f-f10e-44c7-ac76-7db4ca4cf287",
+  "passed": 37,
+  "reported_checks": 37,
+  "reported_failures": 0,
+  "run_id": "9cfd735d-5647-4f67-a3ff-150606201472",
+  "runtime_environment": {
+    "native_process_id": 20540,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_policy_world_2131_25ebb773954b476494fa0b0f6264bde4",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_dispatch_policy_world_2131_25ebb773954b476494fa0b0f6264bde4/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "periodic_credit_safe_logout_test",
+  "schema_version": 1,
+  "source_content_sha256": "d1781a0f05ab5c2c765785b0167979141aeb1b6e6d4918c4d55a05bf732c600b",
+  "status": "PASS"
+}

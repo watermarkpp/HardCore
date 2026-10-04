@@ -32,7 +32,7 @@ func _screen_to_ground(value: Vector2) -> Vector2: return (value+Vector2(50,25))
 
 func _lineage(release: String,source_class: String) -> Dictionary:
 	return {"contract_id":"hardcore.combat.chain_context.v1","root_release_id":"chain:root:1",
-		"release_id":release,"parent_release_id":"chain:root:1" if source_class=="child" else "",
+		"release_id":release,"parent_release_id":"chain:root:1" if source_class!="direct" else "",
 		"root_skill_id":"hc.skill.wizard.ice_storm","generation":1 if source_class=="child" else 0,
 		"maximum_generation":2}
 
@@ -57,7 +57,7 @@ func _run() -> void:
 	var combat: Variant = Combat.new()
 	add_child(combat)
 	for source_class: String in ["direct","periodic","child"]:
-		var release := "chain:child:1" if source_class=="child" else "chain:root:1"
+		var release := "chain:child:1" if source_class=="child" else "chain:tick:1000000" if source_class=="periodic" else "chain:root:1"
 		var lineage := _lineage(release,source_class)
 		var credit := {"profile_id":PlayerState.active_profile_id}
 		var created: Dictionary = batch_type.create(world,release,"hc.skill.wizard.ice_storm",[],credit,0,null,null,lineage,source_class)
@@ -112,7 +112,7 @@ func _run() -> void:
 			"invalid root lineage rejected before HP: "+JSON.stringify(candidate))
 	_check(not batch_type.create(world,"chain:root:1","hc.skill.wizard.ice_storm",[],{},0,null,null,{},"child").success,
 		"unscoped child damage cannot impersonate a root direct batch")
-	var periodic: Dictionary = batch_type.create(world,"chain:root:1","hc.skill.wizard.ice_storm",[],{},0,null,null,_lineage("chain:root:1","periodic"),"periodic")
+	var periodic: Dictionary = batch_type.create(world,"chain:tick:1000000","hc.skill.wizard.ice_storm",[],{},0,null,null,_lineage("chain:tick:1000000","periodic"),"periodic")
 	periodic.batch.begin_base_scope()
 	var immune := _target(); immune.replace_actor_capability_source("fixture:periodic:immune",["hc.immune.periodic"])
 	var independent := RandomNumberGenerator.new(); independent.seed=93827
@@ -150,7 +150,7 @@ func _run() -> void:
 	invalid_actor.queue_free(); await get_tree().process_frame
 	# Audited wrong-public-entry and Combat projection recovery boundaries.
 	for source_class: String in ["periodic","child"]:
-		var release := "chain:child:1" if source_class=="child" else "chain:root:1"
+		var release := "chain:child:1" if source_class=="child" else "chain:tick:1000000" if source_class=="periodic" else "chain:root:1"
 		var made: Dictionary=batch_type.create(world,release,"hc.skill.wizard.ice_storm",[],{},0,null,null,_lineage(release,source_class),source_class)
 		_check(made.success,source_class+" wrong-entry probe owns a legal finite batch")
 		if not made.success: continue

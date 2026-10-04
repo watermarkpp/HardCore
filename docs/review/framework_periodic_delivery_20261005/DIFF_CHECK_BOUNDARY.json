@@ -1,0 +1,32 @@
+{
+  "source_and_owned_docs_exit": 0,
+  "default_full_check_exit": 2,
+  "crlf_aware_full_check_exit": 2,
+  "original_evidence_warning_paths": [
+    "docs/review/framework_periodic_delivery_20261005/controller_evidence/periodic_dispatch_20261004/before_period_boundary_review/owned_source.diff",
+    "docs/review/framework_periodic_delivery_20261005/controller_evidence/periodic_dispatch_20261004/owned_source.diff",
+    "docs/review/framework_periodic_delivery_20261005/native/accepted_binding_final_related_20261005_003154_814782/raw/feature_state_loan_lifetime_test.godot.log",
+    "docs/review/framework_periodic_delivery_20261005/native/accepted_binding_final_related_20261005_003154_814782/raw/feature_state_loan_lifetime_test.stdout.log",
+    "docs/review/framework_periodic_delivery_20261005/native/accepted_binding_guarded_related_final_010457_952896/raw/feature_state_loan_lifetime_test.godot.log",
+    "docs/review/framework_periodic_delivery_20261005/native/accepted_binding_guarded_related_final_010457_952896/raw/feature_state_loan_lifetime_test.stdout.log",
+    "docs/review/framework_periodic_delivery_20261005/native/periodic_cue_final_related_014327_801663/raw/feature_state_loan_lifetime_test.godot.log",
+    "docs/review/framework_periodic_delivery_20261005/native/periodic_cue_final_related_014327_801663/raw/feature_state_loan_lifetime_test.stdout.log",
+    "docs/review/framework_periodic_delivery_20261005/native/periodic_dispatch_fatal_observer_green_185244_833515/native_logs/feature_state_loan_lifetime_test.godot.log",
+    "docs/review/framework_periodic_delivery_20261005/native/periodic_dispatch_fatal_observer_green_185244_833515/native_logs/feature_state_loan_lifetime_test.stdout.log",
+    "docs/review/framework_periodic_delivery_20261005/native/periodic_dispatch_fatal_observer_green_185244_833515/raw/feature_state_loan_lifetime_test.godot.log",
+    "docs/review/framework_periodic_delivery_20261005/native/periodic_dispatch_fatal_observer_green_185244_833515/raw/feature_state_loan_lifetime_test.stdout.log",
+    "docs/review/framework_periodic_delivery_20261005/native/periodic_dispatch_final_related_190109_699642/native_logs/feature_state_loan_lifetime_test.godot.log",
+    "docs/review/framework_periodic_delivery_20261005/native/periodic_dispatch_final_related_190109_699642/native_logs/feature_state_loan_lifetime_test.stdout.log",
+    "docs/review/framework_periodic_delivery_20261005/native/periodic_dispatch_final_related_190109_699642/raw/feature_state_loan_lifetime_test.godot.log",
+    "docs/review/framework_periodic_delivery_20261005/native/periodic_dispatch_final_related_190109_699642/raw/feature_state_loan_lifetime_test.stdout.log",
+    "docs/review/framework_periodic_delivery_20261005/native/periodic_dispatch_identity_green_171942_699286/raw/feature_state_loan_lifetime_test.godot.log",
+    "docs/review/framework_periodic_delivery_20261005/native/periodic_dispatch_identity_green_171942_699286/raw/feature_state_loan_lifetime_test.stdout.log",
+    "docs/review/framework_periodic_delivery_20261005/native/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_state_loan_lifetime_test.godot.log",
+    "docs/review/framework_periodic_delivery_20261005/native/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_state_loan_lifetime_test.stdout.log",
+    "docs/review/framework_periodic_delivery_20261005/native/periodic_dispatch_policy_related_2114_211428_922565/raw/feature_state_loan_lifetime_test.godot.log",
+    "docs/review/framework_periodic_delivery_20261005/native/periodic_dispatch_policy_related_2114_211428_922565/raw/feature_state_loan_lifetime_test.stdout.log",
+    "docs/review/framework_periodic_delivery_20261005/peer_handoff/cue_actor_retirement_delivery.patch",
+    "docs/review/framework_periodic_delivery_20261005/source_review.diff"
+  ],
+  "handling": "Source/test/default-off authoring and owned docs gate PASS. Preserve raw native output and literal patch contexts. No source whitespace exception, no runner allowlist changes."
+}

@@ -1,0 +1,32 @@
+{
+  "time_utc": "2026-10-04T13:58:01.743524+00:00",
+  "status": "NOT_RUN",
+  "paths": [
+    {
+      "path": "assets/data/features/validation/mixed_delivery_registry.json",
+      "sha256": "db04e7bb2e4489c6f232b4b5096405684e2b6c8963dae5ef481cf6cd5c9161fa",
+      "lines": 21
+    },
+    {
+      "path": "assets/data/features/validation/mixed_delivery_chain.json",
+      "sha256": "1846a4c2138e4209016a8336ae2e236ee1e69f26457de2bf4f83ba73d48ae9cf",
+      "lines": 43
+    },
+    {
+      "path": "tests/framework/feature_mixed_delivery_test.gd",
+      "sha256": "324108e2d546fd1fb7977ccd78ab539fb67cd3298e3fbc0b0cfddb29ecbe5f02",
+      "lines": 208
+    },
+    {
+      "path": "tests/framework/feature_mixed_delivery_test.tscn",
+      "sha256": "b20f5c1c0333b1be28bac9035be30cda62ca4a50fb66b8136097c091e4e3124a",
+      "lines": 6
+    },
+    {
+      "path": "tests/framework/feature_mixed_child_resource_test.tscn",
+      "sha256": "1d6bc20523bc0d1f6336a284261fe0c9d3a1a6057db5258d65eac78ff1ab2f24",
+      "lines": 7
+    }
+  ],
+  "scope": "eight item/writer/Root combinations per scene, nonfatal and child fatal/resource, original HP/planner/writer/RNG; test owned simulation steps, not natural/GPU/Android"
+}

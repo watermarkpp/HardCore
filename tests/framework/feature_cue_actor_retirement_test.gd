@@ -1,0 +1,181 @@
+extends Node
+
+const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
+const Root := preload("res://tests/framework/fixtures/lease_probe_root.gd")
+const Fixture := preload("res://tests/helpers/formal_world_skill_fixture.gd")
+const Cue := preload("res://scripts/features/presentation/ignite_cue.gd")
+const Actor := preload("res://scripts/features/contracts/actor_ref.gd")
+const Budget := preload("res://scripts/layers/runtime/execution/frame_budget.gd")
+const PACKAGE := "res://assets/data/features/validation/resource_cue_registry.json"
+const AUDIO := "res://assets/audio/sfx/client/137__M26-3.wav"
+@export var retire_during_cue_attach := false
+var proof := Proof.new()
+var failures: Array[String] = []
+var game: Node
+var target: EnemyActor
+var played: Array[Dictionary] = []
+var attach_callbacks := 0
+var cue_seen := WeakRef.new()
+
+func check(value: bool, label: String) -> void:
+	proof.record(value, label)
+	if not value: failures.append(label)
+
+func _ready() -> void:
+	_run.call_deferred()
+
+func _observe_audio(event: Dictionary) -> void:
+	if event.get("context", {}).has("feature_effect_handle"):
+		played.append(event.duplicate(true))
+
+func _observe_child(child: Node) -> void:
+	if child.get_script() != Cue: return
+	attach_callbacks += 1
+	cue_seen = weakref(child)
+	# Real SceneTree notification between add_child and the caller's return.
+	# This observer is deliberately injected, not claimed as a natural UI flow.
+	if retire_during_cue_attach and attach_callbacks == 1:
+		game._feature_effect_runtime.clear()
+
+func _drain(runtime: RefCounted) -> void:
+	for frame in range(120):
+		runtime.pump()
+		if runtime.pending_count() == 0 and not runtime.has_due(): return
+		await get_tree().process_frame
+	check(false, "bounded public consumer reaches its current service boundary")
+
+func _run() -> void:
+	PlayerState.test_mode = true
+	PlayerState.reset_progress(false)
+	check(PlayerState.set_profession_identity("hc.profession.warrior"), "registered warrior identity")
+	PlayerState.level = 50
+	PlayerState.learned_skills = {"hc.skill.warrior.fire_sword": 3}
+	PlayerState.recalculate_stats(false)
+	var ready: bool = await ContentLayers.reload_feature_catalog_async(PACKAGE)
+	check(ready, "existing default-off critical cue registry prepares its declared resources")
+	if not ready: _finish(); return
+	game = Root.new()
+	add_child(game)
+	var deadline := Time.get_ticks_msec() + 20000
+	while not game.gameplay_input_is_enabled() and Time.get_ticks_msec() < deadline:
+		await get_tree().process_frame
+	check(game.gameplay_input_is_enabled(), "actual mapped Root reaches READY")
+	if not game.gameplay_input_is_enabled(): await _cleanup(); _finish(); return
+	target = await Fixture.prepare_target(self, game, game.player, 19, "cue_actor_retirement")
+	check(target != null, "actual factory creates the mapped receiver")
+	if target == null: await _cleanup(); _finish(); return
+	game.set_process(false)
+	game.set_physics_process(false)
+	game.player.set_physics_process(false)
+	for actor: Node in get_tree().get_nodes_in_group("enemies"): actor.set_physics_process(false)
+	target.max_hp = 10000
+	target.current_hp = 10000
+	target.direct_spell_anti_magic_points = 0
+	target.direct_spell_magic_defense_min = 0
+	target.direct_spell_magic_defense_max = 0
+	target.direct_spell_stats_valid = true
+	game.player.attack_min = 100
+	game.player.attack_max = 100
+	game.player.current_mp = 100
+	game.player.fire_sword_enabled = true
+	game.player.half_moon_enabled = false
+	game.player.thrusting_enabled = false
+	game._audio_runtime_service.event_started.connect(_observe_audio)
+	target.child_entered_tree.connect(_observe_child)
+	var old_ref: RefCounted = Actor.capture(game._world_context, target)
+	check(old_ref != null, "receiver has actual world and life qualification")
+	var slot: String = str(target.get_meta("spawn_slot_id"))
+	var position: Vector2 = target.global_position
+	var lease: RefCounted = game._capture_melee_configuration()
+	check(lease != null and lease.resource_lease() != null, "actual action configuration owns its nonempty resource lease")
+	if lease == null: await _cleanup(); _finish(); return
+	var resource_owner: WeakRef = weakref(lease.resource_lease())
+	var accepted: bool = game.player.request_attack_toward(Vector2.RIGHT, true, target.get_instance_id(), lease)
+	check(accepted and lease.effect_reservation() != null, "real Player accepts a capacity ticket before windup")
+	if not accepted: lease = null; await _cleanup(); _finish(); return
+	check(ContentLayers.set_feature_module_enabled("hc.ignite", false)
+		and ContentLayers.set_feature_module_enabled("hc.ignite_cue_assets", false),
+		"source withdrawal leaves accepted resource ownership intact")
+	deadline = Time.get_ticks_msec() + 3000
+	while game.observed_releases == 0 and Time.get_ticks_msec() < deadline:
+		await get_tree().process_frame
+	check(game.observed_releases == 1 and target.current_hp < 10000, "original timer and Root pipeline commit base HP exactly once")
+	var base_hp: int = target.current_hp
+	var rng: int = game._rng.state
+	var runtime: RefCounted = game._feature_effect_runtime
+	await _drain(runtime)
+	var port: RefCounted = runtime.presentation()
+	check(attach_callbacks == 1, "one actual CanvasItem enters the receiver tree")
+	check(game._rng.state == rng and target.current_hp == base_hp, "cue lifecycle preserves committed HP and gameplay RNG")
+	if retire_during_cue_attach:
+		check(runtime.active_count() == 0 and runtime.heap_count() == 0 and runtime.pending_count() == 0,
+			"synchronous actor-tree observer retires logic before cue attachment returns")
+		check(port.node_count() == 0 and port._nodes.is_empty(),
+			"retired onset cannot register a late live cue after add_child callback")
+		check(played.is_empty() and port._audio_handles.is_empty(),
+			"retirement before audio onset cannot start or register old playback")
+		lease = null
+		await get_tree().process_frame
+		await get_tree().process_frame
+		check(cue_seen.get_ref() == null, "retired actual cue is destroyed after deferred deletion")
+		check(resource_owner.get_ref() == null, "retired accepted lease is released without a surviving cue")
+		game._time_domains.advance_simulation(1.0)
+		await _drain(runtime)
+		check(target.current_hp == base_hp and runtime.errors.is_empty(), "retired onset never produces a later periodic mutation")
+	else:
+		check(runtime.active_count() == 1 and port.node_count() == 1 and played.size() == 1,
+			"accepted state owns one actual cue and one prepared audio onset")
+		if played.size() == 1:
+			var request: Dictionary = played[0]
+			var player: AudioStreamPlayer = game._audio_runtime_service._event_players[int(request.pool_index)]
+			check(is_same(player.stream, resource_owner.get_ref().resource_at(AUDIO)),
+				"actual AudioStreamPlayer consumes the exact accepted stream")
+			var handle: String = str(request.context.feature_effect_handle)
+			port.refresh(handle, 9)
+			check(port.node_count() == 1 and played.size() == 1, "refresh keeps one cue without replaying audio")
+			var bound: Dictionary = game.feature_world_capacity_bound()
+			target.queue_free()
+			check(old_ref.resolve(false) == null, "queued actor immediately loses its original mutation qualification")
+			var replacement: EnemyActor = game._spawn_enemy(GameData.get_monster_by_id(19), position, false, -1.0,
+				{"respawn_enabled": false, "spawn_slot_id": slot})
+			check(replacement != null and game.feature_world_capacity_bound() == bound,
+				"same declared slot admits a new life without growing the world bound")
+			if replacement != null:
+				replacement.set_physics_process(false)
+				var replacement_hp: int = replacement.current_hp
+				lease = null
+				await get_tree().process_frame
+				await get_tree().process_frame
+				check(cue_seen.get_ref() == null, "actor destruction also destroys its actual child cue")
+				# Existing contract allows logic to retire at its next due service.
+				game._time_domains.advance_simulation(1.0)
+				await _drain(runtime)
+				check(runtime.active_count() == 0 and runtime.heap_count() == 0
+					and port.node_count() == 0 and port._audio_handles.is_empty(),
+					"old actor state and exact playback retire at the existing due boundary")
+				check(replacement.current_hp == replacement_hp and game._rng.state == rng,
+					"old delayed service cannot mutate replacement life or gameplay RNG")
+				port.stop(handle); port.stop(handle); port.clear(); port.clear()
+				check(port.node_count() == 0 and port._audio_handles.is_empty(), "repeated stop and clear remain empty")
+				await get_tree().process_frame
+				check(resource_owner.get_ref() == null, "last accepted state and cue release the withdrawn lease")
+	check(Budget.snapshot().open_scopes == 0, "public consumer closes all shared budget scopes")
+	print("CUE_ACTOR_RETIREMENT_TRACE ", JSON.stringify({"reentry": retire_during_cue_attach,
+		"actor": old_ref.identity() if old_ref != null else {}, "audio_requests": played,
+		"attach_callbacks": attach_callbacks, "events": port.events, "errors": runtime.errors}))
+	lease = null
+	port.clear()
+	await _cleanup()
+	_finish()
+
+func _cleanup() -> void:
+	if is_instance_valid(game): game.queue_free()
+	await get_tree().process_frame
+	check(ContentLayers.reload_feature_catalog(), "retired test world restores the ordinary catalog")
+
+func _finish() -> void:
+	var id := "feature_cue_actor_retirement_reentry_test" if retire_during_cue_attach else "feature_cue_actor_retirement_test"
+	var written: bool = proof.write_receipt(id, proof.records.size(), failures.size())
+	print("FEATURE_CUE_ACTOR_RETIREMENT_", "PASS" if written and failures.is_empty() else "FAIL",
+		" checks=", proof.records.size(), " failures=", failures)
+	get_tree().quit(0 if written and failures.is_empty() else 1)

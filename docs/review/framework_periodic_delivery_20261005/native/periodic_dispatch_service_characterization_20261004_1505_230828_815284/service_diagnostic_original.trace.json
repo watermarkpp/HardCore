@@ -1,0 +1,42 @@
+{
+  "invocation_id": "14b3066a-bad2-444b-8e12-9d2f32c4f962",
+  "rows": [
+    {
+      "accepted_horizon_ticks": 4000,
+      "deadline_acceptance": "NOT_RUN",
+      "delivered_sample_ticks": 2231,
+      "elapsed_wall_usec": 8001712,
+      "fully_drained": true,
+      "future_ticks_not_run": 0,
+      "hp": 1977679,
+      "maximum_actual_lateness_usec": 3999000,
+      "maximum_epoch_overrun_usec": 9165,
+      "maximum_quantum_usec": 10365,
+      "original_authored_ticks": 4,
+      "original_period_usec": 1000,
+      "reachability": "controlled compiled Runtime API; production author replacement while world active not established",
+      "refresh_authored_ticks": 4,
+      "service_epochs": 1161
+    },
+    {
+      "accepted_horizon_ticks": 4000000,
+      "deadline_acceptance": "NOT_RUN",
+      "delivered_sample_ticks": 1024,
+      "elapsed_wall_usec": 3530090,
+      "fully_drained": false,
+      "future_ticks_not_run": 3998976,
+      "hp": 1989749,
+      "maximum_actual_lateness_usec": 1023,
+      "maximum_epoch_overrun_usec": 1375,
+      "maximum_quantum_usec": 1662,
+      "original_authored_ticks": 4,
+      "original_period_usec": 1,
+      "reachability": "controlled compiled Runtime API; production author replacement while world active not established",
+      "refresh_authored_ticks": 4,
+      "service_epochs": 514
+    }
+  ],
+  "run_id": "5c90bdf5-3952-4c12-a8fe-5afa32183b93",
+  "scope": "controlled compiled configuration and real HP/Batch/budget characterization; not Root author reload or natural deadline acceptance",
+  "source_content_sha256": "80866f1974d564ac4fd63e237bcca27d375804e4e796cb4af5993c17ba578a32"
+}

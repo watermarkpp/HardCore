@@ -1,0 +1,112 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "registered wizard identity",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "formal registry accepts the finite direct/periodic/child death chain without allowing periodic ignite",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "actual mapped world reaches READY",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "real factory/index/projection supplies the initial receiver",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "later mapped receivers use declared factory slots",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "READY enables only the default-off test module",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "one accepted snapshot freezes ignite and death subscriptions",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "real 85-slot world accepts the full state and finite child promise before MP/cooldown/HP",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "source withdrawal preserves accepted periodic producers",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "root hit survives; this chain must start with a real periodic death",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "root batch is gone while its accepted state still retains future child capacity",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "periodic HP commits cause the two real death waves and child HP creates later ignite",
+      "passed": false
+    },
+    {
+      "id": 13,
+      "label": "periodic deaths immediately remove collisions",
+      "passed": false
+    },
+    {
+      "id": 14,
+      "label": "two finite periodic death branches execute exactly once",
+      "passed": false
+    },
+    {
+      "id": 15,
+      "label": "child hits feed real later periodic states instead of being discarded",
+      "passed": false
+    },
+    {
+      "id": 16,
+      "label": "all periodic producers/child consumers/receipts/capacity retire at the complete terminal boundary",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "periodic and child work preserve old RNG streams and never charge MP again",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "retired world restores the original default registry",
+      "passed": true
+    }
+  ],
+  "count": 18,
+  "engine_version": "4.7-stable (official)",
+  "failed": 4,
+  "invocation_id": "06b14c9d-d3a1-4dda-b931-4c0c7dd288d1",
+  "passed": 14,
+  "reported_checks": 18,
+  "reported_failures": 4,
+  "run_id": "c22d9156-9b8a-463e-9d9d-a687d59c6c6c",
+  "runtime_environment": {
+    "native_process_id": 23132,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_existing_contract_663265f6f2a9482a9cbe87d19fa7caab",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_dispatch_existing_contract_663265f6f2a9482a9cbe87d19fa7caab/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "feature_periodic_child_chain_test",
+  "schema_version": 1,
+  "source_content_sha256": "e11f156ffd6c5b174cb73aae61f1dd93a7c52eebc087c78b785e89995d1762d3",
+  "status": "FAIL"
+}

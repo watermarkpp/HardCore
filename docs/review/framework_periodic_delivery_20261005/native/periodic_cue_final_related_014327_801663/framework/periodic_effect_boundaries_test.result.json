@@ -1,0 +1,132 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "qualified effect source enabled",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "confirmed base receipt boundaries:first",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "logic starts one state and explicit cue handle",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "confirmed base receipt boundaries:weak",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "weaker refresh preserves one state, one heap node and one visual",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "weak refresh retains stronger five damage and original first tick phase",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "confirmed base receipt boundaries:strong",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "pause advances neither simulation nor tick debt",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "source is actually withdrawn",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "source death and withdrawal retain stronger ten damage, using current MAC three",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "real HP port retains historical kill credit after source node destruction",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "known target immunity registers through its sole capability set",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "current immunity suppresses periodic HP write without a minimum-one fallback",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "immunity source can be removed independently",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "later ticks recheck immunity and retain locked stronger raw damage",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "refreshed lifetime includes final phase tick then stops the same cue",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "presentation lifecycle is explicit start refresh stop",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "confirmed base receipt boundaries:missing-cue",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "declared optional missing presentation does not reject damage state",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "missing presentation retains actual damage timing and current defense",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "world replacement invalidates all mutation handles and drains old queues",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "all boundaries execute without hidden command or lifecycle failure",
+      "passed": true
+    }
+  ],
+  "count": 22,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "9fed34a6-d748-4de4-bb7b-ad1d71afe32d",
+  "passed": 22,
+  "reported_checks": 22,
+  "reported_failures": 0,
+  "run_id": "6d6593fc-d74b-4fdc-97ba-f756a63e56a5",
+  "runtime_environment": {
+    "native_process_id": 21992,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_related_20261005_0138",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_related_20261005_0138/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "periodic_effect_boundaries_test",
+  "schema_version": 1,
+  "source_content_sha256": "04d29b688db3419bd9e19a7161f9d9a36b32d37f5fcad4fffedaec4fdaae577a",
+  "status": "PASS"
+}

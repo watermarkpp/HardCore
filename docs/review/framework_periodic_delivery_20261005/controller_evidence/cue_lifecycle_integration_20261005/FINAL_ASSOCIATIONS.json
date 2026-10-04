@@ -1,0 +1,1356 @@
+{
+  "status": "PASS",
+  "read_utc": "2026-10-04T18:03:24.672929+00:00",
+  "scope": "Current-source 39 selected native scenes only; broader P6/R3, GPU/Android and exact original v97 B remain open.",
+  "source_content_sha256": "04d29b688db3419bd9e19a7161f9d9a36b32d37f5fcad4fffedaec4fdaae577a",
+  "source_file_count": 3785,
+  "all_current_runtime_files_rehashed": true,
+  "scene_count": 39,
+  "complete_checks": 2138,
+  "failed_checks": 0,
+  "stderr_warning_scenes": [
+    "combined_effect_lifecycle_test",
+    "empty_extension_behavior_test",
+    "feature_batch_failure_test",
+    "feature_capacity_admission_test",
+    "feature_child_chain_admission_test",
+    "feature_cue_actor_retirement_reentry_test",
+    "feature_cue_actor_retirement_test",
+    "feature_mixed_child_resource_test",
+    "feature_mixed_delivery_test",
+    "feature_periodic_child_chain_test",
+    "feature_resource_natural_test",
+    "feature_state_loan_lifetime_test",
+    "feature_state_loan_root_test",
+    "natural_effect_lifecycle_test",
+    "periodic_child_g2_root_test",
+    "periodic_child_root_test",
+    "periodic_credit_safe_logout_test"
+  ],
+  "shutdown_resource_diagnostics": [
+    {
+      "scene": "feature_state_loan_lifetime_test",
+      "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_state_loan_lifetime_test.stderr.log",
+      "line": 3,
+      "text": "ERROR: 5 resources still in use at exit (run with --verbose for details)."
+    }
+  ],
+  "diagnostic_scope_note": "The exact shutdown resource ERROR is retained under the existing runner rule. Resource/exit lifetime remains open; other ERROR lines and every SCRIPT ERROR are rejected.",
+  "artifact_scope_note": "Only explicit scene rows and matching run/source traces are adopted. Wrapper-copied historical traces are excluded.",
+  "producer_cold_pairs": [
+    {
+      "live_scene": "combined_effect_lifecycle_test",
+      "producer_run_id": "ccc2e93e-5f8e-48f9-bf78-37ce4b99855b",
+      "cold_scene": "combined_effect_lifecycle_cold_test",
+      "cold_run_id": "c982a2a0-d425-4e11-a03d-5fcfd43156f6",
+      "expected_sha256": "a515c6b5b415a7a5af99157ff87fd88b4a25fd906fd5975d07232912e8f86de4",
+      "expected_path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_world_013906_604728\\combined_effect_lifecycle_expected.json"
+    },
+    {
+      "live_scene": "periodic_credit_safe_logout_test",
+      "producer_run_id": "c7db0b4f-657a-4575-9b2c-10ba401774e1",
+      "cold_scene": "periodic_credit_safe_logout_cold_test",
+      "cold_run_id": "4e764a98-a1bb-4a31-8d23-3a9d737fed32",
+      "expected_sha256": "1046beb3fd0cc320b09982a8dcb45b49b21dd9e8acdba81182b14527120e53ac",
+      "expected_path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_world_013906_604728\\periodic_credit_safe_logout_expected.json"
+    },
+    {
+      "live_scene": "natural_effect_lifecycle_test",
+      "producer_run_id": "57dcc03f-edf4-4da1-89f2-9c900c4014e1",
+      "cold_scene": "natural_effect_lifecycle_cold_test",
+      "cold_run_id": "ba2e5808-3761-4f4c-b54d-299182bcf1f1",
+      "expected_sha256": "c087b4da51aeaee5786a34f1365fe39848f099052c9965beefd7929ff716a043",
+      "expected_path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_world_013906_604728\\natural_effect_lifecycle_expected.json"
+    },
+    {
+      "live_scene": "feature_resource_natural_test",
+      "producer_run_id": "92939ed6-ac3c-4c86-b735-2ea36f933c2d",
+      "cold_scene": "feature_resource_natural_cold_test",
+      "cold_run_id": "b4f595c2-ae98-4941-93de-23e98e4416e2",
+      "expected_sha256": "8d7a7186fd44f107ea7077d09a0e6d7702dd3d9631a45beebdabd13695f1dcbb",
+      "expected_path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_world_013906_604728\\feature_resource_natural_expected.json"
+    }
+  ],
+  "traces": [
+    {
+      "scene": "combined_effect_lifecycle_test",
+      "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_world_013906_604728\\combined_effect_lifecycle_trace.json",
+      "sha256": "3a9f13bbc7f2d2ffdec482fe1096e45b5a8757cda8ffe55e9f914148c60d300a"
+    },
+    {
+      "scene": "natural_effect_lifecycle_test",
+      "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_world_013906_604728\\natural_effect_lifecycle_trace.json",
+      "sha256": "945a08ac9fe5e5dd064a9193f810f3fec5f5b0beaa450941ed0d760af80e9103"
+    },
+    {
+      "scene": "feature_resource_natural_test",
+      "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_world_013906_604728\\feature_resource_natural_trace.json",
+      "sha256": "e20ac710a5e983c786728b25448ab7eab790ef09d238f0d54105eec75d244d1f"
+    },
+    {
+      "scene": "feature_mixed_delivery_test",
+      "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_mixed_service_014147_190573\\feature_mixed_delivery_test.trace.json",
+      "sha256": "dbcbcd419a6ce1e313542395dac0d94f303152729ab299c47287be83a478d765"
+    },
+    {
+      "scene": "feature_mixed_child_resource_test",
+      "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_mixed_service_014147_190573\\feature_mixed_child_resource_test.trace.json",
+      "sha256": "2dd568e2ee3139a2cb0d17691e404f73b0853250904164990089a0ce62419fe7"
+    },
+    {
+      "scene": "periodic_refresh_service_boundary_test",
+      "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_mixed_service_014147_190573\\periodic_refresh_service_boundary_test.trace.json",
+      "sha256": "858ec3a002de59568d5d97244c27403629cb67fe42c979422246dc13164ab55f"
+    }
+  ],
+  "rows": [
+    {
+      "scene": "combined_effect_lifecycle_test",
+      "checks": 38,
+      "run_id": "ccc2e93e-5f8e-48f9-bf78-37ce4b99855b",
+      "invocation_id": "3b885bce-a720-4043-9412-646bef867bec",
+      "native_exit": 0,
+      "batch": "periodic_cue_final_world_013906_604728",
+      "receipt_sha256": "08b3ec5369850317562f66c27d02c8d572cb17faf10ede904e3ecf4fc08eeec9",
+      "runtime_environment": {
+        "native_process_id": 25072,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_world_20261005_0138",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_world_20261005_0138/Godot/app_userdata/HardCore"
+      },
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_world_013906_604728\\raw\\combined_effect_lifecycle_test.godot.log",
+          "sha256": "776d1f83fd46f0bb2b4be4645ce5a1684116d66085b886360aaa658871b8355d",
+          "bytes": 5145
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_world_013906_604728\\raw\\combined_effect_lifecycle_test.stderr.log",
+          "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+          "bytes": 133
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_world_013906_604728\\raw\\combined_effect_lifecycle_test.stdout.log",
+          "sha256": "c5bca876d4f8aa4b98f96835d3b5f5f05eafc87a715d3aeee66e634f406909e2",
+          "bytes": 5155
+        }
+      ]
+    },
+    {
+      "scene": "combined_effect_lifecycle_cold_test",
+      "checks": 10,
+      "run_id": "c982a2a0-d425-4e11-a03d-5fcfd43156f6",
+      "invocation_id": "3b885bce-a720-4043-9412-646bef867bec",
+      "native_exit": 0,
+      "batch": "periodic_cue_final_world_013906_604728",
+      "receipt_sha256": "4d9b074c9826c151f595910ffc95327bd17e3020829496bf3a76f2b1182cb5fc",
+      "runtime_environment": {
+        "native_process_id": 19708,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_world_20261005_0138",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_world_20261005_0138/Godot/app_userdata/HardCore"
+      },
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_world_013906_604728\\raw\\combined_effect_lifecycle_cold_test.godot.log",
+          "sha256": "cd1a56188af419b2da657e1e559b7901e6a557d9ee50297716d0c1ff30bde1e1",
+          "bytes": 228
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_world_013906_604728\\raw\\combined_effect_lifecycle_cold_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_world_013906_604728\\raw\\combined_effect_lifecycle_cold_test.stdout.log",
+          "sha256": "15095675e9cdc7402f8003cc725eb630e6a6ddcad18e531c5f2cf2aaf563c987",
+          "bytes": 232
+        }
+      ]
+    },
+    {
+      "scene": "periodic_credit_safe_logout_test",
+      "checks": 37,
+      "run_id": "c7db0b4f-657a-4575-9b2c-10ba401774e1",
+      "invocation_id": "3b885bce-a720-4043-9412-646bef867bec",
+      "native_exit": 0,
+      "batch": "periodic_cue_final_world_013906_604728",
+      "receipt_sha256": "f39003d6ec2bf20b5674d74112eb0495f55d8f48f8d5806b946b5007ce5425d9",
+      "runtime_environment": {
+        "native_process_id": 23140,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_world_20261005_0138",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_world_20261005_0138/Godot/app_userdata/HardCore"
+      },
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_world_013906_604728\\raw\\periodic_credit_safe_logout_test.godot.log",
+          "sha256": "4d82a530f4054141ac467e97cf09430414f7c7b388acba13b701aa9e152ff327",
+          "bytes": 11450
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_world_013906_604728\\raw\\periodic_credit_safe_logout_test.stderr.log",
+          "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+          "bytes": 133
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_world_013906_604728\\raw\\periodic_credit_safe_logout_test.stdout.log",
+          "sha256": "d97b2d4af74d76a630b826890aee519f2a67efe697d159b1928ddfa03e62116e",
+          "bytes": 11462
+        }
+      ]
+    },
+    {
+      "scene": "periodic_credit_safe_logout_cold_test",
+      "checks": 13,
+      "run_id": "4e764a98-a1bb-4a31-8d23-3a9d737fed32",
+      "invocation_id": "3b885bce-a720-4043-9412-646bef867bec",
+      "native_exit": 0,
+      "batch": "periodic_cue_final_world_013906_604728",
+      "receipt_sha256": "135c14659186650bd56dce9f116ec9773171ce47175eaf721d6cff581b87149a",
+      "runtime_environment": {
+        "native_process_id": 22180,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_world_20261005_0138",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_world_20261005_0138/Godot/app_userdata/HardCore"
+      },
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_world_013906_604728\\raw\\periodic_credit_safe_logout_cold_test.godot.log",
+          "sha256": "6467b4920eb2c027b62ccac314267f6399cdd899c0cc000baff16ddafc704f9a",
+          "bytes": 655
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_world_013906_604728\\raw\\periodic_credit_safe_logout_cold_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_world_013906_604728\\raw\\periodic_credit_safe_logout_cold_test.stdout.log",
+          "sha256": "e0db9a4b4b783213107c243a78d36b0c47be898fc357d1c397821ff9a9845db0",
+          "bytes": 660
+        }
+      ]
+    },
+    {
+      "scene": "natural_effect_lifecycle_test",
+      "checks": 137,
+      "run_id": "57dcc03f-edf4-4da1-89f2-9c900c4014e1",
+      "invocation_id": "3b885bce-a720-4043-9412-646bef867bec",
+      "native_exit": 0,
+      "batch": "periodic_cue_final_world_013906_604728",
+      "receipt_sha256": "5a2a9c7d081691bb97f37ca676504ada2fc2c19a5e76c8e5b08fb2e01247bac8",
+      "runtime_environment": {
+        "native_process_id": 8976,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_world_20261005_0138",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_world_20261005_0138/Godot/app_userdata/HardCore"
+      },
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_world_013906_604728\\raw\\natural_effect_lifecycle_test.godot.log",
+          "sha256": "32c7d64821927dffca53814df0e4b05348eafda86d9f7573c00232425d3d4fd8",
+          "bytes": 5140
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_world_013906_604728\\raw\\natural_effect_lifecycle_test.stderr.log",
+          "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+          "bytes": 133
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_world_013906_604728\\raw\\natural_effect_lifecycle_test.stdout.log",
+          "sha256": "977de2ba2a116aebdea64d872040333fa87f61260b3c93337ad6c6b5558bdc5d",
+          "bytes": 5150
+        }
+      ]
+    },
+    {
+      "scene": "natural_effect_lifecycle_cold_test",
+      "checks": 10,
+      "run_id": "ba2e5808-3761-4f4c-b54d-299182bcf1f1",
+      "invocation_id": "3b885bce-a720-4043-9412-646bef867bec",
+      "native_exit": 0,
+      "batch": "periodic_cue_final_world_013906_604728",
+      "receipt_sha256": "9942a55cf130ab7edd07a7ec27aa8835e2003902f9ed7d275a4132faabc3755d",
+      "runtime_environment": {
+        "native_process_id": 20408,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_world_20261005_0138",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_world_20261005_0138/Godot/app_userdata/HardCore"
+      },
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_world_013906_604728\\raw\\natural_effect_lifecycle_cold_test.godot.log",
+          "sha256": "3c0a3a4377122ab25da969530b7ffaa9e49c17071bcf9f27e940daa274846c7f",
+          "bytes": 227
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_world_013906_604728\\raw\\natural_effect_lifecycle_cold_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_world_013906_604728\\raw\\natural_effect_lifecycle_cold_test.stdout.log",
+          "sha256": "597c057aeb71dcb17acef603a39033def31a2da73346fc055907885156abcfea",
+          "bytes": 231
+        }
+      ]
+    },
+    {
+      "scene": "feature_resource_natural_test",
+      "checks": 141,
+      "run_id": "92939ed6-ac3c-4c86-b735-2ea36f933c2d",
+      "invocation_id": "3b885bce-a720-4043-9412-646bef867bec",
+      "native_exit": 0,
+      "batch": "periodic_cue_final_world_013906_604728",
+      "receipt_sha256": "75999081856c7664db76526c01bbc25fb3c694eb6f8ab2cf06b11cf1f000ef57",
+      "runtime_environment": {
+        "native_process_id": 19560,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_world_20261005_0138",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_world_20261005_0138/Godot/app_userdata/HardCore"
+      },
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_world_013906_604728\\raw\\feature_resource_natural_test.godot.log",
+          "sha256": "f35cc012df656e6fd9bffba5fd1dc8bed8d11681ee13c95b743a68648c3998a3",
+          "bytes": 5149
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_world_013906_604728\\raw\\feature_resource_natural_test.stderr.log",
+          "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+          "bytes": 133
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_world_013906_604728\\raw\\feature_resource_natural_test.stdout.log",
+          "sha256": "9a74f4ebf70a57b9e5e5a7820f8bdcf88bbd473e3b4da4d25eefd530f807c47a",
+          "bytes": 5159
+        }
+      ]
+    },
+    {
+      "scene": "feature_resource_natural_cold_test",
+      "checks": 10,
+      "run_id": "b4f595c2-ae98-4941-93de-23e98e4416e2",
+      "invocation_id": "3b885bce-a720-4043-9412-646bef867bec",
+      "native_exit": 0,
+      "batch": "periodic_cue_final_world_013906_604728",
+      "receipt_sha256": "23e6d17e1e316fbbd9ffc93de98cf6325ecd39b5937efcf26b32107f5831cda7",
+      "runtime_environment": {
+        "native_process_id": 24204,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_world_20261005_0138",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_world_20261005_0138/Godot/app_userdata/HardCore"
+      },
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_world_013906_604728\\raw\\feature_resource_natural_cold_test.godot.log",
+          "sha256": "3c0a3a4377122ab25da969530b7ffaa9e49c17071bcf9f27e940daa274846c7f",
+          "bytes": 227
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_world_013906_604728\\raw\\feature_resource_natural_cold_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_world_013906_604728\\raw\\feature_resource_natural_cold_test.stdout.log",
+          "sha256": "597c057aeb71dcb17acef603a39033def31a2da73346fc055907885156abcfea",
+          "bytes": 231
+        }
+      ]
+    },
+    {
+      "scene": "feature_mixed_delivery_test",
+      "checks": 380,
+      "run_id": "f9f67f13-7922-45c5-aa51-b503828ef897",
+      "invocation_id": "35e62eee-3888-4664-a0f5-62f032a66c6e",
+      "native_exit": 0,
+      "batch": "periodic_cue_final_mixed_service_014147_190573",
+      "receipt_sha256": "b25dadeb5730771febd54ae795b4ef95b858439186fde6ee638a962d583fd02a",
+      "runtime_environment": {
+        "native_process_id": 23272,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_mixed_20261005_0138",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_mixed_20261005_0138/Godot/app_userdata/HardCore"
+      },
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_mixed_service_014147_190573\\raw\\feature_mixed_delivery_test.godot.log",
+          "sha256": "39ca7cf0d38372feed19a9045c4868bf021ac6fa2d9baf74601bd91b06fe9dc6",
+          "bytes": 38054
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_mixed_service_014147_190573\\raw\\feature_mixed_delivery_test.stderr.log",
+          "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+          "bytes": 133
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_mixed_service_014147_190573\\raw\\feature_mixed_delivery_test.stdout.log",
+          "sha256": "144fb3ee494590248cdabfc47a4326fb44ca4c25f023d61095b0ef77497a7b55",
+          "bytes": 38099
+        }
+      ]
+    },
+    {
+      "scene": "feature_mixed_child_resource_test",
+      "checks": 388,
+      "run_id": "357227e0-0d45-41b6-8cdf-dab212891d24",
+      "invocation_id": "35e62eee-3888-4664-a0f5-62f032a66c6e",
+      "native_exit": 0,
+      "batch": "periodic_cue_final_mixed_service_014147_190573",
+      "receipt_sha256": "af082a98af17973a5129b5b2ba1eb6eaa2ced1f77e8a3de91c95ee771aa7cf28",
+      "runtime_environment": {
+        "native_process_id": 24976,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_mixed_20261005_0138",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_mixed_20261005_0138/Godot/app_userdata/HardCore"
+      },
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_mixed_service_014147_190573\\raw\\feature_mixed_child_resource_test.godot.log",
+          "sha256": "e10835f9bd7cadd7e619a9ac4ef230fb70ff0184d3f91799438bb245801aa941",
+          "bytes": 38056
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_mixed_service_014147_190573\\raw\\feature_mixed_child_resource_test.stderr.log",
+          "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+          "bytes": 133
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_mixed_service_014147_190573\\raw\\feature_mixed_child_resource_test.stdout.log",
+          "sha256": "d9355490a53d3cb695884ee9962f318442860b61cbeb34d4c7b1b85920279d95",
+          "bytes": 38101
+        }
+      ]
+    },
+    {
+      "scene": "periodic_refresh_service_boundary_test",
+      "checks": 37,
+      "run_id": "627c0470-dba2-49d7-a3b7-6bc32051ddf8",
+      "invocation_id": "35e62eee-3888-4664-a0f5-62f032a66c6e",
+      "native_exit": 0,
+      "batch": "periodic_cue_final_mixed_service_014147_190573",
+      "receipt_sha256": "1b7682d5a0832725850aec962df8f2f8c8cf77046fdcba955db8cea2abd11d6a",
+      "runtime_environment": {
+        "native_process_id": 8672,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_mixed_20261005_0138",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_mixed_20261005_0138/Godot/app_userdata/HardCore"
+      },
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_mixed_service_014147_190573\\raw\\periodic_refresh_service_boundary_test.godot.log",
+          "sha256": "554b6603a1b7e52b52133813651d311bc2b227e41fb1f83b704a2ca100fd67c8",
+          "bytes": 229
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_mixed_service_014147_190573\\raw\\periodic_refresh_service_boundary_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_mixed_service_014147_190573\\raw\\periodic_refresh_service_boundary_test.stdout.log",
+          "sha256": "0feeb307b1362e1f83b89dc0f98e0b54c2544f0776ee7b250b617534f1213e86",
+          "bytes": 233
+        }
+      ]
+    },
+    {
+      "scene": "periodic_producer_identity_test",
+      "checks": 40,
+      "run_id": "61f7118f-64fd-4438-9257-4db739f24a20",
+      "invocation_id": "9fed34a6-d748-4de4-bb7b-ad1d71afe32d",
+      "native_exit": 0,
+      "batch": "periodic_cue_final_related_014327_801663",
+      "receipt_sha256": "10158da22bf79904f8a29d8b132e7e68a0808056a37a9ed73e4bd09380ebc82d",
+      "runtime_environment": {
+        "native_process_id": 12844,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_related_20261005_0138",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_related_20261005_0138/Godot/app_userdata/HardCore"
+      },
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\periodic_producer_identity_test.godot.log",
+          "sha256": "f673989fa1d820fb9459a52669cf180fe527ddac016947ecab41a42adf4c99aa",
+          "bytes": 222
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\periodic_producer_identity_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\periodic_producer_identity_test.stdout.log",
+          "sha256": "6b9d6f0af46e8c73c07f67b30fcffc77fe6ac4de95e2bbb4706eabbf23056d34",
+          "bytes": 226
+        }
+      ]
+    },
+    {
+      "scene": "periodic_dispatch_lifecycle_test",
+      "checks": 132,
+      "run_id": "f41f7957-db58-459c-90e7-0a38cbb4aa74",
+      "invocation_id": "9fed34a6-d748-4de4-bb7b-ad1d71afe32d",
+      "native_exit": 0,
+      "batch": "periodic_cue_final_related_014327_801663",
+      "receipt_sha256": "efda51848ce3b04f6f591dfb0f84d32bd775440f5953abf094cf6178885671b7",
+      "runtime_environment": {
+        "native_process_id": 9396,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_related_20261005_0138",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_related_20261005_0138/Godot/app_userdata/HardCore"
+      },
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\periodic_dispatch_lifecycle_test.godot.log",
+          "sha256": "54e01ceae698d6cad70c53958e9f06390c5dd0fee3f5d6f9bdb890efdc902e3c",
+          "bytes": 224
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\periodic_dispatch_lifecycle_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\periodic_dispatch_lifecycle_test.stdout.log",
+          "sha256": "f83b303859e908702576a0341b1f597300ba88c030756be375024d9af4699eca",
+          "bytes": 228
+        }
+      ]
+    },
+    {
+      "scene": "periodic_refresh_horizon_test",
+      "checks": 37,
+      "run_id": "1609194a-3090-49fc-a593-a57efe079b26",
+      "invocation_id": "9fed34a6-d748-4de4-bb7b-ad1d71afe32d",
+      "native_exit": 0,
+      "batch": "periodic_cue_final_related_014327_801663",
+      "receipt_sha256": "f7979368bf7a0dddcbe2d4fde13c201c15603eb07a2858f590f09aaa0915c979",
+      "runtime_environment": {
+        "native_process_id": 19872,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_related_20261005_0138",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_related_20261005_0138/Godot/app_userdata/HardCore"
+      },
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\periodic_refresh_horizon_test.godot.log",
+          "sha256": "c8f708c5d4991701ee7398f47ad167d6c91361f08e0d5f9c462afdfc1f91f3fe",
+          "bytes": 821
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\periodic_refresh_horizon_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\periodic_refresh_horizon_test.stdout.log",
+          "sha256": "28d895af8bcbad7e8cc4988b674af4112c1ac88082b4b5fab6aa8a35b2d66cc4",
+          "bytes": 827
+        }
+      ]
+    },
+    {
+      "scene": "periodic_child_root_test",
+      "checks": 21,
+      "run_id": "72a08f6a-7ea1-4d1b-be57-f6d7d52fb0dc",
+      "invocation_id": "9fed34a6-d748-4de4-bb7b-ad1d71afe32d",
+      "native_exit": 0,
+      "batch": "periodic_cue_final_related_014327_801663",
+      "receipt_sha256": "86e131e98b085002b858b2c3c0bafe8bdbf11eb1d3939d8def11a495cc27a546",
+      "runtime_environment": {
+        "native_process_id": 23484,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_related_20261005_0138",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_related_20261005_0138/Godot/app_userdata/HardCore"
+      },
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\periodic_child_root_test.godot.log",
+          "sha256": "d29885161c7ab74393a923df3ff046d54fc5dd2dcf9fec695aada65513888dd0",
+          "bytes": 5418
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\periodic_child_root_test.stderr.log",
+          "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+          "bytes": 133
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\periodic_child_root_test.stdout.log",
+          "sha256": "fbaddb1c82e0d2e20318a7ca2dd46b0ad2d1087fbd0bb45f207ce02fd75f9672",
+          "bytes": 5430
+        }
+      ]
+    },
+    {
+      "scene": "periodic_child_g2_root_test",
+      "checks": 27,
+      "run_id": "9fc8412b-2ad6-467e-88ff-376306fcb01c",
+      "invocation_id": "9fed34a6-d748-4de4-bb7b-ad1d71afe32d",
+      "native_exit": 0,
+      "batch": "periodic_cue_final_related_014327_801663",
+      "receipt_sha256": "222ff5f880460dd849bfc22eeba5d53e814d2de5522cc6b791f4abb6288bf639",
+      "runtime_environment": {
+        "native_process_id": 23812,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_related_20261005_0138",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_related_20261005_0138/Godot/app_userdata/HardCore"
+      },
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\periodic_child_g2_root_test.godot.log",
+          "sha256": "a6cc5bff4b6bbc6bf0b49fa4e0e662a46944333a32a9803b24ac405ac9a3d30c",
+          "bytes": 5410
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\periodic_child_g2_root_test.stderr.log",
+          "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+          "bytes": 133
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\periodic_child_g2_root_test.stdout.log",
+          "sha256": "02b07004ef2761f66872a0f0122cae6b7adda6b3d2db759349a6e45f68931a6c",
+          "bytes": 5422
+        }
+      ]
+    },
+    {
+      "scene": "feature_periodic_child_chain_test",
+      "checks": 18,
+      "run_id": "a2a8e519-315c-449c-b9d0-b0a70e338772",
+      "invocation_id": "9fed34a6-d748-4de4-bb7b-ad1d71afe32d",
+      "native_exit": 0,
+      "batch": "periodic_cue_final_related_014327_801663",
+      "receipt_sha256": "a50de7718ac4eb9dc042e93d71885f8c88ca35aaf92dfe9fd4bfb2775699ac36",
+      "runtime_environment": {
+        "native_process_id": 8964,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_related_20261005_0138",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_related_20261005_0138/Godot/app_userdata/HardCore"
+      },
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_periodic_child_chain_test.godot.log",
+          "sha256": "7f30446c2c605df7cfa87708f009d71e436cf460b3f3af14c6ca161293efe71d",
+          "bytes": 5897
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_periodic_child_chain_test.stderr.log",
+          "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+          "bytes": 133
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_periodic_child_chain_test.stdout.log",
+          "sha256": "bb9879d3e2513dbdc30ee879b9c56ce1bcf777b3b0e8311b7e3ac989891cd39d",
+          "bytes": 5910
+        }
+      ]
+    },
+    {
+      "scene": "feature_death_child_command_test",
+      "checks": 31,
+      "run_id": "e2847176-e576-4b6d-aa70-e7a974a6362b",
+      "invocation_id": "9fed34a6-d748-4de4-bb7b-ad1d71afe32d",
+      "native_exit": 0,
+      "batch": "periodic_cue_final_related_014327_801663",
+      "receipt_sha256": "8502e4e58ede78023855f7a3079f5ba92df8ef230068dc3023b7c76822c32d35",
+      "runtime_environment": {
+        "native_process_id": 1592,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_related_20261005_0138",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_related_20261005_0138/Godot/app_userdata/HardCore"
+      },
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_death_child_command_test.godot.log",
+          "sha256": "ed12d6400020c04dea10ede87f8ffe021a0bdda6e5a942598f43116e2ca341f9",
+          "bytes": 225
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_death_child_command_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_death_child_command_test.stdout.log",
+          "sha256": "f08e77ebd6dcd516a4a6338926ceedcc9d1eb242677dd806776d8e7a0201b9e6",
+          "bytes": 229
+        }
+      ]
+    },
+    {
+      "scene": "feature_chain_commit_test",
+      "checks": 68,
+      "run_id": "f4bb29a0-6636-4668-b6bb-a94550dfd254",
+      "invocation_id": "9fed34a6-d748-4de4-bb7b-ad1d71afe32d",
+      "native_exit": 0,
+      "batch": "periodic_cue_final_related_014327_801663",
+      "receipt_sha256": "266e8b8929658ad3f5ad5bda12d888e3494ed0fa7f74495fbd8047a85c570283",
+      "runtime_environment": {
+        "native_process_id": 19668,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_related_20261005_0138",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_related_20261005_0138/Godot/app_userdata/HardCore"
+      },
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_chain_commit_test.godot.log",
+          "sha256": "14c2d0f73fbc19c21dde87dacdb5a25c3c61c51193d88f96db96c4b9be578f5f",
+          "bytes": 218
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_chain_commit_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_chain_commit_test.stdout.log",
+          "sha256": "e059e5c07572913cb6d0e68b22e0b9d7185e087f12bfa956cc77b09dd36f2d29",
+          "bytes": 222
+        }
+      ]
+    },
+    {
+      "scene": "feature_child_chain_admission_test",
+      "checks": 44,
+      "run_id": "5f31a679-21ef-4f5c-8d90-926487823909",
+      "invocation_id": "9fed34a6-d748-4de4-bb7b-ad1d71afe32d",
+      "native_exit": 0,
+      "batch": "periodic_cue_final_related_014327_801663",
+      "receipt_sha256": "29725202fe48ea0b9e1279d865eb7b7f08d47c600381b041cfbc78ab148da2ce",
+      "runtime_environment": {
+        "native_process_id": 15616,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_related_20261005_0138",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_related_20261005_0138/Godot/app_userdata/HardCore"
+      },
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_child_chain_admission_test.godot.log",
+          "sha256": "c09f6fae0e9d25a09ea5ea4c34b717fd5d6e6063dc81391f7e705b6e44228604",
+          "bytes": 5129
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_child_chain_admission_test.stderr.log",
+          "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+          "bytes": 133
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_child_chain_admission_test.stdout.log",
+          "sha256": "9a995fa2287c4926b23bcf538147e2c2c0afc5fd257e11a7febee3a102dfdc8b",
+          "bytes": 5139
+        }
+      ]
+    },
+    {
+      "scene": "feature_state_loan_lifetime_test",
+      "checks": 35,
+      "run_id": "94c4f0d1-af89-42c4-b8b4-c58d44a4c732",
+      "invocation_id": "9fed34a6-d748-4de4-bb7b-ad1d71afe32d",
+      "native_exit": 0,
+      "batch": "periodic_cue_final_related_014327_801663",
+      "receipt_sha256": "83981d881c2059c8004aeca5c40cd0dbba1e610c8b429de6d705217572670f25",
+      "runtime_environment": {
+        "native_process_id": 23024,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_related_20261005_0138",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_related_20261005_0138/Godot/app_userdata/HardCore"
+      },
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_state_loan_lifetime_test.godot.log",
+          "sha256": "be9cf5ca284465b4cf91329380d99da763976039d0f73e491e35ae406eed7072",
+          "bytes": 270
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_state_loan_lifetime_test.stderr.log",
+          "sha256": "9abaeb31deca888a59de0b38bc60a768363cc109851192c3f5b8906753d9296d",
+          "bytes": 250
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_state_loan_lifetime_test.stdout.log",
+          "sha256": "01c8ce31c0c5d750176765cdd9d0589edaca6280594586d428d9dacbc515178e",
+          "bytes": 276
+        }
+      ]
+    },
+    {
+      "scene": "feature_state_loan_root_test",
+      "checks": 25,
+      "run_id": "8e8a4ce9-0b2a-40fd-968d-ec1b407eb41f",
+      "invocation_id": "9fed34a6-d748-4de4-bb7b-ad1d71afe32d",
+      "native_exit": 0,
+      "batch": "periodic_cue_final_related_014327_801663",
+      "receipt_sha256": "4ab53f3d0f60c88ba6f2695ae032e084c2bf7318d88879a7b91f546e0b96b1cf",
+      "runtime_environment": {
+        "native_process_id": 25384,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_related_20261005_0138",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_related_20261005_0138/Godot/app_userdata/HardCore"
+      },
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_state_loan_root_test.godot.log",
+          "sha256": "c9e41624ef74b0560df34d96e9b24377b24871702ae1743f0c12be67d14767ae",
+          "bytes": 5411
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_state_loan_root_test.stderr.log",
+          "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+          "bytes": 133
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_state_loan_root_test.stdout.log",
+          "sha256": "2e22f0c6b72ea2d1fc86f7938178e744729324c5b07a8c4129e11217a0440506",
+          "bytes": 5422
+        }
+      ]
+    },
+    {
+      "scene": "feature_child_capacity_test",
+      "checks": 44,
+      "run_id": "164e3a18-70c3-4fb2-b815-25ee37c31460",
+      "invocation_id": "9fed34a6-d748-4de4-bb7b-ad1d71afe32d",
+      "native_exit": 0,
+      "batch": "periodic_cue_final_related_014327_801663",
+      "receipt_sha256": "cc39915e83546d61d919bd8e86dc7906cd26363c389722c2f0f6220682f8abbc",
+      "runtime_environment": {
+        "native_process_id": 24268,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_related_20261005_0138",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_related_20261005_0138/Godot/app_userdata/HardCore"
+      },
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_child_capacity_test.godot.log",
+          "sha256": "2b3aca5d9649f02ae32155a5d6e7589353eee5481e8a11b2a525eba41ec9aaed",
+          "bytes": 220
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_child_capacity_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_child_capacity_test.stdout.log",
+          "sha256": "75cfadc3653095afa0271c07e3fcef22f226377aa5720201e0a7a2d9dc127607",
+          "bytes": 224
+        }
+      ]
+    },
+    {
+      "scene": "feature_capacity_atomic_test",
+      "checks": 25,
+      "run_id": "a27491e9-a17f-478e-94b0-553bb7fd60c7",
+      "invocation_id": "9fed34a6-d748-4de4-bb7b-ad1d71afe32d",
+      "native_exit": 0,
+      "batch": "periodic_cue_final_related_014327_801663",
+      "receipt_sha256": "da89793673cc72faa01d5e0f90a77df2557d65b7a785aec36758cfb97bc136e5",
+      "runtime_environment": {
+        "native_process_id": 6040,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_related_20261005_0138",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_related_20261005_0138/Godot/app_userdata/HardCore"
+      },
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_capacity_atomic_test.godot.log",
+          "sha256": "d2883c290edfa13a5dd8affcd04df823b0d78ca3add7384a560a0b616a3b2da1",
+          "bytes": 221
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_capacity_atomic_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_capacity_atomic_test.stdout.log",
+          "sha256": "4b094f511a63e2afcbc50ca598345be5ec9443a52ed30e0f8225d21532bf76fb",
+          "bytes": 225
+        }
+      ]
+    },
+    {
+      "scene": "feature_capacity_admission_test",
+      "checks": 15,
+      "run_id": "0480cc3b-935d-4c1c-aa3a-338a7903c735",
+      "invocation_id": "9fed34a6-d748-4de4-bb7b-ad1d71afe32d",
+      "native_exit": 0,
+      "batch": "periodic_cue_final_related_014327_801663",
+      "receipt_sha256": "4c3dc99852ccdbf2224887cc4d5a2a26c3ab6622440e53937e7d21c6b9fd9649",
+      "runtime_environment": {
+        "native_process_id": 21792,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_related_20261005_0138",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_related_20261005_0138/Godot/app_userdata/HardCore"
+      },
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_capacity_admission_test.godot.log",
+          "sha256": "553722135e9677041ba36b472e2fffb1047e700f2ed037365c081111e9441dbd",
+          "bytes": 5129
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_capacity_admission_test.stderr.log",
+          "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+          "bytes": 133
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_capacity_admission_test.stdout.log",
+          "sha256": "a26a775a39cb56ffd5800f51008f2ef0cf74dd0b1f675ef561e54c3f7fde1a29",
+          "bytes": 5139
+        }
+      ]
+    },
+    {
+      "scene": "periodic_effect_boundaries_test",
+      "checks": 22,
+      "run_id": "6d6593fc-d74b-4fdc-97ba-f756a63e56a5",
+      "invocation_id": "9fed34a6-d748-4de4-bb7b-ad1d71afe32d",
+      "native_exit": 0,
+      "batch": "periodic_cue_final_related_014327_801663",
+      "receipt_sha256": "0682b6b01ff8d7c1ea653bcb780406146d5a90b2eed7e34609c427aaee32c698",
+      "runtime_environment": {
+        "native_process_id": 21992,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_related_20261005_0138",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_related_20261005_0138/Godot/app_userdata/HardCore"
+      },
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\periodic_effect_boundaries_test.godot.log",
+          "sha256": "d0f9f83ccc34a6d0d4721644c48c7fae9036bfb960f1c3e907b65e552b69fb1d",
+          "bytes": 225
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\periodic_effect_boundaries_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\periodic_effect_boundaries_test.stdout.log",
+          "sha256": "f8caa51e349268c690e05529e179c26d604b297788534f3da57fb6739f58e404",
+          "bytes": 229
+        }
+      ]
+    },
+    {
+      "scene": "periodic_effect_lifecycle_test",
+      "checks": 18,
+      "run_id": "6e8e661e-1dc0-48bf-87b1-a9523126c1c6",
+      "invocation_id": "9fed34a6-d748-4de4-bb7b-ad1d71afe32d",
+      "native_exit": 0,
+      "batch": "periodic_cue_final_related_014327_801663",
+      "receipt_sha256": "fb6e0c2de2bc1b5e7f8a8438c6af9183849a5dd0db438caa9b04899a13de1315",
+      "runtime_environment": {
+        "native_process_id": 15880,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_related_20261005_0138",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_related_20261005_0138/Godot/app_userdata/HardCore"
+      },
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\periodic_effect_lifecycle_test.godot.log",
+          "sha256": "c20e916aa02e51dfa7e191fac825f4f092850c405cc106b91451f5297c17ce83",
+          "bytes": 221
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\periodic_effect_lifecycle_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\periodic_effect_lifecycle_test.stdout.log",
+          "sha256": "ccb3ac09bbd971480d24ff28d5d4c3e187f5ed245017ea19b6a024c410363a85",
+          "bytes": 225
+        }
+      ]
+    },
+    {
+      "scene": "periodic_callback_retirement_test",
+      "checks": 32,
+      "run_id": "cf0b4ba3-4014-4d31-8ff8-1a08e370f538",
+      "invocation_id": "9fed34a6-d748-4de4-bb7b-ad1d71afe32d",
+      "native_exit": 0,
+      "batch": "periodic_cue_final_related_014327_801663",
+      "receipt_sha256": "789f84eee219afe884f430db52bb6fcde259c7e1c923b5aaf57d0e3c7be788de",
+      "runtime_environment": {
+        "native_process_id": 4104,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_related_20261005_0138",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_related_20261005_0138/Godot/app_userdata/HardCore"
+      },
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\periodic_callback_retirement_test.godot.log",
+          "sha256": "355903ee2ba46ebf9bdecebfe08bdcc0ea1813601ff9411ca60ad5432f054da0",
+          "bytes": 234
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\periodic_callback_retirement_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\periodic_callback_retirement_test.stdout.log",
+          "sha256": "cfd2e0ba6e03abad2266d3a795b420e779bf585628072a74f20633b182176a5b",
+          "bytes": 238
+        }
+      ]
+    },
+    {
+      "scene": "periodic_delivery_lateness_test",
+      "checks": 36,
+      "run_id": "8827a7ad-6f4a-4c66-a5ed-3338bc5b9481",
+      "invocation_id": "9fed34a6-d748-4de4-bb7b-ad1d71afe32d",
+      "native_exit": 0,
+      "batch": "periodic_cue_final_related_014327_801663",
+      "receipt_sha256": "46c285633c1896ec6cfcdf8f1776c08ffad5f1163e7af8de785dc3c03ff25737",
+      "runtime_environment": {
+        "native_process_id": 8220,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_related_20261005_0138",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_related_20261005_0138/Godot/app_userdata/HardCore"
+      },
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\periodic_delivery_lateness_test.godot.log",
+          "sha256": "14984e7e790d9f8739ed8b0670b213d1c9d288904cac5b33f5d93189ada0949b",
+          "bytes": 222
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\periodic_delivery_lateness_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\periodic_delivery_lateness_test.stdout.log",
+          "sha256": "68d1dae38133af6bccc756b82ae655ba3e38341c7aa06442cc838c86bec45d90",
+          "bytes": 226
+        }
+      ]
+    },
+    {
+      "scene": "feature_batch_capacity_ownership_test",
+      "checks": 11,
+      "run_id": "42310a39-52c1-429e-95c8-8bea7e5a1636",
+      "invocation_id": "9fed34a6-d748-4de4-bb7b-ad1d71afe32d",
+      "native_exit": 0,
+      "batch": "periodic_cue_final_related_014327_801663",
+      "receipt_sha256": "830dbad9f3476e9ee1ae84bd26a64bef135d747da849e69433f9408f568deffd",
+      "runtime_environment": {
+        "native_process_id": 6156,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_related_20261005_0138",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_related_20261005_0138/Godot/app_userdata/HardCore"
+      },
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_batch_capacity_ownership_test.godot.log",
+          "sha256": "c1ce29056263cf78d49541ac25e060e358b0dd8656186f11ccc83550c7304654",
+          "bytes": 230
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_batch_capacity_ownership_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_batch_capacity_ownership_test.stdout.log",
+          "sha256": "5c7ec167e00892eb3b9037b96e5f115cdd56e288d8aef59001445b5cb4e9e221",
+          "bytes": 234
+        }
+      ]
+    },
+    {
+      "scene": "feature_batch_failure_test",
+      "checks": 12,
+      "run_id": "8a5cb74c-3007-426f-a450-586c9c2e2ccb",
+      "invocation_id": "9fed34a6-d748-4de4-bb7b-ad1d71afe32d",
+      "native_exit": 0,
+      "batch": "periodic_cue_final_related_014327_801663",
+      "receipt_sha256": "fd5a4e0612d90200f7b9db1154a37f7e3bbe26515ae962be3211be9d57ad542b",
+      "runtime_environment": {
+        "native_process_id": 9672,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_related_20261005_0138",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_related_20261005_0138/Godot/app_userdata/HardCore"
+      },
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_batch_failure_test.godot.log",
+          "sha256": "64c5f275912aed43b960d852d7b0d7aac7df2de75d7f56b46a1cef45c3487a7f",
+          "bytes": 5128
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_batch_failure_test.stderr.log",
+          "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+          "bytes": 133
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_batch_failure_test.stdout.log",
+          "sha256": "e858f9f2157300fc0e421a77c7d38916a660a90cee8456a38ecbcf67822d046d",
+          "bytes": 5138
+        }
+      ]
+    },
+    {
+      "scene": "action_config_lease_test",
+      "checks": 13,
+      "run_id": "321de8d2-b220-46ea-8b8a-c82b80b9f4ba",
+      "invocation_id": "9fed34a6-d748-4de4-bb7b-ad1d71afe32d",
+      "native_exit": 0,
+      "batch": "periodic_cue_final_related_014327_801663",
+      "receipt_sha256": "ff137551050948bf46c321889254ed343956bfe2ea848757911f4abc4e3a8f98",
+      "runtime_environment": {
+        "native_process_id": 17372,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_related_20261005_0138",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_related_20261005_0138/Godot/app_userdata/HardCore"
+      },
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\action_config_lease_test.godot.log",
+          "sha256": "db4cdeec3cac8150361061446b4272271a02ecf019a390cb13d6a2b17f599e55",
+          "bytes": 225
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\action_config_lease_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\action_config_lease_test.stdout.log",
+          "sha256": "a5b2156fc88e0f6f2944d75e3f5a1e8ba11e11adad746343e773cc5e6f65f81c",
+          "bytes": 229
+        }
+      ]
+    },
+    {
+      "scene": "empty_extension_behavior_test",
+      "checks": 30,
+      "run_id": "bda45d09-7766-481b-881d-af34a1086042",
+      "invocation_id": "9fed34a6-d748-4de4-bb7b-ad1d71afe32d",
+      "native_exit": 0,
+      "batch": "periodic_cue_final_related_014327_801663",
+      "receipt_sha256": "30745eb5d63b3da918772df17b9f86d4f5784b7a1fbcc79cf52154003e7009eb",
+      "runtime_environment": {
+        "native_process_id": 19720,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_related_20261005_0138",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_related_20261005_0138/Godot/app_userdata/HardCore"
+      },
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\empty_extension_behavior_test.godot.log",
+          "sha256": "e3073bbdd8092b3d1c35839203f5592a78d81c7e67d5cf60cfcc29ea5cc783bc",
+          "bytes": 5142
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\empty_extension_behavior_test.stderr.log",
+          "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+          "bytes": 133
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\empty_extension_behavior_test.stdout.log",
+          "sha256": "a1cca238d4075973d2660bbec2941f75333a7b697d6b8a064c5e5938e3369c74",
+          "bytes": 5152
+        }
+      ]
+    },
+    {
+      "scene": "periodic_refresh_period_boundary_test",
+      "checks": 52,
+      "run_id": "420247bf-6c6f-497f-9964-ed151f20f5d8",
+      "invocation_id": "9fed34a6-d748-4de4-bb7b-ad1d71afe32d",
+      "native_exit": 0,
+      "batch": "periodic_cue_final_related_014327_801663",
+      "receipt_sha256": "6e8ff9bd0f688fede7356777bf26c1417156a25782b7dba29da4db400de4bcde",
+      "runtime_environment": {
+        "native_process_id": 2608,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_related_20261005_0138",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_related_20261005_0138/Godot/app_userdata/HardCore"
+      },
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\periodic_refresh_period_boundary_test.godot.log",
+          "sha256": "7f528d918530c0201965015574de0a7c2061445d3d558442ab009193c24244ce",
+          "bytes": 722
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\periodic_refresh_period_boundary_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\periodic_refresh_period_boundary_test.stdout.log",
+          "sha256": "6a18a3ee4ec9b57c05d9bcf8106fb78240556be19aa5939ea4eb3bebd3f31646",
+          "bytes": 728
+        }
+      ]
+    },
+    {
+      "scene": "feature_delivery_templates_test",
+      "checks": 57,
+      "run_id": "aa4726bf-beb3-4715-8545-4351eabf699c",
+      "invocation_id": "9fed34a6-d748-4de4-bb7b-ad1d71afe32d",
+      "native_exit": 0,
+      "batch": "periodic_cue_final_related_014327_801663",
+      "receipt_sha256": "7597afa702d4b5d55b64387dde9f298068722f253ba630406c67c1c909d20cee",
+      "runtime_environment": {
+        "native_process_id": 24344,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_related_20261005_0138",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_related_20261005_0138/Godot/app_userdata/HardCore"
+      },
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_delivery_templates_test.godot.log",
+          "sha256": "6d4b8bb22ffbc62a1e7c63b42747c0fcdaf45f02c5e56d1469d6e34f7162201d",
+          "bytes": 222
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_delivery_templates_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_delivery_templates_test.stdout.log",
+          "sha256": "4ffb3bb6c03b011a3f898c95fea01b8c3ac3a0852196507c90d56c5e661bcc2b",
+          "bytes": 226
+        }
+      ]
+    },
+    {
+      "scene": "periodic_effect_runtime_test",
+      "checks": 13,
+      "run_id": "71f542b2-be9c-4630-9e1a-9874ae634839",
+      "invocation_id": "9fed34a6-d748-4de4-bb7b-ad1d71afe32d",
+      "native_exit": 0,
+      "batch": "periodic_cue_final_related_014327_801663",
+      "receipt_sha256": "da269be96be3650423c5af5e522a896cc5a2d52ff4c4ced8cc0c5878059da691",
+      "runtime_environment": {
+        "native_process_id": 9500,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_related_20261005_0138",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_related_20261005_0138/Godot/app_userdata/HardCore"
+      },
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\periodic_effect_runtime_test.godot.log",
+          "sha256": "1feca48b2526026bd701ebbc3f96ed4b24c9e73538bfbb9453a399aee3944595",
+          "bytes": 221
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\periodic_effect_runtime_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\periodic_effect_runtime_test.stdout.log",
+          "sha256": "d50f6d703a34af1193acf9b0ab19cc712545a27b8b2ae9006da6a2516aed4796",
+          "bytes": 225
+        }
+      ]
+    },
+    {
+      "scene": "accepted_binding_snapshot_test",
+      "checks": 37,
+      "run_id": "9895ce0d-05d7-4a4d-a25a-9dc0a9aeb9c4",
+      "invocation_id": "9fed34a6-d748-4de4-bb7b-ad1d71afe32d",
+      "native_exit": 0,
+      "batch": "periodic_cue_final_related_014327_801663",
+      "receipt_sha256": "704793cad71c4209c24cb1a761c15bff21ae91dbd0006afd8ed72f670441b730",
+      "runtime_environment": {
+        "native_process_id": 5488,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_related_20261005_0138",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_related_20261005_0138/Godot/app_userdata/HardCore"
+      },
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\accepted_binding_snapshot_test.godot.log",
+          "sha256": "18cada81fbe37d06ff0e24ad708ad51e669e976fc9ce7186ff4134c230997c54",
+          "bytes": 221
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\accepted_binding_snapshot_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\accepted_binding_snapshot_test.stdout.log",
+          "sha256": "81577ddbd827039746dd35541b65c83b9bfd2c22b8376ceaf0ebc657945cbf0e",
+          "bytes": 225
+        }
+      ]
+    },
+    {
+      "scene": "feature_cue_actor_retirement_test",
+      "checks": 23,
+      "run_id": "7f5e70bb-5869-4ea9-8677-28dd65dac380",
+      "invocation_id": "9fed34a6-d748-4de4-bb7b-ad1d71afe32d",
+      "native_exit": 0,
+      "batch": "periodic_cue_final_related_014327_801663",
+      "receipt_sha256": "e41e040143d107608252b4e58ae9c59fb29d6082adfef846b787e80f3fef82ca",
+      "runtime_environment": {
+        "native_process_id": 14724,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_related_20261005_0138",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_related_20261005_0138/Godot/app_userdata/HardCore"
+      },
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_cue_actor_retirement_test.godot.log",
+          "sha256": "7a47f050becf5a95d515cfe91862e1ffe1b1956cec2bd4dfd8d95467757ae0c0",
+          "bytes": 8498
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_cue_actor_retirement_test.stderr.log",
+          "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+          "bytes": 133
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_cue_actor_retirement_test.stdout.log",
+          "sha256": "656e7b88d29eb48f09a837ac891d5b4efb40d5486e819467f67816ec62ada509",
+          "bytes": 8509
+        }
+      ]
+    },
+    {
+      "scene": "feature_cue_actor_retirement_reentry_test",
+      "checks": 19,
+      "run_id": "8c63e769-e9f6-4e75-9710-ad802fa83a12",
+      "invocation_id": "9fed34a6-d748-4de4-bb7b-ad1d71afe32d",
+      "native_exit": 0,
+      "batch": "periodic_cue_final_related_014327_801663",
+      "receipt_sha256": "0d4d2f0c4ac36996983f2dda1de6176adee686543d09fd819a86ff401b63fc00",
+      "runtime_environment": {
+        "native_process_id": 24756,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_related_20261005_0138",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_related_20261005_0138/Godot/app_userdata/HardCore"
+      },
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_cue_actor_retirement_reentry_test.godot.log",
+          "sha256": "be62cf4d048122ae1c1561092178431a8856f498167d5fb871cdda296d898307",
+          "bytes": 6227
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_cue_actor_retirement_reentry_test.stderr.log",
+          "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+          "bytes": 133
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_cue_final_related_014327_801663\\raw\\feature_cue_actor_retirement_reentry_test.stdout.log",
+          "sha256": "e792b411fa6b904c1be8b940e25a7852f3eeed929406cf9329f8e82c4f7088a5",
+          "bytes": 6238
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "read_utc": "2026-10-04T11:46:48.810262+00:00",
+  "evidence": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_period_boundary_epochs_1941_194154_219163",
+  "receipt_sha256": "14248683f3afb37f31f7675f8011567f02f8722eba61896db9da892da0722b50",
+  "source_content_sha256": "cf3ea39ef2664e66461948443a5958a93a63c7e0724e18fc397ee66fc1f27d8e",
+  "source_files": 3767,
+  "run_id": "5b14a4ef-6d6b-45ef-bc85-2149b8fbbe4f",
+  "invocation_id": "7cabbcc7-9748-433c-80e9-2a17d86f0dd6",
+  "checks": 19,
+  "native_exit": 0,
+  "observation": {
+    "applications": 2,
+    "authored_ticks_per_application": 4,
+    "maximum_actual_lateness_usec": 1023,
+    "observed_ticks": 1025,
+    "remaining_future_ticks": 2998976,
+    "scope": "controlled legal configuration boundary; partial service then explicit owner teardown; no deadline acceptance",
+    "shared_horizon_tick_count": 3000001,
+    "simulation_usec": 1001024
+  },
+  "scope": "controlled compiled-config/real HP unit with partial service and explicit world teardown; not Root admission or natural timing acceptance"
+}

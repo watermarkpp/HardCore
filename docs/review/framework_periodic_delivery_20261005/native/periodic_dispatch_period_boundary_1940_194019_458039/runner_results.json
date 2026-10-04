@@ -1,0 +1,40 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "periodic_refresh_period_boundary_test",
+                        "test_path":  "tests/framework/periodic_refresh_period_boundary_test.tscn",
+                        "wrapper_process_id":  23776,
+                        "wrapper_started_utc":  "2026-10-04T11:40:22.0336087Z",
+                        "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_period_boundary_1940_ed56cba0724040759aa2799d643e368a",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  false,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  1,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-04T11:40:52.0474882Z",
+                        "native_exit_observed_utc":  "2026-10-04T11:40:31.8618935Z",
+                        "effective_exit_code":  1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "85cba2df-fc0d-4228-98fe-5155ec64bd3c",
+                        "framework_receipt_valid":  false,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+                    }
+                ],
+    "total":  1,
+    "invocation_id":  "c554cca7-1234-438e-a90e-009cf4e63caf",
+    "runtime_environment":  {
+                                "project_root":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+                                "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_period_boundary_1940_ed56cba0724040759aa2799d643e368a",
+                                "runner_process_id":  24572
+                            },
+    "passed":  0,
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "engine_log_errors":  0,
+    "generated_at":  "2026-10-04T19:40:32.9778482+08:00",
+    "failed":  1,
+    "suite":  "adhoc"
+}

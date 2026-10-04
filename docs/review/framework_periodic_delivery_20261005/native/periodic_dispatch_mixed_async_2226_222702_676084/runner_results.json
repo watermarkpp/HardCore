@@ -1,0 +1,63 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "feature_mixed_delivery_test",
+                        "test_path":  "tests/framework/feature_mixed_delivery_test.tscn",
+                        "wrapper_process_id":  13196,
+                        "wrapper_started_utc":  "2026-10-04T14:27:05.1375594Z",
+                        "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_mixed_async_2226_d72edc7ea02946aeadec43ac31a34847",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  false,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  1,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-04T14:28:05.1508386Z",
+                        "native_exit_observed_utc":  "2026-10-04T14:27:43.4300360Z",
+                        "effective_exit_code":  1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "45948a01-8d33-4da8-ba84-c9ffc790007c",
+                        "framework_receipt_valid":  false,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+                    },
+                    {
+                        "test_name":  "feature_mixed_child_resource_test",
+                        "test_path":  "tests/framework/feature_mixed_child_resource_test.tscn",
+                        "wrapper_process_id":  4156,
+                        "wrapper_started_utc":  "2026-10-04T14:27:44.6298431Z",
+                        "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_mixed_async_2226_d72edc7ea02946aeadec43ac31a34847",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  false,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  1,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-04T14:28:44.6380113Z",
+                        "native_exit_observed_utc":  "2026-10-04T14:28:21.8784475Z",
+                        "effective_exit_code":  1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "2a522a04-3336-4c10-beb3-08204c9191c7",
+                        "framework_receipt_valid":  false,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+                    }
+                ],
+    "total":  2,
+    "invocation_id":  "738870c7-fb45-467d-84dc-cdc1e232981e",
+    "runtime_environment":  {
+                                "project_root":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+                                "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_mixed_async_2226_d72edc7ea02946aeadec43ac31a34847",
+                                "runner_process_id":  11456
+                            },
+    "passed":  0,
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "engine_log_errors":  0,
+    "generated_at":  "2026-10-04T22:28:23.0426133+08:00",
+    "failed":  2,
+    "suite":  "adhoc"
+}

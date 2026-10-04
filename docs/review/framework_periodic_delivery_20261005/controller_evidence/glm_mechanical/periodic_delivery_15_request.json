@@ -1,0 +1,11 @@
+{
+  "task": "TASK_ID periodic-delivery-native-count-15-20261005. CANDIDATE_EVIDENCE only. Read ONLY the supplied file line 1, no shell, writes, other files, external search, engineering analysis or acceptance decision. Decode the explicitly listed column arrays. Return strict JSON with task_id, groups, total_native_rows, pass_rows, fail_rows, timeouts, null_receipts; then adopted_scenes, adopted_checks, adopted_failed_checks, adopted_sources, adopted_duplicate_scene_ids, adopted_duplicate_run_ids. Count all rows and sum only adopted_final=1 for the adopted fields. Give the evidence path and line 1. Report uncertainty or incomplete rather than guessing. Historical PASS/FAIL stays exactly as encoded; do not turn any historical failure into PASS.",
+  "files": [
+    {
+      "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/framework_v2/glm_mechanical_20261004/periodic_delivery_15_input.json",
+      "start_line": 1,
+      "end_line": 1
+    }
+  ],
+  "max_output_tokens": 4096
+}

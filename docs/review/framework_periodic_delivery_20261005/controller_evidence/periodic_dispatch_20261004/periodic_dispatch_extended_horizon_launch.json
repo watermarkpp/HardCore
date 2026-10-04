@@ -1,0 +1,18 @@
+{
+  "time_utc": "2026-10-04T10:25:46.860602+00:00",
+  "launcher_pid": 21100,
+  "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_extended_horizon_f8af641a75a54401854eaa70b05e30a5",
+  "command": [
+    "py",
+    "-3.12",
+    "tools/source176_r3_validation.py",
+    "periodic_dispatch_extended_horizon",
+    "--tests",
+    "tests/framework/periodic_refresh_horizon_test.tscn",
+    "tests/framework/periodic_dispatch_lifecycle_test.tscn",
+    "tests/framework/periodic_child_root_test.tscn",
+    "--timeout",
+    "30"
+  ],
+  "true_index_sha256": "df5a01dd0d87c14620e0021d70c25a830eb2cc37aa7b012eeb14ee1f2c58c5fb"
+}

@@ -33,9 +33,10 @@ static func commands(fact: Dictionary, binding: Dictionary) -> Array:
 		or chain.maximum_generation!=config.maximum_generation or chain.generation>chain.maximum_generation \
 		or chain.release_id!=fact.get("release_id") or chain.root_skill_id!=definition.get("skill_id"): return []
 	var generation:=int(chain.generation)
-	if generation==0 and (chain.release_id!=chain.root_release_id or not chain.parent_release_id.is_empty()): return []
+	if generation==0 and fact.source_class=="direct" and (chain.release_id!=chain.root_release_id or not chain.parent_release_id.is_empty()): return []
+	if fact.source_class=="periodic" and (chain.release_id==chain.root_release_id or chain.parent_release_id.is_empty()): return []
 	if not fact.get("skill_id") is String or fact.skill_id.is_empty(): return []
-	if generation==0 and fact.source_class=="direct" and fact.skill_id!=chain.root_skill_id: return []
+	if fact.source_class!="child" and fact.skill_id!=chain.root_skill_id: return []
 	if generation>0 and (chain.parent_release_id.is_empty() or chain.release_id==chain.root_release_id): return []
 	if (fact.source_class=="direct" and generation!=0) or (fact.source_class=="child" and generation==0): return []
 	# This is the authored finite transition rule. Its entire potential work
@@ -51,14 +52,18 @@ static func commands(fact: Dictionary, binding: Dictionary) -> Array:
 	if not Vector2(float(origin.x),float(origin.y)).is_finite(): return []
 	var raw:=roundi(float(fact.actual_loss)*float(config.fraction))
 	if raw<=0: return []
-	var captured:=Graph.capture({"op":"RequestChildAction","handler_id":ID,"action_id":ACTION_ID,
+	var command: Dictionary={"op":"RequestChildAction","handler_id":ID,"action_id":ACTION_ID,
 		"source_handle":binding.handle,"mechanic_id":definition.mechanic_id,
 		"root_release_id":chain.root_release_id,"root_skill_id":chain.root_skill_id,
 		"parent_release_id":fact.release_id,"parent_fact_id":fact.fact_id,"parent_target":fact.target,
 		"generation":generation+1,"maximum_generation":int(chain.maximum_generation),
 		"origin":origin,"radius_gu":float(config.radius_gu),"raw_damage":raw,"damage_basis":"actual_hp_loss",
 		"historical_credit":fact.historical_credit,"source_class":"child","damage_channel":"magic_defense",
-		"causes_struck":false,"direct_magic_walk_delay":false},128,8)
+		"causes_struck":false,"direct_magic_walk_delay":false}
+	# Generation one can follow the root's distinct periodic producer. Keep
+	# that recognized variant explicit without broadening the direct command.
+	if fact.source_class=="periodic": command["parent_source_class"]="periodic"
+	var captured:=Graph.capture(command,128,8)
 	return [captured.value] if captured.success else []
 
 static func _first_death(fact: Dictionary) -> bool:

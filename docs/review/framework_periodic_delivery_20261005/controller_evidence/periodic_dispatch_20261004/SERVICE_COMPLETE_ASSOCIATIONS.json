@@ -1,0 +1,158 @@
+{
+  "status": "PASS",
+  "read_utc": "2026-10-04T15:48:41.867585+00:00",
+  "source_content_sha256": "fa554a647d48d0fe644c59a37e7fb6cf087ebe25efd74b4a9bab34279f00c7e9",
+  "source_files": 3780,
+  "engine_version": "4.7.stable.official.5b4e0cb0f",
+  "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+  "invocation_id": "9842699f-5f16-4f57-9d33-0a0c418d28b2",
+  "totals": {
+    "scenes": 3,
+    "checks": 805,
+    "mixed_cases": 16,
+    "service_cases": 2,
+    "failed_checks": 0,
+    "objectdb_warning_lines": 2
+  },
+  "rows": [
+    {
+      "scene": "periodic_refresh_service_boundary_test",
+      "run_id": "ed8a6e16-5eac-498b-93dc-e66c4cb68fa8",
+      "checks": 37,
+      "native_exit": 0,
+      "timeout": false,
+      "receipt": "outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_service_complete_20261004_1536_233609_394255\\framework\\periodic_refresh_service_boundary_test.result.json",
+      "receipt_sha256": "e39e84b35dbee32851c9c3d13b015c8f3884841b482f77f6f11e22d5385a74e2",
+      "duration_seconds": 25.006531
+    },
+    {
+      "scene": "feature_mixed_delivery_test",
+      "run_id": "bf6ec619-f022-40fe-a2e6-2d283a8e8fae",
+      "checks": 380,
+      "native_exit": 0,
+      "timeout": false,
+      "receipt": "outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_service_complete_20261004_1536_233609_394255\\framework\\feature_mixed_delivery_test.result.json",
+      "receipt_sha256": "0c82e0c0dbf7dcc90422c2816620e393c605d7b9fa9b5cf4559cfee65c5414d6",
+      "duration_seconds": 39.727028
+    },
+    {
+      "scene": "feature_mixed_child_resource_test",
+      "run_id": "663b4b1c-bb08-4a1c-a1c0-a8e38872cdc8",
+      "checks": 388,
+      "native_exit": 0,
+      "timeout": false,
+      "receipt": "outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_service_complete_20261004_1536_233609_394255\\framework\\feature_mixed_child_resource_test.result.json",
+      "receipt_sha256": "cd773ed23addfd2313bea5a3728037d7a860d43524a9eca7e52a00e4a4584f03",
+      "duration_seconds": 37.302885
+    }
+  ],
+  "traces": [
+    {
+      "scene": "periodic_refresh_service_boundary_test",
+      "trace": "outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_service_complete_20261004_1536_233609_394255\\periodic_refresh_service_boundary_test.trace.json",
+      "sha256": "fcbd524b65eeec08eb6c63b8e0453fbaeba7a534d345e261b0d478abe61429d9",
+      "scope": "controlled compiled configuration and real HP/Batch/budget characterization; not Root author reload or natural deadline acceptance",
+      "rows": 2
+    },
+    {
+      "scene": "feature_mixed_delivery_test",
+      "trace": "outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_service_complete_20261004_1536_233609_394255\\feature_mixed_delivery_test.trace.json",
+      "sha256": "63fc5b3e0e0a13b6f5651117ccbd402c042875f1a488eadd1a46f99bd0f90224",
+      "scope": "eight controlled real item/writer/Root combinations; simulation steps are test-owned; no natural or device claim",
+      "rows": 8
+    },
+    {
+      "scene": "feature_mixed_child_resource_test",
+      "trace": "outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_service_complete_20261004_1536_233609_394255\\feature_mixed_child_resource_test.trace.json",
+      "sha256": "e29aad847103183c22eb6a6106d7df5d50a4cd93a57d226929af3eb866814c96",
+      "scope": "eight controlled real item/writer/Root combinations; simulation steps are test-owned; no natural or device claim",
+      "rows": 8
+    }
+  ],
+  "native_logs": [
+    {
+      "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_service_complete_20261004_1536_233609_394255\\native_logs\\periodic_refresh_service_boundary_test.stdout.log",
+      "sha256": "0feeb307b1362e1f83b89dc0f98e0b54c2544f0776ee7b250b617534f1213e86",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_service_complete_20261004_1536_233609_394255\\native_logs\\periodic_refresh_service_boundary_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_service_complete_20261004_1536_233609_394255\\native_logs\\periodic_refresh_service_boundary_test.godot.log",
+      "sha256": "554b6603a1b7e52b52133813651d311bc2b227e41fb1f83b704a2ca100fd67c8",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_service_complete_20261004_1536_233609_394255\\native_logs\\feature_mixed_delivery_test.stdout.log",
+      "sha256": "336ef2742738fd4e56ff076bbe9d21686200a5dde46fb79f67ab85e782a8670d",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_service_complete_20261004_1536_233609_394255\\native_logs\\feature_mixed_delivery_test.stderr.log",
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+      "objectdb_warning_lines": 1
+    },
+    {
+      "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_service_complete_20261004_1536_233609_394255\\native_logs\\feature_mixed_delivery_test.godot.log",
+      "sha256": "fca2c41b369d18816ccfb66f9bed661b737491adf8fd528d7d8848680f5d09b0",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_service_complete_20261004_1536_233609_394255\\native_logs\\feature_mixed_child_resource_test.stdout.log",
+      "sha256": "8e04f42c751edbb20f4614f4b9937c70c5c29dd6bf236a01402ed703d32cb1e1",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_service_complete_20261004_1536_233609_394255\\native_logs\\feature_mixed_child_resource_test.stderr.log",
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+      "objectdb_warning_lines": 1
+    },
+    {
+      "path": "outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_service_complete_20261004_1536_233609_394255\\native_logs\\feature_mixed_child_resource_test.godot.log",
+      "sha256": "e7ebefe1d4505024889c434412e5436df79ea71a73358f4c2e08050204500451",
+      "objectdb_warning_lines": 0
+    }
+  ],
+  "service_observations": [
+    {
+      "accepted_horizon_ticks": 4000,
+      "case_requests_full_drain": true,
+      "deadline_acceptance": "NOT_RUN",
+      "delivered_sample_ticks": 4000,
+      "elapsed_wall_usec": 13840626,
+      "fully_drained": true,
+      "future_ticks_not_run": 0,
+      "hp": 1959989,
+      "maximum_actual_lateness_usec": 3999000,
+      "maximum_epoch_overrun_usec": 1334,
+      "maximum_quantum_usec": 1614,
+      "original_authored_ticks": 4,
+      "original_period_usec": 1000,
+      "reachability": "controlled compiled Runtime API; production author replacement while world active not established",
+      "refresh_authored_ticks": 4,
+      "service_epochs": 2008
+    },
+    {
+      "accepted_horizon_ticks": 4000000,
+      "case_requests_full_drain": false,
+      "deadline_acceptance": "NOT_RUN",
+      "delivered_sample_ticks": 1024,
+      "elapsed_wall_usec": 3543383,
+      "fully_drained": false,
+      "future_ticks_not_run": 3998976,
+      "hp": 1989749,
+      "maximum_actual_lateness_usec": 1023,
+      "maximum_epoch_overrun_usec": 1053,
+      "maximum_quantum_usec": 1374,
+      "original_authored_ticks": 4,
+      "original_period_usec": 1,
+      "reachability": "controlled compiled Runtime API; production author replacement while world active not established",
+      "refresh_authored_ticks": 4,
+      "service_epochs": 516
+    }
+  ],
+  "scope": "Controlled real item/writer/Root 16 combinations and real HP/budget cumulative characterization. Intentional due backlog; natural deadline, worst quantum, GPU and Android NOT_RUN. Longer diagnostic completion window is not an optimization result."
+}

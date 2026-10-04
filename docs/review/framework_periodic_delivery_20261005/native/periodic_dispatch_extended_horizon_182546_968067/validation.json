@@ -1,0 +1,16 @@
+{
+  "command": [
+    "powershell",
+    "-NoProfile",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/periodic_refresh_horizon_test.tscn','tests/framework/periodic_dispatch_lifecycle_test.tscn','tests/framework/periodic_child_root_test.tscn' -TimeoutSeconds 30"
+  ],
+  "timeout_seconds": 30,
+  "exit_code": 0,
+  "source_stable_during_run": true,
+  "passed": 3,
+  "failed": 0,
+  "status": "PASS"
+}

@@ -1,0 +1,699 @@
+{
+  "schema": "cue_actor_retirement_final_handoff.v1",
+  "created_utc": "2026-10-04T17:37:05.8811092Z",
+  "task": "cue-lifecycle-2c585-20261004",
+  "head": "2c58552d2d905eea1f5c13d38685f66c489b092c",
+  "branch": "codex/collab-cue-lifecycle-20261004",
+  "worktree": "C:\\Users\\Administrator\\Documents\\Codex\\2026-10-04\\task\\HC-cue",
+  "freeze": "No source edits or native tests after GREEN; 11-scene regression remains NOT_RUN by controller instruction.",
+  "source_files": [
+    {
+      "path": "scripts/features/presentation/presentation_port.gd",
+      "bytes": 4384,
+      "sha256": "0bbcda6073f4a2155d09b039c7942c13941864e323b29db166f64ce44dea0cb1",
+      "green_before_sha256": "0bbcda6073f4a2155d09b039c7942c13941864e323b29db166f64ce44dea0cb1",
+      "green_after_sha256": "0bbcda6073f4a2155d09b039c7942c13941864e323b29db166f64ce44dea0cb1",
+      "unchanged_since_green": true
+    },
+    {
+      "path": "tests/framework/feature_cue_actor_retirement_test.gd",
+      "bytes": 9700,
+      "sha256": "14c8e771f9a4acac2426572adfc9447c05a10ab4a9612ae80115888d405592c7",
+      "green_before_sha256": "14c8e771f9a4acac2426572adfc9447c05a10ab4a9612ae80115888d405592c7",
+      "green_after_sha256": "14c8e771f9a4acac2426572adfc9447c05a10ab4a9612ae80115888d405592c7",
+      "unchanged_since_green": true
+    },
+    {
+      "path": "tests/framework/feature_cue_actor_retirement_test.tscn",
+      "bytes": 219,
+      "sha256": "5d19dc9245750f1ad57441bf052eeacce162a6e5721630322040d1bbb9f907b2",
+      "green_before_sha256": "5d19dc9245750f1ad57441bf052eeacce162a6e5721630322040d1bbb9f907b2",
+      "green_after_sha256": "5d19dc9245750f1ad57441bf052eeacce162a6e5721630322040d1bbb9f907b2",
+      "unchanged_since_green": true
+    },
+    {
+      "path": "tests/framework/feature_cue_actor_retirement_reentry_test.tscn",
+      "bytes": 258,
+      "sha256": "fad9fa922724e25a5556791d36904775462bcb52152a08c3365a73727c70e156",
+      "green_before_sha256": "fad9fa922724e25a5556791d36904775462bcb52152a08c3365a73727c70e156",
+      "green_after_sha256": "fad9fa922724e25a5556791d36904775462bcb52152a08c3365a73727c70e156",
+      "unchanged_since_green": true
+    }
+  ],
+  "all_four_source_bytes_unchanged_since_last_green": true,
+  "excluded_environment_files": [
+    "assets/data/features/socketing_fixture_items.json",
+    "assets/data/identity/item_categories_v1.json"
+  ],
+  "delivery_patch": {
+    "path": "C:\\Users\\Administrator\\Documents\\Codex\\2026-10-04\\task\\HC-cue\\outputs\\cue_actor_retirement_20261004\\cue_actor_retirement_delivery.patch",
+    "bytes": 12640,
+    "sha256": "575c98dfcf917cf87866a115ba91932e42739430010ef20c75b5b1e64eb039d6",
+    "git_command": "git diff --binary --full-index --no-ext-diff HEAD -- <exact four paths>",
+    "included_paths": [
+      "scripts/features/presentation/presentation_port.gd",
+      "tests/framework/feature_cue_actor_retirement_reentry_test.tscn",
+      "tests/framework/feature_cue_actor_retirement_test.gd",
+      "tests/framework/feature_cue_actor_retirement_test.tscn"
+    ]
+  },
+  "worklog": {
+    "path": "C:\\Users\\Administrator\\Documents\\Codex\\2026-10-04\\task\\HC-cue\\docs\\source176_r3\\CUE_ACTOR_RETIREMENT_WORKLOG_20261004.md",
+    "bytes": 7928,
+    "sha256": "a8584079f75dd9d8f9d50b3b91423519e7e2c1d0df259bbaf4eeaa3871f58369",
+    "prior_file_backup": null
+  },
+  "red": {
+    "stage": "RED",
+    "evidence_directory": "C:\\Users\\Administrator\\Documents\\Codex\\2026-10-04\\task\\HC-cue\\outputs\\cue_actor_retirement_20261004\\red_20261004T171345Z_ef588a64",
+    "summary_path": "C:\\Users\\Administrator\\Documents\\Codex\\2026-10-04\\task\\HC-cue\\outputs\\cue_actor_retirement_20261004\\red_20261004T171345Z_ef588a64\\summary.json",
+    "summary": {
+      "stage": "red",
+      "evidence": "C:\\Users\\Administrator\\Documents\\Codex\\2026-10-04\\task\\HC-cue\\outputs\\cue_actor_retirement_20261004\\red_20261004T171345Z_ef588a64",
+      "exit_code": 1,
+      "source_stable": true,
+      "passed": 1,
+      "failed": 1,
+      "invocation_id": "1e48af78-ab9e-4b43-b1fd-29aad971cc01"
+    },
+    "runner_results_path": "C:\\Users\\Administrator\\Documents\\Codex\\2026-10-04\\task\\HC-cue\\outputs\\cue_actor_retirement_20261004\\red_20261004T171345Z_ef588a64\\runner_results.json",
+    "invocation_id": "1e48af78-ab9e-4b43-b1fd-29aad971cc01",
+    "source_stable": true,
+    "total_tests": 2,
+    "passed": 1,
+    "failed": 1,
+    "engine_log_errors": 0,
+    "source_content_sha256": null,
+    "scenes": [
+      {
+        "scene_id": "feature_cue_actor_retirement_test",
+        "run_id": "59ca29e9-6ede-4796-9fa2-8cf6b55dc96a",
+        "invocation_id": "1e48af78-ab9e-4b43-b1fd-29aad971cc01",
+        "receipt_path": "C:\\Users\\Administrator\\Documents\\Codex\\2026-10-04\\task\\HC-cue\\outputs\\cue_actor_retirement_20261004\\red_20261004T171345Z_ef588a64\\framework\\feature_cue_actor_retirement_test.result.json",
+        "receipt_status": "PASS",
+        "receipt_valid": true,
+        "check_count": 23,
+        "passed_checks": 23,
+        "failed_checks": 0,
+        "checks": [
+          {
+            "id": 1,
+            "label": "registered warrior identity",
+            "passed": true
+          },
+          {
+            "id": 2,
+            "label": "existing default-off critical cue registry prepares its declared resources",
+            "passed": true
+          },
+          {
+            "id": 3,
+            "label": "actual mapped Root reaches READY",
+            "passed": true
+          },
+          {
+            "id": 4,
+            "label": "actual factory creates the mapped receiver",
+            "passed": true
+          },
+          {
+            "id": 5,
+            "label": "receiver has actual world and life qualification",
+            "passed": true
+          },
+          {
+            "id": 6,
+            "label": "actual action configuration owns its nonempty resource lease",
+            "passed": true
+          },
+          {
+            "id": 7,
+            "label": "real Player accepts a capacity ticket before windup",
+            "passed": true
+          },
+          {
+            "id": 8,
+            "label": "source withdrawal leaves accepted resource ownership intact",
+            "passed": true
+          },
+          {
+            "id": 9,
+            "label": "original timer and Root pipeline commit base HP exactly once",
+            "passed": true
+          },
+          {
+            "id": 10,
+            "label": "one actual CanvasItem enters the receiver tree",
+            "passed": true
+          },
+          {
+            "id": 11,
+            "label": "cue lifecycle preserves committed HP and gameplay RNG",
+            "passed": true
+          },
+          {
+            "id": 12,
+            "label": "accepted state owns one actual cue and one prepared audio onset",
+            "passed": true
+          },
+          {
+            "id": 13,
+            "label": "actual AudioStreamPlayer consumes the exact accepted stream",
+            "passed": true
+          },
+          {
+            "id": 14,
+            "label": "refresh keeps one cue without replaying audio",
+            "passed": true
+          },
+          {
+            "id": 15,
+            "label": "queued actor immediately loses its original mutation qualification",
+            "passed": true
+          },
+          {
+            "id": 16,
+            "label": "same declared slot admits a new life without growing the world bound",
+            "passed": true
+          },
+          {
+            "id": 17,
+            "label": "actor destruction also destroys its actual child cue",
+            "passed": true
+          },
+          {
+            "id": 18,
+            "label": "old actor state and exact playback retire at the existing due boundary",
+            "passed": true
+          },
+          {
+            "id": 19,
+            "label": "old delayed service cannot mutate replacement life or gameplay RNG",
+            "passed": true
+          },
+          {
+            "id": 20,
+            "label": "repeated stop and clear remain empty",
+            "passed": true
+          },
+          {
+            "id": 21,
+            "label": "last accepted state and cue release the withdrawn lease",
+            "passed": true
+          },
+          {
+            "id": 22,
+            "label": "public consumer closes all shared budget scopes",
+            "passed": true
+          },
+          {
+            "id": 23,
+            "label": "retired test world restores the ordinary catalog",
+            "passed": true
+          }
+        ],
+        "native_process_id": 13156,
+        "child_process_exit_state": "exited",
+        "process_exited": true,
+        "native_exit_code": 0,
+        "native_exit_observed_utc": "2026-10-04T17:14:02.3613111Z",
+        "timeout": false,
+        "pass_marker_found": true,
+        "stdout_final_marker": "PASS",
+        "wrapper_process_id": 22284,
+        "runner_result": "PASS",
+        "engine_log_failure_count": 0,
+        "stderr_path": "C:\\Users\\Administrator\\Documents\\Codex\\2026-10-04\\task\\HC-cue\\outputs\\cue_actor_retirement_20261004\\red_20261004T171345Z_ef588a64\\raw\\feature_cue_actor_retirement_test.stderr.log",
+        "stderr_bytes": 133,
+        "stderr_sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+        "stderr_text": "WARNING: 8 ObjectDB instances were leaked at exit (run with `--verbose` for details).\r\n   at: cleanup (core/object/object.cpp:2535)\r\n",
+        "warning_lines": [
+          "WARNING: 8 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+        ],
+        "source_content_sha256": "fc14f3bd4494fcd4b94691b24e3a2fc594bff4dd99b9d33623c2a6450844375f"
+      },
+      {
+        "scene_id": "feature_cue_actor_retirement_reentry_test",
+        "run_id": "2ad4a6af-7c0e-4185-9f34-baf4c1e9e3df",
+        "invocation_id": "1e48af78-ab9e-4b43-b1fd-29aad971cc01",
+        "receipt_path": "C:\\Users\\Administrator\\Documents\\Codex\\2026-10-04\\task\\HC-cue\\outputs\\cue_actor_retirement_20261004\\red_20261004T171345Z_ef588a64\\framework\\feature_cue_actor_retirement_reentry_test.result.json",
+        "receipt_status": "FAIL",
+        "receipt_valid": false,
+        "check_count": 19,
+        "passed_checks": 15,
+        "failed_checks": 4,
+        "checks": [
+          {
+            "id": 1,
+            "label": "registered warrior identity",
+            "passed": true
+          },
+          {
+            "id": 2,
+            "label": "existing default-off critical cue registry prepares its declared resources",
+            "passed": true
+          },
+          {
+            "id": 3,
+            "label": "actual mapped Root reaches READY",
+            "passed": true
+          },
+          {
+            "id": 4,
+            "label": "actual factory creates the mapped receiver",
+            "passed": true
+          },
+          {
+            "id": 5,
+            "label": "receiver has actual world and life qualification",
+            "passed": true
+          },
+          {
+            "id": 6,
+            "label": "actual action configuration owns its nonempty resource lease",
+            "passed": true
+          },
+          {
+            "id": 7,
+            "label": "real Player accepts a capacity ticket before windup",
+            "passed": true
+          },
+          {
+            "id": 8,
+            "label": "source withdrawal leaves accepted resource ownership intact",
+            "passed": true
+          },
+          {
+            "id": 9,
+            "label": "original timer and Root pipeline commit base HP exactly once",
+            "passed": true
+          },
+          {
+            "id": 10,
+            "label": "one actual CanvasItem enters the receiver tree",
+            "passed": true
+          },
+          {
+            "id": 11,
+            "label": "cue lifecycle preserves committed HP and gameplay RNG",
+            "passed": true
+          },
+          {
+            "id": 12,
+            "label": "synchronous actor-tree observer retires logic before cue attachment returns",
+            "passed": true
+          },
+          {
+            "id": 13,
+            "label": "retired onset cannot register a late live cue after add_child callback",
+            "passed": false
+          },
+          {
+            "id": 14,
+            "label": "retirement before audio onset cannot start or register old playback",
+            "passed": false
+          },
+          {
+            "id": 15,
+            "label": "retired actual cue is destroyed after deferred deletion",
+            "passed": false
+          },
+          {
+            "id": 16,
+            "label": "retired accepted lease is released without a surviving cue",
+            "passed": false
+          },
+          {
+            "id": 17,
+            "label": "retired onset never produces a later periodic mutation",
+            "passed": true
+          },
+          {
+            "id": 18,
+            "label": "public consumer closes all shared budget scopes",
+            "passed": true
+          },
+          {
+            "id": 19,
+            "label": "retired test world restores the ordinary catalog",
+            "passed": true
+          }
+        ],
+        "native_process_id": 24084,
+        "child_process_exit_state": "exited",
+        "process_exited": true,
+        "native_exit_code": 1,
+        "native_exit_observed_utc": "2026-10-04T17:14:17.9791147Z",
+        "timeout": false,
+        "pass_marker_found": false,
+        "stdout_final_marker": "FAIL",
+        "wrapper_process_id": 6220,
+        "runner_result": "FAIL",
+        "engine_log_failure_count": 0,
+        "stderr_path": "C:\\Users\\Administrator\\Documents\\Codex\\2026-10-04\\task\\HC-cue\\outputs\\cue_actor_retirement_20261004\\red_20261004T171345Z_ef588a64\\raw\\feature_cue_actor_retirement_reentry_test.stderr.log",
+        "stderr_bytes": 133,
+        "stderr_sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+        "stderr_text": "WARNING: 8 ObjectDB instances were leaked at exit (run with `--verbose` for details).\r\n   at: cleanup (core/object/object.cpp:2535)\r\n",
+        "warning_lines": [
+          "WARNING: 8 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+        ],
+        "source_content_sha256": "fc14f3bd4494fcd4b94691b24e3a2fc594bff4dd99b9d33623c2a6450844375f"
+      }
+    ]
+  },
+  "green": {
+    "stage": "GREEN",
+    "evidence_directory": "C:\\Users\\Administrator\\Documents\\Codex\\2026-10-04\\task\\HC-cue\\outputs\\cue_actor_retirement_20261004\\green_20261004T172103Z_2cab5ea9",
+    "summary_path": "C:\\Users\\Administrator\\Documents\\Codex\\2026-10-04\\task\\HC-cue\\outputs\\cue_actor_retirement_20261004\\green_20261004T172103Z_2cab5ea9\\summary.json",
+    "summary": {
+      "stage": "green",
+      "evidence": "C:\\Users\\Administrator\\Documents\\Codex\\2026-10-04\\task\\HC-cue\\outputs\\cue_actor_retirement_20261004\\green_20261004T172103Z_2cab5ea9",
+      "exit_code": 0,
+      "source_stable": true,
+      "passed": 2,
+      "failed": 0,
+      "invocation_id": "a2bd7a5f-decf-4f6d-ac6f-71d6ed59ed9e"
+    },
+    "runner_results_path": "C:\\Users\\Administrator\\Documents\\Codex\\2026-10-04\\task\\HC-cue\\outputs\\cue_actor_retirement_20261004\\green_20261004T172103Z_2cab5ea9\\runner_results.json",
+    "invocation_id": "a2bd7a5f-decf-4f6d-ac6f-71d6ed59ed9e",
+    "source_stable": true,
+    "total_tests": 2,
+    "passed": 2,
+    "failed": 0,
+    "engine_log_errors": 0,
+    "source_content_sha256": null,
+    "scenes": [
+      {
+        "scene_id": "feature_cue_actor_retirement_test",
+        "run_id": "a10d43ed-959d-4468-a387-e3db17e6ff18",
+        "invocation_id": "a2bd7a5f-decf-4f6d-ac6f-71d6ed59ed9e",
+        "receipt_path": "C:\\Users\\Administrator\\Documents\\Codex\\2026-10-04\\task\\HC-cue\\outputs\\cue_actor_retirement_20261004\\green_20261004T172103Z_2cab5ea9\\framework\\feature_cue_actor_retirement_test.result.json",
+        "receipt_status": "PASS",
+        "receipt_valid": true,
+        "check_count": 23,
+        "passed_checks": 23,
+        "failed_checks": 0,
+        "checks": [
+          {
+            "id": 1,
+            "label": "registered warrior identity",
+            "passed": true
+          },
+          {
+            "id": 2,
+            "label": "existing default-off critical cue registry prepares its declared resources",
+            "passed": true
+          },
+          {
+            "id": 3,
+            "label": "actual mapped Root reaches READY",
+            "passed": true
+          },
+          {
+            "id": 4,
+            "label": "actual factory creates the mapped receiver",
+            "passed": true
+          },
+          {
+            "id": 5,
+            "label": "receiver has actual world and life qualification",
+            "passed": true
+          },
+          {
+            "id": 6,
+            "label": "actual action configuration owns its nonempty resource lease",
+            "passed": true
+          },
+          {
+            "id": 7,
+            "label": "real Player accepts a capacity ticket before windup",
+            "passed": true
+          },
+          {
+            "id": 8,
+            "label": "source withdrawal leaves accepted resource ownership intact",
+            "passed": true
+          },
+          {
+            "id": 9,
+            "label": "original timer and Root pipeline commit base HP exactly once",
+            "passed": true
+          },
+          {
+            "id": 10,
+            "label": "one actual CanvasItem enters the receiver tree",
+            "passed": true
+          },
+          {
+            "id": 11,
+            "label": "cue lifecycle preserves committed HP and gameplay RNG",
+            "passed": true
+          },
+          {
+            "id": 12,
+            "label": "accepted state owns one actual cue and one prepared audio onset",
+            "passed": true
+          },
+          {
+            "id": 13,
+            "label": "actual AudioStreamPlayer consumes the exact accepted stream",
+            "passed": true
+          },
+          {
+            "id": 14,
+            "label": "refresh keeps one cue without replaying audio",
+            "passed": true
+          },
+          {
+            "id": 15,
+            "label": "queued actor immediately loses its original mutation qualification",
+            "passed": true
+          },
+          {
+            "id": 16,
+            "label": "same declared slot admits a new life without growing the world bound",
+            "passed": true
+          },
+          {
+            "id": 17,
+            "label": "actor destruction also destroys its actual child cue",
+            "passed": true
+          },
+          {
+            "id": 18,
+            "label": "old actor state and exact playback retire at the existing due boundary",
+            "passed": true
+          },
+          {
+            "id": 19,
+            "label": "old delayed service cannot mutate replacement life or gameplay RNG",
+            "passed": true
+          },
+          {
+            "id": 20,
+            "label": "repeated stop and clear remain empty",
+            "passed": true
+          },
+          {
+            "id": 21,
+            "label": "last accepted state and cue release the withdrawn lease",
+            "passed": true
+          },
+          {
+            "id": 22,
+            "label": "public consumer closes all shared budget scopes",
+            "passed": true
+          },
+          {
+            "id": 23,
+            "label": "retired test world restores the ordinary catalog",
+            "passed": true
+          }
+        ],
+        "native_process_id": 16104,
+        "child_process_exit_state": "exited",
+        "process_exited": true,
+        "native_exit_code": 0,
+        "native_exit_observed_utc": "2026-10-04T17:21:20.4916364Z",
+        "timeout": false,
+        "pass_marker_found": true,
+        "stdout_final_marker": "PASS",
+        "wrapper_process_id": 21124,
+        "runner_result": "PASS",
+        "engine_log_failure_count": 0,
+        "stderr_path": "C:\\Users\\Administrator\\Documents\\Codex\\2026-10-04\\task\\HC-cue\\outputs\\cue_actor_retirement_20261004\\green_20261004T172103Z_2cab5ea9\\raw\\feature_cue_actor_retirement_test.stderr.log",
+        "stderr_bytes": 133,
+        "stderr_sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+        "stderr_text": "WARNING: 8 ObjectDB instances were leaked at exit (run with `--verbose` for details).\r\n   at: cleanup (core/object/object.cpp:2535)\r\n",
+        "warning_lines": [
+          "WARNING: 8 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+        ],
+        "source_content_sha256": "82d2bab167c0b1667b5032ae3398fcfdd97ed47da219da9d73bb930389d87e23"
+      },
+      {
+        "scene_id": "feature_cue_actor_retirement_reentry_test",
+        "run_id": "269b2b34-2811-4c42-a7f7-2ea2a5634155",
+        "invocation_id": "a2bd7a5f-decf-4f6d-ac6f-71d6ed59ed9e",
+        "receipt_path": "C:\\Users\\Administrator\\Documents\\Codex\\2026-10-04\\task\\HC-cue\\outputs\\cue_actor_retirement_20261004\\green_20261004T172103Z_2cab5ea9\\framework\\feature_cue_actor_retirement_reentry_test.result.json",
+        "receipt_status": "PASS",
+        "receipt_valid": true,
+        "check_count": 19,
+        "passed_checks": 19,
+        "failed_checks": 0,
+        "checks": [
+          {
+            "id": 1,
+            "label": "registered warrior identity",
+            "passed": true
+          },
+          {
+            "id": 2,
+            "label": "existing default-off critical cue registry prepares its declared resources",
+            "passed": true
+          },
+          {
+            "id": 3,
+            "label": "actual mapped Root reaches READY",
+            "passed": true
+          },
+          {
+            "id": 4,
+            "label": "actual factory creates the mapped receiver",
+            "passed": true
+          },
+          {
+            "id": 5,
+            "label": "receiver has actual world and life qualification",
+            "passed": true
+          },
+          {
+            "id": 6,
+            "label": "actual action configuration owns its nonempty resource lease",
+            "passed": true
+          },
+          {
+            "id": 7,
+            "label": "real Player accepts a capacity ticket before windup",
+            "passed": true
+          },
+          {
+            "id": 8,
+            "label": "source withdrawal leaves accepted resource ownership intact",
+            "passed": true
+          },
+          {
+            "id": 9,
+            "label": "original timer and Root pipeline commit base HP exactly once",
+            "passed": true
+          },
+          {
+            "id": 10,
+            "label": "one actual CanvasItem enters the receiver tree",
+            "passed": true
+          },
+          {
+            "id": 11,
+            "label": "cue lifecycle preserves committed HP and gameplay RNG",
+            "passed": true
+          },
+          {
+            "id": 12,
+            "label": "synchronous actor-tree observer retires logic before cue attachment returns",
+            "passed": true
+          },
+          {
+            "id": 13,
+            "label": "retired onset cannot register a late live cue after add_child callback",
+            "passed": true
+          },
+          {
+            "id": 14,
+            "label": "retirement before audio onset cannot start or register old playback",
+            "passed": true
+          },
+          {
+            "id": 15,
+            "label": "retired actual cue is destroyed after deferred deletion",
+            "passed": true
+          },
+          {
+            "id": 16,
+            "label": "retired accepted lease is released without a surviving cue",
+            "passed": true
+          },
+          {
+            "id": 17,
+            "label": "retired onset never produces a later periodic mutation",
+            "passed": true
+          },
+          {
+            "id": 18,
+            "label": "public consumer closes all shared budget scopes",
+            "passed": true
+          },
+          {
+            "id": 19,
+            "label": "retired test world restores the ordinary catalog",
+            "passed": true
+          }
+        ],
+        "native_process_id": 8280,
+        "child_process_exit_state": "exited",
+        "process_exited": true,
+        "native_exit_code": 0,
+        "native_exit_observed_utc": "2026-10-04T17:21:35.9705221Z",
+        "timeout": false,
+        "pass_marker_found": true,
+        "stdout_final_marker": "PASS",
+        "wrapper_process_id": 12436,
+        "runner_result": "PASS",
+        "engine_log_failure_count": 0,
+        "stderr_path": "C:\\Users\\Administrator\\Documents\\Codex\\2026-10-04\\task\\HC-cue\\outputs\\cue_actor_retirement_20261004\\green_20261004T172103Z_2cab5ea9\\raw\\feature_cue_actor_retirement_reentry_test.stderr.log",
+        "stderr_bytes": 133,
+        "stderr_sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+        "stderr_text": "WARNING: 8 ObjectDB instances were leaked at exit (run with `--verbose` for details).\r\n   at: cleanup (core/object/object.cpp:2535)\r\n",
+        "warning_lines": [
+          "WARNING: 8 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+        ],
+        "source_content_sha256": "82d2bab167c0b1667b5032ae3398fcfdd97ed47da219da9d73bb930389d87e23"
+      }
+    ]
+  },
+  "regression_script": {
+    "path": "C:\\Users\\Administrator\\Documents\\Codex\\2026-10-04\\task\\HC-cue\\outputs\\cue_actor_retirement_20261004\\execute_cue_regressions.py",
+    "bytes": 1103,
+    "sha256": "9b11b9b24aa7602ecd151b0c07cece6a3e916caf899bcbd178cd83803e56fb64",
+    "scene_count": 11,
+    "status": "NOT_RUN"
+  },
+  "diff_checks": {
+    "git_diff_check_head_exit_code": 0,
+    "git_diff_check_head_output": [
+      "warning: in the working copy of 'assets/data/features/socketing_fixture_items.json', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'assets/data/identity/item_categories_v1.json', LF will be replaced by CRLF the next time Git touches it"
+    ],
+    "git_diff_check_worktree_exit_code": 0,
+    "git_diff_check_worktree_output": [
+      "warning: in the working copy of 'assets/data/features/socketing_fixture_items.json', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'assets/data/identity/item_categories_v1.json', LF will be replaced by CRLF the next time Git touches it"
+    ],
+    "git_diff_check_index_exit_code": 0,
+    "git_diff_check_index_output": []
+  },
+  "process_snapshot": {
+    "captured_utc": "2026-10-04T17:37:05.9331610Z",
+    "godot_process_count": 0,
+    "godot_processes": [],
+    "test_native_processes_exited_naturally": true,
+    "process_handles_terminated_by_peer": 0
+  },
+  "final_git_status": [
+    " M assets/data/features/socketing_fixture_items.json",
+    " M assets/data/identity/item_categories_v1.json",
+    " M scripts/features/presentation/presentation_port.gd",
+    "A  tests/framework/feature_cue_actor_retirement_reentry_test.tscn",
+    "A  tests/framework/feature_cue_actor_retirement_test.gd",
+    "A  tests/framework/feature_cue_actor_retirement_test.tscn",
+    "?? docs/source176_r3/CUE_ACTOR_RETIREMENT_WORKLOG_20261004.md"
+  ]
+}

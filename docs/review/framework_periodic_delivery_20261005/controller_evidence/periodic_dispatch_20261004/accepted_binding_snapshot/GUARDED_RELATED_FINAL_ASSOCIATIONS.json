@@ -1,0 +1,890 @@
+{
+  "status": "PASS",
+  "read_utc": "2026-10-04T17:11:34.952129+00:00",
+  "scope": "Final 2da source related regression; world/cold and mixed remain NOT_RUN on this exact source",
+  "evidence": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896",
+  "source_content_sha256": "2da0511645338738205df66bb658df973b2be5802f76dac68eff43045d793f3d",
+  "source_file_count": 3782,
+  "all_current_runtime_files_rehashed": true,
+  "engine_version": "4.7.stable.official.5b4e0cb0f",
+  "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+  "scene_count": 26,
+  "complete_checks": 895,
+  "failed_checks": 0,
+  "native_exit": 0,
+  "invocation_id": "15463c7a-1e30-4605-bc1a-7344e23d0b6e",
+  "stderr_warning_scenes": [
+    "empty_extension_behavior_test",
+    "feature_batch_failure_test",
+    "feature_capacity_admission_test",
+    "feature_child_chain_admission_test",
+    "feature_periodic_child_chain_test",
+    "feature_state_loan_lifetime_test",
+    "feature_state_loan_root_test",
+    "periodic_child_g2_root_test",
+    "periodic_child_root_test"
+  ],
+  "warning_note": "Unique stderr scene identities; duplicate copies in godot/runner logs are not independent warnings. Warning root causes remain open.",
+  "validation_sha256": "bf723df1693cfed05414f44b062d7eec96340fe67a92e205cff2e11976ec1c25",
+  "runner_results_sha256": "e1ca21d8c3e2131d2eca6c1a9c0d9952fbeea66cdaafb917fb3a2db344f876d1",
+  "rows": [
+    {
+      "scene": "periodic_producer_identity_test",
+      "checks": 40,
+      "failed_checks": 0,
+      "native_exit": 0,
+      "run_id": "c92691f6-0176-48f2-8014-8a0605e59be1",
+      "invocation_id": "15463c7a-1e30-4605-bc1a-7344e23d0b6e",
+      "receipt_sha256": "444dd2c14596b2f70901ecc4f4c88548a82ce8e33d9843467968b1fa1f0afbee",
+      "runtime_environment": {
+        "native_process_id": 17376,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/accepted_binding_guarded_related_20261005_0108/Godot/app_userdata/HardCore"
+      },
+      "native_runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\periodic_producer_identity_test.godot.log",
+          "sha256": "f673989fa1d820fb9459a52669cf180fe527ddac016947ecab41a42adf4c99aa",
+          "bytes": 222
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\periodic_producer_identity_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\periodic_producer_identity_test.stdout.log",
+          "sha256": "6b9d6f0af46e8c73c07f67b30fcffc77fe6ac4de95e2bbb4706eabbf23056d34",
+          "bytes": 226
+        }
+      ]
+    },
+    {
+      "scene": "periodic_dispatch_lifecycle_test",
+      "checks": 132,
+      "failed_checks": 0,
+      "native_exit": 0,
+      "run_id": "265d1fff-54a6-4b14-9c88-fac6f4f987c1",
+      "invocation_id": "15463c7a-1e30-4605-bc1a-7344e23d0b6e",
+      "receipt_sha256": "c7fa56da3ff7be9d6dc3cf4dcc65484860f73de990be45682e9b2d8d4aaba2ec",
+      "runtime_environment": {
+        "native_process_id": 864,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/accepted_binding_guarded_related_20261005_0108/Godot/app_userdata/HardCore"
+      },
+      "native_runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\periodic_dispatch_lifecycle_test.godot.log",
+          "sha256": "54e01ceae698d6cad70c53958e9f06390c5dd0fee3f5d6f9bdb890efdc902e3c",
+          "bytes": 224
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\periodic_dispatch_lifecycle_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\periodic_dispatch_lifecycle_test.stdout.log",
+          "sha256": "f83b303859e908702576a0341b1f597300ba88c030756be375024d9af4699eca",
+          "bytes": 228
+        }
+      ]
+    },
+    {
+      "scene": "periodic_refresh_horizon_test",
+      "checks": 37,
+      "failed_checks": 0,
+      "native_exit": 0,
+      "run_id": "893eec9d-dcd0-48f0-b2e6-7c5c915e0e46",
+      "invocation_id": "15463c7a-1e30-4605-bc1a-7344e23d0b6e",
+      "receipt_sha256": "553cd20f8e130f3d0547d4006250d56992a2b997d6c5acfc7e66e3e7210778fa",
+      "runtime_environment": {
+        "native_process_id": 132,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/accepted_binding_guarded_related_20261005_0108/Godot/app_userdata/HardCore"
+      },
+      "native_runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\periodic_refresh_horizon_test.godot.log",
+          "sha256": "c8f708c5d4991701ee7398f47ad167d6c91361f08e0d5f9c462afdfc1f91f3fe",
+          "bytes": 821
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\periodic_refresh_horizon_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\periodic_refresh_horizon_test.stdout.log",
+          "sha256": "28d895af8bcbad7e8cc4988b674af4112c1ac88082b4b5fab6aa8a35b2d66cc4",
+          "bytes": 827
+        }
+      ]
+    },
+    {
+      "scene": "periodic_child_root_test",
+      "checks": 21,
+      "failed_checks": 0,
+      "native_exit": 0,
+      "run_id": "af703e0a-6103-4d24-913b-2d19ba0398a1",
+      "invocation_id": "15463c7a-1e30-4605-bc1a-7344e23d0b6e",
+      "receipt_sha256": "a178e7c62d40856174fb849f9a03aa9d133764217506db75e5994b56cbba732c",
+      "runtime_environment": {
+        "native_process_id": 4004,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/accepted_binding_guarded_related_20261005_0108/Godot/app_userdata/HardCore"
+      },
+      "native_runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\periodic_child_root_test.godot.log",
+          "sha256": "0ef5c3523045af54a8617e0e8f064eafd8d82a361232035b12707b1d372482e0",
+          "bytes": 5420
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\periodic_child_root_test.stderr.log",
+          "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+          "bytes": 133
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\periodic_child_root_test.stdout.log",
+          "sha256": "7aa0e1148fbfba5747587613c3571f4e9231adc3d0871e8fb93d6218f2b7e93d",
+          "bytes": 5432
+        }
+      ]
+    },
+    {
+      "scene": "periodic_child_g2_root_test",
+      "checks": 27,
+      "failed_checks": 0,
+      "native_exit": 0,
+      "run_id": "a0d811b7-ec22-4d7a-a605-0a85b6a67291",
+      "invocation_id": "15463c7a-1e30-4605-bc1a-7344e23d0b6e",
+      "receipt_sha256": "0e2a9029439e16fc34cba4836ee01a9219c1b818d43bcc16b18b264009e318da",
+      "runtime_environment": {
+        "native_process_id": 13716,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/accepted_binding_guarded_related_20261005_0108/Godot/app_userdata/HardCore"
+      },
+      "native_runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\periodic_child_g2_root_test.godot.log",
+          "sha256": "99bdd2bb597aced1cb223164e51e239188869e198a743a5d2645f5d77e14caf5",
+          "bytes": 5415
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\periodic_child_g2_root_test.stderr.log",
+          "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+          "bytes": 133
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\periodic_child_g2_root_test.stdout.log",
+          "sha256": "5f2b22f95c926be636e5a693b99a4361c75968b6ddb20aa16d2c2cc4f998a9f8",
+          "bytes": 5427
+        }
+      ]
+    },
+    {
+      "scene": "feature_periodic_child_chain_test",
+      "checks": 18,
+      "failed_checks": 0,
+      "native_exit": 0,
+      "run_id": "1d108ee0-9e11-443d-a863-486d7a36e61b",
+      "invocation_id": "15463c7a-1e30-4605-bc1a-7344e23d0b6e",
+      "receipt_sha256": "a3199f5d787bd9bf8c1655119e03f0baca00ed9f4de00e4891e0d1ff22c84b00",
+      "runtime_environment": {
+        "native_process_id": 5740,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/accepted_binding_guarded_related_20261005_0108/Godot/app_userdata/HardCore"
+      },
+      "native_runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\feature_periodic_child_chain_test.godot.log",
+          "sha256": "3297b7756ccb66102915c960ec5d84ca4e8b81305c82e2987768dc14ce1b5d7c",
+          "bytes": 5898
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\feature_periodic_child_chain_test.stderr.log",
+          "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+          "bytes": 133
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\feature_periodic_child_chain_test.stdout.log",
+          "sha256": "9ac76bca3dd1992e8de71cb5dbc8e2c2941ff138bbd735acbe5cf90610823ac6",
+          "bytes": 5911
+        }
+      ]
+    },
+    {
+      "scene": "feature_death_child_command_test",
+      "checks": 31,
+      "failed_checks": 0,
+      "native_exit": 0,
+      "run_id": "200e17c3-3ee8-47e7-b3cf-a47103860172",
+      "invocation_id": "15463c7a-1e30-4605-bc1a-7344e23d0b6e",
+      "receipt_sha256": "abfc6e9e5f7dda9dec3a684e906d6614bd36b83105b8993cb8810bcada729481",
+      "runtime_environment": {
+        "native_process_id": 13396,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/accepted_binding_guarded_related_20261005_0108/Godot/app_userdata/HardCore"
+      },
+      "native_runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\feature_death_child_command_test.godot.log",
+          "sha256": "ed12d6400020c04dea10ede87f8ffe021a0bdda6e5a942598f43116e2ca341f9",
+          "bytes": 225
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\feature_death_child_command_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\feature_death_child_command_test.stdout.log",
+          "sha256": "f08e77ebd6dcd516a4a6338926ceedcc9d1eb242677dd806776d8e7a0201b9e6",
+          "bytes": 229
+        }
+      ]
+    },
+    {
+      "scene": "feature_chain_commit_test",
+      "checks": 68,
+      "failed_checks": 0,
+      "native_exit": 0,
+      "run_id": "36d5fcb4-850b-478b-b1c5-4094994f310f",
+      "invocation_id": "15463c7a-1e30-4605-bc1a-7344e23d0b6e",
+      "receipt_sha256": "2d47df027960bf72d5ff3a0bfaf2e6b601292713623ae674e2cc2dea6d0d8c22",
+      "runtime_environment": {
+        "native_process_id": 228,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/accepted_binding_guarded_related_20261005_0108/Godot/app_userdata/HardCore"
+      },
+      "native_runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\feature_chain_commit_test.godot.log",
+          "sha256": "14c2d0f73fbc19c21dde87dacdb5a25c3c61c51193d88f96db96c4b9be578f5f",
+          "bytes": 218
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\feature_chain_commit_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\feature_chain_commit_test.stdout.log",
+          "sha256": "e059e5c07572913cb6d0e68b22e0b9d7185e087f12bfa956cc77b09dd36f2d29",
+          "bytes": 222
+        }
+      ]
+    },
+    {
+      "scene": "feature_child_chain_admission_test",
+      "checks": 44,
+      "failed_checks": 0,
+      "native_exit": 0,
+      "run_id": "b4836ea7-cf8e-4031-9f47-b4bcaadee7a0",
+      "invocation_id": "15463c7a-1e30-4605-bc1a-7344e23d0b6e",
+      "receipt_sha256": "59f314df3c62005cec3b00be2ce13427a8f8b0a4c0419266c6d2b6dff2354a58",
+      "runtime_environment": {
+        "native_process_id": 7364,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/accepted_binding_guarded_related_20261005_0108/Godot/app_userdata/HardCore"
+      },
+      "native_runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\feature_child_chain_admission_test.godot.log",
+          "sha256": "6bfb205895bb7123aa3c00d4447a87ee9cea0ee174997d3bb1ef54578f631885",
+          "bytes": 5131
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\feature_child_chain_admission_test.stderr.log",
+          "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+          "bytes": 133
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\feature_child_chain_admission_test.stdout.log",
+          "sha256": "ae26419d189581417e3d000a4c5ddeeb9f0ae9dfdaef66d9efc14eb79d2d6c61",
+          "bytes": 5141
+        }
+      ]
+    },
+    {
+      "scene": "feature_state_loan_lifetime_test",
+      "checks": 35,
+      "failed_checks": 0,
+      "native_exit": 0,
+      "run_id": "9cb02998-4b17-4b4f-83b6-ee80e37a870b",
+      "invocation_id": "15463c7a-1e30-4605-bc1a-7344e23d0b6e",
+      "receipt_sha256": "35d93dc97cabf3b3ba1a8d6f6973d1fda8bc1b4b46c284e7440359623aca31d4",
+      "runtime_environment": {
+        "native_process_id": 7772,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/accepted_binding_guarded_related_20261005_0108/Godot/app_userdata/HardCore"
+      },
+      "native_runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\feature_state_loan_lifetime_test.godot.log",
+          "sha256": "be9cf5ca284465b4cf91329380d99da763976039d0f73e491e35ae406eed7072",
+          "bytes": 270
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\feature_state_loan_lifetime_test.stderr.log",
+          "sha256": "9abaeb31deca888a59de0b38bc60a768363cc109851192c3f5b8906753d9296d",
+          "bytes": 250
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\feature_state_loan_lifetime_test.stdout.log",
+          "sha256": "01c8ce31c0c5d750176765cdd9d0589edaca6280594586d428d9dacbc515178e",
+          "bytes": 276
+        }
+      ]
+    },
+    {
+      "scene": "feature_state_loan_root_test",
+      "checks": 25,
+      "failed_checks": 0,
+      "native_exit": 0,
+      "run_id": "de5b4568-8115-45c1-815c-5896251911ea",
+      "invocation_id": "15463c7a-1e30-4605-bc1a-7344e23d0b6e",
+      "receipt_sha256": "b841668d5ab99a9e4b6ab40952897e7edf39981ea5915186213df35af7b4273a",
+      "runtime_environment": {
+        "native_process_id": 360,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/accepted_binding_guarded_related_20261005_0108/Godot/app_userdata/HardCore"
+      },
+      "native_runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\feature_state_loan_root_test.godot.log",
+          "sha256": "fce7b5be8d4b4abb6e17c34fa4d0bbbbcad6374f0e7de174a7c7ba1838d295b8",
+          "bytes": 5407
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\feature_state_loan_root_test.stderr.log",
+          "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+          "bytes": 133
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\feature_state_loan_root_test.stdout.log",
+          "sha256": "b1731ba4867d0b924017246a2b7cc99d79bf6587d3e9c43a15ad1ea09d74169a",
+          "bytes": 5418
+        }
+      ]
+    },
+    {
+      "scene": "feature_child_capacity_test",
+      "checks": 44,
+      "failed_checks": 0,
+      "native_exit": 0,
+      "run_id": "b1acc80e-686f-48a8-834e-172e66cffdfb",
+      "invocation_id": "15463c7a-1e30-4605-bc1a-7344e23d0b6e",
+      "receipt_sha256": "103def9ba916f17a22c7cf1957feda1417f2c312fc2dbbb539f96201a64b6fe1",
+      "runtime_environment": {
+        "native_process_id": 3540,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/accepted_binding_guarded_related_20261005_0108/Godot/app_userdata/HardCore"
+      },
+      "native_runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\feature_child_capacity_test.godot.log",
+          "sha256": "2b3aca5d9649f02ae32155a5d6e7589353eee5481e8a11b2a525eba41ec9aaed",
+          "bytes": 220
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\feature_child_capacity_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\feature_child_capacity_test.stdout.log",
+          "sha256": "75cfadc3653095afa0271c07e3fcef22f226377aa5720201e0a7a2d9dc127607",
+          "bytes": 224
+        }
+      ]
+    },
+    {
+      "scene": "feature_capacity_atomic_test",
+      "checks": 25,
+      "failed_checks": 0,
+      "native_exit": 0,
+      "run_id": "5d6d0b20-d2a3-4a7f-9977-4ee79d79d8d1",
+      "invocation_id": "15463c7a-1e30-4605-bc1a-7344e23d0b6e",
+      "receipt_sha256": "828434d5c191d5414f72795a5922f9bce2983939caa135279b28d7da2809fc1b",
+      "runtime_environment": {
+        "native_process_id": 4940,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/accepted_binding_guarded_related_20261005_0108/Godot/app_userdata/HardCore"
+      },
+      "native_runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\feature_capacity_atomic_test.godot.log",
+          "sha256": "d2883c290edfa13a5dd8affcd04df823b0d78ca3add7384a560a0b616a3b2da1",
+          "bytes": 221
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\feature_capacity_atomic_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\feature_capacity_atomic_test.stdout.log",
+          "sha256": "4b094f511a63e2afcbc50ca598345be5ec9443a52ed30e0f8225d21532bf76fb",
+          "bytes": 225
+        }
+      ]
+    },
+    {
+      "scene": "feature_capacity_admission_test",
+      "checks": 15,
+      "failed_checks": 0,
+      "native_exit": 0,
+      "run_id": "9560be9d-c57f-48e2-b86d-f434f4078f66",
+      "invocation_id": "15463c7a-1e30-4605-bc1a-7344e23d0b6e",
+      "receipt_sha256": "da9714bf8275f86f6ca274aaa369b064f108244df55fec7cf53f08218434d526",
+      "runtime_environment": {
+        "native_process_id": 18016,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/accepted_binding_guarded_related_20261005_0108/Godot/app_userdata/HardCore"
+      },
+      "native_runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\feature_capacity_admission_test.godot.log",
+          "sha256": "a9f523b18e4061ddcba0609afba1b3313e3827c2367f9cc0d6464e009c5034fd",
+          "bytes": 5130
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\feature_capacity_admission_test.stderr.log",
+          "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+          "bytes": 133
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\feature_capacity_admission_test.stdout.log",
+          "sha256": "3b0d94032fe7aa69ea0b979f62c21bfe167995057cf571bdd9e66aade193c974",
+          "bytes": 5140
+        }
+      ]
+    },
+    {
+      "scene": "periodic_effect_boundaries_test",
+      "checks": 22,
+      "failed_checks": 0,
+      "native_exit": 0,
+      "run_id": "a6776226-4f80-4839-bb75-cfa589881e98",
+      "invocation_id": "15463c7a-1e30-4605-bc1a-7344e23d0b6e",
+      "receipt_sha256": "dad630477d2bb797229d25340e6cae08542277143f6181407f0d13c17b32103a",
+      "runtime_environment": {
+        "native_process_id": 9504,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/accepted_binding_guarded_related_20261005_0108/Godot/app_userdata/HardCore"
+      },
+      "native_runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\periodic_effect_boundaries_test.godot.log",
+          "sha256": "d0f9f83ccc34a6d0d4721644c48c7fae9036bfb960f1c3e907b65e552b69fb1d",
+          "bytes": 225
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\periodic_effect_boundaries_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\periodic_effect_boundaries_test.stdout.log",
+          "sha256": "f8caa51e349268c690e05529e179c26d604b297788534f3da57fb6739f58e404",
+          "bytes": 229
+        }
+      ]
+    },
+    {
+      "scene": "periodic_effect_lifecycle_test",
+      "checks": 18,
+      "failed_checks": 0,
+      "native_exit": 0,
+      "run_id": "aeff3727-c99c-435f-a2fa-0fde68f56014",
+      "invocation_id": "15463c7a-1e30-4605-bc1a-7344e23d0b6e",
+      "receipt_sha256": "0be6ce2067432fda39850bbbdb3b016439cead0235bbe59bb4fee66a2cd6ad71",
+      "runtime_environment": {
+        "native_process_id": 15748,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/accepted_binding_guarded_related_20261005_0108/Godot/app_userdata/HardCore"
+      },
+      "native_runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\periodic_effect_lifecycle_test.godot.log",
+          "sha256": "c20e916aa02e51dfa7e191fac825f4f092850c405cc106b91451f5297c17ce83",
+          "bytes": 221
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\periodic_effect_lifecycle_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\periodic_effect_lifecycle_test.stdout.log",
+          "sha256": "ccb3ac09bbd971480d24ff28d5d4c3e187f5ed245017ea19b6a024c410363a85",
+          "bytes": 225
+        }
+      ]
+    },
+    {
+      "scene": "periodic_callback_retirement_test",
+      "checks": 32,
+      "failed_checks": 0,
+      "native_exit": 0,
+      "run_id": "6e51108d-8feb-4418-833b-7d48322d3301",
+      "invocation_id": "15463c7a-1e30-4605-bc1a-7344e23d0b6e",
+      "receipt_sha256": "f701a05caa37072a0bb5f6e95b4422c28a0baf20ce7d7ae414cdf91bde2bd6dc",
+      "runtime_environment": {
+        "native_process_id": 13904,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/accepted_binding_guarded_related_20261005_0108/Godot/app_userdata/HardCore"
+      },
+      "native_runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\periodic_callback_retirement_test.godot.log",
+          "sha256": "355903ee2ba46ebf9bdecebfe08bdcc0ea1813601ff9411ca60ad5432f054da0",
+          "bytes": 234
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\periodic_callback_retirement_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\periodic_callback_retirement_test.stdout.log",
+          "sha256": "cfd2e0ba6e03abad2266d3a795b420e779bf585628072a74f20633b182176a5b",
+          "bytes": 238
+        }
+      ]
+    },
+    {
+      "scene": "periodic_delivery_lateness_test",
+      "checks": 36,
+      "failed_checks": 0,
+      "native_exit": 0,
+      "run_id": "098174b1-ae2d-4c18-9595-26f60e349ce9",
+      "invocation_id": "15463c7a-1e30-4605-bc1a-7344e23d0b6e",
+      "receipt_sha256": "3eae8a2fdc69779a57164667278cd187e26782954398b6fdbe15e439b3d4abb8",
+      "runtime_environment": {
+        "native_process_id": 24184,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/accepted_binding_guarded_related_20261005_0108/Godot/app_userdata/HardCore"
+      },
+      "native_runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\periodic_delivery_lateness_test.godot.log",
+          "sha256": "14984e7e790d9f8739ed8b0670b213d1c9d288904cac5b33f5d93189ada0949b",
+          "bytes": 222
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\periodic_delivery_lateness_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\periodic_delivery_lateness_test.stdout.log",
+          "sha256": "68d1dae38133af6bccc756b82ae655ba3e38341c7aa06442cc838c86bec45d90",
+          "bytes": 226
+        }
+      ]
+    },
+    {
+      "scene": "feature_batch_capacity_ownership_test",
+      "checks": 11,
+      "failed_checks": 0,
+      "native_exit": 0,
+      "run_id": "612697a2-e8e7-448a-b312-7ad0062e3434",
+      "invocation_id": "15463c7a-1e30-4605-bc1a-7344e23d0b6e",
+      "receipt_sha256": "bfd0973ce6e8990932f15370ab03de52c204717e26f90b7f4c26ea797e167e7d",
+      "runtime_environment": {
+        "native_process_id": 2056,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/accepted_binding_guarded_related_20261005_0108/Godot/app_userdata/HardCore"
+      },
+      "native_runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\feature_batch_capacity_ownership_test.godot.log",
+          "sha256": "c1ce29056263cf78d49541ac25e060e358b0dd8656186f11ccc83550c7304654",
+          "bytes": 230
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\feature_batch_capacity_ownership_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\feature_batch_capacity_ownership_test.stdout.log",
+          "sha256": "5c7ec167e00892eb3b9037b96e5f115cdd56e288d8aef59001445b5cb4e9e221",
+          "bytes": 234
+        }
+      ]
+    },
+    {
+      "scene": "feature_batch_failure_test",
+      "checks": 12,
+      "failed_checks": 0,
+      "native_exit": 0,
+      "run_id": "39261e1f-5577-4269-8b9a-06250d83fe30",
+      "invocation_id": "15463c7a-1e30-4605-bc1a-7344e23d0b6e",
+      "receipt_sha256": "53cf5bb8ef577cc61363b01126a1aea23a0e41a723a9cfbc611419265f659156",
+      "runtime_environment": {
+        "native_process_id": 13380,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/accepted_binding_guarded_related_20261005_0108/Godot/app_userdata/HardCore"
+      },
+      "native_runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\feature_batch_failure_test.godot.log",
+          "sha256": "4abf0fc38b593d1060d64cbef61e3d7fd71d42486a9829d2a477db13e02d0ee4",
+          "bytes": 5125
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\feature_batch_failure_test.stderr.log",
+          "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+          "bytes": 133
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\feature_batch_failure_test.stdout.log",
+          "sha256": "943a4639380f9044dda69a13e3b36c385e575464513b04315074a0750d42272a",
+          "bytes": 5135
+        }
+      ]
+    },
+    {
+      "scene": "action_config_lease_test",
+      "checks": 13,
+      "failed_checks": 0,
+      "native_exit": 0,
+      "run_id": "d3fa1aad-d6eb-42bc-b70f-1f7886dc3688",
+      "invocation_id": "15463c7a-1e30-4605-bc1a-7344e23d0b6e",
+      "receipt_sha256": "5d5fd105edfaf3ad58141a6abc6770935fb309b48119b50a413cd2afa4101c6a",
+      "runtime_environment": {
+        "native_process_id": 17372,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/accepted_binding_guarded_related_20261005_0108/Godot/app_userdata/HardCore"
+      },
+      "native_runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\action_config_lease_test.godot.log",
+          "sha256": "db4cdeec3cac8150361061446b4272271a02ecf019a390cb13d6a2b17f599e55",
+          "bytes": 225
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\action_config_lease_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\action_config_lease_test.stdout.log",
+          "sha256": "a5b2156fc88e0f6f2944d75e3f5a1e8ba11e11adad746343e773cc5e6f65f81c",
+          "bytes": 229
+        }
+      ]
+    },
+    {
+      "scene": "empty_extension_behavior_test",
+      "checks": 30,
+      "failed_checks": 0,
+      "native_exit": 0,
+      "run_id": "f14305d6-1f61-41c4-a950-b1ac7312c60a",
+      "invocation_id": "15463c7a-1e30-4605-bc1a-7344e23d0b6e",
+      "receipt_sha256": "155ebb2da5d1369643db54ba3ff12d0e2fcaf99f9ceec5ddc8f2dd400d405cc5",
+      "runtime_environment": {
+        "native_process_id": 22508,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/accepted_binding_guarded_related_20261005_0108/Godot/app_userdata/HardCore"
+      },
+      "native_runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\empty_extension_behavior_test.godot.log",
+          "sha256": "2b8a2abecaa23613d6f7aaab000b92994cee3f99b69fef07dfe4f3d78881be87",
+          "bytes": 5136
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\empty_extension_behavior_test.stderr.log",
+          "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+          "bytes": 133
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\empty_extension_behavior_test.stdout.log",
+          "sha256": "35074c60430daa2eb71e6ab33ca8f35db78c50529333d71dfd45ba141294b5f4",
+          "bytes": 5146
+        }
+      ]
+    },
+    {
+      "scene": "periodic_refresh_period_boundary_test",
+      "checks": 52,
+      "failed_checks": 0,
+      "native_exit": 0,
+      "run_id": "1860f9a5-6b40-4c81-adca-f2ec1eeb9b65",
+      "invocation_id": "15463c7a-1e30-4605-bc1a-7344e23d0b6e",
+      "receipt_sha256": "b96e3f86aa9313462a781ceeb2394bb46be1466e6ee784cf582e12c123f0cb7c",
+      "runtime_environment": {
+        "native_process_id": 18900,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/accepted_binding_guarded_related_20261005_0108/Godot/app_userdata/HardCore"
+      },
+      "native_runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\periodic_refresh_period_boundary_test.godot.log",
+          "sha256": "7f528d918530c0201965015574de0a7c2061445d3d558442ab009193c24244ce",
+          "bytes": 722
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\periodic_refresh_period_boundary_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\periodic_refresh_period_boundary_test.stdout.log",
+          "sha256": "6a18a3ee4ec9b57c05d9bcf8106fb78240556be19aa5939ea4eb3bebd3f31646",
+          "bytes": 728
+        }
+      ]
+    },
+    {
+      "scene": "feature_delivery_templates_test",
+      "checks": 57,
+      "failed_checks": 0,
+      "native_exit": 0,
+      "run_id": "4b76e26d-696c-4ce5-b89b-2cbe166824c9",
+      "invocation_id": "15463c7a-1e30-4605-bc1a-7344e23d0b6e",
+      "receipt_sha256": "fb785ddb6946a185f00eebe0abfc06785d1e90e66ccfc0156fd2a19adaf44827",
+      "runtime_environment": {
+        "native_process_id": 12652,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/accepted_binding_guarded_related_20261005_0108/Godot/app_userdata/HardCore"
+      },
+      "native_runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\feature_delivery_templates_test.godot.log",
+          "sha256": "6d4b8bb22ffbc62a1e7c63b42747c0fcdaf45f02c5e56d1469d6e34f7162201d",
+          "bytes": 222
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\feature_delivery_templates_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\feature_delivery_templates_test.stdout.log",
+          "sha256": "4ffb3bb6c03b011a3f898c95fea01b8c3ac3a0852196507c90d56c5e661bcc2b",
+          "bytes": 226
+        }
+      ]
+    },
+    {
+      "scene": "periodic_effect_runtime_test",
+      "checks": 13,
+      "failed_checks": 0,
+      "native_exit": 0,
+      "run_id": "96ab8fe2-741c-4972-ab0a-45f6402553d8",
+      "invocation_id": "15463c7a-1e30-4605-bc1a-7344e23d0b6e",
+      "receipt_sha256": "901650d8951a2959fe4fe10e80f475b9230e6dfa4d377f343e38a7d6c036a3d9",
+      "runtime_environment": {
+        "native_process_id": 9124,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/accepted_binding_guarded_related_20261005_0108/Godot/app_userdata/HardCore"
+      },
+      "native_runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\periodic_effect_runtime_test.godot.log",
+          "sha256": "1feca48b2526026bd701ebbc3f96ed4b24c9e73538bfbb9453a399aee3944595",
+          "bytes": 221
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\periodic_effect_runtime_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\periodic_effect_runtime_test.stdout.log",
+          "sha256": "d50f6d703a34af1193acf9b0ab19cc712545a27b8b2ae9006da6a2516aed4796",
+          "bytes": 225
+        }
+      ]
+    },
+    {
+      "scene": "accepted_binding_snapshot_test",
+      "checks": 37,
+      "failed_checks": 0,
+      "native_exit": 0,
+      "run_id": "af60cd43-f4d7-41c7-9389-bd4a9e83dc8e",
+      "invocation_id": "15463c7a-1e30-4605-bc1a-7344e23d0b6e",
+      "receipt_sha256": "d72ea159f705151bf57aafa65e84dafb669d406ce86905749638f79cff89820d",
+      "runtime_environment": {
+        "native_process_id": 9432,
+        "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/accepted_binding_guarded_related_20261005_0108/Godot/app_userdata/HardCore"
+      },
+      "native_runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+      "logs": [
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\accepted_binding_snapshot_test.godot.log",
+          "sha256": "18cada81fbe37d06ff0e24ad708ad51e669e976fc9ce7186ff4134c230997c54",
+          "bytes": 221
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\accepted_binding_snapshot_test.stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_guarded_related_final_010457_952896\\raw\\accepted_binding_snapshot_test.stdout.log",
+          "sha256": "81577ddbd827039746dd35541b65c83b9bfd2c22b8376ceaf0ebc657945cbf0e",
+          "bytes": 225
+        }
+      ]
+    }
+  ]
+}

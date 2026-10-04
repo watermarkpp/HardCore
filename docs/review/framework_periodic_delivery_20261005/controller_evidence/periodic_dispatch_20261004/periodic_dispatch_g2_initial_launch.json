@@ -1,0 +1,17 @@
+{
+  "time_utc": "2026-10-04T10:29:29.892995+00:00",
+  "launcher_pid": 24464,
+  "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_g2_initial_e0f288c3deb34cf5b5d953cd2bab8cf1",
+  "command": [
+    "py",
+    "-3.12",
+    "tools/source176_r3_validation.py",
+    "periodic_dispatch_g2_initial",
+    "--tests",
+    "tests/framework/periodic_child_g2_root_test.tscn",
+    "tests/framework/periodic_child_root_test.tscn",
+    "--timeout",
+    "30"
+  ],
+  "true_index_sha256": "df5a01dd0d87c14620e0021d70c25a830eb2cc37aa7b012eeb14ee1f2c58c5fb"
+}

@@ -1,0 +1,116 @@
+# 周期连锁生产接入施工记录
+
+2026-10-04。父固定版本2c58552d2d905eea1f5c13d38685f66c489b092c。唯一主控第三树串行；整体Task3—5/P6R3/APK仍未完成。本增量尚未单独推送或发起审计，按用户要求与后续关联施工合并成固定审查批次。
+
+## 身份与领取边界
+
+- 新periodic_producer_identity_test通过正式已有default-off模块获得编译后的绑定，使用实际World/Runtime/EffectReservation/DamageBatch服务，测试错误代次、缺失连锁上下文、根票据冒充periodic三类输入。错误输入必须拒绝且不能消耗原合法资格；合法回调随后完成一次，重复领取拒绝。此为受控服务接口反例，未称自然UI复现。
+- 原生periodic_dispatch_identity_red_171309_337487：28检查、13失败、native退出1、完整回执。
+- 增加公开根上下文只读断言后periodic_dispatch_identity_immutable_red_171718_468798：31检查、16失败、native退出1。旧根上下文确为可写；没有尝试写只读容器制造引擎错误。
+- 四个生产文件的最小修复：根上下文Graph冻结；票据只从runtime取得来源类型；Batch领取前比较完整连锁上下文与来源类型；periodic使用独立release及明确parent，Death纯handler与批次结构核验保持一致。没有全局放开重复领取，不改变HP/planner/writer权威。
+- GREEN身份34检查通过；比RED多的3检查只在合法领取成功后执行重复领取断言，不把31与34称为同一数量。
+- 旧feature_chain_commit_test只迁移periodic fixture的根别名为独立tick身份并保留parent。68个HP、RNG、几何、免疫、零伤害、碰撞与回调断言保留，未弱化。
+
+## 原刷新合同的实际兑现范围
+
+新增periodic_refresh_horizon_test，正式已有直接/子来源、真实Enemy/Player/Combat HP、原1秒period与4秒duration/max_ticks=4。A在0秒接受raw10；测试模拟钟100秒时B接受raw1；先观察刷新，再通过原runtime消费者服务。保持一个状态与一个heap节点、原due1秒、expiry104秒、原credit A和strongest raw10。
+
+实际兑现104次tick，HP5000-10-1-104*10=3949；最后全部根/状态/heap/回执/预留退休。17检查通过。最大实际迟到99000000us明确保留：这是受控积压诊断，不是自然时效/P6通过，也不把人工推进100秒称为正式场景。静态“两个max_ticks相加得到8次”不能覆盖当前已验证合同。
+
+## 分阶段证据
+
+原生证据基目录：outputs/r3_takeover/20260930/validation。
+
+| 场次 | 结果 | 指纹与范围 |
+|---|---|---|
+| periodic_dispatch_identity_green_171942_699286 | 4场景／138检查PASS | 56ed807a16d2ee958bf6964bb3e99a6aadcc4f54dfe58d3897b099a689e0e220；身份34、真实Root25、状态归还35、容量44 |
+| periodic_dispatch_horizon_diagnostic_173125_006936 | 1场景／17检查PASS | fcd1e4bbb8eac60955bec46ebee59cf8f5220edc1ce29532e0047284a40c2a92；实际104 tick诊断 |
+| periodic_dispatch_identity_related_173358_882070 | 9场景／225检查PASS | dbab55063355c0e20e5badf1fa56d71c0c90c9ef5e6d336c235fb2ca45093435；新两专项、chain commit、damage fact、batch ownership/admission/failure、action lease、空扩展 |
+
+每组使用既有source176_r3_validation与run_godot_tests wrapper、显式30秒、该工作树全新隔离APPDATA、原生headless；完整回执与run/invocation/source/native退出保留，均source_stable_during_run=true。不同阶段指纹不合并冒充最终整组通过。两次RED原始FAIL保留。
+
+当前9个源／测试路径差异已自审，独立check.index的diff --check通过；真实HEAD与index未切换或写入，真实index保持df5a01dd0d87c14620e0021d70c25a830eb2cc37aa7b012eeb14ee1f2c58c5fb；冻结MonsterStreaming字节保持。四份生产原字节及原fixture精确父ZIP字节留在outputs/framework_v2/periodic_dispatch_20261004/production_before，差异与后续设计记录在同目录。
+
+## 已接通的周期事实与真实Root子动作
+
+Compiler仅额外接受DeathBurst的完整direct/periodic/child来源组合，仍不允许periodic再次触发Ignite。状态保留最初接受的bindings、parent fact/lineage、历史credit和资源租约；刷新不夺走最初来源，只按既有strongest_keep_phase更新raw、期限与period。
+
+每个tick在同一预算quantum中借用原根已收费的一个fact与对应receipt槽，HP前领取唯一periodic分支，使用原Combat periodic-chain端口捕获真实提交事实，再由原_deliver_fact投递和封口退休。驻留承诺在同步HP回调期间仍计费。没有另建HP、planner、时钟或周期FIFO；direct/child累计几何quota与periodic有限接受期限分开。
+
+真实Root一代／二代专项通过正式default-off registry、实际Player.request_skill和SceneTreeTimer起手、非空票据及原planner/动态几何查询执行。周期首次致死后子动作真实命中此前未命中的目标并点燃，二代子动作随后再次由周期首次死亡产生；最大代次后不再放大，MP/旧RNG不变，死亡碰撞立即清除。此为受控生产API链，AI关闭且模拟钟由测试推进，不称OS/UI事件端到端或自然性能。
+
+最初registry原生2检查1FAIL及periodic-parent schema原39检查3FAIL保留；真实Root正确输入夹具在暂时恢复精确旧runtime时21检查2FAIL，恢复候选后21PASS。根的配置发布会重建computed_stats，trigger-only模块仍使用既有release-time primary policy；测试固定magic输入移到来源撤销之后。旧两次实际25伤害的夹具FAIL保留，不改生产伤害计算。既有feature_periodic_child_chain_test也据此修正受控输入及第二目标HP，原18断言、原period/duration和真实两代要求保持；增加一个结算边界，原31项pure command测试只补独立periodic parent身份。
+
+新增周期生命周期专项覆盖HP后stop、clear、换世界、queued-free、来源销毁、嵌套公共pump以及旧票据／已消费批次重交。已提交HP保留，旧回调在RNG/HP前拒绝，剩余state/heap/receipt/promise和预算consumer闭合。刷新诊断扩展为正式periodic模块撤销、原来源销毁后104个独立tick身份与106个实际事实，receipt驻留峰不超过4；37检查通过。99000000us积压迟到仍明确保留为诊断，不能当作时效通过。
+
+## 提交事实死亡后的状态退休反例
+
+复用既有feature_chain_commit_test的受控post-capture HP观察边界：真实提交事实记录hp_before>0、hp_after=0，虚拟overhead观察回调随后恢复HP，早于Actor标记死亡。旧候选仍重排periodic状态，再次首次致死会耗尽已经承诺的child frontier。
+
+- 单来源RED：periodic_dispatch_fatal_observer_red_184714_352769，111检查3FAIL，native exit1。
+- 增加同一ActorRef life两个合法来源／根：periodic_dispatch_two_source_fatal_red_185134_524156，132检查10FAIL，native exit1。
+- 修复只依据不可变提交事实退休该完整target identity的现有状态。逐目标索引由计数改为handle集合，最多遍历既有正式上限16个状态，不扫描其他目标，不保留死亡tombstone，不改变Actor HP／life权威。分支仍由在途producer与queued child持有，不因state退休提前撤销承诺；presentation同步退休换runtime代次后立即停止旧遍历。
+- GREEN：periodic_dispatch_fatal_observer_green_185244_833515，原132检查全通过，连同一代／二代Root、chain commit与origin state lifetime共5场景283检查通过。这是受控接口反例，不声称正式页面已发生该观察回调。
+
+## 最终同源码相关回归
+
+本阶段受测内容集合`678e2ba32a5d9f8e57ff12b37d8810f03131960f63a0f47a35f25ca1562bc41e`，3765文件；实际HEAD仍`5d9ceb0121980ca9636d9d1cc2e19982949fbf63`，继承dirty及真实index保留，本增量尚未commit/push或独立审计。随后新增的period边界诊断是新阶段，不把此前30场景宣称为含新诊断的最终字节结果。
+
+| 运行 | 结果 | 范围 |
+|---|---|---|
+| periodic_dispatch_final_related_190109_699642 | 22场景／736检查PASS | 新身份／刷新／周期一代二代／生命周期、既有direct/child容量、origin归还、HP提交、旧periodic、lease和空扩展；显式30秒 |
+| periodic_dispatch_final_world_191236_167103 | 8场景／394检查PASS | 原组合、合法退出、自然移动效果、真实准备资源及各独立cold；既有重场景显式60秒 |
+
+共30唯一场景、1130检查。每组完整receipt、run/invocation/source、原生命令/exit0、当前producer-cold关联、原日志和before/after保持；source_stable_during_run=true，不把旧阶段混成最终字节。4个WORLD live日志仍有ObjectDB告警，未称零泄漏。自然resource本轮实际141项与139项历史阶段分别保留，逐死亡追加检查导致数量随真实世界受害者变化，不称优化或删除负载。
+
+11:28 UTC主控逐项核对30完整回执、原生退出与命令、4组本轮live/cold/expectation/成功handoff以及3765文件当前原字节，FINAL_ASSOCIATIONS.json为PASS，1130检查。GLM任务e164cf96-0fc3-44bf-b000-80f0d1173428逐行提取正确，但把WORLD394加成374、总1130加成1110；主控完整候选判FAIL，保留原输出，不用模型算术覆盖本地结果。截至该调用本批9次实际推理、72750 tokens、10条记录含一次本地输入超限；4候选PASS、6候选FAIL，不等同套餐百分比。
+
+23个独占源码／测试／default-off作者数据差异已用独立check.index审阅，diff/check/status留在outputs/framework_v2/periodic_dispatch_20261004；实际index仍`df5a01dd0d87c14620e0021d70c25a830eb2cc37aa7b012eeb14ee1f2c58c5fb`，MonsterStreaming冻结SHA保持`757da0597ab78aded642a98cf1e7433b9da06a6be5fb0684923ca6686282809d`。没有stage真实index、改主树／第二树／真实存档或打包。
+
+## 机械辅助与下一步
+
+GLM仅做有界源符号提取和回执归集。前两清单有统计/遗漏差异，主控标FAIL不接受；第三份两RED回执的身份、计数、失败label与指定前缀分类全部本地核对PASS。完整请求、来源、任务ID、elapsed、usage及原始输出保存在outputs/framework_v2/glm_mechanical_20261004。Luna资源28文件清单也已逐项核对；没有把工程决策交给辅助。
+
+同_tick_one周期事实驻留、真实Root一代二代、原刷新期限兑现与首次死亡收尾已有上述有界证据。极端合法period变化的累计工作／服务时效、最坏atomic quantum、完整模板／生成组合与自然P6R3仍开放；不能把一个1秒period夹具外推为所有合法配置时效通过。完成关联施工后集中固定SHA双审计，继续设备／APK及已记录原B、地图、强杀掉电门禁。
+
+## 合法period变化的受控工作量边界
+
+新增periodic_refresh_period_boundary_test仅测试，不改生产。由正式已注册default-off模块取得稳定来源与authority，以正式Compiler分别编译原1秒/4秒与测试独立副本1微秒/4微秒配置；两个max_ticks均4。真实Combat/Batch/Runtime在旧due1秒处接受弱刷新后保留旧expiry4秒和原raw10/credit A，同时period变为1微秒，共享有限期限为3000001跳。该单位直接调用受控服务并观察刷新，不冒充真实Root/自然输入或正式发布了微秒模块。
+
+- 首跑periodic_dispatch_period_boundary_1940_194019_458039：20检查4FAIL、native exit1。新夹具复用了旧104跳诊断的200帧等待边界，只完成366/1025；原始FAIL、来源c8e5074f6278bd867373eb226b0d9be18a9d224acb90c19e8c1168609b19d88d与日志保留。
+- 只修新夹具等待过程为至多4096处理帧，仍由原runtime每帧预算消费；1025跳、周期/持续时间/实际HP、30秒wrapper与全部原断言保持。额外失败路径的“消费者等待超界”记录在GREEN无需产生，故20→19不称同数量RED/GREEN。
+- 复测periodic_dispatch_period_boundary_epochs_1941_194154_219163：19检查PASS、exit0、source稳定；内容cf3ea39ef2664e66461948443a5958a93a63c7e0724e18fc397ee66fc1f27d8e，3767文件。run5b14a4ef-6d6b-45ef-bc85-2149b8fbbe4f，invocation7cabbcc7-9748-433c-80e9-2a17d86f0dd6。原生完整关联主控复核PASS，见PERIOD_BOUNDARY_ASSOCIATION.json。
+- 实际1025个独立tick、真实HP9739、receipt峰≤4；剩余2998976个未来tick仍由旧根持有。模拟积压最大迟到1023微秒大于1微秒period，明确是受控诊断；最后显式world-owner clear收尾，不把未来工作称为完成，不把单场PASS称为时效或自然P6通过。
+
+这个反例说明max_ticks只约束单次作者配置，不能直接当刷新后累计工作的上界。源码容量驻留与服务时效证明继续分开；没有据此修改旧刷新、truncate、叠层、概率、目标或玩法规则。新测试增加后的阶段指纹不回填为前30场景最终同字节；生产字节无新增变化。25路径自审diff/check、真实index/冻结Streaming哈希继续PASS。下一步须在真实准入及最大合法组合上定义并证明累计工作与服务边界，不能由本诊断静默决定产品合同。
+
+用户最新授权小可爱本人并行施工；经官方工具明确交付固定2c585基线、独立工作区、两个presentation文件及新增专项的独占范围。主控继续第三树periodic runtime与容量，不改对方独占文件；对方实现／测试仍NOT_RUN，最终由主控审查集成。派发、接口错误、旧协作者停止及向本人送达证据在outputs/framework_v2/parallel_cue_20261004，不把已派发当成已施工。
+
+## 用户确认的周期刷新合同与模板增量
+
+2026-10-04用户通过原产品选择明确要求保留旧效果的原周期，刷新继续按既有规则增强数值和延长期限。前节3000001跳及1025跳观测为此裁决前的真实诊断证据，不删除、不回填。原测试源码另存outputs/framework_v2/feature_templates_20261004/period_boundary_before_policy.gd，用户选择及原指纹记在PERIOD_POLICY_DECISION.json。
+
+周期边界测试现按新合同同时覆盖更短和更长周期的合法配置，弱刷新不降伤、不缩原期限，强刷新增强伤害并延长期限，真实HP端口必须分别完整完成原周期四跳和九跳，身份、credit和所有权收尾保持。新合同原生RED与最小生产修复尚待同机测试窗口，此时NOT_RUN，不用旧19项通过替代。
+
+Task5新增三种default-off作者模板和独立registry，沿原Compiler/ContentLayers/PlayerState发布与撤销链，另有完整模块交付文档。模板缺失RED为periodic_dispatch_template_red_2037_203605_680635：原生exit1、完整receipt1检查1FAIL、内容c0b241d4910b47832e66b3db38a54757fa270c0aa5d02dc4642a9300178a14ce且运行稳定，确实进入“模板装配加载”断言。数据填齐后原生GREEN尚NOT_RUN；新测试增加八种组合的精确来源／订阅回归，不能把格式和组合验证称为自然战斗／GPU。
+
+GLM模板机械提取b78e4e64-ff74-43cd-bd2a-36ba87726e20已完成，4文件的完整sources行段/原字节SHA、3模块/5mechanic/5绑定和所有指定字段经本地精确复核PASS，耗用3305 tokens。累计本批11条工具记录、10次实际推理、76055 tokens，5候选PASS与6候选FAIL均保留；无账号套餐百分比推断。
+
+## 原周期合同与模板最终回归检查点
+
+2026-10-04 13:39 UTC主控已实际复核。本节更新前节施工中NOT_RUN状态，前面的旧period变化诊断仍按当时合同保留。用户确认后，已存在状态保持首次接受的period与next_due；刷新仍增强raw并延长expiry，新状态使用自己首次接受的周期。最小生产改动仅移除刷新分支对period的覆盖，未改变原HP、时钟、预算、伤害次数或容量权威。
+
+原生反例periodic_dispatch_period_policy_red_2055_205629_991195：新周期专项26检查2FAIL，分别为较短和较长刷新覆盖原周期；模板57检查13FAIL为夹具错误期待重复设置返回true，八种精确来源组合断言均已通过。正式setter原合同对无变化请求返回false且不增加revision，只修模板夹具遵守该合同，未修改生产setter。原FAIL、native exit1和日志均保留。
+
+最窄GREEN periodic_dispatch_period_policy_green_2102_210019_464305：四场景159检查PASS；周期专项52项包括完整四跳／九跳、每次身份、原credit、收尾，以及旧效果结束后新credit／新周期四跳，故与RED26项不称同数量。模板57项覆盖三默认关闭模块、五机制与八种启用组合的正式编译／发布／撤销、重复和未知身份拒绝，旧graph不变。身份清单来自作者JSON，不激活正式registry或改变玩法平衡。
+
+最终同运行内容集合d1781a0f05ab5c2c765785b0167979141aeb1b6e6d4918c4d55a05bf732c600b、3773文件：
+
+| 运行 | 结果 | 范围 |
+|---|---|---|
+| periodic_dispatch_policy_related_2114_211428_922565 | 25场景／858检查PASS | 原周期链22场景与原周期合同、模板、既有periodic runtime；显式30秒 |
+| periodic_dispatch_policy_world_2131_213126_203389 | 8场景／394检查PASS | 组合效果、合法退出、自然移动效果、真实资源准备及各本轮独立cold；显式60秒 |
+
+共33唯一场景1252检查，原生均完整终止exit0、无超时和引擎错误。四组成功producer、expectation、runner handoff与cold逐项关联，全部3773受测运行文件原字节、before/after及引擎4.7.stable.official.5b4e0cb0f／SHA d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c在13:39检查点已复核；证据为outputs/framework_v2/feature_templates_20261004/POLICY_FINAL_ASSOCIATIONS.json。此前30场景1130项及边界诊断保持各自旧指纹，不混成这33场景。14:38原始日志复核纠正此前“本批ObjectDB计数0”的错误：旧子串未匹配Godot的was/were leaked写法；实际13个场景stderr各有一条退出告警，12场报告8实例、1场报告16实例。原日志、原统计与业务原生结果保留，纠正表为outputs/framework_v2/feature_templates_20261004/OBJECTDB_WARNING_CORRECTION.json；不宣称零泄漏或无限耐久通过。
+
+整体Task3资源表现消费、Task4合法累计工作／服务与最坏atomic quantum、Task5更广生成组合／持续自然P6R3／设备及APK仍NOT_RUN。极短周期的新状态本身仍需服务边界证明，不能用本次防止刷新换周期的修复代替。当前增量尚未单独commit/push或双审计，实际第三树HEAD/index及冻结Streaming保护继续核对；无主树接入、打包或设备通过声明。

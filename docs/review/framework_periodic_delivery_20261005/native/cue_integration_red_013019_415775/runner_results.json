@@ -1,0 +1,63 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "feature_cue_actor_retirement_test",
+                        "test_path":  "tests/framework/feature_cue_actor_retirement_test.tscn",
+                        "wrapper_process_id":  6904,
+                        "wrapper_started_utc":  "2026-10-04T17:30:22.0478061Z",
+                        "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\cue_integration_red_20261005_0130",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-04T17:30:52.0596984Z",
+                        "native_exit_observed_utc":  "2026-10-04T17:30:37.8094412Z",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "a38c38b7-6119-4478-855c-1622bbd684b6",
+                        "framework_receipt_valid":  true,
+                        "result":  "PASS",
+                        "reason":  ""
+                    },
+                    {
+                        "test_name":  "feature_cue_actor_retirement_reentry_test",
+                        "test_path":  "tests/framework/feature_cue_actor_retirement_reentry_test.tscn",
+                        "wrapper_process_id":  9048,
+                        "wrapper_started_utc":  "2026-10-04T17:30:39.2690551Z",
+                        "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\cue_integration_red_20261005_0130",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  false,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  1,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-04T17:31:09.2763339Z",
+                        "native_exit_observed_utc":  "2026-10-04T17:30:53.8397247Z",
+                        "effective_exit_code":  1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "f912c447-70de-4dcb-aaa8-aee30503d1e6",
+                        "framework_receipt_valid":  false,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+                    }
+                ],
+    "total":  2,
+    "invocation_id":  "70aff899-9532-49c9-91e5-36915151ada6",
+    "runtime_environment":  {
+                                "project_root":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+                                "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\cue_integration_red_20261005_0130",
+                                "runner_process_id":  12232
+                            },
+    "passed":  1,
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "engine_log_errors":  0,
+    "generated_at":  "2026-10-05T01:30:54.9155378+08:00",
+    "failed":  1,
+    "suite":  "adhoc"
+}

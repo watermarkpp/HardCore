@@ -1,0 +1,37 @@
+{
+  "status": "FAIL",
+  "task_id": "periodic-delivery-native-count-15-20261005",
+  "server_task_id": "61204d1d-028c-4b6d-9e69-a67599a577ec",
+  "complete": false,
+  "error": "NO_TEXT_RESPONSE",
+  "reason": "The requested 4096 output-token budget was exhausted in reasoning; no candidate text exists. No automatic retry.",
+  "sources": [
+    {
+      "path": "outputs\\framework_v2\\glm_mechanical_20261004\\periodic_delivery_15_input.json",
+      "start_line": 1,
+      "end_line": 1,
+      "sha256": "23c1c89cafcabfdd3cdedf6fbf462c6e0634c6859a3f0c8a29b7bdad37f6de46",
+      "bytes": 22531
+    }
+  ],
+  "model_requested": "glm-5.3-flash",
+  "response_model": "glm-5-3-flash",
+  "model_identity": "unverified",
+  "endpoint": "https://ark.cn-beijing.volces.com/api/coding/v3/responses",
+  "usage": {
+    "input_tokens": 14324,
+    "output_tokens": 4096,
+    "total_tokens": 18420,
+    "reasoning_tokens": 4092
+  },
+  "elapsed_seconds": 67.11,
+  "local_controller_counts": {
+    "native_attempts": 233,
+    "pass": 207,
+    "fail": 26,
+    "timeouts": 2,
+    "final_scenes": 39,
+    "final_checks": 2138
+  },
+  "engineering_adoption": false
+}

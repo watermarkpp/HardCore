@@ -1,0 +1,169 @@
+{
+  "fatal_initial_hit": true,
+  "invocation_id": "651160b8-7e16-492d-85bd-dbbc3c09f374",
+  "rows": [
+    {
+      "audio": [
+        {
+          "exact_stream": true,
+          "handle": "[{\"life_generation\":1,\"runtime_id\":911774586856,\"world\":{\"contract_id\":\"hardcore.execution.world_context.v1\",\"profile_id\":\"mixed-delivery\",\"runtime_map_id\":910001,\"world_epoch\":1,\"world_runtime_id\":347808466592}},\"[\\\"hc.slot.rule\\\",\\\"rule:hc.validation.mixed_delivery_chain\\\",\\\"\\\",\\\"hc.validation.mixed_delivery_chain.ignite\\\"]\",\"hc.validation.mixed_delivery_chain.ignite\",\"hc.effect.ignite.v1\"]",
+          "path": "res://assets/audio/sfx/client/10332__M33-3.wav",
+          "request_serial": 4
+        }
+      ],
+      "base_loss": 20,
+      "child_actions": 1,
+      "child_loss": 20,
+      "healing": 0,
+      "mask": 0,
+      "source_handles": [
+        "[\"hc.slot.weapon\",\"drop:v1:85:ee8d21acf98a5821ff57aa78\",\"[\\\"affix\\\",\\\"hc.affix.validation.magic_bonus.v1\\\",0]\",\"hc.ignite.ice_storm\"]"
+      ],
+      "ticks": 4
+    },
+    {
+      "audio": [
+        {
+          "exact_stream": true,
+          "handle": "[{\"life_generation\":1,\"runtime_id\":1288204985381,\"world\":{\"contract_id\":\"hardcore.execution.world_context.v1\",\"profile_id\":\"mixed-delivery\",\"runtime_map_id\":910001,\"world_epoch\":1,\"world_runtime_id\":942728560212}},\"[\\\"hc.slot.rule\\\",\\\"rule:hc.validation.mixed_delivery_chain\\\",\\\"\\\",\\\"hc.validation.mixed_delivery_chain.ignite\\\"]\",\"hc.validation.mixed_delivery_chain.ignite\",\"hc.effect.ignite.v1\"]",
+          "path": "res://assets/audio/sfx/client/10332__M33-3.wav",
+          "request_serial": 4
+        }
+      ],
+      "base_loss": 20,
+      "child_actions": 1,
+      "child_loss": 20,
+      "healing": 0,
+      "mask": 1,
+      "source_handles": [
+        "[\"hc.slot.weapon\",\"drop:v1:85:9374c46e30803b01c7117a65\",\"[\\\"affix\\\",\\\"hc.affix.validation.magic_bonus.v1\\\",0]\",\"hc.ignite.ice_storm\"]",
+        "[\"hc.slot.weapon\",\"mixed-delivery:gem:1\",\"[\\\"drop:v1:85:9374c46e30803b01c7117a65\\\",\\\"hc.socketing.primary\\\"]\",\"hc.ignite.ice_storm\"]"
+      ],
+      "ticks": 4
+    },
+    {
+      "audio": [
+        {
+          "exact_stream": true,
+          "handle": "[{\"life_generation\":1,\"runtime_id\":1657471508111,\"world\":{\"contract_id\":\"hardcore.execution.world_context.v1\",\"profile_id\":\"mixed-delivery\",\"runtime_map_id\":910001,\"world_epoch\":1,\"world_runtime_id\":1316357151053}},\"[\\\"hc.slot.rule\\\",\\\"rule:hc.validation.mixed_delivery_chain\\\",\\\"\\\",\\\"hc.validation.mixed_delivery_chain.ignite\\\"]\",\"hc.validation.mixed_delivery_chain.ignite\",\"hc.effect.ignite.v1\"]",
+          "path": "res://assets/audio/sfx/client/10332__M33-3.wav",
+          "request_serial": 4
+        }
+      ],
+      "base_loss": 20,
+      "child_actions": 1,
+      "child_loss": 20,
+      "healing": 0,
+      "mask": 2,
+      "source_handles": [
+        "[\"hc.slot.weapon\",\"drop:v1:85:e3524202c6fa45a55c8d6bd5\",\"[\\\"affix\\\",\\\"hc.affix.validation.magic_bonus.v1\\\",1]\",\"hc.ignite.ice_storm\"]",
+        "[\"hc.slot.weapon\",\"mixed-delivery:rune:2\",\"[\\\"drop:v1:85:e3524202c6fa45a55c8d6bd5\\\",\\\"hc.runes.primary\\\"]\",\"hc.ignite.ice_storm\"]"
+      ],
+      "ticks": 4
+    },
+    {
+      "audio": [
+        {
+          "exact_stream": true,
+          "handle": "[{\"life_generation\":1,\"runtime_id\":2048800067541,\"world\":{\"contract_id\":\"hardcore.execution.world_context.v1\",\"profile_id\":\"mixed-delivery\",\"runtime_map_id\":910001,\"world_epoch\":1,\"world_runtime_id\":1707081732133}},\"[\\\"hc.slot.rule\\\",\\\"rule:hc.validation.mixed_delivery_chain\\\",\\\"\\\",\\\"hc.validation.mixed_delivery_chain.ignite\\\"]\",\"hc.validation.mixed_delivery_chain.ignite\",\"hc.effect.ignite.v1\"]",
+          "path": "res://assets/audio/sfx/client/10332__M33-3.wav",
+          "request_serial": 4
+        }
+      ],
+      "base_loss": 20,
+      "child_actions": 1,
+      "child_loss": 20,
+      "healing": 0,
+      "mask": 3,
+      "source_handles": [
+        "[\"hc.slot.weapon\",\"drop:v1:85:2226548359891d8d040c89f3\",\"[\\\"affix\\\",\\\"hc.affix.validation.magic_bonus.v1\\\",0]\",\"hc.ignite.ice_storm\"]",
+        "[\"hc.slot.weapon\",\"mixed-delivery:gem:3\",\"[\\\"drop:v1:85:2226548359891d8d040c89f3\\\",\\\"hc.socketing.primary\\\"]\",\"hc.ignite.ice_storm\"]",
+        "[\"hc.slot.weapon\",\"mixed-delivery:rune:3\",\"[\\\"drop:v1:85:2226548359891d8d040c89f3\\\",\\\"hc.runes.primary\\\"]\",\"hc.ignite.ice_storm\"]"
+      ],
+      "ticks": 4
+    },
+    {
+      "audio": [
+        {
+          "exact_stream": true,
+          "handle": "[{\"life_generation\":1,\"runtime_id\":2409946424764,\"world\":{\"contract_id\":\"hardcore.execution.world_context.v1\",\"profile_id\":\"mixed-delivery\",\"runtime_map_id\":910001,\"world_epoch\":1,\"world_runtime_id\":2068966289976}},\"[\\\"hc.slot.rule\\\",\\\"rule:hc.validation.mixed_delivery_chain\\\",\\\"\\\",\\\"hc.validation.mixed_delivery_chain.ignite\\\"]\",\"hc.validation.mixed_delivery_chain.ignite\",\"hc.effect.ignite.v1\"]",
+          "path": "res://assets/audio/sfx/client/10332__M33-3.wav",
+          "request_serial": 4
+        }
+      ],
+      "base_loss": 20,
+      "child_actions": 1,
+      "child_loss": 20,
+      "healing": 5,
+      "mask": 4,
+      "source_handles": [
+        "[\"hc.slot.weapon\",\"drop:v1:85:e4970b332d4f21a83fc9627a\",\"[\\\"affix\\\",\\\"hc.affix.validation.magic_bonus.v1\\\",0]\",\"hc.ignite.ice_storm\"]"
+      ],
+      "ticks": 4
+    },
+    {
+      "audio": [
+        {
+          "exact_stream": true,
+          "handle": "[{\"life_generation\":1,\"runtime_id\":2779363947680,\"world\":{\"contract_id\":\"hardcore.execution.world_context.v1\",\"profile_id\":\"mixed-delivery\",\"runtime_map_id\":910001,\"world_epoch\":1,\"world_runtime_id\":2438232809575}},\"[\\\"hc.slot.rule\\\",\\\"rule:hc.validation.mixed_delivery_chain\\\",\\\"\\\",\\\"hc.validation.mixed_delivery_chain.ignite\\\"]\",\"hc.validation.mixed_delivery_chain.ignite\",\"hc.effect.ignite.v1\"]",
+          "path": "res://assets/audio/sfx/client/10332__M33-3.wav",
+          "request_serial": 4
+        }
+      ],
+      "base_loss": 20,
+      "child_actions": 1,
+      "child_loss": 20,
+      "healing": 5,
+      "mask": 5,
+      "source_handles": [
+        "[\"hc.slot.weapon\",\"drop:v1:85:e86f4bda2436270533e8d6f7\",\"[\\\"affix\\\",\\\"hc.affix.validation.magic_bonus.v1\\\",0]\",\"hc.ignite.ice_storm\"]",
+        "[\"hc.slot.weapon\",\"mixed-delivery:gem:5\",\"[\\\"drop:v1:85:e86f4bda2436270533e8d6f7\\\",\\\"hc.socketing.primary\\\"]\",\"hc.ignite.ice_storm\"]"
+      ],
+      "ticks": 4
+    },
+    {
+      "audio": [
+        {
+          "exact_stream": true,
+          "handle": "[{\"life_generation\":1,\"runtime_id\":3152606673371,\"world\":{\"contract_id\":\"hardcore.execution.world_context.v1\",\"profile_id\":\"mixed-delivery\",\"runtime_map_id\":910001,\"world_epoch\":1,\"world_runtime_id\":2810888334330}},\"[\\\"hc.slot.rule\\\",\\\"rule:hc.validation.mixed_delivery_chain\\\",\\\"\\\",\\\"hc.validation.mixed_delivery_chain.ignite\\\"]\",\"hc.validation.mixed_delivery_chain.ignite\",\"hc.effect.ignite.v1\"]",
+          "path": "res://assets/audio/sfx/client/10332__M33-3.wav",
+          "request_serial": 4
+        }
+      ],
+      "base_loss": 20,
+      "child_actions": 1,
+      "child_loss": 20,
+      "healing": 5,
+      "mask": 6,
+      "source_handles": [
+        "[\"hc.slot.weapon\",\"drop:v1:85:c0411d0642aeeab79c4a9dd8\",\"[\\\"affix\\\",\\\"hc.affix.validation.magic_bonus.v1\\\",0]\",\"hc.ignite.ice_storm\"]",
+        "[\"hc.slot.weapon\",\"mixed-delivery:rune:6\",\"[\\\"drop:v1:85:c0411d0642aeeab79c4a9dd8\\\",\\\"hc.runes.primary\\\"]\",\"hc.ignite.ice_storm\"]"
+      ],
+      "ticks": 4
+    },
+    {
+      "audio": [
+        {
+          "exact_stream": true,
+          "handle": "[{\"life_generation\":1,\"runtime_id\":3546049154270,\"world\":{\"contract_id\":\"hardcore.execution.world_context.v1\",\"profile_id\":\"mixed-delivery\",\"runtime_map_id\":910001,\"world_epoch\":1,\"world_runtime_id\":3204448265788}},\"[\\\"hc.slot.rule\\\",\\\"rule:hc.validation.mixed_delivery_chain\\\",\\\"\\\",\\\"hc.validation.mixed_delivery_chain.ignite\\\"]\",\"hc.validation.mixed_delivery_chain.ignite\",\"hc.effect.ignite.v1\"]",
+          "path": "res://assets/audio/sfx/client/10332__M33-3.wav",
+          "request_serial": 4
+        }
+      ],
+      "base_loss": 20,
+      "child_actions": 1,
+      "child_loss": 20,
+      "healing": 5,
+      "mask": 7,
+      "source_handles": [
+        "[\"hc.slot.weapon\",\"drop:v1:85:a27d222b6d55af1b3bb40ec3\",\"[\\\"affix\\\",\\\"hc.affix.validation.magic_bonus.v1\\\",0]\",\"hc.ignite.ice_storm\"]",
+        "[\"hc.slot.weapon\",\"mixed-delivery:gem:7\",\"[\\\"drop:v1:85:a27d222b6d55af1b3bb40ec3\\\",\\\"hc.socketing.primary\\\"]\",\"hc.ignite.ice_storm\"]",
+        "[\"hc.slot.weapon\",\"mixed-delivery:rune:7\",\"[\\\"drop:v1:85:a27d222b6d55af1b3bb40ec3\\\",\\\"hc.runes.primary\\\"]\",\"hc.ignite.ice_storm\"]"
+      ],
+      "ticks": 4
+    }
+  ],
+  "run_id": "4dbf82d8-56bc-4221-81bc-9a27bb1b38a7",
+  "scope": "eight controlled real item/writer/Root combinations; simulation steps are test-owned; no natural or device claim",
+  "source_content_sha256": "e34257402209922606d0b0ebae9a97b5892e12ad62f82451d6e41f35a69b781b"
+}

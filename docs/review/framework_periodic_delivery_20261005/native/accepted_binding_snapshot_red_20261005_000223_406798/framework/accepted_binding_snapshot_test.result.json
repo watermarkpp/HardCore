@@ -1,0 +1,62 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "the formal compiler supplies both finite chain bindings",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "this proof starts from a compiled source, not an invented binding",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "the actual player source has a valid life",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "one real runtime owns every admission and claim",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "the root receives a nonempty capacity ticket before HP",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "a runtime-issued ticket can inspect its accepted binding snapshot without consuming release",
+      "passed": false
+    },
+    {
+      "id": 7,
+      "label": "the test-owned world releases all remaining capacity",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "the default catalog is restored after explicit world retirement",
+      "passed": true
+    }
+  ],
+  "count": 8,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "5b6e0ef3-6a7c-43d1-999e-9e9bd4b02c0b",
+  "passed": 7,
+  "reported_checks": 8,
+  "reported_failures": 1,
+  "run_id": "76fff047-e500-4702-9d26-e750ce1404e2",
+  "runtime_environment": {
+    "native_process_id": 9644,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_red_20261005_0001",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/accepted_binding_red_20261005_0001/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "accepted_binding_snapshot_test",
+  "schema_version": 1,
+  "source_content_sha256": "5a02fdffd14807043b427c002797884fb4df86d1fe88fae761c90b8d4d301d23",
+  "status": "FAIL"
+}

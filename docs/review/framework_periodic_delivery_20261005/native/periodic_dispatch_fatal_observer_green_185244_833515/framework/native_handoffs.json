@@ -1,0 +1,57 @@
+{
+    "schema_version":  1,
+    "runtime_environment":  {
+                                "project_root":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+                                "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_fatal_observer_green_e48fbf8e35da4d498f57e018ae3fbb1b",
+                                "runner_process_id":  25360
+                            },
+    "invocation_id":  "7eb5855d-edeb-4062-b4aa-b70584f94842",
+    "source_content_sha256":  "678e2ba32a5d9f8e57ff12b37d8810f03131960f63a0f47a35f25ca1562bc41e",
+    "producers":  {
+                      "periodic_dispatch_lifecycle_test":  {
+                                                               "scene_id":  "periodic_dispatch_lifecycle_test",
+                                                               "run_id":  "3a92bb07-8c61-4439-aa6a-664a181370e3",
+                                                               "source_content_sha256":  "678e2ba32a5d9f8e57ff12b37d8810f03131960f63a0f47a35f25ca1562bc41e",
+                                                               "process_exited":  true,
+                                                               "effective_exit_code":  0,
+                                                               "result":  "PASS",
+                                                               "receipt_sha256":  "f05c5c55ccaf44a117653d2f48ac0270e40010424507c2f44eaadb6d0f27e5a2"
+                                                           },
+                      "periodic_child_root_test":  {
+                                                       "scene_id":  "periodic_child_root_test",
+                                                       "run_id":  "d379eefb-2f14-44d7-ad0b-4b3bf0e220f7",
+                                                       "source_content_sha256":  "678e2ba32a5d9f8e57ff12b37d8810f03131960f63a0f47a35f25ca1562bc41e",
+                                                       "process_exited":  true,
+                                                       "effective_exit_code":  0,
+                                                       "result":  "PASS",
+                                                       "receipt_sha256":  "f0090d3e9f1392c03e99163e922c8e318da64a41ff687956d332e922239e7f4b"
+                                                   },
+                      "periodic_child_g2_root_test":  {
+                                                          "scene_id":  "periodic_child_g2_root_test",
+                                                          "run_id":  "f957561d-1887-46f2-9590-d7f85b346511",
+                                                          "source_content_sha256":  "678e2ba32a5d9f8e57ff12b37d8810f03131960f63a0f47a35f25ca1562bc41e",
+                                                          "process_exited":  true,
+                                                          "effective_exit_code":  0,
+                                                          "result":  "PASS",
+                                                          "receipt_sha256":  "3b36a444850026267c960ae919c5633758e9f2682c4c967a1a31d94cef03dd71"
+                                                      },
+                      "feature_chain_commit_test":  {
+                                                        "scene_id":  "feature_chain_commit_test",
+                                                        "run_id":  "5eaadf14-8853-4dfe-a3b3-df175786bd56",
+                                                        "source_content_sha256":  "678e2ba32a5d9f8e57ff12b37d8810f03131960f63a0f47a35f25ca1562bc41e",
+                                                        "process_exited":  true,
+                                                        "effective_exit_code":  0,
+                                                        "result":  "PASS",
+                                                        "receipt_sha256":  "7fed076f5131dbd75ba42968b38af33d8d5b853a45eacf2f93dc15a0ef308bd6"
+                                                    },
+                      "feature_state_loan_lifetime_test":  {
+                                                               "scene_id":  "feature_state_loan_lifetime_test",
+                                                               "run_id":  "6ec723e8-812d-4b9c-931f-b0254b64726f",
+                                                               "source_content_sha256":  "678e2ba32a5d9f8e57ff12b37d8810f03131960f63a0f47a35f25ca1562bc41e",
+                                                               "process_exited":  true,
+                                                               "effective_exit_code":  0,
+                                                               "result":  "PASS",
+                                                               "receipt_sha256":  "89e7d80e1090a6d4ed15823232434a174863ad730f9ad39b1ea4197d4e97877c"
+                                                           }
+                  }
+}

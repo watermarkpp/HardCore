@@ -22,8 +22,10 @@ static var _catalog_attempted := false
 
 static func create(command: Dictionary, world: RefCounted, release_id: String) -> Dictionary:
 	var rejected := {"success":false,"reason":"invalid_child_request","request":{}}
+	var periodic_parent: bool=command.get("parent_source_class")=="periodic"
+	var fields: Array=COMMAND_FIELDS+["parent_source_class"] if periodic_parent else COMMAND_FIELDS
 	if world == null or world.get_script()!=preload("res://scripts/layers/runtime/execution/world_context.gd") \
-		or release_id.is_empty() or not _keys(command,COMMAND_FIELDS): return rejected
+		or release_id.is_empty() or not _keys(command,fields): return rejected
 	var bound_world: Dictionary=world.capture_world()
 	if not bound_world.get("runtime_map_id") is int or int(bound_world.runtime_map_id)<0: return rejected
 	var row := _definition_for(command.get("action_id"))
@@ -37,7 +39,9 @@ static func create(command: Dictionary, world: RefCounted, release_id: String) -
 	for field: String in ["generation","maximum_generation","raw_damage"]:
 		if not _positive_integer(command[field]): return rejected
 	if command.generation>command.maximum_generation or not _number(command.radius_gu) or float(command.radius_gu)<=0: return rejected
-	if (int(command.generation)==1 and command.parent_release_id!=command.root_release_id) \
+	if periodic_parent:
+		if command.parent_release_id==command.root_release_id: return rejected
+	elif (int(command.generation)==1 and command.parent_release_id!=command.root_release_id) \
 		or (int(command.generation)>1 and command.parent_release_id==command.root_release_id): return rejected
 	var prefix: String=command.parent_release_id+":hp:"
 	if not command.parent_fact_id.begins_with(prefix): return rejected

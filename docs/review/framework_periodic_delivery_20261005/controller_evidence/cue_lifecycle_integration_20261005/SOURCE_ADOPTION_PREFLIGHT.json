@@ -1,0 +1,27 @@
+{
+  "read_utc": "2026-10-04T17:30:19.156661+00:00",
+  "scope": "Root-owned integration of independently verified peer candidate; production unchanged for root native RED",
+  "peer_head": "2c58552d2d905eea1f5c13d38685f66c489b092c",
+  "root_head": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+  "production_before_sha256": "42d739f68e2836cd7e1d88d87ca66693b40d25fdcedc0831c31051f44ba5549e",
+  "backup_sha256": "42d739f68e2836cd7e1d88d87ca66693b40d25fdcedc0831c31051f44ba5549e",
+  "peer_red_green_check": "outputs/framework_v2/periodic_dispatch_20261004/accepted_binding_snapshot/CUE_PEER_RED_GREEN_CHECK.json",
+  "copied_tests": [
+    {
+      "path": "tests/framework/feature_cue_actor_retirement_test.gd",
+      "bytes": 9700,
+      "sha256": "14c8e771f9a4acac2426572adfc9447c05a10ab4a9612ae80115888d405592c7"
+    },
+    {
+      "path": "tests/framework/feature_cue_actor_retirement_test.tscn",
+      "bytes": 219,
+      "sha256": "5d19dc9245750f1ad57441bf052eeacce162a6e5721630322040d1bbb9f907b2"
+    },
+    {
+      "path": "tests/framework/feature_cue_actor_retirement_reentry_test.tscn",
+      "bytes": 258,
+      "sha256": "fad9fa922724e25a5556791d36904775462bcb52152a08c3365a73727c70e156"
+    }
+  ],
+  "status": "PASS"
+}

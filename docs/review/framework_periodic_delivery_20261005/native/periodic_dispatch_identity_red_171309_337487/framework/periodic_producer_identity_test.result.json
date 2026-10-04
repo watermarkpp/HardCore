@@ -1,0 +1,162 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "formal existing default-off direct/child module supplies real compiled bindings",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "formal producer includes both persistent and death subscriptions",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "actual runtime owns the pre-HP producer capability",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "identity probe has an actual accepted reservation: 0",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "wrong lineage/source is rejected before producer claim: 0",
+      "passed": false
+    },
+    {
+      "id": 6,
+      "label": "rejected caller preserves the legitimate unique qualification and all promises: 0",
+      "passed": false
+    },
+    {
+      "id": 7,
+      "label": "the original legitimate producer still succeeds exactly once: 0",
+      "passed": false
+    },
+    {
+      "id": 8,
+      "label": "identity probe has no newly retained writer, batch or root: 0",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "identity probe has an actual accepted reservation: 1",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "wrong lineage/source is rejected before producer claim: 1",
+      "passed": false
+    },
+    {
+      "id": 11,
+      "label": "rejected caller preserves the legitimate unique qualification and all promises: 1",
+      "passed": false
+    },
+    {
+      "id": 12,
+      "label": "the original legitimate producer still succeeds exactly once: 1",
+      "passed": false
+    },
+    {
+      "id": 13,
+      "label": "identity probe has no newly retained writer, batch or root: 1",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "identity probe has an actual accepted reservation: 2",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "wrong lineage/source is rejected before producer claim: 2",
+      "passed": false
+    },
+    {
+      "id": 16,
+      "label": "rejected caller preserves the legitimate unique qualification and all promises: 2",
+      "passed": false
+    },
+    {
+      "id": 17,
+      "label": "the original legitimate producer still succeeds exactly once: 2",
+      "passed": false
+    },
+    {
+      "id": 18,
+      "label": "identity probe has no newly retained writer, batch or root: 2",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "generation-zero periodic work has its own release identity while preserving the root",
+      "passed": false
+    },
+    {
+      "id": 20,
+      "label": "a unique periodic label cannot masquerade as the root direct producer",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "periodic work must identify the status-producing parent",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "a periodic tick cannot reuse the root direct release identity",
+      "passed": false
+    },
+    {
+      "id": 23,
+      "label": "pure handler unit uses the formal registered death definition",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "fatal periodic fact preserves its unique parent and advances child generation once",
+      "passed": false
+    },
+    {
+      "id": 25,
+      "label": "a nonfatal periodic fact produces no death child",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "pure death handler also rejects an aliased periodic root identity",
+      "passed": false
+    },
+    {
+      "id": 27,
+      "label": "all identity probes retire without HP or hidden runtime work",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "identity-only owner restores the formal registry",
+      "passed": true
+    }
+  ],
+  "count": 28,
+  "engine_version": "4.7-stable (official)",
+  "failed": 13,
+  "invocation_id": "5a7ec415-5788-4b62-b57b-0ce2fa1c18f3",
+  "passed": 15,
+  "reported_checks": 28,
+  "reported_failures": 13,
+  "run_id": "8e4025df-73e0-407c-a271-4ce90197bf08",
+  "runtime_environment": {
+    "native_process_id": 4800,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_identity_red_6fb7987965774c4f919d794758beda23",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_dispatch_identity_red_6fb7987965774c4f919d794758beda23/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "periodic_producer_identity_test",
+  "schema_version": 1,
+  "source_content_sha256": "012a20f4f0cea5ef4a6e68fba39002b1cef02158fede85d529055eb9de2c22b1",
+  "status": "FAIL"
+}

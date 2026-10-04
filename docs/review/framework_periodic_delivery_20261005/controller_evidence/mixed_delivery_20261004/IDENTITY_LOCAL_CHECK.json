@@ -1,0 +1,52 @@
+{
+  "status": "PASS",
+  "module_count": 6,
+  "mechanic_count": 7,
+  "bindings": 8,
+  "errors": [],
+  "sent_ranges": [
+    {
+      "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/assets/data/features/validation/mixed_delivery_registry.json",
+      "actual_lines": 21,
+      "requested_end": 21,
+      "sha256": "db04e7bb2e4489c6f232b4b5096405684e2b6c8963dae5ef481cf6cd5c9161fa"
+    },
+    {
+      "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/assets/data/features/validation/mixed_delivery_chain.json",
+      "actual_lines": 43,
+      "requested_end": 43,
+      "sha256": "1846a4c2138e4209016a8336ae2e236ee1e69f26457de2bf4f83ba73d48ae9cf"
+    },
+    {
+      "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/assets/data/features/validation/resource_natural_parent.json",
+      "actual_lines": 80,
+      "requested_end": 92,
+      "sha256": "269394d7c01280e81848c0fa7c7edfed0177dedd54f76f2428da5ab1db90eac4"
+    },
+    {
+      "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/assets/data/features/validation/resource_natural_child.json",
+      "actual_lines": 25,
+      "requested_end": 31,
+      "sha256": "cdc9771ff5ed141d4805b54b537ca22d081c4b57f47981bbafc972eddfe7f229"
+    },
+    {
+      "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/assets/data/features/socketing_fixture.json",
+      "actual_lines": 20,
+      "requested_end": 200,
+      "sha256": "e31fecf539be6785308407f4fc8a84bbce244cbf7466cb62aac89694eacd8318"
+    },
+    {
+      "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/assets/data/features/rune_fixture.json",
+      "actual_lines": 9,
+      "requested_end": 200,
+      "sha256": "557777eaf17c1e9e204091c15ae68549b73ccfc7d834a274666d87f63c2a5afc"
+    },
+    {
+      "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/assets/data/features/validation/lifesteal.json",
+      "actual_lines": 28,
+      "requested_end": 27,
+      "sha256": "5da7fc3136ad2bdd99e5df520751e6fe91121963c29a7a1bb0b2da50dda3f56e"
+    }
+  ],
+  "glm_candidate_status": "FAIL local INVALID_LINE_RANGE, no retry or remote identity/usage claim"
+}

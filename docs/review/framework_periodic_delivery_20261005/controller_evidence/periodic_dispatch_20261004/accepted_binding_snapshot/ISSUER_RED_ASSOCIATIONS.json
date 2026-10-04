@@ -1,0 +1,25 @@
+{
+  "status": "PASS",
+  "read_utc": "2026-10-04T16:49:32.478730+00:00",
+  "classification": "verified native FAIL",
+  "checks": 37,
+  "failed_checks": 2,
+  "native_exit": 1,
+  "source_content_sha256": "a8ae28de3bd6e8babee2baa7111758da3b1cb33f1441b721953f3ffd277a9161",
+  "run_id": "316b451e-6e19-4746-baf9-56015c3fa135",
+  "invocation_id": "85912c4f-1454-4b05-a61c-eab68d48f720",
+  "receipt_sha256": "e713f9ae14cb016ea85a5da787bf8f342bcc4cc4299e2275730365f0b3ea467a",
+  "evidence": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_issuer_red_20261005_003948_722770",
+  "failure_checks": [
+    {
+      "id": 32,
+      "label": "an unrelated object implementing the same method names cannot issue a binding proof",
+      "passed": false
+    },
+    {
+      "id": 33,
+      "label": "a non-runtime issuer cannot skip full validation or consume any fake release",
+      "passed": false
+    }
+  ]
+}

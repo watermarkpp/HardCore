@@ -1,0 +1,9 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"task_id\": \"61204d1d-028c-4b6d-9e69-a67599a577ec\",\n  \"sources\": [\n    {\n      \"path\": \"outputs\\\\framework_v2\\\\glm_mechanical_20261004\\\\periodic_delivery_15_input.json\",\n      \"start_line\": 1,\n      \"end_line\": 1,\n      \"sha256\": \"23c1c89cafcabfdd3cdedf6fbf462c6e0634c6859a3f0c8a29b7bdad37f6de46\",\n      \"bytes\": 22531\n    }\n  ],\n  \"model_requested\": \"glm-5.3-flash\",\n  \"untrusted_model_output\": true,\n  \"verified_facts\": false,\n  \"complete\": false,\n  \"max_output_tokens_requested\": 4096,\n  \"timeout_seconds\": 900,\n  \"endpoint_requested\": \"https://ark.cn-beijing.volces.com/api/coding/v3/responses\",\n  \"reasoning_effort_requested\": \"low\",\n  \"usage\": {\n    \"input_tokens\": 14324,\n    \"output_tokens\": 4096,\n    \"total_tokens\": 18420,\n    \"reasoning_tokens\": 4092\n  },\n  \"http_status\": 200,\n  \"elapsed_seconds\": 67.11,\n  \"response_status\": \"incomplete\",\n  \"incomplete_reason\": \"unverified\",\n  \"output_item_types\": [\n    \"reasoning\"\n  ],\n  \"model_reported\": \"unverified\",\n  \"response_model\": \"glm-5-3-flash\",\n  \"reasoning_effort_reported\": \"low\",\n  \"ok\": false,\n  \"error\": \"NO_TEXT_RESPONSE\"\n}"
+    }
+  ],
+  "isError": false
+}

@@ -1,0 +1,37 @@
+{
+  "parent_review": "2c58552d2d905eea1f5c13d38685f66c489b092c",
+  "verified_at_utc": "2026-10-04T09:19:41.971535+00:00",
+  "production_before": [
+    {
+      "path": "scripts/features/runtime/effect_runtime.gd",
+      "backup": "outputs\\framework_v2\\periodic_dispatch_20261004\\production_before\\effect_runtime.gd",
+      "sha256": "667f7855dd428fa821227682082e910a7f3f02cc73a13f0b7a80a66df069deae",
+      "bytes": 34381
+    },
+    {
+      "path": "scripts/features/contracts/effect_reservation.gd",
+      "backup": "outputs\\framework_v2\\periodic_dispatch_20261004\\production_before\\effect_reservation.gd",
+      "sha256": "886ade35185dbf6121ecb56e0c2c44cb117cea4a9bfc93bf85ae4c858b20cf54",
+      "bytes": 3429
+    },
+    {
+      "path": "scripts/features/runtime/damage_batch.gd",
+      "backup": "outputs\\framework_v2\\periodic_dispatch_20261004\\production_before\\damage_batch.gd",
+      "sha256": "ca9eca5a84db7862265ebec7b35ab0cc30cdadb485c89b292a70af7cf1735b9d",
+      "bytes": 12150
+    },
+    {
+      "path": "scripts/features/handlers/death_burst_handler.gd",
+      "backup": "outputs\\framework_v2\\periodic_dispatch_20261004\\production_before\\death_burst_handler.gd",
+      "sha256": "97879b79132d39bfc80579a4f71e805b48d7e9af9002d6f889bd3ae2292ab6d1",
+      "bytes": 5642
+    }
+  ],
+  "actual_head": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+  "fixture_before": {
+    "path": "tests/framework/feature_chain_commit_test.gd",
+    "backup": "outputs\\framework_v2\\periodic_dispatch_20261004\\production_before\\feature_chain_commit_test.gd",
+    "sha256": "7186dbf733a54da696c2a05205d162f40560649af91db3189c47bf275c798499",
+    "provenance": "Exact parent TESTED_SOURCE ZIP member, verified against SOURCE_MANIFEST; only periodic root alias/parent fixture inputs migrated, all HP/RNG/geometry/death assertions preserved."
+  }
+}

@@ -1,0 +1,197 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "formal registry accepts only the already-supported direct/child test module",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "test module is explicitly enabled",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "one persistent and one finite child subscription use formal bindings",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "both actual Player sources enter valid lifetimes through their production transition authority",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "unit owner supplies the actual mapped HP port and one explicit child consumer",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "85 receiver finite chain admits resident states rather than reserving every historical state creation",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "resident state promise for one persistent binding is85",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "unused large admission cancels before HP",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "life probe has its own accepted root",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "live old state and sealed fatal fact retain the same root before child consumption",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "one origin state spends one of the two resident loans",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "an independent real death invalidates the old state and immediately removes collision",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "queued old life has no mutation qualification while both replacement allowances are materialized",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "the retained committed fatal fact still performs its actual child HP exactly once",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "replacement consumes returned origin loans without retaining the invalid old-life state",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "the two live replacement states hold both origin loans",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "loan reclamation gives the old life one explicit terminal outcome",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "all child/state/receipt/loan owners reach the original complete terminal boundary",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "A accepts two initial states",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "B accepts a weaker refresh grant",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "C accepts a stronger refresh grant",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "weak and strong refresh retain all three accepted roots without multiplying the state node",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "strongest_keep_phase keeps the original historical credit and source authority",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "shared state ownership and two spare refresh-root loan pools remain separate",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "accepted states survive source withdrawal",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "later real periodic HP retains stronger raw and original credit after source destruction",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "refresh origin loans and every retained root retire only after the shared state ends",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "unit loan/life/refresh paths complete without hidden capacity errors",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "clear probe explicitly republishes its own test source",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "clear probe accepts its own finite root",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "loan reclamation reaches a real stop-port retirement callback",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "retirement cannot roll back the child HP already committed",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "clear in loan return leaves no old or replacement scheduling/storage owner",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "original public consumer closes after loan-return retirement without resurrecting old work",
+      "passed": true
+    },
+    {
+      "id": 35,
+      "label": "retired unit restores the formal default registry",
+      "passed": true
+    }
+  ],
+  "count": 35,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "ed80856e-f7ea-4b7a-ac5b-9a5c2dfb440b",
+  "passed": 35,
+  "reported_checks": 35,
+  "reported_failures": 0,
+  "run_id": "85c5f21c-bd68-47d5-8fba-625f004e62be",
+  "runtime_environment": {
+    "native_process_id": 16568,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_final_related_20261005",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/accepted_binding_final_related_20261005/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "feature_state_loan_lifetime_test",
+  "schema_version": 1,
+  "source_content_sha256": "5ae89276e58c2bcc937a922cb55354660a6657664e99eadd8df934cb257147b3",
+  "status": "PASS"
+}

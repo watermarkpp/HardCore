@@ -1,0 +1,982 @@
+{
+  "status": "PASS",
+  "read_utc": "2026-10-04T13:41:31.207864+00:00",
+  "source_content_sha256": "d1781a0f05ab5c2c765785b0167979141aeb1b6e6d4918c4d55a05bf732c600b",
+  "source_files": 3773,
+  "engine_version": "4.7.stable.official.5b4e0cb0f",
+  "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+  "errors": [],
+  "totals": {
+    "scenes": 33,
+    "checks": 1252,
+    "failed_checks": 0,
+    "cold_pairs": 4
+  },
+  "rows": [
+    {
+      "suite": "periodic_dispatch_policy_related_2114_211428_922565",
+      "scene": "periodic_producer_identity_test",
+      "run_id": "527f42a7-5d5f-434d-9c02-19488386979c",
+      "invocation_id": "6e50689c-bf4f-40c0-96e9-ac4f87291bf0",
+      "checks": 40,
+      "failed": 0,
+      "status": "PASS",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/framework/periodic_producer_identity_test.result.json",
+      "receipt_sha256": "ba4c058b199cd5205aafc6144ec34f00b03580ac991fe9b66965634bae847cc7"
+    },
+    {
+      "suite": "periodic_dispatch_policy_related_2114_211428_922565",
+      "scene": "periodic_dispatch_lifecycle_test",
+      "run_id": "a2603389-22b9-4f78-b84e-f7d526942c29",
+      "invocation_id": "6e50689c-bf4f-40c0-96e9-ac4f87291bf0",
+      "checks": 132,
+      "failed": 0,
+      "status": "PASS",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/framework/periodic_dispatch_lifecycle_test.result.json",
+      "receipt_sha256": "4f3e95548ee4d9548775c2cc66caa16a7c4fed9af7c4ca56f8a1d21c9b88f50a"
+    },
+    {
+      "suite": "periodic_dispatch_policy_related_2114_211428_922565",
+      "scene": "periodic_refresh_horizon_test",
+      "run_id": "e669687e-9693-4fa2-95e1-c5c1b116ec3a",
+      "invocation_id": "6e50689c-bf4f-40c0-96e9-ac4f87291bf0",
+      "checks": 37,
+      "failed": 0,
+      "status": "PASS",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/framework/periodic_refresh_horizon_test.result.json",
+      "receipt_sha256": "fc265f019deb2b3b7b9d8decfc2bce04f65dfa2ca77310333ec643a8fda19964"
+    },
+    {
+      "suite": "periodic_dispatch_policy_related_2114_211428_922565",
+      "scene": "periodic_child_root_test",
+      "run_id": "321a914f-eee8-4f26-9040-6fe054778d19",
+      "invocation_id": "6e50689c-bf4f-40c0-96e9-ac4f87291bf0",
+      "checks": 21,
+      "failed": 0,
+      "status": "PASS",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/framework/periodic_child_root_test.result.json",
+      "receipt_sha256": "4ff60577f38db0c1ec23fbdee02357d2a80c883fd9339ab9e983b8c06f11b647"
+    },
+    {
+      "suite": "periodic_dispatch_policy_related_2114_211428_922565",
+      "scene": "periodic_child_g2_root_test",
+      "run_id": "aa2df2e8-365f-47b9-a35e-2b0245690754",
+      "invocation_id": "6e50689c-bf4f-40c0-96e9-ac4f87291bf0",
+      "checks": 27,
+      "failed": 0,
+      "status": "PASS",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/framework/periodic_child_g2_root_test.result.json",
+      "receipt_sha256": "07ef38f7f7a56c3d1da2f473390bafaaaaf2fff7f95e933cb6eb77dc3eda4f66"
+    },
+    {
+      "suite": "periodic_dispatch_policy_related_2114_211428_922565",
+      "scene": "feature_periodic_child_chain_test",
+      "run_id": "f8f56894-1ac1-4a2c-8ebc-cbb51245343d",
+      "invocation_id": "6e50689c-bf4f-40c0-96e9-ac4f87291bf0",
+      "checks": 18,
+      "failed": 0,
+      "status": "PASS",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/framework/feature_periodic_child_chain_test.result.json",
+      "receipt_sha256": "707d10f9a5a74ff65ad9f6ddc8117d693f9245f2b407530227e66441a32925a1"
+    },
+    {
+      "suite": "periodic_dispatch_policy_related_2114_211428_922565",
+      "scene": "feature_death_child_command_test",
+      "run_id": "c7a9ac31-d7e7-455e-8f12-07cfe1a8f40d",
+      "invocation_id": "6e50689c-bf4f-40c0-96e9-ac4f87291bf0",
+      "checks": 31,
+      "failed": 0,
+      "status": "PASS",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/framework/feature_death_child_command_test.result.json",
+      "receipt_sha256": "0cbb5f5cfe15960c265c58a945422cf3a71318521a1a13dd00c3ccc3818a7917"
+    },
+    {
+      "suite": "periodic_dispatch_policy_related_2114_211428_922565",
+      "scene": "feature_chain_commit_test",
+      "run_id": "a5ea1ac4-4c61-42f0-8e6b-57354a2ca352",
+      "invocation_id": "6e50689c-bf4f-40c0-96e9-ac4f87291bf0",
+      "checks": 68,
+      "failed": 0,
+      "status": "PASS",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/framework/feature_chain_commit_test.result.json",
+      "receipt_sha256": "7e42ab4b6afc783452fab6d32b8ddf38c7bcfaba18ee31ca961b5684b2925b00"
+    },
+    {
+      "suite": "periodic_dispatch_policy_related_2114_211428_922565",
+      "scene": "feature_child_chain_admission_test",
+      "run_id": "0069d624-1b05-45f5-94fa-41099960e59f",
+      "invocation_id": "6e50689c-bf4f-40c0-96e9-ac4f87291bf0",
+      "checks": 44,
+      "failed": 0,
+      "status": "PASS",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/framework/feature_child_chain_admission_test.result.json",
+      "receipt_sha256": "ff3b885a5ccaa01f594fcd7fe761c9618fa168d93bcfd17f1dde8f26b43a1b4a"
+    },
+    {
+      "suite": "periodic_dispatch_policy_related_2114_211428_922565",
+      "scene": "feature_state_loan_lifetime_test",
+      "run_id": "b0a20490-1cfb-4097-9d4c-978fe60e9c6a",
+      "invocation_id": "6e50689c-bf4f-40c0-96e9-ac4f87291bf0",
+      "checks": 35,
+      "failed": 0,
+      "status": "PASS",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/framework/feature_state_loan_lifetime_test.result.json",
+      "receipt_sha256": "cebeb8a159f6512e7e1e7afe64b88862af130508d74a8318aee0ca5bd39e5a44"
+    },
+    {
+      "suite": "periodic_dispatch_policy_related_2114_211428_922565",
+      "scene": "feature_state_loan_root_test",
+      "run_id": "0510c59f-8941-4519-8603-7450d28e4abd",
+      "invocation_id": "6e50689c-bf4f-40c0-96e9-ac4f87291bf0",
+      "checks": 25,
+      "failed": 0,
+      "status": "PASS",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/framework/feature_state_loan_root_test.result.json",
+      "receipt_sha256": "eac0905921d90d230a01c9d4a780432253e905f58d1fd29772624f9b103c4881"
+    },
+    {
+      "suite": "periodic_dispatch_policy_related_2114_211428_922565",
+      "scene": "feature_child_capacity_test",
+      "run_id": "ad20f596-dc38-4618-b8d7-b0fd6fe0584d",
+      "invocation_id": "6e50689c-bf4f-40c0-96e9-ac4f87291bf0",
+      "checks": 44,
+      "failed": 0,
+      "status": "PASS",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/framework/feature_child_capacity_test.result.json",
+      "receipt_sha256": "64ac0c06771ae6cdf418951eb0b42cabea272545f44072be2025e68ad4662c01"
+    },
+    {
+      "suite": "periodic_dispatch_policy_related_2114_211428_922565",
+      "scene": "feature_capacity_atomic_test",
+      "run_id": "cb8dacfb-3040-4d8c-ba0d-0dd0c898e93e",
+      "invocation_id": "6e50689c-bf4f-40c0-96e9-ac4f87291bf0",
+      "checks": 25,
+      "failed": 0,
+      "status": "PASS",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/framework/feature_capacity_atomic_test.result.json",
+      "receipt_sha256": "e4c25c8c7a289ca7f15edfa138e43a061076c28ae0395f31a2154bc662bb4d18"
+    },
+    {
+      "suite": "periodic_dispatch_policy_related_2114_211428_922565",
+      "scene": "feature_capacity_admission_test",
+      "run_id": "224e288e-5d4e-46c5-a918-b5242127e35b",
+      "invocation_id": "6e50689c-bf4f-40c0-96e9-ac4f87291bf0",
+      "checks": 15,
+      "failed": 0,
+      "status": "PASS",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/framework/feature_capacity_admission_test.result.json",
+      "receipt_sha256": "6c3a5ab77011ad2c0fa2c40ec0a1757b2c02d8e6097281074785517c0dbd5cec"
+    },
+    {
+      "suite": "periodic_dispatch_policy_related_2114_211428_922565",
+      "scene": "periodic_effect_boundaries_test",
+      "run_id": "1f750acf-0ebb-40f0-8399-a134eba341d3",
+      "invocation_id": "6e50689c-bf4f-40c0-96e9-ac4f87291bf0",
+      "checks": 22,
+      "failed": 0,
+      "status": "PASS",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/framework/periodic_effect_boundaries_test.result.json",
+      "receipt_sha256": "6eecce83ce25b426bc58a29773c825faf7d7152e747061830fea6346213f2090"
+    },
+    {
+      "suite": "periodic_dispatch_policy_related_2114_211428_922565",
+      "scene": "periodic_effect_lifecycle_test",
+      "run_id": "f4113a2a-0fc8-4b86-992b-a6150dc7325c",
+      "invocation_id": "6e50689c-bf4f-40c0-96e9-ac4f87291bf0",
+      "checks": 18,
+      "failed": 0,
+      "status": "PASS",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/framework/periodic_effect_lifecycle_test.result.json",
+      "receipt_sha256": "8ba5ca1315a346fadeb02a48c54f59bbdfb0cb2702d6f9cb867bd9e4e5dab932"
+    },
+    {
+      "suite": "periodic_dispatch_policy_related_2114_211428_922565",
+      "scene": "periodic_callback_retirement_test",
+      "run_id": "f14ffbe4-ae14-48c7-ae91-e04b5dbb0440",
+      "invocation_id": "6e50689c-bf4f-40c0-96e9-ac4f87291bf0",
+      "checks": 32,
+      "failed": 0,
+      "status": "PASS",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/framework/periodic_callback_retirement_test.result.json",
+      "receipt_sha256": "dd2c2c3893ee1b4bb053af04297bef73c129b3044c9f33d2bbe98d427fbf591d"
+    },
+    {
+      "suite": "periodic_dispatch_policy_related_2114_211428_922565",
+      "scene": "periodic_delivery_lateness_test",
+      "run_id": "03e1a9a6-413e-4edc-b4ba-c73a1bce8462",
+      "invocation_id": "6e50689c-bf4f-40c0-96e9-ac4f87291bf0",
+      "checks": 36,
+      "failed": 0,
+      "status": "PASS",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/framework/periodic_delivery_lateness_test.result.json",
+      "receipt_sha256": "c51a0eb58549ba87f2dbf20f9373ae9b0efebcdc6b1038b70992b6478b61a2fb"
+    },
+    {
+      "suite": "periodic_dispatch_policy_related_2114_211428_922565",
+      "scene": "feature_batch_capacity_ownership_test",
+      "run_id": "f983222b-f4e7-45fc-8cd5-7328c9b34265",
+      "invocation_id": "6e50689c-bf4f-40c0-96e9-ac4f87291bf0",
+      "checks": 11,
+      "failed": 0,
+      "status": "PASS",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/framework/feature_batch_capacity_ownership_test.result.json",
+      "receipt_sha256": "5cc4a65e3691c06b4952db441bbc10254536836968875d281dc4cf043e684e09"
+    },
+    {
+      "suite": "periodic_dispatch_policy_related_2114_211428_922565",
+      "scene": "feature_batch_failure_test",
+      "run_id": "ada655fa-b6ad-4ea9-9532-0e7663bafb4c",
+      "invocation_id": "6e50689c-bf4f-40c0-96e9-ac4f87291bf0",
+      "checks": 12,
+      "failed": 0,
+      "status": "PASS",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/framework/feature_batch_failure_test.result.json",
+      "receipt_sha256": "822d109e652c2150e6bbe3baf212d25275c61fb3b1e595231781ccec88e97ec6"
+    },
+    {
+      "suite": "periodic_dispatch_policy_related_2114_211428_922565",
+      "scene": "action_config_lease_test",
+      "run_id": "04f809e2-e060-4ae7-af95-62542ba32320",
+      "invocation_id": "6e50689c-bf4f-40c0-96e9-ac4f87291bf0",
+      "checks": 13,
+      "failed": 0,
+      "status": "PASS",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/framework/action_config_lease_test.result.json",
+      "receipt_sha256": "e42d6a31dcaf878574a01ed701435b2ada38d7b6cddb47a937b248d1a95e4c7c"
+    },
+    {
+      "suite": "periodic_dispatch_policy_related_2114_211428_922565",
+      "scene": "empty_extension_behavior_test",
+      "run_id": "34853c23-0ecb-4ef0-af8a-3b07ca2650a5",
+      "invocation_id": "6e50689c-bf4f-40c0-96e9-ac4f87291bf0",
+      "checks": 30,
+      "failed": 0,
+      "status": "PASS",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/framework/empty_extension_behavior_test.result.json",
+      "receipt_sha256": "202b21cdc5c1631ac3c9749eb8183cf8ddc2ca3eb3bbaa3a863d90f7c5b04b24"
+    },
+    {
+      "suite": "periodic_dispatch_policy_related_2114_211428_922565",
+      "scene": "periodic_refresh_period_boundary_test",
+      "run_id": "4c56b4bf-88c9-49e0-ba0b-b9aa5c32c0f1",
+      "invocation_id": "6e50689c-bf4f-40c0-96e9-ac4f87291bf0",
+      "checks": 52,
+      "failed": 0,
+      "status": "PASS",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/framework/periodic_refresh_period_boundary_test.result.json",
+      "receipt_sha256": "e03ada057a9dcc19559f6ea6daacf52d373a482ac4f5a80404bf63d78ee196a6"
+    },
+    {
+      "suite": "periodic_dispatch_policy_related_2114_211428_922565",
+      "scene": "feature_delivery_templates_test",
+      "run_id": "5f3c824d-7163-497b-8e84-f4b502602c4e",
+      "invocation_id": "6e50689c-bf4f-40c0-96e9-ac4f87291bf0",
+      "checks": 57,
+      "failed": 0,
+      "status": "PASS",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/framework/feature_delivery_templates_test.result.json",
+      "receipt_sha256": "f82de5ea44b64b95eb7427496592a61b5693938fa96c29fdf3225e8458ad0dd9"
+    },
+    {
+      "suite": "periodic_dispatch_policy_related_2114_211428_922565",
+      "scene": "periodic_effect_runtime_test",
+      "run_id": "eee5f3fe-6d77-482f-8544-177b0350cc32",
+      "invocation_id": "6e50689c-bf4f-40c0-96e9-ac4f87291bf0",
+      "checks": 13,
+      "failed": 0,
+      "status": "PASS",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/framework/periodic_effect_runtime_test.result.json",
+      "receipt_sha256": "f640d28f48c3fc89a6cb22c9be90d8d9c0754e3ee0c484dbc23b7825fb3f1eaf"
+    },
+    {
+      "suite": "periodic_dispatch_policy_world_2131_213126_203389",
+      "scene": "combined_effect_lifecycle_test",
+      "run_id": "fd78165e-eef9-4cd8-83b9-8373d80e66b6",
+      "invocation_id": "f4641a2f-f10e-44c7-ac76-7db4ca4cf287",
+      "checks": 38,
+      "failed": 0,
+      "status": "PASS",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/framework/combined_effect_lifecycle_test.result.json",
+      "receipt_sha256": "0b682d2dfd5f0f8c5a04c77943b8cd51596f051a7274929d623beed992b8c5df"
+    },
+    {
+      "suite": "periodic_dispatch_policy_world_2131_213126_203389",
+      "scene": "combined_effect_lifecycle_cold_test",
+      "run_id": "71a7affa-3534-478a-96ae-822d8e745f19",
+      "invocation_id": "f4641a2f-f10e-44c7-ac76-7db4ca4cf287",
+      "checks": 10,
+      "failed": 0,
+      "status": "PASS",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/framework/combined_effect_lifecycle_cold_test.result.json",
+      "receipt_sha256": "a8193887be1cc3841138937edf9e3baf7dd0dc6ce94985eca5896b54f6418af0"
+    },
+    {
+      "suite": "periodic_dispatch_policy_world_2131_213126_203389",
+      "scene": "periodic_credit_safe_logout_test",
+      "run_id": "9cfd735d-5647-4f67-a3ff-150606201472",
+      "invocation_id": "f4641a2f-f10e-44c7-ac76-7db4ca4cf287",
+      "checks": 37,
+      "failed": 0,
+      "status": "PASS",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/framework/periodic_credit_safe_logout_test.result.json",
+      "receipt_sha256": "a862dd3fd23ecb39cdc2cefab39384b42babef42cf697637fe7bf8f91ec0ba69"
+    },
+    {
+      "suite": "periodic_dispatch_policy_world_2131_213126_203389",
+      "scene": "periodic_credit_safe_logout_cold_test",
+      "run_id": "1a5bf48d-c1a3-43ec-9788-4c0d9909dcd2",
+      "invocation_id": "f4641a2f-f10e-44c7-ac76-7db4ca4cf287",
+      "checks": 13,
+      "failed": 0,
+      "status": "PASS",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/framework/periodic_credit_safe_logout_cold_test.result.json",
+      "receipt_sha256": "1eb434c2313259f4983dc7083afc223c035a1e38b2c81f8f26d540b7b8ca651b"
+    },
+    {
+      "suite": "periodic_dispatch_policy_world_2131_213126_203389",
+      "scene": "natural_effect_lifecycle_test",
+      "run_id": "edfe67bb-378b-405b-8261-77b08a23a67c",
+      "invocation_id": "f4641a2f-f10e-44c7-ac76-7db4ca4cf287",
+      "checks": 135,
+      "failed": 0,
+      "status": "PASS",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/framework/natural_effect_lifecycle_test.result.json",
+      "receipt_sha256": "eb9b325071f06c63b56b91e4fdbd7ac09d9f6159fec5a23171d319ab0850c9e1"
+    },
+    {
+      "suite": "periodic_dispatch_policy_world_2131_213126_203389",
+      "scene": "natural_effect_lifecycle_cold_test",
+      "run_id": "06f07c60-7079-45d6-b9f1-2be49098a885",
+      "invocation_id": "f4641a2f-f10e-44c7-ac76-7db4ca4cf287",
+      "checks": 10,
+      "failed": 0,
+      "status": "PASS",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/framework/natural_effect_lifecycle_cold_test.result.json",
+      "receipt_sha256": "771c6cdfc10f8911ceab97b2123bb537f516a7fd258b36d46de210211c464e9e"
+    },
+    {
+      "suite": "periodic_dispatch_policy_world_2131_213126_203389",
+      "scene": "feature_resource_natural_test",
+      "run_id": "9ada6ec0-3ca3-4043-8218-0d9e4d334636",
+      "invocation_id": "f4641a2f-f10e-44c7-ac76-7db4ca4cf287",
+      "checks": 141,
+      "failed": 0,
+      "status": "PASS",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/framework/feature_resource_natural_test.result.json",
+      "receipt_sha256": "19dae430a28c4f5c68c411c75577aef0247171381a7dbdbd2cf2a067ea6d1b92"
+    },
+    {
+      "suite": "periodic_dispatch_policy_world_2131_213126_203389",
+      "scene": "feature_resource_natural_cold_test",
+      "run_id": "ea03c1ee-ef10-4add-b4f1-438dca55841a",
+      "invocation_id": "f4641a2f-f10e-44c7-ac76-7db4ca4cf287",
+      "checks": 10,
+      "failed": 0,
+      "status": "PASS",
+      "native_exit": 0,
+      "timeout": false,
+      "receipt_path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/framework/feature_resource_natural_cold_test.result.json",
+      "receipt_sha256": "00729dc2496bcafbe1fd599703d38e839952a79becdeda098dc30634ae3f66fa"
+    }
+  ],
+  "handoffs": [
+    {
+      "live_scene": "combined_effect_lifecycle_test",
+      "live_run_id": "fd78165e-eef9-4cd8-83b9-8373d80e66b6",
+      "cold_scene": "combined_effect_lifecycle_cold_test",
+      "cold_run_id": "71a7affa-3534-478a-96ae-822d8e745f19",
+      "expected_path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/framework/combined_effect_lifecycle_expected.json",
+      "expected_sha256": "da4a00c840787202cbc4f5a50ba69628e420e399257f56ddfc73fbc2da7e34fc",
+      "generation_scope": "empty value only; separate earlier nonempty production test not rerun"
+    },
+    {
+      "live_scene": "periodic_credit_safe_logout_test",
+      "live_run_id": "9cfd735d-5647-4f67-a3ff-150606201472",
+      "cold_scene": "periodic_credit_safe_logout_cold_test",
+      "cold_run_id": "1a5bf48d-c1a3-43ec-9788-4c0d9909dcd2",
+      "expected_path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/framework/periodic_credit_safe_logout_expected.json",
+      "expected_sha256": "642d045a5c409428fb6104e28cc0696d06155be4255d00680ea8edb75f85664f",
+      "generation_scope": "empty value only; separate earlier nonempty production test not rerun"
+    },
+    {
+      "live_scene": "natural_effect_lifecycle_test",
+      "live_run_id": "edfe67bb-378b-405b-8261-77b08a23a67c",
+      "cold_scene": "natural_effect_lifecycle_cold_test",
+      "cold_run_id": "06f07c60-7079-45d6-b9f1-2be49098a885",
+      "expected_path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/framework/natural_effect_lifecycle_expected.json",
+      "expected_sha256": "f75ef8d561a17091ef0df0a5fec7b680ac87a709a1327f78991f3ac25ed9833a",
+      "generation_scope": "empty value only; separate earlier nonempty production test not rerun"
+    },
+    {
+      "live_scene": "feature_resource_natural_test",
+      "live_run_id": "9ada6ec0-3ca3-4043-8218-0d9e4d334636",
+      "cold_scene": "feature_resource_natural_cold_test",
+      "cold_run_id": "ea03c1ee-ef10-4add-b4f1-438dca55841a",
+      "expected_path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/framework/feature_resource_natural_expected.json",
+      "expected_sha256": "8d12d0b12e38a964ecf855ecf528247acd323a02e921bfcb83a7f3a7ee8bef4b",
+      "generation_scope": "empty value only; separate earlier nonempty production test not rerun"
+    }
+  ],
+  "native_logs": [
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/periodic_producer_identity_test.stdout.log",
+      "sha256": "6b9d6f0af46e8c73c07f67b30fcffc77fe6ac4de95e2bbb4706eabbf23056d34",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/periodic_producer_identity_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/periodic_producer_identity_test.godot.log",
+      "sha256": "f673989fa1d820fb9459a52669cf180fe527ddac016947ecab41a42adf4c99aa",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/periodic_dispatch_lifecycle_test.stdout.log",
+      "sha256": "f83b303859e908702576a0341b1f597300ba88c030756be375024d9af4699eca",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/periodic_dispatch_lifecycle_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/periodic_dispatch_lifecycle_test.godot.log",
+      "sha256": "54e01ceae698d6cad70c53958e9f06390c5dd0fee3f5d6f9bdb890efdc902e3c",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/periodic_refresh_horizon_test.stdout.log",
+      "sha256": "28d895af8bcbad7e8cc4988b674af4112c1ac88082b4b5fab6aa8a35b2d66cc4",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/periodic_refresh_horizon_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/periodic_refresh_horizon_test.godot.log",
+      "sha256": "c8f708c5d4991701ee7398f47ad167d6c91361f08e0d5f9c462afdfc1f91f3fe",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/periodic_child_root_test.stdout.log",
+      "sha256": "4e8a4cf8cba9b60c6f63080bb7072136100491be644f22f5279f505b87132e64",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/periodic_child_root_test.stderr.log",
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/periodic_child_root_test.godot.log",
+      "sha256": "0647f125be580e0e3e6241d27a3a93bf6f932d97daad0748349df704c9cb964a",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/periodic_child_g2_root_test.stdout.log",
+      "sha256": "b51e224c8eef08fbab69fa6c677eefda9a674a3c2ca6af0c8d442b9cd63f2033",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/periodic_child_g2_root_test.stderr.log",
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/periodic_child_g2_root_test.godot.log",
+      "sha256": "ccf8a21e0687490d3d0d8aaac325ec2760d9f6acb27109af174acf4516eab2a1",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_periodic_child_chain_test.stdout.log",
+      "sha256": "61c096c116a65874d38849cf04f15f7fc77774b89559e65061c8d1b6bf398648",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_periodic_child_chain_test.stderr.log",
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_periodic_child_chain_test.godot.log",
+      "sha256": "cd7149d5fb106394477eaba7a81b196a5344134ef8e4b2cf72804973ad1c0061",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_death_child_command_test.stdout.log",
+      "sha256": "f08e77ebd6dcd516a4a6338926ceedcc9d1eb242677dd806776d8e7a0201b9e6",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_death_child_command_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_death_child_command_test.godot.log",
+      "sha256": "ed12d6400020c04dea10ede87f8ffe021a0bdda6e5a942598f43116e2ca341f9",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_chain_commit_test.stdout.log",
+      "sha256": "e059e5c07572913cb6d0e68b22e0b9d7185e087f12bfa956cc77b09dd36f2d29",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_chain_commit_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_chain_commit_test.godot.log",
+      "sha256": "14c2d0f73fbc19c21dde87dacdb5a25c3c61c51193d88f96db96c4b9be578f5f",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_child_chain_admission_test.stdout.log",
+      "sha256": "00a4a4fa01aa0f58b9ccc49edcc794e0e6a945b50cbca6169231b0dd23324b11",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_child_chain_admission_test.stderr.log",
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_child_chain_admission_test.godot.log",
+      "sha256": "1bc6c1843930f028ce0f5a0d189680ac2602c169dbf69eee61dd257f31a3fc79",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_state_loan_lifetime_test.stdout.log",
+      "sha256": "01c8ce31c0c5d750176765cdd9d0589edaca6280594586d428d9dacbc515178e",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_state_loan_lifetime_test.stderr.log",
+      "sha256": "9abaeb31deca888a59de0b38bc60a768363cc109851192c3f5b8906753d9296d",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_state_loan_lifetime_test.godot.log",
+      "sha256": "be9cf5ca284465b4cf91329380d99da763976039d0f73e491e35ae406eed7072",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_state_loan_root_test.stdout.log",
+      "sha256": "0a46a1142cd986a5f639b1b7429bf1f2a97556ea17705cb458c98942619c64f3",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_state_loan_root_test.stderr.log",
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_state_loan_root_test.godot.log",
+      "sha256": "7c7d0f5c0ce437ff7f2af6b7f724acf094360e9dc05c81c606431e72662e0d3a",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_child_capacity_test.stdout.log",
+      "sha256": "75cfadc3653095afa0271c07e3fcef22f226377aa5720201e0a7a2d9dc127607",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_child_capacity_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_child_capacity_test.godot.log",
+      "sha256": "2b3aca5d9649f02ae32155a5d6e7589353eee5481e8a11b2a525eba41ec9aaed",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_capacity_atomic_test.stdout.log",
+      "sha256": "4b094f511a63e2afcbc50ca598345be5ec9443a52ed30e0f8225d21532bf76fb",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_capacity_atomic_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_capacity_atomic_test.godot.log",
+      "sha256": "d2883c290edfa13a5dd8affcd04df823b0d78ca3add7384a560a0b616a3b2da1",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_capacity_admission_test.stdout.log",
+      "sha256": "fb7d675047b7571fd48e9c28d9b0f58058119930d5841f23c754e70d70882a2e",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_capacity_admission_test.stderr.log",
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_capacity_admission_test.godot.log",
+      "sha256": "4c69e1abe0d19eed65fae47ad889101df1ca1c71f3faa6de4d3ad14313a4eb31",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/periodic_effect_boundaries_test.stdout.log",
+      "sha256": "f8caa51e349268c690e05529e179c26d604b297788534f3da57fb6739f58e404",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/periodic_effect_boundaries_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/periodic_effect_boundaries_test.godot.log",
+      "sha256": "d0f9f83ccc34a6d0d4721644c48c7fae9036bfb960f1c3e907b65e552b69fb1d",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/periodic_effect_lifecycle_test.stdout.log",
+      "sha256": "ccb3ac09bbd971480d24ff28d5d4c3e187f5ed245017ea19b6a024c410363a85",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/periodic_effect_lifecycle_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/periodic_effect_lifecycle_test.godot.log",
+      "sha256": "c20e916aa02e51dfa7e191fac825f4f092850c405cc106b91451f5297c17ce83",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/periodic_callback_retirement_test.stdout.log",
+      "sha256": "cfd2e0ba6e03abad2266d3a795b420e779bf585628072a74f20633b182176a5b",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/periodic_callback_retirement_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/periodic_callback_retirement_test.godot.log",
+      "sha256": "355903ee2ba46ebf9bdecebfe08bdcc0ea1813601ff9411ca60ad5432f054da0",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/periodic_delivery_lateness_test.stdout.log",
+      "sha256": "68d1dae38133af6bccc756b82ae655ba3e38341c7aa06442cc838c86bec45d90",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/periodic_delivery_lateness_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/periodic_delivery_lateness_test.godot.log",
+      "sha256": "14984e7e790d9f8739ed8b0670b213d1c9d288904cac5b33f5d93189ada0949b",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_batch_capacity_ownership_test.stdout.log",
+      "sha256": "5c7ec167e00892eb3b9037b96e5f115cdd56e288d8aef59001445b5cb4e9e221",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_batch_capacity_ownership_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_batch_capacity_ownership_test.godot.log",
+      "sha256": "c1ce29056263cf78d49541ac25e060e358b0dd8656186f11ccc83550c7304654",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_batch_failure_test.stdout.log",
+      "sha256": "53e06b6b99b33f1a367c07e9c8068bf3fe8f592805b12683d730d6d871666e25",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_batch_failure_test.stderr.log",
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_batch_failure_test.godot.log",
+      "sha256": "2157f56dffe773cf9cdaeacdc0fbc7a0d63da4a63eb561025dd785a753836a9a",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/action_config_lease_test.stdout.log",
+      "sha256": "a5b2156fc88e0f6f2944d75e3f5a1e8ba11e11adad746343e773cc5e6f65f81c",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/action_config_lease_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/action_config_lease_test.godot.log",
+      "sha256": "db4cdeec3cac8150361061446b4272271a02ecf019a390cb13d6a2b17f599e55",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/empty_extension_behavior_test.stdout.log",
+      "sha256": "e15609f681199c8e846c9764d03c29e6ea59e37f501a5753ec1c866d72a6e1ee",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/empty_extension_behavior_test.stderr.log",
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/empty_extension_behavior_test.godot.log",
+      "sha256": "b51718cf5f14fe42cf6eb2f6fc34d096304d49a324e5551af61f9524d8574def",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/periodic_refresh_period_boundary_test.stdout.log",
+      "sha256": "6a18a3ee4ec9b57c05d9bcf8106fb78240556be19aa5939ea4eb3bebd3f31646",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/periodic_refresh_period_boundary_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/periodic_refresh_period_boundary_test.godot.log",
+      "sha256": "7f528d918530c0201965015574de0a7c2061445d3d558442ab009193c24244ce",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_delivery_templates_test.stdout.log",
+      "sha256": "4ffb3bb6c03b011a3f898c95fea01b8c3ac3a0852196507c90d56c5e661bcc2b",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_delivery_templates_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/feature_delivery_templates_test.godot.log",
+      "sha256": "6d4b8bb22ffbc62a1e7c63b42747c0fcdaf45f02c5e56d1469d6e34f7162201d",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/periodic_effect_runtime_test.stdout.log",
+      "sha256": "d50f6d703a34af1193acf9b0ab19cc712545a27b8b2ae9006da6a2516aed4796",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/periodic_effect_runtime_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_related_2114_211428_922565/native_logs/periodic_effect_runtime_test.godot.log",
+      "sha256": "1feca48b2526026bd701ebbc3f96ed4b24c9e73538bfbb9453a399aee3944595",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/native_logs/combined_effect_lifecycle_test.stdout.log",
+      "sha256": "7fc38aae2fe7e942675887067739e5cdd269e5a36bd92912b8a3789c655a674b",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/native_logs/combined_effect_lifecycle_test.stderr.log",
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/native_logs/combined_effect_lifecycle_test.godot.log",
+      "sha256": "60240c60312e064af36f519cbf2a7e08ec16606ec271b1b58cc9e1aa948d4441",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/native_logs/combined_effect_lifecycle_cold_test.stdout.log",
+      "sha256": "15095675e9cdc7402f8003cc725eb630e6a6ddcad18e531c5f2cf2aaf563c987",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/native_logs/combined_effect_lifecycle_cold_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/native_logs/combined_effect_lifecycle_cold_test.godot.log",
+      "sha256": "cd1a56188af419b2da657e1e559b7901e6a557d9ee50297716d0c1ff30bde1e1",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/native_logs/periodic_credit_safe_logout_test.stdout.log",
+      "sha256": "f3687f2a3d978ca250ab9dfd5ee8e9fcb5e598ab034c159a0b733915846db127",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/native_logs/periodic_credit_safe_logout_test.stderr.log",
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/native_logs/periodic_credit_safe_logout_test.godot.log",
+      "sha256": "9e3df4a8b7de24447fa544bac53049756fe27868fab3208efb85162b4e36ea43",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/native_logs/periodic_credit_safe_logout_cold_test.stdout.log",
+      "sha256": "15f8c15ef1ccc85679b8fb55561352a5c40a18a45c152f284d9aff45ea393c53",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/native_logs/periodic_credit_safe_logout_cold_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/native_logs/periodic_credit_safe_logout_cold_test.godot.log",
+      "sha256": "de0dc7396b5f17de941998fe76dde60020167415b600faab773a10e213c2425c",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/native_logs/natural_effect_lifecycle_test.stdout.log",
+      "sha256": "fb522bc92ed0de4ccd152980970ce990394c0a2522fc3771ec46595527caf4c0",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/native_logs/natural_effect_lifecycle_test.stderr.log",
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/native_logs/natural_effect_lifecycle_test.godot.log",
+      "sha256": "5ac5164bb1c531e1a5e63c7c980085bc5df1257e3263f47107ad0b8a5f5ce393",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/native_logs/natural_effect_lifecycle_cold_test.stdout.log",
+      "sha256": "597c057aeb71dcb17acef603a39033def31a2da73346fc055907885156abcfea",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/native_logs/natural_effect_lifecycle_cold_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/native_logs/natural_effect_lifecycle_cold_test.godot.log",
+      "sha256": "3c0a3a4377122ab25da969530b7ffaa9e49c17071bcf9f27e940daa274846c7f",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/native_logs/feature_resource_natural_test.stdout.log",
+      "sha256": "268783fd20c1b2b6a97010507e83cf960a723564fbcf1e4c088fdd2233414894",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/native_logs/feature_resource_natural_test.stderr.log",
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/native_logs/feature_resource_natural_test.godot.log",
+      "sha256": "aeaa98c09d9b9f05b7be4e540ebb3db6448d23646ff1d828c139c93db6d118d4",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/native_logs/feature_resource_natural_cold_test.stdout.log",
+      "sha256": "597c057aeb71dcb17acef603a39033def31a2da73346fc055907885156abcfea",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/native_logs/feature_resource_natural_cold_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "objectdb_warning_lines": 0
+    },
+    {
+      "path": "outputs/r3_takeover/20260930/validation/periodic_dispatch_policy_world_2131_213126_203389/native_logs/feature_resource_natural_cold_test.godot.log",
+      "sha256": "3c0a3a4377122ab25da969530b7ffaa9e49c17071bcf9f27e940daa274846c7f",
+      "objectdb_warning_lines": 0
+    }
+  ],
+  "scope": "exact two final stages, complete receipt checks and current producer associations; original-period refresh and default-off delivery templates included; not global P6/GPU/Android/zero leak acceptance"
+}

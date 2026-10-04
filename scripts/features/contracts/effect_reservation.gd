@@ -24,6 +24,22 @@ func claim(world: Dictionary, release_id: String, skill_id: String, bindings: Ar
 	if bool(result.get("success", false)): _batch_open = true
 	return result
 
+func matches_accepted_bindings(world: Dictionary, release_id: String, skill_id: String, bindings: Array) -> bool:
+	var owner: RefCounted = _owner.get_ref() as RefCounted if _owner != null else null
+	return not _closed and owner != null and _is_runtime_issuer(owner) and bool(owner.call("_reservation_binding_snapshot_matches",
+		_sequence,world,release_id,skill_id,bindings,_branch,get_instance_id()))
+
+static func _is_runtime_issuer(owner: RefCounted) -> bool:
+	# Match the canonical Script identity, including inherited test observers.
+	# Dynamic loading reuses the existing resource without a cyclic preload or
+	# a persistent extra Script reference, and follows export path remapping.
+	var expected: Script = load("res://scripts/features/runtime/effect_runtime.gd")
+	var script: Script = owner.get_script()
+	while script != null:
+		if script == expected: return true
+		script = script.get_base_script()
+	return false
+
 func belongs_to(owner: RefCounted) -> bool:
 	return _owner != null and _owner.get_ref() == owner
 
@@ -47,6 +63,10 @@ func authorizes_child_request(request: Dictionary) -> bool:
 func chain_context(release_id: String) -> Dictionary:
 	var owner: RefCounted=_owner.get_ref() as RefCounted if _owner!=null else null
 	return owner.call("_reservation_chain_context",_sequence,release_id,_branch) if owner!=null else {}
+
+func source_class(release_id: String) -> String:
+	var owner: RefCounted=_owner.get_ref() as RefCounted if _owner!=null else null
+	return str(owner.call("_reservation_source_class",_sequence,release_id,_branch)) if owner!=null else ""
 
 func close() -> void:
 	if _closed: return

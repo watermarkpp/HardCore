@@ -1,0 +1,1263 @@
+diff --git a/assets/data/features/validation/periodic_chain.json b/assets/data/features/validation/periodic_chain.json
+new file mode 100644
+index 000000000..eb8134f98
+--- /dev/null
++++ b/assets/data/features/validation/periodic_chain.json
+@@ -0,0 +1,18 @@
++{
++  "schema_version":1,"module_id":"hc.validation.periodic_chain","module_version":1,"core_api_version":1,
++  "requires":[],"conflicts":[],"capabilities":["combat.post_hit","combat.child_action","effects.periodic"],
++  "handlers":["hc.ignite.v1","hc.death_burst.v1"],"resource_dependencies":[],
++  "cost":{"commands_per_event":2,"states_per_target":1},"default_enabled":false,
++  "scope":"world","activation_boundary":"world_ready",
++  "mechanics":[
++    {"mechanic_id":"hc.validation.periodic_chain.ignite","kind":"trigger","tags":[],
++      "event":"damage_committed","skill_id":"hc.skill.wizard.ice_storm","handler_id":"hc.ignite.v1",
++      "source_classes":["direct","child"],"dedup":"per_target_per_release","lifecycle":"until_expired",
++      "config":{"chance":1.0,"fraction":1.0,"period_usec":1000000,"duration_usec":4000000,"max_ticks":4}},
++    {"mechanic_id":"hc.validation.periodic_chain.death","kind":"trigger","tags":[],
++      "event":"damage_committed","skill_id":"hc.skill.wizard.ice_storm","handler_id":"hc.death_burst.v1",
++      "source_classes":["direct","periodic","child"],"dedup":"per_target_per_release","lifecycle":"finite_chain",
++      "config":{"fraction":1.0,"radius_gu":3.0,"maximum_generation":1}}
++  ],
++  "tests":["tests/framework/periodic_child_root_test.tscn"]
++}
+diff --git a/assets/data/features/validation/periodic_chain_g2.json b/assets/data/features/validation/periodic_chain_g2.json
+new file mode 100644
+index 000000000..bfe7dfa5f
+--- /dev/null
++++ b/assets/data/features/validation/periodic_chain_g2.json
+@@ -0,0 +1,18 @@
++{
++  "schema_version":1,"module_id":"hc.validation.periodic_chain_g2","module_version":1,"core_api_version":1,
++  "requires":[],"conflicts":[],"capabilities":["combat.post_hit","combat.child_action","effects.periodic"],
++  "handlers":["hc.ignite.v1","hc.death_burst.v1"],"resource_dependencies":[],
++  "cost":{"commands_per_event":2,"states_per_target":1},"default_enabled":false,
++  "scope":"world","activation_boundary":"world_ready",
++  "mechanics":[
++    {"mechanic_id":"hc.validation.periodic_chain_g2.ignite","kind":"trigger","tags":[],
++      "event":"damage_committed","skill_id":"hc.skill.wizard.ice_storm","handler_id":"hc.ignite.v1",
++      "source_classes":["direct","child"],"dedup":"per_target_per_release","lifecycle":"until_expired",
++      "config":{"chance":1.0,"fraction":1.0,"period_usec":1000000,"duration_usec":4000000,"max_ticks":4}},
++    {"mechanic_id":"hc.validation.periodic_chain_g2.death","kind":"trigger","tags":[],
++      "event":"damage_committed","skill_id":"hc.skill.wizard.ice_storm","handler_id":"hc.death_burst.v1",
++      "source_classes":["direct","periodic","child"],"dedup":"per_target_per_release","lifecycle":"finite_chain",
++      "config":{"fraction":1.0,"radius_gu":3.0,"maximum_generation":2}}
++  ],
++  "tests":["tests/framework/periodic_child_g2_root_test.tscn"]
++}
+diff --git a/assets/data/features/validation/periodic_chain_g2_registry.json b/assets/data/features/validation/periodic_chain_g2_registry.json
+new file mode 100644
+index 000000000..acc2511d7
+--- /dev/null
++++ b/assets/data/features/validation/periodic_chain_g2_registry.json
+@@ -0,0 +1,8 @@
++{
++  "schema_version":1,
++  "modules":[{"module_id":"hc.validation.periodic_chain_g2","path":"res://assets/data/features/validation/periodic_chain_g2.json"}],
++  "bindings":[
++    {"module_id":"hc.validation.periodic_chain_g2","kind":"rule","rule_id":"hc.validation.periodic_chain_g2","mechanic_id":"hc.validation.periodic_chain_g2.ignite"},
++    {"module_id":"hc.validation.periodic_chain_g2","kind":"rule","rule_id":"hc.validation.periodic_chain_g2","mechanic_id":"hc.validation.periodic_chain_g2.death"}
++  ]
++}
+diff --git a/assets/data/features/validation/periodic_chain_registry.json b/assets/data/features/validation/periodic_chain_registry.json
+new file mode 100644
+index 000000000..9a02d00c6
+--- /dev/null
++++ b/assets/data/features/validation/periodic_chain_registry.json
+@@ -0,0 +1,8 @@
++{
++  "schema_version":1,
++  "modules":[{"module_id":"hc.validation.periodic_chain","path":"res://assets/data/features/validation/periodic_chain.json"}],
++  "bindings":[
++    {"module_id":"hc.validation.periodic_chain","kind":"rule","rule_id":"hc.validation.periodic_chain","mechanic_id":"hc.validation.periodic_chain.ignite"},
++    {"module_id":"hc.validation.periodic_chain","kind":"rule","rule_id":"hc.validation.periodic_chain","mechanic_id":"hc.validation.periodic_chain.death"}
++  ]
++}
+diff --git a/scripts/features/compilation/child_capacity_proof.gd b/scripts/features/compilation/child_capacity_proof.gd
+index 4f14c8495..2b607bc65 100644
+--- a/scripts/features/compilation/child_capacity_proof.gd
++++ b/scripts/features/compilation/child_capacity_proof.gd
+@@ -57,8 +57,9 @@ static func _power_sum(factor: int, terms: int, ceiling: int) -> Dictionary:
+ 	return {"power":power,"sum":sum}
+ 
+ # The serial runtime consumes all current facts before starting another child
+-# and retires each closed branch's dedup receipts. Total work is still bounded
+-# by the original geometric proof; it is not all resident at the same time.
++# and retires each closed branch's dedup receipts. Direct/child fact work is
++# bounded by the geometric proof; periodic deliveries reuse one charged slot
++# inside their tick quantum and are governed by the accepted state horizon.
+ # States and the complete breadth-first command frontier remain conservatively
+ # reserved. No receiver set or gameplay depth is truncated by this distinction.
+ static func compile_serial_residency(request: Variant, limits: Variant) -> Dictionary:
+@@ -85,7 +86,8 @@ static func compile_serial_residency(request: Variant, limits: Variant) -> Dicti
+ # Every root holds N*S loans throughout its remaining production lifetime;
+ # dead/retired receiver states return their origin loan before a new life uses
+ # it. Refresh roots retain their own full pool and all shared state owners.
+-# Cumulative creations/work and the complete command frontier are unchanged.
++# The direct/child cumulative allowance and complete command frontier remain
++# unchanged. `total_facts`/`total_receipts` do not count periodic deliveries.
+ static func compile_state_loan_residency(request: Variant, limits: Variant) -> Dictionary:
+ 	var total:=compile_serial_residency(request,{"pending_facts":MAX_EXACT_INTEGER-1,
+ 		"active_states":MAX_EXACT_INTEGER-1,"receipts":MAX_EXACT_INTEGER-1})
+diff --git a/scripts/features/compilation/feature_compiler.gd b/scripts/features/compilation/feature_compiler.gd
+index 9adbe3104..f7618f468 100644
+--- a/scripts/features/compilation/feature_compiler.gd
++++ b/scripts/features/compilation/feature_compiler.gd
+@@ -315,7 +315,8 @@ static func _mechanic_valid(value: Dictionary, module: Dictionary, authority: Di
+ 				if permission not in module.capabilities: errors.append("missing_trigger_permission:"+permission)
+ 			if value.event != "damage_committed" or value.skill_id not in authority.skill_ids:
+ 				errors.append("unknown_trigger_event_or_skill")
+-			var chain_sources: bool = value.handler_id == "hc.death_burst.v1" and value.source_classes == ["direct","child"]
++			var chain_sources: bool = value.handler_id == "hc.death_burst.v1" \
++				and value.source_classes in [["direct","child"],["direct","periodic","child"]]
+ 			var child_status_sources: bool = value.handler_id == "hc.ignite.v1" and value.source_classes == ["direct","child"]
+ 			if (value.source_classes != ["direct"] and not chain_sources and not child_status_sources) or value.dedup != "per_target_per_release":
+ 				errors.append("unsupported_trigger_chain")
+diff --git a/scripts/features/contracts/child_action_lease.gd b/scripts/features/contracts/child_action_lease.gd
+index 1966d1b90..c5e6e814e 100644
+--- a/scripts/features/contracts/child_action_lease.gd
++++ b/scripts/features/contracts/child_action_lease.gd
+@@ -22,8 +22,10 @@ static var _catalog_attempted := false
+ 
+ static func create(command: Dictionary, world: RefCounted, release_id: String) -> Dictionary:
+ 	var rejected := {"success":false,"reason":"invalid_child_request","request":{}}
++	var periodic_parent: bool=command.get("parent_source_class")=="periodic"
++	var fields: Array=COMMAND_FIELDS+["parent_source_class"] if periodic_parent else COMMAND_FIELDS
+ 	if world == null or world.get_script()!=preload("res://scripts/layers/runtime/execution/world_context.gd") \
+-		or release_id.is_empty() or not _keys(command,COMMAND_FIELDS): return rejected
++		or release_id.is_empty() or not _keys(command,fields): return rejected
+ 	var bound_world: Dictionary=world.capture_world()
+ 	if not bound_world.get("runtime_map_id") is int or int(bound_world.runtime_map_id)<0: return rejected
+ 	var row := _definition_for(command.get("action_id"))
+@@ -37,7 +39,9 @@ static func create(command: Dictionary, world: RefCounted, release_id: String) -
+ 	for field: String in ["generation","maximum_generation","raw_damage"]:
+ 		if not _positive_integer(command[field]): return rejected
+ 	if command.generation>command.maximum_generation or not _number(command.radius_gu) or float(command.radius_gu)<=0: return rejected
+-	if (int(command.generation)==1 and command.parent_release_id!=command.root_release_id) \
++	if periodic_parent:
++		if command.parent_release_id==command.root_release_id: return rejected
++	elif (int(command.generation)==1 and command.parent_release_id!=command.root_release_id) \
+ 		or (int(command.generation)>1 and command.parent_release_id==command.root_release_id): return rejected
+ 	var prefix: String=command.parent_release_id+":hp:"
+ 	if not command.parent_fact_id.begins_with(prefix): return rejected
+diff --git a/scripts/features/contracts/effect_reservation.gd b/scripts/features/contracts/effect_reservation.gd
+index 58575d105..13879995c 100644
+--- a/scripts/features/contracts/effect_reservation.gd
++++ b/scripts/features/contracts/effect_reservation.gd
+@@ -48,6 +48,10 @@ func chain_context(release_id: String) -> Dictionary:
+ 	var owner: RefCounted=_owner.get_ref() as RefCounted if _owner!=null else null
+ 	return owner.call("_reservation_chain_context",_sequence,release_id,_branch) if owner!=null else {}
+ 
++func source_class(release_id: String) -> String:
++	var owner: RefCounted=_owner.get_ref() as RefCounted if _owner!=null else null
++	return str(owner.call("_reservation_source_class",_sequence,release_id,_branch)) if owner!=null else ""
++
+ func close() -> void:
+ 	if _closed: return
+ 	_closed = true
+diff --git a/scripts/features/handlers/death_burst_handler.gd b/scripts/features/handlers/death_burst_handler.gd
+index 08b9d5fd0..d31cf9616 100644
+--- a/scripts/features/handlers/death_burst_handler.gd
++++ b/scripts/features/handlers/death_burst_handler.gd
+@@ -33,9 +33,10 @@ static func commands(fact: Dictionary, binding: Dictionary) -> Array:
+ 		or chain.maximum_generation!=config.maximum_generation or chain.generation>chain.maximum_generation \
+ 		or chain.release_id!=fact.get("release_id") or chain.root_skill_id!=definition.get("skill_id"): return []
+ 	var generation:=int(chain.generation)
+-	if generation==0 and (chain.release_id!=chain.root_release_id or not chain.parent_release_id.is_empty()): return []
++	if generation==0 and fact.source_class=="direct" and (chain.release_id!=chain.root_release_id or not chain.parent_release_id.is_empty()): return []
++	if fact.source_class=="periodic" and (chain.release_id==chain.root_release_id or chain.parent_release_id.is_empty()): return []
+ 	if not fact.get("skill_id") is String or fact.skill_id.is_empty(): return []
+-	if generation==0 and fact.source_class=="direct" and fact.skill_id!=chain.root_skill_id: return []
++	if fact.source_class!="child" and fact.skill_id!=chain.root_skill_id: return []
+ 	if generation>0 and (chain.parent_release_id.is_empty() or chain.release_id==chain.root_release_id): return []
+ 	if (fact.source_class=="direct" and generation!=0) or (fact.source_class=="child" and generation==0): return []
+ 	# This is the authored finite transition rule. Its entire potential work
+@@ -51,14 +52,18 @@ static func commands(fact: Dictionary, binding: Dictionary) -> Array:
+ 	if not Vector2(float(origin.x),float(origin.y)).is_finite(): return []
+ 	var raw:=roundi(float(fact.actual_loss)*float(config.fraction))
+ 	if raw<=0: return []
+-	var captured:=Graph.capture({"op":"RequestChildAction","handler_id":ID,"action_id":ACTION_ID,
++	var command: Dictionary={"op":"RequestChildAction","handler_id":ID,"action_id":ACTION_ID,
+ 		"source_handle":binding.handle,"mechanic_id":definition.mechanic_id,
+ 		"root_release_id":chain.root_release_id,"root_skill_id":chain.root_skill_id,
+ 		"parent_release_id":fact.release_id,"parent_fact_id":fact.fact_id,"parent_target":fact.target,
+ 		"generation":generation+1,"maximum_generation":int(chain.maximum_generation),
+ 		"origin":origin,"radius_gu":float(config.radius_gu),"raw_damage":raw,"damage_basis":"actual_hp_loss",
+ 		"historical_credit":fact.historical_credit,"source_class":"child","damage_channel":"magic_defense",
+-		"causes_struck":false,"direct_magic_walk_delay":false},128,8)
++		"causes_struck":false,"direct_magic_walk_delay":false}
++	# Generation one can follow the root's distinct periodic producer. Keep
++	# that recognized variant explicit without broadening the direct command.
++	if fact.source_class=="periodic": command["parent_source_class"]="periodic"
++	var captured:=Graph.capture(command,128,8)
+ 	return [captured.value] if captured.success else []
+ 
+ static func _first_death(fact: Dictionary) -> bool:
+diff --git a/scripts/features/runtime/damage_batch.gd b/scripts/features/runtime/damage_batch.gd
+index fb79e00b6..03bfdfbb4 100644
+--- a/scripts/features/runtime/damage_batch.gd
++++ b/scripts/features/runtime/damage_batch.gd
+@@ -48,6 +48,10 @@ static func create(world: RefCounted, release_id: String, skill_id: String, bind
+ 	if reservation != null:
+ 		if reservation.get_script() != preload("res://scripts/features/contracts/effect_reservation.gd"):
+ 			return {"success":false,"reason":"invalid_effect_reservation","batch":null}
++		# Caller-supplied lineage and source type cannot redefine the runtime's
++		# accepted producer, or consume its sole claim before the real callback.
++		if captured.value.chain != reservation.chain_context(release_id) or source_class != reservation.source_class(release_id):
++			return {"success":false,"reason":"invalid_reserved_batch_lineage","batch":null}
+ 		var claimed: Dictionary = reservation.claim(world.capture_world(),release_id,skill_id,captured.value.bindings)
+ 		if not bool(claimed.get("success",false)):
+ 			return {"success":false,"reason":"closed_effect_reservation","batch":null}
+@@ -83,6 +87,8 @@ static func _lineage_valid(chain: Dictionary, release_id: String, skill_id: Stri
+ 		if not (value is int or value is float) or not is_finite(float(value)) or float(value) < 0.0 \
+ 			or float(value) > 9007199254740991.0 or float(value) != floor(float(value)): return false
+ 	if chain.generation > chain.maximum_generation: return false
++	if source_class == "periodic":
++		return chain.release_id != chain.root_release_id and not chain.parent_release_id.is_empty()
+ 	if int(chain.generation) == 0:
+ 		return source_class != "child" and chain.release_id == chain.root_release_id and chain.parent_release_id.is_empty()
+ 	return source_class != "direct" and chain.release_id != chain.root_release_id and not chain.parent_release_id.is_empty()
+diff --git a/scripts/features/runtime/effect_runtime.gd b/scripts/features/runtime/effect_runtime.gd
+index 0187d887f..44160b780 100644
+--- a/scripts/features/runtime/effect_runtime.gd
++++ b/scripts/features/runtime/effect_runtime.gd
+@@ -120,10 +120,10 @@ func reserve_action(skill_id: String, bindings: Array, maximum_receivers: int, e
+ 	var value: Dictionary=_reservations[_next_reservation]
+ 	value.facts=fact_cost
+ 	if not chain.value.is_empty():
+-		value.branches={expected_release_id:{"stage":"reserved","ticket_id":0,"context":{
++		value.branches={expected_release_id:{"stage":"reserved","ticket_id":0,"source_class":"direct","context":Graph.capture({
+ 			"contract_id":"hardcore.combat.chain_context.v1","root_release_id":expected_release_id,
+ 			"release_id":expected_release_id,"parent_release_id":"","root_skill_id":skill_id,
+-			"generation":0,"maximum_generation":chain.value.maximum_generation}}}
++			"generation":0,"maximum_generation":chain.value.maximum_generation},16,2).value}}
+ 		value.state_owners=0; value.child_space=int(chain.value.cost.child_actions)
+ 		value.state_loan_handles={}
+ 		value.total_fact_space=int(chain.value.cost.total_facts)
+@@ -157,6 +157,14 @@ func _reservation_chain_context(sequence: int, release_id: String, branch: Strin
+ 	var key: String=release_id if branch.is_empty() else branch
+ 	return value.branches[key].context if value.branches.has(key) and key==release_id else {}
+ 
++func _reservation_source_class(sequence: int, release_id: String, branch: String) -> String:
++	if not _reservations.has(sequence): return ""
++	var value: Dictionary=_reservations[sequence]
++	if value.chain.is_empty():
++		return "direct" if branch.is_empty() and (str(value.expected_release_id).is_empty() or value.expected_release_id==release_id) else ""
++	var key: String=release_id if branch.is_empty() else branch
++	return str(value.branches[key].source_class) if key==release_id and value.branches.has(key) else ""
++
+ func _child_request_authorized(sequence: int, branch: String, ticket_id: int, request: Dictionary) -> bool:
+ 	if not _reservations.has(sequence) or _reservations[sequence].chain.is_empty() \
+ 		or not _world.matches_world(_reservations[sequence].world): return false
+@@ -184,14 +192,19 @@ func _claim_reservation(sequence: int, identity: Dictionary, release_id: String,
+ 	var value: Dictionary = _reservations[sequence]
+ 	if not value.chain.is_empty():
+ 		var key: String=release_id if branch.is_empty() else branch
+-		var expected_skill: String=value.skill_id if branch.is_empty() else "hc.child.death_burst.v1"
+-		if value.world!=identity or skill_id!=expected_skill or value.bindings!=bindings or not value.branches.has(key): return {"success":false}
++		if not value.branches.has(key): return {"success":false}
+ 		var producer: Dictionary=value.branches[key]
++		var periodic: bool=producer.source_class=="periodic"
++		var expected_skill: String="hc.child.death_burst.v1" if producer.source_class=="child" else value.skill_id
++		if value.world!=identity or skill_id!=expected_skill or value.bindings!=bindings: return {"success":false}
+ 		if key!=release_id or producer.ticket_id!=ticket_id or producer.stage not in ["reserved","available"]: return {"success":false}
+-		if int(value.total_fact_space)<int(value.chain.maximum_receivers): return {"success":false}
++		var limit: int=1 if periodic else int(value.chain.maximum_receivers)
++		if periodic:
++			if int(value.facts)<1 or int(value.receipt_space)<bindings.size(): return {"success":false}
++		elif int(value.total_fact_space)<limit: return {"success":false}
+ 		producer.stage="producing"
+ 		if branch.is_empty(): value.stage="producing"
+-		return {"success":true,"maximum_facts":int(value.chain.maximum_receivers)}
++		return {"success":true,"maximum_facts":limit}
+ 	if value.stage != "reserved" or value.world != identity or value.skill_id != skill_id or value.bindings != bindings:
+ 		return {"success":false}
+ 	if not str(value.expected_release_id).is_empty() and value.expected_release_id != release_id: return {"success":false}
+@@ -381,16 +394,18 @@ func _dispatch_one_fact() -> void:
+ 	_deliver_fact(entry,admission_id)
+ 	if complete and admission_id>0 and _reservations.has(admission_id):
+ 		if _reservations[admission_id].chain.is_empty(): _retire_reservation(admission_id)
+-		else:
+-			# The batch is sealed and consumed, its minted ticket is closed, and
+-			# the branch can never be minted again. All of its consumers finished.
+-			# Pending children/state owners retain the root, not this producer ID.
+-			var value: Dictionary=_reservations[admission_id]
+-			for receipt: String in value.branches[work.branch].receipts:
+-				_receipts.erase(receipt); _stats.retired_receipts+=1
+-				value.receipt_space+=1; _reserved_receipts+=1
+-			_reservations[admission_id].branches.erase(work.branch)
+-			_retire_chain_if_terminal(admission_id)
++		else: _retire_chain_branch(admission_id,work.branch)
++
++func _retire_chain_branch(sequence: int, branch: String) -> void:
++	if not _reservations.has(sequence) or not _reservations[sequence].branches.has(branch): return
++	# Sealed, consumed producers lose all future claim rights before their
++	# receipts are returned. States/children retain the root, not this branch.
++	var value: Dictionary=_reservations[sequence]
++	for receipt: String in value.branches[branch].receipts:
++		_receipts.erase(receipt); _stats.retired_receipts+=1
++		value.receipt_space+=1; _reserved_receipts+=1
++	value.branches.erase(branch)
++	_retire_chain_if_terminal(sequence)
+ 
+ func _deliver_fact(entry: Dictionary, admission_id: int) -> void:
+ 	var fact: Dictionary = entry.fact
+@@ -418,6 +433,11 @@ func _deliver_fact(entry: Dictionary, admission_id: int) -> void:
+ 			_reservations[admission_id].receipt_space -= 1; _reserved_receipts -= 1
+ 		for command: Dictionary in Handlers.commands(fact,binding):
+ 			_apply_command(command,entry)
++	# HP facts own the commit result. A synchronous presentation observer can
++	# restore observed HP before the actor marks its death; that observation
++	# cannot give the old target life another periodic death opportunity.
++	if generation==_delivery_generation and int(fact.hp_before)>0 and int(fact.hp_after)==0:
++		_retire_fatal_target_states(fact.target)
+ 
+ func _apply_command(command: Dictionary, entry: Dictionary) -> void:
+ 	if command.op=="RequestChildAction" and command.handler_id=="hc.death_burst.v1":
+@@ -458,7 +478,8 @@ func _apply_command(command: Dictionary, entry: Dictionary) -> void:
+ 		# Stopping an old cue can synchronously retire its owner. Reclamation
+ 		# cannot grant an old command authority over that replacement runtime.
+ 		if generation!=_delivery_generation or not _reservations.has(admission_id) or entry.target.resolve()==null: return
+-	if _states.size() >= MAX_ACTIVE_STATES or int(_states_per_target.get(target_key,0)) >= MAX_STATES_PER_TARGET:
++	var target_states: Dictionary=_states_per_target.get(target_key,{})
++	if _states.size() >= MAX_ACTIVE_STATES or target_states.size() >= MAX_STATES_PER_TARGET:
+ 		_error("feature_state_capacity"); return
+ 	if admission_id > 0:
+ 		if not _reservations.has(admission_id) or int(_reservations[admission_id].states) <= 0:
+@@ -466,13 +487,16 @@ func _apply_command(command: Dictionary, entry: Dictionary) -> void:
+ 		_reservations[admission_id].states -= 1; _reserved_states -= 1
+ 	var state := {"target":entry.target,"source":entry.source,"command":command,"target_key":target_key,
+ 		"resource_lease":entry.get("resource_lease"),
++		"periodic_bindings":entry.bindings if _has_periodic_children(entry.bindings) else [],
++		"periodic_lineage":entry.fact.get("chain_context",{}),"periodic_parent_fact_id":entry.fact.fact_id,
+ 		"state_loan_origin":admission_id if admission_id>0 and not _reservations[admission_id].chain.is_empty() else 0,
+ 		"raw_per_tick":int(command.raw_per_tick),"period":int(command.period_usec),
+ 		"next_due":accepted_at+int(command.period_usec),"expires":accepted_at+int(command.duration_usec),"ticks":0,"chain_owners":{}}
+ 	if int(state.state_loan_origin)>0: _reservations[admission_id].state_loan_handles[handle]=true
+ 	_hold_chain_state(state,admission_id)
+ 	_states[handle] = state
+-	_states_per_target[target_key] = int(_states_per_target.get(target_key,0))+1
++	if not _states_per_target.has(target_key): _states_per_target[target_key]={}
++	_states_per_target[target_key][handle]=true
+ 	_heap.put(handle,int(state.next_due))
+ 	_stats.started += 1; _stats.peak_states = maxi(int(_stats.peak_states),_states.size())
+ 	if not _presentation.start(handle,entry.target,command,entry.get("resource_lease")):
+@@ -492,6 +516,12 @@ func _tick_one() -> void:
+ 	if int(state.next_due) > int(state.expires):
+ 		_stats.expired += 1; _stop(handle); return
+ 	var source: Node2D = state.source.resolve(false) as Node2D if state.source != null else null
++	var batch: RefCounted=null
++	if not state.periodic_bindings.is_empty():
++		var made:=_begin_periodic_batch(handle,state)
++		if not made.success:
++			_error(str(made.reason)); _stats.failed+=1; _stop(handle); return
++		batch=made.batch
+ 	var rng := RandomNumberGenerator.new()
+ 	rng.seed = JSON.stringify(["hc.rng.periodic.v1",handle,int(state.next_due)]).sha256_text().substr(0,15).hex_to_int()
+ 	# Count valid damage-port delivery attempts, including a rejected port call.
+@@ -501,7 +531,9 @@ func _tick_one() -> void:
+ 	_stats.tick_delivery_count += 1
+ 	_stats.maximum_tick_delivery_lateness_usec = maxi(int(_stats.maximum_tick_delivery_lateness_usec),
+ 		maxi(0,_clock.simulation_usec()-int(state.next_due)))
+-	var result: Dictionary = combat.apply_feature_periodic_damage(target,int(state.raw_per_tick),source,rng,state.command.historical_credit)
++	var result: Dictionary = (combat.apply_feature_periodic_chain_damage(target,int(state.raw_per_tick),source,rng,state.command.historical_credit,batch)
++		if batch!=null else combat.apply_feature_periodic_damage(target,int(state.raw_per_tick),source,rng,state.command.historical_credit))
++	if batch!=null: _finish_periodic_batch(batch,generation)
+ 	# The real HP port can synchronously retire this runtime or state. Its
+ 	# committed result still counts, but the old tick no longer owns scheduling.
+ 	var current_owner := generation == _delivery_generation and _states.has(handle) and is_same(_states[handle],state)
+@@ -518,11 +550,63 @@ func _tick_one() -> void:
+ 		_stats.expired += 1; _stop(handle)
+ 	else: _heap.put(handle,int(state.next_due))
+ 
++static func _has_periodic_children(bindings: Array) -> bool:
++	for binding: Dictionary in bindings:
++		if binding.definition.handler_id=="hc.death_burst.v1" and "periodic" in binding.definition.source_classes: return true
++	return false
++
++func _begin_periodic_batch(handle: String, state: Dictionary) -> Dictionary:
++	var rejected: Dictionary={"success":false,"reason":"feature_periodic_promise_missing","batch":null}
++	var sequence:=int(state.state_loan_origin)
++	if not _reservations.has(sequence) or _reservations[sequence].chain.is_empty() \
++		or state.periodic_lineage.is_empty(): return rejected
++	var value: Dictionary=_reservations[sequence]
++	# One serial tick borrows one already-reserved fact and L receipt slots.
++	# They stay charged to this root throughout HP observers and delivery; no
++	# nested acceptance can borrow them. It does not enqueue another N buffer.
++	if int(value.facts)<1 or int(value.receipt_space)<state.periodic_bindings.size(): return rejected
++	var lineage: Dictionary=state.periodic_lineage.duplicate(false)
++	var release_id: String=value.expected_release_id+":tick:"+JSON.stringify([
++		sequence,handle,state.periodic_parent_fact_id,int(state.next_due)]).sha256_text()
++	if value.branches.has(release_id): return rejected
++	lineage.parent_release_id=state.periodic_lineage.release_id; lineage.release_id=release_id
++	lineage=Graph.capture(lineage,16,2).value
++	var ticket: RefCounted=Reservation.create_child(self,sequence,release_id)
++	value.branches[release_id]={"stage":"reserved","ticket_id":ticket.get_instance_id(),
++		"source_class":"periodic","context":lineage}
++	var made:=preload("res://scripts/features/runtime/damage_batch.gd").create(_world,release_id,
++		value.skill_id,state.periodic_bindings,state.command.historical_credit,_clock.simulation_usec(),
++		ticket,state.resource_lease,lineage,"periodic")
++	if not made.success:
++		value.branches.erase(release_id); ticket.close()
++		return {"success":false,"reason":made.reason,"batch":null}
++	if not made.batch.begin_base_scope():
++		made.batch.finish_production()
++		return {"success":false,"reason":"feature_periodic_scope_rejected","batch":null}
++	return made
++
++func _finish_periodic_batch(batch: RefCounted, generation: int) -> void:
++	if not batch.finish_base_scope() or not batch.errors.is_empty():
++		_error("feature_periodic_batch_invalid"); batch.finish_production(); return
++	var ticket: RefCounted=batch.reservation()
++	var sequence: int=ticket.sequence(); var branch: String=ticket.branch()
++	if generation!=_delivery_generation or not ticket.batch_owner_is_current():
++		batch.finish_production(); return
++	var value: Dictionary=_reservations[sequence]
++	value.branches[branch].stage="queued"; value.branches[branch].receipts=[]
++	var entries: Array=batch.consume()
++	# All bindings are immutable. Periodic subscription is available only to
++	# the finite death handler; it queues children and never recursively calls
++	# Root, creates another status, or advances the simulation clock.
++	for entry: Dictionary in entries: _deliver_fact(entry,sequence)
++	batch.finish_production()
++	_retire_chain_branch(sequence,branch)
++
+ func _stop(handle: String) -> void:
+ 	if not _states.has(handle): return
+ 	var key: String = _states[handle].target_key
+-	_states_per_target[key] = int(_states_per_target[key])-1
+-	if int(_states_per_target[key]) == 0: _states_per_target.erase(key)
++	_states_per_target[key].erase(handle)
++	if _states_per_target[key].is_empty(): _states_per_target.erase(key)
+ 	var owners: Dictionary=_states[handle].get("chain_owners",{})
+ 	var origin:=int(_states[handle].get("state_loan_origin",0))
+ 	_states.erase(handle); _heap.remove(handle)
+@@ -534,6 +618,16 @@ func _stop(handle: String) -> void:
+ 		if _reservations.has(sequence):
+ 			_reservations[sequence].state_owners-=1; _retire_chain_if_terminal(sequence)
+ 
++func _retire_fatal_target_states(target_identity: Dictionary) -> void:
++	# The admission contract bounds this exact ActorRef life to at most 16
++	# state handles. Do not scan unrelated states or retain death tombstones.
++	var target_states: Dictionary=_states_per_target.get(JSON.stringify(target_identity),{})
++	var generation:=_delivery_generation
++	for handle: String in target_states.keys():
++		if generation!=_delivery_generation: return
++		if _states.has(handle):
++			_stats.invalidated+=1; _stop(handle)
++
+ func _reclaim_invalid_state_loan(sequence: int) -> void:
+ 	# Reclaim one origin loan only when its next accepted command needs it.
+ 	# Existing committed facts/child branches are separate owners and remain
+@@ -564,7 +658,7 @@ func _queue_child(command: Dictionary, entry: Dictionary) -> void:
+ 	if not made.success: _error("feature_child_request_rejected"); return
+ 	var ticket: RefCounted=Reservation.create_child(self,sequence,release_id)
+ 	var lease: RefCounted=made.request.child_action_lease
+-	value.branches[release_id]={"stage":"child_queued","ticket_id":ticket.get_instance_id(),
++	value.branches[release_id]={"stage":"child_queued","ticket_id":ticket.get_instance_id(),"source_class":"child",
+ 		"request_owner_id":lease.get_instance_id(),"context":lease.chain_context()}
+ 	value.child_space-=1; _reserved_children-=1
+ 	_children[_child_serial]={"generation":int(command.generation),"sequence":sequence,"release_id":release_id,
+diff --git a/tests/framework/feature_chain_commit_test.gd b/tests/framework/feature_chain_commit_test.gd
+index a2a80cfed..ca576bf0a 100644
+--- a/tests/framework/feature_chain_commit_test.gd
++++ b/tests/framework/feature_chain_commit_test.gd
+@@ -32,7 +32,7 @@ func _screen_to_ground(value: Vector2) -> Vector2: return (value+Vector2(50,25))
+ 
+ func _lineage(release: String,source_class: String) -> Dictionary:
+ 	return {"contract_id":"hardcore.combat.chain_context.v1","root_release_id":"chain:root:1",
+-		"release_id":release,"parent_release_id":"chain:root:1" if source_class=="child" else "",
++		"release_id":release,"parent_release_id":"chain:root:1" if source_class!="direct" else "",
+ 		"root_skill_id":"hc.skill.wizard.ice_storm","generation":1 if source_class=="child" else 0,
+ 		"maximum_generation":2}
+ 
+@@ -57,7 +57,7 @@ func _run() -> void:
+ 	var combat: Variant = Combat.new()
+ 	add_child(combat)
+ 	for source_class: String in ["direct","periodic","child"]:
+-		var release := "chain:child:1" if source_class=="child" else "chain:root:1"
++		var release := "chain:child:1" if source_class=="child" else "chain:tick:1000000" if source_class=="periodic" else "chain:root:1"
+ 		var lineage := _lineage(release,source_class)
+ 		var credit := {"profile_id":PlayerState.active_profile_id}
+ 		var created: Dictionary = batch_type.create(world,release,"hc.skill.wizard.ice_storm",[],credit,0,null,null,lineage,source_class)
+@@ -112,7 +112,7 @@ func _run() -> void:
+ 			"invalid root lineage rejected before HP: "+JSON.stringify(candidate))
+ 	_check(not batch_type.create(world,"chain:root:1","hc.skill.wizard.ice_storm",[],{},0,null,null,{},"child").success,
+ 		"unscoped child damage cannot impersonate a root direct batch")
+-	var periodic: Dictionary = batch_type.create(world,"chain:root:1","hc.skill.wizard.ice_storm",[],{},0,null,null,_lineage("chain:root:1","periodic"),"periodic")
++	var periodic: Dictionary = batch_type.create(world,"chain:tick:1000000","hc.skill.wizard.ice_storm",[],{},0,null,null,_lineage("chain:tick:1000000","periodic"),"periodic")
+ 	periodic.batch.begin_base_scope()
+ 	var immune := _target(); immune.replace_actor_capability_source("fixture:periodic:immune",["hc.immune.periodic"])
+ 	var independent := RandomNumberGenerator.new(); independent.seed=93827
+@@ -150,7 +150,7 @@ func _run() -> void:
+ 	invalid_actor.queue_free(); await get_tree().process_frame
+ 	# Audited wrong-public-entry and Combat projection recovery boundaries.
+ 	for source_class: String in ["periodic","child"]:
+-		var release := "chain:child:1" if source_class=="child" else "chain:root:1"
++		var release := "chain:child:1" if source_class=="child" else "chain:tick:1000000" if source_class=="periodic" else "chain:root:1"
+ 		var made: Dictionary=batch_type.create(world,release,"hc.skill.wizard.ice_storm",[],{},0,null,null,_lineage(release,source_class),source_class)
+ 		_check(made.success,source_class+" wrong-entry probe owns a legal finite batch")
+ 		if not made.success: continue
+diff --git a/tests/framework/feature_death_child_command_test.gd b/tests/framework/feature_death_child_command_test.gd
+index ff631060b..c0dbc42dc 100644
+--- a/tests/framework/feature_death_child_command_test.gd
++++ b/tests/framework/feature_death_child_command_test.gd
+@@ -55,6 +55,9 @@ func _run() -> void:
+ 		and command.origin.x==2.0 and command.historical_credit.profile_id=="fixture-owner" and command.raw_damage==5,
+ 		"later position, profile or configuration mutations cannot rewrite a queued child")
+ 	var periodic:=_fact(); periodic.source_class="periodic"
++	periodic.release_id+="\u003atick:1000000"; periodic.fact_id=periodic.release_id+":hp:0"
++	periodic.chain_context.release_id=periodic.release_id
++	periodic.chain_context.parent_release_id=periodic.chain_context.root_release_id
+ 	_check(Handlers.commands(periodic,_binding()).size()==1,"a real periodic lethal fact remains eligible without posing as direct damage")
+ 	var last:=_fact(); last.source_class="child"; last.chain_context.generation=1
+ 	last.release_id="child:1"; last.chain_context.release_id="child:1"; last.chain_context.parent_release_id="player:1:action:2"
+diff --git a/tests/framework/feature_periodic_child_chain_test.gd b/tests/framework/feature_periodic_child_chain_test.gd
+index 817c27d6e..ffd595ee5 100644
+--- a/tests/framework/feature_periodic_child_chain_test.gd
++++ b/tests/framework/feature_periodic_child_chain_test.gd
+@@ -42,8 +42,9 @@ func _run() -> void:
+ 		actor.max_hp=1000; actor.current_hp=1000
+ 		actor.direct_spell_anti_magic_points=0; actor.direct_spell_magic_defense_min=0
+ 		actor.direct_spell_magic_defense_max=0; actor.direct_spell_stats_valid=true
+-	first.current_hp=200; second.current_hp=24
+-	PlayerState.computed_stats.magic_min=100; PlayerState.computed_stats.magic_max=100
++	# The second receiver must survive its first child hit so the next death
++	# wave originates from a child-created periodic state, not an immediate hit.
++	first.current_hp=200; second.current_hp=120
+ 	game.player.current_mp=100; game._skill_cast_target=first; game._set_magic_locked_target(first,true)
+ 	check(ContentLayers.set_feature_module_enabled("hc.validation.periodic_child_chain",true),"READY enables only the default-off test module")
+ 	var lease: RefCounted=game._capture_action_configuration("hc.skill.wizard.ice_storm")
+@@ -56,6 +57,9 @@ func _run() -> void:
+ 		"real 85-slot world accepts the full state and finite child promise before MP/cooldown/HP")
+ 	if not accepted: game.queue_free(); await get_tree().process_frame; _finish(); return
+ 	check(ContentLayers.set_feature_module_enabled("hc.validation.periodic_child_chain",false),"source withdrawal preserves accepted periodic producers")
++	# This trigger-only module retains release-time primary stats. Publication
++	# rebuilds them; supply the controlled input after the last publication.
++	PlayerState.computed_stats.magic_min=50; PlayerState.computed_stats.magic_max=50
+ 	deadline=Time.get_ticks_msec()+3000
+ 	while game.observed_releases==0 and Time.get_ticks_msec()<deadline: await get_tree().process_frame
+ 	var root_loss:=200-int(first.current_hp)
+@@ -66,7 +70,7 @@ func _run() -> void:
+ 	await _settle(runtime)
+ 	check(runtime.active_count()==1 and runtime.reservation_snapshot().actions==1,
+ 		"root batch is gone while its accepted state still retains future child capacity")
+-	for second_index in range(1,9):
++	for second_index in range(1,10):
+ 		game._time_domains.advance_simulation(1.0)
+ 		await _settle(runtime)
+ 	print("PERIODIC_CHILD_RESULT ",JSON.stringify({"root_loss":root_loss,"first":first.current_hp,"second":second.current_hp,
+diff --git a/tests/framework/periodic_child_g2_root_test.tscn b/tests/framework/periodic_child_g2_root_test.tscn
+new file mode 100644
+index 000000000..804c4144e
+--- /dev/null
++++ b/tests/framework/periodic_child_g2_root_test.tscn
+@@ -0,0 +1,7 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/periodic_child_root_test.gd" id="1"]
++
++[node name="PeriodicChildG2RootTest" type="Node"]
++script = ExtResource("1")
++chain_depth = 2
+diff --git a/tests/framework/periodic_child_root_test.gd b/tests/framework/periodic_child_root_test.gd
+new file mode 100644
+index 000000000..2e7f1d33f
+--- /dev/null
++++ b/tests/framework/periodic_child_root_test.gd
+@@ -0,0 +1,127 @@
++extends Node
++
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const Root := preload("res://tests/framework/fixtures/lease_probe_root.gd")
++const Fixture := preload("res://tests/helpers/formal_world_skill_fixture.gd")
++@export var chain_depth := 1
++var proof := Proof.new()
++var errors: Array[String] = []
++
++func _ready() -> void: _run.call_deferred()
++func check(value: bool,label: String) -> void:
++	proof.record(value,label)
++	if not value: errors.append(label)
++
++func _prepare(enemy: EnemyActor,hp: int) -> void:
++	enemy.set_physics_process(false); enemy.max_hp=5000; enemy.current_hp=hp
++	enemy.direct_spell_anti_magic_points=0
++	enemy.direct_spell_magic_defense_min=0; enemy.direct_spell_magic_defense_max=0
++	enemy.direct_spell_stats_valid=true
++
++func _pump(runtime: RefCounted) -> void:
++	for iteration in range(200):
++		runtime.pump()
++		if runtime.pending_count()==0 and runtime.child_count()==0 and not runtime.has_due(): return
++		await get_tree().process_frame
++	check(false,"bounded production consumer completes")
++
++func _run() -> void:
++	PlayerState.test_mode=true; PlayerState.reset_progress(false)
++	check(PlayerState.set_profession_identity("hc.profession.wizard"),"registered wizard identity")
++	PlayerState.level=50; PlayerState.learned_skills={"hc.skill.wizard.ice_storm":3}; PlayerState.recalculate_stats(false)
++	var module_id: String="hc.validation.periodic_chain_g2" if chain_depth==2 else "hc.validation.periodic_chain"
++	var registry: String="res://assets/data/features/validation/periodic_chain_g2_registry.json" if chain_depth==2 \
++		else "res://assets/data/features/validation/periodic_chain_registry.json"
++	check(ContentLayers.reload_feature_catalog(registry),
++		"formal default-off package admits direct/periodic/child death and direct/child ignition without self-excitation")
++	print("PERIODIC_CHILD_CATALOG ",JSON.stringify(ContentLayers.feature_load_errors))
++	if not errors.is_empty(): _finish(); return
++	var game:=Root.new(); add_child(game)
++	var deadline:=Time.get_ticks_msec()+20000
++	while not game.gameplay_input_is_enabled() and Time.get_ticks_msec()<deadline: await get_tree().process_frame
++	check(game.gameplay_input_is_enabled(),"actual mapped world reaches READY")
++	if not game.gameplay_input_is_enabled(): game.queue_free(); _finish(); return
++	var first: EnemyActor=await Fixture.prepare_target(self,game,game.player,19,"periodic_child")
++	check(first!=null,"initial receiver comes from the sole mapped Root factory")
++	if first==null: game.queue_free(); _finish(); return
++	var later: EnemyActor=game._spawn_enemy(GameData.get_monster_by_id(19),
++		game._canonical_ground_gu_to_screen_px(Vector2(43.1,13.5)),false,-1.0,
++		{"respawn_enabled":false,"spawn_slot_id":"test:periodic_child:later"})
++	check(later!=null,"later receiver is declared before acceptance and starts outside the direct hit")
++	if later==null: game.queue_free(); _finish(); return
++	var third: EnemyActor=null
++	if chain_depth==2:
++		third=game._spawn_enemy(GameData.get_monster_by_id(19),
++			game._canonical_ground_gu_to_screen_px(Vector2(45.7,13.5)),false,-1.0,
++			{"respawn_enabled":false,"spawn_slot_id":"test:periodic_child:g2_later"})
++		check(third!=null,"generation-two receiver is declared before acceptance and outside the initial and first child hits")
++		if third==null: game.queue_free(); _finish(); return
++	game.set_process(false); game.set_physics_process(false); game.player.set_physics_process(false)
++	for enemy: Node in get_tree().get_nodes_in_group("enemies"): enemy.set_physics_process(false)
++	_prepare(first,200); _prepare(later,200 if chain_depth==2 else 5000)
++	if third!=null: _prepare(third,5000)
++	game.player.current_mp=100
++	game._skill_cast_target=first; game._set_magic_locked_target(first,true)
++	check(ContentLayers.set_feature_module_enabled(module_id,true),"READY publication enables only the explicit test module")
++	var bound: Dictionary=game.feature_world_capacity_bound()
++	check(bound.proved and int(bound.maximum_receivers)>(3 if chain_depth==2 else 2),"complete declared world bound exceeds the observed fixture receivers")
++	var lease: RefCounted=game._capture_action_configuration("hc.skill.wizard.ice_storm")
++	check(lease!=null and lease.event_bindings_for("wizard.ice_storm").size()==2,"actual source freezes both complete subscriptions")
++	if lease==null: game.queue_free(); _finish(); return
++	var accepted: bool=game.player.request_skill("hc.skill.wizard.ice_storm",first.get_instance_id(),lease)
++	check(accepted and lease.is_accepted() and lease.effect_reservation()!=null,
++		"real Player acceptance reserves the complete root before MP/cooldown/HP")
++	if not accepted: game.queue_free(); _finish(); return
++	var runtime: RefCounted=game._feature_effect_runtime
++	check(first.current_hp==200 and later.current_hp==(200 if chain_depth==2 else 5000),"real windup has committed no premature HP")
++	check(ContentLayers.set_feature_module_enabled(module_id,false),"source withdrawal retains the accepted periodic and child obligations")
++	# Publication rebuilds stats. This trigger-only module keeps the formal
++	# release-time primary-stat policy, so set the controlled input afterwards.
++	PlayerState.computed_stats.magic_min=50; PlayerState.computed_stats.magic_max=50
++	deadline=Time.get_ticks_msec()+3000
++	while game.observed_releases==0 and Time.get_ticks_msec()<deadline: await get_tree().process_frame
++	check(game.observed_releases==1 and game.observed_execution.get("accepted",false),"real timer releases once through the existing Root planner")
++	var base_loss: int=200-first.current_hp
++	print("PERIODIC_CHILD_BASE ",JSON.stringify({"loss":base_loss,"hp":first.current_hp,"bound":bound}))
++	check(base_loss>=40 and base_loss<100 and later.current_hp==(200 if chain_depth==2 else 5000),
++		"controlled fixed-power base hit survives and needs a later fatal tick rather than an immediate death")
++	if base_loss<40 or base_loss>=100: game.queue_free(); await get_tree().process_frame; _finish(); return
++	await _pump(runtime)
++	check(runtime.active_count()==1 and runtime.child_count()==0,"base fact creates one status and no premature death child")
++	var mp: int=game.player.current_mp; var root_rng: int=game._rng.state; var player_rng: int=game.player._rng.state
++	game._time_domains.advance_simulation(1.0); await _pump(runtime)
++	check(first.current_hp==200-2*base_loss and first.current_hp>0 and runtime.metrics().child_actions==0,
++		"first nonfatal periodic release cannot spend the later fatal release identity")
++	for tick in range(3): game._time_domains.advance_simulation(1.0); await _pump(runtime)
++	check(first.current_hp==0 and first.collision_layer==0 and first.collision_mask==0,
++		"real periodic first death immediately removes collision")
++	check(runtime.metrics().child_actions==1 and later.current_hp<5000,
++		"one later fatal periodic fact releases exactly one child through real Root geometry and HP")
++	check(runtime.active_count()==1 and runtime.heap_count()==1,"real child hit ignites the previously untouched receiver without recursive periodic ignition")
++	if chain_depth==2:
++		check(third.current_hp==5000 and later.current_hp>0,"first child leaves a living second receiver and cannot prematurely hit the third")
++		var remaining: int=later.current_hp
++		game._time_domains.advance_simulation(1.0); await _pump(runtime)
++		check(later.current_hp==0 and later.collision_layer==0 and later.collision_mask==0,
++			"the child-created status has its own later periodic first death and immediate collision retirement")
++		check(runtime.metrics().child_actions==2 and third.current_hp==5000-remaining,
++			"generation-one periodic death releases one generation-two Root child using actual remaining HP loss")
++		check(runtime.active_count()==1 and runtime.heap_count()==1,"second child creates one final generation-two status rather than a recursive heap chain")
++	check(game.player.current_mp==mp and game._rng.state==root_rng and game.player._rng.state==player_rng,
++		"periodic and child work consume no extra player resources or old RNG streams")
++	if chain_depth==2:
++		for tick in range(4): game._time_domains.advance_simulation(1.0); await _pump(runtime)
++		check(runtime.metrics().child_actions==2,"the authored finite generation bound prevents additional child releases")
++	else: game._time_domains.advance_simulation(4.0); await _pump(runtime)
++	var empty:=true
++	for count: int in runtime.reservation_snapshot().values(): empty=empty and count==0
++	check(empty and not runtime.has_work() and runtime.errors.is_empty(),"every direct/tick/child/state/receipt promise reaches terminal without truncation")
++	game.queue_free(); await get_tree().process_frame
++	check(ContentLayers.reload_feature_catalog(),"retired controlled world restores the formal default registry")
++	_finish()
++
++func _finish() -> void:
++	var scene_id: String="periodic_child_g2_root_test" if chain_depth==2 else "periodic_child_root_test"
++	var written:=proof.write_receipt(scene_id,proof.records.size(),errors.size())
++	print("PERIODIC_CHILD_ROOT_",("PASS" if written and errors.is_empty() else "FAIL")," checks=",proof.records.size()," errors=",errors)
++	get_tree().quit(0 if written and errors.is_empty() else 1)
+diff --git a/tests/framework/periodic_child_root_test.tscn b/tests/framework/periodic_child_root_test.tscn
+new file mode 100644
+index 000000000..d3cd61ab7
+--- /dev/null
++++ b/tests/framework/periodic_child_root_test.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/periodic_child_root_test.gd" id="1"]
++
++[node name="PeriodicChildRootTest" type="Node"]
++script = ExtResource("1")
+diff --git a/tests/framework/periodic_dispatch_lifecycle_test.gd b/tests/framework/periodic_dispatch_lifecycle_test.gd
+new file mode 100644
+index 000000000..b0afa67a3
+--- /dev/null
++++ b/tests/framework/periodic_dispatch_lifecycle_test.gd
+@@ -0,0 +1,215 @@
++extends Node
++
++# Controlled runtime/HP protocol unit. Root/planner/geometry is exercised by
++# periodic_child_root_test; this test's child consumer has no live receivers.
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const Enemy := preload("res://scripts/enemy.gd")
++const Player := preload("res://scripts/player.gd")
++const World := preload("res://scripts/layers/runtime/execution/world_context.gd")
++const Clock := preload("res://scripts/layers/runtime/execution/time_domains.gd")
++const Combat := preload("res://scripts/layers/runtime/combat_runtime_service.gd")
++const Runtime := preload("res://scripts/features/runtime/effect_runtime.gd")
++const Batch := preload("res://scripts/features/runtime/damage_batch.gd")
++const Compiler := preload("res://scripts/features/compilation/feature_compiler.gd")
++var _zone_generation := 1
++var current_map_id := 910004
++var proof := Proof.new()
++var errors: Array[String] = []
++var bindings: Array = []
++var world: RefCounted
++var clock: RefCounted
++var runtime: RefCounted
++var combat: Node
++var target: EnemyActor
++var child_commands: Array[Dictionary] = []
++var held_during_stop := false
++var nested_calls := 0
++
++class ObservedEnemy extends Enemy:
++	var batches: Array[RefCounted] = []
++	var credits: Array[Dictionary] = []
++	var after_commit := Callable()
++	var ordinary_calls := 0
++	var heal_before_death_mark := false
++	func _refresh_overhead_health() -> void:
++		# Same controlled post-capture observation as feature_chain_commit_test.
++		# It does not claim this virtual callback is used by a natural game page.
++		if heal_before_death_mark and current_hp==0: current_hp=max_hp
++		super._refresh_overhead_health()
++	func take_feature_periodic_damage(amount: int, attacker: Node2D, credit: Dictionary, receipt: Dictionary) -> void:
++		ordinary_calls+=1
++		super.take_feature_periodic_damage(amount,attacker,credit,receipt)
++	func take_feature_periodic_chain_damage(amount: int, attacker: Node2D, credit: Dictionary,
++		receipt: Dictionary, batch: RefCounted) -> void:
++		batches.append(batch); credits.append(credit.duplicate(true))
++		super.take_feature_periodic_chain_damage(amount,attacker,credit,receipt,batch)
++		if after_commit.is_valid(): after_commit.call()
++
++func _ready() -> void: _run.call_deferred()
++func check(value: bool,label: String) -> void:
++	proof.record(value,label)
++	if not value: errors.append(label)
++func _ground_to_screen(value: Vector2) -> Vector2: return value*10.0
++func _screen_to_ground(value: Vector2) -> Vector2: return value/10.0
++func _empty_promises() -> bool:
++	for value: int in runtime.reservation_snapshot().values():
++		if value!=0: return false
++	return true
++func _pump() -> void:
++	for iteration in range(120):
++		runtime.pump()
++		if runtime.pending_count()==0 and runtime.child_count()==0 and not runtime.has_due(): return
++		await get_tree().process_frame
++	check(false,"bounded public protocol consumer completes")
++
++func _empty_child(request: Dictionary,ticket: RefCounted,frozen: Array,source: Node2D,resources: RefCounted) -> Dictionary:
++	check(ticket.authorizes_child_request(request),"empty unit child retains its actual request-owner capability")
++	if target.heal_before_death_mark:
++		check(target.current_hp==target.max_hp,"empty controlled receiver set does not reread healed HP to discard a committed fatal fact")
++	else:
++		check(target.current_hp==0 and not target.can_receive_damage(),"empty unit child has no live receiver after the actual first death")
++	var lease: RefCounted=request.child_action_lease
++	var chain: Dictionary=lease.chain_context(); var command: Dictionary=lease.command()
++	child_commands.append(command)
++	var made:=Batch.create(world,chain.release_id,"hc.child.death_burst.v1",frozen,
++		command.historical_credit,clock.simulation_usec(),ticket,resources,chain,"child",command.root_skill_id)
++	if not made.success: return {"success":false,"reason":made.reason}
++	var batch: RefCounted=made.batch
++	var sealed: bool=batch.begin_base_scope() and batch.finish_base_scope()
++	check(sealed and batch.pending_fact_count()==0,"legitimate empty child closes the real producer without fabricated HP or a queue entry")
++	batch.finish_production()
++	return {"success":sealed,"reason":""}
++
++func _nested_pump() -> void:
++	check(runtime.pump()==0,"HP observer cannot reenter the active consumer or borrow its inline fact")
++	nested_calls+=1
++func _stop_state() -> void:
++	var handle: String=runtime._states.keys()[0]
++	runtime._stop(handle)
++	held_during_stop=runtime.reservation_snapshot().actions==1 and runtime.active_count()==0
++func _change_world() -> void: _zone_generation+=1
++
++func _run() -> void:
++	PlayerState.test_mode=true; PlayerState.reset_progress(false)
++	PlayerState.active_profile_id="periodic-lifecycle-unit"
++	check(ContentLayers.reload_feature_catalog("res://assets/data/features/validation/periodic_chain_registry.json")
++		and ContentLayers.set_feature_module_enabled("hc.validation.periodic_chain",true),"explicit default-off periodic module supplies formal immutable bindings")
++	bindings=PlayerState.feature_bundle().event_index.get("damage_committed:hc.skill.wizard.ice_storm",[])
++	check(bindings.size()==2,"protocol unit retains both declared subscriptions")
++	if bindings.size()!=2: _finish(); return
++	for mode: String in ["baseline","stop_after_fatal","clear_after_hp","world_after_hp","queued_free_after_hp","source_destroyed","heal_before_death_mark","two_sources_heal_before_death_mark"]:
++		await _case(mode)
++	check(ContentLayers.reload_feature_catalog(),"retired unit restores the formal default catalog")
++	_finish()
++
++func _case(mode: String) -> void:
++	_zone_generation+=1; child_commands.clear(); held_during_stop=false
++	var heals_before_death: bool=mode.ends_with("heal_before_death_mark")
++	var two_sources: bool=mode=="two_sources_heal_before_death_mark"
++	world=World.new(); world.configure(self,PlayerState)
++	clock=Clock.new(); clock.configure(self)
++	combat=Combat.new(); add_child(combat)
++	var source:=Player.new(); add_child(source); source.set_physics_process(false)
++	check(source.begin_combat_transition(mode) and source.finish_combat_transition(mode),mode+" enters an actual source lifetime")
++	target=ObservedEnemy.new(); target.setup(GameData.get_monster_by_id(19),null); add_child(target)
++	target.set_physics_process(false)
++	target.configure_runtime_map_projection(current_map_id,_ground_to_screen,_screen_to_ground)
++	target.set_combat_position(_ground_to_screen(Vector2.ONE),&"periodic_lifecycle_unit_position")
++	target.max_hp=30 if two_sources else 20 if heals_before_death else 5000
++	target.current_hp=30 if two_sources else 20 if mode=="stop_after_fatal" or heals_before_death else 200
++	target.direct_spell_anti_magic_points=0
++	target.direct_spell_magic_defense_min=0; target.direct_spell_magic_defense_max=0; target.direct_spell_stats_valid=true
++	runtime=Runtime.new()
++	check(runtime.configure(world,clock,combat) and runtime.configure_child_executor(_empty_child),mode+" configures one real runtime and HP port")
++	var root: String="periodic:lifecycle:"+mode
++	var ticket: RefCounted=runtime.reserve_action("hc.skill.wizard.ice_storm",bindings,1,root,1)
++	check(ticket!=null,mode+" reserves the complete root before its base HP")
++	if ticket==null: runtime.clear(); target.queue_free(); source.queue_free(); combat.queue_free(); return
++	var made:=Batch.create(world,root,"hc.skill.wizard.ice_storm",bindings,{"profile_id":PlayerState.active_profile_id,"marker":mode},
++		clock.simulation_usec(),ticket,null,ticket.chain_context(root))
++	check(made.success,mode+" claims the actual accepted direct producer")
++	if not made.success: ticket.close(); runtime.clear(); target.queue_free(); source.queue_free(); combat.queue_free(); return
++	var base: RefCounted=made.batch; base.begin_base_scope()
++	target.take_damage(10,source,{"feature_damage_batch":base,"source_class":"direct","damage_channel":"magic_defense"})
++	check(base.finish_base_scope() and runtime.submit_batch(base),mode+" transfers one real base fact")
++	ticket.close(); await _pump()
++	if two_sources:
++		var second_bindings: Array=bindings.duplicate(true)
++		for binding: Dictionary in second_bindings:
++			binding.source.instance_id="periodic:lifecycle:second-source"
++			binding.handle=Compiler.source_handle(binding.source)
++		var second_root: String=root+":second"
++		var second_ticket: RefCounted=runtime.reserve_action("hc.skill.wizard.ice_storm",second_bindings,1,second_root,1)
++		check(second_ticket!=null,"second formal source has its own complete accepted root promise")
++		if second_ticket!=null:
++			var second:=Batch.create(world,second_root,"hc.skill.wizard.ice_storm",second_bindings,
++				{"profile_id":PlayerState.active_profile_id,"marker":mode},clock.simulation_usec(),second_ticket,null,second_ticket.chain_context(second_root))
++			check(second.success,"second source validates exact source identity and immutable trigger definitions")
++			if second.success:
++				second.batch.begin_base_scope()
++				target.take_damage(10,source,{"feature_damage_batch":second.batch,"source_class":"direct","damage_channel":"magic_defense"})
++				check(second.batch.finish_base_scope() and runtime.submit_batch(second.batch),"second actual nonfatal HP fact creates a distinct source status")
++			second_ticket.close(); await _pump()
++	if two_sources:
++		check(runtime.active_count()==2 and runtime.heap_count()==2,"two accepted source roots share the same exact target life with two distinct states")
++	else:
++		check(runtime.active_count()==1 and runtime.heap_count()==1,mode+" has one admitted status and no fabricated periodic work")
++	if mode=="baseline": target.after_commit=_nested_pump
++	elif mode=="stop_after_fatal": target.after_commit=_stop_state
++	elif mode=="clear_after_hp": target.after_commit=runtime.clear
++	elif mode=="world_after_hp": target.after_commit=_change_world
++	elif mode=="queued_free_after_hp": target.after_commit=target.queue_free
++	elif mode=="source_destroyed": source.queue_free(); await get_tree().process_frame
++	elif heals_before_death: target.heal_before_death_mark=true
++	var before: int=target.current_hp
++	clock.advance_simulation(1.0); await _pump()
++	if heals_before_death:
++		check(target.current_hp==target.max_hp,"post-capture observer really restores HP before actor death marking")
++	else:
++		check(target.current_hp==before-10,mode+" preserves the actually committed periodic HP")
++	check(target.batches.size()==1 and target.ordinary_calls==0,mode+" uses the reserved periodic chain port exactly once")
++	if target.batches.size()==1:
++		var old: RefCounted=target.batches[0]
++		var old_chain: Dictionary=old.chain_context()
++		check(old.facts().size()==1 and old_chain.release_id!=root and old_chain.parent_release_id==root,
++			mode+" freezes one distinct tick identity and the original parent")
++		var snapshot: Dictionary=runtime.reservation_snapshot()
++		var rejected:=Batch.create(world,old_chain.release_id,"hc.skill.wizard.ice_storm",bindings,{},clock.simulation_usec(),
++			old.reservation(),null,old_chain,"periodic")
++		check(not rejected.success and runtime.reservation_snapshot()==snapshot,mode+" delayed old ticket cannot reclaim capacity or create new work")
++		var rng:=RandomNumberGenerator.new(); rng.seed=48015
++		var rng_before: int=rng.state; var hp: int=target.current_hp
++		var duplicate: Dictionary=combat.apply_feature_periodic_chain_damage(target,10,null,rng,{},old)
++		check(not duplicate.success and target.current_hp==hp and rng.state==rng_before,
++			mode+" delayed consumed batch rejects before RNG and HP")
++	if heals_before_death:
++		check(target.batches[0].facts()[0].hp_after==0 and not target.batches[0].facts()[0].target_survived_commit,
++			"first-death cancellation uses the immutable commit fact despite later HP observation")
++		check(runtime.active_count()==0 and child_commands.size()==1,
++			"one committed fatal target life closes its periodic scheduler and creates exactly one death child")
++		clock.advance_simulation(3.0); await _pump()
++		check(target.batches.size()==1 and runtime.metrics().ticks==1 and child_commands.size()==1,
++			"post-capture HP restoration cannot reuse the original life for another promised periodic death")
++	elif mode=="stop_after_fatal":
++		check(held_during_stop and child_commands.size()==1,"in-flight fatal producer retains its root after status retirement until its one child is consumed")
++		check(target.collision_layer==0 and target.collision_mask==0,"fatal protocol callback cannot delay collision retirement")
++	elif mode in ["baseline","source_destroyed"]:
++		clock.advance_simulation(1.0); await _pump()
++		check(target.batches.size()==2 and target.batches[0].chain_context().release_id!=target.batches[1].chain_context().release_id,
++			mode+" consecutive actual ticks cannot reuse a retired receipt identity")
++		check(target.credits.back().marker==mode,"original accepted historical credit survives later periodic delivery")
++		clock.advance_simulation(2.0); await _pump()
++		check(target.current_hp==150 and runtime.metrics().ticks==4,mode+" delivers all four authored ticks without extra damage")
++	else:
++		check(runtime.active_count()==0 and child_commands.is_empty(),mode+" retires old scheduling without inventing a child")
++	check(_empty_promises() and not runtime.has_work() and runtime.errors.is_empty() and not runtime._pumping,
++		mode+" closes every producer state receipt and consumer scope")
++	runtime.clear()
++	if is_instance_valid(target): target.queue_free()
++	if is_instance_valid(source): source.queue_free()
++	combat.queue_free(); await get_tree().process_frame
++
++func _finish() -> void:
++	var written:=proof.write_receipt("periodic_dispatch_lifecycle_test",proof.records.size(),errors.size())
++	print("PERIODIC_DISPATCH_LIFECYCLE_",("PASS" if written and errors.is_empty() else "FAIL")," checks=",proof.records.size()," errors=",errors)
++	get_tree().quit(0 if written and errors.is_empty() else 1)
+diff --git a/tests/framework/periodic_dispatch_lifecycle_test.tscn b/tests/framework/periodic_dispatch_lifecycle_test.tscn
+new file mode 100644
+index 000000000..71db467bf
+--- /dev/null
++++ b/tests/framework/periodic_dispatch_lifecycle_test.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/periodic_dispatch_lifecycle_test.gd" id="1"]
++
++[node name="PeriodicDispatchLifecycleTest" type="Node"]
++script = ExtResource("1")
+diff --git a/tests/framework/periodic_producer_identity_test.gd b/tests/framework/periodic_producer_identity_test.gd
+new file mode 100644
+index 000000000..9ac241e57
+--- /dev/null
++++ b/tests/framework/periodic_producer_identity_test.gd
+@@ -0,0 +1,135 @@
++extends Node
++
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const World := preload("res://scripts/layers/runtime/execution/world_context.gd")
++const Clock := preload("res://scripts/layers/runtime/execution/time_domains.gd")
++const Combat := preload("res://scripts/layers/runtime/combat_runtime_service.gd")
++const Runtime := preload("res://scripts/features/runtime/effect_runtime.gd")
++const Batch := preload("res://scripts/features/runtime/damage_batch.gd")
++const Death := preload("res://scripts/features/handlers/death_burst_handler.gd")
++const Child := preload("res://scripts/features/contracts/child_action_lease.gd")
++var _zone_generation := 1
++var current_map_id := 910002
++var proof := Proof.new()
++var errors: Array[String] = []
++var world: RefCounted
++var runtime: RefCounted
++var bindings: Array = []
++
++func _ready() -> void: _run.call_deferred()
++func check(value: bool, label: String) -> void:
++	proof.record(value,label)
++	if not value: errors.append(label)
++
++func _unexpected_child(_request: Dictionary, _ticket: RefCounted, _bindings: Array,
++	_source: Node2D, _resources: RefCounted) -> Dictionary:
++	check(false,"identity-only protocol test never executes a child")
++	return {"success":false,"reason":"identity_test_has_no_child_execution"}
++
++func _run() -> void:
++	PlayerState.test_mode=true; PlayerState.reset_progress(false)
++	check(ContentLayers.reload_feature_catalog("res://assets/data/features/validation/state_loan_lifetime_registry.json")
++		and ContentLayers.set_feature_module_enabled("hc.validation.state_loan_lifetime",true),
++		"formal existing default-off direct/child module supplies real compiled bindings")
++	bindings=PlayerState.feature_bundle().event_index.get("damage_committed:hc.skill.wizard.ice_storm",[])
++	check(bindings.size()==2,"formal producer includes both persistent and death subscriptions")
++	if bindings.size()!=2: _finish(); return
++	world=World.new(); world.configure(self,PlayerState)
++	var clock:=Clock.new(); clock.configure(self)
++	var combat:=Combat.new(); add_child(combat)
++	runtime=Runtime.new()
++	check(runtime.configure(world,clock,combat) and runtime.configure_child_executor(_unexpected_child),
++		"actual runtime owns the pre-HP producer capability")
++	for mode in range(3): _reject_without_stealing(mode)
++	# Pure schema/handler unit. It does not claim a production periodic ticket,
++	# enable unsupported periodic bindings or submit HP/child work.
++	var root := "identity:periodic:root"
++	var lineage := {"contract_id":"hardcore.combat.chain_context.v1","root_release_id":root,
++		"release_id":root+":tick:1000000","parent_release_id":root,
++		"root_skill_id":"hc.skill.wizard.ice_storm","generation":0,"maximum_generation":1}
++	check(Batch._lineage_valid(lineage,lineage.release_id,"hc.skill.wizard.ice_storm","periodic"),
++		"generation-zero periodic work has its own release identity while preserving the root")
++	check(not Batch._lineage_valid(lineage,lineage.release_id,"hc.skill.wizard.ice_storm","direct"),
++		"a unique periodic label cannot masquerade as the root direct producer")
++	var bad:=lineage.duplicate(true); bad.parent_release_id=""
++	check(not Batch._lineage_valid(bad,bad.release_id,"hc.skill.wizard.ice_storm","periodic"),
++		"periodic work must identify the status-producing parent")
++	var alias:=lineage.duplicate(true); alias.release_id=root; alias.parent_release_id=""
++	check(not Batch._lineage_valid(alias,root,"hc.skill.wizard.ice_storm","periodic"),
++		"a periodic tick cannot reuse the root direct release identity")
++	var binding: Dictionary={}
++	for candidate: Dictionary in bindings:
++		if candidate.definition.handler_id==Death.ID: binding=candidate.duplicate(true)
++	check(not binding.is_empty(),"pure handler unit uses the formal registered death definition")
++	if not binding.is_empty():
++		binding.definition.source_classes=["direct","periodic","child"]
++		var fact := {"contract_id":"hardcore.combat.damage_fact.v1","fact_id":lineage.release_id+":hp:0",
++			"release_id":lineage.release_id,"skill_id":"hc.skill.wizard.ice_storm","source_class":"periodic",
++			"damage_channel":"magic_defense","target_survived_commit":false,
++			"hp_before":5,"hp_after":0,"actual_loss":5,"requested_damage":10,
++			"historical_credit":{"profile_id":"identity-credit"},
++			"target":{"world":world.capture_world(),"runtime_id":1,"life_generation":1},
++			"commit_ground_origin":{"x":1.0,"y":2.0},"chain_context":lineage}
++		var commands: Array=Death.commands(fact,binding)
++		check(commands.size()==1 and commands[0].parent_release_id==lineage.release_id
++			and commands[0].generation==1 and commands[0].root_release_id==root,
++			"fatal periodic fact preserves its unique parent and advances child generation once")
++		if commands.size()==1:
++			var command: Dictionary=commands[0]
++			check(command.get("parent_source_class")=="periodic",
++				"a periodic child explicitly names its parent producer variant")
++			var made: Dictionary=Child.create(command,world,root+":child:after_tick")
++			check(made.success,"a typed generation-one periodic parent enters the existing child request owner")
++			if made.success:
++				check(made.request.child_action_lease.chain_context().parent_release_id==lineage.release_id,
++					"the child request preserves the exact tick parent rather than rewriting it to the root")
++			var missing: Dictionary=command.duplicate(true); missing.erase("parent_source_class")
++			check(not Child.create(missing,world,root+":child:missing_type").success,
++				"an untyped generation-one non-root parent cannot impersonate the old direct variant")
++			var wrong: Dictionary=command.duplicate(true); wrong.parent_source_class="direct"
++			check(not Child.create(wrong,world,root+":child:wrong_type").success,
++				"a wrong explicit parent type cannot broaden child request identity")
++			var aliased: Dictionary=command.duplicate(true); aliased.parent_release_id=root
++			aliased.parent_fact_id=root+":hp:0"
++			check(not Child.create(aliased,world,root+":child:aliased").success,
++				"an explicit periodic parent may never reuse the root direct identity")
++		fact.target_survived_commit=true; fact.hp_before=10; fact.hp_after=5
++		check(Death.commands(fact,binding).is_empty(),"a nonfatal periodic fact produces no death child")
++		fact.target_survived_commit=false; fact.hp_before=5; fact.hp_after=0
++		fact.chain_context=alias; fact.release_id=root
++		check(Death.commands(fact,binding).is_empty(),"pure death handler also rejects an aliased periodic root identity")
++	check(not runtime.has_work() and runtime.errors.is_empty(),"all identity probes retire without HP or hidden runtime work")
++	check(ContentLayers.reload_feature_catalog(),"identity-only owner restores the formal registry")
++	_finish()
++
++func _reject_without_stealing(mode: int) -> void:
++	var root: String="identity:root:"+str(mode)
++	var ticket: RefCounted=runtime.reserve_action("hc.skill.wizard.ice_storm",bindings,1,root,1)
++	check(ticket!=null,"identity probe has an actual accepted reservation: "+str(mode))
++	if ticket==null: return
++	var canonical: Dictionary=ticket.chain_context(root)
++	check(canonical.is_read_only(),"published lineage cannot mutate the runtime-owned producer authority: "+str(mode))
++	var supplied: Dictionary=canonical.duplicate(true)
++	var source_class := "direct"
++	if mode==0: supplied.maximum_generation=2
++	elif mode==1: supplied={}
++	else: source_class="periodic"
++	var before: Dictionary=runtime.reservation_snapshot()
++	var wrong: Dictionary=Batch.create(world,root,"hc.skill.wizard.ice_storm",bindings,{},0,ticket,null,supplied,source_class)
++	check(not wrong.success,"wrong lineage/source is rejected before producer claim: "+str(mode))
++	check(ticket.can_begin_release(root) and runtime.reservation_snapshot()==before,
++		"rejected caller preserves the legitimate unique qualification and all promises: "+str(mode))
++	var valid: Dictionary=Batch.create(world,root,"hc.skill.wizard.ice_storm",bindings,{},0,ticket,null,canonical)
++	check(valid.success and valid.batch.requires_commit_context(),"the original legitimate producer still succeeds exactly once: "+str(mode))
++	if valid.success:
++		var duplicate: Dictionary=Batch.create(world,root,"hc.skill.wizard.ice_storm",bindings,{},0,ticket,null,canonical)
++		check(not duplicate.success,"a consumed producer cannot be claimed twice: "+str(mode))
++		valid.batch.finish_production()
++	if wrong.success: wrong.batch.finish_production()
++	ticket.close()
++	check(runtime.reservation_snapshot().actions==0,"identity probe has no newly retained writer, batch or root: "+str(mode))
++
++func _finish() -> void:
++	var written:=proof.write_receipt("periodic_producer_identity_test",proof.records.size(),errors.size())
++	print("PERIODIC_PRODUCER_IDENTITY_",("PASS" if written and errors.is_empty() else "FAIL")," checks=",proof.records.size()," errors=",errors)
++	get_tree().quit(0 if written and errors.is_empty() else 1)
+diff --git a/tests/framework/periodic_producer_identity_test.tscn b/tests/framework/periodic_producer_identity_test.tscn
+new file mode 100644
+index 000000000..ea16dca62
+--- /dev/null
++++ b/tests/framework/periodic_producer_identity_test.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/periodic_producer_identity_test.gd" id="1"]
++
++[node name="PeriodicProducerIdentityTest" type="Node"]
++script = ExtResource("1")
+diff --git a/tests/framework/periodic_refresh_horizon_test.gd b/tests/framework/periodic_refresh_horizon_test.gd
+new file mode 100644
+index 000000000..d103e74cf
+--- /dev/null
++++ b/tests/framework/periodic_refresh_horizon_test.gd
+@@ -0,0 +1,151 @@
++extends Node
++
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const Enemy := preload("res://scripts/enemy.gd")
++const Player := preload("res://scripts/player.gd")
++const World := preload("res://scripts/layers/runtime/execution/world_context.gd")
++const Clock := preload("res://scripts/layers/runtime/execution/time_domains.gd")
++const Combat := preload("res://scripts/layers/runtime/combat_runtime_service.gd")
++const Runtime := preload("res://scripts/features/runtime/effect_runtime.gd")
++const Batch := preload("res://scripts/features/runtime/damage_batch.gd")
++var _zone_generation := 1
++var current_map_id := 910003
++var proof := Proof.new()
++var errors: Array[String] = []
++var world: RefCounted
++var clock: RefCounted
++var runtime: RefCounted
++var bindings: Array = []
++var target: EnemyActor
++var source_a: PlayerCharacter
++var source_b: PlayerCharacter
++
++class ObservedEnemy extends Enemy:
++	var periodic_calls := 0
++	var last_credit: Dictionary = {}
++	var periodic_release_ids: Dictionary = {}
++	func take_feature_periodic_damage(amount: int, attacker: Node2D, credit: Dictionary, receipt: Dictionary) -> void:
++		periodic_calls+=1; last_credit=credit.duplicate(true)
++		super.take_feature_periodic_damage(amount,attacker,credit,receipt)
++	func take_feature_periodic_chain_damage(amount: int, attacker: Node2D, credit: Dictionary,
++		receipt: Dictionary, batch: RefCounted) -> void:
++		periodic_calls+=1; last_credit=credit.duplicate(true)
++		periodic_release_ids[batch.chain_context().release_id]=true
++		super.take_feature_periodic_chain_damage(amount,attacker,credit,receipt,batch)
++
++func _ready() -> void: _run.call_deferred()
++func check(value: bool,label: String) -> void:
++	proof.record(value,label)
++	if not value: errors.append(label)
++func _ground_to_screen(value: Vector2) -> Vector2: return value*10.0
++func _screen_to_ground(value: Vector2) -> Vector2: return value/10.0
++
++func _unexpected_child(_request: Dictionary, _ticket: RefCounted, _bindings: Array,
++	_source: Node2D, _resources: RefCounted) -> Dictionary:
++	check(false,"nonfatal refresh horizon creates no child work")
++	return {"success":false,"reason":"horizon_test_has_no_fatal_child"}
++
++func _run() -> void:
++	PlayerState.test_mode=true; PlayerState.reset_progress(false)
++	PlayerState.active_profile_id="periodic-refresh-horizon"
++	await _case(false)
++	await _case(true)
++	_finish()
++
++func _case(periodic_chain: bool) -> void:
++	_zone_generation+=1
++	var module_id: String="hc.validation.periodic_chain" if periodic_chain else "hc.validation.state_loan_lifetime"
++	var path: String="res://assets/data/features/validation/periodic_chain_registry.json" if periodic_chain \
++		else "res://assets/data/features/validation/state_loan_lifetime_registry.json"
++	check(ContentLayers.reload_feature_catalog(path) and ContentLayers.set_feature_module_enabled(module_id,true),
++		"formal module preserves the original four-second period contract: "+module_id)
++	bindings=PlayerState.feature_bundle().event_index.get("damage_committed:hc.skill.wizard.ice_storm",[])
++	check(bindings.size()==2,"horizon unit uses actual compiled bindings rather than a fabricated periodic producer")
++	if bindings.size()!=2: return
++	world=World.new(); world.configure(self,PlayerState)
++	clock=Clock.new(); clock.configure(self)
++	var combat:=Combat.new(); add_child(combat)
++	source_a=Player.new(); add_child(source_a); source_a.set_physics_process(false)
++	source_b=Player.new(); add_child(source_b); source_b.set_physics_process(false)
++	check(source_a.begin_combat_transition("horizon:A") and source_a.finish_combat_transition("horizon:A")
++		and source_b.begin_combat_transition("horizon:B") and source_b.finish_combat_transition("horizon:B"),
++		"actual source lifetimes are entered by the existing transition service")
++	target=ObservedEnemy.new(); target.setup(GameData.get_monster_by_id(19),null); add_child(target)
++	target.set_physics_process(false)
++	target.configure_runtime_map_projection(current_map_id,_ground_to_screen,_screen_to_ground)
++	target.set_combat_position(_ground_to_screen(Vector2(1,0)),&"periodic_horizon_unit_position")
++	target.max_hp=5000; target.current_hp=5000
++	target.direct_spell_anti_magic_points=0
++	target.direct_spell_magic_defense_min=0; target.direct_spell_magic_defense_max=0
++	target.direct_spell_stats_valid=true
++	runtime=Runtime.new()
++	check(runtime.configure(world,clock,combat) and runtime.configure_child_executor(_unexpected_child),
++		"existing runtime and real Combat HP port own the diagnostic")
++	check(_submit("horizon:A",10,source_a,"A"),"first accepted root creates its real ten-point periodic state")
++	await _pump()
++	var state: Dictionary=runtime._states.values()[0]
++	check(state.next_due==1000000 and state.expires==4000000 and target.current_hp==4990,
++		"original phase and expiry begin at one and four simulation seconds")
++	check(clock.advance_simulation(100.0),"test-owned simulation advance exposes a controlled overdue state")
++	check(_submit("horizon:B",1,source_b,"B"),"later accepted root commits a weaker refresh through the same real HP chain")
++	# Observe the committed refresh before the existing pump can consume old due
++	# work. This is an explicit unit observation, not another gameplay scheduler.
++	runtime._dispatch_one_fact()
++	check(runtime.active_count()==1 and runtime.heap_count()==1 and state.next_due==1000000
++		and state.expires==104000000 and state.raw_per_tick==10 and state.chain_owners.size()==2,
++		"strongest_keep_phase preserves the old due time and extends the shared accepted horizon")
++	if periodic_chain:
++		check(ContentLayers.set_feature_module_enabled(module_id,false),"accepted periodic horizon survives formal source withdrawal")
++		source_a.queue_free(); await get_tree().process_frame
++	await _pump()
++	check(target.periodic_calls==100 and target.current_hp==3989,
++		"the real port delivers all hundred overdue original-phase ticks without a hidden max_ticks cap")
++	check(state.next_due==101000000 and state.expires==104000000,
++		"remaining four ticks retain the original one-second phase")
++	check(clock.advance_simulation(4.0),"simulation reaches the last refreshed expiry boundary")
++	await _pump()
++	check(target.periodic_calls==104 and target.current_hp==3949,
++		"all 104 owed ticks commit exact HP, exceeding the two independent authored four-tick durations")
++	check(target.last_credit.get("marker")=="A", "stronger original raw and historical credit survive the weaker new accepted refresh")
++	if periodic_chain:
++		check(target.periodic_release_ids.size()==104 and runtime.metrics().admitted_facts==106,
++			"all 104 distinct periodic facts reuse the original resident promise without spending the direct/child cumulative quota")
++		check(runtime.metrics().peak_receipts<=4,"104 periodic identities keep dedup receipt residency within the accepted four-slot root pool")
++	check(runtime.metrics().tick_delivery_count==104 and runtime.metrics().maximum_tick_delivery_lateness_usec==99000000,
++		"diagnostic explicitly retains actual overdue lateness rather than calling this a service-deadline PASS")
++	var empty:=true
++	for count: int in runtime.reservation_snapshot().values(): empty=empty and count==0
++	check(empty and not runtime.has_work() and runtime.errors.is_empty(),"all original and refresh owners retire only after the shared work horizon ends")
++	print("PERIODIC_REFRESH_HORIZON_OBSERVATION ",JSON.stringify({"authored_ticks_per_application":4,
++		"accepted_applications":2,"actual_tick_deliveries":runtime.metrics().tick_delivery_count,
++		"actual_hp":target.current_hp,"maximum_actual_lateness_usec":runtime.metrics().maximum_tick_delivery_lateness_usec,
++		"periodic_chain":periodic_chain,"scope":"controlled real-HP overdue unit; not natural cadence or Root admission acceptance"}))
++	check(ContentLayers.reload_feature_catalog(),"diagnostic owner restores the formal default registry")
++	target.queue_free()
++	if is_instance_valid(source_a): source_a.queue_free()
++	source_b.queue_free(); combat.queue_free(); await get_tree().process_frame
++
++func _submit(release: String,amount: int,source: Node2D,marker: String) -> bool:
++	var ticket: RefCounted=runtime.reserve_action("hc.skill.wizard.ice_storm",bindings,1,release,1)
++	if ticket==null: return false
++	var made:=Batch.create(world,release,"hc.skill.wizard.ice_storm",bindings,
++		{"profile_id":PlayerState.active_profile_id,"marker":marker},clock.simulation_usec(),ticket,null,ticket.chain_context(release))
++	if not made.success: ticket.close(); return false
++	var batch: RefCounted=made.batch
++	if not batch.begin_base_scope(): batch.finish_production(); return false
++	target.take_damage(amount,source,{"feature_damage_batch":batch,"source_class":"direct","damage_channel":"magic_defense"})
++	var success: bool=batch.finish_base_scope() and runtime.submit_batch(batch)
++	batch.finish_production()
++	return success
++
++func _pump() -> void:
++	for iteration in range(200):
++		runtime.pump()
++		if runtime.pending_count()==0 and runtime.child_count()==0 and not runtime.has_due(): return
++		await get_tree().process_frame
++	check(false,"bounded real consumer completes the diagnostic")
++
++func _finish() -> void:
++	var written:=proof.write_receipt("periodic_refresh_horizon_test",proof.records.size(),errors.size())
++	print("PERIODIC_REFRESH_HORIZON_",("PASS" if written and errors.is_empty() else "FAIL")," checks=",proof.records.size()," errors=",errors)
++	get_tree().quit(0 if written and errors.is_empty() else 1)
+diff --git a/tests/framework/periodic_refresh_horizon_test.tscn b/tests/framework/periodic_refresh_horizon_test.tscn
+new file mode 100644
+index 000000000..4b5f12c2d
+--- /dev/null
++++ b/tests/framework/periodic_refresh_horizon_test.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/periodic_refresh_horizon_test.gd" id="1"]
++
++[node name="PeriodicRefreshHorizonTest" type="Node"]
++script = ExtResource("1")

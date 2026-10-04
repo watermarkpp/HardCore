@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "read_utc": "2026-10-04T16:14:40.205220+00:00",
+  "classification": "Fixture chose bindings[0] as ordinary ignite, but compiled event order puts death first; this is a finite chain ticket and requires lineage. Original 33/2 native FAIL retained; select registered ignite handler explicitly, keep assertions.",
+  "checks": 33,
+  "failed_checks": 2,
+  "failure_checks": [
+    {
+      "id": 28,
+      "label": "a non-chain reservation stays on the original full binding validation path",
+      "passed": false
+    },
+    {
+      "id": 29,
+      "label": "the ordinary reserved batch remains compatible",
+      "passed": false
+    }
+  ],
+  "run_id": "da21d1d5-5e25-43be-89f0-c9d9ff36f606",
+  "invocation_id": "e476ec39-0a59-46c7-a0ca-9e7fd0713630",
+  "source_content_sha256": "655c80be5347ae1510bd7659ba0280fe1eb453f3845076fbca3734b0187f4eb4",
+  "evidence": "outputs\\r3_takeover\\20260930\\validation\\accepted_binding_snapshot_green_20261005_001248_084478"
+}

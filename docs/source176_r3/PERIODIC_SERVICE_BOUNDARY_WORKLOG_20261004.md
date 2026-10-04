@@ -1,0 +1,27 @@
+# 周期累计工作与量子诊断
+
+2026-10-04，原Task4继续。遵守用户刷新决策：已有状态保留首次接受的周期和phase，刷新增强数值、延长时限。新增专项仅用明确测试配置和真实Compiler／Runtime／Combat／Enemy HP／预算，不修改正式玩法、限目标、截tick、合并伤害或回滚HP。
+
+## 已固定反例和边界
+
+periodic_dispatch_service_characterization_20261004_1505_230828_815284，受测内容80866f1974d564ac4fd63e237bcca27d375804e4e796cb4af5993c17ba578a32。三个native均FAIL：新专项完整37检查／3FAIL、正常exit1；两mixed误用30秒而超时，旧receipt因run/source不符被正确拒绝。历史mixed有效GREEN实际是60秒窗口，各约37秒，本次将恢复该已知重场景窗口，不改变16组负载或断言，不把超时归为已确证生产退步。
+
+新专项实际原生确认两个单独max_ticks=4的作者配置可以在受控Runtime接入中形成更长共用horizon：原周期1000us配长刷新后总4000tick；原周期1us配长刷新后总4000000tick。它不是活世界正式目录替换的自然UI复现；生产publisher的目录生命周期约束仍须单独映射，不能把两个独立max_ticks直接相加当完整累计上界。
+
+首次第一案例受新夹具8秒局部等待限制，仅完成2231／4000，实际HP1977679，剩余1769尚未交付；三个完整量／HP／退休断言FAIL保留。第二案例有界抽样1024次实际HP、独立tick身份通过，剩余3998976未来tick由两个合法根持有，再由本测试明确退休自身world取消，未把这些未来tick算作交付。
+
+原始trace有一处报告字段错误：fully_drained表示原计划“要求全量”的案例，而非实际完成，导致失败第一案例仍写true／future_ticks_not_run=0。原trace不改，已按同run/source/invocation归档为service_diagnostic_original.trace.json；后续trace改为同时记录计划与实际、按真实已投递量报告剩余。完整复核和失败分类在outputs/framework_v2/periodic_dispatch_20261004/SERVICE_INITIAL_FAILURE_CLASSIFICATION.json。
+
+预算保持1200us且每次pump scope闭合。首次案例最大观测quantum10365us／epoch超额9165us；第二案例1662us／1375us，均原样保留，不将其写成最坏确定上界。此处刻意推进模拟钟形成积压，实际迟到3999000us／1023us不代表自然截止时间通过。完成量诊断本身需要充分收尾窗口，下一运行使用已知重场景60秒原生限制和20秒局部等待；原8秒失败不能借新窗口改称性能提升。
+
+## 完成量基线复核
+
+2026-10-04 15:49 UTC：periodic_dispatch_service_complete_20261004_1536_233609_394255 已终态。内容 fa554a647d48d0fe644c59a37e7fb6cf087ebe25efd74b4a9bab34279f00c7e9，3780 文件运行前后及当前字节一致，引擎 SHA d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c。三个原生 exit0，完整 37／380／388 检查合计805项通过，同 invocation 9842699f-5f16-4f57-9d33-0a0c418d28b2；两组 mixed 仍是原16组合、受控真实物品／writer／Root生产API链。
+
+第一案例4000次实际HP交付并退休，诊断泵阶段墙钟13840626us／2008 epoch；第二案例仅1024次有界交付，墙钟3543383us／516 epoch，剩余3998976未来工作由测试明确退出世界取消。最大观测quantum分别1614／1374us，epoch超额1334／1053us。模拟钟刻意形成积压，迟到3999000／1023us均保留；deadline_acceptance 仍为 NOT_RUN。新增完成量通过不能把原8秒窗口失败改称通过或性能提升，也不能用两次不同窗口的最大值差异宣称优化。
+
+主控逐项复核source、run／invocation、APPDATA、全部检查、原生终态、日志和三份trace，并归档当前trace至本轮原生目录；证据为outputs/framework_v2/periodic_dispatch_20261004/SERVICE_COMPLETE_ASSOCIATIONS.json。两组mixed各有一条ObjectDB泄漏warning，原样保留，内存／自然性能门禁未关闭。
+
+## 下一步
+
+复跑全部原始工作量，核对真实完成和退休；检查周期Batch反复执行的配置验证与声明权威构建。若使用既有接受阶段的不可变binding证明复用，必须由原runtime／非空票据验证同一world、release、skill、binding和唯一资格，不引入第二planner／HP／writer，不允许旧或错误票据借用。优化必须有相同工作量的前后比较及篡改／错误ID／已消费／换world反例，不能只凭调用点表或单次墙钟认定。自然P6R3和最坏child quantum仍开放，整体Task4不关闭。

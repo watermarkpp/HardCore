@@ -315,7 +315,8 @@ static func _mechanic_valid(value: Dictionary, module: Dictionary, authority: Di
 				if permission not in module.capabilities: errors.append("missing_trigger_permission:"+permission)
 			if value.event != "damage_committed" or value.skill_id not in authority.skill_ids:
 				errors.append("unknown_trigger_event_or_skill")
-			var chain_sources: bool = value.handler_id == "hc.death_burst.v1" and value.source_classes == ["direct","child"]
+			var chain_sources: bool = value.handler_id == "hc.death_burst.v1" \
+				and value.source_classes in [["direct","child"],["direct","periodic","child"]]
 			var child_status_sources: bool = value.handler_id == "hc.ignite.v1" and value.source_classes == ["direct","child"]
 			if (value.source_classes != ["direct"] and not chain_sources and not child_status_sources) or value.dedup != "per_target_per_release":
 				errors.append("unsupported_trigger_chain")

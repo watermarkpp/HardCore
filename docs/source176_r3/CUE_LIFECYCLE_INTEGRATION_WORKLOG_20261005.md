@@ -1,0 +1,37 @@
+# Cue生命周期接入与同源码回归
+
+核验时间：2026-10-04 18:05 UTC（2026-10-05 Asia/Shanghai）。主控仅在第三树接入小可爱已冻结的独占交付，保持主树、第二树、真实存档及真实Git index。此记录只覆盖本增量，不关闭整体架构、P6/R3或APK验收。
+
+## 交付来源与生产修复
+
+官方原对话01a105ca-8368-7014-aa20-f97fbcf9300b，交付来源turn 01a107ff-f55c-75c0-b576-b739130f5226／item exec-20827de2-adf3-463c-956e-92d39bc459a3；四个执行ID补充来源turn 01a10800-dfc7-727b-b0d8-cff259bf668f／item exec-4fc895c0-eab3-44f8-b585-8a42edea4d51。完整已读正文及读取时间存于outputs/framework_v2/cue_lifecycle_integration_20261005/PEER_FINAL_HANDOFF_READ.json。
+
+执行者独立基线2c58552d2d905eea1f5c13d38685f66c489b092c，交接manifest SHA256 2df67d117180e6b1f4bb321c39f3efe429ebce5cf6554c231fa5b3405fcba966、补丁575c98dfcf917cf87866a115ba91932e42739430010ef20c75b5b1e64eb039d6、原工作日志a8584079f75dd9d8f9d50b3b91423519e7e2c1d0df259bbaf4eeaa3871f58369。主控完整核验对方RED/GREEN原生回执、字节及唯一生产差异，记录CUE_PEER_RED_GREEN_CHECK.json；对方11场额外回归未运行，不把主控回归数量替作其本人实测。
+
+原缺陷：actor.add_child(cue)的同步入树通知可调用runtime.clear；旧代码此时尚未登记Cue，退休无法找到在途节点，返回后又登记并开始已退休来源的音频。主控沿真实调用链核验，并在当前第三树独立复现。最小修改仅presentation_port.gd：在attach前登记所有权，attach返回后检查相同Cue仍有效、仍归属该handle且未queued-free，再播放音频。ignite_cue.gd未修改；不改变周期、HP、MP、RNG或释放权规则，不新增业务ID。
+
+主控原位LF文件修复前SHA256 42d739f68e2836cd7e1d88d87ca66693b40d25fdcedc0831c31051f44ba5549e，修复后1bbc8749b7bcf05adcc83b05105fab42df4499eee7ef89b09aeee1393501385c。对方CRLF原字节不同，归一换行后旧源及补丁一致；原始哈希分别保留，不冒称原字节相同。主控原位备份在outputs/framework_v2/cue_lifecycle_integration_20261005/before。
+
+## 当前树RED与GREEN
+
+cue_integration_red_013019_415775：普通23项PASS／exit0；重入19项中4项FAIL／exit1。原运行源码a460d5b98fed42e4cda3a81c2106890601b14c3195b375f524f2680c2861ab43，3785运行文件；重入run f912c447-70de-4dcb-aaa8-aee30503d1e6。失败分别为退休后晚注册Cue、旧音频开始／登记、deferred后节点未销毁和最后资源lease仍存活。原失败完整保留，测试断言未放宽。
+
+cue_integration_green_013343_994491：相同两场23＋19＝42项全部PASS／exit0。测试包含真实Root/Player起手、非空容量票据、资源lease及AudioStreamPlayer；重入由受控child_entered_tree调用触发，不称自然UI复现。常规queued-free、相同slot新life和到期边界的旧状态／音频／资源退休均有有界证据。
+
+## 最终同源码关联
+
+运行内容指纹04d29b688db3419bd9e19a7161f9d9a36b32d37f5fcad4fffedaec4fdaae577a，3785运行文件。三个连续批次均在相同字节执行且before／after完全相同；主控再计算全部3785文件一致。引擎4.7.stable.official.5b4e0cb0f，console SHA256 d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c。
+
+- periodic_cue_final_world_013906_604728：8场／396完整检查。四组live/cold各自绑定本轮producer、invocation、源码与原生成功handoff；natural live当前回执为137项，旧135项阶段数量不用于本轮总算。
+- periodic_cue_final_mixed_service_014147_190573：3场／805检查。两组正式词缀／宝石／符文来源组合及子资源消费通过，另保留原工作量4000实际交付和1024抽样；刻意积压服务夹具不作为自然截止时间通过。
+- periodic_cue_final_related_014327_801663：28场／937检查，包括两场Cue回归及当前签发者加固。全部原生退出0、无超时、完整receipt连续检查ID和唯一run身份一致。
+
+合计39唯一场景／2138完整检查PASS。证据索引outputs/framework_v2/cue_lifecycle_integration_20261005/FINAL_ASSOCIATIONS.json逐场保存run／invocation／source／引擎／原生exit、隔离APPDATA、receipt和117原始日志哈希；6个当前trace及4份producer期望另按正确身份存档。wrapper复制的历史trace明确排除，不将旧记录混作本轮证据。
+
+17个唯一stderr场景保留退出WARNING。其中feature_state_loan_lifetime_test原始stderr另有“5 resources still in use at exit”诊断，既有runner允许该明确退出诊断，业务及原生结果均PASS；主控证据门禁只认可这一精确已有诊断，所有其他ERROR和SCRIPT ERROR仍拒绝。资源／退出生命周期根因仍开放，不写无错误、无泄漏或无限耐久通过；未修改runner allowlist。
+
+## 未覆盖与后续
+
+实际音频池复用后旧回调、同handle替代Cue、GPU像素和Android仍NOT_RUN；没有从受控CanvasItem／AudioStream测试推断设备表现。Task3更广表现／资源、Task4生产可达累计工作与最坏量子、Task5持续自然P6/R3和最终固定源码双审计继续。原地图formal respawn政策FAIL、原v97 B输入MISSING及旧设备基线分别保留。
+
+同次只读APK准备核验确认既有v97包488711865 bytes、SHA256 02e3e86d90f2437c64f211a83e052578a728eef53d4912c80fae8867c5c90cdd，包ID com.personal.mafaoffline、versionCode 97、arm64-v8a、targetSdk36，apksigner校验exit0。现有安卓工具链位于主仓库tools/android-build；第三树构建需显式指定该现有路径。记录APK_BASELINE_PUBLIC_PREFLIGHT.json包含公开签名指纹。当前导出预设旧versionCode82，后续在正式隔离构建阶段提高版本并核对同签名，不修改主树预设。尚未构建新APK，DEVICE TEST: NOT_RUN。

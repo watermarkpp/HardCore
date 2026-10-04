@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/framework/feature_cue_actor_retirement_test.gd" id="1"]
+
+[node name="FeatureCueActorRetirementReentryTest" type="Node"]
+script = ExtResource("1")
+retire_during_cue_attach = true

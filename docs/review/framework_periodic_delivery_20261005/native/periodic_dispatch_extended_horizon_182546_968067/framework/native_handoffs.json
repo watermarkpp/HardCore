@@ -1,0 +1,39 @@
+{
+    "schema_version":  1,
+    "runtime_environment":  {
+                                "project_root":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+                                "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_extended_horizon_f8af641a75a54401854eaa70b05e30a5",
+                                "runner_process_id":  23512
+                            },
+    "invocation_id":  "a30f81b2-d58a-4610-a1e8-c8d3cf9762f9",
+    "source_content_sha256":  "0b42b4fe7fa85d6f7fb8521d6b689b3ad28b414df92e968c2ee25d3157bc862c",
+    "producers":  {
+                      "periodic_refresh_horizon_test":  {
+                                                            "scene_id":  "periodic_refresh_horizon_test",
+                                                            "run_id":  "8e7bc70b-643f-4003-9340-81514a2b2f77",
+                                                            "source_content_sha256":  "0b42b4fe7fa85d6f7fb8521d6b689b3ad28b414df92e968c2ee25d3157bc862c",
+                                                            "process_exited":  true,
+                                                            "effective_exit_code":  0,
+                                                            "result":  "PASS",
+                                                            "receipt_sha256":  "3308ed6a78ea425499c65a007f8c057598c125f3b72eaa214cb2d4b03b02c9ae"
+                                                        },
+                      "periodic_dispatch_lifecycle_test":  {
+                                                               "scene_id":  "periodic_dispatch_lifecycle_test",
+                                                               "run_id":  "70bf2d59-df5c-4b04-870c-237f746b42f1",
+                                                               "source_content_sha256":  "0b42b4fe7fa85d6f7fb8521d6b689b3ad28b414df92e968c2ee25d3157bc862c",
+                                                               "process_exited":  true,
+                                                               "effective_exit_code":  0,
+                                                               "result":  "PASS",
+                                                               "receipt_sha256":  "6c93ebcadb2ac63f6100ae04183997940efedd80cc427e15a297aed4cd350c04"
+                                                           },
+                      "periodic_child_root_test":  {
+                                                       "scene_id":  "periodic_child_root_test",
+                                                       "run_id":  "a18ad2fe-054a-435a-b716-0fabe6a63a0c",
+                                                       "source_content_sha256":  "0b42b4fe7fa85d6f7fb8521d6b689b3ad28b414df92e968c2ee25d3157bc862c",
+                                                       "process_exited":  true,
+                                                       "effective_exit_code":  0,
+                                                       "result":  "PASS",
+                                                       "receipt_sha256":  "a19eb415f860e444c59fd35288bcbaa65213c2c040d8cf2d4cacea5381663dd2"
+                                                   }
+                  }
+}

@@ -1,0 +1,56 @@
+{
+  "task": "TASK_ID periodic-delivery-id-table-16-20261005. CANDIDATE_EVIDENCE only. Read ONLY the ten supplied JSON file ranges. Perform mechanical ID/table comparison, no engineering or gameplay analysis, no commands, writes, extra files or external search. Return JSON: task_id; file_count; unique module_ids declared by module files; module_count; mechanic_count and each [module_id,mechanic_id]; duplicate declared module/mechanic IDs; registry bindings whose module_id is among supplied declared module IDs as [registry_path,module_id,mechanic_id]; orphan bindings only within those supplied modules; modules with default_enabled other than false; unknown external module/path references listed as excluded input, not guessed missing. Include exact supplied paths/line ranges. Do not interpret dependencies, authority, production behavior, tests or acceptance.",
+  "files": [
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\assets\\data\\features\\validation\\periodic_chain.json",
+      "start_line": 1,
+      "end_line": 18
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\assets\\data\\features\\validation\\periodic_chain_registry.json",
+      "start_line": 1,
+      "end_line": 8
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\assets\\data\\features\\validation\\periodic_chain_g2.json",
+      "start_line": 1,
+      "end_line": 18
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\assets\\data\\features\\validation\\periodic_chain_g2_registry.json",
+      "start_line": 1,
+      "end_line": 8
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\assets\\data\\features\\templates\\numeric_skills.json",
+      "start_line": 1,
+      "end_line": 32
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\assets\\data\\features\\templates\\direct_ignite.json",
+      "start_line": 1,
+      "end_line": 30
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\assets\\data\\features\\templates\\finite_chain.json",
+      "start_line": 1,
+      "end_line": 42
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\assets\\data\\features\\templates\\template_registry.json",
+      "start_line": 1,
+      "end_line": 15
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\assets\\data\\features\\validation\\mixed_delivery_chain.json",
+      "start_line": 1,
+      "end_line": 43
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\assets\\data\\features\\validation\\mixed_delivery_registry.json",
+      "start_line": 1,
+      "end_line": 21
+    }
+  ],
+  "max_output_tokens": 16384
+}

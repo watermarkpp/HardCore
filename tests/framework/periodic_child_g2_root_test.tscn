@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/framework/periodic_child_root_test.gd" id="1"]
+
+[node name="PeriodicChildG2RootTest" type="Node"]
+script = ExtResource("1")
+chain_depth = 2

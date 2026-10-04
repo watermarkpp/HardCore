@@ -31,8 +31,13 @@ func start(handle: String, target: RefCounted, command: Dictionary, resources: R
 	var cue := Cue.new()
 	cue.effect_handle = handle; cue.actor_ref = target; cue.strength = int(command.raw_per_tick)
 	if not requirements.paths.is_empty(): cue.resource_lease = resources
-	actor.add_child(cue)
+	# Tree-entry notifications may synchronously retire or replace this onset.
+	# Publish ownership before attaching, then qualify it again before audio.
 	_nodes[handle] = weakref(cue)
+	actor.add_child(cue)
+	if not is_instance_valid(cue) or not _nodes.has(handle) \
+		or not is_same(_nodes[handle].get_ref(), cue) or cue.is_queued_for_deletion():
+		return true
 	for record: Dictionary in requirements.records:
 		var request: Dictionary = audio.play_prepared_event(record.origin.event_id,resources.resource_at(record.path),
 			{"feature_effect_handle":handle,"audio_owner_key":handle,"release_id":str(cue.get_instance_id())})

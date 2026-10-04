@@ -1,0 +1,52 @@
+# 接受阶段绑定证明与周期结算开销
+
+继续既定Task4，主控串行，第三树施工；不改玩法周期、刷新规则、伤害、输入、RNG、HP/planner/writer权威。没有新增稳定业务ID。三个生产文件在施工前已逐字节备份于outputs/framework_v2/periodic_dispatch_20261004/accepted_binding_snapshot/before。
+
+## 原始路径和反例
+
+reserve_action已经完整validate_bindings，再用PlainGraph保存递归只读绑定。周期分支由原runtime根据这个根的已接受状态、根序号和next_due生成唯一票据，DamageBatch.create每次又构建FeatureAuthority并重复全量定义验证。根接受、实际分支资格和伤害提交仍需逐次验证；可复用的仅是完全相同的冻结绑定验证结果。
+
+accepted_binding_snapshot_red_20261005_000223_406798：原生8项完整检查／1 FAIL，exit1、无解析或环境错误；失败是票据缺少非消耗的冻结绑定检查入口。run76fff047-e500-4702-9d26-e750ce1404e2，invocation5b6e0ef3-6a7c-43d1-999e-9e9bd4b02c0b，内容5a02fdffd14807043b427c002797884fb4df86d1fe88fae761c90b8d4d301d23。完整绑定、实际world、Player／Enemy／Combat和容量ticket均在反例中就绪。RED_VERIFIED.json只说明证据核验通过，不改变原生FAIL。
+
+## 原工作量基线
+
+accepted_binding_service_baseline_a2_20261005_000404_657280，同上述内容、3782运行文件和原始三个生产文件：37检查PASS、exit0，run8500e241-3c1a-4f34-b508-f5076fe4d248，invocation0701d738-fdd9-44f5-a618-b868842870fe。4000次真实HP交付：总观测14067963us、实际pump调用内累计4054616us、2041epoch；1024次抽样3535560us／1019053us／515epoch。观察只新增测试持有的标量累计，预算仍1200us，原负载和断言未变。pump内时间也可能包含OS调度，不写CPU-only。
+
+第一案例全量完成，第二案例剩余3998976未来工作由测试退出自身world取消；刻意积压的迟到保留，natural deadline仍NOT_RUN。更早fa554a基线同4000／1024工作量也已通过，原8秒不足的FAIL保留。证据BASELINE_A2_ASSOCIATIONS.json和各原生原始目录。
+
+## 最小候选边界
+
+- effect_reservation增加matches_accepted_bindings，只返回bool，由原runtime核对；不claim、不同步／清理world，也不返回可变内部图。
+- effect_runtime将既有claim资格检查提取为同一只读内部函数；实际claim复用它并且独占改变stage。world／release／skill／绑定必须精确相同，链票据还核对实际签发对象ID、分支状态及原有逐分支容量。非链票据不提供此证明。
+- DamageBatch只对带真实票据的periodic路径复用冻结绑定证明。Graph捕获、技能身份、lineage、资源支持以及最终一次claim仍保留；直接、child、无票据或无法证明的路径仍用完整validate_bindings。不创建全局定义缓存或第二验证权威。
+- 负例覆盖不同world／release／skill、独立合法但已改变数值的绑定、改handle、伪造相同序号对象、已消费／关闭票据和换world查询；错误查询不能改变资格、容量、HP、MP或runtime metrics。实际四次周期伤害核对独立身份及exact-once，并保留普通非链批次兼容。
+
+## GREEN和同负载反向比较
+
+首轮GREEN实际33检查／2 FAIL，exit1，无解析／环境错误；夹具错误地用bindings[0]表示普通ignite。Compiler按source handle排序，死亡binding先于ignite，导致该案例实际持有有限链票据却不提供链上下文。改为精确选择登记hc.ignite.v1并补一条夹具身份断言，原有拒绝／兼容断言保持；原FAIL完整保存于FIRST_GREEN_FAILURE.json。
+
+accepted_binding_snapshot_green_retry_20261005_001440_782367：34检查全PASS、原生exit0；错误world／release／skill／数值／handle／伪造票据、消耗／关闭／换world、随后原合法callback和四次真实周期HP均通过。普通非链票据仍走全量验证并兼容。run a567bed2-349e-46dc-ab51-777866b18a6f，invocation5798929d-9a92-4904-b5ef-df84c44db060，内容5ae89276e58c2bcc937a922cb55354660a6657664e99eadd8df934cb257147b3；完整关联GREEN_ASSOCIATIONS.json。
+
+按A2→B1→B2→A3顺序，同负载两次原实现与两次候选观测，四场均37检查PASS／exit0，全部真实HP、唯一tick数、预算和未来剩余一致。4000交付原实现墙钟[14067963,13943814]us，候选[9713784,9915150]us，两轮均值降低29.93%；pump调用内累计原实现[4054616,4023582]us，候选[2416024,2426122]us，降低40.06%。1024抽样相应墙钟均值降低30.32%，调用内累计降低39.86%。两个样本仅为描述性比较，不给统计置信区间，不写CPU-only。
+
+A2早于另一未加载的accepted_binding_snapshot普通handler夹具修正；A3／B1／B2的差异只应为原位的三个生产候选文件。所有benchmark使用相同service／parent脚本、配置、1200us预算和真实HP链。各指纹／执行ID／原始trace在四份关联JSON及CONTROLLED_COMPARISON.json；反向A3仅在所有原生终态后精确恢复这三个自有文件的原字节，完成后又精确恢复候选，真实index和冻结Streaming保持不变。
+
+34项直接路径和受控开销增量已通过；相关最终同字节回归仍NOT_RUN。natural deadline、完整自然P6R3、最坏原子量子、无限耐久和Android仍未关闭，不能用本次有界改进替代。
+
+## 签发对象加固与当前源码
+
+后续受控反例发现，独立RefCounted可伪造同名证明方法和claim方法，使初版快路径跳过原验证器对max_ticks=0的拒绝。这是原生可证伪的受控入口缺陷，不描述为自然UI故障。accepted_binding_issuer_red_20261005_003948_722770：37检查／2 FAIL、exit1，无解析或环境错误，内容a8ae28de3bd6e8babee2baa7111758da3b1cb33f1441b721953f3ffd277a9161；完整身份与失败检查在ISSUER_RED_ASSOCIATIONS.json。
+
+matches_accepted_bindings现先用正式ResourceLoader取得原EffectRuntime Script，沿实际owner脚本继承链核对签发者。真实runtime及测试继承观察者合法；任意伪造方法对象无法提供快路径证明。完整验证、实际一次claim和原资源／容量资格保持，不放开重复释放。
+
+accepted_binding_issuer_green_20261005_004249_043398：同37项全部PASS、exit0，无引擎错误，当前内容2da0511645338738205df66bb658df973b2be5802f76dac68eff43045d793f3d，run58745048-7625-418a-bd52-94599d73eae0、invocation7084ffeb-995b-4d99-8bc3-d81c7603c804；ISSUER_GREEN_ASSOCIATIONS.json逐文件核对本地最终字节。
+
+同当前内容的accepted_binding_guarded_service_final_20261005_004422_486022：37检查PASS／exit0，run7ddca8a2-c43d-43db-9de8-3cb6deaa48ce、invocation025800a7-db09-4677-b4dd-0a24b83b5536。4000次真实交付总观测10024497us／实际pump内累计2452138us；1024次抽样2494075us／620678us。原HP、唯一身份、预算和未来剩余保持。GUARDED_SERVICE_FINAL_ASSOCIATIONS.json记录最终源码、完整回执和trace。此前两轮A／B比较属于加固前阶段证据；此单轮加固结果不外推统计置信或自然截止时间。
+
+accepted_binding_final_related_20261005_003154_814782的26场景892完整检查／exit0经RELATED_STAGE_ASSOCIATIONS.json核验，但内容5ae892为加固前阶段，不能标为当前2da最终回归。原raw日志及9个场景的退出警告保留，不能按stdout／stderr／godot重复文本计为独立事件。
+
+当前2da最终相关回归accepted_binding_guarded_related_final_010457_952896：26场景895完整检查／零失败／原生exit0，invocation15463c7a-1e30-4605-bc1a-7344e23d0b6e。主控重新计算全部3782运行文件，与本轮before／after一致；逐场完整receipt、连续检查ID、run／invocation／source、原生命令／隔离APPDATA及78原始日志关联均已核验。GUARDED_RELATED_FINAL_ASSOCIATIONS.json记录9个唯一stderr警告场景，警告根因仍开放。当前world／cold及异构资源链回归继续NOT_RUN，不将相关26场景外推整个框架或APK完成。
+
+机械辅助accepted-binding-regression-count-14-20261005通过正式glm_readonly实际完成：服务任务78085af5-87f2-4099-ac0c-53ae1ceacdaa，coding/v3/responses，请求glm-5.3-flash，响应模型字段glm-5-3-flash（身份仍unverified）。16.265秒、usage输入9036／输出843／总9879，complete=true、无截断。唯一文件第1行原字节22904 bytes／SHA256 93fd6e842fae099a21a77978c4e9d32401358438af5073fba8019eaeaafc40ee，26行／892检查、source／invocation／退出及无重复等结果由主控在本地逐项复算一致。正式答复有JSON围栏，按对象核验；源路径相对项目根，CRLF实际字节数与MCP相同。只作为上述历史阶段的CANDIDATE_EVIDENCE，不批准工程或当前最终源码。请求、原始响应、usage和主控复核在outputs/framework_v2/glm_mechanical_20261004/accepted_binding_regression_14*。
+
+2026-10-05后续同字节检查点：独占Cue交付已由主控在当前第三树独立RED→最小整合→GREEN；最终内容04d29b688db3419bd9e19a7161f9d9a36b32d37f5fcad4fffedaec4fdaae577a重新完成世界／cold8场396检查、混合来源／子资源／服务3场805检查、相关28场937检查，共39场2138完整检查。上述2da服务及26相关回归保留为较早阶段，现world／cold和受控混合资源链已有最终字节证据，不再标这些明确场景NOT_RUN。自然持续P6/R3、生产可达最坏累计工作、最坏量子、设备与整体完成仍未关闭。精确关联、6个当前trace、4组producer/cold及原始退出诊断见CUE_LIFECYCLE_INTEGRATION_WORKLOG_20261005.md和FINAL_ASSOCIATIONS.json。

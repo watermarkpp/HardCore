@@ -1,0 +1,87 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "additive then multiplicative skill calculation",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "plain configuration creates lease",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "accepted input graph owns immutable stats",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "current versions match before accept",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "stale preaccept has no committed lease",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "exact identity accepted once",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "second accept rejected",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "accepted lease retains config across later content changes",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "new actor life rejects old release",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "definition is exact registered identity and frozen",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "unregistered or mismatched definition identity cannot create lease",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "ungranted field fails",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "invalid effective numeric range fails",
+      "passed": true
+    }
+  ],
+  "count": 13,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "6d1e3440-8108-4a83-ae40-561f1800c076",
+  "passed": 13,
+  "reported_checks": 13,
+  "reported_failures": 0,
+  "run_id": "7064462d-54c1-4a72-a8ef-4cb30399729e",
+  "runtime_environment": {
+    "native_process_id": 19248,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_final_related_93616bb3cccc42c49ee63967020c5b27",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_dispatch_final_related_93616bb3cccc42c49ee63967020c5b27/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "action_config_lease_test",
+  "schema_version": 1,
+  "source_content_sha256": "678e2ba32a5d9f8e57ff12b37d8810f03131960f63a0f47a35f25ca1562bc41e",
+  "status": "PASS"
+}

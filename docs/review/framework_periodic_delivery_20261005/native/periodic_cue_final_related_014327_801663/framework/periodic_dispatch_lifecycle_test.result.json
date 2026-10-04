@@ -1,0 +1,682 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "explicit default-off periodic module supplies formal immutable bindings",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "protocol unit retains both declared subscriptions",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "baseline enters an actual source lifetime",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "baseline configures one real runtime and HP port",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "baseline reserves the complete root before its base HP",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "baseline claims the actual accepted direct producer",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "baseline transfers one real base fact",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "baseline has one admitted status and no fabricated periodic work",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "HP observer cannot reenter the active consumer or borrow its inline fact",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "baseline preserves the actually committed periodic HP",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "baseline uses the reserved periodic chain port exactly once",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "baseline freezes one distinct tick identity and the original parent",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "baseline delayed old ticket cannot reclaim capacity or create new work",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "baseline delayed consumed batch rejects before RNG and HP",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "HP observer cannot reenter the active consumer or borrow its inline fact",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "baseline consecutive actual ticks cannot reuse a retired receipt identity",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "original accepted historical credit survives later periodic delivery",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "HP observer cannot reenter the active consumer or borrow its inline fact",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "HP observer cannot reenter the active consumer or borrow its inline fact",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "baseline delivers all four authored ticks without extra damage",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "baseline closes every producer state receipt and consumer scope",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "stop_after_fatal enters an actual source lifetime",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "stop_after_fatal configures one real runtime and HP port",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "stop_after_fatal reserves the complete root before its base HP",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "stop_after_fatal claims the actual accepted direct producer",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "stop_after_fatal transfers one real base fact",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "stop_after_fatal has one admitted status and no fabricated periodic work",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "empty unit child retains its actual request-owner capability",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "empty unit child has no live receiver after the actual first death",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "legitimate empty child closes the real producer without fabricated HP or a queue entry",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "stop_after_fatal preserves the actually committed periodic HP",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "stop_after_fatal uses the reserved periodic chain port exactly once",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "stop_after_fatal freezes one distinct tick identity and the original parent",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "stop_after_fatal delayed old ticket cannot reclaim capacity or create new work",
+      "passed": true
+    },
+    {
+      "id": 35,
+      "label": "stop_after_fatal delayed consumed batch rejects before RNG and HP",
+      "passed": true
+    },
+    {
+      "id": 36,
+      "label": "in-flight fatal producer retains its root after status retirement until its one child is consumed",
+      "passed": true
+    },
+    {
+      "id": 37,
+      "label": "fatal protocol callback cannot delay collision retirement",
+      "passed": true
+    },
+    {
+      "id": 38,
+      "label": "stop_after_fatal closes every producer state receipt and consumer scope",
+      "passed": true
+    },
+    {
+      "id": 39,
+      "label": "clear_after_hp enters an actual source lifetime",
+      "passed": true
+    },
+    {
+      "id": 40,
+      "label": "clear_after_hp configures one real runtime and HP port",
+      "passed": true
+    },
+    {
+      "id": 41,
+      "label": "clear_after_hp reserves the complete root before its base HP",
+      "passed": true
+    },
+    {
+      "id": 42,
+      "label": "clear_after_hp claims the actual accepted direct producer",
+      "passed": true
+    },
+    {
+      "id": 43,
+      "label": "clear_after_hp transfers one real base fact",
+      "passed": true
+    },
+    {
+      "id": 44,
+      "label": "clear_after_hp has one admitted status and no fabricated periodic work",
+      "passed": true
+    },
+    {
+      "id": 45,
+      "label": "clear_after_hp preserves the actually committed periodic HP",
+      "passed": true
+    },
+    {
+      "id": 46,
+      "label": "clear_after_hp uses the reserved periodic chain port exactly once",
+      "passed": true
+    },
+    {
+      "id": 47,
+      "label": "clear_after_hp freezes one distinct tick identity and the original parent",
+      "passed": true
+    },
+    {
+      "id": 48,
+      "label": "clear_after_hp delayed old ticket cannot reclaim capacity or create new work",
+      "passed": true
+    },
+    {
+      "id": 49,
+      "label": "clear_after_hp delayed consumed batch rejects before RNG and HP",
+      "passed": true
+    },
+    {
+      "id": 50,
+      "label": "clear_after_hp retires old scheduling without inventing a child",
+      "passed": true
+    },
+    {
+      "id": 51,
+      "label": "clear_after_hp closes every producer state receipt and consumer scope",
+      "passed": true
+    },
+    {
+      "id": 52,
+      "label": "world_after_hp enters an actual source lifetime",
+      "passed": true
+    },
+    {
+      "id": 53,
+      "label": "world_after_hp configures one real runtime and HP port",
+      "passed": true
+    },
+    {
+      "id": 54,
+      "label": "world_after_hp reserves the complete root before its base HP",
+      "passed": true
+    },
+    {
+      "id": 55,
+      "label": "world_after_hp claims the actual accepted direct producer",
+      "passed": true
+    },
+    {
+      "id": 56,
+      "label": "world_after_hp transfers one real base fact",
+      "passed": true
+    },
+    {
+      "id": 57,
+      "label": "world_after_hp has one admitted status and no fabricated periodic work",
+      "passed": true
+    },
+    {
+      "id": 58,
+      "label": "world_after_hp preserves the actually committed periodic HP",
+      "passed": true
+    },
+    {
+      "id": 59,
+      "label": "world_after_hp uses the reserved periodic chain port exactly once",
+      "passed": true
+    },
+    {
+      "id": 60,
+      "label": "world_after_hp freezes one distinct tick identity and the original parent",
+      "passed": true
+    },
+    {
+      "id": 61,
+      "label": "world_after_hp delayed old ticket cannot reclaim capacity or create new work",
+      "passed": true
+    },
+    {
+      "id": 62,
+      "label": "world_after_hp delayed consumed batch rejects before RNG and HP",
+      "passed": true
+    },
+    {
+      "id": 63,
+      "label": "world_after_hp retires old scheduling without inventing a child",
+      "passed": true
+    },
+    {
+      "id": 64,
+      "label": "world_after_hp closes every producer state receipt and consumer scope",
+      "passed": true
+    },
+    {
+      "id": 65,
+      "label": "queued_free_after_hp enters an actual source lifetime",
+      "passed": true
+    },
+    {
+      "id": 66,
+      "label": "queued_free_after_hp configures one real runtime and HP port",
+      "passed": true
+    },
+    {
+      "id": 67,
+      "label": "queued_free_after_hp reserves the complete root before its base HP",
+      "passed": true
+    },
+    {
+      "id": 68,
+      "label": "queued_free_after_hp claims the actual accepted direct producer",
+      "passed": true
+    },
+    {
+      "id": 69,
+      "label": "queued_free_after_hp transfers one real base fact",
+      "passed": true
+    },
+    {
+      "id": 70,
+      "label": "queued_free_after_hp has one admitted status and no fabricated periodic work",
+      "passed": true
+    },
+    {
+      "id": 71,
+      "label": "queued_free_after_hp preserves the actually committed periodic HP",
+      "passed": true
+    },
+    {
+      "id": 72,
+      "label": "queued_free_after_hp uses the reserved periodic chain port exactly once",
+      "passed": true
+    },
+    {
+      "id": 73,
+      "label": "queued_free_after_hp freezes one distinct tick identity and the original parent",
+      "passed": true
+    },
+    {
+      "id": 74,
+      "label": "queued_free_after_hp delayed old ticket cannot reclaim capacity or create new work",
+      "passed": true
+    },
+    {
+      "id": 75,
+      "label": "queued_free_after_hp delayed consumed batch rejects before RNG and HP",
+      "passed": true
+    },
+    {
+      "id": 76,
+      "label": "queued_free_after_hp retires old scheduling without inventing a child",
+      "passed": true
+    },
+    {
+      "id": 77,
+      "label": "queued_free_after_hp closes every producer state receipt and consumer scope",
+      "passed": true
+    },
+    {
+      "id": 78,
+      "label": "source_destroyed enters an actual source lifetime",
+      "passed": true
+    },
+    {
+      "id": 79,
+      "label": "source_destroyed configures one real runtime and HP port",
+      "passed": true
+    },
+    {
+      "id": 80,
+      "label": "source_destroyed reserves the complete root before its base HP",
+      "passed": true
+    },
+    {
+      "id": 81,
+      "label": "source_destroyed claims the actual accepted direct producer",
+      "passed": true
+    },
+    {
+      "id": 82,
+      "label": "source_destroyed transfers one real base fact",
+      "passed": true
+    },
+    {
+      "id": 83,
+      "label": "source_destroyed has one admitted status and no fabricated periodic work",
+      "passed": true
+    },
+    {
+      "id": 84,
+      "label": "source_destroyed preserves the actually committed periodic HP",
+      "passed": true
+    },
+    {
+      "id": 85,
+      "label": "source_destroyed uses the reserved periodic chain port exactly once",
+      "passed": true
+    },
+    {
+      "id": 86,
+      "label": "source_destroyed freezes one distinct tick identity and the original parent",
+      "passed": true
+    },
+    {
+      "id": 87,
+      "label": "source_destroyed delayed old ticket cannot reclaim capacity or create new work",
+      "passed": true
+    },
+    {
+      "id": 88,
+      "label": "source_destroyed delayed consumed batch rejects before RNG and HP",
+      "passed": true
+    },
+    {
+      "id": 89,
+      "label": "source_destroyed consecutive actual ticks cannot reuse a retired receipt identity",
+      "passed": true
+    },
+    {
+      "id": 90,
+      "label": "original accepted historical credit survives later periodic delivery",
+      "passed": true
+    },
+    {
+      "id": 91,
+      "label": "source_destroyed delivers all four authored ticks without extra damage",
+      "passed": true
+    },
+    {
+      "id": 92,
+      "label": "source_destroyed closes every producer state receipt and consumer scope",
+      "passed": true
+    },
+    {
+      "id": 93,
+      "label": "heal_before_death_mark enters an actual source lifetime",
+      "passed": true
+    },
+    {
+      "id": 94,
+      "label": "heal_before_death_mark configures one real runtime and HP port",
+      "passed": true
+    },
+    {
+      "id": 95,
+      "label": "heal_before_death_mark reserves the complete root before its base HP",
+      "passed": true
+    },
+    {
+      "id": 96,
+      "label": "heal_before_death_mark claims the actual accepted direct producer",
+      "passed": true
+    },
+    {
+      "id": 97,
+      "label": "heal_before_death_mark transfers one real base fact",
+      "passed": true
+    },
+    {
+      "id": 98,
+      "label": "heal_before_death_mark has one admitted status and no fabricated periodic work",
+      "passed": true
+    },
+    {
+      "id": 99,
+      "label": "empty unit child retains its actual request-owner capability",
+      "passed": true
+    },
+    {
+      "id": 100,
+      "label": "empty controlled receiver set does not reread healed HP to discard a committed fatal fact",
+      "passed": true
+    },
+    {
+      "id": 101,
+      "label": "legitimate empty child closes the real producer without fabricated HP or a queue entry",
+      "passed": true
+    },
+    {
+      "id": 102,
+      "label": "post-capture observer really restores HP before actor death marking",
+      "passed": true
+    },
+    {
+      "id": 103,
+      "label": "heal_before_death_mark uses the reserved periodic chain port exactly once",
+      "passed": true
+    },
+    {
+      "id": 104,
+      "label": "heal_before_death_mark freezes one distinct tick identity and the original parent",
+      "passed": true
+    },
+    {
+      "id": 105,
+      "label": "heal_before_death_mark delayed old ticket cannot reclaim capacity or create new work",
+      "passed": true
+    },
+    {
+      "id": 106,
+      "label": "heal_before_death_mark delayed consumed batch rejects before RNG and HP",
+      "passed": true
+    },
+    {
+      "id": 107,
+      "label": "first-death cancellation uses the immutable commit fact despite later HP observation",
+      "passed": true
+    },
+    {
+      "id": 108,
+      "label": "one committed fatal target life closes its periodic scheduler and creates exactly one death child",
+      "passed": true
+    },
+    {
+      "id": 109,
+      "label": "post-capture HP restoration cannot reuse the original life for another promised periodic death",
+      "passed": true
+    },
+    {
+      "id": 110,
+      "label": "heal_before_death_mark closes every producer state receipt and consumer scope",
+      "passed": true
+    },
+    {
+      "id": 111,
+      "label": "two_sources_heal_before_death_mark enters an actual source lifetime",
+      "passed": true
+    },
+    {
+      "id": 112,
+      "label": "two_sources_heal_before_death_mark configures one real runtime and HP port",
+      "passed": true
+    },
+    {
+      "id": 113,
+      "label": "two_sources_heal_before_death_mark reserves the complete root before its base HP",
+      "passed": true
+    },
+    {
+      "id": 114,
+      "label": "two_sources_heal_before_death_mark claims the actual accepted direct producer",
+      "passed": true
+    },
+    {
+      "id": 115,
+      "label": "two_sources_heal_before_death_mark transfers one real base fact",
+      "passed": true
+    },
+    {
+      "id": 116,
+      "label": "second formal source has its own complete accepted root promise",
+      "passed": true
+    },
+    {
+      "id": 117,
+      "label": "second source validates exact source identity and immutable trigger definitions",
+      "passed": true
+    },
+    {
+      "id": 118,
+      "label": "second actual nonfatal HP fact creates a distinct source status",
+      "passed": true
+    },
+    {
+      "id": 119,
+      "label": "two accepted source roots share the same exact target life with two distinct states",
+      "passed": true
+    },
+    {
+      "id": 120,
+      "label": "empty unit child retains its actual request-owner capability",
+      "passed": true
+    },
+    {
+      "id": 121,
+      "label": "empty controlled receiver set does not reread healed HP to discard a committed fatal fact",
+      "passed": true
+    },
+    {
+      "id": 122,
+      "label": "legitimate empty child closes the real producer without fabricated HP or a queue entry",
+      "passed": true
+    },
+    {
+      "id": 123,
+      "label": "post-capture observer really restores HP before actor death marking",
+      "passed": true
+    },
+    {
+      "id": 124,
+      "label": "two_sources_heal_before_death_mark uses the reserved periodic chain port exactly once",
+      "passed": true
+    },
+    {
+      "id": 125,
+      "label": "two_sources_heal_before_death_mark freezes one distinct tick identity and the original parent",
+      "passed": true
+    },
+    {
+      "id": 126,
+      "label": "two_sources_heal_before_death_mark delayed old ticket cannot reclaim capacity or create new work",
+      "passed": true
+    },
+    {
+      "id": 127,
+      "label": "two_sources_heal_before_death_mark delayed consumed batch rejects before RNG and HP",
+      "passed": true
+    },
+    {
+      "id": 128,
+      "label": "first-death cancellation uses the immutable commit fact despite later HP observation",
+      "passed": true
+    },
+    {
+      "id": 129,
+      "label": "one committed fatal target life closes its periodic scheduler and creates exactly one death child",
+      "passed": true
+    },
+    {
+      "id": 130,
+      "label": "post-capture HP restoration cannot reuse the original life for another promised periodic death",
+      "passed": true
+    },
+    {
+      "id": 131,
+      "label": "two_sources_heal_before_death_mark closes every producer state receipt and consumer scope",
+      "passed": true
+    },
+    {
+      "id": 132,
+      "label": "retired unit restores the formal default catalog",
+      "passed": true
+    }
+  ],
+  "count": 132,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "9fed34a6-d748-4de4-bb7b-ad1d71afe32d",
+  "passed": 132,
+  "reported_checks": 132,
+  "reported_failures": 0,
+  "run_id": "f41f7957-db58-459c-90e7-0a38cbb4aa74",
+  "runtime_environment": {
+    "native_process_id": 9396,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_related_20261005_0138",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_related_20261005_0138/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "periodic_dispatch_lifecycle_test",
+  "schema_version": 1,
+  "source_content_sha256": "04d29b688db3419bd9e19a7161f9d9a36b32d37f5fcad4fffedaec4fdaae577a",
+  "status": "PASS"
+}

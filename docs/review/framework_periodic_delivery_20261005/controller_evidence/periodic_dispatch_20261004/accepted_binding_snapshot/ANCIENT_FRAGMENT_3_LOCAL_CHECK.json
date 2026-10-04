@@ -1,0 +1,39 @@
+{
+  "status": "PASS",
+  "read_utc": "2026-10-04T17:03:12.306442+00:00",
+  "classification": "Exact cache/import environment repair admission only; no business acceptance",
+  "allowlist_sha256": "7ccaafb06e3542d1c4d9ee8bac2d3c6878c90fd661ae5da2ae6149fd846e0d25",
+  "source_tree": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+  "target_tree": "C:\\Users\\Administrator\\Documents\\Codex\\2026-10-04\\task\\HC-cue",
+  "source_error_path": "C:\\Users\\Administrator\\Documents\\Codex\\2026-10-04\\task\\HC-cue\\outputs\\cue_actor_retirement_20261004\\red_20261004T164850Z_fcdb89a5\\raw\\feature_cue_actor_retirement_test.stderr.log",
+  "source_error_sha256": "a68a967278190c48481b60587618bd71fe25556f23d107c0f98e94686db6de78",
+  "approved_copy": [
+    {
+      "relative_path": "assets/art/items/custom/ancient_relic_fragment/source.png.import",
+      "bytes": 969,
+      "sha256": "43dcb25b8e57ccd49d1c1bbee010d3863b5a1d998cc7dad82d073739af62cb38"
+    },
+    {
+      "relative_path": ".godot/imported/source.png-a464ca5e8f9967cbb525a7b18330d54d.ctex",
+      "bytes": 560230,
+      "sha256": "d5751c6885b55976b57a03fb05a487e512ae009a7f9a4f55a23a20057dd58b5b"
+    },
+    {
+      "relative_path": ".godot/imported/source.png-a464ca5e8f9967cbb525a7b18330d54d.md5",
+      "bytes": 91,
+      "sha256": "70011a248cfead72ae8ecf7ccafb11bf3a7abf75d8723032d2ea2857cc939ef8"
+    }
+  ],
+  "total_bytes": 561290,
+  "raw_unchanged": [
+    {
+      "relative_path": "assets/art/items/custom/ancient_relic_fragment/inventory_icon.tres",
+      "sha256": "236869d07ccc0e46852cc029e4052e56bbdd496e1569f907440f9d3a2c6dad18"
+    },
+    {
+      "relative_path": "assets/art/items/custom/ancient_relic_fragment/source.png",
+      "sha256": "abf8d1eb23715fbf8c04e1ae85e79e21c5f4f2a741d25bddaf0fd4bbead6b455"
+    }
+  ],
+  "mutations_performed": false
+}

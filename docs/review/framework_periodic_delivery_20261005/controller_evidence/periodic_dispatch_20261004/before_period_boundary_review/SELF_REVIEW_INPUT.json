@@ -1,0 +1,127 @@
+{
+  "read_utc": "2026-10-04T11:12:33.844558+00:00",
+  "base": "2c58552d2d905eea1f5c13d38685f66c489b092c",
+  "scope": "23 explicitly owned source/test/default-off authoring paths only; no real staging",
+  "paths": [
+    {
+      "path": "scripts/features/contracts/effect_reservation.gd",
+      "sha256": "8c1c0206e77bade986652af65c0dbae4761fed52accd4b488593040daedab5e3",
+      "bytes": 3664
+    },
+    {
+      "path": "scripts/features/contracts/child_action_lease.gd",
+      "sha256": "ba2c69b97af0793641464ed0d36b1b86082044fbcd95a5554e55bc445cbf7faf",
+      "bytes": 10504
+    },
+    {
+      "path": "scripts/features/handlers/death_burst_handler.gd",
+      "sha256": "d63e3e839baf7f2e179c07ae6668503041cd500e1208d8b8026442b5332ea1f4",
+      "bytes": 6042
+    },
+    {
+      "path": "scripts/features/runtime/damage_batch.gd",
+      "sha256": "c9c5fa693af48b16dca1cbba508cffd5288a01e2cd74c7dcffcf94e6df59b364",
+      "bytes": 12632
+    },
+    {
+      "path": "scripts/features/runtime/effect_runtime.gd",
+      "sha256": "a960d32ab0029f629ec251589ef8010e9811a201962f802b6ef681eedca2413e",
+      "bytes": 39921
+    },
+    {
+      "path": "scripts/features/compilation/feature_compiler.gd",
+      "sha256": "63bc9f56329834870ceac69ebc92ac4ae2bc34c17465c56835769135019b02d8",
+      "bytes": 23658
+    },
+    {
+      "path": "scripts/features/compilation/child_capacity_proof.gd",
+      "sha256": "8504c82d97cc740d2695281535ef96e0a85cacf7298dae80633fd186d9ff4b09",
+      "bytes": 7580
+    },
+    {
+      "path": "tests/framework/feature_chain_commit_test.gd",
+      "sha256": "ac2c00a47e4bb3a07b1cab9121e12a15b6bc575c5fb728c33620033b1030329e",
+      "bytes": 13454
+    },
+    {
+      "path": "tests/framework/feature_death_child_command_test.gd",
+      "sha256": "5cadef73da37c9a411ed8ae75b1b7aec8e4ec4b076275de1cdbada82787c971e",
+      "bytes": 9422
+    },
+    {
+      "path": "tests/framework/feature_periodic_child_chain_test.gd",
+      "sha256": "af6780783108a17c581d9011e6a8cc19f3f85ab83218e8e6c40951155b670c56",
+      "bytes": 7346
+    },
+    {
+      "path": "tests/framework/periodic_producer_identity_test.gd",
+      "sha256": "44a2b9872ba98b106be858b2628b3662dec6f7247b9f1554d97e1744beaeb2cf",
+      "bytes": 8787
+    },
+    {
+      "path": "tests/framework/periodic_producer_identity_test.tscn",
+      "sha256": "1121a16b2f6d7279e7ebd1fb8f832ff4d2e7d19916a5b10c17f46cc1c535c43e",
+      "bytes": 216
+    },
+    {
+      "path": "tests/framework/periodic_refresh_horizon_test.gd",
+      "sha256": "1af7888036e8ee341e060416e415ec0dce65789c24f6ce0ef3a53e891552b9a2",
+      "bytes": 9355
+    },
+    {
+      "path": "tests/framework/periodic_refresh_horizon_test.tscn",
+      "sha256": "6a3f89c2327bd1152972bd44a2f97926b1620c7c105e07959c6ad165ff46373c",
+      "bytes": 212
+    },
+    {
+      "path": "tests/framework/periodic_child_root_test.gd",
+      "sha256": "97ae89e13c5fd67a45253c3d9770def969fe7d617adfd1278a17117f8f312b46",
+      "bytes": 9114
+    },
+    {
+      "path": "tests/framework/periodic_child_root_test.tscn",
+      "sha256": "1994e9e7f60b5d6f4323ec920e3d15d746b4e406b8db3cca1952fd45b5ba7e92",
+      "bytes": 202
+    },
+    {
+      "path": "tests/framework/periodic_child_g2_root_test.tscn",
+      "sha256": "63948c4a5259db2fd4ebb73af41d32875eb72d2bb4d674216f3b1bda3f96a87c",
+      "bytes": 220
+    },
+    {
+      "path": "tests/framework/periodic_dispatch_lifecycle_test.gd",
+      "sha256": "13fef34bf41e8066b61d60f76952496138a9be491289b7d4b016c92340803d41",
+      "bytes": 13748
+    },
+    {
+      "path": "tests/framework/periodic_dispatch_lifecycle_test.tscn",
+      "sha256": "818bd707c6e486dd18623cf5815935a22071cbc23d5bbe004c1c36f9c4ea77de",
+      "bytes": 218
+    },
+    {
+      "path": "assets/data/features/validation/periodic_chain.json",
+      "sha256": "3b1adbb4ffe2fb2c536f9ba789d713b70ab8dc6f429f5b6612b9281a7bec15bc",
+      "bytes": 1285
+    },
+    {
+      "path": "assets/data/features/validation/periodic_chain_registry.json",
+      "sha256": "2cd1aa36f9c364d1aa09e960c4d7067fc6cc0f5c0cb77ec8899dccf5bdc6fad1",
+      "bytes": 484
+    },
+    {
+      "path": "assets/data/features/validation/periodic_chain_g2.json",
+      "sha256": "f49786024efd0a13fd9a4169ed025280638d2f667cefcda549066d3e5ce25a06",
+      "bytes": 1297
+    },
+    {
+      "path": "assets/data/features/validation/periodic_chain_g2_registry.json",
+      "sha256": "1f5360d4ef261b13c4f8954f9199b2120457b76dee7cea741343374770a311c2",
+      "bytes": 508
+    }
+  ],
+  "protections": {
+    "true_index_sha256": "df5a01dd0d87c14620e0021d70c25a830eb2cc37aa7b012eeb14ee1f2c58c5fb",
+    "frozen_streaming_sha256": "757da0597ab78aded642a98cf1e7433b9da06a6be5fb0684923ca6686282809d"
+  },
+  "diff_check": "PASS"
+}

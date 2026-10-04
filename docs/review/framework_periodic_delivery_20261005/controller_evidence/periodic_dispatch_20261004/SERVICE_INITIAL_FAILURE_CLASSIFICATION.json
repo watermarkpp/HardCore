@@ -1,0 +1,40 @@
+{
+  "status": "PASS",
+  "classification": "evidence verification only; the native suite remains FAIL",
+  "read_utc": "2026-10-04T15:25:36.946155+00:00",
+  "source": "80866f1974d564ac4fd63e237bcca27d375804e4e796cb4af5993c17ba578a32",
+  "source_stable": true,
+  "native_failed": 3,
+  "complete_receipt_checks": 37,
+  "failed_checks": 3,
+  "trace_sha256": "28d9ea1744ba090351ac8a3941c5475b6422163d071249a61061e8fb765c01ed",
+  "trace": "outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_service_characterization_20261004_1505_230828_815284\\service_diagnostic_original.trace.json",
+  "rows": [
+    {
+      "scene": "periodic_refresh_service_boundary_test",
+      "run_id": "5c90bdf5-3952-4c12-a8fe-5afa32183b93",
+      "native_exit": 1,
+      "timeout": false,
+      "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+      "classification": "new fixture local 8-second wait incomplete; 4000 delivery remains unproven in this run"
+    },
+    {
+      "scene": "feature_mixed_delivery_test",
+      "run_id": "ed57b28b-7bfa-4629-9b46-d0a056d5107a",
+      "native_exit": -1,
+      "timeout": true,
+      "reason": "missing_pass_marker;process_did_not_exit;timeout_30s;non_zero_exit_code_-1;framework_receipt_wrong_run;framework_receipt_wrong_source",
+      "classification": "incorrect 30-second process window; same eight-world scene previously took 37 seconds in a 60-second window"
+    },
+    {
+      "scene": "feature_mixed_child_resource_test",
+      "run_id": "14eea32d-36eb-4f99-912f-b932800544ce",
+      "native_exit": -1,
+      "timeout": true,
+      "reason": "missing_pass_marker;process_did_not_exit;timeout_30s;non_zero_exit_code_-1;framework_receipt_wrong_run;framework_receipt_wrong_source",
+      "classification": "incorrect 30-second process window; same eight-world scene previously took 37 seconds in a 60-second window"
+    }
+  ],
+  "reporting_correction_needed": "old trace fully_drained names intended case, not achieved completion; old future_ticks_not_run=0 is incorrect for first partial run. Preserve original; next trace must report actual remaining 1769.",
+  "observed_quantum_scope": "controlled one-state periodic chain; maximum 10365/1662us includes possible scheduling/cold effects, not a proven worst bound or natural performance result"
+}

@@ -1,0 +1,24 @@
+{
+  "time_utc": "2026-10-04T09:33:58.776721+00:00",
+  "launcher_pid": 4808,
+  "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_identity_related_fea698fc99bf43d298ae2818563edcdd",
+  "command": [
+    "py",
+    "-3.12",
+    "tools/source176_r3_validation.py",
+    "periodic_dispatch_identity_related",
+    "--tests",
+    "tests/framework/periodic_producer_identity_test.tscn",
+    "tests/framework/periodic_refresh_horizon_test.tscn",
+    "tests/framework/feature_chain_commit_test.tscn",
+    "tests/framework/damage_commit_fact_test.tscn",
+    "tests/framework/feature_batch_capacity_ownership_test.tscn",
+    "tests/framework/feature_admission_release_test.tscn",
+    "tests/framework/feature_batch_failure_test.tscn",
+    "tests/framework/action_config_lease_test.tscn",
+    "tests/framework/empty_extension_behavior_test.tscn",
+    "--timeout",
+    "30"
+  ],
+  "true_index_sha256": "df5a01dd0d87c14620e0021d70c25a830eb2cc37aa7b012eeb14ee1f2c58c5fb"
+}

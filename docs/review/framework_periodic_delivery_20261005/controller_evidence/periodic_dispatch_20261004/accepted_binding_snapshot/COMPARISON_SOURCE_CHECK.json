@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "same_candidate_content": true,
+  "A3_vs_B1_changed_paths": [
+    "scripts/features/contracts/effect_reservation.gd",
+    "scripts/features/runtime/damage_batch.gd",
+    "scripts/features/runtime/effect_runtime.gd"
+  ],
+  "A2_vs_A3_non_loaded_probe_fixture": [
+    "tests/framework/accepted_binding_snapshot_test.gd"
+  ],
+  "current_bytes_match_all_final_B1_B2_files": true
+}

@@ -1,0 +1,16 @@
+{
+  "time_utc": "2026-10-04T10:47:14.240778+00:00",
+  "launcher_pid": 15900,
+  "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_fatal_observer_red_9b14d40b4e6447e797aa8e810140dbee",
+  "command": [
+    "py",
+    "-3.12",
+    "tools/source176_r3_validation.py",
+    "periodic_dispatch_fatal_observer_red",
+    "--tests",
+    "tests/framework/periodic_dispatch_lifecycle_test.tscn",
+    "--timeout",
+    "30"
+  ],
+  "true_index_sha256": "df5a01dd0d87c14620e0021d70c25a830eb2cc37aa7b012eeb14ee1f2c58c5fb"
+}

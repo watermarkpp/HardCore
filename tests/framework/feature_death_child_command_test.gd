@@ -55,6 +55,9 @@ func _run() -> void:
 		and command.origin.x==2.0 and command.historical_credit.profile_id=="fixture-owner" and command.raw_damage==5,
 		"later position, profile or configuration mutations cannot rewrite a queued child")
 	var periodic:=_fact(); periodic.source_class="periodic"
+	periodic.release_id+="\u003atick:1000000"; periodic.fact_id=periodic.release_id+":hp:0"
+	periodic.chain_context.release_id=periodic.release_id
+	periodic.chain_context.parent_release_id=periodic.chain_context.root_release_id
 	_check(Handlers.commands(periodic,_binding()).size()==1,"a real periodic lethal fact remains eligible without posing as direct damage")
 	var last:=_fact(); last.source_class="child"; last.chain_context.generation=1
 	last.release_id="child:1"; last.chain_context.release_id="child:1"; last.chain_context.parent_release_id="player:1:action:2"

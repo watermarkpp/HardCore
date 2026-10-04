@@ -1,0 +1,77 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "existing runtime is sole reservation owner",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "real source compiled",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "actual producer receives one bounded promise",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "real batch claims that exact promise",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "producer retirement cannot steal claimed batch capacity",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "closed old producer never starts a second batch",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "last batch owner releases an abandoned claim even while old ticket is retained",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "repeated old close cannot leak or reopen capacity",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "released capacity is available for new valid identity",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "unclaimed producer cancellation remains immediate",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "ownership transitions report no hidden errors",
+      "passed": true
+    }
+  ],
+  "count": 11,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "15463c7a-1e30-4605-bc1a-7344e23d0b6e",
+  "passed": 11,
+  "reported_checks": 11,
+  "reported_failures": 0,
+  "run_id": "612697a2-e8e7-448a-b312-7ad0062e3434",
+  "runtime_environment": {
+    "native_process_id": 2056,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\accepted_binding_guarded_related_20261005_0108",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/accepted_binding_guarded_related_20261005_0108/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "feature_batch_capacity_ownership_test",
+  "schema_version": 1,
+  "source_content_sha256": "2da0511645338738205df66bb658df973b2be5802f76dac68eff43045d793f3d",
+  "status": "PASS"
+}

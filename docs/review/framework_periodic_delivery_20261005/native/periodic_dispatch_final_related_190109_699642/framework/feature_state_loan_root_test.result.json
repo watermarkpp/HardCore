@@ -1,0 +1,147 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "registered wizard identity",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "formal default-off loan module uses only supported direct and child sources",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "actual mapped world reaches READY",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "actual mapped first receiver comes from the sole Root factory",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "all later-wave slots are materialized before acceptance",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "READY publication explicitly enables the test module",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "full authored world bound includes every predeclared slot, rather than the three observed receivers",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "actual source freezes persistent and death subscriptions",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "real Player acceptance reserves the entire world-derived chain before MP/cooldown/HP",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "real accepted root promises one resident loan per legal world receiver",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "windup has not committed premature HP",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "source withdrawal cannot discard the accepted chain",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "real timer releases once into Root planner and mapped geometry",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "base HP commits before child service and the later receiver is outside the initial hit",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "origin state and sealed death child coexist before life replacement",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "real independent death immediately removes collision and old mutation qualification",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "same queued factory slots admit new lives without increasing the accepted world bound",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "real child planner queries all three current lives and commits exact-once HP through the sole port",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "one committed root fatal fact performs exactly one child release",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "old invalid tail and three new states remain covered by the original resident loan pool",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "children consume neither old RNG streams nor player resources again",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "first real service boundary retires the old tail once while all three new lives receive their accepted tick",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "original four-tick lifetime completes without dropped state promises",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "all accepted branches, origin loans, owners and receipts retire together",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "retired controlled world restores the formal default registry",
+      "passed": true
+    }
+  ],
+  "count": 25,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "6d1e3440-8108-4a83-ae40-561f1800c076",
+  "passed": 25,
+  "reported_checks": 25,
+  "reported_failures": 0,
+  "run_id": "16cf7469-8539-4eff-a22f-26c709938168",
+  "runtime_environment": {
+    "native_process_id": 17520,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_final_related_93616bb3cccc42c49ee63967020c5b27",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_dispatch_final_related_93616bb3cccc42c49ee63967020c5b27/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "feature_state_loan_root_test",
+  "schema_version": 1,
+  "source_content_sha256": "678e2ba32a5d9f8e57ff12b37d8810f03131960f63a0f47a35f25ca1562bc41e",
+  "status": "PASS"
+}

@@ -1,0 +1,122 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "registered default-off module supplies the original source identities and authority",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "formal compiler accepts both one-second and one-microsecond four-tick configurations",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "configuration changes retain the exact same stable sources rather than creating another status",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "sources use the real actor transition service",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "one runtime and original Combat port own the controlled observation",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "original root is accepted before direct HP",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "original compiled period and four-second horizon are active",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "simulation reaches the first owed tick",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "changed compiled configuration is accepted through the real HP and Batch chain",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "strongest_keep_phase retains old due and longer expiry while applying the new legal period",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "two authored four-tick applications produce a finite 3000001-tick shared horizon",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "the old first due tick commits exactly once",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "a bounded 1024-microsecond simulation observation introduces exactly 1024 more due ticks",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "bounded real consumer completes the diagnostic",
+      "passed": false
+    },
+    {
+      "id": 15,
+      "label": "real HP port executes all 1025 observed ticks without an eight-tick truncation",
+      "passed": false
+    },
+    {
+      "id": 16,
+      "label": "distinct tick identities preserve initial credit and the uncompleted old horizon",
+      "passed": false
+    },
+    {
+      "id": 17,
+      "label": "future accepted work remains owned with bounded receipt residency",
+      "passed": false
+    },
+    {
+      "id": 18,
+      "label": "controlled accumulated lateness exceeds the one-microsecond period and is retained as diagnostic evidence",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "explicit world-owner teardown retires future promises without claiming their completion",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "test restores the formal default publication",
+      "passed": true
+    }
+  ],
+  "count": 20,
+  "engine_version": "4.7-stable (official)",
+  "failed": 4,
+  "invocation_id": "c554cca7-1234-438e-a90e-009cf4e63caf",
+  "passed": 16,
+  "reported_checks": 20,
+  "reported_failures": 4,
+  "run_id": "85cba2df-fc0d-4228-98fe-5155ec64bd3c",
+  "runtime_environment": {
+    "native_process_id": 12032,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_period_boundary_1940_ed56cba0724040759aa2799d643e368a",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_dispatch_period_boundary_1940_ed56cba0724040759aa2799d643e368a/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "periodic_refresh_period_boundary_test",
+  "schema_version": 1,
+  "source_content_sha256": "c8e5074f6278bd867373eb226b0d9be18a9d224acb90c19e8c1168609b19d88d",
+  "status": "FAIL"
+}

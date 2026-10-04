@@ -1,0 +1,48 @@
+{
+  "invocation_id": "158e801d-9076-4116-8871-32bb8f30cb73",
+  "rows": [
+    {
+      "accepted_horizon_ticks": 4000,
+      "case_requests_full_drain": true,
+      "deadline_acceptance": "NOT_RUN",
+      "delivered_sample_ticks": 4000,
+      "elapsed_wall_usec": 13943814,
+      "fully_drained": true,
+      "future_ticks_not_run": 0,
+      "hp": 1959989,
+      "maximum_actual_lateness_usec": 3999000,
+      "maximum_epoch_overrun_usec": 1450,
+      "maximum_quantum_usec": 1929,
+      "original_authored_ticks": 4,
+      "original_period_usec": 1000,
+      "pump_elapsed_scope": "sum of wall time inside actual pump calls, including possible OS scheduling; not CPU-only",
+      "pump_elapsed_usec": 4023582,
+      "reachability": "controlled compiled Runtime API; production author replacement while world active not established",
+      "refresh_authored_ticks": 4,
+      "service_epochs": 2023
+    },
+    {
+      "accepted_horizon_ticks": 4000000,
+      "case_requests_full_drain": false,
+      "deadline_acceptance": "NOT_RUN",
+      "delivered_sample_ticks": 1024,
+      "elapsed_wall_usec": 3522727,
+      "fully_drained": false,
+      "future_ticks_not_run": 3998976,
+      "hp": 1989749,
+      "maximum_actual_lateness_usec": 1023,
+      "maximum_epoch_overrun_usec": 1185,
+      "maximum_quantum_usec": 1211,
+      "original_authored_ticks": 4,
+      "original_period_usec": 1,
+      "pump_elapsed_scope": "sum of wall time inside actual pump calls, including possible OS scheduling; not CPU-only",
+      "pump_elapsed_usec": 1023563,
+      "reachability": "controlled compiled Runtime API; production author replacement while world active not established",
+      "refresh_authored_ticks": 4,
+      "service_epochs": 513
+    }
+  ],
+  "run_id": "7612fdc8-2c12-4db5-b43b-86c9456e24fe",
+  "scope": "controlled compiled configuration and real HP/Batch/budget characterization; not Root author reload or natural deadline acceptance",
+  "source_content_sha256": "75478e72e84f8fdd0f85761e2294bf4a0de9bfcc046834b71e5f8eb3194fc862"
+}

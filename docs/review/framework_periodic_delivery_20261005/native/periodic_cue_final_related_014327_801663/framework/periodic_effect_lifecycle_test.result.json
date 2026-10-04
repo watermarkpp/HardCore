@@ -1,0 +1,112 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "known source is enabled",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "confirmed base receipt lifecycle:first",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "confirmed base receipt lifecycle:first",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "duplicate release across batches does not refresh an admitted state",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "active runtime refuses owner or presentation replacement atomically",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "new target life rejects old ticks before HP mutation",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "unsupported presentation still receives explicit life stop",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "confirmed base receipt lifecycle:second",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "world change drains every accepted state and queue",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "world cancellation conserves terminal state counts",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "world clear stops logical cue handles even with no native visual nodes",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "drained runtime can explicitly replace its presentation owner",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "confirmed base receipt lifecycle:third",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "new visual owner starts one cue after complete drain",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "explicit teardown releases logic and native cue ownership",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "explicit teardown also conserves terminal state counts",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "test source withdrawn",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "lifecycle and duplicate boundaries have no hidden failure",
+      "passed": true
+    }
+  ],
+  "count": 18,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "9fed34a6-d748-4de4-bb7b-ad1d71afe32d",
+  "passed": 18,
+  "reported_checks": 18,
+  "reported_failures": 0,
+  "run_id": "6e8e661e-1dc0-48bf-87b1-a9523126c1c6",
+  "runtime_environment": {
+    "native_process_id": 15880,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_cue_final_related_20261005_0138",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_cue_final_related_20261005_0138/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "periodic_effect_lifecycle_test",
+  "schema_version": 1,
+  "source_content_sha256": "04d29b688db3419bd9e19a7161f9d9a36b32d37f5fcad4fffedaec4fdaae577a",
+  "status": "PASS"
+}

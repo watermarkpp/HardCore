@@ -1,0 +1,24 @@
+{
+  "time_utc": "2026-10-04T11:12:36.059379+00:00",
+  "launcher_pid": 17396,
+  "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_final_world_ecf11298f6394360a62132e90d496e52",
+  "command": [
+    "py",
+    "-3.12",
+    "tools/source176_r3_validation.py",
+    "periodic_dispatch_final_world",
+    "--tests",
+    "tests/framework/combined_effect_lifecycle_test.tscn",
+    "tests/framework/combined_effect_lifecycle_cold_test.tscn",
+    "tests/framework/periodic_credit_safe_logout_test.tscn",
+    "tests/framework/periodic_credit_safe_logout_cold_test.tscn",
+    "tests/framework/natural_effect_lifecycle_test.tscn",
+    "tests/framework/natural_effect_lifecycle_cold_test.tscn",
+    "tests/framework/feature_resource_natural_test.tscn",
+    "tests/framework/feature_resource_natural_cold_test.tscn",
+    "--timeout",
+    "60"
+  ],
+  "timeout_seconds": 60,
+  "true_index_sha256": "df5a01dd0d87c14620e0021d70c25a830eb2cc37aa7b012eeb14ee1f2c58c5fb"
+}

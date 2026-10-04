@@ -1,0 +1,147 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "real runtime configured",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "default-off module explicitly enabled for fixture",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "actual compiled binding used",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "complete real HP facts fill one legal batch 0",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "real queue accepts legal full batch 0",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "complete real HP facts fill one legal batch 1",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "real queue accepts legal full batch 1",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "real queue reaches capacity minus one",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "one free slot refuses the whole two-receiver batch",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "refused multi-receiver transfer installs no partial queue entry",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "one remaining slot accepts the whole boundary batch",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "real pending queue reaches its exact bound",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "full queue rejects submission explicitly",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "rejected fact remains valid and sealed",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "capacity rejection never reverses committed HP",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "actual occupied queue drains through production budget",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "capacity rejection leaves batch unconsumed for an exact later submission",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "retry enqueues its complete fact once",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "accepted retry cannot submit twice",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "retry transports the existing fact without applying base damage again",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "exact retry transports both AOE receiver facts atomically",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "accepted two-receiver batch remains one-shot",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "second receiver HP is neither reversed nor applied again",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "an unsealed producer cannot transfer incomplete work",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "rejected unsealed producer can complete and submit its exact fact",
+      "passed": true
+    }
+  ],
+  "count": 25,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "6d1e3440-8108-4a83-ae40-561f1800c076",
+  "passed": 25,
+  "reported_checks": 25,
+  "reported_failures": 0,
+  "run_id": "2e2cad3e-dbb9-476e-b9ac-1523406a583b",
+  "runtime_environment": {
+    "native_process_id": 4088,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_final_related_93616bb3cccc42c49ee63967020c5b27",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_dispatch_final_related_93616bb3cccc42c49ee63967020c5b27/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "feature_capacity_atomic_test",
+  "schema_version": 1,
+  "source_content_sha256": "678e2ba32a5d9f8e57ff12b37d8810f03131960f63a0f47a35f25ca1562bc41e",
+  "status": "PASS"
+}

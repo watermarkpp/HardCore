@@ -1,0 +1,87 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "periodic runtime exists behind the production damage port",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "actual default-off declared module can be enabled",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "production qualification compiles one declared source",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "post-base receipt is accepted exactly once",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "one active effect has one due node and no immediate tick",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "source withdrawal uses content owner",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "accepted 100 actual loss produces five damage at second 1",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "accepted 100 actual loss produces five damage at second 2",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "accepted 100 actual loss produces five damage at second 3",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "accepted 100 actual loss produces five damage at second 4",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "final due tick executes before expiry and queues drain",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "real actor RNG and direct-struck attack deadline remain unchanged across periodic ticks",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "closed handler, command and runtime report no hidden failure",
+      "passed": true
+    }
+  ],
+  "count": 13,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "305be499-7c3b-4b80-8ca2-c3949bc71918",
+  "passed": 13,
+  "reported_checks": 13,
+  "reported_failures": 0,
+  "run_id": "2b5ffe57-8cef-4d8c-9692-3dec2b04610f",
+  "runtime_environment": {
+    "native_process_id": 13188,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_period_policy_green_2102_38abad3c40874cdab50b97c34255aa98",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_dispatch_period_policy_green_2102_38abad3c40874cdab50b97c34255aa98/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "periodic_effect_runtime_test",
+  "schema_version": 1,
+  "source_content_sha256": "d1781a0f05ab5c2c765785b0167979141aeb1b6e6d4918c4d55a05bf732c600b",
+  "status": "PASS"
+}

@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "module_id": "hc.template.numeric_skills",
+  "module_version": 1,
+  "core_api_version": 1,
+  "requires": [],
+  "conflicts": [],
+  "capabilities": ["stats.contribute", "skills.modify"],
+  "handlers": [],
+  "resource_dependencies": [],
+  "cost": {"commands_per_event": 0, "states_per_target": 0},
+  "default_enabled": false,
+  "scope": "character",
+  "activation_boundary": "world_ready",
+  "mechanics": [
+    {
+      "mechanic_id": "hc.template.numeric_skills.accuracy",
+      "kind": "stat",
+      "tags": ["hc.numeric"],
+      "operations": [{"stat": "accuracy", "op": "add", "value": 2}]
+    },
+    {
+      "mechanic_id": "hc.template.numeric_skills.fire_cooldown",
+      "kind": "skill",
+      "tags": ["hc.numeric"],
+      "operations": [
+        {"skill_id": "hc.skill.warrior.fire_sword", "field": "timing.cooldown_ms", "op": "multiply", "value": 0.5}
+      ]
+    }
+  ],
+  "tests": ["tests/framework/feature_delivery_templates_test.tscn"]
+}

@@ -1,0 +1,28 @@
+{
+  "read_utc": "2026-10-04T15:57:41.268340+00:00",
+  "branch": "codex/pluggable-framework-v2",
+  "head": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+  "bootstrap_status": "FAIL",
+  "bootstrap_reasons": [
+    "Unknown branch for bootstrap routing: codex/pluggable-framework-v2",
+    "Missing rule file for branch codex/pluggable-framework-v2"
+  ],
+  "equivalent_preflight": "Exact existing third tree; user root rules plus integration/professions-skills; no routing modification, protected trees/index/streaming unchanged; owned three production files backed up before candidate. Historical branch-exclusive ownership superseded by root section 7.",
+  "production_before": [
+    {
+      "path": "scripts/features/contracts/effect_reservation.gd",
+      "sha256": "8c1c0206e77bade986652af65c0dbae4761fed52accd4b488593040daedab5e3",
+      "before_sha256": "8c1c0206e77bade986652af65c0dbae4761fed52accd4b488593040daedab5e3"
+    },
+    {
+      "path": "scripts/features/runtime/effect_runtime.gd",
+      "sha256": "6be4bde3c2fd623cb24dee0d8dd3ed6398c8c2bb206c42a1d76ff865cdb97c82",
+      "before_sha256": "6be4bde3c2fd623cb24dee0d8dd3ed6398c8c2bb206c42a1d76ff865cdb97c82"
+    },
+    {
+      "path": "scripts/features/runtime/damage_batch.gd",
+      "sha256": "c9c5fa693af48b16dca1cbba508cffd5288a01e2cd74c7dcffcf94e6df59b364",
+      "before_sha256": "c9c5fa693af48b16dca1cbba508cffd5288a01e2cd74c7dcffcf94e6df59b364"
+    }
+  ]
+}

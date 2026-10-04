@@ -1,0 +1,48 @@
+{
+  "invocation_id": "bc5f48da-69d5-42f6-8ea4-7bdccfcf99c1",
+  "rows": [
+    {
+      "accepted_horizon_ticks": 4000,
+      "case_requests_full_drain": true,
+      "deadline_acceptance": "NOT_RUN",
+      "delivered_sample_ticks": 4000,
+      "elapsed_wall_usec": 9915150,
+      "fully_drained": true,
+      "future_ticks_not_run": 0,
+      "hp": 1959989,
+      "maximum_actual_lateness_usec": 3999000,
+      "maximum_epoch_overrun_usec": 795,
+      "maximum_quantum_usec": 1014,
+      "original_authored_ticks": 4,
+      "original_period_usec": 1000,
+      "pump_elapsed_scope": "sum of wall time inside actual pump calls, including possible OS scheduling; not CPU-only",
+      "pump_elapsed_usec": 2426122,
+      "reachability": "controlled compiled Runtime API; production author replacement while world active not established",
+      "refresh_authored_ticks": 4,
+      "service_epochs": 1439
+    },
+    {
+      "accepted_horizon_ticks": 4000000,
+      "case_requests_full_drain": false,
+      "deadline_acceptance": "NOT_RUN",
+      "delivered_sample_ticks": 1024,
+      "elapsed_wall_usec": 2479709,
+      "fully_drained": false,
+      "future_ticks_not_run": 3998976,
+      "hp": 1989749,
+      "maximum_actual_lateness_usec": 1023,
+      "maximum_epoch_overrun_usec": 579,
+      "maximum_quantum_usec": 831,
+      "original_authored_ticks": 4,
+      "original_period_usec": 1,
+      "pump_elapsed_scope": "sum of wall time inside actual pump calls, including possible OS scheduling; not CPU-only",
+      "pump_elapsed_usec": 616416,
+      "reachability": "controlled compiled Runtime API; production author replacement while world active not established",
+      "refresh_authored_ticks": 4,
+      "service_epochs": 362
+    }
+  ],
+  "run_id": "19955292-9d07-4ffd-b4bf-6059052a1cbe",
+  "scope": "controlled compiled configuration and real HP/Batch/budget characterization; not Root author reload or natural deadline acceptance",
+  "source_content_sha256": "5ae89276e58c2bcc937a922cb55354660a6657664e99eadd8df934cb257147b3"
+}

@@ -1,0 +1,16 @@
+{
+  "command": [
+    "powershell",
+    "-NoProfile",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/periodic_producer_identity_test.tscn','tests/framework/periodic_dispatch_lifecycle_test.tscn','tests/framework/periodic_refresh_horizon_test.tscn','tests/framework/periodic_child_root_test.tscn','tests/framework/periodic_child_g2_root_test.tscn','tests/framework/feature_periodic_child_chain_test.tscn','tests/framework/feature_death_child_command_test.tscn','tests/framework/feature_chain_commit_test.tscn','tests/framework/feature_child_chain_admission_test.tscn','tests/framework/feature_state_loan_lifetime_test.tscn','tests/framework/feature_state_loan_root_test.tscn','tests/framework/feature_child_capacity_test.tscn','tests/framework/feature_capacity_atomic_test.tscn','tests/framework/feature_capacity_admission_test.tscn','tests/framework/periodic_effect_boundaries_test.tscn','tests/framework/periodic_effect_lifecycle_test.tscn','tests/framework/periodic_callback_retirement_test.tscn','tests/framework/periodic_delivery_lateness_test.tscn','tests/framework/feature_batch_capacity_ownership_test.tscn','tests/framework/feature_batch_failure_test.tscn','tests/framework/action_config_lease_test.tscn','tests/framework/empty_extension_behavior_test.tscn','tests/framework/periodic_refresh_period_boundary_test.tscn','tests/framework/feature_delivery_templates_test.tscn','tests/framework/periodic_effect_runtime_test.tscn' -TimeoutSeconds 30"
+  ],
+  "timeout_seconds": 30,
+  "exit_code": 0,
+  "source_stable_during_run": true,
+  "passed": 25,
+  "failed": 0,
+  "status": "PASS"
+}
