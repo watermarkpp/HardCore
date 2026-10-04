@@ -1,0 +1,21 @@
+{
+  "parent": "800cca3cdb7cf21bc0802ae2650d982ec6cc0c9e",
+  "final_checks": 1492,
+  "arithmetic": "1420 + 10 pure loan boundaries + 35 new lifetime checks + 25 actual Root checks + 2 dynamic world death checks =1492",
+  "changed_existing_counts": [
+    {
+      "test_path": "tests/framework/feature_child_capacity_test.tscn",
+      "parent": 34,
+      "current": 44
+    },
+    {
+      "test_path": "tests/framework/feature_resource_natural_test.tscn",
+      "parent": 139,
+      "current": 141
+    }
+  ],
+  "natural_script": "tests/framework/natural_effect_lifecycle_test.gd",
+  "unchanged_script_sha256": "aef66f2ae80b842b6af7de10a02389ebb683760935a89d79f33ddd89eef636f5",
+  "current_world_deaths": 34,
+  "scope": "Natural resource-backed check count varies by additional actual world victims; original30 named targets, three sources and at-least360 delivery gate remain. Not a performance gain or load reduction."
+}
