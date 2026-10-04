@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "modules": [
+    {"module_id": "hc.ignite", "path": "res://assets/data/features/ignite.json"},
+    {"module_id": "hc.socketing_fixture", "path": "res://assets/data/features/socketing_fixture.json"}
+  ],
+  "bindings": [
+    {"module_id": "hc.ignite", "kind": "affix", "affix_id": "hc.affix.validation.magic_bonus.v1", "mechanic_id": "hc.ignite.ice_storm"},
+    {"module_id": "hc.ignite", "kind": "embedded_item", "item_id": "hc.item.990001", "mechanic_id": "hc.ignite.ice_storm"},
+    {"module_id": "hc.socketing_fixture", "kind": "embedded_item", "item_id": "hc.item.990001", "mechanic_id": "hc.socketing.fixture_accuracy"}
+  ]
+}

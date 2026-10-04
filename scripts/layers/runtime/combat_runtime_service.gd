@@ -185,12 +185,10 @@ func apply_feature_source_restore(source_ref: RefCounted, recipient: Dictionary,
 	if source == null or not source.has_method("restore_health") \
 		or (source.has_method("combat_transition_is_active") and source.combat_transition_is_active()):
 		return {"success":true,"reason":"source_unavailable","actual_gain":0}
-	var before := int(source.get("current_hp"))
-	source.restore_health(amount)
-	# The authority emits synchronous UI/lifecycle notifications. The source
-	# may retire during them; never dereference it after such retirement.
-	var after := int(source.get("current_hp")) if is_instance_valid(source) else before
-	return {"success":true,"reason":"","actual_gain":maxi(0,after-before)}
+	# Player and Summon authorities return their own committed gain, captured
+	# before observers run. Reading HP here afterwards would mix other writes.
+	var actual_gain: int = source.restore_health(amount)
+	return {"success":true,"reason":"","actual_gain":actual_gain}
 
 func apply_feature_periodic_damage(target: Node, raw_damage: int, source_actor: Node2D,
 	tick_rng: RandomNumberGenerator, historical_credit: Dictionary) -> Dictionary:

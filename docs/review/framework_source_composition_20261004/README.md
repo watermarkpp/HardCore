@@ -1,0 +1,32 @@
+# 正式词缀与嵌入来源、独立冷恢复及恢复回执增量
+
+父固定版本6ae8a4412bcbf146baf7e9cbe6bfac28e3383fdd；实际第三树施工HEAD仍5d9ceb0121980ca9636d9d1cc2e19982949fbf63加受测内容。此归档不是整个RFC、Task4、P6/R3或APK完成证明。
+
+本轮13源码/配置路径，3700受测文件内容集d82f0011f0dd581c0468e8fcad2a460f270cc97caf63003890fb45c8121c1bff。父版Pro与小可爱完整报告、消息身份与实际读取时间保留在audit_parent_6ae8a441；两份报告评审父版，新增量仍需新固定SHA审查。
+
+## 生产修改和反例
+
+- contribution_source_rules与provider、ContentLayers：登记hc.affix.validation.magic_bonus.v1，只读取既有合法v3掉落正magic_max修饰，不重洗旧装备、不重复授予属性。未知词缀拒绝整份候选。旧入口原生1检查1FAIL→32PASS；正式gem仍为hc.item.990001，通过已有socket事务取得唯一归属。
+- source_composition live/cold：真实quote_new→commit→唯一writer→装备→保存→load_save→独立进程cold。同一燃烧机制保留两个独立来源；移除原宝石只撤它的来源，重新插入原资产恢复同句柄，原base和roll不变。冷启动由既有native_producer_gate关联本轮完整live receipt、source、invocation、run与原生退出，不从旧expectation自行认定当前成功。
+- Player.restore_health与CombatRuntimeService：Pro指出通知后HP差可能混入观察者合法独立恢复，原生25恢复被记为35、最终HP85正确，86检查1FAIL。原HP权威写点在同步通知前冻结本次actual_gain并返回，桥接只消费该回执。没有第二HP写者、回滚或时序调整。
+- feature_lifesteal_runtime：补真正17即时来源派发，425总增量、17独立命令、0持续槽，并保留旧RNG。不是仅预留17回执。隔离测试源max_hp提高以容纳结果，正式数值未改。
+
+## 最终原生证据
+
+最终同内容两个调用：source_composition_delivery_direct_083349_171132（20场景、30秒单场景窗口），source_composition_delivery_world_084455_181099（8场景、60秒单场景窗口）。28唯一采用场景，24份完整framework回执共1123检查，其他4项为普通场景。全部原生退出0、无超时、无引擎错误、源码前后不变。引擎版本及console/child哈希见SCOPED_EVIDENCE.json。
+
+全部82次原生场景尝试及5次原FAIL保留在RUN_INDEX/native：未知来源、通知归因、cold缺本轮expectation，以及两次完整Dictionary相等诊断失败。JSON整数被解析为float，运行时为int；最终先经原codec合法编码，再按既有事务guard相同JSON边界比较完整wire全部字段，不忽略字段、不改保存生产逻辑。阶段旧指纹不用于最终采用结果。
+
+受控Root夹具调用真实生产API、Player起手和唯一planner，不是OS/UI端到端。组合专项停AI并人工推进生产模拟钟/pump；世界相关回归另行保留，但不声称这两来源组合已自然连续压力或设备验收。独立cold只验证物品、来源、所有权和旧操作重试，不恢复战斗状态或地面掉落。
+
+## 可复核字节与保护
+
+TESTED_SOURCE.zip 15744719字节，SHA256 c526e4bc492572cfd0cd0c0660e57821365212dd3bd5110ebc42e41dcf6d55a0；NATIVE_EVIDENCE.zip 5664072字节，SHA256 7f478cd9dcbbc6dc03dd6f52b47301aeff222cd934e8e12d395db3714e993098。每个源码和原始证据成员均逐项重读核验，清单保留原路径/大小/哈希。Git受测映射由publication preflight另存。
+
+INDEX_OBSERVED_BYTES.zip提供之前已留存的当前index与staged输出原件：2575546字节，SHA256 1fe862794a3c16c2e3e471b95b58396f2654e5ad4867a38e0817e48cb6aa6de6。原件分别df5a01dd0d87c14620e0021d70c25a830eb2cc37aa7b012eeb14ee1f2c58c5fb和58f820e21ad45db9ee7606bcf143de644314f2b70b7551548475756dfd0f7733，39611staged条目；只归档，没有恢复或重建真实index。历史66c505连续性FAIL、原备份MISSING仍保留，不能用当前备份修复历史缺口。
+
+PROTECTION记录主树/第二树HEAD、原dirty指纹和真实index保持；第三树只用独立临时index固定快照。冻结MonsterStreaming与三项主源媒体原字节保持。真实存档未触碰。
+
+## 未关闭范围
+
+符文正式来源与经济归属、死亡子连锁/防自激/动态几何完整接受保证、完整生成式组合仍继续。Task5功能模板、自然持续P6/R3与设备/GPU、旧故障supervisor安全复用、原v97B输入MISSING、APK及安卓交付分别开放。有限回归通过不外推无限内存、完整故障矩阵或整个架构完成。

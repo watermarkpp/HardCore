@@ -1,0 +1,29 @@
+# 正式词缀与嵌入来源组合、独立冷恢复及恢复归因
+
+仅第三树，父审查版本6ae8a441；源码由单主控串行修改。Root、Player、CombatRuntimeService和物品事务仍是原权威。主树、第二树、真实用户存档及冻结MonsterStreaming保持。
+
+## 注册来源
+
+原始v3掉落仍由原生成器/种子/严格验证器控制。hc.affix.validation.magic_bonus.v1登记于contribution_sources.json，是已经合法保存的正magic_max modifier视图，不新增随机抽签、属性加成或物品字段。只有显式验证registry绑定会启用该来源，原正式registry不启用它。宝石仍是原hc.item.990001，在原hc.socketing事务中拥有唯一归属。
+
+旧来源类型反例source_composition_red_075102_435907，1检查1FAIL，零引擎错误：feature_binding_unknown_kind。新增精确注册kind/选择器及贡献后，source_composition_green_075337_383777为32PASS；source_composition_related_075559_898113共13场景PASS。真正经过生产quote_new/commit/writer/装备/保存/同进程load_save；移除宝石只撤它的燃烧来源，词缀仍在，重插原宝石还原同来源句柄；原base与v3roll未改。Root真实起手及非空票据接受两来源，各原四周期交付，旧RNG不变。
+
+## 独立冷恢复
+
+新cold先RED：source_composition_cold_red_081652_613275，live32PASS，cold2检查1FAIL，原live没有本轮明确expectation。用既有native_producer_gate绑定本轮完整receipt、source、invocation、run ID和原生退出，不创建第二套持久化权威。
+
+source_composition_cold_green_081851_104151及diagnostic_082325_962532中live34PASS，cold12检查1FAIL，仅整条运行时Dictionary相等失败；其余来源、所有权与旧操作重试已通过。诊断JSON全部字段和值无差，后续原生类型证据确认durability/durability_raw/max_durability/max_durability_raw及扩展format_version期望TYPE_FLOAT、运行时TYPE_INT。旧codec明确允许JSON整数形式，已有事务guard也用JSON roundtrip做完整内容比较。改为双方先通过原codec编码，再完整wire roundtrip比较，未忽略字段或改生产保存。source_composition_cold_wire_082732_740796：live34/cold12全部PASS。此cold只恢复物品/贡献/事务，不宣称战斗状态或地面掉落恢复。
+
+## 恢复统计归因
+
+Pro6ae8完整报告已实际读取，来源和正文在outputs/framework_v2/heterogeneous_20261004/audit_6ae8a441。通知内另行restore_health(10)可使第一条25恢复统计变35，最终HP85本身正确。heal_attribution_red_080041_139596：86检查1FAIL，无引擎错误。Player原HP写点先冻结自身实际增量再发原同步通知并返回int；Combat消费其原回执，不在桥接层计算HP或重写HP。原Summon已经返回自身增量；已有Player调用点忽略返回值，原公式/死源规则/通知顺序保留。heal_attribution_green_080157_600717三个场景PASS。
+
+17即时来源也新增真正派发：一条实际HP损失100的事实，17次各恢复25、总425，从50到475，17个独立回执、零持续状态、不重抽旧RNG；最终运行时场景94项PASS。测试提高隔离来源max_hp以容纳明确期望，不修改正式数值、目标数或性能门槛。
+
+## 最终与待办
+
+source_composition_delivery_direct_083349_171132最终20场景PASS、原生退出0、无超时、源码稳定；世界8场景正在同源码串行执行。原生记录一律保留，旧1dfbca50阶段19/8不是新d82f0011最终字节。
+
+Task4符文来源/经济归属、死亡子连锁、防自激/动态几何完整承诺和生成式组合继续；Task5模板与完整P6/R3、旧故障supervisor安全复用、原B MISSING、Android/GPU/APK仍分别开放。小可爱6ae8尚未实际取得完整报告，Pro该轮已停止扫描；不将其idle或sleep等同审计完成。
+
+2026-10-04最终收证：世界source_composition_delivery_world_084455_181099已终态8PASS，和20直接场景同d82f0011内容；28唯一采用、24完整framework receipt/1123检查。82尝试中的5原FAIL不改标签。小可爱6ae8完整正文现已实际读取，来源turn01a10431、工具消息exec-fa426aae；UTC00:52:30保存，父双扫描已暂停。它要求当前index原件远端补证，既有df5a01/58f820备份只读归档，历史FAIL/MISSING不关闭。全部源码/原生/当前index原字节包及保护清单见docs/review/framework_source_composition_20261004。本轮不是整个Task4完成。

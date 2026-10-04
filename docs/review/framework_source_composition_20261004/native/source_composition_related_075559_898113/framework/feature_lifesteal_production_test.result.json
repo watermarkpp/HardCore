@@ -1,0 +1,146 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "formal trusted registry publishes both heterogeneous definitions",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "both primitives are default-off until explicit test activation",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "actual mapped world reaches READY",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "formal geometry supplies an actual receiver",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "formal live source activation compiles both handlers",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "accepted action freezes two different handler subscriptions",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "real Player windup accepts a nonempty capacity ticket",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "withdrawal during windup preserves accepted effects",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "one real release reaches the single planner",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "real profile maximum leaves space for the literal healing expectation",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "base HP commit finishes before either derived command",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "sole runtime owns the completed base fact",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "committed loss restores through the real player authority exactly once",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "instant healing coexists with one persistent ignite state",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "instant receipt and completed producer retire without losing periodic state",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "old ignite damage is unchanged at tick 1",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "periodic damage cannot recursively heal at tick 1",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "old ignite damage is unchanged at tick 2",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "periodic damage cannot recursively heal at tick 2",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "old ignite damage is unchanged at tick 3",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "periodic damage cannot recursively heal at tick 3",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "old ignite damage is unchanged at tick 4",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "periodic damage cannot recursively heal at tick 4",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "both handlers preserve old combat random streams",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "mixed commands, states and producers drain without business failure",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "retired world can restore the original default-off catalog",
+      "passed": true
+    }
+  ],
+  "count": 26,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "e01733b2-982f-4668-a344-754932c85e96",
+  "passed": 26,
+  "reported_checks": 26,
+  "reported_failures": 0,
+  "run_id": "dddab75d-a65e-44ec-a334-83750af68e7a",
+  "scene_id": "feature_lifesteal_production_test",
+  "schema_version": 1,
+  "source_content_sha256": "c5cab0fce88df89f30628c73d345173ddc0c93d798c1ea6abce101cf5ad11925",
+  "status": "PASS"
+}

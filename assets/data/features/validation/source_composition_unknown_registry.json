@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "modules": [{"module_id": "hc.ignite", "path": "res://assets/data/features/ignite.json"}],
+  "bindings": [
+    {"module_id": "hc.ignite", "kind": "affix", "affix_id": "hc.affix.validation.unknown", "mechanic_id": "hc.ignite.ice_storm"}
+  ]
+}

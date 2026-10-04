@@ -1,0 +1,14 @@
+ assets/data/features/contribution_sources.json     |  13 ++
+ .../validation/source_composition_registry.json    |  12 ++
+ .../source_composition_unknown_registry.json       |   7 +
+ scripts/features/adapters/contribution_provider.gd |  15 ++
+ .../features/adapters/contribution_source_rules.gd |  52 +++++++
+ scripts/layers/runtime/combat_runtime_service.gd   |  10 +-
+ scripts/layers/runtime/content_layer_registry.gd   |   8 +-
+ scripts/player.gd                                  |   9 +-
+ tests/framework/feature_lifesteal_runtime_test.gd  |  18 +++
+ .../feature_source_composition_cold_test.gd        |  65 +++++++++
+ .../feature_source_composition_cold_test.tscn      |   6 +
+ tests/framework/feature_source_composition_test.gd | 151 +++++++++++++++++++++
+ .../framework/feature_source_composition_test.tscn |   6 +
+ 13 files changed, 362 insertions(+), 10 deletions(-)

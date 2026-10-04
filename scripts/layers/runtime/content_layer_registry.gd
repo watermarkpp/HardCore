@@ -207,10 +207,10 @@ func _read_feature_candidate(registry_path: String) -> Dictionary:
 			errors.append("feature_binding_not_dictionary")
 			continue
 		var kind: Variant = binding.get("kind")
-		if not kind is String or kind not in ["item", "embedded_item", "skill", "rule"]:
+		if not kind is String or kind not in ["item", "embedded_item", "affix", "skill", "rule"]:
 			errors.append("feature_binding_unknown_kind")
 			continue
-		var key: String = "item_id" if kind in ["item", "embedded_item"] else ("skill_id" if kind == "skill" else "rule_id")
+		var key: String = "item_id" if kind in ["item", "embedded_item"] else ("affix_id" if kind=="affix" else ("skill_id" if kind == "skill" else "rule_id"))
 		if not compiler._keys(binding, ["module_id", "kind", "mechanic_id", key], [], errors, "feature_binding"):
 			continue
 		var mechanic: Variant = candidate.catalog().mechanics.get(binding.mechanic_id)
@@ -222,6 +222,10 @@ func _read_feature_candidate(registry_path: String) -> Dictionary:
 			errors.append("feature_binding_unknown_item")
 		if kind == "skill" and binding.skill_id not in authority.skill_ids:
 			errors.append("feature_binding_unknown_skill")
+		if kind == "affix":
+			var definition: Dictionary=preload("res://scripts/features/adapters/contribution_source_rules.gd").affix_definition(binding.affix_id) if binding.affix_id is String else {}
+			if definition.is_empty() or definition.stat not in authority.stat_keys:
+				errors.append("feature_binding_unknown_affix")
 		if kind == "rule" and (not binding.rule_id is String or not compiler._stable_id(binding.rule_id)):
 			errors.append("feature_binding_unknown_rule")
 		var handle := JSON.stringify(binding)

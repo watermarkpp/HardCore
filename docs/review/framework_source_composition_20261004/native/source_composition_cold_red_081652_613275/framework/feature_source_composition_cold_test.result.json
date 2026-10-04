@@ -1,0 +1,26 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "independent cold process starts with actual persistence",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "successful live composition supplies an explicit owned handoff",
+      "passed": false
+    }
+  ],
+  "count": 2,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "bb7903ce-5781-4f4d-98f7-3bac3c6df63c",
+  "passed": 1,
+  "reported_checks": 2,
+  "reported_failures": 1,
+  "run_id": "2b068540-8769-419a-b6b1-5dcea385a33e",
+  "scene_id": "feature_source_composition_cold_test",
+  "schema_version": 1,
+  "source_content_sha256": "626fdc0932637ea0f20a0957bf39c3d41a551ee3316745fcdec5557dacdfe57e",
+  "status": "FAIL"
+}

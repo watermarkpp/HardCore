@@ -4,6 +4,7 @@ const Graph := preload("res://scripts/features/contracts/plain_graph.gd")
 const Compiler := preload("res://scripts/features/compilation/feature_compiler.gd")
 const Ids := preload("res://scripts/identity/entity_registry.gd")
 const Items := preload("res://scripts/items/item_extension_codec.gd")
+const SourceRules := preload("res://scripts/features/adapters/contribution_source_rules.gd")
 
 # The caller supplies the existing strict item consumer and skill eligibility.
 # This provider owns no item attributes, progression, or saved equipment.
@@ -15,6 +16,20 @@ static func collect(bindings: Array, enabled: Array, equipment: Dictionary, prof
 		if binding.module_id not in enabled:
 			continue
 		match binding.kind:
+			"affix":
+				var definition:=SourceRules.affix_definition(binding.affix_id)
+				if definition.is_empty():
+					errors.append("unregistered_feature_affix:"+binding.affix_id); continue
+				for slot: String in equipment:
+					var instance: Variant=equipment[slot]
+					if not instance is Dictionary or not bool(item_eligible.call(instance)): continue
+					var base:=Items.base_record(instance)
+					var slot_id:=str(Ids.resolve(slot,"slot").get("id",""))
+					if slot_id.is_empty(): errors.append("unregistered_feature_slot:"+slot); continue
+					for ordinal: int in SourceRules.matching_affix_indices(base,definition):
+						var source: Dictionary={"slot":slot_id,"instance_id":base.instance_id,"mechanic_id":binding.mechanic_id,
+							"extension_id":JSON.stringify(["affix",binding.affix_id,ordinal])}
+						sources.append({"source":source,"mechanic_id":binding.mechanic_id})
 			"embedded_item":
 				for slot: String in equipment:
 					var instance: Variant = equipment[slot]

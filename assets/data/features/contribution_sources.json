@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "contract_id": "hc.feature.contribution.sources.v1",
+  "affixes": [
+    {
+      "affix_id": "hc.affix.validation.magic_bonus.v1",
+      "drop_affix_contract": "item.drop.affix.v3",
+      "stat": "magic_max",
+      "op": "add",
+      "positive_only": true
+    }
+  ]
+}

@@ -1644,16 +1644,21 @@ func _build_warrior_attack_context(has_combat_target := false, configuration: Re
 	return resolution
 
 
-func restore_health(amount: int) -> void:
+func restore_health(amount: int) -> int:
 	# Formal death stays at 0 HP until GameRoot completes an explicit revival.
 	# This also blocks delayed potion/ongoing-heal callbacks from reviving a
 	# dead player at the source-map position.
 	if _dead:
-		return
+		return 0
+	var hp_before := current_hp
 	current_hp = mini(max_hp, current_hp + maxi(0, amount))
+	# Freeze this authority's write before synchronous observers may perform
+	# their own independent damage, healing or lifecycle changes.
+	var actual_gain := maxi(0, current_hp - hp_before)
 	stats_changed.emit(current_hp, max_hp)
 	resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
 	queue_redraw()
+	return actual_gain
 
 
 func restore_mana(amount: int) -> void:

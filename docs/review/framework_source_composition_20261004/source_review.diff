@@ -1,0 +1,520 @@
+diff --git a/assets/data/features/contribution_sources.json b/assets/data/features/contribution_sources.json
+new file mode 100644
+index 000000000..bc9def018
+--- /dev/null
++++ b/assets/data/features/contribution_sources.json
+@@ -0,0 +1,13 @@
++{
++  "schema_version": 1,
++  "contract_id": "hc.feature.contribution.sources.v1",
++  "affixes": [
++    {
++      "affix_id": "hc.affix.validation.magic_bonus.v1",
++      "drop_affix_contract": "item.drop.affix.v3",
++      "stat": "magic_max",
++      "op": "add",
++      "positive_only": true
++    }
++  ]
++}
+diff --git a/assets/data/features/validation/source_composition_registry.json b/assets/data/features/validation/source_composition_registry.json
+new file mode 100644
+index 000000000..530b3b27d
+--- /dev/null
++++ b/assets/data/features/validation/source_composition_registry.json
+@@ -0,0 +1,12 @@
++{
++  "schema_version": 1,
++  "modules": [
++    {"module_id": "hc.ignite", "path": "res://assets/data/features/ignite.json"},
++    {"module_id": "hc.socketing_fixture", "path": "res://assets/data/features/socketing_fixture.json"}
++  ],
++  "bindings": [
++    {"module_id": "hc.ignite", "kind": "affix", "affix_id": "hc.affix.validation.magic_bonus.v1", "mechanic_id": "hc.ignite.ice_storm"},
++    {"module_id": "hc.ignite", "kind": "embedded_item", "item_id": "hc.item.990001", "mechanic_id": "hc.ignite.ice_storm"},
++    {"module_id": "hc.socketing_fixture", "kind": "embedded_item", "item_id": "hc.item.990001", "mechanic_id": "hc.socketing.fixture_accuracy"}
++  ]
++}
+diff --git a/assets/data/features/validation/source_composition_unknown_registry.json b/assets/data/features/validation/source_composition_unknown_registry.json
+new file mode 100644
+index 000000000..7a5213bcb
+--- /dev/null
++++ b/assets/data/features/validation/source_composition_unknown_registry.json
+@@ -0,0 +1,7 @@
++{
++  "schema_version": 1,
++  "modules": [{"module_id": "hc.ignite", "path": "res://assets/data/features/ignite.json"}],
++  "bindings": [
++    {"module_id": "hc.ignite", "kind": "affix", "affix_id": "hc.affix.validation.unknown", "mechanic_id": "hc.ignite.ice_storm"}
++  ]
++}
+diff --git a/scripts/features/adapters/contribution_provider.gd b/scripts/features/adapters/contribution_provider.gd
+index cf7888641..156a9348f 100644
+--- a/scripts/features/adapters/contribution_provider.gd
++++ b/scripts/features/adapters/contribution_provider.gd
+@@ -4,6 +4,7 @@ const Graph := preload("res://scripts/features/contracts/plain_graph.gd")
+ const Compiler := preload("res://scripts/features/compilation/feature_compiler.gd")
+ const Ids := preload("res://scripts/identity/entity_registry.gd")
+ const Items := preload("res://scripts/items/item_extension_codec.gd")
++const SourceRules := preload("res://scripts/features/adapters/contribution_source_rules.gd")
+ 
+ # The caller supplies the existing strict item consumer and skill eligibility.
+ # This provider owns no item attributes, progression, or saved equipment.
+@@ -15,6 +16,20 @@ static func collect(bindings: Array, enabled: Array, equipment: Dictionary, prof
+ 		if binding.module_id not in enabled:
+ 			continue
+ 		match binding.kind:
++			"affix":
++				var definition:=SourceRules.affix_definition(binding.affix_id)
++				if definition.is_empty():
++					errors.append("unregistered_feature_affix:"+binding.affix_id); continue
++				for slot: String in equipment:
++					var instance: Variant=equipment[slot]
++					if not instance is Dictionary or not bool(item_eligible.call(instance)): continue
++					var base:=Items.base_record(instance)
++					var slot_id:=str(Ids.resolve(slot,"slot").get("id",""))
++					if slot_id.is_empty(): errors.append("unregistered_feature_slot:"+slot); continue
++					for ordinal: int in SourceRules.matching_affix_indices(base,definition):
++						var source: Dictionary={"slot":slot_id,"instance_id":base.instance_id,"mechanic_id":binding.mechanic_id,
++							"extension_id":JSON.stringify(["affix",binding.affix_id,ordinal])}
++						sources.append({"source":source,"mechanic_id":binding.mechanic_id})
+ 			"embedded_item":
+ 				for slot: String in equipment:
+ 					var instance: Variant = equipment[slot]
+diff --git a/scripts/features/adapters/contribution_source_rules.gd b/scripts/features/adapters/contribution_source_rules.gd
+new file mode 100644
+index 000000000..6c4c2b2ac
+--- /dev/null
++++ b/scripts/features/adapters/contribution_source_rules.gd
+@@ -0,0 +1,52 @@
++extends RefCounted
++
++const Graph := preload("res://scripts/features/contracts/plain_graph.gd")
++const Compiler := preload("res://scripts/features/compilation/feature_compiler.gd")
++const PATH := "res://assets/data/features/contribution_sources.json"
++const CONTRACT := "hc.feature.contribution.sources.v1"
++const DROP_CONTRACTS := ["item.drop.affix.v1","item.drop.affix.v2","item.drop.affix.v3"]
++static var _affixes: Dictionary = {}
++
++# Registered selectors are views of already validated, persisted modifiers.
++# They never roll an affix, edit the old item or grant an attribute twice.
++static func affix_definition(id: String) -> Dictionary:
++	if not _ensure_loaded(): return {}
++	return _affixes.get(id,{})
++
++static func matching_affix_indices(base: Dictionary, definition: Dictionary) -> Array[int]:
++	var result: Array[int]=[]
++	if definition.is_empty() or not base.get("drop_affix") is Dictionary \
++		or base.drop_affix.get("contract_id")!=definition.drop_affix_contract \
++		or base.drop_affix.get("applied")!=true or not base.get("modifiers") is Array: return result
++	for index in base.modifiers.size():
++		var modifier: Variant=base.modifiers[index]
++		if modifier is Dictionary and modifier.get("stat")==definition.stat and modifier.get("op")==definition.op \
++			and (modifier.get("value") is int or modifier.get("value") is float) \
++			and is_finite(float(modifier.value)) and float(modifier.value)>0: result.append(index)
++	return result
++
++static func _ensure_loaded() -> bool:
++	if not _affixes.is_empty(): return true
++	var document: Variant=JSON.parse_string(FileAccess.get_file_as_string(PATH))
++	if not document is Dictionary or not _keys(document,["schema_version","contract_id","affixes"]) \
++		or not (document.schema_version is int or document.schema_version is float) \
++		or document.schema_version!=1 or document.contract_id!=CONTRACT \
++		or not document.affixes is Array or document.affixes.is_empty() or document.affixes.size()>64: return false
++	var captured:=Graph.capture(document,2048,8)
++	if not captured.success: return false
++	var definitions: Dictionary={}
++	for record: Variant in captured.value.affixes:
++		if not record is Dictionary or not _keys(record,["affix_id","drop_affix_contract","stat","op","positive_only"]) \
++			or not record.affix_id is String or not record.affix_id.begins_with("hc.affix.") \
++			or not Compiler._stable_id(record.affix_id) or definitions.has(record.affix_id) \
++			or record.drop_affix_contract not in DROP_CONTRACTS or not record.stat is String \
++			or not record.op is String or record.op!="add" or not record.positive_only is bool or record.positive_only!=true: return false
++		definitions[record.affix_id]=record
++	_affixes=Graph.capture(definitions,2048,8).value
++	return true
++
++static func _keys(value: Dictionary,fields: Array) -> bool:
++	if value.size()!=fields.size(): return false
++	for field: String in fields:
++		if not value.has(field): return false
++	return true
+diff --git a/scripts/layers/runtime/combat_runtime_service.gd b/scripts/layers/runtime/combat_runtime_service.gd
+index e4920954f..83382a433 100644
+--- a/scripts/layers/runtime/combat_runtime_service.gd
++++ b/scripts/layers/runtime/combat_runtime_service.gd
+@@ -185,12 +185,10 @@ func apply_feature_source_restore(source_ref: RefCounted, recipient: Dictionary,
+ 	if source == null or not source.has_method("restore_health") \
+ 		or (source.has_method("combat_transition_is_active") and source.combat_transition_is_active()):
+ 		return {"success":true,"reason":"source_unavailable","actual_gain":0}
+-	var before := int(source.get("current_hp"))
+-	source.restore_health(amount)
+-	# The authority emits synchronous UI/lifecycle notifications. The source
+-	# may retire during them; never dereference it after such retirement.
+-	var after := int(source.get("current_hp")) if is_instance_valid(source) else before
+-	return {"success":true,"reason":"","actual_gain":maxi(0,after-before)}
++	# Player and Summon authorities return their own committed gain, captured
++	# before observers run. Reading HP here afterwards would mix other writes.
++	var actual_gain: int = source.restore_health(amount)
++	return {"success":true,"reason":"","actual_gain":actual_gain}
+ 
+ func apply_feature_periodic_damage(target: Node, raw_damage: int, source_actor: Node2D,
+ 	tick_rng: RandomNumberGenerator, historical_credit: Dictionary) -> Dictionary:
+diff --git a/scripts/layers/runtime/content_layer_registry.gd b/scripts/layers/runtime/content_layer_registry.gd
+index 9d9113097..134cbfdc8 100644
+--- a/scripts/layers/runtime/content_layer_registry.gd
++++ b/scripts/layers/runtime/content_layer_registry.gd
+@@ -207,10 +207,10 @@ func _read_feature_candidate(registry_path: String) -> Dictionary:
+ 			errors.append("feature_binding_not_dictionary")
+ 			continue
+ 		var kind: Variant = binding.get("kind")
+-		if not kind is String or kind not in ["item", "embedded_item", "skill", "rule"]:
++		if not kind is String or kind not in ["item", "embedded_item", "affix", "skill", "rule"]:
+ 			errors.append("feature_binding_unknown_kind")
+ 			continue
+-		var key: String = "item_id" if kind in ["item", "embedded_item"] else ("skill_id" if kind == "skill" else "rule_id")
++		var key: String = "item_id" if kind in ["item", "embedded_item"] else ("affix_id" if kind=="affix" else ("skill_id" if kind == "skill" else "rule_id"))
+ 		if not compiler._keys(binding, ["module_id", "kind", "mechanic_id", key], [], errors, "feature_binding"):
+ 			continue
+ 		var mechanic: Variant = candidate.catalog().mechanics.get(binding.mechanic_id)
+@@ -222,6 +222,10 @@ func _read_feature_candidate(registry_path: String) -> Dictionary:
+ 			errors.append("feature_binding_unknown_item")
+ 		if kind == "skill" and binding.skill_id not in authority.skill_ids:
+ 			errors.append("feature_binding_unknown_skill")
++		if kind == "affix":
++			var definition: Dictionary=preload("res://scripts/features/adapters/contribution_source_rules.gd").affix_definition(binding.affix_id) if binding.affix_id is String else {}
++			if definition.is_empty() or definition.stat not in authority.stat_keys:
++				errors.append("feature_binding_unknown_affix")
+ 		if kind == "rule" and (not binding.rule_id is String or not compiler._stable_id(binding.rule_id)):
+ 			errors.append("feature_binding_unknown_rule")
+ 		var handle := JSON.stringify(binding)
+diff --git a/scripts/player.gd b/scripts/player.gd
+index 961ad0bab..170a166f8 100644
+--- a/scripts/player.gd
++++ b/scripts/player.gd
+@@ -1644,16 +1644,21 @@ func _build_warrior_attack_context(has_combat_target := false, configuration: Re
+ 	return resolution
+ 
+ 
+-func restore_health(amount: int) -> void:
++func restore_health(amount: int) -> int:
+ 	# Formal death stays at 0 HP until GameRoot completes an explicit revival.
+ 	# This also blocks delayed potion/ongoing-heal callbacks from reviving a
+ 	# dead player at the source-map position.
+ 	if _dead:
+-		return
++		return 0
++	var hp_before := current_hp
+ 	current_hp = mini(max_hp, current_hp + maxi(0, amount))
++	# Freeze this authority's write before synchronous observers may perform
++	# their own independent damage, healing or lifecycle changes.
++	var actual_gain := maxi(0, current_hp - hp_before)
+ 	stats_changed.emit(current_hp, max_hp)
+ 	resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
+ 	queue_redraw()
++	return actual_gain
+ 
+ 
+ func restore_mana(amount: int) -> void:
+diff --git a/tests/framework/feature_lifesteal_runtime_test.gd b/tests/framework/feature_lifesteal_runtime_test.gd
+index 9939d7349..9c3537d06 100644
+--- a/tests/framework/feature_lifesteal_runtime_test.gd
++++ b/tests/framework/feature_lifesteal_runtime_test.gd
+@@ -22,6 +22,7 @@ var runtime: RefCounted
+ var source: CharacterBody2D
+ var combat: Node
+ var release_sequence := 0
++var _bonus_restore_active := false
+ 
+ func _ready() -> void:
+ 	_run.call_deferred()
+@@ -78,6 +79,10 @@ func _run() -> void:
+ 	await _case(bindings,1000,100,0,0,"dead source", "")
+ 	await _case(bindings,1000,100,50,50,"changed source life", "change_life")
+ 	await _case(bindings,1000,100,50,50,"changed world", "change_world")
++	var healing_before: int=runtime.metrics().actual_healing
++	source.stats_changed.connect(_bonus_restore,CONNECT_ONE_SHOT)
++	await _case(bindings,1000,100,50,85,"synchronous notification adds a separate legal restoration", "")
++	check(int(runtime.metrics().actual_healing)-healing_before==25,"the first command freezes its own gain before a synchronous observer restores another ten HP")
+ 	var many: Array = []
+ 	for index in range(17): many.append(contribution(index))
+ 	var instant := Compiler.compile([module()],many,Authority.build())
+@@ -87,6 +92,13 @@ func _run() -> void:
+ 		check(ticket != null,"instant sources do not consume sixteen persistent slots per target")
+ 		check(runtime.reservation_snapshot().states == 0 and runtime.reservation_snapshot().promised_receipts == 17,"instant capacity reserves seventeen receipts and zero states")
+ 		if ticket != null: ticket.close()
++		var commands_before: int=runtime.metrics().healing_commands
++		var gain_before: int=runtime.metrics().actual_healing
++		source.max_hp=1000
++		await _case(instant.bundle.event_index["damage_committed:"+SKILL],1000,100,50,475,"seventeen admitted instant sources actually dispatch", "")
++		check(int(runtime.metrics().healing_commands)-commands_before==17 and int(runtime.metrics().actual_healing)-gain_before==425,
++			"seventeen separately deduplicated commands deliver all four hundred twenty-five HP with zero persistent states")
++		source.max_hp=100
+ 	var mixed: Array = [contribution(0),contribution(1)]
+ 	var paired := Compiler.compile([module()],mixed,Authority.build())
+ 	check(paired.success,"two distinct healing subscriptions are retained")
+@@ -105,6 +117,12 @@ func _run() -> void:
+ func _retire_during_heal(_hp: int, _max_hp: int) -> void:
+ 	runtime.clear()
+ 
++func _bonus_restore(_hp: int,_max_hp: int) -> void:
++	if _bonus_restore_active: return
++	_bonus_restore_active=true
++	source.restore_health(10)
++	_bonus_restore_active=false
++
+ func _case(bindings: Array, hp: int, damage: int, before: int, expected: int, label: String, action: String) -> void:
+ 	runtime.clear(); source.current_hp = before
+ 	var target := Enemy.new(); target.setup(GameData.get_monster_by_id(19),null); add_child(target)
+diff --git a/tests/framework/feature_source_composition_cold_test.gd b/tests/framework/feature_source_composition_cold_test.gd
+new file mode 100644
+index 000000000..95f551aeb
+--- /dev/null
++++ b/tests/framework/feature_source_composition_cold_test.gd
+@@ -0,0 +1,65 @@
++extends Node
++
++const Gate := preload("res://tests/framework/helpers/native_producer_gate.gd")
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const Codec := preload("res://scripts/items/item_extension_codec.gd")
++const Gem := preload("res://scripts/items/socket_gem_rules.gd")
++const EXPECTED := "res://outputs/test_logs/framework/feature_source_composition_expected.json"
++var proof := Proof.new()
++var checks := 0
++var errors: Array[String]=[]
++
++func check(value: bool,label: String) -> void:
++	proof.record(value,label); checks+=1
++	if not value: errors.append(label)
++func _ready() -> void: _run.call_deferred()
++func _run() -> void:
++	check(not PlayerState.test_mode,"independent cold process starts with actual persistence")
++	var expected: Variant=JSON.parse_string(FileAccess.get_file_as_string(EXPECTED)) if FileAccess.file_exists(EXPECTED) else null
++	check(expected is Dictionary,"successful live composition supplies an explicit owned handoff")
++	if not expected is Dictionary: _finish(); return
++	var valid:=Gate.accepts(expected,"feature_source_composition_test")
++	check(valid,"expectation binds this invocation's native exit-zero complete live producer")
++	if not valid: _finish(); return
++	check(expected.producer_run_id!=OS.get_environment("HARDCORE_FRAMEWORK_RUN_ID"),"cold restoration has a different native execution identity")
++	PlayerState.test_mode=true; PlayerState.reset_progress(false)
++	check(ContentLayers.reload_feature_catalog("res://assets/data/features/validation/source_composition_registry.json")
++		and ContentLayers.set_feature_module_enabled(Gem.MODULE,true) and ContentLayers.set_feature_module_enabled("hc.ignite",true),
++		"fresh process resolves the same registered sources through the production configuration")
++	PlayerState.profile_directory=expected.profile_directory; PlayerState.profile_index_path=expected.profile_index_path
++	PlayerState.shared_warehouse_path=expected.shared_warehouse_path
++	PlayerState.shared_warehouse_transaction_log_path=expected.shared_warehouse_transaction_log_path
++	PlayerState.active_profile_id=expected.profile_id; PlayerState._shared_warehouse_initialized=false
++	PlayerState.test_mode=false; PlayerState.load_save()
++	check(PlayerState.last_load_result.success,"real cold loader restores the producer's isolated durable profile")
++	var gear: Dictionary=PlayerState.equipment.get("hc.slot.weapon",{})
++	var encoded:=Codec.encode_runtime(gear)
++	var expected_encoded:=Codec.encode_runtime(expected.gear)
++	if gear!=expected.gear:
++		var type_differences: Array=[]
++		for key: String in expected.gear:
++			if typeof(expected.gear[key])!=typeof(gear.get(key)): type_differences.append({"field":key,"expected_type":typeof(expected.gear[key]),"actual_type":typeof(gear.get(key))})
++		type_differences.append({"field":"extension.format_version","expected_type":typeof(expected.gear[Codec.RUNTIME_EXTENSION].format_version),"actual_type":typeof(gear[Codec.RUNTIME_EXTENSION].format_version)})
++		print("SOURCE_COMPOSITION_COLD_TYPES="+JSON.stringify(type_differences))
++	# Persistence owns JSON wire values. Compare every field after the same
++	# JSON boundary used by the transaction guard, not parser float/int tags.
++	check(encoded.status==Codec.KNOWN_VALID and expected_encoded.status==Codec.KNOWN_VALID
++		and JSON.parse_string(JSON.stringify(encoded.item))==JSON.parse_string(JSON.stringify(expected_encoded.item)),
++		"cold equipment keeps the complete validated persisted wire content exactly")
++	check(Codec.ownership_ids(gear)==[expected.gear.instance_id,expected.gem_instance_id],"cold gear owns the same original gem exactly once")
++	check(PlayerState._validate_extended_item_ownership({"inventory":PlayerState.inventory,"equipment":PlayerState.equipment}),"cold aggregate has no second accessible copy of the embedded gem")
++	var handles: Array=[]
++	for binding: Dictionary in PlayerState.feature_bundle().get("event_index",{}).get("damage_committed:hc.skill.wizard.ice_storm",[]): handles.append(binding.handle)
++	handles.sort()
++	check(handles.size()==2 and handles==expected.source_handles,"cold compiler reconstructs the two exact affix and gem provenance handles")
++	var inventory_before:=PlayerState.inventory.duplicate(true); var equipment_before:=PlayerState.equipment.duplicate(true)
++	var replay:=PlayerState.commit_item_transaction(PlayerState.quote_item_transaction(expected.last_request))
++	check(replay.get("durable",false) and not replay.get("pending",false) and PlayerState._json_persistence.pending_count()==0,
++		"cold retry of the original insertion returns the recorded outcome without a new writer")
++	check(PlayerState.inventory==inventory_before and PlayerState.equipment==equipment_before,"cold replay neither duplicates the gem nor replaces either source")
++	_finish()
++
++func _finish() -> void:
++	if not proof.write_receipt("feature_source_composition_cold_test",checks,errors.size()): errors.append("receipt")
++	print(("FRAMEWORK_SOURCE_COMPOSITION_COLD_PASS" if errors.is_empty() else "FRAMEWORK_SOURCE_COMPOSITION_COLD_FAIL")+" checks="+str(checks)+" errors="+str(errors))
++	get_tree().quit(0 if errors.is_empty() else 1)
+diff --git a/tests/framework/feature_source_composition_cold_test.tscn b/tests/framework/feature_source_composition_cold_test.tscn
+new file mode 100644
+index 000000000..b958b0854
+--- /dev/null
++++ b/tests/framework/feature_source_composition_cold_test.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/feature_source_composition_cold_test.gd" id="1"]
++
++[node name="FeatureSourceCompositionColdTest" type="Node"]
++script = ExtResource("1")
+diff --git a/tests/framework/feature_source_composition_test.gd b/tests/framework/feature_source_composition_test.gd
+new file mode 100644
+index 000000000..f28fc98d7
+--- /dev/null
++++ b/tests/framework/feature_source_composition_test.gd
+@@ -0,0 +1,151 @@
++extends Node
++
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const Root := preload("res://tests/framework/fixtures/lease_probe_root.gd")
++const Fixture := preload("res://tests/helpers/formal_world_skill_fixture.gd")
++const Codec := preload("res://scripts/items/item_extension_codec.gd")
++const Gem := preload("res://scripts/items/socket_gem_rules.gd")
++const Drop := preload("res://scripts/item_drop_instance_rules.gd")
++const SKILL := "hc.skill.wizard.ice_storm"
++const EXPECTED := "res://outputs/test_logs/framework/feature_source_composition_expected.json"
++var proof := Proof.new()
++var checks := 0
++var errors: Array[String] = []
++var _last_item_request: Dictionary={}
++
++func check(value: bool,label: String) -> void:
++	proof.record(value,label); checks += 1
++	if not value: errors.append(label)
++func _ready() -> void: _run.call_deferred()
++
++func _run() -> void:
++	PlayerState.test_mode = true; PlayerState.reset_progress(false)
++	PlayerState.profession = "法师"; PlayerState.level = 50
++	PlayerState.learned_skills = {SKILL:3}; PlayerState.recalculate_stats(false)
++	check(ContentLayers.reload_feature_catalog("res://assets/data/features/validation/source_composition_registry.json"),
++		"trusted registry accepts an explicitly registered affix source beside the embedded gem source")
++	if not errors.is_empty():
++		print("SOURCE_COMPOSITION_PUBLICATION_ERRORS="+JSON.stringify(ContentLayers.feature_load_errors)); _finish(); return
++	var published: Dictionary = ContentLayers.feature_configuration()
++	check(published.enabled_modules.is_empty(),"composition stays default-off before explicit fixture activation")
++	check(not ContentLayers.reload_feature_catalog("res://assets/data/features/validation/source_composition_unknown_registry.json")
++		and ContentLayers.feature_configuration()==published,"unknown affix identity rejects the whole candidate and preserves the published catalog")
++	check(ContentLayers.set_feature_module_enabled(Gem.MODULE,true) and ContentLayers.set_feature_module_enabled("hc.ignite",true),
++		"both fixture business permission and existing ignite activate through the formal configuration boundary")
++	var base: Dictionary = {}
++	for index in range(256):
++		var candidate := Drop.create_instance(GameData.get_item_record({"item_id":85}),"source-composition:"+str(index))
++		for modifier: Dictionary in candidate.get("modifiers",[]):
++			if modifier.stat=="magic_max" and modifier.op=="add" and float(modifier.value)>0: base=candidate; break
++		if not base.is_empty(): break
++	check(not base.is_empty() and GameData.validate_item_drop_instance(base),"real immutable v3 drop generation supplies a validated positive magic affix")
++	if base.is_empty(): _finish(); return
++	var original_base := base.duplicate(true)
++	var gem := Gem.create_instance("source-composition:gem",true)
++	var directory := "user://framework_source_composition_%d" % Time.get_ticks_usec()
++	PlayerState.profile_directory = directory.path_join("characters")
++	PlayerState.profile_index_path = directory.path_join("profiles.json")
++	PlayerState.shared_warehouse_path = directory.path_join("shared.json")
++	PlayerState.shared_warehouse_transaction_log_path = directory.path_join("shared.transaction.json")
++	PlayerState.active_profile_id = "source-composition"; PlayerState.character_name = "来源组合验收"
++	PlayerState._shared_warehouse_initialized = false; PlayerState.set_process(false)
++	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(PlayerState.profile_directory))
++	PlayerState.inventory = [base,gem]; PlayerState.test_mode = false
++	check(PlayerState.save_game(false,false),"production writer persists isolated real equipment and original gem inputs")
++	check(await _transaction("hc.socketing.insert",base.instance_id,gem.instance_id),"formal durable insertion gives the original gem one equipment owner")
++	check(PlayerState.equip_inventory_index_result(0,"hc.slot.weapon",base.instance_id).get("success",false),"production equip compiles the actual affix and embedded sources")
++	check(_handles().size()==2,"exactly two independent sources subscribe to the same ignite mechanism")
++	var first_handles := _handles()
++	if first_handles.size()!=2: _finish(); return
++	check(first_handles[0]!=first_handles[1],"affix and embedded gem have distinct stable provenance handles")
++	check(await _transaction("hc.socketing.remove",base.instance_id,""),"formal removal returns the original gem through the single writer")
++	check(_handles().size()==1,"removing the gem withdraws its ignite contribution and preserves the real affix")
++	check(Codec.base_record(PlayerState.equipment["hc.slot.weapon"])==original_base,"socket removal does not reroll or edit historical v3 modifiers")
++	check(await _transaction("hc.socketing.insert",base.instance_id,gem.instance_id),"a new issued operation reinserts the same uniquely owned gem")
++	check(_handles()==first_handles,"reinsert reconstructs the same two logical source identities")
++	PlayerState._start_item_save(); PlayerState._json_persistence.drain()
++	check(PlayerState._json_persistence.pending_count()==0,"accepted item receipts and ordinary save fully drain")
++	PlayerState.load_save()
++	check(PlayerState.last_load_result.success and _handles()==first_handles,"production reload rebuilds identical source provenance from the durable original items")
++	check(Codec.ownership_ids(PlayerState.equipment["hc.slot.weapon"])==[base.instance_id,gem.instance_id]
++		and PlayerState._validate_extended_item_ownership({"inventory":PlayerState.inventory,"equipment":PlayerState.equipment}),"saved and loaded composition has no duplicated embedded asset")
++	var game := Root.new(); add_child(game)
++	var deadline := Time.get_ticks_msec()+15000
++	while not game.gameplay_input_is_enabled() and Time.get_ticks_msec()<deadline: await get_tree().process_frame
++	check(game.gameplay_input_is_enabled(),"real production world reaches READY with the composed equipment")
++	if not game.gameplay_input_is_enabled(): game.queue_free(); await get_tree().process_frame; _finish(); return
++	var target := await Fixture.prepare_target(self,game,game.player,19,"source_composition")
++	check(target!=null,"actual mapped geometry supplies the receiver")
++	if target==null: game.queue_free(); await get_tree().process_frame; _finish(); return
++	game.set_process(false); game.set_physics_process(false); game.player.set_physics_process(false)
++	for actor: Node in get_tree().get_nodes_in_group("enemies"): actor.set_physics_process(false)
++	target.max_hp=10000; target.current_hp=10000; target.direct_spell_anti_magic_points=0
++	target.direct_spell_magic_defense_min=0; target.direct_spell_magic_defense_max=0; target.direct_spell_stats_valid=true
++	game.player.current_mp=100; game._skill_cast_target=target; game._set_magic_locked_target(target,true)
++	var lease: RefCounted = game._capture_action_configuration(SKILL)
++	check(lease!=null and lease.event_bindings_for(SKILL).size()==2,"real action captures both formal contributions in one immutable lease")
++	if lease==null: game.queue_free(); await get_tree().process_frame; _finish(); return
++	check(game.player.request_skill(SKILL,target.get_instance_id(),lease) and lease.effect_reservation()!=null,"real windup accepts capacity for both derived states")
++	deadline=Time.get_ticks_msec()+3000
++	while game.observed_releases==0 and Time.get_ticks_msec()<deadline: await get_tree().process_frame
++	check(game.observed_releases==1 and is_same(game.observed_configuration,lease),"composed sources still use one actual release and planner")
++	var loss: int = 10000-target.current_hp
++	var runtime: RefCounted = game._feature_effect_runtime
++	var root_rng: int=game._rng.state; var player_rng: int=game.player._rng.state
++	for iteration in range(120):
++		runtime.pump()
++		if runtime.pending_count()==0: break
++		await get_tree().process_frame
++	check(loss>0 and runtime.active_count()==2,"one committed base hit starts both separately owned ignite states")
++	check(ContentLayers.set_feature_module_enabled("hc.ignite",false) and _handles().is_empty(),"formal withdrawal removes future subscriptions without cancelling accepted states")
++	for second in range(1,5):
++		game._time_domains.advance_simulation(float(second*1000000-game._time_domains.simulation_usec())/1000000.0)
++		for iteration in range(120):
++			runtime.pump()
++			if not runtime.has_due(): break
++			await get_tree().process_frame
++		check(target.current_hp==10000-loss-2*second*roundi(float(loss)*0.05),"two original source states each deliver their unchanged periodic damage at tick "+str(second))
++	check(game._rng.state==root_rng and game.player._rng.state==player_rng,"source composition does not consume legacy combat random streams")
++	check(runtime.errors.is_empty() and not runtime.has_work(),"composed producers, receipts and persistent states reach their terminal boundary")
++	game.queue_free(); await get_tree().process_frame
++	PlayerState._start_item_save(); PlayerState._json_persistence.drain()
++	if errors.is_empty():
++		var expected: Dictionary={"producer_run_id":OS.get_environment("HARDCORE_FRAMEWORK_RUN_ID"),
++			"invocation_id":OS.get_environment("HARDCORE_FRAMEWORK_INVOCATION_ID"),
++			"source_content_sha256":OS.get_environment("HARDCORE_R3_CONTENT_SHA256"),
++			"profile_id":PlayerState.active_profile_id,"profile_directory":PlayerState.profile_directory,
++			"profile_index_path":PlayerState.profile_index_path,"shared_warehouse_path":PlayerState.shared_warehouse_path,
++			"shared_warehouse_transaction_log_path":PlayerState.shared_warehouse_transaction_log_path,
++			"gear":PlayerState.equipment["hc.slot.weapon"],"gem_instance_id":gem.instance_id,
++			"source_handles":first_handles,"last_request":_last_item_request}
++		var file:=FileAccess.open(EXPECTED,FileAccess.WRITE)
++		check(file!=null,"this producer can write its owned cold expectation")
++		if file!=null:
++			file.store_string(JSON.stringify(expected)); file.flush()
++			check(file.get_error()==OK,"complete cold expectation is written without ignoring I/O failure")
++			file.close()
++	PlayerState.test_mode=true; PlayerState.set_process(true)
++	check(ContentLayers.reload_feature_catalog(),"retired world restores the original default-off registry")
++	_finish()
++
++func _handles() -> Array:
++	var handles: Array=[]
++	for binding: Dictionary in PlayerState.feature_bundle().get("event_index",{}).get("damage_committed:"+SKILL,[]): handles.append(binding.handle)
++	handles.sort(); return handles
++
++func _transaction(action: String,target: String,gem: String) -> bool:
++	PlayerState._start_item_save(); PlayerState._json_persistence.drain()
++	var quote: Dictionary=PlayerState.quote_new_item_transaction({"action":action,"target_instance_id":target,"gem_instance_id":gem})
++	if quote.get("success",false): _last_item_request=quote.request.duplicate(true)
++	var pending: Dictionary=PlayerState.commit_item_transaction(quote)
++	var job: Variant=pending.get("job")
++	if job==null: print("SOURCE_COMPOSITION_TRANSACTION="+JSON.stringify({"quote":quote,"pending":pending})); return false
++	var deadline=Time.get_ticks_msec()+5000
++	while not job.response.get("finished",false) and Time.get_ticks_msec()<deadline:
++		PlayerState._json_persistence.pump(); await get_tree().process_frame
++	return job.response.get("success",false)
++
++func _finish() -> void:
++	if not proof.write_receipt("feature_source_composition_test",checks,errors.size()): errors.append("receipt")
++	print(("FRAMEWORK_SOURCE_COMPOSITION_PASS" if errors.is_empty() else "FRAMEWORK_SOURCE_COMPOSITION_FAIL")+" checks="+str(checks)+" errors="+str(errors))
++	get_tree().quit(0 if errors.is_empty() else 1)
+diff --git a/tests/framework/feature_source_composition_test.tscn b/tests/framework/feature_source_composition_test.tscn
+new file mode 100644
+index 000000000..77e3eae5b
+--- /dev/null
++++ b/tests/framework/feature_source_composition_test.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/feature_source_composition_test.gd" id="1"]
++
++[node name="FeatureSourceCompositionTest" type="Node"]
++script = ExtResource("1")

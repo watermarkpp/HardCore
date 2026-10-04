@@ -1,0 +1,21 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "trusted registry accepts an explicitly registered affix source beside the embedded gem source",
+      "passed": false
+    }
+  ],
+  "count": 1,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "38f71286-5f02-45e8-ab86-4de82719c9ba",
+  "passed": 0,
+  "reported_checks": 1,
+  "reported_failures": 1,
+  "run_id": "ded07bab-7c8f-4cb3-bedb-3be4691f707e",
+  "scene_id": "feature_source_composition_test",
+  "schema_version": 1,
+  "source_content_sha256": "67d30e033d9d4e5fd72ed35c76ea8ef396800d847865ccb38ea483c28343ff81",
+  "status": "FAIL"
+}

@@ -31,3 +31,6 @@ resource_multi_audio_retirement_red_072012_398623：23检查/1FAIL，并真实�
 剩余Task4词缀/嵌入/符文正式来源组合、死亡子连锁及生成式组合尚未实现；Task5完整P6/R3、旧破坏性supervisor安全复用、Android/GPU、APK和原v97B MISSING仍分别开放。
 
 2026-10-04最终同86b48f60内容：直接46/世界8全部原生PASS，53完整receipt/1409检查，退出0且前后源码不变。73次原生尝试保留8FAIL；首次world提前启动被mutex拒绝，原生未开始，单列1个wrapper FAIL，等待直接终态后串行重跑8PASS。完整原字节与保护检查见docs/review/framework_heterogeneous_20261004；当前index完整备份/39611条staged输出再次验证。Task4仍NOT_RUN整体；后续正式词缀/嵌入/符文组合、死亡链与生成式组合继续。
+
+2026-10-04正式来源增量：旧v3已验证正magic_max词缀以注册hc.affix.validation.magic_bonus.v1选择器提供贡献，不改旧物品字段/掉落规则/roll/属性；原990001宝石仍经生产quote_new/commit和唯一writer持久化。source_composition RED1FAIL(feature_binding_unknown_kind)、GREEN32PASS，13相关场景同c5cab0fc内容PASS；真实Root单lease/非空票据、两个同机制来源各四周期、移除宝石保留词缀、重新插入原身份、生产保存/同进程load_save及原RNG通过。这不是独立cold或符文完成。
+Pro6ae8完整报告已读取保存，指出恢复后同步通知可能多计actual_healing；原生86检查1FAIL、无引擎错误，最终HP85正确但归因多计10。Player原写点在通知前冻结实际增量并返回int，Combat消费原回执；原HP公式、通知顺序、死源规则不改。三相关场景GREEN已通过，17即时源实际派发补证与最终相关回归正在执行。小可爱同轮尚未实际取得完整报告，定时仅等它。

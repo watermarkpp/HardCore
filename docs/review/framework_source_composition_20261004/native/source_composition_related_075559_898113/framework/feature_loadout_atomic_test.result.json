@@ -1,0 +1,46 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "empty bundle publishes without stat inputs",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "numeric schema alone cannot prove actual actor range invariant",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "stat candidate cannot publish without actual base validation",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "actual inverted range rejects and preserves previous bundle",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "valid boundary stat candidate publishes atomically",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "valid contribution applies once after validation",
+      "passed": true
+    }
+  ],
+  "count": 6,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "e01733b2-982f-4668-a344-754932c85e96",
+  "passed": 6,
+  "reported_checks": 6,
+  "reported_failures": 0,
+  "run_id": "5f0193bd-cd67-4449-a0c2-e131b1147dcd",
+  "scene_id": "feature_loadout_atomic_test",
+  "schema_version": 1,
+  "source_content_sha256": "c5cab0fce88df89f30628c73d345173ddc0c93d798c1ea6abce101cf5ad11925",
+  "status": "PASS"
+}

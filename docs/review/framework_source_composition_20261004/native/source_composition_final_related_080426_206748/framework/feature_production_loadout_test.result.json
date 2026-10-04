@@ -1,0 +1,111 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "formal item authority supplies exact ID 85",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "production content/loadout validates",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "all new modules default disabled",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "default disabled loadout has no sources",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "empty extension preserves the exact old definition",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "formal module activation succeeds",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "activation recompiles via actual PlayerState signal consumer",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "item, skill and rule grants have distinct stable handles",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "old base calculator plus two explicit contributions applies once",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "effective geometry leaf differs by exactly the declared amount",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "effective resource leaf differs by the same module",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "effective nested definition is immutable",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "pure durability wear never recompiles qualification",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "crossing broken boundary recompiles exactly once",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "broken equipment revokes only that source and leaves learned skill and rule",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "old accepted immutable source snapshot remains unchanged",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "disable module through actual content entry",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "deactivation withdraws every module source",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "deactivation restores exact canonical skill",
+      "passed": true
+    }
+  ],
+  "count": 19,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "596ece40-8767-4a92-931c-fe3b7717ed6a",
+  "passed": 19,
+  "reported_checks": 19,
+  "reported_failures": 0,
+  "run_id": "0b0c5126-de6c-4c73-b2f4-15e7fd4e2f67",
+  "scene_id": "feature_production_loadout_test",
+  "schema_version": 1,
+  "source_content_sha256": "1dfbca50e801a420c200694440ce9649f9c72693f3070e793faa4db159a133a6",
+  "status": "PASS"
+}

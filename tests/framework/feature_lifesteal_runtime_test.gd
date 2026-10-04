@@ -22,6 +22,7 @@ var runtime: RefCounted
 var source: CharacterBody2D
 var combat: Node
 var release_sequence := 0
+var _bonus_restore_active := false
 
 func _ready() -> void:
 	_run.call_deferred()
@@ -78,6 +79,10 @@ func _run() -> void:
 	await _case(bindings,1000,100,0,0,"dead source", "")
 	await _case(bindings,1000,100,50,50,"changed source life", "change_life")
 	await _case(bindings,1000,100,50,50,"changed world", "change_world")
+	var healing_before: int=runtime.metrics().actual_healing
+	source.stats_changed.connect(_bonus_restore,CONNECT_ONE_SHOT)
+	await _case(bindings,1000,100,50,85,"synchronous notification adds a separate legal restoration", "")
+	check(int(runtime.metrics().actual_healing)-healing_before==25,"the first command freezes its own gain before a synchronous observer restores another ten HP")
 	var many: Array = []
 	for index in range(17): many.append(contribution(index))
 	var instant := Compiler.compile([module()],many,Authority.build())
@@ -87,6 +92,13 @@ func _run() -> void:
 		check(ticket != null,"instant sources do not consume sixteen persistent slots per target")
 		check(runtime.reservation_snapshot().states == 0 and runtime.reservation_snapshot().promised_receipts == 17,"instant capacity reserves seventeen receipts and zero states")
 		if ticket != null: ticket.close()
+		var commands_before: int=runtime.metrics().healing_commands
+		var gain_before: int=runtime.metrics().actual_healing
+		source.max_hp=1000
+		await _case(instant.bundle.event_index["damage_committed:"+SKILL],1000,100,50,475,"seventeen admitted instant sources actually dispatch", "")
+		check(int(runtime.metrics().healing_commands)-commands_before==17 and int(runtime.metrics().actual_healing)-gain_before==425,
+			"seventeen separately deduplicated commands deliver all four hundred twenty-five HP with zero persistent states")
+		source.max_hp=100
 	var mixed: Array = [contribution(0),contribution(1)]
 	var paired := Compiler.compile([module()],mixed,Authority.build())
 	check(paired.success,"two distinct healing subscriptions are retained")
@@ -104,6 +116,12 @@ func _run() -> void:
 
 func _retire_during_heal(_hp: int, _max_hp: int) -> void:
 	runtime.clear()
+
+func _bonus_restore(_hp: int,_max_hp: int) -> void:
+	if _bonus_restore_active: return
+	_bonus_restore_active=true
+	source.restore_health(10)
+	_bonus_restore_active=false
 
 func _case(bindings: Array, hp: int, damage: int, before: int, expected: int, label: String, action: String) -> void:
 	runtime.clear(); source.current_hp = before

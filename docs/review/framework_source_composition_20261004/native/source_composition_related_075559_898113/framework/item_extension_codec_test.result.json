@@ -1,0 +1,451 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "profile test owns an isolated directory",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "actual registered base is a strict valid v3 drop",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "known socket namespace creates a formal runtime item",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "wire codec retains one exact base and registered typed identity",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "known wire round trip preserves the entire extension payload",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "old strict v1 base validator still rejects extension fields and containers",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "actual production drop consumer validates the codec base",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "original affix/rule payload is preserved without generation 0",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "original affix/rule payload is preserved without generation 1",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "original affix/rule payload is preserved without generation 2",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "old unextended instance remains an exact identity transform",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "codec never relaxes the old base field whitelist",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "wire identity cannot replace the base item identity",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "future owner is opaque rather than corrupt 0",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "production aggregate refuses backup recovery over unsupported item 0",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "future owner is opaque rather than corrupt 1",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "production aggregate refuses backup recovery over unsupported item 1",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "future owner is opaque rather than corrupt 2",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "production aggregate refuses backup recovery over unsupported item 2",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "unsupported sibling takes precedence over invalid known item",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "actual profile writer serializes the explicit wire container",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "actual shared writer routes the same codec",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "actual loot/warehouse receive path retains the complete extension",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "formal wire receive publishes a runtime base rather than a raw wrapper",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "existing deterministic v1 source provides a real affixed sample",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "actual item presentation retains the old verified affix marker",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "existing formal loot oracle recognizes the real affix",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "actual ground presentation preserves the extended item affix",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "owned test file can be opened item-codec.json",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "owned test file can be opened item-codec.json.bak",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "real loader rejects future primary rather than restoring old backup",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "opaque aggregate never partially publishes or rolls back live state",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "primary and backup preserve all original opaque bytes",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "unsupported item locks the whole character writer",
+      "passed": true
+    },
+    {
+      "id": 35,
+      "label": "owned test file can be opened item-codec.json",
+      "passed": true
+    },
+    {
+      "id": 36,
+      "label": "real supported load decodes to the existing runtime item authority",
+      "passed": true
+    },
+    {
+      "id": 37,
+      "label": "real ordered writer accepts the supported container",
+      "passed": true
+    },
+    {
+      "id": 38,
+      "label": "real disk round trip does not serialize the runtime-only metadata",
+      "passed": true
+    },
+    {
+      "id": 39,
+      "label": "actual warehouse deposit preserves the runtime extension record",
+      "passed": true
+    },
+    {
+      "id": 40,
+      "label": "actual multi-file warehouse commit saves the formal container",
+      "passed": true
+    },
+    {
+      "id": 41,
+      "label": "actual account initialization decodes wire items before publishing the warehouse",
+      "passed": true
+    },
+    {
+      "id": 42,
+      "label": "actual warehouse withdrawal preserves the exact item and affix ownership",
+      "passed": true
+    },
+    {
+      "id": 43,
+      "label": "a copied extended instance cannot create a second aggregate owner",
+      "passed": true
+    },
+    {
+      "id": 44,
+      "label": "profile and shared warehouse cannot simultaneously own an extended instance",
+      "passed": true
+    },
+    {
+      "id": 45,
+      "label": "shared future payload remains terminal 0",
+      "passed": true
+    },
+    {
+      "id": 46,
+      "label": "shared future payload remains terminal 1",
+      "passed": true
+    },
+    {
+      "id": 47,
+      "label": "shared future payload remains terminal 2",
+      "passed": true
+    },
+    {
+      "id": 48,
+      "label": "owned empty inventory is durable before pickup false",
+      "passed": true
+    },
+    {
+      "id": 49,
+      "label": "actual prepared pickup persists wire and applies only runtime authority false",
+      "passed": true
+    },
+    {
+      "id": 50,
+      "label": "owned empty inventory is durable before pickup true",
+      "passed": true
+    },
+    {
+      "id": 51,
+      "label": "actual prepared pickup persists wire and applies only runtime authority true",
+      "passed": true
+    },
+    {
+      "id": 52,
+      "label": "formal pickup envelope cannot authorize another item's valid base",
+      "passed": true
+    },
+    {
+      "id": 53,
+      "label": "actual forge target receives the same registered extension contract",
+      "passed": true
+    },
+    {
+      "id": 54,
+      "label": "extended forge inputs are durably serialized true",
+      "passed": true
+    },
+    {
+      "id": 55,
+      "label": "actual forge accepts the extended base true",
+      "passed": true
+    },
+    {
+      "id": 56,
+      "label": "bounded isolated seed provides the requested forge outcome true",
+      "passed": true
+    },
+    {
+      "id": 57,
+      "label": "real extended forge commits the requested outcome true",
+      "passed": true
+    },
+    {
+      "id": 58,
+      "label": "background forge writer retains the extension true",
+      "passed": true
+    },
+    {
+      "id": 59,
+      "label": "actual forge disk result remains an extension container true",
+      "passed": true
+    },
+    {
+      "id": 60,
+      "label": "forge never rerolls the accepted base true instance_id",
+      "passed": true
+    },
+    {
+      "id": 61,
+      "label": "forge never rerolls the accepted base true drop_key_digest",
+      "passed": true
+    },
+    {
+      "id": 62,
+      "label": "forge never rerolls the accepted base true modifiers",
+      "passed": true
+    },
+    {
+      "id": 63,
+      "label": "forge never rerolls the accepted base true drop_affix",
+      "passed": true
+    },
+    {
+      "id": 64,
+      "label": "restart routes the complete forge aggregate through the codec true",
+      "passed": true
+    },
+    {
+      "id": 65,
+      "label": "extended forge inputs are durably serialized false",
+      "passed": true
+    },
+    {
+      "id": 66,
+      "label": "actual forge accepts the extended base false",
+      "passed": true
+    },
+    {
+      "id": 67,
+      "label": "bounded isolated seed provides the requested forge outcome false",
+      "passed": true
+    },
+    {
+      "id": 68,
+      "label": "real extended forge commits the requested outcome false",
+      "passed": true
+    },
+    {
+      "id": 69,
+      "label": "background forge writer retains the extension false",
+      "passed": true
+    },
+    {
+      "id": 70,
+      "label": "actual forge disk result remains an extension container false",
+      "passed": true
+    },
+    {
+      "id": 71,
+      "label": "forge never rerolls the accepted base false instance_id",
+      "passed": true
+    },
+    {
+      "id": 72,
+      "label": "forge never rerolls the accepted base false drop_key_digest",
+      "passed": true
+    },
+    {
+      "id": 73,
+      "label": "forge never rerolls the accepted base false modifiers",
+      "passed": true
+    },
+    {
+      "id": 74,
+      "label": "forge never rerolls the accepted base false drop_affix",
+      "passed": true
+    },
+    {
+      "id": 75,
+      "label": "restart routes the complete forge aggregate through the codec false",
+      "passed": true
+    },
+    {
+      "id": 76,
+      "label": "actual workbench transfer moves the decoded extended record by its original instance",
+      "passed": true
+    },
+    {
+      "id": 77,
+      "label": "workbench transfer preserves extension data and original instance ownership",
+      "passed": true
+    },
+    {
+      "id": 78,
+      "label": "malformed typed wire field is rejected without an engine error format_version",
+      "passed": true
+    },
+    {
+      "id": 79,
+      "label": "malformed typed wire field is rejected without an engine error contract_id",
+      "passed": true
+    },
+    {
+      "id": 80,
+      "label": "malformed typed wire field is rejected without an engine error entity_id",
+      "passed": true
+    },
+    {
+      "id": 81,
+      "label": "malformed typed wire field is rejected without an engine error base",
+      "passed": true
+    },
+    {
+      "id": 82,
+      "label": "malformed typed wire field is rejected without an engine error extensions",
+      "passed": true
+    },
+    {
+      "id": 83,
+      "label": "owned test file can be opened shared.json.bak",
+      "passed": true
+    },
+    {
+      "id": 84,
+      "label": "owned test file can be opened shared.json",
+      "passed": true
+    },
+    {
+      "id": 85,
+      "label": "actual account initialization refuses unknown primary despite a known backup",
+      "passed": true
+    },
+    {
+      "id": 86,
+      "label": "unknown account aggregate blocks the shared writer",
+      "passed": true
+    },
+    {
+      "id": 87,
+      "label": "unknown shared primary and backup retain their exact bytes after attempted writes",
+      "passed": true
+    }
+  ],
+  "count": 87,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "e01733b2-982f-4668-a344-754932c85e96",
+  "passed": 87,
+  "reported_checks": 87,
+  "reported_failures": 0,
+  "run_id": "6ba2155f-3101-4f6c-b577-4aee0d7429aa",
+  "scene_id": "item_extension_codec_test",
+  "schema_version": 1,
+  "source_content_sha256": "c5cab0fce88df89f30628c73d345173ddc0c93d798c1ea6abce101cf5ad11925",
+  "status": "PASS"
+}
