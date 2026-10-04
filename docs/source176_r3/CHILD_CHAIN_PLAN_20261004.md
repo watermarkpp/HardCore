@@ -25,3 +25,6 @@ damage_batch在Enemy现有HP提交后冻结actual_loss和target_survived_commit�
 
 
 2026-10-04 Root子动作续施工：实际同Root规划/查询/HP入口、完整finite immediate链预留、累计工作与串行驻留分离、封口消费分支receipt退休已实施。真实85槽、接受后声明槽换代/晚进入范围、负地图46/2FAIL→46PASS、伪造parent22/4FAIL→合法后续各一次均原生验证。最终同9efaa6ab内容38唯一场景、33receipt1113检查PASS；56原生51PASS/5FAIL保留。详情docs/review/framework_child_execution_20261004及CHILD_EXECUTION_WORKLOG_20261004.md。周期致死→子动作→再点燃、A/B刷新credit与根容量所有权、子资源表现/模板/生成式与自然P6R3/APK仍开放，不关闭Task4整体。
+
+
+2026-10-04 活链容量/单消费者续施工：父1f6两份完整独立报告已读。正式35检查7FAIL原生证伪后，同35项通过，并补未封口兄弟分支/合法空命中/真实转移。逐事实连续记账、同runtime同步pump重入返回0、Root传播转移与owner_retired均已实施；最终同572286d5c4b82eeae9e9cb270b98c136e264ad47565f051b474d137ae0981ea3内容42唯一场景/1379检查，见CHILD_CHAIN_ADMISSION_WORKLOG_20261004.md及docs/review/framework_child_chain_admission_20261004。周期链有效unsupported_trigger_chain与child_state_capacity RED均保留，临时开放端口已恢复父字节，不发布不完整功能。Task3/4/5、自然P6R3、APK仍未完成。

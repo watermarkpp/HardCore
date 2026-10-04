@@ -1,0 +1,717 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "first path work is admitted",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "nested optional work can use remaining time",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "nested wall time is charged once to the shared total",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "parent inclusive and self costs remain distinguishable",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "nested category keeps its own inclusive cost",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "third optional owner cannot reset an exhausted iteration",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "fourth optional owner shares the same exhaustion",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "one new outer iteration restores one shared budget",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "in-flight root work counts before its token closes",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "nested entry cannot hide an already over-budget root",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "non-preemptible quantum overrun is measured exactly",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "diagnostics disabled cannot disable budget accounting",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "optional overrun exhausts all remaining allowance",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "already durable receipt remains admissible after exhaustion",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "necessary over-budget work remains visible in the same ledger",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "necessary work has its own measured receipt count",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "necessary work does not grant a second optional budget",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "four continuously runnable owners each receive service despite fixed callback order",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "target replacements preserve original backlog age",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "all owner callbacks close synchronous scopes",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "drained owner leaves fairness arbitration",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "next frame receives exactly one allowance without accumulated credit",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "fixture-requested callback rounds each receive service when allowance remains",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "fair rounds share the same allowance rather than resetting it per service",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "once-per-epoch resource callback receives its initial fair turn",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "effect queue receives its initial fair turn",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "remaining work still yields to a not-yet-served runnable owner",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "not-yet-served persistence callback retains its initial fair turn",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "after all owners get one epoch turn, queued effects consume the still-unused same budget",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "repeated quanta neither reset nor enlarge the shared epoch budget",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "existing atomic overrun exhausts the same budget and blocks further optional work",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "next epoch restores oldest-first admission ahead of the prolific owner",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "once-per-epoch resource owner is not starved in the next epoch",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "work-conserving admission preserves backlog identity and closed scopes",
+      "passed": true
+    },
+    {
+      "id": 35,
+      "label": "new same-epoch pending resource keeps priority over already-served effects",
+      "passed": true
+    },
+    {
+      "id": 36,
+      "label": "denial evidence identifies an actual blocker and remaining allowance",
+      "passed": true
+    },
+    {
+      "id": 37,
+      "label": "repeated real demand preserves age and the resource gets its next actual callback",
+      "passed": true
+    },
+    {
+      "id": 38,
+      "label": "a new same-epoch explicit resource callback remains admissible after its earlier service",
+      "passed": true
+    },
+    {
+      "id": 39,
+      "label": "resource callback initially yields to older not-yet-served persistence",
+      "passed": true
+    },
+    {
+      "id": 40,
+      "label": "resource admission failure is distinguished from budget exhaustion",
+      "passed": true
+    },
+    {
+      "id": 41,
+      "label": "initially rejected resource receives its real turn after the older callback completes",
+      "passed": true
+    },
+    {
+      "id": 42,
+      "label": "budget exhaustion cannot be mistaken for a fairness refusal or grant extra work",
+      "passed": true
+    },
+    {
+      "id": 43,
+      "label": "sustained effects share one closed allowance: frame 0",
+      "passed": true
+    },
+    {
+      "id": 44,
+      "label": "sustained effects share one closed allowance: frame 1",
+      "passed": true
+    },
+    {
+      "id": 45,
+      "label": "sustained effects share one closed allowance: frame 2",
+      "passed": true
+    },
+    {
+      "id": 46,
+      "label": "sustained effects share one closed allowance: frame 3",
+      "passed": true
+    },
+    {
+      "id": 47,
+      "label": "sustained effects share one closed allowance: frame 4",
+      "passed": true
+    },
+    {
+      "id": 48,
+      "label": "sustained effects share one closed allowance: frame 5",
+      "passed": true
+    },
+    {
+      "id": 49,
+      "label": "continuous effect pressure cannot starve the actual callback: resource_completion",
+      "passed": true
+    },
+    {
+      "id": 50,
+      "label": "continuous effect pressure cannot starve the actual callback: death_work",
+      "passed": true
+    },
+    {
+      "id": 51,
+      "label": "continuous effect pressure cannot starve the actual callback: persistence_main",
+      "passed": true
+    },
+    {
+      "id": 52,
+      "label": "unused allowance serves more than one effect quantum per frame",
+      "passed": true
+    },
+    {
+      "id": 53,
+      "label": "all four-owner callback order permutations are covered",
+      "passed": true
+    },
+    {
+      "id": 54,
+      "label": "one atomic overrun per epoch still serves all four oldest owners within four epochs: [\"resource_completion\", \"feature_effects\", \"death_work\", \"persistence_main\"]",
+      "passed": true
+    },
+    {
+      "id": 55,
+      "label": "callback order and repeated submissions preserve age without open scopes: [\"resource_completion\", \"feature_effects\", \"death_work\", \"persistence_main\"]",
+      "passed": true
+    },
+    {
+      "id": 56,
+      "label": "one atomic overrun per epoch still serves all four oldest owners within four epochs: [\"resource_completion\", \"feature_effects\", \"persistence_main\", \"death_work\"]",
+      "passed": true
+    },
+    {
+      "id": 57,
+      "label": "callback order and repeated submissions preserve age without open scopes: [\"resource_completion\", \"feature_effects\", \"persistence_main\", \"death_work\"]",
+      "passed": true
+    },
+    {
+      "id": 58,
+      "label": "one atomic overrun per epoch still serves all four oldest owners within four epochs: [\"resource_completion\", \"death_work\", \"feature_effects\", \"persistence_main\"]",
+      "passed": true
+    },
+    {
+      "id": 59,
+      "label": "callback order and repeated submissions preserve age without open scopes: [\"resource_completion\", \"death_work\", \"feature_effects\", \"persistence_main\"]",
+      "passed": true
+    },
+    {
+      "id": 60,
+      "label": "one atomic overrun per epoch still serves all four oldest owners within four epochs: [\"resource_completion\", \"death_work\", \"persistence_main\", \"feature_effects\"]",
+      "passed": true
+    },
+    {
+      "id": 61,
+      "label": "callback order and repeated submissions preserve age without open scopes: [\"resource_completion\", \"death_work\", \"persistence_main\", \"feature_effects\"]",
+      "passed": true
+    },
+    {
+      "id": 62,
+      "label": "one atomic overrun per epoch still serves all four oldest owners within four epochs: [\"resource_completion\", \"persistence_main\", \"feature_effects\", \"death_work\"]",
+      "passed": true
+    },
+    {
+      "id": 63,
+      "label": "callback order and repeated submissions preserve age without open scopes: [\"resource_completion\", \"persistence_main\", \"feature_effects\", \"death_work\"]",
+      "passed": true
+    },
+    {
+      "id": 64,
+      "label": "one atomic overrun per epoch still serves all four oldest owners within four epochs: [\"resource_completion\", \"persistence_main\", \"death_work\", \"feature_effects\"]",
+      "passed": true
+    },
+    {
+      "id": 65,
+      "label": "callback order and repeated submissions preserve age without open scopes: [\"resource_completion\", \"persistence_main\", \"death_work\", \"feature_effects\"]",
+      "passed": true
+    },
+    {
+      "id": 66,
+      "label": "one atomic overrun per epoch still serves all four oldest owners within four epochs: [\"feature_effects\", \"resource_completion\", \"death_work\", \"persistence_main\"]",
+      "passed": true
+    },
+    {
+      "id": 67,
+      "label": "callback order and repeated submissions preserve age without open scopes: [\"feature_effects\", \"resource_completion\", \"death_work\", \"persistence_main\"]",
+      "passed": true
+    },
+    {
+      "id": 68,
+      "label": "one atomic overrun per epoch still serves all four oldest owners within four epochs: [\"feature_effects\", \"resource_completion\", \"persistence_main\", \"death_work\"]",
+      "passed": true
+    },
+    {
+      "id": 69,
+      "label": "callback order and repeated submissions preserve age without open scopes: [\"feature_effects\", \"resource_completion\", \"persistence_main\", \"death_work\"]",
+      "passed": true
+    },
+    {
+      "id": 70,
+      "label": "one atomic overrun per epoch still serves all four oldest owners within four epochs: [\"feature_effects\", \"death_work\", \"resource_completion\", \"persistence_main\"]",
+      "passed": true
+    },
+    {
+      "id": 71,
+      "label": "callback order and repeated submissions preserve age without open scopes: [\"feature_effects\", \"death_work\", \"resource_completion\", \"persistence_main\"]",
+      "passed": true
+    },
+    {
+      "id": 72,
+      "label": "one atomic overrun per epoch still serves all four oldest owners within four epochs: [\"feature_effects\", \"death_work\", \"persistence_main\", \"resource_completion\"]",
+      "passed": true
+    },
+    {
+      "id": 73,
+      "label": "callback order and repeated submissions preserve age without open scopes: [\"feature_effects\", \"death_work\", \"persistence_main\", \"resource_completion\"]",
+      "passed": true
+    },
+    {
+      "id": 74,
+      "label": "one atomic overrun per epoch still serves all four oldest owners within four epochs: [\"feature_effects\", \"persistence_main\", \"resource_completion\", \"death_work\"]",
+      "passed": true
+    },
+    {
+      "id": 75,
+      "label": "callback order and repeated submissions preserve age without open scopes: [\"feature_effects\", \"persistence_main\", \"resource_completion\", \"death_work\"]",
+      "passed": true
+    },
+    {
+      "id": 76,
+      "label": "one atomic overrun per epoch still serves all four oldest owners within four epochs: [\"feature_effects\", \"persistence_main\", \"death_work\", \"resource_completion\"]",
+      "passed": true
+    },
+    {
+      "id": 77,
+      "label": "callback order and repeated submissions preserve age without open scopes: [\"feature_effects\", \"persistence_main\", \"death_work\", \"resource_completion\"]",
+      "passed": true
+    },
+    {
+      "id": 78,
+      "label": "one atomic overrun per epoch still serves all four oldest owners within four epochs: [\"death_work\", \"resource_completion\", \"feature_effects\", \"persistence_main\"]",
+      "passed": true
+    },
+    {
+      "id": 79,
+      "label": "callback order and repeated submissions preserve age without open scopes: [\"death_work\", \"resource_completion\", \"feature_effects\", \"persistence_main\"]",
+      "passed": true
+    },
+    {
+      "id": 80,
+      "label": "one atomic overrun per epoch still serves all four oldest owners within four epochs: [\"death_work\", \"resource_completion\", \"persistence_main\", \"feature_effects\"]",
+      "passed": true
+    },
+    {
+      "id": 81,
+      "label": "callback order and repeated submissions preserve age without open scopes: [\"death_work\", \"resource_completion\", \"persistence_main\", \"feature_effects\"]",
+      "passed": true
+    },
+    {
+      "id": 82,
+      "label": "one atomic overrun per epoch still serves all four oldest owners within four epochs: [\"death_work\", \"feature_effects\", \"resource_completion\", \"persistence_main\"]",
+      "passed": true
+    },
+    {
+      "id": 83,
+      "label": "callback order and repeated submissions preserve age without open scopes: [\"death_work\", \"feature_effects\", \"resource_completion\", \"persistence_main\"]",
+      "passed": true
+    },
+    {
+      "id": 84,
+      "label": "one atomic overrun per epoch still serves all four oldest owners within four epochs: [\"death_work\", \"feature_effects\", \"persistence_main\", \"resource_completion\"]",
+      "passed": true
+    },
+    {
+      "id": 85,
+      "label": "callback order and repeated submissions preserve age without open scopes: [\"death_work\", \"feature_effects\", \"persistence_main\", \"resource_completion\"]",
+      "passed": true
+    },
+    {
+      "id": 86,
+      "label": "one atomic overrun per epoch still serves all four oldest owners within four epochs: [\"death_work\", \"persistence_main\", \"resource_completion\", \"feature_effects\"]",
+      "passed": true
+    },
+    {
+      "id": 87,
+      "label": "callback order and repeated submissions preserve age without open scopes: [\"death_work\", \"persistence_main\", \"resource_completion\", \"feature_effects\"]",
+      "passed": true
+    },
+    {
+      "id": 88,
+      "label": "one atomic overrun per epoch still serves all four oldest owners within four epochs: [\"death_work\", \"persistence_main\", \"feature_effects\", \"resource_completion\"]",
+      "passed": true
+    },
+    {
+      "id": 89,
+      "label": "callback order and repeated submissions preserve age without open scopes: [\"death_work\", \"persistence_main\", \"feature_effects\", \"resource_completion\"]",
+      "passed": true
+    },
+    {
+      "id": 90,
+      "label": "one atomic overrun per epoch still serves all four oldest owners within four epochs: [\"persistence_main\", \"resource_completion\", \"feature_effects\", \"death_work\"]",
+      "passed": true
+    },
+    {
+      "id": 91,
+      "label": "callback order and repeated submissions preserve age without open scopes: [\"persistence_main\", \"resource_completion\", \"feature_effects\", \"death_work\"]",
+      "passed": true
+    },
+    {
+      "id": 92,
+      "label": "one atomic overrun per epoch still serves all four oldest owners within four epochs: [\"persistence_main\", \"resource_completion\", \"death_work\", \"feature_effects\"]",
+      "passed": true
+    },
+    {
+      "id": 93,
+      "label": "callback order and repeated submissions preserve age without open scopes: [\"persistence_main\", \"resource_completion\", \"death_work\", \"feature_effects\"]",
+      "passed": true
+    },
+    {
+      "id": 94,
+      "label": "one atomic overrun per epoch still serves all four oldest owners within four epochs: [\"persistence_main\", \"feature_effects\", \"resource_completion\", \"death_work\"]",
+      "passed": true
+    },
+    {
+      "id": 95,
+      "label": "callback order and repeated submissions preserve age without open scopes: [\"persistence_main\", \"feature_effects\", \"resource_completion\", \"death_work\"]",
+      "passed": true
+    },
+    {
+      "id": 96,
+      "label": "one atomic overrun per epoch still serves all four oldest owners within four epochs: [\"persistence_main\", \"feature_effects\", \"death_work\", \"resource_completion\"]",
+      "passed": true
+    },
+    {
+      "id": 97,
+      "label": "callback order and repeated submissions preserve age without open scopes: [\"persistence_main\", \"feature_effects\", \"death_work\", \"resource_completion\"]",
+      "passed": true
+    },
+    {
+      "id": 98,
+      "label": "one atomic overrun per epoch still serves all four oldest owners within four epochs: [\"persistence_main\", \"death_work\", \"resource_completion\", \"feature_effects\"]",
+      "passed": true
+    },
+    {
+      "id": 99,
+      "label": "callback order and repeated submissions preserve age without open scopes: [\"persistence_main\", \"death_work\", \"resource_completion\", \"feature_effects\"]",
+      "passed": true
+    },
+    {
+      "id": 100,
+      "label": "one atomic overrun per epoch still serves all four oldest owners within four epochs: [\"persistence_main\", \"death_work\", \"feature_effects\", \"resource_completion\"]",
+      "passed": true
+    },
+    {
+      "id": 101,
+      "label": "callback order and repeated submissions preserve age without open scopes: [\"persistence_main\", \"death_work\", \"feature_effects\", \"resource_completion\"]",
+      "passed": true
+    },
+    {
+      "id": 102,
+      "label": "first-service fairness plus unused allowance is explicitly not equal share or strict round-robin",
+      "passed": true
+    },
+    {
+      "id": 103,
+      "label": "opportunity-based unequal throughput still shares exactly one allowance",
+      "passed": true
+    },
+    {
+      "id": 104,
+      "label": "a detached live owner cannot withhold another callback's fair turn",
+      "passed": true
+    },
+    {
+      "id": 105,
+      "label": "reattached owner recovers its preserved unserved turn",
+      "passed": true
+    },
+    {
+      "id": 106,
+      "label": "reattached owner can consume its actual callback",
+      "passed": true
+    },
+    {
+      "id": 107,
+      "label": "queued-free owner immediately stops blocking without waiting for a destruction callback",
+      "passed": true
+    },
+    {
+      "id": 108,
+      "label": "drained identity retires its pending registration",
+      "passed": true
+    },
+    {
+      "id": 109,
+      "label": "a later new pending registration cannot inherit a drained identity's old queue age",
+      "passed": true
+    },
+    {
+      "id": 110,
+      "label": "empty category cannot bypass its explicit unrunnable state",
+      "passed": true
+    },
+    {
+      "id": 111,
+      "label": "empty unrunnable identity records the actual denial reason",
+      "passed": true
+    },
+    {
+      "id": 112,
+      "label": "empty unrunnable rejection leaves no scope or charged work",
+      "passed": true
+    },
+    {
+      "id": 113,
+      "label": "older unserved empty identity keeps its turn ahead of a named peer",
+      "passed": true
+    },
+    {
+      "id": 114,
+      "label": "named peer records fairness denial caused by the empty category",
+      "passed": true
+    },
+    {
+      "id": 115,
+      "label": "eligible empty category remains a valid ordinary owner",
+      "passed": true
+    },
+    {
+      "id": 116,
+      "label": "served empty owner does not keep unused allowance from its peer",
+      "passed": true
+    },
+    {
+      "id": 117,
+      "label": "both admitted owners retain exact shared accounting and closed scopes",
+      "passed": true
+    },
+    {
+      "id": 118,
+      "label": "unrunnable empty peer cannot block another owner's next epoch",
+      "passed": true
+    },
+    {
+      "id": 119,
+      "label": "necessary empty-category work retains the existing mandatory exception",
+      "passed": true
+    },
+    {
+      "id": 120,
+      "label": "necessary empty-category work is fully charged without a second budget",
+      "passed": true
+    },
+    {
+      "id": 121,
+      "label": "empty category cannot bypass exhausted optional allowance",
+      "passed": true
+    },
+    {
+      "id": 122,
+      "label": "empty identity drains through the same registration owner",
+      "passed": true
+    },
+    {
+      "id": 123,
+      "label": "waiting worker does not block another runnable owner",
+      "passed": true
+    },
+    {
+      "id": 124,
+      "label": "paused simulation owner cannot starve an always-running receipt owner",
+      "passed": true
+    },
+    {
+      "id": 125,
+      "label": "suspending a pending owner preserves its continuous backlog age",
+      "passed": true
+    },
+    {
+      "id": 126,
+      "label": "inherited disabled hierarchy retains callback flags but cannot actually run",
+      "passed": true
+    },
+    {
+      "id": 127,
+      "label": "disabled child cannot reserve a turn ahead of a runnable receipt owner: false",
+      "passed": true
+    },
+    {
+      "id": 128,
+      "label": "disabled hierarchy is exposed as nonrunnable in the shared ledger",
+      "passed": true
+    },
+    {
+      "id": 129,
+      "label": "reenabling the actual owner restores eligibility without losing backlog age",
+      "passed": true
+    },
+    {
+      "id": 130,
+      "label": "restored oldest owner receives its preserved fair turn",
+      "passed": true
+    },
+    {
+      "id": 131,
+      "label": "restored owner is admitted for its real callback",
+      "passed": true
+    },
+    {
+      "id": 132,
+      "label": "explicit synchronous drive can still service a deliberately disabled owner",
+      "passed": true
+    },
+    {
+      "id": 133,
+      "label": "inherited disabled hierarchy retains callback flags but cannot actually run",
+      "passed": true
+    },
+    {
+      "id": 134,
+      "label": "disabled child cannot reserve a turn ahead of a runnable receipt owner: true",
+      "passed": true
+    },
+    {
+      "id": 135,
+      "label": "disabled hierarchy is exposed as nonrunnable in the shared ledger",
+      "passed": true
+    },
+    {
+      "id": 136,
+      "label": "reenabling the actual owner restores eligibility without losing backlog age",
+      "passed": true
+    },
+    {
+      "id": 137,
+      "label": "restored oldest owner receives its preserved fair turn",
+      "passed": true
+    },
+    {
+      "id": 138,
+      "label": "restored owner is admitted for its real callback",
+      "passed": true
+    },
+    {
+      "id": 139,
+      "label": "explicit synchronous drive can still service a deliberately disabled owner",
+      "passed": true
+    }
+  ],
+  "count": 139,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "92d933fa-86b3-45ef-b5ed-242d46510686",
+  "passed": 139,
+  "reported_checks": 139,
+  "reported_failures": 0,
+  "run_id": "f0ed3db9-e891-4bc4-a7f0-1a0d5ba4c62a",
+  "runtime_environment": {
+    "native_process_id": 9108,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\child_chain_admission_related_checked_48951db75f184b49b2e76ab2c04f3b6c",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_chain_admission_related_checked_48951db75f184b49b2e76ab2c04f3b6c/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "frame_budget_test",
+  "schema_version": 1,
+  "source_content_sha256": "572286d5c4b82eeae9e9cb270b98c136e264ad47565f051b474d137ae0981ea3",
+  "status": "PASS"
+}

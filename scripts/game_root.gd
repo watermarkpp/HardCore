@@ -14954,19 +14954,27 @@ func _begin_feature_damage_batch(skill_id: String, release_id: String, configura
 	return batch
 
 
-func _finish_feature_damage_batch(batch: RefCounted) -> void:
-	if batch == null: return
+func _finish_feature_damage_batch(batch: RefCounted) -> Dictionary:
+	if batch == null: return {"success":true,"outcome":"not_applicable","reason":""}
 	if not batch.finish_base_scope() or not batch.errors.is_empty():
 		batch.finish_production()
-		push_error("Feature damage fact rejected: " + str(batch.errors)); return
+		push_error("Feature damage fact rejected: " + str(batch.errors))
+		return {"success":false,"outcome":"rejected","reason":"feature_batch_rejected"}
+	var ticket: RefCounted=batch.reservation()
+	if _feature_effect_runtime==null or (ticket!=null and not ticket.batch_owner_is_current()):
+		batch.finish_production()
+		return {"success":false,"outcome":"owner_retired","reason":"feature_batch_owner_retired"}
 	# A valid miss/empty release owns no post-hit work. Nonempty rejected
 	# transfers remain intact and must be visible as failures, never successes.
 	if batch.pending_fact_count() == 0:
 		batch.finish_production()
-		return
-	if not _feature_effect_runtime.submit_batch(batch):
+		return {"success":true,"outcome":"empty","reason":""}
+	var transferred: bool=_feature_effect_runtime.submit_batch(batch)
+	if not transferred:
 		push_error("Feature damage batch submission rejected: " + str(_feature_effect_runtime.errors))
 	batch.finish_production()
+	return {"success":transferred,"outcome":"transferred" if transferred else "rejected",
+		"reason":"" if transferred else "feature_batch_submission_rejected"}
 
 
 # Only the same admitted runtime owns this entry. It passes an already minted
@@ -15009,8 +15017,10 @@ func _execute_feature_child_action(request: Dictionary, ticket: RefCounted, bind
 		var hit: Dictionary=_combat_runtime.apply_feature_child_damage(enemy,int(plan.gameplay_actions[0].raw_power),
 			source,rng,plan.historical_credit,batch)
 		if not hit.success: succeeded=false
-	_finish_feature_damage_batch(batch)
-	return {"success":succeeded and batch.errors.is_empty(),"reason":"" if succeeded else "child_commit_rejected"}
+	var transfer: Dictionary=_finish_feature_damage_batch(batch)
+	var delivered: bool=succeeded and batch.errors.is_empty() and bool(transfer.success)
+	return {"success":delivered,"reason":"" if delivered else
+		(str(transfer.reason) if not transfer.success else "child_commit_rejected"),"batch_outcome":transfer.outcome}
 
 
 func _ordinary_attack_owner_matches(

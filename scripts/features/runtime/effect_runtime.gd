@@ -36,6 +36,7 @@ var _reserved_children := 0
 var _children: Dictionary = {}
 var _child_serial := 0
 var _child_executor := Callable()
+var _pumping := false
 var require_reservations := false
 var last_admission_reason := ""
 var _stats := {"ticks":0,"actual_loss":0,"started":0,"refreshed":0,"expired":0,"invalidated":0,"failed":0,"admitted_facts":0,"healing_commands":0,"actual_healing":0,"peak_states":0,"peak_pending":0,"optional_cue_missing":0,
@@ -46,7 +47,7 @@ var errors: Array[String] = []
 func configure(world: RefCounted, clock: RefCounted, combat: Node, presentation: RefCounted = null) -> bool:
 	# An accepted state owns its clock, mutation port and cue lifecycle until
 	# terminal drain. Replacing that owner mid-flight would orphan the old cue.
-	if has_work() or world == null or clock == null or not is_instance_valid(combat) \
+	if _pumping or has_work() or world == null or clock == null or not is_instance_valid(combat) \
 		or world.current_world_owner() == null:
 		return false
 	_world = world; _clock = clock; _combat = weakref(combat)
@@ -68,7 +69,7 @@ func metrics() -> Dictionary: return Graph.capture(_stats).value
 func presentation() -> RefCounted: return _presentation
 
 func configure_child_executor(executor: Callable) -> bool:
-	if _world==null or has_work() or not executor.is_valid() or executor.get_object()!=_world.current_world_owner(): return false
+	if _pumping or _world==null or has_work() or not executor.is_valid() or executor.get_object()!=_world.current_world_owner(): return false
 	_child_executor=executor
 	return true
 
@@ -168,6 +169,14 @@ func _reservation_release_is_valid(sequence: int, release_id: String) -> bool:
 	var value: Dictionary = _reservations[sequence]
 	return value.stage == "reserved" and _world.matches_world(value.world) and not release_id.is_empty() \
 		and (str(value.expected_release_id).is_empty() or value.expected_release_id == release_id)
+
+func _reservation_batch_owner_is_current(sequence: int, branch: String) -> bool:
+	if _world==null or not _reservations.has(sequence): return false
+	var value: Dictionary=_reservations[sequence]
+	if not _world.matches_world(value.world): return false
+	if value.chain.is_empty(): return value.stage in ["producing","queued"]
+	var key: String=value.expected_release_id if branch.is_empty() else branch
+	return value.branches.has(key) and value.branches[key].stage in ["producing","queued"]
 
 func _claim_reservation(sequence: int, identity: Dictionary, release_id: String, skill_id: String, bindings: Array, branch := "", ticket_id := 0) -> Dictionary:
 	if not _sync_world() or not _reservations.has(sequence): return {"success":false}
@@ -322,9 +331,15 @@ func submit_batch(batch: RefCounted) -> bool:
 	return true
 
 func pump() -> int:
+	# A synchronous HP/heal observer may call this public entry again. The
+	# outer consumer still owns its unreturned fact/producer and budget scope.
+	# Serial residency and branch retirement require one consumer at a time.
+	if _pumping: return 0
 	if not _sync_world(): return 0
 	var owner: Node = _world.current_world_owner()
 	if owner.get_tree().paused: return 0
+	_pumping=true
+	var generation:=_delivery_generation
 	var served := 0
 	var runnable := _pending > 0 or has_due() or not _children.is_empty()
 	Budget.mark_pending(_category,runnable,true,false,owner,true)
@@ -338,8 +353,10 @@ func pump() -> int:
 		else: _dispatch_one_child(); _prefer_due=true
 		Budget.end(token)
 		served += 1
+		if generation!=_delivery_generation: break
 		runnable = _pending > 0 or has_due() or not _children.is_empty()
 		Budget.mark_pending(_category,runnable,true,false,owner,true)
+	_pumping=false
 	return served
 
 func _dispatch_one_fact() -> void:
@@ -347,6 +364,11 @@ func _dispatch_one_fact() -> void:
 	var entry: Dictionary = work.entries[work.cursor]
 	var admission_id := int(work.admission_id)
 	work.cursor += 1; _pending -= 1
+	if admission_id>0 and _reservations.has(admission_id) and not _reservations[admission_id].chain.is_empty():
+		# Consumed storage remains a live root promise, including inside any
+		# synchronous observer. Transfer one pending slot back immediately;
+		# waiting for the whole batch would temporarily lend it to other roots.
+		_reservations[admission_id].facts+=1; _reserved_facts+=1
 	var complete: bool = work.cursor == work.entries.size()
 	if complete:
 		# A continuous producer need not let the queue become empty. Retire the
@@ -363,7 +385,6 @@ func _dispatch_one_fact() -> void:
 			# the branch can never be minted again. All of its consumers finished.
 			# Pending children/state owners retain the root, not this producer ID.
 			var value: Dictionary=_reservations[admission_id]
-			value.facts+=work.entries.size(); _reserved_facts+=work.entries.size()
 			for receipt: String in value.branches[work.branch].receipts:
 				_receipts.erase(receipt); _stats.retired_receipts+=1
 				value.receipt_space+=1; _reserved_receipts+=1
@@ -543,6 +564,8 @@ func _dispatch_one_child() -> void:
 
 func clear() -> void:
 	_delivery_generation += 1
+	# The in-flight pump alone closes its consumer/budget scope. Clearing work
+	# cannot reopen this instance to a nested pump before that outer return.
 	# Stop all logic handles, including cues with declared missing visuals.
 	# Count cancellation before draining so every started state has a terminal
 	# outcome; no target or presentation mutation survives an owner change.

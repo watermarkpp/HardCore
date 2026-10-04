@@ -1,0 +1,20 @@
+{
+  "attempts": [
+    {
+      "invocation": "child_chain_admission_related_143636_481801",
+      "status": "FAIL",
+      "classification": "missing_requested_test_path_before_native_scenes",
+      "native_scenes_started": 0,
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_child_chain_admission_test.tscn','tests/framework/feature_child_execution_test.tscn','tests/framework/feature_producing_death_reentry_test.tscn','tests/framework/feature_resource_accepted_lifetime_test.tscn','tests/framework/feature_receipt_retirement_test.tscn','tests/framework/feature_queue_retention_test.tscn','tests/framework/frame_budget_fair_turn_test.tscn','tests/framework/frame_budget_shared_test.tscn' -TimeoutSeconds 30"
+      ],
+      "exit_code": 1
+    }
+  ],
+  "scope": "Preserved startup rejection; excluded from native scene counts."
+}

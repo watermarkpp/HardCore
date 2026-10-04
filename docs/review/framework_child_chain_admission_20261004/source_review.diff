@@ -1,0 +1,582 @@
+diff --git a/assets/data/features/validation/child_chain_guard.json b/assets/data/features/validation/child_chain_guard.json
+new file mode 100644
+index 000000000..702e9e293
+--- /dev/null
++++ b/assets/data/features/validation/child_chain_guard.json
+@@ -0,0 +1,17 @@
++{
++  "schema_version":1,"module_id":"hc.validation.child_chain_guard","module_version":1,"core_api_version":1,
++  "requires":[],"conflicts":[],"capabilities":["combat.post_hit","combat.child_action","combat.heal"],
++  "handlers":["hc.lifesteal.v1","hc.death_burst.v1"],"resource_dependencies":[],
++  "cost":{"commands_per_event":2,"states_per_target":0},"default_enabled":false,
++  "scope":"world","activation_boundary":"world_ready",
++  "mechanics":[
++    {"mechanic_id":"hc.validation.child_chain_guard.a_lifesteal","kind":"trigger","tags":[],
++      "event":"damage_committed","skill_id":"hc.skill.wizard.ice_storm","handler_id":"hc.lifesteal.v1",
++      "source_classes":["direct"],"dedup":"per_target_per_release","lifecycle":"immediate","config":{"fraction":0.25}},
++    {"mechanic_id":"hc.validation.child_chain_guard.b_death","kind":"trigger","tags":[],
++      "event":"damage_committed","skill_id":"hc.skill.wizard.ice_storm","handler_id":"hc.death_burst.v1",
++      "source_classes":["direct","child"],"dedup":"per_target_per_release","lifecycle":"finite_chain",
++      "config":{"fraction":0.5,"radius_gu":3.0,"maximum_generation":2}}
++  ],
++  "tests":["tests/framework/feature_child_chain_admission_test.tscn"]
++}
+diff --git a/assets/data/features/validation/child_chain_guard_registry.json b/assets/data/features/validation/child_chain_guard_registry.json
+new file mode 100644
+index 000000000..aadf02cde
+--- /dev/null
++++ b/assets/data/features/validation/child_chain_guard_registry.json
+@@ -0,0 +1,8 @@
++{
++  "schema_version":1,
++  "modules":[{"module_id":"hc.validation.child_chain_guard","path":"res://assets/data/features/validation/child_chain_guard.json"}],
++  "bindings":[
++    {"module_id":"hc.validation.child_chain_guard","kind":"rule","rule_id":"hc.validation.child_chain_guard","mechanic_id":"hc.validation.child_chain_guard.a_lifesteal"},
++    {"module_id":"hc.validation.child_chain_guard","kind":"rule","rule_id":"hc.validation.child_chain_guard","mechanic_id":"hc.validation.child_chain_guard.b_death"}
++  ]
++}
+diff --git a/assets/data/features/validation/periodic_child_chain.json b/assets/data/features/validation/periodic_child_chain.json
+new file mode 100644
+index 000000000..ea947b860
+--- /dev/null
++++ b/assets/data/features/validation/periodic_child_chain.json
+@@ -0,0 +1,18 @@
++{
++  "schema_version":1,"module_id":"hc.validation.periodic_child_chain","module_version":1,"core_api_version":1,
++  "requires":[],"conflicts":[],"capabilities":["combat.post_hit","combat.child_action","effects.periodic"],
++  "handlers":["hc.ignite.v1","hc.death_burst.v1"],"resource_dependencies":[],
++  "cost":{"commands_per_event":2,"states_per_target":1},"default_enabled":false,
++  "scope":"world","activation_boundary":"world_ready",
++  "mechanics":[
++    {"mechanic_id":"hc.validation.periodic_child_chain.ignite","kind":"trigger","tags":[],
++      "event":"damage_committed","skill_id":"hc.skill.wizard.ice_storm","handler_id":"hc.ignite.v1",
++      "source_classes":["direct","child"],"dedup":"per_target_per_release","lifecycle":"until_expired",
++      "config":{"chance":1.0,"fraction":1.0,"period_usec":1000000,"duration_usec":4000000,"max_ticks":4}},
++    {"mechanic_id":"hc.validation.periodic_child_chain.death","kind":"trigger","tags":[],
++      "event":"damage_committed","skill_id":"hc.skill.wizard.ice_storm","handler_id":"hc.death_burst.v1",
++      "source_classes":["direct","periodic","child"],"dedup":"per_target_per_release","lifecycle":"finite_chain",
++      "config":{"fraction":0.5,"radius_gu":3.0,"maximum_generation":2}}
++  ],
++  "tests":["tests/framework/feature_periodic_child_chain_test.tscn"]
++}
+diff --git a/assets/data/features/validation/periodic_child_chain_registry.json b/assets/data/features/validation/periodic_child_chain_registry.json
+new file mode 100644
+index 000000000..0434e9d31
+--- /dev/null
++++ b/assets/data/features/validation/periodic_child_chain_registry.json
+@@ -0,0 +1,8 @@
++{
++  "schema_version":1,
++  "modules":[{"module_id":"hc.validation.periodic_child_chain","path":"res://assets/data/features/validation/periodic_child_chain.json"}],
++  "bindings":[
++    {"module_id":"hc.validation.periodic_child_chain","kind":"rule","rule_id":"hc.validation.periodic_child_chain","mechanic_id":"hc.validation.periodic_child_chain.ignite"},
++    {"module_id":"hc.validation.periodic_child_chain","kind":"rule","rule_id":"hc.validation.periodic_child_chain","mechanic_id":"hc.validation.periodic_child_chain.death"}
++  ]
++}
+diff --git a/scripts/features/contracts/effect_reservation.gd b/scripts/features/contracts/effect_reservation.gd
+index cb25c824c..58575d105 100644
+--- a/scripts/features/contracts/effect_reservation.gd
++++ b/scripts/features/contracts/effect_reservation.gd
+@@ -34,6 +34,11 @@ func can_begin_release(release_id: String) -> bool:
+ func sequence() -> int: return _sequence
+ func branch() -> String: return _branch
+ 
++func batch_owner_is_current() -> bool:
++	var owner: RefCounted=_owner.get_ref() as RefCounted if _owner!=null else null
++	# The batch may still own accepted work after the old action ticket closed.
++	return owner!=null and bool(owner.call("_reservation_batch_owner_is_current",_sequence,_branch))
++
+ func authorizes_child_request(request: Dictionary) -> bool:
+ 	var owner: RefCounted=_owner.get_ref() as RefCounted if _owner!=null else null
+ 	return not _closed and not _branch.is_empty() and owner!=null \
+diff --git a/scripts/features/runtime/effect_runtime.gd b/scripts/features/runtime/effect_runtime.gd
+index 86c41e5b2..4338a7091 100644
+--- a/scripts/features/runtime/effect_runtime.gd
++++ b/scripts/features/runtime/effect_runtime.gd
+@@ -36,6 +36,7 @@ var _reserved_children := 0
+ var _children: Dictionary = {}
+ var _child_serial := 0
+ var _child_executor := Callable()
++var _pumping := false
+ var require_reservations := false
+ var last_admission_reason := ""
+ var _stats := {"ticks":0,"actual_loss":0,"started":0,"refreshed":0,"expired":0,"invalidated":0,"failed":0,"admitted_facts":0,"healing_commands":0,"actual_healing":0,"peak_states":0,"peak_pending":0,"optional_cue_missing":0,
+@@ -46,7 +47,7 @@ var errors: Array[String] = []
+ func configure(world: RefCounted, clock: RefCounted, combat: Node, presentation: RefCounted = null) -> bool:
+ 	# An accepted state owns its clock, mutation port and cue lifecycle until
+ 	# terminal drain. Replacing that owner mid-flight would orphan the old cue.
+-	if has_work() or world == null or clock == null or not is_instance_valid(combat) \
++	if _pumping or has_work() or world == null or clock == null or not is_instance_valid(combat) \
+ 		or world.current_world_owner() == null:
+ 		return false
+ 	_world = world; _clock = clock; _combat = weakref(combat)
+@@ -68,7 +69,7 @@ func metrics() -> Dictionary: return Graph.capture(_stats).value
+ func presentation() -> RefCounted: return _presentation
+ 
+ func configure_child_executor(executor: Callable) -> bool:
+-	if _world==null or has_work() or not executor.is_valid() or executor.get_object()!=_world.current_world_owner(): return false
++	if _pumping or _world==null or has_work() or not executor.is_valid() or executor.get_object()!=_world.current_world_owner(): return false
+ 	_child_executor=executor
+ 	return true
+ 
+@@ -169,6 +170,14 @@ func _reservation_release_is_valid(sequence: int, release_id: String) -> bool:
+ 	return value.stage == "reserved" and _world.matches_world(value.world) and not release_id.is_empty() \
+ 		and (str(value.expected_release_id).is_empty() or value.expected_release_id == release_id)
+ 
++func _reservation_batch_owner_is_current(sequence: int, branch: String) -> bool:
++	if _world==null or not _reservations.has(sequence): return false
++	var value: Dictionary=_reservations[sequence]
++	if not _world.matches_world(value.world): return false
++	if value.chain.is_empty(): return value.stage in ["producing","queued"]
++	var key: String=value.expected_release_id if branch.is_empty() else branch
++	return value.branches.has(key) and value.branches[key].stage in ["producing","queued"]
++
+ func _claim_reservation(sequence: int, identity: Dictionary, release_id: String, skill_id: String, bindings: Array, branch := "", ticket_id := 0) -> Dictionary:
+ 	if not _sync_world() or not _reservations.has(sequence): return {"success":false}
+ 	var value: Dictionary = _reservations[sequence]
+@@ -322,9 +331,15 @@ func submit_batch(batch: RefCounted) -> bool:
+ 	return true
+ 
+ func pump() -> int:
++	# A synchronous HP/heal observer may call this public entry again. The
++	# outer consumer still owns its unreturned fact/producer and budget scope.
++	# Serial residency and branch retirement require one consumer at a time.
++	if _pumping: return 0
+ 	if not _sync_world(): return 0
+ 	var owner: Node = _world.current_world_owner()
+ 	if owner.get_tree().paused: return 0
++	_pumping=true
++	var generation:=_delivery_generation
+ 	var served := 0
+ 	var runnable := _pending > 0 or has_due() or not _children.is_empty()
+ 	Budget.mark_pending(_category,runnable,true,false,owner,true)
+@@ -338,8 +353,10 @@ func pump() -> int:
+ 		else: _dispatch_one_child(); _prefer_due=true
+ 		Budget.end(token)
+ 		served += 1
++		if generation!=_delivery_generation: break
+ 		runnable = _pending > 0 or has_due() or not _children.is_empty()
+ 		Budget.mark_pending(_category,runnable,true,false,owner,true)
++	_pumping=false
+ 	return served
+ 
+ func _dispatch_one_fact() -> void:
+@@ -347,6 +364,11 @@ func _dispatch_one_fact() -> void:
+ 	var entry: Dictionary = work.entries[work.cursor]
+ 	var admission_id := int(work.admission_id)
+ 	work.cursor += 1; _pending -= 1
++	if admission_id>0 and _reservations.has(admission_id) and not _reservations[admission_id].chain.is_empty():
++		# Consumed storage remains a live root promise, including inside any
++		# synchronous observer. Transfer one pending slot back immediately;
++		# waiting for the whole batch would temporarily lend it to other roots.
++		_reservations[admission_id].facts+=1; _reserved_facts+=1
+ 	var complete: bool = work.cursor == work.entries.size()
+ 	if complete:
+ 		# A continuous producer need not let the queue become empty. Retire the
+@@ -363,7 +385,6 @@ func _dispatch_one_fact() -> void:
+ 			# the branch can never be minted again. All of its consumers finished.
+ 			# Pending children/state owners retain the root, not this producer ID.
+ 			var value: Dictionary=_reservations[admission_id]
+-			value.facts+=work.entries.size(); _reserved_facts+=work.entries.size()
+ 			for receipt: String in value.branches[work.branch].receipts:
+ 				_receipts.erase(receipt); _stats.retired_receipts+=1
+ 				value.receipt_space+=1; _reserved_receipts+=1
+@@ -543,6 +564,8 @@ func _dispatch_one_child() -> void:
+ 
+ func clear() -> void:
+ 	_delivery_generation += 1
++	# The in-flight pump alone closes its consumer/budget scope. Clearing work
++	# cannot reopen this instance to a nested pump before that outer return.
+ 	# Stop all logic handles, including cues with declared missing visuals.
+ 	# Count cancellation before draining so every started state has a terminal
+ 	# outcome; no target or presentation mutation survives an owner change.
+diff --git a/scripts/game_root.gd b/scripts/game_root.gd
+index 313f8a7fe..c02f5e711 100644
+--- a/scripts/game_root.gd
++++ b/scripts/game_root.gd
+@@ -14954,19 +14954,27 @@ func _begin_feature_damage_batch(skill_id: String, release_id: String, configura
+ 	return batch
+ 
+ 
+-func _finish_feature_damage_batch(batch: RefCounted) -> void:
+-	if batch == null: return
++func _finish_feature_damage_batch(batch: RefCounted) -> Dictionary:
++	if batch == null: return {"success":true,"outcome":"not_applicable","reason":""}
+ 	if not batch.finish_base_scope() or not batch.errors.is_empty():
+ 		batch.finish_production()
+-		push_error("Feature damage fact rejected: " + str(batch.errors)); return
++		push_error("Feature damage fact rejected: " + str(batch.errors))
++		return {"success":false,"outcome":"rejected","reason":"feature_batch_rejected"}
++	var ticket: RefCounted=batch.reservation()
++	if _feature_effect_runtime==null or (ticket!=null and not ticket.batch_owner_is_current()):
++		batch.finish_production()
++		return {"success":false,"outcome":"owner_retired","reason":"feature_batch_owner_retired"}
+ 	# A valid miss/empty release owns no post-hit work. Nonempty rejected
+ 	# transfers remain intact and must be visible as failures, never successes.
+ 	if batch.pending_fact_count() == 0:
+ 		batch.finish_production()
+-		return
+-	if not _feature_effect_runtime.submit_batch(batch):
++		return {"success":true,"outcome":"empty","reason":""}
++	var transferred: bool=_feature_effect_runtime.submit_batch(batch)
++	if not transferred:
+ 		push_error("Feature damage batch submission rejected: " + str(_feature_effect_runtime.errors))
+ 	batch.finish_production()
++	return {"success":transferred,"outcome":"transferred" if transferred else "rejected",
++		"reason":"" if transferred else "feature_batch_submission_rejected"}
+ 
+ 
+ # Only the same admitted runtime owns this entry. It passes an already minted
+@@ -15009,8 +15017,10 @@ func _execute_feature_child_action(request: Dictionary, ticket: RefCounted, bind
+ 		var hit: Dictionary=_combat_runtime.apply_feature_child_damage(enemy,int(plan.gameplay_actions[0].raw_power),
+ 			source,rng,plan.historical_credit,batch)
+ 		if not hit.success: succeeded=false
+-	_finish_feature_damage_batch(batch)
+-	return {"success":succeeded and batch.errors.is_empty(),"reason":"" if succeeded else "child_commit_rejected"}
++	var transfer: Dictionary=_finish_feature_damage_batch(batch)
++	var delivered: bool=succeeded and batch.errors.is_empty() and bool(transfer.success)
++	return {"success":delivered,"reason":"" if delivered else
++		(str(transfer.reason) if not transfer.success else "child_commit_rejected"),"batch_outcome":transfer.outcome}
+ 
+ 
+ func _ordinary_attack_owner_matches(
+diff --git a/tests/framework/feature_child_chain_admission_test.gd b/tests/framework/feature_child_chain_admission_test.gd
+new file mode 100644
+index 000000000..d85adfd9e
+--- /dev/null
++++ b/tests/framework/feature_child_chain_admission_test.gd
+@@ -0,0 +1,174 @@
++extends Node
++
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const Root := preload("res://tests/framework/fixtures/child_admission_probe_root.gd")
++const Fixture := preload("res://tests/helpers/formal_world_skill_fixture.gd")
++const Runtime := preload("res://scripts/features/runtime/effect_runtime.gd")
++const Batch := preload("res://scripts/features/runtime/damage_batch.gd")
++var proof := Proof.new()
++var checks := 0
++var errors: Array[String] = []
++var game: Node
++var runtime: RefCounted
++var first: EnemyActor
++var survivor: EnemyActor
++var death_binding: Dictionary
++var heal_binding: Dictionary
++var reentry_calls := 0
++var reentry_served := -1
++
++func _ready() -> void: _run.call_deferred()
++func check(ok: bool,label: String) -> void:
++	checks+=1; proof.record(ok,label)
++	if not ok: errors.append(label)
++
++func _fresh_runtime() -> void:
++	runtime=Runtime.new()
++	check(runtime.configure(game._world_context,game._time_domains,game._combat_runtime)
++		and runtime.configure_child_executor(Callable(game,"_execute_feature_child_action")),"same Root installs the real child executor")
++	runtime.require_reservations=true; game._feature_effect_runtime=runtime
++
++func _root_batch(label: String,bindings: Array,count: int,survivor_amount := 1) -> RefCounted:
++	var ticket: RefCounted=runtime.reserve_action("hc.skill.wizard.ice_storm",bindings,85,label,85)
++	check(ticket!=null,"full finite root promise "+label)
++	if ticket==null: return null
++	var made: Dictionary=Batch.create(game._world_context,label,"hc.skill.wizard.ice_storm",bindings,
++		{"profile_id":PlayerState.active_profile_id},game._time_domains.simulation_usec(),ticket,null,ticket.chain_context(label))
++	check(made.success and made.batch.begin_base_scope(),"accepted batch opens only after receiving its ticket "+label)
++	if not made.success: return null
++	var batch: RefCounted=made.batch
++	first.take_damage(20,game.player,{"source_class":"direct","damage_channel":"magic_defense","feature_damage_batch":batch})
++	for i in range(count-1):
++		survivor.take_damage(survivor_amount,game.player,{"source_class":"direct","damage_channel":"magic_defense","feature_damage_batch":batch})
++	check(batch.facts().size()==count and batch.finish_base_scope() and runtime.submit_batch(batch),"actual HP facts transfer once "+label)
++	batch.finish_production()
++	return batch
++
++func _prepare_first(label: String) -> void:
++	if is_instance_valid(first): first.queue_free(); await get_tree().process_frame
++	first=game._spawn_enemy(GameData.get_monster_by_id(19),
++		game._canonical_ground_gu_to_screen_px(Vector2(40.5,13.5)),false,-1.0,
++		{"respawn_enabled":false,"spawn_slot_id":"test:formal_skill:chain_guard:19"})
++	check(first!=null,"same declared first slot supplies a replacement life "+label)
++	if first!=null:
++		first.set_physics_process(false); first.max_hp=1000; first.current_hp=20
++		first.direct_spell_anti_magic_points=0; first.direct_spell_magic_defense_min=0
++		first.direct_spell_magic_defense_max=0; first.direct_spell_stats_valid=true
++
++func _settle() -> void:
++	for i in range(240):
++		runtime.pump()
++		if runtime.pending_count()==0 and runtime.child_count()==0: return
++		await get_tree().process_frame
++	check(false,"finite child work settles")
++
++func _on_stats(_hp: int,_maximum: int) -> void:
++	if reentry_calls>0: return
++	reentry_calls+=1
++	reentry_served=runtime.pump()
++
++func _run() -> void:
++	PlayerState.test_mode=true; PlayerState.reset_progress(false)
++	check(PlayerState.set_profession_identity("hc.profession.wizard"),"stable wizard identity")
++	check(ContentLayers.reload_feature_catalog("res://assets/data/features/validation/child_chain_guard_registry.json"),"formal default-off mixed registry")
++	if not errors.is_empty(): _finish(); return
++	game=Root.new(); add_child(game)
++	var deadline:=Time.get_ticks_msec()+20000
++	while not game.gameplay_input_is_enabled() and Time.get_ticks_msec()<deadline: await get_tree().process_frame
++	check(game.gameplay_input_is_enabled(),"real mapped world reaches READY")
++	if not game.gameplay_input_is_enabled(): game.queue_free(); _finish(); return
++	first=await Fixture.prepare_target(self,game,game.player,19,"chain_guard")
++	survivor=game._spawn_enemy(GameData.get_monster_by_id(64),
++		game._canonical_ground_gu_to_screen_px(Vector2(43.1,13.5)),false,-1.0,
++		{"respawn_enabled":false,"spawn_slot_id":"test:chain_guard:survivor"})
++	var extra: EnemyActor=game._spawn_enemy(GameData.get_monster_by_id(64),
++		game._canonical_ground_gu_to_screen_px(Vector2(53.5,13.5)),false,-1.0,
++		{"respawn_enabled":false,"spawn_slot_id":"test:chain_guard:extra"})
++	check(extra!=null,"the third declared factory slot is real rather than a fabricated receiver limit")
++	check(first!=null and survivor!=null and game.feature_world_capacity_bound().maximum_receivers==85,"real factory has the same 85-slot bound")
++	if first==null or survivor==null: game.queue_free(); _finish(); return
++	game.set_process(false); game.set_physics_process(false); game.player.set_physics_process(false)
++	for actor: Node in get_tree().get_nodes_in_group("enemies"): actor.set_physics_process(false)
++	for actor: EnemyActor in [first,survivor]:
++		actor.max_hp=100000; actor.current_hp=100000
++		actor.direct_spell_anti_magic_points=0; actor.direct_spell_magic_defense_min=0
++		actor.direct_spell_magic_defense_max=0; actor.direct_spell_stats_valid=true
++	first.current_hp=20
++	check(ContentLayers.set_feature_module_enabled("hc.validation.child_chain_guard",true),"READY publishes mixed trusted sources")
++	var all_bindings: Array=PlayerState.feature_bundle().event_index.get("damage_committed:hc.skill.wizard.ice_storm",[])
++	for binding: Dictionary in all_bindings:
++		if binding.definition.handler_id=="hc.lifesteal.v1": heal_binding=binding
++		elif binding.definition.handler_id=="hc.death_burst.v1": death_binding=binding
++	check(not heal_binding.is_empty() and not death_binding.is_empty(),"both qualified bindings come from the actual bundle")
++	if heal_binding.is_empty() or death_binding.is_empty(): game.queue_free(); _finish(); return
++	_fresh_runtime()
++	var held: Array[RefCounted]=[]
++	var root_batch:=_root_batch("guard:partial",[death_binding],85)
++	if root_batch==null: game.queue_free(); _finish(); return
++	for i in range(94):
++		var ticket: RefCounted=runtime.reserve_action("hc.skill.wizard.ice_storm",[heal_binding],85,"guard:held:"+str(i),85)
++		if ticket!=null: held.append(ticket)
++	check(held.size()==94,"94 legitimate zero-state producers coexist with the admitted chain")
++	var total_before: int=runtime.pending_count()+int(runtime.reservation_snapshot().facts)
++	check(total_before==8160,"initial facts plus resident promises total exactly 8160")
++	for i in range(53): runtime._dispatch_one_fact()
++	var partial: Dictionary=runtime.reservation_snapshot()
++	check(runtime.pending_count()==32 and int(partial.facts)+runtime.pending_count()==8160,
++		"each consumed fact remains charged to its live root before the entire branch finishes")
++	var competing: RefCounted=runtime.reserve_action("hc.skill.wizard.ice_storm",[heal_binding],85,"guard:competing",85)
++	check(competing==null,"competing 85-fact producer is rejected before any resource/HP change")
++	for i in range(32): runtime._dispatch_one_fact()
++	check(int(runtime.reservation_snapshot().facts)+runtime.pending_count()<=Runtime.MAX_PENDING_FACTS,
++		"final branch completion cannot raise total commitments above existing capacity")
++	var hp_before: int=survivor.current_hp
++	await _settle()
++	check(survivor.current_hp==hp_before-10 and runtime.metrics().child_actions==1 and runtime.errors.is_empty(),
++		"the admitted child still commits and transfers its full fact after partial drain and competition")
++	if competing!=null: competing.close()
++	for ticket: RefCounted in held: ticket.close()
++	check(not runtime.has_work() and runtime.reservation_snapshot().actions==0,"all first-case owners explicitly retire")
++
++	await _prepare_first("reentry"); _fresh_runtime()
++	game.player.current_hp=50; game.player.stats_changed.connect(_on_stats)
++	root_batch=_root_batch("guard:reentry",[heal_binding,death_binding],2)
++	if root_batch!=null: await _settle()
++	game.player.stats_changed.disconnect(_on_stats)
++	check(reentry_calls==1 and reentry_served==0,"real Player healing notification attempts reentry once without running a second consumer")
++	check(runtime.metrics().child_actions==1 and runtime.errors.is_empty(),"outer death subscription retains its root until all synchronous consumers return")
++	check(not runtime.has_work() and runtime.reservation_snapshot().receipts==0,"reentry leaves no root/branch/receipt work")
++
++	await _prepare_first("submit_retirement"); _fresh_runtime()
++	game.child_results.clear(); game.clear_before_child_submit=true
++	root_batch=_root_batch("guard:retirement",[death_binding],1)
++	hp_before=survivor.current_hp
++	if root_batch!=null: await _settle()
++	check(game.clear_count==1 and survivor.current_hp==hp_before-10,"explicit retirement occurs after actual child HP capture without rolling HP back")
++	check(game.child_results.size()==1 and not game.child_results[0].success,
++		"Root reports the actual failed transfer/retired owner instead of falsely successful child execution")
++	check(runtime.metrics().child_actions==0 and not runtime.has_work(),"retired child is never counted as successful delivery")
++
++	await _prepare_first("sibling_production"); _fresh_runtime()
++	survivor.current_hp=40
++	extra.max_hp=1000; extra.current_hp=1000
++	extra.direct_spell_anti_magic_points=0; extra.direct_spell_magic_defense_min=0
++	extra.direct_spell_magic_defense_max=0; extra.direct_spell_stats_valid=true
++	extra.set_combat_position(game._canonical_ground_gu_to_screen_px(Vector2(45.7,13.5)),&"test_guard_later_receiver")
++	game.child_results.clear(); game.reenter_before_child_submit=true
++	root_batch=_root_batch("guard:sibling_production",[death_binding],2,40)
++	if root_batch!=null: await _settle()
++	check(game.child_reentry_calls==1 and game.child_reentry_served==0 and game.maximum_producing_branches==1,
++		"unsealed real child production cannot start a second queued sibling through synchronous pump")
++	check(game.child_results.size()==2 and game.child_results[0].success and game.child_results[0].batch_outcome=="empty"
++		and game.child_results[1].success and game.child_results[1].batch_outcome=="transferred",
++		"a legitimate empty release and a transferred sibling have distinct accurate successful terminal outcomes")
++	check(extra.current_hp==980 and runtime.metrics().child_actions==2 and runtime.errors.is_empty(),
++		"both owned siblings execute in order and their real HP/consumer results complete once")
++	check(not runtime.has_work() and runtime.reservation_snapshot().receipts==0,"sibling production releases the full chain only after terminal consumption")
++	game.queue_free(); await get_tree().process_frame
++	check(ContentLayers.reload_feature_catalog(),"world retirement restores the original registry")
++	_finish()
++
++func _finish() -> void:
++	var written:=proof.write_receipt("feature_child_chain_admission_test",checks,errors.size())
++	print("FEATURE_CHILD_CHAIN_ADMISSION_",("PASS" if written and errors.is_empty() else "FAIL")," checks=",checks," errors=",errors)
++	get_tree().quit(0 if written and errors.is_empty() else 1)
+diff --git a/tests/framework/feature_child_chain_admission_test.tscn b/tests/framework/feature_child_chain_admission_test.tscn
+new file mode 100644
+index 000000000..f757e69c4
+--- /dev/null
++++ b/tests/framework/feature_child_chain_admission_test.tscn
+@@ -0,0 +1,4 @@
++[gd_scene load_steps=2 format=3]
++[ext_resource type="Script" path="res://tests/framework/feature_child_chain_admission_test.gd" id="1"]
++[node name="FeatureChildChainAdmissionTest" type="Node"]
++script = ExtResource("1")
+diff --git a/tests/framework/feature_periodic_child_chain_test.gd b/tests/framework/feature_periodic_child_chain_test.gd
+new file mode 100644
+index 000000000..817c27d6e
+--- /dev/null
++++ b/tests/framework/feature_periodic_child_chain_test.gd
+@@ -0,0 +1,97 @@
++extends Node
++
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const Root := preload("res://tests/framework/fixtures/lease_probe_root.gd")
++const Fixture := preload("res://tests/helpers/formal_world_skill_fixture.gd")
++var proof := Proof.new()
++var checks := 0
++var errors: Array[String] = []
++
++func _ready() -> void: _run.call_deferred()
++func check(ok: bool,label: String) -> void:
++	checks+=1; proof.record(ok,label)
++	if not ok: errors.append(label)
++
++func _run() -> void:
++	PlayerState.test_mode=true; PlayerState.reset_progress(false)
++	check(PlayerState.set_profession_identity("hc.profession.wizard"),"registered wizard identity")
++	PlayerState.level=50; PlayerState.learned_skills={"hc.skill.wizard.ice_storm":3}; PlayerState.recalculate_stats(false)
++	check(ContentLayers.reload_feature_catalog("res://assets/data/features/validation/periodic_child_chain_registry.json"),
++		"formal registry accepts the finite direct/periodic/child death chain without allowing periodic ignite")
++	print("PERIODIC_CHILD_CATALOG ",JSON.stringify(ContentLayers.feature_load_errors))
++	if not errors.is_empty(): _finish(); return
++	var game:=Root.new(); add_child(game)
++	var deadline:=Time.get_ticks_msec()+20000
++	while not game.gameplay_input_is_enabled() and Time.get_ticks_msec()<deadline: await get_tree().process_frame
++	check(game.gameplay_input_is_enabled(),"actual mapped world reaches READY")
++	if not game.gameplay_input_is_enabled(): game.queue_free(); _finish(); return
++	var first:=await Fixture.prepare_target(self,game,game.player,19,"periodic_child_chain")
++	check(first!=null,"real factory/index/projection supplies the initial receiver")
++	if first==null: game.queue_free(); _finish(); return
++	var second: EnemyActor=game._spawn_enemy(GameData.get_monster_by_id(64),
++		game._canonical_ground_gu_to_screen_px(Vector2(43.1,13.5)),false,-1.0,
++		{"respawn_enabled":false,"spawn_slot_id":"test:periodic_chain:second"})
++	var third: EnemyActor=game._spawn_enemy(GameData.get_monster_by_id(64),
++		game._canonical_ground_gu_to_screen_px(Vector2(45.7,13.5)),false,-1.0,
++		{"respawn_enabled":false,"spawn_slot_id":"test:periodic_chain:third"})
++	check(second!=null and third!=null,"later mapped receivers use declared factory slots")
++	if second==null or third==null: game.queue_free(); _finish(); return
++	game.set_process(false); game.set_physics_process(false); game.player.set_physics_process(false)
++	for actor: Node in get_tree().get_nodes_in_group("enemies"): actor.set_physics_process(false)
++	for actor: EnemyActor in [first,second,third]:
++		actor.max_hp=1000; actor.current_hp=1000
++		actor.direct_spell_anti_magic_points=0; actor.direct_spell_magic_defense_min=0
++		actor.direct_spell_magic_defense_max=0; actor.direct_spell_stats_valid=true
++	first.current_hp=200; second.current_hp=24
++	PlayerState.computed_stats.magic_min=100; PlayerState.computed_stats.magic_max=100
++	game.player.current_mp=100; game._skill_cast_target=first; game._set_magic_locked_target(first,true)
++	check(ContentLayers.set_feature_module_enabled("hc.validation.periodic_child_chain",true),"READY enables only the default-off test module")
++	var lease: RefCounted=game._capture_action_configuration("hc.skill.wizard.ice_storm")
++	check(lease!=null and lease.event_bindings_for("hc.skill.wizard.ice_storm").size()==2,"one accepted snapshot freezes ignite and death subscriptions")
++	if lease==null: game.queue_free(); _finish(); return
++	var accepted: bool=game.player.request_skill("hc.skill.wizard.ice_storm",first.get_instance_id(),lease)
++	print("PERIODIC_CHILD_ADMISSION ",JSON.stringify(game._feature_effect_runtime.reservation_snapshot() if game._feature_effect_runtime!=null else {}),
++		" reason=",game._feature_effect_runtime.last_admission_reason if game._feature_effect_runtime!=null else "no_runtime")
++	check(accepted and lease.is_accepted() and lease.effect_reservation()!=null,
++		"real 85-slot world accepts the full state and finite child promise before MP/cooldown/HP")
++	if not accepted: game.queue_free(); await get_tree().process_frame; _finish(); return
++	check(ContentLayers.set_feature_module_enabled("hc.validation.periodic_child_chain",false),"source withdrawal preserves accepted periodic producers")
++	deadline=Time.get_ticks_msec()+3000
++	while game.observed_releases==0 and Time.get_ticks_msec()<deadline: await get_tree().process_frame
++	var root_loss:=200-int(first.current_hp)
++	check(game.observed_releases==1 and first.current_hp>0 and root_loss>0,"root hit survives; this chain must start with a real periodic death")
++	var runtime: RefCounted=game._feature_effect_runtime
++	if runtime==null or first.current_hp<=0: game.queue_free(); await get_tree().process_frame; _finish(); return
++	var root_rng: int=game._rng.state; var player_rng: int=game.player._rng.state; var mp: int=game.player.current_mp
++	await _settle(runtime)
++	check(runtime.active_count()==1 and runtime.reservation_snapshot().actions==1,
++		"root batch is gone while its accepted state still retains future child capacity")
++	for second_index in range(1,9):
++		game._time_domains.advance_simulation(1.0)
++		await _settle(runtime)
++	print("PERIODIC_CHILD_RESULT ",JSON.stringify({"root_loss":root_loss,"first":first.current_hp,"second":second.current_hp,
++		"third":third.current_hp,"metrics":runtime.metrics(),"reservations":runtime.reservation_snapshot(),"errors":runtime.errors}))
++	check(first.current_hp==0 and second.current_hp==0 and third.current_hp<1000 and third.current_hp>0,
++		"periodic HP commits cause the two real death waves and child HP creates later ignite")
++	check(first.collision_layer==0 and second.collision_layer==0,"periodic deaths immediately remove collisions")
++	check(runtime.metrics().child_actions==2,"two finite periodic death branches execute exactly once")
++	check(runtime.metrics().ticks>2 and runtime.metrics().started>=3,"child hits feed real later periodic states instead of being discarded")
++	check(runtime.errors.is_empty() and not runtime.has_work() and runtime.reservation_snapshot().receipts==0,
++		"all periodic producers/child consumers/receipts/capacity retire at the complete terminal boundary")
++	check(game._rng.state==root_rng and game.player._rng.state==player_rng and game.player.current_mp==mp,
++		"periodic and child work preserve old RNG streams and never charge MP again")
++	game.queue_free(); await get_tree().process_frame
++	check(ContentLayers.reload_feature_catalog(),"retired world restores the original default registry")
++	_finish()
++
++func _settle(runtime: RefCounted) -> void:
++	for iteration in range(240):
++		runtime.pump()
++		if runtime.pending_count()==0 and runtime.child_count()==0 and not runtime.has_due(): return
++		await get_tree().process_frame
++	check(false,"shared-budget work settles without an unbounded forced pump")
++
++func _finish() -> void:
++	var written:=proof.write_receipt("feature_periodic_child_chain_test",checks,errors.size())
++	print("FEATURE_PERIODIC_CHILD_CHAIN_",("PASS" if written and errors.is_empty() else "FAIL")," checks=",checks," errors=",errors)
++	get_tree().quit(0 if written and errors.is_empty() else 1)
+diff --git a/tests/framework/feature_periodic_child_chain_test.tscn b/tests/framework/feature_periodic_child_chain_test.tscn
+new file mode 100644
+index 000000000..f29454dca
+--- /dev/null
++++ b/tests/framework/feature_periodic_child_chain_test.tscn
+@@ -0,0 +1,4 @@
++[gd_scene load_steps=2 format=3]
++[ext_resource type="Script" path="res://tests/framework/feature_periodic_child_chain_test.gd" id="1"]
++[node name="FeaturePeriodicChildChainTest" type="Node"]
++script = ExtResource("1")
+diff --git a/tests/framework/fixtures/child_admission_probe_root.gd b/tests/framework/fixtures/child_admission_probe_root.gd
+new file mode 100644
+index 000000000..07b9ecfcf
+--- /dev/null
++++ b/tests/framework/fixtures/child_admission_probe_root.gd
+@@ -0,0 +1,31 @@
++extends "res://tests/framework/fixtures/lease_probe_root.gd"
++
++var clear_before_child_submit := false
++var clear_count := 0
++var child_results: Array[Dictionary] = []
++var reenter_before_child_submit := false
++var child_reentry_calls := 0
++var child_reentry_served := -1
++var maximum_producing_branches := 0
++
++func _finish_feature_damage_batch(batch: RefCounted) -> Dictionary:
++	if batch!=null and int(batch.chain_context().get("generation",0))>0:
++		var producing:=0
++		for root: Dictionary in _feature_effect_runtime._reservations.values():
++			for branch: Dictionary in root.get("branches",{}).values():
++				if branch.stage=="producing": producing+=1
++		maximum_producing_branches=maxi(maximum_producing_branches,producing)
++		if reenter_before_child_submit:
++			reenter_before_child_submit=false; child_reentry_calls+=1
++			child_reentry_served=_feature_effect_runtime.pump()
++	if clear_before_child_submit and batch!=null and int(batch.chain_context().get("generation",0))>0:
++		clear_before_child_submit=false; clear_count+=1
++		# Explicit test-owned retirement after real HP/capture, before transfer.
++		_feature_effect_runtime.clear()
++	return super._finish_feature_damage_batch(batch)
++
++func _execute_feature_child_action(request: Dictionary,ticket: RefCounted,bindings: Array,
++	source: Node2D,resources: RefCounted) -> Dictionary:
++	var result: Dictionary=super._execute_feature_child_action(request,ticket,bindings,source,resources)
++	child_results.append(result.duplicate(true))
++	return result

@@ -1,0 +1,40 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "feature_periodic_child_chain_test",
+                        "test_path":  "tests/framework/feature_periodic_child_chain_test.tscn",
+                        "wrapper_process_id":  4052,
+                        "wrapper_started_utc":  "2026-10-04T06:15:54.3869979Z",
+                        "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_child_state_admission_red_921dcc14c1bc4403b66482c139d4b6fb",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  false,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  1,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-04T06:16:24.3998685Z",
+                        "native_exit_observed_utc":  "2026-10-04T06:16:09.1125507Z",
+                        "effective_exit_code":  1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "ed797d09-a91a-4fea-b035-d4d0ee58705c",
+                        "framework_receipt_valid":  false,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+                    }
+                ],
+    "total":  1,
+    "invocation_id":  "c62c445e-8755-495f-8dfc-85fb5f260b15",
+    "runtime_environment":  {
+                                "project_root":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+                                "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_child_state_admission_red_921dcc14c1bc4403b66482c139d4b6fb",
+                                "runner_process_id":  21748
+                            },
+    "passed":  0,
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "engine_log_errors":  0,
+    "generated_at":  "2026-10-04T14:16:10.3504175+08:00",
+    "failed":  1,
+    "suite":  "adhoc"
+}

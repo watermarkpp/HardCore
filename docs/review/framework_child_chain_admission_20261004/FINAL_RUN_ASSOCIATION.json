@@ -1,0 +1,316 @@
+[
+  {
+    "group": "child_chain_admission_final_direct",
+    "launcher_pid": 20836,
+    "requested_at_utc": "2026-10-04T06:44:53.458447+00:00",
+    "requested_runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\child_chain_admission_final_direct_b163995ec2514657bb7bf416ab6f2ac9",
+    "command": [
+      "py",
+      "-3.12",
+      "tools/source176_r3_validation.py",
+      "child_chain_admission_final_direct",
+      "--tests",
+      "tests/framework/feature_chain_commit_test.tscn",
+      "tests/framework/damage_commit_fact_test.tscn",
+      "tests/framework/feature_death_child_command_test.tscn",
+      "tests/framework/feature_child_capacity_test.tscn",
+      "tests/framework/feature_binding_validation_test.tscn",
+      "tests/framework/feature_compiler_test.tscn",
+      "tests/framework/feature_capacity_admission_test.tscn",
+      "tests/framework/feature_world_capacity_bound_test.tscn",
+      "tests/framework/feature_receipt_retirement_test.tscn",
+      "tests/framework/feature_fire_effect_production_test.tscn",
+      "tests/framework/feature_lifesteal_production_test.tscn",
+      "tests/framework/periodic_effect_runtime_test.tscn",
+      "tests/framework/periodic_effect_boundaries_test.tscn",
+      "tests/framework/periodic_effect_death_production_test.tscn",
+      "tests/framework/periodic_delivery_lateness_test.tscn",
+      "tests/framework/feature_queue_retention_test.tscn",
+      "tests/framework/feature_source_composition_test.tscn",
+      "tests/framework/feature_source_composition_cold_test.tscn",
+      "tests/framework/rune_source_composition_test.tscn",
+      "tests/framework/rune_source_composition_cold_test.tscn",
+      "tests/framework/feature_child_planner_test.tscn",
+      "tests/mapped_skill_plan_missing_projection_rejected_test.tscn",
+      "tests/canonical_snapshot_identity_production_test.tscn",
+      "tests/canonical_snapshot_propagation_test.tscn",
+      "tests/fire_wall_cap_policy_canonical_plan_test.tscn",
+      "tests/caster_runtime_canonical_plan_adapter_test.tscn",
+      "tests/framework/feature_child_execution_test.tscn",
+      "tests/framework/feature_producing_death_reentry_test.tscn",
+      "tests/framework/feature_resource_accepted_lifetime_test.tscn",
+      "tests/framework/feature_lifesteal_runtime_test.tscn",
+      "tests/framework/feature_child_chain_admission_test.tscn",
+      "tests/framework/frame_budget_test.tscn",
+      "tests/framework/frame_epoch_test.tscn",
+      "tests/framework/budget_producer_admission_test.tscn",
+      "--timeout",
+      "30"
+    ],
+    "native_invocation_id": "068b04ed-a0e4-4cee-bc89-a4c2adf5f4f9",
+    "runner_runtime_environment": {
+      "project_root": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+      "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\child_chain_admission_final_direct_b163995ec2514657bb7bf416ab6f2ac9",
+      "runner_process_id": 23252
+    },
+    "evidence": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\child_chain_admission_final_direct_144453_567876",
+    "status": "PASS",
+    "framework_receipts": [
+      {
+        "test_path": "tests/framework/feature_chain_commit_test.tscn",
+        "run_id": "a0653c37-736a-473d-9955-7e4ce69b8dc1",
+        "native_process_id": 23496,
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_chain_admission_final_direct_b163995ec2514657bb7bf416ab6f2ac9/Godot/app_userdata/HardCore"
+      },
+      {
+        "test_path": "tests/framework/damage_commit_fact_test.tscn",
+        "run_id": "98d8ab02-3d55-4790-8c09-fad0400e9bad",
+        "native_process_id": 16428,
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_chain_admission_final_direct_b163995ec2514657bb7bf416ab6f2ac9/Godot/app_userdata/HardCore"
+      },
+      {
+        "test_path": "tests/framework/feature_death_child_command_test.tscn",
+        "run_id": "0413eb26-2832-4e96-9424-6f7a51c56565",
+        "native_process_id": 21264,
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_chain_admission_final_direct_b163995ec2514657bb7bf416ab6f2ac9/Godot/app_userdata/HardCore"
+      },
+      {
+        "test_path": "tests/framework/feature_child_capacity_test.tscn",
+        "run_id": "0e96d971-c98e-4a04-bccf-f71a14041e5e",
+        "native_process_id": 13664,
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_chain_admission_final_direct_b163995ec2514657bb7bf416ab6f2ac9/Godot/app_userdata/HardCore"
+      },
+      {
+        "test_path": "tests/framework/feature_binding_validation_test.tscn",
+        "run_id": "e0cd7a6b-4270-455a-a1f2-84d6172a6ade",
+        "native_process_id": 9372,
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_chain_admission_final_direct_b163995ec2514657bb7bf416ab6f2ac9/Godot/app_userdata/HardCore"
+      },
+      {
+        "test_path": "tests/framework/feature_compiler_test.tscn",
+        "run_id": "0bbbc101-30c1-478f-a87f-41709d071a38",
+        "native_process_id": 13196,
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_chain_admission_final_direct_b163995ec2514657bb7bf416ab6f2ac9/Godot/app_userdata/HardCore"
+      },
+      {
+        "test_path": "tests/framework/feature_capacity_admission_test.tscn",
+        "run_id": "c1da3440-3242-4b9a-801d-62f01d403916",
+        "native_process_id": 7384,
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_chain_admission_final_direct_b163995ec2514657bb7bf416ab6f2ac9/Godot/app_userdata/HardCore"
+      },
+      {
+        "test_path": "tests/framework/feature_world_capacity_bound_test.tscn",
+        "run_id": "b8a1ff64-4036-4008-aeda-48a4e08aa799",
+        "native_process_id": 16732,
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_chain_admission_final_direct_b163995ec2514657bb7bf416ab6f2ac9/Godot/app_userdata/HardCore"
+      },
+      {
+        "test_path": "tests/framework/feature_receipt_retirement_test.tscn",
+        "run_id": "fed333f3-807a-4637-8ea6-4e0decfea941",
+        "native_process_id": 21120,
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_chain_admission_final_direct_b163995ec2514657bb7bf416ab6f2ac9/Godot/app_userdata/HardCore"
+      },
+      {
+        "test_path": "tests/framework/feature_fire_effect_production_test.tscn",
+        "run_id": "2dce9fca-9456-45bb-a0b6-5d5871a43eda",
+        "native_process_id": 9688,
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_chain_admission_final_direct_b163995ec2514657bb7bf416ab6f2ac9/Godot/app_userdata/HardCore"
+      },
+      {
+        "test_path": "tests/framework/feature_lifesteal_production_test.tscn",
+        "run_id": "cb9d4dd9-0e82-4e85-942f-ce9970fb5e14",
+        "native_process_id": 7112,
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_chain_admission_final_direct_b163995ec2514657bb7bf416ab6f2ac9/Godot/app_userdata/HardCore"
+      },
+      {
+        "test_path": "tests/framework/periodic_effect_runtime_test.tscn",
+        "run_id": "8621de0d-a099-4b78-bddc-0f4de736e15a",
+        "native_process_id": 8060,
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_chain_admission_final_direct_b163995ec2514657bb7bf416ab6f2ac9/Godot/app_userdata/HardCore"
+      },
+      {
+        "test_path": "tests/framework/periodic_effect_boundaries_test.tscn",
+        "run_id": "914b0197-e826-4f99-a50c-2b9249a5f28d",
+        "native_process_id": 16996,
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_chain_admission_final_direct_b163995ec2514657bb7bf416ab6f2ac9/Godot/app_userdata/HardCore"
+      },
+      {
+        "test_path": "tests/framework/periodic_effect_death_production_test.tscn",
+        "run_id": "cbea3cd8-1ee8-4b80-88e1-dfeb6b4d1ac7",
+        "native_process_id": 14956,
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_chain_admission_final_direct_b163995ec2514657bb7bf416ab6f2ac9/Godot/app_userdata/HardCore"
+      },
+      {
+        "test_path": "tests/framework/periodic_delivery_lateness_test.tscn",
+        "run_id": "8595a033-ca63-474e-b0ce-1360f8e849c9",
+        "native_process_id": 9752,
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_chain_admission_final_direct_b163995ec2514657bb7bf416ab6f2ac9/Godot/app_userdata/HardCore"
+      },
+      {
+        "test_path": "tests/framework/feature_queue_retention_test.tscn",
+        "run_id": "27b8ae72-e186-4d7a-b88f-d544bc73444f",
+        "native_process_id": 5640,
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_chain_admission_final_direct_b163995ec2514657bb7bf416ab6f2ac9/Godot/app_userdata/HardCore"
+      },
+      {
+        "test_path": "tests/framework/feature_source_composition_test.tscn",
+        "run_id": "77312b61-2611-4a47-8fb3-8274b4a5dee9",
+        "native_process_id": 20496,
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_chain_admission_final_direct_b163995ec2514657bb7bf416ab6f2ac9/Godot/app_userdata/HardCore"
+      },
+      {
+        "test_path": "tests/framework/feature_source_composition_cold_test.tscn",
+        "run_id": "cf9e37ee-e5be-4d65-89d6-64a44d42a84a",
+        "native_process_id": 23628,
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_chain_admission_final_direct_b163995ec2514657bb7bf416ab6f2ac9/Godot/app_userdata/HardCore"
+      },
+      {
+        "test_path": "tests/framework/rune_source_composition_test.tscn",
+        "run_id": "07c90e3e-78ea-41bf-8735-0d30dcddfb7a",
+        "native_process_id": 9048,
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_chain_admission_final_direct_b163995ec2514657bb7bf416ab6f2ac9/Godot/app_userdata/HardCore"
+      },
+      {
+        "test_path": "tests/framework/rune_source_composition_cold_test.tscn",
+        "run_id": "4a6f8c33-86eb-4e8d-b2af-66e68447167a",
+        "native_process_id": 2736,
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_chain_admission_final_direct_b163995ec2514657bb7bf416ab6f2ac9/Godot/app_userdata/HardCore"
+      },
+      {
+        "test_path": "tests/framework/feature_child_planner_test.tscn",
+        "run_id": "7e17f1e0-e398-420d-832a-c088c1743eaa",
+        "native_process_id": 8656,
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_chain_admission_final_direct_b163995ec2514657bb7bf416ab6f2ac9/Godot/app_userdata/HardCore"
+      },
+      {
+        "test_path": "tests/framework/feature_child_execution_test.tscn",
+        "run_id": "7f1a4527-e503-44da-af1d-d68cdd1b7066",
+        "native_process_id": 20276,
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_chain_admission_final_direct_b163995ec2514657bb7bf416ab6f2ac9/Godot/app_userdata/HardCore"
+      },
+      {
+        "test_path": "tests/framework/feature_producing_death_reentry_test.tscn",
+        "run_id": "453186a3-f32b-4f63-b055-ee656fdb6ef8",
+        "native_process_id": 6188,
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_chain_admission_final_direct_b163995ec2514657bb7bf416ab6f2ac9/Godot/app_userdata/HardCore"
+      },
+      {
+        "test_path": "tests/framework/feature_resource_accepted_lifetime_test.tscn",
+        "run_id": "8114fdda-553e-4371-88e0-222f98194fe9",
+        "native_process_id": 2944,
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_chain_admission_final_direct_b163995ec2514657bb7bf416ab6f2ac9/Godot/app_userdata/HardCore"
+      },
+      {
+        "test_path": "tests/framework/feature_lifesteal_runtime_test.tscn",
+        "run_id": "f7628520-3b29-4148-b1f0-770dcaea108e",
+        "native_process_id": 8824,
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_chain_admission_final_direct_b163995ec2514657bb7bf416ab6f2ac9/Godot/app_userdata/HardCore"
+      },
+      {
+        "test_path": "tests/framework/feature_child_chain_admission_test.tscn",
+        "run_id": "a1bd1c6a-2297-4bcd-839e-fb3c6bbc0678",
+        "native_process_id": 21400,
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_chain_admission_final_direct_b163995ec2514657bb7bf416ab6f2ac9/Godot/app_userdata/HardCore"
+      },
+      {
+        "test_path": "tests/framework/frame_budget_test.tscn",
+        "run_id": "e5e95d03-864c-42d9-b95f-d2a563d5e156",
+        "native_process_id": 8928,
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_chain_admission_final_direct_b163995ec2514657bb7bf416ab6f2ac9/Godot/app_userdata/HardCore"
+      },
+      {
+        "test_path": "tests/framework/frame_epoch_test.tscn",
+        "run_id": "4aaeff2e-0015-4e45-8235-2b86e14e5d38",
+        "native_process_id": 18464,
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_chain_admission_final_direct_b163995ec2514657bb7bf416ab6f2ac9/Godot/app_userdata/HardCore"
+      },
+      {
+        "test_path": "tests/framework/budget_producer_admission_test.tscn",
+        "run_id": "aadbd179-e89b-4843-9545-a9bca612174e",
+        "native_process_id": 4384,
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_chain_admission_final_direct_b163995ec2514657bb7bf416ab6f2ac9/Godot/app_userdata/HardCore"
+      }
+    ]
+  },
+  {
+    "group": "child_chain_admission_final_world",
+    "launcher_pid": 20836,
+    "requested_at_utc": "2026-10-04T06:51:30.664220+00:00",
+    "requested_runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\child_chain_admission_final_world_3a5befd3163145ebb933216941131461",
+    "command": [
+      "py",
+      "-3.12",
+      "tools/source176_r3_validation.py",
+      "child_chain_admission_final_world",
+      "--tests",
+      "tests/framework/combined_effect_lifecycle_test.tscn",
+      "tests/framework/combined_effect_lifecycle_cold_test.tscn",
+      "tests/framework/periodic_credit_safe_logout_test.tscn",
+      "tests/framework/periodic_credit_safe_logout_cold_test.tscn",
+      "tests/framework/natural_effect_lifecycle_test.tscn",
+      "tests/framework/natural_effect_lifecycle_cold_test.tscn",
+      "tests/framework/feature_resource_natural_test.tscn",
+      "tests/framework/feature_resource_natural_cold_test.tscn",
+      "--timeout",
+      "60"
+    ],
+    "native_invocation_id": "6435d0e5-7ada-49f5-bdb0-b887d7b18352",
+    "runner_runtime_environment": {
+      "project_root": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+      "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\child_chain_admission_final_world_3a5befd3163145ebb933216941131461",
+      "runner_process_id": 9628
+    },
+    "evidence": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\child_chain_admission_final_world_145130_775640",
+    "status": "PASS",
+    "framework_receipts": [
+      {
+        "test_path": "tests/framework/combined_effect_lifecycle_test.tscn",
+        "run_id": "94c6b478-b782-4996-9117-127ea2aaa98a",
+        "native_process_id": 24824,
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_chain_admission_final_world_3a5befd3163145ebb933216941131461/Godot/app_userdata/HardCore"
+      },
+      {
+        "test_path": "tests/framework/combined_effect_lifecycle_cold_test.tscn",
+        "run_id": "b38e4e46-baae-4f47-89f9-408de1558f04",
+        "native_process_id": 25072,
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_chain_admission_final_world_3a5befd3163145ebb933216941131461/Godot/app_userdata/HardCore"
+      },
+      {
+        "test_path": "tests/framework/periodic_credit_safe_logout_test.tscn",
+        "run_id": "1fce33f9-d75a-463b-862d-e4b107f2ef3d",
+        "native_process_id": 23548,
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_chain_admission_final_world_3a5befd3163145ebb933216941131461/Godot/app_userdata/HardCore"
+      },
+      {
+        "test_path": "tests/framework/periodic_credit_safe_logout_cold_test.tscn",
+        "run_id": "fb3e6860-c917-49fa-8ce8-8fc60c732d3a",
+        "native_process_id": 8456,
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_chain_admission_final_world_3a5befd3163145ebb933216941131461/Godot/app_userdata/HardCore"
+      },
+      {
+        "test_path": "tests/framework/natural_effect_lifecycle_test.tscn",
+        "run_id": "c57f2565-e061-4660-ab6e-859622d6ca7f",
+        "native_process_id": 22984,
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_chain_admission_final_world_3a5befd3163145ebb933216941131461/Godot/app_userdata/HardCore"
+      },
+      {
+        "test_path": "tests/framework/natural_effect_lifecycle_cold_test.tscn",
+        "run_id": "5ec9226b-9203-497e-9161-a27f7daba6f3",
+        "native_process_id": 8332,
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_chain_admission_final_world_3a5befd3163145ebb933216941131461/Godot/app_userdata/HardCore"
+      },
+      {
+        "test_path": "tests/framework/feature_resource_natural_test.tscn",
+        "run_id": "d5f8c3c4-ca34-4c08-addb-462b8ef52092",
+        "native_process_id": 15312,
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_chain_admission_final_world_3a5befd3163145ebb933216941131461/Godot/app_userdata/HardCore"
+      },
+      {
+        "test_path": "tests/framework/feature_resource_natural_cold_test.tscn",
+        "run_id": "d4137457-b309-4381-a42f-c578cdfdcdea",
+        "native_process_id": 22468,
+        "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_chain_admission_final_world_3a5befd3163145ebb933216941131461/Godot/app_userdata/HardCore"
+      }
+    ]
+  }
+]

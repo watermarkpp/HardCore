@@ -1,0 +1,40 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "feature_child_chain_admission_test",
+                        "test_path":  "tests/framework/feature_child_chain_admission_test.tscn",
+                        "wrapper_process_id":  12016,
+                        "wrapper_started_utc":  "2026-10-04T06:28:09.3260963Z",
+                        "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\child_chain_admission_final_red_3f36b2f44e514165ab3af52dcc7cba51",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  false,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  1,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-04T06:28:39.3379482Z",
+                        "native_exit_observed_utc":  "2026-10-04T06:28:24.2079807Z",
+                        "effective_exit_code":  1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  2,
+                        "engine_log_failure_count":  2,
+                        "framework_run_id":  "d4966dc4-b3f9-402a-97d6-b7e1b5319eba",
+                        "framework_receipt_valid":  false,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;non_zero_exit_code_1;stderr_failures_2;engine_log_failures_2;framework_checks_failed"
+                    }
+                ],
+    "total":  1,
+    "invocation_id":  "35a2e4be-35f6-4a60-8dc9-f7df5487f417",
+    "runtime_environment":  {
+                                "project_root":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+                                "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\child_chain_admission_final_red_3f36b2f44e514165ab3af52dcc7cba51",
+                                "runner_process_id":  20204
+                            },
+    "passed":  0,
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "engine_log_errors":  2,
+    "generated_at":  "2026-10-04T14:28:25.4554855+08:00",
+    "failed":  1,
+    "suite":  "adhoc"
+}

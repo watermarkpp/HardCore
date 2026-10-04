@@ -1,0 +1,26 @@
+ERROR: Feature damage batch submission rejected: ["feature_pending_capacity"]
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _finish_feature_damage_batch (res://scripts/game_root.gd:14968)
+       [1] _finish_feature_damage_batch (res://tests/framework/fixtures/child_admission_probe_root.gd:12)
+       [2] _execute_feature_child_action (res://scripts/game_root.gd:15012)
+       [3] _execute_feature_child_action (res://tests/framework/fixtures/child_admission_probe_root.gd:16)
+       [4] _dispatch_one_child (res://scripts/features/runtime/effect_runtime.gd:537)
+       [5] pump (res://scripts/features/runtime/effect_runtime.gd:338)
+       [6] _settle (res://tests/framework/feature_child_chain_admission_test.gd:60)
+       [7] _run (res://tests/framework/feature_child_chain_admission_test.gd:124)
+       [8] prepare_target (res://tests/helpers/formal_world_skill_fixture.gd:87)
+ERROR: Feature damage batch submission rejected: []
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _finish_feature_damage_batch (res://scripts/game_root.gd:14968)
+       [1] _finish_feature_damage_batch (res://tests/framework/fixtures/child_admission_probe_root.gd:12)
+       [2] _execute_feature_child_action (res://scripts/game_root.gd:15012)
+       [3] _execute_feature_child_action (res://tests/framework/fixtures/child_admission_probe_root.gd:16)
+       [4] _dispatch_one_child (res://scripts/features/runtime/effect_runtime.gd:537)
+       [5] pump (res://scripts/features/runtime/effect_runtime.gd:338)
+       [6] _settle (res://tests/framework/feature_child_chain_admission_test.gd:60)
+       [7] _run (res://tests/framework/feature_child_chain_admission_test.gd:144)
+       [8] _prepare_first (res://tests/framework/feature_child_chain_admission_test.gd:56)
+WARNING: 8 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)

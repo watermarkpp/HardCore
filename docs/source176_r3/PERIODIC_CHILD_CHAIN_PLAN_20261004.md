@@ -1,0 +1,11 @@
+# 原 Task4 周期致死与状态所有权接入
+
+沿原RFC和CHILD_CHAIN_PLAN，不改变玩法参数。父固定1f6ca7a78e2163c3365bbcb38710018e6eee4dbf；第三树单主控，真实HP、planner、存档writer仍唯一。新验证模块默认关闭。
+
+接入顺序：原生正式registry反例→有限周期事实准入→实际tick batch冻结死亡事实→同Root子执行→子命中再点燃→根/状态/分支退休→来源刷新及边界。不能将已有immediate两代通过替代周期链。
+
+状态槽和tick工作必须分开。相同target life/source/mechanic/effect仅一状态，活目标数有生产factory闭包；减少state预留前，必须证明死亡/树外销毁/换代时旧状态先退休，历史及并发来源仍计入全局和逐目标槽。根quota属于接受的有限生产者；刷新不能延长一份已耗尽旧quota，也不能丢原credit或旧已投递工作。新刷新是否更新后续producer lineage属于内部所有权协议，需要精确反例，保持strongest_keep_phase的raw/expiry/next_due行为与已有历史credit。
+
+周期事实经过原Combat periodic-chain端口与DamageBatch；伤害前已拥有branch票据和累计工作配额，不在HP后申请容量。每次实际tick独立release，保留根skill/generation、实际提交位置、历史credit及确定性周期RNG；禁止周期点燃自激。死亡handler只读已提交事实，子请求继续同Root实际释放查询。
+
+先证明接通与完整容量，不假定所有未知场景已覆盖。目标死亡立即无碰撞；周期致死事实须先捕获，状态终止不能销毁尚未消费的已提交分支；旧root/branch不可重入后才退receipt。来源撤销/玩家死亡不取消until_expired，换世界停止旧能力。最终同源码回归和新SHA双审计后再推进模板/自然性能/APK。

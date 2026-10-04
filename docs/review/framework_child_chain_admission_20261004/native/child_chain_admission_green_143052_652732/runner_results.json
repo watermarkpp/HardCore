@@ -1,0 +1,40 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "feature_child_chain_admission_test",
+                        "test_path":  "tests/framework/feature_child_chain_admission_test.tscn",
+                        "wrapper_process_id":  11064,
+                        "wrapper_started_utc":  "2026-10-04T06:30:54.9414412Z",
+                        "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\child_chain_admission_green_09573668c81649aeac8d38b0fcf87c78",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-04T06:31:24.9532612Z",
+                        "native_exit_observed_utc":  "2026-10-04T06:31:09.9259050Z",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "f236ed7f-a451-4e7f-8fca-d7afd2045200",
+                        "framework_receipt_valid":  true,
+                        "result":  "PASS",
+                        "reason":  ""
+                    }
+                ],
+    "total":  1,
+    "invocation_id":  "99740763-b4d2-4f2c-8e87-6b86f91e8fc3",
+    "runtime_environment":  {
+                                "project_root":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+                                "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\child_chain_admission_green_09573668c81649aeac8d38b0fcf87c78",
+                                "runner_process_id":  18660
+                            },
+    "passed":  1,
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "engine_log_errors":  0,
+    "generated_at":  "2026-10-04T14:31:11.3585347+08:00",
+    "failed":  0,
+    "suite":  "adhoc"
+}

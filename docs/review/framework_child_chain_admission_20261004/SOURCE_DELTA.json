@@ -1,0 +1,66 @@
+{
+  "parent": "1f6ca7a78e2163c3365bbcb38710018e6eee4dbf",
+  "source_content_sha256": "572286d5c4b82eeae9e9cb270b98c136e264ad47565f051b474d137ae0981ea3",
+  "delta": [
+    {
+      "path": "scripts/features/contracts/effect_reservation.gd",
+      "before_sha256": "480970391a310439256bbaf38c9f15e526a9b350b042d8c6dbdc7e46f67c03bb",
+      "after_sha256": "886ade35185dbf6121ecb56e0c2c44cb117cea4a9bfc93bf85ae4c858b20cf54"
+    },
+    {
+      "path": "scripts/features/runtime/effect_runtime.gd",
+      "before_sha256": "6f6f1810cd87f1e687bb04ceca951433f005b0accc432cc7184e6b99a329ced5",
+      "after_sha256": "c3b022ab5321edb3972b7475c3ea9d55ad36772d8990daeebc37063eaff9e5e2"
+    },
+    {
+      "path": "scripts/game_root.gd",
+      "before_sha256": "96dcd0f1d3b7908316450700f4b95df686471e891d38bc930be77cb4f6abc948",
+      "after_sha256": "2cae962803e876e302279c960daeb06ec23192e563bcddd6147c6e9a4ab2858f"
+    },
+    {
+      "path": "tests/framework/feature_child_chain_admission_test.gd",
+      "before_sha256": null,
+      "after_sha256": "3bf78ec34f9ad7be5daeb9d49915710119b2166c90ca2a8a9404488ea32fcffb"
+    },
+    {
+      "path": "tests/framework/feature_child_chain_admission_test.tscn",
+      "before_sha256": null,
+      "after_sha256": "910c65e9129962101005362708dec4c86c2a75596c51805af0b4ae67b20ccf42"
+    },
+    {
+      "path": "tests/framework/feature_periodic_child_chain_test.gd",
+      "before_sha256": null,
+      "after_sha256": "d6825cb0bb278645c13b5147733b7bb5e394f4be7ae2955b165a3bf3ec4b9568"
+    },
+    {
+      "path": "tests/framework/feature_periodic_child_chain_test.tscn",
+      "before_sha256": null,
+      "after_sha256": "64d3afa00fa769bac663696b572b1ea525493f9a0e73e7837d5752971f8850a1"
+    },
+    {
+      "path": "tests/framework/fixtures/child_admission_probe_root.gd",
+      "before_sha256": null,
+      "after_sha256": "0829f870a92b26b64af817e2ae1e9fd8e9df04ecb3114361ad4d81d477203f15"
+    },
+    {
+      "path": "assets/data/features/validation/child_chain_guard.json",
+      "before_sha256": null,
+      "after_sha256": "ca92a6dd564a59b740d930595b101618c3f922d7f6f21cd900293cf9c48b5fae"
+    },
+    {
+      "path": "assets/data/features/validation/child_chain_guard_registry.json",
+      "before_sha256": null,
+      "after_sha256": "34e908ead1f47059ebe6fac661287ae0f7d715c529eb7c86ee52661b69d115fd"
+    },
+    {
+      "path": "assets/data/features/validation/periodic_child_chain.json",
+      "before_sha256": null,
+      "after_sha256": "cc96651f8ad72011309acae26fd0eb81257a7234ad9c6fe0f5e826b7d5f561c5"
+    },
+    {
+      "path": "assets/data/features/validation/periodic_child_chain_registry.json",
+      "before_sha256": null,
+      "after_sha256": "9add82cdf488029e0ccfa1c1bbc730dd6b46f0bf1d69a9540e3fa1ec25c3fb10"
+    }
+  ]
+}

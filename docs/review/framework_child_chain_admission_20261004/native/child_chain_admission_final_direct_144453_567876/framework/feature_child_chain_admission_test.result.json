@@ -1,0 +1,242 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "stable wizard identity",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "formal default-off mixed registry",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "real mapped world reaches READY",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "the third declared factory slot is real rather than a fabricated receiver limit",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "real factory has the same 85-slot bound",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "READY publishes mixed trusted sources",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "both qualified bindings come from the actual bundle",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "same Root installs the real child executor",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "full finite root promise guard:partial",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "accepted batch opens only after receiving its ticket guard:partial",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "actual HP facts transfer once guard:partial",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "94 legitimate zero-state producers coexist with the admitted chain",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "initial facts plus resident promises total exactly 8160",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "each consumed fact remains charged to its live root before the entire branch finishes",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "competing 85-fact producer is rejected before any resource/HP change",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "final branch completion cannot raise total commitments above existing capacity",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "the admitted child still commits and transfers its full fact after partial drain and competition",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "all first-case owners explicitly retire",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "same declared first slot supplies a replacement life reentry",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "same Root installs the real child executor",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "full finite root promise guard:reentry",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "accepted batch opens only after receiving its ticket guard:reentry",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "actual HP facts transfer once guard:reentry",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "real Player healing notification attempts reentry once without running a second consumer",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "outer death subscription retains its root until all synchronous consumers return",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "reentry leaves no root/branch/receipt work",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "same declared first slot supplies a replacement life submit_retirement",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "same Root installs the real child executor",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "full finite root promise guard:retirement",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "accepted batch opens only after receiving its ticket guard:retirement",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "actual HP facts transfer once guard:retirement",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "explicit retirement occurs after actual child HP capture without rolling HP back",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "Root reports the actual failed transfer/retired owner instead of falsely successful child execution",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "retired child is never counted as successful delivery",
+      "passed": true
+    },
+    {
+      "id": 35,
+      "label": "same declared first slot supplies a replacement life sibling_production",
+      "passed": true
+    },
+    {
+      "id": 36,
+      "label": "same Root installs the real child executor",
+      "passed": true
+    },
+    {
+      "id": 37,
+      "label": "full finite root promise guard:sibling_production",
+      "passed": true
+    },
+    {
+      "id": 38,
+      "label": "accepted batch opens only after receiving its ticket guard:sibling_production",
+      "passed": true
+    },
+    {
+      "id": 39,
+      "label": "actual HP facts transfer once guard:sibling_production",
+      "passed": true
+    },
+    {
+      "id": 40,
+      "label": "unsealed real child production cannot start a second queued sibling through synchronous pump",
+      "passed": true
+    },
+    {
+      "id": 41,
+      "label": "a legitimate empty release and a transferred sibling have distinct accurate successful terminal outcomes",
+      "passed": true
+    },
+    {
+      "id": 42,
+      "label": "both owned siblings execute in order and their real HP/consumer results complete once",
+      "passed": true
+    },
+    {
+      "id": 43,
+      "label": "sibling production releases the full chain only after terminal consumption",
+      "passed": true
+    },
+    {
+      "id": 44,
+      "label": "world retirement restores the original registry",
+      "passed": true
+    }
+  ],
+  "count": 44,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "068b04ed-a0e4-4cee-bc89-a4c2adf5f4f9",
+  "passed": 44,
+  "reported_checks": 44,
+  "reported_failures": 0,
+  "run_id": "a1bd1c6a-2297-4bcd-839e-fb3c6bbc0678",
+  "runtime_environment": {
+    "native_process_id": 21400,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\child_chain_admission_final_direct_b163995ec2514657bb7bf416ab6f2ac9",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/child_chain_admission_final_direct_b163995ec2514657bb7bf416ab6f2ac9/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "feature_child_chain_admission_test",
+  "schema_version": 1,
+  "source_content_sha256": "572286d5c4b82eeae9e9cb270b98c136e264ad47565f051b474d137ae0981ea3",
+  "status": "PASS"
+}

@@ -34,6 +34,11 @@ func can_begin_release(release_id: String) -> bool:
 func sequence() -> int: return _sequence
 func branch() -> String: return _branch
 
+func batch_owner_is_current() -> bool:
+	var owner: RefCounted=_owner.get_ref() as RefCounted if _owner!=null else null
+	# The batch may still own accepted work after the old action ticket closed.
+	return owner!=null and bool(owner.call("_reservation_batch_owner_is_current",_sequence,_branch))
+
 func authorizes_child_request(request: Dictionary) -> bool:
 	var owner: RefCounted=_owner.get_ref() as RefCounted if _owner!=null else null
 	return not _closed and not _branch.is_empty() and owner!=null \

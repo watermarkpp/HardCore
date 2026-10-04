@@ -1,0 +1,13 @@
+ .../features/validation/child_chain_guard.json     |  17 ++
+ .../validation/child_chain_guard_registry.json     |   8 +
+ .../features/validation/periodic_child_chain.json  |  18 +++
+ .../validation/periodic_child_chain_registry.json  |   8 +
+ scripts/features/contracts/effect_reservation.gd   |   5 +
+ scripts/features/runtime/effect_runtime.gd         |  29 +++-
+ scripts/game_root.gd                               |  24 ++-
+ .../feature_child_chain_admission_test.gd          | 174 +++++++++++++++++++++
+ .../feature_child_chain_admission_test.tscn        |   4 +
+ .../framework/feature_periodic_child_chain_test.gd |  97 ++++++++++++
+ .../feature_periodic_child_chain_test.tscn         |   4 +
+ .../fixtures/child_admission_probe_root.gd         |  31 ++++
+ 12 files changed, 409 insertions(+), 10 deletions(-)

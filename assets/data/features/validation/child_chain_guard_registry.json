@@ -1,0 +1,8 @@
+{
+  "schema_version":1,
+  "modules":[{"module_id":"hc.validation.child_chain_guard","path":"res://assets/data/features/validation/child_chain_guard.json"}],
+  "bindings":[
+    {"module_id":"hc.validation.child_chain_guard","kind":"rule","rule_id":"hc.validation.child_chain_guard","mechanic_id":"hc.validation.child_chain_guard.a_lifesteal"},
+    {"module_id":"hc.validation.child_chain_guard","kind":"rule","rule_id":"hc.validation.child_chain_guard","mechanic_id":"hc.validation.child_chain_guard.b_death"}
+  ]
+}

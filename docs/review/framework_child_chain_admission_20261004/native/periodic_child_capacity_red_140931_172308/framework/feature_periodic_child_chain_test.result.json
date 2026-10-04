@@ -1,0 +1,32 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "registered wizard identity",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "formal registry accepts the finite direct/periodic/child death chain without allowing periodic ignite",
+      "passed": false
+    }
+  ],
+  "count": 2,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "3cbff555-f210-444e-938a-2cd14d0cb961",
+  "passed": 1,
+  "reported_checks": 2,
+  "reported_failures": 1,
+  "run_id": "41ff41ca-5a74-4c6e-ab1e-95a0f549a4bb",
+  "runtime_environment": {
+    "native_process_id": 23908,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_child_capacity_red_e40fea2779d84d8da4288269100c1d03",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_child_capacity_red_e40fea2779d84d8da4288269100c1d03/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "feature_periodic_child_chain_test",
+  "schema_version": 1,
+  "source_content_sha256": "8fe7beb319113f7d95b434a731762953ddb03b342f2050b497a1a90f8aab6bc7",
+  "status": "FAIL"
+}
