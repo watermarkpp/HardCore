@@ -14,6 +14,59 @@ $LinuxStderrStream = $null
 $LinuxStdoutTask = $null
 $LinuxStderrTask = $null
 $RunnerInvocationId = [Guid]::NewGuid().ToString()
+function Assert-PhysicalRuntimeDirectory([string]$Path) {
+    $fullPath = [IO.Path]::GetFullPath($Path)
+    $prefix = [IO.Path]::GetFullPath($ProjectRoot).TrimEnd('/') + '/'
+    if (-not $fullPath.StartsWith($prefix, [StringComparison]::Ordinal)) { throw 'Runtime directory escapes checkout.' }
+    $current = $ProjectRoot
+    foreach ($part in [IO.Path]::GetRelativePath($ProjectRoot, $fullPath).Split('/')) {
+        $current = Join-Path $current $part
+        $item = Get-Item -LiteralPath $current -Force -ErrorAction SilentlyContinue
+        if ($null -ne $item) {
+            if (($item.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) {
+                throw 'Linux runtime directory must not traverse a symlink.'
+            }
+        }
+    }
+}
+function Get-LinuxOwnedGroupProcesses {
+    $groupId = if ($null -ne $LinuxNativeProcess) { $LinuxNativeProcess.Id } else { -1 }
+    $members = @()
+    foreach ($directory in [IO.Directory]::EnumerateDirectories('/proc')) {
+        if ([IO.Path]::GetFileName($directory) -notmatch '^[0-9]+$') { continue }
+        try { $stat = [IO.File]::ReadAllText((Join-Path $directory 'stat')) } catch { continue }
+        $fields = $stat.Substring($stat.LastIndexOf(')') + 2).Split(' ', [StringSplitOptions]::RemoveEmptyEntries)
+        # Require both the owned process group and its private session. Never
+        # infer ownership from a shared engine path or a reusable process name.
+        $memberId = [int][IO.Path]::GetFileName($directory)
+        $privateGroup = $fields[2] -eq [string]$groupId -and $fields[3] -eq [string]$groupId
+        # Godot OS.create_process intentionally detaches its child session.
+        # A subreaper adopts it after engine exit, retaining exact ownership.
+        $adopted = $fields[1] -eq [string]$PID -and $memberId -ne $groupId -and $memberId -notin $LinuxBaselineChildIds
+        if ($fields[0] -ne 'Z' -and ($privateGroup -or $adopted)) {
+            $members += [pscustomobject]@{ Id = $memberId; PrivateGroup = $privateGroup }
+        }
+    }
+    return $members
+}
+function Complete-LinuxOutput([bool]$FailOnIncomplete = $true) {
+    if ($null -eq $LinuxStdoutTask -or $null -eq $LinuxStderrTask) { return }
+    try {
+        $drain = [Threading.Tasks.Task]::WhenAll([Threading.Tasks.Task[]]@($LinuxStdoutTask, $LinuxStderrTask))
+        if (-not $drain.Wait(2000)) { throw 'Linux native output pipes did not close after owned process cleanup.' }
+        $drain.GetAwaiter().GetResult() | Out-Null
+    } catch {
+        $script:LinuxOutputIncomplete = $true
+        if ($null -ne $LinuxNativeProcess) {
+            $LinuxNativeProcess.StandardOutput.Dispose()
+            $LinuxNativeProcess.StandardError.Dispose()
+        }
+        if ($FailOnIncomplete) { throw }
+    } finally {
+        $script:LinuxStdoutTask = $null
+        $script:LinuxStderrTask = $null
+    }
+}
 # A single worktree owns one import cache, userdata directory and log namespace.
 # Reject overlapping runners before either can overwrite evidence or terminate
 # a peer's child process during cleanup. The OS also releases abandoned locks.
@@ -52,11 +105,16 @@ $GodotDirectory = Split-Path -Parent $Godot
 $LogRoot = if ($env:HARDCORE_AUDIT_LOG_ROOT) { $env:HARDCORE_AUDIT_LOG_ROOT } else { Join-Path $ProjectRoot 'outputs\test_logs' }
 $RuntimeAppData = if ($env:HARDCORE_AUDIT_RUNTIME_APPDATA) { $env:HARDCORE_AUDIT_RUNTIME_APPDATA } else { Join-Path $ProjectRoot '.godot\runtime_appdata' }
 if ($RunnerIsLinux) {
+    $LinuxLauncher = @(Get-Command setsid -CommandType Application -ErrorAction Stop)[0].Source
+    Add-Type -TypeDefinition 'using System.Runtime.InteropServices; public static class HardCoreNativeSignals { [DllImport("libc", SetLastError=true)] public static extern int kill(int pid, int signal); [DllImport("libc", SetLastError=true)] public static extern int prctl(int option, ulong arg2, ulong arg3, ulong arg4, ulong arg5); [DllImport("libc", SetLastError=true)] public static extern int waitpid(int pid, out int status, int options); }'
+    $LinuxBaselineChildIds = @((Get-LinuxOwnedGroupProcesses).Id)
+    if ([HardCoreNativeSignals]::prctl(36, 1, 0, 0, 0) -ne 0) { throw 'Linux native runner could not enable child subreaper ownership.' }
     $ownedRoot = [IO.Path]::GetFullPath((Join-Path $ProjectRoot '.godot/runtime_appdata')).TrimEnd('/') + '/'
     $RuntimeAppData = [IO.Path]::GetFullPath((Join-Path $RuntimeAppData "cloud_$RunnerInvocationId"))
     if (-not $RuntimeAppData.StartsWith($ownedRoot, [StringComparison]::Ordinal)) {
         throw 'Linux test userdata must remain inside this checkout .godot/runtime_appdata/.'
     }
+    Assert-PhysicalRuntimeDirectory $RuntimeAppData
     if ($env:HARDCORE_R3_CONTENT_SHA256 -cnotmatch '^[a-f0-9]{64}$') {
         throw 'Linux formal runs require a source fingerprint from source176_r3_validation.py.'
     }
@@ -108,6 +166,7 @@ if ($TestPaths.Count -gt 0) {
 # the current worktree so every professional tree remains isolated and the
 # engine can shut down cleanly without an application-error dialog.
 New-Item -ItemType Directory -Path $RuntimeAppData -Force | Out-Null
+if ($RunnerIsLinux) { Assert-PhysicalRuntimeDirectory $RuntimeAppData }
 $RuntimeAppData = (Get-Item -LiteralPath $RuntimeAppData).FullName
 [Environment]::SetEnvironmentVariable('APPDATA', $RuntimeAppData, 'Process')
 if ($RunnerIsLinux) { [Environment]::SetEnvironmentVariable('XDG_DATA_HOME', $RuntimeAppData, 'Process') }
@@ -1132,11 +1191,34 @@ function Get-UnallowlistedErrorLineCount([string]$Text) {
 
 function Stop-TestProcessTree([int]$ProcessId) {
     if ($RunnerIsLinux) {
-        # The engine installation is shared across checkouts. Own only the
-        # exact process launched here; never enumerate and kill peer engines.
-        if ($null -ne $LinuxNativeProcess -and $LinuxNativeProcess.Id -eq $ProcessId -and -not $LinuxNativeProcess.HasExited) {
-            $LinuxNativeProcess.Kill($true)
-            $LinuxNativeProcess.WaitForExit()
+        if ($null -ne $LinuxNativeProcess) {
+            $owned = @(Get-LinuxOwnedGroupProcesses)
+            if ($ProcessId -eq $LinuxNativeProcess.Id -or $ProcessId -in $owned.Id) {
+                $cleanupDeadline = [DateTime]::UtcNow.AddSeconds(2)
+                $reapIds = [Collections.Generic.HashSet[int]]::new()
+                do {
+                    $owned = @(Get-LinuxOwnedGroupProcesses)
+                    if (@($owned | Where-Object { $_.PrivateGroup }).Count -gt 0) {
+                        [HardCoreNativeSignals]::kill(-$LinuxNativeProcess.Id, 9) | Out-Null
+                    }
+                    foreach ($child in @($owned | Where-Object { -not $_.PrivateGroup })) {
+                        if ([HardCoreNativeSignals]::kill($child.Id, 9) -eq 0) { $reapIds.Add($child.Id) | Out-Null }
+                    }
+                    if (-not $LinuxNativeProcess.HasExited) {
+                        try { $LinuxNativeProcess.Kill($true) }
+                        catch { if (-not $LinuxNativeProcess.HasExited) { $script:LinuxCleanupIncomplete = $true } }
+                    }
+                    foreach ($childId in @($reapIds)) {
+                        $childStatus = 0
+                        if ([HardCoreNativeSignals]::waitpid($childId, [ref]$childStatus, 1) -ne 0) { $reapIds.Remove($childId) | Out-Null }
+                    }
+                    $remaining = @(Get-LinuxOwnedGroupProcesses)
+                    if ($remaining.Count -gt 0 -or $reapIds.Count -gt 0) { Start-Sleep -Milliseconds 10 }
+                } while (($remaining.Count -gt 0 -or $reapIds.Count -gt 0) -and [DateTime]::UtcNow -lt $cleanupDeadline)
+                # Killing a detached parent can adopt another generation. The
+                # fixed deadline covers every rescan, not a new budget per child.
+                if ($remaining.Count -gt 0 -or -not $LinuxNativeProcess.HasExited) { $script:LinuxCleanupIncomplete = $true }
+            }
         }
         return
     }
@@ -1204,8 +1286,7 @@ function Stop-NewGodotProcesses([int]$GraceMilliseconds = 0) {
 
 function Get-NewGodotProcesses {
     if ($RunnerIsLinux) {
-        if ($null -ne $LinuxNativeProcess -and -not $LinuxNativeProcess.HasExited) { return @($LinuxNativeProcess) }
-        return @()
+        return @(Get-LinuxOwnedGroupProcesses)
     }
     return @(Get-WorktreeGodotProcesses | Where-Object { $_.Id -notin $BaselineGodotIds })
 }
@@ -1270,6 +1351,8 @@ $NativeHandoffs = [ordered]@{
 # Reset before any child can fail early and leave a prior receipt untouched.
 [IO.File]::WriteAllText($NativeHandoffPath, ($NativeHandoffs | ConvertTo-Json -Depth 8), (New-Object Text.UTF8Encoding($false)))
 foreach ($testPath in $SelectedTests) {
+    $LinuxCleanupIncomplete = $false
+    $LinuxOutputIncomplete = $false
     $testName = [IO.Path]::GetFileNameWithoutExtension($testPath)
     $isFramework = $testPath.Replace('\', '/') -match '^tests/framework/(?:[^/]+/)*[^/]+\.tscn$'
     if ($isFramework) {
@@ -1301,7 +1384,11 @@ foreach ($testPath in $SelectedTests) {
     $launchCommand = '""' + $Godot + '" --headless' + $BoundaryClockArguments + ' --log-file "' + $engineLogArgument + '" --path . "' + $testPath + '" > "' + $stdout + '" 2> "' + $stderr + '"'
     if ($RunnerIsLinux) {
         $startInfo = [Diagnostics.ProcessStartInfo]::new()
-        $startInfo.FileName = $Godot
+        # setsid exec preserves the native PID while confining its descendants
+        # to an invocation-owned session/group for cleanup after parent exit.
+        $startInfo.FileName = $LinuxLauncher
+        $startInfo.ArgumentList.Add('--')
+        $startInfo.ArgumentList.Add($Godot)
         $startInfo.WorkingDirectory = $ProjectRoot
         $startInfo.UseShellExecute = $false
         $startInfo.RedirectStandardOutput = $true
@@ -1313,10 +1400,12 @@ foreach ($testPath in $SelectedTests) {
         foreach ($argument in @('--log-file', $engineLogArgument, '--path', $ProjectRoot, $testPath)) { $startInfo.ArgumentList.Add($argument) }
         $process = [Diagnostics.Process]::new()
         $process.StartInfo = $startInfo
-        $LinuxNativeProcess = $process
         $LinuxStdoutStream = [IO.FileStream]::new($stdout, [IO.FileMode]::Create, [IO.FileAccess]::Write, [IO.FileShare]::ReadWrite, 1)
         $LinuxStderrStream = [IO.FileStream]::new($stderr, [IO.FileMode]::Create, [IO.FileAccess]::Write, [IO.FileShare]::ReadWrite, 1)
-        if (-not $process.Start()) { throw 'Linux native engine did not start.' }
+        try {
+            if (-not $process.Start()) { throw 'Linux native engine did not start.' }
+            $LinuxNativeProcess = $process
+        } catch { $process.Dispose(); throw }
         $LinuxStdoutTask = $process.StandardOutput.BaseStream.CopyToAsync($LinuxStdoutStream)
         $LinuxStderrTask = $process.StandardError.BaseStream.CopyToAsync($LinuxStderrStream)
     } else {
@@ -1366,6 +1455,7 @@ foreach ($testPath in $SelectedTests) {
     $earlyFailure = $false
     $hasPassMarker = $false
     $naturalExit = $false
+    $LinuxOrphanedChildren = $false
     while ([DateTime]::UtcNow -lt $deadline) {
         Start-Sleep -Milliseconds 150
         $currentOutput = if (Test-Path -LiteralPath $stdout) { Get-Content -LiteralPath $stdout -Raw -ErrorAction SilentlyContinue } else { '' }
@@ -1378,6 +1468,10 @@ foreach ($testPath in $SelectedTests) {
         if ($currentOutput -match $PassMarkerPattern) {
             $hasPassMarker = $true
             # Do NOT break - wait for natural exit to capture post-PASS failures (HC-P0-006)
+        }
+        if ($RunnerIsLinux -and $process.HasExited -and @(Get-NewGodotProcesses).Count -gt 0) {
+            $LinuxOrphanedChildren = $true
+            break
         }
         # On Windows the console executable can exit after spawning the real
         # Godot process. Keep waiting while that child is still running instead
@@ -1428,9 +1522,8 @@ foreach ($testPath in $SelectedTests) {
     $graceMilliseconds = if ($hasPassMarker -and -not $earlyFailure -and -not $timedOut) { 2000 } else { 0 }
     Stop-NewGodotProcesses -GraceMilliseconds $graceMilliseconds
     if ($RunnerIsLinux) {
-        $process.WaitForExit()
-        $LinuxStdoutTask.GetAwaiter().GetResult() | Out-Null
-        $LinuxStderrTask.GetAwaiter().GetResult() | Out-Null
+        if (-not $process.WaitForExit(2000)) { $LinuxCleanupIncomplete = $true }
+        Complete-LinuxOutput -FailOnIncomplete $false
         $LinuxStdoutStream.Dispose()
         $LinuxStderrStream.Dispose()
         $LinuxStdoutStream = $null
@@ -1476,6 +1569,9 @@ foreach ($testPath in $SelectedTests) {
     if (-not $processExited) { $reasons += 'process_did_not_exit' }
     if ($timedOut) { $reasons += "timeout_${TestTimeoutSeconds}s" }
     if ($earlyFailure) { $reasons += 'early_script_error' }
+    if ($LinuxOrphanedChildren) { $reasons += 'lingering_native_children' }
+    if ($LinuxCleanupIncomplete) { $reasons += 'native_cleanup_incomplete' }
+    if ($LinuxOutputIncomplete) { $reasons += 'native_output_pipes_incomplete' }
     if ($finalEffectiveExitCode -ne 0) {
         if ($null -eq $wrapperExitCode) { $reasons += 'missing_effective_exit_code' } else { $reasons += "non_zero_exit_code_$finalEffectiveExitCode" }
     }
@@ -1495,6 +1591,8 @@ foreach ($testPath in $SelectedTests) {
         if ($RunnerIsLinux -and $frameworkReceipt.valid) {
             $nativeReceipt = Get-Content -LiteralPath $frameworkReceiptPath -Raw -Encoding UTF8 | ConvertFrom-Json
             $receiptRuntime = $nativeReceipt.runtime_environment
+            try { Assert-PhysicalRuntimeDirectory ([string]$receiptRuntime.user_data_directory) }
+            catch { $reasons += 'framework_runtime_directory_unconfined' }
             if ($receiptRuntime.project_root -isnot [string] -or $receiptRuntime.user_data_directory -isnot [string] -or
                 $receiptRuntime.native_process_id -ne $process.Id -or $nativeReceipt.engine_version -cne '4.7-stable (official)' -or
                 $receiptRuntime.project_root.TrimEnd('/') -cne $ProjectRoot.TrimEnd('/') -or
@@ -1618,9 +1716,8 @@ if ($failedCount -gt 0) {
 exit 0
 } finally {
     if ($null -ne $LinuxNativeProcess) {
-        if (-not $LinuxNativeProcess.HasExited) { $LinuxNativeProcess.Kill($true); $LinuxNativeProcess.WaitForExit() }
-        if ($null -ne $LinuxStdoutTask) { $LinuxStdoutTask.GetAwaiter().GetResult() | Out-Null }
-        if ($null -ne $LinuxStderrTask) { $LinuxStderrTask.GetAwaiter().GetResult() | Out-Null }
+        Stop-TestProcessTree -ProcessId $LinuxNativeProcess.Id
+        Complete-LinuxOutput -FailOnIncomplete $false
         $LinuxNativeProcess.Dispose()
     }
     if ($null -ne $LinuxStdoutStream) { $LinuxStdoutStream.Dispose() }

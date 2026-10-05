@@ -35,6 +35,10 @@ def fingerprint():
             files[name] = hashlib.sha256((ROOT / name).read_bytes()).hexdigest()
     engine = engine_path()
     shell = shell_path()
+    launcher_name = shutil.which("setsid") if platform.system() == "Linux" else None
+    if platform.system() == "Linux" and not launcher_name:
+        raise RuntimeError("Linux formal runner requires util-linux setsid")
+    launcher = Path(launcher_name).resolve() if launcher_name else None
     engine_version = command(str(engine), "--version")
     if engine_version != "4.7.stable.official.5b4e0cb0f":
         raise RuntimeError("Formal runner requires Godot 4.7 stable official 5b4e0cb0f")
@@ -43,13 +47,15 @@ def fingerprint():
             "files": files, "content_set_sha256": hashlib.sha256(json.dumps(files, sort_keys=True).encode()).hexdigest(),
             "platform": platform.platform(), "engine_path": str(engine),
             "engine_version": engine_version, "engine_sha256": hashlib.sha256(engine.read_bytes()).hexdigest(),
+            "native_launcher_path": str(launcher) if launcher else None,
+            "native_launcher_sha256": hashlib.sha256(launcher.read_bytes()).hexdigest() if launcher else None,
             "shell_path": str(shell), "shell_version": command(str(shell), "-NoProfile", "-Command", "$PSVersionTable.PSVersion.ToString()"),
             "shell_sha256": hashlib.sha256(shell.read_bytes()).hexdigest()}
 def write(path, value):
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2), encoding="utf-8")
 def identity_is_stable(before, after):
     return all(before[key] == after[key] for key in
-               ("files", "tested_sha", "branch", "engine_sha256", "shell_sha256"))
+               ("files", "tested_sha", "branch", "engine_sha256", "shell_sha256", "native_launcher_sha256"))
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("label")
