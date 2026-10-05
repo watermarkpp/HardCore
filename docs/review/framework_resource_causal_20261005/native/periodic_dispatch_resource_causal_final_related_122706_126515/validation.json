@@ -1,0 +1,16 @@
+{
+  "command": [
+    "powershell",
+    "-NoProfile",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/character_launch_failed_preload_retry_test.tscn','tests/framework/synchronous_panel_script_retirement_test.tscn','tests/framework/threaded_panel_script_retirement_test.tscn','tests/framework/threaded_panel_script_retirement_subthreads_test.tscn','tests/framework/threaded_dependency_shader_warm_constant_script_probe_test.tscn','tests/framework/threaded_dependency_texture_warm_constant_script_probe_test.tscn','tests/framework/threaded_dependency_shader_late_script_probe_test.tscn','tests/framework/threaded_dependency_texture_late_script_probe_test.tscn' -TimeoutSeconds 30"
+  ],
+  "timeout_seconds": 30,
+  "exit_code": 1,
+  "source_stable_during_run": true,
+  "passed": 7,
+  "failed": 1,
+  "status": "FAIL"
+}

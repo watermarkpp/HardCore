@@ -1,0 +1,202 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "real PlayerState mode and runner-isolated APPDATA",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "runner supplies run, invocation, and source identity",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "declared panel Script prewarms on the main thread: inventory_panel.gd",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "declared panel Script prewarms on the main thread: enhancement_panel.gd",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "declared panel Script prewarms on the main thread: map_panel.gd",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "declared panel Script prewarms on the main thread: skill_panel.gd",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "declared panel Script prewarms on the main thread: quest_panel.gd",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "declared panel Script prewarms on the main thread: warehouse_panel.gd",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "declared panel Script prewarms on the main thread: shop_panel.gd",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "this invocation owns a previously absent exact fixture path",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "in-memory GDScript compiles before binary save",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "GDScript saves as a test-owned binary .res",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "original binary bytes are captured before damage",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "saved script references are released and native cache is cold",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "only owned binary .res receives controlled corrupt bytes",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "native ResourceLoader accepts the corrupted owned-file request",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "inert real HUD begins with no registered panel requests",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "accepted native request enters HUD's actual pending owner dictionary",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "owned corrupt binary reaches actual native FAILED without get",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "poll reports exactly the controlled FAILED path, with no unrelated panel failures",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "actual HUD owner action retires its accepted FAILED native token",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "actual HUD owner action leaves the whole pending dictionary empty",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "fixture needs zero supplemental get calls after real HUD ownership closes",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "owned FAILED request is retired before restoring its bytes",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "same owned path receives its exact original bytes",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "restored byte sequence equals the captured original sequence",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "restored path is uncached before independent retry",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "same restored path accepts a second native request",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "same restored path reaches native LOADED",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "one native get returns a usable Script from the restored binary",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "restored binary request retires after one get",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "test-owned request is retired before exact file deletion",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "only this invocation's exact owned binary file is deleted",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "isolated native trace directory is available",
+      "passed": true
+    },
+    {
+      "id": 35,
+      "label": "bounded native FAILED token trace opens",
+      "passed": true
+    },
+    {
+      "id": 36,
+      "label": "native FAILED token trace writes completely",
+      "passed": true
+    }
+  ],
+  "count": 36,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "dbda61ed-b2d7-40d6-8b37-cf6f26fda980",
+  "passed": 36,
+  "reported_checks": 36,
+  "reported_failures": 0,
+  "run_id": "52c0ddc0-326e-45af-8b15-c3e2209af6d2",
+  "runtime_environment": {
+    "native_process_id": 11116,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_resource_causal_final_boundaries_22c003368f3b4933b75fbd349f1cf99e",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_dispatch_resource_causal_final_boundaries_22c003368f3b4933b75fbd349f1cf99e/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "hud_failed_native_poll_retirement_test",
+  "schema_version": 1,
+  "source_content_sha256": "77af4cd4a4a3abea001b5d3c76751052f354cf501f5afc13282f3562a06fe3db",
+  "status": "PASS"
+}

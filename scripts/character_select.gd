@@ -131,6 +131,8 @@ func _exit_tree() -> void:
 
 
 func _request_launch_scene_preload() -> void:
+	if not is_inside_tree() or is_queued_for_deletion():
+		return
 	var requested_path := launch_scene_path
 	if (
 		requested_path == _launch_scene_preload_path

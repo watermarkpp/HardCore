@@ -1,0 +1,247 @@
+{
+  "after_first_deferred_outside_tree": {
+    "generation": 1,
+    "inside_tree": false,
+    "launch_path": "res://scenes/main.tscn",
+    "native_status": 0,
+    "preload_path": "",
+    "preload_state": "idle",
+    "process_frame": 2,
+    "queued_for_deletion": false,
+    "request_count": 0,
+    "request_keys": [],
+    "resource_is_packed_scene": false,
+    "ticks_msec": 5540
+  },
+  "after_first_ready_same_stack": {
+    "generation": 0,
+    "inside_tree": true,
+    "launch_path": "res://scenes/main.tscn",
+    "native_status": 0,
+    "preload_path": "",
+    "preload_state": "idle",
+    "process_frame": 0,
+    "queued_for_deletion": false,
+    "request_count": 0,
+    "request_keys": [],
+    "resource_is_packed_scene": false,
+    "ticks_msec": 5540
+  },
+  "after_red_cleanup": {
+    "generation": 1,
+    "inside_tree": false,
+    "launch_path": "res://scenes/main.tscn",
+    "native_status": 0,
+    "preload_path": "",
+    "preload_state": "idle",
+    "process_frame": 2,
+    "queued_for_deletion": false,
+    "request_count": 0,
+    "request_keys": [],
+    "resource_is_packed_scene": false,
+    "ticks_msec": 5540
+  },
+  "after_reentry_exit": {
+    "generation": 3,
+    "inside_tree": false,
+    "launch_path": "res://scenes/main.tscn",
+    "native_status": 0,
+    "preload_path": "res://scenes/main.tscn",
+    "preload_state": "idle",
+    "process_frame": 470,
+    "queued_for_deletion": false,
+    "request_count": 1,
+    "request_keys": [],
+    "resource_is_packed_scene": false,
+    "ticks_msec": 8796
+  },
+  "after_reentry_ready_same_stack": {
+    "generation": 1,
+    "inside_tree": true,
+    "launch_path": "res://scenes/main.tscn",
+    "native_status": 0,
+    "preload_path": "",
+    "preload_state": "idle",
+    "process_frame": 2,
+    "queued_for_deletion": false,
+    "request_count": 0,
+    "request_keys": [],
+    "resource_is_packed_scene": false,
+    "ticks_msec": 5570
+  },
+  "after_reentry_terminal": {
+    "generation": 2,
+    "inside_tree": true,
+    "launch_path": "res://scenes/main.tscn",
+    "native_status": 0,
+    "preload_path": "res://scenes/main.tscn",
+    "preload_state": "ready",
+    "process_frame": 470,
+    "queued_for_deletion": false,
+    "request_count": 1,
+    "request_keys": [],
+    "resource_is_packed_scene": true,
+    "ticks_msec": 8795
+  },
+  "before_first_add": {
+    "generation": 0,
+    "inside_tree": false,
+    "launch_path": "res://scenes/main.tscn",
+    "native_status": 0,
+    "preload_path": "",
+    "preload_state": "idle",
+    "process_frame": 0,
+    "queued_for_deletion": false,
+    "request_count": 0,
+    "request_keys": [],
+    "resource_is_packed_scene": false,
+    "ticks_msec": 5444
+  },
+  "before_first_deferred_after_exit": {
+    "generation": 1,
+    "inside_tree": false,
+    "launch_path": "res://scenes/main.tscn",
+    "native_status": 0,
+    "preload_path": "",
+    "preload_state": "idle",
+    "process_frame": 0,
+    "queued_for_deletion": false,
+    "request_count": 0,
+    "request_keys": [],
+    "resource_is_packed_scene": false,
+    "ticks_msec": 5540
+  },
+  "before_reentry_add": {
+    "generation": 1,
+    "inside_tree": false,
+    "launch_path": "res://scenes/main.tscn",
+    "native_status": 0,
+    "preload_path": "",
+    "preload_state": "idle",
+    "process_frame": 2,
+    "queued_for_deletion": false,
+    "request_count": 0,
+    "request_keys": [],
+    "resource_is_packed_scene": false,
+    "ticks_msec": 5540
+  },
+  "checks_before_trace_write": [
+    {
+      "id": 1,
+      "label": "production test_mode=false uses runner-isolated APPDATA",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "receipt source, run and invocation identities are present",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "default main path begins without another native request token",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "real character select scene loads",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "unmodified hall starts with its production default main PackedScene path",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "first add and removal occur in the same process frame before deferred dispatch",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "same-stack exit precedes first deferred native request admission",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "deferred queue reaches the marker after original hall _ready",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "out-of-tree original deferred callback admits zero native requests",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "out-of-tree original deferred callback leaves no hall request ownership",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "out-of-tree original deferred callback leaves no default-path native token",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "observed hall remains live and outside the scene tree after deferred callback",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "original hall exit requires no fixture native retrieval",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "owned native token is closed before legal reentry",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "request_ready reentry executes the real character hall _ready",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "legal reentry admits exactly one request for the production default path",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "legal reentry reaches READY with a real main PackedScene",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "READY hall has collected its single native request",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "legal reentry exit closes ownership and native token",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "bounded native trace directory is available",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "deferred admission trace opens",
+      "passed": true
+    }
+  ],
+  "default_launch_path": "res://scenes/main.tscn",
+  "failures_before_trace_write": [],
+  "final_native_status": 0,
+  "hall_scene": "res://scenes/character_select.tscn",
+  "invocation_id": "1114d15b-0c18-4e83-b98b-e19a8386fad9",
+  "manual_request_calls": 0,
+  "native_before_red_cleanup": 0,
+  "red_cleanup_gets": 0,
+  "run_id": "f0a4644e-27a6-4160-a0d9-bd1a4dcf53be",
+  "scene_id": "hall_deferred_admission_test",
+  "scope": "real character_select PackedScene and production default main PackedScene; same-stack removal before original _ready call_deferred, then legal request_ready reentry; isolated native runner only, not normal player navigation/APK/device",
+  "source_content_sha256": "99448d6444930b5b751e909f912359ff4e9511aa5f0ad28ae01b64371db1f2e3"
+}

@@ -1,0 +1,57 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "controlled native Script probe owns isolated user data",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "the exact selected Script is not cached before its one native request",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "this process has no existing native retrieval owner for the exact selected Script",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "one real background request accepts the exact selected Script",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "the accepted native Script completes within the 20-second bounded probe",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "one actual get returns an instantiable Script and retires its one native retrieval right",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "the selected Script has no native retrieval owner after release and eight real frames",
+      "passed": true
+    }
+  ],
+  "count": 7,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "5e5304a2-ff12-41ed-8ef7-bc4484b6dae4",
+  "passed": 7,
+  "reported_checks": 7,
+  "reported_failures": 0,
+  "run_id": "d3e5a4b2-5d1e-451e-bad6-510b6ca4eeea",
+  "runtime_environment": {
+    "native_process_id": 3556,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\verbose_caster_78f46790343b4e00bbf8f971bd14f685",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/verbose_caster_78f46790343b4e00bbf8f971bd14f685/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "threaded_dependency_caster_skill_runtime_script_probe_test",
+  "schema_version": 1,
+  "source_content_sha256": "caf161d6059684b9779dbacd205eb4e7a4a90a4bea6e6bbfdbbe028cdea1f2f8",
+  "status": "PASS"
+}

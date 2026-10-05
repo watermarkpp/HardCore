@@ -1,0 +1,16 @@
+{
+  "command": [
+    "powershell",
+    "-NoProfile",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/threaded_dependency_frame_budget_script_probe_test.tscn','tests/framework/threaded_dependency_world_context_script_probe_test.tscn','tests/framework/threaded_dependency_time_domains_script_probe_test.tscn','tests/framework/threaded_dependency_combat_runtime_service_script_probe_test.tscn','tests/framework/threaded_dependency_map_editor_runtime_bridge_script_probe_test.tscn','tests/framework/threaded_dependency_monster_visual_streaming_coordinator_script_probe_test.tscn','tests/framework/threaded_dependency_fire_wall_field_controller_script_probe_test.tscn','tests/framework/threaded_dependency_caster_skill_runtime_script_probe_test.tscn' -TimeoutSeconds 30"
+  ],
+  "timeout_seconds": 30,
+  "exit_code": 1,
+  "source_stable_during_run": true,
+  "passed": 5,
+  "failed": 3,
+  "status": "FAIL"
+}

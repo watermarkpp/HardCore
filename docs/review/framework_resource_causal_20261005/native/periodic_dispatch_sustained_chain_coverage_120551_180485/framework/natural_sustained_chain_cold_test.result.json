@@ -1,0 +1,37 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "independent cold uses real persistence",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "successful current live producer supplied its two-round expectation",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "cold binds this invocation runner-confirmed complete PASS producer",
+      "passed": false
+    }
+  ],
+  "count": 3,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "657ffadd-a7dd-4153-9d50-e9b28930f28d",
+  "passed": 2,
+  "reported_checks": 3,
+  "reported_failures": 1,
+  "run_id": "69e2810b-0053-4a22-8fe2-4bc367ea37c2",
+  "runtime_environment": {
+    "native_process_id": 23640,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_sustained_chain_coverage_bdc14f08b6804cb5a463f2af75c88e6a",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_dispatch_sustained_chain_coverage_bdc14f08b6804cb5a463f2af75c88e6a/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "natural_sustained_chain_cold_test",
+  "schema_version": 1,
+  "source_content_sha256": "caf161d6059684b9779dbacd205eb4e7a4a90a4bea6e6bbfdbbe028cdea1f2f8",
+  "status": "FAIL"
+}

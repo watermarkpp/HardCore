@@ -320,6 +320,8 @@ func _combat_round(index: int) -> void:
 	boundary_spans.append({"round":index,"kind":"actual_cohort_factory_and_fixture_checks","started_usec":birth_started,"finished_usec":Time.get_ticks_usec(),"process_frame":Engine.get_process_frames()})
 	if not nonoverlap: return
 	var start := Time.get_ticks_msec(); var next_input := start; var next_memory := start
+	var cohort_deadline_started_usec := start * 1000
+	var cohort_finished_usec := 0
 	previous_player = game._canonical_screen_px_to_ground_gu(game.player.global_position)
 	observing = runtime != null
 	while Time.get_ticks_msec()-start<35000:
@@ -349,7 +351,9 @@ func _combat_round(index: int) -> void:
 			print("NATURAL_SUSTAINED_PROGRESS ",JSON.stringify({"round":index,"elapsed_ms":now-start,"deaths":deaths-round_death_base,"accepted":accepted_casts-accepted_before,
 				"hp":game.player.current_hp,"mp":game.player.current_mp,"input_enabled":game.gameplay_input_is_enabled(),"rejected":rejected_inputs,"metrics":runtime.metrics() if runtime != null else {}}))
 		await get_tree().process_frame
-		if runtime != null and deaths-round_death_base == 30 and not runtime.has_work() and _settlement_drained() and stream_finished_usec>0: break
+		if _cohort_business_drained():
+			cohort_finished_usec = Time.get_ticks_usec()
+			break
 	game._on_gameplay_movement(Vector2.ZERO)
 	check(runtime != null,label+"actual input creates its admitted runtime")
 	if runtime == null: return
@@ -372,7 +376,10 @@ func _combat_round(index: int) -> void:
 		and bool(round_peak_evidence.get("all_named_thirty_fixture_targets_have_three_sources",false)),label+"all thirty exact ActorRefs simultaneously own three distinct states")
 	check(int(metrics.ticks)-tick_before>=360 and int(metrics.tick_delivery_count)==int(metrics.ticks),label+"at least360 actual ticks complete without rejected damage delivery")
 	check(int(metrics.maximum_tick_delivery_lateness_usec)<1000000,label+"every actual delivery so far is strictly below the original one-second period")
-	check(deaths-round_death_base == 30 and not runtime.has_work() and runtime.errors.is_empty(),label+"all thirty deaths and accepted effects finish before the original bounded cohort deadline")
+	check(deaths-round_death_base == 30 and not runtime.has_work() and runtime.errors.is_empty()
+		and cohort_finished_usec >= cohort_deadline_started_usec and cohort_finished_usec > 0
+		and cohort_finished_usec-cohort_deadline_started_usec < 35000000,
+		label+"all thirty deaths and accepted effects finish before the original bounded cohort deadline")
 	var reservations: Dictionary = runtime.reservation_snapshot()
 	var empty := true
 	for count: int in reservations.values(): empty = empty and count == 0
@@ -398,6 +405,9 @@ func _combat_round(index: int) -> void:
 		remaining["accepted_states"] = states
 		remaining_receivers.append(remaining)
 	completed_rounds.append({"round":index,"elapsed_ms":Time.get_ticks_msec()-start,"world":game._world_context.capture_world(),"runtime_id":runtime.get_instance_id(),
+		"cohort_deadline_started_usec":cohort_deadline_started_usec,"business_finished_usec":cohort_finished_usec,
+		"business_completion_elapsed_usec":cohort_finished_usec-cohort_deadline_started_usec if cohort_finished_usec>0 else -1,
+		"business_deadline_usec":35000000,"completion_scope":"death/effect/reservation/receipt/child/cue/writer/resource drains; excludes later evidence IO, explicit checkpoint and continuing potion restoration",
 		"remaining_receivers_at_original_deadline":remaining_receivers,
 		"simulation_start_usec":simulation_start,"simulation_end_usec":game._time_domains.simulation_usec(),"hp_before":hp,"hp_after":game.player.current_hp,"mp_before":mp,"mp_after":game.player.current_mp,
 		"pending_mana_before":pending_mana_before,"pending_mana_after":game.player._pending_potion_mana,
@@ -413,6 +423,17 @@ func _combat_round(index: int) -> void:
 	_write(report_path.replace("_trace.json","_progress.json"),{"run_id":OS.get_environment("HARDCORE_FRAMEWORK_RUN_ID"),"source_content_sha256":OS.get_environment("HARDCORE_R3_CONTENT_SHA256"),
 		"phase":"completed cohorts only; final result remains pending","rounds":completed_rounds,"phase_failures":failures})
 	boundary_spans.append({"round":index,"kind":"test_owned_progress_evidence_io","started_usec":evidence_started,"finished_usec":Time.get_ticks_usec(),"process_frame":Engine.get_process_frames()})
+
+func _cohort_business_drained() -> bool:
+	if runtime == null or deaths-round_death_base != 30 or runtime.has_work() or not _settlement_drained() or stream_finished_usec <= 0:
+		return false
+	if not runtime._receipts.is_empty() or runtime.heap_count() != 0 or runtime.child_count() != 0 or runtime.pending_count() != 0:
+		return false
+	if runtime.presentation().node_count() != 0 or game._streaming_coordinator.pending_request_count() != 0:
+		return false
+	for count: int in runtime.reservation_snapshot().values():
+		if count != 0: return false
+	return true
 
 func _maybe_use_mana_supply(round_index: int, elapsed_ms: int) -> void:
 	if not is_instance_valid(game) or not is_instance_valid(game.player): return
@@ -505,7 +526,7 @@ func _current_aim_target() -> EnemyActor:
 		for receiver: EnemyActor in targets:
 			if not is_instance_valid(receiver) or receiver.current_hp<=0: continue
 			var offset: Vector2 = game._canonical_screen_px_to_ground_gu(receiver.global_position)-center
-			if absf(offset.x)<=1.5 and absf(offset.y)<=1.5: score += 100 if round_peak_states<90 and not active_targets.has(receiver.get_instance_id()) else 1
+			if absf(offset.x)<=1.5 and absf(offset.y)<=1.5: score += 100 if not active_targets.has(receiver.get_instance_id()) else 1
 		if score>best_score: chosen = actor; best_score = score
 	return chosen
 

@@ -1,0 +1,47 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "controlled native dependency probe owns isolated user data",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "this process has no existing native retrieval owner for the exact Root Script",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "one real background request accepts the exact Root Script",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "the accepted native Root Script completes within the bounded probe",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "one actual get returns an instantiable Script and retires its one native retrieval right",
+      "passed": true
+    }
+  ],
+  "count": 5,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "595385bf-efa0-4beb-b3ef-05881c27ad9c",
+  "passed": 5,
+  "reported_checks": 5,
+  "reported_failures": 0,
+  "run_id": "9ccc7554-3617-49d6-9e5f-4a8cc3fbf4e1",
+  "runtime_environment": {
+    "native_process_id": 12832,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_threaded_direct_root_script_c197ff5dbfa641aeba3f318ad883593e",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_dispatch_threaded_direct_root_script_c197ff5dbfa641aeba3f318ad883593e/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "character_threaded_script_retirement_test",
+  "schema_version": 1,
+  "source_content_sha256": "a6b2496c0ca6846996e888c509268a7632ed923f0c82ad178171ec4c3ab5e0f2",
+  "status": "PASS"
+}

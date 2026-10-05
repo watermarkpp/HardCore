@@ -1,0 +1,57 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "controlled native Script probe owns isolated user data",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "the exact selected Script is not cached before its one native request",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "this process has no existing native retrieval owner for the exact selected Script",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "one real background request accepts the exact selected Script",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "the accepted native Script completes within the 20-second bounded probe",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "one actual get returns an instantiable Script and retires its one native retrieval right",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "the selected Script has no native retrieval owner after release and eight real frames",
+      "passed": true
+    }
+  ],
+  "count": 7,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "85f3d780-28b6-4964-9419-8fb310e597b2",
+  "passed": 7,
+  "reported_checks": 7,
+  "reported_failures": 0,
+  "run_id": "441860f6-25ec-499a-b05e-4477266b3b77",
+  "runtime_environment": {
+    "native_process_id": 3120,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_threaded_dependency_eight_39f7690f824f470bbbf578d6c537cdc4",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_dispatch_threaded_dependency_eight_39f7690f824f470bbbf578d6c537cdc4/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "threaded_dependency_monster_visual_streaming_coordinator_script_probe_test",
+  "schema_version": 1,
+  "source_content_sha256": "a71273567307bae23b28d2ee4b99ab74fee95e9f2511ab1e384319aeceb7aedb",
+  "status": "PASS"
+}

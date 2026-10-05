@@ -1,0 +1,16 @@
+{
+  "command": [
+    "powershell",
+    "-NoProfile",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/threaded_minimal_empty_node_probe_test.tscn','tests/framework/threaded_minimal_inferred_refs_probe_test.tscn','tests/framework/threaded_minimal_typed_refs_probe_test.tscn','tests/framework/threaded_minimal_script_inferred_ref_probe_test.tscn','tests/framework/threaded_minimal_script_typed_ref_probe_test.tscn','tests/framework/threaded_minimal_script_static_ref_probe_test.tscn' -TimeoutSeconds 30"
+  ],
+  "timeout_seconds": 30,
+  "exit_code": 0,
+  "source_stable_during_run": true,
+  "passed": 6,
+  "failed": 0,
+  "status": "PASS"
+}

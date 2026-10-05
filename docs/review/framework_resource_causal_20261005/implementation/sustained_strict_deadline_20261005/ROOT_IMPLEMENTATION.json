@@ -1,0 +1,21 @@
+{
+  "utc": "2026-10-05T03:43:12.263581+00:00",
+  "before_sha256": "2a1dd5809b9ae758014accbcc0a92f4c9639de6268c8a0c47396d620148f0f78",
+  "after_sha256": "41bd2f81a22af13ebe660f18dd96835126c9d1df720a36024c5f0420297cd77f",
+  "change": "freeze first observed complete business drain monotonic timestamp before checks/save/evidence; strict <35,000,000usec from existing millisecond-floor window",
+  "deadline_ms": 35000,
+  "input_cadence_ms": 250,
+  "movement_cycle_ms": 1200,
+  "targets_per_round": 30,
+  "rounds": 2,
+  "simulation_lateness_usec_exclusive": 1000000,
+  "existing_supply_implementation_identical": true,
+  "scope": "all pre-existing terminal queues/cues/receipts now included in observed drain; potion restoration continues under existing separate contract; no production clock/pump changes",
+  "counterexample": {
+    "old_completion_only_accepts": true,
+    "completion_elapsed_usec": 35000000,
+    "new_strict_deadline_accepts": false,
+    "evidence": "logical assertion boundary; not a native late-completion reproduction"
+  },
+  "native_status": "NOT_RUN"
+}

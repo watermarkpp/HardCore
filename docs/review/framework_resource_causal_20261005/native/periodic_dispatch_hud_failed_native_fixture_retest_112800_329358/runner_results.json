@@ -1,0 +1,63 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "hud_failed_native_poll_retirement_test",
+                        "test_path":  "tests/framework/hud_failed_native_poll_retirement_test.tscn",
+                        "wrapper_process_id":  3872,
+                        "wrapper_started_utc":  "2026-10-05T03:28:02.7761038Z",
+                        "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_hud_failed_native_fixture_retest_97ee1866368a4bf1b76cc41c876fe099",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  false,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  1,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-05T03:28:32.7871345Z",
+                        "native_exit_observed_utc":  "2026-10-05T03:28:11.5756348Z",
+                        "effective_exit_code":  1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  2,
+                        "engine_log_failure_count":  2,
+                        "framework_run_id":  "a539d167-3514-4303-9b39-9a4cfa2ceaf2",
+                        "framework_receipt_valid":  false,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;non_zero_exit_code_1;stderr_failures_2;engine_log_failures_2;framework_checks_failed"
+                    },
+                    {
+                        "test_name":  "hud_failed_native_exit_retirement_test",
+                        "test_path":  "tests/framework/hud_failed_native_exit_retirement_test.tscn",
+                        "wrapper_process_id":  22288,
+                        "wrapper_started_utc":  "2026-10-05T03:28:12.6681329Z",
+                        "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_hud_failed_native_fixture_retest_97ee1866368a4bf1b76cc41c876fe099",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  false,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  1,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-05T03:28:42.6756533Z",
+                        "native_exit_observed_utc":  "2026-10-05T03:28:21.5311269Z",
+                        "effective_exit_code":  1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  2,
+                        "engine_log_failure_count":  2,
+                        "framework_run_id":  "99a3aa14-0f46-4825-ba05-29205ffb6b64",
+                        "framework_receipt_valid":  false,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;non_zero_exit_code_1;stderr_failures_2;engine_log_failures_2;framework_checks_failed"
+                    }
+                ],
+    "total":  2,
+    "invocation_id":  "906d03f3-a643-4bd0-91f5-d0387a3610cf",
+    "runtime_environment":  {
+                                "project_root":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+                                "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_hud_failed_native_fixture_retest_97ee1866368a4bf1b76cc41c876fe099",
+                                "runner_process_id":  20056
+                            },
+    "passed":  0,
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "engine_log_errors":  4,
+    "generated_at":  "2026-10-05T11:28:22.5783271+08:00",
+    "failed":  2,
+    "suite":  "adhoc"
+}

@@ -1,0 +1,69 @@
+WorkerThreadPool: 12 threads, 3 max low-priority.
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+TextServer: Added interface "Dummy"
+TextServer: Added interface "ICU / HarfBuzz / Graphite (Built-in)"
+Using "default" pen tablet driver...
+
+TextServer: Primary interface set to: "ICU / HarfBuzz / Graphite (Built-in)".
+CORE API HASH: 3472268009
+EDITOR API HASH: 2212757246
+SceneTreeFTI: traversal method DEFAULT
+Loading resource: res://scripts/device_lab_patch_bootstrap.gd remapped: res://scripts/device_lab_patch_bootstrap.gd
+Completed load for: 'res://scripts/device_lab_patch_bootstrap.gd' remapped 'res://scripts/device_lab_patch_bootstrap.gd' at thread -1
+Loading resource: res://scripts/audio_preferences.gd remapped: res://scripts/audio_preferences.gd
+Completed load for: 'res://scripts/audio_preferences.gd' remapped 'res://scripts/audio_preferences.gd' at thread -1
+Loading resource: res://scripts/loot_preferences.gd remapped: res://scripts/loot_preferences.gd
+Completed load for: 'res://scripts/loot_preferences.gd' remapped 'res://scripts/loot_preferences.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/content_layer_registry.gd remapped: res://scripts/layers/runtime/content_layer_registry.gd
+Completed load for: 'res://scripts/layers/runtime/content_layer_registry.gd' remapped 'res://scripts/layers/runtime/content_layer_registry.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/world_content_service.gd remapped: res://scripts/layers/runtime/world_content_service.gd
+Completed load for: 'res://scripts/layers/runtime/world_content_service.gd' remapped 'res://scripts/layers/runtime/world_content_service.gd' at thread -1
+Loading resource: res://scripts/layers/presentation/presentation_registry.gd remapped: res://scripts/layers/presentation/presentation_registry.gd
+Completed load for: 'res://scripts/layers/presentation/presentation_registry.gd' remapped 'res://scripts/layers/presentation/presentation_registry.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/targeting_runtime_service.gd remapped: res://scripts/layers/runtime/targeting_runtime_service.gd
+Completed load for: 'res://scripts/layers/runtime/targeting_runtime_service.gd' remapped 'res://scripts/layers/runtime/targeting_runtime_service.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/loot_runtime_service.gd remapped: res://scripts/layers/runtime/loot_runtime_service.gd
+Completed load for: 'res://scripts/layers/runtime/loot_runtime_service.gd' remapped 'res://scripts/layers/runtime/loot_runtime_service.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/combat_runtime_service.gd remapped: res://scripts/layers/runtime/combat_runtime_service.gd
+Completed load for: 'res://scripts/layers/runtime/combat_runtime_service.gd' remapped 'res://scripts/layers/runtime/combat_runtime_service.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/domain_runtime_services.gd remapped: res://scripts/layers/runtime/domain_runtime_services.gd
+Completed load for: 'res://scripts/layers/runtime/domain_runtime_services.gd' remapped 'res://scripts/layers/runtime/domain_runtime_services.gd' at thread -1
+Loading resource: res://scripts/layers/rules/boss_mechanic_registry.gd remapped: res://scripts/layers/rules/boss_mechanic_registry.gd
+Completed load for: 'res://scripts/layers/rules/boss_mechanic_registry.gd' remapped 'res://scripts/layers/rules/boss_mechanic_registry.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/runtime_service_facade.gd remapped: res://scripts/layers/runtime/runtime_service_facade.gd
+Completed load for: 'res://scripts/layers/runtime/runtime_service_facade.gd' remapped 'res://scripts/layers/runtime/runtime_service_facade.gd' at thread -1
+Loaded system CA certificates
+Loading resource: res://tests/framework/threaded_dependency_caster_skill_runtime_script_probe_test.tscn remapped: res://tests/framework/threaded_dependency_caster_skill_runtime_script_probe_test.tscn
+Loading resource: res://tests/framework/threaded_dependency_script_probe_test.gd remapped: res://tests/framework/threaded_dependency_script_probe_test.gd
+Completed load for: 'res://tests/framework/threaded_dependency_script_probe_test.gd' remapped 'res://tests/framework/threaded_dependency_script_probe_test.gd' at thread -1
+Completed load for: 'res://tests/framework/threaded_dependency_caster_skill_runtime_script_probe_test.tscn' remapped 'res://tests/framework/threaded_dependency_caster_skill_runtime_script_probe_test.tscn' at thread -1
+数据库载入完成：地图209 怪物156 Boss20 装备175 技能等级132 掉落槽3424 任务9
+load_threaded_get_status(): No threaded load for resource path 'res://scripts/caster_skill_runtime.gd' has been initiated or its result has already been collected.
+Loading resource: res://scripts/caster_skill_runtime.gd remapped: res://scripts/caster_skill_runtime.gd
+Loading resource: res://assets/shaders/trial_magic_screen.gdshader remapped: res://assets/shaders/trial_magic_screen.gdshader
+Completed load for: 'res://assets/shaders/trial_magic_screen.gdshader' remapped 'res://assets/shaders/trial_magic_screen.gdshader' at thread 3
+Loading resource: res://assets/shaders/fire_wall_screen_blend_multiply.gdshader remapped: res://assets/shaders/fire_wall_screen_blend_multiply.gdshader
+Completed load for: 'res://assets/shaders/fire_wall_screen_blend_multiply.gdshader' remapped 'res://assets/shaders/fire_wall_screen_blend_multiply.gdshader' at thread 3
+Loading resource: res://assets/art/monsters/effects/monster_target_magic/cow_mage_thunder_magic2.png remapped: res://assets/art/monsters/effects/monster_target_magic/cow_mage_thunder_magic2.png
+Loading resource: res://.godot/imported/cow_mage_thunder_magic2.png-f1ada7cfae9bb41578ecd7be36fbb1ee.ctex remapped: res://.godot/imported/cow_mage_thunder_magic2.png-f1ada7cfae9bb41578ecd7be36fbb1ee.ctex
+Completed load for: 'res://assets/art/monsters/effects/monster_target_magic/cow_mage_thunder_magic2.png' remapped 'res://assets/art/monsters/effects/monster_target_magic/cow_mage_thunder_magic2.png' at thread 3
+Loading resource: res://assets/art/monsters/effects/monster_target_magic/cow_priest_cast_wmon21.png remapped: res://assets/art/monsters/effects/monster_target_magic/cow_priest_cast_wmon21.png
+Loading resource: res://.godot/imported/cow_priest_cast_wmon21.png-541f8f113f1635cd0f77bea1759fddb7.ctex remapped: res://.godot/imported/cow_priest_cast_wmon21.png-541f8f113f1635cd0f77bea1759fddb7.ctex
+Completed load for: 'res://assets/art/monsters/effects/monster_target_magic/cow_priest_cast_wmon21.png' remapped 'res://assets/art/monsters/effects/monster_target_magic/cow_priest_cast_wmon21.png' at thread 3
+Loading resource: res://assets/art/monsters/effects/monster_target_magic/cow_priest_fly_magic.png remapped: res://assets/art/monsters/effects/monster_target_magic/cow_priest_fly_magic.png
+Loading resource: res://.godot/imported/cow_priest_fly_magic.png-4b64792ab4d2f6c6884e9ad1021249a0.ctex remapped: res://.godot/imported/cow_priest_fly_magic.png-4b64792ab4d2f6c6884e9ad1021249a0.ctex
+Completed load for: 'res://assets/art/monsters/effects/monster_target_magic/cow_priest_fly_magic.png' remapped 'res://assets/art/monsters/effects/monster_target_magic/cow_priest_fly_magic.png' at thread 3
+Completed load for: 'res://scripts/caster_skill_runtime.gd' remapped 'res://scripts/caster_skill_runtime.gd' at thread 3
+load_threaded_get_status(): No threaded load for resource path 'res://scripts/caster_skill_runtime.gd' has been initiated or its result has already been collected.
+load_threaded_get_status(): No threaded load for resource path 'res://scripts/caster_skill_runtime.gd' has been initiated or its result has already been collected.
+THREADED_DEPENDENCY_SCRIPT_PROBE_TRACE {"cache_after_get":true,"cache_after_request":false,"cache_before":false,"completion_elapsed_usec":1331886,"completion_status":3,"elapsed_usec":1387121,"expected_checks":7,"final_cached":true,"final_native_status":0,"get_elapsed_usec":5,"invocation_id":"5e5304a2-ff12-41ed-8ef7-bc4484b6dae4","native_status_after_get":0,"native_status_before":0,"obtained_is_instantiable_script":true,"recorded_checks":7,"request_elapsed_usec":14,"request_error":0,"requested_path":"res://scripts/caster_skill_runtime.gd","requested_type":"Script","run_id":"d3e5a4b2-5d1e-451e-bad6-510b6ca4eeea","scene_id":"threaded_dependency_caster_skill_runtime_script_probe_test","scope":"native Script request/get only; no selected Script instance or world; exit warning assessment uses preserved stderr","selected_dependency":7,"source_content_sha256":"caf161d6059684b9779dbacd205eb4e7a4a90a4bea6e6bbfdbbe028cdea1f2f8","use_sub_threads":false}
+THREADED_DEPENDENCY_SCRIPT_PROBE_PASS failures=[]
+XR: Clearing primary interface
+XR: Removed interface "Native mobile"
+XR: Removed interface "OpenXR"
+Leaked instance: RefCounted:9223372177565288088 - Reference count: 0
+Leaked instance: RefCounted:9223372177716283034 - Reference count: 0
+Leaked instance: RefCounted:9223372214995257072 - Reference count: 0
+Leaked instance: RefCounted:9223372215314024177 - Reference count: 0
+Leaked instance: RefCounted:9223372214659712756 - Reference count: 0
+Hint: Leaked instances typically happen when nodes are removed from the scene tree (with `remove_child()`) but not freed (with `free()` or `queue_free()`).

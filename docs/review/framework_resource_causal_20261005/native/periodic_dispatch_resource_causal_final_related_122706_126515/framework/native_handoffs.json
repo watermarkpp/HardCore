@@ -1,0 +1,75 @@
+{
+    "schema_version":  1,
+    "runtime_environment":  {
+                                "project_root":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+                                "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_resource_causal_final_related_820aa8e19cce4850a9a54c201ce39f54",
+                                "runner_process_id":  24988
+                            },
+    "invocation_id":  "cbca21b8-0f19-40ba-b851-2e0787ba265b",
+    "source_content_sha256":  "77af4cd4a4a3abea001b5d3c76751052f354cf501f5afc13282f3562a06fe3db",
+    "producers":  {
+                      "synchronous_panel_script_retirement_test":  {
+                                                                       "scene_id":  "synchronous_panel_script_retirement_test",
+                                                                       "run_id":  "6f0ec753-420b-4cd6-ac42-facea6fe3cf1",
+                                                                       "source_content_sha256":  "77af4cd4a4a3abea001b5d3c76751052f354cf501f5afc13282f3562a06fe3db",
+                                                                       "process_exited":  true,
+                                                                       "effective_exit_code":  0,
+                                                                       "result":  "PASS",
+                                                                       "receipt_sha256":  "242568e2553d998cc83a736c1bc98e26fb6544a3c79e30d194dcf00eaa44790d"
+                                                                   },
+                      "threaded_panel_script_retirement_test":  {
+                                                                    "scene_id":  "threaded_panel_script_retirement_test",
+                                                                    "run_id":  "adfc4f8a-1652-4d8f-9aa4-cce93c2beb29",
+                                                                    "source_content_sha256":  "77af4cd4a4a3abea001b5d3c76751052f354cf501f5afc13282f3562a06fe3db",
+                                                                    "process_exited":  true,
+                                                                    "effective_exit_code":  0,
+                                                                    "result":  "PASS",
+                                                                    "receipt_sha256":  "26cce64b55c4c0bfe590c54533e5dd302dfdcf48b7b1ffca0be79dba311d948b"
+                                                                },
+                      "threaded_panel_script_retirement_subthreads_test":  {
+                                                                               "scene_id":  "threaded_panel_script_retirement_subthreads_test",
+                                                                               "run_id":  "68f72cc0-8f8f-4dd8-8338-b32bdb1af7f9",
+                                                                               "source_content_sha256":  "77af4cd4a4a3abea001b5d3c76751052f354cf501f5afc13282f3562a06fe3db",
+                                                                               "process_exited":  true,
+                                                                               "effective_exit_code":  0,
+                                                                               "result":  "PASS",
+                                                                               "receipt_sha256":  "774176aed2158af9ac2abf51a6b1ddd9256b2c882fbe2543d4d500677ff8ee91"
+                                                                           },
+                      "threaded_dependency_shader_warm_constant_script_probe_test":  {
+                                                                                         "scene_id":  "threaded_dependency_shader_warm_constant_script_probe_test",
+                                                                                         "run_id":  "9312b317-1c6c-45cf-9454-aa73e5012146",
+                                                                                         "source_content_sha256":  "77af4cd4a4a3abea001b5d3c76751052f354cf501f5afc13282f3562a06fe3db",
+                                                                                         "process_exited":  true,
+                                                                                         "effective_exit_code":  0,
+                                                                                         "result":  "PASS",
+                                                                                         "receipt_sha256":  "033e23046915ca08b2c1d2aede944fecb1a790a6c2d517aaee05ff44656fc5ab"
+                                                                                     },
+                      "threaded_dependency_texture_warm_constant_script_probe_test":  {
+                                                                                          "scene_id":  "threaded_dependency_texture_warm_constant_script_probe_test",
+                                                                                          "run_id":  "692de68e-c0b2-401f-a04e-2bf9971b8b72",
+                                                                                          "source_content_sha256":  "77af4cd4a4a3abea001b5d3c76751052f354cf501f5afc13282f3562a06fe3db",
+                                                                                          "process_exited":  true,
+                                                                                          "effective_exit_code":  0,
+                                                                                          "result":  "PASS",
+                                                                                          "receipt_sha256":  "4435dcf087a2d229a8307407b19dd9b8a422f1c469d27d69c81d06d4daf19a4b"
+                                                                                      },
+                      "threaded_dependency_shader_late_script_probe_test":  {
+                                                                                "scene_id":  "threaded_dependency_shader_late_script_probe_test",
+                                                                                "run_id":  "19673f53-0a2e-4c8e-9309-f7db28f7885f",
+                                                                                "source_content_sha256":  "77af4cd4a4a3abea001b5d3c76751052f354cf501f5afc13282f3562a06fe3db",
+                                                                                "process_exited":  true,
+                                                                                "effective_exit_code":  0,
+                                                                                "result":  "PASS",
+                                                                                "receipt_sha256":  "34c91408ef7e3a435505554f4f42c65e133adb62f8956352b71bcf24ef2408bc"
+                                                                            },
+                      "threaded_dependency_texture_late_script_probe_test":  {
+                                                                                 "scene_id":  "threaded_dependency_texture_late_script_probe_test",
+                                                                                 "run_id":  "7b4d633a-b360-47ff-9eb5-432988fd7a32",
+                                                                                 "source_content_sha256":  "77af4cd4a4a3abea001b5d3c76751052f354cf501f5afc13282f3562a06fe3db",
+                                                                                 "process_exited":  true,
+                                                                                 "effective_exit_code":  0,
+                                                                                 "result":  "PASS",
+                                                                                 "receipt_sha256":  "f0af98de3a337e46a32c9c3b80df6ed82124ed6f39911c0dc38c66031300729e"
+                                                                             }
+                  }
+}

@@ -1,0 +1,52 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "the explicit enum selects exactly one minimal fixture path",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "formal runner binds this isolated native process to a receipt identity",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "the exact selected PackedScene has no cached resource or prior retrieval owner",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "one real background PackedScene request is accepted",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "the one native request reaches LOADED within the bounded probe",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "one actual get returns the PackedScene and consumes its native retrieval right",
+      "passed": true
+    }
+  ],
+  "count": 6,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "77fadc08-e3f1-43c6-ae63-9dbb23f75ea0",
+  "passed": 6,
+  "reported_checks": 6,
+  "reported_failures": 0,
+  "run_id": "c88cc11a-0e33-47b6-aa2f-5ac3e1fe7b6c",
+  "runtime_environment": {
+    "native_process_id": 8256,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_threaded_scripted_ref_controls_d6ecc4b92d414736ba15c8ff68702018",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_dispatch_threaded_scripted_ref_controls_d6ecc4b92d414736ba15c8ff68702018/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "threaded_minimal_typed_refs_probe_test",
+  "schema_version": 1,
+  "source_content_sha256": "425ee724af1c53e128283bdd1e1d316189bf5e34c6b9e105edc006d1f536d113",
+  "status": "PASS"
+}

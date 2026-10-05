@@ -1,0 +1,18 @@
+{
+  "utc": "2026-10-05T03:32:41.404011+00:00",
+  "path": "scripts/hud.gd",
+  "before_sha256": "6a809d06493ab137f5a3359dfd817230e485a8888cf4573377870a41676885b1",
+  "after_sha256": "f39b9833afde21a470af292b7126be0c58e0f290ac5e5d7a2e9d410ac3f2cdd2",
+  "frozen_opaque_loading_branch_sha256": "d51cde070366fe97f2145af6a54dd345f199ca1f6b514efeb53bcfd354980e28",
+  "frozen_branch_identical": true,
+  "red_evidence": "outputs/r3_takeover/20260930/validation/periodic_dispatch_hud_failed_native_fixture_retest_112800_329358",
+  "red_business_checks": 71,
+  "red_failed_checks": 4,
+  "red_scope": "accepted real native FAILED token registered in inert real HUD; controlled ownership injection, not natural UI",
+  "native_errors": "two exact owned corrupt-resource errors per scene; fixture parse failure is separate",
+  "root_change": "consume accepted FAILED native token on poll and exit; INVALID never retrieved",
+  "green_status": "PASS",
+  "green_business_checks": 71,
+  "green_evidence": "periodic_dispatch_hud_failed_native_green_113330_904705",
+  "original_negative_runner_status": "FAIL"
+}

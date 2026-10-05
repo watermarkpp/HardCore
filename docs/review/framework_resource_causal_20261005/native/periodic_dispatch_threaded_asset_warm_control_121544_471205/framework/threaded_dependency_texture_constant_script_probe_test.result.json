@@ -1,0 +1,57 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "controlled native Script probe owns isolated user data",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "the exact selected Script is not cached before its one native request",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "this process has no existing native retrieval owner for the exact selected Script",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "one real background request accepts the exact selected Script",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "the accepted native Script completes within the 20-second bounded probe",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "one actual get returns an instantiable Script and retires its one native retrieval right",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "the selected Script has no native retrieval owner after release and eight real frames",
+      "passed": true
+    }
+  ],
+  "count": 7,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "05491616-51e1-4cae-ae3a-53c1194e6801",
+  "passed": 7,
+  "reported_checks": 7,
+  "reported_failures": 0,
+  "run_id": "858ae0b8-c485-4efa-8319-3fde90d35587",
+  "runtime_environment": {
+    "native_process_id": 8780,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_threaded_asset_warm_control_e9cf7a3a51784bc894797165b43f8dad",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_dispatch_threaded_asset_warm_control_e9cf7a3a51784bc894797165b43f8dad/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "threaded_dependency_texture_constant_script_probe_test",
+  "schema_version": 1,
+  "source_content_sha256": "77af4cd4a4a3abea001b5d3c76751052f354cf501f5afc13282f3562a06fe3db",
+  "status": "PASS"
+}

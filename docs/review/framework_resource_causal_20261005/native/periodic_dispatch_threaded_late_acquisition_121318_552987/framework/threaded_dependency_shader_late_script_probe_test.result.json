@@ -1,0 +1,72 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "controlled native Script probe owns isolated user data",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "the exact selected Script is not cached before its one native request",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "this process has no existing native retrieval owner for the exact selected Script",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "one real background request accepts the exact selected Script",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "the accepted native Script completes within the 20-second bounded probe",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "one actual get returns an instantiable Script and retires its one native retrieval right",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "late-acquisition leaf has not loaded its exact asset during background Script compilation",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "one main-thread first use returns the exact usable source Shader or Texture without a Script instance",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "main-thread first use leaves no extra native threaded retrieval right",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "the selected Script has no native retrieval owner after release and eight real frames",
+      "passed": true
+    }
+  ],
+  "count": 10,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "d493e545-0dca-4c85-b5a6-f4d78faea321",
+  "passed": 10,
+  "reported_checks": 10,
+  "reported_failures": 0,
+  "run_id": "5bfe7a70-9c0f-44f1-b788-a3dc40c6a48b",
+  "runtime_environment": {
+    "native_process_id": 12832,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_threaded_late_acquisition_c74987026af94f7fb652e912a0683748",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_dispatch_threaded_late_acquisition_c74987026af94f7fb652e912a0683748/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "threaded_dependency_shader_late_script_probe_test",
+  "schema_version": 1,
+  "source_content_sha256": "75d32d92e8a4371ae3d1650ddc4174695c11f54b06182fb815dc2ef1343b392c",
+  "status": "PASS"
+}

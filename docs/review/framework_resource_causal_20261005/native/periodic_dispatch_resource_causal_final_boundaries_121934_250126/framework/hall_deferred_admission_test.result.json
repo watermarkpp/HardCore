@@ -1,0 +1,132 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "production test_mode=false uses runner-isolated APPDATA",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "receipt source, run and invocation identities are present",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "default main path begins without another native request token",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "real character select scene loads",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "unmodified hall starts with its production default main PackedScene path",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "first add and removal occur in the same process frame before deferred dispatch",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "same-stack exit precedes first deferred native request admission",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "deferred queue reaches the marker after original hall _ready",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "out-of-tree original deferred callback admits zero native requests",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "out-of-tree original deferred callback leaves no hall request ownership",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "out-of-tree original deferred callback leaves no default-path native token",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "observed hall remains live and outside the scene tree after deferred callback",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "original hall exit requires no fixture native retrieval",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "owned native token is closed before legal reentry",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "request_ready reentry executes the real character hall _ready",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "legal reentry admits exactly one request for the production default path",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "legal reentry reaches READY with a real main PackedScene",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "READY hall has collected its single native request",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "legal reentry exit closes ownership and native token",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "bounded native trace directory is available",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "deferred admission trace opens",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "deferred admission trace writes completely",
+      "passed": true
+    }
+  ],
+  "count": 22,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "dbda61ed-b2d7-40d6-8b37-cf6f26fda980",
+  "passed": 22,
+  "reported_checks": 22,
+  "reported_failures": 0,
+  "run_id": "33ccfc33-1d1c-4add-949f-587f9b634ef0",
+  "runtime_environment": {
+    "native_process_id": 25272,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_resource_causal_final_boundaries_22c003368f3b4933b75fbd349f1cf99e",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_dispatch_resource_causal_final_boundaries_22c003368f3b4933b75fbd349f1cf99e/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "hall_deferred_admission_test",
+  "schema_version": 1,
+  "source_content_sha256": "77af4cd4a4a3abea001b5d3c76751052f354cf501f5afc13282f3562a06fe3db",
+  "status": "PASS"
+}

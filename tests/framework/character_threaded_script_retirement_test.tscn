@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/framework/character_threaded_graph_retirement_test.gd" id="1"]
+
+[node name="CharacterThreadedScriptRetirementTest" type="Node"]
+script = ExtResource("1")
+root_script_only = true

@@ -1,0 +1,92 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "aim-driver counterexample owns isolated production-profile data",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "real profile starts: ",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "same default-off natural source prepares through its production service",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "real mapped Root reaches READY",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "formal walkable receiver 0",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "formal walkable receiver 1",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "formal walkable receiver 2",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "before effects, equally uncovered targets prefer the denser legal footprint",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "one actual Root release owns the real windup, planner and effects",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "real committed effects cover the dense pair and leave the separated third receiver uncovered",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "uncovered edge receiver is selected while the historical peak is below ninety",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "the same uncovered receiver retains priority after the historical peak reaches ninety",
+      "passed": false
+    },
+    {
+      "id": 13,
+      "label": "repeated driver queries submit no damage, effects, clock changes or new actions",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "retired world withdraws its prepared default-off source",
+      "passed": true
+    }
+  ],
+  "count": 14,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "59b97259-fba6-482a-a4c1-69a225ab08b6",
+  "passed": 13,
+  "reported_checks": 14,
+  "reported_failures": 1,
+  "run_id": "a9054574-83a1-4abb-b4ba-98ab36feb7e4",
+  "runtime_environment": {
+    "native_process_id": 9460,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_sustained_aim_coverage_red_768d6e672ee346c78048f5150111e358",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_dispatch_sustained_aim_coverage_red_768d6e672ee346c78048f5150111e358/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "sustained_aim_coverage_test",
+  "schema_version": 1,
+  "source_content_sha256": "34083b49342ba858cf455090bd8659e34708e0e13e8ecb9b17048c96d348bbd2",
+  "status": "FAIL"
+}

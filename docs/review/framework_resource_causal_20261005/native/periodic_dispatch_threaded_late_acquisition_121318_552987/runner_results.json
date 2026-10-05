@@ -1,0 +1,63 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "threaded_dependency_shader_late_script_probe_test",
+                        "test_path":  "tests/framework/threaded_dependency_shader_late_script_probe_test.tscn",
+                        "wrapper_process_id":  4788,
+                        "wrapper_started_utc":  "2026-10-05T04:13:20.9134157Z",
+                        "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_threaded_late_acquisition_c74987026af94f7fb652e912a0683748",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-05T04:13:50.9254006Z",
+                        "native_exit_observed_utc":  "2026-10-05T04:13:26.3461645Z",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "5bfe7a70-9c0f-44f1-b788-a3dc40c6a48b",
+                        "framework_receipt_valid":  true,
+                        "result":  "PASS",
+                        "reason":  ""
+                    },
+                    {
+                        "test_name":  "threaded_dependency_texture_late_script_probe_test",
+                        "test_path":  "tests/framework/threaded_dependency_texture_late_script_probe_test.tscn",
+                        "wrapper_process_id":  11640,
+                        "wrapper_started_utc":  "2026-10-05T04:13:27.8239047Z",
+                        "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_threaded_late_acquisition_c74987026af94f7fb652e912a0683748",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-05T04:13:57.8317093Z",
+                        "native_exit_observed_utc":  "2026-10-05T04:13:33.0847776Z",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "cd19dff7-1c1c-4ef5-8794-367c08a617b4",
+                        "framework_receipt_valid":  true,
+                        "result":  "PASS",
+                        "reason":  ""
+                    }
+                ],
+    "total":  2,
+    "invocation_id":  "d493e545-0dca-4c85-b5a6-f4d78faea321",
+    "runtime_environment":  {
+                                "project_root":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+                                "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_threaded_late_acquisition_c74987026af94f7fb652e912a0683748",
+                                "runner_process_id":  7740
+                            },
+    "passed":  2,
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "engine_log_errors":  0,
+    "generated_at":  "2026-10-05T12:13:34.4724839+08:00",
+    "failed":  0,
+    "suite":  "adhoc"
+}

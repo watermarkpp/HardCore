@@ -1,0 +1,260 @@
+{
+  "parent": "fffadd21f608d7cc759744fc53eb64e161b1e5ef",
+  "source_changes": [
+    {
+      "path": "scripts/character_select.gd",
+      "old_working_sha256": "67e9ad486c7ac75a5f82d8aef222e8bf74df5170dc170ecee9978ce1772efc0e",
+      "new_working_sha256": "029e3b9c75f170a939d63603e70a4b888486c481a5734db0f7a989687fb9b7fb",
+      "parent_git_blob_sha256": "ebdbcb743b39fc138bc675d0d03fccc1b716e0f19de6f706fc93f47b8920b4fe"
+    },
+    {
+      "path": "scripts/hud.gd",
+      "old_working_sha256": "6a809d06493ab137f5a3359dfd817230e485a8888cf4573377870a41676885b1",
+      "new_working_sha256": "f39b9833afde21a470af292b7126be0c58e0f290ac5e5d7a2e9d410ac3f2cdd2",
+      "parent_git_blob_sha256": "2f772974b2da8cdd0c5251b43b95d6a161856ec9292c9d5169093f9b47ebeefd"
+    },
+    {
+      "path": "tests/framework/character_threaded_graph_retirement_test.gd",
+      "old_working_sha256": "777ee0f9775dd361b0790cc1716e3d8b2dbd4490e59c2174cc0ad99301d24553",
+      "new_working_sha256": "61f906e40fd39e762bb1a32397a4fc16f207dd0fcd827de3b7bdc84dcff63688",
+      "parent_git_blob_sha256": "777ee0f9775dd361b0790cc1716e3d8b2dbd4490e59c2174cc0ad99301d24553"
+    },
+    {
+      "path": "tests/framework/character_threaded_script_retirement_test.tscn",
+      "old_working_sha256": "MISSING",
+      "new_working_sha256": "8ad0a0707c71b2dbbe58fa757ab96a0194afd07b3b245d7da5cc8ca4072ff57a",
+      "parent_git_blob_sha256": "MISSING"
+    },
+    {
+      "path": "tests/framework/fixtures/threaded_minimal_custom_ref.gd",
+      "old_working_sha256": "MISSING",
+      "new_working_sha256": "c73d1366ec40d23336ad7ae26fe2a73a3126c6110a121774ff3c2dd068216a14",
+      "parent_git_blob_sha256": "MISSING"
+    },
+    {
+      "path": "tests/framework/fixtures/threaded_minimal_script_inferred_ref.gd",
+      "old_working_sha256": "MISSING",
+      "new_working_sha256": "cf090767e69067e0fc254e9bb25bdf185c86a92abd264e9f22734ef701283666",
+      "parent_git_blob_sha256": "MISSING"
+    },
+    {
+      "path": "tests/framework/fixtures/threaded_minimal_script_inferred_ref.tscn",
+      "old_working_sha256": "MISSING",
+      "new_working_sha256": "02df4bcfbf01c363decb12fa6fb4ed8eb30bf9a741ee196a5593528ee4c1715f",
+      "parent_git_blob_sha256": "MISSING"
+    },
+    {
+      "path": "tests/framework/fixtures/threaded_minimal_script_static_ref.gd",
+      "old_working_sha256": "MISSING",
+      "new_working_sha256": "dc2eb7027d27db1fb93b0f9e1e4f65eb3726160394f3e5c40f80a9516d2c8499",
+      "parent_git_blob_sha256": "MISSING"
+    },
+    {
+      "path": "tests/framework/fixtures/threaded_minimal_script_static_ref.tscn",
+      "old_working_sha256": "MISSING",
+      "new_working_sha256": "ffb0f4373ac849972662ec3b445bc6ebc984fb1e65980f15b01d9b47e802a998",
+      "parent_git_blob_sha256": "MISSING"
+    },
+    {
+      "path": "tests/framework/fixtures/threaded_minimal_script_typed_ref.gd",
+      "old_working_sha256": "MISSING",
+      "new_working_sha256": "6313695a103d62c6e81cbb1b2482a83a06aa9f07e89115df09d0cdd935076726",
+      "parent_git_blob_sha256": "MISSING"
+    },
+    {
+      "path": "tests/framework/fixtures/threaded_minimal_script_typed_ref.tscn",
+      "old_working_sha256": "MISSING",
+      "new_working_sha256": "fe45baec0f85a056cc754fdf74339bbd87a412d82a8cddad9260e71e30253d83",
+      "parent_git_blob_sha256": "MISSING"
+    },
+    {
+      "path": "tests/framework/fixtures/threaded_shader_constant_ref.gd",
+      "old_working_sha256": "MISSING",
+      "new_working_sha256": "a6b818757adc473b12fe3779232213eb63c2ad16b17dfaaac295a64a6078ef34",
+      "parent_git_blob_sha256": "MISSING"
+    },
+    {
+      "path": "tests/framework/fixtures/threaded_shader_late_ref.gd",
+      "old_working_sha256": "MISSING",
+      "new_working_sha256": "98d1708d61244b02d4f8551cb792e9fd791555fc4650c97613b47053a87f2204",
+      "parent_git_blob_sha256": "MISSING"
+    },
+    {
+      "path": "tests/framework/fixtures/threaded_texture_constant_ref.gd",
+      "old_working_sha256": "MISSING",
+      "new_working_sha256": "db3cd12a8241ec12b251fbf605123798d9ecd33946ee1e0a19de835ea3f6cf95",
+      "parent_git_blob_sha256": "MISSING"
+    },
+    {
+      "path": "tests/framework/fixtures/threaded_texture_late_ref.gd",
+      "old_working_sha256": "MISSING",
+      "new_working_sha256": "2a743484fe685e1dda97507954c93c76ce9ab7348b1dd69e7e6cfaa4bc9cb425",
+      "parent_git_blob_sha256": "MISSING"
+    },
+    {
+      "path": "tests/framework/hall_deferred_admission_test.gd",
+      "old_working_sha256": "MISSING",
+      "new_working_sha256": "7bbd94191dd6958ce613a482a8189a88c294fe8f59668bf9c6930d2a7753c725",
+      "parent_git_blob_sha256": "MISSING"
+    },
+    {
+      "path": "tests/framework/hall_deferred_admission_test.tscn",
+      "old_working_sha256": "MISSING",
+      "new_working_sha256": "bff3183adb9162c8eda64ab08f5af526e95ecea07064e48fee67bbf34a0ac01a",
+      "parent_git_blob_sha256": "MISSING"
+    },
+    {
+      "path": "tests/framework/hud_failed_native_exit_retirement_test.tscn",
+      "old_working_sha256": "MISSING",
+      "new_working_sha256": "0d68cee3a29a99f287781d2c98b8b9027bbb856caa3f537a0fa126ec8cc744c3",
+      "parent_git_blob_sha256": "MISSING"
+    },
+    {
+      "path": "tests/framework/hud_failed_native_poll_retirement_test.tscn",
+      "old_working_sha256": "MISSING",
+      "new_working_sha256": "46a65bd2fa33c1b91416c321f677374114f90aece766a89d21bcd7c8bdf1d25d",
+      "parent_git_blob_sha256": "MISSING"
+    },
+    {
+      "path": "tests/framework/hud_failed_native_retirement_test.gd",
+      "old_working_sha256": "MISSING",
+      "new_working_sha256": "cc82d4a6123b95d7773be08b42f102f7854d02a27bfb8f3c81f5355e939d8d26",
+      "parent_git_blob_sha256": "MISSING"
+    },
+    {
+      "path": "tests/framework/natural_sustained_chain_test.gd",
+      "old_working_sha256": "2a1dd5809b9ae758014accbcc0a92f4c9639de6268c8a0c47396d620148f0f78",
+      "new_working_sha256": "9e54128db145a2e319fe9b291573094affac9b43b43a2bbed94665372dd37c8e",
+      "parent_git_blob_sha256": "2a1dd5809b9ae758014accbcc0a92f4c9639de6268c8a0c47396d620148f0f78"
+    },
+    {
+      "path": "tests/framework/sustained_aim_coverage_test.gd",
+      "old_working_sha256": "MISSING",
+      "new_working_sha256": "18444cdbecc2f40da3207479321e4f6db23dc2d7b0cd5c4105a490ff8e6b3e74",
+      "parent_git_blob_sha256": "MISSING"
+    },
+    {
+      "path": "tests/framework/sustained_aim_coverage_test.tscn",
+      "old_working_sha256": "MISSING",
+      "new_working_sha256": "6aec8bf290fd8aae5e63d3a07e80fca29d4f0cb6b37aeed0e4462634372440aa",
+      "parent_git_blob_sha256": "MISSING"
+    },
+    {
+      "path": "tests/framework/threaded_dependency_caster_skill_runtime_script_probe_test.tscn",
+      "old_working_sha256": "MISSING",
+      "new_working_sha256": "870e5d51cb6bd6aa67c730f56d660b54f2ac6e4ec29b42585501838d67d761e9",
+      "parent_git_blob_sha256": "MISSING"
+    },
+    {
+      "path": "tests/framework/threaded_dependency_combat_runtime_service_script_probe_test.tscn",
+      "old_working_sha256": "MISSING",
+      "new_working_sha256": "f4c20b2336079b4f92bc4af5d670cdd50616bae5e1314dd814c7095642e1df89",
+      "parent_git_blob_sha256": "MISSING"
+    },
+    {
+      "path": "tests/framework/threaded_dependency_fire_wall_field_controller_script_probe_test.tscn",
+      "old_working_sha256": "MISSING",
+      "new_working_sha256": "8d5cb5aef98fe3005d21c1f5a736fdd04125214c7618bdcc702092046d095a75",
+      "parent_git_blob_sha256": "MISSING"
+    },
+    {
+      "path": "tests/framework/threaded_dependency_frame_budget_script_probe_test.tscn",
+      "old_working_sha256": "MISSING",
+      "new_working_sha256": "8aa7197a321dd6bd7d7be2bc9f794bee00db567532819c4f55c24f90862aa517",
+      "parent_git_blob_sha256": "MISSING"
+    },
+    {
+      "path": "tests/framework/threaded_dependency_map_editor_runtime_bridge_script_probe_test.tscn",
+      "old_working_sha256": "MISSING",
+      "new_working_sha256": "552ee3a94d36450fb89c4bda2b7b69603a2a87821e025f131c4b56ba48279886",
+      "parent_git_blob_sha256": "MISSING"
+    },
+    {
+      "path": "tests/framework/threaded_dependency_monster_visual_streaming_coordinator_script_probe_test.tscn",
+      "old_working_sha256": "MISSING",
+      "new_working_sha256": "b58ae2ee770ea14630246efa0124a7a3ddc5061d514e741770bad68e8c211caa",
+      "parent_git_blob_sha256": "MISSING"
+    },
+    {
+      "path": "tests/framework/threaded_dependency_script_probe_test.gd",
+      "old_working_sha256": "MISSING",
+      "new_working_sha256": "f07f8e05f85ee54985092ceffa0abcf7b8ea6986dd04f783cdc27f400c868f44",
+      "parent_git_blob_sha256": "MISSING"
+    },
+    {
+      "path": "tests/framework/threaded_dependency_shader_constant_script_probe_test.tscn",
+      "old_working_sha256": "MISSING",
+      "new_working_sha256": "0db79678471d6d0d416ecf13b54e88ffa266055605cea9c37008505294704a0b",
+      "parent_git_blob_sha256": "MISSING"
+    },
+    {
+      "path": "tests/framework/threaded_dependency_shader_late_script_probe_test.tscn",
+      "old_working_sha256": "MISSING",
+      "new_working_sha256": "9b1508b01b446b9a510ec6d86b07f6bc0d63ac092bcad16f65b3bd8fb0a22195",
+      "parent_git_blob_sha256": "MISSING"
+    },
+    {
+      "path": "tests/framework/threaded_dependency_shader_warm_constant_script_probe_test.tscn",
+      "old_working_sha256": "MISSING",
+      "new_working_sha256": "b610ea36495eed8382f224b17e13938cef996c815ce7d5a0ba3cbbe37a8e664e",
+      "parent_git_blob_sha256": "MISSING"
+    },
+    {
+      "path": "tests/framework/threaded_dependency_texture_constant_script_probe_test.tscn",
+      "old_working_sha256": "MISSING",
+      "new_working_sha256": "7e9200a7fa8a8d2f3805335ec23b75bc02d27ac23015fb1b6d18f2c212806f74",
+      "parent_git_blob_sha256": "MISSING"
+    },
+    {
+      "path": "tests/framework/threaded_dependency_texture_late_script_probe_test.tscn",
+      "old_working_sha256": "MISSING",
+      "new_working_sha256": "0f825507bb5e26ba84403c7a317bec0c69786e639a5375dfe9335fe34cf91ffd",
+      "parent_git_blob_sha256": "MISSING"
+    },
+    {
+      "path": "tests/framework/threaded_dependency_texture_warm_constant_script_probe_test.tscn",
+      "old_working_sha256": "MISSING",
+      "new_working_sha256": "7b70e0ae9f35fb331deaef2c7cd7f959e1f9055a728ac0419fc2e2c9eb209c47",
+      "parent_git_blob_sha256": "MISSING"
+    },
+    {
+      "path": "tests/framework/threaded_dependency_time_domains_script_probe_test.tscn",
+      "old_working_sha256": "MISSING",
+      "new_working_sha256": "32ce5178e9450ab77a7d5ba15d7275de697faf010324e17b3946ec24c6b14e12",
+      "parent_git_blob_sha256": "MISSING"
+    },
+    {
+      "path": "tests/framework/threaded_dependency_world_context_script_probe_test.tscn",
+      "old_working_sha256": "MISSING",
+      "new_working_sha256": "943bdedb84dda6e37e31fc95ff0b0d47fc488aa5649d9d84d0741514e0fd7d4e",
+      "parent_git_blob_sha256": "MISSING"
+    },
+    {
+      "path": "tests/framework/threaded_minimal_ref_loader_test.gd",
+      "old_working_sha256": "176e0d352512f68e6f474afc114990e6c1bc5515525c61e5e83d9c05dd12bf71",
+      "new_working_sha256": "c7d1be84bd2e2998135c254104bb6884829f2506bfc567d6445dd9ba5e495caa",
+      "parent_git_blob_sha256": "176e0d352512f68e6f474afc114990e6c1bc5515525c61e5e83d9c05dd12bf71"
+    },
+    {
+      "path": "tests/framework/threaded_minimal_script_inferred_ref_probe_test.tscn",
+      "old_working_sha256": "MISSING",
+      "new_working_sha256": "0b5512cb8f92427ad3d55c81cc5609031ac4cf842f172d5ab7c2369abbf466e7",
+      "parent_git_blob_sha256": "MISSING"
+    },
+    {
+      "path": "tests/framework/threaded_minimal_script_static_ref_probe_test.tscn",
+      "old_working_sha256": "MISSING",
+      "new_working_sha256": "9647fbbd225dbfe2683fca0f88816018ae1db8e0c57edd99ca54e15296f4860f",
+      "parent_git_blob_sha256": "MISSING"
+    },
+    {
+      "path": "tests/framework/threaded_minimal_script_typed_ref_probe_test.tscn",
+      "old_working_sha256": "MISSING",
+      "new_working_sha256": "f111e59c88fe2d1d5284ad754bcd40d2e0997e03aba0cba499a43c98ba12ef3b",
+      "parent_git_blob_sha256": "MISSING"
+    }
+  ],
+  "added": 37,
+  "modified": 5,
+  "deleted": 0
+}

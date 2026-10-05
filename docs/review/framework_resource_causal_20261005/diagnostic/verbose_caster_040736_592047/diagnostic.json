@@ -1,0 +1,29 @@
+{
+  "started_utc": "2026-10-05T04:07:36.592047+00:00",
+  "finished_utc": "2026-10-05T04:07:44.456732+00:00",
+  "command": [
+    "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+    "--headless",
+    "--verbose",
+    "--log-file",
+    "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\test_logs\\verbose_caster_040736_592047\\native.godot.log",
+    "--path",
+    "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+    "tests/framework/threaded_dependency_caster_skill_runtime_script_probe_test.tscn"
+  ],
+  "timeout_seconds": 30,
+  "native_exit": 0,
+  "timeout": false,
+  "run_id": "d3e5a4b2-5d1e-451e-bad6-510b6ca4eeea",
+  "invocation_id": "5e5304a2-ff12-41ed-8ef7-bc4484b6dae4",
+  "source_sha256": "caf161d6059684b9779dbacd205eb4e7a4a90a4bea6e6bbfdbbe028cdea1f2f8",
+  "source_stable": true,
+  "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+  "engine_version": "4.7.stable.official.5b4e0cb0f",
+  "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\verbose_caster_78f46790343b4e00bbf8f971bd14f685",
+  "receipt_status": "PASS",
+  "checks": 7,
+  "failed": 0,
+  "true_index_sha256": "df5a01dd0d87c14620e0021d70c25a830eb2cc37aa7b012eeb14ee1f2c58c5fb",
+  "scope": "owned bounded verbose native Script diagnostic; one actual request/get, no Script instance; not an official suite regression or gameplay/performance/device acceptance"
+}

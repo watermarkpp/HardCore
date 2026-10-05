@@ -1,0 +1,63 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "hud_failed_native_poll_retirement_test",
+                        "test_path":  "tests/framework/hud_failed_native_poll_retirement_test.tscn",
+                        "wrapper_process_id":  23012,
+                        "wrapper_started_utc":  "2026-10-05T03:33:33.2409822Z",
+                        "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_hud_failed_native_green_16a0f4c2663c42e5ba446023597963bc",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-05T03:34:03.2532477Z",
+                        "native_exit_observed_utc":  "2026-10-05T03:33:42.3820971Z",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  2,
+                        "engine_log_failure_count":  2,
+                        "framework_run_id":  "1dd6a383-c5dd-4a50-970b-34c8cb576dfc",
+                        "framework_receipt_valid":  true,
+                        "result":  "FAIL",
+                        "reason":  "stderr_failures_2;engine_log_failures_2"
+                    },
+                    {
+                        "test_name":  "hud_failed_native_exit_retirement_test",
+                        "test_path":  "tests/framework/hud_failed_native_exit_retirement_test.tscn",
+                        "wrapper_process_id":  23660,
+                        "wrapper_started_utc":  "2026-10-05T03:33:43.8490065Z",
+                        "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_hud_failed_native_green_16a0f4c2663c42e5ba446023597963bc",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-05T03:34:13.8562244Z",
+                        "native_exit_observed_utc":  "2026-10-05T03:33:53.0827186Z",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  2,
+                        "engine_log_failure_count":  2,
+                        "framework_run_id":  "02aec463-fa58-4944-bae8-6188c62d9379",
+                        "framework_receipt_valid":  true,
+                        "result":  "FAIL",
+                        "reason":  "stderr_failures_2;engine_log_failures_2"
+                    }
+                ],
+    "total":  2,
+    "invocation_id":  "b92e38d3-9b49-4fee-9e69-f1e0685591ca",
+    "runtime_environment":  {
+                                "project_root":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+                                "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_hud_failed_native_green_16a0f4c2663c42e5ba446023597963bc",
+                                "runner_process_id":  14420
+                            },
+    "passed":  0,
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "engine_log_errors":  4,
+    "generated_at":  "2026-10-05T11:33:54.4766179+08:00",
+    "failed":  2,
+    "suite":  "adhoc"
+}

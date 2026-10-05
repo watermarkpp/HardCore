@@ -1,0 +1,117 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "panel loader characterization owns isolated data",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "all seven exact panel scripts are cold before request admission",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "synchronous native result is a usable panel script: inventory_panel.gd",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "synchronous load leaves no user threaded request: inventory_panel.gd",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "synchronous native result is a usable panel script: enhancement_panel.gd",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "synchronous load leaves no user threaded request: enhancement_panel.gd",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "synchronous native result is a usable panel script: map_panel.gd",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "synchronous load leaves no user threaded request: map_panel.gd",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "synchronous native result is a usable panel script: skill_panel.gd",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "synchronous load leaves no user threaded request: skill_panel.gd",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "synchronous native result is a usable panel script: quest_panel.gd",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "synchronous load leaves no user threaded request: quest_panel.gd",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "synchronous native result is a usable panel script: warehouse_panel.gd",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "synchronous load leaves no user threaded request: warehouse_panel.gd",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "synchronous native result is a usable panel script: shop_panel.gd",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "synchronous load leaves no user threaded request: shop_panel.gd",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "same seven synchronous resources complete within the same five-second boundary",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "bounded panel loader evidence opens",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "panel loader evidence writes completely",
+      "passed": true
+    }
+  ],
+  "count": 19,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "cbca21b8-0f19-40ba-b851-2e0787ba265b",
+  "passed": 19,
+  "reported_checks": 19,
+  "reported_failures": 0,
+  "run_id": "6f0ec753-420b-4cd6-ac42-facea6fe3cf1",
+  "runtime_environment": {
+    "native_process_id": 24268,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_resource_causal_final_related_820aa8e19cce4850a9a54c201ce39f54",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_dispatch_resource_causal_final_related_820aa8e19cce4850a9a54c201ce39f54/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "synchronous_panel_script_retirement_test",
+  "schema_version": 1,
+  "source_content_sha256": "77af4cd4a4a3abea001b5d3c76751052f354cf501f5afc13282f3562a06fe3db",
+  "status": "PASS"
+}

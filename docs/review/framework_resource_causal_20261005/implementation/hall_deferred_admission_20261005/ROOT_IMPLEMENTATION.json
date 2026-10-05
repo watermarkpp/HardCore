@@ -1,0 +1,19 @@
+{
+  "utc": "2026-10-05T03:40:20.353314+00:00",
+  "before_sha256": "67e9ad486c7ac75a5f82d8aef222e8bf74df5170dc170ecee9978ce1772efc0e",
+  "after_sha256": "029e3b9c75f170a939d63603e70a4b888486c481a5734db0f7a989687fb9b7fb",
+  "red": "outputs/r3_takeover/20260930/validation/periodic_dispatch_hall_deferred_red_113858_071119",
+  "red_checks": 22,
+  "red_failed": 6,
+  "native_exit": 1,
+  "timeout": false,
+  "red_primary": "real _ready -> same-stack exit before requests -> original deferred requests default main while outside tree; observed count1/request-key/nativeIN_PROGRESS",
+  "red_secondary": "fixture-owned get cleans native token after failed boundary; production dictionary remains requested and same retained hall reentry cannot reach READY",
+  "change": "new-admission guard requires in-tree and not queued for deletion",
+  "existing_exit_collection_identical": true,
+  "green": "PASS",
+  "warning_scope": "45 ObjectDB warnings in RED preserved separately; no cause attributed to guard",
+  "green_evidence": "periodic_dispatch_hall_deferred_green_114020_663629",
+  "green_checks": 36,
+  "evidence_scope": "new22 and existing14 same-source native checks; full resource graph warning separate"
+}

@@ -1,0 +1,63 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "hall_deferred_admission_test",
+                        "test_path":  "tests/framework/hall_deferred_admission_test.tscn",
+                        "wrapper_process_id":  20864,
+                        "wrapper_started_utc":  "2026-10-05T03:40:23.0609822Z",
+                        "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_hall_deferred_green_1953109acb0049ca9c6b19df52d96c25",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-05T03:40:53.0748558Z",
+                        "native_exit_observed_utc":  "2026-10-05T03:40:32.4222913Z",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "f0a4644e-27a6-4160-a0d9-bd1a4dcf53be",
+                        "framework_receipt_valid":  true,
+                        "result":  "PASS",
+                        "reason":  ""
+                    },
+                    {
+                        "test_name":  "character_launch_resource_lifecycle_test",
+                        "test_path":  "tests/framework/character_launch_resource_lifecycle_test.tscn",
+                        "wrapper_process_id":  8572,
+                        "wrapper_started_utc":  "2026-10-05T03:40:34.0442457Z",
+                        "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_hall_deferred_green_1953109acb0049ca9c6b19df52d96c25",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-05T03:41:04.0546585Z",
+                        "native_exit_observed_utc":  "2026-10-05T03:40:43.3815011Z",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "fdb47c6d-ee97-4f06-829c-cc1a24fe7396",
+                        "framework_receipt_valid":  true,
+                        "result":  "PASS",
+                        "reason":  ""
+                    }
+                ],
+    "total":  2,
+    "invocation_id":  "1114d15b-0c18-4e83-b98b-e19a8386fad9",
+    "runtime_environment":  {
+                                "project_root":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+                                "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_hall_deferred_green_1953109acb0049ca9c6b19df52d96c25",
+                                "runner_process_id":  12784
+                            },
+    "passed":  2,
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "engine_log_errors":  0,
+    "generated_at":  "2026-10-05T11:40:44.7753312+08:00",
+    "failed":  0,
+    "suite":  "adhoc"
+}

@@ -256,7 +256,7 @@ func _exit_tree() -> void:
 	# background prewarming remains asynchronous and never blocks gameplay.
 	for path: String in _panel_script_pending.keys():
 		var status := ResourceLoader.load_threaded_get_status(path)
-		if status in [ResourceLoader.THREAD_LOAD_IN_PROGRESS, ResourceLoader.THREAD_LOAD_LOADED]:
+		if status in [ResourceLoader.THREAD_LOAD_IN_PROGRESS, ResourceLoader.THREAD_LOAD_LOADED, ResourceLoader.THREAD_LOAD_FAILED]:
 			var panel_script := ResourceLoader.load_threaded_get(path) as Script
 			if panel_script != null:
 				_panel_script_warm_refs.append(panel_script)
@@ -2084,6 +2084,8 @@ func _prefetch_panel_scripts(background_mode := false) -> Dictionary:
 					request_failures.append("%s:null" % path)
 				pending.erase(path)
 			elif status == ResourceLoader.THREAD_LOAD_FAILED or status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+				if status == ResourceLoader.THREAD_LOAD_FAILED:
+					ResourceLoader.load_threaded_get(path)
 				request_failures.append("%s:%d" % [path, status])
 				pending.erase(path)
 		if not pending.is_empty():

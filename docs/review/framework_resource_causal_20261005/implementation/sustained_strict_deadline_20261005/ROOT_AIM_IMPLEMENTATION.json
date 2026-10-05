@@ -1,0 +1,15 @@
+{
+  "utc": "2026-10-05T04:03:00.197425+00:00",
+  "before_sha256": "41bd2f81a22af13ebe660f18dd96835126c9d1df720a36024c5f0420297cd77f",
+  "after_sha256": "9e54128db145a2e319fe9b291573094affac9b43b43a2bbed94665372dd37c8e",
+  "red": "outputs/r3_takeover/20260930/validation/periodic_dispatch_sustained_aim_coverage_red_120204_175980",
+  "red_checks": 14,
+  "red_failed": 1,
+  "red_native_exit": 1,
+  "red_counterexample": "one real ice-storm release covers a dense pair; the same uncovered edge receiver is preferred at driver historical peak89, then ignored at90",
+  "change_scope": "test-owned automatic aim selection only; ongoing uncovered receiver priority survives the historical peak observation",
+  "preserved": "thirty receivers per cohort, initial HP, learned skill, typed supplies, release/250ms input interval, movement/1200ms interval, one-second effect period, runtime/clock/pumps, 35000000us strict deadline, all final assertions",
+  "production_changes": [],
+  "performance_comparison": "NOT_RUN; input coverage change cannot claim an optimization",
+  "green": "NOT_RUN"
+}

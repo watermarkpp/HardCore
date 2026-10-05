@@ -5,7 +5,8 @@ extends Node
 ## before the one native threaded request.
 const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
 
-enum FixtureVariant { EMPTY_NODE, INFERRED_REFS, TYPED_REFS }
+enum FixtureVariant { EMPTY_NODE, INFERRED_REFS, TYPED_REFS,
+	SCRIPT_INFERRED_REF, SCRIPT_TYPED_REF, SCRIPT_STATIC_REF }
 @export var fixture_variant: FixtureVariant = FixtureVariant.EMPTY_NODE
 
 var proof := Proof.new()
@@ -29,6 +30,15 @@ func _selected_case() -> Dictionary:
 		FixtureVariant.TYPED_REFS:
 			return {"scene_id": "threaded_minimal_typed_refs_probe_test",
 				"path": "res://tests/framework/fixtures/threaded_minimal_typed_refs.tscn"}
+		FixtureVariant.SCRIPT_INFERRED_REF:
+			return {"scene_id": "threaded_minimal_script_inferred_ref_probe_test",
+				"path": "res://tests/framework/fixtures/threaded_minimal_script_inferred_ref.tscn"}
+		FixtureVariant.SCRIPT_TYPED_REF:
+			return {"scene_id": "threaded_minimal_script_typed_ref_probe_test",
+				"path": "res://tests/framework/fixtures/threaded_minimal_script_typed_ref.tscn"}
+		FixtureVariant.SCRIPT_STATIC_REF:
+			return {"scene_id": "threaded_minimal_script_static_ref_probe_test",
+				"path": "res://tests/framework/fixtures/threaded_minimal_script_static_ref.tscn"}
 	return {}
 
 func _run() -> void:
