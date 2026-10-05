@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/framework/map_respawn_authoring_candidate_test.gd" id="1"]
+
+[node name="MapRespawnAuthoringCandidate" type="Node"]
+script = ExtResource("1")

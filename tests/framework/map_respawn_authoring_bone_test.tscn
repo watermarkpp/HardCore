@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/framework/map_respawn_authoring_candidate_test.gd" id="1"]
+
+[node name="RespawnBone" type="Node"]
+script = ExtResource("1")
+map_keys = Array[String](["cangyue_bone_cave_f2", "cangyue_bone_cave_f3", "cangyue_bone_cave_f4", "cangyue_bone_cave_f5"])
+receipt_scene_id = "map_respawn_authoring_bone_test"

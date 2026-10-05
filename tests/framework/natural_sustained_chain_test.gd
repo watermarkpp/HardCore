@@ -7,6 +7,299 @@ const MANA_SUPPLY_TRIGGER_MP := 250
 const MAX_SUPPLY_INPUTS := 32
 const MAX_RESTORE_EVENTS := 512
 
+## Test-owned boundary observation. Both overrides call the real Root exactly
+## once; no source identity is inferred for later asynchronous damage.
+class ObservedSustainedRoot extends ObservedChildRoot:
+	var skill_release_rows: Array[Dictionary] = []
+	var canonical_release_rows: Array[Dictionary] = []
+	var release_observation_overflowed := false
+
+	# Observer state belongs only to this fixture. No actor, lease or plan is retained.
+	var observer_tail_owner: WeakRef
+	var observer_aim_row: Dictionary = {}
+	var last_entry_gate_observation: Dictionary = {}
+	var _observer_input_active := false
+	var _observer_canonical_active := false
+	var _observer_tail_geometry: Dictionary = {}
+	var _observer_extra_usec := 0
+
+	func _try_release_skill(skill_name: String, show_failure := true) -> StringName:
+		var observation_started := Time.get_ticks_usec()
+		_observer_input_active = skill_name in ["hc.skill.wizard.ice_storm","wizard.ice_storm"]
+		_observer_extra_usec = 0
+		last_entry_gate_observation = {"schema":"sustained.entry_gate.v1", "scope":"wizard.ice_storm", "input_skill_name":skill_name,
+			"scope_supported":_observer_input_active,
+			"before":_observer_player_fields(), "resource_boundary_seen":false,
+			"preflight_seen":false, "admission_seen":false,
+			"windup_timer":{"status":"MISSING", "reason":"Player creates an unretained SceneTreeTimer at player.gd:1283"}}
+		_observer_extra_usec += Time.get_ticks_usec()-observation_started
+		var result := super._try_release_skill(skill_name,show_failure)
+		observation_started = Time.get_ticks_usec()
+		last_entry_gate_observation["after"] = _observer_player_fields()
+		last_entry_gate_observation["result"] = str(result)
+		if result == &"busy" and bool(last_entry_gate_observation.scope_supported):
+			if bool(last_entry_gate_observation.get("admission_seen",false)):
+				last_entry_gate_observation["busy_boundary"] = "request_skill:configuration_admission" if not bool(last_entry_gate_observation.get("admission_success",false)) else "MISSING:busy_after_successful_admission"
+			elif bool(last_entry_gate_observation.get("preflight_seen",false)):
+				last_entry_gate_observation["busy_boundary"] = "request_skill:world_preflight" if not bool(last_entry_gate_observation.get("preflight_result",false)) else "request_skill:configuration_accept_before_admission"
+			else:
+				last_entry_gate_observation["busy_boundary"] = "can_request_skill_or_request_skill_before_preflight"
+		_observer_input_active = false
+		_observer_extra_usec += Time.get_ticks_usec()-observation_started
+		last_entry_gate_observation["measured_observer_block_usec"] = _observer_extra_usec
+		return result
+
+	func _canonical_resource_context(stable_skill_id: String, configuration: RefCounted = null) -> Dictionary:
+		var result := super._canonical_resource_context(stable_skill_id,configuration)
+		if _observer_input_active:
+			var observation_started := Time.get_ticks_usec()
+			last_entry_gate_observation["resource_boundary_seen"] = true
+			last_entry_gate_observation["stable_skill_id"] = stable_skill_id
+			var owner_fields := _observer_player_fields()
+			last_entry_gate_observation["before_can_request_owner_fields"] = owner_fields
+			# The actual capture already loaded this document. Fail closed if absent:
+			# action_configuration_versions() would otherwise load/build Loader caches.
+			var configuration_current: Variant = null
+			if configuration != null and not SkillDataLoaderScript._document.is_empty() \
+				and player.hc_action_configuration_identity == Callable(self,"_action_configuration_identity"):
+				var versions := PlayerState.action_configuration_versions()
+				var identity := _action_configuration_identity()
+				configuration_current = configuration.current_before_accept(
+					versions,identity)
+				last_entry_gate_observation["configuration_versions_read"] = versions
+				last_entry_gate_observation["actor_identity_read"] = identity
+			last_entry_gate_observation["configuration_current_read"] = configuration_current
+			last_entry_gate_observation["first_false_owner_gate"] = _observer_first_false_gate(owner_fields,configuration_current)
+			last_entry_gate_observation["gate_read_status"] = "owner_reads_before_check_not_a_second_can_request_call"
+			_observer_extra_usec += Time.get_ticks_usec()-observation_started
+		return result
+
+	func _hc_skill_preflight(stable_skill_id: String, target_id: int) -> bool:
+		var result := super._hc_skill_preflight(stable_skill_id,target_id)
+		if _observer_input_active:
+			var observation_started := Time.get_ticks_usec()
+			last_entry_gate_observation["preflight_seen"] = true
+			last_entry_gate_observation["preflight_result"] = result
+			last_entry_gate_observation["preflight_target_id"] = target_id
+			_observer_extra_usec += Time.get_ticks_usec()-observation_started
+		return result
+
+	func _reserve_feature_action(configuration: RefCounted) -> Dictionary:
+		var result := super._reserve_feature_action(configuration)
+		if _observer_input_active:
+			var observation_started := Time.get_ticks_usec()
+			last_entry_gate_observation["admission_seen"] = true
+			last_entry_gate_observation["admission_success"] = bool(result.get("success",false))
+			last_entry_gate_observation["admission_reason"] = str(result.get("reason",""))
+			last_entry_gate_observation["admission_has_reservation"] = result.get("reservation") != null
+			_observer_extra_usec += Time.get_ticks_usec()-observation_started
+		return result
+
+	func _observer_player_fields() -> Dictionary:
+		return {"wall_usec":Time.get_ticks_usec(), "simulation_usec":_time_domains.simulation_usec(),
+			"physics_frame":Engine.get_physics_frames(), "process_frame":Engine.get_process_frames(),
+			"attack_timer_seconds":player._attack_timer, "attack_action_timer_seconds":player._attack_action_timer,
+			"struck_lock_seconds":player._struck_lock_remaining,
+			"struck_reaction_lock_seconds":player._struck_reaction_lock_remaining, "control_seconds":player.control_time,
+			"dead":player._dead, "hp":player.current_hp, "mp":player.current_mp,
+			"combat_transition_active":not player._combat_transition_token.is_empty(), "combat_epoch":player.combat_epoch,
+			"skill_cooldown_seconds":float(player._skill_cooldown_remaining.get("wizard.ice_storm",0.0)),
+			"skill_cooldown_remaining_ms":player.skill_cooldown_remaining_ms("wizard.ice_storm"),
+			"melee_can_start_attack_read":player.can_start_attack(),
+			"pending_action_id":player._pending_combat_action_id, "pending_action_active":player._pending_combat_action_active,
+			"pending_action_committed":player._pending_combat_action_committed, "pending_action_epoch":player._pending_combat_action_epoch,
+			"pending_action_kind":player._pending_combat_action_kind,
+			"accepted_release_producer_count":player._accepted_release_producers.size()}
+
+	func _observer_first_false_gate(fields: Dictionary, configuration_current: Variant) -> String:
+		# Only the fixed ice-storm input is covered. This is a read-only branch
+		# explanation, never an eligibility/planner authority or actual Player return.
+		if configuration_current == null: return "MISSING:configuration_current"
+		if not bool(configuration_current): return "configuration_current:player.gd:509"
+		if float(fields.struck_lock_seconds)>0.0 or float(fields.struck_reaction_lock_seconds)>0.0 \
+			or float(fields.control_seconds)>0.0 or bool(fields.dead) or int(fields.hp)<=0 or bool(fields.combat_transition_active):
+			return "life_or_control_or_struck:player.gd:513"
+		if float(fields.attack_timer_seconds)>0.0: return "attack_timer:player.gd:517"
+		if int(fields.skill_cooldown_remaining_ms)>0: return "skill_cooldown:player.gd:522"
+		return "none_of_observed_owner_gates:do_not_infer_ready"
+
+	func _observer_tail_state() -> Dictionary:
+		var tail := observer_tail_owner.get_ref() as EnemyActor if observer_tail_owner != null else null
+		if not is_instance_valid(tail): return {"status":"MISSING", "reason":"tail_weak_owner_not_live"}
+		var point := tail.global_position
+		var result := {"status":"PASS", "runtime_id":tail.get_instance_id(),
+			"wall_usec":Time.get_ticks_usec(), "simulation_usec":_time_domains.simulation_usec(),
+			"physics_frame":Engine.get_physics_frames(), "process_frame":Engine.get_process_frames(),
+			"slot":str(tail.get_meta("spawn_context",{}).get("spawn_slot_id","")),
+			"life":int(tail.get_meta("hc_combat_life_epoch",0)), "generation":int(tail.get_meta("zone_generation",-1)),
+			"hp":tail.current_hp, "max_hp":tail.max_hp, "combat_radius_gu":tail.combat_radius_gu,
+			"inside_tree":tail.is_inside_tree(), "queued_for_deletion":tail.is_queued_for_deletion(),
+			"screen_position_px":[point.x,point.y], "projection_status":"MISSING"}
+		# Read only an already-resolved formal profile. Never resolve/load a map,
+		# refresh cache identity, increment a projection counter or use a fallback.
+		var cache_key := "%d|0" % current_map_id
+		var profile: Dictionary = _projection_profile_cache.get(cache_key,{})
+		if not reference_audit_mode and not _projection_profile_cache_audit_mode \
+			and bool(profile.get("success",false)) and int(profile.get("runtime_map_id",-1)) == current_map_id \
+			and str(profile.get("policy","")) == "map_editor_runtime_absolute" \
+			and MapEditorRuntimeBridgeScript._runtime_cache.has(current_map_id) \
+			and is_same(_projection_profile_runtime_identity_cache.get(cache_key),MapEditorRuntimeBridgeScript._runtime_cache[current_map_id]):
+			var projection: Callable = profile.get("screen_to_ground",Callable())
+			if projection.is_valid():
+				var ground: Vector2 = projection.call(point)
+				if ground.is_finite():
+					result["runtime_map_absolute_ground_gu"] = [ground.x,ground.y]
+					result["projection_status"] = "PASS:existing_formal_cache_math"
+		return result
+
+	func _aoe_query_enemy_candidates_aabb(plan: Dictionary, bounds_ground_gu: Rect2, allow_reference_fallback := true) -> bool:
+		var result := super._aoe_query_enemy_candidates_aabb(plan,bounds_ground_gu,allow_reference_fallback)
+		if _observer_canonical_active:
+			var observation_started := Time.get_ticks_usec()
+			var tail := observer_tail_owner.get_ref() as EnemyActor if observer_tail_owner != null else null
+			_observer_tail_geometry["query_call_count"] = int(_observer_tail_geometry.get("query_call_count",0))+1
+			var rows: Array = _observer_tail_geometry.query_rows
+			if rows.size()<4:
+				rows.append({"query_result":result, "allow_reference_fallback":allow_reference_fallback,
+					"candidate_count":_aoe_candidate_scratch.size(), "tail_in_actual_candidates":_aoe_candidate_scratch.has(tail) if is_instance_valid(tail) else false,
+					"bounds_ground_gu":[bounds_ground_gu.position.x,bounds_ground_gu.position.y,bounds_ground_gu.size.x,bounds_ground_gu.size.y],
+					"tail_after_actual_query":_observer_tail_state(), "actual_frozen_snapshot":_observer_frozen_cell_union(plan)})
+			else: _observer_tail_geometry["detail_overflowed"] = true
+			_observer_extra_usec += Time.get_ticks_usec()-observation_started
+		return result
+
+	func _aoe_validated_snapshot_intersects(plan: Dictionary, enemy: EnemyActor) -> bool:
+		var result := super._aoe_validated_snapshot_intersects(plan,enemy)
+		if _observer_canonical_active and observer_tail_owner != null and enemy == observer_tail_owner.get_ref():
+			var observation_started := Time.get_ticks_usec()
+			_observer_tail_geometry["exact_tail_call_count"] = int(_observer_tail_geometry.get("exact_tail_call_count",0))+1
+			var rows: Array = _observer_tail_geometry.exact_rows
+			if rows.size()<4:
+				rows.append({"actual_exact_result":result, "plan_id":str(plan.get("plan_id","")),
+					"plan_release_id":str(plan.get("release_id","")), "tail_after_actual_exact":_observer_tail_state(), "actual_frozen_snapshot":_observer_frozen_cell_union(plan)})
+			else: _observer_tail_geometry["detail_overflowed"] = true
+			_observer_extra_usec += Time.get_ticks_usec()-observation_started
+		return result
+
+	func _observer_frozen_cell_union(plan: Dictionary) -> Dictionary:
+		var snapshot := _aoe_plan_snapshot(plan)
+		var frozen: Dictionary = {}
+		for key: String in ["snapshot_id","skill_id","release_id","shape_type","shape_contract_id","schema_version","coordinate_space","runtime_map_id","projection_contract_id","origin_ground_gu","projection_origin_ground_gu","cell_origin_offset_gu","created_by"]:
+			frozen[key] = _plain_observation(snapshot.get(key))
+		var polygons: Variant = snapshot.get("polygons_ground_gu",[])
+		var cells: Variant = snapshot.get("geometry_cells_grid_steps",[])
+		# Fixed ice storm has 9 quadrilaterals. Unexpected shape stays MISSING;
+		# observer caps do not truncate production geometry or target selection.
+		if str(snapshot.get("shape_type","")) != "cell_union":
+			frozen["geometry_detail_status"] = "MISSING:outside_fixed_cell_union_scope"
+		elif polygons is Array and cells is Array and polygons.size()<=16 and cells.size()<=16:
+			var bounded := true
+			for polygon: Variant in polygons:
+				if not polygon is PackedVector2Array or polygon.size()>8: bounded = false
+			for cell: Variant in cells:
+				if not cell is Vector2i: bounded = false
+			if bounded:
+				frozen["polygons_ground_gu"] = _plain_observation(polygons)
+				frozen["geometry_cells_grid_steps"] = _plain_observation(cells)
+				frozen["geometry_detail_status"] = "PASS:bounded_actual_snapshot_copy"
+			else: frozen["geometry_detail_status"] = "MISSING:unexpected_polygon_or_cell_size_or_type"
+		else: frozen["geometry_detail_status"] = "MISSING:unexpected_cell_union_size_or_type"
+		return frozen
+
+	func _on_player_skill(skill_name: String, origin: Vector2, direction: Vector2, damage: int) -> void:
+		var context: Dictionary = player.consume_skill_context()
+		var geometry: Dictionary = context.get("release_geometry",{})
+		var started := Time.get_ticks_usec()
+		var simulation: int = _time_domains.simulation_usec()
+		var physics := Engine.get_physics_frames()
+		var process := Engine.get_process_frames()
+		var plan_start := canonical_release_rows.size()
+		var event_start := DamageObserver.events.size()
+		var target_id := int(geometry.get("locked_target_instance_id",0))
+		var target_node := instance_from_id(target_id) if target_id>0 else null
+		var target_identity: Dictionary = {}
+		if is_instance_valid(target_node) and target_node is EnemyActor:
+			var canonical_point: Vector2 = _canonical_screen_px_to_ground_gu(target_node.global_position)
+			target_identity = {"runtime_id":target_id,"life":int(target_node.get_meta("hc_combat_life_epoch",0)),
+				"generation":int(target_node.get_meta("zone_generation",-1)),"hp":target_node.current_hp,
+				"screen_position_px":[target_node.global_position.x,target_node.global_position.y],
+				"runtime_map_absolute_ground_gu":[canonical_point.x,canonical_point.y],
+				"slot":str(target_node.get_meta("spawn_context",{}).get("spawn_slot_id","")),
+				"inside_tree":target_node.is_inside_tree(),"queued_for_deletion":target_node.is_queued_for_deletion()}
+		var tail_at_signal := _observer_tail_state()
+		super._on_player_skill(skill_name,origin,direction,damage)
+		if skill_release_rows.size()>=128:
+			release_observation_overflowed = true
+			return
+		skill_release_rows.append({"release_id":str(geometry.get("release_id","")),"skill_name":skill_name,
+			"wall_started_usec":started,"wall_finished_usec":Time.get_ticks_usec(),"simulation_usec":simulation,
+			"physics_frame":physics,"process_frame":process,"configuration_present":context.get("action_config_lease")!=null,
+			"release_geometry":_plain_observation(geometry),"selected_target_at_signal":target_identity,
+			"tail_at_signal":tail_at_signal,
+			"canonical_row_start":plan_start,"canonical_row_end":canonical_release_rows.size(),
+			"damage_event_start":event_start,"damage_event_end":DamageObserver.events.size()})
+
+	func _execute_canonical_skill(skill_name: String, origin: Vector2, direction: Vector2, client_damage: int,
+		extra_target_context: Dictionary = {}, apply_effects := true, authoritative_cast_target := false,
+		configuration: RefCounted = null) -> Dictionary:
+		var started := Time.get_ticks_usec()
+		var event_start := DamageObserver.events.size()
+		var simulation: int = _time_domains.simulation_usec()
+		var mp_before: int = player.current_mp
+		var observation_started := Time.get_ticks_usec()
+		var prior_canonical_active := _observer_canonical_active
+		var prior_tail_geometry := _observer_tail_geometry
+		var prior_observer_usec := _observer_extra_usec
+		_observer_extra_usec = 0
+		_observer_canonical_active = canonical_release_rows.size()<128
+		_observer_tail_geometry = {"schema":"sustained.tail_geometry.v1", "query_call_count":0,
+			"exact_tail_call_count":0, "query_rows":[], "exact_rows":[], "detail_overflowed":false,
+			"tail_before_canonical":_observer_tail_state(), "exact_if_absent":"NOT_RUN:no_actual_tail_exact_callback"}
+		_observer_extra_usec += Time.get_ticks_usec()-observation_started
+		var result := super._execute_canonical_skill(skill_name,origin,direction,client_damage,
+			extra_target_context,apply_effects,authoritative_cast_target,configuration)
+		observation_started = Time.get_ticks_usec()
+		_observer_tail_geometry["tail_after_canonical"] = _observer_tail_state()
+		_observer_extra_usec += Time.get_ticks_usec()-observation_started
+		_observer_tail_geometry["measured_observer_block_usec"] = _observer_extra_usec
+		var tail_geometry_row := _observer_tail_geometry
+		_observer_canonical_active = prior_canonical_active
+		_observer_tail_geometry = prior_tail_geometry
+		_observer_extra_usec = prior_observer_usec
+		if canonical_release_rows.size()<128:
+			var plan: Dictionary = result.get("canonical_plan",{})
+			var execution: Dictionary = result.get("execution_result",{})
+			canonical_release_rows.append({"release_id":str(extra_target_context.get("release_id","")),
+				"skill_name":skill_name,"wall_started_usec":started,"wall_finished_usec":Time.get_ticks_usec(),
+				"simulation_usec":simulation,"physics_frame":Engine.get_physics_frames(),"process_frame":Engine.get_process_frames(),
+				"accepted":bool(result.get("accepted",false)),"effect_success":bool(result.get("effect_success",false)),
+				"reason":str(result.get("reason","")),"mp_before":mp_before,"mp_after":player.current_mp,
+				"plan_id":str(plan.get("plan_id","")),"plan_hash":str(plan.get("plan_hash","")),
+				"plan_release_id":str(plan.get("release_id","")),"snapshot":_plain_observation(plan.get("canonical_snapshot",{})),
+				"geometry_cells":_plain_observation(plan.get("geometry_cells",[])),
+				"effective_geometry_cells":_plain_observation(plan.get("effective_geometry_cells",[])),
+				"tail_geometry_observation":tail_geometry_row,
+				"damage_results":_plain_observation(execution.get("damage_results",[])),
+				"damage_event_start":event_start,"damage_event_end":DamageObserver.events.size()})
+		else: release_observation_overflowed = true
+		return result
+
+	func _plain_observation(value: Variant, depth := 0) -> Variant:
+		if depth>20:
+			release_observation_overflowed = true
+			return {"unrepresented":"depth_limit"}
+		if value is Vector2 or value is Vector2i: return [value.x,value.y]
+		if value is Dictionary:
+			var result: Dictionary = {}
+			for key: Variant in value: result[str(key)] = _plain_observation(value[key],depth+1)
+			return result
+		if value is Array or value is PackedVector2Array:
+			var result: Array = []
+			for entry: Variant in value: result.append(_plain_observation(entry,depth+1))
+			return result
+		if value==null or value is bool or value is int or value is float or value is String or value is StringName: return value
+		return {"unrepresented_type":type_string(typeof(value))}
+
 ## Same-process, same-world continuation of the existing natural input fixture.
 ## Production clocks, pumps, accepted promises, HP and MP are never reset.
 var completed_rounds: Array[Dictionary] = []
@@ -135,7 +428,7 @@ func _run() -> void:
 	check(resource_owner.get_ref() != null,"one prepared source closure owns the entire continuous run")
 	if resource_owner.get_ref() == null: _finish(); return
 	get_tree().node_added.connect(_observe_spawn)
-	game = ObservedChildRoot.new() if periodic_children else Root.new(); add_child(game)
+	game = ObservedSustainedRoot.new(); add_child(game)
 	var deadline := Time.get_ticks_msec()+20000
 	while not game.gameplay_input_is_enabled() and Time.get_ticks_msec()<deadline: await get_tree().process_frame
 	check(game.gameplay_input_is_enabled(),"one actual mapped world reaches READY")
@@ -279,6 +572,8 @@ func _run() -> void:
 
 func _combat_round(index: int) -> void:
 	var label := "round %d: " % index
+	game.observer_tail_owner = null
+	game.observer_aim_row = {}
 	targets.clear(); previous_actors.clear()
 	round_death_base = deaths; round_peak_states = 0; round_peak_evidence = {}
 	stream_started_usec = 0; stream_finished_usec = 0; resource_evidence = {}; resource_mapping = {}; concurrent_queues = false
@@ -300,6 +595,7 @@ func _combat_round(index: int) -> void:
 	var simulation_start: int = game._time_domains.simulation_usec()
 	var sample_start := samples.size()
 	var initial_stats := {"computed":PlayerState.computed_stats.duplicate(true),"player_max_hp":game.player.max_hp,"player_max_mp":game.player.max_mp}
+	var cohort_damage_identities: Dictionary = {}
 	if index == 0: previous_frame_usec = Time.get_ticks_usec()
 	var birth_started := Time.get_ticks_usec()
 	for slot in 30:
@@ -309,6 +605,12 @@ func _combat_round(index: int) -> void:
 		if actor != null:
 			actor.max_hp = 1500+(slot*7 if periodic_children else 0); actor.current_hp = actor.max_hp
 			actor.died.connect(_on_target_died); targets.append(actor); spawned_owners.append(weakref(actor))
+			if slot == 29: game.observer_tail_owner = weakref(actor)
+			cohort_damage_identities[actor.get_instance_id()] = {"runtime_id":actor.get_instance_id(),
+				"life":int(actor.get_meta("hc_combat_life_epoch",0)),"generation":int(actor.get_meta("zone_generation",-1)),
+				"slot":str(actor.get_meta("spawn_context",{}).get("spawn_slot_id","")),"initial_hp":actor.current_hp,
+				"initial_regen_state":actor._natural_regen.state_snapshot(),
+				"natural_regen_hp_per_tick":MonsterNaturalRegenPolicy.heal_amount(actor.max_hp)}
 			check(actor._hc_point_walkable(point) and actor.is_physics_processing(),label+"real walkable receiver with AI active: "+str(slot))
 	var nonoverlap := targets.size() == 30
 	for i in targets.size():
@@ -336,10 +638,19 @@ func _combat_round(index: int) -> void:
 				var causal_snapshot: Dictionary = {}
 				if action_observations.size()<512:
 					causal_snapshot = _causal_enemy_snapshot(chosen)
+				var input_started := Time.get_ticks_usec()
+				var input_simulation: int = game._time_domains.simulation_usec()
+				var input_physics := Engine.get_physics_frames()
+				var input_process := Engine.get_process_frames()
 				var result: StringName = game._try_release_skill("hc.skill.wizard.ice_storm",false)
 				if action_observations.size()<512:
 					var action_row: Dictionary = {"round":index,"wall_usec":Time.get_ticks_usec(),"simulation_usec":game._time_domains.simulation_usec(),"result":str(result),
+						"input_started_usec":input_started,"input_simulation_usec":input_simulation,
+						"input_physics_frame":input_physics,"input_process_frame":input_process,
+						"expected_release_id":"player:%d:action:%d" % [game.player.get_instance_id(),game.player._pending_combat_action_id] if result==&"accepted" else "",
 						"hp":game.player.current_hp,"mp":game.player.current_mp,"magic_min":PlayerState.computed_stats.get("magic_min",0),"magic_max":PlayerState.computed_stats.get("magic_max",0)}
+					action_row["entry_gate_observation"] = game.last_entry_gate_observation.duplicate(true)
+					action_row["actual_aim_selection_inputs"] = game.observer_aim_row.duplicate(true)
 					action_row.merge(causal_snapshot,true)
 					action_observations.append(action_row)
 				else: action_observation_overflowed = true
@@ -355,6 +666,17 @@ func _combat_round(index: int) -> void:
 			cohort_finished_usec = Time.get_ticks_usec()
 			break
 	game._on_gameplay_movement(Vector2.ZERO)
+	var damage_evidence_started := Time.get_ticks_usec()
+	var cohort_damage_evidence := _cohort_damage_evidence(damage_event_start,cohort_damage_identities)
+	var release_evidence := _cohort_release_evidence(index,cohort_damage_identities)
+	boundary_spans.append({"round":index,"kind":"post_cohort_read_only_hp_evidence","started_usec":damage_evidence_started,
+		"finished_usec":Time.get_ticks_usec(),"process_frame":Engine.get_process_frames()})
+	check(not DamageObserver.overflowed and cohort_damage_evidence.targets.size()==30
+		and bool(cohort_damage_evidence.all_hp_writes_reconcile),
+		label+"all thirty original life/generation identities reconcile actual damage and terminal HP with explicit bounded unobserved gains")
+	check(not game.release_observation_overflowed and not action_observation_overflowed
+		and bool(release_evidence.all_observed_releases_match) and int(release_evidence.observed_signal_count)>0,
+		label+"actual Timer signals uniquely match accepted action IDs and invoke the sole canonical planner at most once")
 	check(runtime != null,label+"actual input creates its admitted runtime")
 	if runtime == null: return
 	var metrics: Dictionary = runtime.metrics()
@@ -417,7 +739,7 @@ func _combat_round(index: int) -> void:
 		"supply_successful_uses":supply_successes-supply_uses_before,
 		"accepted_casts":accepted_casts-accepted_before,"ticks":int(metrics.ticks)-tick_before,"deaths":deaths-round_death_base,"peak_states":round_peak_states,"peak_state_evidence":round_peak_evidence,
 		"sample_start":sample_start,"sample_end":samples.size(),"resource_evidence":resource_evidence.duplicate(true),"reservations":reservations,
-		"memory":_memory_snapshot(),"metrics":metrics,"player_damage_evidence":damage_evidence,"initial_player_stats":initial_stats,"final_player_stats":{"computed":PlayerState.computed_stats.duplicate(true),"player_max_hp":game.player.max_hp,"player_max_mp":game.player.max_mp},
+		"memory":_memory_snapshot(),"metrics":metrics,"player_damage_evidence":damage_evidence,"cohort_damage_evidence":cohort_damage_evidence,"release_evidence":release_evidence,"initial_player_stats":initial_stats,"final_player_stats":{"computed":PlayerState.computed_stats.duplicate(true),"player_max_hp":game.player.max_hp,"player_max_mp":game.player.max_mp},
 		"maximum_pending_age_frames":maximum_pending_age.duplicate(),"maximum_service_age_frames":maximum_service_age.duplicate()})
 	var evidence_started := Time.get_ticks_usec()
 	_write(report_path.replace("_trace.json","_progress.json"),{"run_id":OS.get_environment("HARDCORE_FRAMEWORK_RUN_ID"),"source_content_sha256":OS.get_environment("HARDCORE_R3_CONTENT_SHA256"),
@@ -520,6 +842,11 @@ func _current_aim_target() -> EnemyActor:
 			var receiver: Node = state.target.resolve()
 			if is_instance_valid(receiver): active_targets[receiver.get_instance_id()] = true
 	var chosen: EnemyActor = null; var best_score := -1
+	var observer_started := Time.get_ticks_usec()
+	var tail := game.observer_tail_owner.get_ref() as EnemyActor if game.observer_tail_owner != null else null
+	var tail_score := -1; var tail_center := Vector2.ZERO
+	var score_rows: Array[Dictionary] = []
+	var observer_extra_usec := Time.get_ticks_usec()-observer_started
 	for actor: EnemyActor in targets:
 		if not is_instance_valid(actor) or actor.current_hp<=0: continue
 		var center: Vector2 = game._canonical_screen_px_to_ground_gu(actor.global_position); var score := 0
@@ -527,7 +854,23 @@ func _current_aim_target() -> EnemyActor:
 			if not is_instance_valid(receiver) or receiver.current_hp<=0: continue
 			var offset: Vector2 = game._canonical_screen_px_to_ground_gu(receiver.global_position)-center
 			if absf(offset.x)<=1.5 and absf(offset.y)<=1.5: score += 100 if not active_targets.has(receiver.get_instance_id()) else 1
+		observer_started = Time.get_ticks_usec()
+		if score_rows.size()<30:
+			score_rows.append({"runtime_id":actor.get_instance_id(), "slot":str(actor.get_meta("spawn_context",{}).get("spawn_slot_id","")),
+				"center_ground_gu":[center.x,center.y], "hp":actor.current_hp,
+				"has_active_effect":active_targets.has(actor.get_instance_id()), "actual_score":score})
+		if actor == tail: tail_score = score; tail_center = center
+		observer_extra_usec += Time.get_ticks_usec()-observer_started
 		if score>best_score: chosen = actor; best_score = score
+	observer_started = Time.get_ticks_usec()
+	game.observer_aim_row = {"schema":"sustained.aim_inputs.v1", "score_rows_in_original_order":score_rows,
+		"chosen_runtime_id":chosen.get_instance_id() if is_instance_valid(chosen) else 0, "chosen_actual_score":best_score,
+		"tail_actual_score":tail_score, "tail_center_ground_gu":[tail_center.x,tail_center.y] if tail_score>=0 else [],
+		"tail_has_active_effect":active_targets.has(tail.get_instance_id()) if is_instance_valid(tail) else false,
+		"selected_tail":chosen == tail and is_instance_valid(tail), "tie_rule":"strict_greater_preserves_original_order",
+		"extent_per_axis_gu":1.5, "unactive_weight":100, "active_weight":1}
+	observer_extra_usec += Time.get_ticks_usec()-observer_started
+	game.observer_aim_row["measured_observer_block_usec"] = observer_extra_usec
 	return chosen
 
 func _causal_enemy_snapshot(enemy: EnemyActor) -> Dictionary:
@@ -546,7 +889,8 @@ func _on_target_died(enemy: EnemyActor, data: Dictionary) -> void:
 		"actual death immediately removes collision and active physics before its notification")
 	var death_row: Dictionary = {"instance_id":enemy.get_instance_id(),"slot":str(enemy.get_meta("spawn_context",{}).get("spawn_slot_id","")),
 		"collision_layer":enemy.collision_layer,"collision_mask":enemy.collision_mask,"physics_processing":enemy.is_physics_processing(),"process_frame":Engine.get_process_frames(),"simulation_usec":game._time_domains.simulation_usec(),
-		"death_data_monster_id":int(data.get("monster_id",-1)),"death_data_keys":data.keys()}
+		"death_data_monster_id":int(data.get("monster_id",-1)),"death_data_keys":data.keys(),
+		"natural_regen_state_at_death":enemy._natural_regen.state_snapshot()}
 	# This signal carries canonical monster data, not a fatal damage identity.
 	# Child rows and the explicit damage observer carry their own real sources.
 	death_row.merge(_causal_enemy_snapshot(enemy),true)
@@ -585,6 +929,107 @@ func _observe_profile_caps() -> void:
 	profile_cap_observations.append({"round":completed_rounds.size(),"wall_usec":Time.get_ticks_usec(),"process_frame":Engine.get_process_frames(),
 		"hp":game.player.current_hp,"mp":game.player.current_mp,"player_max_hp":game.player.max_hp,"player_max_mp":game.player.max_mp,
 		"authoritative_max_hp":int(PlayerState.computed_stats.get("max_hp",0)),"authoritative_max_mp":int(PlayerState.computed_stats.get("max_mp",0))})
+
+func _cohort_release_evidence(round_index: int, identities: Dictionary) -> Dictionary:
+	var accepted: Dictionary = {}
+	for action: Dictionary in action_observations:
+		if int(action.round)==round_index and str(action.result)=="accepted":
+			accepted[str(action.expected_release_id)] = action
+	var rows: Array[Dictionary] = []
+	var seen: Dictionary = {}
+	var all_match := true
+	for signal_row: Dictionary in game.skill_release_rows:
+		var release_id := str(signal_row.release_id)
+		if not accepted.has(release_id): continue
+		var action: Dictionary = accepted[release_id]
+		var row: Dictionary = signal_row.duplicate(true)
+		row["input"] = action
+		row["wall_input_to_signal_usec"] = int(row.wall_started_usec)-int(action.input_started_usec)
+		row["simulation_input_to_signal_usec"] = int(row.simulation_usec)-int(action.input_simulation_usec)
+		row["canonical"] = []
+		var canonical_match := true
+		for cursor in range(int(row.canonical_row_start),int(row.canonical_row_end)):
+			var canonical: Dictionary = game.canonical_release_rows[cursor].duplicate(true)
+			canonical["synchronous_cohort_hp_writes"] = []
+			for event_index in range(int(canonical.damage_event_start),int(canonical.damage_event_end)):
+				var event: Dictionary = DamageObserver.events[event_index]
+				if identities.has(int(event.victim_instance_id)): canonical.synchronous_cohort_hp_writes.append(event)
+			canonical_match = canonical_match and str(canonical.release_id)==release_id \
+				and (str(canonical.plan_release_id).is_empty() or str(canonical.plan_release_id)==release_id)
+			row.canonical.append(canonical)
+		row["unique_and_ordered"] = not seen.has(release_id) and row.canonical.size()<=1 and canonical_match \
+			and int(row.wall_input_to_signal_usec)>=0 and int(row.simulation_input_to_signal_usec)>=0
+		all_match = all_match and bool(row.unique_and_ordered)
+		seen[release_id] = true
+		rows.append(row)
+	var without_signal: Array[Dictionary] = []
+	for release_id: String in accepted:
+		if not seen.has(release_id): without_signal.append(accepted[release_id])
+	return {"accepted_input_count":accepted.size(),"observed_signal_count":rows.size(),"rows":rows,
+		"accepted_without_observed_signal":without_signal,"all_observed_releases_match":all_match,
+		"scope":"real Player Timer signal, live release geometry, sole production canonical result, and existing HP events within that synchronous call",
+		"limits":"no source identity assigned to later asynchronous HP writes; no-signal accepted inputs remain explicit, not inferred as lost or canceled"}
+
+func _cohort_damage_evidence(first: int, identities: Dictionary) -> Dictionary:
+	# Reuse the existing bounded observer after the original cohort loop. This
+	# only copies committed HP writes; it adds no hot-path record or authority.
+	var grouped: Dictionary = {}
+	for identity: Dictionary in identities.values():
+		var entry: Dictionary = identity.duplicate(true)
+		entry.merge({"rows":[],"source_counts":{},"actual_hp_loss":0,"last_observed_hp":int(identity.initial_hp),
+			"unobserved_hp_gaps":[],"unobserved_hp_gained":0,"terminal_regen_state":{},
+			"first_physics_tick":-1,"last_physics_tick":-1,"identity_and_order_match":true,"final_hp":-1})
+		grouped[int(identity.runtime_id)] = entry
+	for index in range(first,DamageObserver.events.size()):
+		var row: Dictionary = DamageObserver.events[index]
+		var victim_id := int(row.victim_instance_id)
+		if not grouped.has(victim_id): continue
+		var entry: Dictionary = grouped[victim_id]
+		var gain := int(row.hp_before)-int(entry.last_observed_hp)
+		if gain!=0:
+			entry.unobserved_hp_gaps.append({"previous_damage_after_hp":int(entry.last_observed_hp),
+				"next_damage_before_hp":int(row.hp_before),"delta":gain,"next_physics_tick":int(row.physics_tick)})
+			entry.unobserved_hp_gained += gain
+		entry.identity_and_order_match = bool(entry.identity_and_order_match) and int(row.victim_life)==int(entry.life) \
+			and int(row.victim_generation)==int(entry.generation) and gain>=0 \
+			and int(row.actual_hp_delta)==int(row.hp_before)-int(row.hp_after)
+		entry.rows.append(row)
+		entry.actual_hp_loss += int(row.actual_hp_delta)
+		entry.last_observed_hp = int(row.hp_after)
+		if int(entry.first_physics_tick)<0: entry.first_physics_tick = int(row.physics_tick)
+		entry.last_physics_tick = int(row.physics_tick)
+		var source_key := JSON.stringify(row.source)
+		entry.source_counts[source_key] = int(entry.source_counts.get(source_key,0))+1
+	for actor: EnemyActor in targets:
+		if is_instance_valid(actor) and grouped.has(actor.get_instance_id()):
+			grouped[actor.get_instance_id()].final_hp = actor.current_hp
+			grouped[actor.get_instance_id()].terminal_regen_state = actor._natural_regen.state_snapshot()
+	for death: Dictionary in death_collision_observations:
+		var victim_id := int(death.instance_id)
+		if grouped.has(victim_id) and int(grouped[victim_id].final_hp)<0:
+			grouped[victim_id].final_hp = int(death.enemy_hp)
+			grouped[victim_id].terminal_regen_state = death.natural_regen_state_at_death
+	var all_match := grouped.size()==30
+	for entry: Dictionary in grouped.values():
+		var terminal_gain := int(entry.final_hp)-int(entry.last_observed_hp)
+		if terminal_gain!=0:
+			entry.unobserved_hp_gaps.append({"previous_damage_after_hp":int(entry.last_observed_hp),
+				"terminal_hp":int(entry.final_hp),"delta":terminal_gain,"terminal_physics_tick":Engine.get_physics_frames()})
+			entry.unobserved_hp_gained += terminal_gain
+		var initial_regen: Dictionary = entry.initial_regen_state
+		var terminal_regen: Dictionary = entry.terminal_regen_state
+		var available_ticks := int(terminal_regen.get("total_ticks",-1))-int(initial_regen.total_ticks)
+		entry.regen_gain_capacity = available_ticks*int(entry.natural_regen_hp_per_tick)
+		entry.gains_within_observed_regen_capacity = available_ticks>=0 \
+			and int(entry.unobserved_hp_gained)>=0 and int(entry.unobserved_hp_gained)<=int(entry.regen_gain_capacity)
+		entry.hp_reconciles = bool(entry.identity_and_order_match) and int(entry.final_hp)>=0 \
+			and terminal_gain>=0 and bool(entry.gains_within_observed_regen_capacity) \
+			and int(entry.initial_hp)+int(entry.unobserved_hp_gained)-int(entry.actual_hp_loss)==int(entry.final_hp)
+		all_match = all_match and bool(entry.hp_reconciles)
+	return {"targets":grouped.values(),"all_hp_writes_reconcile":all_match,"observer_overflowed":DamageObserver.overflowed,
+		"scope":"existing bounded actual HP observer; exact cohort identity and ordered mutations; post-loop read-only snapshot",
+		"source_limits":"source dictionaries preserved verbatim; UNKNOWN is not inferred as periodic or child",
+		"gain_limits":"damage-only observer omits healing writes; positive gaps remain unobserved gains, compatible with the actual bounded natural-regen ticks, not separately measured healing"}
 
 func _player_damage_evidence(first: int, first_admission: int, first_delivery: int, first_terminal: int) -> Dictionary:
 	var rows: Array[Dictionary] = []

@@ -113,6 +113,16 @@ func _audit_spawn_layer(
 			_failures.append("unstable_respawn_slot:%d:%s" % [runtime_map_id, group_id])
 			continue
 		var requested_policy := str(entry.get("respawn_policy_id", ""))
+		var canonical_entry := GameData.get_canonical_monster_entry(monster_id, "runtime")
+		var spawn_classification := str(canonical_entry.get("spawn_classification", ""))
+		if spawn_classification == Policy.SPECIAL_NORMAL:
+			var special := Policy.resolve(Policy.SPECIAL_NORMAL, classification,
+				float(entry.get("respawn_seconds", -1.0)), spawn_classification)
+			if not bool(special.get("valid", false)) or float(special.seconds) != 900.0:
+				_failures.append("canonical_special_duration_invalid:%d:%s" % [runtime_map_id, group_id])
+			stats["special_normal_groups"] = int(stats["special_normal_groups"]) + 1
+			stats["special_normal_slots"] = int(stats["special_normal_slots"]) + slot_count
+			continue
 		if classification in ["elite", "boss"]:
 			var resolved := Policy.resolve("", classification, float(entry.get("respawn_seconds", -1.0)))
 			if not bool(resolved.get("valid", false)):
@@ -209,9 +219,25 @@ func _audit_bridge_runtime_content(runtime_map_id: int, semantics: Dictionary) -
 	for raw: Variant in semantics.get("monster_spawn", []):
 		if raw is Dictionary:
 			var entry: Dictionary = raw
-			runtime_ordinary[str(entry.get("semantic_id", ""))] = str(
-				entry.get("respawn_policy_id", "")
-			)
+			var monster_id := int(entry.get("monster_id", -1))
+			var canonical := GameData.get_canonical_monster_entry(monster_id, "runtime")
+			var classification := str(canonical.get("classification", ""))
+			var spawn_classification := str(canonical.get("spawn_classification", ""))
+			var expected_policy := str(entry.get("respawn_policy_id", ""))
+			# Legacy transport can omit seconds while the explicit policy remains
+			# authoritative. Verify both the Bridge transport and real resolution.
+			var expected_seconds := float(entry.get("respawn_seconds", 60.0))
+			if spawn_classification == Policy.SPECIAL_NORMAL:
+				expected_policy = Policy.SPECIAL_NORMAL
+				expected_seconds = Policy.seconds_for(Policy.SPECIAL_NORMAL)
+			elif classification in [Policy.ELITE, Policy.BOSS]:
+				expected_policy = classification
+				expected_seconds = Policy.seconds_for(classification)
+			var sid := str(entry.get("semantic_id", ""))
+			if runtime_ordinary.has(sid):
+				_failures.append("runtime_semantic_duplicate:%d:%s" % [runtime_map_id, sid])
+			runtime_ordinary[sid] = {"monster_id": monster_id, "policy": expected_policy,
+				"seconds": expected_seconds, "authored_policy": str(entry.get("respawn_policy_id", ""))}
 	var mapped := {}
 	for raw: Variant in content.get("spawns", []):
 		if raw is Dictionary:
@@ -222,13 +248,30 @@ func _audit_bridge_runtime_content(runtime_map_id: int, semantics: Dictionary) -
 				if group is Dictionary
 				else entry.get("semantic_id", "")
 			)
-			mapped[sid] = str(entry.get("respawn_policy_id", ""))
+			if mapped.has(sid):
+				_failures.append("bridge_semantic_duplicate:%d:%s" % [runtime_map_id, sid])
+			mapped[sid] = entry
 	for sid: String in runtime_ordinary:
 		if not mapped.has(sid):
 			_failures.append("bridge_semantic_missing:%d:%s" % [runtime_map_id, sid])
 			continue
-		if mapped[sid] != runtime_ordinary[sid]:
+		var expected: Dictionary = runtime_ordinary[sid]
+		var actual: Dictionary = mapped[sid]
+		if int(actual.get("monster_id", -1)) != int(expected.monster_id):
+			_failures.append("bridge_monster_identity_changed:%d:%s" % [runtime_map_id, sid])
+		if str(actual.get("spawn_group", {}).get("respawn_policy_id", "")) != str(expected.authored_policy):
+			_failures.append("bridge_authored_policy_changed:%d:%s" % [runtime_map_id, sid])
+		if float(actual.get("respawn_seconds", -1.0)) != float(expected.seconds):
+			_failures.append("bridge_respawn_seconds_changed:%d:%s" % [runtime_map_id, sid])
+		var resolved := Policy.resolve(str(actual.get("respawn_policy_id", "")),
+			str(actual.get("classification", "")), float(actual.get("respawn_seconds", -1.0)),
+			str(actual.get("spawn_classification", "")))
+		if not bool(resolved.get("valid", false)) or bool(resolved.get("requires_authored_policy", true)):
+			_failures.append("bridge_actual_respawn_resolution_invalid:%d:%s" % [runtime_map_id, sid])
+		elif float(resolved.seconds) != Policy.seconds_for(str(expected.policy)):
+			_failures.append("bridge_actual_respawn_duration_changed:%d:%s" % [runtime_map_id, sid])
+		if str(actual.get("respawn_policy_id", "")) != str(expected.policy):
 			_failures.append(
 				"bridge_policy_lost:%d:%s expected=%s got=%s"
-				% [runtime_map_id, sid, runtime_ordinary[sid], mapped[sid]]
+				% [runtime_map_id, sid, expected.policy, actual.get("respawn_policy_id", "")]
 			)

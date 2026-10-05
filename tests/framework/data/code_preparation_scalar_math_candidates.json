@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "producer_id": "hc.code_preparation.scalar_math_fold_candidates.v1",
+  "engine_commit": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+  "authority": {
+    "kind": "fixed_engine_source_generated",
+    "source_files": [
+      {
+        "status": "PASS",
+        "url": "https://raw.githubusercontent.com/godotengine/godot/5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88/core/variant/variant_utility.cpp",
+        "commit": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+        "relative_source_path": "core/variant/variant_utility.cpp",
+        "retrieved_utc": "2026-10-05T07:11:27.170735+00:00",
+        "bytes": 66081,
+        "sha256": "e6129c2817999436f678e3902adc8f5acf6dfbd6f3e0faf08e761ea9a4c2fdae",
+        "git_blob_sha1": "5f048ed4568def6fba77409edcd610b1f66872ea",
+        "binary_availability": "NOT_RUN",
+        "constant_fold_contract": "NOT_RUN"
+      },
+      {
+        "status": "PASS",
+        "url": "https://raw.githubusercontent.com/godotengine/godot/5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88/core/math/math_funcs.h",
+        "commit": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+        "relative_source_path": "core/math/math_funcs.h",
+        "retrieved_utc": "2026-10-05T07:14:32.098269+00:00",
+        "bytes": 26599,
+        "sha256": "944eac1e6c84b9ebf4ea51af604af129c6f1dc1117c6ef57fe6a62e34ddbbb49",
+        "git_blob_sha1": "43e4aac4ebf7d24e9a031df9c8e40dd367b49153",
+        "binary_availability": "NOT_RUN"
+      }
+    ],
+    "extractor_sha256": "f01184c0ba4ef881ccc779f0d285d825a11e7d1167a5ccc75533bfcfa0b71d32",
+    "cpp_token_extractor_sha256": "a4cc3d3d59f4fabd4cc1a4128bace674b7af08af410c67a1a1931740e0ad01d8"
+  },
+  "needs_artifact_sha256": "01d709dec4c1c53186f418a2a8a0aab1ca3c37eda7d938928551682df9369078",
+  "candidate_rows": [
+    {
+      "name": "sqrt",
+      "kind": "global_function",
+      "source_file": "variant_utility.cpp",
+      "line": 1650,
+      "mechanism": "FUNCBINDR",
+      "utility_category": "UTILITY_FUNC_TYPE_MATH",
+      "implementation_line": 95,
+      "resource_materialization_policy": "scalar_direct_math_forwarder",
+      "implementation_tokens": [
+        "return",
+        "Math",
+        ":",
+        ":",
+        "sqrt",
+        "(",
+        "x",
+        ")",
+        ";"
+      ],
+      "callee": "Math::sqrt",
+      "argument_type": "double",
+      "return_type": "double",
+      "math_forwarder": {
+        "name": "sqrt",
+        "source_file": "math_funcs.h",
+        "line": 150,
+        "implementation_tokens": [
+          "return",
+          "std",
+          ":",
+          ":",
+          "sqrt",
+          "(",
+          "p_x",
+          ")",
+          ";"
+        ],
+        "argument_type": "double",
+        "return_type": "double",
+        "callee": "std::sqrt"
+      }
+    }
+  ],
+  "constant_fold_cases": [
+    {
+      "owner_path": "res://scripts/skills/combat_unit_legacy_adapter.gd",
+      "owner_source_sha256": "08e5247f02fe3a0f052c9da10573cb3234968cc70c00aece4bdbeddace553669",
+      "constant_name": "ISO_AREA_EQUIVALENT_PX_PER_GU",
+      "line": 132,
+      "expression_tokens": [
+        "sqrt",
+        "(",
+        "64.0",
+        "*",
+        "32.0",
+        ")"
+      ],
+      "expression": "sqrt ( 64.0 * 32.0 )",
+      "expression_sha256": "e0dd986e6aa2684552b43db590b70dc9ca4a882cc38ae7f8b3de42ecac12d716",
+      "native_functions": [
+        "sqrt"
+      ]
+    }
+  ],
+  "errors": [],
+  "status": "PASS",
+  "binary_availability": "NOT_RUN",
+  "constant_fold_contract": "NOT_RUN",
+  "whole_gdscript_namespace": "MISSING"
+}

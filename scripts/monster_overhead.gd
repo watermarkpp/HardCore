@@ -83,7 +83,7 @@ func _refresh_rank_visuals() -> void:
 	rank_marker.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	rank_marker.position = Vector2(-bar_width * 0.5 - 12.0, HEALTH_BAR_HEIGHT * 0.5)
 	rank_marker.z_as_relative = true
-	rank_marker.z_index = 1
+	rank_marker.z_index = 0
 	rank_marker.show_behind_parent = false
 	add_child(rank_marker)
 	set_meta("monster_overhead_rank", _rank)

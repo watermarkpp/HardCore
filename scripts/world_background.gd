@@ -2657,6 +2657,7 @@ func _build_static_authored_wall_bridge(
 				if int(command.get("image_pass", -1)) == 1:
 					group.wall_command = command
 					group.wall_sort_y = float(record.wall_sort_y)
+					group.material_layer_order = int(record.material_layer_order)
 			else:
 				object_records.append(record)
 	var record_usec := Time.get_ticks_usec() - record_started_usec
@@ -2768,6 +2769,9 @@ func _static_wall_bridge_record_metadata(
 	return {
 		"command": command,
 		"command_index": int(command.get("command_index", -1)),
+		"material_layer_order": MapEditorInstanceServiceScript.material_layer_order(
+			command.get("instance", {})
+		),
 		"image_pass": int(command.get("image_pass", -1)),
 		"group_key": str(command.get("actor_sort_group", "")),
 		"resource_path": resource_path,
@@ -2974,7 +2978,6 @@ func _static_wall_bridge_resolve_owner(
 	var grid: Dictionary = pass_grid.grid
 	var records: Array[Dictionary] = pass_grid.records
 	var owner: Dictionary = {}
-	var object_sort_y := float(object_record.static_sort_y)
 	# Bucket records are explicitly sorted by descending global command index.
 	# The first opaque pass is the owner of this wall pixel. The wall group's
 	# cached base sort Y is the depth authority for the whole wall union, so a
@@ -3001,7 +3004,11 @@ func _static_wall_bridge_resolve_owner(
 			var owner_group: Dictionary = groups[owner_key]
 			if (
 				owner_group.wall_command.is_empty()
-				or object_sort_y <= float(owner_group.wall_sort_y)
+				or not RuntimeVisualGeometryScript.static_authored_order_and_depth_is_in_front(
+					int(object_record.material_layer_order),
+					int(owner_group.material_layer_order),
+					float(object_record.static_sort_y), float(owner_group.wall_sort_y)
+				)
 			):
 				return {}
 			return owner

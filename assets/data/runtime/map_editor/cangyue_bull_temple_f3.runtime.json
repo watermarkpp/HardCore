@@ -1,5 +1,5 @@
 {
-  "build_sha256": "d613dd1e14d8b5cd612d9d4812a4fcba5596d7ee2a5d65fda03139d04c582b68",
+  "build_sha256": "484e824ec20e4affb53983de579a3f5330de56d3c0b0f779d6b6a550acc91539",
   "collision": {
     "authored_polygons_ground_gu": [
       {
@@ -7362,7 +7362,7 @@
     "coordinate_contract_id": "hc.map.polygon_ground_gu.v1",
     "ground_coordinate_contract_id": "isometric_cell_center_64x32_v2",
     "navigation": {
-      "canonical_catalog_sha256": "e801fc9dfe9bfa920376872f6ac4ff735073a27a8b5eb05cc922e4ecb19d3099",
+      "canonical_catalog_sha256": "a46aca4209b3abc0f3f2cd5365b274605cd07886060706e14ef3e984aad8880a",
       "clearance_gu": 0.025,
       "contract_id": "hc.polygon_nav_faces.v1",
       "profiles": [
@@ -94593,7 +94593,8 @@
         "max_alive": 1.0,
         "monster_id": 234.0,
         "radius_gu": 3.0,
-        "respawn_seconds": 60.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 300.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bull_temple_f3.monster_spawn.000004",
         "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f3.monster_spawn.000004",
@@ -94614,7 +94615,8 @@
         "max_alive": 1.0,
         "monster_id": 233.0,
         "radius_gu": 3.0,
-        "respawn_seconds": 60.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 300.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bull_temple_f3.monster_spawn.000005",
         "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f3.monster_spawn.000005",
@@ -94635,7 +94637,8 @@
         "max_alive": 1.0,
         "monster_id": 232.0,
         "radius_gu": 3.0,
-        "respawn_seconds": 60.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 300.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bull_temple_f3.monster_spawn.000006",
         "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f3.monster_spawn.000006",
@@ -95196,7 +95199,8 @@
         "max_alive": 1.0,
         "monster_id": 231.0,
         "radius_gu": 3.0,
-        "respawn_seconds": 60.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 300.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bull_temple_f3.monster_spawn.000019",
         "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f3.monster_spawn.000019",
@@ -95217,7 +95221,8 @@
         "max_alive": 1.0,
         "monster_id": 234.0,
         "radius_gu": 3.0,
-        "respawn_seconds": 60.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 300.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bull_temple_f3.monster_spawn.000020",
         "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f3.monster_spawn.000020",
@@ -97199,12 +97204,12 @@
   },
   "source": {
     "candidate_binding": {
-      "authoring_sha256": "84bbc7987b2e68a42bf2409ea58f51ed775c231d4e76b6fbbeb09609ec7bd878",
+      "authoring_sha256": "4377b44fe87dfbc02dd59367821fb490f263e2010f898438f68c234543dcc882",
       "contract_id": "mse.map.runtime.candidate_binding.v1",
-      "document_revision": 27.0,
-      "document_sha256": "fd9a8af8970608f1902d7e10996303b77ffc45fd125a8f3eaf8614151d766c33",
+      "document_revision": 28.0,
+      "document_sha256": "1302c7f6bd362dfc7e123b71b2c13a60997865c69ae047977ad5d98b67a94738",
       "ground_manifest_sha256": "88e20a4527afba7d6d9be74c9972394654c252ac08e033e9b0ef1be0d8bb145f",
-      "ground_state_sha256": "e9bad2dfec199c198cf50d4413fb371825d9be3fd26a017ac86a2be495fe0a99",
+      "ground_state_sha256": "cd3eb2a754c954ae65b355696bd9657aab25c91b7300a7dbc30f98987c4a41a6",
       "map_key": "cangyue_bull_temple_f3",
       "runtime_map_id": 917103.0
     },
@@ -97212,7 +97217,7 @@
     "display_name": "牛魔寺庙三层",
     "editor_schema_version": 5.0,
     "map_id": "cangyue_bull_temple_f3",
-    "revision": 27.0,
+    "revision": 28.0,
     "runtime_map_id": 917103.0
   },
   "unit_contract_id": "combat.unit.gu_gs_px.v1",

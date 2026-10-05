@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/framework/map_respawn_authoring_candidate_test.gd" id="1"]
+
+[node name="RespawnZuma" type="Node"]
+script = ExtResource("1")
+map_keys = Array[String](["mengzhong_zuma_temple_f1", "mengzhong_zuma_temple_f2", "mengzhong_zuma_temple_f3", "mengzhong_zuma_temple_f4"])
+receipt_scene_id = "map_respawn_authoring_zuma_test"

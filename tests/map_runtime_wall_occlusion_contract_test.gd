@@ -39,7 +39,14 @@ func _ready() -> void:
 				assert(domain == VisualGeometry.RENDER_DOMAIN_ACTOR_Y_SORT)
 				assert(not str(command.get("actor_sort_group", "")).is_empty())
 				var sort_world := VisualGeometry.command_actor_sort_world(command, size)
-				assert(MapEditorCoordinate.screen_position_px_to_grid_cell(sort_world, size) == command.sort_tile)
+				# Authored visual offsets move the wall foot with its pixels. The
+				# occupied cell round trip therefore removes that explicit offset.
+				var authored_offset: Vector2 = command.sort_baseline_offset_px
+				assert(sort_world.is_equal_approx(
+					MapEditorCoordinate.grid_cell_to_screen_position_px(Vector2(command.sort_tile), size)
+					+ authored_offset
+				))
+				assert(MapEditorCoordinate.screen_position_px_to_grid_cell(sort_world - authored_offset, size) == command.sort_tile)
 	assert(wall_fronts > 0 and wall_bases > 0 and wall_shadows > 0)
 	print("MAP_RUNTIME_WALL_OCCLUSION_CONTRACT_PASS maps=217,218,221 fronts=%d bases=%d shadows=%d" % [wall_fronts, wall_bases, wall_shadows])
 	get_tree().quit(0)

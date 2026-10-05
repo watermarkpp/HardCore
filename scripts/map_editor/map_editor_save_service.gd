@@ -58,7 +58,35 @@ static func has_formal_workspace_for_legacy_map(map_id: String) -> bool:
 	return false
 
 
-static func save_document(document: Dictionary, path := "") -> Dictionary:
+static func _preserved_json_value_matches(actual: Variant, expected: Variant) -> bool:
+	if actual is Dictionary and expected is Dictionary:
+		if actual.size() != expected.size():
+			return false
+		for key: Variant in actual:
+			if not expected.has(key) or not _preserved_json_value_matches(actual[key], expected[key]):
+				return false
+		return true
+	if actual is Array and expected is Array:
+		if actual.size() != expected.size():
+			return false
+		for index: int in actual.size():
+			if not _preserved_json_value_matches(actual[index], expected[index]):
+				return false
+		return true
+	var actual_type := typeof(actual)
+	var expected_type := typeof(expected)
+	if actual_type in [TYPE_INT, TYPE_FLOAT] and expected_type in [TYPE_INT, TYPE_FLOAT]:
+		if actual_type != expected_type:
+			var integral: int = actual if actual_type == TYPE_INT else expected
+			var decimal: float = actual if actual_type == TYPE_FLOAT else expected
+			# JSON parses numbers as floats. Normalize only exactly representable
+			# integral values; never use approximate equality for authored geometry.
+			return integral >= -9007199254740991 and integral <= 9007199254740991 and is_finite(decimal) and decimal == float(integral)
+		return actual == expected
+	return actual_type == expected_type and actual == expected
+
+
+static func save_document(document: Dictionary, path := "", preserved_text := "") -> Dictionary:
 	var errors := MapEditorTypes.validate_document(document)
 	errors.append_array(
 		SpawnIdentityService.validate_document(
@@ -68,6 +96,16 @@ static func save_document(document: Dictionary, path := "") -> Dictionary:
 	)
 	if not errors.is_empty():
 		return {"ok": false, "errors": errors}
+	var encoded := MapEditorJsonCodec.encode(document)
+	# Exact authoring edits may retain unrelated numeric tokens and formatting.
+	# The original document remains the authority; text cannot replace its data.
+	if not preserved_text.is_empty():
+		var parser := JSON.new()
+		if parser.parse(preserved_text) != OK or not parser.data is Dictionary:
+			return {"ok": false, "errors": ["preserved_text_invalid"]}
+		if not _preserved_json_value_matches(parser.data, document):
+			return {"ok": false, "errors": ["preserved_text_document_mismatch"]}
+		encoded = preserved_text
 	var target_path := path if not path.is_empty() else default_path(str(document.map_id))
 	## MAP-SAFETY-R1 defense-in-depth: with a test workspace override active,
 	## any save whose resolved target still points at the formal workspace is
@@ -86,7 +124,7 @@ static func save_document(document: Dictionary, path := "") -> Dictionary:
 	var file := FileAccess.open(temporary, FileAccess.WRITE)
 	if file == null:
 		return {"ok": false, "errors": ["open_temp_failed"]}
-	file.store_string(MapEditorJsonCodec.encode(document))
+	file.store_string(encoded)
 	file.flush()
 	file.close()
 	var verification := MapEditorLoadService.load_document(temporary, false)

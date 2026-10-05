@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/framework/component_asset_preparation_lifecycle_test.gd" id="1"]
+
+[node name="ComponentWarmInflightLifecycleTest" type="Node"]
+script = ExtResource("1")
+scene_id = "component_warm_inflight_lifecycle_test"
+preparation = 1
+owner_exit = 1

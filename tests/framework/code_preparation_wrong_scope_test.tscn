@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/framework/code_preparation_api_shape_test.gd" id="1"]
+
+[node name="CodePreparationWrongScopeTest" type="Node"]
+script = ExtResource("1")
+case_mode = "inputs_wrong_scope"
+receipt_scene_id = "code_preparation_wrong_scope_test"

@@ -1,5 +1,5 @@
 {
-  "build_sha256": "8784de0813edcdfa59b1e950ab36c3dd634cc1990f1146b8d747df919b196f95",
+  "build_sha256": "b1f2060b2789f7c968771ace8ebf8d8dd81d28e9ef1357dff6fad7840c600034",
   "collision": {
     "authored_polygons_ground_gu": [
       {
@@ -3110,7 +3110,7 @@
     "coordinate_contract_id": "hc.map.polygon_ground_gu.v1",
     "ground_coordinate_contract_id": "isometric_cell_center_64x32_v2",
     "navigation": {
-      "canonical_catalog_sha256": "e801fc9dfe9bfa920376872f6ac4ff735073a27a8b5eb05cc922e4ecb19d3099",
+      "canonical_catalog_sha256": "a46aca4209b3abc0f3f2cd5365b274605cd07886060706e14ef3e984aad8880a",
       "clearance_gu": 0.025,
       "contract_id": "hc.polygon_nav_faces.v1",
       "profiles": [
@@ -45015,7 +45015,8 @@
         "max_alive": 1.0,
         "monster_id": 64.0,
         "radius_gu": 0.0,
-        "respawn_seconds": 60.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 480.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000029",
         "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000029",
@@ -45033,7 +45034,8 @@
         "max_alive": 1.0,
         "monster_id": 64.0,
         "radius_gu": 0.0,
-        "respawn_seconds": 60.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 480.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000030",
         "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000030",
@@ -45051,7 +45053,8 @@
         "max_alive": 1.0,
         "monster_id": 64.0,
         "radius_gu": 0.0,
-        "respawn_seconds": 60.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 480.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000031",
         "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000031",
@@ -45069,7 +45072,8 @@
         "max_alive": 1.0,
         "monster_id": 64.0,
         "radius_gu": 0.0,
-        "respawn_seconds": 60.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 480.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000032",
         "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000032",
@@ -45087,7 +45091,8 @@
         "max_alive": 1.0,
         "monster_id": 64.0,
         "radius_gu": 0.0,
-        "respawn_seconds": 60.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 480.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000033",
         "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000033",
@@ -45105,7 +45110,8 @@
         "max_alive": 1.0,
         "monster_id": 64.0,
         "radius_gu": 0.0,
-        "respawn_seconds": 60.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 480.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000034",
         "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000034",
@@ -45198,12 +45204,12 @@
   },
   "source": {
     "candidate_binding": {
-      "authoring_sha256": "7817935ffcd22fd8254ad362b2cb9d36135f37550ac49a3c6b259f410d5fc3a5",
+      "authoring_sha256": "3b034df68167199293abc04336884e0ef56cc788c7ca1c9a6dcb3e95042aeead",
       "contract_id": "mse.map.runtime.candidate_binding.v1",
-      "document_revision": 84.0,
-      "document_sha256": "f90907aab371099b412786d2d8542776607f193d3f608ea7c4fdde88cd7a2945",
+      "document_revision": 85.0,
+      "document_sha256": "9f5d008b29750130f18df71a0a8388916dea3ed46e39a3a60960bdb9f9787fc9",
       "ground_manifest_sha256": "4934ab09bb645647966660ba514882463c4b252fae34dd97c8dfbede4769e9cb",
-      "ground_state_sha256": "5da3144afbc051670d8bd44eae3292d279a30efa4ac25f536d634305149b15f1",
+      "ground_state_sha256": "b055187565595d5efc6448f8e06c3cec63db37330b86236f78f52a5df97d38e3",
       "map_key": "wooma_temple_f2",
       "runtime_map_id": 915002.0
     },
@@ -45211,7 +45217,7 @@
     "display_name": "沃玛寺庙二层",
     "editor_schema_version": 5.0,
     "map_id": "wooma_temple_f2",
-    "revision": 84.0,
+    "revision": 85.0,
     "runtime_map_id": 915002.0
   },
   "unit_contract_id": "combat.unit.gu_gs_px.v1",

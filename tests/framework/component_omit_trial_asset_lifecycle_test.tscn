@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/framework/component_asset_preparation_lifecycle_test.gd" id="1"]
+
+[node name="ComponentOmitTrialAssetLifecycleTest" type="Node"]
+script = ExtResource("1")
+scene_id = "component_omit_trial_asset_lifecycle_test"
+preparation = 2
+omitted_asset_index = 0
+owner_exit = 2

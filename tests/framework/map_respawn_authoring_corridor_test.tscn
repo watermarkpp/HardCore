@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/framework/map_respawn_authoring_candidate_test.gd" id="1"]
+
+[node name="RespawnCorridor" type="Node"]
+script = ExtResource("1")
+map_keys = Array[String](["fengmo_purgatory_corridor", "wooma_temple_f2"])
+receipt_scene_id = "map_respawn_authoring_corridor_test"

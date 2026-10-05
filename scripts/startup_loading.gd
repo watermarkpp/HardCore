@@ -56,6 +56,13 @@ var _main_scene_prefetch_accepted := false
 var _main_scene_prefetch_already_cached := false
 var _main_scene_prefetch_status := "not_started"
 var _main_scene_prefetch_request_count := 0
+var _main_scene_prefetch_native_owned := false
+var _main_scene_prefetch_get_count := 0
+var _main_scene_prefetch_resource: PackedScene
+const MAIN_CODE_ENTRY_ID := "framework.code.caster_animation.v1"
+var _main_code_generation := 1
+var _main_code_result: Dictionary = {}
+var _main_code_preparation: Dictionary = {"state": "not_started"}
 
 var _startup_state := STARTUP_STATE_LOADING
 var _failure_code := ""
@@ -321,6 +328,8 @@ func _on_failure_exit_pressed() -> void:
 	if _startup_state == STARTUP_STATE_EXITING:
 		return
 	_exit_requested = true
+	ContentLayers.cancel_internal_code_owner(self, _main_code_generation)
+	_main_code_generation += 1
 	_startup_state = STARTUP_STATE_EXITING
 	# Invalidate every deferred/await continuation. This keeps a late loader,
 	# data boundary, preparation settle, or reveal callback from reopening the
@@ -540,11 +549,19 @@ func _poll_main_scene_prefetch() -> void:
 		return
 	var status := ResourceLoader.load_threaded_get_status(MAIN_SCENE_PREFETCH_PATH)
 	if status == ResourceLoader.THREAD_LOAD_LOADED:
+		if _main_scene_prefetch_native_owned:
+			_main_scene_prefetch_resource = ResourceLoader.load_threaded_get(MAIN_SCENE_PREFETCH_PATH) as PackedScene
+			_main_scene_prefetch_get_count += 1
+			_main_scene_prefetch_native_owned = false
 		_main_scene_prefetch_status = "ready"
 	elif status in [
 		ResourceLoader.THREAD_LOAD_FAILED,
 		ResourceLoader.THREAD_LOAD_INVALID_RESOURCE,
 	]:
+		if status == ResourceLoader.THREAD_LOAD_FAILED and _main_scene_prefetch_native_owned:
+			ResourceLoader.load_threaded_get(MAIN_SCENE_PREFETCH_PATH)
+			_main_scene_prefetch_get_count += 1
+		_main_scene_prefetch_native_owned = false
 		_main_scene_prefetch_status = "failed"
 	else:
 		_main_scene_prefetch_status = "loading"
@@ -558,6 +575,9 @@ func main_scene_prefetch_diagnostic() -> Dictionary:
 		"already_cached": _main_scene_prefetch_already_cached,
 		"status": _main_scene_prefetch_status,
 		"request_count": _main_scene_prefetch_request_count,
+		"get_count": _main_scene_prefetch_get_count,
+		"native_owned": _main_scene_prefetch_native_owned,
+		"code_preparation": _main_code_preparation.duplicate(true),
 	}
 
 
@@ -627,7 +647,20 @@ func _begin_main_scene_prefetch() -> void:
 	if force_main_scene_prefetch_failure_for_test:
 		_main_scene_prefetch_status = "failed"
 		return
+	_main_scene_prefetch_status = "preparing_code"
+	_prepare_main_scene_prefetch.call_deferred(_main_code_generation)
+
+func _submit_prepared_main_scene_prefetch() -> void:
+	if not ContentLayers.is_internal_code_retention_current(_main_code_result, self):
+		_main_scene_prefetch_status = "failed"
+		return
+	_main_code_preparation["retention_current_at_scene_request"] = true
+	_main_code_preparation["target_cached_at_scene_request"] = ResourceLoader.has_cached("res://scripts/caster_skill_animation_player.gd")
+	if force_main_scene_prefetch_failure_for_test:
+		_main_scene_prefetch_status = "failed"
+		return
 	if ResourceLoader.has_cached(MAIN_SCENE_PREFETCH_PATH):
+		_main_scene_prefetch_resource = ResourceLoader.get_cached_ref(MAIN_SCENE_PREFETCH_PATH) as PackedScene
 		_main_scene_prefetch_accepted = true
 		_main_scene_prefetch_already_cached = true
 		_main_scene_prefetch_status = "already_cached"
@@ -651,6 +684,7 @@ func _begin_main_scene_prefetch() -> void:
 	)
 	_main_scene_prefetch_request_count = 1
 	if request_error == OK:
+		_main_scene_prefetch_native_owned = true
 		_main_scene_prefetch_accepted = true
 		_main_scene_prefetch_status = "accepted"
 	elif request_error == ERR_BUSY:
@@ -695,6 +729,8 @@ func _prepare_target_scene(generation: int) -> void:
 	# change_scene_to_packed() removed the intro first and exposed a black frame.
 	if _target_scene_instance is CanvasItem:
 		(_target_scene_instance as CanvasItem).visible = false
+	if _target_scene_instance.has_method("adopt_startup_launch_preparation") and ContentLayers.is_internal_code_retention_current(_main_code_result, self):
+		_target_scene_instance.adopt_startup_launch_preparation(_main_code_result.duplicate(false), weakref(self), _main_scene_prefetch_resource)
 	get_tree().root.add_child(_target_scene_instance)
 	await get_tree().process_frame
 	await get_tree().process_frame
@@ -735,3 +771,56 @@ func _reveal_target_scene(generation: int) -> void:
 	get_tree().current_scene = _target_scene_instance
 	_target_handoff_count += 1
 	queue_free()
+
+
+func is_code_preparation_generation_current(generation: int) -> bool:
+	return is_inside_tree() and not is_queued_for_deletion() and generation == _main_code_generation
+
+func is_code_preparation_loading_phase_current(generation: int) -> bool:
+	return is_code_preparation_generation_current(generation) and _startup_state in [STARTUP_STATE_LOADING, STARTUP_STATE_READY_TO_HANDOFF] and not _exit_requested
+
+func _prepare_main_scene_prefetch(generation: int) -> void:
+	if not is_code_preparation_loading_phase_current(generation):
+		return
+	var began := Time.get_ticks_usec()
+	_main_code_preparation = {"state": "preparing", "target_cached_before": ResourceLoader.has_cached("res://scripts/caster_skill_animation_player.gd")}
+	var inputs: Dictionary = await ContentLayers.prepare_internal_code_entry(MAIN_CODE_ENTRY_ID, brand_intro, self, generation)
+	if not is_code_preparation_loading_phase_current(generation) or not bool(inputs.get("success", false)):
+		ContentLayers.retire_internal_code_result(inputs)
+		_main_code_preparation["state"] = "cancelled_or_rejected"
+		_main_scene_prefetch_status = "failed"
+		return
+	_main_code_preparation["cover"] = inputs.scope.observation()
+	_main_code_preparation["input_usec"] = Time.get_ticks_usec() - began
+	var result: Dictionary = await ContentLayers.request_internal_prepared_script(inputs, self, generation)
+	inputs.clear()
+	if not is_code_preparation_loading_phase_current(generation) or not bool(result.get("success", false)):
+		ContentLayers.retire_internal_code_result(result)
+		_main_code_preparation["state"] = "cancelled_or_rejected"
+		_main_scene_prefetch_status = "failed"
+		return
+	_main_code_result = result
+	_main_code_preparation["state"] = "retained"
+	_main_code_preparation["total_usec"] = Time.get_ticks_usec() - began
+	_main_code_preparation["target_native_status_after_get"] = ResourceLoader.load_threaded_get_status("res://scripts/caster_skill_animation_player.gd")
+	_submit_prepared_main_scene_prefetch()
+
+func relinquish_startup_launch_retention(result: Dictionary, receiver: Node) -> bool:
+	if _main_code_result.is_empty() or not is_same(_main_code_result.get("lease"), result.get("lease")) or not ContentLayers.is_internal_code_retention_current(result, receiver):
+		return false
+	_main_code_result.clear() # receiver owns the same actual lease; no retirement here.
+	_main_code_preparation["state"] = "transferred_to_hall"
+	return true
+
+func _exit_tree() -> void:
+	ContentLayers.cancel_internal_code_owner(self, _main_code_generation)
+	_main_code_generation += 1
+	# Only this startup's OK request owns a get. ERR_BUSY/global observation does not.
+	if _main_scene_prefetch_native_owned:
+		var status := ResourceLoader.load_threaded_get_status(MAIN_SCENE_PREFETCH_PATH)
+		if status != ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+			_main_scene_prefetch_resource = ResourceLoader.load_threaded_get(MAIN_SCENE_PREFETCH_PATH) as PackedScene
+			_main_scene_prefetch_get_count += 1
+		_main_scene_prefetch_native_owned = false
+	ContentLayers.retire_internal_code_result(_main_code_result)
+	_main_scene_prefetch_resource = null

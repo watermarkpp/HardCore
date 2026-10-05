@@ -14,7 +14,9 @@ const MULTI_DECOR_FIXTURE_HASH := (
 )
 const MAX_F1_SCANNED_OBJECT_PIXELS := 111084
 const MAX_BRIDGE_BUILD_USEC := 1000000
-const EXPECTED_PUBLISHED_DECOR_PAIRS := 7178
+# Current 67-map saved layouts contain 7281 eligible decoration pairs. The
+# pre-fix native inventory independently counted all pairs with zero reversals.
+const EXPECTED_PUBLISHED_DECOR_PAIRS := 7281
 
 const PUBLISHED_RUNTIME_MAPS := [
 	"bich_province",
@@ -457,6 +459,11 @@ func _visible_decor_wall_overlap_hashes(
 				var second_front := VisualGeometry.static_authored_command_is_in_front_of_wall(
 					second.command, wall_base.command, design_size
 				)
+				var wall_order := MapEditorInstanceService.material_layer_order(wall_base.command.instance)
+				if MapEditorInstanceService.material_layer_order(first.command.instance) < wall_order:
+					assert(not first_front, "lower first decoration was promoted over a wall")
+				if MapEditorInstanceService.material_layer_order(second.command.instance) < wall_order:
+					assert(not second_front, "lower second decoration was promoted over a wall")
 				if not first_front and not second_front:
 					continue
 				var pair_bounds: Rect2i = first.aabb.merge(second.aabb)
@@ -495,7 +502,23 @@ func _visible_decor_wall_overlap_hashes(
 								]
 							).to_utf8_buffer()
 						)
-			if (
+			# These exact low-layer carpets stay on the ground after the reviewed
+			# fix. Preserve their real PNG composition while explicitly proving
+			# that neither decoration contributes wall-overlay pixels.
+			var carpet_ids: Array = {
+				"mengzhong_zuma_pavilion": ["user.bb920cfc9a26359e", "user.7d2522ffc19caee4"],
+				"snake_unknown_dark_palace": ["user.40eee3e25073bc57"],
+			}.get(map_key, [])
+			var lower_carpet_pair := (
+				str(first.command.instance.asset_id) in carpet_ids
+				and str(second.command.instance.asset_id) in carpet_ids
+				and (MapEditorInstanceService.material_layer_order(first.command.instance) < 0
+					or MapEditorInstanceService.material_layer_order(second.command.instance) < 0)
+			)
+			if lower_carpet_pair:
+				assert(first_wall_pixels == 0 and second_wall_pixels == 0,
+					"lower authored carpets acquired wall-overlay pixels")
+			elif (
 				first_wall_pixels + second_wall_pixels <= 0
 				and not map_key.begins_with("wooma_temple_")
 			):

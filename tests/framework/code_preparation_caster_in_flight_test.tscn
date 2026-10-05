@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/framework/code_preparation_caster_api_test.gd" id="1"]
+
+[node name="CodePreparationCasterOwnerTest" type="Node"]
+script = ExtResource("1")
+owner_mode = "in_flight"
+receipt_scene_id = "code_preparation_caster_in_flight_test"

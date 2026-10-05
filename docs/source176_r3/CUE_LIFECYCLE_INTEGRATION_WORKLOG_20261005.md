@@ -35,3 +35,15 @@ cue_integration_green_013343_994491：相同两场23＋19＝42项全部PASS／ex
 实际音频池复用后旧回调、同handle替代Cue、GPU像素和Android仍NOT_RUN；没有从受控CanvasItem／AudioStream测试推断设备表现。Task3更广表现／资源、Task4生产可达累计工作与最坏量子、Task5持续自然P6/R3和最终固定源码双审计继续。原地图formal respawn政策FAIL、原v97 B输入MISSING及旧设备基线分别保留。
 
 同次只读APK准备核验确认既有v97包488711865 bytes、SHA256 02e3e86d90f2437c64f211a83e052578a728eef53d4912c80fae8867c5c90cdd，包ID com.personal.mafaoffline、versionCode 97、arm64-v8a、targetSdk36，apksigner校验exit0。现有安卓工具链位于主仓库tools/android-build；第三树构建需显式指定该现有路径。记录APK_BASELINE_PUBLIC_PREFLIGHT.json包含公开签名指纹。当前导出预设旧versionCode82，后续在正式隔离构建阶段提高版本并核对同签名，不修改主树预设。尚未构建新APK，DEVICE TEST: NOT_RUN。
+
+
+## 2026-10-05 后续阶段补证（不覆盖旧源）
+2026-10-05 02:18 UTC 主控核对 periodic_dispatch_resource_retirement_same_source_regression_100706_110885：17场、438项完整检查，原生退出0、无超时、3855文件before/after映射相同，source e4056d07ef3d87a5af2f5f5a6ceb4ab3296e8ffb0f4e0897db57c97403fbe8f3。逐scene run、invocation、receipt哈希与runner成功handoff一致；完整关联在 outputs/framework_v2/natural_sustained_20261005/RESOURCE_RETIREMENT_17_LOCAL_ASSOCIATIONS.json。该组是后续阶段，不把较早04d29结果改写成此源执行。
+
+本组新增并直接执行了真实AudioStreamPlayer自然finished后的同pool复用（52项）及旧已接受Cue/audio/lease仍活跃时正式Root退出（20项）；已有pool复用、same-handle音频替代、Cue同步入树重入、默认资源闭包均通过。这里关闭前述音频池/同handle两个NOT_RUN的窄范围，GPU像素和Android仍NOT_RUN。
+
+同组Root初始/活动caster纹理/receiver/普通技能退出、真实6文件本机native容量4上界、角色A→B→A原路径请求合并也通过。角色大厅退出仍保留46 ObjectDB实例WARNING，其他16场stderr空；不称退出无泄漏。新增生命周期修复的RED/GREEN与原始故障注入日志另存，框架整体和P6/R3仍开放。
+
+同e4056源负例 periodic_dispatch_owned_failed_preload_current_101533_505153 保留官方runner 0 PASS/2 FAIL/exit1。Root 14项、角色大厅24项业务回执全部真、native exit0/无超时；stderr仅每场两条精确且归属本次user://路径的故障注入错误，合法同路径重试成立，旧原生token状态归0且fixture额外get计数0。主控只据精确分类核验负例，不把原runner FAIL改为PASS；没有成功producer handoff，本轮失败不能供cold复用。只读候选及来源哈希在 OWNED_FAILED_PRELOAD_CURRENT_CANDIDATE.json。
+
+持续战斗后续已加正式药水供给和只读实际攻击、MP上限裁剪观察，因此与上述e4056及旧单轮固定目标测试属于不同指纹；其PASS/FAIL和原35秒cohort期限分别报告，不能合并为本17场最终源。未推送新固定提交、未构建APK。

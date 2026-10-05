@@ -91,9 +91,15 @@ var _launch_scene_preload_request_count := 0
 var _launch_scene_preload_generation := 0
 var _launch_scene_preload_requests: Dictionary = {}
 @export var force_launch_preload_for_test := false
+const LAUNCH_CODE_ENTRY_ID := "framework.code.caster_animation.v1"
+var _launch_code_generation := 0
+var _launch_code_result: Dictionary = {}
+var _launch_code_previous: WeakRef
+var _launch_code_diagnostic: Dictionary = {"state": "not_started"}
 
 
 func _ready() -> void:
+	_accept_startup_launch_retention()
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	theme = GothicUIThemeScript.build_character_hall()
 	_build_background()
@@ -116,6 +122,8 @@ func _ready() -> void:
 
 
 func _exit_tree() -> void:
+	ContentLayers.cancel_internal_code_owner(self, _launch_code_generation)
+	_launch_code_generation += 1
 	# ResourceLoader requests cannot be cancelled. Close the real ownership
 	# boundary before the scene or engine can release its resource filesystem.
 	# Includes older requested paths and timed-out monitors, not only the current
@@ -128,6 +136,7 @@ func _exit_tree() -> void:
 	_launch_scene_preload_requests.clear()
 	_launch_scene_preload_resource = null
 	_launch_scene_preload_state = LAUNCH_PRELOAD_IDLE
+	ContentLayers.retire_internal_code_result(_launch_code_result)
 
 
 func _request_launch_scene_preload() -> void:
@@ -147,6 +156,11 @@ func _request_launch_scene_preload() -> void:
 	if requested_path.is_empty() or not ResourceLoader.exists(requested_path, "PackedScene"):
 		_mark_launch_scene_preload_failed(ERR_FILE_NOT_FOUND, generation, requested_path)
 		return
+	if not ContentLayers.is_internal_code_retention_current(_launch_code_result, self):
+		_launch_code_diagnostic["preload_deferred_until_cover"] = true
+		return
+	_launch_code_diagnostic["retention_current_at_scene_request"] = true
+	_launch_code_diagnostic["target_cached_at_scene_request"] = ResourceLoader.has_cached("res://scripts/caster_skill_animation_player.gd")
 	# Returning to a still-owned path changes its monitor, not its native
 	# retrieval entitlement. One entry must correspond to one accepted request.
 	if not _launch_scene_preload_requests.has(requested_path):
@@ -900,14 +914,11 @@ func _enter_selected_character() -> void:
 		_launch_scene_preload_state == LAUNCH_PRELOAD_READY
 	)
 	_launch_in_progress = true
-	launch_loading_overlay.show_loading_immediately("character:%s" % selected_main_profile_id)
-	# Global button feedback may perform its first texture preparation on this
-	# activation. Present Loading in a completed draw before that work, profile
-	# hydration, or main-scene construction is allowed to begin.
-	# The first resume happens before that frame is drawn; yielding a second
-	# process frame lets the visible overlay complete one full render cycle.
-	await get_tree().process_frame
-	await get_tree().process_frame
+	_launch_code_generation += 1
+	launch_loading_overlay.begin_loading("character:%s" % selected_main_profile_id)
+	# The existing opaque overlay issues its actual covered handshake. No new
+	# surface, timer, CG duration, or minimum display duration is introduced.
+	await launch_loading_overlay.transition_covered
 	if not is_inside_tree():
 		return
 	launch_loading_overlay.set_loading_progress("character:%s" % selected_main_profile_id, 0.25, "读取角色")
@@ -935,6 +946,11 @@ func _enter_selected_character() -> void:
 		Time.get_ticks_msec() - profile_hydration_started_msec
 	)
 	launch_loading_overlay.set_loading_progress("character:%s" % selected_main_profile_id, 0.60, "准备游戏场景")
+	var code_ready: bool = await _prepare_launch_code_if_cold(_launch_code_generation)
+	if not code_ready:
+		if is_inside_tree() and not is_queued_for_deletion():
+			_restore_after_launch_failure("暂时无法进入游戏，请重试")
+		return
 	last_launch_request = build_launch_request()
 	get_tree().root.set_meta(LAUNCH_CONTEXT_META, last_launch_request.duplicate(true))
 	character_launch_requested.emit(last_launch_request.duplicate(true))
@@ -956,12 +972,16 @@ func _enter_selected_character() -> void:
 	launch_loading_overlay.set_loading_progress("character:%s" % selected_main_profile_id, 1.0, "进入游戏")
 	if suppress_scene_change_for_test:
 		return
-	var scene_error := get_tree().change_scene_to_packed(launch_scene)
+	var scene_error: int = ContentLayers.change_scene_with_internal_code_retention(_launch_code_result, self, launch_scene)
+	if scene_error == OK:
+		_launch_code_result.clear() # original service now bridges this same lease.
 	if scene_error != OK:
 		_restore_after_launch_failure("暂时无法进入游戏，请重试")
 
 
 func _restore_after_launch_failure(reason: String) -> void:
+	ContentLayers.cancel_internal_code_owner(self, _launch_code_generation)
+	_launch_code_generation += 1
 	_launch_in_progress = false
 	launch_loading_overlay.hide()
 	GothicUIThemeScript.clear_button_feedback(enter_button)
@@ -1008,3 +1028,62 @@ func _section_title(node_name: String, text_value: String, width: float) -> Labe
 	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	title.theme_type_variation = "GothicSectionTitle"
 	return title
+
+
+func adopt_startup_launch_preparation(result: Dictionary, previous: WeakRef, scene: PackedScene) -> void:
+	# Pre-tree carrier only. _ready validates the actual same-service lease.
+	if is_inside_tree() or not _launch_code_result.is_empty():
+		return
+	_launch_code_result = result
+	_launch_code_previous = previous
+	if scene != null and scene.resource_path == "res://scenes/main.tscn":
+		_launch_scene_preload_path = launch_scene_path
+		_launch_scene_preload_resource = scene
+		_launch_scene_preload_state = LAUNCH_PRELOAD_READY
+
+func _accept_startup_launch_retention() -> void:
+	if _launch_code_previous == null:
+		return
+	var previous: Node = _launch_code_previous.get_ref()
+	if is_instance_valid(previous) and ContentLayers.transfer_internal_code_retention(_launch_code_result, previous, self) and previous.relinquish_startup_launch_retention(_launch_code_result, self):
+		_launch_code_diagnostic = {"state": "retained_from_startup", "target_cached_at_transfer": ResourceLoader.has_cached("res://scripts/caster_skill_animation_player.gd")}
+	else:
+		_launch_code_result.clear() # original startup still owns rejection cleanup.
+		_launch_scene_preload_resource = null
+		_launch_scene_preload_state = LAUNCH_PRELOAD_IDLE
+	_launch_code_previous = null
+
+func is_code_preparation_generation_current(generation: int) -> bool:
+	return is_inside_tree() and not is_queued_for_deletion() and generation == _launch_code_generation
+
+func is_code_preparation_loading_phase_current(generation: int) -> bool:
+	return is_code_preparation_generation_current(generation) and _launch_in_progress
+
+func _prepare_launch_code_if_cold(generation: int) -> bool:
+	if ContentLayers.is_internal_code_retention_current(_launch_code_result, self):
+		return true
+	ContentLayers.retire_internal_code_result(_launch_code_result)
+	var began := Time.get_ticks_usec()
+	_launch_code_diagnostic["state"] = "preparing_under_click_cover"
+	_launch_code_diagnostic["target_cached_before"] = ResourceLoader.has_cached("res://scripts/caster_skill_animation_player.gd")
+	var inputs: Dictionary = await ContentLayers.prepare_internal_code_entry(LAUNCH_CODE_ENTRY_ID, launch_loading_overlay, self, generation)
+	if not is_code_preparation_loading_phase_current(generation) or not bool(inputs.get("success", false)):
+		ContentLayers.retire_internal_code_result(inputs)
+		_launch_code_diagnostic["state"] = "cancelled_or_rejected"
+		return false
+	_launch_code_diagnostic["cover"] = inputs.scope.observation()
+	_launch_code_diagnostic["input_usec"] = Time.get_ticks_usec() - began
+	var result: Dictionary = await ContentLayers.request_internal_prepared_script(inputs, self, generation)
+	inputs.clear()
+	if not is_code_preparation_loading_phase_current(generation) or not bool(result.get("success", false)):
+		ContentLayers.retire_internal_code_result(result)
+		_launch_code_diagnostic["state"] = "cancelled_or_rejected"
+		return false
+	_launch_code_result = result
+	_launch_code_diagnostic["state"] = "retained_under_click_cover"
+	_launch_code_diagnostic["total_usec"] = Time.get_ticks_usec() - began
+	_launch_code_diagnostic["target_native_status_after_get"] = ResourceLoader.load_threaded_get_status("res://scripts/caster_skill_animation_player.gd")
+	return true
+
+func launch_code_preparation_diagnostic() -> Dictionary:
+	return _launch_code_diagnostic.duplicate(true)

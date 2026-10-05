@@ -838,167 +838,167 @@
       }
     },
     {
-      "approval_revision": 3.0,
-      "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "649ec2c859cf17d15e1f6e5635e59a9288acc985f3ad4014420b03038bf9e235",
-      "display_name": "祖玛寺庙一层",
-      "map_key": "mengzhong_zuma_temple_f1",
-      "release_state": "implemented_playable",
-      "runtime_map_id": 913101.0,
-      "runtime_path": "res://assets/data/runtime/map_editor/mengzhong_zuma_temple_f1.runtime.json",
-      "ui_presentation": {
-        "boss_names": [],
-        "contract_id": "ui.map.presentation_projection.v1",
-        "has_safe_area": false,
-        "monster_names": [
-          "角蝇",
-          "楔蛾",
-          "大老鼠",
-          "祖玛弓箭手",
-          "祖玛雕像",
-          "祖玛卫士"
-        ],
-        "npc_kinds": [],
-        "portals": [
-          {
-            "label": "盟重",
-            "target_map_id": 910003.0,
-            "target_map_key": "world_mengzhong_province"
-          },
-          {
-            "label": "祖玛2层",
-            "target_map_id": 913102.0,
-            "target_map_key": "mengzhong_zuma_temple_f2"
-          }
-        ],
-        "runtime_build_sha256": "649ec2c859cf17d15e1f6e5635e59a9288acc985f3ad4014420b03038bf9e235"
+  "approval_revision": 4,
+  "approval_source": "published_via_publish_runtime_release",
+  "approved_build_sha256": "f26d7709953d0d1762689b16af1bba31673d94bea2356778ae4a21ebe35a5015",
+  "display_name": "祖玛寺庙一层",
+  "map_key": "mengzhong_zuma_temple_f1",
+  "release_state": "implemented_playable",
+  "runtime_map_id": 913101,
+  "runtime_path": "res://assets/data/runtime/map_editor/mengzhong_zuma_temple_f1.runtime.json",
+  "ui_presentation": {
+    "boss_names": [],
+    "contract_id": "ui.map.presentation_projection.v1",
+    "has_safe_area": false,
+    "monster_names": [
+      "角蝇",
+      "楔蛾",
+      "大老鼠",
+      "祖玛弓箭手",
+      "祖玛雕像",
+      "祖玛卫士"
+    ],
+    "npc_kinds": [],
+    "portals": [
+      {
+        "label": "盟重",
+        "target_map_id": 910003,
+        "target_map_key": "world_mengzhong_province"
+      },
+      {
+        "label": "祖玛2层",
+        "target_map_id": 913102,
+        "target_map_key": "mengzhong_zuma_temple_f2"
       }
-    },
+    ],
+    "runtime_build_sha256": "f26d7709953d0d1762689b16af1bba31673d94bea2356778ae4a21ebe35a5015"
+  }
+},
     {
-      "approval_revision": 3.0,
-      "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "d1cb9d718fa9358cd0cb7c7ddfab5dfd2e24a42eecdfb0ab6ed7c0adb969a724",
-      "display_name": "祖玛寺庙二层",
-      "map_key": "mengzhong_zuma_temple_f2",
-      "release_state": "implemented_playable",
-      "runtime_map_id": 913102.0,
-      "runtime_path": "res://assets/data/runtime/map_editor/mengzhong_zuma_temple_f2.runtime.json",
-      "ui_presentation": {
-        "boss_names": [
-          "祖玛弓箭手3",
-          "祖玛卫士3",
-          "祖玛雕像3"
-        ],
-        "contract_id": "ui.map.presentation_projection.v1",
-        "has_safe_area": false,
-        "monster_names": [
-          "角蝇",
-          "楔蛾",
-          "大老鼠",
-          "祖玛卫士",
-          "祖玛雕像",
-          "祖玛弓箭手"
-        ],
-        "npc_kinds": [],
-        "portals": [
-          {
-            "label": "祖玛1层",
-            "target_map_id": 913101.0,
-            "target_map_key": "mengzhong_zuma_temple_f1"
-          },
-          {
-            "label": "祖玛3层",
-            "target_map_id": 913103.0,
-            "target_map_key": "mengzhong_zuma_temple_f3"
-          }
-        ],
-        "runtime_build_sha256": "d1cb9d718fa9358cd0cb7c7ddfab5dfd2e24a42eecdfb0ab6ed7c0adb969a724"
+  "approval_revision": 4,
+  "approval_source": "published_via_publish_runtime_release",
+  "approved_build_sha256": "2b7da2a4cbf0954eeccbd09ddd983a5e1795e923429a3d11eee2c3262eef3d10",
+  "display_name": "祖玛寺庙二层",
+  "map_key": "mengzhong_zuma_temple_f2",
+  "release_state": "implemented_playable",
+  "runtime_map_id": 913102,
+  "runtime_path": "res://assets/data/runtime/map_editor/mengzhong_zuma_temple_f2.runtime.json",
+  "ui_presentation": {
+    "boss_names": [
+      "祖玛弓箭手3",
+      "祖玛卫士3",
+      "祖玛雕像3"
+    ],
+    "contract_id": "ui.map.presentation_projection.v1",
+    "has_safe_area": false,
+    "monster_names": [
+      "角蝇",
+      "楔蛾",
+      "大老鼠",
+      "祖玛卫士",
+      "祖玛雕像",
+      "祖玛弓箭手"
+    ],
+    "npc_kinds": [],
+    "portals": [
+      {
+        "label": "祖玛1层",
+        "target_map_id": 913101,
+        "target_map_key": "mengzhong_zuma_temple_f1"
+      },
+      {
+        "label": "祖玛3层",
+        "target_map_id": 913103,
+        "target_map_key": "mengzhong_zuma_temple_f3"
       }
-    },
+    ],
+    "runtime_build_sha256": "2b7da2a4cbf0954eeccbd09ddd983a5e1795e923429a3d11eee2c3262eef3d10"
+  }
+},
     {
-      "approval_revision": 3.0,
-      "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "de1781c260f047d2cdf44a1e47d749283744035d1c895a622a82f9e5c5727601",
-      "display_name": "祖玛寺庙三层",
-      "map_key": "mengzhong_zuma_temple_f3",
-      "release_state": "implemented_playable",
-      "runtime_map_id": 913103.0,
-      "runtime_path": "res://assets/data/runtime/map_editor/mengzhong_zuma_temple_f3.runtime.json",
-      "ui_presentation": {
-        "boss_names": [
-          "祖玛弓箭手3",
-          "祖玛卫士3",
-          "祖玛雕像3"
-        ],
-        "contract_id": "ui.map.presentation_projection.v1",
-        "has_safe_area": false,
-        "monster_names": [
-          "角蝇",
-          "楔蛾",
-          "大老鼠",
-          "祖玛卫士",
-          "祖玛雕像",
-          "祖玛弓箭手"
-        ],
-        "npc_kinds": [],
-        "portals": [
-          {
-            "label": "祖玛2层",
-            "target_map_id": 913102.0,
-            "target_map_key": "mengzhong_zuma_temple_f2"
-          },
-          {
-            "label": "祖玛4层",
-            "target_map_id": 913104.0,
-            "target_map_key": "mengzhong_zuma_temple_f4"
-          }
-        ],
-        "runtime_build_sha256": "de1781c260f047d2cdf44a1e47d749283744035d1c895a622a82f9e5c5727601"
+  "approval_revision": 4,
+  "approval_source": "published_via_publish_runtime_release",
+  "approved_build_sha256": "7ef1ca361e6c2953a5e140a85251168db7be73f6a8e21bf6e984bf11ab9193fe",
+  "display_name": "祖玛寺庙三层",
+  "map_key": "mengzhong_zuma_temple_f3",
+  "release_state": "implemented_playable",
+  "runtime_map_id": 913103,
+  "runtime_path": "res://assets/data/runtime/map_editor/mengzhong_zuma_temple_f3.runtime.json",
+  "ui_presentation": {
+    "boss_names": [
+      "祖玛弓箭手3",
+      "祖玛卫士3",
+      "祖玛雕像3"
+    ],
+    "contract_id": "ui.map.presentation_projection.v1",
+    "has_safe_area": false,
+    "monster_names": [
+      "角蝇",
+      "楔蛾",
+      "大老鼠",
+      "祖玛卫士",
+      "祖玛雕像",
+      "祖玛弓箭手"
+    ],
+    "npc_kinds": [],
+    "portals": [
+      {
+        "label": "祖玛2层",
+        "target_map_id": 913102,
+        "target_map_key": "mengzhong_zuma_temple_f2"
+      },
+      {
+        "label": "祖玛4层",
+        "target_map_id": 913104,
+        "target_map_key": "mengzhong_zuma_temple_f4"
       }
-    },
+    ],
+    "runtime_build_sha256": "7ef1ca361e6c2953a5e140a85251168db7be73f6a8e21bf6e984bf11ab9193fe"
+  }
+},
     {
-      "approval_revision": 3.0,
-      "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "d928fbf96b84dfb0504b5a0457313b032878326ccac5522853ac60ad2cbc779e",
-      "display_name": "祖玛寺庙四层",
-      "map_key": "mengzhong_zuma_temple_f4",
-      "release_state": "implemented_playable",
-      "runtime_map_id": 913104.0,
-      "runtime_path": "res://assets/data/runtime/map_editor/mengzhong_zuma_temple_f4.runtime.json",
-      "ui_presentation": {
-        "boss_names": [
-          "祖玛弓箭手3",
-          "祖玛卫士3",
-          "祖玛雕像3"
-        ],
-        "contract_id": "ui.map.presentation_projection.v1",
-        "has_safe_area": false,
-        "monster_names": [
-          "角蝇",
-          "楔蛾",
-          "大老鼠",
-          "祖玛卫士",
-          "祖玛雕像",
-          "祖玛弓箭手"
-        ],
-        "npc_kinds": [
-          "shop"
-        ],
-        "portals": [
-          {
-            "label": "祖玛3层",
-            "target_map_id": 913103.0,
-            "target_map_key": "mengzhong_zuma_temple_f3"
-          },
-          {
-            "label": "祖玛阁",
-            "target_map_id": 913105.0,
-            "target_map_key": "mengzhong_zuma_pavilion"
-          }
-        ],
-        "runtime_build_sha256": "d928fbf96b84dfb0504b5a0457313b032878326ccac5522853ac60ad2cbc779e"
+  "approval_revision": 4,
+  "approval_source": "published_via_publish_runtime_release",
+  "approved_build_sha256": "c41cace30b8dd43e701d01d96fdbc5420a2628a5f3f7ec9244116fa4caace575",
+  "display_name": "祖玛寺庙四层",
+  "map_key": "mengzhong_zuma_temple_f4",
+  "release_state": "implemented_playable",
+  "runtime_map_id": 913104,
+  "runtime_path": "res://assets/data/runtime/map_editor/mengzhong_zuma_temple_f4.runtime.json",
+  "ui_presentation": {
+    "boss_names": [
+      "祖玛弓箭手3",
+      "祖玛卫士3",
+      "祖玛雕像3"
+    ],
+    "contract_id": "ui.map.presentation_projection.v1",
+    "has_safe_area": false,
+    "monster_names": [
+      "角蝇",
+      "楔蛾",
+      "大老鼠",
+      "祖玛卫士",
+      "祖玛雕像",
+      "祖玛弓箭手"
+    ],
+    "npc_kinds": [
+      "shop"
+    ],
+    "portals": [
+      {
+        "label": "祖玛3层",
+        "target_map_id": 913103,
+        "target_map_key": "mengzhong_zuma_temple_f3"
+      },
+      {
+        "label": "祖玛阁",
+        "target_map_id": 913105,
+        "target_map_key": "mengzhong_zuma_pavilion"
       }
-    },
+    ],
+    "runtime_build_sha256": "c41cace30b8dd43e701d01d96fdbc5420a2628a5f3f7ec9244116fa4caace575"
+  }
+},
     {
       "approval_revision": 3.0,
       "approval_source": "published_via_publish_runtime_release",
@@ -1549,45 +1549,45 @@
       }
     },
     {
-      "approval_revision": 3.0,
-      "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "8e666022d6b2d1cdf4d3b3a1d683108b3b467e49f2d0999ccae3f5277081f257",
-      "display_name": "炼狱回廊",
-      "map_key": "fengmo_purgatory_corridor",
-      "release_state": "implemented_playable",
-      "runtime_map_id": 914007.0,
-      "runtime_path": "res://assets/data/runtime/map_editor/fengmo_purgatory_corridor.runtime.json",
-      "ui_presentation": {
-        "boss_names": [
-          "祖玛弓箭手3",
-          "祖玛雕像3",
-          "白野猪",
-          "邪恶毒蛇",
-          "祖玛卫士3"
-        ],
-        "contract_id": "ui.map.presentation_projection.v1",
-        "has_safe_area": false,
-        "monster_names": [
-          "祖玛雕像",
-          "祖玛卫士",
-          "祖玛弓箭手"
-        ],
-        "npc_kinds": [],
-        "portals": [
-          {
-            "label": "魔魂殿",
-            "target_map_id": 914006.0,
-            "target_map_key": "fengmo_mohun_hall"
-          },
-          {
-            "label": "封魔殿",
-            "target_map_id": 914008.0,
-            "target_map_key": "fengmo_final_hall"
-          }
-        ],
-        "runtime_build_sha256": "8e666022d6b2d1cdf4d3b3a1d683108b3b467e49f2d0999ccae3f5277081f257"
+  "approval_revision": 4,
+  "approval_source": "published_via_publish_runtime_release",
+  "approved_build_sha256": "d993ee9def020501a6ac836805856af5e5a3212a099e176516142175a0e26581",
+  "display_name": "炼狱回廊",
+  "map_key": "fengmo_purgatory_corridor",
+  "release_state": "implemented_playable",
+  "runtime_map_id": 914007,
+  "runtime_path": "res://assets/data/runtime/map_editor/fengmo_purgatory_corridor.runtime.json",
+  "ui_presentation": {
+    "boss_names": [
+      "祖玛弓箭手3",
+      "祖玛雕像3",
+      "白野猪",
+      "邪恶毒蛇",
+      "祖玛卫士3"
+    ],
+    "contract_id": "ui.map.presentation_projection.v1",
+    "has_safe_area": false,
+    "monster_names": [
+      "祖玛雕像",
+      "祖玛卫士",
+      "祖玛弓箭手"
+    ],
+    "npc_kinds": [],
+    "portals": [
+      {
+        "label": "魔魂殿",
+        "target_map_id": 914006,
+        "target_map_key": "fengmo_mohun_hall"
+      },
+      {
+        "label": "封魔殿",
+        "target_map_id": 914008,
+        "target_map_key": "fengmo_final_hall"
       }
-    },
+    ],
+    "runtime_build_sha256": "d993ee9def020501a6ac836805856af5e5a3212a099e176516142175a0e26581"
+  }
+},
     {
       "approval_revision": 3.0,
       "approval_source": "published_via_publish_runtime_release",
@@ -1658,47 +1658,47 @@
       }
     },
     {
-      "approval_revision": 3.0,
-      "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "8784de0813edcdfa59b1e950ab36c3dd634cc1990f1146b8d747df919b196f95",
-      "display_name": "沃玛寺庙二层",
-      "map_key": "wooma_temple_f2",
-      "release_state": "implemented_playable",
-      "runtime_map_id": 915002.0,
-      "runtime_path": "res://assets/data/runtime/map_editor/wooma_temple_f2.runtime.json",
-      "ui_presentation": {
-        "boss_names": [
-          "沃玛卫士"
-        ],
-        "contract_id": "ui.map.presentation_projection.v1",
-        "has_safe_area": false,
-        "monster_names": [
-          "山洞蝙蝠",
-          "粪虫",
-          "暗黑战士",
-          "沃玛战士",
-          "沃玛勇士",
-          "沃玛战将",
-          "火焰沃玛"
-        ],
-        "npc_kinds": [
-          "shop"
-        ],
-        "portals": [
-          {
-            "label": "进入沃玛教主大厅",
-            "target_map_id": 915003.0,
-            "target_map_key": "wooma_temple_boss_hall"
-          },
-          {
-            "label": "返回沃玛寺庙一层",
-            "target_map_id": 915001.0,
-            "target_map_key": "wooma_temple_f1"
-          }
-        ],
-        "runtime_build_sha256": "8784de0813edcdfa59b1e950ab36c3dd634cc1990f1146b8d747df919b196f95"
+  "approval_revision": 4,
+  "approval_source": "published_via_publish_runtime_release",
+  "approved_build_sha256": "b1f2060b2789f7c968771ace8ebf8d8dd81d28e9ef1357dff6fad7840c600034",
+  "display_name": "沃玛寺庙二层",
+  "map_key": "wooma_temple_f2",
+  "release_state": "implemented_playable",
+  "runtime_map_id": 915002,
+  "runtime_path": "res://assets/data/runtime/map_editor/wooma_temple_f2.runtime.json",
+  "ui_presentation": {
+    "boss_names": [
+      "沃玛卫士"
+    ],
+    "contract_id": "ui.map.presentation_projection.v1",
+    "has_safe_area": false,
+    "monster_names": [
+      "山洞蝙蝠",
+      "粪虫",
+      "暗黑战士",
+      "沃玛战士",
+      "沃玛勇士",
+      "沃玛战将",
+      "火焰沃玛"
+    ],
+    "npc_kinds": [
+      "shop"
+    ],
+    "portals": [
+      {
+        "label": "进入沃玛教主大厅",
+        "target_map_id": 915003,
+        "target_map_key": "wooma_temple_boss_hall"
+      },
+      {
+        "label": "返回沃玛寺庙一层",
+        "target_map_id": 915001,
+        "target_map_key": "wooma_temple_f1"
       }
-    },
+    ],
+    "runtime_build_sha256": "b1f2060b2789f7c968771ace8ebf8d8dd81d28e9ef1357dff6fad7840c600034"
+  }
+},
     {
       "approval_revision": 3.0,
       "approval_source": "published_via_publish_runtime_release",
@@ -1998,179 +1998,179 @@
       }
     },
     {
-      "approval_revision": 3.0,
-      "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "75276c8d9b371db6648fdf1acd714d200a3f86e0cacb05258bb495e7f89ceb54",
-      "display_name": "骨魔洞一层",
-      "map_key": "cangyue_bone_cave_f1",
-      "release_state": "implemented_playable",
-      "runtime_map_id": 917001.0,
-      "runtime_path": "res://assets/data/runtime/map_editor/cangyue_bone_cave_f1.runtime.json",
-      "ui_presentation": {
-        "boss_names": [],
-        "contract_id": "ui.map.presentation_projection.v1",
-        "has_safe_area": false,
-        "monster_names": [
-          "骷髅长枪兵",
-          "骷髅刀斧手",
-          "骷髅弓箭手",
-          "宝箱8",
-          "宝箱7",
-          "宝箱6",
-          "宝箱5",
-          "宝箱4",
-          "宝箱3",
-          "宝箱2",
-          "骷髅锤兵"
-        ],
-        "npc_kinds": [],
-        "portals": [
-          {
-            "label": "苍月岛",
-            "target_map_id": 910007.0,
-            "target_map_key": "world_cangyue_island"
-          },
-          {
-            "label": "骨魔洞2层",
-            "target_map_id": 917002.0,
-            "target_map_key": "cangyue_bone_cave_f2"
-          }
-        ],
-        "runtime_build_sha256": "75276c8d9b371db6648fdf1acd714d200a3f86e0cacb05258bb495e7f89ceb54"
+  "approval_revision": 4,
+  "approval_source": "published_via_publish_runtime_release",
+  "approved_build_sha256": "7d7ffe4d2ede59801bec6fa18c0c9c69e3ae18c6d0a8e55b2bcbd29e32122815",
+  "display_name": "骨魔洞一层",
+  "map_key": "cangyue_bone_cave_f1",
+  "release_state": "implemented_playable",
+  "runtime_map_id": 917001,
+  "runtime_path": "res://assets/data/runtime/map_editor/cangyue_bone_cave_f1.runtime.json",
+  "ui_presentation": {
+    "boss_names": [],
+    "contract_id": "ui.map.presentation_projection.v1",
+    "has_safe_area": false,
+    "monster_names": [
+      "骷髅长枪兵",
+      "骷髅刀斧手",
+      "骷髅弓箭手",
+      "宝箱8",
+      "宝箱7",
+      "宝箱6",
+      "宝箱5",
+      "宝箱4",
+      "宝箱3",
+      "宝箱2",
+      "骷髅锤兵"
+    ],
+    "npc_kinds": [],
+    "portals": [
+      {
+        "label": "苍月岛",
+        "target_map_id": 910007,
+        "target_map_key": "world_cangyue_island"
+      },
+      {
+        "label": "骨魔洞2层",
+        "target_map_id": 917002,
+        "target_map_key": "cangyue_bone_cave_f2"
       }
-    },
-    {
-      "approval_revision": 3.0,
-      "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "fcc90b9d75eee788e2d9657a7c68454e87bb30f6b3fed9c2bcc193685be38f16",
-      "display_name": "骨魔洞二层",
-      "map_key": "cangyue_bone_cave_f2",
-      "release_state": "implemented_playable",
-      "runtime_map_id": 917002.0,
-      "runtime_path": "res://assets/data/runtime/map_editor/cangyue_bone_cave_f2.runtime.json",
-      "ui_presentation": {
-        "boss_names": [],
-        "contract_id": "ui.map.presentation_projection.v1",
-        "has_safe_area": false,
-        "monster_names": [
-          "骷髅长枪兵",
-          "骷髅刀斧手",
-          "骷髅弓箭手",
-          "宝箱8",
-          "宝箱7",
-          "宝箱6",
-          "宝箱5",
-          "宝箱4",
-          "宝箱3",
-          "宝箱2",
-          "骷髅锤兵"
-        ],
-        "npc_kinds": [],
-        "portals": [
-          {
-            "label": "骨魔洞1层",
-            "target_map_id": 917001.0,
-            "target_map_key": "cangyue_bone_cave_f1"
-          },
-          {
-            "label": "骨魔洞3层",
-            "target_map_id": 917003.0,
-            "target_map_key": "cangyue_bone_cave_f3"
-          }
-        ],
-        "runtime_build_sha256": "fcc90b9d75eee788e2d9657a7c68454e87bb30f6b3fed9c2bcc193685be38f16"
-      }
-    },
-    {
-      "approval_revision": 3.0,
-      "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "553473aa08ffd0c8b58f581198af381064c81c1ea11d2916a13b3e4f4feb268f",
-      "display_name": "骨魔洞三层",
-      "map_key": "cangyue_bone_cave_f3",
-      "release_state": "implemented_playable",
-      "runtime_map_id": 917003.0,
-      "runtime_path": "res://assets/data/runtime/map_editor/cangyue_bone_cave_f3.runtime.json",
-      "ui_presentation": {
-        "boss_names": [],
-        "contract_id": "ui.map.presentation_projection.v1",
-        "has_safe_area": false,
-        "monster_names": [
-          "骷髅长枪兵",
-          "骷髅刀斧手",
-          "骷髅弓箭手",
-          "宝箱8",
-          "宝箱7",
-          "宝箱6",
-          "宝箱5",
-          "宝箱4",
-          "宝箱3",
-          "宝箱2",
-          "骷髅锤兵"
-        ],
-        "npc_kinds": [
-          "shop"
-        ],
-        "portals": [
-          {
-            "label": "骨魔洞2层",
-            "target_map_id": 917002.0,
-            "target_map_key": "cangyue_bone_cave_f2"
-          },
-          {
-            "label": "骨魔洞4层",
-            "target_map_id": 917004.0,
-            "target_map_key": "cangyue_bone_cave_f4"
-          }
-        ],
-        "runtime_build_sha256": "553473aa08ffd0c8b58f581198af381064c81c1ea11d2916a13b3e4f4feb268f"
-      }
-    },
-    {
-      "approval_revision": 3.0,
-      "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "7d06180b92afc14a524d6d7f033b53f100457fdd8f7368b6a7c8b345cfba98a3",
-      "display_name": "骨魔洞四层",
-      "map_key": "cangyue_bone_cave_f4",
-      "release_state": "implemented_playable",
-      "runtime_map_id": 917004.0,
-      "runtime_path": "res://assets/data/runtime/map_editor/cangyue_bone_cave_f4.runtime.json",
-      "ui_presentation": {
-        "boss_names": [],
-        "contract_id": "ui.map.presentation_projection.v1",
-        "has_safe_area": false,
-        "monster_names": [
-          "骷髅长枪兵",
-          "骷髅刀斧手",
-          "骷髅弓箭手",
-          "宝箱8",
-          "宝箱7",
-          "宝箱6",
-          "宝箱5",
-          "宝箱4",
-          "宝箱3",
-          "宝箱2",
-          "骷髅锤兵"
-        ],
-        "npc_kinds": [],
-        "portals": [
-          {
-            "label": "骨魔洞3层",
-            "target_map_id": 917003.0,
-            "target_map_key": "cangyue_bone_cave_f3"
-          },
-          {
-            "label": "骨魔洞5层",
-            "target_map_id": 917005.0,
-            "target_map_key": "cangyue_bone_cave_f5"
-          }
-        ],
-        "runtime_build_sha256": "7d06180b92afc14a524d6d7f033b53f100457fdd8f7368b6a7c8b345cfba98a3"
-      }
-    },
+    ],
+    "runtime_build_sha256": "7d7ffe4d2ede59801bec6fa18c0c9c69e3ae18c6d0a8e55b2bcbd29e32122815"
+  }
+},
     {
   "approval_revision": 4,
   "approval_source": "published_via_publish_runtime_release",
-  "approved_build_sha256": "5d59939f9688a931ee99306f1841a8f7cba2784136728b6e91e97ec69f200f89",
+  "approved_build_sha256": "b70e8d4136d46d8d9957b91ee35eb5e4841b38b07118d38986b0c566554b75bd",
+  "display_name": "骨魔洞二层",
+  "map_key": "cangyue_bone_cave_f2",
+  "release_state": "implemented_playable",
+  "runtime_map_id": 917002,
+  "runtime_path": "res://assets/data/runtime/map_editor/cangyue_bone_cave_f2.runtime.json",
+  "ui_presentation": {
+    "boss_names": [],
+    "contract_id": "ui.map.presentation_projection.v1",
+    "has_safe_area": false,
+    "monster_names": [
+      "骷髅长枪兵",
+      "骷髅刀斧手",
+      "骷髅弓箭手",
+      "宝箱8",
+      "宝箱7",
+      "宝箱6",
+      "宝箱5",
+      "宝箱4",
+      "宝箱3",
+      "宝箱2",
+      "骷髅锤兵"
+    ],
+    "npc_kinds": [],
+    "portals": [
+      {
+        "label": "骨魔洞1层",
+        "target_map_id": 917001,
+        "target_map_key": "cangyue_bone_cave_f1"
+      },
+      {
+        "label": "骨魔洞3层",
+        "target_map_id": 917003,
+        "target_map_key": "cangyue_bone_cave_f3"
+      }
+    ],
+    "runtime_build_sha256": "b70e8d4136d46d8d9957b91ee35eb5e4841b38b07118d38986b0c566554b75bd"
+  }
+},
+    {
+  "approval_revision": 4,
+  "approval_source": "published_via_publish_runtime_release",
+  "approved_build_sha256": "f3d59b71c1c2c0dee5780447d5855bf3152b1caf0f2e940d11591f1494a97098",
+  "display_name": "骨魔洞三层",
+  "map_key": "cangyue_bone_cave_f3",
+  "release_state": "implemented_playable",
+  "runtime_map_id": 917003,
+  "runtime_path": "res://assets/data/runtime/map_editor/cangyue_bone_cave_f3.runtime.json",
+  "ui_presentation": {
+    "boss_names": [],
+    "contract_id": "ui.map.presentation_projection.v1",
+    "has_safe_area": false,
+    "monster_names": [
+      "骷髅长枪兵",
+      "骷髅刀斧手",
+      "骷髅弓箭手",
+      "宝箱8",
+      "宝箱7",
+      "宝箱6",
+      "宝箱5",
+      "宝箱4",
+      "宝箱3",
+      "宝箱2",
+      "骷髅锤兵"
+    ],
+    "npc_kinds": [
+      "shop"
+    ],
+    "portals": [
+      {
+        "label": "骨魔洞2层",
+        "target_map_id": 917002,
+        "target_map_key": "cangyue_bone_cave_f2"
+      },
+      {
+        "label": "骨魔洞4层",
+        "target_map_id": 917004,
+        "target_map_key": "cangyue_bone_cave_f4"
+      }
+    ],
+    "runtime_build_sha256": "f3d59b71c1c2c0dee5780447d5855bf3152b1caf0f2e940d11591f1494a97098"
+  }
+},
+    {
+  "approval_revision": 4,
+  "approval_source": "published_via_publish_runtime_release",
+  "approved_build_sha256": "cf7ae87070ac7fc5cc0463b175cb8319f1562b6974ee8f9acbc2ef4c76b8e77f",
+  "display_name": "骨魔洞四层",
+  "map_key": "cangyue_bone_cave_f4",
+  "release_state": "implemented_playable",
+  "runtime_map_id": 917004,
+  "runtime_path": "res://assets/data/runtime/map_editor/cangyue_bone_cave_f4.runtime.json",
+  "ui_presentation": {
+    "boss_names": [],
+    "contract_id": "ui.map.presentation_projection.v1",
+    "has_safe_area": false,
+    "monster_names": [
+      "骷髅长枪兵",
+      "骷髅刀斧手",
+      "骷髅弓箭手",
+      "宝箱8",
+      "宝箱7",
+      "宝箱6",
+      "宝箱5",
+      "宝箱4",
+      "宝箱3",
+      "宝箱2",
+      "骷髅锤兵"
+    ],
+    "npc_kinds": [],
+    "portals": [
+      {
+        "label": "骨魔洞3层",
+        "target_map_id": 917003,
+        "target_map_key": "cangyue_bone_cave_f3"
+      },
+      {
+        "label": "骨魔洞5层",
+        "target_map_id": 917005,
+        "target_map_key": "cangyue_bone_cave_f5"
+      }
+    ],
+    "runtime_build_sha256": "cf7ae87070ac7fc5cc0463b175cb8319f1562b6974ee8f9acbc2ef4c76b8e77f"
+  }
+},
+    {
+  "approval_revision": 5,
+  "approval_source": "published_via_publish_runtime_release",
+  "approved_build_sha256": "20bde4791e0933e9ffa18a4bffdadb78a6a53094b221f3a58b8b0c572d486856",
   "display_name": "骨魔洞五层",
   "map_key": "cangyue_bone_cave_f5",
   "release_state": "implemented_playable",
@@ -2193,170 +2193,170 @@
     ],
     "npc_kinds": [],
     "portals": [],
-    "runtime_build_sha256": "5d59939f9688a931ee99306f1841a8f7cba2784136728b6e91e97ec69f200f89"
+    "runtime_build_sha256": "20bde4791e0933e9ffa18a4bffdadb78a6a53094b221f3a58b8b0c572d486856"
   }
 },
     {
-      "approval_revision": 3.0,
-      "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "429dfa205f4d9de27561f5b840e16229c9f3f1a6b8bc1b410bad5d9895b2cf87",
-      "display_name": "牛魔寺庙一层",
-      "map_key": "cangyue_bull_temple_f1",
-      "release_state": "implemented_playable",
-      "runtime_map_id": 917101.0,
-      "runtime_path": "res://assets/data/runtime/map_editor/cangyue_bull_temple_f1.runtime.json",
-      "ui_presentation": {
-        "boss_names": [],
-        "contract_id": "ui.map.presentation_projection.v1",
-        "has_safe_area": false,
-        "monster_names": [
-          "牛头魔",
-          "牛魔战士",
-          "牛魔侍卫",
-          "宝箱8",
-          "宝箱7",
-          "宝箱6",
-          "牛魔斗士",
-          "宝箱5"
-        ],
-        "npc_kinds": [],
-        "portals": [
-          {
-            "label": "苍月岛",
-            "target_map_id": 910007.0,
-            "target_map_key": "world_cangyue_island"
-          },
-          {
-            "label": "牛魔寺庙2层",
-            "target_map_id": 917102.0,
-            "target_map_key": "cangyue_bull_temple_f2"
-          }
-        ],
-        "runtime_build_sha256": "429dfa205f4d9de27561f5b840e16229c9f3f1a6b8bc1b410bad5d9895b2cf87"
+  "approval_revision": 4,
+  "approval_source": "published_via_publish_runtime_release",
+  "approved_build_sha256": "ef0dab8a261cb4901ddd435b7754bd6039a02c07acf806ef6465024499523ada",
+  "display_name": "牛魔寺庙一层",
+  "map_key": "cangyue_bull_temple_f1",
+  "release_state": "implemented_playable",
+  "runtime_map_id": 917101,
+  "runtime_path": "res://assets/data/runtime/map_editor/cangyue_bull_temple_f1.runtime.json",
+  "ui_presentation": {
+    "boss_names": [],
+    "contract_id": "ui.map.presentation_projection.v1",
+    "has_safe_area": false,
+    "monster_names": [
+      "牛头魔",
+      "牛魔战士",
+      "牛魔侍卫",
+      "宝箱8",
+      "宝箱7",
+      "宝箱6",
+      "牛魔斗士",
+      "宝箱5"
+    ],
+    "npc_kinds": [],
+    "portals": [
+      {
+        "label": "苍月岛",
+        "target_map_id": 910007,
+        "target_map_key": "world_cangyue_island"
+      },
+      {
+        "label": "牛魔寺庙2层",
+        "target_map_id": 917102,
+        "target_map_key": "cangyue_bull_temple_f2"
       }
-    },
+    ],
+    "runtime_build_sha256": "ef0dab8a261cb4901ddd435b7754bd6039a02c07acf806ef6465024499523ada"
+  }
+},
     {
-      "approval_revision": 4.0,
-      "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "87ca91ea45994e0488c7c8d3d1ba0202404840036eaf58e170d01fe8296d2602",
-      "display_name": "牛魔寺庙二层",
-      "map_key": "cangyue_bull_temple_f2",
-      "release_state": "implemented_playable",
-      "runtime_map_id": 917102.0,
-      "runtime_path": "res://assets/data/runtime/map_editor/cangyue_bull_temple_f2.runtime.json",
-      "ui_presentation": {
-        "boss_names": [],
-        "contract_id": "ui.map.presentation_projection.v1",
-        "has_safe_area": false,
-        "monster_names": [
-          "牛头魔",
-          "牛魔战士",
-          "牛魔侍卫",
-          "宝箱8",
-          "宝箱7",
-          "宝箱6",
-          "牛魔斗士",
-          "宝箱5"
-        ],
-        "npc_kinds": [],
-        "portals": [
-          {
-            "label": "牛魔寺庙1层",
-            "target_map_id": 917101.0,
-            "target_map_key": "cangyue_bull_temple_f1"
-          },
-          {
-            "label": "牛魔寺庙3层",
-            "target_map_id": 917103.0,
-            "target_map_key": "cangyue_bull_temple_f3"
-          }
-        ],
-        "runtime_build_sha256": "87ca91ea45994e0488c7c8d3d1ba0202404840036eaf58e170d01fe8296d2602"
+  "approval_revision": 5,
+  "approval_source": "published_via_publish_runtime_release",
+  "approved_build_sha256": "ee98baf5980fca614daf928c11883a3c651d09e2def682362e56ff38fe968056",
+  "display_name": "牛魔寺庙二层",
+  "map_key": "cangyue_bull_temple_f2",
+  "release_state": "implemented_playable",
+  "runtime_map_id": 917102,
+  "runtime_path": "res://assets/data/runtime/map_editor/cangyue_bull_temple_f2.runtime.json",
+  "ui_presentation": {
+    "boss_names": [],
+    "contract_id": "ui.map.presentation_projection.v1",
+    "has_safe_area": false,
+    "monster_names": [
+      "牛头魔",
+      "牛魔战士",
+      "牛魔侍卫",
+      "宝箱8",
+      "宝箱7",
+      "宝箱6",
+      "牛魔斗士",
+      "宝箱5"
+    ],
+    "npc_kinds": [],
+    "portals": [
+      {
+        "label": "牛魔寺庙1层",
+        "target_map_id": 917101,
+        "target_map_key": "cangyue_bull_temple_f1"
+      },
+      {
+        "label": "牛魔寺庙3层",
+        "target_map_id": 917103,
+        "target_map_key": "cangyue_bull_temple_f3"
       }
-    },
+    ],
+    "runtime_build_sha256": "ee98baf5980fca614daf928c11883a3c651d09e2def682362e56ff38fe968056"
+  }
+},
     {
-      "approval_revision": 4.0,
-      "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "d613dd1e14d8b5cd612d9d4812a4fcba5596d7ee2a5d65fda03139d04c582b68",
-      "display_name": "牛魔寺庙三层",
-      "map_key": "cangyue_bull_temple_f3",
-      "release_state": "implemented_playable",
-      "runtime_map_id": 917103.0,
-      "runtime_path": "res://assets/data/runtime/map_editor/cangyue_bull_temple_f3.runtime.json",
-      "ui_presentation": {
-        "boss_names": [],
-        "contract_id": "ui.map.presentation_projection.v1",
-        "has_safe_area": false,
-        "monster_names": [
-          "牛头魔",
-          "牛魔战士",
-          "牛魔侍卫",
-          "宝箱8",
-          "宝箱7",
-          "宝箱6",
-          "牛魔斗士",
-          "宝箱5",
-          "牛魔法师"
-        ],
-        "npc_kinds": [
-          "shop"
-        ],
-        "portals": [
-          {
-            "label": "牛魔寺庙2层",
-            "target_map_id": 917102.0,
-            "target_map_key": "cangyue_bull_temple_f2"
-          },
-          {
-            "label": "牛魔寺庙4层",
-            "target_map_id": 917104.0,
-            "target_map_key": "cangyue_bull_temple_f4"
-          }
-        ],
-        "runtime_build_sha256": "d613dd1e14d8b5cd612d9d4812a4fcba5596d7ee2a5d65fda03139d04c582b68"
+  "approval_revision": 5,
+  "approval_source": "published_via_publish_runtime_release",
+  "approved_build_sha256": "484e824ec20e4affb53983de579a3f5330de56d3c0b0f779d6b6a550acc91539",
+  "display_name": "牛魔寺庙三层",
+  "map_key": "cangyue_bull_temple_f3",
+  "release_state": "implemented_playable",
+  "runtime_map_id": 917103,
+  "runtime_path": "res://assets/data/runtime/map_editor/cangyue_bull_temple_f3.runtime.json",
+  "ui_presentation": {
+    "boss_names": [],
+    "contract_id": "ui.map.presentation_projection.v1",
+    "has_safe_area": false,
+    "monster_names": [
+      "牛头魔",
+      "牛魔战士",
+      "牛魔侍卫",
+      "宝箱8",
+      "宝箱7",
+      "宝箱6",
+      "牛魔斗士",
+      "宝箱5",
+      "牛魔法师"
+    ],
+    "npc_kinds": [
+      "shop"
+    ],
+    "portals": [
+      {
+        "label": "牛魔寺庙2层",
+        "target_map_id": 917102,
+        "target_map_key": "cangyue_bull_temple_f2"
+      },
+      {
+        "label": "牛魔寺庙4层",
+        "target_map_id": 917104,
+        "target_map_key": "cangyue_bull_temple_f4"
       }
-    },
+    ],
+    "runtime_build_sha256": "484e824ec20e4affb53983de579a3f5330de56d3c0b0f779d6b6a550acc91539"
+  }
+},
     {
-      "approval_revision": 4.0,
-      "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "4d8e0034366e65e65751e626c091b991f76ab7e62f51a4bd6dab2703d51573b7",
-      "display_name": "牛魔寺庙四层",
-      "map_key": "cangyue_bull_temple_f4",
-      "release_state": "implemented_playable",
-      "runtime_map_id": 917104.0,
-      "runtime_path": "res://assets/data/runtime/map_editor/cangyue_bull_temple_f4.runtime.json",
-      "ui_presentation": {
-        "boss_names": [],
-        "contract_id": "ui.map.presentation_projection.v1",
-        "has_safe_area": false,
-        "monster_names": [
-          "牛头魔",
-          "牛魔战士",
-          "牛魔侍卫",
-          "宝箱8",
-          "宝箱7",
-          "宝箱6",
-          "牛魔斗士",
-          "宝箱5",
-          "牛魔将军",
-          "牛魔法师"
-        ],
-        "npc_kinds": [],
-        "portals": [
-          {
-            "label": "牛魔寺庙3层",
-            "target_map_id": 917103.0,
-            "target_map_key": "cangyue_bull_temple_f3"
-          },
-          {
-            "label": "牛魔寺庙大厅",
-            "target_map_id": 917105.0,
-            "target_map_key": "cangyue_bull_temple_hall"
-          }
-        ],
-        "runtime_build_sha256": "4d8e0034366e65e65751e626c091b991f76ab7e62f51a4bd6dab2703d51573b7"
+  "approval_revision": 5,
+  "approval_source": "published_via_publish_runtime_release",
+  "approved_build_sha256": "b0f7957689a5b763c7fc2a0b520f9abfe1bfb7d307fd01f052d704a7c28b83da",
+  "display_name": "牛魔寺庙四层",
+  "map_key": "cangyue_bull_temple_f4",
+  "release_state": "implemented_playable",
+  "runtime_map_id": 917104,
+  "runtime_path": "res://assets/data/runtime/map_editor/cangyue_bull_temple_f4.runtime.json",
+  "ui_presentation": {
+    "boss_names": [],
+    "contract_id": "ui.map.presentation_projection.v1",
+    "has_safe_area": false,
+    "monster_names": [
+      "牛头魔",
+      "牛魔战士",
+      "牛魔侍卫",
+      "宝箱8",
+      "宝箱7",
+      "宝箱6",
+      "牛魔斗士",
+      "宝箱5",
+      "牛魔将军",
+      "牛魔法师"
+    ],
+    "npc_kinds": [],
+    "portals": [
+      {
+        "label": "牛魔寺庙3层",
+        "target_map_id": 917103,
+        "target_map_key": "cangyue_bull_temple_f3"
+      },
+      {
+        "label": "牛魔寺庙大厅",
+        "target_map_id": 917105,
+        "target_map_key": "cangyue_bull_temple_hall"
       }
-    },
+    ],
+    "runtime_build_sha256": "b0f7957689a5b763c7fc2a0b520f9abfe1bfb7d307fd01f052d704a7c28b83da"
+  }
+},
     {
       "approval_revision": 3.0,
       "approval_source": "published_via_publish_runtime_release",

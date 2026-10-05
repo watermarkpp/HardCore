@@ -505,3 +505,173 @@ func _read_json(path: String) -> Dictionary:
 	var file := FileAccess.open(path, FileAccess.READ)
 	var parsed: Variant = JSON.parse_string(file.get_as_text()) if file != null else null
 	return parsed if parsed is Dictionary else {}
+
+
+# Internal framework code entries are distinct from gameplay FeatureModules.
+# Only this code-owned generated source registers targets, never caller JSON.
+const AndroidExportData := preload("res://scripts/features/generated/internal_code_android_export_data.gd")
+const InternalCodeData := preload("res://scripts/features/generated/internal_code_preparation_catalog_data.gd")
+const InternalCodeScope := preload("res://scripts/features/contracts/loading_preparation_scope.gd")
+var _internal_code_entries: Dictionary = {}
+var _internal_code_metadata: Dictionary = {}
+var _internal_code_revision := ""
+signal internal_code_catalogue_finished(success: bool)
+var _internal_code_publication_pending := false
+var internal_code_errors: Array = []
+var internal_code_publication_diagnostic: Dictionary = {}
+
+func is_internal_code_publication_boundary_current(sequence: int) -> bool:
+	return sequence == _feature_preparation_sequence and not _feature_publication_in_progress and not bool(PlayerState.feature_publication_context().world_active)
+
+func code_preparation_export_contract() -> Dictionary:
+	if OS.get_name() != "Android" or not AndroidExportData.AVAILABLE or AndroidExportData.SEAL_JSON.sha256_text() != AndroidExportData.SEAL_SHA256:
+		return {}
+	var seal := AndroidExportData.read_bundle()
+	if seal.get("source_bundle_json_sha256") != InternalCodeData.BUNDLE_JSON.sha256_text() or seal.get("producer_sha256") != InternalCodeData.PRODUCER_SHA256 or not InternalCodeData.REGISTERED_TARGETS.has(seal.get("entry_id")):
+		return {}
+	return seal
+
+func code_preparation_export_seal_sha256() -> String:
+	return AndroidExportData.SEAL_SHA256 if not code_preparation_export_contract().is_empty() else ""
+
+func code_preparation_export_identity(entry_id: String) -> Dictionary:
+	var seal := code_preparation_export_contract()
+	if seal.is_empty() or seal.get("entry_id") != entry_id or not _internal_code_entries.has(entry_id): return {}
+	return {"seal": seal, "seal_sha256": AndroidExportData.SEAL_SHA256}
+
+func _publish_internal_code_catalogue(scope: RefCounted, consumer_ref: WeakRef, generation: int, sequence: int) -> bool:
+	var began := Time.get_ticks_usec()
+	var consumer: Node = consumer_ref.get_ref() if consumer_ref != null else null
+	if not is_internal_code_publication_boundary_current(sequence) or scope == null or not is_instance_valid(consumer) or not bool(scope.valid_for(consumer, generation)) or not (_feature_resources().code_publication_export_current(scope, consumer, generation, AndroidExportData.SEAL_SHA256) if OS.get_name() == "Android" else _feature_resources().code_publication_image_current(scope, consumer, generation, InternalCodeData.ENGINE_BINARY_SHA256)):
+		internal_code_errors = ["internal_code_publication_cover_or_image_unproved"]
+		return false
+	if not _feature_reload_boundary():
+		internal_code_errors = ["internal_code_publication_requires_retired_world"]
+		return false
+	if InternalCodeData.BUNDLE_UTF8_BYTES > 65536 or InternalCodeData.BUNDLE_JSON.to_utf8_buffer().size() != InternalCodeData.BUNDLE_UTF8_BYTES:
+		internal_code_errors = ["internal_code_catalogue_byte_capacity"]
+		return false
+	var bundle := InternalCodeData.read_bundle()
+	if bundle.get("schema_version") != 1 or bundle.get("contract_id") != "hc.internal_code_preparation.catalogue.candidate.v1" or bundle.get("runtime_mode") != "pc_editor_text":
+		internal_code_errors = ["internal_code_catalogue_contract"]
+		return false
+	if not bundle.get("engine") is Dictionary or not bundle.engine.get("version") is Dictionary or not bundle.get("entries") is Dictionary:
+		internal_code_errors = ["internal_code_catalogue_shape"]
+		return false
+	# PC retains runtime image hashing. Android uses the separately reviewed
+	# build seal plus actual capabilities/context checks in the same service.
+	if OS.get_name() not in ["Windows", "Android"] or bundle.engine.version.get("hash") != Engine.get_version_info().get("hash") or (OS.get_name() == "Windows" and bundle.engine.get("binary_sha256") != InternalCodeData.ENGINE_BINARY_SHA256) or (OS.get_name() == "Android" and code_preparation_export_contract().is_empty()):
+		internal_code_errors = ["internal_code_runtime_image_or_platform_mismatch"]
+		return false
+	if bundle.get("producer_sha256") != InternalCodeData.PRODUCER_SHA256 or not bundle.get("input_artifacts") is Array or bundle.input_artifacts.size() != 3:
+		internal_code_errors = ["internal_code_generated_producer_binding"]
+		return false
+	if bundle.entries.size() != 1 or bundle.entries.size() != InternalCodeData.REGISTERED_TARGETS.size():
+		internal_code_errors = ["internal_code_registration_set_mismatch"]
+		return false
+	for id: String in InternalCodeData.REGISTERED_TARGETS:
+		var plan_value: Variant = bundle.entries.get(id)
+		if not plan_value is Dictionary:
+			internal_code_errors = ["internal_code_missing_registered_plan:" + id]
+			return false
+		var plan: Dictionary = plan_value
+		if plan.get("status") != "PASS" or plan.get("errors") != [] or plan.get("target_path") != InternalCodeData.REGISTERED_TARGETS[id] or plan.get("producer_id") != "hc.code_preparation.lexical_subset.candidate.v1" or plan.get("scope") != "supported_gdscript_compile_inputs" or not plan.get("source_fingerprints") is Dictionary:
+			internal_code_errors = ["internal_code_registered_plan_rejected:" + id]
+			return false
+		if plan.source_fingerprints.get("producer") != InternalCodeData.PRODUCER_SHA256 or (OS.get_name() == "Windows" and (FileAccess.get_sha256("res://project.godot") != plan.source_fingerprints.get("project.godot") or FileAccess.get_sha256("res://.godot/global_script_class_cache.cfg") != plan.source_fingerprints.get("class_cache"))):
+			internal_code_errors = ["internal_code_registration_or_source_context_changed:" + id]
+			return false
+	var captured := PlainGraph.capture(bundle.entries, 8192, 32)
+	if not captured.success:
+		internal_code_errors = ["internal_code_catalogue_not_plain_or_capacity"]
+		return false
+	var serialized := JSON.stringify(captured.value, "", true)
+	if serialized.to_utf8_buffer().size() > 65536 or not bool(scope.valid_for(consumer, generation)):
+		internal_code_errors = ["internal_code_catalogue_byte_capacity"]
+		return false
+	# Same ContentLayers owner/sequence, only after its existing boundary gate.
+	_feature_preparation_sequence += 1
+	_internal_code_entries = captured.value
+	_internal_code_revision = serialized.sha256_text()
+	_internal_code_metadata = {}
+	for id: String in _internal_code_entries:
+		var plan: Dictionary = _internal_code_entries[id]
+		_internal_code_metadata[id] = {"entry_id": id, "target_path": plan.target_path, "source_revision": _internal_code_revision,
+			"plan_sha256": JSON.stringify(plan, "", true).sha256_text(), "producer_sha256": InternalCodeData.PRODUCER_SHA256, "runtime_mode": "android_controller_sealed_export" if OS.get_name() == "Android" else "pc_editor_text", "export_seal_sha256": AndroidExportData.SEAL_SHA256 if OS.get_name() == "Android" else ""}
+	_internal_code_metadata.make_read_only()
+	internal_code_errors = []
+	internal_code_publication_diagnostic = {"elapsed_usec": Time.get_ticks_usec() - began, "generation": _feature_preparation_sequence, "source_revision": _internal_code_revision, "runtime_mode": "android_controller_sealed_export" if OS.get_name() == "Android" else "pc_editor_text", "runtime_native_image_sha": "MISSING" if OS.get_name() == "Android" else InternalCodeData.ENGINE_BINARY_SHA256, "native_token_device_acceptance": "NOT_RUN"}
+	return true
+
+func ensure_internal_code_catalogue_async(scope: RefCounted, consumer: Node, generation: int) -> bool:
+	if scope == null or not is_same(scope.get_script(), InternalCodeScope) or not is_instance_valid(consumer) or not bool(scope.valid_for(consumer, generation)):
+		internal_code_errors = ["internal_code_publication_loading_scope_unavailable"]
+		return false
+	if not _internal_code_entries.is_empty():
+		return true
+	if _internal_code_publication_pending:
+		var success: bool = await internal_code_catalogue_finished
+		return success and bool(scope.valid_for(consumer, generation))
+	if not _feature_reload_boundary():
+		internal_code_errors = ["internal_code_publication_requires_retired_world"]
+		return false
+	# Image hashing is 256KiB per existing application quantum. The final
+	# <=64KiB catalogue capture is indivisible, measured, and covered Loading.
+	_internal_code_publication_pending = true
+	var sequence := _feature_preparation_sequence
+	var android_contract := code_preparation_export_contract() if OS.get_name() == "Android" else {}
+	var result: Dictionary = await _feature_resources().prepare_code_publication(AndroidExportData.SEAL_SHA256 if OS.get_name() == "Android" else InternalCodeData.ENGINE_BINARY_SHA256, AndroidExportData.SEAL_JSON.to_utf8_buffer().size() if OS.get_name() == "Android" else InternalCodeData.ENGINE_BINARY_BYTES,
+		Callable(self, "_publish_internal_code_catalogue").bind(scope, weakref(consumer), generation, sequence), scope, consumer, generation, sequence, android_contract)
+	var success: bool = bool(result.success) and bool(scope.valid_for(consumer, generation))
+	if not success and internal_code_errors.is_empty():
+		internal_code_errors = result.get("errors", ["internal_code_publication_cancelled"])
+	_internal_code_publication_pending = false
+	internal_code_catalogue_finished.emit(success)
+	return success
+
+func code_preparation_published_entry(entry_id: String) -> Dictionary:
+	if not _internal_code_entries.has(entry_id):
+		return {}
+	var metadata: Dictionary = _internal_code_metadata[entry_id].duplicate(false)
+	metadata["generation"] = _feature_preparation_sequence
+	return metadata
+
+func is_code_preparation_publication_current(entry_id: String, generation: int, source_revision: String, plan_sha256: String) -> bool:
+	if generation != _feature_preparation_sequence or source_revision != _internal_code_revision or _feature_publication_in_progress or not _internal_code_entries.has(entry_id):
+		return false
+	return _internal_code_metadata[entry_id].plan_sha256 == plan_sha256
+
+func prepare_internal_code_entry(entry_id: String, overlay: Control, consumer: Node, generation: int) -> Dictionary:
+	if not InternalCodeData.REGISTERED_TARGETS.has(entry_id):
+		return {"success": false, "errors": ["internal_code_entry_unregistered"], "lease": null}
+	var scope: RefCounted = InternalCodeScope.issue(overlay, consumer, generation)
+	if scope == null:
+		return {"success": false, "errors": ["internal_code_loading_scope_unavailable"], "lease": null}
+	if not await ensure_internal_code_catalogue_async(scope, consumer, generation):
+		return {"success": false, "errors": internal_code_errors.duplicate(), "lease": null}
+	return await _feature_resources().prepare_code_inputs(_internal_code_entries[entry_id], entry_id, self, scope, consumer, generation)
+
+func request_internal_prepared_script(prepared: Dictionary, consumer: Node, generation: int) -> Dictionary:
+	return await _feature_resources().request_code_script(prepared, consumer, generation)
+
+func cancel_internal_code_owner(consumer: Node, generation: int) -> void:
+	if _feature_resource_service != null:
+		_feature_resource_service.cancel_code_owner(consumer, generation)
+
+func retire_internal_code_result(result: Dictionary) -> void:
+	if _feature_resource_service != null:
+		_feature_resource_service.retire_code_result(result)
+
+
+func is_internal_code_retention_current(result: Dictionary, consumer: Node) -> bool:
+	return is_instance_valid(_feature_resource_service) and _feature_resource_service.code_result_retention_current(result, consumer)
+
+func transfer_internal_code_retention(result: Dictionary, previous: Node, next_consumer: Node) -> bool:
+	return is_instance_valid(_feature_resource_service) and _feature_resource_service.transfer_code_result_retention(result, previous, next_consumer)
+
+func change_scene_with_internal_code_retention(result: Dictionary, consumer: Node, scene: PackedScene) -> int:
+	return _feature_resource_service.change_scene_with_code_retention(result, consumer, scene) if is_instance_valid(_feature_resource_service) else ERR_UNAVAILABLE
+
+func claim_internal_code_world_retention(consumer: Node) -> Dictionary:
+	return _feature_resource_service.claim_code_world_handoff(consumer) if is_instance_valid(_feature_resource_service) else {}
+

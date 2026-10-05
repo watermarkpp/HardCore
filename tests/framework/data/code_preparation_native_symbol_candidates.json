@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "producer_id": "hc.code_preparation.fixed_engine_symbol_candidates.v1",
+  "engine_commit": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+  "authority": {
+    "kind": "fixed_engine_source_generated",
+    "source_files": [
+      {
+        "path": "outputs\\framework_v2\\loading_preparation_contract_20261005\\engine_api\\core_constants.cpp",
+        "url": "https://raw.githubusercontent.com/godotengine/godot/5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88/core/core_constants.cpp",
+        "commit": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+        "bytes": 44030,
+        "sha256": "31cf8ee6d7d418894cc6ca40dfcd3334324473e1777fff43f422e3e5977dc5d4",
+        "git_blob_sha1": "3a43ea0139694eb5cade3a5b403ad96019b5ded9",
+        "status": "PASS",
+        "scope": "Public fixed-commit source retrieval; not native symbol availability"
+      },
+      {
+        "path": "outputs\\framework_v2\\loading_preparation_contract_20261005\\engine_api\\gdscript_utility_functions.cpp",
+        "url": "https://raw.githubusercontent.com/godotengine/godot/5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88/modules/gdscript/gdscript_utility_functions.cpp",
+        "commit": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+        "bytes": 24050,
+        "sha256": "d893fcb2ce43e141bb740ddaf9c474e3455bfc8691d1a1070ddd5f21246916bc",
+        "git_blob_sha1": "5241295c56f6dfff7e4745760a6c9d25ebcb5ecb",
+        "status": "PASS",
+        "scope": "Public fixed-commit source retrieval; not native symbol availability"
+      },
+      {
+        "path": "outputs\\framework_v2\\loading_preparation_contract_20261005\\engine_api\\gdscript_tokenizer.cpp",
+        "url": "https://raw.githubusercontent.com/godotengine/godot/5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88/modules/gdscript/gdscript_tokenizer.cpp",
+        "commit": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+        "bytes": 43387,
+        "sha256": "6d956bc85ad7455110977974ce62f24ba5a2e864968296c7d65cde67bfa634a8",
+        "git_blob_sha1": "bd080c9076a05c0fde40462a3d9d4266772905de",
+        "status": "PASS",
+        "scope": "Public fixed-commit source retrieval; not native symbol availability"
+      }
+    ],
+    "extractor_sha256": "a7f287f75b1267ae76b50f2494b60d3ba6998c9d1a18d52c6b1e53a34bde12cf"
+  },
+  "needs_artifact_sha256": "fa659a0d73c5403dcbb63fad5c2faa9912f20abb33bf4bc00348702c20940582",
+  "target_path": "res://scripts/caster_skill_animation_player.gd",
+  "candidate_rows": [
+    {
+      "name": "INF",
+      "kind": "global_constant",
+      "line": 149,
+      "mechanism": "token_names_constant_with_semantic_token_use",
+      "token": "CONST_INF",
+      "source_file": "gdscript_tokenizer.cpp"
+    },
+    {
+      "name": "OK",
+      "kind": "global_constant",
+      "line": 594,
+      "mechanism": "BIND_CORE_ENUM_CONSTANT",
+      "source_file": "core_constants.cpp"
+    },
+    {
+      "name": "TAU",
+      "kind": "global_constant",
+      "line": 148,
+      "mechanism": "token_names_constant_with_semantic_token_use",
+      "token": "CONST_TAU",
+      "source_file": "gdscript_tokenizer.cpp"
+    },
+    {
+      "name": "TYPE_ARRAY",
+      "kind": "global_constant",
+      "line": 779,
+      "mechanism": "BIND_CORE_ENUM_CONSTANT_CUSTOM",
+      "source_file": "core_constants.cpp"
+    },
+    {
+      "name": "TYPE_BOOL",
+      "kind": "global_constant",
+      "line": 752,
+      "mechanism": "BIND_CORE_ENUM_CONSTANT_CUSTOM",
+      "source_file": "core_constants.cpp"
+    },
+    {
+      "name": "TYPE_DICTIONARY",
+      "kind": "global_constant",
+      "line": 778,
+      "mechanism": "BIND_CORE_ENUM_CONSTANT_CUSTOM",
+      "source_file": "core_constants.cpp"
+    },
+    {
+      "name": "TYPE_FLOAT",
+      "kind": "global_constant",
+      "line": 754,
+      "mechanism": "BIND_CORE_ENUM_CONSTANT_CUSTOM",
+      "source_file": "core_constants.cpp"
+    },
+    {
+      "name": "TYPE_INT",
+      "kind": "global_constant",
+      "line": 753,
+      "mechanism": "BIND_CORE_ENUM_CONSTANT_CUSTOM",
+      "source_file": "core_constants.cpp"
+    },
+    {
+      "name": "TYPE_NIL",
+      "kind": "global_constant",
+      "line": 751,
+      "mechanism": "BIND_CORE_ENUM_CONSTANT_CUSTOM",
+      "source_file": "core_constants.cpp"
+    },
+    {
+      "name": "TYPE_STRING",
+      "kind": "global_constant",
+      "line": 755,
+      "mechanism": "BIND_CORE_ENUM_CONSTANT_CUSTOM",
+      "source_file": "core_constants.cpp"
+    }
+  ],
+  "unresolved_requested_names": [],
+  "source_registered_counts": {
+    "core": 528,
+    "gdscript_utility": 14,
+    "token_constants": 4
+  },
+  "status": "PASS",
+  "binary_availability": "NOT_RUN",
+  "whole_gdscript_namespace": "MISSING",
+  "scope": "Only exact requested unresolved names; inactive #ifdef registrations are not granted binary availability."
+}

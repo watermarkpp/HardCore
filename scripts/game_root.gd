@@ -93,6 +93,7 @@ const SkillFootprintDiagnosticLogScript := preload(
 	"res://scripts/layers/runtime/skill_footprint_diagnostic_log.gd"
 )
 const CasterSkillRuntimeScript := preload("res://scripts/caster_skill_runtime.gd")
+var _initial_code_retention: Dictionary = {}
 const SkillRuntimeClassificationScript := preload("res://scripts/skills/skill_runtime_classification.gd")
 const FireWallFieldControllerScript := preload(
 	"res://scripts/fire_wall_field_controller.gd"
@@ -1493,6 +1494,7 @@ func _loading_profile_mark(
 
 
 func _ready() -> void:
+	_initial_code_retention = ContentLayers.claim_internal_code_world_retention(self)
 	_world_context.configure(self, PlayerState)
 	_time_domains.configure(self)
 	PlayerState.register_profile_gameplay_owner(self)
@@ -1761,6 +1763,7 @@ func _ready() -> void:
 
 
 func _exit_tree() -> void:
+	ContentLayers.retire_internal_code_result(_initial_code_retention)
 	_cancel_respawn_wakeups()
 	_retire_pending_warm_textures()
 	if _feature_effect_runtime != null:

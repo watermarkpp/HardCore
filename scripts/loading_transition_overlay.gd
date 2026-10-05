@@ -29,6 +29,10 @@ var embers: Array[ColorRect] = []
 var transition_id := ""
 var _progress_value := 0.0
 var _coverage_request_serial := 0
+var _presented_coverage_serial := -1
+var _presented_shade_instance_id := 0
+var _presented_cover_rect := Rect2()
+var _presented_viewport_rect := Rect2()
 var _pulse_time := 0.0
 var _holding_final := false
 
@@ -43,6 +47,10 @@ func _ready() -> void:
 	shade.color = Color(0.018, 0.025, 0.035, 1.0)
 	shade.mouse_filter = Control.MOUSE_FILTER_STOP
 	add_child(shade)
+	# Any physical surface change retires the old presentation witness.
+	shade.visibility_changed.connect(_invalidate_code_preparation_cover)
+	shade.tree_exiting.connect(_invalidate_code_preparation_cover)
+	shade.item_rect_changed.connect(_invalidate_code_preparation_cover)
 	battlefield_background = TextureRect.new()
 	battlefield_background.name = "BattlefieldBackground"
 	battlefield_background.texture = BATTLEFIELD_BACKGROUND
@@ -357,7 +365,69 @@ func _emit_covered_after_present(request_serial: int, request_transition_id: Str
 		or request_transition_id != transition_id
 	):
 		return
+	_invalidate_code_preparation_cover()
+	if _code_preparation_surface_covers_viewport():
+		_presented_coverage_serial = request_serial
+		_presented_shade_instance_id = shade.get_instance_id()
+		_presented_cover_rect = _code_preparation_surface_rect()
+		_presented_viewport_rect = get_viewport_rect()
 	_emit_covered()
+
+
+func _invalidate_code_preparation_cover() -> void:
+	_presented_coverage_serial = -1
+	_presented_shade_instance_id = 0
+
+
+func _code_preparation_surface_rect() -> Rect2:
+	var transform := shade.get_global_transform_with_canvas()
+	return Rect2(transform.origin, shade.size * Vector2(transform.x.x, transform.y.y))
+
+
+func _code_preparation_surface_covers_viewport() -> bool:
+	if not is_inside_tree() or is_queued_for_deletion() or not is_visible_in_tree():
+		return false
+	if not is_instance_valid(shade) or not shade.is_inside_tree() or shade.is_queued_for_deletion() or not is_same(shade.get_parent(), self) or not shade.is_visible_in_tree():
+		return false
+	if shade.color.a != 1.0 or shade.modulate.a != 1.0 or shade.self_modulate.a != 1.0:
+		return false
+	# The existing overlay layout is an axis-aligned full viewport rectangle.
+	# Reject rotation/skew and clipping ancestors instead of using an AABB
+	# which could claim cover while leaving a corner of the viewport exposed.
+	var transform := shade.get_global_transform_with_canvas()
+	if transform.x.y != 0.0 or transform.y.x != 0.0 or transform.x.x <= 0.0 or transform.y.y <= 0.0:
+		return false
+	var ancestor: Node = self
+	var depth := 0
+	while ancestor != null:
+		depth += 1
+		if depth > 64:
+			return false
+		if ancestor is CanvasItem and (not ancestor.is_visible_in_tree() or ancestor.modulate.a != 1.0 or ancestor.self_modulate.a != 1.0):
+			return false
+		if ancestor is Control and ancestor.clip_contents:
+			return false
+		ancestor = ancestor.get_parent()
+	var viewport_rect := get_viewport_rect()
+	return viewport_rect.has_area() and _code_preparation_surface_rect().encloses(viewport_rect)
+
+
+func code_preparation_cover_receipt() -> Dictionary:
+	if _presented_coverage_serial != _coverage_request_serial or not _code_preparation_surface_covers_viewport():
+		return {}
+	if shade.get_instance_id() != _presented_shade_instance_id or _code_preparation_surface_rect() != _presented_cover_rect or get_viewport_rect() != _presented_viewport_rect:
+		_invalidate_code_preparation_cover()
+		return {}
+	return {"contract_id": CONTRACT_ID, "transition_id": transition_id,
+		"serial": _coverage_request_serial, "overlay_instance_id": get_instance_id(),
+		"shade_instance_id": _presented_shade_instance_id,
+		"cover_rect": _presented_cover_rect, "viewport_rect": _presented_viewport_rect,
+		"presentation_mode": "headless_process_frame" if DisplayServer.get_name() == "headless" else "rendered_frame_post_draw"}
+
+
+func code_preparation_cover_current(receipt: Dictionary) -> bool:
+	var current := code_preparation_cover_receipt()
+	return not current.is_empty() and receipt == current
 
 
 func _emit_covered() -> void:

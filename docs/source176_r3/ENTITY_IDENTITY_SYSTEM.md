@@ -199,3 +199,12 @@ GameData 正式 rank 查询按已有 skill_id，名称仅是明确旧UI入口和
 49项类别原生检查与21项唯一直接/相关回归PASS（真实退出0、各场景前后源码与引擎不变、receipt核对），生成器27项及 --check PASS。首次组合20PASS/1FAIL，掉落实例保存fixture仍读取旧中文槽位；唯一后续变更为saved_q.equipment["hc.slot.weapon"]，原断言全部保留，精确2项复测PASS。两轮生产/引擎字节完全一致，旧FAIL不重标。当前受测3439文件内容集合 5b864af12061f457648a84e9de8bafed888568097d87cf1b7fb92b01305f68fb。旧类别缺失RED、实现中的解析/遗漏类别/详情面板preload失败保留并修复。旧价格候选名称身份及itemBps名称fallback属于下一身份范围，未声明已完成。证据 outputs/framework_v2/ITEM_CATEGORY_IDENTITY_SCOPED_EVIDENCE.json。
 
 用户新提供六项独立审查风险保留为施工中候选，需自然检查点固定受测版本后逐项反例复核。P6、完整架构/性能/主树/APK/设备验收未完成；R3性能FAIL不被本范围PASS覆盖。
+
+
+## 2026-10-02 价格身份增量
+
+31条既有价格候选按精确现有登记补齐 entity_id；原价格、类别和来源证据逐项不变，未知/重复/冲突声明拒绝。装备估值与维修传实际物品身份；价格策略按正式登记/明确旧数字来源键导入，不在报价时退回中文名，未知和冲突策略对买卖、维修及材料估值整体拒绝。材料估值API按 entity_id 取价，名称只显示；正式商店出售原已按ID缓存，本次未为旧变量名称增加重复改动。新增实体ID为零。
+
+因果RED为52检查45业务FAIL；补实现与边界后93身份检查PASS，最终9项原生专项/相关回归全PASS，退出0、源码/引擎稳定、无引擎错误。179条既有物品价格及provenance完全相同，疗伤药 hc.item.910007 新增ID索引通路，沿用原仅名称可达的5000价格。旧UI报价测试的3项失败在原源码复跑一致，夹具改为正式已登记记录、冲突ID前置拒绝，保留逐项报价、来源、单行报价和按需维护断言（现2922检查PASS）。所有原FAIL保留。证据 outputs/framework_v2/PRICING_IDENTITY_SCOPED_EVIDENCE.json。
+
+旧server catalog名称转换仅保留于明确导入边界；没有声称所有中文兼容入口删除。容量/receipt/journal64、完整P6/R3、精确v97 B故障、主树/APK/设备门禁不因此结案。

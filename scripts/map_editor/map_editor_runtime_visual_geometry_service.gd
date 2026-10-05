@@ -646,10 +646,32 @@ static func static_authored_command_is_in_front_of_wall(
 	wall_command: Dictionary,
 	design_size: Vector2i
 ) -> bool:
-	return (
-		static_authored_sort_world(static_command, design_size).y
-		> command_actor_sort_world(wall_command, design_size).y
+	# Respect the editor's lower material precedence before comparing depth.
+	# A large ground decoration's far corner must not raise its lower authored
+	# layer onto an actor-sorted wall. Eligible layers retain the existing cut
+	# so higher static decorations do not acquire a new actor occlusion range.
+	var static_order := MapEditorInstanceService.material_layer_order(
+		static_command.get("instance", {})
 	)
+	var wall_order := MapEditorInstanceService.material_layer_order(
+		wall_command.get("instance", {})
+	)
+	return static_authored_order_and_depth_is_in_front(
+		static_order, wall_order,
+		static_authored_sort_world(static_command, design_size).y,
+		command_actor_sort_world(wall_command, design_size).y
+	)
+
+
+static func static_authored_order_and_depth_is_in_front(
+	static_order: int,
+	wall_order: int,
+	static_sort_y: float,
+	wall_sort_y: float
+) -> bool:
+	if static_order < wall_order:
+		return false
+	return static_sort_y > wall_sort_y
 
 
 static func static_wall_bridge_pair_is_candidate(

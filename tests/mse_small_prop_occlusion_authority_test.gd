@@ -19,8 +19,9 @@ const REGISTRY_PATH := (
 const WORKSPACE_ROOT := "res://map_editor_workspace"
 const SMALL_PREFIX := "mse.small_decor."
 const EXPECTED_SMALL_ASSET_COUNT := 48
-const EXPECTED_WORKSPACE_DOCUMENT_COUNT := 20
-const EXPECTED_WORKSPACE_INSTANCE_COUNT := 196
+const EXPECTED_WORKSPACE_DOCUMENT_COUNT := 22
+const EXPECTED_WORKSPACE_INSTANCE_COUNT := 212
+const EXPECTED_FORMAL_INSTANCE_COUNT := 114
 
 const EXPECTED_FORMAL_SMALL_COUNTS := {
 	"cangyue_bone_cave_f1": 15,
@@ -28,11 +29,13 @@ const EXPECTED_FORMAL_SMALL_COUNTS := {
 	"cangyue_bone_cave_f3": 15,
 	"cangyue_bone_cave_f4": 15,
 	"cangyue_bone_cave_f5": 10,
-	"world_bich_province": 7,
+	"world_bich_province": 6,
 	"world_cangyue_island": 1,
 	"world_fengmo_valley": 7,
-	"world_mengzhong_province": 6,
+	"world_mengzhong_province": 7,
 	"world_white_day_gate": 7,
+	"snake_unknown_dark_palace": 6,
+	"chiyue_demon_altar": 10,
 }
 
 
@@ -190,17 +193,17 @@ func _run() -> void:
 		assert(formal_keys.has(expected_key),
 			"formal small_prop map missing: %s" % expected_key)
 	assert(formal_runtime_count == EXPECTED_FORMAL_SMALL_COUNTS.size())
-	assert(formal_instance_count == 98)
-	assert(formal_actor_command_count == 98)
-	assert(formal_geometry_pair_count == 98,
-		"formal geometry pair count %d/98" % formal_geometry_pair_count)
+	assert(formal_instance_count == EXPECTED_FORMAL_INSTANCE_COUNT)
+	assert(formal_actor_command_count == EXPECTED_FORMAL_INSTANCE_COUNT)
+	assert(formal_geometry_pair_count == EXPECTED_FORMAL_INSTANCE_COUNT,
+		"formal geometry pair count %d/%d" % [formal_geometry_pair_count, EXPECTED_FORMAL_INSTANCE_COUNT])
 	assert(formal_well_checked, "Bich well exact regression was not checked")
 
 	print(
-		"MSE_SMALL_PROP_OCCLUSION_AUTHORITY_PASS "
+		("MSE_SMALL_PROP_OCCLUSION_AUTHORITY_PASS "
 		+ "catalog=%d workspace_documents=%d workspace_instances=%d "
 		+ "formal_runtime_maps=%d formal_runtime_instances=%d "
-		+ "actor_y_sort_commands=%d geometry_pairs=%d bich_well=true"
+		+ "actor_y_sort_commands=%d geometry_pairs=%d bich_well=true")
 		% [
 			EXPECTED_SMALL_ASSET_COUNT,
 			workspace_document_count,
@@ -257,8 +260,10 @@ func _assert_bich_well(runtime: Dictionary, editor: Dictionary, commands: Array)
 	assert(str(runtime_well.get("asset_id", "")) == "mse.small_decor.002")
 	assert(editor_well.get("tile", []) == [34.0, 37.0])
 	assert(runtime_well.get("tile", []) == [34.0, 37.0])
-	assert(editor_well.get("placement_anchor_px", []) == [171.0, 422.0])
-	assert(runtime_well.get("placement_anchor_px", []) == [171.0, 422.0])
+	# Current saved authoring calibration is authoritative; do not restore the
+	# old 422px anchor to satisfy an obsolete snapshot.
+	assert(editor_well.get("placement_anchor_px", []) == [171.0, 395.3333435058594])
+	assert(runtime_well.get("placement_anchor_px", []) == [171.0, 395.3333435058594])
 	var asset := MapAssetCatalogService.find_asset("mse.small_decor.002")
 	var expected_foot := VisualGeometry.instance_foot_tile(runtime_well, asset)
 	var expected_baseline := VisualGeometry.instance_sort_baseline_tile(runtime_well, asset)

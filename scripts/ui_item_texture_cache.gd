@@ -83,6 +83,8 @@ static func poll_threaded_paths() -> int:
 			_threaded_paths.erase(path)
 			ready += 1
 		elif status == ResourceLoader.THREAD_LOAD_FAILED:
+			# Accepted failed loads still own one native retrieval right.
+			ResourceLoader.load_threaded_get(path)
 			_threaded_paths.erase(path)
 	return ready
 
