@@ -1,12 +1,27 @@
 """Run the repository runner and bind immutable evidence to actual file bytes."""
 from __future__ import annotations
-import argparse, hashlib, json, os, re, shutil, subprocess
+import argparse, hashlib, json, os, platform, re, shutil, subprocess
 from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 def command(*args):
     return subprocess.check_output(args, cwd=ROOT).decode("utf-8", errors="replace").strip()
+def engine_path():
+    if platform.system() == "Windows":
+        return ROOT / "tools/godot-4.7/Godot_v4.7-stable_win64_console.exe"
+    if platform.system() != "Linux":
+        raise RuntimeError("Formal runner supports Windows and Linux only")
+    path = Path(os.environ.get("HARDCORE_GODOT", ""))
+    if not path.is_absolute() or not path.is_file():
+        raise RuntimeError("Linux requires an explicit absolute HARDCORE_GODOT executable")
+    return path.resolve()
+def shell_path():
+    name = os.environ.get("HARDCORE_PWSH", "") if platform.system() == "Linux" else "powershell"
+    resolved = shutil.which(name) if name else None
+    if not resolved:
+        raise RuntimeError("Formal runner requires PowerShell (HARDCORE_PWSH on Linux)")
+    return Path(resolved).resolve()
 def fingerprint():
     files = {}
     for name in ("scripts", "tests", "scenes", "assets/data", "shaders"):
@@ -15,16 +30,26 @@ def fingerprint():
                 files[p.relative_to(ROOT).as_posix()] = hashlib.sha256(p.read_bytes()).hexdigest()
     for name in ("project.godot", "tools/run_godot_tests.ps1", "tools/source176_r3_validation.py"):
         files[name] = hashlib.sha256((ROOT / name).read_bytes()).hexdigest()
-    for name in ("tools/test_framework_receipt.ps1",):
+    for name in ("tools/test_framework_receipt.ps1", "tools/run_godot_tests_request.ps1", "tools/test_cloud_validation.py"):
         if (ROOT / name).is_file():
             files[name] = hashlib.sha256((ROOT / name).read_bytes()).hexdigest()
-    engine = ROOT / "tools/godot-4.7/Godot_v4.7-stable_win64_console.exe"
+    engine = engine_path()
+    shell = shell_path()
+    engine_version = command(str(engine), "--version")
+    if engine_version != "4.7.stable.official.5b4e0cb0f":
+        raise RuntimeError("Formal runner requires Godot 4.7 stable official 5b4e0cb0f")
     return {"time_utc": datetime.now(timezone.utc).isoformat(), "tested_sha": command("git", "rev-parse", "HEAD"),
             "branch": command("git", "branch", "--show-current"), "dirty": command("git", "status", "--short"),
             "files": files, "content_set_sha256": hashlib.sha256(json.dumps(files, sort_keys=True).encode()).hexdigest(),
-            "engine_version": command(str(engine), "--version"), "engine_sha256": hashlib.sha256(engine.read_bytes()).hexdigest()}
+            "platform": platform.platform(), "engine_path": str(engine),
+            "engine_version": engine_version, "engine_sha256": hashlib.sha256(engine.read_bytes()).hexdigest(),
+            "shell_path": str(shell), "shell_version": command(str(shell), "-NoProfile", "-Command", "$PSVersionTable.PSVersion.ToString()"),
+            "shell_sha256": hashlib.sha256(shell.read_bytes()).hexdigest()}
 def write(path, value):
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2), encoding="utf-8")
+def identity_is_stable(before, after):
+    return all(before[key] == after[key] for key in
+               ("files", "tested_sha", "branch", "engine_sha256", "shell_sha256"))
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("label")
@@ -43,10 +68,13 @@ def main():
     env = os.environ.copy()
     env["HARDCORE_R3_TESTED_SHA"] = before["tested_sha"]
     env["HARDCORE_R3_CONTENT_SHA256"] = before["content_set_sha256"]
-    # Fixed shell script takes literal arguments. No user text evaluated as code.
-    runner = ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command",
-              "& './tools/run_godot_tests.ps1' " + ("-Suite '"+args.suite+"'" if args.suite else
-              "-TestPaths " + ",".join("'"+p+"'" for p in args.tests)) + " -TimeoutSeconds " + str(args.timeout)]
+    env["HARDCORE_AUDIT_EVIDENCE_ROOT"] = str(dest / "attempts")
+    # JSON splatting preserves literal path arrays on both PowerShell editions.
+    # No caller text is interpolated into executable shell source.
+    request_path = dest / "runner_request.json"
+    write(request_path, {"timeout": args.timeout, **({"suite": args.suite} if args.suite else {"tests": args.tests})})
+    runner = [str(shell_path()), "-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass",
+              "-File", str(ROOT / "tools/run_godot_tests_request.ps1"), "-RequestPath", str(request_path)]
     for p in ([args.suite] if args.suite else args.tests):
         if not re.fullmatch(r"[a-zA-Z0-9_./-]+", p):
             ap.error("invalid suite/path")
@@ -125,7 +153,7 @@ def main():
                     shutil.copy2(source, dest / "framework" / source.name)
     after = fingerprint()
     write(dest / "after.json", after)
-    stable = before["files"] == after["files"] and before["engine_sha256"] == after["engine_sha256"]
+    stable = identity_is_stable(before, after)
     summary = {"command": runner, "timeout_seconds": args.timeout, "exit_code": result.returncode,
                "source_stable_during_run": stable, "passed": report.get("passed"), "failed": report.get("failed"),
                "status": "PASS" if stable and result.returncode == 0 and report.get("failed") == 0 else "FAIL"}

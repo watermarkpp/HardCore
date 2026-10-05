@@ -7,6 +7,13 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+$RunnerIsLinux = [Environment]::OSVersion.Platform -eq [PlatformID]::Unix
+$LinuxNativeProcess = $null
+$LinuxStdoutStream = $null
+$LinuxStderrStream = $null
+$LinuxStdoutTask = $null
+$LinuxStderrTask = $null
+$RunnerInvocationId = [Guid]::NewGuid().ToString()
 # A single worktree owns one import cache, userdata directory and log namespace.
 # Reject overlapping runners before either can overwrite evidence or terminate
 # a peer's child process during cleanup. The OS also releases abandoned locks.
@@ -27,18 +34,37 @@ try {
 # Some Codex desktop shells inherit both `Path` and `PATH`. PowerShell's
 # Start-Process treats environment keys case-insensitively and aborts when both
 # spellings are present, so normalize the process copy before launching Godot.
-$ProcessPath = [Environment]::GetEnvironmentVariable('Path', 'Process')
-[Environment]::SetEnvironmentVariable('PATH', $null, 'Process')
-[Environment]::SetEnvironmentVariable('Path', $ProcessPath, 'Process')
+if (-not $RunnerIsLinux) {
+    $ProcessPath = [Environment]::GetEnvironmentVariable('Path', 'Process')
+    [Environment]::SetEnvironmentVariable('PATH', $null, 'Process')
+    [Environment]::SetEnvironmentVariable('Path', $ProcessPath, 'Process')
+}
 $ProjectRoot = Split-Path -Parent $PSScriptRoot
 . (Join-Path $PSScriptRoot 'test_framework_receipt.ps1')
 $PreviousFrameworkRunId = [Environment]::GetEnvironmentVariable('HARDCORE_FRAMEWORK_RUN_ID', 'Process')
 $PreviousFrameworkInvocationId = [Environment]::GetEnvironmentVariable('HARDCORE_FRAMEWORK_INVOCATION_ID', 'Process')
 $FrameworkEnvironmentCaptured = $true
-$Godot = Join-Path $ProjectRoot 'tools\godot-4.7\Godot_v4.7-stable_win64_console.exe'
+$Godot = if ($RunnerIsLinux) { $env:HARDCORE_GODOT } else { Join-Path $ProjectRoot 'tools\godot-4.7\Godot_v4.7-stable_win64_console.exe' }
+if ($RunnerIsLinux -and ([string]::IsNullOrEmpty($Godot) -or -not (Test-Path -LiteralPath $Godot -PathType Leaf))) {
+    throw 'Linux requires an explicit existing HARDCORE_GODOT executable.'
+}
 $GodotDirectory = Split-Path -Parent $Godot
 $LogRoot = if ($env:HARDCORE_AUDIT_LOG_ROOT) { $env:HARDCORE_AUDIT_LOG_ROOT } else { Join-Path $ProjectRoot 'outputs\test_logs' }
 $RuntimeAppData = if ($env:HARDCORE_AUDIT_RUNTIME_APPDATA) { $env:HARDCORE_AUDIT_RUNTIME_APPDATA } else { Join-Path $ProjectRoot '.godot\runtime_appdata' }
+if ($RunnerIsLinux) {
+    $ownedRoot = [IO.Path]::GetFullPath((Join-Path $ProjectRoot '.godot/runtime_appdata')).TrimEnd('/') + '/'
+    $RuntimeAppData = [IO.Path]::GetFullPath((Join-Path $RuntimeAppData "cloud_$RunnerInvocationId"))
+    if (-not $RuntimeAppData.StartsWith($ownedRoot, [StringComparison]::Ordinal)) {
+        throw 'Linux test userdata must remain inside this checkout .godot/runtime_appdata/.'
+    }
+    if ($env:HARDCORE_R3_CONTENT_SHA256 -cnotmatch '^[a-f0-9]{64}$') {
+        throw 'Linux formal runs require a source fingerprint from source176_r3_validation.py.'
+    }
+    $engineVersion = (& $Godot --version | Out-String).Trim()
+    if ($LASTEXITCODE -ne 0 -or $engineVersion -cne '4.7.stable.official.5b4e0cb0f') {
+        throw "Linux engine version mismatch: $engineVersion"
+    }
+}
 
 $EffectiveSuite = $Suite
 if ($TestPaths.Count -gt 0) {
@@ -84,6 +110,7 @@ if ($TestPaths.Count -gt 0) {
 New-Item -ItemType Directory -Path $RuntimeAppData -Force | Out-Null
 $RuntimeAppData = (Get-Item -LiteralPath $RuntimeAppData).FullName
 [Environment]::SetEnvironmentVariable('APPDATA', $RuntimeAppData, 'Process')
+if ($RunnerIsLinux) { [Environment]::SetEnvironmentVariable('XDG_DATA_HOME', $RuntimeAppData, 'Process') }
 $RuntimeEnvironmentRecord = [ordered]@{
     project_root = $ProjectRoot
     runtime_appdata = [Environment]::GetEnvironmentVariable('APPDATA', 'Process')
@@ -1104,6 +1131,15 @@ function Get-UnallowlistedErrorLineCount([string]$Text) {
 }
 
 function Stop-TestProcessTree([int]$ProcessId) {
+    if ($RunnerIsLinux) {
+        # The engine installation is shared across checkouts. Own only the
+        # exact process launched here; never enumerate and kill peer engines.
+        if ($null -ne $LinuxNativeProcess -and $LinuxNativeProcess.Id -eq $ProcessId -and -not $LinuxNativeProcess.HasExited) {
+            $LinuxNativeProcess.Kill($true)
+            $LinuxNativeProcess.WaitForExit()
+        }
+        return
+    }
     $children = @(Get-CimInstance Win32_Process -Filter "ParentProcessId=$ProcessId" -ErrorAction SilentlyContinue)
     foreach ($child in $children) {
         Stop-TestProcessTree -ProcessId ([int]$child.ProcessId)
@@ -1121,6 +1157,7 @@ New-Item -ItemType Directory -Path $ProjectReportRoot -Force | Out-Null
 New-Item -ItemType Directory -Path $LogRoot -Force | Out-Null
 
 function Get-WorktreeGodotProcesses {
+    if ($RunnerIsLinux) { return @() }
     return @(Get-Process -ErrorAction SilentlyContinue | Where-Object {
         if ($_.ProcessName -notlike 'Godot*') {
             return $false
@@ -1166,6 +1203,10 @@ function Stop-NewGodotProcesses([int]$GraceMilliseconds = 0) {
 }
 
 function Get-NewGodotProcesses {
+    if ($RunnerIsLinux) {
+        if ($null -ne $LinuxNativeProcess -and -not $LinuxNativeProcess.HasExited) { return @($LinuxNativeProcess) }
+        return @()
+    }
     return @(Get-WorktreeGodotProcesses | Where-Object { $_.Id -notin $BaselineGodotIds })
 }
 
@@ -1216,7 +1257,7 @@ if ($SelectedIncludesStreaming -and $TimeoutSeconds -lt $MonsterStreamingBudgetF
 $StructuredResults = @()
 # One native invocation owns its live/cold evidence pair. A source hash alone
 # cannot distinguish a successful prior invocation from the current failed one.
-[Environment]::SetEnvironmentVariable('HARDCORE_FRAMEWORK_INVOCATION_ID', [Guid]::NewGuid().ToString(), 'Process')
+[Environment]::SetEnvironmentVariable('HARDCORE_FRAMEWORK_INVOCATION_ID', $RunnerInvocationId, 'Process')
 $NativeHandoffPath = Join-Path $ProjectReportRoot 'framework\native_handoffs.json'
 New-Item -ItemType Directory -Path (Split-Path -Parent $NativeHandoffPath) -Force | Out-Null
 $NativeHandoffs = [ordered]@{
@@ -1258,9 +1299,31 @@ foreach ($testPath in $SelectedTests) {
     )) { 60 } else { 0 }
     $BoundaryClockArguments = if ($BoundaryFixedFps -eq 60) { ' --fixed-fps 60 --max-fps 60' } else { '' }
     $launchCommand = '""' + $Godot + '" --headless' + $BoundaryClockArguments + ' --log-file "' + $engineLogArgument + '" --path . "' + $testPath + '" > "' + $stdout + '" 2> "' + $stderr + '"'
-    $process = Start-Process -FilePath 'cmd.exe' `
-        -ArgumentList @('/c', $launchCommand) `
-        -WorkingDirectory $ProjectRoot -WindowStyle Hidden -PassThru
+    if ($RunnerIsLinux) {
+        $startInfo = [Diagnostics.ProcessStartInfo]::new()
+        $startInfo.FileName = $Godot
+        $startInfo.WorkingDirectory = $ProjectRoot
+        $startInfo.UseShellExecute = $false
+        $startInfo.RedirectStandardOutput = $true
+        $startInfo.RedirectStandardError = $true
+        foreach ($argument in @('--headless')) { $startInfo.ArgumentList.Add($argument) }
+        if ($BoundaryFixedFps -eq 60) {
+            foreach ($argument in @('--fixed-fps', '60', '--max-fps', '60')) { $startInfo.ArgumentList.Add($argument) }
+        }
+        foreach ($argument in @('--log-file', $engineLogArgument, '--path', $ProjectRoot, $testPath)) { $startInfo.ArgumentList.Add($argument) }
+        $process = [Diagnostics.Process]::new()
+        $process.StartInfo = $startInfo
+        $LinuxNativeProcess = $process
+        $LinuxStdoutStream = [IO.FileStream]::new($stdout, [IO.FileMode]::Create, [IO.FileAccess]::Write, [IO.FileShare]::ReadWrite, 1)
+        $LinuxStderrStream = [IO.FileStream]::new($stderr, [IO.FileMode]::Create, [IO.FileAccess]::Write, [IO.FileShare]::ReadWrite, 1)
+        if (-not $process.Start()) { throw 'Linux native engine did not start.' }
+        $LinuxStdoutTask = $process.StandardOutput.BaseStream.CopyToAsync($LinuxStdoutStream)
+        $LinuxStderrTask = $process.StandardError.BaseStream.CopyToAsync($LinuxStderrStream)
+    } else {
+        $process = Start-Process -FilePath 'cmd.exe' `
+            -ArgumentList @('/c', $launchCommand) `
+            -WorkingDirectory $ProjectRoot -WindowStyle Hidden -PassThru
+    }
     $wrapperStartedUtc = $process.StartTime.ToUniversalTime().ToString('o')
     # Natural cadence scenes observe six real 4-second attack windows plus
     # pursuit/detour physics. The 1/100/300-monster streaming scale scene
@@ -1364,6 +1427,15 @@ foreach ($testPath in $SelectedTests) {
     # otherwise the next headless launch can be killed during process handoff.
     $graceMilliseconds = if ($hasPassMarker -and -not $earlyFailure -and -not $timedOut) { 2000 } else { 0 }
     Stop-NewGodotProcesses -GraceMilliseconds $graceMilliseconds
+    if ($RunnerIsLinux) {
+        $process.WaitForExit()
+        $LinuxStdoutTask.GetAwaiter().GetResult() | Out-Null
+        $LinuxStderrTask.GetAwaiter().GetResult() | Out-Null
+        $LinuxStdoutStream.Dispose()
+        $LinuxStderrStream.Dispose()
+        $LinuxStdoutStream = $null
+        $LinuxStderrStream = $null
+    }
     $outText = if (Test-Path -LiteralPath $stdout) { Get-Content -LiteralPath $stdout -Raw -ErrorAction SilentlyContinue } else { '' }
     $errText = if (Test-Path -LiteralPath $stderr) { Get-Content -LiteralPath $stderr -Raw -ErrorAction SilentlyContinue } else { '' }
     $engineText = if (Test-Path -LiteralPath $engineLog) { Get-Content -LiteralPath $engineLog -Raw -ErrorAction SilentlyContinue } else { '' }
@@ -1420,6 +1492,18 @@ foreach ($testPath in $SelectedTests) {
         elseif ((Get-Content -LiteralPath $frameworkReceiptPath -Raw -Encoding UTF8 | ConvertFrom-Json).invocation_id -ne $env:HARDCORE_FRAMEWORK_INVOCATION_ID) {
             $reasons += 'framework_invocation_mismatch'
         }
+        if ($RunnerIsLinux -and $frameworkReceipt.valid) {
+            $nativeReceipt = Get-Content -LiteralPath $frameworkReceiptPath -Raw -Encoding UTF8 | ConvertFrom-Json
+            $receiptRuntime = $nativeReceipt.runtime_environment
+            if ($receiptRuntime.project_root -isnot [string] -or $receiptRuntime.user_data_directory -isnot [string] -or
+                $receiptRuntime.native_process_id -ne $process.Id -or $nativeReceipt.engine_version -cne '4.7-stable (official)' -or
+                $receiptRuntime.project_root.TrimEnd('/') -cne $ProjectRoot.TrimEnd('/') -or
+                $receiptRuntime.runtime_appdata -cne $RuntimeAppData -or
+                [string]::IsNullOrEmpty($receiptRuntime.user_data_directory) -or
+                -not $receiptRuntime.user_data_directory.StartsWith(($RuntimeAppData.TrimEnd('/') + '/'), [StringComparison]::Ordinal)) {
+                $reasons += 'framework_runtime_environment_mismatch'
+            }
+        }
     }
     $result = 'PASS'
     if ($reasons.Count -gt 0) {
@@ -1473,6 +1557,35 @@ foreach ($testPath in $SelectedTests) {
     } else {
         Write-Host "[PASS] $testName" -ForegroundColor Green
     }
+    if ($env:HARDCORE_AUDIT_EVIDENCE_ROOT) {
+        # Archive before the next scene can overwrite a repeated producer's
+        # receipt or logs. Every attempt retains its own native association.
+        $attemptId = if ($frameworkRunId) { $frameworkRunId } else { [Guid]::NewGuid().ToString() }
+        $attemptRoot = Join-Path $env:HARDCORE_AUDIT_EVIDENCE_ROOT $attemptId
+        New-Item -ItemType Directory -Path $attemptRoot -Force | Out-Null
+        foreach ($artifact in @($stdout, $stderr, $engineLog, $NativeHandoffPath)) {
+            if (Test-Path -LiteralPath $artifact -PathType Leaf) { Copy-Item -LiteralPath $artifact -Destination $attemptRoot }
+        }
+        $StructuredResults[-1] | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $attemptRoot 'native_result.json') -Encoding UTF8
+        if ($isFramework) {
+            # Preserve the exact receipt consulted by the gate even when it
+            # is malformed or stale; native_result records its rejection.
+            if (Test-Path -LiteralPath $frameworkReceiptPath -PathType Leaf) {
+                Copy-Item -LiteralPath $frameworkReceiptPath -Destination $attemptRoot
+            }
+            foreach ($artifact in @(
+                (Join-Path (Split-Path -Parent $frameworkReceiptPath) (($testName -replace '_test$', '') + '_trace.json')),
+                (Join-Path (Split-Path -Parent $frameworkReceiptPath) (($testName -replace '_test$', '') + '_expected.json')))) {
+                if (-not (Test-Path -LiteralPath $artifact -PathType Leaf)) { continue }
+                try { $ownedArtifact = Get-Content -LiteralPath $artifact -Raw -Encoding UTF8 | ConvertFrom-Json }
+                catch { continue }
+                if ($ownedArtifact.run_id -ceq $frameworkRunId -or $ownedArtifact.producer_run_id -ceq $frameworkRunId) {
+                    Copy-Item -LiteralPath $artifact -Destination $attemptRoot
+                }
+            }
+        }
+    }
+    if ($RunnerIsLinux) { $process.Dispose(); $LinuxNativeProcess = $null }
 }
 
 $passedCount = @($StructuredResults | Where-Object { $_.result -eq 'PASS' }).Count
@@ -1504,6 +1617,14 @@ if ($failedCount -gt 0) {
 }
 exit 0
 } finally {
+    if ($null -ne $LinuxNativeProcess) {
+        if (-not $LinuxNativeProcess.HasExited) { $LinuxNativeProcess.Kill($true); $LinuxNativeProcess.WaitForExit() }
+        if ($null -ne $LinuxStdoutTask) { $LinuxStdoutTask.GetAwaiter().GetResult() | Out-Null }
+        if ($null -ne $LinuxStderrTask) { $LinuxStderrTask.GetAwaiter().GetResult() | Out-Null }
+        $LinuxNativeProcess.Dispose()
+    }
+    if ($null -ne $LinuxStdoutStream) { $LinuxStdoutStream.Dispose() }
+    if ($null -ne $LinuxStderrStream) { $LinuxStderrStream.Dispose() }
     if ($FrameworkEnvironmentCaptured) {
         [Environment]::SetEnvironmentVariable('HARDCORE_FRAMEWORK_RUN_ID', $PreviousFrameworkRunId, 'Process')
         [Environment]::SetEnvironmentVariable('HARDCORE_FRAMEWORK_INVOCATION_ID', $PreviousFrameworkInvocationId, 'Process')
