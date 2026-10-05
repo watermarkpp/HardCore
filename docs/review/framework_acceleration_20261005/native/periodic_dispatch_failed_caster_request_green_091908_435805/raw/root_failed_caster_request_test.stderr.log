@@ -1,0 +1,4 @@
+ERROR: Unrecognized binary resource file: 'user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res'.
+   at: open (core/io/resource_format_binary.cpp:943)
+ERROR: Failed loading resource: user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res.
+   at: _load (core/io/resource_loader.cpp:317)

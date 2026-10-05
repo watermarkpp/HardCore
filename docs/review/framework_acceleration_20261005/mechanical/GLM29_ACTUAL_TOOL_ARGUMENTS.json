@@ -1,0 +1,12 @@
+{
+  "task": "final-native-bundle-inventory-29-20261005",
+  "text": "只读机械归集。仅所给39行JSONL；排除额外路径、网络、凭据、命令及工程推理。逐行复算checks的true/false数量，false所在序号作为failed_ids（1起）；对stderr_messages逐条复算ERROR与WARNING，SCRIPT ERROR单列。保留原runner_status与receipt_status的差异，不改任何FAIL。严格JSON输出task_id、classification=CANDIDATE_EVIDENCE、rows（archive,scene_id,run_id,invocation_id,source_content_sha256,count,passed,failed,failed_ids,stderr_errors,stderr_warnings,script_errors,runner_status,receipt_status,native_exit,timeout）、totals（rows,checks,passed,failed,runner_pass,runner_fail,native_exit_zero,timed_out）、uncertainties（缺失字段及输入行号，完整则空）。只列实际输入事实，禁止猜测原因、批准工程或给建议。计数必须由本行checks及stderr_messages核算。",
+  "files": [
+    {
+      "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/framework_v2/acceleration_bundle_20261005/GLM29_RECEIPT_EXCERPTS.jsonl",
+      "start_line": 1,
+      "end_line": 39
+    }
+  ],
+  "max_output_tokens": 12000
+}

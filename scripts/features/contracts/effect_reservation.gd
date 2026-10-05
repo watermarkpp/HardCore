@@ -4,12 +4,14 @@ extends RefCounted
 ## its sequence, including after clear/world change; no retired-ID list is needed.
 var _owner: WeakRef
 var _sequence := 0
+var _ticket_id := 0
 var _closed := false
 var _batch_open := false
 var _branch := ""
 
 static func create(owner: RefCounted, sequence: int) -> RefCounted:
 	var result := new(); result._owner = weakref(owner); result._sequence = sequence
+	result._ticket_id = result.get_instance_id()
 	return result
 
 static func create_child(owner: RefCounted, sequence: int, release_id: String) -> RefCounted:
@@ -72,7 +74,7 @@ func close() -> void:
 	if _closed: return
 	_closed = true
 	var owner: RefCounted = _owner.get_ref() as RefCounted if _owner != null else null
-	if owner != null and _branch.is_empty(): owner.call("_close_reservation_producer",_sequence)
+	if owner != null and _branch.is_empty(): owner.call("_close_reservation_producer",_sequence,_ticket_id)
 
 func finish_batch() -> void:
 	# The successful claim handed synchronous production to DamageBatch.
@@ -84,10 +86,11 @@ func finish_batch() -> void:
 	if owner != null: owner.call("_close_reservation_batch", _sequence,_branch)
 
 func _notification(what: int) -> void:
-	# A zero-refcount GDScript instance cannot dispatch another method on self.
+	# A zero-refcount GDScript instance cannot dispatch another method on self,
+	# including its identity getter. Keep the actual object ID captured at issue.
 	if what == NOTIFICATION_PREDELETE and (not _closed or _batch_open):
 		_closed = true
 		var owner: RefCounted = _owner.get_ref() as RefCounted if _owner != null else null
 		if owner != null:
-			if _branch.is_empty(): owner.call("_close_reservation_producer",_sequence)
+			if _branch.is_empty(): owner.call("_close_reservation_producer",_sequence,_ticket_id)
 			if _batch_open: owner.call("_close_reservation_batch", _sequence,_branch)

@@ -1,0 +1,157 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "registered warrior identity",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "existing default-off critical cue registry prepares its declared resources",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "actual mapped Root reaches READY",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "actual factory creates the mapped receiver",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "receiver has actual world and life qualification",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "actual action configuration owns its nonempty resource lease",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "real Player accepts a capacity ticket before windup",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "source withdrawal leaves accepted resource ownership intact",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "original timer and Root pipeline commit base HP exactly once",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "synchronous observer releases the original actual audio slot",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "synchronous observer replaces the same presentation handle with a real Cue",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "each actual onset attaches exactly one CanvasItem to the receiver",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "cue lifecycle preserves committed HP and gameplay RNG",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "presentation boundary preserves the one accepted logical state",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "observed prepared onsets exactly match the controlled replacement path",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "outer original onset cannot overwrite the replacement Cue audio ownership",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "replacement playback has a distinct real request identity",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "delayed old request cannot retire the reused audio slot",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "stale retirement preserves the replacement slot, real playback and exact resource",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "old queued Cue is destroyed while the replacement same-handle Cue remains alive",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "replacement Cue keeps its independently selected presentation strength",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "logical retirement drains the actual Cue and its registered audio ownership",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "same-handle replacement retires through the current logical owner",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "terminal Cue and accepted resource lease release after deferred deletion",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "pool reuse and replacement leave committed HP, gameplay RNG and delivery errors unchanged",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "public consumer closes all shared budget scopes",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "retired test world restores the ordinary catalog",
+      "passed": true
+    }
+  ],
+  "count": 27,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "8156b98c-ea92-4824-acc2-9bc0e721995f",
+  "passed": 27,
+  "reported_checks": 27,
+  "reported_failures": 0,
+  "run_id": "06395cde-6b00-4a8d-85de-7555bfd8832c",
+  "runtime_environment": {
+    "native_process_id": 22604,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_ticket_cancel_green_cached_20261005_d0c8cd36a4ec4b49a525c85c196ec5bb",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_dispatch_ticket_cancel_green_cached_20261005_d0c8cd36a4ec4b49a525c85c196ec5bb/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "feature_cue_audio_replacement_test",
+  "schema_version": 1,
+  "source_content_sha256": "95fc97431d6862afb27e7174e5b6d97e4412151c869ddd36936615213e53895a",
+  "status": "PASS"
+}

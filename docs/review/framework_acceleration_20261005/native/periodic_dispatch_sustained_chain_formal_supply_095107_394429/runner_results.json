@@ -1,0 +1,63 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "natural_sustained_chain_test",
+                        "test_path":  "tests/framework/natural_sustained_chain_test.tscn",
+                        "wrapper_process_id":  6692,
+                        "wrapper_started_utc":  "2026-10-05T01:51:09.6466785Z",
+                        "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_sustained_chain_formal_supply_a2e86cb36d964f3dbb921015e1912fbb",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  false,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  1,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-05T01:52:39.6578756Z",
+                        "native_exit_observed_utc":  "2026-10-05T01:52:00.8523923Z",
+                        "effective_exit_code":  1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "ebd5bdb1-2612-407e-b007-4959b861b233",
+                        "framework_receipt_valid":  false,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+                    },
+                    {
+                        "test_name":  "natural_sustained_chain_cold_test",
+                        "test_path":  "tests/framework/natural_sustained_chain_cold_test.tscn",
+                        "wrapper_process_id":  23140,
+                        "wrapper_started_utc":  "2026-10-05T01:52:02.1132561Z",
+                        "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_sustained_chain_formal_supply_a2e86cb36d964f3dbb921015e1912fbb",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  false,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  1,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-05T01:52:32.1208849Z",
+                        "native_exit_observed_utc":  "2026-10-05T01:52:07.4207760Z",
+                        "effective_exit_code":  1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "605927b4-361b-4c82-b68d-fb74feed7eb2",
+                        "framework_receipt_valid":  false,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+                    }
+                ],
+    "total":  2,
+    "invocation_id":  "b85d713e-b636-4929-9940-0e6792c3697d",
+    "runtime_environment":  {
+                                "project_root":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+                                "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_sustained_chain_formal_supply_a2e86cb36d964f3dbb921015e1912fbb",
+                                "runner_process_id":  3796
+                            },
+    "passed":  0,
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "engine_log_errors":  0,
+    "generated_at":  "2026-10-05T09:52:08.4578398+08:00",
+    "failed":  2,
+    "suite":  "adhoc"
+}

@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/framework/feature_cue_actor_retirement_test.gd" id="1"]
+
+[node name="FeatureCueNativeFinishReuseTest" type="Node"]
+script = ExtResource("1")
+wait_for_native_audio_finish_before_reuse = true

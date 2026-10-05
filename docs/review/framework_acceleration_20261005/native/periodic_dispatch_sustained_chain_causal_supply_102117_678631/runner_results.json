@@ -1,0 +1,63 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "natural_sustained_chain_test",
+                        "test_path":  "tests/framework/natural_sustained_chain_test.tscn",
+                        "wrapper_process_id":  3876,
+                        "wrapper_started_utc":  "2026-10-05T02:21:20.0490976Z",
+                        "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_sustained_chain_causal_supply_6c68fcef2455410397ab8481f6fcf807",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-05T02:22:50.0597909Z",
+                        "native_exit_observed_utc":  "2026-10-05T02:22:13.5917500Z",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "72a24523-3bba-4509-92d5-39f38c313a47",
+                        "framework_receipt_valid":  true,
+                        "result":  "PASS",
+                        "reason":  ""
+                    },
+                    {
+                        "test_name":  "natural_sustained_chain_cold_test",
+                        "test_path":  "tests/framework/natural_sustained_chain_cold_test.tscn",
+                        "wrapper_process_id":  25176,
+                        "wrapper_started_utc":  "2026-10-05T02:22:15.0683786Z",
+                        "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_sustained_chain_causal_supply_6c68fcef2455410397ab8481f6fcf807",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-05T02:22:45.0699352Z",
+                        "native_exit_observed_utc":  "2026-10-05T02:22:20.4387595Z",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "2538aa5a-d1a3-405f-840f-e465b2f4f787",
+                        "framework_receipt_valid":  true,
+                        "result":  "PASS",
+                        "reason":  ""
+                    }
+                ],
+    "total":  2,
+    "invocation_id":  "671059f6-a41f-4f13-aa62-b6135f6e54d1",
+    "runtime_environment":  {
+                                "project_root":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+                                "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_sustained_chain_causal_supply_6c68fcef2455410397ab8481f6fcf807",
+                                "runner_process_id":  16428
+                            },
+    "passed":  2,
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "engine_log_errors":  0,
+    "generated_at":  "2026-10-05T10:22:21.9702164+08:00",
+    "failed":  0,
+    "suite":  "adhoc"
+}

@@ -1,0 +1,12 @@
+[FAIL] character_launch_resource_lifecycle_test - missing_pass_marker;non_zero_exit_code_1;framework_checks_failed
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+鏁版嵁搴撹浇鍏ュ畬鎴愶細鍦板浘209 鎬墿156 Boss20 瑁呭175 鎶€鑳界瓑绾?32 鎺夎惤妲?424 浠诲姟9
+CHARACTER_LAUNCH_RESOURCE_TRACE {"after_exit":0,"before":1,"path":"res://scenes/main.tscn"}
+CHARACTER_LAUNCH_PATH_RETURN_TRACE {"after_a":{"generation":1,"native_statuses":{"res://scenes/character_select.tscn":0,"res://scenes/main.tscn":1},"path":"res://scenes/main.tscn","request_count":1,"state":"requested","tracked_paths":["res://scenes/main.tscn"]},"after_b":{"generation":2,"native_statuses":{"res://scenes/character_select.tscn":3,"res://scenes/main.tscn":1},"path":"res://scenes/character_select.tscn","request_count":2,"state":"requested","tracked_paths":["res://scenes/main.tscn","res://scenes/character_select.tscn"]},"after_cleanup":{"res://scenes/character_select.tscn":0,"res://scenes/main.tscn":0},"after_exit":{"generation":4,"native_statuses":{"res://scenes/character_select.tscn":0,"res://scenes/main.tscn":3},"path":"res://scenes/main.tscn","request_count":3,"state":"idle","tracked_paths":[]},"baseline":{"res://scenes/character_select.tscn":0,"res://scenes/main.tscn":0},"before_exit":{"generation":3,"native_statuses":{"res://scenes/character_select.tscn":3,"res://scenes/main.tscn":1},"path":"res://scenes/main.tscn","request_count":3,"state":"requested","tracked_paths":["res://scenes/main.tscn","res://scenes/character_select.tscn"]},"invocation_id":"7e6251c0-03a3-4f25-9994-361a3f19e853","red_cleanup_gets":1,"run_id":"d3245138-7fae-463b-8e04-cf1d0f76a1a1","source_content_sha256":"245d5aedf4219cf3ebf2ccd4f6539581491d1d59b417d4b2fce6ae1ba51fda5d"}
+CHARACTER_LAUNCH_RESOURCE_LIFECYCLE_FAIL failures=["same-stack A-to-B-to-A owns exactly two distinct native requests without reacquiring A", "same-stack owner exit leaves no native retrieval token: res://scenes/main.tscn"]
+WARNING: 46 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+RUNNER_RESULTS_JSON=C:\Users\Administrator\.codex\worktrees\pluggable-framework-v2\HardCore\outputs\test_logs\runner_results_adhoc_20261005_093720_801_10796.json
+TEST_SUMMARY suite=adhoc passed=0 failed=1 engine_log_errors=0
+FAILED_TESTS=character_launch_resource_lifecycle_test (missing_pass_marker;non_zero_exit_code_1;framework_checks_failed)

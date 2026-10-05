@@ -1,0 +1,31 @@
+{
+  "status": "FAIL",
+  "classification": "CANDIDATE_EVIDENCE",
+  "task": "final-native-bundle-inventory-29-20261005",
+  "mcp_task_id": "9c22f7c3-3d33-4b17-839d-ca5f309e6028",
+  "complete": false,
+  "response_status": "incomplete",
+  "http_status": 200,
+  "truncated": false,
+  "requested_model": "glm-5.3-flash",
+  "response_model": "glm-5-3-flash",
+  "model_verified": "unverified",
+  "endpoint": "https://ark.cn-beijing.volces.com/api/coding/v3/responses",
+  "elapsed_seconds": 175.688,
+  "usage": {
+    "input_tokens": 9237,
+    "output_tokens": 12000,
+    "total_tokens": 21237,
+    "reasoning_tokens": 4748
+  },
+  "reason": "Response returned incomplete at the configured output token ceiling; not accepted as a completed inventory. No retry.",
+  "sources": [
+    {
+      "path": "outputs\\framework_v2\\acceleration_bundle_20261005\\GLM29_RECEIPT_EXCERPTS.jsonl",
+      "start_line": 1,
+      "end_line": 39,
+      "sha256": "7e1c78950fca77a9d2aac1acf6c2d25e7bcbf86d96e22638e2cc1af1a61ba901",
+      "bytes": 25203
+    }
+  ]
+}

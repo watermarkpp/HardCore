@@ -1,0 +1,40 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "root_native_caster_capacity_test",
+                        "test_path":  "tests/framework/root_native_caster_capacity_test.tscn",
+                        "wrapper_process_id":  22616,
+                        "wrapper_started_utc":  "2026-10-05T01:34:16.0404432Z",
+                        "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_caster_capacity_native_red_9b5809fe50b6409eb256f9084fcbd664",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  false,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  1,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-05T01:34:46.0525299Z",
+                        "native_exit_observed_utc":  "2026-10-05T01:34:30.5136299Z",
+                        "effective_exit_code":  1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "03421a28-9f4a-4a10-a43f-c1804173597c",
+                        "framework_receipt_valid":  false,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+                    }
+                ],
+    "total":  1,
+    "invocation_id":  "63166bc5-a785-4672-9c5d-fc7c3f2768f2",
+    "runtime_environment":  {
+                                "project_root":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+                                "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_caster_capacity_native_red_9b5809fe50b6409eb256f9084fcbd664",
+                                "runner_process_id":  12436
+                            },
+    "passed":  0,
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "engine_log_errors":  0,
+    "generated_at":  "2026-10-05T09:34:31.6378181+08:00",
+    "failed":  1,
+    "suite":  "adhoc"
+}

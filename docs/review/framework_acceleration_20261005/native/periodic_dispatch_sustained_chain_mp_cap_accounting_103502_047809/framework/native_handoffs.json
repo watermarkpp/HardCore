@@ -1,0 +1,30 @@
+{
+    "schema_version":  1,
+    "runtime_environment":  {
+                                "project_root":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+                                "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_sustained_chain_mp_cap_accounting_b4c105e83f6e435faa0cd9fa78e5947d",
+                                "runner_process_id":  10088
+                            },
+    "invocation_id":  "6b4cd03c-2db7-4b92-85e2-4b41d432a7c0",
+    "source_content_sha256":  "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+    "producers":  {
+                      "natural_sustained_chain_test":  {
+                                                           "scene_id":  "natural_sustained_chain_test",
+                                                           "run_id":  "0f294b2c-e10c-4c4b-8059-59382fb0617d",
+                                                           "source_content_sha256":  "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+                                                           "process_exited":  true,
+                                                           "effective_exit_code":  0,
+                                                           "result":  "PASS",
+                                                           "receipt_sha256":  "acc3dd45031bfa5013557d70aaf1c83c14f38b6cd37dd896bcd33fe90493bc97"
+                                                       },
+                      "natural_sustained_chain_cold_test":  {
+                                                                "scene_id":  "natural_sustained_chain_cold_test",
+                                                                "run_id":  "cf2c8322-7c18-4ebc-9d89-2c1df33b2736",
+                                                                "source_content_sha256":  "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+                                                                "process_exited":  true,
+                                                                "effective_exit_code":  0,
+                                                                "result":  "PASS",
+                                                                "receipt_sha256":  "ca79db6868926de5905f60a75dc29e5ecd061393f0f8fc0c18ec2e72d517472c"
+                                                            }
+                  }
+}

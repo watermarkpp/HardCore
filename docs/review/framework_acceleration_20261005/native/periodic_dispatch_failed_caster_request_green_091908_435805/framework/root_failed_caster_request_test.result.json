@@ -1,0 +1,92 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "failed native request owns isolated production user data",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "real startup and distinct profile create the mapped Root",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "Root reaches READY through ordinary production processing",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "exact test-owned malformed native resource opens",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "malformed fixture writes completely without touching source art or imports",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "ordinary Root accepts and terminates tracking for the actual failed native request",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "failed native request releases its retrieval token before leaving Root tracking",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "same test-owned path now contains a valid native Texture2D",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "fresh lawful attempt uses the unchanged ordinary Root loader",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "fresh valid texture becomes usable without reusing a failed native task",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "negative cleanup leaves no native retrieval right at process exit",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "only this invocation's exact malformed/repaired fixture is removed",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "bounded failed-request trace opens",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "bounded failed-request trace writes completely",
+      "passed": true
+    }
+  ],
+  "count": 14,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "7fd6c44c-c42c-482e-961c-bc03e1b3455f",
+  "passed": 14,
+  "reported_checks": 14,
+  "reported_failures": 0,
+  "run_id": "d76739d0-cc08-47f2-b8d1-b7cd3b81f356",
+  "runtime_environment": {
+    "native_process_id": 8912,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_failed_caster_request_green_cd79bbee822a435191c855435e5c6771",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_dispatch_failed_caster_request_green_cd79bbee822a435191c855435e5c6771/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "root_failed_caster_request_test",
+  "schema_version": 1,
+  "source_content_sha256": "a7999b4002c8498f30810caaf7c3fa0e6f6857f65a2682bbeb471883e1867a28",
+  "status": "PASS"
+}

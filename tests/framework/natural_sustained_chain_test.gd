@@ -1,0 +1,611 @@
+extends "res://tests/framework/natural_effect_lifecycle_test.gd"
+
+const DamageObserver := preload("res://scripts/damage_ledger_observer.gd")
+const MANA_SUPPLY_ID := "hc.service_item.000663"
+const MANA_SUPPLY_SEED_COUNT := 20
+const MANA_SUPPLY_TRIGGER_MP := 250
+const MAX_SUPPLY_INPUTS := 32
+const MAX_RESTORE_EVENTS := 512
+
+## Same-process, same-world continuation of the existing natural input fixture.
+## Production clocks, pumps, accepted promises, HP and MP are never reset.
+var completed_rounds: Array[Dictionary] = []
+var round_death_base := 0
+var round_peak_states := 0
+var round_peak_evidence: Dictionary = {}
+var spawned_owners: Array[WeakRef] = []
+var boundary_spans: Array[Dictionary] = []
+var action_observations: Array[Dictionary] = []
+var action_observation_overflowed := false
+var profile_cap_observations: Array[Dictionary] = []
+var profile_cap_observation_overflowed := false
+var death_collision_observations: Array[Dictionary] = []
+var original_damage_recording := false
+var supply_catalog: Dictionary = {}
+var supply_record: Dictionary = {}
+var supply_recovery_profile: Dictionary = {}
+var supply_initial_count := 0
+var supply_seed_receipts: Array[Dictionary] = []
+var supply_inputs: Array[Dictionary] = []
+var supply_input_overflowed := false
+var supply_last_use_frame := -1
+var supply_successes := 0
+var supply_out_of_stock_reported := false
+var supply_restore_events: Array[Dictionary] = []
+var supply_restore_overflowed := false
+var supply_restored_mana := 0
+var supply_last_signal_mp := 0
+var supply_last_signal_pending := 0
+var supply_last_signal_max_mp := 0
+var observed_non_cap_mp_decrease := 0
+var observed_mp_cap_removal := 0
+var mp_cap_events: Array[Dictionary] = []
+var mp_cap_observation_overflowed := false
+
+func _scenario() -> String:
+	return "natural_sustained_chain" if periodic_children else "natural_sustained_resource"
+
+func _ready() -> void:
+	report_path = "res://outputs/test_logs/framework/"+_scenario()+"_trace.json"
+	expected_path = "res://outputs/test_logs/framework/"+_scenario()+"_expected.json"
+	process_priority = 10000
+	_run.call_deferred()
+
+func _process(delta: float) -> void:
+	var previous_size := samples.size()
+	var previous_wall: int = previous_frame_usec
+	super._process(delta)
+	# The synchronous resource signal records each real delayed-restore tick;
+	# synchronize here as well if Player discarded a remaining queue at its cap.
+	if is_instance_valid(game) and is_instance_valid(game.player):
+		supply_last_signal_mp = game.player.current_mp
+		supply_last_signal_pending = game.player._pending_potion_mana
+		supply_last_signal_max_mp = game.player.max_mp
+	if not observing or runtime == null: return
+	if runtime.active_count() > round_peak_states:
+		round_peak_states = runtime.active_count()
+		round_peak_evidence = _capture_state_cohort()
+	if samples.size() > previous_size:
+		samples[-1]["round"] = completed_rounds.size()
+		samples[-1]["wall_start_usec"] = previous_wall
+		samples[-1]["wall_end_usec"] = previous_frame_usec
+		samples[-1]["process_frame"] = Engine.get_process_frames()
+		samples[-1]["physics_frame"] = Engine.get_physics_frames()
+		samples[-1]["engine_process_usec"] = int(Performance.get_monitor(Performance.TIME_PROCESS)*1000000.0)
+		samples[-1]["engine_physics_usec"] = int(Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS)*1000000.0)
+
+func _run() -> void:
+	check(resource_backed and not PlayerState.test_mode and OS.get_environment("APPDATA").replace("\\","/").contains("/.godot/runtime_appdata/"),
+		"sustained natural fixture owns an isolated real resource-backed profile")
+	PlayerState.begin_startup_save_upgrade()
+	var startup: bool = PlayerState.finish_startup_save_upgrade()
+	var profile_name := "持续周期连锁" if periodic_children else "持续资源战斗"
+	var creation: String = PlayerState.create_character(profile_name,"hc.profession.wizard") if startup else "startup not ready"
+	check(startup and creation.is_empty(),"real startup and new production profile: "+creation)
+	if not startup or not creation.is_empty(): _finish(); return
+	PlayerState.level = 50; PlayerState.learned_skills = {"hc.skill.wizard.ice_storm":3}
+	PlayerState.equipment["hc.slot.weapon"] = Drop.create_instance(GameData.get_item_record({"item_id":85}),"sustained:weapon")
+	PlayerState.recalculate_stats(false)
+	# Service 663 is a registered consumable, not an equipment drop instance.
+	# Receive twenty exact typed records without an intermediate save. The
+	# existing single baseline checkpoint below is the production writer.
+	supply_catalog = GameData.get_entity_record(MANA_SUPPLY_ID)
+	check(not supply_catalog.is_empty() and GameData.item_entity_id(supply_catalog) == MANA_SUPPLY_ID
+		and int(supply_catalog.get("serviceIndex", -1)) == 663
+		and str(supply_catalog.get("kind", "")) == "consumable"
+		and str(supply_catalog.get("useEffect", "")) == "delayed_restore"
+		and int(supply_catalog.get("restoreHealth", -1)) == 0
+		and int(supply_catalog.get("restoreMana", -1)) == 180,
+		"registered service 663 is the exact delayed MP-only 180 potion")
+	if not failures.is_empty(): _finish(); return
+	supply_record = {"service_index":int(supply_catalog.serviceIndex),
+		"name":str(supply_catalog.name),"count":1}
+	check(GameData.item_entity_id(supply_record) == MANA_SUPPLY_ID,
+		"baseline inventory record carries the exact registered service identity")
+	if not failures.is_empty(): _finish(); return
+	supply_initial_count = PlayerState.item_count_by_entity_id(MANA_SUPPLY_ID)
+	var all_received := true
+	for seed_index in MANA_SUPPLY_SEED_COUNT:
+		var receipt: Dictionary = PlayerState.receive_record(supply_record.duplicate(true), false)
+		supply_seed_receipts.append({"index":seed_index,"success":bool(receipt.get("success",false)),
+			"reason":str(receipt.get("reason",""))})
+		all_received = all_received and bool(receipt.get("success",false))
+		if not all_received: break
+	check(all_received and supply_seed_receipts.size() == MANA_SUPPLY_SEED_COUNT
+		and PlayerState.item_count_by_entity_id(MANA_SUPPLY_ID) == supply_initial_count + MANA_SUPPLY_SEED_COUNT,
+		"twenty typed potions enter the one baseline profile without an interim writer")
+	if not failures.is_empty(): _finish(); return
+	check(PlayerState.save_game(true,true,true),"real writer saves baseline equipment, skill and exact twenty-potion supply")
+	if not failures.is_empty(): _finish(); return
+	var binding: Dictionary = PlayerState.assign_quick_item_slot(0, MANA_SUPPLY_ID)
+	check(bool(binding.get("ok",false)) and PlayerState.quick_item_slots[0] == MANA_SUPPLY_ID,
+		"production binding writer saves exact service identity in quick slot zero")
+	if not failures.is_empty(): _finish(); return
+	supply_recovery_profile = GameData.potion_recovery_profile(PlayerState.level, 0, 180, "delayed_restore")
+	check(str(supply_recovery_profile.get("effect_type", "")) == "delayed_restore"
+		and int(supply_recovery_profile.get("total_restore_mana", 0)) == 180
+		and int(supply_recovery_profile.get("tick_amount", 0)) > 0,
+		"formal recovery profile describes delayed Player ticks without a fixture refund")
+	if not failures.is_empty(): _finish(); return
+	var profile: String = PlayerState.active_profile_id
+	var xp_before: int = PlayerState.experience
+	var registry := "res://assets/data/features/validation/natural_periodic_chain_registry.json" if periodic_children else "res://assets/data/features/validation/resource_natural_registry.json"
+	check(await ContentLayers.reload_feature_catalog_async(registry),"existing default-off authoring package prepares through the formal service")
+	resource_owner = weakref(ContentLayers.feature_configuration().resource_lease)
+	check(resource_owner.get_ref() != null,"one prepared source closure owns the entire continuous run")
+	if resource_owner.get_ref() == null: _finish(); return
+	get_tree().node_added.connect(_observe_spawn)
+	game = ObservedChildRoot.new() if periodic_children else Root.new(); add_child(game)
+	var deadline := Time.get_ticks_msec()+20000
+	while not game.gameplay_input_is_enabled() and Time.get_ticks_msec()<deadline: await get_tree().process_frame
+	check(game.gameplay_input_is_enabled(),"one actual mapped world reaches READY")
+	if not game.gameplay_input_is_enabled(): _finish(); return
+	game._audio_runtime_service.event_started.connect(_observe_feature_audio)
+	if periodic_children:
+		check(await ContentLayers.set_feature_module_enabled_async("hc.validation.natural_periodic_chain",true),"READY enables the existing finite periodic-death child module")
+	var event: Array = PlayerState.feature_bundle().event_index.get("damage_committed:hc.skill.wizard.ice_storm",[])
+	check(PlayerState.feature_errors.is_empty() and event.size() == (4 if periodic_children else 3),"real equipment, learned skill and rule qualify three ignition sources and only the declared child subscription")
+	if event.size() != (4 if periodic_children else 3): _finish(); return
+	original_damage_recording = DamageObserver.recording_enabled
+	check(not original_damage_recording,"new native process owns the existing bounded read-only damage observer")
+	DamageObserver.reset(); DamageObserver.recording_enabled = true
+	PlayerState.profile_changed.connect(_observe_profile_caps)
+	game._set_player_world_position(game._canonical_ground_gu_to_screen_px(Vector2(38.5,13.5)))
+	# Exactly the same declared initial stress stats as the single-cohort case.
+	# These are assigned once. Later rounds inherit remaining HP/MP and cooldown.
+	PlayerState.computed_stats.magic_min = 180; PlayerState.computed_stats.magic_max = 180
+	game.player.max_hp = 100000; game.player.current_hp = 100000
+	game.player.max_mp = 5000; game.player.current_mp = 5000
+	game.player.resources_changed.connect(_observe_mana_resources)
+	supply_last_signal_mp = game.player.current_mp
+	supply_last_signal_pending = game.player._pending_potion_mana
+	supply_last_signal_max_mp = game.player.max_mp
+	for index in 2:
+		await _combat_round(index)
+		if completed_rounds.size() != index+1 or not failures.is_empty(): break
+	check(completed_rounds.size() == 2,"two equal full-kill cohorts finish in the same native world")
+	if runtime == null: _finish(); return
+	if completed_rounds.size() == 2:
+		check(completed_rounds[0].world == completed_rounds[1].world and completed_rounds[0].runtime_id == completed_rounds[1].runtime_id,
+			"both rounds retain the exact same world identity and effect runtime")
+		check(int(completed_rounds[1].simulation_start_usec) >= int(completed_rounds[0].simulation_end_usec),"the original simulation clock continues monotonically between rounds")
+		check(int(completed_rounds[1].hp_before) == int(completed_rounds[0].hp_after) and int(completed_rounds[1].mp_before) == int(completed_rounds[0].mp_after),
+			"round two inherits actual remaining HP and MP without a test refund")
+	var expected_xp := xp_before
+	var fixture_deaths := 0
+	for death: Dictionary in observed_deaths.values():
+		expected_xp += int(death.experience)
+		if str(death.spawn_slot_id).begins_with("test:natural:sustained:"): fixture_deaths += 1
+	check(fixture_deaths == 60 and deaths == 60,"independent death signals contain sixty distinct named fixture deaths")
+	check(game._enemy_death_terminal_total_count == observed_deaths.size() and PlayerState.experience == expected_xp,
+		"all fixture and incidental world deaths commit exactly their canonical rewards once")
+	check(scopes_closed and samples.size() >= 240 and samples.size()<12000,"continuous raw observation stays bounded and shared budget scopes close")
+	check(not action_observation_overflowed,"explicit test input observations remain within their finite bound")
+	check(not profile_cap_observation_overflowed and not DamageObserver.overflowed,"profile and actual HP-write observations remain complete within existing bounded containers")
+	check(not supply_input_overflowed and not supply_restore_overflowed and not mp_cap_observation_overflowed,
+		"formal supply inputs and ordinary Player restore events remain within their finite bounds")
+	var supply_frames: Dictionary = {}
+	var unique_supply_frames := true
+	for row: Dictionary in supply_inputs:
+		unique_supply_frames = unique_supply_frames and not supply_frames.has(int(row.process_frame))
+		supply_frames[int(row.process_frame)] = true
+	check(unique_supply_frames and supply_inputs.size() == supply_successes,
+		"each successful formal supply action occurs on a distinct process frame")
+	check(supply_successes > 0 and supply_restored_mana > 0 and not supply_restore_events.is_empty(),
+		"successful potion uses produce actual delayed MP ticks through ordinary Player processing")
+	var valid_restore_ticks := true
+	for row: Dictionary in supply_restore_events:
+		valid_restore_ticks = valid_restore_ticks and (
+			int(row.actual_restored) > 0
+			and int(row.actual_restored) <= int(supply_recovery_profile.tick_amount)
+			and int(row.pending_before) - int(row.pending_after) >= int(row.actual_restored)
+		)
+	check(valid_restore_ticks,"observed delayed MP restoration respects the formal per-tick amount")
+	check(PlayerState.item_count_by_entity_id(MANA_SUPPLY_ID)
+		== supply_initial_count + MANA_SUPPLY_SEED_COUNT - supply_successes
+		and PlayerState.quick_item_slots[0] == MANA_SUPPLY_ID,
+		"every successful structured use consumes exactly one of the baseline twenty and keeps its binding")
+	check(death_collision_observations.size() == 60,"every exact fixture death was observed after immediate collision retirement")
+	var child_rows: Array = game.child_rows if periodic_children else []
+	if periodic_children:
+		var valid: bool = not game.child_observation_overflowed and not child_rows.is_empty()
+		var periodic := 0
+		for row: Dictionary in child_rows:
+			valid = valid and bool(row.result.success) and int(row.generation) == 1
+			periodic += 1 if row.parent_source_class == "periodic" else 0
+		check(valid and periodic > 0 and int(runtime.metrics().child_actions) == child_rows.size(),"every observed real child completes once; natural periodic fatal input is included")
+	check(runtime != null and not runtime.has_work() and runtime.errors.is_empty(),"continuous accepted work finishes before final save and retirement")
+	var final_save_started := Time.get_ticks_usec()
+	check(PlayerState.save_game(true,true,true),"continuous final rewards save through the sole production writer")
+	var final_supply_count := PlayerState.item_count_by_entity_id(MANA_SUPPLY_ID)
+	boundary_spans.append({"round":2,"kind":"final_production_durable_checkpoint","started_usec":final_save_started,"finished_usec":Time.get_ticks_usec(),"process_frame":Engine.get_process_frames()})
+	# Let the original Root and this observer finish the frame containing the
+	# final checkpoint. No clock/pump is invoked or budget reset by the fixture.
+	await get_tree().process_frame
+	observing = false
+	_write(report_path,{"run_id":OS.get_environment("HARDCORE_FRAMEWORK_RUN_ID"),"source_content_sha256":OS.get_environment("HARDCORE_R3_CONTENT_SHA256"),
+		"scope":"PC headless two full 30-receiver natural combat rounds in one Root/profile/runtime; original attack, movement, HP and cohort timing retained; twenty real registered MP consumables added once to the baseline and used only through the formal quick slot; this new lawful supply is not an optimization comparison with the prior no-supply fixture; initial stress HP/MP are temporary and actual profile synchronization applies authoritative caps; cap changes are not counted as incoming damage; authored corpses, ground drops, shared caches and bounded test observations may retain memory; not Android/GPU or infinite duration",
+		"phase":"after final production save; before teardown and cold handoff","phase_status":"PASS" if failures.is_empty() else "FAIL","phase_failures":failures,
+		"rounds":completed_rounds,"samples":samples,"wall_frame_usec":_percentiles("wall_usec"),"engine_process_usec":_percentiles("engine_process_usec"),
+		"engine_physics_usec":_percentiles("engine_physics_usec"),"observed_deaths":observed_deaths.values(),"terminal_death_jobs":game._enemy_death_terminal_jobs,
+		"metrics":runtime.metrics() if runtime != null else {},"child_rows":child_rows,"expected_xp":expected_xp,"xp_after":PlayerState.experience,
+		"boundary_spans":boundary_spans,"action_observations":action_observations,"profile_cap_observations":profile_cap_observations,"death_collision_observations":death_collision_observations,
+		"mana_supply":{"entity_id":MANA_SUPPLY_ID,"catalog":{"serviceIndex":supply_catalog.get("serviceIndex"),
+			"kind":supply_catalog.get("kind"),"useEffect":supply_catalog.get("useEffect"),
+			"restoreHealth":supply_catalog.get("restoreHealth"),"restoreMana":supply_catalog.get("restoreMana")},
+			"recovery_profile":supply_recovery_profile,"initial_count":supply_initial_count,
+			"seed_count":MANA_SUPPLY_SEED_COUNT,"seed_receipts":supply_seed_receipts,
+			"successful_uses":supply_successes,"remaining_count":final_supply_count,
+			"inputs":supply_inputs,"input_overflowed":supply_input_overflowed,
+			"actual_restored_mana":supply_restored_mana,"restore_events":supply_restore_events,
+			"profile_cap_removed_mana":observed_mp_cap_removal,"profile_cap_events":mp_cap_events,
+			"observed_non_cap_mp_decrease":observed_non_cap_mp_decrease,
+			"restore_overflowed":supply_restore_overflowed},
+		"damage_observation_counts":{"events":DamageObserver.events.size(),"admissions":DamageObserver.admissions.size(),"deliveries":DamageObserver.deliveries.size(),"terminal_events":DamageObserver.terminal_events.size(),"overflowed":DamageObserver.overflowed},
+		"engine_monitor_scope":"engine monitor snapshots may repeat between engine updates; wall interval samples are the independent raw frame series; damage observer is enabled for this fixture",
+		"audio_cue_starts":audio_cue_starts,"exact_prepared_streams":exact_prepared_streams,"memory_checkpoints":memory_checkpoints,
+		"maximum_pending_age_frames":maximum_pending_age,"maximum_service_age_frames":maximum_service_age})
+	var generation: String = PlayerState._world_clock_generation
+	var owners := {"root":weakref(game),"runtime":weakref(runtime),"world":weakref(game._world_context),"clock":weakref(game._time_domains),"streaming":weakref(game._streaming_coordinator)}
+	game.queue_free(); await get_tree().process_frame
+	check(not runtime.has_work() and runtime._receipts.is_empty(),"formal Root exit retires the final transient effect owners")
+	check(ContentLayers.reload_feature_catalog(),"retired world withdraws the existing prepared source")
+	for frame in 180:
+		if resource_owner.get_ref() == null and ContentLayers._feature_resource_service.pending_count() == 0: break
+		await get_tree().process_frame
+	check(resource_owner.get_ref() == null and ContentLayers._feature_resource_service.pending_count() == 0,"accepted source leases and resource retirement drain")
+	check(PlayerState.select_character(profile) and PlayerState.experience == expected_xp,"actual profile reload retains exact continuous rewards")
+	check(PlayerState.item_count_by_entity_id(MANA_SUPPLY_ID) == final_supply_count
+		and PlayerState.quick_item_slots[0] == MANA_SUPPLY_ID,
+		"actual profile reload retains exact potion remainder and formal quick-slot binding")
+	if failures.is_empty(): _write(expected_path,{"profile_id":profile,"experience":expected_xp,"generation":generation,"completed_rounds":2,"fixture_deaths":60,
+		"mana_supply_id":MANA_SUPPLY_ID,"mana_supply_initial_count":supply_initial_count,
+		"mana_supply_seed_count":MANA_SUPPLY_SEED_COUNT,"mana_supply_successful_uses":supply_successes,
+		"mana_supply_remaining_count":final_supply_count,"mana_supply_quick_slot":PlayerState.quick_item_slots[0],
+		"invocation_id":OS.get_environment("HARDCORE_FRAMEWORK_INVOCATION_ID"),"producer_run_id":OS.get_environment("HARDCORE_FRAMEWORK_RUN_ID"),"source_content_sha256":OS.get_environment("HARDCORE_R3_CONTENT_SHA256")})
+	var cleanup := {"sample_count":samples.size(),"before_clear":_memory_snapshot()}
+	DamageObserver.recording_enabled = original_damage_recording; DamageObserver.reset()
+	samples.clear(); targets.clear(); previous_actors.clear(); cast_targets.clear(); spawned_owners.clear(); runtime = null
+	for frame in 4: await get_tree().process_frame
+	var released := true
+	for owner: WeakRef in owners.values(): released = released and owner.get_ref() == null
+	check(released and int(Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT)) == 0,"retired Root/runtime/world/clock/streaming release and no orphan nodes remain")
+	cleanup["all_world_owners_released"] = released; cleanup["after_observation_clear"] = _memory_snapshot()
+	var final_trace: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(report_path))
+	final_trace["cleanup"] = cleanup; final_trace["final_checks_before_trace_write"] = checks
+	final_trace["final_status_before_trace_write"] = "PASS" if failures.is_empty() else "FAIL"
+	_write(report_path,final_trace)
+	_finish()
+
+func _combat_round(index: int) -> void:
+	var label := "round %d: " % index
+	targets.clear(); previous_actors.clear()
+	round_death_base = deaths; round_peak_states = 0; round_peak_evidence = {}
+	stream_started_usec = 0; stream_finished_usec = 0; resource_evidence = {}; resource_mapping = {}; concurrent_queues = false
+	var before: Dictionary = runtime.metrics() if runtime != null else {}
+	var tick_before := int(before.get("ticks",0))
+	var damage_event_start := DamageObserver.events.size()
+	var damage_admission_start := DamageObserver.admissions.size()
+	var damage_delivery_start := DamageObserver.deliveries.size()
+	var damage_terminal_start := DamageObserver.terminal_events.size()
+	var accepted_before := accepted_casts
+	var player_motion_before := movement_gu; var actor_motion_before := monster_movement_gu
+	var mp: int = game.player.current_mp; var hp: int = game.player.current_hp
+	var pending_mana_before: int = game.player._pending_potion_mana
+	var restored_before := supply_restored_mana
+	var cap_removal_before := observed_mp_cap_removal
+	var non_cap_decrease_before := observed_non_cap_mp_decrease
+	var supply_uses_before := supply_successes
+	var supply_count_before := PlayerState.item_count_by_entity_id(MANA_SUPPLY_ID)
+	var simulation_start: int = game._time_domains.simulation_usec()
+	var sample_start := samples.size()
+	var initial_stats := {"computed":PlayerState.computed_stats.duplicate(true),"player_max_hp":game.player.max_hp,"player_max_mp":game.player.max_mp}
+	if index == 0: previous_frame_usec = Time.get_ticks_usec()
+	var birth_started := Time.get_ticks_usec()
+	for slot in 30:
+		var point := Vector2(40.5+float(slot%6)*0.72+(0.36 if int(slot/6)%2 else 0.0),12.2+float(slot/6)*0.64)
+		var actor: EnemyActor = game._spawn_enemy(GameData.get_monster_by_id(19),game._canonical_ground_gu_to_screen_px(point),false,-1.0,
+			{"respawn_enabled":false,"spawn_slot_id":"test:natural:sustained:%d:%d" % [index,slot]})
+		if actor != null:
+			actor.max_hp = 1500+(slot*7 if periodic_children else 0); actor.current_hp = actor.max_hp
+			actor.died.connect(_on_target_died); targets.append(actor); spawned_owners.append(weakref(actor))
+			check(actor._hc_point_walkable(point) and actor.is_physics_processing(),label+"real walkable receiver with AI active: "+str(slot))
+	var nonoverlap := targets.size() == 30
+	for i in targets.size():
+		for j in range(i):
+			var a: Vector2 = game._canonical_screen_px_to_ground_gu(targets[i].global_position)
+			var b: Vector2 = game._canonical_screen_px_to_ground_gu(targets[j].global_position)
+			nonoverlap = nonoverlap and a.distance_to(b) >= targets[i].combat_radius_gu+targets[j].combat_radius_gu
+	check(nonoverlap,label+"thirty disjoint real footprints preserve the original cohort inputs")
+	boundary_spans.append({"round":index,"kind":"actual_cohort_factory_and_fixture_checks","started_usec":birth_started,"finished_usec":Time.get_ticks_usec(),"process_frame":Engine.get_process_frames()})
+	if not nonoverlap: return
+	var start := Time.get_ticks_msec(); var next_input := start; var next_memory := start
+	previous_player = game._canonical_screen_px_to_ground_gu(game.player.global_position)
+	observing = runtime != null
+	while Time.get_ticks_msec()-start<35000:
+		var now := Time.get_ticks_msec()
+		game._on_gameplay_movement(Vector2(0.5,-0.25).normalized() if int((now-start)/1200)%2 == 0 else Vector2(-0.5,0.25).normalized())
+		_maybe_use_mana_supply(index, now-start)
+		if now >= next_input and deaths-round_death_base < 30:
+			next_input = now+250
+			var chosen := _current_aim_target()
+			if chosen != null:
+				game._set_magic_locked_target(chosen,true)
+				var causal_snapshot: Dictionary = {}
+				if action_observations.size()<512:
+					causal_snapshot = _causal_enemy_snapshot(chosen)
+				var result: StringName = game._try_release_skill("hc.skill.wizard.ice_storm",false)
+				if action_observations.size()<512:
+					var action_row: Dictionary = {"round":index,"wall_usec":Time.get_ticks_usec(),"simulation_usec":game._time_domains.simulation_usec(),"result":str(result),
+						"hp":game.player.current_hp,"mp":game.player.current_mp,"magic_min":PlayerState.computed_stats.get("magic_min",0),"magic_max":PlayerState.computed_stats.get("magic_max",0)}
+					action_row.merge(causal_snapshot,true)
+					action_observations.append(action_row)
+				else: action_observation_overflowed = true
+				if result == &"accepted": accepted_casts += 1
+				else: rejected_inputs[str(result)] = int(rejected_inputs.get(str(result),0))+1
+		if runtime == null and game._feature_effect_runtime != null: runtime = game._feature_effect_runtime; observing = true
+		if now >= next_memory:
+			next_memory = now+5000; memory_checkpoints.append({"round":index,"elapsed_ms":now-start,"snapshot":_memory_snapshot()})
+			print("NATURAL_SUSTAINED_PROGRESS ",JSON.stringify({"round":index,"elapsed_ms":now-start,"deaths":deaths-round_death_base,"accepted":accepted_casts-accepted_before,
+				"hp":game.player.current_hp,"mp":game.player.current_mp,"input_enabled":game.gameplay_input_is_enabled(),"rejected":rejected_inputs,"metrics":runtime.metrics() if runtime != null else {}}))
+		await get_tree().process_frame
+		if runtime != null and deaths-round_death_base == 30 and not runtime.has_work() and _settlement_drained() and stream_finished_usec>0: break
+	game._on_gameplay_movement(Vector2.ZERO)
+	check(runtime != null,label+"actual input creates its admitted runtime")
+	if runtime == null: return
+	var metrics: Dictionary = runtime.metrics()
+	check(accepted_casts-accepted_before > 1 and movement_gu-player_motion_before>1.0 and monster_movement_gu-actor_motion_before>1.0,
+		label+"repeated accepted casts, Player movement and live pursuit remain active")
+	check(game.player.current_hp<hp and game.player.current_mp<mp,label+"live attacks and real casts spend HP and MP")
+	var restored_this_round := supply_restored_mana - restored_before
+	var cap_removed_this_round := observed_mp_cap_removal - cap_removal_before
+	var actual_mana_spent := observed_non_cap_mp_decrease - non_cap_decrease_before
+	check(actual_mana_spent == mp + restored_this_round - game.player.current_mp - cap_removed_this_round,
+		label+"real resource signals reconcile MP spend separately from profile-cap clipping")
+	check(actual_mana_spent > 0 and PlayerState.item_count_by_entity_id(MANA_SUPPLY_ID)
+		== supply_count_before - (supply_successes - supply_uses_before),
+		label+"actual MP spend includes only observed formal restoration and exact inventory consumption")
+	var damage_evidence := _player_damage_evidence(damage_event_start, damage_admission_start, damage_delivery_start, damage_terminal_start)
+	check(not DamageObserver.overflowed and int(damage_evidence.actual_hp_loss)>0 and not damage_evidence.rows.is_empty(),
+		label+"real incoming Player HP mutations independently prove attacks, excluding profile-cap changes")
+	check(round_peak_states == 90 and bool(round_peak_evidence.get("identities_match",false))
+		and bool(round_peak_evidence.get("all_named_thirty_fixture_targets_have_three_sources",false)),label+"all thirty exact ActorRefs simultaneously own three distinct states")
+	check(int(metrics.ticks)-tick_before>=360 and int(metrics.tick_delivery_count)==int(metrics.ticks),label+"at least360 actual ticks complete without rejected damage delivery")
+	check(int(metrics.maximum_tick_delivery_lateness_usec)<1000000,label+"every actual delivery so far is strictly below the original one-second period")
+	check(deaths-round_death_base == 30 and not runtime.has_work() and runtime.errors.is_empty(),label+"all thirty deaths and accepted effects finish before the original bounded cohort deadline")
+	var reservations: Dictionary = runtime.reservation_snapshot()
+	var empty := true
+	for count: int in reservations.values(): empty = empty and count == 0
+	check(empty and runtime._receipts.is_empty() and runtime.heap_count()==0 and runtime.child_count()==0 and runtime.pending_count()==0 and _settlement_drained(),
+		label+"all transient reservations, states, receipts, facts, children and both writer queues drain naturally")
+	check(concurrent_queues and bool(resource_evidence.get("five_textures_available",false)) and str(resource_evidence.get("request_kind",""))=="threaded_new_job"
+		and int(resource_evidence.get("get_delta",0))>=5 and int(resource_evidence.get("request_delta",0))>=5,label+"actual first-death demand completes its own new five-texture job while settlement overlaps")
+	check(runtime.presentation().node_count()==0 and game._streaming_coordinator.pending_request_count()==0,label+"actual cues and global resource backlog reach terminal drain")
+	game._streaming_coordinator.unregister_visual(get_instance_id())
+	var save_started := Time.get_ticks_usec()
+	check(PlayerState.save_game(true,true,true),label+"real production writer durably saves the completed cohort")
+	boundary_spans.append({"round":index,"kind":"production_durable_checkpoint","started_usec":save_started,"finished_usec":Time.get_ticks_usec(),"process_frame":Engine.get_process_frames()})
+	var remaining_receivers: Array[Dictionary] = []
+	for actor: EnemyActor in targets:
+		if not is_instance_valid(actor) or actor.current_hp <= 0: continue
+		var remaining: Dictionary = _causal_enemy_snapshot(actor)
+		remaining["slot"] = str(actor.get_meta("spawn_context",{}).get("spawn_slot_id",""))
+		var states: Array[Dictionary] = []
+		for state: Dictionary in runtime._states.values():
+			if state.target.resolve(false) == actor:
+				states.append({"source_handle":str(state.command.source_handle),"next_due_usec":int(state.next_due),
+					"expires_usec":int(state.expires),"period_usec":int(state.period),"ticks":int(state.ticks)})
+		remaining["accepted_states"] = states
+		remaining_receivers.append(remaining)
+	completed_rounds.append({"round":index,"elapsed_ms":Time.get_ticks_msec()-start,"world":game._world_context.capture_world(),"runtime_id":runtime.get_instance_id(),
+		"remaining_receivers_at_original_deadline":remaining_receivers,
+		"simulation_start_usec":simulation_start,"simulation_end_usec":game._time_domains.simulation_usec(),"hp_before":hp,"hp_after":game.player.current_hp,"mp_before":mp,"mp_after":game.player.current_mp,
+		"pending_mana_before":pending_mana_before,"pending_mana_after":game.player._pending_potion_mana,
+		"actual_formal_mana_restored":restored_this_round,"actual_mana_spent":actual_mana_spent,
+		"profile_cap_removed_mana":cap_removed_this_round,
+		"supply_count_before":supply_count_before,"supply_count_after":PlayerState.item_count_by_entity_id(MANA_SUPPLY_ID),
+		"supply_successful_uses":supply_successes-supply_uses_before,
+		"accepted_casts":accepted_casts-accepted_before,"ticks":int(metrics.ticks)-tick_before,"deaths":deaths-round_death_base,"peak_states":round_peak_states,"peak_state_evidence":round_peak_evidence,
+		"sample_start":sample_start,"sample_end":samples.size(),"resource_evidence":resource_evidence.duplicate(true),"reservations":reservations,
+		"memory":_memory_snapshot(),"metrics":metrics,"player_damage_evidence":damage_evidence,"initial_player_stats":initial_stats,"final_player_stats":{"computed":PlayerState.computed_stats.duplicate(true),"player_max_hp":game.player.max_hp,"player_max_mp":game.player.max_mp},
+		"maximum_pending_age_frames":maximum_pending_age.duplicate(),"maximum_service_age_frames":maximum_service_age.duplicate()})
+	var evidence_started := Time.get_ticks_usec()
+	_write(report_path.replace("_trace.json","_progress.json"),{"run_id":OS.get_environment("HARDCORE_FRAMEWORK_RUN_ID"),"source_content_sha256":OS.get_environment("HARDCORE_R3_CONTENT_SHA256"),
+		"phase":"completed cohorts only; final result remains pending","rounds":completed_rounds,"phase_failures":failures})
+	boundary_spans.append({"round":index,"kind":"test_owned_progress_evidence_io","started_usec":evidence_started,"finished_usec":Time.get_ticks_usec(),"process_frame":Engine.get_process_frames()})
+
+func _maybe_use_mana_supply(round_index: int, elapsed_ms: int) -> void:
+	if not is_instance_valid(game) or not is_instance_valid(game.player): return
+	var frame := Engine.get_process_frames()
+	var mp_before: int = game.player.current_mp
+	var pending_before: int = game.player._pending_potion_mana
+	# A declared first formal dose at the second-cohort boundary proves the
+	# supply path even if cooldown-limited casts never reach the low-MP trigger.
+	# It requires the real full-dose deficit, consumes the ordinary inventory,
+	# and queues the existing delayed ticks. Subsequent doses keep the 250 gate.
+	var first_boundary_dose: bool = (round_index == 1 and supply_successes == 0
+		and game.player.max_mp - mp_before >= int(supply_catalog.restoreMana))
+	if ((mp_before >= MANA_SUPPLY_TRIGGER_MP and not first_boundary_dose)
+		or pending_before != 0 or frame == supply_last_use_frame): return
+	supply_last_use_frame = frame
+	var count_before := PlayerState.item_count_by_entity_id(MANA_SUPPLY_ID)
+	if count_before <= 0:
+		if not supply_out_of_stock_reported:
+			supply_out_of_stock_reported = true
+			check(false,"the fixed baseline twenty-potion supply remains sufficient for the complete two-round workload")
+		return
+	var started_usec := Time.get_ticks_usec()
+	var result: Dictionary = PlayerState.use_quick_item_slot(0, MANA_SUPPLY_ID)
+	var count_after := PlayerState.item_count_by_entity_id(MANA_SUPPLY_ID)
+	var pending_after: int = game.player._pending_potion_mana
+	var mp_after: int = game.player.current_mp
+	var success := bool(result.get("ok", false))
+	if success: supply_successes += 1
+	check(success and count_after == count_before - 1
+		and pending_after == int(supply_catalog.restoreMana) and mp_after == mp_before,
+		"formal quick-slot use consumes exactly one potion and queues only delayed MP")
+	var row := {"round":round_index,"elapsed_ms":elapsed_ms,"process_frame":frame,
+		"trigger":"first_second_cohort_full_deficit" if first_boundary_dose else "low_mp",
+		"started_usec":started_usec,"finished_usec":Time.get_ticks_usec(),
+		"action":"PlayerState.use_quick_item_slot","entity_id":MANA_SUPPLY_ID,
+		"configuration":{"threshold_mp":MANA_SUPPLY_TRIGGER_MP,"slot":0,
+			"use_effect":supply_catalog.get("useEffect"),"restore_mana":supply_catalog.get("restoreMana"),
+			"restore_health":supply_catalog.get("restoreHealth")},
+		"mp_before":mp_before,"mp_after":mp_after,
+		"pending_mana_before":pending_before,"pending_mana_after":pending_after,
+		"count_before":count_before,"count_after":count_after,
+		"ok":success,"reason":str(result.get("reason",""))}
+	if supply_inputs.size() < MAX_SUPPLY_INPUTS: supply_inputs.append(row)
+	else: supply_input_overflowed = true
+	# Queuing has no MP signal. Establish the new pending baseline so the next
+	# Player.resources_changed callback measures an actual delayed tick.
+	supply_last_signal_mp = mp_after
+	supply_last_signal_pending = pending_after
+
+func _observe_mana_resources(_hp: int, _max_hp: int, current_mp: int, _max_mp: int) -> void:
+	if not is_instance_valid(game) or not is_instance_valid(game.player): return
+	var decrease := maxi(0,supply_last_signal_mp-current_mp)
+	var cap_removed := 0
+	if _max_mp < supply_last_signal_max_mp:
+		# Player._apply_stats clamps absolute MP to the new cap before this
+		# signal. Count that clipping separately from actual combat spending.
+		cap_removed = mini(decrease,maxi(0,supply_last_signal_mp-_max_mp))
+		if cap_removed > 0:
+			observed_mp_cap_removal += cap_removed
+			if mp_cap_events.size() < MAX_RESTORE_EVENTS:
+				mp_cap_events.append({"round":completed_rounds.size(),"process_frame":Engine.get_process_frames(),
+					"mp_before":supply_last_signal_mp,"mp_after":current_mp,
+					"max_mp_before":supply_last_signal_max_mp,"max_mp_after":_max_mp,"cap_removed":cap_removed})
+			else: mp_cap_observation_overflowed = true
+	observed_non_cap_mp_decrease += decrease-cap_removed
+	var pending_now: int = game.player._pending_potion_mana
+	var restored := maxi(0, current_mp - supply_last_signal_mp)
+	if pending_now < supply_last_signal_pending and restored > 0:
+		supply_restored_mana += restored
+		var row := {"round":completed_rounds.size(),"process_frame":Engine.get_process_frames(),
+			"wall_usec":Time.get_ticks_usec(),"mp_before":supply_last_signal_mp,
+			"mp_after":current_mp,"pending_before":supply_last_signal_pending,
+			"pending_after":pending_now,"actual_restored":restored}
+		if supply_restore_events.size() < MAX_RESTORE_EVENTS: supply_restore_events.append(row)
+		else: supply_restore_overflowed = true
+	supply_last_signal_mp = current_mp
+	supply_last_signal_pending = pending_now
+	supply_last_signal_max_mp = _max_mp
+
+func _current_aim_target() -> EnemyActor:
+	var active_targets := {}
+	if runtime != null:
+		for state: Dictionary in runtime._states.values():
+			var receiver: Node = state.target.resolve()
+			if is_instance_valid(receiver): active_targets[receiver.get_instance_id()] = true
+	var chosen: EnemyActor = null; var best_score := -1
+	for actor: EnemyActor in targets:
+		if not is_instance_valid(actor) or actor.current_hp<=0: continue
+		var center: Vector2 = game._canonical_screen_px_to_ground_gu(actor.global_position); var score := 0
+		for receiver: EnemyActor in targets:
+			if not is_instance_valid(receiver) or receiver.current_hp<=0: continue
+			var offset: Vector2 = game._canonical_screen_px_to_ground_gu(receiver.global_position)-center
+			if absf(offset.x)<=1.5 and absf(offset.y)<=1.5: score += 100 if round_peak_states<90 and not active_targets.has(receiver.get_instance_id()) else 1
+		if score>best_score: chosen = actor; best_score = score
+	return chosen
+
+func _causal_enemy_snapshot(enemy: EnemyActor) -> Dictionary:
+	var player_ground_gu: Vector2 = game._canonical_screen_px_to_ground_gu(game.player.global_position)
+	var enemy_ground_gu: Vector2 = game._canonical_screen_px_to_ground_gu(enemy.global_position)
+	return {"causal_snapshot_wall_usec":Time.get_ticks_usec(),"enemy_instance_id":enemy.get_instance_id(),
+		"enemy_hp":enemy.current_hp,"enemy_max_hp":enemy.max_hp,
+		"player_canonical_ground_gu":[player_ground_gu.x,player_ground_gu.y],
+		"enemy_canonical_ground_gu":[enemy_ground_gu.x,enemy_ground_gu.y],
+		"enemy_target_is_player":is_same(enemy.target,game.player),
+		"enemy_audio_attack_sequence":int(enemy._audio_attack_sequence),
+		"enemy_last_physical_hit_resolution":enemy.last_physical_hit_resolution.duplicate(true)}
+
+func _on_target_died(enemy: EnemyActor, data: Dictionary) -> void:
+	check(enemy.collision_layer == 0 and enemy.collision_mask == 0 and not enemy.is_physics_processing() and not enemy.is_in_group("enemies"),
+		"actual death immediately removes collision and active physics before its notification")
+	var death_row: Dictionary = {"instance_id":enemy.get_instance_id(),"slot":str(enemy.get_meta("spawn_context",{}).get("spawn_slot_id","")),
+		"collision_layer":enemy.collision_layer,"collision_mask":enemy.collision_mask,"physics_processing":enemy.is_physics_processing(),"process_frame":Engine.get_process_frames(),"simulation_usec":game._time_domains.simulation_usec(),
+		"death_data_monster_id":int(data.get("monster_id",-1)),"death_data_keys":data.keys()}
+	# This signal carries canonical monster data, not a fatal damage identity.
+	# Child rows and the explicit damage observer carry their own real sources.
+	death_row.merge(_causal_enemy_snapshot(enemy),true)
+	death_collision_observations.append(death_row)
+	deaths += 1
+	if deaths != round_death_base+1: return
+	death_started_usec = Time.get_ticks_usec()
+	var coordinator: RefCounted = game._streaming_coordinator
+	var visual := MonsterVisual.new()
+	for id: int in [64,89,34,19]:
+		var mapping: Dictionary = visual._client_mapping_for(GameData.get_monster_by_id(id))
+		var key: String = visual._client_resource_cache_key(mapping)
+		if not mapping.is_empty() and coordinator.client_resources(key).is_empty() and not coordinator._threaded_profile_requests.has(key):
+			resource_mapping = mapping; resource_key = key; resource_monster_id = id; break
+	visual.free()
+	check(not resource_mapping.is_empty(),"round first-death key is genuinely uncached at actual demand")
+	if resource_mapping.is_empty(): return
+	coordinator.register_visual(self,get_instance_id(),game.current_map_id,game._zone_generation,resource_key,{},0)
+	stream_started_usec = death_started_usec
+	resource_get_before = coordinator.threaded_texture_get_count(); resource_request_before = coordinator.threaded_texture_request_count()
+	var immediate: Dictionary = coordinator.request_visual_resources(self,resource_mapping,resource_monster_id)
+	var job: Dictionary = coordinator._threaded_profile_requests.get(resource_key,{})
+	resource_evidence = {"key":resource_key,"monster_id":resource_monster_id,"demand_death_identity":enemy.get_instance_id(),
+		"cache_empty_at_demand":true,"request_kind":"cache_hit" if not immediate.is_empty() else "threaded_new_job",
+		"job_state_after_request":str(job.get("state","")),"request_sequence":int(job.get("request_sequence",-1)),
+		"job_map_generation":int(job.get("map_generation",-1)),"paths":job.get("paths",{}).duplicate(),
+		"failure_seen":coordinator._failure_details.has(resource_key),"five_textures_available":false}
+	check(immediate.is_empty() and str(job.get("state","")) in ["queued","loading"] and job.get("paths",{}).size()==5,
+		"round demand owns a new five-action job, rather than an unrelated queue or cache hit")
+	concurrent_queues = coordinator._threaded_profile_requests.has(resource_key) and (not game._pending_enemy_deaths.is_empty()
+		or not game._prepared_enemy_death_settlement.is_empty() or PlayerState._json_persistence.pending_count()>0)
+
+func _observe_profile_caps() -> void:
+	if not is_instance_valid(game) or not is_instance_valid(game.player): return
+	if profile_cap_observations.size() >= 512: profile_cap_observation_overflowed = true; return
+	profile_cap_observations.append({"round":completed_rounds.size(),"wall_usec":Time.get_ticks_usec(),"process_frame":Engine.get_process_frames(),
+		"hp":game.player.current_hp,"mp":game.player.current_mp,"player_max_hp":game.player.max_hp,"player_max_mp":game.player.max_mp,
+		"authoritative_max_hp":int(PlayerState.computed_stats.get("max_hp",0)),"authoritative_max_mp":int(PlayerState.computed_stats.get("max_mp",0))})
+
+func _player_damage_evidence(first: int, first_admission: int, first_delivery: int, first_terminal: int) -> Dictionary:
+	var rows: Array[Dictionary] = []
+	var admissions: Array[Dictionary] = []
+	var deliveries: Array[Dictionary] = []
+	var terminals: Array[Dictionary] = []
+	var actual_loss := 0
+	var player_identity: int = game.player.get_instance_id()
+	for index in range(first,DamageObserver.events.size()):
+		var row: Dictionary = DamageObserver.events[index]
+		if int(row.victim_instance_id) == player_identity:
+			rows.append(row); actual_loss += int(row.actual_hp_delta)
+	for index in range(first_admission,DamageObserver.admissions.size()):
+		var row: Dictionary = DamageObserver.admissions[index]
+		if int(row.get("target_id",row.get("target_instance_id",0))) == player_identity: admissions.append(row)
+	for index in range(first_delivery,DamageObserver.deliveries.size()):
+		var row: Dictionary = DamageObserver.deliveries[index]
+		if int(row.get("victim_instance_id",0)) == player_identity: deliveries.append(row)
+	for index in range(first_terminal,DamageObserver.terminal_events.size()):
+		var row: Dictionary = DamageObserver.terminal_events[index]
+		var source: Dictionary = row.get("source",{})
+		if int(source.get("victim_instance_id",0)) == player_identity: terminals.append(row)
+	return {"rows":rows,"actual_hp_loss":actual_loss,"admissions":admissions,"deliveries":deliveries,"terminals":terminals,
+		"scope":"existing bounded read-only observer at actual admission, delivery, terminal and Player HP writes; no profile cap counted as incoming damage"}
+
+func _memory_snapshot() -> Dictionary:
+	var live := 0; var corpses := 0
+	for reference: WeakRef in spawned_owners:
+		var actor: EnemyActor = reference.get_ref() as EnemyActor
+		if actor != null:
+			live += 1
+			if actor.current_hp<=0: corpses += 1
+	return {"memory_static":int(Performance.get_monitor(Performance.MEMORY_STATIC)),"objects":int(Performance.get_monitor(Performance.OBJECT_COUNT)),
+		"resources":int(Performance.get_monitor(Performance.OBJECT_RESOURCE_COUNT)),"nodes":int(Performance.get_monitor(Performance.OBJECT_NODE_COUNT)),
+		"orphans":int(Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT)),"samples":samples.size(),"observed_deaths":observed_deaths.size(),
+		"spawned_actor_weakrefs":spawned_owners.size(),"live_spawned_nodes":live,"authored_corpse_nodes":corpses,
+		"reservations":runtime.reservation_snapshot() if runtime != null else {},"receipts":runtime._receipts.size() if runtime != null else 0}
+
+func _finish() -> void:
+	observing = false
+	DamageObserver.recording_enabled = original_damage_recording; DamageObserver.reset()
+	if is_instance_valid(game): game.queue_free()
+	var written := proof.write_receipt(_scenario()+"_test",checks,failures.size())
+	print("NATURAL_SUSTAINED_",("PASS" if written and failures.is_empty() else "FAIL")," checks=",checks," failures=",failures)
+	get_tree().quit(0 if written and failures.is_empty() else 1)

@@ -1,0 +1,3552 @@
+{
+  "classification": "CANDIDATE_EVIDENCE",
+  "task_id": "verify-owned-failed-preload-evidence-20261005",
+  "execution": "READ_ONLY; this script does not launch Godot, build, modify inputs, or declare acceptance",
+  "allowed_scene_ids": [
+    "root_failed_caster_request_test",
+    "character_launch_failed_preload_retry_test"
+  ],
+  "input_archive": {
+    "archive": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_acceleration_owned_negative_final_104643_820621",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/root_failed_caster_request_test.tscn','tests/framework/character_launch_failed_preload_retry_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 2,
+      "status": "FAIL"
+    },
+    "runner_suite": {
+      "results": [
+        {
+          "test_name": "root_failed_caster_request_test",
+          "test_path": "tests/framework/root_failed_caster_request_test.tscn",
+          "wrapper_process_id": 22060,
+          "wrapper_started_utc": "2026-10-05T02:46:46.1354938Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_acceleration_owned_negative_final_4210f3d4b95443b38bdcb539059f97f0",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-05T02:47:16.1484055Z",
+          "native_exit_observed_utc": "2026-10-05T02:47:00.4860233Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 2,
+          "engine_log_failure_count": 2,
+          "framework_run_id": "c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4",
+          "framework_receipt_valid": true,
+          "result": "FAIL",
+          "reason": "stderr_failures_2;engine_log_failures_2"
+        },
+        {
+          "test_name": "character_launch_failed_preload_retry_test",
+          "test_path": "tests/framework/character_launch_failed_preload_retry_test.tscn",
+          "wrapper_process_id": 14576,
+          "wrapper_started_utc": "2026-10-05T02:47:01.9617568Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_acceleration_owned_negative_final_4210f3d4b95443b38bdcb539059f97f0",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-05T02:47:31.9693050Z",
+          "native_exit_observed_utc": "2026-10-05T02:47:08.1212426Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 2,
+          "engine_log_failure_count": 2,
+          "framework_run_id": "f6771d0b-1eef-4c13-a5d1-fb79071e271d",
+          "framework_receipt_valid": true,
+          "result": "FAIL",
+          "reason": "stderr_failures_2;engine_log_failures_2"
+        }
+      ],
+      "total": 2,
+      "invocation_id": "112e05e5-1f84-48c9-858b-b299d15929bb",
+      "runtime_environment": {
+        "project_root": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+        "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_acceleration_owned_negative_final_4210f3d4b95443b38bdcb539059f97f0",
+        "runner_process_id": 23700
+      },
+      "passed": 0,
+      "git_head": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+      "engine_log_errors": 4,
+      "generated_at": "2026-10-05T10:47:09.5060022+08:00",
+      "failed": 2,
+      "suite": "adhoc"
+    },
+    "before_manifest_identity": {
+      "tested_sha": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+      "content_set_sha256": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+      "engine_version": "4.7.stable.official.5b4e0cb0f",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c"
+    },
+    "after_manifest_identity": {
+      "tested_sha": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+      "content_set_sha256": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+      "engine_version": "4.7.stable.official.5b4e0cb0f",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c"
+    },
+    "runner_log_excerpt": [
+      "[SESSION-ID] godot=4.7-stable (official) renderer=gl_compatibility adapter= api= refresh=-1.0Hz physics_tps=60 max_physics_steps=8 app_version=hardcore 1.0 姝ｅ紡鐗?os=Windows",
+      "[WorldBootstrapProfile] {\"actor_max_item_ms\":42.01,\"actor_max_slice_ms\":42.016,\"actor_slices\":51,\"actor_total_ms\":297.091,\"collision_slices\":4,\"deferred_actors\":0,\"duplicate_actors\":0,\"failed_actors\":0,\"hud\":{\"background_mode\":false,\"catalog_icon_pending\":0,\"catalog_icon_prewarm_complete\":true,\"completed\":true,\"confirmation_wait_frames\":0,\"construction_ms\":2118.941,\"construction_ms_by_panel\":{\"death_revival\":4.39,\"enhancement\":125.429,\"inventory\":95.315,\"map\":21.749,\"quest\":13.87,\"shop\":8.508,\"skill\":16.137,\"warehouse\":33.17},\"initial_profiles_elapsed_ms\":2118.992,\"initial_profiles_wait_frames\":0,\"script_prefetch\":{\"covered_main_thread_loads\":7,\"failures\":[],\"loaded\":7,\"pending\":[],\"requested\":7,\"waited_frames\":0},\"shop_alternate_profile_warmed\":true,\"shop_buy_wait_frames\":0,\"shop_profiles_elapsed_ms\":2164.83,\"shop_sell_wait_frames\":3,\"started_at_usec\":10973220,\"total_ms\":2180.128},\"map_slices\":6,\"max_slice_ms\":42.016,\"planned_actors\":94,\"spawned_actors\":94,\"stages_ms\":{\"BUILD_COLLISION\":1257.027,\"BUILD_MAP\":1234.705,\"COLLECT_REQUIREMENTS\":1052.206,\"FINALIZE\":1693.505,\"REQUEST_RESOURCES\":1078.466,\"SHOW_LOADING\":0.048,\"SPAWN_ACTORS\":1277.531,\"WAIT_RESOURCES\":1234.565},\"total_ms\":4201.504}",
+      "ROOT_FAILED_CASTER_REQUEST_PASS checks=14 failures=[]",
+      "ERROR: Unrecognized binary resource file: 'user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res'.",
+      "   at: open (core/io/resource_format_binary.cpp:943)",
+      "ERROR: Failed loading resource: user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res.",
+      "   at: _load (core/io/resource_loader.cpp:317)",
+      "[FAIL] character_launch_failed_preload_retry_test - stderr_failures_2;engine_log_failures_2",
+      "Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org",
+      "",
+      "鏁版嵁搴撹浇鍏ュ畬鎴愶細鍦板浘209 鎬墿156 Boss20 瑁呭175 鎶€鑳界瓑绾?32 鎺夎惤妲?424 浠诲姟9",
+      "CHARACTER_LAUNCH_FAILED_RETRY_TRACE {\"after_exit\":{\"generation\":3,\"native_status\":0,\"path\":\"user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res\",\"request_count\":2,\"state\":\"idle\",\"tracked_paths\":[]},\"after_failed_monitor\":{\"generation\":1,\"native_status\":0,\"path\":\"user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res\",\"request_count\":1,\"state\":\"failed\",\"tracked_paths\":[]},\"after_failure_cleanup\":{\"generation\":1,\"native_status\":0,\"path\":\"user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res\",\"request_count\":1,\"state\":\"failed\",\"tracked_paths\":[]},\"after_lawful_retry_monitor\":{\"generation\":2,\"native_status\":0,\"path\":\"user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res\",\"request_count\":2,\"state\":\"ready\",\"tracked_paths\":[]},\"after_lawful_retry_request\":{\"generation\":2,\"native_status\":1,\"path\":\"user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res\",\"request_count\":2,\"state\":\"requested\",\"tracked_paths\":[\"user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res\"]},\"after_request\":{\"generation\":1,\"native_status\":1,\"path\":\"user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res\",\"request_count\":1,\"state\":\"requested\",\"tracked_paths\":[\"user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res\"]},\"before_request\":{\"generation\":0,\"native_status\":0,\"path\":\"\",\"request_count\":0,\"state\":\"idle\",\"tracked_paths\":[]},\"final_native_status\":0,\"final_red_cleanup_gets\":0,\"invocation_id\":\"112e05e5-1f84-48c9-858b-b299d15929bb\",\"path\":\"user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res\",\"red_failure_cleanup_gets\":0,\"run_id\":\"f6771d0b-1eef-4c13-a5d1-fb79071e271d\",\"scope\":\"test-owned binary PackedScene fault and same-path lawful retry; no natural production-asset failure claim\",\"source_content_sha256\":\"7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242\",\"terminal_worker_before_monitor\":{\"generation\":1,\"native_status\":2,\"path\":\"user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res\",\"request_count\":1,\"state\":\"requested\",\"tracked_paths\":[\"user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res\"]}}",
+      "CHARACTER_LAUNCH_FAILED_PRELOAD_RETRY_PASS failures=[]",
+      "ERROR: Premature end of file (EOF): 'user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res'.",
+      "   at: open (core/io/resource_format_binary.cpp:1052)",
+      "ERROR: Failed loading resource: user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res.",
+      "   at: _load (core/io/resource_loader.cpp:317)",
+      "RUNNER_RESULTS_JSON=C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\test_logs\\runner_results_adhoc_20261005_104709_506_23700.json",
+      "TEST_SUMMARY suite=adhoc passed=0 failed=2 engine_log_errors=4",
+      "FAILED_TESTS=root_failed_caster_request_test (stderr_failures_2;engine_log_failures_2); character_launch_failed_preload_retry_test (stderr_failures_2;engine_log_failures_2)"
+    ],
+    "evidence_files": [
+      {
+        "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_acceleration_owned_negative_final_104643_820621/validation.json",
+        "sha256": "fc28d05d3357f057f70faa1345d63c3dfc71cae8d5e5e303acee7d660392f3e1",
+        "bytes": 445,
+        "line_count": 16,
+        "status": "READ"
+      },
+      {
+        "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_acceleration_owned_negative_final_104643_820621/runner_results.json",
+        "sha256": "93d8e36f059636c66f3cfe227259f73f49b12c2aa08328af677046dc9538466e",
+        "bytes": 3950,
+        "line_count": 63,
+        "status": "READ"
+      },
+      {
+        "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_acceleration_owned_negative_final_104643_820621/before.json",
+        "sha256": "9622f07ebfa13bf80528db1650a918cbd61a6dd6b13846fa8c3a01b2285bc7d9",
+        "bytes": 532673,
+        "line_count": 3866,
+        "status": "READ"
+      },
+      {
+        "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_acceleration_owned_negative_final_104643_820621/after.json",
+        "sha256": "c8a66467fb6673f8e7e40fef3583263060d5f46adbee49d0befd2a717befd118",
+        "bytes": 532673,
+        "line_count": 3866,
+        "status": "READ"
+      },
+      {
+        "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_acceleration_owned_negative_final_104643_820621/runner.log",
+        "sha256": "cbc123d518136b1d3d36ccce919491cb93f83a289861fefd1ea0d88ed880f1ca",
+        "bytes": 9179,
+        "line_count": 28,
+        "status": "READ"
+      },
+      {
+        "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_acceleration_owned_negative_final_104643_820621/framework/root_failed_caster_request_test.result.json",
+        "sha256": "1f25cb5f6a5c5039a09385a101e09b82f23ac413c1c3be126a6fcbb872ca0c66",
+        "bytes": 2881,
+        "line_count": 92,
+        "status": "READ"
+      },
+      {
+        "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_acceleration_owned_negative_final_104643_820621/framework/character_launch_failed_preload_retry_test.result.json",
+        "sha256": "b90b5d23c4cec7f7f4dafe9d6f8209daf034ce90d134ce53521d28a053e52308",
+        "bytes": 4582,
+        "line_count": 142,
+        "status": "READ"
+      },
+      {
+        "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_acceleration_owned_negative_final_104643_820621/native_logs/root_failed_caster_request_test.stdout.log",
+        "sha256": "3b931d2a058474f72b7aa53894d9c4c435c344e714c750c9751832e69ebfbf76",
+        "bytes": 5206,
+        "line_count": 10,
+        "status": "READ"
+      },
+      {
+        "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_acceleration_owned_negative_final_104643_820621/framework/root_failed_caster_request_trace.json",
+        "sha256": "70e314c3799620824d61d6762552e3d4a8a90666bac172c5323caf510d97ae38",
+        "bytes": 689,
+        "line_count": 1,
+        "status": "READ"
+      },
+      {
+        "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_acceleration_owned_negative_final_104643_820621/native_logs/root_failed_caster_request_test.stdout.log",
+        "sha256": "3b931d2a058474f72b7aa53894d9c4c435c344e714c750c9751832e69ebfbf76",
+        "bytes": 5206,
+        "line_count": 10,
+        "status": "READ"
+      },
+      {
+        "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_acceleration_owned_negative_final_104643_820621/native_logs/root_failed_caster_request_test.stderr.log",
+        "sha256": "6f210f75343b8dfeda436ced78c52316c0a14bb8b08af138da4c505a7de12be6",
+        "bytes": 308,
+        "line_count": 4,
+        "status": "READ"
+      },
+      {
+        "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_acceleration_owned_negative_final_104643_820621/native_logs/root_failed_caster_request_test.godot.log",
+        "sha256": "73b2acc5073e5081adf01107986f86b343994ac24ab32cdca04100dcc7799455",
+        "bytes": 5500,
+        "line_count": 14,
+        "status": "READ"
+      },
+      {
+        "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_acceleration_owned_negative_final_104643_820621/raw/root_failed_caster_request_test.stdout.log",
+        "sha256": "3b931d2a058474f72b7aa53894d9c4c435c344e714c750c9751832e69ebfbf76",
+        "bytes": 5206,
+        "line_count": 10,
+        "status": "READ"
+      },
+      {
+        "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_acceleration_owned_negative_final_104643_820621/raw/root_failed_caster_request_test.stderr.log",
+        "sha256": "6f210f75343b8dfeda436ced78c52316c0a14bb8b08af138da4c505a7de12be6",
+        "bytes": 308,
+        "line_count": 4,
+        "status": "READ"
+      },
+      {
+        "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_acceleration_owned_negative_final_104643_820621/raw/root_failed_caster_request_test.godot.log",
+        "sha256": "73b2acc5073e5081adf01107986f86b343994ac24ab32cdca04100dcc7799455",
+        "bytes": 5500,
+        "line_count": 14,
+        "status": "READ"
+      },
+      {
+        "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_acceleration_owned_negative_final_104643_820621/framework/native_handoffs.json",
+        "sha256": "58f3addd6d49d46e16b47683a0d327f1f57cb42e663d8dbab0c358cef00f014b",
+        "bytes": 737,
+        "line_count": 13,
+        "status": "READ"
+      },
+      {
+        "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_acceleration_owned_negative_final_104643_820621/native_logs/character_launch_failed_preload_retry_test.stdout.log",
+        "sha256": "91dd07952921aad41de6d63b8037099cc0f0b27b5239c9bca7e472bc3e3001cd",
+        "bytes": 2666,
+        "line_count": 5,
+        "status": "READ"
+      },
+      {
+        "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_acceleration_owned_negative_final_104643_820621/native_logs/character_launch_failed_preload_retry_test.stdout.log",
+        "sha256": "91dd07952921aad41de6d63b8037099cc0f0b27b5239c9bca7e472bc3e3001cd",
+        "bytes": 2666,
+        "line_count": 5,
+        "status": "READ"
+      },
+      {
+        "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_acceleration_owned_negative_final_104643_820621/native_logs/character_launch_failed_preload_retry_test.stderr.log",
+        "sha256": "cba9ecb45f314670284133e986b3ce292205fe61f2cddcc3cc601020cafc4ebc",
+        "bytes": 363,
+        "line_count": 4,
+        "status": "READ"
+      },
+      {
+        "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_acceleration_owned_negative_final_104643_820621/native_logs/character_launch_failed_preload_retry_test.godot.log",
+        "sha256": "986cbd606f77ee80698ac28d1eaa5d8248e991091aabe723c2de451b83cb3ad9",
+        "bytes": 3020,
+        "line_count": 9,
+        "status": "READ"
+      },
+      {
+        "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_acceleration_owned_negative_final_104643_820621/raw/character_launch_failed_preload_retry_test.stdout.log",
+        "sha256": "91dd07952921aad41de6d63b8037099cc0f0b27b5239c9bca7e472bc3e3001cd",
+        "bytes": 2666,
+        "line_count": 5,
+        "status": "READ"
+      },
+      {
+        "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_acceleration_owned_negative_final_104643_820621/raw/character_launch_failed_preload_retry_test.stderr.log",
+        "sha256": "cba9ecb45f314670284133e986b3ce292205fe61f2cddcc3cc601020cafc4ebc",
+        "bytes": 363,
+        "line_count": 4,
+        "status": "READ"
+      },
+      {
+        "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_acceleration_owned_negative_final_104643_820621/raw/character_launch_failed_preload_retry_test.godot.log",
+        "sha256": "986cbd606f77ee80698ac28d1eaa5d8248e991091aabe723c2de451b83cb3ad9",
+        "bytes": 3020,
+        "line_count": 9,
+        "status": "READ"
+      },
+      {
+        "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_acceleration_owned_negative_final_104643_820621/framework/native_handoffs.json",
+        "sha256": "58f3addd6d49d46e16b47683a0d327f1f57cb42e663d8dbab0c358cef00f014b",
+        "bytes": 737,
+        "line_count": 13,
+        "status": "READ"
+      }
+    ],
+    "scenes": [
+      {
+        "scene_id": "root_failed_caster_request_test",
+        "role": "input",
+        "input_archive": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_acceleration_owned_negative_final_104643_820621",
+        "receipt": {
+          "path": "framework/root_failed_caster_request_test.result.json",
+          "run_id": "c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4",
+          "invocation_id": "112e05e5-1f84-48c9-858b-b299d15929bb",
+          "source_content_sha256": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+          "engine_version": "4.7-stable (official)",
+          "checks": {
+            "declared": {
+              "count": 14,
+              "reported_checks": 14,
+              "passed": 14,
+              "failed": 0,
+              "reported_failures": 0,
+              "status": "PASS"
+            },
+            "observed": {
+              "count": 14,
+              "passed": 14,
+              "failed": 0
+            },
+            "all_check_records": [
+              {
+                "id": 1,
+                "label": "failed native request owns isolated production user data",
+                "passed": true
+              },
+              {
+                "id": 2,
+                "label": "real startup and distinct profile create the mapped Root",
+                "passed": true
+              },
+              {
+                "id": 3,
+                "label": "Root reaches READY through ordinary production processing",
+                "passed": true
+              },
+              {
+                "id": 4,
+                "label": "exact test-owned malformed native resource opens",
+                "passed": true
+              },
+              {
+                "id": 5,
+                "label": "malformed fixture writes completely without touching source art or imports",
+                "passed": true
+              },
+              {
+                "id": 6,
+                "label": "ordinary Root accepts and terminates tracking for the actual failed native request",
+                "passed": true
+              },
+              {
+                "id": 7,
+                "label": "failed native request releases its retrieval token before leaving Root tracking",
+                "passed": true
+              },
+              {
+                "id": 8,
+                "label": "same test-owned path now contains a valid native Texture2D",
+                "passed": true
+              },
+              {
+                "id": 9,
+                "label": "fresh lawful attempt uses the unchanged ordinary Root loader",
+                "passed": true
+              },
+              {
+                "id": 10,
+                "label": "fresh valid texture becomes usable without reusing a failed native task",
+                "passed": true
+              },
+              {
+                "id": 11,
+                "label": "negative cleanup leaves no native retrieval right at process exit",
+                "passed": true
+              },
+              {
+                "id": 12,
+                "label": "only this invocation's exact malformed/repaired fixture is removed",
+                "passed": true
+              },
+              {
+                "id": 13,
+                "label": "bounded failed-request trace opens",
+                "passed": true
+              },
+              {
+                "id": 14,
+                "label": "bounded failed-request trace writes completely",
+                "passed": true
+              }
+            ],
+            "predicates": {
+              "counts_consistent": true,
+              "all_checks_passed": true
+            }
+          }
+        },
+        "official_runner": {
+          "scene_record_count": 1,
+          "result": "FAIL",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "framework_run_id": "c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4",
+          "runner_invocation_id": "112e05e5-1f84-48c9-858b-b299d15929bb",
+          "reason": "stderr_failures_2;engine_log_failures_2",
+          "raw_record": {
+            "test_name": "root_failed_caster_request_test",
+            "test_path": "tests/framework/root_failed_caster_request_test.tscn",
+            "wrapper_process_id": 22060,
+            "wrapper_started_utc": "2026-10-05T02:46:46.1354938Z",
+            "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_acceleration_owned_negative_final_4210f3d4b95443b38bdcb539059f97f0",
+            "fixed_fps": 0,
+            "pass_marker_found": true,
+            "process_exited": true,
+            "wrapper_exit_code": 0,
+            "child_process_exit_state": "exited",
+            "execution_deadline_utc": "2026-10-05T02:47:16.1484055Z",
+            "native_exit_observed_utc": "2026-10-05T02:47:00.4860233Z",
+            "effective_exit_code": 0,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 2,
+            "engine_log_failure_count": 2,
+            "framework_run_id": "c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4",
+            "framework_receipt_valid": true,
+            "result": "FAIL",
+            "reason": "stderr_failures_2;engine_log_failures_2"
+          }
+        },
+        "native_handoff_identity": {
+          "top_level_invocation_id": "112e05e5-1f84-48c9-858b-b299d15929bb",
+          "top_level_source_content_sha256": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+          "per_scene_producer_record": "MISSING",
+          "per_scene_scene_id": "MISSING",
+          "per_scene_run_id": "MISSING",
+          "per_scene_source_content_sha256": "MISSING",
+          "per_scene_result": "MISSING",
+          "per_scene_effective_exit_code": "MISSING",
+          "per_scene_receipt_sha256": "MISSING"
+        },
+        "raw_hashes": {
+          "receipt_sha256": "1f25cb5f6a5c5039a09385a101e09b82f23ac413c1c3be126a6fcbb872ca0c66",
+          "handoff_file_sha256": "58f3addd6d49d46e16b47683a0d327f1f57cb42e663d8dbab0c358cef00f014b",
+          "trace_file_or_stdout_sha256": "70e314c3799620824d61d6762552e3d4a8a90666bac172c5323caf510d97ae38",
+          "native_log_sha256": {
+            "stdout": "3b931d2a058474f72b7aa53894d9c4c435c344e714c750c9751832e69ebfbf76",
+            "stderr": "6f210f75343b8dfeda436ced78c52316c0a14bb8b08af138da4c505a7de12be6",
+            "godot": "73b2acc5073e5081adf01107986f86b343994ac24ab32cdca04100dcc7799455"
+          },
+          "raw_log_sha256": {
+            "stdout": "3b931d2a058474f72b7aa53894d9c4c435c344e714c750c9751832e69ebfbf76",
+            "stderr": "6f210f75343b8dfeda436ced78c52316c0a14bb8b08af138da4c505a7de12be6",
+            "godot": "73b2acc5073e5081adf01107986f86b343994ac24ab32cdca04100dcc7799455"
+          }
+        },
+        "source_maps": {
+          "before_tested_sha": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+          "after_tested_sha": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+          "before_content_set_sha256": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+          "after_content_set_sha256": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+          "direct_scene_and_fixture_file_maps": [
+            {
+              "path": "tests/framework/root_failed_caster_request_test.tscn",
+              "before_sha256": "fd644cc182a9bfb4d41473c23c3b4469f6ae09719012daed111c45ca3a2ebe1d",
+              "after_sha256": "fd644cc182a9bfb4d41473c23c3b4469f6ae09719012daed111c45ca3a2ebe1d",
+              "maps_match": {
+                "observed": "fd644cc182a9bfb4d41473c23c3b4469f6ae09719012daed111c45ca3a2ebe1d",
+                "expected": "fd644cc182a9bfb4d41473c23c3b4469f6ae09719012daed111c45ca3a2ebe1d",
+                "matches": true
+              }
+            },
+            {
+              "path": "tests/framework/root_failed_caster_request_test.gd",
+              "before_sha256": "8fd13e8ad9402bde4df50d5e6b78e0928d5922146d0e06d7a917a8a71b729550",
+              "after_sha256": "8fd13e8ad9402bde4df50d5e6b78e0928d5922146d0e06d7a917a8a71b729550",
+              "maps_match": {
+                "observed": "8fd13e8ad9402bde4df50d5e6b78e0928d5922146d0e06d7a917a8a71b729550",
+                "expected": "8fd13e8ad9402bde4df50d5e6b78e0928d5922146d0e06d7a917a8a71b729550",
+                "matches": true
+              }
+            }
+          ],
+          "maps_file_counts": {
+            "before": 3855,
+            "after": 3855
+          },
+          "engine_version_before": "4.7.stable.official.5b4e0cb0f",
+          "engine_version_after": "4.7.stable.official.5b4e0cb0f",
+          "engine_sha256_before": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+          "engine_sha256_after": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c"
+        },
+        "trace": {
+          "path": "framework/root_failed_caster_request_trace.json",
+          "raw_identity": {
+            "run_id": "c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4",
+            "invocation_id": "112e05e5-1f84-48c9-858b-b299d15929bb",
+            "source_content_sha256": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+            "owned_resource_path": "user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res"
+          },
+          "marker_location": "MISSING",
+          "raw_trace": {
+            "attempts": [
+              {
+                "admitted": true,
+                "native_status_after": 0,
+                "statuses": [
+                  1,
+                  2,
+                  0
+                ],
+                "tracked_after": false
+              },
+              {
+                "admitted": true,
+                "native_status_after": 0,
+                "statuses": [
+                  1,
+                  3,
+                  0
+                ],
+                "tracked_after": false
+              }
+            ],
+            "fixture_path": "user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res",
+            "invocation_id": "112e05e5-1f84-48c9-858b-b299d15929bb",
+            "negative_cleanup_gets": 0,
+            "run_id": "c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4",
+            "scope": "actual Root ordinary warm channel with a test-owned corrupt binary resource and same-path lawful retry; expected native errors preserved; not a naturally corrupt game asset or normal UI reproduction",
+            "source_content_sha256": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242"
+          },
+          "native_retrieval_and_cleanup_observations": {
+            "post_retrieval_native_statuses_zero": {
+              "observed": [
+                0,
+                0
+              ],
+              "expected": [
+                0,
+                0
+              ],
+              "matches": true
+            },
+            "each_attempt_status_sequence_ends_zero": {
+              "observed": [
+                0,
+                0
+              ],
+              "expected": [
+                0,
+                0
+              ],
+              "matches": true
+            },
+            "cleanup_gets_zero": {
+              "observed": 0,
+              "expected": 0,
+              "matches": true
+            },
+            "later_lawful_retry_same_owned_path": {
+              "observed": "user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res",
+              "expected": "user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res",
+              "matches": true
+            },
+            "attempt_count": {
+              "observed": 2,
+              "expected": 2,
+              "matches": true
+            }
+          }
+        },
+        "fault_path": {
+          "owned_user_resource_path": "user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res",
+          "path_occurrences_unique_across_error_logs": true,
+          "expected_error_lines": [
+            "ERROR: Unrecognized binary resource file: 'user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res'.",
+            "ERROR: Failed loading resource: user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res."
+          ],
+          "per_log_error_predicates": {
+            "native_logs/stderr.log": {
+              "observed": [
+                "ERROR: Unrecognized binary resource file: 'user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res'.",
+                "ERROR: Failed loading resource: user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res."
+              ],
+              "expected": [
+                "ERROR: Unrecognized binary resource file: 'user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res'.",
+                "ERROR: Failed loading resource: user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res."
+              ],
+              "matches": true
+            },
+            "native_logs/godot.log": {
+              "observed": [
+                "ERROR: Unrecognized binary resource file: 'user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res'.",
+                "ERROR: Failed loading resource: user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res."
+              ],
+              "expected": [
+                "ERROR: Unrecognized binary resource file: 'user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res'.",
+                "ERROR: Failed loading resource: user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res."
+              ],
+              "matches": true
+            },
+            "raw/stderr.log": {
+              "observed": [
+                "ERROR: Unrecognized binary resource file: 'user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res'.",
+                "ERROR: Failed loading resource: user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res."
+              ],
+              "expected": [
+                "ERROR: Unrecognized binary resource file: 'user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res'.",
+                "ERROR: Failed loading resource: user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res."
+              ],
+              "matches": true
+            },
+            "raw/godot.log": {
+              "observed": [
+                "ERROR: Unrecognized binary resource file: 'user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res'.",
+                "ERROR: Failed loading resource: user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res."
+              ],
+              "expected": [
+                "ERROR: Unrecognized binary resource file: 'user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res'.",
+                "ERROR: Failed loading resource: user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res."
+              ],
+              "matches": true
+            },
+            "native_logs/stdout.log": {
+              "observed": [],
+              "expected": [],
+              "matches": true
+            },
+            "raw/stdout.log": {
+              "observed": [],
+              "expected": [],
+              "matches": true
+            }
+          },
+          "all_error_lines_from_input_logs": [
+            {
+              "line": 1,
+              "text": "ERROR: Unrecognized binary resource file: 'user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res'."
+            },
+            {
+              "line": 3,
+              "text": "ERROR: Failed loading resource: user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res."
+            },
+            {
+              "line": 10,
+              "text": "ERROR: Unrecognized binary resource file: 'user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res'."
+            },
+            {
+              "line": 12,
+              "text": "ERROR: Failed loading resource: user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res."
+            },
+            {
+              "line": 1,
+              "text": "ERROR: Unrecognized binary resource file: 'user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res'."
+            },
+            {
+              "line": 3,
+              "text": "ERROR: Failed loading resource: user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res."
+            },
+            {
+              "line": 10,
+              "text": "ERROR: Unrecognized binary resource file: 'user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res'."
+            },
+            {
+              "line": 12,
+              "text": "ERROR: Failed loading resource: user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res."
+            }
+          ]
+        },
+        "native_logs": {
+          "native_logs/stdout.log": {
+            "status": "READ",
+            "error_lines": [],
+            "script_error_lines": [],
+            "warning_lines": [],
+            "all_lines": 10
+          },
+          "native_logs/stderr.log": {
+            "status": "READ",
+            "error_lines": [
+              {
+                "line": 1,
+                "text": "ERROR: Unrecognized binary resource file: 'user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res'."
+              },
+              {
+                "line": 3,
+                "text": "ERROR: Failed loading resource: user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res."
+              }
+            ],
+            "script_error_lines": [],
+            "warning_lines": [],
+            "all_lines": 4
+          },
+          "native_logs/godot.log": {
+            "status": "READ",
+            "error_lines": [
+              {
+                "line": 10,
+                "text": "ERROR: Unrecognized binary resource file: 'user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res'."
+              },
+              {
+                "line": 12,
+                "text": "ERROR: Failed loading resource: user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res."
+              }
+            ],
+            "script_error_lines": [],
+            "warning_lines": [],
+            "all_lines": 14
+          },
+          "raw/stdout.log": {
+            "status": "READ",
+            "error_lines": [],
+            "script_error_lines": [],
+            "warning_lines": [],
+            "all_lines": 10
+          },
+          "raw/stderr.log": {
+            "status": "READ",
+            "error_lines": [
+              {
+                "line": 1,
+                "text": "ERROR: Unrecognized binary resource file: 'user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res'."
+              },
+              {
+                "line": 3,
+                "text": "ERROR: Failed loading resource: user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res."
+              }
+            ],
+            "script_error_lines": [],
+            "warning_lines": [],
+            "all_lines": 4
+          },
+          "raw/godot.log": {
+            "status": "READ",
+            "error_lines": [
+              {
+                "line": 10,
+                "text": "ERROR: Unrecognized binary resource file: 'user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res'."
+              },
+              {
+                "line": 12,
+                "text": "ERROR: Failed loading resource: user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res."
+              }
+            ],
+            "script_error_lines": [],
+            "warning_lines": [],
+            "all_lines": 14
+          }
+        },
+        "predicates": {
+          "runner_remains_fail": {
+            "observed": "FAIL",
+            "expected": "FAIL",
+            "matches": true
+          },
+          "native_exit_zero": {
+            "observed": 0,
+            "expected": 0,
+            "matches": true
+          },
+          "native_not_timed_out": {
+            "observed": false,
+            "expected": false,
+            "matches": true
+          },
+          "receipt_expected_count": {
+            "observed": 14,
+            "expected": 14,
+            "matches": true
+          },
+          "receipt_counts_consistent": {
+            "observed": true,
+            "expected": true,
+            "matches": true
+          },
+          "every_receipt_check_passed": {
+            "observed": true,
+            "expected": true,
+            "matches": true
+          },
+          "run_id_matches_runner": {
+            "observed": "c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4",
+            "expected": "c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4",
+            "matches": true
+          },
+          "invocation_matches_runner": {
+            "observed": "112e05e5-1f84-48c9-858b-b299d15929bb",
+            "expected": "112e05e5-1f84-48c9-858b-b299d15929bb",
+            "matches": true
+          },
+          "run_id_matches_native_handoff_producer_when_present": "MISSING",
+          "scene_id_matches_native_handoff_producer_when_present": "MISSING",
+          "invocation_matches_native_handoff": {
+            "observed": "112e05e5-1f84-48c9-858b-b299d15929bb",
+            "expected": "112e05e5-1f84-48c9-858b-b299d15929bb",
+            "matches": true
+          },
+          "source_matches_native_handoff": {
+            "observed": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+            "expected": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+            "matches": true
+          },
+          "source_matches_native_handoff_producer_when_present": "MISSING",
+          "handoff_receipt_hash_matches_when_producer_record_present": "MISSING",
+          "producer_result_matches_runner_when_present": "MISSING",
+          "producer_exit_matches_runner_when_present": "MISSING",
+          "source_matches_before_after_maps": {
+            "observed": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+            "expected": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+            "matches": true
+          },
+          "source_matches_after_map": {
+            "observed": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+            "expected": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+            "matches": true
+          },
+          "direct_scene_fixture_map_entries_match": {
+            "observed": true,
+            "expected": true,
+            "matches": true
+          },
+          "engine_before_after_equal": {
+            "observed": true,
+            "expected": true,
+            "matches": true
+          },
+          "trace_run_identity_matches_receipt": {
+            "observed": "c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4",
+            "expected": "c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4",
+            "matches": true
+          },
+          "trace_invocation_identity_matches_receipt": {
+            "observed": "112e05e5-1f84-48c9-858b-b299d15929bb",
+            "expected": "112e05e5-1f84-48c9-858b-b299d15929bb",
+            "matches": true
+          },
+          "trace_source_identity_matches_receipt": {
+            "observed": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+            "expected": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+            "matches": true
+          },
+          "owned_path_matches_trace_and_errors": {
+            "observed": true,
+            "expected": true,
+            "matches": true
+          },
+          "owned_path_contains_run_id": {
+            "observed": true,
+            "expected": true,
+            "matches": true
+          },
+          "raw_native_stdout_hash_equal": {
+            "observed": "3b931d2a058474f72b7aa53894d9c4c435c344e714c750c9751832e69ebfbf76",
+            "expected": "3b931d2a058474f72b7aa53894d9c4c435c344e714c750c9751832e69ebfbf76",
+            "matches": true
+          },
+          "raw_native_stderr_hash_equal": {
+            "observed": "6f210f75343b8dfeda436ced78c52316c0a14bb8b08af138da4c505a7de12be6",
+            "expected": "6f210f75343b8dfeda436ced78c52316c0a14bb8b08af138da4c505a7de12be6",
+            "matches": true
+          },
+          "raw_native_engine_log_hash_equal": {
+            "observed": "73b2acc5073e5081adf01107986f86b343994ac24ab32cdca04100dcc7799455",
+            "expected": "73b2acc5073e5081adf01107986f86b343994ac24ab32cdca04100dcc7799455",
+            "matches": true
+          },
+          "no_extra_error_warning_or_script_error": {
+            "observed": true,
+            "expected": true,
+            "matches": true
+          }
+        }
+      },
+      {
+        "scene_id": "character_launch_failed_preload_retry_test",
+        "role": "input",
+        "input_archive": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_acceleration_owned_negative_final_104643_820621",
+        "receipt": {
+          "path": "framework/character_launch_failed_preload_retry_test.result.json",
+          "run_id": "f6771d0b-1eef-4c13-a5d1-fb79071e271d",
+          "invocation_id": "112e05e5-1f84-48c9-858b-b299d15929bb",
+          "source_content_sha256": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+          "engine_version": "4.7-stable (official)",
+          "checks": {
+            "declared": {
+              "count": 24,
+              "reported_checks": 24,
+              "passed": 24,
+              "failed": 0,
+              "reported_failures": 0,
+              "status": "PASS"
+            },
+            "observed": {
+              "count": 24,
+              "passed": 24,
+              "failed": 0
+            },
+            "all_check_records": [
+              {
+                "id": 1,
+                "label": "owned failure fixture uses this native run's isolated test user directory",
+                "passed": true
+              },
+              {
+                "id": 2,
+                "label": "unique fault target did not exist before this fixture claimed it",
+                "passed": true
+              },
+              {
+                "id": 3,
+                "label": "owned PackedScene serializes through the real ResourceSaver before fault injection",
+                "passed": true
+              },
+              {
+                "id": 4,
+                "label": "saved fixture is uncached and has a complete binary resource beyond its magic",
+                "passed": true
+              },
+              {
+                "id": 5,
+                "label": "fixture can truncate only its unique owned user resource",
+                "passed": true
+              },
+              {
+                "id": 6,
+                "label": "only the owned resource body was replaced with the bounded binary fault",
+                "passed": true
+              },
+              {
+                "id": 7,
+                "label": "corrupt owned file still passes the real PackedScene existence gate, so failure occurs after request acquisition",
+                "passed": true
+              },
+              {
+                "id": 8,
+                "label": "unique owned path starts without any prior native retrieval token",
+                "passed": true
+              },
+              {
+                "id": 9,
+                "label": "actual hall acquired exactly one owned native request before the worker fault",
+                "passed": true
+              },
+              {
+                "id": 10,
+                "label": "real accepted binary loader worker reaches terminal FAILED before the actual hall monitor handles it",
+                "passed": true
+              },
+              {
+                "id": 11,
+                "label": "actual hall monitor receives the real terminal binary-load failure",
+                "passed": true
+              },
+              {
+                "id": 12,
+                "label": "actual hall terminal FAILED handling retrieves and releases its original native user token",
+                "passed": true
+              },
+              {
+                "id": 13,
+                "label": "terminal failure removes the original owned request rather than retaining a stale path entry",
+                "passed": true
+              },
+              {
+                "id": 14,
+                "label": "lawful retry begins only after the old failed native token has been consumed",
+                "passed": true
+              },
+              {
+                "id": 15,
+                "label": "same unique path receives a fresh valid uncached PackedScene through ResourceSaver",
+                "passed": true
+              },
+              {
+                "id": 16,
+                "label": "same-path lawful retry acquires its own fresh native request through the unchanged hall API",
+                "passed": true
+              },
+              {
+                "id": 17,
+                "label": "fresh lawful worker result reaches READY as a real usable PackedScene",
+                "passed": true
+              },
+              {
+                "id": 18,
+                "label": "returned PackedScene instantiates the exact newly saved lawful fixture",
+                "passed": true
+              },
+              {
+                "id": 19,
+                "label": "lawful retry monitor consumes its fresh native token exactly once",
+                "passed": true
+              },
+              {
+                "id": 20,
+                "label": "owned failure/retry owner exit closes its lifecycle and invalidates monitors",
+                "passed": true
+              },
+              {
+                "id": 21,
+                "label": "no owned native token remains before deleting the unique fault file",
+                "passed": true
+              },
+              {
+                "id": 22,
+                "label": "bounded negative-control cleanup releases this fixture's single remaining owned request",
+                "passed": true
+              },
+              {
+                "id": 23,
+                "label": "deletion resolves to this fixture's unique file inside isolated user data",
+                "passed": true
+              },
+              {
+                "id": 24,
+                "label": "fixture deletes only its unique owned file after native request cleanup",
+                "passed": true
+              }
+            ],
+            "predicates": {
+              "counts_consistent": true,
+              "all_checks_passed": true
+            }
+          }
+        },
+        "official_runner": {
+          "scene_record_count": 1,
+          "result": "FAIL",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "framework_run_id": "f6771d0b-1eef-4c13-a5d1-fb79071e271d",
+          "runner_invocation_id": "112e05e5-1f84-48c9-858b-b299d15929bb",
+          "reason": "stderr_failures_2;engine_log_failures_2",
+          "raw_record": {
+            "test_name": "character_launch_failed_preload_retry_test",
+            "test_path": "tests/framework/character_launch_failed_preload_retry_test.tscn",
+            "wrapper_process_id": 14576,
+            "wrapper_started_utc": "2026-10-05T02:47:01.9617568Z",
+            "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_acceleration_owned_negative_final_4210f3d4b95443b38bdcb539059f97f0",
+            "fixed_fps": 0,
+            "pass_marker_found": true,
+            "process_exited": true,
+            "wrapper_exit_code": 0,
+            "child_process_exit_state": "exited",
+            "execution_deadline_utc": "2026-10-05T02:47:31.9693050Z",
+            "native_exit_observed_utc": "2026-10-05T02:47:08.1212426Z",
+            "effective_exit_code": 0,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 2,
+            "engine_log_failure_count": 2,
+            "framework_run_id": "f6771d0b-1eef-4c13-a5d1-fb79071e271d",
+            "framework_receipt_valid": true,
+            "result": "FAIL",
+            "reason": "stderr_failures_2;engine_log_failures_2"
+          }
+        },
+        "native_handoff_identity": {
+          "top_level_invocation_id": "112e05e5-1f84-48c9-858b-b299d15929bb",
+          "top_level_source_content_sha256": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+          "per_scene_producer_record": "MISSING",
+          "per_scene_scene_id": "MISSING",
+          "per_scene_run_id": "MISSING",
+          "per_scene_source_content_sha256": "MISSING",
+          "per_scene_result": "MISSING",
+          "per_scene_effective_exit_code": "MISSING",
+          "per_scene_receipt_sha256": "MISSING"
+        },
+        "raw_hashes": {
+          "receipt_sha256": "b90b5d23c4cec7f7f4dafe9d6f8209daf034ce90d134ce53521d28a053e52308",
+          "handoff_file_sha256": "58f3addd6d49d46e16b47683a0d327f1f57cb42e663d8dbab0c358cef00f014b",
+          "trace_file_or_stdout_sha256": "91dd07952921aad41de6d63b8037099cc0f0b27b5239c9bca7e472bc3e3001cd",
+          "native_log_sha256": {
+            "stdout": "91dd07952921aad41de6d63b8037099cc0f0b27b5239c9bca7e472bc3e3001cd",
+            "stderr": "cba9ecb45f314670284133e986b3ce292205fe61f2cddcc3cc601020cafc4ebc",
+            "godot": "986cbd606f77ee80698ac28d1eaa5d8248e991091aabe723c2de451b83cb3ad9"
+          },
+          "raw_log_sha256": {
+            "stdout": "91dd07952921aad41de6d63b8037099cc0f0b27b5239c9bca7e472bc3e3001cd",
+            "stderr": "cba9ecb45f314670284133e986b3ce292205fe61f2cddcc3cc601020cafc4ebc",
+            "godot": "986cbd606f77ee80698ac28d1eaa5d8248e991091aabe723c2de451b83cb3ad9"
+          }
+        },
+        "source_maps": {
+          "before_tested_sha": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+          "after_tested_sha": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+          "before_content_set_sha256": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+          "after_content_set_sha256": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+          "direct_scene_and_fixture_file_maps": [
+            {
+              "path": "tests/framework/character_launch_failed_preload_retry_test.tscn",
+              "before_sha256": "0f3ea898e3b7e63a8e1f495b2439bbc928d5235043741f5f9b5c9c3686d50854",
+              "after_sha256": "0f3ea898e3b7e63a8e1f495b2439bbc928d5235043741f5f9b5c9c3686d50854",
+              "maps_match": {
+                "observed": "0f3ea898e3b7e63a8e1f495b2439bbc928d5235043741f5f9b5c9c3686d50854",
+                "expected": "0f3ea898e3b7e63a8e1f495b2439bbc928d5235043741f5f9b5c9c3686d50854",
+                "matches": true
+              }
+            },
+            {
+              "path": "tests/framework/character_launch_failed_preload_retry_test.gd",
+              "before_sha256": "d0d190721077339195ba8b43fdd44b1c94eca19777301ac5ce5db172361061dd",
+              "after_sha256": "d0d190721077339195ba8b43fdd44b1c94eca19777301ac5ce5db172361061dd",
+              "maps_match": {
+                "observed": "d0d190721077339195ba8b43fdd44b1c94eca19777301ac5ce5db172361061dd",
+                "expected": "d0d190721077339195ba8b43fdd44b1c94eca19777301ac5ce5db172361061dd",
+                "matches": true
+              }
+            }
+          ],
+          "maps_file_counts": {
+            "before": 3855,
+            "after": 3855
+          },
+          "engine_version_before": "4.7.stable.official.5b4e0cb0f",
+          "engine_version_after": "4.7.stable.official.5b4e0cb0f",
+          "engine_sha256_before": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+          "engine_sha256_after": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c"
+        },
+        "trace": {
+          "path": "native_logs/character_launch_failed_preload_retry_test.stdout.log",
+          "raw_identity": {
+            "run_id": "f6771d0b-1eef-4c13-a5d1-fb79071e271d",
+            "invocation_id": "112e05e5-1f84-48c9-858b-b299d15929bb",
+            "source_content_sha256": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+            "owned_resource_path": "user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res"
+          },
+          "marker_location": {
+            "line": 4,
+            "marker": "CHARACTER_LAUNCH_FAILED_RETRY_TRACE",
+            "raw": "CHARACTER_LAUNCH_FAILED_RETRY_TRACE {\"after_exit\":{\"generation\":3,\"native_status\":0,\"path\":\"user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res\",\"request_count\":2,\"state\":\"idle\",\"tracked_paths\":[]},\"after_failed_monitor\":{\"generation\":1,\"native_status\":0,\"path\":\"user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res\",\"request_count\":1,\"state\":\"failed\",\"tracked_paths\":[]},\"after_failure_cleanup\":{\"generation\":1,\"native_status\":0,\"path\":\"user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res\",\"request_count\":1,\"state\":\"failed\",\"tracked_paths\":[]},\"after_lawful_retry_monitor\":{\"generation\":2,\"native_status\":0,\"path\":\"user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res\",\"request_count\":2,\"state\":\"ready\",\"tracked_paths\":[]},\"after_lawful_retry_request\":{\"generation\":2,\"native_status\":1,\"path\":\"user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res\",\"request_count\":2,\"state\":\"requested\",\"tracked_paths\":[\"user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res\"]},\"after_request\":{\"generation\":1,\"native_status\":1,\"path\":\"user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res\",\"request_count\":1,\"state\":\"requested\",\"tracked_paths\":[\"user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res\"]},\"before_request\":{\"generation\":0,\"native_status\":0,\"path\":\"\",\"request_count\":0,\"state\":\"idle\",\"tracked_paths\":[]},\"final_native_status\":0,\"final_red_cleanup_gets\":0,\"invocation_id\":\"112e05e5-1f84-48c9-858b-b299d15929bb\",\"path\":\"user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res\",\"red_failure_cleanup_gets\":0,\"run_id\":\"f6771d0b-1eef-4c13-a5d1-fb79071e271d\",\"scope\":\"test-owned binary PackedScene fault and same-path lawful retry; no natural production-asset failure claim\",\"source_content_sha256\":\"7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242\",\"terminal_worker_before_monitor\":{\"generation\":1,\"native_status\":2,\"path\":\"user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res\",\"request_count\":1,\"state\":\"requested\",\"tracked_paths\":[\"user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res\"]}}"
+          },
+          "raw_trace": {
+            "after_exit": {
+              "generation": 3,
+              "native_status": 0,
+              "path": "user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res",
+              "request_count": 2,
+              "state": "idle",
+              "tracked_paths": []
+            },
+            "after_failed_monitor": {
+              "generation": 1,
+              "native_status": 0,
+              "path": "user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res",
+              "request_count": 1,
+              "state": "failed",
+              "tracked_paths": []
+            },
+            "after_failure_cleanup": {
+              "generation": 1,
+              "native_status": 0,
+              "path": "user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res",
+              "request_count": 1,
+              "state": "failed",
+              "tracked_paths": []
+            },
+            "after_lawful_retry_monitor": {
+              "generation": 2,
+              "native_status": 0,
+              "path": "user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res",
+              "request_count": 2,
+              "state": "ready",
+              "tracked_paths": []
+            },
+            "after_lawful_retry_request": {
+              "generation": 2,
+              "native_status": 1,
+              "path": "user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res",
+              "request_count": 2,
+              "state": "requested",
+              "tracked_paths": [
+                "user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res"
+              ]
+            },
+            "after_request": {
+              "generation": 1,
+              "native_status": 1,
+              "path": "user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res",
+              "request_count": 1,
+              "state": "requested",
+              "tracked_paths": [
+                "user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res"
+              ]
+            },
+            "before_request": {
+              "generation": 0,
+              "native_status": 0,
+              "path": "",
+              "request_count": 0,
+              "state": "idle",
+              "tracked_paths": []
+            },
+            "final_native_status": 0,
+            "final_red_cleanup_gets": 0,
+            "invocation_id": "112e05e5-1f84-48c9-858b-b299d15929bb",
+            "path": "user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res",
+            "red_failure_cleanup_gets": 0,
+            "run_id": "f6771d0b-1eef-4c13-a5d1-fb79071e271d",
+            "scope": "test-owned binary PackedScene fault and same-path lawful retry; no natural production-asset failure claim",
+            "source_content_sha256": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+            "terminal_worker_before_monitor": {
+              "generation": 1,
+              "native_status": 2,
+              "path": "user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res",
+              "request_count": 1,
+              "state": "requested",
+              "tracked_paths": [
+                "user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res"
+              ]
+            }
+          },
+          "native_retrieval_and_cleanup_observations": {
+            "post_retrieval_native_statuses_zero": {
+              "observed": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "expected": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "matches": true
+            },
+            "red_failure_cleanup_gets_zero": {
+              "observed": 0,
+              "expected": 0,
+              "matches": true
+            },
+            "final_red_cleanup_gets_zero": {
+              "observed": 0,
+              "expected": 0,
+              "matches": true
+            },
+            "final_native_status_zero": {
+              "observed": 0,
+              "expected": 0,
+              "matches": true
+            },
+            "lawful_retry_same_owned_path": {
+              "observed": "user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res",
+              "expected": "user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res",
+              "matches": true
+            },
+            "lawful_retry_request_is_fresh_requested_state": {
+              "observed": true,
+              "expected": true,
+              "matches": true
+            },
+            "lawful_retry_reaches_ready": {
+              "observed": "ready",
+              "expected": "ready",
+              "matches": true
+            },
+            "trace_owned_path_is_run_scoped": {
+              "observed": true,
+              "expected": true,
+              "matches": true
+            }
+          }
+        },
+        "fault_path": {
+          "owned_user_resource_path": "user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res",
+          "path_occurrences_unique_across_error_logs": true,
+          "expected_error_lines": [
+            "ERROR: Premature end of file (EOF): 'user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res'.",
+            "ERROR: Failed loading resource: user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res."
+          ],
+          "per_log_error_predicates": {
+            "native_logs/stderr.log": {
+              "observed": [
+                "ERROR: Premature end of file (EOF): 'user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res'.",
+                "ERROR: Failed loading resource: user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res."
+              ],
+              "expected": [
+                "ERROR: Premature end of file (EOF): 'user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res'.",
+                "ERROR: Failed loading resource: user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res."
+              ],
+              "matches": true
+            },
+            "native_logs/godot.log": {
+              "observed": [
+                "ERROR: Premature end of file (EOF): 'user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res'.",
+                "ERROR: Failed loading resource: user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res."
+              ],
+              "expected": [
+                "ERROR: Premature end of file (EOF): 'user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res'.",
+                "ERROR: Failed loading resource: user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res."
+              ],
+              "matches": true
+            },
+            "raw/stderr.log": {
+              "observed": [
+                "ERROR: Premature end of file (EOF): 'user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res'.",
+                "ERROR: Failed loading resource: user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res."
+              ],
+              "expected": [
+                "ERROR: Premature end of file (EOF): 'user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res'.",
+                "ERROR: Failed loading resource: user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res."
+              ],
+              "matches": true
+            },
+            "raw/godot.log": {
+              "observed": [
+                "ERROR: Premature end of file (EOF): 'user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res'.",
+                "ERROR: Failed loading resource: user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res."
+              ],
+              "expected": [
+                "ERROR: Premature end of file (EOF): 'user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res'.",
+                "ERROR: Failed loading resource: user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res."
+              ],
+              "matches": true
+            },
+            "native_logs/stdout.log": {
+              "observed": [],
+              "expected": [],
+              "matches": true
+            },
+            "raw/stdout.log": {
+              "observed": [],
+              "expected": [],
+              "matches": true
+            }
+          },
+          "all_error_lines_from_input_logs": [
+            {
+              "line": 1,
+              "text": "ERROR: Premature end of file (EOF): 'user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res'."
+            },
+            {
+              "line": 3,
+              "text": "ERROR: Failed loading resource: user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res."
+            },
+            {
+              "line": 4,
+              "text": "ERROR: Premature end of file (EOF): 'user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res'."
+            },
+            {
+              "line": 6,
+              "text": "ERROR: Failed loading resource: user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res."
+            },
+            {
+              "line": 1,
+              "text": "ERROR: Premature end of file (EOF): 'user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res'."
+            },
+            {
+              "line": 3,
+              "text": "ERROR: Failed loading resource: user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res."
+            },
+            {
+              "line": 4,
+              "text": "ERROR: Premature end of file (EOF): 'user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res'."
+            },
+            {
+              "line": 6,
+              "text": "ERROR: Failed loading resource: user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res."
+            }
+          ]
+        },
+        "native_logs": {
+          "native_logs/stdout.log": {
+            "status": "READ",
+            "error_lines": [],
+            "script_error_lines": [],
+            "warning_lines": [],
+            "all_lines": 5
+          },
+          "native_logs/stderr.log": {
+            "status": "READ",
+            "error_lines": [
+              {
+                "line": 1,
+                "text": "ERROR: Premature end of file (EOF): 'user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res'."
+              },
+              {
+                "line": 3,
+                "text": "ERROR: Failed loading resource: user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res."
+              }
+            ],
+            "script_error_lines": [],
+            "warning_lines": [],
+            "all_lines": 4
+          },
+          "native_logs/godot.log": {
+            "status": "READ",
+            "error_lines": [
+              {
+                "line": 4,
+                "text": "ERROR: Premature end of file (EOF): 'user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res'."
+              },
+              {
+                "line": 6,
+                "text": "ERROR: Failed loading resource: user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res."
+              }
+            ],
+            "script_error_lines": [],
+            "warning_lines": [],
+            "all_lines": 9
+          },
+          "raw/stdout.log": {
+            "status": "READ",
+            "error_lines": [],
+            "script_error_lines": [],
+            "warning_lines": [],
+            "all_lines": 5
+          },
+          "raw/stderr.log": {
+            "status": "READ",
+            "error_lines": [
+              {
+                "line": 1,
+                "text": "ERROR: Premature end of file (EOF): 'user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res'."
+              },
+              {
+                "line": 3,
+                "text": "ERROR: Failed loading resource: user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res."
+              }
+            ],
+            "script_error_lines": [],
+            "warning_lines": [],
+            "all_lines": 4
+          },
+          "raw/godot.log": {
+            "status": "READ",
+            "error_lines": [
+              {
+                "line": 4,
+                "text": "ERROR: Premature end of file (EOF): 'user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res'."
+              },
+              {
+                "line": 6,
+                "text": "ERROR: Failed loading resource: user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res."
+              }
+            ],
+            "script_error_lines": [],
+            "warning_lines": [],
+            "all_lines": 9
+          }
+        },
+        "predicates": {
+          "runner_remains_fail": {
+            "observed": "FAIL",
+            "expected": "FAIL",
+            "matches": true
+          },
+          "native_exit_zero": {
+            "observed": 0,
+            "expected": 0,
+            "matches": true
+          },
+          "native_not_timed_out": {
+            "observed": false,
+            "expected": false,
+            "matches": true
+          },
+          "receipt_expected_count": {
+            "observed": 24,
+            "expected": 24,
+            "matches": true
+          },
+          "receipt_counts_consistent": {
+            "observed": true,
+            "expected": true,
+            "matches": true
+          },
+          "every_receipt_check_passed": {
+            "observed": true,
+            "expected": true,
+            "matches": true
+          },
+          "run_id_matches_runner": {
+            "observed": "f6771d0b-1eef-4c13-a5d1-fb79071e271d",
+            "expected": "f6771d0b-1eef-4c13-a5d1-fb79071e271d",
+            "matches": true
+          },
+          "invocation_matches_runner": {
+            "observed": "112e05e5-1f84-48c9-858b-b299d15929bb",
+            "expected": "112e05e5-1f84-48c9-858b-b299d15929bb",
+            "matches": true
+          },
+          "run_id_matches_native_handoff_producer_when_present": "MISSING",
+          "scene_id_matches_native_handoff_producer_when_present": "MISSING",
+          "invocation_matches_native_handoff": {
+            "observed": "112e05e5-1f84-48c9-858b-b299d15929bb",
+            "expected": "112e05e5-1f84-48c9-858b-b299d15929bb",
+            "matches": true
+          },
+          "source_matches_native_handoff": {
+            "observed": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+            "expected": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+            "matches": true
+          },
+          "source_matches_native_handoff_producer_when_present": "MISSING",
+          "handoff_receipt_hash_matches_when_producer_record_present": "MISSING",
+          "producer_result_matches_runner_when_present": "MISSING",
+          "producer_exit_matches_runner_when_present": "MISSING",
+          "source_matches_before_after_maps": {
+            "observed": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+            "expected": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+            "matches": true
+          },
+          "source_matches_after_map": {
+            "observed": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+            "expected": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+            "matches": true
+          },
+          "direct_scene_fixture_map_entries_match": {
+            "observed": true,
+            "expected": true,
+            "matches": true
+          },
+          "engine_before_after_equal": {
+            "observed": true,
+            "expected": true,
+            "matches": true
+          },
+          "trace_run_identity_matches_receipt": {
+            "observed": "f6771d0b-1eef-4c13-a5d1-fb79071e271d",
+            "expected": "f6771d0b-1eef-4c13-a5d1-fb79071e271d",
+            "matches": true
+          },
+          "trace_invocation_identity_matches_receipt": {
+            "observed": "112e05e5-1f84-48c9-858b-b299d15929bb",
+            "expected": "112e05e5-1f84-48c9-858b-b299d15929bb",
+            "matches": true
+          },
+          "trace_source_identity_matches_receipt": {
+            "observed": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+            "expected": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+            "matches": true
+          },
+          "owned_path_matches_trace_and_errors": {
+            "observed": true,
+            "expected": true,
+            "matches": true
+          },
+          "owned_path_contains_run_id": {
+            "observed": true,
+            "expected": true,
+            "matches": true
+          },
+          "raw_native_stdout_hash_equal": {
+            "observed": "91dd07952921aad41de6d63b8037099cc0f0b27b5239c9bca7e472bc3e3001cd",
+            "expected": "91dd07952921aad41de6d63b8037099cc0f0b27b5239c9bca7e472bc3e3001cd",
+            "matches": true
+          },
+          "raw_native_stderr_hash_equal": {
+            "observed": "cba9ecb45f314670284133e986b3ce292205fe61f2cddcc3cc601020cafc4ebc",
+            "expected": "cba9ecb45f314670284133e986b3ce292205fe61f2cddcc3cc601020cafc4ebc",
+            "matches": true
+          },
+          "raw_native_engine_log_hash_equal": {
+            "observed": "986cbd606f77ee80698ac28d1eaa5d8248e991091aabe723c2de451b83cb3ad9",
+            "expected": "986cbd606f77ee80698ac28d1eaa5d8248e991091aabe723c2de451b83cb3ad9",
+            "matches": true
+          },
+          "no_extra_error_warning_or_script_error": {
+            "observed": true,
+            "expected": true,
+            "matches": true
+          }
+        }
+      }
+    ]
+  },
+  "known_green_references": [
+    {
+      "archive": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_failed_caster_request_green_091908_435805",
+      "validation": {
+        "command": [
+          "powershell",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-Command",
+          "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/root_failed_caster_request_test.tscn' -TimeoutSeconds 30"
+        ],
+        "timeout_seconds": 30,
+        "exit_code": 1,
+        "source_stable_during_run": true,
+        "passed": 0,
+        "failed": 1,
+        "status": "FAIL"
+      },
+      "runner_suite": {
+        "results": [
+          {
+            "test_name": "root_failed_caster_request_test",
+            "test_path": "tests/framework/root_failed_caster_request_test.tscn",
+            "wrapper_process_id": 7396,
+            "wrapper_started_utc": "2026-10-05T01:19:10.7880775Z",
+            "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_failed_caster_request_green_cd79bbee822a435191c855435e5c6771",
+            "fixed_fps": 0,
+            "pass_marker_found": true,
+            "process_exited": true,
+            "wrapper_exit_code": 0,
+            "child_process_exit_state": "exited",
+            "execution_deadline_utc": "2026-10-05T01:19:40.7994568Z",
+            "native_exit_observed_utc": "2026-10-05T01:19:25.8337319Z",
+            "effective_exit_code": 0,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 2,
+            "engine_log_failure_count": 2,
+            "framework_run_id": "d76739d0-cc08-47f2-b8d1-b7cd3b81f356",
+            "framework_receipt_valid": true,
+            "result": "FAIL",
+            "reason": "stderr_failures_2;engine_log_failures_2"
+          }
+        ],
+        "total": 1,
+        "invocation_id": "7fd6c44c-c42c-482e-961c-bc03e1b3455f",
+        "runtime_environment": {
+          "project_root": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+          "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_failed_caster_request_green_cd79bbee822a435191c855435e5c6771",
+          "runner_process_id": 7180
+        },
+        "passed": 0,
+        "git_head": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+        "engine_log_errors": 2,
+        "generated_at": "2026-10-05T09:19:27.2768456+08:00",
+        "failed": 1,
+        "suite": "adhoc"
+      },
+      "before_manifest_identity": {
+        "tested_sha": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+        "content_set_sha256": "a7999b4002c8498f30810caaf7c3fa0e6f6857f65a2682bbeb471883e1867a28",
+        "engine_version": "4.7.stable.official.5b4e0cb0f",
+        "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c"
+      },
+      "after_manifest_identity": {
+        "tested_sha": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+        "content_set_sha256": "a7999b4002c8498f30810caaf7c3fa0e6f6857f65a2682bbeb471883e1867a28",
+        "engine_version": "4.7.stable.official.5b4e0cb0f",
+        "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c"
+      },
+      "runner_log_excerpt": [
+        "[FAIL] root_failed_caster_request_test - stderr_failures_2;engine_log_failures_2",
+        "Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org",
+        "",
+        "鏁版嵁搴撹浇鍏ュ畬鎴愶細鍦板浘209 鎬墿156 Boss20 瑁呭175 鎶€鑳界瓑绾?32 鎺夎惤妲?424 浠诲姟9",
+        "[InitialHUDProfile] {\"origin\":\"GameHUD._ready\",\"pre_ready_boundary\":\"GameHUD_static_script_preloads_before_ready_not_instrumented\",\"stages_ms\":{\"attach_touch_scroll_support\":{\"duration_ms\":0.453,\"start_ms\":63.649},\"build_bottom_chassis\":{\"duration_ms\":18.156,\"start_ms\":37.27},\"build_combat_controls\":{\"duration_ms\":7.677,\"start_ms\":55.426},\"build_hidden_compatibility_info\":{\"duration_ms\":7.248,\"start_ms\":25.687},\"build_item_quick_slot_menu\":{\"duration_ms\":0.546,\"start_ms\":63.103},\"build_loading_transition\":{\"duration_ms\":1.94,\"start_ms\":64.102},\"build_loot_feedback\":{\"duration_ms\":0.752,\"start_ms\":33.5},\"build_right_utility_stack\":{\"duration_ms\":3.018,\"start_ms\":34.252},\"build_target_bar\":{\"duration_ms\":0.565,\"start_ms\":32.935},\"initial_state_sync\":{\"duration_ms\":0.462,\"start_ms\":66.052},\"root_and_theme\":{\"duration_ms\":25.667,\"start_ms\":0.0},\"safe_area_setup\":{\"duration_ms\":0.02,\"start_ms\":25.667},\"wire_player_state_signals\":{\"duration_ms\":0.01,\"start_ms\":66.042}},\"total_ms\":66.516}",
+        "[InitialGameRootProfile] {\"lifecycle_ms\":{\"enter_tree_to_ready\":0.017,\"init_to_enter_tree\":0.047},\"origin\":\"GameRoot._init\",\"pre_ready_boundary\":\"scene_resource_loading_and_instantiation_before_GameRoot._init_not_instrumented\",\"stages_ms\":{\"background_construct_and_attach\":{\"duration_ms\":0.119,\"start_ms\":0.729},\"bootstrap_dispatch\":{\"duration_ms\":0.168,\"start_ms\":701.786},\"camera_construct_and_attach\":{\"duration_ms\":0.035,\"start_ms\":120.081},\"hud_attach_and_ready\":{\"duration_ms\":529.664,\"start_ms\":120.18},\"hud_construct\":{\"duration_ms\":0.038,\"start_ms\":120.116},\"hud_post_ready_setup\":{\"duration_ms\":4.263,\"start_ms\":649.844},\"hud_signal_wiring\":{\"duration_ms\":0.026,\"start_ms\":120.154},\"player_construct_wire_attach_restore\":{\"duration_ms\":119.233,\"start_ms\":0.848},\"pre_background_setup\":{\"duration_ms\":0.665,\"start_ms\":0.064},\"system_menu_build\":{\"duration_ms\":47.679,\"start_ms\":654.107}},\"total_ms\":701.956}",
+        "[UIPanelPrewarmProfile] {\"background_mode\":false,\"catalog_icon_pending\":0,\"catalog_icon_prewarm_complete\":false,\"completed\":true,\"confirmation_wait_frames\":0,\"construction_ms\":2261.958,\"construction_ms_by_panel\":{\"death_revival\":4.755,\"enhancement\":133.026,\"inventory\":94.363,\"map\":22.835,\"quest\":14.196,\"shop\":8.771,\"skill\":16.651,\"warehouse\":33.371},\"initial_profiles_elapsed_ms\":2262.017,\"initial_profiles_wait_frames\":0,\"script_prefetch\":{\"covered_main_thread_loads\":7,\"failures\":[],\"loaded\":7,\"pending\":[],\"requested\":7,\"waited_frames\":0},\"shop_alternate_profile_warmed\":true,\"shop_buy_wait_frames\":0,\"shop_profiles_elapsed_ms\":2313.32,\"shop_sell_wait_frames\":3,\"started_at_usec\":11365512,\"total_ms\":2330.539}",
+        "[LOADING-TOTAL] {\"actor_max_item_ms\":42.593,\"actor_max_slice_ms\":42.599,\"actor_slice_count\":52,\"actor_spawn_ms\":439.999,\"catalog_icon_prewarm_complete\":true,\"collision_max_slice_ms\":0.409,\"collision_slice_count\":4,\"finalize_ms\":0.054,\"map_max_slice_ms\":1.216,\"map_slice_count\":6,\"mode\":\"initial_world\",\"monster_prefetch_ms\":775.774,\"prewarm_deadline_exceeded\":false,\"prewarm_tail_after_deadline_ms\":0.0,\"render_warm\":{\"budget_exhausted\":false,\"elapsed_ms\":0.0,\"frames_drawn\":0,\"lease_refcount_after\":0,\"lease_refcount_before\":0,\"skills_considered\":0,\"skills_warmed\":0},\"render_warm_ms\":0.018,\"skill_workset_ms\":0.054,\"stage_elapsed_ms\":{\"BUILD_COLLISION\":1399.993,\"BUILD_MAP\":1377.073,\"COLLECT_REQUIREMENTS\":1144.964,\"FINALIZE\":1864.89,\"REQUEST_RESOURCES\":1178.585,\"SHOW_LOADING\":0.049,\"SPAWN_ACTORS\":1420.238,\"WAIT_RESOURCES\":1376.883},\"target_map_id\":910001,\"total_ms\":4204.564,\"transition_id\":\"map:9490:1\",\"ui_panels_ms\":2698.521,\"world_pipeline_ms\":275.4}",
+        "[SESSION-ID] godot=4.7-stable (official) renderer=gl_compatibility adapter= api= refresh=-1.0Hz physics_tps=60 max_physics_steps=8 app_version=hardcore 1.0 姝ｅ紡鐗?os=Windows",
+        "[WorldBootstrapProfile] {\"actor_max_item_ms\":42.593,\"actor_max_slice_ms\":42.599,\"actor_slices\":52,\"actor_total_ms\":318.426,\"collision_slices\":4,\"deferred_actors\":0,\"duplicate_actors\":0,\"failed_actors\":0,\"hud\":{\"background_mode\":false,\"catalog_icon_pending\":0,\"catalog_icon_prewarm_complete\":true,\"completed\":true,\"confirmation_wait_frames\":0,\"construction_ms\":2261.958,\"construction_ms_by_panel\":{\"death_revival\":4.755,\"enhancement\":133.026,\"inventory\":94.363,\"map\":22.835,\"quest\":14.196,\"shop\":8.771,\"skill\":16.651,\"warehouse\":33.371},\"initial_profiles_elapsed_ms\":2262.017,\"initial_profiles_wait_frames\":0,\"script_prefetch\":{\"covered_main_thread_loads\":7,\"failures\":[],\"loaded\":7,\"pending\":[],\"requested\":7,\"waited_frames\":0},\"shop_alternate_profile_warmed\":true,\"shop_buy_wait_frames\":0,\"shop_profiles_elapsed_ms\":2313.32,\"shop_sell_wait_frames\":3,\"started_at_usec\":11365512,\"total_ms\":2330.539},\"map_slices\":6,\"max_slice_ms\":42.599,\"planned_actors\":94,\"spawned_actors\":94,\"stages_ms\":{\"BUILD_COLLISION\":1399.993,\"BUILD_MAP\":1377.073,\"COLLECT_REQUIREMENTS\":1144.964,\"FINALIZE\":1864.89,\"REQUEST_RESOURCES\":1178.585,\"SHOW_LOADING\":0.049,\"SPAWN_ACTORS\":1420.238,\"WAIT_RESOURCES\":1376.883},\"total_ms\":4574.962}",
+        "ROOT_FAILED_CASTER_REQUEST_PASS checks=14 failures=[]",
+        "ERROR: Unrecognized binary resource file: 'user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res'.",
+        "   at: open (core/io/resource_format_binary.cpp:943)",
+        "ERROR: Failed loading resource: user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res.",
+        "   at: _load (core/io/resource_loader.cpp:317)",
+        "RUNNER_RESULTS_JSON=C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\test_logs\\runner_results_adhoc_20261005_091927_276_7180.json",
+        "TEST_SUMMARY suite=adhoc passed=0 failed=1 engine_log_errors=2",
+        "FAILED_TESTS=root_failed_caster_request_test (stderr_failures_2;engine_log_failures_2)"
+      ],
+      "evidence_files": [
+        {
+          "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_failed_caster_request_green_091908_435805/validation.json",
+          "sha256": "b438bb7c90f45ca9d4b80e7d42efcf311fd8d2494a2dff086f195325ac9fb0f8",
+          "bytes": 379,
+          "line_count": 16,
+          "status": "READ"
+        },
+        {
+          "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_failed_caster_request_green_091908_435805/runner_results.json",
+          "sha256": "fdc0787442a9a25b834f81306428bc4a9fbdd45e11db958d37fce89ed41995af",
+          "bytes": 2370,
+          "line_count": 40,
+          "status": "READ"
+        },
+        {
+          "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_failed_caster_request_green_091908_435805/before.json",
+          "sha256": "129377c499a139264677ff183f7c38a22dad02e713766a98e0148456981a393e",
+          "bytes": 528913,
+          "line_count": 3847,
+          "status": "READ"
+        },
+        {
+          "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_failed_caster_request_green_091908_435805/after.json",
+          "sha256": "094b0c9779a4658b73f22d5e9060944e5866a2da13890bccf9e11df3cd6065c9",
+          "bytes": 528913,
+          "line_count": 3847,
+          "status": "READ"
+        },
+        {
+          "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_failed_caster_request_green_091908_435805/runner.log",
+          "sha256": "93697e0fc136311b95081f02cb262321e6a7adc2ad862e85c2924d9d8c464a69",
+          "bytes": 5945,
+          "line_count": 18,
+          "status": "READ"
+        },
+        {
+          "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_failed_caster_request_green_091908_435805/framework/root_failed_caster_request_test.result.json",
+          "sha256": "9874642ce0281e7ba316189cf96ef69a80bf92ab954f37c1f2d0e380ae291146",
+          "bytes": 2868,
+          "line_count": 92,
+          "status": "READ"
+        },
+        {
+          "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_failed_caster_request_green_091908_435805/native_logs/root_failed_caster_request_test.stdout.log",
+          "sha256": "9b59860821cb1f500801de027a30bd130ec351fadabc5bc43fed727b9fe3af54",
+          "bytes": 5211,
+          "line_count": 10,
+          "status": "READ"
+        },
+        {
+          "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_failed_caster_request_green_091908_435805/framework/root_failed_caster_request_trace.json",
+          "sha256": "69546d8d9441e50a3dc777db03a81ac2ff23d62ad95644f180702cbb6d957dc4",
+          "bytes": 687,
+          "line_count": 1,
+          "status": "READ"
+        },
+        {
+          "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_failed_caster_request_green_091908_435805/native_logs/root_failed_caster_request_test.stdout.log",
+          "sha256": "9b59860821cb1f500801de027a30bd130ec351fadabc5bc43fed727b9fe3af54",
+          "bytes": 5211,
+          "line_count": 10,
+          "status": "READ"
+        },
+        {
+          "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_failed_caster_request_green_091908_435805/native_logs/root_failed_caster_request_test.stderr.log",
+          "sha256": "af6fce52f9464fcda096cfec851fa76c9abad3792e6045661c9584ad9eb26c67",
+          "bytes": 308,
+          "line_count": 4,
+          "status": "READ"
+        },
+        {
+          "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_failed_caster_request_green_091908_435805/native_logs/root_failed_caster_request_test.godot.log",
+          "sha256": "f20196387952d4cce0fc7cab31e208f121a30ee609706f021ec1befde08d18f9",
+          "bytes": 5505,
+          "line_count": 14,
+          "status": "READ"
+        },
+        {
+          "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_failed_caster_request_green_091908_435805/raw/root_failed_caster_request_test.stdout.log",
+          "sha256": "9b59860821cb1f500801de027a30bd130ec351fadabc5bc43fed727b9fe3af54",
+          "bytes": 5211,
+          "line_count": 10,
+          "status": "READ"
+        },
+        {
+          "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_failed_caster_request_green_091908_435805/raw/root_failed_caster_request_test.stderr.log",
+          "sha256": "af6fce52f9464fcda096cfec851fa76c9abad3792e6045661c9584ad9eb26c67",
+          "bytes": 308,
+          "line_count": 4,
+          "status": "READ"
+        },
+        {
+          "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_failed_caster_request_green_091908_435805/raw/root_failed_caster_request_test.godot.log",
+          "sha256": "f20196387952d4cce0fc7cab31e208f121a30ee609706f021ec1befde08d18f9",
+          "bytes": 5505,
+          "line_count": 14,
+          "status": "READ"
+        },
+        {
+          "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_failed_caster_request_green_091908_435805/framework/native_handoffs.json",
+          "sha256": "2ba98de493656d784c6cfd30dd7e8a9ce2f5ae782d246a6d8df2b9d9867ad2fd",
+          "bytes": 730,
+          "line_count": 13,
+          "status": "READ"
+        }
+      ],
+      "scenes": [
+        {
+          "scene_id": "root_failed_caster_request_test",
+          "role": "known_green_reference",
+          "input_archive": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_failed_caster_request_green_091908_435805",
+          "receipt": {
+            "path": "framework/root_failed_caster_request_test.result.json",
+            "run_id": "d76739d0-cc08-47f2-b8d1-b7cd3b81f356",
+            "invocation_id": "7fd6c44c-c42c-482e-961c-bc03e1b3455f",
+            "source_content_sha256": "a7999b4002c8498f30810caaf7c3fa0e6f6857f65a2682bbeb471883e1867a28",
+            "engine_version": "4.7-stable (official)",
+            "checks": {
+              "declared": {
+                "count": 14,
+                "reported_checks": 14,
+                "passed": 14,
+                "failed": 0,
+                "reported_failures": 0,
+                "status": "PASS"
+              },
+              "observed": {
+                "count": 14,
+                "passed": 14,
+                "failed": 0
+              },
+              "all_check_records": [
+                {
+                  "id": 1,
+                  "label": "failed native request owns isolated production user data",
+                  "passed": true
+                },
+                {
+                  "id": 2,
+                  "label": "real startup and distinct profile create the mapped Root",
+                  "passed": true
+                },
+                {
+                  "id": 3,
+                  "label": "Root reaches READY through ordinary production processing",
+                  "passed": true
+                },
+                {
+                  "id": 4,
+                  "label": "exact test-owned malformed native resource opens",
+                  "passed": true
+                },
+                {
+                  "id": 5,
+                  "label": "malformed fixture writes completely without touching source art or imports",
+                  "passed": true
+                },
+                {
+                  "id": 6,
+                  "label": "ordinary Root accepts and terminates tracking for the actual failed native request",
+                  "passed": true
+                },
+                {
+                  "id": 7,
+                  "label": "failed native request releases its retrieval token before leaving Root tracking",
+                  "passed": true
+                },
+                {
+                  "id": 8,
+                  "label": "same test-owned path now contains a valid native Texture2D",
+                  "passed": true
+                },
+                {
+                  "id": 9,
+                  "label": "fresh lawful attempt uses the unchanged ordinary Root loader",
+                  "passed": true
+                },
+                {
+                  "id": 10,
+                  "label": "fresh valid texture becomes usable without reusing a failed native task",
+                  "passed": true
+                },
+                {
+                  "id": 11,
+                  "label": "negative cleanup leaves no native retrieval right at process exit",
+                  "passed": true
+                },
+                {
+                  "id": 12,
+                  "label": "only this invocation's exact malformed/repaired fixture is removed",
+                  "passed": true
+                },
+                {
+                  "id": 13,
+                  "label": "bounded failed-request trace opens",
+                  "passed": true
+                },
+                {
+                  "id": 14,
+                  "label": "bounded failed-request trace writes completely",
+                  "passed": true
+                }
+              ],
+              "predicates": {
+                "counts_consistent": true,
+                "all_checks_passed": true
+              }
+            }
+          },
+          "official_runner": {
+            "scene_record_count": 1,
+            "result": "FAIL",
+            "effective_exit_code": 0,
+            "timeout": false,
+            "framework_run_id": "d76739d0-cc08-47f2-b8d1-b7cd3b81f356",
+            "runner_invocation_id": "7fd6c44c-c42c-482e-961c-bc03e1b3455f",
+            "reason": "stderr_failures_2;engine_log_failures_2",
+            "raw_record": {
+              "test_name": "root_failed_caster_request_test",
+              "test_path": "tests/framework/root_failed_caster_request_test.tscn",
+              "wrapper_process_id": 7396,
+              "wrapper_started_utc": "2026-10-05T01:19:10.7880775Z",
+              "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_failed_caster_request_green_cd79bbee822a435191c855435e5c6771",
+              "fixed_fps": 0,
+              "pass_marker_found": true,
+              "process_exited": true,
+              "wrapper_exit_code": 0,
+              "child_process_exit_state": "exited",
+              "execution_deadline_utc": "2026-10-05T01:19:40.7994568Z",
+              "native_exit_observed_utc": "2026-10-05T01:19:25.8337319Z",
+              "effective_exit_code": 0,
+              "timeout": false,
+              "stdout_failure_count": 0,
+              "stderr_failure_count": 2,
+              "engine_log_failure_count": 2,
+              "framework_run_id": "d76739d0-cc08-47f2-b8d1-b7cd3b81f356",
+              "framework_receipt_valid": true,
+              "result": "FAIL",
+              "reason": "stderr_failures_2;engine_log_failures_2"
+            }
+          },
+          "native_handoff_identity": {
+            "top_level_invocation_id": "7fd6c44c-c42c-482e-961c-bc03e1b3455f",
+            "top_level_source_content_sha256": "a7999b4002c8498f30810caaf7c3fa0e6f6857f65a2682bbeb471883e1867a28",
+            "per_scene_producer_record": "MISSING",
+            "per_scene_scene_id": "MISSING",
+            "per_scene_run_id": "MISSING",
+            "per_scene_source_content_sha256": "MISSING",
+            "per_scene_result": "MISSING",
+            "per_scene_effective_exit_code": "MISSING",
+            "per_scene_receipt_sha256": "MISSING"
+          },
+          "raw_hashes": {
+            "receipt_sha256": "9874642ce0281e7ba316189cf96ef69a80bf92ab954f37c1f2d0e380ae291146",
+            "handoff_file_sha256": "2ba98de493656d784c6cfd30dd7e8a9ce2f5ae782d246a6d8df2b9d9867ad2fd",
+            "trace_file_or_stdout_sha256": "69546d8d9441e50a3dc777db03a81ac2ff23d62ad95644f180702cbb6d957dc4",
+            "native_log_sha256": {
+              "stdout": "9b59860821cb1f500801de027a30bd130ec351fadabc5bc43fed727b9fe3af54",
+              "stderr": "af6fce52f9464fcda096cfec851fa76c9abad3792e6045661c9584ad9eb26c67",
+              "godot": "f20196387952d4cce0fc7cab31e208f121a30ee609706f021ec1befde08d18f9"
+            },
+            "raw_log_sha256": {
+              "stdout": "9b59860821cb1f500801de027a30bd130ec351fadabc5bc43fed727b9fe3af54",
+              "stderr": "af6fce52f9464fcda096cfec851fa76c9abad3792e6045661c9584ad9eb26c67",
+              "godot": "f20196387952d4cce0fc7cab31e208f121a30ee609706f021ec1befde08d18f9"
+            }
+          },
+          "source_maps": {
+            "before_tested_sha": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+            "after_tested_sha": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+            "before_content_set_sha256": "a7999b4002c8498f30810caaf7c3fa0e6f6857f65a2682bbeb471883e1867a28",
+            "after_content_set_sha256": "a7999b4002c8498f30810caaf7c3fa0e6f6857f65a2682bbeb471883e1867a28",
+            "direct_scene_and_fixture_file_maps": [
+              {
+                "path": "tests/framework/root_failed_caster_request_test.tscn",
+                "before_sha256": "fd644cc182a9bfb4d41473c23c3b4469f6ae09719012daed111c45ca3a2ebe1d",
+                "after_sha256": "fd644cc182a9bfb4d41473c23c3b4469f6ae09719012daed111c45ca3a2ebe1d",
+                "maps_match": {
+                  "observed": "fd644cc182a9bfb4d41473c23c3b4469f6ae09719012daed111c45ca3a2ebe1d",
+                  "expected": "fd644cc182a9bfb4d41473c23c3b4469f6ae09719012daed111c45ca3a2ebe1d",
+                  "matches": true
+                }
+              },
+              {
+                "path": "tests/framework/root_failed_caster_request_test.gd",
+                "before_sha256": "8fd13e8ad9402bde4df50d5e6b78e0928d5922146d0e06d7a917a8a71b729550",
+                "after_sha256": "8fd13e8ad9402bde4df50d5e6b78e0928d5922146d0e06d7a917a8a71b729550",
+                "maps_match": {
+                  "observed": "8fd13e8ad9402bde4df50d5e6b78e0928d5922146d0e06d7a917a8a71b729550",
+                  "expected": "8fd13e8ad9402bde4df50d5e6b78e0928d5922146d0e06d7a917a8a71b729550",
+                  "matches": true
+                }
+              }
+            ],
+            "maps_file_counts": {
+              "before": 3836,
+              "after": 3836
+            },
+            "engine_version_before": "4.7.stable.official.5b4e0cb0f",
+            "engine_version_after": "4.7.stable.official.5b4e0cb0f",
+            "engine_sha256_before": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+            "engine_sha256_after": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c"
+          },
+          "trace": {
+            "path": "framework/root_failed_caster_request_trace.json",
+            "raw_identity": {
+              "run_id": "d76739d0-cc08-47f2-b8d1-b7cd3b81f356",
+              "invocation_id": "7fd6c44c-c42c-482e-961c-bc03e1b3455f",
+              "source_content_sha256": "a7999b4002c8498f30810caaf7c3fa0e6f6857f65a2682bbeb471883e1867a28",
+              "owned_resource_path": "user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res"
+            },
+            "marker_location": "MISSING",
+            "raw_trace": {
+              "attempts": [
+                {
+                  "admitted": true,
+                  "native_status_after": 0,
+                  "statuses": [
+                    2,
+                    0
+                  ],
+                  "tracked_after": false
+                },
+                {
+                  "admitted": true,
+                  "native_status_after": 0,
+                  "statuses": [
+                    1,
+                    3,
+                    0
+                  ],
+                  "tracked_after": false
+                }
+              ],
+              "fixture_path": "user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res",
+              "invocation_id": "7fd6c44c-c42c-482e-961c-bc03e1b3455f",
+              "negative_cleanup_gets": 0,
+              "run_id": "d76739d0-cc08-47f2-b8d1-b7cd3b81f356",
+              "scope": "actual Root ordinary warm channel with a test-owned corrupt binary resource and same-path lawful retry; expected native errors preserved; not a naturally corrupt game asset or normal UI reproduction",
+              "source_content_sha256": "a7999b4002c8498f30810caaf7c3fa0e6f6857f65a2682bbeb471883e1867a28"
+            },
+            "native_retrieval_and_cleanup_observations": {
+              "post_retrieval_native_statuses_zero": {
+                "observed": [
+                  0,
+                  0
+                ],
+                "expected": [
+                  0,
+                  0
+                ],
+                "matches": true
+              },
+              "each_attempt_status_sequence_ends_zero": {
+                "observed": [
+                  0,
+                  0
+                ],
+                "expected": [
+                  0,
+                  0
+                ],
+                "matches": true
+              },
+              "cleanup_gets_zero": {
+                "observed": 0,
+                "expected": 0,
+                "matches": true
+              },
+              "later_lawful_retry_same_owned_path": {
+                "observed": "user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res",
+                "expected": "user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res",
+                "matches": true
+              },
+              "attempt_count": {
+                "observed": 2,
+                "expected": 2,
+                "matches": true
+              }
+            }
+          },
+          "fault_path": {
+            "owned_user_resource_path": "user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res",
+            "path_occurrences_unique_across_error_logs": true,
+            "expected_error_lines": [
+              "ERROR: Unrecognized binary resource file: 'user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res'.",
+              "ERROR: Failed loading resource: user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res."
+            ],
+            "per_log_error_predicates": {
+              "native_logs/stderr.log": {
+                "observed": [
+                  "ERROR: Unrecognized binary resource file: 'user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res'.",
+                  "ERROR: Failed loading resource: user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res."
+                ],
+                "expected": [
+                  "ERROR: Unrecognized binary resource file: 'user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res'.",
+                  "ERROR: Failed loading resource: user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res."
+                ],
+                "matches": true
+              },
+              "native_logs/godot.log": {
+                "observed": [
+                  "ERROR: Unrecognized binary resource file: 'user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res'.",
+                  "ERROR: Failed loading resource: user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res."
+                ],
+                "expected": [
+                  "ERROR: Unrecognized binary resource file: 'user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res'.",
+                  "ERROR: Failed loading resource: user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res."
+                ],
+                "matches": true
+              },
+              "raw/stderr.log": {
+                "observed": [
+                  "ERROR: Unrecognized binary resource file: 'user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res'.",
+                  "ERROR: Failed loading resource: user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res."
+                ],
+                "expected": [
+                  "ERROR: Unrecognized binary resource file: 'user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res'.",
+                  "ERROR: Failed loading resource: user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res."
+                ],
+                "matches": true
+              },
+              "raw/godot.log": {
+                "observed": [
+                  "ERROR: Unrecognized binary resource file: 'user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res'.",
+                  "ERROR: Failed loading resource: user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res."
+                ],
+                "expected": [
+                  "ERROR: Unrecognized binary resource file: 'user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res'.",
+                  "ERROR: Failed loading resource: user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res."
+                ],
+                "matches": true
+              },
+              "native_logs/stdout.log": {
+                "observed": [],
+                "expected": [],
+                "matches": true
+              },
+              "raw/stdout.log": {
+                "observed": [],
+                "expected": [],
+                "matches": true
+              }
+            },
+            "all_error_lines_from_input_logs": [
+              {
+                "line": 1,
+                "text": "ERROR: Unrecognized binary resource file: 'user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res'."
+              },
+              {
+                "line": 3,
+                "text": "ERROR: Failed loading resource: user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res."
+              },
+              {
+                "line": 10,
+                "text": "ERROR: Unrecognized binary resource file: 'user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res'."
+              },
+              {
+                "line": 12,
+                "text": "ERROR: Failed loading resource: user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res."
+              },
+              {
+                "line": 1,
+                "text": "ERROR: Unrecognized binary resource file: 'user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res'."
+              },
+              {
+                "line": 3,
+                "text": "ERROR: Failed loading resource: user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res."
+              },
+              {
+                "line": 10,
+                "text": "ERROR: Unrecognized binary resource file: 'user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res'."
+              },
+              {
+                "line": 12,
+                "text": "ERROR: Failed loading resource: user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res."
+              }
+            ]
+          },
+          "native_logs": {
+            "native_logs/stdout.log": {
+              "status": "READ",
+              "error_lines": [],
+              "script_error_lines": [],
+              "warning_lines": [],
+              "all_lines": 10
+            },
+            "native_logs/stderr.log": {
+              "status": "READ",
+              "error_lines": [
+                {
+                  "line": 1,
+                  "text": "ERROR: Unrecognized binary resource file: 'user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res'."
+                },
+                {
+                  "line": 3,
+                  "text": "ERROR: Failed loading resource: user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res."
+                }
+              ],
+              "script_error_lines": [],
+              "warning_lines": [],
+              "all_lines": 4
+            },
+            "native_logs/godot.log": {
+              "status": "READ",
+              "error_lines": [
+                {
+                  "line": 10,
+                  "text": "ERROR: Unrecognized binary resource file: 'user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res'."
+                },
+                {
+                  "line": 12,
+                  "text": "ERROR: Failed loading resource: user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res."
+                }
+              ],
+              "script_error_lines": [],
+              "warning_lines": [],
+              "all_lines": 14
+            },
+            "raw/stdout.log": {
+              "status": "READ",
+              "error_lines": [],
+              "script_error_lines": [],
+              "warning_lines": [],
+              "all_lines": 10
+            },
+            "raw/stderr.log": {
+              "status": "READ",
+              "error_lines": [
+                {
+                  "line": 1,
+                  "text": "ERROR: Unrecognized binary resource file: 'user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res'."
+                },
+                {
+                  "line": 3,
+                  "text": "ERROR: Failed loading resource: user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res."
+                }
+              ],
+              "script_error_lines": [],
+              "warning_lines": [],
+              "all_lines": 4
+            },
+            "raw/godot.log": {
+              "status": "READ",
+              "error_lines": [
+                {
+                  "line": 10,
+                  "text": "ERROR: Unrecognized binary resource file: 'user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res'."
+                },
+                {
+                  "line": 12,
+                  "text": "ERROR: Failed loading resource: user://caster_failure_d76739d0-cc08-47f2-b8d1-b7cd3b81f356.res."
+                }
+              ],
+              "script_error_lines": [],
+              "warning_lines": [],
+              "all_lines": 14
+            }
+          },
+          "predicates": {
+            "runner_remains_fail": {
+              "observed": "FAIL",
+              "expected": "FAIL",
+              "matches": true
+            },
+            "native_exit_zero": {
+              "observed": 0,
+              "expected": 0,
+              "matches": true
+            },
+            "native_not_timed_out": {
+              "observed": false,
+              "expected": false,
+              "matches": true
+            },
+            "receipt_expected_count": {
+              "observed": 14,
+              "expected": 14,
+              "matches": true
+            },
+            "receipt_counts_consistent": {
+              "observed": true,
+              "expected": true,
+              "matches": true
+            },
+            "every_receipt_check_passed": {
+              "observed": true,
+              "expected": true,
+              "matches": true
+            },
+            "run_id_matches_runner": {
+              "observed": "d76739d0-cc08-47f2-b8d1-b7cd3b81f356",
+              "expected": "d76739d0-cc08-47f2-b8d1-b7cd3b81f356",
+              "matches": true
+            },
+            "invocation_matches_runner": {
+              "observed": "7fd6c44c-c42c-482e-961c-bc03e1b3455f",
+              "expected": "7fd6c44c-c42c-482e-961c-bc03e1b3455f",
+              "matches": true
+            },
+            "run_id_matches_native_handoff_producer_when_present": "MISSING",
+            "scene_id_matches_native_handoff_producer_when_present": "MISSING",
+            "invocation_matches_native_handoff": {
+              "observed": "7fd6c44c-c42c-482e-961c-bc03e1b3455f",
+              "expected": "7fd6c44c-c42c-482e-961c-bc03e1b3455f",
+              "matches": true
+            },
+            "source_matches_native_handoff": {
+              "observed": "a7999b4002c8498f30810caaf7c3fa0e6f6857f65a2682bbeb471883e1867a28",
+              "expected": "a7999b4002c8498f30810caaf7c3fa0e6f6857f65a2682bbeb471883e1867a28",
+              "matches": true
+            },
+            "source_matches_native_handoff_producer_when_present": "MISSING",
+            "handoff_receipt_hash_matches_when_producer_record_present": "MISSING",
+            "producer_result_matches_runner_when_present": "MISSING",
+            "producer_exit_matches_runner_when_present": "MISSING",
+            "source_matches_before_after_maps": {
+              "observed": "a7999b4002c8498f30810caaf7c3fa0e6f6857f65a2682bbeb471883e1867a28",
+              "expected": "a7999b4002c8498f30810caaf7c3fa0e6f6857f65a2682bbeb471883e1867a28",
+              "matches": true
+            },
+            "source_matches_after_map": {
+              "observed": "a7999b4002c8498f30810caaf7c3fa0e6f6857f65a2682bbeb471883e1867a28",
+              "expected": "a7999b4002c8498f30810caaf7c3fa0e6f6857f65a2682bbeb471883e1867a28",
+              "matches": true
+            },
+            "direct_scene_fixture_map_entries_match": {
+              "observed": true,
+              "expected": true,
+              "matches": true
+            },
+            "engine_before_after_equal": {
+              "observed": true,
+              "expected": true,
+              "matches": true
+            },
+            "trace_run_identity_matches_receipt": {
+              "observed": "d76739d0-cc08-47f2-b8d1-b7cd3b81f356",
+              "expected": "d76739d0-cc08-47f2-b8d1-b7cd3b81f356",
+              "matches": true
+            },
+            "trace_invocation_identity_matches_receipt": {
+              "observed": "7fd6c44c-c42c-482e-961c-bc03e1b3455f",
+              "expected": "7fd6c44c-c42c-482e-961c-bc03e1b3455f",
+              "matches": true
+            },
+            "trace_source_identity_matches_receipt": {
+              "observed": "a7999b4002c8498f30810caaf7c3fa0e6f6857f65a2682bbeb471883e1867a28",
+              "expected": "a7999b4002c8498f30810caaf7c3fa0e6f6857f65a2682bbeb471883e1867a28",
+              "matches": true
+            },
+            "owned_path_matches_trace_and_errors": {
+              "observed": true,
+              "expected": true,
+              "matches": true
+            },
+            "owned_path_contains_run_id": {
+              "observed": true,
+              "expected": true,
+              "matches": true
+            },
+            "raw_native_stdout_hash_equal": {
+              "observed": "9b59860821cb1f500801de027a30bd130ec351fadabc5bc43fed727b9fe3af54",
+              "expected": "9b59860821cb1f500801de027a30bd130ec351fadabc5bc43fed727b9fe3af54",
+              "matches": true
+            },
+            "raw_native_stderr_hash_equal": {
+              "observed": "af6fce52f9464fcda096cfec851fa76c9abad3792e6045661c9584ad9eb26c67",
+              "expected": "af6fce52f9464fcda096cfec851fa76c9abad3792e6045661c9584ad9eb26c67",
+              "matches": true
+            },
+            "raw_native_engine_log_hash_equal": {
+              "observed": "f20196387952d4cce0fc7cab31e208f121a30ee609706f021ec1befde08d18f9",
+              "expected": "f20196387952d4cce0fc7cab31e208f121a30ee609706f021ec1befde08d18f9",
+              "matches": true
+            },
+            "no_extra_error_warning_or_script_error": {
+              "observed": true,
+              "expected": true,
+              "matches": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "archive": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_character_failed_preload_green_093951_637852",
+      "validation": {
+        "command": [
+          "powershell",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-Command",
+          "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/character_launch_failed_preload_retry_test.tscn' -TimeoutSeconds 30"
+        ],
+        "timeout_seconds": 30,
+        "exit_code": 1,
+        "source_stable_during_run": true,
+        "passed": 0,
+        "failed": 1,
+        "status": "FAIL"
+      },
+      "runner_suite": {
+        "results": [
+          {
+            "test_name": "character_launch_failed_preload_retry_test",
+            "test_path": "tests/framework/character_launch_failed_preload_retry_test.tscn",
+            "wrapper_process_id": 20912,
+            "wrapper_started_utc": "2026-10-05T01:39:53.9344196Z",
+            "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_character_failed_preload_green_a61d40263ba642f38ac71bbdc88216d2",
+            "fixed_fps": 0,
+            "pass_marker_found": true,
+            "process_exited": true,
+            "wrapper_exit_code": 0,
+            "child_process_exit_state": "exited",
+            "execution_deadline_utc": "2026-10-05T01:40:23.9463862Z",
+            "native_exit_observed_utc": "2026-10-05T01:40:00.1458904Z",
+            "effective_exit_code": 0,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 2,
+            "engine_log_failure_count": 2,
+            "framework_run_id": "787503ce-3b98-48bb-9118-56baf9180f5b",
+            "framework_receipt_valid": true,
+            "result": "FAIL",
+            "reason": "stderr_failures_2;engine_log_failures_2"
+          }
+        ],
+        "total": 1,
+        "invocation_id": "e3a2249e-6c13-4b71-b194-7d8772318ab1",
+        "runtime_environment": {
+          "project_root": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+          "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_character_failed_preload_green_a61d40263ba642f38ac71bbdc88216d2",
+          "runner_process_id": 356
+        },
+        "passed": 0,
+        "git_head": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+        "engine_log_errors": 2,
+        "generated_at": "2026-10-05T09:40:01.5905367+08:00",
+        "failed": 1,
+        "suite": "adhoc"
+      },
+      "before_manifest_identity": {
+        "tested_sha": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+        "content_set_sha256": "d6954482ad565a6d9f61813d26e2e54b7ce9d9f3a1526a79f08a4e8e2bedddb4",
+        "engine_version": "4.7.stable.official.5b4e0cb0f",
+        "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c"
+      },
+      "after_manifest_identity": {
+        "tested_sha": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+        "content_set_sha256": "d6954482ad565a6d9f61813d26e2e54b7ce9d9f3a1526a79f08a4e8e2bedddb4",
+        "engine_version": "4.7.stable.official.5b4e0cb0f",
+        "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c"
+      },
+      "runner_log_excerpt": [
+        "[FAIL] character_launch_failed_preload_retry_test - stderr_failures_2;engine_log_failures_2",
+        "Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org",
+        "",
+        "鏁版嵁搴撹浇鍏ュ畬鎴愶細鍦板浘209 鎬墿156 Boss20 瑁呭175 鎶€鑳界瓑绾?32 鎺夎惤妲?424 浠诲姟9",
+        "CHARACTER_LAUNCH_FAILED_RETRY_TRACE {\"after_exit\":{\"generation\":3,\"native_status\":0,\"path\":\"user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res\",\"request_count\":2,\"state\":\"idle\",\"tracked_paths\":[]},\"after_failed_monitor\":{\"generation\":1,\"native_status\":0,\"path\":\"user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res\",\"request_count\":1,\"state\":\"failed\",\"tracked_paths\":[]},\"after_failure_cleanup\":{\"generation\":1,\"native_status\":0,\"path\":\"user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res\",\"request_count\":1,\"state\":\"failed\",\"tracked_paths\":[]},\"after_lawful_retry_monitor\":{\"generation\":2,\"native_status\":0,\"path\":\"user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res\",\"request_count\":2,\"state\":\"ready\",\"tracked_paths\":[]},\"after_lawful_retry_request\":{\"generation\":2,\"native_status\":1,\"path\":\"user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res\",\"request_count\":2,\"state\":\"requested\",\"tracked_paths\":[\"user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res\"]},\"after_request\":{\"generation\":1,\"native_status\":1,\"path\":\"user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res\",\"request_count\":1,\"state\":\"requested\",\"tracked_paths\":[\"user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res\"]},\"before_request\":{\"generation\":0,\"native_status\":0,\"path\":\"\",\"request_count\":0,\"state\":\"idle\",\"tracked_paths\":[]},\"final_native_status\":0,\"final_red_cleanup_gets\":0,\"invocation_id\":\"e3a2249e-6c13-4b71-b194-7d8772318ab1\",\"path\":\"user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res\",\"red_failure_cleanup_gets\":0,\"run_id\":\"787503ce-3b98-48bb-9118-56baf9180f5b\",\"scope\":\"test-owned binary PackedScene fault and same-path lawful retry; no natural production-asset failure claim\",\"source_content_sha256\":\"d6954482ad565a6d9f61813d26e2e54b7ce9d9f3a1526a79f08a4e8e2bedddb4\",\"terminal_worker_before_monitor\":{\"generation\":1,\"native_status\":2,\"path\":\"user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res\",\"request_count\":1,\"state\":\"requested\",\"tracked_paths\":[\"user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res\"]}}",
+        "CHARACTER_LAUNCH_FAILED_PRELOAD_RETRY_PASS failures=[]",
+        "ERROR: Premature end of file (EOF): 'user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res'.",
+        "   at: open (core/io/resource_format_binary.cpp:1052)",
+        "ERROR: Failed loading resource: user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res.",
+        "   at: _load (core/io/resource_loader.cpp:317)",
+        "RUNNER_RESULTS_JSON=C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\test_logs\\runner_results_adhoc_20261005_094001_590_356.json",
+        "TEST_SUMMARY suite=adhoc passed=0 failed=1 engine_log_errors=2",
+        "FAILED_TESTS=character_launch_failed_preload_retry_test (stderr_failures_2;engine_log_failures_2)"
+      ],
+      "evidence_files": [
+        {
+          "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_character_failed_preload_green_093951_637852/validation.json",
+          "sha256": "1def0d5ea47dd7cc44b6a955ea0ec90211da7cc25d6cd5a59927e4a002792a1e",
+          "bytes": 390,
+          "line_count": 16,
+          "status": "READ"
+        },
+        {
+          "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_character_failed_preload_green_093951_637852/runner_results.json",
+          "sha256": "271593193ece791141aa2808c12dbad2ece05b2f49485d6c03adbb1e3d6791fc",
+          "bytes": 2398,
+          "line_count": 40,
+          "status": "READ"
+        },
+        {
+          "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_character_failed_preload_green_093951_637852/before.json",
+          "sha256": "d8c87e380c276280686416dac17b690d5a578e2d17060bc9a131de4aa5b88a43",
+          "bytes": 529697,
+          "line_count": 3851,
+          "status": "READ"
+        },
+        {
+          "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_character_failed_preload_green_093951_637852/after.json",
+          "sha256": "deb9178792e98fd6084424f1d8237b57e57113bbde2fa0932712ec4d7cb760b1",
+          "bytes": 529697,
+          "line_count": 3851,
+          "status": "READ"
+        },
+        {
+          "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_character_failed_preload_green_093951_637852/runner.log",
+          "sha256": "faf6c167a7e211c5a4a9f33e534a56adfff03c09a2419c032d330d0ada192560",
+          "bytes": 3473,
+          "line_count": 13,
+          "status": "READ"
+        },
+        {
+          "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_character_failed_preload_green_093951_637852/framework/character_launch_failed_preload_retry_test.result.json",
+          "sha256": "6fbb8a716e96fd63f78a836e86b2c62171e5830ca79da9e80f59bc06ed396039",
+          "bytes": 4576,
+          "line_count": 142,
+          "status": "READ"
+        },
+        {
+          "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_character_failed_preload_green_093951_637852/native_logs/character_launch_failed_preload_retry_test.stdout.log",
+          "sha256": "86e8ab268f01293944bb619043de645e37ffefb1300c5568f994b56725988ab1",
+          "bytes": 2666,
+          "line_count": 5,
+          "status": "READ"
+        },
+        {
+          "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_character_failed_preload_green_093951_637852/native_logs/character_launch_failed_preload_retry_test.stdout.log",
+          "sha256": "86e8ab268f01293944bb619043de645e37ffefb1300c5568f994b56725988ab1",
+          "bytes": 2666,
+          "line_count": 5,
+          "status": "READ"
+        },
+        {
+          "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_character_failed_preload_green_093951_637852/native_logs/character_launch_failed_preload_retry_test.stderr.log",
+          "sha256": "f4c95aecffeac472abed106d51e13af99886fb91c7c6068f0c7c7eb9c41be978",
+          "bytes": 363,
+          "line_count": 4,
+          "status": "READ"
+        },
+        {
+          "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_character_failed_preload_green_093951_637852/native_logs/character_launch_failed_preload_retry_test.godot.log",
+          "sha256": "11d66852cda3fff8ceb5f1d82f55b556c32a9526fe609eb3bf91f02aae245804",
+          "bytes": 3020,
+          "line_count": 9,
+          "status": "READ"
+        },
+        {
+          "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_character_failed_preload_green_093951_637852/raw/character_launch_failed_preload_retry_test.stdout.log",
+          "sha256": "86e8ab268f01293944bb619043de645e37ffefb1300c5568f994b56725988ab1",
+          "bytes": 2666,
+          "line_count": 5,
+          "status": "READ"
+        },
+        {
+          "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_character_failed_preload_green_093951_637852/raw/character_launch_failed_preload_retry_test.stderr.log",
+          "sha256": "f4c95aecffeac472abed106d51e13af99886fb91c7c6068f0c7c7eb9c41be978",
+          "bytes": 363,
+          "line_count": 4,
+          "status": "READ"
+        },
+        {
+          "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_character_failed_preload_green_093951_637852/raw/character_launch_failed_preload_retry_test.godot.log",
+          "sha256": "11d66852cda3fff8ceb5f1d82f55b556c32a9526fe609eb3bf91f02aae245804",
+          "bytes": 3020,
+          "line_count": 9,
+          "status": "READ"
+        },
+        {
+          "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_character_failed_preload_green_093951_637852/framework/native_handoffs.json",
+          "sha256": "92b48e03e8db55c65800773aa8fdf772bebad890c85e37ea79cdede23863a030",
+          "bytes": 732,
+          "line_count": 13,
+          "status": "READ"
+        }
+      ],
+      "scenes": [
+        {
+          "scene_id": "character_launch_failed_preload_retry_test",
+          "role": "known_green_reference",
+          "input_archive": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_character_failed_preload_green_093951_637852",
+          "receipt": {
+            "path": "framework/character_launch_failed_preload_retry_test.result.json",
+            "run_id": "787503ce-3b98-48bb-9118-56baf9180f5b",
+            "invocation_id": "e3a2249e-6c13-4b71-b194-7d8772318ab1",
+            "source_content_sha256": "d6954482ad565a6d9f61813d26e2e54b7ce9d9f3a1526a79f08a4e8e2bedddb4",
+            "engine_version": "4.7-stable (official)",
+            "checks": {
+              "declared": {
+                "count": 24,
+                "reported_checks": 24,
+                "passed": 24,
+                "failed": 0,
+                "reported_failures": 0,
+                "status": "PASS"
+              },
+              "observed": {
+                "count": 24,
+                "passed": 24,
+                "failed": 0
+              },
+              "all_check_records": [
+                {
+                  "id": 1,
+                  "label": "owned failure fixture uses this native run's isolated test user directory",
+                  "passed": true
+                },
+                {
+                  "id": 2,
+                  "label": "unique fault target did not exist before this fixture claimed it",
+                  "passed": true
+                },
+                {
+                  "id": 3,
+                  "label": "owned PackedScene serializes through the real ResourceSaver before fault injection",
+                  "passed": true
+                },
+                {
+                  "id": 4,
+                  "label": "saved fixture is uncached and has a complete binary resource beyond its magic",
+                  "passed": true
+                },
+                {
+                  "id": 5,
+                  "label": "fixture can truncate only its unique owned user resource",
+                  "passed": true
+                },
+                {
+                  "id": 6,
+                  "label": "only the owned resource body was replaced with the bounded binary fault",
+                  "passed": true
+                },
+                {
+                  "id": 7,
+                  "label": "corrupt owned file still passes the real PackedScene existence gate, so failure occurs after request acquisition",
+                  "passed": true
+                },
+                {
+                  "id": 8,
+                  "label": "unique owned path starts without any prior native retrieval token",
+                  "passed": true
+                },
+                {
+                  "id": 9,
+                  "label": "actual hall acquired exactly one owned native request before the worker fault",
+                  "passed": true
+                },
+                {
+                  "id": 10,
+                  "label": "real accepted binary loader worker reaches terminal FAILED before the actual hall monitor handles it",
+                  "passed": true
+                },
+                {
+                  "id": 11,
+                  "label": "actual hall monitor receives the real terminal binary-load failure",
+                  "passed": true
+                },
+                {
+                  "id": 12,
+                  "label": "actual hall terminal FAILED handling retrieves and releases its original native user token",
+                  "passed": true
+                },
+                {
+                  "id": 13,
+                  "label": "terminal failure removes the original owned request rather than retaining a stale path entry",
+                  "passed": true
+                },
+                {
+                  "id": 14,
+                  "label": "lawful retry begins only after the old failed native token has been consumed",
+                  "passed": true
+                },
+                {
+                  "id": 15,
+                  "label": "same unique path receives a fresh valid uncached PackedScene through ResourceSaver",
+                  "passed": true
+                },
+                {
+                  "id": 16,
+                  "label": "same-path lawful retry acquires its own fresh native request through the unchanged hall API",
+                  "passed": true
+                },
+                {
+                  "id": 17,
+                  "label": "fresh lawful worker result reaches READY as a real usable PackedScene",
+                  "passed": true
+                },
+                {
+                  "id": 18,
+                  "label": "returned PackedScene instantiates the exact newly saved lawful fixture",
+                  "passed": true
+                },
+                {
+                  "id": 19,
+                  "label": "lawful retry monitor consumes its fresh native token exactly once",
+                  "passed": true
+                },
+                {
+                  "id": 20,
+                  "label": "owned failure/retry owner exit closes its lifecycle and invalidates monitors",
+                  "passed": true
+                },
+                {
+                  "id": 21,
+                  "label": "no owned native token remains before deleting the unique fault file",
+                  "passed": true
+                },
+                {
+                  "id": 22,
+                  "label": "bounded negative-control cleanup releases this fixture's single remaining owned request",
+                  "passed": true
+                },
+                {
+                  "id": 23,
+                  "label": "deletion resolves to this fixture's unique file inside isolated user data",
+                  "passed": true
+                },
+                {
+                  "id": 24,
+                  "label": "fixture deletes only its unique owned file after native request cleanup",
+                  "passed": true
+                }
+              ],
+              "predicates": {
+                "counts_consistent": true,
+                "all_checks_passed": true
+              }
+            }
+          },
+          "official_runner": {
+            "scene_record_count": 1,
+            "result": "FAIL",
+            "effective_exit_code": 0,
+            "timeout": false,
+            "framework_run_id": "787503ce-3b98-48bb-9118-56baf9180f5b",
+            "runner_invocation_id": "e3a2249e-6c13-4b71-b194-7d8772318ab1",
+            "reason": "stderr_failures_2;engine_log_failures_2",
+            "raw_record": {
+              "test_name": "character_launch_failed_preload_retry_test",
+              "test_path": "tests/framework/character_launch_failed_preload_retry_test.tscn",
+              "wrapper_process_id": 20912,
+              "wrapper_started_utc": "2026-10-05T01:39:53.9344196Z",
+              "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_character_failed_preload_green_a61d40263ba642f38ac71bbdc88216d2",
+              "fixed_fps": 0,
+              "pass_marker_found": true,
+              "process_exited": true,
+              "wrapper_exit_code": 0,
+              "child_process_exit_state": "exited",
+              "execution_deadline_utc": "2026-10-05T01:40:23.9463862Z",
+              "native_exit_observed_utc": "2026-10-05T01:40:00.1458904Z",
+              "effective_exit_code": 0,
+              "timeout": false,
+              "stdout_failure_count": 0,
+              "stderr_failure_count": 2,
+              "engine_log_failure_count": 2,
+              "framework_run_id": "787503ce-3b98-48bb-9118-56baf9180f5b",
+              "framework_receipt_valid": true,
+              "result": "FAIL",
+              "reason": "stderr_failures_2;engine_log_failures_2"
+            }
+          },
+          "native_handoff_identity": {
+            "top_level_invocation_id": "e3a2249e-6c13-4b71-b194-7d8772318ab1",
+            "top_level_source_content_sha256": "d6954482ad565a6d9f61813d26e2e54b7ce9d9f3a1526a79f08a4e8e2bedddb4",
+            "per_scene_producer_record": "MISSING",
+            "per_scene_scene_id": "MISSING",
+            "per_scene_run_id": "MISSING",
+            "per_scene_source_content_sha256": "MISSING",
+            "per_scene_result": "MISSING",
+            "per_scene_effective_exit_code": "MISSING",
+            "per_scene_receipt_sha256": "MISSING"
+          },
+          "raw_hashes": {
+            "receipt_sha256": "6fbb8a716e96fd63f78a836e86b2c62171e5830ca79da9e80f59bc06ed396039",
+            "handoff_file_sha256": "92b48e03e8db55c65800773aa8fdf772bebad890c85e37ea79cdede23863a030",
+            "trace_file_or_stdout_sha256": "86e8ab268f01293944bb619043de645e37ffefb1300c5568f994b56725988ab1",
+            "native_log_sha256": {
+              "stdout": "86e8ab268f01293944bb619043de645e37ffefb1300c5568f994b56725988ab1",
+              "stderr": "f4c95aecffeac472abed106d51e13af99886fb91c7c6068f0c7c7eb9c41be978",
+              "godot": "11d66852cda3fff8ceb5f1d82f55b556c32a9526fe609eb3bf91f02aae245804"
+            },
+            "raw_log_sha256": {
+              "stdout": "86e8ab268f01293944bb619043de645e37ffefb1300c5568f994b56725988ab1",
+              "stderr": "f4c95aecffeac472abed106d51e13af99886fb91c7c6068f0c7c7eb9c41be978",
+              "godot": "11d66852cda3fff8ceb5f1d82f55b556c32a9526fe609eb3bf91f02aae245804"
+            }
+          },
+          "source_maps": {
+            "before_tested_sha": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+            "after_tested_sha": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+            "before_content_set_sha256": "d6954482ad565a6d9f61813d26e2e54b7ce9d9f3a1526a79f08a4e8e2bedddb4",
+            "after_content_set_sha256": "d6954482ad565a6d9f61813d26e2e54b7ce9d9f3a1526a79f08a4e8e2bedddb4",
+            "direct_scene_and_fixture_file_maps": [
+              {
+                "path": "tests/framework/character_launch_failed_preload_retry_test.tscn",
+                "before_sha256": "0f3ea898e3b7e63a8e1f495b2439bbc928d5235043741f5f9b5c9c3686d50854",
+                "after_sha256": "0f3ea898e3b7e63a8e1f495b2439bbc928d5235043741f5f9b5c9c3686d50854",
+                "maps_match": {
+                  "observed": "0f3ea898e3b7e63a8e1f495b2439bbc928d5235043741f5f9b5c9c3686d50854",
+                  "expected": "0f3ea898e3b7e63a8e1f495b2439bbc928d5235043741f5f9b5c9c3686d50854",
+                  "matches": true
+                }
+              },
+              {
+                "path": "tests/framework/character_launch_failed_preload_retry_test.gd",
+                "before_sha256": "d0d190721077339195ba8b43fdd44b1c94eca19777301ac5ce5db172361061dd",
+                "after_sha256": "d0d190721077339195ba8b43fdd44b1c94eca19777301ac5ce5db172361061dd",
+                "maps_match": {
+                  "observed": "d0d190721077339195ba8b43fdd44b1c94eca19777301ac5ce5db172361061dd",
+                  "expected": "d0d190721077339195ba8b43fdd44b1c94eca19777301ac5ce5db172361061dd",
+                  "matches": true
+                }
+              }
+            ],
+            "maps_file_counts": {
+              "before": 3840,
+              "after": 3840
+            },
+            "engine_version_before": "4.7.stable.official.5b4e0cb0f",
+            "engine_version_after": "4.7.stable.official.5b4e0cb0f",
+            "engine_sha256_before": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+            "engine_sha256_after": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c"
+          },
+          "trace": {
+            "path": "native_logs/character_launch_failed_preload_retry_test.stdout.log",
+            "raw_identity": {
+              "run_id": "787503ce-3b98-48bb-9118-56baf9180f5b",
+              "invocation_id": "e3a2249e-6c13-4b71-b194-7d8772318ab1",
+              "source_content_sha256": "d6954482ad565a6d9f61813d26e2e54b7ce9d9f3a1526a79f08a4e8e2bedddb4",
+              "owned_resource_path": "user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res"
+            },
+            "marker_location": {
+              "line": 4,
+              "marker": "CHARACTER_LAUNCH_FAILED_RETRY_TRACE",
+              "raw": "CHARACTER_LAUNCH_FAILED_RETRY_TRACE {\"after_exit\":{\"generation\":3,\"native_status\":0,\"path\":\"user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res\",\"request_count\":2,\"state\":\"idle\",\"tracked_paths\":[]},\"after_failed_monitor\":{\"generation\":1,\"native_status\":0,\"path\":\"user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res\",\"request_count\":1,\"state\":\"failed\",\"tracked_paths\":[]},\"after_failure_cleanup\":{\"generation\":1,\"native_status\":0,\"path\":\"user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res\",\"request_count\":1,\"state\":\"failed\",\"tracked_paths\":[]},\"after_lawful_retry_monitor\":{\"generation\":2,\"native_status\":0,\"path\":\"user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res\",\"request_count\":2,\"state\":\"ready\",\"tracked_paths\":[]},\"after_lawful_retry_request\":{\"generation\":2,\"native_status\":1,\"path\":\"user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res\",\"request_count\":2,\"state\":\"requested\",\"tracked_paths\":[\"user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res\"]},\"after_request\":{\"generation\":1,\"native_status\":1,\"path\":\"user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res\",\"request_count\":1,\"state\":\"requested\",\"tracked_paths\":[\"user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res\"]},\"before_request\":{\"generation\":0,\"native_status\":0,\"path\":\"\",\"request_count\":0,\"state\":\"idle\",\"tracked_paths\":[]},\"final_native_status\":0,\"final_red_cleanup_gets\":0,\"invocation_id\":\"e3a2249e-6c13-4b71-b194-7d8772318ab1\",\"path\":\"user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res\",\"red_failure_cleanup_gets\":0,\"run_id\":\"787503ce-3b98-48bb-9118-56baf9180f5b\",\"scope\":\"test-owned binary PackedScene fault and same-path lawful retry; no natural production-asset failure claim\",\"source_content_sha256\":\"d6954482ad565a6d9f61813d26e2e54b7ce9d9f3a1526a79f08a4e8e2bedddb4\",\"terminal_worker_before_monitor\":{\"generation\":1,\"native_status\":2,\"path\":\"user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res\",\"request_count\":1,\"state\":\"requested\",\"tracked_paths\":[\"user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res\"]}}"
+            },
+            "raw_trace": {
+              "after_exit": {
+                "generation": 3,
+                "native_status": 0,
+                "path": "user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res",
+                "request_count": 2,
+                "state": "idle",
+                "tracked_paths": []
+              },
+              "after_failed_monitor": {
+                "generation": 1,
+                "native_status": 0,
+                "path": "user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res",
+                "request_count": 1,
+                "state": "failed",
+                "tracked_paths": []
+              },
+              "after_failure_cleanup": {
+                "generation": 1,
+                "native_status": 0,
+                "path": "user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res",
+                "request_count": 1,
+                "state": "failed",
+                "tracked_paths": []
+              },
+              "after_lawful_retry_monitor": {
+                "generation": 2,
+                "native_status": 0,
+                "path": "user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res",
+                "request_count": 2,
+                "state": "ready",
+                "tracked_paths": []
+              },
+              "after_lawful_retry_request": {
+                "generation": 2,
+                "native_status": 1,
+                "path": "user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res",
+                "request_count": 2,
+                "state": "requested",
+                "tracked_paths": [
+                  "user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res"
+                ]
+              },
+              "after_request": {
+                "generation": 1,
+                "native_status": 1,
+                "path": "user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res",
+                "request_count": 1,
+                "state": "requested",
+                "tracked_paths": [
+                  "user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res"
+                ]
+              },
+              "before_request": {
+                "generation": 0,
+                "native_status": 0,
+                "path": "",
+                "request_count": 0,
+                "state": "idle",
+                "tracked_paths": []
+              },
+              "final_native_status": 0,
+              "final_red_cleanup_gets": 0,
+              "invocation_id": "e3a2249e-6c13-4b71-b194-7d8772318ab1",
+              "path": "user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res",
+              "red_failure_cleanup_gets": 0,
+              "run_id": "787503ce-3b98-48bb-9118-56baf9180f5b",
+              "scope": "test-owned binary PackedScene fault and same-path lawful retry; no natural production-asset failure claim",
+              "source_content_sha256": "d6954482ad565a6d9f61813d26e2e54b7ce9d9f3a1526a79f08a4e8e2bedddb4",
+              "terminal_worker_before_monitor": {
+                "generation": 1,
+                "native_status": 2,
+                "path": "user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res",
+                "request_count": 1,
+                "state": "requested",
+                "tracked_paths": [
+                  "user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res"
+                ]
+              }
+            },
+            "native_retrieval_and_cleanup_observations": {
+              "post_retrieval_native_statuses_zero": {
+                "observed": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "expected": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "matches": true
+              },
+              "red_failure_cleanup_gets_zero": {
+                "observed": 0,
+                "expected": 0,
+                "matches": true
+              },
+              "final_red_cleanup_gets_zero": {
+                "observed": 0,
+                "expected": 0,
+                "matches": true
+              },
+              "final_native_status_zero": {
+                "observed": 0,
+                "expected": 0,
+                "matches": true
+              },
+              "lawful_retry_same_owned_path": {
+                "observed": "user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res",
+                "expected": "user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res",
+                "matches": true
+              },
+              "lawful_retry_request_is_fresh_requested_state": {
+                "observed": true,
+                "expected": true,
+                "matches": true
+              },
+              "lawful_retry_reaches_ready": {
+                "observed": "ready",
+                "expected": "ready",
+                "matches": true
+              },
+              "trace_owned_path_is_run_scoped": {
+                "observed": true,
+                "expected": true,
+                "matches": true
+              }
+            }
+          },
+          "fault_path": {
+            "owned_user_resource_path": "user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res",
+            "path_occurrences_unique_across_error_logs": true,
+            "expected_error_lines": [
+              "ERROR: Premature end of file (EOF): 'user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res'.",
+              "ERROR: Failed loading resource: user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res."
+            ],
+            "per_log_error_predicates": {
+              "native_logs/stderr.log": {
+                "observed": [
+                  "ERROR: Premature end of file (EOF): 'user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res'.",
+                  "ERROR: Failed loading resource: user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res."
+                ],
+                "expected": [
+                  "ERROR: Premature end of file (EOF): 'user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res'.",
+                  "ERROR: Failed loading resource: user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res."
+                ],
+                "matches": true
+              },
+              "native_logs/godot.log": {
+                "observed": [
+                  "ERROR: Premature end of file (EOF): 'user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res'.",
+                  "ERROR: Failed loading resource: user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res."
+                ],
+                "expected": [
+                  "ERROR: Premature end of file (EOF): 'user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res'.",
+                  "ERROR: Failed loading resource: user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res."
+                ],
+                "matches": true
+              },
+              "raw/stderr.log": {
+                "observed": [
+                  "ERROR: Premature end of file (EOF): 'user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res'.",
+                  "ERROR: Failed loading resource: user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res."
+                ],
+                "expected": [
+                  "ERROR: Premature end of file (EOF): 'user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res'.",
+                  "ERROR: Failed loading resource: user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res."
+                ],
+                "matches": true
+              },
+              "raw/godot.log": {
+                "observed": [
+                  "ERROR: Premature end of file (EOF): 'user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res'.",
+                  "ERROR: Failed loading resource: user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res."
+                ],
+                "expected": [
+                  "ERROR: Premature end of file (EOF): 'user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res'.",
+                  "ERROR: Failed loading resource: user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res."
+                ],
+                "matches": true
+              },
+              "native_logs/stdout.log": {
+                "observed": [],
+                "expected": [],
+                "matches": true
+              },
+              "raw/stdout.log": {
+                "observed": [],
+                "expected": [],
+                "matches": true
+              }
+            },
+            "all_error_lines_from_input_logs": [
+              {
+                "line": 1,
+                "text": "ERROR: Premature end of file (EOF): 'user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res'."
+              },
+              {
+                "line": 3,
+                "text": "ERROR: Failed loading resource: user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res."
+              },
+              {
+                "line": 4,
+                "text": "ERROR: Premature end of file (EOF): 'user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res'."
+              },
+              {
+                "line": 6,
+                "text": "ERROR: Failed loading resource: user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res."
+              },
+              {
+                "line": 1,
+                "text": "ERROR: Premature end of file (EOF): 'user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res'."
+              },
+              {
+                "line": 3,
+                "text": "ERROR: Failed loading resource: user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res."
+              },
+              {
+                "line": 4,
+                "text": "ERROR: Premature end of file (EOF): 'user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res'."
+              },
+              {
+                "line": 6,
+                "text": "ERROR: Failed loading resource: user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res."
+              }
+            ]
+          },
+          "native_logs": {
+            "native_logs/stdout.log": {
+              "status": "READ",
+              "error_lines": [],
+              "script_error_lines": [],
+              "warning_lines": [],
+              "all_lines": 5
+            },
+            "native_logs/stderr.log": {
+              "status": "READ",
+              "error_lines": [
+                {
+                  "line": 1,
+                  "text": "ERROR: Premature end of file (EOF): 'user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res'."
+                },
+                {
+                  "line": 3,
+                  "text": "ERROR: Failed loading resource: user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res."
+                }
+              ],
+              "script_error_lines": [],
+              "warning_lines": [],
+              "all_lines": 4
+            },
+            "native_logs/godot.log": {
+              "status": "READ",
+              "error_lines": [
+                {
+                  "line": 4,
+                  "text": "ERROR: Premature end of file (EOF): 'user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res'."
+                },
+                {
+                  "line": 6,
+                  "text": "ERROR: Failed loading resource: user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res."
+                }
+              ],
+              "script_error_lines": [],
+              "warning_lines": [],
+              "all_lines": 9
+            },
+            "raw/stdout.log": {
+              "status": "READ",
+              "error_lines": [],
+              "script_error_lines": [],
+              "warning_lines": [],
+              "all_lines": 5
+            },
+            "raw/stderr.log": {
+              "status": "READ",
+              "error_lines": [
+                {
+                  "line": 1,
+                  "text": "ERROR: Premature end of file (EOF): 'user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res'."
+                },
+                {
+                  "line": 3,
+                  "text": "ERROR: Failed loading resource: user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res."
+                }
+              ],
+              "script_error_lines": [],
+              "warning_lines": [],
+              "all_lines": 4
+            },
+            "raw/godot.log": {
+              "status": "READ",
+              "error_lines": [
+                {
+                  "line": 4,
+                  "text": "ERROR: Premature end of file (EOF): 'user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res'."
+                },
+                {
+                  "line": 6,
+                  "text": "ERROR: Failed loading resource: user://character_preload_owned_failure_787503ce-3b98-48bb-9118-56baf9180f5b_107508401721.res."
+                }
+              ],
+              "script_error_lines": [],
+              "warning_lines": [],
+              "all_lines": 9
+            }
+          },
+          "predicates": {
+            "runner_remains_fail": {
+              "observed": "FAIL",
+              "expected": "FAIL",
+              "matches": true
+            },
+            "native_exit_zero": {
+              "observed": 0,
+              "expected": 0,
+              "matches": true
+            },
+            "native_not_timed_out": {
+              "observed": false,
+              "expected": false,
+              "matches": true
+            },
+            "receipt_expected_count": {
+              "observed": 24,
+              "expected": 24,
+              "matches": true
+            },
+            "receipt_counts_consistent": {
+              "observed": true,
+              "expected": true,
+              "matches": true
+            },
+            "every_receipt_check_passed": {
+              "observed": true,
+              "expected": true,
+              "matches": true
+            },
+            "run_id_matches_runner": {
+              "observed": "787503ce-3b98-48bb-9118-56baf9180f5b",
+              "expected": "787503ce-3b98-48bb-9118-56baf9180f5b",
+              "matches": true
+            },
+            "invocation_matches_runner": {
+              "observed": "e3a2249e-6c13-4b71-b194-7d8772318ab1",
+              "expected": "e3a2249e-6c13-4b71-b194-7d8772318ab1",
+              "matches": true
+            },
+            "run_id_matches_native_handoff_producer_when_present": "MISSING",
+            "scene_id_matches_native_handoff_producer_when_present": "MISSING",
+            "invocation_matches_native_handoff": {
+              "observed": "e3a2249e-6c13-4b71-b194-7d8772318ab1",
+              "expected": "e3a2249e-6c13-4b71-b194-7d8772318ab1",
+              "matches": true
+            },
+            "source_matches_native_handoff": {
+              "observed": "d6954482ad565a6d9f61813d26e2e54b7ce9d9f3a1526a79f08a4e8e2bedddb4",
+              "expected": "d6954482ad565a6d9f61813d26e2e54b7ce9d9f3a1526a79f08a4e8e2bedddb4",
+              "matches": true
+            },
+            "source_matches_native_handoff_producer_when_present": "MISSING",
+            "handoff_receipt_hash_matches_when_producer_record_present": "MISSING",
+            "producer_result_matches_runner_when_present": "MISSING",
+            "producer_exit_matches_runner_when_present": "MISSING",
+            "source_matches_before_after_maps": {
+              "observed": "d6954482ad565a6d9f61813d26e2e54b7ce9d9f3a1526a79f08a4e8e2bedddb4",
+              "expected": "d6954482ad565a6d9f61813d26e2e54b7ce9d9f3a1526a79f08a4e8e2bedddb4",
+              "matches": true
+            },
+            "source_matches_after_map": {
+              "observed": "d6954482ad565a6d9f61813d26e2e54b7ce9d9f3a1526a79f08a4e8e2bedddb4",
+              "expected": "d6954482ad565a6d9f61813d26e2e54b7ce9d9f3a1526a79f08a4e8e2bedddb4",
+              "matches": true
+            },
+            "direct_scene_fixture_map_entries_match": {
+              "observed": true,
+              "expected": true,
+              "matches": true
+            },
+            "engine_before_after_equal": {
+              "observed": true,
+              "expected": true,
+              "matches": true
+            },
+            "trace_run_identity_matches_receipt": {
+              "observed": "787503ce-3b98-48bb-9118-56baf9180f5b",
+              "expected": "787503ce-3b98-48bb-9118-56baf9180f5b",
+              "matches": true
+            },
+            "trace_invocation_identity_matches_receipt": {
+              "observed": "e3a2249e-6c13-4b71-b194-7d8772318ab1",
+              "expected": "e3a2249e-6c13-4b71-b194-7d8772318ab1",
+              "matches": true
+            },
+            "trace_source_identity_matches_receipt": {
+              "observed": "d6954482ad565a6d9f61813d26e2e54b7ce9d9f3a1526a79f08a4e8e2bedddb4",
+              "expected": "d6954482ad565a6d9f61813d26e2e54b7ce9d9f3a1526a79f08a4e8e2bedddb4",
+              "matches": true
+            },
+            "owned_path_matches_trace_and_errors": {
+              "observed": true,
+              "expected": true,
+              "matches": true
+            },
+            "owned_path_contains_run_id": {
+              "observed": true,
+              "expected": true,
+              "matches": true
+            },
+            "raw_native_stdout_hash_equal": {
+              "observed": "86e8ab268f01293944bb619043de645e37ffefb1300c5568f994b56725988ab1",
+              "expected": "86e8ab268f01293944bb619043de645e37ffefb1300c5568f994b56725988ab1",
+              "matches": true
+            },
+            "raw_native_stderr_hash_equal": {
+              "observed": "f4c95aecffeac472abed106d51e13af99886fb91c7c6068f0c7c7eb9c41be978",
+              "expected": "f4c95aecffeac472abed106d51e13af99886fb91c7c6068f0c7c7eb9c41be978",
+              "matches": true
+            },
+            "raw_native_engine_log_hash_equal": {
+              "observed": "11d66852cda3fff8ceb5f1d82f55b556c32a9526fe609eb3bf91f02aae245804",
+              "expected": "11d66852cda3fff8ceb5f1d82f55b556c32a9526fe609eb3bf91f02aae245804",
+              "matches": true
+            },
+            "no_extra_error_warning_or_script_error": {
+              "observed": true,
+              "expected": true,
+              "matches": true
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "direct_fixture_sources": [
+    {
+      "scene_id": "root_failed_caster_request_test",
+      "files": [
+        {
+          "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/tests/framework/root_failed_caster_request_test.tscn",
+          "sha256": "fd644cc182a9bfb4d41473c23c3b4469f6ae09719012daed111c45ca3a2ebe1d",
+          "bytes": 215,
+          "line_count": 6,
+          "status": "READ"
+        },
+        {
+          "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/tests/framework/root_failed_caster_request_test.gd",
+          "sha256": "8fd13e8ad9402bde4df50d5e6b78e0928d5922146d0e06d7a917a8a71b729550",
+          "bytes": 5897,
+          "line_count": 110,
+          "status": "READ"
+        }
+      ],
+      "line_references": [
+        {
+          "path": "tests/framework/root_failed_caster_request_test.tscn",
+          "line": 3,
+          "excerpt": "[ext_resource type=\"Script\" path=\"res://tests/framework/root_failed_caster_request_test.gd\" id=\"1\"]"
+        },
+        {
+          "path": "tests/framework/root_failed_caster_request_test.tscn",
+          "line": 6,
+          "excerpt": "script = ExtResource(\"1\")"
+        },
+        {
+          "path": "tests/framework/root_failed_caster_request_test.gd",
+          "line": 28,
+          "excerpt": "var status := ResourceLoader.load_threaded_get_status(path)"
+        },
+        {
+          "path": "tests/framework/root_failed_caster_request_test.gd",
+          "line": 33,
+          "excerpt": "\"native_status_after\":ResourceLoader.load_threaded_get_status(path)})"
+        },
+        {
+          "path": "tests/framework/root_failed_caster_request_test.gd",
+          "line": 64,
+          "excerpt": "# Same exact path, valid bytes, same ordinary queue. No fixture get/clear"
+        },
+        {
+          "path": "tests/framework/root_failed_caster_request_test.gd",
+          "line": 69,
+          "excerpt": "check(ResourceSaver.save(texture, path) == OK, \"same test-owned path now contains a valid native Texture2D\")"
+        },
+        {
+          "path": "tests/framework/root_failed_caster_request_test.gd",
+          "line": 77,
+          "excerpt": "and ResourceLoader.load_threaded_get_status(path) == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE,"
+        },
+        {
+          "path": "tests/framework/root_failed_caster_request_test.gd",
+          "line": 83,
+          "excerpt": "if ResourceLoader.load_threaded_get_status(path) == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE: break"
+        },
+        {
+          "path": "tests/framework/root_failed_caster_request_test.gd",
+          "line": 86,
+          "excerpt": "check(ResourceLoader.load_threaded_get_status(path) == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE,"
+        },
+        {
+          "path": "tests/framework/root_failed_caster_request_test.gd",
+          "line": 96,
+          "excerpt": "trace.store_string(JSON.stringify({\"run_id\":nonce,"
+        },
+        {
+          "path": "tests/framework/root_failed_caster_request_test.gd",
+          "line": 99,
+          "excerpt": "\"fixture_path\":path, \"attempts\":attempts, \"negative_cleanup_gets\":cleanup_gets,"
+        },
+        {
+          "path": "tests/framework/root_failed_caster_request_test.gd",
+          "line": 100,
+          "excerpt": "\"scope\":\"actual Root ordinary warm channel with a test-owned corrupt binary resource and same-path lawful retry; expected native errors preserved; not a naturally corrupt game asset or normal UI reproduction\"}))"
+        }
+      ]
+    },
+    {
+      "scene_id": "character_launch_failed_preload_retry_test",
+      "files": [
+        {
+          "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/tests/framework/character_launch_failed_preload_retry_test.tscn",
+          "sha256": "0f3ea898e3b7e63a8e1f495b2439bbc928d5235043741f5f9b5c9c3686d50854",
+          "bytes": 236,
+          "line_count": 6,
+          "status": "READ"
+        },
+        {
+          "path": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/tests/framework/character_launch_failed_preload_retry_test.gd",
+          "sha256": "d0d190721077339195ba8b43fdd44b1c94eca19777301ac5ce5db172361061dd",
+          "bytes": 10890,
+          "line_count": 183,
+          "status": "READ"
+        }
+      ],
+      "line_references": [
+        {
+          "path": "tests/framework/character_launch_failed_preload_retry_test.tscn",
+          "line": 3,
+          "excerpt": "[ext_resource type=\"Script\" path=\"res://tests/framework/character_launch_failed_preload_retry_test.gd\" id=\"1\"]"
+        },
+        {
+          "path": "tests/framework/character_launch_failed_preload_retry_test.tscn",
+          "line": 6,
+          "excerpt": "script = ExtResource(\"1\")"
+        },
+        {
+          "path": "tests/framework/character_launch_failed_preload_retry_test.gd",
+          "line": 34,
+          "excerpt": "trace[\"path\"] = owned_path"
+        },
+        {
+          "path": "tests/framework/character_launch_failed_preload_retry_test.gd",
+          "line": 71,
+          "excerpt": "check(int(trace.before_request.native_status) == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE,"
+        },
+        {
+          "path": "tests/framework/character_launch_failed_preload_retry_test.gd",
+          "line": 100,
+          "excerpt": "var failure_cleanup_gets := 0"
+        },
+        {
+          "path": "tests/framework/character_launch_failed_preload_retry_test.gd",
+          "line": 103,
+          "excerpt": "failure_cleanup_gets = 1"
+        },
+        {
+          "path": "tests/framework/character_launch_failed_preload_retry_test.gd",
+          "line": 105,
+          "excerpt": "trace[\"red_failure_cleanup_gets\"] = failure_cleanup_gets"
+        },
+        {
+          "path": "tests/framework/character_launch_failed_preload_retry_test.gd",
+          "line": 120,
+          "excerpt": "trace[\"after_lawful_retry_request\"] = _snapshot(owner)"
+        },
+        {
+          "path": "tests/framework/character_launch_failed_preload_retry_test.gd",
+          "line": 125,
+          "excerpt": "trace[\"after_lawful_retry_monitor\"] = _snapshot(owner)"
+        },
+        {
+          "path": "tests/framework/character_launch_failed_preload_retry_test.gd",
+          "line": 153,
+          "excerpt": "\"tracked_paths\": owner._launch_scene_preload_requests.keys(), \"native_status\": ResourceLoader.load_threaded_get_status(owned_path)}"
+        },
+        {
+          "path": "tests/framework/character_launch_failed_preload_retry_test.gd",
+          "line": 166,
+          "excerpt": "var final_cleanup_gets := 0"
+        },
+        {
+          "path": "tests/framework/character_launch_failed_preload_retry_test.gd",
+          "line": 169,
+          "excerpt": "final_cleanup_gets = 1"
+        },
+        {
+          "path": "tests/framework/character_launch_failed_preload_retry_test.gd",
+          "line": 170,
+          "excerpt": "trace[\"final_red_cleanup_gets\"] = final_cleanup_gets"
+        },
+        {
+          "path": "tests/framework/character_launch_failed_preload_retry_test.gd",
+          "line": 171,
+          "excerpt": "trace[\"final_native_status\"] = ResourceLoader.load_threaded_get_status(owned_path)"
+        },
+        {
+          "path": "tests/framework/character_launch_failed_preload_retry_test.gd",
+          "line": 172,
+          "excerpt": "check(int(trace.final_native_status) == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE, \"bounded negative-control cleanup releases this fixture's single remaining owned request\")"
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Boolean fields are mechanical predicates for main-controller review, not production correctness or final PASS."
+  ],
+  "input_vs_known_green_comparisons": [
+    {
+      "scene_id": "root_failed_caster_request_test",
+      "input": {
+        "archive": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_acceleration_owned_negative_final_104643_820621",
+        "run_id": "c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4",
+        "invocation_id": "112e05e5-1f84-48c9-858b-b299d15929bb",
+        "source_content_sha256": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+        "runner_result": "FAIL",
+        "receipt_status": "PASS",
+        "receipt_checks": {
+          "count": 14,
+          "passed": 14,
+          "failed": 0
+        },
+        "hashes": {
+          "receipt_sha256": "1f25cb5f6a5c5039a09385a101e09b82f23ac413c1c3be126a6fcbb872ca0c66",
+          "handoff_file_sha256": "58f3addd6d49d46e16b47683a0d327f1f57cb42e663d8dbab0c358cef00f014b",
+          "trace_file_or_stdout_sha256": "70e314c3799620824d61d6762552e3d4a8a90666bac172c5323caf510d97ae38",
+          "native_log_sha256": {
+            "stdout": "3b931d2a058474f72b7aa53894d9c4c435c344e714c750c9751832e69ebfbf76",
+            "stderr": "6f210f75343b8dfeda436ced78c52316c0a14bb8b08af138da4c505a7de12be6",
+            "godot": "73b2acc5073e5081adf01107986f86b343994ac24ab32cdca04100dcc7799455"
+          },
+          "raw_log_sha256": {
+            "stdout": "3b931d2a058474f72b7aa53894d9c4c435c344e714c750c9751832e69ebfbf76",
+            "stderr": "6f210f75343b8dfeda436ced78c52316c0a14bb8b08af138da4c505a7de12be6",
+            "godot": "73b2acc5073e5081adf01107986f86b343994ac24ab32cdca04100dcc7799455"
+          }
+        }
+      },
+      "known_green_reference": {
+        "archive": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_failed_caster_request_green_091908_435805",
+        "run_id": "d76739d0-cc08-47f2-b8d1-b7cd3b81f356",
+        "invocation_id": "7fd6c44c-c42c-482e-961c-bc03e1b3455f",
+        "source_content_sha256": "a7999b4002c8498f30810caaf7c3fa0e6f6857f65a2682bbeb471883e1867a28",
+        "runner_result": "FAIL",
+        "receipt_status": "PASS",
+        "receipt_checks": {
+          "count": 14,
+          "passed": 14,
+          "failed": 0
+        },
+        "hashes": {
+          "receipt_sha256": "9874642ce0281e7ba316189cf96ef69a80bf92ab954f37c1f2d0e380ae291146",
+          "handoff_file_sha256": "2ba98de493656d784c6cfd30dd7e8a9ce2f5ae782d246a6d8df2b9d9867ad2fd",
+          "trace_file_or_stdout_sha256": "69546d8d9441e50a3dc777db03a81ac2ff23d62ad95644f180702cbb6d957dc4",
+          "native_log_sha256": {
+            "stdout": "9b59860821cb1f500801de027a30bd130ec351fadabc5bc43fed727b9fe3af54",
+            "stderr": "af6fce52f9464fcda096cfec851fa76c9abad3792e6045661c9584ad9eb26c67",
+            "godot": "f20196387952d4cce0fc7cab31e208f121a30ee609706f021ec1befde08d18f9"
+          },
+          "raw_log_sha256": {
+            "stdout": "9b59860821cb1f500801de027a30bd130ec351fadabc5bc43fed727b9fe3af54",
+            "stderr": "af6fce52f9464fcda096cfec851fa76c9abad3792e6045661c9584ad9eb26c67",
+            "godot": "f20196387952d4cce0fc7cab31e208f121a30ee609706f021ec1befde08d18f9"
+          }
+        }
+      },
+      "field_comparisons": {
+        "same_source_content_sha256": false,
+        "same_run_id": false,
+        "same_invocation_id": false,
+        "receipt_sha256_equal": false,
+        "handoff_sha256_equal": false,
+        "native_stdout_sha256_equal": false,
+        "native_stderr_sha256_equal": false,
+        "native_engine_log_sha256_equal": false,
+        "runner_status_equal": true
+      }
+    },
+    {
+      "scene_id": "character_launch_failed_preload_retry_test",
+      "input": {
+        "archive": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_acceleration_owned_negative_final_104643_820621",
+        "run_id": "f6771d0b-1eef-4c13-a5d1-fb79071e271d",
+        "invocation_id": "112e05e5-1f84-48c9-858b-b299d15929bb",
+        "source_content_sha256": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+        "runner_result": "FAIL",
+        "receipt_status": "PASS",
+        "receipt_checks": {
+          "count": 24,
+          "passed": 24,
+          "failed": 0
+        },
+        "hashes": {
+          "receipt_sha256": "b90b5d23c4cec7f7f4dafe9d6f8209daf034ce90d134ce53521d28a053e52308",
+          "handoff_file_sha256": "58f3addd6d49d46e16b47683a0d327f1f57cb42e663d8dbab0c358cef00f014b",
+          "trace_file_or_stdout_sha256": "91dd07952921aad41de6d63b8037099cc0f0b27b5239c9bca7e472bc3e3001cd",
+          "native_log_sha256": {
+            "stdout": "91dd07952921aad41de6d63b8037099cc0f0b27b5239c9bca7e472bc3e3001cd",
+            "stderr": "cba9ecb45f314670284133e986b3ce292205fe61f2cddcc3cc601020cafc4ebc",
+            "godot": "986cbd606f77ee80698ac28d1eaa5d8248e991091aabe723c2de451b83cb3ad9"
+          },
+          "raw_log_sha256": {
+            "stdout": "91dd07952921aad41de6d63b8037099cc0f0b27b5239c9bca7e472bc3e3001cd",
+            "stderr": "cba9ecb45f314670284133e986b3ce292205fe61f2cddcc3cc601020cafc4ebc",
+            "godot": "986cbd606f77ee80698ac28d1eaa5d8248e991091aabe723c2de451b83cb3ad9"
+          }
+        }
+      },
+      "known_green_reference": {
+        "archive": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/outputs/r3_takeover/20260930/validation/periodic_dispatch_character_failed_preload_green_093951_637852",
+        "run_id": "787503ce-3b98-48bb-9118-56baf9180f5b",
+        "invocation_id": "e3a2249e-6c13-4b71-b194-7d8772318ab1",
+        "source_content_sha256": "d6954482ad565a6d9f61813d26e2e54b7ce9d9f3a1526a79f08a4e8e2bedddb4",
+        "runner_result": "FAIL",
+        "receipt_status": "PASS",
+        "receipt_checks": {
+          "count": 24,
+          "passed": 24,
+          "failed": 0
+        },
+        "hashes": {
+          "receipt_sha256": "6fbb8a716e96fd63f78a836e86b2c62171e5830ca79da9e80f59bc06ed396039",
+          "handoff_file_sha256": "92b48e03e8db55c65800773aa8fdf772bebad890c85e37ea79cdede23863a030",
+          "trace_file_or_stdout_sha256": "86e8ab268f01293944bb619043de645e37ffefb1300c5568f994b56725988ab1",
+          "native_log_sha256": {
+            "stdout": "86e8ab268f01293944bb619043de645e37ffefb1300c5568f994b56725988ab1",
+            "stderr": "f4c95aecffeac472abed106d51e13af99886fb91c7c6068f0c7c7eb9c41be978",
+            "godot": "11d66852cda3fff8ceb5f1d82f55b556c32a9526fe609eb3bf91f02aae245804"
+          },
+          "raw_log_sha256": {
+            "stdout": "86e8ab268f01293944bb619043de645e37ffefb1300c5568f994b56725988ab1",
+            "stderr": "f4c95aecffeac472abed106d51e13af99886fb91c7c6068f0c7c7eb9c41be978",
+            "godot": "11d66852cda3fff8ceb5f1d82f55b556c32a9526fe609eb3bf91f02aae245804"
+          }
+        }
+      },
+      "field_comparisons": {
+        "same_source_content_sha256": false,
+        "same_run_id": false,
+        "same_invocation_id": false,
+        "receipt_sha256_equal": false,
+        "handoff_sha256_equal": false,
+        "native_stdout_sha256_equal": false,
+        "native_stderr_sha256_equal": false,
+        "native_engine_log_sha256_equal": false,
+        "runner_status_equal": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,386 @@
+{
+  "status": "PASS",
+  "scope": "stage receipt and raw byte associations only; not additional final-source execution",
+  "native_attempts": 6,
+  "preserved_runner_fail": 1,
+  "runs": [
+    {
+      "name": "periodic_dispatch_ticket_cancel_red_exact_20261005_031211_342414",
+      "status": "FAIL",
+      "source_content_sha256": "59b93538671c8a1fee4bcc14fe84e3f4ce6d4ceeea6ad713664e540ae4d13e74",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/accepted_binding_snapshot_test.tscn' -TimeoutSeconds 30"
+      ],
+      "rows": [
+        {
+          "scene_id": "accepted_binding_snapshot_test",
+          "run_id": "99dc4dd2-bd99-4b28-82ed-0963ce86c576",
+          "invocation_id": "6af635d8-f20f-446b-ad43-06586829c753",
+          "source_content_sha256": "59b93538671c8a1fee4bcc14fe84e3f4ce6d4ceeea6ad713664e540ae4d13e74",
+          "runner_status": "FAIL",
+          "native_exit": 1,
+          "timeout": false,
+          "receipt_count": 81,
+          "receipt_failed": 14,
+          "receipt_sha256": "48f67bbad493812b29244b84172b9e86c6af496a66ebd7e041e9db1dcbe5a4a8"
+        }
+      ]
+    },
+    {
+      "name": "periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706",
+      "status": "PASS",
+      "source_content_sha256": "95fc97431d6862afb27e7174e5b6d97e4412151c869ddd36936615213e53895a",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/accepted_binding_snapshot_test.tscn','tests/framework/feature_cue_pool_reuse_test.tscn','tests/framework/feature_cue_audio_replacement_test.tscn','tests/framework/feature_cue_actor_retirement_test.tscn','tests/framework/feature_cue_actor_retirement_reentry_test.tscn' -TimeoutSeconds 30"
+      ],
+      "rows": [
+        {
+          "scene_id": "accepted_binding_snapshot_test",
+          "run_id": "82414e39-3f38-4b52-9caf-1cd405d1e26e",
+          "invocation_id": "8156b98c-ea92-4824-acc2-9bc0e721995f",
+          "source_content_sha256": "95fc97431d6862afb27e7174e5b6d97e4412151c869ddd36936615213e53895a",
+          "runner_status": "PASS",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 81,
+          "receipt_failed": 0,
+          "receipt_sha256": "d4d0e2d4bbd2924dcd89e06b219a06e41ef0b7455583927074d899f417c2e853"
+        },
+        {
+          "scene_id": "feature_cue_pool_reuse_test",
+          "run_id": "f4976b42-241e-453d-8cdc-26c1610f73d2",
+          "invocation_id": "8156b98c-ea92-4824-acc2-9bc0e721995f",
+          "source_content_sha256": "95fc97431d6862afb27e7174e5b6d97e4412151c869ddd36936615213e53895a",
+          "runner_status": "PASS",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 49,
+          "receipt_failed": 0,
+          "receipt_sha256": "89eec49367c42d4b78c4e0c8a6afabd9a13fce1fa3d217183cada33233901d03"
+        },
+        {
+          "scene_id": "feature_cue_audio_replacement_test",
+          "run_id": "06395cde-6b00-4a8d-85de-7555bfd8832c",
+          "invocation_id": "8156b98c-ea92-4824-acc2-9bc0e721995f",
+          "source_content_sha256": "95fc97431d6862afb27e7174e5b6d97e4412151c869ddd36936615213e53895a",
+          "runner_status": "PASS",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 27,
+          "receipt_failed": 0,
+          "receipt_sha256": "d4ec776b1cd7b8c5409baef9bf4e0929f4040c883e67343a1299d062054aed1a"
+        },
+        {
+          "scene_id": "feature_cue_actor_retirement_test",
+          "run_id": "34605678-e456-4e9f-9a1b-2dc171632886",
+          "invocation_id": "8156b98c-ea92-4824-acc2-9bc0e721995f",
+          "source_content_sha256": "95fc97431d6862afb27e7174e5b6d97e4412151c869ddd36936615213e53895a",
+          "runner_status": "PASS",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 23,
+          "receipt_failed": 0,
+          "receipt_sha256": "0abb2cd4dad5ce1d8d33e5086c173d020ceee8066777fa798f37376f63e50f21"
+        },
+        {
+          "scene_id": "feature_cue_actor_retirement_reentry_test",
+          "run_id": "9e3de8c8-78fb-4f5b-b77d-89dba61e56aa",
+          "invocation_id": "8156b98c-ea92-4824-acc2-9bc0e721995f",
+          "source_content_sha256": "95fc97431d6862afb27e7174e5b6d97e4412151c869ddd36936615213e53895a",
+          "runner_status": "PASS",
+          "native_exit": 0,
+          "timeout": false,
+          "receipt_count": 19,
+          "receipt_failed": 0,
+          "receipt_sha256": "3b1b455554f6a3df29e5ede02a2cbfc223c812c19494f62878451e1939eca2fe"
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_red_exact_20261005_031211_342414/before.json",
+      "bytes": 519782,
+      "sha256": "52533f4e38a48403ea71563d9d6b1e1fdba3c10df3ad8a7e96185d2d448e3a84"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_red_exact_20261005_031211_342414/after.json",
+      "bytes": 519782,
+      "sha256": "ad790f788e55b963b1c5e105146850811d479e8f2f799fa7f062b2e0473de1e8"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_red_exact_20261005_031211_342414/validation.json",
+      "bytes": 378,
+      "sha256": "67401d52a55288ff6bc31d16b77db8185e621270fe5e83312be7ffddce726be5"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_red_exact_20261005_031211_342414/runner_results.json",
+      "bytes": 2406,
+      "sha256": "46c7f986cf54a5c0459f9a1f77d6d441907e4450f271a3a7a86b30271c279985"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_red_exact_20261005_031211_342414/runner.log",
+      "bytes": 2072,
+      "sha256": "ad0f932726ebbf904f57ec8709491e267c15f355275f898f5a0bbcc4164c77c2"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_red_exact_20261005_031211_342414/framework/accepted_binding_snapshot_test.result.json",
+      "bytes": 13111,
+      "sha256": "48f67bbad493812b29244b84172b9e86c6af496a66ebd7e041e9db1dcbe5a4a8"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_red_exact_20261005_031211_342414/framework/native_handoffs.json",
+      "bytes": 735,
+      "sha256": "00e7752a60bf5af442214a5b5dc39ac66a72f8ba37e4df07226c4d88b98cfe90"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_red_exact_20261005_031211_342414/raw/accepted_binding_snapshot_test.godot.log",
+      "bytes": 1596,
+      "sha256": "06b8da92dd5e61fa847905c51419857bbb756e0f9425784534a85b8b657c639e"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_red_exact_20261005_031211_342414/raw/accepted_binding_snapshot_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_red_exact_20261005_031211_342414/raw/accepted_binding_snapshot_test.stdout.log",
+      "bytes": 1600,
+      "sha256": "7b5b2fbdd1123f7137628902dd38e86c37131afe1c447abcce5b2ec92ae9215e"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_red_exact_20261005_031211_342414/native_logs/accepted_binding_snapshot_test.godot.log",
+      "bytes": 1596,
+      "sha256": "06b8da92dd5e61fa847905c51419857bbb756e0f9425784534a85b8b657c639e"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_red_exact_20261005_031211_342414/native_logs/accepted_binding_snapshot_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_red_exact_20261005_031211_342414/native_logs/accepted_binding_snapshot_test.stdout.log",
+      "bytes": 1600,
+      "sha256": "7b5b2fbdd1123f7137628902dd38e86c37131afe1c447abcce5b2ec92ae9215e"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/before.json",
+      "bytes": 519782,
+      "sha256": "a65ce2a8a81863acd8979c57ba6566e603a4c95a778cf9b180824bf1eff848a9"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/after.json",
+      "bytes": 519782,
+      "sha256": "830bb40b4783f5db0cd84add5720e33a57ffc9da8af416ce511970e9ffe51b98"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/validation.json",
+      "bytes": 609,
+      "sha256": "adc29d4277075746a7d2330804a81dc3da13d70a9e2337775db42fe57f9fd6e8"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/runner_results.json",
+      "bytes": 8394,
+      "sha256": "19850775f6e995133aa8b5ce0804efa46f23eb38ce0248838767905c69ed96d8"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/runner.log",
+      "bytes": 430,
+      "sha256": "ac9da5f3d6aed8ef394859791e99b8b86f6ebf3d65cafb740e37c4a76750097a"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/framework/accepted_binding_snapshot_test.result.json",
+      "bytes": 13101,
+      "sha256": "d4d0e2d4bbd2924dcd89e06b219a06e41ef0b7455583927074d899f417c2e853"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/framework/feature_cue_actor_retirement_reentry_test.result.json",
+      "bytes": 3432,
+      "sha256": "3b1b455554f6a3df29e5ede02a2cbfc223c812c19494f62878451e1939eca2fe"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/framework/feature_cue_actor_retirement_test.result.json",
+      "bytes": 3901,
+      "sha256": "0abb2cd4dad5ce1d8d33e5086c173d020ceee8066777fa798f37376f63e50f21"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/framework/feature_cue_audio_replacement_test.result.json",
+      "bytes": 4581,
+      "sha256": "d4ec776b1cd7b8c5409baef9bf4e0929f4040c883e67343a1299d062054aed1a"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/framework/feature_cue_pool_reuse_test.result.json",
+      "bytes": 7344,
+      "sha256": "89eec49367c42d4b78c4e0c8a6afabd9a13fce1fa3d217183cada33233901d03"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/framework/native_handoffs.json",
+      "bytes": 5406,
+      "sha256": "f9d1a85decd407da48d975f5ebbef96f3febb21c8b63aa4195b5d80520e449c4"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/raw/accepted_binding_snapshot_test.godot.log",
+      "bytes": 221,
+      "sha256": "adce80679a72afc5acd1ac536a0afff72b2199a3f99b243d3c82237e02211ac4"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/raw/accepted_binding_snapshot_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/raw/accepted_binding_snapshot_test.stdout.log",
+      "bytes": 225,
+      "sha256": "85a72ded8b43cab74114ff3566deadb1b35f4192b1acae4559f350de4b441c95"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/raw/feature_cue_actor_retirement_reentry_test.godot.log",
+      "bytes": 6302,
+      "sha256": "3894023188487a5630b7aa754866ba016ad4cb4492538a41cfe8f59eab72a002"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/raw/feature_cue_actor_retirement_reentry_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/raw/feature_cue_actor_retirement_reentry_test.stdout.log",
+      "bytes": 6313,
+      "sha256": "fe7178b0b734d206f0bc4406b27398ea7a507628964a7566b4ddd5312a6b1b7e"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/raw/feature_cue_actor_retirement_test.godot.log",
+      "bytes": 8568,
+      "sha256": "a5076b9431de76d4dd0a00120daeaa026fcf9756f9f85c30f713297334eb139c"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/raw/feature_cue_actor_retirement_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/raw/feature_cue_actor_retirement_test.stdout.log",
+      "bytes": 8579,
+      "sha256": "43d441873e45c78f187ecfa514e680235291c74b40b23354b352d73e78ab8b7d"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/raw/feature_cue_audio_replacement_test.godot.log",
+      "bytes": 9267,
+      "sha256": "77694aed6a850209d0e488cf52980d62a6d279e3886a33952c1078ec7dd5eb8e"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/raw/feature_cue_audio_replacement_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/raw/feature_cue_audio_replacement_test.stdout.log",
+      "bytes": 9278,
+      "sha256": "e7612210163eca1ea612016f5c00a7e8a42e84612e5cd6b81d0d8cfc31278ad7"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/raw/feature_cue_pool_reuse_test.godot.log",
+      "bytes": 7392,
+      "sha256": "e88dadca8e8436750e73fa578809ee12ad119a838ffec78e76a42eae27a2d843"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/raw/feature_cue_pool_reuse_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/raw/feature_cue_pool_reuse_test.stdout.log",
+      "bytes": 7403,
+      "sha256": "d329545134fbec1c987252c93008b20ba8b3e20b12f86dcdb5f8171b84d4b444"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/native_logs/accepted_binding_snapshot_test.godot.log",
+      "bytes": 221,
+      "sha256": "adce80679a72afc5acd1ac536a0afff72b2199a3f99b243d3c82237e02211ac4"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/native_logs/accepted_binding_snapshot_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/native_logs/accepted_binding_snapshot_test.stdout.log",
+      "bytes": 225,
+      "sha256": "85a72ded8b43cab74114ff3566deadb1b35f4192b1acae4559f350de4b441c95"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/native_logs/feature_cue_actor_retirement_reentry_test.godot.log",
+      "bytes": 6302,
+      "sha256": "3894023188487a5630b7aa754866ba016ad4cb4492538a41cfe8f59eab72a002"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/native_logs/feature_cue_actor_retirement_reentry_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/native_logs/feature_cue_actor_retirement_reentry_test.stdout.log",
+      "bytes": 6313,
+      "sha256": "fe7178b0b734d206f0bc4406b27398ea7a507628964a7566b4ddd5312a6b1b7e"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/native_logs/feature_cue_actor_retirement_test.godot.log",
+      "bytes": 8568,
+      "sha256": "a5076b9431de76d4dd0a00120daeaa026fcf9756f9f85c30f713297334eb139c"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/native_logs/feature_cue_actor_retirement_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/native_logs/feature_cue_actor_retirement_test.stdout.log",
+      "bytes": 8579,
+      "sha256": "43d441873e45c78f187ecfa514e680235291c74b40b23354b352d73e78ab8b7d"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/native_logs/feature_cue_audio_replacement_test.godot.log",
+      "bytes": 9267,
+      "sha256": "77694aed6a850209d0e488cf52980d62a6d279e3886a33952c1078ec7dd5eb8e"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/native_logs/feature_cue_audio_replacement_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/native_logs/feature_cue_audio_replacement_test.stdout.log",
+      "bytes": 9278,
+      "sha256": "e7612210163eca1ea612016f5c00a7e8a42e84612e5cd6b81d0d8cfc31278ad7"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/native_logs/feature_cue_pool_reuse_test.godot.log",
+      "bytes": 7392,
+      "sha256": "e88dadca8e8436750e73fa578809ee12ad119a838ffec78e76a42eae27a2d843"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/native_logs/feature_cue_pool_reuse_test.stderr.log",
+      "bytes": 133,
+      "sha256": "0901414cf8ce95a7352c3f76d8580397e07bc715667aa55e7b94bd0dd5d87bf2"
+    },
+    {
+      "archive_path": "native_extra/periodic_dispatch_ticket_cancel_green_cached_20261005_031734_029706/native_logs/feature_cue_pool_reuse_test.stdout.log",
+      "bytes": 7403,
+      "sha256": "d329545134fbec1c987252c93008b20ba8b3e20b12f86dcdb5f8171b84d4b444"
+    }
+  ],
+  "zip": {
+    "bytes": 848098,
+    "sha256": "15d3532674fada88b857e79960dfe93f3754e61cb74fa64325ecccaf14cb8088"
+  }
+}

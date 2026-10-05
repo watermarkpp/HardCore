@@ -1,0 +1,63 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "child_batch_retirement_boundary_test",
+                        "test_path":  "tests/framework/child_batch_retirement_boundary_test.tscn",
+                        "wrapper_process_id":  21860,
+                        "wrapper_started_utc":  "2026-10-04T19:44:38.6696775Z",
+                        "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_child_batch_retirement_20261005_69379dcf2def4715971d040e546f6002",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-04T19:45:08.6831550Z",
+                        "native_exit_observed_utc":  "2026-10-04T19:44:53.9669216Z",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "66d3f242-6714-4b3f-98fe-a540ba733a64",
+                        "framework_receipt_valid":  true,
+                        "result":  "PASS",
+                        "reason":  ""
+                    },
+                    {
+                        "test_name":  "child_batch_atomic_control_test",
+                        "test_path":  "tests/framework/child_batch_atomic_control_test.tscn",
+                        "wrapper_process_id":  8940,
+                        "wrapper_started_utc":  "2026-10-04T19:44:55.4020460Z",
+                        "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_child_batch_retirement_20261005_69379dcf2def4715971d040e546f6002",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-04T19:45:25.4087186Z",
+                        "native_exit_observed_utc":  "2026-10-04T19:45:10.1981898Z",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "30c7e90d-bd54-4e36-be98-04dcdec5552e",
+                        "framework_receipt_valid":  true,
+                        "result":  "PASS",
+                        "reason":  ""
+                    }
+                ],
+    "total":  2,
+    "invocation_id":  "1fa9693e-6847-44bf-bf9d-dd1ba5146aba",
+    "runtime_environment":  {
+                                "project_root":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+                                "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_child_batch_retirement_20261005_69379dcf2def4715971d040e546f6002",
+                                "runner_process_id":  6080
+                            },
+    "passed":  2,
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "engine_log_errors":  0,
+    "generated_at":  "2026-10-05T03:45:11.7164783+08:00",
+    "failed":  0,
+    "suite":  "adhoc"
+}

@@ -1175,13 +1175,28 @@ $SelectedTests = if ($TestPaths.Count -gt 0) { $TestPaths } else { $Suites[$Suit
 $Authorized90SecondScenes = @(
     'tests/hc_monster_combat_r4/all_damage_lost_test.tscn',
     'tests/hc_monster_combat_r4/natural_cadence_24_test.tscn',
-    'tests/hc_monster_combat_r4/natural_cadence_76_test.tscn'
+    'tests/hc_monster_combat_r4/natural_cadence_76_test.tscn',
+    'tests/framework/natural_sustained_chain_test.tscn',
+    'tests/framework/natural_sustained_resource_test.tscn'
+)
+$AuthorizedSustainedColdScenes = @(
+    'tests/framework/natural_sustained_chain_cold_test.tscn',
+    'tests/framework/natural_sustained_resource_cold_test.tscn'
 )
 if ($TimeoutSeconds -gt 60) {
-    if ($EffectiveSuite -cne 'adhoc' -or @($SelectedTests | Where-Object {
-        $Authorized90SecondScenes -cnotcontains $_
+    if ($TimeoutSeconds -ne 90 -or $EffectiveSuite -cne 'adhoc' -or @($SelectedTests | Where-Object {
+        $Authorized90SecondScenes -cnotcontains $_ -and $AuthorizedSustainedColdScenes -cnotcontains $_
     }).Count -gt 0) {
-        throw 'A timeout above60s is authorized only for the three explicit R4 diagnostic scenes, using TestPaths.'
+        throw 'Only the explicit user-approved diagnostic live scenes may use a 90s window, using TestPaths.'
+    }
+    foreach ($coldPath in $AuthorizedSustainedColdScenes) {
+        if ($SelectedTests -ccontains $coldPath) {
+            $livePath = $coldPath.Replace('_cold_test.tscn', '_test.tscn')
+            if ([Array]::IndexOf($SelectedTests, $livePath) -lt 0 -or
+                [Array]::IndexOf($SelectedTests, $livePath) -gt [Array]::IndexOf($SelectedTests, $coldPath)) {
+                throw 'A sustained cold scene needs its matching live producer earlier in this invocation.'
+            }
+        }
     }
 }
 
@@ -1280,7 +1295,9 @@ foreach ($testPath in $SelectedTests) {
         'tests/user_feedback_20260930/surround_vacancy_refill_89_test.tscn',
         'tests/user_feedback_20260930/surround_vacancy_refill_test.tscn'
     )
-    $TestTimeoutSeconds = if ($testPath -in $HeavyR4Scenes) { [Math]::Max(60, $TimeoutSeconds) } else { $TimeoutSeconds }
+    $TestTimeoutSeconds = if ($TimeoutSeconds -eq 90 -and $testPath -in $AuthorizedSustainedColdScenes) {
+        30
+    } elseif ($testPath -in $HeavyR4Scenes) { [Math]::Max(60, $TimeoutSeconds) } else { $TimeoutSeconds }
     $deadline = [DateTime]::UtcNow.AddSeconds($TestTimeoutSeconds)
     $wrapperExitWithoutChildSince = $null
     $earlyFailure = $false

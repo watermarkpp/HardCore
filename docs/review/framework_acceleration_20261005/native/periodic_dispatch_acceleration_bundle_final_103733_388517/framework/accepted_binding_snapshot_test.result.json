@@ -1,0 +1,427 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "the formal compiler supplies both finite chain bindings",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "this proof starts from a compiled source, not an invented binding",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "the actual player source has a valid life",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "one real runtime owns every admission and claim",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "cancellation case has one real issued producer binding-cancel:2:close",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "unissued same-sequence object cannot certify the accepted producer binding-cancel:2:close",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "unissued same-sequence object cannot consume any original producer binding-cancel:2:close",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "unissued close or last-reference deletion preserves the exact original capacity and release binding-cancel:2:close",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "original producer still claims exactly once after unissued retirement binding-cancel:2:close",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "the genuine producer cannot claim a second batch binding-cancel:2:close",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "completed qualification probe restores capacity without HP or MP mutation binding-cancel:2:close",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "legitimate unused action receives its own nonempty reservation binding-cancel:2:close",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "issued close and issued destructor still release only their own unused promise binding-cancel:2:close",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "legitimate unused action receives its own nonempty reservation binding-cancel:2:close",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "issued close and issued destructor still release only their own unused promise binding-cancel:2:close",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "cancellation case has one real issued producer binding-cancel:2:destructor",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "unissued same-sequence object cannot certify the accepted producer binding-cancel:2:destructor",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "unissued same-sequence object cannot consume any original producer binding-cancel:2:destructor",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "unissued close or last-reference deletion preserves the exact original capacity and release binding-cancel:2:destructor",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "original producer still claims exactly once after unissued retirement binding-cancel:2:destructor",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "the genuine producer cannot claim a second batch binding-cancel:2:destructor",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "completed qualification probe restores capacity without HP or MP mutation binding-cancel:2:destructor",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "legitimate unused action receives its own nonempty reservation binding-cancel:2:destructor",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "issued close and issued destructor still release only their own unused promise binding-cancel:2:destructor",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "legitimate unused action receives its own nonempty reservation binding-cancel:2:destructor",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "issued close and issued destructor still release only their own unused promise binding-cancel:2:destructor",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "cancellation case has one real issued producer binding-cancel:1:close",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "unissued same-sequence object cannot certify the accepted producer binding-cancel:1:close",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "unissued same-sequence object cannot consume any original producer binding-cancel:1:close",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "unissued close or last-reference deletion preserves the exact original capacity and release binding-cancel:1:close",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "original producer still claims exactly once after unissued retirement binding-cancel:1:close",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "the genuine producer cannot claim a second batch binding-cancel:1:close",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "completed qualification probe restores capacity without HP or MP mutation binding-cancel:1:close",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "legitimate unused action receives its own nonempty reservation binding-cancel:1:close",
+      "passed": true
+    },
+    {
+      "id": 35,
+      "label": "issued close and issued destructor still release only their own unused promise binding-cancel:1:close",
+      "passed": true
+    },
+    {
+      "id": 36,
+      "label": "legitimate unused action receives its own nonempty reservation binding-cancel:1:close",
+      "passed": true
+    },
+    {
+      "id": 37,
+      "label": "issued close and issued destructor still release only their own unused promise binding-cancel:1:close",
+      "passed": true
+    },
+    {
+      "id": 38,
+      "label": "cancellation case has one real issued producer binding-cancel:1:destructor",
+      "passed": true
+    },
+    {
+      "id": 39,
+      "label": "unissued same-sequence object cannot certify the accepted producer binding-cancel:1:destructor",
+      "passed": true
+    },
+    {
+      "id": 40,
+      "label": "unissued same-sequence object cannot consume any original producer binding-cancel:1:destructor",
+      "passed": true
+    },
+    {
+      "id": 41,
+      "label": "unissued close or last-reference deletion preserves the exact original capacity and release binding-cancel:1:destructor",
+      "passed": true
+    },
+    {
+      "id": 42,
+      "label": "original producer still claims exactly once after unissued retirement binding-cancel:1:destructor",
+      "passed": true
+    },
+    {
+      "id": 43,
+      "label": "the genuine producer cannot claim a second batch binding-cancel:1:destructor",
+      "passed": true
+    },
+    {
+      "id": 44,
+      "label": "completed qualification probe restores capacity without HP or MP mutation binding-cancel:1:destructor",
+      "passed": true
+    },
+    {
+      "id": 45,
+      "label": "legitimate unused action receives its own nonempty reservation binding-cancel:1:destructor",
+      "passed": true
+    },
+    {
+      "id": 46,
+      "label": "issued close and issued destructor still release only their own unused promise binding-cancel:1:destructor",
+      "passed": true
+    },
+    {
+      "id": 47,
+      "label": "legitimate unused action receives its own nonempty reservation binding-cancel:1:destructor",
+      "passed": true
+    },
+    {
+      "id": 48,
+      "label": "issued close and issued destructor still release only their own unused promise binding-cancel:1:destructor",
+      "passed": true
+    },
+    {
+      "id": 49,
+      "label": "the root receives a nonempty capacity ticket before HP",
+      "passed": true
+    },
+    {
+      "id": 50,
+      "label": "a runtime-issued ticket can inspect its accepted binding snapshot without consuming release",
+      "passed": true
+    },
+    {
+      "id": 51,
+      "label": "repeated exact snapshot inspection accepts independently copied plain bindings",
+      "passed": true
+    },
+    {
+      "id": 52,
+      "label": "a different world cannot borrow the proof",
+      "passed": true
+    },
+    {
+      "id": 53,
+      "label": "an old or different release cannot borrow the proof",
+      "passed": true
+    },
+    {
+      "id": 54,
+      "label": "a different registered skill cannot borrow the proof",
+      "passed": true
+    },
+    {
+      "id": 55,
+      "label": "the changed numeric binding is independently valid, so rejection requires exact accepted identity",
+      "passed": true
+    },
+    {
+      "id": 56,
+      "label": "independently valid changed numbers still cannot reuse the old snapshot",
+      "passed": true
+    },
+    {
+      "id": 57,
+      "label": "a changed source handle cannot borrow accepted identity",
+      "passed": true
+    },
+    {
+      "id": 58,
+      "label": "a second object with the same sequence is not the issued ticket",
+      "passed": true
+    },
+    {
+      "id": 59,
+      "label": "all proof queries leave claims, capacity, HP, MP and runtime metrics unchanged",
+      "passed": true
+    },
+    {
+      "id": 60,
+      "label": "a changed batch fails without stealing the original legal release",
+      "passed": true
+    },
+    {
+      "id": 61,
+      "label": "a forged object cannot claim the original branch",
+      "passed": true
+    },
+    {
+      "id": 62,
+      "label": "the original callback still claims its complete accepted configuration",
+      "passed": true
+    },
+    {
+      "id": 63,
+      "label": "a consumed release cannot be certified for another batch",
+      "passed": true
+    },
+    {
+      "id": 64,
+      "label": "the real batch owns the original HP scope",
+      "passed": true
+    },
+    {
+      "id": 65,
+      "label": "the unique real HP fact transfers to the original runtime",
+      "passed": true
+    },
+    {
+      "id": 66,
+      "label": "a closed action never regains a snapshot proof while accepted state remains",
+      "passed": true
+    },
+    {
+      "id": 67,
+      "label": "the accepted root actually starts its real periodic state",
+      "passed": true
+    },
+    {
+      "id": 68,
+      "label": "the explicit unit clock reaches all four original deadlines",
+      "passed": true
+    },
+    {
+      "id": 69,
+      "label": "four distinct periodic batches each commit exact real HP once",
+      "passed": true
+    },
+    {
+      "id": 70,
+      "label": "two denied claims, one root claim and four periodic claims retain the original one-shot protocol",
+      "passed": true
+    },
+    {
+      "id": 71,
+      "label": "periodic producer, state, receipts and root promises all retire",
+      "passed": true
+    },
+    {
+      "id": 72,
+      "label": "the ordinary compatibility case selects the registered non-chain handler explicitly",
+      "passed": true
+    },
+    {
+      "id": 73,
+      "label": "a non-chain reservation stays on the original full binding validation path",
+      "passed": true
+    },
+    {
+      "id": 74,
+      "label": "the ordinary reserved batch remains compatible",
+      "passed": true
+    },
+    {
+      "id": 75,
+      "label": "the spoof case is rejected by the original full configuration validator",
+      "passed": true
+    },
+    {
+      "id": 76,
+      "label": "an unrelated object implementing the same method names cannot issue a binding proof",
+      "passed": true
+    },
+    {
+      "id": 77,
+      "label": "a non-runtime issuer cannot skip full validation or consume any fake release",
+      "passed": true
+    },
+    {
+      "id": 78,
+      "label": "a final real ticket exists before world retirement",
+      "passed": true
+    },
+    {
+      "id": 79,
+      "label": "stale-world proof inspection refuses without mutating or consuming the old producer",
+      "passed": true
+    },
+    {
+      "id": 80,
+      "label": "the test-owned world releases all remaining capacity",
+      "passed": true
+    },
+    {
+      "id": 81,
+      "label": "the default catalog is restored after explicit world retirement",
+      "passed": true
+    }
+  ],
+  "count": 81,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "a117f259-e5a7-4e5f-8a03-216733ad2c9c",
+  "passed": 81,
+  "reported_checks": 81,
+  "reported_failures": 0,
+  "run_id": "2e7a5b88-fc99-4802-b9f5-7c11eced2898",
+  "runtime_environment": {
+    "native_process_id": 11516,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_acceleration_bundle_final_19325cee066a455494e554322df17a1a",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_dispatch_acceleration_bundle_final_19325cee066a455494e554322df17a1a/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "accepted_binding_snapshot_test",
+  "schema_version": 1,
+  "source_content_sha256": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+  "status": "PASS"
+}

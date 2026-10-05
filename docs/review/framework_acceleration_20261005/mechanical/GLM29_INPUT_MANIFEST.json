@@ -1,0 +1,321 @@
+{
+  "task_id": "final-native-bundle-inventory-29-20261005",
+  "input": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\framework_v2\\acceleration_bundle_20261005\\GLM29_RECEIPT_EXCERPTS.jsonl",
+  "input_sha256": "7e1c78950fca77a9d2aac1acf6c2d25e7bcbf86d96e22638e2cc1af1a61ba901",
+  "line_count": 39,
+  "bytes": 25203,
+  "sources": [
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\framework\\root_startup_retirement_test.result.json",
+      "sha256": "406a69e22df60e8ef2204265ff9963fc1ef44e576bc7f35101edacb302d01f1f"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\native_logs\\root_startup_retirement_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\framework\\root_receiver_retirement_test.result.json",
+      "sha256": "9d06dc805e9894c65ac12b817add95e5ff540386c05bf02e5c30ebc57cd45d03"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\native_logs\\root_receiver_retirement_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\framework\\root_plain_skill_retirement_test.result.json",
+      "sha256": "40b2503daa5cd793df3fa45ebf0e72fc45491dd22dbac867d46833dde7437619"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\native_logs\\root_plain_skill_retirement_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\framework\\root_plain_skill_drained_retirement_test.result.json",
+      "sha256": "c3c7a09e6da9516ce43870d57224a42dab86d919c60e167471f0847f454d1ec1"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\native_logs\\root_plain_skill_drained_retirement_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\framework\\root_inflight_caster_retirement_test.result.json",
+      "sha256": "b54a1f9f4149f43ab47bfd65e2e9c23802b30dcb23799f326a6643ae178527ca"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\native_logs\\root_inflight_caster_retirement_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\framework\\root_native_caster_capacity_test.result.json",
+      "sha256": "50f3b524bcaee89bb5b6f490e8f5770267676a89b6949db7781ecea5cfdd3ea6"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\native_logs\\root_native_caster_capacity_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\framework\\character_launch_resource_lifecycle_test.result.json",
+      "sha256": "e5f1857c3e8c732bc9ef77802478002e7362e8058b96a85d208e1efb373d13af"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\native_logs\\character_launch_resource_lifecycle_test.stderr.log",
+      "sha256": "63797ca2e463af1e3e131e552506433077d07dd1aba7b687fedeadbd96b8ae40"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\framework\\feature_cue_actor_retirement_test.result.json",
+      "sha256": "72a69528a143da7645231f95519ab7dca528bc6833f2eabd40c46c88227d50d7"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\native_logs\\feature_cue_actor_retirement_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\framework\\feature_cue_actor_retirement_reentry_test.result.json",
+      "sha256": "164872614a0e4371f5328daf4a3798b96ae2ab0de51d7114beeab1415ad5f9bb"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\native_logs\\feature_cue_actor_retirement_reentry_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\framework\\feature_cue_pool_reuse_test.result.json",
+      "sha256": "dd94d41d07ac8d9c7c293291659585561c6fe3d411454415059cdf082cdc56dd"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\native_logs\\feature_cue_pool_reuse_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\framework\\feature_cue_audio_replacement_test.result.json",
+      "sha256": "73f628a35ceb2d55e0989af5c3d8c12a44ff1a8946858a4eec98939512b8eeb1"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\native_logs\\feature_cue_audio_replacement_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\framework\\feature_cue_native_finish_reuse_test.result.json",
+      "sha256": "8cd735e7c4edb0aa37a7395261bfe54f602189965efba404433675a236e8de36"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\native_logs\\feature_cue_native_finish_reuse_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\framework\\feature_cue_active_world_exit_test.result.json",
+      "sha256": "de6836daff3b59089533b787108e04b6bab49b6c025bcca134448d849aeb26f1"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\native_logs\\feature_cue_active_world_exit_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\framework\\feature_resource_cue_test.result.json",
+      "sha256": "1be5270248e0b69a4cd44c1b654888ba91d5ad77fd048ff193e3b5a32a0ca3fc"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\native_logs\\feature_resource_cue_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\framework\\feature_resource_cue_reentry_test.result.json",
+      "sha256": "70b5f5c0a2da583b6922a4780deb2e0488512830cae1f09609618148f52df369"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\native_logs\\feature_resource_cue_reentry_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\framework\\feature_resource_audio_closure_test.result.json",
+      "sha256": "291a04dc19e13e99a63584e3c0d4a5732c377323f46ee14715c4d38114722f96"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\native_logs\\feature_resource_audio_closure_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\framework\\periodic_cadence_production_reachability_test.result.json",
+      "sha256": "e46655294102e8383ccc79eb020d3059d412022dc24487c4d460ffa75df09fd2"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\native_logs\\periodic_cadence_production_reachability_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\framework\\accepted_binding_snapshot_test.result.json",
+      "sha256": "1263b9dcab71a0470133a5cc3235e58b3db6238e20904ef09ec094130c65c20c"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\native_logs\\accepted_binding_snapshot_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\framework\\child_batch_retirement_boundary_test.result.json",
+      "sha256": "242500f16a0b843a448c40f7bf223f0073c6aeebdc9f42dfc9fb2b3bb4e41e35"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\native_logs\\child_batch_retirement_boundary_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\framework\\child_batch_empty_completion_test.result.json",
+      "sha256": "ef86bc6b6711d0dcb29cb5f81ad8b34b211b1090aea76ca203d46ff27030cc1c"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\native_logs\\child_batch_empty_completion_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\framework\\child_batch_atomic_control_test.result.json",
+      "sha256": "3ef11c9fbf50396e82cc644b28f2dc65ed9a89cdac95e1ba7d19aecef9a74b14"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\native_logs\\child_batch_atomic_control_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\framework\\feature_reservation_test.result.json",
+      "sha256": "12c11d939f8f0b1341d346b4e6c10bc030afc3c8b95cf80b3c0995c015af945e"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\native_logs\\feature_reservation_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\framework\\feature_release_identity_test.result.json",
+      "sha256": "b328f765d01362ff23ab44aa2681f836d26debb3da543de76668d819692a07ee"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\native_logs\\feature_release_identity_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\framework\\feature_child_planner_test.result.json",
+      "sha256": "047b4e8e3d1bb576efbae98585fc7d99716ea867802a3a1920eb05aa6c62c301"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\native_logs\\feature_child_planner_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\framework\\feature_child_execution_test.result.json",
+      "sha256": "c9076a339797583ca0f74b30658d3661df062d785e2f3adaa098d3810f7f55e2"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\native_logs\\feature_child_execution_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\framework\\feature_child_chain_admission_test.result.json",
+      "sha256": "81ab92891fd87a7c0fe1b3e5d46346d54bf71a44b94080b1ced1b0e8c8260700"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\native_logs\\feature_child_chain_admission_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\framework\\feature_periodic_child_chain_test.result.json",
+      "sha256": "2dd4c1be4b9989a9c89cdced09c839bbde719f32d5ecc119fd5730ed74171b37"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\native_logs\\feature_periodic_child_chain_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\framework\\periodic_child_root_test.result.json",
+      "sha256": "df8332600fc49832ab84783f90e8720ab3eb7def2ea3208cb1825f284e165c30"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\native_logs\\periodic_child_root_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\framework\\periodic_child_g2_root_test.result.json",
+      "sha256": "2473fc04afde682acc873c9be748d783063f729c61eca7181f6d9a586fdff3d9"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\native_logs\\periodic_child_g2_root_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\framework\\periodic_refresh_period_boundary_test.result.json",
+      "sha256": "e9b3c258899558ce690cded44d8e46372f08c3c153ccc9528781f440f5485fa1"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\native_logs\\periodic_refresh_period_boundary_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\framework\\threaded_minimal_empty_node_probe_test.result.json",
+      "sha256": "50297941e8e507febb7392ba1bb25121149a519da6b249d371a8136a502bf610"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\native_logs\\threaded_minimal_empty_node_probe_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\framework\\threaded_minimal_inferred_refs_probe_test.result.json",
+      "sha256": "697dbf8e6939acc411c0926fe7b642db67fd74bde12b950fce23e13a6cb6bffa"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\native_logs\\threaded_minimal_inferred_refs_probe_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\framework\\threaded_minimal_typed_refs_probe_test.result.json",
+      "sha256": "4db31a1604a9d4c94f6670e775ed6d98b821bd5b6451c21100ca07f92c17f6c8"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\native_logs\\threaded_minimal_typed_refs_probe_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_sustained_resource_mp_cap_accounting_103236_207797\\framework\\natural_sustained_resource_test.result.json",
+      "sha256": "3b665ba3d169882b71245b53ba66ddf2c139be9ee2978d6d5dfe17df5d792cf9"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_sustained_resource_mp_cap_accounting_103236_207797\\native_logs\\natural_sustained_resource_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_sustained_resource_mp_cap_accounting_103236_207797\\framework\\natural_sustained_resource_cold_test.result.json",
+      "sha256": "a8199644aad199777c1c1f5d3971b5b54ea0e2a78f2373a1666cbba06cc7e40a"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_sustained_resource_mp_cap_accounting_103236_207797\\native_logs\\natural_sustained_resource_cold_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_sustained_chain_mp_cap_accounting_103502_047809\\framework\\natural_sustained_chain_test.result.json",
+      "sha256": "acc3dd45031bfa5013557d70aaf1c83c14f38b6cd37dd896bcd33fe90493bc97"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_sustained_chain_mp_cap_accounting_103502_047809\\native_logs\\natural_sustained_chain_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_sustained_chain_mp_cap_accounting_103502_047809\\framework\\natural_sustained_chain_cold_test.result.json",
+      "sha256": "ca79db6868926de5905f60a75dc29e5ecd061393f0f8fc0c18ec2e72d517472c"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_sustained_chain_mp_cap_accounting_103502_047809\\native_logs\\natural_sustained_chain_cold_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_owned_negative_final_104643_820621\\framework\\root_failed_caster_request_test.result.json",
+      "sha256": "1f25cb5f6a5c5039a09385a101e09b82f23ac413c1c3be126a6fcbb872ca0c66"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_owned_negative_final_104643_820621\\native_logs\\root_failed_caster_request_test.stderr.log",
+      "sha256": "6f210f75343b8dfeda436ced78c52316c0a14bb8b08af138da4c505a7de12be6"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_owned_negative_final_104643_820621\\framework\\character_launch_failed_preload_retry_test.result.json",
+      "sha256": "b90b5d23c4cec7f7f4dafe9d6f8209daf034ce90d134ce53521d28a053e52308"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_owned_negative_final_104643_820621\\native_logs\\character_launch_failed_preload_retry_test.stderr.log",
+      "sha256": "cba9ecb45f314670284133e986b3ce292205fe61f2cddcc3cc601020cafc4ebc"
+    }
+  ]
+}

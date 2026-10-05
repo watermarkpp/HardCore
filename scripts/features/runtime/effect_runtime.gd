@@ -131,6 +131,7 @@ func reserve_action(skill_id: String, bindings: Array, maximum_receivers: int, e
 	_reserved_facts += fact_cost; _reserved_states += state_cost; _reserved_receipts += cost
 	_stats.peak_reservations = maxi(int(_stats.peak_reservations),_reservations.size())
 	var ticket: RefCounted=Reservation.create(self,_next_reservation)
+	value.ticket_id=ticket.get_instance_id()
 	if not chain.value.is_empty(): value.branches[expected_release_id].ticket_id=ticket.get_instance_id()
 	return ticket
 
@@ -204,7 +205,8 @@ func _inspect_reservation_claim(sequence: int, identity: Dictionary, release_id:
 			if int(value.facts)<1 or int(value.receipt_space)<bindings.size(): return {"success":false}
 		elif int(value.total_fact_space)<limit: return {"success":false}
 		return {"success":true,"maximum_facts":limit,"value":value,"producer":producer}
-	if value.stage != "reserved" or value.world != identity or value.skill_id != skill_id or value.bindings != bindings:
+	if value.stage != "reserved" or value.world != identity or value.skill_id != skill_id or value.bindings != bindings \
+		or value.ticket_id != ticket_id:
 		return {"success":false}
 	if not str(value.expected_release_id).is_empty() and value.expected_release_id != release_id: return {"success":false}
 	return {"success":true,"maximum_facts":int(value.facts),"value":value,"producer":{}}
@@ -227,11 +229,12 @@ func _claim_reservation(sequence: int, identity: Dictionary, release_id: String,
 		value.stage="producing"
 	return {"success":true,"maximum_facts":int(inspected.maximum_facts)}
 
-func _close_reservation_producer(sequence: int) -> void:
+func _close_reservation_producer(sequence: int, ticket_id: int) -> void:
 	if not _reservations.has(sequence): return
 	# A successful claim transfers production to the batch; queue admission
 	# then transfers it to the consumer. Old action cancellation owns neither.
-	if _reservations[sequence].stage == "reserved": _retire_reservation(sequence)
+	var value: Dictionary=_reservations[sequence]
+	if value.ticket_id == ticket_id and value.stage == "reserved": _retire_reservation(sequence)
 
 func _close_reservation_batch(sequence: int, branch := "") -> void:
 	if not _reservations.has(sequence): return
@@ -696,9 +699,12 @@ func _dispatch_one_child() -> void:
 	var epoch:=_delivery_generation
 	var source: Node2D=work.source.resolve(false) as Node2D if work.source!=null else null
 	var result: Dictionary=_child_executor.call(work.request,work.ticket,value.bindings,source,work.resource_lease)
-	if epoch!=_delivery_generation or not _reservations.has(sequence): return
+	if epoch!=_delivery_generation: return
+	# A successful empty batch may close the last branch and its root inside
+	# the domain call. Completion belongs to this unchanged delivery generation.
+	if result.success: _stats.child_actions+=1
+	if not _reservations.has(sequence): return
 	if not result.success: _error("feature_child_delivery:"+str(result.get("reason","unknown")))
-	else: _stats.child_actions+=1
 	if value.branches.has(work.release_id) and value.branches[work.release_id].stage=="available":
 		value.branches.erase(work.release_id); _retire_chain_if_terminal(sequence)
 

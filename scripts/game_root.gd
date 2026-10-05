@@ -1762,6 +1762,7 @@ func _ready() -> void:
 
 func _exit_tree() -> void:
 	_cancel_respawn_wakeups()
+	_retire_pending_warm_textures()
 	if _feature_effect_runtime != null:
 		_feature_effect_runtime.clear()
 	_poll_prepared_enemy_death_settlement(true)
@@ -2081,6 +2082,23 @@ func _player_display_extent_world_px() -> Vector3:
 var _frame_texture_threaded: Dictionary = {}
 
 
+func _retire_pending_warm_textures() -> void:
+	if _frame_texture_threaded.is_empty():
+		return
+	# Requests cannot be cancelled. Only this final owner boundary may join
+	# the bounded admitted jobs; ordinary combat polling stays nonblocking.
+	var token := FrameBudget.begin("caster_texture_retirement", true)
+	for path: String in _frame_texture_threaded.keys():
+		var status := ResourceLoader.load_threaded_get_status(path)
+		if status != ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+			var texture := ResourceLoader.load_threaded_get(path) as Texture2D
+			if texture != null:
+				CasterSkillVisualRegistry.retain_loaded_texture(path, texture)
+	_frame_texture_threaded.clear()
+	if token != 0:
+		FrameBudget.end(token)
+
+
 func _pump_pending_warm_textures() -> void:
 	if CasterSkillVisualRegistry.is_loading_window_active():
 		return
@@ -2091,15 +2109,21 @@ func _pump_pending_warm_textures() -> void:
 			var texture := ResourceLoader.load_threaded_get(path) as Texture2D
 			if texture != null:
 				CasterSkillVisualRegistry.retain_loaded_texture(path, texture)
-		elif (
-			status == ResourceLoader.THREAD_LOAD_FAILED
-			or status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE
-		):
+		elif status == ResourceLoader.THREAD_LOAD_FAILED:
 			_frame_texture_threaded.erase(path)
+			# FAILED is terminal; retrieve once to release this request's token.
+			ResourceLoader.load_threaded_get(path)
+		elif status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+			_frame_texture_threaded.erase(path)
+	# Collect admitted results first. A queued world's final notification must
+	# not start new work whose result this retiring owner will never collect.
+	if is_queued_for_deletion():
+		return
 	if _frame_texture_threaded.size() >= FRAME_TEXTURE_WARM_MAX_IN_FLIGHT:
 		return
 	for path: String in CasterSkillVisualRegistry.take_pending_warm_paths(
-		FRAME_TEXTURE_WARM_PER_FRAME
+		mini(FRAME_TEXTURE_WARM_PER_FRAME,
+			FRAME_TEXTURE_WARM_MAX_IN_FLIGHT - _frame_texture_threaded.size())
 	):
 		if _frame_texture_threaded.has(path):
 			continue

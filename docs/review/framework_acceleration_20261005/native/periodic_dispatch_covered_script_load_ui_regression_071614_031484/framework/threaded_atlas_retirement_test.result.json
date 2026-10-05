@@ -1,0 +1,167 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "engine loader probe owns isolated data",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "exact declared texture is cold: 0",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "native request accepts exact texture: 0",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "exact declared texture is cold: 1",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "native request accepts exact texture: 1",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "exact declared texture is cold: 2",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "native request accepts exact texture: 2",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "exact declared texture is cold: 3",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "native request accepts exact texture: 3",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "exact declared texture is cold: 4",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "native request accepts exact texture: 4",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "exact declared texture is cold: 5",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "native request accepts exact texture: 5",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "exact declared texture is cold: 6",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "native request accepts exact texture: 6",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "exact declared texture is cold: 7",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "native request accepts exact texture: 7",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "real native completion has usable texture: lucky_guardian_inventory.tres",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "real native completion has usable texture: lucky_guardian_ground.tres",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "real native completion has usable texture: dragon_heart_inventory.tres",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "real native completion has usable texture: dragon_heart_ground.tres",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "real native completion has usable texture: dragon_eye_inventory.tres",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "real native completion has usable texture: dragon_eye_ground.tres",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "real native completion has usable texture: courage_badge_inventory.tres",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "real native completion has usable texture: courage_badge_ground.tres",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "every declared real native request completes within the same deadline",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "every collected path retires its user-facing request",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "owned native loader evidence opens",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "owned native loader evidence completes",
+      "passed": true
+    }
+  ],
+  "count": 29,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "43148314-9569-4077-a913-57786f9e0667",
+  "passed": 29,
+  "reported_checks": 29,
+  "reported_failures": 0,
+  "run_id": "8b917b17-face-4764-87b1-7bb23d01462d",
+  "runtime_environment": {
+    "native_process_id": 24376,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_covered_script_load_ui_regression_419e0bf457624679beebbece1a656806",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_dispatch_covered_script_load_ui_regression_419e0bf457624679beebbece1a656806/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "threaded_atlas_retirement_test",
+  "schema_version": 1,
+  "source_content_sha256": "d1d22368f350668a5b64add42294b2bd54dcdbbf3b0b93da09073e1babfe8396",
+  "status": "PASS"
+}

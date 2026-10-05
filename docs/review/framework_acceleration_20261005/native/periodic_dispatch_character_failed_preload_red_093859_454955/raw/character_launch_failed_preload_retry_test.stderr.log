@@ -1,0 +1,4 @@
+ERROR: Premature end of file (EOF): 'user://character_preload_owned_failure_1b012f8d-5efd-435e-99dd-f0036003753f_107508401721.res'.
+   at: open (core/io/resource_format_binary.cpp:1052)
+ERROR: Failed loading resource: user://character_preload_owned_failure_1b012f8d-5efd-435e-99dd-f0036003753f_107508401721.res.
+   at: _load (core/io/resource_loader.cpp:317)

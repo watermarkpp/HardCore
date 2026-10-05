@@ -1,0 +1,42 @@
+{
+  "status": "PASS",
+  "scope": "Root classified exact owned load fault only; official runner FAIL preserved, no successful producer",
+  "source_content_sha256": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+  "source_file_count": 3855,
+  "same_source_as_positive": true,
+  "negative_archive": "periodic_dispatch_acceleration_owned_negative_final_104643_820621",
+  "runner_status": "FAIL",
+  "runner_exit": 1,
+  "native_exit": [
+    0,
+    0
+  ],
+  "complete_business_checks": 38,
+  "candidate_sha256": "100e3072856daca876f8c8998d078309961ffa8b21c72cf4cfd33b8c01705b85",
+  "scenes": [
+    {
+      "scene": "root_failed_caster_request_test",
+      "run_id": "c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4",
+      "invocation_id": "112e05e5-1f84-48c9-858b-b299d15929bb",
+      "checks": 14,
+      "injected_error_lines": [
+        "ERROR: Unrecognized binary resource file: 'user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res'.",
+        "ERROR: Failed loading resource: user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res."
+      ],
+      "owned_resource_path": "user://caster_failure_c9af8bf4-f7d8-42d9-9d0d-b28cd05c1da4.res",
+      "successful_producer": "MISSING"
+    },
+    {
+      "scene": "character_launch_failed_preload_retry_test",
+      "run_id": "f6771d0b-1eef-4c13-a5d1-fb79071e271d",
+      "invocation_id": "112e05e5-1f84-48c9-858b-b299d15929bb",
+      "checks": 24,
+      "injected_error_lines": [
+        "ERROR: Premature end of file (EOF): 'user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res'.",
+        "ERROR: Failed loading resource: user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res."
+      ],
+      "owned_resource_path": "user://character_preload_owned_failure_f6771d0b-1eef-4c13-a5d1-fb79071e271d_107491624505.res",
+      "successful_producer": "MISSING"
+    }
+  ]
+}

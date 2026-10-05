@@ -8,9 +8,11 @@ const Drop := preload("res://scripts/item_drop_instance_rules.gd")
 const Compiler := preload("res://scripts/features/compilation/feature_compiler.gd")
 const Runtime := preload("res://scripts/features/runtime/effect_runtime.gd")
 const Budget := preload("res://scripts/layers/runtime/execution/frame_budget.gd")
+const Child := preload("res://scripts/features/contracts/child_action_lease.gd")
 const REPORT := "res://outputs/test_logs/framework/natural_effect_lifecycle_trace.json"
 const EXPECTED := "res://outputs/test_logs/framework/natural_effect_lifecycle_expected.json"
 @export var resource_backed := false
+@export var periodic_children := false
 var report_path := REPORT
 var expected_path := EXPECTED
 var resource_owner: WeakRef
@@ -57,6 +59,29 @@ var memory_checkpoints: Array = []
 var cast_targets: Dictionary = {}
 var observed_deaths: Dictionary = {}
 
+class ObservedChildRoot extends Root:
+	var child_rows: Array[Dictionary] = []
+	var child_observation_overflowed := false
+	func _execute_feature_child_action(request: Dictionary, ticket: RefCounted, bindings: Array,
+		source: Node2D, resources: RefCounted) -> Dictionary:
+		var lease: RefCounted = Child.from_request(request)
+		var command: Dictionary = lease.command() if lease != null else {}
+		var started := Time.get_ticks_usec()
+		var generation_before: int = _feature_effect_runtime._delivery_generation
+		var root_before: bool = _feature_effect_runtime._reservations.has(ticket.sequence())
+		var result := super._execute_feature_child_action(request,ticket,bindings,source,resources)
+		if child_rows.size() < 512:
+			child_rows.append({"root_release_id":command.get("root_release_id",""),
+				"parent_release_id":command.get("parent_release_id",""),"parent_fact_id":command.get("parent_fact_id",""),
+				"parent_source_class":command.get("parent_source_class","direct_or_child"),
+				"parent_target":command.get("parent_target",{}),"generation":command.get("generation",-1),
+				"delivery_generation_before":generation_before,"delivery_generation_after":_feature_effect_runtime._delivery_generation,
+				"root_active_before":root_before,"root_active_after":_feature_effect_runtime._reservations.has(ticket.sequence()),
+				"wall_usec":Time.get_ticks_usec()-started,"simulation_usec":_time_domains.simulation_usec(),
+				"result":result.duplicate(true)})
+		else: child_observation_overflowed = true
+		return result
+
 func check(value: bool, label: String) -> void:
 	proof.record(value,label); checks += 1
 	if not value: failures.append(label)
@@ -65,6 +90,9 @@ func _ready() -> void:
 	if resource_backed:
 		report_path = "res://outputs/test_logs/framework/feature_resource_natural_trace.json"
 		expected_path = "res://outputs/test_logs/framework/feature_resource_natural_expected.json"
+	if periodic_children:
+		report_path = "res://outputs/test_logs/framework/natural_periodic_chain_trace.json"
+		expected_path = "res://outputs/test_logs/framework/natural_periodic_chain_expected.json"
 	process_priority = 10000
 	_run.call_deferred()
 
@@ -108,9 +136,10 @@ func _process(_delta: float) -> void:
 
 func _run() -> void:
 	check(not PlayerState.test_mode and OS.get_environment("APPDATA").replace("\\","/").contains("/.godot/runtime_appdata/"),"natural production run owns an isolated account")
+	if periodic_children: check(resource_backed,"periodic-child natural variant retains the full existing required resource workload")
 	PlayerState.begin_startup_save_upgrade()
 	var startup_ready: bool = PlayerState.finish_startup_save_upgrade()
-	var profile_name := "资源协同战斗" if resource_backed else "自然战斗压力"
+	var profile_name := "周期连锁实战" if periodic_children else ("资源协同战斗" if resource_backed else "自然战斗压力")
 	var creation_error: String = PlayerState.create_character(profile_name,"hc.profession.wizard") if startup_ready else "startup not ready"
 	check(startup_ready and creation_error.is_empty(),"real startup and profile creation: " + creation_error)
 	if not startup_ready or not creation_error.is_empty(): _finish(); return
@@ -121,12 +150,13 @@ func _run() -> void:
 	var profile: String = PlayerState.active_profile_id
 	var xp_before: int = PlayerState.experience
 	if resource_backed:
-		check(await ContentLayers.reload_feature_catalog_async("res://assets/data/features/validation/resource_natural_registry.json"),"resource-backed natural sources prepare all parent and child cues before world entry")
+		var registry: String = "res://assets/data/features/validation/natural_periodic_chain_registry.json" if periodic_children else "res://assets/data/features/validation/resource_natural_registry.json"
+		check(await ContentLayers.reload_feature_catalog_async(registry),"resource-backed natural sources prepare all parent and child cues before world entry")
 		resource_owner = weakref(ContentLayers.feature_configuration().resource_lease)
 		check(resource_owner.get_ref() != null,"natural source has a nonempty accepted resource closure")
 		if resource_owner.get_ref() == null: _finish(); return
 	get_tree().node_added.connect(_observe_spawn)
-	game = Root.new(); add_child(game)
+	game = ObservedChildRoot.new() if periodic_children else Root.new(); add_child(game)
 	var deadline := Time.get_ticks_msec()+20000
 	while not game.gameplay_input_is_enabled() and Time.get_ticks_msec()<deadline: await get_tree().process_frame
 	check(game.gameplay_input_is_enabled(),"real mapped world reaches READY")
@@ -144,10 +174,12 @@ func _run() -> void:
 		ContentLayers._feature_bindings = captured.value
 		check(ContentLayers.set_feature_module_enabled("hc.ignite",true),"default-off module enabled through real service")
 	else:
-		check(ContentLayers.feature_configuration().bindings.size() == 3 and "hc.ignite" in ContentLayers.feature_configuration().enabled_modules,"formal resource registry alone publishes three legal natural sources")
+		check(ContentLayers.feature_configuration().bindings.size() == (4 if periodic_children else 3) and "hc.ignite" in ContentLayers.feature_configuration().enabled_modules,"formal resource registry alone publishes three legal natural ignition sources")
+	if periodic_children:
+		check(await ContentLayers.set_feature_module_enabled_async("hc.validation.natural_periodic_chain",true),"READY publication enables the default-off real periodic-death child subscription")
 	var event: Array = PlayerState.feature_bundle().event_index.get("damage_committed:hc.skill.wizard.ice_storm",[])
-	check(PlayerState.feature_errors.is_empty() and event.size() == 3,"equipment, learned skill and rule compile to three actual qualified sources")
-	if event.size() != 3: _finish(); return
+	check(PlayerState.feature_errors.is_empty() and event.size() == (4 if periodic_children else 3),"equipment, learned skill and rule compile to three ignition sources plus only the declared child subscription")
+	if event.size() != (4 if periodic_children else 3): _finish(); return
 	game._set_player_world_position(game._canonical_ground_gu_to_screen_px(Vector2(38.5,13.5)))
 	# Declared stress-health/stat inputs keep actual AI, damage and death paths
 	# active long enough to exercise recurring work. No per-frame heal/refund.
@@ -161,7 +193,7 @@ func _run() -> void:
 		var actor: EnemyActor = game._spawn_enemy(GameData.get_monster_by_id(19),game._canonical_ground_gu_to_screen_px(point),false,-1.0,
 			{"respawn_enabled":false,"spawn_slot_id":"test:natural:"+str(index)})
 		if actor != null:
-			actor.max_hp = 1500; actor.current_hp = 1500
+			actor.max_hp = 1500+(index*7 if periodic_children else 0); actor.current_hp = actor.max_hp
 			actor.died.connect(_on_target_died); targets.append(actor)
 			check(actor._hc_point_walkable(point) and actor.is_physics_processing(),"natural receiver born on walkable authored ground with AI active: "+str(index))
 	check(targets.size() == 30,"all thirty real receivers exist without a gameplay cap")
@@ -245,6 +277,19 @@ func _run() -> void:
 	check(game._enemy_death_terminal_total_count == observed_deaths.size(),"every observed death has exactly one completed production job")
 	check(PlayerState.experience == expected_xp,"canonical rewards equal the exact sum of unique observed world and fixture deaths: actual=%d expected=%d fixture_only=%d" % [PlayerState.experience,expected_xp,minimum_xp])
 	check(scopes_closed and samples.size() >= 120 and samples.size()<12000,"bounded raw frame observation includes no open budget scopes")
+	var child_rows: Array = []
+	if periodic_children:
+		child_rows = game.child_rows
+		var periodic_count := 0
+		var child_results_valid := true
+		for row: Dictionary in child_rows:
+			periodic_count += 1 if row.parent_source_class == "periodic" else 0
+			child_results_valid = child_results_valid and bool(row.result.success) and int(row.generation) == 1
+		check(not game.child_observation_overflowed and not child_rows.is_empty() and child_results_valid,
+			"natural child requests remain bounded observations of successful real Root plans and exact finite generations")
+		check(periodic_count > 0,"at least one real periodic fatal fact naturally releases a child without direct Batch injection or a test-owned clock")
+		check(int(runtime.metrics().child_actions) == child_rows.size(),"actual successful child completion count matches every observed Root request exactly")
+		check(int(runtime.metrics().refreshed) > 0,"natural repeated accepted input exercises cumulative refresh before terminal drain")
 	if resource_backed:
 		check(peak_cue_nodes >= 90 and audio_cue_starts > 0 and exact_prepared_streams == audio_cue_starts,"natural workload actually creates required cues and consumes only exact accepted streams")
 		check(runtime.presentation().node_count() == 0 and ContentLayers._feature_resource_service.pending_count() == 0,"natural effects and resource work reach terminal drain")
@@ -256,6 +301,7 @@ func _run() -> void:
 		"xp_before":xp_before,"xp_after":PlayerState.experience,"expected_xp":expected_xp,"fixture_only_xp":minimum_xp,"observed_deaths":observed_deaths.values(),
 		"terminal_death_jobs":game._enemy_death_terminal_jobs,
 		"resource_backed":resource_backed,"peak_cue_nodes":peak_cue_nodes,"audio_cue_starts":audio_cue_starts,"exact_prepared_streams":exact_prepared_streams,
+		"periodic_children":periodic_children,"child_rows":child_rows,
 		"wall_frame_usec":_percentiles("wall_usec"),"samples":samples,"memory_checkpoints":memory_checkpoints,
 		"maximum_pending_age_frames":maximum_pending_age,"maximum_service_age_frames":maximum_service_age})
 	game._streaming_coordinator.unregister_visual(get_instance_id())
@@ -424,6 +470,7 @@ func _write(path: String, value: Dictionary) -> void:
 func _finish() -> void:
 	observing = false
 	if is_instance_valid(game): game.queue_free()
-	if not proof.write_receipt("feature_resource_natural_test" if resource_backed else "natural_effect_lifecycle_test",checks,failures.size()): failures.append("receipt")
+	var scene_id: String = "natural_periodic_chain_test" if periodic_children else ("feature_resource_natural_test" if resource_backed else "natural_effect_lifecycle_test")
+	if not proof.write_receipt(scene_id,checks,failures.size()): failures.append("receipt")
 	print("NATURAL_EFFECT_LIFECYCLE_%s checks=%d failures=%s" % ["PASS" if failures.is_empty() else "FAIL",checks,str(failures)])
 	get_tree().quit(0 if failures.is_empty() else 1)

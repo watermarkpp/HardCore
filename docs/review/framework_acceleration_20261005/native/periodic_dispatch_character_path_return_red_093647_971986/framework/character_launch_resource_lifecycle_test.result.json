@@ -1,0 +1,97 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "actual hall requests the real production PackedScene before a native exit",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "native owner deletion has actually completed",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "native owner exit joins its actual outstanding scene load before resources can be unmounted",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "replaced real PackedScene path retains both accepted native requests",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "actual tree exit consumes the tracked native request: res://scenes/main.tscn",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "actual tree exit consumes the tracked native request: res://scenes/character_select.tscn",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "exit clears ownership and invalidates prior monitors without disabling future prewarm",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "same-stack path-return case starts without another owner's native retrieval rights",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "same-stack A-to-B-to-A returns to the actual outstanding production main scene",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "same-stack A-to-B-to-A owns exactly two distinct native requests without reacquiring A",
+      "passed": false
+    },
+    {
+      "id": 11,
+      "label": "same-stack owner exit leaves no native retrieval token: res://scenes/main.tscn",
+      "passed": false
+    },
+    {
+      "id": 12,
+      "label": "same-stack owner exit leaves no native retrieval token: res://scenes/character_select.tscn",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "same-stack exit clears ownership and invalidates every prior monitor",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "owned path-return negative control still contains the actual valid main PackedScene",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "one owned surplus retrieval cleans the negative control without hiding its original assertions",
+      "passed": true
+    }
+  ],
+  "count": 15,
+  "engine_version": "4.7-stable (official)",
+  "failed": 2,
+  "invocation_id": "7e6251c0-03a3-4f25-9994-361a3f19e853",
+  "passed": 13,
+  "reported_checks": 15,
+  "reported_failures": 2,
+  "run_id": "d3245138-7fae-463b-8e04-cf1d0f76a1a1",
+  "runtime_environment": {
+    "native_process_id": 2844,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_character_path_return_red_697e7395e0404625bdaa81eb0833d414",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_dispatch_character_path_return_red_697e7395e0404625bdaa81eb0833d414/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "character_launch_resource_lifecycle_test",
+  "schema_version": 1,
+  "source_content_sha256": "245d5aedf4219cf3ebf2ccd4f6539581491d1d59b417d4b2fce6ae1ba51fda5d",
+  "status": "FAIL"
+}

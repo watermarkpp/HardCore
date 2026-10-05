@@ -1,0 +1,196 @@
+{
+  "cleanup_gets": [],
+  "counterexample_observed": true,
+  "exit_budget": {
+    "categories": {},
+    "epoch": 117,
+    "inflight_usec": 0,
+    "limit_usec": 1200,
+    "open_scopes": 0,
+    "overrun_usec": 0,
+    "pending": {},
+    "spent_usec": 0
+  },
+  "fixture_paths": [
+    "user://caster_capacity_2ae03b606f77d964_0.hcwarm",
+    "user://caster_capacity_2ae03b606f77d964_1.hcwarm",
+    "user://caster_capacity_2ae03b606f77d964_2.hcwarm",
+    "user://caster_capacity_2ae03b606f77d964_3.hcwarm",
+    "user://caster_capacity_2ae03b606f77d964_4.hcwarm",
+    "user://caster_capacity_2ae03b606f77d964_5.hcwarm"
+  ],
+  "invocation_id": "63166bc5-a785-4672-9c5d-fc7c3f2768f2",
+  "loader_counters": {
+    "completed": {
+      "user://caster_capacity_2ae03b606f77d964_0.hcwarm": 1,
+      "user://caster_capacity_2ae03b606f77d964_1.hcwarm": 1,
+      "user://caster_capacity_2ae03b606f77d964_2.hcwarm": 1,
+      "user://caster_capacity_2ae03b606f77d964_3.hcwarm": 1,
+      "user://caster_capacity_2ae03b606f77d964_4.hcwarm": 1,
+      "user://caster_capacity_2ae03b606f77d964_5.hcwarm": 1
+    },
+    "entered": {
+      "user://caster_capacity_2ae03b606f77d964_0.hcwarm": 1,
+      "user://caster_capacity_2ae03b606f77d964_1.hcwarm": 1,
+      "user://caster_capacity_2ae03b606f77d964_2.hcwarm": 1,
+      "user://caster_capacity_2ae03b606f77d964_3.hcwarm": 1,
+      "user://caster_capacity_2ae03b606f77d964_4.hcwarm": 1,
+      "user://caster_capacity_2ae03b606f77d964_5.hcwarm": 1
+    }
+  },
+  "max_in_flight": 4,
+  "native_after_exit": {
+    "user://caster_capacity_2ae03b606f77d964_0.hcwarm": 0,
+    "user://caster_capacity_2ae03b606f77d964_1.hcwarm": 0,
+    "user://caster_capacity_2ae03b606f77d964_2.hcwarm": 0,
+    "user://caster_capacity_2ae03b606f77d964_3.hcwarm": 0,
+    "user://caster_capacity_2ae03b606f77d964_4.hcwarm": 0,
+    "user://caster_capacity_2ae03b606f77d964_5.hcwarm": 0
+  },
+  "owner_destroyed": true,
+  "reached_delivery": true,
+  "run_id": "03421a28-9f4a-4a10-a43f-c1804173597c",
+  "scene_id": "root_native_caster_capacity_test",
+  "schema_version": 1,
+  "scope": "controlled production API capacity counterexample: real Root and ResourceLoader with six test-owned gated textures; not natural P6, combat, APK, or device evidence",
+  "snapshots": [
+    {
+      "loader_counters": {
+        "completed": {},
+        "entered": {}
+      },
+      "native_status": {
+        "user://caster_capacity_2ae03b606f77d964_0.hcwarm": 1,
+        "user://caster_capacity_2ae03b606f77d964_1.hcwarm": 1,
+        "user://caster_capacity_2ae03b606f77d964_2.hcwarm": 0,
+        "user://caster_capacity_2ae03b606f77d964_3.hcwarm": 0,
+        "user://caster_capacity_2ae03b606f77d964_4.hcwarm": 0,
+        "user://caster_capacity_2ae03b606f77d964_5.hcwarm": 0
+      },
+      "owner_count": 2,
+      "owner_paths": [
+        "user://caster_capacity_2ae03b606f77d964_0.hcwarm",
+        "user://caster_capacity_2ae03b606f77d964_1.hcwarm"
+      ],
+      "pending_count": 4,
+      "stage": "pump_1"
+    },
+    {
+      "loader_counters": {
+        "completed": {},
+        "entered": {}
+      },
+      "native_status": {
+        "user://caster_capacity_2ae03b606f77d964_0.hcwarm": 1,
+        "user://caster_capacity_2ae03b606f77d964_1.hcwarm": 1,
+        "user://caster_capacity_2ae03b606f77d964_2.hcwarm": 1,
+        "user://caster_capacity_2ae03b606f77d964_3.hcwarm": 1,
+        "user://caster_capacity_2ae03b606f77d964_4.hcwarm": 0,
+        "user://caster_capacity_2ae03b606f77d964_5.hcwarm": 0
+      },
+      "owner_count": 4,
+      "owner_paths": [
+        "user://caster_capacity_2ae03b606f77d964_0.hcwarm",
+        "user://caster_capacity_2ae03b606f77d964_1.hcwarm",
+        "user://caster_capacity_2ae03b606f77d964_2.hcwarm",
+        "user://caster_capacity_2ae03b606f77d964_3.hcwarm"
+      ],
+      "pending_count": 2,
+      "stage": "pump_2"
+    },
+    {
+      "loader_counters": {
+        "completed": {
+          "user://caster_capacity_2ae03b606f77d964_0.hcwarm": 1
+        },
+        "entered": {
+          "user://caster_capacity_2ae03b606f77d964_0.hcwarm": 1,
+          "user://caster_capacity_2ae03b606f77d964_1.hcwarm": 1,
+          "user://caster_capacity_2ae03b606f77d964_2.hcwarm": 1,
+          "user://caster_capacity_2ae03b606f77d964_3.hcwarm": 1
+        }
+      },
+      "native_status": {
+        "user://caster_capacity_2ae03b606f77d964_0.hcwarm": 3,
+        "user://caster_capacity_2ae03b606f77d964_1.hcwarm": 1,
+        "user://caster_capacity_2ae03b606f77d964_2.hcwarm": 1,
+        "user://caster_capacity_2ae03b606f77d964_3.hcwarm": 1,
+        "user://caster_capacity_2ae03b606f77d964_4.hcwarm": 0,
+        "user://caster_capacity_2ae03b606f77d964_5.hcwarm": 0
+      },
+      "owner_count": 4,
+      "owner_paths": [
+        "user://caster_capacity_2ae03b606f77d964_0.hcwarm",
+        "user://caster_capacity_2ae03b606f77d964_1.hcwarm",
+        "user://caster_capacity_2ae03b606f77d964_2.hcwarm",
+        "user://caster_capacity_2ae03b606f77d964_3.hcwarm"
+      ],
+      "pending_count": 2,
+      "stage": "one_loaded_three_held_two_pending"
+    },
+    {
+      "loader_counters": {
+        "completed": {
+          "user://caster_capacity_2ae03b606f77d964_0.hcwarm": 1
+        },
+        "entered": {
+          "user://caster_capacity_2ae03b606f77d964_0.hcwarm": 1,
+          "user://caster_capacity_2ae03b606f77d964_1.hcwarm": 1,
+          "user://caster_capacity_2ae03b606f77d964_2.hcwarm": 1,
+          "user://caster_capacity_2ae03b606f77d964_3.hcwarm": 1
+        }
+      },
+      "native_status": {
+        "user://caster_capacity_2ae03b606f77d964_0.hcwarm": 0,
+        "user://caster_capacity_2ae03b606f77d964_1.hcwarm": 1,
+        "user://caster_capacity_2ae03b606f77d964_2.hcwarm": 1,
+        "user://caster_capacity_2ae03b606f77d964_3.hcwarm": 1,
+        "user://caster_capacity_2ae03b606f77d964_4.hcwarm": 1,
+        "user://caster_capacity_2ae03b606f77d964_5.hcwarm": 1
+      },
+      "owner_count": 5,
+      "owner_paths": [
+        "user://caster_capacity_2ae03b606f77d964_1.hcwarm",
+        "user://caster_capacity_2ae03b606f77d964_2.hcwarm",
+        "user://caster_capacity_2ae03b606f77d964_3.hcwarm",
+        "user://caster_capacity_2ae03b606f77d964_4.hcwarm",
+        "user://caster_capacity_2ae03b606f77d964_5.hcwarm"
+      ],
+      "pending_count": 0,
+      "stage": "pump_3_after_replacement"
+    },
+    {
+      "loader_counters": {
+        "completed": {
+          "user://caster_capacity_2ae03b606f77d964_0.hcwarm": 1,
+          "user://caster_capacity_2ae03b606f77d964_1.hcwarm": 1,
+          "user://caster_capacity_2ae03b606f77d964_2.hcwarm": 1,
+          "user://caster_capacity_2ae03b606f77d964_3.hcwarm": 1,
+          "user://caster_capacity_2ae03b606f77d964_4.hcwarm": 1,
+          "user://caster_capacity_2ae03b606f77d964_5.hcwarm": 1
+        },
+        "entered": {
+          "user://caster_capacity_2ae03b606f77d964_0.hcwarm": 1,
+          "user://caster_capacity_2ae03b606f77d964_1.hcwarm": 1,
+          "user://caster_capacity_2ae03b606f77d964_2.hcwarm": 1,
+          "user://caster_capacity_2ae03b606f77d964_3.hcwarm": 1,
+          "user://caster_capacity_2ae03b606f77d964_4.hcwarm": 1,
+          "user://caster_capacity_2ae03b606f77d964_5.hcwarm": 1
+        }
+      },
+      "native_status": {
+        "user://caster_capacity_2ae03b606f77d964_0.hcwarm": 0,
+        "user://caster_capacity_2ae03b606f77d964_1.hcwarm": 0,
+        "user://caster_capacity_2ae03b606f77d964_2.hcwarm": 0,
+        "user://caster_capacity_2ae03b606f77d964_3.hcwarm": 0,
+        "user://caster_capacity_2ae03b606f77d964_4.hcwarm": 0,
+        "user://caster_capacity_2ae03b606f77d964_5.hcwarm": 0
+      },
+      "owner_count": 0,
+      "owner_paths": [],
+      "pending_count": 0,
+      "stage": "all_gates_open_after_drain"
+    }
+  ],
+  "source_content_sha256": "6dd9b514a9b8020682b979437c91dc65fe51bf20e4ed8867358ba1276770cf1f"
+}

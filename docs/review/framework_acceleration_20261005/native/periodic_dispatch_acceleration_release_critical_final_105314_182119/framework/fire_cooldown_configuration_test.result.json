@@ -1,0 +1,227 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "actual mapped world is READY",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "real exact-ID melee receiver is available",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "cooldown x0.5 is legal under the actual compiler and authority",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "default-OFF fixture makes no contribution",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "empty extension: accepted candidate has a configuration owner",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "empty extension: real qualified definition contains the declared cooldown",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "empty extension: natural melee input accepts this lease",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "empty extension: same configuration reaches the real planner once",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "empty extension: actual target HP was committed",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "empty extension: final cooldown equals the accepted configuration",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "empty extension: real actor reaches its finished action boundary",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "empty extension: body completion does not submit another release",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "legal half cooldown: activate through actual content owner",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "legal half cooldown: accepted candidate has a configuration owner",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "legal half cooldown: real qualified definition contains the declared cooldown",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "legal half cooldown: natural melee input accepts this lease",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "legal half cooldown: same configuration reaches the real planner once",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "legal half cooldown: actual target HP was committed",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "legal half cooldown: final cooldown equals the accepted configuration",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "legal half cooldown: real actor reaches its finished action boundary",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "legal half cooldown: body completion does not submit another release",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "accepted half cooldown then module OFF: accepted candidate has a configuration owner",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "accepted half cooldown then module OFF: real qualified definition contains the declared cooldown",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "accepted half cooldown then module OFF: natural melee input accepts this lease",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "accepted half cooldown then module OFF: content changes after acceptance",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "accepted half cooldown then module OFF: same configuration reaches the real planner once",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "accepted half cooldown then module OFF: actual target HP was committed",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "accepted half cooldown then module OFF: final cooldown equals the accepted configuration",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "accepted half cooldown then module OFF: real actor reaches its finished action boundary",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "accepted half cooldown then module OFF: body completion does not submit another release",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "accepted half cooldown then cast speed changes: activate through actual content owner",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "accepted half cooldown then cast speed changes: accepted candidate has a configuration owner",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "accepted half cooldown then cast speed changes: real qualified definition contains the declared cooldown",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "accepted half cooldown then cast speed changes: natural melee input accepts this lease",
+      "passed": true
+    },
+    {
+      "id": 35,
+      "label": "accepted half cooldown then cast speed changes: real profile consumer updates live speed",
+      "passed": true
+    },
+    {
+      "id": 36,
+      "label": "accepted half cooldown then cast speed changes: same configuration reaches the real planner once",
+      "passed": true
+    },
+    {
+      "id": 37,
+      "label": "accepted half cooldown then cast speed changes: actual target HP was committed",
+      "passed": true
+    },
+    {
+      "id": 38,
+      "label": "accepted half cooldown then cast speed changes: final cooldown equals the accepted configuration",
+      "passed": true
+    },
+    {
+      "id": 39,
+      "label": "accepted half cooldown then cast speed changes: real actor reaches its finished action boundary",
+      "passed": true
+    },
+    {
+      "id": 40,
+      "label": "accepted half cooldown then cast speed changes: body completion does not submit another release",
+      "passed": true
+    },
+    {
+      "id": 41,
+      "label": "actual authoring catalog restored after world retirement",
+      "passed": true
+    }
+  ],
+  "count": 41,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "0016ad87-1afb-4533-b800-e065ad5289d5",
+  "passed": 41,
+  "reported_checks": 41,
+  "reported_failures": 0,
+  "run_id": "248d4df5-4789-4731-b549-c76913f7493d",
+  "runtime_environment": {
+    "native_process_id": 20104,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_acceleration_release_critical_final_f298b4dc532b4ea0bfd3ccc61f596065",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_dispatch_acceleration_release_critical_final_f298b4dc532b4ea0bfd3ccc61f596065/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "fire_cooldown_configuration_test",
+  "schema_version": 1,
+  "source_content_sha256": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+  "status": "PASS"
+}

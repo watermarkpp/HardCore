@@ -1,0 +1,142 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "owned failure fixture uses this native run's isolated test user directory",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "unique fault target did not exist before this fixture claimed it",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "owned PackedScene serializes through the real ResourceSaver before fault injection",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "saved fixture is uncached and has a complete binary resource beyond its magic",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "fixture can truncate only its unique owned user resource",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "only the owned resource body was replaced with the bounded binary fault",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "corrupt owned file still passes the real PackedScene existence gate, so failure occurs after request acquisition",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "unique owned path starts without any prior native retrieval token",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "actual hall acquired exactly one owned native request before the worker fault",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "real accepted binary loader worker reaches terminal FAILED before the actual hall monitor handles it",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "actual hall monitor receives the real terminal binary-load failure",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "actual hall terminal FAILED handling retrieves and releases its original native user token",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "terminal failure removes the original owned request rather than retaining a stale path entry",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "lawful retry begins only after the old failed native token has been consumed",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "same unique path receives a fresh valid uncached PackedScene through ResourceSaver",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "same-path lawful retry acquires its own fresh native request through the unchanged hall API",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "fresh lawful worker result reaches READY as a real usable PackedScene",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "returned PackedScene instantiates the exact newly saved lawful fixture",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "lawful retry monitor consumes its fresh native token exactly once",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "owned failure/retry owner exit closes its lifecycle and invalidates monitors",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "no owned native token remains before deleting the unique fault file",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "bounded negative-control cleanup releases this fixture's single remaining owned request",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "deletion resolves to this fixture's unique file inside isolated user data",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "fixture deletes only its unique owned file after native request cleanup",
+      "passed": true
+    }
+  ],
+  "count": 24,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "112e05e5-1f84-48c9-858b-b299d15929bb",
+  "passed": 24,
+  "reported_checks": 24,
+  "reported_failures": 0,
+  "run_id": "f6771d0b-1eef-4c13-a5d1-fb79071e271d",
+  "runtime_environment": {
+    "native_process_id": 22136,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_acceleration_owned_negative_final_4210f3d4b95443b38bdcb539059f97f0",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_dispatch_acceleration_owned_negative_final_4210f3d4b95443b38bdcb539059f97f0/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "character_launch_failed_preload_retry_test",
+  "schema_version": 1,
+  "source_content_sha256": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+  "status": "PASS"
+}

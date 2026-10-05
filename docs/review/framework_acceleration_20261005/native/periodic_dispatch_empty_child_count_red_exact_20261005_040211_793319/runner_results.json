@@ -1,0 +1,40 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "child_batch_empty_completion_test",
+                        "test_path":  "tests/framework/child_batch_empty_completion_test.tscn",
+                        "wrapper_process_id":  1824,
+                        "wrapper_started_utc":  "2026-10-04T20:02:14.1938220Z",
+                        "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_empty_child_count_red_exact_20261005_ec860aa083d04b6f91ec87063a611952",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  false,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  1,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-04T20:02:44.2051001Z",
+                        "native_exit_observed_utc":  "2026-10-04T20:02:30.3257875Z",
+                        "effective_exit_code":  1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "b858ce4b-7bd2-45b3-aa1c-81fa5eb70fd5",
+                        "framework_receipt_valid":  false,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+                    }
+                ],
+    "total":  1,
+    "invocation_id":  "6ca58aad-6024-459d-9d13-5717270e473b",
+    "runtime_environment":  {
+                                "project_root":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+                                "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_empty_child_count_red_exact_20261005_ec860aa083d04b6f91ec87063a611952",
+                                "runner_process_id":  12252
+                            },
+    "passed":  0,
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "engine_log_errors":  0,
+    "generated_at":  "2026-10-05T04:02:31.4293692+08:00",
+    "failed":  1,
+    "suite":  "adhoc"
+}

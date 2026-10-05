@@ -1,0 +1,103 @@
+{
+  "status": "PASS",
+  "status_scope": "inventory completeness and manifest byte stability only",
+  "scope": "manifest-explicit paths only; fixed-parent clean blob inventory, not release review",
+  "generated_utc": "2026-10-05T02:52:58.290590+00:00",
+  "input_ref": "5c34cd5acdd0e7d98ff46965479555a6a708c4c",
+  "resolved_commit": "5c34cd5acdd0e7d98ff46965479555a6a708c4c4",
+  "fixed_parent": "5c34cd5acdd0e7d98ff46965479555a6a708c4c4",
+  "manifest": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\periodic_dispatch_acceleration_bundle_final_103733_388517\\before.json",
+  "manifest_sha256": "ac0fa43d62dc01fecc21c1f72374795cc543013ca923bf8ea056c81a3b8f01a4",
+  "manifest_tested_sha": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+  "manifest_content_set_sha256": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+  "manifest_paths": 3855,
+  "state_counts": {
+    "same_clean_blob": 3774,
+    "added_since_parent": 70,
+    "changed_clean_blob": 11
+  },
+  "clean_change_count": 81,
+  "raw_sha_mismatch_count": 0,
+  "lines_added_total": 3295,
+  "lines_removed_total": 41,
+  "raw_sha_mismatch_paths": [],
+  "missing_current_paths": [],
+  "drifted_during_inventory_paths": [],
+  "category_counts": {
+    "data": {
+      "manifest_paths": 596,
+      "clean_changes": 6,
+      "added_since_parent": 6,
+      "changed_existing_blob": 0,
+      "lines_added": 102,
+      "lines_removed": 0,
+      "raw_sha_mismatches": 0,
+      "missing_current": 0
+    },
+    "production_project": {
+      "manifest_paths": 1,
+      "clean_changes": 0,
+      "added_since_parent": 0,
+      "changed_existing_blob": 0,
+      "lines_added": 0,
+      "lines_removed": 0,
+      "raw_sha_mismatches": 0,
+      "missing_current": 0
+    },
+    "production_scenes": {
+      "manifest_paths": 6,
+      "clean_changes": 0,
+      "added_since_parent": 0,
+      "changed_existing_blob": 0,
+      "lines_added": 0,
+      "lines_removed": 0,
+      "raw_sha_mismatches": 0,
+      "missing_current": 0
+    },
+    "production_scripts": {
+      "manifest_paths": 351,
+      "clean_changes": 5,
+      "added_since_parent": 0,
+      "changed_existing_blob": 5,
+      "lines_added": 82,
+      "lines_removed": 23,
+      "raw_sha_mismatches": 0,
+      "missing_current": 0
+    },
+    "tests": {
+      "manifest_paths": 2898,
+      "clean_changes": 69,
+      "added_since_parent": 64,
+      "changed_existing_blob": 5,
+      "lines_added": 3089,
+      "lines_removed": 13,
+      "raw_sha_mismatches": 0,
+      "missing_current": 0
+    },
+    "tools": {
+      "manifest_paths": 3,
+      "clean_changes": 1,
+      "added_since_parent": 0,
+      "changed_existing_blob": 1,
+      "lines_added": 22,
+      "lines_removed": 5,
+      "raw_sha_mismatches": 0,
+      "missing_current": 0
+    }
+  },
+  "requested_group_counts": {
+    "production_total": 5,
+    "production_scripts": 5,
+    "tests": 69,
+    "data": 6,
+    "tools": 1
+  },
+  "line_count_method": "SequenceMatcher on parent blob vs current raw file after CRLF/CR to LF normalization; replace contributes to both added and removed; trailing final newline reported separately",
+  "git_operations": [
+    "rev-parse input ref to commit with exact 40-character SHA check",
+    "ls-tree resolved parent with explicit literal manifest path batches",
+    "hash-object --stdin-paths --filters without -w",
+    "cat-file fixed-parent changed blobs only"
+  ],
+  "git_index_written": false
+}

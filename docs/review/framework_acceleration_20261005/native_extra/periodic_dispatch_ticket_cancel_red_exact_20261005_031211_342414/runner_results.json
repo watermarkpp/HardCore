@@ -1,0 +1,40 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "accepted_binding_snapshot_test",
+                        "test_path":  "tests/framework/accepted_binding_snapshot_test.tscn",
+                        "wrapper_process_id":  24268,
+                        "wrapper_started_utc":  "2026-10-04T19:12:13.6601624Z",
+                        "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_ticket_cancel_red_exact_20261005_8f22106c2c6b4800ab7677e518b865e3",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  false,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  1,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-04T19:12:43.6699330Z",
+                        "native_exit_observed_utc":  "2026-10-04T19:12:21.4611692Z",
+                        "effective_exit_code":  1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "99dc4dd2-bd99-4b28-82ed-0963ce86c576",
+                        "framework_receipt_valid":  false,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+                    }
+                ],
+    "total":  1,
+    "invocation_id":  "6af635d8-f20f-446b-ad43-06586829c753",
+    "runtime_environment":  {
+                                "project_root":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+                                "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_ticket_cancel_red_exact_20261005_8f22106c2c6b4800ab7677e518b865e3",
+                                "runner_process_id":  2668
+                            },
+    "passed":  0,
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "engine_log_errors":  0,
+    "generated_at":  "2026-10-05T03:12:22.5568843+08:00",
+    "failed":  1,
+    "suite":  "adhoc"
+}

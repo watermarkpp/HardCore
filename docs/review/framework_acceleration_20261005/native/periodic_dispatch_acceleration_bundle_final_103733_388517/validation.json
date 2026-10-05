@@ -1,0 +1,16 @@
+{
+  "command": [
+    "powershell",
+    "-NoProfile",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/root_startup_retirement_test.tscn','tests/framework/root_receiver_retirement_test.tscn','tests/framework/root_plain_skill_retirement_test.tscn','tests/framework/root_plain_skill_drained_retirement_test.tscn','tests/framework/root_inflight_caster_retirement_test.tscn','tests/framework/root_native_caster_capacity_test.tscn','tests/framework/character_launch_resource_lifecycle_test.tscn','tests/framework/feature_cue_actor_retirement_test.tscn','tests/framework/feature_cue_actor_retirement_reentry_test.tscn','tests/framework/feature_cue_pool_reuse_test.tscn','tests/framework/feature_cue_audio_replacement_test.tscn','tests/framework/feature_cue_native_finish_reuse_test.tscn','tests/framework/feature_cue_active_world_exit_test.tscn','tests/framework/feature_resource_cue_test.tscn','tests/framework/feature_resource_cue_reentry_test.tscn','tests/framework/feature_resource_audio_closure_test.tscn','tests/framework/periodic_cadence_production_reachability_test.tscn','tests/framework/accepted_binding_snapshot_test.tscn','tests/framework/child_batch_retirement_boundary_test.tscn','tests/framework/child_batch_empty_completion_test.tscn','tests/framework/child_batch_atomic_control_test.tscn','tests/framework/feature_reservation_test.tscn','tests/framework/feature_release_identity_test.tscn','tests/framework/feature_child_planner_test.tscn','tests/framework/feature_child_execution_test.tscn','tests/framework/feature_child_chain_admission_test.tscn','tests/framework/feature_periodic_child_chain_test.tscn','tests/framework/periodic_child_root_test.tscn','tests/framework/periodic_child_g2_root_test.tscn','tests/framework/periodic_refresh_period_boundary_test.tscn','tests/framework/threaded_minimal_empty_node_probe_test.tscn','tests/framework/threaded_minimal_inferred_refs_probe_test.tscn','tests/framework/threaded_minimal_typed_refs_probe_test.tscn' -TimeoutSeconds 30"
+  ],
+  "timeout_seconds": 30,
+  "exit_code": 0,
+  "source_stable_during_run": true,
+  "passed": 33,
+  "failed": 0,
+  "status": "PASS"
+}

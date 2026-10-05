@@ -1,0 +1,112 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "actual effect runtime configured",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "qualified test source enabled",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "real compiled binding used",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "continuous producers preserve exactly one necessary pending fact",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "fully consumed batches release their ActorRef objects even while queue remains nonempty: 0",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "retained batch containers are bounded by necessary pending facts",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "production budget pump drains the remaining fact and every queue container",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "every real fact is dispatched exactly once in the 257 two-receiver batches",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "queue retirement preserves all historical deduplication receipts",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "final fully consumed batch releases its own target handle",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "final fully consumed batch releases its own target handle",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "final drain processes precisely the sole pending fact",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "old release replay remains deduplicated after its queue container is reclaimed",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "replay neither loses nor adds an old receipt",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "all queue operations complete without hidden capacity or identity errors",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "world teardown resets the queue",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "explicitly cleared owner can accept and drain a new queue",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "test source withdrawn",
+      "passed": true
+    }
+  ],
+  "count": 18,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "0016ad87-1afb-4533-b800-e065ad5289d5",
+  "passed": 18,
+  "reported_checks": 18,
+  "reported_failures": 0,
+  "run_id": "c1fa9624-cad3-447c-9930-c67e768a47b3",
+  "runtime_environment": {
+    "native_process_id": 10176,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_acceleration_release_critical_final_f298b4dc532b4ea0bfd3ccc61f596065",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_dispatch_acceleration_release_critical_final_f298b4dc532b4ea0bfd3ccc61f596065/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "feature_queue_retention_test",
+  "schema_version": 1,
+  "source_content_sha256": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+  "status": "PASS"
+}

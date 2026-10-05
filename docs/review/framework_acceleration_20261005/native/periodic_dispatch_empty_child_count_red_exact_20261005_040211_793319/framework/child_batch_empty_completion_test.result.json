@@ -1,0 +1,122 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "registered wizard identity",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "existing default-off formal periodic child package loads at the retired world boundary",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "actual mapped Root reaches READY",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "three exact-ID receivers come from the sole mapped factory",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "actual Root stable traversal reaches the observed receiver first",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "READY publication enables the explicit existing module",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "actual lease freezes both root and periodic-child subscriptions",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "real Player accepts a nonempty complete promise before windup",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "source withdrawal preserves already accepted work",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "real timer releases the admitted root exactly once",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "initial real geometry misses both later child receivers and does not kill the parent",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "real base fact starts its status without premature child work",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "the true periodic fatal commit immediately retires parent collision",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "one admitted child queries current empty geometry and never reaches a receiver HP notification",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "the legitimate empty base batch has an explicit successful empty outcome",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "one successful empty child is counted even when its root closes during batch finish",
+      "passed": false
+    },
+    {
+      "id": 17,
+      "label": "empty child consumes no target HP, extra Player MP or original RNG streams",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "successful empty finish retires its producer, receipts, states and queue without an artificial error",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "retired empty branch replay cannot receive a second completion count",
+      "passed": false
+    },
+    {
+      "id": 20,
+      "label": "retired world restores the existing formal default registry",
+      "passed": true
+    }
+  ],
+  "count": 20,
+  "engine_version": "4.7-stable (official)",
+  "failed": 2,
+  "invocation_id": "6ca58aad-6024-459d-9d13-5717270e473b",
+  "passed": 18,
+  "reported_checks": 20,
+  "reported_failures": 2,
+  "run_id": "b858ce4b-7bd2-45b3-aa1c-81fa5eb70fd5",
+  "runtime_environment": {
+    "native_process_id": 14612,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_empty_child_count_red_exact_20261005_ec860aa083d04b6f91ec87063a611952",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_dispatch_empty_child_count_red_exact_20261005_ec860aa083d04b6f91ec87063a611952/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "child_batch_empty_completion_test",
+  "schema_version": 1,
+  "source_content_sha256": "1c2c5c5d3dc8f7b5425198a2154e6e86311013227ad06da20de0e90999cc8e28",
+  "status": "FAIL"
+}

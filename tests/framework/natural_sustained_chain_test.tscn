@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/framework/natural_sustained_chain_test.gd" id="1"]
+
+[node name="NaturalSustainedChainTest" type="Node"]
+script = ExtResource("1")
+resource_backed = true
+periodic_children = true

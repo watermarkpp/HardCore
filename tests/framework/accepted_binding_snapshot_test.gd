@@ -47,6 +47,13 @@ func _run() -> void:
 	check(runtime.configure(world,clock,combat) and runtime.configure_child_executor(_unexpected_child),"one real runtime owns every admission and claim")
 	var skill: String="hc.skill.wizard.ice_storm"
 	var release: String="binding-snapshot:root"
+	var ordinary_bindings: Array=[]
+	for binding: Dictionary in bindings:
+		if binding.definition.handler_id=="hc.ignite.v1": ordinary_bindings.append(binding)
+	for selected: Array in [bindings,ordinary_bindings]:
+		_test_unissued_cancel(skill,selected,false)
+		_test_unissued_cancel(skill,selected,true)
+	var claims_before_original_case: int=runtime.claim_calls
 	var ticket: RefCounted=runtime.reserve_action(skill,bindings,1,release,1)
 	check(ticket!=null,"the root receives a nonempty capacity ticket before HP")
 	if ticket==null:
@@ -70,7 +77,7 @@ func _run() -> void:
 	check(not _query(ticket,world.capture_world(),release,skill,malformed),"a changed source handle cannot borrow accepted identity")
 	var forged: RefCounted=Reservation.create(runtime,ticket.sequence())
 	check(not _query(forged,world.capture_world(),release,skill,bindings),"a second object with the same sequence is not the issued ticket")
-	check(runtime.reservation_snapshot()==before and runtime.metrics()==metrics and runtime.claim_calls==0
+	check(runtime.reservation_snapshot()==before and runtime.metrics()==metrics and runtime.claim_calls==claims_before_original_case
 		and target.current_hp==5000 and source_a.current_mp==old_mp,"all proof queries leave claims, capacity, HP, MP and runtime metrics unchanged")
 	var rejected:=Batch.create(world,release,skill,changed,{},0,ticket,null,ticket.chain_context(release))
 	check(not rejected.success and ticket.can_begin_release(release),"a changed batch fails without stealing the original legal release")
@@ -94,7 +101,7 @@ func _run() -> void:
 	await _pump()
 	check(target.periodic_calls==4 and target.periodic_release_ids.size()==4 and target.current_hp==4950,
 		"four distinct periodic batches each commit exact real HP once")
-	check(runtime.claim_calls==7,"two denied claims, one root claim and four periodic claims retain the original one-shot protocol")
+	check(runtime.claim_calls-claims_before_original_case==7,"two denied claims, one root claim and four periodic claims retain the original one-shot protocol")
 	check(not runtime.has_work() and runtime.errors.is_empty(),"periodic producer, state, receipts and root promises all retire")
 	var plain: Array=[]
 	for binding: Dictionary in bindings:
@@ -124,6 +131,42 @@ func _run() -> void:
 	check(not _query(stale,world.capture_world(),"binding-snapshot:stale",skill,bindings)
 		and runtime.reservation_snapshot()==before and runtime.claim_calls==claims,"stale-world proof inspection refuses without mutating or consuming the old producer")
 	_cleanup(combat)
+
+func _test_unissued_cancel(skill: String, selected: Array, by_destructor: bool) -> void:
+	var release := "binding-cancel:%d:%s" % [selected.size(), "destructor" if by_destructor else "close"]
+	var baseline: Dictionary=runtime.reservation_snapshot()
+	var hp: int=target.current_hp
+	var mp: int=source_a.current_mp
+	var issued: RefCounted=runtime.reserve_action(skill,selected,1,release,1)
+	check(issued!=null,"cancellation case has one real issued producer " + release)
+	if issued==null: return
+	var reserved: Dictionary=runtime.reservation_snapshot()
+	var unissued: RefCounted=Reservation.create(runtime,issued.sequence())
+	check(not _query(unissued,world.capture_world(),release,skill,selected),
+		"unissued same-sequence object cannot certify the accepted producer " + release)
+	check(not unissued.claim(world.capture_world(),release,skill,selected).success,
+		"unissued same-sequence object cannot consume any original producer " + release)
+	if not by_destructor: unissued.close()
+	unissued=null
+	check(runtime.reservation_snapshot()==reserved and issued.can_begin_release(release),
+		"unissued close or last-reference deletion preserves the exact original capacity and release " + release)
+	var made:=Batch.create(world,release,skill,selected,{},0,issued,null,issued.chain_context(release))
+	check(made.success,"original producer still claims exactly once after unissued retirement " + release)
+	check(made.success and not issued.claim(world.capture_world(),release,skill,selected).success,
+		"the genuine producer cannot claim a second batch " + release)
+	if made.success:
+		made.batch.finish_production()
+	issued=null
+	check(runtime.reservation_snapshot()==baseline and target.current_hp==hp and source_a.current_mp==mp,
+		"completed qualification probe restores capacity without HP or MP mutation " + release)
+	for abandoned_by_destructor in [false,true]:
+		var cancellable: RefCounted=runtime.reserve_action(skill,selected,1,release+":legitimate:%s" % abandoned_by_destructor,1)
+		check(cancellable!=null,"legitimate unused action receives its own nonempty reservation " + release)
+		if cancellable==null: return
+		if not abandoned_by_destructor: cancellable.close()
+		cancellable=null
+		check(runtime.reservation_snapshot()==baseline,
+			"issued close and issued destructor still release only their own unused promise " + release)
 
 func _cleanup(combat: Node) -> void:
 	runtime.clear()

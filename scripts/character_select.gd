@@ -123,7 +123,7 @@ func _exit_tree() -> void:
 	_launch_scene_preload_generation += 1
 	for requested_path: String in _launch_scene_preload_requests:
 		var status := ResourceLoader.load_threaded_get_status(requested_path)
-		if status in [ResourceLoader.THREAD_LOAD_IN_PROGRESS, ResourceLoader.THREAD_LOAD_LOADED]:
+		if status != ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
 			ResourceLoader.load_threaded_get(requested_path)
 	_launch_scene_preload_requests.clear()
 	_launch_scene_preload_resource = null
@@ -145,14 +145,15 @@ func _request_launch_scene_preload() -> void:
 	if requested_path.is_empty() or not ResourceLoader.exists(requested_path, "PackedScene"):
 		_mark_launch_scene_preload_failed(ERR_FILE_NOT_FOUND, generation, requested_path)
 		return
-	_launch_scene_preload_request_count += 1
-	var request_error := ResourceLoader.load_threaded_request(requested_path, "PackedScene")
-	if request_error != OK:
-		var existing_status := ResourceLoader.load_threaded_get_status(requested_path)
-		if existing_status not in [ResourceLoader.THREAD_LOAD_IN_PROGRESS, ResourceLoader.THREAD_LOAD_LOADED]:
+	# Returning to a still-owned path changes its monitor, not its native
+	# retrieval entitlement. One entry must correspond to one accepted request.
+	if not _launch_scene_preload_requests.has(requested_path):
+		_launch_scene_preload_request_count += 1
+		var request_error := ResourceLoader.load_threaded_request(requested_path, "PackedScene")
+		if request_error != OK:
 			_mark_launch_scene_preload_failed(request_error, generation, requested_path)
 			return
-	_launch_scene_preload_requests[requested_path] = true
+		_launch_scene_preload_requests[requested_path] = true
 	_launch_scene_preload_state = LAUNCH_PRELOAD_REQUESTED
 	_monitor_launch_scene_preload.call_deferred(generation, requested_path)
 
@@ -175,6 +176,10 @@ func _monitor_launch_scene_preload(generation: int, requested_path: String) -> v
 				_mark_launch_scene_preload_failed(ERR_FILE_CORRUPT, generation, requested_path)
 			return
 		if status in [ResourceLoader.THREAD_LOAD_FAILED, ResourceLoader.THREAD_LOAD_INVALID_RESOURCE]:
+			_launch_scene_preload_requests.erase(requested_path)
+			if status == ResourceLoader.THREAD_LOAD_FAILED:
+				# A terminal failure still owns one native retrieval entitlement.
+				ResourceLoader.load_threaded_get(requested_path)
 			_mark_launch_scene_preload_failed(ERR_CANT_OPEN, generation, requested_path)
 			return
 		await get_tree().process_frame

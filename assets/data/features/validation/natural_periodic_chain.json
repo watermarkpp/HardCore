@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "module_id": "hc.validation.natural_periodic_chain",
+  "module_version": 1,
+  "core_api_version": 1,
+  "requires": ["hc.ignite_cue_assets"],
+  "conflicts": [],
+  "capabilities": ["combat.post_hit", "combat.child_action"],
+  "handlers": ["hc.death_burst.v1"],
+  "resource_dependencies": [],
+  "cost": {"commands_per_event": 1, "states_per_target": 0},
+  "default_enabled": false,
+  "scope": "world",
+  "activation_boundary": "world_ready",
+  "mechanics": [
+    {
+      "mechanic_id": "hc.validation.natural_periodic_chain.death",
+      "kind": "trigger",
+      "tags": [],
+      "event": "damage_committed",
+      "skill_id": "hc.skill.wizard.ice_storm",
+      "handler_id": "hc.death_burst.v1",
+      "source_classes": ["direct", "periodic", "child"],
+      "dedup": "per_target_per_release",
+      "lifecycle": "finite_chain",
+      "config": {"fraction": 1.0, "radius_gu": 3.0, "maximum_generation": 1}
+    }
+  ],
+  "tests": ["tests/framework/natural_periodic_chain_test.tscn"]
+}

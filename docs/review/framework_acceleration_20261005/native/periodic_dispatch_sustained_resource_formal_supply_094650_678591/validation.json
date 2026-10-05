@@ -1,0 +1,16 @@
+{
+  "command": [
+    "powershell",
+    "-NoProfile",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/natural_sustained_resource_test.tscn','tests/framework/natural_sustained_resource_cold_test.tscn' -TimeoutSeconds 90"
+  ],
+  "timeout_seconds": 90,
+  "exit_code": 0,
+  "source_stable_during_run": true,
+  "passed": 2,
+  "failed": 0,
+  "status": "PASS"
+}

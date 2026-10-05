@@ -1,0 +1,40 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "character_launch_failed_preload_retry_test",
+                        "test_path":  "tests/framework/character_launch_failed_preload_retry_test.tscn",
+                        "wrapper_process_id":  20912,
+                        "wrapper_started_utc":  "2026-10-05T01:39:53.9344196Z",
+                        "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_character_failed_preload_green_a61d40263ba642f38ac71bbdc88216d2",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-05T01:40:23.9463862Z",
+                        "native_exit_observed_utc":  "2026-10-05T01:40:00.1458904Z",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  2,
+                        "engine_log_failure_count":  2,
+                        "framework_run_id":  "787503ce-3b98-48bb-9118-56baf9180f5b",
+                        "framework_receipt_valid":  true,
+                        "result":  "FAIL",
+                        "reason":  "stderr_failures_2;engine_log_failures_2"
+                    }
+                ],
+    "total":  1,
+    "invocation_id":  "e3a2249e-6c13-4b71-b194-7d8772318ab1",
+    "runtime_environment":  {
+                                "project_root":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+                                "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_character_failed_preload_green_a61d40263ba642f38ac71bbdc88216d2",
+                                "runner_process_id":  356
+                            },
+    "passed":  0,
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "engine_log_errors":  2,
+    "generated_at":  "2026-10-05T09:40:01.5905367+08:00",
+    "failed":  1,
+    "suite":  "adhoc"
+}

@@ -1,0 +1,117 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "native retirement owns isolated production user data",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "production startup and distinct profile prepare the real world",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "all extension modules remain disabled",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "mapped Root reaches READY through ordinary processing",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "test-owned binary texture 0 saves completely",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "test-owned texture 0 starts outside the native cache",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "test-owned binary texture 1 saves completely",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "test-owned texture 1 starts outside the native cache",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "ordinary Root admits both cold native requests before this observer destroys it",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "both admitted requests still have their original native retrieval right at destruction",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "at least one actual native request is still IN_PROGRESS before owner destruction",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "actual Root destruction consumes every previously admitted native retrieval right",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "the destroyed Root and its static world access do not survive retirement; budget scopes are closed",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "each admitted native texture remains usable from its collecting owner",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "only this invocation's exact texture fixture is removed",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "each admitted native texture remains usable from its collecting owner",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "only this invocation's exact texture fixture is removed",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "bounded native ownership trace opens",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "native ownership trace writes completely",
+      "passed": true
+    }
+  ],
+  "count": 19,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "1152d73c-e89e-4916-bdb6-dd95ddade80b",
+  "passed": 19,
+  "reported_checks": 19,
+  "reported_failures": 0,
+  "run_id": "b9e13808-8469-400f-bf7f-e44885809986",
+  "runtime_environment": {
+    "native_process_id": 7256,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_inflight_caster_retirement_green_34312b8c034f4341b910441b3d76c415",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_dispatch_inflight_caster_retirement_green_34312b8c034f4341b910441b3d76c415/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "root_inflight_caster_retirement_test",
+  "schema_version": 1,
+  "source_content_sha256": "8e424a4d5c5636d2bd95adbcf4a27769e3ec1c552075768eeaf2204316b6e6b7",
+  "status": "PASS"
+}

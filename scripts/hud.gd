@@ -253,7 +253,7 @@ func _exit_tree() -> void:
 	_catalog_icon_prewarm_paths.clear()
 	# Script loaders can still be compiling preloaded textures when the world
 	# exits. Join this HUD's requests before engine/resource teardown; ordinary
-	# prewarming remains asynchronous and never blocks the gameplay frame.
+	# background prewarming remains asynchronous and never blocks gameplay.
 	for path: String in _panel_script_pending.keys():
 		var status := ResourceLoader.load_threaded_get_status(path)
 		if status in [ResourceLoader.THREAD_LOAD_IN_PROGRESS, ResourceLoader.THREAD_LOAD_LOADED]:
@@ -1846,7 +1846,7 @@ func _run_panel_prewarm(system_menu_panel: Control = null, background_mode: bool
 		"construction_ms_by_panel": {},
 		"background_mode": background_mode,
 	}
-	_panel_prewarm_diagnostic["script_prefetch"] = await _prefetch_panel_scripts()
+	_panel_prewarm_diagnostic["script_prefetch"] = await _prefetch_panel_scripts(background_mode)
 	_report_panel_prewarm_progress(background_mode, 0.84, "界面资源已准备")
 	_start_catalog_icon_prewarm.call_deferred(background_mode)
 	var panel_started_usec := 0
@@ -2030,7 +2030,7 @@ func _run_panel_prewarm(system_menu_panel: Control = null, background_mode: bool
 		print("[UIPanelPrewarmProfile] ", JSON.stringify(_panel_prewarm_diagnostic))
 
 
-func _prefetch_panel_scripts() -> Dictionary:
+func _prefetch_panel_scripts(background_mode := false) -> Dictionary:
 	var paths: Array[String] = [
 		INVENTORY_PANEL_SCRIPT_PATH,
 		ENHANCEMENT_PANEL_SCRIPT_PATH,
@@ -2042,7 +2042,27 @@ func _prefetch_panel_scripts() -> Dictionary:
 	]
 	var pending := _panel_script_pending
 	var request_failures: Array[String] = []
+	var covered_loads := 0
 	for path: String in paths:
+		# Godot 4.7's threaded GDScript dependency loader can leave zero-ref
+		# objects after every request was collected. Only explicit opaque
+		# Loading admits a main-thread script load; yield between scripts so
+		# the overlay can present. Live/background work keeps the async path.
+		if (
+			not background_mode
+			and is_instance_valid(loading_transition_overlay)
+			and loading_transition_overlay.is_visible_in_tree()
+		):
+			var panel_script := ResourceLoader.load(path) as Script
+			if panel_script != null:
+				_panel_script_warm_refs.append(panel_script)
+			else:
+				request_failures.append("%s:null" % path)
+			covered_loads += 1
+			await get_tree().process_frame
+			if not is_inside_tree():
+				break
+			continue
 		var error := ResourceLoader.load_threaded_request(path)
 		if error == OK:
 			pending[path] = true
@@ -2072,6 +2092,7 @@ func _prefetch_panel_scripts() -> Dictionary:
 	return {
 		"requested": paths.size(),
 		"loaded": _panel_script_warm_refs.size(),
+		"covered_main_thread_loads": covered_loads,
 		"pending": pending.keys(),
 		"failures": request_failures,
 		"waited_frames": waited_frames,

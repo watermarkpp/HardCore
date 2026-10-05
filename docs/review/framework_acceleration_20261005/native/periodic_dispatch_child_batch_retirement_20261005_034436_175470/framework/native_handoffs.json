@@ -1,0 +1,30 @@
+{
+    "schema_version":  1,
+    "runtime_environment":  {
+                                "project_root":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+                                "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_child_batch_retirement_20261005_69379dcf2def4715971d040e546f6002",
+                                "runner_process_id":  6080
+                            },
+    "invocation_id":  "1fa9693e-6847-44bf-bf9d-dd1ba5146aba",
+    "source_content_sha256":  "684e506669f6555766d5871464dc52e6d4c718db4cbf083c85de4585ab72cc8a",
+    "producers":  {
+                      "child_batch_retirement_boundary_test":  {
+                                                                   "scene_id":  "child_batch_retirement_boundary_test",
+                                                                   "run_id":  "66d3f242-6714-4b3f-98fe-a540ba733a64",
+                                                                   "source_content_sha256":  "684e506669f6555766d5871464dc52e6d4c718db4cbf083c85de4585ab72cc8a",
+                                                                   "process_exited":  true,
+                                                                   "effective_exit_code":  0,
+                                                                   "result":  "PASS",
+                                                                   "receipt_sha256":  "d29ee60586d5bcd396ea246f6c12f831bdc7eac8c9c66eaa0c794b371ce07214"
+                                                               },
+                      "child_batch_atomic_control_test":  {
+                                                              "scene_id":  "child_batch_atomic_control_test",
+                                                              "run_id":  "30c7e90d-bd54-4e36-be98-04dcdec5552e",
+                                                              "source_content_sha256":  "684e506669f6555766d5871464dc52e6d4c718db4cbf083c85de4585ab72cc8a",
+                                                              "process_exited":  true,
+                                                              "effective_exit_code":  0,
+                                                              "result":  "PASS",
+                                                              "receipt_sha256":  "fa829013458ed4a40f02a011d988080ddce909f9d5324ad5e34783ad2cb85926"
+                                                          }
+                  }
+}

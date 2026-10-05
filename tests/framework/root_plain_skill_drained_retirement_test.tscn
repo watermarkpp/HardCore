@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/framework/root_startup_retirement_test.gd" id="1"]
+
+[node name="RootPlainSkillDrainedRetirementTest" type="Node"]
+script = ExtResource("1")
+prepare_receiver = true
+release_skill = true
+wait_for_caster_warmup = true

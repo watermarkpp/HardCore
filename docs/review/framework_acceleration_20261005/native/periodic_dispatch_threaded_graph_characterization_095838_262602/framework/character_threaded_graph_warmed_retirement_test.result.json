@@ -1,0 +1,52 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "controlled native dependency probe owns isolated user data",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "comparison loads the same Root graph on the actual main thread",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "this process has no existing native retrieval owner for the exact main scene",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "one real background request accepts the unchanged main PackedScene",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "the accepted native main scene completes within the bounded probe",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "one actual get returns the PackedScene and retires its one native retrieval right",
+      "passed": true
+    }
+  ],
+  "count": 6,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "bfb15963-c908-4772-9b83-70daa4de3bea",
+  "passed": 6,
+  "reported_checks": 6,
+  "reported_failures": 0,
+  "run_id": "5893e52f-9142-4e23-b9d0-fca1fbdb70fd",
+  "runtime_environment": {
+    "native_process_id": 5676,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_threaded_graph_characterization_d8a6f2fe29844e50bef9bac443e2bc06",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_dispatch_threaded_graph_characterization_d8a6f2fe29844e50bef9bac443e2bc06/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "character_threaded_graph_warmed_retirement_test",
+  "schema_version": 1,
+  "source_content_sha256": "679b47895e1a2c795d5a1c6469cda66070bc62b77922818a901a59c035f0f0ec",
+  "status": "PASS"
+}

@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "modules": [
+    {"module_id": "hc.ignite", "path": "res://assets/data/features/validation/resource_natural_parent.json"},
+    {"module_id": "hc.ignite_cue_assets", "path": "res://assets/data/features/validation/resource_natural_child.json"},
+    {"module_id": "hc.validation.natural_periodic_chain", "path": "res://assets/data/features/validation/natural_periodic_chain.json"}
+  ],
+  "bindings": [
+    {"module_id": "hc.ignite", "kind": "rule", "rule_id": "hc.ignite", "mechanic_id": "hc.ignite.ice_storm"},
+    {"module_id": "hc.ignite", "kind": "item", "item_id": "hc.item.000085", "mechanic_id": "hc.ignite.ice_storm"},
+    {"module_id": "hc.ignite", "kind": "skill", "skill_id": "hc.skill.wizard.ice_storm", "mechanic_id": "hc.ignite.ice_storm"},
+    {"module_id": "hc.validation.natural_periodic_chain", "kind": "rule", "rule_id": "hc.validation.natural_periodic_chain", "mechanic_id": "hc.validation.natural_periodic_chain.death"}
+  ]
+}

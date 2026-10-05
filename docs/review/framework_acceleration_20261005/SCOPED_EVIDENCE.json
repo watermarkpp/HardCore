@@ -1,0 +1,43 @@
+{
+  "status": "PASS",
+  "status_scope": "bounded current native receipt and byte association only",
+  "parent": "5c34cd5acdd0e7d98ff46965479555a6a708c4c4",
+  "construction_head": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+  "source_content_sha256": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+  "source_files": 3855,
+  "source_delta_files": 81,
+  "production_scripts_changed": 5,
+  "final_positive_scenes": 46,
+  "final_positive_complete_checks": 1767,
+  "final_negative_scenes": 2,
+  "final_negative_business_checks": 38,
+  "negative_official_status": "FAIL",
+  "native_attempts": 81,
+  "stage_attempts": 33,
+  "preserved_failed_attempts": 14,
+  "engine_version": "4.7.stable.official.5b4e0cb0f",
+  "engine_console_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+  "remaining_exit_warning": "46 ObjectDB instances in final character_launch_resource_lifecycle_test",
+  "whole_framework_status": "NOT_RUN",
+  "r3_original_full_performance_status": "FAIL",
+  "apk_status": "NOT_RUN",
+  "device_test": "NOT_RUN",
+  "true_index_sha256_before": "df5a01dd0d87c14620e0021d70c25a830eb2cc37aa7b012eeb14ee1f2c58c5fb",
+  "true_index_sha256_after": "df5a01dd0d87c14620e0021d70c25a830eb2cc37aa7b012eeb14ee1f2c58c5fb",
+  "source_zip": {
+    "bytes": 15459256,
+    "sha256": "3116784ef1a80751a000f0791b295625b00e4b6d8a34d011da41294f2d856541"
+  },
+  "native_zip": {
+    "bytes": 11995339,
+    "sha256": "25099535a5c357460407227b2fccf37a49be3c044dadd0bdde96c89c9c8b64cd"
+  },
+  "not_claimed": [
+    "clean checkout executed",
+    "all added diagnostic scenes run at final bytes",
+    "Android/GPU",
+    "whole P6/R3",
+    "unlimited memory",
+    "original v97 B causally closed"
+  ]
+}

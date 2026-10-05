@@ -1,0 +1,92 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "actual hall requests the real production PackedScene before a native exit",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "native owner deletion has actually completed",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "native owner exit joins its actual outstanding scene load before resources can be unmounted",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "replaced real PackedScene path retains both accepted native requests",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "actual tree exit consumes the tracked native request: res://scenes/main.tscn",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "actual tree exit consumes the tracked native request: res://scenes/character_select.tscn",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "exit clears ownership and invalidates prior monitors without disabling future prewarm",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "same-stack path-return case starts without another owner's native retrieval rights",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "same-stack A-to-B-to-A returns to the actual outstanding production main scene",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "same-stack A-to-B-to-A owns exactly two distinct native requests without reacquiring A",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "same-stack owner exit leaves no native retrieval token: res://scenes/main.tscn",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "same-stack owner exit leaves no native retrieval token: res://scenes/character_select.tscn",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "same-stack exit clears ownership and invalidates every prior monitor",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "one owned surplus retrieval cleans the negative control without hiding its original assertions",
+      "passed": true
+    }
+  ],
+  "count": 14,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "a117f259-e5a7-4e5f-8a03-216733ad2c9c",
+  "passed": 14,
+  "reported_checks": 14,
+  "reported_failures": 0,
+  "run_id": "b04812e1-8a59-4779-ae73-61eb21ae7870",
+  "runtime_environment": {
+    "native_process_id": 5900,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_acceleration_bundle_final_19325cee066a455494e554322df17a1a",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/periodic_dispatch_acceleration_bundle_final_19325cee066a455494e554322df17a1a/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "character_launch_resource_lifecycle_test",
+  "schema_version": 1,
+  "source_content_sha256": "7d048ed9b2d83053b8c24b7ea7bff3d27f3e2b9805c1046d1eae853611794242",
+  "status": "PASS"
+}

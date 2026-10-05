@@ -1,0 +1,40 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "root_inflight_caster_retirement_test",
+                        "test_path":  "tests/framework/root_inflight_caster_retirement_test.tscn",
+                        "wrapper_process_id":  21348,
+                        "wrapper_started_utc":  "2026-10-05T01:02:25.5408338Z",
+                        "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_inflight_caster_budget_red_0a26508e47cf4dfe971081f8f59b6252",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  false,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  1,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-05T01:02:55.5529633Z",
+                        "native_exit_observed_utc":  "2026-10-05T01:02:40.6025042Z",
+                        "effective_exit_code":  1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "7c028142-ed62-47f5-b7e7-6d94a3cf1c7f",
+                        "framework_receipt_valid":  false,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+                    }
+                ],
+    "total":  1,
+    "invocation_id":  "1f119f6d-4a79-4411-a944-99cbb0ee97ef",
+    "runtime_environment":  {
+                                "project_root":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+                                "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_inflight_caster_budget_red_0a26508e47cf4dfe971081f8f59b6252",
+                                "runner_process_id":  22972
+                            },
+    "passed":  0,
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "engine_log_errors":  0,
+    "generated_at":  "2026-10-05T09:02:41.8514497+08:00",
+    "failed":  1,
+    "suite":  "adhoc"
+}

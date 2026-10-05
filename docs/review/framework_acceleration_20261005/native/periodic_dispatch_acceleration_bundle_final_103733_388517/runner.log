@@ -1,0 +1,35 @@
+[PASS] root_startup_retirement_test
+[PASS] root_receiver_retirement_test
+[PASS] root_plain_skill_retirement_test
+[PASS] root_plain_skill_drained_retirement_test
+[PASS] root_inflight_caster_retirement_test
+[PASS] root_native_caster_capacity_test
+[PASS] character_launch_resource_lifecycle_test
+[PASS] feature_cue_actor_retirement_test
+[PASS] feature_cue_actor_retirement_reentry_test
+[PASS] feature_cue_pool_reuse_test
+[PASS] feature_cue_audio_replacement_test
+[PASS] feature_cue_native_finish_reuse_test
+[PASS] feature_cue_active_world_exit_test
+[PASS] feature_resource_cue_test
+[PASS] feature_resource_cue_reentry_test
+[PASS] feature_resource_audio_closure_test
+[PASS] periodic_cadence_production_reachability_test
+[PASS] accepted_binding_snapshot_test
+[PASS] child_batch_retirement_boundary_test
+[PASS] child_batch_empty_completion_test
+[PASS] child_batch_atomic_control_test
+[PASS] feature_reservation_test
+[PASS] feature_release_identity_test
+[PASS] feature_child_planner_test
+[PASS] feature_child_execution_test
+[PASS] feature_child_chain_admission_test
+[PASS] feature_periodic_child_chain_test
+[PASS] periodic_child_root_test
+[PASS] periodic_child_g2_root_test
+[PASS] periodic_refresh_period_boundary_test
+[PASS] threaded_minimal_empty_node_probe_test
+[PASS] threaded_minimal_inferred_refs_probe_test
+[PASS] threaded_minimal_typed_refs_probe_test
+RUNNER_RESULTS_JSON=C:\Users\Administrator\.codex\worktrees\pluggable-framework-v2\HardCore\outputs\test_logs\runner_results_adhoc_20261005_104517_838_2696.json
+TEST_SUMMARY suite=adhoc passed=33 failed=0 engine_log_errors=0

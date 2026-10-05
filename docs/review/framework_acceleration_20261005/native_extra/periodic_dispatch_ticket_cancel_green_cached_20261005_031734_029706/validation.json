@@ -1,0 +1,16 @@
+{
+  "command": [
+    "powershell",
+    "-NoProfile",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/accepted_binding_snapshot_test.tscn','tests/framework/feature_cue_pool_reuse_test.tscn','tests/framework/feature_cue_audio_replacement_test.tscn','tests/framework/feature_cue_actor_retirement_test.tscn','tests/framework/feature_cue_actor_retirement_reentry_test.tscn' -TimeoutSeconds 30"
+  ],
+  "timeout_seconds": 30,
+  "exit_code": 0,
+  "source_stable_during_run": true,
+  "passed": 5,
+  "failed": 0,
+  "status": "PASS"
+}

@@ -1,0 +1,40 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "root_failed_caster_request_test",
+                        "test_path":  "tests/framework/root_failed_caster_request_test.tscn",
+                        "wrapper_process_id":  21644,
+                        "wrapper_started_utc":  "2026-10-05T01:16:40.9191320Z",
+                        "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_failed_caster_request_red_3909e69438f849b1adcc09186e625d85",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  false,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  1,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-05T01:17:10.9309861Z",
+                        "native_exit_observed_utc":  "2026-10-05T01:16:55.9937733Z",
+                        "effective_exit_code":  1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  2,
+                        "engine_log_failure_count":  2,
+                        "framework_run_id":  "97ac8cad-b980-4a7a-a34a-494ab7bbb795",
+                        "framework_receipt_valid":  false,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;non_zero_exit_code_1;stderr_failures_2;engine_log_failures_2;framework_checks_failed"
+                    }
+                ],
+    "total":  1,
+    "invocation_id":  "7fce656e-39fa-4ca0-9c8f-b68ab1d03da8",
+    "runtime_environment":  {
+                                "project_root":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+                                "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_failed_caster_request_red_3909e69438f849b1adcc09186e625d85",
+                                "runner_process_id":  16224
+                            },
+    "passed":  0,
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "engine_log_errors":  2,
+    "generated_at":  "2026-10-05T09:16:57.2273662+08:00",
+    "failed":  1,
+    "suite":  "adhoc"
+}

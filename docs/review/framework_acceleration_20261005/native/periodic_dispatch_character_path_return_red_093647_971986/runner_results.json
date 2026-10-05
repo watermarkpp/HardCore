@@ -1,0 +1,40 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "character_launch_resource_lifecycle_test",
+                        "test_path":  "tests/framework/character_launch_resource_lifecycle_test.tscn",
+                        "wrapper_process_id":  24920,
+                        "wrapper_started_utc":  "2026-10-05T01:37:08.8892825Z",
+                        "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_character_path_return_red_697e7395e0404625bdaa81eb0833d414",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  false,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  1,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-05T01:37:38.9012678Z",
+                        "native_exit_observed_utc":  "2026-10-05T01:37:19.6821677Z",
+                        "effective_exit_code":  1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "d3245138-7fae-463b-8e04-cf1d0f76a1a1",
+                        "framework_receipt_valid":  false,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+                    }
+                ],
+    "total":  1,
+    "invocation_id":  "7e6251c0-03a3-4f25-9994-361a3f19e853",
+    "runtime_environment":  {
+                                "project_root":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+                                "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_character_path_return_red_697e7395e0404625bdaa81eb0833d414",
+                                "runner_process_id":  10796
+                            },
+    "passed":  0,
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "engine_log_errors":  0,
+    "generated_at":  "2026-10-05T09:37:20.8015337+08:00",
+    "failed":  1,
+    "suite":  "adhoc"
+}

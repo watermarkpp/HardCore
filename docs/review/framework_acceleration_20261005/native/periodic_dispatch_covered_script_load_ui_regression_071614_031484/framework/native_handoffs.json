@@ -1,0 +1,57 @@
+{
+    "schema_version":  1,
+    "runtime_environment":  {
+                                "project_root":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+                                "runtime_appdata":  "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\periodic_dispatch_covered_script_load_ui_regression_419e0bf457624679beebbece1a656806",
+                                "runner_process_id":  14564
+                            },
+    "invocation_id":  "43148314-9569-4077-a913-57786f9e0667",
+    "source_content_sha256":  "d1d22368f350668a5b64add42294b2bd54dcdbbf3b0b93da09073e1babfe8396",
+    "producers":  {
+                      "root_startup_retirement_test":  {
+                                                           "scene_id":  "root_startup_retirement_test",
+                                                           "run_id":  "4aa2357e-8b3e-463d-b649-93246884f505",
+                                                           "source_content_sha256":  "d1d22368f350668a5b64add42294b2bd54dcdbbf3b0b93da09073e1babfe8396",
+                                                           "process_exited":  true,
+                                                           "effective_exit_code":  0,
+                                                           "result":  "PASS",
+                                                           "receipt_sha256":  "5470f592a4e98d49a5a1694eadb1c1d4846e4563894ce4389991349e1c09d5b6"
+                                                       },
+                      "threaded_texture_retirement_probe_test":  {
+                                                                     "scene_id":  "threaded_texture_retirement_probe_test",
+                                                                     "run_id":  "46471c87-e799-4af4-be66-7e3c0e670b88",
+                                                                     "source_content_sha256":  "d1d22368f350668a5b64add42294b2bd54dcdbbf3b0b93da09073e1babfe8396",
+                                                                     "process_exited":  true,
+                                                                     "effective_exit_code":  0,
+                                                                     "result":  "PASS",
+                                                                     "receipt_sha256":  "e251470f5bd3e8e325c20a777d4c76ab7e8a7691d47be5ddd511fbb20afcdd47"
+                                                                 },
+                      "threaded_texture_retirement_subthreads_test":  {
+                                                                          "scene_id":  "threaded_texture_retirement_subthreads_test",
+                                                                          "run_id":  "f3ea0c5f-e2f1-460e-b3bb-8eb69d430b9d",
+                                                                          "source_content_sha256":  "d1d22368f350668a5b64add42294b2bd54dcdbbf3b0b93da09073e1babfe8396",
+                                                                          "process_exited":  true,
+                                                                          "effective_exit_code":  0,
+                                                                          "result":  "PASS",
+                                                                          "receipt_sha256":  "5e31a42ff03cb87e648d4e6a9cf8e577dec14c0bd4d6a5250ae49d43ad2d4774"
+                                                                      },
+                      "threaded_atlas_retirement_test":  {
+                                                             "scene_id":  "threaded_atlas_retirement_test",
+                                                             "run_id":  "8b917b17-face-4764-87b1-7bb23d01462d",
+                                                             "source_content_sha256":  "d1d22368f350668a5b64add42294b2bd54dcdbbf3b0b93da09073e1babfe8396",
+                                                             "process_exited":  true,
+                                                             "effective_exit_code":  0,
+                                                             "result":  "PASS",
+                                                             "receipt_sha256":  "0cb6874173df948adaac18a47a617257627207d53717b2360d945cf5d36666ea"
+                                                         },
+                      "threaded_atlas_retirement_subthreads_test":  {
+                                                                        "scene_id":  "threaded_atlas_retirement_subthreads_test",
+                                                                        "run_id":  "72888ede-3dc8-480f-8072-aa86c461ff92",
+                                                                        "source_content_sha256":  "d1d22368f350668a5b64add42294b2bd54dcdbbf3b0b93da09073e1babfe8396",
+                                                                        "process_exited":  true,
+                                                                        "effective_exit_code":  0,
+                                                                        "result":  "PASS",
+                                                                        "receipt_sha256":  "1da1519abd6a8f360b06b0b72815aef89cbafcad3a7193e38c5b8e79c427848c"
+                                                                    }
+                  }
+}
