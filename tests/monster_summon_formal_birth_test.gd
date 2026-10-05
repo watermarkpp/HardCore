@@ -6,21 +6,29 @@ func _run() -> void:
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
 	await Fixture.wait_for_formal_world(self, game, "summon_cap_birth")
+	var plan: Array[Dictionary] = []
+	for index in range(3):
+		var id: int = [182,126,160][index]
+		plan.append({"id":id,"ground":Fixture.FIXTURE_GROUND_POSITION+Vector2(index*4,0),
+			"respawn":-1.0,"context":{"respawn_enabled":false,"spawn_slot_id":"cap:%d" % id}})
+	for id in [33,241]:
+		plan.append({"id":id,"ground":Fixture.FIXTURE_GROUND_POSITION+Vector2(-3,3),
+			"respawn":-1.0,"context":{"respawn_enabled":false,"spawn_slot_id":"empty:%d" % id}})
+	var published: Array[EnemyActor] = await Fixture.publish_targets(self,game,plan,"summon_cap_birth")
 	var caster: PlayerCharacter = game.player
 	caster.max_hp = 999999
 	caster.current_hp = caster.max_hp
 	game._set_player_world_position(game._canonical_ground_gu_to_screen_px(
 		Fixture.FIXTURE_GROUND_POSITION + Fixture.CASTER_GROUND_OFFSET))
-	for value: Variant in get_tree().get_nodes_in_group("enemies"):
+	for value: Variant in game._active_enemy_cache.values():
 		if value is EnemyActor:
-			value.set_combat_position(caster.global_position + Vector2(3000, 3000), &"summon_test_clear")
 			value.set_physics_process(false)
+			if value not in published:
+				value.set_combat_position(caster.global_position + Vector2(3000,3000), &"summon_test_clear")
 	var sources: Array[EnemyActor] = []
 	for index in range(3):
-		var id: int = [182, 126, 160][index]
-		var position: Vector2 = game._canonical_ground_gu_to_screen_px(Fixture.FIXTURE_GROUND_POSITION + Vector2(index * 4, 0))
-		var source: EnemyActor = game._spawn_enemy(GameData.get_monster_by_id(id), position, false, -1.0,
-			{"respawn_enabled": false, "spawn_slot_id": "cap:%d" % id})
+		var id: int = [182,126,160][index]
+		var source: EnemyActor = published[index] if published.size()==5 else null
 		check(source != null and source.monster_id == id, "formal source birth%d" % id)
 		if source == null:
 			get_tree().quit(1)
@@ -61,10 +69,9 @@ func _run() -> void:
 	sources[0]._update_behavior_summon(0.5)
 	await _drain_formal(queue)
 	check(queue._active("cap:182") == 5, "real phantom producer refills exactly one")
-	for monster_id in [33, 241]:
-		var empty_actor: EnemyActor = game._spawn_enemy(GameData.get_monster_by_id(monster_id),
-			game._canonical_ground_gu_to_screen_px(Fixture.FIXTURE_GROUND_POSITION + Vector2(-3, 3)),
-			false, -1.0, {"respawn_enabled": false, "spawn_slot_id": "empty:%d" % monster_id})
+	for index in range(2):
+		var monster_id: int = [33,241][index]
+		var empty_actor: EnemyActor = published[index+3]
 		check(empty_actor != null and empty_actor.monster_id == monster_id, "no-drop ordinary spawn%d works" % monster_id)
 		if empty_actor != null:
 			empty_actor.take_damage(999999, caster, {"source": "empty_drop_regression"})

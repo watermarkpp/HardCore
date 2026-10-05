@@ -40,23 +40,24 @@ func _run() -> void:
 	if not game.gameplay_input_is_enabled():
 		_finish()
 		return
-	var first: EnemyActor = await Fixture.prepare_target(self,game,game.player,19,"framework_empty_baseline")
+	var descriptors: Array[Dictionary] = [
+		{"id": 19, "ground": Fixture.FIXTURE_GROUND_POSITION, "respawn": -1.0, "context": {"respawn_enabled": false, "spawn_slot_id": "test:formal_skill:framework_empty_baseline:19"}},
+		{"id": 64, "ground": Vector2(41.2,13.5), "respawn": -1.0, "context": {"respawn_enabled": false, "spawn_slot_id": "fixture:framework:empty:1"}},
+		{"id": 89, "ground": Vector2(40.5,14.2), "respawn": -1.0, "context": {"respawn_enabled": false, "spawn_slot_id": "fixture:framework:empty:2"}},
+	]
+	var published_targets := await Fixture.prepare_published_target_set(self, game, game.player, descriptors, "framework_empty_baseline")
+	var first: EnemyActor = published_targets[0]
 	check(first != null and first.projection_ready(), "first target uses exact canonical mapped spawn")
 	if first == null:
 		game.queue_free()
 		_finish()
 		return
-	var targets: Array[EnemyActor] = [first]
-	var ground_positions := [Vector2(40.5,13.5), Vector2(41.2,13.5), Vector2(40.5,14.2)]
+	var targets: Array[EnemyActor] = published_targets
 	var ids := [19,64,89]
 	for index: int in range(1,3):
-		var target: EnemyActor = game._spawn_enemy(GameData.get_monster_by_id(ids[index]),
-			game._canonical_ground_gu_to_screen_px(ground_positions[index]),false,-1.0,
-			{"respawn_enabled":false,"spawn_slot_id":"fixture:framework:empty:%d" % index})
+		var target: EnemyActor = targets[index]
 		check(target != null and target.monster_id == ids[index] and target.projection_ready(),
 			"AOE target %d uses canonical identity and projection" % index)
-		if target != null:
-			targets.append(target)
 	check(targets.size() == 3, "all three independent real AOE targets exist")
 	game.set_process(false)
 	game.set_physics_process(false)

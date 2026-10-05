@@ -76,11 +76,15 @@ func _run() -> void:
 	while not game.gameplay_input_is_enabled() and Time.get_ticks_msec()<deadline: await get_tree().process_frame
 	check(game.gameplay_input_is_enabled(),"actual mapped Root reaches READY")
 	if not game.gameplay_input_is_enabled(): await _cleanup(); _finish(); return
-	first=await Fixture.prepare_target(self,game,game.player,19,"child_batch_retirement")
-	receiver_a=game._spawn_enemy(GameData.get_monster_by_id(19),game._canonical_ground_gu_to_screen_px(Vector2(43.1,13.5)),
-		false,-1.0,{"respawn_enabled":false,"spawn_slot_id":"test:child_batch_retirement:a"})
-	receiver_b=game._spawn_enemy(GameData.get_monster_by_id(19),game._canonical_ground_gu_to_screen_px(Vector2(43.25,13.5)),
-		false,-1.0,{"respawn_enabled":false,"spawn_slot_id":"test:child_batch_retirement:b"})
+	var descriptors: Array[Dictionary] = [
+		{"id": 19, "ground": Fixture.FIXTURE_GROUND_POSITION, "respawn": -1.0, "context": {"respawn_enabled": false, "spawn_slot_id": "test:formal_skill:child_batch_retirement:19"}},
+		{"id": 19, "ground": Vector2(43.1,13.5), "respawn": -1.0, "context": {"respawn_enabled": false, "spawn_slot_id": "test:child_batch_retirement:a"}},
+		{"id": 19, "ground": Vector2(43.25,13.5), "respawn": -1.0, "context": {"respawn_enabled": false, "spawn_slot_id": "test:child_batch_retirement:b"}},
+	]
+	var published_targets := await Fixture.prepare_published_target_set(self, game, game.player, descriptors, "child_batch_retirement")
+	first = published_targets[0]
+	receiver_a = published_targets[1]
+	receiver_b = published_targets[2]
 	check(first!=null and receiver_a!=null and receiver_b!=null,"three exact-ID receivers come from the sole mapped factory")
 	if first==null or receiver_a==null or receiver_b==null: await _cleanup(); _finish(); return
 	game.set_process(false); game.set_physics_process(false); game.player.set_physics_process(false)

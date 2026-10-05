@@ -140,11 +140,17 @@ func enqueue(source: EnemyActor, monster_ids: Array, count: int, max_active: int
 	if not is_instance_valid(host):
 		return
 	_sync_world(host)
-	_stats["requests"] = int(_stats["requests"]) + 1
 	if bool(host.get("_map_transition_in_progress")) or bool(host.get("_world_bootstrap_in_progress")):
 		return
 	if not _source_valid(source, host) or monster_ids.is_empty() or count <= 0 or max_active <= 0:
 		return
+	if not host.has_method("_hc_m30_summon_request_valid") or not bool(host.call(
+		"_hc_m30_summon_request_valid", source, monster_ids, count, max_active)):
+		return
+	var serial: int = int(source.get_meta("m30_summon_release_serial", 0))
+	if serial <= 0:
+		return
+	_stats["requests"] = int(_stats["requests"]) + 1
 	# is_boss is compiled by EnemyActor.setup from the canonical ID classification.
 	# Bosses retain their authored cap; ordinary and elite summoners share cap 5.
 	var effective_max_active := effective_maximum(source.is_boss,max_active)
@@ -159,7 +165,6 @@ func enqueue(source: EnemyActor, monster_ids: Array, count: int, max_active: int
 	_stats["last_effective_max_active"] = effective_max_active
 	_stats["last_child_ids"] = monster_ids.duplicate()
 	# The producer reserves its serial BEFORE emitting the synchronous signal.
-	var serial: int = int(source.get_meta("m30_summon_release_serial", 0))
 	var life: int = int(source.get_meta("hc_combat_life_epoch", 0))
 	var accepted: Vector2i = source.get_meta("m30_last_queued_release", Vector2i(-1, -1))
 	if serial > 0 and accepted == Vector2i(life, serial):
@@ -197,6 +202,47 @@ func _job_source(job: Dictionary, host: Node) -> EnemyActor:
 		return null
 	return source
 
+func claim_birth(monster_id: int, candidate: Vector2, context: Dictionary) -> bool:
+	# The current original job owns this ordinal; labels or copied jobs cannot issue it.
+	var host := _host()
+	var job: Variant = context.get("_m30_job")
+	if not _pump_active or not job is Dictionary or job.is_empty() or not is_instance_valid(host):
+		return false
+	if _materializing_epoch != _queue_epoch or not is_same(job, _materializing_job):
+		return false
+	if _jobs.is_empty() or _cursor >= _jobs.size() or not is_same(job, _jobs[_cursor]):
+		return false
+	if int(host.get("current_map_id")) != _map_id or int(host.get("_zone_generation")) != _generation:
+		return false
+	if bool(host.get("_map_transition_in_progress")) or bool(host.get("_world_bootstrap_in_progress")):
+		return false
+	if bool(job.get("birth_claimed", false)) or int(job.get("remaining", 0)) <= 0:
+		return false
+	var slot := str(job.get("slot", ""))
+	if int(_reserved.get(slot, 0)) <= 0 or int(job.get("serial", 0)) <= 0:
+		return false
+	var source := _job_source(job, host)
+	if source == null or str(context.get("summoner_spawn_slot", "")) != slot:
+		return false
+	if int(context.get("m30_source_instance_id", -1)) != source.get_instance_id() \
+		or int(context.get("m30_source_life", -1)) != int(job.life):
+		return false
+	if int(context.get("m30_release_serial", -1)) != int(job.serial) \
+		or int(context.get("m30_job_ordinal", -1)) != int(job.index):
+		return false
+	if candidate != job.get("candidate", Vector2.INF) or not candidate.is_finite():
+		return false
+	var monster: Dictionary = job.get("monster", {})
+	if monster_id != int(monster.get("monster_id", -1)) \
+		or monster_id != int(context.get("summon_monster_id", -1)):
+		return false
+	if str(context.get("spawn_group_id", "")) != "%s:summons" % slot \
+		or bool(context.get("respawn_enabled", true)) or context.has("spawn_slot_id"):
+		return false
+	# Consume before EnemyActor.setup/add_child can synchronously reenter the factory.
+	job["birth_claimed"] = true
+	return true
+
 func _release_reservation(slot: String, amount: int) -> void:
 	var remaining: int = maxi(0, int(_reserved.get(slot, 0)) - amount)
 	if remaining == 0:
@@ -208,6 +254,8 @@ func _finish_child(job: Dictionary) -> void:
 	if not bool(job.get("birth_tracked", false)):
 		_release_reservation(str(job["slot"]), 1)
 	job["birth_tracked"] = false
+	job["birth_claimed"] = false
+	job.erase("candidate")
 	job["remaining"] = int(job["remaining"]) - 1
 	job["index"] = int(job["index"]) + 1
 	job["attempts"] = 0
@@ -332,6 +380,7 @@ func _pump_body(tick: int) -> void:
 			if candidate.is_finite():
 				materializations += 1
 				var spawn_started: int = Time.get_ticks_usec()
+				job["candidate"] = candidate
 				_materializing_job = job
 				_materializing_epoch = epoch
 				var child: EnemyActor = host.call("_hc_m30_materialize", monster, candidate, {
@@ -341,6 +390,9 @@ func _pump_body(tick: int) -> void:
 					"summon_monster_id": int(monster.get("monster_id", -1)),
 					"m30_source_instance_id": source.get_instance_id(),
 					"m30_source_life": int(job["life"]),
+					"m30_release_serial": int(job["serial"]),
+					"m30_job_ordinal": int(job["index"]),
+					"_m30_job": job,
 				}) as EnemyActor
 				_stats["max_spawn_call_usec"] = maxi(int(_stats["max_spawn_call_usec"]), Time.get_ticks_usec() - spawn_started)
 				# Birth already returned from the formal factory. Source death during

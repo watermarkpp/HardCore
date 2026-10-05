@@ -41,19 +41,22 @@ func _run() -> void:
 	while not game.gameplay_input_is_enabled() and Time.get_ticks_msec()<deadline: await get_tree().process_frame
 	check(game.gameplay_input_is_enabled(),"actual mapped world reaches READY")
 	if not game.gameplay_input_is_enabled(): game.queue_free(); _finish(); return
-	var first: EnemyActor=await Fixture.prepare_target(self,game,game.player,19,"periodic_child")
+	var descriptors: Array[Dictionary] = [
+		{"id": 19, "ground": Fixture.FIXTURE_GROUND_POSITION, "respawn": -1.0, "context": {"respawn_enabled": false, "spawn_slot_id": "test:formal_skill:periodic_child:19"}},
+		{"id": 19, "ground": Vector2(43.1,13.5), "respawn": -1.0, "context": {"respawn_enabled": false, "spawn_slot_id": "test:periodic_child:later"}},
+	]
+	if chain_depth == 2:
+		descriptors.append({"id": 19, "ground": Vector2(45.7,13.5), "respawn": -1.0, "context": {"respawn_enabled": false, "spawn_slot_id": "test:periodic_child:g2_later"}})
+	var published_targets := await Fixture.prepare_published_target_set(self, game, game.player, descriptors, "periodic_child")
+	var first: EnemyActor = published_targets[0]
 	check(first!=null,"initial receiver comes from the sole mapped Root factory")
 	if first==null: game.queue_free(); _finish(); return
-	var later: EnemyActor=game._spawn_enemy(GameData.get_monster_by_id(19),
-		game._canonical_ground_gu_to_screen_px(Vector2(43.1,13.5)),false,-1.0,
-		{"respawn_enabled":false,"spawn_slot_id":"test:periodic_child:later"})
+	var later: EnemyActor = published_targets[1]
 	check(later!=null,"later receiver is declared before acceptance and starts outside the direct hit")
 	if later==null: game.queue_free(); _finish(); return
 	var third: EnemyActor=null
 	if chain_depth==2:
-		third=game._spawn_enemy(GameData.get_monster_by_id(19),
-			game._canonical_ground_gu_to_screen_px(Vector2(45.7,13.5)),false,-1.0,
-			{"respawn_enabled":false,"spawn_slot_id":"test:periodic_child:g2_later"})
+		third = published_targets[2]
 		check(third!=null,"generation-two receiver is declared before acceptance and outside the initial and first child hits")
 		if third==null: game.queue_free(); _finish(); return
 	game.set_process(false); game.set_physics_process(false); game.player.set_physics_process(false)

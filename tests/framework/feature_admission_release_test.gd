@@ -22,12 +22,19 @@ func _run() -> void:
 	while not game.gameplay_input_is_enabled() and Time.get_ticks_msec()<deadline: await get_tree().process_frame
 	check(game.gameplay_input_is_enabled(),"actual formal world is ready")
 	if not game.gameplay_input_is_enabled(): game.queue_free(); _finish(); return
-	var selected := await Fixture.prepare_target(self,game,game.player,19,"feature_admission_release")
+	var descriptors: Array[Dictionary] = [
+		{"id": 19, "ground": Fixture.FIXTURE_GROUND_POSITION, "respawn": -1.0, "context": {"respawn_enabled": false, "spawn_slot_id": "test:formal_skill:feature_admission_release:19"}},
+		{"id": 64, "ground": Vector2(47,13.5), "respawn": -1.0, "context": {"respawn_enabled": false, "spawn_slot_id": "fixture:admission:moving"}},
+		{"id": 89, "ground": Vector2(40.5,14.2), "respawn": 0.01, "context": {"respawn_enabled": false, "spawn_slot_id": "fixture:admission:respawn"}},
+		{"id": 126, "ground": Vector2(44,13.5), "respawn": -1.0, "context": {"respawn_enabled": false, "spawn_slot_id": "fixture:admission:summoner"}},
+	]
+	var published_targets := await Fixture.prepare_published_target_set(self, game, game.player, descriptors, "feature_admission_release")
+	var selected: EnemyActor = published_targets[0]
 	check(selected != null,"real selected receiver exists")
 	if selected == null: game.queue_free(); _finish(); return
-	var moving: EnemyActor = _spawn(game,64,Vector2(47,13.5),"fixture:admission:moving")
-	var replaced: EnemyActor = _spawn(game,89,Vector2(40.5,14.2),"fixture:admission:respawn")
-	var summoner: EnemyActor = _spawn(game,126,Vector2(44,13.5),"fixture:admission:summoner")
+	var moving: EnemyActor = published_targets[1]
+	var replaced: EnemyActor = published_targets[2]
+	var summoner: EnemyActor = published_targets[3]
 	check(moving != null and replaced != null and summoner != null,"declared base slots use exact production monster factories")
 	if moving == null or replaced == null or summoner == null: game.queue_free(); _finish(); return
 	for actor: Node in get_tree().get_nodes_in_group("enemies"): actor.set_physics_process(false)
@@ -49,9 +56,13 @@ func _run() -> void:
 	replaced.queue_free()
 	game._respawn_later(GameData.get_monster_by_id(89),game._canonical_ground_gu_to_screen_px(Vector2(40.5,14.2)),false,0.01,
 		game._zone_generation,{"respawn_enabled":false,"spawn_slot_id":"fixture:admission:respawn"})
-	summoner.control_time = 0; summoner.target = game.player
-	summoner.set_meta("m30_summon_release_serial",1)
-	game._on_boss_summon_requested(summoner,[127],1,5)
+	# Cold publication may put the distant source to sleep before caster
+	# placement. Restore this fixture's original awake source, then let its
+	# actual registered producer issue the original queue job and serial.
+	summoner.control_time = 0; summoner.dormant = false; summoner.target = game.player
+	summoner._summon_cooldown = 0
+	summoner._update_behavior_summon(0)
+	summoner._update_behavior_summon(0.5)
 	var child: EnemyActor
 	var replacement: EnemyActor
 	while game.observed_releases == 0 and (child == null or replacement == null):

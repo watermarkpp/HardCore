@@ -251,6 +251,9 @@ var _zone_generation := 0
 var _respawn_wakeups: Dictionary = {}
 var _ready_world_map_id := -1
 var _ready_world_zone_generation := -1
+# Own exactly one genuine safe-home publication after a failed world swap.
+var _map_failure_recovery_active := false
+var _map_transition_environment_replaced := false
 var _monster_terrain_navigation_context: Dictionary = {}
 var _rng := RandomNumberGenerator.new()
 var locked_target: EnemyActor
@@ -3439,9 +3442,12 @@ func _begin_map_transition(operation: Callable, target_map_id := -1) -> bool:
 	]
 	set_meta("map_combat_transition_token", combat_token)
 	_map_transition_in_progress = true
+	_map_transition_environment_replaced = false
 	if is_instance_valid(_town_music_controller):
 		_town_music_controller.begin_map_transition(target_map_id, _active_map_transition_id)
-	_acquire_gameplay_input_lock(INPUT_LOCK_MAP_TRANSITION_LOCAL)
+	# A new transition takes over the retained terminal map lock, if any.
+	if not _gameplay_input_locks.has(INPUT_LOCK_MAP_TRANSITION_LOCAL):
+		_acquire_gameplay_input_lock(INPUT_LOCK_MAP_TRANSITION_LOCAL)
 	_cancel_map_transition_movement_input()
 	_run_map_transition(_active_map_transition_id, operation, target_map_id)
 	return true
@@ -3541,6 +3547,10 @@ func _run_map_transition(
 	# environment was already staged-built for the same map.
 	r13_stage_started_usec = Time.get_ticks_usec()
 	var built_ok := await _run_world_build_pipeline(target_map_id, transition_id)
+	# A cancelled old pipeline also returns false; only its current owner
+	# may update the HUD or route a genuine failure through recovery.
+	if not _map_transition_in_progress or _active_map_transition_id != transition_id:
+		return
 	r13_loading_profile["world_pipeline_ms"] = (
 		float(Time.get_ticks_usec() - r13_stage_started_usec) / 1000.0
 	)
@@ -3553,14 +3563,19 @@ func _run_map_transition(
 		# lock, the player combat token and the Loading overlay.
 		_fail_map_transition(&"pre_arrival_keep_world")
 		return
-	if not _map_transition_in_progress or _active_map_transition_id != transition_id:
-		return
 	r13_stage_started_usec = Time.get_ticks_usec()
+	_world_bootstrap_coordinator.begin_actor_collection(Callable(self, "_validate_queued_actor_descriptor"))
 	_collecting_staged_actor_plan = true
 	_staged_actor_source_index = 0
 	_staged_actor_spawn_failure_reason = ""
 	operation.call()
 	_collecting_staged_actor_plan = false
+	_world_bootstrap_coordinator.close_actor_collection()
+	_feature_target_bound.sync_world(_world_context.capture_world())
+	if not _staged_actor_spawn_failure_reason.is_empty() or not _feature_target_bound.seal():
+		_world_bootstrap_coordinator.finish(false, "published_birth_plan_failed")
+		_fail_map_transition(&"post_arrival_safe_home")
+		return
 	if PlayerState.test_mode:
 		# Preserve the established deterministic synchronous travel hook while
 		# exercising the identical descriptor handler and slice accounting.
@@ -3775,6 +3790,8 @@ func _run_map_transition(
 		# that exact retained generation on a later transition.
 		_ready_world_map_id = current_map_id
 		_ready_world_zone_generation = _zone_generation
+		_map_failure_recovery_active = false
+		_map_transition_environment_replaced = false
 		var bootstrap_profile := _world_bootstrap_coordinator.finish(
 			true, "map_transition_ready"
 		)
@@ -3857,6 +3874,11 @@ func _maybe_relocate_blocked_arrival() -> void:
 ## relocate the player to the resolved safe home so an incomplete map is
 ## never handed to gameplay input.
 func _fail_map_transition(recovery_policy: StringName) -> void:
+	var failed_transition_serial := _map_transition_serial
+	# prepare_map_build clears the prior real environment before arrival.
+	# After that boundary a pre-arrival failure cannot keep it playable.
+	if recovery_policy == &"pre_arrival_keep_world" and _map_transition_environment_replaced:
+		recovery_policy = &"post_arrival_safe_home"
 	var coordinator := _world_bootstrap_coordinator
 	var reason := "map_transition_failed"
 	if coordinator != null and is_instance_valid(coordinator):
@@ -3866,6 +3888,17 @@ func _fail_map_transition(recovery_policy: StringName) -> void:
 	_cancel_map_transition_movement_input()
 	_active_map_transition_id = ""
 	_map_transition_in_progress = false
+	if _map_failure_recovery_active:
+		# The failed destination was already unsafe. A failed real home build
+		# cannot restore it, release input, or recursively start another home.
+		_map_failure_recovery_active = false
+		if not _gameplay_input_locks.has(INPUT_LOCK_MAP_TRANSITION_LOCAL):
+			_acquire_gameplay_input_lock(INPUT_LOCK_MAP_TRANSITION_LOCAL)
+		if is_instance_valid(hud):
+			hud.finish_loading_transition()
+			hud.show_error_message("安全区域加载失败，请重新进入游戏。", 4.0)
+		print("[MapTransition] terminal safe-home failure reason=%s" % reason)
+		return
 	if is_instance_valid(hud):
 		hud.finish_loading_transition()
 		if recovery_policy == &"pre_arrival_keep_world":
@@ -3876,6 +3909,7 @@ func _fail_map_transition(recovery_policy: StringName) -> void:
 			hud.show_error_message("地图切换失败，请稍后重试。", 4.0)
 	print("[MapTransition] FAILED reason=%s policy=%s" % [reason, str(recovery_policy)])
 	if recovery_policy == &"post_arrival_safe_home":
+		_map_failure_recovery_active = true
 		# A player killed during the failed arrival goes through the
 		# production death revival (home relocation + death state cleanup);
 		# a living player goes through the plain safe-home relocation. An
@@ -3894,13 +3928,18 @@ func _fail_map_transition(recovery_policy: StringName) -> void:
 				and Time.get_ticks_msec() < death_settle
 			):
 				await get_tree().create_timer(0.05, true).timeout
+			# A real death-UI transition may take ownership during the settle
+			# await. The old failure cannot release that new owner's lock.
+			if _map_transition_serial != failed_transition_serial or not _map_failure_recovery_active:
+				return
 			print("[MapTransition] recovery state dead=%s hp=%d" % [
 				str(player._dead), int(player.current_hp),
 			])
 			# The FAILED transition's own lock must go before a new home
 			# transition can acquire it; the recovery transition re-owns
 			# the lock and releases it through its own READY/FAILED path.
-			_release_gameplay_input_lock(INPUT_LOCK_MAP_TRANSITION_LOCAL)
+			if _gameplay_input_locks.has(INPUT_LOCK_MAP_TRANSITION_LOCAL):
+				_release_gameplay_input_lock(INPUT_LOCK_MAP_TRANSITION_LOCAL)
 			var recovery_started := false
 			if bool(player._dead):
 				# Formal production town revival: full home travel +
@@ -3909,15 +3948,17 @@ func _fail_map_transition(recovery_policy: StringName) -> void:
 				recovery_started = _request_production_town_revival()
 			else:
 				recovery_started = travel_to_service_home(
-					false, false, "比奇省", Callable()
+					false, true, "比奇省", Callable()
 				)
 			if recovery_started:
 				print("[MapTransition] safe-home recovery transition started")
 				return
-		# Recovery could not start (no player / home unresolvable): release
-		# the FAILED transition lock so the state is not double-locked and
-		# leave the explicit error message pointing at the retry path.
-		_release_gameplay_input_lock(INPUT_LOCK_MAP_TRANSITION_LOCAL)
+		# No recovery exists: the current incomplete world stays closed.
+		_map_failure_recovery_active = false
+		if not _gameplay_input_locks.has(INPUT_LOCK_MAP_TRANSITION_LOCAL):
+			_acquire_gameplay_input_lock(INPUT_LOCK_MAP_TRANSITION_LOCAL)
+		if is_instance_valid(hud):
+			hud.show_error_message("安全区域加载失败，请重新进入游戏。", 4.0)
 		return
 	# pre_arrival_keep_world (and future title-return): the current world is
 	# safe to hand back to gameplay input, so the transition lock goes away.
@@ -3930,13 +3971,12 @@ func _fail_map_transition(recovery_policy: StringName) -> void:
 func _request_production_town_revival() -> bool:
 	if _active_death_id.is_empty() or _death_revival_request_in_flight:
 		return false
-	_on_revival_requested({
+	return _on_revival_requested({
 		"contract_id": DEATH_REVIVAL_CONTRACT_ID,
 		"death_id": _active_death_id,
 		"option_slot": "town",
 		"method_id": "revive.nearest_town",
 	})
-	return _death_revival_request_in_flight
 
 
 func _run_world_build_pipeline(map_id: int, transition_id: String) -> bool:
@@ -3947,14 +3987,15 @@ func _run_world_build_pipeline(map_id: int, transition_id: String) -> bool:
 	if not coordinator.is_generation_current(generation):
 		return false
 
-	# 1) COLLECT_REQUIREMENTS: background registers only target-map resources
-	# and builds the ordered map/collision descriptors (no SceneTree writes).
+	# 1) COLLECT_REQUIREMENTS also clears the old real environment. Record
+	# this ownership boundary before preparation, including failure returns.
 	coordinator.advance(WorldBootstrapCoordinator.Stage.COLLECT_REQUIREMENTS)
 	var target_map_data: Dictionary = {}
 	if map_id >= 0:
 		target_map_data = GameData.get_map_by_id(map_id)
 	if target_map_data.is_empty():
 		target_map_data = {"mapId": map_id, "name": "未命名地图"}
+	_map_transition_environment_replaced = true
 	var prepared := background.prepare_map_build(
 		map_id, coordinator, target_map_data
 	)
@@ -4068,6 +4109,9 @@ func _check_world_ready_contract() -> bool:
 	if coordinator == null or not is_instance_valid(background):
 		return false
 	var summary := coordinator.ready_contract_summary()
+	var birth_plan := feature_world_capacity_bound()
+	if not bool(birth_plan.get("sealed", false)) or not bool(birth_plan.get("proved", false)):
+		return false
 	# FREEZE-P0.2: gameplay is only reachable in a projection-ready world. The
 	# formal map profile gate keeps legacy Vector2 wrappers out of broken maps.
 	var ready_profile := _resolve_projection_profile_for_map(current_map_id)
@@ -4870,17 +4914,59 @@ func _submit_staged_actor_descriptor(
 	payload: Dictionary,
 	stable_actor_id := ""
 ) -> bool:
+	if not _collecting_staged_actor_plan or not _world_bootstrap_coordinator.actor_collection_is_open():
+		return false
 	var source_index := _staged_actor_source_index
-	_staged_actor_source_index += 1
 	var actor_id := stable_actor_id
 	if actor_id.is_empty():
 		actor_id = "%s:%d:%06d" % [actor_type, current_map_id, source_index]
-	return _world_bootstrap_coordinator.submit_actor_descriptor({
-		"actor_id": actor_id,
-		"actor_type": actor_type,
-		"source_index": source_index,
-		"payload": payload,
-	})
+	var descriptor := {"actor_id": actor_id, "actor_type": actor_type,
+		"source_index": source_index, "payload": payload}
+	# The existing queue owner preflights stable identity before cold compilation.
+	if not _world_bootstrap_coordinator.actor_descriptor_is_admissible(descriptor):
+		return false
+	if actor_type == "enemy":
+		var monster_id := _strict_runtime_monster_id(payload)
+		var position: Variant = payload.get("position")
+		var seconds: Variant = payload.get("respawn_seconds", -1.0)
+		var raw_context: Variant = payload.get("spawn_context", {})
+		if monster_id <= 0 or not position is Vector2 or not position.is_finite() \
+			or (not seconds is int and not seconds is float) or not is_finite(float(seconds)) \
+			or not raw_context is Dictionary:
+			return false
+		var spawn_context: Dictionary = raw_context
+		var slot := str(spawn_context.get("spawn_slot_id", spawn_context.get("spawn_group_id", "")))
+		if slot.is_empty() or not str(spawn_context.get("summoner_spawn_slot", "")).is_empty():
+			return false
+		_feature_target_bound.sync_world(_world_context.capture_world())
+		if not _feature_target_bound.declare_base(slot, monster_id, position, float(seconds), spawn_context, actor_id):
+			return false
+	var accepted := _world_bootstrap_coordinator.submit_actor_descriptor(descriptor)
+	if accepted:
+		_staged_actor_source_index += 1
+	return accepted
+
+
+func _validate_queued_actor_descriptor(descriptor: Dictionary) -> bool:
+	if not _collecting_staged_actor_plan:
+		return false
+	var actor_type := str(descriptor.get("actor_type", ""))
+	if actor_type != "enemy":
+		return actor_type in ["npc", "zone_portal", "map_portal"]
+	var payload: Dictionary = descriptor.get("payload", {})
+	var position: Variant = payload.get("position")
+	var seconds: Variant = payload.get("respawn_seconds", -1.0)
+	var raw_context: Variant = payload.get("spawn_context", {})
+	if not position is Vector2 or not position.is_finite() \
+		or (not seconds is int and not seconds is float) or not is_finite(float(seconds)) \
+		or not raw_context is Dictionary:
+		return false
+	var context: Dictionary = raw_context
+	var slot := str(context.get("spawn_slot_id", context.get("spawn_group_id", "")))
+	if slot.is_empty():
+		return false
+	return _feature_target_bound.declared_base_matches(
+		_strict_runtime_monster_id(payload), position, float(seconds), context, str(descriptor.get("actor_id", "")))
 
 
 func _spawn_staged_actor_descriptor(descriptor: Dictionary) -> Dictionary:
@@ -4889,9 +4975,7 @@ func _spawn_staged_actor_descriptor(descriptor: Dictionary) -> Dictionary:
 	match actor_type:
 		"enemy":
 			var monster_id := int(payload.get("monster_id", -1))
-			var monster := GameData.get_monster_by_id(monster_id)
-			if monster.is_empty():
-				return {"ok": false, "reason": "missing_monster"}
+			var monster := {"monster_id": monster_id}
 			_staged_actor_spawn_failure_reason = ""
 			var enemy := _spawn_enemy(
 				monster,
@@ -5016,8 +5100,7 @@ func _spawn_enemy(
 			"spawn_slot_id",
 			spawn_context.get("spawn_group_id", "")
 		))
-		_feature_target_bound.declare_base(slot_id_for_plan,monster_id_for_plan)
-		_submit_staged_actor_descriptor(
+		var planned := _submit_staged_actor_descriptor(
 			"enemy",
 			{
 				"monster_id": monster_id_for_plan,
@@ -5028,12 +5111,31 @@ func _spawn_enemy(
 			},
 			"enemy:%s" % slot_id_for_plan if not slot_id_for_plan.is_empty() else ""
 		)
+		if not planned:
+			_staged_actor_spawn_failure_reason = "invalid_published_base_descriptor"
 		return null
 	var monster_id := _strict_runtime_monster_id(monster_data)
-	var canonical_monster := GameData.get_monster_by_id(monster_id)
-	if canonical_monster.is_empty():
-		_staged_actor_spawn_failure_reason = "missing_canonical_monster"
+	var summoner_slot := str(spawn_context.get("summoner_spawn_slot", ""))
+	var admission: Dictionary = {}
+	var inputs: RefCounted
+	if summoner_slot.is_empty():
+		admission = _feature_target_bound.admit_base(monster_id, spawn_position, float(respawn_seconds), spawn_context)
+		if not bool(admission.get("accepted", false)):
+			_staged_actor_spawn_failure_reason = str(admission.get("reason", "unpublished_base_spawn"))
+			return null
+		inputs = admission.get("inputs")
+	else:
+		if not _feature_target_bound.admits_child(summoner_slot, monster_id):
+			_staged_actor_spawn_failure_reason = "unpublished_summon_child"
+			return null
+		inputs = _feature_target_bound.monster_inputs(monster_id)
+		if not is_instance_valid(_hc_m30_summon_queue) or not _hc_m30_summon_queue.claim_birth(monster_id, spawn_position, spawn_context):
+			_staged_actor_spawn_failure_reason = "unissued_summon_birth"
+			return null
+	if inputs == null:
+		_staged_actor_spawn_failure_reason = "missing_published_monster_inputs"
 		return null
+	var canonical_monster: Dictionary = inputs.view().entry
 	monster_data = canonical_monster
 	# Classification is canonical data, never a caller-controlled flag.
 	is_boss = str(monster_data.get("classification", "")) == "boss"
@@ -5055,7 +5157,10 @@ func _spawn_enemy(
 		_staged_actor_spawn_failure_reason = "occupied_base_spawn_slot"
 		return null
 	_runtime_spawn_serial += 1
-	var context := spawn_context.duplicate(true)
+	# The original job is a synchronous factory capability, never actor/save data.
+	var context := spawn_context.duplicate(false)
+	context.erase("_m30_job")
+	context = context.duplicate(true)
 	var respawn_enabled := bool(context.get("respawn_enabled", true))
 	var slot_id := str(context.get("spawn_slot_id", context.get("spawn_group_id", "")))
 	if slot_id.is_empty():
@@ -5068,22 +5173,13 @@ func _spawn_enemy(
 			return null
 		slot_id = "runtime:%d:%d" % [_zone_generation, _runtime_spawn_serial]
 	context["spawn_slot_id"] = slot_id
-	var summoner_slot := str(context.get("summoner_spawn_slot",""))
-	if summoner_slot.is_empty(): _feature_target_bound.declare_base(slot_id,monster_id)
-	else: _feature_target_bound.observe_child(summoner_slot,monster_id)
-	var classification := str(canonical_monster.get("classification", ""))
 	var spawn_classification := str(
 		canonical_monster.get("spawn_classification", "")
 	)
 	var policy: Dictionary = {}
 	var effective_respawn := maxf(0.0, float(respawn_seconds))
 	if respawn_enabled:
-		policy = MonsterRespawnPolicyScript.resolve(
-			str(context.get("respawn_policy_id", "")),
-			classification,
-			float(respawn_seconds),
-			spawn_classification
-		)
+		policy = admission.get("policy", {})
 		if not bool(policy.get("valid", false)):
 			push_error(
 				"Monster respawn policy rejected monster_id=%d slot=%s reason=%s"
@@ -5138,7 +5234,7 @@ func _spawn_enemy(
 					return null
 				clear_persisted_respawn_after_spawn = true
 	var enemy := EnemyActor.new()
-	enemy.setup(monster_data, player, is_boss)
+	enemy.setup(monster_data, player, is_boss, inputs)
 	# R4 T3: the body admission verdict is obtained synchronously BEFORE the
 	# world registers anything. A config-rejected profile never occupies the
 	# spatial index, the activity cache or the respawn slot: the spawn
@@ -6426,27 +6522,27 @@ func _death_revival_context() -> Dictionary:
 	}
 
 
-func _on_revival_requested(request: Dictionary) -> void:
+func _on_revival_requested(request: Dictionary) -> bool:
 	if _active_death_id.is_empty() or _death_revival_request_in_flight:
-		return
+		return false
 	if str(request.get("contract_id", "")) != DEATH_REVIVAL_CONTRACT_ID:
-		return
+		return false
 	if str(request.get("death_id", "")) != _active_death_id:
-		return
+		return false
 	if (
 		str(request.get("option_slot", "")) != "town"
 		or str(request.get("method_id", "")) != "revive.nearest_town"
 	):
-		return
+		return false
 	_death_revival_request_in_flight = true
 	var accepted := travel_to_service_home(
 		false,
-		false,
+		_map_failure_recovery_active,
 		"比奇省",
 		Callable(self, "_finish_death_revival")
 	)
 	if accepted:
-		return
+		return true
 	_death_revival_request_in_flight = false
 	if is_instance_valid(hud):
 		hud.apply_revival_result({
@@ -6454,6 +6550,7 @@ func _on_revival_requested(request: Dictionary) -> void:
 			"message": "复活位置暂不可用",
 			"revival_options": _death_revival_context().get("revival_options", []),
 		})
+	return false
 
 
 func _finish_death_revival() -> void:
@@ -14777,6 +14874,20 @@ func _respawn_later(
 	generation: int,
 	spawn_context: Dictionary = {}
 ) -> void:
+	# Delayed births use the same published base qualification before acquiring
+	# Timer ownership. The factory rechecks after the real timeout as before.
+	if not is_inside_tree() or generation != _zone_generation or not is_finite(seconds) or seconds < 0.0:
+		return
+	if not _world_context.matches_world(_feature_target_bound.snapshot().get("world", {})):
+		return
+	var raw_base_seconds: Variant = spawn_context.get("respawn_base_seconds", seconds)
+	if not raw_base_seconds is int and not raw_base_seconds is float:
+		return
+	var base_seconds: float = float(raw_base_seconds)
+	var admission := _feature_target_bound.admit_base(
+		_strict_runtime_monster_id(monster_data), spawn_position, base_seconds, spawn_context)
+	if not bool(admission.get("accepted", false)):
+		return
 	var wakeup := get_tree().create_timer(seconds)
 	var identity := wakeup.get_instance_id()
 	_respawn_wakeups[identity] = wakeup
@@ -15193,9 +15304,19 @@ func _hc_m30_materialize(monster: Dictionary, candidate_px: Vector2, context: Di
 func hc_m30_summon_snapshot() -> Dictionary:
 	return _hc_m30_summon_queue.snapshot() if is_instance_valid(_hc_m30_summon_queue) else {"pending_batches": 0}
 
+func _hc_m30_summon_request_valid(source: EnemyActor, ids: Array, count: int, maximum: int) -> bool:
+	if not is_instance_valid(source):
+		return false
+	return _feature_target_bound.summon_request_valid(
+		str(source.get_meta("spawn_slot_id", "")), source.monster_id, ids, count, maximum)
+
 func _hc_m30_resolve_monster(raw_id: Variant) -> Dictionary:
-	var monster_id: int = GameData.canonical_monster_id(raw_id)
-	return GameData.get_monster_by_id(monster_id) if monster_id > 0 else {}
+	if not raw_id is int and not raw_id is float:
+		return {}
+	if float(raw_id) != floorf(float(raw_id)):
+		return {}
+	var inputs: RefCounted = _feature_target_bound.monster_inputs(int(raw_id))
+	return inputs.view().entry if inputs != null else {}
 
 func hc_m30_stable_enemy_ground_point(point: Vector2, radius_gu: float, expected_map_id: int) -> Vector2:
 	# Read-only projection shared by existing Bich enforcement and navigation.

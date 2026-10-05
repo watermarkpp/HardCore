@@ -77,13 +77,15 @@ func _run() -> void:
 	while not game.gameplay_input_is_enabled() and Time.get_ticks_msec()<deadline: await get_tree().process_frame
 	check(game.gameplay_input_is_enabled(),"real mapped world reaches READY")
 	if not game.gameplay_input_is_enabled(): game.queue_free(); _finish(); return
-	first=await Fixture.prepare_target(self,game,game.player,19,"chain_guard")
-	survivor=game._spawn_enemy(GameData.get_monster_by_id(64),
-		game._canonical_ground_gu_to_screen_px(Vector2(43.1,13.5)),false,-1.0,
-		{"respawn_enabled":false,"spawn_slot_id":"test:chain_guard:survivor"})
-	var extra: EnemyActor=game._spawn_enemy(GameData.get_monster_by_id(64),
-		game._canonical_ground_gu_to_screen_px(Vector2(53.5,13.5)),false,-1.0,
-		{"respawn_enabled":false,"spawn_slot_id":"test:chain_guard:extra"})
+	var descriptors: Array[Dictionary] = [
+		{"id": 19, "ground": Fixture.FIXTURE_GROUND_POSITION, "respawn": -1.0, "context": {"respawn_enabled": false, "spawn_slot_id": "test:formal_skill:chain_guard:19"}},
+		{"id": 64, "ground": Vector2(43.1,13.5), "respawn": -1.0, "context": {"respawn_enabled": false, "spawn_slot_id": "test:chain_guard:survivor"}},
+		{"id": 64, "ground": Vector2(53.5,13.5), "respawn": -1.0, "context": {"respawn_enabled": false, "spawn_slot_id": "test:chain_guard:extra"}},
+	]
+	var published_targets := await Fixture.prepare_published_target_set(self, game, game.player, descriptors, "chain_guard")
+	first = published_targets[0]
+	survivor = published_targets[1]
+	var extra: EnemyActor = published_targets[2]
 	check(extra!=null,"the third declared factory slot is real rather than a fabricated receiver limit")
 	check(first!=null and survivor!=null and game.feature_world_capacity_bound().maximum_receivers==85,"real factory has the same 85-slot bound")
 	if first==null or survivor==null: game.queue_free(); _finish(); return

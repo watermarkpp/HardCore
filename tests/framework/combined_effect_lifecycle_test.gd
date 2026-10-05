@@ -69,7 +69,10 @@ func _process(_delta: float) -> void:
 	peak_persistence = maxi(peak_persistence,PlayerState._json_persistence.pending_count()+PlayerState._world_json_persistence.pending_count())
 	if runtime.has_due():
 		maximum_remaining_due_backlog_usec = maxi(maximum_remaining_due_backlog_usec,game._time_domains.simulation_usec()-runtime._heap.due_usec())
-	if stream_started_usec > 0 and stream_finished_usec == 0 and game._streaming_coordinator.pending_request_count() == 0:
+	if stream_started_usec > 0 and stream_finished_usec == 0 and game._streaming_coordinator.pending_request_count() == 0 \
+		and not game._streaming_coordinator.client_resources(resource_key).is_empty() \
+		and game._streaming_coordinator.threaded_texture_request_count() - resource_request_before == 5 \
+		and game._streaming_coordinator.threaded_texture_get_count() - resource_get_before == 5:
 		stream_finished_usec = now
 	if deaths == 30 and death_finished_usec == 0 and _settlement_drained(): death_finished_usec = now
 
@@ -87,14 +90,20 @@ func _run() -> void:
 	while not game.gameplay_input_is_enabled() and Time.get_ticks_msec()<deadline: await get_tree().process_frame
 	check(game.gameplay_input_is_enabled(),"real mapped world reaches READY")
 	if not game.gameplay_input_is_enabled(): _finish(); return
-	var first := await Fixture.prepare_target(self,game,game.player,19,"combined_effect_lifecycle")
+	var descriptors: Array[Dictionary] = [
+		{"id": 19, "ground": Fixture.FIXTURE_GROUND_POSITION, "respawn": -1.0, "context": {"respawn_enabled": false, "spawn_slot_id": "test:formal_skill:combined_effect_lifecycle:19"}},
+	]
+	for index in range(1,30):
+		var ground := Fixture.FIXTURE_GROUND_POSITION+Vector2(float(index%6)*0.4,float(index/6)*0.4)
+		descriptors.append({"id": 19, "ground": ground, "respawn": -1.0,
+			"context": {"respawn_enabled": false, "spawn_slot_id": "fixture:combined:"+str(index)}})
+	var published_targets := await Fixture.prepare_published_target_set(self, game, game.player, descriptors, "combined_effect_lifecycle")
+	var first: EnemyActor = published_targets[0]
 	check(first != null,"first receiver uses formal spawn and real death connections")
 	if first == null: _finish(); return
 	targets.append(first)
 	for index in range(1,30):
-		var ground := Fixture.FIXTURE_GROUND_POSITION+Vector2(float(index%6)*0.4,float(index/6)*0.4)
-		var actor: EnemyActor = game._spawn_enemy(GameData.get_monster_by_id(19),game._canonical_ground_gu_to_screen_px(ground),false,-1.0,
-			{"respawn_enabled":false,"spawn_slot_id":"fixture:combined:"+str(index)})
+		var actor: EnemyActor = published_targets[index]
 		if actor != null: targets.append(actor)
 	check(targets.size() == 30,"all thirty actual mapped receivers created")
 	if targets.size() != 30: _finish(); return
@@ -120,7 +129,10 @@ func _run() -> void:
 	helper.free()
 	check(not resource_mapping.is_empty(),"registered uncached five-action resource selected for simultaneous completion")
 	if resource_mapping.is_empty(): _finish(); return
-	game._streaming_coordinator.register_visual(self,get_instance_id(),game.current_map_id,game._zone_generation,resource_key,{},0)
+	game._streaming_coordinator.register_visual(self,get_instance_id(),game.current_map_id,
+		game._streaming_coordinator.current_world_generation(),resource_key,{},0)
+	check(game._streaming_coordinator.visual_subscription_is_current(get_instance_id(),resource_key),
+		"real publisher accepts this consumer using its own current generation")
 	check(ContentLayers.set_feature_module_enabled("hc.ignite",true),"default-off test module explicitly enabled")
 	var original: Array = PlayerState.feature_bundle().event_index.get("damage_committed:hc.skill.wizard.ice_storm",[])
 	check(original.size() == 1,"real compiled mechanic binding found")
@@ -181,6 +193,8 @@ func _run() -> void:
 		"elapsed_usec":Time.get_ticks_usec()-started_usec,"wall_frame_usec":_percentiles("wall_usec"),"maximum_remaining_due_backlog_usec":maximum_remaining_due_backlog_usec,
 		"death_latency_usec":death_finished_usec-death_started_usec if death_finished_usec > 0 else -1,
 		"resource_latency_usec":stream_finished_usec-stream_started_usec if stream_finished_usec > 0 else -1,
+		"resource_monster_id":resource_monster_id,"resource_key":resource_key,
+		"resource_publisher_generation":game._streaming_coordinator.current_world_generation(),
 		"peak_states":peak_states,"peak_deaths":peak_deaths,"peak_persistence":peak_persistence,
 		"category_scopes":category_scopes,"maximum_pending_age_frames":maximum_pending_age,"maximum_runnable_service_age_frames":maximum_service_age,
 		"profile_writer":PlayerState._json_persistence.work_snapshot(),"world_writer":PlayerState._world_json_persistence.work_snapshot(),"samples":samples}

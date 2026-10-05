@@ -21,18 +21,21 @@ func _run() -> void:
 	while not game.gameplay_input_is_enabled() and Time.get_ticks_msec() < deadline: await get_tree().process_frame
 	check(game.gameplay_input_is_enabled(),"real mapped world READY")
 	if not game.gameplay_input_is_enabled(): _finish(); return
-	var first := await Fixture.prepare_target(self,game,game.player,19,"feature_effect_production")
+	var descriptors: Array[Dictionary] = [
+		{"id": 19, "ground": Fixture.FIXTURE_GROUND_POSITION, "respawn": -1.0, "context": {"respawn_enabled": false, "spawn_slot_id": "test:formal_skill:feature_effect_production:19"}},
+	]
+	if not melee:
+		descriptors.append({"id": 64, "ground": Vector2(41.2,13.5), "respawn": -1.0, "context": {"respawn_enabled": false, "spawn_slot_id": "fixture:feature_effect:0"}})
+		descriptors.append({"id": 89, "ground": Vector2(40.5,14.2), "respawn": -1.0, "context": {"respawn_enabled": false, "spawn_slot_id": "fixture:feature_effect:1"}})
+	var published_targets := await Fixture.prepare_published_target_set(self, game, game.player, descriptors, "feature_effect_production")
+	var first: EnemyActor = published_targets[0]
 	check(first != null,"formal first receiver")
 	if first == null: _finish(); return
-	var targets: Array[EnemyActor] = [first]
+	var targets: Array[EnemyActor] = published_targets
 	if not melee:
-		var positions := [Vector2(41.2,13.5),Vector2(40.5,14.2)]
-		var ids := [64,89]
 		for index in range(2):
-			var actor: EnemyActor = game._spawn_enemy(GameData.get_monster_by_id(ids[index]),
-				game._canonical_ground_gu_to_screen_px(positions[index]),false,-1.0,{"respawn_enabled":false,"spawn_slot_id":"fixture:feature_effect:"+str(index)})
+			var actor: EnemyActor = targets[index+1]
 			check(actor != null and actor.projection_ready(),"exact mapped AOE actor "+str(index))
-			if actor != null: targets.append(actor)
 	game.set_process(false); game.set_physics_process(false); game.player.set_physics_process(false)
 	for actor: Node in get_tree().get_nodes_in_group("enemies"): actor.set_physics_process(false)
 	for actor: EnemyActor in targets:

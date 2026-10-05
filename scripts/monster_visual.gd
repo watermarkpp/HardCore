@@ -695,9 +695,17 @@ func _resources_for(monster_data: Dictionary) -> Dictionary:
 	return _client_resources(client_mapping) if not client_mapping.is_empty() else {}
 
 
+func _appearance_profile_for(monster_id: int) -> Dictionary:
+	if is_instance_valid(actor) and actor.monster_id == monster_id:
+		var published := actor.published_monster_inputs_view()
+		if not published.is_empty():
+			return published.appearance
+	return MonsterIdentityScript.appearance_profile(monster_id)
+
+
 func _client_mapping_for(monster_data: Dictionary) -> Dictionary:
 	var monster_id := MonsterIdentityScript.monster_id(monster_data)
-	var profile := MonsterIdentityScript.appearance_profile(monster_id)
+	var profile := _appearance_profile_for(monster_id)
 	if profile.is_empty() or str(profile.get("status", "")) != "formal":
 		return {}
 	var atlas: Dictionary = profile.get("atlas", {}) if profile.get("atlas", {}) is Dictionary else {}
@@ -1373,10 +1381,10 @@ func _start_struck_visual(duration: float) -> void:
 ## .framesPerDirection (109 profiles = 2 frames, monster 241's shared profile
 ## = 6 frames). This is appearance metadata, not texture-residency state, so
 ## a struck enqueued during cold activation / async streaming still gets the
-## exact vanilla duration. appearance_profile() is cached by MonsterIdentity;
-## this stays a one-shot read per visual.
+## exact vanilla duration. Published actors use their frozen appearance;
+## standalone actors retain the canonical one-shot read per visual.
 func _load_canonical_struck_frame_count(monster_id: int) -> int:
-	var actions: Variant = MonsterIdentityScript.appearance_profile(monster_id).get("actions", {})
+	var actions: Variant = _appearance_profile_for(monster_id).get("actions", {})
 	if actions is Dictionary:
 		var hit: Variant = actions.get("hit", {})
 		if hit is Dictionary:

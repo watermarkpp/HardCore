@@ -52,6 +52,9 @@ var defer_between_slices := true
 var _map_build_queue: Array[Dictionary] = []
 var _collision_build_queue: Array[Dictionary] = []
 var _actor_spawn_queue: Array[Dictionary] = []
+var _actor_collection_open := false
+var _actor_collection_started := false
+var _actor_descriptor_validator := Callable()
 
 # ── resources ──
 var resource_manifest: Dictionary = {}
@@ -125,6 +128,9 @@ func _internal_begin(_map_id: int, _mode: String) -> void:
 	_map_build_queue.clear()
 	_collision_build_queue.clear()
 	_actor_spawn_queue.clear()
+	_actor_collection_open = false
+	_actor_collection_started = false
+	_actor_descriptor_validator = Callable()
 	resource_manifest.clear()
 	_prefetched_resources.clear()
 	_consumed_paths.clear()
@@ -515,15 +521,41 @@ func submit_collision_descriptors(descriptors: Array) -> void:
 	collision_max_slice_ms = 0.0
 
 
+func begin_actor_collection(validator: Callable) -> bool:
+	if stage != Stage.SPAWN_ACTORS or _actor_collection_started or not validator.is_valid():
+		return false
+	_actor_collection_started = true
+	_actor_descriptor_validator = validator
+	_actor_collection_open = true
+	return true
+
+
+func close_actor_collection() -> void:
+	_actor_collection_open = false
+
+
+func actor_collection_is_open() -> bool:
+	return _actor_collection_open and stage == Stage.SPAWN_ACTORS
+
+
+func actor_descriptor_is_admissible(descriptor: Dictionary) -> bool:
+	if not actor_collection_is_open():
+		return false
+	var actor_id: Variant = descriptor.get("actor_id")
+	if not actor_id is String or actor_id.is_empty() or _planned_actor_ids.has(actor_id):
+		return false
+	return descriptor.get("actor_type", "") in ["enemy", "npc", "zone_portal", "map_portal"] \
+		and descriptor.get("payload") is Dictionary
+
+
 func submit_actor_descriptor(descriptor: Dictionary) -> bool:
+	# Admission precedes every queue, identity and diagnostic counter mutation.
+	if not actor_descriptor_is_admissible(descriptor):
+		return false
+	if not _actor_descriptor_validator.is_valid() or not bool(_actor_descriptor_validator.call(descriptor)):
+		return false
 	planned_actors += 1
 	var actor_id := str(descriptor.get("actor_id", ""))
-	if actor_id.is_empty():
-		failed_actors += 1
-		return false
-	if _planned_actor_ids.has(actor_id):
-		duplicate_actors += 1
-		return false
 	_planned_actor_ids[actor_id] = true
 	_actor_spawn_queue.append(descriptor.duplicate(true))
 	return true
@@ -548,6 +580,7 @@ func process_collision_queue(
 
 
 func process_actor_queue(handler: Callable, max_items: int, budget_ms: float) -> void:
+	close_actor_collection()
 	await _process_staged_queue(
 		_actor_spawn_queue,
 		handler,
@@ -562,7 +595,9 @@ func process_actor_queue_blocking(
 	max_items: int,
 	budget_ms: float
 ) -> void:
-	while not _actor_spawn_queue.is_empty():
+	close_actor_collection()
+	var owner_generation := generation
+	while is_generation_current(owner_generation) and not _actor_spawn_queue.is_empty():
 		_process_staged_queue_slice(
 			_actor_spawn_queue,
 			handler,
@@ -579,8 +614,11 @@ func _process_staged_queue(
 	budget_ms: float,
 	kind: String
 ) -> void:
-	while not queue.is_empty():
+	var owner_generation := generation
+	while is_generation_current(owner_generation) and not queue.is_empty():
 		_process_staged_queue_slice(queue, handler, max_items, budget_ms, kind)
+		if not is_generation_current(owner_generation):
+			return
 		if not queue.is_empty() and defer_between_slices:
 			await Engine.get_main_loop().process_frame
 
@@ -592,13 +630,18 @@ func _process_staged_queue_slice(
 	budget_ms: float,
 	kind: String
 ) -> void:
+	var owner_generation := generation
 	var slice_start := Time.get_ticks_usec()
 	var processed := 0
-	while not queue.is_empty():
+	while is_generation_current(owner_generation) and not queue.is_empty():
 		var item: Variant = queue.pop_front()
 		if item is Dictionary:
 			var item_started_usec := Time.get_ticks_usec()
 			var result: Variant = handler.call(item as Dictionary)
+			# A real callback may replace this generation synchronously. Neither
+			# its returned item nor its slice belongs to the replacement owner.
+			if not is_generation_current(owner_generation):
+				return
 			var item_ms := (
 				float(Time.get_ticks_usec() - item_started_usec) / 1000.0
 			)

@@ -116,11 +116,15 @@ func _case(mask: int) -> bool:
 	while not game.gameplay_input_is_enabled() and Time.get_ticks_msec()<deadline: await get_tree().process_frame
 	check(game.gameplay_input_is_enabled(),prefix+"mapped production world reaches READY")
 	if not game.gameplay_input_is_enabled(): await _retire(game); return false
-	var target: EnemyActor=await Fixture.prepare_target(self,game,game.player,19,"mixed_delivery")
+	var descriptors: Array[Dictionary] = [
+		{"id": 19, "ground": Fixture.FIXTURE_GROUND_POSITION, "respawn": -1.0, "context": {"respawn_enabled": false, "spawn_slot_id": "test:formal_skill:mixed_delivery:19"}},
+		{"id": 19, "ground": Vector2(43.1,13.5), "respawn": -1.0, "context": {"respawn_enabled": false, "spawn_slot_id": "test:mixed_delivery:later"}},
+	]
+	var published_targets := await Fixture.prepare_published_target_set(self, game, game.player, descriptors, "mixed_delivery")
+	var target: EnemyActor = published_targets[0]
 	check(target!=null,prefix+"sole Root factory creates the initial receiver")
 	if target==null: await _retire(game); return false
-	var later: EnemyActor=game._spawn_enemy(GameData.get_monster_by_id(19),game._canonical_ground_gu_to_screen_px(Vector2(43.1,13.5)),
-		false,-1.0,{"respawn_enabled":false,"spawn_slot_id":"test:mixed_delivery:later"})
+	var later: EnemyActor = published_targets[1]
 	check(later!=null,prefix+"declared child receiver starts outside the direct footprint")
 	if later==null: await _retire(game); return false
 	game.set_process(false); game.set_physics_process(false); game.player.set_physics_process(false)

@@ -33,17 +33,19 @@ func _run() -> void:
 	while not game.gameplay_input_is_enabled() and Time.get_ticks_msec()<deadline: await get_tree().process_frame
 	check(game.gameplay_input_is_enabled(),"production mapped world reaches READY")
 	if not game.gameplay_input_is_enabled(): game.queue_free(); _finish(); return
-	var first:=await Fixture.prepare_target(self,game,game.player,19,"child_execution")
+	var descriptors: Array[Dictionary] = [
+		{"id": 19, "ground": Fixture.FIXTURE_GROUND_POSITION, "respawn": -1.0, "context": {"respawn_enabled": false, "spawn_slot_id": "test:formal_skill:child_execution:19"}},
+		{"id": 64, "ground": Vector2(43.1,13.5), "respawn": -1.0, "context": {"respawn_enabled": false, "spawn_slot_id": "test:chain:0"}},
+		{"id": 64, "ground": Vector2(53.5,13.5), "respawn": -1.0, "context": {"respawn_enabled": false, "spawn_slot_id": "test:chain:1"}},
+	]
+	var published_targets := await Fixture.prepare_published_target_set(self, game, game.player, descriptors, "child_execution")
+	var first: EnemyActor = published_targets[0]
 	check(first!=null,"real factory, spatial index and mapped first receiver")
 	if first==null: game.queue_free(); _finish(); return
-	var receivers: Array[EnemyActor]=[first]
+	var receivers: Array[EnemyActor] = published_targets
 	for i in range(2):
-		var start_ground:=Vector2(43.1,13.5) if i==0 else Vector2(53.5,13.5)
-		var actor: EnemyActor=game._spawn_enemy(GameData.get_monster_by_id(64),
-			game._canonical_ground_gu_to_screen_px(start_ground),false,-1.0,
-			{"respawn_enabled":false,"spawn_slot_id":"test:chain:"+str(i)})
+		var actor: EnemyActor = receivers[i+1]
 		check(actor!=null and actor.projection_ready(),"production later-wave receiver "+str(i))
-		if actor!=null: receivers.append(actor)
 	if receivers.size()!=3: game.queue_free(); _finish(); return
 	game.set_process(false); game.set_physics_process(false); game.player.set_physics_process(false)
 	for actor: Node in get_tree().get_nodes_in_group("enemies"): actor.set_physics_process(false)

@@ -2,6 +2,7 @@ extends Node
 
 const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
 const Root := preload("res://tests/framework/fixtures/lease_probe_root.gd")
+const Fixture := preload("res://tests/helpers/formal_world_skill_fixture.gd")
 const Actor := preload("res://scripts/features/contracts/actor_ref.gd")
 var proof := Proof.new()
 var checks := 0
@@ -19,18 +20,20 @@ func _run() -> void:
 	while not game.gameplay_input_is_enabled() and Time.get_ticks_msec()<deadline: await get_tree().process_frame
 	check(game.gameplay_input_is_enabled(),"production mapped world reaches READY")
 	if not game.gameplay_input_is_enabled(): game.queue_free(); _finish(); return
+	var context: Dictionary={"respawn_enabled":false,"spawn_slot_id":"test:birth_slot_identity:19"}
+	var initial: Dictionary=game.feature_world_capacity_bound()
+	var plan: Array[Dictionary]=[{"id":19,"ground":Vector2(40.5,13.5),"respawn":-1.0,"context":context}]
+	var published: Array[EnemyActor]=await Fixture.publish_targets(self,game,plan,"birth_slot_identity")
 	game.set_process(false); game.set_physics_process(false); game.player.set_physics_process(false)
 	for enemy: Node in get_tree().get_nodes_in_group("enemies"): enemy.set_physics_process(false)
 	var position: Vector2=game._canonical_ground_gu_to_screen_px(Vector2(40.5,13.5))
-	var context: Dictionary={"respawn_enabled":false,"spawn_slot_id":"test:birth_slot_identity:19"}
-	var initial: Dictionary=game.feature_world_capacity_bound()
-	var first: EnemyActor=game._spawn_enemy(GameData.get_monster_by_id(19),position,false,-1.0,context)
+	var first: EnemyActor=published[0] if not published.is_empty() else null
 	check(first!=null and first.can_receive_damage(),"first actual life occupies its stable base factory slot")
 	if first==null: game.queue_free(); _finish(); return
 	first.set_physics_process(false)
 	var bound: Dictionary=game.feature_world_capacity_bound()
 	check(bound.proved and int(bound.maximum_receivers)==int(initial.maximum_receivers)+1,
-		"the base slot contributes exactly one legal receiver to the original world proof")
+		"real republication includes the authored world and exactly one fixture base slot")
 	var serial: int=game._runtime_spawn_serial
 	var actors_before: int=get_tree().get_nodes_in_group("enemies").size()
 	var original_hp: int=first.current_hp

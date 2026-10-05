@@ -23,6 +23,7 @@ const MonsterGroundRuntimeDiagnosticOverlayScript := preload(
 const GroundUnitSpace := preload("res://scripts/ground_unit_space.gd")
 const CombatResolutionRules := preload("res://scripts/combat_resolution_rules.gd")
 const MonsterIdentityScript := preload("res://scripts/monster_identity.gd")
+const PublishedMonsterInputsScript := preload("res://scripts/features/contracts/published_monster_inputs.gd")
 const MonsterUnitAdapterScript := preload("res://scripts/monster_unit_adapter.gd")
 const SkillFootprintSnapshotScript := preload(
 	"res://scripts/skills/skill_footprint_snapshot.gd"
@@ -367,6 +368,7 @@ var _dying := false
 var _death_pending := false
 var boss_rule: Dictionary = {}
 var behavior_profile: Dictionary = {}
+var _published_birth_inputs: RefCounted
 var combat_enabled := true
 var service_ai_code := -1
 var service_move_interval_ms := 0
@@ -625,7 +627,12 @@ var _terrain_failed_cell_until_ms := 0
 var _last_damaging_pet: WeakRef
 
 
-func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := false) -> void:
+func published_monster_inputs_view() -> Dictionary:
+	return _published_birth_inputs.view() if _published_birth_inputs != null else {}
+
+
+func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := false, inputs: RefCounted = null) -> void:
+	_published_birth_inputs = null
 	_canonical_attack_frames = 0
 	_canonical_attack_frame_ms = 0
 	set_meta("canonical_attack_binding_status", "MISSING")
@@ -671,7 +678,18 @@ func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := fals
 		set_meta("retired_source_only", true)
 		set_meta("canonical_rejected", true)
 		return
-	var canonical_entry := MonsterIdentityScript.require_catalog_entry(requested_id, "runtime")
+	if inputs != null:
+		if inputs.get_script() != PublishedMonsterInputsScript or not inputs.valid_for(requested_id):
+			monster_data = {"monster_id": requested_id}
+			monster_id = -1
+			set_meta("canonical_rejected", true)
+			return
+		_published_birth_inputs = inputs
+	var published := published_monster_inputs_view()
+	var canonical_entry: Dictionary = (
+		published.entry if _published_birth_inputs != null
+		else MonsterIdentityScript.require_catalog_entry(requested_id, "runtime")
+	)
 	if canonical_entry.is_empty():
 		monster_data = {"monster_id": requested_id}
 		monster_id = -1
@@ -690,7 +708,10 @@ func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := fals
 	}
 	monster_id = requested_id
 	# Resolve immutable action metadata once per setup, not once per attack.
-	var appearance := MonsterIdentityScript.appearance_profile(monster_id)
+	var appearance: Dictionary = (
+		published.appearance if _published_birth_inputs != null
+		else MonsterIdentityScript.appearance_profile(monster_id)
+	)
 	var canonical_attack: Dictionary = appearance.get("actions", {}).get("attack", {})
 	_canonical_attack_frames = int(canonical_attack.get("framesPerDirection", 0))
 	_canonical_attack_frame_ms = int(canonical_attack.get("frameMs", 0))
@@ -700,7 +721,10 @@ func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := fals
 	set_meta("canonical_attack_timing_error", "" if _canonical_attack_frame_ms > 0 else "attack_frame_ms_missing:compatibility_fallback_unverified")
 	# HC-BODY-2TIER-1P5-V1: capture the baked body profile through the formal
 	# identity entry. No name/suffix fallback exists for body data.
-	combat_body_profile = MonsterIdentityScript.body_profile(requested_id)
+	combat_body_profile = (
+		published.body.duplicate(true) if _published_birth_inputs != null
+		else MonsterIdentityScript.body_profile(requested_id)
+	)
 	# M02A: primary_target is the searchable player reference. A current combat
 	# target exists only after the exact monster-id acquisition policy accepts it.
 	target = null
@@ -740,12 +764,18 @@ func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := fals
 	move_speed_gu_per_sec = MonsterUnitAdapterScript.legacy_screen_scalar_px_to_gu(
 		40.0 if is_boss else 58.0
 	)
-	behavior_profile = MonsterIdentityScript.behavior_profile(monster_data)
+	behavior_profile = (
+		published.behavior.duplicate(true) if _published_birth_inputs != null
+		else MonsterIdentityScript.behavior_profile(monster_data)
+	)
 	_apply_behavior_profile()
 	_apply_attack_range_policy()
 	_apply_source_locked_special_delivery_override()
 	if is_boss:
-		boss_rule = MonsterIdentityScript.runtime_boss_rule(monster_data, GameData.boss_service_rules)
+		boss_rule = (
+			published.boss_rule.duplicate(true) if _published_birth_inputs != null
+			else MonsterIdentityScript.runtime_boss_rule(monster_data, GameData.boss_service_rules)
+		)
 		if not boss_rule.is_empty():
 			_apply_boss_rule()
 	if stationary:
@@ -1438,7 +1468,10 @@ func _hold_combat_disabled() -> void:
 
 
 func _apply_attack_range_policy() -> void:
-	var policy := _attack_range_policy_record_for_id(monster_id)
+	var policy: Dictionary = (
+		published_monster_inputs_view().attack_range_policy if _published_birth_inputs != null
+		else _attack_range_policy_record_for_id(monster_id)
+	)
 	if policy.is_empty():
 		return
 	var range_gu_value: Variant = policy.get("attackRangeGu", null)
@@ -1598,7 +1631,7 @@ static func _movement_authority_record_for_id(
 
 func _configure_target_acquisition() -> bool:
 	_target_acquisition_policy = MonsterTargetAcquisitionPolicyScript.new()
-	var authority_record := _movement_authority_record_for_id(monster_id)
+	var authority_record := _birth_movement_authority_record()
 	var ok := _target_acquisition_policy.configure(authority_record, monster_id)
 	var targeting: Dictionary = authority_record.get("targeting", {})
 	_target_focus_timeout_ms = int(targeting.get("focus_timeout_ms", 0))
@@ -1681,12 +1714,18 @@ func _target_should_disengage(
 	)
 
 
+func _birth_movement_authority_record() -> Dictionary:
+	if _published_birth_inputs != null:
+		return published_monster_inputs_view().movement_policy
+	return _movement_authority_record_for_id(monster_id)
+
+
 func _configure_movement_cadence() -> bool:
 	if monster_id <= 0:
 		_movement_authority_failed_closed = true
 		set_meta("movement_authority_rejected", true)
 		return false
-	var authority_record := _movement_authority_record_for_id(monster_id)
+	var authority_record := _birth_movement_authority_record()
 	if authority_record.is_empty():
 		_movement_authority_failed_closed = true
 		set_meta("movement_authority_rejected", true)
@@ -7691,6 +7730,7 @@ func _apply_health_stage_mechanics() -> void:
 		for _child_index in range(count):
 			if not pool.is_empty():
 				ids.append(pool[_rng.randi_range(0, pool.size() - 1)])
+		set_meta("m30_summon_release_serial", int(get_meta("m30_summon_release_serial", 0)) + 1)
 		summon_requested.emit(self, ids, count, int(summon.get("maxActive", 30)))
 	if bool(rage.get("enabled", false)):
 		_boss_rage_time = float(rage.get("durationSeconds", 8.0))
