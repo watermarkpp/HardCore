@@ -85,7 +85,9 @@ Windows受测引擎 `4.7.stable.official.5b4e0cb0f`，exe SHA256 `d8055fb8c7e7f5
 
 ## 7. Pro 原规划者协作与停止状态
 
-用户授权向Pro咨询。原对话“游戏稳定性设计”地址 `https://chatgpt.com/g/g-p-6a489c5ed68481919473c4a1128c4a54/c/6abbcea3-5fb4-83ea-8732-0cf95e1c4583`；共享历史 `https://chatgpt.com/share/6abcd9f8-0bd0-83ea-8061-3e5dee97c341`。共享副本不是可写原对话。当前原对话Pro模型已通过UI确认；本地主控正在从最早原始设计通读全部轮次，核对是否因局部审计偏离主目标。全文阅读结果与本轮实际新回复后续补入本目录，不把旧报告当作新求助结果。
+用户授权向Pro咨询。原对话“游戏稳定性设计”地址 `https://chatgpt.com/g/g-p-6a489c5ed68481919473c4a1128c4a54-you-xi-zhi-zuo-xiang-mu/c/6abbcea3-5fb4-83ea-8732-0cf95e1c4583`；共享历史 `https://chatgpt.com/share/6abcd9f8-0bd0-83ea-8061-3e5dee97c341`。共享副本不是可写原对话。原对话Pro模型已通过UI确认。本地主控已从最早设计通读全部可访问的103条正文、339775字符，包含后续纠偏与本轮实际12547字符新回复，并完整读取本地RFC及附录。阅读范围见[PRO_FULL_READ_RECEIPT.json](PRO_FULL_READ_RECEIPT.json)，设计核对见[CORE_DIRECTION_AND_PRO_RECONCILIATION.md](CORE_DIRECTION_AND_PRO_RECONCILIATION.md)，本轮回复摘要见[PRO_PROGRESS_REPLY.md](PRO_PROGRESS_REPLY.md)。这不代表所有历史二进制附件被独立审计，也不把Pro规划意见称当前SHA验收。
+
+完整源码/证据快照已推送commit `4685d5ec76227509d53d4ff542f9d60cb4b8b626`，tree `7276ab23a44e57b423c5ddff5125cd910180ee8f`；云端已经实际fetch、建立独立接续分支并校验清单。详见[TRANSFER_RECEIPT.md](TRANSFER_RECEIPT.md)。本次后续文档提交只补交接资料，源码受测指纹不变。云端已有dirty施工时先保护现场，再fetch并读取/接入文档增量，不能reset覆盖自己的新实现。
 
 云端应先理解完整核心设计，遇到容量、有限链/旧life、准入、自然期限等问题随时到原Pro对话研究清楚；提供固定SHA、最小调用链、真实FAIL和明确问题，不让规划者代猜未推送源码，不把只读意见当主控验收。GLM/dots/小可爱旧CLI/MCP/Harness/队列与定时轮询弃用。
 
