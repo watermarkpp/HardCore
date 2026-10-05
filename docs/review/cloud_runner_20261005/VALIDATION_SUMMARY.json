@@ -1,0 +1,498 @@
+{
+  "candidate_sha": "43167c51f6ee31cc3fe08647397c0c4ff9c997a6",
+  "source_content_sha256": "d758bb3a1a3b2fc764a817fc19e587f5859c7f0bfd41a419b0aeba368f3d411e",
+  "python_self_tests": 11,
+  "self_test_seconds": 149.539,
+  "formal_native_attempts": 16,
+  "independent_peer_native_processes": 1,
+  "journal_pair": "PASS",
+  "windows_native": "NOT_RUN",
+  "pro_fixed_sha_audit": "NOT_RUN",
+  "android_export": "NOT_RUN",
+  "device_test": "NOT_RUN",
+  "invocations": [
+    {
+      "evidence": "linux_source_changed_150545_448196",
+      "native_results": [
+        {
+          "test_name": "proof_source_changed",
+          "framework_run_id": "867e8a1d-ebfc-48bd-bcbc-dff938f0796d",
+          "wrapper_process_id": 25435,
+          "runtime_appdata": "/workspace/HardCore/.godot/runtime_appdata/cloud_20db1245-9be5-4830-98e6-a88ce4a929f0",
+          "effective_exit_code": 0,
+          "process_exited": true,
+          "framework_receipt_valid": true,
+          "result": "PASS",
+          "reason": ""
+        }
+      ],
+      "command": [
+        "/workspace/.hardcore-cloud/tools/pwsh-7.5.4/pwsh",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "/workspace/HardCore/tools/run_godot_tests_request.ps1",
+        "-RequestPath",
+        "/workspace/HardCore/outputs/r3_takeover/20260930/validation/linux_source_changed_150545_448196/runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": false,
+      "passed": 1,
+      "failed": 0,
+      "status": "FAIL"
+    },
+    {
+      "evidence": "linux_cold_receipt_gate_150554_226671",
+      "native_results": [
+        {
+          "test_name": "combined_cold_receipt_gate_test",
+          "framework_run_id": "db66dfe9-c9cb-419e-acb8-a85ff462af50",
+          "wrapper_process_id": 25563,
+          "runtime_appdata": "/workspace/HardCore/.godot/runtime_appdata/cloud_4d027b71-66f6-4bb2-814a-c3e589a72a8e",
+          "effective_exit_code": 0,
+          "process_exited": true,
+          "framework_receipt_valid": true,
+          "result": "PASS",
+          "reason": ""
+        }
+      ],
+      "command": [
+        "/workspace/.hardcore-cloud/tools/pwsh-7.5.4/pwsh",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "/workspace/HardCore/tools/run_godot_tests_request.ps1",
+        "-RequestPath",
+        "/workspace/HardCore/outputs/r3_takeover/20260930/validation/linux_cold_receipt_gate_150554_226671/runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 1,
+      "failed": 0,
+      "status": "PASS"
+    },
+    {
+      "evidence": "linux_false_marker_150606_780957",
+      "native_results": [
+        {
+          "test_name": "proof_false_marker",
+          "framework_run_id": "577ac79a-128d-4a70-9c2c-6dce4d1a66c8",
+          "wrapper_process_id": 25691,
+          "runtime_appdata": "/workspace/HardCore/.godot/runtime_appdata/cloud_3dde3216-7ccd-4aa4-bb79-e262815b6909",
+          "effective_exit_code": 0,
+          "process_exited": true,
+          "framework_receipt_valid": false,
+          "result": "FAIL",
+          "reason": "framework_check_counts_mismatch;framework_checks_failed"
+        }
+      ],
+      "command": [
+        "/workspace/.hardcore-cloud/tools/pwsh-7.5.4/pwsh",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "/workspace/HardCore/tools/run_godot_tests_request.ps1",
+        "-RequestPath",
+        "/workspace/HardCore/outputs/r3_takeover/20260930/validation/linux_false_marker_150606_780957/runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    {
+      "evidence": "linux_orphan_with_peer_150620_502481",
+      "native_results": [
+        {
+          "test_name": "proof_orphan_pipe",
+          "framework_run_id": "84f66579-2a83-4381-978f-c798af2f7168",
+          "wrapper_process_id": 25829,
+          "runtime_appdata": "/workspace/HardCore/.godot/runtime_appdata/cloud_a763eb01-4ce8-47ce-ad8c-01136f12968b",
+          "effective_exit_code": 0,
+          "process_exited": false,
+          "framework_receipt_valid": true,
+          "result": "FAIL",
+          "reason": "process_did_not_exit;lingering_native_children"
+        }
+      ],
+      "command": [
+        "/workspace/.hardcore-cloud/tools/pwsh-7.5.4/pwsh",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "/workspace/HardCore/tools/run_godot_tests_request.ps1",
+        "-RequestPath",
+        "/workspace/HardCore/outputs/r3_takeover/20260930/validation/linux_orphan_with_peer_150620_502481/runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    {
+      "evidence": "linux_orphan_pipe_150630_097890",
+      "native_results": [
+        {
+          "test_name": "proof_orphan_pipe",
+          "framework_run_id": "edd641f9-4501-475f-813b-87e2ff205dee",
+          "wrapper_process_id": 25959,
+          "runtime_appdata": "/workspace/HardCore/.godot/runtime_appdata/cloud_41742f12-c257-4d7d-8a40-d95a8a6cf26c",
+          "effective_exit_code": 0,
+          "process_exited": false,
+          "framework_receipt_valid": true,
+          "result": "FAIL",
+          "reason": "process_did_not_exit;lingering_native_children"
+        }
+      ],
+      "command": [
+        "/workspace/.hardcore-cloud/tools/pwsh-7.5.4/pwsh",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "/workspace/HardCore/tools/run_godot_tests_request.ps1",
+        "-RequestPath",
+        "/workspace/HardCore/outputs/r3_takeover/20260930/validation/linux_orphan_pipe_150630_097890/runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    {
+      "evidence": "linux_positive_control_150639_785791",
+      "native_results": [
+        {
+          "test_name": "proof_positive_control",
+          "framework_run_id": "869c982c-b623-4613-99b0-090104ef2f21",
+          "wrapper_process_id": 26089,
+          "runtime_appdata": "/workspace/HardCore/.godot/runtime_appdata/cloud_b59809f6-9f9e-4eee-b9dc-59c6c7a596dd",
+          "effective_exit_code": 0,
+          "process_exited": true,
+          "framework_receipt_valid": true,
+          "result": "PASS",
+          "reason": ""
+        }
+      ],
+      "command": [
+        "/workspace/.hardcore-cloud/tools/pwsh-7.5.4/pwsh",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "/workspace/HardCore/tools/run_godot_tests_request.ps1",
+        "-RequestPath",
+        "/workspace/HardCore/outputs/r3_takeover/20260930/validation/linux_positive_control_150639_785791/runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 1,
+      "failed": 0,
+      "status": "PASS"
+    },
+    {
+      "evidence": "linux_case3_pass_then_nonzero_exit_150648_443180",
+      "native_results": [
+        {
+          "test_name": "case3_pass_then_nonzero_exit",
+          "framework_run_id": "",
+          "wrapper_process_id": 26217,
+          "runtime_appdata": "/workspace/HardCore/.godot/runtime_appdata/cloud_27c1f12b-05fd-41f3-8b55-c808155b7f1d",
+          "effective_exit_code": 7,
+          "process_exited": true,
+          "framework_receipt_valid": null,
+          "result": "FAIL",
+          "reason": "non_zero_exit_code_7"
+        }
+      ],
+      "command": [
+        "/workspace/.hardcore-cloud/tools/pwsh-7.5.4/pwsh",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "/workspace/HardCore/tools/run_godot_tests_request.ps1",
+        "-RequestPath",
+        "/workspace/HardCore/outputs/r3_takeover/20260930/validation/linux_case3_pass_then_nonzero_exit_150648_443180/runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    {
+      "evidence": "linux_case6_engine_log_fatal_150657_172361",
+      "native_results": [
+        {
+          "test_name": "case6_engine_log_fatal",
+          "framework_run_id": "",
+          "wrapper_process_id": 26345,
+          "runtime_appdata": "/workspace/HardCore/.godot/runtime_appdata/cloud_ea1e9125-9f3f-416c-a2a5-b1deee0e3ff8",
+          "effective_exit_code": 0,
+          "process_exited": true,
+          "framework_receipt_valid": null,
+          "result": "FAIL",
+          "reason": "stderr_failures_1;engine_log_failures_1"
+        }
+      ],
+      "command": [
+        "/workspace/.hardcore-cloud/tools/pwsh-7.5.4/pwsh",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "/workspace/HardCore/tools/run_godot_tests_request.ps1",
+        "-RequestPath",
+        "/workspace/HardCore/outputs/r3_takeover/20260930/validation/linux_case6_engine_log_fatal_150657_172361/runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    {
+      "evidence": "linux_case4_pass_then_hang_150706_088813",
+      "native_results": [
+        {
+          "test_name": "case4_pass_then_hang",
+          "framework_run_id": "",
+          "wrapper_process_id": 26473,
+          "runtime_appdata": "/workspace/HardCore/.godot/runtime_appdata/cloud_4cd63dfe-f5d2-42c5-accf-d9a0a4206027",
+          "effective_exit_code": 137,
+          "process_exited": false,
+          "framework_receipt_valid": null,
+          "result": "FAIL",
+          "reason": "process_did_not_exit;timeout_30s;native_cleanup_incomplete;non_zero_exit_code_137"
+        }
+      ],
+      "command": [
+        "/workspace/.hardcore-cloud/tools/pwsh-7.5.4/pwsh",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "/workspace/HardCore/tools/run_godot_tests_request.ps1",
+        "-RequestPath",
+        "/workspace/HardCore/outputs/r3_takeover/20260930/validation/linux_case4_pass_then_hang_150706_088813/runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    {
+      "evidence": "linux_repeat_producer_150739_318792",
+      "native_results": [
+        {
+          "test_name": "proof_repeat_once",
+          "framework_run_id": "9bcb32e1-4f74-48ac-88b6-2450ea5ef251",
+          "wrapper_process_id": 26614,
+          "runtime_appdata": "/workspace/HardCore/.godot/runtime_appdata/cloud_e89ece04-0f22-4629-9306-bf03a0d726be",
+          "effective_exit_code": 0,
+          "process_exited": true,
+          "framework_receipt_valid": true,
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "proof_repeat_once",
+          "framework_run_id": "579f0b10-e802-47f0-8ae5-7b8bf26b31f0",
+          "wrapper_process_id": 26624,
+          "runtime_appdata": "/workspace/HardCore/.godot/runtime_appdata/cloud_e89ece04-0f22-4629-9306-bf03a0d726be",
+          "effective_exit_code": 0,
+          "process_exited": true,
+          "framework_receipt_valid": false,
+          "result": "FAIL",
+          "reason": "framework_checks_failed"
+        }
+      ],
+      "command": [
+        "/workspace/.hardcore-cloud/tools/pwsh-7.5.4/pwsh",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "/workspace/HardCore/tools/run_godot_tests_request.ps1",
+        "-RequestPath",
+        "/workspace/HardCore/outputs/r3_takeover/20260930/validation/linux_repeat_producer_150739_318792/runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 1,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    {
+      "evidence": "linux_link_userdata_150754_418013",
+      "native_results": [],
+      "command": [
+        "/workspace/.hardcore-cloud/tools/pwsh-7.5.4/pwsh",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "/workspace/HardCore/tools/run_godot_tests_request.ps1",
+        "-RequestPath",
+        "/workspace/HardCore/outputs/r3_takeover/20260930/validation/linux_link_userdata_150754_418013/runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": null,
+      "failed": null,
+      "status": "FAIL"
+    },
+    {
+      "evidence": "linux_proof_zero_checks_150756_960979",
+      "native_results": [
+        {
+          "test_name": "proof_zero_checks",
+          "framework_run_id": "fdba80db-75fe-4087-8adf-20d8e6b7913e",
+          "wrapper_process_id": 26864,
+          "runtime_appdata": "/workspace/HardCore/.godot/runtime_appdata/cloud_cce0c426-14fb-4049-838d-e4cde45277df",
+          "effective_exit_code": 0,
+          "process_exited": true,
+          "framework_receipt_valid": false,
+          "result": "FAIL",
+          "reason": "framework_zero_checks;framework_checks_failed"
+        }
+      ],
+      "command": [
+        "/workspace/.hardcore-cloud/tools/pwsh-7.5.4/pwsh",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "/workspace/HardCore/tools/run_godot_tests_request.ps1",
+        "-RequestPath",
+        "/workspace/HardCore/outputs/r3_takeover/20260930/validation/linux_proof_zero_checks_150756_960979/runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    {
+      "evidence": "linux_proof_marker_only_150806_170403",
+      "native_results": [
+        {
+          "test_name": "proof_marker_only",
+          "framework_run_id": "6680de3a-a16a-4638-b645-aa545c2d3a1b",
+          "wrapper_process_id": 26992,
+          "runtime_appdata": "/workspace/HardCore/.godot/runtime_appdata/cloud_3893161b-3449-4213-b9eb-dc3dc319e4d6",
+          "effective_exit_code": 0,
+          "process_exited": true,
+          "framework_receipt_valid": false,
+          "result": "FAIL",
+          "reason": "framework_receipt_missing"
+        }
+      ],
+      "command": [
+        "/workspace/.hardcore-cloud/tools/pwsh-7.5.4/pwsh",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "/workspace/HardCore/tools/run_godot_tests_request.ps1",
+        "-RequestPath",
+        "/workspace/HardCore/outputs/r3_takeover/20260930/validation/linux_proof_marker_only_150806_170403/runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    {
+      "evidence": "linux_final_journal_pair_150901_943991",
+      "native_results": [
+        {
+          "test_name": "item_journal_v2_backup_seed_test",
+          "framework_run_id": "4ee38219-6fe7-4b0f-8360-eb74f957d7d0",
+          "wrapper_process_id": 27353,
+          "runtime_appdata": "/workspace/HardCore/.godot/runtime_appdata/cloud_bbc42a6d-93c6-43bf-a233-e75f5710e3af",
+          "effective_exit_code": 0,
+          "process_exited": true,
+          "framework_receipt_valid": true,
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "item_journal_v2_backup_cold_test",
+          "framework_run_id": "d88aadb3-f521-4e01-a265-784e1d76407b",
+          "wrapper_process_id": 27480,
+          "runtime_appdata": "/workspace/HardCore/.godot/runtime_appdata/cloud_bbc42a6d-93c6-43bf-a233-e75f5710e3af",
+          "effective_exit_code": 0,
+          "process_exited": true,
+          "framework_receipt_valid": true,
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "item_journal_v2_backup_restart_test",
+          "framework_run_id": "5afd5acd-4823-48e6-8890-c82ac9a1bef3",
+          "wrapper_process_id": 27491,
+          "runtime_appdata": "/workspace/HardCore/.godot/runtime_appdata/cloud_bbc42a6d-93c6-43bf-a233-e75f5710e3af",
+          "effective_exit_code": 0,
+          "process_exited": true,
+          "framework_receipt_valid": true,
+          "result": "PASS",
+          "reason": ""
+        }
+      ],
+      "command": [
+        "/workspace/.hardcore-cloud/tools/pwsh-7.5.4/pwsh",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "/workspace/HardCore/tools/run_godot_tests_request.ps1",
+        "-RequestPath",
+        "/workspace/HardCore/outputs/r3_takeover/20260930/validation/linux_final_journal_pair_150901_943991/runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 3,
+      "failed": 0,
+      "status": "PASS"
+    }
+  ]
+}

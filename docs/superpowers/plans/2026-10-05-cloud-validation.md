@@ -45,7 +45,17 @@
 - [x] Run positive, false marker, zero checks and marker-only native fixtures. Verify negative cases fail and never create a producer grant.
 - [x] Add real native transport fixtures for post-PASS nonzero, post-PASS timeout and post-PASS engine error; keep the old BOM-bearing Windows fixtures unchanged.
 - [x] Run the existing cold receipt counterexample gate and one actual live/cold pair. Archive exact associations and preserve all failed attempts.
-- [ ] Review the diff, verify no unintended source changes, commit the concrete runner increment and push the continuation branch.
+- [x] Review the diff, verify no unintended source changes, commit the concrete runner increment and push the continuation branch.
+
+Completion evidence: candidate `43167c51f6ee31cc3fe08647397c0c4ff9c997a6`,
+source `d758bb3a1a3b2fc764a817fc19e587f5859c7f0bfd41a419b0aeba368f3d411e`.
+Eleven Python methods PASS149.539seconds, thirteen formal native self-test attempts
+plus three actual journal live/cold/restart processes and one independent peer.
+Expected negative outcomes remain FAIL; the suite verifies their rejection.
+Internal review findings were reproduced, fixed and retested, including symlink
+escape and detached multigeneration pipe ownership. Source commits and remote
+branch were actually pushed and checked with ls-remote. Review evidence is in
+`docs/review/cloud_runner_20261005`; independent Pro audit remains NOT_RUN.
 
 ## Following architecture work
 
