@@ -401,34 +401,105 @@ try {
                 throw "Godot isolated import retry failed. Logs: $ImportLog, $ImportRetryLog"
             }
         }
-        $ExportStdout = Join-Path $StageProjectPath "outputs\android_isolated_export_stdout.log"
-        $ExportStderr = Join-Path $StageProjectPath "outputs\android_isolated_export_stderr.log"
-        $ExportProcess = Start-Process $GodotConsole -ArgumentList @(
-            "--headless", "--path", $StageProjectPath, "--log-file", $ExportLog,
-            "--export-debug", "Android", $StageApk
-        ) -RedirectStandardOutput $ExportStdout -RedirectStandardError $ExportStderr -WindowStyle Hidden -PassThru
-        $ExportDeadline = (Get-Date).AddMinutes(10)
-        while (-not $ExportProcess.HasExited -and (Get-Date) -lt $ExportDeadline) {
-            Start-Sleep -Seconds 2
-            $ExportProcess.Refresh()
-            if (Test-Path -LiteralPath $StageApk -PathType Leaf) {
-                $FirstLength = (Get-Item -LiteralPath $StageApk).Length
-                Start-Sleep -Seconds 2
-                $ExportProcess.Refresh()
-                if (-not $ExportProcess.HasExited -and (Get-Item -LiteralPath $StageApk).Length -eq $FirstLength -and $FirstLength -gt 0) {
-                    $ExportLogText = if (Test-Path $ExportLog) { Get-Content -LiteralPath $ExportLog -Raw } else { "" }
-                    if ($ExportLogText -match '\[ DONE \].*export') {
-                        Stop-Process -Id $ExportProcess.Id -Force
-                        $ExportProcess.WaitForExit()
-                        break
-                    }
+        # Two-pass Android seal export (GPT Pro directive 2026-10-06, promoted
+        # from the reviewed runtime_bridge_candidate). Pass 1 exports with the
+        # tracked placeholder metadata; build_android_seal.py binds the actual
+        # APK/template/source bytes; pass 2 exports with the generated
+        # AVAILABLE=true metadata. Between passes only that one generated file
+        # may change and every frozen input is re-verified by the hook.
+        . (Join-Path $ProjectRoot 'tools\android_seal\android_two_pass_export_hook.ps1')
+        $RealEngineExe = Join-Path $ProjectRoot "tools\godot-4.7\Godot_v4.7-stable_win64.exe"
+        $TemplateApk = Join-Path $ProjectRoot "tools\godot-4.7\editor_data\export_templates\4.7.stable\android_debug.apk"
+        $TemplateSha = (Get-FileHash -LiteralPath $TemplateApk -Algorithm SHA256).Hash.ToLowerInvariant()
+        $ApkSigner = Join-Path $AndroidRoot "sdk\build-tools\35.0.1\apksigner.bat"
+        $PythonExe = (Get-Command python).Source
+        $SealEvidenceRoot = Join-Path $StageParent ("seal-evidence-" + (Split-Path $StagePath -Leaf))
+        # The stage worktree has no engine assets; the runner inside the stage
+        # resolves the engine through a junction to the host tree's engine so
+        # the capture scenes execute the exact bytes recorded in the namespace.
+        $StageEngineLink = Join-Path $StageProjectPath "tools\godot-4.7"
+        if (-not (Test-Path -LiteralPath $StageEngineLink)) {
+            $GodotDirectory = Split-Path -Parent $GodotConsole
+            cmd /c mklink /J "$StageEngineLink" "$GodotDirectory" | Out-Null
+        }
+        $RegenerateStageCatalogue = {
+            param($StageRoot, $EvidenceRoot)
+            $Sha256 = [System.Security.Cryptography.SHA256]::Create()
+            $contentStream = New-Object System.IO.MemoryStream
+            Get-ChildItem (Join-Path $StageRoot 'scripts') -Recurse -Filter '*.gd' | Sort-Object FullName | ForEach-Object {
+                $bytes = [System.IO.File]::ReadAllBytes($_.FullName)
+                $contentStream.Write($bytes, 0, $bytes.Length)
+            }
+            $previousContentSha = $env:HARDCORE_R3_CONTENT_SHA256
+            $previousAuditAppData = $env:HARDCORE_AUDIT_RUNTIME_APPDATA
+            $env:HARDCORE_R3_CONTENT_SHA256 = [BitConverter]::ToString($Sha256.ComputeHash($contentStream.ToArray())).Replace('-', '').ToLower()
+            $frameworkDir = Join-Path $StageRoot 'outputs\test_logs\framework'
+            $artifacts = [ordered]@{
+                namespace = 'code_preparation_engine_namespace_capture_test.namespace.json'
+                symbols = 'code_preparation_native_symbol_probe_test.symbols.json'
+                fold = 'code_preparation_scalar_math_probe_test.symbols.json'
+            }
+            $sceneByArtifact = [ordered]@{
+                namespace = 'tests/framework/code_preparation_engine_namespace_capture_test.tscn'
+                symbols = 'tests/framework/code_preparation_native_symbol_probe_test.tscn'
+                fold = 'tests/framework/code_preparation_scalar_math_probe_test.tscn'
+            }
+            try {
+                foreach ($key in $artifacts.Keys) {
+                    $runAppData = Join-Path $StageRoot ".godot\runtime_appdata\seal_$key\"
+                    $env:HARDCORE_AUDIT_RUNTIME_APPDATA = $runAppData
+                    & pwsh -NoProfile -File (Join-Path $StageRoot 'tools\run_godot_tests.ps1') -TestPaths $sceneByArtifact[$key] -TimeoutSeconds 30 | Out-Null
+                    if ($LASTEXITCODE -ne 0) { throw "Stage capture scene failed: $($sceneByArtifact[$key])" }
+                    $artifactPath = Join-Path $frameworkDir $artifacts[$key]
+                    if (-not (Test-Path -LiteralPath $artifactPath -PathType Leaf)) { throw "Missing stage capture artifact: $($artifacts[$key])" }
                 }
+            } finally {
+                $env:HARDCORE_R3_CONTENT_SHA256 = $previousContentSha
+                $env:HARDCORE_AUDIT_RUNTIME_APPDATA = $previousAuditAppData
+            }
+            $namespacePath = Join-Path $frameworkDir $artifacts['namespace']
+            $symbolsPath = Join-Path $frameworkDir $artifacts['symbols']
+            $foldPath = Join-Path $frameworkDir $artifacts['fold']
+            $planPath = Join-Path $EvidenceRoot 'caster_inputs.json'
+            $null = & $PythonExe -B (Join-Path $StageRoot 'tools\compile_code_preparation_inputs.py') `
+                --root $StageRoot --class-cache (Join-Path $StageRoot '.godot\global_script_class_cache.cfg') `
+                --max-source-nodes 64 --entry res://scripts/caster_skill_animation_player.gd `
+                --native-namespace $namespacePath --expected-engine-binary-sha256 (Get-FileHash -LiteralPath $RealEngineExe -Algorithm SHA256).Hash.ToLower() `
+                --global-symbols $symbolsPath --expected-global-symbols-sha256 (Get-FileHash -LiteralPath $symbolsPath -Algorithm SHA256).Hash.ToLower() `
+                --fold-symbols $foldPath --expected-fold-symbols-sha256 (Get-FileHash -LiteralPath $foldPath -Algorithm SHA256).Hash.ToLower() `
+                --out $planPath
+            if ($LASTEXITCODE -ne 0) { throw 'Stage source plan generation failed.' }
+            $cataloguePath = Join-Path $EvidenceRoot 'generated\internal_code_preparation_catalog_data.gd'
+            $null = & $PythonExe -B (Join-Path $StageRoot 'tools\build_internal_code_catalogue.py') `
+                --root $StageRoot --class-cache (Join-Path $StageRoot '.godot\global_script_class_cache.cfg') `
+                --max-source-nodes 64 --entry-id framework.code.caster_animation.v1 `
+                --expected-producer-sha256 (Get-FileHash -LiteralPath (Join-Path $StageRoot 'tools\compile_code_preparation_inputs.py') -Algorithm SHA256).Hash.ToLower() `
+                --plan $planPath --namespace $namespacePath --symbols $symbolsPath --fold $foldPath `
+                --expected-namespace-sha256 (Get-FileHash -LiteralPath $namespacePath -Algorithm SHA256).Hash.ToLower() `
+                --expected-symbols-sha256 (Get-FileHash -LiteralPath $symbolsPath -Algorithm SHA256).Hash.ToLower() `
+                --expected-fold-sha256 (Get-FileHash -LiteralPath $foldPath -Algorithm SHA256).Hash.ToLower() `
+                --out $cataloguePath
+            if ($LASTEXITCODE -ne 0) { throw 'Stage catalogue generation failed.' }
+            return [ordered]@{
+                SourceCatalogue = $cataloguePath
+                SourcePlan = $planPath
+                Producer = (Join-Path $StageRoot 'tools\compile_code_preparation_inputs.py')
+                Namespace = $namespacePath
+                EntryId = 'framework.code.caster_animation.v1'
             }
         }
-        if (-not $ExportProcess.HasExited) {
-            Stop-Process -Id $ExportProcess.Id -Force
-            throw "Godot isolated Android export timed out. Log: $ExportLog"
+        $VerifyProductionBuild = {
+            param($ApkPath, $Commit)
+            & (Join-Path $ProjectRoot 'tools\verify_android_build.ps1') -ApkPath $ApkPath -AndroidRoot $AndroidRoot `
+                -BaselineApkPath $BaselineApkPath -ExpectedVersionCode $ExpectedVersionCode `
+                -ExpectedVersionName $ExpectedVersionName -ExpectedCommit $Commit
+            if ($LASTEXITCODE -ne 0) { throw "Isolated Android APK verification failed." }
         }
+        $FinalExport = Invoke-TwoPassAndroidCodeExport -StageRoot $StageProjectPath -GodotConsole $RealEngineExe `
+            -Python $PythonExe -OutputApk $StageApk -EvidenceRoot $SealEvidenceRoot -SourceCommit $ResolvedCommit `
+            -TemplateApk $TemplateApk -ExpectedTemplateSha256 $TemplateSha -BaselineApk $BaselineApkPath `
+            -ApkSigner $ApkSigner -RegenerateStageCatalogue $RegenerateStageCatalogue -VerifyProductionBuild $VerifyProductionBuild
+        Write-Output ("TWO_PASS_SEAL_EXPORT_PASS final=" + $FinalExport.apk_sha256)
         if (-not (Test-Path -LiteralPath $StageApk -PathType Leaf)) {
             throw "Godot isolated Android export failed. Log: $ExportLog"
         }
