@@ -32,6 +32,11 @@ function Invoke-CodeOfficialExport([string]$GodotConsole, [string]$StageRoot, [s
     $Process = Start-Process -FilePath $GodotConsole -ArgumentList @('--headless','--path',('"'+$StageRoot+'"'),'--log-file',('"'+$Log+'"'),'--export-debug','Android',('"'+$Apk+'"')) -RedirectStandardOutput $Stdout -RedirectStandardError $Stderr -WindowStyle Hidden -PassThru
     if (-not $Process.WaitForExit(600000)) { $Process.Kill(); throw "Export timed out: $Name" }
     if ($Process.ExitCode -ne 0 -or -not (Test-Path -LiteralPath $Apk -PathType Leaf)) { throw "Native export failed: $Name exit=$($Process.ExitCode)" }
+    # Imported media source bytes are audited runtime inputs. Both passes use
+    # the same post-export injection, alignment and existing certificate BEFORE
+    # the APK identity is captured; no unsigned or stale pre-injection hash.
+    & (Join-Path $PSScriptRoot 'inject_sources_resign.ps1') -ApkPath $Apk -StageRoot $StageRoot *> (Join-Path $EvidenceRoot ($Name + '.source_injection.log'))
+    if ($LASTEXITCODE -ne 0) { throw "Owned source injection/signing failed: $Name" }
     return @{native_exit=$Process.ExitCode; apk=$Apk; apk_sha256=(Get-CodeExportHash $Apk); engine_sha256=(Get-CodeExportHash $GodotConsole); log=$Log; stdout=$Stdout; stderr=$Stderr}
 }
 
@@ -73,6 +78,12 @@ function Invoke-TwoPassAndroidCodeExport {
     foreach ($Path in @((Join-Path $StageRoot 'project.godot'),(Join-Path $StageRoot '.godot/global_script_class_cache.cfg'),(Join-Path $StageRoot 'export_presets.cfg'),(Join-Path $StageRoot 'assets/generated/build_info.json'),$Inputs.SourceCatalogue,$Inputs.SourcePlan,$Inputs.Producer,$Inputs.Namespace,$GodotConsole,$TemplateApk,$SealTool,$VerifyTool,$FrozenCollector,(Join-Path $PSScriptRoot 'android_two_pass_export_hook.ps1'))) {
         $Fixed[$Path] = Get-CodeExportHash $Path
     }
+    # These bytes affect the real APK independently of the code graph.
+    foreach ($Source in @('assets/art/items/service/inventory/client.classic_raw_complete/Items_00014.png', 'assets/audio/sfx/client/137__M26-3.wav', 'assets/audio/sfx/client/10332__M33-3.wav')) {
+        $Path = Join-Path $StageRoot $Source
+        $Fixed[$Path] = Get-CodeExportHash $Path
+    }
+    $Fixed[(Join-Path $PSScriptRoot 'inject_sources_resign.ps1')] = Get-CodeExportHash (Join-Path $PSScriptRoot 'inject_sources_resign.ps1')
     $Metadata = Join-Path $StageRoot 'scripts/features/generated/internal_code_android_export_data.gd'
     if (-not (Test-Path -LiteralPath $Metadata -PathType Leaf) -or [IO.File]::ReadAllText($Metadata) -notmatch '(?m)^const AVAILABLE := false\s*$') { throw 'First export requires the tracked unavailable placeholder, with no class_name.' }
     $FirstApk = Join-Path $EvidenceRoot 'first-unavailable-export.apk'

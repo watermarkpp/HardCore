@@ -9,6 +9,10 @@ static var _loaded := false
 static var _result: Dictionary = {}
 
 static func declarations() -> Dictionary:
+	# Android defers the existing data authority until the startup cover is drawn.
+	# NOT_READY must not poison the permanent declaration result cache.
+	if not GameData.is_loaded():
+		return _reject(["feature_resource_primary_not_ready"])
 	if _loaded: return _result
 	_loaded = true
 	var input: Variant = JSON.parse_string(FileAccess.get_file_as_string(PATH))

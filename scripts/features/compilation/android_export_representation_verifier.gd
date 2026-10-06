@@ -145,4 +145,11 @@ func valid_shader(path: String, resource: Resource) -> bool:
 	return is_verified() and _shader_text.has(path) and resource is Shader and resource.resource_path == path and (resource as Shader).code == _shader_text[path]
 
 func _notification(what: int) -> void:
-	if what == NOTIFICATION_PREDELETE: cancel()
+	# RefCounted is already at zero references here: calling another method
+	# on self is invalid. Retire the owned native stream directly.
+	if what != NOTIFICATION_PREDELETE: return
+	_failed = true
+	if _file != null: _file.close()
+	_file = null
+	_hash = null
+	_buffer = PackedByteArray()

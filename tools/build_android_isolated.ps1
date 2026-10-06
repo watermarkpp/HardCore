@@ -407,7 +407,7 @@ try {
         # APK/template/source bytes; pass 2 exports with the generated
         # AVAILABLE=true metadata. Between passes only that one generated file
         # may change and every frozen input is re-verified by the hook.
-        . (Join-Path $ProjectRoot 'tools\android_seal\android_two_pass_export_hook.ps1')
+        . (Join-Path $ProjectRoot 'tools\android_seal\bridge\android_two_pass_export_hook.ps1')
         $RealEngineExe = Join-Path $ProjectRoot "tools\godot-4.7\Godot_v4.7-stable_win64.exe"
         $TemplateApk = Join-Path $ProjectRoot "tools\godot-4.7\editor_data\export_templates\4.7.stable\android_debug.apk"
         $TemplateSha = (Get-FileHash -LiteralPath $TemplateApk -Algorithm SHA256).Hash.ToLowerInvariant()
@@ -480,8 +480,13 @@ try {
                 --expected-fold-sha256 (Get-FileHash -LiteralPath $foldPath -Algorithm SHA256).Hash.ToLower() `
                 --out $cataloguePath
             if ($LASTEXITCODE -ne 0) { throw 'Stage catalogue generation failed.' }
-            return [ordered]@{
-                SourceCatalogue = $cataloguePath
+            # The sealed source bundle must be the one the APK actually loads,
+            # not merely the external evidence copy used by the collector.
+            $InstalledCatalogue = Join-Path $StageRoot 'scripts\features\generated\internal_code_preparation_catalog_data.gd'
+            Copy-Item -LiteralPath $cataloguePath -Destination $InstalledCatalogue -Force
+            if ((Get-FileHash -LiteralPath $InstalledCatalogue -Algorithm SHA256).Hash -cne (Get-FileHash -LiteralPath $cataloguePath -Algorithm SHA256).Hash) { throw 'Installed stage catalogue byte mismatch.' }
+            return @{
+                SourceCatalogue = $InstalledCatalogue
                 SourcePlan = $planPath
                 Producer = (Join-Path $StageRoot 'tools\compile_code_preparation_inputs.py')
                 Namespace = $namespacePath

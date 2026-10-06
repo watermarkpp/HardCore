@@ -20,7 +20,9 @@ foreach ($item in $SourceEntries) {
     if (-not (Test-Path $src)) { throw "missing source file: $src" }
 }
 
-$zip = [System.IO.Compression.ZipFile]::Open($ApkPath, 'Update')
+# Godot/Gradle APK names are UTF-8 even when the ZIP EFS flag is absent.
+# Windows PowerShell's locale default must never rename sparse-pack assets.
+$zip = [System.IO.Compression.ZipFile]::Open($ApkPath, 'Update', [System.Text.UTF8Encoding]::new($false, $true))
 try {
     foreach ($item in $SourceEntries) {
         $src = Join-Path $StageRoot $item.Source

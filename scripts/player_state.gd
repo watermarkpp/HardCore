@@ -466,8 +466,13 @@ func _ready() -> void:
 		_migrate_single_save_to_profile()
 		_recover_shared_warehouse_transaction()
 		_initialize_shared_warehouse()
-	reset_progress(false)
-	recalculate_stats()
+	# Android StartupLoading owns deferred data readiness. Build no feature
+	# configuration from empty pre-ready indexes; the existing upgrade finish
+	# resets/recalculates after GameData has completed its authoritative load.
+	var data_ready := GameData.is_loaded()
+	reset_progress(false, data_ready)
+	if data_ready:
+		recalculate_stats()
 	ContentLayers.feature_catalog_changed.connect(_on_feature_catalog_changed)
 
 
