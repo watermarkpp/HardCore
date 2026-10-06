@@ -11,8 +11,8 @@
 |---|---|---|---|---|---|---|
 | 1 | 初始 READY fixture 完成条件 = 正式四条件合同 | `tests/helpers/formal_initial_ready.gd`（新增）；`tests/helpers/formal_world_skill_fixture.gd` `wait_for_formal_world`；`tests/initial_world_bootstrap_test.gd` | initial_world_bootstrap_test、monster_summon_formal_birth_test + 同 helper 全部消费者（13 场全绿） | 272430b36 | **PASS**（14 场 + birth direct 210 + mixed 380 逐场 receipt 见 evidence_20261006/） | 无 |
 | 2 | 启动性能 SLA | 生产未改（60 秒有界等待合同） | ready 诊断（8513/8163ms 实测） | 272430b36 | **OPEN / PRODUCT SLA MISSING**（60 秒 ceiling 非门槛） | 无（不阻断独立项） |
-| 3 | 同种 DOT 完整替换（new_due=施加时刻+新period、expiry=施加时刻+全新期限、新 source/credit/lease） | 未实现：`scripts/features/runtime/effect_runtime.gd` `_apply_command` 仍取更大伤害/更晚到期/保留旧周期 | 待 S1 新反例（RED） | 272430b36 | **NOT_RUN**（S1） | S1/S2/S4 组合 |
-| 4 | 认证 species / 独立层权限（default-off，接受时冻结） | 未实现（无层权限编译产物） | 待 S1 | 272430b36 | **NOT_RUN**（S1） | S1/S2 |
+| 3 | 同种 DOT 完整替换（new_due=施加时刻+新period、expiry=施加时刻+全新期限、新 source/credit/lease） | `scripts/features/runtime/effect_runtime.gd` `_apply_command` 同种替换分支（原子新 incarnation、heap.remove、presentation refresh 同头、chain_owners 承接、旧 loan 槽归还、`replaced` 终态）+ `ignite_handler.gd` species/layer/refresh_policy 注入 | dot_replace_contract_test（20/20 RED→GREEN）、feature_receipt_retirement（replaced=65970）、periodic_effect_boundaries、periodic_refresh_period_boundary、periodic_refresh_horizon、feature_state_loan_lifetime（期望随 2026-10-05 用户裁决更新） | 272430b36+ | **PASS**（S1） | 无 |
+| 4 | 认证 species / 独立层权限（default-off，接受时冻结） | `feature_compiler.gd` 可选 status_layer 校验（稳定 ID + `effects.layered_status` 权限；config 可选键）；`feature_authority.gd`/`handler_registry.gd`/`ignite.json` 授予该验证能力；`combined_effect_lifecycle_test` 90 状态=三层表达、`feature_mixed_delivery_test` 同种多源收敛 1 头 | combined_effect_lifecycle_test（39）、feature_mixed_delivery_test（380）、feature_compiler_test、feature_production_loadout_test | 272430b36+ | **PASS**（S1） | 无 |
 | 5 | 出生闭包（完整 base 计划 + SummonQueue 真 ordinal） | 已有生产实现 + 局部 PASS（birth direct 11 场） | published_world_birth_guard 等 11 场 | 272430b36 | 局部 **PASS**；完整组合与 retire 尾部记账待 S2 收口 | S2 |
 | 6 | 容量三份证明（同时驻留/累计合法工作/可服务时效） | 历史 FAIL 保留（pending8192 消费权、AOE 3 目标 2 项旧记录） | 待 S2 新组合 | 272430b36 | **FAIL（历史，保留）** / S2 待做 | S2/S6 判定 |
 | 7 | 资源发布真实交错（scene-change 即时失败、publisher 物理替换、闭包打包） | 部分已有；scene-change 即时失败 MISSING | 待 S3 | 272430b36 | **NOT_RUN/MISSING（S3）** | S3/S5/S6 内容闭包 |
@@ -28,6 +28,15 @@
 - 旧 2-frame / 5-second startup FAIL：`evidence_20261006/runner_receipts/…100338/101046/101444/101523…`（exit 137）+ 云端 EVIDENCE_INDEX fixed_candidate 节。
 - 迁移中间 FAIL（physics 观察点修正前的两次 input 断言失败）：…104521 / …104655。
 - 历史 658/25 组合、V3/V4 性能、容量、save/teardown 六 FAIL、33 检查时效、B 任务全字典：按 FRAMEWORK_PROGRESS / USER_SCOPE_LEDGER 原记录保留。
+
+## S1 期间固定的新增基线分类（2026-10-06）
+
+- `feature_queue_retention_test`：当前 FAIL（18 checks/4 errors，510 retained ActorRef）；纯净基线
+  （HEAD 三文件）对照同 FAIL（early_script_error×5 崩溃形态）→ **本树从未 PASS 的既有失败**
+  （FAIL_CHANGED 形态，人工审查结论：与 S1 无因果），S5 统一归因。
+- `natural_effect_lifecycle_test`：292 行 refreshed 期望已按裁决更新为 replaced；138 行 APPDATA
+  尾斜杠环境合同已修；剩余 receivers 断言在纯净基线同 FAIL（early_script_error 崩溃形态）→
+  **既有失败**，S5 归因。该测试每跑必在沙盒创建真实角色（重跑前需清 `.godot/runtime_appdata`）。
 
 ## 环境纪律（S0 复验结果）
 

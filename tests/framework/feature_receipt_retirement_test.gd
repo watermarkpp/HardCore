@@ -71,8 +71,11 @@ func _run() -> void:
 			await get_tree().process_frame
 	check(completed == RELEASES,"all 2200 accepted thirty-receiver releases finish after crossing the old 65536-receipt lifetime bound")
 	check(int(runtime.metrics().admitted_facts) == RELEASES*TARGETS,"all 66000 real committed HP facts were consumed exactly once")
-	check(int(runtime.metrics().started) == TARGETS and int(runtime.metrics().refreshed) == RELEASES*TARGETS-TARGETS,
-		"thirty real states start and every subsequent accepted source refresh is retained")
+	# 2026-10-05 user ruling: same-species repeats atomically replace one head
+	# (replaced terminals), the strongest_keep_phase refresh terminal is gone.
+	check(int(runtime.metrics().started) == TARGETS and int(runtime.metrics().replaced) == RELEASES*TARGETS-TARGETS
+		and int(runtime.metrics().refreshed) == 0,
+		"thirty same-species heads start once and every later accepted source atomically replaces its incarnation")
 	var exact_hp := true
 	for actor: EnemyActor in receivers: exact_hp = exact_hp and actor.current_hp == 100000-10*RELEASES
 	check(exact_hp,"every target retains the exact completed base damage total")

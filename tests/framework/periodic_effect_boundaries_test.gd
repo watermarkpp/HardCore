@@ -49,10 +49,13 @@ func _run() -> void:
 	clock.advance_simulation(0.5)
 	await _submit("boundaries:weak",40)
 	check(runtime.active_count() == 1 and runtime.heap_count() == 1 and visual.node_count() == 1,"weaker refresh preserves one state, one heap node and one visual")
-	clock.advance_simulation(0.5)
+	# 2026-10-05 user ruling: the weaker application atomically replaces the
+	# head — its fresh phase commits the accepted weaker damage at its own
+	# application-anchored tick (0.5s + 1s period).
+	clock.advance_simulation(1.0)
 	var before: int = target.current_hp
 	await _pump()
-	check(target.current_hp == before-5,"weak refresh retains stronger five damage and original first tick phase")
+	check(target.current_hp == before-2,"replacement's fresh phase commits the accepted weaker two damage on its application-anchored tick")
 	clock.advance_simulation(0.5)
 	await _submit("boundaries:strong",200)
 	get_tree().paused = true
@@ -61,18 +64,21 @@ func _run() -> void:
 	get_tree().paused = false
 	check(ContentLayers.set_feature_module_enabled("hc.ignite",false),"source is actually withdrawn")
 	source.queue_free(); await get_tree().process_frame
-	clock.advance_simulation(0.5)
+	# 2026-10-05 user ruling: the strong application replaced the head at 2.0s;
+	# its fresh phase first ticks at 3.0s with the accepted raw ten damage and
+	# the current magic absorption, surviving the earlier source destruction.
+	clock.advance_simulation(1.0)
 	target.direct_spell_magic_defense_min = 3; target.direct_spell_magic_defense_max = 3
 	before = target.current_hp
 	await _pump()
-	check(target.current_hp == before-7,"source death and withdrawal retain stronger ten damage, using current MAC three")
+	check(target.current_hp == before-7,"source death and withdrawal retain the replacement's accepted ten damage, using current MAC three")
 	check(target.credits.back().profile_id == "periodic-boundary-owner","real HP port retains historical kill credit after source node destruction")
 	check(target.replace_actor_capability_source("hc.source.fixture.immunity",["hc.immune.periodic"]),"known target immunity registers through its sole capability set")
 	clock.advance_simulation(1.0); before = target.current_hp; await _pump()
 	check(target.current_hp == before,"current immunity suppresses periodic HP write without a minimum-one fallback")
 	check(target.replace_actor_capability_source("hc.source.fixture.immunity",[]),"immunity source can be removed independently")
 	clock.advance_simulation(1.0); before = target.current_hp; await _pump()
-	check(target.current_hp == before-7,"later ticks recheck immunity and retain locked stronger raw damage")
+	check(target.current_hp == before-7,"later ticks recheck immunity and retain the replacement's accepted raw damage")
 	clock.advance_simulation(1.0); await _pump()
 	check(runtime.metrics().ticks == 5 and runtime.active_count() == 0 and visual.node_count() == 0,"refreshed lifetime includes final phase tick then stops the same cue")
 	check(visual.events[0].kind == "start" and visual.events[1].kind == "refresh" and visual.events.back().kind == "stop","presentation lifecycle is explicit start refresh stop")

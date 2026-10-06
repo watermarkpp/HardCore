@@ -87,32 +87,42 @@ func _case(periodic_chain: bool) -> void:
 	check(state.next_due==1000000 and state.expires==4000000 and target.current_hp==4990,
 		"original phase and expiry begin at one and four simulation seconds")
 	check(clock.advance_simulation(100.0),"test-owned simulation advance exposes a controlled overdue state")
-	check(_submit("horizon:B",1,source_b,"B"),"later accepted root commits a weaker refresh through the same real HP chain")
-	# Observe the committed refresh before the existing pump can consume old due
-	# work. This is an explicit unit observation, not another gameplay scheduler.
+	check(_submit("horizon:B",1,source_b,"B"),"later accepted root commits a weaker replacement through the same real HP chain")
+	# Observe the committed replacement before the existing pump can consume old
+	# due work. This is an explicit unit observation, not another scheduler.
+	# 2026-10-05 user ruling: the later accepted same-species application
+	# atomically replaces the original incarnation — its uncommitted overdue
+	# ticks are cancelled with it, and the fresh incarnation restarts strength,
+	# phase and the full duration from its own application time.
 	runtime._dispatch_one_fact()
-	check(runtime.active_count()==1 and runtime.heap_count()==1 and state.next_due==1000000
-		and state.expires==104000000 and state.raw_per_tick==10 and state.chain_owners.size()==2,
-		"strongest_keep_phase preserves the old due time and extends the shared accepted horizon")
+	# Replacement publishes a fresh incarnation Dictionary: re-observe the live
+	# head instead of the retired old incarnation captured before the ruling.
+	var replaced_state: Dictionary = {}
+	for live_state: Dictionary in runtime._states.values():
+		if live_state.target.resolve() == target: replaced_state = live_state
+	check(runtime.active_count()==1 and runtime.heap_count()==1 and replaced_state.next_due==101000000
+		and replaced_state.expires==104000000 and replaced_state.raw_per_tick==1 and replaced_state.chain_owners.size()==2,
+		"same-species replacement cancels overdue original ticks and restarts phase, strength and horizon at the application time")
 	if periodic_chain:
 		check(ContentLayers.set_feature_module_enabled(module_id,false),"accepted periodic horizon survives formal source withdrawal")
 		source_a.queue_free(); await get_tree().process_frame
 	await _pump()
-	check(target.periodic_calls==100 and target.current_hp==3989,
-		"the real port delivers all hundred overdue original-phase ticks without a hidden max_ticks cap")
-	check(state.next_due==101000000 and state.expires==104000000,
-		"remaining four ticks retain the original one-second phase")
-	check(clock.advance_simulation(4.0),"simulation reaches the last refreshed expiry boundary")
-	await _pump()
-	check(target.periodic_calls==104 and target.current_hp==3949,
-		"all 104 owed ticks commit exact HP, exceeding the two independent authored four-tick durations")
-	check(target.last_credit.get("marker")=="A", "stronger original raw and historical credit survive the weaker new accepted refresh")
+	check(target.periodic_calls==0 and target.current_hp==4989,
+		"the replaced incarnation commits no owed original ticks; only the two accepted base damage applications landed")
+	check(replaced_state.next_due==101000000 and replaced_state.expires==104000000,
+		"the fresh incarnation waits for its own application-anchored phase")
+	for tick_index in range(4):
+		check(clock.advance_simulation(1.0),"simulation reaches replacement tick second "+str(tick_index+1))
+		await _pump()
+	check(target.periodic_calls==4 and target.current_hp==4985,
+		"exactly the four replacement ticks commit one point each within the new full duration")
+	check(target.last_credit.get("marker")=="B", "the replacement's own historical credit owns the delivered ticks")
 	if periodic_chain:
-		check(target.periodic_release_ids.size()==104 and runtime.metrics().admitted_facts==106,
-			"all 104 distinct periodic facts reuse the original resident promise without spending the direct/child cumulative quota")
-		check(runtime.metrics().peak_receipts<=4,"104 periodic identities keep dedup receipt residency within the accepted four-slot root pool")
-	check(runtime.metrics().tick_delivery_count==104 and runtime.metrics().maximum_tick_delivery_lateness_usec==99000000,
-		"diagnostic explicitly retains actual overdue lateness rather than calling this a service-deadline PASS")
+		check(target.periodic_release_ids.size()==4 and runtime.metrics().admitted_facts==6,
+			"the four distinct replacement periodic facts reuse the resident promise without spending the direct/child cumulative quota")
+		check(runtime.metrics().peak_receipts<=4,"replacement periodic identities keep dedup receipt residency within the accepted four-slot root pool")
+	check(runtime.metrics().tick_delivery_count==4 and runtime.metrics().maximum_tick_delivery_lateness_usec==0,
+		"cancelled overdue work is not re-delivered and the fresh phase runs without artificial lateness")
 	var empty:=true
 	for count: int in runtime.reservation_snapshot().values(): empty=empty and count==0
 	check(empty and not runtime.has_work() and runtime.errors.is_empty(),"all original and refresh owners retire only after the shared work horizon ends")

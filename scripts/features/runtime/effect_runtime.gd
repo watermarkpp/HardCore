@@ -39,7 +39,7 @@ var _child_executor := Callable()
 var _pumping := false
 var require_reservations := false
 var last_admission_reason := ""
-var _stats := {"ticks":0,"actual_loss":0,"started":0,"refreshed":0,"expired":0,"invalidated":0,"failed":0,"admitted_facts":0,"healing_commands":0,"actual_healing":0,"peak_states":0,"peak_pending":0,"optional_cue_missing":0,
+var _stats := {"ticks":0,"actual_loss":0,"started":0,"refreshed":0,"replaced":0,"expired":0,"invalidated":0,"failed":0,"admitted_facts":0,"healing_commands":0,"actual_healing":0,"peak_states":0,"peak_pending":0,"optional_cue_missing":0,
 	"peak_receipts":0,"retired_receipts":0,"peak_reservations":0,
 	"tick_delivery_count":0,"maximum_tick_delivery_lateness_usec":0,"child_actions":0,"peak_children":0}
 var errors: Array[String] = []
@@ -476,20 +476,69 @@ func _apply_command(command: Dictionary, entry: Dictionary) -> void:
 	if target == null or not target.has_method("has_actor_capability"): return
 	if target.has_actor_capability("hc.immune.periodic"): return
 	var target_key := JSON.stringify(command.target)
-	var handle := JSON.stringify([command.target,command.source_handle,command.mechanic_id,command.effect_id])
+	# Certified species identity (user ruling 2026-10-05). The species is the
+	# handler-owned effect kind, frozen into the command at acceptance time.
+	# An explicitly registered independent layer keeps its own head; every
+	# normal command converges onto one head per target per species.
+	var species_id: String = str(command.get("species_id", ""))
+	if species_id.is_empty():
+		_error("feature_command_missing_species"); return
+	var layer_id: String = str(command.get("layer_id", ""))
+	var handle := (JSON.stringify([command.target, species_id, layer_id]) if not layer_id.is_empty()
+		else JSON.stringify([command.target, species_id]))
 	var accepted_at := int(entry.fact.accepted_simulation_usec)
+	var admission_id := int(entry.get("admission_id", 0))
 	if _states.has(handle):
-		var state: Dictionary = _states[handle]
-		_hold_chain_state(state,int(entry.get("admission_id",0)))
-		state.raw_per_tick = maxi(int(state.raw_per_tick),int(command.raw_per_tick))
-		state.expires = maxi(int(state.expires),accepted_at+int(command.duration_usec))
-		# Refresh keeps the existing accepted period and due phase. New strength
-		# and expiry cannot apply a different period to the old remaining horizon.
-		# A newly created state below uses its own accepted command period.
-		_stats.refreshed += 1
-		_presentation.refresh(handle,int(state.raw_per_tick))
+		# Same-species replacement (S1): one atomic new incarnation publishes
+		# the new accepted values even when weaker; next_due restarts from the
+		# ACTUAL application simulation time plus the new period, and expiry
+		# restarts with the full new duration. The old incarnation ends as a
+		# `replaced` terminal: its already committed HP facts, fatal facts and
+		# accepted children stay owned by their original roots (chain owner
+		# counts transfer to the new incarnation and are returned only at its
+		# own terminal state), and its uncommitted future ticks are cancelled.
+		# Sync cue/audio callbacks from the old onset can reenter; the new
+		# incarnation is a fresh Dictionary, so old callbacks can never advance
+		# or stop the new handle. The presentation keeps the SAME state-head
+		# cue (ignite.refreshed semantics): no node is torn down or rebuilt, so
+		# high-frequency same-frame replacement cannot pile up retired cues.
+		var old_state: Dictionary = _states[handle]
+		var old_origin := int(old_state.get("state_loan_origin", 0))
+		if old_origin > 0 and _reservations.has(old_origin):
+			# The replaced incarnation releases the old state-loan slot; its
+			# chain owner counts (already committed work) are NOT returned.
+			_reservations[old_origin].state_loan_handles.erase(handle)
+			_reservations[old_origin].states += 1; _reserved_states += 1
+		_heap.remove(handle)
+		var apply_at: int = int(_clock.simulation_usec())
+		var replacement := {"target":entry.target,"source":entry.source,"command":command,"target_key":target_key,
+			"resource_lease":entry.get("resource_lease"),
+			"periodic_bindings":entry.bindings if _has_periodic_children(entry.bindings) else [],
+			"periodic_lineage":entry.fact.get("chain_context",{}),"periodic_parent_fact_id":entry.fact.fact_id,
+			"state_loan_origin":0,
+			"raw_per_tick":int(command.raw_per_tick),"period":int(command.period_usec),
+			"next_due":apply_at+int(command.period_usec),"expires":apply_at+int(command.duration_usec),"ticks":0,
+			"chain_owners":old_state.chain_owners}
+		if admission_id > 0:
+			if not _reservations.has(admission_id) or int(_reservations[admission_id].states) <= 0:
+				# Reclaim one invalid loan slot for the new accepted command
+				# before rejecting, mirroring the fresh-state admission path.
+				if _reservations.has(admission_id) and not _reservations[admission_id].chain.is_empty():
+					var replacement_generation := _delivery_generation
+					_reclaim_invalid_state_loan(admission_id)
+					if replacement_generation != _delivery_generation or entry.target.resolve() == null: return
+			if not _reservations.has(admission_id) or int(_reservations[admission_id].states) <= 0:
+				_error("feature_state_reservation_missing"); return
+			_reservations[admission_id].states -= 1; _reserved_states -= 1
+			replacement.state_loan_origin = admission_id
+			if not _reservations[admission_id].chain.is_empty():
+				_reservations[admission_id].state_loan_handles[handle] = true
+		_states[handle] = replacement
+		_hold_chain_state(replacement, admission_id)
+		_heap.put(handle, int(replacement.next_due))
+		_stats.replaced += 1
+		_presentation.refresh(handle, int(command.raw_per_tick))
 		return
-	var admission_id := int(entry.get("admission_id",0))
 	if admission_id>0 and _reservations.has(admission_id) and not _reservations[admission_id].chain.is_empty() \
 		and int(_reservations[admission_id].states)<=0:
 		var generation:=_delivery_generation

@@ -28,11 +28,19 @@ static func commands(fact: Dictionary, binding: Dictionary) -> Array:
 	var cue := Cues.definition(cue_id)
 	if cue.is_empty(): return []
 	var command := Graph.capture({"op":"ApplyStatus","effect_id":EFFECT_ID,"handler_id":ID,
+		# Certified DOT species identity (user ruling 2026-10-05): the species is
+		# the handler-owned effect kind. Mechanics, names or suffixes cannot forge
+		# a different species, so unrelated sources converge onto one state head.
+		"species_id":EFFECT_ID,
+		# Explicit registered independent layer (default-off): empty means the
+		# normal per-species head; a non-empty compiled value freezes the layer
+		# at acceptance time and keeps it independent from the normal head.
+		"layer_id":str(definition.config.get("status_layer","")),
 		"source_handle":binding.handle,"mechanic_id":definition.mechanic_id,"target":fact.target,
 		"historical_credit":fact.historical_credit,"raw_per_tick":raw,"period_usec":int(config.period_usec),
 		"duration_usec":int(config.duration_usec),"time_domain":"simulation","damage_basis":"actual_hp_loss",
 		"damage_channel":"magic_defense","source_class":"periodic","causes_struck":false,
-		"direct_magic_walk_delay":false,"refresh_policy":"strongest_keep_phase","source_removed":"until_expired",
+		"direct_magic_walk_delay":false,"refresh_policy":"replace_same_species","source_removed":"until_expired",
 		"target_defense_sampling":"per_tick","expires_order":"tick_before_expiry",
 		"cue_id":cue_id,"cue_policy":cue.policy})
 	return [command.value] if bool(command.success) else []

@@ -16,6 +16,8 @@ const Batch := preload("res://scripts/features/runtime/damage_batch.gd")
 const Enemy := preload("res://scripts/enemy.gd")
 const Combat := preload("res://scripts/layers/runtime/combat_runtime_service.gd")
 
+var _zone_generation := 1
+var current_map_id := 910001
 var checks := 0
 var errors: Array[String] = []
 var proof := Proof.new()
@@ -83,15 +85,17 @@ func _run() -> void:
 	check(int(state.get("raw_per_tick", -1)) == 2,
 		"the new weaker damage replaces the old value instead of keeping the strongest")
 
-	# --- Remaining horizon: ticks at 2s,3s,4s each 2 damage; expiry at 5.0s. ---
+	# --- Remaining horizon: duration 4s / period 1s = 4 boundary ticks at 2s,3s,4s,5s each 2 damage. ---
 	var hp_after_replace: int = target.current_hp
-	for index in range(3):
+	for index in range(4):
 		clock.advance_simulation(1.0)
 		await _pump_due(runtime)
 		check(target.current_hp == hp_after_replace - 2 * (index + 1),
 			"replacement incarnation ticks use the new accepted damage at second %d" % (index + 2))
 	check(runtime.active_count() == 0 and runtime.heap_count() == 0, "replacement incarnation drains by its own expiry")
-	check(target.current_hp == 1000 - a_committed - 6, "committed old facts are not rolled back and total loss is exact")
+	# Total loss = 100 (A base take_damage) + a_committed (old tick) + 40 (B base)
+	# + 8 (four replacement ticks). Feature-batch base damage is real HP loss.
+	check(target.current_hp == 1000 - 100 - a_committed - 40 - 8, "committed old facts are not rolled back and total loss is exact")
 	var final_metrics: Dictionary = runtime.metrics()
 	check(int(final_metrics.get("replaced", 0)) == 1 and int(final_metrics.get("started", 0)) == 1
 		and int(final_metrics.get("refreshed", 0)) == 0, "terminal counters stay: 1 started, 1 replaced, 0 refreshed")

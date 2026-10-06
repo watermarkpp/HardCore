@@ -135,7 +135,9 @@ func _process(_delta: float) -> void:
 	if deaths == 30 and death_finished_usec == 0 and _settlement_drained(): death_finished_usec = now
 
 func _run() -> void:
-	check(not PlayerState.test_mode and OS.get_environment("APPDATA").replace("\\","/").contains("/.godot/runtime_appdata/"),"natural production run owns an isolated account")
+	# The runner exports APPDATA without a trailing separator; matching the
+	# sandbox path itself preserves the full isolation intent.
+	check(not PlayerState.test_mode and OS.get_environment("APPDATA").replace("\\","/").contains("/.godot/runtime_appdata"),"natural production run owns an isolated account")
 	if periodic_children: check(resource_backed,"periodic-child natural variant retains the full existing required resource workload")
 	PlayerState.begin_startup_save_upgrade()
 	var startup_ready: bool = PlayerState.finish_startup_save_upgrade()
@@ -289,7 +291,9 @@ func _run() -> void:
 			"natural child requests remain bounded observations of successful real Root plans and exact finite generations")
 		check(periodic_count > 0,"at least one real periodic fatal fact naturally releases a child without direct Batch injection or a test-owned clock")
 		check(int(runtime.metrics().child_actions) == child_rows.size(),"actual successful child completion count matches every observed Root request exactly")
-		check(int(runtime.metrics().refreshed) > 0,"natural repeated accepted input exercises cumulative refresh before terminal drain")
+		# 2026-10-05 user ruling: repeated accepted same-species input now
+		# publishes atomic replacements instead of cumulative refreshes.
+		check(int(runtime.metrics().replaced) > 0,"natural repeated accepted input exercises atomic replacement before terminal drain")
 	if resource_backed:
 		check(peak_cue_nodes >= 90 and audio_cue_starts > 0 and exact_prepared_streams == audio_cue_starts,"natural workload actually creates required cues and consumes only exact accepted streams")
 		check(runtime.presentation().node_count() == 0 and ContentLayers._feature_resource_service.pending_count() == 0,"natural effects and resource work reach terminal drain")

@@ -156,7 +156,12 @@ func _case(mask: int) -> bool:
 	var runtime: RefCounted=game._feature_effect_runtime
 	var old_rng: int=game._rng.state; var player_rng: int=game.player._rng.state; var mp: int=game.player.current_mp
 	check(await _pump(runtime),prefix+"production consumer completes base and finite child facts")
-	var states: int=1 if fatal_initial_hit else source_count+1
+	# 2026-10-05 user ruling: every periodic source here (base/gem/rune affix
+	# and the chain module's own ignite mechanic) shares the hc.ignite.v1
+	# handler species, so they all converge onto ONE accepted state head at
+	# runtime. Compile-time bindings keep one entry per source (handles
+	# assertion above); runtime heads converge.
+	var states: int=1
 	var child_loss: int=10000-later.current_hp
 	check(runtime.active_count()==states and runtime.presentation().node_count()==states,prefix+"every surviving declared source has one actual native cue")
 	check(runtime.metrics().child_actions==(1 if fatal_initial_hit else 0)

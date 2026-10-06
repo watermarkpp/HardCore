@@ -2,8 +2,10 @@ extends "res://tests/framework/periodic_refresh_horizon_test.gd"
 
 const Compiler := preload("res://scripts/features/compilation/feature_compiler.gd")
 
-# User decision: refresh keeps the original period, strongest damage and longest expiry.
-# The old 3000001-tick observation and exact original source remain in owned evidence.
+# 2026-10-05 user ruling: same-species replacement is atomic — the fresh
+# incarnation owns its own accepted period, phase and full duration from the
+# actual application time. The old strongest_keep_phase observations remain in
+# owned historical evidence.
 func _run() -> void:
 	PlayerState.test_mode=true; PlayerState.reset_progress(false)
 	PlayerState.active_profile_id="periodic-refresh-period-policy"
@@ -61,36 +63,40 @@ func _period_case(longer: bool) -> void:
 	check(clock.advance_simulation(1.0),"simulation reaches the first owed tick")
 	bindings=later
 	var refresh_loss: int=20 if longer else 1
-	var expected_raw: int=20 if longer else 10
-	var expected_expiry: int=9000000 if longer else 4000000
-	var expected_ticks: int=9 if longer else 4
+	# 2026-10-05 user ruling: same-species replacement is atomic — the fresh
+	# incarnation owns its own accepted period, phase and full duration from the
+	# actual application time, and the owed original tick is cancelled with the
+	# old incarnation instead of being committed on the original phase.
+	var expected_raw: int=20 if longer else 1
+	var expected_period: int=2000000 if longer else 1
+	var expected_expiry: int=9000000 if longer else 1000004
+	var expected_ticks: int=4
 	check(_submit("period-policy:B",refresh_loss,source_b,"B"),"changed configuration accepts through the original HP and Batch chain")
 	runtime._dispatch_one_fact()
-	check(runtime.active_count()==1 and runtime.heap_count()==1 and state.period==1000000,
-		"refresh preserves the original period when the new period is "+("longer" if longer else "shorter"))
-	check(state.next_due==1000000 and state.expires==expected_expiry and state.raw_per_tick==expected_raw,
-		"refresh preserves due phase, strengthens damage and extends expiry by the existing rules")
-	# Fail before pumping a wrong 1us state: a useful RED does not require millions of iterations.
-	if state.period==1000000:
-		var owed: int=(int(state.expires)-int(state.next_due))/int(state.period)+1
-		check(owed==expected_ticks,"the chosen period gives the exact finite shared horizon")
-		await _pump()
-		check(target.periodic_calls==1 and state.next_due==2000000,"the previously owed tick commits exactly once on the original phase")
-		check(clock.advance_simulation(0.001024),"a bounded sub-period simulation advance succeeds")
-		await _pump()
-		check(target.periodic_calls==1 and not runtime.has_due(),"shorter refresh configuration creates no extra sub-period ticks")
+	var replacement: Dictionary={}
+	for live: Dictionary in runtime._states.values():
+		if live.target.resolve()==target: replacement=live
+	check(runtime.active_count()==1 and runtime.heap_count()==1 and replacement.period==expected_period,
+		"replacement installs its accepted period when the new period is "+("longer" if longer else "shorter"))
+	check(replacement.next_due==clock.simulation_usec()+expected_period
+		and replacement.expires==clock.simulation_usec()+int(changed.mechanics[0].config.duration_usec)
+		and replacement.raw_per_tick==expected_raw,
+		"replacement restarts phase and the full accepted duration from the actual application time")
+	if replacement.period==expected_period:
+		var owed: int=(int(replacement.expires)-int(replacement.next_due))/expected_period+1
+		check(owed==expected_ticks,"the accepted period gives the exact finite replacement horizon")
 		check(clock.advance_simulation(float(expected_expiry-clock.simulation_usec())/1000000.0),
-			"simulation reaches the actual refreshed final expiry")
+			"simulation reaches the replacement's final expiry")
 		await _pump()
 		check(target.periodic_calls==expected_ticks and target.current_hp==20000-10-refresh_loss-expected_ticks*expected_raw,
-			"the real HP port delivers every owed original-period tick through expiry without truncation")
-		check(target.periodic_release_ids.size()==expected_ticks and target.last_credit.get("marker")=="A",
-			"every tick has a unique release identity and preserves original historical credit")
+			"the real HP port delivers every replacement tick through expiry without truncation")
+		check(target.periodic_release_ids.size()==expected_ticks and target.last_credit.get("marker")=="B",
+			"every tick has a unique release identity owned by the replacement's own credit")
 		check(runtime.active_count()==0 and runtime.heap_count()==0 and not runtime.has_work() and runtime.errors.is_empty(),
-			"the accepted shared horizon completes and retires all runtime work")
+			"the accepted replacement horizon completes and retires all runtime work")
 		print("PERIODIC_REFRESH_PERIOD_POLICY_OBSERVATION ",JSON.stringify({"new_period_usec":changed.mechanics[0].config.period_usec,
-			"kept_period_usec":state.period,"expiry_usec":expected_expiry,"completed_ticks":target.periodic_calls,
-			"hp":target.current_hp,"scope":"controlled real HP and Batch chain; original period retained; not natural deadline proof"}))
+			"replacement_period_usec":replacement.period,"expiry_usec":expected_expiry,"completed_ticks":target.periodic_calls,
+			"hp":target.current_hp,"scope":"controlled real HP and Batch chain; replacement owns its own period; not natural deadline proof"}))
 		var hp_before_new: int=target.current_hp
 		check(_submit("period-policy:C",refresh_loss,source_b,"C"),"after expiry a new accepted root can create a separate state")
 		await _pump()

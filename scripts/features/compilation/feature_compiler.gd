@@ -326,7 +326,17 @@ static func _mechanic_valid(value: Dictionary, module: Dictionary, authority: Di
 				float(module.cost.get("commands_per_event", 0)) < int(contract.commands)
 				or float(module.cost.get("states_per_target", 0)) < int(contract.states)):
 				errors.append("undeclared_trigger_capacity")
-			if value.handler_id == "hc.ignite.v1": _validate_ignite_config(value.config, errors)
+			if value.handler_id == "hc.ignite.v1":
+				_validate_ignite_config(value.config, errors)
+				# Explicit independent status layer (default-off): a compiled
+				# layer identity must be a stable id and the module must declare
+				# the layered-status permission; the normal per-species head
+				# stays the only behavior for every module that omits it.
+				if value.config is Dictionary and str(value.config.get("status_layer", "")) != "":
+					if not _stable_id(str(value.config.status_layer)):
+						errors.append("invalid_status_layer")
+					elif "effects.layered_status" not in module.capabilities:
+						errors.append("missing_layered_status_permission")
 			elif value.handler_id == "hc.death_burst.v1": _validate_child_config(value.config,errors)
 			else: _validate_lifesteal_config(value.config,errors)
 		"capability":
@@ -372,7 +382,7 @@ static func _validate_ignite_config(input: Variant, errors: Array[String]) -> vo
 	if not input is Dictionary:
 		errors.append("ignite_not_dictionary")
 		return
-	if not _keys(input, ["chance", "fraction", "period_usec", "duration_usec", "max_ticks"], [], errors, "ignite"):
+	if not _keys(input, ["chance", "fraction", "period_usec", "duration_usec", "max_ticks"], ["status_layer"], errors, "ignite"):
 		return
 	if not _number(input.chance) or float(input.chance) < 0.0 or float(input.chance) > 1.0:
 		errors.append("invalid_proc_chance")

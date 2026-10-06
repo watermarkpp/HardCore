@@ -142,6 +142,11 @@ func _run() -> void:
 		var binding: Dictionary = original[0].duplicate(true)
 		binding.source.instance_id = "combined:retained-source:"+str(index)
 		binding.handle = Compiler.source_handle(binding.source)
+		# 2026-10-05 user ruling: three plain copies of one ignite species no
+		# longer mint three heads per target. The ninety-state load is expressed
+		# with three explicitly registered independent layers of the same
+		# effect species — one head per layer, load unchanged.
+		binding.definition.config["status_layer"] = "combined.layer."+str(index)
 		bindings.append(binding)
 	runtime = Runtime.new()
 	check(runtime.configure(game._world_context,game._time_domains,game._combat_runtime),"actual runtime owns production world clock and damage port")
@@ -163,7 +168,7 @@ func _run() -> void:
 		await get_tree().process_frame
 		if deaths == 30 and not runtime.has_work() and _settlement_drained() and stream_finished_usec > 0: break
 	observing = false
-	check(peak_states == 90 and int(runtime.metrics().started) == 90,"thirty targets retain all ninety independent accepted states")
+	check(peak_states == 90 and int(runtime.metrics().started) == 90,"thirty targets retain all ninety accepted states as three registered layers of the accepted species")
 	check(int(runtime.metrics().ticks) == 360 and int(runtime.metrics().actual_loss) == 1800,"all four phases settle 360 actual ticks and 1800 HP loss")
 	check(deaths == 30 and not runtime.has_work() and runtime.heap_count() == 0,"all thirty real deaths terminate every effect and due node")
 	check(runtime.pending_count() == 0 and runtime._batches.is_empty() and runtime.errors.is_empty(),"all necessary effect queues drain without refusal")
@@ -183,7 +188,7 @@ func _run() -> void:
 	check(runtime.metrics().tick_delivery_count == 360,"every actual periodic delivery is included in the consumption-boundary latency metric")
 	check(runtime.metrics().maximum_tick_delivery_lateness_usec < 1000000,"this bounded headless cohort delivers every tick before it falls one complete configured period behind: "+str(runtime.metrics().maximum_tick_delivery_lateness_usec))
 	var report := {"run_id":OS.get_environment("HARDCORE_FRAMEWORK_RUN_ID"),"source_content_sha256":OS.get_environment("HARDCORE_R3_CONTENT_SHA256"),
-		"scope":"PC headless; 30 fixed receivers, 3 independent sources of the existing ignite handler; natural Root clock/pumps; no GPU/device or whole-game performance claim",
+		"scope":"PC headless; 30 fixed receivers, three explicitly registered independent ignite layers (one accepted head per layer); natural Root clock/pumps; no GPU/device or whole-game performance claim",
 		"phase":"workload_observation_before_final_save_teardown_reload",
 		"phase_status":"PASS" if failures.is_empty() else "FAIL","phase_checks":checks,"phase_failures":failures.duplicate(),
 		"final_result_authority":"complete receipt plus native runner exit and source fingerprint",
