@@ -220,7 +220,13 @@ $StageCreated = $false
 $BuildSucceeded = $false
 try {
     if ([string]::IsNullOrWhiteSpace($PreparedStagePath)) {
-        & git -C $ProjectRoot worktree add --detach $StagePath $ResolvedCommit
+        # v98 regression fix (GPT Pro review 2026-10-06): the host default
+        # core.autocrlf=true re-writes LF-blob identity JSONs to CRLF in a
+        # fresh stage, so GameData's raw-byte identity checks fail on the
+        # device even though the dev tree (historical LF checkout) passes.
+        # Check the stage out as pure blob bytes: LF sources land as LF,
+        # i/crlf sources land as CRLF - every registered hash then matches.
+        & git -c core.autocrlf=false -C $ProjectRoot worktree add --detach $StagePath $ResolvedCommit
         if ($LASTEXITCODE -ne 0) {
             throw "Unable to create isolated build worktree."
         }
@@ -339,6 +345,41 @@ try {
             )
             Write-Output "VERSION_CODE_OVERRIDE=$VersionCode"
         }
+
+        # v98 regression gate (GPT Pro review 2026-10-06): the identity
+        # registry pins raw-byte SHA256 hashes for its source JSONs and
+        # GameData refuses to load on any mismatch. Verify the stage bytes
+        # against those registered hashes BEFORE import/export so a bad
+        # checkout fails here instead of on the device.
+        $StageIdentityRegistry = Join-Path $StageProjectPath "assets\data\runtime\entity_registry_v1.json"
+        if (-not (Test-Path -LiteralPath $StageIdentityRegistry -PathType Leaf)) {
+            throw "Stage identity registry missing: $StageIdentityRegistry"
+        }
+        $RegistryText = [System.IO.File]::ReadAllText($StageIdentityRegistry)
+        $IdentityEntries = [regex]::Matches($RegistryText, '"res://(assets/data/[^"]+\.json)":\s*"([0-9a-f]{64})"')
+        if ($IdentityEntries.Count -eq 0) {
+            throw "No registered identity source hashes found in $StageIdentityRegistry"
+        }
+        $IdentitySha = [System.Security.Cryptography.SHA256]::Create()
+        $IdentityFailed = 0
+        foreach ($Entry in $IdentityEntries) {
+            $RelPath = $Entry.Groups[1].Value -replace '/', [System.IO.Path]::DirectorySeparatorChar
+            $StageSource = Join-Path $StageProjectPath $RelPath
+            if (-not (Test-Path -LiteralPath $StageSource -PathType Leaf)) {
+                Write-Output "IDENTITY_BYTE_GATE MISSING: $($Entry.Groups[1].Value)"
+                $IdentityFailed++
+                continue
+            }
+            $Actual = [BitConverter]::ToString($IdentitySha.ComputeHash([System.IO.File]::ReadAllBytes($StageSource))).Replace('-', '').ToLower()
+            if ($Actual -ne $Entry.Groups[2].Value) {
+                Write-Output "IDENTITY_BYTE_GATE MISMATCH: $($Entry.Groups[1].Value) actual=$($Actual.Substring(0,12)) expected=$($Entry.Groups[2].Value.Substring(0,12))"
+                $IdentityFailed++
+            }
+        }
+        if ($IdentityFailed -gt 0) {
+            throw "Stage identity byte gate failed for $IdentityFailed of $($IdentityEntries.Count) registered sources."
+        }
+        Write-Output "IDENTITY_BYTE_GATE PASS files=$($IdentityEntries.Count)"
 
         & (Join-Path $StageProjectPath 'tools/verify_wall_render_bindings.ps1') -ProjectRoot $StageProjectPath
         & $GodotConsole --headless --path $StageProjectPath --log-file $ImportLog --import
