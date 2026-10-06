@@ -129,5 +129,40 @@
 
 ## 更新记录
 
+## F13. v98 真机反馈：覆盖安装后无法进入游戏（2026-10-06 · 待 Pro 协作定位）
+
+### 现象
+- v98（构建冻结 SHA `be92f2775`）覆盖安装于 v97 设备后，**游戏进不去**。具体表现（黑屏/闪退/卡某一加载阶段/有无崩溃弹窗）**待用户补充细节**；设备 logcat 尚未抓取。
+
+### 产物与环境
+- APK：`outputs/hardcore/HardCore-v98-thirdtree-debug.apk`，size=489226256，SHA256=`7DE06E12470420E9…7FEF`；aapt 核对 `com.personal.mafaoffline` / versionCode **98** / versionName 一致 / min24 target36 / arm64-v8a；签名证书 SHA-256 `c62d0f82…` **与 v97 同证书**，覆盖升级身份 PASS；verify 内容探针全 PASS（含 splash 主题断言）。
+- 构建方式：gradle debug 导出（`--export-debug`），stage 为 `be92f2775` 的 git worktree 检出（**注意 `core.autocrlf=true`：检出的 `.gd` 在磁盘与 APK 包内均为 CRLF 字节**；LF blob 指纹的匹配依赖本任务在 CodeGuard 加入的 CRLF→LF 归一化重试）。
+- 工作树（Windows 磁盘）环境健康：brand_intro/启动链相关单跑 PASS——问题指向**真机/打包特有路径**，而非工作树可复现路径。
+
+### v97→v98 生产代码差全集（scripts/ 仅 8 文件，+163/-22）
+| 文件 | 行数 | 内容 | 与"进不去"的关联评估 |
+|---|---|---|---|
+| `scripts/startup_loading.gd` | +8 | F8 修复期加的诊断透传（失败分支记录 errors/request_diagnostics） | 低——纯诊断字段追加，不改控制流 |
+| `scripts/features/compilation/code_preparation_envelope_guard.gd` | +55 | F8 修复：指纹匹配加 CRLF→LF 归一化重试（原字节优先） | **中**——逻辑上"原字节不匹配才归一重试"，但真机 APK 内字节口径与启动时序待证 |
+| `scripts/features/runtime/feature_resource_preparation.gd` | +17 | S0-S4 期间 feature 链改动 | 低-中 |
+| `scripts/features/runtime/effect_runtime.gd` | +77/-22 | S1 同种 DOT 完整替换 | 低（战斗期，不挡进入） |
+| `feature_compiler.gd`/`ignite_handler.gd`/`feature_authority.gd`/`handler_registry.gd` | 共 +28 | S1 独立层权限 | 低-中（feature 编译在启动链早期） |
+
+### 嫌疑排序（供 Pro 审查方向）
+1. **存档/配置兼容**：v97 存档 + v98 新 feature/DOT 代码——启动时从存档重建 feature bundle，旧结构是否触发新代码崩溃（覆盖升级特有，全新安装可能不复现——**请用户优先尝试：卸载后全新安装一次对比**）。
+2. **真机启动链中身份/指纹校验的第三处消费者**：`entity_registry.gd:39`、`item_category_identity.gd:26`、`rune_item_rules.gd:30`、`socket_gem_rules.gd:38`、`skill_data_loader.gd:261/265` 仍用 `FileAccess.get_sha256`（磁盘/APK 字节）对比各自指纹——若这些指纹也是 LF blob 口径，真机与 Windows 检出**同样必炸**，且其中任何一处位于启动链即阻断进入。F8 修复只覆盖 code_preparation catalog 的两道门，**未覆盖这些身份链**（当时判为非本修复范围——该判定需 Pro 复核）。
+3. **CodeGuard 归一化在真机时序中的行为**（APK 内 CRLF 字节 vs LF 指纹——归一匹配应通过，但 `_normalized_lf_matches` 的 O(n) 全量扫描 × 20 文件在低端机上的耗时是否触发其它超时）。
+4. **debug 导出与 v97 发布导出形态差异**（export-debug vs 曾用导出参数的差异项）。
+5. splash 补丁为手工按构建脚本逐行抄写（末跑独立 Assert-AndroidSplashTheme；verify 链的 splash 断言已 PASS）。
+
+### 设备取证指引（抓到后可立即定位）
+```
+adb logcat -c && adb install -r HardCore-v98-thirdtree-debug.apk && adb logcat -v time | findstr /i "godot hardcore FATAL DEBUG AndroidRuntime"
+```
+关键判别：有无 `AndroidRuntime FATAL`（Java 层崩溃）/ Godot `SCRIPT ERROR`（GD 层）/ 卡在哪个启动阶段标志（WorldBootstrapProfile / brand intro / READY 四条件）。
+
+### 已排除/已验证
+- 工作树启动链单测健康（brand_intro PASS、40+ 专项 PASS）；APK aapt/签名/内容校验全 PASS；非安装身份问题（同证书覆盖 PASS）。
+
 - 2026-10-06 v1：初版 F1-F7
 - 2026-10-06 v2：按 GPT-Pro 审查修正口径（三列/候选降级/撤回 F5 白名单建议/F4 探针实证/F8 降级待深挖/S3/S4 记账边界/audio 复核口径）
