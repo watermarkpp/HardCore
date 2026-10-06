@@ -795,8 +795,16 @@ func _prepare_main_scene_prefetch(generation: int) -> void:
 	var result: Dictionary = await ContentLayers.request_internal_prepared_script(inputs, self, generation)
 	inputs.clear()
 	if not is_code_preparation_loading_phase_current(generation) or not bool(result.get("success", false)):
+		# Preserve the real failure reason before retiring the result: without
+		# this the diagnostic only says "cancelled_or_rejected" and the actual
+		# guard/admission/load error stays invisible to launch diagnostics.
+		var result_errors: Array = result.get("errors", []) if result is Dictionary else []
+		var request_diagnostics: Variant = result.get("diagnostics") if result is Dictionary else null
 		ContentLayers.retire_internal_code_result(result)
 		_main_code_preparation["state"] = "cancelled_or_rejected"
+		_main_code_preparation["errors"] = result_errors
+		if request_diagnostics is Dictionary:
+			_main_code_preparation["request_diagnostics"] = request_diagnostics
 		_main_scene_prefetch_status = "failed"
 		return
 	_main_code_result = result

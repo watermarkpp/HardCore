@@ -195,12 +195,19 @@ func verify_next_source() -> Dictionary:
 	if _cursor < _source_paths.size():
 		var path: String = _source_paths[_cursor]
 		_cursor += 1
-		var file := FileAccess.open(path, FileAccess.READ)
 		var record: Dictionary = _source_record(path)
-		var size_matches: bool = file != null and file.get_length() == record.bytes
+		var checkout_bytes := PackedByteArray()
+		var file := FileAccess.open(path, FileAccess.READ)
 		if file != null:
+			checkout_bytes = file.get_buffer(file.get_length())
 			file.close()
-		if not size_matches or FileAccess.get_sha256(path) != record.sha256:
+		var raw_matches: bool = _checkout_bytes_match_fingerprint(checkout_bytes, record)
+		# A Windows core.autocrlf checkout expands LF-blob fingerprints to
+		# CRLF on disk; that is a platform property, not a content change
+		# (the catalog fingerprints are cut from the LF repo blobs). Before
+		# failing the source, re-hash the checkout bytes normalized back to
+		# LF. A real content edit still fails this normalized comparison.
+		if file == null or not raw_matches:
 			_failed = true
 			return {"success": false, "done": true, "errors": ["code_preparation_source_changed:" + path]}
 	elif _residency_cursor < _residency_requirements.size():
@@ -217,6 +224,43 @@ func verify_next_source() -> Dictionary:
 
 func _source_record(path: String) -> Dictionary:
 	return _payload.nodes[path] if _payload.nodes.has(path) else _payload.source_fingerprints.source_context[path]
+
+
+# Hash the checkout bytes with every CRLF pair collapsed to LF. The catalog
+# fingerprints for `i/lf` sources are cut from the LF repo blobs, so a
+# CRLF checkout only matches after this normalization; genuine content
+# edits diverge in the normalized hash as well.
+static func _normalized_lf_matches(checkout_bytes: PackedByteArray, record: Dictionary) -> bool:
+	if checkout_bytes.is_empty():
+		return false
+	var normalized := checkout_bytes.duplicate()
+	var write := 0
+	for read in normalized.size():
+		var b := normalized[read]
+		if b == 13 and read + 1 < normalized.size() and normalized[read + 1] == 10:
+			continue
+		normalized[write] = b
+		write += 1
+	normalized.resize(write)
+	return normalized.size() == record.bytes and _sha256_hex(normalized) == str(record.sha256)
+
+
+# Shared admission predicate: byte-for-byte first, then the LF-normalized
+# retry so a Windows autocrlf checkout of an LF-blob fingerprint still
+# matches. A real content edit fails both comparisons.
+static func _checkout_bytes_match_fingerprint(checkout_bytes: PackedByteArray, record: Dictionary) -> bool:
+	if checkout_bytes.is_empty():
+		return false
+	if checkout_bytes.size() == record.bytes and _sha256_hex(checkout_bytes) == str(record.sha256):
+		return true
+	return _normalized_lf_matches(checkout_bytes, record)
+
+
+static func _sha256_hex(bytes: PackedByteArray) -> String:
+	var context := HashingContext.new()
+	context.start(HashingContext.HASH_SHA256)
+	context.update(bytes)
+	return context.finish().hex_encode()
 
 func is_verified() -> bool:
 	return _verified and not _failed and publication_current() and residency_current()
@@ -256,10 +300,11 @@ func revalidate_admission_sources() -> Dictionary:
 	for path: String in _source_paths:
 		var file := FileAccess.open(path, FileAccess.READ)
 		var record: Dictionary = _source_record(path)
-		var size_matches: bool = file != null and file.get_length() == record.bytes
+		var checkout_bytes := PackedByteArray()
 		if file != null:
+			checkout_bytes = file.get_buffer(file.get_length())
 			file.close()
-		if not size_matches or FileAccess.get_sha256(path) != record.sha256:
+		if not _checkout_bytes_match_fingerprint(checkout_bytes, record):
 			_failed = true
 			return {"success": false, "errors": ["code_preparation_admission_source_changed:" + path], "elapsed_usec": Time.get_ticks_usec() - began, "checked": checked}
 		if _payload.nodes.has(path) and _payload.nodes[path].kind in ["script", "resident_script"]:
