@@ -23,12 +23,12 @@
 - 根因链（同 F3 家族）：测试世界构建/调用路径未走正式发布计划收集 → `_spawn_enemy` 的 `admit_base` 拒绝 → targets=0。**修复路径**：迁移到正式发布入口（F2 试点验证后逐个套用）
 - 备注：历史原件曾打到第二轮 24/30——targets=0 是**新的前置阻断**，不能解释历史六个尾部目标未完成；修好准备路径后才能继续原 35 秒因果工作
 
-### F2. tests/skill_plan_single_resource_commit_test.tscn
-- 失败模式：`Assertion failed: resource commit fixture must use the formal exact-ID mapped spawn`
+### F2. tests/skill_plan_single_resource_commit_test.tscn —— **已修复（2026-10-06 试点）**
+- 原失败模式：`Assertion failed: resource commit fixture must use the formal exact-ID mapped spawn`
 - **回归归因**：候选 BASELINE_EXISTING（同 F1 口径）
-- **当前正确性**：FAIL——fixture 在世界 READY 后直接 `_spawn_enemy()` 临时 slot（`test:skill_plan_resource_commit:19`），未把该 slot 放进完整发布计划
-- **阻断范围**：阻断该测试自身；不阻断其他源码工作
-- **修复方向（已定）**：复用 `tests/helpers/formal_world_skill_fixture.gd` 的 `publish_targets` 正式发布接口，**不另写第二套登记流程**；迁移时保留：原怪物 ID、位置、WORLD 路径、MP 公式、恰好一次提交、snapshot 身份；**被测 release、锁定目标和 accepted lease 在完成准备后捕获**（重新发布可能改变 world generation/玩家位置/前态）
+- **当前正确性**：**PASS（迁移后单跑验证）**——fixture 改用 `WorldSkillFixture.publish_targets` 正式发布入口（真实 map-transition 计划收集窗口）；**全部原测点保留**：原怪物 ID 19、ground 位置、WORLD 路径、MP 公式、恰好一次提交（实测 mp=35）、canonical plan 同价、snapshot 身份；被测 release/锁定目标在发布完成后的世界上捕获（caster 位置/MP/清场均在 republish 之后重设；清场排除 fixture target）
+- **阻断范围**：已解除
+- **模式可复制**：F9-F11（canonical 系）与 F1/F3（cadence/natural 系）按同模式逐个迁移，每消费者单项执行验证——共享 helper 修复一次不代表全部消费者已 PASS
 
 ### F3. tests/framework/natural_sustained_chain_test.tscn + tests/framework/natural_effect_lifecycle_test.tscn
 - 失败模式：`_spawn_enemy` 30 次全 null（targets=0）

@@ -6,6 +6,7 @@ extends Node
 const Fixtures := preload(
 	"res://tests/helpers/skill_execution_plan_test_fixtures.gd"
 )
+const WorldSkillFixture := preload("res://tests/helpers/formal_world_skill_fixture.gd")
 const GroundUnit := preload("res://scripts/ground_unit_space.gd")
 const Plan := preload("res://scripts/skills/skill_execution_plan.gd")
 const DataLoader := preload("res://scripts/skills/skill_data_loader.gd")
@@ -31,6 +32,31 @@ func _run() -> void:
 	for _i: int in range(5):
 		await get_tree().process_frame
 	await _wait_for_formal_world(game)
+	# Publish the target through the real map-transition publication entry (the
+	# shared formal fixture). This replaces the old direct _spawn_enemy call,
+	# which the published-birth admission correctly refused because the slot was
+	# never part of a sealed plan. Every gameplay measurement below keeps its
+	# original semantics; the caster state and locks are (re)captured AFTER the
+	# republish so they describe the world that is actually under test.
+	var published: Array[EnemyActor] = await WorldSkillFixture.publish_targets(
+		self,
+		game,
+		[{
+			"id": FIXTURE_MONSTER_ID,
+			"ground": FIXTURE_GROUND_POSITION,
+			"respawn": -1.0,
+			"context": {
+				"respawn_enabled": false,
+				"spawn_slot_id": "test:skill_plan_resource_commit:%d" % FIXTURE_MONSTER_ID,
+			},
+		}],
+		"resource commit fixture",
+	)
+	var target: EnemyActor = published[0]
+	# Recapture the caster's pre-state on the republished world: the formal
+	# republication rebuilds the zone, so the player position, MP budget and
+	# the ambient-enemy clearance all describe the world that is actually
+	# under test only now.
 	var caster: PlayerCharacter = game.player
 	caster.current_mp = 500
 	var caster_ground: Vector2 = FIXTURE_GROUND_POSITION - Vector2(2.0, 0.0)
@@ -44,8 +70,10 @@ func _run() -> void:
 		),
 		"resource commit caster fixture must be outside the authored safe area",
 	)
+	# Clear the republished world's ambient enemies out of the fight, but never
+	# the published fixture target itself.
 	for value: Variant in get_tree().get_nodes_in_group("enemies"):
-		if value is EnemyActor:
+		if value is EnemyActor and (value as EnemyActor) != target:
 			(value as EnemyActor).set_combat_position(
 				caster.global_position + Vector2(3000.0, 3000.0),
 				&"test_fixture_clear",
@@ -58,21 +86,6 @@ func _run() -> void:
 			game._active_safe_zones,
 		),
 		"resource commit target fixture must be outside the authored safe area",
-	)
-	var canonical_data := GameData.get_monster_by_id(FIXTURE_MONSTER_ID)
-	assert(
-		not canonical_data.is_empty(),
-		"resource commit fixture monster_id=%d must exist" % FIXTURE_MONSTER_ID
-	)
-	var target: EnemyActor = game._spawn_enemy(
-		canonical_data,
-		target_position,
-		false,
-		-1.0,
-		{
-			"respawn_enabled": false,
-			"spawn_slot_id": "test:skill_plan_resource_commit:%d" % FIXTURE_MONSTER_ID,
-		},
 	)
 	assert(
 		target != null
