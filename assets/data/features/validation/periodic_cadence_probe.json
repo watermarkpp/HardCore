@@ -5,7 +5,8 @@
   "core_api_version": 1,
   "requires": [],
   "conflicts": [],
-  "capabilities": ["combat.post_hit", "effects.periodic"],
+  "capabilities": [
+    "effects.layered_status","combat.post_hit", "effects.periodic"],
   "handlers": ["hc.ignite.v1"],
   "resource_dependencies": [],
   "cost": {"commands_per_event": 1, "states_per_target": 1},

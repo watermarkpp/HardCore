@@ -368,7 +368,7 @@ func _process(delta: float) -> void:
 		samples[-1]["engine_physics_usec"] = int(Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS)*1000000.0)
 
 func _run() -> void:
-	check(resource_backed and not PlayerState.test_mode and OS.get_environment("APPDATA").replace("\\","/").contains("/.godot/runtime_appdata/"),
+	check(resource_backed and not PlayerState.test_mode and OS.get_environment("APPDATA").replace("\\","/").contains("/.godot/runtime_appdata"),
 		"sustained natural fixture owns an isolated real resource-backed profile")
 	PlayerState.begin_startup_save_upgrade()
 	var startup: bool = PlayerState.finish_startup_save_upgrade()

@@ -1,6 +1,7 @@
 {
   "schema_version":1,"module_id":"hc.validation.periodic_chain","module_version":1,"core_api_version":1,
-  "requires":[],"conflicts":[],"capabilities":["combat.post_hit","combat.child_action","effects.periodic"],
+  "requires":[],"conflicts":[],"capabilities":[
+    "effects.layered_status","combat.post_hit","combat.child_action","effects.periodic"],
   "handlers":["hc.ignite.v1","hc.death_burst.v1"],"resource_dependencies":[],
   "cost":{"commands_per_event":2,"states_per_target":1},"default_enabled":false,
   "scope":"world","activation_boundary":"world_ready",
