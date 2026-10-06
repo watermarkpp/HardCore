@@ -134,6 +134,16 @@ func _process(_delta: float) -> void:
 		_observe_resource_completion(now)
 	if deaths == 30 and death_finished_usec == 0 and _settlement_drained(): death_finished_usec = now
 
+func _ice_storm_predict_hit(cell: Vector2i, monster_ground: Vector2) -> bool:
+	# Exact production geometry (skill_geometry_service square cells +
+	# footprint SAT): the 3x3 cell square around the rounded target cell,
+	# expanded by the monster's small-tier footprint circle r=16/(32*sqrt(2)).
+	const FOOTPRINT_R := 0.3535534
+	var dx := maxf(absf(monster_ground.x - float(cell.x)) - 1.5, 0.0)
+	var dy := maxf(absf(monster_ground.y - float(cell.y)) - 1.5, 0.0)
+	return dx * dx + dy * dy <= FOOTPRINT_R * FOOTPRINT_R + 0.000001
+
+
 func _run() -> void:
 	# The runner exports APPDATA without a trailing separator; matching the
 	# sandbox path itself preserves the full isolation intent.
@@ -247,26 +257,34 @@ func _run() -> void:
 				for state: Dictionary in runtime._states.values():
 					var receiver: Node = state.target.resolve()
 					if is_instance_valid(receiver): active_targets[receiver.get_instance_id()] = true
+			# v8 aiming aligned to the production delivery geometry (forensic
+			# pass): enumerate ROUNDED integer cell centers of living monsters
+			# (the production target tile is roundi of the locked monster's
+			# ground GU), score each candidate cell with the exact
+			# 3x3-square + footprint-circle predicate, then lock a monster
+			# whose rounded cell IS the best cell. Removes the <=0.5GU
+			# quantization bias of the old continuous-coordinate box.
 			var chosen: EnemyActor = null
 			var best_score := -1
+			var best_cell := Vector2i.ZERO
 			for actor: EnemyActor in targets:
 				if not is_instance_valid(actor) or actor.current_hp <= 0: continue
-				var center: Vector2 = game._canonical_screen_px_to_ground_gu(actor.global_position)
-				# Damage-budget aiming (best measured variant, v4): the 35s
-				# cadence admits ~23 casts, and thirty 1500+HP receivers need
-				# dense clusters — score pure neighbour density inside the
-				# 1.5GU box. NOTE: the data-declared area_radius 115px
-				# (~2.541GU circle) measured WORSE (15 deaths) — that field
-				# evidently does not drive the actual damage distribution; the
-				# real delivery radius must be read from the production
-				# delivery code before the next aiming adjustment.
+				var actor_ground: Vector2 = game._canonical_screen_px_to_ground_gu(actor.global_position)
+				var cell := Vector2i(roundi(actor_ground.x), roundi(actor_ground.y))
 				var score := 0
 				for receiver: EnemyActor in targets:
 					if not is_instance_valid(receiver) or receiver.current_hp <= 0: continue
-					var offset: Vector2 = game._canonical_screen_px_to_ground_gu(receiver.global_position)-center
-					if absf(offset.x) <= 1.5 and absf(offset.y) <= 1.5:
+					if _ice_storm_predict_hit(cell, game._canonical_screen_px_to_ground_gu(receiver.global_position)):
 						score += 100
-				if score > best_score: chosen = actor; best_score = score
+				if score > best_score:
+					best_score = score
+					best_cell = cell
+			for actor: EnemyActor in targets:
+				if not is_instance_valid(actor) or actor.current_hp <= 0: continue
+				var actor_ground: Vector2 = game._canonical_screen_px_to_ground_gu(actor.global_position)
+				if Vector2i(roundi(actor_ground.x), roundi(actor_ground.y)) == best_cell:
+					chosen = actor
+					break
 			if chosen != null:
 				game._set_magic_locked_target(chosen,true)
 				var result: StringName = game._try_release_skill("hc.skill.wizard.ice_storm",false)
