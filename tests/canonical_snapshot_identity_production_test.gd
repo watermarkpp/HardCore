@@ -5,6 +5,7 @@ const FIXTURE_MONSTER_ID := 18
 ## The central outdoor authored spawn avoids the Home polygon and map edge.
 const FIXTURE_GROUND_POSITION := Vector2(40.5, 13.5)
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
+const WorldSkillFixture := preload("res://tests/helpers/formal_world_skill_fixture.gd")
 
 
 func _ready() -> void:
@@ -24,6 +25,27 @@ func _run() -> void:
 	await get_tree().process_frame
 	await _wait_for_formal_world(game)
 	var legacy_before := Snapshot.legacy_snapshot_validation_count
+	# Publish through the real map-transition staged plan collection window
+	# (shared formal fixture) instead of a direct _spawn_enemy call, which the
+	# published-birth admission correctly refused for an unsealed slot.
+	var target_position: Vector2 = game._canonical_ground_gu_to_screen_px(FIXTURE_GROUND_POSITION)
+	var published: Array[EnemyActor] = await WorldSkillFixture.publish_targets(
+		self,
+		game,
+		[{
+			"id": FIXTURE_MONSTER_ID,
+			"position": target_position,
+			"respawn": -1.0,
+			"context": {
+				"respawn_enabled": false,
+				"spawn_slot_id": "test:canonical_snapshot_identity:%d" % FIXTURE_MONSTER_ID,
+			},
+		}],
+		"canonical snapshot fixture",
+	)
+	# Recapture the caster's pre-state on the republished world: the formal
+	# republication rebuilds the zone, so position, MP and the ambient-enemy
+	# clearance describe the world under test only now.
 	var caster: PlayerCharacter = game.player
 	caster.current_mp = 100
 	var caster_ground: Vector2 = FIXTURE_GROUND_POSITION - Vector2(2.0, 0.0)
@@ -38,14 +60,13 @@ func _run() -> void:
 		"canonical snapshot caster fixture must be outside the authored safe area",
 	)
 	for value: Variant in get_tree().get_nodes_in_group("enemies"):
-		if value is EnemyActor:
+		if value is EnemyActor and (value as EnemyActor) != published[0]:
 			(value as EnemyActor).set_combat_position(
 				caster.global_position + Vector2(3000.0, 3000.0),
 				&"test_fixture_clear",
 			)
 
 	# Lightning chain: gameplay snapshot -> visual metadata.
-	var target_position: Vector2 = game._canonical_ground_gu_to_screen_px(FIXTURE_GROUND_POSITION)
 	assert(target_position.is_finite(), "canonical snapshot fixture needs a finite target projection")
 	assert(
 		not WorldSpatialRulesScript.point_inside_safe_zones_ground_gu(
@@ -54,7 +75,7 @@ func _run() -> void:
 		),
 		"canonical snapshot target fixture must be outside the authored safe area",
 	)
-	var target := _make_enemy(game, target_position)
+	var target := _prepare_published_enemy(game, published[0])
 	assert(
 		game._combat_target_world_clear(target, caster.global_position, true),
 		"canonical snapshot target must have a clear WORLD path",
@@ -167,23 +188,7 @@ func _assert_identity(snapshot: Dictionary, label: String) -> void:
 	)
 
 
-func _make_enemy(game: Node, screen_position: Vector2) -> EnemyActor:
-	var canonical_data := GameData.get_monster_by_id(FIXTURE_MONSTER_ID)
-	assert(
-		not canonical_data.is_empty(),
-		"canonical snapshot fixture canonical monster ID=%d must resolve"
-		% FIXTURE_MONSTER_ID
-	)
-	var enemy: EnemyActor = game._spawn_enemy(
-		canonical_data,
-		screen_position,
-		false,
-		-1.0,
-		{
-			"respawn_enabled": false,
-			"spawn_slot_id": "test:canonical_snapshot_identity:%d" % FIXTURE_MONSTER_ID,
-		},
-	)
+func _prepare_published_enemy(game: Node, enemy: EnemyActor) -> EnemyActor:
 	assert(
 		enemy != null
 			and enemy.monster_id == FIXTURE_MONSTER_ID
