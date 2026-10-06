@@ -86,7 +86,9 @@
   1. **等待机制已按指令重写**：240 帧上限 → 30s 墙钟 + 真实终态即刻返回；测试侧不再 `load_threaded_get` 自行收尾/改写 diagnostic（原 teardown 行为已删除）；每次状态变化记录 `{wall_ms, process_frames, status, attempted, accepted, request_count, get_count, native_owned, code_preparation_state}` 轨迹并随诊断返回
   2. **轨迹给出决定性证据**：30s 内到达**真实终态 `failed`**，`code_preparation.state = "cancelled_or_rejected"`，`request_count=0`——**内部代码准备链（ContentLayers `prepare_internal_code_entry` / `request_internal_prepared_script`）在 intro 环境内取消或拒绝**，从未到达场景请求提交（`_submit_prepared_main_scene_prefetch` 未执行）
   3. **"240 帧窗口不够"假设关闭**；"owner/retention 失效"降级为次级候选（retention 检查在 _submit 内，未到达）
-- **下一步**：读 ContentLayers 两个函数的取消/拒绝条件（generation 比对、lease/retention 判定、intro 环境下的具体输入），区分"被正常关闭（generation 推进）"与"真实错误"
+- **下一步**：~~读 ContentLayers 两个函数的取消/拒绝条件~~ **已完成（Round 14 主会话+子代理交叉）**：`is_code_preparation_loading_phase_current`（startup_loading.gd L779-780）要求 `generation 相同 + _startup_state ∈ [LOADING, READY_TO_HANDOFF] + 非 exit`——**启动流程正常推进（动画结束→handoff→reveal→transition/EXITING）后，仍在两个 await（内部代码编译链）中的准备被判定取消 → cancelled_or_rejected → failed**。generation 推进点仅两处（L332 退出按钮/L817 exit_tree），均非本路径触发；触发的是 **state 推进本身**
+- **判定**：**(a) 合法取消**——预取是 fire-and-forget 优化（同文件注释自证），main 场景由常规 `_prepare_target_scene` 加载且 launch 0 已断言 target ready（功能无损）；冷缓存下编译链耗时结构性超过动画+transition 窗口，基线 272430b36 起即如此（BASELINE_EXISTING 与机制一致）
+- **待裁决（GPT Pro）**：launch 0 断言 `status ∈ [ready, already_cached]` 是"优化必须完成"的性能期望——建议改为**分类观测断言**：终态 failed 且 `code_preparation.state=cancelled_or_rejected`（合法取消、无 request 副作用）时 PASS；其余 failed（真实错误：retention 失效/请求被拒）仍 FAIL——既保留"真实错误必须暴露"的验收力，又不再把冷缓存优化时序当功能失败
 - **阻断范围**：brand_intro 自身与启动验收相关子项
 
 ### F9. tests/canonical_skill_production_entry_test.tscn —— **已修复（2026-10-06）**
