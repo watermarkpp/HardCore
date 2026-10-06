@@ -153,7 +153,11 @@ func _run() -> void:
 	var sampling_started_ms := Time.get_ticks_msec()
 	var sample_deadline := run_started_ms + int((BOOT_BUDGET_S + SAMPLE_BUDGET_S) * 1000.0)
 	if approved_process_window_seconds != 0:
-		assert(_expected_monster_id() == 24 and not chase_mode and approved_process_window_seconds == 90)
+		assert(
+			(_expected_monster_id() == 24 or _expected_monster_id() == 76)
+			and not chase_mode and approved_process_window_seconds == 90,
+			"only the approved 90s diagnostic identities may extend the process window"
+		)
 		# Engine time includes startup. Reserve the runner's2s cleanup plus1s
 		# exit confirmation; no additional execution beyond the approved90s.
 		sample_deadline = approved_process_window_seconds * 1000 - 3000
