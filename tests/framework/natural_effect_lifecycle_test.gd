@@ -182,6 +182,22 @@ func _run() -> void:
 	var event: Array = PlayerState.feature_bundle().event_index.get("damage_committed:hc.skill.wizard.ice_storm",[])
 	check(PlayerState.feature_errors.is_empty() and event.size() == (4 if periodic_children else 3),"equipment, learned skill and rule compile to three ignition sources plus only the declared child subscription")
 	if event.size() != (4 if periodic_children else 3): _finish(); return
+	# Publish all thirty receivers through the real map-transition staged plan
+	# collection window (shared formal fixture) AFTER the feature bindings are
+	# enabled, so the receivers are born into the exact feature environment the
+	# combat loop exercises. The authored grid points, slots and respawn rules
+	# are unchanged; the player pre-state below is recaptured afterwards
+	# because the republication rebuilds the zone.
+	var descriptors: Array[Dictionary] = []
+	for index in 30:
+		var point := Vector2(40.5+float(index%6)*0.72+(0.36 if int(index/6)%2 else 0.0),12.2+float(index/6)*0.64)
+		descriptors.append({
+			"id": 19,
+			"position": game._canonical_ground_gu_to_screen_px(point),
+			"respawn": -1.0,
+			"context": {"respawn_enabled": false, "spawn_slot_id": "test:natural:"+str(index)},
+		})
+	var published: Array[EnemyActor] = await Fixture.publish_targets(self,game,descriptors,"natural effect lifecycle fixture")
 	game._set_player_world_position(game._canonical_ground_gu_to_screen_px(Vector2(38.5,13.5)))
 	# Declared stress-health/stat inputs keep actual AI, damage and death paths
 	# active long enough to exercise recurring work. No per-frame heal/refund.
@@ -192,8 +208,7 @@ func _run() -> void:
 	var hp_before: int = game.player.current_hp
 	for index in 30:
 		var point := Vector2(40.5+float(index%6)*0.72+(0.36 if int(index/6)%2 else 0.0),12.2+float(index/6)*0.64)
-		var actor: EnemyActor = game._spawn_enemy(GameData.get_monster_by_id(19),game._canonical_ground_gu_to_screen_px(point),false,-1.0,
-			{"respawn_enabled":false,"spawn_slot_id":"test:natural:"+str(index)})
+		var actor: EnemyActor = published[index]
 		if actor != null:
 			actor.max_hp = 1500+(index*7 if periodic_children else 0); actor.current_hp = actor.max_hp
 			actor.died.connect(_on_target_died); targets.append(actor)

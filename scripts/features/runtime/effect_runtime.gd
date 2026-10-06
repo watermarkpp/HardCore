@@ -530,7 +530,11 @@ func _apply_command(command: Dictionary, entry: Dictionary) -> void:
 			if not _reservations.has(admission_id) or int(_reservations[admission_id].states) <= 0:
 				_error("feature_state_reservation_missing"); return
 			_reservations[admission_id].states -= 1; _reserved_states -= 1
-			replacement.state_loan_origin = admission_id
+			# Mirror the fresh-state admission: a state may only carry a loan
+			# origin when its reservation actually owns chain loan slots
+			# (state_loan_handles). Setting the origin unconditionally made a
+			# later replacement erase a key that was never created.
+			replacement.state_loan_origin = admission_id if not _reservations[admission_id].chain.is_empty() else 0
 			if not _reservations[admission_id].chain.is_empty():
 				_reservations[admission_id].state_loan_handles[handle] = true
 		_states[handle] = replacement
