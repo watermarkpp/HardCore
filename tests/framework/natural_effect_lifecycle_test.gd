@@ -252,9 +252,14 @@ func _run() -> void:
 			for actor: EnemyActor in targets:
 				if not is_instance_valid(actor) or actor.current_hp <= 0: continue
 				var center: Vector2 = game._canonical_screen_px_to_ground_gu(actor.global_position)
-				# Damage-budget aiming (best measured variant): the 35s cadence
-				# admits ~23 casts, and thirty 1500+HP receivers need dense
-				# clusters — score pure neighbour density inside the 1.5GU box.
+				# Damage-budget aiming (best measured variant, v4): the 35s
+				# cadence admits ~23 casts, and thirty 1500+HP receivers need
+				# dense clusters — score pure neighbour density inside the
+				# 1.5GU box. NOTE: the data-declared area_radius 115px
+				# (~2.541GU circle) measured WORSE (15 deaths) — that field
+				# evidently does not drive the actual damage distribution; the
+				# real delivery radius must be read from the production
+				# delivery code before the next aiming adjustment.
 				var score := 0
 				for receiver: EnemyActor in targets:
 					if not is_instance_valid(receiver) or receiver.current_hp <= 0: continue
