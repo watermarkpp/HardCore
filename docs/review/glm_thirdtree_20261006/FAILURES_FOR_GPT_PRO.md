@@ -12,6 +12,14 @@
   5. 打印 PASS marker 但超时/未正常退出的运行**保持原 FAIL**；后续单跑 PASS 另列；
   6. 提交 `ad29a835e` 除报告外还包含历史证据目录中的 `.gd.uid` 元数据文件（随 git add -A 进入；不影响运行/导出语义，记录在案，不清理）。
 
+## 修复进度总账（2026-10-06 · 发布适配批次后）
+- **已 PASS 收口（7/12）**：F2（试点）、F1 cadence 全家 5/5（24/24_chase/76/238/239）、F9、F10、F11——全部经 `publish_targets` 正式发布入口迁移 + 逐项单跑验证；期间顺带修复 1 项 S1 REGRESSION（state_loan_handles 缺键崩溃，498680579）
+- **FAIL 但归因闭合（2）**：F8（失败环节=ContentLayers 内部代码准备链 `cancelled_or_rejected`，观测轨迹已按指令建成）、F3（lifecycle 死亡 5→20/30，剩余=瞄准几何 vs 生产交付几何 + 90 并发/30 死亡双断言可达性待裁决）
+- **待观察（1）**：F12（无稳定 FAIL 证据，critical 回归正常退出即消除）
+- **候选 BASELINE_EXISTING（2）**：F6（启动性能，永久 OPEN 口径）、F7（V3/V4 不可比）
+- **待裁决项汇总（供 GPT Pro）**：①F8 launch 0 的 `ready` 断言是否改为"真实终态+证据完整性"观测断言（预取为 fire-and-forget 优化、有常规加载兜底，冷缓存下被 generation 关闭是否仍须断言成功）；②F3 的 90 并发 states 与 30 死亡在同一 23 次施法伤害预算内的可达性（期望校准 vs 交付几何优化）
+- 提交链：663a2dd53(F2) → bb8d9d7c9(F9-F11) → 498680579(REGRESSION 修复) → 0c0d17867/a407ea670(F3 实验) → 5ad1d60f0(F1 76) → 221dbc04e(F8 轨迹)
+
 ## 失败清单（v2 三列口径）
 
 ### F1. tests/hc_monster_combat_r4/natural_cadence_24_test.tscn（同款：24_chase / 76 / 238 / 239）—— **已全部修复，5/5 PASS（2026-10-06）**
