@@ -1,0 +1,322 @@
+{
+  "created_utc": "2026-10-06T03:48:50.3844168Z",
+  "purpose": "S0-A archive: startup fixture-migration native evidence (14 PASS scenes + FAIL reproductions + migration interim FAILs + READY timeline)",
+  "tested_candidate": {
+    "commit": "272430b3692e776b25df820eaa8b53ed9f34bd8e",
+    "parent": "160e9c79b2cae5f701fa7dceafbf59ba8777640c",
+    "branch": "codex/glm-thirdtree-continuation-20261006",
+    "note": "migration 14 场 receipt 内 git_head 字段为 160e9c79b（修改提交前运行）；受测工作树内容 = 提交后的 272430b36 树。生产文件与 160e9c79b 完全相同（该提交只含 3 个测试文件 + 1 个新测试 helper + 1 份审计文档）。",
+    "receipt_git_head_field": "160e9c79b2cae5f701fa7dceafbf59ba8777640c (pre-commit run; do not read as tested bytes alone)"
+  },
+  "engine": {
+    "path": "tools/godot-4.7/Godot_v4.7-stable_win64_console.exe",
+    "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+    "version": "4.7.stable.official.5b4e0cb0f",
+    "expected_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c"
+  },
+  "commands": {
+    "runner": "pwsh -NoProfile -File tools/run_godot_tests.ps1 -TestPaths '<scene>' -TimeoutSeconds <N>",
+    "timeout_policy": "普通 30s；已知重场景（initial_world_bootstrap_test / monster_summon_formal_birth_test / feature_mixed_delivery_test）60s；READY helper 内部 60s 仅为生产 fail-safe ceiling，非启动性能门槛",
+    "diag": "Godot console exe --headless --path . res://outputs/diag_ready_timeline_20261006.tscn （APPDATA 隔离）"
+  },
+  "result_summary": {
+    "fail_reproduction_receipts": [
+      "runner_receipts/runner_results_adhoc_20261006_100338_088_16476.json",
+      "runner_receipts/runner_results_adhoc_20261006_101046_574_10624.json",
+      "runner_receipts/runner_results_adhoc_20261006_101444_392_9352.json",
+      "runner_receipts/runner_results_adhoc_20261006_101523_914_2628.json"
+    ],
+    "migration_interim_fail_receipts": [
+      "runner_receipts/runner_results_adhoc_20261006_104521_040_18684.json",
+      "runner_receipts/runner_results_adhoc_20261006_104655_620_3680.json"
+    ],
+    "migration_pass_receipts": [
+      "runner_receipts/runner_results_adhoc_20261006_104746_528_17212.json",
+      "runner_receipts/runner_results_adhoc_20261006_104816_590_10660.json",
+      "runner_receipts/runner_results_adhoc_20261006_104851_826_14188.json",
+      "runner_receipts/runner_results_adhoc_20261006_104916_554_3952.json",
+      "runner_receipts/runner_results_adhoc_20261006_104958_319_15192.json",
+      "runner_receipts/runner_results_adhoc_20261006_105020_961_17800.json",
+      "runner_receipts/runner_results_adhoc_20261006_105038_310_1588.json",
+      "runner_receipts/runner_results_adhoc_20261006_105100_694_10024.json",
+      "runner_receipts/runner_results_adhoc_20261006_105119_928_11528.json",
+      "runner_receipts/runner_results_adhoc_20261006_105154_067_20472.json",
+      "runner_receipts/runner_results_adhoc_20261006_105202_029_19420.json",
+      "runner_receipts/runner_results_adhoc_20261006_105227_607_17932.json",
+      "runner_receipts/runner_results_adhoc_20261006_105250_362_9352.json",
+      "runner_receipts/runner_results_adhoc_20261006_105339_030_8348.json"
+    ],
+    "birth_direct_11_checks_total": 210,
+    "mixed_checks": 380,
+    "all_scenes_stderr_failures": 0,
+    "mixed_stderr_note": "scene_logs/feature_mixed_delivery_test.stderr.log 含引擎级 'Parameter t is null (dummy texture_2d_initialize)' headless 渲染后端告警；非脚本错误，receipt stderr_failure_count=0",
+    "takeover_short_stdout_note": "published_queue_generation_takeover stdout 本就精简（OBSERVATION 行 + PASS checks=13），receipt valid exit 0"
+  },
+  "environment_checks": {
+    "entity_registry_source_hash_match": "15/15 (2026-10-06 S0 复验；CRLF 修复后原字节完好)",
+    "untracked_uid_classification": "301 个 .uid 为 Godot --import 对 docs/review 证据场景/脚本生成的伴生文件；生产构建路径不含 docs/，不属于 APK 打包输入，不入正式构建清单，不入库",
+    "runner_isolation": "每场景独立 .godot/runtime_appdata 隔离 userdata"
+  },
+  "files": [
+    {
+      "path": "ready_timeline/cold_warm_20261006.txt",
+      "bytes": 2248,
+      "sha256": "3a07bcb6d64163d2c2dd4dcd14e534d9d20b3b9732cd6825d27ba2e16e403d1c"
+    },
+    {
+      "path": "ready_timeline/diag_ready_timeline_20261006.gd",
+      "bytes": 2000,
+      "sha256": "f7b2ac30a9031db67f4ac6da500959ee93faac5b9ec847eae034db467f6d99d6"
+    },
+    {
+      "path": "ready_timeline/diag_ready_timeline_20261006.tscn",
+      "bytes": 231,
+      "sha256": "265e562217bdbfe2604ec55bc3ff6d586ddc5a3bd6e82cbef0a07ae5870c6afe"
+    },
+    {
+      "path": "runner_receipts/runner_results_adhoc_20261006_100338_088_16476.json",
+      "bytes": 1640,
+      "sha256": "c0bb76c10b5808fd3006477af30496e1a18863fcfa1c4ae40afb777978073451"
+    },
+    {
+      "path": "runner_receipts/runner_results_adhoc_20261006_101046_574_10624.json",
+      "bytes": 1640,
+      "sha256": "03c4ebddf90a0f040fa40e04b52b0e0335bd38631dbd72821230c65be7a81593"
+    },
+    {
+      "path": "runner_receipts/runner_results_adhoc_20261006_101444_392_9352.json",
+      "bytes": 1640,
+      "sha256": "b749c17c882536804e14b67d175ee93005af517882c1732512ee6dafd437edca"
+    },
+    {
+      "path": "runner_receipts/runner_results_adhoc_20261006_101523_914_2628.json",
+      "bytes": 1647,
+      "sha256": "ae80710c8ded152bb112bdc4e6dbde8291392df2016f63bdf2f8c1f9efb62ca4"
+    },
+    {
+      "path": "runner_receipts/runner_results_adhoc_20261006_104521_040_18684.json",
+      "bytes": 1641,
+      "sha256": "bf4c5c6830db41ac7ca305d0bc06ec27a2ad418a9c271d416617dc4ce0da5d74"
+    },
+    {
+      "path": "runner_receipts/runner_results_adhoc_20261006_104655_620_3680.json",
+      "bytes": 1639,
+      "sha256": "778eb292051fc57841a4008984fc423b0c7e76b4b0f197b472d8e31a570374fb"
+    },
+    {
+      "path": "runner_receipts/runner_results_adhoc_20261006_104746_528_17212.json",
+      "bytes": 1529,
+      "sha256": "5765858d5137206f65b57312518d47fc8ef353d9f49029fa05a173ec1147326e"
+    },
+    {
+      "path": "runner_receipts/runner_results_adhoc_20261006_104816_590_10660.json",
+      "bytes": 1538,
+      "sha256": "bfa72a9e34932ed756067e21d8fca9eefe652f174e6a4ab347f3a5230be1242d"
+    },
+    {
+      "path": "runner_receipts/runner_results_adhoc_20261006_104851_826_14188.json",
+      "bytes": 1590,
+      "sha256": "6cc40cb0e7554afdbab6ee6e34532a52ad577656cb0c02659361088a4fee9881"
+    },
+    {
+      "path": "runner_receipts/runner_results_adhoc_20261006_104916_554_3952.json",
+      "bytes": 1579,
+      "sha256": "bfbcb69f8ec897abaf4e97541b7a492fd9226f3f329421fa161127d3c9bc8cd5"
+    },
+    {
+      "path": "runner_receipts/runner_results_adhoc_20261006_104958_319_15192.json",
+      "bytes": 1583,
+      "sha256": "5f7afd925be862e0b2cfd10491640a751039b8de3518cb6ba771848956d0405e"
+    },
+    {
+      "path": "runner_receipts/runner_results_adhoc_20261006_105020_961_17800.json",
+      "bytes": 1578,
+      "sha256": "d6f8b117f2c29daf8fb3672deff1c0fd1ac0af03c0269f337c6b8dba2058ea66"
+    },
+    {
+      "path": "runner_receipts/runner_results_adhoc_20261006_105038_310_1588.json",
+      "bytes": 1583,
+      "sha256": "de5ae39ef9d1b135684f3eb028fa0e0878572a7782e0ebe8241420a73a50fe26"
+    },
+    {
+      "path": "runner_receipts/runner_results_adhoc_20261006_105100_694_10024.json",
+      "bytes": 1585,
+      "sha256": "8db6f8aee16aac05db55fd3270f9e5c149d1ead4458998eeddca29951520efbb"
+    },
+    {
+      "path": "runner_receipts/runner_results_adhoc_20261006_105119_928_11528.json",
+      "bytes": 1594,
+      "sha256": "188ec67c288a5a9158ebd79c72135fa7962499f3e8f72d731f8ac65d0b6c1acb"
+    },
+    {
+      "path": "runner_receipts/runner_results_adhoc_20261006_105154_067_20472.json",
+      "bytes": 1606,
+      "sha256": "e45cf68ef4e7d44c2a751048e3ee835278df13b38cbbf12ee4f517155d5985c1"
+    },
+    {
+      "path": "runner_receipts/runner_results_adhoc_20261006_105202_029_19420.json",
+      "bytes": 1600,
+      "sha256": "ce5c0296a2fbc34bb97531ec9fe2b9cfda14fe91ca8009c3f5e91b5f0a4f9ad8"
+    },
+    {
+      "path": "runner_receipts/runner_results_adhoc_20261006_105227_607_17932.json",
+      "bytes": 1580,
+      "sha256": "090daabe58393fd157028bc711d3135689d2feca39669ddeb2b2969b44887669"
+    },
+    {
+      "path": "runner_receipts/runner_results_adhoc_20261006_105250_362_9352.json",
+      "bytes": 1578,
+      "sha256": "4f9eaf3f4c7acc11520cbca316f7a219a3246006512350490b87e2c218ecff35"
+    },
+    {
+      "path": "runner_receipts/runner_results_adhoc_20261006_105339_030_8348.json",
+      "bytes": 1572,
+      "sha256": "23ccf09ed65f4d687d6ab6d9d1f5c8f704f17c16f8a2539aba8d4e6ac1fd4336"
+    },
+    {
+      "path": "scene_logs/combined_effect_lifecycle_test.godot.log",
+      "bytes": 6144,
+      "sha256": "584da980a50c8fc575572ac03c1fea84d4838cf7fb6d337686173a20265b31f3"
+    },
+    {
+      "path": "scene_logs/combined_effect_lifecycle_test.stdout.log",
+      "bytes": 6155,
+      "sha256": "846be0edbff37f90547ce659a66a49166191480e5d3f6208315da93aea9ad97a"
+    },
+    {
+      "path": "scene_logs/feature_admission_release_test.godot.log",
+      "bytes": 7482,
+      "sha256": "88cff54c5b97150a0b502218939b157a13d4e721d233cef2087552fc775582a1"
+    },
+    {
+      "path": "scene_logs/feature_admission_release_test.stdout.log",
+      "bytes": 7495,
+      "sha256": "96255868dc1bcebe58d7f1ae3e8fa40cbe590e45d172b02be973bbb4ad40d688"
+    },
+    {
+      "path": "scene_logs/feature_birth_slot_identity_test.godot.log",
+      "bytes": 6127,
+      "sha256": "00a821b6bf2ecd7a8bc9695f2147374237874a9e66bef1f00aa6ab77e2c99170"
+    },
+    {
+      "path": "scene_logs/feature_birth_slot_identity_test.stdout.log",
+      "bytes": 6138,
+      "sha256": "4add38ef007fff098f896bf6087a340d591f0a2aca52a5064305b5eef57f7e20"
+    },
+    {
+      "path": "scene_logs/feature_mixed_delivery_test.godot.log",
+      "bytes": 46210,
+      "sha256": "703bcc98d4424faf618a90ebfa3c1dd6b8b72f5a4e6459fff83c4e22e7322d52"
+    },
+    {
+      "path": "scene_logs/feature_mixed_delivery_test.stderr.log",
+      "bytes": 118,
+      "sha256": "63a2c03bd55519c8fcae03081901a5c8bb73c78418058605ef1bb33a0bf93d8f"
+    },
+    {
+      "path": "scene_logs/feature_mixed_delivery_test.stdout.log",
+      "bytes": 46147,
+      "sha256": "eef2cf759c36cff4e5f013ea860c5d8ef6db38f99ed3d112d603b8e1887923c7"
+    },
+    {
+      "path": "scene_logs/feature_world_capacity_bound_test.godot.log",
+      "bytes": 7459,
+      "sha256": "0e7abf857fc905bb75f88fea064559aaa760bcb369c13cb5790bddaf11a6291c"
+    },
+    {
+      "path": "scene_logs/feature_world_capacity_bound_test.stdout.log",
+      "bytes": 7471,
+      "sha256": "12b300d0eeff5aef3a3c4cf46165c9dead295edf0e4ace40ec0685c1d8c5be26"
+    },
+    {
+      "path": "scene_logs/initial_world_bootstrap_test.godot.log",
+      "bytes": 5249,
+      "sha256": "b66ac6d8024c52a929f916336fd1e45399470c58034e2d368cbee8453fe19955"
+    },
+    {
+      "path": "scene_logs/initial_world_bootstrap_test.stdout.log",
+      "bytes": 5259,
+      "sha256": "0c412c5d9c35d8311371eb76334d097307782cdaf3231884714131b3341e8434"
+    },
+    {
+      "path": "scene_logs/monster_summon_formal_birth_test.godot.log",
+      "bytes": 7529,
+      "sha256": "b7581e8dd606dfefa167e8d48a8411a7614a574af277adfc2dc4b38e28baf812"
+    },
+    {
+      "path": "scene_logs/monster_summon_formal_birth_test.stdout.log",
+      "bytes": 7541,
+      "sha256": "3fe7b1339ab5cedd0c2d9a905bb14e6833b2331e1e146a8249eec91c525463e5"
+    },
+    {
+      "path": "scene_logs/published_descriptor_preflight_test.godot.log",
+      "bytes": 6632,
+      "sha256": "fc86e69939290b3df8804c86bcd840389186572d41843b931cd14c3b635f410a"
+    },
+    {
+      "path": "scene_logs/published_descriptor_preflight_test.stdout.log",
+      "bytes": 6644,
+      "sha256": "1aa1887148030b13e9ccd7d7eab197fb1a4aab752df3ddf0be2ece449136792e"
+    },
+    {
+      "path": "scene_logs/published_environment_failure_recovery_test.godot.log",
+      "bytes": 6792,
+      "sha256": "fafcfda7aa7ee3ae3e76aa3f5c7d0dec3af6dfd1efd218d7f90258dd1a48dd4e"
+    },
+    {
+      "path": "scene_logs/published_environment_failure_recovery_test.stdout.log",
+      "bytes": 6806,
+      "sha256": "89b224b913108b864d8d0db13e4a6f4ce200ff5398fe0f8b2cabb7b76c4c961e"
+    },
+    {
+      "path": "scene_logs/published_monster_inputs_test.godot.log",
+      "bytes": 6124,
+      "sha256": "cba28644ea32129353034a96aa840b4869431ae8519767a890ad07b45c80f4bf"
+    },
+    {
+      "path": "scene_logs/published_monster_inputs_test.stdout.log",
+      "bytes": 6135,
+      "sha256": "7a33f8c4f1350cd5dc6eed2172a1ff1301b95f88aa59edfb42ae6ab27c920448"
+    },
+    {
+      "path": "scene_logs/published_queue_generation_takeover_test.godot.log",
+      "bytes": 478,
+      "sha256": "3c45fe4784d721020e2fade1db5e62d96b98d186ef41e96a9f05aed3d47d3155"
+    },
+    {
+      "path": "scene_logs/published_queue_generation_takeover_test.stdout.log",
+      "bytes": 483,
+      "sha256": "df97fa27392d73c746e9e5b022e6e3ec9b6d35d9439f4964313e747d0e4d68a7"
+    },
+    {
+      "path": "scene_logs/published_summon_issuance_test.godot.log",
+      "bytes": 12295,
+      "sha256": "02e086d866e4ce1227ea0b8c6b1206f51fe9988968a5ddab8ef7b71726cf948c"
+    },
+    {
+      "path": "scene_logs/published_summon_issuance_test.stdout.log",
+      "bytes": 12307,
+      "sha256": "1e1917bb7d5422f035aa67af68f1b839f91a3040adcf44df978a2bbac3098c51"
+    },
+    {
+      "path": "scene_logs/published_world_birth_guard_test.godot.log",
+      "bytes": 5187,
+      "sha256": "5b5fb97f3fbd81d502cb3f79e55208a95b97563118c290265a3750f918af35f2"
+    },
+    {
+      "path": "scene_logs/published_world_birth_guard_test.stdout.log",
+      "bytes": 5197,
+      "sha256": "fe3bd9d3f109e403961e3542ec6398cd5a2e10e487469838ea93acb651179356"
+    },
+    {
+      "path": "scene_logs/published_world_failure_recovery_test.godot.log",
+      "bytes": 8212,
+      "sha256": "212991aa48e420283b22d254da8cca7a21ce45bfd0a89530a238e579f61f0b34"
+    },
+    {
+      "path": "scene_logs/published_world_failure_recovery_test.stdout.log",
+      "bytes": 8235,
+      "sha256": "e644b92a243590623891c334f1859962adc7462956aa3bc64a1b9ea29e2363eb"
+    }
+  ]
+}

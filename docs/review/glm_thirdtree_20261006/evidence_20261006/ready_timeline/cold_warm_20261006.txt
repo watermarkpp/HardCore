@@ -1,0 +1,40 @@
+# 初始 READY 时间线实测（诊断脚本 diag_ready_timeline_20261006.gd/.tscn）
+
+- 日期：2026-10-06；受测候选：272430b3692e776b25df820eaa8b53ed9f34bd8e 树内容
+- 方法：headless console 引擎 + 隔离 APPDATA（.godot/runtime_appdata/diag_ready_20261006*），
+  逐帧观察 `_world_bootstrap_coordinator` stage、`_map_transition_in_progress` 与
+  `gameplay_input_is_enabled()`；生产自身合同上限 60 秒。
+- 启动性能状态：OPEN / PRODUCT SLA MISSING（以下仅记录实测耗时，不构成 PASS）。
+
+## 首次启动（环境原字节修复后首跑，资源/OS 缓存最冷）
+
+- bootstrap_dispatch 起 4226.8ms（InitialGameRootProfile：hud_attach_and_ready 3907ms）
+- FINALIZE 6311ms → READY = transition closed = input enabled = **10889ms**
+
+## 正式记录冷启动（新 userdata 目录）
+
+- `DIAG_RESULT ready_ms=8513 transition_closed_ms=8513`
+- bootstrap_dispatch 起 551.8ms
+- [LOADING-TOTAL] transition pipeline total=4243.787ms：
+  COLLECT 341.461 / REQUEST 365.692 / WAIT 516.139 / BUILD_MAP 516.305 /
+  BUILD_COLLISION 519.538 / SPAWN_ACTORS 520.790 / FINALIZE 1623.109
+  （内含 monster_prefetch 341.136、ui_panels 2603.753）
+- prewarm_deadline_exceeded=false、catalog_icon_prewarm_complete=true
+
+## 正式记录热启动（复用同 userdata）
+
+- `DIAG_RESULT ready_ms=8163 transition_closed_ms=8163`
+- [LOADING-TOTAL] total=3918.315ms：
+  COLLECT 329.872 / REQUEST 352.113 / WAIT 497.741 / BUILD_MAP 497.880 /
+  BUILD_COLLISION 501.039 / SPAWN_ACTORS 502.155 / FINALIZE 1533.535
+  （内含 monster_prefetch 329.554、ui_panels 2375.881）
+- prewarm_deadline_exceeded=false、catalog_icon_prewarm_complete=true
+
+## 说明
+
+- stage_elapsed_ms 为各阶段完成时刻的累计跨度（stage 相对 pipeline 起点），
+  相邻差值≈该阶段净耗时；FINALIZE 内含 UI 面板预热（ui_panels_ms）与
+  怪物预取（monster_prefetch_ms），两者存在并行调度，不得把所有 stage 值
+  直接相加当作端到端耗时（端到端以 ready_ms 为准）。
+- 新 APPDATA 不等于全部资源/OS 缓存均冷（.godot 导入缓存与 OS 文件缓存仍热）。
+- HEAD/ready helper 的 60 秒只是等待保护；外层 runner 30/60 秒是另一合同。

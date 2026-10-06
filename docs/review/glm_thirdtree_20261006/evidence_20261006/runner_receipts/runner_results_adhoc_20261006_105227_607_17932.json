@@ -1,0 +1,40 @@
+{
+  "passed": 1,
+  "generated_at": "2026-10-06T10:52:27.6077257+08:00",
+  "total": 1,
+  "git_head": "160e9c79b2cae5f701fa7dceafbf59ba8777640c",
+  "engine_log_errors": 0,
+  "failed": 0,
+  "suite": "adhoc",
+  "results": [
+    {
+      "test_name": "feature_admission_release_test",
+      "test_path": "tests/framework/feature_admission_release_test.tscn",
+      "wrapper_process_id": 20968,
+      "wrapper_started_utc": "2026-10-06T02:52:08.0047922Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata",
+      "fixed_fps": 0,
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-06T02:52:38.0176478Z",
+      "native_exit_observed_utc": "2026-10-06T02:52:26.0754883Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "bd2230c0-3edc-4fd7-bb4f-212ef494f462",
+      "framework_receipt_valid": true,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "invocation_id": "2319530c-7fd9-43ac-8113-721172a2b986",
+  "runtime_environment": {
+    "project_root": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata",
+    "runner_process_id": 17932
+  }
+}

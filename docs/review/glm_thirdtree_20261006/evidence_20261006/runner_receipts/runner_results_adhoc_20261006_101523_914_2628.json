@@ -1,0 +1,40 @@
+{
+  "git_head": "4e03608362f801ccaf68e873a1a6d5b12591d087",
+  "generated_at": "2026-10-06T10:15:23.9142401+08:00",
+  "failed": 1,
+  "passed": 0,
+  "engine_log_errors": 1,
+  "total": 1,
+  "results": [
+    {
+      "test_name": "monster_summon_formal_birth_test",
+      "test_path": "tests/monster_summon_formal_birth_test.tscn",
+      "wrapper_process_id": 8116,
+      "wrapper_started_utc": "2026-10-06T02:15:08.6937532Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata",
+      "fixed_fps": 0,
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "execution_deadline_utc": "2026-10-06T02:15:38.7061551Z",
+      "native_exit_observed_utc": null,
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 1,
+      "engine_log_failure_count": 1,
+      "framework_run_id": "",
+      "framework_receipt_valid": null,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+    }
+  ],
+  "runtime_environment": {
+    "project_root": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata",
+    "runner_process_id": 2628
+  },
+  "invocation_id": "c43a29aa-bac5-4b48-a73e-66c20836ba60",
+  "suite": "adhoc"
+}

@@ -1,0 +1,40 @@
+{
+  "engine_log_errors": 0,
+  "passed": 1,
+  "generated_at": "2026-10-06T10:51:00.6947119+08:00",
+  "runtime_environment": {
+    "project_root": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata",
+    "runner_process_id": 10024
+  },
+  "total": 1,
+  "invocation_id": "ec9c1620-2fe8-4443-a36a-87fb871d3a7c",
+  "failed": 0,
+  "suite": "adhoc",
+  "results": [
+    {
+      "test_name": "feature_world_capacity_bound_test",
+      "test_path": "tests/framework/feature_world_capacity_bound_test.tscn",
+      "wrapper_process_id": 6540,
+      "wrapper_started_utc": "2026-10-06T02:50:44.0682079Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata",
+      "fixed_fps": 0,
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-06T02:51:14.0810926Z",
+      "native_exit_observed_utc": "2026-10-06T02:50:59.1490634Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "f098cbd9-7448-4ee7-b823-e077f7fab9b9",
+      "framework_receipt_valid": true,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "git_head": "160e9c79b2cae5f701fa7dceafbf59ba8777640c"
+}
