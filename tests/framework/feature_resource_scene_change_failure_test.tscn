@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/framework/feature_resource_scene_change_failure_test.gd" id="1"]
+
+[node name="ResourceSceneChangeFailureTest" type="Node"]
+script = ExtResource("1")

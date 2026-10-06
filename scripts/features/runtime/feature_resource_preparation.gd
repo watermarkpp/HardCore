@@ -9,6 +9,7 @@ class Request extends RefCounted:
 	signal completed(result: Dictionary)
 	var plan: Dictionary
 	var kind := "module"
+	var scene_epoch := 0
 	var code_plan: RefCounted
 	var scope: RefCounted
 	var consumer: WeakRef
@@ -59,6 +60,10 @@ func prepare(catalog: Dictionary, enabled: Array) -> Dictionary:
 	var id := _next_request
 	var request := Request.new()
 	request.plan = plan
+	# Scene-change immediate failure (S3): the request belongs to the scene
+	# that started it; a later scene invalidates it before any promotion.
+	var owner_scene: Node = get_tree().current_scene
+	request.scene_epoch = owner_scene.get_instance_id() if owner_scene != null else 0
 	_requests[id] = request
 	for path: String in plan.paths:
 		request.remaining[path] = true
@@ -119,6 +124,18 @@ func _process(_delta: float) -> void:
 	var code_phase := ""
 	var code_began := Time.get_ticks_usec()
 	var finished: Array = []
+	# Scene-change immediate failure: the first service quantum that observes a
+	# different current scene fails every outstanding module preparation right
+	# away. Code-publication/handoff requests keep their own cross-scene
+	# retention contract and are deliberately untouched here.
+	var successor: Node = get_tree().current_scene
+	var scene_epoch := successor.get_instance_id() if successor != null else 0
+	for stale_id: int in _requests.keys():
+		var stale_request: Request = _requests[stale_id]
+		if stale_request.kind != "module" or stale_id == _applying_request: continue
+		if stale_request.scene_epoch != 0 and scene_epoch != stale_request.scene_epoch:
+			_deferred_completions.append({"id":stale_id, "result":{"success":false,
+				"errors":["feature_resource_scene_changed"], "lease":null}})
 	# Each nonempty class receives one opportunity in at most three granted
 	# service quanta. Continuous loading cannot starve promotion or retirement.
 	var queue := -1
