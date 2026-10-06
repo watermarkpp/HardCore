@@ -64,16 +64,19 @@
 - **下一步**：补完整状态轨迹（wall 时间、process epoch、generation、status、code_preparation 错误、原 request/get 计数），按真实终态判断；正式等待按终态而非帧数；测试不得自行 get 结果改写 diagnostic 充当生产成功
 - **阻断范围**：阻断 brand_intro 自身与启动验收的相关子项
 
-### F9. tests/canonical_skill_production_entry_test.tscn
-- **回归归因**：**候选** BASELINE_EXISTING（v2 降级：与 F2 相同断言文本，但无逐项基线实验；F4 的基线实验只覆盖其自身调用路径，不自动覆盖本项）
-- **当前正确性**：FAIL（`formal exact-ID mapped spawn` → 连锁 current_hp on Nil）
-- **阻断范围**：自身
+### F9. tests/canonical_skill_production_entry_test.tscn —— **已修复（2026-10-06）**
+- 原失败模式：`formal exact-ID mapped spawn` → 连锁 current_hp on Nil
+- **回归归因**：候选 BASELINE_EXISTING（家族症状一致，未逐项做基线实验）
+- **当前正确性**：**PASS（迁移后单跑验证）**——一次 publication 发布**两个**目标（雷电术 19 + 圣言术祖玛卫士 156），因第二次发布重建世界会销毁后续段仍引用的第一个目标；`_prepare_published_enemy` 保留原 exact-ID/WORLD path 校验与 HP/控制设置；caster 前态与清场（排除两个 fixture 目标）在发布后重捕获
+- **阻断范围**：已解除
 
-### F10. tests/canonical_snapshot_identity_production_test.tscn
-- 同 F9：**候选** BASELINE_EXISTING；FAIL（exact-ID mapped spawn → WORLD path 断言连锁）；阻断自身
+### F10. tests/canonical_snapshot_identity_production_test.tscn —— **已修复（2026-10-06）**
+- 原失败模式：`formal exact-ID mapped spawn` → 连锁 WORLD path 断言
+- **当前正确性**：**PASS（迁移后单跑验证）**——单目标发布（monster 18，slot `test:canonical_snapshot_identity:18`），caster/清场/安全区断言在发布后世界重捕获，快照身份链断言全部保留
 
-### F11. tests/canonical_snapshot_propagation_test.tscn
-- 同 F9：**候选** BASELINE_EXISTING；FAIL（同款断言连锁）；阻断自身
+### F11. tests/canonical_snapshot_propagation_test.tscn —— **已修复（2026-10-06）**
+- 原失败模式：同款断言连锁
+- **当前正确性**：**PASS（迁移后单跑验证）**——单目标发布（monster 19，slot `test:canonical_snapshot:19`），同款重捕获模式
 
 ### F12. audio_w4_actor_service_test（第一批 FAIL 的复核）
 - 原判：批次 1 FAIL（early_script_error + 超时杀）
