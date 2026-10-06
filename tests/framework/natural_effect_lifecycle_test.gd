@@ -232,7 +232,11 @@ func _run() -> void:
 	deadline = start+35000
 	while Time.get_ticks_msec()<deadline:
 		var now := Time.get_ticks_msec()
-		game._on_gameplay_movement(Vector2(0.5,-0.25).normalized() if int((now-start)/1200)%2 == 0 else Vector2(-0.5,0.25).normalized())
+		# Kite instead of the old two-way shuffle: a slow circle keeps the
+		# caster at AOE lock range while the pursuing pack trails behind and
+		# clusters, so real struck-lock downtime stops stalling every cast
+		# after the pack closes in. Monster count, 35s budget and AI unchanged.
+		game._on_gameplay_movement(Vector2(cos(float(now-start)*0.0006), sin(float(now-start)*0.0006)))
 		if now >= next_input and deaths < 30:
 			next_input = now+250
 			# Scripted aiming uses current visible positions and coverage. It does
@@ -248,12 +252,15 @@ func _run() -> void:
 			for actor: EnemyActor in targets:
 				if not is_instance_valid(actor) or actor.current_hp <= 0: continue
 				var center: Vector2 = game._canonical_screen_px_to_ground_gu(actor.global_position)
+				# Damage-budget aiming (best measured variant): the 35s cadence
+				# admits ~23 casts, and thirty 1500+HP receivers need dense
+				# clusters — score pure neighbour density inside the 1.5GU box.
 				var score := 0
 				for receiver: EnemyActor in targets:
 					if not is_instance_valid(receiver) or receiver.current_hp <= 0: continue
 					var offset: Vector2 = game._canonical_screen_px_to_ground_gu(receiver.global_position)-center
 					if absf(offset.x) <= 1.5 and absf(offset.y) <= 1.5:
-						score += 100 if peak_states < 90 and not active_targets.has(receiver.get_instance_id()) else 1
+						score += 100
 				if score > best_score: chosen = actor; best_score = score
 			if chosen != null:
 				game._set_magic_locked_target(chosen,true)
