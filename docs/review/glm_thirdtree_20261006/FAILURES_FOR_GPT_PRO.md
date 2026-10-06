@@ -14,14 +14,17 @@
 
 ## 失败清单（v2 三列口径）
 
-### F1. tests/hc_monster_combat_r4/natural_cadence_24_test.tscn（同款：24_chase / 76 / 238 / 239）
-- 复现：`-TestPaths 'tests/hc_monster_combat_r4/natural_cadence_24_test.tscn' -TimeoutSeconds 90`（场景自声明 90s 窗口；runner 参数上限 90）
-- 失败模式：`R4_NATURAL_CADENCE_FAIL: monster=24 ["spawn_failed", "insufficient_starts=0", "insufficient_settlements=0", "foreign_perturbation_missing"]`
-- **回归归因**：候选 BASELINE_EXISTING（家族症状一致 + 本任务零 spawn 链改动，但未做逐项基线实验）
-- **当前正确性**：FAIL——测试未进入目标业务（spawn_failed，0 起手 0 结算）
-- **阻断范围**：阻断 cadence 系自身验收；不阻断其他源码工作
-- 根因链（同 F3 家族）：测试世界构建/调用路径未走正式发布计划收集 → `_spawn_enemy` 的 `admit_base` 拒绝 → targets=0。**修复路径**：迁移到正式发布入口（F2 试点验证后逐个套用）
-- 备注：历史原件曾打到第二轮 24/30——targets=0 是**新的前置阻断**，不能解释历史六个尾部目标未完成；修好准备路径后才能继续原 35 秒因果工作
+### F1. tests/hc_monster_combat_r4/natural_cadence_24_test.tscn（同款：24_chase / 76 / 238 / 239）—— **4/5 已修复（2026-10-06）**
+- 原失败模式：`R4_NATURAL_CADENCE_FAIL: monster=24 ["spawn_failed", "insufficient_starts=0", ...]`
+- **回归归因**：候选 BASELINE_EXISTING（家族症状一致，未逐项基线实验）
+- **当前正确性（迁移后逐项单跑）**：
+  - **24：PASS**（starts=20 attributed=20 settlements=20 foreign=35，90s 授权窗）
+  - **24_chase：PASS**（1/1/1/2，60s——chase 模式真实移动接近语义保留）
+  - **238：PASS**（20/20/20/14，60s）
+  - **239：PASS**（20/18/20/8，60s——18/20 归因由场景自身断言接受）
+  - **76：FAIL（新模式，非 spawn）**——`insufficient_starts=19, insufficient_settlements=19`：spawn 已修，窗口内 17 次真实 HP 扣减发生，但 `_hc_starts/_hc_settlements` 计数 1 vs 期望 20——48s 采样预算与 76 号真实节拍不匹配，或起手-结算语义需原生分析（evidence=`outputs/test_logs/r4_cadence_76.json`）。**归因：业务采样课题，非 fixture/发布问题**
+- **阻断范围**：76 阻断其自身 cadence 验收；其余四项已解除
+- 迁移方式：`natural_cadence_base` 发布目标改走 `publish_targets`（publish 先于 player 前态捕获；原 AI/归因/扰动/时间窗逻辑零改动）
 
 ### F2. tests/skill_plan_single_resource_commit_test.tscn —— **已修复（2026-10-06 试点）**
 - 原失败模式：`Assertion failed: resource commit fixture must use the formal exact-ID mapped spawn`
