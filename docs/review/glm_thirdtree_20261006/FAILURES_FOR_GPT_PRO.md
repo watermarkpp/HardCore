@@ -164,5 +164,16 @@ adb logcat -c && adb install -r HardCore-v98-thirdtree-debug.apk && adb logcat -
 ### 已排除/已验证
 - 工作树启动链单测健康（brand_intro PASS、40+ 专项 PASS）；APK aapt/签名/内容校验全 PASS；非安装身份问题（同证书覆盖 PASS）。
 
+### 【Round 20 · Pro 机制已在本仓库字节级复现确认】
+- **现象收敛**：真机启动卡在 `STARTUP_DATA_GAME_DATA_FAILED`（`GameData.ensure_loaded()` 失败）——先于存档升级阶段，**不是存档损坏**。
+- **机制确认（主会话独立复现 Pro 的隔离实验，三重证据）**：
+  1. 登记值口径：`assets/data/runtime/entity_registry_v1.json` 对 `socketing_fixture_items.json` 登记哈希 = `ae2c7adb…23043`（LF blob，410B）；
+  2. 开发工作树磁盘 = 410B LF（`git ls-files --eol` = `i/lf w/lf`，**历史检出**）→ 工作树测试 PASS——**Round 19 主会话"排除嫌疑 2"的判定是错误的**：错在用开发树（LF 磁盘）验证口径自洽，而 APK 的 stage 是**当天新建的 worktree**；
+  3. 临时 worktree（autocrlf=true，模拟 stage）检出同文件 = **429B CRLF / `4f6e5e02…`**（与 Pro 实验字节级一致）≠ 登记值 → `identity_source_hash` 拒绝 → GameData 失败。**stage 的 15 个身份源 JSON 全部以 CRLF 进包，真机必炸。**
+- **根因定性**：`build_android_isolated.ps1` 的 stage worktree 检出未控制换行转换；`entity_registry` 等身份链按**原始字节**校验（这是正确的生产行为，不修改校验迁就错误包）。F8 的归一化修复只覆盖 code_preparation catalog 两道门，身份链数据校验（entity_registry/item_category/rune/socket/skill_data_loader）不在其中且**不应**用归一化放宽（Pro 明确：归一后匹配仍判失败）。
+- **修复方向（待协调后实施，当前暂停构建文件修改）**：stage 检出命令级 `-c core.autocrlf=false`（=纯 blob 字节落盘，LF 登记文件落 LF、i/crlf 文件落 CRLF，两类登记口径都自然匹配；不重生成哈希、不改游戏校验、平台无关）+ Pro 建议的严格哈希资产 `.gitattributes` 固定；正式门禁=stage 字节逐项一致才 import/export + APK 内再逐项一致。
+- **遗留排查（Pro 第五节）**：`internal_code_android_export_data.gd` 仍为 seal 占位（AVAILABLE=false）——v97 可玩说明 v97 构建链对该占位有既有处理方式，需沿第一树构建脚本查明，不得直接改 true 或跳过封印检查。
+- **用户侧纪律（Pro 指令，全遵守）**：不卸载重装、不清应用数据、不动真实存档；先验算现有 v98 包；旧 v98 保留为反例（新字节门禁必须能拒绝它）；RDC/Desktop Commander 恢复在线由用户侧操作。
+
 - 2026-10-06 v1：初版 F1-F7
 - 2026-10-06 v2：按 GPT-Pro 审查修正口径（三列/候选降级/撤回 F5 白名单建议/F4 探针实证/F8 降级待深挖/S3/S4 记账边界/audio 复核口径）
