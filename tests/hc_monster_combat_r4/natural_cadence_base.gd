@@ -11,6 +11,7 @@ extends Node
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 const DamageLedgerObserverScript := preload("res://scripts/damage_ledger_observer.gd")
 const VerifierScript := preload("res://tests/hc_monster_combat_r4/damage_attribution_verifier.gd")
+const WorldSkillFixture := preload("res://tests/helpers/formal_world_skill_fixture.gd")
 
 const SAMPLE_TARGET := 20
 const BOOT_BUDGET_S := 8.0
@@ -94,6 +95,28 @@ func _run() -> void:
 		get_tree().quit(1)
 		return
 
+	# Publish the cadence target through the real map-transition staged plan
+	# collection window (shared formal fixture) BEFORE capturing the player
+	# pre-state: the republication rebuilds the zone, so position, HP and the
+	# safe-zone context describe the world under test only afterwards. The
+	# spawn position keeps the original semantics — stationary mode inside
+	# admission reach, chase mode OUTSIDE the 1.5GU center reach.
+	var fixture_ground_anchor := Vector2(40.5, 13.5)
+	var fixture_anchor_screen: Vector2 = game._canonical_ground_gu_to_screen_px(fixture_ground_anchor)
+	var spawn_offset_px := 30.0 if not chase_mode else 200.0
+	var published: Array[EnemyActor] = await WorldSkillFixture.publish_targets(
+		self,
+		game,
+		[{
+			"id": _expected_monster_id(),
+			"position": fixture_anchor_screen + Vector2(spawn_offset_px, 0.0),
+			"respawn": -1.0,
+			"context": {"respawn_enabled": false, "spawn_slot_id": "test:r4-natural-cadence"},
+		}],
+		"r4 natural cadence fixture",
+	)
+	enemy = published[0]
+
 	player = game.player
 	player.set_physics_process(false)
 	player.max_hp = 100000
@@ -112,16 +135,6 @@ func _run() -> void:
 	DamageLedgerObserverScript.recording_enabled = true
 	DamageLedgerObserverScript.reset()
 	var boot_finished_ms := Time.get_ticks_msec()
-	# Stationary mode: spawn within admission reach. Chase mode: spawn
-	# OUTSIDE the 1.5GU center-admission reach and require real movement.
-	var spawn_offset_px := 30.0 if not chase_mode else 200.0
-	enemy = game._spawn_enemy(
-		GameData.get_monster_by_id(_expected_monster_id()),
-		fixture_screen + Vector2(spawn_offset_px, 0.0),
-		false,
-		-1.0,
-		{"respawn_enabled": false, "spawn_slot_id": "test:r4-natural-cadence"},
-	)
 	spawn_ok = enemy != null and enemy.combat_enabled and not bool(enemy.get_meta("body_policy_rejected", false))
 	if not spawn_ok:
 		failures.append("spawn_failed")
