@@ -33,13 +33,17 @@
 - **阻断范围**：已解除
 - **模式可复制**：F9-F11（canonical 系）与 F1/F3（cadence/natural 系）按同模式逐个迁移，每消费者单项执行验证——共享 helper 修复一次不代表全部消费者已 PASS
 
-### F3. tests/framework/natural_sustained_chain_test.tscn + tests/framework/natural_effect_lifecycle_test.tscn
-- 失败模式：`_spawn_enemy` 30 次全 null（targets=0）
-- **回归归因**：BASELINE_EXISTING（受控实验 5 轮：S1 父版本/HEAD 双复证 + 纯净基线；**实验范围=17 个 feature 文件字节还原**）
-- **当前正确性**：FAIL——**阻断自然 30 目标/35 秒要求的验收完成**（此前口径"不阻断 S5/S6"不成立：不阻断其他独立开发，但阻断以该测试证明自然要求已完成）
-- **阻断范围**：阻断自然验收（ledger 行 8 的验收声明同步降级）
+### F3. tests/framework/natural_sustained_chain_test.tscn + tests/framework/natural_effect_lifecycle_test.tscn —— **发布迁移完成；失败推进到 35 秒负载归因（2026-10-06）**
+- 原失败模式：`_spawn_enemy` 30 次全 null（targets=0）
+- **当前正确性（lifecycle 迁移后单跑）**：FAIL（129 checks / 8 失败）——但失败形态**质变**：
+  1. **发布修复生效**：30 目标真实出生、nonoverlap 通过、AI 活跃（monster_movement>1）、玩家被真实攻击（hp 下降）、23 次施法经正式入口接受、states 真实产生（峰值 30）
+  2. **发现的独立 S1 REGRESSION（已修，498680579）**：replacement 路径无条件写 `state_loan_origin` 而 `state_loan_handles` 仅 chain 非空时存在 → 后续替换 erase 缺键崩溃（25 次）。修复=对齐 fresh 路径守卫，states 会计不变。**该崩溃类已从日志完全消失**
+  3. **剩余 8 项失败的同源主因（精确归因）**：30 只怪 AI 围攻 → 玩家受击锁（StruckTime=100ms 历史合同 + 受击反应锁，scripts/player.gd L60-63/123-125）在 ~15 击/秒下近乎全覆盖 → **memory_checkpoints 时间线证实**：t=5s states=29（怪接近中，施法顺畅）→ t=10s 26 → t=15s 15 → t=20s 10 → t=25s 6（怪到位后施法吞吐≈0）→ 死亡仅 5/30；90 states/三源覆盖/排空/纹理请求/死亡信号等 7 项均为死亡数不足的连锁次生失败
+- **回归归因**：**非迁移引入；F3 历史口径（第二轮 24/30）从未 PASS**——30 怪围攻下固定 2 方向往复移动的施法吞吐在真实受击合同下结构性不可能完成 30 击杀/90 并发 states——测试负载设计与真实战斗合同的冲突第一次被完整暴露
+- **待裁决选项**（GPT Pro/用户）：A. 风筝式移动脚本（拉开距离减受击、模拟真实玩家操作、不改怪物数量/时限/AI——**最合法方向**）；B. 受击锁豁免（=mock 生产路径，违反纪律）；C. 重新校准 30 死亡期望（需明确合同变更依据）；D. 接受当前形态为"真实负载结构性发现"记档
+- **阻断范围**：natural 系两场自然验收；不阻断其他源码工作；**35 秒时限与怪物数量未动**
 - 已排除：S3 scene_epoch 机制；S1 编译断裂（已修）
-- 修复路径：同 F2（正式发布入口），保留完整 30 目标计划一次发布、同世界连续轮次、原 HP/输入节拍/35 秒、真实 AI
+- 修复路径：发布入口迁移已完成（30 目标一次发布、同世界连续轮次、原 HP/输入节拍/35 秒、真实 AI 全保留）；余项取决于上述裁决
 
 ### F4. tests/bich_area_test.tscn —— **根因已确证（本版本更新）**
 - 失败模式（原测试，保留为 RED 记录）：`Assertion failed: 一层编辑器怪物配置未完整加载`，诊断 `enemies=0 expected=40`
