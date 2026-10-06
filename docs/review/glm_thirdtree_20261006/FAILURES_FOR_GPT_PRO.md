@@ -70,13 +70,15 @@
 ### F7. 旧 V3/V4 Windows 性能失败（第二树遗产）
 - 不可比（不同语义 source）；本树已有 `feature_residency_latency_distribution_test` 的**结构性调度测量**（见下"口径边界"）
 
-### F8. tests/brand_intro_test.tscn —— 归因待深挖（v2 降级）
-- 失败模式：`Assertion failed: real main-scene prefetch did not settle successfully: {contract_id: startup.loading.main_scene_prefetch.v1, attempted: true, accepted: false, status: "pre...（截断）`（brand_intro_test.gd:207）
+### F8. tests/brand_intro_test.tscn —— **失败环节已定位（2026-10-06，221dbc04e）**
+- 失败模式：`Assertion failed: real main-scene prefetch did not settle successfully: {...status: "failed", request_count: 0, get_count: 0, code_preparation.state: "cancelled_or_rejected", _test_observation: {...}}`（brand_intro_test.gd:93 区段）
 - **回归归因**：BASELINE_EXISTING（17 文件受控实验基线同败）
-- **当前正确性**：FAIL——但 **accepted=false 不必然等于申请被拒**：生产预取链为 `_begin_main_scene_prefetch → attempted=true → status="preparing_code" → deferred 准备 → 检查实际 retention → 申请/复用 main.tscn → accepted=true`，而测试 `_wait_for_main_scene_prefetch` 最多等 240 个 process 帧——窗口结束时若仍 `preparing_code`，返回的是**未终态诊断**
-- **候选原因（未裁决）**：①240 帧不足以等到真实准备完成；②准备因真实错误失败；③owner/retention 失效；④main 资源请求真正被拒
-- **下一步**：补完整状态轨迹（wall 时间、process epoch、generation、status、code_preparation 错误、原 request/get 计数），按真实终态判断；正式等待按终态而非帧数；测试不得自行 get 结果改写 diagnostic 充当生产成功
-- **阻断范围**：阻断 brand_intro 自身与启动验收的相关子项
+- **当前正确性**：FAIL——但归因已按 GPT Pro 指令闭合到具体环节：
+  1. **等待机制已按指令重写**：240 帧上限 → 30s 墙钟 + 真实终态即刻返回；测试侧不再 `load_threaded_get` 自行收尾/改写 diagnostic（原 teardown 行为已删除）；每次状态变化记录 `{wall_ms, process_frames, status, attempted, accepted, request_count, get_count, native_owned, code_preparation_state}` 轨迹并随诊断返回
+  2. **轨迹给出决定性证据**：30s 内到达**真实终态 `failed`**，`code_preparation.state = "cancelled_or_rejected"`，`request_count=0`——**内部代码准备链（ContentLayers `prepare_internal_code_entry` / `request_internal_prepared_script`）在 intro 环境内取消或拒绝**，从未到达场景请求提交（`_submit_prepared_main_scene_prefetch` 未执行）
+  3. **"240 帧窗口不够"假设关闭**；"owner/retention 失效"降级为次级候选（retention 检查在 _submit 内，未到达）
+- **下一步**：读 ContentLayers 两个函数的取消/拒绝条件（generation 比对、lease/retention 判定、intro 环境下的具体输入），区分"被正常关闭（generation 推进）"与"真实错误"
+- **阻断范围**：brand_intro 自身与启动验收相关子项
 
 ### F9. tests/canonical_skill_production_entry_test.tscn —— **已修复（2026-10-06）**
 - 原失败模式：`formal exact-ID mapped spawn` → 连锁 current_hp on Nil
