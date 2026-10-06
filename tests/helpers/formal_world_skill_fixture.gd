@@ -7,6 +7,7 @@ extends RefCounted
 const FIXTURE_GROUND_POSITION := Vector2(40.5, 13.5)
 const CASTER_GROUND_OFFSET := Vector2(-2.0, 0.0)
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
+const FormalInitialReady := preload("res://tests/helpers/formal_initial_ready.gd")
 
 
 static func target_screen_position(game: Node) -> Vector2:
@@ -144,13 +145,15 @@ static func prepare_published_target_set(
 
 
 static func wait_for_formal_world(owner: Node, game: Node, label: String) -> void:
-	var deadline_ms: int = Time.get_ticks_msec() + 5000
-	while Time.get_ticks_msec() < deadline_ms:
-		var current_map_id: int = int(game.get("current_map_id"))
-		var input_enabled: bool = bool(game.call("gameplay_input_is_enabled"))
-		if current_map_id >= 0 and input_enabled:
-			break
-		await owner.get_tree().process_frame
+	# 2026-10-06 fixture migration: the original five-second poll predated the
+	# staged asynchronous bootstrap and failed before any publication logic.
+	# The shared helper now waits for the full formal initial-READY contract;
+	# its 60s ceiling is the production fail-safe window, not a startup
+	# performance PASS threshold (startup stays OPEN / PRODUCT SLA MISSING).
+	# The original assertion set below is kept unchanged. The separate
+	# republication deadline inside publish_targets() is a different contract
+	# and is intentionally untouched.
+	await FormalInitialReady.wait_for_initial_ready(owner, game, label)
 	assert(
 		int(game.get("current_map_id")) == GameData.service_runtime_map_id(0),
 		"%s must wait for the formal mapped world" % label,

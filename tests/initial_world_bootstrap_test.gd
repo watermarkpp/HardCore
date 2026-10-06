@@ -1,5 +1,7 @@
 extends Node
 
+const FormalInitialReady := preload("res://tests/helpers/formal_initial_ready.gd")
+
 
 func _ready() -> void:
 	_run.call_deferred()
@@ -12,8 +14,12 @@ func _run() -> void:
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	assert(game != null, "Game root scene failed to instantiate")
 	add_child(game)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	# 2026-10-06 fixture migration: the old two-frame assumption predated the
+	# staged asynchronous bootstrap. Wait for the full formal initial-READY
+	# contract; the 60s ceiling is the production fail-safe window, not a
+	# startup-performance PASS threshold (OPEN / PRODUCT SLA MISSING). Every
+	# original business assertion below is kept unchanged.
+	await FormalInitialReady.wait_for_initial_ready(self, game, "initial_world_bootstrap")
 
 	var home_map_id := GameData.service_runtime_map_id(0)
 	var home_position: Vector2 = game._bich_home_screen_position_px()
@@ -29,7 +35,13 @@ func _run() -> void:
 	assert(game.player.global_position.is_equal_approx(home_position), "Bootstrap should spawn player at service-home anchor")
 
 	game.player.set_touch_vector(Vector2.RIGHT)
-	await get_tree().process_frame
+	# movement_input_active is owned by _physics_process (player.gd). The
+	# physics_frame signal fires at the START of a physics step, so crossing
+	# two boundaries is the minimum window that guarantees one completed
+	# physics tick after the input was set; the headless process rate is not
+	# coupled to the physics tick. The assertion itself is unchanged.
+	await get_tree().physics_frame
+	await get_tree().physics_frame
 	assert(game.player.movement_input_active, "Player input should become active after bootstrap")
 	game.player.set_touch_vector(Vector2.ZERO)
 	await get_tree().process_frame

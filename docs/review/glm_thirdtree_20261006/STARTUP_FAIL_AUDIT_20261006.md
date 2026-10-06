@@ -96,15 +96,18 @@ ground ready、home 锚点）与当前 READY 合同一致，需要更新的是**
 - 实测生产 input enabled 最早时刻：热跑 8371ms / 冷跑 10889ms —— **均 > 5000ms**。
 - 失败发生在任何发布/容量/召唤断言之前（云端 minimal_observed_reason 同结论）。
 
-### 2.3 与同 helper PASS 场景的分化解释
+### 2.3 与同 helper PASS 场景的分化解释（2026-10-06 Pro 复审修正）
 
-云端 birth direct 轮（fixed SHA 67aaa55f）中 `published_descriptor_preflight_test`
-（11 checks）与 `published_summon_issuance_test`（44 checks）使用**同一个**
-`wait_for_formal_world` 且 PASS；`monster_summon_formal_birth_test` 在 startup 轮
-（冷启动/不同编排）两轮 FAIL。结合本地热/冷 8.4~10.9 秒的波动：
-READY 时刻在 5 秒窗口边缘附近受资源冷热与编排影响，5 秒不是当前生产的确定性
-完成边界——同一 helper 出现"有的场景过、有的场景不过"正是窗口不足的表现，
-不是某个场景特有的生产缺陷。
+初版报告曾把 preflight/issuance 的 PASS 当作"READY 有时低于 5 秒"的证据。
+Pro 复审指出该论据错误，本节已更正：`published_descriptor_preflight_test`（第 26-27 行）
+与 `published_summon_issuance_test`（第 18-19 行）在调用 `wait_for_formal_world`
+**之前**已各自等待最多 20 秒直到 `gameplay_input_is_enabled()`，因此它们的
+PASS 证明的是"READY ≤ 20 秒（framework20seconds）"，**不能**证明初始 READY
+有时低于 5 秒；该论据删除，最终 fixture-stale 定性不变。
+定性依据改为独立的 READY 时间线实测（本文 1.3 与第 5.3 节）：生产 input
+enabled 最早时刻实测 8163~10889ms（多轮冷/热），**恒大于** helper 的 5000ms
+deadline，5 秒窗口必然不足；失败发生在任何出生/容量断言之前（云端
+minimal_observed_reason 同结论）。
 
 ### 2.4 定性
 
@@ -114,21 +117,13 @@ READY 时刻在 5 秒窗口边缘附近受资源冷热与编排影响，5 秒不
 "published base 出生计划 + SummonQueue 一次资格"主体断言（40+ checks）
 在两轮云端与本次本地运行中都**从未被执行**。
 
-## 3. 结论与建议（不执行）
+## 3. 结论与建议
 
 - 结论：`initial_world_bootstrap_test` 与 `monster_summon_formal_birth_test` 的
   startup FAIL 均为 **fixture contract stale**；无生产 defect 证据，无 insufficient
   evidence 保留项（生产 60 秒合同、READY 时间线、预热预算均有实测数据）。
-- 建议的后续修复方向（需另立施工任务、按 RED→GREEN 走）：
-  1. 两个 fixture 的完成条件统一迁移到正式 READY 合同：
-     `current_map_id == service_runtime_map_id(0)` 且
-     `WorldBootstrapCoordinator.Stage.READY` 且 `_map_transition_in_progress == false`
-     且 `gameplay_input_is_enabled()`，等待上限对齐生产合同（60 秒），
-     并保留超时即 FAIL 的门禁属性；
-  2. 不删减任一现有断言；不缩短、不放宽任何业务期限；
-  3. fixture 修改后，两个场景的 PASS 必须与 `cloud_birth_20261005` 的
-     birth direct 11 场景/210 checks、mixed 380 checks 在同一 fixed SHA 下重新闭环，
-     原 FAIL 证据保留。
+- 建议的修复方向已于 2026-10-06 按 Pro 复审授权执行（fixture migration，只改
+  测试不改生产），结果见第 5 节。
 
 ## 4. 证据清单
 
@@ -139,3 +134,78 @@ READY 时刻在 5 秒窗口边缘附近受资源冷热与编排影响，5 秒不
   `docs/review/cloud_birth_20261005/PRO_AUDIT_REQUEST.md`（问题 5 与本审计直接对应）
 - 原字节修复记录：本文第 0 节；受影响文件清单
   `assets/data/runtime/entity_registry_v1.json` `source_hashes` 的 15 个路径。
+
+## 5. Fixture migration 结果（2026-10-06，Pro 复审授权：只改测试，不改生产）
+
+### 5.1 修改文件（完整 diff 范围）
+
+- 新增 `tests/helpers/formal_initial_ready.gd`：正式初始 READY 合同等待
+  （四条件：service home runtime map 正确、`WorldBootstrapCoordinator.Stage.READY`、
+  `_map_transition_in_progress == false`、`gameplay_input_is_enabled() == true`）；
+  60 秒仅为生产 fail-safe ceiling（`INITIAL_WORLD_BOOTSTRAP_TIMEOUT_MSEC`），
+  明确不是启动性能 PASS 门槛，超时仍 assert FAIL。
+- `tests/helpers/formal_world_skill_fixture.gd`：`wait_for_formal_world` 的旧
+  5 秒轮询替换为共享 helper 调用；原 assert 序列（mapped world / READY input /
+  safe-zone context）逐条保留。`publish_targets()` 内 republication 自己的
+  5 秒 deadline（第 50-57 行）为不同合同，**未触碰**。
+- `tests/initial_world_bootstrap_test.gd`：旧"两个 process frame"假设替换为
+  共享 helper 等待；其后全部业务断言保留。其中
+  "Player input should become active after bootstrap"断言的观察点由
+  "1 个 process 帧"修正为"跨越两个 `physics_frame` 边界"——`movement_input_active`
+  的真实所有者是 `_physics_process`（player.gd:325），`physics_frame` 信号在
+  物理步开始时发出，跨两个边界才是"一次已完成物理 tick 后观察"；断言文本与
+  语义未变（原假设在 headless 下 process 帧率与物理 tick 解耦时永不满足）。
+- 生产源码（game_root/coordinator/出生逻辑/资源流程/怪物数量/业务 deadline/
+  正式玩法参数）：**零修改**。
+
+### 5.2 逐场 run/source/receipt/exit（全部在同一迁移后源码上单项运行）
+
+| 场景 | checks | 结果 | runner receipt（outputs/test_logs/） | exit |
+|---|---|---|---|---|
+| initial_world_bootstrap_test | 断言式 | PASS | runner_results_adhoc_20261006_104746_528_17212.json | 0 |
+| monster_summon_formal_birth_test | 断言式 | PASS | runner_results_adhoc_20261006_104816_590_10660.json | 0 |
+| published_descriptor_preflight_test | 11 | PASS | runner_results_adhoc_20261006_104851_826_14188.json | 0 |
+| published_summon_issuance_test | 44 | PASS | runner_results_adhoc_20261006_104916_554_3952.json | 0 |
+| published_world_birth_guard_test | 13 | PASS | runner_results_adhoc_20261006_104958_319_15192.json | 0 |
+| published_monster_inputs_test | 7 | PASS | runner_results_adhoc_20261006_105020_961_17800.json | 0 |
+| feature_birth_slot_identity_test | 11 | PASS | runner_results_adhoc_20261006_105038_310_1588.json | 0 |
+| feature_world_capacity_bound_test | 15 | PASS | runner_results_adhoc_20261006_105100_694_10024.json | 0 |
+| published_world_failure_recovery_test | 19 | PASS | runner_results_adhoc_20261006_105119_928_11528.json | 0 |
+| published_environment_failure_recovery_test | 11 | PASS | runner_results_adhoc_20261006_105154_067_20472.json | 0 |
+| published_queue_generation_takeover_test | 13 | PASS | runner_results_adhoc_20261006_105202_029_19420.json | 0 |
+| feature_admission_release_test | 27 | PASS | runner_results_adhoc_20261006_105227_607_17932.json | 0 |
+| combined_effect_lifecycle_test | 39 | PASS | runner_results_adhoc_20261006_105250_362_9352.json | 0 |
+| feature_mixed_delivery_test | 380 | PASS | runner_results_adhoc_20261006_105339_030_8348.json | 0 |
+
+- birth direct 11 场 checks 合计 = **210**，与 `cloud_birth_20261005`
+  EVIDENCE_INDEX fixed_candidate 基准逐场一致；mixed = **380** 一致。
+- 全部场景 `stderr_failures=0;engine_log_errors=0`，正式 runner 退出 0。
+- 受测源码为同一迁移后工作树（测试文件 3 个 + 新 helper 1 个，生产零修改），
+  commit SHA 见推送记录。
+
+### 5.3 启动耗时记录（非 PASS 门槛；状态：OPEN / PRODUCT SLA MISSING）
+
+诊断脚本 `outputs/diag_ready_timeline_20261006.gd/.tscn`（ignored），
+headless + 隔离 APPDATA，观察 `_world_bootstrap_coordinator` stage 与 input enabled：
+
+- 首次启动（环境修复后首跑）：`bootstrap_dispatch` 4226.8ms 开始
+  （`hud_attach_and_ready` 3907ms 为主），READY = **10889ms**。
+- 正式记录冷启动（新 userdata）：`bootstrap_dispatch` 551.8ms，READY = **8513ms**。
+- 正式记录热启动（复用 userdata）：READY = **8163ms**。
+- `[LOADING-TOTAL]` stage breakdown（transition pipeline，冷/热轮）：
+  COLLECT 341/330、REQUEST 366/352、WAIT 516/498、BUILD_MAP 516/498、
+  BUILD_COLLISION 520/501、SPAWN_ACTORS 521/502、FINALIZE 1623/1534
+  （内含 monster_prefetch 341/330、ui_panels 2604/2376）；
+  每轮 `prewarm_deadline_exceeded=false`、`catalog_icon_prewarm_complete=true`。
+- 以上仅记录实际耗时；**启动性能状态保持 `OPEN / PRODUCT SLA MISSING`**，
+  60 秒 ceiling 不是也不构成启动性能 PASS。
+
+### 5.4 原 FAIL 与新结果对应
+
+| 原 FAIL（云端 fixed-SHA 两轮 repeat） | 原因 | 迁移后 |
+|---|---|---|
+| initial_world_bootstrap_test exit 137：`Bootstrap should not keep map transition open`（bootstrap.gd:24） | 2 帧假设早于异步 READY（约 8.2~10.9s） | PASS（同断言集在 READY 后全部通过） |
+| monster_summon_formal_birth_test exit 137：`summon_cap_birth must wait for READY input`（formal_world_skill_fixture.gd:158） | 5 秒 helper deadline 早于异步 READY | PASS（出生/容量/召唤断言首次真实执行并通过） |
+
+原 FAIL 的原始证据保留于 `docs/review/cloud_birth_20261005/EVIDENCE_INDEX.json`
+（fixed_candidate 节）与本文第 1/2 节，未改写、未删除。
