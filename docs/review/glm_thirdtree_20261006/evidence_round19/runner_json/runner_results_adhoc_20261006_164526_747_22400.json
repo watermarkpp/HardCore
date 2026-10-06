@@ -1,0 +1,40 @@
+{
+  "passed": 1,
+  "failed": 0,
+  "git_head": "1133e97dbcc6a7355a8eee929506b7f995a5a235",
+  "engine_log_errors": 0,
+  "generated_at": "2026-10-06T16:45:26.7475945+08:00",
+  "runtime_environment": {
+    "project_root": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata",
+    "runner_process_id": 22400
+  },
+  "invocation_id": "9797461e-e71e-483f-9495-7f4b9e08780a",
+  "suite": "adhoc",
+  "results": [
+    {
+      "test_name": "natural_cadence_238_test",
+      "test_path": "tests/hc_monster_combat_r4/natural_cadence_238_test.tscn",
+      "wrapper_process_id": 4692,
+      "wrapper_started_utc": "2026-10-06T08:44:38.1887034Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata",
+      "fixed_fps": 0,
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-06T08:45:38.2050487Z",
+      "native_exit_observed_utc": "2026-10-06T08:45:25.1931764Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "",
+      "framework_receipt_valid": null,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "total": 1
+}

@@ -1,0 +1,40 @@
+{
+  "engine_log_errors": 0,
+  "total": 1,
+  "runtime_environment": {
+    "project_root": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata",
+    "runner_process_id": 21780
+  },
+  "invocation_id": "9a3af632-d2b3-40d3-8f9d-eff1eeac1c63",
+  "results": [
+    {
+      "test_name": "natural_sustained_chain_test",
+      "test_path": "tests/framework/natural_sustained_chain_test.tscn",
+      "wrapper_process_id": 17424,
+      "wrapper_started_utc": "2026-10-06T09:07:45.1762160Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata",
+      "fixed_fps": 0,
+      "pass_marker_found": false,
+      "process_exited": true,
+      "wrapper_exit_code": 1,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-06T09:09:15.1889436Z",
+      "native_exit_observed_utc": "2026-10-06T09:08:36.0928729Z",
+      "effective_exit_code": 1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "8d303d1d-0808-4f84-9a01-cb9b656d60a6",
+      "framework_receipt_valid": false,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+    }
+  ],
+  "suite": "adhoc",
+  "git_head": "be92f2775235f7e30daa346af04dd504d3037f00",
+  "failed": 1,
+  "passed": 0,
+  "generated_at": "2026-10-06T17:08:37.3157852+08:00"
+}

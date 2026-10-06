@@ -1,0 +1,40 @@
+{
+  "failed": 0,
+  "runtime_environment": {
+    "project_root": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata",
+    "runner_process_id": 11528
+  },
+  "results": [
+    {
+      "test_name": "natural_cadence_24_test",
+      "test_path": "tests/hc_monster_combat_r4/natural_cadence_24_test.tscn",
+      "wrapper_process_id": 8216,
+      "wrapper_started_utc": "2026-10-06T08:47:22.5154567Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata",
+      "fixed_fps": 0,
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-06T08:48:52.5310020Z",
+      "native_exit_observed_utc": "2026-10-06T08:48:40.0884628Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "",
+      "framework_receipt_valid": null,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "generated_at": "2026-10-06T16:48:41.4672630+08:00",
+  "suite": "adhoc",
+  "engine_log_errors": 0,
+  "total": 1,
+  "passed": 1,
+  "invocation_id": "de13f51f-6c3f-4f2e-b21b-3bd193e40e7e",
+  "git_head": "1133e97dbcc6a7355a8eee929506b7f995a5a235"
+}
