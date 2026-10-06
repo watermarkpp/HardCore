@@ -252,7 +252,7 @@ try {
         # i/crlf sources land as CRLF - every registered hash then matches.
         # Git's normal progress is stderr, not a PowerShell terminating error.
         # Retain both streams and use the actual native exit status.
-        $GitCreate = Start-Process -FilePath 'git.exe' -ArgumentList @('-c','core.autocrlf=false','-C',('+$ProjectRoot+'),'worktree','add','--detach',('+$StagePath+'),$ResolvedCommit) -RedirectStandardOutput ($StagePath + '.create.stdout.log') -RedirectStandardError ($StagePath + '.create.stderr.log') -PassThru -Wait -WindowStyle Hidden
+        $GitCreate = Start-Process -FilePath 'git.exe' -ArgumentList @('-c','core.autocrlf=false','-C',([char]34+$ProjectRoot+[char]34),'worktree','add','--detach',([char]34+$StagePath+[char]34),$ResolvedCommit) -RedirectStandardOutput ($StagePath + '.create.stdout.log') -RedirectStandardError ($StagePath + '.create.stderr.log') -PassThru -Wait -WindowStyle Hidden
         if ($GitCreate.ExitCode -ne 0) {
             throw ("Unable to create isolated build worktree, exit={0}; see {1}.create.stderr.log" -f $GitCreate.ExitCode, $StagePath)
         }
