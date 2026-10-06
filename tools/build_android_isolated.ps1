@@ -111,6 +111,32 @@ function Assert-AndroidSplashTheme {
     Write-Output "ANDROID_SPLASH_THEME_VERIFY_PASS"
 }
 
+function Invoke-AndroidNativeCommand {
+    param([string]$FilePath, [string[]]$ArgumentList, [string]$StdoutPath, [string]$StderrPath)
+    # Keep native streams as original bytes. PowerShell 5 native stderr is not
+    # an exception and is not proof of failure: use the actual exit + log gates.
+    $info = New-Object System.Diagnostics.ProcessStartInfo
+    $info.FileName = $FilePath
+    $info.Arguments = $ArgumentList -join ' '
+    $info.UseShellExecute = $false
+    $info.CreateNoWindow = $true
+    $info.RedirectStandardOutput = $true
+    $info.RedirectStandardError = $true
+    $process = New-Object System.Diagnostics.Process
+    $process.StartInfo = $info
+    $out = [IO.File]::Open($StdoutPath, [IO.FileMode]::Create, [IO.FileAccess]::Write, [IO.FileShare]::Read)
+    $err = [IO.File]::Open($StderrPath, [IO.FileMode]::Create, [IO.FileAccess]::Write, [IO.FileShare]::Read)
+    try {
+        if (-not $process.Start()) { throw 'Unable to start native Android build command.' }
+        $outCopy = $process.StandardOutput.BaseStream.CopyToAsync($out)
+        $errCopy = $process.StandardError.BaseStream.CopyToAsync($err)
+        $process.WaitForExit()
+        [void]$outCopy.GetAwaiter().GetResult()
+        [void]$errCopy.GetAwaiter().GetResult()
+        return [int]$process.ExitCode
+    } finally { $out.Dispose(); $err.Dispose(); $process.Dispose() }
+}
+
 function Read-GitUtf8Blob {
     param([string]$Revision, [string]$RelativePath)
     # Git emits blob bytes as UTF-8, independently of the Windows console locale.
@@ -408,8 +434,7 @@ try {
         Write-Output "IDENTITY_BYTE_GATE PASS files=$($IdentityEntries.Count)"
 
         & (Join-Path $StageProjectPath 'tools/verify_wall_render_bindings.ps1') -ProjectRoot $StageProjectPath
-        & $GodotConsole --headless --path $StageProjectPath --log-file $ImportLog --import
-        $ImportExitCode = $LASTEXITCODE
+        $ImportExitCode = Invoke-AndroidNativeCommand -FilePath $GodotConsole -ArgumentList @('--headless','--path',([char]34+$StageProjectPath+[char]34),'--log-file',([char]34+$ImportLog+[char]34),'--import') -StdoutPath ($ImportLog+'.stdout') -StderrPath ($ImportLog+'.stderr')
         if ($ImportExitCode -ne 0) {
             # On a fresh checkout, Godot can finish the full import and then
             # return a nonzero exit status while closing its first editor run.
@@ -421,10 +446,20 @@ try {
             }
             $ImportRetryLog = Join-Path $StageProjectPath "outputs\android_isolated_import_retry.log"
             Write-Warning "Fresh isolated import completed but exited $ImportExitCode; retrying once with the same imported cache."
-            & $GodotConsole --headless --path $StageProjectPath --log-file $ImportRetryLog --import
-            $ImportExitCode = $LASTEXITCODE
+            $ImportExitCode = Invoke-AndroidNativeCommand -FilePath $GodotConsole -ArgumentList @('--headless','--path',([char]34+$StageProjectPath+[char]34),'--log-file',([char]34+$ImportRetryLog+[char]34),'--import') -StdoutPath ($ImportRetryLog+'.stdout') -StderrPath ($ImportRetryLog+'.stderr')
             if ($ImportExitCode -ne 0) {
                 throw "Godot isolated import retry failed. Logs: $ImportLog, $ImportRetryLog"
+            }
+        }
+        $ImportEvidenceLogs = @($ImportLog, ($ImportLog+'.stderr'))
+        if (Test-Path -LiteralPath (Join-Path $StageProjectPath 'outputs/android_isolated_import_retry.log')) {
+            $ImportEvidenceLogs += (Join-Path $StageProjectPath 'outputs/android_isolated_import_retry.log')
+            $ImportEvidenceLogs += (Join-Path $StageProjectPath 'outputs/android_isolated_import_retry.log.stderr')
+        }
+        foreach ($ImportEvidenceLog in $ImportEvidenceLogs) {
+            if (Test-Path -LiteralPath $ImportEvidenceLog) {
+                $ImportEvidenceText = [IO.File]::ReadAllText($ImportEvidenceLog, [Text.Encoding]::UTF8)
+                if ($ImportEvidenceText -match '(?m)^(SCRIPT ERROR:|ERROR:)') { throw "Native import contains a real error: $ImportEvidenceLog" }
             }
         }
         # Two-pass Android seal export (GPT Pro directive 2026-10-06, promoted
