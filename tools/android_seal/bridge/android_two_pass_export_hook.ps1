@@ -24,20 +24,45 @@ function Assert-CodeExportSigner([string]$Apk, [string]$BaselineApk, [string]$Ap
     return @{status='PASS'; certificate_sha256=$CandidateIds; apk_sha256=(Get-CodeExportHash $Apk); apksigner_sha256=(Get-CodeExportHash $ApkSigner)}
 }
 
+function Invoke-CodeExportProcess {
+    param([string]$Executable, [string[]]$Arguments, [string]$Stdout, [string]$Stderr)
+    # Keep native streams as original bytes. PowerShell 5 native stderr is not
+    # an exception and is not proof of failure: use the actual exit + log gates.
+    $info = New-Object System.Diagnostics.ProcessStartInfo
+    $info.FileName = $Executable
+    $info.Arguments = $Arguments -join ' '
+    $info.UseShellExecute = $false
+    $info.CreateNoWindow = $true
+    $info.RedirectStandardOutput = $true
+    $info.RedirectStandardError = $true
+    $process = New-Object System.Diagnostics.Process
+    $process.StartInfo = $info
+    $out = [IO.File]::Open($Stdout, [IO.FileMode]::Create, [IO.FileAccess]::Write, [IO.FileShare]::Read)
+    $err = [IO.File]::Open($Stderr, [IO.FileMode]::Create, [IO.FileAccess]::Write, [IO.FileShare]::Read)
+    try {
+        if (-not $process.Start()) { throw 'Unable to start native Android build command.' }
+        $outCopy = $process.StandardOutput.BaseStream.CopyToAsync($out)
+        $errCopy = $process.StandardError.BaseStream.CopyToAsync($err)
+        if (-not $process.WaitForExit(600000)) { $process.Kill(); $process.WaitForExit(); throw 'Native Android export timed out.' }
+        [void]$outCopy.GetAwaiter().GetResult()
+        [void]$errCopy.GetAwaiter().GetResult()
+        return [int]$process.ExitCode
+    } finally { $out.Dispose(); $err.Dispose(); $process.Dispose() }
+}
+
 function Invoke-CodeOfficialExport([string]$GodotConsole, [string]$StageRoot, [string]$Apk, [string]$EvidenceRoot, [string]$Name) {
     $Log = Join-Path $EvidenceRoot "$Name.engine.log"
     $Stdout = Join-Path $EvidenceRoot "$Name.stdout.log"
     $Stderr = Join-Path $EvidenceRoot "$Name.stderr.log"
     # Quotes are required for stage/log paths with spaces. No shell evaluation.
-    $Process = Start-Process -FilePath $GodotConsole -ArgumentList @('--headless','--path',('"'+$StageRoot+'"'),'--log-file',('"'+$Log+'"'),'--export-debug','Android',('"'+$Apk+'"')) -RedirectStandardOutput $Stdout -RedirectStandardError $Stderr -WindowStyle Hidden -PassThru
-    if (-not $Process.WaitForExit(600000)) { $Process.Kill(); throw "Export timed out: $Name" }
-    if ($Process.ExitCode -ne 0 -or -not (Test-Path -LiteralPath $Apk -PathType Leaf)) { throw "Native export failed: $Name exit=$($Process.ExitCode)" }
+    $NativeExit = Invoke-CodeExportProcess -Executable $GodotConsole -Arguments @('--headless','--path',('+$StageRoot+'),'--log-file',('+$Log+'),'--export-debug','Android',('+$Apk+')) -Stdout $Stdout -Stderr $Stderr
+    if ($NativeExit -ne 0 -or -not (Test-Path -LiteralPath $Apk -PathType Leaf)) { throw "Native export failed: $Name exit=$NativeExit" }
     # Imported media source bytes are audited runtime inputs. Both passes use
     # the same post-export injection, alignment and existing certificate BEFORE
     # the APK identity is captured; no unsigned or stale pre-injection hash.
     & (Join-Path $PSScriptRoot 'inject_sources_resign.ps1') -ApkPath $Apk -StageRoot $StageRoot *> (Join-Path $EvidenceRoot ($Name + '.source_injection.log'))
     if ($LASTEXITCODE -ne 0) { throw "Owned source injection/signing failed: $Name" }
-    return @{native_exit=$Process.ExitCode; apk=$Apk; apk_sha256=(Get-CodeExportHash $Apk); engine_sha256=(Get-CodeExportHash $GodotConsole); log=$Log; stdout=$Stdout; stderr=$Stderr}
+    return @{native_exit=$NativeExit; apk=$Apk; apk_sha256=(Get-CodeExportHash $Apk); engine_sha256=(Get-CodeExportHash $GodotConsole); log=$Log; stdout=$Stdout; stderr=$Stderr}
 }
 
 function Invoke-TwoPassAndroidCodeExport {
