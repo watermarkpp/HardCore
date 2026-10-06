@@ -19,7 +19,7 @@
 | 8 | 35 秒自然六目标 FAIL 因果 | 旧 73452a… 原件 FAIL 保留（第二轮 24/30） | 归因材料 S4 补 | 73452a…（原件，不改写） | **FAIL（旧合同原件）**；S4 因果 NOT_RUN | S4；不得一边改 DOT 一边归因 |
 | 9 | Windows 持续性能（P50/P95/P99、due 迟到、队列年龄） | 旧 V3/V4 FAIL 属第二树不同语义 source | 待 S4 同机对照 | 待 S4 冻结 | **OPEN** | S4 |
 | 10 | P0-P6 总账与统一回归（critical 逐项单项） | 部分历史证据；总账待建 | S5 | 待 S5 冻结 | **NOT_RUN** | S5 |
-| 11 | APK 构建（包名/版本/签名/内容闭包） | preset=Android/Gradle/arm64-v8a、`com.personal.mafaoffline`、version/code=82（**不得冒充升级**） | S6 实测 | 待冻结候选 | **NOT_RUN**；versionCode 必须实测旧包后取更大值 | 签名材料/工具链盘点进行中（S0-B） |
+| 11 | APK 构建（包名/版本/签名/内容闭包） | preset=Android/Gradle/arm64-v8a、`com.personal.mafaoffline`、version/code=82（**S6 改 ≥98**，旧包实测最高 97） | S6 实测 | 待冻结候选 | 前置核对 **PASS**（工具链全 HAVE，见 S0B_APK_PREREQ_20261006.md）；构建 **NOT_RUN** | release keystore MISSING（仅阻断 release 正式包）；debug 测试包不阻断 |
 | 12 | 设备回测 | 无 | S7 | — | **NOT_RUN**（需用户授权） | 全部设备分项 |
 | 13 | v97 B 角色背包故障 | 输入 MISSING | — | — | **MISSING**（输入），修复 NOT_RUN | 仅该故障自身；不阻断 APK 交付 |
 
