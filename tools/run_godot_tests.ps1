@@ -1096,6 +1096,28 @@ $Suites.source176_r3 = @($Source176R3StableGates + $Source176R3Scenes | Select-O
 $Suites.monster = @($Suites.monster + $UserFeedbackGates | Select-Object -Unique)
 $Suites.critical = @($Suites.critical + $UserFeedbackGates | Select-Object -Unique)
 
+# 2026-10-06 third-tree architecture closeout (baseline 272430b36): register
+# the new structural proofs — the S2 capacity trifold and birth-closure
+# combination, the S3 resource scene-change immediate failure, the S4
+# residency latency distribution, and the DOT replace contract.
+$ThirdTree20261006 = @(
+    'tests/framework/feature_capacity_trifold_test.tscn',
+    'tests/feature_birth_capacity_combination_test.tscn',
+    'tests/framework/feature_resource_scene_change_failure_test.tscn',
+    'tests/framework/feature_residency_latency_distribution_test.tscn',
+    'tests/framework/dot_replace_contract_test.tscn'
+)
+if ($ThirdTree20261006.Count -ne 5 -or ($ThirdTree20261006 | Sort-Object -Unique).Count -ne 5) {
+    throw 'thirdtree_20261006 membership must contain exactly 5 unique scenes'
+}
+foreach ($scene in $ThirdTree20261006) {
+    if (-not (Test-Path (Join-Path $ProjectRoot $scene))) {
+        throw "thirdtree_20261006 registered scene is missing on disk: $scene"
+    }
+}
+$Suites.thirdtree_20261006 = $ThirdTree20261006
+$Suites.critical = @($Suites.critical + $ThirdTree20261006 | Select-Object -Unique)
+
 # Re-audit the fully assembled critical suite for the R31 contract after all
 # later domain extensions have run. This catches accidental removal, shadowing
 # by another block, or duplicate registration.
