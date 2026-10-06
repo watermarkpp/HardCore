@@ -14,7 +14,7 @@
 
 ## 失败清单（v2 三列口径）
 
-### F1. tests/hc_monster_combat_r4/natural_cadence_24_test.tscn（同款：24_chase / 76 / 238 / 239）—— **4/5 已修复（2026-10-06）**
+### F1. tests/hc_monster_combat_r4/natural_cadence_24_test.tscn（同款：24_chase / 76 / 238 / 239）—— **已全部修复，5/5 PASS（2026-10-06）**
 - 原失败模式：`R4_NATURAL_CADENCE_FAIL: monster=24 ["spawn_failed", "insufficient_starts=0", ...]`
 - **回归归因**：候选 BASELINE_EXISTING（家族症状一致，未逐项基线实验）
 - **当前正确性（迁移后逐项单跑）**：
@@ -22,8 +22,8 @@
   - **24_chase：PASS**（1/1/1/2，60s——chase 模式真实移动接近语义保留）
   - **238：PASS**（20/20/20/14，60s）
   - **239：PASS**（20/18/20/8，60s——18/20 归因由场景自身断言接受）
-  - **76：FAIL（新模式，非 spawn）**——`insufficient_starts=19, insufficient_settlements=19`：spawn 已修，窗口内 17 次真实 HP 扣减发生，但 `_hc_starts/_hc_settlements` 计数 1 vs 期望 20——48s 采样预算与 76 号真实节拍不匹配，或起手-结算语义需原生分析（evidence=`outputs/test_logs/r4_cadence_76.json`）。**归因：业务采样课题，非 fixture/发布问题**
-- **阻断范围**：76 阻断其自身 cadence 验收；其余四项已解除
+  - **76：PASS（5ad1d60f0）**（starts=20 attributed=19 settlements=20 foreign=13，90s 授权窗）——Round 8 的"starts=1"为**误读**（实为 hc_starts_total=19，48s 窗完成 19/20 循环、deadline 切掉第 20 次；真实节拍 ~2.5s/次 × 20 次 ≈ 50s 采样 + boot 8s 本就超出 48s 预算）。修复=76 场景声明 approved_process_window_seconds=90（与 24 号先例同构，runner 名单已含 76，20 次期望未动，基类断言放行两个身份）
+- **阻断范围**：**已全部解除**——cadence 家族 5/5 通过自身全部业务断言
 - 迁移方式：`natural_cadence_base` 发布目标改走 `publish_targets`（publish 先于 player 前态捕获；原 AI/归因/扰动/时间窗逻辑零改动）
 
 ### F2. tests/skill_plan_single_resource_commit_test.tscn —— **已修复（2026-10-06 试点）**
