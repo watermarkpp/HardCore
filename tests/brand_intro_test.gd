@@ -192,16 +192,49 @@ func _run() -> void:
 
 
 func _wait_for_main_scene_prefetch(handoff: Control) -> Dictionary:
-	for _frame in range(240):
+	# Review directive: wait for the REAL terminal state instead of a fixed
+	# frame budget, record a full observation trace (wall time, process epoch,
+	# status, request/get counts, code-preparation state) and never finalize
+	# or rewrite the diagnostic on the test side. The production poller owns
+	# every status transition; a pending result returns with its trace so the
+	# failure shows exactly where the state machine stopped.
+	var trace: Array = []
+	var started_ms := Time.get_ticks_msec()
+	var last_status := ""
+	var deadline_ms := started_ms + 30000
+	while Time.get_ticks_msec() < deadline_ms:
 		var diagnostic: Dictionary = handoff.main_scene_prefetch_diagnostic()
 		var status := str(diagnostic.get("status", ""))
-		if status in ["ready", "already_cached", "failed"]:
+		if status != last_status:
+			last_status = status
+			trace.append({
+				"wall_ms": Time.get_ticks_msec() - started_ms,
+				"process_frames": Engine.get_process_frames(),
+				"status": status,
+				"attempted": bool(diagnostic.get("attempted", false)),
+				"accepted": bool(diagnostic.get("accepted", false)),
+				"request_count": int(diagnostic.get("request_count", 0)),
+				"get_count": int(diagnostic.get("get_count", 0)),
+				"native_owned": bool(diagnostic.get("native_owned", false)),
+				"code_preparation_state": str(
+					(diagnostic.get("code_preparation", {}) as Dictionary).get("state", "")
+				),
+			})
+		if status in ["ready", "already_cached", "already_requested", "failed"]:
+			diagnostic["_test_observation"] = {
+				"wall_ms": Time.get_ticks_msec() - started_ms,
+				"process_frames": Engine.get_process_frames(),
+				"trace": trace,
+			}
 			return diagnostic
 		await get_tree().process_frame
+	# Pending after the wall-time ceiling: return the untouched diagnostic
+	# with the full trace; the caller's assertion carries the evidence.
 	var pending_diagnostic: Dictionary = handoff.main_scene_prefetch_diagnostic()
-	if str(pending_diagnostic.get("status", "")) == "loading":
-		# Finalize the request that this test already started. This is teardown
-		# only; production still owns the non-blocking prefetch decision.
-		var prefetched_scene: Resource = ResourceLoader.load_threaded_get("res://scenes/main.tscn")
-		pending_diagnostic["status"] = "ready" if prefetched_scene is PackedScene else "failed"
+	pending_diagnostic["_test_observation"] = {
+		"wall_ms": Time.get_ticks_msec() - started_ms,
+		"process_frames": Engine.get_process_frames(),
+		"timed_out": true,
+		"trace": trace,
+	}
 	return pending_diagnostic
