@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/framework/bich_formal_transition_probe_test.gd" id="1"]
+
+[node name="BichFormalTransitionProbeTest" type="Node"]
+script = ExtResource("1")
