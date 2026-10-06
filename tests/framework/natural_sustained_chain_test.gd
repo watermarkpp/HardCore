@@ -577,41 +577,65 @@ func _combat_round(index: int) -> void:
 	targets.clear(); previous_actors.clear()
 	round_death_base = deaths; round_peak_states = 0; round_peak_evidence = {}
 	stream_started_usec = 0; stream_finished_usec = 0; resource_evidence = {}; resource_mapping = {}; concurrent_queues = false
-	var before: Dictionary = runtime.metrics() if runtime != null else {}
-	var tick_before := int(before.get("ticks",0))
+	var before: Dictionary = {}; var tick_before := 0
 	var damage_event_start := DamageObserver.events.size()
 	var damage_admission_start := DamageObserver.admissions.size()
 	var damage_delivery_start := DamageObserver.deliveries.size()
 	var damage_terminal_start := DamageObserver.terminal_events.size()
 	var accepted_before := accepted_casts
 	var player_motion_before := movement_gu; var actor_motion_before := monster_movement_gu
-	var mp: int = game.player.current_mp; var hp: int = game.player.current_hp
-	var pending_mana_before: int = game.player._pending_potion_mana
+	var pending_mana_before: int = 0
 	var restored_before := supply_restored_mana
 	var cap_removal_before := observed_mp_cap_removal
 	var non_cap_decrease_before := observed_non_cap_mp_decrease
 	var supply_uses_before := supply_successes
-	var supply_count_before := PlayerState.item_count_by_entity_id(MANA_SUPPLY_ID)
-	var simulation_start: int = game._time_domains.simulation_usec()
+	var supply_count_before: int = 0
+	var simulation_start: int = 0
 	var sample_start := samples.size()
-	var initial_stats := {"computed":PlayerState.computed_stats.duplicate(true),"player_max_hp":game.player.max_hp,"player_max_mp":game.player.max_mp}
+	var initial_stats: Dictionary = {}
 	var cohort_damage_identities: Dictionary = {}
 	if index == 0: previous_frame_usec = Time.get_ticks_usec()
 	var birth_started := Time.get_ticks_usec()
+	# Publish the round cohort through the real map-transition staged plan
+	# collection window (shared formal fixture, same as the lifecycle scene).
+	# The authored grid points, slots and respawn rules are unchanged; the
+	# republication rebuilds the zone, so every world-bound baseline below is
+	# recaptured afterwards.
+	var descriptors: Array[Dictionary] = []
 	for slot in 30:
 		var point := Vector2(40.5+float(slot%6)*0.72+(0.36 if int(slot/6)%2 else 0.0),12.2+float(slot/6)*0.64)
-		var actor: EnemyActor = game._spawn_enemy(GameData.get_monster_by_id(19),game._canonical_ground_gu_to_screen_px(point),false,-1.0,
-			{"respawn_enabled":false,"spawn_slot_id":"test:natural:sustained:%d:%d" % [index,slot]})
-		if actor != null:
-			actor.max_hp = 1500+(slot*7 if periodic_children else 0); actor.current_hp = actor.max_hp
-			actor.died.connect(_on_target_died); targets.append(actor); spawned_owners.append(weakref(actor))
-			if slot == 29: game.observer_tail_owner = weakref(actor)
-			cohort_damage_identities[actor.get_instance_id()] = {"runtime_id":actor.get_instance_id(),
-				"life":int(actor.get_meta("hc_combat_life_epoch",0)),"generation":int(actor.get_meta("zone_generation",-1)),
-				"slot":str(actor.get_meta("spawn_context",{}).get("spawn_slot_id","")),"initial_hp":actor.current_hp,
-				"initial_regen_state":actor._natural_regen.state_snapshot(),
-				"natural_regen_hp_per_tick":MonsterNaturalRegenPolicy.heal_amount(actor.max_hp)}
-			check(actor._hc_point_walkable(point) and actor.is_physics_processing(),label+"real walkable receiver with AI active: "+str(slot))
+		descriptors.append({"id":19,"position":game._canonical_ground_gu_to_screen_px(point),
+			"respawn":-1.0,"context":{"respawn_enabled":false,
+			"spawn_slot_id":"test:natural:sustained:%d:%d" % [index,slot]}})
+	var published: Array[EnemyActor] = await Fixture.publish_targets(self,game,descriptors,label+"cohort")
+	# The republication rebuilds the zone and resets the player, so the
+	# declared stress-health/stat inputs are re-applied here (the setup-time
+	# versions above were consumed by the rebuild), then every world-bound
+	# baseline is recaptured.
+	game._set_player_world_position(game._canonical_ground_gu_to_screen_px(Vector2(38.5,13.5)))
+	PlayerState.computed_stats.magic_min = 180; PlayerState.computed_stats.magic_max = 180
+	game.player.max_hp = 100000; game.player.current_hp = 100000
+	game.player.max_mp = 5000; game.player.current_mp = 5000
+	before = runtime.metrics() if runtime != null else {}
+	tick_before = int(before.get("ticks",0))
+	var mp: int = game.player.current_mp; var hp: int = game.player.current_hp
+	pending_mana_before = game.player._pending_potion_mana
+	supply_count_before = PlayerState.item_count_by_entity_id(MANA_SUPPLY_ID)
+	simulation_start = game._time_domains.simulation_usec()
+	initial_stats = {"computed":PlayerState.computed_stats.duplicate(true),"player_max_hp":game.player.max_hp,"player_max_mp":game.player.max_mp}
+	for slot in published.size():
+		var actor: EnemyActor = published[slot]
+		if actor == null: continue
+		var point := Vector2(40.5+float(slot%6)*0.72+(0.36 if int(slot/6)%2 else 0.0),12.2+float(slot/6)*0.64)
+		actor.max_hp = 1500+(slot*7 if periodic_children else 0); actor.current_hp = actor.max_hp
+		actor.died.connect(_on_target_died); targets.append(actor); spawned_owners.append(weakref(actor))
+		if slot == 29: game.observer_tail_owner = weakref(actor)
+		cohort_damage_identities[actor.get_instance_id()] = {"runtime_id":actor.get_instance_id(),
+			"life":int(actor.get_meta("hc_combat_life_epoch",0)),"generation":int(actor.get_meta("zone_generation",-1)),
+			"slot":str(actor.get_meta("spawn_context",{}).get("spawn_slot_id","")),"initial_hp":actor.current_hp,
+			"initial_regen_state":actor._natural_regen.state_snapshot(),
+			"natural_regen_hp_per_tick":MonsterNaturalRegenPolicy.heal_amount(actor.max_hp)}
+		check(actor._hc_point_walkable(point) and actor.is_physics_processing(),label+"real walkable receiver with AI active: "+str(slot))
 	var nonoverlap := targets.size() == 30
 	for i in targets.size():
 		for j in range(i):
