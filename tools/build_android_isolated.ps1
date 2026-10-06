@@ -111,6 +111,30 @@ function Assert-AndroidSplashTheme {
     Write-Output "ANDROID_SPLASH_THEME_VERIFY_PASS"
 }
 
+function Read-GitUtf8Blob {
+    param([string]$Revision, [string]$RelativePath)
+    # Git emits blob bytes as UTF-8, independently of the Windows console locale.
+    $info = New-Object System.Diagnostics.ProcessStartInfo
+    $info.FileName = 'git.exe'
+    $info.Arguments = '-C "' + $ProjectRoot + '" show "' + $Revision + ':' + $RelativePath + '"'
+    $info.UseShellExecute = $false
+    $info.CreateNoWindow = $true
+    $info.RedirectStandardOutput = $true
+    $info.RedirectStandardError = $true
+    $info.StandardOutputEncoding = [Text.UTF8Encoding]::new($false, $true)
+    $info.StandardErrorEncoding = [Text.UTF8Encoding]::new($false, $true)
+    $process = New-Object System.Diagnostics.Process
+    $process.StartInfo = $info
+    try {
+        if (-not $process.Start()) { throw 'Unable to start Git blob read.' }
+        $output = $process.StandardOutput.ReadToEnd()
+        $failure = $process.StandardError.ReadToEnd()
+        $process.WaitForExit()
+        if ($process.ExitCode -ne 0) { throw ("Git blob read failed: {0} {1}" -f $RelativePath, $failure) }
+        return $output
+    } finally { $process.Dispose() }
+}
+
 $ResolvedCommitOutput = @(& git -C $ProjectRoot rev-parse --verify "$Commit^{commit}")
 if ($LASTEXITCODE -ne 0 -or $ResolvedCommitOutput.Count -ne 1) {
     throw "Unable to resolve build commit: $Commit"
@@ -119,7 +143,7 @@ $ResolvedCommit = ([string]$ResolvedCommitOutput[0]).Trim()
 if ([string]::IsNullOrWhiteSpace($ResolvedCommit)) {
     throw "Unable to resolve build commit: $Commit"
 }
-$ExportPresetText = (@(& git -C $ProjectRoot show "${ResolvedCommit}:export_presets.cfg")) -join "`n"
+$ExportPresetText = Read-GitUtf8Blob $ResolvedCommit 'export_presets.cfg'
 if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($ExportPresetText)) {
     throw "Build commit has no readable export_presets.cfg: $ResolvedCommit"
 }
@@ -166,7 +190,7 @@ if ([string]::IsNullOrWhiteSpace($ExpectedVersionName)) {
 elseif ($PresetVersionName -ne $ExpectedVersionName) {
     throw "Build commit export preset contains version/name=`"$PresetVersionName`", expected `"$ExpectedVersionName`"."
 }
-$ProjectConfigText = (@(& git -C $ProjectRoot show "${ResolvedCommit}:project.godot")) -join "`n"
+$ProjectConfigText = Read-GitUtf8Blob $ResolvedCommit 'project.godot'
 if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($ProjectConfigText)) {
     throw "Build commit has no readable project.godot: $ResolvedCommit"
 }
@@ -226,9 +250,11 @@ try {
         # device even though the dev tree (historical LF checkout) passes.
         # Check the stage out as pure blob bytes: LF sources land as LF,
         # i/crlf sources land as CRLF - every registered hash then matches.
-        & git -c core.autocrlf=false -C $ProjectRoot worktree add --detach $StagePath $ResolvedCommit
-        if ($LASTEXITCODE -ne 0) {
-            throw "Unable to create isolated build worktree."
+        # Git's normal progress is stderr, not a PowerShell terminating error.
+        # Retain both streams and use the actual native exit status.
+        $GitCreate = Start-Process -FilePath 'git.exe' -ArgumentList @('-c','core.autocrlf=false','-C',('+$ProjectRoot+'),'worktree','add','--detach',('+$StagePath+'),$ResolvedCommit) -RedirectStandardOutput ($StagePath + '.create.stdout.log') -RedirectStandardError ($StagePath + '.create.stderr.log') -PassThru -Wait -WindowStyle Hidden
+        if ($GitCreate.ExitCode -ne 0) {
+            throw ("Unable to create isolated build worktree, exit={0}; see {1}.create.stderr.log" -f $GitCreate.ExitCode, $StagePath)
         }
         $StageCreated = $true
     }
