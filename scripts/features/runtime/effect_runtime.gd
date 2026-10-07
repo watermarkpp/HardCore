@@ -280,7 +280,10 @@ static func _binding_sources(bindings: Array) -> Dictionary:
 	for binding: Dictionary in bindings:
 		var contract := Handlers.contract(binding.definition.handler_id)
 		if int(contract.states) > 0:
-			result[JSON.stringify([binding.handle,binding.definition.mechanic_id,contract.effect_id])] = true
+			# Local occupancy follows the exact certified species/layer used by
+			# ApplyStatus. A source handle neither creates a layer nor merges
+			# different already accepted layers from successive revisions.
+			result[JSON.stringify([contract.effect_id, str(binding.definition.config.get("status_layer", ""))])] = true
 	return result
 
 func _target_sources_fit(additional: Dictionary) -> bool:
@@ -291,7 +294,7 @@ func _target_sources_fit(additional: Dictionary) -> bool:
 	for state: Dictionary in _states.values():
 		var command: Dictionary = state.command
 		var values: Dictionary = targets.get(state.target_key,{})
-		values[JSON.stringify([command.source_handle,command.mechanic_id,command.effect_id])] = true
+		values[JSON.stringify([command.species_id, str(command.get("layer_id", ""))])] = true
 		targets[state.target_key] = values
 	for work: Dictionary in _batches.values():
 		for index in range(int(work.cursor),work.entries.size()):
@@ -486,7 +489,9 @@ func _apply_command(command: Dictionary, entry: Dictionary) -> void:
 	var layer_id: String = str(command.get("layer_id", ""))
 	var handle := (JSON.stringify([command.target, species_id, layer_id]) if not layer_id.is_empty()
 		else JSON.stringify([command.target, species_id]))
-	var accepted_at := int(entry.fact.accepted_simulation_usec)
+	# Keep the immutable fact timestamp historical; every new state receives
+	# its complete horizon from actual application, including a delayed first fact.
+	var applied_at := int(_clock.simulation_usec())
 	var admission_id := int(entry.get("admission_id", 0))
 	if _states.has(handle):
 		# Same-species replacement (S1): one atomic new incarnation publishes
@@ -494,9 +499,9 @@ func _apply_command(command: Dictionary, entry: Dictionary) -> void:
 		# ACTUAL application simulation time plus the new period, and expiry
 		# restarts with the full new duration. The old incarnation ends as a
 		# `replaced` terminal: its already committed HP facts, fatal facts and
-		# accepted children stay owned by their original roots (chain owner
-		# counts transfer to the new incarnation and are returned only at its
-		# own terminal state), and its uncommitted future ticks are cancelled.
+		# accepted children retain their original independent branch owners.
+		# The replaced state releases its old root references rather than
+		# retaining cancelled future production across later replacements.
 		# Sync cue/audio callbacks from the old onset can reenter; the new
 		# incarnation is a fresh Dictionary, so old callbacks can never advance
 		# or stop the new handle. The presentation keeps the SAME state-head
@@ -506,7 +511,7 @@ func _apply_command(command: Dictionary, entry: Dictionary) -> void:
 		var old_origin := int(old_state.get("state_loan_origin", 0))
 		if old_origin > 0 and _reservations.has(old_origin):
 			# The replaced incarnation releases the old state-loan slot; its
-			# chain owner counts (already committed work) are NOT returned.
+			# old state references retire after the new state is published.
 			_reservations[old_origin].state_loan_handles.erase(handle)
 			_reservations[old_origin].states += 1; _reserved_states += 1
 		_heap.remove(handle)
@@ -518,7 +523,7 @@ func _apply_command(command: Dictionary, entry: Dictionary) -> void:
 			"state_loan_origin":0,
 			"raw_per_tick":int(command.raw_per_tick),"period":int(command.period_usec),
 			"next_due":apply_at+int(command.period_usec),"expires":apply_at+int(command.duration_usec),"ticks":0,
-			"chain_owners":old_state.chain_owners}
+			"chain_owners":{}}
 		if admission_id > 0:
 			if not _reservations.has(admission_id) or int(_reservations[admission_id].states) <= 0:
 				# Reclaim one invalid loan slot for the new accepted command
@@ -540,8 +545,17 @@ func _apply_command(command: Dictionary, entry: Dictionary) -> void:
 		_states[handle] = replacement
 		_hold_chain_state(replacement, admission_id)
 		_heap.put(handle, int(replacement.next_due))
+		# Publish the new owner before releasing the old state reference.
+		# Other live states and accepted child branches retain old roots
+		# through their own ownership, never through the replacement state.
+		for sequence: int in old_state.chain_owners:
+			if _reservations.has(sequence):
+				_reservations[sequence].state_owners -= 1
+				_retire_chain_if_terminal(sequence)
 		_stats.replaced += 1
-		_presentation.refresh(handle, int(command.raw_per_tick))
+		if not _presentation.replace(handle, entry.target, command, entry.get("resource_lease")):
+			if command.cue_policy == "required_procedural": _error("feature_required_cue_failed")
+			else: _stats.optional_cue_missing += 1
 		return
 	if admission_id>0 and _reservations.has(admission_id) and not _reservations[admission_id].chain.is_empty() \
 		and int(_reservations[admission_id].states)<=0:
@@ -563,7 +577,7 @@ func _apply_command(command: Dictionary, entry: Dictionary) -> void:
 		"periodic_lineage":entry.fact.get("chain_context",{}),"periodic_parent_fact_id":entry.fact.fact_id,
 		"state_loan_origin":admission_id if admission_id>0 and not _reservations[admission_id].chain.is_empty() else 0,
 		"raw_per_tick":int(command.raw_per_tick),"period":int(command.period_usec),
-		"next_due":accepted_at+int(command.period_usec),"expires":accepted_at+int(command.duration_usec),"ticks":0,"chain_owners":{}}
+		"next_due":applied_at+int(command.period_usec),"expires":applied_at+int(command.duration_usec),"ticks":0,"chain_owners":{}}
 	if int(state.state_loan_origin)>0: _reservations[admission_id].state_loan_handles[handle]=true
 	_hold_chain_state(state,admission_id)
 	_states[handle] = state

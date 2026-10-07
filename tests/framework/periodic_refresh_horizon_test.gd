@@ -101,7 +101,7 @@ func _case(periodic_chain: bool) -> void:
 	for live_state: Dictionary in runtime._states.values():
 		if live_state.target.resolve() == target: replaced_state = live_state
 	check(runtime.active_count()==1 and runtime.heap_count()==1 and replaced_state.next_due==101000000
-		and replaced_state.expires==104000000 and replaced_state.raw_per_tick==1 and replaced_state.chain_owners.size()==2,
+		and replaced_state.expires==104000000 and replaced_state.raw_per_tick==1 and replaced_state.chain_owners.size()==1,
 		"same-species replacement cancels overdue original ticks and restarts phase, strength and horizon at the application time")
 	if periodic_chain:
 		check(ContentLayers.set_feature_module_enabled(module_id,false),"accepted periodic horizon survives formal source withdrawal")
@@ -125,7 +125,7 @@ func _case(periodic_chain: bool) -> void:
 		"cancelled overdue work is not re-delivered and the fresh phase runs without artificial lateness")
 	var empty:=true
 	for count: int in runtime.reservation_snapshot().values(): empty=empty and count==0
-	check(empty and not runtime.has_work() and runtime.errors.is_empty(),"all original and refresh owners retire only after the shared work horizon ends")
+	check(empty and not runtime.has_work() and runtime.errors.is_empty(),"all actually remaining owners retire after their own accepted work ends")
 	print("PERIODIC_REFRESH_HORIZON_OBSERVATION ",JSON.stringify({"authored_ticks_per_application":4,
 		"accepted_applications":2,"actual_tick_deliveries":runtime.metrics().tick_delivery_count,
 		"actual_hp":target.current_hp,"maximum_actual_lateness_usec":runtime.metrics().maximum_tick_delivery_lateness_usec,

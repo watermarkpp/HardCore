@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/framework/dot_application_time_test.gd" id="1"]
+
+[node name="DotApplicationTimeTest" type="Node"]
+script = ExtResource("1")

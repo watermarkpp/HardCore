@@ -1,0 +1,4271 @@
+{
+  "baseline": "761c00c5c3a4ae436f99bdd20d99a627c2ffae88",
+  "scope": "358 production .gd files; enumeration and hashes alone are NOT a code review",
+  "files": [
+    {
+      "path": "scripts/actor_body_policy.gd",
+      "git_blob": "bd8cb69bb4bea32a27db5f19943515a6ec2fc1c6",
+      "role": "production_gdscript",
+      "raw_sha256": "949b381addb1e6d6ac7643f9c45941c505b0be2f16909a3c13abce8fcc962fb0",
+      "lines": 222,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/adaptive_button_style_box.gd",
+      "git_blob": "4475a5f3386fd8168d96f98ff49c07006b0f3529",
+      "role": "production_gdscript",
+      "raw_sha256": "93976b470a6b5efb9cf795ab1283e8fce8948c02916d61db51063ab229021ada",
+      "lines": 516,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/aoe_engagement_window.gd",
+      "git_blob": "f1370d6383afbc8992ad63e0972c90b639845032",
+      "role": "production_gdscript",
+      "raw_sha256": "c2eebfbe98d13ad7720ae6da1d54efa7c430879f77569057b2924f313204810a",
+      "lines": 200,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/art_spec.gd",
+      "git_blob": "bd4061af5ececd5713eec2e597035a96dd06fbbb",
+      "role": "production_gdscript",
+      "raw_sha256": "7cfa974d7c242dc39d0e77775019f8f13a5eda3b2eb45b9d4724c86a2e81e1ca",
+      "lines": 63,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/audio_preferences.gd",
+      "git_blob": "f23fd2078bd8cdba05a44df5a656f7b45dac4057",
+      "role": "production_gdscript",
+      "raw_sha256": "8324e93a7eeef25f9ec76e631a281da9f570993c37d5bbb3786c57b2400e69c6",
+      "lines": 169,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/audio_runtime_service.gd",
+      "git_blob": "ac0336f4305998f4706e9e4198131c09bd621386",
+      "role": "production_gdscript",
+      "raw_sha256": "b1169b8e2205660da66b1c7ce8fabf251c11afb1e1611bb2187fa7acadaf6e4e",
+      "lines": 1246,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/brand_intro.gd",
+      "git_blob": "d4955c99f9b8777c7bc0039e0447e7b3c19892b4",
+      "role": "production_gdscript",
+      "raw_sha256": "fa1934dfb443028b13dda29f58a4258e9f697e84f61d555623b16eea3753179c",
+      "lines": 193,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/caster_skill_animation_batch.gd",
+      "git_blob": "0f4aadd701657f631110c3065eb1a9c1a4da6c10",
+      "role": "production_gdscript",
+      "raw_sha256": "ddcbf12583b216e5053a9c4e35aee2b1bbacbca9f123af87dc57ad4e77e1b110",
+      "lines": 56,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/caster_skill_animation_player.gd",
+      "git_blob": "e17c23d11c7df0b87f230f93488e51d8d954e416",
+      "role": "production_gdscript",
+      "raw_sha256": "365cdebbfe74104d08de7eda5558455190e8aaf5e63399dadffe269b648c1ef3",
+      "lines": 874,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/caster_skill_beam_visual_effect.gd",
+      "git_blob": "8c800a0ce308600e1aa2bb2c85806aa1f1834743",
+      "role": "production_gdscript",
+      "raw_sha256": "45198b5f591d06f9d8ac0eedb356d3f1e1b969f566af2ffe1ad21472991c5e59",
+      "lines": 307,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/caster_skill_behavior.gd",
+      "git_blob": "ade7ae4ed412cf2e12d876e748bd010cdba270e1",
+      "role": "production_gdscript",
+      "raw_sha256": "8c8f848477106ca05806e6a83fbff3930c9e398232d36ff23438fd3d124475f4",
+      "lines": 198,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/caster_skill_runtime.gd",
+      "git_blob": "77c04b7d94dc9f8870ea4540feed05f9ca5def9c",
+      "role": "production_gdscript",
+      "raw_sha256": "98191c61d63953312d64f81e2d5d7ef129f240731953ed730759cb343b6e2f67",
+      "lines": 679,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/caster_skill_sky_strike_visual_effect.gd",
+      "git_blob": "12f6c78cd314251515196f80bbc7c8b37dea2c83",
+      "role": "production_gdscript",
+      "raw_sha256": "baa5661625b65ee2ccab8deb3bb295eb106a718f99a0ee1aa83b940f8c020491",
+      "lines": 328,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/caster_skill_visual_effect.gd",
+      "git_blob": "422490249cf184a2887f557003209fde7a92d27f",
+      "role": "production_gdscript",
+      "raw_sha256": "9a8e0a411c550950933bb8c510530a28a49b9fb8aa7646f7a1d470740d530efd",
+      "lines": 869,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/caster_skill_visual_factory.gd",
+      "git_blob": "b86dbc0a92080fcce28851544888b65b3811c126",
+      "role": "production_gdscript",
+      "raw_sha256": "ecdc975e864cc7545a49d9241ce07524033e9c621b8a5e92d2c1f7db3c9d2deb",
+      "lines": 24,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/caster_skill_visual_registry.gd",
+      "git_blob": "b44aea90b7f69f31da85b02de92e03d54b17b143",
+      "role": "production_gdscript",
+      "raw_sha256": "ccd3220d6df2dc66835eac417fe8ebbd653ff73308760828b8e267ab73fabfcc",
+      "lines": 925,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/character_select.gd",
+      "git_blob": "430fc5f42b9a8184dd56487372a65685af624fbf",
+      "role": "production_gdscript",
+      "raw_sha256": "8c01f58693b01f4c09b3771782e367fbaed4b9dbecc5bddb9e7efad77411cba9",
+      "lines": 1089,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/circular_touch_button.gd",
+      "git_blob": "1ce9faea24b92c235bc140f76bfd85e926dd0b43",
+      "role": "production_gdscript",
+      "raw_sha256": "c1e47f3532070233b5a53b6688b1f0dda343869585fd286022af6529e6dcf93e",
+      "lines": 269,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/combat_resolution_rules.gd",
+      "git_blob": "66d3b90cb898be47bc8793a5db623af7289bee78",
+      "role": "production_gdscript",
+      "raw_sha256": "92f7f3a4e606257ce90ee55ed28a3782c6a0dfe2baa5b767454d7ea1adf8dd17",
+      "lines": 179,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/damage_ledger_observer.gd",
+      "git_blob": "b9c6a8e5d4bd3fc22226fa9276c8a8cc1a11d44b",
+      "role": "production_gdscript",
+      "raw_sha256": "ca012b51cb653b9e040c35695dfac82f77b65387ec430ffbfbd32b4fd1326bf5",
+      "lines": 81,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/death_revival_panel.gd",
+      "git_blob": "4c8362fe7259be1bd9cb9f20a21a43da2ddc20c6",
+      "role": "production_gdscript",
+      "raw_sha256": "49781000b0099aafe8afa648454bc69d7518d81ba7084eb349497dbc8beb49fb",
+      "lines": 323,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/device_lab_patch_bootstrap.gd",
+      "git_blob": "2c38f2347c6d8b9ca0df0ed959bb99630513e5f0",
+      "role": "production_gdscript",
+      "raw_sha256": "b21167df8e2cb555dfc6727d91c6974da9d63e9945f776c1fc6451a900cb965d",
+      "lines": 252,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/device_lab_runtime.gd",
+      "git_blob": "2919c961aeba82ab6bfc3c627473efc5d69559f0",
+      "role": "production_gdscript",
+      "raw_sha256": "27e802e4ff3c8682a27527ff3c4bc316f11cb902ff833e743b9359c8bae7988a",
+      "lines": 1438,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/drop/boss_material_drop_resolver.gd",
+      "git_blob": "4b11f37727da8e5609e406cd1b32bb0b649fb819",
+      "role": "production_gdscript",
+      "raw_sha256": "796541b1e887affc708330f2b6c3310049d520f2da2b8a56c5212c014e170bab",
+      "lines": 50,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/drop/dpv2_repair_v5_contract.gd",
+      "git_blob": "d2c41a193fbb74a0ec110e4e0d17515aa6b02933",
+      "role": "production_gdscript",
+      "raw_sha256": "78d1b79abac1d9cacb775b02217e99a278759d0811a738e3065ba4327787f67f",
+      "lines": 191,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/drop/user_drop_additions_v81.gd",
+      "git_blob": "24a91f7c37d5d3fffc1f74d5c25ea983cdeb6471",
+      "role": "production_gdscript",
+      "raw_sha256": "d8a702aca39cedf952b1c95c0bd3fff1f8d08060ee66f71e5e1ea92a3a2f6cce",
+      "lines": 100,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/drop/user_drop_balance.gd",
+      "git_blob": "60308d3fc2b3a0a5fc24b443507619c30fc97da1",
+      "role": "production_gdscript",
+      "raw_sha256": "686db3082b741646685697c3de92d710780e8772a79795246b6af20e48713883",
+      "lines": 54,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/drop/user_loot_sheet_provider.gd",
+      "git_blob": "2eac11c31ab199df88c9578d9e9cdfc6b542a39a",
+      "role": "production_gdscript",
+      "raw_sha256": "f3cdb515f911b4aeeafec4612b9a87e9369a92a6e8b8429843dfa5bcf0e739e0",
+      "lines": 351,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/enemy.gd",
+      "git_blob": "33e9e270a408e85d5927665a7afb1803ee1f355b",
+      "role": "production_gdscript",
+      "raw_sha256": "03813e70128dafc5d63ca07b50ef5ffa7f0d27646cf26364df83778979e47bdb",
+      "lines": 10303,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/enhancement_panel.gd",
+      "git_blob": "9dc38660c7236989a2e82f08a7583fae1ee986bf",
+      "role": "production_gdscript",
+      "raw_sha256": "179f9f25a441c2c57c6407efe247d8875c6ddca14947fc6379602dd3949dd399",
+      "lines": 683,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/entrapment_boundary_controller.gd",
+      "git_blob": "cf74f482c7ed4bc78bf8b05892d94627a7174773",
+      "role": "production_gdscript",
+      "raw_sha256": "115f50ed5e4546382f81cc44edef821f1dfce70172e1f282b810ed609f8b8b2c",
+      "lines": 242,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/environment_catalog.gd",
+      "git_blob": "a00f65ad358df4ec4d6f19a117aed45a8344239d",
+      "role": "production_gdscript",
+      "raw_sha256": "ff8b90f6fb407a589733a88a0c529f7776e95dd08be4b8d299f809aa7c88ef75",
+      "lines": 773,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/environment_validator.gd",
+      "git_blob": "2794dd9200aac352eb3ad8e4918ad155411e181e",
+      "role": "production_gdscript",
+      "raw_sha256": "5e7cd2cddf6780c034bbfe5f784c0725f3a3d82ea5f1be0aae89eca295de3eec",
+      "lines": 110,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/equipment_character_preview.gd",
+      "git_blob": "a2fb2106e991de132373fd79a46d5c91b9d589d8",
+      "role": "production_gdscript",
+      "raw_sha256": "b049b1bd29b75be199c0da41a4837360b76a53b458a2dea8c8aab5fe5de41df9",
+      "lines": 1250,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/equipment_rules.gd",
+      "git_blob": "efbe9675ebc5c5c33f1537e90302248fbf3c9099",
+      "role": "production_gdscript",
+      "raw_sha256": "6ead495cd49988b0987947b1cf77377d5b420c108d8f68a8c0ad749875b6d98f",
+      "lines": 778,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/equipment_test_loadout_catalog.gd",
+      "git_blob": "51d76e7f36490caef1a45fedb182cd7a3b579f12",
+      "role": "production_gdscript",
+      "raw_sha256": "6c9636d479137e53bbc8515bba8c87db1a9a8edae9c66899547f5d69e395f2f5",
+      "lines": 67,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/features/adapters/contribution_provider.gd",
+      "git_blob": "09a5b9e54e2edc63473d76a2eacb9043dd8d3df8",
+      "role": "production_gdscript",
+      "raw_sha256": "ef97ad17a333a45f8640c44580d5e2a96f971b867ad1a2eb10b485b71a2d4bfa",
+      "lines": 80,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          80
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/features/adapters/contribution_source_rules.gd",
+      "git_blob": "6c4c2b2ac99a5b3354729e2eb93f99ba4dc66f75",
+      "role": "production_gdscript",
+      "raw_sha256": "1f192b7f24415f2fca31ead865d77dde96cf150c4e4c7842d5e45f4bb9ef6c6a",
+      "lines": 52,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          52
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/features/adapters/effective_skill_definition.gd",
+      "git_blob": "95615c0646ea5c0757d380ba350a59ae99ac0825",
+      "role": "production_gdscript",
+      "raw_sha256": "556057f0ffadea98a4e9801bae1a6db246ff520d7179c92754efdd50e53421bb",
+      "lines": 59,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          59
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/features/adapters/feature_authority.gd",
+      "git_blob": "d779986c05fe9011744d42d3e9bcb1654e97a1cd",
+      "role": "production_gdscript",
+      "raw_sha256": "fee603f9ff6fd4b69e93f280bcf4fde58bf7e42290a520cd00a0fd38acbb5bf6",
+      "lines": 24,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          24
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/features/adapters/world_target_bound.gd",
+      "git_blob": "bdeece297884cd53c70fe3783c15a1bdc0d4b599",
+      "role": "production_gdscript",
+      "raw_sha256": "0c85f66b77b6356d5ed537168f5e8ec36e1a62d40b44ab7e29a84e9775ac940e",
+      "lines": 262,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          262
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/features/compilation/android_export_representation_verifier.gd",
+      "git_blob": "d99e8efd3eaff56e01d59f3f75567e7c514f60b4",
+      "role": "production_gdscript",
+      "raw_sha256": "3123e5bcb332ce17f7bcae2dede4a89987ab706d52ce888b0085c7b04de15658",
+      "lines": 155,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/features/compilation/child_capacity_proof.gd",
+      "git_blob": "2b607bc65c256f2392abb21a79d8d2eebb3ab213",
+      "role": "production_gdscript",
+      "raw_sha256": "a54fb871fc13948888d012cdc32f1677d72db3d49ddc89b7114fc51c95b7fe31",
+      "lines": 130,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          130
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/features/compilation/code_preparation_envelope_guard.gd",
+      "git_blob": "a536be08e893da68c4dbad3e508dcd6aac970bcf",
+      "role": "production_gdscript",
+      "raw_sha256": "18106cf6de8300a83637a60a9c96a8fe581fd049934e90860b6707c5bca92809",
+      "lines": 398,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/features/compilation/feature_catalog.gd",
+      "git_blob": "9fe672718ab51bcca9716739777332ccff691e24",
+      "role": "production_gdscript",
+      "raw_sha256": "32b9aa4866fbeb78975c5a43861cf1bf02d664435583615812be26d76bc94c1c",
+      "lines": 59,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          59
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/features/compilation/feature_compiler.gd",
+      "git_blob": "724a9fc14ce90785ec7364482cd1a0a3cc205cf8",
+      "role": "production_gdscript",
+      "raw_sha256": "4055116a58d24fa2f3db4a692e674d5e3280b1f8cb3d0a5021f1dbd997927bd4",
+      "lines": 477,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          477
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/features/compilation/feature_loadout.gd",
+      "git_blob": "c4b4b0327595a08d98131440ee1db6221c6bb962",
+      "role": "production_gdscript",
+      "raw_sha256": "c7ee688d4ffa5bdb2abe5ab07696300a986276c7cd92786e5d3451ec8fa3e31b",
+      "lines": 107,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          107
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/features/compilation/feature_resource_registry.gd",
+      "git_blob": "806aa3ebcf60ef2254781b7993efde69f9778996",
+      "role": "production_gdscript",
+      "raw_sha256": "7a77a6f20a4b018feaf898a8b712c6f76ec4b799dff5f1c25d764d5d0f82e6b3",
+      "lines": 125,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/features/contracts/action_config_lease.gd",
+      "git_blob": "c5fcc8c29cdf43041aaa97d49fe35898ebe2cd79",
+      "role": "production_gdscript",
+      "raw_sha256": "f1a5ee8dfbcc0f21bae3c8852a477f09dbe0d8b1eda85088fcaec0f02fcf334a",
+      "lines": 204,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          204
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/features/contracts/actor_ref.gd",
+      "git_blob": "4aa341af9e1834f1fd9645940f74d250bddb10cf",
+      "role": "production_gdscript",
+      "raw_sha256": "f7a8d8741f0662c08d57a8df21626e55c6023edaf73a9dfa6b6af1c501c393d7",
+      "lines": 49,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          49
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/features/contracts/child_action_lease.gd",
+      "git_blob": "c5e6e814e6aaa86a9d5c27563140759cf8cd8485",
+      "role": "production_gdscript",
+      "raw_sha256": "b5f6b9d326bc467884af6fe7df82f60df9a5cc75461e5b5559309be6fb4642d5",
+      "lines": 154,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          154
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/features/contracts/effect_reservation.gd",
+      "git_blob": "4cb7ddfee01606fae1126f2cda8e462fe286b294",
+      "role": "production_gdscript",
+      "raw_sha256": "997d606b3f1e2d4b79582159f478f641578ec70419cc97acc244123406224fb3",
+      "lines": 96,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          96
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/features/contracts/feature_resource_lease.gd",
+      "git_blob": "7c3ca038ccf1cae4d0931fe79376e6cd8783fcf0",
+      "role": "production_gdscript",
+      "raw_sha256": "074abf06808c2cbdf7897443bbedc95414f578dfd4c4acb5bc2408b6a599e902",
+      "lines": 152,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          152
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/features/contracts/loading_preparation_scope.gd",
+      "git_blob": "5392f649e9324ff9738bb0592aff1de26e607011",
+      "role": "production_gdscript",
+      "raw_sha256": "d725ee11c7cefc2d713afd16a813e698d75037f17f5a3320db6a265ec73e82b1",
+      "lines": 67,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/features/contracts/plain_graph.gd",
+      "git_blob": "c28cb1a7c587b55cf66028e015c39304b7d587ef",
+      "role": "production_gdscript",
+      "raw_sha256": "918f19c28be0877aed56342c591d7734bcbe98de3d5366a50bee51aeba635f2f",
+      "lines": 49,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          49
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/features/contracts/published_monster_inputs.gd",
+      "git_blob": "3e08914d3465264761827d12805bf8241af19254",
+      "role": "production_gdscript",
+      "raw_sha256": "0ec79664ac4bb0cd28c9148a0aa870b00970bc5f25f31db811c7235b96ea7156",
+      "lines": 49,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          49
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/features/generated/internal_code_android_export_data.gd",
+      "git_blob": "0eecbd5d5108848980c337a6c25dac4f166a1c77",
+      "role": "production_gdscript",
+      "raw_sha256": "24bfc528bc0a246355c95c86662a784c2a0c1ada1a788def7c5a1a9e7b65fa0e",
+      "lines": 11,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/features/generated/internal_code_preparation_catalog_data.gd",
+      "git_blob": "a93ca16e0f5cad44b143d6be91efec492a06dca5",
+      "role": "production_gdscript",
+      "raw_sha256": "afbe545825ef38729abae31c6c01d55745e7383a569a47988d14081f31925188",
+      "lines": 13,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/features/handlers/death_burst_handler.gd",
+      "git_blob": "d31cf961606214de0f7c2b045f2e8e67c79b5439",
+      "role": "production_gdscript",
+      "raw_sha256": "f34ac5e418ad808ad0f4e0347a7d6309835911348ffc7c744d319084b2264438",
+      "lines": 88,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          88
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/features/handlers/handler_registry.gd",
+      "git_blob": "a608f54f10c420c8335bbddcf5b1ee7e988fae1e",
+      "role": "production_gdscript",
+      "raw_sha256": "a65066deae4d455e0e381de672465fc99425bcc1ca77171d284fedcbc74b7404",
+      "lines": 31,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          31
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/features/handlers/ignite_handler.gd",
+      "git_blob": "44354d00950fd7bcc1512f3ac7f529a08bdd8548",
+      "role": "production_gdscript",
+      "raw_sha256": "96de5a20f71fbba9d2d39345714134d69c9b570f504f09295029c0afae7bc91f",
+      "lines": 46,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          46
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/features/handlers/lifesteal_handler.gd",
+      "git_blob": "563d8d4c8cd4e9f8c6c180421afd05b5833e5cd1",
+      "role": "production_gdscript",
+      "raw_sha256": "958dc774fbc06ddd5e1bff1e109a8edf9f46d73d9d49484e7b352201700529d7",
+      "lines": 17,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          17
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/features/presentation/cue_definitions.gd",
+      "git_blob": "59096fd12e84cd9621bf4be385c087382d2e71de",
+      "role": "production_gdscript",
+      "raw_sha256": "283a843ab8b3db7640192464b2c86054e7cf9e087a2a6205b6f99c22876db781",
+      "lines": 26,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          26
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/features/presentation/ignite_cue.gd",
+      "git_blob": "12f37206ba8f019797c804c184d0ce25b2cdf4be",
+      "role": "production_gdscript",
+      "raw_sha256": "209f9a65ac140508624e753bb4e59d69ebc12f25c7a3483335a3b34fdeeecb98",
+      "lines": 18,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          18
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/features/presentation/presentation_port.gd",
+      "git_blob": "2b2ef6dd8719e83e8c70e118663197fab0120c78",
+      "role": "production_gdscript",
+      "raw_sha256": "ef7fe42967c368e1efb29ebc009ceb5837386966fe69f8319f37ce7312640987",
+      "lines": 134,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          134
+        ]
+      ],
+      "findings": [
+        "A03"
+      ],
+      "current_native_tests": [
+        "A03_FINAL",
+        "A_CUE_AUDIO_REENTRY",
+        "A_CUE_ATTACH_REENTRY"
+      ],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/features/runtime/actor_capability_set.gd",
+      "git_blob": "3d436afa609fb808561f11d7111e5c9157ae07fd",
+      "role": "production_gdscript",
+      "raw_sha256": "9fbe592a80abc0ccbe278a180c42e9742a633d0542b6165eda7419d3da5f27c8",
+      "lines": 25,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          25
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/features/runtime/code_input_acquisition_quantum.gd",
+      "git_blob": "a5302bda3c8364ee1af16e008c346eab935ea044",
+      "role": "production_gdscript",
+      "raw_sha256": "95371a2b3b275e283f366a749f1581cc0e1c80add49bdd6fe5386f6f6eef6d0f",
+      "lines": 42,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/features/runtime/damage_batch.gd",
+      "git_blob": "7a1265fb9e2b881fec2c069818b2b451ec8b0911",
+      "role": "production_gdscript",
+      "raw_sha256": "425b421bd1aec2304d1cd26f34f761d57d7f694527f3176b7dd9e7fdde945b5a",
+      "lines": 244,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          244
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/features/runtime/effect_runtime.gd",
+      "git_blob": "2090b25faeadd7e32d057cb3652d0e2564f82f68",
+      "role": "production_gdscript",
+      "raw_sha256": "def2cf0f390f43f2c712b40d089cde28f4fd6a0ae4a1f728efe98ed3ea9d4502",
+      "lines": 795,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          795
+        ]
+      ],
+      "findings": [
+        "A01",
+        "A02",
+        "A04"
+      ],
+      "current_native_tests": [
+        "A04_GREEN",
+        "A01_FINAL",
+        "A02_FINAL",
+        "A03_FINAL",
+        "A04_TRIFOLD",
+        "A04_CHAIN_ADMISSION",
+        "A_RETIRE_CALLBACK",
+        "P1_FRAME_BUDGET",
+        "A02_LIFETIME_FINAL",
+        "A02_HORIZON_FINAL",
+        "A_MIXED_FINAL",
+        "A_CHILD_G2_FINAL",
+        "A_CUE_AUDIO_REENTRY",
+        "A_CUE_ATTACH_REENTRY",
+        "A_EMPTY_AND_PRODUCTION"
+      ],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/features/runtime/feature_resource_preparation.gd",
+      "git_blob": "47a5e1905be0188082eb9d219a83463c05d6f3db",
+      "role": "production_gdscript",
+      "raw_sha256": "4e2ec1f6b9d19035ebdf3a6a994c6ea07efaad807c28a3a82ef22d721947e528",
+      "lines": 804,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          804
+        ]
+      ],
+      "findings": [
+        "C01_CANDIDATE_exit_awaiters",
+        "C02_CANDIDATE_late_owner_admission"
+      ],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/features/runtime/indexed_due_heap.gd",
+      "git_blob": "e11152ba7ec4b7e114226fdfdb0c5711e8e0def9",
+      "role": "production_gdscript",
+      "raw_sha256": "f0466b561c850686e13cd7b21cc1f3fab12609a72bb34bf1d8b76b68702e3bb6",
+      "lines": 52,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          52
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/fire_wall_field_controller.gd",
+      "git_blob": "35bef9c64b7625c6f6cdbe3fdb6401c41c36a2c9",
+      "role": "production_gdscript",
+      "raw_sha256": "d5672ddb85668bb98dd58029876cda2c4506dc5270b4ad52eed570e601578e93",
+      "lines": 483,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/game_data.gd",
+      "git_blob": "cd30fc93cb165205a62f55d9b0fdc9592c0a1611",
+      "role": "production_gdscript",
+      "raw_sha256": "bde65ba2e3166ea98d48e4849dcb84ad7fdbcba6f9734d7c08ff6fbc0960755a",
+      "lines": 4164,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/game_root.gd",
+      "git_blob": "795c1e8c19fb746af8eacea124ac4772096f556a",
+      "role": "production_gdscript",
+      "raw_sha256": "895a2828d3c627d063ff38c32d2a3f8262596f9f9de106d4c86ad4601be5a838",
+      "lines": 15332,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/generated/character_base_growth_v1.gd",
+      "git_blob": "537fd8159f2eaefa6bed764733896a022f4eed07",
+      "role": "production_gdscript",
+      "raw_sha256": "0d7bc9d3d10953133551f5baed0fb06143f2706db6a5f8961477fa74ff63d020",
+      "lines": 73,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/generated/drop_balance_v80_seal.gd",
+      "git_blob": "2666f7de178e144ee11579aa958c7bbc226209e8",
+      "role": "production_gdscript",
+      "raw_sha256": "d4fd28330884d74ca811286430f1fdb5e724e08c64977ca9c234a00cea0f6f3c",
+      "lines": 3,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/gothic_confirmation_panel.gd",
+      "git_blob": "384c25d617813293eda711d30097740f537a091e",
+      "role": "production_gdscript",
+      "raw_sha256": "0b56fa88316301109a4e03519db2385b02d4cfcb71fa5f0b67ab0dc7d0b5f008",
+      "lines": 175,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/gothic_frame_factory.gd",
+      "git_blob": "b62ca81b853ff964b253da6da5a967e3d4a1e835",
+      "role": "production_gdscript",
+      "raw_sha256": "b288fe1f2dbafef42e8f9ef17987a66321d52285ae7ec6e3f448e42353761cf0",
+      "lines": 152,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/gothic_frame_fill.gd",
+      "git_blob": "84d66b6687f1ee3443c2de692731ac0907810158",
+      "role": "production_gdscript",
+      "raw_sha256": "a92aa8bff5faa6d6e2621570ad29c05a4da7e9bae71d24c3b3b676f68f63f8b3",
+      "lines": 102,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/gothic_modal_layout.gd",
+      "git_blob": "200a9e4b888eb63711cd94880e8b561f381f11c4",
+      "role": "production_gdscript",
+      "raw_sha256": "3ed57955107f0aa981ae5e1ae345977a691e2b735c7c7577218904a05f27b3df",
+      "lines": 174,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/gothic_ui_theme.gd",
+      "git_blob": "ff17f88a2605c9781632b40d89740b0e64a2a9ba",
+      "role": "production_gdscript",
+      "raw_sha256": "95a573b02092d706ff2b567e71b3ccd846505c8a8fdb674a7ebfd4b7c7f3651a",
+      "lines": 1121,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/ground_effect.gd",
+      "git_blob": "b8b240910f7f4dd1b97f4f04208c551e349bca6f",
+      "role": "production_gdscript",
+      "raw_sha256": "906ce54ec94739f18f44e5c6386003209fc15647985188fd0e2229b4d2c683c2",
+      "lines": 389,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/ground_skill_visual_cell.gd",
+      "git_blob": "b67103f1fd5bfcbb1ae54f06ec852581fab31e42",
+      "role": "production_gdscript",
+      "raw_sha256": "6abdea21b76bd4876b1327cd2e248825eb339013e38cd8d414924f580ccb0f0e",
+      "lines": 55,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/ground_unit_space.gd",
+      "git_blob": "c3e3fe991c09ee716ebbf9a509d4b7bae8f8f770",
+      "role": "production_gdscript",
+      "raw_sha256": "d8d786f2b7fd8f7ff7b5b2a28e78625814f04c45432dfc94307a20b9778a5cf6",
+      "lines": 159,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/hc_r6_frame_probe.gd",
+      "git_blob": "42938e6c9e44fa07db73f5f0a7ae9ddd4812c47d",
+      "role": "production_gdscript",
+      "raw_sha256": "204b8b51499a74073fcf77b5d1f27445e9591a2613a0757329760c77c50dbcce",
+      "lines": 109,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/helmet_visual_v2.gd",
+      "git_blob": "30d7dab6be5c86f4f206562d7809e78e99798b36",
+      "role": "production_gdscript",
+      "raw_sha256": "d8bbab4e0d88bc6cf02e77e3833c99dc9fc8055925f19b9a671e006cf639d6ed",
+      "lines": 859,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/hud.gd",
+      "git_blob": "8e1e75ed1f811daf3e908d266a65e70b19806c58",
+      "role": "production_gdscript",
+      "raw_sha256": "f39b9833afde21a470af292b7126be0c58e0f290ac5e5d7a2e9d410ac3f2cdd2",
+      "lines": 3026,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/hud_asset_sanitizer.gd",
+      "git_blob": "2e4b6de370258f19e4939cc7c96e06b5cf7b3f26",
+      "role": "production_gdscript",
+      "raw_sha256": "46e8b0ec4384a892bef70e2ab31b4540ad7449dc8f3ca4ea0d73c8cb321c7adc",
+      "lines": 207,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/hud_chassis_designs.gd",
+      "git_blob": "d25aba8b5247fd734854074ffa260648487dc95c",
+      "role": "production_gdscript",
+      "raw_sha256": "2952eea319bd2bd9de085fe41dc2a1cf7240a54bb29362e3c11afd0d99110de4",
+      "lines": 97,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/hud_resource_orb.gd",
+      "git_blob": "a6fc70755c7d05bf97cfbc7dd9554978e311ce22",
+      "role": "production_gdscript",
+      "raw_sha256": "e1828ed53e836fd3fde6bcd2b3895984500002d87e97f93350896e0e53ad2532",
+      "lines": 56,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/hud_skill_icon_catalog.gd",
+      "git_blob": "6e40aeebb4503cff2e11bc2c363fe1a48d84864d",
+      "role": "production_gdscript",
+      "raw_sha256": "b21f1be5a3b94d4c8f0b56c3fe4d660d375645c6a874408b3614bd1d9433bbb7",
+      "lines": 69,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/identity/character_identity_codec.gd",
+      "git_blob": "0b666641288a6fd7337d2fae52128a17161de0ec",
+      "role": "production_gdscript",
+      "raw_sha256": "6561a911b61bd75ad1466ce83e2fd9af1c09b2506fc5cb304c64dd69e53747f1",
+      "lines": 46,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/identity/entity_registry.gd",
+      "git_blob": "2aca0ebc5b174b5a440915031b1601c9c1cde64f",
+      "role": "production_gdscript",
+      "raw_sha256": "1dd47525e5779fa77236483bb41638252908617a5b2ae72f7881b6ace6ad7e56",
+      "lines": 152,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/identity/equipment_identity_codec.gd",
+      "git_blob": "fefa92ea2fba60849ed98fec859f7df51e1668cb",
+      "role": "production_gdscript",
+      "raw_sha256": "df686ecf03253ae7de781fd0471d4b2b50906ba289c6bae0d84e7d50e964c770",
+      "lines": 98,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          98
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/identity/item_binding_codec.gd",
+      "git_blob": "d76e99dc045f322c350908d0d966b0beb5e70fab",
+      "role": "production_gdscript",
+      "raw_sha256": "6db9b651f7abad9cc539c7fb47ebeafd424f01c19ccbe9feb61cba9bcb1f4fcb",
+      "lines": 51,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/identity/item_category_identity.gd",
+      "git_blob": "be725a76efc8502f788398e98a6643159b3e9a77",
+      "role": "production_gdscript",
+      "raw_sha256": "9ac4c1d49c35053bc06130763a725bf95cb8f8341d61d6c2ea9bb935e0428544",
+      "lines": 102,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/identity/item_identity_codec.gd",
+      "git_blob": "027acdbc55004ab720f5934242d9a1bd7e23dc87",
+      "role": "production_gdscript",
+      "raw_sha256": "ea91f55df264ff6f5b9c1b5823eb92534ec09480e8bde3d2bbb367fcbfbece37",
+      "lines": 47,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          47
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/inventory_panel.gd",
+      "git_blob": "136baeae2045621bff5207d48a3ce21ffb9a446b",
+      "role": "production_gdscript",
+      "raw_sha256": "f8e6a87f2c410854d1a76ad24d66ec364f0da6bdce9294886700d379df565fb5",
+      "lines": 1822,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/item_attribute_help.gd",
+      "git_blob": "77b85d6e6fc95575fa75861ec4c3dfc648e02a73",
+      "role": "production_gdscript",
+      "raw_sha256": "80840325aa881f9ed3b708735d167ca919343c8dd25228e02e5da1ec7325a7eb",
+      "lines": 177,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/item_detail_docked_presenter.gd",
+      "git_blob": "0b32564d5b3f163cc6da56625a8765ecd43d27b9",
+      "role": "production_gdscript",
+      "raw_sha256": "c47c46cfdd0965fdbe2dbbe373ee515d0f7f330ab8e0ff3815b109920a9bbdf8",
+      "lines": 582,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/item_detail_presenter.gd",
+      "git_blob": "c14bf7af2921741c9fd8e85604a5253383e8d1db",
+      "role": "production_gdscript",
+      "raw_sha256": "f4093cc6d772ece4312bfba2bc8e7ca57118e2c5013d47c91a89becebe1466fc",
+      "lines": 701,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/item_drop_affix_v3_rules.gd",
+      "git_blob": "3dec688f967f5e87786afed77bd76b96f6c2ee46",
+      "role": "production_gdscript",
+      "raw_sha256": "87d567717f9228f99b1bbfc29fccfde102bddee2de395d315bcab80d815c2e30",
+      "lines": 85,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/item_drop_instance_rules.gd",
+      "git_blob": "6776758d8b8988cc9cd830bef61a5433115b23f0",
+      "role": "production_gdscript",
+      "raw_sha256": "b88601257a1b133921bda3e67d3fc8061100f7e3727f6e3eb429448ac50b57a5",
+      "lines": 577,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/items/item_extension_codec.gd",
+      "git_blob": "59ec205ae95065c17ca70b39607d6b29eda6b9ce",
+      "role": "production_gdscript",
+      "raw_sha256": "bfaad2a8f7c811e8696ca4416a721a65b32c8309c5d9006c7313fc5a3bb4c005",
+      "lines": 363,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          363
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/items/item_transaction_journal.gd",
+      "git_blob": "28284aad729ae5b14ac8638420c3528598314c3b",
+      "role": "production_gdscript",
+      "raw_sha256": "d92b00422f4a03562f3049c378c2e0ea640e16a8f010d8ce08c7320a0625fad6",
+      "lines": 171,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          171
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/items/item_transaction_port.gd",
+      "git_blob": "0ecdd5d930a3b260aac97ff280cd6d0ab70eeeea",
+      "role": "production_gdscript",
+      "raw_sha256": "68a9eb74ca1ef01bbf32635bec020a8094e67a4de9d659392edc8d068f19a501",
+      "lines": 308,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          308
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/items/rune_item_rules.gd",
+      "git_blob": "39f17a23ae560ecd13cb8b337d07ef02f5bbe3ed",
+      "role": "production_gdscript",
+      "raw_sha256": "893c2e86442112a8111dd2623f6a23230d971b0e699711f47e8ef33d0f01f1ec",
+      "lines": 67,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          67
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/items/socket_gem_rules.gd",
+      "git_blob": "32baf22b2e463af2ae0316fd0481442247be95fb",
+      "role": "production_gdscript",
+      "raw_sha256": "5683607ff1efe525746c6248b5e9cb495717e42b3a24f5bb9c8e37bffd7e6ddc",
+      "lines": 86,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          86
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/json_persistence_job.gd",
+      "git_blob": "54edc135359589e5d2d5f85b6da547f74f045534",
+      "role": "production_gdscript",
+      "raw_sha256": "8c016948356196ec7d777585b1e303f431aeac84f58f25a16cc44cb742757242",
+      "lines": 352,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/json_persistence_service.gd",
+      "git_blob": "8a5e1bb81408a6fb973a1560f5d1cfffee3cf53a",
+      "role": "production_gdscript",
+      "raw_sha256": "581d09246ef6e9991c35bb3563c90fd4f4cf3a098f56bb95d31b5a543dcd06c0",
+      "lines": 366,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/json_prepared_request.gd",
+      "git_blob": "18d1dbdaadf4f30589cb16adb09adc7db60f9d4f",
+      "role": "production_gdscript",
+      "raw_sha256": "7aa720d4193ff6ee3f6faa1da9e2ddc0efe402e8cccec2227c7dfa1026a95052",
+      "lines": 22,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/layers/presentation/editor_chunk_ground_canvas.gd",
+      "git_blob": "6d1a5a8654223132a795dbc088e8c7e548e4f13b",
+      "role": "production_gdscript",
+      "raw_sha256": "859593d4b22b8caa45a68f10c62f06046ff49e3fa2e775fdaa2e3014312a0965",
+      "lines": 45,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/layers/presentation/gothic_bich_camp_builder.gd",
+      "git_blob": "0d44b0300c80bf0569688c0a328aae0e2603005b",
+      "role": "production_gdscript",
+      "raw_sha256": "b1e4f81f4e9eb3a8b00bfd17c7eb1e54517fa6a42a9bea3f33a2b50af8551695",
+      "lines": 140,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/layers/presentation/monster_animation_policy.gd",
+      "git_blob": "79283c7ccfb87cf9da49dc1182b5a8a691dbc09f",
+      "role": "production_gdscript",
+      "raw_sha256": "a4864f7237b1d33bb014ad1f334aa81c69f9ea103364d0017224c3016130ab95",
+      "lines": 46,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/layers/presentation/presentation_registry.gd",
+      "git_blob": "59ef708ebc601798ae4da20897c8f4935f4632d3",
+      "role": "production_gdscript",
+      "raw_sha256": "3eadcbe30c64e6bb19c43fa358614698baf76923b077e4c451cd02f46c32e1b7",
+      "lines": 66,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/layers/rules/ancient_relic_fragment.gd",
+      "git_blob": "cf309566da05af13cecc7ca3bf22994cd629ac26",
+      "role": "production_gdscript",
+      "raw_sha256": "6371ca62c9461185910c75c82412c3dff289f89ada18241a1d681b66236e2d7a",
+      "lines": 63,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/layers/rules/boss_mechanic_registry.gd",
+      "git_blob": "7f0d1cf717f7f3ac09036b2f01fb238393cd49ef",
+      "role": "production_gdscript",
+      "raw_sha256": "4e8735674d5a12e300ca167389b7db4452e75de1955935f3caa7b52add832c57",
+      "lines": 28,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/layers/rules/equipment_enhancement_black_iron.gd",
+      "git_blob": "cd22f2631ad31ba44e683baab09ce87db68a8b2c",
+      "role": "production_gdscript",
+      "raw_sha256": "c788d2450d5557bb5064a91141ef2c6cc6a54b668de12af1a46b1eb3e7a26e7d",
+      "lines": 72,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/layers/rules/equipment_enhancement_grade.gd",
+      "git_blob": "7c5723a883e42ae4c26f4d8ae1ef290bd8c1b364",
+      "role": "production_gdscript",
+      "raw_sha256": "26541a4c1b2d636866c2de9ecec10728600772cf905b375a9ffe0479a9cabd1a",
+      "lines": 67,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/layers/rules/equipment_enhancement_rules.gd",
+      "git_blob": "6551320f8757e882913a273b8e18213774915894",
+      "role": "production_gdscript",
+      "raw_sha256": "9c2504b7ee22610e0268d7cf0da56ec5dc351015d9234432bb47188a580e7028",
+      "lines": 154,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/layers/rules/equipment_skill_level_affix_rollout.gd",
+      "git_blob": "82ab92e6b77438b57bfafcef9dede52f2f1c0376",
+      "role": "production_gdscript",
+      "raw_sha256": "23327406e12e0b7136f1f231d54c965f80af6cef411d748c66f2ffe3c9e297fd",
+      "lines": 66,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/layers/rules/modifier_effect_runtime.gd",
+      "git_blob": "5f05fa9e2d8234c58cf131b9d58543ee8db75aeb",
+      "role": "production_gdscript",
+      "raw_sha256": "33f51459c7b11ee073b3a40ee7f601769c1a044036d414bcc5ebf68d0f17c5e2",
+      "lines": 71,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/layers/rules/relic_synthesis_rules.gd",
+      "git_blob": "cd8ff459f2f63bc806db54923491cf2b9c599bfa",
+      "role": "production_gdscript",
+      "raw_sha256": "1c8f6ccf3e4b56b3a2da0c2b90d2d3ff273999af146ec88db2a70fd4158b6a1b",
+      "lines": 249,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/layers/runtime/authored_map_loader.gd",
+      "git_blob": "5584ad351c4b64e1d2ec4924fc81441d36ccc23a",
+      "role": "production_gdscript",
+      "raw_sha256": "26908ea8535b026a3ed4177720b6e7ed7234ce080e9b070c1a4acc000226e987",
+      "lines": 26,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/layers/runtime/combat_diagnostic_log.gd",
+      "git_blob": "a986b0e8501586284719d1a537d6383ac43ef928",
+      "role": "production_gdscript",
+      "raw_sha256": "58db28d30851c499b6e4e10f9aa04019b502ff6b52d223582dab733fe2b82b14",
+      "lines": 101,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/layers/runtime/combat_runtime_service.gd",
+      "git_blob": "90abc5df45101b21e77302521cb5f279483205a3",
+      "role": "production_gdscript",
+      "raw_sha256": "fbdf1d13b2383a80515c1324332bbe46ebe3211388925f0eb8ebf7989c5f04f2",
+      "lines": 377,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/layers/runtime/combat_target_query_service.gd",
+      "git_blob": "bd846621d8406b80e3cb8e7566f868d789e17d73",
+      "role": "production_gdscript",
+      "raw_sha256": "208441d27a3afb786103508b1b996dbcd9b557fa433a324235b232a6a14739fa",
+      "lines": 314,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/layers/runtime/content_layer_registry.gd",
+      "git_blob": "1471f14c73bcdb66ee396316339150fe712b6bda",
+      "role": "production_gdscript",
+      "raw_sha256": "4903076392cf7a51fc25c645cc3026af5a92c5a669eb10da7515105c97ae8612",
+      "lines": 677,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          677
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/layers/runtime/domain_runtime_services.gd",
+      "git_blob": "6c873b7d0294a2ac86c4d4e312f5a3d178bfa628",
+      "role": "production_gdscript",
+      "raw_sha256": "fc17966f3c13a5824243a3198d0afac1d332a2268bc7982a8786eb22847d3c8a",
+      "lines": 29,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/layers/runtime/equipment_enhancement_service.gd",
+      "git_blob": "f648e7d129717149ef07dc9dae3287a545946999",
+      "role": "production_gdscript",
+      "raw_sha256": "c126fc7f459092d3c2f6f368dfff8d3b0001b59aa079154663173ed1fc72b684",
+      "lines": 261,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/layers/runtime/execution/frame_budget.gd",
+      "git_blob": "abae07cdae94ffb8f626fea5e0372c0709b20a81",
+      "role": "production_gdscript",
+      "raw_sha256": "f047dc1b9905b582aa0484b8009fe407489502f49c4ea4462510c170515b4114",
+      "lines": 210,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          210
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/layers/runtime/execution/paused_receipt_pump.gd",
+      "git_blob": "5c1cc818395ab287030ff37feabedb861885a453",
+      "role": "production_gdscript",
+      "raw_sha256": "cb2acdfef258ebe3da44e2dd6e71816b80902ec48ba388896b2112ef728e620a",
+      "lines": 16,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          16
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/layers/runtime/execution/time_domains.gd",
+      "git_blob": "522efb5be7cd6e36858566516c0902089af3c6d5",
+      "role": "production_gdscript",
+      "raw_sha256": "60cf865eaa682277dbd60e0bf55ea7ecd5764b1406d6cee9f85bbb829344c77f",
+      "lines": 32,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          32
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/layers/runtime/execution/world_context.gd",
+      "git_blob": "0e4c57f9a4b97a45386785937c7884849c767c20",
+      "role": "production_gdscript",
+      "raw_sha256": "6bcb54757b29543b7c4569cd3b1edf4b60b1074a0249a68cd2965b7ac9b44ba2",
+      "lines": 46,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          46
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/layers/runtime/game_mode_service.gd",
+      "git_blob": "ac1113cbfb504baa7ce790c95a7c16669308c01b",
+      "role": "production_gdscript",
+      "raw_sha256": "c33a4bbfd306cf0164bbcb4943e9f3c54388dc88013f53f3f7ece982d00cc840",
+      "lines": 33,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/layers/runtime/loot_runtime_service.gd",
+      "git_blob": "17bf1bc2b4d13de619d5ce5138ab600210ae11ab",
+      "role": "production_gdscript",
+      "raw_sha256": "082998e570788c01a521b0bfca3fcd3332abd000c380a962002adc4b0a9fde76",
+      "lines": 835,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/layers/runtime/map_editor_runtime_bridge.gd",
+      "git_blob": "4c05a59748e88d9c78845b60f18def239a62c6ce",
+      "role": "production_gdscript",
+      "raw_sha256": "6322aaf98410f7578fcd7dd59b33c20ff34cc17a77463edc20a4115b31784ef5",
+      "lines": 866,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/layers/runtime/map_teleport_runtime_policy.gd",
+      "git_blob": "831df344d03a3478dd4d65e10c791767f96b72f4",
+      "role": "production_gdscript",
+      "raw_sha256": "2c48544f8852c6e718c42874a9d91f0e026dda2b0b86eba3695ef7df232c692e",
+      "lines": 196,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/layers/runtime/relic_synthesis_service.gd",
+      "git_blob": "1a088964722c64588e1c802954c7b407616f8c72",
+      "role": "production_gdscript",
+      "raw_sha256": "88be15d9d38758936a00ae3ed8da337e9ec8baf9e7e32643f0714640dfb9a6b3",
+      "lines": 131,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/layers/runtime/runtime_service_facade.gd",
+      "git_blob": "1bafc94714b5c73ede103902944c4820f19ee26b",
+      "role": "production_gdscript",
+      "raw_sha256": "79042e7e3c5d9048fed91fccbedacf03146a8d570f1c37b501e9ff6f0bcfbceb",
+      "lines": 22,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/layers/runtime/skill_footprint_diagnostic_log.gd",
+      "git_blob": "1e8be544782df80b76131d756f2cb3d211b4fc01",
+      "role": "production_gdscript",
+      "raw_sha256": "07cf56a52192d1e22b9fb41163749dd6fc0774811cb0c125413c61cc1ef03dab",
+      "lines": 103,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/layers/runtime/targeting_runtime_service.gd",
+      "git_blob": "7513a938baf5d330c9ae7194aaba2218de1713c9",
+      "role": "production_gdscript",
+      "raw_sha256": "59b4c641b88549419422f481eb712ccb4c44fb74438b8d6359c09190f7fc650f",
+      "lines": 47,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/layers/runtime/world_content_service.gd",
+      "git_blob": "67e6029e49870e669e2c79cf23fc7455ba99ad87",
+      "role": "production_gdscript",
+      "raw_sha256": "4f11d500202c08073b67692cf35da2336331be8c8ad0f60fee9b8ea34ddcfc18",
+      "lines": 106,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/loading_transition_overlay.gd",
+      "git_blob": "8e3d815b1f4815d0b92e0be22b76887321c90c05",
+      "role": "production_gdscript",
+      "raw_sha256": "61b87bcb63ff40bbd6c94e3b1ccb48793bb0b448d12214e2725e2fd8766ae396",
+      "lines": 446,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/loot_feedback_layer.gd",
+      "git_blob": "00e7e5bacfa1f642a83b0223399b0666cbada71a",
+      "role": "production_gdscript",
+      "raw_sha256": "ce3775bba9074b2258e22cd9f24e9d568d2f3aafa3e63fa5ac684ea4ea6ce560",
+      "lines": 237,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/loot_ground_label.gd",
+      "git_blob": "3694f52f91dbb05a259e868995254d06beac7da5",
+      "role": "production_gdscript",
+      "raw_sha256": "622b509677610817ef6cbbaff44ef2c6657d288b4689182f66ecac302df99ae8",
+      "lines": 67,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/loot_name_layout.gd",
+      "git_blob": "67a780f7e8048cabc7197cf258c0cceac09ab660",
+      "role": "production_gdscript",
+      "raw_sha256": "b71954283d9fc69d89647f3ac554ce7ef6d56bd2ee3114584bbcba11f03c51db",
+      "lines": 20,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/loot_pickup.gd",
+      "git_blob": "9f7c193d2ac466e14ec59c03f02b88a57749cf27",
+      "role": "production_gdscript",
+      "raw_sha256": "945e0a8a924237b5d6cca1ca65352b914bad27095e252713f72843c5a616ced2",
+      "lines": 406,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/loot_pickup_runtime_manager.gd",
+      "git_blob": "0de2fde2acaf894eaf0ff21d454ba93243b67927",
+      "role": "production_gdscript",
+      "raw_sha256": "1cdb2bb2cb9eb494426957853d2320c978106b87091bf7fb1487a3bb57375896",
+      "lines": 519,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/loot_preferences.gd",
+      "git_blob": "7256ad60448fcdeb3ed3d860093d1312c5519840",
+      "role": "production_gdscript",
+      "raw_sha256": "fba627139b55af966bb95d5a795e3728e4c2cdb7abd29c42c9974adcfd081541",
+      "lines": 74,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/loot_prepared_file.gd",
+      "git_blob": "845a6da6b90c1d6950cb7ce15556fcef39a5cc8d",
+      "role": "production_gdscript",
+      "raw_sha256": "a560de9cf4425789c218334035ffde13d51141a80163fb31ef312ee83acb99bd",
+      "lines": 68,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/loot_visual_effect.gd",
+      "git_blob": "a816c11a066bb73ed4a96cedd5cc444733251e84",
+      "role": "production_gdscript",
+      "raw_sha256": "8fe2fd28a15e5f9255383cacfd6f3f193dbe0337454f3c1a0d5dd8dc914657e1",
+      "lines": 229,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_assets/iso_footprint_geometry.gd",
+      "git_blob": "803164c0c46ba27b7f4cc3c4de6c1da5043f43e8",
+      "role": "production_gdscript",
+      "raw_sha256": "0015f7bfd0055e30ef9ca76a128ed27679321c9049579d8f9211ac366b7b543b",
+      "lines": 28,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_assets/map_asset_calibration_service.gd",
+      "git_blob": "58c35d9def9aa5b42876c871efbc2697b7d3f375",
+      "role": "production_gdscript",
+      "raw_sha256": "650ab3287040ae318031bbd502e53e40c625adb5cbb6522e3d8d9b32aeae70ea",
+      "lines": 117,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_assets/map_asset_catalog_service.gd",
+      "git_blob": "2303bc0ea4b1ba4c89b7d80aac296f36c7149acf",
+      "role": "production_gdscript",
+      "raw_sha256": "b773e98634b60c4e63c34222fde197e95559db751129c283060f0fbdac9dc3c0",
+      "lines": 284,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_assets/map_asset_manual_collision_policy.gd",
+      "git_blob": "8e9b4f70a8d5e8b10dc969c826c359f0b19d427b",
+      "role": "production_gdscript",
+      "raw_sha256": "d9d1f0d473a3ae45a1eb6b07114b8824e97e3199d03c5c674cb078def9cd6764",
+      "lines": 53,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_assets/map_asset_placement_anchor_policy.gd",
+      "git_blob": "9be97c4ce7140ac38a6362ed0e03b8ae5b5912aa",
+      "role": "production_gdscript",
+      "raw_sha256": "973db222dfa0374b27ef32e289a27717b0b8bb6de46e07161b141c362e7af102",
+      "lines": 75,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_coordinate_mapper.gd",
+      "git_blob": "fe2896d60928a85ef507fd5e715ab9cd4d671df6",
+      "role": "production_gdscript",
+      "raw_sha256": "69f061a030f3c279d5b40ac3bbe3d025a2b565cfc8d94ff7fa5587c59d36847d",
+      "lines": 311,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_design_catalog_service.gd",
+      "git_blob": "2f593a7fc5f5f1fe18e715452203b8cd177a7821",
+      "role": "production_gdscript",
+      "raw_sha256": "30d58df53329c25924ad080e740807f14cd815eabe0990ba9bcc863d559692b6",
+      "lines": 282,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_diamond_camera_constraint_service.gd",
+      "git_blob": "bf7ed22bba6ad3eba5ee68146ece64414f31fa46",
+      "role": "production_gdscript",
+      "raw_sha256": "f973b6980da7157c80ea16f7784a57bce7124677d27ea556f602988e9f3d857a",
+      "lines": 730,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_editor_app.gd",
+      "git_blob": "7a23f073fb2fe839ba12a0188aefec095128e68d",
+      "role": "production_gdscript",
+      "raw_sha256": "e42988f45b6723b5b935f3fb101916ee082637677f11e73bf044cc29a50eaefd",
+      "lines": 3264,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_editor_build_runtime_service.gd",
+      "git_blob": "3a5ca72e6a2bc927d474e60f18f76ac493671299",
+      "role": "production_gdscript",
+      "raw_sha256": "80fc87f6884f8bc82c1c48a7e4d15d085c402fb5e77270dcf7e6acc640e2711e",
+      "lines": 1363,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_editor_canvas_preview.gd",
+      "git_blob": "49293168f39fb09d742520fe61b7c200ecad5d5b",
+      "role": "production_gdscript",
+      "raw_sha256": "5ecd04e4a9ec391ebbe1043f92b5bc07ba3922418d34ab0e6b9b7073bb1e81cc",
+      "lines": 1158,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_editor_chunk_bake_service.gd",
+      "git_blob": "bacda7ae480c10a41316e89f2581698e2fb1c9a8",
+      "role": "production_gdscript",
+      "raw_sha256": "3507732cdcfabc4e543bb68de7ed3aced0755bfaa4caa8599d30b09f73e8604d",
+      "lines": 175,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_editor_collision_service.gd",
+      "git_blob": "0a569a63413483a2d5eb45ebf70c1d9c04a29130",
+      "role": "production_gdscript",
+      "raw_sha256": "2e02172b974d9349c4284648a29a4fe75208e6c559b0f3d8ffb5415037ab7f34",
+      "lines": 296,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_editor_command_stack.gd",
+      "git_blob": "ebfbe28279fc872a5684110d2d31cc8928de65b4",
+      "role": "production_gdscript",
+      "raw_sha256": "31b0952fe6a2ca5f43c6cfb80eb2c27aadd96ec90f59fa8658cd9690051bd48e",
+      "lines": 52,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_editor_connection_policy_service.gd",
+      "git_blob": "4bb65bf9dd0bf1c922e29b05c9de9a3889218eb9",
+      "role": "production_gdscript",
+      "raw_sha256": "916ce9f24cdca349992eaabed31165aaac270ec25b81ed083d3903e17a3349da",
+      "lines": 577,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_editor_content_catalog_service.gd",
+      "git_blob": "471096c20d2fe2fbb33678da19e0afc35bafb913",
+      "role": "production_gdscript",
+      "raw_sha256": "944be6b3f9d9937c168c9749feb8d55e354c79c4fb9fe6a143cf4989f3f5b372",
+      "lines": 356,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_editor_coordinate.gd",
+      "git_blob": "8e6682371cefdedc806f422b906dc3773fd062b0",
+      "role": "production_gdscript",
+      "raw_sha256": "69240bd56cfaca30cb1553165d3b2e73cc363c7f59b829b082898c80629a71aa",
+      "lines": 170,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_editor_gameplay_semantic_service.gd",
+      "git_blob": "3076e6507ad7129e7ea044c7fc9ed1c210b8df72",
+      "role": "production_gdscript",
+      "raw_sha256": "dc09acbc8fcb5419c8889cdb22b0f415aed7ba5597990a11c9a9ea566e4dbb36",
+      "lines": 258,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_editor_ghost_preview.gd",
+      "git_blob": "bc282412de20bd792f3c8ff3d466e71f322a5e5b",
+      "role": "production_gdscript",
+      "raw_sha256": "c3b876eaa7c92a941bf6e8bde17eb3a697af15ef86b7c8ec4b5001aa905886db",
+      "lines": 20,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_editor_grid_service.gd",
+      "git_blob": "2d643e9a9d5ded1e3e81f8cd2a9d16873b6c9c6a",
+      "role": "production_gdscript",
+      "raw_sha256": "4f89663a8619a20c9e86e13f70ef43022f29be243bd8e365b2ad3a7657d8fe51",
+      "lines": 18,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_editor_ground_service.gd",
+      "git_blob": "0609754c203b4a3f7931111e307992a6d203650a",
+      "role": "production_gdscript",
+      "raw_sha256": "a3d97e3bae4e0438f09dc334ac7b73df960a9d993793eca5d78c5906dc089afe",
+      "lines": 443,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_editor_instance_profile_service.gd",
+      "git_blob": "9809e31cf1f1f593ce8f4d16e97e7411fe2b35a0",
+      "role": "production_gdscript",
+      "raw_sha256": "feae0cec6bef39cf02af1ac1107bb0f4db999fe2028549eacb00da0cd8799f90",
+      "lines": 338,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_editor_instance_service.gd",
+      "git_blob": "c915e3dd6d857fe5bbd6d0b134ae237616e4b57b",
+      "role": "production_gdscript",
+      "raw_sha256": "d25ef486aa888375c6a48cf3412ddbe56d48810010852e4f7be5a790109fc0ae",
+      "lines": 634,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_editor_json_codec.gd",
+      "git_blob": "c9fc43b08330c329a3727246a25c027e5f369356",
+      "role": "production_gdscript",
+      "raw_sha256": "c7f80190bb172bf88b7197bcb423c6ac46c8f01f7aef7c502a2b1beaa434522c",
+      "lines": 27,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_editor_load_service.gd",
+      "git_blob": "32b36592476bcb8957ff417ff4b0b8cca5c79f6b",
+      "role": "production_gdscript",
+      "raw_sha256": "675596e1c8414d36d2f1845d998a17094e3d724533d45b351956ea82452e8e8a",
+      "lines": 15,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_editor_npc_placeholder_service.gd",
+      "git_blob": "1c57e2713268824fcb707cf25a40a47819635d9b",
+      "role": "production_gdscript",
+      "raw_sha256": "f13b617f0c7e850cb54ad8a0c1d412e8e89dd276d11abf395f5872f32dc24cd3",
+      "lines": 12,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_editor_path_safety.gd",
+      "git_blob": "6651b7a07c55bbc342357f97dd160ba3f77805df",
+      "role": "production_gdscript",
+      "raw_sha256": "99f3e54d07bf6a7833b7ca603e7d5a24c0abdfeb1dd3d94ac8d03a51db065bf9",
+      "lines": 89,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_editor_placement_resolver.gd",
+      "git_blob": "a84ecde340e963e4c7714397db12f7d5696d6333",
+      "role": "production_gdscript",
+      "raw_sha256": "54cda0bc5e3c599ffae6b4ce26807ac3e24383e6728d5d58c9a0206c86d12d8b",
+      "lines": 18,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_editor_placement_validator.gd",
+      "git_blob": "fb2ea97b017e18c5373318934a1dfe691f606b28",
+      "role": "production_gdscript",
+      "raw_sha256": "c4ea0574fdaeff8c4e5180a0e9a0612180beef2fbd40e5037f9543f600bb488e",
+      "lines": 89,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_editor_portal_anchor_service.gd",
+      "git_blob": "056c098bb0724121bb00d5a23870aed72c37c2f0",
+      "role": "production_gdscript",
+      "raw_sha256": "eca57e1e0002606ee33593e50c16e9a1ea355804a4a5b2a1c74f91c0dce17e5b",
+      "lines": 106,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_editor_runtime_collision_geometry_service.gd",
+      "git_blob": "c4eedaff32cfc14cecab728358c4e307c523a841",
+      "role": "production_gdscript",
+      "raw_sha256": "1f4b650f86af868190ad2ef2c83ddfef37d98cadd8ef8edcd7d9dce9502c93e7",
+      "lines": 732,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_editor_runtime_map_service.gd",
+      "git_blob": "bee3aa6833295c55f52a253d4440cf425e7567b5",
+      "role": "production_gdscript",
+      "raw_sha256": "50e6fc7c02ade177912141406a7edf0a986fb7b26f7f6ac7aeb1ba7254fefc00",
+      "lines": 253,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_editor_runtime_visual_geometry_service.gd",
+      "git_blob": "2d17f18072dab22a7dba9b0d0e6bea77af73f4e3",
+      "role": "production_gdscript",
+      "raw_sha256": "e9e9a27c52a5f97662d15d4e02b46ad0447bf5206ac20c8a72949d2e3ba7ebfb",
+      "lines": 823,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_editor_save_service.gd",
+      "git_blob": "3862f4a7839a04dc53dd6a9c1b8b0d554ff061d6",
+      "role": "production_gdscript",
+      "raw_sha256": "e077f17af650248003a205b0d32cb23bc4ba2365a57f17ddb2e271c3705bdc45",
+      "lines": 1149,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_editor_selection.gd",
+      "git_blob": "d303a7863551e9802d2707d5717cd00c16d12097",
+      "role": "production_gdscript",
+      "raw_sha256": "9e629a99f8f6b26f84cf25b6c94e2a5f6daa967fefbe5a268198ade5561ee25c",
+      "lines": 23,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_editor_snap_service.gd",
+      "git_blob": "d1dfd948ae09a810b8d6c186e3b9cdbb102d255b",
+      "role": "production_gdscript",
+      "raw_sha256": "49976db0fc2a060619936ef687257f12aa9a107234b4867db91fd36a95da7484",
+      "lines": 13,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_editor_spawn_identity_service.gd",
+      "git_blob": "0f0b8603e2205a50b37f0e4f1996950dd61c0f98",
+      "role": "production_gdscript",
+      "raw_sha256": "376c3fa4fde8f89e930bd80ca934dfb68a67cda759df5bcf64c7a562d739a415",
+      "lines": 242,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_editor_types.gd",
+      "git_blob": "5c2120173aa49e9160a617b51f64fff8ae5d3110",
+      "role": "production_gdscript",
+      "raw_sha256": "64f54257589f31d71de9b841e0c6e5cdce0f7c58279612aeb841bb93a78242ac",
+      "lines": 168,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_editor_unit_legacy_adapter.gd",
+      "git_blob": "68e70d630a8e687ed8c7d8be323a71c918284209",
+      "role": "production_gdscript",
+      "raw_sha256": "41452b1c31c8da991c1f29fb1a9266e01c455ec38e622a1cc7c324dcc67b3aa0",
+      "lines": 117,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_editor_wall_loop_service.gd",
+      "git_blob": "edc5c8e30284719d361a965ac5c89bd67c22e8a6",
+      "role": "production_gdscript",
+      "raw_sha256": "09e3cec7d313bdbfea75254185432b7b386f7364f9c08994afd54e2edf52e3c3",
+      "lines": 452,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_editor_wall_render_compiler.gd",
+      "git_blob": "3dd534b9fa59a0f037bffc803c0deae192d1c946",
+      "role": "production_gdscript",
+      "raw_sha256": "054a9e478bf4dffac0ed234197cae9af2a5b71e0d039b48a08adceb2cafc2224",
+      "lines": 564,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_editor_wall_render_plan_runtime_service.gd",
+      "git_blob": "93702f5298ec94f19589eed9ecfdbc54e3671ea6",
+      "role": "production_gdscript",
+      "raw_sha256": "820ccd84a65f5ba392b5720a8fbfdb6173c347bb742912a7189a27304b27aa86",
+      "lines": 259,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_editor_wall_render_publish_service.gd",
+      "git_blob": "803ad010cbe73c03e1a21351b2d9ee6daa05845d",
+      "role": "production_gdscript",
+      "raw_sha256": "d964c59fb7edca847197c647738c1a16325c12cd199b8910c82a6ea4a6fb46e6",
+      "lines": 490,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_portal_runtime_service.gd",
+      "git_blob": "ac1e1dd3cb2f53ebd0b5d47537ad7f7fce673cfd",
+      "role": "production_gdscript",
+      "raw_sha256": "b775f514ad9e3071e224846f9411317a59659d605cd2fa370d6ac2bfa2f84332",
+      "lines": 112,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_portal_travel_guard.gd",
+      "git_blob": "276c84cba727357842ea47cd188b0747b2faa17f",
+      "role": "production_gdscript",
+      "raw_sha256": "151d3e81f464aa9042779f9f1a85663163d98cd1ae26a10703ddadb6feb2e67f",
+      "lines": 73,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_registry_entry_splice.gd",
+      "git_blob": "396119c571177b7053cefdb9d74b54124aa12505",
+      "role": "production_gdscript",
+      "raw_sha256": "fee442cc8435f08bef4a3d70df7b333e1195b5e53af2b8d9c0396dd18a6e3668",
+      "lines": 177,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/map_ui_presentation_projection.gd",
+      "git_blob": "4a3bdfb9e52cadd0f942f9eb8840933a529a6e92",
+      "role": "production_gdscript",
+      "raw_sha256": "7be2f14a6cc8bd1125a8fdfb0ebfadb7033c7fb125bf8ec5c5bce486945d53ac",
+      "lines": 95,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/polygon/poly_alignment_probe.gd",
+      "git_blob": "a4b9ad50478fadb2f082615d2bafd5740aed56f9",
+      "role": "production_gdscript",
+      "raw_sha256": "0026e9c7d4c58033e101da4b8d1cc40e196c99ce86d8f578c3a0696d3bb11233",
+      "lines": 118,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/polygon/poly_authoring.gd",
+      "git_blob": "b03048483431c580a4c341f4cab07c792cf703ac",
+      "role": "production_gdscript",
+      "raw_sha256": "a631f1875816af19fbed819e063befc44f5db90aa98f557d636908af258b4b51",
+      "lines": 278,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/polygon/poly_build.gd",
+      "git_blob": "352de8c816cfd30ba5752e21419b6c3a60f16aee",
+      "role": "production_gdscript",
+      "raw_sha256": "2a2fb0937a2cedf1dc749cd26edb701fa17fd9e66a44cddff2040944ddad7cce",
+      "lines": 153,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/polygon/poly_editor_controller.gd",
+      "git_blob": "f03221cf3d49b44e9ea151da5086121582b677dd",
+      "role": "production_gdscript",
+      "raw_sha256": "1b35df4f129477b47300133c65717d9e4cf8490f838ce4d1b93be317998426ba",
+      "lines": 774,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/polygon/poly_editor_overlay.gd",
+      "git_blob": "91dd85c2a26920023685682f482b8cacf4cb17c3",
+      "role": "production_gdscript",
+      "raw_sha256": "1558b5baeb6298d69b00a544e899bd2db584e6158edcbf5dcf0addba36607c5c",
+      "lines": 10,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/polygon/poly_geometry.gd",
+      "git_blob": "7a09060a0ae311cbf69c162c870429160c1bd9a9",
+      "role": "production_gdscript",
+      "raw_sha256": "23f628a47a5cca2474d5d0357817919ce3523126b1df85105ad3dcf070ff36db",
+      "lines": 200,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/polygon/poly_index.gd",
+      "git_blob": "36d25332dd5bd8e18017ad45145b6dbe843c7044",
+      "role": "production_gdscript",
+      "raw_sha256": "c689666d24858522889e4ef747fb80ee2d80c85487d324e3757e443c4c5435aa",
+      "lines": 127,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/polygon/poly_instance_binding.gd",
+      "git_blob": "4801d2dbf7415b5f2706a6a86c2a887d70a9f61f",
+      "role": "production_gdscript",
+      "raw_sha256": "92231ec2d0c341dd0b3be45c11c197640591f5836c1ade9c4f80d77547e8a5b0",
+      "lines": 184,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/polygon/poly_nav_graph.gd",
+      "git_blob": "00eaaf6676e43b6d36109668870acddf41cc1ab7",
+      "role": "production_gdscript",
+      "raw_sha256": "8158bba44925634e9fa25c06d141039253ab320dc072e85365e89d6e26c734da",
+      "lines": 142,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/polygon/poly_path_search.gd",
+      "git_blob": "2c8ddd6fca461b48bfc2d6471b6efb132838db6a",
+      "role": "production_gdscript",
+      "raw_sha256": "340628088c6874ef9073fe65f636fa91375360a262138eec2366eadc793fde87",
+      "lines": 244,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/polygon/poly_pixel_layout.gd",
+      "git_blob": "c6aec05c37b02e4f2e960703eafb89294f442053",
+      "role": "production_gdscript",
+      "raw_sha256": "2f9b73f0c3d295605f79f27f730245d579d32d2c4844340fab3bfc4dae2176a7",
+      "lines": 98,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/polygon/poly_pursuit_driver.gd",
+      "git_blob": "3e63524906ed1eed92691f947ac2c6619497cf3b",
+      "role": "production_gdscript",
+      "raw_sha256": "2f31d3fae977275bc3e77d874475812f9c83143a23a7bf29bd7f261b53be0bc2",
+      "lines": 129,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/polygon/poly_reset.gd",
+      "git_blob": "f086d3396c817e62ca578f489a8fa22b5a89d088",
+      "role": "production_gdscript",
+      "raw_sha256": "62ec9b17310409b8afae7e775e652bb2fc7e62160cf7b23a7e877d851896be12",
+      "lines": 263,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/polygon/poly_runtime.gd",
+      "git_blob": "c1dc75034759ea36355de25451d98e188c33092c",
+      "role": "production_gdscript",
+      "raw_sha256": "71bd790a3c2fe80d7afa81153bbb1cc786164eec19d55d1f849fd599c663dc04",
+      "lines": 182,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_editor/polygon/poly_visual_snapshot.gd",
+      "git_blob": "fa96b87bdec5d371764ca22ab9ecabcb6b04fcec",
+      "role": "production_gdscript",
+      "raw_sha256": "73454d67e3da70bbb44181cec634eee3931fe1da6e60769579e01ad8a071aa43",
+      "lines": 76,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/map_panel.gd",
+      "git_blob": "02d290ed3c5d2f8dc708e401c9625fdbb0dcd1d4",
+      "role": "production_gdscript",
+      "raw_sha256": "128b152bba66ffeb8a4d5fd1740edb6cb51cc8d22a2cbd9d1ec29f3ac6ae7b2d",
+      "lines": 866,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/mobile_layout.gd",
+      "git_blob": "02529e7b828d7ac3ad4329d1236197ebba9bf57e",
+      "role": "production_gdscript",
+      "raw_sha256": "1faf89751a724e1f8ad7ae69a0a3b77f31361413a83c76f32271d8514a825d81",
+      "lines": 25,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/monster_ai_package/delivery_geometry.gd",
+      "git_blob": "2f7271cfe3a51af1115ed31fee2db8cd1392481a",
+      "role": "production_gdscript",
+      "raw_sha256": "c133b03f5fd709744bd16cd55559dc507c6d542d63110fbee196b7fda4f26c95",
+      "lines": 105,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/monster_ai_package/m30/context_token.gd",
+      "git_blob": "76c4049f0a53556827dba3e047052ad2015386ab",
+      "role": "production_gdscript",
+      "raw_sha256": "16752458cb7cd2699bbc0376b41dc22d2abf81d701daeffde6195e01b378b48e",
+      "lines": 26,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/monster_ai_package/m30/summon_queue.gd",
+      "git_blob": "606dff9560a2300ff1d5a84e63bcec3d846b5418",
+      "role": "production_gdscript",
+      "raw_sha256": "96bcd616093871c6035b38a050b76fe5b78663336c507644886c25d1a08eeacc",
+      "lines": 444,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/monster_ai_package/m30/walk_phase.gd",
+      "git_blob": "994e29fab1f07ea1140073400be4405dc1cea228",
+      "role": "production_gdscript",
+      "raw_sha256": "f3b93095a5a09409b79998af6baff953e61f864c3800766bdfc4317f25653c32",
+      "lines": 62,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/monster_ai_package/path_scheduler.gd",
+      "git_blob": "9cc6aea89b4c736873eff10f9996e451e85cdb8d",
+      "role": "production_gdscript",
+      "raw_sha256": "b7b02a79d570af4fd647f14fb5470419ad64852f491c1db681a45e79cade06b3",
+      "lines": 127,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/monster_ai_package/path_search.gd",
+      "git_blob": "c19705de63f070fa7f222459fc5d6f3bdecdebc6",
+      "role": "production_gdscript",
+      "raw_sha256": "b1276a0e94f5fce8e9c88dff66f262da0b9bd72e4d5b9a5bddfc8ad452ea3b9a",
+      "lines": 642,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/monster_ai_package/policy.gd",
+      "git_blob": "9c68cdf33fc16e73dc6846904c787a33ec9db5d2",
+      "role": "production_gdscript",
+      "raw_sha256": "d20fee4ecda8028afab4b6765a0b68d117819c1d4f48c9ce7243e1ed26c8e58c",
+      "lines": 117,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/monster_attack_source_overlay.gd",
+      "git_blob": "34a4319cbdb5f27a73384b61a3573cb5e2053ac0",
+      "role": "production_gdscript",
+      "raw_sha256": "389ba517a64e26c4749567b5ea5beb2e2e4598eb3cfe7b0ce5a5ae1058fc4c1b",
+      "lines": 55,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/monster_attack_timing.gd",
+      "git_blob": "d94c7b47fb23d06910ea4de67d1073320d102d20",
+      "role": "production_gdscript",
+      "raw_sha256": "8be3352dca82f213abff1136cc9eb414b02b74439560c55c7cf7bb18b73f2134",
+      "lines": 12,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/monster_crowd_attack_position_policy.gd",
+      "git_blob": "687bc81028e79d0e51f31802ade517b72aeabc14",
+      "role": "production_gdscript",
+      "raw_sha256": "245365b95d0d42b8e6a9f5da7f805e1faa65e327c446b52e58e18e67b5784b08",
+      "lines": 177,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/monster_display_formatter.gd",
+      "git_blob": "810641c565b4f162a4cd5c62792599b1ddd12f52",
+      "role": "production_gdscript",
+      "raw_sha256": "9b751bc6cc413b504ab75935f4b54d7ee7ff3b62f1c4ebdb8acd0f16ecd64c6a",
+      "lines": 194,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/monster_ground_alignment_draft.gd",
+      "git_blob": "6bda126fd7e3972c90884079384874e74080ccfa",
+      "role": "production_gdscript",
+      "raw_sha256": "a5dd445ebfb36123df71b1e72535549939d6fef9ce43fe4c237b0a865a794e38",
+      "lines": 360,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/monster_ground_runtime_diagnostic_overlay.gd",
+      "git_blob": "111ae2d5551a2e4be8383d7c9ccee14cdf774cf6",
+      "role": "production_gdscript",
+      "raw_sha256": "7f46fcce3f15ac87c19da60df5a44b93b9fd6efffb40974b5627b879e5083a90",
+      "lines": 305,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/monster_ground_spike_effect.gd",
+      "git_blob": "051eed320b6b8d6593b228b5016dbb9bfaafe8de",
+      "role": "production_gdscript",
+      "raw_sha256": "939423b5d519cfbbd2534447d13254defa93e42b1894155a9482aa3893117242",
+      "lines": 219,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/monster_identity.gd",
+      "git_blob": "a50f2b7e09dac4da455ae6eaba987c41ca1e1362",
+      "role": "production_gdscript",
+      "raw_sha256": "8c86f2039a8072a58a4a51b75308ede52ad1275a081358f146c80d6676eb5a04",
+      "lines": 232,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/monster_movement_cadence.gd",
+      "git_blob": "97658eb448e2faad20a273492b5e8d40a01df201",
+      "role": "production_gdscript",
+      "raw_sha256": "7f0345067502357aa7e20d2cc07047d827858ae5ed1104808d7c179bef6b64a4",
+      "lines": 477,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/monster_natural_regen_policy.gd",
+      "git_blob": "4c5a0c70113ebd13efb031738a3ea62dad5ef246",
+      "role": "production_gdscript",
+      "raw_sha256": "cb6586d02be883eb7b1eb76768ee990b5b496cf67693c69bdf170d7059df2b33",
+      "lines": 77,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/monster_neighbor_step_policy.gd",
+      "git_blob": "d99267c12dc5282807d9b1f0180bb24f1a261d05",
+      "role": "production_gdscript",
+      "raw_sha256": "df99cc7628eb88cfbfe360b2f5bd71ecd4a147408c6cbf8ab40148167debdd70",
+      "lines": 221,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/monster_overhead.gd",
+      "git_blob": "e59cdc869b02ed0c998fc9f33b2bd2f89ed683e3",
+      "role": "production_gdscript",
+      "raw_sha256": "c8354ead65eee23f55be11b9c6865f37e74de73de3ba2c1861a21195316ca3cf",
+      "lines": 137,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/monster_ranged_projectile_effect.gd",
+      "git_blob": "b6221fb52ae8cfbd5f2a2ebad35e0fef9d18f369",
+      "role": "production_gdscript",
+      "raw_sha256": "9f73fd20df9a8df05ca9807edc0ba04d942cace52517aaa571616306d0221548",
+      "lines": 386,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/monster_respawn_policy.gd",
+      "git_blob": "9fbaf904692f35dc52b63c1865b83f96cdb44359",
+      "role": "production_gdscript",
+      "raw_sha256": "92944003d88d30ab4ae36e167119c64058aeadbfe3a0dd9ce65d0028b45c868f",
+      "lines": 151,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/monster_source176/action_boundary.gd",
+      "git_blob": "046a31ee94394c09535343bfe11f9e26888b7c76",
+      "role": "production_gdscript",
+      "raw_sha256": "6e3caf3236b2b998494ef7b8ecbc857a2dfc7d513455c429881fbe362584bebd",
+      "lines": 19,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/monster_source176/frame_cursor.gd",
+      "git_blob": "8bc9448e70c259822319fc69259c1c7aa4e6456e",
+      "role": "production_gdscript",
+      "raw_sha256": "2e4101dd8a4b1e7bb6b5d24336917f6017d800702a4880d504dbb6f221e5712e",
+      "lines": 12,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/monster_source176/reaction_policy.gd",
+      "git_blob": "046c1a80801dc52dab7ddd2b9ef46199563c9dd3",
+      "role": "production_gdscript",
+      "raw_sha256": "0dd7c972bb04d9cb3f3068fe95a966b0f518de93267b02de9b33a07210d221a0",
+      "lines": 40,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/monster_source176/skill_reaction_registry.gd",
+      "git_blob": "531cec2225bacc58396e169a97cad34a505e2961",
+      "role": "production_gdscript",
+      "raw_sha256": "2fd34ad963f112223fa05e420545eadeabff9f7ab2b83826303386d4d8030cb3",
+      "lines": 56,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/monster_source176/source_melee_geometry.gd",
+      "git_blob": "e07ef6eb363e9d4bdf8819804b0587f072b7ac95",
+      "role": "production_gdscript",
+      "raw_sha256": "e879622924da605c3e6c5d02e7d3929f92b934118d6dfa3a0669bae4528b479c",
+      "lines": 35,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/monster_source176/source_step_plan.gd",
+      "git_blob": "af5c06f525b523bd36acfe87ff853d9f041b0aaa",
+      "role": "production_gdscript",
+      "raw_sha256": "1c3e1c48999def1ab02ab3f973bbbb076a6110357d9cd9a00367587ffe43d647",
+      "lines": 37,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/monster_source176/step_budget.gd",
+      "git_blob": "602bff7281811751b026f6713191de74920e03bf",
+      "role": "production_gdscript",
+      "raw_sha256": "1262a7256265a13f92029ae00d8c8110cc405080a68a7f08ec9f617f4f7ec221",
+      "lines": 27,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/monster_source_frames.gd",
+      "git_blob": "b4f8ce55b0b92c349d5d04b63aea64435dfe4629",
+      "role": "production_gdscript",
+      "raw_sha256": "b902228b8b21e388d929f79b86ab7073c2cb7782125438eaa9028684e4a7fd14",
+      "lines": 106,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/monster_source_poison_state.gd",
+      "git_blob": "cb038868f4735337b7f8ba23d87fba80edefbc70",
+      "role": "production_gdscript",
+      "raw_sha256": "62c0753b4c384630155b631ad9903dc74fd5932914c0a4dd236cc1adad6b227b",
+      "lines": 41,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/monster_struck_policy.gd",
+      "git_blob": "8caaf4b1366be1f3ccd7e4c014ac7c560cb602c8",
+      "role": "production_gdscript",
+      "raw_sha256": "9f83d8d607ba00530b55543375f2c4654975eee3afb78754929916230105db06",
+      "lines": 101,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/monster_target_acquisition_policy.gd",
+      "git_blob": "a4a7a8eb30d9429661b58fce2c0923a0c2c10589",
+      "role": "production_gdscript",
+      "raw_sha256": "1fde7a6919a9a4ef5a38c135cc0f6ea95ffbeb17ecc0beed289b2ae4bd99b48c",
+      "lines": 88,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/monster_target_magic_effect.gd",
+      "git_blob": "e2c654defa697f9a5f6e05a79965209fa280d8ab",
+      "role": "production_gdscript",
+      "raw_sha256": "b6b8885d61faadecb56441ee9c36140fa8cccc042716b67147ede4091bc998a3",
+      "lines": 404,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/monster_target_ring_geometry.gd",
+      "git_blob": "ca60249d2ffd755bdb74ec6b863b691d771d87b7",
+      "role": "production_gdscript",
+      "raw_sha256": "8a62c83e03ff8e115611e86cfc6abbe91b6726a5bb81c5d933dc7fd4c35e6a53",
+      "lines": 33,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/monster_terrain_navigation_policy.gd",
+      "git_blob": "59baa868de8a5d336dd2f5b979f6643b2b55dcc5",
+      "role": "production_gdscript",
+      "raw_sha256": "e31dc0cd3ece24131de3a3573f92ee40a6d6b683f8858b83c9f5be80ecd22aed",
+      "lines": 512,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/monster_unit_adapter.gd",
+      "git_blob": "8d8e3ed5241a98be446a17ce004cda7574784f2c",
+      "role": "production_gdscript",
+      "raw_sha256": "df3c261d4a646b8667069eda6b735d38a8590124aa39eb6de56568ad87e5347d",
+      "lines": 114,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/monster_visual.gd",
+      "git_blob": "5ff3bbb0dc060fa9d47c89b09e23a63f499d0cb6",
+      "role": "production_gdscript",
+      "raw_sha256": "032ab98c39bb16242da048d3ffca9c76384a8a6e8d962608e47a894d55867abb",
+      "lines": 1579,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/monster_visual_streaming_coordinator.gd",
+      "git_blob": "53a18e3e11e18ea88e9175527554a0466c026424",
+      "role": "production_gdscript",
+      "raw_sha256": "757da0597ab78aded642a98cf1e7433b9da06a6be5fb0684923ca6686282809d",
+      "lines": 1629,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/npc_actor.gd",
+      "git_blob": "87603cff2e2a1ecdd2b3aa0b6f5c456c66b5456e",
+      "role": "production_gdscript",
+      "raw_sha256": "61a829928c169fb36d14f0e3d7dede7cf1eae648750f9e32306f8cc9f4ce2096",
+      "lines": 144,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/npc_service_identity.gd",
+      "git_blob": "3c8e9a8c4b214111c19e28990a1ae21f68ca330d",
+      "role": "production_gdscript",
+      "raw_sha256": "c566989b83d7ac314626ce6bce2cca77829bf7cb004d48a86fb82ee7ed45b22b",
+      "lines": 50,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/npc_visual.gd",
+      "git_blob": "7553895db6905ac80e8e7bc9a8afa4ed79c4cf03",
+      "role": "production_gdscript",
+      "raw_sha256": "ac4bbaa3986fe0ab51bb2f941d99e70726ab9605f8feb26c735916195e2a43b5",
+      "lines": 123,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/persistent_ground_effect_manager.gd",
+      "git_blob": "74211bf574b125f16d7d59df8080947ba8aea70f",
+      "role": "production_gdscript",
+      "raw_sha256": "3a0a685fa9ff8565caf5d4ffad2c1c3cb87b61e7ddb8eb85af2a2d9cb88def8a",
+      "lines": 349,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/player.gd",
+      "git_blob": "5b71059b68834faa1aef05410033badf0e15b48d",
+      "role": "production_gdscript",
+      "raw_sha256": "95fdfbd24567982540e81c6f1e8a1d27cf50117d6e9dcc9f7dc3a0f950dcfc70",
+      "lines": 1990,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/player_ground_runtime_diagnostic_overlay.gd",
+      "git_blob": "fa13be9a9019fb5b5129f23ecd9e704c6c40f115",
+      "role": "production_gdscript",
+      "raw_sha256": "119797a4a132c659777fe78d2b69512298a1992202f26790e7c415535c2a2d78",
+      "lines": 26,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/player_health_bar.gd",
+      "git_blob": "5d1f85869c99bd9799129fc34c22d07d33750f91",
+      "role": "production_gdscript",
+      "raw_sha256": "1566cec377e48ab04e5318e9f2f54f627268fe983f679a89b9940ae44603bd7b",
+      "lines": 114,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/player_notice_presenter.gd",
+      "git_blob": "6cefd75dba825c0441c98789cfda1fa9265a3af4",
+      "role": "production_gdscript",
+      "raw_sha256": "925ccd0b9801f967959ec0c27847fd02229630ab643c4f9e298da6db57895323",
+      "lines": 250,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/player_state.gd",
+      "git_blob": "93901c54f39c9d84cc1d4a97d3e5c2eacf91b337",
+      "role": "production_gdscript",
+      "raw_sha256": "3665651d44a386b9ace7bd0731e122e01e942a7d65591823b14a84aa47f219fc",
+      "lines": 10177,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/player_status_marker_strip.gd",
+      "git_blob": "6632e0fc7190f098cb3065e0bd332bf58fab85cf",
+      "role": "production_gdscript",
+      "raw_sha256": "7f221c55b895a6f20f3ee2b26b026b5d4363b7681af9d54d1eab559a1f348cae",
+      "lines": 70,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/player_visual.gd",
+      "git_blob": "c3c468bfbe673b833887512f8f20dcd3289381ba",
+      "role": "production_gdscript",
+      "raw_sha256": "b1f0d7f55be712b4d2d3ae2a00335c4eb0db1e75b6b46acd534702beb29b7a29",
+      "lines": 1136,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/prepared_music_stream.gd",
+      "git_blob": "3a0d57c07fd605e6fd798f0b3cd15d84d4615154",
+      "role": "production_gdscript",
+      "raw_sha256": "092a0095153487169b705f8bbce7b255bbf685a5b9bb89dff9aa991476897299",
+      "lines": 27,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/pricing_service.gd",
+      "git_blob": "0c17904c541a37d66df10f53cee6d9f6209c36a6",
+      "role": "production_gdscript",
+      "raw_sha256": "a934949cb2ff0fbb61d36df82ce056cc0917466274e77c2274aa1f43aec5aebf",
+      "lines": 501,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/profession_rules.gd",
+      "git_blob": "31021112ce8f5058404f9ce3c2d30b5717348ed1",
+      "role": "production_gdscript",
+      "raw_sha256": "fddf0c96c7a59f56c2b58f03fe4e15f92e1445bb4f2141f6a2f6e9365189525a",
+      "lines": 475,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/quest_panel.gd",
+      "git_blob": "7aaca50d6735a6d3fdf1283718398869a780b17c",
+      "role": "production_gdscript",
+      "raw_sha256": "c867202bdc6dfe5ab43b8234c9b0ce0f776ef8550e26f436a777949ef46d0b8a",
+      "lines": 640,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/region_content.gd",
+      "git_blob": "ba1822c86d5a2926b6006c0583e7a4712e1eb1a7",
+      "role": "production_gdscript",
+      "raw_sha256": "3c248550b5fde4446784dedd8ac9d03d7c7bab4bb90eaf36f24aab3477c7c611",
+      "lines": 841,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/route_beacon.gd",
+      "git_blob": "ef5c0bddbc59a334e2466d6a2d26a5ff72d84d67",
+      "role": "production_gdscript",
+      "raw_sha256": "bf274e97ce1151947584b788d591ff9599ae36929a2f229267d249db11b3bd53",
+      "lines": 48,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/runtime_combat_spatial_index.gd",
+      "git_blob": "df3583403d606b2841c917a1805becd0d27df4fd",
+      "role": "production_gdscript",
+      "raw_sha256": "cdce62065caea6b169d19b0946dc3e72f84de6b73983bbe7fe8a8b742463a9cf",
+      "lines": 822,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/runtime_diagnostics.gd",
+      "git_blob": "ab81a802ffb16ef70a1625ce1d7ada729bfba9fd",
+      "role": "production_gdscript",
+      "raw_sha256": "d007c703dd3ae8320c4f12794a9666ee40999d6412e2456b6ac5257735a3b3cd",
+      "lines": 779,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/runtime_loot_spatial_index.gd",
+      "git_blob": "2c3a2d2e58a4a6eb9edd541eb0defce9d3d61d50",
+      "role": "production_gdscript",
+      "raw_sha256": "3db3ef3ac2d12e86e51f8811cbefa187b2fe23c44b1762a8191292d75231f87a",
+      "lines": 249,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/save_upgrade_backup.gd",
+      "git_blob": "657af4c83c670b4a3cbee65dbe97b6fced0147f7",
+      "role": "production_gdscript",
+      "raw_sha256": "aad1c64968c22009828ebefa143f7afd43722b61925f0831a6a245f6e7e4df60",
+      "lines": 115,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/shop_panel.gd",
+      "git_blob": "ca46e58464c5ed2966734195a43bf93d3be1699b",
+      "role": "production_gdscript",
+      "raw_sha256": "91a6578f940bc4677f51fb0235a8ea3c7d27b35afb6a5bd54e87208b1026b4dd",
+      "lines": 1474,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/skill_input_policy.gd",
+      "git_blob": "dc9c600967642b0ef634989f8aa5ac3318fcbba2",
+      "role": "production_gdscript",
+      "raw_sha256": "a00542f04f1d2c931553e5e0d31e60ed7040c70c7261e5ecae9a58a958926eba",
+      "lines": 427,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/skill_loadout_rules.gd",
+      "git_blob": "0fa0813c7f812cfef4c34245795107ec4938ba3b",
+      "role": "production_gdscript",
+      "raw_sha256": "bbedb6cbc327bb3ac9453d4f67a6984e7b2ac097f99b0c70bab17d28d2528d33",
+      "lines": 395,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/skill_panel.gd",
+      "git_blob": "1579f9c24c844e9a1b8a6f37ad8e6b9133bc497f",
+      "role": "production_gdscript",
+      "raw_sha256": "12652ebcde8802947b0ff0efb9664c83d34e0962e28b025a4bc61044f8f5fe1f",
+      "lines": 1077,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/skill_projectile.gd",
+      "git_blob": "225a8312528f7b2c8ac6a3e92e565a90b4daf5c5",
+      "role": "production_gdscript",
+      "raw_sha256": "8973047f4609ba69624b6832d006869ae723193e8048965284e5e496626b88a7",
+      "lines": 730,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/skills/caster_spell_geometry.gd",
+      "git_blob": "294f8d311006b1a06356197eb4dce7fbb191f850",
+      "role": "production_gdscript",
+      "raw_sha256": "730f80291e0c976d92b3feae288b38762a97675d1fe14b828cb2cc82da6cbe4f",
+      "lines": 1113,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/skills/combat_direction_space.gd",
+      "git_blob": "b40232b15905d9c81bee6eeb4e49f079f24f1507",
+      "role": "production_gdscript",
+      "raw_sha256": "928ef8a07d7a6ea49a240ce58840d1b658071d1df49f9b7c9aad89be83c95560",
+      "lines": 93,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/skills/combat_release_geometry.gd",
+      "git_blob": "43588b52a3ea4ca3a77a033a94361cdc1de89c1d",
+      "role": "production_gdscript",
+      "raw_sha256": "2616985d4dd87f9579b62c49e1cf113553186a1500c2ad93586e0f55e20c578f",
+      "lines": 291,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/skills/combat_unit_legacy_adapter.gd",
+      "git_blob": "516c7453630db26fc9e001d3c141596c63a23d34",
+      "role": "production_gdscript",
+      "raw_sha256": "08e5247f02fe3a0f052c9da10573cb3234968cc70c00aece4bdbeddace553669",
+      "lines": 214,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/skills/formulas/mir2_skill_formula.gd",
+      "git_blob": "294623804d4e2fdabd3d85ef16025f38ea304038",
+      "role": "production_gdscript",
+      "raw_sha256": "c599b453cf093cf0d334a264c93c4abc795666f8dc3141b0b77fbc9cf6c996bc",
+      "lines": 75,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/skills/legacy_skill_adapter.gd",
+      "git_blob": "679cff4b2df12faf4f2be967d0366dd654a749c3",
+      "role": "production_gdscript",
+      "raw_sha256": "e3581adbbdc0ec1c480eb9383be8112f171c41e98853877aec64406ab4616273",
+      "lines": 44,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/skills/runtimes/taoist_skill_runtime.gd",
+      "git_blob": "c30c09f156315cc3210d408ab57c189a824d16bd",
+      "role": "production_gdscript",
+      "raw_sha256": "3c646a1241c2fd76dba4fed1254963f7f8c455a3779272af74f99d9236645b63",
+      "lines": 1031,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/skills/runtimes/warrior_skill_runtime.gd",
+      "git_blob": "15aabcdf35ccb5d1bdf6f652c1b4542f8a7ce18a",
+      "role": "production_gdscript",
+      "raw_sha256": "66d8e70e19f0c13a089ecef5da48df6a347328e608dfcb3c68adad25b0eb77f1",
+      "lines": 202,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          202
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/skills/runtimes/wizard_skill_runtime.gd",
+      "git_blob": "50d831c14dcfbdaa1a331efd2b99aa3dba6baa11",
+      "role": "production_gdscript",
+      "raw_sha256": "07196a335cacf5ec9112446e517ed05a1fbc3a12f2ff5a6f41d5816a712259fe",
+      "lines": 391,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/skills/skill_cast_request.gd",
+      "git_blob": "b49f0738c98e776a6eea56737063c5df192fd5b3",
+      "role": "production_gdscript",
+      "raw_sha256": "af17458b083f3f8829dcfca5c098997b345db53e07fab327dd9cdfff5ea299ff",
+      "lines": 69,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          69
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/skills/skill_data_loader.gd",
+      "git_blob": "f7cc9a465a478fce2400722c187ba4e9d781004c",
+      "role": "production_gdscript",
+      "raw_sha256": "9f4040b9eb704752b53f634ccd07da22541abbee6d639abab229f71625170ed8",
+      "lines": 490,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/skills/skill_execution_plan.gd",
+      "git_blob": "39f3b71885089010e3eae35b2a3f64baec64f65a",
+      "role": "production_gdscript",
+      "raw_sha256": "bb9f5a83ea76a8bb5fad146e7ed9cc1056d963d945c46dbf51c2481b7ea02915",
+      "lines": 70,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          70
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/skills/skill_execution_plan_contract.gd",
+      "git_blob": "c21d690ebbc2cc0eec10f7733365d8c07f7b5e7e",
+      "role": "production_gdscript",
+      "raw_sha256": "1f8a3831aaa715b7aff294a205ade55b2a65c6bce01211a35915902f8efa657c",
+      "lines": 1073,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/skills/skill_footprint_query_plan.gd",
+      "git_blob": "dbd6226f1b3a0903e6c4d72f144c27836436dd62",
+      "role": "production_gdscript",
+      "raw_sha256": "0d409e4789e6d9906e21101c01557b45a42d77f2bcbffd39a25d05be17a27120",
+      "lines": 341,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/skills/skill_footprint_snapshot.gd",
+      "git_blob": "a0ec51e20d5a5b816bd946b4919f449c989db9dd",
+      "role": "production_gdscript",
+      "raw_sha256": "e13b68de0238c68029b5f071b6d4b87795d76014c491ac74454290320cf370e8",
+      "lines": 1889,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/skills/skill_geometry_service.gd",
+      "git_blob": "19f0cfbe99c298e6a09d997d995018b7f6e9349d",
+      "role": "production_gdscript",
+      "raw_sha256": "d6fa941d425798978876f9ffc77a5f2a5fe56890d97d11ece6ee72f13de3fb8f",
+      "lines": 99,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/skills/skill_player_description.gd",
+      "git_blob": "2cd7af17af74272424d6b363954356ec1d41c2b2",
+      "role": "production_gdscript",
+      "raw_sha256": "4b1adce002f123e2ae0a31fa304509ecd446f34aec9969be3b3b49f387e56130",
+      "lines": 154,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/skills/skill_progression_service.gd",
+      "git_blob": "3a89929d8d17013006130f868333e406f011aa10",
+      "role": "production_gdscript",
+      "raw_sha256": "0b5dd4728ab43fd226e45a28e654dd9ff4ce819dce9232ac94375d7cd73d43fb",
+      "lines": 229,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/skills/skill_rank_extension_policy.gd",
+      "git_blob": "02523d5c9c75be256215d237d60d7df8f3e9d7a8",
+      "role": "production_gdscript",
+      "raw_sha256": "61ac7e79268b41abcd6db47471d8ca3d418f81174472d82bb9376c8cd9e8fd88",
+      "lines": 126,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          126
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/skills/skill_rank_resolver.gd",
+      "git_blob": "f3e806816773dc29e1fa3984aa9c9614ff3bec86",
+      "role": "production_gdscript",
+      "raw_sha256": "47f38958b921e61fe247c9ebd2a0af82b79e7888cbe974327277f5ef7b34571f",
+      "lines": 120,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          120
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/skills/skill_resource_service.gd",
+      "git_blob": "ce436710520ac08836f669e33012430933e1eda6",
+      "role": "production_gdscript",
+      "raw_sha256": "da17e627c6bd614cc51e3bd31c76d39d4f2d78a5b70ead1667b37e48bae2c24f",
+      "lines": 329,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          329
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/skills/skill_rng.gd",
+      "git_blob": "8fc486c85f98c63703c2c42aef1c695cb65fd2f7",
+      "role": "production_gdscript",
+      "raw_sha256": "ae06e6a269377edece7c191f34ec7181b40a8275533d99b287229459e8595e7f",
+      "lines": 32,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          32
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/skills/skill_runtime_classification.gd",
+      "git_blob": "3195c6e3f9803f24765ea332c14105501dacae6d",
+      "role": "production_gdscript",
+      "raw_sha256": "7ebfa3be0aedac4d0da8616912337ce03782eb51e13ba58981253401691885b7",
+      "lines": 314,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/skills/skill_runtime_router.gd",
+      "git_blob": "f0d823dd69ffbe9840eaeed1dd4bca8211010f82",
+      "role": "production_gdscript",
+      "raw_sha256": "1abd850db05601cd989550b0ac5f1574eb6ffa988c06e8a82a3312d67f83be2b",
+      "lines": 392,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          392
+        ]
+      ],
+      "findings": [
+        "B01_CANDIDATE_non_dictionary_rejection_dereference"
+      ],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/skills/skill_spatial_projection_contract.gd",
+      "git_blob": "525431e9ee461adba6743c0d13091892d0ce135d",
+      "role": "production_gdscript",
+      "raw_sha256": "3640a9f16c753d578bc8958303cffe08c90f28440ced4f1938948932024533fb",
+      "lines": 289,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/skills/skill_target_service.gd",
+      "git_blob": "4ea9758062b66f2a5df1f6fb7800689b705c37c7",
+      "role": "production_gdscript",
+      "raw_sha256": "257db057710d890ab99b913efc3158ecd682278d322b0916fe0e67dc53598465",
+      "lines": 21,
+      "review_status": "STATIC_REVIEWED",
+      "reviewed_ranges": [
+        [
+          1,
+          21
+        ]
+      ],
+      "findings": [],
+      "current_native_tests": [],
+      "notes": "Full current file read; this is not whole-domain dynamic acceptance."
+    },
+    {
+      "path": "scripts/skills/skill_visibility_policy.gd",
+      "git_blob": "bc565676891ef0947edb9d718494269c7ffc4fd7",
+      "role": "production_gdscript",
+      "raw_sha256": "cc59324e5294ac62a5b6e5dfda4af3a9910a634bf6af6654bf3daf423070b5bf",
+      "lines": 23,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/skills/spell_target_lock_policy.gd",
+      "git_blob": "7f363280a11b2852b280eab02b795323f73a613b",
+      "role": "production_gdscript",
+      "raw_sha256": "6e1858bce720f6f1272f02f89f208694b5a83e73182e023733a6511b9a03f0dd",
+      "lines": 87,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/skills/taoist_friendly_targeting.gd",
+      "git_blob": "c8cc81c4f3e45aa0132f09c91deedc8078623ff5",
+      "role": "production_gdscript",
+      "raw_sha256": "e41eb865cb9051023670c67eaabdee396603c596b7b02ceaa759e23364675362",
+      "lines": 91,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/skills/taoist_support_policy.gd",
+      "git_blob": "01f406bc670db1d2143c0e34f8748efd29606e38",
+      "role": "production_gdscript",
+      "raw_sha256": "2b33c582046f59c5a31c3dde5777d2960a2aca610cae03efc0eab8f24c985116",
+      "lines": 196,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/skills/warrior_melee_diagnostic.gd",
+      "git_blob": "a28632c59884ec3cb0b0220920109af72c795617",
+      "role": "production_gdscript",
+      "raw_sha256": "dca7e6098fcb85f4208e0a14baed23770d1e03c85299e5a5ce0f7cc210ef16c7",
+      "lines": 501,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/skills/warrior_melee_geometry.gd",
+      "git_blob": "554855f4692805fa1d7eb1bf595b20a503b34db9",
+      "role": "production_gdscript",
+      "raw_sha256": "aeb280d129fcf0004850a137dd98a7934783b7512404499873d997e264b2ce54",
+      "lines": 1433,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/special_consumable_stacks.gd",
+      "git_blob": "101e2d11dca3c8e2a1a64d6fc5b0afb2d85f40dc",
+      "role": "production_gdscript",
+      "raw_sha256": "158fe17a74d87b29ed622177814144acc10f29046a4dd8374c7825da475cccfe",
+      "lines": 41,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/startup_loading.gd",
+      "git_blob": "b511ed26fc8ea062a762ec635ab6f5dfff9d4b34",
+      "role": "production_gdscript",
+      "raw_sha256": "39c731e286ccffd214f49d1dbd35b1f08289bc8563c7273358320c822b78410d",
+      "lines": 834,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/summon_actor.gd",
+      "git_blob": "dfd9cb56f60a3eb5d2853efed806241025df6ddd",
+      "role": "production_gdscript",
+      "raw_sha256": "d854daf73daa4ab5cda21f08e10c199bcf4bab36628e5b90d2c3f3d755f6be0a",
+      "lines": 2235,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/summon_visual_registry.gd",
+      "git_blob": "ae73b174792c0c61f2faeb6c57a589139b6efbb0",
+      "role": "production_gdscript",
+      "raw_sha256": "f2e5c8755b0a04f6441c342131d56d4eebcff3bca821c5a2a3f9597392f9c110",
+      "lines": 644,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/system_menu_panel.gd",
+      "git_blob": "bb94fc96a47642b3728f0fb1feda8d6bf2241aca",
+      "role": "production_gdscript",
+      "raw_sha256": "241f2225179e7100b85fe2c453ca4d6519c42520e2fc9fcdb744d91c1c4d6650",
+      "lines": 501,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/taoist_combat_math.gd",
+      "git_blob": "96251a1c3d1f9ce40230bea8b5c614ee60500b2b",
+      "role": "production_gdscript",
+      "raw_sha256": "231a1106a262a072a92cbcd73a58e86b79a46e57e6ca45170c054997dec88bb0",
+      "lines": 292,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/targeting_system.gd",
+      "git_blob": "d2a551bdbdc7486fecebb4718a3c12ec566fc59b",
+      "role": "production_gdscript",
+      "raw_sha256": "4cf53b58c7b31e094b538495b7078849f9fc648f8d6e12ff54f80e6376fe3923",
+      "lines": 159,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/technical_art_sample.gd",
+      "git_blob": "edaf9812d5ae150ce7c568c8df039bb0c825d008",
+      "role": "production_gdscript",
+      "raw_sha256": "8af3b61365cb2c3a09de7090bb1078a8a3b2b614e6bbfd0d7a616fd0e0d12ecf",
+      "lines": 97,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/test_character_skill_profiles.gd",
+      "git_blob": "f320add76703e3db90094050ecba0c647cde26ae",
+      "role": "production_gdscript",
+      "raw_sha256": "342806f6cc1be094bb24471b313b707210b497555b52b07c60ed747a32b4829b",
+      "lines": 173,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/touch_scroll_support.gd",
+      "git_blob": "9e4cd0788830a2105d3566cbaf8e25bf8cb0e65a",
+      "role": "production_gdscript",
+      "raw_sha256": "a438234411bc0d1329467fa0f4879c875eee11a13263bba03dbd5aa7514a543f",
+      "lines": 255,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/town_music_controller.gd",
+      "git_blob": "d72ed972e1b17a23ef1065a7dc7050495334eab0",
+      "role": "production_gdscript",
+      "raw_sha256": "da8ec99cf5e61e79e34d9f6d9d0a7e7c1e3e3c1cffc7ef4e4bf75a6700854b29",
+      "lines": 365,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/ui_activation_once.gd",
+      "git_blob": "66903e3984a852d06ca1b704faeb6660be7a3d0c",
+      "role": "production_gdscript",
+      "raw_sha256": "904448f44a47e83cc6a7290d312b46b67c477fb0eebdcc43731787fb0772d4b5",
+      "lines": 150,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/ui_error_feedback.gd",
+      "git_blob": "530d17235c46a504158fb38c8ce5a44206377e0d",
+      "role": "production_gdscript",
+      "raw_sha256": "18cb0fd6217b044e94aa693efb0eacb20d478431e597785f78948c6c7a1ae7b8",
+      "lines": 132,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/ui_item_detail_dock.gd",
+      "git_blob": "728168b07f394bccae00d38e1f1ee4a5e0dc8a60",
+      "role": "production_gdscript",
+      "raw_sha256": "9bba0e6c42f3ad90a5b51e3a192ffc64b67d6c36d9533859e1e4c22c3a0403ab",
+      "lines": 78,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/ui_item_name_style.gd",
+      "git_blob": "554ab5d738c24d191da8ac53bb3f4875b60b507b",
+      "role": "production_gdscript",
+      "raw_sha256": "cf97af7b625107cea90969a1cd83cb6210fa31bf787d0226e2aeeadbcdaae3d3",
+      "lines": 132,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/ui_item_player_copy.gd",
+      "git_blob": "8545303fd32f254622864df557eb4642d3271d2d",
+      "role": "production_gdscript",
+      "raw_sha256": "64272ed9949a1f1f179da1e3942820d756771d9823920901e240c8f7bdd7bf5b",
+      "lines": 109,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/ui_item_selection_lifecycle.gd",
+      "git_blob": "3d318c89a1287244b4c1b63b08e1eeac979d4423",
+      "role": "production_gdscript",
+      "raw_sha256": "52edce458073e62bdc62df7156c7f3412a164018b358b21567cfecddb89125ba",
+      "lines": 90,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/ui_item_selection_visual.gd",
+      "git_blob": "815956bec2d80dbf3dc5047f21057fc167551be1",
+      "role": "production_gdscript",
+      "raw_sha256": "7a9b843a5d980e9a3def8439b6e42fb4790e2538a368c953d0c2a83e40fcdc7d",
+      "lines": 38,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/ui_item_texture_cache.gd",
+      "git_blob": "3a632eb942b34495562cf4f54f602480f56edcb3",
+      "role": "production_gdscript",
+      "raw_sha256": "8ae8484703626dfc3c5580471b75b43c9734c79d4c0eb33221d32a1e99dac865",
+      "lines": 114,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/ui_layout_calibration_overlay.gd",
+      "git_blob": "ab6f1b1bacfd12a20722cf63fa8bac4ab8897d79",
+      "role": "production_gdscript",
+      "raw_sha256": "d8f9fc21200e79fe964ef199a023b6b666e23ec7e39da34a5018e1d18a73c1cb",
+      "lines": 1278,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/ui_level_up_preview.gd",
+      "git_blob": "682cdd2776d508c1d98febca29af76dea1d78627",
+      "role": "production_gdscript",
+      "raw_sha256": "f84d03075e4f1c3a061730df062d549271fd2c46c5bfc701bdebf6f75ea9fd79",
+      "lines": 361,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/ui_player_notice.gd",
+      "git_blob": "6f08104256f36214016853471ee4304fb4982b37",
+      "role": "production_gdscript",
+      "raw_sha256": "86ff2afa986daeec9c0e7e3800fdae095d936d974362b7755ae13f9b3a981d7a",
+      "lines": 192,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/ui_registration_lifetime.gd",
+      "git_blob": "a08407f83d6102e91418b4f6b50d0966645fde52",
+      "role": "production_gdscript",
+      "raw_sha256": "3d580784509a72781b38d5bfaba88df09120662dcca729b1f87363f87575f4e3",
+      "lines": 42,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/ui_relic_proc_effect.gd",
+      "git_blob": "c3e9195baffc0f01dfc8b9bc85f21f011284ef31",
+      "role": "production_gdscript",
+      "raw_sha256": "ba08238a84e5babc879b29891536db73b5ee16380a4182990839b3369f418a48",
+      "lines": 63,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/ui_runtime_layout_overrides.gd",
+      "git_blob": "a9b4e64a07dbccd236f3af0cf3638f34e8124ed5",
+      "role": "production_gdscript",
+      "raw_sha256": "9400f98cfc5689ee9244237125987ae7a7eff823e9b39e18a9c294b4899ad4ec",
+      "lines": 725,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/ui_selection_dismiss_guard.gd",
+      "git_blob": "21a8fecdb686dcc3422112478fb9c3c86983115c",
+      "role": "production_gdscript",
+      "raw_sha256": "e24be087b62aeb7737758e11e056c7a2e158d3b25e2be2aca54f41f08120b110",
+      "lines": 255,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/ui_shop_detail_space.gd",
+      "git_blob": "f4768cda3188164eb87cae46535ccf0ab3e05b13",
+      "role": "production_gdscript",
+      "raw_sha256": "200764c0fb3f81b2cb694d97a1139be79fb2b374067bdb33b841c99cc40a0e99",
+      "lines": 147,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/ui_style_visual_bounds.gd",
+      "git_blob": "414c7bf1f97d8e923154dc51e0881ce7e391e87a",
+      "role": "production_gdscript",
+      "raw_sha256": "1bc15f13ac87a75bb779e28abdc96566d7e0a6710c96d171695efdca63ca4ba9",
+      "lines": 152,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/virtual_joystick.gd",
+      "git_blob": "5031a8c5840e8d38cb748892d258093039539269",
+      "role": "production_gdscript",
+      "raw_sha256": "d45d17acaf1daa1ae1ca9b34b72663c07a4b0d03dc6a8ccc837f11c2112c70b1",
+      "lines": 107,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/wall_runtime_perf_probe.gd",
+      "git_blob": "15cbf7a38cacdb409f4f84a56bf14663c7cbf35f",
+      "role": "production_gdscript",
+      "raw_sha256": "32f5881e9abdcad1811666ad457c79ac65f023e2b2ec80cd361cd163bddd4ea2",
+      "lines": 416,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/warehouse_commit_operation.gd",
+      "git_blob": "258004ccaf5c4b62a51699b5295b8d60bb570281",
+      "role": "production_gdscript",
+      "raw_sha256": "31ba26a99c6f936bac5e6218a7bbcf6832b922235d9c57eac12c3581ed926a03",
+      "lines": 97,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/warehouse_panel.gd",
+      "git_blob": "186bf2d673338995d8f1ba9b7434a57ada54546e",
+      "role": "production_gdscript",
+      "raw_sha256": "7dc9fb564bbce5fec7aacd2e42d47124d57ce79bbcdbc9a6a39f6af181a56449",
+      "lines": 1452,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/warehouse_prepared_transaction.gd",
+      "git_blob": "d67c0c1600c67c20f9e219f04bf5bc6ff1943ae2",
+      "role": "production_gdscript",
+      "raw_sha256": "3790915edf8f5d724d252ef0dafd44ef3503e2490414795b2895dd8b9cae9079",
+      "lines": 86,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/warrior_combat_math.gd",
+      "git_blob": "f879b84af56f6efa8c2f46cc0c491b309270b3e9",
+      "role": "production_gdscript",
+      "raw_sha256": "a24eb74882d70c8819af2e8cfaa85014dd8b417dce1508fae18b8df32dd74d78",
+      "lines": 201,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/warrior_melee_visual_effect.gd",
+      "git_blob": "0ce611b7b67a608046c30b5e9feb9259475a5f9c",
+      "role": "production_gdscript",
+      "raw_sha256": "73fe68b6033d80b2807aec8fdfa7d4383e08dfb0e208bbf2c686a07e07a6993f",
+      "lines": 313,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/wizard_combat_math.gd",
+      "git_blob": "b8730952b2356a7f8613e81d7cccf98415d94a9b",
+      "role": "production_gdscript",
+      "raw_sha256": "6c0150cece14b38997605a6903514fe46c6b7fc1ee9fec0ca0cbf659faa3d8cf",
+      "lines": 142,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/world_background.gd",
+      "git_blob": "a947c6f85e016139279882da0db31b3c5c640796",
+      "role": "production_gdscript",
+      "raw_sha256": "0822bac938022122c0cf25780647455da196f6a18dbbec02a661239e8bab37a5",
+      "lines": 3699,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/world_bootstrap_coordinator.gd",
+      "git_blob": "3fdff4e53812307b2ff88cd4ff64d1a604dc44dd",
+      "role": "production_gdscript",
+      "raw_sha256": "7a627543514f36cb75cf162436f6de2d5f267ced665bd9c15c81d71ba76b69af",
+      "lines": 791,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/world_camera_follow.gd",
+      "git_blob": "740b694522473fe1373fe32460128417e1c2d8c3",
+      "role": "production_gdscript",
+      "raw_sha256": "0d6462cd3723aca7c958c97778cbd37b2f5d5f4ec522fb8218a4f937988e2bb0",
+      "lines": 16,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/world_clock_delta.gd",
+      "git_blob": "4199900829d8fc13bc8eac4ba1f2e16bf8b0b169",
+      "role": "production_gdscript",
+      "raw_sha256": "93ca3f54f9e7e475ce6d830cdbc23325d09898e732270ec122fe4aa79b170ecb",
+      "lines": 90,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/world_clock_event_cleanup.gd",
+      "git_blob": "db593c9378d0247bb95e3da5c1efd747621e0717",
+      "role": "production_gdscript",
+      "raw_sha256": "10d5dcf68d27eeaf2f9eb26880be854dd5af7f78a7627003107060f65d32b01c",
+      "lines": 54,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/world_effect_render_order.gd",
+      "git_blob": "48b75918f5fa6f7430256222d1f0159bb79b26ca",
+      "role": "production_gdscript",
+      "raw_sha256": "3b7fac1e3e0bd823ecc78b040432e557450b50aec118a80e7ddb6b591219b11e",
+      "lines": 28,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/world_monster_clock_ledger.gd",
+      "git_blob": "53400b8b7d0d89e37a0876fc05d6d8150e5b7c99",
+      "role": "production_gdscript",
+      "raw_sha256": "367357800956835d4be83b294674d6bec5f8110cc0d37d0f22e610a08453127c",
+      "lines": 201,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/world_monster_respawn_state.gd",
+      "git_blob": "36db97ba7452a0eb4289dbdb7a392e8625c601ba",
+      "role": "production_gdscript",
+      "raw_sha256": "40dd173199cdefb711005686907a5a7c2b90153e103043b64a7cb39635a681b1",
+      "lines": 144,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/world_spatial_rules.gd",
+      "git_blob": "08ad59d6e8a0d328f0e146d3b083a93dee99580b",
+      "role": "production_gdscript",
+      "raw_sha256": "7f7858c92194576ed1c34a5415ec58711325baa44b937e73038bc80475f7792e",
+      "lines": 613,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    },
+    {
+      "path": "scripts/zone_portal.gd",
+      "git_blob": "3b92c4d1b3c7b5878431f5ff5feb6b79924be697",
+      "role": "production_gdscript",
+      "raw_sha256": "86e78478fa70fca7e20745d45d462ac0c76bd0b3e789d96d81a297bd422181b5",
+      "lines": 92,
+      "review_status": "NOT_RUN",
+      "reviewed_ranges": [],
+      "findings": [],
+      "current_native_tests": []
+    }
+  ],
+  "reviewed_full_files": 49,
+  "scope_note": "STATIC_REVIEWED means full text examined, not all paths executed. Unread production files remain NOT_RUN."
+}

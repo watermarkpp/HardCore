@@ -129,16 +129,16 @@ func _run() -> void:
 	var selected: Dictionary={}
 	for state: Dictionary in runtime._states.values():
 		if state.target.resolve()==receivers[0]: selected=state
-	check(not selected.is_empty() and selected.raw_per_tick==20 and selected.chain_owners.size()==3,
-		"weak and strong refresh retain all three accepted roots without multiplying the state node")
+	check(not selected.is_empty() and selected.raw_per_tick==20 and selected.chain_owners.size()==1,
+		"complete replacement keeps only the current state root without multiplying its node")
 	# 2026-10-05 user ruling: the last accepted same-species application owns
 	# the head — its source and historical credit replace the prior roots —
-	# while all three accepted roots stay chained to the one state node.
+	# while independent old states or accepted child branches keep their own roots.
 	check(not selected.is_empty() and selected.source!=null and selected.command.historical_credit.get("marker")=="C"
 		and selected.source.identity().runtime_id==source_b.get_instance_id(),
 		"the last accepted application owns the state: source and historical credit replace prior roots")
-	check(runtime.active_count()==2 and runtime.reservation_snapshot().actions==3 and runtime.reservation_snapshot().states==4,
-		"shared state ownership and two spare refresh-root loan pools remain separate")
+	check(runtime.active_count()==2 and runtime.reservation_snapshot().actions==2 and runtime.reservation_snapshot().states==2,
+		"only the other A state and current C root retain their spare loan slots")
 	var before: int=receivers[0].current_hp
 	source_a.queue_free(); await get_tree().process_frame
 	check(ContentLayers.set_feature_module_enabled("hc.validation.state_loan_lifetime",false),"accepted states survive source withdrawal")
@@ -147,7 +147,7 @@ func _run() -> void:
 		"later real periodic HP carries the last accepted source and credit after another root's destruction")
 	clock.advance_simulation(3.0); await _pump()
 	check(not runtime.has_work() and _promises_empty() and runtime.active_count()==0 and view.node_count()==0,
-		"refresh origin loans and every retained root retire only after the shared state ends")
+		"every actually live state or child root retires when its own work ends")
 	check(runtime.errors.is_empty(),"unit loan/life/refresh paths complete without hidden capacity errors")
 	for enemy: EnemyActor in receivers: enemy.queue_free()
 	await get_tree().process_frame
