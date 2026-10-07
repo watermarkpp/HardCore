@@ -143,3 +143,6 @@ docs/retired/20261007/** -text -whitespace
 docs/WORKSPACE_CURRENT_STATUS.md text eol=lf
 # Entity identity binds this fixture's raw LF source hash.
 assets/data/features/socketing_fixture_items.json -text
+
+# The Android seal loads this audited collector by its exact LF-byte SHA-256.
+tools/android_seal/export_identity_tool/collector.py text eol=lf
