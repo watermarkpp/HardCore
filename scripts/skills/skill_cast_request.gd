@@ -60,6 +60,9 @@ static func validate(request: Variant) -> Dictionary:
 		return {"valid": false, "reason": "request_contract"}
 	if str(request.get("skill_id", "")).is_empty():
 		return {"valid": false, "reason": "skill_id"}
+	# Reject invalid containers before entering the original typed ports.
+	if not request.get("target_context", {}) is Dictionary or not request.get("resource_context", {}) is Dictionary:
+		return {"valid": false, "reason": "invalid_request"}
 	var request_rank := int(request.get("rank", -1))
 	if (
 		request_rank < 0

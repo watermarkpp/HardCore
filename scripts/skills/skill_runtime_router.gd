@@ -191,16 +191,27 @@ static func _canonical_rejection_plan(
 	context: Dictionary
 ) -> Dictionary:
 	var normalized := SkillExecutionPlanContractScript.normalize_reason(reason)
+	# Rejection must also respect the public Variant boundary.
+	# Never coerce nested objects or dereference an invalid request.
+	var safe_request: Dictionary = request if request is Dictionary else {}
+	var target_value: Variant = safe_request.get("target_context", {})
+	var safe_target: Dictionary = target_value if target_value is Dictionary else {}
+	var seed_value: Variant = safe_request.get("seed", 0)
+	var safe_seed: int = seed_value if seed_value is int else 0
+	var rank_value: Variant = safe_request.get("rank", 0)
+	var safe_rank: int = rank_value if rank_value is int else 0
+	var facing_value: Variant = safe_request.get("facing", Vector2i.DOWN)
+	var safe_facing: Vector2i = facing_value if facing_value is Vector2i else Vector2i.DOWN
 	var release_id := str(
 		context.get(
 			"release_id",
-			request.get("target_context", {}).get("release_id", "")
+			safe_target.get("release_id", "")
 		)
 	)
 	if release_id.is_empty():
 		release_id = "canonical:%s:%d" % [
 			skill_id,
-			int(request.get("seed", 0)),
+			safe_seed,
 		]
 	return {
 		"contract": SkillExecutionPlanContractScript.CONTRACT_ID,
@@ -214,10 +225,10 @@ static func _canonical_rejection_plan(
 		"runtime_map_id": int(context.get("runtime_map_id", -1)),
 		"input_mode": str(context.get("input_mode", "canonical")),
 		"effective_rank": SkillRankResolverScript.safe_effective_rank(
-			int(request.get("rank", 0))
+			safe_rank
 		),
-		"requested_direction": request.get("facing", Vector2i.DOWN),
-		"resolved_direction": request.get("facing", Vector2i.DOWN),
+		"requested_direction": safe_facing,
+		"resolved_direction": safe_facing,
 		"lock_on_context": {},
 		"resource_cost": {},
 		"cooldown_contract": {},
