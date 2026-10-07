@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HardCore · 攻杀剑术动画预览</title>
+<style>
+:root{font-family:"Microsoft YaHei",system-ui,sans-serif;color:#eadcc3;background:#101213;font-size:14px}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 45% -15%,#313029,#111314 52%)}
+header{padding:18px 24px;border-bottom:1px solid #514837;background:#161817e8}
+.eyebrow{color:#b99b6d;font-size:11px;letter-spacing:.2em}.sub,.hint{color:#bcb5a4;line-height:1.6}
+h1{margin:7px 0;font-size:24px}h2{font-size:18px;margin:0 0 14px}a{color:#eac68c}
+.shell{display:grid;grid-template-columns:minmax(460px,1fr) 340px;gap:16px;padding:16px;max-width:1200px;margin:auto}
+.panel{background:#1b1e1e;border:1px solid #454337;border-radius:11px;box-shadow:0 10px 30px #0004;padding:17px;min-width:0}
+button,select{font:inherit;color:#efe2c9;background:#282c2a;border:1px solid #6a604b;border-radius:6px;padding:9px 11px;cursor:pointer}
+button:hover{border-color:#d5aa6d}button.active{border-color:#efc074;background:#57432a;color:#ffe8ba}button:disabled{opacity:.45}
+.directions,.timeline,.tools{display:flex;gap:6px;flex-wrap:wrap}.directions button,.timeline button{min-width:49px}
+.stage{width:min(100%,480px);aspect-ratio:240/224;overflow:hidden;border:1px solid #3d3f37;border-radius:6px;margin:14px auto;display:flex;align-items:center;justify-content:center}
+.stage canvas{display:block;width:100%;height:100%;image-rendering:pixelated}
+.stage.game{background-image:url('/api/ground.png');background-size:cover}.stage.gray{background:#676767}.stage.black{background:#050505}
+.stage.checker{background-color:#555;background-image:linear-gradient(45deg,#777 25%,transparent 25%),linear-gradient(-45deg,#777 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#777 75%),linear-gradient(-45deg,transparent 75%,#777 75%);background-size:20px 20px;background-position:0 0,0 10px,10px -10px,-10px 0}
+.field{margin:0 0 14px}.field label{display:block;margin:0 0 7px}.field select{width:100%}
+input[type=range]{width:100%;accent-color:#efc074}.readout{color:#f2d399;margin:8px 0 18px}
+.status{color:#d9a78e;min-height:20px;margin-top:12px}.small{font-size:12px;color:#aaa18c;margin-top:12px}
+@media(max-width:850px){.shell{grid-template-columns:1fr}.panel{padding:12px}}
+</style>
+</head>
+<body>
+<header><div class="eyebrow">HARDCORE · ART WORKSPACE</div><h1 id="skill-title">攻杀剑术 · 动画预览</h1>
+<div class="sub">按游戏脚点显示八方向六帧。当前只试调暗部透明度，动画位置和颜色保持原样。 <a href="/">半月</a> · <a href="/power">攻杀</a> · <a href="/thrust">刺杀</a> · <a href="/fire">烈火</a> · <a href="/fireball">火球</a></div></header>
+<div class="shell">
+<main class="panel">
+  <div class="field"><label>方向</label><div class="directions" id="directions"></div></div>
+  <div class="stage game" id="stage" aria-label="技能刀气与战士动画"><canvas id="preview" width="240" height="224"></canvas></div>
+  <div class="field"><label>六帧时间轴 <span id="frame-label"></span></label><div class="timeline" id="timeline"></div></div>
+  <div class="tools"><button id="play">暂停</button><button id="prev">上一帧</button><button id="next">下一帧</button></div>
+</main>
+<aside class="panel">
+  <h2 id="effect-label">刀气暗部</h2>
+  <div class="field"><label for="haze"><span id="control-name">暗灰透明化</span> <span id="haze-value">200%</span>（可选 0–300%）</label><input id="haze" type="range" min="0" max="3" step="0.01" value="2"></div>
+  <div class="tools"><button id="original">看原图 0%</button><button id="trial">看采用值 200%</button><button id="undo">撤销调整</button></div>
+  <div class="hint" id="effect-hint">仅把深蓝灰刀身逐渐透明；蓝白亮边、六帧顺序、八方向及动画位置不变。调整自动保存到本地工作版本。</div>
+  <div class="field" style="margin-top:18px"><label for="equipment">人物与武器</label><select id="equipment"><option value="base">真实战士 · 基础</option><option value="sword">真实战士 · 剑</option><option value="heavy">真实战士 · 重武器</option></select></div>
+  <div class="field"><label for="background">背景</label><select id="background"><option value="game">真实地面参照</option><option value="gray">灰色</option><option value="checker">透明棋盘</option><option value="black">黑色</option></select></div>
+  <div class="small" id="formal-note">游戏贴图已采用 200%；此处继续试调不会自动改写正式游戏贴图。</div>
+  <div class="status" id="status" role="status"></div>
+</aside>
+</div>
+<script>
+const $=id=>document.getElementById(id),names=['S','SW','W','NW','N','NE','E','SE'];
+const cfg=location.pathname==='/fire'
+  ? {slug:'fire',title:'烈火剑法',width:800,height:624,trial:0.3,trialText:'看采用值 30%',note:'游戏贴图已采用 30%；此处继续试调不会自动改写正式游戏贴图。'}
+  : location.pathname==='/thrust'
+    ? {slug:'thrust',title:'刺杀剑术',width:320,height:240,trial:1.5,trialText:'看采用值 150%',note:'游戏贴图已采用 150%；此处继续试调不会自动改写正式游戏贴图。'}
+    : {slug:'power',title:'攻杀剑术',width:240,height:224,trial:2,trialText:'看采用值 200%',note:'游戏贴图已采用 200%；此处继续试调不会自动改写正式游戏贴图。'};
+let state=null,direction=Number(localStorage.getItem(`${cfg.slug}-direction`)??1),frame=0,playing=true,lastTick=performance.now(),carry=0,image=null,queue=Promise.resolve();
+if(!Number.isInteger(direction)||direction<0||direction>7)direction=1;
+function message(value){$('status').textContent=value}
+function draw(){
+  const canvas=$('preview'),ctx=canvas.getContext('2d');ctx.clearRect(0,0,cfg.width,cfg.height);
+  if(image?.complete&&image.naturalWidth)ctx.drawImage(image,frame*cfg.width,0,cfg.width,cfg.height,0,0,cfg.width,cfg.height);
+  $('frame-label').textContent=`F${frame}`;
+  for(const button of $('timeline').children)button.classList.toggle('active',Number(button.dataset.frame)===frame);
+}
+function loadImage(){image=new Image();image.onload=draw;image.onerror=()=>message('预览读取失败，请刷新页面。');image.src=`/api/${cfg.slug}/preview.png?direction=${direction}&equipment=${encodeURIComponent($('equipment').value)}&revision=${state.revision}`}
+async function refresh(){const response=await fetch(`/api/${cfg.slug}/state`);if(!response.ok)throw Error('读取工作版本失败');state=await response.json();$('haze').value=state.haze_cleanup;$('haze-value').textContent=`${Math.round(state.haze_cleanup*100)}%`;$('undo').disabled=!state.undo_available;for(const button of $('directions').children)button.classList.toggle('active',Number(button.dataset.direction)===direction);loadImage()}
+async function action(body){const response=await fetch(`/api/${cfg.slug}/action`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const result=await response.json();if(!response.ok)throw Error(result.error||'操作失败');await refresh();return result}
+function tune(value){queue=queue.then(()=>action({action:'tune',haze_cleanup:value})).catch(error=>message(error.message))}
+function init(){
+  document.title=`HardCore · ${cfg.title}动画预览`;
+  $('skill-title').textContent=`${cfg.title} · 动画预览`;
+  $('stage').style.aspectRatio=`${cfg.width}/${cfg.height}`;
+  $('preview').width=cfg.width;$('preview').height=cfg.height;
+  $('trial').textContent=cfg.trialText;$('formal-note').textContent=cfg.note;
+  if(cfg.slug==='fire'){
+    $('effect-label').textContent='火焰暗部';$('control-name').textContent='暗火透明化';
+    $('effect-hint').textContent='按游戏的逐帧武器尖端位置叠放四张分片火焰；仅试调暗红棕区域透明度，亮火颜色、顺序和位置保持原样。';
+    $('equipment').querySelector('option[value="base"]').remove();
+  }
+  $('directions').innerHTML=names.map((name,index)=>`<button data-direction="${index}">${name}</button>`).join('');
+  for(const button of $('directions').children)button.onclick=()=>{direction=Number(button.dataset.direction);localStorage.setItem(`${cfg.slug}-direction`,String(direction));for(const item of $('directions').children)item.classList.toggle('active',item===button);loadImage()};
+  $('timeline').innerHTML=Array.from({length:6},(_,index)=>`<button data-frame="${index}">F${index}</button>`).join('');
+  for(const button of $('timeline').children)button.onclick=()=>{frame=Number(button.dataset.frame);playing=false;$('play').textContent='播放';draw()};
+  $('play').onclick=()=>{playing=!playing;$('play').textContent=playing?'暂停':'播放'};
+  $('prev').onclick=()=>{playing=false;$('play').textContent='播放';frame=(frame+5)%6;draw()};
+  $('next').onclick=()=>{playing=false;$('play').textContent='播放';frame=(frame+1)%6;draw()};
+  $('haze').oninput=()=>{$('haze-value').textContent=`${Math.round(Number($('haze').value)*100)}%`};
+  $('haze').onchange=()=>tune(Number($('haze').value));
+  $('original').onclick=()=>tune(0);$('trial').onclick=()=>tune(cfg.trial);
+  $('undo').onclick=()=>{queue=queue.then(()=>action({action:'undo'})).catch(error=>message(error.message))};
+  $('equipment').value=localStorage.getItem('hmg-equipment')||'heavy';
+  if(!$('equipment').value)$('equipment').value='heavy';
+  $('background').value=localStorage.getItem('hmg-background')||'game';
+  $('equipment').onchange=()=>{localStorage.setItem('hmg-equipment',$('equipment').value);loadImage()};
+  $('background').onchange=()=>{localStorage.setItem('hmg-background',$('background').value);$('stage').className='stage '+$('background').value};
+  $('stage').className='stage '+$('background').value;
+  refresh().then(()=>{playing=true;$('play').textContent='暂停';lastTick=performance.now()}).catch(error=>message(error.message));
+}
+function tick(now){if(state&&playing){carry+=now-lastTick;while(carry>=85){frame=(frame+1)%6;carry-=85}draw()}lastTick=now;requestAnimationFrame(tick)}
+init();requestAnimationFrame(tick);
+</script>
+</body>
+</html>

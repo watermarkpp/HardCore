@@ -1,0 +1,786 @@
+{
+  "source_snapshot": "b3d144061b9b0aef419ce6b746ddc476023fd912",
+  "supplements": [
+    {
+      "path": "assets/art/characters/caster_skill_sources/laser/.gdignore",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "assets/art/characters/caster_skill_sources/laser/laser_direction_00.apng",
+      "sha256": "88935d4b075224ae17814e24ca906639b99cf9611f0d0292d3a1e74fe21bd920",
+      "bytes": 276804
+    },
+    {
+      "path": "assets/art/characters/caster_skill_sources/laser/laser_direction_01.apng",
+      "sha256": "15f158ace048f03a4dc2bc22d9e1738ae8a7014f6f54049f404fee2f90bddb32",
+      "bytes": 296847
+    },
+    {
+      "path": "assets/art/characters/caster_skill_sources/laser/laser_direction_02.apng",
+      "sha256": "cd538906f85d5119afe462c1116a867a7954b203d92fb351fef57d31ca7fe70a",
+      "bytes": 337673
+    },
+    {
+      "path": "assets/art/characters/caster_skill_sources/laser/laser_direction_03.apng",
+      "sha256": "64253758aff1bf1fc2192d8ae3a434586ee2266c41393df254dd8f8913019606",
+      "bytes": 382494
+    },
+    {
+      "path": "assets/art/characters/caster_skill_sources/laser/laser_direction_04.apng",
+      "sha256": "4a51f815fe761a0dead62730232275ac103431493bd6a590fa0ff75e268cf169",
+      "bytes": 444196
+    },
+    {
+      "path": "assets/art/characters/caster_skill_sources/laser/laser_direction_05.apng",
+      "sha256": "bb87d1f2b1f39e49f489e9c15a2f49d99c9f49230815fb2e773878fca372969d",
+      "bytes": 386312
+    },
+    {
+      "path": "assets/art/characters/caster_skill_sources/laser/laser_direction_06.apng",
+      "sha256": "86f4325dc138072fcc5287f93c72855b424c7b3f7e2e9e8adc84190546a658ea",
+      "bytes": 322900
+    },
+    {
+      "path": "assets/art/characters/caster_skill_sources/laser/laser_direction_07.apng",
+      "sha256": "b707e4ce4986549134b27a8d7c8f135cdf65bea429c5a4a20e8c715ae57ed3fd",
+      "bytes": 280830
+    },
+    {
+      "path": "assets/art/characters/caster_skill_sources/laser/laser_direction_08.apng",
+      "sha256": "5378780c5faabdce632242f4e637a2b1c24b77202108d0e8d894636fb39bfa95",
+      "bytes": 250639
+    },
+    {
+      "path": "assets/art/characters/caster_skill_sources/laser/laser_direction_09.apng",
+      "sha256": "ada298e8f538a115025eccb9ca693a95d56604d3c5a0b5d7ebc2bd9e415650be",
+      "bytes": 272534
+    },
+    {
+      "path": "assets/art/characters/caster_skill_sources/laser/laser_direction_10.apng",
+      "sha256": "a7339aabe363152c98abfc606473256109276b2b620ee92e40ed3edd761c9498",
+      "bytes": 309530
+    },
+    {
+      "path": "assets/art/characters/caster_skill_sources/laser/laser_direction_11.apng",
+      "sha256": "4a04b584954800e4a290906d31d59d28d6a256cda79989b9b504ec753cc35cde",
+      "bytes": 367276
+    },
+    {
+      "path": "assets/art/characters/caster_skill_sources/laser/laser_direction_12.apng",
+      "sha256": "a93978931f41d5ab610d7473ba13d8e4b9e115b97c0bf60a7e068ef6f3fe074d",
+      "bytes": 444997
+    },
+    {
+      "path": "assets/art/characters/caster_skill_sources/laser/laser_direction_13.apng",
+      "sha256": "1fcb0ca465d8c1a186d471acdf2d50eac2ec46533714369d7515794dcb42b9a8",
+      "bytes": 405641
+    },
+    {
+      "path": "assets/art/characters/caster_skill_sources/laser/laser_direction_14.apng",
+      "sha256": "41351fc9077091a22691ed26e3fa044e8d58c305e4baf90a6f984003026d0ed3",
+      "bytes": 356327
+    },
+    {
+      "path": "assets/art/characters/caster_skill_sources/laser/laser_direction_15.apng",
+      "sha256": "5d23e7b4bddc89548fbdefb33cfc547954b2b5e8271a86312e541052786b7208",
+      "bytes": 308243
+    },
+    {
+      "path": "assets/art/characters/caster_skill_sources/lightning/.gdignore",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "assets/art/characters/caster_skill_sources/lightning/user_realistic_sharpened.apng",
+      "sha256": "9d6cd628da2981f21bc2cba38351e8bcfb60d182f1940f4304fb7c86df52a7a2",
+      "bytes": 3988870
+    },
+    {
+      "path": "tools/half_moon_generator/add_curated_batch.py",
+      "sha256": "85ab79aae470615bca2e37cfb8eec0b010a1eace3e8e82fcc48e79e1920acc58",
+      "bytes": 521
+    },
+    {
+      "path": "tools/half_moon_generator/add_sw_reference_batch.py",
+      "sha256": "da0c2396dcc0e0ac57705a4211f0917ccacb8fb5b38b75bf6ee7ca0abfd6c1e0",
+      "bytes": 394
+    },
+    {
+      "path": "tools/half_moon_generator/add_temporal_batch.py",
+      "sha256": "0b78a957a42b85a283d4502fbbb0364ad8530fb161a92d40f14a10649c8e144f",
+      "bytes": 391
+    },
+    {
+      "path": "tools/half_moon_generator/exploding_flame_editor.py",
+      "sha256": "f2397759231ca88d4900a6a6f789b2c6ad49bcbf97def473441f1a36468f10db",
+      "bytes": 5954
+    },
+    {
+      "path": "tools/half_moon_generator/export_first_batch.py",
+      "sha256": "736780d29f619cc5d55dee3fd6dba06ea4039129279714502707d98fce1d2379",
+      "bytes": 2658
+    },
+    {
+      "path": "tools/half_moon_generator/fireball_editor.html",
+      "sha256": "ace64fac92314033a6eb6f3c957a33fed2a01a8c74546f694a32fe5f3834cc96",
+      "bytes": 10302
+    },
+    {
+      "path": "tools/half_moon_generator/fireball_editor.py",
+      "sha256": "0746962fb2f52391063044fe2dda481c204e5079a4add684acb23af35e7ec549",
+      "bytes": 7267
+    },
+    {
+      "path": "tools/half_moon_generator/fire_editor.py",
+      "sha256": "a53b81558f07579942d9be1eadb0e04b5eaf831f22c23ae6ad4f21f410ef582a",
+      "bytes": 7387
+    },
+    {
+      "path": "tools/half_moon_generator/fire_wall_editor.py",
+      "sha256": "5522735a8b8bff93854a197b53de8d0643471da76ee6080613e3a7c557826ff8",
+      "bytes": 5880
+    },
+    {
+      "path": "tools/half_moon_generator/great_fireball_editor.py",
+      "sha256": "dd274ebca169d4b39048ccce6d00065e1a6e0fac37b98d7e9ee4bc9757c0676b",
+      "bytes": 6405
+    },
+    {
+      "path": "tools/half_moon_generator/hellfire_editor.html",
+      "sha256": "664c2fff322bdb30c4272efeea59deedb8c5ecd1f3f5254b1b668d9ae3a2dad3",
+      "bytes": 9423
+    },
+    {
+      "path": "tools/half_moon_generator/hellfire_editor.py",
+      "sha256": "af182018f7ada291f69882260d4a8a04ff515dece32937da45dff443fe7e1962",
+      "bytes": 7122
+    },
+    {
+      "path": "tools/half_moon_generator/hell_lightning_editor.py",
+      "sha256": "3b81138ed477a254563a11fb1b175cb517f09d26a2d4c2be305978a079d7b916",
+      "bytes": 6242
+    },
+    {
+      "path": "tools/half_moon_generator/hmg.py",
+      "sha256": "17e76b990665ea39db63a3f1d441f79646362c52cffd7742bd2355e72a118047",
+      "bytes": 54270
+    },
+    {
+      "path": "tools/half_moon_generator/holy_word_editor.py",
+      "sha256": "81d32c9b0ab66547ded4f4bc73b05ed7292225f5057711ca7ca57eb55755b434",
+      "bytes": 6165
+    },
+    {
+      "path": "tools/half_moon_generator/ice_storm_blend_lab.html",
+      "sha256": "62265012abce2a5eb113977d6f496ffc090f9c32ed1c7c44921afe7bd5706b8e",
+      "bytes": 5732
+    },
+    {
+      "path": "tools/half_moon_generator/ice_storm_editor.py",
+      "sha256": "9a6fe028121c18122ab33dde64d8bd034962e85a6cd0c6e3519a381df416f122",
+      "bytes": 6600
+    },
+    {
+      "path": "tools/half_moon_generator/index.html",
+      "sha256": "9f12aa9b4f2b4b9128b7b19ca32b52318f7bcc886b3326309f8d7c0bd4f0ace2",
+      "bytes": 12826
+    },
+    {
+      "path": "tools/half_moon_generator/lightning_editor.html",
+      "sha256": "0ee6bb734d2676963c9ba9862ac1c03390637d9fa543ea4ee235039e94085185",
+      "bytes": 8073
+    },
+    {
+      "path": "tools/half_moon_generator/lightning_editor.py",
+      "sha256": "ffbb1f3e6781e0d4e2ace4757629d0d370a998349bfda93b61669154436f8a3b",
+      "bytes": 5830
+    },
+    {
+      "path": "tools/half_moon_generator/magic_shield_editor.py",
+      "sha256": "e2feffabdaf110b90d1241fb4d0db12bc230175173c06655aa4e1d9b2bbe7587",
+      "bytes": 7731
+    },
+    {
+      "path": "tools/half_moon_generator/power_editor.html",
+      "sha256": "98b2362900f2dc900dbfd0e8bf7dc63be9621c75356687f90958f7988a3c2722",
+      "bytes": 10200
+    },
+    {
+      "path": "tools/half_moon_generator/power_editor.py",
+      "sha256": "3a6d2ad584f73cacf067b4d1af5f6e823b099038e3ac762a7479f6f1e653953e",
+      "bytes": 5723
+    },
+    {
+      "path": "tools/half_moon_generator/README.md",
+      "sha256": "4ebe0eb72017537f563f22e7d47a3a3d4393f454f531701424945569bca3b724",
+      "bytes": 11579,
+      "source_sha256": "a8193dd5e1d9eb331a5b2f7b4ff93eecd723f24da74b8e2ce452d03586565bc4",
+      "change": "Prepend current compatibility boundary; original retained in local retirement archive."
+    },
+    {
+      "path": "tools/half_moon_generator/repulsion_editor.html",
+      "sha256": "bbac93d7d491abd78932afa99e509978f4e6dd20c246b89c3679743e30ff2212",
+      "bytes": 17565
+    },
+    {
+      "path": "tools/half_moon_generator/repulsion_editor.py",
+      "sha256": "07533af5981a9b58294eba1e2c5ade7ee64855555a0b574843197490e26053f9",
+      "bytes": 5707
+    },
+    {
+      "path": "tools/half_moon_generator/server.py",
+      "sha256": "0abb996bf740b0d0dc3a9f2f5e67cc83364e139eaa1a1d47d9af0000fe5612e8",
+      "bytes": 19827
+    },
+    {
+      "path": "tools/half_moon_generator/source/fire_hit_d0_f0_original.png",
+      "sha256": "092123752789cedb651b2f1aed023290760bfa707c5aebbcb9dcda5d8a3b5ae2",
+      "bytes": 72698
+    },
+    {
+      "path": "tools/half_moon_generator/source/fire_hit_d0_f0_original.png.import",
+      "sha256": "ab084f46ed3a8af7d5e89c1f48ab9fe6884140a0b43c74f9b04ad6f632f860d5",
+      "bytes": 1006
+    },
+    {
+      "path": "tools/half_moon_generator/source/fire_hit_d0_f1_original.png",
+      "sha256": "18e1da5a8af8ce017895c724a4b3fe53209738f8f06754f474855667ebf06a42",
+      "bytes": 128944
+    },
+    {
+      "path": "tools/half_moon_generator/source/fire_hit_d0_f1_original.png.import",
+      "sha256": "ceac5bca7ff5505460ab60ed4524378aab7d14e3569691e8433fdbaf7e739b01",
+      "bytes": 1005
+    },
+    {
+      "path": "tools/half_moon_generator/source/fire_hit_d1_f0_original.png",
+      "sha256": "5f68ce38c199670db5c200d7121a6ae1c92a42fd320f168592b3b74929cb2bf6",
+      "bytes": 82029
+    },
+    {
+      "path": "tools/half_moon_generator/source/fire_hit_d1_f0_original.png.import",
+      "sha256": "5d11c3e7981bfa0a933870bd12501678df351eb84cd83abe9f90b3ec487ea491",
+      "bytes": 1005
+    },
+    {
+      "path": "tools/half_moon_generator/source/fire_hit_d1_f1_original.png",
+      "sha256": "c548ba01ea35f0797c7d77ca050b88c96632ab17a80431413ac539098637cafe",
+      "bytes": 160568
+    },
+    {
+      "path": "tools/half_moon_generator/source/fire_hit_d1_f1_original.png.import",
+      "sha256": "170fb5f73584d6347a9ba1bc75a55ed03311b42a0a36bbfbb8ca2c020f204be7",
+      "bytes": 1006
+    },
+    {
+      "path": "tools/half_moon_generator/source/long_hit_original.png",
+      "sha256": "97e558356f1d4c7bbc8c63a7ef1dedb7f7f397fa7e8385075cda72169fe864c3",
+      "bytes": 300794
+    },
+    {
+      "path": "tools/half_moon_generator/source/long_hit_original.png.import",
+      "sha256": "edbddd3ccb08b870b4fb94db0d5af3c356a5cbdd4c41a74cbf4c0f73744a0647",
+      "bytes": 988
+    },
+    {
+      "path": "tools/half_moon_generator/source/power_hit_original.png",
+      "sha256": "4300ce585417a5ebfcd3aae77f747e69ce4b878d95ae888f8eb38e056f23a1cb",
+      "bytes": 188236
+    },
+    {
+      "path": "tools/half_moon_generator/source/power_hit_original.png.import",
+      "sha256": "b00bf80eb7b0f395a303777dce65bea0ef13fe0bbda17ac0ae5d22ad17777c40",
+      "bytes": 991
+    },
+    {
+      "path": "tools/half_moon_generator/source/wide_hit_original.png",
+      "sha256": "aa0b29f13d5c9a196c5f2372ad47fefa75f8b328684d4b8689a70f279c26276c",
+      "bytes": 352997
+    },
+    {
+      "path": "tools/half_moon_generator/source/wide_hit_original.png.import",
+      "sha256": "c3150e78a90ecc9f70c2d1de1b838c859cdc2d5c54a9cd480b7a03350052b217",
+      "bytes": 988
+    },
+    {
+      "path": "tools/half_moon_generator/teleport_editor.py",
+      "sha256": "e6fdb466640e0f86f9273ec76843bd8d3cb92dcc1172960346220bfeb792fbc2",
+      "bytes": 6312
+    },
+    {
+      "path": "tools/half_moon_generator/temptation_editor.py",
+      "sha256": "a5e29e4abc1b78da9110da606266e62266453fda068f70574a21a571695f6cce",
+      "bytes": 6145
+    },
+    {
+      "path": "tools/half_moon_generator/test_exploding_flame_editor.py",
+      "sha256": "23cf082104971f5446da187bdb4be7df3d8e8549d2b5a76d2798c3b8bb1f2fe8",
+      "bytes": 1953
+    },
+    {
+      "path": "tools/half_moon_generator/test_fireball_editor.py",
+      "sha256": "3429ba50f128620f401463f454dcd6540b1c2258e28187abe7bd46bd44758fd2",
+      "bytes": 2225
+    },
+    {
+      "path": "tools/half_moon_generator/test_fire_editor.py",
+      "sha256": "5d0273f0a5dc2efdf565ab75f001a63ad3b7696db705cdc10612bd80d03d0a7f",
+      "bytes": 3717
+    },
+    {
+      "path": "tools/half_moon_generator/test_fire_wall_editor.py",
+      "sha256": "04c7cfe724fbf18ad0b8299eca66a6da1557c937e0278f799bbd2e23736147a7",
+      "bytes": 1912
+    },
+    {
+      "path": "tools/half_moon_generator/test_great_fireball_editor.py",
+      "sha256": "8c51d14ee319f0d8e97ecc7802688befd31321a9ee0ec396d2e67a043aff685b",
+      "bytes": 2145
+    },
+    {
+      "path": "tools/half_moon_generator/test_hellfire_editor.py",
+      "sha256": "06e9235910ee9448fc274a2b8cc6508a522e8321d5714d707a31e6b9f8bd89b2",
+      "bytes": 2520
+    },
+    {
+      "path": "tools/half_moon_generator/test_hell_lightning_editor.py",
+      "sha256": "1b73ea9a2ce355299c22bedf6fb9ee3a6ee5a47ade5e3269e4152d11fcb87f80",
+      "bytes": 1753
+    },
+    {
+      "path": "tools/half_moon_generator/test_hmg.py",
+      "sha256": "2173520b3f83413f8d2ef42abb226fe54751b9a7dc6b8aeb4c30783e0153957c",
+      "bytes": 22749
+    },
+    {
+      "path": "tools/half_moon_generator/test_holy_word_editor.py",
+      "sha256": "9a4d958f269d21f5136b2f02eb898acd1aea8ebe6a7d9fa1fcb1d8b94ea637de",
+      "bytes": 1791
+    },
+    {
+      "path": "tools/half_moon_generator/test_ice_storm_editor.py",
+      "sha256": "ac3f40c3f44b569629dee35b4dac02e19c47da3f1b6ff2f54baf39a9c6cf6285",
+      "bytes": 2201
+    },
+    {
+      "path": "tools/half_moon_generator/test_lightning_editor.py",
+      "sha256": "ed412e4c161e5e6023f37e1de955dbe8c799956efe054ebc8588548b4840a4ca",
+      "bytes": 1707
+    },
+    {
+      "path": "tools/half_moon_generator/test_magic_shield_editor.py",
+      "sha256": "6a12eff2d9758cea40e2b2ddc35d7e17d7d0eb71043e8cbaef6180e2e151593e",
+      "bytes": 2182
+    },
+    {
+      "path": "tools/half_moon_generator/test_power_editor.py",
+      "sha256": "ae07c6eb73ded8e644ebc280f8ce70c2003a05b6feba993632569379bdd8633f",
+      "bytes": 3461
+    },
+    {
+      "path": "tools/half_moon_generator/test_repulsion_editor.py",
+      "sha256": "e875d706351a88026a303fbe8df6d8788b61fd69d0876d844acd5cbae8585f8c",
+      "bytes": 1931
+    },
+    {
+      "path": "tools/half_moon_generator/test_teleport_editor.py",
+      "sha256": "ce7f9b3893c7962549fdcbe1a16cd396af463aead19d875af710bf17db4eb67b",
+      "bytes": 1996
+    },
+    {
+      "path": "tools/half_moon_generator/test_temptation_editor.py",
+      "sha256": "d07b470b9bac731314155ce9bc6f544740a5940f31344ad0567238c099211fa9",
+      "bytes": 1892
+    },
+    {
+      "path": "tools/half_moon_generator/test_thrust_editor.py",
+      "sha256": "6a173d5650e31d8bc4899394aab5ffc3caaa383d06de43bcd00e8b08121758e6",
+      "bytes": 3368
+    },
+    {
+      "path": "tools/half_moon_generator/thrust_editor.py",
+      "sha256": "ecb22e5532ab8181526f366328498610f9c477018c77d28756de5c2ec6052789",
+      "bytes": 4109
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/add_curated_batch.cpython-312.pyc",
+      "sha256": "70c6031b68bc42a96c74c2e173861077826d49796132d4ec28583396d4aa52f5",
+      "bytes": 1287
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/add_sw_reference_batch.cpython-312.pyc",
+      "sha256": "beee420d9d49e7a8abb301380ba7a6de2a7396f76de8582fbb0b32bdb63e2dd2",
+      "bytes": 913
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/add_temporal_batch.cpython-312.pyc",
+      "sha256": "1374b3713d50374a2d22a45b56557869582c6e8e6b04fa78fca8cacb8cc545cf",
+      "bytes": 906
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/exploding_flame_editor.cpython-312.pyc",
+      "sha256": "cd111b05254032187a73a863e6cc23fe7f6f0d2820d008eefb43a4507c722ccb",
+      "bytes": 9466
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/export_first_batch.cpython-312.pyc",
+      "sha256": "f1a1c9e7911b3e9a5e6257926daeceb6c4b2d43ac48b4e88c0f4a47f132dbab4",
+      "bytes": 4916
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/fireball_editor.cpython-311.pyc",
+      "sha256": "429e99b13717a092c219c42fb7c381315b4897147d8417f63e31f09112edbb54",
+      "bytes": 13275
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/fireball_editor.cpython-312.pyc",
+      "sha256": "a3989c1b3c01949e30f73ac44e5c76fb3dc6896d35a9811e981acdfd69ebe1d4",
+      "bytes": 11272
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/fire_editor.cpython-312.pyc",
+      "sha256": "3d62ed1224913b87843269775241a4a4ccb7316372ab3234b025e94710f66639",
+      "bytes": 12411
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/fire_wall_editor.cpython-312.pyc",
+      "sha256": "b4110c2c8cd4154b549a7f89fc9a93218856ff4ab116d9feaf42da5dbe180b9e",
+      "bytes": 9401
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/great_fireball_editor.cpython-312.pyc",
+      "sha256": "eab2ad3e0fcddfc134cbe38014ddb979862fa59a55ab228bfab4b76fa4062a7d",
+      "bytes": 9977
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/hellfire_editor.cpython-312.pyc",
+      "sha256": "a8fd981e38124db127e7ae7eccd60540d6a306032f2ab11ff84fd62d78e1b75a",
+      "bytes": 11910
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/hell_lightning_editor.cpython-312.pyc",
+      "sha256": "1bd82500379d5fc9bb4008b8f8ee6c996ebff65f92fbe7580c483a91762d4a37",
+      "bytes": 9766
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/hmg.cpython-311.pyc",
+      "sha256": "a820bf625166a6387c120f9f2f46c39c100c58fdb29f51c9a2e3330466fb7dd2",
+      "bytes": 85334
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/hmg.cpython-312.pyc",
+      "sha256": "9ac5d92fc4d78955f04a54b63ac18ef6244be85136ed434634e35aa081ee23bc",
+      "bytes": 72183
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/holy_word_editor.cpython-312.pyc",
+      "sha256": "4b9746fcebe51d386ae2d4e16493ed4351696d045be9b9581f3afa8de3860ddd",
+      "bytes": 9744
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/ice_storm_editor.cpython-312.pyc",
+      "sha256": "0c1955b2aa5380721a6c37a5b3c7a589f0a6c617584c19ae3788939e4ea7c1a2",
+      "bytes": 10533
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/lightning_editor.cpython-311.pyc",
+      "sha256": "ed3c774ccd529648adcbbaaad241cbfec901b34870a9b6cf3bf6622cf2ce08aa",
+      "bytes": 10807
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/lightning_editor.cpython-312.pyc",
+      "sha256": "eca31c198687fa15b698b170a56a6626f6af99306e5b699486cf21093873d568",
+      "bytes": 9188
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/magic_shield_editor.cpython-312.pyc",
+      "sha256": "4b3651b900f47ce761bc1f7b1c1ad851f54aec017ab88398e9209b20ab7a7955",
+      "bytes": 11836
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/power_editor.cpython-311.pyc",
+      "sha256": "115fd4ca825cd67af9390036a34db3b2456a3ce11be8477005ce212abaebc2f9",
+      "bytes": 10926
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/power_editor.cpython-312.pyc",
+      "sha256": "0b574539eca54a6142886a1780ba62b5c2c5193c9ced4dd7c6d0f8c5496d3731",
+      "bytes": 9733
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/refresh_first_batch.cpython-312.pyc",
+      "sha256": "014169aff08a8b6e476722ee40ea817c14ae9458675318169328266b5a72b780",
+      "bytes": 2034
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/repulsion_editor.cpython-311.pyc",
+      "sha256": "a59466136996a4ab9df43e2f151b9c1e1677c9b5afb3279f1b02149aac4970db",
+      "bytes": 10379
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/repulsion_editor.cpython-312.pyc",
+      "sha256": "91791067da10b52d8dcbecc5c476f29aff8ce27d59cec937039ae9f72a828a37",
+      "bytes": 8788
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/server.cpython-311.pyc",
+      "sha256": "45a801327a491e80a9f535d57c1d89309bcf49dfdbd262b4a94b1ef85f77d242",
+      "bytes": 20304
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/server.cpython-312.pyc",
+      "sha256": "a32f88c53a2f66dad46fb3539d28a80e8d897ceef7973952ce8a896ff49917fe",
+      "bytes": 27228
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/teleport_editor.cpython-312.pyc",
+      "sha256": "8885ce9184277ba7682fadfc4e2801056b5dc81e56470eb343ca7e30dbe11591",
+      "bytes": 9873
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/temptation_editor.cpython-311.pyc",
+      "sha256": "7fc615893f19b62cb299b57be884e420e9dd7f63814644ff46b6e4875f559109",
+      "bytes": 11213
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/temptation_editor.cpython-312.pyc",
+      "sha256": "c5058fa8b0c93d2d8f77eb336faddcba064fa08e362d0beb124d2ea85041d293",
+      "bytes": 9526
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/test_exploding_flame_editor.cpython-312.pyc",
+      "sha256": "caa2742deb6ad558d412f7271b7dc74475f68189ab17529598f282dc1ab946d0",
+      "bytes": 4255
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/test_fireball_editor.cpython-311.pyc",
+      "sha256": "0b22ae7292aea6f7bd196708b09cc12eee2e055d9e4c13b2def5e09a1d44d8e2",
+      "bytes": 5232
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/test_fireball_editor.cpython-312.pyc",
+      "sha256": "ce4339e2432cc993d8052875c9acc08ada8c165b2c272909e456c19121903b32",
+      "bytes": 4496
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/test_fire_editor.cpython-312.pyc",
+      "sha256": "8c94417dc10417de90c5cbf584a1cc84b9b5af5c085360eb9723b4f069881845",
+      "bytes": 7376
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/test_fire_wall_editor.cpython-312.pyc",
+      "sha256": "e923616a96f68ba2c3b0192d9f8dbfb97f322c24b1b87291ffad706612c22e04",
+      "bytes": 4225
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/test_great_fireball_editor.cpython-312.pyc",
+      "sha256": "70d36e46ec2bdb09423d9d0774ebcf6cd607307e7864d162ac465a88e6795b86",
+      "bytes": 4301
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/test_hellfire_editor.cpython-312.pyc",
+      "sha256": "b9cfcf8046cd2c9be43d0f5e6b595c7a91a8522d0e129b696c4ddaca95ca3f59",
+      "bytes": 5741
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/test_hell_lightning_editor.cpython-312.pyc",
+      "sha256": "372b1730520b93009d21075adb58b69292f1f3a37792a4dcd1079f17c3ea0238",
+      "bytes": 3809
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/test_hmg.cpython-312.pyc",
+      "sha256": "ea6ccc9a8e2a478cb82435a2171c3bac1df11600628e6e10f74e8bf4ceb657c5",
+      "bytes": 47677
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/test_holy_word_editor.cpython-312.pyc",
+      "sha256": "e14bd446663087272500f5398d4117d3bf99965f571d22f0cdfaba8b7341deee",
+      "bytes": 3937
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/test_ice_storm_editor.cpython-312.pyc",
+      "sha256": "c58fdfa1285bd60200592ed90f2baf8f28a7d8795e2e96a2765f14a781b5f04d",
+      "bytes": 4699
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/test_lightning_editor.cpython-311.pyc",
+      "sha256": "ee1c6d2037a2fff17c4b4899a212d472bfae7391c0bcf18d5e12082236303aaf",
+      "bytes": 4201
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/test_lightning_editor.cpython-312.pyc",
+      "sha256": "11cac1d75ea733b4c0d2d3f7fe1c8ce6976dd39af09ce24de862c66f8a19d1d9",
+      "bytes": 3639
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/test_magic_shield_editor.cpython-312.pyc",
+      "sha256": "9a22c489384062297d97f989506b4e7d29c1b75adc0ac5137aff9c7a522939f9",
+      "bytes": 4531
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/test_power_editor.cpython-312.pyc",
+      "sha256": "40d128dd04ca806094a7dfd88173a85eedb3b499197a0af08591afad99a66103",
+      "bytes": 7287
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/test_repulsion_editor.cpython-311.pyc",
+      "sha256": "9eb2754edaf7a15886c794a193713b52a978dd8b239dd2fd001a68fd517303a8",
+      "bytes": 4849
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/test_repulsion_editor.cpython-312.pyc",
+      "sha256": "bdc0b3c4d917593d94eb02c2fe31e222399afb81f0e415e4266e6c8fe3463b7d",
+      "bytes": 4136
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/test_teleport_editor.cpython-312.pyc",
+      "sha256": "d20fb6b301f10ca2abd3b95a567a1afff04f8fddd6d5d313df53d70c98ec4fc8",
+      "bytes": 4300
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/test_temptation_editor.cpython-311.pyc",
+      "sha256": "0f90db5872976f6b713f81601323a7e1cb965c81f50d05d86ddb6cc6a8042cf0",
+      "bytes": 4736
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/test_temptation_editor.cpython-312.pyc",
+      "sha256": "e48acaa7c05ad8b19ac06a8b9283a3988ca5f633ede7dd4653e8a4d04287779b",
+      "bytes": 4039
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/test_thrust_editor.cpython-312.pyc",
+      "sha256": "742c5865b8e14f579fb8cecf79061be07bb7fe76aff77a752073f55d5a49d544",
+      "bytes": 6970
+    },
+    {
+      "path": "tools/half_moon_generator/__pycache__/thrust_editor.cpython-312.pyc",
+      "sha256": "f5c9053086dcae2ec302586c55ba9aef0b19573177f8addce3f77d1694c40198",
+      "bytes": 7035
+    },
+    {
+      "path": "docs/vfx/half_moon_generator_v1/DESIGN.md",
+      "sha256": "01bace13762a999e092f0d7ff782d871ade3e5ef3c57b4fdaa58635f68235f74",
+      "bytes": 5590
+    },
+    {
+      "path": "docs/vfx/half_moon_generator_v1/PARAMETER_REFERENCE.md",
+      "sha256": "6c5d34d76a99320fdb9c78c91032e699cb0960a8b5d05668ca736a30acd930d0",
+      "bytes": 3633
+    },
+    {
+      "path": "docs/vfx/half_moon_generator_v1/USER_GUIDE.md",
+      "sha256": "f4364d0b8c227fabee85b0e691e6533adb53c63c6eca861ec1262754956cb92c",
+      "bytes": 1527
+    },
+    {
+      "path": "docs/vfx/half_moon_generator_v1/VERIFICATION.md",
+      "sha256": "f5b7c8b6b9373734eb357be5dbcb7305a183f5139c5a09ac96f0d5e77761e73d",
+      "bytes": 5569
+    },
+    {
+      "path": "docs/monster_combat_r4/sol_takeover/CONTINUATION_C046_20260928.md",
+      "sha256": "06abdedbcdbd69f604408a88c060e2e26fb0781cd3872854f92aeee6db578069",
+      "bytes": 3692
+    },
+    {
+      "path": "docs/performance_20260926/CHECKPOINT.sha256",
+      "sha256": "0bcf5d0e2b547825b7cabe1185e471040624b214698182f738db49d3ce47723f",
+      "bytes": 2649
+    },
+    {
+      "path": "docs/performance_20260926/all_fixes_checkpoint.patch",
+      "sha256": "93f463da09f5bb93d95e22780cd2a41797f874d8893abac86b9cebbe00ee279d",
+      "bytes": 87461
+    },
+    {
+      "path": "docs/performance_20260926/save_safety_changes.patch",
+      "sha256": "f839d7337e1fb54de99eb13d31c70d973cec681637591da21d01435afdeb8854",
+      "bytes": 11879
+    },
+    {
+      "path": "docs/retired/20261007/unique_tests/zombie_lightning_pursuit_timing_test.gd.txt",
+      "sha256": "63aa1f4953b0c97f0840249c36cab490d0267f4ee8ff6a0674a4de309c9bb8fa",
+      "bytes": 4708
+    },
+    {
+      "path": "docs/retired/20261007/unique_tests/zombie_lightning_pursuit_timing_test.tscn.txt",
+      "sha256": "936cb8ba8931e36e9f0fbc45125621a28d05a42a6a5f76a25c07a9aea37e540c",
+      "bytes": 215
+    }
+  ],
+  "unchanged_raw_authorities": [
+    {
+      "path": "assets/data/canonical_monster_drop_source_v2.json",
+      "sha256": "59338a7e5caaccc82661e942908caea0a4a06cf56402961e4c3e55fb123e4013"
+    },
+    {
+      "path": "assets/data/drop/boss_material_drop_directive_v1.json",
+      "sha256": "e24341b97c63134c590f80a7bccd41fd03e051722ea031654500009d5711b557"
+    },
+    {
+      "path": "assets/data/drop/dpv2_single_player_item_boost_classification_v1.json",
+      "sha256": "107cf67f4296041f66a0076d3d6fdd4b45e3efb1f6e865477a051514f9e10e9c"
+    },
+    {
+      "path": "map_editor_workspace/cangyue_bone_cave_f1/cangyue_bone_cave_f1.editor.json",
+      "sha256": "90e874b86be4082f34595c115bb8c3fbf9e6300afcdf6da64f4b601ba341a311"
+    },
+    {
+      "path": "map_editor_workspace/cangyue_bone_cave_f2/cangyue_bone_cave_f2.editor.json",
+      "sha256": "90e36d5a2a74ff74d8ca6e266522a3b342e8438f322fb3179cd0c90e03a00ed3"
+    },
+    {
+      "path": "map_editor_workspace/cangyue_bone_cave_f3/cangyue_bone_cave_f3.editor.json",
+      "sha256": "b9fc897a41c2423fe18cdd46c61e576a6d1394ea71f99c514f64ba74bda20a75"
+    },
+    {
+      "path": "map_editor_workspace/cangyue_bone_cave_f4/cangyue_bone_cave_f4.editor.json",
+      "sha256": "9397001d00ee29a86127ecb8a4991b2286a9efa0117f2254873abeb6059db76f"
+    },
+    {
+      "path": "map_editor_workspace/cangyue_bone_cave_f5/cangyue_bone_cave_f5.editor.json",
+      "sha256": "89363eb55c825e64a726fc8919654a8d9bd9ab1a5179ee5ad56d2bdba80d5201"
+    },
+    {
+      "path": "map_editor_workspace/cangyue_bull_temple_f1/cangyue_bull_temple_f1.editor.json",
+      "sha256": "b1a9d21b46979ed5cf3bfcec36e4443fc92c3cd837adf36e932b11d13ccdc0e8"
+    },
+    {
+      "path": "map_editor_workspace/cangyue_bull_temple_f2/cangyue_bull_temple_f2.editor.json",
+      "sha256": "de816b90fc4310b846b811271b978cc5f8efcff25650419a184e977e4b0df95f"
+    },
+    {
+      "path": "map_editor_workspace/cangyue_bull_temple_f3/cangyue_bull_temple_f3.editor.json",
+      "sha256": "2cb542d87e904ade07b9db64d4cf598bc95b104de6fdf7362d6b97575186c9c8"
+    },
+    {
+      "path": "map_editor_workspace/cangyue_bull_temple_f4/cangyue_bull_temple_f4.editor.json",
+      "sha256": "7f0f3d69707e3f2cdde49c135639b915a05a71e711ca6486cd569a5113c9c4b5"
+    },
+    {
+      "path": "map_editor_workspace/fengmo_purgatory_corridor/fengmo_purgatory_corridor.editor.json",
+      "sha256": "055ca837494394dd037f40abe7a7767dc64fa17762f7742337b1f1c909138479"
+    },
+    {
+      "path": "map_editor_workspace/mengzhong_zuma_temple_f1/mengzhong_zuma_temple_f1.editor.json",
+      "sha256": "8f2ae200582340cdc4345858e3046d64db07d5331392537e5c75911dc6a1608e"
+    },
+    {
+      "path": "map_editor_workspace/mengzhong_zuma_temple_f2/mengzhong_zuma_temple_f2.editor.json",
+      "sha256": "cce96f9423a9b5005dd9ac70bf04ae297d39fd8b2583dc800b31e91f56dd643b"
+    },
+    {
+      "path": "map_editor_workspace/mengzhong_zuma_temple_f3/mengzhong_zuma_temple_f3.editor.json",
+      "sha256": "0e8641a2056312b5c229435ba567a9ae866a11056a453327576a8b9048a6c6c8"
+    },
+    {
+      "path": "map_editor_workspace/mengzhong_zuma_temple_f4/mengzhong_zuma_temple_f4.editor.json",
+      "sha256": "2704bcea3cb1c5d873522897aa79b9d4b0b511c3c5eef6265c88633f951ebc30"
+    },
+    {
+      "path": "map_editor_workspace/wooma_temple_f2/wooma_temple_f2.editor.json",
+      "sha256": "61b87077b937e310ac7d24c1a3d84e3ddf67fcaeb4c077dbb9aa39c230ab9674"
+    }
+  ]
+}

@@ -1,0 +1,1903 @@
+{
+  "verified_at": "2026-10-07T15:07:07",
+  "production_snapshot": "b3d144061b9b0aef419ce6b746ddc476023fd912",
+  "archive_history_commit": "d85608aadc320fd1c9cfec76ba908c8f1d74d170",
+  "archive_tree": "4b825dc642cb6eb9a060e54bf8d69288fbee4904",
+  "remote_heads_before": [
+    {
+      "sha": "1e2927f7baa9de6c8360fc09c8a9b8bbf55c3f0d",
+      "ref": "refs/heads/archive/apk-provenance-1.18.3"
+    },
+    {
+      "sha": "6546dfecfb276e97d856235bb190a12b878797a3",
+      "ref": "refs/heads/archive/dpv2-spb1-local-state-20260919"
+    },
+    {
+      "sha": "a62229d375ee5ae5f462988c9510711f9a5edffc",
+      "ref": "refs/heads/archive/equipment-bronze-repair-wip-20260829"
+    },
+    {
+      "sha": "6c82291dcd5be7ad760163e594f29bbf65108e00",
+      "ref": "refs/heads/archive/equipment-god-magic-236-wip-20260829"
+    },
+    {
+      "sha": "17c6a45b0294f3914dcfd7160a266263bd60c9e8",
+      "ref": "refs/heads/archive/equipment-prayer-224-directions-wip-20260829"
+    },
+    {
+      "sha": "39d162c5a0c8be630867ab7b7d150cc80862a768",
+      "ref": "refs/heads/archive/equipment-wip-20260829"
+    },
+    {
+      "sha": "f7a9d28b6e0f055e21a04b71fc6859f0285441ff",
+      "ref": "refs/heads/archive/map-monster-placement-phase0-artifacts-20260829"
+    },
+    {
+      "sha": "6bac984e76e173f6e332a610eb1f63098a564b68",
+      "ref": "refs/heads/archive/maps-complete-working-state-20260829"
+    },
+    {
+      "sha": "ca0134f11307b435c1ef92e2e28cdf4f09d9d385",
+      "ref": "refs/heads/archive/maps-local-state-20260904"
+    },
+    {
+      "sha": "2ae9f914e64a59a55e6702fc013f4d62169dfc93",
+      "ref": "refs/heads/archive/monsters-combat-gu-final-audit-wip-20260829"
+    },
+    {
+      "sha": "6a26e006ac6cbdc2825e222b668ae05692f39b92",
+      "ref": "refs/heads/archive/p3-monster-runtime-audit-wip-20260829"
+    },
+    {
+      "sha": "a1ae13a5ef90892023476518ae92447ad6c18a28",
+      "ref": "refs/heads/archive/professions-skills-wip-20260829"
+    },
+    {
+      "sha": "6095e3bc0c77cdacb1b6bc9582146d15d28bcecd",
+      "ref": "refs/heads/archive/release-1.18.4-monster-map-wip-20260829"
+    },
+    {
+      "sha": "8aeb5ab2675abc772450b25fa402cda5c4552f60",
+      "ref": "refs/heads/archive/stashed-calibration-evidence-20260829"
+    },
+    {
+      "sha": "022ef8edaef9ebe5f17d909268838899cd18f8bb",
+      "ref": "refs/heads/archive/ui-single-ring-system-wip-20260829"
+    },
+    {
+      "sha": "fc1e7fbfeeecd0f2b75f3f30cfa6577744c14787",
+      "ref": "refs/heads/archive/unregistered-worktree-residuals-20260829"
+    },
+    {
+      "sha": "4943dce09a449c13188d8bb610c6cd9d2f10cbc5",
+      "ref": "refs/heads/archive/visual-lab-frozen-wip-20260829"
+    },
+    {
+      "sha": "5b737710258086c80c314b7e48244ba0330e2dd8",
+      "ref": "refs/heads/codex/audit-bich-npc-20260905"
+    },
+    {
+      "sha": "e987867de642f752913c4069730b51faf69f55f2",
+      "ref": "refs/heads/codex/audit-loot-order-20260905"
+    },
+    {
+      "sha": "36bd5bffdebba07dee657fec5566a7af18ea4409",
+      "ref": "refs/heads/codex/audit-loot-time-20260905"
+    },
+    {
+      "sha": "34391a4fcdd65e41c747def826c2c05061ba2acf",
+      "ref": "refs/heads/codex/audit-map-safety-20260905"
+    },
+    {
+      "sha": "ef79e00d8a9849f265faadcbabba9aedfddc8d53",
+      "ref": "refs/heads/codex/audit-startup-safety-20260905"
+    },
+    {
+      "sha": "b4284b9607532a499c73a8b08238d9166bacbbbc",
+      "ref": "refs/heads/codex/bugfix24-audio-20260909"
+    },
+    {
+      "sha": "3f72a1dd2e5c25f03285ead021127d1b12f768c6",
+      "ref": "refs/heads/codex/bugfix24-rev07-perf-20260909"
+    },
+    {
+      "sha": "65d05e66c3c8b9a38e9b51dc810c1e90e1623864",
+      "ref": "refs/heads/codex/bugfix24-ui-preview-20260909"
+    },
+    {
+      "sha": "b56db9c2d098a9699f292948977b7bf8c343d5f7",
+      "ref": "refs/heads/codex/bugfix24-v3-close-20260909"
+    },
+    {
+      "sha": "e9d95bc299eaa6f107fba8932857b08e72aec5ec",
+      "ref": "refs/heads/codex/bugfix24-visuals-20260909"
+    },
+    {
+      "sha": "843763c98dbb1f0ad949bfbc769757be0e2b7d44",
+      "ref": "refs/heads/codex/bugfix24-w1-data-20260909"
+    },
+    {
+      "sha": "4e03608362f801ccaf68e873a1a6d5b12591d087",
+      "ref": "refs/heads/codex/cloud-continuation-20261005"
+    },
+    {
+      "sha": "9f2ffc25b62ad27914b1ee5cae9bbba0229fdd99",
+      "ref": "refs/heads/codex/cloud-handoff-20261005"
+    },
+    {
+      "sha": "98ea003b66915622b5c265602e54386f9213016c",
+      "ref": "refs/heads/codex/dpv2-21cq-x1-r1-non-loot-semantic-closure"
+    },
+    {
+      "sha": "342891ab884150c0e81084c932df8205484e6388",
+      "ref": "refs/heads/codex/dpv2-glm52-flash-v5-0-2-20260908"
+    },
+    {
+      "sha": "e0ac4cc8441274fe93ba8a36beda54cc4e592bf2",
+      "ref": "refs/heads/codex/dpv2-glm52-flash-v5-0-2-20260908-4b-import-gate-aborted-20260908-0107"
+    },
+    {
+      "sha": "9005677934808bf60fd33d0d54fe937035f8c754",
+      "ref": "refs/heads/codex/dpv2-glm52-flash-v5-0-2-20260908-4b-marker-fix-pending-20260908-0123"
+    },
+    {
+      "sha": "288136127d7e358d92f20a42d302ead41841dcfa",
+      "ref": "refs/heads/codex/dpv2-glm52-flash-v5-0-2-20260908-4b-prepatch-aborted-20260908-003834"
+    },
+    {
+      "sha": "5995cad6a8b119c736e76e663102e15cb7fb7053",
+      "ref": "refs/heads/codex/dpv2-glm52-flash-v5-0-2-20260908-4b-uid-gate-pending-20260908-0223"
+    },
+    {
+      "sha": "cf1d2718befdef7e6cc2fb274fd91ce0759d105f",
+      "ref": "refs/heads/codex/dpv2-glm52-flash-v5-0-3-20260908"
+    },
+    {
+      "sha": "c821fad667014c12e4ebf5dd933c75e5ababa129",
+      "ref": "refs/heads/codex/dpv2-glm52-flash-v5-20260907"
+    },
+    {
+      "sha": "ffcdc76b360d5976eef2ce17a45664ddaf550590",
+      "ref": "refs/heads/codex/dpv2-glm52-flash-v5-20260907-ps51-aborted-20260907-235208"
+    },
+    {
+      "sha": "06459e9672fbe7b906614a795582c8a80a4c05ad",
+      "ref": "refs/heads/codex/dpv2-spb-1-single-player-x25"
+    },
+    {
+      "sha": "ba8d4ff372589e822072ce23c303098020f899b6",
+      "ref": "refs/heads/codex/equipment"
+    },
+    {
+      "sha": "a696020789e21ef3d52ef9706fa19e7d70c88b71",
+      "ref": "refs/heads/codex/equipment-bronze-repair"
+    },
+    {
+      "sha": "d3e23c6fd2589b754860c87bfc064dd571681df5",
+      "ref": "refs/heads/codex/equipment-foundation-audit-20260810"
+    },
+    {
+      "sha": "4da0680dc10777d99b63066e214477a5b58d6d81",
+      "ref": "refs/heads/codex/equipment-helmet151-target"
+    },
+    {
+      "sha": "b165194b14a94648260ce6467ff65d42fc112ca5",
+      "ref": "refs/heads/codex/equipment-memory-228"
+    },
+    {
+      "sha": "d07c4b73dfc4e60b49237922255d202504467360",
+      "ref": "refs/heads/codex/equipment-mystery-218"
+    },
+    {
+      "sha": "f3132c305234fb88105a20eef192d65e0944bcfd",
+      "ref": "refs/heads/codex/equipment-mystery-218-width"
+    },
+    {
+      "sha": "17c6a45b0294f3914dcfd7160a266263bd60c9e8",
+      "ref": "refs/heads/codex/equipment-prayer-224-directions"
+    },
+    {
+      "sha": "8deb9622e96f16956a5cf804cb039a00abffc42c",
+      "ref": "refs/heads/codex/equipment-skill-ranks"
+    },
+    {
+      "sha": "da41da3642123c180723ef03dec193ef1fc4cb1b",
+      "ref": "refs/heads/codex/forge-ui-20260923"
+    },
+    {
+      "sha": "bce41b09716e401cacb5394e16828a2b3fd03184",
+      "ref": "refs/heads/codex/framework-budget-epoch-20261003"
+    },
+    {
+      "sha": "e72d826071483885d57c261b900a1dbbbf422d14",
+      "ref": "refs/heads/codex/framework-layered-critical-20261003"
+    },
+    {
+      "sha": "e7b3e06c53fb5ec2c4c84c321f0fec6725b4564c",
+      "ref": "refs/heads/codex/framework-layered-wip-20261003"
+    },
+    {
+      "sha": "723972322b837da1a287172c85412076df0e118d",
+      "ref": "refs/heads/codex/framework-review-20261001"
+    },
+    {
+      "sha": "d7f9b7f79d4f96c16b9327e29b0bd281e1cd3079",
+      "ref": "refs/heads/codex/framework-review-20261002"
+    },
+    {
+      "sha": "a41a655e81a63a2be091263a405f5d88b2495896",
+      "ref": "refs/heads/codex/framework-review-admission-20261002"
+    },
+    {
+      "sha": "1687798348756846001eb6c27a14cf2f376f42cf",
+      "ref": "refs/heads/codex/framework-review-audit-closure-20261002"
+    },
+    {
+      "sha": "1a9d3393684deb437d1a123573a7f6d3dfb7b4f0",
+      "ref": "refs/heads/codex/framework-review-capacity-20261002"
+    },
+    {
+      "sha": "dc1ebf3fea1d047d4e18b352140a50b593223cea",
+      "ref": "refs/heads/codex/framework-review-copy-burst-20261002"
+    },
+    {
+      "sha": "211acc30023934ced8160eb5f4dc0a20de5b50b5",
+      "ref": "refs/heads/codex/framework-review-credit-20261002"
+    },
+    {
+      "sha": "6eb2d7f52f484ed084da88b6b84ee99d0f73f787",
+      "ref": "refs/heads/codex/framework-review-journal-generation-20261002"
+    },
+    {
+      "sha": "de02ced5df4c71b2fe6a41c2b0baab8e73389a57",
+      "ref": "refs/heads/codex/framework-review-journal-recovery-20261002"
+    },
+    {
+      "sha": "4d1efdc45897ace1be64fe0050c977c47f703ad0",
+      "ref": "refs/heads/codex/framework-review-lifecycle-20261002"
+    },
+    {
+      "sha": "29d460cf677695bf786404e01c45e1368df195f5",
+      "ref": "refs/heads/codex/framework-review-natural-lifecycle-20261002"
+    },
+    {
+      "sha": "1d20d266936623a5a6c8925426f2f2063a518d70",
+      "ref": "refs/heads/codex/framework-review-registry-r3-20261002"
+    },
+    {
+      "sha": "4f65e01f09bfcaaaaa0b497bc72b85e182b00f90",
+      "ref": "refs/heads/codex/framework-review-release-20261002"
+    },
+    {
+      "sha": "93b75aef8d05ff6277b8495e63f1d8fb501c25ff",
+      "ref": "refs/heads/codex/framework-review-release-boundaries-20261002"
+    },
+    {
+      "sha": "fedce38a379325005adb5d03db2db40eae231b92",
+      "ref": "refs/heads/codex/glm-thirdtree-continuation-20261006"
+    },
+    {
+      "sha": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+      "ref": "refs/heads/codex/glm53-r1-20260929"
+    },
+    {
+      "sha": "db9010209128f82969211cfd9b01a1046ac257b6",
+      "ref": "refs/heads/codex/hardcore-1-0-milestone"
+    },
+    {
+      "sha": "4a9fbb5023480d369591eee5413a33b1527879e7",
+      "ref": "refs/heads/codex/hotfix-bich-performance"
+    },
+    {
+      "sha": "bf06a1dba4b4cbcd2ae251b671979f986cfe714e",
+      "ref": "refs/heads/codex/hotfix-map-occlusion"
+    },
+    {
+      "sha": "27bf669fdd5293f8657e28e1ecd7976c39e8d983",
+      "ref": "refs/heads/codex/integration"
+    },
+    {
+      "sha": "52938dbd6532cf617e2a933ab053dd9086fd86d3",
+      "ref": "refs/heads/codex/integration-core-foundation-audit-20260810"
+    },
+    {
+      "sha": "9614bfd6e087219aaadc798e710a8a86e6cb97b8",
+      "ref": "refs/heads/codex/integration-item-quick-slots-cycle"
+    },
+    {
+      "sha": "b3296528d7f85c7dff2c78adafaa0f5e4ec33c16",
+      "ref": "refs/heads/codex/m30-r3-integration"
+    },
+    {
+      "sha": "fcc85acd5a7a4bca75372f900c46a35a3a425fb2",
+      "ref": "refs/heads/codex/m30-r4-flash"
+    },
+    {
+      "sha": "cfe1b81f892ba6dd8ebe82012c9b700b65e5314f",
+      "ref": "refs/heads/codex/m30-r4r1-refine"
+    },
+    {
+      "sha": "0278dde0b244813ba0d3d95abcd3d4df4ae50eb2",
+      "ref": "refs/heads/codex/m30-r4r2-baseline-obs"
+    },
+    {
+      "sha": "e0a075645a8c33320297e91a15b8e837c0dfe846",
+      "ref": "refs/heads/codex/m30-r4r2-consistency"
+    },
+    {
+      "sha": "d5d73183766dd7889398432347ea34200f269d38",
+      "ref": "refs/heads/codex/m30-r4r3-acceptance"
+    },
+    {
+      "sha": "b961157694959767cfdbf721acfc63097e95a233",
+      "ref": "refs/heads/codex/m30-r4r3-evidence"
+    },
+    {
+      "sha": "49501f19e2ff9f4c0f8781a2e39550c21a5e1506",
+      "ref": "refs/heads/codex/m30-r4r3-prune"
+    },
+    {
+      "sha": "e158dd7f65be703c37653f9d6dcedbd2c1b6fe1e",
+      "ref": "refs/heads/codex/map-monster-placement-phase0"
+    },
+    {
+      "sha": "b63193afd126f48e8985792afc06c69b58bc6b69",
+      "ref": "refs/heads/codex/maps"
+    },
+    {
+      "sha": "f371f1bf9cd6b0944f6eca400251e3a234570576",
+      "ref": "refs/heads/codex/maps-combat-gu"
+    },
+    {
+      "sha": "35de6fa4ecbbc134d5eb8a2c04874709c51f1c26",
+      "ref": "refs/heads/codex/maps-combat-gu-final"
+    },
+    {
+      "sha": "c10565c540e22b3f4caf639460bc52b19afc2df5",
+      "ref": "refs/heads/codex/maps-decoration-halo-repair-20260814"
+    },
+    {
+      "sha": "0126ffe228a4f21024bdb4ac89058fba974b1ad2",
+      "ref": "refs/heads/codex/maps-foundation-audit-20260810"
+    },
+    {
+      "sha": "b2b01937fcf3a59cba5d2a8c4d281604a9e4e8ef",
+      "ref": "refs/heads/codex/maps-guangmang-clones-20260823"
+    },
+    {
+      "sha": "703fcf592b6ac64773ef7ec4420f1c781f3f0fe3",
+      "ref": "refs/heads/codex/maps-manual-collision-policy"
+    },
+    {
+      "sha": "566af7da95f30fce2fff76150b3309b19894f8bc",
+      "ref": "refs/heads/codex/maps-map-exits-20260822"
+    },
+    {
+      "sha": "b63193afd126f48e8985792afc06c69b58bc6b69",
+      "ref": "refs/heads/codex/maps-monster-placement-sync"
+    },
+    {
+      "sha": "2dcb4e4c64895012b3e3ef3952ab8df4f4d52eed",
+      "ref": "refs/heads/codex/maps-mse-input-fix-20260814"
+    },
+    {
+      "sha": "25d28c7cadc353a46f02c97c01db90b006827cec",
+      "ref": "refs/heads/codex/maps-polygon-precision-r2"
+    },
+    {
+      "sha": "039c99c47b7cf05302a048b9c36f3ab0060a78ab",
+      "ref": "refs/heads/codex/maps-runtime-fields-final"
+    },
+    {
+      "sha": "bec7c3d65f2646b173493f72e2617d339736c1ef",
+      "ref": "refs/heads/codex/maps-tree-halo-repair-20260814"
+    },
+    {
+      "sha": "1e0cb24e220f9728ca6ba3e5ae7078d6f31087ed",
+      "ref": "refs/heads/codex/monster-canonical"
+    },
+    {
+      "sha": "d289f907c804e87080bd4a70cd3e16df51bdbc54",
+      "ref": "refs/heads/codex/monster-combat-r1-20260925"
+    },
+    {
+      "sha": "c97a08b43832b174f98de31f5ed6673ccda344ae",
+      "ref": "refs/heads/codex/monster-density-hotpath-r3"
+    },
+    {
+      "sha": "275eef8b9455c7f3ef63daaf59dfff3c06e26069",
+      "ref": "refs/heads/codex/monster-melee-ai-package-v3"
+    },
+    {
+      "sha": "4a91db49c7ae1738e75fbc114356da4423281cee",
+      "ref": "refs/heads/codex/monster-struck-r1"
+    },
+    {
+      "sha": "9f228d7ed1b2687935c76152b9df1b6e9f678e98",
+      "ref": "refs/heads/codex/monsters"
+    },
+    {
+      "sha": "a1832b0923e8b61f6f0baa0ca9043fa46e007cda",
+      "ref": "refs/heads/codex/monsters-combat-gu"
+    },
+    {
+      "sha": "2ae9f914e64a59a55e6702fc013f4d62169dfc93",
+      "ref": "refs/heads/codex/monsters-combat-gu-final-audit"
+    },
+    {
+      "sha": "d4ff35485b136a4ac54cf8f1a687c206bd40229d",
+      "ref": "refs/heads/codex/monsters-ground-shadow"
+    },
+    {
+      "sha": "f09d97434251d43e744cc72031fbc5dbd7caa5c9",
+      "ref": "refs/heads/codex/monsters-holy-word"
+    },
+    {
+      "sha": "5df96a140cd7e688be0d27997b6d62487a70841a",
+      "ref": "refs/heads/codex/perf-smoothness-r1"
+    },
+    {
+      "sha": "b50eec3be0ca51aeeb488e86c86e8e57bea58170",
+      "ref": "refs/heads/codex/performance-v82-20260914"
+    },
+    {
+      "sha": "7b40d6d7d463a6635e17f2ccab4d2ec42b26b636",
+      "ref": "refs/heads/codex/player-hit-reaction-v4"
+    },
+    {
+      "sha": "162df988d9f7ee513ce6fcca3e67e55898dc8eb9",
+      "ref": "refs/heads/codex/professions-skills"
+    },
+    {
+      "sha": "3c07facd5ce98dc8bc15996baa48e90ea3881432",
+      "ref": "refs/heads/codex/professions-skills-combat-gu"
+    },
+    {
+      "sha": "9067dbb2e0fa3956c56152f5b8019e316443bd4d",
+      "ref": "refs/heads/codex/professions-skills-foundation-audit-20260810"
+    },
+    {
+      "sha": "defe4faf4971fffbe28b57b329d5ac36a2cf3456",
+      "ref": "refs/heads/codex/professions-skills-hell-lightning-visual"
+    },
+    {
+      "sha": "524c35bd40aa108569d3fea94c0018109807e090",
+      "ref": "refs/heads/codex/professions-skills-lightning-timing"
+    },
+    {
+      "sha": "a49080dc17d4b100298e93d5ab3c1a9fbb5094f1",
+      "ref": "refs/heads/codex/professions-skills-lightning-visual"
+    },
+    {
+      "sha": "7bef5aedd852a7563fcaf6ed0e6bd0c0160ecfec",
+      "ref": "refs/heads/codex/professions-skills-melee-angle-fix"
+    },
+    {
+      "sha": "716263321313b34f3d1986a023042888e681a17c",
+      "ref": "refs/heads/codex/professions-skills-melee-continuous-lock"
+    },
+    {
+      "sha": "6bad15f0da1c991e752f5d946dff074af5cde3d7",
+      "ref": "refs/heads/codex/professions-skills-skill-growth"
+    },
+    {
+      "sha": "02ac78570c4f2f684f38b592753e683b56eca77e",
+      "ref": "refs/heads/codex/professions-skills-taoist-support"
+    },
+    {
+      "sha": "ae4159aa63688d3c5ebb072ad19bfd3c3cc4c049",
+      "ref": "refs/heads/codex/professions-skills-warrior-target-aligned-20260809"
+    },
+    {
+      "sha": "3d572da1c75451f6e01f59b630c526ca0d64d822",
+      "ref": "refs/heads/codex/r14cam-kb-integration"
+    },
+    {
+      "sha": "a96db29320606d72849e292002a6515ac454ce7a",
+      "ref": "refs/heads/codex/r2-joint-closure"
+    },
+    {
+      "sha": "3468de45f49adb2cbe30da2b08bfeebe17c7de0e",
+      "ref": "refs/heads/codex/r3-1-1-typed-array-fix"
+    },
+    {
+      "sha": "c0afa4b35ac3c6ab207a01aae810e1f86bb07745",
+      "ref": "refs/heads/codex/r3-1-api-focus-fix"
+    },
+    {
+      "sha": "d2aa9e6ae2feda2723a95edbcaf9e951a475f5b8",
+      "ref": "refs/heads/codex/r3-2-space-budget"
+    },
+    {
+      "sha": "e608c2c09fbe98ad2bce68344052af42c32d70b3",
+      "ref": "refs/heads/codex/r3-3-single-heading"
+    },
+    {
+      "sha": "d43387b86dd2be0954af6c9248474ba8493a54df",
+      "ref": "refs/heads/codex/r3-android-input-20260909"
+    },
+    {
+      "sha": "6c0f1479ff09a32f631bc712b30e0745c4a500c1",
+      "ref": "refs/heads/codex/r3-layout-close-m30"
+    },
+    {
+      "sha": "c471879954cc2a5460e0babdf9050feaafed7afe",
+      "ref": "refs/heads/codex/r3-regression-repair-20260909"
+    },
+    {
+      "sha": "9b9362219753557edc8def1e05b61db62bb928f2",
+      "ref": "refs/heads/codex/r6-1-full-repair"
+    },
+    {
+      "sha": "55d961feea032f2614e1093ed4b308ae72b8b3b6",
+      "ref": "refs/heads/codex/release-1.18.4-monster-map"
+    },
+    {
+      "sha": "85d37077704c1083c85ee9d79f14081fff2c4dba",
+      "ref": "refs/heads/codex/rv14-rv15-joint-review"
+    },
+    {
+      "sha": "0ace161669ece1585c2abd7711748e28f14fe25e",
+      "ref": "refs/heads/codex/taoist-projectile-summon-fixes-20260809"
+    },
+    {
+      "sha": "700e884dad8d432e14250b676c71eb65714f5cca",
+      "ref": "refs/heads/codex/ui-art"
+    },
+    {
+      "sha": "dfbc361e2799b7b5ec8170b35636e9496fe06141",
+      "ref": "refs/heads/codex/ui-art-foundation-audit-20260810"
+    },
+    {
+      "sha": "73519b788af408ebdcabdea3f904300f18f64701",
+      "ref": "refs/heads/codex/ui-art-item-interaction-scroll"
+    },
+    {
+      "sha": "61089ef2fc4a63645dcd4901c829eec1db152849",
+      "ref": "refs/heads/codex/ui-art-quick-picker-alignment-20260810"
+    },
+    {
+      "sha": "bf8f29bfd42319b44e2fd0e9ee3990e611bdb0d2",
+      "ref": "refs/heads/codex/ui-final-modal-polish"
+    },
+    {
+      "sha": "359ad9c3e4a61cdda1660c3e8a1417a8e6c47e65",
+      "ref": "refs/heads/codex/ui-l1-measure-after"
+    },
+    {
+      "sha": "802979b0a972edb11252235f98503313927a3aec",
+      "ref": "refs/heads/codex/ui-l1-measure-before"
+    },
+    {
+      "sha": "dc250d1576e555def231fb44c9db012a5b40d098",
+      "ref": "refs/heads/codex/ui-l1-measure-r2after"
+    },
+    {
+      "sha": "9da054955c86b825e8f196d718a426a9660e64a5",
+      "ref": "refs/heads/codex/ui-l1-measure-r2before"
+    },
+    {
+      "sha": "1a031f4bdb6520bb3818596d4400f5e95c96661f",
+      "ref": "refs/heads/codex/ui-layout-exp-bar"
+    },
+    {
+      "sha": "bf26b14c1891d9540dec54155607bdb9d1dbc7fe",
+      "ref": "refs/heads/codex/ui-layout-refinement-20260811"
+    },
+    {
+      "sha": "1eea8c29224923027df24220f6444f7cb48ed47c",
+      "ref": "refs/heads/codex/ui-r5-dock-audio-dismiss"
+    },
+    {
+      "sha": "0b25e1e07615d58b98e48a5e6610bbe4227309e2",
+      "ref": "refs/heads/codex/ui-r5-tmp-integration-20260910"
+    },
+    {
+      "sha": "ab0d55245599fa3dcc681d5163be5af02f758394",
+      "ref": "refs/heads/codex/wall-p1r-final-v2"
+    },
+    {
+      "sha": "bcc2bd1501145b5c3bb5c020cc3bdb1c68027386",
+      "ref": "refs/heads/codex/wall-p1r-rollout-r2-r4"
+    },
+    {
+      "sha": "789c49836a102fa2c23b0ba9d63e81a7bd467582",
+      "ref": "refs/heads/deepseek/maps-calibration-r4-20260820"
+    },
+    {
+      "sha": "ea0e94d3e8211eba8689baf78a3add09226a38da",
+      "ref": "refs/heads/deepseek/maps-calibration-r4-final-20260820"
+    },
+    {
+      "sha": "5a872a41d22ffe012f5288d7855a7ecfa489ff3d",
+      "ref": "refs/heads/deepseek/maps-calibration-review-snapshot-20260820"
+    },
+    {
+      "sha": "6efaab154eb954a08e49aafdf60dd167c85ac1d6",
+      "ref": "refs/heads/deepseek/maps-footprint-review-r2-20260820"
+    },
+    {
+      "sha": "8dcaa3284c7c62dd29ce83cdcf18c9a23d2636b5",
+      "ref": "refs/heads/deepseek/maps-footprint-review-r2-final-land-20260820"
+    },
+    {
+      "sha": "6970282331be37dcdd4c65d6f24c7437e63654d8",
+      "ref": "refs/heads/deepseek/maps-footprint-review-r3-final-land-20260820"
+    },
+    {
+      "sha": "466ea8647545041616b8c5afd35bd1d09ed5c081",
+      "ref": "refs/heads/deepseek/maps-footprint-review-r3-v2-final-land-20260820"
+    },
+    {
+      "sha": "6014abdea86ab9d0e98e48540d9cd210050e17f3",
+      "ref": "refs/heads/deepseek/maps-footprint-review-tool-20260820"
+    },
+    {
+      "sha": "f62a322707bd87cfad36a08b2d0ecb448f0768a0",
+      "ref": "refs/heads/deepseek/maps-remove-bad-view-decor4-20260820"
+    },
+    {
+      "sha": "fa0957a0f92760bbbc2821b158c37bb75ceecbf0",
+      "ref": "refs/heads/deepseek/maps-sculpture-recut-r2-20260820"
+    },
+    {
+      "sha": "224c5783824a8c2bf56d27b9653a2e37590f1e20",
+      "ref": "refs/heads/deepseek/maps-sculpture-recut-r2-final-20260820"
+    },
+    {
+      "sha": "20ee655bb33e6fac7778e696d70ae042db48e60b",
+      "ref": "refs/heads/deepseek/maps-sculpture-seam-r3-20260820"
+    },
+    {
+      "sha": "daaf13f1bf234b4b4f2723a60f76102abc717d4c",
+      "ref": "refs/heads/deepseek/maps-sculpture-seam-r3-final-20260820"
+    },
+    {
+      "sha": "36e01cbe61e9eea454f385fdeaebe41dddb9bc4f",
+      "ref": "refs/heads/deepseek/maps-xzsc-cage8-20260820"
+    },
+    {
+      "sha": "3158d2d124c61ed3ed18f935c6b6575e730fbb20",
+      "ref": "refs/heads/deepseek/maps-xzsc-import-20260820"
+    },
+    {
+      "sha": "fa8415a373c6179ae3ff943f3f700747a83d32d4",
+      "ref": "refs/heads/deepseek/maps-xzsc-sculpture-20260820"
+    },
+    {
+      "sha": "63b9ce0f1ce26cfae432dd8aa36509288ba5b1cb",
+      "ref": "refs/heads/deepseek/r4c-monster-authority-reconcile-20260819"
+    },
+    {
+      "sha": "68e9a6fb4bde0b44dbf9ebd197646872070b287a",
+      "ref": "refs/heads/deepseek/r4d-maps-monster-editor-sync-20260819"
+    },
+    {
+      "sha": "77e8743e1fc4ca27df40c198ae3ce6de99c02e75",
+      "ref": "refs/heads/deepseek/r4e3-land-r4d-after-user-maps-20260820"
+    },
+    {
+      "sha": "8db38bb83712927879c28f3b91912816980701e4",
+      "ref": "refs/heads/deepseek/sol-handoff-20260820"
+    },
+    {
+      "sha": "62fafc5a85d42187d06397d9a0c4e580fc690526",
+      "ref": "refs/heads/dsh/monster-runtime-r2r3"
+    },
+    {
+      "sha": "0ad51702f2f49c920e888d1de9523a0995962ecc",
+      "ref": "refs/heads/dsh/p1a-r1-final-20260825"
+    },
+    {
+      "sha": "fd848019e3fa4e02a238e907db11b541fe094032",
+      "ref": "refs/heads/handoff/wip/equipment-20260817"
+    },
+    {
+      "sha": "3ebfb0f58cedec88be43d2d1ed5302b8d613a5d2",
+      "ref": "refs/heads/handoff/wip/integration-20260817"
+    },
+    {
+      "sha": "b6075021ad9a1ec2725a5c19bcae0e89136474b4",
+      "ref": "refs/heads/handoff/wip/maps-20260817"
+    },
+    {
+      "sha": "2cd8f056643d393c48cb8c63c677fb959b013b49",
+      "ref": "refs/heads/handoff/wip/monsters-20260817"
+    },
+    {
+      "sha": "987ea3b79364afe01519a6e85fa6b996a929cd0e",
+      "ref": "refs/heads/handoff/wip/professions-skills-20260817"
+    },
+    {
+      "sha": "78a797973409c0ce47590b928f3d26ff067fe567",
+      "ref": "refs/heads/main"
+    },
+    {
+      "sha": "61ddf59eeec0c586338eb0ed4699a55ab3da142e",
+      "ref": "refs/heads/qwen/monster-runtime-closure-audit-r4-20260818"
+    },
+    {
+      "sha": "6dd4e25f7cd1abf176ba067503dc8fe068738b9e",
+      "ref": "refs/heads/qwen/p3a-maps-consumer-runtime-policy-20260818"
+    },
+    {
+      "sha": "0613f4f3a0c8f9da1afb9a602a8dae478f54a50c",
+      "ref": "refs/heads/qwen/p3b-maps-consumer-all-active-20260819"
+    },
+    {
+      "sha": "82717f5aa02aa92c890e8c371c394851b46d9659",
+      "ref": "refs/heads/qwen/p3b-variant-appearance-inheritance-20260819"
+    },
+    {
+      "sha": "5102b453f0eef402763ef71062392845d84379b9",
+      "ref": "refs/heads/rescue/before-laser-ew-repair"
+    },
+    {
+      "sha": "259a613df5a09ae1bf7b7106fd56d6313dbd9171",
+      "ref": "refs/heads/rescue/p1-d-before-integration-recovery"
+    },
+    {
+      "sha": "80e15dbfb8431aaa78034a48387c5098afeb1bb3",
+      "ref": "refs/heads/rescue/v2.1-contaminated-20260805"
+    },
+    {
+      "sha": "ba8d4ff372589e822072ce23c303098020f899b6",
+      "ref": "refs/heads/tree0/equipment-legacy-snapshot-20260824"
+    },
+    {
+      "sha": "deff1ef641f87f238c55a4f9edba409a2361e137",
+      "ref": "refs/heads/tree0/maps-working-snapshot-20260824"
+    },
+    {
+      "sha": "c469b5f226e92facb11f3aaa7232ae5b8548bc8b",
+      "ref": "refs/heads/tree0/maps-working-snapshot-20260824-r2"
+    },
+    {
+      "sha": "3b52ee880fc4a918ff473c7ed5f1d5d33ea64b46",
+      "ref": "refs/heads/validation/caster-visual-production-v1"
+    },
+    {
+      "sha": "dda18aedd8868c5221b014f1df5a5f745df8bb94",
+      "ref": "refs/heads/validation/caster-visual-production-v2"
+    },
+    {
+      "sha": "ffe1a9b323d341303778dcd176ea2ac824a90ba3",
+      "ref": "refs/heads/validation/laser-anchor-rebase-v1"
+    },
+    {
+      "sha": "d1ab30d64dd3a3b7fa60a2291caf276a8bd268e1",
+      "ref": "refs/heads/validation/laser-anchor-rebase-v2"
+    },
+    {
+      "sha": "2ca826a2631d9d136bffb1640c1fb89451f9c400",
+      "ref": "refs/heads/validation/laser-anchor-rebase-v3"
+    },
+    {
+      "sha": "216e354bb5efc88e92d89e475ce7aacba0491597",
+      "ref": "refs/heads/validation/p0-runtime-foundation-v1"
+    },
+    {
+      "sha": "e4125df352c4f839e9c649f1c3ab4ed0faeaaa2e",
+      "ref": "refs/heads/validation/p1-input-gate-v2"
+    },
+    {
+      "sha": "81f70e2b5f12ecd128c52724574d35a9645d0275",
+      "ref": "refs/heads/validation/p1-snapshot-coordinate-contract-v1"
+    },
+    {
+      "sha": "183dd4efeed49414b24c4722b5d7157ee276a032",
+      "ref": "refs/heads/validation/p1-world-loading-v2"
+    }
+  ],
+  "local_heads_before": [
+    {
+      "sha": "1e2927f7baa9de6c8360fc09c8a9b8bbf55c3f0d",
+      "ref": "refs/heads/archive/apk-provenance-1.18.3"
+    },
+    {
+      "sha": "a62229d375ee5ae5f462988c9510711f9a5edffc",
+      "ref": "refs/heads/archive/equipment-bronze-repair-wip-20260829"
+    },
+    {
+      "sha": "6c82291dcd5be7ad760163e594f29bbf65108e00",
+      "ref": "refs/heads/archive/equipment-god-magic-236-wip-20260829"
+    },
+    {
+      "sha": "17c6a45b0294f3914dcfd7160a266263bd60c9e8",
+      "ref": "refs/heads/archive/equipment-prayer-224-directions-wip-20260829"
+    },
+    {
+      "sha": "39d162c5a0c8be630867ab7b7d150cc80862a768",
+      "ref": "refs/heads/archive/equipment-wip-20260829"
+    },
+    {
+      "sha": "f7a9d28b6e0f055e21a04b71fc6859f0285441ff",
+      "ref": "refs/heads/archive/map-monster-placement-phase0-artifacts-20260829"
+    },
+    {
+      "sha": "6bac984e76e173f6e332a610eb1f63098a564b68",
+      "ref": "refs/heads/archive/maps-complete-working-state-20260829"
+    },
+    {
+      "sha": "2ae9f914e64a59a55e6702fc013f4d62169dfc93",
+      "ref": "refs/heads/archive/monsters-combat-gu-final-audit-wip-20260829"
+    },
+    {
+      "sha": "6a26e006ac6cbdc2825e222b668ae05692f39b92",
+      "ref": "refs/heads/archive/p3-monster-runtime-audit-wip-20260829"
+    },
+    {
+      "sha": "a1ae13a5ef90892023476518ae92447ad6c18a28",
+      "ref": "refs/heads/archive/professions-skills-wip-20260829"
+    },
+    {
+      "sha": "6095e3bc0c77cdacb1b6bc9582146d15d28bcecd",
+      "ref": "refs/heads/archive/release-1.18.4-monster-map-wip-20260829"
+    },
+    {
+      "sha": "8aeb5ab2675abc772450b25fa402cda5c4552f60",
+      "ref": "refs/heads/archive/stashed-calibration-evidence-20260829"
+    },
+    {
+      "sha": "022ef8edaef9ebe5f17d909268838899cd18f8bb",
+      "ref": "refs/heads/archive/ui-single-ring-system-wip-20260829"
+    },
+    {
+      "sha": "fc1e7fbfeeecd0f2b75f3f30cfa6577744c14787",
+      "ref": "refs/heads/archive/unregistered-worktree-residuals-20260829"
+    },
+    {
+      "sha": "4943dce09a449c13188d8bb610c6cd9d2f10cbc5",
+      "ref": "refs/heads/archive/visual-lab-frozen-wip-20260829"
+    },
+    {
+      "sha": "5b737710258086c80c314b7e48244ba0330e2dd8",
+      "ref": "refs/heads/codex/audit-bich-npc-20260905"
+    },
+    {
+      "sha": "85d37077704c1083c85ee9d79f14081fff2c4dba",
+      "ref": "refs/heads/codex/audit-bugfix-performance-20260921"
+    },
+    {
+      "sha": "e987867de642f752913c4069730b51faf69f55f2",
+      "ref": "refs/heads/codex/audit-loot-order-20260905"
+    },
+    {
+      "sha": "36bd5bffdebba07dee657fec5566a7af18ea4409",
+      "ref": "refs/heads/codex/audit-loot-time-20260905"
+    },
+    {
+      "sha": "34391a4fcdd65e41c747def826c2c05061ba2acf",
+      "ref": "refs/heads/codex/audit-map-safety-20260905"
+    },
+    {
+      "sha": "ef79e00d8a9849f265faadcbabba9aedfddc8d53",
+      "ref": "refs/heads/codex/audit-startup-safety-20260905"
+    },
+    {
+      "sha": "b4284b9607532a499c73a8b08238d9166bacbbbc",
+      "ref": "refs/heads/codex/bugfix24-audio-20260909"
+    },
+    {
+      "sha": "3f72a1dd2e5c25f03285ead021127d1b12f768c6",
+      "ref": "refs/heads/codex/bugfix24-rev07-perf-20260909"
+    },
+    {
+      "sha": "65d05e66c3c8b9a38e9b51dc810c1e90e1623864",
+      "ref": "refs/heads/codex/bugfix24-ui-preview-20260909"
+    },
+    {
+      "sha": "b56db9c2d098a9699f292948977b7bf8c343d5f7",
+      "ref": "refs/heads/codex/bugfix24-v3-close-20260909"
+    },
+    {
+      "sha": "e9d95bc299eaa6f107fba8932857b08e72aec5ec",
+      "ref": "refs/heads/codex/bugfix24-visuals-20260909"
+    },
+    {
+      "sha": "843763c98dbb1f0ad949bfbc769757be0e2b7d44",
+      "ref": "refs/heads/codex/bugfix24-w1-data-20260909"
+    },
+    {
+      "sha": "9f2ffc25b62ad27914b1ee5cae9bbba0229fdd99",
+      "ref": "refs/heads/codex/cloud-handoff-20261005"
+    },
+    {
+      "sha": "98ea003b66915622b5c265602e54386f9213016c",
+      "ref": "refs/heads/codex/dpv2-21cq-x1-r1-non-loot-semantic-closure"
+    },
+    {
+      "sha": "342891ab884150c0e81084c932df8205484e6388",
+      "ref": "refs/heads/codex/dpv2-glm52-flash-v5-0-2-20260908"
+    },
+    {
+      "sha": "e0ac4cc8441274fe93ba8a36beda54cc4e592bf2",
+      "ref": "refs/heads/codex/dpv2-glm52-flash-v5-0-2-20260908-4b-import-gate-aborted-20260908-0107"
+    },
+    {
+      "sha": "9005677934808bf60fd33d0d54fe937035f8c754",
+      "ref": "refs/heads/codex/dpv2-glm52-flash-v5-0-2-20260908-4b-marker-fix-pending-20260908-0123"
+    },
+    {
+      "sha": "288136127d7e358d92f20a42d302ead41841dcfa",
+      "ref": "refs/heads/codex/dpv2-glm52-flash-v5-0-2-20260908-4b-prepatch-aborted-20260908-003834"
+    },
+    {
+      "sha": "5995cad6a8b119c736e76e663102e15cb7fb7053",
+      "ref": "refs/heads/codex/dpv2-glm52-flash-v5-0-2-20260908-4b-uid-gate-pending-20260908-0223"
+    },
+    {
+      "sha": "c821fad667014c12e4ebf5dd933c75e5ababa129",
+      "ref": "refs/heads/codex/dpv2-glm52-flash-v5-20260907"
+    },
+    {
+      "sha": "ffcdc76b360d5976eef2ce17a45664ddaf550590",
+      "ref": "refs/heads/codex/dpv2-glm52-flash-v5-20260907-ps51-aborted-20260907-235208"
+    },
+    {
+      "sha": "6546dfecfb276e97d856235bb190a12b878797a3",
+      "ref": "refs/heads/codex/dpv2-spb-1-single-player-x25"
+    },
+    {
+      "sha": "ba8d4ff372589e822072ce23c303098020f899b6",
+      "ref": "refs/heads/codex/equipment"
+    },
+    {
+      "sha": "a696020789e21ef3d52ef9706fa19e7d70c88b71",
+      "ref": "refs/heads/codex/equipment-bronze-repair"
+    },
+    {
+      "sha": "d3e23c6fd2589b754860c87bfc064dd571681df5",
+      "ref": "refs/heads/codex/equipment-foundation-audit-20260810"
+    },
+    {
+      "sha": "b39eb9729be8f1f2bf4172be14ce2a04d4c1a611",
+      "ref": "refs/heads/codex/equipment-god-magic-236"
+    },
+    {
+      "sha": "4da0680dc10777d99b63066e214477a5b58d6d81",
+      "ref": "refs/heads/codex/equipment-helmet151-target"
+    },
+    {
+      "sha": "b165194b14a94648260ce6467ff65d42fc112ca5",
+      "ref": "refs/heads/codex/equipment-memory-228"
+    },
+    {
+      "sha": "d07c4b73dfc4e60b49237922255d202504467360",
+      "ref": "refs/heads/codex/equipment-mystery-218"
+    },
+    {
+      "sha": "f3132c305234fb88105a20eef192d65e0944bcfd",
+      "ref": "refs/heads/codex/equipment-mystery-218-width"
+    },
+    {
+      "sha": "17c6a45b0294f3914dcfd7160a266263bd60c9e8",
+      "ref": "refs/heads/codex/equipment-prayer-224-directions"
+    },
+    {
+      "sha": "8deb9622e96f16956a5cf804cb039a00abffc42c",
+      "ref": "refs/heads/codex/equipment-skill-ranks"
+    },
+    {
+      "sha": "97d639af7cbdc80c668e6a7574efbcd0c7566bc0",
+      "ref": "refs/heads/codex/fix-aoe-firewall-perf-20260915"
+    },
+    {
+      "sha": "da41da3642123c180723ef03dec193ef1fc4cb1b",
+      "ref": "refs/heads/codex/forge-ui-20260923"
+    },
+    {
+      "sha": "bce41b09716e401cacb5394e16828a2b3fd03184",
+      "ref": "refs/heads/codex/framework-budget-epoch-20261003"
+    },
+    {
+      "sha": "e72d826071483885d57c261b900a1dbbbf422d14",
+      "ref": "refs/heads/codex/framework-layered-critical-20261003"
+    },
+    {
+      "sha": "e7b3e06c53fb5ec2c4c84c321f0fec6725b4564c",
+      "ref": "refs/heads/codex/framework-layered-wip-20261003"
+    },
+    {
+      "sha": "723972322b837da1a287172c85412076df0e118d",
+      "ref": "refs/heads/codex/framework-review-20261001"
+    },
+    {
+      "sha": "d7f9b7f79d4f96c16b9327e29b0bd281e1cd3079",
+      "ref": "refs/heads/codex/framework-review-20261002"
+    },
+    {
+      "sha": "a41a655e81a63a2be091263a405f5d88b2495896",
+      "ref": "refs/heads/codex/framework-review-admission-20261002"
+    },
+    {
+      "sha": "1687798348756846001eb6c27a14cf2f376f42cf",
+      "ref": "refs/heads/codex/framework-review-audit-closure-20261002"
+    },
+    {
+      "sha": "1a9d3393684deb437d1a123573a7f6d3dfb7b4f0",
+      "ref": "refs/heads/codex/framework-review-capacity-20261002"
+    },
+    {
+      "sha": "dc1ebf3fea1d047d4e18b352140a50b593223cea",
+      "ref": "refs/heads/codex/framework-review-copy-burst-20261002"
+    },
+    {
+      "sha": "211acc30023934ced8160eb5f4dc0a20de5b50b5",
+      "ref": "refs/heads/codex/framework-review-credit-20261002"
+    },
+    {
+      "sha": "6eb2d7f52f484ed084da88b6b84ee99d0f73f787",
+      "ref": "refs/heads/codex/framework-review-journal-generation-20261002"
+    },
+    {
+      "sha": "de02ced5df4c71b2fe6a41c2b0baab8e73389a57",
+      "ref": "refs/heads/codex/framework-review-journal-recovery-20261002"
+    },
+    {
+      "sha": "4d1efdc45897ace1be64fe0050c977c47f703ad0",
+      "ref": "refs/heads/codex/framework-review-lifecycle-20261002"
+    },
+    {
+      "sha": "29d460cf677695bf786404e01c45e1368df195f5",
+      "ref": "refs/heads/codex/framework-review-natural-lifecycle-20261002"
+    },
+    {
+      "sha": "1d20d266936623a5a6c8925426f2f2063a518d70",
+      "ref": "refs/heads/codex/framework-review-registry-r3-20261002"
+    },
+    {
+      "sha": "4f65e01f09bfcaaaaa0b497bc72b85e182b00f90",
+      "ref": "refs/heads/codex/framework-review-release-20261002"
+    },
+    {
+      "sha": "93b75aef8d05ff6277b8495e63f1d8fb501c25ff",
+      "ref": "refs/heads/codex/framework-review-release-boundaries-20261002"
+    },
+    {
+      "sha": "ec8ba9bb9a291c7da6025296731a0bc4ea855d70",
+      "ref": "refs/heads/codex/full-main-consolidation-20260919"
+    },
+    {
+      "sha": "fedce38a379325005adb5d03db2db40eae231b92",
+      "ref": "refs/heads/codex/glm-thirdtree-continuation-20261006"
+    },
+    {
+      "sha": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+      "ref": "refs/heads/codex/glm53-r1-20260929"
+    },
+    {
+      "sha": "db9010209128f82969211cfd9b01a1046ac257b6",
+      "ref": "refs/heads/codex/hardcore-1-0-milestone"
+    },
+    {
+      "sha": "4a9fbb5023480d369591eee5413a33b1527879e7",
+      "ref": "refs/heads/codex/hotfix-bich-performance"
+    },
+    {
+      "sha": "bf06a1dba4b4cbcd2ae251b671979f986cfe714e",
+      "ref": "refs/heads/codex/hotfix-map-occlusion"
+    },
+    {
+      "sha": "b3d144061b9b0aef419ce6b746ddc476023fd912",
+      "ref": "refs/heads/codex/integration"
+    },
+    {
+      "sha": "52938dbd6532cf617e2a933ab053dd9086fd86d3",
+      "ref": "refs/heads/codex/integration-core-foundation-audit-20260810"
+    },
+    {
+      "sha": "9614bfd6e087219aaadc798e710a8a86e6cb97b8",
+      "ref": "refs/heads/codex/integration-item-quick-slots-cycle"
+    },
+    {
+      "sha": "90685044f8f9cc34fa88d883748b503f662d1898",
+      "ref": "refs/heads/codex/integration-map-network-20260824"
+    },
+    {
+      "sha": "13fbbd3d670d0808b18115ec73afa085d3e6b5ee",
+      "ref": "refs/heads/codex/lightning-apng-firewall-timing"
+    },
+    {
+      "sha": "4f4462ad027714acf657c7a2ac28fa4f15a6e293",
+      "ref": "refs/heads/codex/loot-ui-followup-20260914"
+    },
+    {
+      "sha": "b3296528d7f85c7dff2c78adafaa0f5e4ec33c16",
+      "ref": "refs/heads/codex/m30-r3-integration"
+    },
+    {
+      "sha": "fcc85acd5a7a4bca75372f900c46a35a3a425fb2",
+      "ref": "refs/heads/codex/m30-r4-flash"
+    },
+    {
+      "sha": "cfe1b81f892ba6dd8ebe82012c9b700b65e5314f",
+      "ref": "refs/heads/codex/m30-r4r1-refine"
+    },
+    {
+      "sha": "0278dde0b244813ba0d3d95abcd3d4df4ae50eb2",
+      "ref": "refs/heads/codex/m30-r4r2-baseline-obs"
+    },
+    {
+      "sha": "e0a075645a8c33320297e91a15b8e837c0dfe846",
+      "ref": "refs/heads/codex/m30-r4r2-consistency"
+    },
+    {
+      "sha": "d5d73183766dd7889398432347ea34200f269d38",
+      "ref": "refs/heads/codex/m30-r4r3-acceptance"
+    },
+    {
+      "sha": "b961157694959767cfdbf721acfc63097e95a233",
+      "ref": "refs/heads/codex/m30-r4r3-evidence"
+    },
+    {
+      "sha": "49501f19e2ff9f4c0f8781a2e39550c21a5e1506",
+      "ref": "refs/heads/codex/m30-r4r3-prune"
+    },
+    {
+      "sha": "e158dd7f65be703c37653f9d6dcedbd2c1b6fe1e",
+      "ref": "refs/heads/codex/map-monster-placement-phase0"
+    },
+    {
+      "sha": "ca0134f11307b435c1ef92e2e28cdf4f09d9d385",
+      "ref": "refs/heads/codex/maps"
+    },
+    {
+      "sha": "ddb1e91f69b3e0f1a41de3738ee7420d20eb5da9",
+      "ref": "refs/heads/codex/maps-chiyue-canyon-walls-20260823"
+    },
+    {
+      "sha": "9029b44d0043a459935319b5a726a4d427c0c6ca",
+      "ref": "refs/heads/codex/maps-chiyue-environment-props-20260823"
+    },
+    {
+      "sha": "f371f1bf9cd6b0944f6eca400251e3a234570576",
+      "ref": "refs/heads/codex/maps-combat-gu"
+    },
+    {
+      "sha": "35de6fa4ecbbc134d5eb8a2c04874709c51f1c26",
+      "ref": "refs/heads/codex/maps-combat-gu-final"
+    },
+    {
+      "sha": "c10565c540e22b3f4caf639460bc52b19afc2df5",
+      "ref": "refs/heads/codex/maps-decoration-halo-repair-20260814"
+    },
+    {
+      "sha": "0126ffe228a4f21024bdb4ac89058fba974b1ad2",
+      "ref": "refs/heads/codex/maps-foundation-audit-20260810"
+    },
+    {
+      "sha": "b2b01937fcf3a59cba5d2a8c4d281604a9e4e8ef",
+      "ref": "refs/heads/codex/maps-guangmang-clones-20260823"
+    },
+    {
+      "sha": "703fcf592b6ac64773ef7ec4420f1c781f3f0fe3",
+      "ref": "refs/heads/codex/maps-manual-collision-policy"
+    },
+    {
+      "sha": "566af7da95f30fce2fff76150b3309b19894f8bc",
+      "ref": "refs/heads/codex/maps-map-exits-20260822"
+    },
+    {
+      "sha": "b63193afd126f48e8985792afc06c69b58bc6b69",
+      "ref": "refs/heads/codex/maps-monster-placement-sync"
+    },
+    {
+      "sha": "2dcb4e4c64895012b3e3ef3952ab8df4f4d52eed",
+      "ref": "refs/heads/codex/maps-mse-input-fix-20260814"
+    },
+    {
+      "sha": "25d28c7cadc353a46f02c97c01db90b006827cec",
+      "ref": "refs/heads/codex/maps-polygon-precision-r2"
+    },
+    {
+      "sha": "5b7344a4cb9c36af89fa9da7d54214fa7a7a4a34",
+      "ref": "refs/heads/codex/maps-portal-instance-notes-20260823"
+    },
+    {
+      "sha": "06459e9672fbe7b906614a795582c8a80a4c05ad",
+      "ref": "refs/heads/codex/maps-precise-placement-migration"
+    },
+    {
+      "sha": "f2f8b0bde1910df5ac4f7549ab07a38daf136e39",
+      "ref": "refs/heads/codex/maps-refresh-position-fix"
+    },
+    {
+      "sha": "039c99c47b7cf05302a048b9c36f3ab0060a78ab",
+      "ref": "refs/heads/codex/maps-runtime-fields-final"
+    },
+    {
+      "sha": "bec7c3d65f2646b173493f72e2617d339736c1ef",
+      "ref": "refs/heads/codex/maps-tree-halo-repair-20260814"
+    },
+    {
+      "sha": "7c8ed55d61661b40b9900fa4e4b42a281edb7866",
+      "ref": "refs/heads/codex/maps-world-network-migration-20260824"
+    },
+    {
+      "sha": "ce35b2f1ed4f5f32f478182f7372db1ca24e0994",
+      "ref": "refs/heads/codex/mfc1-monster-audit"
+    },
+    {
+      "sha": "3d527c99f27d74be112256e08e15a8ae83f99549",
+      "ref": "refs/heads/codex/mfc2-monster-audit"
+    },
+    {
+      "sha": "bf263ebd8b8aed8c64c5a35a429da41699bc0bb5",
+      "ref": "refs/heads/codex/mfc4-formal-respawn-policy"
+    },
+    {
+      "sha": "edbe9628c7dd11c2a0b06d9f7ab4cc5edc730e32",
+      "ref": "refs/heads/codex/mfc4-respawn"
+    },
+    {
+      "sha": "b08d72ed451e446b746cd005224648f24117c3be",
+      "ref": "refs/heads/codex/mfc4-respawn-test"
+    },
+    {
+      "sha": "2309142bc3a8f490b70c870a134c3e575d2abad6",
+      "ref": "refs/heads/codex/mfc5-final-gate"
+    },
+    {
+      "sha": "1e0cb24e220f9728ca6ba3e5ae7078d6f31087ed",
+      "ref": "refs/heads/codex/monster-canonical"
+    },
+    {
+      "sha": "d289f907c804e87080bd4a70cd3e16df51bdbc54",
+      "ref": "refs/heads/codex/monster-combat-r1-20260925"
+    },
+    {
+      "sha": "c97a08b43832b174f98de31f5ed6673ccda344ae",
+      "ref": "refs/heads/codex/monster-density-hotpath-r3"
+    },
+    {
+      "sha": "ab015ee898251bfa3cab18a0f1e51cb5ca3f69ad",
+      "ref": "refs/heads/codex/monster-final-closure-20260825"
+    },
+    {
+      "sha": "b08d72ed451e446b746cd005224648f24117c3be",
+      "ref": "refs/heads/codex/monster-final-closure-mfc3-mfc4"
+    },
+    {
+      "sha": "275eef8b9455c7f3ef63daaf59dfff3c06e26069",
+      "ref": "refs/heads/codex/monster-melee-ai-package-v3"
+    },
+    {
+      "sha": "c62dabe5b041ab9ae5c91d319198809ff6f0aad9",
+      "ref": "refs/heads/codex/monster-respawn-closure-20260825"
+    },
+    {
+      "sha": "4a91db49c7ae1738e75fbc114356da4423281cee",
+      "ref": "refs/heads/codex/monster-struck-r1"
+    },
+    {
+      "sha": "9f228d7ed1b2687935c76152b9df1b6e9f678e98",
+      "ref": "refs/heads/codex/monsters"
+    },
+    {
+      "sha": "a1832b0923e8b61f6f0baa0ca9043fa46e007cda",
+      "ref": "refs/heads/codex/monsters-combat-gu"
+    },
+    {
+      "sha": "2ae9f914e64a59a55e6702fc013f4d62169dfc93",
+      "ref": "refs/heads/codex/monsters-combat-gu-final-audit"
+    },
+    {
+      "sha": "d4ff35485b136a4ac54cf8f1a687c206bd40229d",
+      "ref": "refs/heads/codex/monsters-ground-shadow"
+    },
+    {
+      "sha": "f09d97434251d43e744cc72031fbc5dbd7caa5c9",
+      "ref": "refs/heads/codex/monsters-holy-word"
+    },
+    {
+      "sha": "5df96a140cd7e688be0d27997b6d62487a70841a",
+      "ref": "refs/heads/codex/perf-smoothness-r1"
+    },
+    {
+      "sha": "bfe90de4b4546b4b7001cdcbe214122691ae53b8",
+      "ref": "refs/heads/codex/performance-diagnostic"
+    },
+    {
+      "sha": "b50eec3be0ca51aeeb488e86c86e8e57bea58170",
+      "ref": "refs/heads/codex/performance-v82-20260914"
+    },
+    {
+      "sha": "7b40d6d7d463a6635e17f2ccab4d2ec42b26b636",
+      "ref": "refs/heads/codex/player-hit-reaction-v4"
+    },
+    {
+      "sha": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+      "ref": "refs/heads/codex/pluggable-framework-v2"
+    },
+    {
+      "sha": "86331feb719e78c7a4e13196bdf3aee5afdeef5c",
+      "ref": "refs/heads/codex/preserve-lightning-86331-20260928"
+    },
+    {
+      "sha": "bfe90de4b4546b4b7001cdcbe214122691ae53b8",
+      "ref": "refs/heads/codex/preserve-perf-bfe90-20260928"
+    },
+    {
+      "sha": "162df988d9f7ee513ce6fcca3e67e55898dc8eb9",
+      "ref": "refs/heads/codex/professions-skills"
+    },
+    {
+      "sha": "3c07facd5ce98dc8bc15996baa48e90ea3881432",
+      "ref": "refs/heads/codex/professions-skills-combat-gu"
+    },
+    {
+      "sha": "9067dbb2e0fa3956c56152f5b8019e316443bd4d",
+      "ref": "refs/heads/codex/professions-skills-foundation-audit-20260810"
+    },
+    {
+      "sha": "defe4faf4971fffbe28b57b329d5ac36a2cf3456",
+      "ref": "refs/heads/codex/professions-skills-hell-lightning-visual"
+    },
+    {
+      "sha": "524c35bd40aa108569d3fea94c0018109807e090",
+      "ref": "refs/heads/codex/professions-skills-lightning-timing"
+    },
+    {
+      "sha": "a49080dc17d4b100298e93d5ab3c1a9fbb5094f1",
+      "ref": "refs/heads/codex/professions-skills-lightning-visual"
+    },
+    {
+      "sha": "7bef5aedd852a7563fcaf6ed0e6bd0c0160ecfec",
+      "ref": "refs/heads/codex/professions-skills-melee-angle-fix"
+    },
+    {
+      "sha": "716263321313b34f3d1986a023042888e681a17c",
+      "ref": "refs/heads/codex/professions-skills-melee-continuous-lock"
+    },
+    {
+      "sha": "6bad15f0da1c991e752f5d946dff074af5cde3d7",
+      "ref": "refs/heads/codex/professions-skills-skill-growth"
+    },
+    {
+      "sha": "02ac78570c4f2f684f38b592753e683b56eca77e",
+      "ref": "refs/heads/codex/professions-skills-taoist-support"
+    },
+    {
+      "sha": "ae4159aa63688d3c5ebb072ad19bfd3c3cc4c049",
+      "ref": "refs/heads/codex/professions-skills-warrior-target-aligned-20260809"
+    },
+    {
+      "sha": "14bb52f5f3a0a0134130c2bb9eba644ff91ca35a",
+      "ref": "refs/heads/codex/professions-skills-wizard-line-presentation"
+    },
+    {
+      "sha": "fa4a1ffa88f7d2ec20d83a8548afc2d4b99d1393",
+      "ref": "refs/heads/codex/progression-loot-20260913"
+    },
+    {
+      "sha": "3d572da1c75451f6e01f59b630c526ca0d64d822",
+      "ref": "refs/heads/codex/r14cam-kb-integration"
+    },
+    {
+      "sha": "a96db29320606d72849e292002a6515ac454ce7a",
+      "ref": "refs/heads/codex/r2-joint-closure"
+    },
+    {
+      "sha": "3468de45f49adb2cbe30da2b08bfeebe17c7de0e",
+      "ref": "refs/heads/codex/r3-1-1-typed-array-fix"
+    },
+    {
+      "sha": "c0afa4b35ac3c6ab207a01aae810e1f86bb07745",
+      "ref": "refs/heads/codex/r3-1-api-focus-fix"
+    },
+    {
+      "sha": "d2aa9e6ae2feda2723a95edbcaf9e951a475f5b8",
+      "ref": "refs/heads/codex/r3-2-space-budget"
+    },
+    {
+      "sha": "e608c2c09fbe98ad2bce68344052af42c32d70b3",
+      "ref": "refs/heads/codex/r3-3-single-heading"
+    },
+    {
+      "sha": "d43387b86dd2be0954af6c9248474ba8493a54df",
+      "ref": "refs/heads/codex/r3-android-input-20260909"
+    },
+    {
+      "sha": "6c0f1479ff09a32f631bc712b30e0745c4a500c1",
+      "ref": "refs/heads/codex/r3-layout-close-m30"
+    },
+    {
+      "sha": "c471879954cc2a5460e0babdf9050feaafed7afe",
+      "ref": "refs/heads/codex/r3-regression-repair-20260909"
+    },
+    {
+      "sha": "9b9362219753557edc8def1e05b61db62bb928f2",
+      "ref": "refs/heads/codex/r6-1-full-repair"
+    },
+    {
+      "sha": "55d961feea032f2614e1093ed4b308ae72b8b3b6",
+      "ref": "refs/heads/codex/release-1.18.4-monster-map"
+    },
+    {
+      "sha": "0d3de7e7c254cab01bdeb051b8c74d68b0c98088",
+      "ref": "refs/heads/codex/takeover-20260913"
+    },
+    {
+      "sha": "0ace161669ece1585c2abd7711748e28f14fe25e",
+      "ref": "refs/heads/codex/taoist-projectile-summon-fixes-20260809"
+    },
+    {
+      "sha": "9361bf72cd54d48ffc59d0a7be60e2e708fccd5d",
+      "ref": "refs/heads/codex/taoist-skill-fixes-20260809"
+    },
+    {
+      "sha": "700e884dad8d432e14250b676c71eb65714f5cca",
+      "ref": "refs/heads/codex/ui-art"
+    },
+    {
+      "sha": "dfbc361e2799b7b5ec8170b35636e9496fe06141",
+      "ref": "refs/heads/codex/ui-art-foundation-audit-20260810"
+    },
+    {
+      "sha": "73519b788af408ebdcabdea3f904300f18f64701",
+      "ref": "refs/heads/codex/ui-art-item-interaction-scroll"
+    },
+    {
+      "sha": "61089ef2fc4a63645dcd4901c829eec1db152849",
+      "ref": "refs/heads/codex/ui-art-quick-picker-alignment-20260810"
+    },
+    {
+      "sha": "2ef962bb76ba8b3df9ba75d96c5a2c1713712d63",
+      "ref": "refs/heads/codex/ui-art-shop-multiselect-20260811"
+    },
+    {
+      "sha": "98b38830ea074084cde49e964b3ca1da15263417",
+      "ref": "refs/heads/codex/ui-character-review-20260913"
+    },
+    {
+      "sha": "bf8f29bfd42319b44e2fd0e9ee3990e611bdb0d2",
+      "ref": "refs/heads/codex/ui-final-modal-polish"
+    },
+    {
+      "sha": "359ad9c3e4a61cdda1660c3e8a1417a8e6c47e65",
+      "ref": "refs/heads/codex/ui-l1-measure-after"
+    },
+    {
+      "sha": "802979b0a972edb11252235f98503313927a3aec",
+      "ref": "refs/heads/codex/ui-l1-measure-before"
+    },
+    {
+      "sha": "dc250d1576e555def231fb44c9db012a5b40d098",
+      "ref": "refs/heads/codex/ui-l1-measure-r2after"
+    },
+    {
+      "sha": "9da054955c86b825e8f196d718a426a9660e64a5",
+      "ref": "refs/heads/codex/ui-l1-measure-r2before"
+    },
+    {
+      "sha": "1a031f4bdb6520bb3818596d4400f5e95c96661f",
+      "ref": "refs/heads/codex/ui-layout-exp-bar"
+    },
+    {
+      "sha": "bf26b14c1891d9540dec54155607bdb9d1dbc7fe",
+      "ref": "refs/heads/codex/ui-layout-refinement-20260811"
+    },
+    {
+      "sha": "1eea8c29224923027df24220f6444f7cb48ed47c",
+      "ref": "refs/heads/codex/ui-r5-dock-audio-dismiss"
+    },
+    {
+      "sha": "0b25e1e07615d58b98e48a5e6610bbe4227309e2",
+      "ref": "refs/heads/codex/ui-r5-tmp-integration-20260910"
+    },
+    {
+      "sha": "fd12bf52245237d217e9a6db5065e590d57ea1f5",
+      "ref": "refs/heads/codex/ui-single-ring-system"
+    },
+    {
+      "sha": "7950b0c5eebcac0197e30a427c942d251aac844a",
+      "ref": "refs/heads/codex/wall-p1r-final-integration"
+    },
+    {
+      "sha": "ab0d55245599fa3dcc681d5163be5af02f758394",
+      "ref": "refs/heads/codex/wall-p1r-final-v2"
+    },
+    {
+      "sha": "bcc2bd1501145b5c3bb5c020cc3bdb1c68027386",
+      "ref": "refs/heads/codex/wall-p1r-rollout-r2-r4"
+    },
+    {
+      "sha": "c91781bdf59bde825a6de13b6c96e86453c40b92",
+      "ref": "refs/heads/deepseek/aia2-input-debt"
+    },
+    {
+      "sha": "7bd8a185da59b46fea93c6cbb7f1368be911f53a",
+      "ref": "refs/heads/deepseek/maps-cage8-final-apply-20260820"
+    },
+    {
+      "sha": "2fe4a3d32120aa28becd64eb63825a87b6de729f",
+      "ref": "refs/heads/deepseek/maps-calibration-apply-cage8-20260820"
+    },
+    {
+      "sha": "789c49836a102fa2c23b0ba9d63e81a7bd467582",
+      "ref": "refs/heads/deepseek/maps-calibration-r4-20260820"
+    },
+    {
+      "sha": "ea0e94d3e8211eba8689baf78a3add09226a38da",
+      "ref": "refs/heads/deepseek/maps-calibration-r4-final-20260820"
+    },
+    {
+      "sha": "5a872a41d22ffe012f5288d7855a7ecfa489ff3d",
+      "ref": "refs/heads/deepseek/maps-calibration-review-snapshot-20260820"
+    },
+    {
+      "sha": "e7d61e435cf4cb30c4550128051e45048950413e",
+      "ref": "refs/heads/deepseek/maps-decor4-final-land-20260820"
+    },
+    {
+      "sha": "4533f9eccd235b9ddc153ace0d067ad3a2c9ae7f",
+      "ref": "refs/heads/deepseek/maps-footprint-review-final-land-20260820"
+    },
+    {
+      "sha": "6efaab154eb954a08e49aafdf60dd167c85ac1d6",
+      "ref": "refs/heads/deepseek/maps-footprint-review-r2-20260820"
+    },
+    {
+      "sha": "8dcaa3284c7c62dd29ce83cdcf18c9a23d2636b5",
+      "ref": "refs/heads/deepseek/maps-footprint-review-r2-final-land-20260820"
+    },
+    {
+      "sha": "6970282331be37dcdd4c65d6f24c7437e63654d8",
+      "ref": "refs/heads/deepseek/maps-footprint-review-r3-final-land-20260820"
+    },
+    {
+      "sha": "466ea8647545041616b8c5afd35bd1d09ed5c081",
+      "ref": "refs/heads/deepseek/maps-footprint-review-r3-v2-final-land-20260820"
+    },
+    {
+      "sha": "6014abdea86ab9d0e98e48540d9cd210050e17f3",
+      "ref": "refs/heads/deepseek/maps-footprint-review-tool-20260820"
+    },
+    {
+      "sha": "edc4e51b03ee572509e9645525447a40d3ca1c5b",
+      "ref": "refs/heads/deepseek/maps-preserve-local-deletions-20260820"
+    },
+    {
+      "sha": "f62a322707bd87cfad36a08b2d0ecb448f0768a0",
+      "ref": "refs/heads/deepseek/maps-remove-bad-view-decor4-20260820"
+    },
+    {
+      "sha": "fa0957a0f92760bbbc2821b158c37bb75ceecbf0",
+      "ref": "refs/heads/deepseek/maps-sculpture-recut-r2-20260820"
+    },
+    {
+      "sha": "224c5783824a8c2bf56d27b9653a2e37590f1e20",
+      "ref": "refs/heads/deepseek/maps-sculpture-recut-r2-final-20260820"
+    },
+    {
+      "sha": "20ee655bb33e6fac7778e696d70ae042db48e60b",
+      "ref": "refs/heads/deepseek/maps-sculpture-seam-r3-20260820"
+    },
+    {
+      "sha": "daaf13f1bf234b4b4f2723a60f76102abc717d4c",
+      "ref": "refs/heads/deepseek/maps-sculpture-seam-r3-final-20260820"
+    },
+    {
+      "sha": "3139bc347ab85c667faccd823cf23004a8fe3b75",
+      "ref": "refs/heads/deepseek/maps-sculpture28-final-apply-20260820"
+    },
+    {
+      "sha": "36e01cbe61e9eea454f385fdeaebe41dddb9bc4f",
+      "ref": "refs/heads/deepseek/maps-xzsc-cage8-20260820"
+    },
+    {
+      "sha": "60769d5cdda1c03411da126d4238774fab6f657b",
+      "ref": "refs/heads/deepseek/maps-xzsc-final-land-20260820"
+    },
+    {
+      "sha": "3158d2d124c61ed3ed18f935c6b6575e730fbb20",
+      "ref": "refs/heads/deepseek/maps-xzsc-import-20260820"
+    },
+    {
+      "sha": "fa8415a373c6179ae3ff943f3f700747a83d32d4",
+      "ref": "refs/heads/deepseek/maps-xzsc-sculpture-20260820"
+    },
+    {
+      "sha": "35e694fa22c52ac1920a70d6500c1e44b5bb5e8c",
+      "ref": "refs/heads/deepseek/maps-xzsc-sculpture-final-20260820"
+    },
+    {
+      "sha": "527951ef91e933fc7aa518f512378cc1facff1bd",
+      "ref": "refs/heads/deepseek/p3c-monster-variant-prune-20260819"
+    },
+    {
+      "sha": "63b9ce0f1ce26cfae432dd8aa36509288ba5b1cb",
+      "ref": "refs/heads/deepseek/r4c-monster-authority-reconcile-20260819"
+    },
+    {
+      "sha": "68e9a6fb4bde0b44dbf9ebd197646872070b287a",
+      "ref": "refs/heads/deepseek/r4d-maps-monster-editor-sync-20260819"
+    },
+    {
+      "sha": "77e8743e1fc4ca27df40c198ae3ce6de99c02e75",
+      "ref": "refs/heads/deepseek/r4e3-land-r4d-after-user-maps-20260820"
+    },
+    {
+      "sha": "8db38bb83712927879c28f3b91912816980701e4",
+      "ref": "refs/heads/deepseek/sol-handoff-20260820"
+    },
+    {
+      "sha": "1f492dfb46354496a2042cc6e4161ef3bda2045a",
+      "ref": "refs/heads/deepseek/sol-handoff-20260820-final"
+    },
+    {
+      "sha": "f2ab65cfe8ce46b648755b0e2bde94d25687e734",
+      "ref": "refs/heads/dsh/monster-classification-audit"
+    },
+    {
+      "sha": "066e84f6f387ae25a96a623270bcc2e6daa59e8e",
+      "ref": "refs/heads/dsh/monster-runtime-closure"
+    },
+    {
+      "sha": "62fafc5a85d42187d06397d9a0c4e580fc690526",
+      "ref": "refs/heads/dsh/monster-runtime-r2r3"
+    },
+    {
+      "sha": "8808ebe301816a58c05d7be39dee298cd505cb5f",
+      "ref": "refs/heads/dsh/monsters-drop-audit"
+    },
+    {
+      "sha": "0ad51702f2f49c920e888d1de9523a0995962ecc",
+      "ref": "refs/heads/dsh/p1a-r1-final-20260825"
+    },
+    {
+      "sha": "511d97d7c72239fa6bdb1e837aa53a590d98e428",
+      "ref": "refs/heads/glm/maps-uniform-scale-10pct-20260820"
+    },
+    {
+      "sha": "fd848019e3fa4e02a238e907db11b541fe094032",
+      "ref": "refs/heads/handoff/wip/equipment-20260817"
+    },
+    {
+      "sha": "3ebfb0f58cedec88be43d2d1ed5302b8d613a5d2",
+      "ref": "refs/heads/handoff/wip/integration-20260817"
+    },
+    {
+      "sha": "2cd8f056643d393c48cb8c63c677fb959b013b49",
+      "ref": "refs/heads/handoff/wip/monsters-20260817"
+    },
+    {
+      "sha": "987ea3b79364afe01519a6e85fa6b996a929cd0e",
+      "ref": "refs/heads/handoff/wip/professions-skills-20260817"
+    },
+    {
+      "sha": "a9f0542d91f12b55946185a9d98af5e81aa4735d",
+      "ref": "refs/heads/integration-test"
+    },
+    {
+      "sha": "78a797973409c0ce47590b928f3d26ff067fe567",
+      "ref": "refs/heads/main"
+    },
+    {
+      "sha": "b08d72ed451e446b746cd005224648f24117c3be",
+      "ref": "refs/heads/monster-mfc4-test"
+    },
+    {
+      "sha": "a2e9cb243b58aa33b50cce870e754901fb247595",
+      "ref": "refs/heads/qwen/import-eol-normalization-20260817"
+    },
+    {
+      "sha": "61ddf59eeec0c586338eb0ed4699a55ab3da142e",
+      "ref": "refs/heads/qwen/monster-runtime-closure-audit-r4-20260818"
+    },
+    {
+      "sha": "aaf916f4777b09cbeb8b54e9d84f09681d774164",
+      "ref": "refs/heads/qwen/p0-monster-art-wiring-20260817"
+    },
+    {
+      "sha": "a721a72f37f3681f3505c720eefd0a8c8871b333",
+      "ref": "refs/heads/qwen/p0-monster-golden-combat-authority-20260818"
+    },
+    {
+      "sha": "bdd6384e356956fca13c0fd28dc3e2627421dad8",
+      "ref": "refs/heads/qwen/p1-monster-classification-recovery-20260818"
+    },
+    {
+      "sha": "252d034ad27e7d1372b409b5615c37e987aa914a",
+      "ref": "refs/heads/qwen/p3-monster-golden-runtime-authority-20260818"
+    },
+    {
+      "sha": "f92686f782f9802ed8bb319e6d64889eacdb8edf",
+      "ref": "refs/heads/qwen/p3a-canonical-monster-runtime-gate-20260818"
+    },
+    {
+      "sha": "6dd4e25f7cd1abf176ba067503dc8fe068738b9e",
+      "ref": "refs/heads/qwen/p3a-maps-consumer-runtime-policy-20260818"
+    },
+    {
+      "sha": "0613f4f3a0c8f9da1afb9a602a8dae478f54a50c",
+      "ref": "refs/heads/qwen/p3b-maps-consumer-all-active-20260819"
+    },
+    {
+      "sha": "82717f5aa02aa92c890e8c371c394851b46d9659",
+      "ref": "refs/heads/qwen/p3b-variant-appearance-inheritance-20260819"
+    },
+    {
+      "sha": "67d56545d191611d40c33ee5e78ec41250b1616f",
+      "ref": "refs/heads/qwen/sync-p0-art-authority-to-monsters-20260817"
+    },
+    {
+      "sha": "5102b453f0eef402763ef71062392845d84379b9",
+      "ref": "refs/heads/rescue/before-laser-ew-repair"
+    },
+    {
+      "sha": "259a613df5a09ae1bf7b7106fd56d6313dbd9171",
+      "ref": "refs/heads/rescue/p1-d-before-integration-recovery"
+    },
+    {
+      "sha": "80e15dbfb8431aaa78034a48387c5098afeb1bb3",
+      "ref": "refs/heads/rescue/v2.1-contaminated-20260805"
+    },
+    {
+      "sha": "b7188497b2e74cafc40475ea1e54ec5520e227ff",
+      "ref": "refs/heads/spark/p1-monster-classification-recovery-20260818"
+    },
+    {
+      "sha": "cf0e9a1d1493deaf205a8e7ca1e1e8b73be0515b",
+      "ref": "refs/heads/tree0/integration-convergence-final-20260824"
+    },
+    {
+      "sha": "deff1ef641f87f238c55a4f9edba409a2361e137",
+      "ref": "refs/heads/tree0/maps-working-snapshot-20260824"
+    },
+    {
+      "sha": "c469b5f226e92facb11f3aaa7232ae5b8548bc8b",
+      "ref": "refs/heads/tree0/maps-working-snapshot-20260824-r2"
+    },
+    {
+      "sha": "3b52ee880fc4a918ff473c7ed5f1d5d33ea64b46",
+      "ref": "refs/heads/validation/caster-visual-production-v1"
+    },
+    {
+      "sha": "dda18aedd8868c5221b014f1df5a5f745df8bb94",
+      "ref": "refs/heads/validation/caster-visual-production-v2"
+    },
+    {
+      "sha": "ffe1a9b323d341303778dcd176ea2ac824a90ba3",
+      "ref": "refs/heads/validation/laser-anchor-rebase-v1"
+    },
+    {
+      "sha": "d1ab30d64dd3a3b7fa60a2291caf276a8bd268e1",
+      "ref": "refs/heads/validation/laser-anchor-rebase-v2"
+    },
+    {
+      "sha": "2ca826a2631d9d136bffb1640c1fb89451f9c400",
+      "ref": "refs/heads/validation/laser-anchor-rebase-v3"
+    },
+    {
+      "sha": "216e354bb5efc88e92d89e475ce7aacba0491597",
+      "ref": "refs/heads/validation/p0-runtime-foundation-v1"
+    },
+    {
+      "sha": "e4125df352c4f839e9c649f1c3ab4ed0faeaaa2e",
+      "ref": "refs/heads/validation/p1-input-gate-v2"
+    },
+    {
+      "sha": "81f70e2b5f12ecd128c52724574d35a9645d0275",
+      "ref": "refs/heads/validation/p1-snapshot-coordinate-contract-v1"
+    },
+    {
+      "sha": "183dd4efeed49414b24c4722b5d7157ee276a032",
+      "ref": "refs/heads/validation/p1-world-loading-v2"
+    }
+  ],
+  "retired_frontier": [
+    "0126ffe228a4f21024bdb4ac89058fba974b1ad2",
+    "022ef8edaef9ebe5f17d909268838899cd18f8bb",
+    "0278dde0b244813ba0d3d95abcd3d4df4ae50eb2",
+    "02ac78570c4f2f684f38b592753e683b56eca77e",
+    "039c99c47b7cf05302a048b9c36f3ab0060a78ab",
+    "0613f4f3a0c8f9da1afb9a602a8dae478f54a50c",
+    "0ace161669ece1585c2abd7711748e28f14fe25e",
+    "0b25e1e07615d58b98e48a5e6610bbe4227309e2",
+    "13fbbd3d670d0808b18115ec73afa085d3e6b5ee",
+    "17c6a45b0294f3914dcfd7160a266263bd60c9e8",
+    "1a031f4bdb6520bb3818596d4400f5e95c96661f",
+    "1e0cb24e220f9728ca6ba3e5ae7078d6f31087ed",
+    "20ee655bb33e6fac7778e696d70ae042db48e60b",
+    "27bf669fdd5293f8657e28e1ecd7976c39e8d983",
+    "288136127d7e358d92f20a42d302ead41841dcfa",
+    "2ae9f914e64a59a55e6702fc013f4d62169dfc93",
+    "2ca826a2631d9d136bffb1640c1fb89451f9c400",
+    "2cd8f056643d393c48cb8c63c677fb959b013b49",
+    "2dcb4e4c64895012b3e3ef3952ab8df4f4d52eed",
+    "3158d2d124c61ed3ed18f935c6b6575e730fbb20",
+    "34391a4fcdd65e41c747def826c2c05061ba2acf",
+    "359ad9c3e4a61cdda1660c3e8a1417a8e6c47e65",
+    "35de6fa4ecbbc134d5eb8a2c04874709c51f1c26",
+    "36bd5bffdebba07dee657fec5566a7af18ea4409",
+    "36e01cbe61e9eea454f385fdeaebe41dddb9bc4f",
+    "39d162c5a0c8be630867ab7b7d150cc80862a768",
+    "3b52ee880fc4a918ff473c7ed5f1d5d33ea64b46",
+    "3c07facd5ce98dc8bc15996baa48e90ea3881432",
+    "3ebfb0f58cedec88be43d2d1ed5302b8d613a5d2",
+    "3f72a1dd2e5c25f03285ead021127d1b12f768c6",
+    "4943dce09a449c13188d8bb610c6cd9d2f10cbc5",
+    "4a9fbb5023480d369591eee5413a33b1527879e7",
+    "4da0680dc10777d99b63066e214477a5b58d6d81",
+    "524c35bd40aa108569d3fea94c0018109807e090",
+    "52938dbd6532cf617e2a933ab053dd9086fd86d3",
+    "566af7da95f30fce2fff76150b3309b19894f8bc",
+    "5995cad6a8b119c736e76e663102e15cb7fb7053",
+    "5a872a41d22ffe012f5288d7855a7ecfa489ff3d",
+    "5b737710258086c80c314b7e48244ba0330e2dd8",
+    "6014abdea86ab9d0e98e48540d9cd210050e17f3",
+    "6095e3bc0c77cdacb1b6bc9582146d15d28bcecd",
+    "61089ef2fc4a63645dcd4901c829eec1db152849",
+    "61ddf59eeec0c586338eb0ed4699a55ab3da142e",
+    "62fafc5a85d42187d06397d9a0c4e580fc690526",
+    "65d05e66c3c8b9a38e9b51dc810c1e90e1623864",
+    "68e9a6fb4bde0b44dbf9ebd197646872070b287a",
+    "6a26e006ac6cbdc2825e222b668ae05692f39b92",
+    "6bac984e76e173f6e332a610eb1f63098a564b68",
+    "6bad15f0da1c991e752f5d946dff074af5cde3d7",
+    "6c82291dcd5be7ad760163e594f29bbf65108e00",
+    "6efaab154eb954a08e49aafdf60dd167c85ac1d6",
+    "700e884dad8d432e14250b676c71eb65714f5cca",
+    "703fcf592b6ac64773ef7ec4420f1c781f3f0fe3",
+    "716263321313b34f3d1986a023042888e681a17c",
+    "73519b788af408ebdcabdea3f904300f18f64701",
+    "789c49836a102fa2c23b0ba9d63e81a7bd467582",
+    "7bef5aedd852a7563fcaf6ed0e6bd0c0160ecfec",
+    "802979b0a972edb11252235f98503313927a3aec",
+    "82717f5aa02aa92c890e8c371c394851b46d9659",
+    "843763c98dbb1f0ad949bfbc769757be0e2b7d44",
+    "8aeb5ab2675abc772450b25fa402cda5c4552f60",
+    "8db38bb83712927879c28f3b91912816980701e4",
+    "8deb9622e96f16956a5cf804cb039a00abffc42c",
+    "9005677934808bf60fd33d0d54fe937035f8c754",
+    "9067dbb2e0fa3956c56152f5b8019e316443bd4d",
+    "9614bfd6e087219aaadc798e710a8a86e6cb97b8",
+    "987ea3b79364afe01519a6e85fa6b996a929cd0e",
+    "9da054955c86b825e8f196d718a426a9660e64a5",
+    "9f228d7ed1b2687935c76152b9df1b6e9f678e98",
+    "a1832b0923e8b61f6f0baa0ca9043fa46e007cda",
+    "a1ae13a5ef90892023476518ae92447ad6c18a28",
+    "a49080dc17d4b100298e93d5ab3c1a9fbb5094f1",
+    "a62229d375ee5ae5f462988c9510711f9a5edffc",
+    "ae4159aa63688d3c5ebb072ad19bfd3c3cc4c049",
+    "b165194b14a94648260ce6467ff65d42fc112ca5",
+    "b2b01937fcf3a59cba5d2a8c4d281604a9e4e8ef",
+    "b4284b9607532a499c73a8b08238d9166bacbbbc",
+    "b56db9c2d098a9699f292948977b7bf8c343d5f7",
+    "b6075021ad9a1ec2725a5c19bcae0e89136474b4",
+    "b63193afd126f48e8985792afc06c69b58bc6b69",
+    "bce41b09716e401cacb5394e16828a2b3fd03184",
+    "bec7c3d65f2646b173493f72e2617d339736c1ef",
+    "bf06a1dba4b4cbcd2ae251b671979f986cfe714e",
+    "bf26b14c1891d9540dec54155607bdb9d1dbc7fe",
+    "bf8f29bfd42319b44e2fd0e9ee3990e611bdb0d2",
+    "bfe90de4b4546b4b7001cdcbe214122691ae53b8",
+    "c10565c540e22b3f4caf639460bc52b19afc2df5",
+    "c471879954cc2a5460e0babdf9050feaafed7afe",
+    "c821fad667014c12e4ebf5dd933c75e5ababa129",
+    "ca0134f11307b435c1ef92e2e28cdf4f09d9d385",
+    "d07c4b73dfc4e60b49237922255d202504467360",
+    "d3e23c6fd2589b754860c87bfc064dd571681df5",
+    "d43387b86dd2be0954af6c9248474ba8493a54df",
+    "d4ff35485b136a4ac54cf8f1a687c206bd40229d",
+    "defe4faf4971fffbe28b57b329d5ac36a2cf3456",
+    "deff1ef641f87f238c55a4f9edba409a2361e137",
+    "dfbc361e2799b7b5ec8170b35636e9496fe06141",
+    "e0ac4cc8441274fe93ba8a36beda54cc4e592bf2",
+    "e987867de642f752913c4069730b51faf69f55f2",
+    "e9d95bc299eaa6f107fba8932857b08e72aec5ec",
+    "ef79e00d8a9849f265faadcbabba9aedfddc8d53",
+    "f09d97434251d43e744cc72031fbc5dbd7caa5c9",
+    "f3132c305234fb88105a20eef192d65e0944bcfd",
+    "f371f1bf9cd6b0944f6eca400251e3a234570576",
+    "f62a322707bd87cfad36a08b2d0ecb448f0768a0",
+    "f7a9d28b6e0f055e21a04b71fc6859f0285441ff",
+    "fa0957a0f92760bbbc2821b158c37bb75ceecbf0",
+    "fa8415a373c6179ae3ff943f3f700747a83d32d4",
+    "fc1e7fbfeeecd0f2b75f3f30cfa6577744c14787",
+    "fd848019e3fa4e02a238e907db11b541fe094032"
+  ],
+  "semantics": "Archive ancestry only; candidate files take priority."
+}

@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HardCore · 冰咆哮混合对照</title>
+<style>
+:root{font-family:"Microsoft YaHei",system-ui,sans-serif;color:#eadcc3;background:#111514}
+*{box-sizing:border-box}body{margin:0}header,main{max-width:1240px;margin:auto;padding:18px}
+header{border-bottom:1px solid #514837}h1{margin:8px 0;font-size:25px}p{color:#bab8aa;line-height:1.6}
+a{color:#eac68c}.controls{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin:14px 0}
+button,select{font:inherit;color:#f0e5d2;background:#292e2b;border:1px solid #75664a;border-radius:6px;padding:8px 12px;cursor:pointer}
+button:hover,select:hover{border-color:#e2b46c}.compare{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.panel{background:#1c2220;border:1px solid #4a483b;border-radius:10px;padding:14px;min-width:0}
+.panel h2{margin:0 0 4px;font-size:18px}.panel p{margin:0 0 10px;font-size:13px;min-height:42px}
+canvas{width:100%;aspect-ratio:6/5;display:block;image-rendering:pixelated;background:#101211;border:1px solid #555}
+.note{font-size:13px}.status{color:#e2ae89;min-height:24px}
+@media(max-width:500px){.compare{grid-template-columns:1fr}header,main{padding:12px}}
+</style>
+</head>
+<body>
+<header>
+ <a href="/ice-storm">← 冰咆哮编辑器</a>
+ <h1>冰咆哮 · 原版混合试验</h1>
+ <p>同一组原始 Magic.wil 帧、同一世界锚点、同一每帧 80 毫秒。左边直接读取游戏已批准的 115% PNG；右边读取原始像素，用原客户端模式 1 的 screen 公式与背景合成。</p>
+</header>
+<main>
+ <div class="controls">
+  <button id="play">暂停</button><button id="prev">上一帧</button><button id="next">下一帧</button>
+  <label>背景 <select id="background">
+   <option value="map">游戏地图地面</option><option value="dark">深色参考</option>
+   <option value="grass">草地色块参考</option><option value="sand">沙地色块参考</option>
+   <option value="snow">雪地色块参考</option>
+  </select></label>
+  <span id="frame-label">F0 / 20</span>
+ </div>
+ <div class="compare">
+  <section class="panel"><h2>A · 现行正式素材</h2><p>冰咆哮 115% 暗部透明化；游戏中的普通 PNG 透明合成。</p><canvas id="approved" width="360" height="300"></canvas></section>
+  <section class="panel"><h2>B · 原版混合公式模拟</h2><p>原始索引 0 透明，其余像素保留；按 screen 公式实时叠到同一背景。</p><canvas id="blend" width="360" height="300"></canvas></section>
+ </div>
+ <p class="note">B 是原版绘制公式的 RGB 近似对照，尚未复现原客户端的 256 色最近色重映射。草地、沙地、雪地为色块参考；“游戏地图地面”使用项目地图贴图。此页不写入正式 PNG，也不改变技能范围、位置或遮挡层次。</p>
+ <p id="status" class="status" role="status">正在读取 20 帧…</p>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const backgrounds={dark:'#171b24',grass:'#53734b',sand:'#b79b67',snow:'#d9e4e7'};
+let state=null,approved=[],original=[],map=null,frame=0,playing=true,last=performance.now(),carry=0;
+function load(url){return new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>reject(Error(`无法读取 ${url}`));img.src=url})}
+function paintBackground(ctx){
+ const choice=$('background').value;
+ ctx.globalCompositeOperation='source-over';ctx.clearRect(0,0,360,300);
+ if(choice==='map'&&map){ctx.drawImage(map,0,0,360,300)}
+ else{ctx.fillStyle=backgrounds[choice]||backgrounds.dark;ctx.fillRect(0,0,360,300)}
+}
+function draw(){
+ if(!state||!approved[frame]||!original[frame])return;
+ const position=state.positions[frame],rebase=state.center_rebase;
+ const x=Math.round(180+position[0]+rebase[0]),y=Math.round(150+position[1]+rebase[1]);
+ const a=$('approved').getContext('2d'),b=$('blend').getContext('2d');
+ for(const ctx of [a,b]){ctx.imageSmoothingEnabled=false;paintBackground(ctx)}
+ a.drawImage(approved[frame],x,y);
+ b.globalCompositeOperation='screen';b.drawImage(original[frame],x,y);b.globalCompositeOperation='source-over';
+ $('frame-label').textContent=`F${frame} / ${state.frame_count}`;
+}
+function step(delta){frame=(frame+delta+state.frame_count)%state.frame_count;carry=0;draw()}
+function tick(now){
+ if(playing&&state){carry+=Math.min(now-last,100);if(carry>=state.frame_time_ms){
+  frame=(frame+Math.floor(carry/state.frame_time_ms))%state.frame_count;
+  carry%=state.frame_time_ms;draw();
+ }}
+ last=now;requestAnimationFrame(tick);
+}
+$('play').onclick=()=>{playing=!playing;$('play').textContent=playing?'暂停':'播放'};
+$('prev').onclick=()=>{playing=false;$('play').textContent='播放';step(-1)};
+$('next').onclick=()=>{playing=false;$('play').textContent='播放';step(1)};
+$('background').onchange=draw;
+async function init(){
+ try{
+  const response=await fetch('/api/ice-storm/state');if(!response.ok)throw Error('无法读取冰咆哮帧信息');
+  state=await response.json();
+  if(state.frame_count!==20||state.frame_time_ms!==80||state.positions.length!==20)throw Error('冰咆哮动画合同已改变');
+  const tasks=[];
+  for(let i=0;i<20;i++){
+   tasks.push(load(`/api/ice-storm/approved-frame.png?frame=${i}`).then(img=>{approved[i]=img}));
+   tasks.push(load(`/api/ice-storm/original-frame.png?frame=${i}`).then(img=>{original[i]=img}));
+  }
+  tasks.push(load('/api/ground_wide.png').then(img=>{map=img}));
+  await Promise.all(tasks);$('status').textContent='已加载。可暂停逐帧查看，也可切换背景。';draw();
+ }catch(error){playing=false;$('status').textContent=error.message}
+}
+requestAnimationFrame(tick);init();
+</script>
+</body>
+</html>

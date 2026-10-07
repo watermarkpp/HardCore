@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HardCore · 雷电术原始素材预览</title>
+<style>
+:root{font-family:"Microsoft YaHei",system-ui,sans-serif;color:#eadcc3;background:#101213;font-size:14px}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 45% -15%,#313029,#111314 52%)}
+header{padding:18px 24px;border-bottom:1px solid #514837;background:#161817e8}h1{margin:7px 0;font-size:24px}p{color:#bcb5a4;line-height:1.6}a{color:#eac68c}
+.shell{display:grid;grid-template-columns:minmax(660px,1fr) 320px;gap:16px;padding:16px;max-width:1200px;margin:auto}
+.panel{background:#1b1e1e;border:1px solid #454337;border-radius:11px;padding:17px;min-width:0}
+button,select{font:inherit;color:#efe2c9;background:#282c2a;border:1px solid #6a604b;border-radius:6px;padding:9px 11px;cursor:pointer}
+button:hover{border-color:#d5aa6d}button.active{border-color:#efc074;background:#57432a}button:disabled{opacity:.45}
+.views{display:flex;align-items:flex-start;justify-content:center;gap:16px;flex-wrap:wrap;margin:8px 0 16px}.view{display:flex;flex-direction:column;align-items:center;gap:7px;color:#bcb5a4}
+.stage,.detail{overflow:hidden;border:1px solid #3d3f37;border-radius:6px}.stage{width:360px;height:336px}.detail{width:300px;height:430px;background:#343a3a}
+.stage canvas,.detail canvas{width:100%;height:100%;display:block;image-rendering:pixelated}
+.stage.game{background-image:url('/api/ground.png');background-size:cover}.stage.gray,.detail.gray{background:#676767}.stage.black,.detail.black{background:#050505}.stage.checker,.detail.checker{background-color:#555;background-image:linear-gradient(45deg,#777 25%,transparent 25%),linear-gradient(-45deg,#777 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#777 75%),linear-gradient(-45deg,transparent 75%,#777 75%);background-size:20px 20px;background-position:0 0,0 10px,10px -10px,-10px 0}
+.timeline,.tools{display:flex;flex-wrap:wrap;gap:6px}.timeline button{min-width:48px}.field{margin:0 0 16px}.field label{display:block;margin:0 0 7px}input[type=range],select{width:100%;accent-color:#efc074}.hint{color:#aaa18c;font-size:12px;margin-top:16px}.status{color:#d9a78e;min-height:20px;margin-top:12px}
+@media(max-width:1050px){.shell{grid-template-columns:1fr}.stage{max-width:100%}}
+</style>
+</head>
+<body>
+<header><div style="color:#b99b6d;font-size:11px;letter-spacing:.2em">HARDCORE · ART WORKSPACE</div><h1>雷电术 · 原始素材试稿</h1>
+<p>直接读取原始 <code>Magic2.wil</code> 六帧，预设 150% 暗部透明化。可以切回 0% 对比原图，动画自动循环。<a href="/temptation">诱惑之光</a> · <a href="/repulsion">抗拒火环</a> · <a href="/fireball">火球术</a></p></header>
+<div class="shell"><main class="panel">
+<div class="views"><div class="view"><span>游戏地面参照 · 完整落雷</span><div class="stage game" id="stage"><canvas id="preview" width="240" height="224"></canvas></div></div>
+<div class="view"><span>逐帧细节 · 放大</span><div class="detail" id="detail-box"><canvas id="detail" width="300" height="430"></canvas></div></div></div>
+<div class="field"><label>六帧时间轴 · <span id="frame-label">F0</span></label><div class="timeline" id="timeline"></div></div>
+<div class="tools"><button id="play">暂停</button><button id="prev">上一帧</button><button id="next">下一帧</button></div>
+</main><aside class="panel">
+<h2>蓝灰暗部透明化</h2><div class="field"><label for="haze">强度 <span id="haze-value">0%</span>（0–300%）</label><input id="haze" type="range" min="0" max="3" step="0.01" value="0"></div>
+<div class="tools"><button id="original">看原图 0%</button><button id="trial">看试稿 150%</button><button id="undo">撤销调整</button></div>
+<p class="hint">游戏地面窗口显示整段落雷，细节窗口供放大检查。为看全近千像素的原图，两窗分别缩至 22% 与 34%，游戏原有的横向 0.62 比例仍保留。十字为目标位置。正式贴图须等你确认后才替换。</p>
+<div class="field"><label for="background">背景</label><select id="background"><option value="game">真实地面参照</option><option value="gray">灰色</option><option value="black">黑色</option><option value="checker">透明棋盘</option></select></div>
+<div class="status" id="status" role="status"></div>
+</aside></div>
+<script>
+const $=id=>document.getElementById(id);
+let state=null,frame=0,playing=true,lastTick=performance.now(),carry=0,images=[],queue=Promise.resolve(),imageRevision=0;
+function message(value){$('status').textContent=value}
+function draw(){
+ const game=$('preview').getContext('2d'),detail=$('detail').getContext('2d'),img=images[frame];
+ game.clearRect(0,0,240,224);detail.clearRect(0,0,300,430);
+ function targetMark(ctx,x,y){ctx.strokeStyle='#b9c5c777';ctx.beginPath();ctx.moveTo(x-8,y);ctx.lineTo(x+8,y);ctx.moveTo(x,y-8);ctx.lineTo(x,y+8);ctx.stroke()}
+ targetMark(game,120,205);targetMark(detail,150,405);
+ if(img?.complete&&img.naturalWidth){
+  const pos=state.positions[frame];
+  game.drawImage(img,Math.round(120+pos[0]*.62*.22),Math.round(205+pos[1]*.22),img.naturalWidth*.62*.22,img.naturalHeight*.22);
+  detail.drawImage(img,Math.round(150+pos[0]*.62*.34),Math.round(405+pos[1]*.34),img.naturalWidth*.62*.34,img.naturalHeight*.34);
+ }
+ $('frame-label').textContent=`F${frame}`;
+ for(const button of $('timeline').children)button.classList.toggle('active',Number(button.dataset.frame)===frame);
+}
+function loadImages(){const revision=++imageRevision;images=[];for(let i=0;i<6;i++){const img=new Image();images[i]=img;img.onload=()=>{if(revision===imageRevision&&i===frame)draw()};img.onerror=()=>message(`F${i} 读取失败`);img.src=`/api/lightning/frame.png?frame=${i}&revision=${state.revision}`}draw()}
+async function refresh(){const response=await fetch('/api/lightning/state');const result=await response.json();if(!response.ok)throw Error(result.error||'读取雷电术失败');state=result;$('haze').value=state.haze_cleanup;$('haze-value').textContent=`${Math.round(state.haze_cleanup*100)}%`;$('undo').disabled=!state.undo_available;loadImages()}
+async function action(body){const response=await fetch('/api/lightning/action',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const result=await response.json();if(!response.ok)throw Error(result.error||'操作失败');await refresh()}
+function tune(value){queue=queue.then(()=>action({action:'tune',haze_cleanup:value})).catch(error=>message(error.message))}
+function init(){
+ $('timeline').innerHTML=Array.from({length:6},(_,i)=>`<button data-frame="${i}">F${i}</button>`).join('');
+ for(const button of $('timeline').children)button.onclick=()=>{frame=Number(button.dataset.frame);playing=false;$('play').textContent='播放';draw()};
+ $('play').onclick=()=>{playing=!playing;$('play').textContent=playing?'暂停':'播放';lastTick=performance.now()};
+ $('prev').onclick=()=>{playing=false;$('play').textContent='播放';frame=(frame+5)%6;draw()};
+ $('next').onclick=()=>{playing=false;$('play').textContent='播放';frame=(frame+1)%6;draw()};
+ $('haze').oninput=()=>{$('haze-value').textContent=`${Math.round(Number($('haze').value)*100)}%`};
+ $('haze').onchange=()=>tune(Number($('haze').value));
+ $('original').onclick=()=>tune(0);$('trial').onclick=()=>tune(1.5);
+ $('undo').onclick=()=>{queue=queue.then(()=>action({action:'undo'})).catch(error=>message(error.message))};
+ $('background').value='game';
+ $('background').onchange=()=>{$('stage').className='stage '+$('background').value;$('detail-box').className='detail '+$('background').value};
+ $('background').onchange();
+ refresh().then(()=>{lastTick=performance.now()}).catch(error=>message(error.message));
+}
+function tick(now){if(state&&playing){carry+=now-lastTick;while(carry>=state.frame_time_ms){frame=(frame+1)%6;carry-=state.frame_time_ms}draw()}lastTick=now;requestAnimationFrame(tick)}
+init();requestAnimationFrame(tick);
+</script></body></html>

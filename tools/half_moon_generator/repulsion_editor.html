@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HardCore · 抗拒火环动画预览</title>
+<style>
+:root{font-family:"Microsoft YaHei",system-ui,sans-serif;color:#eadcc3;background:#101213;font-size:14px}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 45% -15%,#313029,#111314 52%)}
+header{padding:18px 24px;border-bottom:1px solid #514837;background:#161817e8}
+.eyebrow{color:#b99b6d;font-size:11px;letter-spacing:.2em}h1{margin:7px 0;font-size:24px}h2{font-size:18px;margin:0 0 14px}
+p,.hint{color:#bcb5a4;line-height:1.6}a{color:#eac68c}
+.shell{display:grid;grid-template-columns:minmax(460px,1fr) 340px;gap:16px;padding:16px;max-width:1200px;margin:auto}
+.panel{background:#1b1e1e;border:1px solid #454337;border-radius:11px;box-shadow:0 10px 30px #0004;padding:17px;min-width:0}
+button,select{font:inherit;color:#efe2c9;background:#282c2a;border:1px solid #6a604b;border-radius:6px;padding:9px 11px;cursor:pointer}
+button:hover{border-color:#d5aa6d}button.active{border-color:#efc074;background:#57432a;color:#ffe8ba}button:disabled{opacity:.45}
+.timeline,.tools{display:flex;gap:6px;flex-wrap:wrap}.timeline button{min-width:49px}
+.views{display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;margin:15px 0}
+.view{display:flex;flex-direction:column;align-items:center;gap:7px;color:#bcb5a4}
+.stage{width:360px;height:336px;overflow:hidden;border:1px solid #3d3f37;border-radius:6px;background-image:url('/api/ground.png');background-size:cover}
+.stage canvas,.detail canvas{width:100%;height:100%;display:block;image-rendering:pixelated}
+.detail{width:270px;height:210px;background:#222;border:1px solid #3d3f37;border-radius:6px}
+.stage.gray,.detail.gray{background:#676767}.stage.black,.detail.black{background:#050505}
+.stage.checker,.detail.checker{background-color:#555;background-image:linear-gradient(45deg,#777 25%,transparent 25%),linear-gradient(-45deg,#777 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#777 75%),linear-gradient(-45deg,transparent 75%,#777 75%);background-size:20px 20px;background-position:0 0,0 10px,10px -10px,-10px 0}
+.field{margin:0 0 14px}.field label{display:block;margin:0 0 7px}.field select{width:100%}
+input[type=range]{width:100%;accent-color:#efc074}.status{color:#d9a78e;min-height:20px;margin-top:12px}.small{font-size:12px;color:#aaa18c;margin-top:12px}
+@media(max-width:850px){.shell{grid-template-columns:1fr}.panel{padding:12px}}
+</style>
+</head>
+<body>
+<header><div class="eyebrow">HARDCORE · ART WORKSPACE</div><h1 id="skill-title">抗拒火环 · 动画预览</h1>
+<p><span id="intro">游戏实际使用的单方向 10 帧火环，按施法者中心显示原始大小与位置。</span> <a href="/">半月</a> · <a href="/power">攻杀</a> · <a href="/thrust">刺杀</a> · <a href="/fire">烈火</a> · <a href="/fireball">火球</a> · <a href="/repulsion">抗拒火环</a> · <a href="/temptation">诱惑之光</a> · <a href="/lightning">雷电术</a> · <a href="/hellfire">地狱火</a> · <a href="/teleport">瞬息移动</a> · <a href="/great-fireball">大火球</a> · <a href="/exploding-flame">爆裂火焰</a> · <a href="/fire-wall">火墙</a> · <a href="/hell-lightning">地狱雷光</a> · <a href="/magic-shield">魔法盾</a> · <a href="/holy-word">圣言术</a> · <a href="/ice-storm">冰咆哮</a></p></header>
+<div class="shell">
+<main class="panel">
+ <div class="views"><div class="view"><span>游戏大小 · 地面参照</span><div class="stage" id="stage"><canvas id="preview" width="240" height="224"></canvas></div></div>
+ <div class="view"><span>逐帧细节 · 放大</span><div class="detail" id="detail-box"><canvas id="detail" width="180" height="140"></canvas></div></div></div>
+ <div class="field"><label><span id="timeline-title">十帧时间轴</span> <span id="frame-label"></span></label><div class="timeline" id="timeline"></div></div>
+ <div class="tools"><button id="play">播放</button><button id="prev">上一帧</button><button id="next">下一帧</button></div>
+</main>
+<aside class="panel">
+ <h2 id="effect-title">火环暗部</h2>
+ <div class="field"><label for="haze"><span id="control-title">暗火透明化</span> <span id="haze-value">0%</span>（可选 0–300%）</label><input id="haze" type="range" min="0" max="3" step="0.01" value="0"></div>
+ <div class="tools"><button id="original">看原图 0%</button><button id="trial">看采用值 100%</button><button id="undo">撤销调整</button></div>
+ <p class="hint" id="effect-hint">仅让暗红棕区域渐隐；亮火颜色、十帧顺序、火环中心和大小保持原样。第 10 帧是原素材的消隐尾帧。</p>
+ <div class="field"><label for="background">背景</label><select id="background"><option value="game">真实地面参照</option><option value="gray">灰色</option><option value="checker">透明棋盘</option><option value="black">黑色</option></select></div>
+ <div class="small" id="formal-note">游戏贴图已采用 100%；此处继续试调不会自动改写正式游戏贴图。</div>
+ <div class="status" id="status" role="status"></div>
+</aside>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const cfg=location.pathname==='/temptation'
+ ? {slug:'temptation',title:'诱惑之光',frames:16,trial:1.5}
+ : location.pathname==='/teleport'
+ ? {slug:'teleport',title:'瞬息移动',frames:20,trial:1}
+ : location.pathname==='/exploding-flame'
+ ? {slug:'exploding-flame',title:'爆裂火焰',frames:20,trial:1}
+ : location.pathname==='/fire-wall'
+ ? {slug:'fire-wall',title:'火墙',frames:6,trial:1}
+ : location.pathname==='/hell-lightning'
+ ? {slug:'hell-lightning',title:'地狱雷光',frames:10,trial:1.2}
+ : location.pathname==='/magic-shield'
+ ? {slug:'magic-shield',title:'魔法盾',frames:10,trial:1}
+ : location.pathname==='/holy-word'
+ ? {slug:'holy-word',title:'圣言术',frames:16,trial:1.5}
+ : location.pathname==='/ice-storm'
+ ? {slug:'ice-storm',title:'冰咆哮',frames:20,trial:1.15}
+ : {slug:'repulsion',title:'抗拒火环',frames:10,trial:1};
+let state=null,frame=0,playing=false,lastTick=performance.now(),carry=0,images=[],queue=Promise.resolve(),imageRevision=0;
+const shieldActor=new Image();
+if(cfg.slug==='magic-shield'){
+ shieldActor.onload=()=>draw();
+ shieldActor.onerror=()=>message('人物素材读取失败，请刷新页面。');
+ shieldActor.src='/api/magic-shield/actor.png';
+}
+function message(value){$('status').textContent=value}
+function draw(){
+ const source=images[frame],game=$('preview').getContext('2d'),detail=$('detail').getContext('2d');
+ game.clearRect(0,0,game.canvas.width,game.canvas.height);detail.clearRect(0,0,detail.canvas.width,detail.canvas.height);
+ if(cfg.slug==='magic-shield'&&state&&shieldActor.complete&&shieldActor.naturalWidth){
+   game.drawImage(shieldActor,Math.round(game.canvas.width/2+state.actor_offset[0]),Math.round(game.canvas.height/2+state.actor_offset[1]));
+ }
+ if(source?.complete&&source.naturalWidth){
+   const position=state.positions[frame],rebase=state.center_rebase;
+   game.drawImage(source,Math.round(game.canvas.width/2+position[0]+rebase[0]),Math.round((cfg.slug==='exploding-flame'||cfg.slug==='fire-wall'?200:game.canvas.height/2)+position[1]+rebase[1]));
+   detail.drawImage(source,(detail.canvas.width-source.naturalWidth)/2,(detail.canvas.height-source.naturalHeight)/2);
+ }
+ $('frame-label').textContent=cfg.slug==='teleport'?`${frame<10?'离开':'到达'} F${frame%10}`:`F${frame}`;
+ for(const button of $('timeline').children)button.classList.toggle('active',Number(button.dataset.frame)===frame);
+}
+function loadImages(){
+ const revision=++imageRevision;images=[];
+ for(let index=0;index<state.frame_count;index++){
+   const source=new Image();images[index]=source;
+   source.onload=()=>{if(revision===imageRevision&&index===frame)draw()};
+   source.onerror=()=>message(`F${index} 读取失败，请刷新页面。`);
+   source.src=`/api/${cfg.slug}/frame.png?frame=${index}&revision=${state.revision}`;
+ }
+ draw();
+}
+async function refresh(){const response=await fetch(`/api/${cfg.slug}/state`);if(!response.ok)throw Error('读取工作版本失败');state=await response.json();$('haze').value=state.haze_cleanup;$('haze-value').textContent=`${Math.round(state.haze_cleanup*100)}%`;$('undo').disabled=!state.undo_available;loadImages()}
+async function action(body){const response=await fetch(`/api/${cfg.slug}/action`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const result=await response.json();if(!response.ok)throw Error(result.error||'操作失败');await refresh()}
+function tune(value){queue=queue.then(()=>action({action:'tune',haze_cleanup:value})).catch(error=>message(error.message))}
+function init(){
+ document.title=`HardCore · ${cfg.title}动画预览`;$('skill-title').textContent=`${cfg.title} · 动画预览`;
+ if(cfg.slug==='temptation'){
+   $('intro').textContent='游戏实际使用的单方向 16 帧蓝白色目标特效，按目标锚点显示原始大小与位置。';
+   $('timeline-title').textContent='十六帧时间轴';$('effect-title').textContent='蓝白电光暗部';
+   $('control-title').textContent='暗蓝灰透明化';$('trial').textContent='看采用值 150%';
+   $('effect-hint').textContent='仅让暗蓝灰区域渐隐；蓝白亮纹、16 帧顺序、目标锚点和大小保持原样。';
+   $('formal-note').textContent='游戏贴图已采用 150%；此处继续试调不会自动改写正式游戏贴图。';
+ }
+ if(cfg.slug==='teleport'){
+   $('intro').textContent='游戏原始 Magic.wil 瞬息移动：离开 10 帧、到达 10 帧，各按 30 毫秒自动播放，显示原始大小和锚点。';
+   $('timeline-title').textContent='离开 10 帧 / 到达 10 帧';$('effect-title').textContent='蓝白传送光暗部';
+   $('control-title').textContent='暗蓝灰透明化';$('trial').textContent='看采用值 100%';
+   $('effect-hint').textContent='前 10 帧是离开，后 10 帧是到达。只试调暗蓝灰透明度；蓝白亮纹、帧顺序、锚点和原始大小保持不变。';
+   $('formal-note').textContent='游戏离开与到达贴图已采用 100%；此处继续试调不会自动改写正式游戏贴图。';
+ }
+ if(cfg.slug==='exploding-flame'){
+   $('intro').textContent='游戏原始 Magic.wil 爆裂火焰，单方向 20 帧，每帧 80 毫秒，按实际尺寸与世界锚点自动循环播放。';
+   $('timeline-title').textContent='二十帧时间轴';$('effect-title').textContent='爆裂火焰暗部';
+   $('control-title').textContent='暗火透明化';$('trial').textContent='看采用值 100%';
+   $('effect-hint').textContent='只试调暗红棕火焰的透明度；明亮火焰、20 帧顺序、锚点和原始尺寸不变。';
+   $('formal-note').textContent='正式游戏贴图已采用 100%；此处继续试调不会自动改写贴图。';
+   $('preview').width=360;$('preview').height=320;$('stage').style.width='540px';$('stage').style.height='480px';
+   $('detail').width=240;$('detail').height=270;$('detail-box').style.width='360px';$('detail-box').style.height='405px';
+ }
+ if(cfg.slug==='fire-wall'){
+   $('intro').textContent='游戏原始 Magic.wil 火墙单格火焰，6 帧循环，游戏采用每帧 60 毫秒，按实际尺寸与世界锚点自动播放。';
+   $('timeline-title').textContent='六帧循环时间轴';$('effect-title').textContent='火墙暗部';
+   $('control-title').textContent='暗火透明化';$('trial').textContent='看采用值 100%';
+   $('effect-hint').textContent='这里显示一格火墙的原始火焰；只试调暗红棕区域的透明度，亮火、六帧顺序、锚点和尺寸不变。';
+   $('formal-note').textContent='正式游戏贴图已采用 100%；此处继续试调不会自动改写贴图。';
+   $('preview').width=360;$('preview').height=320;$('stage').style.width='540px';$('stage').style.height='480px';
+   $('detail').width=240;$('detail').height=270;$('detail-box').style.width='360px';$('detail-box').style.height='405px';
+ }
+ if(cfg.slug==='hell-lightning'){
+   $('intro').textContent='游戏原始 Magic.wil 地狱雷光，单方向 10 帧，每帧 60 毫秒自动播放。这里显示贴图原始大小并按序列边界居中。';
+   $('timeline-title').textContent='十帧时间轴';$('effect-title').textContent='地狱雷光暗部';
+   $('control-title').textContent='暗蓝灰透明化';$('trial').textContent='看采用值 120%';
+   $('effect-hint').textContent='仅试调暗蓝灰区域的透明度；蓝白闪电、10 帧顺序和原始贴图不变。游戏实际范围会按技能几何等比适配。';
+   $('formal-note').textContent='正式游戏贴图已采用 120%；此处继续试调不会自动改写贴图。';
+   $('preview').width=360;$('preview').height=320;$('stage').style.width='540px';$('stage').style.height='480px';
+   $('detail').width=300;$('detail').height=230;$('detail-box').style.width='450px';$('detail-box').style.height='345px';
+ }
+ if(cfg.slug==='magic-shield'){
+   $('intro').textContent='魔法盾与游戏男法师原始人物同脚点预览：先画人物，再画护盾。每帧 60 毫秒自动播放，与正式游戏的前后层次一致。';
+   $('timeline-title').textContent='十帧时间轴';$('effect-title').textContent='魔法盾暗部';
+   $('control-title').textContent='暗金透明化';$('trial').textContent='看采用值 100%';
+   $('effect-hint').textContent='左侧：游戏男法师基础站立帧在后，当前滑杆值的护盾在前；右侧：护盾逐帧细节。只试调暗金透明度，尺寸和人物脚点不变。';
+   $('formal-note').textContent='游戏贴图已采用 100%；编辑器当前透明度可继续试调，正式游戏按护盾在人物前的顺序绘制。';
+   document.querySelector('.stage').previousElementSibling.textContent='游戏人物 · 护盾在前';
+ }
+ if(cfg.slug==='holy-word'){
+   $('intro').textContent='游戏原始 Magic.wil 圣言术，单方向 16 帧，每帧 80 毫秒自动播放。按目标人物锚点显示原始大小与位置。';
+   $('timeline-title').textContent='十六帧时间轴';$('effect-title').textContent='圣言术暗部';
+   $('control-title').textContent='暗色透明化';$('trial').textContent='看采用值 150%';
+   $('effect-hint').textContent='只试调暗色区域透明度；蓝白与金色亮光、帧顺序、原始尺寸和目标锚点保持不变。';
+   $('formal-note').textContent='正式游戏贴图已采用 150%；此处继续试调不会自动改写贴图。';
+   $('preview').width=360;$('preview').height=320;$('stage').style.width='540px';$('stage').style.height='480px';
+   $('detail').width=260;$('detail').height=230;$('detail-box').style.width='390px';$('detail-box').style.height='345px';
+ }
+ if(cfg.slug==='ice-storm'){
+   $('intro').textContent='游戏原始 Magic.wil 冰咆哮，单方向 20 帧，每帧 80 毫秒自动播放。画面按世界锚点显示原始大小与位置。';
+   $('timeline-title').textContent='二十帧时间轴';$('effect-title').textContent='冰咆哮暗部';
+   $('control-title').textContent='暗蓝灰透明化';$('trial').textContent='已采用 115%';
+   $('effect-hint').textContent='只试调暗蓝灰区域透明度；冰晶亮光、帧顺序、原始尺寸和世界锚点保持不变。';
+   $('formal-note').textContent='正式游戏贴图已采用 115%；此处继续试调不会自动改写贴图。';
+   $('formal-note').insertAdjacentHTML('beforeend',' <a href="/ice-storm-blend">查看原版混合对照试验</a>');
+   $('preview').width=360;$('preview').height=320;$('stage').style.width='540px';$('stage').style.height='480px';
+   $('detail').width=320;$('detail').height=260;$('detail-box').style.width='480px';$('detail-box').style.height='390px';
+ }
+ $('timeline').innerHTML=Array.from({length:cfg.frames},(_,index)=>`<button data-frame="${index}">${cfg.slug==='teleport'?`${index<10?'离':'到'}${index%10}`:`F${index}`}</button>`).join('');
+ for(const button of $('timeline').children)button.onclick=()=>{frame=Number(button.dataset.frame);playing=false;$('play').textContent='播放';draw()};
+ $('play').onclick=()=>{if(!playing&&frame===cfg.frames-1)frame=0;playing=!playing;$('play').textContent=playing?'暂停':'播放';draw()};
+ $('prev').onclick=()=>{playing=false;$('play').textContent='播放';frame=(frame+cfg.frames-1)%cfg.frames;draw()};
+ $('next').onclick=()=>{playing=false;$('play').textContent='播放';frame=(frame+1)%cfg.frames;draw()};
+ $('haze').oninput=()=>{$('haze-value').textContent=`${Math.round(Number($('haze').value)*100)}%`};$('haze').onchange=()=>tune(Number($('haze').value));
+ $('original').onclick=()=>tune(0);$('trial').onclick=()=>tune(cfg.trial);
+ $('undo').onclick=()=>{queue=queue.then(()=>action({action:'undo'})).catch(error=>message(error.message))};
+ $('background').value=localStorage.getItem('hmg-background')||'game';
+ $('background').onchange=()=>{localStorage.setItem('hmg-background',$('background').value);$('stage').className='stage '+$('background').value;$('detail-box').className='detail '+$('background').value};
+ $('background').onchange();refresh().then(()=>{$('play').textContent='暂停';playing=true;lastTick=performance.now()}).catch(error=>message(error.message));
+}
+function tick(now){if(state&&playing){carry+=now-lastTick;while(carry>=state.frame_time_ms){frame=(frame+1)%cfg.frames;carry-=state.frame_time_ms}draw()}lastTick=now;requestAnimationFrame(tick)}
+init();requestAnimationFrame(tick);
+</script>
+</body>
+</html>

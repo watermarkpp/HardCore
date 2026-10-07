@@ -1,5 +1,11 @@
 # HardCore Current Status
 
+## 2026-10-07：第三树成为唯一主树
+
+用户已确定 `codex/integration` 为唯一主树。当前工程内容继承第三树快照 `b3d144061b9b0aef419ce6b746ddc476023fd912`，补入旧主树缺失的素材编辑工具、源素材与文档。旧主树、第二树和临时树的冲突实现、人工数据、证据保全；详见 `docs/WORKSPACE_CURRENT_STATUS.md` 与 `docs/retired/20261007/README.md`。下方 v97 及旧交付条目为历史，不能作为当前源码状态。
+
+架构升级仍未全量验收。保留 A01—A04/B01 原始证据及 FAIL/MISSING/NOT_RUN 边界，本次不修改玩法、版本或签名，不重新构建/安装 APK；DEVICE TEST: NOT_RUN。
+
 ## 2026-09-29：v97 锻造存档与新物品图标修复
 
 固定源码 `a945e921e849b4aa81439183f60cec95e63d725c`，完整继承 v96（`b0119a18a`）及 v94 后热补丁。修复真实掉落装备锻造后 JSON 数字类型导致保存被拒、退出受阻的问题，以及出售卡片遗漏图标尺寸设置的问题。17 项相关回归 PASS，固定源码两项复验 PASS；18 种新物品显示检查 PASS。桌面 `HardCore-v97-forge-icons-debug.apk`，versionCode97，同包名同签名，488711865字节，SHA256 `02E3E86D90F2437C64F211A83E052578A728EEF53D4912C80FAE8867C5C90CDD`。包内2个修复脚本更新，其余296脚本、9684数据/纹理同v96一致。DEVICE TEST: NOT_RUN；未自动安装。详见 `docs/repair_v97_20260929/DELIVERY.md`。下方 v95 条目保留为历史；v96 交付证据在 `docs/repair_v95_20260929/DELIVERY.md`。

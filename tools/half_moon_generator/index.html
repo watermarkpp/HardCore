@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HardCore · 半月刀气校准</title>
+<style>
+  :root{font-family:"Microsoft YaHei",system-ui,sans-serif;color:#eadcc3;background:#101213;font-size:14px}
+  *{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 45% -15%,#313029,#111314 52%)}
+  header{padding:18px 24px;border-bottom:1px solid #514837;background:#161817e8}
+  .eyebrow{color:#bb8e52;font-size:11px;letter-spacing:.2em}h1{font-size:23px;margin:3px 0 5px;font-weight:600}h2{font-size:16px;margin:0 0 14px}
+  .sub,.hint{color:#b6aa96;font-size:12px;line-height:1.6}.shell{display:grid;grid-template-columns:minmax(340px,1fr) 310px;gap:16px;max-width:1020px;margin:auto;padding:18px}
+  .panel{background:#1b1e1e;border:1px solid #454337;border-radius:11px;box-shadow:0 10px 30px #0004;padding:17px;min-width:0}
+  button,select{font:inherit;color:#efe2c9;background:#282c2a;border:1px solid #6a604b;border-radius:6px;padding:9px 11px}
+  button{cursor:pointer}button:hover{border-color:#d5aa6d;background:#3a382e}button.active{border-color:#efc074;background:#57432a;color:#ffe8ba}button:disabled{opacity:.45;cursor:not-allowed}
+  button:focus-visible,select:focus-visible,.stage:focus-visible{outline:2px solid #c7965a;outline-offset:2px}
+  .directions,.arrows,.timeline,.tools{display:flex;gap:7px;flex-wrap:wrap}.directions button{min-width:43px}.arrows button{flex:1;min-width:48px;font-size:18px}
+  .stage{width:min(100%,480px);aspect-ratio:240/224;overflow:hidden;background:#111;border:1px solid #3d3f37;border-radius:6px;margin:14px auto;display:flex;align-items:center;justify-content:center}
+  .stage canvas{display:block;width:100%;height:100%;image-rendering:pixelated}.stage.game{background-image:url('/api/ground.png');background-size:cover}
+  .stage.gray{background:#676767}.stage.black{background:#050505}.stage.checker{background-color:#555;background-image:linear-gradient(45deg,#777 25%,transparent 25%),linear-gradient(-45deg,#777 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#777 75%),linear-gradient(-45deg,transparent 75%,#777 75%);background-size:20px 20px;background-position:0 0,0 10px,10px -10px,-10px 0}
+  .field{margin:0 0 17px}.field label{display:block;color:#b9aa91;font-size:12px;margin-bottom:7px}select{width:100%}
+  .tone-row{margin:0 0 13px}.tone-row label{display:flex;justify-content:space-between;color:#cdbb9e;font-size:12px}.tone-row input{width:100%;accent-color:#b6dafa;margin-top:7px}
+  .readout{color:#e8c389;margin:7px 0}.timeline button{min-width:43px}.tools{margin-top:10px}.tools button{flex:1}
+  .divider{border-top:1px solid #4a473b;margin:18px 0}.status{min-height:23px;color:#c9a66e;font-size:12px;line-height:1.5;margin-top:12px;word-break:break-word}
+  .small{font-size:11px;color:#a99f8e;line-height:1.5}.source{border:1px solid #4a7162;color:#a2c6b3;border-radius:5px;padding:7px 9px;margin-top:10px}
+  @media(max-width:820px){.shell{display:block;padding:10px}.panel{margin-bottom:12px}header{padding:15px}.stage{max-width:390px}}
+</style>
+</head>
+<body>
+<header><div class="eyebrow">HARDCORE · ART WORKSPACE</div><h1>半月刀气 · 原始素材校准</h1><div class="sub">以游戏原始八方向六帧贴图为基础，清理暗灰刀影、调整蓝白刀锋和整体位置。 <a href="/power" style="color:#eac68c">查看攻杀剑术</a></div></header>
+<div class="shell">
+  <main class="panel">
+    <div class="field"><label>方向</label><div class="directions" id="directions"></div></div>
+    <div class="stage game" id="stage" tabindex="0" aria-label="当前方向的战士与半月刀气动画"><canvas id="preview" width="240" height="224"></canvas></div>
+    <div class="field"><label>六帧时间轴 <span id="frame-label" class="small">F0</span></label><div class="timeline" id="timeline"></div>
+      <div class="tools"><button id="play">暂停</button><button id="prev">上一帧</button><button id="next">下一帧</button></div></div>
+  </main>
+  <aside class="panel">
+    <h2>蓝白刀气质感</h2>
+    <div id="tone-controls"></div>
+    <div class="tools"><button id="reset-tone">还原原图质感</button></div>
+    <div class="hint">暗部会逐渐透明，刀锋和光纹更清晰。只改变颜色与透明度，保留原始八方向六帧的形状。</div>
+    <div class="divider"></div>
+    <h2>整体位置</h2>
+    <div class="arrows"><button id="left" title="向左 1 像素">←</button><button id="up" title="向上 1 像素">↑</button><button id="down" title="向下 1 像素">↓</button><button id="right" title="向右 1 像素">→</button></div>
+    <div class="readout" id="position">X 0 · Y 0 像素</div>
+    <div class="hint">直接按键盘方向键移动当前方向的整组六帧动画，每次 1 像素；按住 Shift 每次 10 像素。改动自动保存。</div>
+    <button id="undo" style="width:100%;margin-top:10px">撤销上次调整</button>
+    <div class="divider"></div>
+    <div class="field"><label for="equipment">人物与武器</label><select id="equipment"><option value="base">真实战士 · 基础</option><option value="sword">真实战士 · 剑</option><option value="heavy">真实战士 · 重武器</option></select></div>
+    <div class="field"><label for="background">背景</label><select id="background"><option value="game">真实地面参照</option><option value="gray">灰色</option><option value="checker">透明棋盘</option><option value="black">黑色</option></select></div>
+    <div class="divider"></div>
+    <div class="tools"><button id="contact">查看 8 方向 × 6 帧</button><button id="bake">导出预览 PNG</button></div>
+    <div class="small">预览导出保存在 outputs；游戏贴图已采用确认的 150%，后续编辑器试调不会自动改写游戏贴图。</div>
+    <div class="source small" id="source">读取原始素材工作版本中…</div>
+    <div class="status" id="status" role="status"></div>
+  </aside>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const names=['S','SW','W','NW','N','NE','E','SE'];
+let state=null,direction=Number(localStorage.getItem('hmg-direction')??1),frame=0,playing=true,lastTick=performance.now(),carry=0,image=null,nudgeQueue=Promise.resolve();
+const toneControls=[
+  {key:'haze_cleanup',name:'暗灰透明化',min:0,max:2,step:.01,unit:'%'},
+  {key:'body_brightness',name:'蓝白主体亮度',min:1,max:1.5,step:.01,unit:'×'},
+  {key:'core_gain',name:'刀锋高光',min:0,max:.6,step:.01,unit:'%'},
+  {key:'edge_detail',name:'光纹与边缘锐度',min:0,max:2,step:.05,unit:'×'},
+];
+if(!Number.isInteger(direction)||direction<0||direction>7)direction=1;
+function message(value){$('status').textContent=value}
+function toneValue(control,value){return control.unit==='%'?`${Math.round(value*100)}%`:`${Number(value).toFixed(2)}×`}
+function renderInfo(){
+  const offset=state.candidate.direction_overrides[names[direction]]||{};
+  $('position').textContent=`${names[direction]} · X ${offset.offset_x||0} · Y ${offset.offset_y||0} 像素`;
+  $('undo').disabled=!state.candidate.revisions?.length;
+  $('source').textContent=`工作版本 ${state.selected_id} · 游戏原始 wide_hit.png · 每方向位置独立保存`;
+  for(const control of toneControls){const input=$(`tone-${control.key}`),value=state.candidate.parameters[control.key];input.value=value;$(`value-${control.key}`).textContent=toneValue(control,value)}
+  for(const button of $('directions').children)button.classList.toggle('active',Number(button.dataset.direction)===direction);
+  draw();
+}
+function imageUrl(){return `/api/preview.png?direction=${direction}&equipment=${encodeURIComponent($('equipment').value)}&revision=${state.revision}`}
+function loadImage(){image=new Image();image.onload=draw;image.onerror=()=>message('预览读取失败，请刷新页面。');image.src=imageUrl()}
+function draw(){
+  const canvas=$('preview'),ctx=canvas.getContext('2d');ctx.clearRect(0,0,240,224);
+  if(image?.complete&&image.naturalWidth)ctx.drawImage(image,frame*240,0,240,224,0,0,240,224);
+  $('frame-label').textContent=`F${frame} · ${['起势','展开','扩大','最大','宽弧','淡出'][frame]}`;
+  for(const button of $('timeline').children)button.classList.toggle('active',Number(button.dataset.frame)===frame);
+}
+async function refresh(){const response=await fetch('/api/state');if(!response.ok)throw Error('读取工程失败');state=await response.json();renderInfo();loadImage()}
+async function action(body){
+  const response=await fetch('/api/action',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  const result=await response.json();if(!response.ok)throw Error(result.error||'操作失败');
+  if(body.action==='nudge'||body.action==='undo'||body.action==='tune')await refresh();
+  return result;
+}
+function nudge(dx,dy){
+  const facing=direction;
+  nudgeQueue=nudgeQueue.then(()=>action({action:'nudge',direction:facing,dx,dy})).catch(error=>message(`位置调整失败：${error.message}`));
+}
+function onKey(e){
+  const vector={ArrowLeft:[-1,0],ArrowUp:[0,-1],ArrowDown:[0,1],ArrowRight:[1,0]}[e.key];
+  if(!vector||!state||e.altKey||e.ctrlKey||e.metaKey)return;
+  if(e.target instanceof Element&&(e.target.closest('input,select,textarea,[contenteditable="true"]')||e.target.isContentEditable))return;
+  e.preventDefault();nudge(vector[0]*(e.shiftKey?10:1),vector[1]*(e.shiftKey?10:1));
+}
+function init(){
+  $('tone-controls').innerHTML=toneControls.map(control=>`<div class="tone-row"><label for="tone-${control.key}"><span>${control.name}</span><span id="value-${control.key}"></span></label><input id="tone-${control.key}" type="range" min="${control.min}" max="${control.max}" step="${control.step}"></div>`).join('');
+  for(const control of toneControls){const input=$(`tone-${control.key}`);input.oninput=()=>$(`value-${control.key}`).textContent=toneValue(control,Number(input.value));input.onchange=()=>{const value=Number(input.value);nudgeQueue=nudgeQueue.then(()=>action({action:'tune',changes:{[control.key]:value}})).catch(error=>message(`质感调整失败：${error.message}`))}}
+  $('reset-tone').onclick=()=>{nudgeQueue=nudgeQueue.then(()=>action({action:'tune',changes:{haze_cleanup:0,body_brightness:1,core_gain:0,edge_detail:0}})).catch(error=>message(`还原失败：${error.message}`))};
+  $('directions').innerHTML=names.map((name,index)=>`<button data-direction="${index}">${name}</button>`).join('');
+  for(const button of $('directions').children)button.onclick=()=>{direction=Number(button.dataset.direction);localStorage.setItem('hmg-direction',String(direction));renderInfo();loadImage()};
+  $('timeline').innerHTML=Array.from({length:6},(_,index)=>`<button data-frame="${index}">F${index}</button>`).join('');
+  for(const button of $('timeline').children)button.onclick=()=>{frame=Number(button.dataset.frame);playing=false;$('play').textContent='播放';draw()};
+  for(const [id,dx,dy] of [['left',-1,0],['up',0,-1],['down',0,1],['right',1,0]])$(id).onclick=e=>nudge(dx*(e.shiftKey?10:1),dy*(e.shiftKey?10:1));
+  document.addEventListener('keydown',onKey);
+  $('undo').onclick=()=>{nudgeQueue=nudgeQueue.then(()=>action({action:'undo'})).catch(error=>message(`撤销失败：${error.message}`))};
+  $('equipment').value=localStorage.getItem('hmg-equipment')||'heavy';$('background').value=localStorage.getItem('hmg-background')||'game';
+  $('equipment').onchange=()=>{localStorage.setItem('hmg-equipment',$('equipment').value);loadImage()};
+  $('background').onchange=()=>{localStorage.setItem('hmg-background',$('background').value);$('stage').className='stage '+$('background').value};
+  $('stage').className='stage '+$('background').value;
+  $('play').onclick=()=>{playing=!playing;$('play').textContent=playing?'暂停':'播放'};
+  $('prev').onclick=()=>{playing=false;$('play').textContent='播放';frame=(frame+5)%6;draw()};
+  $('next').onclick=()=>{playing=false;$('play').textContent='播放';frame=(frame+1)%6;draw()};
+  $('contact').onclick=async()=>{try{const result=await action({action:'contact_export'});message(`已导出：${result.path}`);window.open('/api/contact.png','_blank')}catch(error){message(error.message)}};
+  $('bake').onclick=async()=>{try{const result=await action({action:'bake_preview'});message(`已保存 ${result.path} · 警告 ${result.warnings.length} 项`)}catch(error){message(error.message)}};
+  refresh().then(()=>{playing=true;$('play').textContent='暂停';lastTick=performance.now()}).catch(error=>message(error.message));
+}
+function tick(now){if(state&&playing){carry+=now-lastTick;while(carry>=100){frame=(frame+1)%6;carry-=100}draw()}lastTick=now;requestAnimationFrame(tick)}
+init();requestAnimationFrame(tick);
+</script>
+</body>
+</html>

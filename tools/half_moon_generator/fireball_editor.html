@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HardCore · 火球术动画预览</title>
+<style>
+:root{font-family:"Microsoft YaHei",system-ui,sans-serif;color:#eadcc3;background:#101213;font-size:14px}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 45% -15%,#313029,#111314 52%)}
+header{padding:18px 24px;border-bottom:1px solid #514837;background:#161817e8}
+.eyebrow{color:#b99b6d;font-size:11px;letter-spacing:.2em}h1{margin:7px 0;font-size:24px}h2{font-size:18px;margin:0 0 14px}
+p,.hint{color:#bcb5a4;line-height:1.6}a{color:#eac68c}
+.shell{display:grid;grid-template-columns:minmax(460px,1fr) 340px;gap:16px;padding:16px;max-width:1200px;margin:auto}
+.panel{background:#1b1e1e;border:1px solid #454337;border-radius:11px;box-shadow:0 10px 30px #0004;padding:17px;min-width:0}
+button,select{font:inherit;color:#efe2c9;background:#282c2a;border:1px solid #6a604b;border-radius:6px;padding:9px 11px;cursor:pointer}
+button:hover{border-color:#d5aa6d}button.active{border-color:#efc074;background:#57432a;color:#ffe8ba}button:disabled{opacity:.45}
+.directions,.timeline,.tools{display:flex;gap:6px;flex-wrap:wrap}.directions button{min-width:56px}.timeline button{min-width:49px}
+.views{display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;margin:15px 0}
+.view{display:flex;flex-direction:column;align-items:center;gap:7px;color:#bcb5a4}
+.stage{width:360px;height:336px;overflow:hidden;border:1px solid #3d3f37;border-radius:6px;background-image:url('/api/ground.png');background-size:cover}
+.stage canvas{width:100%;height:100%;display:block;image-rendering:pixelated}.detail{width:216px;height:207px;background:#222;border:1px solid #3d3f37;border-radius:6px}
+.detail canvas{width:100%;height:100%;display:block;image-rendering:pixelated}
+.stage.gray,.detail.gray{background:#676767}.stage.black,.detail.black{background:#050505}
+.stage.checker,.detail.checker{background-color:#555;background-image:linear-gradient(45deg,#777 25%,transparent 25%),linear-gradient(-45deg,#777 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#777 75%),linear-gradient(-45deg,transparent 75%,#777 75%);background-size:20px 20px;background-position:0 0,0 10px,10px -10px,-10px 0}
+.field{margin:0 0 14px}.field label{display:block;margin:0 0 7px}.field select{width:100%}
+input[type=range]{width:100%;accent-color:#efc074}.readout{color:#f2d399;margin:8px 0 18px}
+.status{color:#d9a78e;min-height:20px;margin-top:12px}.small{font-size:12px;color:#aaa18c;margin-top:12px}
+@media(max-width:850px){.shell{grid-template-columns:1fr}.panel{padding:12px}}
+</style>
+</head>
+<body>
+<header><div class="eyebrow">HARDCORE · ART WORKSPACE</div><h1 id="skill-title">火球术 · 动画预览</h1>
+<p><span id="intro">游戏实际使用的 16 方向 × 6 帧火球，左侧按游戏投射物大小和锚点显示，右侧放大查看原图细节。</span> <a href="/">半月</a> · <a href="/power">攻杀</a> · <a href="/thrust">刺杀</a> · <a href="/fire">烈火</a> · <a href="/fireball">火球</a> · <a href="/repulsion">抗拒火环</a> · <a href="/great-fireball">大火球</a></p></header>
+<div class="shell">
+<main class="panel">
+ <div class="field"><label>飞行方向</label><div class="directions" id="directions"></div></div>
+ <div class="views"><div class="view"><span>游戏大小 · 地面参照</span><div class="stage" id="stage"><canvas id="preview" width="240" height="224"></canvas></div></div>
+ <div class="view"><span>逐帧细节 · 放大</span><div class="detail" id="detail-box"><canvas id="detail" width="144" height="138"></canvas></div></div></div>
+ <div class="field"><label>六帧时间轴 <span id="frame-label"></span></label><div class="timeline" id="timeline"></div></div>
+ <div class="tools"><button id="play">暂停</button><button id="prev">上一帧</button><button id="next">下一帧</button></div>
+</main>
+<aside class="panel">
+ <h2 id="effect-title">火球暗部</h2>
+ <div class="field"><label for="haze">暗火透明化 <span id="haze-value">0%</span>（可选 0–300%）</label><input id="haze" type="range" min="0" max="3" step="0.01" value="0"></div>
+ <div class="tools"><button id="original">看原图 0%</button><button id="trial">看采用值 150%</button><button id="undo">撤销调整</button></div>
+ <p class="hint" id="effect-hint">只让暗红棕区域渐隐，亮火颜色、六帧顺序、方向和位置保持原样。调整自动保存到本地预览工作版本。</p>
+ <div class="field"><label for="background">背景</label><select id="background"><option value="game">真实地面参照</option><option value="gray">灰色</option><option value="checker">透明棋盘</option><option value="black">黑色</option></select></div>
+ <div class="small" id="formal-note">游戏贴图已采用 150%；此处继续试调不会自动改写正式游戏贴图。</div>
+ <div class="status" id="status" role="status"></div>
+</aside>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const cfg=location.pathname==='/great-fireball'
+ ? {slug:'great-fireball',title:'大火球',trial:1}
+ : {slug:'fireball',title:'火球术',trial:1.5};
+const names=['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];
+let state=null,direction=Number(localStorage.getItem(`${cfg.slug}-direction`)??8),frame=0,playing=true,lastTick=performance.now(),carry=0,images=[],queue=Promise.resolve(),imageRevision=0;
+if(!Number.isInteger(direction)||direction<0||direction>15)direction=8;
+function message(value){$('status').textContent=value}
+function draw(){
+ const source=images[frame];
+ const game=$('preview').getContext('2d'),detail=$('detail').getContext('2d');
+ game.clearRect(0,0,240,224);detail.clearRect(0,0,144,138);
+ if(source?.complete&&source.naturalWidth){
+   const scale=state.fit_extent/state.native_extent,position=state.positions[direction][frame];
+   game.drawImage(source,Math.round(120+position[0]*scale),Math.round(112+position[1]*scale),Math.round(source.naturalWidth*scale),Math.round(source.naturalHeight*scale));
+   detail.drawImage(source,(144-source.naturalWidth)/2,(138-source.naturalHeight)/2);
+ }
+ $('frame-label').textContent=`F${frame}`;
+ for(const button of $('timeline').children)button.classList.toggle('active',Number(button.dataset.frame)===frame);
+}
+function loadImages(){
+ const revision=++imageRevision;images=[];
+ for(let index=0;index<6;index++){
+   const source=new Image();images[index]=source;
+   source.onload=()=>{if(revision===imageRevision&&index===frame)draw()};
+   source.onerror=()=>message(`F${index} 读取失败，请刷新页面。`);
+   source.src=`/api/${cfg.slug}/frame.png?direction=${direction}&frame=${index}&revision=${state.revision}`;
+ }
+ draw();
+}
+async function refresh(){const response=await fetch(`/api/${cfg.slug}/state`);if(!response.ok)throw Error('读取工作版本失败');state=await response.json();$('haze').value=state.haze_cleanup;$('haze-value').textContent=`${Math.round(state.haze_cleanup*100)}%`;$('undo').disabled=!state.undo_available;for(const button of $('directions').children)button.classList.toggle('active',Number(button.dataset.direction)===direction);loadImages()}
+async function action(body){const response=await fetch(`/api/${cfg.slug}/action`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const result=await response.json();if(!response.ok)throw Error(result.error||'操作失败');await refresh()}
+function tune(value){queue=queue.then(()=>action({action:'tune',haze_cleanup:value})).catch(error=>message(error.message))}
+function init(){
+ if(cfg.slug==='great-fireball'){
+   document.title='HardCore · 大火球动画预览';$('skill-title').textContent='大火球 · 原始素材预览';
+   $('intro').textContent='游戏原始 Magic.wil 大火球，16 方向 × 6 帧，按投射物实际大小与锚点自动循环播放。';
+   $('effect-title').textContent='大火球暗部';$('trial').textContent='看采用值 150%';
+   $('effect-hint').textContent='仅预览暗红棕区域渐隐；火焰亮部、六帧顺序、方向和位置保持原样。';
+   $('formal-note').textContent='游戏 16 方向贴图已采用 150%；此处继续试调不会自动改写正式游戏贴图。';
+ }
+ $('directions').innerHTML=names.map((name,index)=>`<button data-direction="${index}">${name}</button>`).join('');
+ for(const button of $('directions').children)button.onclick=()=>{direction=Number(button.dataset.direction);localStorage.setItem(`${cfg.slug}-direction`,String(direction));for(const item of $('directions').children)item.classList.toggle('active',item===button);loadImages()};
+ $('timeline').innerHTML=Array.from({length:6},(_,index)=>`<button data-frame="${index}">F${index}</button>`).join('');
+ for(const button of $('timeline').children)button.onclick=()=>{frame=Number(button.dataset.frame);playing=false;$('play').textContent='播放';draw()};
+ $('play').onclick=()=>{playing=!playing;$('play').textContent=playing?'暂停':'播放'};
+ $('prev').onclick=()=>{playing=false;$('play').textContent='播放';frame=(frame+5)%6;draw()};
+ $('next').onclick=()=>{playing=false;$('play').textContent='播放';frame=(frame+1)%6;draw()};
+ $('haze').oninput=()=>{$('haze-value').textContent=`${Math.round(Number($('haze').value)*100)}%`};$('haze').onchange=()=>tune(Number($('haze').value));
+ $('original').onclick=()=>tune(0);$('trial').onclick=()=>tune(cfg.trial);
+ $('undo').onclick=()=>{queue=queue.then(()=>action({action:'undo'})).catch(error=>message(error.message))};
+ $('background').value=localStorage.getItem('hmg-background')||'game';
+ $('background').onchange=()=>{localStorage.setItem('hmg-background',$('background').value);$('stage').className='stage '+$('background').value;$('detail-box').className='detail '+$('background').value};
+ $('background').onchange();refresh().then(()=>{playing=true;$('play').textContent='暂停';lastTick=performance.now()}).catch(error=>message(error.message));
+}
+function tick(now){if(state&&playing){carry+=now-lastTick;while(carry>=state.frame_time_ms){frame=(frame+1)%6;carry-=state.frame_time_ms}draw()}lastTick=now;requestAnimationFrame(tick)}
+init();requestAnimationFrame(tick);
+</script>
+</body>
+</html>

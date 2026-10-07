@@ -114,3 +114,30 @@ map_editor_workspace/hidden_fallen_graveyard/ground/ground_manifest.json text eo
 map_editor_workspace/hidden_death_temple/ground/ground_manifest.json text eol=lf
 map_editor_workspace/hidden_abyss_domain/ground/ground_manifest.json text eol=lf
 map_editor_workspace/hidden_pincer_nest/ground/ground_manifest.json text eol=lf
+
+# Third-tree promotion: these existing snapshot blobs contain raw CRLF.
+# Preserve audited authority/editor bytes; do not normalize their content.
+assets/data/canonical_monster_drop_source_v2.json -text
+assets/data/drop/boss_material_drop_directive_v1.json -text
+assets/data/drop/dpv2_single_player_item_boost_classification_v1.json -text
+map_editor_workspace/cangyue_bone_cave_f1/cangyue_bone_cave_f1.editor.json -text
+map_editor_workspace/cangyue_bone_cave_f2/cangyue_bone_cave_f2.editor.json -text
+map_editor_workspace/cangyue_bone_cave_f3/cangyue_bone_cave_f3.editor.json -text
+map_editor_workspace/cangyue_bone_cave_f4/cangyue_bone_cave_f4.editor.json -text
+map_editor_workspace/cangyue_bone_cave_f5/cangyue_bone_cave_f5.editor.json -text
+map_editor_workspace/cangyue_bull_temple_f1/cangyue_bull_temple_f1.editor.json -text
+map_editor_workspace/cangyue_bull_temple_f2/cangyue_bull_temple_f2.editor.json -text
+map_editor_workspace/cangyue_bull_temple_f3/cangyue_bull_temple_f3.editor.json -text
+map_editor_workspace/cangyue_bull_temple_f4/cangyue_bull_temple_f4.editor.json -text
+map_editor_workspace/fengmo_purgatory_corridor/fengmo_purgatory_corridor.editor.json -text
+map_editor_workspace/mengzhong_zuma_temple_f1/mengzhong_zuma_temple_f1.editor.json -text
+map_editor_workspace/mengzhong_zuma_temple_f2/mengzhong_zuma_temple_f2.editor.json -text
+map_editor_workspace/mengzhong_zuma_temple_f3/mengzhong_zuma_temple_f3.editor.json -text
+map_editor_workspace/mengzhong_zuma_temple_f4/mengzhong_zuma_temple_f4.editor.json -text
+map_editor_workspace/wooma_temple_f2/wooma_temple_f2.editor.json -text
+# Retired diagnostic patches and history captures preserve their exact bytes.
+docs/performance_20260926/all_fixes_checkpoint.patch -text -whitespace
+docs/performance_20260926/save_safety_changes.patch -text -whitespace
+docs/retired/20261007/** -text -whitespace
+# This current-status document is editable text, not a frozen byte authority.
+docs/WORKSPACE_CURRENT_STATUS.md text eol=lf

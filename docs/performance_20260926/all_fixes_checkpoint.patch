@@ -1,0 +1,1744 @@
+diff --git a/PROJECT_CURRENT_STATUS.md b/PROJECT_CURRENT_STATUS.md
+index 908fc7b5f..4abfa1b39 100644
+--- a/PROJECT_CURRENT_STATUS.md
++++ b/PROJECT_CURRENT_STATUS.md
+@@ -1,5 +1,9 @@
+ # HardCore Current Status
+ 
++## 2026-09-27：固定掉落名称与旧版回存修复，长帧审计继续
++
++用户已批准 `docs/performance_20260926/SOL6_AUDIT.md` 的完整修复方案，并要求额度刷新后继续。**先读 `docs/performance_20260926/CONTINUE_HERE.md`**：保存当前代码状态、回归证据、冻结要求与剩余施工顺序。已完成备份清理序号、建角失败回滚、特效背景拷贝节点生命周期、固定掉落名称、旧版回存代际隔离五项局部修复。名称固定在自身图标上方且允许重叠，详见 `F04_IMPLEMENTATION.md`；存档导入、备份恢复和相关 14 场景回归、最后三项复验见 `F02_IMPLEMENTATION.md`。下一项是 F03 异步持久化，再处理 F05 结算/显示队列；真实 APK 往返和渲染验收仍待继续。当前为基于 f5d6308f 的未提交改动，未构建 APK，不能将局部测试当成整个方案已完成。
++
+ ## 2026-09-23：v93 APK 冻结里程碑
+ 
+ 已发布的 `milestone-hardcore-1.0-v93` 精确固定 APK 源码 `672811a135ddf0f4d8048a6a0eb11e92dee48dc4`；桌面 APK 已核验 versionCode 93、同包名与签名，DEVICE TEST: NOT_RUN。仅清理了两棵已合并的重复临时工作树（独立内容逐文件归档）和 54 个已并入里程碑的远端冗余分支；旧版基线、构建树、版本材料与独有提交均保留。完整身份、保留清单、清理证据和已知测试边界见 `docs/milestones/v93/README.md`。
+diff --git a/scripts/caster_skill_animation_player.gd b/scripts/caster_skill_animation_player.gd
+index d97ec1874..c045a8e22 100644
+--- a/scripts/caster_skill_animation_player.gd
++++ b/scripts/caster_skill_animation_player.gd
+@@ -67,13 +67,16 @@ func _ensure_trial_screen_copy() -> void:
+ 	if is_instance_valid(_trial_screen_copy):
+ 		_sync_trial_screen_copy_visibility()
+ 		return
+-	# Capture after earlier actors and spells in this sort lane so overlapping
+-	# effects use the same screen formula as the browser experiment.
++	# Own the copy as a child drawn immediately before this sprite. Adding a
++	# sibling during _ready can fail while the parent enters its children.
++	# The same relative Z lane preserves capture after earlier world items.
+ 	_trial_screen_copy = BackBufferCopy.new()
+ 	_trial_screen_copy.name = "TrialScreenBackdrop"
+ 	_trial_screen_copy.copy_mode = BackBufferCopy.COPY_MODE_VIEWPORT
+-	get_parent().add_child(_trial_screen_copy)
+-	get_parent().move_child(_trial_screen_copy, get_index())
++	_trial_screen_copy.z_as_relative = true
++	_trial_screen_copy.z_index = 0
++	_trial_screen_copy.show_behind_parent = true
++	add_child(_trial_screen_copy)
+ 	_sync_trial_screen_copy_visibility()
+ 
+ 
+@@ -115,6 +118,7 @@ func configure(
+ 	var profile := CasterSkillVisualRegistry.profile(skill_id)
+ 	material = null
+ 	if is_instance_valid(_trial_screen_copy):
++		_trial_screen_copy.hide()
+ 		_trial_screen_copy.queue_free()
+ 		_trial_screen_copy = null
+ 	if is_instance_valid(_fire_wall_additive_sprite):
+@@ -374,8 +378,6 @@ func _release_sequence_lease() -> void:
+ 
+ 
+ func _exit_tree() -> void:
+-	if is_instance_valid(_trial_screen_copy):
+-		_trial_screen_copy.queue_free()
+ 	# R14-C5: looping/persistent effects hold the lease until node teardown;
+ 	# one-shot players release on completion. Reconfigure and exit both
+ 	# release here.
+diff --git a/scripts/loot_name_layout.gd b/scripts/loot_name_layout.gd
+index fae6247ec..187e29534 100644
+--- a/scripts/loot_name_layout.gd
++++ b/scripts/loot_name_layout.gd
+@@ -1,222 +1,20 @@
+ extends RefCounted
+ 
+-## Event-driven world-space label placement (2026-09-20 user principle,
+-## replacing the former block-packing grid that pooled a whole cluster's
+-## names above the cluster and broke name-to-item association):
+-##   1. Every label's HOME is directly above its own ground icon — the exact
+-##      position a single drop presents. After ANY refresh (drop, pickup,
+-##      expiry, filter change) a label returns home whenever the home slot is
+-##      free, including labels displaced by an earlier conflict.
+-##   2. A label leaves home only when the home slot is really taken, and then
+-##      takes the NEAREST free slot from bounded concentric rings (26px step,
+-##      3 rings ≈ ≤78px — under one plate width), direction order biased
+-##      upward away from the icon, then lateral, then downward.
+-##   3. Other pickups' ground-icon rects are association obstacles: a name
+-##      plate never covers another item's icon.
+-## Pickup/collection positions never move. The manager owns triggering:
+-## set changes mark a dirty flag and call arrange once per coalesced batch
+-## (call_deferred) — no timers, no per-frame work, idle frames cost nothing.
+-
+-const CELL := Vector2(192, 96)
+-const PLATE_PADDING := 8.0
+-const GAP := 6.0
+-const RING_STEP := 26.0
+-const RING_COUNT := 3
+-# Deterministic nearest-first ring directions: up, upper diagonals, lateral,
+-# lower diagonals, down. No RNG anywhere.
+-const DIRECTIONS: Array[Vector2] = [
+-	Vector2.UP,
+-	Vector2(-0.70710678, -0.70710678),
+-	Vector2(0.70710678, -0.70710678),
+-	Vector2(-1.0, 0.0),
+-	Vector2(1.0, 0.0),
+-	Vector2(-0.70710678, 0.70710678),
+-	Vector2(0.70710678, 0.70710678),
+-	Vector2(0.0, 1.0),
+-]
+-
+-
++## 2026-09-26: each label belongs to its own icon. Position a new item once;
++## crowded text does not trigger searches or move already visible names.
++static func place_at_home(pickup: Node2D) -> void:
++	if not is_instance_valid(pickup) or pickup.is_queued_for_deletion():
++		return
++	var label: Label = pickup.get("name_label")
++	if not is_instance_valid(label):
++		return
++	var home: Vector2 = pickup.name_label_home_position()
++	if pickup.name_label_display_offset != Vector2.ZERO or label.position != home:
++		pickup.set_name_label_display_offset(Vector2.ZERO)
++
++
++## Explicit bulk callers (e.g. local diagnostics) may initialize a batch.
++## Production registration calls place_at_home on only the incoming item.
+ static func arrange(pickups: Array) -> void:
+-	var ordered: Array = []
+-	var icon_index: Dictionary = {}
+ 	for pickup: Node2D in pickups:
+-		if not is_instance_valid(pickup) or pickup.is_queued_for_deletion():
+-			continue
+-		var label: Label = pickup.get("name_label")
+-		if label == null or not label.visible:
+-			continue
+-		ordered.append(pickup)
+-		# Association obstacle = the icon's VISUAL core (the rect shrunk by 5px
+-		# drops transparent texture edges): a plate brushing 2-5px of a
+-		# neighbour icon's transparent top edge must not force displacement,
+-		# while a plate actually sitting on the icon body is rejected.
+-		var icon_core := _icon_world_rect(pickup).grow(-5.0)
+-		if icon_core.size.x <= 0.0 or icon_core.size.y <= 0.0:
+-			# Tiny icons (small gold piles) collapse under the 5px shrink;
+-			# keep the ungrown visual core so the obstacle stays valid instead
+-			# of feeding negative-size rects into Rect2.intersects.
+-			icon_core = _icon_world_rect(pickup)
+-		_index_rect(icon_index, icon_core, pickup.get_instance_id())
+-	# Oldest registration first: first come keeps home priority.
+-	ordered.sort_custom(func(a: Node2D, b: Node2D) -> bool:
+-		return int(a.get_meta("loot_registration_order", a.get_instance_id())) < int(b.get_meta("loot_registration_order", b.get_instance_id())))
+-	# Saturation gate: when so many items share the search neighbourhood that
+-	# no candidate slot can possibly be free (members x own plate area exceed
+-	# the reachable region capacity), skip the search entirely and keep the
+-	# label at home — in a pathological pile the nearest slot IS home, and the
+-	# O(n x 9) gate replaces the O(candidates x members) scan that made dense
+-	# piles quadratic (measured 102ms for a 150-item pile before this gate).
+-	var home_cell_counts: Dictionary = {}
+-	for pickup: Node2D in ordered:
+-		var key: Vector2i = Vector2i((pickup.global_position / CELL).floor())
+-		home_cell_counts[key] = int(home_cell_counts.get(key, 0)) + 1
+-	var placed_index: Dictionary = {}
+-	for pickup: Node2D in ordered:
+-		var label: Label = pickup.get("name_label")
+-		var plate_size: Vector2 = pickup.get("name_plate_size")
+-		if not (plate_size is Vector2) or plate_size.x <= 0.0:
+-			plate_size = label.get_minimum_size() + Vector2(PLATE_PADDING, 0.0)
+-		var home_origin: Vector2 = (
+-			pickup.global_position + Vector2(-plate_size.x * 0.5, -36.0)
+-		)
+-		var offset := Vector2.ZERO
+-		if not _neighbourhood_saturated(pickup.global_position, plate_size, home_cell_counts):
+-			if _is_free(home_origin, plate_size, placed_index, icon_index, pickup.get_instance_id()):
+-				offset = Vector2.ZERO
+-			else:
+-				offset = _nearest_free_offset(
+-					home_origin, plate_size, placed_index, icon_index, pickup.get_instance_id())
+-		_index_rect(placed_index, Rect2(home_origin + offset, plate_size), -1)
+-		var target_local := Vector2(-plate_size.x * 0.5, -36.0) + offset
+-		if pickup.has_method("set_name_label_display_offset"):
+-			pickup.set_name_label_display_offset(offset)
+-		elif not label.position.is_equal_approx(target_local):
+-			label.position = target_local
+-
+-
+-## True when the 3x3 cell neighbourhood around the item already holds more
+-## plate area than the ring-search reachable region can hold, so no free
+-## candidate slot can exist and the search would be pure waste.
+-static func _neighbourhood_saturated(item_position: Vector2, plate_size: Vector2, home_cell_counts: Dictionary) -> bool:
+-	var own_area: float = plate_size.x * plate_size.y
+-	if own_area <= 0.0:
+-		return false
+-	var capacity := (CELL.x + RING_COUNT * RING_STEP * 2.0) * (CELL.y + RING_COUNT * RING_STEP * 2.0)
+-	var threshold: int = int(capacity / own_area)
+-	var key := Vector2i((item_position / CELL).floor())
+-	var members := 0
+-	for x: int in range(-1, 2):
+-		for y: int in range(-1, 2):
+-			members += int(home_cell_counts.get(key + Vector2i(x, y), 0))
+-	return members > threshold
+-
+-
+-static func _is_free(
+-	origin: Vector2,
+-	plate_size: Vector2,
+-	placed_index: Dictionary,
+-	icon_index: Dictionary,
+-	owner_id: int,
+-) -> bool:
+-	var plate_query := Rect2(origin, plate_size).grow(GAP * 0.5)
+-	var icon_query := Rect2(origin, plate_size)
+-	for cell: Vector2i in _cells(plate_query):
+-		for entry: Variant in placed_index.get(cell, []):
+-			if plate_query.intersects((entry as Array)[0]):
+-				return false
+-		for entry: Variant in icon_index.get(cell, []):
+-			var packed: Array = entry
+-			if int(packed[1]) == owner_id:
+-				continue
+-			if icon_query.intersects(packed[0]):
+-				return false
+-	return true
+-
+-
+-static func _nearest_free_offset(
+-	home_origin: Vector2,
+-	plate_size: Vector2,
+-	placed_index: Dictionary,
+-	icon_index: Dictionary,
+-	owner_id: int,
+-) -> Vector2:
+-	var home_center := home_origin + plate_size * 0.5
+-	var best_offset := Vector2.ZERO
+-	var best_overlap := INF
+-	for ring: int in range(1, RING_COUNT + 1):
+-		for direction: Vector2 in DIRECTIONS:
+-			var center := home_center + direction * (float(ring) * RING_STEP)
+-			var origin := center - plate_size * 0.5
+-			var overlap := _overlap_area(
+-				origin, plate_size, placed_index, icon_index, owner_id, best_overlap)
+-			if overlap <= 0.0:
+-				return center - home_center
+-			if overlap < best_overlap:
+-				best_overlap = overlap
+-				best_offset = center - home_center
+-	# Pathological pile where every ring slot is blocked: place at the
+-	# least-overlapping candidate so a name never disappears.
+-	return best_offset
+-
+-
+-## Total overlap area of a candidate plate against placed plates (with a
+-## half-GAP clearance grown in, so plates never visually touch) and against
+-## OTHER pickups' icon cores (ungrown: touching is not covering).
+-static func _overlap_area(
+-	origin: Vector2,
+-	plate_size: Vector2,
+-	placed_index: Dictionary,
+-	icon_index: Dictionary,
+-	owner_id: int,
+-	stop_at := INF,
+-) -> float:
+-	var plate_query := Rect2(origin, plate_size).grow(GAP * 0.5)
+-	var icon_query := Rect2(origin, plate_size)
+-	var total := 0.0
+-	for cell: Vector2i in _cells(plate_query):
+-		for entry: Variant in placed_index.get(cell, []):
+-			var other: Rect2 = (entry as Array)[0]
+-			if plate_query.intersects(other):
+-				total += plate_query.intersection(other).get_area()
+-				# Areas are nonnegative. Once this candidate cannot beat the best
+-				# preceding candidate, its remaining intersections cannot affect
+-				# either the winner or the deterministic tie order.
+-				if total >= stop_at:
+-					return total
+-		for entry: Variant in icon_index.get(cell, []):
+-			var packed: Array = entry
+-			if int(packed[1]) == owner_id:
+-				continue
+-			var other: Rect2 = packed[0]
+-			if icon_query.intersects(other):
+-				total += icon_query.intersection(other).get_area()
+-				if total >= stop_at:
+-					return total
+-	return total
+-
+-
+-static func _icon_world_rect(pickup: Node2D) -> Rect2:
+-	var local: Rect2 = (
+-		pickup.ground_icon_rect_local()
+-		if pickup.has_method("ground_icon_rect_local")
+-		else Rect2(Vector2(-12, -16), Vector2(24, 24))
+-	)
+-	return Rect2(pickup.global_position + local.position, local.size)
+-
+-
+-static func _index_rect(index: Dictionary, rect: Rect2, owner_id: int) -> void:
+-	var entry := [rect, owner_id]
+-	for cell: Vector2i in _cells(rect.grow(GAP)):
+-		if not index.has(cell):
+-			index[cell] = []
+-		index[cell].append(entry)
+-
+-
+-static func _cells(rect: Rect2) -> Array[Vector2i]:
+-	var result: Array[Vector2i] = []
+-	var start := Vector2i((rect.position / CELL).floor())
+-	var end := Vector2i((rect.end / CELL).floor())
+-	for x: int in range(start.x, end.x + 1):
+-		for y: int in range(start.y, end.y + 1):
+-			result.append(Vector2i(x, y))
+-	return result
++		place_at_home(pickup)
+diff --git a/scripts/loot_pickup.gd b/scripts/loot_pickup.gd
+index 8535efeaa..5d2c23caa 100644
+--- a/scripts/loot_pickup.gd
++++ b/scripts/loot_pickup.gd
+@@ -216,9 +216,8 @@ func _ready() -> void:
+ 	label.add_theme_constant_override("shadow_offset_y", 1)
+ 	add_child(label)
+ 	name_label = label
+-	# Measure the real text plate once: the layout authority and the drawn
+-	# label must share the same rectangle, and long names must not silently
+-	# overflow the tested box.
++	# Measure text once so even a long name is centered on its own icon.
++	# Neighboring names may overlap; they never move this label.
+ 	name_plate_size = Vector2(maxf(48.0, label.get_minimum_size().x) + 8.0, 24.0)
+ 	label.size = name_plate_size
+ 	label.position = name_label_home_position()
+@@ -241,26 +240,14 @@ func name_label_home_position() -> Vector2:
+ 	return Vector2(-name_plate_size.x * 0.5, -36.0)
+ 
+ 
+-## Only the event-driven ground-name layout writes offsets. Zero keeps the
+-## label at its home position above its own icon.
++## Name placement keeps a fixed home above this item's icon. The setter also
++## lets an explicit placement pass clear an obsolete displacement.
+ func set_name_label_display_offset(offset: Vector2) -> void:
+ 	name_label_display_offset = offset
+ 	if is_instance_valid(name_label):
+ 		name_label.position = name_label_home_position() + offset
+ 
+ 
+-## Local-space rect of this pickup's ground icon. The name layout treats
+-## OTHER pickups' icon rects as association obstacles: a name plate must
+-## never cover another item's icon.
+-func ground_icon_rect_local() -> Rect2:
+-	var icon_size := Vector2(24, 24)
+-	if is_instance_valid(icon_sprite) and icon_sprite.texture != null:
+-		var texture_size := icon_sprite.texture.get_size()
+-		if texture_size.x > 1.0 and texture_size.y > 1.0:
+-			icon_size = Vector2(minf(texture_size.x, 48.0), minf(texture_size.y, 48.0))
+-	return Rect2(Vector2(0, -5) - icon_size * 0.5, icon_size)
+-
+-
+ func _apply_filter(level: int) -> void:
+ 	filtered = _filter_threshold > 0 and level >= _filter_threshold
+ 	if is_instance_valid(name_label):
+diff --git a/scripts/loot_pickup_runtime_manager.gd b/scripts/loot_pickup_runtime_manager.gd
+index 6515815b7..1c701a90f 100644
+--- a/scripts/loot_pickup_runtime_manager.gd
++++ b/scripts/loot_pickup_runtime_manager.gd
+@@ -12,8 +12,7 @@ const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+ const LootPickupScript := preload("res://scripts/loot_pickup.gd")
+ const RuntimeDiagnosticsScript := preload("res://scripts/runtime_diagnostics.gd")
+ const NameLayout := preload("res://scripts/loot_name_layout.gd")
+-var _name_layout_dirty := false
+-var name_layout_count := 0
++var name_placement_count := 0
+ 
+ const CONTRACT_ID := "hardcore.loot.runtime_manager.map_scoped.v1"
+ const COLLECTION_RADIUS_GU := 0.75
+@@ -65,28 +64,17 @@ func _on_filter_changed(_level: int) -> void:
+ 	# Labels are updated by pickups synchronously. Resume auto-collection on
+ 	# the next frame, after all signal subscribers have applied the new filter.
+ 	_fail_safe_remaining = 0.0
+-	_queue_name_layout()
+ 
+-func _queue_name_layout() -> void:
+-	if _name_layout_dirty: return
+-	_name_layout_dirty = true
+-	_flush_name_layout.call_deferred()
+ 
+-func _flush_name_layout() -> void:
++func _place_new_pickup_name(pickup: LootPickup) -> void:
+ 	var profile_started_usec := RuntimeDiagnosticsScript.timing_start()
+-	_name_layout_dirty = false
+-	if not is_inside_tree(): return
+-	var pickups: Array = []
+-	for ref: WeakRef in _registered_pickups.values():
+-		var pickup: Variant = ref.get_ref()
+-		if is_instance_valid(pickup): pickups.append(pickup)
+-	NameLayout.arrange(pickups)
+-	name_layout_count += 1
++	NameLayout.place_at_home(pickup)
++	name_placement_count += 1
+ 	var elapsed_usec := RuntimeDiagnosticsScript.timing_elapsed_usec(profile_started_usec)
+ 	if elapsed_usec > 0:
+-		RuntimeDiagnosticsScript.increment_performance_counter(&"loot_name_layout_runs")
+-		RuntimeDiagnosticsScript.increment_performance_counter(&"loot_name_layout_usec", elapsed_usec)
+-		RuntimeDiagnosticsScript.record_performance_max(&"loot_name_layout_max_ms", float(elapsed_usec) / 1000.0)
++		RuntimeDiagnosticsScript.increment_performance_counter(&"loot_name_placements")
++		RuntimeDiagnosticsScript.increment_performance_counter(&"loot_name_placement_usec", elapsed_usec)
++		RuntimeDiagnosticsScript.record_performance_max(&"loot_name_placement_max_ms", float(elapsed_usec) / 1000.0)
+ 
+ 
+ func configure_player(player: PlayerCharacter) -> void:
+@@ -173,7 +161,7 @@ func register_pickup(pickup: LootPickup) -> bool:
+ 		return false
+ 	RuntimeDiagnosticsScript.increment_performance_counter(&"loot_spatial_registers")
+ 	_registered_pickups[pickup_id] = weakref(pickup)
+-	_queue_name_layout()
++	_place_new_pickup_name(pickup)
+ 	_registered_pickup_maps[pickup_id] = _runtime_map_id
+ 	_expiry_queue.append({"pickup": weakref(pickup), "deadline": _ground_age + GROUND_LIFETIME_SECONDS})
+ 	pickup.set_collection_manager(self)
+@@ -214,7 +202,6 @@ func unregister_pickup(pickup_or_id: Variant) -> void:
+ 	_spatial_index.unregister(pickup_id)
+ 	RuntimeDiagnosticsScript.increment_performance_counter(&"loot_spatial_unregisters")
+ 	_registered_pickups.erase(pickup_id)
+-	_queue_name_layout()
+ 	_registered_pickup_maps.erase(pickup_id)
+ 	_previous_candidate_ids.erase(pickup_id)
+ 	_logout_blocked_pickup_ids.erase(pickup_id)
+@@ -224,7 +211,6 @@ func update_pickup_position(pickup: LootPickup) -> bool:
+ 	if not is_instance_valid(pickup):
+ 		return false
+ 	var ground_position := _screen_position_to_ground(pickup.global_position)
+-	_queue_name_layout()
+ 	return _spatial_index.update_pickup(pickup.get_instance_id(), ground_position)
+ 
+ 
+@@ -496,7 +482,6 @@ func _on_pickup_tree_exiting(pickup_id: int) -> void:
+ 	_spatial_index.unregister(pickup_id)
+ 	RuntimeDiagnosticsScript.increment_performance_counter(&"loot_spatial_unregisters")
+ 	_registered_pickups.erase(pickup_id)
+-	_queue_name_layout()
+ 	_registered_pickup_maps.erase(pickup_id)
+ 	_previous_candidate_ids.erase(pickup_id)
+ 	_logout_blocked_pickup_ids.erase(pickup_id)
+diff --git a/scripts/player_state.gd b/scripts/player_state.gd
+index 1afc3f5d1..feb429e30 100644
+--- a/scripts/player_state.gd
++++ b/scripts/player_state.gd
+@@ -188,6 +188,7 @@ var world_monster_respawn_state: Dictionary = (
+ 	WorldMonsterRespawnStateScript.empty_snapshot()
+ )
+ var _death_event_sequence := 0
++var _world_clock_generation := ""
+ var _profile_saved_death_event_sequence := 0
+ var _profile_backup_death_event_sequence := 0
+ var _world_clock_snapshot_sequence := -1
+@@ -246,6 +247,7 @@ var _atomic_write_generation := 0
+ var _validated_profile_path := ""
+ var _validated_profile_bytes := PackedByteArray()
+ var _atomic_write_phases: Dictionary = {}
++var _last_json_promotion: Dictionary = {}
+ var _last_save_phase_profile: Dictionary = {}
+ var _last_loot_batch_profile: Dictionary = {}
+ var _last_death_settlement_profile: Dictionary = {}
+@@ -366,6 +368,7 @@ func reset_progress(emit_updates := true) -> void:
+ 	quest_states = {}
+ 	world_monster_respawn_state = WorldMonsterRespawnStateScript.empty_snapshot()
+ 	_death_event_sequence = 0
++	_world_clock_generation = ""
+ 	_profile_saved_death_event_sequence = 0
+ 	_profile_backup_death_event_sequence = 0
+ 	_world_clock_snapshot_sequence = -1
+@@ -3743,7 +3746,9 @@ func _world_clock_directory() -> String:
+ 	return profile_directory.path_join("world_clocks")
+ 
+ 
+-func _world_clock_path(profile_id: String) -> String:
++func _world_clock_path(profile_id: String, generation := "") -> String:
++	if not generation.is_empty():
++		return _world_clock_directory().path_join(profile_id).path_join(generation + ".json")
+ 	return _world_clock_directory().path_join(profile_id + ".json")
+ 
+ 
+@@ -3751,12 +3756,14 @@ func _death_event_root() -> String:
+ 	return profile_directory.path_join("death_events")
+ 
+ 
+-func _death_event_directory(profile_id: String) -> String:
++func _death_event_directory(profile_id: String, generation := "") -> String:
++	if not generation.is_empty():
++		return _death_event_root().path_join(profile_id).path_join(generation)
+ 	return _death_event_root().path_join(profile_id)
+ 
+ 
+-func _death_event_path(profile_id: String, sequence: int) -> String:
+-	return _death_event_directory(profile_id).path_join("%012d.json" % sequence)
++func _death_event_path(profile_id: String, sequence: int, generation := "") -> String:
++	return _death_event_directory(profile_id, generation).path_join("%012d.json" % sequence)
+ 
+ 
+ var _json_parse_snapshots: Dictionary = {}
+@@ -4077,6 +4084,14 @@ func _validate_profile_document_status(
+ 	allow_missing_identity: bool
+ ) -> Dictionary:
+ 	var document_version := -1
++	if not WorldMonsterClockLedgerScript.valid_generation(document.get("world_clock_generation", "")):
++		return _validation_result(false, "invalid_world_clock_generation")
++	if document.has("world_clock_generation") and not document.has("death_event_sequence"):
++		return _validation_result(false, "world_clock_generation_without_sequence")
++	if document.has("death_event_sequence"):
++		var sequence: Variant = document.death_event_sequence
++		if not _is_integral_json_number(sequence) or int(sequence) < 0:
++			return _validation_result(false, "invalid_death_event_sequence")
+ 	if document.has("save_version"):
+ 		var version_value: Variant = document.get("save_version")
+ 		if not _is_integral_json_number(version_value) or int(version_value) < 0:
+@@ -4242,6 +4257,14 @@ func _json_validator_for_path(path: String) -> Callable:
+ 		return Callable(self, "_validate_shared_warehouse_document_status")
+ 	if path in [SAVE_PATH, LEGACY_SAVE_PATH]:
+ 		return Callable(self, "_validate_profile_document_status").bind("", true)
++	if path.get_base_dir().get_base_dir() == _world_clock_directory() and path.ends_with(".json"):
++		return Callable(self, "_validate_world_clock_document_status").bind(
++			path.get_base_dir().get_file(), path.get_file().get_basename()
++		)
++	if path.get_base_dir().get_base_dir().get_base_dir() == _death_event_root() and path.ends_with(".json"):
++		return Callable(self, "_validate_death_event_document_status").bind(
++			path.get_base_dir().get_base_dir().get_file(), path.get_file().get_basename(), path.get_base_dir().get_file()
++		)
+ 	if path.get_base_dir() == _world_clock_directory() and path.ends_with(".json"):
+ 		return Callable(self, "_validate_world_clock_document_status").bind(path.get_file().get_basename())
+ 	if path.get_base_dir().get_base_dir() == _death_event_root() and path.ends_with(".json"):
+@@ -4251,13 +4274,15 @@ func _json_validator_for_path(path: String) -> Callable:
+ 	if path.get_base_dir() == profile_directory and path.ends_with(".json"):
+ 		var expected_profile_id := path.get_file().get_basename()
+ 		return Callable(self, "_validate_profile_document_status").bind(expected_profile_id, false)
++	if path.get_base_dir() == profile_directory and path.ends_with(".json.bak"):
++		return Callable(self, "_validate_profile_document_status").bind(path.get_file().trim_suffix(".json.bak"), false)
+ 	return Callable()
+ 
+ 
+-func _validate_world_clock_document_status(document: Dictionary, profile_id: String) -> Dictionary:
++func _validate_world_clock_document_status(document: Dictionary, profile_id: String, generation := "") -> Dictionary:
+ 	return _validation_result(
+ 		_valid_profile_storage_id(profile_id)
+-		and WorldMonsterClockLedgerScript.valid_snapshot(document, profile_id),
++		and WorldMonsterClockLedgerScript.valid_snapshot(document, profile_id, generation),
+ 		"invalid_world_clock_snapshot",
+ 	)
+ 
+@@ -4266,12 +4291,13 @@ func _validate_death_event_document_status(
+ 	document: Dictionary,
+ 	profile_id: String,
+ 	sequence_text: String,
++	generation := "",
+ ) -> Dictionary:
+ 	return _validation_result(
+ 		_valid_profile_storage_id(profile_id)
+ 		and sequence_text.is_valid_int()
+ 		and WorldMonsterClockLedgerScript.valid_death_event(
+-			document, profile_id, int(sequence_text)
++			document, profile_id, int(sequence_text), generation
+ 		),
+ 		"invalid_death_event",
+ 	)
+@@ -4282,7 +4308,8 @@ func _read_world_clock_replay(profile_document: Dictionary) -> Dictionary:
+ 	if not _valid_profile_storage_id(profile_id):
+ 		return {"ok": false, "reason": "invalid_profile_id"}
+ 	var snapshot: Dictionary = {}
+-	var clock_path := _world_clock_path(profile_id)
++	var generation := str(profile_document.get("world_clock_generation", ""))
++	var clock_path := _world_clock_path(profile_id, generation)
+ 	if FileAccess.file_exists(clock_path) or FileAccess.file_exists(clock_path + ".bak"):
+ 		var clock_read := _read_json_with_status(clock_path)
+ 		if not bool(clock_read.get("success", false)):
+@@ -4292,7 +4319,7 @@ func _read_world_clock_replay(profile_document: Dictionary) -> Dictionary:
+ 	var world_sequence := int(snapshot.get("sequence", 0))
+ 	var minimum_sequence := mini(profile_sequence, world_sequence)
+ 	var events: Array = []
+-	var event_directory := _death_event_directory(profile_id)
++	var event_directory := _death_event_directory(profile_id, generation)
+ 	if DirAccess.dir_exists_absolute(ProjectSettings.globalize_path(event_directory)):
+ 		var directory := DirAccess.open(event_directory)
+ 		if directory == null:
+@@ -4312,7 +4339,7 @@ func _read_world_clock_replay(profile_document: Dictionary) -> Dictionary:
+ 		directory.list_dir_end()
+ 		sequences.sort()
+ 		for sequence: int in sequences:
+-			var event_read := _read_json_with_status(_death_event_path(profile_id, sequence))
++			var event_read := _read_json_with_status(_death_event_path(profile_id, sequence, generation))
+ 			if not bool(event_read.get("success", false)):
+ 				return {"ok": false, "reason": "death_event_unavailable"}
+ 			events.append(event_read.get("data", {}))
+@@ -4328,6 +4355,7 @@ func _read_world_clock_replay(profile_document: Dictionary) -> Dictionary:
+ 		and bool(_validate_profile_document_status(
+ 			profile_backup.get("data", {}), profile_id, false
+ 		).get("valid", false))
++		and profile_backup.data.get("world_clock_generation", "") == generation
+ 	):
+ 		profile_backup_sequence = int(
+ 			(profile_backup.get("data", {}) as Dictionary).get("death_event_sequence", 0)
+@@ -4337,7 +4365,7 @@ func _read_world_clock_replay(profile_document: Dictionary) -> Dictionary:
+ 	if (
+ 		bool(world_backup.get("valid", false))
+ 		and WorldMonsterClockLedgerScript.valid_snapshot(
+-			world_backup.get("data", {}), profile_id
++			world_backup.get("data", {}), profile_id, generation
+ 		)
+ 	):
+ 		world_backup_sequence = int(
+@@ -4349,12 +4377,12 @@ func _read_world_clock_replay(profile_document: Dictionary) -> Dictionary:
+ 
+ 
+ func _archive_legacy_world_clock_profile(profile_document: Dictionary) -> String:
+-	if test_mode or not profile_document.has("world_monster_respawn_state") or profile_document.has("death_event_sequence"):
++	if test_mode or profile_document.has("death_event_sequence"):
+ 		return ""
+ 	var profile_id := str(profile_document.get("profile_id", ""))
+ 	if not _valid_profile_storage_id(profile_id):
+ 		return ""
+-	var directory := profile_directory.path_join("clock_migration_backups")
++	var directory := profile_directory.path_join("clock_import_backups")
+ 	if DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(directory)) != OK:
+ 		return ""
+ 	var digest := _shared_digest(profile_document)
+@@ -4365,6 +4393,88 @@ func _archive_legacy_world_clock_profile(profile_document: Dictionary) -> String
+ 	return path if _write_json_atomic(path, profile_document) else ""
+ 
+ 
++func _prepare_world_clock_profile(document: Dictionary) -> Dictionary:
++	if test_mode:
++		return {"ok": true, "data": document}
++	if document.has("death_event_sequence"):
++		# An interrupted import may have promoted the primary but not its backup.
++		# Finish that boundary before any new death may commit to this generation.
++		if document.has("world_clock_import_source") and not _complete_world_clock_import_backup(document):
++			return {"ok": false, "reason": "world_clock_import_backup_failed"}
++		return {"ok": true, "data": document}
++	var profile_id := str(document.get("profile_id", ""))
++	var digest := _shared_digest(document)
++	var replay := WorldMonsterClockLedgerScript.replay(document, {}, [])
++	# The first clock implementation archived a legacy source but left the
++	# primary unmarked until the next save. Preserve any committed events from
++	# that exact, evidenced forward migration. New imports use a different
++	# archive directory so retrying a failed import cannot manufacture this proof.
++	var prior_archive_path := profile_directory.path_join("clock_migration_backups").path_join("%s-%s.json" % [profile_id, digest])
++	if FileAccess.file_exists(prior_archive_path):
++		var prior := _read_json_document(prior_archive_path)
++		if not bool(prior.get("valid", false)) or _shared_digest(prior.get("data", {})) != digest:
++			return {"ok": false, "reason": "legacy_clock_archive_invalid"}
++		replay = _read_world_clock_replay(document)
++	if not bool(replay.get("ok", false)):
++		return replay
++	var archive := _archive_legacy_world_clock_profile(document)
++	if archive.is_empty():
++		return {"ok": false, "reason": "world_clock_migration_archive_failed"}
++	# A distinct namespace prevents an old writer's sequence-less checkpoint
++	# from being joined to previous (possibly already compacted) death events.
++	var generation := Crypto.new().generate_random_bytes(16).hex_encode()
++	var clock_path := _world_clock_path(profile_id, generation)
++	if FileAccess.file_exists(clock_path):
++		return {"ok": false, "reason": "world_clock_import_identity_collision"}
++	if DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(clock_path.get_base_dir())) != OK:
++		return {"ok": false, "reason": "world_clock_import_directory_failed"}
++	var clock := WorldMonsterClockLedgerScript.snapshot_document(profile_id, 0, replay.world_state, generation)
++	if not _write_json_atomic(clock_path, clock):
++		return {"ok": false, "reason": "world_clock_import_snapshot_failed"}
++	var converted := document.duplicate(true)
++	converted.erase("world_monster_respawn_state")
++	converted["level"] = replay.level
++	converted["experience"] = replay.experience
++	converted["quest_states"] = replay.quest_states
++	converted["death_event_sequence"] = 0
++	converted["world_clock_generation"] = generation
++	converted["world_clock_import_source"] = digest
++	# World first, then primary, then matching recovery checkpoint. No gameplay
++	# runs until all three succeed. Original character data remains archived.
++	if not _write_json_atomic(_profile_path(profile_id), converted):
++		return {"ok": false, "reason": "world_clock_import_profile_failed"}
++	if not _complete_world_clock_import_backup(converted):
++		return {"ok": false, "reason": "world_clock_import_backup_failed"}
++	return {"ok": true, "data": converted, "archive": archive}
++
++
++func _complete_world_clock_import_backup(document: Dictionary) -> bool:
++	var profile_id := str(document.get("profile_id", ""))
++	var generation := str(document.get("world_clock_generation", ""))
++	if generation.is_empty() or not WorldMonsterClockLedgerScript.valid_generation(generation):
++		return false
++	var clock := _read_json_with_status(_world_clock_path(profile_id, generation))
++	if not bool(clock.get("success", false)):
++		return false
++	var backup_path := _profile_path(profile_id) + ".bak"
++	var backup := _read_json_document(backup_path)
++	if bool(backup.get("valid", false)):
++		var prior: Dictionary = backup.data
++		if not bool(_validate_profile_document_status(prior, profile_id, false).valid):
++			return false
++		if prior.has("death_event_sequence"):
++			return prior.get("world_clock_generation", "") == generation
++		if _shared_digest(prior) != str(document.get("world_clock_import_source", "")):
++			return false
++	elif bool(backup.get("exists", false)):
++		return false
++	# This is only the import's sequence-zero backup conversion. Never promote
++	# an arbitrary older checkpoint to a later cleanup watermark.
++	if int(document.get("death_event_sequence", -1)) != 0:
++		return false
++	return _write_json_atomic(backup_path, document)
++
++
+ func _checkpoint_world_clock() -> bool:
+ 	if test_mode:
+ 		return true
+@@ -4376,21 +4486,22 @@ func _checkpoint_world_clock() -> bool:
+ 		and _world_clock_backup_sequence >= _world_clock_snapshot_sequence
+ 	):
+ 		return true
+-	var directory := _world_clock_directory()
++	var clock_path := _world_clock_path(active_profile_id, _world_clock_generation)
++	var directory := clock_path.get_base_dir()
+ 	if DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(directory)) != OK:
+ 		return false
+ 	var compacted := WorldMonsterRespawnStateScript.compact_elapsed(
+ 		world_monster_respawn_state, Time.get_unix_time_from_system()
+ 	)
+ 	var document := WorldMonsterClockLedgerScript.snapshot_document(
+-		active_profile_id, _death_event_sequence, compacted
++		active_profile_id, _death_event_sequence, compacted, _world_clock_generation
+ 	)
+ 	var previous_sequence := _world_clock_snapshot_sequence
+-	if not _write_json_atomic(_world_clock_path(active_profile_id), document):
++	if not _write_json_atomic(clock_path, document):
+ 		return false
+ 	_world_clock_snapshot_sequence = _death_event_sequence
+-	_world_clock_backup_sequence = (
+-		previous_sequence if previous_sequence >= 0 else _death_event_sequence
++	_world_clock_backup_sequence = _backup_sequence_after_promotion(
++		clock_path, previous_sequence, _death_event_sequence, "sequence"
+ 	)
+ 	_world_clock_dirty = false
+ 	return true
+@@ -4408,6 +4519,7 @@ func _queue_world_clock_cleanup() -> void:
+ 		return
+ 	var request := {
+ 		"profile_id": active_profile_id,
++		"generation": _world_clock_generation,
+ 		"through_sequence": through_sequence,
+ 	}
+ 	if _clock_cleanup_worker != null and not bool(_clock_cleanup_worker.result().finished):
+@@ -4418,11 +4530,12 @@ func _queue_world_clock_cleanup() -> void:
+ 
+ func _start_world_clock_cleanup(request: Dictionary) -> void:
+ 	var profile_id := str(request.get("profile_id", ""))
+-	if not _valid_profile_storage_id(profile_id):
++	var generation: Variant = request.get("generation", "")
++	if not _valid_profile_storage_id(profile_id) or not WorldMonsterClockLedgerScript.valid_generation(generation):
+ 		return
+ 	_clock_cleanup_worker = WorldClockEventCleanupScript.new()
+ 	_clock_cleanup_worker.start(
+-		_death_event_directory(profile_id),
++		_death_event_directory(profile_id, generation),
+ 		int(request.get("through_sequence", 0)),
+ 	)
+ 
+@@ -4444,15 +4557,15 @@ func _commit_death_event() -> bool:
+ 		active_profile_id.is_empty()
+ 		or active_profile_id == _save_blocked_profile_id
+ 		or _world_clock_snapshot_sequence < 0
+-		or not FileAccess.file_exists(_world_clock_path(active_profile_id))
++		or not FileAccess.file_exists(_world_clock_path(active_profile_id, _world_clock_generation))
+ 	):
+ 		return false
+ 	var next_sequence := _death_event_sequence + 1
+-	var path := _death_event_path(active_profile_id, next_sequence)
++	var path := _death_event_path(active_profile_id, next_sequence, _world_clock_generation)
+ 	if FileAccess.file_exists(path):
+ 		return false
+ 	if DirAccess.make_dir_recursive_absolute(
+-		ProjectSettings.globalize_path(_death_event_directory(active_profile_id))
++		ProjectSettings.globalize_path(_death_event_directory(active_profile_id, _world_clock_generation))
+ 	) != OK:
+ 		return false
+ 	var document := WorldMonsterClockLedgerScript.death_event_document(
+@@ -4464,6 +4577,7 @@ func _commit_death_event() -> bool:
+ 		WorldMonsterRespawnStateScript.compact_elapsed(
+ 			world_monster_respawn_state, Time.get_unix_time_from_system()
+ 		),
++		_world_clock_generation,
+ 	)
+ 	_last_save_phase_profile["runtime_snapshot_ms"] = (
+ 		float(Time.get_ticks_usec() - started_usec) / 1000.0
+@@ -4635,6 +4749,7 @@ func _write_json_atomic(path: String, data: Dictionary) -> bool:
+ 
+ 
+ func _promote_verified_json(path: String, temporary: String, expected_bytes: PackedByteArray, validated_previous_bytes: Variant = null) -> bool:
++	_last_json_promotion = {}
+ 	var validator := _json_validator_for_path(path)
+ 	var backup := path + ".bak"
+ 	var phase_usec := Time.get_ticks_usec()
+@@ -4699,6 +4814,14 @@ func _promote_verified_json(path: String, temporary: String, expected_bytes: Pac
+ 	var verified := _file_matches_validated_bytes(path, expected_bytes)
+ 	_atomic_write_phases["rotate_promote_read_ms"] = float(Time.get_ticks_usec() - phase_usec) / 1000.0
+ 	if verified:
++		_last_json_promotion = {
++			"path": path,
++			"backup_rotated": moved_valid_main,
++			"backup_exists": FileAccess.file_exists(backup),
++			"previous_sequence": (current_document.get("data", {}) as Dictionary).get("sequence", -1),
++			"previous_death_sequence": (current_document.get("data", {}) as Dictionary).get("death_event_sequence", -1),
++			"previous_generation": (current_document.get("data", {}) as Dictionary).get("world_clock_generation", "") if current_document.has("data") else null,
++		}
+ 		_atomic_write_generation += 1
+ 		if path.get_base_dir() == profile_directory and path.ends_with(".json"):
+ 			_validated_profile_path = path
+@@ -4715,6 +4838,37 @@ func _promote_verified_json(path: String, temporary: String, expected_bytes: Pac
+ 	return verified
+ 
+ 
++func _backup_sequence_after_promotion(path: String, previous_sequence: int, current_sequence: int, field: String) -> int:
++	# A corrupt primary is quarantined without rotating the valid old backup.
++	# Only a verified rotation can advance its cleanup watermark to the previous
++	# primary. The byte-validated profile fast path already owns that sequence.
++	if str(_last_json_promotion.get("path", "")) != path:
++		return -1
++	if not bool(_last_json_promotion.get("backup_exists", false)):
++		return current_sequence
++	if bool(_last_json_promotion.get("backup_rotated", false)):
++		# The byte-validated fast path does not parse the prior generation. Null
++		# is unknown, not the legacy namespace: retain its known older watermark.
++		var recorded_generation: Variant = _last_json_promotion.get("previous_generation")
++		if field == "death_event_sequence" and recorded_generation != null and recorded_generation != _world_clock_generation:
++			return current_sequence # Another generation retains its own journal.
++		var key := "previous_sequence" if field == "sequence" else "previous_death_sequence"
++		var recorded := int(_last_json_promotion.get(key, -1))
++		return recorded if recorded >= 0 else previous_sequence
++	# Exceptional recovery path only: inspect the backup actually preserved.
++	# Unknown/invalid backups hold back cleanup instead of deleting evidence.
++	var backup := _read_json_document(path + ".bak")
++	if not bool(backup.get("valid", false)):
++		return -1
++	var document: Dictionary = backup.get("data", {})
++	if not bool(_validate_json_candidate(document, _json_validator_for_path(path)).get("valid", false)):
++		return -1
++	if field == "death_event_sequence" and document.get("world_clock_generation", "") != _world_clock_generation:
++		return current_sequence
++	var sequence: Variant = document.get(field, 0 if field == "death_event_sequence" else -1)
++	return int(sequence) if _is_integral_json_number(sequence) and int(sequence) >= 0 else -1
++
++
+ func _file_matches_validated_bytes(path: String, expected: PackedByteArray) -> bool:
+ 	var file := FileAccess.open(path, FileAccess.READ)
+ 	if file == null:
+@@ -5312,6 +5466,7 @@ func _prepare_character_save_payload() -> Dictionary:
+ 		"warrior_runtime_state": warrior_runtime_state,
+ 		"quest_states": quest_states,
+ 		"death_event_sequence": _death_event_sequence,
++		"world_clock_generation": _world_clock_generation,
+ 		"content_packages": ContentLayers.enabled_package_ids(),
+ 		"content_schema_version": CURRENT_CONTENT_SCHEMA_VERSION,
+ 		"map_id": saved_map_id,
+@@ -5358,10 +5513,8 @@ func save_game(update_profile_index := true, finalize_pending_durability := true
+ 			"path": profile_path,
+ 		}
+ 		return false
+-	_profile_backup_death_event_sequence = (
+-		_profile_saved_death_event_sequence
+-		if FileAccess.file_exists(profile_path + ".bak")
+-		else _death_event_sequence
++	_profile_backup_death_event_sequence = _backup_sequence_after_promotion(
++		profile_path, _profile_saved_death_event_sequence, _death_event_sequence, "death_event_sequence"
+ 	)
+ 	_profile_saved_death_event_sequence = _death_event_sequence
+ 	_active_profile_legacy_warehouse_pending = false
+@@ -5723,6 +5876,16 @@ func load_save() -> void:
+ 		return
+ 	_clear_pending_durability_runtime()
+ 	var parsed: Dictionary = load_result.get("data", {})
++	var imported := _prepare_world_clock_profile(parsed)
++	if not bool(imported.get("ok", false)):
++		last_load_result["success"] = false
++		last_load_result["reason"] = str(imported.get("reason", "world_clock_import_failed"))
++		_save_blocked_profile_id = active_profile_id
++		_save_blocked_reason = str(last_load_result.reason)
++		return
++	parsed = imported.get("data", parsed)
++	if imported.has("archive"):
++		last_load_result["world_clock_migration_archive"] = imported.archive
+ 	var world_replay := _read_world_clock_replay(parsed)
+ 	if not bool(world_replay.get("ok", false)):
+ 		last_load_result["success"] = false
+@@ -5730,19 +5893,6 @@ func load_save() -> void:
+ 		_save_blocked_profile_id = active_profile_id
+ 		_save_blocked_reason = str(last_load_result["reason"])
+ 		return
+-	if (
+-		not test_mode
+-		and parsed.has("world_monster_respawn_state")
+-		and not parsed.has("death_event_sequence")
+-	):
+-		var archive_path := _archive_legacy_world_clock_profile(parsed)
+-		if archive_path.is_empty():
+-			last_load_result["success"] = false
+-			last_load_result["reason"] = "world_clock_migration_archive_failed"
+-			_save_blocked_profile_id = active_profile_id
+-			_save_blocked_reason = "world_clock_migration_archive_failed"
+-			return
+-		last_load_result["world_clock_migration_archive"] = archive_path
+ 	var projected_gold := _gold_load_projection(parsed)
+ 	if bool(projected_gold.needs_archive):
+ 		var archive_root := profile_directory.get_base_dir().path_join("gold_migrations")
+@@ -5866,6 +6016,7 @@ func load_save() -> void:
+ 		)
+ 	)
+ 	_death_event_sequence = int(world_replay.get("latest_sequence", 0))
++	_world_clock_generation = str(parsed.get("world_clock_generation", ""))
+ 	_profile_saved_death_event_sequence = int(world_replay.get("source_profile_sequence", 0))
+ 	_profile_backup_death_event_sequence = int(world_replay.get(
+ 		"profile_backup_sequence", _profile_saved_death_event_sequence
+@@ -7483,10 +7634,8 @@ func finish_prepared_loot_save(plan: Dictionary, wait := false) -> Dictionary:
+ 	if not _promote_verified_json(str(plan.path), str(plan.writer.path), plan.bytes):
+ 		plan.writer.cancel()
+ 		return _loot_save_failure(plan.outcomes)
+-	_profile_backup_death_event_sequence = (
+-		_profile_saved_death_event_sequence
+-		if FileAccess.file_exists(str(plan.path) + ".bak")
+-		else _death_event_sequence
++	_profile_backup_death_event_sequence = _backup_sequence_after_promotion(
++		str(plan.path), _profile_saved_death_event_sequence, _death_event_sequence, "death_event_sequence"
+ 	)
+ 	_profile_saved_death_event_sequence = _death_event_sequence
+ 	_queue_world_clock_cleanup()
+@@ -7911,7 +8060,7 @@ func delete_character_profile(profile_id: String) -> Dictionary:
+ 		result["reason"] = "profile_index_write_failed"
+ 		return result
+ 	var base_path := _profile_path(profile_id)
+-	for suffix: String in ["", ".bak", ".tmp", ".corrupt.tmp"]:
++	for suffix: String in ["", ".bak", ".tmp", ".corrupt.tmp", ".bak.bak", ".bak.tmp"]:
+ 		var path := base_path + suffix
+ 		if not FileAccess.file_exists(path):
+ 			continue
+@@ -8042,15 +8191,38 @@ func _remove_profile_world_clock_files(
+ ) -> void:
+ 	if not _valid_profile_storage_id(profile_id):
+ 		return
++	var generations: Dictionary = {}
++	var clock_directory := _world_clock_directory().path_join(profile_id)
++	var clocks := DirAccess.open(clock_directory)
++	if clocks != null:
++		for name: String in clocks.get_files():
++			var generation := name.trim_suffix(".corrupt.tmp").trim_suffix(".tmp").trim_suffix(".bak").trim_suffix(".json")
++			if not generation.is_empty() and WorldMonsterClockLedgerScript.valid_generation(generation):
++				generations[generation] = true
++	var events := DirAccess.open(_death_event_directory(profile_id))
++	if events != null:
++		for generation: String in events.get_directories():
++			if WorldMonsterClockLedgerScript.valid_generation(generation):
++				generations[generation] = true
++	for generation: String in generations:
++		_remove_profile_clock_generation_files(profile_id, generation, removed, failures)
++	if clocks != null and DirAccess.remove_absolute(ProjectSettings.globalize_path(clock_directory)) != OK:
++		failures.append(clock_directory)
++	_remove_profile_clock_generation_files(profile_id, "", removed, failures)
++
++
++func _remove_profile_clock_generation_files(
++	profile_id: String, generation: String, removed: Array, failures: Array
++) -> void:
+ 	for suffix: String in ["", ".bak", ".tmp", ".corrupt.tmp"]:
+-		var path := _world_clock_path(profile_id) + suffix
++		var path := _world_clock_path(profile_id, generation) + suffix
+ 		if not FileAccess.file_exists(path):
+ 			continue
+ 		if DirAccess.remove_absolute(ProjectSettings.globalize_path(path)) == OK:
+ 			removed.append(path)
+ 		elif FileAccess.file_exists(path):
+ 			failures.append(path)
+-	var event_path := _death_event_directory(profile_id)
++	var event_path := _death_event_directory(profile_id, generation)
+ 	var directory := DirAccess.open(event_path)
+ 	if directory == null:
+ 		return
+@@ -8100,6 +8272,14 @@ func _creation_runtime_snapshot() -> Dictionary:
+ 		"warrior_runtime_state": warrior_runtime_state.duplicate(true),
+ 		"taoist_main_pet_runtime_states": taoist_main_pet_runtime_states.duplicate(true),
+ 		"quest_states": quest_states.duplicate(true),
++		"world_monster_respawn_state": world_monster_respawn_state.duplicate(true),
++		"death_event_sequence": _death_event_sequence,
++		"world_clock_generation": _world_clock_generation,
++		"profile_saved_death_event_sequence": _profile_saved_death_event_sequence,
++		"profile_backup_death_event_sequence": _profile_backup_death_event_sequence,
++		"world_clock_snapshot_sequence": _world_clock_snapshot_sequence,
++		"world_clock_backup_sequence": _world_clock_backup_sequence,
++		"world_clock_dirty": _world_clock_dirty,
+ 		"saved_map_id": saved_map_id,
+ 		"saved_position": saved_position,
+ 		"saved_ground_position_gu": saved_ground_position_gu,
+@@ -8142,6 +8322,14 @@ func _restore_creation_runtime(snapshot: Dictionary) -> void:
+ 	warrior_runtime_state = (snapshot.get("warrior_runtime_state", {}) as Dictionary).duplicate(true)
+ 	taoist_main_pet_runtime_states = (snapshot.get("taoist_main_pet_runtime_states", {}) as Dictionary).duplicate(true)
+ 	quest_states = (snapshot.get("quest_states", {}) as Dictionary).duplicate(true)
++	world_monster_respawn_state = (snapshot.get("world_monster_respawn_state", WorldMonsterRespawnStateScript.empty_snapshot()) as Dictionary).duplicate(true)
++	_death_event_sequence = int(snapshot.get("death_event_sequence", 0))
++	_world_clock_generation = str(snapshot.get("world_clock_generation", ""))
++	_profile_saved_death_event_sequence = int(snapshot.get("profile_saved_death_event_sequence", 0))
++	_profile_backup_death_event_sequence = int(snapshot.get("profile_backup_death_event_sequence", 0))
++	_world_clock_snapshot_sequence = int(snapshot.get("world_clock_snapshot_sequence", -1))
++	_world_clock_backup_sequence = int(snapshot.get("world_clock_backup_sequence", -1))
++	_world_clock_dirty = bool(snapshot.get("world_clock_dirty", true))
+ 	saved_map_id = int(snapshot.get("saved_map_id", 910001))
+ 	saved_position = snapshot.get("saved_position", Vector2.ZERO)
+ 	saved_ground_position_gu = snapshot.get("saved_ground_position_gu", Vector2.ZERO)
+diff --git a/scripts/world_monster_clock_ledger.gd b/scripts/world_monster_clock_ledger.gd
+index db754bd57..3de447cb2 100644
+--- a/scripts/world_monster_clock_ledger.gd
++++ b/scripts/world_monster_clock_ledger.gd
+@@ -7,11 +7,12 @@ const SNAPSHOT_CONTRACT_ID := "monster.world_clock.snapshot.v1"
+ const EVENT_CONTRACT_ID := "monster.world_clock.death_event.v1"
+ 
+ 
+-static func snapshot_document(profile_id: String, sequence: int, state: Dictionary) -> Dictionary:
++static func snapshot_document(profile_id: String, sequence: int, state: Dictionary, generation := "") -> Dictionary:
+ 	return {
+ 		"contract_id": SNAPSHOT_CONTRACT_ID,
+ 		"profile_id": profile_id,
+ 		"sequence": sequence,
++		"world_clock_generation": generation,
+ 		"world_state": state.duplicate(true),
+ 	}
+ 
+@@ -23,9 +24,11 @@ static func death_event_document(
+ 	experience: int,
+ 	quest_states: Dictionary,
+ 	world_state: Dictionary,
++	generation := "",
+ ) -> Dictionary:
+ 	return {
+ 		"contract_id": EVENT_CONTRACT_ID,
++		"world_clock_generation": generation,
+ 		"profile_id": profile_id,
+ 		"sequence": sequence,
+ 		"level": level,
+@@ -56,25 +59,42 @@ static func valid_world_state(value: Variant) -> bool:
+ 	return true
+ 
+ 
+-static func valid_snapshot(value: Variant, expected_profile_id: String) -> bool:
++static func valid_generation(value: Variant) -> bool:
++	if not value is String:
++		return false
++	if value.is_empty():
++		return true # Pre-generation journals remain in their original namespace.
++	if value.length() != 32:
++		return false
++	for character in value:
++		if not character in "0123456789abcdef":
++			return false
++	return true
++
++
++static func valid_snapshot(value: Variant, expected_profile_id: String, generation := "") -> bool:
+ 	if not value is Dictionary:
+ 		return false
+ 	var document: Dictionary = value
+ 	return (
+ 		str(document.get("contract_id", "")) == SNAPSHOT_CONTRACT_ID
+ 		and str(document.get("profile_id", "")) == expected_profile_id
++		and valid_generation(generation)
++		and document.get("world_clock_generation", "") == generation
+ 		and _nonnegative_sequence(document.get("sequence", null))
+ 		and valid_world_state(document.get("world_state", null))
+ 	)
+ 
+ 
+-static func valid_death_event(value: Variant, expected_profile_id: String, expected_sequence: int) -> bool:
++static func valid_death_event(value: Variant, expected_profile_id: String, expected_sequence: int, generation := "") -> bool:
+ 	if not value is Dictionary:
+ 		return false
+ 	var document: Dictionary = value
+ 	return (
+ 		str(document.get("contract_id", "")) == EVENT_CONTRACT_ID
+ 		and str(document.get("profile_id", "")) == expected_profile_id
++		and valid_generation(generation)
++		and document.get("world_clock_generation", "") == generation
+ 		and _nonnegative_sequence(document.get("sequence", null))
+ 		and int(document.get("sequence", -1)) == expected_sequence
+ 		and _nonnegative_sequence(document.get("level", null))
+@@ -91,6 +111,9 @@ static func replay(
+ 	events: Array,
+ ) -> Dictionary:
+ 	var profile_id := str(profile_document.get("profile_id", ""))
++	var generation: Variant = profile_document.get("world_clock_generation", "")
++	if not valid_generation(generation):
++		return {"ok": false, "reason": "invalid_world_clock_generation"}
+ 	var profile_sequence_value: Variant = profile_document.get("death_event_sequence", 0)
+ 	if profile_id.is_empty() or not _nonnegative_sequence(profile_sequence_value):
+ 		return {"ok": false, "reason": "invalid_profile_sequence"}
+@@ -98,6 +121,8 @@ static func replay(
+ 	var world_sequence := 0
+ 	var world_state: Dictionary
+ 	if world_snapshot.is_empty():
++		if not generation.is_empty():
++			return {"ok": false, "reason": "world_snapshot_missing"}
+ 		if profile_sequence > 0 and not profile_document.has("world_monster_respawn_state"):
+ 			return {"ok": false, "reason": "world_snapshot_missing"}
+ 		var legacy: Variant = profile_document.get("world_monster_respawn_state", WorldState.empty_snapshot())
+@@ -105,7 +130,7 @@ static func replay(
+ 			return {"ok": false, "reason": "invalid_legacy_world_state"}
+ 		world_state = (legacy as Dictionary).duplicate(true)
+ 	else:
+-		if not valid_snapshot(world_snapshot, profile_id):
++		if not valid_snapshot(world_snapshot, profile_id, generation):
+ 			return {"ok": false, "reason": "invalid_world_snapshot"}
+ 		world_sequence = int(world_snapshot["sequence"])
+ 		world_state = (world_snapshot["world_state"] as Dictionary).duplicate(true)
+@@ -128,7 +153,7 @@ static func replay(
+ 			return {"ok": false, "reason": "invalid_death_event"}
+ 		var event: Dictionary = raw_event
+ 		var sequence := int(event.get("sequence", -1))
+-		if sequence <= previous or not valid_death_event(event, profile_id, sequence):
++		if sequence <= previous or not valid_death_event(event, profile_id, sequence, generation):
+ 			return {"ok": false, "reason": "invalid_death_event"}
+ 		if sequence != previous + 1:
+ 			return {"ok": false, "reason": "death_event_gap"}
+diff --git a/tests/caster_skill_visual_test.gd b/tests/caster_skill_visual_test.gd
+index 5c994718e..0fc129b85 100644
+--- a/tests/caster_skill_visual_test.gd
++++ b/tests/caster_skill_visual_test.gd
+@@ -218,7 +218,9 @@ func _assert_trial_screen_sprite(effect_sprite: Sprite2D) -> void:
+ 		assert(effect_sprite._fire_wall_additive_sprite.material is CanvasItemMaterial)
+ 		assert(effect_sprite._fire_wall_additive_sprite.material.blend_mode == CanvasItemMaterial.BLEND_MODE_ADD)
+ 		return
+-	assert(effect_sprite.get_index() > 0)
+-	var copy := effect_sprite.get_parent().get_child(effect_sprite.get_index() - 1)
++	assert(effect_sprite is CasterSkillAnimationPlayer)
++	var copy: BackBufferCopy = effect_sprite._trial_screen_copy
+ 	assert(copy is BackBufferCopy)
++	assert(copy.get_parent() == effect_sprite and copy.is_inside_tree())
++	assert(copy.show_behind_parent and copy.z_as_relative and copy.z_index == 0)
+ 	assert(copy.copy_mode == BackBufferCopy.COPY_MODE_VIEWPORT)
+diff --git a/tests/character_delete_transaction_test.gd b/tests/character_delete_transaction_test.gd
+index 815d05780..2ff15efe4 100644
+--- a/tests/character_delete_transaction_test.gd
++++ b/tests/character_delete_transaction_test.gd
+@@ -40,6 +40,14 @@ func _run() -> void:
+ 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(deleted_event_path.get_base_dir()))
+ 	_write_text(deleted_clock_path, "clock-sidecar")
+ 	_write_text(deleted_event_path, "death-event")
++	var generation := "0123456789abcdef0123456789abcdef"
++	var deleted_generation_clock := PlayerState._world_clock_path(deleted_id, generation)
++	var deleted_generation_event := PlayerState._death_event_path(deleted_id, 1, generation)
++	var preserved_generation_clock := PlayerState._world_clock_path(preserved_id, generation)
++	for extra_path: String in [deleted_generation_clock, deleted_generation_event, preserved_generation_clock]:
++		DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(extra_path.get_base_dir()))
++		_write_text(extra_path, "generation-sidecar")
++	_write_text(TEST_DIRECTORY + "/" + deleted_id + ".json.bak.bak", "legacy-import-backup")
+ 	assert(FileAccess.file_exists(TEST_DIRECTORY + "/" + deleted_id + ".json.bak"), "delete fixture backup missing")
+ 
+ 	var hall: Control = load("res://scenes/character_select.tscn").instantiate()
+@@ -87,6 +95,10 @@ func _run() -> void:
+ 		assert(not FileAccess.file_exists(TEST_DIRECTORY + "/" + deleted_id + ".json" + suffix), "deleted profile sidecar survived: %s" % suffix)
+ 	assert(not FileAccess.file_exists(deleted_clock_path))
+ 	assert(not FileAccess.file_exists(deleted_event_path))
++	assert(not FileAccess.file_exists(deleted_generation_clock))
++	assert(not FileAccess.file_exists(deleted_generation_event))
++	assert(not FileAccess.file_exists(TEST_DIRECTORY + "/" + deleted_id + ".json.bak.bak"))
++	assert(FileAccess.get_file_as_string(preserved_generation_clock) == "generation-sidecar")
+ 	assert(FileAccess.get_file_as_bytes(preserved_path) == preserved_bytes, "unrelated profile bytes changed")
+ 	assert(not _index_has(deleted_id), "deleted profile remains indexed")
+ 	# The ordinary writable fixture must complete all sidecar cleanup.  A future
+diff --git a/tests/loot_ui_20260914/ground_names_test.gd b/tests/loot_ui_20260914/ground_names_test.gd
+index ddfa71c06..7006178fa 100644
+--- a/tests/loot_ui_20260914/ground_names_test.gd
++++ b/tests/loot_ui_20260914/ground_names_test.gd
+@@ -1,18 +1,9 @@
+ extends Node
+-## Ground-name layout contract, 2026-09-20 user principle:
+-##   - a label's HOME is directly above its own ground icon (single-drop
+-##     position); after any refresh a label returns home whenever free
+-##   - displacement only on real conflict, always the nearest free slot,
+-##     bounded (<= 3 rings x 26px), never covering another item's icon
+-##   - burst changes coalesce into ONE layout pass; idle frames never relayout
+-##   - performance budget is asserted, not assumed.
++## 2026-09-26 approved contract: names stay centered above their own icon.
++## Spawn/removal/filter events must not move existing names or ground items.
+ const Manager := preload("res://scripts/loot_pickup_runtime_manager.gd")
+ const Layout := preload("res://scripts/loot_name_layout.gd")
+ 
+-const MAX_DISPLACEMENT := 80.0
+-const DENSE_BUDGET_USEC := 8000
+-const CLUSTER_BUDGET_USEC := 4000
+-
+ func _ready() -> void:
+ 	_run.call_deferred()
+ 
+@@ -22,140 +13,82 @@ func _run() -> void:
+ 	var manager := Manager.new()
+ 	add_child(manager)
+ 	manager.configure_map(1, 1, func(p: Vector2) -> Vector2: return p, func(p: Vector2) -> Vector2: return p)
+-	var target := PlayerCharacter.new()
+-
+-	# --- Scenario A: sparse items all sit at home, zero displacement ---
+-	var sparse: Array = []
+-	for i in range(5):
+-		sparse.append(_spawn_pickup(manager, target, Vector2(i * 420.0, i * 60.0)))
+-	Layout.arrange(sparse)
+-	for i in range(sparse.size()):
+-		var pickup: LootPickup = sparse[i]
+-		assert(pickup.name_label_display_offset == Vector2.ZERO, "sparse label %d must stay at home" % i)
+-		assert(pickup.global_position == _spawned_positions[i], "pickup node must never move")
+-	_assert_association(sparse)
+-
+-	# --- Scenario B: realistic cluster resolves with bounded displacement ---
+-	var cluster: Array = []
+-	var cluster_spots := [
+-		Vector2(0, 0), Vector2(40, 0), Vector2(80, 0),
+-		Vector2(20, 30), Vector2(60, 30), Vector2(100, 30),
+-	]
+-	for spot: Vector2 in cluster_spots:
+-		cluster.append(_spawn_pickup(manager, target, spot))
+-	var cluster_start := Time.get_ticks_usec()
+-	Layout.arrange(cluster)
+-	var cluster_usec := Time.get_ticks_usec() - cluster_start
+-	assert(cluster_usec < CLUSTER_BUDGET_USEC, "cluster layout %dus over budget" % cluster_usec)
+-	for i in range(cluster.size()):
+-		for j in range(cluster.size()):
+-			if i == j: continue
+-			assert(not _label_rect(cluster[i]).intersects(_label_rect(cluster[j])), "cluster plates %d/%d overlap" % [i, j])
+-	_assert_association(cluster)
+-	# --- Scenario C: a displaced label returns home once the blocker leaves ---
+-	var pair_a := _spawn_pickup(manager, target, Vector2(2000, 0))
+-	var pair_b := _spawn_pickup(manager, target, Vector2(2020, 0))
+-	Layout.arrange([pair_a, pair_b])
+-	assert(pair_a.name_label_display_offset == Vector2.ZERO, "older item keeps home")
+-	assert(not _label_rect(pair_a).intersects(_label_rect(pair_b)), "pair plates must not overlap")
+-	var displaced := pair_b.name_label_display_offset
+-	assert(displaced != Vector2.ZERO, "younger item 20px away must yield its home")
+-	assert(displaced.length() <= MAX_DISPLACEMENT, "displacement %s over bound" % displaced)
+-	manager.unregister_pickup(pair_a)
+-	pair_a.queue_free()
+-	await get_tree().process_frame
++	var pickups: Array = []
++	var positions: Array[Vector2] = []
++	# Deliberately crowded: centering remains the rule even when text overlaps.
++	for index in range(150):
++		var pickup := LootPickup.new()
++		var item := GameData.get_item_record(80 if index % 2 == 0 else 130)
++		pickup.setup_item_record({"item_id": item.itemId, "output_item_id": item.itemId, "item_name": item.name, "output_record": item}, null)
++		if index == 1:
++			pickup.setup_gold(12345, null)
++		elif index == 3:
++			# Presentation fixture only: exercise a name wider than its neighbors.
++			pickup.item_name = "超长名称显示测试装备超长名称显示测试装备"
++		pickup.position = Vector2((index % 15) * 10.0, (index / 15) * 8.0)
++		positions.append(pickup.position)
++		add_child(pickup)
++		assert(manager.register_pickup(pickup))
++		pickups.append(pickup)
++		# Staggered arrival used to trigger another full layout each frame.
++		if index % 10 == 0:
++			await get_tree().process_frame
++			_assert_home(pickups, positions)
+ 	await get_tree().process_frame
+-	assert(pair_b.name_label_display_offset == Vector2.ZERO, "younger label must return home after blocker leaves")
+-
+-	# --- Scenario D: burst coalescing, idle frames, filter trigger ---
+-	# Scenario C's unregister already flushed one layout; measure the burst
+-	# relative to that baseline.
+-	var baseline := manager.name_layout_count
+-	var dense: Array = []
+-	var before: Array = []
+-	for i in range(150):
+-		var pickup := _spawn_pickup(manager, target, Vector2((i % 15) * 10.0, (i / 15) * 8.0), i)
+-		dense.append(pickup)
+-		before.append(pickup.global_position)
+-	await get_tree().process_frame
+-	assert(manager.name_layout_count == baseline + 1, "burst must coalesce into one layout")
+-	var dense_start := Time.get_ticks_usec()
+-	Layout.arrange(dense)
+-	var dense_usec := Time.get_ticks_usec() - dense_start
+-	assert(dense_usec < DENSE_BUDGET_USEC, "dense 150 layout %dus over budget" % dense_usec)
+-	for i in range(dense.size()):
+-		assert(dense[i].global_position == before[i], "pickup node must never move")
+-		var displacement: Vector2 = dense[i].name_label_display_offset
+-		assert(displacement.length() <= MAX_DISPLACEMENT, "dense displacement over bound")
+-	for i in range(5):
++	_assert_home(pickups, positions)
++	assert(pickups[1].name_label.text == "金币 12345")
++	assert(pickups[3].name_plate_size.x > pickups[0].name_plate_size.x)
++	var long_name_rect := Rect2(pickups[3].global_position + pickups[3].name_label.position, pickups[3].name_label.size)
++	var neighbor_rect := Rect2(pickups[4].global_position + pickups[4].name_label.position, pickups[4].name_label.size)
++	assert(long_name_rect.intersects(neighbor_rect), "overlapping names must keep their own anchors")
++	var placement_count: int = manager.get("name_placement_count")
++	assert(placement_count == 150, "only each new item may require placement")
++	for index in range(5):
+ 		await get_tree().process_frame
+-	assert(manager.name_layout_count == baseline + 1, "idle frames must not relayout")
++	assert(manager.get("name_placement_count") == placement_count)
+ 	LootPreferences.set_filter_level(1)
+ 	await get_tree().process_frame
+-	assert(manager.name_layout_count == baseline + 2)
+-	for i in range(0, 150, 2):
+-		assert(not dense[i].name_label.visible)
++	assert(manager.get("name_placement_count") == placement_count, "filter must not reposition names")
++	for index in range(0, 150, 2):
++		assert(not pickups[index].name_label.visible)
+ 	LootPreferences.set_filter_level(0)
+-
+-	for pickup: LootPickup in dense:
+-		pickup.queue_free()
+-	for pickup: LootPickup in sparse:
+-		pickup.queue_free()
+-	for pickup: LootPickup in cluster:
++	await get_tree().process_frame
++	_assert_home(pickups, positions)
++	# Removing half the pile must neither move nor recompute the survivors.
++	for index in range(149, 74, -1):
++		manager.unregister_pickup(pickups[index])
++		pickups[index].queue_free()
++		pickups.remove_at(index)
++		positions.remove_at(index)
++	await get_tree().process_frame
++	_assert_home(pickups, positions)
++	assert(manager.get("name_placement_count") == placement_count)
++	# Moving an item moves its local child name with it, with no group layout.
++	pickups[0].position += Vector2(500, 80)
++	positions[0] = pickups[0].position
++	assert(manager.update_pickup_position(pickups[0]))
++	await get_tree().process_frame
++	_assert_home(pickups, positions)
++	assert(manager.get("name_placement_count") == placement_count)
++	var started := Time.get_ticks_usec()
++	Layout.arrange(pickups)
++	var elapsed := Time.get_ticks_usec() - started
++	assert(elapsed < 8000, "explicit batch positioning must remain bounded")
++	for pickup: LootPickup in pickups:
+ 		pickup.queue_free()
+-	pair_b.queue_free()
+ 	await get_tree().process_frame
+ 	manager.queue_free()
+-	target.free()
+ 	await get_tree().process_frame
+-	print(
+-		"GROUND_NAMES_HOME_FIRST_PASS sparse=5 cluster=6 cluster_usec=%d dense=150 dense_usec=%d coalesced=1 return_home=true" % [
+-			cluster_usec, dense_usec,
+-		])
+-	get_tree().quit()
+-
+-var _spawned_positions: Array = []
+-
+-func _spawn_pickup(manager: Manager, target: PlayerCharacter, position: Vector2, parity := -1) -> LootPickup:
+-	var pickup := LootPickup.new()
+-	# Explicit parity keeps the filter assertion deterministic: even parity ->
+-	# item 80 (filterable), odd -> item 130 (always visible). Callers that do
+-	# not care fall back to the running spawn counter.
+-	var effective_parity: int = parity if parity >= 0 else _spawned_positions.size()
+-	var item := GameData.get_item_record(130 if effective_parity % 2 else 80)
+-	var item_id := GameData._stable_item_id(item)
+-	pickup.setup_item_record({"item_id": item_id, "output_item_id": item_id, "item_name": item.name, "output_record": item}, target)
+-	pickup.position = position
+-	add_child(pickup)
+-	assert(pickup.z_index == -2 and not pickup.z_as_relative)
+-	assert(manager.register_pickup(pickup))
+-	_spawned_positions.append(position)
+-	return pickup
+-
+-func _label_rect(pickup: LootPickup) -> Rect2:
+-	return Rect2(
+-		pickup.global_position + pickup.name_label.position,
+-		pickup.name_label.size,
+-	)
++	print("GROUND_NAMES_HOME_FIRST_PASS fixed_home=150 staggered=true survivors=75 no_group_relayout=true explicit_batch_usec=", elapsed)
++	get_tree().quit(0)
+ 
+-func _assert_association(pickups: Array) -> void:
+-	for i in range(pickups.size()):
+-		var pickup: LootPickup = pickups[i]
+-		var label_rect := _label_rect(pickup)
+-		var home := pickup.global_position + pickup.name_label_home_position()
+-		assert(
+-			label_rect.position.distance_to(home) <= MAX_DISPLACEMENT,
+-			"label %d drifted from its own item home" % i,
+-		)
+-		for j in range(pickups.size()):
+-			if i == j: continue
+-			var other: LootPickup = pickups[j]
+-			var icon_core: Rect2 = other.ground_icon_rect_local().grow(-5.0)
+-			var icon_world := Rect2(
+-				other.global_position + icon_core.position,
+-				icon_core.size,
+-			)
+-			assert(
+-				not label_rect.intersects(icon_world),
+-				"label %d covers item %d's icon" % [i, j],
+-			)
++func _assert_home(pickups: Array, positions: Array[Vector2]) -> void:
++	for index in range(pickups.size()):
++		var pickup: LootPickup = pickups[index]
++		assert(pickup.position == positions[index], "name layout must never move ground loot")
++		assert(pickup.name_label_display_offset == Vector2.ZERO, "name must stay over its own item")
++		assert(pickup.name_label.position == pickup.name_label_home_position())
++		assert(is_zero_approx(pickup.name_label.position.x + pickup.name_plate_size.x * 0.5))
++		assert(pickup.name_label.position.y < pickup.icon_sprite.position.y)
++		assert(pickup.z_index == -2 and not pickup.z_as_relative)
++		assert(pickup.name_label.z_index == 1 and not pickup.name_label.z_as_relative)
+diff --git a/tests/w6_visual_contract_test.gd b/tests/w6_visual_contract_test.gd
+index 8f3345793..05bdcae55 100644
+--- a/tests/w6_visual_contract_test.gd
++++ b/tests/w6_visual_contract_test.gd
+@@ -142,10 +142,21 @@ func _test_sky_strike_world_sort_contract() -> void:
+ 		"lightning world footpoint render contract missing",
+ 	)
+ 	var drawable_body_lane_verified := false
++	var backdrop_refs: Array[WeakRef] = []
+ 	for child: Node in sky.get_children():
+ 		if child is CasterSkillAnimationPlayer:
+ 			var drawable := child as CasterSkillAnimationPlayer
+ 			drawable_body_lane_verified = drawable.z_as_relative and drawable.z_index == 0 and not drawable.show_behind_parent
++			var backdrop: BackBufferCopy = drawable._trial_screen_copy
++			assert(is_instance_valid(backdrop), "lightning backdrop must exist before first draw")
++			assert(backdrop.get_parent() == drawable, "drawable must own its backdrop lifecycle")
++			assert(backdrop.is_inside_tree(), "lightning backdrop must be attached immediately")
++			assert(backdrop.show_behind_parent and backdrop.z_as_relative and backdrop.z_index == 0, "copy must run immediately before its own drawable in the same Z lane")
++			assert(backdrop.copy_mode == BackBufferCopy.COPY_MODE_VIEWPORT)
++			backdrop_refs.append(weakref(backdrop))
++			drawable.hide()
++			assert(not backdrop.is_visible_in_tree())
++			drawable.show()
+ 	assert(drawable_body_lane_verified, "lightning drawable did not stay behind same-footpoint body")
+ 	var metadata: Dictionary = sky.sky_strike_visual_debug_metadata()
+ 	assert(bool(metadata.get("world_footpoint_y_sort", false)), "lightning metadata lost world y-sort")
+@@ -156,6 +167,8 @@ func _test_sky_strike_world_sort_contract() -> void:
+ 	assert(sky.global_position.y < 512.0 and is_equal_approx(sky.global_position.y, 511.99), "lightning sort proxy left target footpoint")
+ 	assert(is_equal_approx(float(sky.get_meta("sky_strike_world_footpoint_sort_y", -1.0)), 512.0), "lightning did not track target footpoint Y")
+ 	sky.free()
++	for backdrop_ref: WeakRef in backdrop_refs:
++		assert(backdrop_ref.get_ref() == null, "freeing the effect must free its backdrop immediately")
+ 	owner.free()
+ 	target.free()
+ 
+diff --git a/tests/world_monster_clock_ledger_test.gd b/tests/world_monster_clock_ledger_test.gd
+index d76ec03b2..c3162cfa9 100644
+--- a/tests/world_monster_clock_ledger_test.gd
++++ b/tests/world_monster_clock_ledger_test.gd
+@@ -45,5 +45,13 @@ func _ready() -> void:
+ 	assert(not Ledger.replay(profile, {}, []).ok)
+ 	var behind_world := Ledger.snapshot_document("clock_test", 1, first_world)
+ 	assert(not Ledger.replay(profile, behind_world, []).ok)
++	var isolated := profile.duplicate(true)
++	isolated["world_clock_generation"] = "0123456789abcdef0123456789abcdef"
++	assert(not Ledger.replay(isolated, snapshot, []).ok, "same sequence in another generation is not the same event history")
++	isolated["death_event_sequence"] = 0
++	assert(not Ledger.replay(isolated, {}, []).ok, "a generation marker requires its durable baseline even at sequence zero")
++	assert(not Ledger.valid_generation("../other_profile"))
++	assert(not Ledger.valid_generation(12))
++	assert(Ledger.valid_generation("0123456789abcdef0123456789abcdef"))
+ 	print("WORLD_MONSTER_CLOCK_LEDGER_PASS")
+ 	get_tree().quit(0)
+diff --git a/tests/world_monster_clock_legacy_migration_test.gd b/tests/world_monster_clock_legacy_migration_test.gd
+index c89b65eaf..ff54a9a82 100644
+--- a/tests/world_monster_clock_legacy_migration_test.gd
++++ b/tests/world_monster_clock_legacy_migration_test.gd
+@@ -17,6 +17,7 @@ func _ready() -> void:
+ 		WorldState.empty_snapshot(), 913203, "group:0", 64, "normal_cave", deadline
+ 	)
+ 	old_profile.erase("death_event_sequence")
++	old_profile.erase("world_clock_generation")
+ 	old_profile["level"] = 22
+ 	old_profile["experience"] = 345
+ 	old_profile["gold"] = 12345
+@@ -43,8 +44,11 @@ func _ready() -> void:
+ 	assert(archived.level == 22 and archived.gold == 12345)
+ 	assert(PlayerState.level == 22 and PlayerState.experience == 345 and PlayerState.gold == 12345)
+ 	assert(PlayerState.monster_respawn_entry(913203, "group:0").respawn_at_unix == deadline)
+-	assert(FileAccess.file_exists(clock_path))
+-	assert(FileAccess.get_file_as_string(profile_path) == old_bytes)
++	var migrated: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(profile_path))
++	assert(FileAccess.file_exists(PlayerState._world_clock_path(PlayerState.active_profile_id, migrated.world_clock_generation)))
++	assert(migrated.has("death_event_sequence") and not migrated.has("world_monster_respawn_state"))
++	var original_on_disk: Dictionary = JSON.parse_string(old_bytes)
++	assert(PlayerState._shared_digest(archived) == PlayerState._shared_digest(original_on_disk), "original profile is preserved in the migration archive")
+ 	assert(PlayerState.save_game(false))
+ 	var new_profile: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(profile_path))
+ 	assert(not new_profile.has("world_monster_respawn_state"))
+@@ -55,7 +59,7 @@ func _ready() -> void:
+ 	assert(str(new_profile.equipment["武器"].name) == "木剑")
+ 	assert(str(new_profile.equipment["武器"].instance_id) == "legacy_weapon")
+ 	var backup: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(profile_path + ".bak"))
+-	assert(backup.has("world_monster_respawn_state"))
++	assert(backup.has("death_event_sequence") and backup.world_clock_generation == migrated.world_clock_generation)
+ 	assert(backup.level == old_profile.level)
+ 	assert(backup.experience == old_profile.experience)
+ 	assert(backup.gold == old_profile.gold)
+@@ -64,9 +68,6 @@ func _ready() -> void:
+ 	assert(int(backup.inventory[0].count) == 10)
+ 	assert(str(backup.equipment["武器"].instance_id) == "legacy_weapon")
+ 	assert(backup.quest_states == old_profile.quest_states)
+-	assert(WorldState.entry_for(
+-		backup.world_monster_respawn_state, 913203, "group:0"
+-	).respawn_at_unix == deadline)
+ 	PlayerState.reset_progress(false)
+ 	PlayerState.load_save()
+ 	assert(PlayerState.last_load_result.success)
+@@ -74,5 +75,163 @@ func _ready() -> void:
+ 	assert(PlayerState.monster_respawn_entry(913203, "group:0").respawn_at_unix == deadline)
+ 	assert(PlayerState.save_game(false))
+ 	assert(FileAccess.file_exists(archive_path))
++	await _test_old_writer_roundtrip()
++	await _test_interrupted_import(".tmp", "world_clock_import_profile_failed")
++	await _test_interrupted_import(".bak.tmp", "world_clock_import_backup_failed")
++	await _test_pre_generation_migration_replay()
+ 	print("WORLD_MONSTER_CLOCK_LEGACY_MIGRATION_PASS")
+ 	get_tree().quit(0)
++
++
++func _drain_cleanup() -> void:
++	var deadline := Time.get_ticks_msec() + 2000
++	while PlayerState._clock_cleanup_worker != null or not PlayerState._clock_cleanup_pending.is_empty():
++		assert(Time.get_ticks_msec() < deadline)
++		PlayerState._advance_world_clock_cleanup()
++		await get_tree().process_frame
++
++
++func _test_old_writer_roundtrip() -> void:
++	await _drain_cleanup()
++	PlayerState.active_profile_id = "old_writer_roundtrip"
++	PlayerState.reset_progress(false)
++	assert(PlayerState.save_game(false))
++	PlayerState.level = 22
++	PlayerState.experience = 100
++	assert(PlayerState._commit_death_event())
++	assert(PlayerState.save_game(false))
++	assert(PlayerState.save_game(false))
++	await _drain_cleanup()
++	var path := PlayerState._profile_path(PlayerState.active_profile_id)
++	assert(not FileAccess.file_exists(PlayerState._death_event_path(PlayerState.active_profile_id, 1)))
++	for round_index in range(2):
++		var old: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(path))
++		# v93's serializer writes known fields and has no death sequence or generation.
++		old.erase("death_event_sequence")
++		old.erase("world_clock_generation")
++		old["level"] = 30 + round_index
++		old["experience"] = 777 + round_index
++		old["gold"] = 67890 + round_index
++		old["inventory"] = [{"name": "太阳水", "count": 12 + round_index}]
++		var deadline := Time.get_unix_time_from_system() + 3600.0
++		old["world_monster_respawn_state"] = WorldState.with_deadline(
++			WorldState.empty_snapshot(), 913203, "old_return", 64, "normal_cave", deadline
++		)
++		assert(PlayerState._write_json_atomic(path, old))
++		PlayerState.reset_progress(false)
++		PlayerState.load_save()
++		assert(PlayerState.last_load_result.success, "old writer return must not replay an unrelated death sequence: " + str(PlayerState.last_load_result))
++		assert(PlayerState.level == 30 + round_index and PlayerState.experience == 777 + round_index)
++		assert(PlayerState.gold == 67890 + round_index)
++		assert(PlayerState.inventory[0].count == 12 + round_index)
++		assert(PlayerState.monster_respawn_entry(913203, "old_return").respawn_at_unix == deadline)
++		# A new death before the next character checkpoint must survive backup recovery.
++		PlayerState.experience += 10
++		assert(PlayerState._commit_death_event())
++		if round_index == 0:
++			# Exercise the byte-validated save fast path without resetting its cache.
++			assert(PlayerState._checkpoint_world_clock())
++			assert(PlayerState._checkpoint_world_clock())
++			assert(PlayerState.save_game(false))
++			await _drain_cleanup()
++		var corrupt := FileAccess.open(path, FileAccess.WRITE)
++		corrupt.store_string("{broken")
++		corrupt.close()
++		PlayerState.reset_progress(false)
++		PlayerState.load_save()
++		assert(PlayerState.last_load_result.success)
++		assert(PlayerState.level == 30 + round_index and PlayerState.experience == 787 + round_index)
++		assert(PlayerState.gold == 67890 + round_index)
++		assert(PlayerState.inventory[0].count == 12 + round_index)
++		assert(PlayerState._checkpoint_world_clock())
++		assert(PlayerState.save_game(false))
++		await _drain_cleanup()
++		# The first character checkpoint still has a sequence-zero backup. Its
++		# recovery event must survive even when both world checkpoints are newer.
++		corrupt = FileAccess.open(path, FileAccess.WRITE)
++		corrupt.store_string("{broken_again")
++		corrupt.close()
++		PlayerState.reset_progress(false)
++		PlayerState.load_save()
++		assert(PlayerState.last_load_result.success, "generation-aware cleanup must retain the older backup's events")
++		assert(PlayerState.experience == 787 + round_index)
++		assert(PlayerState.save_game(false))
++		await _drain_cleanup()
++
++
++func _legacy_fixture(profile_id: String) -> Dictionary:
++	PlayerState.active_profile_id = profile_id
++	PlayerState.reset_progress(false)
++	assert(PlayerState.save_game(false))
++	var path := PlayerState._profile_path(profile_id)
++	var legacy: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(path))
++	legacy.erase("death_event_sequence")
++	legacy.erase("world_clock_generation")
++	legacy["level"] = 20
++	legacy["experience"] = 123
++	legacy["gold"] = 4567
++	legacy["world_monster_respawn_state"] = WorldState.empty_snapshot()
++	assert(PlayerState._write_json_atomic(path, legacy))
++	return legacy
++
++
++func _test_interrupted_import(blocker_suffix: String, expected_reason: String) -> void:
++	await _drain_cleanup()
++	var profile_id := "interrupted_backup" if blocker_suffix == ".bak.tmp" else "interrupted_primary"
++	var original := _legacy_fixture(profile_id)
++	var path := PlayerState._profile_path(profile_id)
++	var original_bytes := FileAccess.get_file_as_bytes(path)
++	# A directory at the exact temporary-file path injects a real write failure.
++	var blocker := ProjectSettings.globalize_path(path + blocker_suffix)
++	assert(DirAccess.make_dir_recursive_absolute(blocker) == OK)
++	PlayerState.load_save()
++	assert(not PlayerState.last_load_result.success and PlayerState.last_load_result.reason == expected_reason)
++	assert(not PlayerState.save_game(false), "failed import must not allow gameplay state to overwrite the source")
++	if blocker_suffix == ".tmp":
++		assert(FileAccess.get_file_as_bytes(path) == original_bytes)
++	else:
++		var backup: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(path + ".bak"))
++		assert(PlayerState._shared_digest(backup) == PlayerState._shared_digest(original))
++	assert(DirAccess.remove_absolute(blocker) == OK)
++	PlayerState.load_save()
++	assert(PlayerState.last_load_result.success, "interrupted import must resume safely")
++	assert(PlayerState.level == 20 and PlayerState.experience == 123 and PlayerState.gold == 4567)
++	var creation_rollback := PlayerState._creation_runtime_snapshot()
++	PlayerState.reset_progress(false)
++	PlayerState._restore_creation_runtime(creation_rollback)
++	PlayerState.experience = 133
++	assert(PlayerState._commit_death_event())
++	var corrupt := FileAccess.open(path, FileAccess.WRITE)
++	corrupt.store_string("{broken")
++	corrupt.close()
++	PlayerState.reset_progress(false)
++	PlayerState.load_save()
++	assert(PlayerState.last_load_result.success)
++	assert(PlayerState.level == 20 and PlayerState.experience == 133 and PlayerState.gold == 4567)
++
++
++func _test_pre_generation_migration_replay() -> void:
++	await _drain_cleanup()
++	var legacy := _legacy_fixture("partial_previous_clock_migration")
++	var profile_id: String = PlayerState.active_profile_id
++	# Reproduce the earlier implementation: archive + world baseline, unchanged
++	# legacy character file, then a durable death before the next character save.
++	var directory := PlayerState.profile_directory.path_join("clock_migration_backups")
++	assert(DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(directory)) == OK)
++	var archive := directory.path_join("%s-%s.json" % [profile_id, PlayerState._shared_digest(legacy)])
++	assert(PlayerState._write_json_atomic(archive, legacy))
++	PlayerState.level = 20
++	PlayerState.experience = 173
++	assert(PlayerState._commit_death_event())
++	var prior_event := PlayerState._death_event_path(profile_id, 1)
++	var prior_bytes := FileAccess.get_file_as_bytes(prior_event)
++	PlayerState.reset_progress(false)
++	PlayerState.load_save()
++	assert(PlayerState.last_load_result.success)
++	assert(PlayerState.level == 20 and PlayerState.experience == 173 and PlayerState.gold == 4567)
++	PlayerState.experience = 183
++	assert(PlayerState._commit_death_event())
++	assert(PlayerState.save_game(false))
++	assert(PlayerState.save_game(false))
++	await _drain_cleanup()
++	assert(FileAccess.get_file_as_bytes(prior_event) == prior_bytes, "cleanup must stay in its captured generation")
+diff --git a/tests/world_monster_clock_persistence_test.gd b/tests/world_monster_clock_persistence_test.gd
+index 671ecd639..ac83d9e16 100644
+--- a/tests/world_monster_clock_persistence_test.gd
++++ b/tests/world_monster_clock_persistence_test.gd
+@@ -66,5 +66,91 @@ func _ready() -> void:
+ 	assert(PlayerState.last_load_result.success)
+ 	assert(PlayerState.experience == 3 and PlayerState.level == 2)
+ 	assert(PlayerState.monster_respawn_entry(913203, "group:0").respawn_at_unix == deadline)
++	for mode: String in ["profile", "world", "pickup"]:
++		await _test_preserved_backup_recovery(mode)
++	await _test_creation_runtime_rollback()
+ 	print("WORLD_MONSTER_CLOCK_PERSISTENCE_PASS")
+ 	get_tree().quit(0)
++
++
++func _drain_cleanup() -> void:
++	var deadline := Time.get_ticks_msec() + 2000
++	while PlayerState._clock_cleanup_worker != null or not PlayerState._clock_cleanup_pending.is_empty():
++		assert(Time.get_ticks_msec() < deadline, "cleanup must finish")
++		PlayerState._advance_world_clock_cleanup()
++		await get_tree().process_frame
++
++
++func _corrupt(path: String) -> void:
++	var file := FileAccess.open(path, FileAccess.WRITE)
++	assert(file != null)
++	file.store_string("{broken")
++	file.close()
++
++
++func _test_preserved_backup_recovery(mode: String) -> void:
++	await _drain_cleanup()
++	PlayerState.active_profile_id = "preserved_backup_" + mode
++	PlayerState.reset_progress(false)
++	assert(PlayerState.save_game(false))
++	assert(PlayerState._commit_death_event())
++	assert(PlayerState.save_game(false))
++	assert(PlayerState.save_game(false))
++	await _drain_cleanup()
++	assert(PlayerState._commit_death_event())
++	assert(PlayerState.save_game(false))
++	await _drain_cleanup()
++	var path := PlayerState._world_clock_path(PlayerState.active_profile_id) if mode == "world" else PlayerState._profile_path(PlayerState.active_profile_id)
++	var field := "sequence" if mode == "world" else "death_event_sequence"
++	var event_path := PlayerState._death_event_path(PlayerState.active_profile_id, 2)
++	assert(FileAccess.file_exists(event_path))
++	if mode == "pickup":
++		var plan := PlayerState.prepare_loot_save([{"gold": true, "amount": 7}])
++		assert(plan.has("writer"))
++		while not bool(plan.writer.result().finished):
++			await get_tree().process_frame
++		_corrupt(path)
++		assert(PlayerState.finish_prepared_loot_save(plan).success)
++	else:
++		_corrupt(path)
++		assert(PlayerState.save_game(false))
++	await _drain_cleanup()
++	var backup: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(path + ".bak"))
++	assert(int(backup[field]) == 1)
++	var tracked := PlayerState._world_clock_backup_sequence if mode == "world" else PlayerState._profile_backup_death_event_sequence
++	assert(tracked == 1, "preserved backup sequence must match disk: " + mode)
++	assert(FileAccess.file_exists(event_path), "preserved backup still needs event 2")
++	_corrupt(path)
++	PlayerState.load_save()
++	assert(PlayerState.last_load_result.success, "backup and retained journal must recover: " + mode)
++	assert(PlayerState._death_event_sequence == 2)
++
++
++func _test_creation_runtime_rollback() -> void:
++	await _drain_cleanup()
++	PlayerState.active_profile_id = "creation_rollback"
++	PlayerState.reset_progress(false)
++	assert(PlayerState.save_game(false))
++	assert(PlayerState.mark_monster_respawn_dead(913203, "rollback_slot", 64, "normal_cave", Time.get_unix_time_from_system() + 600))
++	assert(PlayerState._commit_death_event())
++	var expected_world := PlayerState.world_monster_respawn_state.duplicate(true)
++	var snapshot := PlayerState._creation_runtime_snapshot()
++	# Same transaction boundary used when starter creation or its save fails.
++	PlayerState.active_profile_id = "rejected_new_character"
++	PlayerState.reset_progress(false)
++	PlayerState._restore_creation_runtime(snapshot)
++	assert(PlayerState.active_profile_id == "creation_rollback")
++	assert(PlayerState.world_monster_respawn_state == expected_world)
++	assert(PlayerState._death_event_sequence == 1)
++	assert(PlayerState._profile_saved_death_event_sequence == 0)
++	assert(PlayerState._profile_backup_death_event_sequence == 0)
++	assert(PlayerState._world_clock_snapshot_sequence == 0)
++	assert(PlayerState._world_clock_backup_sequence == 0)
++	assert(PlayerState._world_clock_dirty)
++	assert(PlayerState._commit_death_event())
++	assert(PlayerState.save_game(false))
++	PlayerState.load_save()
++	assert(PlayerState.last_load_result.success)
++	assert(PlayerState._death_event_sequence == 2)
++	assert(PlayerState.world_monster_respawn_state == expected_world)
++	await _drain_cleanup()
