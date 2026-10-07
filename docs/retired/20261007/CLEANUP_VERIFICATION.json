@@ -1,0 +1,74 @@
+{
+  "verified_at": "2026-10-07T15:26:15",
+  "workspace_cleanup": "PASS",
+  "main_path": "C:\\Users\\Administrator\\Documents\\HardCore",
+  "branch": "codex/integration",
+  "remote": {
+    "status": "PASS",
+    "promotion_sha": "be4dde8916ab531595cdbdb130488bc9f91d2c64",
+    "deleted_remote_heads": 195,
+    "deleted_local_heads": 248,
+    "remote_heads_after": {
+      "refs/heads/codex/integration": "be4dde8916ab531595cdbdb130488bc9f91d2c64"
+    },
+    "remote_tag_ref_rows_preserved": 16,
+    "default_branch": "codex/integration",
+    "deletion_policy": "Atomic expected-SHA deletion leases; no integration history rewrite.",
+    "worktrees_after": "worktree C:/Users/Administrator/Documents/HardCore\nHEAD be4dde8916ab531595cdbdb130488bc9f91d2c64\nbranch refs/heads/codex/integration"
+  },
+  "registered_linked_worktrees_retired": 12,
+  "retired_old_paths_absent": true,
+  "archive_path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\retired\\20261007",
+  "archive_bundle": {
+    "bytes": 1543954986,
+    "sha256": "1f5ba4a7e98427c1f693dde1377d4e8d69aff82af94ad9655e7d37f6c2157bcd",
+    "git_bundle_verify": "PASS"
+  },
+  "duplicate_pruning": {
+    "files": 620201,
+    "bytes": 39099211521,
+    "dirty_hash_checks": 534
+  },
+  "conservation": {
+    "status": "PASS",
+    "supplement_hash_checks": 141,
+    "raw_authority_hash_checks": 18,
+    "historical_locked_log_hash_checks": 24
+  },
+  "shared_art_source_conservation": {
+    "files": 38882,
+    "bytes": 14468597602,
+    "status": "PASS"
+  },
+  "checkout_identity_byte_repair": {
+    "path": "assets/data/features/socketing_fixture_items.json",
+    "before_checkout_sha256": "4f6e5e0252b31a33d6d857c266a8065f8d0664678af31b05b0ef83138fdee82d",
+    "restored_third_snapshot_sha256": "ae2c7adbcf0ee9ed8e88f4e2dd8d4c4e2c55af6b49a7bcffc0828c8a29e23043",
+    "classification": "core.autocrlf conversion of a hash-bound LF fixture; JSON values unchanged.",
+    "entity_registry_source_hash_checks": 15
+  },
+  "tests": {
+    "bootstrap": "PASS",
+    "historical_editor_tests": {
+      "total": 62,
+      "PASS": 48,
+      "FAIL": 13,
+      "ERROR": 1,
+      "classification_file": "HALF_MOON_COMPATIBILITY_REVIEW.json"
+    },
+    "first_headless_import": {
+      "result": "FAIL",
+      "native_exit_code": -1073741819,
+      "resource_import_completed": true,
+      "log": "outputs/promotion_godot_import.log",
+      "classification": "native editor exit access violation; not runtime acceptance"
+    },
+    "B01_after_hash_repair": {
+      "result": "PASS",
+      "receipt": "outputs/test_logs/runner_results_adhoc_20261007_152315_378_16296.json",
+      "engine_log_errors": 0
+    },
+    "architecture_full_acceptance": "NOT_RUN",
+    "device_test": "NOT_RUN"
+  }
+}

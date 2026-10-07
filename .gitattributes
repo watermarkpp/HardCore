@@ -141,3 +141,5 @@ docs/performance_20260926/save_safety_changes.patch -text -whitespace
 docs/retired/20261007/** -text -whitespace
 # This current-status document is editable text, not a frozen byte authority.
 docs/WORKSPACE_CURRENT_STATUS.md text eol=lf
+# Entity identity binds this fixture's raw LF source hash.
+assets/data/features/socketing_fixture_items.json -text
