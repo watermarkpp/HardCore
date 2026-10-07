@@ -135,7 +135,8 @@ function Invoke-TwoPassAndroidCodeExport {
     if ($LASTEXITCODE -ne 0) { throw 'Final export identity changed or is incomplete.' }
     # Existing verify_android_build.ps1 remains the package/version/splash/runtime
     # resource acceptance owner. Callback must throw on any failure.
-    & $VerifyProductionBuild $OutputApk $SourceCommit
+    # Verification logs are evidence, not additional function return values.
+    & $VerifyProductionBuild $OutputApk $SourceCommit *> (Join-Path $EvidenceRoot 'production-verify.log')
     @{schema_version=1; source_commit=$SourceCommit; fixed_inputs=$Fixed; first_export=$First; final_export=$Final; first_signer=$FirstSigner; final_signer=$FinalSigner; generated_metadata_sha256=$SealGdHash; seal_json_sha256=(Get-CodeExportHash $SealJson); exact_export_receipt_sha256=(Get-CodeExportHash $Receipt); runtime_native_image_sha='MISSING'; native_token_device_acceptance='NOT_RUN'} | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $EvidenceRoot 'two-pass-build-receipt.json') -Encoding UTF8
     return $Final
 }
