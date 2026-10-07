@@ -55,7 +55,7 @@ function Invoke-CodeOfficialExport([string]$GodotConsole, [string]$StageRoot, [s
     $Stdout = Join-Path $EvidenceRoot "$Name.stdout.log"
     $Stderr = Join-Path $EvidenceRoot "$Name.stderr.log"
     # Quotes are required for stage/log paths with spaces. No shell evaluation.
-    $NativeExit = Invoke-CodeExportProcess -Executable $GodotConsole -Arguments @('--headless','--path',('+$StageRoot+'),'--log-file',('+$Log+'),'--export-debug','Android',('+$Apk+')) -Stdout $Stdout -Stderr $Stderr
+    $NativeExit = Invoke-CodeExportProcess -Executable $GodotConsole -Arguments @('--headless','--path',([char]34+$StageRoot+[char]34),'--log-file',([char]34+$Log+[char]34),'--export-debug','Android',([char]34+$Apk+[char]34)) -Stdout $Stdout -Stderr $Stderr
     if ($NativeExit -ne 0 -or -not (Test-Path -LiteralPath $Apk -PathType Leaf)) { throw "Native export failed: $Name exit=$NativeExit" }
     # Imported media source bytes are audited runtime inputs. Both passes use
     # the same post-export injection, alignment and existing certificate BEFORE
