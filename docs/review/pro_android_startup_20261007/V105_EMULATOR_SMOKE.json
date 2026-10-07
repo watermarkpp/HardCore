@@ -1,0 +1,36 @@
+{
+  "status": "PASS",
+  "scope": "owned Android emulator UI smoke; not physical-phone/P6/full-project acceptance",
+  "apk_sha256": "e65366c437c1d2778a45083ad4448eed4647c21ca024d4c2cc22fe18fe10064c",
+  "version_code": 105,
+  "source_commit": "f6b70d55def70d98639003da5b90d6d0b7cd3587",
+  "application_id": "com.personal.mafaoffline",
+  "installed_hash_matches": true,
+  "first_pid": "25064",
+  "cold_pid": "25473",
+  "old_profiles_preserved": 3,
+  "new_profile": "Pro105Dao",
+  "new_profession": "taoist",
+  "total_profiles_after": 4,
+  "observed": [
+    "APK install-r succeeded without clearing data",
+    "actual Hall UI created new character",
+    "enter HardCore reached real home world",
+    "joystick moved actor",
+    "inventory/equipment panel rendered",
+    "actual menu save-and-exit terminated first process",
+    "independent cold launch retained the four profiles",
+    "same new character re-entered home world and inventory retained equipment",
+    "second menu save-and-exit terminated cold process"
+  ],
+  "engine_script_errors": [],
+  "retained_warnings": [
+    "shader cache recompilation",
+    "noncritical item icons still prewarming in background at Loading end"
+  ],
+  "device": "emulator-5554 sdk_gphone64_x86_64 using arm64 translation",
+  "data_clear": false,
+  "physical_phone": "NOT_RUN",
+  "evidence_root": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\pro_v105_final_20261007",
+  "private_archives_not_for_publication": true
+}
