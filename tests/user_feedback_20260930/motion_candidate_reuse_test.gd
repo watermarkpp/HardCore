@@ -147,8 +147,7 @@ func _station_envelope_prefilter_case(actor: EnemyActor, origin: Vector2) -> voi
 			var actual := probe.spatial_index_position()
 			var radius := actor.combat_radius_gu + probe.combat_radius_gu
 			var contender := actual.distance_squared_to(point)
-			var own := actor.spatial_index_position().distance_squared_to(point)
-			if probe.current_hp > 0 and probe.behavior_profile.worldCollision and contender < radius * radius - GU.EPSILON_GU and (contender < own or (contender == own and probe.spatial_actor_runtime_id < actor.spatial_actor_runtime_id)):
+			if probe.current_hp > 0 and probe.behavior_profile.worldCollision and contender < radius * radius - GU.EPSILON_GU:
 				expected_available = false
 		_check(Positions.available(actor, player, point, probes) == expected_available, "station envelope changed live contender result at trial %d" % trial)
 	var far_reads := 0

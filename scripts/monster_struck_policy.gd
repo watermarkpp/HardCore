@@ -12,13 +12,10 @@ extends RefCounted
 ##   The WalkTime line is COMMENTED OUT in lzxsz, Diamond and OpenMir2:
 ##   an ordinary physical STRUCK must never create a gameplay movement lock.
 ##
-##   Direct magic (RM_MAGSTRUCK, ObjMon/Animal processing):
-##     if ProcessMsg.wIdent = RM_MAGSTRUCK and monster and not exempt
-##        and monster.Level < 50 then
-##       m_dwWalkTick := m_dwWalkTick + 800 + Random(1000);
-##   Fire wall (TFireBurnEvent.Run) sends RM_MAGSTRUCK_MINE, which never
-##   enters that branch: ground-mine ticks keep their STRUCK presentation and
-##   attack-tick penalty but must never postpone the walk tick.
+##   Direct magic and ground-mine damage both use the ordinary positive-damage
+##   STRUCK path in the current product. The historical RM_MAGSTRUCK walk
+##   postponement is retired; only its old Lv<50 RNG draw is retained as an
+##   invisible compatibility draw so actor RNG sequences remain stable.
 ##
 ## Level-50 note (evidence conflict, resolved R1): two Delphi trees and
 ## OpenMir2 keep the ordinary attack-tick penalty for every level, while one
@@ -34,9 +31,7 @@ const ORDINARY_ATTACK_DELAY_LEVEL_REDUCTION_MS := 4
 const STRUCK_FRAME_TIME_BASE_MS := 200
 const STRUCK_FRAME_TIME_MIN_MS := 80
 const STRUCK_FRAME_TIME_LEVEL_REDUCTION_MS := 5
-const DIRECT_MAGIC_WALK_DELAY_BASE_MS := 800
-const DIRECT_MAGIC_WALK_DELAY_RANDOM_SPAN_MS := 1000
-## RM_MAGSTRUCK walk delay requires monster.Level < 50 in the original server.
+## Legacy direct-magic reception boundary used only for actor-RNG continuity.
 const DIRECT_MAGIC_WALK_DELAY_LEVEL_CAP := 50
 ## The original client accelerates a queued message backlog (>= 2 messages)
 ## by playing frame time at 2/3 speed; expressed as a countdown multiplier
@@ -71,20 +66,9 @@ static func struck_frame_ms(level: int) -> int:
 	)
 
 
-## Direct magic (RM_MAGSTRUCK): postpone the next autonomous walk by
-## 800 + Random(1000) milliseconds. `random_0_to_999` is the roll already
-## drawn by the caller's RNG (deterministic in tests).
-static func direct_magic_walk_delay_ms(random_0_to_999: int) -> int:
-	return DIRECT_MAGIC_WALK_DELAY_BASE_MS + clampi(
-		random_0_to_999,
-		0,
-		DIRECT_MAGIC_WALK_DELAY_RANDOM_SPAN_MS - 1
-	)
-
-
-## Direct magic walk delay eligibility: level < 50 and not source-exempt.
-## Ordinary struck (RM_STRUCK) eligibility is separate: any positive damage.
-static func direct_magic_can_delay_walk(
+## Legacy direct-magic compatibility draw eligibility: level < 50 and not
+## source-exempt. This no longer grants any movement side effect.
+static func direct_magic_compatibility_draw_required(
 	level: int,
 	source_exempt: bool
 ) -> bool:

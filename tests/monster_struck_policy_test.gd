@@ -2,7 +2,7 @@ extends Node
 
 ## R1 monster struck policy: verifiable vanilla-1.76 constants and tables.
 ## Evidence: TAnimalObject.Struck attack-tick formula, client struck frame
-## time, RM_MAGSTRUCK walk delay (800 + Random(1000), Level < 50).
+## time and the direct-magic actor RNG compatibility boundary (Level < 50).
 
 const Policy := preload("res://scripts/monster_struck_policy.gd")
 
@@ -23,8 +23,7 @@ func _check(condition: bool, label: String) -> void:
 func _run() -> void:
 	_test_attack_delay_table()
 	_test_struck_frame_ms_table()
-	_test_direct_magic_walk_delay()
-	_test_direct_magic_eligibility()
+	_test_direct_magic_compatibility_boundary()
 	_test_backlog_speed_and_cap()
 
 
@@ -74,21 +73,13 @@ func _test_struck_frame_ms_table() -> void:
 	_check(Policy.struck_frame_ms(0) == 195, "level clamps to >= 1")
 
 
-func _test_direct_magic_walk_delay() -> void:
-	_check(Policy.direct_magic_walk_delay_ms(0) == 800, "roll 0 -> 800ms")
-	_check(Policy.direct_magic_walk_delay_ms(500) == 1300, "roll 500 -> 1300ms")
-	_check(Policy.direct_magic_walk_delay_ms(999) == 1799, "roll 999 -> 1799ms")
-	_check(Policy.direct_magic_walk_delay_ms(1000) == 1799, "roll clamped at 999")
-	_check(Policy.direct_magic_walk_delay_ms(-7) == 800, "negative roll clamped at 0")
-
-
-func _test_direct_magic_eligibility() -> void:
-	_check(Policy.direct_magic_can_delay_walk(1, false), "Lv1 eligible")
-	_check(Policy.direct_magic_can_delay_walk(43, false), "Lv43 eligible")
-	_check(Policy.direct_magic_can_delay_walk(49, false), "Lv49 eligible")
-	_check(not Policy.direct_magic_can_delay_walk(50, false), "Lv50 is the hard cap boundary")
-	_check(not Policy.direct_magic_can_delay_walk(51, false), "Lv51 ineligible")
-	_check(not Policy.direct_magic_can_delay_walk(43, true), "source-exempt ineligible")
+func _test_direct_magic_compatibility_boundary() -> void:
+	_check(Policy.direct_magic_compatibility_draw_required(1, false), "Lv1 keeps compatibility draw")
+	_check(Policy.direct_magic_compatibility_draw_required(43, false), "Lv43 keeps compatibility draw")
+	_check(Policy.direct_magic_compatibility_draw_required(49, false), "Lv49 keeps compatibility draw")
+	_check(not Policy.direct_magic_compatibility_draw_required(50, false), "Lv50 has no legacy draw")
+	_check(not Policy.direct_magic_compatibility_draw_required(51, false), "Lv51 has no legacy draw")
+	_check(not Policy.direct_magic_compatibility_draw_required(43, true), "source-exempt has no legacy draw")
 
 
 func _test_backlog_speed_and_cap() -> void:

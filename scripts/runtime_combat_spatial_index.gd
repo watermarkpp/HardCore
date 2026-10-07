@@ -513,15 +513,20 @@ func query_neighbor_enemy_nodes_into(
 				# callers can issue the next query. Do not invoke a live provider or
 				# re-home here: that would add script calls and dictionary mutation to
 				# every crowd query.
-				_append_neighbor_node_sorted(
-					output,
-					node,
-					int(entry.get("stable_combat_order", actor_id)),
-				)
+				# Collect first. The final sort below preserves the exact existing
+				# stable_combat_order / instance_id order without O(k^2) insertion.
+				output.append(node)
 	for actor_id: int in _neighbor_stale_actor_ids:
 		_erase_entry(actor_id)
 		index_stale_cleanup_count += 1
 	_neighbor_stale_actor_ids.clear()
+	output.sort_custom(func(a: Node, b: Node) -> bool:
+		var a_order := int(_stable_order_by_node_instance_id.get(a.get_instance_id(), a.get_instance_id()))
+		var b_order := int(_stable_order_by_node_instance_id.get(b.get_instance_id(), b.get_instance_id()))
+		if a_order != b_order:
+			return a_order < b_order
+		return a.get_instance_id() < b.get_instance_id()
+	)
 	index_neighbor_candidate_count += output.size()
 	index_total_candidate_count += output.size()
 	index_max_candidate_count = maxi(

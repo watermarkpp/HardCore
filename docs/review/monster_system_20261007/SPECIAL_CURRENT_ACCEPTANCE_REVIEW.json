@@ -1,0 +1,189 @@
+{
+  "baseline": "codex/integration@aa75c5bc9845b49ee3ce67ce064442cc3fb3c43c",
+  "status": "READ_ONLY_AUDIT",
+  "accepted_or_latest": [
+    {
+      "remaining": "timing/reentrant receipts",
+      "ids": [
+        160
+      ],
+      "scenes": [
+        "tests/zuma_formal_summon_chain_test.tscn",
+        "tests/classic_boss_order_test.tscn"
+      ],
+      "native": "latest report 4 requests/15 births/map retirement",
+      "family": "boss_summon"
+    },
+    {
+      "remaining": "device/native final result",
+      "ids": [
+        160
+      ],
+      "scenes": [
+        "tests/zuma_rank5_firewall_production_test.tscn",
+        "tests/zuma_rank5_firewall_mc47_production_test.tscn"
+      ],
+      "native": "formal GameRoot/controller evidence",
+      "family": "firewall"
+    },
+    {
+      "remaining": "one-shot/remote/duplicate receipts",
+      "ids": [
+        183
+      ],
+      "scenes": [
+        "tests/monster_explosion_spider_runtime_test.tscn",
+        "tests/special_actor_explosion_gap_test.tscn"
+      ],
+      "native": "positive actor evidence",
+      "family": "self_detonation"
+    },
+    {
+      "remaining": "zero/miss/stale no-heal receipts",
+      "ids": [
+        220,
+        222,
+        224
+      ],
+      "scenes": [
+        "tests/monster_target_magic_attack_test.tscn",
+        "tests/special_actor_target_magic_gap_test.tscn"
+      ],
+      "native": "release/defense/delay/life/map evidence",
+      "family": "target_magic"
+    },
+    {
+      "remaining": "source semantic missing",
+      "ids": [
+        193
+      ],
+      "scenes": [
+        "tests/special_actor_lifesteal_poison_gap_test.tscn",
+        "tests/fengmo_area_test.tscn"
+      ],
+      "native": "pre-AC input 30 -> loss19 -> heal9",
+      "family": "physical_lifesteal"
+    },
+    {
+      "remaining": "death/map cleanup",
+      "ids": [
+        180,
+        195
+      ],
+      "scenes": [
+        "tests/fixed_area_monster_test.tscn",
+        "tests/fixed_area_release_batch_test.tscn"
+      ],
+      "native": "actor family",
+      "family": "fixed_area"
+    },
+    {
+      "remaining": "emerge/heal/timing receipt",
+      "ids": [
+        124
+      ],
+      "scenes": [
+        "tests/classic_boss_area_magic_outcomes_test.tscn"
+      ],
+      "native": "representative",
+      "family": "burrow"
+    }
+  ],
+  "exact_missing": [
+    {
+      "reason": "formal_runtime_ids empty; canonical ID169 is 月魔蜘蛛0",
+      "ids": [
+        169
+      ],
+      "family": "moth_control"
+    },
+    {
+      "reason": "family runtime only; per-ID status receipts missing",
+      "ids": [
+        46,
+        60,
+        128,
+        168
+      ],
+      "family": "gas_poison_exact"
+    },
+    {
+      "reason": "exact actor receipts missing",
+      "ids": [
+        50,
+        62,
+        150,
+        151,
+        152,
+        174,
+        206,
+        207
+      ],
+      "family": "physical_projectile_exact"
+    },
+    {
+      "reason": "family evidence only",
+      "ids": [
+        153,
+        154,
+        155,
+        156,
+        157,
+        158,
+        159
+      ],
+      "family": "dormant_variants"
+    },
+    {
+      "reason": "repeated death/map/reentrant boundaries still missing",
+      "ids": [
+        126,
+        182,
+        180,
+        195,
+        124
+      ],
+      "family": "full_lifecycle_cleanup"
+    }
+  ],
+  "final_run_scenes": [
+    "tests/zuma_formal_summon_chain_test.tscn",
+    "tests/zuma_rank5_firewall_production_test.tscn",
+    "tests/zuma_rank5_firewall_mc47_production_test.tscn",
+    "tests/monster_explosion_spider_runtime_test.tscn",
+    "tests/special_actor_explosion_gap_test.tscn",
+    "tests/monster_target_magic_attack_test.tscn",
+    "tests/special_actor_target_magic_gap_test.tscn",
+    "tests/special_actor_lifesteal_poison_gap_test.tscn",
+    "tests/hc_monster_ai/w1_special_delivery_runtime_test.tscn",
+    "tests/monster_physical_projectile_attack_test.tscn",
+    "tests/fixed_area_monster_test.tscn",
+    "tests/fixed_area_release_batch_test.tscn",
+    "tests/monster_summon_hard_cap_test.tscn",
+    "tests/monster_dormant_damage_wake_test.tscn",
+    "tests/classic_boss_order_test.tscn",
+    "tests/classic_boss_area_magic_outcomes_test.tscn"
+  ],
+  "device": "NOT_RUN",
+  "controller_update": {
+    "physical_projectile_native_ids": [
+      42,
+      50,
+      62,
+      145,
+      150,
+      152,
+      174,
+      186,
+      206
+    ],
+    "remaining_physical_projectile_ids": [
+      151,
+      207
+    ],
+    "zuma_formal_source_seal": "15b63efb24a518f6d008355f14479b802a16fe98989ecc8af4c1b357f3a58666",
+    "zuma_formal_receipt": "final_summon_surround_behavior/191252_852810",
+    "device_test": "NOT_RUN",
+    "note": "Historical audit rows retained; controller update supersedes old missing-ID claims only for exact listed branches."
+  }
+}

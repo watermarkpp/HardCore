@@ -1,5 +1,7 @@
 extends "res://tests/hc_monster_combat_r4/d3_boundary_runtime_test.gd"
+
 const Positions := preload("res://scripts/monster_crowd_attack_position_policy.gd")
+
 func _run() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress(false)
@@ -10,29 +12,19 @@ func _run() -> void:
 	add_child(player)
 	player.set_physics_process(false)
 	var actor := _spawn(238, CENTER + Vector2(1.2, -1.2))
-	var other := _spawn(150, CENTER + Vector2(-1.0, 0.0))
-	for item in [actor, other]:
+	var ranged := _spawn(150, CENTER + Vector2(-1, 0))
+	for item in [actor, ranged]:
 		item._leave_background_deep_sleep()
 		item.set_physics_process(false)
 		item.target = player
-	_check(actor._source176_ordinary_melee(), "natural 238 fixture is not ordinary melee")
-	_check(not other._source176_ordinary_melee(), "mixed peer fixture is not a ranged body")
-	var corner := Positions.goal(actor, player, CENTER, 7, [actor, other])
-	_check(maxf(absf(corner.x - CENTER.x), absf(corner.y - CENTER.y)) <= 1.0 + GU.EPSILON_GU, "corner waits outside reach for axial stations that nobody claims")
-	var pending := _spawn(64, CENTER + Vector2(1.5, 0))
-	pending._leave_background_deep_sleep()
-	pending.set_physics_process(false)
-	pending.target = player
-	pending._hc_surround_scope = [MAP_ID, 1, pending._hc_life(pending), player.get_instance_id(), pending._hc_life(player)]
-	pending._hc_surround_anchor = CENTER
-	pending._hc_surround_slot = 0
-	pending._hc_surround_goal = Positions.station(pending, CENTER, pending._target_combat_radius_gu(player), 0)
-	corner = Positions.goal(actor, player, CENTER, 7, [actor, other, pending])
-	_check(maxf(absf(corner.x - CENTER.x), absf(corner.y - CENTER.y)) > 1.0 + GU.EPSILON_GU, "corner closed a claimed axial entrance before its body arrived")
-	pending.target = null
-	corner = Positions.goal(actor, player, CENTER, 7, [actor, other, pending])
-	_check(maxf(absf(corner.x - CENTER.x), absf(corner.y - CENTER.y)) <= 1.0 + GU.EPSILON_GU, "old target claim retained the corner wait")
-	for item in [actor, other, pending]:
+	_check(actor._source176_ordinary_melee(), "238 fixture must use ordinary melee")
+	_check(not ranged._source176_ordinary_melee(), "150 fixture must retain ranged delivery")
+	var expected := Positions.station(actor, CENTER, actor._target_combat_radius_gu(player), 7)
+	var corner := Positions.goal(actor, player, CENTER, 7, [actor, ranged])
+	_check(corner == expected, "mixed ranged/ordinary corner still waits for an axial owner")
+	ranged.set_combat_position(_ground_to_screen(expected), &"mixed_corner_live_body")
+	_check(not Positions.goal(actor, player, CENTER, 7, [actor, ranged]).is_finite(), "mixed ranged body overlap did not block the corner")
+	for item in [actor, ranged]:
 		index.unregister(item.spatial_actor_runtime_id)
 		item.free()
 	player.free()

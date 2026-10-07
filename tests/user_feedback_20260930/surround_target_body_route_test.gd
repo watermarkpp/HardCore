@@ -70,8 +70,10 @@ func _run() -> void:
 	if committed:
 		var endpoint := actor._movement_step_target_ground_gu
 		actor._hc_tick_melee(0.0, 0.0)
-		_check(actor._hc_surround_goal == goal, "fixture lost its formal station owner")
-		_check(actor._movement_step_active and actor._movement_step_target_ground_gu == endpoint, "unchanged station cancelled its active outward flank as a target reversal")
+		# Legacy distant claims no longer own destinations. The occupied west
+		# axis leaves this literal northwest corner as the nearest free point.
+		_check(actor._hc_surround_slot == 6 and actor._hc_surround_goal.distance_to(anchor + Vector2(-1, -1)) <= GU.EPSILON_GU, "outer detour retained a distant claim instead of the nearest free corner")
+		_check(actor._movement_step_active and actor._movement_step_target_ground_gu == endpoint, "nearest-point reselection cancelled a lawful committed outward segment")
 	index.unregister(peer.spatial_actor_runtime_id)
 	peer.free()
 	index.unregister(actor.spatial_actor_runtime_id)

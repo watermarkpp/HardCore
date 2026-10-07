@@ -16,3 +16,7 @@
 下一轮先运行 `tools/agent_bootstrap.ps1 -Compact`，查看当前分支/HEAD/dirty、`git worktree list --porcelain`，再从 `docs/retired/20261007/README.md` 与第三树保留的交接证据定位剩余任务。
 
 迁移验证：bootstrap PASS；身份注册 15 源哈希 PASS，B01 24 检查 PASS/0 引擎错误。旧编辑器回归 48 PASS/13 FAIL/1 ERROR（历史素材/manifest 合同不兼容，未改正式素材）。首次 headless 资源导入完成但原生编辑器退出 FAIL（-1073741819），原日志保留；完整架构、APK和设备验收继续开放。
+
+## v105反馈的继续施工
+
+2026-10-07：当前主树 HEAD `aa75c5bc9845b49ee3ce67ce064442cc3fb3c43c`。怪物系统修复为未提交工作，用户已授权受击移动解锁、祖玛行动边界召唤、Boss基础主属性及群怪局部追击/包围简化。具体合同、基线及受测源码范围见 `docs/review/monster_system_20261007/FINDINGS.md` 与 `PROJECT_CURRENT_STATUS.md` 最新条目。当前源码及原生测试仍在施工，不将旧迁移126检查或历史v105包作为本轮验收。

@@ -1,0 +1,28 @@
+{
+  "status": "READ_ONLY_AUDIT",
+  "baseline": "codex/integration@aa75c5bc9845b49ee3ce67ce064442cc3fb3c43c",
+  "families": [
+    {"family":"poison_control_on_hit","ids":[169],"legacy_profiles":["cave_maggot","dung"],"entry":"EnemyActor._apply_attack_damage_impl -> _apply_on_hit_control / onHit poison","consumer":"EnemyActor status clock","coverage":"MISSING_EXACT_ACTOR","defect":"NONE_CONFIRMED"},
+    {"family":"gas_poison_delivery","ids":[46,60,128,168],"entry":"special cell delivery -> release settlement -> poison/status","consumer":"EnemyActor.apply_poison/status tick","coverage":"FAMILY_RUNTIME","defect":"NONE_CONFIRMED"},
+    {"family":"target_magic","ids":[220,222,224],"entry":"_launch_target_magic -> _settle_target_magic_release -> target_magic_requested","consumer":"GameRoot target-magic release consumer","coverage":"ACTOR_POSITIVE_EXISTING_RECEIPT_GAP","defect":"NONE_CONFIRMED"},
+    {"family":"physical_projectile","ids":[42,50,62,145,146,150,151,152,174,186,194,206,207],"entry":"projectile launch -> release settlement -> _apply_attack_damage_impl","consumer":"projectile/release owner then EnemyActor HP/status","coverage":"FAMILY_RUNTIME_WITH_MISSING_EXACT_IDS","defect":"NONE_CONFIRMED"},
+    {"family":"life_steal","ids":[193,222],"entry":"successful physical or magic settlement -> apply_life_steal","consumer":"EnemyActor HP authority","coverage":"MISSING_EXACT_ACTOR","defect":"NONE_CONFIRMED"},
+    {"family":"fixed_area","ids":[180,195],"entry":"_update_area_attack -> fixed_area_ground_spike_requested","consumer":"GameRoot._on_enemy_fixed_area_ground_spike_requested","coverage":"ACTOR_RUNTIME","defect":"NONE_CONFIRMED"},
+    {"family":"ordinary_summoner","ids":[126,182],"entry":"_update_behavior_summon -> summon_requested","consumer":"GameRoot summon service/M30 birth queue","coverage":"ACTOR_RUNTIME","defect":"NONE_CONFIRMED"},
+    {"family":"self_detonation","ids":[183],"entry":"self_detonation delivery -> adjacent release -> death settlement","consumer":"EnemyActor/projectile release owner","coverage":"MISSING_EXACT_ACTOR","defect":"NONE_CONFIRMED"},
+    {"family":"dormant_wake","ids":[153,154,155,156,157,158,159,160],"legacy_profiles":["zuma_boss"],"entry":"dormant gate -> wake range/target acquisition","consumer":"EnemyActor state and Boss rule","coverage":"FAMILY_RUNTIME_ID160; MISSING_VARIANTS","defect":"ID160_HEALTH_STAGE_CLOCK_MISMATCH_CONFIRMED"},
+    {"family":"burrow_ambush","ids":[124],"entry":"burrow state -> wake/ambush -> area magic release","consumer":"EnemyActor area release/status/life steal","coverage":"ACTOR_RUNTIME","defect":"NONE_CONFIRMED"}
+  ],
+  "reusable_native_scenarios":[
+    "tests/monster_summon_hard_cap_test.gd",
+    "tests/fixed_area_monster_test.gd",
+    "tests/monster_dormant_damage_wake_test.gd",
+    "tests/classic_boss_order_test.gd",
+    "tests/classic_boss_area_magic_outcomes_test.gd",
+    "tests/hc_monster_ai/w1_special_delivery_runtime_test.gd",
+    "tests/monster_struck_runtime_test.gd",
+    "tests/source176_r3/all_skill_reaction_paths_test.gd",
+    "tests/source176_r3/source_direct_phase_trace_test.gd"
+  ],
+  "device_test": "NOT_RUN"
+}

@@ -1,5 +1,7 @@
 # HardCore Project Index
 
+2026-10-07 怪物系统继续升级：`docs/review/monster_system_20261007/FINDINGS.md` 为v105反馈、用户裁决、生产主线、来源边界、固定源码和性能对照的入口；`SPECIAL_BEHAVIOR_MATRIX.json` 为全部profile/稳定ID台账，元数据检查不代表actor或设备验收。
+
 2026-10-07 当前入口：`docs/WORKSPACE_CURRENT_STATUS.md` 与 `docs/retired/20261007/README.md`。第三树内容现为 `codex/integration` 唯一主树；`SUPPLEMENT_MANIFEST.json` 记录外部独有补入，`BRANCH_HISTORY_ARCHIVE.json` 记录全部历史分支恢复地址。下方日期条目为历史导航。
 
 2026-09-23 v93 冻结导航：`docs/milestones/v93/README.md` 是 APK 源码标签、包身份、版本材料保留、工作树和远端分支清理的当前记录；`remote_cleanup.json` 保存清理前后远端分支精确 SHA。

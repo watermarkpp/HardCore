@@ -33,11 +33,11 @@ func run() -> void:
 			var rng: int = actor._rng.state
 			var skill := "wizard.fire_wall" if kind=="MINE" else "wizard.lightning"
 			var result := service.apply_enemy_direct_spell_damage(actor,skill,20,null,null,Callable(self,"zero_mac") if kind=="MAC_ZERO" else Callable(),0,{},Combat.EnemyMagicDeliveryKind.AUTO)
-			var delays := level==49 and kind in ["DIRECT","MAC_ZERO"]
-			check(actor._movement_cadence.walk_tick_ms==tick+(800+sample if delays else 0),"exact level/defense/evasion source delay")
+			var compatibility_draw := level==49 and kind in ["DIRECT","MAC_ZERO"]
+			check(actor._movement_cadence.walk_tick_ms==tick,"direct reception never delays movement")
 			if kind in ["EVADED","MAC_ZERO"]:
 				check(actor.current_hp==actor.max_hp,"zero damage does not write HP")
-				check(actor._rng.state==(reference.state if delays else rng),"only eligible reception consumes target walk roll")
+				check(actor._rng.state==(reference.state if compatibility_draw else rng),"only legacy eligible reception consumes compatibility roll")
 			rows.append({"level":level,"kind":kind,"result":result,"tick_before":tick,"tick_after":actor._movement_cadence.walk_tick_ms})
 			F.dispose(actor,victim)
 	check(not bool(service.apply_enemy_direct_spell_damage(null,"wizard.lightning",20,null).get("success",true)),"invalid target rejected")

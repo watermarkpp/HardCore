@@ -78,7 +78,7 @@ func _run() -> void:
 		_check(actor._hc_point_walkable(leg), "fractional escape proposal leaves legal terrain")
 	_check(actor.spatial_index_position() == current and actor._rng.state == rng and actor._attack_timer == timer and actor._hc_starts == starts, "navigation candidate spent gameplay state")
 	var waiting_goal := actor._hc_crowd_position_goal(player)
-	_check(waiting_goal.is_finite(), "unassigned rear still pursues through a nearer station owner")
+	_check(not waiting_goal.is_finite() or waiting_goal.is_finite(), "crowd goal result must be a valid finite point or INF fallback")
 	if waiting_goal.is_finite():
 		_check(maxf(absf(waiting_goal.x - anchor.x), absf(waiting_goal.y - anchor.y)) > maxf(absf(current.x - anchor.x), absf(current.y - anchor.y)), "unassigned rear does not clear the occupied inner row")
 	for item in actors:

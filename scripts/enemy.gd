@@ -415,6 +415,12 @@ var _boss_skill_direction_ground := Vector2.DOWN
 var _boss_skill_footprint_snapshot: Dictionary = {}
 var _last_boss_skill_hit := false
 var _boss_health_stage := -1
+## Summon and rage consume the same authored health thresholds but have
+## different owners: summons are released by the search/action loop, while
+## rage remains a damage reaction. Separate cursors prevent one from
+## consuming the other's stage.
+var _boss_rage_health_stage := -1
+var _boss_search_clock_anchor_s := 0.0
 var _boss_rage_time := 0.0
 var _boss_base_move_speed_gu_per_sec := 0.0
 var _boss_base_attack_interval := 0.0
@@ -461,8 +467,7 @@ var _attack_action_active := false
 # One cadence.evaluate per logical event (evaluate itself refuses a repeated
 # same-millisecond grant); the tick's melee/pursue choice shares the cached
 # decision. The serial counts source permissions, not animation segments.
-# The cache reads exactly the wall-millisecond domain the M01A cadence
-# authority consumes - no scaled delta is mixed in anywhere.
+# The cache projects the owner's combat clock to cadence milliseconds.
 var _source176_decision_serial: int = 0
 var _source176_decision_now_ms: int = -1
 var _source176_decision_tick: int = -1
@@ -1881,18 +1886,8 @@ func _begin_autonomous_step_without_cadence(
 		return false
 	if control_time > 0.0 or charm_time > 0.0:
 		return false
-	# HC-MONSTER-COMBAT-R1 Task 4 (F03): the shared next-segment gate. A
-	# direct-magic walk postponement must gate the NEXT autonomous segment even
-	# when the granted pursuit session bypasses cadence.evaluate(). The
-	# committed current step is never revoked here; only a new segment start is
-	# refused, and an already-expired postponement allows the step immediately.
-	if _movement_cadence != null and _movement_cadence.direct_magic_delay_blocks_next_step(
-		int(_combat_action_time_s * 1000.0) if now_ms_override < 0 else now_ms_override
-	):
-		RuntimeDiagnostics.increment_performance_counter(
-			&"monster_direct_magic_walk_delay_blocked_steps"
-		)
-		return false
+	# A struck never gates a new movement segment. Control, charm, dormant and
+	# authority gates above remain the sole non-combat reasons to refuse it.
 	if not desired_direction_ground_gu.is_finite():
 		return false
 	if desired_direction_ground_gu.length() <= GroundUnitSpace.EPSILON_GU:
@@ -2531,7 +2526,11 @@ func _apply_boss_rule() -> void:
 	move_speed_gu_per_sec = float(projection_gu.move_speed_gu_per_sec)
 	attack_range_gu = float(projection_gu.attack_range_gu)
 	aggro_radius_gu = float(projection_gu.aggro_radius_gu)
-	_attack_interval = float(AttackTimingScript.effective_interval_ms(timing.get("attackIntervalMs", 1550))) / 1000.0
+	# _configure_behavior_profile() already resolves the canonical 21CQ attack
+	# interval. Boss rules own presentation timing and explicit special phases;
+	# they must not replace the base cadence (76=1500 ms, 160=1000 ms).
+	if _attack_interval <= 0.0:
+		_attack_interval = float(AttackTimingScript.effective_interval_ms(timing.get("attackIntervalMs", 1550))) / 1000.0
 	_attack_animation_duration = float(timing.get("attackAnimationMs", 460)) / 1000.0
 	_attack_hit_delay = float(timing.get("hitDelayMs", 0)) / 1000.0
 	var configured_delivery: Variant = boss_rule.get("attackDelivery", {})
@@ -2549,6 +2548,8 @@ func _apply_boss_rule() -> void:
 	var summon: Dictionary = mechanics.get("healthStageSummon", {})
 	var rage: Dictionary = mechanics.get("healthStageRage", {})
 	_boss_health_stage = int(summon.get("stages", rage.get("stages", -1)))
+	_boss_rage_health_stage = int(rage.get("stages", -1))
+	_boss_search_clock_anchor_s = _combat_action_time_s
 	_boss_base_move_speed_gu_per_sec = move_speed_gu_per_sec
 	_boss_base_attack_interval = _attack_interval
 
@@ -7239,7 +7240,9 @@ func _apply_damage_core(
 		_hc_received_damage(attacker, float(actual_damage))
 	_refresh_overhead_health()
 	if is_boss and not boss_rule.is_empty():
-		_apply_health_stage_mechanics()
+		# Rage keeps its existing damage-driven contract. Summon stages are
+		# checked only by the Boss action/search loop below.
+		_apply_health_stage_rage_on_damage()
 	if causes_struck and amount > 0 and current_hp > 0:
 		# Vanilla ordinary STRUCK (nDamage > 0, no MaxHP-percentage threshold):
 		# the NEXT attack deadline slips slightly and a struck visual event is
@@ -7290,32 +7293,11 @@ func _apply_source_struck_attack_delay() -> void:
 	) / 1000.0
 
 
-## Direct magic (RM_MAGSTRUCK) that passed the anti-magic stage: postpone the
-## next autonomous walk by 800 + Random(1000) ms through the movement
-## cadence. Never cancels a committed step, never clears a path session and
-## never freezes attacks (that would be control_time, which the vanilla code
-## does not do here). Fire-wall / ground-mine ticks (RM_MAGSTRUCK_MINE) must
-## never reach this method.
-## The roll comes from this actor's own RNG stream by default (the vanilla
-## server draws Random(1000) from the shared server stream, never from a
-## per-spell resolution stream - consuming the caller's spell RNG here would
-## shift the validated direct-spell RNG continuation, see
-## direct_spell_compiled_stats_parity_test). Callers may still pass an
-## explicit deterministic roll for tests.
-func apply_source_direct_magic_walk_delay(random_0_to_999 := -1) -> void:
-	if _dying or _death_pending:
-		return
-	if _movement_cadence == null:
-		return
-	var roll := random_0_to_999
-	if roll < 0:
-		roll = _rng.randi_range(0, 999)
-	if _movement_cadence.postpone_walk_tick_ms(
-		MonsterStruckPolicyScript.direct_magic_walk_delay_ms(roll)
-	):
-		RuntimeDiagnostics.increment_performance_counter(
-			&"monster_direct_magic_walk_delay_count"
-		)
+## Compatibility draw for the retired direct-magic walk reaction. The random
+## value preserves the actor RNG stream used by old Lv<50 reception, while no
+## movement state is changed and no spell RNG is consumed.
+func consume_direct_magic_compatibility_roll() -> void:
+	_rng.randi_range(0, 999)
 
 
 ## Vanilla green poison ticks damage health directly and never send
@@ -7712,12 +7694,17 @@ func _update_status_effects(delta: float) -> void:
 
 
 func _apply_health_stage_mechanics() -> void:
-	if _boss_health_stage <= 0 or max_hp <= 0:
+	if max_hp <= 0:
 		return
 	var mechanics: Dictionary = boss_rule.get("mechanics", {})
 	var summon: Dictionary = mechanics.get("healthStageSummon", {})
-	var rage: Dictionary = mechanics.get("healthStageRage", {})
-	var stage_count := int(summon.get("stages", rage.get("stages", _boss_health_stage)))
+	var stage_count := int(summon.get("stages", _boss_health_stage))
+	# ObjMon.Run resets the danger stage only at an action/search boundary.
+	if current_hp >= max_hp:
+		_boss_health_stage = stage_count
+		return
+	if _boss_health_stage <= 0:
+		return
 	var current_stage := int(floor(float(current_hp) / float(max_hp) * float(stage_count)))
 	if current_stage >= _boss_health_stage:
 		return
@@ -7732,13 +7719,42 @@ func _apply_health_stage_mechanics() -> void:
 				ids.append(pool[_rng.randi_range(0, pool.size() - 1)])
 		set_meta("m30_summon_release_serial", int(get_meta("m30_summon_release_serial", 0)) + 1)
 		summon_requested.emit(self, ids, count, int(summon.get("maxActive", 30)))
-	if bool(rage.get("enabled", false)):
-		_boss_rage_time = float(rage.get("durationSeconds", 8.0))
-		move_speed_gu_per_sec = (
-			_boss_base_move_speed_gu_per_sec
-			* float(rage.get("moveSpeedMultiplier", 1.0))
-		)
-		_attack_interval = float(rage.get("attackIntervalSeconds", _boss_base_attack_interval))
+
+
+func _apply_health_stage_rage_on_damage() -> void:
+	if _boss_rage_health_stage <= 0 or max_hp <= 0:
+		return
+	var rage: Dictionary = boss_rule.get("mechanics", {}).get("healthStageRage", {})
+	if not bool(rage.get("enabled", false)):
+		return
+	var stage_count := int(rage.get("stages", _boss_rage_health_stage))
+	var current_stage := int(floor(float(current_hp) / float(max_hp) * float(stage_count)))
+	if current_stage >= _boss_rage_health_stage:
+		return
+	_boss_rage_health_stage -= 1
+	_boss_rage_time = float(rage.get("durationSeconds", 8.0))
+	move_speed_gu_per_sec = (
+		_boss_base_move_speed_gu_per_sec
+		* float(rage.get("moveSpeedMultiplier", 1.0))
+	)
+	_attack_interval = float(rage.get("attackIntervalSeconds", _boss_base_attack_interval))
+
+
+func _boss_stage_search_due() -> bool:
+	if not is_boss or not bool(boss_rule.get("mechanics", {}).get("healthStageSummon", {}).get("enabled", false)):
+		return false
+	var search: Dictionary = boss_rule.get("targetSearch", {})
+	var has_usable_target := is_instance_valid(target) and _target_candidate_is_live(target)
+	var interval := float(search.get("withTargetMs" if has_usable_target else "withoutTargetMs", 1000)) / 1000.0
+	return _combat_action_time_s - _boss_search_clock_anchor_s + 0.000001 >= interval
+
+
+func _boss_stage_search_action_legal() -> bool:
+	return (not _dying and not _death_pending and current_hp > 0 and combat_enabled
+		and control_time <= 0.0 and charm_time <= 0.0 and not dormant and not _burrowed
+		and not _attack_action_active and _pending_attack_time < 0.0
+		and _boss_warning <= 0.0 and _area_attack_warning <= 0.0
+		and _area_magic_warning <= 0.0 and _summon_warning <= 0.0)
 
 
 func _retarget(delta := 0.0, safe_checked_player: Node2D = null) -> void:
@@ -7755,6 +7771,9 @@ func _retarget(delta := 0.0, safe_checked_player: Node2D = null) -> void:
 ## Inclusive target maintenance/selection body. Its duration is nested in the
 ## actor physics or background-tick total when called from those paths.
 func _retarget_internal(delta := 0.0, safe_checked_player: Node2D = null) -> void:
+	# Target maintenance and hit-driven threat wakes do not own this clock.
+	# A due search survives a committed action until the actor can consume it.
+	var boss_stage_search := _boss_stage_search_due() and _boss_stage_search_action_legal()
 	if _hc_standard_melee():
 		_hc_refresh_observation()
 		if _hc_damage_dirty:
@@ -7806,7 +7825,7 @@ func _retarget_internal(delta := 0.0, safe_checked_player: Node2D = null) -> voi
 		if _movement_step_active:
 			_cancel_autonomous_step(true)
 	if not boss_rule.is_empty():
-		if is_instance_valid(target) and _retarget_timer > 0.0:
+		if is_instance_valid(target) and _retarget_timer > 0.0 and not boss_stage_search:
 			return
 	else:
 		# Ordinary monsters keep their current target between decision ticks.
@@ -7962,6 +7981,12 @@ func _retarget_internal(delta := 0.0, safe_checked_player: Node2D = null) -> voi
 		chosen = target
 	target = chosen
 	_record_performance_counter(&"retarget_decisions")
+	# TScultureKingMonster.Run checks danger/CallSlave only after a formal
+	# target-search decision (8 s with a target, 1 s without one). Damage
+	# callbacks never release summons directly.
+	if boss_stage_search:
+		_apply_health_stage_mechanics()
+		_boss_search_clock_anchor_s = _combat_action_time_s
 	if not boss_rule.is_empty():
 		var search: Dictionary = boss_rule.get("targetSearch", {})
 		var authored_interval_seconds := (
@@ -8819,6 +8844,12 @@ var _hc_motion_candidate_high := Vector2.INF
 var _hc_motion_candidate_buckets := Rect2i()
 
 func _hc_motion_clear(a: Vector2, b: Vector2) -> bool:
+	var _hc_diag_started_usec := RuntimeDiagnostics.begin_timed_segment(&"enemy_motion_clear_calls")
+	var _hc_diag_result: bool = _hc_motion_clear_internal(a, b)
+	RuntimeDiagnostics.end_timed_segment(&"enemy_motion_clear_usec", _hc_diag_started_usec)
+	return _hc_diag_result
+
+func _hc_motion_clear_internal(a: Vector2, b: Vector2) -> bool:
 	if combat_spatial_index == null or runtime_map_id < 0 or not a.is_finite() or not b.is_finite():
 		return false
 	var revision := combat_spatial_index.bucket_membership_revision
@@ -9097,8 +9128,7 @@ func _hc_finalize_boss_facing() -> void:
 ## choice. evaluate() dedupes the same timestamp, so a permission can be
 ## consumed at most once per millisecond; permitted idle/pursue ticks still
 ## refresh the cadence phase (source Run refreshes WalkTick even when the
-## monster only stands or walks), which keeps later magic postponements on
-## a fresh source phase instead of a stale one.
+## monster only stands or walks), keeping movement grants on a fresh phase.
 func _source176_take_tick_decision() -> bool:
 	var tick := Engine.get_physics_frames()
 	var generation := int(get_meta("zone_generation", -1))
@@ -9273,9 +9303,7 @@ func _hc_tick_melee(delta: float, physics_delta: float) -> void:
 		if leg.dot(desired_target - current) < 0.0 and _hc_world_between(current, desired_target):
 			_clear_autonomous_step_state()
 	var remaining_budget := maxf(0.0, physics_delta)
-	_locomotion_pose_intent = _hc_pursuit_session and not _movement_authority_failed_closed and (
-		_movement_cadence == null or not _movement_cadence.direct_magic_delay_blocks_next_step(int(_combat_action_time_s * 1000.0))
-	)
+	_locomotion_pose_intent = _hc_pursuit_session and not _movement_authority_failed_closed
 	var traveled := 0.0
 	for _subleg in range(16):
 		var leg_start := _screen_position_px_to_ground_position_gu(global_position)
@@ -9727,8 +9755,13 @@ func _hc_path_completed(token: int, status: String, route: PackedVector2Array) -
 	_hc_path_retry_ms = Time.get_ticks_msec() + 500 + int(posmod(get_instance_id(), 7)) * 17
 
 func _hc_crowd_position_goal(hit_target: Node2D) -> Vector2:
+	var _hc_diag_started_usec := RuntimeDiagnostics.begin_timed_segment(&"enemy_crowd_goal_calls")
+	var _hc_diag_result: Vector2 = _hc_crowd_position_goal_internal(hit_target)
+	RuntimeDiagnostics.end_timed_segment(&"enemy_crowd_goal_usec", _hc_diag_started_usec)
+	return _hc_diag_result
+
+func _hc_crowd_position_goal_internal(hit_target: Node2D) -> Vector2:
 	var previous_goal := _hc_surround_goal
-	var previous_slot := _hc_surround_slot
 	var previous_scope := _hc_surround_scope
 	var previous_anchor := _hc_surround_anchor
 	_hc_surround_goal = Vector2.INF
@@ -9743,8 +9776,8 @@ func _hc_crowd_position_goal(hit_target: Node2D) -> Vector2:
 		_hc_surround_slot = -1
 		_hc_surround_anchor = anchor
 		_hc_surround_scope = owner_scope
-	# Once a station is selected, its owner survives a legitimate outer
-	# detour. The near-field bound controls new acquisition, not route life.
+	# The near-field bound prevents expensive crowd selection for distant actors;
+	# no station ownership or reservation is retained by this policy.
 	if not anchor.is_finite() or (_hc_surround_slot < 0 and not continuing and maxf(absf(current.x - anchor.x), absf(current.y - anchor.y)) > Source176Melee.HALF_EXTENT_GU + combat_radius_gu * 2.0):
 		return _hc_publish_crowd_goal(previous_goal, Vector2.INF)
 	# One bounded broadphase per target/index/world/physics frame. The reused
@@ -9759,21 +9792,29 @@ func _hc_crowd_position_goal(hit_target: Node2D) -> Vector2:
 		cache = {"scope": scope, "nodes": nodes}
 		hit_target.set_meta("hc_crowd_position_candidates", cache)
 	var peers: Array = cache.nodes
-	var bodies := 0
-	for other: Variant in peers:
-		if is_instance_valid(other) and other.can_receive_damage() and bool(other.behavior_profile.get("worldCollision", true)):
-			bodies += 1
-	if bodies < 2:
+	# One local snapshot per actor decision. It contains position/radius only;
+	# eligibility is read after the exact coarse envelope and never shared.
+	var snapshot := CrowdAttackPosition.snapshot_peers(self, peers)
+	var has_body := false
+	for record: Dictionary in snapshot:
+		var other: Variant = record.get("node")
+		var center: Vector2 = record.get("position", Vector2.INF)
+		if not is_instance_valid(other) or not center.is_finite():
+			continue
+		if not other.can_receive_damage() or not bool(other.behavior_profile.get("worldCollision", true)):
+			continue
+		has_body = true
+		break
+	if not has_body:
 		_hc_surround_slot = -1
 		return _hc_publish_crowd_goal(previous_goal, Vector2.INF)
-	_hc_surround_slot = CrowdAttackPosition.choose(self, hit_target, anchor, current, peers, _hc_surround_slot)
+	_hc_surround_slot = CrowdAttackPosition.choose_with_snapshot(self, hit_target, anchor, current, snapshot, _hc_surround_slot)
 	if _hc_surround_slot >= 0:
-		_hc_surround_goal = CrowdAttackPosition.goal(self, hit_target, anchor, _hc_surround_slot, peers)
-	elif CrowdAttackPosition.has_station_owner(self, hit_target, anchor, peers):
-		var waiting := CrowdAttackPosition.waiting_station(self, anchor, current)
-		if continuing and previous_slot < 0 and current.distance_squared_to(previous_goal) > GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU and _hc_point_walkable(previous_goal):
-			waiting = previous_goal
-		_hc_surround_goal = waiting if _hc_point_walkable(waiting) else current
+		_hc_surround_goal = CrowdAttackPosition.goal_with_snapshot(self, hit_target, anchor, _hc_surround_slot, snapshot)
+	else:
+		# No legal current candidate retires the previous crowd goal so ordinary
+		# pursuit/local relief can take over instead of chasing a stale station.
+		_hc_surround_goal = Vector2.INF
 	return _hc_publish_crowd_goal(previous_goal, _hc_surround_goal)
 
 func _hc_publish_crowd_goal(previous_goal: Vector2, new_goal: Vector2) -> Vector2:
@@ -9785,6 +9826,12 @@ func _hc_publish_crowd_goal(previous_goal: Vector2, new_goal: Vector2) -> Vector
 	return new_goal
 
 func _hc_neighbor(current: Vector2, hit_target: Node2D, direct: Vector2i) -> Vector2i:
+	var _hc_diag_started_usec := RuntimeDiagnostics.begin_timed_segment(&"enemy_neighbor_calls")
+	var _hc_diag_result: Vector2i = _hc_neighbor_internal(current, hit_target, direct)
+	RuntimeDiagnostics.end_timed_segment(&"enemy_neighbor_usec", _hc_diag_started_usec)
+	return _hc_diag_result
+
+func _hc_neighbor_internal(current: Vector2, hit_target: Node2D, direct: Vector2i) -> Vector2i:
 	_hc_step_override = Vector2.INF
 	# A stationary rear actor with no legal adjacent step has no new path to
 	# evaluate until its existing bounded flank retry. Target/self movement
@@ -9840,6 +9887,7 @@ func _hc_neighbor(current: Vector2, hit_target: Node2D, direct: Vector2i) -> Vec
 	# and returns to the same blocked cell (C05).
 	if _hc_observed and _hc_world_between(current, anchor) and (
 		not _source176_ordinary_melee() or _hc_route_index >= _hc_route.size()
+		or (_terrain_navigation_context.has("poly_index") and _hc_direct_source_route_clear(current, anchor))
 	):
 		var intended := Vector2(cell + direct) + Vector2(0.5, 0.5)
 		if _source176_ordinary_melee():
@@ -10050,6 +10098,28 @@ func _hc_neighbor(current: Vector2, hit_target: Node2D, direct: Vector2i) -> Vec
 		_hc_submit_path(anchor)
 	return Vector2i.ZERO
 
+## Retire a distant polygon detour only after BOTH complete canonical legs
+## clear terrain, WORLD and live bodies. A clear one-unit prefix is insufficient
+## (C05); checks run at segment selection, never revoke committed movement.
+func _hc_direct_source_route_clear(origin: Vector2, destination: Vector2) -> bool:
+	var offset := destination - origin
+	var budget := maxf(absf(offset.x), absf(offset.y))
+	if not is_finite(budget) or budget <= GroundUnitSpace.EPSILON_GU:
+		return false
+	var turn := SourceStepPlan.next_leg(origin, destination, budget, GroundUnitSpace.EPSILON_GU)
+	if not turn.is_finite():
+		return false
+	var start := origin
+	for endpoint: Vector2 in [turn, destination]:
+		if start.distance_squared_to(endpoint) <= GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
+			continue
+		if (not HCPPolyRuntime.segment_walkable(_terrain_navigation_context, start, endpoint, combat_radius_gu)
+			or not _hc_world_between(start, endpoint) or not _hc_motion_clear(start, endpoint)
+			or not _hc_point_walkable(endpoint)):
+			return false
+		start = endpoint
+	return true
+
 func _hc_fail_step() -> void:
 	var from := MonsterNeighborStepPolicyScript.temporary_cell(_screen_position_px_to_ground_position_gu(global_position))
 	var to := MonsterNeighborStepPolicyScript.temporary_cell(_movement_step_target_ground_gu)
@@ -10113,6 +10183,8 @@ func _hc_frontline_candidates(a: Vector2, b: Vector2, hit_target: Node2D, candid
 	return 0
 
 func _hc_motion_candidates(a: Vector2, b: Vector2, candidates: Array) -> bool:
+	# Count raw identities before any early return; observer-only.
+	_record_performance_counter(&"enemy_motion_candidate_checks", candidates.size())
 	# A station on the far side is a navigation destination. Its route must
 	# avoid the same target body that native movement will collide with.
 	# Ordinary approach without station alignment keeps its existing rules.
@@ -10130,6 +10202,7 @@ func _hc_motion_candidates(a: Vector2, b: Vector2, candidates: Array) -> bool:
 			continue
 		if other.runtime_map_id != runtime_map_id:
 			continue
+		_record_performance_counter(&"enemy_motion_body_checks")
 		var c := other.spatial_index_position()
 		# Cached coarse buckets intentionally contain distant identities. Read
 		# their current formal position, then reject outside the conservative
@@ -10202,6 +10275,7 @@ func _hc_contact_flank(current: Vector2, anchor: Vector2, victim_anchor: Vector2
 	if combat_spatial_index == null or runtime_map_id < 0:
 		return Vector2.INF
 	combat_spatial_index.query_enemy_nodes_bucket_segment_into(runtime_map_id, current - Vector2.ONE, current + Vector2.ONE, combat_radius_gu, _hc_contact_flank_scratch)
+	var contact_snapshot := CrowdAttackPosition.snapshot_peers(self, _hc_contact_flank_scratch)
 	var best := Vector2.INF
 	var best_cost := INF
 	# Unassigned rear bodies need room to leave a jam, not the smallest
@@ -10211,7 +10285,7 @@ func _hc_contact_flank(current: Vector2, anchor: Vector2, victim_anchor: Vector2
 	var best_extent_squared := -1.0
 	for option: Vector2i in MonsterNeighborStepPolicyScript.NEIGHBOR_DELTAS:
 		var direction := Vector2(option)
-		var point := CrowdAttackPosition.contact_leg(self, hit_target, current, direction, _hc_contact_flank_scratch)
+		var point := CrowdAttackPosition.contact_leg_with_snapshot(self, hit_target, current, direction, contact_snapshot)
 		if not point.is_finite():
 			continue
 		var next := MonsterNeighborStepPolicyScript.temporary_cell(point)
@@ -10281,6 +10355,7 @@ var _hc_polygon_step_override := Vector2.INF
 var _hc_polygon_pursuit: HCPPolyPursuit
 
 func _hc_polygon_neighbor_clear(a: Vector2, b: Vector2, from_cell: Vector2i, to_cell: Vector2i) -> bool:
+	_record_performance_counter(&"enemy_motion_polygon_checks")
 	if _terrain_navigation_context.has("poly_index"):
 		return HCPPolyRuntime.segment_walkable(_terrain_navigation_context, a, b, combat_radius_gu)
 	return to_cell == from_cell or MonsterTerrainNavigationPolicyScript.can_traverse_neighbor(_terrain_navigation_context, from_cell, to_cell, combat_radius_gu)

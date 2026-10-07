@@ -56,6 +56,7 @@ func _run() -> void:
 	var wooma := _boss(76, "本地化沃玛首领", player)
 	await get_tree().process_frame
 	assert(wooma.visual.uses_final_art() and int(wooma.boss_rule.get("monsterId", -1)) == 76, "沃玛教主未按monsterId读取动画/规则")
+	assert(is_equal_approx(wooma._boss_base_attack_interval, 1.5), "沃玛教主基础攻击间隔必须来自21CQ canonical 1500ms")
 	var relocation_result := {"radius": 0}
 	wooma.relocation_requested.connect(func(_enemy: EnemyActor, radius_gu: float) -> void:
 		relocation_result.radius = radius_gu
@@ -116,6 +117,7 @@ func _run() -> void:
 	var zuma := _boss(160, "本地化祖玛首领", player)
 	await get_tree().process_frame
 	assert(zuma.visual.uses_final_art() and zuma.dormant, "祖玛教主未以石化动画状态出生")
+	assert(is_equal_approx(zuma._boss_base_attack_interval, 1.0), "祖玛教主基础攻击间隔必须来自21CQ canonical 1000ms")
 	player.global_position = zuma.global_position + Vector2(60, 0)
 	zuma._physics_process(0.01)
 	assert(not zuma.dormant, "祖玛教主两格范围苏醒失效")
@@ -125,8 +127,22 @@ func _run() -> void:
 		summon_result.max_active = max_active
 		summon_result.ids = ids
 	)
+	# Real wall-clock physics scenario: repeated damage arrives during 8.2 s of
+	# live actor frames. Each hit wakes target maintenance, but the Boss search
+	# anchor must remain untouched until the authored with-target boundary.
+	zuma.take_damage(1)
+	assert(int(summon_result.count) == 0, "祖玛教主受击回调不得立即释放阶段召唤")
+	zuma.set_physics_process(true)
 	zuma._rng.seed = 160
-	zuma.take_damage(int(ceil(float(zuma.max_hp) / 5.0)) + 1)
+	var first_search_anchor := zuma._boss_search_clock_anchor_s
+	for _tick in range(82):
+		zuma.take_damage(25)
+		await get_tree().create_timer(0.1).timeout
+		if zuma._combat_action_time_s - first_search_anchor < 8.0:
+			assert(int(summon_result.count) == 0, "positive hit or target maintenance released summon before 8-second boundary")
+			assert(zuma._boss_search_clock_anchor_s == first_search_anchor, "positive damage changed stage search anchor")
+	assert(int(summon_result.count) >= 4 and int(summon_result.count) <= 7, "真实8秒physics受击期间祖玛阶段召唤未按搜索边界释放")
+	zuma.set_physics_process(false)
 	# R3 W6: the stage bounds follow the canonical healthStageSummon authority
 	# (minCount 4 / maxCount 7, stages 5).
 	assert(int(summon_result.count) >= 4 and int(summon_result.count) <= 7, "祖玛教主血量阶段召唤数量错误")
@@ -144,6 +160,63 @@ func _run() -> void:
 		and summon_ids.all(func(value: Variant) -> bool: return [156, 153, 150, 128].has(int(value))),
 		"祖玛教主召唤上限或稳定monsterId集合错误",
 	)
+	# No-target searches use the authored one-second boundary independently of
+	# the fast target-maintenance wake path.
+	var first_release_count := int(summon_result.count)
+	summon_result.count = 0
+	zuma.queue_free()
+	await get_tree().process_frame
+	player.global_position = Vector2(100000.0, 100000.0)
+	zuma = _boss(160, "祖玛无目标时钟夹具", player)
+	await get_tree().process_frame
+	zuma.dormant = false
+	zuma.target = null
+	zuma.primary_target = null
+	zuma._hc_forget(player)
+	zuma.summon_requested.connect(func(_enemy: EnemyActor, ids: Array, count: int, max_active: int) -> void:
+		summon_result.count = count
+		summon_result.max_active = max_active
+		summon_result.ids = ids
+	)
+	zuma._boss_health_stage = 5
+	zuma.current_hp = 1
+	for _tick in range(9):
+		zuma._physics_process(0.1)
+	assert(int(summon_result.count) == 0, "祖玛教主无目标时不得在1秒搜索边界前阶段召唤")
+	# The boundary is due at 1 s; an already committed attack may defer the
+	# release until its action slot is free, but cannot reset the due boundary.
+	for _tick in range(11):
+		zuma._physics_process(0.1)
+	assert(int(summon_result.count) >= 4 and int(summon_result.count) <= 7, "祖玛教主无目标1秒搜索边界未释放4-7只")
+	assert(first_release_count >= 4 and first_release_count <= 7, "祖玛首次阶段召唤数量未保留")
+	# A depleted cursor is restored only at a legal search boundary after full
+	# healing; healing itself must not emit a summon.
+	summon_result.count = 0
+	zuma._boss_health_stage = 0
+	zuma.current_hp = zuma.max_hp
+	zuma._boss_search_clock_anchor_s = zuma._combat_action_time_s - 1.0
+	zuma._retarget(0.0)
+	assert(zuma._boss_health_stage == 5 and int(summon_result.count) == 0, "祖玛满血搜索未恢复阶段5或错误召唤")
+	# Control, dormant and death-pending actors keep a due search boundary but
+	# cannot consume it until the action gate is legal again.
+	for blocked_kind in [&"control", &"dormant", &"death"]:
+		summon_result.count = 0
+		zuma._boss_health_stage = 5
+		zuma.current_hp = 1
+		zuma._boss_search_clock_anchor_s = zuma._combat_action_time_s - 1.0
+		if blocked_kind == &"control":
+			zuma.control_time = 1.0
+		elif blocked_kind == &"dormant":
+			zuma.dormant = true
+		else:
+			zuma._death_pending = true
+		zuma._retarget(0.0)
+		assert(int(summon_result.count) == 0, "祖玛%s状态不得消费到期召唤搜索" % str(blocked_kind))
+		zuma.control_time = 0.0
+		zuma.dormant = false
+		zuma._death_pending = false
+		zuma._retarget(0.0)
+		assert(int(summon_result.count) >= 4 and int(summon_result.count) <= 7, "祖玛%s解除后未消费保留的召唤搜索" % str(blocked_kind))
 
 	wooma.queue_free()
 	dragon.queue_free()

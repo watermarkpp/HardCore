@@ -1,0 +1,38 @@
+{
+  "baseline": "codex/integration@aa75c5bc9845b49ee3ce67ce064442cc3fb3c43c",
+  "status": "READ_ONLY_AUDIT",
+  "zuma": {
+    "model_with_aligned_regen_seconds": "about 81, phase-dependent",
+    "rank5_raw": 64,
+    "device": "NOT_RUN",
+    "no_regen_lower_bound_seconds": 69,
+    "max_hp": 3000,
+    "rank3_raw": 53,
+    "damage_per_accepted_tick": 44,
+    "mc_fixture": 47,
+    "claim": "global caster:skill:target, one accepted hit per tick",
+    "mac": 20,
+    "tick_interval_ms": 1000,
+    "physics_tick_gap_frames": 60,
+    "rank5_multiplier": 1.21,
+    "natural_regen": {
+      "heal_formula": "floor(MaxHP/75)+1",
+      "heal_hp": 41,
+      "interval_seconds": 6
+    },
+    "id": 160,
+    "no_regen_lower_bound_ticks": 69
+  },
+  "id169": {
+    "status": "MISSING_EXACT_ACTOR",
+    "gas_ids_covered_separately": [
+      128,
+      168
+    ],
+    "canonical_name": "月魔蜘蛛0",
+    "profile": "moth_control",
+    "formal_runtime_ids": [],
+    "generic_consumer": "scripts/enemy.gd:5903-5919",
+    "gas_profile": "w1_gas_moth_128_168"
+  }
+}

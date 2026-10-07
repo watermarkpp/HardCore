@@ -148,7 +148,10 @@ func _check_boss_summons() -> void:
 	for release in range(40):
 		boss._boss_health_stage = 5
 		boss.current_hp = 1
-		boss._apply_health_stage_mechanics()
+		# The producer is owned by the formal no-target Boss search boundary,
+		# not by a direct damage callback or a free-standing stage helper call.
+		boss._combat_action_time_s += 1.0
+		boss._retarget(0.0)
 		check(queue._active("boss:zuma") + int(queue._reserved.get("boss:zuma", 0)) <= 15, "rapid Boss stage signals capped15")
 	check(observed.counts.size() == 4 and observed.ids.size() == 4, "deterministic samples cover counts4-7 and all four kinds")
 	await _drain(queue)
@@ -177,7 +180,8 @@ func _check_boss_legacy_defaults() -> void:
 	for release in range(12):
 		boss._boss_health_stage = 5
 		boss.current_hp = 1
-		boss._apply_health_stage_mechanics()
+		boss._combat_action_time_s += 1.0
+		boss._retarget(0.0)
 	await _drain(queue)
 	check(host.births == 30 and queue._active("boss:legacy_defaults") == 30, "non-Zuma Boss cap30 is not reduced to5 or15")
 	host.queue_free()

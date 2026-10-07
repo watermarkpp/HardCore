@@ -1,0 +1,67 @@
+{
+  "status": "READ_ONLY_AUDIT",
+  "baseline": "codex/integration@aa75c5bc9845b49ee3ce67ce064442cc3fb3c43c",
+  "monster_id": 193,
+  "profile_ratio": 0.33,
+  "runtime": {
+    "entry": "EnemyActor._apply_attack_damage_impl",
+    "target_call": "hit_target.take_damage(dealt_damage)",
+    "heal_call": "EnemyActor.apply_life_steal(dealt_damage)",
+    "heal_formula": "max(1, int(dealt_damage * life_steal_ratio)), capped at attacker max_hp",
+    "basis": "pre_ac_dealt_damage"
+  },
+  "native_observation": {
+    "dealt_damage": 30,
+    "target_actual_hp_loss_after_ac": 19,
+    "attacker_heal": 9,
+    "consistency": "VERIFIED_PRE_AC_INPUT_BASIS"
+  },
+  "source_priority": {
+    "lane": "server_rules",
+    "primary": "source.original_gameofmir.server_suite",
+    "primary_semantic_rule_found": false,
+    "fallback_used": false,
+    "result": "MISSING_AUTHORITY",
+    "auxiliary_checks": [
+      {
+        "tier": "auxiliary_1",
+        "distribution": "source.minipizza_mir2.server",
+        "exact_target": "MISSING",
+        "evidence": [
+          "Shared/Enums.cs:389 DarkWingedOma=193",
+          "Server/MirObjects/MonsterObject.cs:431 commented case 193 CrystalBeast",
+          "Server/MirObjects/MonsterObject.cs:146 case 60 VampireSpider",
+          "Server/MirObjects/MonsterObject.cs:2333-2340 generic HPDrainRatePercent uses damage-armour"
+        ],
+        "excluded": "VampireSpider is pet VampAmount, not ID193"
+      },
+      {
+        "tier": "auxiliary_2",
+        "distribution": "source.suprcode_crystal.server",
+        "exact_target": "MISSING",
+        "evidence": [
+          "Shared/Enums.cs:389 DarkWingedOma=193",
+          "Server/MirObjects/MonsterObject.cs:431 commented case 193 CrystalBeast",
+          "Server/MirObjects/MonsterObject.cs:146 case 60 VampireSpider",
+          "Server/MirObjects/MonsterObject.cs:2641-2648 generic HPDrainRatePercent uses damage-armour"
+        ],
+        "excluded": "VampireSpider is pet VampAmount, not ID193"
+      },
+      {
+        "tier": "auxiliary_3",
+        "distribution": "archive_extract.GM.51417ae3bc9f",
+        "exact_target": "INELIGIBLE",
+        "policy": "allowedScopes gm_commands and script_examples only; cannot establish general combat rule"
+      }
+    ],
+    "server_data_candidate": {
+      "path": "reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa",
+      "result": "EXCLUDED_NON_SERVER_RULES",
+      "evidence": "Configs/Setup.ini:73 VampireName=自爆蜘蛛 plus item/drop vocabulary; no ID193 heal order"
+    }
+  },
+  "shield_absorption_semantics": "MISSING",
+  "overkill_semantics": "MISSING",
+  "product_decision_required_before_post_ac_change": true,
+  "device_test": "NOT_RUN"
+}

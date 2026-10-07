@@ -32,10 +32,6 @@ func _run() -> void:
 		var now := 0
 		for step in range(300):
 			now += rng.randi_range(0, 1800)
-			if step % 19 == 0:
-				var delay := rng.randi_range(800, 1799)
-				check(old.postpone_walk_tick_ms(delay) == fast.postpone_walk_tick_ms(delay), "postpone acceptance parity")
-				verbose.postpone_walk_tick_ms(delay)
 			if step % 71 == 0:
 				check(old.reset(now) == fast.reset(now), "explicit reset parity")
 				verbose.reset(now)
@@ -43,7 +39,6 @@ func _run() -> void:
 			check(expected == verbose.evaluate(now), "verbose decision and reason parity")
 			check(bool(expected.granted) == bool(fast.call("evaluate_grant", now)), "fast grant parity")
 			check(old.state_snapshot() == fast.state_snapshot(), "all cadence state fields match")
-			check(old.direct_magic_walk_floor_ms == fast.direct_magic_walk_floor_ms, "direct magic floor matches")
 			check(not bool(fast.call("evaluate_grant", now)), "same timestamp cannot grant twice")
 			old.evaluate(now)
 			verbose.evaluate(now)

@@ -38,11 +38,13 @@ func run() -> void:
 		actor.max_hp = 100000
 		actor.current_hp = actor.max_hp
 		var before: int = actor._movement_cadence.walk_tick_ms
+		var attack_before := actor._attack_timer
 		var rng_before: int = actor._rng.state
 		var result := service.apply_enemy_direct_spell_damage(actor,id,50,null,null,Callable(),9,{},Combat.EnemyMagicDeliveryKind.AUTO)
 		if family==&"DIRECT":
 			check(bool(result.get("success",false)),"DIRECT actual sink damage "+id)
-			check(actor._movement_cadence.walk_tick_ms>=before+800 and actor._movement_cadence.walk_tick_ms<=before+1799,"DIRECT source delay "+id)
+			check(actor._movement_cadence.walk_tick_ms==before,"DIRECT does not delay movement "+id)
+			check(actor._attack_timer>attack_before,"DIRECT positive damage delays next attack "+id)
 		elif family==&"MINE":
 			check(bool(result.get("success",false)) and actor._movement_cadence.walk_tick_ms==before,"MINE damage without DIRECT delay")
 		else:

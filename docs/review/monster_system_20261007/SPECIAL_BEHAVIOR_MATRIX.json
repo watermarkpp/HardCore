@@ -1,0 +1,1681 @@
+{
+  "baseline_head": "aa75c5bc9845b49ee3ce67ce064442cc3fb3c43c",
+  "source_files": {
+    "assets\\data\\monster_behavior_profiles.json": "8cccd9c0e88d5440e774164ca17c8d7e3da4ab2a304a9ace99d15b9efe1c0818",
+    "assets\\data\\runtime\\canonical_monster_catalog.json": "a46aca4209b3abc0f3f2cd5365b274605cd07886060706e14ef3e984aad8880a"
+  },
+  "profile_count": 53,
+  "id_binding_count": 93,
+  "canonical_entry_count": 156,
+  "special_profile_count": 36,
+  "evidence_note": "Metadata census plus scoped read-only audit; existing scene mention is not full ID or behavior acceptance. Current source fixes are recorded separately.",
+  "profiles": [
+    {
+      "profile": "strawman",
+      "registered_ids": [
+        21,
+        23
+      ],
+      "formal_runtime_ids": [
+        21
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {},
+      "behavior_scope": "ordinary_visual_or_collision",
+      "existing_actor_tests": [],
+      "full_behavior_acceptance": "NOT_RUN"
+    },
+    {
+      "profile": "hook_cat",
+      "registered_ids": [
+        24,
+        25
+      ],
+      "formal_runtime_ids": [
+        24
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {},
+      "behavior_scope": "ordinary_visual_or_collision",
+      "existing_actor_tests": [],
+      "full_behavior_acceptance": "NOT_RUN"
+    },
+    {
+      "profile": "forest_yeti",
+      "registered_ids": [
+        28,
+        29
+      ],
+      "formal_runtime_ids": [
+        28
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {},
+      "behavior_scope": "ordinary_visual_or_collision",
+      "existing_actor_tests": [],
+      "full_behavior_acceptance": "NOT_RUN"
+    },
+    {
+      "profile": "cannibal_flower",
+      "registered_ids": [
+        30
+      ],
+      "formal_runtime_ids": [
+        30
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {
+        "specialClassification": "rooted_contact_attacker",
+        "movement": {
+          "stationary": true
+        }
+      },
+      "behavior_scope": "special",
+      "existing_actor_tests": [],
+      "full_behavior_acceptance": "MISSING"
+    },
+    {
+      "profile": "half_orc",
+      "registered_ids": [
+        34,
+        35
+      ],
+      "formal_runtime_ids": [
+        34
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {},
+      "behavior_scope": "ordinary_visual_or_collision",
+      "existing_actor_tests": [],
+      "full_behavior_acceptance": "NOT_RUN"
+    },
+    {
+      "profile": "oma_fighter",
+      "registered_ids": [
+        36,
+        37
+      ],
+      "formal_runtime_ids": [
+        36
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {},
+      "behavior_scope": "ordinary_visual_or_collision",
+      "existing_actor_tests": [],
+      "full_behavior_acceptance": "NOT_RUN"
+    },
+    {
+      "profile": "oma_warrior",
+      "registered_ids": [
+        38,
+        39,
+        41
+      ],
+      "formal_runtime_ids": [
+        38,
+        39,
+        41
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {},
+      "behavior_scope": "ordinary_visual_or_collision",
+      "existing_actor_tests": [],
+      "full_behavior_acceptance": "NOT_RUN"
+    },
+    {
+      "profile": "cave_bat",
+      "registered_ids": [
+        43,
+        44
+      ],
+      "formal_runtime_ids": [
+        43
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {},
+      "behavior_scope": "ordinary_visual_or_collision",
+      "existing_actor_tests": [],
+      "full_behavior_acceptance": "NOT_RUN"
+    },
+    {
+      "profile": "scorpion",
+      "registered_ids": [
+        45
+      ],
+      "formal_runtime_ids": [
+        45
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {},
+      "behavior_scope": "ordinary_visual_or_collision",
+      "existing_actor_tests": [],
+      "full_behavior_acceptance": "NOT_RUN"
+    },
+    {
+      "profile": "cave_maggot",
+      "registered_ids": [],
+      "formal_runtime_ids": [],
+      "unmapped_legacy_profile": true,
+      "special_fields": {
+        "onHit": {
+          "controlSeconds": 5.0,
+          "controlChanceDenominatorBase": 20,
+          "confidence": "A",
+          "source": "original_gameofmir/M2Server/UsrEngn.pas race=90 + ObjMon.pas TGasAttackMonster.sub_4A9C78"
+        }
+      },
+      "behavior_scope": "special",
+      "existing_actor_tests": [],
+      "full_behavior_acceptance": "MISSING"
+    },
+    {
+      "profile": "dung",
+      "registered_ids": [],
+      "formal_runtime_ids": [],
+      "unmapped_legacy_profile": true,
+      "special_fields": {
+        "onHit": {
+          "controlSeconds": 5.0,
+          "controlChanceDenominatorBase": 20,
+          "confidence": "A",
+          "source": "original_gameofmir/M2Server/UsrEngn.pas race=90 + ObjMon.pas TGasAttackMonster.sub_4A9C78"
+        }
+      },
+      "behavior_scope": "special",
+      "existing_actor_tests": [],
+      "full_behavior_acceptance": "MISSING"
+    },
+    {
+      "profile": "dark_warrior",
+      "registered_ids": [
+        63
+      ],
+      "formal_runtime_ids": [],
+      "unmapped_legacy_profile": false,
+      "special_fields": {},
+      "behavior_scope": "ordinary_visual_or_collision",
+      "existing_actor_tests": [],
+      "full_behavior_acceptance": "NOT_RUN"
+    },
+    {
+      "profile": "wooma_soldier",
+      "registered_ids": [
+        64,
+        65
+      ],
+      "formal_runtime_ids": [
+        64
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {},
+      "behavior_scope": "ordinary_visual_or_collision",
+      "existing_actor_tests": [],
+      "full_behavior_acceptance": "NOT_RUN"
+    },
+    {
+      "profile": "wooma_fighter",
+      "registered_ids": [
+        66,
+        67
+      ],
+      "formal_runtime_ids": [
+        66
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {},
+      "behavior_scope": "ordinary_visual_or_collision",
+      "existing_actor_tests": [],
+      "full_behavior_acceptance": "NOT_RUN"
+    },
+    {
+      "profile": "wooma_warrior",
+      "registered_ids": [
+        68,
+        69
+      ],
+      "formal_runtime_ids": [
+        68
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {},
+      "behavior_scope": "ordinary_visual_or_collision",
+      "existing_actor_tests": [],
+      "full_behavior_acceptance": "NOT_RUN"
+    },
+    {
+      "profile": "large_client_boss",
+      "registered_ids": [
+        56,
+        89
+      ],
+      "formal_runtime_ids": [
+        56,
+        89
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {},
+      "behavior_scope": "ordinary_visual_or_collision",
+      "existing_actor_tests": [],
+      "full_behavior_acceptance": "NOT_RUN"
+    },
+    {
+      "profile": "flame_wooma",
+      "registered_ids": [
+        70
+      ],
+      "formal_runtime_ids": [
+        70
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {
+        "attackDelivery": {
+          "kind": "special_melee",
+          "effectId": "monster.flame_wooma.magic_melee.v1",
+          "damageChannel": "magic_defense",
+          "bodyOnly": true,
+          "rangeShape": "chebyshev_square",
+          "rangeTiles": 1,
+          "range_gu": 1.0,
+          "hitDelaySeconds": 0.0,
+          "presentationDelaySeconds": 0.3,
+          "obstaclePolicy": "environment_adjacent_only",
+          "confidence": "A",
+          "source": "original_gameofmir/M2Server/ObjMon.pas TMagCowMonster.sub_4A9F6C"
+        }
+      },
+      "behavior_scope": "special",
+      "existing_actor_tests": [
+        {
+          "scene": "tests/monster_special_delivery_runtime_test.tscn",
+          "scope": "special magic melee / area magic branch"
+        }
+      ],
+      "full_behavior_acceptance": "MISSING",
+      "existing_actor_scope": "ACTOR_RUNTIME",
+      "existing_actor_note": "ID70 actual MAC/evasion/contact/0.3s presentation branch in monster_special_delivery_runtime_test; no blanket full acceptance"
+    },
+    {
+      "profile": "wooma_guardian",
+      "registered_ids": [
+        73,
+        74,
+        75
+      ],
+      "formal_runtime_ids": [
+        73,
+        74,
+        75
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {},
+      "behavior_scope": "ordinary_visual_or_collision",
+      "existing_actor_tests": [],
+      "full_behavior_acceptance": "NOT_RUN"
+    },
+    {
+      "profile": "red_snake",
+      "registered_ids": [
+        92,
+        93
+      ],
+      "formal_runtime_ids": [
+        92
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {},
+      "behavior_scope": "ordinary_visual_or_collision",
+      "existing_actor_tests": [],
+      "full_behavior_acceptance": "NOT_RUN"
+    },
+    {
+      "profile": "tiger_snake",
+      "registered_ids": [
+        94,
+        95
+      ],
+      "formal_runtime_ids": [
+        94
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {},
+      "behavior_scope": "ordinary_visual_or_collision",
+      "existing_actor_tests": [],
+      "full_behavior_acceptance": "NOT_RUN"
+    },
+    {
+      "profile": "evil_centipede",
+      "registered_ids": [
+        120,
+        121,
+        122,
+        123
+      ],
+      "formal_runtime_ids": [
+        120,
+        121,
+        122,
+        123
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {
+        "onHit": {
+          "poisonDamage": 2,
+          "poisonSeconds": 6.0
+        }
+      },
+      "behavior_scope": "special",
+      "existing_actor_tests": [],
+      "full_behavior_acceptance": "MISSING"
+    },
+    {
+      "profile": "wooma_boss",
+      "registered_ids": [],
+      "formal_runtime_ids": [],
+      "unmapped_legacy_profile": true,
+      "special_fields": {},
+      "behavior_scope": "ordinary_visual_or_collision",
+      "existing_actor_tests": [],
+      "full_behavior_acceptance": "NOT_RUN"
+    },
+    {
+      "profile": "touch_dragon",
+      "registered_ids": [
+        124
+      ],
+      "formal_runtime_ids": [
+        124
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {
+        "specialClassification": "burrowed_stationary_area_attacker",
+        "onHit": {
+          "poisonDamage": 4,
+          "poisonSeconds": 8.0
+        },
+        "attackDelivery": {
+          "kind": "area_magic",
+          "effectId": "monster.touch_dragon.area_magic.v1",
+          "damageChannel": "magic_defense",
+          "bodyOnly": true,
+          "rangeShape": "chebyshev_axis_aligned_square",
+          "rangeTiles": 6,
+          "range_gu": 6.0,
+          "boundary": "exclusive",
+          "hitDelaySeconds": 0.6,
+          "obstaclePolicy": "none_no_los",
+          "targetMode": "all_combat_targets",
+          "scope": "same_map_visible_actors",
+          "status": {
+            "statusChance": 0.25,
+            "poisonWeight": 2,
+            "controlWeight": 1,
+            "poisonDamage": 4,
+            "poisonSeconds": 8.0,
+            "controlSeconds": 5.0
+          },
+          "confidence": "A",
+          "source": "original_gameofmir/M2Server/ObjMon2.pas TCentipedeKingMonster.AttackTarget + ObjBase.pas RM_DELAYMAGIC"
+        },
+        "movement": {
+          "stationary": true
+        }
+      },
+      "behavior_scope": "special",
+      "existing_actor_tests": [
+        {
+          "scene": "tests/monster_special_delivery_runtime_test.tscn",
+          "scope": "special magic melee / area magic branch"
+        },
+        {
+          "scene": "tests/classic_boss_order_test.tscn",
+          "scope": "historical boss partial behavior; ID160 lacks source search clock"
+        }
+      ],
+      "full_behavior_acceptance": "MISSING"
+    },
+    {
+      "profile": "zuma_boss",
+      "registered_ids": [],
+      "formal_runtime_ids": [],
+      "unmapped_legacy_profile": true,
+      "special_fields": {
+        "dormant": true
+      },
+      "behavior_scope": "special",
+      "existing_actor_tests": [],
+      "full_behavior_acceptance": "MISSING"
+    },
+    {
+      "profile": "moth_control",
+      "registered_ids": [
+        169
+      ],
+      "formal_runtime_ids": [],
+      "unmapped_legacy_profile": false,
+      "special_fields": {
+        "onHit": {
+          "controlSeconds": 5.0,
+          "controlChanceDenominatorBase": 20,
+          "confidence": "A",
+          "source": "original_gameofmir/M2Server/UsrEngn.pas race=105 + ObjMon.pas TGasMothMonster inherits TGasAttackMonster.sub_4A9C78"
+        }
+      },
+      "behavior_scope": "special",
+      "existing_actor_tests": [],
+      "full_behavior_acceptance": "MISSING"
+    },
+    {
+      "profile": "axe_skeleton",
+      "registered_ids": [
+        50
+      ],
+      "formal_runtime_ids": [
+        50
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {
+        "attackDelivery": {
+          "kind": "physical_projectile",
+          "effectId": "monster.physical_arrow.v1",
+          "trajectory": "frozen_target_footpoint",
+          "obstaclePolicy": "environment_can_fly_line",
+          "impactDelay": {
+            "baseSeconds": 0.6,
+            "perChebyshevGuSeconds": 0.05
+          },
+          "confidence": "A",
+          "source": "original_gameofmir/M2Server/ObjAxeMon.pas TDualAxeMonster.FlyAxeAttack",
+          "sourceTiming": "StruckDamage precedes SendDelayMsg; 0.6 + Chebyshev-GU * 0.05 describes delayed RM_10101 feedback.",
+          "runtimeCompatibility": "Existing HardCore physical-projectile adapter delays target-bound settlement and validates WORLD/combat_epoch at impact.",
+          "visualAuthority": "monster.physical_arrow.v1 is the existing generic physical-projectile trajectory, not axe-specific source art."
+        }
+      },
+      "behavior_scope": "special",
+      "existing_actor_tests": [],
+      "full_behavior_acceptance": "MISSING"
+    },
+    {
+      "profile": "zuma_archer",
+      "registered_ids": [
+        150,
+        151,
+        152
+      ],
+      "formal_runtime_ids": [
+        150,
+        152
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {
+        "attackDelivery": {
+          "kind": "physical_projectile",
+          "effectId": "monster.physical_arrow.v1",
+          "trajectory": "frozen_target_footpoint",
+          "obstaclePolicy": "environment_can_fly_line",
+          "impactDelay": {
+            "baseSeconds": 0.6,
+            "perChebyshevGuSeconds": 0.05
+          },
+          "confidence": "A",
+          "source": "original_gameofmir/M2Server/ObjAxeMon.pas TDualAxeMonster.FlyAxeAttack"
+        }
+      },
+      "behavior_scope": "special",
+      "existing_actor_tests": [],
+      "full_behavior_acceptance": "MISSING"
+    },
+    {
+      "profile": "zuma_dormant",
+      "registered_ids": [
+        153,
+        154,
+        155
+      ],
+      "formal_runtime_ids": [
+        153,
+        155
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {
+        "dormant": true
+      },
+      "behavior_scope": "special",
+      "existing_actor_tests": [],
+      "full_behavior_acceptance": "MISSING"
+    },
+    {
+      "profile": "zuma_guard_holy_word",
+      "registered_ids": [
+        156,
+        157,
+        158,
+        159
+      ],
+      "formal_runtime_ids": [
+        156,
+        157,
+        158,
+        159
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {
+        "dormant": true
+      },
+      "behavior_scope": "special",
+      "existing_actor_tests": [],
+      "full_behavior_acceptance": "MISSING"
+    },
+    {
+      "profile": "stationary_demon",
+      "registered_ids": [
+        180
+      ],
+      "formal_runtime_ids": [
+        180
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {
+        "specialClassification": "fixed_body_full_area_attacker",
+        "areaAttack": {
+          "enabled": true,
+          "targetMode": "all_combat_targets",
+          "scope": "visible_actors",
+          "rangeTiles": 16,
+          "rangePixels": 512.0,
+          "hitDelaySeconds": 0.2,
+          "confidence": "A"
+        },
+        "movement": {
+          "stationary": true
+        }
+      },
+      "behavior_scope": "special",
+      "existing_actor_tests": [
+        {
+          "scene": "tests/fixed_area_monster_test.tscn",
+          "scope": "existing fixed area actor test; NOT_RUN this round"
+        }
+      ],
+      "full_behavior_acceptance": "MISSING"
+    },
+    {
+      "profile": "stationary_summoner",
+      "registered_ids": [
+        126
+      ],
+      "formal_runtime_ids": [
+        126
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {
+        "specialClassification": "fixed_body_summoner",
+        "summonRule": {
+          "enabled": true,
+          "monsterIds": [
+            127
+          ],
+          "count": 1,
+          "maxActive": 5,
+          "delaySeconds": 0.5,
+          "confidence": "A"
+        },
+        "movement": {
+          "stationary": true
+        }
+      },
+      "behavior_scope": "special",
+      "existing_actor_tests": [
+        {
+          "scene": "tests/monster_summon_hard_cap_test.tscn",
+          "scope": "existing summon cap test; NOT_RUN this round"
+        }
+      ],
+      "full_behavior_acceptance": "MISSING"
+    },
+    {
+      "profile": "stationary_spider",
+      "registered_ids": [
+        182
+      ],
+      "formal_runtime_ids": [
+        182
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {
+        "specialClassification": "fixed_body_summoner",
+        "summonRule": {
+          "enabled": true,
+          "monsterIds": [
+            183
+          ],
+          "count": 1,
+          "maxActive": 5,
+          "delaySeconds": 0.5,
+          "confidence": "B"
+        },
+        "movement": {
+          "stationary": true
+        }
+      },
+      "behavior_scope": "special",
+      "existing_actor_tests": [
+        {
+          "scene": "tests/monster_summon_hard_cap_test.tscn",
+          "scope": "existing summon cap test; NOT_RUN this round"
+        }
+      ],
+      "full_behavior_acceptance": "MISSING"
+    },
+    {
+      "profile": "explosion_spider",
+      "registered_ids": [
+        183
+      ],
+      "formal_runtime_ids": [
+        183
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {
+        "attackDelivery": {
+          "kind": "self_detonation",
+          "rangeShape": "adjacent_map_cells",
+          "range_gu": 1.0,
+          "physicalRatio": 0.5,
+          "magicRatio": 0.5,
+          "confidence": "A",
+          "source": "original_gameofmir/M2Server/ObjMon2.pas:745-804"
+        }
+      },
+      "behavior_scope": "special",
+      "existing_actor_tests": [],
+      "full_behavior_acceptance": "MISSING",
+      "existing_actor_scope": "ACTOR_RUNTIME",
+      "existing_actor_note": "Exact positive actor scenes exist; newly added negative receipts tracked separately, not source metadata acceptance"
+    },
+    {
+      "profile": "rainbow_demon",
+      "registered_ids": [
+        193
+      ],
+      "formal_runtime_ids": [
+        193
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {
+        "lifeStealRatio": 0.33
+      },
+      "behavior_scope": "special",
+      "existing_actor_tests": [],
+      "full_behavior_acceptance": "MISSING",
+      "semantic_authority": "MISSING",
+      "verified_current_heal_basis": "pre_AC_input",
+      "authority_review": "SPECIAL_LIFESTEAL_SOURCE_AUDIT.md"
+    },
+    {
+      "profile": "millennium_tree",
+      "registered_ids": [
+        195
+      ],
+      "formal_runtime_ids": [
+        195
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {
+        "specialClassification": "fixed_body_full_area_attacker",
+        "areaAttack": {
+          "enabled": true,
+          "targetMode": "all_combat_targets",
+          "scope": "visible_actors",
+          "rangeTiles": 16,
+          "rangePixels": 512.0,
+          "hitDelaySeconds": 0.2,
+          "confidence": "A"
+        },
+        "movement": {
+          "stationary": true
+        }
+      },
+      "behavior_scope": "special",
+      "existing_actor_tests": [
+        {
+          "scene": "tests/fixed_area_monster_test.tscn",
+          "scope": "existing fixed area actor test; NOT_RUN this round"
+        }
+      ],
+      "full_behavior_acceptance": "MISSING"
+    },
+    {
+      "profile": "skeleton_archer",
+      "registered_ids": [
+        206,
+        207
+      ],
+      "formal_runtime_ids": [
+        206
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {
+        "attackDelivery": {
+          "kind": "physical_projectile",
+          "effectId": "monster.physical_arrow.v1",
+          "trajectory": "frozen_target_footpoint",
+          "obstaclePolicy": "environment_can_fly_line",
+          "impactDelay": {
+            "baseSeconds": 0.6,
+            "perChebyshevGuSeconds": 0.05
+          },
+          "confidence": "A",
+          "source": "original_gameofmir/M2Server/ObjAxeMon.pas TDualAxeMonster.FlyAxeAttack"
+        }
+      },
+      "behavior_scope": "special",
+      "existing_actor_tests": [],
+      "full_behavior_acceptance": "MISSING"
+    },
+    {
+      "profile": "cow_mage",
+      "registered_ids": [
+        220
+      ],
+      "formal_runtime_ids": [
+        220
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {
+        "attackDelivery": {
+          "kind": "target_magic",
+          "effectId": "monster.target_lightning.v1",
+          "presentationEffectId": "monster.cow_mage.thunder.primary.v1",
+          "visualSourceManifest": "res://assets/data/monster_target_magic_sources_v1.json",
+          "damageChannel": "magic_defense",
+          "rangeShape": "chebyshev_square",
+          "rangeTiles": 2,
+          "rangePixels": 64.0,
+          "hitDelaySeconds": 0.2,
+          "activation": {
+            "hpBelowRatio": 0.5,
+            "orAxisBoundaryTiles": 2.0
+          },
+          "confidence": "A",
+          "source": "original_gameofmir/M2Server/ObjMon.pas TElectronicScolpionMon.LightingAttack and Run"
+        }
+      },
+      "behavior_scope": "special",
+      "existing_actor_tests": [],
+      "full_behavior_acceptance": "MISSING",
+      "existing_actor_scope": "ACTOR_RUNTIME",
+      "existing_actor_note": "Exact positive actor scenes exist; newly added negative receipts tracked separately, not source metadata acceptance"
+    },
+    {
+      "profile": "cow_priest",
+      "registered_ids": [
+        222
+      ],
+      "formal_runtime_ids": [
+        222
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {
+        "lifeStealRatio": 0.2,
+        "attackDelivery": {
+          "kind": "target_magic",
+          "effectId": "monster.target_lightning.v1",
+          "presentationEffectId": "monster.cow_priest.fly.primary.v1",
+          "visualSourceManifest": "res://assets/data/monster_target_magic_sources_v1.json",
+          "damageChannel": "magic_defense",
+          "rangeShape": "chebyshev_square",
+          "rangeTiles": 2,
+          "rangePixels": 64.0,
+          "hitDelaySeconds": 0.2,
+          "activation": {
+            "hpBelowRatio": 0.5,
+            "orAxisBoundaryTiles": 2.0
+          },
+          "confidence": "A",
+          "source": "original_gameofmir/M2Server/ObjMon.pas TElectronicScolpionMon.LightingAttack and Run"
+        }
+      },
+      "behavior_scope": "special",
+      "existing_actor_tests": [],
+      "full_behavior_acceptance": "MISSING",
+      "existing_actor_scope": "ACTOR_RUNTIME",
+      "existing_actor_note": "Exact positive actor scenes exist; newly added negative receipts tracked separately, not source metadata acceptance"
+    },
+    {
+      "profile": "w1_archer_projectile",
+      "registered_ids": [
+        42,
+        145,
+        186
+      ],
+      "formal_runtime_ids": [
+        42,
+        145,
+        186
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {
+        "attackDelivery": {
+          "kind": "physical_projectile",
+          "effectId": "monster.physical_arrow.v1",
+          "trajectory": "frozen_target_footpoint",
+          "obstaclePolicy": "environment_can_fly_line",
+          "impactDelay": {
+            "baseSeconds": 0.6,
+            "perChebyshevGuSeconds": 0.05
+          },
+          "confidence": "A",
+          "source": "original_gameofmir/M2Server/ObjAxeMon.pas TArcherMonster inherits TDualAxeMonster.FlyAxeAttack",
+          "sourceTiming": "StruckDamage precedes SendDelayMsg; 0.6 + Chebyshev-GU * 0.05 describes delayed RM_10101 feedback, not source HP settlement.",
+          "runtimeCompatibility": "Existing HardCore physical-projectile adapter delays target-bound settlement and validates WORLD/combat_epoch at impact.",
+          "visualAuthority": "monster.physical_arrow.v1 is the existing generic physical-projectile trajectory, not archer-specific source art."
+        }
+      },
+      "behavior_scope": "special",
+      "existing_actor_tests": [],
+      "full_behavior_acceptance": "MISSING"
+    },
+    {
+      "profile": "w1_thorn_dark_projectile_62",
+      "registered_ids": [
+        62
+      ],
+      "formal_runtime_ids": [
+        62
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {
+        "attackDelivery": {
+          "kind": "physical_projectile",
+          "effectId": "monster.physical_arrow.v1",
+          "trajectory": "frozen_target_footpoint",
+          "obstaclePolicy": "environment_can_fly_line",
+          "impactDelay": {
+            "baseSeconds": 0.6,
+            "perChebyshevGuSeconds": 0.05
+          },
+          "confidence": "A",
+          "source": "original_gameofmir/M2Server/ObjAxeMon.pas TThornDarkMonster inherits TDualAxeMonster.FlyAxeAttack",
+          "sourceTiming": "StruckDamage precedes SendDelayMsg; 0.6 + Chebyshev-GU * 0.05 describes delayed RM_10101 feedback, not source HP settlement.",
+          "runtimeCompatibility": "Existing HardCore physical-projectile adapter delays target-bound settlement and validates WORLD/combat_epoch at impact.",
+          "visualAuthority": "monster.physical_arrow.v1 is the existing generic physical-projectile trajectory, not thorn-specific source art."
+        }
+      },
+      "behavior_scope": "special",
+      "existing_actor_tests": [],
+      "full_behavior_acceptance": "MISSING"
+    },
+    {
+      "profile": "w1_thorn_dark_projectile_174",
+      "registered_ids": [
+        174
+      ],
+      "formal_runtime_ids": [
+        174
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {
+        "attackDelivery": {
+          "kind": "physical_projectile",
+          "effectId": "monster.physical_arrow.v1",
+          "trajectory": "frozen_target_footpoint",
+          "obstaclePolicy": "environment_can_fly_line",
+          "impactDelay": {
+            "baseSeconds": 0.6,
+            "perChebyshevGuSeconds": 0.05
+          },
+          "confidence": "A",
+          "source": "original_gameofmir/M2Server/ObjAxeMon.pas TThornDarkMonster inherits TDualAxeMonster.FlyAxeAttack",
+          "sourceTiming": "StruckDamage precedes SendDelayMsg; 0.6 + Chebyshev-GU * 0.05 describes delayed RM_10101 feedback, not source HP settlement.",
+          "runtimeCompatibility": "Existing HardCore physical-projectile adapter delays target-bound settlement and validates WORLD/combat_epoch at impact.",
+          "visualAuthority": "monster.physical_arrow.v1 is the existing generic physical-projectile trajectory, not thorn-specific source art."
+        }
+      },
+      "behavior_scope": "special",
+      "existing_actor_tests": [],
+      "full_behavior_acceptance": "MISSING"
+    },
+    {
+      "profile": "w1_electronic_scolpion_target_magic",
+      "registered_ids": [
+        224
+      ],
+      "formal_runtime_ids": [
+        224
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {
+        "attackDelivery": {
+          "kind": "target_magic",
+          "effectId": "monster.target_lightning.v1",
+          "damageChannel": "magic_defense",
+          "rangeShape": "chebyshev_square",
+          "rangeTiles": 2,
+          "rangePixels": 64.0,
+          "hitDelaySeconds": 0.2,
+          "activation": {
+            "hpBelowRatio": 0.5,
+            "orAxisBoundaryTiles": 2.0
+          },
+          "sourceContactMeleeFallback": true,
+          "confidence": "A",
+          "source": "original_gameofmir/M2Server/ObjMon.pas TElectronicScolpionMon.LightingAttack and Run",
+          "sourceTiming": "Source applies StruckDamage immediately and sends 200 ms RM_10101 feedback; HardCore retains its delayed target-magic settlement contract.",
+          "runtimeCompatibility": "The existing target-magic adapter enforces the formal 2 GU axis condition, magic-defense channel, WORLD and combat_epoch checks, with inherited adjacent physical fallback.",
+          "visualAuthority": "monster.target_lightning.v1 is the existing generic target-magic effect; no new source art is introduced."
+        }
+      },
+      "behavior_scope": "special",
+      "existing_actor_tests": [],
+      "full_behavior_acceptance": "MISSING",
+      "existing_actor_scope": "ACTOR_RUNTIME",
+      "existing_actor_note": "Exact positive actor scenes exist; newly added negative receipts tracked separately, not source metadata acceptance"
+    },
+    {
+      "profile": "w1_spit_spider",
+      "registered_ids": [
+        18,
+        103,
+        104,
+        185
+      ],
+      "formal_runtime_ids": [
+        18,
+        103,
+        104,
+        185
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {
+        "attackDelivery": {
+          "kind": "directional_spit_map",
+          "damageChannel": "magic_defense",
+          "rangeShape": "source_spit_map_5x5",
+          "range_gu": 2.0,
+          "bodyOnly": false,
+          "presentationDelaySeconds": 0.3,
+          "footprintPattern": "source_spit_map_5x5",
+          "cellSteps": 2,
+          "useAccuracy": true,
+          "poisonEnabled": true,
+          "confidence": "A",
+          "source": "ObjMon.pas TSpitSpider.SpitAttack/AttackTarget; TargetInSpitRange and SpitMap are primary geometry",
+          "status": {
+            "poisonKind": "decrease_health",
+            "durationSeconds": 30.0,
+            "chanceDenominatorOffset": 20,
+            "chanceDenominatorStatOwner": "attacker",
+            "point": 1,
+            "tickDamage": 2,
+            "intervalSeconds": 2.5,
+            "intervalSource": {
+              "distribution": "source.original_gameofmir.server_suite",
+              "tier": "primary",
+              "path": "dev_art_sources/reference/original_gameofmir/M2Server/M2Share.pas",
+              "sha256": "9E1505BE616D55A362151150BA92712B9C8439F0A32E35B13C666AE07A33C085",
+              "lines": "2073,10368-10371",
+              "setupPath": "dev_art_sources/reference/original_gameofmir/MirServer/Mir200/!Setup.txt",
+              "setupSha256": "C1DD4A6DE2A53BE3F2BC520B8D42571A0112C4FA58F05292C869942FBD8E146B",
+              "setupLine": "290",
+              "rule": "dwPosionDecHealthTime defaults to 2500 ms and !Setup.txt pins PosionDecHealthTime=2500; runtime Setup may override this setting.",
+              "resolution": "source_default_2_5_seconds_with_external_setup_override_allowed"
+            }
+          },
+          "sourceEvidence": {
+            "distribution": "source.original_gameofmir.server_suite",
+            "tier": "primary",
+            "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas",
+            "sha256": "E32425C0C056CD83E0DD449F752813C613E829DA4EABC21C26CBAD45FFA59CE2",
+            "dispatchPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+            "dispatchLine": "1871",
+            "dispatchSha256": "E9E1735511CE0AEC8F90E52D38F504FD7430DF1AA490D6E82B29D62D7C6E84D3",
+            "fieldEvidence": {
+              "kind": "ObjMon.pas:674-729 TSpitSpider.SpitAttack/AttackTarget",
+              "damageChannel": "ObjMon.pas:698-704 GetMagStruckDamage",
+              "useAccuracy": "ObjMon.pas:699 Random(BaseObject.m_btSpeedPoint) < m_btHitPoint",
+              "rangeShape": "ObjBase.pas:18504-18531 TargetInSpitRange uses SpitMap",
+              "range_gu": "ObjBase.pas:18504-18531 max abs(dx),abs(dy)<=2; project GU adapter",
+              "bodyOnly": "ObjMon.pas:681-701 iterates every enabled SpitMap cell, not target-body-only",
+              "presentationDelaySeconds": "ObjMon.pas:703-704 RM_10101 feedback delay=300 ms",
+              "footprintPattern": "ObjMon.pas:681-690 source 5x5 loop and m_currX/Y-2..+2",
+              "cellSteps": "ObjBase.pas:18504-18531 source spit bound is two cells",
+              "poisonEnabled": "ObjMon.pas:660-665 constructor sets m_boUsePoison=True",
+              "status.poisonKind": "ObjMon.pas:707-709 POISON_DECHEALTH",
+              "status.durationSeconds": "ObjMon.pas:709 MakePosion(...,30,1)",
+              "status.chanceDenominatorOffset": "ObjMon.pas:708 Random(m_btAntiPoison + 20)",
+              "status.chanceDenominatorStatOwner": "ObjMon.pas:708 uses attacker m_btAntiPoison",
+              "status.point": "ObjMon.pas:709 MakePosion(...,30,1); ObjBase.pas:22750 stores green point",
+              "status.tickDamage": "ObjBase.pas:4255-4263 DamageHealth(m_btGreenPoisoningPoint+1)=2",
+              "status.intervalSeconds": "M2Share.pas:2073,10368-10371 and Mir200/!Setup.txt:290"
+            }
+          }
+        }
+      },
+      "behavior_scope": "special",
+      "existing_actor_tests": [
+        {
+          "scene": "tests/hc_monster_ai/w1_special_delivery_runtime_test.tscn",
+          "scope": "special delivery actual actor family paths; does not certify every lifecycle, clock or combination"
+        }
+      ],
+      "full_behavior_acceptance": "MISSING"
+    },
+    {
+      "profile": "w1_spit_elf_warrior_146",
+      "registered_ids": [
+        146
+      ],
+      "formal_runtime_ids": [
+        146
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {
+        "attackDelivery": {
+          "kind": "directional_spit_map",
+          "damageChannel": "magic_defense",
+          "rangeShape": "source_spit_map_5x5",
+          "range_gu": 2.0,
+          "bodyOnly": false,
+          "presentationDelaySeconds": 0.3,
+          "footprintPattern": "source_spit_map_5x5",
+          "cellSteps": 2,
+          "useAccuracy": true,
+          "poisonEnabled": false,
+          "confidence": "A",
+          "source": "ObjMon.pas TSpitSpider.SpitAttack/AttackTarget; TargetInSpitRange and SpitMap are primary geometry",
+          "sourceEvidence": {
+            "distribution": "source.original_gameofmir.server_suite",
+            "tier": "primary",
+            "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas",
+            "sha256": "E32425C0C056CD83E0DD449F752813C613E829DA4EABC21C26CBAD45FFA59CE2",
+            "dispatchPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+            "dispatchLine": "1916",
+            "dispatchSha256": "E9E1735511CE0AEC8F90E52D38F504FD7430DF1AA490D6E82B29D62D7C6E84D3",
+            "fieldEvidence": {
+              "kind": "ObjMon.pas:219-231 TElfWarriorMonster inherits TSpitSpider",
+              "damageChannel": "ObjMon.pas:698-704 inherited TSpitSpider.GetMagStruckDamage",
+              "rangeShape": "ObjBase.pas:18504-18531 inherited TargetInSpitRange uses SpitMap",
+              "range_gu": "ObjBase.pas:18504-18531 inherited two-cell bound; project GU adapter",
+              "bodyOnly": "ObjMon.pas:681-701 inherited 5x5 cell iteration",
+              "presentationDelaySeconds": "ObjMon.pas:703-704 inherited RM_10101 feedback delay=300 ms",
+              "footprintPattern": "ObjMon.pas:681-690 inherited source 5x5 SpitMap loop",
+              "cellSteps": "ObjBase.pas:18504-18531 inherited source spit bound is two cells",
+              "poisonEnabled": "ObjMon.pas:1718-1724 TElfWarriorMonster.Create sets m_boUsePoison=False"
+            }
+          }
+        }
+      },
+      "behavior_scope": "special",
+      "existing_actor_tests": [
+        {
+          "scene": "tests/hc_monster_ai/w1_special_delivery_runtime_test.tscn",
+          "scope": "special delivery actual actor family paths; does not certify every lifecycle, clock or combination"
+        }
+      ],
+      "full_behavior_acceptance": "MISSING"
+    },
+    {
+      "profile": "w1_gas_cave_maggot_46",
+      "registered_ids": [
+        46
+      ],
+      "formal_runtime_ids": [
+        46
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {
+        "onHit": {
+          "controlSeconds": 5.0,
+          "controlChanceDenominatorBase": 20,
+          "confidence": "A",
+          "source": "original_gameofmir/M2Server/UsrEngn.pas race=90 + ObjMon.pas TGasAttackMonster.sub_4A9C78"
+        },
+        "attackDelivery": {
+          "kind": "gas_adjacent",
+          "damageChannel": "magic_defense",
+          "rangeShape": "chebyshev_square",
+          "range_gu": 1.0,
+          "bodyOnly": true,
+          "presentationDelaySeconds": 0.3,
+          "footprintPattern": "adjacent_target",
+          "cellSteps": 1,
+          "useAccuracy": true,
+          "hiddenRevealChanceDenominator": 0,
+          "status": {
+            "poisonKind": "stone",
+            "durationSeconds": 5.0,
+            "chanceDenominatorOffset": 20,
+            "chanceDenominatorStatOwner": "target",
+            "point": 0
+          },
+          "confidence": "A",
+          "source": "ObjMon.pas TGasAttackMonster.sub_4A9C78/AttackTarget; TGasMothMonster adds hidden reveal",
+          "sourceEvidence": {
+            "distribution": "source.original_gameofmir.server_suite",
+            "tier": "primary",
+            "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas",
+            "sha256": "E32425C0C056CD83E0DD449F752813C613E829DA4EABC21C26CBAD45FFA59CE2",
+            "dispatchPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+            "dispatchLine": "1879",
+            "dispatchSha256": "E9E1735511CE0AEC8F90E52D38F504FD7430DF1AA490D6E82B29D62D7C6E84D3",
+            "fieldEvidence": {
+              "kind": "ObjMon.pas:874-918 TGasAttackMonster.sub_4A9C78/AttackTarget",
+              "damageChannel": "ObjMon.pas:887-898 GetMagStruckDamage",
+              "useAccuracy": "ObjMon.pas:890 Random(BaseObject.m_btSpeedPoint) < m_btHitPoint",
+              "rangeShape": "ObjBase.pas:18449-18502 GetAttackDir adjacent Chebyshev target",
+              "range_gu": "ObjBase.pas:18449-18502 GetAttackDir one-cell adjacency; project GU adapter",
+              "bodyOnly": "ObjMon.pas:887 GetPoseCreate selects one adjacent target",
+              "presentationDelaySeconds": "ObjMon.pas:899 RM_10101 feedback delay=300 ms",
+              "footprintPattern": "ObjMon.pas:887 GetPoseCreate adjacent target cell",
+              "cellSteps": "ObjBase.pas:18449-18502 GetAttackDir one-cell adjacency",
+              "status.poisonKind": "ObjMon.pas:899-901 MakePosion(POISON_STONE,5,0)",
+              "status.durationSeconds": "ObjMon.pas:899-901 MakePosion(POISON_STONE,5,0)",
+              "status.chanceDenominatorOffset": "ObjMon.pas:897-900 Random(BaseObject.m_btAntiPoison + 20)",
+              "status.chanceDenominatorStatOwner": "ObjMon.pas:897-900 uses target BaseObject.m_btAntiPoison",
+              "status.point": "ObjMon.pas:899-901 MakePosion(POISON_STONE,5,0)",
+              "hiddenRevealChanceDenominator": "No TGasAttackMonster reveal; zero is the explicit default"
+            }
+          }
+        }
+      },
+      "behavior_scope": "special",
+      "existing_actor_tests": [
+        {
+          "scene": "tests/hc_monster_ai/w1_special_delivery_runtime_test.tscn",
+          "scope": "special delivery actual actor family paths; does not certify every lifecycle, clock or combination"
+        }
+      ],
+      "full_behavior_acceptance": "MISSING"
+    },
+    {
+      "profile": "w1_gas_dung_60",
+      "registered_ids": [
+        60
+      ],
+      "formal_runtime_ids": [
+        60
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {
+        "onHit": {
+          "controlSeconds": 5.0,
+          "controlChanceDenominatorBase": 20,
+          "confidence": "A",
+          "source": "original_gameofmir/M2Server/UsrEngn.pas race=90 + ObjMon.pas TGasAttackMonster.sub_4A9C78"
+        },
+        "attackDelivery": {
+          "kind": "gas_adjacent",
+          "damageChannel": "magic_defense",
+          "rangeShape": "chebyshev_square",
+          "range_gu": 1.0,
+          "bodyOnly": true,
+          "presentationDelaySeconds": 0.3,
+          "footprintPattern": "adjacent_target",
+          "cellSteps": 1,
+          "useAccuracy": true,
+          "hiddenRevealChanceDenominator": 0,
+          "status": {
+            "poisonKind": "stone",
+            "durationSeconds": 5.0,
+            "chanceDenominatorOffset": 20,
+            "chanceDenominatorStatOwner": "target",
+            "point": 0
+          },
+          "confidence": "A",
+          "source": "ObjMon.pas TGasAttackMonster.sub_4A9C78/AttackTarget; TGasMothMonster adds hidden reveal",
+          "sourceEvidence": {
+            "distribution": "source.original_gameofmir.server_suite",
+            "tier": "primary",
+            "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas",
+            "sha256": "E32425C0C056CD83E0DD449F752813C613E829DA4EABC21C26CBAD45FFA59CE2",
+            "dispatchPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+            "dispatchLine": "1879",
+            "dispatchSha256": "E9E1735511CE0AEC8F90E52D38F504FD7430DF1AA490D6E82B29D62D7C6E84D3",
+            "fieldEvidence": {
+              "kind": "ObjMon.pas:874-918 TGasAttackMonster.sub_4A9C78/AttackTarget",
+              "damageChannel": "ObjMon.pas:887-898 GetMagStruckDamage",
+              "useAccuracy": "ObjMon.pas:890 Random(BaseObject.m_btSpeedPoint) < m_btHitPoint",
+              "rangeShape": "ObjBase.pas:18449-18502 GetAttackDir adjacent Chebyshev target",
+              "range_gu": "ObjBase.pas:18449-18502 GetAttackDir one-cell adjacency; project GU adapter",
+              "bodyOnly": "ObjMon.pas:887 GetPoseCreate selects one adjacent target",
+              "presentationDelaySeconds": "ObjMon.pas:899 RM_10101 feedback delay=300 ms",
+              "footprintPattern": "ObjMon.pas:887 GetPoseCreate adjacent target cell",
+              "cellSteps": "ObjBase.pas:18449-18502 GetAttackDir one-cell adjacency",
+              "status.poisonKind": "ObjMon.pas:899-901 MakePosion(POISON_STONE,5,0)",
+              "status.durationSeconds": "ObjMon.pas:899-901 MakePosion(POISON_STONE,5,0)",
+              "status.chanceDenominatorOffset": "ObjMon.pas:897-900 Random(BaseObject.m_btAntiPoison + 20)",
+              "status.chanceDenominatorStatOwner": "ObjMon.pas:897-900 uses target BaseObject.m_btAntiPoison",
+              "status.point": "ObjMon.pas:899-901 MakePosion(POISON_STONE,5,0)",
+              "hiddenRevealChanceDenominator": "No TGasAttackMonster reveal; zero is the explicit default"
+            }
+          }
+        }
+      },
+      "behavior_scope": "special",
+      "existing_actor_tests": [
+        {
+          "scene": "tests/hc_monster_ai/w1_special_delivery_runtime_test.tscn",
+          "scope": "special delivery actual actor family paths; does not certify every lifecycle, clock or combination"
+        }
+      ],
+      "full_behavior_acceptance": "MISSING"
+    },
+    {
+      "profile": "w1_gas_moth_128_168",
+      "registered_ids": [
+        128,
+        168
+      ],
+      "formal_runtime_ids": [
+        128,
+        168
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {
+        "onHit": {
+          "controlSeconds": 5.0,
+          "controlChanceDenominatorBase": 20,
+          "confidence": "A",
+          "source": "original_gameofmir/M2Server/UsrEngn.pas race=105 + ObjMon.pas TGasMothMonster inherits TGasAttackMonster.sub_4A9C78"
+        },
+        "attackDelivery": {
+          "kind": "gas_adjacent",
+          "damageChannel": "magic_defense",
+          "rangeShape": "chebyshev_square",
+          "range_gu": 1.0,
+          "bodyOnly": true,
+          "presentationDelaySeconds": 0.3,
+          "footprintPattern": "adjacent_target",
+          "cellSteps": 1,
+          "useAccuracy": true,
+          "hiddenRevealChanceDenominator": 3,
+          "status": {
+            "poisonKind": "stone",
+            "durationSeconds": 5.0,
+            "chanceDenominatorOffset": 20,
+            "chanceDenominatorStatOwner": "target",
+            "point": 0
+          },
+          "confidence": "A",
+          "source": "ObjMon.pas TGasAttackMonster.sub_4A9C78/AttackTarget; TGasMothMonster adds hidden reveal",
+          "sourceEvidence": {
+            "distribution": "source.original_gameofmir.server_suite",
+            "tier": "primary",
+            "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas",
+            "sha256": "E32425C0C056CD83E0DD449F752813C613E829DA4EABC21C26CBAD45FFA59CE2",
+            "dispatchPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+            "dispatchLine": "1909",
+            "dispatchSha256": "E9E1735511CE0AEC8F90E52D38F504FD7430DF1AA490D6E82B29D62D7C6E84D3",
+            "fieldEvidence": {
+              "kind": "ObjMon.pas:193-199,1569-1590 TGasMothMonster inherits TGasAttackMonster",
+              "damageChannel": "ObjMon.pas:1581-1589 inherited gas helper",
+              "rangeShape": "ObjBase.pas:18449-18502 inherited GetAttackDir adjacency",
+              "range_gu": "ObjBase.pas:18449-18502 inherited one-cell adjacency; project GU adapter",
+              "bodyOnly": "ObjMon.pas:1581-1589 inherited GetPoseCreate selects one target",
+              "presentationDelaySeconds": "ObjMon.pas:899 inherited gas feedback delay=300 ms",
+              "footprintPattern": "ObjMon.pas:1581-1589 inherited adjacent gas target",
+              "cellSteps": "ObjBase.pas:18449-18502 inherited one-cell adjacency",
+              "status.poisonKind": "ObjMon.pas:899-901 inherited POISON_STONE",
+              "status.durationSeconds": "ObjMon.pas:899-901 inherited duration=5",
+              "status.chanceDenominatorOffset": "ObjMon.pas:897-900 inherited anti-poison+20",
+              "hiddenRevealChanceDenominator": "ObjMon.pas:1581-1589 Random(3) when target is hidden"
+            }
+          }
+        }
+      },
+      "behavior_scope": "special",
+      "existing_actor_tests": [
+        {
+          "scene": "tests/hc_monster_ai/w1_special_delivery_runtime_test.tscn",
+          "scope": "special delivery actual actor family paths; does not certify every lifecycle, clock or combination"
+        }
+      ],
+      "full_behavior_acceptance": "MISSING"
+    },
+    {
+      "profile": "w1_line_lighting_zombi_79",
+      "registered_ids": [
+        79
+      ],
+      "formal_runtime_ids": [
+        79
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {
+        "attackDelivery": {
+          "kind": "line_magic",
+          "damageChannel": "magic_defense",
+          "rangeShape": "directional_line_cells",
+          "range_gu": 6.0,
+          "bodyOnly": false,
+          "presentationDelaySeconds": 0.6,
+          "footprintPattern": "directional_line_cells",
+          "cellSteps": 9,
+          "trigger": {
+            "axisExclusiveGu": 6.0
+          },
+          "hitDelaySeconds": 0.6,
+          "undeadMultiplier": 1.5,
+          "confidence": "A",
+          "source": "ObjMon.pas TLightingZombi.Run/LightingAttack; MagPassThroughMagic traverses nine cells",
+          "sourceEvidence": {
+            "distribution": "source.original_gameofmir.server_suite",
+            "tier": "primary",
+            "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas",
+            "sha256": "E32425C0C056CD83E0DD449F752813C613E829DA4EABC21C26CBAD45FFA59CE2",
+            "dispatchPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+            "dispatchLine": "1883",
+            "dispatchSha256": "E9E1735511CE0AEC8F90E52D38F504FD7430DF1AA490D6E82B29D62D7C6E84D3",
+            "fieldEvidence": {
+              "kind": "ObjMon.pas:1131-1144 TLightingZombi.LightingAttack",
+              "damageChannel": "ObjMon.pas:1141-1143 MagPassThroughMagic(...,True)",
+              "rangeShape": "ObjMon.pas:1150-1168 axis-aligned absolute delta gate",
+              "range_gu": "ObjMon.pas:1150-1168 abs(dx),abs(dy)<6; project GU adapter",
+              "bodyOnly": "ObjBase.pas:2536-2568 MagPassThroughMagic visits each traversed cell",
+              "presentationDelaySeconds": "ObjBase.pas:2536-2568 RM_MAGSTRUCK delay=600 ms",
+              "footprintPattern": "ObjMon.pas:1138-1143 GetNextPosition step 1 to step 9",
+              "cellSteps": "ObjMon.pas:1138-1143 target endpoint is GetNextPosition(...,9)",
+              "trigger.axisExclusiveGu": "ObjMon.pas:1150-1168 both abs axes are strictly <6",
+              "hitDelaySeconds": "ObjBase.pas:2536-2568 RM_MAGSTRUCK delay=600 ms",
+              "undeadMultiplier": "ObjBase.pas:2536-2555 undeadattack=True applies 1.5"
+            }
+          }
+        }
+      },
+      "behavior_scope": "special",
+      "existing_actor_tests": [
+        {
+          "scene": "tests/hc_monster_ai/w1_special_delivery_runtime_test.tscn",
+          "scope": "special delivery actual actor family paths; does not certify every lifecycle, clock or combination"
+        }
+      ],
+      "full_behavior_acceptance": "MISSING"
+    },
+    {
+      "profile": "w1_mixed_cow_king_76",
+      "registered_ids": [
+        76
+      ],
+      "formal_runtime_ids": [
+        76
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {
+        "attackDelivery": {
+          "kind": "mixed_target_tile",
+          "damageChannel": "mixed_defense",
+          "rangeShape": "chebyshev_square",
+          "range_gu": 1.0,
+          "bodyOnly": true,
+          "presentationDelaySeconds": 0.2,
+          "footprintPattern": "target_cell",
+          "physicalRatio": 0.5,
+          "magicRatio": 0.5,
+          "confidence": "A",
+          "source": "ObjMon.pas mixed HitMagAttackTarget source method",
+          "sourceEvidence": {
+            "distribution": "source.original_gameofmir.server_suite",
+            "tier": "primary",
+            "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas",
+            "sha256": "E32425C0C056CD83E0DD449F752813C613E829DA4EABC21C26CBAD45FFA59CE2",
+            "dispatchPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+            "dispatchLine": "1881",
+            "dispatchSha256": "E9E1735511CE0AEC8F90E52D38F504FD7430DF1AA490D6E82B29D62D7C6E84D3",
+            "fieldEvidence": {
+              "kind": "ObjMon.pas:1039-1047 TCowKingMonster.Attack",
+              "damageChannel": "ObjBase.pas:22631-22658 HitMagAttackTarget splits hit/magic channels",
+              "rangeShape": "ObjBase.pas:18449-18502 inherited adjacent target cell",
+              "range_gu": "ObjBase.pas:18449-18502 inherited GetAttackDir adjacency; project GU adapter",
+              "bodyOnly": "ObjBase.pas:22631-22658 HitMagAttackTarget enumerates target cell",
+              "presentationDelaySeconds": "ObjBase.pas:22631-22658 RM_10101 feedback delay=200 ms",
+              "footprintPattern": "ObjBase.pas:22631-22658 GeTBaseObjects(target cell)",
+              "physicalRatio": "ObjMon.pas:1043-1045 HitMagAttackTarget nPower div 2",
+              "magicRatio": "ObjMon.pas:1043-1045 HitMagAttackTarget nPower div 2"
+            }
+          }
+        }
+      },
+      "behavior_scope": "special",
+      "existing_actor_tests": [
+        {
+          "scene": "tests/hc_monster_ai/w1_special_delivery_runtime_test.tscn",
+          "scope": "special delivery actual actor family paths; does not certify every lifecycle, clock or combination"
+        },
+        {
+          "scene": "tests/classic_boss_order_test.tscn",
+          "scope": "historical boss partial behavior; ID160 lacks source search clock"
+        }
+      ],
+      "full_behavior_acceptance": "MISSING"
+    },
+    {
+      "profile": "w1_mixed_cow_king_variants",
+      "registered_ids": [
+        77,
+        235,
+        236,
+        239
+      ],
+      "formal_runtime_ids": [
+        77,
+        235,
+        236,
+        239
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {
+        "attackDelivery": {
+          "kind": "mixed_target_tile",
+          "damageChannel": "mixed_defense",
+          "rangeShape": "chebyshev_square",
+          "range_gu": 1.0,
+          "bodyOnly": true,
+          "presentationDelaySeconds": 0.2,
+          "footprintPattern": "target_cell",
+          "physicalRatio": 0.5,
+          "magicRatio": 0.5,
+          "confidence": "A",
+          "source": "ObjMon.pas mixed HitMagAttackTarget source method",
+          "sourceEvidence": {
+            "distribution": "source.original_gameofmir.server_suite",
+            "tier": "primary",
+            "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas",
+            "sha256": "E32425C0C056CD83E0DD449F752813C613E829DA4EABC21C26CBAD45FFA59CE2",
+            "dispatchPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+            "dispatchLine": "1881",
+            "dispatchSha256": "E9E1735511CE0AEC8F90E52D38F504FD7430DF1AA490D6E82B29D62D7C6E84D3",
+            "fieldEvidence": {
+              "kind": "ObjMon.pas:1039-1047 TCowKingMonster.Attack",
+              "damageChannel": "ObjBase.pas:22631-22658 HitMagAttackTarget splits hit/magic channels",
+              "rangeShape": "ObjBase.pas:18449-18502 inherited adjacent target cell",
+              "range_gu": "ObjBase.pas:18449-18502 inherited GetAttackDir adjacency; project GU adapter",
+              "bodyOnly": "ObjBase.pas:22631-22658 HitMagAttackTarget enumerates target cell",
+              "presentationDelaySeconds": "ObjBase.pas:22631-22658 RM_10101 feedback delay=200 ms",
+              "footprintPattern": "ObjBase.pas:22631-22658 GeTBaseObjects(target cell)",
+              "physicalRatio": "ObjMon.pas:1043-1045 HitMagAttackTarget nPower div 2",
+              "magicRatio": "ObjMon.pas:1043-1045 HitMagAttackTarget nPower div 2"
+            }
+          }
+        }
+      },
+      "behavior_scope": "special",
+      "existing_actor_tests": [
+        {
+          "scene": "tests/hc_monster_ai/w1_special_delivery_runtime_test.tscn",
+          "scope": "special delivery actual actor family paths; does not certify every lifecycle, clock or combination"
+        }
+      ],
+      "full_behavior_acceptance": "MISSING"
+    },
+    {
+      "profile": "w1_mixed_sculture_king_160",
+      "registered_ids": [
+        160
+      ],
+      "formal_runtime_ids": [
+        160
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {
+        "dormant": true,
+        "attackDelivery": {
+          "kind": "mixed_target_tile",
+          "damageChannel": "mixed_defense",
+          "rangeShape": "chebyshev_square",
+          "range_gu": 1.0,
+          "bodyOnly": true,
+          "presentationDelaySeconds": 0.2,
+          "footprintPattern": "target_cell",
+          "physicalRatio": 0.0,
+          "magicRatio": 1.0,
+          "confidence": "A",
+          "source": "ObjMon.pas mixed HitMagAttackTarget source method",
+          "sourceEvidence": {
+            "distribution": "source.original_gameofmir.server_suite",
+            "tier": "primary",
+            "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas",
+            "sha256": "E32425C0C056CD83E0DD449F752813C613E829DA4EABC21C26CBAD45FFA59CE2",
+            "dispatchPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+            "dispatchLine": "1906",
+            "dispatchSha256": "E9E1735511CE0AEC8F90E52D38F504FD7430DF1AA490D6E82B29D62D7C6E84D3",
+            "fieldEvidence": {
+              "kind": "ObjMon.pas:1502-1508 TScultureKingMonster.Attack",
+              "damageChannel": "ObjBase.pas:22631-22658 HitMagAttackTarget magic branch",
+              "rangeShape": "ObjBase.pas:18449-18502 inherited adjacent target cell",
+              "range_gu": "ObjBase.pas:18449-18502 inherited GetAttackDir adjacency; project GU adapter",
+              "bodyOnly": "ObjBase.pas:22631-22658 HitMagAttackTarget enumerates target cell",
+              "presentationDelaySeconds": "ObjBase.pas:22631-22658 RM_10101 feedback delay=200 ms",
+              "footprintPattern": "ObjBase.pas:22631-22658 GeTBaseObjects(target cell)",
+              "physicalRatio": "ObjMon.pas:1506-1507 HitMagAttackTarget nHitPower=0",
+              "magicRatio": "ObjMon.pas:1506-1507 HitMagAttackTarget nMagPower=nPower"
+            }
+          }
+        }
+      },
+      "behavior_scope": "special",
+      "existing_actor_tests": [
+        {
+          "scene": "tests/hc_monster_ai/w1_special_delivery_runtime_test.tscn",
+          "scope": "special delivery actual actor family paths; does not certify every lifecycle, clock or combination"
+        },
+        {
+          "scene": "tests/classic_boss_order_test.tscn",
+          "scope": "historical boss partial behavior; ID160 lacks source search clock"
+        },
+        {
+          "scene": "tests/monster_summon_hard_cap_test.tscn",
+          "scope": "existing summon cap test; NOT_RUN this round"
+        }
+      ],
+      "full_behavior_acceptance": "MISSING"
+    },
+    {
+      "profile": "w1_guard_archer_194",
+      "registered_ids": [
+        194
+      ],
+      "formal_runtime_ids": [
+        194
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {
+        "attackDelivery": {
+          "kind": "guard_direct_projectile",
+          "damageChannel": "physical_defense",
+          "rangeShape": "manhattan_diamond",
+          "range_gu": 12.0,
+          "bodyOnly": true,
+          "footprintPattern": "target_cell",
+          "rangeMetric": "manhattan",
+          "viewRangeGu": 12.0,
+          "useAccuracy": false,
+          "damageTiming": "immediate",
+          "obstaclePolicy": "world_fresh_override",
+          "presentationKind": "generic_projectile_observer",
+          "presentationDelay": {
+            "baseSeconds": 0.6,
+            "perChebyshevGuSeconds": 0.05
+          },
+          "confidence": "A",
+          "source": "ObjMon2.pas TArcherGuard constructor/sub_4A6B30/Run",
+          "sourceEvidence": {
+            "distribution": "source.original_gameofmir.server_suite",
+            "tier": "primary",
+            "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon2.pas",
+            "sha256": "983C098130D7A83B34F19746FC484609DCEF975344864C435526D254F98D0BCD",
+            "dispatchPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+            "dispatchLine": "1914",
+            "dispatchSha256": "E9E1735511CE0AEC8F90E52D38F504FD7430DF1AA490D6E82B29D62D7C6E84D3",
+            "fieldEvidence": {
+              "kind": "ObjMon2.pas:904-921 TArcherGuard.sub_4A6B30",
+              "damageChannel": "ObjMon2.pas:909 GetHitStruckDamage then StruckDamage",
+              "rangeShape": "ObjMon2.pas:936-950 nearest target selection uses Manhattan nAbs",
+              "range_gu": "ObjMon2.pas:889-893 constructor m_nViewRange:=12; project GU adapter",
+              "bodyOnly": "ObjMon2.pas:904-921 one selected target body",
+              "footprintPattern": "ObjMon2.pas:904-921 target-bound RM_FLYAXE presentation",
+              "rangeMetric": "ObjMon2.pas:936-950 nAbs := abs(dx)+abs(dy)",
+              "viewRangeGu": "ObjMon2.pas:889-893 m_nViewRange := 12",
+              "useAccuracy": "ObjMon2.pas:904-923 has no Random(speed)<hit gate; direct GetHitStruckDamage then StruckDamage",
+              "damageTiming": "ObjMon2.pas:909-914 StruckDamage precedes SendDelayMsg",
+              "obstaclePolicy": "HardCore adapter requirement: fresh WORLD check at settlement; source has no fly-LOS rule",
+              "presentationKind": "ObjMon2.pas:914-916 RM_FLYAXE presentation only after immediate HP settlement",
+              "presentationDelay.baseSeconds": "ObjMon2.pas:914-916 delay formula base=600 ms",
+              "presentationDelay.perChebyshevGuSeconds": "ObjMon2.pas:914-916 max(dx,dy)*50 ms"
+            }
+          }
+        }
+      },
+      "behavior_scope": "special",
+      "existing_actor_tests": [
+        {
+          "scene": "tests/hc_monster_ai/w1_special_delivery_runtime_test.tscn",
+          "scope": "special delivery actual actor family paths; does not certify every lifecycle, clock or combination"
+        }
+      ],
+      "full_behavior_acceptance": "MISSING"
+    },
+    {
+      "profile": "w1_fixed_noncombat",
+      "registered_ids": [
+        226,
+        227,
+        228,
+        229,
+        230,
+        231,
+        232,
+        233,
+        234
+      ],
+      "formal_runtime_ids": [
+        226,
+        227,
+        228,
+        229,
+        230,
+        231,
+        232,
+        233,
+        234
+      ],
+      "unmapped_legacy_profile": false,
+      "special_fields": {
+        "specialClassification": "fixed_noncombat",
+        "combatEnabled": false,
+        "movement": {
+          "stationary": true
+        }
+      },
+      "behavior_scope": "special",
+      "existing_actor_tests": [],
+      "full_behavior_acceptance": "MISSING"
+    }
+  ],
+  "mainline_review": "SPECIAL_MAINLINE_REVIEW.md",
+  "scope_definition": {
+    "ACTOR_RUNTIME": "real actor path exists for the stated branch, not complete ID/lifecycle acceptance",
+    "FAMILY_RUNTIME": "representative delivery family only",
+    "STATIC_ONLY": "metadata/source inspection",
+    "full_behavior_acceptance": "retains MISSING/NOT_RUN unless all exact-ID/lifecycle outcomes are accepted"
+  }
+}

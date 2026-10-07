@@ -22,7 +22,9 @@ func _run() -> void:
 	rng.seed = 271927
 	Observer.recording_enabled = true
 	for mid: int in [24, 76, 238, 239]:
+		print("D3_PHASE_BEGIN id=", mid, " wall_ms=", Time.get_ticks_msec())
 		await _motion_pressure(mid)
+		print("D3_PHASE_END id=", mid, " wall_ms=", Time.get_ticks_msec())
 	await _real_pause_and_late_draw()
 	Observer.recording_enabled = false
 	FileAccess.open("res://outputs/test_logs/r4_d3_motion_pressure.json", FileAccess.WRITE).store_string(JSON.stringify({"rows": rows, "failures": failures}, "  "))
@@ -52,6 +54,7 @@ func _motion_pressure(mid: int) -> void:
 	await get_tree().physics_frame
 	# Establish one real reachable action before the faster player motion and
 	# sustained DIRECT pressure. No clock/cadence/cooldown rewrite.
+	print("D3_ADMISSION_WAIT id=", mid, " clock=", actor._combat_action_time_s, " combat=", actor.combat_enabled)
 	var initial_admission_deadline := actor._combat_action_time_s + 4.0
 	while actor._hc_starts==0 and actor._combat_action_time_s<initial_admission_deadline:
 		await get_tree().physics_frame
@@ -91,14 +94,10 @@ func _motion_pressure(mid: int) -> void:
 			motion_gu += _screen_to_ground(player.global_position - before).length()
 			frame += 1
 		if phase == "pressure":
-			# source176 Task 2 (docs/02 D1/D2): direct-magic postponement now
-			# gates melee starts too, so sustained spell pressure legitimately
-			# starves new starts. The R4 deadlock guard stays: zero starts is
-			# acceptable only while a magic postponement floor is active; a
-			# genuine deadlock (no starts, no postponement) still fails.
+			# Sustained spell pressure must not starve new melee starts. A struck
+			# delays only the next attack deadline and never movement admission.
 			_check(
-				actor._hc_starts > starts_before
-				or actor._movement_cadence.direct_magic_walk_floor_ms > 0,
+				actor._hc_starts > starts_before,
 				"%d:pressure_prevented_all_starts" % mid,
 			)
 		phases.append({"phase": phase, "frames": frame, "new_starts": actor._hc_starts - starts_before})

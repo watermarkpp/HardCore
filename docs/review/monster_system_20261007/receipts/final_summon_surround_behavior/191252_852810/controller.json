@@ -1,0 +1,23 @@
+{
+  "command": [
+    "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+    "-NoProfile",
+    "-NonInteractive",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-File",
+    "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+    "-RequestPath",
+    "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\monster_upgrade_20261007\\final_summon_surround_behavior\\191252_852810\\runner_request.json"
+  ],
+  "timeout_seconds": 60,
+  "exit_code": 0,
+  "source_stable": true,
+  "source_content_sha256": "15b63efb24a518f6d008355f14479b802a16fe98989ecc8af4c1b357f3a58666",
+  "tested_head": "aa75c5bc9845b49ee3ce67ce064442cc3fb3c43c",
+  "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+  "invocation_id": "302e64bb-576d-459b-9a02-0571372451cf",
+  "passed": 3,
+  "failed": 0,
+  "status": "PASS"
+}

@@ -7,15 +7,11 @@ const SourceReactionRegistryScript := preload(
 	"res://scripts/monster_source176/skill_reaction_registry.gd"
 )
 
-## R1: vanilla monster magic delivery classes.
-## DIRECT_MAGSTRUCK is the RM_MAGSTRUCK family (targeted/destined direct
-## magic): when the resolution enters the magic-defense stage (anti-magic did
-## not evade) and the target is a Lv<50 monster, the target's next autonomous
-## walk is postponed by 800 + Random(1000) ms.
-## MAGSTRUCK_MINE is the RM_MAGSTRUCK_MINE family (TFireBurnEvent ground
-## burns, e.g. wizard.fire_wall): MAC and damage resolve normally and a
-## positive tick still produces an ordinary STRUCK, but the walk tick is
-## NEVER postponed. Every pre-R1 caller keeps DIRECT_MAGSTRUCK semantics.
+## Monster magic delivery classes retain source-family routing and RNG order.
+## DIRECT_MAGSTRUCK and MAGSTRUCK_MINE both resolve MAC normally. Positive
+## damage produces ordinary STRUCK presentation and the level-based attack
+## delay; neither delivery postpones autonomous movement. Direct magic keeps
+## its legacy actor RNG draw at the MAC boundary for sequence compatibility.
 ## source176 AUTO (-1) is the migration/compatibility value for generic
 ## call sites that deliver several skills: the kind is resolved through
 ## SourceReactionRegistry by stable id. AUTO never grants DIRECT silently -
@@ -149,15 +145,18 @@ func apply_enemy_direct_spell_damage(
 		checked_anti_magic_roll,
 		magic_defense_adapter
 	)
-	# Vanilla order: the walk-tick postponement applies when the message
-	# actually enters the magic-defense stage (anti-magic did not evade),
-	# even if MAC later compresses the final damage to 0. The ordinary STRUCK
-	# (take_damage below) still requires final_damage > 0.
+	# Keep the legacy actor-RNG draw for the former Lv<50 direct-magic
+	# reception boundary. It is a compatibility draw only: it no longer feeds
+	# movement, damage, or any timing decision. The caller's spell RNG remains
+	# untouched.
 	if (
 		checked_delivery == EnemyMagicDeliveryKind.DIRECT_MAGSTRUCK
 		and bool(resolution.get("enters_magic_defense_stage", false))
 	):
-		_apply_direct_magic_walk_delay(target)
+		_compatibility_draw_direct_magic_actor_rng(target)
+	# Direct magic and mine damage share the ordinary positive-damage STRUCK
+	# path below. A struck may postpone the next attack deadline, but it must
+	# never alter the movement cadence or gate the next autonomous segment.
 	var final_damage := int(resolution.get("final_damage", 0))
 	if final_damage > 0:
 		if checked_delivery == EnemyMagicDeliveryKind.MAGSTRUCK_MINE:
@@ -265,33 +264,12 @@ func _target_rejects_damage(target: Node) -> bool:
 	)
 
 
-## RM_MAGSTRUCK walk postponement (Lv<50 monsters, not source-exempt).
-## The 800..1799ms composition lives in MonsterStruckPolicy; the target owns
-## the movement cadence AND the roll (its own RNG stream, never the caller's
-## spell-resolution stream - that stream's continuation is a validated
-## contract). Fail-closed on targets without an integer level (summons keep
-## their own delivery rules and are not R1 scope).
-##
-## Evidence Note (R1.1, reviewer adjudication): the vanilla source-exemption
-## flag is the server-side `bo2BF` member, whose only known setter is
-## `TCowKingMonster.Create -> bo2BF := True` (牛魔王). Every known exempt
-## monster in the 1.76 data set is Level >= 50, so the `level < 50` gate in
-## MonsterStruckPolicy already yields the identical result and the runtime
-## passes `false` deliberately - there is no monster-data field carrying this
-## flag yet, and R1 must not invent one. When a future data revision adds a
-## real exemption source, replace the literal `false` with that field here;
-## the policy API stays unchanged.
-func _apply_direct_magic_walk_delay(target: Node) -> void:
-	if not target.has_method("apply_source_direct_magic_walk_delay"):
+func _compatibility_draw_direct_magic_actor_rng(target: Node) -> void:
+	if not target.has_method("consume_direct_magic_compatibility_roll"):
 		return
 	var raw_level: Variant = target.get("level")
-	if not raw_level is int:
-		return
-	if not MonsterStruckPolicyScript.direct_magic_can_delay_walk(
-		int(raw_level), false
-	):
-		return
-	target.call("apply_source_direct_magic_walk_delay")
+	if raw_level is int and MonsterStruckPolicyScript.direct_magic_compatibility_draw_required(int(raw_level), false):
+		target.call("consume_direct_magic_compatibility_roll")
 
 
 func _target_stats_with_runtime_buffs(target: Node) -> Dictionary:

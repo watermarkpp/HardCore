@@ -1,10 +1,16 @@
 # HardCore Current Status
 
+## 2026-10-07：v105反馈的怪物系统修复正在执行
+
+当前 `codex/integration`，施工基线 HEAD `aa75c5bc9845b49ee3ce67ce064442cc3fb3c43c`，改动尚未提交。用户已授权直接魔法受击只延后下一攻击、不得停移动；Boss 基础攻击间隔使用21CQ主属性，祖玛阶段召唤在既有行动时钟有目标8秒/无目标1秒边界消费，保留4–7只/次、15只上限及阶段算法。用户另授权简化群怪追击/包围，允许退休旧axis/corner等待和站位认领，保留真实地形/身体碰撞、怪物数量与伤害结算。
+
+接手先读 `docs/review/monster_system_20261007/CURRENT_RESULT.md`。最新相同源码阶段18项原生功能回归PASS、退出0、无引擎错误；包括自动入战、短墙绕行及真实攻击、窄道、完整已提交路径、30怪2700帧开阔与墙边包围、连续受击、Boss/火墙/main召唤。已修复额外发现的polygon路线过度绕行：全canonical路径确实清晰后再恢复直接追击。完整receipt、较早46/47超时FAIL及特殊行为覆盖缺口保留。用户最终要求停止重复性能采集，群怪流畅度以其实际游玩体感验收。固定候选正在准备构建v106；包名/签名/存档合同不变；APK BUILD: NOT_RUN；DEVICE TEST: NOT_RUN。
+
 ## 2026-10-07：第三树成为唯一主树
 
 用户已确定 `codex/integration` 为唯一主树。当前工程内容继承第三树快照 `b3d144061b9b0aef419ce6b746ddc476023fd912`，补入旧主树缺失的素材编辑工具、源素材与文档。旧主树、第二树和临时树的冲突实现、人工数据、证据保全；详见 `docs/WORKSPACE_CURRENT_STATUS.md` 与 `docs/retired/20261007/README.md`。下方 v97 及旧交付条目为历史，不能作为当前源码状态。
 
-架构升级仍未全量验收。保留 A01—A04/B01 原始证据及 FAIL/MISSING/NOT_RUN 边界，本次不修改玩法、版本或签名，不重新构建/安装 APK；DEVICE TEST: NOT_RUN。
+架构升级仍未全量验收。保留 A01—A04/B01 原始证据及 FAIL/MISSING/NOT_RUN 边界，该次主树迁移不修改玩法、版本或签名，不重新构建/安装 APK；DEVICE TEST: NOT_RUN。
 
 ## 2026-09-29：v97 锻造存档与新物品图标修复
 

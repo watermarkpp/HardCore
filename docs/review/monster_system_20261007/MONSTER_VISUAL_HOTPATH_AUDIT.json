@@ -1,0 +1,39 @@
+{
+  "baseline": "codex/integration@aa75c5bc9845b49ee3ce67ce064442cc3fb3c43c",
+  "status": "READ_ONLY_AUDIT",
+  "confirmed": {
+    "per_actor_process": "monster_visual.gd:389-401",
+    "no_per_frame_decode": true,
+    "coordinator": "game_root.gd:1890-1892; monster_visual_streaming_coordinator.gd:429-448,452-545",
+    "no_unconditional_queue_redraw": true,
+    "no_per_frame_atlas_new": true,
+    "frame_path": "monster_visual.gd:503-552",
+    "cold_load": "monster_visual.gd:1033-1057,1107-1123",
+    "render_guard": "monster_visual.gd:1060-1083"
+  },
+  "tiering": {
+    "idle": "resident visible visuals still process",
+    "moving": "same process path, walk phase/facing branch",
+    "dormant_burrow": "draw suppressed for burrowed, no explicit process-tier branch",
+    "released": "process disabled, coarse residency wakeup",
+    "engaged": "same path plus Enemy redraw requests on status/combat transitions"
+  },
+  "observer_seam": [
+    "visual_animation_updates",
+    "visual_render_state_changes",
+    "actor_redraw_requests",
+    "monster_streaming_poll_max_ms",
+    "resource_apply_count",
+    "same_key_reload_count",
+    "sync_load_count",
+    "threaded_texture_request_count",
+    "threaded_texture_get_count",
+    "Performance.TIME_PROCESS",
+    "Performance.TIME_PHYSICS_PROCESS",
+    "draw_calls",
+    "render_primitives",
+    "texture_mem",
+    "video_mem"
+  ],
+  "device": "NOT_RUN"
+}

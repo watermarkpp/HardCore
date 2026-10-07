@@ -1,0 +1,13 @@
+{
+  "timeout": 30,
+  "tests": [
+    "tests/user_feedback_20260930/natural_entry_obstacle_test.tscn",
+    "tests/user_feedback_20260930/natural_wall_detour_test.tscn",
+    "tests/user_feedback_20260930/natural_narrow_corridor_test.tscn",
+    "tests/source176_r3/c05_native_detour_test.tscn",
+    "tests/source176_r3/exact_leg_and_corridor_test.tscn",
+    "tests/user_feedback_20260930/surround_target_body_route_test.tscn",
+    "tests/user_feedback_20260930/flank_committed_segment_test.tscn",
+    "tests/user_feedback_20260930/flank_projection_residual_test.tscn"
+  ]
+}

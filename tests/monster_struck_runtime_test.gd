@@ -2,7 +2,7 @@ extends Node2D
 
 ## R1 monster struck runtime: attack-deadline semantics (negative allowed),
 ## committed attacks survive ordinary struck, ordinary struck never touches
-## the walk cadence, direct magic postpones the walk tick (Lv<50), MAC-zero
+## the walk cadence, direct magic also never postpones the walk tick, MAC-zero
 ## still postpones, anti-magic evasion postpones nothing, fire wall
 ## (MAGSTRUCK_MINE) never postpones, Lv50 immune to the walk delay, and
 ## poison ticks damage HP only.
@@ -188,10 +188,9 @@ func _test_ordinary_struck_keeps_walk_cadence() -> void:
 	enemy.free()
 
 
-## Section 37: direct magic enters the MAC stage -> walk tick +800..1799.
-## The roll comes from the TARGET's own RNG stream (the service must not
-## consume the caller's spell-resolution RNG; its continuation is a validated
-## parity contract). Seed it and mirror the draw with a probe RNG.
+## Section 37: direct magic enters the MAC stage -> attack delay only.
+## The spell-resolution RNG must keep its continuation unchanged and the
+## target's movement cadence must remain untouched for every monster level.
 func _test_direct_magic_walk_delay() -> void:
 	var enemy := await _make_enemy(18, 43)
 	var cadence = enemy._movement_cadence
@@ -199,9 +198,6 @@ func _test_direct_magic_walk_delay() -> void:
 	var hp_before := enemy.current_hp
 	var deadline_before := enemy._attack_timer
 	enemy._rng.seed = 20260916
-	var probe_rng := RandomNumberGenerator.new()
-	probe_rng.seed = 20260916
-	var expected_roll := probe_rng.randi_range(0, 999)
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 20260916
 	var resolution: Dictionary = _combat_runtime.apply_enemy_direct_spell_damage(
@@ -215,10 +211,7 @@ func _test_direct_magic_walk_delay() -> void:
 		{},
 	)
 	_check(bool(resolution.get("success", false)), "direct magic dealt damage")
-	_check(
-		cadence.walk_tick_ms == tick_before + 800 + expected_roll,
-		"walk tick postponed by exactly 800 + roll (%d)" % expected_roll
-	)
+	_check(cadence.walk_tick_ms == tick_before, "direct magic never postpones walk")
 	_check(enemy.current_hp < hp_before, "positive magic damage reduces HP")
 	_check(
 		enemy._attack_timer > deadline_before,
@@ -229,7 +222,7 @@ func _test_direct_magic_walk_delay() -> void:
 
 
 ## Section 38: MAC compresses damage to 0 AFTER the MAC stage was entered:
-## walk delay stays, ordinary STRUCK does not happen.
+## neither movement nor attack deadline changes, and ordinary STRUCK does not happen.
 func _test_direct_magic_zero_damage_boundary() -> void:
 	var enemy := await _make_enemy(18, 43)
 	var cadence = enemy._movement_cadence
@@ -252,10 +245,7 @@ func _test_direct_magic_zero_damage_boundary() -> void:
 	_check(bool(resolution.get("enters_magic_defense_stage", false)), "MAC stage was entered")
 	_check(int(resolution.get("final_damage", -1)) == 0, "MAC compressed damage to 0")
 	_check(enemy.current_hp == hp_before, "HP unchanged")
-	_check(
-		cadence.walk_tick_ms > tick_before,
-		"walk tick is still postponed at zero final damage"
-	)
+	_check(cadence.walk_tick_ms == tick_before, "zero final damage does not postpone walk")
 	_check(
 		is_equal_approx(enemy._attack_timer, deadline_before),
 		"attack deadline untouched at zero final damage"

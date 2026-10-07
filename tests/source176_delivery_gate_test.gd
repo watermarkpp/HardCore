@@ -223,10 +223,7 @@ func _test_auto_resolves_direct_family() -> void:
 	)
 	_check(not resolution.has("failure_reason"), "AUTO lightning: no rejection")
 	_check(bool(resolution.get("success", false)), "AUTO lightning: dealt damage")
-	_check(
-		cadence.walk_tick_ms == tick_before + 800 + expected_roll,
-		"AUTO lightning: walk tick postponed by 800 + target roll (%d)" % expected_roll
-	)
+	_check(cadence.walk_tick_ms == tick_before, "AUTO lightning: movement cadence unchanged")
 	_check(enemy.current_hp < hp_before, "AUTO lightning: HP reduced")
 	enemy.free()
 
@@ -283,10 +280,7 @@ func _test_explicit_direct_stays_accepted() -> void:
 	)
 	_check(not resolution.has("failure_reason"), "explicit DIRECT lightning: no rejection")
 	_check(bool(resolution.get("success", false)), "explicit DIRECT lightning: dealt damage")
-	_check(
-		cadence.walk_tick_ms == tick_before + 800 + expected_roll,
-		"explicit DIRECT lightning: walk tick postponed by 800 + roll"
-	)
+	_check(cadence.walk_tick_ms == tick_before, "explicit DIRECT lightning: movement cadence unchanged")
 	_check(enemy.current_hp < hp_before, "explicit DIRECT lightning: HP reduced")
 	enemy.free()
 

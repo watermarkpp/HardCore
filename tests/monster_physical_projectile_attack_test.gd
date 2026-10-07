@@ -10,6 +10,7 @@ const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 
 var _descriptors: Array[Dictionary] = []
 var _blocked_world_px := Vector2.INF
+var _case_completed := false
 
 
 func _ready() -> void:
@@ -22,7 +23,12 @@ func _run() -> void:
 	_assert_authoritative_archer_profiles()
 	_assert_id50_identity_bridge()
 	for monster_id: int in [42, 50, 62, 145, 150, 152, 174, 186, 206]:
+		_case_completed = false
 		await _assert_actual_actor_delivery(monster_id)
+		if not _case_completed:
+			print("MONSTER_PHYSICAL_PROJECTILE_ATTACK_FAIL monster_id=", monster_id)
+			get_tree().quit(1)
+			return
 	print(
 		"MONSTER_PHYSICAL_PROJECTILE_ATTACK_PASS "
 		+ "exact_actors=42,50,62,145,150,152,174,186,206 release_after_frame=1 "
@@ -72,6 +78,8 @@ func _assert_actual_actor_delivery(monster_id: int) -> void:
 	attacker.target = player
 	attacker.attack_min = 7
 	attacker.attack_max = 7
+	# Independent body actions must enter a new real physics tick.
+	await get_tree().physics_frame
 	attacker._attack_timer = 0.0
 
 	var hp_before := player.current_hp
@@ -109,6 +117,8 @@ func _assert_actual_actor_delivery(monster_id: int) -> void:
 	await get_tree().physics_frame
 	await get_tree().process_frame
 
+	# Independent body actions must enter a new real physics tick.
+	await get_tree().physics_frame
 	attacker._attack_timer = 0.0
 	attacker._physics_process(0.01)
 	_advance_release(attacker)
@@ -125,6 +135,8 @@ func _assert_actual_actor_delivery(monster_id: int) -> void:
 
 	# A target changing maps during flight keeps the visual but cancels damage.
 	player.current_hp = hp_before
+	# Independent body actions must enter a new real physics tick.
+	await get_tree().physics_frame
 	attacker._attack_timer = 0.0
 	attacker._physics_process(0.01)
 	_advance_release(attacker)
@@ -138,6 +150,8 @@ func _assert_actual_actor_delivery(monster_id: int) -> void:
 	# Every exact projectile actor freezes the typed player epoch at launch. A complete
 	# Loading transition invalidates the old projectile even after READY resumes.
 	attacker.target = player
+	# Independent body actions must enter a new real physics tick.
+	await get_tree().physics_frame
 	attacker._attack_timer = 0.0
 	attacker._physics_process(0.01)
 	_advance_release(attacker)
@@ -150,6 +164,8 @@ func _assert_actual_actor_delivery(monster_id: int) -> void:
 	assert(player.current_hp == hp_before, "monsterId=%d projectile crossed combat_epoch" % monster_id)
 
 	# A wall entering the frozen lane after launch must stop the live flight.
+	# Independent body actions must enter a new real physics tick.
+	await get_tree().physics_frame
 	attacker._attack_timer = 0.0
 	attacker._physics_process(0.01)
 	_advance_release(attacker)
@@ -176,7 +192,12 @@ func _assert_actual_actor_delivery(monster_id: int) -> void:
 
 	# CanFly parity: one blocked intermediate sample rejects the whole release,
 	# so there is no visual and no delayed damage transaction.
+	# The prior cross-map cases may legally begin a return segment. Start
+	# this independent exact-sample lane through the formal position writer.
+	attacker.set_combat_position(Vector2.ZERO, &"projectile_fixture_lane")
 	_blocked_world_px = _ground_to_screen(Vector2(2.0, 0.0))
+	# Independent body actions must enter a new real physics tick.
+	await get_tree().physics_frame
 	attacker._attack_timer = 0.0
 	attacker._physics_process(0.01)
 	_advance_release(attacker)
@@ -191,6 +212,10 @@ func _assert_actual_actor_delivery(monster_id: int) -> void:
 		if child is Node2D and child.get_script() == ProjectileEffectScript:
 			child.queue_free()
 	await get_tree().process_frame
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	await get_tree().process_frame
+	_case_completed = true
 
 
 func _advance_release(attacker: EnemyActor) -> void:
