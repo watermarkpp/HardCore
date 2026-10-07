@@ -47,8 +47,39 @@ if ($dirty -and -not $AllowDirty -and -not $SkipDirtyCheck) {
     Pop-Location; exit 1
 }
 
-$versionName = (git show HEAD:project.godot | Select-String 'config/version' | ForEach { $_ -replace '.*=\s*"([^"]+)".*','$1' }).Trim()
-$versionCode = (git show HEAD:export_presets.cfg | Select-String 'version/code=' | ForEach { $_ -replace '.*version/code=(\d+).*','$1' }).Trim()
+function Read-BuildGitUtf8([string]$RelativePath) {
+    # Git blobs are UTF-8; never decode them using the host console codepage.
+    $info = New-Object System.Diagnostics.ProcessStartInfo
+    $info.FileName = 'git.exe'
+    $info.WorkingDirectory = [IO.Path]::GetFullPath($ROOT)
+    $info.Arguments = 'show "HEAD:' + $RelativePath + '"'
+    $info.UseShellExecute = $false
+    $info.CreateNoWindow = $true
+    $info.RedirectStandardOutput = $true
+    $info.RedirectStandardError = $true
+    $info.StandardOutputEncoding = [Text.UTF8Encoding]::new($false, $true)
+    $info.StandardErrorEncoding = [Text.UTF8Encoding]::new($false, $true)
+    $process = New-Object System.Diagnostics.Process
+    $process.StartInfo = $info
+    try {
+        if (-not $process.Start()) { throw 'Unable to read build metadata from Git.' }
+        $stdout = $process.StandardOutput.ReadToEndAsync()
+        $stderr = $process.StandardError.ReadToEndAsync()
+        $process.WaitForExit()
+        $text = $stdout.GetAwaiter().GetResult()
+        $errorText = $stderr.GetAwaiter().GetResult()
+        if ($process.ExitCode -ne 0) { throw ('Build metadata Git read failed exit={0}: {1}' -f $process.ExitCode, $errorText) }
+        return $text
+    } finally { $process.Dispose() }
+}
+
+$ProjectText = Read-BuildGitUtf8 'project.godot'
+$PresetText = Read-BuildGitUtf8 'export_presets.cfg'
+$NameMatches = [regex]::Matches($ProjectText, '(?m)^config/version="([^"\r\n]+)"\r?$')
+$CodeMatches = [regex]::Matches($PresetText, '(?m)^version/code=(\d+)\r?$')
+if ($NameMatches.Count -ne 1 -or $CodeMatches.Count -ne 1) { throw 'Missing or ambiguous version metadata in the fixed Git source.' }
+$versionName = $NameMatches[0].Groups[1].Value
+$versionCode = $CodeMatches[0].Groups[1].Value
 # QA override (remote review 2026-09-16): the isolated build injects a
 # monotonic per-QA versionCode into the staged preset; build_info.json must
 # record the SAME code or the runtime-resource verify step rejects the APK.

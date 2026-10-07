@@ -9,6 +9,41 @@ param(
 
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version 2.0
+function Read-AndroidToolUtf8 {
+    param([string]$Executable, [string[]]$Arguments)
+    # Android inspection tools emit UTF-8 independently of PowerShell's locale.
+    # Read both pipes concurrently and keep the actual native failure status.
+    $info = New-Object System.Diagnostics.ProcessStartInfo
+    $info.FileName = $Executable
+    $info.Arguments = $Arguments -join ' '
+    $info.UseShellExecute = $false
+    $info.CreateNoWindow = $true
+    $info.RedirectStandardOutput = $true
+    $info.RedirectStandardError = $true
+    $info.StandardOutputEncoding = [Text.UTF8Encoding]::new($false, $true)
+    $info.StandardErrorEncoding = [Text.UTF8Encoding]::new($false, $true)
+    $process = New-Object System.Diagnostics.Process
+    $process.StartInfo = $info
+    try {
+        if (-not $process.Start()) { throw 'Unable to start Android inspection tool.' }
+        $stdout = $process.StandardOutput.ReadToEndAsync()
+        $stderr = $process.StandardError.ReadToEndAsync()
+        if (-not $process.WaitForExit(60000)) {
+            $process.Kill()
+            $process.WaitForExit()
+            throw 'Android inspection tool timed out.'
+        }
+        $text = $stdout.GetAwaiter().GetResult()
+        $errorText = $stderr.GetAwaiter().GetResult()
+        if ($process.ExitCode -ne 0) {
+            throw ('Android inspection failed exit={0}: {1}' -f $process.ExitCode, $errorText)
+        }
+        return $text
+    } finally {
+        $process.Dispose()
+    }
+}
+
 $ProjectRoot = Split-Path $PSScriptRoot -Parent
 
 if ([string]::IsNullOrWhiteSpace($ApkPath)) {
@@ -51,8 +86,8 @@ if ($CandidateCertificates.Count -eq 0 -or ($CandidateCertificates -join ',') -c
 }
 Write-Output $CandidateSignature
 
-$Badging = (& $Aapt dump badging $ApkPath) -join "`n"
-$BaselineBadging = (& $Aapt dump badging $BaselineApkPath) -join "`n"
+$Badging = Read-AndroidToolUtf8 -Executable $Aapt -Arguments @('dump','badging',([char]34+$ApkPath+[char]34))
+$BaselineBadging = Read-AndroidToolUtf8 -Executable $Aapt -Arguments @('dump','badging',([char]34+$BaselineApkPath+[char]34))
 $IdentityPattern = "package: name='([^']+)' versionCode='([0-9]+)'"
 $CandidateIdentity = [regex]::Match($Badging, $IdentityPattern)
 $BaselineIdentity = [regex]::Match($BaselineBadging, $IdentityPattern)
@@ -62,7 +97,7 @@ if (-not $CandidateIdentity.Success -or -not $BaselineIdentity.Success -or
     throw 'Direct update requires the same package identity and a higher version code.'
 }
 Write-Output "ANDROID_DIRECT_UPDATE_IDENTITY_PASS certificate_sha256=$($CandidateCertificates -join ',')"
-$Manifest = (& $Aapt dump xmltree $ApkPath AndroidManifest.xml) -join "`n"
+$Manifest = Read-AndroidToolUtf8 -Executable $Aapt -Arguments @('dump','xmltree',([char]34+$ApkPath+[char]34),'AndroidManifest.xml')
 $ExpectedBadging = @(
     "name='com.personal.mafaoffline'",
     "sdkVersion:'24'",
