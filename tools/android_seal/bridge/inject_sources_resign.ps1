@@ -32,13 +32,15 @@ try {
     }
 } finally { $zip.Dispose() }
 
-$SdkBuildTools = "C:\Users\Administrator\Documents\HardCore\tools\android-build\sdk\build-tools\35.0.1"
-$Keystore = "C:\Users\Administrator\.codex\worktrees\pluggable-framework-v2\HardCore\tools\godot-4.7\editor_data\keystores\debug.keystore"
+$ProjectRoot = Split-Path (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent) -Parent
+$SdkBuildTools = Join-Path $ProjectRoot "tools\android-build\sdk\build-tools\35.0.1"
+$Keystore = Join-Path $ProjectRoot "tools\godot-4.7\editor_data\keystores\debug.keystore"
+if (-not (Test-Path -LiteralPath $Keystore -PathType Leaf)) { throw "APK signing keystore is missing from the current tool root." }
 $Aligned = "$ApkPath.aligned"
 & (Join-Path $SdkBuildTools "zipalign.exe") -f -p 4 $ApkPath $Aligned
 if ($LASTEXITCODE -ne 0) { throw "zipalign failed" }
 Move-Item $Aligned $ApkPath -Force
-$env:JAVA_HOME = (Get-ChildItem "C:\Users\Administrator\Documents\HardCore\tools\android-build\jdk" -Directory | Select-Object -First 1).FullName
+$env:JAVA_HOME = (Get-ChildItem (Join-Path $ProjectRoot "tools\android-build\jdk") -Directory | Select-Object -First 1).FullName
 & (Join-Path $SdkBuildTools "apksigner.bat") sign --ks $Keystore --ks-pass pass:android --ks-key-alias androiddebugkey $ApkPath
 if ($LASTEXITCODE -ne 0) { throw "apksigner failed" }
 $cert = ((& (Join-Path $SdkBuildTools "apksigner.bat") verify --print-certs $ApkPath 2>&1) -join "`n")
