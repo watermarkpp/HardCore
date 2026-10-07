@@ -65,6 +65,19 @@ function Invoke-CodeOfficialExport([string]$GodotConsole, [string]$StageRoot, [s
     return @{native_exit=$NativeExit; apk=$Apk; apk_sha256=(Get-CodeExportHash $Apk); engine_sha256=(Get-CodeExportHash $GodotConsole); log=$Log; stdout=$Stdout; stderr=$Stderr}
 }
 
+function Invoke-CodeSealTool {
+    param([string]$Python, [string[]]$Arguments, [string]$EvidenceRoot, [string]$Name)
+    # Native JSON stdout is evidence, never an extra PowerShell return value.
+    # Use the existing raw-stream/real-exit process owner, including failures.
+    $Quoted = @()
+    foreach ($Argument in $Arguments) {
+        if ($Argument.Contains([string][char]34)) { throw 'Invalid quote in native seal argument.' }
+        $Quoted += ([string][char]34 + $Argument + [string][char]34)
+    }
+    $ToolExit = Invoke-CodeExportProcess -Executable $Python -Arguments $Quoted -Stdout (Join-Path $EvidenceRoot ($Name + '.stdout.log')) -Stderr (Join-Path $EvidenceRoot ($Name + '.stderr.log'))
+    if ($ToolExit -ne 0) { throw "Native seal tool failed: $Name exit=$ToolExit" }
+}
+
 function Invoke-TwoPassAndroidCodeExport {
     param(
         [Parameter(Mandatory=$true)][string]$StageRoot,
@@ -118,8 +131,7 @@ function Invoke-TwoPassAndroidCodeExport {
     Assert-CodeExportFrozen $Fixed
     $SealJson = Join-Path $EvidenceRoot 'android-export-seal.json'
     $SealGd = Join-Path $EvidenceRoot 'internal_code_android_export_data.gd'
-    & $Python -B $SealTool --source-catalogue $Inputs.SourceCatalogue --expected-source-catalogue-sha256 $Fixed[$Inputs.SourceCatalogue] --source-plan $Inputs.SourcePlan --expected-source-plan-sha256 $Fixed[$Inputs.SourcePlan] --producer $Inputs.Producer --expected-producer-sha256 $Fixed[$Inputs.Producer] --namespace $Inputs.Namespace --expected-namespace-sha256 $Fixed[$Inputs.Namespace] --source-root $StageRoot --apk $FirstApk --expected-apk-sha256 $First.apk_sha256 --template $TemplateApk --expected-template-sha256 $ExpectedTemplateSha256 --source-commit $SourceCommit --entry-id $Inputs.EntryId --output-gd $SealGd --output-json $SealJson
-    if ($LASTEXITCODE -ne 0) { throw 'Strict source/export seal generation failed.' }
+    Invoke-CodeSealTool -Python $Python -Arguments @('-B', $SealTool, '--source-catalogue', $Inputs.SourceCatalogue, '--expected-source-catalogue-sha256', $Fixed[$Inputs.SourceCatalogue], '--source-plan', $Inputs.SourcePlan, '--expected-source-plan-sha256', $Fixed[$Inputs.SourcePlan], '--producer', $Inputs.Producer, '--expected-producer-sha256', $Fixed[$Inputs.Producer], '--namespace', $Inputs.Namespace, '--expected-namespace-sha256', $Fixed[$Inputs.Namespace], '--source-root', $StageRoot, '--apk', $FirstApk, '--expected-apk-sha256', $First.apk_sha256, '--template', $TemplateApk, '--expected-template-sha256', $ExpectedTemplateSha256, '--source-commit', $SourceCommit, '--entry-id', $Inputs.EntryId, '--output-gd', $SealGd, '--output-json', $SealJson) -EvidenceRoot $EvidenceRoot -Name 'build-seal'
     $SealGdHash = Get-CodeExportHash $SealGd
     Copy-Item -LiteralPath $SealGd -Destination $Metadata
     # No version mutation, build-info regeneration, timestamp change, manual
@@ -131,8 +143,7 @@ function Invoke-TwoPassAndroidCodeExport {
     if ((Get-CodeExportHash $Metadata) -cne $SealGdHash) { throw 'Generated metadata source changed during export.' }
     $FinalSigner = Assert-CodeExportSigner $OutputApk $BaselineApk $ApkSigner
     $Receipt = Join-Path $EvidenceRoot 'final-export-identity-receipt.json'
-    & $Python -B $VerifyTool --seal-json $SealJson --expected-seal-json-sha256 (Get-CodeExportHash $SealJson) --seal-gd $Metadata --expected-seal-gd-sha256 $SealGdHash --source-plan $Inputs.SourcePlan --expected-source-plan-sha256 $Fixed[$Inputs.SourcePlan] --source-root $StageRoot --apk $OutputApk --expected-apk-sha256 $Final.apk_sha256 --template $TemplateApk --expected-template-sha256 $ExpectedTemplateSha256 --source-commit $SourceCommit --output $Receipt
-    if ($LASTEXITCODE -ne 0) { throw 'Final export identity changed or is incomplete.' }
+    Invoke-CodeSealTool -Python $Python -Arguments @('-B', $VerifyTool, '--seal-json', $SealJson, '--expected-seal-json-sha256', (Get-CodeExportHash $SealJson), '--seal-gd', $Metadata, '--expected-seal-gd-sha256', $SealGdHash, '--source-plan', $Inputs.SourcePlan, '--expected-source-plan-sha256', $Fixed[$Inputs.SourcePlan], '--source-root', $StageRoot, '--apk', $OutputApk, '--expected-apk-sha256', $Final.apk_sha256, '--template', $TemplateApk, '--expected-template-sha256', $ExpectedTemplateSha256, '--source-commit', $SourceCommit, '--output', $Receipt) -EvidenceRoot $EvidenceRoot -Name 'final-verify'
     # Existing verify_android_build.ps1 remains the package/version/splash/runtime
     # resource acceptance owner. Callback must throw on any failure.
     # Verification logs are evidence, not additional function return values.
