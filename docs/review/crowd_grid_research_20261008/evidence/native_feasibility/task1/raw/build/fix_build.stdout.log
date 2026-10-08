@@ -1,0 +1,32 @@
+**********************************************************************
+** Visual Studio 2026 Developer Command Prompt v18.5.2
+** Copyright (c) 2026 Microsoft Corporation
+**********************************************************************
+scons: Entering directory `C:\Users\Administrator\.codex\worktrees\crowd-v107-comparison\HardCore\outputs\native_kernel_sdk\godot-cpp'
+scons: Reading SConscript files ...
+Auto-detected 12 CPU cores available for build parallelism. Using 11 cores by default. You can override it with the -j argument.
+Building for architecture x86_64 on platform windows
+scons: done reading SConscript files.
+scons: Building targets ...
+scons: `bin\libgodot-cpp.windows.template_debug.x86_64.lib' is up to date.
+scons: done building targets.
+**********************************************************************
+** Visual Studio 2026 Developer Command Prompt v18.5.2
+** Copyright (c) 2026 Microsoft Corporation
+**********************************************************************
+scons: Entering directory `C:\Users\Administrator\.codex\worktrees\crowd-v107-comparison\HardCore\research\native\crowd_kernel'
+scons: Reading SConscript files ...
+scons: done reading SConscript files.
+scons: Building targets ...
+cl /Fosrc\crowd_melee_kernel.obj /c src\crowd_melee_kernel.cpp /TP /std:c++17 /Zc:__cplusplus /DTYPED_METHOD_BIND /EHsc /MT /nologo /IC:\Users\Administrator\.codex\worktrees\crowd-v107-comparison\HardCore\outputs\native_kernel_sdk\godot-cpp\include /IC:\Users\Administrator\.codex\worktrees\crowd-v107-comparison\HardCore\outputs\native_kernel_sdk\godot-cpp\gen\include /IC:\Users\Administrator\.codex\worktrees\crowd-v107-comparison\HardCore\outputs\native_kernel_sdk\godot-cpp\include\godot_cpp
+crowd_melee_kernel.cpp
+C:\Users\Administrator\.codex\worktrees\crowd-v107-comparison\HardCore\outputs\native_kernel_sdk\godot-cpp\include\godot_cpp/templates/cowdata.hpp(1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+C:\Users\Administrator\.codex\worktrees\crowd-v107-comparison\HardCore\outputs\native_kernel_sdk\godot-cpp\include\godot_cpp/core/memory.hpp(1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+link /nologo /dll /out:bin\crowd_melee_kernel.windows.template_debug.x86_64.dll /implib:bin\crowd_melee_kernel.windows.template_debug.x86_64.lib /LIBPATH:C:\Users\Administrator\.codex\worktrees\crowd-v107-comparison\HardCore\outputs\native_kernel_sdk\godot-cpp\bin C:\Users\Administrator\.codex\worktrees\crowd-v107-comparison\HardCore\outputs\native_kernel_sdk\godot-cpp\bin\libgodot-cpp.windows.template_debug.x86_64.lib src\crowd_melee_kernel.obj src\register_types.obj
+  正在创建库 bin\crowd_melee_kernel.windows.template_debug.x86_64.lib 和对象 bin\crowd_melee_kernel.windows.template_debug.x86_64.exp
+scons: done building targets.
+
+Algorithm       Hash                                                                   Path
+---------       ----                                                                   ----
+SHA256          755A2242FAE39F31AACA34B2DA542C1EEC9F5DB859131F18A6DCED5713698DB0       C:\Users\Administrator\.codex\w…
+

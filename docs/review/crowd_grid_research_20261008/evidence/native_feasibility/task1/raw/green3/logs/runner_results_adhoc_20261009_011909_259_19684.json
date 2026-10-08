@@ -1,0 +1,40 @@
+{
+  "results": [
+    {
+      "test_name": "crowd_native_kernel_contract_20261009",
+      "test_path": "tests/crowd_native_kernel_contract_20261009.tscn",
+      "wrapper_process_id": 17952,
+      "wrapper_started_utc": "2026-10-08T17:19:02.3043327Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-v107-comparison\\HardCore\\outputs\\crowd_native_kernel_20261009\\task1\\green3\\runtime",
+      "fixed_fps": 0,
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-08T17:19:32.3160583Z",
+      "native_exit_observed_utc": "2026-10-08T17:19:07.7377963Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "",
+      "framework_receipt_valid": null,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "failed": 0,
+  "runtime_environment": {
+    "project_root": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-v107-comparison\\HardCore",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-v107-comparison\\HardCore\\outputs\\crowd_native_kernel_20261009\\task1\\green3\\runtime",
+    "runner_process_id": 19684
+  },
+  "engine_log_errors": 0,
+  "passed": 1,
+  "git_head": "edae6fdef6a6551a951fab1ea8c6ade43359d603",
+  "invocation_id": "3c8ab0e9-ea06-41be-8b06-2c30d0fe4861",
+  "suite": "adhoc",
+  "total": 1,
+  "generated_at": "2026-10-09T01:19:09.2600683+08:00"
+}

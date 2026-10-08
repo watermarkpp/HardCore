@@ -1,0 +1,23 @@
+{
+  "test_name": "crowd_native_kernel_contract_20261009",
+  "test_path": "tests/crowd_native_kernel_contract_20261009.tscn",
+  "wrapper_process_id": 4944,
+  "wrapper_started_utc": "2026-10-08T17:07:25.4921700Z",
+  "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-v107-comparison\\HardCore\\outputs\\crowd_native_kernel_20261009\\task1\\red\\runtime",
+  "fixed_fps": 0,
+  "pass_marker_found": false,
+  "process_exited": false,
+  "wrapper_exit_code": -1,
+  "child_process_exit_state": "forced_termination",
+  "execution_deadline_utc": "2026-10-08T17:07:55.5043578Z",
+  "native_exit_observed_utc": null,
+  "effective_exit_code": -1,
+  "timeout": false,
+  "stdout_failure_count": 0,
+  "stderr_failure_count": 3,
+  "engine_log_failure_count": 3,
+  "framework_run_id": "",
+  "framework_receipt_valid": null,
+  "result": "FAIL",
+  "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_3;engine_log_failures_3"
+}

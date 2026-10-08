@@ -35,35 +35,6 @@ var _bucket_size_gu := DEFAULT_BUCKET_SIZE_GU
 ## Every registration/removal/bucket crossing invalidates conservative
 ## bucket identity pools. Positions inside a bucket are read live.
 var bucket_membership_revision := 0
-## Exact monotone stamps, not a hash: an unrelated bucket cannot invalidate
-## a complete identity pool. Positions and narrow phases remain live.
-var _bucket_membership_stamps: Dictionary = {}
-var _map_membership_stamps: Dictionary = {}
-var _map_clear_stamps: Dictionary = {}
-var _bounds_growth_stamp := 0
-
-func _record_bucket_membership_change(map_id: int, old_bucket: Vector2i, new_bucket: Vector2i) -> void:
-	bucket_membership_revision += 1
-	var stamps: Dictionary = _bucket_membership_stamps.get(map_id, {})
-	stamps[old_bucket] = bucket_membership_revision
-	stamps[new_bucket] = bucket_membership_revision
-	_bucket_membership_stamps[map_id] = stamps
-	_map_membership_stamps[map_id] = bucket_membership_revision
-
-func enemy_bucket_pool_unchanged(map_id: int, covered: Rect2i, since: int) -> bool:
-	if since < 0 or covered.size.x <= 0 or covered.size.y <= 0:
-		return false
-	if _bounds_growth_stamp > since or int(_map_clear_stamps.get(map_id, 0)) > since:
-		return false
-	if int(_map_membership_stamps.get(map_id, 0)) <= since:
-		return true
-	var stamps: Dictionary = _bucket_membership_stamps.get(map_id, {})
-	for y in range(covered.position.y, covered.end.y):
-		for x in range(covered.position.x, covered.end.x):
-			if int(stamps.get(Vector2i(x, y), 0)) > since:
-				return false
-	return true
-
 
 var index_register_count := 0
 var index_unregister_count := 0
@@ -131,13 +102,11 @@ func register(
 	}
 	if is_instance_valid(node):
 		_stable_order_by_node_instance_id[node.get_instance_id()] = stable_combat_order
-	if safe_bounds > _max_actor_bounds_gu:
-		_bounds_growth_stamp = bucket_membership_revision + 1
 	_max_actor_bounds_gu = maxf(_max_actor_bounds_gu, safe_bounds)
 	_bucket_set(runtime_map_id, _entries[actor_runtime_id]["bucket_key"])[
 		actor_runtime_id
 	] = weakref(node)
-	_record_bucket_membership_change(runtime_map_id, _entries[actor_runtime_id]["bucket_key"], _entries[actor_runtime_id]["bucket_key"])
+	bucket_membership_revision += 1
 	index_register_count += 1
 
 
@@ -160,7 +129,7 @@ func unregister(actor_runtime_id: int) -> void:
 	if map_buckets.is_empty():
 		_buckets.erase(runtime_map_id)
 	_entries.erase(actor_runtime_id)
-	_record_bucket_membership_change(runtime_map_id, bucket_key, bucket_key)
+	bucket_membership_revision += 1
 	index_unregister_count += 1
 
 
@@ -184,7 +153,7 @@ func update_actor(actor_runtime_id: int, absolute_ground_gu: Vector2) -> void:
 	)
 	entry["bucket_key"] = new_bucket
 	_bucket_set(runtime_map_id, new_bucket)[actor_runtime_id] = node_ref
-	_record_bucket_membership_change(runtime_map_id, old_bucket, new_bucket)
+	bucket_membership_revision += 1
 	index_bucket_change_count += 1
 
 
@@ -203,9 +172,6 @@ func clear_map(runtime_map_id: int) -> void:
 			removed += 1
 	if removed > 0:
 		bucket_membership_revision += 1
-		_map_clear_stamps[runtime_map_id] = bucket_membership_revision
-		_map_membership_stamps[runtime_map_id] = bucket_membership_revision
-		_bucket_membership_stamps.erase(runtime_map_id)
 	index_unregister_count += removed
 
 
@@ -760,7 +726,6 @@ func _move_entry_to(actor_runtime_id: int, new_bucket: Vector2i) -> void:
 	if entry.is_empty():
 		return
 	var runtime_map_id := int(entry.get("runtime_map_id", -1))
-	var old_bucket: Vector2i = entry.get("bucket_key", Vector2i.ZERO)
 	var node_ref: WeakRef = _take_bucket_ref(
 		runtime_map_id,
 		entry.get("bucket_key", Vector2i.ZERO),
@@ -768,7 +733,7 @@ func _move_entry_to(actor_runtime_id: int, new_bucket: Vector2i) -> void:
 	)
 	entry["bucket_key"] = new_bucket
 	_bucket_set(runtime_map_id, new_bucket)[actor_runtime_id] = node_ref
-	_record_bucket_membership_change(runtime_map_id, old_bucket, new_bucket)
+	bucket_membership_revision += 1
 	index_bucket_change_count += 1
 
 
@@ -791,7 +756,7 @@ func _erase_entry(actor_runtime_id: int) -> void:
 	if map_buckets.is_empty():
 		_buckets.erase(runtime_map_id)
 	_entries.erase(actor_runtime_id)
-	_record_bucket_membership_change(runtime_map_id, bucket_key, bucket_key)
+	bucket_membership_revision += 1
 	index_unregister_count += 1
 
 

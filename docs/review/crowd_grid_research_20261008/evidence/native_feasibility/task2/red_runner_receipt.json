@@ -1,0 +1,40 @@
+{
+  "runtime_environment": {
+    "project_root": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-v107-comparison\\HardCore",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-v107-comparison\\HardCore\\.godot\\runtime_appdata",
+    "runner_process_id": 22100
+  },
+  "total": 1,
+  "results": [
+    {
+      "test_name": "crowd_quantum_abi_contract_20261009",
+      "test_path": "tests/crowd_quantum_abi_contract_20261009.tscn",
+      "wrapper_process_id": 14152,
+      "wrapper_started_utc": "2026-10-08T17:40:51.3009753Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-v107-comparison\\HardCore\\.godot\\runtime_appdata",
+      "fixed_fps": 0,
+      "pass_marker_found": false,
+      "process_exited": true,
+      "wrapper_exit_code": 1,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-08T17:41:21.3129131Z",
+      "native_exit_observed_utc": "2026-10-08T17:40:59.3919192Z",
+      "effective_exit_code": 1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "",
+      "framework_receipt_valid": null,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1"
+    }
+  ],
+  "invocation_id": "2d9e8d99-73f3-4711-b95d-58f5659cc055",
+  "failed": 1,
+  "suite": "adhoc",
+  "engine_log_errors": 0,
+  "generated_at": "2026-10-09T01:41:00.4620085+08:00",
+  "passed": 0,
+  "git_head": "edae6fdef6a6551a951fab1ea8c6ade43359d603"
+}

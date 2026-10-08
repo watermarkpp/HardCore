@@ -1,0 +1,148 @@
+{
+  "schema": "crowd_quantum_abi_sham_verification_20261009",
+  "status": "PASS",
+  "scope": "Offline diagnostic comparison of LOCAL and ABI_SHAM transport arms; no production/performance promotion.",
+  "reviewed_without_rerun": true,
+  "source_archive": {
+    "path": "outputs/crowd_native_kernel_20261009/task2/sham",
+    "files_preserved": 20,
+    "source_inputs": [
+      "sham_inputs/scripts/enemy.gd",
+      "sham_inputs/tests/crowd_quantum_abi_sham_20261009.gd",
+      "sham_inputs/tests/crowd_quantum_abi_sham_20261009.tscn",
+      "sham_inputs/tests/helpers/crowd_quantum_boundary_trace_20261009.gd"
+    ],
+    "source_sha256": {
+      "sham_inputs/scripts/enemy.gd": "26db15449980141db11119a864a0abdddcc199ea47dc3d852f1909e906375cea",
+      "sham_inputs/tests/crowd_quantum_abi_sham_20261009.gd": "1a3709bd4ceef910956a8873d1f8f20638e311e515d047edcc72da6c0b028dcf",
+      "sham_inputs/tests/crowd_quantum_abi_sham_20261009.tscn": "718f8aa51147efdced027b2c0ddb9055f03bcc3439800dac66545e0559d2738d",
+      "sham_inputs/tests/helpers/crowd_quantum_boundary_trace_20261009.gd": "5f2be9b9c97ddb147eff7f0280411ec41dbee6f60ca06104af3b07700da533cb",
+      "local.json": "1bf464be20327d31889b80dcc46f7e24746eb32dfac538595a163ccc3438ce46",
+      "abi_sham.json": "7341fffd4875d2ce9d466d2ef86d9ec8484c4ce55da1638a8fd7c50901c6ef2c"
+    }
+  },
+  "runners": {
+    "runner_local": {
+      "status": "PASS",
+      "sha256": "d164e89876b61e50ea9cdbd218e80028b0f9320b039bb4e4805273540caac98f",
+      "invocation_id": "e8ceffac-acd8-4610-96e3-7c1979b5868f",
+      "total": 1,
+      "passed": 1,
+      "failed": 0,
+      "engine_log_errors": 0,
+      "effective_exit_code": 0,
+      "pass_marker": true
+    },
+    "runner_native": {
+      "status": "PASS",
+      "sha256": "18d04d96142d740d24be18613defd977e3b8fd7f62cc8a8d7e8c9a5752766b92",
+      "invocation_id": "e9fe4e67-aac6-4ee8-83dc-deea41296a9a",
+      "total": 1,
+      "passed": 1,
+      "failed": 0,
+      "engine_log_errors": 0,
+      "effective_exit_code": 0,
+      "pass_marker": true
+    }
+  },
+  "counts": {
+    "local_actual_physics_ticks": 300,
+    "native_actual_physics_ticks": 300,
+    "local_enemy_outer_calls": 10200,
+    "native_enemy_outer_calls": 10200,
+    "local_diagnostic_errors": 0,
+    "native_diagnostic_errors": 0,
+    "local_identity_bytes": 555328,
+    "native_identity_bytes": 553536,
+    "local_scalar_bytes": 1041240,
+    "native_scalar_bytes": 1037880,
+    "local_vector_bytes": 694160,
+    "native_vector_bytes": 691920,
+    "local_bridge_calls": 16019,
+    "native_bridge_calls": 16023,
+    "input_bytes_per_call": 264,
+    "output_bytes_instrumented": false
+  },
+  "per_arm_usec": {
+    "LOCAL": {
+      "R": {
+        "enemy_outer_usec": 761683,
+        "retained_move_usec": 407992,
+        "observation_usec": 40209,
+        "attack_usec": 9951
+      },
+      "R_total": 1219835,
+      "P_compute": 1054037,
+      "B_packing": 110652,
+      "sample_elapsed_usec": 4954646
+    },
+    "ABI_SHAM": {
+      "R": {
+        "enemy_outer_usec": 735341,
+        "retained_move_usec": 411216,
+        "observation_usec": 38526,
+        "attack_usec": 12244
+      },
+      "R_total": 1197327,
+      "P_compute": 1007297,
+      "B_packing": 129503,
+      "sample_elapsed_usec": 4957578
+    },
+    "target_R_usec": 1028639.25
+  },
+  "trajectory_comparison": {
+    "strict_paired_bridge_attribution": "UNKNOWN",
+    "reason": "same requested fixture/layout and 300 ticks, but actual local/native trajectories and events differ",
+    "local": {
+      "moving_ticks": 107,
+      "total_gu": 3.0628186835836,
+      "attacks": {
+        "player_hp_end": 120,
+        "player_hp_loss": 167,
+        "total_starts": 16
+      },
+      "potion_ticks": [
+        45,
+        90,
+        195
+      ],
+      "engaged_enemy_count": 8677
+    },
+    "native": {
+      "moving_ticks": 130,
+      "total_gu": 3.05363195088421,
+      "attacks": {
+        "player_hp_end": 161,
+        "player_hp_loss": 174,
+        "total_starts": 16
+      },
+      "potion_ticks": [
+        45,
+        90,
+        225,
+        255
+      ],
+      "engaged_enemy_count": 8649
+    }
+  },
+  "interpretation": {
+    "input_contract_same": true,
+    "same_identity_order": true,
+    "same_layout": true,
+    "R_target_result": "both_above_target",
+    "absolute_production_lower_bound": false,
+    "P_fully_portable": false,
+    "B_future_candidate_packing_omitted": true,
+    "performance_claim": "NOT_RUN"
+  },
+  "preserved_runner_receipts": {
+    "runner_local": "runner_local.json",
+    "runner_native": "runner_native.json"
+  },
+  "limits": [
+    "Diagnostic overhead scope only; no strict paired causal attribution.",
+    "Output bytes were not instrumented and are not estimated.",
+    "No 50-percent approval or production promotion.",
+    "No source/test/native execution during review."
+  ]
+}

@@ -1,0 +1,113 @@
+{
+	"checks": [
+		{
+			"id": "binding-manifest",
+			"message": "task2 invocation inputs exist before load",
+			"passed": true
+		},
+		{
+			"id": "binding-json",
+			"message": "task2 invocation inputs are valid",
+			"passed": true
+		},
+		{
+			"id": "binding-source-tests/crowd_quantum_abi_contract_20261009.gd",
+			"message": "tested input hash matches producer",
+			"passed": true
+		},
+		{
+			"id": "binding-source-tests/crowd_quantum_abi_contract_20261009.tscn",
+			"message": "tested input hash matches producer",
+			"passed": true
+		},
+		{
+			"id": "binding-source-research/native/crowd_kernel/src/crowd_melee_kernel.h",
+			"message": "tested input hash matches producer",
+			"passed": true
+		},
+		{
+			"id": "binding-source-research/native/crowd_kernel/src/crowd_melee_kernel.cpp",
+			"message": "tested input hash matches producer",
+			"passed": true
+		},
+		{
+			"id": "binding-source-research/native/crowd_kernel/src/register_types.cpp",
+			"message": "tested input hash matches producer",
+			"passed": true
+		},
+		{
+			"id": "binding-source-research/native/crowd_kernel/SConstruct",
+			"message": "tested input hash matches producer",
+			"passed": true
+		},
+		{
+			"id": "binding-source-research/native/crowd_kernel/build_profile.json",
+			"message": "tested input hash matches producer",
+			"passed": true
+		},
+		{
+			"id": "binding-source-research/native/crowd_kernel/crowd_kernel.gdextension",
+			"message": "tested input hash matches producer",
+			"passed": true
+		},
+		{
+			"id": "binding-source-tools/build_crowd_kernel.ps1",
+			"message": "tested input hash matches producer",
+			"passed": true
+		},
+		{
+			"id": "binding-engine",
+			"message": "native engine matches producer",
+			"passed": true
+		},
+		{
+			"id": "binding-dll",
+			"message": "loaded DLL matches producer",
+			"passed": true
+		},
+		{
+			"id": "ABI-load",
+			"message": "explicit extension resource loads",
+			"passed": true
+		},
+		{
+			"id": "ABI-class",
+			"message": "explicit extension registers CrowdMeleeKernel",
+			"passed": true
+		},
+		{
+			"id": "ABI-version",
+			"message": "kernel ABI version remains 1",
+			"passed": true
+		},
+		{
+			"id": "ABI-forward-method",
+			"message": "forward_buffers is bound in ClassDB",
+			"passed": false
+		}
+	],
+	"passed": false,
+	"run_binding": {
+		"dll_actual_sha256": "20fd2895439426d648ab58eb00340ddde9822ffd673cc6d247c9b5e97d0796cc",
+		"dll_sha256": "20fd2895439426d648ab58eb00340ddde9822ffd673cc6d247c9b5e97d0796cc",
+		"dll_source_snapshot": "C:/Users/Administrator/Documents/HardCore/outputs/crowd_native_kernel_20261009/task1/source_snapshot",
+		"engine_actual_path": "C:/Users/Administrator/.codex/worktrees/crowd-v107-comparison/HardCore/tools/godot-4.7/Godot_v4.7-stable_win64.exe",
+		"engine_actual_sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+		"engine_sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+		"manifest_actual_sha256": "42ddf334377cfeadc946b00f61694070064d10a1c7777decc08362bc783f9c57",
+		"phase": "RED missing transport against sealed Task1 DLL",
+		"sdk_commit": "272e7f4a5fde342ea20983371fffafdccea07f20",
+		"source_sha256": {
+			"research/native/crowd_kernel/SConstruct": "f14c19a1b381a30576fa67ce4a10ef47e5f68b248288d1ac93b99ac83f3d1c78",
+			"research/native/crowd_kernel/build_profile.json": "b97d71de8088807461bc4283a348591e338e4562919924674046ce1f1d8817d7",
+			"research/native/crowd_kernel/crowd_kernel.gdextension": "b86b67c50172c847b6900a2f603a613a53f666b7163f185894d11bae0d917df9",
+			"research/native/crowd_kernel/src/crowd_melee_kernel.cpp": "3b0b8a0c0cb5d2f02696bf0b646f5c609108d00957e3709397c61187f34372a8",
+			"research/native/crowd_kernel/src/crowd_melee_kernel.h": "9064f960d2305848dbef8884b4cd0b4c1041482496396df2c2a12c269d3d64e5",
+			"research/native/crowd_kernel/src/register_types.cpp": "aa94de6bbb068043de2f6495093ff6373b5d84d42181fe8d88f7fadc692fe528",
+			"tests/crowd_quantum_abi_contract_20261009.gd": "b0a339be239629c4dc7dca1b930991991a7e1a9cd5fed778f059bfa077225a86",
+			"tests/crowd_quantum_abi_contract_20261009.tscn": "86d004fd134e9374fed1b1425ee67ba7a0b2cab02f92bff09adb8cdc629f8fa4",
+			"tools/build_crowd_kernel.ps1": "b0e4c295b23efdb30e19a03307d61b5f0d4e99c83ad6feb71a4603d07727f833"
+		}
+	},
+	"test": "crowd_quantum_abi_contract_20261009"
+}

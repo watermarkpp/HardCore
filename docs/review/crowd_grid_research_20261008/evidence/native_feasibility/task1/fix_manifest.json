@@ -1,0 +1,26 @@
+{
+  "manifest_version": "task1-fix-20261009",
+  "generated_at": "2026-10-09T01:19:15.7662565+08:00",
+  "worktree": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-v107-comparison\\HardCore",
+  "git_head": "edae6fdef6a6551a951fab1ea8c6ade43359d603",
+  "sdk_commit": "272e7f4a5fde342ea20983371fffafdccea07f20",
+  "sdk_commit_expected": "272e7f4a5fde342ea20983371fffafdccea07f20",
+  "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+  "dll_sha256": "755a2242fae39f31aaca34b2da542c1eec9f5db859131f18a6dced5713698db0",
+  "source_sha256": {
+    "research/native/crowd_kernel/SConstruct": "d512a20142c41f24c451a892f0adc90026158c72171d9066d38e33a8ad6b6251",
+    "research/native/crowd_kernel/build_profile.json": "dcee994375d8d2066eb2ddde8b6fd4c1bf3f94f2500bf10c07e72003757fff30",
+    "research/native/crowd_kernel/crowd_kernel.gdextension": "b86b67c50172c847b6900a2f603a613a53f666b7163f185894d11bae0d917df9",
+    "research/native/crowd_kernel/src/crowd_melee_kernel.h": "f1795f1a0c34a1cfbc57d019dbc1759ef034c252f5c32e16809f78e693c52582",
+    "research/native/crowd_kernel/src/crowd_melee_kernel.cpp": "84cb09e0e6d9e58ccc84cab80414765f3ae4061889b60ba1a203c5016e27270a",
+    "research/native/crowd_kernel/src/register_types.cpp": "aa94de6bbb068043de2f6495093ff6373b5d84d42181fe8d88f7fadc692fe528",
+    "tools/build_crowd_kernel.ps1": "8b064b3dc6942765bcc9636c78a2b6399e77a1b234c94fb5f894743ce86b2bb6",
+    "tests/crowd_native_kernel_contract_20261009.gd": "bb5a1ec873a41358dca660aa91d775bd1cd7c41286cf860c4ee49f5488c46ba7",
+    "tests/crowd_native_kernel_contract_20261009.tscn": "bddb461f202dc0793c444aa360c3f01a9270b66853e470c3f68f024bf0ff73a1"
+  },
+  "exact_build_command": "pwsh -NoProfile -File tools/build_crowd_kernel.ps1",
+  "exact_test_command": "pwsh -NoProfile -File tools/run_godot_tests.ps1 -TestPaths @('tests/crowd_native_kernel_contract_20261009.tscn') -TimeoutSeconds 30",
+  "green3_runner_receipt": "raw/green3/logs/runner_results_adhoc_20261009_011909_259_19684.json",
+  "red2_runner_receipt": "raw/red2/logs/runner_results_adhoc_20261009_010741_986_3036.json",
+  "evidence_copy": "raw contains complete preserved red/red2/green/green2/green3/build trees"
+}

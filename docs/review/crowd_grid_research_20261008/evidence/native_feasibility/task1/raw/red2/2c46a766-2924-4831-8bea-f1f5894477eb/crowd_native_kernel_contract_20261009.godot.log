@@ -1,0 +1,22 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+数据库载入完成：地图209 怪物156 Boss20 装备175 技能等级132 掉落槽3424 任务9
+ERROR: Condition "!FileAccess::exists(path)" is true. Returning: ERR_FILE_NOT_FOUND
+   at: open_dynamic_library (platform/windows/os_windows.cpp:483)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://tests/crowd_native_kernel_contract_20261009.gd:21)
+ERROR: GDExtension dynamic library not found: 'res://research/native/crowd_kernel/crowd_kernel.gdextension'.
+   at: open_library (core/extension/gdextension.cpp:810)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://tests/crowd_native_kernel_contract_20261009.gd:21)
+ERROR: Failed loading resource: res://research/native/crowd_kernel/crowd_kernel.gdextension.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://tests/crowd_native_kernel_contract_20261009.gd:21)
+ERROR: Cannot get class 'CrowdMeleeKernel'.
+   at: _instantiate_internal (core/object/class_db.cpp:587)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://tests/crowd_native_kernel_contract_20261009.gd:22)
+HC_TEST_FAIL ABI-load explicit extension resource loads
+HC_TEST_FAIL ABI-class explicit extension registers CrowdMeleeKernel
+HC_CROWD_NATIVE_KERNEL_CONTRACT_20261009_FAIL checks=2

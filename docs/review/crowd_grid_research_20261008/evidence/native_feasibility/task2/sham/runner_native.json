@@ -1,0 +1,40 @@
+{
+  "engine_log_errors": 0,
+  "runtime_environment": {
+    "project_root": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-v107-comparison\\HardCore",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-v107-comparison\\HardCore\\.godot\\runtime_appdata",
+    "runner_process_id": 3944
+  },
+  "total": 1,
+  "generated_at": "2026-10-09T01:50:34.1360498+08:00",
+  "results": [
+    {
+      "test_name": "crowd_quantum_abi_sham_20261009",
+      "test_path": "tests/crowd_quantum_abi_sham_20261009.tscn",
+      "wrapper_process_id": 21952,
+      "wrapper_started_utc": "2026-10-08T17:50:09.3354739Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-v107-comparison\\HardCore\\.godot\\runtime_appdata",
+      "fixed_fps": 0,
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-08T17:51:09.3477417Z",
+      "native_exit_observed_utc": "2026-10-08T17:50:32.6148622Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "",
+      "framework_receipt_valid": null,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "passed": 1,
+  "failed": 0,
+  "invocation_id": "e9fe4e67-aac6-4ee8-83dc-deea41296a9a",
+  "git_head": "edae6fdef6a6551a951fab1ea8c6ade43359d603",
+  "suite": "adhoc"
+}

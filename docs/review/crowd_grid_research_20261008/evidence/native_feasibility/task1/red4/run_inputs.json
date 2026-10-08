@@ -1,0 +1,21 @@
+{
+  "status": "red_existing_real_t_dll",
+  "sdk_commit": "272e7f4a5fde342ea20983371fffafdccea07f20",
+  "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+  "dll_sha256": "755a2242fae39f31aaca34b2da542c1eec9f5db859131f18a6dced5713698db0",
+  "source_sha256": {
+    "research/native/crowd_kernel/SConstruct": "f14c19a1b381a30576fa67ce4a10ef47e5f68b248288d1ac93b99ac83f3d1c78",
+    "research/native/crowd_kernel/build_profile.json": "0317e7218f0f845bf7a99c733cf9373d968cafee390b25d9a5821f35a44a2b55",
+    "research/native/crowd_kernel/crowd_kernel.gdextension": "b86b67c50172c847b6900a2f603a613a53f666b7163f185894d11bae0d917df9",
+    "research/native/crowd_kernel/src/crowd_melee_kernel.h": "f1795f1a0c34a1cfbc57d019dbc1759ef034c252f5c32e16809f78e693c52582",
+    "research/native/crowd_kernel/src/crowd_melee_kernel.cpp": "84cb09e0e6d9e58ccc84cab80414765f3ae4061889b60ba1a203c5016e27270a",
+    "research/native/crowd_kernel/src/register_types.cpp": "aa94de6bbb068043de2f6495093ff6373b5d84d42181fe8d88f7fadc692fe528",
+    "tools/build_crowd_kernel.ps1": "b0e4c295b23efdb30e19a03307d61b5f0d4e99c83ad6feb71a4603d07727f833",
+    "tests/crowd_native_kernel_contract_20261009.gd": "d30574106275e7648dc70b854bea7aea0778cefcd1b9b62fe2220fa845cd9262",
+    "tests/crowd_native_kernel_contract_20261009.tscn": "bddb461f202dc0793c444aa360c3f01a9270b66853e470c3f68f024bf0ff73a1",
+    "scripts/monster_ai_package/policy.gd": "d20fee4ecda8028afab4b6765a0b68d117819c1d4f48c9ce7243e1ed26c8e58c",
+    "scripts/ground_unit_space.gd": "d8d786f2b7fd8f7ff7b5b2a28e78625814f04c45432dfc94307a20b9778a5cf6"
+  },
+  "dll_build_receipt": "outputs/crowd_native_kernel_20261009/task1/fix_manifest.json",
+  "exact_test_command": "tools/run_godot_tests.ps1 -TestPaths tests/crowd_native_kernel_contract_20261009.tscn -TimeoutSeconds 30"
+}

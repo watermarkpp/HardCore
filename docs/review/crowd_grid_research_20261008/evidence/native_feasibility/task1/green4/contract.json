@@ -1,0 +1,1534 @@
+{
+	"checks": [
+		{
+			"id": "binding-manifest",
+			"message": "invocation inputs exist before load",
+			"passed": true
+		},
+		{
+			"id": "binding-json",
+			"message": "invocation inputs are valid",
+			"passed": true
+		},
+		{
+			"id": "binding-source-research/native/crowd_kernel/SConstruct",
+			"message": "tested input hash matches producer",
+			"passed": true
+		},
+		{
+			"id": "binding-source-research/native/crowd_kernel/build_profile.json",
+			"message": "tested input hash matches producer",
+			"passed": true
+		},
+		{
+			"id": "binding-source-research/native/crowd_kernel/crowd_kernel.gdextension",
+			"message": "tested input hash matches producer",
+			"passed": true
+		},
+		{
+			"id": "binding-source-research/native/crowd_kernel/src/crowd_melee_kernel.h",
+			"message": "tested input hash matches producer",
+			"passed": true
+		},
+		{
+			"id": "binding-source-research/native/crowd_kernel/src/crowd_melee_kernel.cpp",
+			"message": "tested input hash matches producer",
+			"passed": true
+		},
+		{
+			"id": "binding-source-research/native/crowd_kernel/src/register_types.cpp",
+			"message": "tested input hash matches producer",
+			"passed": true
+		},
+		{
+			"id": "binding-source-tools/build_crowd_kernel.ps1",
+			"message": "tested input hash matches producer",
+			"passed": true
+		},
+		{
+			"id": "binding-source-tests/crowd_native_kernel_contract_20261009.gd",
+			"message": "tested input hash matches producer",
+			"passed": true
+		},
+		{
+			"id": "binding-source-tests/crowd_native_kernel_contract_20261009.tscn",
+			"message": "tested input hash matches producer",
+			"passed": true
+		},
+		{
+			"id": "binding-source-scripts/monster_ai_package/policy.gd",
+			"message": "tested input hash matches producer",
+			"passed": true
+		},
+		{
+			"id": "binding-source-scripts/ground_unit_space.gd",
+			"message": "tested input hash matches producer",
+			"passed": true
+		},
+		{
+			"id": "binding-engine",
+			"message": "native engine matches producer",
+			"passed": true
+		},
+		{
+			"id": "binding-dll",
+			"message": "loaded DLL matches producer",
+			"passed": true
+		},
+		{
+			"id": "ABI-load",
+			"message": "explicit extension resource loads",
+			"passed": true
+		},
+		{
+			"id": "ABI-class",
+			"message": "explicit extension registers CrowdMeleeKernel",
+			"passed": true
+		},
+		{
+			"id": "ABI-version",
+			"message": "kernel ABI version is 1",
+			"passed": true
+		},
+		{
+			"id": "core-through",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "core-overlap-enter",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "core-overlap-exit",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "core-actual-tangent",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "corpus-radius-low",
+			"message": "low threshold branch is false",
+			"passed": true
+		},
+		{
+			"id": "corpus-radius-high",
+			"message": "high threshold branch is true",
+			"passed": true
+		},
+		{
+			"id": "core-radius-double-low",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "core-radius-double-high",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "core-vector32-neighbor-0.49999997019768",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "core-vector32-neighbor-0.5",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "core-vector32-neighbor-0.50000005960464",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "core-clamp-(-2.0, 0.5)",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "core-clamp-(-1.0, 0.5)",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "core-clamp-(1.0, 0.5)",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "core-clamp-(2.0, 0.5)",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "core-clamp-(0.0, 0.0)",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "core-degenerate-nonzero",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "core-dot-epsilon-neighbor-0.99989994039536",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "core-dot-epsilon-neighbor-0.9999",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "core-dot-epsilon-neighbor-0.99990005960464",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "core-radius-nan",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "core-radius-inf-sum-nan",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "core-degenerate",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "core-negative-radii",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "core-inf",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "core-nan",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-000",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-001",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-002",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-003",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-004",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-005",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-006",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-007",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-008",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-009",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-010",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-011",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-012",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-013",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-014",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-015",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-016",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-017",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-018",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-019",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-020",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-021",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-022",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-023",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-024",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-025",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-026",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-027",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-028",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-029",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-030",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-031",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-032",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-033",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-034",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-035",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-036",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-037",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-038",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-039",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-040",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-041",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-042",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-043",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-044",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-045",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-046",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-047",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-048",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-049",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-050",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-051",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-052",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-053",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-054",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-055",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-056",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-057",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-058",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-059",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-060",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-061",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-062",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-063",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-064",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-065",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-066",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-067",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-068",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-069",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-070",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-071",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-072",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-073",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-074",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-075",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-076",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-077",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-078",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-079",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-080",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-081",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-082",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-083",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-084",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-085",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-086",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-087",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-088",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-089",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-090",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-091",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-092",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-093",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-094",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-095",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-096",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-097",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-098",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-099",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-100",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-101",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-102",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-103",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-104",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-105",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-106",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-107",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-108",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-109",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-110",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-111",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-112",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-113",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-114",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-115",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-116",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-117",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-118",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-119",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-120",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-121",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-122",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-123",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-124",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-125",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-126",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-127",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-128",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-129",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-130",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-131",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-132",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-133",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-134",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-135",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-136",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-137",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-138",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-139",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-140",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-141",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-142",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-143",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-144",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-145",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-146",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-147",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-148",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-149",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-150",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-151",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-152",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-153",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-154",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-155",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-156",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-157",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-158",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-159",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-160",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-161",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-162",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-163",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-164",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-165",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-166",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-167",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-168",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-169",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-170",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-171",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-172",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-173",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-174",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-175",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-176",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-177",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-178",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-179",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-180",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-181",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-182",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-183",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-184",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-185",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-186",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-187",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-188",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-189",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-190",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-191",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-192",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-193",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-194",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-195",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-196",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-197",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-198",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-199",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-200",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-201",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-202",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-203",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-204",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-205",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-206",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-207",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-208",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-209",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-210",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-211",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-212",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-213",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-214",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-215",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-216",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-217",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-218",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-219",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-220",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-221",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-222",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-223",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-224",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-225",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-226",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-227",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-228",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-229",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-230",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-231",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-232",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-233",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-234",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-235",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-236",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-237",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-238",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-239",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-240",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-241",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-242",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-243",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-244",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-245",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-246",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-247",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-248",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-249",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-250",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-251",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-252",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-253",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-254",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		},
+		{
+			"id": "fuzz-255",
+			"message": "native result differs from stock core_crossed",
+			"passed": true
+		}
+	],
+	"passed": true,
+	"run_binding": {
+		"build_log": "outputs/crowd_native_kernel_20261009/task1/build5/build.log",
+		"build_log_sha256": "4213b57d9fd8cd6b9dc3a3a51d44df4a498155490c3188e8e686cfd9aa04f44b",
+		"console_launcher_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+		"dll_sha256": "20fd2895439426d648ab58eb00340ddde9822ffd673cc6d247c9b5e97d0796cc",
+		"engine_actual_path": "C:/Users/Administrator/.codex/worktrees/crowd-v107-comparison/HardCore/tools/godot-4.7/Godot_v4.7-stable_win64.exe",
+		"engine_actual_sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+		"engine_sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+		"exact_build_command": "tools/build_crowd_kernel.ps1 -> pinned SDK SConscript, api_version=4.7 platform=windows target=template_debug arch=x86_64 optimize=speed precision=single build_profile=research/native/crowd_kernel/build_profile.json -j4",
+		"exact_test_command": "tools/run_godot_tests.ps1 -TestPaths tests/crowd_native_kernel_contract_20261009.tscn -TimeoutSeconds 30",
+		"manifest_sha256": "18ffced2a29f161d9b08a1b47ce3bfa3220d1e1d364daa527743fc7542e7b410",
+		"scons_version": "4.11.1",
+		"sdk_commit": "272e7f4a5fde342ea20983371fffafdccea07f20",
+		"source_sha256": {
+			"research/native/crowd_kernel/SConstruct": "f14c19a1b381a30576fa67ce4a10ef47e5f68b248288d1ac93b99ac83f3d1c78",
+			"research/native/crowd_kernel/build_profile.json": "b97d71de8088807461bc4283a348591e338e4562919924674046ce1f1d8817d7",
+			"research/native/crowd_kernel/crowd_kernel.gdextension": "b86b67c50172c847b6900a2f603a613a53f666b7163f185894d11bae0d917df9",
+			"research/native/crowd_kernel/src/crowd_melee_kernel.cpp": "847ba5f70bc4673e4d24f2eeb8bb98e4e8cc4af7325ef9a9fa2b53114f7932c8",
+			"research/native/crowd_kernel/src/crowd_melee_kernel.h": "6c3781911c5222f949e867f306fdbd11a43ffe2770595ee8c4cb3765e76c6202",
+			"research/native/crowd_kernel/src/register_types.cpp": "aa94de6bbb068043de2f6495093ff6373b5d84d42181fe8d88f7fadc692fe528",
+			"scripts/ground_unit_space.gd": "d8d786f2b7fd8f7ff7b5b2a28e78625814f04c45432dfc94307a20b9778a5cf6",
+			"scripts/monster_ai_package/policy.gd": "d20fee4ecda8028afab4b6765a0b68d117819c1d4f48c9ce7243e1ed26c8e58c",
+			"tests/crowd_native_kernel_contract_20261009.gd": "2639648bce745812e8267268d397bd54832bee4d5e638b8601406ef7e1296c65",
+			"tests/crowd_native_kernel_contract_20261009.tscn": "bddb461f202dc0793c444aa360c3f01a9270b66853e470c3f68f024bf0ff73a1",
+			"tools/build_crowd_kernel.ps1": "b0e4c295b23efdb30e19a03307d61b5f0d4e99c83ad6feb71a4603d07727f833"
+		},
+		"status": "boundary_fix_and_frozen_input"
+	},
+	"test": "crowd_native_kernel_contract_20261009"
+}
