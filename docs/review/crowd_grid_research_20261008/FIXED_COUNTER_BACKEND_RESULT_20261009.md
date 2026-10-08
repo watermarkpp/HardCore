@@ -47,7 +47,7 @@ Production restoration is a root-owned action and is outside this archive.
 - Raw reports: `final_evidence\raw_reports\fixed_counter_30_01.json` and `fixed_counter_30_02.json`
 - UUID receipt index and logs: `final_evidence\receipt_index.json` and `final_evidence\receipts\`
 - Static wrapper artifact: `final_evidence\static_id_wrapper_rejection\`
-- Archive inventory SHA-256: `25820A98774826EFB142C3AE61D9FB7CFFF38E30B31ABBE05C075E0D0BCDD6C8`
+- Final archive inventory SHA-256 (including root restoration receipt): `CB685197A31466DB1164D198298761DE72C5BB88297159B91CC330C89E6E0608`
 - Scope: archive/reconciliation only; no rerun, build, source restoration, staging, commit, or push.
 - Unresolved: performance target **FAIL**; generic producer metadata **MISSING**; release/device evidence **MISSING**; device test **NOT_RUN**.
 
