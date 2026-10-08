@@ -1,0 +1,16 @@
+ERROR: Can't open dynamic library: C:/Users/Administrator/.codex/worktrees/crowd-v107-comparison/HardCore/research/native/crowd_kernel/bin/crowd_melee_kernel.windows.template_debug.x86_64.dll. Error: Error 1114: 动态链接库(DLL)初始化例程失败。.
+   at: open_dynamic_library (platform/windows/os_windows.cpp:544)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://tests/crowd_native_live_motion_query_contract_20261009.gd:142)
+ERROR: Can't open GDExtension dynamic library: 'res://research/native/crowd_kernel/crowd_kernel.gdextension'.
+   at: open_library (core/extension/gdextension.cpp:811)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://tests/crowd_native_live_motion_query_contract_20261009.gd:142)
+ERROR: Failed loading resource: res://research/native/crowd_kernel/crowd_kernel.gdextension.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://tests/crowd_native_live_motion_query_contract_20261009.gd:142)
+ERROR: Cannot get class 'CrowdMeleeKernel'.
+   at: _instantiate_internal (core/object/class_db.cpp:587)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://tests/crowd_native_live_motion_query_contract_20261009.gd:143)

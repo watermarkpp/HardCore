@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "five_production_paths_exact_stock107": true,
+  "enemy_restored_sha256": "22eb3a376540759219f7159958cab51ed80884b27444b4d22cb2b76e45e15f3e",
+  "native_foundation_restored": [
+    {
+      "path": "research/native/crowd_kernel/src/crowd_melee_kernel.cpp",
+      "before_sha256": "bc0cc2a5f7e4992e1770d1033d4361856548a762e92c5da486d9a6a5948ed008",
+      "after_sha256": "3b0b8a0c0cb5d2f02696bf0b646f5c609108d00957e3709397c61187f34372a8",
+      "source": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\crowd_native_kernel_20261009\\task2\\source_snapshot\\research\\native\\crowd_kernel\\src\\crowd_melee_kernel.cpp"
+    },
+    {
+      "path": "research/native/crowd_kernel/src/crowd_melee_kernel.h",
+      "before_sha256": "a19ce18f2f048a9580894a8547563667f722fe9da8b0f83286853ed11737c720",
+      "after_sha256": "9064f960d2305848dbef8884b4cd0b4c1041482496396df2c2a12c269d3d64e5",
+      "source": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\crowd_native_kernel_20261009\\task2\\source_snapshot\\research\\native\\crowd_kernel\\src\\crowd_melee_kernel.h"
+    }
+  ],
+  "foundation_dll_sha256": "96e6ba8d6c0a6286620e5b96eac6cdcd6c55c3fc7e9c5d412ae468586b9e5ae3",
+  "unrelated_dirty_preserved": true
+}

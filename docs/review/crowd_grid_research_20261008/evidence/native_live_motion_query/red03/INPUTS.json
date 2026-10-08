@@ -1,0 +1,20 @@
+{
+  "schema": "hardcore.native_live_motion_query.inputs.v1",
+  "stage": "absence_red03_canonical_hash_case",
+  "baseline": "edae6fdef6a6551a951fab1ea8c6ade43359d603",
+  "source_sha256": {
+    "scripts/enemy.gd": "22eb3a376540759219f7159958cab51ed80884b27444b4d22cb2b76e45e15f3e",
+    "scripts/runtime_diagnostics.gd": "5d9223872649c9af7e7d59336706c7d7414118e756bc71b8cafee60ba5d1e8da",
+    "scripts/world_background.gd": "0822bac938022122c0cf25780647455da196f6a18dbbec02a661239e8bab37a5",
+    "scripts/monster_ai_package/policy.gd": "d20fee4ecda8028afab4b6765a0b68d117819c1d4f48c9ce7243e1ed26c8e58c",
+    "tests/crowd_native_live_motion_query_contract_20261009.gd": "973cc6dcc93caf699b583edd8f80923161e70a08bd5466aaf9080dff176a7e01",
+    "tests/crowd_native_live_motion_query_contract_20261009.tscn": "50a7ecd7c2af179ed58b4736c58d6174bd19d5cab2cc91fd630d65d9b6fa8ac1",
+    "research/native/crowd_kernel/crowd_kernel.gdextension": "b86b67c50172c847b6900a2f603a613a53f666b7163f185894d11bae0d917df9",
+    "tools/run_godot_tests.ps1": "8049ef382dede726e9476574167a4b305017a2a7a5d2ba121bf9461296c28b48"
+  },
+  "engine_sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+  "dll_path": "research/native/crowd_kernel/bin/crowd_melee_kernel.windows.template_debug.x86_64.dll",
+  "dll_sha256": "96e6ba8d6c0a6286620e5b96eac6cdcd6c55c3fc7e9c5d412ae468586b9e5ae3",
+  "dll_producer": "C:/Users/Administrator/Documents/HardCore/outputs/crowd_native_kernel_20261009/task2/run_inputs.json",
+  "command": "tools/run_godot_tests.ps1 -TestPaths tests/crowd_native_live_motion_query_contract_20261009.tscn -TimeoutSeconds 30"
+}

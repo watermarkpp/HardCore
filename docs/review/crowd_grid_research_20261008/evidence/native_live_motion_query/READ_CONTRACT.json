@@ -1,0 +1,150 @@
+{
+  "report_version": "READ_CONTRACT_V1",
+  "fixed_commit": "edae6fdef6a6551a951fab1ea8c6ade43359d603",
+  "scope": "NATIVE_LIVE_MOTION_QUERY only; offline static contract audit",
+  "entry": {
+    "function": "EnemyActor._hc_motion_candidates",
+    "source": "scripts/enemy.gd:10301-10334",
+    "callers": [
+      "scripts/enemy.gd:8888 (_hc_motion_clear_internal)",
+      "scripts/enemy.gd:10241 (_hc_choose_blocked_neighbor batch path)",
+      "scripts/enemy.gd:10384 (_hc_direct_source_route_clear)"
+    ],
+    "result": "bool; false on target/body crossing"
+  },
+  "identity": {
+    "script": "scripts/enemy.gd:1-2",
+    "class_name": "EnemyActor",
+    "base": "CharacterBody2D",
+    "native_gate": "exact known EnemyActor script identity/inheritance; GDScript `is EnemyActor` semantics. Ordinary members may be read through Godot Object.get; no private-memory offset or extra bridge is implied.",
+    "prohibited": "Object.is_class(\"EnemyActor\") is insufficient because it does not test script class_name identity"
+  },
+  "fields": [
+    {
+      "name": "self.a/self.b",
+      "type": "Vector2",
+      "source": "_hc_motion_candidates(a,b,candidates):10301-10312",
+      "read": "by value; finite status is owned by caller _hc_motion_clear_internal at 8847-8848"
+    },
+    {
+      "name": "candidates",
+      "type": "Array[Variant] of live EnemyActor references",
+      "source": "10301-10316",
+      "read": "raw identity/order; no copy or reorder"
+    },
+    {
+      "name": "self._hc_surround_goal",
+      "type": "Vector2",
+      "source": "10307",
+      "read": "finite branch only; target special gate"
+    },
+    {
+      "name": "self.target",
+      "type": "Node2D reference",
+      "source": "10307-10310",
+      "read": "is_instance_valid then global_position; target radius via _target_combat_radius_gu"
+    },
+    {
+      "name": "self.runtime_map_id",
+      "type": "int",
+      "source": "327",
+      "read": "candidate map gate 10319"
+    },
+    {
+      "name": "self.combat_radius_gu",
+      "type": "float",
+      "source": "362-364",
+      "read": "envelope and core_crossed"
+    },
+    {
+      "name": "self.spatial_actor_runtime_id",
+      "type": "int",
+      "source": "331",
+      "read": "not consumed by motion body loop; only HCPolicy core may receive it indirectly only in frontline, so do not add"
+    },
+    {
+      "name": "other runtime_map_id",
+      "type": "int",
+      "source": "10319",
+      "read": "same-map filter"
+    },
+    {
+      "name": "other.combat_radius_gu",
+      "type": "float",
+      "source": "10327,10332",
+      "read": "radius and exact predicate"
+    },
+    {
+      "name": "other.global_position",
+      "type": "Vector2",
+      "source": "spatial_index_position 3299-3306; projection helper 3377-3404",
+      "read": "formal ground position; current live read"
+    },
+    {
+      "name": "other.can_receive_damage() fields",
+      "type": "bool predicate",
+      "source": "7327-7342",
+      "read": "_body_admission_rejected, current_hp, _death_pending, _dying, is_queued_for_deletion"
+    },
+    {
+      "name": "other.behavior_profile[worldCollision]",
+      "type": "Dictionary bool default true",
+      "source": "10330",
+      "read": "after envelope"
+    },
+    {
+      "name": "HCPolicy.EPS/core_crossed",
+      "type": "static numeric policy",
+      "source": "10327-10333",
+      "read": "exact existing floating-point order"
+    },
+    {
+      "name": "RuntimeDiagnostics counter",
+      "type": "observer side effect",
+      "source": "10302-10303,209-210",
+      "read": "must remain before early returns"
+    }
+  ],
+  "algorithm_order": [
+    "record enemy_motion_candidate_checks(candidates.size())",
+    "if surround goal finite and target valid: project target.global_position and core_crossed target; return false on crossing",
+    "compute low/high from a,b",
+    "for raw in original candidate Array order: validity and EnemyActor identity; skip self/target; same runtime_map_id; increment enemy_motion_body_checks; read current formal ground position; conservative envelope reject; can_receive_damage; behavior_profile.worldCollision; exact HCPolicy.core_crossed; return false at first crossing",
+    "return true"
+  ],
+  "projection_cache": {
+    "known_safe_hit": "Object.get may read ordinary underscore members. The cache fields are the declared typed fields `_last_spatial_index_screen_position_px: Vector2`, `_last_spatial_index_ground_position_gu: Vector2`, `_last_spatial_index_runtime_map_id: int`, `_last_spatial_index_zone_generation: int`, `_last_spatial_index_environment_revision: int`, `_last_spatial_index_projection: Callable` (scripts/enemy.gd:567-572). Predicate at 3285-3296 requires valid runtime_screen_to_ground_position_px, exact current screen, map, zone generation, environment revision, and exact projection Callable; hit returns the current stored ground value at 3299-3306.",
+    "miss": "must stay legacy _screen_position_px_to_ground_position_gu path at 3377-3404; typed callback at 3413-3418; mapped invalid/missing returns Vector2.INF and increments rejection state 3419-3427",
+    "environment_revision": "Known exact `WorldBackground` provider is `class_name WorldBackground` and `environment_collision_revision() -> int` returns plain `_environment_collision_revision` (scripts/world_background.gd:1,112,337-338), so native may directly read that field only after exact script identity. Unknown provider keeps the original `_hc_environment_revision` call at its original helper point; do not pre-call it and then invoke the helper again.",
+    "target_special": "target ground projection at 10307-10310 is only on finite surround_goal + valid target branch; do not eagerly project distant candidates",
+    "target_cache_fields": "Target-only cache is separate: `_target_ground_cache_physics_frame: int`, target instance id: int, target screen/ground Vector2, runtime map int, zone generation int, projection Callable (scripts/enemy.gd:577-583); predicate 3430-3444. Motion target special uses the normal helper and only reaches this cache when target identity/position matches."
+  },
+  "can_receive_damage": {
+    "exact_predicate": "false if _body_admission_rejected; else current_hp > 0 && !_death_pending && !_dying && !is_queued_for_deletion",
+    "source": "7327-7342",
+    "native_condition": "only for exact EnemyActor implementation with fields read live; no cached HP/life shadow"
+  },
+  "provider_contract": {
+    "supported": "Exact EnemyActor implementation plus exact known WorldBackground provider for the revision read. Ordinary Dictionary/Object.get reads are callback-free; preserve Variant-to-bool conversion for behavior_profile[\"worldCollision\"].",
+    "unknown": "Unknown Enemy subclass: native may still enter the scan if the scan implementation itself is inherited unchanged, but any unknown overridden callee is invoked at the original loop point only. Unknown projection/environment provider calls the original legacy helper at the original point; no whole-query restart after partial counters/effects.",
+    "reentry": "A legacy projection/provider callback can mutate owner, target, candidate, index, or destroy an object. After that call, continue only with the exact fields the original code reads next (validity/type, map, position, eligibility, behavior profile, radii); reread them live. If the callback destroys the object, preserve the original invalid-instance/legacy error behavior; do not add a conservative native rejection or silently continue."
+  },
+  "index_boundary": {
+    "candidate_pool": "RuntimeCombatSpatialIndex query supplies live EnemyActor nodes; index does stale deletion, map/bucket filtering and appends at 390-440",
+    "writer_visibility": "Object.get is permitted for ordinary GDScript members, including underscore cache fields; it is not a private-memory bridge. Position/index update remains synchronous and stale indexed Dictionary position is never authoritative when the formal read misses.",
+    "native_scope": "does not move actors, update index, write position, call signals, or alter candidate pool"
+  },
+  "diagnostics": {
+    "counter": "_record_performance_counter -> RuntimeDiagnostics.increment_performance_counter at 209-210",
+    "semantics": "preserve counter names, order, and amount; no batched flush or observer-only replacement"
+  },
+  "gaps": [
+    "A cache miss can call GDScript projection and environment revision; unknown/overridden callback reentry prevents continuing with pre-call locals.",
+    "behavior_profile is a mutable Dictionary; known EnemyActor route must read it at the original post-envelope point, and any callback/reentry invalidates prior facts.",
+    "target special projection may be a callback and can mutate state; if provider is unknown, fallback before counter/target branch or re-read exactly.",
+    "No proof of net performance or >=50% coverage; this contract is one bounded execution replacement only.",
+    "Object.get ordinary GDScript members is available, but dynamic lookup/type conversion cost must be included in the experiment; no private memory offset is allowed.",
+    "Unknown callbacks may destroy owner/target/candidate; preserve legacy invalid-instance/error behavior and do not add a new conservative rejection."
+  ],
+  "decision": "feasible as a single bounded execution replacement: inherited EnemyActor scans may route known pure reads, unknown overridden callees/providers stay at their original loop/helper point, and whole-entry fallback is reserved only for an uncloseable callback/reentry boundary; no source mutation/tests performed."
+}

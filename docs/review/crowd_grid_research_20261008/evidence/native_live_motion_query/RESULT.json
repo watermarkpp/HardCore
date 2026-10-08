@@ -1,0 +1,80 @@
+{
+  "status": "FAIL",
+  "candidate": "NATIVE_LIVE_MOTION_QUERY",
+  "retired": true,
+  "baseline_ms": 2057.2785,
+  "target_ms": 1028.63925,
+  "median_ms": 2066.1184999999996,
+  "slower_percent": 0.4296938892813795,
+  "runs": [
+    {
+      "run": "native_live_full01",
+      "cpu_ms": 2061.624,
+      "player_motion": {
+        "moving_ticks": 126,
+        "total_gu": 3.45875106760786
+      },
+      "native_stats_since_setup": {
+        "cache_hits": 31253,
+        "candidate_legacy": 0,
+        "entries": 10745,
+        "miss_callbacks": 0,
+        "provider_fallbacks": 0,
+        "revalidation_failures": 0,
+        "unsupported_owner": 0
+      },
+      "decision_budget": {
+        "actual_admitted_count": 1166,
+        "epoch": 560,
+        "epoch_owner_count": 0,
+        "max_epoch_owner_count": 5,
+        "max_wait_frames": 1,
+        "open_scopes": 0,
+        "previous_epoch": 559,
+        "previous_owner_ids": [
+          996767973930,
+          1007203402698
+        ],
+        "queue": [],
+        "queue_length": 0,
+        "serviced_owner_ids": []
+      },
+      "status": "PASS"
+    },
+    {
+      "run": "native_live_full02",
+      "cpu_ms": 2070.613,
+      "player_motion": {
+        "moving_ticks": 123,
+        "total_gu": 3.34344215970577
+      },
+      "native_stats_since_setup": {
+        "cache_hits": 30870,
+        "candidate_legacy": 0,
+        "entries": 10775,
+        "miss_callbacks": 0,
+        "provider_fallbacks": 0,
+        "revalidation_failures": 0,
+        "unsupported_owner": 0
+      },
+      "decision_budget": {
+        "actual_admitted_count": 1168,
+        "epoch": 551,
+        "epoch_owner_count": 0,
+        "max_epoch_owner_count": 5,
+        "max_wait_frames": 1,
+        "open_scopes": 0,
+        "previous_epoch": 550,
+        "previous_owner_ids": [
+          996767973930
+        ],
+        "queue": [],
+        "queue_length": 0,
+        "serviced_owner_ids": []
+      },
+      "status": "PASS"
+    }
+  ],
+  "coverage_scope": "Native statistics include setup. Exact in-window query count MISSING; no unsupported-owner/legacy/miss observed in entire superset; original window body and physics counters retained.",
+  "device_test": "NOT_RUN"
+}

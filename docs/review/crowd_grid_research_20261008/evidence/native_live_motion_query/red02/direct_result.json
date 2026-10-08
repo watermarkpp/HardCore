@@ -1,0 +1,121 @@
+{
+	"case_counters": [],
+	"checks": [
+		{
+			"id": "binding-manifest",
+			"message": "producer manifest exists before native load",
+			"passed": true
+		},
+		{
+			"id": "binding-json",
+			"message": "manifest is a JSON object",
+			"passed": true
+		},
+		{
+			"id": "binding-source-scripts/enemy.gd",
+			"message": "source hash matches",
+			"passed": false
+		},
+		{
+			"id": "binding-source-scripts/runtime_diagnostics.gd",
+			"message": "source hash matches",
+			"passed": false
+		},
+		{
+			"id": "binding-source-scripts/world_background.gd",
+			"message": "source hash matches",
+			"passed": false
+		},
+		{
+			"id": "binding-source-scripts/monster_ai_package/policy.gd",
+			"message": "source hash matches",
+			"passed": false
+		},
+		{
+			"id": "binding-source-tests/crowd_native_live_motion_query_contract_20261009.gd",
+			"message": "source hash matches",
+			"passed": false
+		},
+		{
+			"id": "binding-source-tests/crowd_native_live_motion_query_contract_20261009.tscn",
+			"message": "source hash matches",
+			"passed": false
+		},
+		{
+			"id": "binding-source-research/native/crowd_kernel/crowd_kernel.gdextension",
+			"message": "source hash matches",
+			"passed": false
+		},
+		{
+			"id": "binding-source-tools/run_godot_tests.ps1",
+			"message": "source hash matches",
+			"passed": false
+		},
+		{
+			"id": "binding-engine",
+			"message": "engine hash matches",
+			"passed": false
+		},
+		{
+			"id": "binding-dll",
+			"message": "DLL hash matches",
+			"passed": false
+		},
+		{
+			"id": "ABI-load",
+			"message": "extension resource loads",
+			"passed": true
+		},
+		{
+			"id": "ABI-class",
+			"message": "CrowdMeleeKernel registered",
+			"passed": true
+		},
+		{
+			"id": "api-configure_live_motion_scripts",
+			"message": "required API exists",
+			"passed": false
+		},
+		{
+			"id": "api-motion_candidates_live",
+			"message": "required API exists",
+			"passed": false
+		},
+		{
+			"id": "api-get_live_motion_stats",
+			"message": "required API exists",
+			"passed": false
+		},
+		{
+			"id": "api-reset_live_motion_stats",
+			"message": "required API exists",
+			"passed": false
+		}
+	],
+	"old_calls": 0,
+	"passed": false,
+	"run_binding": {
+		"baseline": "edae6fdef6a6551a951fab1ea8c6ade43359d603",
+		"command": "tools/run_godot_tests.ps1 -TestPaths tests/crowd_native_live_motion_query_contract_20261009.tscn -TimeoutSeconds 30",
+		"dll_path": "research/native/crowd_kernel/bin/crowd_melee_kernel.windows.template_debug.x86_64.dll",
+		"dll_producer": "C:/Users/Administrator/Documents/HardCore/outputs/crowd_native_kernel_20261009/task2/run_inputs.json",
+		"dll_sha256": "96E6BA8D6C0A6286620E5B96EAC6CDCD6C55C3FC7E9C5D412AE468586B9E5AE3",
+		"engine_actual_path": "C:/Users/Administrator/.codex/worktrees/crowd-v107-comparison/HardCore/tools/godot-4.7/Godot_v4.7-stable_win64.exe",
+		"engine_actual_sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+		"engine_sha256": "B2CA888D5115A6CEDEE564764A2EE494A625F2EC2EDBABD010FE33C9A88A6BF8",
+		"manifest_sha256": "02fbd5cff4159868ae58f9fbfb0a8204eecaa7eab0d970331ecaa5efba844943",
+		"schema": "hardcore.native_live_motion_query.inputs.v1",
+		"source_sha256": {
+			"research/native/crowd_kernel/crowd_kernel.gdextension": "B86B67C50172C847B6900A2F603A613A53F666B7163F185894D11BAE0D917DF9",
+			"scripts/enemy.gd": "22EB3A376540759219F7159958CAB51ED80884B27444B4D22CB2B76E45E15F3E",
+			"scripts/monster_ai_package/policy.gd": "D20FEE4ECDA8028AFAB4B6765A0B68D117819C1D4F48C9CE7243E1ED26C8E58C",
+			"scripts/runtime_diagnostics.gd": "5D9223872649C9AF7E7D59336706C7D7414118E756BC71B8CAFEE60BA5D1E8DA",
+			"scripts/world_background.gd": "0822BAC938022122C0CF25780647455DA196F6A18DBBEC02A661239E8BAB37A5",
+			"tests/crowd_native_live_motion_query_contract_20261009.gd": "973CC6DCC93CAF699B583EDD8F80923161E70A08BD5466AAF9080DFF176A7E01",
+			"tests/crowd_native_live_motion_query_contract_20261009.tscn": "50A7ECD7C2AF179ED58B4736C58D6174BD19D5CAB2CC91FD630D65D9B6FA8AC1",
+			"tools/run_godot_tests.ps1": "8049EF382DEDE726E9476574167A4B305017A2A7A5D2BA121BF9461296C28B48"
+		},
+		"stage": "absence_red02_fixture_parse_fixed"
+	},
+	"test": "crowd_native_live_motion_query_contract_20261009"
+}

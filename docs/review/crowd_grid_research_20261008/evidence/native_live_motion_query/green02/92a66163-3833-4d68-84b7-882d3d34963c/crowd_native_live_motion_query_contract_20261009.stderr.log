@@ -1,0 +1,14 @@
+SCRIPT ERROR: Invalid call. Nonexistent 'bool' constructor.
+   at: EnemyActor._hc_motion_candidates_legacy (res://scripts/enemy.gd:10346)
+   GDScript backtrace (most recent call first):
+       [0] _hc_motion_candidates_legacy (res://scripts/enemy.gd:10346)
+       [1] old_motion (res://tests/crowd_native_live_motion_query_contract_20261009.gd:69)
+       [2] compare_case (res://tests/crowd_native_live_motion_query_contract_20261009.gd:77)
+       [3] _ready (res://tests/crowd_native_live_motion_query_contract_20261009.gd:178)
+SCRIPT ERROR: Invalid call. Nonexistent 'bool' constructor.
+   at: EnemyActor._hc_motion_candidates_legacy (res://scripts/enemy.gd:10346)
+   GDScript backtrace (most recent call first):
+       [0] _hc_motion_candidates_legacy (res://scripts/enemy.gd:10346)
+       [1] old_motion (res://tests/crowd_native_live_motion_query_contract_20261009.gd:69)
+       [2] compare_case (res://tests/crowd_native_live_motion_query_contract_20261009.gd:77)
+       [3] _ready (res://tests/crowd_native_live_motion_query_contract_20261009.gd:179)

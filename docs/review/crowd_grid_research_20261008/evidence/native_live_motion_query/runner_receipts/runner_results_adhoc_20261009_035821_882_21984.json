@@ -1,0 +1,40 @@
+{
+  "failed": 1,
+  "total": 1,
+  "generated_at": "2026-10-09T03:58:21.8827412+08:00",
+  "invocation_id": "d2f10a86-876e-44a3-bc16-bd82fb432ec9",
+  "passed": 0,
+  "runtime_environment": {
+    "project_root": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-v107-comparison\\HardCore",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-v107-comparison\\HardCore\\.godot\\runtime_appdata",
+    "runner_process_id": 21984
+  },
+  "results": [
+    {
+      "test_name": "crowd_native_live_motion_query_contract_20261009",
+      "test_path": "tests/crowd_native_live_motion_query_contract_20261009.tscn",
+      "wrapper_process_id": 12172,
+      "wrapper_started_utc": "2026-10-08T19:58:12.8736629Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-v107-comparison\\HardCore\\.godot\\runtime_appdata",
+      "fixed_fps": 0,
+      "pass_marker_found": false,
+      "process_exited": true,
+      "wrapper_exit_code": 1,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-08T19:58:42.8860720Z",
+      "native_exit_observed_utc": "2026-10-08T19:58:20.8177182Z",
+      "effective_exit_code": 1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "",
+      "framework_receipt_valid": null,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1"
+    }
+  ],
+  "suite": "adhoc",
+  "engine_log_errors": 0,
+  "git_head": "edae6fdef6a6551a951fab1ea8c6ade43359d603"
+}

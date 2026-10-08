@@ -1,0 +1,17 @@
+{
+  "status": "FAIL",
+  "stage": "static_rejection_01",
+  "reason_file": "REJECTION_REASON.txt",
+  "files": [
+    {
+      "path": "crowd_melee_kernel.h",
+      "sha256": "A19CE18F2F048A9580894A8547563667F722FE9DA8B0F83286853ED11737C720",
+      "bytes": 1696
+    },
+    {
+      "path": "crowd_melee_kernel.cpp",
+      "sha256": "5617E3083C56E8FEBF150EAF481D490C191099266F9A2232A387AF7E4A2D1539",
+      "bytes": 18149
+    }
+  ]
+}

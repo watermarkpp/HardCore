@@ -1,0 +1,5 @@
+Source05 semantic rejection archive before boolean conversion correction.
+Actual runner evidence: GDScript bool(value) rejects String/Vector2; prior Variant.booleanize accepted them and diverged from stock.
+cpp_sha256=EA6D2EEE445E187FEE5E413A31ACA14A757C3A913FF085631D488429438A805E
+header_sha256=A19CE18F2F048A9580894A8547563667F722FE9DA8B0F83286853ED11737C720
+Build/test after this archive: NOT_RUN.
