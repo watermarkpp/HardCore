@@ -1,0 +1,8 @@
+SCRIPT ERROR: Parse Error: Cannot infer the type of "old_revision" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/formal_spatial_binding_contract_20261009.gd:153)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "old_value" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/formal_spatial_binding_contract_20261009.gd:154)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "changed_value" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/formal_spatial_binding_contract_20261009.gd:159)
+ERROR: Failed to load script "res://tests/formal_spatial_binding_contract_20261009.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)

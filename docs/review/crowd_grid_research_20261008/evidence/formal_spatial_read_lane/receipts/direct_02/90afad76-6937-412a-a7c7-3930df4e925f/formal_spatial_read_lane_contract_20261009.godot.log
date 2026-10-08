@@ -1,0 +1,62 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+数据库载入完成：地图209 怪物156 Boss20 装备175 技能等级132 掉落槽3424 任务9
+FORMAL_SPATIAL_READ_LANE_PASS: consumer entry returns the current formal read result
+ERROR: FORMAL_SPATIAL_READ_LANE_FAIL: known canonical provider binds in actual scope
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tests/formal_spatial_read_lane_contract_20261009.gd:37)
+       [1] _run_contract (res://tests/formal_spatial_read_lane_contract_20261009.gd:86)
+       [2] _ready (res://tests/formal_spatial_read_lane_contract_20261009.gd:23)
+FORMAL_SPATIAL_READ_LANE_PASS: same scope reuses one immutable formal binding
+FORMAL_SPATIAL_READ_LANE_PASS: same-world candidate acquires a finite formal position
+FORMAL_SPATIAL_READ_LANE_PASS: candidate cache follows actual same-frame screen mutation
+FORMAL_SPATIAL_READ_LANE_PASS: candidate nonfinite read does not reuse a prior finite fact
+FORMAL_SPATIAL_READ_LANE_PASS: candidate generation and environment revision force a fresh formal read
+FORMAL_SPATIAL_READ_LANE_PASS: candidate list preserves outside-envelope eligibility
+FORMAL_SPATIAL_READ_LANE_PASS: candidate current position participates in motion collision
+FORMAL_SPATIAL_READ_LANE_PASS: candidate current position participates in destination eligibility
+ERROR: FORMAL_SPATIAL_READ_LANE_FAIL: nonfinite candidate is excluded without resurrecting old position
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tests/formal_spatial_read_lane_contract_20261009.gd:37)
+       [1] _run_contract (res://tests/formal_spatial_read_lane_contract_20261009.gd:162)
+       [2] _ready (res://tests/formal_spatial_read_lane_contract_20261009.gd:23)
+FORMAL_SPATIAL_READ_LANE_PASS: same-frame position setter publishes the spatial index
+FORMAL_SPATIAL_READ_LANE_PASS: nonfinite position retains the last valid index entry
+FORMAL_SPATIAL_READ_LANE_PASS: generation change forces current-position index publication
+FORMAL_SPATIAL_READ_LANE_PASS: override provider rejects formal binding and falls back to old Callable
+ERROR: FORMAL_SPATIAL_READ_LANE_FAIL: canonical binding reacquires after override scope
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tests/formal_spatial_read_lane_contract_20261009.gd:37)
+       [1] _run_contract (res://tests/formal_spatial_read_lane_contract_20261009.gd:217)
+       [2] _ready (res://tests/formal_spatial_read_lane_contract_20261009.gd:23)
+FORMAL_SPATIAL_READ_LANE_PASS: position writer invalidates borrowed binding
+FORMAL_SPATIAL_READ_LANE_PASS: candidate initial domain query
+FORMAL_SPATIAL_READ_LANE_PASS: candidate query consumes current live position
+FORMAL_SPATIAL_READ_LANE_PASS: candidate nonfinite live read retains index entry
+ERROR: FORMAL_SPATIAL_READ_LANE_FAIL: candidate map domain change is visible same frame
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tests/formal_spatial_read_lane_contract_20261009.gd:37)
+       [1] _run_contract (res://tests/formal_spatial_read_lane_contract_20261009.gd:254)
+       [2] _ready (res://tests/formal_spatial_read_lane_contract_20261009.gd:23)
+FORMAL_SPATIAL_READ_LANE_PASS: typed Player target live predicate accepts current map
+FORMAL_SPATIAL_READ_LANE_PASS: typed Player target passes actual usable and safe-context gates
+FORMAL_SPATIAL_READ_LANE_PASS: typed Player target establishes far-range access baseline
+FORMAL_SPATIAL_READ_LANE_PASS: Player HP zero closes live predicate
+FORMAL_SPATIAL_READ_LANE_PASS: Player HP zero closes usable predicate
+FORMAL_SPATIAL_READ_LANE_PASS: Player HP zero reaches invalid-target access gate
+FORMAL_SPATIAL_READ_LANE_PASS: Player map mismatch closes live predicate
+FORMAL_SPATIAL_READ_LANE_PASS: Player map mismatch reaches invalid-target access gate
+FORMAL_SPATIAL_READ_LANE_PASS: Player map restoration is observed immediately
+FORMAL_SPATIAL_READ_LANE_PASS: Player transition owner enters actual transition
+FORMAL_SPATIAL_READ_LANE_PASS: Player transition closes live predicate
+FORMAL_SPATIAL_READ_LANE_PASS: Player transition reaches invalid-target access gate
+FORMAL_SPATIAL_READ_LANE_PASS: Player transition owner closes actual transition
+FORMAL_SPATIAL_READ_LANE_PASS: typed Enemy target live predicate accepts current map
+FORMAL_SPATIAL_READ_LANE_PASS: typed Enemy HP zero closes live predicate
+FORMAL_SPATIAL_READ_LANE_PASS: typed Enemy map mismatch closes live predicate
+FORMAL_SPATIAL_READ_LANE_PASS: typed Enemy deletion closes live predicate
+FORMAL_SPATIAL_READ_LANE_CONTRACT_FAIL checks=38 failures=4

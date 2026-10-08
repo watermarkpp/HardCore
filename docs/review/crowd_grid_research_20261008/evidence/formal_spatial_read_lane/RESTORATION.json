@@ -1,0 +1,31 @@
+{
+  "status": "PASS",
+  "scope": "Exact five stock107 production files only; unrelated edits preserved",
+  "files": [
+    {
+      "path": "scripts/enemy.gd",
+      "before": "ae3cc1a6d21d8c1aaf834c7b8e288e9b387a15d8717ebdfb37719fb252a1f746",
+      "restored": "22eb3a376540759219f7159958cab51ed80884b27444b4d22cb2b76e45e15f3e"
+    },
+    {
+      "path": "scripts/game_root.gd",
+      "before": "cc8149c3d38a8ee53eb96de4112a9338250d1a5409ccfc9256dcd90bbc22228d",
+      "restored": "e920127fcb0fc15d879ac30eab03f48e3005fd7563fff618efe4dff0b089bdd4"
+    },
+    {
+      "path": "scripts/runtime_combat_spatial_index.gd",
+      "before": "1fa26f141042da16fc3cadc15bf329298212bdd5466debe96e282fddb084f081",
+      "restored": "1fa26f141042da16fc3cadc15bf329298212bdd5466debe96e282fddb084f081"
+    },
+    {
+      "path": "scripts/runtime_diagnostics.gd",
+      "before": "5d9223872649c9af7e7d59336706c7d7414118e756bc71b8cafee60ba5d1e8da",
+      "restored": "5d9223872649c9af7e7d59336706c7d7414118e756bc71b8cafee60ba5d1e8da"
+    },
+    {
+      "path": "tools/run_godot_tests.ps1",
+      "before": "8049ef382dede726e9476574167a4b305017a2a7a5d2ba121bf9461296c28b48",
+      "restored": "8049ef382dede726e9476574167a4b305017a2a7a5d2ba121bf9461296c28b48"
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "failed": 2,
+  "passed": 0,
+  "results": [
+    {
+      "test_name": "formal_spatial_binding_contract_20261009",
+      "test_path": "tests/formal_spatial_binding_contract_20261009.tscn",
+      "wrapper_process_id": 22748,
+      "wrapper_started_utc": "2026-10-08T18:46:43.6673924Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-v107-comparison\\HardCore\\.godot\\runtime_appdata",
+      "fixed_fps": 0,
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "execution_deadline_utc": "2026-10-08T18:47:13.6796602Z",
+      "native_exit_observed_utc": null,
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 1,
+      "engine_log_failure_count": 1,
+      "framework_run_id": "",
+      "framework_receipt_valid": null,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+    },
+    {
+      "test_name": "formal_spatial_read_lane_contract_20261009",
+      "test_path": "tests/formal_spatial_read_lane_contract_20261009.tscn",
+      "wrapper_process_id": 15364,
+      "wrapper_started_utc": "2026-10-08T18:46:48.1434463Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-v107-comparison\\HardCore\\.godot\\runtime_appdata",
+      "fixed_fps": 0,
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "execution_deadline_utc": "2026-10-08T18:47:18.1513404Z",
+      "native_exit_observed_utc": null,
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 8,
+      "engine_log_failure_count": 8,
+      "framework_run_id": "",
+      "framework_receipt_valid": null,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_8;engine_log_failures_8"
+    }
+  ],
+  "invocation_id": "c12163db-8579-4659-b0b4-e8bd0abd9ade",
+  "git_head": "edae6fdef6a6551a951fab1ea8c6ade43359d603",
+  "engine_log_errors": 9,
+  "suite": "adhoc",
+  "total": 2,
+  "runtime_environment": {
+    "project_root": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-v107-comparison\\HardCore",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-v107-comparison\\HardCore\\.godot\\runtime_appdata",
+    "runner_process_id": 17080
+  },
+  "generated_at": "2026-10-09T02:46:51.7180392+08:00"
+}

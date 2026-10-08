@@ -1,0 +1,13 @@
+{
+  "status": "FAIL",
+  "engine_log_errors": 0,
+  "first_attempt": "Retained FAIL fixture parse and invalid RefCounted free; corrected fixture-only before repeat",
+  "purpose": "Expected availability RED against byte-exact stock107 GameRoot and Enemy",
+  "native_exits": [
+    1,
+    1
+  ],
+  "command": "tools/run_godot_tests.ps1 -TestPaths tests/formal_spatial_binding_contract_20261009.tscn,tests/formal_spatial_read_lane_contract_20261009.tscn -TimeoutSeconds 30",
+  "runner": "C:/Users/Administrator/.codex/worktrees/crowd-v107-comparison/HardCore/outputs/test_logs/runner_results_adhoc_20261009_022143_350_14784.json",
+  "production_restored": "Provider draft exact bytes restored after RED"
+}

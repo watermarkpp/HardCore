@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/crowd_formal_grid_comparison_20261008.gd" id="1_formal_grid"]
+
+[node name="FormalGridComparisonCrowd20261008" type="Node"]
+script = ExtResource("1_formal_grid")

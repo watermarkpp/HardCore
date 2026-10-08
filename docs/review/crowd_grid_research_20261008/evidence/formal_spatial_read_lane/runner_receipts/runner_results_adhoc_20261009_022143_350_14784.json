@@ -1,0 +1,63 @@
+{
+  "generated_at": "2026-10-09T02:21:43.3502666+08:00",
+  "invocation_id": "c95434d2-51ea-4139-9ef3-a3d43ac80b4b",
+  "suite": "adhoc",
+  "git_head": "edae6fdef6a6551a951fab1ea8c6ade43359d603",
+  "results": [
+    {
+      "test_name": "formal_spatial_binding_contract_20261009",
+      "test_path": "tests/formal_spatial_binding_contract_20261009.tscn",
+      "wrapper_process_id": 23932,
+      "wrapper_started_utc": "2026-10-08T18:21:25.1392335Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-v107-comparison\\HardCore\\.godot\\runtime_appdata",
+      "fixed_fps": 0,
+      "pass_marker_found": false,
+      "process_exited": true,
+      "wrapper_exit_code": 1,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-08T18:21:55.1512933Z",
+      "native_exit_observed_utc": "2026-10-08T18:21:34.6184497Z",
+      "effective_exit_code": 1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "",
+      "framework_receipt_valid": null,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1"
+    },
+    {
+      "test_name": "formal_spatial_read_lane_contract_20261009",
+      "test_path": "tests/formal_spatial_read_lane_contract_20261009.tscn",
+      "wrapper_process_id": 3036,
+      "wrapper_started_utc": "2026-10-08T18:21:35.8298774Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-v107-comparison\\HardCore\\.godot\\runtime_appdata",
+      "fixed_fps": 0,
+      "pass_marker_found": false,
+      "process_exited": true,
+      "wrapper_exit_code": 1,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-08T18:22:05.8378214Z",
+      "native_exit_observed_utc": "2026-10-08T18:21:42.1760488Z",
+      "effective_exit_code": 1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "",
+      "framework_receipt_valid": null,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1"
+    }
+  ],
+  "failed": 2,
+  "engine_log_errors": 0,
+  "passed": 0,
+  "total": 2,
+  "runtime_environment": {
+    "project_root": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-v107-comparison\\HardCore",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-v107-comparison\\HardCore\\.godot\\runtime_appdata",
+    "runner_process_id": 14784
+  }
+}

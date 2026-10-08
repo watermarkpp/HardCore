@@ -1,0 +1,40 @@
+{
+  "engine_log_errors": 1,
+  "git_head": "edae6fdef6a6551a951fab1ea8c6ade43359d603",
+  "runtime_environment": {
+    "project_root": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-v107-comparison\\HardCore",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-v107-comparison\\HardCore\\.godot\\runtime_appdata",
+    "runner_process_id": 2424
+  },
+  "failed": 1,
+  "results": [
+    {
+      "test_name": "formal_spatial_read_lane_contract_20261009",
+      "test_path": "tests/formal_spatial_read_lane_contract_20261009.tscn",
+      "wrapper_process_id": 21656,
+      "wrapper_started_utc": "2026-10-08T18:51:05.6996763Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-v107-comparison\\HardCore\\.godot\\runtime_appdata",
+      "fixed_fps": 0,
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 1,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-08T18:51:35.7122030Z",
+      "native_exit_observed_utc": "2026-10-08T18:51:16.0350328Z",
+      "effective_exit_code": 1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 1,
+      "engine_log_failure_count": 1,
+      "framework_run_id": "",
+      "framework_receipt_valid": null,
+      "result": "FAIL",
+      "reason": "non_zero_exit_code_1;stderr_failures_1;engine_log_failures_1"
+    }
+  ],
+  "total": 1,
+  "generated_at": "2026-10-09T02:51:17.5786620+08:00",
+  "suite": "adhoc",
+  "passed": 0,
+  "invocation_id": "cbdc4625-d3a0-4b35-9aa2-25d082e79653"
+}

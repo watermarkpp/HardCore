@@ -1,0 +1,44 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+数据库载入完成：地图209 怪物156 Boss20 装备175 技能等级132 掉落槽3424 任务9
+FORMAL_SPATIAL_READ_LANE_PASS: consumer entry returns the current formal read result
+FORMAL_SPATIAL_READ_LANE_PASS: known canonical provider binds in actual scope
+FORMAL_SPATIAL_READ_LANE_PASS: same scope reuses one immutable formal binding
+FORMAL_SPATIAL_READ_LANE_PASS: same-world candidate acquires a finite formal position
+FORMAL_SPATIAL_READ_LANE_PASS: candidate cache follows actual same-frame screen mutation
+FORMAL_SPATIAL_READ_LANE_PASS: candidate nonfinite read does not reuse a prior finite fact
+FORMAL_SPATIAL_READ_LANE_PASS: candidate generation and environment revision force a fresh formal read
+FORMAL_SPATIAL_READ_LANE_PASS: candidate list preserves outside-envelope eligibility
+FORMAL_SPATIAL_READ_LANE_PASS: candidate current position participates in motion collision
+FORMAL_SPATIAL_READ_LANE_PASS: candidate current position participates in destination eligibility
+FORMAL_SPATIAL_READ_LANE_PASS: nonfinite candidate follows the production fail-closed frontline policy
+FORMAL_SPATIAL_READ_LANE_PASS: same-frame position setter publishes the spatial index
+FORMAL_SPATIAL_READ_LANE_PASS: nonfinite position retains the last valid index entry
+FORMAL_SPATIAL_READ_LANE_PASS: generation change forces current-position index publication
+FORMAL_SPATIAL_READ_LANE_PASS: override provider rejects formal binding and falls back to old Callable
+FORMAL_SPATIAL_READ_LANE_PASS: canonical binding reacquires after override scope
+FORMAL_SPATIAL_READ_LANE_PASS: writer scope records the old formal read point
+FORMAL_SPATIAL_READ_LANE_PASS: position writer clears the old formal read point before publish
+FORMAL_SPATIAL_READ_LANE_PASS: position writer publishes the new authoritative index ground
+FORMAL_SPATIAL_READ_LANE_PASS: candidate initial domain query
+FORMAL_SPATIAL_READ_LANE_PASS: candidate query consumes current live position
+FORMAL_SPATIAL_READ_LANE_PASS: candidate nonfinite live read retains index entry
+FORMAL_SPATIAL_READ_LANE_PASS: candidate map domain change is visible same frame
+FORMAL_SPATIAL_READ_LANE_PASS: typed Player target live predicate accepts current map
+FORMAL_SPATIAL_READ_LANE_PASS: typed Player target passes actual usable and safe-context gates
+FORMAL_SPATIAL_READ_LANE_PASS: typed Player target establishes far-range access baseline
+FORMAL_SPATIAL_READ_LANE_PASS: Player HP zero closes live predicate
+FORMAL_SPATIAL_READ_LANE_PASS: Player HP zero closes usable predicate
+FORMAL_SPATIAL_READ_LANE_PASS: Player HP zero reaches invalid-target access gate
+FORMAL_SPATIAL_READ_LANE_PASS: Player map mismatch closes live predicate
+FORMAL_SPATIAL_READ_LANE_PASS: Player map mismatch reaches invalid-target access gate
+FORMAL_SPATIAL_READ_LANE_PASS: Player map restoration is observed immediately
+FORMAL_SPATIAL_READ_LANE_PASS: Player transition owner enters actual transition
+FORMAL_SPATIAL_READ_LANE_PASS: Player transition closes live predicate
+FORMAL_SPATIAL_READ_LANE_PASS: Player transition reaches invalid-target access gate
+FORMAL_SPATIAL_READ_LANE_PASS: Player transition owner closes actual transition
+FORMAL_SPATIAL_READ_LANE_PASS: typed Enemy target live predicate accepts current map
+FORMAL_SPATIAL_READ_LANE_PASS: typed Enemy HP zero closes live predicate
+FORMAL_SPATIAL_READ_LANE_PASS: typed Enemy map mismatch closes live predicate
+FORMAL_SPATIAL_READ_LANE_PASS: typed Enemy deletion closes live predicate
+FORMAL_SPATIAL_READ_LANE_CONTRACT_PASS checks=40 failures=0

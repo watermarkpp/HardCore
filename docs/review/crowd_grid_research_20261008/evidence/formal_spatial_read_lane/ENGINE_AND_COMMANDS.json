@@ -1,0 +1,38 @@
+{
+  "status": "PASS",
+  "engine_version": "4.7.stable.official.5b4e0cb0f",
+  "engine": [
+    {
+      "file": "Godot_v4.7-stable_win64_console.exe",
+      "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c"
+    },
+    {
+      "file": "Godot_v4.7-stable_win64.exe",
+      "sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8"
+    }
+  ],
+  "source_proof": "Candidate_03 production Enemy/GameRoot/helper hashes equal frozen final production hashes; no changes between two full-load invocations.",
+  "full_load_commands_reconstructed_from_session": [
+    {
+      "run_id": "formal_read_lane_30_01",
+      "env": {
+        "HARDCORE_SCALING_ENGAGED": "30",
+        "HARDCORE_GRID_COMPARISON_MODE": "current",
+        "HARDCORE_GRID_COMPARISON_RUN_ID": "formal_read_lane_30_01"
+      },
+      "command": "tools/run_godot_tests.ps1 -TestPaths tests/crowd_formal_grid_comparison_20261008.tscn -TimeoutSeconds 60"
+    },
+    {
+      "run_id": "formal_read_lane_30_02",
+      "env": {
+        "HARDCORE_SCALING_ENGAGED": "30",
+        "HARDCORE_GRID_COMPARISON_MODE": "current",
+        "HARDCORE_GRID_COMPARISON_RUN_ID": "formal_read_lane_30_02"
+      },
+      "command": "tools/run_godot_tests.ps1 -TestPaths tests/crowd_formal_grid_comparison_20261008.tscn -TimeoutSeconds 60"
+    }
+  ],
+  "historical_producer_association": "MISSING: stock generic runner handoffs have empty producer dictionary; no retrofit of native receipt fields.",
+  "device_test": "NOT_RUN",
+  "performance_goal": "FAIL"
+}

@@ -1,0 +1,78 @@
+{
+  "snapshot": "candidate_current_research",
+  "worktree": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-v107-comparison\\HardCore",
+  "head": "edae6fdef6a6551a951fab1ea8c6ade43359d603",
+  "files": [
+    {
+      "path": "scripts/enemy.gd",
+      "sha256": "AE3CC1A6D21D8C1AAF834C7B8E288E9B387A15D8717EBDFB37719FB252A1F746",
+      "bytes": 439061
+    },
+    {
+      "path": "scripts/game_root.gd",
+      "sha256": "CC8149C3D38A8EE53EB96DE4112A9338250D1A5409CCFC9256DCD90BBC22228D",
+      "bytes": 597058
+    },
+    {
+      "path": "scripts/runtime_combat_spatial_index.gd",
+      "sha256": "1FA26F141042DA16FC3CADC15BF329298212BDD5466DEBE96E282FDDB084F081",
+      "bytes": 29952
+    },
+    {
+      "path": "scripts/layers/runtime/spatial/formal_spatial_read_binding.gd",
+      "sha256": "363736A8890C12C8701C8D8D093E344070158BF7AFAFD17786BEC6C8ED63582A",
+      "bytes": 3671
+    },
+    {
+      "path": "tests/formal_spatial_read_lane_contract_20261009.gd",
+      "sha256": "6329321A3FFC68ABAB612F6032B81CF0A8AEFEFC2F4B54351FE57175835E1339",
+      "bytes": 16448
+    },
+    {
+      "path": "tests/formal_spatial_read_lane_contract_20261009.tscn",
+      "sha256": "9CA5EF0C104BDA79CFBD2CED21CAFF2AA353C870DB5C24B9CA1413DDB5DF7645",
+      "bytes": 226
+    },
+    {
+      "path": "tests/formal_spatial_binding_contract_20261009.gd",
+      "sha256": "5651A048BD7FB205608426B483D0286BBE54198A2522670EE1F22C0004CF5C2A",
+      "bytes": 7689
+    },
+    {
+      "path": "tests/formal_spatial_binding_contract_20261009.tscn",
+      "sha256": "9473D685A95BB40DF1F4D44E49191FA8B77817F506D3BECF6D07B4D9353165DD",
+      "bytes": 223
+    },
+    {
+      "path": "scripts/runtime_diagnostics.gd",
+      "sha256": "5D9223872649C9AF7E7D59336706C7D7414118E756BC71B8CAFEE60BA5D1E8DA",
+      "bytes": 28624
+    },
+    {
+      "path": "tools/run_godot_tests.ps1",
+      "sha256": "8049EF382DEDE726E9476574167A4B305017A2A7A5D2BA121BF9461296C28B48",
+      "bytes": 93887
+    },
+    {
+      "path": "tests/crowd_formal_grid_comparison_20261008.gd",
+      "sha256": "D26B66A6E048C208C1306E040202098425D2D3C8B8A08AE159B9362F533A4197",
+      "bytes": 9717
+    },
+    {
+      "path": "tests/crowd_formal_grid_comparison_20261008.tscn",
+      "sha256": "865C9DEB0233CD0F59AD9A49160292D54D6DCB04DB12227B2E2DE602B5EAD9DB",
+      "bytes": 241
+    },
+    {
+      "path": "tests/crowd_engagement_scaling_20261008.gd",
+      "sha256": "FCB75F90C89F3A6CA9D6C056CC89FC84B3FC6D8A003A1B8E081EA8CE931CFBB4",
+      "bytes": 16548
+    },
+    {
+      "path": "tests/crowd_engagement_scaling_20261008.tscn",
+      "sha256": "EFF9FC7DBBCFC110367591C9054FD30C2A0F8C294ACA9C829ED648724C155F52",
+      "bytes": 226
+    }
+  ],
+  "evidence_scope": "Frozen candidate source. Direct provider/consumer fixtures changed across recorded stages; full-load pair production hashes equal candidate_03 manifest."
+}
