@@ -7,6 +7,7 @@ const ItemExtensionCodec := preload("res://scripts/items/item_extension_codec.gd
 const SocketGemRules := preload("res://scripts/items/socket_gem_rules.gd")
 const RuneItemRules := preload("res://scripts/items/rune_item_rules.gd")
 const CanonicalSkills := preload("res://scripts/skills/skill_data_loader.gd")
+const EquipmentGrantedSkillRules := preload("res://scripts/equipment_granted_skill_rules.gd")
 
 const EquipmentRulesScript = preload("res://scripts/equipment_rules.gd")
 const PricingServiceScript = preload("res://scripts/pricing_service.gd")
@@ -72,6 +73,9 @@ const DPV2_MONSTER_DROP_SEMANTIC_AUTHORITY_PATH := (
 )
 const DPV2_VERIFIED_PROFILE_AUTHORITY_PATH := (
 	"res://assets/data/drop/dpv2_21cq_verified_profile_authority_v1.json"
+)
+const MONSTER_GROUND_SLOT_GROUP_POLICY_PATH := (
+	"res://assets/data/drop/monster_ground_slot_group_policy.runtime.json"
 )
 
 # These are the user-frozen semantic decisions.  The formal semantic
@@ -150,6 +154,7 @@ var dpv2_global_drop_rate_authority: Dictionary = {}
 var dpv2_direct_baseline_manifest: Dictionary = {}
 var dpv2_direct_baseline: Dictionary = {}
 var dpv2_monster_drop_semantic_authority: Dictionary = {}
+var monster_ground_slot_group_policy: Dictionary = {}
 var dpv2_direct_baseline_loaded := false
 var dpv2_single_player_drop_boost: Dictionary = {}
 var dpv2_single_player_item_boost_classification: Dictionary = {}
@@ -255,6 +260,8 @@ func load_database() -> bool:
 	bosses = []
 	if not _load_canonical_monster_catalog():
 		return false
+	if not _load_monster_ground_slot_group_policy():
+		return false
 	_load_bich_community_baseline()
 	items = database.get("items", [])
 	_load_equipment_client_art()
@@ -333,6 +340,8 @@ func _load_canonical_monster_catalog() -> bool:
 		load_error = "canonical_monster_entries_missing"
 		return false
 	canonical_monster_catalog = parsed
+
+
 	var entries_by_id: Dictionary = entries_value
 	for raw_key: Variant in entries_by_id.keys():
 		var key := str(raw_key)
@@ -356,6 +365,64 @@ func _load_canonical_monster_catalog() -> bool:
 		_monsters_by_id[monster_id] = entry
 	return true
 
+
+func _load_monster_ground_slot_group_policy() -> bool:
+	monster_ground_slot_group_policy = {}
+	if not FileAccess.file_exists(MONSTER_GROUND_SLOT_GROUP_POLICY_PATH):
+		load_error = "monster_ground_slot_group_policy_missing"
+		return false
+	var parsed: Variant = JSON.parse_string(
+		FileAccess.get_file_as_string(MONSTER_GROUND_SLOT_GROUP_POLICY_PATH)
+	)
+	if not parsed is Dictionary:
+		load_error = "monster_ground_slot_group_policy_invalid_json"
+		return false
+	var policy: Dictionary = parsed
+	if (
+		str(policy.get("schema", "")) != "hardcore.monster_ground_slot_group_policy.runtime.v1"
+		or str(policy.get("authority_id", "")) != "monster.ground_slot_groups.runtime.v1"
+		or str(policy.get("status", "")) != "PRODUCTION_ACTIVE"
+		or not bool(policy.get("production_active", false))
+		or str(policy.get("identity_key", "")) != "canonical_monster_classification"
+	):
+		load_error = "monster_ground_slot_group_policy_contract_invalid"
+		return false
+	var groups_value: Variant = policy.get("groups", null)
+	if not groups_value is Dictionary:
+		load_error = "monster_ground_slot_group_policy_groups_invalid"
+		return false
+	var groups: Dictionary = groups_value
+	for expected: Dictionary in [
+		{"name": "ordinary", "limit": 6},
+		{"name": "elite", "limit": 9},
+		{"name": "boss", "limit": 12},
+	]:
+		var group_value: Variant = groups.get(expected.name, null)
+		if (
+			not group_value is Dictionary
+			or _dpv2_json_integer(group_value.get("ground_slot_limit", null)) != expected.limit
+		):
+			load_error = "monster_ground_slot_group_policy_limit_invalid:%s" % expected.name
+			return false
+	if groups.size() != 3:
+		load_error = "monster_ground_slot_group_policy_group_set_invalid"
+		return false
+	var source_authority: Variant = policy.get("source_authority", null)
+	if not source_authority is Dictionary:
+		load_error = "monster_ground_slot_group_policy_source_authority_invalid"
+		return false
+	if (
+		str(source_authority.get("path", ""))
+			!= "assets/data/drop/monster_ground_slot_group_policy.source.json"
+		or str(source_authority.get("schema", ""))
+			!= "hardcore.monster_ground_slot_group_policy.source.v1"
+		or str(source_authority.get("sha256_lf", "")).to_upper()
+			!= _sha256_lf_file("res://assets/data/drop/monster_ground_slot_group_policy.source.json")
+	):
+		load_error = "monster_ground_slot_group_policy_source_hash_invalid"
+		return false
+	monster_ground_slot_group_policy = policy
+	return true
 
 func _load_service_reference() -> void:
 	service_reference.clear()
@@ -2628,6 +2695,23 @@ func _build_item_catalog() -> void:
 func _build_skill_book_index() -> void:
 	_skill_books_by_skill = {}
 	var candidate := {}
+	var canonical_skill_ids := PackedStringArray()
+	for skill_alias: String in CanonicalSkills.skill_ids():
+		var skill_id := CanonicalSkills.entity_skill_id(skill_alias)
+		if skill_id.is_empty() or canonical_skill_ids.has(skill_id):
+			push_error("Invalid canonical skill registry identity: %s" % skill_alias)
+			return
+		canonical_skill_ids.append(skill_id)
+	var validated_equipment_grants := {}
+	for grant: Dictionary in EquipmentGrantedSkillRules.grant_definitions():
+		var grant_id := str(grant.get("skill_id", ""))
+		if grant_id.is_empty() or not canonical_skill_ids.has(grant_id):
+			push_error("Invalid equipment granted skill registry relation: %s" % grant_id)
+			return
+		if not bool(grant.get("equipment_granted", false)):
+			push_error("Equipment granted skill missing explicit marker: %s" % grant_id)
+			return
+		validated_equipment_grants[grant_id] = true
 	for item: Dictionary in item_catalog:
 		if str(item.get("kind", "")) != "skill_book" or not item.get("usable", true): continue
 		var target: Variant = item.get("learnSkillId", "")
@@ -2639,7 +2723,15 @@ func _build_skill_book_index() -> void:
 			push_error("Invalid registered skill book relation")
 			return
 		candidate[target] = book
-	if candidate.size() != CanonicalSkills.skill_ids().size():
+	for target: String in candidate:
+		if not canonical_skill_ids.has(target):
+			push_error("Unknown registered skill book target: %s" % target)
+			return
+		if validated_equipment_grants.has(target):
+			push_error("Equipment granted skill must not have a skill book relation: %s" % target)
+			return
+	var required_book_targets := canonical_skill_ids.size() - validated_equipment_grants.size()
+	if candidate.size() != required_book_targets:
 		push_error("Incomplete registered skill book relations")
 		return
 	candidate.make_read_only()
@@ -2668,6 +2760,43 @@ func _build_price_index() -> void:
 	# primary record.
 	for raw: Variant in equipment_price_candidates.get("records", []):
 		_register_price_record(raw)
+	# User-authorized price rulings may supersede one already-present legacy
+	# quote, but only through an exact stable item identity. Keep the general
+	# primary-first rule unchanged for every other catalog entry.
+	_apply_exact_user_price_override(920032)
+
+
+func _apply_exact_user_price_override(item_id: int) -> void:
+	var service_index := EntityRegistry.service_for_item(EntityRegistry.canonical(EntityRegistry.from_legacy("item", item_id)))
+	var record: Dictionary = {}
+	# Quote lookup prefers the registered service alias, even when a candidate
+	# also populated the item index. Update that real owner and all its aliases.
+	if service_index >= 0 and _price_by_service_index.has(service_index):
+		record = _price_by_service_index[service_index]
+	elif _price_by_item_id.has(item_id):
+		record = _price_by_item_id[item_id]
+	if record.is_empty():
+		return
+	for raw: Variant in equipment_price_candidates.get("records", []):
+		if not raw is Dictionary or str(raw.get("entity_id", "")) != "hc.item.%06d" % item_id:
+			continue
+		var source: Variant = raw.get("source", {})
+		if not source is Dictionary or str(source.get("distribution", "")) != "user.pricing_ruling":
+			return
+		var override_price := maxi(0, int(raw.get("price", 0)))
+		if override_price <= 0:
+			return
+		record["base_price"] = override_price
+		record["source"] = source.duplicate(true)
+		_price_by_item_id[item_id] = record
+		if service_index >= 0:
+			_price_by_service_index[service_index] = record
+		var record_service_index := int(record.get("service_index", service_index))
+		if record_service_index >= 0:
+			_price_by_service_index[record_service_index] = record
+		if str(record.get("item_name", "")) != "":
+			_price_by_name[str(record.item_name)] = record
+		return
 
 
 func _register_price_record(raw: Variant) -> void:
@@ -3447,6 +3576,17 @@ func dpv2_ground_slot_limit() -> int:
 	return maxi(0, _dpv2_json_integer(
 		(policy as Dictionary).get("post_rng_ground_slot_limit", 0)
 	))
+
+
+func dpv2_ground_slot_limit_for_monster(monster_id: int) -> int:
+	var classification := canonical_monster_classification(monster_id)
+	var groups: Variant = monster_ground_slot_group_policy.get("groups", {})
+	if not groups is Dictionary:
+		return 0
+	var group: Variant = groups.get(classification, null)
+	if not group is Dictionary:
+		return 0
+	return maxi(0, int(group.get("ground_slot_limit", 0)))
 
 
 func dpv2_source_slot_gate() -> Dictionary:

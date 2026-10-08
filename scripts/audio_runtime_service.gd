@@ -374,7 +374,14 @@ func prewarm_runtime_streams() -> Dictionary:
 	for raw_event: Variant in _events.values():
 		if not raw_event is Dictionary:
 			continue
-		for runtime_path: String in _valid_event_runtime_paths((raw_event as Dictionary).get("runtime_paths", [])):
+		var event := raw_event as Dictionary
+		# Keep archived exact mappings, but load only sounds admitted in production.
+		if str(event.get("owner_kind", "")) == "monster" and (
+			str(event.get("semantic_event", "")) in MONSTER_REJECTED_SEMANTICS
+			or str(event.get("semantic_event", "")) in MONSTER_PROMPT_SEMANTICS
+		):
+			continue
+		for runtime_path: String in _valid_event_runtime_paths(event.get("runtime_paths", [])):
 			_prewarm_one(runtime_path, result, "event")
 	return result
 
@@ -455,10 +462,14 @@ func _play_event_internal(
 		return _reject_event("unresolved_mapping", event_id, context)
 	var owner_kind := str(binding.get("owner_kind", ""))
 	var semantic_event := str(binding.get("semantic_event", ""))
+	if owner_kind == "monster" and (
+		semantic_event in MONSTER_PROMPT_SEMANTICS
+		or requested_semantic_event in MONSTER_PROMPT_SEMANTICS
+	):
+		return _skipped_event("combat_prompt_disabled", event_id, context)
 	if (
 		owner_kind == "monster"
 		and semantic_event in MONSTER_REJECTED_SEMANTICS
-		and not allow_restricted_monster_source
 	):
 		return _reject_event_light("monster_event_not_allowed", event_id, context)
 	if not _sfx_enabled:
@@ -551,9 +562,8 @@ func _play_event_internal(
 	return event
 
 
-## Exact monster-ID helper. Attack phases use their own source phase. The
-## combat prompt deliberately reuses this ID's original ambient sample and is
-## the only production path that may consume an ambient binding.
+## Exact monster-ID helper. Discovery and combat-state prompts were removed
+## at the user's request; committed attack phases retain their own source.
 func play_monster_event(monster_id: int, semantic_event: String, context: Dictionary = {}) -> Dictionary:
 	if monster_id <= 0 or semantic_event.is_empty():
 		return _reject_event("invalid_event", "", context)
@@ -569,10 +579,8 @@ func play_monster_event(monster_id: int, semantic_event: String, context: Dictio
 	return play_event("monster.%d.%s" % [monster_id, semantic_event], context)
 
 
-## Start one presentation session for a real monster engagement. A session is
-## keyed by the actor owner, so a target refresh or a short LOS interruption
-## cannot replay the prompt. The source event remains `ambient` for an exact
-## stable monster-ID reuse; the returned semantic event is `combat_prompt`.
+## Compatibility entry for removed discovery/combat-state sound. Return before
+## session allocation, sample selection, resource lookup or player admission.
 func play_monster_combat_prompt(
 	monster_id: int,
 	audio_owner_key: String,
@@ -580,45 +588,7 @@ func play_monster_combat_prompt(
 ) -> Dictionary:
 	if monster_id <= 0 or audio_owner_key.strip_edges().is_empty():
 		return _reject_event("invalid_event", "", context)
-	var owner_key := audio_owner_key.strip_edges()
-	var now_msec := _now_msec()
-	var session: Dictionary = _monster_sessions.get(owner_key, {}) as Dictionary
-	if bool(session.get("active", false)) or bool(session.get("entry_attempted", false)):
-		return _reject_event_light(
-			"combat_session_duplicate",
-			"monster.%d.ambient" % monster_id,
-			context,
-		)
-	if now_msec < int(session.get("rearm_after_msec", 0)):
-		return _reject_event_light(
-			"combat_session_rearm_pending",
-			"monster.%d.ambient" % monster_id,
-			context,
-		)
-	var prompt_context := context.duplicate(true)
-	prompt_context["audio_owner_key"] = owner_key
-	prompt_context["release_id"] = str(
-		context.get("session_id", "combat:%s:%d" % [owner_key, now_msec])
-	)
-	prompt_context["monster_combat_session"] = true
-	# Latch the real engagement before playback/admission. A missing sample,
-	# muted SFX bus or exhausted budget is still one completed entry attempt;
-	# only end_monster_combat_session may clear it for a later re-entry.
-	session["active"] = true
-	session["entry_attempted"] = true
-	session["monster_id"] = monster_id
-	session["started_msec"] = now_msec
-	session["last_activity_msec"] = now_msec
-	session["rearm_after_msec"] = 0
-	var result := _play_event_internal(
-		"monster.%d.ambient" % monster_id,
-		prompt_context,
-		true,
-		"combat_prompt",
-	)
-	session["audio_started"] = str(result.get("status", "")) == "played"
-	_monster_sessions[owner_key] = session
-	return result
+	return _skipped_event("combat_prompt_disabled", "monster.%d.ambient" % monster_id, context)
 
 
 func set_monster_combat_session(

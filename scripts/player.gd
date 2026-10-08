@@ -105,6 +105,7 @@ var stealth_time := 0.0
 ## PlayerState, but an attack/skill submission suppresses its visibility until
 ## a new runtime stealth application explicitly refreshes the state.
 var _stealth_break_override := false
+var _equipment_stealth_active := false
 var defense_buff := 0
 var defense_buff_time := 0.0
 var mac_buff := 0
@@ -146,7 +147,7 @@ var _pending_combat_action_kind := ""
 var _accepted_release_producers: Dictionary = {}
 var _test_combat_time_ms := -1
 var _last_temporary_item_buff_revision := -1
-var _last_revival_at_ms := -60000
+var _last_revival_at_ms := -300000
 # HC-MONSTER-COMBAT-R3 W5 (R3-06): the death lifecycle generation. Every
 # formal death opens a new generation; the deferred death notification task
 # captures its own generation and re-checks it after the await, so a revival
@@ -1071,7 +1072,7 @@ func _apply_resolved_damage(
 	var committed_death_generation := -1
 	if current_hp == 0:
 		var now_ms := Time.get_ticks_msec()
-		if PlayerState.has_special_effect("revival") and now_ms - _last_revival_at_ms >= 60000:
+		if PlayerState.has_special_effect("revival") and now_ms - _last_revival_at_ms >= EquipmentRulesScript.revival_cooldown_ms():
 			# HC-MONSTER-COMBAT-R2 T5: the automatic revival consumed the ring
 			# charge above, but this physical hit still owes exactly one
 			# incoming-struck durability event. The old early `return` skipped
@@ -1808,6 +1809,20 @@ func break_stealth() -> void:
 	queue_redraw()
 
 
+func recover_equipment_stealth_after_combat_exit() -> bool:
+	## Re-arm equipment-derived stealth only at the authoritative combat exit.
+	## Timer expiry never restores a broken ring state.
+	if not PlayerState.has_special_effect("stealth"):
+		_stealth_break_override = false
+		stealth_time = 0.0
+		queue_redraw()
+		return false
+	_stealth_break_override = false
+	stealth_time = 0.0
+	queue_redraw()
+	return true
+
+
 func apply_defense_buff(seconds: float, amount: int) -> void:
 	## Physical AC compatibility alias; AC and MAC stay separate.
 	apply_ac_buff(seconds, amount)
@@ -1943,6 +1958,11 @@ func _draw() -> void:
 
 
 func _apply_profile_stats() -> void:
+	var equipment_stealth_active := PlayerState.has_special_effect("stealth")
+	if equipment_stealth_active != _equipment_stealth_active:
+		_equipment_stealth_active = equipment_stealth_active
+		_stealth_break_override = false
+		queue_redraw()
 	var old_max := maxi(1, max_hp)
 	var previous_hp := current_hp
 	# A lethal physical hit applies incoming durability before it marks `_dead`.

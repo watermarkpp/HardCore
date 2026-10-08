@@ -70,10 +70,13 @@ func _run() -> void:
 	if committed:
 		var endpoint := actor._movement_step_target_ground_gu
 		actor._hc_tick_melee(0.0, 0.0)
-		# Legacy distant claims no longer own destinations. The occupied west
-		# axis leaves this literal northwest corner as the nearest free point.
-		_check(actor._hc_surround_slot == 6 and actor._hc_surround_goal.distance_to(anchor + Vector2(-1, -1)) <= GU.EPSILON_GU, "outer detour retained a distant claim instead of the nearest free corner")
-		_check(actor._movement_step_active and actor._movement_step_target_ground_gu == endpoint, "nearest-point reselection cancelled a lawful committed outward segment")
+		_check(actor._hc_surround_goal == goal and actor._hc_flank_waypoint == outer_flank, "valid outward detour changed its contact destination before completing the flank")
+		_check(actor._movement_step_active and actor._movement_step_target_ground_gu == endpoint, "crowd selection cancelled a lawful committed outward segment")
+		# A consumed waypoint provides no persistent ownership. The occupied
+		# west axis still leaves this literal northwest corner nearest.
+		actor._hc_flank_waypoint = actor.spatial_index_position()
+		actor._hc_crowd_position_goal(player)
+		_check(actor._hc_surround_slot == 6 and actor._hc_surround_goal.distance_to(anchor + Vector2(-1, -1)) <= GU.EPSILON_GU, "consumed outer detour retained a distant claim instead of the nearest free corner")
 	index.unregister(peer.spatial_actor_runtime_id)
 	peer.free()
 	index.unregister(actor.spatial_actor_runtime_id)
@@ -103,8 +106,12 @@ func _run() -> void:
 	frog._hc_surround_anchor = anchor
 	frog._hc_surround_scope = [MAP_ID, 1, frog._hc_life(frog), player.get_instance_id(), frog._hc_life(player)]
 	frog._hc_surround_slot = 0
+	var held_flank := frog._hc_flank_waypoint
 	var nearby_goal := frog._hc_crowd_position_goal(player)
-	_check(frog._hc_surround_slot == 3 and nearby_goal.distance_to(Positions.station(frog, anchor, frog._target_combat_radius_gu(player), 3)) <= GU.EPSILON_GU, "in-zone actor retained a distant station while its nearest actual entrance was free")
+	_check(nearby_goal == goal and frog._hc_flank_waypoint == held_flank, "mixed-body detour restarted before its legal flank destination was reached")
+	frog._hc_flank_waypoint = frog.spatial_index_position()
+	nearby_goal = frog._hc_crowd_position_goal(player)
+	_check(frog._hc_surround_slot == 3 and nearby_goal.distance_to(Positions.station(frog, anchor, frog._target_combat_radius_gu(player), 3)) <= GU.EPSILON_GU, "consumed mixed-body detour retained a distant station while its nearest actual entrance was free")
 	for item in [frog, corner_body]:
 		index.unregister(item.spatial_actor_runtime_id)
 		item.free()

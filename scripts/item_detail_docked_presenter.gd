@@ -6,7 +6,7 @@ extends Panel
 const NameStyle := preload("res://scripts/ui_item_name_style.gd")
 const Formatter := preload("res://scripts/item_detail_presenter.gd")
 const Dock := preload("res://scripts/ui_item_detail_dock.gd")
-const TITLE_SIZE := 20
+const TITLE_SIZE := 18
 const BODY_SIZE := 14
 const MARGIN := 18.0
 const MIN_WIDTH := 100.0

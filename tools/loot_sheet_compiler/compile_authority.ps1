@@ -27,15 +27,15 @@ $rv = Join-Path $ScriptDir 'evidence'
 $preparedInputDir = Join-Path $OutputDir 'source_inputs'
 & (Join-Path $ScriptDir 'prepare_archive_inputs.ps1') -ProjectRoot $ProjectRoot -OutputDir $preparedInputDir
 $doc = Get-Content (Join-Path $preparedInputDir 'loot_sheet_parsed.json') -Raw -Encoding UTF8 | ConvertFrom-Json
-$db = Get-Content (Join-Path $ProjectRoot 'assets\data\drop\dpv2_direct_baseline_v2.json') -Raw | ConvertFrom-Json
+$db = Get-Content (Join-Path $ProjectRoot 'assets\data\drop\dpv2_direct_baseline_v2.json') -Raw -Encoding UTF8 | ConvertFrom-Json
 $grp = Get-Content (Join-Path $preparedInputDir 'row_to_full_slot_uid_map.json') -Raw -Encoding UTF8 | ConvertFrom-Json
-$equ = Get-Content (Join-Path $ProjectRoot 'assets\data\equipment_attribute_master.json') -Raw | ConvertFrom-Json
+$equ = Get-Content (Join-Path $ProjectRoot 'assets\data\equipment_attribute_master.json') -Raw -Encoding UTF8 | ConvertFrom-Json
 
 # workbook sha: real workbook when provided, otherwise the versioned archive
 # binding recorded in evidence/SOURCE_BINDINGS.json (archived parsed-rows mode).
 $sourceMode = "archived_parsed_rows"
 if ([string]::IsNullOrWhiteSpace($WorkbookPath)) {
-    $bindings = Get-Content (Join-Path $rv 'SOURCE_BINDINGS.json') -Raw | ConvertFrom-Json
+    $bindings = Get-Content (Join-Path $rv 'SOURCE_BINDINGS.json') -Raw -Encoding UTF8 | ConvertFrom-Json
     $xlsxSha = [string]$bindings.source_workbook_sha256
     if ($xlsxSha -ne 'bc234fca54286547b07f64731c9d0e3674aa19a703863c393c356caf97005251') {
         throw "archived workbook sha mismatch: $xlsxSha"
@@ -226,7 +226,7 @@ $emptyNames = $stat.emptySheets -join ','
 # synthesized document is impossible here because this script always
 # rebuilds from the parsed rows first (idempotent by construction).
 $overlayInputPath = Join-Path $rv 'user_directive_overlay_slots.json'
-$overlayInput = Get-Content $overlayInputPath -Raw | ConvertFrom-Json
+$overlayInput = Get-Content $overlayInputPath -Raw -Encoding UTF8 | ConvertFrom-Json
 $overlaySlots = $overlayInput.slots
 $overlayByMid = @{}
 foreach ($os in $overlaySlots) {
@@ -262,7 +262,7 @@ if ($overlayApplied -ne $overlayTotal) { $overlayConflicts += "OVERLAY-TALLY-MIS
 # after the user's deletion. Output aliases identify the exact retained armor;
 # they do not authorize restoring either a deleted row or another source slot.
 $armorDirectivePath = Join-Path $rv 'armor_single_slot_directive_v92.json'
-$armorDirective = Get-Content -LiteralPath $armorDirectivePath -Raw | ConvertFrom-Json
+$armorDirective = Get-Content -LiteralPath $armorDirectivePath -Raw -Encoding UTF8 | ConvertFrom-Json
 function Assert-ArmorDirective([bool]$Condition, [string]$Message) {
     if (-not $Condition) { throw "ARMOR_SINGLE_SLOT_DIRECTIVE_REJECTED: $Message" }
 }
@@ -284,7 +284,7 @@ $armorPairPath = Join-Path $ProjectRoot ([string]$armorDirective.identity_basis.
 Assert-ArmorDirective ($armorDirective.identity_basis.sha256_scope -eq 'utf8_lf_text') 'identity hash scope mismatch'
 Assert-ArmorDirective ((Get-TextSha256 ([IO.File]::ReadAllText($armorMasterPath).Replace("`r`n", "`n"))) -eq $armorDirective.identity_basis.equipment_master_sha256) 'equipment master changed; review exact IDs before recompiling'
 Assert-ArmorDirective ((Get-TextSha256 ([IO.File]::ReadAllText($armorPairPath).Replace("`r`n", "`n"))) -eq $armorDirective.identity_basis.female_pair_evidence_sha256) 'female pairing evidence changed'
-$armorPairEvidence = Get-Content -LiteralPath $armorPairPath -Raw | ConvertFrom-Json
+$armorPairEvidence = Get-Content -LiteralPath $armorPairPath -Raw -Encoding UTF8 | ConvertFrom-Json
 $armorMasterById = @{}
 foreach ($record in $equ.records) {
     if ([string]$record.category -eq [string]$armorDirective.identity_basis.armor_category) { $armorMasterById[[int]$record.itemId] = $record }
@@ -402,6 +402,41 @@ Assert-ArmorDirective ($nonArmorBeforeSha -eq $nonArmorAfterSha) 'non-armor slot
 $armorDirectiveSha = ((Get-FileHash -LiteralPath $armorDirectivePath -Algorithm SHA256).Hash).ToLowerInvariant()
 $armorAudit = [ordered]@{ directive_id = [string]$armorDirective.directive_id; directive_sha256 = $armorDirectiveSha; before_slots = $armorBeforeTotal; after_slots = $armorAfterTotal; removed_slots = $armorRemoved; groups = $armorGroupKeys.Count; frozen_exception_slots = $armorExceptions.Count; non_armor_slots = $armorNonArmorAfter.Count; non_armor_before_sha256 = $nonArmorBeforeSha; non_armor_after_sha256 = $nonArmorAfterSha; remaining_slot_order_unchanged = $true }
 
+# Exact special-item source correction. The archived evidence remains immutable;
+# this policy removes only the named drop slot from runtime authority and never
+# touches owned inventory instances.
+$techniquePolicyPath = Join-Path $ProjectRoot 'assets/data/drop/technique_drop_source_policy_v1.json'
+$techniquePolicy = Get-Content -LiteralPath $techniquePolicyPath -Raw -Encoding UTF8 | ConvertFrom-Json
+if ([string]$techniquePolicy.schema -ne 'hardcore.drop.technique_source_policy.v1' -or
+    [string]$techniquePolicy.operation -ne 'remove_from_drop_authority_only' -or
+    [string]$techniquePolicy.owned_instances_effect -ne 'preserve' -or
+    @($techniquePolicy.exact_removals).Count -ne 1) {
+    throw 'TECHNIQUE_SOURCE_POLICY_REJECTED: contract mismatch'
+}
+$techniqueRemoved = 0
+foreach ($removal in $techniquePolicy.exact_removals) {
+    $uid = [string]$removal.slot_uid
+    $mid = [int]$removal.monster_id
+    $itemId = [int]$removal.canonical_item_id
+    $row = [int]$removal.source_sheet_row
+    $owner = @($monstersOut | Where-Object { [int]$_.monster_id -eq $mid })
+    if ($owner.Count -ne 1) { throw "TECHNIQUE_SOURCE_POLICY_REJECTED: monster missing $mid" }
+    $matches = @($owner[0].slots | Where-Object { [string]$_.slot_uid -eq $uid })
+    if ($matches.Count -ne 1 -or [int]$matches[0].canonical_item_id -ne $itemId -or [int]$matches[0].source_sheet_row -ne $row) {
+        throw "TECHNIQUE_SOURCE_POLICY_REJECTED: exact identity mismatch $uid"
+    }
+    $kept = New-Object System.Collections.Generic.List[object]
+    foreach ($slot in $owner[0].slots) {
+        if ([string]$slot.slot_uid -eq $uid) { $techniqueRemoved++; continue }
+        $kept.Add($slot)
+    }
+    $owner[0].slots = $kept
+}
+if ($techniqueRemoved -ne @($techniquePolicy.exact_removals).Count) {
+    throw "TECHNIQUE_SOURCE_POLICY_REJECTED: removed=$techniqueRemoved expected=$(@($techniquePolicy.exact_removals).Count)"
+}
+$techniquePolicySha = ((Get-FileHash -LiteralPath $techniquePolicyPath -Algorithm SHA256).Hash).ToLowerInvariant()
+
 # New user-authored Boss material slots are appended after the frozen workbook
 # and armor correction. One ore slot is one independent trial; its purity is
 # selected only after that trial succeeds, in the runtime reward resolver.
@@ -480,6 +515,8 @@ $out = [ordered]@{
         armor_single_slot_directive_sha256 = $armorDirectiveSha
         boss_material_directive = 'assets/data/drop/boss_material_drop_directive_v1.json'
         boss_material_directive_sha256 = $bossMaterialSha
+        technique_drop_source_policy = 'assets/data/drop/technique_drop_source_policy_v1.json'
+        technique_drop_source_policy_sha256 = $techniquePolicySha
         baseline_commit = "84ab22742eee1589ac105a8ff175da8623778f37"
         probability_contract = "sheet_E_is_final_per_slot_pre_rng_probability_no_spb_no_v5_no_denominator_policy_no_v80_no_v81_no_global_multiplier_no_gold_x5"
         gold_contract = "sheet_D_is_final_gold_amount"
@@ -493,7 +530,8 @@ $out = [ordered]@{
         boss_material_slots = $bossMaterialSlots
         armor_single_slot_removed_slots = $armorRemoved
         armor_single_slot_groups = $armorGroupKeys.Count
-        total_effective_slots = $armorAfterTotal + $bossMaterialSlots
+        technique_drop_source_removed_slots = $techniqueRemoved
+        total_effective_slots = $armorAfterTotal + $bossMaterialSlots - $techniqueRemoved
         excluded_residue_rows = $stat.excludedResidue
         parser_excluded_residue_rows = $residueRows.Count
         residue_rows_source = "evidence/04_五张空表与七条残留.csv"
@@ -523,7 +561,7 @@ if ($acceptanceFailures.Count -gt 0) {
 
 # --- optional reference comparison of the sheet-compiled portion ---
 if (-not [string]::IsNullOrWhiteSpace($VerifyAgainstAuthority)) {
-    $ref = Get-Content $VerifyAgainstAuthority -Raw | ConvertFrom-Json
+    $ref = Get-Content $VerifyAgainstAuthority -Raw -Encoding UTF8 | ConvertFrom-Json
     $refSheet = @{}
     foreach ($m in $ref.monsters) { foreach ($s in $m.slots) {
         if ([string]$s.origin -eq 'sheet_row' -or [string]$s.origin -eq 'new_equip' -or [string]$s.origin -eq 'v81_fate_blade') {
@@ -565,6 +603,7 @@ $JsonOut = $out | ConvertTo-Json -Depth 8
 [System.IO.File]::WriteAllText((Join-Path $OutputDir 'compile_disambiguation.json'), ($disambiguated | ConvertTo-Json -Depth 4), [System.Text.UTF8Encoding]::new($false))
 [System.IO.File]::WriteAllText((Join-Path $OutputDir 'armor_single_slot_audit.json'), ($armorAudit | ConvertTo-Json -Depth 4), [System.Text.UTF8Encoding]::new($false))
 Write-Output "ARMOR_SINGLE_SLOT_DIRECTIVE_PASS before=$armorBeforeTotal after=$armorAfterTotal removed=$armorRemoved groups=$($armorGroupKeys.Count) frozen=$($armorExceptions.Count) non_armor_unchanged=$($nonArmorBeforeSha -eq $nonArmorAfterSha)"
+Write-Output "TECHNIQUE_SOURCE_POLICY_PASS removed=$techniqueRemoved policy_sha=$($techniquePolicySha.Substring(0,16))... owned_instances=preserved"
 Write-Output "source_mode=$sourceMode sheet_sha=$($xlsxSha.ToLower().Substring(0,16))..."
 Write-Output "disambiguated_uids=$($disambiguated.Count)"
 Write-Output "compiled: named=$($stat.named) slotRows=$($stat.compiled) newSlots=$($stat.newSlots) fate=$($stat.fate) overlay=$overlayApplied excluded=$($stat.excludedResidue) emptySheets=[$emptyNames] monsters=$($monstersOut.Count)"

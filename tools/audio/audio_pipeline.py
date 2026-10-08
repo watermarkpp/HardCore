@@ -9,6 +9,7 @@ runtime binding ownership remains in audio_bindings.source.json.
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import hashlib
 import json
 import re
@@ -483,6 +484,131 @@ def public_resolution(value: dict[str, Any]) -> dict[str, Any]:
     result = dict(value)
     result.pop("_source_file", None)
     return result
+
+
+def canonical_item_alias_routes(
+    project_root: Path,
+    service_items_doc: dict[str, Any],
+    item_event_routes: dict[str, Any],
+) -> dict[str, Any]:
+    """Add the audited service-item aliases as canonical item routes.
+
+    The gameplay bridge may expose an old service item as its canonical item
+    identity (for example service 658 becomes item 920045).  Keep the legacy
+    service route, but publish the canonical route as well so both identities
+    resolve to the same already-audited semantic event.  This is deliberately
+    sourced from the identity registry; names and numeric-range guesses are
+    rejected.
+    """
+    registry_path = project_root / "assets/data/identity/entity_registry_source.json"
+    registry = json.loads(registry_path.read_text(encoding="utf-8"))
+    seen_service_indexes: dict[int, int] = {}
+    for record_index, record in enumerate(service_items_doc.get("runtimeItems", [])):
+        if not isinstance(record, dict):
+            continue
+        raw_service_index = record.get("serviceIndex", "")
+        if not str(raw_service_index).isdigit():
+            continue
+        service_index = int(raw_service_index)
+        if service_index in seen_service_indexes:
+            raise ValueError(
+                "duplicate serviceIndex in service catalog: "
+                f"{service_index} at {seen_service_indexes[service_index]} and {record_index}"
+            )
+        seen_service_indexes[service_index] = record_index
+    identity_builder_path = Path(__file__).resolve().parents[1] / "build_entity_registry.py"
+    if not identity_builder_path.is_file():
+        raise ValueError(f"missing formal identity builder: {identity_builder_path}")
+    identity_spec = importlib.util.spec_from_file_location(
+        "hardcore_entity_registry_builder", identity_builder_path
+    )
+    if identity_spec is None or identity_spec.loader is None:
+        raise ValueError("unable to load formal identity builder")
+    identity_builder = importlib.util.module_from_spec(identity_spec)
+    identity_spec.loader.exec_module(identity_builder)
+    try:
+        identity_document = identity_builder.build(registry_path, project_root)
+    except (KeyError, TypeError, ValueError, OSError) as exc:
+        raise ValueError(f"formal identity registry validation failed: {exc}") from exc
+    identity_records = {
+        str(record.get("id")): record
+        for record in identity_document.get("records", [])
+        if isinstance(record, dict) and record.get("id")
+    }
+    aliases = registry.get("aliases", [])
+    if not isinstance(aliases, list):
+        raise ValueError("entity registry aliases must be a list")
+    service_records: dict[int, dict[str, Any]] = {}
+    service_record_indexes: dict[int, int] = {}
+    for record_index, record in enumerate(service_items_doc.get("runtimeItems", [])):
+        if not isinstance(record, dict):
+            continue
+        raw_service_index = record.get("serviceIndex", "")
+        if not str(raw_service_index).isdigit():
+            continue
+        service_index = int(raw_service_index)
+        if service_index in service_records:
+            raise ValueError(
+                "duplicate serviceIndex in service catalog: "
+                f"{service_index} at {service_record_indexes[service_index]} and {record_index}"
+            )
+        service_records[service_index] = record
+        service_record_indexes[service_index] = record_index
+    seen_aliases: set[str] = set()
+    seen_canonical_ids: set[int] = set()
+    added: dict[str, Any] = {}
+    for alias_index, raw_alias in enumerate(aliases):
+        if not isinstance(raw_alias, dict):
+            raise ValueError(f"entity registry alias {alias_index} is not a dictionary")
+        alias_id = str(raw_alias.get("alias_id", ""))
+        canonical_id = str(raw_alias.get("canonical_id", ""))
+        alias_match = re.fullmatch(r"hc\.service_item\.(\d{6})", alias_id)
+        canonical_match = re.fullmatch(r"hc\.item\.(\d+)", canonical_id)
+        if alias_match is None or canonical_match is None:
+            raise ValueError(f"invalid audio alias identity at index {alias_index}: {alias_id} -> {canonical_id}")
+        service_index = int(alias_match.group(1))
+        item_id = int(canonical_match.group(1))
+        if alias_id in seen_aliases:
+            raise ValueError(f"duplicate audio alias: {alias_id}")
+        if item_id in seen_canonical_ids:
+            raise ValueError(f"duplicate canonical audio alias target: item:{item_id}")
+        seen_aliases.add(alias_id)
+        seen_canonical_ids.add(item_id)
+        if identity_records.get(alias_id, {}).get("kind") != "service_item":
+            raise ValueError(f"audio alias is not a registered service item: {alias_id}")
+        if identity_records.get(canonical_id, {}).get("kind") != "item":
+            raise ValueError(f"audio alias canonical target is not a registered item: {canonical_id}")
+        service_key = f"service:{service_index}"
+        item_key = f"item:{item_id}"
+        service_record = service_records.get(service_index)
+        if service_record is None:
+            raise ValueError(f"audio alias has no registered service record: {alias_id}")
+        service_route = item_event_routes.get(service_key)
+        if not isinstance(service_route, dict):
+            raise ValueError(f"audio alias service route is missing: {service_key}")
+        route = json.loads(json.dumps(service_route))
+        route["identity_kind"] = "canonical_item_id_alias"
+        route["identity_value"] = item_id
+        route["alias_of"] = service_key
+        route["identity_source"] = {
+            "path": "assets/data/identity/entity_registry_source.json",
+            "pointer": f"/aliases/{alias_index}",
+            "alias_id": alias_id,
+            "canonical_id": canonical_id,
+            "service_record": f"/runtimeItems/{next(i for i, r in enumerate(service_items_doc.get('runtimeItems', [])) if r is service_record)}",
+        }
+        existing_route = item_event_routes.get(item_key)
+        if existing_route is not None and existing_route != route:
+            raise ValueError(f"audio alias would overwrite conflicting item route: {item_key}")
+        added[item_key] = route
+    item_event_routes.update({key: route for key, route in added.items() if key not in item_event_routes})
+    return {
+        "alias_count": len(added),
+        "canonical_item_route_count": len(added),
+        "service_route_count": len(added),
+        "source": "assets/data/identity/entity_registry_source.json",
+        "source_sha256": sha256_file(registry_path),
+    }
 
 
 def monster_appearance(record: dict[str, Any], catalog: dict[str, Any]) -> int | None:
@@ -968,6 +1094,9 @@ def command_build_exact(args: argparse.Namespace) -> int:
             service_index = int(record.get("serviceIndex", -1))
             if service_index >= 0:
                 add_item_audit(f"service:{service_index}", record, "service_index", service_index)
+    alias_route_summary = canonical_item_alias_routes(
+        project_root, service_items_doc, item_event_routes
+    )
     for record in item_runtime_authority_doc.get("newItems", []):
         if isinstance(record, dict):
             item_id = int(record.get("itemId", -1))
@@ -1032,7 +1161,8 @@ def command_build_exact(args: argparse.Namespace) -> int:
         "runtime_event_count": len(runtime_events),
         "managed_asset_count": len(needed_files),
         "current_item_identity_count": len(item_audit),
-        "item_route_count": sum(len(item.get("runtime_routes", {})) for item in item_audit),
+        "item_route_count": sum(len(item.get("runtime_routes", {})) for item in item_audit) + alias_route_summary["canonical_item_route_count"],
+        "canonical_item_alias_route_count": alias_route_summary["canonical_item_route_count"],
         "player_core_event_count": len(PLAYER_REACTION_SOUNDS) + len(PLAYER_CONTACT_SOUNDS),
     }
     authoring["unresolved_scope"] = [
@@ -1109,7 +1239,8 @@ def command_build_exact(args: argparse.Namespace) -> int:
             "all_non_npc_mappings_unresolved": False,
             "current_item_identity_count": len(item_audit),
             "item_exact_route_identity_count": sum(1 for item in item_audit if item.get("runtime_routes")),
-            "item_runtime_route_count": sum(len(item.get("runtime_routes", {})) for item in item_audit),
+            "item_runtime_route_count": sum(len(item.get("runtime_routes", {})) for item in item_audit) + alias_route_summary["canonical_item_route_count"],
+            "canonical_item_alias_route_count": alias_route_summary["canonical_item_route_count"],
             "player_core_event_count": len(PLAYER_REACTION_SOUNDS) + len(PLAYER_CONTACT_SOUNDS),
         }
     )
@@ -1158,6 +1289,7 @@ def command_build_exact(args: argparse.Namespace) -> int:
         "currency": "currency:gold",
         "runtime_names_forbidden": True,
         "sources": item_identity_sources,
+        "canonical_alias_routes": alias_route_summary,
     }
     write_json(requirements_path, requirements)
 
@@ -1180,8 +1312,9 @@ def command_build_exact(args: argparse.Namespace) -> int:
             "runtime_events": len(runtime_events),
             "managed_unique_assets": len(needed_files),
             "current_item_identities": len(item_audit),
-            "item_route_identities": sum(1 for item in item_audit if item.get("runtime_routes")),
-            "item_runtime_routes": sum(len(item.get("runtime_routes", {})) for item in item_audit),
+            "item_route_identities": sum(1 for item in item_audit if item.get("runtime_routes")) + alias_route_summary["canonical_item_route_count"],
+            "item_runtime_routes": sum(len(item.get("runtime_routes", {})) for item in item_audit) + alias_route_summary["canonical_item_route_count"],
+            "canonical_item_alias_route_count": alias_route_summary["canonical_item_route_count"],
         },
         "missing_sources": [
             {"event_id": item["event_id"], "samples": item["samples"]}
@@ -1229,6 +1362,23 @@ def command_inventory(args: argparse.Namespace) -> int:
     write_json(out_dir / "source_anomalies.json", anomalies(primary))
     comparison = source_comparison(primary, user)
     print(json.dumps({"status": "PASS", "out_dir": out_dir.as_posix(), "comparison": comparison["status_counts"]}, ensure_ascii=False))
+    return 0
+
+
+def command_refresh_alias_routes(args: argparse.Namespace) -> int:
+    """Refresh only canonical alias routes in an existing runtime binding."""
+    project_root = Path(args.project_root).resolve()
+    runtime_path = Path(args.runtime)
+    service_items_doc = json.loads(Path(args.service_items).read_text(encoding="utf-8"))
+    runtime = json.loads(runtime_path.read_text(encoding="utf-8"))
+    routes = runtime.get("item_event_routes")
+    if not isinstance(routes, dict):
+        raise ValueError("runtime item_event_routes must be a dictionary")
+    summary = canonical_item_alias_routes(project_root, service_items_doc, routes)
+    runtime["item_event_routes"] = routes
+    runtime.setdefault("alias_route_generation", {}).update(summary)
+    write_json(runtime_path, runtime)
+    print(json.dumps({"status": "PASS", **summary, "runtime": runtime_path.as_posix()}, ensure_ascii=False))
     return 0
 
 
@@ -1567,6 +1717,11 @@ def build_parser() -> argparse.ArgumentParser:
     exact.add_argument("--project-root", default=".")
     exact.add_argument("--base-sha", default=BASE_SHA_DEFAULT)
     exact.set_defaults(handler=command_build_exact)
+    refresh_aliases = subparsers.add_parser("refresh-alias-routes")
+    refresh_aliases.add_argument("--runtime", required=True)
+    refresh_aliases.add_argument("--service-items", default="assets/data/service_item_catalog.json")
+    refresh_aliases.add_argument("--project-root", default=".")
+    refresh_aliases.set_defaults(handler=command_refresh_alias_routes)
     return parser
 
 

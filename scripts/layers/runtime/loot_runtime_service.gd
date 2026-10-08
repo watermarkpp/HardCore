@@ -210,6 +210,13 @@ func roll_monster_drops(
 		result.reason = "invalid_monster_id"
 		return result
 	result.canonical_monster_id = resolved_id
+	var monster_classification := GameData.canonical_monster_classification(resolved_id)
+	var ground_slot_limit := GameData.dpv2_ground_slot_limit_for_monster(resolved_id)
+	result["ground_slot_group"] = {
+		"classification": monster_classification,
+		"ground_slot_limit": ground_slot_limit,
+		"policy_authority": "monster.ground_slot_groups.runtime.v1",
+	}
 
 	# The direct profile is joined by canonical_monster_id. Its display/profile
 	# token is telemetry only and is never used to locate a runtime drop table.
@@ -356,7 +363,7 @@ func roll_monster_drops(
 	var selection := _select_ground_rewards(
 		successful_rewards,
 		rng,
-		GameData.dpv2_ground_slot_limit(),
+		ground_slot_limit,
 	)
 	for raw_selected: Variant in selection.get("selected", []):
 		if not raw_selected is Dictionary:

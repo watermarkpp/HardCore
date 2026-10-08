@@ -19,6 +19,11 @@ CONTRACT = "hardcore.entity_identity.v1"
 KINDS = {"skill", "item", "service_item", "monster", "map", "profession", "slot", "currency", "item_category"}
 NUMERIC = {"item", "service_item", "monster", "map"}
 ASCII_ID = re.compile(r"[a-z][a-z0-9_]*(?:\.[a-z0-9_]+)*\Z")
+EQUIPMENT_GRANTED_SKILL_IDS = {
+    'hc.skill.equipment.ring_teleport',
+    'hc.skill.equipment.ring_healing',
+    'hc.skill.equipment.ring_fireball',
+}
 
 
 def read(path: Path):
@@ -73,9 +78,43 @@ def validate_skill_book_bindings(authority, catalog, records):
             raise ValueError('duplicate skill book relation')
         relations[book] = target
         targets.add(target)
-    if targets != {key for key, row in records.items() if row['kind'] == 'skill'}:
+    # Equipment-granted skills are deliberately not skill-book targets. Their
+    # entitlement comes from the linked positive-durability item instance.
+    vanilla_skill_ids = {
+        key for key, row in records.items()
+        if row['kind'] == 'skill' and key not in EQUIPMENT_GRANTED_SKILL_IDS
+    }
+    if targets != vanilla_skill_ids:
         raise ValueError('incomplete skill book relations')
     return relations
+
+
+def validate_equipment_granted_bindings(root, records):
+    source_path = root / 'assets/data/equipment_granted_skills.source.json'
+    master_path = root / 'assets/data/equipment_attribute_master.json'
+    source = read(source_path)
+    master = read(master_path)
+    if source.get('contract_id') != 'equipment.granted_skills.source.v1' or not isinstance(source.get('records'), list):
+        raise ValueError('invalid equipment-granted skill source')
+    master_by_id = {row.get('itemId'): row for row in master.get('records', []) if isinstance(row, dict)}
+    seen_skill_ids = set()
+    seen_item_ids = set()
+    for row in source['records']:
+        skill_id = row.get('skill_id')
+        item_id = row.get('item_id')
+        if not isinstance(skill_id, str) or not skill_id.startswith('hc.skill.equipment.'):
+            raise ValueError('invalid equipment-granted skill identity')
+        if records.get(skill_id, {}).get('kind') != 'skill':
+            raise ValueError(f'unregistered equipment-granted skill: {skill_id}')
+        if type(item_id) is not int or item_id in seen_item_ids or item_id not in master_by_id:
+            raise ValueError(f'invalid equipment-granted item binding: {item_id}')
+        if skill_id in seen_skill_ids:
+            raise ValueError(f'duplicate equipment-granted skill: {skill_id}')
+        seen_skill_ids.add(skill_id)
+        seen_item_ids.add(item_id)
+    if seen_skill_ids != EQUIPMENT_GRANTED_SKILL_IDS or seen_item_ids != {254, 255, 259}:
+        raise ValueError('equipment-granted skill closure mismatch')
+    return {'skill_count': len(seen_skill_ids), 'item_ids': sorted(seen_item_ids)}
 
 
 def validate_relic_bindings(authority, skill_source, records):
@@ -252,6 +291,9 @@ def build(source=SOURCE, root=ROOT):
     if 'res://' + relic_authority in provenance:
         validate_relic_bindings(read(root/relic_authority),
             read(root/'assets/data/vanilla_176/skills_source_of_truth_v1.json'), records)
+    equipment_grant_source = root / 'assets/data/equipment_granted_skills.source.json'
+    provenance['res://assets/data/equipment_granted_skills.source.json'] = digest(equipment_grant_source)
+    validate_equipment_granted_bindings(root, records)
     category_authority = 'assets/data/identity/item_categories_v1.json'
     if 'res://' + category_authority in provenance:
         validate_item_categories(read(root/category_authority), records)

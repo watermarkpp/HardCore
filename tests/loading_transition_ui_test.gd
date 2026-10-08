@@ -45,7 +45,12 @@ func _run() -> void:
 	var finished_requests: Array[Dictionary] = []
 	overlay.transition_covered.connect(func(request: Dictionary) -> void: covered_requests.append(request.duplicate(true)))
 	overlay.transition_finished.connect(func(request: Dictionary) -> void: finished_requests.append(request.duplicate(true)))
+	overlay.begin_loading("stage-only:test", false)
+	assert(not overlay.progress_track.visible and not overlay.progress_percent.visible, "stage-only Loading必须隐藏进度条和百分比")
+	assert(overlay.progress_stage.visible, "stage-only Loading必须保留阶段文案")
 	overlay.begin_loading("map:test:001")
+	assert(overlay.progress_track.visible and overlay.progress_percent.visible, "普通Loading必须恢复进度条和百分比")
+	assert(overlay.progress_percent.visible, "普通地图Loading默认必须显示真实阶段进度")
 	overlay.set_loading_progress("map:test:001", 0.35, "准备地图")
 	assert(overlay.progress_percent.text == "35%" and overlay.progress_stage.text == "准备地图", "Loading进度未更新")
 	overlay.set_loading_progress("map:stale", 0.95, "错误任务")

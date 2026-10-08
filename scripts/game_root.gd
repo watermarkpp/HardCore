@@ -33,6 +33,7 @@ var _player_level_up_effect: Node2D
 var _player_relic_proc_effect: Node2D
 
 const EquipmentRulesScript := preload("res://scripts/equipment_rules.gd")
+const EquipmentGrantedSkills := preload("res://scripts/equipment_granted_skill_rules.gd")
 const UIErrorFeedbackScript := preload("res://scripts/ui_error_feedback.gd")
 const UIPlayerNoticeScript := preload("res://scripts/ui_player_notice.gd")
 const CombatResolutionRulesScript := preload("res://scripts/combat_resolution_rules.gd")
@@ -329,6 +330,8 @@ var _collecting_staged_actor_plan := false
 var _staged_actor_source_index := 0
 var _staged_actor_spawn_failure_reason := ""
 var _active_enemy_cache: Dictionary = {}
+## Projection of real EnemyActor target edges; no scan or independent timer.
+var _player_combat_enemy_ids: Dictionary = {}
 var _active_boss_cache: Dictionary = {}
 var _safe_zone_enforcement_remaining := 0.0
 var _combat_spatial_index: RuntimeCombatSpatialIndexScript
@@ -1685,7 +1688,6 @@ func _ready() -> void:
 	hud.map_teleport_requested.connect(_on_map_teleport_requested)
 	hud.target_switch_pressed.connect(_cycle_target)
 	hud.auto_target_changed.connect(_set_auto_target_enabled)
-	hud.special_action_pressed.connect(_on_special_action_pressed)
 	hud.skill_button_assignment_requested.connect(_on_skill_button_assignment_requested)
 	hud.shop_buy_quotes_requested.connect(_on_shop_buy_quotes_requested)
 	hud.shop_buy_requested.connect(_on_shop_buy_requested)
@@ -1845,6 +1847,7 @@ func _physics_process(delta: float) -> void:
 
 
 func _process(delta: float) -> void:
+	_recover_equipment_stealth_if_out_of_combat()
 	var full_process_started_usec := RuntimeDiagnostics.timing_start()
 	# Real frame pacing (perf-smoothness-r1 Phase A): `_process(delta)` is
 	# clamped by the engine (8/60 = 0.133s default) and was provably blind to
@@ -4406,6 +4409,7 @@ func _load_zone(zone_name: String, initial: bool, map_data: Dictionary) -> void:
 	_active_safe_zones.clear()
 	_active_enemy_cache.clear()
 	_active_boss_cache.clear()
+	_player_combat_enemy_ids.clear()
 	_safe_zone_enforcement_remaining = 0.0
 	_cancel_all_combat_targets()
 	if _combat_spatial_index != null and current_map_id >= 0:
@@ -5301,6 +5305,8 @@ func _spawn_enemy(
 	enemy.environment_blocker = background
 	enemy.add_to_group("zone_content")
 	enemy.died.connect(_on_enemy_died)
+	enemy.combat_target_changed.connect(_on_enemy_combat_target_changed)
+	_on_enemy_combat_target_changed(enemy, enemy.target)
 	enemy.target_requested.connect(_on_enemy_target_requested)
 	enemy.summon_requested.connect(_on_boss_summon_requested)
 	enemy.relocation_requested.connect(_on_boss_relocation_requested)
@@ -5328,6 +5334,7 @@ func _spawn_enemy(
 
 
 func _on_cached_enemy_tree_exiting(enemy_instance_id: int) -> void:
+	_player_combat_enemy_ids.erase(enemy_instance_id)
 	_active_enemy_cache.erase(enemy_instance_id)
 	_active_boss_cache.erase(enemy_instance_id)
 
@@ -7045,6 +7052,8 @@ func _use_skill_slot(slot_group: String, slot_index: int) -> void:
 
 
 func _try_release_skill(skill_name: String, show_failure := true) -> StringName:
+	if not EquipmentGrantedSkills.definition(skill_name).is_empty():
+		return _release_equipment_skill(skill_name, show_failure)
 	if skill_name.is_empty() or not PlayerState.is_skill_learned(skill_name):
 		if show_failure:
 			hud.show_error_message("技能尚未学习")
@@ -7287,7 +7296,7 @@ func _on_skill_button_assignment_requested(request: Dictionary) -> void:
 		if bool(request.get("clear", false))
 		else SkillLoadoutRulesScript.assign_button_slot(
 			PlayerState.skill_button_assignments_snapshot(),
-			PlayerState.learned_skills,
+			PlayerState.skill_assignment_roster(),
 			request
 		)
 	)
@@ -7877,20 +7886,31 @@ func _commit_warrior_melee_modifier_events(modifiers: Dictionary) -> void:
 	pass
 
 
-func _on_special_action_pressed(effect_id: String) -> void:
-	if not PlayerState.has_special_effect(effect_id):
-		hud.show_error_message("特殊装备已失效")
-		return
+func _release_equipment_skill(skill_name_or_id: String, show_failure := true) -> StringName:
+	var grant := EquipmentGrantedSkills.definition(skill_name_or_id)
+	if not gameplay_input_is_enabled() or not is_instance_valid(player) or player._dead or player.current_hp <= 0 or player.combat_transition_is_active():
+		return &"rejected"
+	if grant.is_empty() or not PlayerState.is_skill_available(str(grant.get("skill_id", ""))):
+		if show_failure: hud.show_error_message("装备技能已失效")
+		return &"rejected"
+	if player.control_time > 0.0:
+		return &"busy"
+	var effect_id := str(grant.effect_id)
+	if effect_id == "grant_fireball_skill" and _hostile_skill_blocked_by_safe_zone(SkillDataLoaderScript.skill("wizard.fireball")):
+		if show_failure: hud.show_error_message("安全区内无法对敌人释放技能")
+		return &"rejected"
 	match effect_id:
-		"teleport":
+		"safe_teleport":
 			if _try_safe_ring_teleport():
 				hud.show_message("传送戒指：安全位移")
 			else:
-				hud.show_error_message("前方没有合法传送落点")
-		"flame_skill":
+				if show_failure: hud.show_error_message("前方没有合法传送落点")
+				return &"rejected"
+		"grant_fireball_skill":
 			if not player.spend_mana(5):
-				hud.show_error_message("火球需要5点魔法")
-				return
+				if show_failure: hud.show_error_message("火球需要5点魔法")
+				return &"rejected"
+			player.break_stealth()
 			_skill_cast_target = null
 			_ensure_skill_cast_target(null)
 			var direction := _face_skill_cast_target()
@@ -7915,13 +7935,32 @@ func _on_special_action_pressed(effect_id: String) -> void:
 			)
 			_skill_cast_target = null
 			hud.show_message("火焰戒指：火球")
-		"recovery_skill":
+		"grant_healing_skill":
 			if not player.spend_mana(5):
-				hud.show_error_message("治愈需要5点魔法")
-				return
+				if show_failure: hud.show_error_message("治愈需要5点魔法")
+				return &"rejected"
 			var amount := maxi(12, int(PlayerState.level / 2) + int(PlayerState.computed_stats.get("tao_max", 0)) * 2)
 			player.restore_health(amount)
 			hud.show_message("防御戒指：恢复%d生命" % amount)
+		_: return &"rejected"
+	return &"released"
+
+
+func _on_enemy_combat_target_changed(enemy: EnemyActor, new_target: Node2D) -> void:
+	if not is_instance_valid(enemy): return
+	var id := enemy.get_instance_id()
+	if not enemy._dying and not enemy._death_pending and enemy.current_hp > 0 and is_instance_valid(new_target) and (new_target == player or new_target is SummonActor):
+		_player_combat_enemy_ids[id] = true
+	else:
+		_player_combat_enemy_ids.erase(id)
+
+
+func _recover_equipment_stealth_if_out_of_combat() -> void:
+	if not is_instance_valid(player) or not player._stealth_break_override or not _player_combat_enemy_ids.is_empty():
+		return
+	if not gameplay_input_is_enabled() or player._dead or player._pending_combat_action_active or player._attack_action_timer > 0.0:
+		return
+	player.recover_equipment_stealth_after_combat_exit()
 
 
 func _try_safe_ring_teleport() -> bool:
@@ -12879,7 +12918,9 @@ func _apply_physical_hit(
 	if recovered >= 2:
 		player.restore_health(recovered)
 	if PlayerState.has_special_effect("paralysis") and EquipmentRulesScript.paralysis_succeeds(enemy.anti_poison, _rng.randi_range(0, maxi(1, enemy.anti_poison + 5) - 1)):
-		enemy.apply_control(5.0)
+		enemy.apply_control(EquipmentRulesScript.paralysis_duration_for_classification(
+			str(enemy.monster_data.get("classification", ""))
+		))
 	return true
 
 
@@ -13156,6 +13197,7 @@ func _show_attack_flash(origin: Vector2, direction: Vector2, hit: bool, color: C
 
 
 func _on_enemy_died(enemy: EnemyActor, monster_data: Dictionary) -> void:
+	_player_combat_enemy_ids.erase(enemy.get_instance_id())
 	var queued_at_usec := Time.get_ticks_usec()
 	if _combat_spatial_index != null:
 		_combat_spatial_index.unregister(
@@ -14485,6 +14527,13 @@ func _queue_loot_collection(candidate: Dictionary) -> bool:
 		)
 		pickup_object.reject_collection("拾取来源无效，无法入账。")
 		return false
+	# Reachability decides admission. Once this real source is accepted, its
+	# ordered transaction survives ordinary player movement while IO finishes.
+	if not pickup_object.collection_pending():
+		return false
+	if not _loot_collection_path_is_clear(pickup_object):
+		pickup_object.reject_collection("暂时无法到达该物品。")
+		return false
 	_pending_loot_collections.append(queued_candidate)
 	if not _loot_collection_flush_queued:
 		_loot_collection_flush_queued = true
@@ -14521,9 +14570,7 @@ func _flush_loot_collections(allow_background := false) -> Dictionary:
 			if pickup is LootPickup and is_instance_valid(pickup):
 				(pickup as LootPickup).reject_collection("地图已切换，无法拾取。")
 			continue
-		if not pickup is LootPickup or not _loot_collection_path_is_clear(pickup):
-			if pickup is LootPickup and is_instance_valid(pickup):
-				pickup.reject_collection("暂时无法到达该物品。")
+		if not pickup is LootPickup or not is_instance_valid(pickup) or not pickup.collection_pending():
 			continue
 		transaction_pending.append(candidate)
 		candidates.append(candidate.duplicate(true))
@@ -14565,7 +14612,7 @@ func _poll_prepared_loot_collection(wait := false) -> Dictionary:
 		if (int(candidate.get("origin_map_id", -1)) != current_map_id
 			or int(candidate.get("origin_generation", -1)) != _zone_generation
 			or not pickup is LootPickup or not is_instance_valid(pickup)
-			or not pickup.collection_pending() or not _loot_collection_path_is_clear(pickup)):
+			or not pickup.collection_pending()):
 			valid = false
 			break
 	var result: Dictionary
@@ -14593,7 +14640,13 @@ func _poll_prepared_loot_collection(wait := false) -> Dictionary:
 	if bool(result.get("pending", false)): return result
 	_prepared_loot_collection = {}
 	if bool(result.get("retry", false)):
-		_pending_loot_collections.append_array(cohort.pending)
+		# These sources were accepted before the next cohort. A state barrier
+		# may invalidate preparation, but cannot put older rewards behind new
+		# ones (including when inventory capacity makes order significant).
+		var ordered_pending: Array[Dictionary] = []
+		ordered_pending.assign(cohort.pending)
+		ordered_pending.append_array(_pending_loot_collections)
+		_pending_loot_collections = ordered_pending
 	else:
 		result = _finish_loot_collection_outcomes(cohort.pending, result, int(cohort.candidate_count), int(cohort.stale_count), started_usec)
 	if not _pending_loot_collections.is_empty() and not _loot_collection_flush_queued:
@@ -14631,9 +14684,10 @@ func _finish_loot_collection_outcomes(transaction_pending: Array, result: Dictio
 		# Keep unacknowledged candidates pending for a diagnosable retry instead
 		# of silently dropping them when a malformed/partial transaction result
 		# is returned.
-		_pending_loot_collections.append_array(
-			transaction_pending.slice(processed_count)
-		)
+		var ordered_pending: Array[Dictionary] = []
+		ordered_pending.assign(transaction_pending.slice(processed_count))
+		ordered_pending.append_array(_pending_loot_collections)
+		_pending_loot_collections = ordered_pending
 		if not _pending_loot_collections.is_empty() and not _loot_collection_flush_queued:
 			_loot_collection_flush_queued = true
 			call_deferred("_flush_loot_collections", true)

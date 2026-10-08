@@ -3,6 +3,7 @@ extends Panel
 
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
 const HUDSkillIconCatalogScript := preload("res://scripts/hud_skill_icon_catalog.gd")
+const SkillDataLoaderScript := preload("res://scripts/skills/skill_data_loader.gd")
 const UIItemTextureCacheScript := preload("res://scripts/ui_item_texture_cache.gd")
 const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
 const GothicFrameFillScript := preload("res://scripts/gothic_frame_fill.gd")
@@ -444,6 +445,21 @@ func open_for(display_name: String) -> void:
 		):
 			continue
 		skill_entries.append(entry)
+	var available_ids: Variant = PlayerState.available_skill_ids() if PlayerState.has_method("available_skill_ids") else []
+	for raw_id: Variant in available_ids:
+		var definition := SkillDataLoaderScript.skill(str(raw_id))
+		if definition.is_empty() or not bool(definition.get("equipment_granted", false)):
+			continue
+		var grant_id := str(definition.get("skill_id", raw_id))
+		if not SkillVisibilityPolicyScript.is_skill_visible(grant_id):
+			continue
+		skill_entries.append({
+			"skillName": str(definition.get("display_name", grant_id)),
+			"skill_id": grant_id,
+			"description": str(definition.get("description", "")),
+			"requiredCharacterLevel": 1,
+			"equipment_granted": true,
+		})
 	selected_skill_index = 0 if not skill_entries.is_empty() else -1
 	refresh()
 	show()
@@ -478,12 +494,14 @@ func refresh() -> void:
 	_refresh_pending = false
 	_refresh_scheduled = false
 	_refresh_execution_count += 1
+	_sync_equipment_granted_entries()
 	skill_list.clear()
 	for entry: Variant in skill_entries:
 		var skill_name := str(entry.get("skillName", "技能"))
 		var learned := PlayerState.is_skill_learned(skill_name)
+		var equipment_granted := bool(entry.get("equipment_granted", false))
 		var has_book := PlayerState.has_item(GameData.skill_book_entity_id(CanonicalSkillData.entity_skill_id(str(entry.get("skill_id", "")))))
-		var marker := "已学会" if learned else ("可学习" if has_book else "缺少技能书")
+		var marker := "已学会" if learned else ("装备赋予" if equipment_granted else ("可学习" if has_book else "缺少技能书"))
 		skill_list.add_item("%s（%s）　Lv%d" % [skill_name, marker, int(entry.get("requiredCharacterLevel", 1))])
 	_rebuild_skill_cards()
 	_refresh_assignment_slots()
@@ -500,6 +518,50 @@ func refresh() -> void:
 		_layout_apply_count += 1
 		UIRuntimeLayoutOverridesScript.apply_profile(self, "skill")
 		call_deferred("_ensure_skill_list_bottom_clearance")
+
+
+func _sync_equipment_granted_entries() -> void:
+	## Ordinary profession entries are the stable base list. Grant rows are
+	## rebuilt from current availability on every refresh so equip/unequip and
+	## durability changes are reflected immediately without duplication.
+	var previous_index := selected_skill_index
+	var previous_skill_id := ""
+	if previous_index >= 0 and previous_index < skill_entries.size():
+		previous_skill_id = str(skill_entries[previous_index].get("skill_id", ""))
+	var ordinary_entries: Array = []
+	for raw_entry: Variant in skill_entries:
+		if raw_entry is Dictionary and not bool((raw_entry as Dictionary).get("equipment_granted", false)):
+			ordinary_entries.append(raw_entry)
+	skill_entries = ordinary_entries
+	var seen_grants := {}
+	var available_ids: Variant = PlayerState.available_skill_ids() if PlayerState.has_method("available_skill_ids") else []
+	for raw_id: Variant in available_ids:
+		var definition := SkillDataLoaderScript.skill(str(raw_id))
+		if definition.is_empty() or not bool(definition.get("equipment_granted", false)):
+			continue
+		var grant_id := str(definition.get("skill_id", raw_id))
+		if seen_grants.has(grant_id) or not SkillVisibilityPolicyScript.is_skill_visible(grant_id):
+			continue
+		seen_grants[grant_id] = true
+		skill_entries.append({
+			"skillName": str(definition.get("display_name", grant_id)),
+			"skill_id": grant_id,
+			"description": str(definition.get("description", "")),
+			"requiredCharacterLevel": 1,
+			"equipment_granted": true,
+		})
+	var restored_index := -1
+	if not previous_skill_id.is_empty():
+		for index in range(skill_entries.size()):
+			if str(skill_entries[index].get("skill_id", "")) == previous_skill_id:
+				restored_index = index
+				break
+	if restored_index >= 0:
+		selected_skill_index = restored_index
+	elif skill_entries.is_empty():
+		selected_skill_index = -1
+	else:
+		selected_skill_index = clampi(previous_index, 0, skill_entries.size() - 1)
 
 
 func _flush_queued_refresh() -> void:
@@ -545,11 +607,12 @@ func _rebuild_skill_cards() -> void:
 		var entry: Dictionary = skill_entries[index]
 		var skill_name := str(entry.get("skillName", "技能"))
 		var learned := PlayerState.is_skill_learned(skill_name)
+		var equipment_granted := bool(entry.get("equipment_granted", false))
 		var has_book := PlayerState.has_item(GameData.skill_book_entity_id(CanonicalSkillData.entity_skill_id(str(entry.get("skill_id", "")))))
 		var level := PlayerState.effective_skill_level(skill_name)
 		var interaction_label := _skill_presentation_label(skill_name)
-		var status := "已学会" if learned else "未学会"
-		var detail_status := "Lv.%d · %s" % [level, interaction_label] if learned else ("可学习" if has_book else "缺少技能书")
+		var status := "已学会" if learned else ("装备赋予" if equipment_granted else "未学会")
+		var detail_status := "Lv.%d · %s" % [level, interaction_label] if learned else ("可用 · %s" % interaction_label if equipment_granted else ("可学习" if has_book else "缺少技能书"))
 		var card_text := "%s（%s）\n%s" % [skill_name, status, detail_status]
 		var button: Button
 		if index < skill_buttons.size():
@@ -614,6 +677,7 @@ func _show_skill_detail(index: int) -> void:
 	var entry: Dictionary = skill_entries[index]
 	var skill_name := str(entry.get("skillName", ""))
 	var learned := PlayerState.is_skill_learned(skill_name)
+	var equipment_granted := bool(entry.get("equipment_granted", false))
 	var learned_level := PlayerState.effective_skill_level(skill_name) if learned else -1
 	var base_level := int(PlayerState.learned_skills.get(preload("res://scripts/skills/skill_data_loader.gd").entity_skill_id(skill_name), 0)) if learned else -1
 	var row := GameData.get_skill(skill_name, maxi(0, base_level))
@@ -621,7 +685,7 @@ func _show_skill_detail(index: int) -> void:
 		row = entry
 	var preview_rank := learned_level if learned else 1
 	var combat := ProfessionRules.skill_combat_profile(skill_name, preview_rank)
-	var definition := CanonicalSkillData.skill(skill_name)
+	var definition := SkillDataLoaderScript.skill(str(entry.get("skill_id", skill_name)))
 	var passive := str(definition.get("mechanics", {}).get("runtime_family", "")) in ["passive_stat_modifier", "melee_proc_modifier"]
 	var timing: Dictionary = definition.get("timing", {})
 	var cooldown := float(timing.get("cooldown_ms", timing.get("total_action_lock_ms", 0))) / 1000.0
@@ -631,9 +695,9 @@ func _show_skill_detail(index: int) -> void:
 		var partner := "taoist.defense" if stable_id == "taoist.magic_defense" else "taoist.magic_defense"
 		if PlayerState.is_skill_learned(partner):
 			partner_rank = PlayerState.effective_skill_level(partner)
-	var mana_cost := SkillDescription.mana_cost(stable_id, preview_rank, partner_rank)
-	var upgrade_text := "基础已满级，装备可继续提升有效等级" if base_level >= 3 else "使用对应技能书提升，基础最高 3 级"
-	var state_text := "已学会" if learned else ("可学习" if PlayerState.has_item(GameData.skill_book_entity_id(CanonicalSkillData.entity_skill_id(str(entry.get("skill_id", ""))))) else "缺少技能书")
+	var mana_cost := int(definition.get("mana_cost", SkillDescription.mana_cost(stable_id, preview_rank, partner_rank))) if equipment_granted else SkillDescription.mana_cost(stable_id, preview_rank, partner_rank)
+	var upgrade_text := "佩戴对应装备后可用" if equipment_granted else ("基础已满级，装备可继续提升有效等级" if base_level >= 3 else "使用对应技能书提升，基础最高 3 级")
+	var state_text := "装备赋予" if equipment_granted else ("已学会" if learned else ("可学习" if PlayerState.has_item(GameData.skill_book_entity_id(CanonicalSkillData.entity_skill_id(str(entry.get("skill_id", ""))))) else "缺少技能书"))
 	skill_name_label.text = "%s（%s）" % [skill_name, state_text]
 	skill_icon.texture = _skill_texture(skill_name)
 	skill_icon.set_meta("skill_id", ProfessionRules.skill_id(skill_name))
@@ -648,7 +712,7 @@ func _show_skill_detail(index: int) -> void:
 		cooldown,
 		state_text,
 	]
-	description_label.text = "[color=#d7c3a3]%s[/color]" % _player_mechanics_description(row, combat)
+	description_label.text = "[color=#d7c3a3]%s[/color]" % (str(entry.get("description", "")) if equipment_granted else _player_mechanics_description(row, combat))
 
 
 func _player_mechanics_description(row: Dictionary, combat: Dictionary) -> String:
@@ -795,8 +859,8 @@ func _open_assignment_popup_for(index: int) -> void:
 	if index < 0 or index >= skill_entries.size():
 		return
 	var skill_name := str(skill_entries[index].get("skillName", ""))
-	if not PlayerState.is_skill_learned(skill_name):
-		description_label.text = "[color=#b58b68]请先学习该技能，再配置战斗按钮。[/color]"
+	if not PlayerState.is_skill_available(skill_name):
+		description_label.text = "[color=#b58b68]请先学习该技能或佩戴对应装备，再配置战斗按钮。[/color]"
 		return
 	if _skill_interaction_mode(skill_name) == "passive":
 		description_label.text = "[color=#b58b68]被动技能始终生效，只在技能列表中展示，不能配置到战斗按钮。[/color]"
@@ -820,7 +884,7 @@ func _assign_selected_to_target(slot_group: String, slot_index: int) -> void:
 		skill_name = str(assignment_popup.get_meta("skill_name", ""))
 	elif selected_skill_index >= 0 and selected_skill_index < skill_entries.size():
 		skill_name = str(skill_entries[selected_skill_index].get("skillName", ""))
-	if not PlayerState.is_skill_learned(skill_name):
+	if not PlayerState.is_skill_available(skill_name):
 		return
 	if _skill_interaction_mode(skill_name) == "passive":
 		return
@@ -993,7 +1057,11 @@ func _interaction_mode_label(mode: String) -> String:
 func _skill_texture(skill_name: String) -> Texture2D:
 	if skill_name.is_empty():
 		return null
-	var texture := HUDSkillIconCatalogScript.texture_for(skill_name)
+	var skill_id := SkillDataLoaderScript.entity_skill_id(skill_name)
+	var texture := HUDSkillIconCatalogScript.texture_for(skill_id)
+	if texture != null:
+		return texture
+	texture = HUDSkillIconCatalogScript.texture_for(skill_name)
 	if texture != null:
 		return texture
 	return UIItemTextureCacheScript.texture_for(

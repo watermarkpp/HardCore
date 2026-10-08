@@ -751,6 +751,8 @@ def sync_runtime_record(catalog_record: dict[str, Any], master: dict[str, Any]) 
         "setId",
         "specialEffectId",
         "specialEffectDescription",
+        "specialEffectMetadata",
+        "randomInstanceRule",
     )
     for field in compatibility_fields:
         if field in master:
@@ -1058,6 +1060,61 @@ def apply_female_armor_correction_only() -> dict[str, Any]:
     }
 
 
+def project_current_master_items(
+    item_ids: list[int], *, write_outputs: bool, audit_output: Path | None
+) -> dict[str, Any]:
+    """Synchronize only explicitly named master records into vanilla runtime."""
+    if not item_ids or len(item_ids) != len(set(item_ids)):
+        raise RuntimeError("--project-current-master-items requires unique explicit IDs")
+    master = json.loads(MASTER_PATH.read_text(encoding="utf-8"))
+    catalog = json.loads(ITEMS_PATH.read_text(encoding="utf-8"))
+    master_records = master.get("records", [])
+    catalog_records = catalog.get("records", [])
+    master_by_id: dict[int, dict[str, Any]] = {}
+    catalog_by_id: dict[int, dict[str, Any]] = {}
+    for record in master_records:
+        item_id = int(record["itemId"])
+        if item_id in master_by_id:
+            raise RuntimeError(f"duplicate master itemId {item_id}")
+        master_by_id[item_id] = record
+    for record in catalog_records:
+        item_id = int(record["itemId"])
+        if item_id in catalog_by_id:
+            raise RuntimeError(f"duplicate vanilla itemId {item_id}")
+        catalog_by_id[item_id] = record
+    unknown = [item_id for item_id in item_ids if item_id not in master_by_id or item_id not in catalog_by_id]
+    if unknown:
+        raise RuntimeError(f"project-current-master-items unknown or unpaired IDs: {unknown}")
+    before_non_targets = {
+        int(record["itemId"]): json.dumps(record, ensure_ascii=False, sort_keys=True)
+        for record in catalog_records
+        if int(record["itemId"]) not in item_ids
+    }
+    for item_id in item_ids:
+        sync_runtime_record(catalog_by_id[item_id], master_by_id[item_id])
+    after_non_targets = {
+        int(record["itemId"]): json.dumps(record, ensure_ascii=False, sort_keys=True)
+        for record in catalog_records
+        if int(record["itemId"]) not in item_ids
+    }
+    if before_non_targets != after_non_targets:
+        raise RuntimeError("non-target vanilla records changed during bounded projection")
+    audit = {
+        "mode": "project_current_master_items",
+        "itemIds": item_ids,
+        "masterRecordCount": len(master_records),
+        "vanillaRecordCount": len(catalog_records),
+        "nonTargetRecordsPreserved": True,
+        "targetMetadataFields": ["specialEffectMetadata", "randomInstanceRule"],
+    }
+    if write_outputs:
+        ITEMS_PATH.write_text(json.dumps(catalog, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    if audit_output is not None:
+        audit_output.parent.mkdir(parents=True, exist_ok=True)
+        audit_output.write_text(json.dumps(audit, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return audit
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -1077,6 +1134,12 @@ def parse_args() -> argparse.Namespace:
         help="Read and validate the complete workbook without writing contracts",
     )
     parser.add_argument(
+        "--project-current-master-items",
+        type=int,
+        nargs="+",
+        help="Synchronize only the explicitly named unique master IDs into vanilla runtime",
+    )
+    parser.add_argument(
         "--audit-output",
         type=Path,
         help="Optional JSON audit output path",
@@ -1086,6 +1149,17 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
+    if args.project_current_master_items is not None:
+        audit = project_current_master_items(
+            args.project_current_master_items,
+            write_outputs=not args.check_only,
+            audit_output=args.audit_output.resolve() if args.audit_output else None,
+        )
+        print(
+            "EQUIPMENT_CURRENT_MASTER_PROJECTION_PASS: "
+            f"{audit['itemIds']} projected, non-target records preserved"
+        )
+        return
     if args.female_armor_correction_only:
         audit = apply_female_armor_correction_only()
         print(

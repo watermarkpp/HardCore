@@ -1,6 +1,8 @@
 class_name EnemyActor
 extends CharacterBody2D
 
+signal combat_target_changed(enemy: EnemyActor, new_target: Node2D)
+
 const HCM30ContextTokenScript := preload("res://scripts/monster_ai_package/m30/context_token.gd")
 const DamageLedgerObserverScript := preload("res://scripts/damage_ledger_observer.gd")
 const FeatureDamageBatchScript := preload("res://scripts/features/runtime/damage_batch.gd")
@@ -58,6 +60,7 @@ const SourceStepPlan := preload(
 	"res://scripts/monster_source176/source_step_plan.gd"
 )
 const CrowdAttackPosition := preload("res://scripts/monster_crowd_attack_position_policy.gd")
+const HCDecisionBudget := preload("res://scripts/monster_ai_package/decision_budget.gd")
 const SourceActionBoundary := preload(
 	"res://scripts/monster_source176/action_boundary.gd"
 )
@@ -317,7 +320,8 @@ var target: Node2D:
 			_refresh_target_focus()
 			if not _background_maintenance_running:
 				_leave_background_deep_sleep()
-			_audio_target_changed(target)
+		if changed:
+			combat_target_changed.emit(self, target)
 var primary_target: PlayerCharacter
 var is_boss := false
 var runtime_map_id: int = -1
@@ -428,7 +432,7 @@ var _burrowed := false
 var _rng := RandomNumberGenerator.new()
 ## Presentation-only RNG. It is retained for deterministic audio fixtures and
 ## never aliases gameplay, spawn-facing, loot or status randomness.
-var _audio_rng := RandomNumberGenerator.new()
+var _audio_rng: RandomNumberGenerator
 var _audio_rng_initialized := false
 var _audio_appear_emitted := false
 var _audio_death_emitted := false
@@ -813,6 +817,8 @@ func _reset_monster_audio_observer() -> void:
 ## Test-only deterministic control for the presentation RNG.  Production
 ## callers never need this; importantly it never aliases `_rng`.
 func set_audio_seed_for_test(seed_value: int) -> void:
+	if _audio_rng == null:
+		_audio_rng = RandomNumberGenerator.new()
 	_audio_rng.seed = seed_value
 	_audio_rng_initialized = true
 
@@ -871,12 +877,9 @@ func _audio_owner_key_for_actor() -> String:
 	return _audio_owner_key
 
 
-func _audio_target_changed(next_target: Node2D) -> void:
-	if not is_instance_valid(next_target):
-		return
-	# Target assignment is only an intent edge. The actual prompt is retried
-	# from the actor tick when the service is present and the actor is audible.
-	_audio_try_enter_combat_session()
+func _audio_target_changed(_next_target: Node2D) -> void:
+	# Compatibility only: discovery/combat-state sound is retired.
+	return
 
 
 func _audio_player_target() -> Node:
@@ -1034,40 +1037,11 @@ func _audio_try_emit_appear() -> void:
 
 
 func _audio_try_enter_combat_session() -> bool:
-	if not combat_enabled or _audio_combat_entry_seen or not is_instance_valid(target):
-		return false
-	# A loading/cross-map transition is not the real combat edge. Wait for the
-	# optional W3 transition contract to settle, then latch the edge before any
-	# audibility, service or resource decision. A rejected sound must not turn
-	# into a per-physics retry loop.
-	if _audio_combat_transition_is_active():
-		return false
-	_audio_combat_entry_seen = true
-	_audio_combat_session_active = true
-	_audio_combat_session_serial += 1
-	if monster_id <= 0 or not _audio_is_listenable():
-		return false
-	var service := _audio_service()
-	if service == null or not service.has_method("play_monster_combat_prompt"):
-		return false
-	var result: Variant = service.call(
-		"play_monster_combat_prompt",
-		monster_id,
-		_audio_owner_key_for_actor(),
-		_audio_context("combat_prompt"),
-	)
-	if result is Dictionary and str((result as Dictionary).get("status", "")) == "played":
-		_audio_combat_session_active = true
-		return true
+	# Compatibility only. No service lookup, context or session on pursuit.
 	return false
 
 
-func _audio_end_combat_session(reason := "explicit_disengage") -> void:
-	if not _audio_combat_session_active:
-		return
-	var service := _audio_service()
-	if service != null and service.has_method("end_monster_combat_session"):
-		service.call("end_monster_combat_session", _audio_owner_key_for_actor(), reason)
+func _audio_end_combat_session(_reason := "explicit_disengage") -> void:
 	_audio_combat_session_active = false
 	_audio_combat_entry_seen = false
 
@@ -1969,7 +1943,10 @@ func _begin_autonomous_step_without_cadence(
 			if leg_target_pos.is_finite():
 				var leg_offset := planned_leg - current_ground_gu
 				var leg_length := leg_offset.length()
-				var leg_room := current_ground_gu.distance_to(leg_target_pos) - _contact_distance_gu_to_target(engagement_target)
+				# Ordinary reach is the source adjacency box. Its approach cap
+				# must not retain the legacy 1.5-GU presentation/contact gap,
+				# which parks axial pursuers outside their actual attack reach.
+				var leg_room := current_ground_gu.distance_to(leg_target_pos) - _hc_preferred(engagement_target)
 				if leg_length > GroundUnitSpace.EPSILON_GU and leg_room < leg_length:
 					if leg_room <= GroundUnitSpace.EPSILON_GU:
 						planned_leg = Vector2.INF
@@ -2668,9 +2645,6 @@ func _ready() -> void:
 	safe_margin = 0.35
 	max_slides = 6
 	_rng.randomize()
-	if not _audio_rng_initialized:
-		_audio_rng.randomize()
-		_audio_rng_initialized = true
 	_initialize_spawn_facing_once()
 	# HC-MONSTER-COMBAT-R2 T2: resolution is identity-bound. A production
 	# profile must match the current policy bytes, the exact tier radius and
@@ -2793,7 +2767,6 @@ func _update_natural_regen(delta: float) -> void:
 
 func _physics_process(delta: float) -> void:
 	_locomotion_pose_intent = false
-	_audio_try_enter_combat_session()
 	_audio_observe_visual_state()
 	var physics_started_usec := RuntimeDiagnostics.begin_timed_segment(
 		&"enemy_physics_calls"
@@ -2874,6 +2847,14 @@ func _physics_process_internal(delta: float) -> void:
 		_hold_combat_disabled()
 		return
 	_update_pending_attack(delta)
+	# A committed ordinary melee owns the body until its existing action clock
+	# closes. Target motion cannot reopen pursuit/retargeting between impact and
+	# the final animation frame. Status, death and pending damage still tick above.
+	if _source176_ordinary_melee() and _attack_action_active:
+		velocity = Vector2.ZERO
+		_hc_last_reason = "ATTACK_POSE_COMMIT"
+		_request_actor_redraw_if_dynamic()
+		return
 	if use_background_ai:
 		_background_ai_timer = BACKGROUND_AI_INTERVAL_SECONDS
 		_record_performance_counter(&"background_ai_evaluations")
@@ -4554,12 +4535,10 @@ func _launch_monster_special_cell_delivery(
 		# The projectile node owns the first contact; the special settlement path
 		# must not deal a second, immediate target-locked hit.
 		pass
-	elif kind == "line_magic":
-		_pending_attack_time = float(attack_delivery_rule.get("hitDelaySeconds", 0.0))
-		_pending_attack_target = hit_target
-		_pending_attack_damage = maxi(0, rolled_damage)
-		_pending_attack_release_record = release_record
 	else:
+		# User contract 2026-10-08: directional lines are instantaneous AOE.
+		# Resolve the admitted snapshot once; the descriptor's presentation
+		# delay is visual only and cannot reopen target geometry or HP delivery.
 		_settle_monster_special_cell_release(release_record)
 	return true
 
@@ -5695,6 +5674,13 @@ func _deal_melee_hit(
 ) -> void:
 	if not combat_enabled or not is_instance_valid(hit_target) or not hit_target.has_method("take_damage") or _target_is_safe_player(hit_target):
 		return
+	if release_record is Dictionary and bool(release_record.get("ordinary_committed", false)):
+		# The strict geometry was accepted and frozen at admission. This is the
+		# same physical-hit/defence/HP delivery; subsequent motion never cancels
+		# an accepted hit or expands the geometry used by the NEXT admission.
+		_last_attack_footprint_snapshot = release_record.admission_footprint
+		_apply_attack_damage(hit_target, dealt_damage, true, -1, false, -1, false, release_record)
+		return
 	var target_radius_gu := _target_combat_radius_gu(hit_target)
 	var center_reach_gu := (
 		HCPolicy.START_GU if _hc_standard_melee()
@@ -6003,6 +5989,7 @@ func _notification(what: int) -> void:
 
 
 func _exit_tree() -> void:
+	HCDecisionBudget.cancel(get_instance_id())
 	_clear_attack_los_cache()
 	_cancel_autonomous_step(true)
 	clear_entrapment("exit_tree")
@@ -6140,7 +6127,6 @@ func _update_area_magic_delivery(delta: float) -> void:
 	if _area_magic_warning > 0.0:
 		_area_magic_warning = maxf(0.0, _area_magic_warning - delta)
 		if _area_magic_warning <= 0.0:
-			_settle_area_magic_release_records()
 			_last_attack_footprint_snapshot = _area_magic_footprint_snapshot
 			_area_magic_footprint_snapshot = {}
 			_area_magic_release_records.clear()
@@ -6172,6 +6158,9 @@ func _update_area_magic_delivery(delta: float) -> void:
 	# unproven client warning circle or independent projectile/effect.
 	# R4 T1: admission ownership stays with this release point.
 	_play_attack_animation(target_magic_duration, parent_action)
+	# Each non-projectile AOE resolves once at activation. The remaining
+	# authored warning is presentation/body ownership, not a second hit timer.
+	_settle_area_magic_release_records()
 
 
 func _create_area_magic_footprint_snapshot() -> Dictionary:
@@ -6280,6 +6269,7 @@ func _freeze_area_magic_release_records(
 ) -> Array[Dictionary]:
 	var records: Array[Dictionary] = []
 	var release_id := str(footprint_snapshot.get("release_id", ""))
+	var release_serial := _spatial_release_serial
 	for victim: Node2D in victims:
 		if not _area_magic_victim_is_valid(victim, footprint_snapshot):
 			continue
@@ -6294,6 +6284,7 @@ func _freeze_area_magic_release_records(
 			"source_generation": int(get_meta("zone_generation", -1)),
 			"target_life": _hc_life(victim),
 			"release_id": release_id,
+			"release_serial": release_serial,
 			"release_target_id": "%s:target:%d" % [
 				release_id,
 				victim.get_instance_id(),
@@ -6328,6 +6319,8 @@ func _settle_area_magic_release_records() -> void:
 	for release_record: Dictionary in _area_magic_release_records:
 		var target_instance_id := int(release_record.get("target_instance_id", 0))
 		if target_instance_id <= 0:
+			continue
+		if not _claim_special_delivery_settlement(target_instance_id, int(release_record.get("release_serial", 0))):
 			continue
 		var candidate: Object = instance_from_id(target_instance_id)
 		if not (candidate is Node2D):
@@ -6413,7 +6406,6 @@ func _update_area_attack(delta: float) -> bool:
 		_area_attack_warning -= delta
 		if _area_attack_warning <= 0.0:
 			_area_attack_warning = 0.0
-			_settle_area_attack_release_records()
 			_last_attack_footprint_snapshot = _area_attack_footprint_snapshot
 			_area_attack_footprint_snapshot = {}
 			_area_attack_release_records.clear()
@@ -6442,6 +6434,7 @@ func _update_area_attack(delta: float) -> bool:
 			_area_attack_warning = warning_duration
 			# R4 T1: admission ownership stays with this release point.
 			_play_attack_animation(area_attack_duration, parent_action)
+			_settle_area_attack_release_records()
 	return true
 
 
@@ -6591,6 +6584,7 @@ func _freeze_area_attack_release_records(
 ) -> Array[Dictionary]:
 	var records: Array[Dictionary] = []
 	var release_id := str(footprint_snapshot.get("release_id", ""))
+	var release_serial := _spatial_release_serial
 	for victim: Node2D in victims:
 		if not _area_attack_victim_is_valid(victim, footprint_snapshot):
 			continue
@@ -6606,6 +6600,7 @@ func _freeze_area_attack_release_records(
 			"source_generation": int(get_meta("zone_generation", -1)),
 			"target_life": _hc_life(victim),
 			"release_id": release_id,
+			"release_serial": release_serial,
 			"release_target_id": "%s:target:%d" % [
 				release_id,
 				target_instance_id,
@@ -6629,6 +6624,8 @@ func _settle_area_attack_release_records() -> void:
 	for release_record: Dictionary in _area_attack_release_records:
 		var target_instance_id := int(release_record.get("target_instance_id", 0))
 		if target_instance_id <= 0:
+			continue
+		if not _claim_special_delivery_settlement(target_instance_id, int(release_record.get("release_serial", 0))):
 			continue
 		var candidate: Object = instance_from_id(target_instance_id)
 		if not (candidate is Node2D):
@@ -7348,6 +7345,7 @@ func can_receive_damage() -> bool:
 func _mark_death_pending() -> void:
 	if _dying or _death_pending:
 		return
+	HCDecisionBudget.cancel(get_instance_id())
 	_record_performance_counter(&"death_pending_marks")
 	# Freeze the actor's runtime identity at the lethal boundary.  The death
 	# signal is emitted after the deferred death-art handoff, so reading the
@@ -8459,37 +8457,7 @@ func _update_boss_skill(delta: float, distance_gu: float) -> void:
 		queue_redraw()
 		_boss_warning -= delta
 		if _boss_warning <= 0.0:
-			_last_boss_skill_hit = false
-			var release_snapshot := _boss_skill_footprint_snapshot
-			if not _snapshot_strict_ok(release_snapshot):
-				release_snapshot = _create_boss_skill_footprint_snapshot(
-					special,
-					_next_spatial_release_id("boss_fallback"),
-				)
-			if str(special.get("shape", "circle")) == "cone" and is_instance_valid(target):
-				if (
-					_snapshot_intersects_target(release_snapshot, target)
-					and not _target_is_safe_player(target)
-				):
-					target.take_damage(_rng.randi_range(attack_min, attack_max) * damage_multiplier)
-					_last_boss_skill_hit = true
-			else:
-				var target_mode := str(special.get("targetMode", "current_target"))
-				var victims: Array[Node2D] = []
-				if target_mode == "all_combat_targets":
-					victims = _boss_skill_targets(skill_radius_gu, release_snapshot)
-				elif (
-					is_instance_valid(target)
-					and _snapshot_intersects_target(release_snapshot, target)
-				):
-					victims.append(target)
-				for victim: Node2D in victims:
-					if _target_is_safe_player(victim):
-						continue
-					victim.take_damage(_rng.randi_range(attack_min, attack_max) * damage_multiplier)
-					_apply_boss_skill_status(victim, special)
-					_last_boss_skill_hit = true
-			_last_attack_footprint_snapshot = release_snapshot
+			_last_attack_footprint_snapshot = _boss_skill_footprint_snapshot
 			_boss_skill_footprint_snapshot = {}
 			_boss_skill_cooldown = float(phase.get("skillCooldownSeconds", special.get("cooldownSeconds", 4.6))) if _boss_phase_two else float(special.get("cooldownSeconds", 4.6))
 	elif _boss_skill_cooldown > 0.0:
@@ -8521,7 +8489,32 @@ func _update_boss_skill(delta: float, distance_gu: float) -> void:
 		_boss_warning = maxf(0.001, float(special.get("warningSeconds", 0.85)))
 		# R4 T1: admission ownership stays with this release point.
 		var boss_special_duration := float(special.get("animationSeconds", _attack_animation_duration))
-		_play_attack_animation(boss_special_duration, _allocate_attack_action(boss_special_duration))
+		var parent_action := _allocate_attack_action(boss_special_duration)
+		_settle_boss_skill_activation(special, skill_radius_gu, damage_multiplier)
+		_play_attack_animation(boss_special_duration, parent_action)
+
+
+func _settle_boss_skill_activation(special: Dictionary, skill_radius_gu: float, damage_multiplier: int) -> void:
+	var release_snapshot := _boss_skill_footprint_snapshot
+	_last_boss_skill_hit = false
+	if not _snapshot_strict_ok(release_snapshot):
+		return
+	var cone := str(special.get("shape", "circle")) == "cone"
+	var victims: Array[Node2D] = []
+	if not cone and str(special.get("targetMode", "current_target")) == "all_combat_targets":
+		victims = _boss_skill_targets(skill_radius_gu, release_snapshot)
+	elif is_instance_valid(target) and _snapshot_intersects_target(release_snapshot, target):
+		victims.append(target)
+	# This local set is consumed synchronously once. The warning-completion
+	# branch only cleans presentation and never queries current positions again.
+	for victim: Node2D in victims:
+		if not _target_candidate_is_live(victim) or _target_is_safe_player(victim):
+			continue
+		victim.take_damage(_rng.randi_range(attack_min, attack_max) * damage_multiplier)
+		if not cone and is_instance_valid(victim):
+			_apply_boss_skill_status(victim, special)
+		_last_boss_skill_hit = true
+	_last_attack_footprint_snapshot = release_snapshot
 
 
 func _boss_skill_targets(radius_gu: float, snapshot := {}) -> Array[Node2D]:
@@ -8604,6 +8597,7 @@ var _hc_known_ground := Vector2.INF
 var _hc_observed := false
 var _hc_investigation_arrived := false
 var _hc_next_observation_ms := 0
+var _hc_observation_scope: Array = []
 var _hc_pursuit_session := false
 var _hc_step_override := Vector2.INF
 var _hc_flank_waypoint := Vector2.INF
@@ -8936,6 +8930,9 @@ func _hc_try_start(hit_target: Node2D) -> bool:
 	var tick := Engine.get_physics_frames()
 	if _hc_last_start_tick == tick or _attack_timer > 0.0 or _pending_attack_time >= 0.0:
 		return false
+	if _source176_ordinary_melee() and _attack_action_active:
+		_hc_last_reason = "BODY_ACTION_BUSY"
+		return false
 	_hc_last_reason = _hc_access(hit_target)
 	if _hc_last_reason != "CLEAR":
 		return false
@@ -8976,6 +8973,17 @@ func _hc_try_start(hit_target: Node2D) -> bool:
 		"parent_start_game_time_s": _attack_action_start_time_s,
 		"parent_duration_s": _attack_action_duration_s,
 	}
+	if _source176_ordinary_melee():
+		record["ordinary_committed"] = true
+		var admission_footprint := SkillFootprintSnapshotScript.create_centered_rectangle(
+			_monster_attack_id("release_contact"), str(record.release_id),
+			_screen_position_px_to_ground_position_gu(global_position),
+			Vector2.ONE * Source176Melee.HALF_EXTENT_GU, _snapshot_coordinate_context(),
+		)
+		record["admission_footprint"] = _decorate_attack_footprint_snapshot(
+			admission_footprint, PROJECTION_RELATIONSHIP_RELEASE_CONTACT, hit_target,
+			Source176Melee.HALF_EXTENT_GU, 0.0,
+		)
 	_last_hc_release_record = record
 	if DamageLedgerObserverScript.recording_enabled:
 		var admission := record.duplicate(true)
@@ -9007,6 +9015,8 @@ func _hc_try_start(hit_target: Node2D) -> bool:
 		_pending_attack_damage = int(record.damage)
 		_pending_attack_release_record = record
 	var m30_clip: float = HCM30WalkPhaseScript.attack_clip_seconds(_attack_animation_duration, _attack_timer, hit_delay)
+	if bool(record.get("ordinary_committed", false)):
+		m30_clip = _attack_action_duration_s
 	_hc_m30_attack_move_cutoff = maxf(0.0, _attack_timer - m30_clip)
 	_hc_m30_attack_pose_remaining = m30_clip
 	# R3 W1: the presentation consumes the identity allocated above; the
@@ -9046,8 +9056,10 @@ func _hc_settle(record: Dictionary) -> void:
 			"rejected", "RELEASE_LIFECYCLE_REJECTED",
 		)
 		return
-	# Release settlement always rechecks WORLD without the navigation cache.
-	_hc_last_reason = _hc_access(victim, float(record.tolerance), true)
+	# Accepted ordinary melee keeps its admission. Lifecycle checks above still
+	# reject a different life/map/epoch; named special deliveries retain their
+	# own live release geometry, including WORLD and frontline checks.
+	_hc_last_reason = "CLEAR" if bool(record.get("ordinary_committed", false)) else _hc_access(victim, float(record.tolerance), true)
 	if _hc_last_reason != "CLEAR":
 		DamageLedgerObserverScript.record_terminal(
 			_delivery_observation_identity(record, victim, "admission"),
@@ -9162,6 +9174,10 @@ func _source176_take_tick_decision() -> bool:
 func _hc_tick_melee(delta: float, physics_delta: float) -> void:
 	if visual != null:
 		visual.hc_m30_begin_melee_tick()
+	if _source176_ordinary_melee() and _attack_action_active:
+		velocity = Vector2.ZERO
+		_hc_last_reason = "ATTACK_POSE_COMMIT"
+		return
 	if not HCPolicy.valid() or not _hc_target_usable(target):
 		velocity = Vector2.ZERO
 		return
@@ -9229,7 +9245,32 @@ func _hc_tick_melee(delta: float, physics_delta: float) -> void:
 		if source176_ordinary
 		else distance <= HCPolicy.START_GU + GroundUnitSpace.EPSILON_GU
 	)
-	var surround_goal := _hc_crowd_position_goal(target)
+	# Legal contact owns a stationary attack/cooldown state. A moving player
+	# inside the same reach must not trigger another surrounding-point search.
+	# A body or WORLD blocker still falls through to local navigation below.
+	if source176_ordinary and source176_in_zone and _hc_access(target) == "CLEAR":
+		HCDecisionBudget.cancel(get_instance_id())
+		_clear_autonomous_step_state()
+		_hc_publish_crowd_goal(_hc_surround_goal, Vector2.INF)
+		velocity = Vector2.ZERO
+		if _attack_timer > 0.0:
+			_hc_last_reason = "COOLDOWN_HOLD"
+		elif not _source176_take_tick_decision():
+			_hc_last_reason = "SOURCE_DECISION_WAIT"
+		else:
+			_hc_try_start(target)
+		return
+	# Ordinary pursuit follows adjacent steps toward the observed target.
+	# It need not continuously assign an ideal target-relative attack station;
+	# blocked steps already use the existing eight-neighbor flank navigator.
+	var surround_goal := _hc_crowd_position_goal(target) if not source176_ordinary else Vector2.INF
+	# A previously admitted detour keeps its destination until its boundary;
+	# abandoning it here can reverse a lawful outward step into the same jam.
+	if source176_ordinary and _hc_surround_goal.is_finite():
+		if _hc_path_pending or _hc_route_index < _hc_route.size() or _hc_flank_waypoint.is_finite():
+			surround_goal = _hc_surround_goal
+		else:
+			_hc_publish_crowd_goal(_hc_surround_goal, Vector2.INF)
 	var align_surround := surround_goal.is_finite() and spatial_index_position().distance_squared_to(surround_goal) > GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU
 	if source176_ordinary and source176_in_zone:
 		var source176_decision_granted := _source176_take_tick_decision()
@@ -9259,6 +9300,11 @@ func _hc_tick_melee(delta: float, physics_delta: float) -> void:
 	var current := spatial_index_position()
 	var desired_target := surround_goal if surround_goal.is_finite() else _hc_known_ground
 	if not current.is_finite() or not desired_target.is_finite():
+		# Initial observation can be queued after the source clock already
+		# granted pursuit. Retain that intent until the observation is served;
+		# no position or route is invented while the owner lacks a reliable point.
+		if source176_ordinary and _source176_decision_granted and HCDecisionBudget.has_pending(get_instance_id()):
+			_hc_pursuit_session = true
 		_hc_last_reason = "NO_RELIABLE_POSITION"
 		velocity = Vector2.ZERO
 		return
@@ -9310,6 +9356,7 @@ func _hc_tick_melee(delta: float, physics_delta: float) -> void:
 		if remaining_budget <= 0.000001 or not leg_start.is_finite():
 			break
 		if not _movement_step_active:
+			# Select another neighbor only at the completed step boundary.
 			var started := false
 			_hc_owned_movement_call = true
 			if _hc_pursuit_session:
@@ -9320,6 +9367,11 @@ func _hc_tick_melee(delta: float, physics_delta: float) -> void:
 					_hc_pursuit_session = true
 			_hc_owned_movement_call = false
 			if not started:
+				# A source grant admitted this pursuit intent; optional planning
+				# may finish later without consuming another movement grant.
+				# Target identity invalidation still retires the session below.
+				if source176_ordinary and _source176_decision_granted and _hc_last_reason == "DECISION_BUDGET_WAIT":
+					_hc_pursuit_session = true
 				velocity = Vector2.ZERO
 				break
 		var speed := move_speed_gu_per_sec * _movement_step_speed_scale
@@ -9472,12 +9524,38 @@ func _hc_point_inside_safe_zone(point_screen_px: Vector2) -> bool:
 	cache[point_screen_px] = result
 	return result
 
+func _hc_decision_scope() -> Array:
+	if not can_receive_damage() or not is_instance_valid(target):
+		return []
+	return [runtime_map_id, int(get_meta("zone_generation", -1)), _hc_life(self), target.get_instance_id(), _hc_life(target), _hc_environment_revision()]
+
 func _hc_refresh_observation() -> void:
 	if not is_instance_valid(target):
 		return
 	var now := Time.get_ticks_msec()
 	var tid := target.get_instance_id()
+	var observation_scope := _hc_decision_scope()
+	if observation_scope != _hc_observation_scope:
+		# Changed WORLD invalidates visibility immediately, before optional
+		# geometry receives its next turn. A real last-known point may remain
+		# for investigation; a different map/life/target cannot inherit it.
+		_hc_observed = false
+		_hc_next_observation_ms = 0
+		if _hc_observation_scope.size() == 6 and observation_scope.size() == 6 and _hc_observation_scope.slice(0, 5) != observation_scope.slice(0, 5):
+			_hc_known_ground = Vector2.INF
+			_hc_pursuit_session = false
+			_hc_cancel_path()
+		# Invalidate once per identity change. Repeating this reset while the
+		# fresh observation waits would discard an already admitted pursuit.
+		_hc_observation_scope = observation_scope.duplicate()
+	# A queued local-navigation request can cease to be needed as a body or
+	# target moves. Poll its turn without repeating an observation that is
+	# still current; any needed flank then continues this owner's quantum.
 	if tid == _hc_known_target_id and now < _hc_next_observation_ms and not _hc_damage_dirty:
+		if HCDecisionBudget.has_pending(get_instance_id()):
+			var pending_token := HCDecisionBudget.begin(self, _hc_decision_scope(), &"poll")
+			if pending_token != 0:
+				HCDecisionBudget.end(pending_token)
 		return
 	if not _hc_target_usable(target):
 		return
@@ -9492,6 +9570,10 @@ func _hc_refresh_observation() -> void:
 		var event_position: Variant = _hc_damage_observations.get(tid)
 		if event_position is Vector2:
 			_hc_known_ground = event_position
+	# Identity invalidation is immediate; only optional geometry is queued.
+	var decision_token := HCDecisionBudget.begin(self, observation_scope)
+	if decision_token == 0:
+		return
 	_hc_next_observation_ms = now + 180 + int(posmod(get_instance_id(), 5)) * 7
 	var a := spatial_index_position()
 	var b := _screen_position_px_to_ground_position_gu(target.global_position)
@@ -9505,6 +9587,7 @@ func _hc_refresh_observation() -> void:
 			_hc_cancel_path()
 		_hc_known_ground = b
 		_refresh_target_focus(now)
+	HCDecisionBudget.end(decision_token)
 
 func _hc_received_damage(source: Node2D, amount: float) -> void:
 	if not _hc_standard_melee() or amount <= 0.0 or not _target_candidate_is_live(source):
@@ -9523,6 +9606,7 @@ func _hc_received_damage(source: Node2D, amount: float) -> void:
 	_leave_background_deep_sleep()
 
 func _hc_forget(candidate: Node2D) -> void:
+	HCDecisionBudget.cancel(get_instance_id())
 	if is_instance_valid(candidate):
 		_threat_table.erase(candidate.get_instance_id())
 		_hc_damage_observations.erase(candidate.get_instance_id())
@@ -9530,6 +9614,7 @@ func _hc_forget(candidate: Node2D) -> void:
 	_hc_known_target_id = 0
 	_hc_observed = false
 	_hc_next_observation_ms = 0
+	_hc_observation_scope.clear()
 	_hc_pursuit_session = false
 	_hc_surround_anchor = Vector2.INF
 	_hc_surround_goal = Vector2.INF
@@ -9764,8 +9849,9 @@ func _hc_crowd_position_goal_internal(hit_target: Node2D) -> Vector2:
 	var previous_goal := _hc_surround_goal
 	var previous_scope := _hc_surround_scope
 	var previous_anchor := _hc_surround_anchor
+	var previous_slot := _hc_surround_slot
 	_hc_surround_goal = Vector2.INF
-	if not _source176_ordinary_melee() or combat_radius_gu <= 0.0 or combat_spatial_index == null or not is_instance_valid(hit_target):
+	if not _source176_ordinary_melee() or combat_radius_gu <= 0.0 or combat_spatial_index == null or spatial_actor_runtime_id <= 0 or not is_instance_valid(hit_target):
 		_hc_surround_slot = -1
 		return _hc_publish_crowd_goal(previous_goal, Vector2.INF)
 	var anchor := _screen_position_px_to_ground_position_gu(hit_target.global_position)
@@ -9778,50 +9864,65 @@ func _hc_crowd_position_goal_internal(hit_target: Node2D) -> Vector2:
 		_hc_surround_scope = owner_scope
 	# The near-field bound prevents expensive crowd selection for distant actors;
 	# no station ownership or reservation is retained by this policy.
-	if not anchor.is_finite() or (_hc_surround_slot < 0 and not continuing and maxf(absf(current.x - anchor.x), absf(current.y - anchor.y)) > Source176Melee.HALF_EXTENT_GU + combat_radius_gu * 2.0):
+	if not anchor.is_finite() or not current.is_finite() or (_hc_surround_slot < 0 and not continuing and maxf(absf(current.x - anchor.x), absf(current.y - anchor.y)) > Source176Melee.HALF_EXTENT_GU + combat_radius_gu * 2.0):
 		return _hc_publish_crowd_goal(previous_goal, Vector2.INF)
-	# One bounded broadphase per target/index/world/physics frame. The reused
-	# nodes are candidate identities only; body positions and access are read
-	# live and actual locomotion still performs its own collision checks.
-	var cache: Dictionary = hit_target.get_meta("hc_crowd_position_candidates", {})
-	var scope := [Engine.get_physics_frames(), combat_spatial_index.get_instance_id(), runtime_map_id, int(get_meta("zone_generation", -1)), _hc_life(hit_target), anchor, combat_radius_gu, combat_spatial_index.bucket_membership_revision]
-	if cache.get("scope", []) != scope:
-		var nodes: Array = cache.get("nodes", [])
-		combat_spatial_index.query_neighbor_enemy_nodes_into(runtime_map_id, anchor, Source176Melee.HALF_EXTENT_GU + combat_radius_gu * 2.0, nodes)
-		scope[-1] = combat_spatial_index.bucket_membership_revision
-		cache = {"scope": scope, "nodes": nodes}
-		hit_target.set_meta("hc_crowd_position_candidates", cache)
-	var peers: Array = cache.nodes
-	# One local snapshot per actor decision. It contains position/radius only;
-	# eligibility is read after the exact coarse envelope and never shared.
-	var snapshot := CrowdAttackPosition.snapshot_peers(self, peers)
-	var has_body := false
-	for record: Dictionary in snapshot:
-		var other: Variant = record.get("node")
-		var center: Vector2 = record.get("position", Vector2.INF)
-		if not is_instance_valid(other) or not center.is_finite():
+	# Preserve an active terrain/flank detour for the unchanged target. The
+	# local chooser below is intentionally stateless with respect to ownership,
+	# but a committed route must not be cancelled merely because a new local
+	# candidate happens to be closer on this frame.
+	if continuing and (_hc_path_pending or _hc_route_index < _hc_route.size() or _hc_flank_waypoint.is_finite()):
+		_hc_sync_navigation()
+	var route_active := (_hc_path_pending or _hc_route_index < _hc_route.size()) and _hc_path_anchor == previous_goal
+	var flank_active := (
+		_hc_flank_waypoint.is_finite() and _hc_flank_anchor == previous_goal
+		and current.distance_squared_to(_hc_flank_waypoint) > GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU
+	)
+	if continuing and (route_active or flank_active) and _hc_point_walkable(previous_goal) and _hc_world_between(previous_goal, anchor) and _hc_flank_destination_clear(previous_goal):
+		_hc_surround_slot = previous_slot
+		_hc_surround_goal = previous_goal
+		return _hc_publish_crowd_goal(previous_goal, previous_goal)
+	# The product contract only needs effective pursuit and local surround. Do
+	# not build a target-wide peer snapshot for every actor: it creates an O(N^2)
+	# position/eligibility pass before the real movement checks. Each candidate
+	# below is tested against current geometry and the exact short motion segment;
+	# live body collision remains authoritative in _hc_motion_clear and again at
+	# attack admission/release.
+	_hc_surround_slot = -1
+	_hc_surround_goal = Vector2.INF
+	var stable_order := spatial_actor_runtime_id
+	var target_radius := _target_combat_radius_gu(hit_target)
+	var axial_distance := CrowdAttackPosition.axis_distance(self, target_radius)
+	var order := CrowdAttackPosition.local_slot_order(stable_order)
+	var best_cost := INF
+	var best_goal := Vector2.INF
+	var best_slot := -1
+	for slot: int in order:
+		var point: Vector2 = anchor + CrowdAttackPosition.DIRECTIONS[slot] * (
+			axial_distance if slot < 4 else Source176Melee.HALF_EXTENT_GU
+		)
+		var cost := current.distance_squared_to(point)
+		if not cost < best_cost:
 			continue
-		if not other.can_receive_damage() or not bool(other.behavior_profile.get("worldCollision", true)):
+		if not _hc_point_walkable(point) or not _hc_world_between(point, anchor):
 			continue
-		has_body = true
-		break
-	if not has_body:
-		_hc_surround_slot = -1
-		return _hc_publish_crowd_goal(previous_goal, Vector2.INF)
-	_hc_surround_slot = CrowdAttackPosition.choose_with_snapshot(self, hit_target, anchor, current, snapshot, _hc_surround_slot)
-	if _hc_surround_slot >= 0:
-		_hc_surround_goal = CrowdAttackPosition.goal_with_snapshot(self, hit_target, anchor, _hc_surround_slot, snapshot)
-	else:
-		# No legal current candidate retires the previous crowd goal so ordinary
-		# pursuit/local relief can take over instead of chasing a stale station.
-		_hc_surround_goal = Vector2.INF
-	return _hc_publish_crowd_goal(previous_goal, _hc_surround_goal)
+		# A contact point is a navigation destination, not a promise that its
+		# entire straight line is free. Check this decision's one-unit source
+		# leg and the live destination; the existing navigator owns the rest
+		# of the route, including terrain and body detours.
+		var first_leg := SourceStepPlan.next_leg(current, point, 1.0, GroundUnitSpace.EPSILON_GU)
+		if not first_leg.is_finite() or not _hc_flank_destination_clear(point) or not _hc_motion_clear(current, first_leg):
+			continue
+		best_slot = slot
+		best_goal = point
+		best_cost = cost
+	_hc_surround_slot = best_slot
+	return _hc_publish_crowd_goal(previous_goal, best_goal)
 
 func _hc_publish_crowd_goal(previous_goal: Vector2, new_goal: Vector2) -> Vector2:
 	_hc_surround_goal = new_goal
 	# Retire only a path for a different destination. Unchanged C05 detours
 	# keep their route, token and canonical leg instead of restarting.
-	if previous_goal != new_goal and (_hc_path_pending or _hc_route_index < _hc_route.size()):
+	if previous_goal != new_goal and (_hc_path_pending or _hc_route_index < _hc_route.size() or _hc_flank_waypoint.is_finite()):
 		_hc_cancel_path()
 	return new_goal
 
@@ -9876,6 +9977,7 @@ func _hc_neighbor_internal(current: Vector2, hit_target: Node2D, direct: Vector2
 			var flank_leg := SourceStepPlan.next_leg(current, _hc_flank_waypoint, 1.0, GroundUnitSpace.EPSILON_GU)
 			var flank_cell := MonsterNeighborStepPolicyScript.temporary_cell(flank_leg)
 			if flank_leg.is_finite() and _hc_motion_clear(current, flank_leg) and _hc_polygon_neighbor_clear(current, flank_leg, cell, flank_cell) and not _hc_edge_blocked(cell, flank_cell) and _hc_point_walkable(flank_leg):
+				HCDecisionBudget.cancel(get_instance_id())
 				_hc_step_override = flank_leg
 				return MonsterNeighborStepPolicyScript.neighbor_for_desired_ground_direction(flank_leg - current)
 			# Recheck live occupancy; never retain a now-blocked body segment.
@@ -9950,6 +10052,7 @@ func _hc_neighbor_internal(current: Vector2, hit_target: Node2D, direct: Vector2
 		if r6_motion_clear and _hc_surround_goal.is_finite() and _hc_surround_slot < 0:
 			r6_motion_clear = _hc_flank_destination_clear(anchor)
 		if r6_motion_clear and _hc_polygon_neighbor_clear(current, intended, cell, next) and not _hc_edge_blocked(cell, next) and _hc_point_walkable(intended):
+			HCDecisionBudget.cancel(get_instance_id())
 			_hc_step_override = intended
 			_hc_route.clear()
 			_hc_route_index = 0
@@ -9958,88 +10061,16 @@ func _hc_neighbor_internal(current: Vector2, hit_target: Node2D, direct: Vector2
 		if not r6_motion_clear or _hc_frontline_at(current, victim_anchor, hit_target) > 0:
 			if Time.get_ticks_msec() < _hc_next_side_retry_ms:
 				return Vector2i.ZERO
-			_hc_next_side_retry_ms = Time.get_ticks_msec() + HC_BLOCKED_SIDE_RETRY_MS
-			var best := Vector2i.ZERO
-			var best_cost := INF
-			var preferred_sign := 1.0 if posmod(get_instance_id(), 2) == 0 else -1.0
-			if far_approach:
-				var approach := _hc_far_approach_waypoint(current, anchor, cell, preferred_sign)
-				if approach.is_finite():
-					_hc_flank_waypoint = approach
-					_hc_flank_anchor = anchor
-					_hc_step_override = _hc_flank_leg_endpoint(current, approach)
-					return MonsterNeighborStepPolicyScript.neighbor_for_desired_ground_direction(_hc_step_override - current)
-				# No full direction can leave this live crowd. The same bounded
-				# contact-ray escape remains available without attack-slot ranking.
-				var relief := _hc_contact_flank(current, anchor, victim_anchor, hit_target, cell, preferred_sign)
-				if relief.is_finite():
-					_hc_flank_waypoint = relief
-					_hc_flank_anchor = anchor
-					_hc_step_override = relief
-					return MonsterNeighborStepPolicyScript.neighbor_for_desired_ground_direction(relief - current)
-				_hc_last_reason = "FRONTLINE_BLOCKED"
-				_hc_blocked_wait_target_id = hit_target.get_instance_id()
-				_hc_blocked_wait_self = current
-				_hc_blocked_wait_target = victim_anchor
-				return Vector2i.ZERO
-			# Query the exact sixteen bucket envelopes once. Preserve option order,
-			# static legality, live narrow phases and the original cost tie-break.
-			var batched := _hc_prepare_flank_batch(current, victim_anchor, cell)
-			for option_index in range(MonsterNeighborStepPolicyScript.NEIGHBOR_DELTAS.size()):
-				var option: Vector2i = MonsterNeighborStepPolicyScript.NEIGHBOR_DELTAS[option_index]
-				var endpoint := Vector2(cell + option) + Vector2(0.5, 0.5)
-				var committed_endpoint := _hc_flank_leg_endpoint(current, endpoint)
-				var query_offset := _hc_flank_option_offsets[option_index] if batched else -1
-				if batched:
-					if query_offset < 0:
-						continue
-				elif not committed_endpoint.is_finite() or not _hc_polygon_neighbor_clear(current, committed_endpoint, cell, MonsterNeighborStepPolicyScript.temporary_cell(committed_endpoint)) or not _hc_point_walkable(endpoint):
-					continue
-				var motion_clear := (
-					_hc_motion_candidates(current, committed_endpoint, _hc_flank_outputs[query_offset])
-					if batched else _hc_motion_clear(current, committed_endpoint)
-				)
-				if not motion_clear:
-					continue
-				# A legal canonical prefix does not make an occupied destination
-				# reachable. Retaining that waypoint can alternate tiny prefixes
-				# forever while the next axis leg remains inside a rear body.
-				var destination_clear := (
-					_hc_flank_destination_candidates_clear(endpoint, _hc_flank_outputs[query_offset])
-					if batched else _hc_flank_destination_clear(endpoint)
-				)
-				if not destination_clear:
-					continue
-				var cost := endpoint.distance_to(anchor) + (0.05 if Vector2(option).cross(anchor - current) * preferred_sign < 0.0 else 0.0)
-				var blocked := (
-					_hc_frontline_candidates(endpoint, victim_anchor, hit_target, _hc_flank_outputs[query_offset + 1]) != 0
-					if batched else _hc_frontline_at(endpoint, victim_anchor, hit_target) != 0
-				)
-				if blocked:
-					cost += 2.0
-				if cost < best_cost:
-					best = option
-					best_cost = cost
-			_hc_last_reason = "FRONTLINE_BLOCKED"
-			if best == Vector2i.ZERO and _source176_ordinary_melee():
-				var contact_waypoint := _hc_contact_flank(current, anchor, victim_anchor, hit_target, cell, preferred_sign)
-				if contact_waypoint.is_finite():
-					_hc_step_override = contact_waypoint
-					_hc_flank_waypoint = contact_waypoint
-					_hc_flank_anchor = anchor
-					return MonsterNeighborStepPolicyScript.neighbor_for_desired_ground_direction(contact_waypoint - current)
-			if best != Vector2i.ZERO:
-				_hc_step_override = Vector2(cell + best) + Vector2(0.5, 0.5)
-				if _source176_ordinary_melee():
-					_hc_flank_waypoint = _hc_step_override
-					_hc_flank_anchor = anchor
-					_hc_step_override = _hc_flank_leg_endpoint(current, _hc_flank_waypoint)
-					return MonsterNeighborStepPolicyScript.neighbor_for_desired_ground_direction(_hc_step_override - current)
-			else:
-				_hc_blocked_wait_target_id = hit_target.get_instance_id()
-				_hc_blocked_wait_self = current
-				_hc_blocked_wait_target = _screen_position_px_to_ground_position_gu(hit_target.global_position)
-			return best
+			var decision_token := 0
+			if _source176_ordinary_melee():
+				decision_token = HCDecisionBudget.begin(self, _hc_decision_scope(), &"neighbor")
+				if decision_token == 0:
+					_hc_last_reason = "DECISION_BUDGET_WAIT"
+					return Vector2i.ZERO
+			var result := _hc_choose_blocked_neighbor(current, anchor, victim_anchor, hit_target, cell, far_approach)
+			if decision_token != 0:
+				HCDecisionBudget.end(decision_token)
+			return result
 	while _hc_route_index < _hc_route.size() and current.distance_to(_hc_route[_hc_route_index]) <= (0.005 if _terrain_navigation_context.has("poly_index") else 0.08):
 		_hc_route_index += 1
 	if not _hc_observed and not _hc_route.is_empty() and _hc_route_index >= _hc_route.size():
@@ -10090,6 +10121,7 @@ func _hc_neighbor_internal(current: Vector2, hit_target: Node2D, direct: Vector2
 				_hc_last_reason = "FRONTLINE_BLOCKED"
 				return Vector2i.ZERO
 			_hc_step_override = point
+			HCDecisionBudget.cancel(get_instance_id())
 			return neighbor
 		_hc_cancel_path()
 	if _hc_path_pending:
@@ -10167,6 +10199,90 @@ var _hc_flank_scratch: Array = []
 
 ## HC-M30-R6: exact existing narrow phases, with caller-supplied live candidates.
 ## No callbacks/await, attack decisions, delays, cached hits or position writes.
+func _hc_choose_blocked_neighbor(current: Vector2, anchor: Vector2, victim_anchor: Vector2, hit_target: Node2D, cell: Vector2i, far_approach: bool) -> Vector2i:
+	_hc_next_side_retry_ms = Time.get_ticks_msec() + HC_BLOCKED_SIDE_RETRY_MS
+	var best := Vector2i.ZERO
+	var best_cost := INF
+	var preferred_sign := 1.0 if posmod(get_instance_id(), 2) == 0 else -1.0
+	if far_approach:
+		var approach := _hc_far_approach_waypoint(current, anchor, cell, preferred_sign)
+		if approach.is_finite():
+			_hc_flank_waypoint = approach
+			_hc_flank_anchor = anchor
+			_hc_step_override = _hc_flank_leg_endpoint(current, approach)
+			return MonsterNeighborStepPolicyScript.neighbor_for_desired_ground_direction(_hc_step_override - current)
+		# No full direction can leave this live crowd. The same bounded
+		# contact-ray escape remains available without attack-slot ranking.
+		var relief := _hc_contact_flank(current, anchor, victim_anchor, hit_target, cell, preferred_sign)
+		if relief.is_finite():
+			_hc_flank_waypoint = relief
+			_hc_flank_anchor = anchor
+			_hc_step_override = relief
+			return MonsterNeighborStepPolicyScript.neighbor_for_desired_ground_direction(relief - current)
+		_hc_last_reason = "FRONTLINE_BLOCKED"
+		_hc_blocked_wait_target_id = hit_target.get_instance_id()
+		_hc_blocked_wait_self = current
+		_hc_blocked_wait_target = victim_anchor
+		return Vector2i.ZERO
+	# Query the exact sixteen bucket envelopes once. Preserve option order,
+	# static legality, live narrow phases and the original cost tie-break.
+	var batched := _hc_prepare_flank_batch(current, victim_anchor, cell)
+	for option_index in range(MonsterNeighborStepPolicyScript.NEIGHBOR_DELTAS.size()):
+		var option: Vector2i = MonsterNeighborStepPolicyScript.NEIGHBOR_DELTAS[option_index]
+		var endpoint := Vector2(cell + option) + Vector2(0.5, 0.5)
+		var committed_endpoint := _hc_flank_leg_endpoint(current, endpoint)
+		var query_offset := _hc_flank_option_offsets[option_index] if batched else -1
+		if batched:
+			if query_offset < 0:
+				continue
+		elif not committed_endpoint.is_finite() or not _hc_polygon_neighbor_clear(current, committed_endpoint, cell, MonsterNeighborStepPolicyScript.temporary_cell(committed_endpoint)) or not _hc_point_walkable(endpoint):
+			continue
+		var motion_clear := (
+			_hc_motion_candidates(current, committed_endpoint, _hc_flank_outputs[query_offset])
+			if batched else _hc_motion_clear(current, committed_endpoint)
+		)
+		if not motion_clear:
+			continue
+		# A legal canonical prefix does not make an occupied destination
+		# reachable. Retaining that waypoint can alternate tiny prefixes
+		# forever while the next axis leg remains inside a rear body.
+		var destination_clear := (
+			_hc_flank_destination_candidates_clear(endpoint, _hc_flank_outputs[query_offset])
+			if batched else _hc_flank_destination_clear(endpoint)
+		)
+		if not destination_clear:
+			continue
+		var cost := endpoint.distance_to(anchor) + (0.05 if Vector2(option).cross(anchor - current) * preferred_sign < 0.0 else 0.0)
+		var blocked := (
+			_hc_frontline_candidates(endpoint, victim_anchor, hit_target, _hc_flank_outputs[query_offset + 1]) != 0
+			if batched else _hc_frontline_at(endpoint, victim_anchor, hit_target) != 0
+		)
+		if blocked:
+			cost += 2.0
+		if cost < best_cost:
+			best = option
+			best_cost = cost
+	_hc_last_reason = "FRONTLINE_BLOCKED"
+	if best == Vector2i.ZERO and _source176_ordinary_melee():
+		var contact_waypoint := _hc_contact_flank(current, anchor, victim_anchor, hit_target, cell, preferred_sign)
+		if contact_waypoint.is_finite():
+			_hc_step_override = contact_waypoint
+			_hc_flank_waypoint = contact_waypoint
+			_hc_flank_anchor = anchor
+			return MonsterNeighborStepPolicyScript.neighbor_for_desired_ground_direction(contact_waypoint - current)
+	if best != Vector2i.ZERO:
+		_hc_step_override = Vector2(cell + best) + Vector2(0.5, 0.5)
+		if _source176_ordinary_melee():
+			_hc_flank_waypoint = _hc_step_override
+			_hc_flank_anchor = anchor
+			_hc_step_override = _hc_flank_leg_endpoint(current, _hc_flank_waypoint)
+			return MonsterNeighborStepPolicyScript.neighbor_for_desired_ground_direction(_hc_step_override - current)
+	else:
+		_hc_blocked_wait_target_id = hit_target.get_instance_id()
+		_hc_blocked_wait_self = current
+		_hc_blocked_wait_target = _screen_position_px_to_ground_position_gu(hit_target.global_position)
+	return best
+
 func _hc_frontline_candidates(a: Vector2, b: Vector2, hit_target: Node2D, candidates: Array) -> int:
 	var target_radius: float = _target_combat_radius_gu(hit_target)
 	for raw: Variant in candidates:
@@ -10222,7 +10338,10 @@ var _hc_flank_destination_scratch: Array = []
 func _hc_flank_destination_clear(point: Vector2) -> bool:
 	if combat_spatial_index == null or runtime_map_id < 0 or not point.is_finite():
 		return false
-	combat_spatial_index.query_enemy_nodes_bucket_segment_into(runtime_map_id, point, point, combat_radius_gu, _hc_flank_destination_scratch)
+	# This is a fresh existential point query, not a pool retained for future
+	# motion. Use the inclusive footprint envelope; complete 4-GU bucket pools
+	# unnecessarily project every distant neighbor for every candidate point.
+	combat_spatial_index.query_enemy_nodes_segment_unsorted_into(runtime_map_id, point, point, combat_radius_gu, _hc_flank_destination_scratch)
 	return _hc_flank_destination_candidates_clear(point, _hc_flank_destination_scratch)
 
 func _hc_flank_destination_candidates_clear(point: Vector2, candidates: Array) -> bool:
@@ -10274,6 +10393,8 @@ var _hc_contact_flank_scratch: Array = []
 func _hc_contact_flank(current: Vector2, anchor: Vector2, victim_anchor: Vector2, hit_target: Node2D, cell: Vector2i, preferred_sign: float) -> Vector2:
 	if combat_spatial_index == null or runtime_map_id < 0:
 		return Vector2.INF
+	# Contact-leg geometry includes both bodies' recovery margins. Retain the
+	# complete coarse pool here; a tight radius-only envelope omits those margins.
 	combat_spatial_index.query_enemy_nodes_bucket_segment_into(runtime_map_id, current - Vector2.ONE, current + Vector2.ONE, combat_radius_gu, _hc_contact_flank_scratch)
 	var contact_snapshot := CrowdAttackPosition.snapshot_peers(self, _hc_contact_flank_scratch)
 	var best := Vector2.INF

@@ -80,6 +80,8 @@ func _run() -> void:
 		assert(enemy.stationary and is_zero_approx(enemy.move_speed_gu_per_sec), "monsterId=%d 运行时仍可移动" % monster_id)
 		assert(enemy.area_attack_rule.get("targetMode", "") == "all_combat_targets", "monsterId=%d 未启用全屏多目标攻击" % monster_id)
 		enemy._physics_process(0.01)
+		var hp_after_commit := player.current_hp
+		assert(hp_after_commit < hp_before, "monsterId=%d fixed AOE must consume HP at admission" % monster_id)
 		enemy._physics_process(0.21)
 		assert(
 			SkillFootprintSnapshotScript.has_legacy_base_contract(
@@ -104,6 +106,7 @@ func _run() -> void:
 		)
 		assert(enemy.global_position == position_before and enemy.velocity == Vector2.ZERO, "monsterId=%d 攻击时发生位移" % monster_id)
 		assert(player.current_hp < hp_before, "monsterId=%d 没有命中普通近战范围外的屏内目标" % monster_id)
+		assert(player.current_hp == hp_after_commit, "monsterId=%d visual warning duplicated HP" % monster_id)
 
 		enemy.queue_free()
 		player.queue_free()

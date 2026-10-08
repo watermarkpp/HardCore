@@ -1,5 +1,7 @@
 extends Node
 
+const FormalFixture := preload("res://tests/helpers/formal_world_skill_fixture.gd")
+
 var _events: Array[Dictionary] = []
 
 
@@ -96,13 +98,9 @@ func _run() -> void:
 	PlayerState.equipment["hc.slot.weapon"] = {"item_id": 81, "name": "匕首"}
 	game.player.visual._refresh_equipment_visuals()
 	assert(game.player.visual.audio_classic_weapon_shape() == 6, "fixture weapon shape drift")
-	var target: EnemyActor = game._spawn_enemy(
-		GameData.get_monster_by_id(38),
-		game.player.global_position + Vector2(32.0, 0.0),
-		false,
-		-1.0,
-		{"respawn_enabled": false, "spawn_group_id": "player_core_audio_target"},
-	)
+	# The current world admits only its sealed, published base descriptor set.
+	# Preserve monster 38 and every contact assertion through the real factory.
+	var target: EnemyActor = await FormalFixture.prepare_target(self, game, game.player, 38, "player_core_audio_target")
 	assert(target != null, "audio target spawn failed")
 	await get_tree().process_frame
 	target.control_time = 60.0

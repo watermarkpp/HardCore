@@ -16413,6 +16413,766 @@
         "loot_success": "currency.gold.changed",
         "balance_change_success": "currency.gold.changed"
       }
+    },
+    "item:920045": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920045,
+      "kind": "consumable",
+      "category": "药品",
+      "events": {
+        "use_success": "item.use.drug.success"
+      },
+      "alias_of": "service:658",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/0",
+        "alias_id": "hc.service_item.000658",
+        "canonical_id": "hc.item.920045",
+        "service_record": "/runtimeItems/1"
+      }
+    },
+    "item:920053": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920053,
+      "kind": "consumable",
+      "category": "药品",
+      "events": {
+        "use_success": "item.use.drug.success"
+      },
+      "alias_of": "service:659",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/1",
+        "alias_id": "hc.service_item.000659",
+        "canonical_id": "hc.item.920053",
+        "service_record": "/runtimeItems/2"
+      }
+    },
+    "item:920044": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920044,
+      "kind": "consumable",
+      "category": "药品",
+      "events": {
+        "use_success": "item.use.drug.success"
+      },
+      "alias_of": "service:660",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/2",
+        "alias_id": "hc.service_item.000660",
+        "canonical_id": "hc.item.920044",
+        "service_record": "/runtimeItems/3"
+      }
+    },
+    "item:920052": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920052,
+      "kind": "consumable",
+      "category": "药品",
+      "events": {
+        "use_success": "item.use.drug.success"
+      },
+      "alias_of": "service:661",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/3",
+        "alias_id": "hc.service_item.000661",
+        "canonical_id": "hc.item.920052",
+        "service_record": "/runtimeItems/4"
+      }
+    },
+    "item:920014": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920014,
+      "kind": "consumable",
+      "category": "药品",
+      "events": {
+        "use_success": "item.use.drug.success"
+      },
+      "alias_of": "service:670",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/4",
+        "alias_id": "hc.service_item.000670",
+        "canonical_id": "hc.item.920014",
+        "service_record": "/runtimeItems/13"
+      }
+    },
+    "item:920016": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920016,
+      "kind": "consumable",
+      "category": "药品",
+      "events": {
+        "use_success": "item.use.drug.success"
+      },
+      "alias_of": "service:671",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/5",
+        "alias_id": "hc.service_item.000671",
+        "canonical_id": "hc.item.920016",
+        "service_record": "/runtimeItems/14"
+      }
+    },
+    "item:920001": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920001,
+      "kind": "consumable",
+      "category": "药品",
+      "events": {
+        "use_success": "item.use.drug.success"
+      },
+      "alias_of": "service:673",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/6",
+        "alias_id": "hc.service_item.000673",
+        "canonical_id": "hc.item.920001",
+        "service_record": "/runtimeItems/16"
+      }
+    },
+    "item:920019": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920019,
+      "kind": "scroll",
+      "category": "卷轴",
+      "events": {},
+      "alias_of": "service:707",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/7",
+        "alias_id": "hc.service_item.000707",
+        "canonical_id": "hc.item.920019",
+        "service_record": "/runtimeItems/50"
+      }
+    },
+    "item:920033": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920033,
+      "kind": "scroll",
+      "category": "卷轴",
+      "events": {},
+      "alias_of": "service:709",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/8",
+        "alias_id": "hc.service_item.000709",
+        "canonical_id": "hc.item.920033",
+        "service_record": "/runtimeItems/52"
+      }
+    },
+    "item:920007": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920007,
+      "kind": "scroll",
+      "category": "卷轴",
+      "events": {},
+      "alias_of": "service:719",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/9",
+        "alias_id": "hc.service_item.000719",
+        "canonical_id": "hc.item.920007",
+        "service_record": "/runtimeItems/58"
+      }
+    },
+    "item:920037": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920037,
+      "kind": "material",
+      "category": "肉类",
+      "events": {},
+      "alias_of": "service:855",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/10",
+        "alias_id": "hc.service_item.000855",
+        "canonical_id": "hc.item.920037",
+        "service_record": "/runtimeItems/142"
+      }
+    },
+    "item:920023": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920023,
+      "kind": "material",
+      "category": "制作材料",
+      "events": {},
+      "alias_of": "service:870",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/11",
+        "alias_id": "hc.service_item.000870",
+        "canonical_id": "hc.item.920023",
+        "service_record": "/runtimeItems/157"
+      }
+    },
+    "item:920032": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920032,
+      "kind": "material",
+      "category": "制作材料",
+      "events": {},
+      "alias_of": "service:871",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/12",
+        "alias_id": "hc.service_item.000871",
+        "canonical_id": "hc.item.920032",
+        "service_record": "/runtimeItems/158"
+      }
+    },
+    "item:920038": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920038,
+      "kind": "material",
+      "category": "制作材料",
+      "events": {},
+      "alias_of": "service:872",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/13",
+        "alias_id": "hc.service_item.000872",
+        "canonical_id": "hc.item.920038",
+        "service_record": "/runtimeItems/159"
+      }
+    },
+    "item:920012": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920012,
+      "kind": "skill_book",
+      "category": "技能书",
+      "events": {},
+      "alias_of": "service:973",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/14",
+        "alias_id": "hc.service_item.000973",
+        "canonical_id": "hc.item.920012",
+        "service_record": "/runtimeItems/260"
+      }
+    },
+    "item:920021": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920021,
+      "kind": "skill_book",
+      "category": "技能书",
+      "events": {},
+      "alias_of": "service:974",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/15",
+        "alias_id": "hc.service_item.000974",
+        "canonical_id": "hc.item.920021",
+        "service_record": "/runtimeItems/261"
+      }
+    },
+    "item:920003": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920003,
+      "kind": "skill_book",
+      "category": "技能书",
+      "events": {},
+      "alias_of": "service:975",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/16",
+        "alias_id": "hc.service_item.000975",
+        "canonical_id": "hc.item.920003",
+        "service_record": "/runtimeItems/262"
+      }
+    },
+    "item:920004": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920004,
+      "kind": "skill_book",
+      "category": "技能书",
+      "events": {},
+      "alias_of": "service:976",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/17",
+        "alias_id": "hc.service_item.000976",
+        "canonical_id": "hc.item.920004",
+        "service_record": "/runtimeItems/263"
+      }
+    },
+    "item:920043": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920043,
+      "kind": "skill_book",
+      "category": "技能书",
+      "events": {},
+      "alias_of": "service:977",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/18",
+        "alias_id": "hc.service_item.000977",
+        "canonical_id": "hc.item.920043",
+        "service_record": "/runtimeItems/264"
+      }
+    },
+    "item:920028": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920028,
+      "kind": "skill_book",
+      "category": "技能书",
+      "events": {},
+      "alias_of": "service:980",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/19",
+        "alias_id": "hc.service_item.000980",
+        "canonical_id": "hc.item.920028",
+        "service_record": "/runtimeItems/267"
+      }
+    },
+    "item:920026": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920026,
+      "kind": "skill_book",
+      "category": "技能书",
+      "events": {},
+      "alias_of": "service:990",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/20",
+        "alias_id": "hc.service_item.000990",
+        "canonical_id": "hc.item.920026",
+        "service_record": "/runtimeItems/277"
+      }
+    },
+    "item:920020": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920020,
+      "kind": "skill_book",
+      "category": "技能书",
+      "events": {},
+      "alias_of": "service:991",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/21",
+        "alias_id": "hc.service_item.000991",
+        "canonical_id": "hc.item.920020",
+        "service_record": "/runtimeItems/278"
+      }
+    },
+    "item:920041": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920041,
+      "kind": "skill_book",
+      "category": "技能书",
+      "events": {},
+      "alias_of": "service:992",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/22",
+        "alias_id": "hc.service_item.000992",
+        "canonical_id": "hc.item.920041",
+        "service_record": "/runtimeItems/279"
+      }
+    },
+    "item:920013": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920013,
+      "kind": "skill_book",
+      "category": "技能书",
+      "events": {},
+      "alias_of": "service:993",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/23",
+        "alias_id": "hc.service_item.000993",
+        "canonical_id": "hc.item.920013",
+        "service_record": "/runtimeItems/280"
+      }
+    },
+    "item:920010": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920010,
+      "kind": "skill_book",
+      "category": "技能书",
+      "events": {},
+      "alias_of": "service:994",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/24",
+        "alias_id": "hc.service_item.000994",
+        "canonical_id": "hc.item.920010",
+        "service_record": "/runtimeItems/281"
+      }
+    },
+    "item:920048": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920048,
+      "kind": "skill_book",
+      "category": "技能书",
+      "events": {},
+      "alias_of": "service:995",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/25",
+        "alias_id": "hc.service_item.000995",
+        "canonical_id": "hc.item.920048",
+        "service_record": "/runtimeItems/282"
+      }
+    },
+    "item:920031": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920031,
+      "kind": "skill_book",
+      "category": "技能书",
+      "events": {},
+      "alias_of": "service:996",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/26",
+        "alias_id": "hc.service_item.000996",
+        "canonical_id": "hc.item.920031",
+        "service_record": "/runtimeItems/283"
+      }
+    },
+    "item:920029": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920029,
+      "kind": "skill_book",
+      "category": "技能书",
+      "events": {},
+      "alias_of": "service:997",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/27",
+        "alias_id": "hc.service_item.000997",
+        "canonical_id": "hc.item.920029",
+        "service_record": "/runtimeItems/284"
+      }
+    },
+    "item:920025": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920025,
+      "kind": "skill_book",
+      "category": "技能书",
+      "events": {},
+      "alias_of": "service:998",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/28",
+        "alias_id": "hc.service_item.000998",
+        "canonical_id": "hc.item.920025",
+        "service_record": "/runtimeItems/285"
+      }
+    },
+    "item:920030": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920030,
+      "kind": "skill_book",
+      "category": "技能书",
+      "events": {},
+      "alias_of": "service:999",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/29",
+        "alias_id": "hc.service_item.000999",
+        "canonical_id": "hc.item.920030",
+        "service_record": "/runtimeItems/286"
+      }
+    },
+    "item:920011": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920011,
+      "kind": "skill_book",
+      "category": "技能书",
+      "events": {},
+      "alias_of": "service:1001",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/30",
+        "alias_id": "hc.service_item.001001",
+        "canonical_id": "hc.item.920011",
+        "service_record": "/runtimeItems/288"
+      }
+    },
+    "item:920051": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920051,
+      "kind": "skill_book",
+      "category": "技能书",
+      "events": {},
+      "alias_of": "service:1002",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/31",
+        "alias_id": "hc.service_item.001002",
+        "canonical_id": "hc.item.920051",
+        "service_record": "/runtimeItems/289"
+      }
+    },
+    "item:920009": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920009,
+      "kind": "skill_book",
+      "category": "技能书",
+      "events": {},
+      "alias_of": "service:1003",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/32",
+        "alias_id": "hc.service_item.001003",
+        "canonical_id": "hc.item.920009",
+        "service_record": "/runtimeItems/290"
+      }
+    },
+    "item:920002": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920002,
+      "kind": "skill_book",
+      "category": "技能书",
+      "events": {},
+      "alias_of": "service:1005",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/33",
+        "alias_id": "hc.service_item.001005",
+        "canonical_id": "hc.item.920002",
+        "service_record": "/runtimeItems/292"
+      }
+    },
+    "item:920024": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920024,
+      "kind": "skill_book",
+      "category": "技能书",
+      "events": {},
+      "alias_of": "service:1016",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/34",
+        "alias_id": "hc.service_item.001016",
+        "canonical_id": "hc.item.920024",
+        "service_record": "/runtimeItems/303"
+      }
+    },
+    "item:920035": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920035,
+      "kind": "skill_book",
+      "category": "技能书",
+      "events": {},
+      "alias_of": "service:1017",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/35",
+        "alias_id": "hc.service_item.001017",
+        "canonical_id": "hc.item.920035",
+        "service_record": "/runtimeItems/304"
+      }
+    },
+    "item:920022": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920022,
+      "kind": "skill_book",
+      "category": "技能书",
+      "events": {},
+      "alias_of": "service:1018",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/36",
+        "alias_id": "hc.service_item.001018",
+        "canonical_id": "hc.item.920022",
+        "service_record": "/runtimeItems/305"
+      }
+    },
+    "item:920027": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920027,
+      "kind": "skill_book",
+      "category": "技能书",
+      "events": {},
+      "alias_of": "service:1019",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/37",
+        "alias_id": "hc.service_item.001019",
+        "canonical_id": "hc.item.920027",
+        "service_record": "/runtimeItems/306"
+      }
+    },
+    "item:920006": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920006,
+      "kind": "skill_book",
+      "category": "技能书",
+      "events": {},
+      "alias_of": "service:1020",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/38",
+        "alias_id": "hc.service_item.001020",
+        "canonical_id": "hc.item.920006",
+        "service_record": "/runtimeItems/307"
+      }
+    },
+    "item:920046": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920046,
+      "kind": "skill_book",
+      "category": "技能书",
+      "events": {},
+      "alias_of": "service:1021",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/39",
+        "alias_id": "hc.service_item.001021",
+        "canonical_id": "hc.item.920046",
+        "service_record": "/runtimeItems/308"
+      }
+    },
+    "item:920047": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920047,
+      "kind": "skill_book",
+      "category": "技能书",
+      "events": {},
+      "alias_of": "service:1022",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/40",
+        "alias_id": "hc.service_item.001022",
+        "canonical_id": "hc.item.920047",
+        "service_record": "/runtimeItems/309"
+      }
+    },
+    "item:920015": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920015,
+      "kind": "skill_book",
+      "category": "技能书",
+      "events": {},
+      "alias_of": "service:1023",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/41",
+        "alias_id": "hc.service_item.001023",
+        "canonical_id": "hc.item.920015",
+        "service_record": "/runtimeItems/310"
+      }
+    },
+    "item:920018": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920018,
+      "kind": "skill_book",
+      "category": "技能书",
+      "events": {},
+      "alias_of": "service:1024",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/42",
+        "alias_id": "hc.service_item.001024",
+        "canonical_id": "hc.item.920018",
+        "service_record": "/runtimeItems/311"
+      }
+    },
+    "item:920034": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920034,
+      "kind": "skill_book",
+      "category": "技能书",
+      "events": {},
+      "alias_of": "service:1025",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/43",
+        "alias_id": "hc.service_item.001025",
+        "canonical_id": "hc.item.920034",
+        "service_record": "/runtimeItems/312"
+      }
+    },
+    "item:920008": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920008,
+      "kind": "skill_book",
+      "category": "技能书",
+      "events": {},
+      "alias_of": "service:1027",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/44",
+        "alias_id": "hc.service_item.001027",
+        "canonical_id": "hc.item.920008",
+        "service_record": "/runtimeItems/314"
+      }
+    },
+    "item:920036": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920036,
+      "kind": "skill_book",
+      "category": "技能书",
+      "events": {},
+      "alias_of": "service:1029",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/45",
+        "alias_id": "hc.service_item.001029",
+        "canonical_id": "hc.item.920036",
+        "service_record": "/runtimeItems/316"
+      }
+    },
+    "item:920005": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920005,
+      "kind": "skill_book",
+      "category": "技能书",
+      "events": {},
+      "alias_of": "service:1032",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/46",
+        "alias_id": "hc.service_item.001032",
+        "canonical_id": "hc.item.920005",
+        "service_record": "/runtimeItems/319"
+      }
+    },
+    "item:920017": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920017,
+      "kind": "consumable",
+      "category": "药品",
+      "events": {
+        "use_success": "item.use.drug.success"
+      },
+      "alias_of": "service:666",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/47",
+        "alias_id": "hc.service_item.000666",
+        "canonical_id": "hc.item.920017",
+        "service_record": "/runtimeItems/9"
+      }
+    },
+    "item:920042": {
+      "identity_kind": "canonical_item_id_alias",
+      "identity_value": 920042,
+      "kind": "consumable",
+      "category": "药品",
+      "events": {
+        "use_success": "item.use.drug.success"
+      },
+      "alias_of": "service:667",
+      "identity_source": {
+        "path": "assets/data/identity/entity_registry_source.json",
+        "pointer": "/aliases/48",
+        "alias_id": "hc.service_item.000667",
+        "canonical_id": "hc.item.920042",
+        "service_record": "/runtimeItems/10"
+      }
     }
+  },
+  "alias_route_generation": {
+    "alias_count": 49,
+    "canonical_item_route_count": 49,
+    "service_route_count": 49,
+    "source": "assets/data/identity/entity_registry_source.json",
+    "source_sha256": "4d2c6674fb6c37dda246a10f1ae0f2396298c31e968d40929dc2c86ddf49265a"
   }
 }

@@ -1,6 +1,17 @@
 # HardCore Project Index
 
+2026-10-08 13:47 UI当前入口：docs/review/hud_touch_20261008/RESULT.md、VERIFICATION.json；六技能/攻击/换敌/交互/摇杆尺寸、四槽多点触控与可见外框点击、仅两种超级药水杂点/视觉中心、目标血条完整底色/普通字体。6项最新专项PASS，实际GPU截图hud_20261008_final.png及两个局部图待用户视觉确认，尚未封装或手机验收。
+
+2026-10-08 群怪当前入口：docs/review/phone_crowd_20261008/BASELINE.md（真实v106手机窗口）、ARCHITECTURE_DIAGNOSIS.md（职责/最新伤害合同）、LOCAL_COMPARISON.md（同负载最终CPU/完成量/轨迹差异）、VERIFICATION.json（71个原始receipt、源码指纹、失败与复用边界）。最终本地正常/频繁转向CPU分别降低33.74%/27.42%，30实际追击者保持；手机体验和新APK未验收。v106临时基线树已保全并归档，唯一工作树integration。下方“等待演示”是历史。
+
+2026-10-08 01:24 当前特装/HUD入口：docs/review/special_equipment_20261008/FINAL_RESULT.md，完整各阶段命令、失败、源码指纹与最新专项见FINAL_RECEIPTS.json和WORK_LOG.md。神秘装备资料库公式证据在docs/mystery_equipment_random_source_evidence.md。旧特殊装备清单为改动前普查，由新交接覆盖本轮指定条目；群怪仍等用户手机演示，未出新APK。
+
+2026-10-07 23:32 当前：音频、拾取及新增售价/概率/Loading专项已验证，详见 docs/audio/20261007/CURRENT_RESULT.md 顶部。特殊装备完整清单在 docs/review/monster_system_20261007/SPECIAL_EQUIPMENT_CONNECTION_LIST.md；接线与原生/设备验收分开记录。群怪问题最后由用户手机演示并监测数据；本轮尚未封装，DEVICE TEST NOT_RUN。
+
+2026-10-07 最新优先项：docs/audio/20261007/CURRENT_RESULT.md，吃药正式canonical身份接线、BGM启动链及连续拾取/提示顺序。群怪卡顿仍开放；用户反馈的安装版本待绑定，v106封装与旧原生PASS不能代替体验验收。
+
 2026-10-07 怪物系统继续升级：`docs/review/monster_system_20261007/FINDINGS.md` 为v105反馈、用户裁决、生产主线、来源边界、固定源码和性能对照的入口；`SPECIAL_BEHAVIOR_MATRIX.json` 为全部profile/稳定ID台账，元数据检查不代表actor或设备验收。
+2026-10-07 v106交付：`docs/review/monster_system_20261007/APK_DELIVERY.md` 为封装前追击/绕行检查、18项同内容原生回归、APK固定源码与身份、桌面产物及DEVICE TEST NOT_RUN的当前入口；流畅度按用户试玩体感验收。
 
 2026-10-07 当前入口：`docs/WORKSPACE_CURRENT_STATUS.md` 与 `docs/retired/20261007/README.md`。第三树内容现为 `codex/integration` 唯一主树；`SUPPLEMENT_MANIFEST.json` 记录外部独有补入，`BRANCH_HISTORY_ARCHIVE.json` 记录全部历史分支恢复地址。下方日期条目为历史导航。
 

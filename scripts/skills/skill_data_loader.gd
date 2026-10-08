@@ -12,6 +12,9 @@ const SkillRankResolverScript := preload(
 const SkillRankExtensionPolicyScript := preload(
 	"res://scripts/skills/skill_rank_extension_policy.gd"
 )
+const EquipmentGrantedSkillRulesScript := preload(
+	"res://scripts/equipment_granted_skill_rules.gd"
+)
 
 const SOURCE_OF_TRUTH_PATH := "res://assets/data/vanilla_176/skills_source_of_truth_v1.json"
 const PACKAGE_ROOT := "res://assets/data/vanilla_176/skill_source_package_v1_0_1"
@@ -86,11 +89,16 @@ static func skill_ids() -> PackedStringArray:
 	ordered_ids.sort_custom(func(left: String, right: String) -> bool:
 		return int(_skills_by_id[left].get("order", 0)) < int(_skills_by_id[right].get("order", 0))
 	)
+	for granted: Dictionary in EquipmentGrantedSkillRulesScript.grant_definitions():
+		ordered_ids.append(str(granted.get("skill_id", "")))
 	return PackedStringArray(ordered_ids)
 
 
 static func skill(skill_name_or_id: String) -> Dictionary:
 	document()
+	var granted := _equipment_granted_definition(skill_name_or_id)
+	if not granted.is_empty():
+		return granted
 	var stable_id := stable_skill_id(skill_name_or_id)
 	var raw_definition: Dictionary = _skills_by_id.get(stable_id, {})
 	if raw_definition.is_empty():
@@ -124,6 +132,14 @@ static func skill(skill_name_or_id: String) -> Dictionary:
 
 static func stable_skill_id(skill_name_or_id: String) -> String:
 	document()
+	var granted := EquipmentGrantedSkillRulesScript.definition(skill_name_or_id)
+	if not granted.is_empty():
+		var granted_id := str(granted.get("skill_id", ""))
+		var granted_legacy: Variant = EntityRegistry.legacy(granted_id, "skill")
+		return str(granted_legacy) if granted_legacy is String and not str(granted_legacy).is_empty() else granted_id
+	var registry_entry := EntityRegistry.resolve(skill_name_or_id, "skill")
+	if not registry_entry.is_empty() and str(registry_entry.get("legacy_id", "")).begins_with("equipment."):
+		return str(registry_entry.get("legacy_id", ""))
 	if skill_name_or_id.begins_with("hc."):
 		var old: Variant = EntityRegistry.legacy(skill_name_or_id, "skill")
 		return str(old) if old is String and _skills_by_id.has(old) else ""
@@ -134,12 +150,15 @@ static func stable_skill_id(skill_name_or_id: String) -> String:
 
 # Exact UI/legacy-import boundary; runtime tables retain only the returned ID.
 static func entity_skill_id(skill_name_or_id: String) -> String:
+	var granted := _equipment_granted_definition(skill_name_or_id)
+	if not granted.is_empty():
+		return str(granted.get("skill_id", ""))
 	return EntityRegistry.from_legacy("skill", stable_skill_id(skill_name_or_id))
 
 
 static func is_canonical_skill_id(skill_id: String) -> bool:
 	document()
-	return _skills_by_id.has(skill_id)
+	return _skills_by_id.has(skill_id) or not EquipmentGrantedSkillRulesScript.definition(skill_id).is_empty()
 
 
 static func display_name(skill_name_or_id: String) -> String:
@@ -460,6 +479,36 @@ static func _build_indexes() -> void:
 		_ids_by_alias[str(definition.get("display_name", ""))] = skill_id
 		for alias: Variant in definition.get("aliases", []):
 			_ids_by_alias[str(alias)] = skill_id
+
+
+static func _equipment_granted_definition(skill_name_or_id: String) -> Dictionary:
+	var record := EquipmentGrantedSkillRulesScript.definition(str(skill_name_or_id))
+	if record.is_empty():
+		var registry_entry := EntityRegistry.resolve(str(skill_name_or_id), "skill")
+		if not registry_entry.is_empty():
+			record = EquipmentGrantedSkillRulesScript.definition(
+				"hc.skill.%s" % str(registry_entry.get("legacy_id", ""))
+			)
+	if record.is_empty():
+		return {}
+	var parent_id := str(record.get("parent_skill_id", ""))
+	var parent := skill(parent_id)
+	if parent.is_empty():
+		return {}
+	var result := parent.duplicate(true)
+	result["skill_id"] = str(record.get("skill_id", ""))
+	result["entity_id"] = str(record.get("skill_id", ""))
+	result["display_name"] = str(record.get("display_name", ""))
+	result["description"] = str(record.get("description", ""))
+	result["equipment_granted"] = true
+	result["effect_id"] = str(record.get("effect_id", ""))
+	result["parent_skill_id"] = parent_id
+	result["activation"] = str(record.get("activation", "click"))
+	var mana_cost := maxi(0, int(record.get("mana_cost", 0)))
+	result["mana_cost"] = mana_cost
+	result["mp_cost_by_rank"] = [mana_cost, mana_cost, mana_cost, mana_cost]
+	result["source_contract"] = EquipmentGrantedSkillRulesScript.CONTRACT_ID
+	return result
 
 
 static func _validate_runtime_status(definition: Dictionary, key: String, skill_id: String, errors: Array[String]) -> void:

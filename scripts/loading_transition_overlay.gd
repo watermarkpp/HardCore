@@ -35,6 +35,7 @@ var _presented_cover_rect := Rect2()
 var _presented_viewport_rect := Rect2()
 var _pulse_time := 0.0
 var _holding_final := false
+var _report_progress := true
 
 
 func _ready() -> void:
@@ -294,8 +295,9 @@ func set_loading_progress(request_transition_id: String, completed: float, stage
 		return
 	_progress_value = maxf(_progress_value, clampf(completed, 0.0, 1.0))
 	progress_stage.text = stage
-	progress_percent.text = "%d%%" % roundi(_progress_value * 100.0)
-	_update_progress_fill()
+	if _report_progress:
+		progress_percent.text = "%d%%" % roundi(_progress_value * 100.0)
+		_update_progress_fill()
 
 
 func _reset_progress() -> void:
@@ -305,10 +307,14 @@ func _reset_progress() -> void:
 	_update_progress_fill()
 
 
-func begin_loading(next_transition_id := "") -> void:
+func begin_loading(next_transition_id := "", report_progress := true) -> void:
 	_coverage_request_serial += 1
 	var request_serial := _coverage_request_serial
 	_holding_final = false
+	_report_progress = bool(report_progress)
+	progress_track.visible = _report_progress
+	progress_percent.visible = _report_progress
+	progress_stage.visible = true
 	transition_id = str(next_transition_id)
 	var request_transition_id := transition_id
 	_pulse_time = 0.0
@@ -322,9 +328,13 @@ func begin_loading(next_transition_id := "") -> void:
 	_emit_covered_after_present(request_serial, request_transition_id)
 
 
-func show_loading_immediately(next_transition_id := "") -> void:
+func show_loading_immediately(next_transition_id := "", report_progress := true) -> void:
 	_coverage_request_serial += 1
 	_holding_final = false
+	_report_progress = bool(report_progress)
+	progress_track.visible = _report_progress
+	progress_percent.visible = _report_progress
+	progress_stage.visible = true
 	transition_id = str(next_transition_id)
 	_pulse_time = 0.0
 	loading_label.text = LOADING_TEXT

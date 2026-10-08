@@ -24,9 +24,12 @@ func _run() -> void:
 	layer.show_feedback({"event_type": "pickup_success", "item_name": "沃玛号角", "count": 1, "item_kind": "quest_item"})
 	layer.show_feedback({"event_type": "pickup_success", "item_name": "强效太阳水", "count": 2, "item_kind": "consumable"})
 	layer.show_feedback({"event_type": "pickup_success", "item_name": "多余物品", "count": 1, "item_kind": "material"})
-	assert(layer.toast_container.get_child_count() == 3, "普通拾取提示没有限制为最近三条")
+	assert(layer.toast_container.get_child_count() == 3, "拾取提示必须复用原有固定控件")
 	assert(layer.toast_container.get_child(0).get_meta("stable_id", "") == "loot.feedback.normal", "普通提示稳定 ID 错误")
-	assert("多余物品" in layer.toast_container.get_child(0).get_node("Text").text, "最新拾取提示没有置顶")
+	assert("金币" in layer.toast_container.get_child(0).get_node("Text").text, "首次成功拾取应先显示，后续提示不能抢占")
+	for expected: String in ["沃玛号角", "强效太阳水", "多余物品"]:
+		layer._process(LootFeedbackLayerScript.DEFAULT_DURATION + 0.01)
+		assert(expected in layer.toast_container.get_child(0).get_node("Text").text, "拾取提示必须按收到顺序完整显示")
 	assert(layer.toast_container.get_child(0).size.y == 30, "普通拾取提示仍然过高")
 	assert(layer.toast_container.get_child(0).size.x < layer.toast_container.size.x, "普通拾取提示没有按文字裁切")
 
@@ -67,7 +70,7 @@ func _run() -> void:
 		assert(style.bg_color.a < 0.80, "战利品反馈背景不是半透明灰色")
 		assert(style.border_width_left == 1 and style.border_width_top == 1, "战利品反馈轮廓不是最细1像素")
 	await _assert_landscape_safe_area_centering()
-	print("LOOT_FEEDBACK_GOTHIC_UI_PASS：地面名称、分类颜色、三条拾取提示、满包失败和Boss高价值横幅均正常")
+	print("LOOT_FEEDBACK_GOTHIC_UI_PASS：地面名称、分类颜色、顺序拾取提示、满包失败和Boss高价值横幅均正常")
 	get_tree().quit(0)
 
 

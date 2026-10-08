@@ -206,6 +206,8 @@ func _run() -> void:
 		expected_item_centers.append(ChassisDesigns.source_to_local(design, slot_center))
 	var expected_fill_size: Vector2 = design["item_slot_fill_display_size"]
 	var expected_fill_render_size: Vector2 = design.get("item_slot_fill_render_size", expected_fill_size)
+	var expected_touch_size := ChassisDesigns.source_rect_to_local(design, Rect2(Vector2.ZERO, design["item_slot_touch_source_size"])).size
+	var expected_hit_padding := (expected_touch_size - expected_fill_size) * 0.5
 	var chassis_art := chassis.get_node("DemonChassisArt") as TextureRect
 	for index in range(4):
 		var item_fill := chassis.get_node("ItemSlotFill%d" % (index + 1)) as Panel
@@ -220,9 +222,9 @@ func _run() -> void:
 			and is_equal_approx(item_fill.size.y, expected_fill_render_size.y),
 			"物品框底色没有按外扩尺寸盖住金属内孔")
 		assert(item_slot != null
-			and is_equal_approx(item_slot.size.x, expected_fill_size.x)
-			and is_equal_approx(item_slot.size.y, expected_fill_size.y)
-			and item_slot.get_meta("metal_masked", false), "物品框触控层没有按金属内孔建立")
+			and is_equal_approx(item_slot.size.x, expected_touch_size.x)
+			and is_equal_approx(item_slot.size.y, expected_touch_size.y)
+			and item_slot.get_meta("metal_masked", false), "物品框触控层没有覆盖金属槽框")
 		assert(
 			is_equal_approx(item_fill.position.x + item_fill.size.x * 0.5, expected_item_centers[index].x)
 			and is_equal_approx(item_fill.position.y + item_fill.size.y * 0.5, expected_item_centers[index].y),
@@ -259,7 +261,7 @@ func _run() -> void:
 		"fire_cooldown_remaining_ms": 0,
 	})
 	assert("烈火:开·就绪" in hud.warrior_state_label.text, "烈火状态没有显示开启就绪")
-	var attack_center := (root.get_node("AttackButton") as Control).position + Vector2(60, 60)
+	var attack_center := (root.get_node("AttackButton") as Control).position + Vector2(51, 51)
 	assert(attack_center == root.size + GameHUD.HUD_ATTACK_CENTER, "攻击键没有使用统一内移圆心")
 	var frame_image := Image.load_from_file(ProjectSettings.globalize_path(ACTION_FRAME_PATH))
 	var visible_inner_radius_max := _measure_action_frame_visible_inner_radius_max(frame_image)
@@ -268,11 +270,11 @@ func _run() -> void:
 		GameHUD.HUD_ACTION_FRAME_VISIBLE_INNER_MAX_RADIUS_SOURCE == visible_inner_radius_max,
 		"HUD 未使用圆框逐方向实测的可视亮金属内沿",
 	)
-	var expected_attack_content_size := Vector2(90, 90)
-	var expected_ring_content_size := Vector2(50, 50)
+	var expected_attack_content_size := Vector2(76.5, 76.5)
+	var expected_ring_content_size := Vector2(60, 60)
 	_assert_action_frame_content_reaches_visible_inner_edge(
 		frame_image,
-		expected_attack_content_size.x * 0.5,
+		expected_attack_content_size.x * 0.5 / 0.85,
 		expected_ring_content_size.x * 0.5 * float(frame_image.get_width())
 			/ GameHUD.HUD_ATTACK_RING_BUTTON_SIZE.x,
 	)
@@ -285,8 +287,8 @@ func _run() -> void:
 		var ring_frame := ring_skill.get_node("RoundActionFrame") as TextureRect
 		var expected_ring_skill: String = ["野蛮冲撞", "烈火剑法", "半月弯刀", "刺杀剑术", "", ""][index]
 		assert(ring_icon != null and ring_icon.get_meta("skill_name", "") == expected_ring_skill)
-		assert(ring_icon.position == Vector2(11, 11) and ring_icon.size == expected_ring_content_size, "环绕技能图没有延伸到可视金属内沿下方")
-		assert(ring_backdrop.position == Vector2(11, 11) and ring_backdrop.size == expected_ring_content_size, "环绕技能底色没有延伸到可视金属内沿下方")
+		assert(ring_icon.position.is_equal_approx(Vector2(13.2, 13.2)) and ring_icon.size.is_equal_approx(expected_ring_content_size), "环绕技能图几何 pos=%s size=%s expected=%s" % [ring_icon.position, ring_icon.size, expected_ring_content_size])
+		assert(ring_backdrop.position.is_equal_approx(Vector2(13.2, 13.2)) and ring_backdrop.size.is_equal_approx(expected_ring_content_size), "环绕技能底色没有延伸到可视金属内沿下方")
 		assert(ring_icon.material is ShaderMaterial and ring_icon.get_meta("circular_clip", false), "环绕技能图没有圆形裁切")
 		assert(ring_frame != null and ring_frame.get_index() > ring_icon.get_index(), "环形技能金属框没有覆盖在图标之上")
 		assert(
@@ -298,10 +300,10 @@ func _run() -> void:
 		var expected_angle := GameHUD.HUD_ATTACK_RING_START_DEGREES + GameHUD.HUD_ATTACK_RING_STEP_DEGREES * index
 		var expected_center := root.size + GameHUD.HUD_ATTACK_CENTER + Vector2.from_angle(deg_to_rad(expected_angle)) * GameHUD.HUD_ATTACK_RING_RADIUS
 		assert(actual_center.is_equal_approx(expected_center), "六个技能按钮没有使用等角等半径攻击环")
-		assert(is_equal_approx(actual_center.distance_to(attack_center), 125.0), "环形技能半径不统一")
+		assert(is_equal_approx(actual_center.distance_to(attack_center), 140.0), "环形技能半径不统一")
 		assert(bool(ring_skill.call("_has_point", Vector2(36, 36))) and not bool(ring_skill.call("_has_point", Vector2.ZERO)), "环形技能仍使用方形触控判定")
 		if index > 0:
-			assert(actual_center.distance_to(previous_ring_center) > 72.0, "相邻环形技能圆形触控区重叠")
+			assert(actual_center.distance_to(previous_ring_center) > 86.4, "相邻环形技能圆形触控区重叠")
 		previous_ring_center = actual_center
 		if expected_ring_skill.is_empty():
 			assert(not ring_backdrop.visible and not ring_icon.visible and ring_icon.texture == null, "空技能槽仍显示黑底或图标")
@@ -323,7 +325,7 @@ func _run() -> void:
 	(root.get_node("AttackRingSkill6") as Button).call("_gui_input", ring_touch)
 	assert(grouped_presses == [["attack_ring", 5]], "HUD 六环技能点击没有保留 slot_group")
 	var attack := root.get_node("AttackButton") as Button
-	assert(attack.size == Vector2(120, 120), "攻击按钮视觉直径应保持缩小后的120px")
+	assert(attack.size == Vector2(102, 102), "攻击按钮视觉直径应保持本轮缩小后的102px")
 	assert(bool(attack.call("_has_point", Vector2(60, 60))) and not bool(attack.call("_has_point", Vector2.ZERO)), "攻击键仍使用方形触控判定")
 	var attack_fill := root.get_node("AttackFill") as Control
 	var attack_frame := root.get_node("AttackFrame") as Control
@@ -338,8 +340,8 @@ func _run() -> void:
 		"攻击键框没有清除可视内沿以内的深色空圈",
 	)
 	var joystick := root.get_node("TouchJoystick") as TouchJoystick
-	assert(joystick.size.x >= 150 and is_equal_approx(joystick.radius, 58.0), "摇杆触控区和缩小后的可视半径不匹配")
-	assert(joystick.position == Vector2(70, root.size.y - 210), "摇杆没有向安全区内部移动")
+	assert(joystick.size.x >= 150 and is_equal_approx(joystick.radius, 69.6), "摇杆触控区和缩小后的可视半径不匹配")
+	assert(joystick.position.is_equal_approx(Vector2(54.8, root.size.y - 241.2)), "摇杆没有向安全区内部移动")
 	assert(hud.warrior_state_label.get_meta("layout_anchor", "") == "chassis_source_center_peak.v1", "战士状态行没有使用底盘中央尖顶锚点")
 	assert((root.get_node("InventoryButton") as Control).position.y > (root.get_node("MapButton") as Control).position.y)
 	assert((root.get_node("SkillBookButton") as Control).position.y > (root.get_node("MenuButton") as Control).position.y)
@@ -348,8 +350,8 @@ func _run() -> void:
 	var switch_target := root.get_node("SwitchTargetButton") as Control
 	var interact_fill := root.get_node("InteractFill") as Control
 	var switch_target_fill := root.get_node("SwitchTargetFill") as Control
-	assert(interact.size == Vector2(110, 76) and interact.position + interact.size * 0.5 == interact_fill.position + interact_fill.size * 0.5, "交互按钮未对准美术圆心")
-	assert(switch_target.size == Vector2(110, 76) and switch_target.position + switch_target.size * 0.5 == switch_target_fill.position + switch_target_fill.size * 0.5, "换敌按钮未对准美术圆心")
+	assert(interact.size.is_equal_approx(Vector2(91.2, 91.2)) and (interact.position + interact.size * 0.5).is_equal_approx(interact_fill.position + interact_fill.size * 0.5), "交互按钮未对准美术圆心")
+	assert(switch_target.size.is_equal_approx(Vector2(91.2, 91.2)) and (switch_target.position + switch_target.size * 0.5).is_equal_approx(switch_target_fill.position + switch_target_fill.size * 0.5), "换敌按钮未对准美术圆心")
 
 	assert(root.get_node("TargetPanel/TargetFrameArt").get_meta("stable_id") == "ui.hud.gothic.v2.target_bar")
 	assert(root.get_node("UtilityStackArt").get_meta("stable_id") == "ui.hud.gothic.v2.utility_stack")
@@ -390,8 +392,8 @@ func _run() -> void:
 	for slot_index in range(4):
 		var item_slot_button := hud.hud_item_buttons[slot_index] as Button
 		assert(
-			is_equal_approx(item_slot_button.size.x, expected_fill_size.x)
-			and is_equal_approx(item_slot_button.size.y, expected_fill_size.y),
+			is_equal_approx(item_slot_button.size.x, expected_touch_size.x)
+			and is_equal_approx(item_slot_button.size.y, expected_touch_size.y),
 			"快捷物品槽几何被改动",
 		)
 		assert(item_slot_button.get_node_or_null("ItemQuickSlotIcon") != null, "快捷物品槽缺少图标层")
@@ -437,18 +439,18 @@ func _run() -> void:
 	assert(bound_button.text.is_empty(), "绑定快捷物品后槽号文字应清空")
 	assert(bound_icon.texture != null and bound_icon.size == bound_icon.texture.get_size(), "主槽图标应保持 inventoryIcon 原生尺寸")
 	assert(bound_icon.size == Vector2(20, 27), "太阳水主槽图标应保持 20x27 原生像素")
-	assert(bound_icon.position + bound_icon.size * 0.5 == bound_button.size * 0.5, "主槽图标未在槽框内居中")
+	assert((bound_icon.position + GameHUD.QuickItemIconLayout.visible_center(bound_icon.texture) * bound_icon.size / bound_icon.texture.get_size()).is_equal_approx(bound_button.size * 0.5), "主槽图标未在槽框内居中")
 	if (design["item_slot_fill_display_size"] as Vector2).x >= 64.0:
 		assert(not Rect2(bound_icon.position, bound_icon.size).intersects(Rect2(bound_count.position, bound_count.size)), "主槽数量角标与太阳水图标相交")
 	else:
 		# 小槽设计：角标锚定右下角，右/下边缘与槽框的间距是确定性的；行盒按
 		# 字体最小高度向下对齐（grow=BEGIN），允许叠在图标右下空白角上。
 		assert(
-			is_equal_approx(bound_count.position.x + bound_count.size.x, bound_button.size.x - 2.0),
+			is_equal_approx(bound_count.position.x + bound_count.size.x, bound_button.size.x - 2.0 - expected_hit_padding.x),
 			"小槽数量角标必须右对齐（距右缘2px）",
 		)
 		assert(
-			is_equal_approx(bound_count.position.y + bound_count.size.y, bound_button.size.y),
+			is_equal_approx(bound_count.position.y + bound_count.size.y, bound_button.size.y - expected_hit_padding.y),
 			"小槽数量角标必须贴齐槽底",
 		)
 		assert(

@@ -1,0 +1,950 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-10-08T13:47:59.559234+08:00",
+  "workspace": "C:\\Users\\Administrator\\Documents\\HardCore",
+  "branch": "codex/integration",
+  "head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+  "dirty_preserved": true,
+  "source_binding_note": "Snapshot after runs. Production frozen during final two invocations; only three fixture expectations changed between them. Earlier epochs are not evidence for final-source full PASS.",
+  "production_and_inputs": [
+    {
+      "path": "project.godot",
+      "bytes": 2727,
+      "sha256": "030f44250ab8d487a5521e56ce3d77ef23dbad7d0290e6db1285d10589c36f92"
+    },
+    {
+      "path": "scripts/hud.gd",
+      "bytes": 127606,
+      "sha256": "f556951c17d71a573db99ac62db5d18f3e3e4172504df2aa58ecb5c4df24f84a"
+    },
+    {
+      "path": "scripts/hud_chassis_designs.gd",
+      "bytes": 4267,
+      "sha256": "e0a931beff815bc293a01c6d3fa45391a7c32afe1b8fd8576efbac781f6fb015"
+    },
+    {
+      "path": "scripts/hud_utility_touch_button.gd",
+      "bytes": 896,
+      "sha256": "b0d7738eee2b5a90fd881c348bdc62b32a66ce8f51613b1dc53dcbb8c612a91a"
+    },
+    {
+      "path": "scripts/quick_item_icon_layout.gd",
+      "bytes": 1552,
+      "sha256": "df61d6a727e19b87ff0fac70ceca66d396daed6573a4d498cb3ec17a89beadfa"
+    },
+    {
+      "path": "scripts/circular_touch_button.gd",
+      "bytes": 8613,
+      "sha256": "c1e47f3532070233b5a53b6688b1f0dda343869585fd286022af6529e6dcf93e"
+    },
+    {
+      "path": "scripts/hud_asset_sanitizer.gd",
+      "bytes": 7854,
+      "sha256": "46e8b0ec4384a892bef70e2ab31b4540ad7449dc8f3ca4ea0d73c8cb321c7adc"
+    },
+    {
+      "path": "scripts/mobile_layout.gd",
+      "bytes": 1210,
+      "sha256": "1faf89751a724e1f8ad7ae69a0a3b77f31361413a83c76f32271d8514a825d81"
+    },
+    {
+      "path": "scripts/hud_skill_icon_catalog.gd",
+      "bytes": 6100,
+      "sha256": "14a49b14b0d681370fd85c1fc5a7df09bb520c9103ed7c61418bd0f130687c92"
+    },
+    {
+      "path": "scripts/ui_item_texture_cache.gd",
+      "bytes": 3890,
+      "sha256": "8ae8484703626dfc3c5580471b75b43c9734c79d4c0eb33221d32a1e99dac865"
+    },
+    {
+      "path": "scripts/game_root.gd",
+      "bytes": 592611,
+      "sha256": "e920127fcb0fc15d879ac30eab03f48e3005fd7563fff618efe4dff0b089bdd4"
+    },
+    {
+      "path": "scripts/player.gd",
+      "bytes": 83409,
+      "sha256": "b5bc5af4c78ddbd88cc69e32cdacd04607fa89a5337e99de5c5a496db14ff703"
+    },
+    {
+      "path": "scripts/player_state.gd",
+      "bytes": 456547,
+      "sha256": "13cccb4cff55eda54c858c69ea8a0da16c33af44f19ec43b7199cf3ddf4d80a6"
+    },
+    {
+      "path": "scripts/gothic_ui_theme.gd",
+      "bytes": 78727,
+      "sha256": "95a573b02092d706ff2b567e71b3ccd846505c8a8fdb674a7ebfd4b7c7f3651a"
+    },
+    {
+      "path": "scripts/ui_generated/hud_target_bar_mask_geometry.gd",
+      "bytes": 310,
+      "sha256": "0eef86962baff939b66b077ea2996463b2744dcd29abab9a02ae6a657ab67f1c"
+    },
+    {
+      "path": "assets/ui/gothic_hud/v2/target_bar_fill_mask.source.json",
+      "bytes": 422,
+      "sha256": "dd4c05467c9df52c5991d21a1126615eca173d531295d0c7c24be74369930e66"
+    },
+    {
+      "path": "assets/ui/gothic_hud/v2/runtime/target_bar_fill_mask.png",
+      "bytes": 721,
+      "sha256": "3054f72ed9cf0476d3e2efc5fbafa11b106e187d139ecaa9b6dd675859a2f262"
+    },
+    {
+      "path": "assets/ui/gothic_hud/v2/runtime/target_bar_fill_mask.png.import",
+      "bytes": 996,
+      "sha256": "c73e0135b7530429baf84792e7b914764f0b64667f3e8db4097167950bf3c366"
+    },
+    {
+      "path": "assets/ui/gothic_hud/v2/runtime/target_bar_fill.gdshader",
+      "bytes": 263,
+      "sha256": "bfa0159c7c1bf8ac1c66aa865189d4134beb2ffa49a22cb7177e126e4cf0a8d4"
+    },
+    {
+      "path": "assets/ui/gothic_hud/v2/runtime/target_bar_v2.png",
+      "bytes": 58762,
+      "sha256": "e595460b66850d568a193410fff9a67d0d56d14718ea7721a5b9108af3edceaf"
+    },
+    {
+      "path": "assets/art/items/service/inventory/client.mir2opensource_2013_complete/Items_00315.png",
+      "bytes": 860,
+      "sha256": "1386c0feab82ec735b7fb6bc34e039dd63b66634cb2943b119dda1149e9819ea"
+    },
+    {
+      "path": "assets/art/items/service/inventory/client.mir2opensource_2013_complete/Items_00316.png",
+      "bytes": 810,
+      "sha256": "96520e9cbf1220e9dc882f19c25b188f0008859c76fdf04a8efeb7ee9a3ca308"
+    },
+    {
+      "path": "tools/build_hud_target_bar_mask.py",
+      "bytes": 2321,
+      "sha256": "018180a5f5be67b13301f1864502f80b8f11978accde531b05cf08f9e40f1a03"
+    },
+    {
+      "path": "tools/run_godot_tests.ps1",
+      "bytes": 93887,
+      "sha256": "8049ef382dede726e9476574167a4b305017a2a7a5d2ba121bf9461296c28b48"
+    }
+  ],
+  "test_sources": [
+    {
+      "path": "tests/hud_target_and_potion_art_test.gd",
+      "bytes": 3334,
+      "sha256": "8f329c283d2c8c7cdd6173e8d432f2d2237605610436b142de2faabbcbdb7c2e"
+    },
+    {
+      "path": "tests/hud_target_and_potion_art_test.tscn",
+      "bytes": 202,
+      "sha256": "8b659e924c19781bdb7eb66ae3679a9b6577479e55ea88b887251b0fd1b7acac"
+    },
+    {
+      "path": "tests/hud_multitouch_quick_items_test.gd",
+      "bytes": 7107,
+      "sha256": "b7915409c01ba81dd906b862c69a422889eb73af9948e2dcbc5b4c0685058dd7"
+    },
+    {
+      "path": "tests/hud_multitouch_quick_items_test.tscn",
+      "bytes": 205,
+      "sha256": "3d8bf6eae7197c0e88fb2b25e79d7a6fdf301a50a1130a0f202676f7ae2913c6"
+    },
+    {
+      "path": "tests/hud_touch_layout_20261008_test.gd",
+      "bytes": 3178,
+      "sha256": "d9e5deeb3ffb0f70bb9f7f5f1185f4393022d56f7dcbaf485212734be829873a"
+    },
+    {
+      "path": "tests/hud_touch_layout_20261008_test.tscn",
+      "bytes": 195,
+      "sha256": "29b08418b83849bce59f3e348d3fb929306b672c48ba9dc24dc525756cde3dcb"
+    },
+    {
+      "path": "tests/hud_gothic_runtime_test.gd",
+      "bytes": 52594,
+      "sha256": "7758fbfd701061ffcb3068139f45a5ce4ba330483023a6bfd8f3003e52fd1d57"
+    },
+    {
+      "path": "tests/hud_gothic_runtime_test.tscn",
+      "bytes": 196,
+      "sha256": "6f686c6c08b0d1e21fe7b0933b104406dbbfacf3e21b875b43517f0f63863d72"
+    },
+    {
+      "path": "tests/android_layout_test.gd",
+      "bytes": 7887,
+      "sha256": "33db669094091d7e13e9130df634d29831db159a5775737df9740e88d3c4358f"
+    },
+    {
+      "path": "tests/android_layout_test.tscn",
+      "bytes": 189,
+      "sha256": "d9ff465de542147355e26055f01c209c7a96b08b59414430ffae6545e3a485f0"
+    },
+    {
+      "path": "tests/hud_center_alignment_special_text_test.gd",
+      "bytes": 3459,
+      "sha256": "a7496939fa526ceedb4bac627687ee4e29ebbfe713d23591939e82484244eb5e"
+    },
+    {
+      "path": "tests/hud_center_alignment_special_text_test.tscn",
+      "bytes": 218,
+      "sha256": "cad2b3d907977abbaff030e558c42e9a4fa4eee0ae494b059d47f68d8dbe0cb4"
+    }
+  ],
+  "engine": {
+    "path": "tools/godot-4.7/Godot_v4.7-stable_win64_console.exe",
+    "bytes": 198152,
+    "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c"
+  },
+  "engine_version": "4.7.stable.official.5b4e0cb0f",
+  "commands": [
+    {
+      "result": "FAIL",
+      "command": "& tools/run_godot_tests.ps1 -TestPaths tests/hud_target_and_potion_art_test.tscn,tests/hud_multitouch_quick_items_test.tscn,tests/hud_touch_layout_20261008_test.tscn,tests/hud_gothic_runtime_test.tscn,tests/android_layout_test.tscn,tests/hud_center_alignment_special_text_test.tscn -TimeoutSeconds 30",
+      "receipt": "runner_results_adhoc_20261008_133918_168_18480.json",
+      "scope": "3 PASS, 3 fixture assertion FAIL"
+    },
+    {
+      "result": "PASS",
+      "command": "& tools/run_godot_tests.ps1 -TestPaths tests/hud_target_and_potion_art_test.tscn,tests/hud_touch_layout_20261008_test.tscn,tests/hud_gothic_runtime_test.tscn -TimeoutSeconds 30",
+      "receipt": "runner_results_adhoc_20261008_134252_349_24364.json",
+      "repeat_reason": "Only failed fixtures: curved interior starts at center row34; blue/red optical centers differ; float geometry uses approximate equality; authorized outer-frame hit size"
+    }
+  ],
+  "final_latest_per_test": {
+    "hud_target_and_potion_art_test": {
+      "receipt": "outputs/test_logs/runner_results_adhoc_20261008_134252_349_24364.json",
+      "invocation_id": "604cb18a-36d1-4fe4-8a75-123876423448",
+      "producer": {
+        "test_name": "hud_target_and_potion_art_test",
+        "test_path": "tests/hud_target_and_potion_art_test.tscn",
+        "wrapper_process_id": 8372,
+        "wrapper_started_utc": "2026-10-08T05:42:22.8131966Z",
+        "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata",
+        "fixed_fps": 0,
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "execution_deadline_utc": "2026-10-08T05:42:52.8273635Z",
+        "native_exit_observed_utc": "2026-10-08T05:42:31.0171826Z",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 0,
+        "engine_log_failure_count": 0,
+        "framework_run_id": "",
+        "framework_receipt_valid": null,
+        "result": "PASS",
+        "reason": ""
+      }
+    },
+    "hud_multitouch_quick_items_test": {
+      "receipt": "outputs/test_logs/runner_results_adhoc_20261008_133918_168_18480.json",
+      "invocation_id": "f861037b-baae-4440-bdcf-8f9ddaed6be3",
+      "producer": {
+        "test_name": "hud_multitouch_quick_items_test",
+        "test_path": "tests/hud_multitouch_quick_items_test.tscn",
+        "wrapper_process_id": 16224,
+        "wrapper_started_utc": "2026-10-08T05:38:20.6425632Z",
+        "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata",
+        "fixed_fps": 0,
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "execution_deadline_utc": "2026-10-08T05:38:50.6503573Z",
+        "native_exit_observed_utc": "2026-10-08T05:38:28.5785548Z",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 0,
+        "engine_log_failure_count": 0,
+        "framework_run_id": "",
+        "framework_receipt_valid": null,
+        "result": "PASS",
+        "reason": ""
+      }
+    },
+    "hud_touch_layout_20261008_test": {
+      "receipt": "outputs/test_logs/runner_results_adhoc_20261008_134252_349_24364.json",
+      "invocation_id": "604cb18a-36d1-4fe4-8a75-123876423448",
+      "producer": {
+        "test_name": "hud_touch_layout_20261008_test",
+        "test_path": "tests/hud_touch_layout_20261008_test.tscn",
+        "wrapper_process_id": 636,
+        "wrapper_started_utc": "2026-10-08T05:42:32.5126228Z",
+        "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata",
+        "fixed_fps": 0,
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "execution_deadline_utc": "2026-10-08T05:43:02.5205234Z",
+        "native_exit_observed_utc": "2026-10-08T05:42:39.9292863Z",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 0,
+        "engine_log_failure_count": 0,
+        "framework_run_id": "",
+        "framework_receipt_valid": null,
+        "result": "PASS",
+        "reason": ""
+      }
+    },
+    "hud_gothic_runtime_test": {
+      "receipt": "outputs/test_logs/runner_results_adhoc_20261008_134252_349_24364.json",
+      "invocation_id": "604cb18a-36d1-4fe4-8a75-123876423448",
+      "producer": {
+        "test_name": "hud_gothic_runtime_test",
+        "test_path": "tests/hud_gothic_runtime_test.tscn",
+        "wrapper_process_id": 3516,
+        "wrapper_started_utc": "2026-10-08T05:42:41.4288361Z",
+        "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata",
+        "fixed_fps": 0,
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "execution_deadline_utc": "2026-10-08T05:43:11.4366700Z",
+        "native_exit_observed_utc": "2026-10-08T05:42:50.8394504Z",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 0,
+        "engine_log_failure_count": 0,
+        "framework_run_id": "",
+        "framework_receipt_valid": null,
+        "result": "PASS",
+        "reason": ""
+      }
+    },
+    "android_layout_test": {
+      "receipt": "outputs/test_logs/runner_results_adhoc_20261008_133918_168_18480.json",
+      "invocation_id": "f861037b-baae-4440-bdcf-8f9ddaed6be3",
+      "producer": {
+        "test_name": "android_layout_test",
+        "test_path": "tests/android_layout_test.tscn",
+        "wrapper_process_id": 6080,
+        "wrapper_started_utc": "2026-10-08T05:38:46.4192249Z",
+        "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata",
+        "fixed_fps": 0,
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "execution_deadline_utc": "2026-10-08T05:39:16.4268996Z",
+        "native_exit_observed_utc": "2026-10-08T05:39:01.0498402Z",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 0,
+        "engine_log_failure_count": 0,
+        "framework_run_id": "",
+        "framework_receipt_valid": null,
+        "result": "PASS",
+        "reason": ""
+      }
+    },
+    "hud_center_alignment_special_text_test": {
+      "receipt": "outputs/test_logs/runner_results_adhoc_20261008_133918_168_18480.json",
+      "invocation_id": "f861037b-baae-4440-bdcf-8f9ddaed6be3",
+      "producer": {
+        "test_name": "hud_center_alignment_special_text_test",
+        "test_path": "tests/hud_center_alignment_special_text_test.tscn",
+        "wrapper_process_id": 8436,
+        "wrapper_started_utc": "2026-10-08T05:39:02.4030850Z",
+        "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata",
+        "fixed_fps": 0,
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "execution_deadline_utc": "2026-10-08T05:39:32.4112300Z",
+        "native_exit_observed_utc": "2026-10-08T05:39:16.6769793Z",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 0,
+        "engine_log_failure_count": 0,
+        "framework_run_id": "",
+        "framework_receipt_valid": null,
+        "result": "PASS",
+        "reason": ""
+      }
+    }
+  },
+  "complete_final_receipts": [
+    {
+      "file": {
+        "path": "outputs/test_logs/runner_results_adhoc_20261008_133918_168_18480.json",
+        "bytes": 6290,
+        "sha256": "4bc9ee0993619e8e6e8caa15437999015f7e593553842e4181bf9022b2329ca4"
+      },
+      "complete_receipt": {
+        "passed": 3,
+        "git_head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+        "generated_at": "2026-10-08T13:39:18.1691586+08:00",
+        "total": 6,
+        "runtime_environment": {
+          "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata",
+          "runner_process_id": 18480
+        },
+        "invocation_id": "f861037b-baae-4440-bdcf-8f9ddaed6be3",
+        "engine_log_errors": 3,
+        "suite": "adhoc",
+        "results": [
+          {
+            "test_name": "hud_target_and_potion_art_test",
+            "test_path": "tests/hud_target_and_potion_art_test.tscn",
+            "wrapper_process_id": 18532,
+            "wrapper_started_utc": "2026-10-08T05:38:12.6944100Z",
+            "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata",
+            "fixed_fps": 0,
+            "pass_marker_found": false,
+            "process_exited": false,
+            "wrapper_exit_code": -1,
+            "child_process_exit_state": "forced_termination",
+            "execution_deadline_utc": "2026-10-08T05:38:42.7077254Z",
+            "native_exit_observed_utc": null,
+            "effective_exit_code": -1,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 1,
+            "engine_log_failure_count": 1,
+            "framework_run_id": "",
+            "framework_receipt_valid": null,
+            "result": "FAIL",
+            "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+          },
+          {
+            "test_name": "hud_multitouch_quick_items_test",
+            "test_path": "tests/hud_multitouch_quick_items_test.tscn",
+            "wrapper_process_id": 16224,
+            "wrapper_started_utc": "2026-10-08T05:38:20.6425632Z",
+            "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata",
+            "fixed_fps": 0,
+            "pass_marker_found": true,
+            "process_exited": true,
+            "wrapper_exit_code": 0,
+            "child_process_exit_state": "exited",
+            "execution_deadline_utc": "2026-10-08T05:38:50.6503573Z",
+            "native_exit_observed_utc": "2026-10-08T05:38:28.5785548Z",
+            "effective_exit_code": 0,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 0,
+            "engine_log_failure_count": 0,
+            "framework_run_id": "",
+            "framework_receipt_valid": null,
+            "result": "PASS",
+            "reason": ""
+          },
+          {
+            "test_name": "hud_touch_layout_20261008_test",
+            "test_path": "tests/hud_touch_layout_20261008_test.tscn",
+            "wrapper_process_id": 8624,
+            "wrapper_started_utc": "2026-10-08T05:38:30.1083980Z",
+            "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata",
+            "fixed_fps": 0,
+            "pass_marker_found": false,
+            "process_exited": false,
+            "wrapper_exit_code": -1,
+            "child_process_exit_state": "forced_termination",
+            "execution_deadline_utc": "2026-10-08T05:39:00.1162653Z",
+            "native_exit_observed_utc": null,
+            "effective_exit_code": -1,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 1,
+            "engine_log_failure_count": 1,
+            "framework_run_id": "",
+            "framework_receipt_valid": null,
+            "result": "FAIL",
+            "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+          },
+          {
+            "test_name": "hud_gothic_runtime_test",
+            "test_path": "tests/hud_gothic_runtime_test.tscn",
+            "wrapper_process_id": 23252,
+            "wrapper_started_utc": "2026-10-08T05:38:37.6772885Z",
+            "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata",
+            "fixed_fps": 0,
+            "pass_marker_found": false,
+            "process_exited": false,
+            "wrapper_exit_code": -1,
+            "child_process_exit_state": "forced_termination",
+            "execution_deadline_utc": "2026-10-08T05:39:07.6853176Z",
+            "native_exit_observed_utc": null,
+            "effective_exit_code": -1,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 1,
+            "engine_log_failure_count": 1,
+            "framework_run_id": "",
+            "framework_receipt_valid": null,
+            "result": "FAIL",
+            "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+          },
+          {
+            "test_name": "android_layout_test",
+            "test_path": "tests/android_layout_test.tscn",
+            "wrapper_process_id": 6080,
+            "wrapper_started_utc": "2026-10-08T05:38:46.4192249Z",
+            "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata",
+            "fixed_fps": 0,
+            "pass_marker_found": true,
+            "process_exited": true,
+            "wrapper_exit_code": 0,
+            "child_process_exit_state": "exited",
+            "execution_deadline_utc": "2026-10-08T05:39:16.4268996Z",
+            "native_exit_observed_utc": "2026-10-08T05:39:01.0498402Z",
+            "effective_exit_code": 0,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 0,
+            "engine_log_failure_count": 0,
+            "framework_run_id": "",
+            "framework_receipt_valid": null,
+            "result": "PASS",
+            "reason": ""
+          },
+          {
+            "test_name": "hud_center_alignment_special_text_test",
+            "test_path": "tests/hud_center_alignment_special_text_test.tscn",
+            "wrapper_process_id": 8436,
+            "wrapper_started_utc": "2026-10-08T05:39:02.4030850Z",
+            "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata",
+            "fixed_fps": 0,
+            "pass_marker_found": true,
+            "process_exited": true,
+            "wrapper_exit_code": 0,
+            "child_process_exit_state": "exited",
+            "execution_deadline_utc": "2026-10-08T05:39:32.4112300Z",
+            "native_exit_observed_utc": "2026-10-08T05:39:16.6769793Z",
+            "effective_exit_code": 0,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 0,
+            "engine_log_failure_count": 0,
+            "framework_run_id": "",
+            "framework_receipt_valid": null,
+            "result": "PASS",
+            "reason": ""
+          }
+        ],
+        "failed": 3
+      }
+    },
+    {
+      "file": {
+        "path": "outputs/test_logs/runner_results_adhoc_20261008_134252_349_24364.json",
+        "bytes": 3236,
+        "sha256": "0774b848ca4d1a61eca3dd705998a626d6254e6d29f9dc46aac0e43ee6d8b2eb"
+      },
+      "complete_receipt": {
+        "generated_at": "2026-10-08T13:42:52.3495349+08:00",
+        "passed": 3,
+        "suite": "adhoc",
+        "git_head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+        "runtime_environment": {
+          "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata",
+          "runner_process_id": 24364
+        },
+        "invocation_id": "604cb18a-36d1-4fe4-8a75-123876423448",
+        "total": 3,
+        "failed": 0,
+        "results": [
+          {
+            "test_name": "hud_target_and_potion_art_test",
+            "test_path": "tests/hud_target_and_potion_art_test.tscn",
+            "wrapper_process_id": 8372,
+            "wrapper_started_utc": "2026-10-08T05:42:22.8131966Z",
+            "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata",
+            "fixed_fps": 0,
+            "pass_marker_found": true,
+            "process_exited": true,
+            "wrapper_exit_code": 0,
+            "child_process_exit_state": "exited",
+            "execution_deadline_utc": "2026-10-08T05:42:52.8273635Z",
+            "native_exit_observed_utc": "2026-10-08T05:42:31.0171826Z",
+            "effective_exit_code": 0,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 0,
+            "engine_log_failure_count": 0,
+            "framework_run_id": "",
+            "framework_receipt_valid": null,
+            "result": "PASS",
+            "reason": ""
+          },
+          {
+            "test_name": "hud_touch_layout_20261008_test",
+            "test_path": "tests/hud_touch_layout_20261008_test.tscn",
+            "wrapper_process_id": 636,
+            "wrapper_started_utc": "2026-10-08T05:42:32.5126228Z",
+            "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata",
+            "fixed_fps": 0,
+            "pass_marker_found": true,
+            "process_exited": true,
+            "wrapper_exit_code": 0,
+            "child_process_exit_state": "exited",
+            "execution_deadline_utc": "2026-10-08T05:43:02.5205234Z",
+            "native_exit_observed_utc": "2026-10-08T05:42:39.9292863Z",
+            "effective_exit_code": 0,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 0,
+            "engine_log_failure_count": 0,
+            "framework_run_id": "",
+            "framework_receipt_valid": null,
+            "result": "PASS",
+            "reason": ""
+          },
+          {
+            "test_name": "hud_gothic_runtime_test",
+            "test_path": "tests/hud_gothic_runtime_test.tscn",
+            "wrapper_process_id": 3516,
+            "wrapper_started_utc": "2026-10-08T05:42:41.4288361Z",
+            "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata",
+            "fixed_fps": 0,
+            "pass_marker_found": true,
+            "process_exited": true,
+            "wrapper_exit_code": 0,
+            "child_process_exit_state": "exited",
+            "execution_deadline_utc": "2026-10-08T05:43:11.4366700Z",
+            "native_exit_observed_utc": "2026-10-08T05:42:50.8394504Z",
+            "effective_exit_code": 0,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 0,
+            "engine_log_failure_count": 0,
+            "framework_run_id": "",
+            "framework_receipt_valid": null,
+            "result": "PASS",
+            "reason": ""
+          }
+        ],
+        "engine_log_errors": 0
+      }
+    }
+  ],
+  "phase_original_receipts": [
+    {
+      "file": {
+        "path": "outputs/test_logs/runner_results_adhoc_20261008_130558_015_11860.json",
+        "bytes": 1550,
+        "sha256": "9a1cccaa6533476f7a8cfc514512b971bf5895342fff6a8abae7c04c86f226ee"
+      },
+      "passed": 0,
+      "failed": 1,
+      "invocation_id": "6a056995-a0ba-4c18-9624-71b1c627e033"
+    },
+    {
+      "file": {
+        "path": "outputs/test_logs/runner_results_adhoc_20261008_131046_603_15460.json",
+        "bytes": 1440,
+        "sha256": "557cf0e76f6866a56eadbbb790273bed242ada42139a335d80534d8bcf57ac32"
+      },
+      "passed": 1,
+      "failed": 0,
+      "invocation_id": "ce4e4375-28aa-4143-977c-39b679d9d944"
+    },
+    {
+      "file": {
+        "path": "outputs/test_logs/runner_results_adhoc_20261008_131232_966_5820.json",
+        "bytes": 2347,
+        "sha256": "975e7de1c6434c4ab366fb8700553e5332c858530b18ec442d42cf1b74182e09"
+      },
+      "passed": 2,
+      "failed": 0,
+      "invocation_id": "a6355d4f-78cb-4473-a89c-22a0214af3b3"
+    },
+    {
+      "file": {
+        "path": "outputs/test_logs/runner_results_adhoc_20261008_131614_415_5492.json",
+        "bytes": 7102,
+        "sha256": "1ab0bc6cfc811beca2427fe8a08237f535b37c5e726cf85fe75f4fa829d8e1e4"
+      },
+      "passed": 5,
+      "failed": 2,
+      "invocation_id": "0051d8fb-9dc3-4a85-b871-6ff98fe3b47d"
+    },
+    {
+      "file": {
+        "path": "outputs/test_logs/runner_results_adhoc_20261008_131725_986_2628.json",
+        "bytes": 1534,
+        "sha256": "f108e863b2c9d3e23079389832fbe741b19a9489452374ca833b7485a522798f"
+      },
+      "passed": 0,
+      "failed": 1,
+      "invocation_id": "28291816-d981-4d65-97ff-2925f52700f5"
+    },
+    {
+      "file": {
+        "path": "outputs/test_logs/runner_results_adhoc_20261008_131826_042_23540.json",
+        "bytes": 4588,
+        "sha256": "a400ae552821984650d46d6678f1df61f7d0a8af8d26eeb40fc6dffeb00ee8dd"
+      },
+      "passed": 0,
+      "failed": 4,
+      "invocation_id": "cf76fdde-3a6c-49cf-a2b7-d55d05f221ec"
+    },
+    {
+      "file": {
+        "path": "outputs/test_logs/runner_results_adhoc_20261008_131924_433_1944.json",
+        "bytes": 4364,
+        "sha256": "2162debb0a8bc47875706229e8fd88bd44058720c7ace4e8121429b8051d25b3"
+      },
+      "passed": 2,
+      "failed": 2,
+      "invocation_id": "a73596dc-7990-4ebf-aba9-79581893c293"
+    },
+    {
+      "file": {
+        "path": "outputs/test_logs/runner_results_adhoc_20261008_132015_391_15272.json",
+        "bytes": 2420,
+        "sha256": "d5d0959ec8cb814c2f687fd54e7e16e9e5d3f24c84ad67f3d4b720755b4ef2d6"
+      },
+      "passed": 1,
+      "failed": 1,
+      "invocation_id": "73914374-2b48-4706-94ca-7a8464d11d24"
+    },
+    {
+      "file": {
+        "path": "outputs/test_logs/runner_results_adhoc_20261008_132037_573_14716.json",
+        "bytes": 1424,
+        "sha256": "fde894a59ef91edd3ec36bfa96ae52d95b8d97bf2c4242946a0e89cb211870bc"
+      },
+      "passed": 1,
+      "failed": 0,
+      "invocation_id": "fa5dcaf9-8e0e-4263-9775-12395df2bbdd"
+    },
+    {
+      "file": {
+        "path": "outputs/test_logs/runner_results_adhoc_20261008_132248_914_9304.json",
+        "bytes": 2347,
+        "sha256": "f13829c252611360f4b370b7940522d4f2ad2db13e4a9877a2a1a29c693aa0f1"
+      },
+      "passed": 2,
+      "failed": 0,
+      "invocation_id": "c4be37ae-42e8-4b93-b3c1-a8ca3ec2ed4c"
+    },
+    {
+      "file": {
+        "path": "outputs/test_logs/runner_results_adhoc_20261008_133918_168_18480.json",
+        "bytes": 6290,
+        "sha256": "4bc9ee0993619e8e6e8caa15437999015f7e593553842e4181bf9022b2329ca4"
+      },
+      "passed": 3,
+      "failed": 3,
+      "invocation_id": "f861037b-baae-4440-bdcf-8f9ddaed6be3"
+    },
+    {
+      "file": {
+        "path": "outputs/test_logs/runner_results_adhoc_20261008_134252_349_24364.json",
+        "bytes": 3236,
+        "sha256": "0774b848ca4d1a61eca3dd705998a626d6254e6d29f9dc46aac0e43ee6d8b2eb"
+      },
+      "passed": 3,
+      "failed": 0,
+      "invocation_id": "604cb18a-36d1-4fe4-8a75-123876423448"
+    }
+  ],
+  "final_native_logs": [
+    {
+      "path": "docs/review/hud_touch_20261008/native_logs/hud_target_and_potion_art_test.stdout.log",
+      "bytes": 1209,
+      "sha256": "2226be42d8b4c23095c6bf639cb935bedeaeded9f602ffb2dd9b86486f23b1a8"
+    },
+    {
+      "path": "docs/review/hud_touch_20261008/native_logs/hud_target_and_potion_art_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/review/hud_touch_20261008/native_logs/hud_target_and_potion_art_test.godot.log",
+      "bytes": 1204,
+      "sha256": "c21659b93453febc5a6a3164ed1857e3eb7c34145b5b82740d159d6b9c10a9cf"
+    },
+    {
+      "path": "docs/review/hud_touch_20261008/native_logs/hud_multitouch_quick_items_test.stdout.log",
+      "bytes": 1414,
+      "sha256": "24e698291956a15f651c5bbdb1d90467321c4b35e7373c243ae1cc77da3ca296"
+    },
+    {
+      "path": "docs/review/hud_touch_20261008/native_logs/hud_multitouch_quick_items_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/review/hud_touch_20261008/native_logs/hud_multitouch_quick_items_test.godot.log",
+      "bytes": 1407,
+      "sha256": "f91ef2b896376331afd446ece035a18efae0fcd85eb2d09ea70408492604dbe6"
+    },
+    {
+      "path": "docs/review/hud_touch_20261008/native_logs/hud_touch_layout_20261008_test.stdout.log",
+      "bytes": 1207,
+      "sha256": "ceea243b10024b238bccb6585ee6974b983a9568e0e23a30ce9cf2f1a8b55ec1"
+    },
+    {
+      "path": "docs/review/hud_touch_20261008/native_logs/hud_touch_layout_20261008_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/review/hud_touch_20261008/native_logs/hud_touch_layout_20261008_test.godot.log",
+      "bytes": 1202,
+      "sha256": "31b65f30315e2efc473f492074f4670e5f1089503ac425a8fbcacb6993f09409"
+    },
+    {
+      "path": "docs/review/hud_touch_20261008/native_logs/hud_gothic_runtime_test.stdout.log",
+      "bytes": 1325,
+      "sha256": "25b654522eb999b69a5ac531fb0da27edd6b09668366cba883707fe1a3217a16"
+    },
+    {
+      "path": "docs/review/hud_touch_20261008/native_logs/hud_gothic_runtime_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/review/hud_touch_20261008/native_logs/hud_gothic_runtime_test.godot.log",
+      "bytes": 1320,
+      "sha256": "2e5611c302f4431784ece319865d13d0337c6fd5e1c86290bdcb4b3d52fceada"
+    },
+    {
+      "path": "docs/review/hud_touch_20261008/native_logs/android_layout_test.stdout.log",
+      "bytes": 5254,
+      "sha256": "20cc2eb585a259af83a886aed4bac423281ee7ce2b81102be77a418de6cf8405"
+    },
+    {
+      "path": "docs/review/hud_touch_20261008/native_logs/android_layout_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/review/hud_touch_20261008/native_logs/android_layout_test.godot.log",
+      "bytes": 5244,
+      "sha256": "aa2bf2e292c84bd3f7d61e6d1266a955927e8c34a1ce68d2956ca4aa17673432"
+    },
+    {
+      "path": "docs/review/hud_touch_20261008/native_logs/hud_center_alignment_special_text_test.stdout.log",
+      "bytes": 5238,
+      "sha256": "0992044234403318fe7cc16efd007b4e31d3be0197af2e317622f8f4d8634729"
+    },
+    {
+      "path": "docs/review/hud_touch_20261008/native_logs/hud_center_alignment_special_text_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/review/hud_touch_20261008/native_logs/hud_center_alignment_special_text_test.godot.log",
+      "bytes": 5228,
+      "sha256": "00703f1c84bcc659e1bddbef75f3d6ad7a75f011b96a274a064c0d6d2cc46b8c"
+    }
+  ],
+  "historical_failed_raw_log_collection": "MISSING: regular runner per-scene files can be overwritten; original structured failure receipts are retained. Final six scene logs copied before further tests.",
+  "evidence_reuse": {
+    "circular_touch_lifecycle": "131614_415_5492: underlying lifecycle unchanged; final layout covers new dimensions",
+    "quick_item_consumer": "131614_415_5492: formal game-root wiring unchanged by UI phase",
+    "other_modules": "Reuse audio/pickup/equipment/crowd receipts only within prior scope"
+  },
+  "gpu_capture": {
+    "result": "PASS",
+    "process_id": 21584,
+    "exit_code": 0,
+    "actual_args": [
+      "--path",
+      ".",
+      "--rendering-method",
+      "gl_compatibility",
+      "--audio-driver",
+      "Dummy",
+      "--resolution",
+      "1598x720",
+      "--position",
+      "-10000,-10000",
+      "res://tests/hud_runtime_capture.tscn"
+    ],
+    "environment": {
+      "APPDATA": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\hud_preview_20261008_final",
+      "HUD_CAPTURE_ITEMS": "1",
+      "HUD_CAPTURE_NAME": "20261008_final",
+      "HUD_CAPTURE_SAFE_MARGIN_X": "73",
+      "HUD_CAPTURE_SAFE_MARGIN_RIGHT": "77"
+    },
+    "stderr_bytes": 0,
+    "source": {
+      "path": "tests/hud_runtime_capture.gd",
+      "bytes": 2755,
+      "sha256": "0e272fe2e65ad2d3a449ccbbe38ec800126fee2e3a36f537724837809fd4fd11"
+    },
+    "scope": "Production HUD over existing background-image fixture; no device acceptance"
+  },
+  "artifacts": [
+    {
+      "path": "outputs/visual_acceptance/hud_runtime/hud_20261008_final.png",
+      "bytes": 1688252,
+      "sha256": "6e5a502221979977cf6fcce15fb46f65f5a072a00aeb29f960f734494ebf0ad9"
+    },
+    {
+      "path": "outputs/visual_acceptance/hud_runtime/hud_20261008_final_quickbar.png",
+      "bytes": 54645,
+      "sha256": "48e64c36c867b9a24ebf15cba9f016f40b46fed236a219d5cb83ec696aa3fd61"
+    },
+    {
+      "path": "outputs/visual_acceptance/hud_runtime/hud_20261008_final_target.png",
+      "bytes": 68426,
+      "sha256": "d4f89aad4b250d5c567d44297e242325edc4090cff5ace98f283d90927760d0a"
+    },
+    {
+      "path": "outputs/test_logs/hud_preview_20261008_final.stdout.log",
+      "bytes": 1478,
+      "sha256": "728b51060ba30a6c23d60e87252d94938b3e51e3b35abe5aa6a56bf67139a709"
+    },
+    {
+      "path": "outputs/test_logs/hud_preview_20261008_final.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "outputs/test_logs/hud_touch_import_20261008.stdout.log",
+      "bytes": 8450,
+      "sha256": "dbf93341f57c1b5157382c8e9bfccf3513050900a67f9ad4b1b702f18d5fe7bf"
+    },
+    {
+      "path": "outputs/test_logs/hud_touch_import_20261008.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "stable_ids": [
+    "hc.item.920017",
+    "hc.item.920042",
+    "ui.hud.gothic.v2.target_bar"
+  ],
+  "mask_generation": {
+    "result": "PASS",
+    "command": "python tools/build_hud_target_bar_mask.py",
+    "source_sha256": "e595460b66850d568a193410fff9a67d0d56d14718ea7721a5b9108af3edceaf",
+    "interior_bounds": [
+      99,
+      33,
+      464,
+      39
+    ],
+    "interior_pixel_count": 17121,
+    "headless_import_exit_code": 0
+  },
+  "diff_check": "PASS: working and cached diff with cr-at-eol",
+  "visual_user_acceptance": "NOT_RUN",
+  "APK": "NOT_RUN",
+  "DEVICE TEST": "NOT_RUN",
+  "related_diff": {
+    "path": "docs/review/hud_touch_20261008/RELATED_DIFF.patch",
+    "sha256": "9048b236473d2601adf4db54fbc880ab90ee9ba5d36e2524352469bd3aa92e2b",
+    "bytes": 48698
+  }
+}

@@ -492,10 +492,9 @@ func _emit_summon_audio(semantic_event: String, allow_death := false) -> bool:
 
 
 func _audio_try_emit_appear() -> void:
-	if _audio_appear_emitted:
-		return
-	if _emit_summon_audio("appear"):
-		_audio_appear_emitted = true
+	# The existing production whitelist disables appear. Seal the old hook
+	# without retries while off-screen or while no audio service exists.
+	_audio_appear_emitted = true
 
 
 func _audio_attack_started() -> void:
@@ -717,7 +716,6 @@ func _process(delta: float) -> void:
 
 
 func _physics_process(delta: float) -> void:
-	_audio_try_emit_appear()
 	_update_monster_source_poison(delta)
 	if state == SummonState.DEAD:
 		velocity = Vector2.ZERO

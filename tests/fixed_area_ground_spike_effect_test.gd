@@ -1,8 +1,8 @@
 extends Node
 
-## Fixed-area monster release contract: the attacker freezes one record and
-## emits one spike immediately per valid target, then settles only that frozen
-## batch after the configured delay. The visual consumes no damage API and
+## Fixed-area monster release contract: the attacker freezes one record,
+## emits one spike per valid target, and consumes that frozen batch
+## synchronously at admission. The warning/visual consumes no damage API and
 ## expires after its eight user-approved authored frames.
 
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
@@ -80,10 +80,11 @@ func _run() -> void:
 		"fixed-area body attack must preserve the authored 6x120ms timing",
 	)
 	assert(_descriptors.size() == 2, "N frozen victims must produce N immediate spike descriptors")
-	assert(primary.current_hp == primary_hp_before)
+	assert(primary.current_hp < primary_hp_before, "AOE damage must be synchronous at admission")
+	assert(second.current_hp < second_hp_before, "AOE second victim must be consumed at admission")
 	_attacker._physics_process(0.14)
 	assert(_descriptors.size() == 2, "the frozen batch must not emit duplicate spikes")
-	assert(primary.current_hp == primary_hp_before)
+	assert(primary.current_hp < primary_hp_before, "presentation warning must not defer HP")
 	var primary_record: Dictionary = {}
 	for release_record: Dictionary in _attacker._area_attack_release_records:
 		if int(release_record.get("target_instance_id", 0)) == primary.get_instance_id():
@@ -92,7 +93,7 @@ func _run() -> void:
 	assert(not primary_record.is_empty())
 	assert(
 		_attacker._area_attack_release_target_is_valid(primary, primary_record),
-		"frozen primary invalid before settlement: attacker_map=%d target_map=%d dead=%s safe=%s"
+		"frozen primary remains valid during warning: attacker_map=%d target_map=%d dead=%s safe=%s"
 		% [
 			_attacker.runtime_map_id,
 			_attacker._runtime_map_id_for_area_target(primary),
@@ -100,6 +101,7 @@ func _run() -> void:
 			str(_attacker._point_inside_safe_zone(primary.global_position)),
 		],
 	)
+	var primary_hp_after_commit := primary.current_hp
 	_attacker._physics_process(0.07)
 
 	assert(_descriptors.size() == 2, "settlement must not create a second visual path")
@@ -109,6 +111,7 @@ func _run() -> void:
 		% [primary.current_hp, primary_hp_before, str(_attacker._area_attack_release_records)],
 	)
 	assert(second.current_hp < second_hp_before)
+	assert(primary.current_hp == primary_hp_after_commit, "warning completion must not duplicate HP")
 	assert(
 		float(primary.struck_reaction_snapshot().get("server_action_lock_remaining", 0.0)) > 0.0,
 		"fixed-area ground spike must force the brief struck reaction below the global damage threshold",

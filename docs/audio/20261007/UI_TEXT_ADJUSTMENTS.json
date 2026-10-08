@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "scope": "static exact display-only diff proof; device readability NOT_RUN",
+  "outline_parameter_before": 2,
+  "outline_parameter_after": 4,
+  "red_fill_and_gold_color_unchanged": true,
+  "membership_unchanged": true,
+  "name_size_before": 20,
+  "name_size_after": 18,
+  "attribute_size": 14,
+  "engine_outline_reference": "https://github.com/godotengine/godot/blob/5b4e0cb0f/modules/text_server_adv/text_server_adv.cpp#L1425",
+  "preview_capture": "outputs/monster_upgrade_20261007/name_outline_preview/rare_name_outline_comparison.png",
+  "preview_native_exit": 0,
+  "user_confirmation": "很好，金边用现在的",
+  "user_confirmation_scope": "right-hand thicker outline in native desktop preview; device NOT_RUN",
+  "sha256": {
+    "assets/data/ui/item_name_rarity_policy_v2.json": "3996ef48554c1cfe4bfdd5d3f16f942c638ecb729ac45dd9ac3ac9559531b995",
+    "assets/data/ui/item_name_rarity_v1.json": "c1335de47a40ec6879df2f912c0ab766d47a5380caace4b513f2fcde61f1bdbe",
+    "scripts/item_detail_docked_presenter.gd": "22da0516bd21329a044aecbe0f045f66b645b147ed78cdb8008800779d22ac7c"
+  }
+}

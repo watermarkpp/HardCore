@@ -70,7 +70,7 @@ func _run_map_query_gate() -> void:
 	_blocked_ground_gu = Vector2.INF
 	assert(projectile._launch_physical_projectile(projectile_player, 7))
 	assert(_projectile_descriptors.size() == 1, "clear physical path did not emit descriptor")
-	_advance_projectile_to_contact()
+	await _advance_projectile_to_contact()
 	assert(projectile_player.current_hp < projectile_hp_before, "clear physical path did not settle damage")
 
 	var magic_player := _make_player(Vector2(2.0, 0.0))
@@ -151,7 +151,7 @@ func _run_physics_gate_without_environment_provider() -> void:
 	assert(melee_player.current_hp < melee_player.max_hp, "clear WORLD ray did not allow melee")
 	var projectile_hp_before := projectile_player.current_hp
 	assert(projectile._launch_physical_projectile(projectile_player, 7))
-	_advance_projectile_to_contact()
+	await _advance_projectile_to_contact()
 	assert(projectile_player.current_hp < projectile_hp_before, "clear WORLD ray did not settle projectile")
 
 	var magic_hp_before := magic_player.current_hp
@@ -205,6 +205,10 @@ func _make_attacker(monster_id: int, player: PlayerCharacter) -> EnemyActor:
 	var attacker := EnemyActor.new()
 	attacker.global_position = Vector2.ZERO
 	attacker.setup(GameData.get_monster_by_id(monster_id), player, false)
+	# Physical projectile delivery still performs the real player evasion roll.
+	# Choose the same deterministic non-evading seed used by the authoritative
+	# projectile movement fixture; do not bypass or mock the roll.
+	_set_non_evading_seed(player)
 	attacker.configure_runtime_map_projection(
 		1,
 		Callable(self, "_ground_to_screen"),
@@ -225,6 +229,17 @@ func _make_attacker(monster_id: int, player: PlayerCharacter) -> EnemyActor:
 	attacker._pending_attack_damage = 0
 	attacker._pending_attack_release_record = {}
 	return attacker
+
+
+func _set_non_evading_seed(player: PlayerCharacter) -> void:
+	var reference := RandomNumberGenerator.new()
+	var hit_seed := 1
+	while true:
+		reference.seed = hit_seed
+		if reference.randi_range(0, 9) == 9:
+			player._rng.seed = hit_seed
+			return
+		hit_seed += 1
 
 
 func is_environment_point_blocked(world_px: Vector2) -> bool:
@@ -258,7 +273,14 @@ func _advance_projectile_to_contact() -> void:
 		if child is MonsterRangedProjectileEffect and not child.is_queued_for_deletion():
 			effect = child as MonsterRangedProjectileEffect
 	assert(effect != null, "accepted projectile did not create a flight actor")
-	effect._physics_process(2.0)
+	# Contact is resolved by the real physical flight, after the physics server
+	# has synchronized node additions/removals. A synthetic two-second private
+	# tick bypassed that boundary and made the clear-wall case unreliable.
+	for frame in range(180):
+		await get_tree().physics_frame
+		if not is_instance_valid(effect) or effect.is_queued_for_deletion():
+			return
+	assert(false, "accepted projectile did not finish within 180 real physics frames")
 
 
 func _ground_to_screen(value: Vector2) -> Vector2:

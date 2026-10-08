@@ -19,6 +19,16 @@ static func station(actor: CharacterBody2D, anchor: Vector2, target_radius: floa
 	var direction: Vector2 = DIRECTIONS[slot]
 	return anchor + direction * (axis_distance(actor, target_radius) if slot < 4 else Reach.HALF_EXTENT_GU)
 
+## Local pursuit order for the simplified product contract. It is a stable
+## preference only; it does not reserve a station or establish ownership.
+## The caller still chooses by exact current distance and live clearance.
+static func local_slot_order(stable_order: int) -> Array[int]:
+	var result: Array[int] = []
+	var start := posmod(stable_order, DIRECTIONS.size())
+	for offset: int in DIRECTIONS.size():
+		result.append(posmod(start + offset, DIRECTIONS.size()))
+	return result
+
 static func snapshot_peers(actor: CharacterBody2D, peers: Array) -> Array:
 	# One synchronous decision only. Keep source/index order; do not sort or
 	# cache eligibility across actors. Eligibility is checked after geometry.

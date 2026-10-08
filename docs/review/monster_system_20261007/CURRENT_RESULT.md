@@ -1,12 +1,14 @@
 # v105 怪物系统修复候选
 
-2026-10-07，codex/integration，施工基线 aa75c5bc9845b49ee3ce67ce064442cc3fb3c43c。
+2026-10-07 最新反馈：用户明确群怪卡顿仍未解决。以下v106功能/封装证据保留为历史候选，不代表设备流畅度验收。当前优先音频、连续拾取及追加Loading/地图文案修复，入口docs/audio/20261007/CURRENT_RESULT.md；当前手机版本未绑定，DEVICE TEST: NOT_RUN。
+
+2026-10-07，codex/integration，施工基线 aa75c5bc9845b49ee3ce67ce064442cc3fb3c43c；固定修复源码 c8477058a0c2f67f7a9e39f3523f4ea7693bd5cd。
 
 用户最新裁决：停止重复群怪性能采集，以用户在原测试手机的实际游玩体感作为流畅度验收。已有性能序列保留，不能据此宣布掉帧修复。必要功能回归继续，不能降低怪物数、HP、碰撞或伤害工作量制造通过。
 
 已实施直接魔法正伤害只延后下一攻击，移除移动延迟；保留已提交攻击及原 RNG 连续性。祖玛阶段召唤由正式行动循环按有目标8秒/无目标1秒检查，4–7只/次、15只上限；Boss 基础攻击间隔读取21CQ，显式狂暴保留。群怪取消长期站位认领、轴角互等，使用一次邻居快照选最近可达空位、局部让路，移动仍检查真实身体和地形。空间索引全部候选一次稳定排序；存在有效邻居判定找到首个即结束。
 
-已通过的专项不等于整个架构升级或设备验收。最新相同源码阶段18项功能回归PASS，原生退出0、无引擎错误；APK BUILD NOT_RUN，DEVICE TEST NOT_RUN。最终 receipt 已写入本文件及FINAL_FUNCTIONAL_RECEIPTS.json。
+已通过的专项不等于整个架构升级或设备验收。最新相同源码阶段18项功能回归PASS，原生退出0、无引擎错误；APK BUILD PASS，APK STATIC PASS，DEVICE TEST NOT_RUN。最终 receipt 已写入本文件及FINAL_FUNCTIONAL_RECEIPTS.json。
 
 ## 保留的问题与覆盖边界
 
@@ -43,3 +45,11 @@ natural_entry_obstacle_and_d3_diagnostic/190524_531482：D3保持同生产源码
 final_summon_surround_behavior/191252_852810：3 PASS/0 FAIL/0 engine errors，原生退出0，source稳定，内容指纹同15b63efb...。真实祖玛main queue 4waves/15births/有目标至少8秒阶段间隔/地图退场清理；30怪完整2700物理帧包围开阔8个可用点、真实西侧WORLD墙5个可用点，实际玩家HP降低。保持数量、伤害、碰撞与原期限。
 
 final_related_combat_after_route/191634_030270：7 PASS/0 FAIL/0 engine errors，原生退出0，source稳定，同15b63efb...；连续受击真实移动、持续移动/压力/暂停、Boss行动、MC47火墙、索引候选顺序、简化包围、九ID真实物理投射。最终相同源码阶段合计18场景PASS，完整receipts见FINAL_FUNCTIONAL_RECEIPTS.json。先前不同阶段的46/47、超时及夹具失败原记录不改。
+
+## 固定封装来源
+
+怪物运行代码固定提交 c8477058a0c2f67f7a9e39f3523f4ea7693bd5cd；构建提交78d0775b4b22f40ad1f54426639d867310dae41a仅修正APK签名工具的已退役路径，运行内容指纹仍与上述18项回归完全一致。构建环境失败记录保留：Windows PowerShell模块路径、Java默认临时目录回环连接、JAVA_TOOL_OPTIONS提示误判及旧第三树keystore路径；使用进程内PSModulePath和工程自有TEMP/TMP，签名工具按当前工程根解析。实际注入/重签原生退出0、证书c62d0f8239b926f819038845c302143fd24dcfd75ed8d877ed846c430c6f3fcc不变。第一遍导出中间包不作交付，仍执行完整冷导入、两遍导出和封装门禁。
+
+## v106已交付
+
+固定构建源码78d0775b4b22f40ad1f54426639d867310dae41a，运行内容仍为同一18项回归指纹。v106两遍封装及独立APK内容/签名校验PASS，桌面交付路径、大小、SHA及完整receipt见APK_DELIVERY.md/json。构建工具LF指纹问题按精确原Git blob恢复，不放宽门禁；此前失败保留。四个本任务构建树保全证据后移除，只剩integration主树。ADB未连接，DEVICE TEST NOT_RUN；不将封装通过当成用户体感验收。
