@@ -1,0 +1,39 @@
+{
+  "recorded_at": "2026-10-08T23:11:37.7032805+08:00",
+  "scene": "tests/crowd_v107_cost_growth_20261008.tscn",
+  "runs": [
+    {
+      "reason": "new input: 0 engaged",
+      "status": "PASS",
+      "engaged": 0,
+      "receipt": "0_runner.json"
+    },
+    {
+      "reason": "new input: 10 engaged",
+      "status": "PASS",
+      "engaged": 10,
+      "receipt": "10_runner.json"
+    },
+    {
+      "reason": "new input: 20 engaged",
+      "status": "PASS",
+      "engaged": 20,
+      "receipt": "20_runner.json"
+    },
+    {
+      "reason": "reuse same v107 production source/identity/layout/input contract; no repeat",
+      "status": "PASS/FAIL preserved",
+      "engaged": 30
+    }
+  ],
+  "detailed_scene": "tests/crowd_v107_detailed_cost_20261008.tscn",
+  "detailed_receipt": "detailed_30_runner.json",
+  "detailed_reason": "missing fine-grained nested timing, diagnostic-only wrappers",
+  "detailed_status": "PASS",
+  "missing_trace_attempt_status": "MISSING",
+  "command_template": "HARDCORE_GRID_COMPARISON_MODE=v107; HARDCORE_GRID_COMPARISON_RUN_ID=<retained run>; HARDCORE_SCALING_ENGAGED=<0/10/20/30>; HARDCORE_AUDIT_EVIDENCE_ROOT=<retained directory>; tools/run_godot_tests.ps1 -TestPaths <scene> -TimeoutSeconds 60",
+  "source_fingerprints": "GROWTH.json + each raw producer source_hashes + INSTRUMENTATION.json",
+  "frozen_v107_restored": "RESTORED_107.json",
+  "gpu": "NOT_RUN",
+  "device": "NOT_RUN"
+}

@@ -1,0 +1,40 @@
+{
+  "engine_log_errors": 0,
+  "results": [
+    {
+      "test_name": "crowd_formal_grid_comparison_20261008",
+      "test_path": "tests/crowd_formal_grid_comparison_20261008.tscn",
+      "wrapper_process_id": 11456,
+      "wrapper_started_utc": "2026-10-08T15:31:41.4088999Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-v107-comparison\\HardCore\\.godot\\runtime_appdata",
+      "fixed_fps": 0,
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-08T15:32:41.4216769Z",
+      "native_exit_observed_utc": "2026-10-08T15:32:04.6924125Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "",
+      "framework_receipt_valid": null,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "suite": "adhoc",
+  "total": 1,
+  "failed": 0,
+  "generated_at": "2026-10-08T23:32:06.2097305+08:00",
+  "runtime_environment": {
+    "project_root": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-v107-comparison\\HardCore",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-v107-comparison\\HardCore\\.godot\\runtime_appdata",
+    "runner_process_id": 22912
+  },
+  "git_head": "edae6fdef6a6551a951fab1ea8c6ade43359d603",
+  "invocation_id": "249a90f3-bea8-4bad-81f8-010d420f8393",
+  "passed": 1
+}

@@ -1,0 +1,331 @@
+{
+  "diagnostic_status": "PASS",
+  "production_performance_acceptance": "NOT_RUN",
+  "recorded_at": "2026-10-08T23:09:18.955881+08:00",
+  "build_sha": "edae6fdef6a6551a951fab1ea8c6ade43359d603",
+  "contract": "34 formal actors/48 loot/map913203/seed20261008/300 real physics ticks; engaged population 0/10/20/30",
+  "rows": [
+    {
+      "engaged": 0,
+      "background": 34,
+      "statuses": [
+        "PASS"
+      ],
+      "failures": [
+        []
+      ],
+      "source_hashes": [
+        {
+          "res://scripts/enemy.gd": "22eb3a376540759219f7159958cab51ed80884b27444b4d22cb2b76e45e15f3e",
+          "res://scripts/game_root.gd": "e920127fcb0fc15d879ac30eab03f48e3005fd7563fff618efe4dff0b089bdd4",
+          "res://scripts/loot_pickup.gd": "945e0a8a924237b5d6cca1ca65352b914bad27095e252713f72843c5a616ced2",
+          "res://scripts/monster_ai_package/decision_budget.gd": "8a5e91dc699f65beb2403d6ccb757c01b74f00a9b6d1103c70a852fca3c67f5e",
+          "res://scripts/monster_ai_package/path_scheduler.gd": "b7b02a79d570af4fd647f14fb5470419ad64852f491c1db681a45e79cade06b3",
+          "res://scripts/monster_ai_package/path_search.gd": "b1276a0e94f5fce8e9c88dff66f262da0b9bd72e4d5b9a5bddfc8ad452ea3b9a",
+          "res://scripts/monster_visual.gd": "032ab98c39bb16242da048d3ffca9c76384a8a6e8d962608e47a894d55867abb",
+          "res://scripts/player.gd": "b5bc5af4c78ddbd88cc69e32cdacd04607fa89a5337e99de5c5a496db14ff703",
+          "res://scripts/runtime_combat_spatial_index.gd": "1fa26f141042da16fc3cadc15bf329298212bdd5466debe96e282fddb084f081",
+          "res://tests/crowd_engagement_scaling_20261008.gd": "fcb75f90c89f3a6ca9d6c056cc89fc84b3fc6d8a003a1b8e081ea8ce931cfbb4",
+          "res://tests/crowd_formal_grid_comparison_20261008.gd": "509d326bf0a646803bbc3c016647d12d59e182d727e80743fc25176b2c2f4edd",
+          "res://tests/crowd_v107_cost_growth_20261008.gd": "bb84c6f26b028cd7f66febd3bea75e94c3fdca301f4c435cbabb6e167acfbd9a",
+          "res://tests/phone_crowd_baseline_20261008.gd": "552e4a150eb726583750a4b854dd20207a088f2d0deed9f80e958ddbd4a7c0de",
+          "res://tests/world_crowd_firewall_profile_test.gd": "27404b9c498a799fbf2c03b59f89ea9a910102276da6318190acb1cee2c98630"
+        }
+      ],
+      "results": [
+        {
+          "path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\crowd_v107_growth_20261008\\0.json",
+          "sha256": "67d9ba5abc213bb72bfd3a39525d42a2f2e2c0e20186ce63ff1edbc6b88c9845"
+        }
+      ],
+      "counters": {
+        "enemy_physics_usec": 104705,
+        "enemy_movement_strategy_usec": 0,
+        "enemy_movement_strategy_calls": 0,
+        "enemy_neighbor_usec": 0,
+        "enemy_neighbor_calls": 0,
+        "enemy_retarget_usec": 5153,
+        "enemy_retarget_calls": 331,
+        "enemy_motion_clear_usec": 0,
+        "enemy_motion_body_checks": 0,
+        "enemy_motion_candidate_checks": 0,
+        "move_and_slide_usec": 0,
+        "enemy_projection_usec": 10
+      },
+      "enemy_cpu_mean_ms_per_tick": 0.34901666666666664,
+      "physics_p50_ms": 0.614,
+      "process_p50_ms": 1.003,
+      "movement_gu": 0.0,
+      "attacks": 0
+    },
+    {
+      "engaged": 10,
+      "background": 24,
+      "statuses": [
+        "PASS"
+      ],
+      "failures": [
+        []
+      ],
+      "source_hashes": [
+        {
+          "res://scripts/enemy.gd": "22eb3a376540759219f7159958cab51ed80884b27444b4d22cb2b76e45e15f3e",
+          "res://scripts/game_root.gd": "e920127fcb0fc15d879ac30eab03f48e3005fd7563fff618efe4dff0b089bdd4",
+          "res://scripts/loot_pickup.gd": "945e0a8a924237b5d6cca1ca65352b914bad27095e252713f72843c5a616ced2",
+          "res://scripts/monster_ai_package/decision_budget.gd": "8a5e91dc699f65beb2403d6ccb757c01b74f00a9b6d1103c70a852fca3c67f5e",
+          "res://scripts/monster_ai_package/path_scheduler.gd": "b7b02a79d570af4fd647f14fb5470419ad64852f491c1db681a45e79cade06b3",
+          "res://scripts/monster_ai_package/path_search.gd": "b1276a0e94f5fce8e9c88dff66f262da0b9bd72e4d5b9a5bddfc8ad452ea3b9a",
+          "res://scripts/monster_visual.gd": "032ab98c39bb16242da048d3ffca9c76384a8a6e8d962608e47a894d55867abb",
+          "res://scripts/player.gd": "b5bc5af4c78ddbd88cc69e32cdacd04607fa89a5337e99de5c5a496db14ff703",
+          "res://scripts/runtime_combat_spatial_index.gd": "1fa26f141042da16fc3cadc15bf329298212bdd5466debe96e282fddb084f081",
+          "res://tests/crowd_engagement_scaling_20261008.gd": "fcb75f90c89f3a6ca9d6c056cc89fc84b3fc6d8a003a1b8e081ea8ce931cfbb4",
+          "res://tests/crowd_formal_grid_comparison_20261008.gd": "d26b66a6e048c208c1306e040202098425d2d3c8b8a08ae159b9362f533a4197",
+          "res://tests/crowd_v107_cost_growth_20261008.gd": "bb84c6f26b028cd7f66febd3bea75e94c3fdca301f4c435cbabb6e167acfbd9a",
+          "res://tests/phone_crowd_baseline_20261008.gd": "552e4a150eb726583750a4b854dd20207a088f2d0deed9f80e958ddbd4a7c0de",
+          "res://tests/world_crowd_firewall_profile_test.gd": "27404b9c498a799fbf2c03b59f89ea9a910102276da6318190acb1cee2c98630"
+        }
+      ],
+      "results": [
+        {
+          "path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\crowd_v107_growth_20261008\\10.json",
+          "sha256": "3b7ea2d8dff2096a1d87fc7f98aa56c6f5a1294eab5a1768b05dfcd4e18f566a"
+        }
+      ],
+      "counters": {
+        "enemy_physics_usec": 694671,
+        "enemy_movement_strategy_usec": 196441,
+        "enemy_movement_strategy_calls": 1916,
+        "enemy_neighbor_usec": 72796,
+        "enemy_neighbor_calls": 261,
+        "enemy_retarget_usec": 102131,
+        "enemy_retarget_calls": 2962,
+        "enemy_motion_clear_usec": 45477,
+        "enemy_motion_body_checks": 4960,
+        "enemy_motion_candidate_checks": 7713,
+        "move_and_slide_usec": 53975,
+        "enemy_projection_usec": 42484
+      },
+      "enemy_cpu_mean_ms_per_tick": 2.31557,
+      "physics_p50_ms": 2.621,
+      "process_p50_ms": 0.916,
+      "movement_gu": 30.74603834137088,
+      "attacks": 13
+    },
+    {
+      "engaged": 20,
+      "background": 14,
+      "statuses": [
+        "PASS"
+      ],
+      "failures": [
+        []
+      ],
+      "source_hashes": [
+        {
+          "res://scripts/enemy.gd": "22eb3a376540759219f7159958cab51ed80884b27444b4d22cb2b76e45e15f3e",
+          "res://scripts/game_root.gd": "e920127fcb0fc15d879ac30eab03f48e3005fd7563fff618efe4dff0b089bdd4",
+          "res://scripts/loot_pickup.gd": "945e0a8a924237b5d6cca1ca65352b914bad27095e252713f72843c5a616ced2",
+          "res://scripts/monster_ai_package/decision_budget.gd": "8a5e91dc699f65beb2403d6ccb757c01b74f00a9b6d1103c70a852fca3c67f5e",
+          "res://scripts/monster_ai_package/path_scheduler.gd": "b7b02a79d570af4fd647f14fb5470419ad64852f491c1db681a45e79cade06b3",
+          "res://scripts/monster_ai_package/path_search.gd": "b1276a0e94f5fce8e9c88dff66f262da0b9bd72e4d5b9a5bddfc8ad452ea3b9a",
+          "res://scripts/monster_visual.gd": "032ab98c39bb16242da048d3ffca9c76384a8a6e8d962608e47a894d55867abb",
+          "res://scripts/player.gd": "b5bc5af4c78ddbd88cc69e32cdacd04607fa89a5337e99de5c5a496db14ff703",
+          "res://scripts/runtime_combat_spatial_index.gd": "1fa26f141042da16fc3cadc15bf329298212bdd5466debe96e282fddb084f081",
+          "res://tests/crowd_engagement_scaling_20261008.gd": "fcb75f90c89f3a6ca9d6c056cc89fc84b3fc6d8a003a1b8e081ea8ce931cfbb4",
+          "res://tests/crowd_formal_grid_comparison_20261008.gd": "d26b66a6e048c208c1306e040202098425d2d3c8b8a08ae159b9362f533a4197",
+          "res://tests/crowd_v107_cost_growth_20261008.gd": "bb84c6f26b028cd7f66febd3bea75e94c3fdca301f4c435cbabb6e167acfbd9a",
+          "res://tests/phone_crowd_baseline_20261008.gd": "552e4a150eb726583750a4b854dd20207a088f2d0deed9f80e958ddbd4a7c0de",
+          "res://tests/world_crowd_firewall_profile_test.gd": "27404b9c498a799fbf2c03b59f89ea9a910102276da6318190acb1cee2c98630"
+        }
+      ],
+      "results": [
+        {
+          "path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\crowd_v107_growth_20261008\\20.json",
+          "sha256": "0296b99525624ad09f87a222bfe64d0b690eb31d7ac2cf6fc38b705d9ed15ba7"
+        }
+      ],
+      "counters": {
+        "enemy_physics_usec": 1298672,
+        "enemy_movement_strategy_usec": 440892,
+        "enemy_movement_strategy_calls": 4310,
+        "enemy_neighbor_usec": 139036,
+        "enemy_neighbor_calls": 455,
+        "enemy_retarget_usec": 198805,
+        "enemy_retarget_calls": 5731,
+        "enemy_motion_clear_usec": 119880,
+        "enemy_motion_body_checks": 13698,
+        "enemy_motion_candidate_checks": 20184,
+        "move_and_slide_usec": 114246,
+        "enemy_projection_usec": 87130
+      },
+      "enemy_cpu_mean_ms_per_tick": 4.328906666666667,
+      "physics_p50_ms": 4.642,
+      "process_p50_ms": 0.866,
+      "movement_gu": 67.16116754565155,
+      "attacks": 18
+    },
+    {
+      "engaged": 30,
+      "background": 4,
+      "statuses": [
+        "PASS",
+        "FAIL"
+      ],
+      "failures": [
+        [],
+        [
+          "decision_budget_not_drained"
+        ]
+      ],
+      "source_hashes": [
+        {
+          "res://scripts/enemy.gd": "22eb3a376540759219f7159958cab51ed80884b27444b4d22cb2b76e45e15f3e",
+          "res://scripts/game_root.gd": "e920127fcb0fc15d879ac30eab03f48e3005fd7563fff618efe4dff0b089bdd4",
+          "res://scripts/loot_pickup.gd": "945e0a8a924237b5d6cca1ca65352b914bad27095e252713f72843c5a616ced2",
+          "res://scripts/monster_ai_package/decision_budget.gd": "8a5e91dc699f65beb2403d6ccb757c01b74f00a9b6d1103c70a852fca3c67f5e",
+          "res://scripts/monster_ai_package/path_scheduler.gd": "b7b02a79d570af4fd647f14fb5470419ad64852f491c1db681a45e79cade06b3",
+          "res://scripts/monster_ai_package/path_search.gd": "b1276a0e94f5fce8e9c88dff66f262da0b9bd72e4d5b9a5bddfc8ad452ea3b9a",
+          "res://scripts/monster_visual.gd": "032ab98c39bb16242da048d3ffca9c76384a8a6e8d962608e47a894d55867abb",
+          "res://scripts/player.gd": "b5bc5af4c78ddbd88cc69e32cdacd04607fa89a5337e99de5c5a496db14ff703",
+          "res://scripts/runtime_combat_spatial_index.gd": "1fa26f141042da16fc3cadc15bf329298212bdd5466debe96e282fddb084f081",
+          "res://tests/crowd_engagement_scaling_20261008.gd": "fcb75f90c89f3a6ca9d6c056cc89fc84b3fc6d8a003a1b8e081ea8ce931cfbb4",
+          "res://tests/crowd_formal_grid_comparison_20261008.gd": "509d326bf0a646803bbc3c016647d12d59e182d727e80743fc25176b2c2f4edd",
+          "res://tests/phone_crowd_baseline_20261008.gd": "552e4a150eb726583750a4b854dd20207a088f2d0deed9f80e958ddbd4a7c0de",
+          "res://tests/world_crowd_firewall_profile_test.gd": "27404b9c498a799fbf2c03b59f89ea9a910102276da6318190acb1cee2c98630"
+        },
+        {
+          "res://scripts/enemy.gd": "22eb3a376540759219f7159958cab51ed80884b27444b4d22cb2b76e45e15f3e",
+          "res://scripts/game_root.gd": "e920127fcb0fc15d879ac30eab03f48e3005fd7563fff618efe4dff0b089bdd4",
+          "res://scripts/loot_pickup.gd": "945e0a8a924237b5d6cca1ca65352b914bad27095e252713f72843c5a616ced2",
+          "res://scripts/monster_ai_package/decision_budget.gd": "8a5e91dc699f65beb2403d6ccb757c01b74f00a9b6d1103c70a852fca3c67f5e",
+          "res://scripts/monster_ai_package/path_scheduler.gd": "b7b02a79d570af4fd647f14fb5470419ad64852f491c1db681a45e79cade06b3",
+          "res://scripts/monster_ai_package/path_search.gd": "b1276a0e94f5fce8e9c88dff66f262da0b9bd72e4d5b9a5bddfc8ad452ea3b9a",
+          "res://scripts/monster_visual.gd": "032ab98c39bb16242da048d3ffca9c76384a8a6e8d962608e47a894d55867abb",
+          "res://scripts/player.gd": "b5bc5af4c78ddbd88cc69e32cdacd04607fa89a5337e99de5c5a496db14ff703",
+          "res://scripts/runtime_combat_spatial_index.gd": "1fa26f141042da16fc3cadc15bf329298212bdd5466debe96e282fddb084f081",
+          "res://tests/crowd_engagement_scaling_20261008.gd": "fcb75f90c89f3a6ca9d6c056cc89fc84b3fc6d8a003a1b8e081ea8ce931cfbb4",
+          "res://tests/crowd_formal_grid_comparison_20261008.gd": "509d326bf0a646803bbc3c016647d12d59e182d727e80743fc25176b2c2f4edd",
+          "res://tests/phone_crowd_baseline_20261008.gd": "552e4a150eb726583750a4b854dd20207a088f2d0deed9f80e958ddbd4a7c0de",
+          "res://tests/world_crowd_firewall_profile_test.gd": "27404b9c498a799fbf2c03b59f89ea9a910102276da6318190acb1cee2c98630"
+        }
+      ],
+      "results": [
+        {
+          "path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\crowd_formal_grid_comparison_20261008\\v107_02.json",
+          "sha256": "246855a17b10caa9901ccdcf5f3f590b55c1a33daf709681e035d33707020da9"
+        },
+        {
+          "path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\crowd_formal_grid_comparison_20261008\\v107_final_01.json",
+          "sha256": "a899249721206fd139cca61090f42cebed8738c089570d5240459a08ffbbe0e7"
+        }
+      ],
+      "counters": {
+        "enemy_physics_usec": 2057278.5,
+        "enemy_movement_strategy_usec": 782424.0,
+        "enemy_movement_strategy_calls": 7425.0,
+        "enemy_neighbor_usec": 274831.5,
+        "enemy_neighbor_calls": 787.0,
+        "enemy_retarget_usec": 301574.0,
+        "enemy_retarget_calls": 8711.0,
+        "enemy_motion_clear_usec": 244896.5,
+        "enemy_motion_body_checks": 27656.0,
+        "enemy_motion_candidate_checks": 40310.0,
+        "move_and_slide_usec": 199011.5,
+        "enemy_projection_usec": 137603.5
+      },
+      "enemy_cpu_mean_ms_per_tick": 6.857595,
+      "physics_p50_ms": 7.054,
+      "process_p50_ms": 0.8895,
+      "movement_gu": 128.43926536176696,
+      "attacks": 16.0
+    }
+  ],
+  "detailed_trace": {
+    "exclusive_definition": "inclusive minus instrumented nested children; uninstrumented work remains inside nearest parent",
+    "open_segments": 0,
+    "scope": "instrumented v107 CPU diagnostic, not uninstrumented performance acceptance",
+    "segments": {
+      "action_cadence": {
+        "calls": 18185,
+        "exclusive_usec": 57228,
+        "inclusive_usec": 57228
+      },
+      "advance_step": {
+        "calls": 7337,
+        "exclusive_usec": 233918,
+        "inclusive_usec": 997730
+      },
+      "attack_frontline": {
+        "calls": 1024,
+        "exclusive_usec": 22323,
+        "inclusive_usec": 22323
+      },
+      "attack_qualification": {
+        "calls": 1154,
+        "exclusive_usec": 23441,
+        "inclusive_usec": 92006
+      },
+      "combat_loop": {
+        "calls": 8650,
+        "exclusive_usec": 320995,
+        "inclusive_usec": 1826416
+      },
+      "ground_projection": {
+        "calls": 73274,
+        "exclusive_usec": 347665,
+        "inclusive_usec": 347665
+      },
+      "motion_body_clearance": {
+        "calls": 8851,
+        "exclusive_usec": 270485,
+        "inclusive_usec": 270485
+      },
+      "native_move_and_guards": {
+        "calls": 7314,
+        "exclusive_usec": 324057,
+        "inclusive_usec": 425292
+      },
+      "neighbor_selection": {
+        "calls": 788,
+        "exclusive_usec": 93248,
+        "inclusive_usec": 295795
+      },
+      "step_attack_readiness": {
+        "calls": 14651,
+        "exclusive_usec": 96222,
+        "inclusive_usec": 98303
+      },
+      "target_maintenance": {
+        "calls": 8690,
+        "exclusive_usec": 170355,
+        "inclusive_usec": 430810
+      },
+      "target_observation": {
+        "calls": 17160,
+        "exclusive_usec": 127609,
+        "inclusive_usec": 171964
+      },
+      "terrain_point_query": {
+        "calls": 1839,
+        "exclusive_usec": 101223,
+        "inclusive_usec": 101223
+      },
+      "world_line_test": {
+        "calls": 2645,
+        "exclusive_usec": 110424,
+        "inclusive_usec": 110424
+      }
+    }
+  },
+  "trace_result_sha256": "548aea0d0e7b72cea55d4cff0b9ef1da46cb4c911265f78ba496e43c37985404",
+  "instrumentation_overhead_vs_stock_pct": 30.04977206537667,
+  "limitations": [
+    "30 reused without rerun because identity/layout/inputs and runtime code match",
+    "30 includes one strict queue-drain FAIL; no busy frames or failures dropped",
+    "0 run growth_contract is authoritative; parent comparison_contract still labels30 before metadata-only correction",
+    "instrumented trace is for call graph/counts; timing overhead means it is not production performance",
+    "GPU/device FPS and exclusive attribution of every instruction NOT_RUN"
+  ],
+  "DEVICE TEST": "NOT_RUN",
+  "GPU": "NOT_RUN"
+}

@@ -1,0 +1,78 @@
+{
+  "scope": "diagnostic wrappers only; original bodies retained; no gameplay algorithm changes",
+  "stock_sha256": "22eb3a376540759219f7159958cab51ed80884b27444b4d22cb2b76e45e15f3e",
+  "instrumented_sha256": "f94eceda15f71631dc6ab2b914245f031330daeb5d54f18a12f4e8ba891f694c",
+  "segments": {
+    "_hc_tick_melee": [
+      "delta, physics_delta",
+      "void",
+      "combat_loop"
+    ],
+    "_advance_autonomous_step": [
+      "delta, frame_delta",
+      "void",
+      "advance_step"
+    ],
+    "_move_with_spatial_rules": [
+      "delta",
+      "void",
+      "native_move_and_guards"
+    ],
+    "_retarget": [
+      "delta, safe_checked_player",
+      "void",
+      "target_maintenance"
+    ],
+    "_hc_refresh_observation": [
+      "",
+      "void",
+      "target_observation"
+    ],
+    "_hc_access": [
+      "hit_target, tolerance, fresh_world",
+      "String",
+      "attack_qualification"
+    ],
+    "_hc_frontline_at": [
+      "a, b, hit_target",
+      "int",
+      "attack_frontline"
+    ],
+    "_movement_step_engagement_ready": [
+      "",
+      "bool",
+      "step_attack_readiness"
+    ],
+    "_hc_world_between": [
+      "a, b",
+      "bool",
+      "world_line_test"
+    ],
+    "_hc_neighbor": [
+      "current, hit_target, direct",
+      "Vector2i",
+      "neighbor_selection"
+    ],
+    "_hc_motion_clear": [
+      "a, b",
+      "bool",
+      "motion_body_clearance"
+    ],
+    "_hc_point_walkable": [
+      "p",
+      "bool",
+      "terrain_point_query"
+    ],
+    "_screen_position_px_to_ground_position_gu": [
+      "screen_position_px",
+      "Vector2",
+      "ground_projection"
+    ],
+    "_source176_take_tick_decision": [
+      "",
+      "bool",
+      "action_cadence"
+    ]
+  },
+  "source": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-v107-comparison\\HardCore\\scripts\\enemy.gd"
+}

@@ -8857,7 +8857,7 @@ func _hc_motion_clear_internal(a: Vector2, b: Vector2) -> bool:
 	# reads current positions/eligibility and reruns the exact body core test.
 	var same_scope := (
 		_hc_motion_candidate_index == combat_spatial_index.get_instance_id()
-		and _hc_motion_candidate_revision == revision
+		and combat_spatial_index.enemy_bucket_pool_unchanged(runtime_map_id, _hc_motion_candidate_buckets, _hc_motion_candidate_revision)
 		and _hc_motion_candidate_map == runtime_map_id
 		and _hc_motion_candidate_generation == generation
 		and _hc_motion_candidate_life == life
@@ -8885,6 +8885,8 @@ func _hc_motion_clear_internal(a: Vector2, b: Vector2) -> bool:
 		_hc_motion_candidate_radius = combat_radius_gu
 		_hc_motion_candidate_low = low
 		_hc_motion_candidate_high = high
+	# Membership is unchanged in the covered rectangle at this exact stamp.
+	_hc_motion_candidate_revision = combat_spatial_index.bucket_membership_revision
 	return _hc_motion_candidates(a, b, _hc_motion_scratch)
 
 func _delivery_observation_identity(record: Variant, victim: Node, child: String) -> Variant:

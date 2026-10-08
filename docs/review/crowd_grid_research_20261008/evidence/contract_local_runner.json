@@ -1,0 +1,63 @@
+{
+  "results": [
+    {
+      "test_name": "crowd_local_cache_contract_20261008",
+      "test_path": "tests/crowd_local_cache_contract_20261008.tscn",
+      "wrapper_process_id": 23808,
+      "wrapper_started_utc": "2026-10-08T15:30:38.7313842Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-v107-comparison\\HardCore\\.godot\\runtime_appdata",
+      "fixed_fps": 0,
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-08T15:31:08.7432977Z",
+      "native_exit_observed_utc": "2026-10-08T15:30:46.4941604Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "",
+      "framework_receipt_valid": null,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "motion_candidate_reuse_test",
+      "test_path": "tests/user_feedback_20260930/motion_candidate_reuse_test.tscn",
+      "wrapper_process_id": 23868,
+      "wrapper_started_utc": "2026-10-08T15:30:48.0089285Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-v107-comparison\\HardCore\\.godot\\runtime_appdata",
+      "fixed_fps": 0,
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-08T15:31:18.0173879Z",
+      "native_exit_observed_utc": "2026-10-08T15:30:55.6833546Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "",
+      "framework_receipt_valid": null,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "total": 2,
+  "suite": "adhoc",
+  "passed": 2,
+  "engine_log_errors": 0,
+  "runtime_environment": {
+    "project_root": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-v107-comparison\\HardCore",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-v107-comparison\\HardCore\\.godot\\runtime_appdata",
+    "runner_process_id": 19984
+  },
+  "failed": 0,
+  "git_head": "edae6fdef6a6551a951fab1ea8c6ade43359d603",
+  "generated_at": "2026-10-08T23:30:57.2150248+08:00",
+  "invocation_id": "38de7668-3fbe-46c8-98ca-979c889e6b8d"
+}
