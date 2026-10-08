@@ -1,0 +1,468 @@
+{
+  "status": "NOT_RUN",
+  "before": "22eb3a376540759219f7159958cab51ed80884b27444b4d22cb2b76e45e15f3e",
+  "after": "d81b0bc2052b6703a6c9c8a36c8357c269e992bbfb6f98567492887c15e91c81",
+  "fixed_fields": [
+    "active_enemy_physics_count",
+    "actor_redraw_requests",
+    "actor_redraw_requests_from_damage",
+    "attack_los_cache_hits",
+    "attack_los_evaluations",
+    "attack_los_map_samples",
+    "attack_los_physics_rays",
+    "attack_los_requests",
+    "background_ai_evaluations",
+    "background_deep_sleep_entries",
+    "background_deep_sleep_wakeups",
+    "background_fast_path_skips",
+    "crowd_index_candidates",
+    "crowd_queries",
+    "crowd_query_candidates",
+    "crowd_steering_evaluations",
+    "death_begin_calls",
+    "death_pending_marks",
+    "death_physics_process_calls_after_begin",
+    "death_same_release_unregistrations",
+    "direct_spell_stats_snapshot_count",
+    "enemy_background_tick_calls",
+    "enemy_background_tick_usec",
+    "enemy_crowd_goal_calls",
+    "enemy_crowd_goal_usec",
+    "enemy_environment_guard_calls",
+    "enemy_environment_guard_usec",
+    "enemy_motion_body_checks",
+    "enemy_motion_candidate_checks",
+    "enemy_motion_clear_calls",
+    "enemy_motion_clear_usec",
+    "enemy_motion_polygon_checks",
+    "enemy_movement_strategy_calls",
+    "enemy_movement_strategy_usec",
+    "enemy_neighbor_calls",
+    "enemy_neighbor_usec",
+    "enemy_physics_calls",
+    "enemy_physics_usec",
+    "enemy_projection_calls",
+    "enemy_projection_usec",
+    "enemy_retarget_calls",
+    "enemy_retarget_usec",
+    "enemy_terrain_path_accepted",
+    "enemy_terrain_path_budget_rejections",
+    "enemy_terrain_path_calls",
+    "enemy_terrain_path_expansions",
+    "enemy_terrain_path_usec",
+    "enemy_visual_update_calls",
+    "enemy_visual_update_usec",
+    "engaged_enemy_count",
+    "foreground_ai_ticks",
+    "hit_animation_requests",
+    "lethal_damage_count",
+    "monster_dot_no_struck_count",
+    "moving_enemy_count",
+    "overhead_health_refreshes",
+    "physics_moves",
+    "retarget_decisions",
+    "retarget_full_scans",
+    "retarget_target_candidates",
+    "retarget_target_group_scans",
+    "safe_zone_queries",
+    "take_damage_calls"
+  ],
+  "callsite_changes": [
+    {
+      "method": "_record_performance_counter",
+      "field": "direct_spell_stats_snapshot_count",
+      "line": 1325
+    },
+    {
+      "method": "RuntimeDiagnostics.begin_timed_segment",
+      "field": "enemy_terrain_path_calls",
+      "line": 2086
+    },
+    {
+      "method": "RuntimeDiagnostics.end_timed_segment",
+      "field": "enemy_terrain_path_usec",
+      "line": 2096
+    },
+    {
+      "method": "RuntimeDiagnostics.increment_performance_counter",
+      "field": "enemy_terrain_path_accepted",
+      "line": 2102
+    },
+    {
+      "method": "RuntimeDiagnostics.increment_performance_counter",
+      "field": "enemy_terrain_path_budget_rejections",
+      "line": 2106
+    },
+    {
+      "method": "RuntimeDiagnostics.increment_performance_counter",
+      "field": "enemy_terrain_path_expansions",
+      "line": 2112
+    },
+    {
+      "method": "RuntimeDiagnostics.begin_timed_segment",
+      "field": "enemy_movement_strategy_calls",
+      "line": 2325
+    },
+    {
+      "method": "RuntimeDiagnostics.end_timed_segment",
+      "field": "enemy_movement_strategy_usec",
+      "line": 2329
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "actor_redraw_requests",
+      "line": 2717
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "actor_redraw_requests",
+      "line": 2747
+    },
+    {
+      "method": "RuntimeDiagnostics.begin_timed_segment",
+      "field": "enemy_physics_calls",
+      "line": 2771
+    },
+    {
+      "method": "RuntimeDiagnostics.end_timed_segment",
+      "field": "enemy_physics_usec",
+      "line": 2777
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "death_physics_process_calls_after_begin",
+      "line": 2787
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "active_enemy_physics_count",
+      "line": 2801
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "background_fast_path_skips",
+      "line": 2816
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "background_fast_path_skips",
+      "line": 2824
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "background_ai_evaluations",
+      "line": 2860
+    },
+    {
+      "method": "RuntimeDiagnostics.begin_timed_segment",
+      "field": "enemy_background_tick_calls",
+      "line": 2861
+    },
+    {
+      "method": "RuntimeDiagnostics.end_timed_segment",
+      "field": "enemy_background_tick_usec",
+      "line": 2867
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "foreground_ai_ticks",
+      "line": 2873
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "engaged_enemy_count",
+      "line": 2875
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "background_deep_sleep_entries",
+      "line": 3167
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "background_deep_sleep_wakeups",
+      "line": 3218
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "background_ai_evaluations",
+      "line": 3240
+    },
+    {
+      "method": "RuntimeDiagnostics.begin_timed_segment",
+      "field": "enemy_background_tick_calls",
+      "line": 3241
+    },
+    {
+      "method": "RuntimeDiagnostics.end_timed_segment",
+      "field": "enemy_background_tick_usec",
+      "line": 3249
+    },
+    {
+      "method": "RuntimeDiagnostics.begin_timed_segment",
+      "field": "enemy_projection_calls",
+      "line": 3390
+    },
+    {
+      "method": "RuntimeDiagnostics.end_timed_segment",
+      "field": "enemy_projection_usec",
+      "line": 3396
+    },
+    {
+      "method": "RuntimeDiagnostics.increment_performance_counter",
+      "field": "safe_zone_queries",
+      "line": 3579
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "physics_moves",
+      "line": 3697
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "moving_enemy_count",
+      "line": 3702
+    },
+    {
+      "method": "RuntimeDiagnostics.begin_timed_segment",
+      "field": "enemy_environment_guard_calls",
+      "line": 3747
+    },
+    {
+      "method": "RuntimeDiagnostics.end_timed_segment",
+      "field": "enemy_environment_guard_usec",
+      "line": 3756
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "attack_los_requests",
+      "line": 3838
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "attack_los_requests",
+      "line": 3870
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "attack_los_cache_hits",
+      "line": 3886
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "attack_los_evaluations",
+      "line": 3914
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "attack_los_map_samples",
+      "line": 3943
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "attack_los_map_samples",
+      "line": 3967
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "attack_los_physics_rays",
+      "line": 3990
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "attack_los_requests",
+      "line": 4064
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "crowd_query_candidates",
+      "line": 6860
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "crowd_index_candidates",
+      "line": 6861
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "crowd_steering_evaluations",
+      "line": 6894
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "crowd_queries",
+      "line": 6895
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "retarget_full_scans",
+      "line": 6918
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "retarget_target_group_scans",
+      "line": 6919
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "retarget_target_candidates",
+      "line": 6933
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "take_damage_calls",
+      "line": 7209
+    },
+    {
+      "method": "RuntimeDiagnostics.increment_performance_counter",
+      "field": "monster_dot_no_struck_count",
+      "line": 7257
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "lethal_damage_count",
+      "line": 7272
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "hit_animation_requests",
+      "line": 7276
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "actor_redraw_requests",
+      "line": 7277
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "actor_redraw_requests_from_damage",
+      "line": 7278
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "death_pending_marks",
+      "line": 7349
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "death_same_release_unregistrations",
+      "line": 7401
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "death_begin_calls",
+      "line": 7411
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "actor_redraw_requests",
+      "line": 7475
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "actor_redraw_requests",
+      "line": 7493
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "actor_redraw_requests",
+      "line": 7646
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "actor_redraw_requests",
+      "line": 7686
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "actor_redraw_requests",
+      "line": 7690
+    },
+    {
+      "method": "RuntimeDiagnostics.begin_timed_segment",
+      "field": "enemy_retarget_calls",
+      "line": 7759
+    },
+    {
+      "method": "RuntimeDiagnostics.end_timed_segment",
+      "field": "enemy_retarget_usec",
+      "line": 7763
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "retarget_decisions",
+      "line": 7981
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "overhead_health_refreshes",
+      "line": 8321
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "actor_redraw_requests",
+      "line": 8327
+    },
+    {
+      "method": "RuntimeDiagnostics.begin_timed_segment",
+      "field": "enemy_visual_update_calls",
+      "line": 8336
+    },
+    {
+      "method": "RuntimeDiagnostics.end_timed_segment",
+      "field": "enemy_visual_update_usec",
+      "line": 8340
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "actor_redraw_requests",
+      "line": 8456
+    },
+    {
+      "method": "RuntimeDiagnostics.begin_timed_segment",
+      "field": "enemy_motion_clear_calls",
+      "line": 8841
+    },
+    {
+      "method": "RuntimeDiagnostics.end_timed_segment",
+      "field": "enemy_motion_clear_usec",
+      "line": 8843
+    },
+    {
+      "method": "RuntimeDiagnostics.begin_timed_segment",
+      "field": "enemy_crowd_goal_calls",
+      "line": 9843
+    },
+    {
+      "method": "RuntimeDiagnostics.end_timed_segment",
+      "field": "enemy_crowd_goal_usec",
+      "line": 9845
+    },
+    {
+      "method": "RuntimeDiagnostics.begin_timed_segment",
+      "field": "enemy_neighbor_calls",
+      "line": 9930
+    },
+    {
+      "method": "RuntimeDiagnostics.end_timed_segment",
+      "field": "enemy_neighbor_usec",
+      "line": 9932
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "enemy_motion_candidate_checks",
+      "line": 10303
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "enemy_motion_body_checks",
+      "line": 10321
+    },
+    {
+      "method": "_record_performance_counter",
+      "field": "enemy_motion_polygon_checks",
+      "line": 10479
+    }
+  ],
+  "scope": "Fixed diagnostic IDs only; unknown dynamic fields and local match counters retained"
+}

@@ -1,0 +1,80 @@
+{
+  "receipt_count": 5,
+  "receipts": [
+    {
+      "receipt": "receipts/direct_and_window_01/6c49e458-650b-4bf7-ae12-a76c20dedf9c/native_result.json",
+      "run_id": "6c49e458-650b-4bf7-ae12-a76c20dedf9c",
+      "test_name": "crowd_fixed_counter_backend_contract_20261009",
+      "test_path": "tests/crowd_fixed_counter_backend_contract_20261009.tscn",
+      "result": "PASS",
+      "reason": "",
+      "effective_exit_code": 0,
+      "native_exit_observed_utc": "2026-10-08T19:19:55.2450838Z",
+      "wrapper_exit_code": 0,
+      "process_exited": true,
+      "pass_marker_found": true,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0
+    },
+    {
+      "receipt": "receipts/direct_and_window_01/9fc2216e-fb12-482f-b93f-60e0eff24836/native_result.json",
+      "run_id": "9fc2216e-fb12-482f-b93f-60e0eff24836",
+      "test_name": "monster_density_diagnostics_window_test",
+      "test_path": "tests/monster_density_diagnostics_window_test.tscn",
+      "result": "PASS",
+      "reason": "",
+      "effective_exit_code": 0,
+      "native_exit_observed_utc": "2026-10-08T19:20:03.5749167Z",
+      "wrapper_exit_code": 0,
+      "process_exited": true,
+      "pass_marker_found": true,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0
+    },
+    {
+      "receipt": "receipts/fixed_counter_30_01/9b74e6a8-f0f2-442b-8a17-8cbf9d03abf3/native_result.json",
+      "run_id": "9b74e6a8-f0f2-442b-8a17-8cbf9d03abf3",
+      "test_name": "crowd_formal_grid_comparison_20261008",
+      "test_path": "tests/crowd_formal_grid_comparison_20261008.tscn",
+      "result": "PASS",
+      "reason": "",
+      "effective_exit_code": 0,
+      "native_exit_observed_utc": "2026-10-08T19:21:04.3433597Z",
+      "wrapper_exit_code": 0,
+      "process_exited": true,
+      "pass_marker_found": true,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0
+    },
+    {
+      "receipt": "receipts/fixed_counter_30_02/89ce1ba3-68e8-4317-b7c1-f5adf03baa7d/native_result.json",
+      "run_id": "89ce1ba3-68e8-4317-b7c1-f5adf03baa7d",
+      "test_name": "crowd_formal_grid_comparison_20261008",
+      "test_path": "tests/crowd_formal_grid_comparison_20261008.tscn",
+      "result": "PASS",
+      "reason": "",
+      "effective_exit_code": 0,
+      "native_exit_observed_utc": "2026-10-08T19:21:28.9823119Z",
+      "wrapper_exit_code": 0,
+      "process_exited": true,
+      "pass_marker_found": true,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0
+    },
+    {
+      "receipt": "receipts/red_01/b3406fef-b37c-49c3-bcb3-fc4cd9467f8f/native_result.json",
+      "run_id": "b3406fef-b37c-49c3-bcb3-fc4cd9467f8f",
+      "test_name": "crowd_fixed_counter_backend_contract_20261009",
+      "test_path": "tests/crowd_fixed_counter_backend_contract_20261009.tscn",
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1",
+      "effective_exit_code": 1,
+      "native_exit_observed_utc": "2026-10-08T19:10:52.8623492Z",
+      "wrapper_exit_code": 1,
+      "process_exited": true,
+      "pass_marker_found": false,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0
+    }
+  ]
+}

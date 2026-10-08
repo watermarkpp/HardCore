@@ -1,0 +1,7 @@
+{
+  "status": "FAIL",
+  "scope": "Static review only; not run natively",
+  "reason": "ID wrapper retained legacy Dictionary get/set and per-call field table validation; required packed-int storage not implemented",
+  "source_sha256": "E237B6F7DEC2272D54CB0316C40B8C06E983E497E196BF0858B1BA75FF630100",
+  "next": "Implement actual compact backend; no wrapper benchmark"
+}

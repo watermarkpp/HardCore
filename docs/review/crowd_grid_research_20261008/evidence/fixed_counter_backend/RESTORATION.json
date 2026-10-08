@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "scope": "Exact two candidate production files restored; all five stock107 matched; unrelated content retained",
+  "files": [
+    {
+      "path": "scripts/runtime_diagnostics.gd",
+      "before": "20C4959DD27C0D9C5B885EC472C1BA81D1613B9D5BDFBC228D4D185C4A74A7D6",
+      "restored": "5D9223872649C9AF7E7D59336706C7D7414118E756BC71B8CAFEE60BA5D1E8DA"
+    },
+    {
+      "path": "scripts/enemy.gd",
+      "before": "D81B0BC2052B6703A6C9C8A36C8357C269E992BBFB6F98567492887C15E91C81",
+      "restored": "22EB3A376540759219F7159958CAB51ED80884B27444B4D22CB2B76E45E15F3E"
+    }
+  ]
+}
