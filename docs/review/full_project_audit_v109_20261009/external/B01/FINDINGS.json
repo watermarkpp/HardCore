@@ -1,0 +1,159 @@
+{
+  "batch": "B01",
+  "fixed_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175",
+  "status": "READ_ONLY_AUDIT_NOT_RELEASE_PASS",
+  "findings": [
+    {
+      "id": "B01-001",
+      "severity": "P1",
+      "category": "已由源码证明的取消控制流缺口",
+      "status": "SOURCE_PROVEN_RUNTIME_UNVERIFIED",
+      "confidence": "HIGH",
+      "path": "scripts/game_root.gd; scripts/world_bootstrap_coordinator.gd",
+      "function": "_begin_initial_world_bootstrap; _run_world_build_pipeline; WorldBootstrapCoordinator.finish/is_generation_current",
+      "lines": "game_root.gd:3381-3455, 4039-4120; world_bootstrap_coordinator.gd:122-139, 241-263",
+      "trigger": "初始世界的线程预取未在60秒内完成；GameRoot结束初始等待并finish(false)，线程资源随后成功完成。",
+      "observed": "超时finish并不改变coordinator.generation；_run_world_build_pipeline等待资源时只以generation作为主要取消判据，继续执行background.submit_staged_build及map/collision阶段；外层transition_id检查发生在await函数返回之后。",
+      "expected": "任何超时/撤销的world build在加载资源之后、进入任一实际地图变更之前必然失效，不允许旧协程修改失败或新世界。",
+      "call_chain": "GameRoot._begin_initial_world_bootstrap -> _run_map_transition -> _run_world_build_pipeline [await/poll] -> WorldBootstrapCoordinator -> background.submit_staged_build/build map",
+      "evidence": [
+        "https://github.com/watermarkpp/HardCore/blob/dbd78d3301c2af6cfd9e070abe8cc847e6353175/scripts/game_root.gd#L3381-L3455",
+        "https://github.com/watermarkpp/HardCore/blob/dbd78d3301c2af6cfd9e070abe8cc847e6353175/scripts/game_root.gd#L4039-L4120",
+        "https://github.com/watermarkpp/HardCore/blob/dbd78d3301c2af6cfd9e070abe8cc847e6353175/scripts/world_bootstrap_coordinator.gd#L241-L263"
+      ],
+      "repair": "给原world build明确的超时取消generation/transition权属封锁；在wait后、submit_staged_build前、每个await后和每个有副作用阶段入口同时检查generation与有效transition_id。保留错误恢复、安全输入锁和原地图完整性，不改变60000ms时限。",
+      "minimal_validation": "控制式延迟单个正式prefetch超出可注入超时，允许旧资源随后完成；断言旧地图变更回调、碰撞构建、actor spawn均为0；另一新generation READY不受旧完成污染。",
+      "notes": "真实设备是否出现该竞态MISSING；此处是触发条件明确的静态控制流缺口。"
+    },
+    {
+      "id": "B01-002",
+      "severity": "P1",
+      "category": "源码证明的条件性资源令牌收尾缺失",
+      "status": "SOURCE_PROVEN_TRIGGER_UNMEASURED",
+      "confidence": "HIGH",
+      "path": "scripts/monster_visual_streaming_coordinator.gd",
+      "function": "_start_threaded_profile_jobs; _poll_admitted; _mark_job_failed; release_map_pins; _erase_terminal_request",
+      "lines": "247-319; 445-560; 928-947",
+      "trigger": "同一怪物图集五个动作中，先前的load_threaded_request已返回OK，后续动作请求或加载失败；或者旧generation加载期间解除map pins。",
+      "observed": "任务失败统一调用_mark_job_failed，仅清除partial_resources、action_cursor、loaded_pending等字段，不对该任务已成功提交但未消费的每个动作路径作终止get；转图清除queued状态也没有逐token清算。Godot 4.7 get消耗用户令牌，get_status仅报告状态。",
+      "expected": "每个实际接受的加载用户令牌有唯一拥有者和恰好一次terminal get，即使整体profile失败或世界撤销；未完成者非阻塞地继续等待终态，不在游戏帧强制join。",
+      "call_chain": "MonsterVisual request -> coordinator.request_client_profile -> _start_threaded_profile_jobs [5 requests] -> _poll_admitted OR failure -> _mark_job_failed/evict/generation swap",
+      "evidence": [
+        "https://github.com/watermarkpp/HardCore/blob/dbd78d3301c2af6cfd9e070abe8cc847e6353175/scripts/monster_visual_streaming_coordinator.gd#L247-L319",
+        "https://github.com/watermarkpp/HardCore/blob/dbd78d3301c2af6cfd9e070abe8cc847e6353175/scripts/monster_visual_streaming_coordinator.gd#L445-L560",
+        "https://raw.githubusercontent.com/godotengine/godot/4.7-stable/core/io/resource_loader.cpp#L860-L923"
+      ],
+      "repair": "引入此coordinator现有job内的每路径accepted/get-consumed ledger；失败/取消分离逻辑交付与异步token retire；保持两任务并发、5动作原子profile验收、waiter/lease/地图generation及decoded预算不变。",
+      "minimal_validation": "五动作请求第3个失败、第4个已启动后加载失败、旧地图切换时已有2个IN_PROGRESS；逐路径断言accepted==get次数、无视觉误交付、无阻塞战斗帧、失败后可以重试。",
+      "notes": "尚未证明本地stderr的3个Resource就是此路径；需要verbose或失败专项。"
+    },
+    {
+      "id": "B01-003",
+      "severity": "P1",
+      "category": "源码证明的条件性资源令牌收尾缺失",
+      "status": "SOURCE_PROVEN_TRIGGER_UNMEASURED",
+      "confidence": "HIGH",
+      "path": "scripts/world_bootstrap_coordinator.gd",
+      "function": "request_threaded_prefetch; poll_threaded_prefetch; _internal_begin",
+      "lines": "122-138; 695-769",
+      "trigger": "任一已OK提交的地图预取路径返回THREAD_LOAD_FAILED；或切图时前一代仍有IN_PROGRESS/LOADED但尚未get的预取。",
+      "observed": "FAILED仅标记load_failed；_internal_begin清空resource_manifest和_prefetched_resources，失去未完成的请求身份。成功LOADED才执行get。",
+      "expected": "正式map-generation替换或FAILED也必须继续对已接受token做有界终态回收，并保证资源不会提交到错代地图。",
+      "call_chain": "GameRoot._run_world_build_pipeline -> WorldBootstrapCoordinator.request_threaded_prefetch -> poll_threaded_prefetch -> FAILED/generation replace",
+      "evidence": [
+        "https://github.com/watermarkpp/HardCore/blob/dbd78d3301c2af6cfd9e070abe8cc847e6353175/scripts/world_bootstrap_coordinator.gd#L122-L138",
+        "https://github.com/watermarkpp/HardCore/blob/dbd78d3301c2af6cfd9e070abe8cc847e6353175/scripts/world_bootstrap_coordinator.gd#L695-L769",
+        "https://raw.githubusercontent.com/godotengine/godot/4.7-stable/core/io/resource_loader.cpp#L860-L923"
+      ],
+      "repair": "在现有coordinator保留独立的accepted-path收尾状态，失败状态终态get，旧generation预取只退役不交付；不可仅通过clear字典或增加预算解决。",
+      "minimal_validation": "必需资源失效与地图取消两种场景，对每个实际OK请求准确清算，旧generation返回后不覆盖当前world；验证原required/optional失败规则不变。",
+      "notes": "不把ERR_ALREADY_IN_USE等返回值无条件视为新增本owner token；需要按Godot原生返回语义逐条确认。"
+    },
+    {
+      "id": "B01-004",
+      "severity": "P2",
+      "category": "源码证明的条件性资源令牌收尾缺失",
+      "status": "SOURCE_PROVEN_TRIGGER_UNMEASURED",
+      "confidence": "MEDIUM_HIGH",
+      "path": "scripts/startup_loading.gd; scripts/monster_source_frames.gd",
+      "function": "StartupLoading._begin_target_load/_process/_exit_tree; MonsterSourceFrames.poll/request",
+      "lines": "startup_loading.gd:373-545, 823-835; monster_source_frames.gd:39-73",
+      "trigger": "启动目标场景的已接受异步load最终FAILED，或未完成时重试/离开；怪物overlay资源已OK提交后FAILED。",
+      "observed": "主场景prefetch失败有get收尾，启动目标scene的FAILED分支只发布错误；overlay的FAILED/INVALID分支删除_requested并无get，可能遗失已接受请求。",
+      "expected": "不同资源通路对自己持有的accepted-token实现对称且不阻塞的终态回收。",
+      "call_chain": "StartupLoading._begin_target_load -> _process status FAILED -> _fail_target_load; GameRoot._process -> MonsterSourceFrames.poll status FAILED -> _requested.erase",
+      "evidence": [
+        "https://github.com/watermarkpp/HardCore/blob/dbd78d3301c2af6cfd9e070abe8cc847e6353175/scripts/startup_loading.gd#L373-L545",
+        "https://github.com/watermarkpp/HardCore/blob/dbd78d3301c2af6cfd9e070abe8cc847e6353175/scripts/startup_loading.gd#L823-L835",
+        "https://github.com/watermarkpp/HardCore/blob/dbd78d3301c2af6cfd9e070abe8cc847e6353175/scripts/monster_source_frames.gd#L39-L73"
+      ],
+      "repair": "只对确由本owner OK提交的token建立pending-get状态；FAILED时适当消费终态get；重试/退出不得抹掉IN_PROGRESS收尾所有权，避免对外部BUSY token误get。",
+      "minimal_validation": "损坏启动场景和特效Texture分别触发真正threaded FAILED；恢复时重复请求成功；获取verbose token/资源账本；正常启动仍不额外同步加载。",
+      "notes": "本批未运行对应失败路径；与B01-002/003同机制但不同生命周期owner。"
+    },
+    {
+      "id": "B01-005",
+      "severity": "P2",
+      "category": "已由源码证明的测试夹具BUG",
+      "status": "SOURCE_PROVEN",
+      "confidence": "HIGH",
+      "path": "tests/safe_logout_pending_retry_repair_20261009.gd; scripts/layers/runtime/loot_runtime_service.gd",
+      "function": "fixture _run; LootRuntimeService",
+      "lines": "safe_logout_pending_retry_repair_20261009.gd: _run preview; loot_runtime_service.gd:1",
+      "trigger": "运行真实pending-logout回归场景时调用一次临时预览掉落。",
+      "observed": "LootRuntimeScript.new()构造extends Node的实例，未add_child也未free；Godot Node不是RefCounted，test完成时遗留ObjectDB对象。原始stderr为13 ObjectDB leaked、3 resources in use，但仅可将该一个Node确定归属。",
+      "expected": "夹具中任何临时Node都有明确free/queue_free生命周期，测试结束ObjectDB/Resource退出告警按类型进一步归因。",
+      "call_chain": "safe_logout_pending_retry_repair_20261009._run -> LootRuntimeScript.new().roll_monster_drops -> _finish -> get_tree().quit",
+      "evidence": [
+        "https://github.com/watermarkpp/HardCore/blob/dbd78d3301c2af6cfd9e070abe8cc847e6353175/tests/safe_logout_pending_retry_repair_20261009.gd",
+        "https://github.com/watermarkpp/HardCore/blob/dbd78d3301c2af6cfd9e070abe8cc847e6353175/scripts/layers/runtime/loot_runtime_service.gd#L1-L2",
+        "https://github.com/watermarkpp/HardCore/blob/dbd78d3301c2af6cfd9e070abe8cc847e6353175/docs/review/v108_runtime_bug_repair_20261009/evidence/followup/direct05_logout_safe_logout_pending_retry_repair_20261009.stderr.log"
+      ],
+      "repair": "夹具使用已有正式LootRuntime autoload或显式释放临时Node，保持preview RNG和原44项退出/幂等断言；不要将此直接归咎于生产资源服务。",
+      "minimal_validation": "只在改变夹具后对该场景做一次native单例重跑，保留实际stderr与--verbose对象类/ID；看剩余12 ObjectDB/3 resources是否仍有，以事实再追生产持有链。",
+      "notes": "现有runner元数据engine_log_errors=0与独立stderr原文不等价。"
+    },
+    {
+      "id": "B01-006",
+      "severity": "P2",
+      "category": "源码推导的稳帧风险/授权行为取舍",
+      "status": "POLICY_KNOWN_PERFORMANCE_NOT_MEASURED",
+      "confidence": "HIGH",
+      "path": "scripts/game_root.gd; scripts/layers/runtime/execution/frame_budget.gd",
+      "function": "_on_player_moved; _pump_passive_monster_wakeup; _service_passive_monster_wakeup_batch; FrameBudget.begin",
+      "lines": "game_root.gd:6541-6885; frame_budget.gd:118-183",
+      "trigger": "一个process epoch内发生多个真实physics补步/移动事件，30只或更多合格怪物的被动激活需要立即处理。",
+      "observed": "新事件可在同一process反复调用同步查询；必要路径begin(...,true)不受optional1200us截断。这是用户批准的即时激活合同，而不是原8候选分页bug。已提供10次移动回调约13847us只是function observer压力，不包含完整Android帧。",
+      "expected": "即时激活/不漏新入范围演员与峰值治理同时成立；不得恢复8候选或300ms延迟。",
+      "call_chain": "player.movement_performed -> GameRoot._on_player_moved -> spatial AABB -> Enemy.request_passive_target_wakeup; physics catch-up may repeat",
+      "evidence": [
+        "https://github.com/watermarkpp/HardCore/blob/dbd78d3301c2af6cfd9e070abe8cc847e6353175/scripts/game_root.gd#L6541-L6885",
+        "https://github.com/watermarkpp/HardCore/blob/dbd78d3301c2af6cfd9e070abe8cc847e6353175/scripts/layers/runtime/execution/frame_budget.gd#L118-L183"
+      ],
+      "repair": "本批不批准修改：先度量实际process内查询数和范围/实际位置/索引membership revision，再讨论只对完全相同输入的候选池复用；每次候选仍需真实合法性判断。",
+      "minimal_validation": "同process多physics及不同玩家位置/敌人新增/移动/代际变化A/B压力probe，保留全量即时30/30激活、完整运动和帧间隔；手机60fps需真机而非headless。",
+      "notes": "非已证生产BUG、非降精度提案、旧same-work50%与稳帧产品指标分别报。"
+    },
+    {
+      "id": "B01-007",
+      "severity": "P2",
+      "category": "109发布前配置验证缺口",
+      "status": "VALIDATION_GAP_NOT_SOURCE_BUG",
+      "confidence": "HIGH",
+      "path": "export_presets.cfg; project.godot",
+      "function": "Android export preset/version properties",
+      "lines": "export_presets.cfg:32-46; project.godot:11-31",
+      "trigger": "主控直接从仓库Android导出设置生成待发布的版本109 APK，而未通过正式打包入口覆盖版本信息。",
+      "observed": "固定仓库export_presets.cfg的version/code仍是82；project.godot显示HardCore正式版和release.boundary-fix.v39。先前v108 APK有独立构建入口和包内versionCode证据，不能据仓库字段推断v108 APK错误。",
+      "expected": "109最终APK需明确versionCode=109、package com.personal.mafaoffline、签名/旧存档兼容，以及实际使用的export preset/import filters均已核验。",
+      "call_chain": "project.godot [application] + export_presets.cfg [preset.0.options] -> formal export script -> APK manifest",
+      "evidence": [
+        "https://github.com/watermarkpp/HardCore/blob/dbd78d3301c2af6cfd9e070abe8cc847e6353175/export_presets.cfg#L1-L49",
+        "https://github.com/watermarkpp/HardCore/blob/dbd78d3301c2af6cfd9e070abe8cc847e6353175/project.godot#L11-L80"
+      ],
+      "repair": "只在109正式构建准备时核对脚本是否覆盖code，并对APK实际manifest和签名做最终校验；本审查不修改export_preset。",
+      "minimal_validation": "正式构建前输出preset与命令覆盖值，正式构建后读APK manifest versionCode/package、签名指纹及原用户数据升级兼容；本批NOT_RUN。",
+      "notes": "不能称versionCode=82已进入109包，因为109还未构建。"
+    }
+  ]
+}

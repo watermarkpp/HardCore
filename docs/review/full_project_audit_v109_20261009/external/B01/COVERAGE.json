@@ -1,0 +1,364 @@
+{
+  "batch": "B01",
+  "fixed_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175",
+  "status": "PARTIAL_SOURCE_REVIEW_COMPLETED_WITH_FINDINGS_NOT_PRODUCT_PASS",
+  "modules": {
+    "bootstrap_runtime": "B01_REVIEWED_WITH_PARTIAL_LARGE_FILES",
+    "resource_streaming": "B01_REVIEWED_WITH_PARTIAL_LARGE_FILES",
+    "diagnostics_budget_observability": "B01_REVIEWED_WITH_PARTIAL_LARGE_FILES"
+  },
+  "other_modules": "NOT_RUN; 17 other manifest module groups remain out of scope",
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "status": "FULL",
+      "git_blob_sha": "a93ce3863ae8c6ce7b476015745dbbb3951a6630",
+      "scope_and_boundary": "项目审查和用户历史规则；本轮最新极高覆盖Pro要求",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "PROJECT_CORE_CONTRACTS.md",
+      "status": "FULL",
+      "git_blob_sha": "7c949aae7ede749fa74ea1d7ac6f1703dcdc9c28",
+      "scope_and_boundary": "项目核心合同；与用户补充指令校核",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/SCOPE.md",
+      "status": "FULL",
+      "git_blob_sha": "12b30e381cc4886b986d8fa880f5ddfb6cf9c15a",
+      "scope_and_boundary": "本批外边界/未审查项",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/BATCH_01.md",
+      "status": "FULL",
+      "git_blob_sha": null,
+      "scope_and_boundary": "B01范围重点/要求",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/STANDARD_AUDIT_PROMPT.md",
+      "status": "FULL",
+      "git_blob_sha": null,
+      "scope_and_boundary": "主控标准审查合同",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/AUDIT_PROGRESS.md",
+      "status": "FULL",
+      "git_blob_sha": null,
+      "scope_and_boundary": "历史NOT_RUN状态；本报告新结果不能改远端",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/AUDIT_SCOPE_MANIFEST.json",
+      "status": "METADATA_PARSED",
+      "git_blob_sha": "63998a169d10193358c25e11b74c17b921e1a85a",
+      "scope_and_boundary": "GitHub connector大文件正文为空；授权Win设备git show固定SHA解析JSON：20 modules/6168 inventory，提取B01三模块；并未逐项审计6168个文件",
+      "source_ref": "fixed_git_commit_verified_via_remote_git_show",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "project.godot",
+      "status": "FULL",
+      "git_blob_sha": "a6db0873d7fb56eea170fd97ea972816b517a091",
+      "scope_and_boundary": "run/main_scene、autoload、hardcore预算和物理/渲染设置",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "export_presets.cfg",
+      "status": "FULL",
+      "git_blob_sha": "88df806ceadc9ca2f4ee5a016a90c10e54b21911",
+      "scope_and_boundary": "Android package、export filters、version、Gradle",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "scenes/main.tscn",
+      "status": "FULL",
+      "git_blob_sha": "3ae56747b8c02eb33abcb3c77ba81431846a61ad",
+      "scope_and_boundary": "GameRoot场景脚本入口",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "scenes/startup_loading.tscn",
+      "status": "FULL",
+      "git_blob_sha": "9cc84ee7d2a8314f04d2d7f05945bf7553d8dd12",
+      "scope_and_boundary": "启动场景script与BrandIntro ext_resource",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "scripts/game_root.gd",
+      "status": "PARTIAL",
+      "git_blob_sha": "c0fce8a0176370263bfde364541ed9907b723897",
+      "scope_and_boundary": "_init/_ready/_exit_tree/_notification/_process/_physics_process、bootstrap/map READY、transition/recovery、_run_world_build_pipeline、_load_zone、halo与death EXIT相关；其余战斗/技能/经济UI不属于本批",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "scripts/game_data.gd",
+      "status": "PARTIAL",
+      "git_blob_sha": "d3d3452f8fb8f880ab62fda639c625e98faa6309",
+      "scope_and_boundary": "_ready/ensure_loaded/load_database/bootstrap/generator权威接线；大量资料与技能价格函数留后续批次",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "scripts/world_bootstrap_coordinator.gd",
+      "status": "FULL",
+      "git_blob_sha": "3fdff4e53812307b2ff88cd4ff64d1a604dc44dd",
+      "scope_and_boundary": "begin/finish/generation、queue、resource prefetch、失败/取消/READY",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "scripts/layers/runtime/execution/frame_budget.gd",
+      "status": "FULL",
+      "git_blob_sha": "a3c2401a35ace9682c5ba1ca22db90117741c965",
+      "scope_and_boundary": "process epoch、optional/necessary、denial、fairness、LIFO scopes",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "scripts/layers/runtime/execution/time_domains.gd",
+      "status": "FULL",
+      "git_blob_sha": "522efb5be7cd6e36858566516c0902089af3c6d5",
+      "scope_and_boundary": "simulation/wall/unix clocks",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "scripts/layers/runtime/execution/world_context.gd",
+      "status": "FULL",
+      "git_blob_sha": "0e4c57f9a4b97a45386785937c7884849c767c20",
+      "scope_and_boundary": "weak owner/profile、world/generation snapshots",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "scripts/layers/runtime/execution/paused_receipt_pump.gd",
+      "status": "FULL",
+      "git_blob_sha": "5c1cc818395ab287030ff37feabedb861885a453",
+      "scope_and_boundary": "PROCESS_ALWAYS paused receipt call",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "scripts/features/runtime/feature_resource_preparation.gd",
+      "status": "FULL",
+      "git_blob_sha": "47a5e1905be0188082eb9d219a83463c05d6f3db",
+      "scope_and_boundary": "module preparation, resource token get/failure, cancel_all, code retention/transfer/exit",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "scripts/features/contracts/feature_resource_lease.gd",
+      "status": "FULL",
+      "git_blob_sha": "7c3ca038ccf1cae4d0931fe79376e6cd8783fcf0",
+      "scope_and_boundary": "lease valid/retain/transfer/PREDELETE",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "scripts/features/compilation/feature_resource_registry.gd",
+      "status": "FULL",
+      "git_blob_sha": "806aa3ebcf60ef2254781b7993efde69f9778996",
+      "scope_and_boundary": "declaration validation/resource ID/origin/path checks",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "scripts/skills/skill_resource_service.gd",
+      "status": "FULL",
+      "git_blob_sha": "ce436710520ac08836f669e33012430933e1eda6",
+      "scope_and_boundary": "实际是MP/material quoted resource服务，非ResourceLoader；更深技能行为在其他批次",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "scripts/monster_visual_streaming_coordinator.gd",
+      "status": "PARTIAL",
+      "git_blob_sha": "53a18e3e11e18ea88e9175527554a0466c026424",
+      "scope_and_boundary": "request/load/failure/poll/dispatch/dedup/lease/waiter/evict/generation/reset；部分诊断与订阅helper略查",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "scripts/monster_visual.gd",
+      "status": "PARTIAL",
+      "git_blob_sha": "de18c84e031fcca0ea9220567102529227af6bc1",
+      "scope_and_boundary": "_ready/_exit_tree/visual registry、_activate_resources/_release_resources；动画表现其它责任后续",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "scripts/monster_source_frames.gd",
+      "status": "FULL",
+      "git_blob_sha": "b4f8ce55b0b92c349d5d04b63aea64435dfe4629",
+      "scope_and_boundary": "overlay texture threaded request/get/status/cache",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "scripts/prepared_music_stream.gd",
+      "status": "FULL",
+      "git_blob_sha": "3a0d57c07fd605e6fd798f0b3cd15d84d4615154",
+      "scope_and_boundary": "AudioStream native playback prepare/instantiate",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "scripts/runtime_diagnostics.gd",
+      "status": "PARTIAL",
+      "git_blob_sha": "e0cb3385f5bd0168a7bd0812797afb69acbf20bf",
+      "scope_and_boundary": "Debug/DeviceLab flags, counters, windows, wall-frame sampling, inclusive timing；字段常量列表未逐个审计",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "scripts/layers/runtime/combat_diagnostic_log.gd",
+      "status": "FULL",
+      "git_blob_sha": "a986b0e8501586284719d1a537d6383ac43ef928",
+      "scope_and_boundary": "Debug JSONL, max bytes/records, recursive safe encode",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "scripts/layers/runtime/skill_footprint_diagnostic_log.gd",
+      "status": "FULL",
+      "git_blob_sha": "1e8be544782df80b76131d756f2cb3d211b4fc01",
+      "scope_and_boundary": "Debug footprint JSONL",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "scripts/layers/runtime/runtime_service_facade.gd",
+      "status": "FULL",
+      "git_blob_sha": "1bafc94714b5c73ede103902944c4820f19ee26b",
+      "scope_and_boundary": "autoload real save/expansion/status handlers",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "scripts/layers/runtime/domain_runtime_services.gd",
+      "status": "FULL",
+      "git_blob_sha": "6c873b7d0294a2ac86c4d4e312f5a3d178bfa628",
+      "scope_and_boundary": "autoload domain map/save/skill bridge",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "scripts/environment_validator.gd",
+      "status": "FULL",
+      "git_blob_sha": "2794dd9200aac352eb3ad8e4918ad155411e181e",
+      "scope_and_boundary": "environment/theme/portal resource validation",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "scripts/startup_loading.gd",
+      "status": "PARTIAL",
+      "git_blob_sha": "b511ed26fc8ea062a762ec635ab6f5dfff9d4b34",
+      "scope_and_boundary": "first frame authoritative load, target scene threaded failure/retry, prefetched main resource, code retain, _exit_tree",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "scripts/character_select.gd",
+      "status": "PARTIAL",
+      "git_blob_sha": "1767a16864b410da3efa638d105dac919ff51f54",
+      "scope_and_boundary": "code handoff/retire entrypoint mapping, scene startup, not full roster UI",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "scripts/layers/runtime/content_layer_registry.gd",
+      "status": "PARTIAL",
+      "git_blob_sha": "1471f14c73bcdb66ee396316339150fe712b6bda",
+      "scope_and_boundary": "autoload init, feature service construction, cancel, code handoff/retire",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "scripts/layers/runtime/world_content_service.gd",
+      "status": "PARTIAL",
+      "git_blob_sha": "67e6029e49870e669e2c79cf23fc7455ba99ad87",
+      "scope_and_boundary": "autoload ensure/reload and public map service names",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "scripts/layers/runtime/loot_runtime_service.gd",
+      "status": "PARTIAL",
+      "git_blob_sha": null,
+      "scope_and_boundary": "继承Node头部与fixture预览调用已证；掉落正文B04未审查",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "tests/safe_logout_pending_retry_repair_20261009.gd",
+      "status": "FULL",
+      "git_blob_sha": "1442f816c00b1323ea11b53bbf6af277e03371b5",
+      "scope_and_boundary": "完整真实reentry成功/失败/再次退出验收与测试夹具所有权",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "docs/review/v108_runtime_bug_repair_20261009/evidence/followup/direct05_logout_runner.json",
+      "status": "FULL",
+      "git_blob_sha": null,
+      "scope_and_boundary": "runner PASS/native0，不覆盖stderr",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "docs/review/v108_runtime_bug_repair_20261009/evidence/followup/direct05_logout_safe_logout_pending_retry_repair_20261009.stderr.log",
+      "status": "FULL",
+      "git_blob_sha": null,
+      "scope_and_boundary": "13 ObjectDB+3 resources退出告警",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "docs/review/v108_runtime_bug_repair_20261009/evidence/followup/direct06_projection_runner.json",
+      "status": "FULL",
+      "git_blob_sha": null,
+      "scope_and_boundary": "投影恢复专项单测试通过",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "docs/review/v108_runtime_bug_repair_20261009/evidence/followup/direct09_freed_owner_passive_wake_stale_target_repair_20261009.stderr.log",
+      "status": "FULL",
+      "git_blob_sha": null,
+      "scope_and_boundary": "单对象泄漏例，生产归因不足",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    },
+    {
+      "path": "docs/review/v108_runtime_bug_repair_20261009/evidence/followup/FINAL_SCOPE_BINDING.json",
+      "status": "FULL",
+      "git_blob_sha": null,
+      "scope_and_boundary": "最后生产源码SHA256与旧MAIN HEAD区分",
+      "source_ref": "fixed_git_commit",
+      "reviewed_at_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175"
+    }
+  ],
+  "limitations": [
+    "For 6,168 inventory entries only 3 B01 module metadata rows were extracted; this is not 6,168-file audit",
+    "37 local_only_not_uploaded_not_covered manifest entries are NOT_READ, including retired grid work; do not load into runtime",
+    "Other module code downstream of B01 is PARTIAL/NOT_RUN",
+    "All tests and Android runs are NOT_RUN by this audit; old direct receipts are read-only evidence",
+    "private Page unavailable; no Page ID exists"
+  ]
+}
