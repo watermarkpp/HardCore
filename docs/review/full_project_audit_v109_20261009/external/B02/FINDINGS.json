@@ -1,0 +1,164 @@
+{
+  "schema": "hardcore.audit.findings.v1",
+  "batch": "B02",
+  "source_commit": "ed2d87121de80c84caaa3f096c3a5acb71d4946f",
+  "review_status": "PARTIAL_SOURCE_REVIEW_WITH_FINDINGS",
+  "test_execution": "NOT_RUN",
+  "severity_not_release_pass": true,
+  "findings": [
+    {
+      "id": "B02-001",
+      "severity": "P1",
+      "category": "SOURCE_CONFIRMED_TIME_DOMAIN_BUG",
+      "status": "OPEN_UNVALIDATED",
+      "confidence": "HIGH",
+      "path": "scripts/player.gd",
+      "function": "_emit_attack_after_windup / _emit_skill_after_windup",
+      "lines": "1263-1355",
+      "formal_trigger": "A legal player attack or skill starts with nonzero windup; the player opens the system menu before that windup completes.",
+      "current_behavior": "Both release coroutines await SceneTree.create_timer(windup) with process_always=true by default. GameRoot._show_system_menu pauses SceneTree but leaves _player_input_enabled unchanged; the SceneTreeTimer continues and emits the accepted attack/skill during menu pause. Other physics-driven cooldown/motion/DOT timers remain paused.",
+      "expected_behavior": "Pause must not advance player gameplay windup or deal new pending-release damage behind a paused menu. On resume, an accepted action completes once without resetting cooldown or cancelling its legitimate release.",
+      "shortest_call_chain": "Player.request_attack/request_skill → _emit_*_after_windup → SceneTreeTimer(default process_always=true) → GameRoot._on_player_attack/_on_player_skill → apply HP; GameRoot._show_system_menu sets tree.paused=true without changing gameplay_input_is_enabled",
+      "evidence": [
+        "https://github.com/watermarkpp/HardCore/blob/ed2d87121de80c84caaa3f096c3a5acb71d4946f/scripts/player.gd#L1263-L1365",
+        "https://github.com/watermarkpp/HardCore/blob/ed2d87121de80c84caaa3f096c3a5acb71d4946f/scripts/game_root.gd#L2580-L2628",
+        "https://github.com/watermarkpp/HardCore/blob/ed2d87121de80c84caaa3f096c3a5acb71d4946f/scripts/game_root.gd#L1427-L1464",
+        "Godot SceneTree.create_timer(time, process_always=true) documented default; https://docs.godotengine.org/en/stable/classes/class_scenetree.html"
+      ],
+      "repair": "Keep gameplay windup on one pause-aware simulation time-domain; at minimum make its SceneTreeTimer process_always=false while preserving action epoch/synchronous release and release order; do not remove lifecycle cancellation or make damage happen on menu entry.",
+      "minimum_validation": "Native real GameRoot/Player with hit-guaranteed target: accept attack and skill, pause mid-windup longer than duration; assert no HP/MP release while paused; resume, exactly one release/hit, no duplicate stats, death/map transition still cancels correctly.",
+      "source_sha": "ed2d87121de80c84caaa3f096c3a5acb71d4946f"
+    },
+    {
+      "id": "B02-002",
+      "severity": "P2",
+      "category": "SOURCE_DERIVED_COLLISION_ORDER_RISK",
+      "status": "OPEN_REQUIRES_PRODUCT_AND_NATIVE",
+      "confidence": "HIGH_ORDERING_MEDIUM_POLICY",
+      "path": "scripts/skill_projectile.gd",
+      "function": "_physics_process / _swept_segment_intersects_enemy_footprint",
+      "lines": "374-492",
+      "formal_trigger": "Two distinct eligible monster footprints intersect one fast projectile's same physics segment, with far enemy having earlier stable_combat_order.",
+      "current_behavior": "The projectile asks RuntimeCombatSpatialIndex.query_segment_candidates (stable combat order), loops results and applies the first exact swept hit then queue_free. It never computes earliest impact parameter along the travel segment, so far target may be damaged before nearer target.",
+      "expected_behavior": "If the formal single-hit projectile policy is first physical contact, pick minimum segment-contact time t among exact hits; stable identity order may only resolve equal-time ties.",
+      "shortest_call_chain": "SkillProjectile._physics_process → RuntimeCombatSpatialIndex.query_segment_candidates → _query_aabb_candidates stable_combat_order sort → first intersects → _apply_hit → queue_free",
+      "evidence": [
+        "https://github.com/watermarkpp/HardCore/blob/ed2d87121de80c84caaa3f096c3a5acb71d4946f/scripts/skill_projectile.gd#L374-L491",
+        "https://github.com/watermarkpp/HardCore/blob/ed2d87121de80c84caaa3f096c3a5acb71d4946f/scripts/runtime_combat_spatial_index.gd#L200-L218",
+        "https://github.com/watermarkpp/HardCore/blob/ed2d87121de80c84caaa3f096c3a5acb71d4946f/scripts/runtime_combat_spatial_index.gd#L610-L645"
+      ],
+      "repair": "Do not expand candidate set or add a second collision authority. Confirm first-impact rule; if approved, reuse same frozen segment and exact target shapes, calculate first contact parameter for eligible candidates then commit once to nearest. Preserve deterministic tie-break.",
+      "minimum_validation": "Two collinear targets inside one physics step, reverse spawn/stable IDs; assert first physical contact wins and far enemy untouched; test glancing and exact-equal contacts; projectile must still be dodgeable by actual motion.",
+      "source_sha": "ed2d87121de80c84caaa3f096c3a5acb71d4946f"
+    },
+    {
+      "id": "B02-003",
+      "severity": "P2",
+      "category": "SOURCE_DERIVED_CROSS_MODULE_EVENT_RISK",
+      "status": "OPEN_REQUIRES_NATIVE_REPRO",
+      "confidence": "MEDIUM_HIGH",
+      "path": "scripts/player.gd",
+      "function": "_physics_process",
+      "lines": "385-459",
+      "formal_trigger": "A blocked player changes position solely through a zero-motion collision recovery, including without directional movement input, and a cold enemy enters their new 6/9/12 halo.",
+      "current_behavior": "move_and_collide(Vector2.ZERO,false,safe_margin,true) can separate contact before position_before_move is captured. Movement event and actual_ground_motion_gu compare only after this assignment. Recovery-only displacement is not published to GameRoot._on_player_moved; event-based passive activation may await another event.",
+      "expected_behavior": "Any actual externally visible player world movement crossing an activation envelope must publish one legal activation event or be covered by an existing documented position-publication event; no full per-frame monster scan.",
+      "shortest_call_chain": "Player._physics_process zero-motion contact recovery → resets position_before_move → accepted_motion computed from later directional move → no movement_performed → GameRoot._on_player_moved not called → passive wake misses move",
+      "evidence": [
+        "https://github.com/watermarkpp/HardCore/blob/ed2d87121de80c84caaa3f096c3a5acb71d4946f/scripts/player.gd#L389-L456",
+        "https://github.com/watermarkpp/HardCore/blob/ed2d87121de80c84caaa3f096c3a5acb71d4946f/scripts/game_root.gd#L6541-L6550"
+      ],
+      "repair": "First reproduce actual recovery displacement; if it occurs, publish final canonical player position change at one movement owner boundary (after all collision correction), without double-publishing or changing free 8-direction motion. Avoid new halo scans.",
+      "minimum_validation": "Start overlapping valid dynamic body, no input, force recovery into halo of dormant monster; measure initial/final Ground GU and movement event count; assert target acquisition immediate and no duplicate call when directional displacement also occurs.",
+      "source_sha": "ed2d87121de80c84caaa3f096c3a5acb71d4946f"
+    },
+    {
+      "id": "B02-004",
+      "severity": "P2",
+      "category": "SOURCE_DERIVED_STEALTH_LIFECYCLE_RISK",
+      "status": "OPEN_REQUIRES_RULE_RECONCILIATION",
+      "confidence": "HIGH_CONTROL_FLOW_MEDIUM_PRODUCT",
+      "path": "scripts/player.gd",
+      "function": "_apply_profile_stats / recover_equipment_stealth_after_combat_exit",
+      "lines": "2018-2042; 1871-1898",
+      "formal_trigger": "Stealth equipment was explicitly broken by combat. While still engaged, a profile/equipment change toggles computed equipment stealth eligibility off and on.",
+      "current_behavior": "_apply_profile_stats clears _stealth_break_override on any change in equipment stealth active flag, regardless of active combat. The separate equipment stealth re-arm method explicitly checks combat exit at GameRoot, so reequipping during combat can restore stealth earlier than that owner boundary.",
+      "expected_behavior": "If equipment stealth is meant to stay broken until genuine combat exit, profile changes must not reset combat suppression while still engaged. Valid fresh equips outside combat must still activate stealth.",
+      "shortest_call_chain": "Player.break_stealth → _stealth_break_override=true → PlayerState equipment change/profile_changed → Player._apply_profile_stats() compares _equipment_stealth_active and sets override=false → Player.is_stealthed() true while enemy remains engaged",
+      "evidence": [
+        "https://github.com/watermarkpp/HardCore/blob/ed2d87121de80c84caaa3f096c3a5acb71d4946f/scripts/player.gd#L1860-L1903",
+        "https://github.com/watermarkpp/HardCore/blob/ed2d87121de80c84caaa3f096c3a5acb71d4946f/scripts/player.gd#L2025-L2045",
+        "https://github.com/watermarkpp/HardCore/blob/ed2d87121de80c84caaa3f096c3a5acb71d4946f/scripts/game_root.gd#L8360-L8393"
+      ],
+      "repair": "Ask main controller to verify user equipment-rearm contract. If broken-until-combat-exit is authoritative, preserve the live broken flag across stat/equipment recalculation during combat; leave normal equip/new-character/revive boundaries with existing sole owner.",
+      "minimum_validation": "Attack breaks ring stealth; off/on equipment and same-stat profile change while enemy retains live target; assert no rearm until actual combat exit. Repeat unequipped-in-peace, new character and invisible summon influence.",
+      "source_sha": "ed2d87121de80c84caaa3f096c3a5acb71d4946f"
+    },
+    {
+      "id": "B02-005",
+      "severity": "P2",
+      "category": "RULE_CHOICE_NOT_PROVEN_BUG",
+      "status": "PENDING_PRODUCT_DECISION",
+      "confidence": "HIGH_CODE_HIGH_INTENTIONAL_SUBMISSION",
+      "path": "scripts/player.gd",
+      "function": "request_attack / request_skill / _request_active_skill",
+      "lines": "482-512; 600-645",
+      "formal_trigger": "Player is stealthed and submits a cast that later fails final current world admission, e.g. wizard lightning target blocked by static LOS.",
+      "current_behavior": "break_stealth is called before can_request_skill and hc_world_skill_preflight; a rejected cast attempt may still break stealth. Code has a dated explicit user-override comment: 'Any ... submission breaks stealth uniformly'.",
+      "expected_behavior": "Do not change this without the exact 'submission' versus 'successfully accepted cast' product rule. Prior code comment suggests intentional stealth break even on a rejected request.",
+      "shortest_call_chain": "GameRoot._try_release_skill → Player.request_skill → break_stealth → can_request_skill/_request_active_skill → GameRoot._hc_skill_preflight rejects",
+      "evidence": [
+        "https://github.com/watermarkpp/HardCore/blob/ed2d87121de80c84caaa3f096c3a5acb71d4946f/scripts/player.gd#L482-L512",
+        "https://github.com/watermarkpp/HardCore/blob/ed2d87121de80c84caaa3f096c3a5acb71d4946f/scripts/player.gd#L600-L642",
+        "https://github.com/watermarkpp/HardCore/blob/ed2d87121de80c84caaa3f096c3a5acb71d4946f/scripts/game_root.gd#L15469-L15550"
+      ],
+      "repair": "No automatic fix. If 'submission' intentionally includes failed requests, retain; only with explicit new user ruling move stealth break to the authoritative accepted-action boundary.",
+      "minimum_validation": "Decision-first deterministic stealth+blocked LOS/insufficient eligibility test; do not rewrite expected behavior based on style preferences.",
+      "source_sha": "ed2d87121de80c84caaa3f096c3a5acb71d4946f"
+    },
+    {
+      "id": "B02-006",
+      "severity": "P3",
+      "category": "CONDITIONAL_SOURCE_RISK_NO_CURRENT_TRIGGER_PROVEN",
+      "status": "OPEN_CONDITIONAL",
+      "confidence": "MEDIUM",
+      "path": "scripts/player.gd",
+      "function": "can_request_skill",
+      "lines": "543-599",
+      "formal_trigger": "A formally available learned skill receives quote.valid=false for a non-MP reason (materials, invalid paired resource quotation or feature-modified definition) but mp_cost <= current_mp.",
+      "current_behavior": "can_request_skill returns only MP comparison rather than quote.valid; GameRoot._try_release_skill also checks MP but not quote.valid. Player can begin animation/cooldown then canonical router _plan rejects resource quote at release.",
+      "expected_behavior": "Every cast rejected by final quote should fail admission before action/cooldown start when the current production skill definitions can legally require that condition.",
+      "shortest_call_chain": "Player.can_request_skill/ GameRoot._try_release_skill → ignores quote.valid → Player._request_active_skill commits timer → GameRoot._execute_canonical_skill_plan → SkillRuntimeRouter._plan rejects non-valid quote",
+      "evidence": [
+        "https://github.com/watermarkpp/HardCore/blob/ed2d87121de80c84caaa3f096c3a5acb71d4946f/scripts/player.gd#L543-L599",
+        "https://github.com/watermarkpp/HardCore/blob/ed2d87121de80c84caaa3f096c3a5acb71d4946f/scripts/game_root.gd#L7500-L7580",
+        "https://github.com/watermarkpp/HardCore/blob/ed2d87121de80c84caaa3f096c3a5acb71d4946f/scripts/skills/skill_runtime_router.gd#L27-L105",
+        "https://github.com/watermarkpp/HardCore/blob/ed2d87121de80c84caaa3f096c3a5acb71d4946f/scripts/skills/skill_resource_service.gd#L76-L192"
+      ],
+      "repair": "First establish a reachable real non-MP invalid quote in fixed production; if none, do not alter. If real, use quote.valid at both preflight and accepted final resource gate, preserving one canonical quote and no duplicate MP deduction.",
+      "minimum_validation": "Fixed-source actual skill/extension producing invalid material or partner context; assert no cooldown, animation, stealth break or MP use when the form truly cannot cast; ordinary Taoist material-free policy remains unchanged.",
+      "source_sha": "ed2d87121de80c84caaa3f096c3a5acb71d4946f"
+    },
+    {
+      "id": "B02-007",
+      "severity": "P3",
+      "category": "LIFESTEAL_PRODUCT_SEMANTICS_NEED_RECONCILIATION",
+      "status": "PENDING_PRODUCT_DECISION",
+      "confidence": "HIGH_CODE_UNDECIDED_BALANCE",
+      "path": "scripts/game_root.gd",
+      "function": "_apply_physical_hit",
+      "lines": "13251-13358",
+      "formal_trigger": "A successful physical hit deals final damage different from raw attack damage, or target has fewer remaining HP than incoming damage.",
+      "current_behavior": "Legacy equipment lifesteal uses int(max(1,raw_damage)*life_steal_percent/100), while hit log records actual_hp_delta and Feature lifesteal handler uses damage facts actual_loss. Thus two lifesteal lanes use different bases.",
+      "expected_behavior": "Needs confirmed official/current HardCore balance contract: raw attack strength, mitigated damage, or actual HP lost. Do not silently redesign healing by applying inferred preference.",
+      "shortest_call_chain": "GameRoot._apply_physical_hit → WarriorCombatMath.resolve_enemy_physical_damage → CombatRuntimeService.apply_enemy_physical_damage → Enemy.hp mutation → GameRoot computes recovered from original damage; feature DamageBatch uses fact.actual_loss",
+      "evidence": [
+        "https://github.com/watermarkpp/HardCore/blob/ed2d87121de80c84caaa3f096c3a5acb71d4946f/scripts/game_root.gd#L13251-L13358",
+        "https://github.com/watermarkpp/HardCore/blob/ed2d87121de80c84caaa3f096c3a5acb71d4946f/scripts/features/runtime/damage_batch.gd#L166-L206"
+      ],
+      "repair": "Retain until intended equipment lifesteal formula is confirmed by user/authoring. If same semantic basis required as feature lifesteal, change only existing post-hit calculation and verify healing cap and once-per-hit.",
+      "minimum_validation": "Low-HP enemy overkill plus high physical defense plus feature lifesteal; distinguish final resolved damage and actual HP loss; preserve unchanged current balancing if intentional.",
+      "source_sha": "ed2d87121de80c84caaa3f096c3a5acb71d4946f"
+    }
+  ]
+}
