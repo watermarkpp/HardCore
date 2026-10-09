@@ -1,0 +1,11 @@
+{
+  "full_archive_diff_check": "FAIL",
+  "classification": "Four retained inputs end with an extra blank line. Preserve tested source, native output and already retained review bytes.",
+  "paths": [
+    "CONTACT_STOP_DESIGN_REVIEW.md",
+    "direct_01/native_logs/crowd_pursuit_budget_contract_20261009.stdout.log",
+    "tested_source/tests/crowd_pursuit_process_budget_ab_20261009.gd",
+    "tested_source/tests/crowd_pursuit_process_budget_ab_20261009.tscn"
+  ],
+  "remaining_changed_files_check": "Performed with exactly these four exclusions"
+}

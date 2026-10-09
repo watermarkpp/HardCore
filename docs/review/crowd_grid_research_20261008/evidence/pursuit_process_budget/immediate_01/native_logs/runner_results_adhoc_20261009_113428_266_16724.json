@@ -1,0 +1,40 @@
+{
+  "invocation_id": "2c5e7f9d-7e76-42c6-baa6-1438ea8cc165",
+  "runtime_environment": {
+    "project_root": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-attack-frame-ab\\HardCore",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-attack-frame-ab\\HardCore\\.godot\\runtime_appdata",
+    "runner_process_id": 16724
+  },
+  "git_head": "edae6fdef6a6551a951fab1ea8c6ade43359d603",
+  "generated_at": "2026-10-09T11:34:28.2664743+08:00",
+  "suite": "adhoc",
+  "engine_log_errors": 0,
+  "results": [
+    {
+      "test_name": "crowd_pursuit_process_budget_ab_20261009",
+      "test_path": "tests/crowd_pursuit_process_budget_ab_20261009.tscn",
+      "wrapper_process_id": 15328,
+      "wrapper_started_utc": "2026-10-09T03:33:58.5906341Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-attack-frame-ab\\HardCore\\.godot\\runtime_appdata",
+      "fixed_fps": 0,
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-09T03:34:58.6034339Z",
+      "native_exit_observed_utc": "2026-10-09T03:34:26.7256548Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "",
+      "framework_receipt_valid": null,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "total": 1,
+  "passed": 1,
+  "failed": 0
+}

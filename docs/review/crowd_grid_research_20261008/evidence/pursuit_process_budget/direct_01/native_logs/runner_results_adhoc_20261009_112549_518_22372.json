@@ -1,0 +1,40 @@
+{
+  "failed": 1,
+  "runtime_environment": {
+    "project_root": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-attack-frame-ab\\HardCore",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-attack-frame-ab\\HardCore\\.godot\\runtime_appdata",
+    "runner_process_id": 22372
+  },
+  "passed": 0,
+  "git_head": "edae6fdef6a6551a951fab1ea8c6ade43359d603",
+  "suite": "adhoc",
+  "total": 1,
+  "results": [
+    {
+      "test_name": "crowd_pursuit_budget_contract_20261009",
+      "test_path": "tests/crowd_pursuit_budget_contract_20261009.tscn",
+      "wrapper_process_id": 17348,
+      "wrapper_started_utc": "2026-10-09T03:25:45.9588531Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-attack-frame-ab\\HardCore\\.godot\\runtime_appdata",
+      "fixed_fps": 0,
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "execution_deadline_utc": "2026-10-09T03:26:15.9707971Z",
+      "native_exit_observed_utc": null,
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 2,
+      "engine_log_failure_count": 2,
+      "framework_run_id": "",
+      "framework_receipt_valid": null,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2"
+    }
+  ],
+  "invocation_id": "5509c132-506c-4365-b4b8-a5c2c3964e35",
+  "generated_at": "2026-10-09T11:25:49.5189420+08:00",
+  "engine_log_errors": 2
+}

@@ -1,0 +1,287 @@
+{
+  "schema": "crowd_ai_frequency_ab.comparison.v1",
+  "status": "PASS_WITH_LIMITATIONS",
+  "scope": "offline retained immediate_01 versus budgeted_01; no rerun",
+  "cpu_reduction_percent": 9.140967965114935,
+  "target_50_percent": "FAIL",
+  "runs": [
+    {
+      "name": "immediate_01",
+      "producer_ids": {
+        "raw": "592a12cf-caca-496e-b8f8-15f1cb80f983",
+        "post": "592a12cf-caca-496e-b8f8-15f1cb80f983"
+      },
+      "status": {
+        "raw": "PASS",
+        "post": "PASS",
+        "native": "PASS",
+        "exit": 0,
+        "engine_errors": 0
+      },
+      "input_sha256": {
+        "INPUTS.json": "b73577c23662586d047e5ce0a06387941f71bedbe753fef3fe654065350d6021",
+        "POST_RUN.json": "12820f5dfa3789571c722da576fed725e67b214bb9a2f12373f1fdae40415537",
+        "PRELOAD_BINDING.json": "806bad0e8a62e253468fa34586556799ceae72721bc275c12c93b4420a8225f5"
+      },
+      "cohort": {
+        "active": 34,
+        "formal": 34,
+        "engaged": 30,
+        "loot": 48,
+        "ticks": 300,
+        "enemy_calls": 10200
+      },
+      "enemy_cpu_total_ms": 2114.601,
+      "per_process_enemy_cpu_ms": {
+        "n": 299,
+        "p50": 6.826,
+        "p95": 8.923,
+        "p99": 9.651,
+        "max": 12.138
+      },
+      "process_interval_ms": {
+        "n": 298,
+        "p50": 16.592,
+        "p95": 18.727,
+        "p99": 20.131,
+        "max": 21.062
+      },
+      "summary_p99": "MISSING",
+      "motion": {
+        "moving_ticks": 148,
+        "total_gu": 2.63953059212326
+      },
+      "attacks": {
+        "total": 22,
+        "window_starts": 19,
+        "settlements": 19,
+        "completed": 17,
+        "damage": 269,
+        "prewindow": 3
+      },
+      "potion_inputs": [
+        {
+          "entity_id": "hc.item.920016",
+          "hp_after": 179,
+          "hp_before": 108,
+          "result": {
+            "contract_id": "gameplay.item.quick_slots.v2",
+            "entity_id": "hc.item.920016",
+            "item_name": "强效太阳水",
+            "kind": "consumable",
+            "message": "使用：强效太阳水",
+            "ok": true,
+            "reason": "used",
+            "slot_index": 0
+          },
+          "tick": 30
+        },
+        {
+          "entity_id": "hc.item.920016",
+          "hp_after": 179,
+          "hp_before": 127,
+          "result": {
+            "contract_id": "gameplay.item.quick_slots.v2",
+            "entity_id": "hc.item.920016",
+            "item_name": "强效太阳水",
+            "kind": "consumable",
+            "message": "使用：强效太阳水",
+            "ok": true,
+            "reason": "used",
+            "slot_index": 0
+          },
+          "tick": 75
+        },
+        {
+          "entity_id": "hc.item.920016",
+          "hp_after": 179,
+          "hp_before": 105,
+          "result": {
+            "contract_id": "gameplay.item.quick_slots.v2",
+            "entity_id": "hc.item.920016",
+            "item_name": "强效太阳水",
+            "kind": "consumable",
+            "message": "使用：强效太阳水",
+            "ok": true,
+            "reason": "used",
+            "slot_index": 0
+          },
+          "tick": 165
+        },
+        {
+          "entity_id": "hc.item.920016",
+          "hp_after": 179,
+          "hp_before": 132,
+          "result": {
+            "contract_id": "gameplay.item.quick_slots.v2",
+            "entity_id": "hc.item.920016",
+            "item_name": "强效太阳水",
+            "kind": "consumable",
+            "message": "使用：强效太阳水",
+            "ok": true,
+            "reason": "used",
+            "slot_index": 0
+          },
+          "tick": 210
+        },
+        {
+          "entity_id": "hc.item.920016",
+          "hp_after": 179,
+          "hp_before": 126,
+          "result": {
+            "contract_id": "gameplay.item.quick_slots.v2",
+            "entity_id": "hc.item.920016",
+            "item_name": "强效太阳水",
+            "kind": "consumable",
+            "message": "使用：强效太阳水",
+            "ok": true,
+            "reason": "used",
+            "slot_index": 0
+          },
+          "tick": 285
+        }
+      ],
+      "budget": {
+        "grants": 0,
+        "epoch_owner_max": 0,
+        "reserved_owner_max": 0,
+        "budget_denied": 0,
+        "fifo_denied": 0,
+        "max_wait_processes": 0,
+        "wait_usec_max": 0,
+        "wait_usec_total": 0,
+        "timeline_entries": 0,
+        "timeline_limit": 256
+      },
+      "raw_sha256": "28b4fefec9628b29a440bc6fe97272cd02c9627d3777114a266ca32232cac548",
+      "receipt": "runner_results_adhoc_20261009_113428_266_16724.json"
+    },
+    {
+      "name": "budgeted_01",
+      "producer_ids": {
+        "raw": "5ff8ae0d-0fdd-48d7-abb5-4a2b516bb75f",
+        "post": "5ff8ae0d-0fdd-48d7-abb5-4a2b516bb75f"
+      },
+      "status": {
+        "raw": "PASS",
+        "post": "PASS",
+        "native": "PASS",
+        "exit": 0,
+        "engine_errors": 0
+      },
+      "input_sha256": {
+        "INPUTS.json": "eb52e89f0c0861dc1f671943014e5a99ce0e273fe431ff75e11504c0e357b263",
+        "POST_RUN.json": "e9d9e941ccc943f595916f84490894ad4383d34856ef7e282bca4e660bc543bf",
+        "PRELOAD_BINDING.json": "7f9776d9c6971592b875fc8dec19be51e989318e36d96626190f3f42d0de9c86"
+      },
+      "cohort": {
+        "active": 34,
+        "formal": 34,
+        "engaged": 30,
+        "loot": 48,
+        "ticks": 300,
+        "enemy_calls": 10200
+      },
+      "enemy_cpu_total_ms": 1921.306,
+      "per_process_enemy_cpu_ms": {
+        "n": 299,
+        "p50": 6.31,
+        "p95": 7.52,
+        "p99": 8.324,
+        "max": 11.819
+      },
+      "process_interval_ms": {
+        "n": 298,
+        "p50": 16.655,
+        "p95": 17.845,
+        "p99": 19.032,
+        "max": 20.555
+      },
+      "summary_p99": "MISSING",
+      "motion": {
+        "moving_ticks": 219,
+        "total_gu": 4.07579466642346
+      },
+      "attacks": {
+        "total": 16,
+        "window_starts": 14,
+        "settlements": 14,
+        "completed": 12,
+        "damage": 194,
+        "prewindow": 2
+      },
+      "potion_inputs": [
+        {
+          "entity_id": "hc.item.920016",
+          "hp_after": 179,
+          "hp_before": 98,
+          "result": {
+            "contract_id": "gameplay.item.quick_slots.v2",
+            "entity_id": "hc.item.920016",
+            "item_name": "强效太阳水",
+            "kind": "consumable",
+            "message": "使用：强效太阳水",
+            "ok": true,
+            "reason": "used",
+            "slot_index": 0
+          },
+          "tick": 45
+        },
+        {
+          "entity_id": "hc.item.920016",
+          "hp_after": 179,
+          "hp_before": 124,
+          "result": {
+            "contract_id": "gameplay.item.quick_slots.v2",
+            "entity_id": "hc.item.920016",
+            "item_name": "强效太阳水",
+            "kind": "consumable",
+            "message": "使用：强效太阳水",
+            "ok": true,
+            "reason": "used",
+            "slot_index": 0
+          },
+          "tick": 180
+        },
+        {
+          "entity_id": "hc.item.920016",
+          "hp_after": 179,
+          "hp_before": 134,
+          "result": {
+            "contract_id": "gameplay.item.quick_slots.v2",
+            "entity_id": "hc.item.920016",
+            "item_name": "强效太阳水",
+            "kind": "consumable",
+            "message": "使用：强效太阳水",
+            "ok": true,
+            "reason": "used",
+            "slot_index": 0
+          },
+          "tick": 210
+        }
+      ],
+      "budget": {
+        "grants": 291,
+        "epoch_owner_max": 1,
+        "reserved_owner_max": 5,
+        "budget_denied": 2336,
+        "fifo_denied": 14543,
+        "max_wait_processes": 177,
+        "wait_usec_max": 2973119,
+        "wait_usec_total": 154863999,
+        "timeline_entries": 256,
+        "timeline_limit": 256
+      },
+      "raw_sha256": "a0753f4327d6c64168d77f92e66a43577994b4c3df808183a45e5f9439ecaeec",
+      "receipt": "runner_results_adhoc_20261009_113536_076_9688.json"
+    }
+  ],
+  "interpretation": {
+    "cohort": "34 active/formal, 30 engaged, 48 loot, 300 ticks, 10200 enemy calls",
+    "equal_work": "FAIL/UNPROVEN; policy changes trajectory, attack starts and damage",
+    "budget_service": "FAIL; budgeted epoch_owner_max=1, reserved_owner_max=5, grants=291, queue_peak=28, max wait 2973119 usec/177 processes, retained unserved 6510762 usec/389 processes",
+    "timeline": "256 entries, truncated; complete maximum MISSING",
+    "android_gpu": "NOT_RUN",
+    "candidate": "NOT_INTEGRATED"
+  }
+}

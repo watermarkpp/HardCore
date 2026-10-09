@@ -1,0 +1,38 @@
+{
+  "command": "./tools/run_godot_tests.ps1 -TestPaths tests/crowd_pursuit_budget_contract_20261009.tscn -TimeoutSeconds 30",
+  "stage": "direct_02",
+  "reason": "Fix direct_01 parser FAIL and admission/diagnostic ownership defects; revised explicit state-reset test API",
+  "timestamp": "2026-10-09T11:32:18.6039125+08:00",
+  "files": [
+    {
+      "path": "scripts/enemy.gd",
+      "sha256": "df46e0d1df0c834b497f6a570071e6842e1fbbf7d4038fd5c680706a9d1079ee"
+    },
+    {
+      "path": "scripts/monster_ai_package/decision_budget.gd",
+      "sha256": "695f70ea19eda984b27426617324f1a2b141ed9e94e6fffc09edf050c90f2775"
+    },
+    {
+      "path": "scripts/layers/runtime/execution/frame_budget.gd",
+      "sha256": "f047dc1b9905b582aa0484b8009fe407489502f49c4ea4462510c170515b4114"
+    },
+    {
+      "path": "tests/crowd_pursuit_budget_contract_20261009.gd",
+      "sha256": "c175c33a264ca4b7d75a95f7edff7678c7bb4fa35e2070b1f1c1ea6f0191b9f7"
+    },
+    {
+      "path": "tests/crowd_pursuit_budget_contract_20261009.tscn",
+      "sha256": "54c48f688a7e0de5548bcd02a013285cc4ffcb113f3965ad06d2fa3fc559c904"
+    },
+    {
+      "path": "tools/run_godot_tests.ps1",
+      "sha256": "8049ef382dede726e9476574167a4b305017a2a7a5d2ba121bf9461296c28b48"
+    },
+    {
+      "path": "tools/godot-4.7/Godot_v4.7-stable_win64_console.exe",
+      "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c"
+    }
+  ],
+  "status": "NOT_RUN",
+  "sourceRoot": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-attack-frame-ab\\HardCore"
+}
