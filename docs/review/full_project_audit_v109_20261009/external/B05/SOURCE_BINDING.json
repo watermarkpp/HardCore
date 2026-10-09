@@ -1,0 +1,1003 @@
+{
+  "schema": "hardcore.audit.source_binding.v1",
+  "fixed_source_sha": "dfcfb9cda1b88d71d7cca3b432ba812831d93c23",
+  "repository_full_name": "watermarkpp/HardCore",
+  "branch": "codex/v108-runtime-bug-review-20261009",
+  "source_read_method": "exact fixed-SHA git ls-tree -rlz and per-blob git cat-file blob; all 161 file bodies consumed. Map visual source document semantic decoding deferred to B06, not treated as parsed JSON.",
+  "manifest_files": 161,
+  "exact_file_bytes_read": 161,
+  "files": [
+    {
+      "path": "assets/audio/town/main_city_bgm.playback.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "263eb748866cbb0748b09a8a6254a7bc71cdf13f",
+      "bytes": 816
+    },
+    {
+      "path": "assets/audio/town/main_city_bgm.source.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "0b06c1be5d9c85eecc684a25e14855edc7c7df6b",
+      "bytes": 1188
+    },
+    {
+      "path": "assets/branding/brand_manifest.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "ab06e9f76bcf9677db56aea42e9252b4a8428bf3",
+      "bytes": 2464
+    },
+    {
+      "path": "assets/data/caster_skill_visual_timing_overrides.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "478c03d22838c311d0f4b0befb586f7a5be1e09d",
+      "bytes": 220
+    },
+    {
+      "path": "assets/data/caster_skill_visuals.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "872205cb821a175db6a15ebd5e6a567389c6861d",
+      "bytes": 574737
+    },
+    {
+      "path": "assets/data/player_visual_alignment.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "ee077d50e318ab6d98217cae7ad3d1f4ef2f9cb9",
+      "bytes": 1101
+    },
+    {
+      "path": "assets/data/runtime/map_editor/bich_corpse_king_hall.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "09b7698767b2db40336d169616a72bfb6760d2c5",
+      "bytes": 1858
+    },
+    {
+      "path": "assets/data/runtime/map_editor/bich_mine_1.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "5d806b9dabf76d5e6393ee5fe1a5a4f9e3e4baeb",
+      "bytes": 2599
+    },
+    {
+      "path": "assets/data/runtime/map_editor/bich_mine_2.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "0a3c4962ec1b63a9aa6b47ff8cc2d2a44f0d8f0b",
+      "bytes": 2599
+    },
+    {
+      "path": "assets/data/runtime/map_editor/bich_mine_f1.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "4d1318146f6018d7c02f5f8d5cbf507e3fe235fd",
+      "bytes": 3641
+    },
+    {
+      "path": "assets/data/runtime/map_editor/bich_mine_f2.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "f0696bd51f0172c61744c25e22e413c27a00634c",
+      "bytes": 3641
+    },
+    {
+      "path": "assets/data/runtime/map_editor/bich_orc_tomb_f1.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "6361fdb6c8e372f8adce1063368d422c6837f7c9",
+      "bytes": 2929
+    },
+    {
+      "path": "assets/data/runtime/map_editor/bich_orc_tomb_f2.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "de39053189335803ee3b8e8a3fa3df07f0aa9099",
+      "bytes": 2929
+    },
+    {
+      "path": "assets/data/runtime/map_editor/bich_orc_tomb_f3.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "f7bc2ac08f07a6fa513f105579ad128cbc7c2aca",
+      "bytes": 2929
+    },
+    {
+      "path": "assets/data/runtime/map_editor/bich_province.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "63ce748d6f64eaca4b30eabdd38cf5ce991c3552",
+      "bytes": 3034
+    },
+    {
+      "path": "assets/data/runtime/map_editor/cangyue_bone_cave_f1.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "b47ffbb76efd1bf071d8e9b8c0b1b6f1f9088750",
+      "bytes": 3295
+    },
+    {
+      "path": "assets/data/runtime/map_editor/cangyue_bone_cave_f2.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "b0f6161b22dd81a7954368ed0ff07e40f6fba3d9",
+      "bytes": 3295
+    },
+    {
+      "path": "assets/data/runtime/map_editor/cangyue_bone_cave_f3.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "8446787da9d253a19368d920c938d83373e67ab5",
+      "bytes": 3295
+    },
+    {
+      "path": "assets/data/runtime/map_editor/cangyue_bone_cave_f4.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "8b6c13a2b24654cefe1228cb62ce70fd980f5376",
+      "bytes": 3295
+    },
+    {
+      "path": "assets/data/runtime/map_editor/cangyue_bone_cave_f5.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "51f7bb15052e03208a852fa71c4e9526847fe316",
+      "bytes": 3295
+    },
+    {
+      "path": "assets/data/runtime/map_editor/cangyue_bull_temple_f1.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "855f3cc8dd4afd900104850c40446998e576ccaa",
+      "bytes": 4016
+    },
+    {
+      "path": "assets/data/runtime/map_editor/cangyue_bull_temple_f2.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "e1891b7827e9fffcd79fa11eb665615053431327",
+      "bytes": 4016
+    },
+    {
+      "path": "assets/data/runtime/map_editor/cangyue_bull_temple_f3.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "74ad2abfb0cc2994b5b3f5c8e4760496f30bc1c5",
+      "bytes": 4016
+    },
+    {
+      "path": "assets/data/runtime/map_editor/cangyue_bull_temple_f4.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "480973be31790eecf42d3c85e5dbcc27328cf3a2",
+      "bytes": 4016
+    },
+    {
+      "path": "assets/data/runtime/map_editor/cangyue_bull_temple_hall.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "984ed67763423ce5c73bb0e3f61a8d988be57211",
+      "bytes": 4018
+    },
+    {
+      "path": "assets/data/runtime/map_editor/chiyue_choice_land.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "61883e28135c4f43b91afbd820dfde92754518ec",
+      "bytes": 5461
+    },
+    {
+      "path": "assets/data/runtime/map_editor/chiyue_demon_altar.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "7c68ef9a0196c24963c70ad4837551c1d3ae1ab7",
+      "bytes": 3291
+    },
+    {
+      "path": "assets/data/runtime/map_editor/chiyue_red_moon_lair.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "df70bb9dcff4773bab2a2ff672a23001b195cbfc",
+      "bytes": 1862
+    },
+    {
+      "path": "assets/data/runtime/map_editor/chiyue_valley.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "b922eedce1b0b5672c960c4a0c84c687f645a793",
+      "bytes": 5091
+    },
+    {
+      "path": "assets/data/runtime/map_editor/chiyue_valley_secret_passage_a.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "58a72f1acc1ec7c9da1ffeb118a48530416fe3e3",
+      "bytes": 5108
+    },
+    {
+      "path": "assets/data/runtime/map_editor/chiyue_valley_secret_passage_b.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "ac5b37c251ceaf5a7926cf971a78f6840f5310b3",
+      "bytes": 5108
+    },
+    {
+      "path": "assets/data/runtime/map_editor/chiyue_valley_square.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "ecd380ae84b5a4fe017d74b052f1f8d641d1825c",
+      "bytes": 5463
+    },
+    {
+      "path": "assets/data/runtime/map_editor/corpse_king_hall.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "2de4b31aae4943d805d111fccf6deeaac9dcfcbe",
+      "bytes": 1113
+    },
+    {
+      "path": "assets/data/runtime/map_editor/fengmo_bazhe_hall.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "005f151a5eef8681d13c839258a9bd77a7c0b4f9",
+      "bytes": 4004
+    },
+    {
+      "path": "assets/data/runtime/map_editor/fengmo_final_hall.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "9e147f6b00666e696a82740f81a77e3ff3775457",
+      "bytes": 4004
+    },
+    {
+      "path": "assets/data/runtime/map_editor/fengmo_forked_path.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "f097e4ceefa780732ff6c121abc336c0b3733488",
+      "bytes": 2935
+    },
+    {
+      "path": "assets/data/runtime/map_editor/fengmo_light_corridor.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "ee2d7b61df654719f1b5069aaddcb71cee720528",
+      "bytes": 4008
+    },
+    {
+      "path": "assets/data/runtime/map_editor/fengmo_mohun_hall.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "3b07df1d895ac22046195ef90ac9e79ae3471662",
+      "bytes": 4004
+    },
+    {
+      "path": "assets/data/runtime/map_editor/fengmo_purgatory_corridor.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "1afcb539ec1a824e9d08ffc1d3ac0c102fcf95c6",
+      "bytes": 4012
+    },
+    {
+      "path": "assets/data/runtime/map_editor/fengmo_thunder_road.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "f3b1ac99b8446595bdd8cca82e08c1efa4aa1b8e",
+      "bytes": 4006
+    },
+    {
+      "path": "assets/data/runtime/map_editor/fengmo_zonghengdao.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "8b231b87b88da0fe85662dfbd170814d744fb6ad",
+      "bytes": 4005
+    },
+    {
+      "path": "assets/data/runtime/map_editor/hidden_abyss_domain.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "92380ee9db88aa683d50c6757c8030188d08260e",
+      "bytes": 1861
+    },
+    {
+      "path": "assets/data/runtime/map_editor/hidden_confusion_hall.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "7611b782971cc4a272636bd21b0aa69c4ef570b8",
+      "bytes": 1858
+    },
+    {
+      "path": "assets/data/runtime/map_editor/hidden_fallen_graveyard.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "af41f2803560c9067bae1ac01c6bed186124b555",
+      "bytes": 1865
+    },
+    {
+      "path": "assets/data/runtime/map_editor/hidden_hellfire.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "679d77648937a4d286a565c881ac75edbfcf321e",
+      "bytes": 1857
+    },
+    {
+      "path": "assets/data/runtime/map_editor/hidden_pincer_nest.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "cff41da486b9ad2814fee6ccc27606e62635d467",
+      "bytes": 1860
+    },
+    {
+      "path": "assets/data/runtime/map_editor/mengzhong_dark_area.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "b1b6e9062371b1cddfd20f6e466bc7bfa46082aa",
+      "bytes": 3292
+    },
+    {
+      "path": "assets/data/runtime/map_editor/mengzhong_stone_coffin_room.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "21d7dced6992012b144526c16c98e079886b8201",
+      "bytes": 1869
+    },
+    {
+      "path": "assets/data/runtime/map_editor/mengzhong_stone_tomb_f1.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "2e6a495d14dd847ee167c47f39c342d422aa0aa5",
+      "bytes": 3652
+    },
+    {
+      "path": "assets/data/runtime/map_editor/mengzhong_stone_tomb_f2.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "544888d842600b2a3560eabf031f0b30404f460e",
+      "bytes": 3652
+    },
+    {
+      "path": "assets/data/runtime/map_editor/mengzhong_stone_tomb_f3.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "ef3af50ab822ef153ed2d4cb65cc661bbd0ff394",
+      "bytes": 3652
+    },
+    {
+      "path": "assets/data/runtime/map_editor/mengzhong_stone_tomb_f4.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "d879b8f8ac27d6291f8a90cfe9678c8e70a08ca9",
+      "bytes": 3652
+    },
+    {
+      "path": "assets/data/runtime/map_editor/mengzhong_terror_space.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "55f82239102c2d07c18c250010e91e23134e375b",
+      "bytes": 3295
+    },
+    {
+      "path": "assets/data/runtime/map_editor/mengzhong_thin_sky_passage.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "39922de96f8aa4c109564ef5bb9350b2bc801e92",
+      "bytes": 3299
+    },
+    {
+      "path": "assets/data/runtime/map_editor/mengzhong_zuma_leader_home.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "b763acd595429628943867d3f4fd9aae5edd27ed",
+      "bytes": 2939
+    },
+    {
+      "path": "assets/data/runtime/map_editor/mengzhong_zuma_pavilion.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "243eb66b64ff12f5bc367f9f56aaa4a3bcfdc5e2",
+      "bytes": 4017
+    },
+    {
+      "path": "assets/data/runtime/map_editor/mengzhong_zuma_temple_f1.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "086950b40e7393373e5b225acfcf6c196ab15d0e",
+      "bytes": 3653
+    },
+    {
+      "path": "assets/data/runtime/map_editor/mengzhong_zuma_temple_f2.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "9c7a2cee43b764423da1a52982ad77e71abffbbe",
+      "bytes": 3653
+    },
+    {
+      "path": "assets/data/runtime/map_editor/mengzhong_zuma_temple_f3.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "25874f6e08b2e0a077497909754cde9cb3789fff",
+      "bytes": 3653
+    },
+    {
+      "path": "assets/data/runtime/map_editor/mengzhong_zuma_temple_f4.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "c00d5137ba7895fb9652d2c587a2ebfcfe315130",
+      "bytes": 3653
+    },
+    {
+      "path": "assets/data/runtime/map_editor/orc_tomb_1.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "7396aa59d4d83d72b95b736a3f6e6f0bfde886c1",
+      "bytes": 2220
+    },
+    {
+      "path": "assets/data/runtime/map_editor/orc_tomb_2.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "9f0e5671e5cd9898cb76dd2cb9f6ff5bed2da593",
+      "bytes": 2220
+    },
+    {
+      "path": "assets/data/runtime/map_editor/orc_tomb_3.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "b4c7102fa1d7119f6073669e44fa5b14ff798505",
+      "bytes": 2220
+    },
+    {
+      "path": "assets/data/runtime/map_editor/snake_mine_passage_1.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "b70937fd2ca4b3801b073074d5c877f62085d793",
+      "bytes": 3649
+    },
+    {
+      "path": "assets/data/runtime/map_editor/snake_mine_passage_2.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "c1326cffe70c78ccb3a509a68c20b99ddfa86d35",
+      "bytes": 3649
+    },
+    {
+      "path": "assets/data/runtime/map_editor/snake_unknown_dark_palace.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "481f5960a039d38524e3a6438b78208c7010ad21",
+      "bytes": 3298
+    },
+    {
+      "path": "assets/data/runtime/map_editor/wooma_forest.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "220b1564040acc62077d76ac84ef33b2ec33fbef",
+      "bytes": 2926
+    },
+    {
+      "path": "assets/data/runtime/map_editor/wooma_temple_1.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "a14187e005a6cfeeee3e8d28a1df55300aa14cf7",
+      "bytes": 2332
+    },
+    {
+      "path": "assets/data/runtime/map_editor/wooma_temple_2.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "164e6e14e0a70c7eb906c29afb6c3e5b64d5ec83",
+      "bytes": 2332
+    },
+    {
+      "path": "assets/data/runtime/map_editor/wooma_temple_3.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "7ac5ebfa648f0205222037a7b1cd69385debfd91",
+      "bytes": 2332
+    },
+    {
+      "path": "assets/data/runtime/map_editor/wooma_temple_boss_hall.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "aba265d00efa261d6e49f8f6e8eb2b834b15286d",
+      "bytes": 3293
+    },
+    {
+      "path": "assets/data/runtime/map_editor/wooma_temple_f1.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "cf7003d9e8bdbae8c946fd91e9bec750e289b996",
+      "bytes": 3286
+    },
+    {
+      "path": "assets/data/runtime/map_editor/wooma_temple_f2.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "8dfd6a61396650b7b11ee7f85c2bb21bd526fae1",
+      "bytes": 3286
+    },
+    {
+      "path": "assets/data/runtime/map_editor/world_bich_province.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "ec13a270576f96cb92dab579ade0dd45537fd9b4",
+      "bytes": 5811
+    },
+    {
+      "path": "assets/data/runtime/map_editor/world_cangyue_island.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "a87b82de27f5351c4514d130da3edc305f66288c",
+      "bytes": 3293
+    },
+    {
+      "path": "assets/data/runtime/map_editor/world_fengmo_valley.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "7364bf8311ba57a2c7b65d7ba75bab33345a2c4e",
+      "bytes": 3292
+    },
+    {
+      "path": "assets/data/runtime/map_editor/world_mengzhong_province.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "c042784e9583ad3fae60f404ff7efae3e0d56a7d",
+      "bytes": 6533
+    },
+    {
+      "path": "assets/data/runtime/map_editor/world_snake_valley.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "d614c46456f965740e5801ddea8d04c77544cef6",
+      "bytes": 3647
+    },
+    {
+      "path": "assets/data/runtime/map_editor/world_white_day_gate.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "8e3ae3847a92ae7a0162d40698316f84d93f3046",
+      "bytes": 3293
+    },
+    {
+      "path": "assets/data/runtime/map_editor/world_wooma_forest.visual.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "92b9d3f46ed8debdcfd0feef55c22fb7a91958d7",
+      "bytes": 4005
+    },
+    {
+      "path": "assets/data/skill_visual_profiles.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "b9cdd86fd6e11c0c8f9fc93499ebd0e6db63f6fd",
+      "bytes": 2403
+    },
+    {
+      "path": "assets/presentation/skins/classic_client/skin_manifest.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "ab7f25a307d6a0a0c32c071dc647679ec8ab561d",
+      "bytes": 2812
+    },
+    {
+      "path": "assets/presentation/skins/gothic_bich_camp/layout.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "a56a3f84e191c10f47d804ec7b2ef893d1acb19b",
+      "bytes": 3371
+    },
+    {
+      "path": "assets/presentation/skins/gothic_bich_camp/skin_manifest.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "e5138b5876cd18a4c5d6c1081067f9f27dc87be4",
+      "bytes": 608
+    },
+    {
+      "path": "assets/shaders/fire_wall_screen_blend_multiply.gdshader",
+      "module": "presentation_scene_assets",
+      "git_blob_sha": "7a27c0a87d9a9aa3623f860997818400ec9a8f20",
+      "bytes": 146
+    },
+    {
+      "path": "assets/shaders/trial_magic_screen.gdshader",
+      "module": "presentation_scene_assets",
+      "git_blob_sha": "0931ea83117dff80855011d09e415dfd58483f33",
+      "bytes": 414
+    },
+    {
+      "path": "assets/ui/gothic_hud/v2/hud_asset_manifest.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "eee55e38122edd5d8724e9d3076c94c46b4766f3",
+      "bytes": 2662
+    },
+    {
+      "path": "assets/ui/gothic_hud/v2/runtime/circular_icon_mask.gdshader",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "ada43abd76d2d23f41901553f7528628152605e2",
+      "bytes": 278
+    },
+    {
+      "path": "assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/skill_icon_manifest.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "7bdeb67a334c79964be119cd3a11e79ac9e7d48f",
+      "bytes": 39768
+    },
+    {
+      "path": "assets/ui/gothic_hud/v2/runtime/skill_icons/skill_icon_manifest.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "93201a3fc8e04fba995877ba77b29c59fc6ccdab",
+      "bytes": 1736
+    },
+    {
+      "path": "assets/ui/gothic_hud/v2/runtime/target_bar_fill.gdshader",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "0c9980457e8e3f99bb2975d01925de467ee20986",
+      "bytes": 263
+    },
+    {
+      "path": "assets/ui/gothic_hud/v2/target_bar_fill_mask.source.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "90eddc5e55bc4127400f2ab5d576a7f5a80046f7",
+      "bytes": 422
+    },
+    {
+      "path": "assets/ui/gothic_hud/v3/gothic_hud_frame_geometry_v3.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "79744a2ac8a8b97b5f37736869e034308649b3eb",
+      "bytes": 11670
+    },
+    {
+      "path": "assets/ui/gothic_preview/frames/gothic_hud_frame_geometry_v2.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "8c8a1239e9861d2671442d449e9dbb14cf50d03b",
+      "bytes": 1711
+    },
+    {
+      "path": "assets/ui/gothic_preview/icons/runtime_v2/runtime_icon_manifest.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "90161d9d6d03ae89c30ec88faa492ad2c7f96fe2",
+      "bytes": 2251
+    },
+    {
+      "path": "assets/ui/gothic_theme/v1/character_launch_contract_v1.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "736b64766fc29fd8a8e675801fc3edda07f85b7a",
+      "bytes": 1347
+    },
+    {
+      "path": "assets/ui/gothic_theme/v1/confirmation_dialog_contract_v1.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "ffd224993def7f060b00009bf432ab5b83cdb0cc",
+      "bytes": 1662
+    },
+    {
+      "path": "assets/ui/gothic_theme/v1/integration_handoff_v1.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "cb380065b9d8d023ece39c47e4dfaa453ede7430",
+      "bytes": 10085
+    },
+    {
+      "path": "assets/ui/gothic_theme/v1/loading_transition_contract_v1.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "cfb55853e75b17b364ffac793b1c6cdc7a2da5a1",
+      "bytes": 2764
+    },
+    {
+      "path": "assets/ui/gothic_theme/v1/loot_feedback_contract_v1.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "0ccb8152f0e874b042e5d20f4a4db6954f562f6c",
+      "bytes": 1271
+    },
+    {
+      "path": "assets/ui/gothic_theme/v1/profession_selection_contract_v1.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "7284bfb4e4a0b1f19ad3328d5d68074821ec346e",
+      "bytes": 557
+    },
+    {
+      "path": "assets/ui/gothic_theme/v1/sample/button_feedback_layers_manifest.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "cd07d45cde16d9e2e6ea44dc32e0d5d51bd00245",
+      "bytes": 5640
+    },
+    {
+      "path": "assets/ui/gothic_theme/v1/sample/character_hall_feedback_layers_manifest.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "6916d5489d1c7d9ff4111a67c4697534c3db6f3f",
+      "bytes": 2892
+    },
+    {
+      "path": "assets/ui/gothic_theme/v1/sample/component_manifest.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "d53af64c29f4a4be16ac06b7dfbc6ec6605a34f0",
+      "bytes": 9263
+    },
+    {
+      "path": "assets/ui/gothic_theme/v1/sample/component_manifest_v3.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "979ad10710c74178e60e344420c7f2ace909f11c",
+      "bytes": 2171
+    },
+    {
+      "path": "assets/ui/gothic_theme/v1/sample/component_manifest_v4.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "2c1fa16fd032cc2bcb82831ea9bbf8f51c0d8476",
+      "bytes": 3224
+    },
+    {
+      "path": "assets/ui/gothic_theme/v1/shop_sell_contract.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "d62d9dfa816ec720e6e78c329621c490e78e3c2a",
+      "bytes": 1092
+    },
+    {
+      "path": "assets/ui/gothic_theme/v1/skill_button_assignment_contract_v2.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "6d90b0f0579c5933d0433a661a434ce17b168d0d",
+      "bytes": 2007
+    },
+    {
+      "path": "assets/ui/gothic_theme/v1/skill_button_assignment_contract_v3.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "17c9defeeca03745f41acb796dccb9933e252bf5",
+      "bytes": 2144
+    },
+    {
+      "path": "assets/ui/gothic_theme/v1/skill_quick_slot_assignment_contract.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "64881eb68c8c717fddf5a49756d9736bf615ac58",
+      "bytes": 667
+    },
+    {
+      "path": "assets/ui/gothic_theme/v1/system_menu_audio_contract_v1.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "25d99967911311d9e8bb8d40231f894a3dbbd2c9",
+      "bytes": 840
+    },
+    {
+      "path": "assets/ui/gothic_theme/v1/world_map_teleport_contract.json",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "522edddd63466b233e55e9b39b84a1d7f9e2425f",
+      "bytes": 1744
+    },
+    {
+      "path": "assets/ui/monster_markers/boss_horned_gold_skull.svg",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "cad07ff17affe807bc80e6e9ee28f30b5ac72924",
+      "bytes": 664
+    },
+    {
+      "path": "assets/ui/monster_markers/elite_skull.svg",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "d6f598a72bf060e43ca462bd0a08c716aa4226b5",
+      "bytes": 567
+    },
+    {
+      "path": "scenes/brand_intro.tscn",
+      "module": "presentation_scene_assets",
+      "git_blob_sha": "e4a35711ef5a583c73385e821527c33ab61a2168",
+      "bytes": 1498
+    },
+    {
+      "path": "scenes/character_select.tscn",
+      "module": "presentation_scene_assets",
+      "git_blob_sha": "c5bc8eafaf82eb87170cdbab1937565f0e682371",
+      "bytes": 308
+    },
+    {
+      "path": "scenes/startup_loading.tscn",
+      "module": "presentation_scene_assets",
+      "git_blob_sha": "9cc84ee7d2a8314f04d2d7f05945bf7553d8dd12",
+      "bytes": 535
+    },
+    {
+      "path": "scenes/technical_art_sample.tscn",
+      "module": "presentation_scene_assets",
+      "git_blob_sha": "55905c32f342f7f6c3a770d4f3d53322042093b4",
+      "bytes": 195
+    },
+    {
+      "path": "scenes/tools/mafa_scene_editor.tscn",
+      "module": "presentation_scene_assets",
+      "git_blob_sha": "2439be0a0bb7a22d5c7ba2aac9febbfa7f2c93f3",
+      "bytes": 317
+    },
+    {
+      "path": "scripts/audio_preferences.gd",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "cf5a2c91f9d1c6ee32fe0c0dc1a46547d7413ed9",
+      "bytes": 6331
+    },
+    {
+      "path": "scripts/audio_runtime_service.gd",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "d270a038e5f0b9dd3ddb17535f17aea38da70a75",
+      "bytes": 45728
+    },
+    {
+      "path": "scripts/enhancement_panel.gd",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "9dc38660c7236989a2e82f08a7583fae1ee986bf",
+      "bytes": 29585
+    },
+    {
+      "path": "scripts/features/presentation/cue_definitions.gd",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "59096fd12e84cd9621bf4be385c087382d2e71de",
+      "bytes": 1153
+    },
+    {
+      "path": "scripts/features/presentation/ignite_cue.gd",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "12f37206ba8f019797c804c184d0ce25b2cdf4be",
+      "bytes": 709
+    },
+    {
+      "path": "scripts/features/presentation/presentation_port.gd",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "0139c631fa3d25da353101281c8e7a1ca9ed5802",
+      "bytes": 6778
+    },
+    {
+      "path": "scripts/gothic_confirmation_panel.gd",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "384c25d617813293eda711d30097740f537a091e",
+      "bytes": 6256
+    },
+    {
+      "path": "scripts/ground_skill_visual_cell.gd",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "b67103f1fd5bfcbb1ae54f06ec852581fab31e42",
+      "bytes": 1651
+    },
+    {
+      "path": "scripts/helmet_visual_v2.gd",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "30d7dab6be5c86f4f206562d7809e78e99798b36",
+      "bytes": 27177
+    },
+    {
+      "path": "scripts/hud.gd",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "e686ca981330918d035013840f811cfa4b3f36c5",
+      "bytes": 127606
+    },
+    {
+      "path": "scripts/hud_asset_sanitizer.gd",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "2e4b6de370258f19e4939cc7c96e06b5cf7b3f26",
+      "bytes": 7854
+    },
+    {
+      "path": "scripts/hud_chassis_designs.gd",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "540915484519cd3dc146172aa5a7eb45a9ccdc9a",
+      "bytes": 4267
+    },
+    {
+      "path": "scripts/hud_resource_orb.gd",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "a6fc70755c7d05bf97cfbc7dd9554978e311ce22",
+      "bytes": 2473
+    },
+    {
+      "path": "scripts/hud_skill_icon_catalog.gd",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "87b4d0da291e69e7eb006f85edc338eb11f6f3ba",
+      "bytes": 6100
+    },
+    {
+      "path": "scripts/hud_utility_touch_button.gd",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "b98acd234cb570eea3f492548443f72bdbd1127c",
+      "bytes": 896
+    },
+    {
+      "path": "scripts/npc_visual.gd",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "7553895db6905ac80e8e7bc9a8afa4ed79c4cf03",
+      "bytes": 5295
+    },
+    {
+      "path": "scripts/quest_panel.gd",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "7aaca50d6735a6d3fdf1283718398869a780b17c",
+      "bytes": 26059
+    },
+    {
+      "path": "scripts/shop_panel.gd",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "ca46e58464c5ed2966734195a43bf93d3be1699b",
+      "bytes": 59090
+    },
+    {
+      "path": "scripts/skill_panel.gd",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "03cee811df6ecab25c62fd6beb7484e275e983f4",
+      "bytes": 51578
+    },
+    {
+      "path": "scripts/system_menu_panel.gd",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "871925a4201c7d0b3474425a9bd999e4e7a7a92d",
+      "bytes": 22177
+    },
+    {
+      "path": "scripts/ui_item_selection_visual.gd",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "815956bec2d80dbf3dc5047f21057fc167551be1",
+      "bytes": 2341
+    },
+    {
+      "path": "scripts/ui_style_visual_bounds.gd",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "414c7bf1f97d8e923154dc51e0881ce7e391e87a",
+      "bytes": 7469
+    },
+    {
+      "path": "scripts/warehouse_panel.gd",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "186bf2d673338995d8f1ba9b7434a57ada54546e",
+      "bytes": 61084
+    },
+    {
+      "path": "scripts/warrior_melee_visual_effect.gd",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "0ce611b7b67a608046c30b5e9feb9259475a5f9c",
+      "bytes": 9977
+    },
+    {
+      "path": "tools/audit_caster_skill_visual_sources.py",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "4d7879c02cb7d5932a79c4a4ebd4ebfaf9f3eefd",
+      "bytes": 11781
+    },
+    {
+      "path": "tools/audit_warrior_skill_visuals.py",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "7883b66f3a5c0027e965a17edd235d1b378b8f04",
+      "bytes": 7657
+    },
+    {
+      "path": "tools/build_equipment_visual_catalog.py",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "1063bac85cb7b107b1bc206dd8fdc7b0486fe1e0",
+      "bytes": 39438
+    },
+    {
+      "path": "tools/map_editor/package_bich_runtime_visuals.py",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "ab150e99c542835cdcda929b516dca506978080f",
+      "bytes": 5091
+    },
+    {
+      "path": "tools/map_editor/publish_orc_tomb_runtime_visuals.gd",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "d808b747a8ac4d16b7b62b5908f78acb27ba1b7c",
+      "bytes": 6102
+    },
+    {
+      "path": "tools/map_editor/publish_phase1_mine_runtime_visuals.gd",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "b6c263be7d6960071226ba6d28726ba4898e1512",
+      "bytes": 5769
+    },
+    {
+      "path": "tools/map_editor/publish_single_formal_map_visual.gd",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "2447c25d61a2e62d53adbf8d75a5b0b17442fbbf",
+      "bytes": 2245
+    },
+    {
+      "path": "tools/map_editor/publish_single_formal_map_visual.tscn",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "c61c19f74dc1d9b83c61b3ad2d0f0a8c5d677b28",
+      "bytes": 218
+    },
+    {
+      "path": "tools/map_editor/publish_wooma_runtime_visuals.gd",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "f294ac5df98820c631b25a9897f0548aea8b63dc",
+      "bytes": 6441
+    },
+    {
+      "path": "tools/map_editor/repair_orc_tomb_3_visual_loop.gd",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "dc13948532cc93e005b798cb1515aa43d9038ac8",
+      "bytes": 2847
+    },
+    {
+      "path": "tools/map_visual_capture.gd",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "c49f236357d19d83e3563ad46fb19ead45d5e517",
+      "bytes": 2378
+    },
+    {
+      "path": "tools/map_visual_capture.tscn",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "d9cddf1e2b5d6badbbe05c7f02e7505b066ea515",
+      "bytes": 210
+    },
+    {
+      "path": "tools/run_visual_acceptance_lab.ps1",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "c5d5dcdcaeb3f2e6b8aad13e3bbcd3a9fe719e22",
+      "bytes": 1428
+    },
+    {
+      "path": "tools/sync_fire_wall_visual_geometry.py",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "2eb0f6251d0e5a5c0a24e1465af973a910bfdd44",
+      "bytes": 972
+    },
+    {
+      "path": "tools/visual_acceptance_lab/visual_acceptance_lab.gd",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "07a17b5b02ad303da0c3dbfdbc3285689920be2a",
+      "bytes": 73029
+    },
+    {
+      "path": "tools/visual_acceptance_lab/visual_acceptance_lab.tscn",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "47c7fe4924b57937e1784257e990749a68de8b37",
+      "bytes": 333
+    },
+    {
+      "path": "tools/wall_render_visual_capture.gd",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "a6ea79d8c8be27a8d7c51c2e76f3dd70c0bc72b2",
+      "bytes": 4456
+    },
+    {
+      "path": "tools/wall_render_visual_capture.tscn",
+      "module": "audio_presentation_ui",
+      "git_blob_sha": "038b498abd4729c63cf14902284232076d8be4b0",
+      "bytes": 204
+    }
+  ],
+  "core_documents": [
+    "AGENTS.md",
+    "PROJECT_CORE_CONTRACTS.md",
+    "docs/review/full_project_audit_v109_20261009/STANDARD_AUDIT_PROMPT.md",
+    "docs/review/full_project_audit_v109_20261009/BATCH_05.md",
+    "docs/review/full_project_audit_v109_20261009/SCOPE.md",
+    "docs/review/full_project_audit_v109_20261009/AUDIT_SCOPE_MANIFEST.json"
+  ],
+  "cross_module_consumers_directly_read": [
+    "scripts/game_root.gd",
+    "scripts/player_state.gd",
+    "scripts/enemy.gd",
+    "scripts/virtual_joystick.gd",
+    "scripts/circular_touch_button.gd",
+    "scripts/touch_scroll_support.gd",
+    "scripts/town_music_controller.gd",
+    "scripts/loading_transition_overlay.gd",
+    "scripts/startup_loading.gd",
+    "scripts/brand_intro.gd",
+    "scripts/equipment_character_preview.gd",
+    "scripts/inventory_panel.gd"
+  ],
+  "native": "NOT_RUN",
+  "android": "NOT_RUN",
+  "apk": "NOT_RUN",
+  "mutations_to_production": "NONE"
+}
