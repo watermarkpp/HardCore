@@ -1,0 +1,910 @@
+{
+  "schema": "hardcore.audit.coverage.v1",
+  "batch": "B03",
+  "fixed_review_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+  "groups": [
+    "enemy_ai_combat",
+    "spatial_geometry_movement",
+    "summon_pet_targeting",
+    "source176_skill_packages"
+  ],
+  "counts": {
+    "paths": 47,
+    "read": 45,
+    "missing": 2,
+    "partial": 8
+  },
+  "coverage_notes": "47 in manifest, 45 present at fixed SHA; scoped semantic functions/callers/owners/failure boundary recorded. Large multi-function code PARTIAL intentionally; no index-only counted as deep, native tests NOT_RUN.",
+  "files": [
+    {
+      "path": "scripts/enemy.gd",
+      "module": "enemy_ai_combat",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "93adc6b0586816743c1915dd4c42c4d254937df2",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "PARTIAL_B03_SCOPE_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "setup",
+        "request_passive_target_wakeup",
+        "_acquire_cold_damage_target",
+        "_physics_process_internal",
+        "_hc_tick_melee",
+        "_hc_try_start",
+        "_retarget_internal",
+        "_launch_monster_special_cell_delivery",
+        "_settle_monster_special_cell_release",
+        "_queue_guard_projectile",
+        "_on_guard_projectile_contact",
+        "_settle_target_magic_release",
+        "_apply_damage_core",
+        "_mark_death_pending",
+        "_exit_tree"
+      ],
+      "live_callers": "GameRoot spawn;player/summon wake;skills;M30",
+      "write_authority": "Enemy HP,combat target,action,move,source clock",
+      "failed_cancel_repeat_boundary": "Map/life/zone death invalid;per-physics commits continue;full death persistence external",
+      "not_covered": "Other responsibilities/functions inside large file and Android/Godot native NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/enemy.gd"
+    },
+    {
+      "path": "scripts/monster_ai_package/decision_budget.gd",
+      "module": "enemy_ai_combat",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "2e9b8650a678022e497fde1deca622e0bd106526",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "PARTIAL_B03_SCOPE_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "begin_pursuit_turn",
+        "dispatch_pursuit_process_batch",
+        "begin",
+        "borrow_pursuit_turn",
+        "end_pursuit_turn",
+        "cancel"
+      ],
+      "live_callers": "Enemy retarget;FrameBudget",
+      "write_authority": "HCDecisionBudget per-owner queue/admission",
+      "failed_cancel_repeat_boundary": "Process optional vs legacy physics necessary;B03-003",
+      "not_covered": "Other responsibilities/functions inside large file and Android/Godot native NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_ai_package/decision_budget.gd"
+    },
+    {
+      "path": "scripts/monster_ai_package/delivery_geometry.gd",
+      "module": "enemy_ai_combat",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "2f7271cfe3a51af1115ed31fee2db8cd1392481a",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "absolute_cell_for_ground_position",
+        "directional_cells",
+        "target_cell",
+        "create_target_cell_snapshot"
+      ],
+      "live_callers": "Enemy special release",
+      "write_authority": "pure absolute GU-cell snapshot",
+      "failed_cancel_repeat_boundary": "Reject invalid GU,empty direction or missing release ID",
+      "not_covered": "Native, device and unrelated batch responsibilities NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_ai_package/delivery_geometry.gd"
+    },
+    {
+      "path": "scripts/monster_ai_package/grid_crowd_trial.gd",
+      "module": "enemy_ai_combat",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": null,
+      "actual_source_read": "NOT_FOUND from fixed SHA",
+      "review_status": "MISSING_RETIRED_NOT_IN_FIXED_TREE",
+      "scoped_functions": [],
+      "live_callers": "none",
+      "write_authority": "retired grid candidate",
+      "failed_cancel_repeat_boundary": "NOT_FOUND fixed tree,do not restore",
+      "not_covered": "Native, device and unrelated batch responsibilities NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_ai_package/grid_crowd_trial.gd"
+    },
+    {
+      "path": "scripts/monster_ai_package/grid_occupancy_service.gd",
+      "module": "enemy_ai_combat",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": null,
+      "actual_source_read": "NOT_FOUND from fixed SHA",
+      "review_status": "MISSING_RETIRED_NOT_IN_FIXED_TREE",
+      "scoped_functions": [],
+      "live_callers": "none",
+      "write_authority": "retired grid candidate",
+      "failed_cancel_repeat_boundary": "NOT_FOUND fixed tree,do not restore",
+      "not_covered": "Native, device and unrelated batch responsibilities NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_ai_package/grid_occupancy_service.gd"
+    },
+    {
+      "path": "scripts/monster_ai_package/m30/context_token.gd",
+      "module": "enemy_ai_combat",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "76c4049f0a53556827dba3e047052ad2015386ab",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "token",
+        "retained_count"
+      ],
+      "live_callers": "HCPathSearch",
+      "write_authority": "bounded static context identity",
+      "failed_cancel_repeat_boundary": "Max64 contexts,monotonic ABA-safe token",
+      "not_covered": "Native, device and unrelated batch responsibilities NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_ai_package/m30/context_token.gd"
+    },
+    {
+      "path": "scripts/monster_ai_package/m30/summon_queue.gd",
+      "module": "enemy_ai_combat",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "606dff9560a2300ff1d5a84e63bcec3d846b5418",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "enqueue",
+        "claim_birth",
+        "pump",
+        "cancel_all",
+        "track_child"
+      ],
+      "live_callers": "GameRoot summon factory,Enemy.summon_requested",
+      "write_authority": "reserved slots/jobs and life release identity",
+      "failed_cancel_repeat_boundary": "Queue 256 cap/one birth physics/8 probes;B03-004 denial stamp",
+      "not_covered": "Native, device and unrelated batch responsibilities NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_ai_package/m30/summon_queue.gd"
+    },
+    {
+      "path": "scripts/monster_ai_package/m30/walk_phase.gd",
+      "module": "enemy_ai_combat",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "994e29fab1f07ea1140073400be4405dc1cea228",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "configure_cycle",
+        "accept_distance",
+        "frame_index",
+        "interrupt_pose"
+      ],
+      "live_callers": "Enemy,MonsterVisual",
+      "write_authority": "visual stride phase",
+      "failed_cancel_repeat_boundary": "No catchup on stop;visual only",
+      "not_covered": "Native, device and unrelated batch responsibilities NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_ai_package/m30/walk_phase.gd"
+    },
+    {
+      "path": "scripts/monster_ai_package/path_scheduler.gd",
+      "module": "enemy_ai_combat",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "9cc6aea89b4c736873eff10f9996e451e85cdb8d",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "for_tree",
+        "submit",
+        "cancel",
+        "pump",
+        "_pump_slice",
+        "_exit_tree"
+      ],
+      "live_callers": "Enemy,HCAStar,FrameBudget",
+      "write_authority": "bounded owner-token path service",
+      "failed_cancel_repeat_boundary": "Owner stale/job cancel + detach shared field",
+      "not_covered": "Native, device and unrelated batch responsibilities NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_ai_package/path_scheduler.gd"
+    },
+    {
+      "path": "scripts/monster_ai_package/path_search.gd",
+      "module": "enemy_ai_combat",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "716fcc8cea2eca31bc6dddf1c4ad97af51ea326b",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "PARTIAL_B03_SCOPE_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "configure",
+        "configure_deferred",
+        "advance",
+        "detach_shared_goal_field",
+        "_reconstruct"
+      ],
+      "live_callers": "HCMonsterPathScheduler,Enemy",
+      "write_authority": "resumable A* pure route suggestion",
+      "failed_cancel_repeat_boundary": "MAX8192 nodes;stale context and graph no-route closed",
+      "not_covered": "Other responsibilities/functions inside large file and Android/Godot native NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_ai_package/path_search.gd"
+    },
+    {
+      "path": "scripts/monster_ai_package/policy.gd",
+      "module": "enemy_ai_combat",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "9c68cdf33fc16e73dc6846904c787a33ec9db5d2",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "within",
+        "source_goal"
+      ],
+      "live_callers": "Enemy._hc_tick_melee",
+      "write_authority": "pure 300ms pursuit geometry utility",
+      "failed_cancel_repeat_boundary": "No separate actor authority",
+      "not_covered": "Native, device and unrelated batch responsibilities NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_ai_package/policy.gd"
+    },
+    {
+      "path": "scripts/monster_attack_source_overlay.gd",
+      "module": "enemy_ai_combat",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "34a4319cbdb5f27a73384b61a3573cb5e2053ac0",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "setup",
+        "_process"
+      ],
+      "live_callers": "MonsterVisual",
+      "write_authority": "source attack visual Node",
+      "failed_cancel_repeat_boundary": "ID146 detaches at frame5;queue_free on finish",
+      "not_covered": "Native, device and unrelated batch responsibilities NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_attack_source_overlay.gd"
+    },
+    {
+      "path": "scripts/monster_attack_timing.gd",
+      "module": "enemy_ai_combat",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "d94c7b47fb23d06910ea4de67d1073320d102d20",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "effective_interval_ms"
+      ],
+      "live_callers": "Enemy.setup",
+      "write_authority": "source 21CQ interval floor",
+      "failed_cancel_repeat_boundary": "Invalid source values reject;min200ms",
+      "not_covered": "Native, device and unrelated batch responsibilities NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_attack_timing.gd"
+    },
+    {
+      "path": "scripts/monster_crowd_attack_position_policy.gd",
+      "module": "enemy_ai_combat",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "4787b3041c1c9fcf4b9fa1a717b51248835cdacb",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "snapshot_peers",
+        "choose_with_snapshot",
+        "contact_leg_with_snapshot"
+      ],
+      "live_callers": "Enemy blocked neighbor",
+      "write_authority": "pure live local peers",
+      "failed_cancel_repeat_boundary": "No cross-frame blocked-negative memoization",
+      "not_covered": "Native, device and unrelated batch responsibilities NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_crowd_attack_position_policy.gd"
+    },
+    {
+      "path": "scripts/monster_display_formatter.gd",
+      "module": "enemy_ai_combat",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "810641c565b4f162a4cd5c62792599b1ddd12f52",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "display_name",
+        "rank_for_actor",
+        "rank_for_context"
+      ],
+      "live_callers": "MonsterOverhead,HUD",
+      "write_authority": "read-only labels",
+      "failed_cancel_repeat_boundary": "Missing names do not change canonical ID",
+      "not_covered": "Native, device and unrelated batch responsibilities NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_display_formatter.gd"
+    },
+    {
+      "path": "scripts/monster_ground_alignment_draft.gd",
+      "module": "enemy_ai_combat",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "6bda126fd7e3972c90884079384874e74080ccfa",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "load_draft",
+        "draft_is_formal",
+        "build_payload",
+        "save_draft"
+      ],
+      "live_callers": "MonsterVisual acceptance tests",
+      "write_authority": "editor acceptance authoring only",
+      "failed_cancel_repeat_boundary": "Authored artifact write not game movement;B07 outside",
+      "not_covered": "Native, device and unrelated batch responsibilities NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_ground_alignment_draft.gd"
+    },
+    {
+      "path": "scripts/monster_ground_runtime_diagnostic_overlay.gd",
+      "module": "enemy_ai_combat",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "111ae2d5551a2e4be8383d7c9ccee14cdf774cf6",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "enabled_for_runtime",
+        "setup",
+        "coordinate_snapshot",
+        "_draw"
+      ],
+      "live_callers": "Enemy opt-in only",
+      "write_authority": "diagnostic canvas mirror",
+      "failed_cancel_repeat_boundary": "Android debug + commandline;no production movement",
+      "not_covered": "Native, device and unrelated batch responsibilities NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_ground_runtime_diagnostic_overlay.gd"
+    },
+    {
+      "path": "scripts/monster_ground_spike_effect.gd",
+      "module": "enemy_ai_combat",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "051eed320b6b8d6593b228b5016dbb9bfaafe8de",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "setup",
+        "play_once",
+        "_process"
+      ],
+      "live_callers": "Enemy ID180/195",
+      "write_authority": "visual-only fixed spike",
+      "failed_cancel_repeat_boundary": "Animation queue_free;HP only Enemy",
+      "not_covered": "Native, device and unrelated batch responsibilities NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_ground_spike_effect.gd"
+    },
+    {
+      "path": "scripts/monster_identity.gd",
+      "module": "enemy_ai_combat",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "a50f2b7e09dac4da455ae6eaba987c41ca1e1362",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "monster_id",
+        "require_catalog_entry",
+        "behavior_profile",
+        "boss_rule"
+      ],
+      "live_callers": "GameRoot spawn,Enemy.setup",
+      "write_authority": "canonical ID/data ownership boundary",
+      "failed_cancel_repeat_boundary": "Retired/invalid ID rejected",
+      "not_covered": "Native, device and unrelated batch responsibilities NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_identity.gd"
+    },
+    {
+      "path": "scripts/monster_movement_cadence.gd",
+      "module": "enemy_ai_combat",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "a50f000b7dd2c0b49799edf9df112850e7a63dc9",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "configure",
+        "evaluate_grant",
+        "reset",
+        "state_snapshot"
+      ],
+      "live_callers": "Enemy physics",
+      "write_authority": "per actor 21CQ movement cadence",
+      "failed_cancel_repeat_boundary": "No overdue move catchup,strict source typed fields",
+      "not_covered": "Native, device and unrelated batch responsibilities NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_movement_cadence.gd"
+    },
+    {
+      "path": "scripts/monster_natural_regen_policy.gd",
+      "module": "enemy_ai_combat",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "4c5a0c70113ebd13efb031738a3ea62dad5ef246",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "advance",
+        "heal_amount",
+        "reset"
+      ],
+      "live_callers": "Enemy._physics_process_internal",
+      "write_authority": "6-second regen counter",
+      "failed_cancel_repeat_boundary": "Damage/poison do not reset;Enemy owns HP",
+      "not_covered": "Native, device and unrelated batch responsibilities NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_natural_regen_policy.gd"
+    },
+    {
+      "path": "scripts/monster_neighbor_step_policy.gd",
+      "module": "enemy_ai_combat",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "d99267c12dc5282807d9b1f0180bb24f1a261d05",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "temporary_cell",
+        "build_neighbor_step",
+        "eight_way_path",
+        "motion_follows_direction"
+      ],
+      "live_callers": "Enemy movement",
+      "write_authority": "temporary derived neighbor,not grid physics",
+      "failed_cancel_repeat_boundary": "Bad leg fails,actual body collide preserved",
+      "not_covered": "Native, device and unrelated batch responsibilities NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_neighbor_step_policy.gd"
+    },
+    {
+      "path": "scripts/monster_overhead.gd",
+      "module": "enemy_ai_combat",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "e59cdc869b02ed0c998fc9f33b2bd2f89ed683e3",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "setup",
+        "_refresh_rank_visuals",
+        "set_health",
+        "_draw"
+      ],
+      "live_callers": "MonsterVisual",
+      "write_authority": "presentation HP mirror",
+      "failed_cancel_repeat_boundary": "Missing optional rank texture no combat impact",
+      "not_covered": "Native, device and unrelated batch responsibilities NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_overhead.gd"
+    },
+    {
+      "path": "scripts/monster_ranged_projectile_effect.gd",
+      "module": "enemy_ai_combat",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "b6221fb52ae8cfbd5f2a2ebad35e0fef9d18f369",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "setup",
+        "_physics_process",
+        "_advance_flight",
+        "_first_flight_collision",
+        "_finish"
+      ],
+      "live_callers": "Enemy physical and ID194 guard release",
+      "write_authority": "projectile contact only",
+      "failed_cancel_repeat_boundary": "Source/target map+life validation in Enemy;B03-001",
+      "not_covered": "Native, device and unrelated batch responsibilities NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_ranged_projectile_effect.gd"
+    },
+    {
+      "path": "scripts/monster_respawn_policy.gd",
+      "module": "enemy_ai_combat",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "9fbaf904692f35dc52b63c1865b83f96cdb44359",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "resolve",
+        "seconds_for"
+      ],
+      "live_callers": "GameRoot death/slot",
+      "write_authority": "5-tier spawn interval 300/480/900/1800/3600",
+      "failed_cancel_repeat_boundary": "Classification locks and legacy tier conversion,world save B06",
+      "not_covered": "Native, device and unrelated batch responsibilities NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_respawn_policy.gd"
+    },
+    {
+      "path": "scripts/monster_source_frames.gd",
+      "module": "enemy_ai_combat",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "18a1f6db87bd85933ddb55f055b76ed9017aa916",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "request_profile",
+        "poll",
+        "texture",
+        "profile_for_id",
+        "retire_threaded_resource_claims"
+      ],
+      "live_callers": "MonsterVisual,MonsterRangedProjectile",
+      "write_authority": "source animation texture client",
+      "failed_cancel_repeat_boundary": "B01 resource owner fixed,do not re-audit",
+      "not_covered": "Native, device and unrelated batch responsibilities NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_source_frames.gd"
+    },
+    {
+      "path": "scripts/monster_source_poison_state.gd",
+      "module": "enemy_ai_combat",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "cb038868f4735337b7f8ba23d87fba80edefbc70",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "apply",
+        "advance",
+        "clear"
+      ],
+      "live_callers": "Enemy,Player,Summon",
+      "write_authority": "source poison tick only",
+      "failed_cancel_repeat_boundary": "Nonfinite reject,weaker reapply no downgrade",
+      "not_covered": "Native, device and unrelated batch responsibilities NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_source_poison_state.gd"
+    },
+    {
+      "path": "scripts/monster_struck_policy.gd",
+      "module": "enemy_ai_combat",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "b99c53e408df0cd69f157d96911d9a75c581876f",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "attack_delay_ms",
+        "struck_frame_ms",
+        "direct_magic_compatibility_draw_required"
+      ],
+      "live_callers": "Enemy,MonsterVisual",
+      "write_authority": "pure presentation struck policy",
+      "failed_cancel_repeat_boundary": "Historical penalty not current extra cooldown",
+      "not_covered": "Native, device and unrelated batch responsibilities NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_struck_policy.gd"
+    },
+    {
+      "path": "scripts/monster_target_acquisition_policy.gd",
+      "module": "enemy_ai_combat",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "a4a7a8eb30d9429661b58fce2c0923a0c2c10589",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "configure",
+        "contains_ground_delta_gu"
+      ],
+      "live_callers": "Enemy target setter",
+      "write_authority": "per-ID cold acquisition L∞ view",
+      "failed_cancel_repeat_boundary": "Strict fail closed invalid authority,halo LOS static-only",
+      "not_covered": "Native, device and unrelated batch responsibilities NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_target_acquisition_policy.gd"
+    },
+    {
+      "path": "scripts/monster_target_magic_effect.gd",
+      "module": "enemy_ai_combat",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "9e958fb432e8a3709776f76cb566ebdf6622cb85",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "setup",
+        "_process",
+        "_update_presentation"
+      ],
+      "live_callers": "Enemy ID220/222/224",
+      "write_authority": "visual-only target magic",
+      "failed_cancel_repeat_boundary": "Damage committed by Enemy before visible flight,visual may vanish",
+      "not_covered": "Native, device and unrelated batch responsibilities NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_target_magic_effect.gd"
+    },
+    {
+      "path": "scripts/monster_target_ring_geometry.gd",
+      "module": "enemy_ai_combat",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "ca60249d2ffd755bdb74ec6b863b691d771d87b7",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "resolve",
+        "direction_offsets"
+      ],
+      "live_callers": "MonsterVisual",
+      "write_authority": "visual indicator ellipse",
+      "failed_cancel_repeat_boundary": "Source broken posture metadata leaves original radii",
+      "not_covered": "Native, device and unrelated batch responsibilities NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_target_ring_geometry.gd"
+    },
+    {
+      "path": "scripts/monster_terrain_navigation_policy.gd",
+      "module": "enemy_ai_combat",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "59baa868de8a5d336dd2f5b979f6643b2b55dcc5",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "build_context",
+        "context_valid",
+        "cell_walkable",
+        "static_line_of_sight_clear",
+        "find_bounded_path"
+      ],
+      "live_callers": "Enemy first LOS,HCPathSearch",
+      "write_authority": "WORLD static polygons/grid",
+      "failed_cancel_repeat_boundary": "Invalid projection/context fail closed,no dynamic monster signal blocking",
+      "not_covered": "Native, device and unrelated batch responsibilities NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_terrain_navigation_policy.gd"
+    },
+    {
+      "path": "scripts/monster_unit_adapter.gd",
+      "module": "enemy_ai_combat",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "8d8e3ed5241a98be446a17ce004cda7574784f2c",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "runtime_projection_gu",
+        "collision_radius_gu",
+        "range_gu",
+        "relocation_radius_gu"
+      ],
+      "live_callers": "Enemy setup,boss",
+      "write_authority": "legacy→GU single adapter",
+      "failed_cancel_repeat_boundary": "No second position;missing typed values use approved default",
+      "not_covered": "Native, device and unrelated batch responsibilities NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_unit_adapter.gd"
+    },
+    {
+      "path": "scripts/monster_visual.gd",
+      "module": "enemy_ai_combat",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "de18c84e031fcca0ea9220567102529227af6bc1",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "PARTIAL_B03_SCOPE_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "_process",
+        "play_attack",
+        "begin_attack_presentation",
+        "queue_struck",
+        "play_death",
+        "hc_m30_accept_ground_motion",
+        "_exit_tree"
+      ],
+      "live_callers": "Enemy actor,streaming coordinator",
+      "write_authority": "presentation frame + reaction queue",
+      "failed_cancel_repeat_boundary": "HP commits independent;art details B05",
+      "not_covered": "Other responsibilities/functions inside large file and Android/Godot native NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_visual.gd"
+    },
+    {
+      "path": "scripts/monster_visual_streaming_coordinator.gd",
+      "module": "enemy_ai_combat",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "30e9cbf4d69b075c1b272a373025464c69927292",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "PARTIAL_B03_SCOPE_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "request_client_profile",
+        "poll_once",
+        "register_visual",
+        "unregister_visual",
+        "release_visual_resource",
+        "retire_threaded_resource_claims"
+      ],
+      "live_callers": "GameRoot,MonsterVisual",
+      "write_authority": "one shared atlas async owner",
+      "failed_cancel_repeat_boundary": "B01 resource claim lifecycle already closed",
+      "not_covered": "Other responsibilities/functions inside large file and Android/Godot native NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_visual_streaming_coordinator.gd"
+    },
+    {
+      "path": "scripts/ground_unit_space.gd",
+      "module": "spatial_geometry_movement",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "c3e3fe991c09ee716ebbf9a509d4b7bae8f8f770",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "screen_delta_px_to_ground_delta_gu",
+        "ground_delta_gu_to_screen_delta_px",
+        "is_within_range_gu",
+        "desired_ground_motion_gu"
+      ],
+      "live_callers": "Enemy,Player,Summon",
+      "write_authority": "GU projection only",
+      "failed_cancel_repeat_boundary": "Mapped position projection validated at caller,not raw screen fallback",
+      "not_covered": "Native, device and unrelated batch responsibilities NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/ground_unit_space.gd"
+    },
+    {
+      "path": "scripts/runtime_combat_spatial_index.gd",
+      "module": "spatial_geometry_movement",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "1f851f96d0ae5cd5aa95d7f1e817d35d389e2659",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "PARTIAL_B03_SCOPE_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "register",
+        "unregister",
+        "update_actor",
+        "clear_map",
+        "query_enemy_nodes_aabb_into",
+        "query_neighbor_enemy_nodes_into",
+        "query_enemy_nodes_segment_batch_into"
+      ],
+      "live_callers": "GameRoot spawn,Enemy position publisher",
+      "write_authority": "map-scoped buckets and revision",
+      "failed_cancel_repeat_boundary": "Forced writes must update same bucket;live provider cannot heal false negative",
+      "not_covered": "Other responsibilities/functions inside large file and Android/Godot native NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/runtime_combat_spatial_index.gd"
+    },
+    {
+      "path": "scripts/world_spatial_rules.gd",
+      "module": "spatial_geometry_movement",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "08ad59d6e8a0d328f0e146d3b083a93dee99580b",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "actor_combat_radius_gu_from_screen_radius_px",
+        "actor_screen_radius_px_from_combat_radius_gu"
+      ],
+      "live_callers": "Enemy/Summon/Player/MapEditor",
+      "write_authority": "shared static collision layers,footprint",
+      "failed_cancel_repeat_boundary": "WORLD mask-only LOS,actors not block light",
+      "not_covered": "Native, device and unrelated batch responsibilities NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/world_spatial_rules.gd"
+    },
+    {
+      "path": "scripts/summon_actor.gd",
+      "module": "summon_pet_targeting",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "a2b90082c5ea139ed55b2ab23336b37c5b45fd21",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "PARTIAL_B03_SCOPE_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "_physics_process",
+        "_nearest_enemy",
+        "_attack_world_path_clear",
+        "_owner_formation_anchor_screen_px",
+        "_release_pending_attack",
+        "apply_damage"
+      ],
+      "live_callers": "GameRoot spawn,Enemy target,owner Player",
+      "write_authority": "summon body HP/cooldown/move",
+      "failed_cancel_repeat_boundary": "Life,map/owner death,forced follow snap B03-002",
+      "not_covered": "Other responsibilities/functions inside large file and Android/Godot native NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/summon_actor.gd"
+    },
+    {
+      "path": "scripts/summon_visual_registry.gd",
+      "module": "summon_pet_targeting",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "ae73b174792c0c61f2faeb6c57a589139b6efbb0",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "PARTIAL_B03_SCOPE_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "request_profile",
+        "poll_profile",
+        "reap_completed_requests",
+        "_poll_request_once"
+      ],
+      "live_callers": "SummonActor presentation",
+      "write_authority": "summon sprite request/service",
+      "failed_cancel_repeat_boundary": "No HP,failed texture stays visual failure",
+      "not_covered": "Other responsibilities/functions inside large file and Android/Godot native NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/summon_visual_registry.gd"
+    },
+    {
+      "path": "scripts/monster_source176/action_boundary.gd",
+      "module": "source176_skill_packages",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "046a31ee94394c09535343bfe11f9e26888b7c76",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "choose",
+        "can_reserve_body_action"
+      ],
+      "live_callers": "Enemy._hc_try_start",
+      "write_authority": "pure attack reserve check",
+      "failed_cancel_repeat_boundary": "No budget may erase committed attack",
+      "not_covered": "Native, device and unrelated batch responsibilities NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_source176/action_boundary.gd"
+    },
+    {
+      "path": "scripts/monster_source176/frame_cursor.gd",
+      "module": "source176_skill_packages",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "8bc9448e70c259822319fc69259c1c7aa4e6456e",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "frame_at"
+      ],
+      "live_callers": "MonsterVisual",
+      "write_authority": "source frame observer",
+      "failed_cancel_repeat_boundary": "Invalid times return -1,not HP",
+      "not_covered": "Native, device and unrelated batch responsibilities NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_source176/frame_cursor.gd"
+    },
+    {
+      "path": "scripts/monster_source176/reaction_policy.gd",
+      "module": "source176_skill_packages",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "046c1a80801dc52dab7ddd2b9ef46199563c9dd3",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "walk_delta_ms",
+        "ordinary_struck_attack_delta_ms",
+        "pushed_walk_delta_ms"
+      ],
+      "live_callers": "Enemy hit reaction",
+      "write_authority": "source feedback selector",
+      "failed_cancel_repeat_boundary": "Actual actor HP/time owner elsewhere",
+      "not_covered": "Native, device and unrelated batch responsibilities NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_source176/reaction_policy.gd"
+    },
+    {
+      "path": "scripts/monster_source176/skill_reaction_registry.gd",
+      "module": "source176_skill_packages",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "531cec2225bacc58396e169a97cad34a505e2961",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "family",
+        "validate_ids"
+      ],
+      "live_callers": "Enemy source reaction policy",
+      "write_authority": "33 player skill hit family classification",
+      "failed_cancel_repeat_boundary": "Not Boss special ID table",
+      "not_covered": "Native, device and unrelated batch responsibilities NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_source176/skill_reaction_registry.gd"
+    },
+    {
+      "path": "scripts/monster_source176/source_melee_geometry.gd",
+      "module": "source176_skill_packages",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "e07ef6eb363e9d4bdf8819804b0587f072b7ac95",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "source_adjacent",
+        "continuous_adjacent",
+        "broadphase_radius_gu",
+        "closest_goal"
+      ],
+      "live_callers": "Enemy pursuit",
+      "write_authority": "source cell to live GU contact",
+      "failed_cancel_repeat_boundary": "Finite and ZERO guards,no second grid pos",
+      "not_covered": "Native, device and unrelated batch responsibilities NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_source176/source_melee_geometry.gd"
+    },
+    {
+      "path": "scripts/monster_source176/source_step_plan.gd",
+      "module": "source176_skill_packages",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "af5c06f525b523bd36acfe87ff853d9f041b0aaa",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "next_leg",
+        "octile_distance",
+        "is_eight_way"
+      ],
+      "live_callers": "Enemy._advance_autonomous_step",
+      "write_authority": "one-leg math only",
+      "failed_cancel_repeat_boundary": "No bypass of source movement cadence",
+      "not_covered": "Native, device and unrelated batch responsibilities NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_source176/source_step_plan.gd"
+    },
+    {
+      "path": "scripts/monster_source176/step_budget.gd",
+      "module": "source176_skill_packages",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "blob_sha": "602bff7281811751b026f6713191de74920e03bf",
+      "actual_source_read": "GitHub fetch_file(full content/ref fixed SHA) and scoped function bodies; manifest exact git show fixed SHA",
+      "review_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "desired_motion",
+        "after_arrival"
+      ],
+      "live_callers": "Enemy actual move_and_slide",
+      "write_authority": "same-physics delta accounting",
+      "failed_cancel_repeat_boundary": "No time debt/catchup beyond current physics",
+      "not_covered": "Native, device and unrelated batch responsibilities NOT_RUN",
+      "source_url": "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_source176/step_budget.gd"
+    }
+  ],
+  "additional_consumers": [
+    {
+      "path": "scripts/game_root.gd",
+      "covered": "_spawn_enemy,_on_player_moved,_pump_passive_monster_wakeup,_on_boss_summon_requested,canonical map projection,death event; rest not reviewed in B03"
+    },
+    {
+      "path": "assets/data/runtime/canonical_monster_catalog.json",
+      "sha": "785c48c7b3c89221530e19dedb29e2c5d2c76fbc",
+      "covered": "156 run-allowed monster source entries/64 nontrivial per-ID mapping in SPECIAL_BEHAVIOR_COVERAGE.json"
+    }
+  ],
+  "unreviewed": "B04/B05/B06/B07 and non-B03 responsibilities inside large files, native/device tests not run"
+}

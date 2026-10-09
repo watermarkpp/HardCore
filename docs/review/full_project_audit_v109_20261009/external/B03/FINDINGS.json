@@ -1,0 +1,111 @@
+{
+  "schema": "hardcore.audit.findings.v1",
+  "batch": "B03",
+  "fixed_source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+  "tests": "NOT_RUN",
+  "apk": "NOT_RUN",
+  "devices": "NOT_RUN",
+  "severity_not_release_pass": true,
+  "findings": [
+    {
+      "id": "B03-001",
+      "severity": "P1",
+      "category": "SOURCE_PROVEN_FORMAL_DAMAGE_DELIVERY_CONFLICT",
+      "status": "OPEN_REQUIRES_DIRECT_NATIVE",
+      "confidence": "HIGH",
+      "path": "scripts/enemy.gd",
+      "function": "_launch_monster_special_cell_delivery / _emit_monster_special_delivery_descriptor / _on_guard_projectile_contact",
+      "lines": "4888-4910; 5478-5536; 5720-5746",
+      "monster_ids": [
+        194
+      ],
+      "formal_trigger": "ID194 TArcherGuard has a valid committed guard_direct_projectile cast; player moves out during the later projectile's visible flight, or its ray hits a WORLD obstacle after the accepted strike.",
+      "current_behavior": "The source-backed runtime catalog for ID194 specifies damageTiming=immediate and generic_projectile_observer visual. Enemy skips activation-time settlement for guard_direct_projectile, creates MonsterRangedProjectileEffect(presentation_only=false), and applies HP only when ray contact callback reaches the original player/summon. Player motion can turn source-declared immediate accepted damage into a miss.",
+      "expected_behavior": "Source-bound accepted immediate physical damage must settle once at its legally specified authoritative release boundary; its displayed moving projectile is observation/presentation only. True physical-flight skills remain dodgeable. User's already committed attack damage cannot be cancelled by later player movement unless real flight-contact is the approved source policy.",
+      "shortest_call_chain": "GameRoot._spawn_enemy ID194 → Enemy.setup attackDelivery.kind=guard_direct_projectile → Enemy._launch_monster_special_cell_delivery → _emit_monster_special_delivery_descriptor → MonsterRangedProjectileEffect._physics_process/_first_flight_collision → Enemy._on_guard_projectile_contact → _settle_monster_special_victim → Player HP; no settlement at initial allowed release",
+      "source_evidence": [
+        "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/enemy.gd#L4888-L4910",
+        "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/enemy.gd#L5478-L5537",
+        "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_ranged_projectile_effect.gd#L173-L240",
+        "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/enemy.gd#L5720-L5746",
+        "assets/data/runtime/canonical_monster_catalog.json exact ID194 attackDelivery.damageTiming='immediate', presentationKind='generic_projectile_observer', serviceClass='TArcherGuard', source ObjMon2.pas (catalog Git blob 785c48c7b3c89221530e19dedb29e2c5d2c76fbc)"
+      ],
+      "cancellation_boundary": "At original accepted source release, preserve source map/life/target epoch/safe/world admissibility. After settlement, visual may vanish from WORLD but cannot re-submit/undo HP. Current duplicate claim ledger must still block second settlement.",
+      "recommendation": "Clarify source acceptance-time versus attack animation release-frame semantics with main controller; in current source immediate contract, settle the guarded target-locked hit at the authorized gameplay moment once and make projectile presentation_only; retain sprite/flight timing visually. Do not turn all arrows into instant hits or rewrite genuine physical-flight projectiles.",
+      "minimum_validation": "Frozen ID194 actual non-test scene: same release, matched static WORLD, player stays vs moves during visible flight, with exact HP and one attack event; true flying-arrow ID50/other source projectile still dodges by motion; map/target generation invalid rejects; native NOT_RUN."
+    },
+    {
+      "id": "B03-002",
+      "severity": "P2",
+      "category": "SOURCE_PROVEN_CONDITIONAL_COLLISION_PLACEMENT_BYPASS",
+      "status": "OPEN_REQUIRES_MAP_REPRO",
+      "confidence": "HIGH_CONTROL_FLOW_MEDIUM_RUNTIME_OCCURRENCE",
+      "path": "scripts/summon_actor.gd",
+      "function": "_physics_process / _owner_formation_anchor_screen_px",
+      "lines": "749-759; 1041-1071",
+      "monster_ids": [],
+      "formal_trigger": "A live owner/summon separation reaches teleport_range_gu while the summon formation offset behind the owner overlaps a static wall/nonwalkable polygon or invalid landing region.",
+      "current_behavior": "SummonActor._physics_process assigns global_position=_owner_formation_anchor_screen_px() directly when far; the anchor is calculated from owner.movement_facing and fixed lateral offsets, without existing canonical landing/walkability or body placement validation, bypassing regular move_and_slide collision.",
+      "expected_behavior": "A summon landing/teleport must use a proven legal map/body position, or defer/retry without writing an invalid position; existing per-physics movement/collision and separate HP authority must stay intact.",
+      "shortest_call_chain": "SummonActor._physics_process → owner_distance_gu>=teleport_range_gu → _owner_formation_anchor_screen_px → global_position direct assignment → passive_wakeup_changed; GameRoot has distinct canonical relocation policy for an actual owner teleport but this auto-follow teleport bypasses it",
+      "source_evidence": [
+        "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/summon_actor.gd#L749-L759",
+        "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/summon_actor.gd#L1041-L1071",
+        "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/summon_actor.gd#L532-L585"
+      ],
+      "cancellation_boundary": "Death/expiry, owner alive, runtime_map_id and current map projection, zone generation, oncoming WORLD collider; don't duplicate current GameRoot relocation owner or invent grid movement.",
+      "recommendation": "Reuse existing formal summoned-body landing validation at this single forced-position event. If no legal destination, fail closed/continue bounded approach or keep follow-pending; do not silently snap through static terrain.",
+      "minimum_validation": "One native blocked formation slot near wall, summon separated beyond teleport_range_gu, assert final body not inside terrain and same map and no unbounded retry; valid open space still follows; verify owner teleport already-tested path unchanged. NOT_RUN."
+    },
+    {
+      "id": "B03-003",
+      "severity": "P2",
+      "category": "CONDITIONAL_PROCESS_BUDGET_OVERCOMMIT_RISK",
+      "status": "WATCH_REQUIRES_REAL_MAIN_EPOCH_TRACE",
+      "confidence": "HIGH_CODE_MEDIUM_REAL_LOAD",
+      "path": "scripts/monster_ai_package/decision_budget.gd",
+      "function": "begin / begin_pursuit_turn / dispatch_pursuit_process_batch",
+      "lines": "971-1024; 563-660; 352-486",
+      "monster_ids": [],
+      "formal_trigger": "One or more permitted observation/neighbor decision calls occur outside the active process-pursuit turn during a low-FPS main loop containing multiple physics catch-up updates.",
+      "current_behavior": "Legacy HCDecisionBudget.begin uses physics epoch 5-owner admission and FrameBudget.begin(CATEGORY,true), which can overrun optional 1200us and reset per physics catchup. New pursuit dispatcher uses Engine.get_process_frames and FrameBudget optional, but legacy outer cases still exist in the code. Actual frequency under v108 normal Enemy control flow is not proven from static source.",
+      "expected_behavior": "Optional 300ms re-observation/neighbor planning should not silently reissue a separate time allowance on each physics catchup. Necessary attack commit, already-running motion/collision/HP/dying must remain every physics.",
+      "shortest_call_chain": "Enemy._hc_refresh_observation/_hc_neighbor_internal (when no active process lease) → HCDecisionBudget.begin legacy → _sync_epoch physics frame → FrameBudget.begin(CATEGORY,true) → complete expensive synchronous decision; multiple physics callbacks in same process epoch can accrue necessary overdrafts",
+      "source_evidence": [
+        "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_ai_package/decision_budget.gd#L971-L1024",
+        "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_ai_package/decision_budget.gd#L126-L145",
+        "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_ai_package/decision_budget.gd#L352-L486",
+        "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_ai_package/decision_budget.gd#L563-L662"
+      ],
+      "cancellation_boundary": "No change to source attack timers/death/collision/committed attacks. Existing per-owner scope and FrameBudget must remain balanced; no increase budget or TTL deletion.",
+      "recommendation": "Do not assert global limit or mobile FPS improvement. First instrument real-main PC same process count of legacy necessary begin vs process optional during multi-physics catchup and queue age; only if used in optional planning ensure it borrows existing same-process admission or fails closed without granting a second budget.",
+      "minimum_validation": "Same-process two or more real physics updates with >10 engaged melee and official attack eligibility: count legacy necessary begins, process optional admissions, FrameBudget max, queue ages, starts/settles and final HP; no fake equal workload; NOT_RUN."
+    },
+    {
+      "id": "B03-004",
+      "severity": "P3",
+      "category": "CONDITIONAL_SUMMON_RELEASE_CAPACITY_POLICY_RISK",
+      "status": "REQUIRES_USER_POLICY_AND_REAL_TEST",
+      "confidence": "HIGH_SOURCE_MEDIUM_EXPECTATION",
+      "path": "scripts/monster_ai_package/m30/summon_queue.gd",
+      "function": "enqueue",
+      "lines": "138-192",
+      "monster_ids": [
+        126,
+        160,
+        182
+      ],
+      "formal_trigger": "M30 receives an otherwise valid unique life/release serial when 256 batches are pending or allowed child slots are temporarily full; same serialized release is signaled again if capacity later opens.",
+      "current_behavior": "Source m30_last_queued_release is marked before MAX_PENDING_BATCHES and allowed capacity checks. The release cannot be retried after rejection even though no job/reservation was admitted. This is safe anti-dup if overcapacity means the cast fails permanently, but it can discard an intended deferred summon.",
+      "expected_behavior": "User/main controller must confirm whether overfull summons must be dropped once or remain pending. The release-serial dedup must prevent double birth; must not lose an already acknowledged commitment under an authorized queue contract.",
+      "shortest_call_chain": "Enemy._update_behavior_summon/_apply_health_stage_mechanics → summon_requested → GameRoot._on_boss_summon_requested → HCM30SummonQueue.enqueue → set_meta(last_release) → capacity/allowed checks return → future identical serial blocked",
+      "source_evidence": [
+        "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_ai_package/m30/summon_queue.gd#L138-L192",
+        "https://github.com/watermarkpp/HardCore/blob/4e77c619249450b7c33e833c2bb3531f3f120bfc/scripts/monster_ai_package/m30/summon_queue.gd#L194-L292"
+      ],
+      "cancellation_boundary": "Keep max256 batches, max5 ordinary children, boss authored cap, one materialization per physics tick; map/zone/source death invalidates queued work.",
+      "recommendation": "No premature fix. If under queue-capacity policy this is intended drop, record as accepted limitation; if commit must be eventually serviced, move acknowledgment to successful admission atomically and retain source life epoch dedup. Do not increase caps or hide age.",
+      "minimum_validation": "Deterministic full queue then capacity free, same source life/serial replay; assert declared policy, no duplicate children and no reservation leaks after owner death, map switch, callback reentry; NOT_RUN."
+    }
+  ]
+}

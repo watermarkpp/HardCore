@@ -1,0 +1,623 @@
+{
+  "schema": "hardcore.audit.source_binding.v1",
+  "batch": "B03",
+  "fixed_source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+  "repo": "watermarkpp/HardCore",
+  "branch_at_dispatch": "codex/v108-runtime-bug-review-20261009",
+  "notes": "Source files obtained through GitHub fetch_file with exact ref, manifest parsed by read-only git show exact SHA using authorized remote terminal (NOT working tree file); source links and blob SHA constitute binding. No local code/test modifications.",
+  "scope_documents": [
+    {
+      "path": "AGENTS.md",
+      "blob_sha": "a93ce3863ae8c6ce7b476015745dbbb3951a6630",
+      "read": "YES"
+    },
+    {
+      "path": "PROJECT_CORE_CONTRACTS.md",
+      "blob_sha": "7c949aae7ede749fa74ea1d7ac6f1703dcdc9c28",
+      "read": "YES"
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/STANDARD_AUDIT_PROMPT.md",
+      "blob_sha": "2680700a6962fe10dc1286c72c08e496ee5e9ea2",
+      "read": "YES"
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/BATCH_03.md",
+      "blob_sha": "cb16a3bdca56c739ef52ceade1deb97a98198300",
+      "read": "YES"
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/SCOPE.md",
+      "blob_sha": "52ceafc5f4c160ff687d942ff569eaa4a2c5143e",
+      "read": "YES"
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/AUDIT_SCOPE_MANIFEST.json",
+      "blob_sha": "bc8ecfc67c865cabc19988d186d98781e803a2af",
+      "read": "YES"
+    }
+  ],
+  "manifest_file_count": 47,
+  "runtime_source_files_read": 45,
+  "missing_retired_grid": [
+    "scripts/monster_ai_package/grid_crowd_trial.gd",
+    "scripts/monster_ai_package/grid_occupancy_service.gd"
+  ],
+  "read_sources": [
+    {
+      "path": "scripts/enemy.gd",
+      "module": "enemy_ai_combat",
+      "blob_sha": "93adc6b0586816743c1915dd4c42c4d254937df2",
+      "read_status": "PARTIAL_B03_SCOPE_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "setup",
+        "request_passive_target_wakeup",
+        "_acquire_cold_damage_target",
+        "_physics_process_internal",
+        "_hc_tick_melee",
+        "_hc_try_start",
+        "_retarget_internal",
+        "_launch_monster_special_cell_delivery",
+        "_settle_monster_special_cell_release",
+        "_queue_guard_projectile",
+        "_on_guard_projectile_contact",
+        "_settle_target_magic_release",
+        "_apply_damage_core",
+        "_mark_death_pending",
+        "_exit_tree"
+      ]
+    },
+    {
+      "path": "scripts/monster_ai_package/decision_budget.gd",
+      "module": "enemy_ai_combat",
+      "blob_sha": "2e9b8650a678022e497fde1deca622e0bd106526",
+      "read_status": "PARTIAL_B03_SCOPE_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "begin_pursuit_turn",
+        "dispatch_pursuit_process_batch",
+        "begin",
+        "borrow_pursuit_turn",
+        "end_pursuit_turn",
+        "cancel"
+      ]
+    },
+    {
+      "path": "scripts/monster_ai_package/delivery_geometry.gd",
+      "module": "enemy_ai_combat",
+      "blob_sha": "2f7271cfe3a51af1115ed31fee2db8cd1392481a",
+      "read_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "absolute_cell_for_ground_position",
+        "directional_cells",
+        "target_cell",
+        "create_target_cell_snapshot"
+      ]
+    },
+    {
+      "path": "scripts/monster_ai_package/grid_crowd_trial.gd",
+      "module": "enemy_ai_combat",
+      "blob_sha": null,
+      "read_status": "MISSING_RETIRED_NOT_IN_FIXED_TREE",
+      "scoped_functions": []
+    },
+    {
+      "path": "scripts/monster_ai_package/grid_occupancy_service.gd",
+      "module": "enemy_ai_combat",
+      "blob_sha": null,
+      "read_status": "MISSING_RETIRED_NOT_IN_FIXED_TREE",
+      "scoped_functions": []
+    },
+    {
+      "path": "scripts/monster_ai_package/m30/context_token.gd",
+      "module": "enemy_ai_combat",
+      "blob_sha": "76c4049f0a53556827dba3e047052ad2015386ab",
+      "read_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "token",
+        "retained_count"
+      ]
+    },
+    {
+      "path": "scripts/monster_ai_package/m30/summon_queue.gd",
+      "module": "enemy_ai_combat",
+      "blob_sha": "606dff9560a2300ff1d5a84e63bcec3d846b5418",
+      "read_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "enqueue",
+        "claim_birth",
+        "pump",
+        "cancel_all",
+        "track_child"
+      ]
+    },
+    {
+      "path": "scripts/monster_ai_package/m30/walk_phase.gd",
+      "module": "enemy_ai_combat",
+      "blob_sha": "994e29fab1f07ea1140073400be4405dc1cea228",
+      "read_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "configure_cycle",
+        "accept_distance",
+        "frame_index",
+        "interrupt_pose"
+      ]
+    },
+    {
+      "path": "scripts/monster_ai_package/path_scheduler.gd",
+      "module": "enemy_ai_combat",
+      "blob_sha": "9cc6aea89b4c736873eff10f9996e451e85cdb8d",
+      "read_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "for_tree",
+        "submit",
+        "cancel",
+        "pump",
+        "_pump_slice",
+        "_exit_tree"
+      ]
+    },
+    {
+      "path": "scripts/monster_ai_package/path_search.gd",
+      "module": "enemy_ai_combat",
+      "blob_sha": "716fcc8cea2eca31bc6dddf1c4ad97af51ea326b",
+      "read_status": "PARTIAL_B03_SCOPE_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "configure",
+        "configure_deferred",
+        "advance",
+        "detach_shared_goal_field",
+        "_reconstruct"
+      ]
+    },
+    {
+      "path": "scripts/monster_ai_package/policy.gd",
+      "module": "enemy_ai_combat",
+      "blob_sha": "9c68cdf33fc16e73dc6846904c787a33ec9db5d2",
+      "read_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "within",
+        "source_goal"
+      ]
+    },
+    {
+      "path": "scripts/monster_attack_source_overlay.gd",
+      "module": "enemy_ai_combat",
+      "blob_sha": "34a4319cbdb5f27a73384b61a3573cb5e2053ac0",
+      "read_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "setup",
+        "_process"
+      ]
+    },
+    {
+      "path": "scripts/monster_attack_timing.gd",
+      "module": "enemy_ai_combat",
+      "blob_sha": "d94c7b47fb23d06910ea4de67d1073320d102d20",
+      "read_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "effective_interval_ms"
+      ]
+    },
+    {
+      "path": "scripts/monster_crowd_attack_position_policy.gd",
+      "module": "enemy_ai_combat",
+      "blob_sha": "4787b3041c1c9fcf4b9fa1a717b51248835cdacb",
+      "read_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "snapshot_peers",
+        "choose_with_snapshot",
+        "contact_leg_with_snapshot"
+      ]
+    },
+    {
+      "path": "scripts/monster_display_formatter.gd",
+      "module": "enemy_ai_combat",
+      "blob_sha": "810641c565b4f162a4cd5c62792599b1ddd12f52",
+      "read_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "display_name",
+        "rank_for_actor",
+        "rank_for_context"
+      ]
+    },
+    {
+      "path": "scripts/monster_ground_alignment_draft.gd",
+      "module": "enemy_ai_combat",
+      "blob_sha": "6bda126fd7e3972c90884079384874e74080ccfa",
+      "read_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "load_draft",
+        "draft_is_formal",
+        "build_payload",
+        "save_draft"
+      ]
+    },
+    {
+      "path": "scripts/monster_ground_runtime_diagnostic_overlay.gd",
+      "module": "enemy_ai_combat",
+      "blob_sha": "111ae2d5551a2e4be8383d7c9ccee14cdf774cf6",
+      "read_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "enabled_for_runtime",
+        "setup",
+        "coordinate_snapshot",
+        "_draw"
+      ]
+    },
+    {
+      "path": "scripts/monster_ground_spike_effect.gd",
+      "module": "enemy_ai_combat",
+      "blob_sha": "051eed320b6b8d6593b228b5016dbb9bfaafe8de",
+      "read_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "setup",
+        "play_once",
+        "_process"
+      ]
+    },
+    {
+      "path": "scripts/monster_identity.gd",
+      "module": "enemy_ai_combat",
+      "blob_sha": "a50f2b7e09dac4da455ae6eaba987c41ca1e1362",
+      "read_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "monster_id",
+        "require_catalog_entry",
+        "behavior_profile",
+        "boss_rule"
+      ]
+    },
+    {
+      "path": "scripts/monster_movement_cadence.gd",
+      "module": "enemy_ai_combat",
+      "blob_sha": "a50f000b7dd2c0b49799edf9df112850e7a63dc9",
+      "read_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "configure",
+        "evaluate_grant",
+        "reset",
+        "state_snapshot"
+      ]
+    },
+    {
+      "path": "scripts/monster_natural_regen_policy.gd",
+      "module": "enemy_ai_combat",
+      "blob_sha": "4c5a0c70113ebd13efb031738a3ea62dad5ef246",
+      "read_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "advance",
+        "heal_amount",
+        "reset"
+      ]
+    },
+    {
+      "path": "scripts/monster_neighbor_step_policy.gd",
+      "module": "enemy_ai_combat",
+      "blob_sha": "d99267c12dc5282807d9b1f0180bb24f1a261d05",
+      "read_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "temporary_cell",
+        "build_neighbor_step",
+        "eight_way_path",
+        "motion_follows_direction"
+      ]
+    },
+    {
+      "path": "scripts/monster_overhead.gd",
+      "module": "enemy_ai_combat",
+      "blob_sha": "e59cdc869b02ed0c998fc9f33b2bd2f89ed683e3",
+      "read_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "setup",
+        "_refresh_rank_visuals",
+        "set_health",
+        "_draw"
+      ]
+    },
+    {
+      "path": "scripts/monster_ranged_projectile_effect.gd",
+      "module": "enemy_ai_combat",
+      "blob_sha": "b6221fb52ae8cfbd5f2a2ebad35e0fef9d18f369",
+      "read_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "setup",
+        "_physics_process",
+        "_advance_flight",
+        "_first_flight_collision",
+        "_finish"
+      ]
+    },
+    {
+      "path": "scripts/monster_respawn_policy.gd",
+      "module": "enemy_ai_combat",
+      "blob_sha": "9fbaf904692f35dc52b63c1865b83f96cdb44359",
+      "read_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "resolve",
+        "seconds_for"
+      ]
+    },
+    {
+      "path": "scripts/monster_source_frames.gd",
+      "module": "enemy_ai_combat",
+      "blob_sha": "18a1f6db87bd85933ddb55f055b76ed9017aa916",
+      "read_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "request_profile",
+        "poll",
+        "texture",
+        "profile_for_id",
+        "retire_threaded_resource_claims"
+      ]
+    },
+    {
+      "path": "scripts/monster_source_poison_state.gd",
+      "module": "enemy_ai_combat",
+      "blob_sha": "cb038868f4735337b7f8ba23d87fba80edefbc70",
+      "read_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "apply",
+        "advance",
+        "clear"
+      ]
+    },
+    {
+      "path": "scripts/monster_struck_policy.gd",
+      "module": "enemy_ai_combat",
+      "blob_sha": "b99c53e408df0cd69f157d96911d9a75c581876f",
+      "read_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "attack_delay_ms",
+        "struck_frame_ms",
+        "direct_magic_compatibility_draw_required"
+      ]
+    },
+    {
+      "path": "scripts/monster_target_acquisition_policy.gd",
+      "module": "enemy_ai_combat",
+      "blob_sha": "a4a7a8eb30d9429661b58fce2c0923a0c2c10589",
+      "read_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "configure",
+        "contains_ground_delta_gu"
+      ]
+    },
+    {
+      "path": "scripts/monster_target_magic_effect.gd",
+      "module": "enemy_ai_combat",
+      "blob_sha": "9e958fb432e8a3709776f76cb566ebdf6622cb85",
+      "read_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "setup",
+        "_process",
+        "_update_presentation"
+      ]
+    },
+    {
+      "path": "scripts/monster_target_ring_geometry.gd",
+      "module": "enemy_ai_combat",
+      "blob_sha": "ca60249d2ffd755bdb74ec6b863b691d771d87b7",
+      "read_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "resolve",
+        "direction_offsets"
+      ]
+    },
+    {
+      "path": "scripts/monster_terrain_navigation_policy.gd",
+      "module": "enemy_ai_combat",
+      "blob_sha": "59baa868de8a5d336dd2f5b979f6643b2b55dcc5",
+      "read_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "build_context",
+        "context_valid",
+        "cell_walkable",
+        "static_line_of_sight_clear",
+        "find_bounded_path"
+      ]
+    },
+    {
+      "path": "scripts/monster_unit_adapter.gd",
+      "module": "enemy_ai_combat",
+      "blob_sha": "8d8e3ed5241a98be446a17ce004cda7574784f2c",
+      "read_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "runtime_projection_gu",
+        "collision_radius_gu",
+        "range_gu",
+        "relocation_radius_gu"
+      ]
+    },
+    {
+      "path": "scripts/monster_visual.gd",
+      "module": "enemy_ai_combat",
+      "blob_sha": "de18c84e031fcca0ea9220567102529227af6bc1",
+      "read_status": "PARTIAL_B03_SCOPE_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "_process",
+        "play_attack",
+        "begin_attack_presentation",
+        "queue_struck",
+        "play_death",
+        "hc_m30_accept_ground_motion",
+        "_exit_tree"
+      ]
+    },
+    {
+      "path": "scripts/monster_visual_streaming_coordinator.gd",
+      "module": "enemy_ai_combat",
+      "blob_sha": "30e9cbf4d69b075c1b272a373025464c69927292",
+      "read_status": "PARTIAL_B03_SCOPE_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "request_client_profile",
+        "poll_once",
+        "register_visual",
+        "unregister_visual",
+        "release_visual_resource",
+        "retire_threaded_resource_claims"
+      ]
+    },
+    {
+      "path": "scripts/ground_unit_space.gd",
+      "module": "spatial_geometry_movement",
+      "blob_sha": "c3e3fe991c09ee716ebbf9a509d4b7bae8f8f770",
+      "read_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "screen_delta_px_to_ground_delta_gu",
+        "ground_delta_gu_to_screen_delta_px",
+        "is_within_range_gu",
+        "desired_ground_motion_gu"
+      ]
+    },
+    {
+      "path": "scripts/runtime_combat_spatial_index.gd",
+      "module": "spatial_geometry_movement",
+      "blob_sha": "1f851f96d0ae5cd5aa95d7f1e817d35d389e2659",
+      "read_status": "PARTIAL_B03_SCOPE_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "register",
+        "unregister",
+        "update_actor",
+        "clear_map",
+        "query_enemy_nodes_aabb_into",
+        "query_neighbor_enemy_nodes_into",
+        "query_enemy_nodes_segment_batch_into"
+      ]
+    },
+    {
+      "path": "scripts/world_spatial_rules.gd",
+      "module": "spatial_geometry_movement",
+      "blob_sha": "08ad59d6e8a0d328f0e146d3b083a93dee99580b",
+      "read_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "actor_combat_radius_gu_from_screen_radius_px",
+        "actor_screen_radius_px_from_combat_radius_gu"
+      ]
+    },
+    {
+      "path": "scripts/summon_actor.gd",
+      "module": "summon_pet_targeting",
+      "blob_sha": "a2b90082c5ea139ed55b2ab23336b37c5b45fd21",
+      "read_status": "PARTIAL_B03_SCOPE_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "_physics_process",
+        "_nearest_enemy",
+        "_attack_world_path_clear",
+        "_owner_formation_anchor_screen_px",
+        "_release_pending_attack",
+        "apply_damage"
+      ]
+    },
+    {
+      "path": "scripts/summon_visual_registry.gd",
+      "module": "summon_pet_targeting",
+      "blob_sha": "ae73b174792c0c61f2faeb6c57a589139b6efbb0",
+      "read_status": "PARTIAL_B03_SCOPE_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "request_profile",
+        "poll_profile",
+        "reap_completed_requests",
+        "_poll_request_once"
+      ]
+    },
+    {
+      "path": "scripts/monster_source176/action_boundary.gd",
+      "module": "source176_skill_packages",
+      "blob_sha": "046a31ee94394c09535343bfe11f9e26888b7c76",
+      "read_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "choose",
+        "can_reserve_body_action"
+      ]
+    },
+    {
+      "path": "scripts/monster_source176/frame_cursor.gd",
+      "module": "source176_skill_packages",
+      "blob_sha": "8bc9448e70c259822319fc69259c1c7aa4e6456e",
+      "read_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "frame_at"
+      ]
+    },
+    {
+      "path": "scripts/monster_source176/reaction_policy.gd",
+      "module": "source176_skill_packages",
+      "blob_sha": "046c1a80801dc52dab7ddd2b9ef46199563c9dd3",
+      "read_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "walk_delta_ms",
+        "ordinary_struck_attack_delta_ms",
+        "pushed_walk_delta_ms"
+      ]
+    },
+    {
+      "path": "scripts/monster_source176/skill_reaction_registry.gd",
+      "module": "source176_skill_packages",
+      "blob_sha": "531cec2225bacc58396e169a97cad34a505e2961",
+      "read_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "family",
+        "validate_ids"
+      ]
+    },
+    {
+      "path": "scripts/monster_source176/source_melee_geometry.gd",
+      "module": "source176_skill_packages",
+      "blob_sha": "e07ef6eb363e9d4bdf8819804b0587f072b7ac95",
+      "read_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "source_adjacent",
+        "continuous_adjacent",
+        "broadphase_radius_gu",
+        "closest_goal"
+      ]
+    },
+    {
+      "path": "scripts/monster_source176/source_step_plan.gd",
+      "module": "source176_skill_packages",
+      "blob_sha": "af5c06f525b523bd36acfe87ff853d9f041b0aaa",
+      "read_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "next_leg",
+        "octile_distance",
+        "is_eight_way"
+      ]
+    },
+    {
+      "path": "scripts/monster_source176/step_budget.gd",
+      "module": "source176_skill_packages",
+      "blob_sha": "602bff7281811751b026f6713191de74920e03bf",
+      "read_status": "B03_MODULE_RUNTIME_SEMANTIC_REVIEW",
+      "scoped_functions": [
+        "desired_motion",
+        "after_arrival"
+      ]
+    }
+  ],
+  "extra_source": [
+    {
+      "path": "scripts/game_root.gd",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "scope": "spawn,passive halo and emergency wake, M30 summon factory, death event, projection; not full file"
+    },
+    {
+      "path": "assets/data/runtime/canonical_monster_catalog.json",
+      "blob_sha": "785c48c7b3c89221530e19dedb29e2c5d2c76fbc",
+      "scope": "156 exact canonical runtime rows;64 special/Boss metadata rows"
+    },
+    {
+      "path": "assets/data/monster_special_delivery_sources_v1.json",
+      "source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "scope": "ID70/124 primary special metadata and ID71 retired-only"
+    }
+  ],
+  "per_id_table_blob_sha": "60381a6eb9f3bbadc0fead58ca2171ab0974eb5e",
+  "validation": {
+    "Godot": "NOT_RUN",
+    "native": "NOT_RUN",
+    "Android": "NOT_RUN",
+    "APK": "NOT_RUN",
+    "code_mutations": "NONE",
+    "workspace_dirty": "UNTOUCHED"
+  }
+}
