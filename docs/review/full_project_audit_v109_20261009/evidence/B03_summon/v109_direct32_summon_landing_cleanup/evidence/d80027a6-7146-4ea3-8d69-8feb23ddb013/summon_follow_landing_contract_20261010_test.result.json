@@ -1,0 +1,152 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "formal runtime projection profile is valid",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "formal runtime projection profile has a source domain",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "formal map has an open canonical summon landing",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "open canonical landing commits without pending",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "open owner teleport uses a legal canonical landing",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "open owner teleport result must pass the formal landing validator",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "map mismatch rejects follow landing",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "map mismatch cannot register deferred arrival",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "owner mismatch rejects follow landing",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "owner mismatch cannot defer arrival",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "map transition rejects follow landing",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "map transition cannot defer arrival",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "non-pending summon cannot register arrival",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "formal map has a clear owner with a blocked formation anchor",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "blocked anchor with alternate legal landing recovers immediately",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "alternate legal landing is committed",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "alternate blocked-anchor landing passes the formal validator",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "fully occupied radius-8 landing defers",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "no-landing case preserves actual position",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "GameRoot exposes pending-pet recovery seam",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "pending registration is idempotent",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "same owner tile does not consume pending retry",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "fixture recovery location is formally clear",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "recovery owner position uses a different formal ground tile",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "pending summon landing recovers through GameRoot retry",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "recovered summon landing must pass the formal validator",
+      "passed": true
+    }
+  ],
+  "count": 26,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "315d948e-592a-41c0-864c-8772e5968416",
+  "passed": 26,
+  "reported_checks": 26,
+  "reported_failures": 0,
+  "run_id": "d80027a6-7146-4ea3-8d69-8feb23ddb013",
+  "runtime_environment": {
+    "native_process_id": 1840,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct32_summon_landing_cleanup",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/v109_direct32_summon_landing_cleanup/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "summon_follow_landing_contract_20261010_test",
+  "schema_version": 1,
+  "source_content_sha256": "d7b2b463365bf9a059d14d61ddf85ed78d661f7ad7e80506211436ed3971e627",
+  "status": "PASS"
+}

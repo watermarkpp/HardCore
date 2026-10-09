@@ -1,0 +1,41 @@
+{
+  "status": "PASS",
+  "scope": "formal released map runtime semantics only; no engine/test run",
+  "counts": {
+    "released_maps": 67,
+    "spawn_rows": 2638,
+    "spawned_unique_ids": 120,
+    "canonical_catalog_ids": 156,
+    "canonical_runtime_allowed_ids": 156,
+    "runtime_allowed_not_currently_spawned": 36,
+    "drop_source_v2_records": 217,
+    "direct_baseline_profiles": 156,
+    "spawned_missing_canonical": 0,
+    "spawned_runtime_disallowed": 0,
+    "spawned_missing_drop_source": 0,
+    "spawned_missing_direct_profile": 0,
+    "spawned_direct_invalid_or_empty": 0,
+    "spawned_source_rows_sum": 5644,
+    "spawned_direct_slots_sum": 6296
+  },
+  "source_hashes": {
+    "assets/data/runtime/map_editor/map_runtime_release_registry.json": "9d2700103b63253039210c545f5af08e7e1597394cb8b417b54f59d5bc1ff738",
+    "assets/data/runtime/canonical_monster_catalog.json": "a46aca4209b3abc0f3f2cd5365b274605cd07886060706e14ef3e984aad8880a",
+    "assets/data/canonical_monster_drop_source_v2.json": "59338a7e5caaccc82661e942908caea0a4a06cf56402961e4c3e55fb123e4013",
+    "assets/data/drop/dpv2_direct_baseline_manifest_v2.json": "e54f1a2df353e996ed3d8b63d0c0e2fa858fe42d7c3bc4c6944ac180787db37f",
+    "assets/data/drop/dpv2_direct_baseline_v2.json": "a4cd03688418820d4657403da46424ed9bddf0d930d46e4778b54b912555dad7",
+    "scripts/layers/runtime/map_editor_runtime_bridge.gd": "6322aaf98410f7578fcd7dd59b33c20ff34cc17a77463edc20a4115b31784ef5",
+    "scripts/game_root.gd": "91955b3111b1ffea6a24856da717af3b5fc481985feedf6d3d481ed150ce8ee8",
+    "scripts/game_data.gd": "641e8938f764b0048f3a3176c3d97409798d495db4d606ad58ef90f71246f16b",
+    "tools/monster_drop_p1a_runtime_export.gd": "ff70f5b036438f8228126bf016d94d98c1bd59c981f05ba0bb36c237e395a2bb",
+    "scripts/layers/runtime/world_content_service.gd": "4f11d500202c08073b67692cf35da2336331be8c8ad0f60fee9b8ea34ddcfc18"
+  },
+  "source_receipt": "outputs/wake_drop_v108_review_followup_20261009/drop_coverage_evidence.json",
+  "reuse_reason": "Prior formal released-map/static receipt is reused unchanged; no engine rerun.",
+  "current_hash_comparison": {
+    "fixed172_catalog_sha256": "A46ACA4209B3ABC0F3F2CD5365B274605CD07886060706E14EF3E984AAD8880A",
+    "current_catalog_sha256": "A46ACA4209B3ABC0F3F2CD5365B274605CD07886060706E14EF3E984AAD8880A",
+    "fixed172_sheet_sha256": "3C371628C2D0F51023A5C059439020F756A3762C88C3AE6EA4FA4A5790C99AFF",
+    "current_sheet_sha256": "3C371628C2D0F51023A5C059439020F756A3762C88C3AE6EA4FA4A5790C99AFF"
+  }
+}

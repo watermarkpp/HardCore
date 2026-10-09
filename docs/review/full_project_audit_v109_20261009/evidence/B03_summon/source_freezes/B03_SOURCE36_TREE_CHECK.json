@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "tree": "fa9f4ebb60379299e69db701d9ff294e729b261a",
+  "fingerprint_file_count": 1020,
+  "direct_blob_matches": 1018,
+  "normalized_blob_comparisons": 0,
+  "tree_mismatches": [],
+  "not_in_tree": [
+    "scripts/monster_ai_package/grid_crowd_trial.gd",
+    "scripts/monster_ai_package/grid_occupancy_service.gd"
+  ],
+  "scope": "same source36 checkout scripts/scenes/data/selected fixtures; CRLF/LF normalize both; two retired grid trial local-only exclusions per LOCAL_ONLY_SOURCE_TRIAGE; not whole project binary/APK claim",
+  "earlier_comparison_error": "normalized checkout hash was compared to raw CRLF Git blob hash; corrected without changing source"
+}

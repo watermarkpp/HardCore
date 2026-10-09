@@ -37,7 +37,7 @@ separately from the per-run candidate tree.
 | direct23 | `runs/direct23_snapshot_and_visual_negative/` | FAIL | Initial visual fixture parse/lifecycle failure retained. The projectile snapshot companion in the same run is PASS. |
 | direct24 | `runs/direct24_visual_negative_parse_fix/` | FAIL | Six visual fixture checks failed; two expected malformed-resource errors remain. This is not promoted. |
 | direct25 | `runs/direct25_visual_typed_input/` | native exit 0; raw wrapper FAIL | 35/35 internal checks, valid framework receipt, and the two expected malformed `.res` errors. Classified separately in `NEGATIVE_CASE_CLASSIFICATION.json`. |
-| related26 | `runs/related26_visual_positive/` | PASS | Three existing positive lease/cache tests, native exit 0, stderr 0, engine errors 0. |
+| related26 | `runs/related26_visual_positive/` | FUNCTIONAL PASS / CLEANUP FAIL | Sequence-lease and production-caller cases are clean; the workset case functionally passes but its retained stderr/Godot log contains 4 CanvasItem RIDs, 8 ObjectDB, and 2 resource-at-exit cleanup warnings from four tree-less test players. |
 
 ## direct25 negative classification
 
@@ -55,6 +55,15 @@ runner receipt. It records `PASS` only for the bounded negative-case scope:
 The raw wrapper remains `FAIL` with
 `stderr_failures_2;engine_log_failures_2`. The classification does not turn
 that wrapper result green and does not classify a production asset failure.
+
+The related26 sequence-lease and production-caller cases have native exit 0
+with clean stderr and engine logs. The workset case has a functional PASS but
+a cleanup FAIL in its retained logs: four tree-less
+`CasterSkillAnimationPlayer` test objects were not freed before exit,
+producing 4 CanvasItem RIDs, 8 ObjectDB, and 2 resource-at-exit warnings.
+This is a test cleanup defect, not a production visual leak assertion. The
+owned test now explicitly frees those four players; one focused verbose
+rerun is required.
 
 ## Freeze and provenance files
 

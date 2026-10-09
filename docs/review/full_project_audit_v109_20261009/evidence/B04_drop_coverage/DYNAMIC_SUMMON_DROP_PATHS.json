@@ -1,0 +1,84 @@
+{
+  "status": "PASS",
+  "source_hashes": {
+    "scripts/enemy.gd": {
+      "path": "scripts/enemy.gd",
+      "sha256": "4EB42E585F30C3401366184CD240771ACD9BC25A066BCEC9AE859E38A71DDF2A",
+      "bytes": 496054
+    },
+    "scripts/game_root.gd": {
+      "path": "scripts/game_root.gd",
+      "sha256": "348F3694368B03A345339D156ED7277B600B7B14BFDF1294BA4157D7C272C0BC",
+      "bytes": 616070
+    },
+    "scripts/monster_ai_package/m30/summon_queue.gd": {
+      "path": "scripts/monster_ai_package/m30/summon_queue.gd",
+      "sha256": "96BCD616093871C6035B38A050B76FE5B78663336C507644886C25D1A08EEACC",
+      "bytes": 18749
+    }
+  },
+  "dynamic_paths": [
+    {
+      "kind": "behavior_summon",
+      "source": "assets/data/runtime/canonical_monster_catalog.json",
+      "owner_monster_ids": [
+        126,
+        182
+      ],
+      "configured_child_ids": [
+        127,
+        183
+      ],
+      "source_paths": [
+        "scripts/enemy.gd:7147-7178",
+        "scripts/game_root.gd:6468-6477",
+        "scripts/monster_ai_package/m30/summon_queue.gd:138-253,386-417"
+      ],
+      "sheet_presence": {
+        "127": false,
+        "183": false
+      },
+      "drop_join": "Children are materialized as ordinary EnemyActor records through GameRoot._hc_m30_materialize and then enter the same death->LootRuntime path. ID 127 has a fixed canonical drop profile (entry_count 5) but is absent from the user sheet; ID 183 has explicit no-row exemption."
+    },
+    {
+      "kind": "boss_health_stage_summon",
+      "source": "assets/data/runtime/canonical_monster_catalog.json",
+      "owner_monster_ids": [
+        96,
+        160
+      ],
+      "configured_child_ids": [
+        156,
+        153,
+        150,
+        128
+      ],
+      "source_paths": [
+        "scripts/enemy.gd:8069-8090",
+        "scripts/game_root.gd:6468-6477",
+        "scripts/monster_ai_package/m30/summon_queue.gd:138-253,386-417"
+      ],
+      "sheet_presence": {
+        "128": true,
+        "150": true,
+        "153": true,
+        "156": true
+      },
+      "drop_join": "No separate loot authority; claim_birth/materialize creates regular enemy identities and death processing uses the child monster_id."
+    },
+    {
+      "kind": "special_profile_extensions",
+      "source_paths": [
+        "scripts/drop/user_drop_additions_v81.gd:22-45",
+        "scripts/drop/user_drop_balance.gd:23-39"
+      ],
+      "ids": [
+        76,
+        159
+      ],
+      "finding": "These are profile modifiers keyed by stable monster_id; they do not create additional spawn/drop identities or bypass the canonical profile join."
+    }
+  ],
+  "native_run": "NOT_RUN",
+  "godot_run": "NOT_RUN"
+}

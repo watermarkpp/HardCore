@@ -1,0 +1,444 @@
+{
+  "status": "PASS",
+  "scope": "Current UserLootSheetProvider input join against the previously recorded released spawn ID set; static only, no rerun.",
+  "prior_receipt": {
+    "path": "outputs/wake_drop_v108_review_followup_20261009/drop_coverage_evidence.json",
+    "status": "PASS",
+    "spawned_ids_count": 120,
+    "spawned_ids_source_hashes": {
+      "assets/data/runtime/map_editor/map_runtime_release_registry.json": "9d2700103b63253039210c545f5af08e7e1597394cb8b417b54f59d5bc1ff738",
+      "assets/data/runtime/canonical_monster_catalog.json": "a46aca4209b3abc0f3f2cd5365b274605cd07886060706e14ef3e984aad8880a",
+      "assets/data/canonical_monster_drop_source_v2.json": "59338a7e5caaccc82661e942908caea0a4a06cf56402961e4c3e55fb123e4013",
+      "assets/data/drop/dpv2_direct_baseline_manifest_v2.json": "e54f1a2df353e996ed3d8b63d0c0e2fa858fe42d7c3bc4c6944ac180787db37f",
+      "assets/data/drop/dpv2_direct_baseline_v2.json": "a4cd03688418820d4657403da46424ed9bddf0d930d46e4778b54b912555dad7",
+      "scripts/layers/runtime/map_editor_runtime_bridge.gd": "6322aaf98410f7578fcd7dd59b33c20ff34cc17a77463edc20a4115b31784ef5",
+      "scripts/game_root.gd": "91955b3111b1ffea6a24856da717af3b5fc481985feedf6d3d481ed150ce8ee8",
+      "scripts/game_data.gd": "641e8938f764b0048f3a3176c3d97409798d495db4d606ad58ef90f71246f16b",
+      "tools/monster_drop_p1a_runtime_export.gd": "ff70f5b036438f8228126bf016d94d98c1bd59c981f05ba0bb36c237e395a2bb",
+      "scripts/layers/runtime/world_content_service.gd": "4f11d500202c08073b67692cf35da2336331be8c8ad0f60fee9b8ea34ddcfc18"
+    },
+    "ids_are_from": "ids.spawned"
+  },
+  "current_user_sheet": {
+    "path": "assets/data/drop/dpv2_user_loot_sheet_authority_v1.json",
+    "sha256": "3C371628C2D0F51023A5C059439020F756A3762C88C3AE6EA4FA4A5790C99AFF",
+    "authority_id": "dpv2.user_loot_sheet.v1",
+    "document_status": "PENDING_ACTIVATION",
+    "provider_runtime_path": "scripts/drop/user_loot_sheet_provider.gd",
+    "provider_sha256": "F3CDB515F911B4AEEAFEC4612B9A87E9369A92A6E8B8429843DFA5BCF0E739E0",
+    "effective_slots": 6083,
+    "profile_count": 126,
+    "sheet_source_sha256": "bc234fca54286547b07f64731c9d0e3674aa19a703863c393c356caf97005251"
+  },
+  "join": {
+    "released_spawned_count": 120,
+    "current_sheet_intersection_count": 120,
+    "released_ids_missing_current_user_sheet": [],
+    "all_released_spawn_ids_have_current_user_sheet_profile": true,
+    "current_sheet_profile_126": {
+      "present": true,
+      "slot_count": 8
+    },
+    "current_sheet_profile_127": {
+      "present": false,
+      "slot_count": 0
+    }
+  },
+  "dynamic_parent_child": {
+    "published_parent_126": true,
+    "published_child_127": false,
+    "interpretation": "Parent 126 is in the previously recorded released spawn set and current UserLootSheet has a profile for 126. Child 127 is not in that released spawn set and has no current UserLootSheet profile. The dynamic behavior profile can request 127, so 127 is a reachable code path only if that summon behavior is enabled in a released runtime context; this static join does not claim current live materialization."
+  },
+  "id_75": {
+    "canonical_current_entry": {
+      "monster_id": 75,
+      "canonical_name": "沃玛卫士2",
+      "variant_code": "2",
+      "classification": "elite",
+      "spawn_classification": null,
+      "editor_placement": {
+        "allowed": true,
+        "placement_kind": "",
+        "map_codes": [
+          "D022",
+          "D023",
+          "D024"
+        ],
+        "source_scope": "classification_and_drop_closure"
+      },
+      "spawn_authority": null,
+      "runtime_allowed": true,
+      "runtime_capability": {
+        "allowed": true,
+        "classification_ok": true,
+        "art_ok": true,
+        "drop_ok": true,
+        "combat_identity_ok": true,
+        "intentional_exclusion": false,
+        "blockers": []
+      },
+      "status": "formal",
+      "drop_policy": {
+        "hostile_requires_non_empty": true,
+        "entry_count": 78,
+        "exemption": null
+      },
+      "combat": {
+        "stats": {
+          "level": 50,
+          "exp": 1,
+          "hp": 1000,
+          "defense": 50,
+          "magic_defense": 50,
+          "attack_min": 10,
+          "attack_max": 25
+        },
+        "ai": {
+          "ai_code": 0,
+          "view_range": 7,
+          "image": 33,
+          "resolution_status": "exact_service_name",
+          "source_distribution": "server.crystal.cjlaaa"
+        },
+        "timing": {
+          "attack_interval_ms": 1500,
+          "move_interval_ms": 500,
+          "confidence": "user_authoritative_21cq",
+          "resolution_status": "user_authoritative_21cq"
+        },
+        "runtime_projection": {
+          "agility": 17,
+          "accuracy": 20,
+          "life_type": "不死系",
+          "undead": true,
+          "anti_stealth": false,
+          "anti_poison": 0,
+          "source_evidence": {
+            "agility": {
+              "source": "assets/data/monster_21cq_detail_source_v1.json",
+              "sha256": "2F2DC3D1AB733081FD36BFE9608702E13B468A0EE0D8A921DC77501DFA13474F",
+              "authority": "user_authoritative_override",
+              "role": "monster_21cq_detail_user_authoritative_override",
+              "field": "agility",
+              "raw_html_sha256": "71CEA9C20EFB0C0910B89D842FDB05DCEC7A429E21A2A85EF1FE32D45128A478"
+            },
+            "accuracy": {
+              "source": "assets/data/monster_21cq_detail_source_v1.json",
+              "sha256": "2F2DC3D1AB733081FD36BFE9608702E13B468A0EE0D8A921DC77501DFA13474F",
+              "authority": "user_authoritative_override",
+              "role": "monster_21cq_detail_user_authoritative_override",
+              "field": "accuracy",
+              "raw_html_sha256": "71CEA9C20EFB0C0910B89D842FDB05DCEC7A429E21A2A85EF1FE32D45128A478"
+            },
+            "life_type": {
+              "source": "assets/data/monster_21cq_detail_source_v1.json",
+              "sha256": "2F2DC3D1AB733081FD36BFE9608702E13B468A0EE0D8A921DC77501DFA13474F",
+              "authority": "user_authoritative_override",
+              "role": "monster_21cq_detail_user_authoritative_override",
+              "field": "life_type",
+              "raw_html_sha256": "71CEA9C20EFB0C0910B89D842FDB05DCEC7A429E21A2A85EF1FE32D45128A478"
+            },
+            "undead": {
+              "source": "assets/data/monster_21cq_detail_source_v1.json",
+              "sha256": "2F2DC3D1AB733081FD36BFE9608702E13B468A0EE0D8A921DC77501DFA13474F",
+              "authority": "user_authoritative_override",
+              "role": "monster_21cq_detail_user_authoritative_override",
+              "field": "undead",
+              "raw_html_sha256": "71CEA9C20EFB0C0910B89D842FDB05DCEC7A429E21A2A85EF1FE32D45128A478",
+              "superseded_conflicts": [
+                {
+                  "source": "server.crystal.cjlaaa",
+                  "distribution": "server.crystal.cjlaaa",
+                  "tier": "primary",
+                  "original_path": "assets/data/service_monster_runtime_catalog.json",
+                  "sha256": "BC5D625645C63B4C67A3EC5DE96BB06092572F1AA3279B80F78F4B699C041580",
+                  "field": "undead",
+                  "role": "superseded_crystal_life_flag_candidate",
+                  "value": false,
+                  "evidence": "service_monster_runtime_catalog runtimeByMonsterId[75].behaviorProfile.serviceBehavior.undead",
+                  "resolution": "superseded_by_21cq_user_override"
+                }
+              ]
+            },
+            "anti_stealth": {
+              "source": "assets/data/monster_21cq_detail_source_v1.json",
+              "sha256": "2F2DC3D1AB733081FD36BFE9608702E13B468A0EE0D8A921DC77501DFA13474F",
+              "authority": "user_authoritative_override",
+              "role": "monster_21cq_detail_user_authoritative_override",
+              "field": "anti_stealth",
+              "raw_html_sha256": "71CEA9C20EFB0C0910B89D842FDB05DCEC7A429E21A2A85EF1FE32D45128A478"
+            },
+            "anti_poison": {
+              "distribution": "project.monster_runtime_contract",
+              "tier": "project_rule",
+              "original_path": "assets/data/canonical_monster_catalog_policy_v1.json",
+              "sha256": "7E2856C16AC1937CBE0A9050200C989607FFA938E8A8EC29413FA9D756107B7E",
+              "hash_normalization": "lf_text",
+              "role": "runtime_projection_safe_default",
+              "field": "anti_poison",
+              "evidence": "No authoritative 21CQ anti-poison field; canonical runtime keeps the safe project default"
+            }
+          }
+        },
+        "behavior_profile": {
+          "timing": {
+            "attackIntervalMs": 1500,
+            "moveIntervalMs": 500,
+            "confidence": "user_authoritative_21cq",
+            "resolutionStatus": "user_authoritative_21cq"
+          },
+          "serviceBehavior": {
+            "aiCode": 0,
+            "viewRange": 7,
+            "confidence": "B",
+            "image": 33,
+            "effect": 0,
+            "coolEye": 0,
+            "canPush": true,
+            "canTame": false,
+            "autoRevive": true,
+            "undead": true,
+            "resolutionStatus": "exact_service_name",
+            "sourceDistribution": "server.crystal.cjlaaa",
+            "primaryRuleDistribution": "source.original_gameofmir.server_suite",
+            "databaseFormatReferenceDistribution": "source.suprcode_crystal.server",
+            "lifeType": "不死系",
+            "antiStealth": false
+          },
+          "runtimeProjection": {
+            "moveSpeed": 46.0
+          },
+          "collisionRadius": 24.0
+        },
+        "boss_rule": {},
+        "body_profile": {
+          "policy_id": "actor_body_policy_v1",
+          "contract_id": "hardcore.actor.body_policy.v1",
+          "policy_sha256": "D499993967B8146F1C6FF17510DA6B77FFF318CA4233D8DDD3CEF843A61E2003",
+          "tier": "large",
+          "assignment_rule": "named_large_elite_family",
+          "screen_radius_px": 22.627416997969522,
+          "ground_radius_gu": 0.5
+        }
+      },
+      "appearance_profile_id": "appearance.wooma_guardian_d04e7d9b4be548c5",
+      "drop_profile_id": "drop.75",
+      "spawn_contexts": [
+        {
+          "map_code": "D022",
+          "classification": "elite",
+          "placement_kind": "",
+          "allowed": true
+        },
+        {
+          "map_code": "D023",
+          "classification": "elite",
+          "placement_kind": "",
+          "allowed": true
+        },
+        {
+          "map_code": "D024",
+          "classification": "elite",
+          "placement_kind": "",
+          "allowed": true
+        }
+      ],
+      "source_evidence": {
+        "canonical_name": {
+          "distribution": "source.vanilla_176",
+          "tier": "primary",
+          "original_path": "assets/data/vanilla_176/monsters.json",
+          "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
+          "hash_normalization": "lf_text",
+          "role": "canonical_name_vanilla_exact_id",
+          "field": "canonical_name",
+          "evidence": "vanilla_176/monsters.json exact monster_id=75 record.name"
+        },
+        "identity_resolution": "vanilla_exact_id",
+        "classification": {
+          "source": {
+            "distribution": "source.user_authoritative_attachment",
+            "tier": "user_authoritative",
+            "original_path": "assets/data/canonical_monster_classification_v1.json",
+            "sha256": "8800A609B173C88E448542CEA743BD3A86860F99ED701FD8B6460A8E340DDEC9",
+            "hash_normalization": "lf_text",
+            "role": "classification_and_editor_placement",
+            "evidence": "Persisted exact monster_id policy; runtime generator performs no name join"
+          },
+          "attachment_source": {
+            "path": "assets/data/map_editor_monster_spawn_classification_v1.json",
+            "sha256": "82B3EC564EE1645E2D39AA9B506C8C40E53F66D99CA5DDC0C12EF2FD4C3DDEEB",
+            "resolution_policy": "visibleName exact canonical name, unique only; no base-name, suffix trim, or alias"
+          },
+          "matched_exact_id": true,
+          "resolution": "attachment_exact_id_override",
+          "unresolved": false
+        },
+        "spawn_classification": null,
+        "combat_stats": {
+          "level": {
+            "source": "assets/data/monster_21cq_detail_source_v1.json",
+            "sha256": "2F2DC3D1AB733081FD36BFE9608702E13B468A0EE0D8A921DC77501DFA13474F",
+            "authority": "user_authoritative_override",
+            "role": "monster_21cq_detail_user_authoritative_override",
+            "field": "level",
+            "raw_html_sha256": "71CEA9C20EFB0C0910B89D842FDB05DCEC7A429E21A2A85EF1FE32D45128A478"
+          },
+          "exp": {
+            "source": "assets/data/monster_21cq_detail_source_v1.json",
+            "sha256": "2F2DC3D1AB733081FD36BFE9608702E13B468A0EE0D8A921DC77501DFA13474F",
+            "authority": "user_authoritative_override",
+            "role": "monster_21cq_detail_user_authoritative_override",
+            "field": "exp",
+            "raw_html_sha256": "71CEA9C20EFB0C0910B89D842FDB05DCEC7A429E21A2A85EF1FE32D45128A478"
+          },
+          "hp": {
+            "source": "assets/data/monster_21cq_detail_source_v1.json",
+            "sha256": "2F2DC3D1AB733081FD36BFE9608702E13B468A0EE0D8A921DC77501DFA13474F",
+            "authority": "user_authoritative_override",
+            "role": "monster_21cq_detail_user_authoritative_override",
+            "field": "hp",
+            "raw_html_sha256": "71CEA9C20EFB0C0910B89D842FDB05DCEC7A429E21A2A85EF1FE32D45128A478"
+          },
+          "defense": {
+            "source": "assets/data/monster_21cq_detail_source_v1.json",
+            "sha256": "2F2DC3D1AB733081FD36BFE9608702E13B468A0EE0D8A921DC77501DFA13474F",
+            "authority": "user_authoritative_override",
+            "role": "monster_21cq_detail_user_authoritative_override",
+            "field": "defense",
+            "raw_html_sha256": "71CEA9C20EFB0C0910B89D842FDB05DCEC7A429E21A2A85EF1FE32D45128A478"
+          },
+          "magic_defense": {
+            "source": "assets/data/monster_21cq_detail_source_v1.json",
+            "sha256": "2F2DC3D1AB733081FD36BFE9608702E13B468A0EE0D8A921DC77501DFA13474F",
+            "authority": "user_authoritative_override",
+            "role": "monster_21cq_detail_user_authoritative_override",
+            "field": "magic_defense",
+            "raw_html_sha256": "71CEA9C20EFB0C0910B89D842FDB05DCEC7A429E21A2A85EF1FE32D45128A478"
+          },
+          "attack_min": {
+            "source": "assets/data/monster_21cq_detail_source_v1.json",
+            "sha256": "2F2DC3D1AB733081FD36BFE9608702E13B468A0EE0D8A921DC77501DFA13474F",
+            "authority": "user_authoritative_override",
+            "role": "monster_21cq_detail_user_authoritative_override",
+            "field": "attack_min",
+            "raw_html_sha256": "71CEA9C20EFB0C0910B89D842FDB05DCEC7A429E21A2A85EF1FE32D45128A478"
+          },
+          "attack_max": {
+            "source": "assets/data/monster_21cq_detail_source_v1.json",
+            "sha256": "2F2DC3D1AB733081FD36BFE9608702E13B468A0EE0D8A921DC77501DFA13474F",
+            "authority": "user_authoritative_override",
+            "role": "monster_21cq_detail_user_authoritative_override",
+            "field": "attack_max",
+            "raw_html_sha256": "71CEA9C20EFB0C0910B89D842FDB05DCEC7A429E21A2A85EF1FE32D45128A478"
+          }
+        },
+        "combat_ai_timing": {
+          "service": {
+            "distribution": "source.original_gameofmir.server_suite",
+            "tier": "primary",
+            "original_path": "assets/data/service_monster_runtime_catalog.json",
+            "sha256": "BC5D625645C63B4C67A3EC5DE96BB06092572F1AA3279B80F78F4B699C041580",
+            "hash_normalization": "lf_text",
+            "role": "service_ai_and_timing",
+            "evidence": "Direct monster_id row; unresolved source status is retained, never name-resolved"
+          },
+          "behavior": {
+            "distribution": "project.monster_behavior_profiles",
+            "tier": "primary",
+            "original_path": "assets/data/monster_behavior_profiles.json",
+            "sha256": "06DF0BD39E7457FB6B41681C67D6D1737C333ABE8CA00237C9622BC4DE5A384D",
+            "hash_normalization": "lf_text",
+            "role": "behavior_profile",
+            "evidence": "profileByMonsterId[75]=wooma_guardian"
+          },
+          "detail": {
+            "source": "assets/data/monster_21cq_detail_source_v1.json",
+            "source_sha256": "2F2DC3D1AB733081FD36BFE9608702E13B468A0EE0D8A921DC77501DFA13474F",
+            "distribution": "user.21cq.com.mir.monster_detail",
+            "authority": "user_authoritative_override",
+            "role": "monster_21cq_detail_timing_and_life_flags",
+            "field_page_sha256": {
+              "attack_interval_ms": "71CEA9C20EFB0C0910B89D842FDB05DCEC7A429E21A2A85EF1FE32D45128A478",
+              "move_interval_ms": "71CEA9C20EFB0C0910B89D842FDB05DCEC7A429E21A2A85EF1FE32D45128A478",
+              "life_type": "71CEA9C20EFB0C0910B89D842FDB05DCEC7A429E21A2A85EF1FE32D45128A478",
+              "undead": "71CEA9C20EFB0C0910B89D842FDB05DCEC7A429E21A2A85EF1FE32D45128A478",
+              "anti_stealth": "71CEA9C20EFB0C0910B89D842FDB05DCEC7A429E21A2A85EF1FE32D45128A478"
+            }
+          }
+        },
+        "combat_auxiliary": {},
+        "appearance": {
+          "status": "formal",
+          "manifest": "bich_common_client_art_sources.json",
+          "manifest_sha256": "0CA4C1C037DC816E6A25F7590DACEE46B72657DF0AED5E546138E9E25F28F205",
+          "manifest_hash_normalization": "lf_text",
+          "mapping_source": "21cq monster-page appearance path + bundled client WIL pixels + Client/Actor.pas standard action layout",
+          "mapping_confidence": "B"
+        },
+        "drops": {
+          "sources": [
+            {
+              "distribution": "user.excel.217_monster_drop_slots",
+              "tier": "primary",
+              "original_path": "热血传奇1.76_217怪物_完整掉落槽版.xlsx::掉落槽_完整版",
+              "sha256": "6902A37DB839577D2CE440B9EFDC4628430CF063BF9DF505F03B41E24A5D67EE",
+              "role": "drop_profile_primary",
+              "row_count": 78,
+              "resolution": "available"
+            }
+          ]
+        },
+        "status": {
+          "runtime_allowed": true,
+          "art_status": "formal",
+          "classification_status": "elite",
+          "identity_resolution": "vanilla_exact_id",
+          "core_combat_identity_ok": true,
+          "core_combat_stats_ok": true,
+          "ai_authority_ok": true,
+          "timing_authority_ok": true,
+          "combat_identity_ok": true,
+          "drop_status": "exact_slots",
+          "drop_entry_count": 78,
+          "drop_exemption": null,
+          "appearance_translation": {
+            "required": true,
+            "provided": true,
+            "service_image": 33,
+            "client_appearance": 151,
+            "reason": "exact monster_id client-art authority provides the service-to-client appearance translation; service image is diagnostic metadata and is not the client rendering identity",
+            "source": {
+              "status": "formal",
+              "manifest": "bich_common_client_art_sources.json",
+              "manifest_sha256": "0CA4C1C037DC816E6A25F7590DACEE46B72657DF0AED5E546138E9E25F28F205",
+              "manifest_hash_normalization": "lf_text",
+              "mapping_source": "21cq monster-page appearance path + bundled client WIL pixels + Client/Actor.pas standard action layout",
+              "mapping_confidence": "B"
+            }
+          }
+        }
+      }
+    },
+    "current_user_sheet_present": false,
+    "previous_released_spawned": false,
+    "previous_not_currently_spawned": true,
+    "region_runtime_spawn_rows_for_75": [],
+    "map_runtime_release_registry_count": 67,
+    "interpretation": "The catalog/editor contexts D022/D023/D024 are not themselves proof of a published runtime spawn. The previous released-map receipt excludes 75 from ids.spawned; the current region runtime catalog has no monsterId=75 row. Do not convert the historical context into current runtime reachability."
+  },
+  "input_fingerprints": {
+    "current_user_sheet": "3C371628C2D0F51023A5C059439020F756A3762C88C3AE6EA4FA4A5790C99AFF",
+    "prior_direct_baseline": "a4cd03688418820d4657403da46424ed9bddf0d930d46e4778b54b912555dad7",
+    "prior_catalog": "a46aca4209b3abc0f3f2cd5365b274605cd07886060706e14ef3e984aad8880a",
+    "current_catalog": "A46ACA4209B3ABC0F3F2CD5365B274605CD07886060706E14EF3E984AAD8880A",
+    "current_region_spawn_catalog": "A2FFD1874E408B5646AE603FD59DD97E49FAA0F2104868C0B922C14D5D225939",
+    "current_release_registry": "9D2700103B63253039210C545F5AF08E7E1597394CB8B417B54F59D5BC1FF738"
+  },
+  "commands": [
+    "python static join of prior receipt ids.spawned with current assets/data/drop/dpv2_user_loot_sheet_authority_v1.json",
+    "targeted rg/Get-Content inspection of provider, canonical catalog, region spawn catalog and release registry"
+  ],
+  "godot_run": "NOT_RUN",
+  "native_run": "NOT_RUN"
+}

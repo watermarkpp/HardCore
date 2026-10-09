@@ -1,0 +1,335 @@
+{
+  "status": "PASS",
+  "scope": "evidence ledger completeness for source34/36; does not promote per-case FAIL/cleanup FAIL to PASS",
+  "stages": [
+    {
+      "stage": "v109_direct34_summon_emitter",
+      "invocation_id": "7a5cdce4-3f41-4488-ba17-3bbd6b6c7482",
+      "runner_receipt": "outputs/test_logs/v109_direct34_summon_emitter/logs/runner_results_adhoc_20261010_011949_617_15236.json",
+      "source_freeze": "B03_SOURCE_FREEZE_34.json",
+      "source_changed_since_prior": "passive emitter lifecycle repair and targeted fixture alignment",
+      "orchestration_command": {
+        "script": "tools/run_godot_tests.ps1",
+        "TestPaths": [
+          "tests/framework/summon_follow_landing_contract_20261010_test.tscn"
+        ],
+        "TimeoutSeconds": 30,
+        "Verbose": true
+      },
+      "environment_roots": {
+        "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+        "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct34_summon_emitter",
+        "runner_process_id": 15236
+      },
+      "native_result": {
+        "test_name": "summon_follow_landing_contract_20261010_test",
+        "test_path": "tests/framework/summon_follow_landing_contract_20261010_test.tscn",
+        "wrapper_process_id": 1928,
+        "wrapper_started_utc": "2026-10-09T17:19:24.7068672Z",
+        "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct34_summon_emitter",
+        "fixed_fps": 0,
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "execution_deadline_utc": "2026-10-09T17:19:54.7194514Z",
+        "native_exit_observed_utc": "2026-10-09T17:19:48.0251740Z",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 0,
+        "engine_log_failure_count": 0,
+        "framework_run_id": "8686778d-8158-489c-a3fa-4f80f0b26567",
+        "framework_receipt_valid": true,
+        "result": "PASS",
+        "reason": ""
+      },
+      "cleanup_status": "PASS",
+      "cleanup_owner_attribution": "NOT_REQUIRED"
+    },
+    {
+      "stage": "v109_related35_summon_contracts",
+      "invocation_id": "cf8dc4c9-383a-4961-b340-61451c075f05",
+      "runner_receipt": "outputs/test_logs/v109_related35_summon_contracts/logs/runner_results_adhoc_20261010_012148_895_22140.json",
+      "source_freeze": "B03_SOURCE_FREEZE_34.json",
+      "source_changed_since_prior": "passive emitter lifecycle repair and targeted fixture alignment",
+      "orchestration_command": {
+        "script": "tools/run_godot_tests.ps1",
+        "TestPaths": [
+          "tests/skills/summon_owner_teleport_runtime_test.tscn",
+          "tests/summon_actor_state_machine_test.tscn",
+          "tests/canonical_summon_integration_test.tscn",
+          "tests/skeleton_multi_summon_contract_test.tscn"
+        ],
+        "TimeoutSeconds": 30,
+        "Verbose": true
+      },
+      "environment_roots": {
+        "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+        "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_related35_summon_contracts",
+        "runner_process_id": 22140
+      },
+      "native_result": {
+        "test_name": "summon_owner_teleport_runtime_test",
+        "test_path": "tests/skills/summon_owner_teleport_runtime_test.tscn",
+        "wrapper_process_id": 23072,
+        "wrapper_started_utc": "2026-10-09T17:20:40.0513599Z",
+        "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_related35_summon_contracts",
+        "fixed_fps": 0,
+        "pass_marker_found": false,
+        "process_exited": false,
+        "wrapper_exit_code": -1,
+        "child_process_exit_state": "forced_termination",
+        "execution_deadline_utc": "2026-10-09T17:21:10.0663840Z",
+        "native_exit_observed_utc": null,
+        "effective_exit_code": -1,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 1,
+        "engine_log_failure_count": 1,
+        "framework_run_id": "",
+        "framework_receipt_valid": null,
+        "result": "FAIL",
+        "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+      },
+      "cleanup_status": "PASS",
+      "cleanup_owner_attribution": "NOT_REQUIRED"
+    },
+    {
+      "stage": "v109_related35_summon_contracts",
+      "invocation_id": "cf8dc4c9-383a-4961-b340-61451c075f05",
+      "runner_receipt": "outputs/test_logs/v109_related35_summon_contracts/logs/runner_results_adhoc_20261010_012148_895_22140.json",
+      "source_freeze": "B03_SOURCE_FREEZE_34.json",
+      "source_changed_since_prior": "passive emitter lifecycle repair and targeted fixture alignment",
+      "orchestration_command": {
+        "script": "tools/run_godot_tests.ps1",
+        "TestPaths": [
+          "tests/skills/summon_owner_teleport_runtime_test.tscn",
+          "tests/summon_actor_state_machine_test.tscn",
+          "tests/canonical_summon_integration_test.tscn",
+          "tests/skeleton_multi_summon_contract_test.tscn"
+        ],
+        "TimeoutSeconds": 30,
+        "Verbose": true
+      },
+      "environment_roots": {
+        "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+        "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_related35_summon_contracts",
+        "runner_process_id": 22140
+      },
+      "native_result": {
+        "test_name": "summon_actor_state_machine_test",
+        "test_path": "tests/summon_actor_state_machine_test.tscn",
+        "wrapper_process_id": 6072,
+        "wrapper_started_utc": "2026-10-09T17:20:57.5629099Z",
+        "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_related35_summon_contracts",
+        "fixed_fps": 0,
+        "pass_marker_found": false,
+        "process_exited": false,
+        "wrapper_exit_code": -1,
+        "child_process_exit_state": "forced_termination",
+        "execution_deadline_utc": "2026-10-09T17:21:27.5708333Z",
+        "native_exit_observed_utc": null,
+        "effective_exit_code": -1,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 1,
+        "engine_log_failure_count": 1,
+        "framework_run_id": "",
+        "framework_receipt_valid": null,
+        "result": "FAIL",
+        "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+      },
+      "cleanup_status": "PASS",
+      "cleanup_owner_attribution": "NOT_REQUIRED"
+    },
+    {
+      "stage": "v109_related35_summon_contracts",
+      "invocation_id": "cf8dc4c9-383a-4961-b340-61451c075f05",
+      "runner_receipt": "outputs/test_logs/v109_related35_summon_contracts/logs/runner_results_adhoc_20261010_012148_895_22140.json",
+      "source_freeze": "B03_SOURCE_FREEZE_34.json",
+      "source_changed_since_prior": "passive emitter lifecycle repair and targeted fixture alignment",
+      "orchestration_command": {
+        "script": "tools/run_godot_tests.ps1",
+        "TestPaths": [
+          "tests/skills/summon_owner_teleport_runtime_test.tscn",
+          "tests/summon_actor_state_machine_test.tscn",
+          "tests/canonical_summon_integration_test.tscn",
+          "tests/skeleton_multi_summon_contract_test.tscn"
+        ],
+        "TimeoutSeconds": 30,
+        "Verbose": true
+      },
+      "environment_roots": {
+        "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+        "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_related35_summon_contracts",
+        "runner_process_id": 22140
+      },
+      "native_result": {
+        "test_name": "canonical_summon_integration_test",
+        "test_path": "tests/canonical_summon_integration_test.tscn",
+        "wrapper_process_id": 22212,
+        "wrapper_started_utc": "2026-10-09T17:21:13.2029781Z",
+        "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_related35_summon_contracts",
+        "fixed_fps": 0,
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "execution_deadline_utc": "2026-10-09T17:21:43.2108484Z",
+        "native_exit_observed_utc": "2026-10-09T17:21:29.9303334Z",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 0,
+        "engine_log_failure_count": 0,
+        "framework_run_id": "",
+        "framework_receipt_valid": null,
+        "result": "PASS",
+        "reason": ""
+      },
+      "cleanup_status": "FAIL",
+      "cleanup_owner_attribution": "BLOCKED"
+    },
+    {
+      "stage": "v109_related35_summon_contracts",
+      "invocation_id": "cf8dc4c9-383a-4961-b340-61451c075f05",
+      "runner_receipt": "outputs/test_logs/v109_related35_summon_contracts/logs/runner_results_adhoc_20261010_012148_895_22140.json",
+      "source_freeze": "B03_SOURCE_FREEZE_34.json",
+      "source_changed_since_prior": "passive emitter lifecycle repair and targeted fixture alignment",
+      "orchestration_command": {
+        "script": "tools/run_godot_tests.ps1",
+        "TestPaths": [
+          "tests/skills/summon_owner_teleport_runtime_test.tscn",
+          "tests/summon_actor_state_machine_test.tscn",
+          "tests/canonical_summon_integration_test.tscn",
+          "tests/skeleton_multi_summon_contract_test.tscn"
+        ],
+        "TimeoutSeconds": 30,
+        "Verbose": true
+      },
+      "environment_roots": {
+        "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+        "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_related35_summon_contracts",
+        "runner_process_id": 22140
+      },
+      "native_result": {
+        "test_name": "skeleton_multi_summon_contract_test",
+        "test_path": "tests/skeleton_multi_summon_contract_test.tscn",
+        "wrapper_process_id": 21736,
+        "wrapper_started_utc": "2026-10-09T17:21:31.4035352Z",
+        "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_related35_summon_contracts",
+        "fixed_fps": 0,
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "execution_deadline_utc": "2026-10-09T17:22:01.4116325Z",
+        "native_exit_observed_utc": "2026-10-09T17:21:47.3899477Z",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 0,
+        "engine_log_failure_count": 0,
+        "framework_run_id": "",
+        "framework_receipt_valid": null,
+        "result": "PASS",
+        "reason": ""
+      },
+      "cleanup_status": "FAIL",
+      "cleanup_owner_attribution": "BLOCKED"
+    },
+    {
+      "stage": "v109_related36_summon_fixture_repair",
+      "invocation_id": "40e116ff-ed6f-416b-b6ef-2abf5df56340",
+      "runner_receipt": "outputs/test_logs/v109_related36_summon_fixture_repair/logs/runner_results_adhoc_20261010_012639_338_23076.json",
+      "source_freeze": "B03_SOURCE_FREEZE_36.json",
+      "source_changed_since_prior": "two fixture inputs only",
+      "orchestration_command": {
+        "script": "tools/run_godot_tests.ps1",
+        "TestPaths": [
+          "tests/skills/summon_owner_teleport_runtime_test.tscn",
+          "tests/summon_actor_state_machine_test.tscn"
+        ],
+        "TimeoutSeconds": 30,
+        "Verbose": true
+      },
+      "environment_roots": {
+        "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+        "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_related36_summon_fixture_repair",
+        "runner_process_id": 23076
+      },
+      "native_result": {
+        "test_name": "summon_owner_teleport_runtime_test",
+        "test_path": "tests/skills/summon_owner_teleport_runtime_test.tscn",
+        "wrapper_process_id": 4736,
+        "wrapper_started_utc": "2026-10-09T17:26:01.1074382Z",
+        "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_related36_summon_fixture_repair",
+        "fixed_fps": 0,
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "execution_deadline_utc": "2026-10-09T17:26:31.1197782Z",
+        "native_exit_observed_utc": "2026-10-09T17:26:19.8275168Z",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 0,
+        "engine_log_failure_count": 0,
+        "framework_run_id": "",
+        "framework_receipt_valid": null,
+        "result": "PASS",
+        "reason": ""
+      },
+      "cleanup_status": "FAIL",
+      "cleanup_owner_attribution": "BLOCKED"
+    },
+    {
+      "stage": "v109_related36_summon_fixture_repair",
+      "invocation_id": "40e116ff-ed6f-416b-b6ef-2abf5df56340",
+      "runner_receipt": "outputs/test_logs/v109_related36_summon_fixture_repair/logs/runner_results_adhoc_20261010_012639_338_23076.json",
+      "source_freeze": "B03_SOURCE_FREEZE_36.json",
+      "source_changed_since_prior": "two fixture inputs only",
+      "orchestration_command": {
+        "script": "tools/run_godot_tests.ps1",
+        "TestPaths": [
+          "tests/skills/summon_owner_teleport_runtime_test.tscn",
+          "tests/summon_actor_state_machine_test.tscn"
+        ],
+        "TimeoutSeconds": 30,
+        "Verbose": true
+      },
+      "environment_roots": {
+        "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+        "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_related36_summon_fixture_repair",
+        "runner_process_id": 23076
+      },
+      "native_result": {
+        "test_name": "summon_actor_state_machine_test",
+        "test_path": "tests/summon_actor_state_machine_test.tscn",
+        "wrapper_process_id": 23580,
+        "wrapper_started_utc": "2026-10-09T17:26:21.4712731Z",
+        "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_related36_summon_fixture_repair",
+        "fixed_fps": 0,
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "execution_deadline_utc": "2026-10-09T17:26:51.4789702Z",
+        "native_exit_observed_utc": "2026-10-09T17:26:37.8230210Z",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 0,
+        "engine_log_failure_count": 0,
+        "framework_run_id": "",
+        "framework_receipt_valid": null,
+        "result": "PASS",
+        "reason": ""
+      },
+      "cleanup_status": "FAIL",
+      "cleanup_owner_attribution": "BLOCKED"
+    }
+  ]
+}

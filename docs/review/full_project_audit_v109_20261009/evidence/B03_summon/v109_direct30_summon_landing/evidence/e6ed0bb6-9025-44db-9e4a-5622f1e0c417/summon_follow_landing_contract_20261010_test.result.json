@@ -1,0 +1,82 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "formal map has an open canonical summon landing",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "open canonical landing commits without pending",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "open owner teleport uses a legal canonical landing",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "open owner teleport result must pass the formal landing validator",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "map mismatch rejects follow landing",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "map mismatch cannot register deferred arrival",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "owner mismatch rejects follow landing",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "owner mismatch cannot defer arrival",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "map transition rejects follow landing",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "map transition cannot defer arrival",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "non-pending summon cannot register arrival",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "formal map has a clear owner with a blocked formation anchor",
+      "passed": false
+    }
+  ],
+  "count": 12,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "32059220-f0f1-46a6-9955-eb8cdd4d36c2",
+  "passed": 11,
+  "reported_checks": 12,
+  "reported_failures": 1,
+  "run_id": "e6ed0bb6-9025-44db-9e4a-5622f1e0c417",
+  "runtime_environment": {
+    "native_process_id": 5216,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct30_summon_landing",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/v109_direct30_summon_landing/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "summon_follow_landing_contract_20261010_test",
+  "schema_version": 1,
+  "source_content_sha256": "506da2206b9b206b0957369ad0301d2bb78c5d8fabe6e8604a8e123c918ee82e",
+  "status": "FAIL"
+}

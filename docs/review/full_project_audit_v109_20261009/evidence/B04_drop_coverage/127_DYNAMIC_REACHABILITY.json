@@ -1,0 +1,62 @@
+{
+  "status": "PASS",
+  "scope": "Static reachability proof for canonical behavior child 127 from published parent 126; no engine/native run.",
+  "source_hashes": {
+    "assets/data/runtime/canonical_monster_catalog.json": "A46ACA4209B3ABC0F3F2CD5365B274605CD07886060706E14EF3E984AAD8880A",
+    "scripts/features/contracts/published_monster_inputs.gd": "0EC79664AC4BB0CD28C9148A0AA870B00970BC5F25F31DB811C7235B96EA7156",
+    "scripts/features/adapters/world_target_bound.gd": "0C85F66B77B6356D5ED537168F5E8EC36E1A62D40B44AB7E29A84E9775AC940E",
+    "scripts/enemy.gd": "4EB42E585F30C3401366184CD240771ACD9BC25A066BCEC9AE859E38A71DDF2A",
+    "scripts/game_root.gd": "AF3982647F1FE4EDF72C877026317A4866E8D83307C1B3B39E56F75044DA4D66",
+    "scripts/monster_ai_package/m30/summon_queue.gd": "96BCD616093871C6035B38A050B76FE5B78663336C507644886C25D1A08EEACC"
+  },
+  "parent_126": {
+    "canonical_runtime_allowed": true,
+    "classification": "special",
+    "behavior_summon_rule": {
+      "enabled": true,
+      "monsterIds": [
+        127
+      ],
+      "count": 1,
+      "maxActive": 5,
+      "delaySeconds": 0.5,
+      "confidence": "A"
+    },
+    "actual_capture_route": "PublishedMonsterInputs.capture -> Identity.behavior_profile -> Graph.capture; no static disable flag found."
+  },
+  "child_127": {
+    "canonical_runtime_allowed": true,
+    "runtime_capability": {
+      "allowed": true,
+      "classification_ok": true,
+      "art_ok": true,
+      "drop_ok": true,
+      "combat_identity_ok": true,
+      "intentional_exclusion": false,
+      "blockers": []
+    },
+    "drop_profile_id": "drop.127",
+    "drop_policy": {
+      "hostile_requires_non_empty": true,
+      "entry_count": 5,
+      "exemption": null
+    },
+    "user_sheet_present": false,
+    "behavior_summon_rule": {}
+  },
+  "closure_proof": {
+    "world_target_bound": "_closure(126) extracts enabled behavior summonRule, canonicalizes each child ID, calls _capture_inputs(child), rejects only missing child inputs or nested summon lifetime; admits_child returns child in closure.ids and child input present. Current static data satisfies these identity/input predicates for 127.",
+    "queue_request": "summon_request_valid checks exact owner slot, count=1, maxActive=5, ordered monsterIds=[127], and rule membership.",
+    "birth_claim": "M30SummonQueue.claim_birth requires an active issued job, current map/generation, live source/life/serial, candidate, and matching summon context; it is a queue/lifecycle gate, not a loot-profile gate.",
+    "materialization": "GameRoot._hc_m30_materialize calls the canonical _spawn_enemy path; child profile is loaded from PublishedMonsterInputs and then later uses normal death/drop processing."
+  },
+  "classification": "STATICALLY_REACHABLE_IF_126_IS_ADMITTED_AND_SUMMON_RELEASE_CONDITIONS_HOLD",
+  "blocking_conditions": [
+    "126 source must be live/combat-enabled/target-usable and complete its summon warning",
+    "world closure must be sealed and 126 base slot admitted",
+    "M30 queue capacity/owner cap, map generation, landing candidate and source life must remain valid"
+  ],
+  "drop_gap": "127 is absent from current UserLootSheetProvider input despite canonical drop_policy.entry_count=5. No fallback is permitted. This is an authoring gap on a statically reachable dynamic path, not proof of current released materialization.",
+  "godot_run": "NOT_RUN",
+  "native_run": "NOT_RUN"
+}

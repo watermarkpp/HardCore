@@ -1,0 +1,10 @@
+WARNING: Loading ended with item icons still prewarming in background
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _run_map_transition (res://scripts/game_root.gd:3749)
+SCRIPT ERROR: Invalid type in function '_canonical_summon_spawn_plan' in base 'Node2D (game_root.gd)'. The array of argument 4 (Array) does not have the same element type as the expected typed array argument.
+   at: _run (res://tests/framework/summon_follow_landing_contract_20261010_test.gd:50)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/framework/summon_follow_landing_contract_20261010_test.gd:50)
+       [1] wait_for_formal_world (res://tests/helpers/formal_world_skill_fixture.gd:162)
+       [2] wait_for_initial_ready (res://tests/helpers/formal_initial_ready.gd:40)

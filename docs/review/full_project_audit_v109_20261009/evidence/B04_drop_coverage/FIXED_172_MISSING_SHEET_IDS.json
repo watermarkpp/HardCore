@@ -1,0 +1,943 @@
+{
+  "status": "PASS",
+  "fixed_source_commit": "172125ae99e3c4adf19af82da2720934a52f9537",
+  "catalog_entries": 156,
+  "runtime_allowed_editor_entries": 152,
+  "user_sheet_monsters": 126,
+  "missing_count": 26,
+  "missing": [
+    {
+      "monster_id": 33,
+      "canonical_name": "雪人王",
+      "classification": "elite",
+      "editor_placement": {
+        "allowed": true,
+        "placement_kind": "",
+        "map_codes": [],
+        "source_scope": "classification_and_drop_closure"
+      },
+      "spawn_contexts": [],
+      "runtime_allowed": true,
+      "runtime_capability": {
+        "allowed": true,
+        "classification_ok": true,
+        "art_ok": true,
+        "drop_ok": true,
+        "combat_identity_ok": true,
+        "intentional_exclusion": false,
+        "blockers": []
+      },
+      "drop_policy": {
+        "hostile_requires_non_empty": true,
+        "entry_count": 0,
+        "exemption": {
+          "allowed": true,
+          "reason": "user_loot_sheet_sole_drop_authority_lists_no_rows_for_this_identity"
+        }
+      },
+      "status": "formal",
+      "drop_profile_id": "drop.33"
+    },
+    {
+      "monster_id": 41,
+      "canonical_name": "半兽勇士9",
+      "classification": "elite",
+      "editor_placement": {
+        "allowed": true,
+        "placement_kind": "",
+        "map_codes": [],
+        "source_scope": "classification_and_drop_closure"
+      },
+      "spawn_contexts": [],
+      "runtime_allowed": true,
+      "runtime_capability": {
+        "allowed": true,
+        "classification_ok": true,
+        "art_ok": true,
+        "drop_ok": true,
+        "combat_identity_ok": true,
+        "intentional_exclusion": false,
+        "blockers": []
+      },
+      "drop_policy": {
+        "hostile_requires_non_empty": true,
+        "entry_count": 50,
+        "exemption": null
+      },
+      "status": "formal",
+      "drop_profile_id": "drop.41"
+    },
+    {
+      "monster_id": 55,
+      "canonical_name": "骷髅战将0",
+      "classification": "elite",
+      "editor_placement": {
+        "allowed": true,
+        "placement_kind": "",
+        "map_codes": [],
+        "source_scope": "classification_and_drop_closure"
+      },
+      "spawn_contexts": [],
+      "runtime_allowed": true,
+      "runtime_capability": {
+        "allowed": true,
+        "classification_ok": true,
+        "art_ok": true,
+        "drop_ok": true,
+        "combat_identity_ok": true,
+        "intentional_exclusion": false,
+        "blockers": []
+      },
+      "drop_policy": {
+        "hostile_requires_non_empty": true,
+        "entry_count": 27,
+        "exemption": null
+      },
+      "status": "formal",
+      "drop_profile_id": "drop.55"
+    },
+    {
+      "monster_id": 75,
+      "canonical_name": "沃玛卫士2",
+      "classification": "elite",
+      "editor_placement": {
+        "allowed": true,
+        "placement_kind": "",
+        "map_codes": [
+          "D022",
+          "D023",
+          "D024"
+        ],
+        "source_scope": "classification_and_drop_closure"
+      },
+      "spawn_contexts": [
+        {
+          "map_code": "D022",
+          "classification": "elite",
+          "placement_kind": "",
+          "allowed": true
+        },
+        {
+          "map_code": "D023",
+          "classification": "elite",
+          "placement_kind": "",
+          "allowed": true
+        },
+        {
+          "map_code": "D024",
+          "classification": "elite",
+          "placement_kind": "",
+          "allowed": true
+        }
+      ],
+      "runtime_allowed": true,
+      "runtime_capability": {
+        "allowed": true,
+        "classification_ok": true,
+        "art_ok": true,
+        "drop_ok": true,
+        "combat_identity_ok": true,
+        "intentional_exclusion": false,
+        "blockers": []
+      },
+      "drop_policy": {
+        "hostile_requires_non_empty": true,
+        "entry_count": 78,
+        "exemption": null
+      },
+      "status": "formal",
+      "drop_profile_id": "drop.75"
+    },
+    {
+      "monster_id": 91,
+      "canonical_name": "尸王2",
+      "classification": "elite",
+      "editor_placement": {
+        "allowed": true,
+        "placement_kind": "",
+        "map_codes": [],
+        "source_scope": "classification_and_drop_closure"
+      },
+      "spawn_contexts": [],
+      "runtime_allowed": true,
+      "runtime_capability": {
+        "allowed": true,
+        "classification_ok": true,
+        "art_ok": true,
+        "drop_ok": true,
+        "combat_identity_ok": true,
+        "intentional_exclusion": false,
+        "blockers": []
+      },
+      "drop_policy": {
+        "hostile_requires_non_empty": true,
+        "entry_count": 8,
+        "exemption": null
+      },
+      "status": "formal",
+      "drop_profile_id": "drop.91"
+    },
+    {
+      "monster_id": 122,
+      "canonical_name": "邪恶钳虫2",
+      "classification": "elite",
+      "editor_placement": {
+        "allowed": true,
+        "placement_kind": "",
+        "map_codes": [],
+        "source_scope": "classification_and_drop_closure"
+      },
+      "spawn_contexts": [],
+      "runtime_allowed": true,
+      "runtime_capability": {
+        "allowed": true,
+        "classification_ok": true,
+        "art_ok": true,
+        "drop_ok": true,
+        "combat_identity_ok": true,
+        "intentional_exclusion": false,
+        "blockers": []
+      },
+      "drop_policy": {
+        "hostile_requires_non_empty": true,
+        "entry_count": 50,
+        "exemption": null
+      },
+      "status": "formal",
+      "drop_profile_id": "drop.122"
+    },
+    {
+      "monster_id": 123,
+      "canonical_name": "邪恶钳虫9",
+      "classification": "version_difference",
+      "editor_placement": {
+        "allowed": true,
+        "placement_kind": "monster_spawn",
+        "map_codes": [],
+        "source_scope": "classification_and_drop_closure"
+      },
+      "spawn_contexts": [],
+      "runtime_allowed": true,
+      "runtime_capability": {
+        "allowed": true,
+        "classification_ok": true,
+        "art_ok": true,
+        "drop_ok": true,
+        "combat_identity_ok": true,
+        "intentional_exclusion": false,
+        "blockers": []
+      },
+      "drop_policy": {
+        "hostile_requires_non_empty": false,
+        "entry_count": 112,
+        "exemption": null
+      },
+      "status": "formal",
+      "drop_profile_id": "drop.123"
+    },
+    {
+      "monster_id": 127,
+      "canonical_name": "蝙蝠",
+      "classification": "ordinary",
+      "editor_placement": {
+        "allowed": true,
+        "placement_kind": "monster_spawn",
+        "map_codes": [],
+        "source_scope": "classification_and_drop_closure"
+      },
+      "spawn_contexts": [],
+      "runtime_allowed": true,
+      "runtime_capability": {
+        "allowed": true,
+        "classification_ok": true,
+        "art_ok": true,
+        "drop_ok": true,
+        "combat_identity_ok": true,
+        "intentional_exclusion": false,
+        "blockers": []
+      },
+      "drop_policy": {
+        "hostile_requires_non_empty": true,
+        "entry_count": 5,
+        "exemption": null
+      },
+      "status": "formal",
+      "drop_profile_id": "drop.127"
+    },
+    {
+      "monster_id": 131,
+      "canonical_name": "红野猪3",
+      "classification": "elite",
+      "editor_placement": {
+        "allowed": true,
+        "placement_kind": "",
+        "map_codes": [],
+        "source_scope": "classification_and_drop_closure"
+      },
+      "spawn_contexts": [],
+      "runtime_allowed": true,
+      "runtime_capability": {
+        "allowed": true,
+        "classification_ok": true,
+        "art_ok": true,
+        "drop_ok": true,
+        "combat_identity_ok": true,
+        "intentional_exclusion": false,
+        "blockers": []
+      },
+      "drop_policy": {
+        "hostile_requires_non_empty": true,
+        "entry_count": 18,
+        "exemption": null
+      },
+      "status": "formal",
+      "drop_profile_id": "drop.131"
+    },
+    {
+      "monster_id": 133,
+      "canonical_name": "黑野猪0",
+      "classification": "ordinary",
+      "editor_placement": {
+        "allowed": true,
+        "placement_kind": "monster_spawn",
+        "map_codes": [],
+        "source_scope": "classification_and_drop_closure"
+      },
+      "spawn_contexts": [],
+      "runtime_allowed": true,
+      "runtime_capability": {
+        "allowed": true,
+        "classification_ok": true,
+        "art_ok": true,
+        "drop_ok": true,
+        "combat_identity_ok": true,
+        "intentional_exclusion": false,
+        "blockers": []
+      },
+      "drop_policy": {
+        "hostile_requires_non_empty": true,
+        "entry_count": 46,
+        "exemption": null
+      },
+      "status": "formal",
+      "drop_profile_id": "drop.133"
+    },
+    {
+      "monster_id": 134,
+      "canonical_name": "黑野猪3",
+      "classification": "elite",
+      "editor_placement": {
+        "allowed": true,
+        "placement_kind": "",
+        "map_codes": [],
+        "source_scope": "classification_and_drop_closure"
+      },
+      "spawn_contexts": [],
+      "runtime_allowed": true,
+      "runtime_capability": {
+        "allowed": true,
+        "classification_ok": true,
+        "art_ok": true,
+        "drop_ok": true,
+        "combat_identity_ok": true,
+        "intentional_exclusion": false,
+        "blockers": []
+      },
+      "drop_policy": {
+        "hostile_requires_non_empty": true,
+        "entry_count": 18,
+        "exemption": null
+      },
+      "status": "formal",
+      "drop_profile_id": "drop.134"
+    },
+    {
+      "monster_id": 136,
+      "canonical_name": "白野猪0",
+      "classification": "special",
+      "editor_placement": {
+        "allowed": true,
+        "placement_kind": "monster_spawn",
+        "map_codes": [],
+        "source_scope": "classification_and_drop_closure"
+      },
+      "spawn_contexts": [],
+      "runtime_allowed": true,
+      "runtime_capability": {
+        "allowed": true,
+        "classification_ok": true,
+        "art_ok": true,
+        "drop_ok": true,
+        "combat_identity_ok": true,
+        "intentional_exclusion": false,
+        "blockers": []
+      },
+      "drop_policy": {
+        "hostile_requires_non_empty": true,
+        "entry_count": 91,
+        "exemption": null
+      },
+      "status": "formal",
+      "drop_profile_id": "drop.136"
+    },
+    {
+      "monster_id": 140,
+      "canonical_name": "蝎蛇3",
+      "classification": "elite",
+      "editor_placement": {
+        "allowed": true,
+        "placement_kind": "",
+        "map_codes": [],
+        "source_scope": "classification_and_drop_closure"
+      },
+      "spawn_contexts": [],
+      "runtime_allowed": true,
+      "runtime_capability": {
+        "allowed": true,
+        "classification_ok": true,
+        "art_ok": true,
+        "drop_ok": true,
+        "combat_identity_ok": true,
+        "intentional_exclusion": false,
+        "blockers": []
+      },
+      "drop_policy": {
+        "hostile_requires_non_empty": true,
+        "entry_count": 18,
+        "exemption": null
+      },
+      "status": "formal",
+      "drop_profile_id": "drop.140"
+    },
+    {
+      "monster_id": 145,
+      "canonical_name": "变异骷髅0",
+      "classification": "special",
+      "editor_placement": {
+        "allowed": true,
+        "placement_kind": "monster_spawn",
+        "map_codes": [],
+        "source_scope": "classification_and_drop_closure"
+      },
+      "spawn_contexts": [],
+      "runtime_allowed": true,
+      "runtime_capability": {
+        "allowed": true,
+        "classification_ok": true,
+        "art_ok": true,
+        "drop_ok": true,
+        "combat_identity_ok": true,
+        "intentional_exclusion": false,
+        "blockers": []
+      },
+      "drop_policy": {
+        "hostile_requires_non_empty": true,
+        "entry_count": 74,
+        "exemption": null
+      },
+      "status": "formal",
+      "drop_profile_id": "drop.145"
+    },
+    {
+      "monster_id": 146,
+      "canonical_name": "神兽0",
+      "classification": "special",
+      "editor_placement": {
+        "allowed": true,
+        "placement_kind": "monster_spawn",
+        "map_codes": [],
+        "source_scope": "classification_and_drop_closure"
+      },
+      "spawn_contexts": [],
+      "runtime_allowed": true,
+      "runtime_capability": {
+        "allowed": true,
+        "classification_ok": true,
+        "art_ok": true,
+        "drop_ok": true,
+        "combat_identity_ok": true,
+        "intentional_exclusion": false,
+        "blockers": []
+      },
+      "drop_policy": {
+        "hostile_requires_non_empty": true,
+        "entry_count": 78,
+        "exemption": null
+      },
+      "status": "formal",
+      "drop_profile_id": "drop.146"
+    },
+    {
+      "monster_id": 147,
+      "canonical_name": "神兽2",
+      "classification": "special",
+      "editor_placement": {
+        "allowed": true,
+        "placement_kind": "monster_spawn",
+        "map_codes": [],
+        "source_scope": "classification_and_drop_closure"
+      },
+      "spawn_contexts": [],
+      "runtime_allowed": true,
+      "runtime_capability": {
+        "allowed": true,
+        "classification_ok": true,
+        "art_ok": true,
+        "drop_ok": true,
+        "combat_identity_ok": true,
+        "intentional_exclusion": false,
+        "blockers": []
+      },
+      "drop_policy": {
+        "hostile_requires_non_empty": true,
+        "entry_count": 71,
+        "exemption": null
+      },
+      "status": "formal",
+      "drop_profile_id": "drop.147"
+    },
+    {
+      "monster_id": 183,
+      "canonical_name": "爆裂蜘蛛",
+      "classification": "ordinary",
+      "editor_placement": {
+        "allowed": true,
+        "placement_kind": "monster_spawn",
+        "map_codes": [],
+        "source_scope": "classification_and_drop_closure"
+      },
+      "spawn_contexts": [],
+      "runtime_allowed": true,
+      "runtime_capability": {
+        "allowed": true,
+        "classification_ok": true,
+        "art_ok": true,
+        "drop_ok": true,
+        "combat_identity_ok": true,
+        "intentional_exclusion": false,
+        "blockers": []
+      },
+      "drop_policy": {
+        "hostile_requires_non_empty": true,
+        "entry_count": 0,
+        "exemption": {
+          "allowed": true,
+          "reason": "user_loot_sheet_sole_drop_authority_lists_no_rows_for_this_identity"
+        }
+      },
+      "status": "formal",
+      "drop_profile_id": "drop.183"
+    },
+    {
+      "monster_id": 186,
+      "canonical_name": "鹰卫",
+      "classification": "special",
+      "editor_placement": {
+        "allowed": true,
+        "placement_kind": "monster_spawn",
+        "map_codes": [
+          "12",
+          "M001",
+          "D2051",
+          "D2053",
+          "D2052",
+          "D2071",
+          "D2072",
+          "D2073",
+          "D2075",
+          "D2076",
+          "D2078",
+          "D2079",
+          "R001"
+        ],
+        "source_scope": "classification_and_drop_closure"
+      },
+      "spawn_contexts": [
+        {
+          "map_code": "12",
+          "classification": "special",
+          "placement_kind": "monster_spawn",
+          "allowed": true
+        },
+        {
+          "map_code": "M001",
+          "classification": "special",
+          "placement_kind": "monster_spawn",
+          "allowed": true
+        },
+        {
+          "map_code": "D2051",
+          "classification": "special",
+          "placement_kind": "monster_spawn",
+          "allowed": true
+        },
+        {
+          "map_code": "D2053",
+          "classification": "special",
+          "placement_kind": "monster_spawn",
+          "allowed": true
+        },
+        {
+          "map_code": "D2052",
+          "classification": "special",
+          "placement_kind": "monster_spawn",
+          "allowed": true
+        },
+        {
+          "map_code": "D2071",
+          "classification": "special",
+          "placement_kind": "monster_spawn",
+          "allowed": true
+        },
+        {
+          "map_code": "D2072",
+          "classification": "special",
+          "placement_kind": "monster_spawn",
+          "allowed": true
+        },
+        {
+          "map_code": "D2073",
+          "classification": "special",
+          "placement_kind": "monster_spawn",
+          "allowed": true
+        },
+        {
+          "map_code": "D2075",
+          "classification": "special",
+          "placement_kind": "monster_spawn",
+          "allowed": true
+        },
+        {
+          "map_code": "D2076",
+          "classification": "special",
+          "placement_kind": "monster_spawn",
+          "allowed": true
+        },
+        {
+          "map_code": "D2078",
+          "classification": "special",
+          "placement_kind": "monster_spawn",
+          "allowed": true
+        },
+        {
+          "map_code": "D2079",
+          "classification": "special",
+          "placement_kind": "monster_spawn",
+          "allowed": true
+        },
+        {
+          "map_code": "R001",
+          "classification": "special",
+          "placement_kind": "monster_spawn",
+          "allowed": true
+        }
+      ],
+      "runtime_allowed": true,
+      "runtime_capability": {
+        "allowed": true,
+        "classification_ok": true,
+        "art_ok": true,
+        "drop_ok": true,
+        "combat_identity_ok": true,
+        "intentional_exclusion": false,
+        "blockers": []
+      },
+      "drop_policy": {
+        "hostile_requires_non_empty": true,
+        "entry_count": 0,
+        "exemption": {
+          "allowed": true,
+          "reason": "wizard_tameable_entity_no_drop_requirement"
+        }
+      },
+      "status": "formal",
+      "drop_profile_id": "drop.186"
+    },
+    {
+      "monster_id": 187,
+      "canonical_name": "虎卫",
+      "classification": "special",
+      "editor_placement": {
+        "allowed": true,
+        "placement_kind": "monster_spawn",
+        "map_codes": [],
+        "source_scope": "classification_and_drop_closure"
+      },
+      "spawn_contexts": [],
+      "runtime_allowed": true,
+      "runtime_capability": {
+        "allowed": true,
+        "classification_ok": true,
+        "art_ok": true,
+        "drop_ok": true,
+        "combat_identity_ok": true,
+        "intentional_exclusion": false,
+        "blockers": []
+      },
+      "drop_policy": {
+        "hostile_requires_non_empty": true,
+        "entry_count": 0,
+        "exemption": {
+          "allowed": true,
+          "reason": "wizard_tameable_entity_no_drop_requirement"
+        }
+      },
+      "status": "formal",
+      "drop_profile_id": "drop.187"
+    },
+    {
+      "monster_id": 189,
+      "canonical_name": "虹魔猪卫0",
+      "classification": "elite",
+      "editor_placement": {
+        "allowed": true,
+        "placement_kind": "",
+        "map_codes": [],
+        "source_scope": "classification_and_drop_closure"
+      },
+      "spawn_contexts": [],
+      "runtime_allowed": true,
+      "runtime_capability": {
+        "allowed": true,
+        "classification_ok": true,
+        "art_ok": true,
+        "drop_ok": true,
+        "combat_identity_ok": true,
+        "intentional_exclusion": false,
+        "blockers": []
+      },
+      "drop_policy": {
+        "hostile_requires_non_empty": true,
+        "entry_count": 57,
+        "exemption": null
+      },
+      "status": "formal",
+      "drop_profile_id": "drop.189"
+    },
+    {
+      "monster_id": 190,
+      "canonical_name": "虹魔猪卫9",
+      "classification": "version_difference",
+      "editor_placement": {
+        "allowed": true,
+        "placement_kind": "monster_spawn",
+        "map_codes": [],
+        "source_scope": "classification_and_drop_closure"
+      },
+      "spawn_contexts": [],
+      "runtime_allowed": true,
+      "runtime_capability": {
+        "allowed": true,
+        "classification_ok": true,
+        "art_ok": true,
+        "drop_ok": true,
+        "combat_identity_ok": true,
+        "intentional_exclusion": false,
+        "blockers": []
+      },
+      "drop_policy": {
+        "hostile_requires_non_empty": false,
+        "entry_count": 57,
+        "exemption": null
+      },
+      "status": "formal",
+      "drop_profile_id": "drop.190"
+    },
+    {
+      "monster_id": 192,
+      "canonical_name": "虹魔蝎卫0",
+      "classification": "elite",
+      "editor_placement": {
+        "allowed": true,
+        "placement_kind": "",
+        "map_codes": [],
+        "source_scope": "classification_and_drop_closure"
+      },
+      "spawn_contexts": [],
+      "runtime_allowed": true,
+      "runtime_capability": {
+        "allowed": true,
+        "classification_ok": true,
+        "art_ok": true,
+        "drop_ok": true,
+        "combat_identity_ok": true,
+        "intentional_exclusion": false,
+        "blockers": []
+      },
+      "drop_policy": {
+        "hostile_requires_non_empty": true,
+        "entry_count": 56,
+        "exemption": null
+      },
+      "status": "formal",
+      "drop_profile_id": "drop.192"
+    },
+    {
+      "monster_id": 194,
+      "canonical_name": "恶魔弓箭手",
+      "classification": "non_hostile",
+      "editor_placement": {
+        "allowed": true,
+        "placement_kind": "monster_spawn",
+        "map_codes": [
+          "0",
+          "1",
+          "2",
+          "4",
+          "5",
+          "D601"
+        ],
+        "source_scope": "classification_and_drop_closure"
+      },
+      "spawn_contexts": [
+        {
+          "map_code": "0",
+          "classification": "non_hostile",
+          "placement_kind": "monster_spawn",
+          "allowed": true
+        },
+        {
+          "map_code": "1",
+          "classification": "non_hostile",
+          "placement_kind": "monster_spawn",
+          "allowed": true
+        },
+        {
+          "map_code": "2",
+          "classification": "non_hostile",
+          "placement_kind": "monster_spawn",
+          "allowed": true
+        },
+        {
+          "map_code": "4",
+          "classification": "non_hostile",
+          "placement_kind": "monster_spawn",
+          "allowed": true
+        },
+        {
+          "map_code": "5",
+          "classification": "non_hostile",
+          "placement_kind": "monster_spawn",
+          "allowed": true
+        },
+        {
+          "map_code": "D601",
+          "classification": "non_hostile",
+          "placement_kind": "monster_spawn",
+          "allowed": true
+        }
+      ],
+      "runtime_allowed": true,
+      "runtime_capability": {
+        "allowed": true,
+        "classification_ok": true,
+        "art_ok": true,
+        "drop_ok": true,
+        "combat_identity_ok": true,
+        "intentional_exclusion": false,
+        "blockers": []
+      },
+      "drop_policy": {
+        "hostile_requires_non_empty": false,
+        "entry_count": 0,
+        "exemption": {
+          "allowed": true,
+          "reason": "non_hostile_guard_or_script_object"
+        }
+      },
+      "status": "formal",
+      "drop_profile_id": "drop.194"
+    },
+    {
+      "monster_id": 199,
+      "canonical_name": "恶灵尸王0",
+      "classification": "boss",
+      "editor_placement": {
+        "allowed": true,
+        "placement_kind": "",
+        "map_codes": [],
+        "source_scope": "classification_and_drop_closure"
+      },
+      "spawn_contexts": [],
+      "runtime_allowed": true,
+      "runtime_capability": {
+        "allowed": true,
+        "classification_ok": true,
+        "art_ok": true,
+        "drop_ok": true,
+        "combat_identity_ok": true,
+        "intentional_exclusion": false,
+        "blockers": []
+      },
+      "drop_policy": {
+        "hostile_requires_non_empty": true,
+        "entry_count": 72,
+        "exemption": null
+      },
+      "status": "formal",
+      "drop_profile_id": "drop.199"
+    },
+    {
+      "monster_id": 209,
+      "canonical_name": "黄泉教主0",
+      "classification": "boss",
+      "editor_placement": {
+        "allowed": true,
+        "placement_kind": "",
+        "map_codes": [],
+        "source_scope": "classification_and_drop_closure"
+      },
+      "spawn_contexts": [],
+      "runtime_allowed": true,
+      "runtime_capability": {
+        "allowed": true,
+        "classification_ok": true,
+        "art_ok": true,
+        "drop_ok": true,
+        "combat_identity_ok": true,
+        "intentional_exclusion": false,
+        "blockers": []
+      },
+      "drop_policy": {
+        "hostile_requires_non_empty": true,
+        "entry_count": 107,
+        "exemption": null
+      },
+      "status": "formal",
+      "drop_profile_id": "drop.209"
+    },
+    {
+      "monster_id": 241,
+      "canonical_name": "飞火流星",
+      "classification": "special",
+      "editor_placement": {
+        "allowed": true,
+        "placement_kind": "monster_spawn",
+        "map_codes": [],
+        "source_scope": "classification_and_drop_closure"
+      },
+      "spawn_contexts": [],
+      "runtime_allowed": true,
+      "runtime_capability": {
+        "allowed": true,
+        "classification_ok": true,
+        "art_ok": true,
+        "drop_ok": true,
+        "combat_identity_ok": true,
+        "intentional_exclusion": false,
+        "blockers": []
+      },
+      "drop_policy": {
+        "hostile_requires_non_empty": true,
+        "entry_count": 0,
+        "exemption": {
+          "allowed": true,
+          "reason": "user_loot_sheet_sole_drop_authority_lists_no_rows_for_this_identity"
+        }
+      },
+      "status": "formal",
+      "drop_profile_id": "drop.241"
+    }
+  ],
+  "interpretation": "These are fixed-172 catalog identities absent from the 126-row user sheet. This is an authoring-coverage join, not evidence that all 26 are currently spawned. Runtime map reachability is covered separately by the reused published-map receipt."
+}

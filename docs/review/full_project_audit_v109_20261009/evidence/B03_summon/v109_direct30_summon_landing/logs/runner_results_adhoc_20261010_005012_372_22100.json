@@ -1,0 +1,40 @@
+{
+  "failed": 1,
+  "total": 1,
+  "runtime_environment": {
+    "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct30_summon_landing",
+    "runner_process_id": 22100
+  },
+  "generated_at": "2026-10-10T00:50:12.3726550+08:00",
+  "invocation_id": "32059220-f0f1-46a6-9955-eb8cdd4d36c2",
+  "suite": "adhoc",
+  "results": [
+    {
+      "test_name": "summon_follow_landing_contract_20261010_test",
+      "test_path": "tests/framework/summon_follow_landing_contract_20261010_test.tscn",
+      "wrapper_process_id": 10716,
+      "wrapper_started_utc": "2026-10-09T16:49:55.7792800Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct30_summon_landing",
+      "fixed_fps": 0,
+      "pass_marker_found": false,
+      "process_exited": true,
+      "wrapper_exit_code": 1,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-09T16:50:25.7921891Z",
+      "native_exit_observed_utc": "2026-10-09T16:50:11.1452716Z",
+      "effective_exit_code": 1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "e6ed0bb6-9025-44db-9e4a-5622f1e0c417",
+      "framework_receipt_valid": false,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+    }
+  ],
+  "engine_log_errors": 0,
+  "passed": 0,
+  "git_head": "215f0b2f651a51e6855ee813ddd99221690311a1"
+}

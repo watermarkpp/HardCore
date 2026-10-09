@@ -1,0 +1,38 @@
+ERROR: Signal 'passive_wakeup_changed' is already connected to given callable 'Node2D(game_root.gd)::_on_passive_wake_emitter_changed' in that object.
+   at: connect (core/object/object.cpp:1561)
+   GDScript backtrace (most recent call first):
+       [0] _register_passive_wake_emitter (res://scripts/game_root.gd:6644)
+       [1] _mark_passive_monster_wakeup_dirty (res://scripts/game_root.gd:6710)
+       [2] _on_passive_wake_emitter_changed (res://scripts/game_root.gd:6664)
+ERROR: Signal 'tree_exiting' is already connected to given callable 'Node2D(game_root.gd)::_on_passive_wake_emitter_exiting' in that object.
+   at: connect (core/object/object.cpp:1561)
+   GDScript backtrace (most recent call first):
+       [0] _register_passive_wake_emitter (res://scripts/game_root.gd:6649)
+       [1] _mark_passive_monster_wakeup_dirty (res://scripts/game_root.gd:6710)
+       [2] _on_passive_wake_emitter_changed (res://scripts/game_root.gd:6664)
+ERROR: Signal 'summon_state_changed' is already connected to given callable 'Node2D(game_root.gd)::_on_passive_wake_summon_state_changed' in that object.
+   at: connect (core/object/object.cpp:1561)
+   GDScript backtrace (most recent call first):
+       [0] _register_passive_wake_emitter (res://scripts/game_root.gd:6654)
+       [1] _mark_passive_monster_wakeup_dirty (res://scripts/game_root.gd:6710)
+       [2] _on_passive_wake_emitter_changed (res://scripts/game_root.gd:6664)
+ERROR: Signal 'passive_wakeup_changed' is already connected to given callable 'Node2D(game_root.gd)::_on_passive_wake_emitter_changed' in that object.
+   at: connect (core/object/object.cpp:1561)
+   GDScript backtrace (most recent call first):
+       [0] _register_passive_wake_emitter (res://scripts/game_root.gd:6644)
+       [1] _mark_passive_monster_wakeup_dirty (res://scripts/game_root.gd:6710)
+       [2] _on_passive_wake_summon_state_changed (res://scripts/game_root.gd:6672)
+ERROR: Signal 'tree_exiting' is already connected to given callable 'Node2D(game_root.gd)::_on_passive_wake_emitter_exiting' in that object.
+   at: connect (core/object/object.cpp:1561)
+   GDScript backtrace (most recent call first):
+       [0] _register_passive_wake_emitter (res://scripts/game_root.gd:6649)
+       [1] _mark_passive_monster_wakeup_dirty (res://scripts/game_root.gd:6710)
+       [2] _on_passive_wake_summon_state_changed (res://scripts/game_root.gd:6672)
+ERROR: Signal 'summon_state_changed' is already connected to given callable 'Node2D(game_root.gd)::_on_passive_wake_summon_state_changed' in that object.
+   at: connect (core/object/object.cpp:1561)
+   GDScript backtrace (most recent call first):
+       [0] _register_passive_wake_emitter (res://scripts/game_root.gd:6654)
+       [1] _mark_passive_monster_wakeup_dirty (res://scripts/game_root.gd:6710)
+       [2] _on_passive_wake_summon_state_changed (res://scripts/game_root.gd:6672)
+WARNING: 2 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)

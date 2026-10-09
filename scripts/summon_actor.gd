@@ -751,7 +751,23 @@ func _physics_process(delta: float) -> void:
 	)
 	if owner_distance_gu >= teleport_range_gu:
 		_set_state(SummonState.RETURN_TO_OWNER)
-		global_position = _owner_formation_anchor_screen_px()
+		var landing_plan := _canonical_owner_teleport_landing_plan()
+		if not bool(landing_plan.get("valid", false)):
+			# A remote owner never authorizes a raw position write.  Keep the
+			# existing body hidden/pending until the canonical map-aware planner
+			# finds a legal footprint, exactly as map-arrival relocation does.
+			if bool(landing_plan.get("defer_allowed", false)):
+				_defer_owner_follow_landing()
+			velocity = Vector2.ZERO
+			actual_ground_motion_gu = Vector2.ZERO
+			return
+		var landing_position: Variant = landing_plan.get("position_screen_px")
+		if not landing_position is Vector2 or not (landing_position as Vector2).is_finite():
+			_defer_owner_follow_landing()
+			return
+		# Preserve the established follow action/timing; only its placement now
+		# requires a legal footprint. Accepted attacks are not reset by following.
+		global_position = landing_position as Vector2
 		passive_wakeup_changed.emit()
 		_rest_formation_moving = false
 		velocity = Vector2.ZERO
@@ -820,6 +836,35 @@ func _physics_process(delta: float) -> void:
 
 	if not actual_ground_motion_gu.is_zero_approx():
 		passive_wakeup_changed.emit()
+
+
+func _owner_follow_landing_authority() -> Node:
+	var owner_node: Node = get_parent()
+	while owner_node != null:
+		if (
+			owner_node.has_method("_canonical_summon_follow_landing_plan")
+			and owner_node.has_method("_register_pending_main_pet_arrival")
+		):
+			return owner_node
+		owner_node = owner_node.get_parent()
+	return null
+
+
+func _canonical_owner_teleport_landing_plan() -> Dictionary:
+	var authority := _owner_follow_landing_authority()
+	if authority != null:
+		var raw_plan: Variant = authority.call("_canonical_summon_follow_landing_plan", self)
+		if raw_plan is Dictionary:
+			return raw_plan
+	return {"valid": false, "reason": "canonical_landing_authority_unavailable", "defer_allowed": false}
+
+
+func _defer_owner_follow_landing() -> void:
+	var authority := _owner_follow_landing_authority()
+	if authority == null:
+		return
+	defer_owner_teleport_relocation()
+	authority.call("_register_pending_main_pet_arrival", self)
 
 
 func _begin_attack(enemy: EnemyActor) -> void:

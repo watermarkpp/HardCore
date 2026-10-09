@@ -343,6 +343,13 @@ func _t7_catch_up_commits_final_frame_only() -> void:
 		player_c.current_frame_index == player_d.current_frame_index,
 		"loop catch-up must reach the same frame index as small steps"
 	)
+	# These players are intentionally tree-less for the catch-up micro-contract;
+	# release them explicitly so the test does not turn its functional PASS into
+	# an ObjectDB/CanvasItem cleanup failure at process exit.
+	player_a.free()
+	player_b.free()
+	player_c.free()
+	player_d.free()
 
 
 func _fire_wall_frame_paths() -> Array[String]:

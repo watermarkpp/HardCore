@@ -68,11 +68,14 @@ cleanup. The wrapper result is correctly retained as `FAIL` because the two
 expected malformed `.res` ResourceLoader errors remain in stderr/engine logs;
 they are not suppressed or reclassified as a clean engine run.
 
-The related26 positive evidence is retained separately and reports native
-exit 0, stderr 0, and engine-error 0 for the existing sequence-lease,
-production-caller lease, and workset lease tests. These are positive cache and
-lease regressions; they do not convert the direct25 malformed-resource
-negative into a general asset-corruption pass.
+The related26 sequence-lease and production-caller lease cases report native
+exit 0 with clean stderr and engine logs. The workset case functionally passes
+but its retained stderr/Godot log contains 4 CanvasItem RIDs, 8 ObjectDB, and
+2 resource-at-exit warnings from four tree-less test players. That is a test
+cleanup FAIL, not evidence of a production visual leak. The fixture now frees
+those players explicitly; one focused verbose rerun remains required. These
+positive cache and lease regressions do not convert the direct25
+malformed-resource negative into a general asset-corruption pass.
 
 ## Final status
 
@@ -82,7 +85,9 @@ negative into a general asset-corruption pass.
 | Terminal registry/Root outcome ownership | PASS | Direct25 checks plus current host source |
 | Old waiter versus explicit retry | PASS | Direct25 serial assertions |
 | One-shot/persistent presentation cleanup | PASS | Direct25 component fixture; presentation scope |
-| Existing positive lease/cache regressions | PASS | Related26 native receipts |
+| Sequence/production-caller lease regressions | PASS | Related26 native receipts, clean stderr/engine logs |
+| Workset functional assertions | PASS | Related26 internal assertions |
+| Workset teardown diagnostics | FAIL | Four tree-less test players caused retained cleanup warnings; fix added, focused verbose rerun required |
 | Full production PNG/art corruption through a real spell damage event | NOT_RUN | No claim made from injected component path |
 | Android/device audio/visual behavior | NOT_RUN | Outside this B02 source/native scope |
 

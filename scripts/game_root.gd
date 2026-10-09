@@ -6628,7 +6628,15 @@ func _passive_wake_emitter_current(emitter: Node2D) -> bool:
 
 
 func _register_passive_wake_emitter(emitter: Node2D) -> void:
-	if not is_instance_valid(emitter):
+	# Deferred events from a pet leaving the old map must not recreate its
+	# registry entry after the map generation has been replaced.
+	if (
+		not is_instance_valid(emitter)
+		or emitter.is_queued_for_deletion()
+		or not emitter.is_inside_tree()
+		or not is_ancestor_of(emitter)
+		or is_queued_for_deletion()
+	):
 		return
 	var id := emitter.get_instance_id()
 	if _passive_wake_emitters.has(id):
@@ -6640,21 +6648,22 @@ func _register_passive_wake_emitter(emitter: Node2D) -> void:
 		"map_id": current_map_id,
 		"generation": _zone_generation,
 	}
-	if emitter.has_signal("passive_wakeup_changed"):
-		emitter.connect(
-			"passive_wakeup_changed",
-			_on_passive_wake_emitter_changed.bind(id),
-			CONNECT_DEFERRED,
-		)
-	emitter.tree_exiting.connect(
-		_on_passive_wake_emitter_exiting.bind(id),
-		CONNECT_ONE_SHOT,
-	)
+	# Connections belong to the live emitter, while the registry belongs to a
+	# map generation. Re-admitting a surviving emitter must reuse its hooks.
+	var changed_callback := _on_passive_wake_emitter_changed.bind(id)
+	if (
+		emitter.has_signal("passive_wakeup_changed")
+		and not emitter.is_connected("passive_wakeup_changed", changed_callback)
+	):
+		emitter.connect("passive_wakeup_changed", changed_callback, CONNECT_DEFERRED)
+	var exiting_callback := _on_passive_wake_emitter_exiting.bind(id)
+	if not emitter.tree_exiting.is_connected(exiting_callback):
+		emitter.tree_exiting.connect(exiting_callback, CONNECT_ONE_SHOT)
 	if emitter is SummonActor:
-		(emitter as SummonActor).summon_state_changed.connect(
-			_on_passive_wake_summon_state_changed.bind(id),
-			CONNECT_DEFERRED,
-		)
+		var summon := emitter as SummonActor
+		var state_callback := _on_passive_wake_summon_state_changed.bind(id)
+		if not summon.summon_state_changed.is_connected(state_callback):
+			summon.summon_state_changed.connect(state_callback, CONNECT_DEFERRED)
 	_passive_wake_emitter_queue.append(id)
 	_passive_wake_dirty = true
 	FrameBudget.mark_pending(PASSIVE_WAKE_BUDGET_CATEGORY, true, true, false, self, false)
@@ -12226,10 +12235,74 @@ func _relocate_main_pets_after_map_arrival() -> void:
 				pending.erase(summon)
 			else:
 				summon.defer_owner_teleport_relocation()
+				summon.set_meta("pending_arrival_zone_generation", _zone_generation)
 				_pending_main_pet_arrivals.append(summon)
 	if not _pending_main_pet_arrivals.is_empty():
 		_pending_main_pet_retry_tile = _main_pet_owner_tile()
 		_pending_main_pet_retry_tile_valid = true
+
+
+func _main_pet_follow_context_is_current(summon: SummonActor) -> bool:
+	return (
+		is_inside_tree()
+		and not is_queued_for_deletion()
+		and not _map_transition_in_progress
+		and is_instance_valid(player)
+		and player.current_hp > 0
+		and is_instance_valid(background)
+		and is_instance_valid(summon)
+		and not summon.is_queued_for_deletion()
+		and summon.is_inside_tree()
+		and is_ancestor_of(summon)
+		and summon.owner_player == player
+		and bool(summon.get_meta("taoist_main_pet", false))
+		and summon.summon_id in ["skeleton", "divine_beast"]
+		and summon.runtime_map_id == current_map_id
+		and summon.runtime_ground_gu_to_screen_position_px.is_valid()
+		and summon.runtime_screen_to_ground_position_px.is_valid()
+		and summon.current_hp > 0
+		and summon.state not in [SummonActor.SummonState.DEAD, SummonActor.SummonState.EXPIRED]
+	)
+
+
+func _canonical_summon_follow_landing_plan(summon: SummonActor) -> Dictionary:
+	# Follow teleport uses the same map/body placement authority as arrival.
+	# Invalid ownership or a transition cannot authorize relocation or deferral.
+	if not _main_pet_follow_context_is_current(summon):
+		return {"valid": false, "reason": "follow_context_not_current", "defer_allowed": false}
+	var pending: Array[SummonActor] = [summon]
+	var formation_screen_px := summon._owner_formation_anchor_screen_px()
+	var formation_ground_gu := _canonical_screen_px_to_ground_gu(formation_screen_px)
+	if _canonical_summon_position_is_valid(
+		formation_ground_gu, _actor_combat_radius_gu(summon), summon, pending
+	):
+		return {
+			"valid": true,
+			"reason": "",
+			"position_ground_gu": formation_ground_gu,
+			"position_screen_px": formation_screen_px,
+			"defer_allowed": true,
+		}
+	var stable_skill_id := (
+		"taoist.summon_skeleton" if summon.summon_id == "skeleton"
+		else "taoist.summon_divine_beast"
+	)
+	var plan := _canonical_summon_spawn_plan(stable_skill_id, summon, summon.pet_slot_index, pending)
+	if not bool(plan.get("valid", false)):
+		plan = _canonical_summon_teleport_fallback_plan(summon, pending)
+	plan["defer_allowed"] = true
+	return plan
+
+
+func _register_pending_main_pet_arrival(summon: SummonActor) -> bool:
+	if not _main_pet_follow_context_is_current(summon) or not summon.owner_teleport_pending:
+		return false
+	summon.set_meta("pending_arrival_zone_generation", _zone_generation)
+	if not _pending_main_pet_arrivals.has(summon):
+		_pending_main_pet_arrivals.append(summon)
+		_pending_main_pet_retry_tile = _main_pet_owner_tile()
+		_pending_main_pet_retry_tile_valid = true
+	return true
 
 
 func _main_pet_owner_tile() -> Vector2i:
@@ -12250,7 +12323,11 @@ func _retry_pending_main_pet_arrivals() -> void:
 		if not is_instance_valid(summon) or summon.is_queued_for_deletion():
 			_pending_main_pet_arrivals.erase(summon)
 			continue
-		if not summon.owner_teleport_pending:
+		if (
+			not summon.owner_teleport_pending
+			or not _main_pet_follow_context_is_current(summon)
+			or int(summon.get_meta("pending_arrival_zone_generation", -1)) != _zone_generation
+		):
 			_pending_main_pet_arrivals.erase(summon)
 			continue
 		var stable_skill_id := (

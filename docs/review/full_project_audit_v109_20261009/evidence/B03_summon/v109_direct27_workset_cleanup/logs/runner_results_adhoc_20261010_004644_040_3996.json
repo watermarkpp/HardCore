@@ -1,0 +1,40 @@
+{
+  "total": 1,
+  "invocation_id": "cceefdf9-8a3d-40b9-8f60-ee59087e904f",
+  "runtime_environment": {
+    "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct27_workset_cleanup",
+    "runner_process_id": 3996
+  },
+  "generated_at": "2026-10-10T00:46:44.0404693+08:00",
+  "git_head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+  "engine_log_errors": 0,
+  "suite": "adhoc",
+  "failed": 0,
+  "passed": 1,
+  "results": [
+    {
+      "test_name": "caster_skill_workset_lease_test",
+      "test_path": "tests/caster_skill_workset_lease_test.tscn",
+      "wrapper_process_id": 10448,
+      "wrapper_started_utc": "2026-10-09T16:46:36.5259038Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct27_workset_cleanup",
+      "fixed_fps": 0,
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-09T16:47:06.5389693Z",
+      "native_exit_observed_utc": "2026-10-09T16:46:42.4598843Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "",
+      "framework_receipt_valid": null,
+      "result": "PASS",
+      "reason": ""
+    }
+  ]
+}

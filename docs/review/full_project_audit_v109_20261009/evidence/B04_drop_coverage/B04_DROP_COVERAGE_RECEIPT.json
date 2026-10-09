@@ -1,0 +1,46 @@
+{
+  "status": "PASS",
+  "scope": "B04-001 static drop coverage disposition; published-map and dynamic child path review",
+  "fixed_missing_sheet_ids": 26,
+  "published_map_used_ids": 120,
+  "published_map_spawn_rows": 2638,
+  "published_maps": 67,
+  "dynamic_review": "PASS",
+  "dynamic_missing_sheet_runtime_reachability": "MISSING",
+  "conditional_gap": "IDs 127 and 183 are dynamically configured child identities absent from the fixed user sheet. ID 183 has explicit no-row tameable exemption. ID 127 has canonical entry_count 5 but lacks user-sheet row; this remains an authoring/runtime-contract gap only if the stationary summoner path is enabled in a released map. No released-map receipt proves it is currently spawned.",
+  "intentional_no_reward_or_exemption": [
+    {
+      "id": 33,
+      "reason": "user_loot_sheet_sole_drop_authority_lists_no_rows_for_this_identity"
+    },
+    {
+      "id": 183,
+      "reason": "user_loot_sheet_sole_drop_authority_lists_no_rows_for_this_identity"
+    },
+    {
+      "id": 186,
+      "reason": "wizard_tameable_entity_no_drop_requirement"
+    },
+    {
+      "id": 187,
+      "reason": "wizard_tameable_entity_no_drop_requirement"
+    },
+    {
+      "id": 194,
+      "reason": "non_hostile_guard_or_script_object"
+    },
+    {
+      "id": 241,
+      "reason": "user_loot_sheet_sole_drop_authority_lists_no_rows_for_this_identity"
+    }
+  ],
+  "unresolved_product_choice": "ID 127 requires an explicit authoring decision only if its dynamic summon route is intended to be released; no fallback/probability guess was applied.",
+  "native_run": "NOT_RUN",
+  "godot_run": "NOT_RUN",
+  "source_binding": "SOURCE_BINDING.json",
+  "evidence": [
+    "FIXED_172_MISSING_SHEET_IDS.json",
+    "PUBLISHED_MAP_COVERAGE_REUSE.json",
+    "DYNAMIC_SUMMON_DROP_PATHS.json"
+  ]
+}

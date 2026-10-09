@@ -1,6 +1,6 @@
 # Full project audit v109 progress
 
-Whole-project coverage: `MISSING`. B01 report reception: `PASS` (exact seven files verified from Git commit `75371c60addc5d63c37469dff4379d49015c22f6`, parent `ba97849bfe3a9fe11f12904bfa26b41fc8c7f06a`). This confirms receipt, not production acceptance. B02 seven original reports have also been received from `ac4c3f285053e10993b20712e7ab99ee107a1512` against fixed source `ed2d87121de80c84caaa3f096c3a5acb71d4946f`; coverage is partial (13 core,15 partial,31 index-only of59). B02 remainder was received byte-identically from `4e77c619249450b7c33e833c2bb3531f3f120bfc`:46 remaining paths reviewed for their B02 responsibilities,59 coverage entries retained, findings B02-008..010 under disposition. B03 was dispatched against fixed `4e77c619` in the same xhigh reviewer conversation; B04–B08 remain `NOT_RUN`.
+Whole-project coverage: `MISSING`. B01 report reception: `PASS` (exact seven files verified from Git commit `75371c60addc5d63c37469dff4379d49015c22f6`, parent `ba97849bfe3a9fe11f12904bfa26b41fc8c7f06a`). This confirms receipt, not production acceptance. B02 seven original reports have also been received from `ac4c3f285053e10993b20712e7ab99ee107a1512` against fixed source `ed2d87121de80c84caaa3f096c3a5acb71d4946f`; coverage is partial (13 core,15 partial,31 index-only of59). B02 remainder was received byte-identically from `4e77c619249450b7c33e833c2bb3531f3f120bfc`:46 remaining paths reviewed for their B02 responsibilities,59 coverage entries retained, findings B02-008..010 under disposition. B03 eight original reports were received byte-identically from `172125ae99e3c4adf19af82da2720934a52f9537` against fixed source `4e77c619249450b7c33e833c2bb3531f3f120bfc`. B04 eight original reports were received byte-identically from `dfcfb9cda1b88d71d7cca3b432ba812831d93c23` against fixed `172125ae99e3c4adf19af82da2720934a52f9537`. B05 is running in the same xhigh browser conversation against fixed `dfcfb9cda1b88d71d7cca3b432ba812831d93c23`. B06–B08 remain `NOT_RUN`.
 
 B01 audited production: `dbd78d3301c2af6cfd9e070abe8cc847e6353175`. Initial dispatch turn `8161e97e-e6dd-4565-864f-ebd9c7279c43`, assistant `e7955aa8-3599-40d4-ac05-b28a16541b2a`. App returned only a content reference; Pages transport and IAB login attempts failed. Those attempts remain historical failures. User-provided Chrome enabled actual main-reply reception, followed by a report-only GitHub delivery request. Seven original report files now exist in `external/B01/`; `RECEIVE_RECEIPT.json` binds exact Git blob/byte SHA256. Original reports are preserved without retroactive rewriting.
 
@@ -16,18 +16,18 @@ B01 records 43 visited paths and three module groups, with partial large-file co
 | B01-006 | Necessary activation peak is a performance risk, not confirmed source bug | Real physics/process catch-up measurement `NOT_RUN`; do not restore delayed/legal activation cap |
 | B01-007 | APK version/signature/content validation gap, not source bug | Formal109 build `NOT_RUN` |
 
-The original B01 baseline findings are not automatically current-source verdicts. B01 repair evidence is recorded in B01_NATIVE_VERIFICATION_LEDGER.md, with separate native failures, source stages and cleanup limitations. B02 confirmed pause timing and movement publication repairs are under local review; B02 stealth rearm is reconciled with the existing user contract. B02 submission-break and incoming-damage equipment lifesteal retain the user's established semantics. No whole-project, Android, performance, or release PASS is claimed.
+The original B01 baseline findings are not automatically current-source verdicts. B01 repair evidence is recorded in B01_NATIVE_VERIFICATION_LEDGER.md, with separate native failures, source stages and cleanup limitations. B02 confirmed pause timing and movement publication repairs are published with scoped native evidence; B02 stealth rearm is reconciled with the existing user contract. B02 submission-break and incoming-damage equipment lifesteal retain the user's established semantics. No whole-project, Android, performance, or release PASS is claimed.
 
 | Batch | Modules | Status | Evidence |
 |---|---|---|---|
 | `bootstrap_runtime` | bootstrap_runtime | `MISSING` | B01 source review received; large-file/functions remain partially covered, see external/B01/COVERAGE.json |
-| `enemy_ai_combat` | enemy_ai_combat | `NOT_RUN` | No current-source audit receipt yet |
-| `spatial_geometry_movement` | spatial_geometry_movement | `NOT_RUN` | No current-source audit receipt yet |
+| `enemy_ai_combat` | enemy_ai_combat | `MISSING` | B03 report received: 45 listed paths read, eight large-file responsibilities remain partial; static scope is not native coverage |
+| `spatial_geometry_movement` | spatial_geometry_movement | `MISSING` | B03 report received: 45 listed paths read, eight large-file responsibilities remain partial; static scope is not native coverage |
 | `damage_status_control` | damage_status_control | `MISSING` | B02 report received, responsibility-level static followup received; finding disposition and dynamic limits retained |
 | `skills_magic_area` | skills_magic_area | `MISSING` | B02 report received, responsibility-level static followup received; finding disposition and dynamic limits retained |
-| `summon_pet_targeting` | summon_pet_targeting | `NOT_RUN` | No current-source audit receipt yet |
-| `death_revival_drops` | death_revival_drops | `NOT_RUN` | No current-source audit receipt yet |
-| `equipment_inventory_identity` | equipment_inventory_identity | `NOT_RUN` | No current-source audit receipt yet |
+| `summon_pet_targeting` | summon_pet_targeting | `MISSING` | B03 report received: 45 listed paths read, eight large-file responsibilities remain partial; static scope is not native coverage |
+| `death_revival_drops` | death_revival_drops | `MISSING` | B04 received; direct authorities traced, historical/map/large-file responsibilities remain partial |
+| `equipment_inventory_identity` | equipment_inventory_identity | `MISSING` | B04 received; 14 special-equipment static groups reconciled, remaining visual/authoring paths cross-batch |
 | `maps_environment_streaming` | maps_environment_streaming | `NOT_RUN` | No current-source audit receipt yet |
 | `audio_presentation_ui` | audio_presentation_ui | `NOT_RUN` | No current-source audit receipt yet |
 | `save_input_platform` | save_input_platform | `NOT_RUN` | No current-source audit receipt yet |
@@ -35,7 +35,7 @@ The original B01 baseline findings are not automatically current-source verdicts
 | `diagnostics_budget_observability` | diagnostics_budget_observability | `MISSING` | B01 source review received; large-file/functions remain partially covered, see external/B01/COVERAGE.json |
 | `verification_and_tests` | verification_and_tests | `NOT_RUN` | No current-source audit receipt yet |
 | `player_actor_state` | player_actor_state | `MISSING` | B02 report received, responsibility-level static followup received; finding disposition and dynamic limits retained |
-| `source176_skill_packages` | source176_skill_packages | `NOT_RUN` | No current-source audit receipt yet |
+| `source176_skill_packages` | source176_skill_packages | `MISSING` | B03 report received: 45 listed paths read, eight large-file responsibilities remain partial; static scope is not native coverage |
 | `resource_streaming` | resource_streaming | `MISSING` | B01 source review received; large-file/functions remain partially covered, see external/B01/COVERAGE.json |
 | `data_authoring_identity` | data_authoring_identity | `NOT_RUN` | No current-source audit receipt yet |
 | `presentation_scene_assets` | presentation_scene_assets | `NOT_RUN` | No current-source audit receipt yet |
@@ -43,6 +43,33 @@ The original B01 baseline findings are not automatically current-source verdicts
 
 The manifest inventory is a scope artifact, not coverage evidence. Each batch must bind the final fixed source SHA, relevant engine/input/scene fingerprints, direct contract receipt, and negative evidence. No native, device, performance, or generated-data acceptance is claimed here. `residual_review` paths require explicit path-level review before the full audit can be considered complete.
 
-## B02 Player repair evidence
+## B02 repair and evidence disposition
 
-Player pause-aware attack/skill windup, collision-recovery movement publication (without manufacturing run distance), and equipment stealth rearm ownership passed the new direct checks and five relevant boundaries. See B02_PLAYER_NATIVE_LEDGER.md; original direct16 fixture parse failure retained. This is scoped PC/native evidence. B02 projectile direct20 passed; related21 has9PASS/3FAIL under fixture-contract triage, so projectile related regression remains FAIL. Visual terminal failure repair is still in progress. APK109 and device remain NOT_RUN.
+Published review commit `878775d18f6660eddaf086dc8edfdf3ad6fa80c4` contains the frozen projectile and visual failure repairs and their retained original evidence. Main integration HEAD/index were not changed by publication. Publication source tree `084e8269d45498bf52c2d499ed7187f2872ee6db` is distinguished from each tested tree.
+
+- Player pause/movement/stealth: direct17 and related18 scoped PASS; initial direct16 parse FAIL retained. Unchanged evidence is reused.
+- Projectile first-contact: direct20 PASS; related21 originally9PASS/3FAIL. The three failed fixture inputs were aligned to the actual ground bucket/swept-circle contract; direct22 lifecycle/query PASS and direct23 snapshot PASS retained. No monster, geometry, HP, or service load reduction was used.
+- Visual terminal failure: direct25 actual native accepted-malformed resource and component cleanup has35checks PASS, native0; rawrunner FAIL because of exactly two deliberate ResourceLoader errors is retained and separately classified. This does not prove full primary-PNG corruption through spell MP/HP/cooldown.
+- Related26 visual positives: sequence lease and production caller are clean PASS. Workset functional PASS had4CanvasItem RIDs/8ObjectDB/2resources-at-exit: CLEANUP FAIL, not clean PASS. Four tree-less fixture nodes were not freed. Direct27 after exact owned-node cleanup PASS/native0/emptystderr; all original assertions retained. No production leak is inferred from fixture ownership.
+- Prior native source labels were stale environment tags. They remain byte-identical; actual per-run freeze bindings and this limitation are explicit. New direct27+ use the actual freeze fingerprint in the native environment.
+- B02-009 zero-direction reachability remains unproved/BLOCKED. B02-010 changed descriptions only to match current user geometry (firewall3x3, thrust3GU, halfmoonfront3directions2GU), no gameplay/generated data edit.
+
+## B03 reception and current repair boundary
+
+B03 original eight Git files and blob/byte hashes are in `external/B03/RECEIVE_RECEIPT.json`. The browser connection broke before the original full reply could be displayed; a later skipped UI turn produced an alternate partial B03 reply. That UI reply is not substituted for or used to rewrite the received Git reports. Receipt is PASS; semantic coverage is partial:47listed paths,45read,2retired-grid paths absent, eight large-file responsibilities pending cross-batch review. The64-special-behavior table is static data coverage, not64 native runs.
+
+B03-001 ID194 real projectile retains the user's flight-time movement-dodge contract; old source damageTiming wording cannot authorize immediate launch-time HP loss. B03-003 current300ms optional pursuit chain is statically bounded, but actual physics/process catch-up remains NOT_RUN. B03-004 queue-capacity rejection occurs before job/reservation acceptance; automatic retry has not been requested and production remains unchanged.
+
+B03-002 far-follow formerly wrote the raw formation anchor. The final local production candidate validates the original formation anchor first, preserves the prior follow/attack state semantics, uses canonical fallback only for a blocked landing, and admits hidden pending arrivals to the existing owner-tile-change retry with exact current context and zone generation. Related33 also exposed a real old-map deferred emitter re-registration bug. Queued/detached/foreign actors are now rejected and live actors reuse their signal hooks. Direct34 has31formal checks PASS/native0/valid receipt and clean exit. Related35 canonical coexistence/persistence and multi-skeleton cases are functional PASS with cleanup warnings retained. The two failed fixture preconditions were corrected without weakening contracts; related36 teleport2/3/9-pet and state-machine cases PASS/native0, each with two RefCounted exit warnings. Prior direct28–30/related33/35 failures and direct31/32 warnings remain exact raw evidence. Cleanup owner identity remains BLOCKED where warned. See B03_SUMMON_LANDING_DISPOSITION.md and B03_NATIVE_VERIFICATION_LEDGER.json.
+
+## B04 receipt and authoring boundary
+
+B04 has176reported paths read, but this includes19core responsibility reviews,11formal data authority reviews,22historical-role entries,17partial script entries,38partial equipment/visual/authoring entries,68map paths assigned to the death scope by the inventory, and one other partial entry. This is not176full semantic reviews. Generated data provenance and direct consumer scope are kept distinct from full large-file coverage.
+
+B04-001 was narrowed to actual reachability. The historical DPV2 direct-profile receipt remains bound only to that older authority. A separate exact current UserLootSheet join shows120/120recorded released spawn IDs covered by126profiles/6083slots. ID75's historical map contexts are not current released spawn evidence. ID126 is released and its enabled summon closure can reach ID127, which has no current user-sheet profile. The user has been asked whether summoned bats should explicitly have no drops or receive the five old-source rows/probabilities; no authoring probability or fallback was changed while that choice is pending. ID183 and other explicit no-reward exemptions were not treated as missing gameplay rewards.
+
+B04-002 pickup-toast backlog is a conditional service-latency/product-policy concern; the user requested every success notice in order, so no aggregation/drop/truncation was added. B04-003 `PENDING_ACTIVATION` is unconditional compiler metadata, not a runtime probability gate: provider validity consumes schema/source hash/slots/summary, not that status. Metadata reconciliation remains separate from the already validated6083slot authority, and no generated file was hand-edited.
+
+B05 was dispatched with the accepted HUD layout, pointer ownership, Loading synchronization, audio ownership and B02 visual-terminal boundaries. The browser menu selected extreme reasoning; backend identity is not inferred from that label. Reports have not yet been received. B06–B08 and cross-batch semantic closure remain NOT_RUN/MISSING.
+
+Formal109 build: `NOT_RUN`. DEVICE TEST: `NOT_RUN`. Whole-project semantic audit closure remains `MISSING` until B05–B08 receipts and all remaining responsibility gaps are resolved.

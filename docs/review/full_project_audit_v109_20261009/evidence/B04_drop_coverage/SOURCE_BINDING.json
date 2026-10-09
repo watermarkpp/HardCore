@@ -1,0 +1,84 @@
+{
+  "status": "PASS",
+  "scope": "static B04 coverage binding; no engine/native run",
+  "fixed_source_commit": "172125ae99e3c4adf19af82da2720934a52f9537",
+  "fixed_source_commit_label": "B04 fixed source supplied by root",
+  "current_runner_head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+  "fixed_catalog_sha256": "A46ACA4209B3ABC0F3F2CD5365B274605CD07886060706E14EF3E984AAD8880A",
+  "fixed_user_loot_sheet_sha256": "3C371628C2D0F51023A5C059439020F756A3762C88C3AE6EA4FA4A5790C99AFF",
+  "current_files": {
+    "assets/data/runtime/canonical_monster_catalog.json": {
+      "path": "assets/data/runtime/canonical_monster_catalog.json",
+      "sha256": "A46ACA4209B3ABC0F3F2CD5365B274605CD07886060706E14EF3E984AAD8880A",
+      "bytes": 13762166
+    },
+    "assets/data/drop/dpv2_user_loot_sheet_authority_v1.json": {
+      "path": "assets/data/drop/dpv2_user_loot_sheet_authority_v1.json",
+      "sha256": "3C371628C2D0F51023A5C059439020F756A3762C88C3AE6EA4FA4A5790C99AFF",
+      "bytes": 1973313
+    },
+    "assets/data/drop/dpv2_direct_baseline_manifest_v2.json": {
+      "path": "assets/data/drop/dpv2_direct_baseline_manifest_v2.json",
+      "sha256": "E54F1A2DF353E996ED3D8B63D0C0E2FA858FE42D7C3BC4C6944AC180787DB37F",
+      "bytes": 4179
+    },
+    "assets/data/drop/dpv2_direct_baseline_v2.json": {
+      "path": "assets/data/drop/dpv2_direct_baseline_v2.json",
+      "sha256": "A4CD03688418820D4657403DA46424ED9BDDF0D930D46E4778B54B912555DAD7",
+      "bytes": 2874784
+    },
+    "assets/data/runtime/map_editor/map_runtime_release_registry.json": {
+      "path": "assets/data/runtime/map_editor/map_runtime_release_registry.json",
+      "sha256": "9D2700103B63253039210C545F5AF08E7E1597394CB8B417B54F59D5BC1FF738",
+      "bytes": 80624
+    },
+    "scripts/game_root.gd": {
+      "path": "scripts/game_root.gd",
+      "sha256": "348F3694368B03A345339D156ED7277B600B7B14BFDF1294BA4157D7C272C0BC",
+      "bytes": 616070
+    },
+    "scripts/layers/runtime/loot_runtime_service.gd": {
+      "path": "scripts/layers/runtime/loot_runtime_service.gd",
+      "sha256": "793C5FFEB45B1309C38FC8420C90D41D0E083E5EC271C6817866ACBF69572C9B",
+      "bytes": 38357
+    },
+    "scripts/drop/user_loot_sheet_provider.gd": {
+      "path": "scripts/drop/user_loot_sheet_provider.gd",
+      "sha256": "F3CDB515F911B4AEEAFEC4612B9A87E9369A92A6E8B8429843DFA5BCF0E739E0",
+      "bytes": 14211
+    },
+    "scripts/enemy.gd": {
+      "path": "scripts/enemy.gd",
+      "sha256": "4EB42E585F30C3401366184CD240771ACD9BC25A066BCEC9AE859E38A71DDF2A",
+      "bytes": 496054
+    },
+    "scripts/monster_ai_package/m30/summon_queue.gd": {
+      "path": "scripts/monster_ai_package/m30/summon_queue.gd",
+      "sha256": "96BCD616093871C6035B38A050B76FE5B78663336C507644886C25D1A08EEACC",
+      "bytes": 18749
+    },
+    "scripts/drop/user_drop_additions_v81.gd": {
+      "path": "scripts/drop/user_drop_additions_v81.gd",
+      "sha256": "D8A702ACA39CEDF952B1C95C0BD3FFF1F8D08060EE66F71E5E1EA92A3A2F6CCE",
+      "bytes": 4999
+    },
+    "scripts/drop/user_drop_balance.gd": {
+      "path": "scripts/drop/user_drop_balance.gd",
+      "sha256": "686DB3082B741646685697C3DE92D710780E8772A79795246B6AF20E48713883",
+      "bytes": 2593
+    }
+  },
+  "reused_prior_receipt": {
+    "path": "outputs/wake_drop_v108_review_followup_20261009/drop_coverage_evidence.json",
+    "status": "PASS",
+    "sha256": "85331839FE499F835A9223FE18B812FC3DD4CE9C163C2AAC578EE716475B7A85",
+    "reason": "67-map/2638-spawn/120-used-ID formal coverage is reused; unchanged receipt is not rerun."
+  },
+  "commands": [
+    "git show 172125ae99e3c4adf19af82da2720934a52f9537:<path>",
+    "targeted rg/Get-Content call-chain review",
+    "python fixed-catalog join (this evidence generation)"
+  ],
+  "native_run": "NOT_RUN",
+  "godot_run": "NOT_RUN"
+}
