@@ -1,0 +1,32 @@
+{
+  "schema": "hardcore.no_plan_failure_audit.inputs.v1",
+  "baseline": "edae6fdef6a6551a951fab1ea8c6ade43359d603",
+  "producer_id": "02a31191-b9f3-41cc-bead-b688a22b3c78",
+  "stage": "formal01",
+  "source_sha256": {
+    "scripts/enemy.gd": "1889770268e8a192b386a96240b1c6043bec6cc95bc1554225000ab857710ceb",
+    "scripts/runtime_diagnostics.gd": "5d9223872649c9af7e7d59336706c7d7414118e756bc71b8cafee60ba5d1e8da",
+    "scripts/game_root.gd": "e920127fcb0fc15d879ac30eab03f48e3005fd7563fff618efe4dff0b089bdd4",
+    "scripts/runtime_combat_spatial_index.gd": "1fa26f141042da16fc3cadc15bf329298212bdd5466debe96e282fddb084f081",
+    "scripts/world_background.gd": "0822bac938022122c0cf25780647455da196f6a18dbbec02a661239e8bab37a5",
+    "scripts/monster_ai_package/policy.gd": "d20fee4ecda8028afab4b6765a0b68d117819c1d4f48c9ce7243e1ed26c8e58c",
+    "tools/run_godot_tests.ps1": "8049ef382dede726e9476574167a4b305017a2a7a5d2ba121bf9461296c28b48",
+    "project.godot": "030f44250ab8d487a5521e56ce3d77ef23dbad7d0290e6db1285d10589c36f92",
+    "tests/crowd_no_plan_failure_audit_20261009.gd": "1ee56b5d60022225cba0222cdddc3ce654ed01da54a36be2c7d40503a24053b1",
+    "tests/crowd_no_plan_failure_audit_20261009.tscn": "cc6a9591d48dddd08f3936d597a5ac7ffb05cbd461112775ced67e634a795191",
+    "tests/support/no_plan_failure_audit_20261009.gd": "972de50546846e3c6dfb3bedbb0e12de717665d7f49fa10bf6bca502ea3b037d",
+    "tests/crowd_formal_grid_comparison_20261008.gd": "d26b66a6e048c208c1306e040202098425d2d3c8b8a08ae159b9362f533a4197",
+    "tests/crowd_engagement_scaling_20261008.gd": "fcb75f90c89f3a6ca9d6c056cc89fc84b3fc6d8a003a1b8e081ea8ce931cfbb4",
+    "tests/phone_crowd_baseline_20261008.gd": "552e4a150eb726583750a4b854dd20207a088f2d0deed9f80e958ddbd4a7c0de"
+  },
+  "engine_sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+  "engine_console_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+  "command": "tools/run_godot_tests.ps1 -TestPaths tests/crowd_no_plan_failure_audit_20261009.tscn -TimeoutSeconds 60",
+  "environment": {
+    "HARDCORE_AUDIT_EVIDENCE_ROOT": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\crowd_no_plan_failure_audit_20261009\\formal01",
+    "HARDCORE_SCALING_ENGAGED": "30",
+    "HARDCORE_GRID_COMPARISON_MODE": "current",
+    "HARDCORE_GRID_COMPARISON_RUN_ID": "no_plan_failure_formal01"
+  },
+  "scope": "passive diagnosis only; all original algorithm and counters active; NOT performance acceptance"
+}

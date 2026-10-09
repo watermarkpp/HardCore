@@ -1,0 +1,67 @@
+{
+  "status": "PASS",
+  "scope": "one passive diagnostic window, not production or performance acceptance",
+  "producer_id": "02a31191-b9f3-41cc-bead-b688a22b3c78",
+  "goal_status": "FAIL",
+  "cache_hypothesis": "FAIL in this measured window: no exhausted local plan failures or target-only wait guard invalidations",
+  "neighbor_calls": 834,
+  "chooser_entered": 170,
+  "chooser_nonzero": 170,
+  "chooser_zero": 0,
+  "complete_failure": 0,
+  "target_only_guard_miss": 0,
+  "guard_live_known_comparison_executed": 0,
+  "events": {
+    "wait_identity_miss": 834,
+    "local_context": 834,
+    "motion_hard_reject": 1445,
+    "direct_motion_result": 535,
+    "chooser_enter": 170,
+    "far_candidate": 406,
+    "far_approach_result": 98,
+    "chooser_success": 170,
+    "postretry_wait": 255,
+    "near_batch": 72,
+    "near_candidate": 576,
+    "near_motion_reject": 367,
+    "near_destination_reject": 98,
+    "contact_candidate": 368,
+    "near_contact_result": 28,
+    "far_contact_result": 18,
+    "budget_denied": 15,
+    "path_pending": 2
+  },
+  "parent_envelopes_ms": {
+    "all_neighbor": 337.124,
+    "chooser_success": 190.044,
+    "complete_failure": 0
+  },
+  "diagnostic_enemy_cpu_ms": 2130.237,
+  "cpu_interpretation": "NOT_PERFORMANCE_EVIDENCE; passive logging adds work and trajectories differ",
+  "certificate_creation": "NOT_MEASURED",
+  "certificate_validation": "NOT_MEASURED",
+  "reusable_failure_proof": "MISSING; no full failures; recorded geometry is insufficient for a certificate",
+  "player_motion": {
+    "moving_ticks": 105,
+    "total_gu": 3.05299799652289
+  },
+  "decision_budget": {
+    "actual_admitted_count": 1157,
+    "epoch": 720,
+    "epoch_owner_count": 0,
+    "max_epoch_owner_count": 5,
+    "max_wait_frames": 3,
+    "open_scopes": 0,
+    "previous_epoch": 719,
+    "previous_owner_ids": [
+      980141752757,
+      985997001323,
+      987758609093,
+      989520216863
+    ],
+    "queue": [],
+    "queue_length": 0,
+    "serviced_owner_ids": []
+  },
+  "device_test": "NOT_RUN"
+}

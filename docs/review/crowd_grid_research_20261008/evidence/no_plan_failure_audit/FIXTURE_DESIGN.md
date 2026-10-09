@@ -1,0 +1,12 @@
+# NO_PLAN_FAILURE_AUDIT fixture design
+
+Fixed research baseline: `edae6fdef6a6551a951fab1ea8c6ade43359d603`.
+
+The fixture subclasses the existing `crowd_formal_grid_comparison_20261008.gd` formal pair, which in turn reuses the fixed107 crowd workload. It therefore keeps the production setup and input path for 34 live actors, 30 requested engaged actors, 48 synthetic loot items, real player movement, 300 physics ticks, unchanged HP/AI/physics and full RuntimeDiagnostics. It adds no failure cache and never short-circuits `_hc_neighbor` or its chooser.
+
+Each selected Enemy receives one `NoPlanFailureAuditSink20261009` through the production hook `configure_no_plan_failure_audit(sink)`. Missing hooks are recorded as a fixture failure. The sink exposes the requested `begin_call`, `event`, `end_call`, and `snapshot` methods and stores per-call event dictionaries. It records exact `wait_entry` hits (while retaining `wait_guard_miss` and `wait_identity_miss` as ordinary events), post-retry gates, budget outcomes, exact `chooser_enter` and chooser success, complete failure, target-only invalidation, known/live differences and elapsed diagnostics. It does not call projection, environment, damage eligibility, or any other gameplay query.
+
+The fixture reads `res://outputs/crowd_no_plan_failure_audit_20261009/current_run_inputs.json` before the formal run, validates producer source and engine fingerprints, and exits 1 before the formal workload on binding failure while keeping the binding in successful results. It clears all sinks at the first sampled physics tick, then aggregates owner snapshots into the existing formal result. The result checks actual actor/alive count, actual engaged maximum, loot count, physics ticks, positive player motion, hook count, active sink state, original `enemy_neighbor_calls`, and the 10,200 physics callback count. Any failed check is copied into both `failures` and `_scaling_failures` and changes `status` to `FAIL`; unequal sink calls and original `enemy_neighbor_calls` remain explicit failure evidence. Certificate creation and validation are `NOT_MEASURED`; diagnostic CPU is not a performance result. A repeated hard failure is `UNPROVEN` until the original diagnostic hook has supplied complete call evidence; reason strings or final census counts are insufficient.
+
+Static handoff status: `NOT_RUN` for Godot/native execution. The root agent must run the fixture serially and bind the output to the fixed source and runner evidence.
+
