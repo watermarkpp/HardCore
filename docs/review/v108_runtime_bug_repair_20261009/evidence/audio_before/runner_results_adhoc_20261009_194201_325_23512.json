@@ -1,0 +1,40 @@
+{
+  "passed": 0,
+  "failed": 1,
+  "generated_at": "2026-10-09T19:42:01.3255349+08:00",
+  "total": 1,
+  "suite": "adhoc",
+  "git_head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+  "engine_log_errors": 1,
+  "runtime_environment": {
+    "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\wake_drop_20261009_audio_before",
+    "runner_process_id": 23512
+  },
+  "invocation_id": "84767493-bae2-40a4-90f3-62be8591687a",
+  "results": [
+    {
+      "test_name": "audio_startup_preferences_repair_20261009",
+      "test_path": "tests/audio_startup_preferences_repair_20261009.tscn",
+      "wrapper_process_id": 23888,
+      "wrapper_started_utc": "2026-10-09T11:41:54.4373692Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\wake_drop_20261009_audio_before",
+      "fixed_fps": 0,
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "execution_deadline_utc": "2026-10-09T11:42:24.4498656Z",
+      "native_exit_observed_utc": null,
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 1,
+      "engine_log_failure_count": 1,
+      "framework_run_id": "",
+      "framework_receipt_valid": null,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+    }
+  ]
+}

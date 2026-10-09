@@ -1,0 +1,75 @@
+{
+	"frame_budget": {
+		"categories": {},
+		"epoch": 1902,
+		"inflight_usec": 0,
+		"limit_usec": 1200,
+		"open_scopes": 0,
+		"overrun_usec": 0,
+		"pending": {
+			"death_work:334537688675": {
+				"oldest_age_frames": 1800,
+				"pending_epoch": 102,
+				"runnable": false,
+				"runs_when_paused": false,
+				"service_age_frames": 1800
+			},
+			"resource_completion:-9223371702031874399": {
+				"oldest_age_frames": 1880,
+				"pending_epoch": 22,
+				"runnable": true,
+				"runs_when_paused": false,
+				"service_age_frames": 1
+			}
+		},
+		"spent_usec": 0
+	},
+	"manager": {
+		"candidate_scratch_count": 0,
+		"collection_full_scan_count": 0,
+		"contract_id": "hardcore.loot.runtime_manager.map_scoped.v1",
+		"logout_retry_blocked_count": 0,
+		"logout_retry_blocked_pickup_ids": [],
+		"manager_collection_request_count": 0,
+		"manager_exact_range_check_count": 0,
+		"manager_fail_safe_check_count": 141,
+		"manager_full_scan_count": 0,
+		"manager_player_event_count": 2,
+		"manager_registration_check_count": 0,
+		"manager_retry_check_count": 0,
+		"manager_visual_update_count": 0,
+		"registered_pickup_count": 0,
+		"runtime_map_id": 910001,
+		"spatial_index": {
+			"bucket_size_gu": 4.0,
+			"contract_id": "hardcore.loot.spatial_index.map_ground_gu_buckets.v1",
+			"index_bucket_change_count": 0,
+			"index_candidate_count": 0,
+			"index_full_scan_count": 0,
+			"index_max_candidate_count": 0,
+			"index_query_count": 143,
+			"index_register_count": 0,
+			"index_stale_cleanup_count": 0,
+			"index_unregister_count": 0,
+			"index_update_check_count": 0,
+			"registered_pickup_count": 0
+		},
+		"visual_registry_entry_count": 0,
+		"visual_registry_scan_count": 0,
+		"zone_generation": 1
+	},
+	"player_state": {
+		"active_profile_id": "1791546551_2272",
+		"last_load_result": {
+			"contract_id": "player_state.save_result.v1",
+			"path": "user://characters/1791546551_2272.json",
+			"reason": "primary",
+			"success": true
+		},
+		"world_clock_generation": "",
+		"world_clock_snapshot_sequence": 0
+	},
+	"status": "FAIL",
+	"terminal": {},
+	"test_mode": false
+}

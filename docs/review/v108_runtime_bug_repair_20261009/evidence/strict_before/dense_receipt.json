@@ -1,0 +1,3566 @@
+{
+	"actors": [
+		{
+			"damage_dirty": false,
+			"hp": 14,
+			"id": 463755808914,
+			"sleep": false,
+			"target": 331148691178
+		},
+		{
+			"damage_dirty": false,
+			"hp": 15,
+			"id": 464108130468,
+			"sleep": false,
+			"target": 331148691178
+		},
+		{
+			"damage_dirty": false,
+			"hp": 27,
+			"id": 464460452022,
+			"sleep": false,
+			"target": 331148691178
+		},
+		{
+			"damage_dirty": false,
+			"hp": 22,
+			"id": 464812773576,
+			"sleep": false,
+			"target": 331148691178
+		},
+		{
+			"damage_dirty": false,
+			"hp": 27,
+			"id": 466574381346,
+			"sleep": false,
+			"target": 331148691178
+		},
+		{
+			"damage_dirty": false,
+			"hp": 27,
+			"id": 466926702900,
+			"sleep": false,
+			"target": 331148691178
+		},
+		{
+			"damage_dirty": false,
+			"hp": 27,
+			"id": 467279024454,
+			"sleep": false,
+			"target": 331148691178
+		},
+		{
+			"damage_dirty": false,
+			"hp": 27,
+			"id": 469225181528,
+			"sleep": false,
+			"target": 331148691178
+		},
+		{
+			"damage_dirty": false,
+			"hp": 14,
+			"id": 469611057524,
+			"sleep": false,
+			"target": 331148691178
+		},
+		{
+			"damage_dirty": false,
+			"hp": 14,
+			"id": 469963379078,
+			"sleep": false,
+			"target": 331148691178
+		},
+		{
+			"damage_dirty": false,
+			"hp": 14,
+			"id": 470315700632,
+			"sleep": false,
+			"target": 331148691178
+		},
+		{
+			"damage_dirty": false,
+			"hp": 14,
+			"id": 470668022186,
+			"sleep": false,
+			"target": 331148691178
+		}
+	],
+	"damage_recovery_frame": 20,
+	"failures": [
+		"halo_not_immediate:0/12",
+		"ground_tick_not_immediate:0/12"
+	],
+	"frames": [
+		{
+			"actors": [
+				{
+					"damage_dirty": false,
+					"hp": 22,
+					"id": 463755808914,
+					"physics": true,
+					"sleep": true,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 23,
+					"id": 464108130468,
+					"physics": true,
+					"sleep": true,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 36,
+					"id": 464460452022,
+					"physics": true,
+					"sleep": true,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 30,
+					"id": 464812773576,
+					"physics": true,
+					"sleep": true,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 36,
+					"id": 466574381346,
+					"physics": true,
+					"sleep": true,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 36,
+					"id": 466926702900,
+					"physics": true,
+					"sleep": true,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 36,
+					"id": 467279024454,
+					"physics": true,
+					"sleep": true,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 36,
+					"id": 469225181528,
+					"physics": true,
+					"sleep": true,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 22,
+					"id": 469611057524,
+					"physics": true,
+					"sleep": true,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 22,
+					"id": 469963379078,
+					"physics": true,
+					"sleep": true,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 22,
+					"id": 470315700632,
+					"physics": true,
+					"sleep": true,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 22,
+					"id": 470668022186,
+					"physics": true,
+					"sleep": true,
+					"target": 0,
+					"wake_pending": false
+				}
+			],
+			"frame": 1,
+			"frame_budget": {
+				"categories": {},
+				"epoch": 45,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"monster_passive_wakeup": {
+						"oldest_age_frames": 1,
+						"pending_epoch": 44,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					},
+					"resource_completion:-9223371706075183452": {
+						"oldest_age_frames": 44,
+						"pending_epoch": 1,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					}
+				},
+				"spent_usec": 0
+			},
+			"phase": "wake",
+			"process_epoch": 45
+		},
+		{
+			"actors": [
+				{
+					"damage_dirty": false,
+					"hp": 14,
+					"id": 463755808914,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 15,
+					"id": 464108130468,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 464460452022,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 22,
+					"id": 464812773576,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 27,
+					"id": 466574381346,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 27,
+					"id": 466926702900,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 27,
+					"id": 467279024454,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 27,
+					"id": 469225181528,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 469611057524,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": true
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 469963379078,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 470315700632,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 470668022186,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				}
+			],
+			"frame": 0,
+			"frame_budget": {
+				"categories": {
+					"monster_pursuit_process": {
+						"denied": 1,
+						"denied_budget": 1,
+						"denied_fairness": 0,
+						"denied_unrunnable": 0,
+						"inclusive_usec": 1326,
+						"last_denial": {
+							"blocker_service_epoch": -1,
+							"blocker_service_sequence": -1,
+							"blocking_category": "",
+							"epoch": 46,
+							"inflight_usec": 0,
+							"own_service_epoch": 45,
+							"own_service_sequence": 0,
+							"reason": "budget",
+							"remaining_usec": 0,
+							"spent_usec": 1326
+						},
+						"maximum_quantum_usec": 711,
+						"necessary_scopes": 0,
+						"scopes": 4,
+						"self_usec": 1326
+					}
+				},
+				"epoch": 46,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 126,
+				"pending": {
+					"monster_passive_wakeup": {
+						"oldest_age_frames": 2,
+						"pending_epoch": 44,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					},
+					"monster_pursuit_process": {
+						"oldest_age_frames": 0,
+						"pending_epoch": 46,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					},
+					"resource_completion:-9223371706075183452": {
+						"oldest_age_frames": 45,
+						"pending_epoch": 1,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					}
+				},
+				"spent_usec": 1326
+			},
+			"phase": "damage",
+			"process_epoch": 46
+		},
+		{
+			"actors": [
+				{
+					"damage_dirty": false,
+					"hp": 14,
+					"id": 463755808914,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 15,
+					"id": 464108130468,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 464460452022,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 22,
+					"id": 464812773576,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 27,
+					"id": 466574381346,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 27,
+					"id": 466926702900,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 27,
+					"id": 467279024454,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 27,
+					"id": 469225181528,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 469611057524,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": true
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 469963379078,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 470315700632,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 470668022186,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				}
+			],
+			"frame": 1,
+			"frame_budget": {
+				"categories": {},
+				"epoch": 47,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"monster_passive_wakeup": {
+						"oldest_age_frames": 3,
+						"pending_epoch": 44,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 2
+					},
+					"monster_pursuit_process": {
+						"oldest_age_frames": 1,
+						"pending_epoch": 46,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 2
+					},
+					"resource_completion:-9223371706075183452": {
+						"oldest_age_frames": 46,
+						"pending_epoch": 1,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 2
+					}
+				},
+				"spent_usec": 0
+			},
+			"phase": "damage",
+			"process_epoch": 47
+		},
+		{
+			"actors": [
+				{
+					"damage_dirty": false,
+					"hp": 14,
+					"id": 463755808914,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 15,
+					"id": 464108130468,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 464460452022,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 22,
+					"id": 464812773576,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 27,
+					"id": 466574381346,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 27,
+					"id": 466926702900,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 27,
+					"id": 467279024454,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 27,
+					"id": 469225181528,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 469611057524,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": true
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 469963379078,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 470315700632,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 470668022186,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				}
+			],
+			"frame": 2,
+			"frame_budget": {
+				"categories": {},
+				"epoch": 48,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"monster_passive_wakeup": {
+						"oldest_age_frames": 4,
+						"pending_epoch": 44,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 3
+					},
+					"monster_pursuit_process": {
+						"oldest_age_frames": 2,
+						"pending_epoch": 46,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 3
+					},
+					"resource_completion:-9223371706075183452": {
+						"oldest_age_frames": 47,
+						"pending_epoch": 1,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 3
+					}
+				},
+				"spent_usec": 0
+			},
+			"phase": "damage",
+			"process_epoch": 48
+		},
+		{
+			"actors": [
+				{
+					"damage_dirty": false,
+					"hp": 14,
+					"id": 463755808914,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 15,
+					"id": 464108130468,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 464460452022,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 22,
+					"id": 464812773576,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 466574381346,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 27,
+					"id": 466926702900,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 27,
+					"id": 467279024454,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 27,
+					"id": 469225181528,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 469611057524,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": true
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 469963379078,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 470315700632,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 470668022186,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				}
+			],
+			"frame": 3,
+			"frame_budget": {
+				"categories": {
+					"monster_pursuit_process": {
+						"denied": 1,
+						"denied_budget": 0,
+						"denied_fairness": 1,
+						"denied_unrunnable": 0,
+						"inclusive_usec": 216,
+						"last_denial": {
+							"blocker_service_epoch": 45,
+							"blocker_service_sequence": 48,
+							"blocking_category": "resource_completion:-9223371706075183452",
+							"epoch": 49,
+							"inflight_usec": 0,
+							"own_service_epoch": 49,
+							"own_service_sequence": 49,
+							"reason": "fairness",
+							"remaining_usec": 984,
+							"spent_usec": 216
+						},
+						"maximum_quantum_usec": 216,
+						"necessary_scopes": 0,
+						"scopes": 1,
+						"self_usec": 216
+					}
+				},
+				"epoch": 49,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"monster_passive_wakeup": {
+						"oldest_age_frames": 5,
+						"pending_epoch": 44,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 4
+					},
+					"monster_pursuit_process": {
+						"oldest_age_frames": 3,
+						"pending_epoch": 46,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 0
+					},
+					"resource_completion:-9223371706075183452": {
+						"oldest_age_frames": 48,
+						"pending_epoch": 1,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 4
+					}
+				},
+				"spent_usec": 216
+			},
+			"phase": "damage",
+			"process_epoch": 49
+		},
+		{
+			"actors": [
+				{
+					"damage_dirty": false,
+					"hp": 14,
+					"id": 463755808914,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 15,
+					"id": 464108130468,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 464460452022,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 22,
+					"id": 464812773576,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 466574381346,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 27,
+					"id": 466926702900,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 27,
+					"id": 467279024454,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 27,
+					"id": 469225181528,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 469611057524,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": true
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 469963379078,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 470315700632,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 470668022186,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": true
+				}
+			],
+			"frame": 4,
+			"frame_budget": {
+				"categories": {},
+				"epoch": 50,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"monster_passive_wakeup": {
+						"oldest_age_frames": 6,
+						"pending_epoch": 44,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					},
+					"monster_pursuit_process": {
+						"oldest_age_frames": 4,
+						"pending_epoch": 46,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					},
+					"resource_completion:-9223371706075183452": {
+						"oldest_age_frames": 49,
+						"pending_epoch": 1,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					}
+				},
+				"spent_usec": 0
+			},
+			"phase": "damage",
+			"process_epoch": 50
+		},
+		{
+			"actors": [
+				{
+					"damage_dirty": false,
+					"hp": 14,
+					"id": 463755808914,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 15,
+					"id": 464108130468,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 464460452022,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 22,
+					"id": 464812773576,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 466574381346,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 466926702900,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 27,
+					"id": 467279024454,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 27,
+					"id": 469225181528,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 469611057524,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": true
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 469963379078,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 470315700632,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 470668022186,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": true
+				}
+			],
+			"frame": 5,
+			"frame_budget": {
+				"categories": {
+					"monster_pursuit_process": {
+						"denied": 1,
+						"denied_budget": 0,
+						"denied_fairness": 1,
+						"denied_unrunnable": 0,
+						"inclusive_usec": 210,
+						"last_denial": {
+							"blocker_service_epoch": 49,
+							"blocker_service_sequence": 51,
+							"blocking_category": "resource_completion:-9223371706075183452",
+							"epoch": 51,
+							"inflight_usec": 0,
+							"own_service_epoch": 51,
+							"own_service_sequence": 52,
+							"reason": "fairness",
+							"remaining_usec": 990,
+							"spent_usec": 210
+						},
+						"maximum_quantum_usec": 210,
+						"necessary_scopes": 0,
+						"scopes": 1,
+						"self_usec": 210
+					}
+				},
+				"epoch": 51,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"monster_passive_wakeup": {
+						"oldest_age_frames": 7,
+						"pending_epoch": 44,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 2
+					},
+					"monster_pursuit_process": {
+						"oldest_age_frames": 5,
+						"pending_epoch": 46,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 0
+					},
+					"resource_completion:-9223371706075183452": {
+						"oldest_age_frames": 50,
+						"pending_epoch": 1,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 2
+					}
+				},
+				"spent_usec": 210
+			},
+			"phase": "damage",
+			"process_epoch": 51
+		},
+		{
+			"actors": [
+				{
+					"damage_dirty": false,
+					"hp": 14,
+					"id": 463755808914,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 15,
+					"id": 464108130468,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 464460452022,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 22,
+					"id": 464812773576,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 466574381346,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 466926702900,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 27,
+					"id": 467279024454,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 27,
+					"id": 469225181528,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 469611057524,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": true
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 469963379078,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 470315700632,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 470668022186,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": true
+				}
+			],
+			"frame": 6,
+			"frame_budget": {
+				"categories": {},
+				"epoch": 52,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"monster_passive_wakeup": {
+						"oldest_age_frames": 8,
+						"pending_epoch": 44,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					},
+					"monster_pursuit_process": {
+						"oldest_age_frames": 6,
+						"pending_epoch": 46,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					},
+					"resource_completion:-9223371706075183452": {
+						"oldest_age_frames": 51,
+						"pending_epoch": 1,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					}
+				},
+				"spent_usec": 0
+			},
+			"phase": "damage",
+			"process_epoch": 52
+		},
+		{
+			"actors": [
+				{
+					"damage_dirty": false,
+					"hp": 14,
+					"id": 463755808914,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 15,
+					"id": 464108130468,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 464460452022,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 22,
+					"id": 464812773576,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 466574381346,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 466926702900,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 27,
+					"id": 467279024454,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 27,
+					"id": 469225181528,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 469611057524,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": true
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 469963379078,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 470315700632,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 470668022186,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": true
+				}
+			],
+			"frame": 7,
+			"frame_budget": {
+				"categories": {},
+				"epoch": 53,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"monster_passive_wakeup": {
+						"oldest_age_frames": 9,
+						"pending_epoch": 44,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 2
+					},
+					"monster_pursuit_process": {
+						"oldest_age_frames": 7,
+						"pending_epoch": 46,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 2
+					},
+					"resource_completion:-9223371706075183452": {
+						"oldest_age_frames": 52,
+						"pending_epoch": 1,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 2
+					}
+				},
+				"spent_usec": 0
+			},
+			"phase": "damage",
+			"process_epoch": 53
+		},
+		{
+			"actors": [
+				{
+					"damage_dirty": false,
+					"hp": 14,
+					"id": 463755808914,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 15,
+					"id": 464108130468,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 464460452022,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 22,
+					"id": 464812773576,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 466574381346,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 466926702900,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 467279024454,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 27,
+					"id": 469225181528,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 469611057524,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": true
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 469963379078,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 470315700632,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 470668022186,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": true
+				}
+			],
+			"frame": 8,
+			"frame_budget": {
+				"categories": {
+					"monster_pursuit_process": {
+						"denied": 1,
+						"denied_budget": 0,
+						"denied_fairness": 1,
+						"denied_unrunnable": 0,
+						"inclusive_usec": 210,
+						"last_denial": {
+							"blocker_service_epoch": 51,
+							"blocker_service_sequence": 54,
+							"blocking_category": "resource_completion:-9223371706075183452",
+							"epoch": 54,
+							"inflight_usec": 0,
+							"own_service_epoch": 54,
+							"own_service_sequence": 55,
+							"reason": "fairness",
+							"remaining_usec": 990,
+							"spent_usec": 210
+						},
+						"maximum_quantum_usec": 210,
+						"necessary_scopes": 0,
+						"scopes": 1,
+						"self_usec": 210
+					}
+				},
+				"epoch": 54,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"monster_passive_wakeup": {
+						"oldest_age_frames": 10,
+						"pending_epoch": 44,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 3
+					},
+					"monster_pursuit_process": {
+						"oldest_age_frames": 8,
+						"pending_epoch": 46,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 0
+					},
+					"resource_completion:-9223371706075183452": {
+						"oldest_age_frames": 53,
+						"pending_epoch": 1,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 3
+					}
+				},
+				"spent_usec": 210
+			},
+			"phase": "damage",
+			"process_epoch": 54
+		},
+		{
+			"actors": [
+				{
+					"damage_dirty": false,
+					"hp": 14,
+					"id": 463755808914,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 15,
+					"id": 464108130468,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 464460452022,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 22,
+					"id": 464812773576,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 466574381346,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 466926702900,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 467279024454,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 27,
+					"id": 469225181528,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 469611057524,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": true
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 469963379078,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 470315700632,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 470668022186,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": true
+				}
+			],
+			"frame": 9,
+			"frame_budget": {
+				"categories": {},
+				"epoch": 55,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"monster_passive_wakeup": {
+						"oldest_age_frames": 11,
+						"pending_epoch": 44,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					},
+					"monster_pursuit_process": {
+						"oldest_age_frames": 9,
+						"pending_epoch": 46,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					},
+					"resource_completion:-9223371706075183452": {
+						"oldest_age_frames": 54,
+						"pending_epoch": 1,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					}
+				},
+				"spent_usec": 0
+			},
+			"phase": "damage",
+			"process_epoch": 55
+		},
+		{
+			"actors": [
+				{
+					"damage_dirty": false,
+					"hp": 14,
+					"id": 463755808914,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 15,
+					"id": 464108130468,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 464460452022,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 22,
+					"id": 464812773576,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 466574381346,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 466926702900,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 467279024454,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 469225181528,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 469611057524,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": true
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 469963379078,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 470315700632,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 470668022186,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": true
+				}
+			],
+			"frame": 10,
+			"frame_budget": {
+				"categories": {
+					"monster_pursuit_process": {
+						"denied": 1,
+						"denied_budget": 0,
+						"denied_fairness": 1,
+						"denied_unrunnable": 0,
+						"inclusive_usec": 208,
+						"last_denial": {
+							"blocker_service_epoch": 54,
+							"blocker_service_sequence": 57,
+							"blocking_category": "resource_completion:-9223371706075183452",
+							"epoch": 56,
+							"inflight_usec": 0,
+							"own_service_epoch": 56,
+							"own_service_sequence": 58,
+							"reason": "fairness",
+							"remaining_usec": 992,
+							"spent_usec": 208
+						},
+						"maximum_quantum_usec": 208,
+						"necessary_scopes": 0,
+						"scopes": 1,
+						"self_usec": 208
+					}
+				},
+				"epoch": 56,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"monster_passive_wakeup": {
+						"oldest_age_frames": 12,
+						"pending_epoch": 44,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 2
+					},
+					"monster_pursuit_process": {
+						"oldest_age_frames": 10,
+						"pending_epoch": 46,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 0
+					},
+					"resource_completion:-9223371706075183452": {
+						"oldest_age_frames": 55,
+						"pending_epoch": 1,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 2
+					}
+				},
+				"spent_usec": 208
+			},
+			"phase": "damage",
+			"process_epoch": 56
+		},
+		{
+			"actors": [
+				{
+					"damage_dirty": false,
+					"hp": 14,
+					"id": 463755808914,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 15,
+					"id": 464108130468,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 464460452022,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 22,
+					"id": 464812773576,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 466574381346,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 466926702900,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 467279024454,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 469225181528,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 469611057524,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": true
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 469963379078,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 470315700632,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 470668022186,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": true
+				}
+			],
+			"frame": 11,
+			"frame_budget": {
+				"categories": {},
+				"epoch": 57,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"monster_passive_wakeup": {
+						"oldest_age_frames": 13,
+						"pending_epoch": 44,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					},
+					"monster_pursuit_process": {
+						"oldest_age_frames": 11,
+						"pending_epoch": 46,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					},
+					"resource_completion:-9223371706075183452": {
+						"oldest_age_frames": 56,
+						"pending_epoch": 1,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					}
+				},
+				"spent_usec": 0
+			},
+			"phase": "damage",
+			"process_epoch": 57
+		},
+		{
+			"actors": [
+				{
+					"damage_dirty": false,
+					"hp": 14,
+					"id": 463755808914,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 15,
+					"id": 464108130468,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 464460452022,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 22,
+					"id": 464812773576,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 466574381346,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 466926702900,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 467279024454,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 469225181528,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 469611057524,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": true
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 469963379078,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 470315700632,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 470668022186,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": true
+				}
+			],
+			"frame": 12,
+			"frame_budget": {
+				"categories": {},
+				"epoch": 58,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"monster_passive_wakeup": {
+						"oldest_age_frames": 14,
+						"pending_epoch": 44,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 2
+					},
+					"monster_pursuit_process": {
+						"oldest_age_frames": 12,
+						"pending_epoch": 46,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 2
+					},
+					"resource_completion:-9223371706075183452": {
+						"oldest_age_frames": 57,
+						"pending_epoch": 1,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 2
+					}
+				},
+				"spent_usec": 0
+			},
+			"phase": "damage",
+			"process_epoch": 58
+		},
+		{
+			"actors": [
+				{
+					"damage_dirty": false,
+					"hp": 14,
+					"id": 463755808914,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 15,
+					"id": 464108130468,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 464460452022,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 22,
+					"id": 464812773576,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 466574381346,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 466926702900,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 467279024454,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 469225181528,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 14,
+					"id": 469611057524,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 469963379078,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 470315700632,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 470668022186,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": true
+				}
+			],
+			"frame": 13,
+			"frame_budget": {
+				"categories": {
+					"monster_pursuit_process": {
+						"denied": 1,
+						"denied_budget": 0,
+						"denied_fairness": 1,
+						"denied_unrunnable": 0,
+						"inclusive_usec": 211,
+						"last_denial": {
+							"blocker_service_epoch": 56,
+							"blocker_service_sequence": 60,
+							"blocking_category": "resource_completion:-9223371706075183452",
+							"epoch": 59,
+							"inflight_usec": 0,
+							"own_service_epoch": 59,
+							"own_service_sequence": 61,
+							"reason": "fairness",
+							"remaining_usec": 989,
+							"spent_usec": 211
+						},
+						"maximum_quantum_usec": 211,
+						"necessary_scopes": 0,
+						"scopes": 1,
+						"self_usec": 211
+					}
+				},
+				"epoch": 59,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"monster_passive_wakeup": {
+						"oldest_age_frames": 15,
+						"pending_epoch": 44,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 3
+					},
+					"monster_pursuit_process": {
+						"oldest_age_frames": 13,
+						"pending_epoch": 46,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 0
+					},
+					"resource_completion:-9223371706075183452": {
+						"oldest_age_frames": 58,
+						"pending_epoch": 1,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 3
+					}
+				},
+				"spent_usec": 211
+			},
+			"phase": "damage",
+			"process_epoch": 59
+		},
+		{
+			"actors": [
+				{
+					"damage_dirty": false,
+					"hp": 14,
+					"id": 463755808914,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 15,
+					"id": 464108130468,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 464460452022,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 22,
+					"id": 464812773576,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 466574381346,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 466926702900,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 467279024454,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 469225181528,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 14,
+					"id": 469611057524,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 469963379078,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 470315700632,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 470668022186,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": true
+				}
+			],
+			"frame": 14,
+			"frame_budget": {
+				"categories": {},
+				"epoch": 60,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"monster_passive_wakeup": {
+						"oldest_age_frames": 16,
+						"pending_epoch": 44,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					},
+					"monster_pursuit_process": {
+						"oldest_age_frames": 14,
+						"pending_epoch": 46,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					},
+					"resource_completion:-9223371706075183452": {
+						"oldest_age_frames": 59,
+						"pending_epoch": 1,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					}
+				},
+				"spent_usec": 0
+			},
+			"phase": "damage",
+			"process_epoch": 60
+		},
+		{
+			"actors": [
+				{
+					"damage_dirty": false,
+					"hp": 14,
+					"id": 463755808914,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 15,
+					"id": 464108130468,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 464460452022,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 22,
+					"id": 464812773576,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 466574381346,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 466926702900,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 467279024454,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 469225181528,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 14,
+					"id": 469611057524,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 14,
+					"id": 469963379078,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 470315700632,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 470668022186,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": true
+				}
+			],
+			"frame": 15,
+			"frame_budget": {
+				"categories": {
+					"monster_pursuit_process": {
+						"denied": 1,
+						"denied_budget": 0,
+						"denied_fairness": 1,
+						"denied_unrunnable": 0,
+						"inclusive_usec": 223,
+						"last_denial": {
+							"blocker_service_epoch": 59,
+							"blocker_service_sequence": 63,
+							"blocking_category": "resource_completion:-9223371706075183452",
+							"epoch": 61,
+							"inflight_usec": 0,
+							"own_service_epoch": 61,
+							"own_service_sequence": 64,
+							"reason": "fairness",
+							"remaining_usec": 977,
+							"spent_usec": 223
+						},
+						"maximum_quantum_usec": 223,
+						"necessary_scopes": 0,
+						"scopes": 1,
+						"self_usec": 223
+					}
+				},
+				"epoch": 61,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"monster_passive_wakeup": {
+						"oldest_age_frames": 17,
+						"pending_epoch": 44,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 2
+					},
+					"monster_pursuit_process": {
+						"oldest_age_frames": 15,
+						"pending_epoch": 46,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 0
+					},
+					"resource_completion:-9223371706075183452": {
+						"oldest_age_frames": 60,
+						"pending_epoch": 1,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 2
+					}
+				},
+				"spent_usec": 223
+			},
+			"phase": "damage",
+			"process_epoch": 61
+		},
+		{
+			"actors": [
+				{
+					"damage_dirty": false,
+					"hp": 14,
+					"id": 463755808914,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 15,
+					"id": 464108130468,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 464460452022,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 22,
+					"id": 464812773576,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 466574381346,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 466926702900,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 467279024454,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 469225181528,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 14,
+					"id": 469611057524,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 14,
+					"id": 469963379078,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 470315700632,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 470668022186,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": true
+				}
+			],
+			"frame": 16,
+			"frame_budget": {
+				"categories": {},
+				"epoch": 62,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"monster_passive_wakeup": {
+						"oldest_age_frames": 18,
+						"pending_epoch": 44,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					},
+					"monster_pursuit_process": {
+						"oldest_age_frames": 16,
+						"pending_epoch": 46,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					},
+					"resource_completion:-9223371706075183452": {
+						"oldest_age_frames": 61,
+						"pending_epoch": 1,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					}
+				},
+				"spent_usec": 0
+			},
+			"phase": "damage",
+			"process_epoch": 62
+		},
+		{
+			"actors": [
+				{
+					"damage_dirty": false,
+					"hp": 14,
+					"id": 463755808914,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 15,
+					"id": 464108130468,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 464460452022,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 22,
+					"id": 464812773576,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 466574381346,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 466926702900,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 467279024454,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 469225181528,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 14,
+					"id": 469611057524,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 14,
+					"id": 469963379078,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 470315700632,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 470668022186,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": true
+				}
+			],
+			"frame": 17,
+			"frame_budget": {
+				"categories": {},
+				"epoch": 63,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"monster_passive_wakeup": {
+						"oldest_age_frames": 19,
+						"pending_epoch": 44,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 2
+					},
+					"monster_pursuit_process": {
+						"oldest_age_frames": 17,
+						"pending_epoch": 46,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 2
+					},
+					"resource_completion:-9223371706075183452": {
+						"oldest_age_frames": 62,
+						"pending_epoch": 1,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 2
+					}
+				},
+				"spent_usec": 0
+			},
+			"phase": "damage",
+			"process_epoch": 63
+		},
+		{
+			"actors": [
+				{
+					"damage_dirty": false,
+					"hp": 14,
+					"id": 463755808914,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 15,
+					"id": 464108130468,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 464460452022,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 22,
+					"id": 464812773576,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 466574381346,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 466926702900,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 467279024454,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 469225181528,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 14,
+					"id": 469611057524,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 14,
+					"id": 469963379078,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 14,
+					"id": 470315700632,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 470668022186,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": true
+				}
+			],
+			"frame": 18,
+			"frame_budget": {
+				"categories": {
+					"monster_pursuit_process": {
+						"denied": 1,
+						"denied_budget": 0,
+						"denied_fairness": 1,
+						"denied_unrunnable": 0,
+						"inclusive_usec": 212,
+						"last_denial": {
+							"blocker_service_epoch": 61,
+							"blocker_service_sequence": 66,
+							"blocking_category": "resource_completion:-9223371706075183452",
+							"epoch": 64,
+							"inflight_usec": 0,
+							"own_service_epoch": 64,
+							"own_service_sequence": 67,
+							"reason": "fairness",
+							"remaining_usec": 988,
+							"spent_usec": 212
+						},
+						"maximum_quantum_usec": 212,
+						"necessary_scopes": 0,
+						"scopes": 1,
+						"self_usec": 212
+					}
+				},
+				"epoch": 64,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"monster_passive_wakeup": {
+						"oldest_age_frames": 20,
+						"pending_epoch": 44,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 3
+					},
+					"monster_pursuit_process": {
+						"oldest_age_frames": 18,
+						"pending_epoch": 46,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 0
+					},
+					"resource_completion:-9223371706075183452": {
+						"oldest_age_frames": 63,
+						"pending_epoch": 1,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 3
+					}
+				},
+				"spent_usec": 212
+			},
+			"phase": "damage",
+			"process_epoch": 64
+		},
+		{
+			"actors": [
+				{
+					"damage_dirty": false,
+					"hp": 14,
+					"id": 463755808914,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 15,
+					"id": 464108130468,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 464460452022,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 22,
+					"id": 464812773576,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 466574381346,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 466926702900,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 467279024454,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 469225181528,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 14,
+					"id": 469611057524,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 14,
+					"id": 469963379078,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 14,
+					"id": 470315700632,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": true,
+					"hp": 14,
+					"id": 470668022186,
+					"physics": true,
+					"sleep": false,
+					"target": 0,
+					"wake_pending": true
+				}
+			],
+			"frame": 19,
+			"frame_budget": {
+				"categories": {},
+				"epoch": 65,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"monster_passive_wakeup": {
+						"oldest_age_frames": 21,
+						"pending_epoch": 44,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					},
+					"monster_pursuit_process": {
+						"oldest_age_frames": 19,
+						"pending_epoch": 46,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					},
+					"resource_completion:-9223371706075183452": {
+						"oldest_age_frames": 64,
+						"pending_epoch": 1,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					}
+				},
+				"spent_usec": 0
+			},
+			"phase": "damage",
+			"process_epoch": 65
+		},
+		{
+			"actors": [
+				{
+					"damage_dirty": false,
+					"hp": 14,
+					"id": 463755808914,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 15,
+					"id": 464108130468,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 464460452022,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 22,
+					"id": 464812773576,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 466574381346,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 466926702900,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 467279024454,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 27,
+					"id": 469225181528,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 14,
+					"id": 469611057524,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 14,
+					"id": 469963379078,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 14,
+					"id": 470315700632,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				},
+				{
+					"damage_dirty": false,
+					"hp": 14,
+					"id": 470668022186,
+					"physics": true,
+					"sleep": false,
+					"target": 331148691178,
+					"wake_pending": false
+				}
+			],
+			"frame": 20,
+			"frame_budget": {
+				"categories": {
+					"monster_pursuit_process": {
+						"denied": 0,
+						"denied_budget": 0,
+						"denied_fairness": 0,
+						"denied_unrunnable": 0,
+						"inclusive_usec": 188,
+						"last_denial": {},
+						"maximum_quantum_usec": 188,
+						"necessary_scopes": 0,
+						"scopes": 1,
+						"self_usec": 188
+					}
+				},
+				"epoch": 66,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"monster_passive_wakeup": {
+						"oldest_age_frames": 22,
+						"pending_epoch": 44,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 2
+					},
+					"monster_pursuit_process": {
+						"oldest_age_frames": 20,
+						"pending_epoch": 46,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 0
+					},
+					"resource_completion:-9223371706075183452": {
+						"oldest_age_frames": 65,
+						"pending_epoch": 1,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 2
+					}
+				},
+				"spent_usec": 188
+			},
+			"phase": "damage",
+			"process_epoch": 66
+		}
+	],
+	"ground_tick": {
+		"callback": "GameRoot._apply_canonical_ground_tick",
+		"cohort": 12,
+		"immediate_target_count": 0,
+		"powers": {
+			"463755808914": 8,
+			"464108130468": 8,
+			"464460452022": 9,
+			"464812773576": 8,
+			"466574381346": 9,
+			"466926702900": 9,
+			"467279024454": 9,
+			"469225181528": 9,
+			"469611057524": 8,
+			"469963379078": 8,
+			"470315700632": 8,
+			"470668022186": 8
+		}
+	},
+	"setup": {
+		"cohort_prepared": 12,
+		"cohort_requested": 12,
+		"generation": 1,
+		"map_id": 910001,
+		"nonstealth_player": true,
+		"player_ground": [
+			43.5,
+			36.5
+		]
+	},
+	"status": "FAIL",
+	"wake_elapsed_usec": 1101,
+	"wake_target_counts": [
+		{
+			"cohort": 12,
+			"process_frame": 1,
+			"target_count": 0
+		}
+	]
+}
