@@ -1,0 +1,4 @@
+SCRIPT ERROR: Assertion failed: same-bucket movement must not re-home the entry
+   at: _run (res://tests/projectile_spatial_index_lifecycle_test.gd:28)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/projectile_spatial_index_lifecycle_test.gd:28)

@@ -1,0 +1,911 @@
+{
+  "schema": "B02_PROJECTILE_EVIDENCE_MANIFEST_20261010",
+  "status": "PASS",
+  "generated_at": "2026-10-10",
+  "source_runs": {
+    "direct19": {
+      "status": "FAIL",
+      "runner": "raw/direct19_projectile/runner_results_adhoc_20261009_233606_648_6208.json",
+      "git_head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "note": "parse/early-script failure retained",
+      "source_content_sha256": "610ace48ee4f292cf9b5e4d8622314be3875dbe4c6a3f74070571d25cce43549",
+      "source_tree": "c80aae1bdbc0496e39bf92d356abefb8c2d67e96",
+      "freeze_json": "B02_PROJECTILE_FREEZE_19.json"
+    },
+    "direct20": {
+      "status": "PASS",
+      "runner": "raw/direct20_projectile_parse_fix/runner_results_adhoc_20261009_233758_330_19988.json",
+      "git_head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "framework_run_id": "3b4187c1-ee1b-4534-9c74-6d14a1559e7d",
+      "source_content_sha256": "b9ddeca1fc0f6eddf4bb2a6ac6850ef6f63aa7d056c6d3c016f2c754ae82441d",
+      "source_tree": "685ca788178dbad4920e65ea2f4333259151843f",
+      "freeze_json": "B02_PROJECTILE_FREEZE_20.json"
+    },
+    "related21": {
+      "status": "FAIL",
+      "runner": "raw/related21_projectile_boundaries/runner_results_projectile_spatial_critical_20261009_234113_846_8376.json",
+      "git_head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "summary": "9 PASS, 3 FAIL",
+      "source_content_sha256": "b9ddeca1fc0f6eddf4bb2a6ac6850ef6f63aa7d056c6d3c016f2c754ae82441d",
+      "source_tree": null,
+      "source_tree_status": "MISSING"
+    },
+    "direct22": {
+      "status": "FAIL",
+      "runner": "raw/direct22_projectile_fixture_contract_fix/runner_results_adhoc_20261009_235905_410_12472.json",
+      "git_head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "summary": "lifecycle/query PASS, snapshot fixture FAIL",
+      "source_content_sha256": "ae8f91df355f519242c9ea03363beec15f36182a346059bef4a891e4c8a3acaf",
+      "source_tree": "5d194efdfc982b28bb81d12de2418b0533ef7f74",
+      "freeze_json": "B02_COMBINED_FREEZE_22.json"
+    },
+    "direct23": {
+      "status": "PASS",
+      "runner": "raw/direct23_snapshot_and_visual_negative/runner_results_adhoc_20261010_000206_706_23136.json",
+      "git_head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "summary": "projectile snapshot PASS; visual negative separate FAIL",
+      "source_content_sha256": "e9f0be513dd142adb1f4c601ff8cabaf58aa5e62b4bfde428f9a4140da95a74c",
+      "source_tree": "0eac359b5aeeb12318a6de5492633e82db6c4448",
+      "freeze_json": "B02_COMBINED_FREEZE_23.json"
+    }
+  },
+  "current_source_fingerprints": {
+    "scripts/skill_projectile.gd": "CA91A0545BBF80A9EBA2EE617DEE79010B6CBDABBAA3AD24B7468052D51F88EF",
+    "scripts/runtime_combat_spatial_index.gd": "1FA26F141042DA16FC3CADC15BF329298212BDD5466DEBE96E282FDDB084F081",
+    "tests/framework/projectile_first_contact_order_20261009_test.gd": "19AF24E757DA7BCD6A2DDA52886BE9E8206BAE2B7C74AD9DC1646B1809E294C0",
+    "tests/projectile_spatial_index_lifecycle_test.gd": "B61596F516E17B591B1A25B6EC446944E42E4B6C29346C9A62D1ECAA6CF61670",
+    "tests/projectile_snapshot_single_build_per_step_test.gd": "832538CA4F98AA3B7736F48988E473A41ABAC0C7694ABCB8A3FEA028A1F0D30F",
+    "tests/projectile_spatial_index_query_before_enemy_tick_test.gd": "43E7E26975B3A4433A9645A6E0D4C6E0432DE28CDD44A5EE800CD645473D0D4F"
+  },
+  "evidence_files": [
+    {
+      "path": "raw/direct19_projectile/evidence/8edbc215-05cf-476d-aa23-2c7b38f47966/native_handoffs.json",
+      "bytes": 461,
+      "sha256": "40D958264A7982308F5A0A9DC6BBB64EE065F5B016C3E53CFBB63F03148FCCAA"
+    },
+    {
+      "path": "raw/direct19_projectile/evidence/8edbc215-05cf-476d-aa23-2c7b38f47966/native_result.json",
+      "bytes": 1052,
+      "sha256": "47A0D4816D052A1095C3AD131D22B748AC36AB3233D7B4E122C22BA3E78A7E47"
+    },
+    {
+      "path": "raw/direct19_projectile/evidence/8edbc215-05cf-476d-aa23-2c7b38f47966/projectile_first_contact_order_20261009_test.godot.log",
+      "bytes": 1015,
+      "sha256": "7C7BB25402373458EBBA6276994DE17A00BD02F0E66C1018E7BC4993F25E4E8A"
+    },
+    {
+      "path": "raw/direct19_projectile/evidence/8edbc215-05cf-476d-aa23-2c7b38f47966/projectile_first_contact_order_20261009_test.stderr.log",
+      "bytes": 954,
+      "sha256": "FCFCE59A15C2F831E0685B830A91585379EE82D2058DEF1CA1F3A910B779DB53"
+    },
+    {
+      "path": "raw/direct19_projectile/evidence/8edbc215-05cf-476d-aa23-2c7b38f47966/projectile_first_contact_order_20261009_test.stdout.log",
+      "bytes": 73,
+      "sha256": "BB3BCF7181E550FE37F9235C4AECF24A81B757EDDFEFF554D88E7974FEB2ED1D"
+    },
+    {
+      "path": "raw/direct19_projectile/logs/projectile_first_contact_order_20261009_test.godot.log",
+      "bytes": 1015,
+      "sha256": "7C7BB25402373458EBBA6276994DE17A00BD02F0E66C1018E7BC4993F25E4E8A"
+    },
+    {
+      "path": "raw/direct19_projectile/logs/projectile_first_contact_order_20261009_test.stderr.log",
+      "bytes": 954,
+      "sha256": "FCFCE59A15C2F831E0685B830A91585379EE82D2058DEF1CA1F3A910B779DB53"
+    },
+    {
+      "path": "raw/direct19_projectile/logs/projectile_first_contact_order_20261009_test.stdout.log",
+      "bytes": 73,
+      "sha256": "BB3BCF7181E550FE37F9235C4AECF24A81B757EDDFEFF554D88E7974FEB2ED1D"
+    },
+    {
+      "path": "raw/direct19_projectile/logs/runner_results_adhoc_20261009_233606_648_6208.json",
+      "bytes": 1699,
+      "sha256": "A11CB37997EDE1C2D5291EFBB9E378D35C74CD7A3356597DB757F678AC341602"
+    },
+    {
+      "path": "raw/direct19_projectile/runner_results_adhoc_20261009_233606_648_6208.json",
+      "bytes": 1699,
+      "sha256": "A11CB37997EDE1C2D5291EFBB9E378D35C74CD7A3356597DB757F678AC341602"
+    },
+    {
+      "path": "raw/direct20_projectile_parse_fix/evidence/3b4187c1-ee1b-4534-9c74-6d14a1559e7d/native_handoffs.json",
+      "bytes": 933,
+      "sha256": "3E16C41762A05A38D65A558D1D6534A49C03609931832B6862F7532197B334C9"
+    },
+    {
+      "path": "raw/direct20_projectile_parse_fix/evidence/3b4187c1-ee1b-4534-9c74-6d14a1559e7d/native_result.json",
+      "bytes": 914,
+      "sha256": "E8DF6A234E9A579DA6CD675C901D82D17059740F39EB12CF5048BBE49020D00D"
+    },
+    {
+      "path": "raw/direct20_projectile_parse_fix/evidence/3b4187c1-ee1b-4534-9c74-6d14a1559e7d/projectile_first_contact_order_20261009_test.godot.log",
+      "bytes": 236,
+      "sha256": "69D2F660F447083721816E0D546FDB55C75AFA7FAD93C46CFEBF2E047FCA3B8F"
+    },
+    {
+      "path": "raw/direct20_projectile_parse_fix/evidence/3b4187c1-ee1b-4534-9c74-6d14a1559e7d/projectile_first_contact_order_20261009_test.result.json",
+      "bytes": 2296,
+      "sha256": "E39E49CCB372B2183F2DE1E519453F1D517AF3308C32DDF58DC580D731CA7BA6"
+    },
+    {
+      "path": "raw/direct20_projectile_parse_fix/evidence/3b4187c1-ee1b-4534-9c74-6d14a1559e7d/projectile_first_contact_order_20261009_test.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "raw/direct20_projectile_parse_fix/evidence/3b4187c1-ee1b-4534-9c74-6d14a1559e7d/projectile_first_contact_order_20261009_test.stdout.log",
+      "bytes": 240,
+      "sha256": "8D0DC9C20089A83E0ACB6226B63A48757E54E1C558E8EA390403583CF8988612"
+    },
+    {
+      "path": "raw/direct20_projectile_parse_fix/logs/projectile_first_contact_order_20261009_test.godot.log",
+      "bytes": 236,
+      "sha256": "69D2F660F447083721816E0D546FDB55C75AFA7FAD93C46CFEBF2E047FCA3B8F"
+    },
+    {
+      "path": "raw/direct20_projectile_parse_fix/logs/projectile_first_contact_order_20261009_test.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "raw/direct20_projectile_parse_fix/logs/projectile_first_contact_order_20261009_test.stdout.log",
+      "bytes": 240,
+      "sha256": "8D0DC9C20089A83E0ACB6226B63A48757E54E1C558E8EA390403583CF8988612"
+    },
+    {
+      "path": "raw/direct20_projectile_parse_fix/logs/runner_results_adhoc_20261009_233758_330_19988.json",
+      "bytes": 1562,
+      "sha256": "41EF9778BEF7826F63C3BC99527110C8F927FA6E6F06C8EABCCED48EE55BADC9"
+    },
+    {
+      "path": "raw/direct20_projectile_parse_fix/runner_results_adhoc_20261009_233758_330_19988.json",
+      "bytes": 1562,
+      "sha256": "41EF9778BEF7826F63C3BC99527110C8F927FA6E6F06C8EABCCED48EE55BADC9"
+    },
+    {
+      "path": "raw/direct22_projectile_fixture_contract_fix/evidence/029492c9-deb5-4d49-b058-2a66fb3d67a6/native_handoffs.json",
+      "bytes": 462,
+      "sha256": "EFA35736854A96B7F11A48E2CA5C2803F0B618BC4253A40E43AC2AFB5B09BEF8"
+    },
+    {
+      "path": "raw/direct22_projectile_fixture_contract_fix/evidence/029492c9-deb5-4d49-b058-2a66fb3d67a6/native_result.json",
+      "bytes": 858,
+      "sha256": "9365AD0386F8AF127C387744138A818D500DA9B23367EBFC03178122ED756A3A"
+    },
+    {
+      "path": "raw/direct22_projectile_fixture_contract_fix/evidence/029492c9-deb5-4d49-b058-2a66fb3d67a6/projectile_spatial_index_lifecycle_test.godot.log",
+      "bytes": 271,
+      "sha256": "62FD4E4B599C38387AAF41671CB6557E64940A1480D2FA68F77EA400A043650E"
+    },
+    {
+      "path": "raw/direct22_projectile_fixture_contract_fix/evidence/029492c9-deb5-4d49-b058-2a66fb3d67a6/projectile_spatial_index_lifecycle_test.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "raw/direct22_projectile_fixture_contract_fix/evidence/029492c9-deb5-4d49-b058-2a66fb3d67a6/projectile_spatial_index_lifecycle_test.stdout.log",
+      "bytes": 275,
+      "sha256": "2EB3F70D2928EDC2E6FC5CA95929BC91337C84F96178D591CE9D0B4B0BE6A54E"
+    },
+    {
+      "path": "raw/direct22_projectile_fixture_contract_fix/evidence/35a01c5c-d45f-46f5-a083-4ed65cfdcf47/native_handoffs.json",
+      "bytes": 462,
+      "sha256": "EFA35736854A96B7F11A48E2CA5C2803F0B618BC4253A40E43AC2AFB5B09BEF8"
+    },
+    {
+      "path": "raw/direct22_projectile_fixture_contract_fix/evidence/35a01c5c-d45f-46f5-a083-4ed65cfdcf47/native_result.json",
+      "bytes": 885,
+      "sha256": "E2BB7D1F5636DC3FB55F48913BD6E5A4AC37B0F2B222C6D5448BDFA571EB5EBA"
+    },
+    {
+      "path": "raw/direct22_projectile_fixture_contract_fix/evidence/35a01c5c-d45f-46f5-a083-4ed65cfdcf47/projectile_spatial_index_query_before_enemy_tick_test.godot.log",
+      "bytes": 224,
+      "sha256": "897F5E3C4E9CA5592C76CCABB2A665EF37AE0604D3AA57BD4524F16B84300FF9"
+    },
+    {
+      "path": "raw/direct22_projectile_fixture_contract_fix/evidence/35a01c5c-d45f-46f5-a083-4ed65cfdcf47/projectile_spatial_index_query_before_enemy_tick_test.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "raw/direct22_projectile_fixture_contract_fix/evidence/35a01c5c-d45f-46f5-a083-4ed65cfdcf47/projectile_spatial_index_query_before_enemy_tick_test.stdout.log",
+      "bytes": 228,
+      "sha256": "286558DF6E09D85345FB21511FE05FD8BCA88765AA04213AC52A8504A64C9A06"
+    },
+    {
+      "path": "raw/direct22_projectile_fixture_contract_fix/evidence/bdb9318f-8f60-471a-b92c-3287d6ac9628/native_handoffs.json",
+      "bytes": 462,
+      "sha256": "EFA35736854A96B7F11A48E2CA5C2803F0B618BC4253A40E43AC2AFB5B09BEF8"
+    },
+    {
+      "path": "raw/direct22_projectile_fixture_contract_fix/evidence/bdb9318f-8f60-471a-b92c-3287d6ac9628/native_result.json",
+      "bytes": 982,
+      "sha256": "CB45112495DF8E302A5272BDD69931366787E64B1F149AE4B80AF76BA1BC58AE"
+    },
+    {
+      "path": "raw/direct22_projectile_fixture_contract_fix/evidence/bdb9318f-8f60-471a-b92c-3287d6ac9628/projectile_snapshot_single_build_per_step_test.godot.log",
+      "bytes": 465,
+      "sha256": "345E4F316182F0A4020E81A53D7DC2BF0B3ADEB34CA6F17476D8386F3D10AA61"
+    },
+    {
+      "path": "raw/direct22_projectile_fixture_contract_fix/evidence/bdb9318f-8f60-471a-b92c-3287d6ac9628/projectile_snapshot_single_build_per_step_test.stderr.log",
+      "bytes": 299,
+      "sha256": "4C8946CCB0ACCBF642CB3342A9B4090B83CB72D765D83425CFCC083811F3567F"
+    },
+    {
+      "path": "raw/direct22_projectile_fixture_contract_fix/evidence/bdb9318f-8f60-471a-b92c-3287d6ac9628/projectile_snapshot_single_build_per_step_test.stdout.log",
+      "bytes": 173,
+      "sha256": "0F6EB4C7547500684FE45C1BFF6E37D2E359CCA519623DD7FC7F41461623693F"
+    },
+    {
+      "path": "raw/direct22_projectile_fixture_contract_fix/logs/projectile_snapshot_single_build_per_step_test.godot.log",
+      "bytes": 465,
+      "sha256": "345E4F316182F0A4020E81A53D7DC2BF0B3ADEB34CA6F17476D8386F3D10AA61"
+    },
+    {
+      "path": "raw/direct22_projectile_fixture_contract_fix/logs/projectile_snapshot_single_build_per_step_test.stderr.log",
+      "bytes": 299,
+      "sha256": "4C8946CCB0ACCBF642CB3342A9B4090B83CB72D765D83425CFCC083811F3567F"
+    },
+    {
+      "path": "raw/direct22_projectile_fixture_contract_fix/logs/projectile_snapshot_single_build_per_step_test.stdout.log",
+      "bytes": 173,
+      "sha256": "0F6EB4C7547500684FE45C1BFF6E37D2E359CCA519623DD7FC7F41461623693F"
+    },
+    {
+      "path": "raw/direct22_projectile_fixture_contract_fix/logs/projectile_spatial_index_lifecycle_test.godot.log",
+      "bytes": 271,
+      "sha256": "62FD4E4B599C38387AAF41671CB6557E64940A1480D2FA68F77EA400A043650E"
+    },
+    {
+      "path": "raw/direct22_projectile_fixture_contract_fix/logs/projectile_spatial_index_lifecycle_test.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "raw/direct22_projectile_fixture_contract_fix/logs/projectile_spatial_index_lifecycle_test.stdout.log",
+      "bytes": 275,
+      "sha256": "2EB3F70D2928EDC2E6FC5CA95929BC91337C84F96178D591CE9D0B4B0BE6A54E"
+    },
+    {
+      "path": "raw/direct22_projectile_fixture_contract_fix/logs/projectile_spatial_index_query_before_enemy_tick_test.godot.log",
+      "bytes": 224,
+      "sha256": "897F5E3C4E9CA5592C76CCABB2A665EF37AE0604D3AA57BD4524F16B84300FF9"
+    },
+    {
+      "path": "raw/direct22_projectile_fixture_contract_fix/logs/projectile_spatial_index_query_before_enemy_tick_test.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "raw/direct22_projectile_fixture_contract_fix/logs/projectile_spatial_index_query_before_enemy_tick_test.stdout.log",
+      "bytes": 228,
+      "sha256": "286558DF6E09D85345FB21511FE05FD8BCA88765AA04213AC52A8504A64C9A06"
+    },
+    {
+      "path": "raw/direct22_projectile_fixture_contract_fix/logs/runner_results_adhoc_20261009_235905_410_12472.json",
+      "bytes": 3559,
+      "sha256": "110C0967D6A5BEB18CBB033B234E26463FA05A2F2CE245C3537A01AE139C1104"
+    },
+    {
+      "path": "raw/direct22_projectile_fixture_contract_fix/runner_results_adhoc_20261009_235905_410_12472.json",
+      "bytes": 3559,
+      "sha256": "110C0967D6A5BEB18CBB033B234E26463FA05A2F2CE245C3537A01AE139C1104"
+    },
+    {
+      "path": "raw/direct23_snapshot_and_visual_negative/evidence/8069ab2f-698a-4ffa-a60b-a69d7774750b/caster_visual_terminal_failure_contract_20261009_test.godot.log",
+      "bytes": 524,
+      "sha256": "7CE7D14E3A2443BA8CFF88E4AFB225FD25AEEFE42B8490F6593E11C2A37D5465"
+    },
+    {
+      "path": "raw/direct23_snapshot_and_visual_negative/evidence/8069ab2f-698a-4ffa-a60b-a69d7774750b/caster_visual_terminal_failure_contract_20261009_test.stderr.log",
+      "bytes": 457,
+      "sha256": "C15B1CC0FB6F55B68AA7870F8E4305C510B6FD4662F7FD58B388B2958B11E26C"
+    },
+    {
+      "path": "raw/direct23_snapshot_and_visual_negative/evidence/8069ab2f-698a-4ffa-a60b-a69d7774750b/caster_visual_terminal_failure_contract_20261009_test.stdout.log",
+      "bytes": 73,
+      "sha256": "BB3BCF7181E550FE37F9235C4AECF24A81B757EDDFEFF554D88E7974FEB2ED1D"
+    },
+    {
+      "path": "raw/direct23_snapshot_and_visual_negative/evidence/8069ab2f-698a-4ffa-a60b-a69d7774750b/native_handoffs.json",
+      "bytes": 458,
+      "sha256": "2164543724C89A483D1C15650C57BB6CA88C6E00DD545A918B1485635A303ACE"
+    },
+    {
+      "path": "raw/direct23_snapshot_and_visual_negative/evidence/8069ab2f-698a-4ffa-a60b-a69d7774750b/native_result.json",
+      "bytes": 1065,
+      "sha256": "AF782C5FC14B9911F74C4C3EB07F691BE7D4F347DD5980F73F09BFA4D355D644"
+    },
+    {
+      "path": "raw/direct23_snapshot_and_visual_negative/evidence/af49f2d1-fabf-45b9-b6d1-93c44300c060/native_handoffs.json",
+      "bytes": 458,
+      "sha256": "2164543724C89A483D1C15650C57BB6CA88C6E00DD545A918B1485635A303ACE"
+    },
+    {
+      "path": "raw/direct23_snapshot_and_visual_negative/evidence/af49f2d1-fabf-45b9-b6d1-93c44300c060/native_result.json",
+      "bytes": 867,
+      "sha256": "4026B1691CDD9D956BA021124B1E83D29508179E1A1C61CE9BE5E464E701DD0B"
+    },
+    {
+      "path": "raw/direct23_snapshot_and_visual_negative/evidence/af49f2d1-fabf-45b9-b6d1-93c44300c060/projectile_snapshot_single_build_per_step_test.godot.log",
+      "bytes": 251,
+      "sha256": "4952610C448EBE7EE66676B3232903D40BFDFDCD38D0139A6C40E37B75DE31B6"
+    },
+    {
+      "path": "raw/direct23_snapshot_and_visual_negative/evidence/af49f2d1-fabf-45b9-b6d1-93c44300c060/projectile_snapshot_single_build_per_step_test.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "raw/direct23_snapshot_and_visual_negative/evidence/af49f2d1-fabf-45b9-b6d1-93c44300c060/projectile_snapshot_single_build_per_step_test.stdout.log",
+      "bytes": 255,
+      "sha256": "D7E11ADBC91A783D5EC52F8B6E37DD747A31539009F3AE6BECDA6D732C4203DC"
+    },
+    {
+      "path": "raw/direct23_snapshot_and_visual_negative/logs/caster_visual_terminal_failure_contract_20261009_test.godot.log",
+      "bytes": 524,
+      "sha256": "7CE7D14E3A2443BA8CFF88E4AFB225FD25AEEFE42B8490F6593E11C2A37D5465"
+    },
+    {
+      "path": "raw/direct23_snapshot_and_visual_negative/logs/caster_visual_terminal_failure_contract_20261009_test.stderr.log",
+      "bytes": 457,
+      "sha256": "C15B1CC0FB6F55B68AA7870F8E4305C510B6FD4662F7FD58B388B2958B11E26C"
+    },
+    {
+      "path": "raw/direct23_snapshot_and_visual_negative/logs/caster_visual_terminal_failure_contract_20261009_test.stdout.log",
+      "bytes": 73,
+      "sha256": "BB3BCF7181E550FE37F9235C4AECF24A81B757EDDFEFF554D88E7974FEB2ED1D"
+    },
+    {
+      "path": "raw/direct23_snapshot_and_visual_negative/logs/projectile_snapshot_single_build_per_step_test.godot.log",
+      "bytes": 251,
+      "sha256": "4952610C448EBE7EE66676B3232903D40BFDFDCD38D0139A6C40E37B75DE31B6"
+    },
+    {
+      "path": "raw/direct23_snapshot_and_visual_negative/logs/projectile_snapshot_single_build_per_step_test.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "raw/direct23_snapshot_and_visual_negative/logs/projectile_snapshot_single_build_per_step_test.stdout.log",
+      "bytes": 255,
+      "sha256": "D7E11ADBC91A783D5EC52F8B6E37DD747A31539009F3AE6BECDA6D732C4203DC"
+    },
+    {
+      "path": "raw/direct23_snapshot_and_visual_negative/logs/runner_results_adhoc_20261010_000206_706_23136.json",
+      "bytes": 2669,
+      "sha256": "373052B984B83D989EF15631B90DCACC8798D76565D6FDC818311615AAD07605"
+    },
+    {
+      "path": "raw/direct23_snapshot_and_visual_negative/runner_results_adhoc_20261010_000206_706_23136.json",
+      "bytes": 2669,
+      "sha256": "373052B984B83D989EF15631B90DCACC8798D76565D6FDC818311615AAD07605"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/01af2f72-9464-4925-bf9c-49ebaeed08b7/native_handoffs.json",
+      "bytes": 462,
+      "sha256": "A857D736DED1F405E96FA563ABDBC9C80352468DB1E5258F1B9AAFF32C282F02"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/01af2f72-9464-4925-bf9c-49ebaeed08b7/native_result.json",
+      "bytes": 984,
+      "sha256": "E694C5BFE25A382436172EE00665885EBA9AA6F5803C416146F9C5E75CB7EB40"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/01af2f72-9464-4925-bf9c-49ebaeed08b7/projectile_snapshot_single_build_per_step_test.godot.log",
+      "bytes": 446,
+      "sha256": "81862F7583EEF00F0B274CEF6E059F48FAC9C1788E925787B11239ED2E8B868B"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/01af2f72-9464-4925-bf9c-49ebaeed08b7/projectile_snapshot_single_build_per_step_test.stderr.log",
+      "bytes": 280,
+      "sha256": "FB019686F0C369FE40A0023D563903FCCC3783C210A071BB24D3B0262F47FD3D"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/01af2f72-9464-4925-bf9c-49ebaeed08b7/projectile_snapshot_single_build_per_step_test.stdout.log",
+      "bytes": 173,
+      "sha256": "0F6EB4C7547500684FE45C1BFF6E37D2E359CCA519623DD7FC7F41461623693F"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/08763c46-9158-4418-a3d3-c447d3527ee0/native_handoffs.json",
+      "bytes": 462,
+      "sha256": "A857D736DED1F405E96FA563ABDBC9C80352468DB1E5258F1B9AAFF32C282F02"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/08763c46-9158-4418-a3d3-c447d3527ee0/native_result.json",
+      "bytes": 855,
+      "sha256": "D8459AABA67F77C33E8283F28FB1DE575A35EFE459DE704112753FE35095632F"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/08763c46-9158-4418-a3d3-c447d3527ee0/projectile_broadphase_hit_parity_test.godot.log",
+      "bytes": 216,
+      "sha256": "D6496A0D5ADC025ADAEBFE71D5366162E4446379EBBC2EBED08DB1DD9C1D0308"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/08763c46-9158-4418-a3d3-c447d3527ee0/projectile_broadphase_hit_parity_test.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/08763c46-9158-4418-a3d3-c447d3527ee0/projectile_broadphase_hit_parity_test.stdout.log",
+      "bytes": 220,
+      "sha256": "61A7C5D572651BFCE4C135AADF731CFCEE1260E1F5A7EE631A6270EC2248DE57"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/110c7595-e7e5-4524-a6b6-2cb0dae27f7c/native_handoffs.json",
+      "bytes": 462,
+      "sha256": "A857D736DED1F405E96FA563ABDBC9C80352468DB1E5258F1B9AAFF32C282F02"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/110c7595-e7e5-4524-a6b6-2cb0dae27f7c/native_result.json",
+      "bytes": 869,
+      "sha256": "12BC0CA76B3201075C8D0538CF25C820AE2A0DE5E9C9C1853EF7A938FAB6B95C"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/110c7595-e7e5-4524-a6b6-2cb0dae27f7c/projectile_spatial_index_ready_contract_test.godot.log",
+      "bytes": 215,
+      "sha256": "7842FEBE5C688851EEAAD9818A9473C08CA8DBA0E27FDE93823E185C286BA585"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/110c7595-e7e5-4524-a6b6-2cb0dae27f7c/projectile_spatial_index_ready_contract_test.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/110c7595-e7e5-4524-a6b6-2cb0dae27f7c/projectile_spatial_index_ready_contract_test.stdout.log",
+      "bytes": 219,
+      "sha256": "C9E1B4E7DBBCCA88DC6D3A02CBD21F624B6F4C3009CB9B4E98E3B4F585B65099"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/2a0ede9b-e47d-46ac-885c-5aa0d4f339bd/native_handoffs.json",
+      "bytes": 462,
+      "sha256": "A857D736DED1F405E96FA563ABDBC9C80352468DB1E5258F1B9AAFF32C282F02"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/2a0ede9b-e47d-46ac-885c-5aa0d4f339bd/native_result.json",
+      "bytes": 998,
+      "sha256": "611CEB48DD4E92542E0993E6AFDDF8F5C526C7246E89CA4E4413E171CA3C4183"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/2a0ede9b-e47d-46ac-885c-5aa0d4f339bd/projectile_spatial_index_query_before_enemy_tick_test.godot.log",
+      "bytes": 498,
+      "sha256": "D970DB82617F5C8792B68ED6C4E936D476378D2CA0330C7EE615688F3A8B8B90"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/2a0ede9b-e47d-46ac-885c-5aa0d4f339bd/projectile_spatial_index_query_before_enemy_tick_test.stderr.log",
+      "bytes": 332,
+      "sha256": "E6998591C71A2C84A275987D19F98027E562F85978CC18D59B74DAED55E09172"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/2a0ede9b-e47d-46ac-885c-5aa0d4f339bd/projectile_spatial_index_query_before_enemy_tick_test.stdout.log",
+      "bytes": 173,
+      "sha256": "0F6EB4C7547500684FE45C1BFF6E37D2E359CCA519623DD7FC7F41461623693F"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/2f517821-606f-4916-90fc-329fade64d95/native_handoffs.json",
+      "bytes": 462,
+      "sha256": "A857D736DED1F405E96FA563ABDBC9C80352468DB1E5258F1B9AAFF32C282F02"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/2f517821-606f-4916-90fc-329fade64d95/native_result.json",
+      "bytes": 877,
+      "sha256": "7C4B46B13B3205EB83619229E5E82E24AAE72CE855E9A7B23BE05B38FB830B07"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/2f517821-606f-4916-90fc-329fade64d95/projectile_spatial_index_same_frame_teleport_test.godot.log",
+      "bytes": 220,
+      "sha256": "06B5BBA11741DD76E5215913DCB97B32D19CDFA6B9CFE2CC7D616B2E0155A31D"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/2f517821-606f-4916-90fc-329fade64d95/projectile_spatial_index_same_frame_teleport_test.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/2f517821-606f-4916-90fc-329fade64d95/projectile_spatial_index_same_frame_teleport_test.stdout.log",
+      "bytes": 224,
+      "sha256": "D51923AF76A0EA8C4462F3C4787D3F1BF923CEE5F5F797791DD2EAF321D55CD6"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/462ac040-5827-47cb-97b8-e77367fbe1fa/native_handoffs.json",
+      "bytes": 462,
+      "sha256": "A857D736DED1F405E96FA563ABDBC9C80352468DB1E5258F1B9AAFF32C282F02"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/462ac040-5827-47cb-97b8-e77367fbe1fa/native_result.json",
+      "bytes": 970,
+      "sha256": "E4BA3883411C283DBAF0619B4380A7E357AD79D7BBF437196A8717B5D35F408A"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/462ac040-5827-47cb-97b8-e77367fbe1fa/projectile_spatial_index_lifecycle_test.godot.log",
+      "bytes": 446,
+      "sha256": "261A4D2D61A141A637B0601D4304CC3AB7528EF4D97C155B9C5A0FEAE98DE408"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/462ac040-5827-47cb-97b8-e77367fbe1fa/projectile_spatial_index_lifecycle_test.stderr.log",
+      "bytes": 280,
+      "sha256": "660840D9560C39EE153438EF37B444B4EB0C511D5A5EA47A87BA62EDA0D8852F"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/462ac040-5827-47cb-97b8-e77367fbe1fa/projectile_spatial_index_lifecycle_test.stdout.log",
+      "bytes": 173,
+      "sha256": "0F6EB4C7547500684FE45C1BFF6E37D2E359CCA519623DD7FC7F41461623693F"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/474224af-1d74-4c0a-bcb3-eebdaa04548a/native_handoffs.json",
+      "bytes": 462,
+      "sha256": "A857D736DED1F405E96FA563ABDBC9C80352468DB1E5258F1B9AAFF32C282F02"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/474224af-1d74-4c0a-bcb3-eebdaa04548a/native_result.json",
+      "bytes": 873,
+      "sha256": "F795B727344C5B32EB4B2BBC1AE6D8E0C3B65EE9BB0327693DB8972FE4D792F5"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/474224af-1d74-4c0a-bcb3-eebdaa04548a/projectile_broadphase_candidate_reduction_test.godot.log",
+      "bytes": 336,
+      "sha256": "9B2F9316FFDAD3EF57700DC08118461ACE7F80B7DB9BF8864B527312E7814026"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/474224af-1d74-4c0a-bcb3-eebdaa04548a/projectile_broadphase_candidate_reduction_test.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/474224af-1d74-4c0a-bcb3-eebdaa04548a/projectile_broadphase_candidate_reduction_test.stdout.log",
+      "bytes": 340,
+      "sha256": "951B2B38EEFE8989ECB81603B0C721770D7C987B6C8148E139D3273932AA3EC1"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/513964eb-4152-4ff1-b459-7781955222b2/native_handoffs.json",
+      "bytes": 462,
+      "sha256": "A857D736DED1F405E96FA563ABDBC9C80352468DB1E5258F1B9AAFF32C282F02"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/513964eb-4152-4ff1-b459-7781955222b2/native_result.json",
+      "bytes": 859,
+      "sha256": "99FC33F7126BDFD87FCF67ACE08BA03B2AF62B8D00436EC44E69FF053DF392C4"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/513964eb-4152-4ff1-b459-7781955222b2/projectile_broadphase_stable_order_test.godot.log",
+      "bytes": 210,
+      "sha256": "B96B94782BCE27F6E3EC147685F288ED7578DDE04162F358C2BCAEAB5A7BA6A5"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/513964eb-4152-4ff1-b459-7781955222b2/projectile_broadphase_stable_order_test.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/513964eb-4152-4ff1-b459-7781955222b2/projectile_broadphase_stable_order_test.stdout.log",
+      "bytes": 214,
+      "sha256": "F982FB9F7D9E5296551BA4751E25F910094F0CFA0296044B64CC10C178483932"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/a6ccfad6-0904-4e77-9b91-6dde6c18dd6c/native_handoffs.json",
+      "bytes": 462,
+      "sha256": "A857D736DED1F405E96FA563ABDBC9C80352468DB1E5258F1B9AAFF32C282F02"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/a6ccfad6-0904-4e77-9b91-6dde6c18dd6c/native_result.json",
+      "bytes": 877,
+      "sha256": "2BEDCE06564E2CA052F431A07AEDE792F6A728A2D6480B99DB143E009378E06D"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/a6ccfad6-0904-4e77-9b91-6dde6c18dd6c/projectile_broadphase_runtime_map_isolation_test.godot.log",
+      "bytes": 219,
+      "sha256": "A4BCD2F3FB03C47101BBDD1DC70737E17752E91B610F6EF82283B21F095159D1"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/a6ccfad6-0904-4e77-9b91-6dde6c18dd6c/projectile_broadphase_runtime_map_isolation_test.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/a6ccfad6-0904-4e77-9b91-6dde6c18dd6c/projectile_broadphase_runtime_map_isolation_test.stdout.log",
+      "bytes": 223,
+      "sha256": "0C72DFF97EAE3D44250B814C0F50EFACC86FC2D75E20B5C933FE8208DEA9275A"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/b958e6d1-ab58-4bfe-9c7e-8e1854dc4a05/native_handoffs.json",
+      "bytes": 462,
+      "sha256": "A857D736DED1F405E96FA563ABDBC9C80352468DB1E5258F1B9AAFF32C282F02"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/b958e6d1-ab58-4bfe-9c7e-8e1854dc4a05/native_result.json",
+      "bytes": 869,
+      "sha256": "C65475A65AC7DAF9ACC9D2759FA7C9345DE0F58E0A23B3B114F8047BFA9C2169"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/b958e6d1-ab58-4bfe-9c7e-8e1854dc4a05/projectile_broadphase_no_false_negative_test.godot.log",
+      "bytes": 295,
+      "sha256": "AB38240D727292B3C89B2DAA9CDE3528E91227413CA7F85CA17E899CE4AD33E9"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/b958e6d1-ab58-4bfe-9c7e-8e1854dc4a05/projectile_broadphase_no_false_negative_test.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/b958e6d1-ab58-4bfe-9c7e-8e1854dc4a05/projectile_broadphase_no_false_negative_test.stdout.log",
+      "bytes": 299,
+      "sha256": "F772E9A048D5C39F07FA43A6F0ACA3FE56A55E649D079BF539CFC88897BDE19A"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/e3072bfe-84a5-42e0-92b3-503d90882a65/native_handoffs.json",
+      "bytes": 462,
+      "sha256": "A857D736DED1F405E96FA563ABDBC9C80352468DB1E5258F1B9AAFF32C282F02"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/e3072bfe-84a5-42e0-92b3-503d90882a65/native_result.json",
+      "bytes": 863,
+      "sha256": "A1B0E3E3AA0DE81ECADB9BA7418C8CE65AAA636D934C2593F0167C38E3AE9C19"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/e3072bfe-84a5-42e0-92b3-503d90882a65/projectile_broadphase_terrain_cutoff_test.godot.log",
+      "bytes": 249,
+      "sha256": "E33355B64DC099E7E3A8DB27CDA41C3F2D28FFA3E84D4153C44253D0CE6F9ECA"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/e3072bfe-84a5-42e0-92b3-503d90882a65/projectile_broadphase_terrain_cutoff_test.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/e3072bfe-84a5-42e0-92b3-503d90882a65/projectile_broadphase_terrain_cutoff_test.stdout.log",
+      "bytes": 253,
+      "sha256": "89AB47FA0081BFD6B25DC3C12CD69E52B78B65BC290C24450CB3AF338D4AD5FE"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/f9638cca-5a60-4d4d-9054-503f3fd96662/native_handoffs.json",
+      "bytes": 462,
+      "sha256": "A857D736DED1F405E96FA563ABDBC9C80352468DB1E5258F1B9AAFF32C282F02"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/f9638cca-5a60-4d4d-9054-503f3fd96662/native_result.json",
+      "bytes": 881,
+      "sha256": "B59410047066A2A953B447F9E4F1BAC991C5963B81A7E2BC394BFE74D7081E38"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/f9638cca-5a60-4d4d-9054-503f3fd96662/projectile_spatial_index_same_frame_knockback_test.godot.log",
+      "bytes": 221,
+      "sha256": "9F612390A56E996CC765EC93C0581E8F3B1D1BB103D7AFAC5B8C36840E1DC79C"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/f9638cca-5a60-4d4d-9054-503f3fd96662/projectile_spatial_index_same_frame_knockback_test.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/evidence/f9638cca-5a60-4d4d-9054-503f3fd96662/projectile_spatial_index_same_frame_knockback_test.stdout.log",
+      "bytes": 225,
+      "sha256": "1E8C25B90F1DEB809B9D824DF4DE3BC8031F6C0DE9F7018E304FB7DA5BFD49AD"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/logs/projectile_broadphase_candidate_reduction_test.godot.log",
+      "bytes": 336,
+      "sha256": "9B2F9316FFDAD3EF57700DC08118461ACE7F80B7DB9BF8864B527312E7814026"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/logs/projectile_broadphase_candidate_reduction_test.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/logs/projectile_broadphase_candidate_reduction_test.stdout.log",
+      "bytes": 340,
+      "sha256": "951B2B38EEFE8989ECB81603B0C721770D7C987B6C8148E139D3273932AA3EC1"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/logs/projectile_broadphase_hit_parity_test.godot.log",
+      "bytes": 216,
+      "sha256": "D6496A0D5ADC025ADAEBFE71D5366162E4446379EBBC2EBED08DB1DD9C1D0308"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/logs/projectile_broadphase_hit_parity_test.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/logs/projectile_broadphase_hit_parity_test.stdout.log",
+      "bytes": 220,
+      "sha256": "61A7C5D572651BFCE4C135AADF731CFCEE1260E1F5A7EE631A6270EC2248DE57"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/logs/projectile_broadphase_no_false_negative_test.godot.log",
+      "bytes": 295,
+      "sha256": "AB38240D727292B3C89B2DAA9CDE3528E91227413CA7F85CA17E899CE4AD33E9"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/logs/projectile_broadphase_no_false_negative_test.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/logs/projectile_broadphase_no_false_negative_test.stdout.log",
+      "bytes": 299,
+      "sha256": "F772E9A048D5C39F07FA43A6F0ACA3FE56A55E649D079BF539CFC88897BDE19A"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/logs/projectile_broadphase_runtime_map_isolation_test.godot.log",
+      "bytes": 219,
+      "sha256": "A4BCD2F3FB03C47101BBDD1DC70737E17752E91B610F6EF82283B21F095159D1"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/logs/projectile_broadphase_runtime_map_isolation_test.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/logs/projectile_broadphase_runtime_map_isolation_test.stdout.log",
+      "bytes": 223,
+      "sha256": "0C72DFF97EAE3D44250B814C0F50EFACC86FC2D75E20B5C933FE8208DEA9275A"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/logs/projectile_broadphase_stable_order_test.godot.log",
+      "bytes": 210,
+      "sha256": "B96B94782BCE27F6E3EC147685F288ED7578DDE04162F358C2BCAEAB5A7BA6A5"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/logs/projectile_broadphase_stable_order_test.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/logs/projectile_broadphase_stable_order_test.stdout.log",
+      "bytes": 214,
+      "sha256": "F982FB9F7D9E5296551BA4751E25F910094F0CFA0296044B64CC10C178483932"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/logs/projectile_broadphase_terrain_cutoff_test.godot.log",
+      "bytes": 249,
+      "sha256": "E33355B64DC099E7E3A8DB27CDA41C3F2D28FFA3E84D4153C44253D0CE6F9ECA"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/logs/projectile_broadphase_terrain_cutoff_test.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/logs/projectile_broadphase_terrain_cutoff_test.stdout.log",
+      "bytes": 253,
+      "sha256": "89AB47FA0081BFD6B25DC3C12CD69E52B78B65BC290C24450CB3AF338D4AD5FE"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/logs/projectile_snapshot_single_build_per_step_test.godot.log",
+      "bytes": 446,
+      "sha256": "81862F7583EEF00F0B274CEF6E059F48FAC9C1788E925787B11239ED2E8B868B"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/logs/projectile_snapshot_single_build_per_step_test.stderr.log",
+      "bytes": 280,
+      "sha256": "FB019686F0C369FE40A0023D563903FCCC3783C210A071BB24D3B0262F47FD3D"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/logs/projectile_snapshot_single_build_per_step_test.stdout.log",
+      "bytes": 173,
+      "sha256": "0F6EB4C7547500684FE45C1BFF6E37D2E359CCA519623DD7FC7F41461623693F"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/logs/projectile_spatial_index_lifecycle_test.godot.log",
+      "bytes": 446,
+      "sha256": "261A4D2D61A141A637B0601D4304CC3AB7528EF4D97C155B9C5A0FEAE98DE408"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/logs/projectile_spatial_index_lifecycle_test.stderr.log",
+      "bytes": 280,
+      "sha256": "660840D9560C39EE153438EF37B444B4EB0C511D5A5EA47A87BA62EDA0D8852F"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/logs/projectile_spatial_index_lifecycle_test.stdout.log",
+      "bytes": 173,
+      "sha256": "0F6EB4C7547500684FE45C1BFF6E37D2E359CCA519623DD7FC7F41461623693F"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/logs/projectile_spatial_index_query_before_enemy_tick_test.godot.log",
+      "bytes": 498,
+      "sha256": "D970DB82617F5C8792B68ED6C4E936D476378D2CA0330C7EE615688F3A8B8B90"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/logs/projectile_spatial_index_query_before_enemy_tick_test.stderr.log",
+      "bytes": 332,
+      "sha256": "E6998591C71A2C84A275987D19F98027E562F85978CC18D59B74DAED55E09172"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/logs/projectile_spatial_index_query_before_enemy_tick_test.stdout.log",
+      "bytes": 173,
+      "sha256": "0F6EB4C7547500684FE45C1BFF6E37D2E359CCA519623DD7FC7F41461623693F"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/logs/projectile_spatial_index_ready_contract_test.godot.log",
+      "bytes": 215,
+      "sha256": "7842FEBE5C688851EEAAD9818A9473C08CA8DBA0E27FDE93823E185C286BA585"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/logs/projectile_spatial_index_ready_contract_test.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/logs/projectile_spatial_index_ready_contract_test.stdout.log",
+      "bytes": 219,
+      "sha256": "C9E1B4E7DBBCCA88DC6D3A02CBD21F624B6F4C3009CB9B4E98E3B4F585B65099"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/logs/projectile_spatial_index_same_frame_knockback_test.godot.log",
+      "bytes": 221,
+      "sha256": "9F612390A56E996CC765EC93C0581E8F3B1D1BB103D7AFAC5B8C36840E1DC79C"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/logs/projectile_spatial_index_same_frame_knockback_test.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/logs/projectile_spatial_index_same_frame_knockback_test.stdout.log",
+      "bytes": 225,
+      "sha256": "1E8C25B90F1DEB809B9D824DF4DE3BC8031F6C0DE9F7018E304FB7DA5BFD49AD"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/logs/projectile_spatial_index_same_frame_teleport_test.godot.log",
+      "bytes": 220,
+      "sha256": "06B5BBA11741DD76E5215913DCB97B32D19CDFA6B9CFE2CC7D616B2E0155A31D"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/logs/projectile_spatial_index_same_frame_teleport_test.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/logs/projectile_spatial_index_same_frame_teleport_test.stdout.log",
+      "bytes": 224,
+      "sha256": "D51923AF76A0EA8C4462F3C4787D3F1BF923CEE5F5F797791DD2EAF321D55CD6"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/logs/runner_results_projectile_spatial_critical_20261009_234113_846_8376.json",
+      "bytes": 12469,
+      "sha256": "D52270AE72F0000BBBEB848AFDDC2D42B997E725C17176F9A5FC1B3645AF749E"
+    },
+    {
+      "path": "raw/related21_projectile_boundaries/runner_results_projectile_spatial_critical_20261009_234113_846_8376.json",
+      "bytes": 12469,
+      "sha256": "D52270AE72F0000BBBEB848AFDDC2D42B997E725C17176F9A5FC1B3645AF749E"
+    },
+    {
+      "path": "B02_PROJECTILE_FREEZE_19.json",
+      "bytes": 4939,
+      "sha256": "610ace48ee4f292cf9b5e4d8622314be3875dbe4c6a3f74070571d25cce43549"
+    },
+    {
+      "path": "B02_PROJECTILE_FREEZE_20.json",
+      "bytes": 4987,
+      "sha256": "b9ddeca1fc0f6eddf4bb2a6ac6850ef6f63aa7d056c6d3c016f2c754ae82441d"
+    },
+    {
+      "path": "B02_COMBINED_FREEZE_22.json",
+      "bytes": 6602,
+      "sha256": "ae8f91df355f519242c9ea03363beec15f36182a346059bef4a891e4c8a3acaf"
+    },
+    {
+      "path": "B02_COMBINED_FREEZE_23.json",
+      "bytes": 6651,
+      "sha256": "e9f0be513dd142adb1f4c601ff8cabaf58aa5e62b4bfde428f9a4140da95a74c"
+    }
+  ],
+  "run_test_source_fingerprints": {
+    "direct20_projectile_first_contact": "19AF24E757DA7BCD6A2DDA52886BE9E8206BAE2B7C74AD9DC1646B1809E294C0",
+    "direct22_lifecycle": "B61596F516E17B591B1A25B6EC446944E42E4B6C29346C9A62D1ECAA6CF61670",
+    "direct22_query_before_tick": "43E7E26975B3A4433A9645A6E0D4C6E0432DE28CDD44A5EE800CD645473D0D4F",
+    "direct22_snapshot_pre_canonical_radius_fix": "AEA74F616D12636AEBE28CC7874F0B965C310A56AD75376A67D11993816F2DBC",
+    "direct23_snapshot": "832538CA4F98AA3B7736F48988E473A41ABAC0C7694ABCB8A3FEA028A1F0D30F"
+  },
+  "commands": {
+    "direct19": "tools/run_godot_tests.ps1 -TestPaths tests/framework/projectile_first_contact_order_20261009_test.tscn -TimeoutSeconds 30",
+    "direct20": "tools/run_godot_tests.ps1 -TestPaths tests/framework/projectile_first_contact_order_20261009_test.tscn -TimeoutSeconds 30",
+    "related21": "tools/run_godot_tests.ps1 -TestPaths tests/projectile_broadphase_hit_parity_test.tscn,tests/projectile_broadphase_no_false_negative_test.tscn,tests/projectile_broadphase_candidate_reduction_test.tscn,tests/projectile_broadphase_stable_order_test.tscn,tests/projectile_broadphase_terrain_cutoff_test.tscn,tests/projectile_broadphase_runtime_map_isolation_test.tscn,tests/projectile_spatial_index_lifecycle_test.tscn,tests/projectile_snapshot_single_build_per_step_test.tscn,tests/projectile_spatial_index_same_frame_teleport_test.tscn,tests/projectile_spatial_index_same_frame_knockback_test.tscn,tests/projectile_spatial_index_query_before_enemy_tick_test.tscn,tests/projectile_spatial_index_ready_contract_test.tscn -TimeoutSeconds 30",
+    "direct22": "tools/run_godot_tests.ps1 -TestPaths tests/projectile_spatial_index_lifecycle_test.tscn,tests/projectile_snapshot_single_build_per_step_test.tscn,tests/projectile_spatial_index_query_before_enemy_tick_test.tscn -TimeoutSeconds 30",
+    "direct23": "tools/run_godot_tests.ps1 -TestPaths tests/projectile_snapshot_single_build_per_step_test.tscn,tests/framework/caster_visual_terminal_failure_contract_20261009_test.tscn -TimeoutSeconds 30"
+  }
+}

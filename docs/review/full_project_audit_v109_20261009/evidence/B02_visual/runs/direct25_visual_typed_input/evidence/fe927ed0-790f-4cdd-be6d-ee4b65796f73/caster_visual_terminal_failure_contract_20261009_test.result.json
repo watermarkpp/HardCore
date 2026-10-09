@@ -1,0 +1,197 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "terminal failure fixture owns isolated production user data",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "ordinary startup reaches a distinct mapped profile",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "ordinary Root reaches READY",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "ordinary Root exposes the production player owner",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "test-owned malformed visual resource opens",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "malformed visual resource is written completely",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "actual ResourceLoader request is admitted",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "accepted malformed request ends with the native invalid-resource status",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "Root transfers actual THREAD_LOAD_FAILED to the visual registry",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "an existing waiter sees the monotonic failure history",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "explicit new admission clears only the current failure",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "old sequence remains terminal after a new admission clears current state",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "new sequence baseline is not poisoned by the old failure",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "same owned path is repaired with valid Texture2D bytes",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "new explicit admission reaches resident visual state",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "successful retention clears current terminal state",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "one-shot effect installs one real animation child",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "one-shot component owns a real resident sequence lease",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "one-shot injection retains the typed selected path",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "one-shot retry input resolves the old native terminal result",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "one-shot animation enters terminal failure through registry history",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "one-shot parent retires through the animation failure signal",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "one-shot terminal result releases its actual lease",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "persistent shield effect installs one real animation child",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "shield component owns a real resident sequence lease",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "shield injection retains the typed selected path",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "shield retry input resolves the old native terminal result",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "shield animation enters terminal failure through registry history",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "shield parent retires through the animation failure signal",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "shield terminal result releases its actual lease",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "terminal shield visual cleanup leaves the real player buff unchanged",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "Root retirement is allowed to release its own retrieval claims",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "retired visual path has no remaining native retrieval claim",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "terminal failure trace opens",
+      "passed": true
+    },
+    {
+      "id": 35,
+      "label": "terminal failure trace writes completely",
+      "passed": true
+    }
+  ],
+  "count": 35,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "d655cb9e-abf9-458a-a97e-26f9b57b464e",
+  "passed": 35,
+  "reported_checks": 35,
+  "reported_failures": 0,
+  "run_id": "fe927ed0-790f-4cdd-be6d-ee4b65796f73",
+  "runtime_environment": {
+    "native_process_id": 22156,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\b02_direct25_visual",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/b02_direct25_visual/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "caster_visual_terminal_failure_contract_20261009_test",
+  "schema_version": 1,
+  "source_content_sha256": "",
+  "status": "PASS"
+}

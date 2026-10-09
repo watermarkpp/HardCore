@@ -1,0 +1,40 @@
+{
+  "git_head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+  "runtime_environment": {
+    "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\b02_direct19_projectile",
+    "runner_process_id": 6208
+  },
+  "suite": "adhoc",
+  "results": [
+    {
+      "test_name": "projectile_first_contact_order_20261009_test",
+      "test_path": "tests/framework/projectile_first_contact_order_20261009_test.tscn",
+      "wrapper_process_id": 13996,
+      "wrapper_started_utc": "2026-10-09T15:36:02.9712701Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\b02_direct19_projectile",
+      "fixed_fps": 0,
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "execution_deadline_utc": "2026-10-09T15:36:32.9841444Z",
+      "native_exit_observed_utc": null,
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 5,
+      "engine_log_failure_count": 5,
+      "framework_run_id": "8edbc215-05cf-476d-aa23-2c7b38f47966",
+      "framework_receipt_valid": false,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_5;engine_log_failures_5;framework_receipt_missing"
+    }
+  ],
+  "generated_at": "2026-10-09T23:36:06.6487484+08:00",
+  "failed": 1,
+  "engine_log_errors": 5,
+  "invocation_id": "4f5d630f-ebfa-45f0-ae8a-cd6c8be6b895",
+  "passed": 0,
+  "total": 1
+}

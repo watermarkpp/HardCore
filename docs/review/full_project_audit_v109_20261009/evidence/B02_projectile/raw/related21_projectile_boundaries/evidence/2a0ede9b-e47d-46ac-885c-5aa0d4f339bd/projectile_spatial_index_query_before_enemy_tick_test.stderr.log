@@ -1,0 +1,4 @@
+SCRIPT ERROR: Assertion failed: projectile query before enemy tick must still find the registered enemy
+   at: _run (res://tests/projectile_spatial_index_query_before_enemy_tick_test.gd:35)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/projectile_spatial_index_query_before_enemy_tick_test.gd:35)

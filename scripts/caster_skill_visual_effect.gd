@@ -49,6 +49,7 @@ var _skip_legacy_laser_single_active := false
 var _elapsed := 0.0
 var _completion_elapsed := 0.0
 var _sprites: Array[Sprite2D] = []
+var _terminal_failure_cleanup_queued := false
 var _visual_sort_proxy: Node2D
 var _playback_strategy := "frame_sequence"
 var _attachment_policy := "world_anchor"
@@ -328,6 +329,21 @@ func _process(delta: float) -> void:
 			return
 
 
+func _bind_animation_failure(sprite: Node) -> void:
+	if not is_instance_valid(sprite) or not sprite.has_signal("animation_terminal_failure"):
+		return
+	var callback := Callable(self, "_on_animation_terminal_failure")
+	if not sprite.is_connected("animation_terminal_failure", callback):
+		sprite.connect("animation_terminal_failure", callback)
+
+
+func _on_animation_terminal_failure(_reason: String) -> void:
+	if _terminal_failure_cleanup_queued:
+		return
+	_terminal_failure_cleanup_queued = true
+	queue_free()
+
+
 func _sync_actor_attachment_position() -> void:
 	# The visual proxy owns ordering; this remains the exact gameplay footpoint.
 	global_position = target_node.global_position
@@ -416,6 +432,7 @@ func _install_single() -> void:
 		sprite.queue_free()
 		return
 	_apply_line_decoration_policy(sprite)
+	_bind_animation_failure(sprite)
 	_add_world_visual(sprite)
 	_sprites.append(sprite)
 
@@ -471,6 +488,7 @@ func _install_hellfire_trail(render: Dictionary) -> void:
 			sprite.queue_free()
 			continue
 		_apply_line_decoration_policy(sprite)
+		_bind_animation_failure(sprite)
 		sprite.set_manual_frame(frame_index)
 		sprite.visible = false
 		_add_world_visual(sprite)

@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "scope": "Exact retained bytes and bounded negative-case classification",
+  "projectile_manifest_entries": 167,
+  "visual_manifest_entries": 67,
+  "negative_raw_wrapper": "FAIL",
+  "negative_case": "PASS",
+  "negative_framework_run": "fe927ed0-790f-4cdd-be6d-ee4b65796f73",
+  "negative_invocation": "d655cb9e-abf9-458a-a97e-26f9b57b464e",
+  "source_tree": "6b67e51ffe5423301697181acc9306f112f72627",
+  "publication_source_tree": "084e8269d45498bf52c2d499ed7187f2872ee6db",
+  "native_source_tag": "",
+  "operator_freeze_sha256": "8e0e98d219baa5db05eb78c703fbca90b4ee730bb06c86fdea85cf7eb0a56ac8",
+  "native_source_tag_matches_operator_freeze": false,
+  "source_tag_limitation": "The native environment tag was not refreshed after direct24. Operator freeze and unchanged production raw hashes bind the component result; native tag is not final fixed-source acceptance.",
+  "metadata_static_only": true,
+  "source_coverage_limit": "Related21 has no independent frozen tree; historical runner HEAD is not source identity. Visual full damage/art-corruption E2E NOT_RUN."
+}

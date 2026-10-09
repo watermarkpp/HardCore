@@ -1,0 +1,151 @@
+{
+  "parent": "868ed9849caa9057e0811666cf6a4565429967f6",
+  "candidate_tree": "6b67e51ffe5423301697181acc9306f112f72627",
+  "files": [
+    {
+      "path": "scripts/game_root.gd",
+      "sha256": "2ea2dc8e90239e8c1db9260cabbb57a7991ec14b82999c89b2035661e90e5c93"
+    },
+    {
+      "path": "scripts/world_bootstrap_coordinator.gd",
+      "sha256": "43544704faddcbdcfbf75c59fa9914f9f54ba68a971dd63eac59b36407190db2"
+    },
+    {
+      "path": "scripts/features/runtime/feature_resource_preparation.gd",
+      "sha256": "302338e03ab3ad3d38052469ed65330708047dab8b93876057ac1f770e389493"
+    },
+    {
+      "path": "scripts/layers/runtime/content_layer_registry.gd",
+      "sha256": "fadfdff4772dd5806f6bccc058533d95f13d728bbb284cbe35220e18deedbf33"
+    },
+    {
+      "path": "scripts/monster_visual_streaming_coordinator.gd",
+      "sha256": "70e936b9a64e76361ce624019b08f7df88dcc05d6adf9b68939e523ef4f06319"
+    },
+    {
+      "path": "scripts/monster_source_frames.gd",
+      "sha256": "18299833c62a2eaf231ecd267cc9878ed30eb8c180a667d2bba5cc11a651e917"
+    },
+    {
+      "path": "scripts/startup_loading.gd",
+      "sha256": "25a5d7e789a4ba1797da5b5e73b0c7887ec56fbe824e23944e1a730edeaf5a33"
+    },
+    {
+      "path": "tests/retired_threaded_resource_claims_20261009.gd",
+      "sha256": "e8c3188216f8b1130c292a861f9666d2eab846d1f1254553d6105b42490d17dd"
+    },
+    {
+      "path": "tests/retired_threaded_resource_claims_20261009.tscn",
+      "sha256": "2ff98e695dac39933cb4c9de7c4bc0b2531a63787968247b5d79c8f3b2ed953f"
+    },
+    {
+      "path": "tests/world_bootstrap_generation_prefetch_contract_20261009.gd",
+      "sha256": "f3db3253fc3829cb66371418d10f85e615a7c8f0958cbfb685cf37db8bf70600"
+    },
+    {
+      "path": "tests/world_bootstrap_generation_prefetch_contract_20261009.tscn",
+      "sha256": "ec8cddb3b87e7ccacee3d4b51c84b4acf2792a33e1ba519d8952be2a5a531ed4"
+    },
+    {
+      "path": "tools/run_godot_tests.ps1",
+      "sha256": "7942f83af625a03bd44a3891f627136e2d3299404c44e5e8bf8ed798fee0906b"
+    },
+    {
+      "path": "tests/safe_logout_pending_retry_repair_20261009.gd",
+      "sha256": "87e0776f35be7d02bfc2d0f279f9984d2fbfbeab3a384a8cc42d8ddd57f0bc71"
+    },
+    {
+      "path": "tests/framework/monster_visual_streaming_terminal_get_contract_test.gd",
+      "sha256": "7b7f85bf2c58c308d3827bda06de8332b05f4fe1c6707b2a6ef08189c287434d"
+    },
+    {
+      "path": "tests/framework/monster_visual_streaming_terminal_get_contract_test.tscn",
+      "sha256": "dea024bbb4efb21c03a365a9c37957e78e2e7a097fcbca09a46de18fe7556e2f"
+    },
+    {
+      "path": "tests/framework/monster_source_frames_terminal_get_contract_test.gd",
+      "sha256": "4e548caf14ff02a628f6c6f5c34ddd4292a88d985ed03fdd96496dda58ab5fe0"
+    },
+    {
+      "path": "tests/framework/monster_source_frames_terminal_get_contract_test.tscn",
+      "sha256": "08b830b387d74d310efe3fe48ed1f13ab086956ca8161e3bbfb9b1fafcf17c25"
+    },
+    {
+      "path": "tests/framework/startup_loading_terminal_get_contract_test.gd",
+      "sha256": "6e74b4d8fac408bd2ee6970170cf03a7a68bcfd35cf655fd93c31cbfded1355b"
+    },
+    {
+      "path": "tests/framework/startup_loading_terminal_get_contract_test.tscn",
+      "sha256": "fa6fd6bbefac260d0c84bb1214856b18728734f5ec5501518d5045c3889d2fdc"
+    },
+    {
+      "path": "scripts/player.gd",
+      "sha256": "40ce84d019e1b5770a5749a5384c49572f7f7666a5ff581d3db9b9bd05e718d3"
+    },
+    {
+      "path": "tests/framework/player_pause_movement_contract_20261009_test.gd",
+      "sha256": "38c9388f547b05775bbc8c0837caab05366112fae58feac4c2f72ebc0ef26e38"
+    },
+    {
+      "path": "tests/framework/player_pause_movement_contract_20261009_test.tscn",
+      "sha256": "a0091a5b02501f61a36cb7924d6a4416f4e0dccee43a7258afef5da98022750c"
+    },
+    {
+      "path": "tests/framework/equipment_stealth_rearm_contract_20261009_test.gd",
+      "sha256": "a2fa7aa2b7ba168a2a323a5cf3f81ae8c90c14df64d3826e5b97efb40f653738"
+    },
+    {
+      "path": "tests/framework/equipment_stealth_rearm_contract_20261009_test.tscn",
+      "sha256": "05b2100feda8e150691a3adffabeddd1871527ac8487ec2f267e40f0bb162133"
+    },
+    {
+      "path": "scripts/skill_projectile.gd",
+      "sha256": "ca91a0545bbf80a9eba2ee617dee79010b6cbdabbaa3ad24b7468052d51f88ef"
+    },
+    {
+      "path": "tests/framework/projectile_first_contact_order_20261009_test.gd",
+      "sha256": "19af24e757da7bcd6a2dda52886be9e8206bae2b7c74ad9dc1646b1809e294c0"
+    },
+    {
+      "path": "tests/framework/projectile_first_contact_order_20261009_test.tscn",
+      "sha256": "44957abf54049a021b2b5f3e5681253435e2de7156740f20183beba1a9c3902f"
+    },
+    {
+      "path": "tests/projectile_spatial_index_lifecycle_test.gd",
+      "sha256": "b61596f516e17b591b1a25b6ec446944e42e4b6c29346c9a62d1ecaa6cf61670"
+    },
+    {
+      "path": "tests/projectile_snapshot_single_build_per_step_test.gd",
+      "sha256": "832538ca4f98aa3b7736f48988e473a41abac0c7694abcb8a3fea028a1f0d30f"
+    },
+    {
+      "path": "tests/projectile_spatial_index_query_before_enemy_tick_test.gd",
+      "sha256": "43e7e26975b3a4433a9645a6e0d4c6e0432de28cdd44a5ee800cd645473d0d4f"
+    },
+    {
+      "path": "scripts/caster_skill_visual_registry.gd",
+      "sha256": "c9a17f569f4b4bd4263bcde067ca7c1a26eeb184277faf814ef20bef34a862fe"
+    },
+    {
+      "path": "scripts/caster_skill_animation_player.gd",
+      "sha256": "54f6cd40974b81b25544cbdc5b15a7edeabcfad5b700c98aa94f44c731bc888b"
+    },
+    {
+      "path": "scripts/caster_skill_visual_effect.gd",
+      "sha256": "017ba6a1e1aee80aceff025e068bf29281d8aa6133fdd32516365da0c9ec4f55"
+    },
+    {
+      "path": "tests/framework/caster_visual_terminal_failure_contract_20261009_test.gd",
+      "sha256": "b2aba64c79b3db647f58e076e778cb15c7c9f48cd1fffa426b864b5147a04485"
+    },
+    {
+      "path": "tests/framework/caster_visual_terminal_failure_contract_20261009_test.tscn",
+      "sha256": "14e1bd59e2611622cbbaa99a852f21c5b86f64ebec65c89a59ad1d1ef98cf31a"
+    }
+  ],
+  "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+  "retest_reason": "direct24 six component failure checks: inject a typed Array[String] into the selected animation path; add assertions verifying actual retry inputs and retained failure history. No production change. Only failed visual case rerun.",
+  "commands": [
+    "tools/run_godot_tests.ps1 -TimeoutSeconds 30 -TestPaths tests/framework/caster_visual_terminal_failure_contract_20261009_test.tscn; APPDATA=b02_direct25_visual; log/evidence=direct25_visual_typed_input"
+  ]
+}

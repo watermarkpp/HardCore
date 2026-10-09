@@ -1,0 +1,30 @@
+{
+  "status": "PASS",
+  "scope": "B02-010 metadata descriptions only",
+  "candidate_tree": "084e8269d45498bf52c2d499ed7187f2872ee6db",
+  "runtime_gameplay_change": false,
+  "source_paths": [
+    {
+      "path": "scripts/skills/skill_spatial_projection_contract.gd",
+      "sha256": "d498b3ac4828d313eb7d7007869897afce305a415f6acadbd1fb7fc4a32817f6"
+    },
+    {
+      "path": "docs/combat/spatial_projection_relationship_matrix.md",
+      "sha256": "690da84a9e63c45b4fbc7a6d9aff4a21381c1ad313b93a686a3f9f34b235e979"
+    },
+    {
+      "path": "scripts/skills/warrior_melee_geometry.gd",
+      "sha256": "aeb280d129fcf0004850a137dd98a7934783b7512404499873d997e264b2ce54"
+    },
+    {
+      "path": "scripts/warrior_combat_math.gd",
+      "sha256": "a24eb74882d70c8819af2e8cfaa85014dd8b417dce1508fae18b8df32dd74d78"
+    },
+    {
+      "path": "assets/data/vanilla_176/skills_source_of_truth_v1.json",
+      "sha256": "7575c45a7bd147f8e60d2efdb15c6c5e9781445ddc2f748e73dd69ed386a62ab"
+    }
+  ],
+  "tests": "NOT_RUN: descriptions only; no new behavior claim",
+  "command": "git diff --check; rg exact retired specification labels in scripts/tests/tools; inspect authoring dimensions and existing user-authorized WarriorMeleeGeometry constants"
+}

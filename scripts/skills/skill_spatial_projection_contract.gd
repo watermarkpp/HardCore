@@ -50,13 +50,13 @@ static var ENTRIES: Array[Dictionary] = [
 	),
 	_entry(
 		"warrior.thrusting", DIRECTED_CORE,
-		"source_geometry_directed_rectangle_2_5_gu_by_1_gu",
+		"source_geometry_directed_rectangle_3_gu_by_1_gu",
 		"caster_release_frame_footpoint", "frozen_release_facing",
 		SNAPSHOT_CREATE, "effective_core_overlap", []
 	),
 	_entry(
 		"warrior.half_moon", DIRECTED_CORE,
-		"source_geometry_rotated_front_four_direction_arc_1_5_gu",
+		"source_geometry_rotated_front_three_direction_arc_2_gu",
 		"caster_release_frame_footpoint", "frozen_release_facing",
 		SNAPSHOT_CREATE, "effective_core_overlap", []
 	),
@@ -123,7 +123,7 @@ static var ENTRIES: Array[Dictionary] = [
 	),
 	_entry(
 		"wizard.fire_wall", GROUND_EXACT,
-		"source_geometry_frozen_2_by_2_exact_cell_union",
+		"source_geometry_frozen_3_by_3_exact_cell_union",
 		"selected_ground_or_target_release_frame_footpoint",
 		"no_damage_facing", SNAPSHOT_CREATE, "complete_overlap", []
 	),

@@ -1,0 +1,10 @@
+SCRIPT ERROR: Parse Error: Cannot find member "hash" in base "Vector2".
+   at: GDScript::reload (res://tests/framework/projectile_first_contact_order_20261009_test.gd:95)
+SCRIPT ERROR: Parse Error: Function "hash()" not found in base Vector2.
+   at: GDScript::reload (res://tests/framework/projectile_first_contact_order_20261009_test.gd:95)
+SCRIPT ERROR: Parse Error: Cannot pass a value of type "String" as "float".
+   at: GDScript::reload (res://tests/framework/projectile_first_contact_order_20261009_test.gd:94)
+SCRIPT ERROR: Parse Error: Invalid argument for "setup_ground_unit_projectile()" function: argument 11 should be "float" but is "String".
+   at: GDScript::reload (res://tests/framework/projectile_first_contact_order_20261009_test.gd:94)
+ERROR: Failed to load script "res://tests/framework/projectile_first_contact_order_20261009_test.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)

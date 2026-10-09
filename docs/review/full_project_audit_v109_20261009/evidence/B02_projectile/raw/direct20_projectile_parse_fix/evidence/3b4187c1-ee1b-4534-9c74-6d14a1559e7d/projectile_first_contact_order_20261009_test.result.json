@@ -1,0 +1,87 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "first contact precedes target centre",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "tangent contact uses formal radius",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "initial overlap contacts at t=0",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "zero-length segment inside footprint contacts",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "zero-length segment outside footprint misses",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "near contact wins against earlier far stable order",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "far candidate remains untouched",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "both candidates pass the exact eligibility gate",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "near contact remains first after reverse spawn order",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "reverse-order far candidate remains untouched",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "equal contact keeps lower stable order",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "equal contact does not hit tie loser",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "actual target motion can dodge the swept segment",
+      "passed": true
+    }
+  ],
+  "count": 13,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "842e15bf-b1f7-4eeb-a6fb-7bb254a6844e",
+  "passed": 13,
+  "reported_checks": 13,
+  "reported_failures": 0,
+  "run_id": "3b4187c1-ee1b-4534-9c74-6d14a1559e7d",
+  "runtime_environment": {
+    "native_process_id": 17292,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\b02_direct20_projectile",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/b02_direct20_projectile/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "projectile_first_contact_order_20261009_test",
+  "schema_version": 1,
+  "source_content_sha256": "b9ddeca1fc0f6eddf4bb2a6ac6850ef6f63aa7d056c6d3c016f2c754ae82441d",
+  "status": "PASS"
+}

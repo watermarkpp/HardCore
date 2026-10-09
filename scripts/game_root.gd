@@ -2135,6 +2135,12 @@ func _retire_pending_warm_textures() -> void:
 			var texture := ResourceLoader.load_threaded_get(path) as Texture2D
 			if texture != null:
 				CasterSkillVisualRegistry.retain_loaded_texture(path, texture)
+			else:
+				CasterSkillVisualRegistry.mark_frame_texture_terminal_failure(
+					path, "failed" if status == ResourceLoader.THREAD_LOAD_FAILED else "wrong_resource_type"
+				)
+		else:
+			CasterSkillVisualRegistry.mark_frame_texture_terminal_failure(path, "invalid")
 	_frame_texture_threaded.clear()
 	if token != 0:
 		FrameBudget.end(token)
@@ -2150,12 +2156,16 @@ func _pump_pending_warm_textures() -> void:
 			var texture := ResourceLoader.load_threaded_get(path) as Texture2D
 			if texture != null:
 				CasterSkillVisualRegistry.retain_loaded_texture(path, texture)
+			else:
+				CasterSkillVisualRegistry.mark_frame_texture_terminal_failure(path, "wrong_resource_type")
 		elif status == ResourceLoader.THREAD_LOAD_FAILED:
 			_frame_texture_threaded.erase(path)
 			# FAILED is terminal; retrieve once to release this request's token.
 			ResourceLoader.load_threaded_get(path)
+			CasterSkillVisualRegistry.mark_frame_texture_terminal_failure(path, "failed")
 		elif status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
 			_frame_texture_threaded.erase(path)
+			CasterSkillVisualRegistry.mark_frame_texture_terminal_failure(path, "invalid")
 	# Collect admitted results first. A queued world's final notification must
 	# not start new work whose result this retiring owner will never collect.
 	if is_queued_for_deletion():
@@ -2170,8 +2180,17 @@ func _pump_pending_warm_textures() -> void:
 			continue
 		# PERF-R2 R5: combat warm-up must never use sub threads - the main
 		# thread's frame time stability outranks background texture speed.
-		if ResourceLoader.load_threaded_request(path, "Texture2D", false) == OK:
+		var request_error := ResourceLoader.load_threaded_request(path, "Texture2D", false)
+		if request_error == OK:
 			_frame_texture_threaded[path] = true
+		elif request_error == ERR_BUSY:
+			# No accepted claim belongs to this owner. A busy request can become
+			# available later and must not terminate the visual sequence.
+			CasterSkillVisualRegistry.queue_sequence_warm([path], false)
+		else:
+			CasterSkillVisualRegistry.mark_frame_texture_terminal_failure(
+				path, "request_rejected_%d" % request_error
+			)
 
 
 ## perf-smoothness-r1 C-R1 (PERF-R2 R7): the workset priority comes from the

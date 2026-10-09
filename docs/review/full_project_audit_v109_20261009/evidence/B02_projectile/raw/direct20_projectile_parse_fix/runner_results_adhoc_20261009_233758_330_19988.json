@@ -1,0 +1,40 @@
+{
+  "suite": "adhoc",
+  "passed": 1,
+  "total": 1,
+  "generated_at": "2026-10-09T23:37:58.3309034+08:00",
+  "runtime_environment": {
+    "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\b02_direct20_projectile",
+    "runner_process_id": 19988
+  },
+  "results": [
+    {
+      "test_name": "projectile_first_contact_order_20261009_test",
+      "test_path": "tests/framework/projectile_first_contact_order_20261009_test.tscn",
+      "wrapper_process_id": 20932,
+      "wrapper_started_utc": "2026-10-09T15:37:48.5624931Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\b02_direct20_projectile",
+      "fixed_fps": 0,
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-09T15:38:18.5770652Z",
+      "native_exit_observed_utc": "2026-10-09T15:37:56.8469011Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "3b4187c1-ee1b-4534-9c74-6d14a1559e7d",
+      "framework_receipt_valid": true,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "git_head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+  "failed": 0,
+  "invocation_id": "842e15bf-b1f7-4eeb-a6fb-7bb254a6844e",
+  "engine_log_errors": 0
+}

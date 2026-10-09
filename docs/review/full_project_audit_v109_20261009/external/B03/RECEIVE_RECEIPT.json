@@ -1,0 +1,59 @@
+{
+  "status": "PASS",
+  "scope": "Byte-identical report reception only; no gameplay acceptance",
+  "batch": "B03",
+  "report_commit": "172125ae99e3c4adf19af82da2720934a52f9537",
+  "report_parent": "868ed9849caa9057e0811666cf6a4565429967f6",
+  "audited_source_commit": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+  "files": [
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B03/COVERAGE.json",
+      "bytes": 48122,
+      "sha256": "28b83a1fed79428d25c22bae0929730eb8d2195ff3e3fc47f142227880f40efa",
+      "git_blob": "64986021ae0432ba1ad9d168000c2cc2cbc78e6e"
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B03/FINDINGS.csv",
+      "bytes": 10562,
+      "sha256": "d2d8ad2cfade3e861bb4ec648d8711533d575483f5b2591a105446f7a80e0f64",
+      "git_blob": "9b360406a2676c358b49161cd805c23283fe1735"
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B03/FINDINGS.json",
+      "bytes": 12479,
+      "sha256": "7f9d0a8db6d7fce8151b133b99cad675f302b980dec051aaf8ee98e83ea366d6",
+      "git_blob": "f0c3a8af64175739f9138ed1205f34bfa6bdb6f9"
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B03/REDUNDANCY.md",
+      "bytes": 2494,
+      "sha256": "eceec46d60e84e313cd8f0dfcb46ef457024fc399de55e46077012fbf0013de6",
+      "git_blob": "da6a338872c48611f78d86c75d8cd3074770fc10"
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B03/SOURCE_BINDING.json",
+      "bytes": 19761,
+      "sha256": "484f5858ee12e1584a12e915637129b11bc94d12b6a99855a1ded7d405fdaf63",
+      "git_blob": "7b9e5dfa7304d04b318119f69da9395f14365740"
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B03/SPECIAL_BEHAVIOR_COVERAGE.json",
+      "bytes": 216629,
+      "sha256": "284edef276b31090d523677249c65eea0ad9b1d2eb38152b794db355075e95f0",
+      "git_blob": "60381a6eb9f3bbadc0fead58ca2171ab0974eb5e"
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B03/SUMMARY.md",
+      "bytes": 7080,
+      "sha256": "9567796d93c10697ec056fab7aedcaa268cedd4e0f38fd53f67b4db08b0ae0a9",
+      "git_blob": "877738d108e4a2978727e1564c8debf85f6717de"
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B03/VALIDATION_GAPS.md",
+      "bytes": 3526,
+      "sha256": "1faa2404e16bfe911fd9501bb1ae373f134205c045c9188cc3e4302ebcd95b14",
+      "git_blob": "e81a0a90da1be4bdb699ac4348a85ce5f0a57632"
+    }
+  ],
+  "original_reports_preserved": true
+}

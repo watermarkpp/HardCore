@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "case": "direct25_visual_typed_input",
+  "classification": "PASS",
+  "status": "PASS",
+  "scope": "negative-case classification only",
+  "native": {
+    "effective_exit_code": 0,
+    "pass_marker_found": true,
+    "framework_receipt_valid": true,
+    "timeout": false,
+    "internal_checks": 35,
+    "internal_failures": 0
+  },
+  "raw_wrapper": {
+    "status": "FAIL",
+    "reason": "stderr_failures_2;engine_log_failures_2",
+    "preserved": true
+  },
+  "exact_expected_errors": [
+    "ERROR: Unrecognized binary resource file: 'user://caster_terminal_failure_fe927ed0-790f-4cdd-be6d-ee4b65796f73.res'.",
+    "ERROR: Failed loading resource: user://caster_terminal_failure_fe927ed0-790f-4cdd-be6d-ee4b65796f73.res."
+  ],
+  "error_scope": "Both retained errors are the test-owned malformed .res negative input; no other stderr/engine errors were accepted.",
+  "e2e_damage_hp_mp": "NOT_RUN",
+  "source_identity": "See B02_visual_manifest.json; runner git_head is historical dirty main-tree metadata, not a source fingerprint.",
+  "evidence": [
+    "runs/direct25_visual_typed_input/evidence/fe927ed0-790f-4cdd-be6d-ee4b65796f73/native_result.json",
+    "runs/direct25_visual_typed_input/evidence/fe927ed0-790f-4cdd-be6d-ee4b65796f73/caster_visual_terminal_failure_contract_20261009_test.result.json",
+    "runs/direct25_visual_typed_input/logs/caster_visual_terminal_failure_contract_20261009_test.stderr.log",
+    "runs/direct25_visual_typed_input/logs/runner_results_adhoc_20261010_001144_752_11680.json"
+  ]
+}

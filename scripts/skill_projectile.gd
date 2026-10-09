@@ -458,6 +458,8 @@ func _physics_process(delta: float) -> void:
 			_broadphase_max_candidate_count,
 			candidates.size()
 		)
+		var selected_enemy: EnemyActor = null
+		var selected_contact_t := INF
 		for candidate: Dictionary in candidates:
 			var candidate_node: Variant = candidate.get("node")
 			if not candidate_node is EnemyActor:
@@ -477,8 +479,17 @@ func _physics_process(delta: float) -> void:
 				node
 			):
 				continue
+			var contact_t := _swept_segment_contact_parameter(
+				segment_start_ground_gu,
+				segment_end_ground_gu,
+				node
+			)
+			if contact_t < selected_contact_t:
+				selected_enemy = node
+				selected_contact_t = contact_t
+		if selected_enemy != null:
 			_broadphase_hit_count += 1
-			_apply_hit(node)
+			_apply_hit(selected_enemy)
 			_emit_projectile_audio_phase("impact", "target_contact")
 			queue_free()
 			return
@@ -572,6 +583,47 @@ func _swept_segment_intersects_enemy_footprint(
 		Vector2.ZERO,
 		contact_radius_gu
 	)
+
+
+func _swept_segment_contact_parameter(
+	segment_start_ground_gu: Vector2,
+	segment_end_ground_gu: Vector2,
+	enemy: EnemyActor,
+) -> float:
+	var target_center_ground_gu := _runtime_screen_to_ground_position(enemy.global_position)
+	return swept_segment_contact_parameter_gu(
+		segment_start_ground_gu,
+		segment_end_ground_gu,
+		target_center_ground_gu,
+		enemy.combat_radius_gu + maxf(0.0, projectile_radius_gu)
+	)
+
+
+static func swept_segment_contact_parameter_gu(
+	segment_start_ground_gu: Vector2,
+	segment_end_ground_gu: Vector2,
+	target_center_ground_gu: Vector2,
+	combined_contact_radius_gu: float,
+) -> float:
+	var segment := segment_end_ground_gu - segment_start_ground_gu
+	var relative_start := segment_start_ground_gu - target_center_ground_gu
+	var radius := maxf(0.0, combined_contact_radius_gu) + GroundUnitSpaceScript.EPSILON_GU
+	var segment_length_squared := segment.length_squared()
+	if segment_length_squared <= 0.0000001:
+		return 0.0 if relative_start.length_squared() <= radius * radius else INF
+	if relative_start.length_squared() <= radius * radius:
+		return 0.0
+	var b := relative_start.dot(segment)
+	var c := relative_start.length_squared() - radius * radius
+	var discriminant := b * b - segment_length_squared * c
+	if discriminant < 0.0:
+		return INF
+	var root := (-b - sqrt(maxf(0.0, discriminant))) / segment_length_squared
+	if root < 0.0:
+		return 0.0
+	if root > 1.0:
+		return INF
+	return root
 
 
 func _runtime_screen_to_ground_position(screen_position_px: Vector2) -> Vector2:
