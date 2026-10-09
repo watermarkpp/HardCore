@@ -1,0 +1,91 @@
+{
+  "status": "PASS",
+  "scope": "raw-byte binding of existing official build helper and authoring inputs only; no generation or runtime rewrite",
+  "review_parent": "dbd78d3301c2af6cfd9e070abe8cc847e6353175",
+  "files": [
+    {
+      "path": "assets/data/vanilla_176/skill_source_package_v1_0_1/CODEX_施工总指令_v1.md",
+      "sha256": "DB4C5439FBB84F0738F4945C5F96B6D3027B7A9D8AF142BD9004FE2B260F07FF",
+      "bytes": 2961,
+      "role": "human_authoring_contract",
+      "already_present_in_b01": true
+    },
+    {
+      "path": "assets/data/vanilla_176/skill_source_package_v1_0_1/MIR2_176_33技能_Codex施工规格_v1.0.1.md",
+      "sha256": "19906276B3D6F88144C3477D0F99C95FD8AFE6E17C5753C9B200AC3EBAB9612A",
+      "bytes": 56283,
+      "role": "human_authoring_contract",
+      "already_present_in_b01": true
+    },
+    {
+      "path": "assets/data/vanilla_176/skill_source_package_v1_0_1/MIR2_176_当前差异与迁移清单_4b6ea4e0.md",
+      "sha256": "7068F0ABF1D5C4A9F14F51192D3166DB5595E88E7CD468292D33E76662A9F7DE",
+      "bytes": 3106,
+      "role": "human_authoring_contract",
+      "already_present_in_b01": true
+    },
+    {
+      "path": "tools/android_java_environment.ps1",
+      "sha256": "55207F47B2794395550867DE18C423C58C56435D139F536BDDBB92160A8D6837",
+      "bytes": 3827,
+      "role": "formal_android_build_helper",
+      "already_present_in_b01": false
+    },
+    {
+      "path": "tools/loot_sheet_compiler/evidence/01_新增物品41行.csv",
+      "sha256": "A38DD2C05E829424904CB009D88C886FB7335621E46D051BD26A550E69CC077C",
+      "bytes": 8900,
+      "role": "formal_compiler_authoring_input",
+      "already_present_in_b01": true
+    },
+    {
+      "path": "tools/loot_sheet_compiler/evidence/02_数字爆率67行_分数重建候选.csv",
+      "sha256": "0B61AC11F5DDA36FE3029820EF3AD6DD85FFA542158276DEA9BB767F28AACF10",
+      "bytes": 9469,
+      "role": "formal_compiler_authoring_input",
+      "already_present_in_b01": true
+    },
+    {
+      "path": "tools/loot_sheet_compiler/evidence/03_合并独立槽320行_待绑定完整UID.csv",
+      "sha256": "ECD2112A60AD122FB1C90F7BC048D9440FFEF25786541E2AE16B2512CDDE94BC",
+      "bytes": 53835,
+      "role": "formal_compiler_authoring_input",
+      "already_present_in_b01": true
+    },
+    {
+      "path": "tools/loot_sheet_compiler/evidence/04_五张空表与七条残留.csv",
+      "sha256": "4CE606502C960736E5A6BE6130E41DCA04248A04D085B5560E06238520EA90B9",
+      "bytes": 1252,
+      "role": "formal_compiler_authoring_input",
+      "already_present_in_b01": true
+    },
+    {
+      "path": "tools/loot_sheet_compiler/evidence/05_目录计数75处过期.csv",
+      "sha256": "E2228F9722571759B81C374FD1A20B94E165F6F4D2DAC8CB49B390E0E5EA17E7",
+      "bytes": 5412,
+      "role": "historical_evidence_only",
+      "already_present_in_b01": true
+    },
+    {
+      "path": "tools/loot_sheet_compiler/evidence/06_F列八处非联动公式.csv",
+      "sha256": "2349565067DBFF43A0366518E1D5EA8742270EB122BE376DBE05576F527AC277",
+      "bytes": 928,
+      "role": "historical_evidence_only",
+      "already_present_in_b01": true
+    },
+    {
+      "path": "tools/loot_sheet_compiler/evidence/07_全部具名奖励4876行.csv",
+      "sha256": "7D08B583AC0B006052E751AC908DEC2B74B085174F9D0144F1A384E0FC3C2874",
+      "bytes": 670948,
+      "role": "formal_compiler_authoring_input",
+      "already_present_in_b01": true
+    },
+    {
+      "path": "tools/android_java_loopback_probe.java",
+      "sha256": "AA52874D057B6959BF7E295A72FE40B2998E6E8640759A779E5FF2A69B61A29B",
+      "bytes": 1205,
+      "role": "formal_android_java_loopback_preflight_source",
+      "already_present_in_b01": false
+    }
+  ]
+}
