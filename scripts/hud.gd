@@ -2607,11 +2607,18 @@ func update_loading_progress(transition_id: String, completed: float, stage: Str
 
 
 func cancel_movement_input() -> void:
-	_cancel_all_item_slot_presses()
+	cancel_item_slot_input_boundary(&"movement_boundary")
 	if movement_joystick != null and is_instance_valid(movement_joystick):
 		movement_joystick.cancel_input()
 	else:
 		movement_changed.emit(Vector2.ZERO)
+
+
+## Clears transient quick-item pointer/hold ownership at a shared input boundary.
+## Slot bindings and already accepted item transactions remain untouched; this
+## deliberately does not synthesize a release event.
+func cancel_item_slot_input_boundary(_reason: StringName = &"") -> void:
+	_cancel_all_item_slot_presses()
 
 
 func finish_loading_transition() -> void:

@@ -1,0 +1,5 @@
+ERROR: B05-001: fresh quick-slot DOWN/UP emits exactly one use
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/framework/hud_quick_slot_cancel_contract_20261010_test.gd:14)
+       [1] _run (res://tests/framework/hud_quick_slot_cancel_contract_20261010_test.gd:83)

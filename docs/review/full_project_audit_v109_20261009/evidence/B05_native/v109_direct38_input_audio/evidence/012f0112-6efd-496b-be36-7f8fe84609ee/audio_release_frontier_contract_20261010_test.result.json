@@ -1,0 +1,2747 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "real EnemyActor resolves shared audio service",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "real EnemyActor attack context must play",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "same live EnemyActor release must reject",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "new live EnemyActor release must play",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "old live EnemyActor receipt must reject",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "owner alias must reject",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "wrong owner life must reject",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "retired EnemyActor context must reject",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "retired EnemyActor must release live owner state",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "owner 1 first release must play",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "owner 2 first release must play",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "owner 3 first release must play",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "owner 4 first release must play",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "owner 5 first release must play",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "owner 6 first release must play",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "owner 7 first release must play",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "owner 8 first release must play",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "owner 9 first release must play",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "owner 10 first release must play",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "owner 11 first release must play",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "owner 12 first release must play",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "owner 13 first release must play",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "owner 14 first release must play",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "owner 15 first release must play",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "owner 16 first release must play",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "owner 17 first release must play",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "owner 18 first release must play",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "owner 19 first release must play",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "owner 20 first release must play",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "retired owners must not accumulate",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "synthetic compatibility event must play",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "synthetic exact-key replay must reject",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "same release frame event is independently admissible",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "same frame event must be rejected",
+      "passed": true
+    },
+    {
+      "id": 35,
+      "label": "new serial 1 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 36,
+      "label": "new serial 2 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 37,
+      "label": "new serial 3 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 38,
+      "label": "new serial 4 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 39,
+      "label": "new serial 5 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 40,
+      "label": "new serial 6 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 41,
+      "label": "new serial 7 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 42,
+      "label": "new serial 8 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 43,
+      "label": "new serial 9 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 44,
+      "label": "new serial 10 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 45,
+      "label": "new serial 11 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 46,
+      "label": "new serial 12 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 47,
+      "label": "new serial 13 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 48,
+      "label": "new serial 14 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 49,
+      "label": "new serial 15 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 50,
+      "label": "new serial 16 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 51,
+      "label": "new serial 17 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 52,
+      "label": "new serial 18 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 53,
+      "label": "new serial 19 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 54,
+      "label": "new serial 20 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 55,
+      "label": "new serial 21 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 56,
+      "label": "new serial 22 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 57,
+      "label": "new serial 23 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 58,
+      "label": "new serial 24 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 59,
+      "label": "new serial 25 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 60,
+      "label": "new serial 26 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 61,
+      "label": "new serial 27 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 62,
+      "label": "new serial 28 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 63,
+      "label": "new serial 29 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 64,
+      "label": "new serial 30 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 65,
+      "label": "new serial 31 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 66,
+      "label": "new serial 32 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 67,
+      "label": "new serial 33 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 68,
+      "label": "new serial 34 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 69,
+      "label": "new serial 35 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 70,
+      "label": "new serial 36 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 71,
+      "label": "new serial 37 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 72,
+      "label": "new serial 38 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 73,
+      "label": "new serial 39 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 74,
+      "label": "new serial 40 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 75,
+      "label": "new serial 41 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 76,
+      "label": "new serial 42 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 77,
+      "label": "new serial 43 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 78,
+      "label": "new serial 44 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 79,
+      "label": "new serial 45 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 80,
+      "label": "new serial 46 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 81,
+      "label": "new serial 47 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 82,
+      "label": "new serial 48 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 83,
+      "label": "new serial 49 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 84,
+      "label": "new serial 50 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 85,
+      "label": "new serial 51 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 86,
+      "label": "new serial 52 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 87,
+      "label": "new serial 53 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 88,
+      "label": "new serial 54 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 89,
+      "label": "new serial 55 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 90,
+      "label": "new serial 56 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 91,
+      "label": "new serial 57 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 92,
+      "label": "new serial 58 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 93,
+      "label": "new serial 59 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 94,
+      "label": "new serial 60 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 95,
+      "label": "new serial 61 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 96,
+      "label": "new serial 62 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 97,
+      "label": "new serial 63 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 98,
+      "label": "new serial 64 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 99,
+      "label": "new serial 65 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 100,
+      "label": "new serial 66 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 101,
+      "label": "new serial 67 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 102,
+      "label": "new serial 68 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 103,
+      "label": "new serial 69 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 104,
+      "label": "new serial 70 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 105,
+      "label": "new serial 71 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 106,
+      "label": "new serial 72 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 107,
+      "label": "new serial 73 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 108,
+      "label": "new serial 74 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 109,
+      "label": "new serial 75 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 110,
+      "label": "new serial 76 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 111,
+      "label": "new serial 77 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 112,
+      "label": "new serial 78 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 113,
+      "label": "new serial 79 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 114,
+      "label": "new serial 80 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 115,
+      "label": "new serial 81 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 116,
+      "label": "new serial 82 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 117,
+      "label": "new serial 83 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 118,
+      "label": "new serial 84 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 119,
+      "label": "new serial 85 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 120,
+      "label": "new serial 86 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 121,
+      "label": "new serial 87 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 122,
+      "label": "new serial 88 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 123,
+      "label": "new serial 89 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 124,
+      "label": "new serial 90 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 125,
+      "label": "new serial 91 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 126,
+      "label": "new serial 92 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 127,
+      "label": "new serial 93 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 128,
+      "label": "new serial 94 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 129,
+      "label": "new serial 95 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 130,
+      "label": "new serial 96 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 131,
+      "label": "new serial 97 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 132,
+      "label": "new serial 98 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 133,
+      "label": "new serial 99 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 134,
+      "label": "new serial 100 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 135,
+      "label": "new serial 101 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 136,
+      "label": "new serial 102 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 137,
+      "label": "new serial 103 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 138,
+      "label": "new serial 104 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 139,
+      "label": "new serial 105 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 140,
+      "label": "new serial 106 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 141,
+      "label": "new serial 107 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 142,
+      "label": "new serial 108 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 143,
+      "label": "new serial 109 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 144,
+      "label": "new serial 110 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 145,
+      "label": "new serial 111 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 146,
+      "label": "new serial 112 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 147,
+      "label": "new serial 113 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 148,
+      "label": "new serial 114 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 149,
+      "label": "new serial 115 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 150,
+      "label": "new serial 116 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 151,
+      "label": "new serial 117 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 152,
+      "label": "new serial 118 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 153,
+      "label": "new serial 119 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 154,
+      "label": "new serial 120 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 155,
+      "label": "new serial 121 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 156,
+      "label": "new serial 122 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 157,
+      "label": "new serial 123 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 158,
+      "label": "new serial 124 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 159,
+      "label": "new serial 125 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 160,
+      "label": "new serial 126 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 161,
+      "label": "new serial 127 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 162,
+      "label": "new serial 128 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 163,
+      "label": "new serial 129 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 164,
+      "label": "new serial 130 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 165,
+      "label": "new serial 131 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 166,
+      "label": "new serial 132 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 167,
+      "label": "new serial 133 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 168,
+      "label": "new serial 134 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 169,
+      "label": "new serial 135 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 170,
+      "label": "new serial 136 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 171,
+      "label": "new serial 137 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 172,
+      "label": "new serial 138 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 173,
+      "label": "new serial 139 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 174,
+      "label": "new serial 140 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 175,
+      "label": "new serial 141 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 176,
+      "label": "new serial 142 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 177,
+      "label": "new serial 143 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 178,
+      "label": "new serial 144 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 179,
+      "label": "new serial 145 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 180,
+      "label": "new serial 146 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 181,
+      "label": "new serial 147 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 182,
+      "label": "new serial 148 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 183,
+      "label": "new serial 149 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 184,
+      "label": "new serial 150 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 185,
+      "label": "new serial 151 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 186,
+      "label": "new serial 152 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 187,
+      "label": "new serial 153 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 188,
+      "label": "new serial 154 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 189,
+      "label": "new serial 155 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 190,
+      "label": "new serial 156 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 191,
+      "label": "new serial 157 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 192,
+      "label": "new serial 158 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 193,
+      "label": "new serial 159 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 194,
+      "label": "new serial 160 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 195,
+      "label": "new serial 161 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 196,
+      "label": "new serial 162 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 197,
+      "label": "new serial 163 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 198,
+      "label": "new serial 164 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 199,
+      "label": "new serial 165 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 200,
+      "label": "new serial 166 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 201,
+      "label": "new serial 167 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 202,
+      "label": "new serial 168 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 203,
+      "label": "new serial 169 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 204,
+      "label": "new serial 170 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 205,
+      "label": "new serial 171 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 206,
+      "label": "new serial 172 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 207,
+      "label": "new serial 173 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 208,
+      "label": "new serial 174 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 209,
+      "label": "new serial 175 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 210,
+      "label": "new serial 176 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 211,
+      "label": "new serial 177 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 212,
+      "label": "new serial 178 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 213,
+      "label": "new serial 179 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 214,
+      "label": "new serial 180 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 215,
+      "label": "new serial 181 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 216,
+      "label": "new serial 182 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 217,
+      "label": "new serial 183 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 218,
+      "label": "new serial 184 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 219,
+      "label": "new serial 185 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 220,
+      "label": "new serial 186 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 221,
+      "label": "new serial 187 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 222,
+      "label": "new serial 188 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 223,
+      "label": "new serial 189 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 224,
+      "label": "new serial 190 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 225,
+      "label": "new serial 191 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 226,
+      "label": "new serial 192 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 227,
+      "label": "new serial 193 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 228,
+      "label": "new serial 194 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 229,
+      "label": "new serial 195 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 230,
+      "label": "new serial 196 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 231,
+      "label": "new serial 197 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 232,
+      "label": "new serial 198 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 233,
+      "label": "new serial 199 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 234,
+      "label": "new serial 200 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 235,
+      "label": "new serial 201 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 236,
+      "label": "new serial 202 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 237,
+      "label": "new serial 203 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 238,
+      "label": "new serial 204 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 239,
+      "label": "new serial 205 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 240,
+      "label": "new serial 206 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 241,
+      "label": "new serial 207 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 242,
+      "label": "new serial 208 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 243,
+      "label": "new serial 209 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 244,
+      "label": "new serial 210 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 245,
+      "label": "new serial 211 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 246,
+      "label": "new serial 212 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 247,
+      "label": "new serial 213 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 248,
+      "label": "new serial 214 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 249,
+      "label": "new serial 215 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 250,
+      "label": "new serial 216 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 251,
+      "label": "new serial 217 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 252,
+      "label": "new serial 218 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 253,
+      "label": "new serial 219 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 254,
+      "label": "new serial 220 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 255,
+      "label": "new serial 221 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 256,
+      "label": "new serial 222 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 257,
+      "label": "new serial 223 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 258,
+      "label": "new serial 224 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 259,
+      "label": "new serial 225 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 260,
+      "label": "new serial 226 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 261,
+      "label": "new serial 227 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 262,
+      "label": "new serial 228 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 263,
+      "label": "new serial 229 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 264,
+      "label": "new serial 230 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 265,
+      "label": "new serial 231 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 266,
+      "label": "new serial 232 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 267,
+      "label": "new serial 233 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 268,
+      "label": "new serial 234 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 269,
+      "label": "new serial 235 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 270,
+      "label": "new serial 236 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 271,
+      "label": "new serial 237 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 272,
+      "label": "new serial 238 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 273,
+      "label": "new serial 239 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 274,
+      "label": "new serial 240 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 275,
+      "label": "new serial 241 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 276,
+      "label": "new serial 242 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 277,
+      "label": "new serial 243 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 278,
+      "label": "new serial 244 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 279,
+      "label": "new serial 245 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 280,
+      "label": "new serial 246 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 281,
+      "label": "new serial 247 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 282,
+      "label": "new serial 248 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 283,
+      "label": "new serial 249 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 284,
+      "label": "new serial 250 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 285,
+      "label": "new serial 251 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 286,
+      "label": "new serial 252 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 287,
+      "label": "new serial 253 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 288,
+      "label": "new serial 254 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 289,
+      "label": "new serial 255 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 290,
+      "label": "new serial 256 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 291,
+      "label": "new serial 257 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 292,
+      "label": "new serial 258 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 293,
+      "label": "new serial 259 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 294,
+      "label": "new serial 260 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 295,
+      "label": "new serial 261 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 296,
+      "label": "new serial 262 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 297,
+      "label": "new serial 263 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 298,
+      "label": "new serial 264 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 299,
+      "label": "new serial 265 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 300,
+      "label": "new serial 266 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 301,
+      "label": "new serial 267 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 302,
+      "label": "new serial 268 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 303,
+      "label": "new serial 269 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 304,
+      "label": "new serial 270 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 305,
+      "label": "new serial 271 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 306,
+      "label": "new serial 272 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 307,
+      "label": "new serial 273 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 308,
+      "label": "new serial 274 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 309,
+      "label": "new serial 275 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 310,
+      "label": "new serial 276 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 311,
+      "label": "new serial 277 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 312,
+      "label": "new serial 278 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 313,
+      "label": "new serial 279 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 314,
+      "label": "new serial 280 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 315,
+      "label": "new serial 281 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 316,
+      "label": "new serial 282 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 317,
+      "label": "new serial 283 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 318,
+      "label": "new serial 284 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 319,
+      "label": "new serial 285 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 320,
+      "label": "new serial 286 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 321,
+      "label": "new serial 287 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 322,
+      "label": "new serial 288 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 323,
+      "label": "new serial 289 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 324,
+      "label": "new serial 290 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 325,
+      "label": "new serial 291 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 326,
+      "label": "new serial 292 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 327,
+      "label": "new serial 293 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 328,
+      "label": "new serial 294 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 329,
+      "label": "new serial 295 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 330,
+      "label": "new serial 296 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 331,
+      "label": "new serial 297 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 332,
+      "label": "new serial 298 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 333,
+      "label": "new serial 299 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 334,
+      "label": "new serial 300 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 335,
+      "label": "new serial 301 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 336,
+      "label": "new serial 302 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 337,
+      "label": "new serial 303 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 338,
+      "label": "new serial 304 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 339,
+      "label": "new serial 305 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 340,
+      "label": "new serial 306 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 341,
+      "label": "new serial 307 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 342,
+      "label": "new serial 308 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 343,
+      "label": "new serial 309 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 344,
+      "label": "new serial 310 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 345,
+      "label": "new serial 311 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 346,
+      "label": "new serial 312 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 347,
+      "label": "new serial 313 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 348,
+      "label": "new serial 314 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 349,
+      "label": "new serial 315 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 350,
+      "label": "new serial 316 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 351,
+      "label": "new serial 317 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 352,
+      "label": "new serial 318 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 353,
+      "label": "new serial 319 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 354,
+      "label": "new serial 320 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 355,
+      "label": "new serial 321 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 356,
+      "label": "new serial 322 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 357,
+      "label": "new serial 323 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 358,
+      "label": "new serial 324 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 359,
+      "label": "new serial 325 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 360,
+      "label": "new serial 326 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 361,
+      "label": "new serial 327 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 362,
+      "label": "new serial 328 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 363,
+      "label": "new serial 329 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 364,
+      "label": "new serial 330 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 365,
+      "label": "new serial 331 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 366,
+      "label": "new serial 332 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 367,
+      "label": "new serial 333 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 368,
+      "label": "new serial 334 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 369,
+      "label": "new serial 335 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 370,
+      "label": "new serial 336 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 371,
+      "label": "new serial 337 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 372,
+      "label": "new serial 338 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 373,
+      "label": "new serial 339 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 374,
+      "label": "new serial 340 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 375,
+      "label": "new serial 341 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 376,
+      "label": "new serial 342 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 377,
+      "label": "new serial 343 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 378,
+      "label": "new serial 344 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 379,
+      "label": "new serial 345 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 380,
+      "label": "new serial 346 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 381,
+      "label": "new serial 347 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 382,
+      "label": "new serial 348 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 383,
+      "label": "new serial 349 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 384,
+      "label": "new serial 350 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 385,
+      "label": "new serial 351 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 386,
+      "label": "new serial 352 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 387,
+      "label": "new serial 353 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 388,
+      "label": "new serial 354 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 389,
+      "label": "new serial 355 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 390,
+      "label": "new serial 356 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 391,
+      "label": "new serial 357 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 392,
+      "label": "new serial 358 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 393,
+      "label": "new serial 359 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 394,
+      "label": "new serial 360 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 395,
+      "label": "new serial 361 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 396,
+      "label": "new serial 362 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 397,
+      "label": "new serial 363 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 398,
+      "label": "new serial 364 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 399,
+      "label": "new serial 365 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 400,
+      "label": "new serial 366 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 401,
+      "label": "new serial 367 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 402,
+      "label": "new serial 368 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 403,
+      "label": "new serial 369 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 404,
+      "label": "new serial 370 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 405,
+      "label": "new serial 371 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 406,
+      "label": "new serial 372 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 407,
+      "label": "new serial 373 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 408,
+      "label": "new serial 374 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 409,
+      "label": "new serial 375 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 410,
+      "label": "new serial 376 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 411,
+      "label": "new serial 377 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 412,
+      "label": "new serial 378 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 413,
+      "label": "new serial 379 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 414,
+      "label": "new serial 380 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 415,
+      "label": "new serial 381 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 416,
+      "label": "new serial 382 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 417,
+      "label": "new serial 383 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 418,
+      "label": "new serial 384 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 419,
+      "label": "new serial 385 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 420,
+      "label": "new serial 386 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 421,
+      "label": "new serial 387 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 422,
+      "label": "new serial 388 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 423,
+      "label": "new serial 389 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 424,
+      "label": "new serial 390 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 425,
+      "label": "new serial 391 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 426,
+      "label": "new serial 392 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 427,
+      "label": "new serial 393 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 428,
+      "label": "new serial 394 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 429,
+      "label": "new serial 395 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 430,
+      "label": "new serial 396 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 431,
+      "label": "new serial 397 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 432,
+      "label": "new serial 398 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 433,
+      "label": "new serial 399 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 434,
+      "label": "new serial 400 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 435,
+      "label": "new serial 401 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 436,
+      "label": "new serial 402 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 437,
+      "label": "new serial 403 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 438,
+      "label": "new serial 404 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 439,
+      "label": "new serial 405 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 440,
+      "label": "new serial 406 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 441,
+      "label": "new serial 407 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 442,
+      "label": "new serial 408 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 443,
+      "label": "new serial 409 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 444,
+      "label": "new serial 410 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 445,
+      "label": "new serial 411 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 446,
+      "label": "new serial 412 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 447,
+      "label": "new serial 413 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 448,
+      "label": "new serial 414 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 449,
+      "label": "new serial 415 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 450,
+      "label": "new serial 416 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 451,
+      "label": "new serial 417 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 452,
+      "label": "new serial 418 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 453,
+      "label": "new serial 419 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 454,
+      "label": "new serial 420 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 455,
+      "label": "new serial 421 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 456,
+      "label": "new serial 422 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 457,
+      "label": "new serial 423 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 458,
+      "label": "new serial 424 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 459,
+      "label": "new serial 425 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 460,
+      "label": "new serial 426 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 461,
+      "label": "new serial 427 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 462,
+      "label": "new serial 428 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 463,
+      "label": "new serial 429 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 464,
+      "label": "new serial 430 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 465,
+      "label": "new serial 431 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 466,
+      "label": "new serial 432 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 467,
+      "label": "new serial 433 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 468,
+      "label": "new serial 434 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 469,
+      "label": "new serial 435 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 470,
+      "label": "new serial 436 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 471,
+      "label": "new serial 437 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 472,
+      "label": "new serial 438 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 473,
+      "label": "new serial 439 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 474,
+      "label": "new serial 440 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 475,
+      "label": "new serial 441 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 476,
+      "label": "new serial 442 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 477,
+      "label": "new serial 443 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 478,
+      "label": "new serial 444 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 479,
+      "label": "new serial 445 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 480,
+      "label": "new serial 446 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 481,
+      "label": "new serial 447 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 482,
+      "label": "new serial 448 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 483,
+      "label": "new serial 449 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 484,
+      "label": "new serial 450 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 485,
+      "label": "new serial 451 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 486,
+      "label": "new serial 452 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 487,
+      "label": "new serial 453 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 488,
+      "label": "new serial 454 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 489,
+      "label": "new serial 455 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 490,
+      "label": "new serial 456 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 491,
+      "label": "new serial 457 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 492,
+      "label": "new serial 458 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 493,
+      "label": "new serial 459 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 494,
+      "label": "new serial 460 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 495,
+      "label": "new serial 461 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 496,
+      "label": "new serial 462 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 497,
+      "label": "new serial 463 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 498,
+      "label": "new serial 464 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 499,
+      "label": "new serial 465 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 500,
+      "label": "new serial 466 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 501,
+      "label": "new serial 467 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 502,
+      "label": "new serial 468 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 503,
+      "label": "new serial 469 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 504,
+      "label": "new serial 470 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 505,
+      "label": "new serial 471 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 506,
+      "label": "new serial 472 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 507,
+      "label": "new serial 473 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 508,
+      "label": "new serial 474 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 509,
+      "label": "new serial 475 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 510,
+      "label": "new serial 476 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 511,
+      "label": "new serial 477 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 512,
+      "label": "new serial 478 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 513,
+      "label": "new serial 479 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 514,
+      "label": "new serial 480 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 515,
+      "label": "new serial 481 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 516,
+      "label": "new serial 482 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 517,
+      "label": "new serial 483 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 518,
+      "label": "new serial 484 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 519,
+      "label": "new serial 485 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 520,
+      "label": "new serial 486 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 521,
+      "label": "new serial 487 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 522,
+      "label": "new serial 488 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 523,
+      "label": "new serial 489 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 524,
+      "label": "new serial 490 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 525,
+      "label": "new serial 491 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 526,
+      "label": "new serial 492 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 527,
+      "label": "new serial 493 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 528,
+      "label": "new serial 494 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 529,
+      "label": "new serial 495 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 530,
+      "label": "new serial 496 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 531,
+      "label": "new serial 497 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 532,
+      "label": "new serial 498 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 533,
+      "label": "new serial 499 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 534,
+      "label": "new serial 500 must play at authored cadence",
+      "passed": true
+    },
+    {
+      "id": 535,
+      "label": "one frontier per live owner/event is required",
+      "passed": true
+    },
+    {
+      "id": 536,
+      "label": "only non-monotonic synthetic UUIDs use the exact-key ledger",
+      "passed": true
+    },
+    {
+      "id": 537,
+      "label": "retired serial owner must release live owner state",
+      "passed": true
+    },
+    {
+      "id": 538,
+      "label": "retired serial owner must release its frontier",
+      "passed": true
+    },
+    {
+      "id": 539,
+      "label": "world stop clears attack frontiers",
+      "passed": true
+    },
+    {
+      "id": 540,
+      "label": "independent attack frame frontier",
+      "passed": true
+    },
+    {
+      "id": 541,
+      "label": "duplicate attack frame rejects",
+      "passed": true
+    },
+    {
+      "id": 542,
+      "label": "one frontier per live owner/event",
+      "passed": true
+    },
+    {
+      "id": 543,
+      "label": "only synthetic UUID uses exact ledger",
+      "passed": true
+    },
+    {
+      "id": 544,
+      "label": "retired serial owner releases frontier",
+      "passed": true
+    },
+    {
+      "id": 545,
+      "label": "world stop clears attack frontiers",
+      "passed": true
+    }
+  ],
+  "count": 545,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "dc75713e-d0d9-4de5-86c2-b765c47b7992",
+  "passed": 545,
+  "reported_checks": 545,
+  "reported_failures": 0,
+  "run_id": "012f0112-6efd-496b-be36-7f8fe84609ee",
+  "runtime_environment": {
+    "native_process_id": 6068,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct38_input_audio",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/v109_direct38_input_audio/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "audio_release_frontier_contract_20261010_test",
+  "schema_version": 1,
+  "source_content_sha256": "8861cd59c0eef98c229923b4ce7b9e6822e38b8afb1e2d751f162d0d4b92968d",
+  "status": "PASS"
+}

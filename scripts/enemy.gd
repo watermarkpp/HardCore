@@ -847,6 +847,7 @@ func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := fals
 
 
 func _reset_monster_audio_observer() -> void:
+	_retire_cached_audio_owner()
 	_audio_appear_emitted = false
 	_audio_death_emitted = false
 	_audio_combat_session_active = false
@@ -865,6 +866,20 @@ func _reset_monster_audio_observer() -> void:
 	_audio_previous_visual_state = ""
 	_audio_previous_visual_frame = -1
 	_audio_previous_facing = Vector2.INF
+
+
+func _retire_cached_audio_owner() -> void:
+	if (
+		_audio_owner_key.is_empty()
+		or not is_instance_valid(_audio_runtime_service)
+		or not _audio_runtime_service.has_method("retire_monster_audio_owner")
+	):
+		return
+	_audio_runtime_service.call(
+		"retire_monster_audio_owner",
+		_audio_owner_key,
+		get_instance_id(),
+	)
 
 
 ## Test-only deterministic control for the presentation RNG.  Production
@@ -1015,6 +1030,8 @@ func _audio_context(semantic_event: String) -> Dictionary:
 		"runtime_map_id": runtime_map_id,
 		"semantic_event": semantic_event,
 		"audio_owner_key": _audio_owner_key_for_actor(),
+		"source_instance_id": get_instance_id(),
+		"source_life": _hc_life(self),
 	}
 	var combat_epoch := _audio_combat_epoch()
 	if combat_epoch >= 0:
@@ -6358,6 +6375,7 @@ func _notification(what: int) -> void:
 
 
 func _exit_tree() -> void:
+	_retire_cached_audio_owner()
 	HCDecisionBudget.cancel(get_instance_id())
 	_clear_attack_los_cache()
 	_cancel_autonomous_step(true)

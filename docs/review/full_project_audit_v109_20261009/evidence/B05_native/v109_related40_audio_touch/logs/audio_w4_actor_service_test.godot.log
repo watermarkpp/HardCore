@@ -1,0 +1,582 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+TextServer: Added interface "Dummy"
+TextServer: Added interface "ICU / HarfBuzz / Graphite (Built-in)"
+Using "default" pen tablet driver...
+
+TextServer: Primary interface set to: "ICU / HarfBuzz / Graphite (Built-in)".
+CORE API HASH: 3472268009
+EDITOR API HASH: 2212757246
+SceneTreeFTI: traversal method DEFAULT
+Loading resource: res://scripts/device_lab_patch_bootstrap.gd remapped: res://scripts/device_lab_patch_bootstrap.gd
+Completed load for: 'res://scripts/device_lab_patch_bootstrap.gd' remapped 'res://scripts/device_lab_patch_bootstrap.gd' at thread -1
+Loading resource: res://scripts/audio_preferences.gd remapped: res://scripts/audio_preferences.gd
+Completed load for: 'res://scripts/audio_preferences.gd' remapped 'res://scripts/audio_preferences.gd' at thread -1
+Loading resource: res://scripts/loot_preferences.gd remapped: res://scripts/loot_preferences.gd
+Completed load for: 'res://scripts/loot_preferences.gd' remapped 'res://scripts/loot_preferences.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/content_layer_registry.gd remapped: res://scripts/layers/runtime/content_layer_registry.gd
+Completed load for: 'res://scripts/layers/runtime/content_layer_registry.gd' remapped 'res://scripts/layers/runtime/content_layer_registry.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/world_content_service.gd remapped: res://scripts/layers/runtime/world_content_service.gd
+Completed load for: 'res://scripts/layers/runtime/world_content_service.gd' remapped 'res://scripts/layers/runtime/world_content_service.gd' at thread -1
+Loading resource: res://scripts/layers/presentation/presentation_registry.gd remapped: res://scripts/layers/presentation/presentation_registry.gd
+Completed load for: 'res://scripts/layers/presentation/presentation_registry.gd' remapped 'res://scripts/layers/presentation/presentation_registry.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/targeting_runtime_service.gd remapped: res://scripts/layers/runtime/targeting_runtime_service.gd
+Completed load for: 'res://scripts/layers/runtime/targeting_runtime_service.gd' remapped 'res://scripts/layers/runtime/targeting_runtime_service.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/loot_runtime_service.gd remapped: res://scripts/layers/runtime/loot_runtime_service.gd
+Completed load for: 'res://scripts/layers/runtime/loot_runtime_service.gd' remapped 'res://scripts/layers/runtime/loot_runtime_service.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/combat_runtime_service.gd remapped: res://scripts/layers/runtime/combat_runtime_service.gd
+Completed load for: 'res://scripts/layers/runtime/combat_runtime_service.gd' remapped 'res://scripts/layers/runtime/combat_runtime_service.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/domain_runtime_services.gd remapped: res://scripts/layers/runtime/domain_runtime_services.gd
+Completed load for: 'res://scripts/layers/runtime/domain_runtime_services.gd' remapped 'res://scripts/layers/runtime/domain_runtime_services.gd' at thread -1
+Loading resource: res://scripts/layers/rules/boss_mechanic_registry.gd remapped: res://scripts/layers/rules/boss_mechanic_registry.gd
+Completed load for: 'res://scripts/layers/rules/boss_mechanic_registry.gd' remapped 'res://scripts/layers/rules/boss_mechanic_registry.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/runtime_service_facade.gd remapped: res://scripts/layers/runtime/runtime_service_facade.gd
+Completed load for: 'res://scripts/layers/runtime/runtime_service_facade.gd' remapped 'res://scripts/layers/runtime/runtime_service_facade.gd' at thread -1
+Loaded system CA certificates
+Loading resource: res://tests/audio_w4_actor_service_test.tscn remapped: res://tests/audio_w4_actor_service_test.tscn
+Loading resource: res://tests/audio_w4_actor_service_test.gd remapped: res://tests/audio_w4_actor_service_test.gd
+Loading resource: res://assets/shaders/trial_magic_screen.gdshader remapped: res://assets/shaders/trial_magic_screen.gdshader
+Completed load for: 'res://assets/shaders/trial_magic_screen.gdshader' remapped 'res://assets/shaders/trial_magic_screen.gdshader' at thread -1
+Loading resource: res://assets/art/monsters/effects/monster_target_magic/cow_mage_thunder_magic2.png remapped: res://assets/art/monsters/effects/monster_target_magic/cow_mage_thunder_magic2.png
+Loading resource: res://.godot/imported/cow_mage_thunder_magic2.png-f1ada7cfae9bb41578ecd7be36fbb1ee.ctex remapped: res://.godot/imported/cow_mage_thunder_magic2.png-f1ada7cfae9bb41578ecd7be36fbb1ee.ctex
+Completed load for: 'res://assets/art/monsters/effects/monster_target_magic/cow_mage_thunder_magic2.png' remapped 'res://assets/art/monsters/effects/monster_target_magic/cow_mage_thunder_magic2.png' at thread -1
+Loading resource: res://assets/art/monsters/effects/monster_target_magic/cow_priest_cast_wmon21.png remapped: res://assets/art/monsters/effects/monster_target_magic/cow_priest_cast_wmon21.png
+Loading resource: res://.godot/imported/cow_priest_cast_wmon21.png-541f8f113f1635cd0f77bea1759fddb7.ctex remapped: res://.godot/imported/cow_priest_cast_wmon21.png-541f8f113f1635cd0f77bea1759fddb7.ctex
+Completed load for: 'res://assets/art/monsters/effects/monster_target_magic/cow_priest_cast_wmon21.png' remapped 'res://assets/art/monsters/effects/monster_target_magic/cow_priest_cast_wmon21.png' at thread -1
+Loading resource: res://assets/art/monsters/effects/monster_target_magic/cow_priest_fly_magic.png remapped: res://assets/art/monsters/effects/monster_target_magic/cow_priest_fly_magic.png
+Loading resource: res://.godot/imported/cow_priest_fly_magic.png-4b64792ab4d2f6c6884e9ad1021249a0.ctex remapped: res://.godot/imported/cow_priest_fly_magic.png-4b64792ab4d2f6c6884e9ad1021249a0.ctex
+Completed load for: 'res://assets/art/monsters/effects/monster_target_magic/cow_priest_fly_magic.png' remapped 'res://assets/art/monsters/effects/monster_target_magic/cow_priest_fly_magic.png' at thread -1
+Completed load for: 'res://tests/audio_w4_actor_service_test.gd' remapped 'res://tests/audio_w4_actor_service_test.gd' at thread -1
+Completed load for: 'res://tests/audio_w4_actor_service_test.tscn' remapped 'res://tests/audio_w4_actor_service_test.tscn' at thread -1
+数据库载入完成：地图209 怪物156 Boss20 装备175 技能等级132 掉落槽3424 任务9
+Loading resource: res://assets/audio/npc/warehouse/pegboy24.wav remapped: res://assets/audio/npc/warehouse/pegboy24.wav
+Loading resource: res://.godot/imported/pegboy24.wav-682b22f7367e48fa44bd25a78a4ddf74.sample remapped: res://.godot/imported/pegboy24.wav-682b22f7367e48fa44bd25a78a4ddf74.sample
+Completed load for: 'res://assets/audio/npc/warehouse/pegboy24.wav' remapped 'res://assets/audio/npc/warehouse/pegboy24.wav' at thread -1
+Loading resource: res://assets/audio/npc/warehouse/pegboy34.wav remapped: res://assets/audio/npc/warehouse/pegboy34.wav
+Loading resource: res://.godot/imported/pegboy34.wav-e90021fa3114069582291968ec434b51.sample remapped: res://.godot/imported/pegboy34.wav-e90021fa3114069582291968ec434b51.sample
+Completed load for: 'res://assets/audio/npc/warehouse/pegboy34.wav' remapped 'res://assets/audio/npc/warehouse/pegboy34.wav' at thread -1
+Loading resource: res://assets/audio/npc/veteran/storyt25.wav remapped: res://assets/audio/npc/veteran/storyt25.wav
+Loading resource: res://.godot/imported/storyt25.wav-43933949a9f1d018631369029e766f5e.sample remapped: res://.godot/imported/storyt25.wav-43933949a9f1d018631369029e766f5e.sample
+Completed load for: 'res://assets/audio/npc/veteran/storyt25.wav' remapped 'res://assets/audio/npc/veteran/storyt25.wav' at thread -1
+Loading resource: res://assets/audio/npc/enhancement/bsmith25.wav remapped: res://assets/audio/npc/enhancement/bsmith25.wav
+Loading resource: res://.godot/imported/bsmith25.wav-3b3c074424bdd8503a7fa965634951fd.sample remapped: res://.godot/imported/bsmith25.wav-3b3c074424bdd8503a7fa965634951fd.sample
+Completed load for: 'res://assets/audio/npc/enhancement/bsmith25.wav' remapped 'res://assets/audio/npc/enhancement/bsmith25.wav' at thread -1
+Loading resource: res://assets/audio/npc/book/tavown05.wav remapped: res://assets/audio/npc/book/tavown05.wav
+Loading resource: res://.godot/imported/tavown05.wav-57c008fc18a5a978f77b9d5f4764768b.sample remapped: res://.godot/imported/tavown05.wav-57c008fc18a5a978f77b9d5f4764768b.sample
+Completed load for: 'res://assets/audio/npc/book/tavown05.wav' remapped 'res://assets/audio/npc/book/tavown05.wav' at thread -1
+Loading resource: res://assets/audio/npc/book/tavown31.wav remapped: res://assets/audio/npc/book/tavown31.wav
+Loading resource: res://.godot/imported/tavown31.wav-716b5b8107c757f24abf520c152a5512.sample remapped: res://.godot/imported/tavown31.wav-716b5b8107c757f24abf520c152a5512.sample
+Completed load for: 'res://assets/audio/npc/book/tavown31.wav' remapped 'res://assets/audio/npc/book/tavown31.wav' at thread -1
+Loading resource: res://assets/audio/npc/blacksmith/bsmith31.wav remapped: res://assets/audio/npc/blacksmith/bsmith31.wav
+Loading resource: res://.godot/imported/bsmith31.wav-df618c2da590ea3ed23fe2e406e2f5d3.sample remapped: res://.godot/imported/bsmith31.wav-df618c2da590ea3ed23fe2e406e2f5d3.sample
+Completed load for: 'res://assets/audio/npc/blacksmith/bsmith31.wav' remapped 'res://assets/audio/npc/blacksmith/bsmith31.wav' at thread -1
+Loading resource: res://assets/audio/npc/blacksmith/bsmith34.wav remapped: res://assets/audio/npc/blacksmith/bsmith34.wav
+Loading resource: res://.godot/imported/bsmith34.wav-ccd2ec7aa0471bd2083c24167942d2a4.sample remapped: res://.godot/imported/bsmith34.wav-ccd2ec7aa0471bd2083c24167942d2a4.sample
+Completed load for: 'res://assets/audio/npc/blacksmith/bsmith34.wav' remapped 'res://assets/audio/npc/blacksmith/bsmith34.wav' at thread -1
+Loading resource: res://assets/audio/npc/blacksmith/bsmith44.wav remapped: res://assets/audio/npc/blacksmith/bsmith44.wav
+Loading resource: res://.godot/imported/bsmith44.wav-599bcbf0a287a2062f647f0897d9f22f.sample remapped: res://.godot/imported/bsmith44.wav-599bcbf0a287a2062f647f0897d9f22f.sample
+Completed load for: 'res://assets/audio/npc/blacksmith/bsmith44.wav' remapped 'res://assets/audio/npc/blacksmith/bsmith44.wav' at thread -1
+Loading resource: res://assets/audio/npc/pharmacist/healer16.wav remapped: res://assets/audio/npc/pharmacist/healer16.wav
+Loading resource: res://.godot/imported/healer16.wav-762da9e60bbd227fdf6edd245d2c6ed0.sample remapped: res://.godot/imported/healer16.wav-762da9e60bbd227fdf6edd245d2c6ed0.sample
+Completed load for: 'res://assets/audio/npc/pharmacist/healer16.wav' remapped 'res://assets/audio/npc/pharmacist/healer16.wav' at thread -1
+Loading resource: res://assets/audio/npc/pharmacist/healer37.wav remapped: res://assets/audio/npc/pharmacist/healer37.wav
+Loading resource: res://.godot/imported/healer37.wav-114d8507e278ac157dd9c80a51c1e79a.sample remapped: res://.godot/imported/healer37.wav-114d8507e278ac157dd9c80a51c1e79a.sample
+Completed load for: 'res://assets/audio/npc/pharmacist/healer37.wav' remapped 'res://assets/audio/npc/pharmacist/healer37.wav' at thread -1
+Loading resource: res://assets/audio/npc/general/witch16.wav remapped: res://assets/audio/npc/general/witch16.wav
+Loading resource: res://.godot/imported/witch16.wav-5c091135d38e2f1a3a26bd6b30ec29b4.sample remapped: res://.godot/imported/witch16.wav-5c091135d38e2f1a3a26bd6b30ec29b4.sample
+Completed load for: 'res://assets/audio/npc/general/witch16.wav' remapped 'res://assets/audio/npc/general/witch16.wav' at thread -1
+Loading resource: res://assets/audio/npc/general/witch31.wav remapped: res://assets/audio/npc/general/witch31.wav
+Loading resource: res://.godot/imported/witch31.wav-08541609f1dcf41895d2ab62d3db2d73.sample remapped: res://.godot/imported/witch31.wav-08541609f1dcf41895d2ab62d3db2d73.sample
+Completed load for: 'res://assets/audio/npc/general/witch31.wav' remapped 'res://assets/audio/npc/general/witch31.wav' at thread -1
+Loading resource: res://assets/audio/npc/general/witch34.wav remapped: res://assets/audio/npc/general/witch34.wav
+Loading resource: res://.godot/imported/witch34.wav-609e8f0928745b4929bb495526b46903.sample remapped: res://.godot/imported/witch34.wav-609e8f0928745b4929bb495526b46903.sample
+Completed load for: 'res://assets/audio/npc/general/witch34.wav' remapped 'res://assets/audio/npc/general/witch34.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/130__M7-1.wav remapped: res://assets/audio/sfx/client/130__M7-1.wav
+Loading resource: res://.godot/imported/130__M7-1.wav-6b1cbf76c393a4369fd7e718b4aaa5f2.sample remapped: res://.godot/imported/130__M7-1.wav-6b1cbf76c393a4369fd7e718b4aaa5f2.sample
+Completed load for: 'res://assets/audio/sfx/client/130__M7-1.wav' remapped 'res://assets/audio/sfx/client/130__M7-1.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/131__M7-2.wav remapped: res://assets/audio/sfx/client/131__M7-2.wav
+Loading resource: res://.godot/imported/131__M7-2.wav-f3f2ad0cb6b5496fb48c7edc3abd92db.sample remapped: res://.godot/imported/131__M7-2.wav-f3f2ad0cb6b5496fb48c7edc3abd92db.sample
+Completed load for: 'res://assets/audio/sfx/client/131__M7-2.wav' remapped 'res://assets/audio/sfx/client/131__M7-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/132__M12-1.wav remapped: res://assets/audio/sfx/client/132__M12-1.wav
+Loading resource: res://.godot/imported/132__M12-1.wav-cd0dac53ca6c075be139b61bfbad9894.sample remapped: res://.godot/imported/132__M12-1.wav-cd0dac53ca6c075be139b61bfbad9894.sample
+Completed load for: 'res://assets/audio/sfx/client/132__M12-1.wav' remapped 'res://assets/audio/sfx/client/132__M12-1.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/133__M25-1.wav remapped: res://assets/audio/sfx/client/133__M25-1.wav
+Loading resource: res://.godot/imported/133__M25-1.wav-85b70fbeceba034b279af56430dcf15a.sample remapped: res://.godot/imported/133__M25-1.wav-85b70fbeceba034b279af56430dcf15a.sample
+Completed load for: 'res://assets/audio/sfx/client/133__M25-1.wav' remapped 'res://assets/audio/sfx/client/133__M25-1.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/137__M26-3.wav remapped: res://assets/audio/sfx/client/137__M26-3.wav
+Loading resource: res://.godot/imported/137__M26-3.wav-7712d841610054f9ea672e4711361b90.sample remapped: res://.godot/imported/137__M26-3.wav-7712d841610054f9ea672e4711361b90.sample
+Completed load for: 'res://assets/audio/sfx/client/137__M26-3.wav' remapped 'res://assets/audio/sfx/client/137__M26-3.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10010__M1-1.wav remapped: res://assets/audio/sfx/client/10010__M1-1.wav
+Loading resource: res://.godot/imported/10010__M1-1.wav-27f894ea4ca2ee444550696eb273ea9e.sample remapped: res://.godot/imported/10010__M1-1.wav-27f894ea4ca2ee444550696eb273ea9e.sample
+Completed load for: 'res://assets/audio/sfx/client/10010__M1-1.wav' remapped 'res://assets/audio/sfx/client/10010__M1-1.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10011__M1-2.wav remapped: res://assets/audio/sfx/client/10011__M1-2.wav
+Loading resource: res://.godot/imported/10011__M1-2.wav-442fa5e0f3ec3a1d7f54ae148a6c1e15.sample remapped: res://.godot/imported/10011__M1-2.wav-442fa5e0f3ec3a1d7f54ae148a6c1e15.sample
+Completed load for: 'res://assets/audio/sfx/client/10011__M1-2.wav' remapped 'res://assets/audio/sfx/client/10011__M1-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10012__M1-3.wav remapped: res://assets/audio/sfx/client/10012__M1-3.wav
+Loading resource: res://.godot/imported/10012__M1-3.wav-b5ca131976f62d0459842a850f39bbef.sample remapped: res://.godot/imported/10012__M1-3.wav-b5ca131976f62d0459842a850f39bbef.sample
+Completed load for: 'res://assets/audio/sfx/client/10012__M1-3.wav' remapped 'res://assets/audio/sfx/client/10012__M1-3.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10080__M8-2.wav remapped: res://assets/audio/sfx/client/10080__M8-2.wav
+Loading resource: res://.godot/imported/10080__M8-2.wav-1c4cde843c6bfb4857075773d1b762db.sample remapped: res://.godot/imported/10080__M8-2.wav-1c4cde843c6bfb4857075773d1b762db.sample
+Completed load for: 'res://assets/audio/sfx/client/10080__M8-2.wav' remapped 'res://assets/audio/sfx/client/10080__M8-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10200__M20-1.wav remapped: res://assets/audio/sfx/client/10200__M20-1.wav
+Loading resource: res://.godot/imported/10200__M20-1.wav-6112b351d7d976898864ae76a5242153.sample remapped: res://.godot/imported/10200__M20-1.wav-6112b351d7d976898864ae76a5242153.sample
+Completed load for: 'res://assets/audio/sfx/client/10200__M20-1.wav' remapped 'res://assets/audio/sfx/client/10200__M20-1.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10202__M20-3.wav remapped: res://assets/audio/sfx/client/10202__M20-3.wav
+Loading resource: res://.godot/imported/10202__M20-3.wav-029ec7780d41690f6835eacc0e37f572.sample remapped: res://.godot/imported/10202__M20-3.wav-029ec7780d41690f6835eacc0e37f572.sample
+Completed load for: 'res://assets/audio/sfx/client/10202__M20-3.wav' remapped 'res://assets/audio/sfx/client/10202__M20-3.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10090__M9-1.wav remapped: res://assets/audio/sfx/client/10090__M9-1.wav
+Loading resource: res://.godot/imported/10090__M9-1.wav-e45249d91cfc24b7eae6feb6168c23c7.sample remapped: res://.godot/imported/10090__M9-1.wav-e45249d91cfc24b7eae6feb6168c23c7.sample
+Completed load for: 'res://assets/audio/sfx/client/10090__M9-1.wav' remapped 'res://assets/audio/sfx/client/10090__M9-1.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10092__M9-3.wav remapped: res://assets/audio/sfx/client/10092__M9-3.wav
+Loading resource: res://.godot/imported/10092__M9-3.wav-0c91ed73096b35d618c80064180f8750.sample remapped: res://.godot/imported/10092__M9-3.wav-0c91ed73096b35d618c80064180f8750.sample
+Completed load for: 'res://assets/audio/sfx/client/10092__M9-3.wav' remapped 'res://assets/audio/sfx/client/10092__M9-3.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10112__M11-2.wav remapped: res://assets/audio/sfx/client/10112__M11-2.wav
+Loading resource: res://.godot/imported/10112__M11-2.wav-3f8c41b2c8504b5634a22cc9bc521a26.sample remapped: res://.godot/imported/10112__M11-2.wav-3f8c41b2c8504b5634a22cc9bc521a26.sample
+Completed load for: 'res://assets/audio/sfx/client/10112__M11-2.wav' remapped 'res://assets/audio/sfx/client/10112__M11-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10050__M5-1.wav remapped: res://assets/audio/sfx/client/10050__M5-1.wav
+Loading resource: res://.godot/imported/10050__M5-1.wav-c6ea8192e7422590f9452d0d4e4fed3d.sample remapped: res://.godot/imported/10050__M5-1.wav-c6ea8192e7422590f9452d0d4e4fed3d.sample
+Completed load for: 'res://assets/audio/sfx/client/10050__M5-1.wav' remapped 'res://assets/audio/sfx/client/10050__M5-1.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10051__M5-2.wav remapped: res://assets/audio/sfx/client/10051__M5-2.wav
+Loading resource: res://.godot/imported/10051__M5-2.wav-8b3e1004b4467d76b5464e0520c57ff3.sample remapped: res://.godot/imported/10051__M5-2.wav-8b3e1004b4467d76b5464e0520c57ff3.sample
+Completed load for: 'res://assets/audio/sfx/client/10051__M5-2.wav' remapped 'res://assets/audio/sfx/client/10051__M5-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10052__M5-3.wav remapped: res://assets/audio/sfx/client/10052__M5-3.wav
+Loading resource: res://.godot/imported/10052__M5-3.wav-b1cb6116b8aa9468fb0d97a194673823.sample remapped: res://.godot/imported/10052__M5-3.wav-b1cb6116b8aa9468fb0d97a194673823.sample
+Completed load for: 'res://assets/audio/sfx/client/10052__M5-3.wav' remapped 'res://assets/audio/sfx/client/10052__M5-3.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10210__M21-1.wav remapped: res://assets/audio/sfx/client/10210__M21-1.wav
+Loading resource: res://.godot/imported/10210__M21-1.wav-06cf6fd1fd874730e191abce9cd07014.sample remapped: res://.godot/imported/10210__M21-1.wav-06cf6fd1fd874730e191abce9cd07014.sample
+Completed load for: 'res://assets/audio/sfx/client/10210__M21-1.wav' remapped 'res://assets/audio/sfx/client/10210__M21-1.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10230__M23-1.wav remapped: res://assets/audio/sfx/client/10230__M23-1.wav
+Loading resource: res://.godot/imported/10230__M23-1.wav-318806b456840f358adb11264e11aa3e.sample remapped: res://.godot/imported/10230__M23-1.wav-318806b456840f358adb11264e11aa3e.sample
+Completed load for: 'res://assets/audio/sfx/client/10230__M23-1.wav' remapped 'res://assets/audio/sfx/client/10230__M23-1.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10232__M23-3.wav remapped: res://assets/audio/sfx/client/10232__M23-3.wav
+Loading resource: res://.godot/imported/10232__M23-3.wav-6f1b849dbb1485cd6eafce884f5fe9df.sample remapped: res://.godot/imported/10232__M23-3.wav-6f1b849dbb1485cd6eafce884f5fe9df.sample
+Completed load for: 'res://assets/audio/sfx/client/10232__M23-3.wav' remapped 'res://assets/audio/sfx/client/10232__M23-3.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10220__M22-1.wav remapped: res://assets/audio/sfx/client/10220__M22-1.wav
+Loading resource: res://.godot/imported/10220__M22-1.wav-28cb83791c52f3f575e4024a406d4f04.sample remapped: res://.godot/imported/10220__M22-1.wav-28cb83791c52f3f575e4024a406d4f04.sample
+Completed load for: 'res://assets/audio/sfx/client/10220__M22-1.wav' remapped 'res://assets/audio/sfx/client/10220__M22-1.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10222__M22-3.wav remapped: res://assets/audio/sfx/client/10222__M22-3.wav
+Loading resource: res://.godot/imported/10222__M22-3.wav-0cff75021df926374b1c9813eda16d29.sample remapped: res://.godot/imported/10222__M22-3.wav-0cff75021df926374b1c9813eda16d29.sample
+Completed load for: 'res://assets/audio/sfx/client/10222__M22-3.wav' remapped 'res://assets/audio/sfx/client/10222__M22-3.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10100__M10-1.wav remapped: res://assets/audio/sfx/client/10100__M10-1.wav
+Loading resource: res://.godot/imported/10100__M10-1.wav-592012aef9b31ef0d2dfb985c50fd9ad.sample remapped: res://.godot/imported/10100__M10-1.wav-592012aef9b31ef0d2dfb985c50fd9ad.sample
+Completed load for: 'res://assets/audio/sfx/client/10100__M10-1.wav' remapped 'res://assets/audio/sfx/client/10100__M10-1.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10240__M24-1.wav remapped: res://assets/audio/sfx/client/10240__M24-1.wav
+Loading resource: res://.godot/imported/10240__M24-1.wav-1bb20bb8c7db8f4e5e3795a617f9a2c7.sample remapped: res://.godot/imported/10240__M24-1.wav-1bb20bb8c7db8f4e5e3795a617f9a2c7.sample
+Completed load for: 'res://assets/audio/sfx/client/10240__M24-1.wav' remapped 'res://assets/audio/sfx/client/10240__M24-1.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10310__M31-1.wav remapped: res://assets/audio/sfx/client/10310__M31-1.wav
+Loading resource: res://.godot/imported/10310__M31-1.wav-4c08345abf08fb11612af1b21dc51e4c.sample remapped: res://.godot/imported/10310__M31-1.wav-4c08345abf08fb11612af1b21dc51e4c.sample
+Completed load for: 'res://assets/audio/sfx/client/10310__M31-1.wav' remapped 'res://assets/audio/sfx/client/10310__M31-1.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10320__M32-1.wav remapped: res://assets/audio/sfx/client/10320__M32-1.wav
+Loading resource: res://.godot/imported/10320__M32-1.wav-121f7a8ad939f3724273d0e9a3274a9f.sample remapped: res://.godot/imported/10320__M32-1.wav-121f7a8ad939f3724273d0e9a3274a9f.sample
+Completed load for: 'res://assets/audio/sfx/client/10320__M32-1.wav' remapped 'res://assets/audio/sfx/client/10320__M32-1.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10322__M32-3.wav remapped: res://assets/audio/sfx/client/10322__M32-3.wav
+Loading resource: res://.godot/imported/10322__M32-3.wav-95496aab735cf1dfadd00fd71d1dbc3d.sample remapped: res://.godot/imported/10322__M32-3.wav-95496aab735cf1dfadd00fd71d1dbc3d.sample
+Completed load for: 'res://assets/audio/sfx/client/10322__M32-3.wav' remapped 'res://assets/audio/sfx/client/10322__M32-3.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10330__M33-1.wav remapped: res://assets/audio/sfx/client/10330__M33-1.wav
+Loading resource: res://.godot/imported/10330__M33-1.wav-824bbe6ce0870c66b8337bf8f8825b66.sample remapped: res://.godot/imported/10330__M33-1.wav-824bbe6ce0870c66b8337bf8f8825b66.sample
+Completed load for: 'res://assets/audio/sfx/client/10330__M33-1.wav' remapped 'res://assets/audio/sfx/client/10330__M33-1.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10332__M33-3.wav remapped: res://assets/audio/sfx/client/10332__M33-3.wav
+Loading resource: res://.godot/imported/10332__M33-3.wav-8866445221b72d5d79562bfbcee4f8dc.sample remapped: res://.godot/imported/10332__M33-3.wav-8866445221b72d5d79562bfbcee4f8dc.sample
+Completed load for: 'res://assets/audio/sfx/client/10332__M33-3.wav' remapped 'res://assets/audio/sfx/client/10332__M33-3.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10020__M2-1.wav remapped: res://assets/audio/sfx/client/10020__M2-1.wav
+Loading resource: res://.godot/imported/10020__M2-1.wav-d5dfa3b80e5a5af55d9d4079e7ce9b86.sample remapped: res://.godot/imported/10020__M2-1.wav-d5dfa3b80e5a5af55d9d4079e7ce9b86.sample
+Completed load for: 'res://assets/audio/sfx/client/10020__M2-1.wav' remapped 'res://assets/audio/sfx/client/10020__M2-1.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10022__M2-3.wav remapped: res://assets/audio/sfx/client/10022__M2-3.wav
+Loading resource: res://.godot/imported/10022__M2-3.wav-d80e10a7b73435729c140ec7f7d81031.sample remapped: res://.godot/imported/10022__M2-3.wav-d80e10a7b73435729c140ec7f7d81031.sample
+Completed load for: 'res://assets/audio/sfx/client/10022__M2-3.wav' remapped 'res://assets/audio/sfx/client/10022__M2-3.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10060__M6-1.wav remapped: res://assets/audio/sfx/client/10060__M6-1.wav
+Loading resource: res://.godot/imported/10060__M6-1.wav-eb2a5e85b624805fdefe13321802df3d.sample remapped: res://.godot/imported/10060__M6-1.wav-eb2a5e85b624805fdefe13321802df3d.sample
+Completed load for: 'res://assets/audio/sfx/client/10060__M6-1.wav' remapped 'res://assets/audio/sfx/client/10060__M6-1.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10062__M6-3.wav remapped: res://assets/audio/sfx/client/10062__M6-3.wav
+Loading resource: res://.godot/imported/10062__M6-3.wav-d8697831fc639e1071a670a08c0e1d75.sample remapped: res://.godot/imported/10062__M6-3.wav-d8697831fc639e1071a670a08c0e1d75.sample
+Completed load for: 'res://assets/audio/sfx/client/10062__M6-3.wav' remapped 'res://assets/audio/sfx/client/10062__M6-3.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10130__M13-1.wav remapped: res://assets/audio/sfx/client/10130__M13-1.wav
+Loading resource: res://.godot/imported/10130__M13-1.wav-c75796a0c4983d7257de0706ba7b1c8d.sample remapped: res://.godot/imported/10130__M13-1.wav-c75796a0c4983d7257de0706ba7b1c8d.sample
+Completed load for: 'res://assets/audio/sfx/client/10130__M13-1.wav' remapped 'res://assets/audio/sfx/client/10130__M13-1.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10131__M13-2.wav remapped: res://assets/audio/sfx/client/10131__M13-2.wav
+Loading resource: res://.godot/imported/10131__M13-2.wav-7d2e3d69d2ee196dc427acd3310097e8.sample remapped: res://.godot/imported/10131__M13-2.wav-7d2e3d69d2ee196dc427acd3310097e8.sample
+Completed load for: 'res://assets/audio/sfx/client/10131__M13-2.wav' remapped 'res://assets/audio/sfx/client/10131__M13-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10132__M13-3.wav remapped: res://assets/audio/sfx/client/10132__M13-3.wav
+Loading resource: res://.godot/imported/10132__M13-3.wav-dafb8ddd332510128d4b51868e5f5144.sample remapped: res://.godot/imported/10132__M13-3.wav-dafb8ddd332510128d4b51868e5f5144.sample
+Completed load for: 'res://assets/audio/sfx/client/10132__M13-3.wav' remapped 'res://assets/audio/sfx/client/10132__M13-3.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10170__M17-1.wav remapped: res://assets/audio/sfx/client/10170__M17-1.wav
+Loading resource: res://.godot/imported/10170__M17-1.wav-20b8514908e58635b9b6dc460160973a.sample remapped: res://.godot/imported/10170__M17-1.wav-20b8514908e58635b9b6dc460160973a.sample
+Completed load for: 'res://assets/audio/sfx/client/10170__M17-1.wav' remapped 'res://assets/audio/sfx/client/10170__M17-1.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10180__M18-1.wav remapped: res://assets/audio/sfx/client/10180__M18-1.wav
+Loading resource: res://.godot/imported/10180__M18-1.wav-f4315ad882cc3441e853aa1684deca67.sample remapped: res://.godot/imported/10180__M18-1.wav-f4315ad882cc3441e853aa1684deca67.sample
+Completed load for: 'res://assets/audio/sfx/client/10180__M18-1.wav' remapped 'res://assets/audio/sfx/client/10180__M18-1.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10192__M19-3.wav remapped: res://assets/audio/sfx/client/10192__M19-3.wav
+Loading resource: res://.godot/imported/10192__M19-3.wav-fc417a835eddd8a3d527662bbf293457.sample remapped: res://.godot/imported/10192__M19-3.wav-fc417a835eddd8a3d527662bbf293457.sample
+Completed load for: 'res://assets/audio/sfx/client/10192__M19-3.wav' remapped 'res://assets/audio/sfx/client/10192__M19-3.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10142__M14-3.wav remapped: res://assets/audio/sfx/client/10142__M14-3.wav
+Loading resource: res://.godot/imported/10142__M14-3.wav-76fd8fae5880b39a3773c0432c51a36e.sample remapped: res://.godot/imported/10142__M14-3.wav-76fd8fae5880b39a3773c0432c51a36e.sample
+Completed load for: 'res://assets/audio/sfx/client/10142__M14-3.wav' remapped 'res://assets/audio/sfx/client/10142__M14-3.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10152__M15-3.wav remapped: res://assets/audio/sfx/client/10152__M15-3.wav
+Loading resource: res://.godot/imported/10152__M15-3.wav-dd4aa8ca41f63f661f1182b3f9ef1a96.sample remapped: res://.godot/imported/10152__M15-3.wav-dd4aa8ca41f63f661f1182b3f9ef1a96.sample
+Completed load for: 'res://assets/audio/sfx/client/10152__M15-3.wav' remapped 'res://assets/audio/sfx/client/10152__M15-3.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10280__M28-1.wav remapped: res://assets/audio/sfx/client/10280__M28-1.wav
+Loading resource: res://.godot/imported/10280__M28-1.wav-990e31b15214adaa40e8c5631e2c517f.sample remapped: res://.godot/imported/10280__M28-1.wav-990e31b15214adaa40e8c5631e2c517f.sample
+Completed load for: 'res://assets/audio/sfx/client/10280__M28-1.wav' remapped 'res://assets/audio/sfx/client/10280__M28-1.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10282__M28-3.wav remapped: res://assets/audio/sfx/client/10282__M28-3.wav
+Loading resource: res://.godot/imported/10282__M28-3.wav-20d5373edaed2dc99b67491e1b939c06.sample remapped: res://.godot/imported/10282__M28-3.wav-20d5373edaed2dc99b67491e1b939c06.sample
+Completed load for: 'res://assets/audio/sfx/client/10282__M28-3.wav' remapped 'res://assets/audio/sfx/client/10282__M28-3.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10160__M16-1.wav remapped: res://assets/audio/sfx/client/10160__M16-1.wav
+Loading resource: res://.godot/imported/10160__M16-1.wav-f95f1d38620146d631631b6f77fcf656.sample remapped: res://.godot/imported/10160__M16-1.wav-f95f1d38620146d631631b6f77fcf656.sample
+Completed load for: 'res://assets/audio/sfx/client/10160__M16-1.wav' remapped 'res://assets/audio/sfx/client/10160__M16-1.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10162__M16-3.wav remapped: res://assets/audio/sfx/client/10162__M16-3.wav
+Loading resource: res://.godot/imported/10162__M16-3.wav-eb98b8cce36c85acc981c57b67475602.sample remapped: res://.godot/imported/10162__M16-3.wav-eb98b8cce36c85acc981c57b67475602.sample
+Completed load for: 'res://assets/audio/sfx/client/10162__M16-3.wav' remapped 'res://assets/audio/sfx/client/10162__M16-3.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10290__M29-1.wav remapped: res://assets/audio/sfx/client/10290__M29-1.wav
+Loading resource: res://.godot/imported/10290__M29-1.wav-527b27c253074d66237ab6fd45585a6f.sample remapped: res://.godot/imported/10290__M29-1.wav-527b27c253074d66237ab6fd45585a6f.sample
+Completed load for: 'res://assets/audio/sfx/client/10290__M29-1.wav' remapped 'res://assets/audio/sfx/client/10290__M29-1.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10292__M29-3.wav remapped: res://assets/audio/sfx/client/10292__M29-3.wav
+Loading resource: res://.godot/imported/10292__M29-3.wav-d74409a7f057f3c636c7b240e7d63735.sample remapped: res://.godot/imported/10292__M29-3.wav-d74409a7f057f3c636c7b240e7d63735.sample
+Completed load for: 'res://assets/audio/sfx/client/10292__M29-3.wav' remapped 'res://assets/audio/sfx/client/10292__M29-3.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/10300__M30-1.wav remapped: res://assets/audio/sfx/client/10300__M30-1.wav
+Loading resource: res://.godot/imported/10300__M30-1.wav-f3a532b763a302fa519def9b075a66ea.sample remapped: res://.godot/imported/10300__M30-1.wav-f3a532b763a302fa519def9b075a66ea.sample
+Completed load for: 'res://assets/audio/sfx/client/10300__M30-1.wav' remapped 'res://assets/audio/sfx/client/10300__M30-1.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/50__50.wav remapped: res://assets/audio/sfx/client/50__50.wav
+Loading resource: res://.godot/imported/50__50.wav-9a1db62a662d848c4a6692c49ce9aaa6.sample remapped: res://.godot/imported/50__50.wav-9a1db62a662d848c4a6692c49ce9aaa6.sample
+Completed load for: 'res://assets/audio/sfx/client/50__50.wav' remapped 'res://assets/audio/sfx/client/50__50.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/51__51.wav remapped: res://assets/audio/sfx/client/51__51.wav
+Loading resource: res://.godot/imported/51__51.wav-c7a83ff092d3c21a2960e41fee70bde2.sample remapped: res://.godot/imported/51__51.wav-c7a83ff092d3c21a2960e41fee70bde2.sample
+Completed load for: 'res://assets/audio/sfx/client/51__51.wav' remapped 'res://assets/audio/sfx/client/51__51.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/52__52.wav remapped: res://assets/audio/sfx/client/52__52.wav
+Loading resource: res://.godot/imported/52__52.wav-162fb87e84f39e52a72a46a5420713ea.sample remapped: res://.godot/imported/52__52.wav-162fb87e84f39e52a72a46a5420713ea.sample
+Completed load for: 'res://assets/audio/sfx/client/52__52.wav' remapped 'res://assets/audio/sfx/client/52__52.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/53__53.wav remapped: res://assets/audio/sfx/client/53__53.wav
+Loading resource: res://.godot/imported/53__53.wav-995fb593912ca28f1c06c67426ce0263.sample remapped: res://.godot/imported/53__53.wav-995fb593912ca28f1c06c67426ce0263.sample
+Completed load for: 'res://assets/audio/sfx/client/53__53.wav' remapped 'res://assets/audio/sfx/client/53__53.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/54__54.wav remapped: res://assets/audio/sfx/client/54__54.wav
+Loading resource: res://.godot/imported/54__54.wav-c6a0928a5a85b781d535e51ef374904b.sample remapped: res://.godot/imported/54__54.wav-c6a0928a5a85b781d535e51ef374904b.sample
+Completed load for: 'res://assets/audio/sfx/client/54__54.wav' remapped 'res://assets/audio/sfx/client/54__54.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/55__55.wav remapped: res://assets/audio/sfx/client/55__55.wav
+Loading resource: res://.godot/imported/55__55.wav-7ddfb4879f24ec8cb54c1d9cd48bf4bf.sample remapped: res://.godot/imported/55__55.wav-7ddfb4879f24ec8cb54c1d9cd48bf4bf.sample
+Completed load for: 'res://assets/audio/sfx/client/55__55.wav' remapped 'res://assets/audio/sfx/client/55__55.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/56__56.wav remapped: res://assets/audio/sfx/client/56__56.wav
+Loading resource: res://.godot/imported/56__56.wav-f1cce1b47043959b2305658e616920e5.sample remapped: res://.godot/imported/56__56.wav-f1cce1b47043959b2305658e616920e5.sample
+Completed load for: 'res://assets/audio/sfx/client/56__56.wav' remapped 'res://assets/audio/sfx/client/56__56.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/57__57.wav remapped: res://assets/audio/sfx/client/57__57.wav
+Loading resource: res://.godot/imported/57__57.wav-be6536a50b6e2fe05bcbc5e076faac8b.sample remapped: res://.godot/imported/57__57.wav-be6536a50b6e2fe05bcbc5e076faac8b.sample
+Completed load for: 'res://assets/audio/sfx/client/57__57.wav' remapped 'res://assets/audio/sfx/client/57__57.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/72__72.wav remapped: res://assets/audio/sfx/client/72__72.wav
+Loading resource: res://.godot/imported/72__72.wav-d3684ea30b36c33678750e2b48135679.sample remapped: res://.godot/imported/72__72.wav-d3684ea30b36c33678750e2b48135679.sample
+Completed load for: 'res://assets/audio/sfx/client/72__72.wav' remapped 'res://assets/audio/sfx/client/72__72.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/138__138.wav remapped: res://assets/audio/sfx/client/138__138.wav
+Loading resource: res://.godot/imported/138__138.wav-a3eda4668b599313362ae4e33b92d85a.sample remapped: res://.godot/imported/138__138.wav-a3eda4668b599313362ae4e33b92d85a.sample
+Completed load for: 'res://assets/audio/sfx/client/138__138.wav' remapped 'res://assets/audio/sfx/client/138__138.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/139__139.wav remapped: res://assets/audio/sfx/client/139__139.wav
+Loading resource: res://.godot/imported/139__139.wav-8667fdfeab6052eb10b59c59825fc0d5.sample remapped: res://.godot/imported/139__139.wav-8667fdfeab6052eb10b59c59825fc0d5.sample
+Completed load for: 'res://assets/audio/sfx/client/139__139.wav' remapped 'res://assets/audio/sfx/client/139__139.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/144__144.wav remapped: res://assets/audio/sfx/client/144__144.wav
+Loading resource: res://.godot/imported/144__144.wav-d7eee33ebf2b3969e5c3f4ec575f557c.sample remapped: res://.godot/imported/144__144.wav-d7eee33ebf2b3969e5c3f4ec575f557c.sample
+Completed load for: 'res://assets/audio/sfx/client/144__144.wav' remapped 'res://assets/audio/sfx/client/144__144.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/145__145.wav remapped: res://assets/audio/sfx/client/145__145.wav
+Loading resource: res://.godot/imported/145__145.wav-c35d3936022d07f12f2a62ec44c9f9b7.sample remapped: res://.godot/imported/145__145.wav-c35d3936022d07f12f2a62ec44c9f9b7.sample
+Completed load for: 'res://assets/audio/sfx/client/145__145.wav' remapped 'res://assets/audio/sfx/client/145__145.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/60__60.wav remapped: res://assets/audio/sfx/client/60__60.wav
+Loading resource: res://.godot/imported/60__60.wav-38dc25993c48ecd453a8516570a3a37e.sample remapped: res://.godot/imported/60__60.wav-38dc25993c48ecd453a8516570a3a37e.sample
+Completed load for: 'res://assets/audio/sfx/client/60__60.wav' remapped 'res://assets/audio/sfx/client/60__60.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/61__61.wav remapped: res://assets/audio/sfx/client/61__61.wav
+Loading resource: res://.godot/imported/61__61.wav-fb5d5a6cb5c56ea75d24f5353016bd5f.sample remapped: res://.godot/imported/61__61.wav-fb5d5a6cb5c56ea75d24f5353016bd5f.sample
+Completed load for: 'res://assets/audio/sfx/client/61__61.wav' remapped 'res://assets/audio/sfx/client/61__61.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/62__62.wav remapped: res://assets/audio/sfx/client/62__62.wav
+Loading resource: res://.godot/imported/62__62.wav-a4242ae4b3862c5b6203457228ba4701.sample remapped: res://.godot/imported/62__62.wav-a4242ae4b3862c5b6203457228ba4701.sample
+Completed load for: 'res://assets/audio/sfx/client/62__62.wav' remapped 'res://assets/audio/sfx/client/62__62.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/63__63.wav remapped: res://assets/audio/sfx/client/63__63.wav
+Loading resource: res://.godot/imported/63__63.wav-7ce915c6f47ddb7f3e7a777de44e3e01.sample remapped: res://.godot/imported/63__63.wav-7ce915c6f47ddb7f3e7a777de44e3e01.sample
+Completed load for: 'res://assets/audio/sfx/client/63__63.wav' remapped 'res://assets/audio/sfx/client/63__63.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/64__64.wav remapped: res://assets/audio/sfx/client/64__64.wav
+Loading resource: res://.godot/imported/64__64.wav-56211c5887187b31bd88351c52ea29c2.sample remapped: res://.godot/imported/64__64.wav-56211c5887187b31bd88351c52ea29c2.sample
+Completed load for: 'res://assets/audio/sfx/client/64__64.wav' remapped 'res://assets/audio/sfx/client/64__64.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/65__65.wav remapped: res://assets/audio/sfx/client/65__65.wav
+Loading resource: res://.godot/imported/65__65.wav-2c65dced4f8b3f43e0edbb563f25ef08.sample remapped: res://.godot/imported/65__65.wav-2c65dced4f8b3f43e0edbb563f25ef08.sample
+Completed load for: 'res://assets/audio/sfx/client/65__65.wav' remapped 'res://assets/audio/sfx/client/65__65.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/70__70.wav remapped: res://assets/audio/sfx/client/70__70.wav
+Loading resource: res://.godot/imported/70__70.wav-a305b8bed710e69d74f0327e0c00f257.sample remapped: res://.godot/imported/70__70.wav-a305b8bed710e69d74f0327e0c00f257.sample
+Completed load for: 'res://assets/audio/sfx/client/70__70.wav' remapped 'res://assets/audio/sfx/client/70__70.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/71__71.wav remapped: res://assets/audio/sfx/client/71__71.wav
+Loading resource: res://.godot/imported/71__71.wav-feb5c9d794c17bc813d353d64819c710.sample remapped: res://.godot/imported/71__71.wav-feb5c9d794c17bc813d353d64819c710.sample
+Completed load for: 'res://assets/audio/sfx/client/71__71.wav' remapped 'res://assets/audio/sfx/client/71__71.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/73__73.wav remapped: res://assets/audio/sfx/client/73__73.wav
+Loading resource: res://.godot/imported/73__73.wav-8d31278e6113693ea94c5b5eb8045ade.sample remapped: res://.godot/imported/73__73.wav-8d31278e6113693ea94c5b5eb8045ade.sample
+Completed load for: 'res://assets/audio/sfx/client/73__73.wav' remapped 'res://assets/audio/sfx/client/73__73.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/1832__1830-2.wav remapped: res://assets/audio/sfx/client/1832__1830-2.wav
+Loading resource: res://.godot/imported/1832__1830-2.wav-84cf136397e312c179212909143bdbda.sample remapped: res://.godot/imported/1832__1830-2.wav-84cf136397e312c179212909143bdbda.sample
+Completed load for: 'res://assets/audio/sfx/client/1832__1830-2.wav' remapped 'res://assets/audio/sfx/client/1832__1830-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/1822__1820-2.wav remapped: res://assets/audio/sfx/client/1822__1820-2.wav
+Loading resource: res://.godot/imported/1822__1820-2.wav-a3ea3b5bb7dc254de0ab339c2ceed13d.sample remapped: res://.godot/imported/1822__1820-2.wav-a3ea3b5bb7dc254de0ab339c2ceed13d.sample
+Completed load for: 'res://assets/audio/sfx/client/1822__1820-2.wav' remapped 'res://assets/audio/sfx/client/1822__1820-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/472__470-2.wav remapped: res://assets/audio/sfx/client/472__470-2.wav
+Loading resource: res://.godot/imported/472__470-2.wav-91237e0b521dfda8556b9024d60d149b.sample remapped: res://.godot/imported/472__470-2.wav-91237e0b521dfda8556b9024d60d149b.sample
+Completed load for: 'res://assets/audio/sfx/client/472__470-2.wav' remapped 'res://assets/audio/sfx/client/472__470-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/452__450-2.wav remapped: res://assets/audio/sfx/client/452__450-2.wav
+Loading resource: res://.godot/imported/452__450-2.wav-ba760e4665bfc64caef84f5527a07dae.sample remapped: res://.godot/imported/452__450-2.wav-ba760e4665bfc64caef84f5527a07dae.sample
+Completed load for: 'res://assets/audio/sfx/client/452__450-2.wav' remapped 'res://assets/audio/sfx/client/452__450-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/453__450-3.wav remapped: res://assets/audio/sfx/client/453__450-3.wav
+Loading resource: res://.godot/imported/453__450-3.wav-7e3452e5e73cf45a009166c62d16425f.sample remapped: res://.godot/imported/453__450-3.wav-7e3452e5e73cf45a009166c62d16425f.sample
+Completed load for: 'res://assets/audio/sfx/client/453__450-3.wav' remapped 'res://assets/audio/sfx/client/453__450-3.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/462__460-2.wav remapped: res://assets/audio/sfx/client/462__460-2.wav
+Loading resource: res://.godot/imported/462__460-2.wav-9eba73cf627317cb755e71ee58d011eb.sample remapped: res://.godot/imported/462__460-2.wav-9eba73cf627317cb755e71ee58d011eb.sample
+Completed load for: 'res://assets/audio/sfx/client/462__460-2.wav' remapped 'res://assets/audio/sfx/client/462__460-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/463__460-3.wav remapped: res://assets/audio/sfx/client/463__460-3.wav
+Loading resource: res://.godot/imported/463__460-3.wav-ce7df347c7f95bc59b1e69512dae4237.sample remapped: res://.godot/imported/463__460-3.wav-ce7df347c7f95bc59b1e69512dae4237.sample
+Completed load for: 'res://assets/audio/sfx/client/463__460-3.wav' remapped 'res://assets/audio/sfx/client/463__460-3.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/212__210-2.wav remapped: res://assets/audio/sfx/client/212__210-2.wav
+Loading resource: res://.godot/imported/212__210-2.wav-0e749264473493e1fd659b28b664719a.sample remapped: res://.godot/imported/212__210-2.wav-0e749264473493e1fd659b28b664719a.sample
+Completed load for: 'res://assets/audio/sfx/client/212__210-2.wav' remapped 'res://assets/audio/sfx/client/212__210-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/302__300-2.wav remapped: res://assets/audio/sfx/client/302__300-2.wav
+Loading resource: res://.godot/imported/302__300-2.wav-80d054c5ac90d637594ed772fdb172cd.sample remapped: res://.godot/imported/302__300-2.wav-80d054c5ac90d637594ed772fdb172cd.sample
+Completed load for: 'res://assets/audio/sfx/client/302__300-2.wav' remapped 'res://assets/audio/sfx/client/302__300-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/1202__1200-2.wav remapped: res://assets/audio/sfx/client/1202__1200-2.wav
+Loading resource: res://.godot/imported/1202__1200-2.wav-3975780cbd168df10023aa556c53699d.sample remapped: res://.godot/imported/1202__1200-2.wav-3975780cbd168df10023aa556c53699d.sample
+Completed load for: 'res://assets/audio/sfx/client/1202__1200-2.wav' remapped 'res://assets/audio/sfx/client/1202__1200-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/1212__1210-2.wav remapped: res://assets/audio/sfx/client/1212__1210-2.wav
+Loading resource: res://.godot/imported/1212__1210-2.wav-97361895556c887ac77e62a355f9ef96.sample remapped: res://.godot/imported/1212__1210-2.wav-97361895556c887ac77e62a355f9ef96.sample
+Completed load for: 'res://assets/audio/sfx/client/1212__1210-2.wav' remapped 'res://assets/audio/sfx/client/1212__1210-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/1213__1220-3.wav remapped: res://assets/audio/sfx/client/1213__1220-3.wav
+Loading resource: res://.godot/imported/1213__1220-3.wav-aefaa0da553f77170f9f99f327a9e9ea.sample remapped: res://.godot/imported/1213__1220-3.wav-aefaa0da553f77170f9f99f327a9e9ea.sample
+Completed load for: 'res://assets/audio/sfx/client/1213__1220-3.wav' remapped 'res://assets/audio/sfx/client/1213__1220-3.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/1222__1220-2.wav remapped: res://assets/audio/sfx/client/1222__1220-2.wav
+Loading resource: res://.godot/imported/1222__1220-2.wav-24cc5b37a69fa345ba657cf3208e6234.sample remapped: res://.godot/imported/1222__1220-2.wav-24cc5b37a69fa345ba657cf3208e6234.sample
+Completed load for: 'res://assets/audio/sfx/client/1222__1220-2.wav' remapped 'res://assets/audio/sfx/client/1222__1220-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/1223__1220-3.wav remapped: res://assets/audio/sfx/client/1223__1220-3.wav
+Loading resource: res://.godot/imported/1223__1220-3.wav-44cbab0f58ebb8e55c767f8d6871bb7d.sample remapped: res://.godot/imported/1223__1220-3.wav-44cbab0f58ebb8e55c767f8d6871bb7d.sample
+Completed load for: 'res://assets/audio/sfx/client/1223__1220-3.wav' remapped 'res://assets/audio/sfx/client/1223__1220-3.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/1002__1000-2.wav remapped: res://assets/audio/sfx/client/1002__1000-2.wav
+Loading resource: res://.godot/imported/1002__1000-2.wav-ed8d9aac6230005f45cd7422e8b42d53.sample remapped: res://.godot/imported/1002__1000-2.wav-ed8d9aac6230005f45cd7422e8b42d53.sample
+Completed load for: 'res://assets/audio/sfx/client/1002__1000-2.wav' remapped 'res://assets/audio/sfx/client/1002__1000-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/1032__1030-2.wav remapped: res://assets/audio/sfx/client/1032__1030-2.wav
+Loading resource: res://.godot/imported/1032__1030-2.wav-93e44d5a78217a1bb2b75aeafb9ab888.sample remapped: res://.godot/imported/1032__1030-2.wav-93e44d5a78217a1bb2b75aeafb9ab888.sample
+Completed load for: 'res://assets/audio/sfx/client/1032__1030-2.wav' remapped 'res://assets/audio/sfx/client/1032__1030-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/442__440-2.wav remapped: res://assets/audio/sfx/client/442__440-2.wav
+Loading resource: res://.godot/imported/442__440-2.wav-7fbfd0af807411bad25c8562f273721a.sample remapped: res://.godot/imported/442__440-2.wav-7fbfd0af807411bad25c8562f273721a.sample
+Completed load for: 'res://assets/audio/sfx/client/442__440-2.wav' remapped 'res://assets/audio/sfx/client/442__440-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/402__400-2.wav remapped: res://assets/audio/sfx/client/402__400-2.wav
+Loading resource: res://.godot/imported/402__400-2.wav-4a23d5f6a54f4b2b7df662ed781c6a7f.sample remapped: res://.godot/imported/402__400-2.wav-4a23d5f6a54f4b2b7df662ed781c6a7f.sample
+Completed load for: 'res://assets/audio/sfx/client/402__400-2.wav' remapped 'res://assets/audio/sfx/client/402__400-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/403__400-3.wav remapped: res://assets/audio/sfx/client/403__400-3.wav
+Loading resource: res://.godot/imported/403__400-3.wav-61a87696b3469a55484d924b60da846c.sample remapped: res://.godot/imported/403__400-3.wav-61a87696b3469a55484d924b60da846c.sample
+Completed load for: 'res://assets/audio/sfx/client/403__400-3.wav' remapped 'res://assets/audio/sfx/client/403__400-3.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/412__410-2.wav remapped: res://assets/audio/sfx/client/412__410-2.wav
+Loading resource: res://.godot/imported/412__410-2.wav-9837030cddd6783b7f0e4d1854ba7a6b.sample remapped: res://.godot/imported/412__410-2.wav-9837030cddd6783b7f0e4d1854ba7a6b.sample
+Completed load for: 'res://assets/audio/sfx/client/412__410-2.wav' remapped 'res://assets/audio/sfx/client/412__410-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/422__420-2.wav remapped: res://assets/audio/sfx/client/422__420-2.wav
+Loading resource: res://.godot/imported/422__420-2.wav-989ce808ca562ad5abfe1df1233d13ac.sample remapped: res://.godot/imported/422__420-2.wav-989ce808ca562ad5abfe1df1233d13ac.sample
+Completed load for: 'res://assets/audio/sfx/client/422__420-2.wav' remapped 'res://assets/audio/sfx/client/422__420-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/432__430-2.wav remapped: res://assets/audio/sfx/client/432__430-2.wav
+Loading resource: res://.godot/imported/432__430-2.wav-012e5990babf02741eac72ac3ad94951.sample remapped: res://.godot/imported/432__430-2.wav-012e5990babf02741eac72ac3ad94951.sample
+Completed load for: 'res://assets/audio/sfx/client/432__430-2.wav' remapped 'res://assets/audio/sfx/client/432__430-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/433__430-3.wav remapped: res://assets/audio/sfx/client/433__430-3.wav
+Loading resource: res://.godot/imported/433__430-3.wav-b35afbb0fb61bddb15ced965093ff365.sample remapped: res://.godot/imported/433__430-3.wav-b35afbb0fb61bddb15ced965093ff365.sample
+Completed load for: 'res://assets/audio/sfx/client/433__430-3.wav' remapped 'res://assets/audio/sfx/client/433__430-3.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/1702__1700-2.wav remapped: res://assets/audio/sfx/client/1702__1700-2.wav
+Loading resource: res://.godot/imported/1702__1700-2.wav-fedaf6518e6609cf9089242be83bfa44.sample remapped: res://.godot/imported/1702__1700-2.wav-fedaf6518e6609cf9089242be83bfa44.sample
+Completed load for: 'res://assets/audio/sfx/client/1702__1700-2.wav' remapped 'res://assets/audio/sfx/client/1702__1700-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/1703__1700-2.wav remapped: res://assets/audio/sfx/client/1703__1700-2.wav
+Loading resource: res://.godot/imported/1703__1700-2.wav-57ce1b6b2d8a33634c95f7c754c73953.sample remapped: res://.godot/imported/1703__1700-2.wav-57ce1b6b2d8a33634c95f7c754c73953.sample
+Completed load for: 'res://assets/audio/sfx/client/1703__1700-2.wav' remapped 'res://assets/audio/sfx/client/1703__1700-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/492__490-2.wav remapped: res://assets/audio/sfx/client/492__490-2.wav
+Loading resource: res://.godot/imported/492__490-2.wav-b1dd4a722a9b70ca34b31cec78344831.sample remapped: res://.godot/imported/492__490-2.wav-b1dd4a722a9b70ca34b31cec78344831.sample
+Completed load for: 'res://assets/audio/sfx/client/492__490-2.wav' remapped 'res://assets/audio/sfx/client/492__490-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/482__480-2.wav remapped: res://assets/audio/sfx/client/482__480-2.wav
+Loading resource: res://.godot/imported/482__480-2.wav-e55f2e20417a59adb9373f3566440527.sample remapped: res://.godot/imported/482__480-2.wav-e55f2e20417a59adb9373f3566440527.sample
+Completed load for: 'res://assets/audio/sfx/client/482__480-2.wav' remapped 'res://assets/audio/sfx/client/482__480-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/502__500-2.wav remapped: res://assets/audio/sfx/client/502__500-2.wav
+Loading resource: res://.godot/imported/502__500-2.wav-bc532a82317f0d9d354f60f520bc9b0f.sample remapped: res://.godot/imported/502__500-2.wav-bc532a82317f0d9d354f60f520bc9b0f.sample
+Completed load for: 'res://assets/audio/sfx/client/502__500-2.wav' remapped 'res://assets/audio/sfx/client/502__500-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/522__520-2.wav remapped: res://assets/audio/sfx/client/522__520-2.wav
+Loading resource: res://.godot/imported/522__520-2.wav-889012db9a8f2791e8ecad7850c756fe.sample remapped: res://.godot/imported/522__520-2.wav-889012db9a8f2791e8ecad7850c756fe.sample
+Completed load for: 'res://assets/audio/sfx/client/522__520-2.wav' remapped 'res://assets/audio/sfx/client/522__520-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/532__530-2.wav remapped: res://assets/audio/sfx/client/532__530-2.wav
+Loading resource: res://.godot/imported/532__530-2.wav-b24755b162f3a9139e0cc99fc92f0355.sample remapped: res://.godot/imported/532__530-2.wav-b24755b162f3a9139e0cc99fc92f0355.sample
+Completed load for: 'res://assets/audio/sfx/client/532__530-2.wav' remapped 'res://assets/audio/sfx/client/532__530-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/512__510-2.wav remapped: res://assets/audio/sfx/client/512__510-2.wav
+Loading resource: res://.godot/imported/512__510-2.wav-dc161ced8d4e35e06f2bae496c9d55bd.sample remapped: res://.godot/imported/512__510-2.wav-dc161ced8d4e35e06f2bae496c9d55bd.sample
+Completed load for: 'res://assets/audio/sfx/client/512__510-2.wav' remapped 'res://assets/audio/sfx/client/512__510-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/1712__1710-2.wav remapped: res://assets/audio/sfx/client/1712__1710-2.wav
+Loading resource: res://.godot/imported/1712__1710-2.wav-8936e4b55bb291841a850f9eddb67dcd.sample remapped: res://.godot/imported/1712__1710-2.wav-8936e4b55bb291841a850f9eddb67dcd.sample
+Completed load for: 'res://assets/audio/sfx/client/1712__1710-2.wav' remapped 'res://assets/audio/sfx/client/1712__1710-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/542__540-2.wav remapped: res://assets/audio/sfx/client/542__540-2.wav
+Loading resource: res://.godot/imported/542__540-2.wav-2466bc844fcaf7de0fc10caee26b0624.sample remapped: res://.godot/imported/542__540-2.wav-2466bc844fcaf7de0fc10caee26b0624.sample
+Completed load for: 'res://assets/audio/sfx/client/542__540-2.wav' remapped 'res://assets/audio/sfx/client/542__540-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/543__540-3.wav remapped: res://assets/audio/sfx/client/543__540-3.wav
+Loading resource: res://.godot/imported/543__540-3.wav-880774d96a0c3374bcdd9f8483e4b5b7.sample remapped: res://.godot/imported/543__540-3.wav-880774d96a0c3374bcdd9f8483e4b5b7.sample
+Completed load for: 'res://assets/audio/sfx/client/543__540-3.wav' remapped 'res://assets/audio/sfx/client/543__540-3.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/602__600-2.wav remapped: res://assets/audio/sfx/client/602__600-2.wav
+Loading resource: res://.godot/imported/602__600-2.wav-0bce93497ffe64e1474a6e0b9086f281.sample remapped: res://.godot/imported/602__600-2.wav-0bce93497ffe64e1474a6e0b9086f281.sample
+Completed load for: 'res://assets/audio/sfx/client/602__600-2.wav' remapped 'res://assets/audio/sfx/client/602__600-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/702__700-2.wav remapped: res://assets/audio/sfx/client/702__700-2.wav
+Loading resource: res://.godot/imported/702__700-2.wav-0a504fd3963c3f4bb7e350c22e61ea70.sample remapped: res://.godot/imported/702__700-2.wav-0a504fd3963c3f4bb7e350c22e61ea70.sample
+Completed load for: 'res://assets/audio/sfx/client/702__700-2.wav' remapped 'res://assets/audio/sfx/client/702__700-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/712__710-2.wav remapped: res://assets/audio/sfx/client/712__710-2.wav
+Loading resource: res://.godot/imported/712__710-2.wav-351477cba20a3611adfbce5fe3614613.sample remapped: res://.godot/imported/712__710-2.wav-351477cba20a3611adfbce5fe3614613.sample
+Completed load for: 'res://assets/audio/sfx/client/712__710-2.wav' remapped 'res://assets/audio/sfx/client/712__710-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/722__720-2.wav remapped: res://assets/audio/sfx/client/722__720-2.wav
+Loading resource: res://.godot/imported/722__720-2.wav-1895229a833306c1bbb9d5d742378597.sample remapped: res://.godot/imported/722__720-2.wav-1895229a833306c1bbb9d5d742378597.sample
+Completed load for: 'res://assets/audio/sfx/client/722__720-2.wav' remapped 'res://assets/audio/sfx/client/722__720-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/732__730-2.wav remapped: res://assets/audio/sfx/client/732__730-2.wav
+Loading resource: res://.godot/imported/732__730-2.wav-ca35f6c48e588e704fd713fec724206f.sample remapped: res://.godot/imported/732__730-2.wav-ca35f6c48e588e704fd713fec724206f.sample
+Completed load for: 'res://assets/audio/sfx/client/732__730-2.wav' remapped 'res://assets/audio/sfx/client/732__730-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/1722__1720-2.wav remapped: res://assets/audio/sfx/client/1722__1720-2.wav
+Loading resource: res://.godot/imported/1722__1720-2.wav-779e6dc80e69aa86b5698b6ce6c2717c.sample remapped: res://.godot/imported/1722__1720-2.wav-779e6dc80e69aa86b5698b6ce6c2717c.sample
+Completed load for: 'res://assets/audio/sfx/client/1722__1720-2.wav' remapped 'res://assets/audio/sfx/client/1722__1720-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/562__560-2.wav remapped: res://assets/audio/sfx/client/562__560-2.wav
+Loading resource: res://.godot/imported/562__560-2.wav-5265dd62f02cc9cbf8a26b315e7bee37.sample remapped: res://.godot/imported/562__560-2.wav-5265dd62f02cc9cbf8a26b315e7bee37.sample
+Completed load for: 'res://assets/audio/sfx/client/562__560-2.wav' remapped 'res://assets/audio/sfx/client/562__560-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/582__580-2.wav remapped: res://assets/audio/sfx/client/582__580-2.wav
+Loading resource: res://.godot/imported/582__580-2.wav-cd5d22e7bc991a492c4a3e42ba94bf6e.sample remapped: res://.godot/imported/582__580-2.wav-cd5d22e7bc991a492c4a3e42ba94bf6e.sample
+Completed load for: 'res://assets/audio/sfx/client/582__580-2.wav' remapped 'res://assets/audio/sfx/client/582__580-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/632__630-2.wav remapped: res://assets/audio/sfx/client/632__630-2.wav
+Loading resource: res://.godot/imported/632__630-2.wav-3a5e6c5a033bc84c426bf8db15d11699.sample remapped: res://.godot/imported/632__630-2.wav-3a5e6c5a033bc84c426bf8db15d11699.sample
+Completed load for: 'res://assets/audio/sfx/client/632__630-2.wav' remapped 'res://assets/audio/sfx/client/632__630-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/642__640-2.wav remapped: res://assets/audio/sfx/client/642__640-2.wav
+Loading resource: res://.godot/imported/642__640-2.wav-3a3587c36b2a11170306b3023e8ecfb0.sample remapped: res://.godot/imported/642__640-2.wav-3a3587c36b2a11170306b3023e8ecfb0.sample
+Completed load for: 'res://assets/audio/sfx/client/642__640-2.wav' remapped 'res://assets/audio/sfx/client/642__640-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/902__900-2.wav remapped: res://assets/audio/sfx/client/902__900-2.wav
+Loading resource: res://.godot/imported/902__900-2.wav-0fe99c8269532c788b3a1f226f77da91.sample remapped: res://.godot/imported/902__900-2.wav-0fe99c8269532c788b3a1f226f77da91.sample
+Completed load for: 'res://assets/audio/sfx/client/902__900-2.wav' remapped 'res://assets/audio/sfx/client/902__900-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/652__650-2.wav remapped: res://assets/audio/sfx/client/652__650-2.wav
+Loading resource: res://.godot/imported/652__650-2.wav-1468e1b19bf77fd75c5084ef69f61b4d.sample remapped: res://.godot/imported/652__650-2.wav-1468e1b19bf77fd75c5084ef69f61b4d.sample
+Completed load for: 'res://assets/audio/sfx/client/652__650-2.wav' remapped 'res://assets/audio/sfx/client/652__650-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/682__680-2.wav remapped: res://assets/audio/sfx/client/682__680-2.wav
+Loading resource: res://.godot/imported/682__680-2.wav-0d866bb1d42dab60d9a1a707924adc64.sample remapped: res://.godot/imported/682__680-2.wav-0d866bb1d42dab60d9a1a707924adc64.sample
+Completed load for: 'res://assets/audio/sfx/client/682__680-2.wav' remapped 'res://assets/audio/sfx/client/682__680-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/1102__1100-2.wav remapped: res://assets/audio/sfx/client/1102__1100-2.wav
+Loading resource: res://.godot/imported/1102__1100-2.wav-c2f574867f655ef37bf1429b52643218.sample remapped: res://.godot/imported/1102__1100-2.wav-c2f574867f655ef37bf1429b52643218.sample
+Completed load for: 'res://assets/audio/sfx/client/1102__1100-2.wav' remapped 'res://assets/audio/sfx/client/1102__1100-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/1112__1110-2.wav remapped: res://assets/audio/sfx/client/1112__1110-2.wav
+Loading resource: res://.godot/imported/1112__1110-2.wav-78e14b8cfb67db8d87fe12703aa69258.sample remapped: res://.godot/imported/1112__1110-2.wav-78e14b8cfb67db8d87fe12703aa69258.sample
+Completed load for: 'res://assets/audio/sfx/client/1112__1110-2.wav' remapped 'res://assets/audio/sfx/client/1112__1110-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/932__930-2.wav remapped: res://assets/audio/sfx/client/932__930-2.wav
+Loading resource: res://.godot/imported/932__930-2.wav-a148fd72c412f6300ae953ad7d83602d.sample remapped: res://.godot/imported/932__930-2.wav-a148fd72c412f6300ae953ad7d83602d.sample
+Completed load for: 'res://assets/audio/sfx/client/932__930-2.wav' remapped 'res://assets/audio/sfx/client/932__930-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/942__940-2.wav remapped: res://assets/audio/sfx/client/942__940-2.wav
+Loading resource: res://.godot/imported/942__940-2.wav-64004311eb2e27d0f2941f715cb298fe.sample remapped: res://.godot/imported/942__940-2.wav-64004311eb2e27d0f2941f715cb298fe.sample
+Completed load for: 'res://assets/audio/sfx/client/942__940-2.wav' remapped 'res://assets/audio/sfx/client/942__940-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/1012__1010-2.wav remapped: res://assets/audio/sfx/client/1012__1010-2.wav
+Loading resource: res://.godot/imported/1012__1010-2.wav-3bd3107fbea7bfc4f27ccc550f10c4be.sample remapped: res://.godot/imported/1012__1010-2.wav-3bd3107fbea7bfc4f27ccc550f10c4be.sample
+Completed load for: 'res://assets/audio/sfx/client/1012__1010-2.wav' remapped 'res://assets/audio/sfx/client/1012__1010-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/1022__1020-2.wav remapped: res://assets/audio/sfx/client/1022__1020-2.wav
+Loading resource: res://.godot/imported/1022__1020-2.wav-beabe8f34bd1684c9b51c1d230fc5190.sample remapped: res://.godot/imported/1022__1020-2.wav-beabe8f34bd1684c9b51c1d230fc5190.sample
+Completed load for: 'res://assets/audio/sfx/client/1022__1020-2.wav' remapped 'res://assets/audio/sfx/client/1022__1020-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/1402__1400-2.wav remapped: res://assets/audio/sfx/client/1402__1400-2.wav
+Loading resource: res://.godot/imported/1402__1400-2.wav-a2cbc9be5acbb96f4997c5a1c5dfb7a5.sample remapped: res://.godot/imported/1402__1400-2.wav-a2cbc9be5acbb96f4997c5a1c5dfb7a5.sample
+Completed load for: 'res://assets/audio/sfx/client/1402__1400-2.wav' remapped 'res://assets/audio/sfx/client/1402__1400-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/1412__1410-2.wav remapped: res://assets/audio/sfx/client/1412__1410-2.wav
+Loading resource: res://.godot/imported/1412__1410-2.wav-bda872364390e72d9fb9912e1e7cdf69.sample remapped: res://.godot/imported/1412__1410-2.wav-bda872364390e72d9fb9912e1e7cdf69.sample
+Completed load for: 'res://assets/audio/sfx/client/1412__1410-2.wav' remapped 'res://assets/audio/sfx/client/1412__1410-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/1602__1600-2.wav remapped: res://assets/audio/sfx/client/1602__1600-2.wav
+Loading resource: res://.godot/imported/1602__1600-2.wav-04de6570499c32f8a433f3948688c877.sample remapped: res://.godot/imported/1602__1600-2.wav-04de6570499c32f8a433f3948688c877.sample
+Completed load for: 'res://assets/audio/sfx/client/1602__1600-2.wav' remapped 'res://assets/audio/sfx/client/1602__1600-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/612__610-2.wav remapped: res://assets/audio/sfx/client/612__610-2.wav
+Loading resource: res://.godot/imported/612__610-2.wav-3c351c2dcc629fc99db849735b713a47.sample remapped: res://.godot/imported/612__610-2.wav-3c351c2dcc629fc99db849735b713a47.sample
+Completed load for: 'res://assets/audio/sfx/client/612__610-2.wav' remapped 'res://assets/audio/sfx/client/612__610-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/622__620-2.wav remapped: res://assets/audio/sfx/client/622__620-2.wav
+Loading resource: res://.godot/imported/622__620-2.wav-9c54fdabde3faa753a969d98a836a081.sample remapped: res://.godot/imported/622__620-2.wav-9c54fdabde3faa753a969d98a836a081.sample
+Completed load for: 'res://assets/audio/sfx/client/622__620-2.wav' remapped 'res://assets/audio/sfx/client/622__620-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/592__590-2.wav remapped: res://assets/audio/sfx/client/592__590-2.wav
+Loading resource: res://.godot/imported/592__590-2.wav-1c5a753050cc0058a1c0722d3a4caf30.sample remapped: res://.godot/imported/592__590-2.wav-1c5a753050cc0058a1c0722d3a4caf30.sample
+Completed load for: 'res://assets/audio/sfx/client/592__590-2.wav' remapped 'res://assets/audio/sfx/client/592__590-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/1302__1310-2.wav remapped: res://assets/audio/sfx/client/1302__1310-2.wav
+Loading resource: res://.godot/imported/1302__1310-2.wav-e43f021573ccb81c5be8d852a63cac52.sample remapped: res://.godot/imported/1302__1310-2.wav-e43f021573ccb81c5be8d852a63cac52.sample
+Completed load for: 'res://assets/audio/sfx/client/1302__1310-2.wav' remapped 'res://assets/audio/sfx/client/1302__1310-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/1312__1310-2.wav remapped: res://assets/audio/sfx/client/1312__1310-2.wav
+Loading resource: res://.godot/imported/1312__1310-2.wav-c5d2e64704794be6cf5a8b86f40a646e.sample remapped: res://.godot/imported/1312__1310-2.wav-c5d2e64704794be6cf5a8b86f40a646e.sample
+Completed load for: 'res://assets/audio/sfx/client/1312__1310-2.wav' remapped 'res://assets/audio/sfx/client/1312__1310-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/1323__1320-3.wav remapped: res://assets/audio/sfx/client/1323__1320-3.wav
+Loading resource: res://.godot/imported/1323__1320-3.wav-7d8a922a0c9f60e1022e0a51bb977363.sample remapped: res://.godot/imported/1323__1320-3.wav-7d8a922a0c9f60e1022e0a51bb977363.sample
+Completed load for: 'res://assets/audio/sfx/client/1323__1320-3.wav' remapped 'res://assets/audio/sfx/client/1323__1320-3.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/1502__1500-2.wav remapped: res://assets/audio/sfx/client/1502__1500-2.wav
+Loading resource: res://.godot/imported/1502__1500-2.wav-c84febe4d46062fd3b0fa182ffd150b4.sample remapped: res://.godot/imported/1502__1500-2.wav-c84febe4d46062fd3b0fa182ffd150b4.sample
+Completed load for: 'res://assets/audio/sfx/client/1502__1500-2.wav' remapped 'res://assets/audio/sfx/client/1502__1500-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/572__54.wav remapped: res://assets/audio/sfx/client/572__54.wav
+Loading resource: res://.godot/imported/572__54.wav-66a821faca90b3e9ee4939b557dbdf87.sample remapped: res://.godot/imported/572__54.wav-66a821faca90b3e9ee4939b557dbdf87.sample
+Completed load for: 'res://assets/audio/sfx/client/572__54.wav' remapped 'res://assets/audio/sfx/client/572__54.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/573__64.wav remapped: res://assets/audio/sfx/client/573__64.wav
+Loading resource: res://.godot/imported/573__64.wav-dccc67a4dd2a5f4350e6ea3321c162c6.sample remapped: res://.godot/imported/573__64.wav-dccc67a4dd2a5f4350e6ea3321c162c6.sample
+Completed load for: 'res://assets/audio/sfx/client/573__64.wav' remapped 'res://assets/audio/sfx/client/573__64.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/1912__1910-2.wav remapped: res://assets/audio/sfx/client/1912__1910-2.wav
+Loading resource: res://.godot/imported/1912__1910-2.wav-0b075386ebeacb960eb139716e731dea.sample remapped: res://.godot/imported/1912__1910-2.wav-0b075386ebeacb960eb139716e731dea.sample
+Completed load for: 'res://assets/audio/sfx/client/1912__1910-2.wav' remapped 'res://assets/audio/sfx/client/1912__1910-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/1913__1910-3.wav remapped: res://assets/audio/sfx/client/1913__1910-3.wav
+Loading resource: res://.godot/imported/1913__1910-3.wav-c8500828c869a53df4402b0d189b36a3.sample remapped: res://.godot/imported/1913__1910-3.wav-c8500828c869a53df4402b0d189b36a3.sample
+Completed load for: 'res://assets/audio/sfx/client/1913__1910-3.wav' remapped 'res://assets/audio/sfx/client/1913__1910-3.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/662__660-2.wav remapped: res://assets/audio/sfx/client/662__660-2.wav
+Loading resource: res://.godot/imported/662__660-2.wav-d5bd83678b0348cc482b3724ca98ac9c.sample remapped: res://.godot/imported/662__660-2.wav-d5bd83678b0348cc482b3724ca98ac9c.sample
+Completed load for: 'res://assets/audio/sfx/client/662__660-2.wav' remapped 'res://assets/audio/sfx/client/662__660-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/672__670-2.wav remapped: res://assets/audio/sfx/client/672__670-2.wav
+Loading resource: res://.godot/imported/672__670-2.wav-640998748c971500de8a0919304757e1.sample remapped: res://.godot/imported/672__670-2.wav-640998748c971500de8a0919304757e1.sample
+Completed load for: 'res://assets/audio/sfx/client/672__670-2.wav' remapped 'res://assets/audio/sfx/client/672__670-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/812__810-2.wav remapped: res://assets/audio/sfx/client/812__810-2.wav
+Loading resource: res://.godot/imported/812__810-2.wav-5f096761e7bf7d160ca787c2d88dadb4.sample remapped: res://.godot/imported/812__810-2.wav-5f096761e7bf7d160ca787c2d88dadb4.sample
+Completed load for: 'res://assets/audio/sfx/client/812__810-2.wav' remapped 'res://assets/audio/sfx/client/812__810-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/822__820-2.wav remapped: res://assets/audio/sfx/client/822__820-2.wav
+Loading resource: res://.godot/imported/822__820-2.wav-28723f36d8b6913721531ea66d888486.sample remapped: res://.godot/imported/822__820-2.wav-28723f36d8b6913721531ea66d888486.sample
+Completed load for: 'res://assets/audio/sfx/client/822__820-2.wav' remapped 'res://assets/audio/sfx/client/822__820-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/832__830-2.wav remapped: res://assets/audio/sfx/client/832__830-2.wav
+Loading resource: res://.godot/imported/832__830-2.wav-39180ce346572181dfe374ff57797fc7.sample remapped: res://.godot/imported/832__830-2.wav-39180ce346572181dfe374ff57797fc7.sample
+Completed load for: 'res://assets/audio/sfx/client/832__830-2.wav' remapped 'res://assets/audio/sfx/client/832__830-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/1332__1330-2.wav remapped: res://assets/audio/sfx/client/1332__1330-2.wav
+Loading resource: res://.godot/imported/1332__1330-2.wav-fdb4f884e82fd85e2163f03a7b9fa64f.sample remapped: res://.godot/imported/1332__1330-2.wav-fdb4f884e82fd85e2163f03a7b9fa64f.sample
+Completed load for: 'res://assets/audio/sfx/client/1332__1330-2.wav' remapped 'res://assets/audio/sfx/client/1332__1330-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/1333__1330-3.wav remapped: res://assets/audio/sfx/client/1333__1330-3.wav
+Loading resource: res://.godot/imported/1333__1330-3.wav-86539cf69051f19445c1a36952784114.sample remapped: res://.godot/imported/1333__1330-3.wav-86539cf69051f19445c1a36952784114.sample
+Completed load for: 'res://assets/audio/sfx/client/1333__1330-3.wav' remapped 'res://assets/audio/sfx/client/1333__1330-3.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/1342__1340-2.wav remapped: res://assets/audio/sfx/client/1342__1340-2.wav
+Loading resource: res://.godot/imported/1342__1340-2.wav-68d6137e05a9a16ed6233fe221bc2a1b.sample remapped: res://.godot/imported/1342__1340-2.wav-68d6137e05a9a16ed6233fe221bc2a1b.sample
+Completed load for: 'res://assets/audio/sfx/client/1342__1340-2.wav' remapped 'res://assets/audio/sfx/client/1342__1340-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/1392__1390-2.wav remapped: res://assets/audio/sfx/client/1392__1390-2.wav
+Loading resource: res://.godot/imported/1392__1390-2.wav-26afa13f82db05d8906822ad3ba53040.sample remapped: res://.godot/imported/1392__1390-2.wav-26afa13f82db05d8906822ad3ba53040.sample
+Completed load for: 'res://assets/audio/sfx/client/1392__1390-2.wav' remapped 'res://assets/audio/sfx/client/1392__1390-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/1372__1370-2.wav remapped: res://assets/audio/sfx/client/1372__1370-2.wav
+Loading resource: res://.godot/imported/1372__1370-2.wav-7ad72322bb83d11b71bdf98d5239c749.sample remapped: res://.godot/imported/1372__1370-2.wav-7ad72322bb83d11b71bdf98d5239c749.sample
+Completed load for: 'res://assets/audio/sfx/client/1372__1370-2.wav' remapped 'res://assets/audio/sfx/client/1372__1370-2.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/1373__1370-3.wav remapped: res://assets/audio/sfx/client/1373__1370-3.wav
+Loading resource: res://.godot/imported/1373__1370-3.wav-a27b089de2da2058ea6e191e7447a5c1.sample remapped: res://.godot/imported/1373__1370-3.wav-a27b089de2da2058ea6e191e7447a5c1.sample
+Completed load for: 'res://assets/audio/sfx/client/1373__1370-3.wav' remapped 'res://assets/audio/sfx/client/1373__1370-3.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/106__106.wav remapped: res://assets/audio/sfx/client/106__106.wav
+Loading resource: res://.godot/imported/106__106.wav-5b6370c97144e9fa0b1c26fc3653c173.sample remapped: res://.godot/imported/106__106.wav-5b6370c97144e9fa0b1c26fc3653c173.sample
+Completed load for: 'res://assets/audio/sfx/client/106__106.wav' remapped 'res://assets/audio/sfx/client/106__106.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/107__107.wav remapped: res://assets/audio/sfx/client/107__107.wav
+Loading resource: res://.godot/imported/107__107.wav-9aea188f30fe3baadbe7ebf34735ad68.sample remapped: res://.godot/imported/107__107.wav-9aea188f30fe3baadbe7ebf34735ad68.sample
+Completed load for: 'res://assets/audio/sfx/client/107__107.wav' remapped 'res://assets/audio/sfx/client/107__107.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/108__108.wav remapped: res://assets/audio/sfx/client/108__108.wav
+Loading resource: res://.godot/imported/108__108.wav-b536bb8a587a753b686f24ee7e8817d2.sample remapped: res://.godot/imported/108__108.wav-b536bb8a587a753b686f24ee7e8817d2.sample
+Completed load for: 'res://assets/audio/sfx/client/108__108.wav' remapped 'res://assets/audio/sfx/client/108__108.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/111__111.wav remapped: res://assets/audio/sfx/client/111__111.wav
+Loading resource: res://.godot/imported/111__111.wav-0b9022243120e1d98eb27f42aa0e7cc7.sample remapped: res://.godot/imported/111__111.wav-0b9022243120e1d98eb27f42aa0e7cc7.sample
+Completed load for: 'res://assets/audio/sfx/client/111__111.wav' remapped 'res://assets/audio/sfx/client/111__111.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/112__112.wav remapped: res://assets/audio/sfx/client/112__112.wav
+Loading resource: res://.godot/imported/112__112.wav-25cb0d43070c60d2074d2d14ebeb4f0e.sample remapped: res://.godot/imported/112__112.wav-25cb0d43070c60d2074d2d14ebeb4f0e.sample
+Completed load for: 'res://assets/audio/sfx/client/112__112.wav' remapped 'res://assets/audio/sfx/client/112__112.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/113__113.wav remapped: res://assets/audio/sfx/client/113__113.wav
+Loading resource: res://.godot/imported/113__113.wav-3fa9a5a2649c6da5ec08835a9ba71857.sample remapped: res://.godot/imported/113__113.wav-3fa9a5a2649c6da5ec08835a9ba71857.sample
+Completed load for: 'res://assets/audio/sfx/client/113__113.wav' remapped 'res://assets/audio/sfx/client/113__113.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/114__114.wav remapped: res://assets/audio/sfx/client/114__114.wav
+Loading resource: res://.godot/imported/114__114.wav-48ba41365871462e2cb8dfbabf7da175.sample remapped: res://.godot/imported/114__114.wav-48ba41365871462e2cb8dfbabf7da175.sample
+Completed load for: 'res://assets/audio/sfx/client/114__114.wav' remapped 'res://assets/audio/sfx/client/114__114.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/115__115.wav remapped: res://assets/audio/sfx/client/115__115.wav
+Loading resource: res://.godot/imported/115__115.wav-53c874e2844024955c463d9a8896b8d0.sample remapped: res://.godot/imported/115__115.wav-53c874e2844024955c463d9a8896b8d0.sample
+Completed load for: 'res://assets/audio/sfx/client/115__115.wav' remapped 'res://assets/audio/sfx/client/115__115.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/116__116.wav remapped: res://assets/audio/sfx/client/116__116.wav
+Loading resource: res://.godot/imported/116__116.wav-ad603f5fe656adcf1a924611f9e7c0ba.sample remapped: res://.godot/imported/116__116.wav-ad603f5fe656adcf1a924611f9e7c0ba.sample
+Completed load for: 'res://assets/audio/sfx/client/116__116.wav' remapped 'res://assets/audio/sfx/client/116__116.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/117__117.wav remapped: res://assets/audio/sfx/client/117__117.wav
+Loading resource: res://.godot/imported/117__117.wav-1eaed3ec7ff37cbc0314eb67003e2fba.sample remapped: res://.godot/imported/117__117.wav-1eaed3ec7ff37cbc0314eb67003e2fba.sample
+Completed load for: 'res://assets/audio/sfx/client/117__117.wav' remapped 'res://assets/audio/sfx/client/117__117.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/118__118.wav remapped: res://assets/audio/sfx/client/118__118.wav
+Loading resource: res://.godot/imported/118__118.wav-3ed1873b3f6c360d252ec61287c97fe0.sample remapped: res://.godot/imported/118__118.wav-3ed1873b3f6c360d252ec61287c97fe0.sample
+Completed load for: 'res://assets/audio/sfx/client/118__118.wav' remapped 'res://assets/audio/sfx/client/118__118.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/103__103.wav remapped: res://assets/audio/sfx/client/103__103.wav
+Loading resource: res://.godot/imported/103__103.wav-8bb5226755cc4b74c8b517ea1937e6e5.sample remapped: res://.godot/imported/103__103.wav-8bb5226755cc4b74c8b517ea1937e6e5.sample
+Completed load for: 'res://assets/audio/sfx/client/103__103.wav' remapped 'res://assets/audio/sfx/client/103__103.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/104__104.wav remapped: res://assets/audio/sfx/client/104__104.wav
+Loading resource: res://.godot/imported/104__104.wav-6ef4e68069e0f4a38af6c008f5d2841b.sample remapped: res://.godot/imported/104__104.wav-6ef4e68069e0f4a38af6c008f5d2841b.sample
+Completed load for: 'res://assets/audio/sfx/client/104__104.wav' remapped 'res://assets/audio/sfx/client/104__104.wav' at thread -1
+Loading resource: res://assets/audio/sfx/client/105__105.wav remapped: res://assets/audio/sfx/client/105__105.wav
+Loading resource: res://.godot/imported/105__105.wav-c9566f2abe4a38f36cbecc74a3504b24.sample remapped: res://.godot/imported/105__105.wav-c9566f2abe4a38f36cbecc74a3504b24.sample
+Completed load for: 'res://assets/audio/sfx/client/105__105.wav' remapped 'res://assets/audio/sfx/client/105__105.wav' at thread -1
+Loading resource: res://assets/ui/monster_markers/elite_skull.svg remapped: res://assets/ui/monster_markers/elite_skull.svg
+Loading resource: res://.godot/imported/elite_skull.svg-715be515f9f92c5bfc95a6ee56a73cef.ctex remapped: res://.godot/imported/elite_skull.svg-715be515f9f92c5bfc95a6ee56a73cef.ctex
+Completed load for: 'res://assets/ui/monster_markers/elite_skull.svg' remapped 'res://assets/ui/monster_markers/elite_skull.svg' at thread -1
+AUDIO_W4_ACTOR_SERVICE_PASS：真实Enemy/AudioRuntimeService入战静音、攻击起手/帧、LOS和脱战静音、非白名单静音通过

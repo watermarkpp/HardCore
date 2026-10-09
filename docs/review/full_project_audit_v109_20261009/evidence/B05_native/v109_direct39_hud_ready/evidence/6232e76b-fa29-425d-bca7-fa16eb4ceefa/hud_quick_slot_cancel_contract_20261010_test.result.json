@@ -1,0 +1,87 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "formal GameRoot exposes the live HUD slot",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "formal PlayerState accepts the quick-slot binding",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "formal GameRoot synchronizes the PlayerState quick-slot binding",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "formal READY HUD admits an ordinary quick-slot DOWN/UP",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "system menu owns the pause",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "menu boundary cancels old quick-slot UP and long-press",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "menu boundary clears transient slot pointers",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "menu boundary stops the shared long-press timer",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "menu boundary preserves the slot binding",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "focus boundary cancels old quick-slot UP",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "map transition boundary cancels old quick-slot UP",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "fresh quick-slot DOWN/UP emits exactly one use",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "fresh use does not change the slot binding",
+      "passed": true
+    }
+  ],
+  "count": 13,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "ad985d43-3ff5-4d4d-85dd-e921e78e2b0d",
+  "passed": 13,
+  "reported_checks": 13,
+  "reported_failures": 0,
+  "run_id": "6232e76b-fa29-425d-bca7-fa16eb4ceefa",
+  "runtime_environment": {
+    "native_process_id": 21544,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct39_hud_ready",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/v109_direct39_hud_ready/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "hud_quick_slot_cancel_contract_20261010_test",
+  "schema_version": 1,
+  "source_content_sha256": "b9a2db179c5e4d4cf9e04b5ad4c37a7791defb31d632ccff52197fdb719440a5",
+  "status": "PASS"
+}

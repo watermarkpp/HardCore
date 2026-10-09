@@ -2667,6 +2667,7 @@ func _cancel_player_input_boundary(reason: StringName) -> void:
 	if is_instance_valid(hud):
 		hud.cancel_attack_inputs(reason)
 		hud.cancel_skill_inputs(reason)
+		hud.cancel_item_slot_input_boundary(reason)
 	_cancel_map_transition_movement_input()
 	_cancel_all_mobile_attack_inputs(true)
 	_cancel_all_skill_inputs(true)

@@ -1,0 +1,39 @@
+SCRIPT ERROR: Assertion failed: same live EnemyActor release must reject
+   at: _check (res://tests/framework/audio_release_frontier_contract_20261010_test.gd:30)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tests/framework/audio_release_frontier_contract_20261010_test.gd:30)
+       [1] _run (res://tests/framework/audio_release_frontier_contract_20261010_test.gd:48)
+       [2] _make_enemy (res://tests/framework/audio_release_frontier_contract_20261010_test.gd:25)
+SCRIPT ERROR: Assertion failed: old live EnemyActor receipt must reject
+   at: _check (res://tests/framework/audio_release_frontier_contract_20261010_test.gd:30)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tests/framework/audio_release_frontier_contract_20261010_test.gd:30)
+       [1] _run (res://tests/framework/audio_release_frontier_contract_20261010_test.gd:57)
+       [2] _make_enemy (res://tests/framework/audio_release_frontier_contract_20261010_test.gd:25)
+SCRIPT ERROR: Assertion failed: owner alias must reject
+   at: _check (res://tests/framework/audio_release_frontier_contract_20261010_test.gd:30)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tests/framework/audio_release_frontier_contract_20261010_test.gd:30)
+       [1] _run (res://tests/framework/audio_release_frontier_contract_20261010_test.gd:62)
+       [2] _make_enemy (res://tests/framework/audio_release_frontier_contract_20261010_test.gd:25)
+SCRIPT ERROR: Assertion failed: wrong owner life must reject
+   at: _check (res://tests/framework/audio_release_frontier_contract_20261010_test.gd:30)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tests/framework/audio_release_frontier_contract_20261010_test.gd:30)
+       [1] _run (res://tests/framework/audio_release_frontier_contract_20261010_test.gd:66)
+       [2] _make_enemy (res://tests/framework/audio_release_frontier_contract_20261010_test.gd:25)
+SCRIPT ERROR: Assertion failed: retired EnemyActor context must reject
+   at: _check (res://tests/framework/audio_release_frontier_contract_20261010_test.gd:30)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tests/framework/audio_release_frontier_contract_20261010_test.gd:30)
+       [1] _run (res://tests/framework/audio_release_frontier_contract_20261010_test.gd:73)
+SCRIPT ERROR: Assertion failed: synthetic exact-key replay must reject
+   at: _check (res://tests/framework/audio_release_frontier_contract_20261010_test.gd:30)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tests/framework/audio_release_frontier_contract_20261010_test.gd:30)
+       [1] _run (res://tests/framework/audio_release_frontier_contract_20261010_test.gd:105)
+SCRIPT ERROR: Assertion failed: same frame event must be rejected
+   at: _run (res://tests/framework/audio_release_frontier_contract_20261010_test.gd:116)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/framework/audio_release_frontier_contract_20261010_test.gd:116)
+       [1] _make_enemy (res://tests/framework/audio_release_frontier_contract_20261010_test.gd:25)

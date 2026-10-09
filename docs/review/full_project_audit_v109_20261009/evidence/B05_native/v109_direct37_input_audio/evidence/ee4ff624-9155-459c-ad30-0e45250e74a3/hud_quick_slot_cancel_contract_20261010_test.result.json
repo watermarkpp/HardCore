@@ -1,0 +1,72 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "formal GameRoot exposes the live HUD slot",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "system menu owns the pause",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "menu boundary cancels old quick-slot UP and long-press",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "menu boundary clears transient slot pointers",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "menu boundary stops the shared long-press timer",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "menu boundary preserves the slot binding",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "focus boundary cancels old quick-slot UP",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "map transition boundary cancels old quick-slot UP",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "fresh quick-slot DOWN/UP emits exactly one use",
+      "passed": false
+    },
+    {
+      "id": 10,
+      "label": "fresh use does not change the slot binding",
+      "passed": true
+    }
+  ],
+  "count": 10,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "47d65b5d-2721-4882-88d8-33c03268c3b4",
+  "passed": 9,
+  "reported_checks": 10,
+  "reported_failures": 1,
+  "run_id": "ee4ff624-9155-459c-ad30-0e45250e74a3",
+  "runtime_environment": {
+    "native_process_id": 4768,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct37_input_audio",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/v109_direct37_input_audio/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "hud_quick_slot_cancel_contract_20261010_test",
+  "schema_version": 1,
+  "source_content_sha256": "d0e669dbbadf9436740e36c0cd031f9969e3f1b2ef50cf5955117597d5c80d78",
+  "status": "FAIL"
+}
