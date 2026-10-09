@@ -1,0 +1,77 @@
+{
+  "schema": "hardcore.audit.findings.v1",
+  "batch": "B04",
+  "review_source_commit": "172125ae99e3c4adf19af82da2720934a52f9537",
+  "audit_contract": "read_only_fixed_source",
+  "findings": [
+    {
+      "id": "B04-001",
+      "severity": "P2",
+      "category": "SOURCE_DERIVED_FORMAL_DROP_PROFILE_COVERAGE_RISK",
+      "status": "CONDITIONAL_PRODUCT_AUTHORITY_CONFIRMATION",
+      "confidence": "HIGH_CODE_HIGH_MISMATCH_MEDIUM_REACHABILITY",
+      "path": "scripts/layers/runtime/loot_runtime_service.gd",
+      "function": "_production_profile / begin_monster_drop_roll_job / advance_monster_drop_roll_job",
+      "lines": "~120-210;~260-350",
+      "formal_trigger": "玩家杀死固定生产目录中被标为runtime_allowed且editor_placement.allowed、却不在用户126种怪物Sheet里的怪物；尤其是拥有原正式非空掉落条目的ID75等。",
+      "current_behavior": "正式UserLootSheetProvider仅有126个profile；固定canonical_monster_catalog包含152个允许运行且可编辑放置的身份，其中26个未配置于Sheet。LootRuntimeService无对应profile即返回配置失败/空roll，不回退历史SPB；死亡经验/复活可成功而这类怪的奖励为零。尚未验证26者均在当前已发布地图真实刷出。",
+      "expected_behavior": "用户最终掉落Sheet是唯一概率权威；应明确无配置ID究竟是有意无奖励、不可刷、还是遗漏了用户批准的对应profile。真实正在刷出的目标不可被无证据自动赋值或静默混同于RNG正常零掉落。",
+      "shortest_call_chain": "正式EnemyActor.died → GameRoot._pump_enemy_death_work_queue/_plan_enemy_death_item → LootRuntimeService.begin_monster_drop_roll_job → _production_profile → UserLootSheetProvider.profile(missing monster_id)={} → no item roll outcome; source contrast canonical_monster_catalog runtime_allowed/editor_placement",
+      "evidence": [
+        "https://github.com/watermarkpp/HardCore/blob/172125ae99e3c4adf19af82da2720934a52f9537/scripts/layers/runtime/loot_runtime_service.gd#L90-L200",
+        "https://github.com/watermarkpp/HardCore/blob/172125ae99e3c4adf19af82da2720934a52f9537/scripts/drop/user_loot_sheet_provider.gd#L40-L148",
+        "https://github.com/watermarkpp/HardCore/blob/172125ae99e3c4adf19af82da2720934a52f9537/scripts/game_root.gd#L14280-L14515",
+        "assets/data/runtime/canonical_monster_catalog.json@172125ae99e3c4adf19af82da2720934a52f9537 — source inventory 156 entries, 152 runtime_allowed/editor allowed; 26 unmatched to 126 sheet profiles; ID75 old entries=78, map code D022/D023/D024 (fixed-commit Python read-only diff)",
+        "assets/data/drop/dpv2_user_loot_sheet_authority_v1.json@172125ae99e3c4adf19af82da2720934a52f9537 — 126 monster profiles / 6083 slots, blob f1cf29e9f770a5eeb1116d1689d1269577921811"
+      ],
+      "repair": "主控先从正式已发布地图spawn资料核对缺失ID的真实刷怪、奖励义务和用户sheet原件。若真漏，由用户确认后仅走正式authoring编译链修改单条目标，保持现有概率及其他槽位字节不变；若刻意无掉落，则在正式authority显式记录no_reward，不用退役表fallback。补诊断区别'valid RNG zero'与'profile missing'，不更改掉落。",
+      "minimum_validation": "只读比对126 Sheet IDs、152正式允许ID与已发布runtime spawn实际ID；对当前真实可刷出的缺失ID，固定seed自然death检查roll.configured、reason、经验以及ground/items；用户授权前不得生成新概率。",
+      "source_sha": "172125ae99e3c4adf19af82da2720934a52f9537"
+    },
+    {
+      "id": "B04-002",
+      "severity": "P2",
+      "category": "SOURCE_DERIVED_UI_SERVICE_LATENCY_RISK",
+      "status": "CONDITIONAL_DIAGNOSTIC_NOT_RUN",
+      "confidence": "HIGH_CONTROL_FLOW_MEDIUM_PRODUCT_IMPACT",
+      "path": "scripts/loot_feedback_layer.gd",
+      "function": "_show_pickup_success / _start_next_pickup_feedback / _process",
+      "lines": "~113-188",
+      "formal_trigger": "连续拾取大量物品，新的pickup_success入队速度在数十秒持续快于一个默认2.4秒/条的展示速度，或一次批量产生几十/上百条成功通知。",
+      "current_behavior": "_pending_pickup_feedback无限追加；_start_next_pickup_feedback在toast_entries非空时不启动下一条，每条默认2.4秒、一次只展示1条。100条积压理论服务延时约240秒，尾部信息明显陈旧；队列无上限、无旧提示聚合或取消收尾。原设计明确要求不能漏提示，所以不能直接判为当前异常或随便截断。",
+      "expected_behavior": "当前用户要求均匀提示并保留成功事实，显示不能令玩家误以为刚拾取的是数分钟前的事件；也不得因此无限持有大量复制Dictionary。UI展示策略需由主控确认可否做同类聚合/可查阅历史，而非丢消息。",
+      "shortest_call_chain": "GameRoot._finish_loot_collection_outcomes(success receipt) → LootFeedbackLayer.show_feedback_batch → _show_pickup_success(appends) → _start_next_pickup_feedback(guard when active) → _process timer expiration → next one",
+      "evidence": [
+        "https://github.com/watermarkpp/HardCore/blob/172125ae99e3c4adf19af82da2720934a52f9537/scripts/loot_feedback_layer.gd#L99-L195",
+        "https://github.com/watermarkpp/HardCore/blob/172125ae99e3c4adf19af82da2720934a52f9537/scripts/game_root.gd#L15038-L15235"
+      ],
+      "repair": "先观测真实单位时间成功拾取数量、queue_max/oldest_wait/visible_count，确认用户允许哪种呈现；必须保留item receipt及成功提示语义。若可接受合并，可在唯一UI层做有界聚合/日志而非在GameRoot减掉落或弱化数据库。",
+      "minimum_validation": "用户实际32尸体掉落、背包满/失败混杂场景，模拟长期拾取压测，记录队首等待与场景切换清理；不改变B04奖励总数或回执。",
+      "source_sha": "172125ae99e3c4adf19af82da2720934a52f9537"
+    },
+    {
+      "id": "B04-003",
+      "severity": "P3",
+      "category": "SOURCE_CONFIRMED_METADATA_DRIFT_NOT_RUNTIME_BUG",
+      "status": "AUTHORING_RECONCILIATION_REQUIRED",
+      "confidence": "HIGH",
+      "path": "tools/loot_sheet_compiler/compile_authority.ps1",
+      "function": "final $out status writer / UserLootSheetProvider._init",
+      "lines": "~515-552; provider ~40-85",
+      "formal_trigger": "后续工具或主控查看用户掉落Sheet编译文件的status作为是否正式启用的机器依据。",
+      "current_behavior": "编译器固定输出status=PENDING_ACTIVATION，固定Sheet文件该字段仍PENDING_ACTIVATION，但生产LootRuntimeService无条件创建UserLootSheetProvider并以其概率为唯一运行权威；provider验证schema和内容但不检查status。运行时真实已激活，元数据陈述与生产态不一致。",
+      "expected_behavior": "资料状态应能准确描述正式生产来源，不误导后续authoring/验证脚本；不能据此把合法现行Sheet禁用或替换成旧表。",
+      "shortest_call_chain": "compile_authority.ps1 emits PENDING_ACTIVATION → JSON checked-in → UserLootSheetProvider._init validates schema and slots, no status gate → LootRuntimeService._production_profile uses same source",
+      "evidence": [
+        "https://github.com/watermarkpp/HardCore/blob/172125ae99e3c4adf19af82da2720934a52f9537/tools/loot_sheet_compiler/compile_authority.ps1#L520-L554",
+        "https://github.com/watermarkpp/HardCore/blob/172125ae99e3c4adf19af82da2720934a52f9537/scripts/drop/user_loot_sheet_provider.gd#L40-L89",
+        "https://github.com/watermarkpp/HardCore/blob/172125ae99e3c4adf19af82da2720934a52f9537/scripts/layers/runtime/loot_runtime_service.gd#L40-L125"
+      ],
+      "repair": "后续正式authoring声明中对齐激活元数据和运行消费权威，必须保留Sheet所有奖励槽位和概率以及其原哈希追溯；不属于本轮可以直接动生产开关的Bug。",
+      "minimum_validation": "正式编译器verify-only和loader元数据一致性专项；生产概率与现有用户Sheet逐槽哈希相同；本轮NOT_RUN。",
+      "source_sha": "172125ae99e3c4adf19af82da2720934a52f9537"
+    }
+  ],
+  "notes": "B04-001/002 are CONDITIONAL risks, B04-003 is metadata drift; no source-proven duplicate reward/sale or verified Android behavior. Previously repaired PERSISTING and detection-necklace exclusions are NOT re-registered as defects.",
+  "tests": "NOT_RUN"
+}

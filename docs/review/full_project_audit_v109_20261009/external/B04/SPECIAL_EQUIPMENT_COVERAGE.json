@@ -1,0 +1,177 @@
+{
+  "schema": "hardcore.audit.special_equipment_coverage.v1",
+  "source_commit": "172125ae99e3c4adf19af82da2720934a52f9537",
+  "native": "NOT_RUN",
+  "rows": [
+    {
+      "contract": "复活戒指",
+      "ids": "special_effect revival",
+      "source": [
+        "scripts/equipment_rules.gd::revival_cooldown_ms",
+        "assets/data/equipment_special_rules.json",
+        "scripts/player.gd lethal HP event",
+        "scripts/game_root.gd::_on_player_death_requested"
+      ],
+      "value": "300000ms cooldown; automatic restore HP and wear damage, NO formal death/XP loss; otherwise normal death -10% EXP",
+      "status": "STATIC_CALL_CHAIN_VERIFIED",
+      "gap": "restart session cooldown semantics and actual device/native"
+    },
+    {
+      "contract": "麻痹戒指",
+      "source": [
+        "scripts/equipment_rules.gd::paralysis_duration_for_classification",
+        "assets/data/equipment_special_rules.json"
+      ],
+      "value": "ordinary=5.0s, elite/boss=2.5s",
+      "status": "STATIC_RULE_VERIFIED",
+      "gap": "Enemy application and 300ms committed action native"
+    },
+    {
+      "contract": "虹魔",
+      "source": [
+        "scripts/equipment_rules.gd::SET_PIECES_BY_NAME",
+        "scripts/player_state.gd::recalculate_stats",
+        "scripts/game_root.gd::_apply_physical_hit"
+      ],
+      "value": "4/3/2 piece powers; base-input/raw damage for legacy gear heal per user; not actual HP loss",
+      "status": "STATIC_CALL_CHAIN_VERIFIED",
+      "gap": "overkill high defense native"
+    },
+    {
+      "contract": "隐身戒指",
+      "source": [
+        "assets/data/equipment_special_rules.json rules.stealthDescription",
+        "scripts/player.gd break/recover",
+        "scripts/game_root.gd real combat-exit owner"
+      ],
+      "value": "break on attack/skill submission, only true combat-exit rearms; 0 durability/unequip disables",
+      "status": "STATIC_PRODUCT_RULE_MATCH",
+      "gap": "re-equip in combat handled separately by main controller"
+    },
+    {
+      "contract": "技巧项链",
+      "ids": [
+        250
+      ],
+      "source": [
+        "scripts/equipment_random_special_instance_rules.gd",
+        "scripts/item_drop_instance_rules.gd::create_instance",
+        "assets/data/drop/dpv2_user_loot_sheet_authority_v1.json"
+      ],
+      "value": "one deterministically selected eligible skill +1; no auto-learn; ID250 remains in two slots",
+      "status": "STATIC_CALL_CHAIN_VERIFIED",
+      "gap": "all source skill matches / failure policy native"
+    },
+    {
+      "contract": "探测项链",
+      "ids": [
+        251
+      ],
+      "source": [
+        "assets/data/drop/technique_drop_source_policy_v1.json",
+        "tools/loot_sheet_compiler/compile_authority.ps1"
+      ],
+      "value": "one exact source slot 160/070 removed; no ID251 final Sheet slot; preowned instances preserved",
+      "status": "STATIC_COMPILED_DATA_VERIFIED",
+      "gap": "rebuild byte hash on later authoring"
+    },
+    {
+      "contract": "神秘装备",
+      "ids": [
+        218,
+        219,
+        220
+      ],
+      "source": [
+        "scripts/mystery_equipment_instance_rules.gd::create_roll/validate_roll/requirement",
+        "scripts/item_drop_instance_rules.gd::create_instance",
+        "scripts/equipment_rules.gd::requirement_for"
+      ],
+      "value": "rolled 5 stats and correlated wearing condition; no new curse; rederived from stable drop digest",
+      "status": "STATIC_CALL_CHAIN_VERIFIED",
+      "gap": "all family requirements and legacy save native"
+    },
+    {
+      "contract": "穿戴授予技能",
+      "source": [
+        "scripts/equipment_granted_skill_rules.gd",
+        "assets/data/equipment_granted_skills.source.json",
+        "scripts/player_state.gd::equipment_granted_skill_ids/is_skill_available"
+      ],
+      "value": "learned skill records unchanged; equip/unequip gates effective access, zero durability invalid",
+      "status": "STATIC_CALL_CHAIN_VERIFIED",
+      "gap": "gear swap/quick-slot lifecycle native"
+    },
+    {
+      "contract": "黑铁矿价格",
+      "ids": "940010..940020",
+      "source": [
+        "assets/data/equipment_price_candidates_v1.json",
+        "scripts/game_data.gd::_build_price_index",
+        "scripts/pricing_service.gd::quote_sell"
+      ],
+      "value": "base 180000*sell 1/2=90000; token940000 purifies 10..20 only after reward success",
+      "status": "STATIC_SOURCE_VERIFIED",
+      "gap": "merchant actual authorizations native"
+    },
+    {
+      "contract": "远古圣物碎片价格",
+      "ids": [
+        950001
+      ],
+      "source": [
+        "assets/data/equipment_price_candidates_v1.json",
+        "scripts/pricing_service.gd::quote_sell"
+      ],
+      "value": "base 200000/2=100000",
+      "status": "STATIC_SOURCE_VERIFIED",
+      "gap": "actual merchant native"
+    },
+    {
+      "contract": "成品圣物徽章价格",
+      "ids": "950101..950203",
+      "source": [
+        "assets/data/equipment_price_candidates_v1.json",
+        "scripts/pricing_service.gd::quote_sell"
+      ],
+      "value": "base 400000/2=200000",
+      "status": "STATIC_SOURCE_VERIFIED",
+      "gap": "all catalog ID native"
+    },
+    {
+      "contract": "祖玛头像价格",
+      "ids": [
+        920032
+      ],
+      "source": [
+        "assets/data/equipment_price_candidates_v1.json",
+        "scripts/game_data.gd::_apply_exact_user_price_override",
+        "scripts/pricing_service.gd::quote_sell"
+      ],
+      "value": "stable-ID override base2000000/2=1000000; old service price not authoritative",
+      "status": "STATIC_SOURCE_VERIFIED",
+      "gap": "actual merchant quote native"
+    },
+    {
+      "contract": "沃玛以上小极品",
+      "source": [
+        "assets/data/item_drop_affix_wooma_jp_policy.source.json",
+        "assets/data/item_drop_affix_wooma_jp_policy.runtime.json",
+        "scripts/item_drop_affix_v4_rules.gd",
+        "scripts/item_drop_instance_rules.gd"
+      ],
+      "value": "authoring outer true nonzero event probability x3, min(1,...); no conditional attribute/stat modifier distribution change",
+      "status": "STATIC_AUTHORITY_TRACED",
+      "gap": "same-seed total probability statistical/native not run"
+    },
+    {
+      "contract": "祝福油幸运",
+      "source": [
+        "scripts/equipment_rules.gd::blessing_outcome/blessing_luck12_joint_roll_hits/blessing_success_roll_hits"
+      ],
+      "value": "5x effective chance using joint rank1-2 draw; no new RNG branch or curse",
+      "status": "STATIC_FORMULA_VERIFIED",
+      "gap": "full distribution native not run"
+    }
+  ]
+}

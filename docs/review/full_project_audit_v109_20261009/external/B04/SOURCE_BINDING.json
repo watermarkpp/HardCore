@@ -1,0 +1,1082 @@
+{
+  "schema": "hardcore.audit.source_binding.v1",
+  "repo": "watermarkpp/HardCore",
+  "source_commit": "172125ae99e3c4adf19af82da2720934a52f9537",
+  "source_authority": "FIXED_REVIEW_SHA_NOT_BRANCH_HEAD",
+  "reference_docs": [
+    "AGENTS.md",
+    "PROJECT_CORE_CONTRACTS.md",
+    "docs/review/full_project_audit_v109_20261009/STANDARD_AUDIT_PROMPT.md",
+    "docs/review/full_project_audit_v109_20261009/BATCH_04.md",
+    "docs/review/full_project_audit_v109_20261009/SCOPE.md",
+    "docs/review/full_project_audit_v109_20261009/AUDIT_SCOPE_MANIFEST.json"
+  ],
+  "read_methods": [
+    "mcp__GitHub__fetch_file(...,ref=FIXED_SHA) for actual GDScript readers",
+    "mcp__Remote_Desktop_Commander__start_process running READ-ONLY git show and git ls-tree -rlz FIXED_SHA; Python subprocess checks exact committed bytes, not worktree"
+  ],
+  "count": 176,
+  "paths": [
+    {
+      "path": "assets/data/drop/boss_material_drop_directive_v1.json",
+      "module": "death_revival_drops",
+      "sha": "d450167afd71964d3726ec6a79f1df4f76ad02b1",
+      "bytes": "2291"
+    },
+    {
+      "path": "assets/data/drop/dpv2_21cq_item_mapping_v1.json",
+      "module": "death_revival_drops",
+      "sha": "0df9c56f0d113efdff4ed6739bf2f008b4f1dd7b",
+      "bytes": "68329"
+    },
+    {
+      "path": "assets/data/drop/dpv2_21cq_monster_mapping_v1.json",
+      "module": "death_revival_drops",
+      "sha": "4f9b093116e54939161246e093de508200be7781",
+      "bytes": "136447"
+    },
+    {
+      "path": "assets/data/drop/dpv2_21cq_overflow_authority_v1.json",
+      "module": "death_revival_drops",
+      "sha": "a00da0fa051358d16b8f2130f6753f99d956ce1f",
+      "bytes": "73865"
+    },
+    {
+      "path": "assets/data/drop/dpv2_21cq_source_corrections_v1.json",
+      "module": "death_revival_drops",
+      "sha": "dc52741d400636de4ed8a50c899f45aaa7b7be72",
+      "bytes": "5637"
+    },
+    {
+      "path": "assets/data/drop/dpv2_21cq_source_provenance_v1.json",
+      "module": "death_revival_drops",
+      "sha": "9c311307d8dc43fe6db378aa5015598a6351e2d5",
+      "bytes": "5915135"
+    },
+    {
+      "path": "assets/data/drop/dpv2_21cq_verified_profile_authority_v1.json",
+      "module": "death_revival_drops",
+      "sha": "57b56fc72104560942aa9c816fb40ed4099db046",
+      "bytes": "2633065"
+    },
+    {
+      "path": "assets/data/drop/dpv2_direct_baseline_manifest_v2.json",
+      "module": "death_revival_drops",
+      "sha": "e6ec926bd68c8665e2b3ab43d6c1dea74bdfe182",
+      "bytes": "4179"
+    },
+    {
+      "path": "assets/data/drop/dpv2_direct_baseline_v2.json",
+      "module": "death_revival_drops",
+      "sha": "eccc43e01852e8423fc4f1cea1ec032440317dbc",
+      "bytes": "2874784"
+    },
+    {
+      "path": "assets/data/drop/dpv2_drop_role_design_authority_v1.json",
+      "module": "death_revival_drops",
+      "sha": "8f4af24f46a722b0f452adb364d148f1fef14587",
+      "bytes": "3595"
+    },
+    {
+      "path": "assets/data/drop/dpv2_drop_runtime_authority_v1.json",
+      "module": "death_revival_drops",
+      "sha": "b3d9d7dc89e4c69dfee76ef45c588b9857db6a4e",
+      "bytes": "67870"
+    },
+    {
+      "path": "assets/data/drop/dpv2_global_drop_rate_authority_v1.json",
+      "module": "death_revival_drops",
+      "sha": "f4733f3887592e3d04ce63664476c6a8b53be4c5",
+      "bytes": "1801"
+    },
+    {
+      "path": "assets/data/drop/dpv2_item_identity_authority_v1.json",
+      "module": "death_revival_drops",
+      "sha": "f5fb2af4cdc281177a67348c479e961a7837abfc",
+      "bytes": "18556"
+    },
+    {
+      "path": "assets/data/drop/dpv2_item_tier_authority_v1.json",
+      "module": "death_revival_drops",
+      "sha": "3f49135cdf96a575c85bacf6e7868373dbc179d1",
+      "bytes": "215382"
+    },
+    {
+      "path": "assets/data/drop/dpv2_monster_drop_semantic_authority_v1.json",
+      "module": "death_revival_drops",
+      "sha": "e31fc8810a2e15d67742d73bba9a61318249a065",
+      "bytes": "271855"
+    },
+    {
+      "path": "assets/data/drop/dpv2_monster_role_authority_v1.json",
+      "module": "death_revival_drops",
+      "sha": "80a6c792b10e3ad01defeee61d8730058695e55b",
+      "bytes": "127191"
+    },
+    {
+      "path": "assets/data/drop/dpv2_single_player_drop_boost_v1.json",
+      "module": "death_revival_drops",
+      "sha": "0dc393ad3e6d239767500760ce1946fe8c5d35af",
+      "bytes": "94865"
+    },
+    {
+      "path": "assets/data/drop/dpv2_single_player_effective_probability_v1.json",
+      "module": "death_revival_drops",
+      "sha": "fed543a1ae9e9db2a0f45dcc84c921116d0cb9a4",
+      "bytes": "7797055"
+    },
+    {
+      "path": "assets/data/drop/dpv2_single_player_item_boost_classification_v1.json",
+      "module": "death_revival_drops",
+      "sha": "bb05119f778df97e6598e861bd26555eaa398b18",
+      "bytes": "77224"
+    },
+    {
+      "path": "assets/data/drop/dpv2_user_loot_sheet_authority_v1.json",
+      "module": "death_revival_drops",
+      "sha": "f1cf29e9f770a5eeb1116d1689d1269577921811",
+      "bytes": "1973313"
+    },
+    {
+      "path": "assets/data/drop/monster_ground_slot_group_policy.runtime.json",
+      "module": "death_revival_drops",
+      "sha": "4e1016b6167d12374541a94be5334d5e65806e64",
+      "bytes": "1131"
+    },
+    {
+      "path": "assets/data/drop/monster_ground_slot_group_policy.source.json",
+      "module": "death_revival_drops",
+      "sha": "c2ac9dc39fc9d48476b29eafb6c139207b05fe8d",
+      "bytes": "680"
+    },
+    {
+      "path": "assets/data/drop/single_player_balance_v80.json",
+      "module": "death_revival_drops",
+      "sha": "689f652013168c3383d539e6615e662b538b726d",
+      "bytes": "314818"
+    },
+    {
+      "path": "assets/data/drop/single_player_balance_v80_policy.json",
+      "module": "death_revival_drops",
+      "sha": "c903dfe95a2418b057ae3acf83cc480237bf8021",
+      "bytes": "1863"
+    },
+    {
+      "path": "assets/data/drop/technique_drop_source_policy_v1.json",
+      "module": "death_revival_drops",
+      "sha": "7b58ee26e7887a50cdfa1b06a31656a1fed27481",
+      "bytes": "473"
+    },
+    {
+      "path": "assets/data/drop/user_additions_v81.json",
+      "module": "death_revival_drops",
+      "sha": "62e19fe4f5cb21206714ce1deb7eca3ed5879ee9",
+      "bytes": "534"
+    },
+    {
+      "path": "assets/data/equipment_actor_sort_contract.json",
+      "module": "equipment_inventory_identity",
+      "sha": "e0f6af2eaede690dd5e64aa09824b3641eb75ef7",
+      "bytes": "2060"
+    },
+    {
+      "path": "assets/data/equipment_attribute_master.json",
+      "module": "equipment_inventory_identity",
+      "sha": "567941f9b55a55d5c972a0e61163775487720b78",
+      "bytes": "351910"
+    },
+    {
+      "path": "assets/data/equipment_classic_avatar_head_patches.json",
+      "module": "equipment_inventory_identity",
+      "sha": "ae997233e9a1cc49af9d8a2b39b3b0c24680abf9",
+      "bytes": "56021"
+    },
+    {
+      "path": "assets/data/equipment_client_art_sources.json",
+      "module": "equipment_inventory_identity",
+      "sha": "24ef74bbfbdeda586cc482b390a7730c80a50ee7",
+      "bytes": "239733"
+    },
+    {
+      "path": "assets/data/equipment_customization.json",
+      "module": "equipment_inventory_identity",
+      "sha": "0dfbbbfe4185bc8f92e78952ac32025f63e78144",
+      "bytes": "2660"
+    },
+    {
+      "path": "assets/data/equipment_durability_rules.json",
+      "module": "equipment_inventory_identity",
+      "sha": "bcdfc5cba1434156318ee2933fd802a6220ade8e",
+      "bytes": "2647"
+    },
+    {
+      "path": "assets/data/equipment_enhancement_black_iron_v1.json",
+      "module": "equipment_inventory_identity",
+      "sha": "517fcc04357afdbdbeb721d09964cadf94ba8998",
+      "bytes": "479"
+    },
+    {
+      "path": "assets/data/equipment_enhancement_grade_v1.json",
+      "module": "equipment_inventory_identity",
+      "sha": "776097849eb17093f862eb27e5f167178b14885c",
+      "bytes": "30272"
+    },
+    {
+      "path": "assets/data/equipment_enhancement_rules_v1.json",
+      "module": "equipment_inventory_identity",
+      "sha": "fb085cfa03b808cd4906e4860991ef23605267e1",
+      "bytes": "715"
+    },
+    {
+      "path": "assets/data/equipment_female_armor_attribute_evidence.json",
+      "module": "equipment_inventory_identity",
+      "sha": "ad64cc1aabd8aa4f447527e227f1f842d8f58006",
+      "bytes": "22216"
+    },
+    {
+      "path": "assets/data/equipment_granted_skills.source.json",
+      "module": "equipment_inventory_identity",
+      "sha": "85e4a3b821db315c9aac06b460d169e2aedbf527",
+      "bytes": "1116"
+    },
+    {
+      "path": "assets/data/equipment_helmet_151_golden_reference.json",
+      "module": "equipment_inventory_identity",
+      "sha": "3053e7d8261285d4f7bb023154d6f746fc27a8e3",
+      "bytes": "3037"
+    },
+    {
+      "path": "assets/data/equipment_helmet_finalization_manifest.json",
+      "module": "equipment_inventory_identity",
+      "sha": "6eb4f15f2905ecf38cb773d521cbdbc8fb8fee0c",
+      "bytes": "1603276"
+    },
+    {
+      "path": "assets/data/equipment_helmet_runtime_icon_routes.json",
+      "module": "equipment_inventory_identity",
+      "sha": "445bad6a22707a4e806a241e062df9364e152bca",
+      "bytes": "50307"
+    },
+    {
+      "path": "assets/data/equipment_helmet_v2_audit.json",
+      "module": "equipment_inventory_identity",
+      "sha": "bfc667396d3a84ccce73b2f47a51768feca5666a",
+      "bytes": "1568"
+    },
+    {
+      "path": "assets/data/equipment_helmet_visual_v2.json",
+      "module": "equipment_inventory_identity",
+      "sha": "38731534d30115a305e3cbd3e8543e52518fa37f",
+      "bytes": "519502"
+    },
+    {
+      "path": "assets/data/equipment_helmet_visual_v2_overrides.json",
+      "module": "equipment_inventory_identity",
+      "sha": "3bea78e9f0c08b504ea6cf708c09ec85c0741d0e",
+      "bytes": "64414"
+    },
+    {
+      "path": "assets/data/equipment_luck_rules.json",
+      "module": "equipment_inventory_identity",
+      "sha": "6c8be4092493de71c80ad06532bad2134929894d",
+      "bytes": "3315"
+    },
+    {
+      "path": "assets/data/equipment_male_dress_world_wear.json",
+      "module": "equipment_inventory_identity",
+      "sha": "e1a52880e99fbefd900a2c4fe67f233c9d8b9032",
+      "bytes": "1102973"
+    },
+    {
+      "path": "assets/data/equipment_male_run_world_wear.json",
+      "module": "equipment_inventory_identity",
+      "sha": "8758b681dbb7e6ca95ff871a19e952df774ddf66",
+      "bytes": "113611"
+    },
+    {
+      "path": "assets/data/equipment_male_weapon_world_wear.json",
+      "module": "equipment_inventory_identity",
+      "sha": "a6280e8753d3c494586f2ca5e310f5f6e77fa027",
+      "bytes": "1298384"
+    },
+    {
+      "path": "assets/data/equipment_male_world_helmet.json",
+      "module": "equipment_inventory_identity",
+      "sha": "1835f376951671bc92ed2b3dd5bb4c04a25d8b3d",
+      "bytes": "4767954"
+    },
+    {
+      "path": "assets/data/equipment_male_world_helmet_recipes.json",
+      "module": "equipment_inventory_identity",
+      "sha": "e9620d4c052d4638329dd02957b8da2a4d6f8f3f",
+      "bytes": "25133"
+    },
+    {
+      "path": "assets/data/equipment_original_client_paper_doll_stage.json",
+      "module": "equipment_inventory_identity",
+      "sha": "24537a47970ec12d98413981ca8584edb14c26f7",
+      "bytes": "63664"
+    },
+    {
+      "path": "assets/data/equipment_paper_doll_presentation_modes.json",
+      "module": "equipment_inventory_identity",
+      "sha": "e0ae5f4f6fd4142c19fd9f2f14c5f8d33a7cfb7f",
+      "bytes": "6488"
+    },
+    {
+      "path": "assets/data/equipment_price_candidates_v1.json",
+      "module": "equipment_inventory_identity",
+      "sha": "486bcfc6cd8d06f0b36de2717dfcdaf2bdd30abc",
+      "bytes": "24878"
+    },
+    {
+      "path": "assets/data/equipment_primary_weapon_compatibility.json",
+      "module": "equipment_inventory_identity",
+      "sha": "55e030edf9357269c36c27af2117351eb7151449",
+      "bytes": "245170"
+    },
+    {
+      "path": "assets/data/equipment_reference_batches.json",
+      "module": "equipment_inventory_identity",
+      "sha": "703fa5b0c1c202595c1e2980fdbc3a71f794af9b",
+      "bytes": "3553"
+    },
+    {
+      "path": "assets/data/equipment_service_rules.json",
+      "module": "equipment_inventory_identity",
+      "sha": "e7226353ea569a2338d0e607c67f56574435e43e",
+      "bytes": "1767"
+    },
+    {
+      "path": "assets/data/equipment_skill_level_affix_rollout_v1.json",
+      "module": "equipment_inventory_identity",
+      "sha": "ab11abdb4866776c7c13de9e0ff10a7fdbb6b7ff",
+      "bytes": "188"
+    },
+    {
+      "path": "assets/data/equipment_special_rules.json",
+      "module": "equipment_inventory_identity",
+      "sha": "f76af1fb32c8a4fa52e8eab8ca8966585d24613d",
+      "bytes": "3125"
+    },
+    {
+      "path": "assets/data/equipment_test_loadouts.json",
+      "module": "equipment_inventory_identity",
+      "sha": "9286530c27e0fc59f08a4b4bcc0795b17e1e7764",
+      "bytes": "13073"
+    },
+    {
+      "path": "assets/data/equipment_visual_catalog.json",
+      "module": "equipment_inventory_identity",
+      "sha": "16e540d356d0d60524d6e11d08bffcb9eb1bbb5a",
+      "bytes": "2583446"
+    },
+    {
+      "path": "assets/data/equipment_weapon_frame_order.json",
+      "module": "equipment_inventory_identity",
+      "sha": "38ef4082b7c3aacdb41560946757315500ccccb1",
+      "bytes": "12693"
+    },
+    {
+      "path": "assets/data/equipment_web_looks_candidates.json",
+      "module": "equipment_inventory_identity",
+      "sha": "1cbc082c6c79ca3764774160571cfca6983658c9",
+      "bytes": "27574"
+    },
+    {
+      "path": "assets/data/equipment_world_helmet_runtime_policy.json",
+      "module": "equipment_inventory_identity",
+      "sha": "c9f65b4c5965b9fe7a44e70311f45f89ab1c1b82",
+      "bytes": "148626"
+    },
+    {
+      "path": "assets/data/identity/entity_registry_source.json",
+      "module": "equipment_inventory_identity",
+      "sha": "dd1b0505cc05cc4775c9e4001450fa849085b8b7",
+      "bytes": "22688"
+    },
+    {
+      "path": "assets/data/identity/item_categories_v1.json",
+      "module": "equipment_inventory_identity",
+      "sha": "1b6e6f1c3ec4841467ea54de1aee7362fcfb273b",
+      "bytes": "4025"
+    },
+    {
+      "path": "assets/data/item_drop_affix_rules_v2.json",
+      "module": "equipment_inventory_identity",
+      "sha": "38d439d688730e8ec93152ffb61539573e643851",
+      "bytes": "125992"
+    },
+    {
+      "path": "assets/data/item_drop_affix_rules_v3.json",
+      "module": "equipment_inventory_identity",
+      "sha": "12e9df4d1436eaf473d5d11d260a75961e79bafd",
+      "bytes": "507505"
+    },
+    {
+      "path": "assets/data/item_drop_affix_wooma_jp_policy.runtime.json",
+      "module": "equipment_inventory_identity",
+      "sha": "86538a46d75850c7468b75f1e23b1be7c529af76",
+      "bytes": "1459666"
+    },
+    {
+      "path": "assets/data/item_drop_affix_wooma_jp_policy.source.json",
+      "module": "equipment_inventory_identity",
+      "sha": "f165d12e8dd68857303ed4336e8f5c87405469b0",
+      "bytes": "4056"
+    },
+    {
+      "path": "assets/data/item_drop_instance_rules_v1.json",
+      "module": "equipment_inventory_identity",
+      "sha": "1eaf25e635bbd8bd0f3f07cc7abe670e08af04e3",
+      "bytes": "1027"
+    },
+    {
+      "path": "assets/data/item_runtime_authority_v1.json",
+      "module": "equipment_inventory_identity",
+      "sha": "1dd7690c873e42585922541a88b7968e66b7af1d",
+      "bytes": "24368"
+    },
+    {
+      "path": "assets/data/runtime/map_editor/hidden_death_temple.runtime.json",
+      "module": "death_revival_drops",
+      "sha": "b0d5894b96e02bead588d98c29d48c2d28be44c2",
+      "bytes": "197019"
+    },
+    {
+      "path": "assets/data/runtime/map_editor/hidden_death_temple.visual.json",
+      "module": "death_revival_drops",
+      "sha": "2ddf0ee805b334086044ed7a8a46fb792a48ec86",
+      "bytes": "1861"
+    },
+    {
+      "path": "assets/data/runtime/map_editor/mengzhong_between_life_and_death.runtime.json",
+      "module": "death_revival_drops",
+      "sha": "07df02cdfba94c248e66cde27d8ff5326491c8cc",
+      "bytes": "837617"
+    },
+    {
+      "path": "assets/data/runtime/map_editor/mengzhong_between_life_and_death.visual.json",
+      "module": "death_revival_drops",
+      "sha": "979c88dabe4fe8f396dd5d9e5f7a6099f35e0bef",
+      "bytes": "3305"
+    },
+    {
+      "path": "assets/data/runtime/map_editor/mengzhong_death_coffin.runtime.json",
+      "module": "death_revival_drops",
+      "sha": "eaf6d2cc04b787288c5359506d664aab8cb3dd7e",
+      "bytes": "841059"
+    },
+    {
+      "path": "assets/data/runtime/map_editor/mengzhong_death_coffin.visual.json",
+      "module": "death_revival_drops",
+      "sha": "3187110a8707fd59d050f14e887601a36c9e4a14",
+      "bytes": "3295"
+    },
+    {
+      "path": "assets/data/runtime/map_editor/mengzhong_death_valley_dungeon.runtime.json",
+      "module": "death_revival_drops",
+      "sha": "71ca82acc2e0d29b15898f6412c3cade010bfb8b",
+      "bytes": "579125"
+    },
+    {
+      "path": "assets/data/runtime/map_editor/mengzhong_death_valley_dungeon.visual.json",
+      "module": "death_revival_drops",
+      "sha": "84389c0a7f5e2398d630c4970ad5c0590ec6dac2",
+      "bytes": "3303"
+    },
+    {
+      "path": "assets/data/runtime/map_editor/wall_render_plans/hidden_death_temple.wall_render_plan.json",
+      "module": "death_revival_drops",
+      "sha": "87e1a0de9471223d68147bfc8ae6ff19851cf65b",
+      "bytes": "50168"
+    },
+    {
+      "path": "assets/data/runtime/map_editor/wall_render_plans/mengzhong_between_life_and_death.wall_render_plan.json",
+      "module": "death_revival_drops",
+      "sha": "2232d4d9b1055efbe62172eb928f30969bf3b354",
+      "bytes": "178258"
+    },
+    {
+      "path": "assets/data/runtime/map_editor/wall_render_plans/mengzhong_death_coffin.wall_render_plan.json",
+      "module": "death_revival_drops",
+      "sha": "7ffd189255da58a269885dac1555bd57fa1c49ec",
+      "bytes": "178201"
+    },
+    {
+      "path": "assets/data/runtime/map_editor/wall_render_plans/mengzhong_death_valley_dungeon.wall_render_plan.json",
+      "module": "death_revival_drops",
+      "sha": "35d0eae55848a9d1fd32577234ad77913e4932a6",
+      "bytes": "138669"
+    },
+    {
+      "path": "assets/data/vanilla_176/drops.json",
+      "module": "death_revival_drops",
+      "sha": "eac95d8da60c7b9bfbe40c5531c0af2c069e864a",
+      "bytes": "2394981"
+    },
+    {
+      "path": "assets/ui/gothic_theme/v1/death_revival_contract_v1.json",
+      "module": "death_revival_drops",
+      "sha": "0874aa4d179281c842f11ebb3cc961a429f0a022",
+      "bytes": "1605"
+    },
+    {
+      "path": "map_editor_workspace/between_life_and_death/between_life_and_death.editor.json",
+      "module": "death_revival_drops",
+      "sha": "339cf6db3f953b3eae69885675a24fd8e7497b56",
+      "bytes": "560517"
+    },
+    {
+      "path": "map_editor_workspace/between_life_and_death/ground/baked_preview/bake_manifest.json",
+      "module": "death_revival_drops",
+      "sha": "f057e3fffc9e9e1a0a74c838d62ef5e82077b2e8",
+      "bytes": "1283"
+    },
+    {
+      "path": "map_editor_workspace/between_life_and_death/ground/chunks/c_0_0.json",
+      "module": "death_revival_drops",
+      "sha": "d830307358db43622e4f258c2faa68045e5719b3",
+      "bytes": "42546"
+    },
+    {
+      "path": "map_editor_workspace/between_life_and_death/ground/chunks/c_0_1.json",
+      "module": "death_revival_drops",
+      "sha": "e0bf6b45fd254ca4cda4bb15b0a51f1ca8a390bf",
+      "bytes": "46014"
+    },
+    {
+      "path": "map_editor_workspace/between_life_and_death/ground/chunks/c_1_0.json",
+      "module": "death_revival_drops",
+      "sha": "d226c523f8d56ad817f778e2cbf782b7b21e18ba",
+      "bytes": "142406"
+    },
+    {
+      "path": "map_editor_workspace/between_life_and_death/ground/chunks/c_1_1.json",
+      "module": "death_revival_drops",
+      "sha": "c3b065cafb329fac2a694c5de7fec61603bf2768",
+      "bytes": "41859"
+    },
+    {
+      "path": "map_editor_workspace/between_life_and_death/ground/chunks/c_2_0.json",
+      "module": "death_revival_drops",
+      "sha": "c7b163caee30c20b3cb29ad3513fac1c3285c523",
+      "bytes": "90908"
+    },
+    {
+      "path": "map_editor_workspace/between_life_and_death/ground/chunks/c_2_1.json",
+      "module": "death_revival_drops",
+      "sha": "402f0a52d868bdcb266cd7381b05e6bf4f5efd67",
+      "bytes": "200"
+    },
+    {
+      "path": "map_editor_workspace/between_life_and_death/ground/ground_manifest.json",
+      "module": "death_revival_drops",
+      "sha": "8818af515064e68b3fe941a939c238b57e49785a",
+      "bytes": "3539"
+    },
+    {
+      "path": "map_editor_workspace/between_life_and_death/ground/ground_state.json",
+      "module": "death_revival_drops",
+      "sha": "1a2e73367a59dde27b2e7c28e639e5c2143006da",
+      "bytes": "409834"
+    },
+    {
+      "path": "map_editor_workspace/death_coffin/death_coffin.editor.json",
+      "module": "death_revival_drops",
+      "sha": "b7c4b4b7ae563b5c5c66aa9be477d94844e4a678",
+      "bytes": "556948"
+    },
+    {
+      "path": "map_editor_workspace/death_coffin/ground/baked_preview/bake_manifest.json",
+      "module": "death_revival_drops",
+      "sha": "31dd69704caaf96819f5b11dd12544fe5d4daded",
+      "bytes": "1273"
+    },
+    {
+      "path": "map_editor_workspace/death_coffin/ground/chunks/c_0_0.json",
+      "module": "death_revival_drops",
+      "sha": "d830307358db43622e4f258c2faa68045e5719b3",
+      "bytes": "42546"
+    },
+    {
+      "path": "map_editor_workspace/death_coffin/ground/chunks/c_0_1.json",
+      "module": "death_revival_drops",
+      "sha": "e0bf6b45fd254ca4cda4bb15b0a51f1ca8a390bf",
+      "bytes": "46014"
+    },
+    {
+      "path": "map_editor_workspace/death_coffin/ground/chunks/c_1_0.json",
+      "module": "death_revival_drops",
+      "sha": "d226c523f8d56ad817f778e2cbf782b7b21e18ba",
+      "bytes": "142406"
+    },
+    {
+      "path": "map_editor_workspace/death_coffin/ground/chunks/c_1_1.json",
+      "module": "death_revival_drops",
+      "sha": "c3b065cafb329fac2a694c5de7fec61603bf2768",
+      "bytes": "41859"
+    },
+    {
+      "path": "map_editor_workspace/death_coffin/ground/chunks/c_2_0.json",
+      "module": "death_revival_drops",
+      "sha": "c7b163caee30c20b3cb29ad3513fac1c3285c523",
+      "bytes": "90908"
+    },
+    {
+      "path": "map_editor_workspace/death_coffin/ground/chunks/c_2_1.json",
+      "module": "death_revival_drops",
+      "sha": "402f0a52d868bdcb266cd7381b05e6bf4f5efd67",
+      "bytes": "200"
+    },
+    {
+      "path": "map_editor_workspace/death_coffin/ground/ground_manifest.json",
+      "module": "death_revival_drops",
+      "sha": "0acdbdc98877e8a1dd74585ea3f0e66e9f33efcc",
+      "bytes": "3529"
+    },
+    {
+      "path": "map_editor_workspace/death_coffin/ground/ground_state.json",
+      "module": "death_revival_drops",
+      "sha": "da3725541945c14250245700db75c12f61bf3aee",
+      "bytes": "409824"
+    },
+    {
+      "path": "map_editor_workspace/hidden_death_temple/ground/baked_preview/bake_manifest.json",
+      "module": "death_revival_drops",
+      "sha": "05d541742143aa4cb29f636af51b3ff539bfffec",
+      "bytes": "521"
+    },
+    {
+      "path": "map_editor_workspace/hidden_death_temple/ground/chunks/c_0_0.json",
+      "module": "death_revival_drops",
+      "sha": "d5c68f738995c8140bf2927aaec6761dd3f84204",
+      "bytes": "81365"
+    },
+    {
+      "path": "map_editor_workspace/hidden_death_temple/ground/chunks/c_1_0.json",
+      "module": "death_revival_drops",
+      "sha": "46bc830929ee903674682b1f54b084d849ee7a9b",
+      "bytes": "99516"
+    },
+    {
+      "path": "map_editor_workspace/hidden_death_temple/ground/ground_manifest.json",
+      "module": "death_revival_drops",
+      "sha": "7c7e1286533ba69173e48d228ddedca6f3e2f7ff",
+      "bytes": "1454"
+    },
+    {
+      "path": "map_editor_workspace/hidden_death_temple/ground/ground_state.json",
+      "module": "death_revival_drops",
+      "sha": "3466436720e18681520429773baee7014ee6fb8b",
+      "bytes": "202355"
+    },
+    {
+      "path": "map_editor_workspace/hidden_death_temple/hidden_death_temple.editor.json",
+      "module": "death_revival_drops",
+      "sha": "bc5a846765c5e8f2760dd5b56a2b989e1f479948",
+      "bytes": "89386"
+    },
+    {
+      "path": "map_editor_workspace/mengzhong_between_life_and_death/ground/baked_preview/bake_manifest.json",
+      "module": "death_revival_drops",
+      "sha": "1beed501e9ce517abd01cfdacc0ecbe9aa82150e",
+      "bytes": "1293"
+    },
+    {
+      "path": "map_editor_workspace/mengzhong_between_life_and_death/ground/chunks/c_0_0.json",
+      "module": "death_revival_drops",
+      "sha": "f165666f7fedc43d191ee3c637abca70f2692f77",
+      "bytes": "51349"
+    },
+    {
+      "path": "map_editor_workspace/mengzhong_between_life_and_death/ground/chunks/c_0_1.json",
+      "module": "death_revival_drops",
+      "sha": "822e9c38ab3216242b633ad4a137019bd70ffaf3",
+      "bytes": "48252"
+    },
+    {
+      "path": "map_editor_workspace/mengzhong_between_life_and_death/ground/chunks/c_1_0.json",
+      "module": "death_revival_drops",
+      "sha": "bf22ccf6f6e477b8b4758af465403e557c94069b",
+      "bytes": "149016"
+    },
+    {
+      "path": "map_editor_workspace/mengzhong_between_life_and_death/ground/chunks/c_1_1.json",
+      "module": "death_revival_drops",
+      "sha": "2c5e23755811e81bcd47e482605fa9b85e746a59",
+      "bytes": "69107"
+    },
+    {
+      "path": "map_editor_workspace/mengzhong_between_life_and_death/ground/chunks/c_2_0.json",
+      "module": "death_revival_drops",
+      "sha": "8e0c7ffd49646bfeb21b7d2ab7447a53c36c7cb8",
+      "bytes": "104141"
+    },
+    {
+      "path": "map_editor_workspace/mengzhong_between_life_and_death/ground/chunks/c_2_1.json",
+      "module": "death_revival_drops",
+      "sha": "402f0a52d868bdcb266cd7381b05e6bf4f5efd67",
+      "bytes": "200"
+    },
+    {
+      "path": "map_editor_workspace/mengzhong_between_life_and_death/ground/ground_manifest.json",
+      "module": "death_revival_drops",
+      "sha": "08ea573e8836a658cb2a4dabf9ea5df9ac1252ff",
+      "bytes": "3549"
+    },
+    {
+      "path": "map_editor_workspace/mengzhong_between_life_and_death/ground/ground_state.json",
+      "module": "death_revival_drops",
+      "sha": "838ef070e9ee0633322e1bbb7195536d6b4b7a52",
+      "bytes": "475266"
+    },
+    {
+      "path": "map_editor_workspace/mengzhong_between_life_and_death/mengzhong_between_life_and_death.editor.json",
+      "module": "death_revival_drops",
+      "sha": "8838d1c0683acaa8d12684913d14af3d6c47b642",
+      "bytes": "535165"
+    },
+    {
+      "path": "map_editor_workspace/mengzhong_death_coffin/ground/baked_preview/bake_manifest.json",
+      "module": "death_revival_drops",
+      "sha": "6f7a0fa2218b6404a5f29ff90646f66c79f1ee21",
+      "bytes": "1283"
+    },
+    {
+      "path": "map_editor_workspace/mengzhong_death_coffin/ground/chunks/c_0_0.json",
+      "module": "death_revival_drops",
+      "sha": "f165666f7fedc43d191ee3c637abca70f2692f77",
+      "bytes": "51349"
+    },
+    {
+      "path": "map_editor_workspace/mengzhong_death_coffin/ground/chunks/c_0_1.json",
+      "module": "death_revival_drops",
+      "sha": "822e9c38ab3216242b633ad4a137019bd70ffaf3",
+      "bytes": "48252"
+    },
+    {
+      "path": "map_editor_workspace/mengzhong_death_coffin/ground/chunks/c_1_0.json",
+      "module": "death_revival_drops",
+      "sha": "bf22ccf6f6e477b8b4758af465403e557c94069b",
+      "bytes": "149016"
+    },
+    {
+      "path": "map_editor_workspace/mengzhong_death_coffin/ground/chunks/c_1_1.json",
+      "module": "death_revival_drops",
+      "sha": "2c5e23755811e81bcd47e482605fa9b85e746a59",
+      "bytes": "69107"
+    },
+    {
+      "path": "map_editor_workspace/mengzhong_death_coffin/ground/chunks/c_2_0.json",
+      "module": "death_revival_drops",
+      "sha": "8e0c7ffd49646bfeb21b7d2ab7447a53c36c7cb8",
+      "bytes": "104141"
+    },
+    {
+      "path": "map_editor_workspace/mengzhong_death_coffin/ground/chunks/c_2_1.json",
+      "module": "death_revival_drops",
+      "sha": "402f0a52d868bdcb266cd7381b05e6bf4f5efd67",
+      "bytes": "200"
+    },
+    {
+      "path": "map_editor_workspace/mengzhong_death_coffin/ground/ground_manifest.json",
+      "module": "death_revival_drops",
+      "sha": "713f03ae92777160426311176f50a4e0000ee8b6",
+      "bytes": "3539"
+    },
+    {
+      "path": "map_editor_workspace/mengzhong_death_coffin/ground/ground_state.json",
+      "module": "death_revival_drops",
+      "sha": "f50048a53c79bfea04069c89e479677c808fa768",
+      "bytes": "475256"
+    },
+    {
+      "path": "map_editor_workspace/mengzhong_death_coffin/mengzhong_death_coffin.editor.json",
+      "module": "death_revival_drops",
+      "sha": "66b907bcbc366debcc07138aba5a1f9cfc8a72b2",
+      "bytes": "541224"
+    },
+    {
+      "path": "map_editor_workspace/mengzhong_death_valley_dungeon/ground/baked_preview/bake_manifest.json",
+      "module": "death_revival_drops",
+      "sha": "f6f05484eac03f9a1cbdc7b47d9ace096cdfe3bd",
+      "bytes": "1291"
+    },
+    {
+      "path": "map_editor_workspace/mengzhong_death_valley_dungeon/ground/chunks/c_0_0.json",
+      "module": "death_revival_drops",
+      "sha": "8410333d0cc27f86ce714fa43dd1f55a8b937321",
+      "bytes": "59634"
+    },
+    {
+      "path": "map_editor_workspace/mengzhong_death_valley_dungeon/ground/chunks/c_0_1.json",
+      "module": "death_revival_drops",
+      "sha": "357eece24fed2d4480065bc34898a04f8c24ff0d",
+      "bytes": "13711"
+    },
+    {
+      "path": "map_editor_workspace/mengzhong_death_valley_dungeon/ground/chunks/c_1_0.json",
+      "module": "death_revival_drops",
+      "sha": "47ee657aadbf49ece06ccca221fac8e9ad29bffa",
+      "bytes": "224083"
+    },
+    {
+      "path": "map_editor_workspace/mengzhong_death_valley_dungeon/ground/chunks/c_1_1.json",
+      "module": "death_revival_drops",
+      "sha": "46429aa9a70ba76b92ce0d55c95ef8794b8a5dd1",
+      "bytes": "63907"
+    },
+    {
+      "path": "map_editor_workspace/mengzhong_death_valley_dungeon/ground/chunks/c_2_0.json",
+      "module": "death_revival_drops",
+      "sha": "bfd2b77acce260981068a5ec51a5c8f17c826a55",
+      "bytes": "64869"
+    },
+    {
+      "path": "map_editor_workspace/mengzhong_death_valley_dungeon/ground/chunks/c_2_1.json",
+      "module": "death_revival_drops",
+      "sha": "5cb5c60610188351eed1804fffcc0698581b0dc8",
+      "bytes": "13196"
+    },
+    {
+      "path": "map_editor_workspace/mengzhong_death_valley_dungeon/ground/ground_manifest.json",
+      "module": "death_revival_drops",
+      "sha": "a6fd861311b67045fd34a05dfb003fd35b4ba56c",
+      "bytes": "3547"
+    },
+    {
+      "path": "map_editor_workspace/mengzhong_death_valley_dungeon/ground/ground_state.json",
+      "module": "death_revival_drops",
+      "sha": "f9c21718639effa7a267cb996c3c0824c3b2d589",
+      "bytes": "495549"
+    },
+    {
+      "path": "map_editor_workspace/mengzhong_death_valley_dungeon/mengzhong_death_valley_dungeon.editor.json",
+      "module": "death_revival_drops",
+      "sha": "c2ef2694281e1c3ce6df6faff234573c2e472834",
+      "bytes": "318221"
+    },
+    {
+      "path": "scripts/death_revival_panel.gd",
+      "module": "death_revival_drops",
+      "sha": "4c8362fe7259be1bd9cb9f20a21a43da2ddc20c6",
+      "bytes": "13043"
+    },
+    {
+      "path": "scripts/drop/boss_material_drop_resolver.gd",
+      "module": "death_revival_drops",
+      "sha": "4b11f37727da8e5609e406cd1b32bb0b649fb819",
+      "bytes": "2056"
+    },
+    {
+      "path": "scripts/drop/dpv2_repair_v5_contract.gd",
+      "module": "death_revival_drops",
+      "sha": "d2c41a193fbb74a0ec110e4e0d17515aa6b02933",
+      "bytes": "7280"
+    },
+    {
+      "path": "scripts/drop/user_drop_additions_v81.gd",
+      "module": "death_revival_drops",
+      "sha": "24a91f7c37d5d3fffc1f74d5c25ea983cdeb6471",
+      "bytes": "4999"
+    },
+    {
+      "path": "scripts/drop/user_drop_balance.gd",
+      "module": "death_revival_drops",
+      "sha": "60308d3fc2b3a0a5fc24b443507619c30fc97da1",
+      "bytes": "2593"
+    },
+    {
+      "path": "scripts/drop/user_loot_sheet_provider.gd",
+      "module": "death_revival_drops",
+      "sha": "2eac11c31ab199df88c9578d9e9cdfc6b542a39a",
+      "bytes": "14211"
+    },
+    {
+      "path": "scripts/equipment_character_preview.gd",
+      "module": "equipment_inventory_identity",
+      "sha": "a2fb2106e991de132373fd79a46d5c91b9d589d8",
+      "bytes": "47612"
+    },
+    {
+      "path": "scripts/equipment_granted_skill_rules.gd",
+      "module": "equipment_inventory_identity",
+      "sha": "c91bf12262bfad2bd1c843ef77235df3e86564d7",
+      "bytes": "3096"
+    },
+    {
+      "path": "scripts/equipment_random_special_instance_rules.gd",
+      "module": "equipment_inventory_identity",
+      "sha": "afe35248e38f44eede877b6d81fdec1c360af35e",
+      "bytes": "4577"
+    },
+    {
+      "path": "scripts/equipment_rules.gd",
+      "module": "equipment_inventory_identity",
+      "sha": "0fe2606fef5f0b83c5e6abec23c6c89493785ffe",
+      "bytes": "35252"
+    },
+    {
+      "path": "scripts/equipment_test_loadout_catalog.gd",
+      "module": "equipment_inventory_identity",
+      "sha": "51d76e7f36490caef1a45fedb182cd7a3b579f12",
+      "bytes": "2438"
+    },
+    {
+      "path": "scripts/features/handlers/death_burst_handler.gd",
+      "module": "death_revival_drops",
+      "sha": "d31cf961606214de0f7c2b045f2e8e67c79b5439",
+      "bytes": "6042"
+    },
+    {
+      "path": "scripts/generated/drop_balance_v80_seal.gd",
+      "module": "death_revival_drops",
+      "sha": "2666f7de178e144ee11579aa958c7bbc226209e8",
+      "bytes": "153"
+    },
+    {
+      "path": "scripts/identity/character_identity_codec.gd",
+      "module": "equipment_inventory_identity",
+      "sha": "0b666641288a6fd7337d2fae52128a17161de0ec",
+      "bytes": "2246"
+    },
+    {
+      "path": "scripts/identity/entity_registry.gd",
+      "module": "equipment_inventory_identity",
+      "sha": "2aca0ebc5b174b5a440915031b1601c9c1cde64f",
+      "bytes": "6534"
+    },
+    {
+      "path": "scripts/identity/equipment_identity_codec.gd",
+      "module": "equipment_inventory_identity",
+      "sha": "fefa92ea2fba60849ed98fec859f7df51e1668cb",
+      "bytes": "5354"
+    },
+    {
+      "path": "scripts/identity/item_binding_codec.gd",
+      "module": "equipment_inventory_identity",
+      "sha": "d76e99dc045f322c350908d0d966b0beb5e70fab",
+      "bytes": "2432"
+    },
+    {
+      "path": "scripts/identity/item_category_identity.gd",
+      "module": "equipment_inventory_identity",
+      "sha": "be725a76efc8502f788398e98a6643159b3e9a77",
+      "bytes": "5241"
+    },
+    {
+      "path": "scripts/identity/item_identity_codec.gd",
+      "module": "equipment_inventory_identity",
+      "sha": "027acdbc55004ab720f5934242d9a1bd7e23dc87",
+      "bytes": "2348"
+    },
+    {
+      "path": "scripts/inventory_panel.gd",
+      "module": "equipment_inventory_identity",
+      "sha": "136baeae2045621bff5207d48a3ce21ffb9a446b",
+      "bytes": "79197"
+    },
+    {
+      "path": "scripts/items/item_extension_codec.gd",
+      "module": "equipment_inventory_identity",
+      "sha": "59ec205ae95065c17ca70b39607d6b29eda6b9ce",
+      "bytes": "19429"
+    },
+    {
+      "path": "scripts/items/item_transaction_journal.gd",
+      "module": "equipment_inventory_identity",
+      "sha": "28284aad729ae5b14ac8638420c3528598314c3b",
+      "bytes": "9697"
+    },
+    {
+      "path": "scripts/items/item_transaction_port.gd",
+      "module": "equipment_inventory_identity",
+      "sha": "0ecdd5d930a3b260aac97ff280cd6d0ab70eeeea",
+      "bytes": "18325"
+    },
+    {
+      "path": "scripts/items/rune_item_rules.gd",
+      "module": "equipment_inventory_identity",
+      "sha": "39f17a23ae560ecd13cb8b337d07ef02f5bbe3ed",
+      "bytes": "4558"
+    },
+    {
+      "path": "scripts/items/socket_gem_rules.gd",
+      "module": "equipment_inventory_identity",
+      "sha": "32baf22b2e463af2ae0316fd0481442247be95fb",
+      "bytes": "4969"
+    },
+    {
+      "path": "scripts/layers/runtime/loot_runtime_service.gd",
+      "module": "death_revival_drops",
+      "sha": "83776073d29263fc97efae1b7b5a249f59b9bfa5",
+      "bytes": "38357"
+    },
+    {
+      "path": "scripts/loot_feedback_layer.gd",
+      "module": "death_revival_drops",
+      "sha": "97e724600ae86194ea56eaa5d09eb8c797225410",
+      "bytes": "9447"
+    },
+    {
+      "path": "scripts/loot_ground_label.gd",
+      "module": "death_revival_drops",
+      "sha": "3694f52f91dbb05a259e868995254d06beac7da5",
+      "bytes": "2622"
+    },
+    {
+      "path": "scripts/loot_name_layout.gd",
+      "module": "death_revival_drops",
+      "sha": "67a780f7e8048cabc7197cf258c0cceac09ab660",
+      "bytes": "847"
+    },
+    {
+      "path": "scripts/loot_pickup.gd",
+      "module": "death_revival_drops",
+      "sha": "9f7c193d2ac466e14ec59c03f02b88a57749cf27",
+      "bytes": "16031"
+    },
+    {
+      "path": "scripts/loot_pickup_runtime_manager.gd",
+      "module": "death_revival_drops",
+      "sha": "a63fa2e72a9487a74ee0ed552a320a625cc08c33",
+      "bytes": "19772"
+    },
+    {
+      "path": "scripts/loot_preferences.gd",
+      "module": "death_revival_drops",
+      "sha": "7256ad60448fcdeb3ed3d860093d1312c5519840",
+      "bytes": "2853"
+    },
+    {
+      "path": "scripts/loot_prepared_file.gd",
+      "module": "death_revival_drops",
+      "sha": "845a6da6b90c1d6950cb7ce15556fcef39a5cc8d",
+      "bytes": "2225"
+    },
+    {
+      "path": "scripts/loot_visual_effect.gd",
+      "module": "death_revival_drops",
+      "sha": "a816c11a066bb73ed4a96cedd5cc444733251e84",
+      "bytes": "8411"
+    },
+    {
+      "path": "tools/analyze_client_helmet_death_poses.py",
+      "module": "death_revival_drops",
+      "sha": "a45cce7e07d2e52f6d94b62c2692d6a00be3ea90",
+      "bytes": "17857"
+    },
+    {
+      "path": "tools/verify_black_iron_runtime_death.py",
+      "module": "death_revival_drops",
+      "sha": "cb723b9799b7a2539c83c749470530d951e944a1",
+      "bytes": "4587"
+    }
+  ],
+  "notes": "All listed 176 files were present in fixed commit and read as exact Git blob bytes at least once; not every source file has complete semantic coverage. COVERAGE.json distinguishes deeply reviewed B04 function bodies from only schema/index and cross-batch maps.",
+  "native": "NOT_RUN",
+  "apk": "NOT_RUN",
+  "device": "NOT_RUN",
+  "production_changes": "NONE"
+}
