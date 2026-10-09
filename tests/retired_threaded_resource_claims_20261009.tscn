@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource path="res://tests/retired_threaded_resource_claims_20261009.gd" type="Script" id="1"]
+
+[node name="RetiredThreadedResourceClaims" type="Node"]
+script = ExtResource("1")

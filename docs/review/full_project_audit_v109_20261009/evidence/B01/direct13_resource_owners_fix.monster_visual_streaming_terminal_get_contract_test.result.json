@@ -1,0 +1,97 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "formal GameData mapping exists",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "formal mapping has five action claims",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "formal action path exists: idle",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "formal action path exists: walk",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "formal action path exists: attack",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "formal action path exists: hit",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "formal action path exists: death",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "foreign same-path claim accepted",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "coordinator accepted all five real action claims",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "visual owner handoff accepted",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "five claims transferred to resident owner",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "resident owner eventually consumes exactly five claims",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "repeated visual handoff is idempotent",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "repeated handoff adds no claims",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "foreign same-path claim remains observable",
+      "passed": true
+    }
+  ],
+  "count": 15,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "49ae3a5b-1b60-42e7-8d79-3aec4b05344e",
+  "passed": 15,
+  "reported_checks": 15,
+  "reported_failures": 0,
+  "run_id": "e2903751-7f74-48aa-bbb2-7eabe50b75c0",
+  "runtime_environment": {
+    "native_process_id": 17108,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\b01_direct13_resource_owners_fix",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/b01_direct13_resource_owners_fix/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "monster_visual_streaming_terminal_get_contract_test",
+  "schema_version": 1,
+  "source_content_sha256": "",
+  "status": "PASS"
+}

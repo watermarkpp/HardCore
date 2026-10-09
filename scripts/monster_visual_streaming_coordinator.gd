@@ -16,6 +16,12 @@ func configure_process_owner(owner: Node) -> void:
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_PREDELETE:
+		if not _threaded_claims_retired:
+			# RefCounted is already at zero here: dispatch through the script's
+			# static seam, never another method on the dying instance.
+			MonsterVisualStreamingCoordinator._transfer_owned_threaded_claims(
+				_threaded_profile_requests, _orphaned_threaded_paths, _unresolved_threaded_paths
+			)
 		FrameBudget.mark_pending(_budget_category, false)
 
 const CONTRACT_ID := "hardcore.monster.visual_streaming_coordinator.v1"
@@ -47,6 +53,18 @@ const JOB_LANE_RUNTIME_DEMAND := "runtime_demand"
 
 var _threaded_profile_requests: Dictionary = {}
 var _threaded_profile_queue: Array[String] = []
+## Accepted action requests that outlived a failed profile job.  A profile may
+## submit several independent threaded requests before one action fails; the
+## failed job must not abandon the other native retrieval rights.  These paths
+## are drained only when they reach a terminal status, never by blocking the
+## current frame.
+var _orphaned_threaded_paths: Dictionary = {}
+## Accepted requests that are still IN_PROGRESS when this owner is deleted.
+## Godot exposes no owner-cancel operation; retain the path/status as an
+## explicit unresolved receipt instead of blocking predelete on get().
+var _unresolved_threaded_paths: Dictionary = {}
+var _transferred_threaded_path_count := 0
+var _threaded_claims_retired := false
 var _client_resource_profiles: Dictionary = {}
 var _client_resource_profile_lru: Array[String] = []
 var _client_resource_profile_decoded_rgba8_bytes: Dictionary = {}
@@ -124,6 +142,77 @@ var immediate_eviction_count := 0
 var same_key_reload_count := 0
 var evicted_before_first_apply_count := 0
 var late_completion_resident_skip_count := 0
+
+
+## Explicit scene-owner handoff is the normal lifecycle boundary. PREDELETE
+## uses the same static seam only as protection for standalone coordinators.
+func retire_threaded_resource_claims() -> bool:
+	if _threaded_claims_retired:
+		return _unresolved_threaded_paths.is_empty()
+	var result := MonsterVisualStreamingCoordinator._transfer_owned_threaded_claims(
+		_threaded_profile_requests, _orphaned_threaded_paths, _unresolved_threaded_paths
+	)
+	_transferred_threaded_path_count += int(result.transferred)
+	_threaded_claims_retired = bool(result.complete)
+	return _threaded_claims_retired
+
+
+static func _transfer_owned_threaded_claims(
+	jobs: Dictionary, orphans: Dictionary, unresolved: Dictionary
+) -> Dictionary:
+	var transferred := 0
+	var complete := true
+	for job: Dictionary in jobs.values():
+		if str(job.get("state", "")) not in ["loading", "collecting"]:
+			continue
+		var native_get_paths: Dictionary = job.get("native_get_paths", {})
+		var native_requested_paths: Dictionary = job.get("native_requested_paths", {})
+		for raw_path: Variant in native_requested_paths.keys():
+			var path := str(raw_path)
+			var accepted := int(native_requested_paths.get(path, 0))
+			var consumed := int(native_get_paths.get(path, 0))
+			var remaining := maxi(0, accepted - consumed)
+			if path.is_empty() or remaining <= 0:
+				continue
+			var status := ResourceLoader.load_threaded_get_status(path)
+			if status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+				unresolved.erase(path)
+				continue
+			if status in [ResourceLoader.THREAD_LOAD_IN_PROGRESS, ResourceLoader.THREAD_LOAD_LOADED, ResourceLoader.THREAD_LOAD_FAILED] and MonsterVisualStreamingCoordinator._handoff_threaded_claim(path, remaining):
+				transferred += remaining
+				unresolved.erase(path)
+				native_get_paths[path] = accepted
+				job["native_get_paths"] = native_get_paths
+			else:
+				complete = false
+				unresolved[path] = {"status": status, "owner_exit": true, "claim_count": remaining}
+	for raw_path: Variant in orphans.keys():
+		var path := str(raw_path)
+		var remaining := int(orphans.get(path, 0))
+		if remaining <= 0:
+			orphans.erase(path)
+			continue
+		var status := ResourceLoader.load_threaded_get_status(path)
+		if status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+			unresolved.erase(path)
+			orphans.erase(path)
+		elif status in [ResourceLoader.THREAD_LOAD_IN_PROGRESS, ResourceLoader.THREAD_LOAD_LOADED, ResourceLoader.THREAD_LOAD_FAILED] and MonsterVisualStreamingCoordinator._handoff_threaded_claim(path, remaining):
+			transferred += remaining
+			orphans.erase(path)
+			unresolved.erase(path)
+		else:
+			complete = false
+			unresolved[path] = {"status": status, "owner_exit": true, "claim_count": remaining}
+	return {"complete": complete, "transferred": transferred}
+
+
+static func _handoff_threaded_claim(path: String, claim_count: int) -> bool:
+	# ContentLayers is the long-lived owner for accepted requests after a
+	# coordinator/scene exits. It never submits a second request; it polls and
+	# consumes one existing claim per bounded quantum.
+	if path.is_empty() or claim_count <= 0 or not ContentLayers.has_method("retire_threaded_resource_claims"):
+		return false
+	return bool(ContentLayers.retire_threaded_resource_claims(path, claim_count))
 
 
 func client_resources(cache_key: String) -> Dictionary:
@@ -278,6 +367,10 @@ func _start_threaded_profile_jobs() -> void:
 				failed_path = path
 				break
 			_threaded_texture_request_count += 1
+			var native_requested_paths: Dictionary = job.get("native_requested_paths", {})
+			native_requested_paths[path] = int(native_requested_paths.get(path, 0)) + 1
+			job["native_requested_paths"] = native_requested_paths
+			_threaded_profile_requests[cache_key] = job
 		if not failed_path.is_empty():
 			_mark_job_failed(cache_key, job, failed_path)
 		else:
@@ -291,8 +384,22 @@ func _start_threaded_profile_jobs() -> void:
 ## record its real action/path. Transient failures get a bounded backoff
 ## retry while demand remains; exhausted attempts become permanent.
 func _mark_job_failed(cache_key: String, job: Dictionary, failed_path: String) -> void:
+	var native_get_paths: Dictionary = job.get("native_get_paths", {})
+	var native_requested_paths: Dictionary = job.get("native_requested_paths", {})
+	for raw_path: Variant in native_requested_paths.keys():
+		var path := str(raw_path)
+		var accepted := int(native_requested_paths.get(path, 0))
+		var consumed := int(native_get_paths.get(path, 0))
+		var remaining := maxi(0, accepted - consumed)
+		if path.is_empty() or remaining <= 0:
+			continue
+		# FAILED is terminal but still owns one load_threaded_get claim.  Retain
+		# every accepted path, including failed_path, for non-blocking polling.
+		_orphaned_threaded_paths[path] = int(_orphaned_threaded_paths.get(path, 0)) + remaining
 	job.erase("partial_resources")
 	job.erase("action_cursor")
+	job.erase("native_get_paths")
+	job.erase("native_requested_paths")
 	_loaded_pending_keys.erase(cache_key)
 	var failure_count := int(job.get("failure_count", 0)) + 1
 	job["failure_count"] = failure_count
@@ -311,6 +418,23 @@ func _mark_job_failed(cache_key: String, job: Dictionary, failed_path: String) -
 		"failure_count": failure_count,
 	}
 	failed_resource_count += 1
+
+
+func _poll_orphaned_threaded_paths() -> void:
+	if _orphaned_threaded_paths.is_empty():
+		return
+	for raw_path: Variant in _orphaned_threaded_paths.keys():
+		var path := str(raw_path)
+		# An accepted orphan claim already has a resident owner handoff path. Keep
+		# this poll bounded and avoid live-job traversal plus a second get: the
+		# ContentLayers service consumes at most one transferred claim per budget
+		# quantum. A failed handoff remains owned and is retried next poll.
+		if _handoff_threaded_claim(path, 1):
+			var remaining := int(_orphaned_threaded_paths.get(path, 0)) - 1
+			if remaining <= 0:
+				_orphaned_threaded_paths.erase(path)
+			else:
+				_orphaned_threaded_paths[path] = remaining
 
 
 ## perf-smoothness-r1 C-R1 (PERF-R2 R5/B5): only loading-window map prefetch
@@ -448,6 +572,7 @@ func _poll_admitted(frame_id: int) -> Dictionary:
 	_last_streaming_poll_frame = frame_id
 	coordinator_poll_count += 1
 	heavy_poll_execution_count += 1
+	_poll_orphaned_threaded_paths()
 	var helper: MonsterVisual
 	for cache_key: String in _threaded_profile_requests.keys():
 		if FrameBudget.remaining_usec() <= 0:
@@ -494,6 +619,10 @@ func _poll_admitted(frame_id: int) -> Dictionary:
 				break
 			var action_name: String = ACTIONS[action_cursor]
 			var action_path := str(paths[action_name])
+			var native_get_paths: Dictionary = job.get("native_get_paths", {})
+			native_get_paths[action_path] = int(native_get_paths.get(action_path, 0)) + 1
+			job["native_get_paths"] = native_get_paths
+			_threaded_profile_requests[cache_key] = job
 			var get_started_usec := Time.get_ticks_usec()
 			var texture := ResourceLoader.load_threaded_get(
 				action_path
@@ -1490,6 +1619,10 @@ func reset_for_tests() -> void:
 	maximum_action_get_usec = 0
 	_threaded_profile_requests.clear()
 	_threaded_profile_queue.clear()
+	_orphaned_threaded_paths.clear()
+	_unresolved_threaded_paths.clear()
+	_transferred_threaded_path_count = 0
+	_threaded_claims_retired = false
 	_client_resource_profiles.clear()
 	_client_resource_profile_lru.clear()
 	_client_resource_profile_decoded_rgba8_bytes.clear()
@@ -1565,6 +1698,9 @@ func monster_streaming_diagnostics() -> Dictionary:
 			state = "loading"
 		if request_state_counts.has(state):
 			request_state_counts[state] = int(request_state_counts[state]) + 1
+	var orphaned_claim_count := 0
+	for raw_count: Variant in _orphaned_threaded_paths.values():
+		orphaned_claim_count += int(raw_count)
 	return {
 		"contract_id": CONTRACT_ID,
 		"oldest_age_usec": oldest_age_usec,
@@ -1578,6 +1714,10 @@ func monster_streaming_diagnostics() -> Dictionary:
 		"unique_request_count": unique_request_count,
 		"duplicate_request_count": duplicate_request_count,
 		"active_request_count": _threaded_profile_requests.size(),
+		"orphaned_threaded_path_count": _orphaned_threaded_paths.size(),
+		"orphaned_threaded_claim_count": orphaned_claim_count,
+		"unresolved_threaded_path_count": _unresolved_threaded_paths.size(),
+		"transferred_threaded_path_count": _transferred_threaded_path_count,
 		"queued_request_count": int(request_state_counts.queued),
 		"loading_request_count": int(request_state_counts.loading),
 		"loaded_request_count": int(request_state_counts.loaded),

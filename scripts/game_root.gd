@@ -59,6 +59,7 @@ const MonsterGroundSpikeEffectScript := preload(
 const MonsterVisualStreamingCoordinatorScript := preload(
 	"res://scripts/monster_visual_streaming_coordinator.gd"
 )
+const MonsterSourceFramesScript := preload("res://scripts/monster_source_frames.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 const SystemMenuPanelScript := preload("res://scripts/system_menu_panel.gd")
@@ -1790,6 +1791,12 @@ func _ready() -> void:
 
 
 func _exit_tree() -> void:
+	if not MonsterSourceFramesScript.retire_pending_threaded_claims():
+		push_error("Monster overlay resource claims could not transfer to the persistent owner.")
+	if is_instance_valid(_streaming_coordinator) and not _streaming_coordinator.retire_threaded_resource_claims():
+		push_error("Monster visual resource claims could not transfer to the persistent owner.")
+	if not _world_bootstrap_coordinator.retire_threaded_resource_claims():
+		push_error("World resource claims could not transfer to the persistent owner.")
 	ContentLayers.retire_internal_code_result(_initial_code_retention)
 	_cancel_respawn_wakeups()
 	_retire_pending_warm_textures()
@@ -3436,6 +3443,9 @@ func _begin_initial_world_bootstrap() -> void:
 		# A formal map may require substantially more resources than the legacy
 		# 11-map slice. Never release input onto a half-built world when the
 		# bounded bootstrap deadline is exhausted.
+		# Retire the coordinator owner before releasing the transition boundary;
+		# suspended pipeline coroutines must fail closed at their next await.
+		_world_bootstrap_coordinator.revoke_current_generation()
 		_active_map_transition_id = ""
 		_map_transition_in_progress = false
 		_world_bootstrap_coordinator.finish(false, "initial_bootstrap_timeout")
@@ -4017,7 +4027,7 @@ func _run_world_build_pipeline(map_id: int, transition_id: String) -> bool:
 	if coordinator == null or not is_instance_valid(background):
 		return false
 	var generation := coordinator.generation
-	if not coordinator.is_generation_current(generation):
+	if not _world_pipeline_owner_current(coordinator, generation, transition_id):
 		return false
 
 	# 1) COLLECT_REQUIREMENTS also clears the old real environment. Record
@@ -4029,6 +4039,8 @@ func _run_world_build_pipeline(map_id: int, transition_id: String) -> bool:
 	if target_map_data.is_empty():
 		target_map_data = {"mapId": map_id, "name": "未命名地图"}
 	_map_transition_environment_replaced = true
+	if not _world_pipeline_owner_current(coordinator, generation, transition_id):
+		return false
 	var prepared := background.prepare_map_build(
 		map_id, coordinator, target_map_data
 	)
@@ -4053,14 +4065,16 @@ func _run_world_build_pipeline(map_id: int, transition_id: String) -> bool:
 			coordinator.finish(false, "prefetch_timeout")
 			return false
 	else:
-		while not coordinator.poll_threaded_prefetch():
-			if not coordinator.is_generation_current(generation):
+		while true:
+			if not _world_pipeline_owner_current(coordinator, generation, transition_id):
 				return false
+			if coordinator.poll_threaded_prefetch():
+				break
 			await get_tree().process_frame
 	if coordinator.has_failed_required_resource():
 		coordinator.finish(false, "prefetch_failed_required_resource")
 		return false
-	if not coordinator.is_generation_current(generation):
+	if not _world_pipeline_owner_current(coordinator, generation, transition_id):
 		return false
 
 	# WALL-P1R C4: the descriptor queue is handed over only after
@@ -4068,6 +4082,8 @@ func _run_world_build_pipeline(map_id: int, transition_id: String) -> bool:
 	# submit_staged_build's optimized/legacy mode selection can verify the
 	# prefetched derived textures. The resource manifest was fully built
 	# during prepare_map_build; nothing needs the queue before this point.
+	if not _world_pipeline_owner_current(coordinator, generation, transition_id):
+		return false
 	background.submit_staged_build()
 
 	# 4) BUILD_MAP: one atomic map unit per queue task, frame-budgeted.
@@ -4078,7 +4094,7 @@ func _run_world_build_pipeline(map_id: int, transition_id: String) -> bool:
 	await coordinator.process_map_queue(
 		Callable(background, "build_one_map_item"), max_items, budget_ms
 	)
-	if not coordinator.is_generation_current(generation):
+	if not _world_pipeline_owner_current(coordinator, generation, transition_id):
 		return false
 	if coordinator.has_unexpected_sync_load():
 		coordinator.finish(false, "unexpected_sync_load_during_build_map")
@@ -4092,7 +4108,7 @@ func _run_world_build_pipeline(map_id: int, transition_id: String) -> bool:
 	await coordinator.process_collision_queue(
 		Callable(background, "build_one_collision"), max_items, budget_ms
 	)
-	if not coordinator.is_generation_current(generation):
+	if not _world_pipeline_owner_current(coordinator, generation, transition_id):
 		return false
 	if coordinator.has_unexpected_sync_load():
 		coordinator.finish(false, "unexpected_sync_load_during_build_collision")
@@ -4108,8 +4124,26 @@ func _run_world_build_pipeline(map_id: int, transition_id: String) -> bool:
 	# descriptors after this pipeline returns. GameRoot then drains that exact
 	# plan with the same frame budget before FINALIZE/READY.
 	coordinator.advance(WorldBootstrapCoordinator.Stage.SPAWN_ACTORS)
+	if not _world_pipeline_owner_current(coordinator, generation, transition_id):
+		return false
 	background.finish_map_build()
 	return true
+
+
+func _world_pipeline_owner_current(
+	coordinator: WorldBootstrapCoordinator,
+	generation: int,
+	transition_id: String
+) -> bool:
+	## Every async resume and environment mutation belongs to both the
+	## transition and the coordinator generation.  Generation alone is not
+	## sufficient: timeout/recovery can retire it before a new generation starts.
+	return (
+		is_instance_valid(coordinator)
+		and coordinator.is_generation_current(generation)
+		and _map_transition_in_progress
+		and _active_map_transition_id == transition_id
+	)
 
 
 func _bootstrap_max_items_per_frame() -> int:

@@ -1,0 +1,12 @@
+ERROR: B01 startup contract: resident owner actually consumed one startup claim
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tests/framework/startup_loading_terminal_get_contract_test.gd:10)
+       [1] _real_owner_handoff_probe (res://tests/framework/startup_loading_terminal_get_contract_test.gd:44)
+ERROR: B01 startup contract: startup claim retirement finished
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tests/framework/startup_loading_terminal_get_contract_test.gd:10)
+       [1] _real_owner_handoff_probe (res://tests/framework/startup_loading_terminal_get_contract_test.gd:45)
+WARNING: 118 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)

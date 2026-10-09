@@ -1,0 +1,63 @@
+{
+  "engine_log_errors": 0,
+  "results": [
+    {
+      "test_name": "monster_visual_streaming_terminal_get_contract_test",
+      "test_path": "tests/framework/monster_visual_streaming_terminal_get_contract_test.tscn",
+      "wrapper_process_id": 5492,
+      "wrapper_started_utc": "2026-10-09T14:49:34.8787372Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\b01_direct13_resource_owners_fix",
+      "fixed_fps": 0,
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-09T14:50:04.8909945Z",
+      "native_exit_observed_utc": "2026-10-09T14:49:42.0372276Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "e2903751-7f74-48aa-bbb2-7eabe50b75c0",
+      "framework_receipt_valid": true,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "startup_loading_terminal_get_contract_test",
+      "test_path": "tests/framework/startup_loading_terminal_get_contract_test.tscn",
+      "wrapper_process_id": 20064,
+      "wrapper_started_utc": "2026-10-09T14:49:43.5992436Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\b01_direct13_resource_owners_fix",
+      "fixed_fps": 0,
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-09T14:50:13.6072575Z",
+      "native_exit_observed_utc": "2026-10-09T14:49:49.8684961Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "cdc5f406-d313-4c5c-bc67-349c0f12214b",
+      "framework_receipt_valid": true,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "invocation_id": "49ae3a5b-1b60-42e7-8d79-3aec4b05344e",
+  "generated_at": "2026-10-09T22:49:51.3677575+08:00",
+  "git_head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+  "total": 2,
+  "runtime_environment": {
+    "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\b01_direct13_resource_owners_fix",
+    "runner_process_id": 13948
+  },
+  "passed": 2,
+  "failed": 0,
+  "suite": "adhoc"
+}

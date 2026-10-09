@@ -1,0 +1,164 @@
+[
+  {
+    "run": "direct12_resource_owners",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\b01_direct12_resource_owners",
+    "timeout_seconds": 30,
+    "verbose": false,
+    "actual_scene_arguments": [
+      "tests/retired_threaded_resource_claims_20261009.tscn",
+      "tests/world_bootstrap_generation_prefetch_contract_20261009.tscn",
+      "tests/framework/monster_visual_streaming_terminal_get_contract_test.tscn",
+      "tests/framework/monster_source_frames_terminal_get_contract_test.tscn",
+      "tests/framework/startup_loading_terminal_get_contract_test.tscn"
+    ],
+    "results": [
+      {
+        "scene": "tests/retired_threaded_resource_claims_20261009.tscn",
+        "run_id": "",
+        "result": "PASS",
+        "native_exit": 0,
+        "complete_receipt": "NOT_RUN"
+      },
+      {
+        "scene": "tests/world_bootstrap_generation_prefetch_contract_20261009.tscn",
+        "run_id": "",
+        "result": "PASS",
+        "native_exit": 0,
+        "complete_receipt": "NOT_RUN"
+      },
+      {
+        "scene": "tests/framework/monster_visual_streaming_terminal_get_contract_test.tscn",
+        "run_id": "2fa3b40c-7747-435c-bfdc-8b5c499e2184",
+        "result": "FAIL",
+        "native_exit": -1,
+        "complete_receipt": "MISSING"
+      },
+      {
+        "scene": "tests/framework/monster_source_frames_terminal_get_contract_test.tscn",
+        "run_id": "dc004698-5315-42fc-b9fd-911a7b128da6",
+        "result": "PASS",
+        "native_exit": 0,
+        "complete_receipt": "PASS",
+        "receipt": "docs/review/full_project_audit_v109_20261009/evidence/B01/direct12_resource_owners.monster_source_frames_terminal_get_contract_test.result.json",
+        "receipt_sha256": "466a2aa039fdb291f471d1854292df4dd3cd59f9e942c2b0d523c77e436a1f77"
+      },
+      {
+        "scene": "tests/framework/startup_loading_terminal_get_contract_test.tscn",
+        "run_id": "b3a15836-6a50-4d58-b6b0-7834efe8451a",
+        "result": "FAIL",
+        "native_exit": 1,
+        "complete_receipt": "MISSING"
+      }
+    ]
+  },
+  {
+    "run": "direct13_resource_owners_fix",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\b01_direct13_resource_owners_fix",
+    "timeout_seconds": 30,
+    "verbose": false,
+    "actual_scene_arguments": [
+      "tests/framework/monster_visual_streaming_terminal_get_contract_test.tscn",
+      "tests/framework/startup_loading_terminal_get_contract_test.tscn"
+    ],
+    "results": [
+      {
+        "scene": "tests/framework/monster_visual_streaming_terminal_get_contract_test.tscn",
+        "run_id": "e2903751-7f74-48aa-bbb2-7eabe50b75c0",
+        "result": "PASS",
+        "native_exit": 0,
+        "complete_receipt": "PASS",
+        "receipt": "docs/review/full_project_audit_v109_20261009/evidence/B01/direct13_resource_owners_fix.monster_visual_streaming_terminal_get_contract_test.result.json",
+        "receipt_sha256": "c9decfe285f88109980206fd72cf804b0f1ec44afd4b934c3ca0f2b1d53637a1"
+      },
+      {
+        "scene": "tests/framework/startup_loading_terminal_get_contract_test.tscn",
+        "run_id": "cdc5f406-d313-4c5c-bc67-349c0f12214b",
+        "result": "PASS",
+        "native_exit": 0,
+        "complete_receipt": "MISSING"
+      }
+    ]
+  },
+  {
+    "run": "related14_resource_lifecycle",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\b01_related14_resource_lifecycle",
+    "timeout_seconds": 30,
+    "verbose": true,
+    "actual_scene_arguments": [
+      "tests/framework/feature_resource_preparation_test.tscn",
+      "tests/framework/feature_resource_foreign_request_test.tscn",
+      "tests/world_bootstrap_stage_order_test.tscn",
+      "tests/world_bootstrap_failure_test.tscn",
+      "tests/startup_loading_failure_recovery_test.tscn",
+      "tests/framework/startup_loading_terminal_get_contract_test.tscn"
+    ],
+    "results": [
+      {
+        "scene": "tests/framework/feature_resource_preparation_test.tscn",
+        "run_id": "05944346-1b8e-4873-a80f-abc7a7f00077",
+        "result": "PASS",
+        "native_exit": 0,
+        "complete_receipt": "PASS",
+        "receipt": "docs/review/full_project_audit_v109_20261009/evidence/B01/related14_resource_lifecycle.feature_resource_preparation_test.result.json",
+        "receipt_sha256": "0bb795ef5568a84c9389dced97b91df3db05cefc3a0ec7dae71aa9ee5e1d7eda"
+      },
+      {
+        "scene": "tests/framework/feature_resource_foreign_request_test.tscn",
+        "run_id": "293c5187-9e63-4ee3-9eda-ad5402dae1c5",
+        "result": "PASS",
+        "native_exit": 0,
+        "complete_receipt": "PASS",
+        "receipt": "docs/review/full_project_audit_v109_20261009/evidence/B01/related14_resource_lifecycle.feature_resource_foreign_request_test.result.json",
+        "receipt_sha256": "e0a904b555d4961a9bc673604e78a5658650cb7073bb175c3473bd71ed98744e"
+      },
+      {
+        "scene": "tests/world_bootstrap_stage_order_test.tscn",
+        "run_id": "",
+        "result": "PASS",
+        "native_exit": 0,
+        "complete_receipt": "NOT_RUN"
+      },
+      {
+        "scene": "tests/world_bootstrap_failure_test.tscn",
+        "run_id": "",
+        "result": "PASS",
+        "native_exit": 0,
+        "complete_receipt": "NOT_RUN"
+      },
+      {
+        "scene": "tests/startup_loading_failure_recovery_test.tscn",
+        "run_id": "",
+        "result": "PASS",
+        "native_exit": 0,
+        "complete_receipt": "NOT_RUN"
+      },
+      {
+        "scene": "tests/framework/startup_loading_terminal_get_contract_test.tscn",
+        "run_id": "297d32b7-d69e-46ea-99b2-83b340a3f379",
+        "result": "PASS",
+        "native_exit": 0,
+        "complete_receipt": "PASS",
+        "receipt": "docs/review/full_project_audit_v109_20261009/evidence/B01/related14_resource_lifecycle.startup_loading_terminal_get_contract_test.result.json",
+        "receipt_sha256": "eeab9d5b50fd87320df2a8d7175f116fd588475cf160fc09adedddcf70ec1b8b"
+      }
+    ]
+  },
+  {
+    "run": "integration15_initial_ready",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\b01_integration15_initial_ready",
+    "timeout_seconds": 30,
+    "verbose": false,
+    "actual_scene_arguments": [
+      "tests/initial_world_bootstrap_test.tscn"
+    ],
+    "results": [
+      {
+        "scene": "tests/initial_world_bootstrap_test.tscn",
+        "run_id": "",
+        "result": "PASS",
+        "native_exit": 0,
+        "complete_receipt": "NOT_RUN"
+      }
+    ]
+  }
+]

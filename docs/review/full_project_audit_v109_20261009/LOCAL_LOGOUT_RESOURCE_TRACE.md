@@ -49,3 +49,49 @@ The three-resource warning cannot be mapped to a specific resource because the c
 After explicitly freeing the preview service, run this test once with Godot verbose object/resource cleanup enabled and an isolated runtime appdata directory. Compare the ObjectDB/resource identities against the current 13/3 baseline. Keep the functional assertions and 30-second limit unchanged. If the remaining objects are main-scene children, inspect their owner/exit path; if they are autoload/resource-cache objects, record them as shared teardown evidence rather than changing gameplay cleanup.
 
 Status: functional test `PASS`; source attribution `PASS` for one fixture leak; full leak closure `BLOCKED`; new verification `NOT_RUN`.
+
+## Follow-up direct10 cleanup and verbose result
+
+The owned fixture was minimally changed at line 47 to retain the preview service in a local `Variant` and call `free()` after the formal preview assertions. The runner received one default-off `[switch]$Verbose`; when set, it adds Godot `--verbose` on both Windows and Linux launch paths and does not change timeout, clock, receipt, or failure parsing.
+
+The isolated run used the private index rooted at `dbd78d3301c2af6cfd9e070abe8cc847e6353175`, a separate runtime appdata directory, and `-TimeoutSeconds 30 -Verbose`. Evidence:
+
+- `outputs/wake_drop_v108_review_followup_20261009/direct10_logout_cleanup/logs/runner_results_adhoc_20261009_220313_246_19196.json`: `PASS`, native exit `0`, `engine_log_errors: 0`, pass marker present.
+- `outputs/wake_drop_v108_review_followup_20261009/direct10_logout_cleanup/logs/safe_logout_pending_retry_repair_20261009.stdout.log`: `SAFE_LOGOUT_PENDING_RETRY_REPAIR_PASS checks=44`.
+- `.../safe_logout_pending_retry_repair_20261009.stderr.log`: no resource warning; five verbose identities remain:
+  `RefCounted:9223372906904426219`, `9223372906921213228`, `9223372906937990445`, `9223372906954767662`, and `9223372906971544879`.
+  Godot reports each with reference count zero and the generic removed-node hint.
+
+This is a measurable cleanup result: the prior direct05 aggregate was 13 ObjectDB and 3 resources; direct10 is 5 ObjectDB and 0 resources after freeing the preview Node. The reduction is consistent with the unparented preview service retaining its nested authority objects and resources. Functional behavior stayed unchanged at 44 checks/pass.
+
+Static ownership maps the remaining five zero-reference `RefCounted` candidates to the world teardown closure rather than the preview fixture: `GameRoot` owns `_world_context` (`scripts/game_root.gd:9`), `_time_domains` (`:10`), `_world_bootstrap_coordinator` (`:478`), and `_feature_target_bound` (`:15496`); its child `LootPickupRuntimeManager` owns `_spatial_index` (`scripts/loot_pickup_runtime_manager.gd:27`). Their classes are RefCounted (`world_context.gd:1`, `time_domains.gd:1`, `world_bootstrap_coordinator.gd:2`, `world_target_bound.gd:1`, `runtime_loot_spatial_index.gd:2`). This is a bounded candidate set, not proof of identity because the engine prints instance IDs only and no script paths.
+
+Status after direct10: fixture cleanup `PASS`; business contract `PASS`; remaining five production teardown candidates `BLOCKED` for exact identity; resource warning closure `PASS`; repeat functional verification `NOT_RUN` beyond this required direct10 run. No production source was changed.
+
+Current changed-file SHA256:
+
+- `tests/safe_logout_pending_retry_repair_20261009.gd`: `E6603BC8343938ECD6290A5BB38D6E883AC6641D7B70EA74C0BCFB4DC5D2A249`
+- `tools/run_godot_tests.ps1`: `7942F83AF625A03BD44A3891F627136E2D3299404C44E5E8BF8ED798FEE0906B`
+
+## direct11 identity follow-up
+
+To avoid treating the aggregate count as an attribution, the fixture was instrumented only with scalar diagnostics before teardown. It records signed `Object.get_instance_id()` values as strings (the IDs exceed JSON's exact integer range), script resource paths, class names, and labels for explicit `GameRoot`, `PlayerState`, `LootRuntime`, `GameData`, manager, and both temporary EnemyActor members. No object reference is retained by the diagnostic.
+
+The clean direct11 run used a newly cleared isolated runtime appdata directory and the private `dbd78d3301c2af6cfd9e070abe8cc847e6353175` index. It completed the 44 checks with native exit `0`. Receipt:
+
+- `outputs/wake_drop_v108_review_followup_20261009/direct11_logout_identity/receipt_16532461_15644.json`
+- `outputs/wake_drop_v108_review_followup_20261009/direct11_logout_identity/logs/safe_logout_pending_retry_repair_20261009.stdout.log`
+- `outputs/wake_drop_v108_review_followup_20261009/direct11_logout_identity/logs/safe_logout_pending_retry_repair_20261009.stderr.log`
+
+The final stderr contains five leaked IDs:
+
+`9223372905881016043`, `9223372905897803052`, `9223372905914580269`, `9223372905931357486`, `9223372905964911920`.
+
+Exact decimal comparison against every captured pre-teardown GameRoot, PlayerState, LootRuntime, GameData, manager, and EnemyActor ID found no match. The diagnostic therefore closes the earlier overclaim: the five leaked instances cannot be assigned to the listed world members from this run. Those members are static examples of RefCounted ownership, not a bounded identity set. The remaining leak is `BLOCKED` for source attribution. The earlier preview-service attribution remains confirmed by the 13-to-5 and 3-to-0 reduction.
+
+The first identity rerun on the reused runtime directory failed early because the generated character name already existed; that evidence is retained. The final run used a cleared runtime directory and passed. No business assertion was weakened.
+
+Updated source hashes:
+
+- `tests/safe_logout_pending_retry_repair_20261009.gd`: `87E0776F35BE7D02BFC2D0F279F9984D2FBFBEAB3A384A8CC42D8DDD57F0BC71`
+- `tools/run_godot_tests.ps1`: `7942F83AF625A03BD44A3891F627136E2D3299404C44E5E8BF8ED798FEE0906B`

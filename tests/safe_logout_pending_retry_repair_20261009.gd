@@ -6,7 +6,7 @@ const MONSTER_ID := 76
 const RNG_SEED := 20261009
 const WORLD_READY_FRAMES := 1800
 const RECEIPT_WAIT_FRAMES := 900
-const RECEIPT_DIR := "res://outputs/wake_drop_v108_repair_20261009/safe_logout_pending"
+const RECEIPT_DIR := "res://outputs/wake_drop_v108_review_followup_20261009/direct11_logout_identity"
 
 var _game: Node
 var _failures: Array[String] = []
@@ -44,7 +44,9 @@ func _run() -> void:
 
 	var preview_rng := RandomNumberGenerator.new()
 	preview_rng.seed = RNG_SEED
-	var preview: Dictionary = LootRuntimeScript.new().roll_monster_drops(MONSTER_ID, preview_rng, true)
+	var preview_service: Variant = LootRuntimeScript.new()
+	var preview: Dictionary = preview_service.roll_monster_drops(MONSTER_ID, preview_rng, true)
+	preview_service.free()
 	_expect(bool(preview.get("configured", false)), "producing monster profile unavailable: %s" % preview)
 	_expect(
 		not (preview.get("items", []) as Array).is_empty()
@@ -164,6 +166,8 @@ func _run() -> void:
 		"profile_save": PlayerState.last_save_result,
 		"frame_budget": FrameBudgetScript.snapshot(),
 		"runtime_diagnostics": RuntimeDiagnostics.performance_counters(),
+		"pre_teardown_refcounted": _capture_refcounted_members(),
+		"pre_teardown_enemy_refcounted": _capture_enemy_refcounted(enemy, blocked_enemy),
 	})
 	_finish()
 
@@ -239,6 +243,65 @@ func _latest_terminal() -> Dictionary:
 	if _game._enemy_death_terminal_jobs.is_empty():
 		return {}
 	return (_game._enemy_death_terminal_jobs[-1] as Dictionary).duplicate(true)
+
+
+func _capture_refcounted_members() -> Array[Dictionary]:
+	var entries: Array[Dictionary] = []
+	var game_members := [
+		"_world_context", "_time_domains", "_world_bootstrap_coordinator",
+		"_feature_target_bound", "_feature_effect_runtime", "_combat_spatial_index",
+		"_combat_target_query_service", "_combat_target_query_service_index",
+		"_loot_pickup_runtime_manager", "_audio_runtime_service", "_streaming_coordinator",
+	]
+	for member_name: String in game_members:
+		_capture_refcounted_entry(entries, "GameRoot.%s" % member_name, _game.get(member_name))
+	if is_instance_valid(_game.get("_loot_pickup_runtime_manager")):
+		var manager: Variant = _game.get("_loot_pickup_runtime_manager")
+		_capture_refcounted_entry(entries, "LootPickupRuntimeManager._spatial_index", manager.get("_spatial_index"))
+
+	for member_name: String in [
+		"_feature_loadout", "_item_transaction_port", "_skill_progression",
+		"_clock_cleanup_worker", "_json_persistence", "_world_json_persistence",
+		"_enhancement_service", "_relic_synthesis_service",
+	]:
+		_capture_refcounted_entry(entries, "PlayerState.%s" % member_name, PlayerState.get(member_name))
+
+	_capture_refcounted_entry(entries, "LootRuntime.autoload", LootRuntime)
+	_capture_refcounted_entry(entries, "LootRuntime._user_additions", LootRuntime.get("_user_additions"))
+	_capture_refcounted_entry(entries, "LootRuntime._sheet_authority", LootRuntime.get("_sheet_authority"))
+	_capture_refcounted_entry(entries, "GameData.autoload", GameData)
+	return entries
+
+
+func _capture_refcounted_entry(entries: Array[Dictionary], label: String, value: Variant) -> void:
+	if value == null or not value is Object or not is_instance_valid(value):
+		return
+	var object: Object = value
+	var script_value: Variant = object.get_script()
+	var script_path := str(script_value.resource_path) if script_value is Script else ""
+	entries.append({
+		"label": label,
+		# Object IDs exceed JSON's exact IEEE-754 integer range. Preserve the
+		# signed decimal spelling so verbose ObjectDB IDs can be matched exactly.
+		"instance_id": str(object.get_instance_id()),
+		"class": object.get_class(),
+		"script_path": script_path,
+		"refcounted": value is RefCounted,
+	})
+
+
+func _capture_enemy_refcounted(entries_a: Variant, entries_b: Variant) -> Array[Dictionary]:
+	var entries: Array[Dictionary] = []
+	for pair: Array in [["successful", entries_a], ["blocked", entries_b]]:
+		var actor: Variant = pair[1]
+		if actor == null or not actor is Object or not is_instance_valid(actor):
+			continue
+		for member_name: String in [
+			"_feature_capabilities", "_natural_regen", "_movement_cadence",
+			"_target_acquisition_policy", "_entrapment_controller", "_hc_polygon_pursuit",
+		]:
+			_capture_refcounted_entry(entries, "EnemyActor.%s.%s" % [pair[0], member_name], actor.get(member_name))
+	return entries
 
 
 func _write_receipt(receipt: Dictionary) -> void:

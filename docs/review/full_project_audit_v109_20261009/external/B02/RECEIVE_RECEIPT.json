@@ -1,0 +1,51 @@
+{
+  "status": "PASS",
+  "report_commit": "ac4c3f285053e10993b20712e7ab99ee107a1512",
+  "parent": "ed2d87121de80c84caaa3f096c3a5acb71d4946f",
+  "audit_source": "ed2d87121de80c84caaa3f096c3a5acb71d4946f",
+  "scope": "Seven exact report files received; semantic coverage remains partial",
+  "files": [
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B02/SUMMARY.md",
+      "bytes": 4640,
+      "sha256": "7480cedf06775805990da0fb47f0746d2fb8b9d747ee94955d4733f9847b0bd1",
+      "blob": "9c1e1baaaccfdf7d88dda211a0f6a8a6d5180fdb"
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B02/FINDINGS.json",
+      "bytes": 16396,
+      "sha256": "7143b3d641b2a157f83e159cf3299c17f47df11304d136e55afb606164147093",
+      "blob": "e8445c26797c6cc88767a15e23ab90aa979567d4"
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B02/FINDINGS.csv",
+      "bytes": 13457,
+      "sha256": "52b38741e772b1e67393bfbe6870141d5c11a6e15f339e4369f20ccea8b2bee6",
+      "blob": "720d8ef768370d5eee174b35cef07e0acc90a690"
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B02/COVERAGE.json",
+      "bytes": 29646,
+      "sha256": "ed38dc07eda76c66220df6c2cfa9d2bc2a27c8252b71396ac7e35690d7de301b",
+      "blob": "12a03f6dde942c75ff12360063cd29e61ef7309d"
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B02/REDUNDANCY.md",
+      "bytes": 1400,
+      "sha256": "2a92615cf576e1dddbc1514248e9c5deb75c1337a567a2942fa836c623774def",
+      "blob": "520c7b4d4d640445d200980abec87392245836c4"
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B02/VALIDATION_GAPS.md",
+      "bytes": 2148,
+      "sha256": "84c0f78bccc6a0a9c4e1fbb82d391a437c3244e1fb9f38eb0507fe9f583eb539",
+      "blob": "e5bce22704fc0726a7d2ecde8c482fe3d6df3fe8"
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B02/SOURCE_BINDING.json",
+      "bytes": 11311,
+      "sha256": "4b3e1ad711922dfd16d1088c0573a25988e37c1cc72611501bac5e9fed2ff660",
+      "blob": "7667d29a2ed8531352d87b409154f35ad69bf315"
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "startup target path follows real accepted-or-cached branch",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "startup handoff closes or transfers owned target",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "accepted startup target claim transferred",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "resident owner actually consumed one startup claim",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "startup claim retirement finished",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "repeated startup handoff is idempotent",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "startup does not transfer twice",
+      "passed": true
+    }
+  ],
+  "count": 7,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "da55df1e-2fe0-44bf-a598-77827fa764d3",
+  "passed": 7,
+  "reported_checks": 7,
+  "reported_failures": 0,
+  "run_id": "297d32b7-d69e-46ea-99b2-83b340a3f379",
+  "runtime_environment": {
+    "native_process_id": 14596,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\b01_related14_resource_lifecycle",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/b01_related14_resource_lifecycle/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "startup_loading_terminal_get_contract_test",
+  "schema_version": 1,
+  "source_content_sha256": "",
+  "status": "PASS"
+}

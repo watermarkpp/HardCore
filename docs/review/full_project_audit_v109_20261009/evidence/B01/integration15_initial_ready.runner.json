@@ -1,0 +1,40 @@
+{
+  "engine_log_errors": 0,
+  "results": [
+    {
+      "test_name": "initial_world_bootstrap_test",
+      "test_path": "tests/initial_world_bootstrap_test.tscn",
+      "wrapper_process_id": 23524,
+      "wrapper_started_utc": "2026-10-09T14:55:08.3048796Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\b01_integration15_initial_ready",
+      "fixed_fps": 0,
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-09T14:55:38.3190220Z",
+      "native_exit_observed_utc": "2026-10-09T14:55:31.3018457Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "",
+      "framework_receipt_valid": null,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "suite": "adhoc",
+  "generated_at": "2026-10-09T22:55:32.7166916+08:00",
+  "runtime_environment": {
+    "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\b01_integration15_initial_ready",
+    "runner_process_id": 18552
+  },
+  "failed": 0,
+  "invocation_id": "bafc4a31-bfad-490a-8c82-d105c644a6fe",
+  "passed": 1,
+  "git_head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+  "total": 1
+}

@@ -1,0 +1,5 @@
+SCRIPT ERROR: Attempt to call function '_consume_terminal_threaded_requests_on_exit' in base 'null instance' on a null instance.
+   at: MonsterVisualStreamingCoordinator._notification (res://scripts/monster_visual_streaming_coordinator.gd:19)
+   GDScript backtrace (most recent call first):
+       [0] _notification (res://scripts/monster_visual_streaming_coordinator.gd:19)
+       [1] _real_owner_handoff_probe (res://tests/framework/monster_visual_streaming_terminal_get_contract_test.gd:78)

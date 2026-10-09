@@ -3,6 +3,7 @@ param(
     [string]$Suite = 'critical',
     [ValidateRange(1, 90)]
     [int]$TimeoutSeconds = 30,
+    [switch]$Verbose,
     [string[]]$TestPaths = @()
 )
 
@@ -1403,7 +1404,8 @@ foreach ($testPath in $SelectedTests) {
         'tests/framework/death_expiry_overlap_test.tscn'
     )) { 60 } else { 0 }
     $BoundaryClockArguments = if ($BoundaryFixedFps -eq 60) { ' --fixed-fps 60 --max-fps 60' } else { '' }
-    $launchCommand = '""' + $Godot + '" --headless' + $BoundaryClockArguments + ' --log-file "' + $engineLogArgument + '" --path . "' + $testPath + '" > "' + $stdout + '" 2> "' + $stderr + '"'
+    $VerboseArgument = if ($Verbose) { ' --verbose' } else { '' }
+    $launchCommand = '""' + $Godot + '" --headless' + $VerboseArgument + $BoundaryClockArguments + ' --log-file "' + $engineLogArgument + '" --path . "' + $testPath + '" > "' + $stdout + '" 2> "' + $stderr + '"'
     if ($RunnerIsLinux) {
         $startInfo = [Diagnostics.ProcessStartInfo]::new()
         # setsid exec preserves the native PID while confining its descendants
@@ -1416,6 +1418,7 @@ foreach ($testPath in $SelectedTests) {
         $startInfo.RedirectStandardOutput = $true
         $startInfo.RedirectStandardError = $true
         foreach ($argument in @('--headless')) { $startInfo.ArgumentList.Add($argument) }
+        if ($Verbose) { $startInfo.ArgumentList.Add('--verbose') }
         if ($BoundaryFixedFps -eq 60) {
             foreach ($argument in @('--fixed-fps', '60', '--max-fps', '60')) { $startInfo.ArgumentList.Add($argument) }
         }

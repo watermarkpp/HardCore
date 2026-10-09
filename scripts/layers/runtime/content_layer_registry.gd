@@ -144,6 +144,20 @@ func _feature_resources() -> Node:
 		add_child(_feature_resource_service)
 	return _feature_resource_service
 
+## Transfer already-issued threaded ResourceLoader claims from a retiring
+## scene owner into the shared feature service. The service never re-requests
+## the path; it polls and joins the supplied user claims under its retirement
+## budget.
+func retire_threaded_resource_claims(path: String, claim_count: int) -> bool:
+	if path.is_empty() or claim_count <= 0:
+		return false
+	return bool(_feature_resources().retire_threaded_resource_claims(path, claim_count))
+
+func threaded_resource_claim_diagnostics() -> Dictionary:
+	if _feature_resource_service == null:
+		return {"accepted":0, "transferred":0, "get":0, "missing":0, "pending":0}
+	return _feature_resource_service.threaded_claim_diagnostics()
+
 
 func _apply_prepared_feature_candidate(result: Dictionary, resource_lease: RefCounted, sequence: int, profile: String) -> bool:
 	if sequence != _feature_preparation_sequence: return false

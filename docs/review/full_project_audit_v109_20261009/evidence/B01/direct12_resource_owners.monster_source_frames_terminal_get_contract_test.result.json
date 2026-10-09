@@ -1,0 +1,47 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "formal overlay frame path exists",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "source-frame producer accepted a real request",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "source-frame owner handoff accepted",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "source-frame claim transferred to resident owner",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "resident owner consumed source-frame claim",
+      "passed": true
+    }
+  ],
+  "count": 5,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "b8ec5917-8596-4a1f-9758-a84ef01d3078",
+  "passed": 5,
+  "reported_checks": 5,
+  "reported_failures": 0,
+  "run_id": "dc004698-5315-42fc-b9fd-911a7b128da6",
+  "runtime_environment": {
+    "native_process_id": 18688,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\b01_direct12_resource_owners",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/b01_direct12_resource_owners/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "monster_source_frames_terminal_get_contract_test",
+  "schema_version": 1,
+  "source_content_sha256": "",
+  "status": "PASS"
+}

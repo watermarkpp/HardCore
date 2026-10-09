@@ -25,6 +25,12 @@ var _transition_started := false
 var _target_prepare_started := false
 var _target_scene_ready := false
 var _load_requested := false
+## True only when this StartupLoading instance received OK from
+## load_threaded_request. ERR_BUSY reuses another owner's request and must not
+## consume it on exit.
+var _target_native_request_owned := false
+var _target_native_request_unresolved := false
+var _target_native_request_transferred := false
 var _target_scene_instance: Node
 @export var suppress_scene_handoff_for_test := false
 ## Test-only failure injection. It never changes the target-scene handoff
@@ -57,6 +63,9 @@ var _main_scene_prefetch_already_cached := false
 var _main_scene_prefetch_status := "not_started"
 var _main_scene_prefetch_request_count := 0
 var _main_scene_prefetch_native_owned := false
+var _main_scene_prefetch_unresolved := false
+var _main_scene_prefetch_transferred := false
+var _threaded_claims_retired := false
 var _main_scene_prefetch_get_count := 0
 var _main_scene_prefetch_resource: PackedScene
 const MAIN_CODE_ENTRY_ID := "framework.code.caster_animation.v1"
@@ -339,6 +348,8 @@ func _on_failure_exit_pressed() -> void:
 	_target_load_generation += 1
 	_target_load_attempt_in_progress = false
 	_load_requested = false
+	_target_native_request_owned = false
+	_target_native_request_unresolved = false
 	_target_prepare_started = false
 	_transition_started = false
 	if failure_retry_button != null:
@@ -366,6 +377,9 @@ func startup_diagnostic() -> Dictionary:
 		"target_load_attempt_count": _target_load_attempt_count,
 		"target_load_generation": _target_load_generation,
 		"target_load_failed": _target_load_failed,
+		"target_native_request_unresolved": _target_native_request_unresolved,
+		"target_native_request_transferred": _target_native_request_transferred,
+		"threaded_claims_retired": _threaded_claims_retired,
 		"target_handoff_count": _target_handoff_count,
 	}
 
@@ -433,6 +447,10 @@ func _begin_target_load() -> void:
 		return
 	var request_error := ResourceLoader.load_threaded_request(target_path)
 	_load_requested = request_error == OK or request_error == ERR_BUSY
+	_target_native_request_owned = request_error == OK
+	_target_native_request_unresolved = false
+	_target_native_request_transferred = false
+	_threaded_claims_retired = false
 	_target_load_attempt_in_progress = _load_requested
 	if not _load_requested:
 		# Keep the first authored frame on screen before the rare synchronous
@@ -492,6 +510,11 @@ func _process(_delta: float) -> void:
 			return
 	elif status == ResourceLoader.THREAD_LOAD_FAILED:
 		_load_requested = false
+		if _target_native_request_owned:
+			# FAILED is terminal but still consumes the accepted request claim.
+			ResourceLoader.load_threaded_get(_target_scene_path())
+		_target_native_request_owned = false
+		_target_native_request_unresolved = false
 		_target_load_attempt_in_progress = false
 		_fail_target_load(
 			"STARTUP_TARGET_THREAD_FAILED",
@@ -501,6 +524,7 @@ func _process(_delta: float) -> void:
 		return
 	elif status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
 		_load_requested = false
+		_target_native_request_owned = false
 		_target_load_attempt_in_progress = false
 		_fail_target_load(
 			"STARTUP_TARGET_THREAD_INVALID",
@@ -523,15 +547,24 @@ func _target_load_status(progress: Array[float]):
 
 
 func _target_threaded_get() -> PackedScene:
+	# Test status injection and ERR_BUSY/shared observations do not create a
+	# claim for this owner.  Never call get without the explicit OK ownership.
+	if not _target_native_request_owned:
+		return null if force_target_scene_null_for_test else ResourceLoader.load(_target_scene_path()) as PackedScene
+	_target_native_request_owned = false
+	_target_native_request_unresolved = false
+	var loaded := ResourceLoader.load_threaded_get(_target_scene_path()) as PackedScene
 	if force_target_scene_null_for_test:
 		return null
-	return ResourceLoader.load_threaded_get(_target_scene_path()) as PackedScene
+	return loaded
 
 
 func _fail_target_load(code: String, message: String, generation: int) -> void:
 	if generation != _target_load_generation:
 		return
 	_load_requested = false
+	_target_native_request_owned = false
+	_target_native_request_unresolved = false
 	_target_load_attempt_in_progress = false
 	_target_load_failed = true
 	_target_failure_code = code
@@ -553,14 +586,17 @@ func _poll_main_scene_prefetch() -> void:
 			_main_scene_prefetch_resource = ResourceLoader.load_threaded_get(MAIN_SCENE_PREFETCH_PATH) as PackedScene
 			_main_scene_prefetch_get_count += 1
 			_main_scene_prefetch_native_owned = false
+			_main_scene_prefetch_unresolved = false
 		_main_scene_prefetch_status = "ready"
-	elif status in [
-		ResourceLoader.THREAD_LOAD_FAILED,
-		ResourceLoader.THREAD_LOAD_INVALID_RESOURCE,
-	]:
-		if status == ResourceLoader.THREAD_LOAD_FAILED and _main_scene_prefetch_native_owned:
+	elif status == ResourceLoader.THREAD_LOAD_FAILED:
+		if _main_scene_prefetch_native_owned:
 			ResourceLoader.load_threaded_get(MAIN_SCENE_PREFETCH_PATH)
 			_main_scene_prefetch_get_count += 1
+		_main_scene_prefetch_unresolved = false
+		_main_scene_prefetch_native_owned = false
+		_main_scene_prefetch_status = "failed"
+	elif status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+		_main_scene_prefetch_unresolved = false
 		_main_scene_prefetch_native_owned = false
 		_main_scene_prefetch_status = "failed"
 	else:
@@ -577,6 +613,8 @@ func main_scene_prefetch_diagnostic() -> Dictionary:
 		"request_count": _main_scene_prefetch_request_count,
 		"get_count": _main_scene_prefetch_get_count,
 		"native_owned": _main_scene_prefetch_native_owned,
+		"unresolved": _main_scene_prefetch_unresolved,
+		"transferred": _main_scene_prefetch_transferred,
 		"code_preparation": _main_code_preparation.duplicate(true),
 	}
 
@@ -644,6 +682,8 @@ func _check_transition() -> void:
 
 func _begin_main_scene_prefetch() -> void:
 	_main_scene_prefetch_attempted = true
+	_main_scene_prefetch_transferred = false
+	_main_scene_prefetch_unresolved = false
 	if force_main_scene_prefetch_failure_for_test:
 		_main_scene_prefetch_status = "failed"
 		return
@@ -685,6 +725,7 @@ func _submit_prepared_main_scene_prefetch() -> void:
 	_main_scene_prefetch_request_count = 1
 	if request_error == OK:
 		_main_scene_prefetch_native_owned = true
+		_main_scene_prefetch_unresolved = false
 		_main_scene_prefetch_accepted = true
 		_main_scene_prefetch_status = "accepted"
 	elif request_error == ERR_BUSY:
@@ -820,15 +861,46 @@ func relinquish_startup_launch_retention(result: Dictionary, receiver: Node) -> 
 	_main_code_preparation["state"] = "transferred_to_hall"
 	return true
 
+## Public startup owner-handoff seam. Terminal and pending accepted claims are
+## transferred by path without a synchronous teardown get. ContentLayers owns
+## the bounded terminal consumption; ERR_BUSY was never registered here.
+func retire_threaded_resource_claims() -> bool:
+	if _threaded_claims_retired:
+		return not _target_native_request_unresolved and not _main_scene_prefetch_unresolved
+	var complete := true
+	if _target_native_request_owned:
+		var target_status := ResourceLoader.load_threaded_get_status(_target_scene_path())
+		if target_status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+			_target_native_request_owned = false
+		elif target_status in [ResourceLoader.THREAD_LOAD_IN_PROGRESS, ResourceLoader.THREAD_LOAD_LOADED, ResourceLoader.THREAD_LOAD_FAILED]:
+			if ContentLayers.has_method("retire_threaded_resource_claims") and bool(ContentLayers.retire_threaded_resource_claims(_target_scene_path(), 1)):
+				_target_native_request_owned = false
+				_target_native_request_transferred = true
+				_target_native_request_unresolved = false
+			else:
+				complete = false
+				_target_native_request_unresolved = true
+	if _main_scene_prefetch_native_owned:
+		var prefetch_status := ResourceLoader.load_threaded_get_status(MAIN_SCENE_PREFETCH_PATH)
+		if prefetch_status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+			_main_scene_prefetch_native_owned = false
+		elif prefetch_status in [ResourceLoader.THREAD_LOAD_IN_PROGRESS, ResourceLoader.THREAD_LOAD_LOADED, ResourceLoader.THREAD_LOAD_FAILED]:
+			if ContentLayers.has_method("retire_threaded_resource_claims") and bool(ContentLayers.retire_threaded_resource_claims(MAIN_SCENE_PREFETCH_PATH, 1)):
+				_main_scene_prefetch_native_owned = false
+				_main_scene_prefetch_transferred = true
+				_main_scene_prefetch_unresolved = false
+			else:
+				complete = false
+				_main_scene_prefetch_unresolved = true
+	_threaded_claims_retired = complete
+	return complete
+
+
 func _exit_tree() -> void:
 	ContentLayers.cancel_internal_code_owner(self, _main_code_generation)
 	_main_code_generation += 1
-	# Only this startup's OK request owns a get. ERR_BUSY/global observation does not.
-	if _main_scene_prefetch_native_owned:
-		var status := ResourceLoader.load_threaded_get_status(MAIN_SCENE_PREFETCH_PATH)
-		if status != ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
-			_main_scene_prefetch_resource = ResourceLoader.load_threaded_get(MAIN_SCENE_PREFETCH_PATH) as PackedScene
-			_main_scene_prefetch_get_count += 1
-		_main_scene_prefetch_native_owned = false
+	# Final protection only: ordinary owner handoff is explicit, and no teardown
+	# path synchronously blocks on load_threaded_get().
+	retire_threaded_resource_claims()
 	ContentLayers.retire_internal_code_result(_main_code_result)
 	_main_scene_prefetch_resource = null

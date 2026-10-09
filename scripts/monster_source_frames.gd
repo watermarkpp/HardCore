@@ -64,12 +64,42 @@ static func poll() -> void:
 			_textures[path] = loaded
 			_last_use[path] = frame
 			_resident_bytes += bytes
-		elif status in [ResourceLoader.THREAD_LOAD_FAILED, ResourceLoader.THREAD_LOAD_INVALID_RESOURCE]:
+		elif status == ResourceLoader.THREAD_LOAD_FAILED:
+			# FAILED is terminal but the accepted request still owns one
+			# load_threaded_get claim.  The get consumes that claim even when it
+			# returns null; do not leave the engine user reference pending.
+			ResourceLoader.load_threaded_get(path)
+			_requested.erase(path)
+		elif status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+			# INVALID means there is no remaining claim (or it was already
+			# consumed), so calling get here would be a second consumer.
 			_requested.erase(path)
 	while _requested.size() < MAX_IN_FLIGHT and not _queue.is_empty():
 		var path: String = _queue.pop_front()
 		if ResourceLoader.load_threaded_request(path, "Texture2D") == OK:
 			_requested[path] = true
+
+## GameRoot owns the process poll for this static cache.  It must call this at
+## its scene/owner handoff: accepted IN_PROGRESS claims move to the long-lived
+## ContentLayers owner, while terminal claims are consumed here.  No request is
+## submitted again and no get is attempted for INVALID_RESOURCE.
+static func retire_pending_threaded_claims() -> bool:
+	var complete := true
+	for path: String in _requested.keys():
+		var status := ResourceLoader.load_threaded_get_status(path)
+		if status in [ResourceLoader.THREAD_LOAD_LOADED, ResourceLoader.THREAD_LOAD_FAILED]:
+			if ContentLayers.has_method("retire_threaded_resource_claims") and bool(ContentLayers.retire_threaded_resource_claims(path, 1)):
+				_requested.erase(path)
+			else:
+				complete = false
+		elif status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+			_requested.erase(path)
+		elif status == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+			if ContentLayers.has_method("retire_threaded_resource_claims") and bool(ContentLayers.retire_threaded_resource_claims(path, 1)):
+				_requested.erase(path)
+			else:
+				complete = false
+	return complete
 
 static func texture(path: String) -> Texture2D:
 	poll()
