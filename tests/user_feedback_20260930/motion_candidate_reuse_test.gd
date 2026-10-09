@@ -42,9 +42,11 @@ func _run() -> void:
 	_check(index.index_enemy_node_segment_query_count == queries + 1, "registration did not invalidate candidate identities")
 	# Coarse bucket identities remain complete while a body moves inside
 	# its bucket. The exact old hit is never cached, even across physics ticks.
-	var second_origin := CENTER + Vector2(8, 8)
+	# Construct the SAME-bucket case from the configured partition, rather
+	# than assuming a 4-GU bucket. The incoming body remains in that bucket.
+	var second_origin := Vector2(24, 24) + Vector2.ONE * index.bucket_size_gu() * 0.1
 	var second := _spawn(24, second_origin)
-	var same_bucket := _spawn(24, second_origin + Vector2(2, 2))
+	var same_bucket := _spawn(24, second_origin + Vector2.ONE * index.bucket_size_gu() * 0.8)
 	_check(second._hc_motion_clear(second_origin, second_origin + Vector2(0, 1)), "coarse pool initial path blocked")
 	queries = index.index_enemy_node_segment_query_count
 	await get_tree().physics_frame

@@ -24,6 +24,7 @@ BOSS_PATH = ROOT / "assets/data/boss_service_rules.json"
 COMBAT_SOURCE_PATH = ROOT / "assets/data/canonical_monster_combat_source_v1.json"
 MOVEMENT_MASTER_PATH = ROOT / "assets/data/monster_movement_source_master_v1.json"
 DETAIL_SOURCE_PATH = ROOT / "assets/data/monster_21cq_detail_source_v1.json"
+TARGETING_OVERRIDE_PATH = ROOT / "assets/data/monster_targeting_classification_override_v1.json"
 BASE_SHA = "f4879d33c78edf21ff189b7be451162e3dbcd37b"
 M00_FINAL_SHA = "1945a5eceaf6efc49ddf4e5da4298834bf15c864"
 
@@ -264,15 +265,25 @@ KNOWN_EXACT_VIEW_CORRECTIONS = {
 # The class-derived ViewRange remains the historical source value. This
 # project-level floor only governs first acquisition for active runtime
 # classifications; it must never reduce a larger class/special value.
-RUNTIME_CLASSIFICATION_VIEW_FLOOR_CELLS: dict[str, int | None] = {
-    "ordinary": None,
-    "elite": 7,
-    "boss": 9,
-}
-CLASSIFICATION_FLOOR_AUTHORITY = "HUMAN_FROZEN"
-CLASSIFICATION_FLOOR_SOURCE = (
-    "user.authority.monster_classification_view_floor.2026-08-30"
-)
+def load_targeting_override_policy() -> dict[str, Any]:
+    policy = read_json(TARGETING_OVERRIDE_PATH)
+    if policy.get("schema_version") != 1:
+        raise RuntimeError("targeting override policy schema must be 1")
+    if policy.get("field") != "targeting.view_range_cells":
+        raise RuntimeError("targeting override policy field must be targeting.view_range_cells")
+    overrides = policy.get("overrides")
+    if not isinstance(overrides, dict):
+        raise RuntimeError("targeting override policy overrides must be an object")
+    allowed = {"ordinary", "elite", "boss"}
+    if set(overrides) != allowed:
+        raise RuntimeError("targeting override policy may only override ordinary, elite and boss")
+    for classification, record in overrides.items():
+        if not isinstance(record, dict) or not isinstance(record.get("view_range_cells"), int):
+            raise RuntimeError(f"invalid targeting override for {classification}")
+        if int(record["view_range_cells"]) <= 0:
+            raise RuntimeError(f"non-positive targeting override for {classification}")
+    return policy
+
 
 SOURCE_LOCKED_STATIONARY_PROFILES = {
     "touch_dragon",
@@ -285,6 +296,17 @@ SOURCE_LOCKED_STATIONARY_PROFILES = {
 
 def read_json(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+TARGETING_OVERRIDE_POLICY = load_targeting_override_policy()
+RUNTIME_CLASSIFICATION_VIEW_OVERRIDE_CELLS: dict[str, int | None] = {
+    classification: int(record["view_range_cells"])
+    for classification, record in TARGETING_OVERRIDE_POLICY["overrides"].items()
+}
+CLASSIFICATION_OVERRIDE_AUTHORITY = str(
+    TARGETING_OVERRIDE_POLICY["overrides"]["ordinary"]["authority"]
+)
+CLASSIFICATION_OVERRIDE_SOURCE = "assets/data/monster_targeting_classification_override_v1.json"
 
 
 def sha256(path: Path) -> str:
@@ -509,16 +531,16 @@ def movement_record(
     }
 
 
-def classification_floor_view_range_cells(
+def classification_override_view_range_cells(
     classification: str,
     runtime_allowed: bool,
     exact_source_row: bool,
 ) -> int | None:
-    # A DATA_HOLD identity remains fail-closed. The classification floor is a
-    # runtime acquisition rule only after the exact source binding exists.
+    # A DATA_HOLD identity remains fail-closed. The classification override is
+    # applied only after the exact source binding exists.
     if not runtime_allowed or not exact_source_row:
         return None
-    return RUNTIME_CLASSIFICATION_VIEW_FLOOR_CELLS.get(classification)
+    return RUNTIME_CLASSIFICATION_VIEW_OVERRIDE_CELLS.get(classification)
 
 
 def targeting_record(
@@ -531,17 +553,17 @@ def targeting_record(
     source_binding = dict(movement_source.get("source_binding", {}))
     server_binding = dict(movement_source.get("server_class_binding", {}))
     exact_source_row = source_binding.get("binding_status") == "EXACT_SOURCE_ROW"
-    classification_floor = classification_floor_view_range_cells(
+    classification_override = classification_override_view_range_cells(
         classification,
         runtime_allowed,
         exact_source_row,
     )
-    classification_floor_authority = (
-        CLASSIFICATION_FLOOR_AUTHORITY if classification_floor is not None else None
+    classification_override_authority = (
+        CLASSIFICATION_OVERRIDE_AUTHORITY if classification_override is not None else None
     )
     class_derived_view: int | None = None
     effective_view_authority: str | None = None
-    classification_floor_applied = False
+    classification_override_applied = False
 
     if exact_source_row:
         server_race = int(server_binding.get("server_race", -1))
@@ -551,13 +573,12 @@ def targeting_record(
                 f"monster_id={monster_id} exact server_race={server_race} has no Pascal targeting rule"
             )
         class_derived_view = int(class_rule["view_range_cells"])
-        view = max(
-            class_derived_view,
-            classification_floor if classification_floor is not None else class_derived_view,
+        view = (
+            classification_override
+            if classification_override is not None
+            else class_derived_view
         )
-        classification_floor_applied = (
-            classification_floor is not None and classification_floor > class_derived_view
-        )
+        classification_override_applied = classification_override is not None
         view_source: str | None = str(class_rule["view_source"])
         pascal_class: str | None = str(class_rule["pascal_class"])
         class_binding_status = "CANDIDATE"
@@ -567,8 +588,8 @@ def targeting_record(
         acquisition_status = "CANDIDATE"
         acquisition_authority = "B_CANDIDATE"
         effective_view_authority = (
-            CLASSIFICATION_FLOOR_AUTHORITY
-            if classification_floor_applied
+            CLASSIFICATION_OVERRIDE_AUTHORITY
+            if classification_override_applied
             else view_authority
         )
 
@@ -613,16 +634,16 @@ def targeting_record(
         "class_binding_missing_evidence": missing_evidence,
         "view_range_cells": view,
         "class_derived_view_range_cells": class_derived_view,
-        "classification_floor_view_range_cells": classification_floor,
-        "classification_floor_authority": classification_floor_authority,
-        "classification_floor_source": (
-            CLASSIFICATION_FLOOR_SOURCE if classification_floor is not None else None
+        "classification_override_view_range_cells": classification_override,
+        "classification_override_authority": classification_override_authority,
+        "classification_override_source": (
+            CLASSIFICATION_OVERRIDE_SOURCE if classification_override is not None else None
         ),
-        "classification_floor_applied": classification_floor_applied,
+        "classification_override_applied": classification_override_applied,
         "effective_view_range_authority": effective_view_authority,
         "effective_view_range_rule": (
-            "max(class_derived_view_range_cells, classification_floor_view_range_cells)"
-            if classification_floor is not None
+            "classification_override_view_range_cells"
+            if classification_override is not None
             else "class_derived_view_range_cells"
         ),
         "view_range_status": view_status,
@@ -839,6 +860,17 @@ def build_payload() -> dict[str, Any]:
                 "field": "move_interval_ms",
                 "scope": "monster timing only; strict cadence algorithm and stationary gate unchanged",
             },
+            "targeting_classification_override": {
+                "authority": str(TARGETING_OVERRIDE_POLICY["authority_id"]),
+                "source": str(TARGETING_OVERRIDE_PATH.relative_to(ROOT)).replace("\\", "/"),
+                "source_sha256": sha256(TARGETING_OVERRIDE_PATH),
+                "field": "targeting.view_range_cells",
+                "scope": "first acquisition only; ordinary/elite/boss exact rows; special/non-hostile/version-difference preserved",
+                "overrides": {
+                    classification: int(record["view_range_cells"])
+                    for classification, record in TARGETING_OVERRIDE_POLICY["overrides"].items()
+                },
+            },
             "movement_speed_derivation": {
                 "authority": "derived_from_effective_move_interval",
                 "formula": "base_move_speed_gu_per_sec = 1000.0 / effective_move_interval_ms",
@@ -902,17 +934,18 @@ def build_payload() -> dict[str, Any]:
                 "authority": "A_LOCKED",
                 "source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas:249-258",
             },
-            "runtime_classification_first_acquisition_floor": {
+            "runtime_classification_first_acquisition_override": {
                 "status": "LOCKED",
-                "authority": CLASSIFICATION_FLOOR_AUTHORITY,
-                "source": CLASSIFICATION_FLOOR_SOURCE,
-                "rule": "effective_view=max(class_derived_view, classification_floor)",
-                "classification_floor_view_range_cells": {
-                    "ordinary": None,
-                    "elite": 7,
-                    "boss": 9,
+                "authority": CLASSIFICATION_OVERRIDE_AUTHORITY,
+                "source": CLASSIFICATION_OVERRIDE_SOURCE,
+                "rule": "effective_view=classification_override_view_range_cells",
+                "classification_override_view_range_cells": {
+                    classification: value
+                    for classification, value in RUNTIME_CLASSIFICATION_VIEW_OVERRIDE_CELLS.items()
                 },
                 "scope": "active runtime first acquisition only; class/special values are never reduced",
+                "source_policy": CLASSIFICATION_OVERRIDE_SOURCE,
+                "source_sha256": sha256(TARGETING_OVERRIDE_PATH),
             },
             "standard_active_class_search": {
                 "idle_search_ms": 1000,
@@ -1112,7 +1145,7 @@ def validate(payload: dict[str, Any]) -> list[str]:
         source_binding = dict(movement_source.get("source_binding", {}))
         classification = str(record.get("classification", ""))
         runtime_allowed = bool(record.get("runtime_allowed", False))
-        expected_classification_floor = classification_floor_view_range_cells(
+        expected_classification_override = classification_override_view_range_cells(
             classification,
             runtime_allowed,
             source_binding.get("binding_status") == "EXACT_SOURCE_ROW",
@@ -1120,10 +1153,10 @@ def validate(payload: dict[str, Any]) -> list[str]:
         for required in (
             "view_range_cells",
             "class_derived_view_range_cells",
-            "classification_floor_view_range_cells",
-            "classification_floor_authority",
-            "classification_floor_source",
-            "classification_floor_applied",
+            "classification_override_view_range_cells",
+            "classification_override_authority",
+            "classification_override_source",
+            "classification_override_applied",
             "effective_view_range_authority",
             "effective_view_range_rule",
             "acquisition_status",
@@ -1161,39 +1194,35 @@ def validate(payload: dict[str, Any]) -> list[str]:
                 if targeting.get("pascal_class") != rule["pascal_class"]:
                     errors.append(f"monster_id={monster_id} targeting.pascal_class drift")
                 class_derived_view = int(rule["view_range_cells"])
-                expected_view = max(
-                    class_derived_view,
-                    expected_classification_floor
-                    if expected_classification_floor is not None
-                    else class_derived_view,
+                expected_view = (
+                    expected_classification_override
+                    if expected_classification_override is not None
+                    else class_derived_view
                 )
-                expected_floor_applied = (
-                    expected_classification_floor is not None
-                    and expected_classification_floor > class_derived_view
-                )
+                expected_override_applied = expected_classification_override is not None
                 if targeting.get("class_derived_view_range_cells") != class_derived_view:
                     errors.append(f"monster_id={monster_id} class-derived view range drift")
-                if targeting.get("classification_floor_view_range_cells") != expected_classification_floor:
-                    errors.append(f"monster_id={monster_id} classification floor drift")
-                expected_floor_authority = (
-                    CLASSIFICATION_FLOOR_AUTHORITY
-                    if expected_classification_floor is not None
+                if targeting.get("classification_override_view_range_cells") != expected_classification_override:
+                    errors.append(f"monster_id={monster_id} classification override drift")
+                expected_override_authority = (
+                    CLASSIFICATION_OVERRIDE_AUTHORITY
+                    if expected_classification_override is not None
                     else None
                 )
-                if targeting.get("classification_floor_authority") != expected_floor_authority:
-                    errors.append(f"monster_id={monster_id} classification floor authority drift")
-                expected_floor_source = (
-                    CLASSIFICATION_FLOOR_SOURCE
-                    if expected_classification_floor is not None
+                if targeting.get("classification_override_authority") != expected_override_authority:
+                    errors.append(f"monster_id={monster_id} classification override authority drift")
+                expected_override_source = (
+                    CLASSIFICATION_OVERRIDE_SOURCE
+                    if expected_classification_override is not None
                     else None
                 )
-                if targeting.get("classification_floor_source") != expected_floor_source:
-                    errors.append(f"monster_id={monster_id} classification floor source drift")
-                if targeting.get("classification_floor_applied") != expected_floor_applied:
-                    errors.append(f"monster_id={monster_id} classification floor application drift")
+                if targeting.get("classification_override_source") != expected_override_source:
+                    errors.append(f"monster_id={monster_id} classification override source drift")
+                if targeting.get("classification_override_applied") != expected_override_applied:
+                    errors.append(f"monster_id={monster_id} classification override application drift")
                 if targeting.get("effective_view_range_authority") != (
-                    CLASSIFICATION_FLOOR_AUTHORITY
-                    if expected_floor_applied
+                    CLASSIFICATION_OVERRIDE_AUTHORITY
+                    if expected_override_applied
                     else "B_CANDIDATE"
                 ):
                     errors.append(f"monster_id={monster_id} effective view authority drift")
@@ -1221,20 +1250,20 @@ def validate(payload: dict[str, Any]) -> list[str]:
                     errors.append(f"monster_id={monster_id} DATA_HOLD targeting.{key} must be null")
             for key, expected in (
                 ("class_derived_view_range_cells", None),
-                ("classification_floor_view_range_cells", expected_classification_floor),
+                ("classification_override_view_range_cells", expected_classification_override),
                 (
-                    "classification_floor_authority",
-                    CLASSIFICATION_FLOOR_AUTHORITY
-                    if expected_classification_floor is not None
+                    "classification_override_authority",
+                    CLASSIFICATION_OVERRIDE_AUTHORITY
+                    if expected_classification_override is not None
                     else None,
                 ),
                 (
-                    "classification_floor_source",
-                    CLASSIFICATION_FLOOR_SOURCE
-                    if expected_classification_floor is not None
+                    "classification_override_source",
+                    CLASSIFICATION_OVERRIDE_SOURCE
+                    if expected_classification_override is not None
                     else None,
                 ),
-                ("classification_floor_applied", False),
+                ("classification_override_applied", False),
                 ("effective_view_range_authority", None),
             ):
                 if targeting.get(key) != expected:
@@ -1285,7 +1314,7 @@ def validate(payload: dict[str, Any]) -> list[str]:
         if not bool(record.get("runtime_allowed", False)):
             continue
         classification = str(record.get("classification", ""))
-        minimum_view = RUNTIME_CLASSIFICATION_VIEW_FLOOR_CELLS.get(classification)
+        minimum_view = RUNTIME_CLASSIFICATION_VIEW_OVERRIDE_CELLS.get(classification)
         if minimum_view is None:
             continue
         view = dict(record.get("targeting", {})).get("view_range_cells")
@@ -1293,10 +1322,10 @@ def validate(payload: dict[str, Any]) -> list[str]:
             # DATA_HOLD remains fail-closed; it is not a runtime classification
             # floor failure and must not be promoted by this rule.
             continue
-        if not isinstance(view, int) or view < minimum_view:
+        if not isinstance(view, int) or view != minimum_view:
             errors.append(
                 f"monster_id={record.get('monster_id')} active {classification} view range "
-                f"{view} below classification floor {minimum_view}"
+                f"{view} differs from authorized classification override {minimum_view}"
             )
     actual_holds = {
         int(item.get("monster_id", -1))

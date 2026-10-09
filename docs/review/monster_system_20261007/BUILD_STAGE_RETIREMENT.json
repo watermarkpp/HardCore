@@ -1,0 +1,275 @@
+{
+  "status": "PASS",
+  "scope": "only four task-owned isolated build stages; unchanged production blobs and all native/export evidence retained; shared engine junctions removed without following target",
+  "stages": [
+    {
+      "stage": "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\c8477058a0c2-20261007-192107-13e55eb9",
+      "head": "c8477058a0c2f67f7a9e39f3523f4ea7693bd5cd",
+      "status_before": "M export_presets.cfg\n?? android/",
+      "changed_hashes": {
+        "export_presets.cfg": "17a1d2f70edfba4c8110cfef7e5739aacb671c7b79ba509e69c9ab0b4349070a"
+      },
+      "production_blob_hashes": {
+        "scripts/enemy.gd": "24c3866a002e602cbdd5c1aac66a0e1a4a502181f6e34f3dd1f7f78aec81313d",
+        "scripts/layers/runtime/combat_runtime_service.gd": "3263c5978e63842caee4c9e3d3d912eaeb01170414b01c4a76394777b58868c2",
+        "scripts/monster_crowd_attack_position_policy.gd": "a5c531ed9884023a56805b0ab0003c62102f1545347c31194dd5f3dfa1a99268",
+        "scripts/monster_movement_cadence.gd": "8577a8d1343c43e7c6b6cf02a60c479759af5fc0fb42c73397cc853805c2bd7e",
+        "scripts/monster_struck_policy.gd": "314fdade18bac876c65bc34b5c784d3fc50cea032adeb1883046f1647d4b828c",
+        "scripts/runtime_combat_spatial_index.gd": "ab3b82f043657393caee46855267d808c8a6b85112ebe4115e923d1075fc4184",
+        "scripts/runtime_diagnostics.gd": "5d9223872649c9af7e7d59336706c7d7414118e756bc71b8cafee60ba5d1e8da"
+      },
+      "junctions": [],
+      "archive": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\monster_upgrade_20261007\\apk_v106\\stage_archives\\c8477058a0c2-20261007-192107-13e55eb9",
+      "evidence_moves": [
+        {
+          "original": "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\c8477058a0c2-20261007-192107-13e55eb9\\outputs",
+          "archive": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\monster_upgrade_20261007\\apk_v106\\stage_archives\\c8477058a0c2-20261007-192107-13e55eb9\\outputs"
+        }
+      ],
+      "retirement_status": "PASS"
+    },
+    {
+      "stage": "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\c8477058a0c2-20261007-192304-1f6c0d95",
+      "head": "c8477058a0c2f67f7a9e39f3523f4ea7693bd5cd",
+      "status_before": "M docs/bugfix24/20260909/monster_delivery_inventory.actor.translation\n M docs/bugfix24/20260909/monster_delivery_inventory.ai.translation\n M docs/bugfix24/20260909/monster_delivery_inventory.attack.translation\n M docs/bugfix24/20260909/monster_delivery_inventory.canonical.translation\n M docs/bugfix24/20260909/monster_delivery_inventory.classification.translation\n M docs/bugfix24/20260909/monster_delivery_inventory.delivery.translation\n M docs/bugfix24/20260909/monster_delivery_inventory.implementation.translation\n M docs/bugfix24/20260909/monster_delivery_inventory.runtime.translation\n M docs/bugfix24/20260909/monster_delivery_inventory.server.translation\n M docs/bugfix24/20260909/monster_delivery_inventory.shared.translation\n M docs/bugfix24/20260909/monster_delivery_inventory.source.translation\n M docs/bugfix24/20260909/monster_delivery_inventory.stationary.translation\n M docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.env.translation\n M docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.max.translation\n M docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.movement.translation\n M docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.p50.translation\n M docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.p95.translation\n M docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.p99.translation\n M docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.physics.translation\n M docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.retarget.translation\n M docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.side.translation\n M docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.env.translation\n M docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.max.translation\n M docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.movement.translation\n M docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.p50.translation\n M docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.p95.translation\n M docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.p99.translation\n M docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.physics.translation\n M docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.retarget.translation\n M docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.side.translation\n M export_presets.cfg\n M reports/skill_comparison_matrix.action.translation\n M reports/skill_comparison_matrix.classification.translation\n M reports/skill_comparison_matrix.cooldown.translation\n M reports/skill_comparison_matrix.database.translation\n M reports/skill_comparison_matrix.disposition.translation\n M reports/skill_comparison_matrix.formula.translation\n M reports/skill_comparison_matrix.icon.translation\n M reports/skill_comparison_matrix.instance.translation\n M reports/skill_comparison_matrix.item.translation\n M reports/skill_comparison_matrix.mp.translation\n M reports/skill_comparison_matrix.name.translation\n M reports/skill_comparison_matrix.profession.translation\n M reports/skill_comparison_matrix.protocol.translation\n M reports/skill_comparison_matrix.server.translation\n M reports/skill_comparison_matrix.targeting.translation\n M reports/skill_comparison_matrix.visual.translation\n M scripts/features/generated/internal_code_preparation_catalog_data.gd\n?? android/",
+      "changed_hashes": {
+        "docs/bugfix24/20260909/monster_delivery_inventory.actor.translation": "571321ab275eb382314b3e166c6d3d8b3a58acaec82c0d4ba79c7fc84e4eb83e",
+        "docs/bugfix24/20260909/monster_delivery_inventory.ai.translation": "30a41306d57a7acd01b597f7ffafc4d8b2b542d8b4157247f0d3b2575bb18a6a",
+        "docs/bugfix24/20260909/monster_delivery_inventory.attack.translation": "edd92d52ab585504c4335ce77b066a49802880a129cdb79e26b252c934066520",
+        "docs/bugfix24/20260909/monster_delivery_inventory.canonical.translation": "8f6e2ba0088ccf6dfcba5bdb47c563ee882217c78c562b930f2e8188fd869a2f",
+        "docs/bugfix24/20260909/monster_delivery_inventory.classification.translation": "b6ce5126066f3e4987a559defc616a5ab3b5e982c0d98d159779d509ecd3eaa6",
+        "docs/bugfix24/20260909/monster_delivery_inventory.delivery.translation": "9c6b41f88832c147b8fc7dc8cd010dba2ab6fb56669dd9ad91eee1ff5ed9c206",
+        "docs/bugfix24/20260909/monster_delivery_inventory.implementation.translation": "669fe852e676fc3eaa5ec0c190abfbd453e1f7c492853cf044a23fb51dea5202",
+        "docs/bugfix24/20260909/monster_delivery_inventory.runtime.translation": "be2f0fd9467804b333acde74fb22f90afb75842e2bc809fe6dd8c5e8bac0f413",
+        "docs/bugfix24/20260909/monster_delivery_inventory.server.translation": "e909661fe43c9fb29b7927c5a53dc78301279b15df74aa02c0f0c869e8954cba",
+        "docs/bugfix24/20260909/monster_delivery_inventory.shared.translation": "23bc42351ea7686d4bb83d96cce73da136a3a60d18a1b7068721f01e311aee8f",
+        "docs/bugfix24/20260909/monster_delivery_inventory.source.translation": "e4500a67708968c23aef12cc35ea57f4f3fe5da39a80c69faf457235cedbd94a",
+        "docs/bugfix24/20260909/monster_delivery_inventory.stationary.translation": "94ec4b809bf45b1d0e369cc2ac1ff0e5453cbb06b0cfc730735e743e6d523871",
+        "docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.env.translation": "d0b5914b5908ca41f171f66afae15e080726fd3a7bd9a1bbe4bd2164bbab6619",
+        "docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.max.translation": "ca1f434666f32598fd381741c4dcae383f6667948d27110d6150051c6a42c60b",
+        "docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.movement.translation": "74ba327de252f603087436db84fa9e463423608617d2c34e3da7a1dd7de5f776",
+        "docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.p50.translation": "1c83c305b6c6a38ef196de0f9f39e2a1d654d4777eccb954ed8db86960af014f",
+        "docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.p95.translation": "f56b78d761c0b871a9470b1e03ff09f5b1a13ab15a701e05165aa51b422d9c5b",
+        "docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.p99.translation": "8169f38a61a8224b408db2346a3f4ac3ae6a986aad7bd73537e41e204d8a5012",
+        "docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.physics.translation": "ab65c1eba78b09e2dac7277b0cf3a2c1ee3ad6953db9bef2bf1c85c2e77d708c",
+        "docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.retarget.translation": "28476ba34215b691b8618c3dcddf2dc0f64bbe9b14ad41006851e062caa5920d",
+        "docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.side.translation": "405256a3d9b619a641f1600327177b418e01394753a60614b4ccb99ffbdc0fe5",
+        "docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.env.translation": "f48e26db108029a8d9b9ae956c3c54a14ab1e1dd779c438d106100fa604474b8",
+        "docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.max.translation": "fb8d5e613edb1eaef2c29b630e4eb436798b307864387bb7bf51d49b29e554f7",
+        "docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.movement.translation": "9b8303f4e8ea0135f9d2f95c96afc2f46e452f722370d56bb0d2b1837541b9a4",
+        "docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.p50.translation": "af3187f954b64c075eed7e67bed20b1355e2f32f05cc2e5b6151183fd2b0b4db",
+        "docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.p95.translation": "6cc3296513f1c81cc4a3b5ec64cbcb431a9aec2949454ef0a771274f20a0f0c5",
+        "docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.p99.translation": "cd016e7e555a299e3347759a8a08d4fe7fa7938b11600ff5c00bc2f84e3bed1c",
+        "docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.physics.translation": "d9a601e1aeeb637ddab94b8187493625f151cff28aa36415b768433bf36c8ee3",
+        "docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.retarget.translation": "8d3f31a5ae3b060b0190d124285a5c5321029fcd6493bf7f87fa86f52db5fcae",
+        "docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.side.translation": "fcb15db1e9d8aed83d9b32fe5b0e2943946ada50f473d642e6be8134bb3d4ce4",
+        "export_presets.cfg": "17a1d2f70edfba4c8110cfef7e5739aacb671c7b79ba509e69c9ab0b4349070a",
+        "reports/skill_comparison_matrix.action.translation": "3d09a37bd2c648d58c2de8047cd24776b2cc2a7bc73b44e650880226378e3bcb",
+        "reports/skill_comparison_matrix.classification.translation": "10aa3516847d04981ce8f2570e0b18b8f8b49ab15e24e00d7b093d63a95cd185",
+        "reports/skill_comparison_matrix.cooldown.translation": "1025a649c2596173b8b9fd20023be5fade1f19c4d8b2fb2f60660c0b614a5350",
+        "reports/skill_comparison_matrix.database.translation": "a6f6e9a5c02302d12ce9f888754fa9effdcdb8061a4fe787812e9431dc33c319",
+        "reports/skill_comparison_matrix.disposition.translation": "93cc326600cb54b9db44849ddf7760de4f88b7e05e24da411876b6fd39f10b8c",
+        "reports/skill_comparison_matrix.formula.translation": "8f0645ce63a7f1ffd8e752a0c773e17dd09d5ca9780fa935c3e8c5cd91b4dbe6",
+        "reports/skill_comparison_matrix.icon.translation": "507c556361342b0b98afd3e7b0360dc0bc2b5cf532af0890e18c272aa72b1719",
+        "reports/skill_comparison_matrix.instance.translation": "b37818ed334d17845c985bc0af8759b777f5183a63538e5d3d00e136ffb381c4",
+        "reports/skill_comparison_matrix.item.translation": "4866ba9d34ea93b365eb274e5686f58301c12edc57b47c15334976c49110cd32",
+        "reports/skill_comparison_matrix.mp.translation": "443093a19d723ac402c46070421547d2e62f72af158205276abc97b1888a0e8c",
+        "reports/skill_comparison_matrix.name.translation": "6b2ef6eeb0d6d4fe0392415f9f1a92f2b6c74bc6cd346c6fd7557d41a778a225",
+        "reports/skill_comparison_matrix.profession.translation": "77f699a660f120efca71fcfe4a8ee97741057c70fdfdeaffd91301510b183a48",
+        "reports/skill_comparison_matrix.protocol.translation": "696b923ca592043a42a625b78369b3deaf0ae41fa1348b17950f915c6e756b68",
+        "reports/skill_comparison_matrix.server.translation": "6ba5864bcf393da7324a03c2595042ee10d94e24c90135eb7639c7385fcfe741",
+        "reports/skill_comparison_matrix.targeting.translation": "0207755fde6b17aacd5974b052c30a060dc0c7e617e30a6bc315c06b0890162a",
+        "reports/skill_comparison_matrix.visual.translation": "49cafa032b15096335dcb147fe68eaaf30965a89d05c2b10d310c06fd7424acc",
+        "scripts/features/generated/internal_code_preparation_catalog_data.gd": "fb4e4b160993db66a254a04ac074845a8dc564fb1b44b34787ea7bc93dd94444"
+      },
+      "production_blob_hashes": {
+        "scripts/enemy.gd": "24c3866a002e602cbdd5c1aac66a0e1a4a502181f6e34f3dd1f7f78aec81313d",
+        "scripts/layers/runtime/combat_runtime_service.gd": "3263c5978e63842caee4c9e3d3d912eaeb01170414b01c4a76394777b58868c2",
+        "scripts/monster_crowd_attack_position_policy.gd": "a5c531ed9884023a56805b0ab0003c62102f1545347c31194dd5f3dfa1a99268",
+        "scripts/monster_movement_cadence.gd": "8577a8d1343c43e7c6b6cf02a60c479759af5fc0fb42c73397cc853805c2bd7e",
+        "scripts/monster_struck_policy.gd": "314fdade18bac876c65bc34b5c784d3fc50cea032adeb1883046f1647d4b828c",
+        "scripts/runtime_combat_spatial_index.gd": "ab3b82f043657393caee46855267d808c8a6b85112ebe4115e923d1075fc4184",
+        "scripts/runtime_diagnostics.gd": "5d9223872649c9af7e7d59336706c7d7414118e756bc71b8cafee60ba5d1e8da"
+      },
+      "junctions": [
+        "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\c8477058a0c2-20261007-192304-1f6c0d95\\tools\\godot-4.7"
+      ],
+      "archive": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\monster_upgrade_20261007\\apk_v106\\stage_archives\\c8477058a0c2-20261007-192304-1f6c0d95",
+      "evidence_moves": [
+        {
+          "original": "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\c8477058a0c2-20261007-192304-1f6c0d95\\outputs",
+          "archive": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\monster_upgrade_20261007\\apk_v106\\stage_archives\\c8477058a0c2-20261007-192304-1f6c0d95\\outputs"
+        },
+        {
+          "original": "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\seal-evidence-c8477058a0c2-20261007-192304-1f6c0d95",
+          "archive": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\monster_upgrade_20261007\\apk_v106\\stage_archives\\c8477058a0c2-20261007-192304-1f6c0d95\\seal_prior"
+        }
+      ],
+      "retirement_status": "PASS"
+    },
+    {
+      "stage": "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\c8477058a0c2-20261007-193818-a380794a",
+      "head": "c8477058a0c2f67f7a9e39f3523f4ea7693bd5cd",
+      "status_before": "M docs/bugfix24/20260909/monster_delivery_inventory.actor.translation\n M docs/bugfix24/20260909/monster_delivery_inventory.ai.translation\n M docs/bugfix24/20260909/monster_delivery_inventory.attack.translation\n M docs/bugfix24/20260909/monster_delivery_inventory.canonical.translation\n M docs/bugfix24/20260909/monster_delivery_inventory.classification.translation\n M docs/bugfix24/20260909/monster_delivery_inventory.delivery.translation\n M docs/bugfix24/20260909/monster_delivery_inventory.implementation.translation\n M docs/bugfix24/20260909/monster_delivery_inventory.runtime.translation\n M docs/bugfix24/20260909/monster_delivery_inventory.server.translation\n M docs/bugfix24/20260909/monster_delivery_inventory.shared.translation\n M docs/bugfix24/20260909/monster_delivery_inventory.source.translation\n M docs/bugfix24/20260909/monster_delivery_inventory.stationary.translation\n M docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.env.translation\n M docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.max.translation\n M docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.movement.translation\n M docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.p50.translation\n M docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.p95.translation\n M docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.p99.translation\n M docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.physics.translation\n M docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.retarget.translation\n M docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.side.translation\n M docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.env.translation\n M docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.max.translation\n M docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.movement.translation\n M docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.p50.translation\n M docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.p95.translation\n M docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.p99.translation\n M docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.physics.translation\n M docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.retarget.translation\n M docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.side.translation\n M export_presets.cfg\n M reports/skill_comparison_matrix.action.translation\n M reports/skill_comparison_matrix.classification.translation\n M reports/skill_comparison_matrix.cooldown.translation\n M reports/skill_comparison_matrix.database.translation\n M reports/skill_comparison_matrix.disposition.translation\n M reports/skill_comparison_matrix.formula.translation\n M reports/skill_comparison_matrix.icon.translation\n M reports/skill_comparison_matrix.instance.translation\n M reports/skill_comparison_matrix.item.translation\n M reports/skill_comparison_matrix.mp.translation\n M reports/skill_comparison_matrix.name.translation\n M reports/skill_comparison_matrix.profession.translation\n M reports/skill_comparison_matrix.protocol.translation\n M reports/skill_comparison_matrix.server.translation\n M reports/skill_comparison_matrix.targeting.translation\n M reports/skill_comparison_matrix.visual.translation\n M scripts/features/generated/internal_code_preparation_catalog_data.gd\n?? android/",
+      "changed_hashes": {
+        "docs/bugfix24/20260909/monster_delivery_inventory.actor.translation": "571321ab275eb382314b3e166c6d3d8b3a58acaec82c0d4ba79c7fc84e4eb83e",
+        "docs/bugfix24/20260909/monster_delivery_inventory.ai.translation": "30a41306d57a7acd01b597f7ffafc4d8b2b542d8b4157247f0d3b2575bb18a6a",
+        "docs/bugfix24/20260909/monster_delivery_inventory.attack.translation": "edd92d52ab585504c4335ce77b066a49802880a129cdb79e26b252c934066520",
+        "docs/bugfix24/20260909/monster_delivery_inventory.canonical.translation": "8f6e2ba0088ccf6dfcba5bdb47c563ee882217c78c562b930f2e8188fd869a2f",
+        "docs/bugfix24/20260909/monster_delivery_inventory.classification.translation": "b6ce5126066f3e4987a559defc616a5ab3b5e982c0d98d159779d509ecd3eaa6",
+        "docs/bugfix24/20260909/monster_delivery_inventory.delivery.translation": "9c6b41f88832c147b8fc7dc8cd010dba2ab6fb56669dd9ad91eee1ff5ed9c206",
+        "docs/bugfix24/20260909/monster_delivery_inventory.implementation.translation": "669fe852e676fc3eaa5ec0c190abfbd453e1f7c492853cf044a23fb51dea5202",
+        "docs/bugfix24/20260909/monster_delivery_inventory.runtime.translation": "be2f0fd9467804b333acde74fb22f90afb75842e2bc809fe6dd8c5e8bac0f413",
+        "docs/bugfix24/20260909/monster_delivery_inventory.server.translation": "e909661fe43c9fb29b7927c5a53dc78301279b15df74aa02c0f0c869e8954cba",
+        "docs/bugfix24/20260909/monster_delivery_inventory.shared.translation": "23bc42351ea7686d4bb83d96cce73da136a3a60d18a1b7068721f01e311aee8f",
+        "docs/bugfix24/20260909/monster_delivery_inventory.source.translation": "e4500a67708968c23aef12cc35ea57f4f3fe5da39a80c69faf457235cedbd94a",
+        "docs/bugfix24/20260909/monster_delivery_inventory.stationary.translation": "94ec4b809bf45b1d0e369cc2ac1ff0e5453cbb06b0cfc730735e743e6d523871",
+        "docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.env.translation": "d0b5914b5908ca41f171f66afae15e080726fd3a7bd9a1bbe4bd2164bbab6619",
+        "docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.max.translation": "ca1f434666f32598fd381741c4dcae383f6667948d27110d6150051c6a42c60b",
+        "docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.movement.translation": "74ba327de252f603087436db84fa9e463423608617d2c34e3da7a1dd7de5f776",
+        "docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.p50.translation": "1c83c305b6c6a38ef196de0f9f39e2a1d654d4777eccb954ed8db86960af014f",
+        "docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.p95.translation": "f56b78d761c0b871a9470b1e03ff09f5b1a13ab15a701e05165aa51b422d9c5b",
+        "docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.p99.translation": "8169f38a61a8224b408db2346a3f4ac3ae6a986aad7bd73537e41e204d8a5012",
+        "docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.physics.translation": "ab65c1eba78b09e2dac7277b0cf3a2c1ee3ad6953db9bef2bf1c85c2e77d708c",
+        "docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.retarget.translation": "28476ba34215b691b8618c3dcddf2dc0f64bbe9b14ad41006851e062caa5920d",
+        "docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.side.translation": "405256a3d9b619a641f1600327177b418e01394753a60614b4ccb99ffbdc0fe5",
+        "docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.env.translation": "f48e26db108029a8d9b9ae956c3c54a14ab1e1dd779c438d106100fa604474b8",
+        "docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.max.translation": "fb8d5e613edb1eaef2c29b630e4eb436798b307864387bb7bf51d49b29e554f7",
+        "docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.movement.translation": "9b8303f4e8ea0135f9d2f95c96afc2f46e452f722370d56bb0d2b1837541b9a4",
+        "docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.p50.translation": "af3187f954b64c075eed7e67bed20b1355e2f32f05cc2e5b6151183fd2b0b4db",
+        "docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.p95.translation": "6cc3296513f1c81cc4a3b5ec64cbcb431a9aec2949454ef0a771274f20a0f0c5",
+        "docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.p99.translation": "cd016e7e555a299e3347759a8a08d4fe7fa7938b11600ff5c00bc2f84e3bed1c",
+        "docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.physics.translation": "d9a601e1aeeb637ddab94b8187493625f151cff28aa36415b768433bf36c8ee3",
+        "docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.retarget.translation": "8d3f31a5ae3b060b0190d124285a5c5321029fcd6493bf7f87fa86f52db5fcae",
+        "docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.side.translation": "fcb15db1e9d8aed83d9b32fe5b0e2943946ada50f473d642e6be8134bb3d4ce4",
+        "export_presets.cfg": "17a1d2f70edfba4c8110cfef7e5739aacb671c7b79ba509e69c9ab0b4349070a",
+        "reports/skill_comparison_matrix.action.translation": "3d09a37bd2c648d58c2de8047cd24776b2cc2a7bc73b44e650880226378e3bcb",
+        "reports/skill_comparison_matrix.classification.translation": "10aa3516847d04981ce8f2570e0b18b8f8b49ab15e24e00d7b093d63a95cd185",
+        "reports/skill_comparison_matrix.cooldown.translation": "1025a649c2596173b8b9fd20023be5fade1f19c4d8b2fb2f60660c0b614a5350",
+        "reports/skill_comparison_matrix.database.translation": "a6f6e9a5c02302d12ce9f888754fa9effdcdb8061a4fe787812e9431dc33c319",
+        "reports/skill_comparison_matrix.disposition.translation": "93cc326600cb54b9db44849ddf7760de4f88b7e05e24da411876b6fd39f10b8c",
+        "reports/skill_comparison_matrix.formula.translation": "8f0645ce63a7f1ffd8e752a0c773e17dd09d5ca9780fa935c3e8c5cd91b4dbe6",
+        "reports/skill_comparison_matrix.icon.translation": "507c556361342b0b98afd3e7b0360dc0bc2b5cf532af0890e18c272aa72b1719",
+        "reports/skill_comparison_matrix.instance.translation": "b37818ed334d17845c985bc0af8759b777f5183a63538e5d3d00e136ffb381c4",
+        "reports/skill_comparison_matrix.item.translation": "4866ba9d34ea93b365eb274e5686f58301c12edc57b47c15334976c49110cd32",
+        "reports/skill_comparison_matrix.mp.translation": "443093a19d723ac402c46070421547d2e62f72af158205276abc97b1888a0e8c",
+        "reports/skill_comparison_matrix.name.translation": "6b2ef6eeb0d6d4fe0392415f9f1a92f2b6c74bc6cd346c6fd7557d41a778a225",
+        "reports/skill_comparison_matrix.profession.translation": "77f699a660f120efca71fcfe4a8ee97741057c70fdfdeaffd91301510b183a48",
+        "reports/skill_comparison_matrix.protocol.translation": "696b923ca592043a42a625b78369b3deaf0ae41fa1348b17950f915c6e756b68",
+        "reports/skill_comparison_matrix.server.translation": "6ba5864bcf393da7324a03c2595042ee10d94e24c90135eb7639c7385fcfe741",
+        "reports/skill_comparison_matrix.targeting.translation": "0207755fde6b17aacd5974b052c30a060dc0c7e617e30a6bc315c06b0890162a",
+        "reports/skill_comparison_matrix.visual.translation": "49cafa032b15096335dcb147fe68eaaf30965a89d05c2b10d310c06fd7424acc",
+        "scripts/features/generated/internal_code_preparation_catalog_data.gd": "92ec638e322e8312a2a46b3d1b4148366b8fd7c784c91b3529b8109e055b456e"
+      },
+      "production_blob_hashes": {
+        "scripts/enemy.gd": "24c3866a002e602cbdd5c1aac66a0e1a4a502181f6e34f3dd1f7f78aec81313d",
+        "scripts/layers/runtime/combat_runtime_service.gd": "3263c5978e63842caee4c9e3d3d912eaeb01170414b01c4a76394777b58868c2",
+        "scripts/monster_crowd_attack_position_policy.gd": "a5c531ed9884023a56805b0ab0003c62102f1545347c31194dd5f3dfa1a99268",
+        "scripts/monster_movement_cadence.gd": "8577a8d1343c43e7c6b6cf02a60c479759af5fc0fb42c73397cc853805c2bd7e",
+        "scripts/monster_struck_policy.gd": "314fdade18bac876c65bc34b5c784d3fc50cea032adeb1883046f1647d4b828c",
+        "scripts/runtime_combat_spatial_index.gd": "ab3b82f043657393caee46855267d808c8a6b85112ebe4115e923d1075fc4184",
+        "scripts/runtime_diagnostics.gd": "5d9223872649c9af7e7d59336706c7d7414118e756bc71b8cafee60ba5d1e8da"
+      },
+      "junctions": [
+        "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\c8477058a0c2-20261007-193818-a380794a\\tools\\godot-4.7"
+      ],
+      "archive": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\monster_upgrade_20261007\\apk_v106\\stage_archives\\c8477058a0c2-20261007-193818-a380794a",
+      "evidence_moves": [
+        {
+          "original": "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\c8477058a0c2-20261007-193818-a380794a\\outputs",
+          "archive": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\monster_upgrade_20261007\\apk_v106\\stage_archives\\c8477058a0c2-20261007-193818-a380794a\\outputs"
+        },
+        {
+          "original": "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\seal-evidence-c8477058a0c2-20261007-193818-a380794a",
+          "archive": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\monster_upgrade_20261007\\apk_v106\\stage_archives\\c8477058a0c2-20261007-193818-a380794a\\seal_prior"
+        }
+      ],
+      "retirement_status": "PASS"
+    },
+    {
+      "stage": "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\78d0775b4b22-20261007-195820-2e3c09ee",
+      "head": "78d0775b4b22f40ad1f54426639d867310dae41a",
+      "status_before": "M docs/bugfix24/20260909/monster_delivery_inventory.actor.translation\n M docs/bugfix24/20260909/monster_delivery_inventory.ai.translation\n M docs/bugfix24/20260909/monster_delivery_inventory.attack.translation\n M docs/bugfix24/20260909/monster_delivery_inventory.canonical.translation\n M docs/bugfix24/20260909/monster_delivery_inventory.classification.translation\n M docs/bugfix24/20260909/monster_delivery_inventory.delivery.translation\n M docs/bugfix24/20260909/monster_delivery_inventory.implementation.translation\n M docs/bugfix24/20260909/monster_delivery_inventory.runtime.translation\n M docs/bugfix24/20260909/monster_delivery_inventory.server.translation\n M docs/bugfix24/20260909/monster_delivery_inventory.shared.translation\n M docs/bugfix24/20260909/monster_delivery_inventory.source.translation\n M docs/bugfix24/20260909/monster_delivery_inventory.stationary.translation\n M docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.env.translation\n M docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.max.translation\n M docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.movement.translation\n M docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.p50.translation\n M docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.p95.translation\n M docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.p99.translation\n M docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.physics.translation\n M docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.retarget.translation\n M docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.side.translation\n M docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.env.translation\n M docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.max.translation\n M docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.movement.translation\n M docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.p50.translation\n M docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.p95.translation\n M docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.p99.translation\n M docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.physics.translation\n M docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.retarget.translation\n M docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.side.translation\n M export_presets.cfg\n M reports/skill_comparison_matrix.action.translation\n M reports/skill_comparison_matrix.classification.translation\n M reports/skill_comparison_matrix.cooldown.translation\n M reports/skill_comparison_matrix.database.translation\n M reports/skill_comparison_matrix.disposition.translation\n M reports/skill_comparison_matrix.formula.translation\n M reports/skill_comparison_matrix.icon.translation\n M reports/skill_comparison_matrix.instance.translation\n M reports/skill_comparison_matrix.item.translation\n M reports/skill_comparison_matrix.mp.translation\n M reports/skill_comparison_matrix.name.translation\n M reports/skill_comparison_matrix.profession.translation\n M reports/skill_comparison_matrix.protocol.translation\n M reports/skill_comparison_matrix.server.translation\n M reports/skill_comparison_matrix.targeting.translation\n M reports/skill_comparison_matrix.visual.translation\n M scripts/features/generated/internal_code_android_export_data.gd\n M scripts/features/generated/internal_code_preparation_catalog_data.gd\n?? android/",
+      "changed_hashes": {
+        "docs/bugfix24/20260909/monster_delivery_inventory.actor.translation": "571321ab275eb382314b3e166c6d3d8b3a58acaec82c0d4ba79c7fc84e4eb83e",
+        "docs/bugfix24/20260909/monster_delivery_inventory.ai.translation": "30a41306d57a7acd01b597f7ffafc4d8b2b542d8b4157247f0d3b2575bb18a6a",
+        "docs/bugfix24/20260909/monster_delivery_inventory.attack.translation": "edd92d52ab585504c4335ce77b066a49802880a129cdb79e26b252c934066520",
+        "docs/bugfix24/20260909/monster_delivery_inventory.canonical.translation": "8f6e2ba0088ccf6dfcba5bdb47c563ee882217c78c562b930f2e8188fd869a2f",
+        "docs/bugfix24/20260909/monster_delivery_inventory.classification.translation": "b6ce5126066f3e4987a559defc616a5ab3b5e982c0d98d159779d509ecd3eaa6",
+        "docs/bugfix24/20260909/monster_delivery_inventory.delivery.translation": "9c6b41f88832c147b8fc7dc8cd010dba2ab6fb56669dd9ad91eee1ff5ed9c206",
+        "docs/bugfix24/20260909/monster_delivery_inventory.implementation.translation": "669fe852e676fc3eaa5ec0c190abfbd453e1f7c492853cf044a23fb51dea5202",
+        "docs/bugfix24/20260909/monster_delivery_inventory.runtime.translation": "be2f0fd9467804b333acde74fb22f90afb75842e2bc809fe6dd8c5e8bac0f413",
+        "docs/bugfix24/20260909/monster_delivery_inventory.server.translation": "e909661fe43c9fb29b7927c5a53dc78301279b15df74aa02c0f0c869e8954cba",
+        "docs/bugfix24/20260909/monster_delivery_inventory.shared.translation": "23bc42351ea7686d4bb83d96cce73da136a3a60d18a1b7068721f01e311aee8f",
+        "docs/bugfix24/20260909/monster_delivery_inventory.source.translation": "e4500a67708968c23aef12cc35ea57f4f3fe5da39a80c69faf457235cedbd94a",
+        "docs/bugfix24/20260909/monster_delivery_inventory.stationary.translation": "94ec4b809bf45b1d0e369cc2ac1ff0e5453cbb06b0cfc730735e743e6d523871",
+        "docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.env.translation": "d0b5914b5908ca41f171f66afae15e080726fd3a7bd9a1bbe4bd2164bbab6619",
+        "docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.max.translation": "ca1f434666f32598fd381741c4dcae383f6667948d27110d6150051c6a42c60b",
+        "docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.movement.translation": "74ba327de252f603087436db84fa9e463423608617d2c34e3da7a1dd7de5f776",
+        "docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.p50.translation": "1c83c305b6c6a38ef196de0f9f39e2a1d654d4777eccb954ed8db86960af014f",
+        "docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.p95.translation": "f56b78d761c0b871a9470b1e03ff09f5b1a13ab15a701e05165aa51b422d9c5b",
+        "docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.p99.translation": "8169f38a61a8224b408db2346a3f4ac3ae6a986aad7bd73537e41e204d8a5012",
+        "docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.physics.translation": "ab65c1eba78b09e2dac7277b0cf3a2c1ee3ad6953db9bef2bf1c85c2e77d708c",
+        "docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.retarget.translation": "28476ba34215b691b8618c3dcddf2dc0f64bbe9b14ad41006851e062caa5920d",
+        "docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.side.translation": "405256a3d9b619a641f1600327177b418e01394753a60614b4ccb99ffbdc0fe5",
+        "docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.env.translation": "f48e26db108029a8d9b9ae956c3c54a14ab1e1dd779c438d106100fa604474b8",
+        "docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.max.translation": "fb8d5e613edb1eaef2c29b630e4eb436798b307864387bb7bf51d49b29e554f7",
+        "docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.movement.translation": "9b8303f4e8ea0135f9d2f95c96afc2f46e452f722370d56bb0d2b1837541b9a4",
+        "docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.p50.translation": "af3187f954b64c075eed7e67bed20b1355e2f32f05cc2e5b6151183fd2b0b4db",
+        "docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.p95.translation": "6cc3296513f1c81cc4a3b5ec64cbcb431a9aec2949454ef0a771274f20a0f0c5",
+        "docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.p99.translation": "cd016e7e555a299e3347759a8a08d4fe7fa7938b11600ff5c00bc2f84e3bed1c",
+        "docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.physics.translation": "d9a601e1aeeb637ddab94b8187493625f151cff28aa36415b768433bf36c8ee3",
+        "docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.retarget.translation": "8d3f31a5ae3b060b0190d124285a5c5321029fcd6493bf7f87fa86f52db5fcae",
+        "docs/closure/20260911/r61_review_evidence/perf_three_rounds/sustained_close30_three_rounds.side.translation": "fcb15db1e9d8aed83d9b32fe5b0e2943946ada50f473d642e6be8134bb3d4ce4",
+        "export_presets.cfg": "17a1d2f70edfba4c8110cfef7e5739aacb671c7b79ba509e69c9ab0b4349070a",
+        "reports/skill_comparison_matrix.action.translation": "3d09a37bd2c648d58c2de8047cd24776b2cc2a7bc73b44e650880226378e3bcb",
+        "reports/skill_comparison_matrix.classification.translation": "10aa3516847d04981ce8f2570e0b18b8f8b49ab15e24e00d7b093d63a95cd185",
+        "reports/skill_comparison_matrix.cooldown.translation": "1025a649c2596173b8b9fd20023be5fade1f19c4d8b2fb2f60660c0b614a5350",
+        "reports/skill_comparison_matrix.database.translation": "a6f6e9a5c02302d12ce9f888754fa9effdcdb8061a4fe787812e9431dc33c319",
+        "reports/skill_comparison_matrix.disposition.translation": "93cc326600cb54b9db44849ddf7760de4f88b7e05e24da411876b6fd39f10b8c",
+        "reports/skill_comparison_matrix.formula.translation": "8f0645ce63a7f1ffd8e752a0c773e17dd09d5ca9780fa935c3e8c5cd91b4dbe6",
+        "reports/skill_comparison_matrix.icon.translation": "507c556361342b0b98afd3e7b0360dc0bc2b5cf532af0890e18c272aa72b1719",
+        "reports/skill_comparison_matrix.instance.translation": "b37818ed334d17845c985bc0af8759b777f5183a63538e5d3d00e136ffb381c4",
+        "reports/skill_comparison_matrix.item.translation": "4866ba9d34ea93b365eb274e5686f58301c12edc57b47c15334976c49110cd32",
+        "reports/skill_comparison_matrix.mp.translation": "443093a19d723ac402c46070421547d2e62f72af158205276abc97b1888a0e8c",
+        "reports/skill_comparison_matrix.name.translation": "6b2ef6eeb0d6d4fe0392415f9f1a92f2b6c74bc6cd346c6fd7557d41a778a225",
+        "reports/skill_comparison_matrix.profession.translation": "77f699a660f120efca71fcfe4a8ee97741057c70fdfdeaffd91301510b183a48",
+        "reports/skill_comparison_matrix.protocol.translation": "696b923ca592043a42a625b78369b3deaf0ae41fa1348b17950f915c6e756b68",
+        "reports/skill_comparison_matrix.server.translation": "6ba5864bcf393da7324a03c2595042ee10d94e24c90135eb7639c7385fcfe741",
+        "reports/skill_comparison_matrix.targeting.translation": "0207755fde6b17aacd5974b052c30a060dc0c7e617e30a6bc315c06b0890162a",
+        "reports/skill_comparison_matrix.visual.translation": "49cafa032b15096335dcb147fe68eaaf30965a89d05c2b10d310c06fd7424acc",
+        "scripts/features/generated/internal_code_android_export_data.gd": "f9ae55b2727c905fa6f0ba404867cba3b26cbb3c139865c545cecafae9535576",
+        "scripts/features/generated/internal_code_preparation_catalog_data.gd": "8458265a46d2a2ee7ea1d4c50017ece8e3bad167f1efeeccf733a70103bdb234"
+      },
+      "production_blob_hashes": {
+        "scripts/enemy.gd": "24c3866a002e602cbdd5c1aac66a0e1a4a502181f6e34f3dd1f7f78aec81313d",
+        "scripts/layers/runtime/combat_runtime_service.gd": "3263c5978e63842caee4c9e3d3d912eaeb01170414b01c4a76394777b58868c2",
+        "scripts/monster_crowd_attack_position_policy.gd": "a5c531ed9884023a56805b0ab0003c62102f1545347c31194dd5f3dfa1a99268",
+        "scripts/monster_movement_cadence.gd": "8577a8d1343c43e7c6b6cf02a60c479759af5fc0fb42c73397cc853805c2bd7e",
+        "scripts/monster_struck_policy.gd": "314fdade18bac876c65bc34b5c784d3fc50cea032adeb1883046f1647d4b828c",
+        "scripts/runtime_combat_spatial_index.gd": "ab3b82f043657393caee46855267d808c8a6b85112ebe4115e923d1075fc4184",
+        "scripts/runtime_diagnostics.gd": "5d9223872649c9af7e7d59336706c7d7414118e756bc71b8cafee60ba5d1e8da"
+      },
+      "junctions": [
+        "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\78d0775b4b22-20261007-195820-2e3c09ee\\tools\\godot-4.7"
+      ],
+      "archive": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\monster_upgrade_20261007\\apk_v106\\stage_archives\\78d0775b4b22-20261007-195820-2e3c09ee",
+      "evidence_moves": [
+        {
+          "original": "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\78d0775b4b22-20261007-195820-2e3c09ee\\outputs",
+          "archive": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\monster_upgrade_20261007\\apk_v106\\stage_archives\\78d0775b4b22-20261007-195820-2e3c09ee\\outputs"
+        },
+        {
+          "original": "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\seal-evidence-78d0775b4b22-20261007-195820-2e3c09ee",
+          "archive": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\monster_upgrade_20261007\\apk_v106\\stage_archives\\78d0775b4b22-20261007-195820-2e3c09ee\\seal_prior"
+        },
+        {
+          "original": "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\seal-evidence-78d0775b4b22-20261007-195820-2e3c09ee-lf-retry",
+          "archive": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\monster_upgrade_20261007\\apk_v106\\stage_archives\\78d0775b4b22-20261007-195820-2e3c09ee\\seal"
+        }
+      ],
+      "retirement_status": "PASS"
+    }
+  ],
+  "worktrees_after": "worktree C:/Users/Administrator/Documents/HardCore\nHEAD 215f0b2f651a51e6855ee813ddd99221690311a1\nbranch refs/heads/codex/integration"
+}

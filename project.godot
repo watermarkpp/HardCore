@@ -64,6 +64,18 @@ window/handheld/orientation=4
 2d_physics/layer_5="loot"
 2d_physics/layer_6="skill_area"
 
+[hardcore]
+
+; Accepted production owner decision contract. This window gates rich
+; pursuit/retarget planning only; attack admission, committed damage, physics
+; movement, and collision remain per-physics.
+performance/owner_decision_interval_ms=300
+performance/owner_optional_budget_enabled=true
+performance/ordinary_contact_instant_settle=true
+performance/ordinary_attack_visual_move_override=true
+performance/frame_optional_budget_usec=1200
+performance/death_drop_slicing=true
+
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0

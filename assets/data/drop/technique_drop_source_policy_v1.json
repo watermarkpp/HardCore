@@ -1,0 +1,15 @@
+{
+  "schema": "hardcore.drop.technique_source_policy.v1",
+  "policy_id": "technique_drop_source_policy.20261008.v1",
+  "source_authority": "tools/loot_sheet_compiler/evidence/07_全部具名奖励4876行.csv",
+  "operation": "remove_from_drop_authority_only",
+  "owned_instances_effect": "preserve",
+  "exact_removals": [
+    {
+      "slot_uid": "dpv2.direct.m160.slot_070",
+      "monster_id": 160,
+      "canonical_item_id": 251,
+      "source_sheet_row": 96
+    }
+  ]
+}

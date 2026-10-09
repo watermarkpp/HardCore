@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "contract_id": "equipment.granted_skills.source.v1",
+  "records": [
+    {
+      "skill_id": "hc.skill.equipment.ring_teleport",
+      "item_id": 254,
+      "display_name": "传送戒指技能",
+      "effect_id": "safe_teleport",
+      "parent_skill_id": "wizard.teleport",
+      "activation": "click",
+      "mana_cost": 0,
+      "description": "佩戴传送戒指后可用的安全传送能力。"
+    },
+    {
+      "skill_id": "hc.skill.equipment.ring_healing",
+      "item_id": 255,
+      "display_name": "防御戒指技能",
+      "effect_id": "grant_healing_skill",
+      "parent_skill_id": "taoist.healing",
+      "activation": "click",
+      "mana_cost": 5,
+      "description": "佩戴防御戒指后可用的治愈能力。"
+    },
+    {
+      "skill_id": "hc.skill.equipment.ring_fireball",
+      "item_id": 259,
+      "display_name": "火焰戒指技能",
+      "effect_id": "grant_fireball_skill",
+      "parent_skill_id": "wizard.fireball",
+      "activation": "click",
+      "mana_cost": 5,
+      "description": "佩戴火焰戒指后可用的火球能力。"
+    }
+  ]
+}

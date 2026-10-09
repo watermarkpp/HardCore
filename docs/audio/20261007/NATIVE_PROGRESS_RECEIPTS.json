@@ -1,0 +1,2551 @@
+{
+  "scope": "Intermediate source epochs retained separately. User priority: continuous pickup, grouped drop caps, then crowded monster pursuit. Final integration/package deferred. Device NOT_RUN.",
+  "receipts": [
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/audio_canonical_red_formal_205852_215248",
+      "status": "FAIL",
+      "exit_code": 1,
+      "passed": 0,
+      "failed": 1,
+      "source_stable_during_run": true,
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "8f7f2d4c3c863042a736420ef3fca1c7eec0efee4c006ac34c9d26d281314459",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "98dfff13-c953-4e99-9da4-fff0f846b55d",
+      "tests": [
+        {
+          "test_path": "tests/audio_canonical_consumable_test.tscn",
+          "passed": null,
+          "exit_code": null
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/audio_fixed_candidate_211432_375326",
+      "status": "PASS",
+      "exit_code": 0,
+      "passed": 6,
+      "failed": 0,
+      "source_stable_during_run": true,
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "82d17556dbaecee4e0609ac6cbcf8ff909e12c1a8b357e3677a4b2f81b797eae",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "32c11d46-e3f9-4e5f-abd4-7e702be67cf8",
+      "tests": [
+        {
+          "test_path": "tests/audio_canonical_consumable_test.tscn",
+          "passed": null,
+          "exit_code": null
+        },
+        {
+          "test_path": "tests/town_music_pcm_lifecycle_test.tscn",
+          "passed": null,
+          "exit_code": null
+        },
+        {
+          "test_path": "tests/player_item_audio_event_test.tscn",
+          "passed": null,
+          "exit_code": null
+        },
+        {
+          "test_path": "tests/audio_runtime_service_test.tscn",
+          "passed": null,
+          "exit_code": null
+        },
+        {
+          "test_path": "tests/town_music_controller_test.tscn",
+          "passed": null,
+          "exit_code": null
+        },
+        {
+          "test_path": "tests/ui_r5_audio_test.tscn",
+          "passed": null,
+          "exit_code": null
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/pickup_continuous_red_211554_248753",
+      "status": "FAIL",
+      "exit_code": 1,
+      "passed": 0,
+      "failed": 2,
+      "source_stable_during_run": true,
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "82d17556dbaecee4e0609ac6cbcf8ff909e12c1a8b357e3677a4b2f81b797eae",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "b5f7a6bc-dfc7-4abc-a41e-720a5b4ef203",
+      "tests": [
+        {
+          "test_path": "tests/loot_feedback_fifo_test.tscn",
+          "passed": null,
+          "exit_code": null
+        },
+        {
+          "test_path": "tests/loot_accepted_movement_test.tscn",
+          "passed": null,
+          "exit_code": null
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/pickup_fixed_candidate_211902_822150",
+      "status": "PASS",
+      "exit_code": 0,
+      "passed": 7,
+      "failed": 0,
+      "source_stable_during_run": true,
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "0a087095b52a6be416382bd42424db5703933a329d3de122410e85e23a0b82a6",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "20969eaa-3348-4a89-a977-25d960ed924f",
+      "tests": [
+        {
+          "test_path": "tests/loot_feedback_fifo_test.tscn",
+          "passed": null,
+          "exit_code": null
+        },
+        {
+          "test_path": "tests/loot_accepted_movement_test.tscn",
+          "passed": null,
+          "exit_code": null
+        },
+        {
+          "test_path": "tests/loot_feedback_gothic_ui_test.tscn",
+          "passed": null,
+          "exit_code": null
+        },
+        {
+          "test_path": "tests/loot_inventory_transaction_batch_test.tscn",
+          "passed": null,
+          "exit_code": null
+        },
+        {
+          "test_path": "tests/loot_world_placement_integration_test.tscn",
+          "passed": null,
+          "exit_code": null
+        },
+        {
+          "test_path": "tests/loot_stable_identity_save_test.tscn",
+          "passed": null,
+          "exit_code": null
+        },
+        {
+          "test_path": "tests/f03_native_pickup_lifecycle_test.tscn",
+          "passed": null,
+          "exit_code": null
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/monster_discovery_audio_red_212937_622649",
+      "status": "FAIL",
+      "exit_code": 1,
+      "passed": 0,
+      "failed": 1,
+      "source_stable_during_run": true,
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "2054547a19699f45cc157c0eb8447200d15cd65987b128fd46b9cf009275b549",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "78963475-2975-427e-9e88-60d3b7ed6832",
+      "tests": [
+        {
+          "test_path": "tests/monster_discovery_audio_retired_test.tscn",
+          "passed": null,
+          "exit_code": null
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/audio_monster_fixed_candidate_213042_531877",
+      "status": "PASS",
+      "exit_code": 0,
+      "passed": 7,
+      "failed": 0,
+      "source_stable_during_run": true,
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "37f2693613e102588dd78fd2721d7b57e555ddb9339337a616cfa1d994e1d646",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "2aae5abe-3ad0-409e-9a3d-d439a8ca8b20",
+      "tests": [
+        {
+          "test_path": "tests/monster_discovery_audio_retired_test.tscn",
+          "passed": null,
+          "exit_code": null
+        },
+        {
+          "test_path": "tests/audio_runtime_service_test.tscn",
+          "passed": null,
+          "exit_code": null
+        },
+        {
+          "test_path": "tests/audio_w4_contract_test.tscn",
+          "passed": null,
+          "exit_code": null
+        },
+        {
+          "test_path": "tests/audio_w4_actor_service_test.tscn",
+          "passed": null,
+          "exit_code": null
+        },
+        {
+          "test_path": "tests/monster_audio_hook_test.tscn",
+          "passed": null,
+          "exit_code": null
+        },
+        {
+          "test_path": "tests/skills/summon_audio_hook_test.tscn",
+          "passed": null,
+          "exit_code": null
+        },
+        {
+          "test_path": "tests/hc_monster_combat_r3/audio_stale_frame_test.tscn",
+          "passed": null,
+          "exit_code": null
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/audio_pickup_final_related_213214_456077",
+      "status": "FAIL",
+      "exit_code": 1,
+      "passed": 15,
+      "failed": 1,
+      "source_stable_during_run": true,
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "37f2693613e102588dd78fd2721d7b57e555ddb9339337a616cfa1d994e1d646",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "b86395c5-4f9a-4811-b0c2-18f56cfca01f",
+      "tests": [
+        {
+          "test_path": "tests/audio_canonical_consumable_test.tscn",
+          "passed": null,
+          "exit_code": null
+        },
+        {
+          "test_path": "tests/town_music_pcm_lifecycle_test.tscn",
+          "passed": null,
+          "exit_code": null
+        },
+        {
+          "test_path": "tests/player_item_audio_event_test.tscn",
+          "passed": null,
+          "exit_code": null
+        },
+        {
+          "test_path": "tests/town_music_controller_test.tscn",
+          "passed": null,
+          "exit_code": null
+        },
+        {
+          "test_path": "tests/ui_r5_audio_test.tscn",
+          "passed": null,
+          "exit_code": null
+        },
+        {
+          "test_path": "tests/player_core_audio_hook_test.tscn",
+          "passed": null,
+          "exit_code": null
+        },
+        {
+          "test_path": "tests/projectile_audio_lifecycle_test.tscn",
+          "passed": null,
+          "exit_code": null
+        },
+        {
+          "test_path": "tests/framework/feature_cue_audio_replacement_test.tscn",
+          "passed": null,
+          "exit_code": null
+        },
+        {
+          "test_path": "tests/framework/feature_resource_audio_closure_test.tscn",
+          "passed": null,
+          "exit_code": null
+        },
+        {
+          "test_path": "tests/loot_feedback_fifo_test.tscn",
+          "passed": null,
+          "exit_code": null
+        },
+        {
+          "test_path": "tests/loot_accepted_movement_test.tscn",
+          "passed": null,
+          "exit_code": null
+        },
+        {
+          "test_path": "tests/loot_feedback_gothic_ui_test.tscn",
+          "passed": null,
+          "exit_code": null
+        },
+        {
+          "test_path": "tests/loot_inventory_transaction_batch_test.tscn",
+          "passed": null,
+          "exit_code": null
+        },
+        {
+          "test_path": "tests/loot_world_placement_integration_test.tscn",
+          "passed": null,
+          "exit_code": null
+        },
+        {
+          "test_path": "tests/loot_stable_identity_save_test.tscn",
+          "passed": null,
+          "exit_code": null
+        },
+        {
+          "test_path": "tests/f03_native_pickup_lifecycle_test.tscn",
+          "passed": null,
+          "exit_code": null
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/player_audio_published_fixture_213644_729486",
+      "status": "PASS",
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "source_stable_during_run": true,
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "08ae73b7bf28adda5fdae90bdf4fcfddd4bf5d922b760bd44204a4a85546060c",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "f04da6ea-4306-485f-b21f-10789c0380e5",
+      "tests": [
+        {
+          "test_path": "tests/player_core_audio_hook_test.tscn",
+          "passed": null,
+          "exit_code": null
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/loot_cohorts_pending_red_220753_588145",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\loot_cohorts_pending_red_220753_588145\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "6154e4e676279dcf935c9fbe136cae13eea957fdbb2e36e3b90ac5d34fa05d47",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "a2425c69-8b27-4275-8984-6aae73cabe80",
+      "tests": [
+        {
+          "test_path": "tests/loot_continuous_cohorts_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_5;engine_log_failures_5"
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/loot_cohorts_business_red_221133_591059",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\loot_cohorts_business_red_221133_591059\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "41b6d702400d56313e4b5e5c98c632a16737e6aa368bdd6b0fe966c9d6661c71",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "a4df1282-8c0d-4448-85af-a5558064b10d",
+      "tests": [
+        {
+          "test_path": "tests/loot_continuous_cohorts_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/loot_cohorts_order_red_221235_696103",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\loot_cohorts_order_red_221235_696103\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "ff3eed0368aee7fe4d823b0e459b61165e3fc4690efac6fbdfa1eeef1640958c",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "5c1b9fe5-0e89-4d62-ab69-bbb6f4c759ec",
+      "tests": [
+        {
+          "test_path": "tests/loot_continuous_cohorts_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/loot_cohorts_order_green_221337_560870",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\loot_cohorts_order_green_221337_560870\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 1,
+      "status": "FAIL",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "a7ab7ae580ea3ef1c5b36cf294218fad40dddd6020bb041c004fe0bbc0281abd",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "ae3d9574-5d7b-479d-a1ce-fe633504557b",
+      "tests": [
+        {
+          "test_path": "tests/loot_continuous_cohorts_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+        },
+        {
+          "test_path": "tests/loot_accepted_movement_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        },
+        {
+          "test_path": "tests/loot_feedback_fifo_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/loot_cohorts_fixed_221434_057382",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\loot_cohorts_fixed_221434_057382\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "4fe65cae11f8969efb0a9768d3949cc848562a20493f504c2aeba867198e4a88",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "7cedccd2-d598-4191-8bef-d908cef8adff",
+      "tests": [
+        {
+          "test_path": "tests/loot_continuous_cohorts_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/loot_cohorts_receipt_fixed_221613_896826",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\loot_cohorts_receipt_fixed_221613_896826\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 1,
+      "failed": 0,
+      "status": "PASS",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "9995ddb3ae1b55ee8c9525201cacfedef72bf66e4ff71d7d052cb38cab7dae78",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "cda669b5-e2f3-4bd9-ac2e-de212285131b",
+      "tests": [
+        {
+          "test_path": "tests/loot_continuous_cohorts_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/loot_manager_related_221655_416567",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\loot_manager_related_221655_416567\\runner_request.json"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 1,
+      "failed": 0,
+      "status": "PASS",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "9995ddb3ae1b55ee8c9525201cacfedef72bf66e4ff71d7d052cb38cab7dae78",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "9560439e-8bd0-48ea-b790-db2403f22c56",
+      "tests": [
+        {
+          "test_path": "tests/loot_pickup_runtime_manager_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/loot_pending_lifecycle_related_221725_748657",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\loot_pending_lifecycle_related_221725_748657\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "9995ddb3ae1b55ee8c9525201cacfedef72bf66e4ff71d7d052cb38cab7dae78",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "996402f0-91f4-4cdc-98b3-8fbbcf4512a6",
+      "tests": [
+        {
+          "test_path": "tests/loot_expiry_pending_guard_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        },
+        {
+          "test_path": "tests/f03_pickup_receipt_lifecycle_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/drop_group_functional_222339_996459",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\drop_group_functional_222339_996459\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 4,
+      "failed": 0,
+      "status": "PASS",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "15d1bdcf35d4fb6a1fc7353c639ac02081bc599e7c3ac5c5188db5017ced8a89",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "336ad401-d0a3-4d54-ba32-b7141132f54b",
+      "tests": [
+        {
+          "test_path": "tests/monster_ground_slot_group_policy_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        },
+        {
+          "test_path": "tests/dpv2_drop_runtime_policy_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        },
+        {
+          "test_path": "tests/armor_single_slot_authority_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        },
+        {
+          "test_path": "tests/live_map_loot_authority_export_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/probability_price_direct_225338_294844",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\probability_price_direct_225338_294844\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 2,
+      "status": "FAIL",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "96cb5a96cf96485646b8976dbd4cda2c57f2c4a25fafdb2a8407cd15e851fe92",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "0b2ec5d1-e8ed-445c-bac3-4a1b18966fc5",
+      "tests": [
+        {
+          "test_path": "tests/blessing_oil_success_multiplier_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        },
+        {
+          "test_path": "tests/repair_20260913/blessing_rule_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        },
+        {
+          "test_path": "tests/user_special_sale_pricing_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2"
+        },
+        {
+          "test_path": "tests/item_drop_affix_v4_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2"
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/probability_price_parse_fixed_225435_120124",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\probability_price_parse_fixed_225435_120124\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 2,
+      "status": "FAIL",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "2cb940702ad133ede4aeab5c9cc64643c1e10a2737a07c53368960a3569364be",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "f8f8dce9-da53-4ffd-9aae-cbc22248d24a",
+      "tests": [
+        {
+          "test_path": "tests/user_special_sale_pricing_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+        },
+        {
+          "test_path": "tests/item_drop_affix_v4_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2"
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/probability_price_business_fixed_225658_913418",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\probability_price_business_fixed_225658_913418\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 1,
+      "failed": 1,
+      "status": "FAIL",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "bfbf9b309ce59d8d997e72821f3fd472d6c788f0809c0219007bee88128c4546",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "877a8fa2-8524-44d4-80d3-ac36920acdfd",
+      "tests": [
+        {
+          "test_path": "tests/user_special_sale_pricing_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+        },
+        {
+          "test_path": "tests/item_drop_affix_v4_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/sale_luck_related_fixed_225915_541985",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\sale_luck_related_fixed_225915_541985\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 1,
+      "status": "FAIL",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "f67ae142bea6e450526c88170d6b2aebcfe233692a4ebebd1b6071076f5c69e6",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "9e9caf00-fbfe-4500-a159-3e18347dae28",
+      "tests": [
+        {
+          "test_path": "tests/user_special_sale_pricing_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+        },
+        {
+          "test_path": "tests/equipment_luck_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        },
+        {
+          "test_path": "tests/persistence_business_transactions_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/sale_owner_diagnostic_230116_965922",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\sale_owner_diagnostic_230116_965922\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "b1dc7c41225f841fb2c8795dc5e924469a6f1b60f925775bf18485599b86fafc",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "9fb0257c-47d7-4b27-a019-3aa1d5f2b955",
+      "tests": [
+        {
+          "test_path": "tests/user_special_sale_pricing_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/sale_owner_timing_diagnostic_230212_384656",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\sale_owner_timing_diagnostic_230212_384656\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "26eb1cffdcfa0e4b0b1482a10517e8aa42ac53336a8893a16563155e7ac1cad1",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "e8b5c883-78a5-4c14-99af-4481782e1675",
+      "tests": [
+        {
+          "test_path": "tests/user_special_sale_pricing_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/sale_actual_owner_fixed_230314_966157",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\sale_actual_owner_fixed_230314_966157\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "0566212e3d5586a0998ae06fc4f2dd3cee1499b990a78ccfaffd9307fcb1b952",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "daab2713-249e-4e20-9f6a-5242d3013121",
+      "tests": [
+        {
+          "test_path": "tests/user_special_sale_pricing_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/sale_tradability_diagnostic_230428_691440",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\sale_tradability_diagnostic_230428_691440\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "f49e7e36387fbee18bcd0388aaf74002b51a99f6b59410b62ff8f99fb6db10e0",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "b85b3de5-85f4-4dd4-bf26-6121809bb7fd",
+      "tests": [
+        {
+          "test_path": "tests/user_special_sale_pricing_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/sale_exact_quest_exception_230526_845908",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\sale_exact_quest_exception_230526_845908\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "e76a6dad8d57c02d07b72c43e9a2afb4cc79caea255beb47583d2ae2e7c7b621",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "567d589e-a284-4d7e-a218-a11cb7d966d0",
+      "tests": [
+        {
+          "test_path": "tests/user_special_sale_pricing_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/sale_quote_contract_fixed_230654_698564",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\sale_quote_contract_fixed_230654_698564\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "f618ceaef81cd33c3dd5332e6276f18beb2faab357e7af42e9526867538ff480",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "3d06ab62-c67a-4ef4-97e3-8728f4b74cc5",
+      "tests": [
+        {
+          "test_path": "tests/user_special_sale_pricing_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/sale_transaction_contract_fixed_230759_949917",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\sale_transaction_contract_fixed_230759_949917\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "dd72cbf02cd926dba44dd64840a8fa9a34664eeedf7128f59989e1bb778b48f9",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "53440efe-c7c1-4743-86d8-8ea5ad8b9621",
+      "tests": [
+        {
+          "test_path": "tests/user_special_sale_pricing_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/sale_inventory_shape_fixed_230904_226761",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\sale_inventory_shape_fixed_230904_226761\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "185a3cfe5d958af7965186f870a1e5ed9b802d4c4c6e391150596c77718e5aa0",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "8229d950-49d8-48fb-abb1-28a6430a7e8e",
+      "tests": [
+        {
+          "test_path": "tests/user_special_sale_pricing_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/sale_quantity_contract_fixed_231015_448034",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\sale_quantity_contract_fixed_231015_448034\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 1,
+      "status": "FAIL",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "7bf3babf476c042e8b37bffa7dff73ae2f4e286e72cf0f4307f645b7df05728d",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "ebf2ae7e-275e-4c27-88ef-1a8df4ea3322",
+      "tests": [
+        {
+          "test_path": "tests/user_special_sale_pricing_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        },
+        {
+          "test_path": "tests/pricing_authority_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        },
+        {
+          "test_path": "tests/framework/pricing_identity_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": 1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/pricing_identity_user_additions_231608_876684",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\pricing_identity_user_additions_231608_876684\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "e7f88870102b3ccd45c5ea0ab29abf14b2dc5d0af1a2149c62d8076999708c51",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "ac4a7f00-04a5-4de2-b454-f7cb0c92850f",
+      "tests": [
+        {
+          "test_path": "tests/framework/pricing_identity_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": 1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/pricing_identity_provenance_fixed_231637_354992",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\pricing_identity_provenance_fixed_231637_354992\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 1,
+      "failed": 0,
+      "status": "PASS",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "8552b8cb0156290533eb1eec07691d555f85c188fc9edd58c0dbcb4948bf5481",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "b44a958e-7775-47ba-91b4-aad5079a1567",
+      "tests": [
+        {
+          "test_path": "tests/framework/pricing_identity_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/loading_names_fixed_231832_477857",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\loading_names_fixed_231832_477857\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 1,
+      "status": "FAIL",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "967ef56c5bbf45b881bed927446b86b1e460f74abe0efb4e143bd13fe25f5458",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "f6822045-bf2b-4072-bce8-9e6b29d40f65",
+      "tests": [
+        {
+          "test_path": "tests/character_select_launch_loading_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+        },
+        {
+          "test_path": "tests/loading_transition_ui_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        },
+        {
+          "test_path": "tests/map_release_display_name_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/character_loading_bound_diagnostic_231946_341401",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\character_loading_bound_diagnostic_231946_341401\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "3926daea9faa1e9e2b4f408c91f6bf8dff6e86d4227e6685976f270dc0794211",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "0e277e64-52f2-4a92-bead-a95ccfdf4c1b",
+      "tests": [
+        {
+          "test_path": "tests/character_select_launch_loading_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/drop_legacy_and_current_sheet_232117_846955",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\drop_legacy_and_current_sheet_232117_846955\\runner_request.json"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "3926daea9faa1e9e2b4f408c91f6bf8dff6e86d4227e6685976f270dc0794211",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "c5727c6a-7d2e-4a36-b81b-c8bcb5ef7ed7",
+      "tests": [
+        {
+          "test_path": "tests/test_dpv2_repair_v5.tscn",
+          "status": "FAIL",
+          "effective_exit_code": 1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;non_zero_exit_code_1;stderr_failures_24;engine_log_failures_24"
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/drop_historical_stage_fixed_232237_329128",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\drop_historical_stage_fixed_232237_329128\\runner_request.json"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "d77dc791963d4ebb16b5d3e172b808a45a5c89b777fa7c44391c125a9e8c4c07",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "9d16caa9-601d-4bde-823e-fd5ef9c3eae4",
+      "tests": [
+        {
+          "test_path": "tests/test_dpv2_repair_v5.tscn",
+          "status": "FAIL",
+          "effective_exit_code": 1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;non_zero_exit_code_1;stderr_failures_3;engine_log_failures_3"
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/drop_complete_authority_fixed_232329_737041",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\drop_complete_authority_fixed_232329_737041\\runner_request.json"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 1,
+      "failed": 0,
+      "status": "PASS",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "326e81a70ca7571eefc3de0b0a0c7918adc5f36d6e05810b1d24606a2d31f0a6",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "1505d124-74cf-4e77-b660-9ccb6b34357d",
+      "tests": [
+        {
+          "test_path": "tests/test_dpv2_repair_v5.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/current_code_catalog_captures_232355_844155",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\current_code_catalog_captures_232355_844155\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 3,
+      "status": "FAIL",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "326e81a70ca7571eefc3de0b0a0c7918adc5f36d6e05810b1d24606a2d31f0a6",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "6928a524-ccdb-481b-b641-17cca3f76378",
+      "tests": [
+        {
+          "test_path": "tests/framework/code_preparation_engine_namespace_capture_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": 1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+        },
+        {
+          "test_path": "tests/framework/code_preparation_native_symbol_probe_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": 1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+        },
+        {
+          "test_path": "tests/framework/code_preparation_scalar_math_probe_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": 1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/current_code_catalog_isolated_232442_700216",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\current_code_catalog_isolated_232442_700216\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 3,
+      "failed": 0,
+      "status": "PASS",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "326e81a70ca7571eefc3de0b0a0c7918adc5f36d6e05810b1d24606a2d31f0a6",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "74975b14-b45d-41aa-aac3-ee2d35835fb3",
+      "tests": [
+        {
+          "test_path": "tests/framework/code_preparation_engine_namespace_capture_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        },
+        {
+          "test_path": "tests/framework/code_preparation_native_symbol_probe_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        },
+        {
+          "test_path": "tests/framework/code_preparation_scalar_math_probe_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/character_loading_real_startup_232622_927766",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\character_loading_real_startup_232622_927766\\runner_request.json"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "73541b0164c32289fa32ab40016dd50adbaddd763cb8e7148e77892e6b656c3a",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "d88e4b78-c1ba-4cca-af18-cd3200790b52",
+      "tests": [
+        {
+          "test_path": "tests/character_select_launch_loading_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/character_loading_phase_contract_232757_667072",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\character_loading_phase_contract_232757_667072\\runner_request.json"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "0a71d1e3abc5dd83d8e6b59f8186686c6469affba383a6ab9de2e45d471f65ac",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "077f33b0-5578-46f8-aca8-42f9c991727e",
+      "tests": [
+        {
+          "test_path": "tests/character_select_launch_loading_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_4;engine_log_failures_4"
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/character_loading_parse_fixed_232830_788382",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\character_loading_parse_fixed_232830_788382\\runner_request.json"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 1,
+      "failed": 0,
+      "status": "PASS",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "9969789445d98494a26f82a6b6e043ea9dd37e29f66b4cfee94668496e85ffc6",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "2064c8c1-3c16-489f-97c8-34994ab7d626",
+      "tests": [
+        {
+          "test_path": "tests/character_select_launch_loading_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/audio_pickup_drop_current_232907_517994",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\audio_pickup_drop_current_232907_517994\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 5,
+      "failed": 0,
+      "status": "PASS",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "9969789445d98494a26f82a6b6e043ea9dd37e29f66b4cfee94668496e85ffc6",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "5cf59894-4124-4a2f-85c0-cf090694b1bf",
+      "tests": [
+        {
+          "test_path": "tests/audio_canonical_consumable_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        },
+        {
+          "test_path": "tests/town_music_pcm_lifecycle_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        },
+        {
+          "test_path": "tests/monster_discovery_audio_retired_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        },
+        {
+          "test_path": "tests/loot_continuous_cohorts_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        },
+        {
+          "test_path": "tests/dpv2_drop_runtime_policy_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/special_ring_existing_current_233016_797740",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\special_ring_existing_current_233016_797740\\runner_request.json"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 1,
+      "failed": 0,
+      "status": "PASS",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "9969789445d98494a26f82a6b6e043ea9dd37e29f66b4cfee94668496e85ffc6",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "564e9a5f-a9aa-4c28-8248-cb435d078e30",
+      "tests": [
+        {
+          "test_path": "tests/equipment_special_effects_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/special_equipment_rules_red_000108_010861",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\special_equipment_rules_red_000108_010861\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 2,
+      "status": "FAIL",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "2d6012f890d0a7f8305d07ccc44d7a8d4fbf69cee96f4f2f03fbbeb48e253acb",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "5da81ded-adc2-4eed-9f5d-a5359f17698b",
+      "tests": [
+        {
+          "test_path": "tests/equipment_granted_skill_identity_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+        },
+        {
+          "test_path": "tests/special_equipment_actor_policy_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_4;engine_log_failures_4"
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/special_actor_rules_red_elite_001351_470630",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\special_actor_rules_red_elite_001351_470630\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "2ee19f16d178fd95ddf034e0bd6e3a9229e5c1a5f89f73ecdae3e248ce6b08a9",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "21d835b4-3b62-424e-9aff-e44d3153c26a",
+      "tests": [
+        {
+          "test_path": "tests/special_equipment_actor_policy_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/special_state_technique_red_002024_077695",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\special_state_technique_red_002024_077695\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 2,
+      "status": "FAIL",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "b380f6effcb5a869f40a9646236e1061342d864720a33b73df1aaf72c6455ac5",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "2f51822b-c779-4c2f-89bb-92b7743c6e2e",
+      "tests": [
+        {
+          "test_path": "tests/equipment_granted_skill_state_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2"
+        },
+        {
+          "test_path": "tests/technique_necklace_instance_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": 1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;non_zero_exit_code_1;stderr_failures_3;engine_log_failures_3"
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/special_modules_first_003128_013988",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\special_modules_first_003128_013988\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 5,
+      "status": "FAIL",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "8f436997d6a2672948df70f66cf76653fe3310b9e08d61de5353a4d05158fee3",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "5e81e804-824f-4c52-88be-a7dbd5190a7d",
+      "tests": [
+        {
+          "test_path": "tests/equipment_granted_skill_identity_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_3;engine_log_failures_3"
+        },
+        {
+          "test_path": "tests/equipment_granted_skill_state_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_3;engine_log_failures_3"
+        },
+        {
+          "test_path": "tests/equipment_granted_skill_panel_lifecycle_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_3;engine_log_failures_3"
+        },
+        {
+          "test_path": "tests/technique_necklace_instance_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_3;engine_log_failures_3"
+        },
+        {
+          "test_path": "tests/special_equipment_detail_contract_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_3;engine_log_failures_3"
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/special_code_capture_detail_red_003358_877717",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\special_code_capture_detail_red_003358_877717\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 4,
+      "status": "FAIL",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "198abf6e878f7320e2fe56c7801e8ec9fbbc8090bc9c57876fa09a22397091ba",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "e721eddf-ea43-4877-a5f6-db2bbcb275dd",
+      "tests": [
+        {
+          "test_path": "tests/framework/code_preparation_engine_namespace_capture_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": "stderr_failures_1;engine_log_failures_1"
+        },
+        {
+          "test_path": "tests/framework/code_preparation_native_symbol_probe_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": "stderr_failures_1;engine_log_failures_1"
+        },
+        {
+          "test_path": "tests/framework/code_preparation_scalar_math_probe_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": "stderr_failures_1;engine_log_failures_1"
+        },
+        {
+          "test_path": "tests/special_equipment_detail_contract_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": true,
+          "reason": "process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_11;engine_log_failures_11"
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/special_capture_state_red_004440_033832",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\special_capture_state_red_004440_033832\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 8,
+      "status": "FAIL",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "c62618d8afa93e3863124e7ffd8e2df13c1cd4490578b064ddf9098ea8d893b7",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "7cb16566-c3d4-4cb6-a8a6-3fb1f4a42280",
+      "tests": [
+        {
+          "test_path": "tests/framework/code_preparation_engine_namespace_capture_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": "stderr_failures_1;engine_log_failures_1"
+        },
+        {
+          "test_path": "tests/framework/code_preparation_native_symbol_probe_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": "stderr_failures_1;engine_log_failures_1"
+        },
+        {
+          "test_path": "tests/framework/code_preparation_scalar_math_probe_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": "stderr_failures_1;engine_log_failures_1"
+        },
+        {
+          "test_path": "tests/equipment_granted_skill_state_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2"
+        },
+        {
+          "test_path": "tests/equipment_granted_skill_identity_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": "stderr_failures_1;engine_log_failures_1"
+        },
+        {
+          "test_path": "tests/equipment_granted_skill_panel_lifecycle_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": "stderr_failures_1;engine_log_failures_1"
+        },
+        {
+          "test_path": "tests/technique_necklace_instance_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": "stderr_failures_1;engine_log_failures_1"
+        },
+        {
+          "test_path": "tests/special_equipment_detail_contract_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": true,
+          "reason": "process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2"
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/special_modules_capture_final_005413_618694",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\special_modules_capture_final_005413_618694\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 11,
+      "status": "FAIL",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "c7fd28da6ea079f054411896fb4f7270a41b048149dc61a79e39b24a548e278a",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "d5fe38a1-6db4-441f-8980-ee834ab64160",
+      "tests": [
+        {
+          "test_path": "tests/framework/code_preparation_engine_namespace_capture_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_5;engine_log_failures_5;framework_receipt_wrong_run;framework_receipt_wrong_source"
+        },
+        {
+          "test_path": "tests/framework/code_preparation_native_symbol_probe_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_5;engine_log_failures_5;framework_receipt_wrong_run;framework_receipt_wrong_source"
+        },
+        {
+          "test_path": "tests/framework/code_preparation_scalar_math_probe_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_5;engine_log_failures_5;framework_receipt_wrong_run;framework_receipt_wrong_source"
+        },
+        {
+          "test_path": "tests/equipment_granted_skill_identity_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_5;engine_log_failures_5"
+        },
+        {
+          "test_path": "tests/equipment_granted_skill_state_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_5;engine_log_failures_5"
+        },
+        {
+          "test_path": "tests/equipment_granted_skill_panel_lifecycle_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_5;engine_log_failures_5"
+        },
+        {
+          "test_path": "tests/technique_necklace_instance_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_5;engine_log_failures_5"
+        },
+        {
+          "test_path": "tests/technique_necklace_formal_flow_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_5;engine_log_failures_5"
+        },
+        {
+          "test_path": "tests/special_equipment_detail_contract_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_5;engine_log_failures_5"
+        },
+        {
+          "test_path": "tests/mystery_equipment_instance_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_5;engine_log_failures_5"
+        },
+        {
+          "test_path": "tests/mystery_equipment_formal_flow_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_5;engine_log_failures_5"
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/special_capture_book_fix_005529_416237",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\special_capture_book_fix_005529_416237\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 3,
+      "failed": 0,
+      "status": "PASS",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "ff2536badb29b29bd3b204369a5238f9417f7df149ff7011b2dca8c0a34d0468",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "2e22c536-526f-41b3-ad3e-956fc37f1d54",
+      "tests": [
+        {
+          "test_path": "tests/framework/code_preparation_engine_namespace_capture_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        },
+        {
+          "test_path": "tests/framework/code_preparation_native_symbol_probe_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        },
+        {
+          "test_path": "tests/framework/code_preparation_scalar_math_probe_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/special_equipment_functional_final_005610_879556",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\special_equipment_functional_final_005610_879556\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 4,
+      "failed": 7,
+      "status": "FAIL",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "ff2536badb29b29bd3b204369a5238f9417f7df149ff7011b2dca8c0a34d0468",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "0cdd60b4-e4aa-4ecd-a0eb-d1fab146f987",
+      "tests": [
+        {
+          "test_path": "tests/equipment_granted_skill_identity_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        },
+        {
+          "test_path": "tests/equipment_granted_skill_state_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        },
+        {
+          "test_path": "tests/equipment_granted_skill_panel_lifecycle_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        },
+        {
+          "test_path": "tests/technique_necklace_instance_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        },
+        {
+          "test_path": "tests/technique_necklace_formal_flow_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_3;engine_log_failures_3"
+        },
+        {
+          "test_path": "tests/special_equipment_detail_contract_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": true,
+          "reason": "process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+        },
+        {
+          "test_path": "tests/mystery_equipment_instance_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+        },
+        {
+          "test_path": "tests/mystery_equipment_formal_flow_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": 1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;non_zero_exit_code_1;stderr_failures_6;engine_log_failures_6"
+        },
+        {
+          "test_path": "tests/special_equipment_actor_policy_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_26;engine_log_failures_26"
+        },
+        {
+          "test_path": "tests/special_equipment_root_flow_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_7;engine_log_failures_7"
+        },
+        {
+          "test_path": "tests/hud_center_alignment_special_text_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_38;engine_log_failures_38"
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/special_equipment_failure_recheck_010014_860392",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\special_equipment_failure_recheck_010014_860392\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 5,
+      "status": "FAIL",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "05a3e36959e9be1a71f9a0aa77e685cf377a47ce9e9e3f3b029377fc9a7b1351",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "e2a8f3d7-f3d4-40ed-8072-6053ff4a3cab",
+      "tests": [
+        {
+          "test_path": "tests/technique_necklace_formal_flow_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": 1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;non_zero_exit_code_1;stderr_failures_4;engine_log_failures_4"
+        },
+        {
+          "test_path": "tests/special_equipment_detail_contract_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": true,
+          "reason": "process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+        },
+        {
+          "test_path": "tests/mystery_equipment_instance_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        },
+        {
+          "test_path": "tests/mystery_equipment_formal_flow_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_25;engine_log_failures_25"
+        },
+        {
+          "test_path": "tests/special_equipment_actor_policy_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        },
+        {
+          "test_path": "tests/special_equipment_root_flow_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": true,
+          "reason": "process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2"
+        },
+        {
+          "test_path": "tests/hud_center_alignment_special_text_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/special_final_remaining_010705_195757",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\special_final_remaining_010705_195757\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 5,
+      "failed": 1,
+      "status": "FAIL",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "004cf97dfee6fee4a6793a55bec380a3b3844e0b1f742d7ede8d34c963ec254f",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "4c6c7cc7-29b5-4280-9e9d-322f884d3eb8",
+      "tests": [
+        {
+          "test_path": "tests/technique_necklace_formal_flow_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        },
+        {
+          "test_path": "tests/special_equipment_detail_contract_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        },
+        {
+          "test_path": "tests/mystery_equipment_formal_flow_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        },
+        {
+          "test_path": "tests/special_equipment_root_flow_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2"
+        },
+        {
+          "test_path": "tests/hud_center_alignment_special_text_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        },
+        {
+          "test_path": "tests/equipment_granted_skill_progression_rejection_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/special_last_stealth_wear_root_011445_830645",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\special_last_stealth_wear_root_011445_830645\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 3,
+      "failed": 0,
+      "status": "PASS",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "9be4cc99c7b1839c5532ac611891c5baf311ae093c4b8c0f3c764b8340cb2e84",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "c1a9d08d-1dda-454c-ae73-08444394f6bd",
+      "tests": [
+        {
+          "test_path": "tests/mystery_equipment_wear_requirements_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        },
+        {
+          "test_path": "tests/special_equipment_actor_policy_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        },
+        {
+          "test_path": "tests/special_equipment_root_flow_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/special_panel_and_set_regression_011913_702466",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\special_panel_and_set_regression_011913_702466\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 2,
+      "status": "FAIL",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "1dc8231dd5f9c54200e33681ee8ccf57c0f30675b9de04f0484216aa4f017b68",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "904fdc2d-9df4-41ba-ae3e-3fdba1595c08",
+      "tests": [
+        {
+          "test_path": "tests/equipment_granted_skill_panel_lifecycle_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+        },
+        {
+          "test_path": "tests/equipment_special_phase2_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/special_panel_set_fixture_repair_012027_695403",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\special_panel_set_fixture_repair_012027_695403\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 1,
+      "failed": 1,
+      "status": "FAIL",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "49d7ae27a0342ad7e7b4f1b2346b15a21edb6a8ffc361bb134b7949ef5779096",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "d0c578a7-b9b7-44a3-a11f-e45da174c5a3",
+      "tests": [
+        {
+          "test_path": "tests/equipment_granted_skill_panel_lifecycle_test.tscn",
+          "status": "FAIL",
+          "effective_exit_code": -1,
+          "pass_marker_found": false,
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+        },
+        {
+          "test_path": "tests/equipment_special_phase2_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "evidence": "outputs/r3_takeover/20260930/validation/special_panel_identity_boundary_012136_862376",
+      "command": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\run_godot_tests_request.ps1",
+        "-RequestPath",
+        "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\special_panel_identity_boundary_012136_862376\\runner_request.json"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 1,
+      "failed": 0,
+      "status": "PASS",
+      "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+      "content_set_sha256": "e01c573daf7b6ec7af17495c4cf477a1c98edeb3166e37d62879ec27396c4ce5",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "invocation_id": "2c6979f2-b59d-4bb0-94af-ea35d523323a",
+      "tests": [
+        {
+          "test_path": "tests/equipment_granted_skill_panel_lifecycle_test.tscn",
+          "status": "PASS",
+          "effective_exit_code": 0,
+          "pass_marker_found": true,
+          "reason": ""
+        }
+      ]
+    }
+  ]
+}

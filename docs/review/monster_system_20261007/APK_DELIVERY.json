@@ -1,0 +1,33 @@
+{
+  "verified_at": "2026-10-07T20:44:46.225750+08:00",
+  "apk_build_status": "PASS",
+  "apk_static_status": "PASS",
+  "native_functional_status": "PASS",
+  "native_functional_scenes": 18,
+  "device_test": "NOT_RUN",
+  "user_play_experience": "NOT_RUN",
+  "apk_build_commit": "78d0775b4b22f40ad1f54426639d867310dae41a",
+  "runtime_change_commit": "c8477058a0c2f67f7a9e39f3523f4ea7693bd5cd",
+  "host_collector_eol_fix_commit": "215f0b2f651a51e6855ee813ddd99221690311a1",
+  "runtime_content_sha256": "15b63efb24a518f6d008355f14479b802a16fe98989ecc8af4c1b357f3a58666",
+  "package": "com.personal.mafaoffline",
+  "version_code": 106,
+  "certificate_sha256": [
+    "c62d0f8239b926f819038845c302143fd24dcfd75ed8d877ed846c430c6f3fcc"
+  ],
+  "delivery": {
+    "status": "PASS",
+    "source_apk": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\hardcore\\HardCore-v106-monster-fixes-debug.apk",
+    "desktop_apk": "C:\\Users\\Administrator\\Desktop\\HardCore-v106-monster-fixes-debug.apk",
+    "bytes": 491805682,
+    "sha256": "895f9fe37cfb28e13570423dcb341fa4307dcc1a61ee5ec070a437f19e247c4a",
+    "previous_desktop_backup": null,
+    "device_test": "NOT_RUN",
+    "adb_inventory": "no connected devices"
+  },
+  "build_worktrees_removed": 4,
+  "remaining_worktree": "C:\\Users\\Administrator\\Documents\\HardCore",
+  "scope": "source/PC native and actual APK bytes/signature only; final crowd fluency remains user experience; existing FAIL/MISSING coverage retained",
+  "build_evidence": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\monster_upgrade_20261007\\apk_v106\\stage_archives\\78d0775b4b22-20261007-195820-2e3c09ee\\seal",
+  "build_resume_command": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\monster_upgrade_20261007\\apk_v106\\resume_command.json"
+}

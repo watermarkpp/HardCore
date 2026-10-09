@@ -31,6 +31,7 @@ const RUNTIME_ROOT := "res://assets/data/runtime/map_editor/"
 const DEFAULT_RELEASE_REGISTRY_PATH := (
 	"res://assets/data/runtime/map_editor/map_runtime_release_registry.json"
 )
+const FORMAL_IDENTITY_PATH := "res://assets/data/map_design/map_identity_registry.json"
 ## FREEZE-P0.3R: Build Candidates are NEVER written to the formal runtime
 ## directory. outputs/ is gitignored and candidates are keyed by build hash.
 const CANDIDATE_ROOT := "res://outputs/map_runtime_candidates/"
@@ -43,6 +44,57 @@ static var test_fail_post_publish_verify := false
 ## FREEZE-P0.3R test/dev seam: redirect formal runtime promotion to a scratch
 ## root (e.g. user://) so tests never write the tracked formal runtime dir.
 static var test_formal_runtime_root_override := ""
+
+
+static func _resolve_release_display_name(
+	map_key: String,
+	runtime_map_id: int,
+	authored_display_name: String,
+) -> Dictionary:
+	if not FileAccess.file_exists(FORMAL_IDENTITY_PATH):
+		return {"ok": false, "name": "", "formal": false, "reason": "formal_identity_registry_unavailable"}
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(FORMAL_IDENTITY_PATH))
+	if not parsed is Dictionary or str(parsed.get("contract_id", "")) != "hardcore.formal_map_identity.v1":
+		return {"ok": false, "name": "", "formal": false, "reason": "formal_identity_registry_invalid"}
+	var canonical_range: Variant = parsed.get("canonical_runtime_range", null)
+	if not canonical_range is Array or canonical_range.size() != 2:
+		return {"ok": false, "name": "", "formal": false, "reason": "formal_identity_registry_invalid"}
+	# JSON numbers may be floats; accept only finite, exact integer bounds.
+	for bound: Variant in canonical_range:
+		if not (bound is int or bound is float) or not is_finite(float(bound)) or float(bound) != floorf(float(bound)):
+			return {"ok": false, "name": "", "formal": false, "reason": "formal_identity_registry_invalid"}
+	if int(canonical_range[0]) > int(canonical_range[1]):
+		return {"ok": false, "name": "", "formal": false, "reason": "formal_identity_registry_invalid"}
+	var formal_range := runtime_map_id >= int(canonical_range[0]) and runtime_map_id <= int(canonical_range[1])
+	var found := false
+	var canonical := ""
+	var registered_id := -1
+	var seen_keys := {}
+	var seen_ids := {}
+	var identity_rows: Variant = parsed.get("maps", null)
+	if not identity_rows is Array:
+		return {"ok": false, "name": "", "formal": formal_range, "reason": "formal_identity_registry_invalid"}
+	for raw: Variant in identity_rows:
+		if not raw is Dictionary:
+			return {"ok": false, "name": "", "formal": formal_range, "reason": "formal_identity_registry_invalid"}
+		var row_key := str(raw.get("map_id", "")).strip_edges()
+		var row_id := int(raw.get("runtime_map_id", -1))
+		if row_key.is_empty() or row_id <= 0 or seen_keys.has(row_key) or seen_ids.has(row_id):
+			return {"ok": false, "name": "", "formal": formal_range, "reason": "formal_identity_registry_conflict"}
+		seen_keys[row_key] = true
+		seen_ids[row_id] = true
+		if row_key != map_key:
+			continue
+		found = true
+		canonical = str(raw.get("display_name", "")).strip_edges()
+		registered_id = row_id
+	if not found:
+		return {"ok": not formal_range, "name": authored_display_name, "formal": false, "reason": "formal_identity_row_missing"}
+	if registered_id != runtime_map_id or canonical.is_empty():
+		return {"ok": false, "name": "", "formal": true, "reason": "formal_identity_runtime_or_name_invalid"}
+	if authored_display_name.strip_edges() != canonical:
+		return {"ok": false, "name": "", "formal": true, "reason": "candidate_display_name_conflict"}
+	return {"ok": true, "name": canonical, "formal": true}
 
 
 static func approve_for_runtime(document: Dictionary) -> Dictionary:
@@ -133,19 +185,30 @@ static func publish_runtime_release(
 	var authored_display_name := str(
 		runtime.get("source", {}).get("display_name", "")
 	).strip_edges()
+	if authored_display_name.is_empty():
+		return {"success": false, "reason": "candidate_display_name_missing"}
+	var name_resolution := _resolve_release_display_name(
+		map_key,
+		runtime_map_id,
+		authored_display_name,
+	)
+	if not bool(name_resolution.get("ok", false)):
+		return {
+			"success": false,
+			"reason": str(name_resolution.get("reason", "display_name_invalid")),
+		}
+	var verified_display_name := str(name_resolution.get("name", "")).strip_edges()
 	var previous_revision := 0
 	var updated := false
 	var formal_path := default_runtime_path(map_key)
 	for i in range(maps.size()):
 		if int(maps[i].get("runtime_map_id", -1)) == runtime_map_id:
 			previous_revision = int(maps[i].get("approval_revision", 0))
-			var existing_display_name := str(
-				maps[i].get("display_name", "")
-			)
+			var existing_display_name := str(maps[i].get("display_name", "")).strip_edges()
 			var release_display_name := (
-				existing_display_name
-				if not existing_display_name.strip_edges().is_empty()
-				else authored_display_name
+				verified_display_name
+				if bool(name_resolution.get("formal", false))
+				else (existing_display_name if not existing_display_name.is_empty() else authored_display_name)
 			)
 			if release_display_name.is_empty():
 				return {

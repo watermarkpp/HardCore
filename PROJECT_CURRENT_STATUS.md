@@ -1,10 +1,100 @@
 # HardCore Current Status
 
-## 2026-10-07：v105反馈的怪物系统修复正在执行
+2026-10-09 18:20 最新阶段：已精确接入完整 codex/integration 主树，12生产+18测试文件；HEAD215f0b2保持、真实index ddacea4e保持，344个无关dirty文件指纹保持。生产即最新ON09来源：34存活/30入战/48掉落/300物理步/10200回调，CPU962.170ms对固定107的2061.931ms下降53.33646%，最大process CPU4.800ms；仅本地单次最新窗口，不冒称手机FPS或新中位数。光源直线LOS、普通6/精英9/Boss12、人物及未隐身召唤物激活、纯被动冷怪/不回出生点已接入；光环外真实物理/法术/持续伤害独立唤醒，direct82原生PASS。最终寻敌几何602检查direct90原生PASS/退出0/error0；历史74-88退出崩溃保留，单因素改fixture匿名投影为正式静态Callable闭合。Boss60/owner64/真实受击66/掉落67/中央唤醒73按不变函数与来源边界复用。生成器仅删EOF空行，AST相等，正式156条authority check及diff-check PASS。音频、拾取、HUD、特装、Loading、零掉落与post107受击修复保留。固定108来源、正式构建与包核验正在执行，尚不冒称通过；DEVICE TEST: NOT_RUN。证据：outputs/release_v108_20261009/INTEGRATION_RECEIPT.json、ACQUISITION_FINAL_REVIEW.json、FINAL_LOCAL_PERFORMANCE.json。旧段落为各历史阶段，不代表当前状态。
 
-当前 `codex/integration`，施工基线 HEAD `aa75c5bc9845b49ee3ce67ce064442cc3fb3c43c`，改动尚未提交。用户已授权直接魔法受击只延后下一攻击、不得停移动；Boss 基础攻击间隔使用21CQ主属性，祖玛阶段召唤在既有行动时钟有目标8秒/无目标1秒边界消费，保留4–7只/次、15只上限及阶段算法。用户另授权简化群怪追击/包围，允许退休旧axis/corner等待和站位认领，保留真实地形/身体碰撞、怪物数量与伤害结算。
+2026-10-09：用户确认本轮最终必须回到完整codex/integration主树并封装108。执行清单见docs/review/TASK108_DELIVERY_PLAN_20261009.md，107后工作及保全见docs/review/POST107_WORK_SUMMARY_20261009.md。300ms方案此前本地CPU中位下降49.5433%，用户接受；新按帧预算不混用此成绩。最新同源OFF02/ON02各原生PASS且9527输入前后保持，但预算开启CPU1096.523ms高于关闭971.512ms，服务等待约2.07s、末队首约4.17s，完整服务FAIL，修复中，不接主树。掉落切片direct39/674检查、Boss direct38、owner时钟direct40各专项PASS；新增冷启动/背景唤醒scope修复direct44 PASS，不等于全负载通过。主树后107零掉落/Loading/首次攻击/受击修复及原音频/拾取/特装/HUD保留。主树生产接入、固定来源、108构建、APK核验NOT_RUN，DEVICE TEST: NOT_RUN。
 
-接手先读 `docs/review/monster_system_20261007/CURRENT_RESULT.md`。最新相同源码阶段18项原生功能回归PASS、退出0、无引擎错误；包括自动入战、短墙绕行及真实攻击、窄道、完整已提交路径、30怪2700帧开阔与墙边包围、连续受击、Boss/火墙/main召唤。已修复额外发现的polygon路线过度绕行：全canonical路径确实清晰后再恢复直接追击。完整receipt、较早46/47超时FAIL及特殊行为覆盖缺口保留。用户最终要求停止重复性能采集，群怪流畅度以其实际游玩体感验收。固定候选正在准备构建v106；包名/签名/存档合同不变；APK BUILD: NOT_RUN；DEVICE TEST: NOT_RUN。
+2026-10-09 13:52：用户正式选300ms追击规划，攻击/法术不等周期，合法且冷却就绪普通接触当次结算，投射物飞行例外；只允许攻击视觉被追击覆盖，逻辑parent/单次伤害/cooldown/struck时序保持。新owner窗口隔离首轮0/100/200/300观察见outputs/crowd_ai_frequency_ab_20261009/OWNER_INTERVAL_ROUND_01.md。原始107新同负载stock控制CPU2033.073ms、native PASS；wrapper额外runtime producer/maxfps字段MISSING保留，配置源/INPUTS/receipt/POST可追溯。首轮300的1024.695ms漏owner-wait HC移动ownership，不作为完整候选成绩；补齐后两个无phase窗口1169.611与1105.157ms，分别下降42.47%与45.64%，各自源码阶段native0/error0/PASS、9524前后不变、34alive/30入战/48loot/300physics/10200callbacks；不能合并为同源重复验证。direct16、17各自PASS。50%仍FAIL，不用首轮49.6%或同源owner0的56.6%冒称相对107达标。最新被动probe_02 native0/error0/PASS：foreground394.880ms、melee含实际移动502.835ms、retarget8626次273.986ms；诊断不作收益。probe_01误参数导致disabled，归因MISSING保留，准备器已校验。普通远距脱战AI维护也进owner窗口，生死/地图/安全区/攻击仍实时，direct18 PASS；leashdue_01完整CPU采集中。Boss特殊/远程窗口覆盖、持续AOE本地长窗口尚未完成；生产主树未集成，未出新APK。主树HEAD215f0b2与原dirty保全。
+
+2026-10-09 12:53：用户最新明确“100/200/300ms只限制追击AI，攻击不等该间隔，范围合法+冷却就绪立即触发”，覆盖此前攻击可等待一轮的产品选择；玩家位置对追击方向/选路周期采样，对攻击与碰撞实时。整体owner窗口仅设计，未实施，不把现有newstep200当完整实现。隔离一次被动exclusive phase probe native0/error0/PASS、9524前后一致、34/30/48/300/10200；Enemy2025.063ms中meleeplan含真实移动1281.822ms(63.30%)、foregroundgates465.177ms(22.97%)，其余preflight151.306/index21.221/status55.348/unlabelled50.189；不能把63%全称可跳过AI或叠加nested计时。证据immediate_residual200_01/RESULT.md，下一设计OWNER_DECISION_WINDOW_DESIGN.md。持续10-20s AOE渲染/手机FPS NOT_RUN，≥50%未达，主树HEAD/index/Enemy原哈希保持，无新APK。
+
+2026-10-09 12:46：新单optional宏batch dispatcher direct08 native0/error0/PASS，五owner/真实process、repeat与diagreset不补额度、pending真实root、disabled actor/root、借用once/LIFO/completion、scope退休与postcallback停批均专项验证。新同源immediate200/dispatched200窗口9524预绑定/后验/正式runtimehash相等、34/30/48/300/10200、native0/error0/PASS。完整计入迁移入口：Enemy1994.032→1852.093ms + dispatch0→316.500ms，总1994.032→2168.593ms（增加8.75%，性能FAIL不晋升）。队列末0、979grant、最大已服务等待89.266ms，多秒饥饿闭合；窗口攻击15→17/伤害217→254，人物行程与HP驱动吃药执行不同，严格等执行输入FAIL，不能当等量算法或设备验收。CPU向量同窗口齐全，p99略降但max升18.028ms，不称长帧目标已达。证据入口DISPATCH_DECISION_01.md、DISPATCH_BOUND_COMPARISON_01.json、direct_08/RESULT.md。主树代码未并入，≥50%未达，无APK/DEVICE TEST: NOT_RUN；下一步仅先分解physics残余成本，旧闭合项目不重复测。用户同一“项目助手工作线程”极高咨询授权持续有效，当前Pro限额BLOCKED，未冒称配置已切换。
+
+2026-10-09 12:25：current/200ms独立新步对照两窗口native0/error0/PASS、9521已声明输入前后相等；Enemy2176.497→1920.126ms（11.78%），新步712→390，失败293→22；窗口攻击18→17/伤害254→246，玩家行程2.686→2.892GU，明确为AI策略取舍。Enemy perprocess p99/max11.144/13.404→10.362/12.034ms，但process间隔p99/max20.763/20.992→21.082/21.8ms，不能称帧尾改善已验证。离线闭包复核发现raw中loot_pickup/path_scheduler/path_search三个正式源在INPUTS预绑定MISSING，两个runtime指纹相同，当前文件相同；是预绑定缺项，不是观察到源码漂移，不回写旧manifest或重复跑成绿，严格结果FAIL。下一新源准备器已补三路径。结果入口FREQUENCY_COMPARISON_RESULT.md与FREQUENCY_BINDING_LIMIT.md。后续batch dispatcher仅隔离施工，单个optional宏scope最多五owner，物理推进原样；必须把dispatch完整CPU与Enemyphysics相加，禁止移动计时归属冒称改善。50%未达，不晋升，无APK/DEVICE TEST: NOT_RUN。
+
+2026-10-09 12:18：direct04 PASS后同源pair02 Enemy CPU2164.204→1986.512ms（8.21%），仍因多秒未服务请求产品FAIL。新增被动诊断native0/error0/PASS、9521输入前后相等；末32拒绝由resource_completion类别公平轮转阻挡，当前process已服务pursuit而视觉类别只在上一process服务，预算仍有余量；实际每epoch一owner、预留五owner，不得通过删除素材pending/绕开fairness/扩大预算掩盖。入口outputs/crowd_ai_frequency_ab_20261009/DENIAL_DIAGNOSTIC_RESULT.md。200ms独立新步门槛已在隔离源实现，仅普通非Boss pursuit，复用owner时钟、失败消耗一次、无补债；原移动碰撞/struck/已提交动作保持逐physics。direct05 diagnostic空字段early FAIL已保全；修复后direct06三fixture断言FAIL，搬至合法内点且保留断言后direct07 native0/error0/PASS。新同源current/200窗口进行中，尚无性能结果，不晋升。用户授权后期在同一“项目助手工作线程”极高咨询，但Pro14限额BLOCKED仍有效，未冒称档位已切换。≥50%未达，APK/DEVICE TEST: NOT_RUN。
+
+2026-10-09 11:43补充：Pro14真实返回assistant42cd768f...报告模型使用限额，外部审阅BLOCKED，没有本轮分析建议，主控继续独立有限施工，不冒称已获Pro结论。Pro13原文已从官方read回收至PRO_RESPONSE_ROUND13_20261009.md，旧全文MISSING为历史记录。下一步先修kind-specific请求实际需要/退休、nested已执行任务消费和拒绝原因分类，再做同源对比，未增加时钟/重写整移动系统。当前已测候选产品FAIL和主树保全边界不变。
+
+2026-10-09 11:40：PURSUIT_PROCESS_BUDGET_AB已完成隔离源码和原生对照，但产品服务FAIL，不晋升。直接01 parser FAIL、直接02独立fixture残留FIFO导致FAIL均保全；修正后直接03 native0/error0/PASS，统计reset不清业务、嵌套借用、pending多kind、spent额度和生命周期合同已专项验证。相同9521输入指纹两窗口native0/error0/PASS、前后源码一致、34/30/48/300/10200；Enemy总CPU2114.601→1921.306ms（下降9.14%），perprocess p99 9.651→8.324ms、max12.138→11.819ms，CPU收益未达50%。窗口攻击19→14、伤害269→194、玩家移动2.64→4.08GU，不能冒称等量work；队列末23、最老未服务6.51s/389process、实际served ownermax1与reserved5不符，服务FAIL。只在owner再次进入相同kind入口才服务的callback生命周期与FIFO预留脱节，不能用TTL清年龄/加预算掩盖。入口outputs/crowd_ai_frequency_ab_20261009/COMPARISON_RESULT.md、ARCHITECTURE_GUARDRAILS.md；钢珠接触即停已只读分析，省的是后续重规划，碰撞仍必需，未实现。用户新建议200–300ms决策时钟，主控拟先200ms/300ms对照、统一预算错峰、现移动/动作/伤害继续，无补算积债。61项审阅材料实际push 3e067e0e5d632dcf2d24fbe2a67c7a7c9745b542，主树HEAD/index原字节保全；Pro14已发实际请求，回复尚未读取。≥50%与Android/GPU目标未达，无新APK，DEVICE TEST: NOT_RUN。
+
+2026-10-09 11:17范围更新：Pro13完整回复已实际读到（assistant df25d47d-2600-4572-aca4-ff44284b407e，审阅1a29a798...），永久全文导出目前MISSING，真实读值receipt与明确改述见PRO_RESPONSE_ROUND13_READ_RECEIPT_20261009.md。为保护架构，第一原型收窄为PURSUIT_PROCESS_BUDGET_AB：到期观察+新追击步生成在现process预算内错峰，规划token在真实移动前关闭；不将整Enemy/近战tick挂预算，不改现攻击资格/移动/碰撞/时钟。原全foreground10Hz设计与partial字节已保全NOT_RUN，未跑引擎、不晋升。用户允许从频率/检查量牺牲AI精度与反应，但禁止长帧回退；下一步在隔离树完成CONTROL/PROCESS_BUDGET并绑定同源对照，特别记录atomic quantum超额和服务积压，不能承诺调度自动保证60fps。当前范围入口outputs/crowd_ai_frequency_ab_20261009/CURRENT_SCOPE.md；此前完成的检查不重复。50%尚未达成，DEVICE TEST: NOT_RUN。
+
+2026-10-09 11:10：ATTACK_START_FRAME_AB已完成，当前已接受源码叠加于隔离107基线；34alive/30参战/48loot/300physics/10200callbacks三窗口CPU2161.960/2170.136/2256.584ms，窗口18/18/19攻击。提交限流无PROCESS_QUOTA竞争、仅2预算等待，未见收益，不晋升；A05原生receipt恢复PASS但stdout/engine MISSING，A06为必要日志补测，全部保留。新纯计数CONTACT_CHECK_DIAGNOSTIC原生PASS，937次完整检查中896处于冷却；远处已廉价筛除，观察入口17094次含cadence早退，不能称全量扫描。计时嵌套且有observer开销，不作收益。112项审阅证据实际push 1a29a798ffff36d0b9b7c617a30b9fcbcf18a709，主树HEAD/index/Enemy原字节保持；Pro13已派发、回复尚未读取。用户最新授权从AI决策频率和检查量降低入手，允许反应/精度取舍，逐项保留真实整体收益，最后叠加验收；不要求单项50%，不能直接相加局部百分比。正在设计10Hz决策与process预算/轮转原型，已提交动作/伤害/必要碰撞照旧推进；此原型NOT_RUN。入口outputs/crowd_attack_frame_ab_20261009/COMPARISON_RESULT.md、CONTACT_DIAGNOSTIC_RESULT.md、PASSIVE_CONTACT_SOURCE_DESIGN.md。≥50%尚未达成，无新APK，DEVICE TEST: NOT_RUN。
+
+2026-10-09 09:38–09:50：Pro10指导的NO_PLAN_FAILURE_AUDIT唯一被动诊断完成。34alive/30参战/48loot/300physics/10200callbacks、834记录=原neighbor834且337124usec相符；170chooser全部成功非ZERO，完整失败0，target-only guard失效0（wait身份全0，live/known比较未执行，不能称普遍一致）；postretry255、budget拒绝15。native0/engineerrors0/runnerPASS，诊断CPU2130.237ms不作收益，queue0/open0/maxwait3保留。已归档29项/3360499bytes并push审阅5c24890d18a345f0e310c87fda43984b0009bfb3，五生产恢复exactstock107。关闭本负结果缓存猜想；无晋升/新APK，50%仍未达。入口NO_PLAN_FAILURE_AUDIT_RESULT_20261009.md及outputs/crowd_no_plan_failure_audit_20261009/final_evidence。用户最新允许牺牲怪物反应与AI精细度争取稳定60fps，要求强制分帧与预算；攻击是否分帧先同条件对比再决定，非已定最终策略。正在只读梳理既有时钟/physics补步与process预算、已提交动作和必要碰撞边界。不会把减少AI执行次数冒充旧合同的同工作提速；用户新取舍与原CPU目标分开记录。Pro新消息已实际派发，LOCAL_DETOUR_OFF旧建议尚未执行，因新方向暂不推进。
+
+2026-10-09 04:26：NATIVE_LIVE_MOTION_QUERY按Pro9建议完成单入口真实执行体实验。最终direct118项/native0/零引擎错误PASS；完整两轮34alive/30参战/48loot/300physics/10200callbacks、queue0/open0/wait1，CPU2061.624/2070.613ms，中位2066.1185ms比fixed107慢0.4297%，性能FAIL并退役。native确实进入，setup统计10745/10775entries、零fallback；精确300窗口native查询数MISSING，不伪造。静态拒绝、加载崩溃及bool非法fixture引擎失败完整保全，不能拿局部PASS抵消runnerFAIL。研究五生产文件恢复exactstock107，native源/DLL恢复sealedtask2；主树HEAD/index/原dirty保全。实际审阅push d77b42126da5a173d7b3f6f7e6290cfcc231878e，仅158项退役证据与Pro9原文。Pro新轮已派发：判断真正失败邻居计划的重复计算/有界消融，尚未实施。入口NATIVE_LIVE_MOTION_QUERY_RESULT_20261009.md及outputs/crowd_native_live_motion_query_20261009/final_evidence。50%目标仍未达成，无新APK，DEVICE TEST: NOT_RUN。
+
+2026-10-09 03:44：独立FIXED_COUNTER_BACKEND完整两窗口CPU2211.004/1986.185ms，中位2098.5945ms，比fixed107慢2.0083%，性能FAIL，候选退役。两窗口均34alive/30入战/48loot/300physics/10200callbacks，专项及window回归各自PASS；不挑较快窗口、不把行为PASS当收益。研究五生产文件再次逐字节恢复stock107，主树HEAD/index/生产现场保全。Pro第8轮原文已读并保全，profile归属纠错离线V4仅归因，不作为Enemy分账或可迁移预算；目前没有证成50%的执行集合。审阅分支实际push aa98321f4002ab375c93393af64ea87ca1f3c969（c14d3d4e归档后仅修报告最终inventory摘要），候选只在退役档案。Pro第9轮正在判断直接读取真实owner并执行原判定的native假设，尚未开新施工。入口FIXED_COUNTER_BACKEND_RESULT_20261009.md、PRO_RESPONSE_ROUND8_20261009.md、outputs/crowd_fixed_counter_backend_20261009/final_evidence/、outputs/crowd_native_profile_20261009/UNKNOWN_OWNER_AUDIT_V4.json。目标仍未达成，无新APK，DEVICE TEST: NOT_RUN。
+
+2026-10-09 03:10：FORMAL_SPATIAL_READ_LANE闭合候选两完整窗口均34alive/30入战/48loot/300physics/10200callbacks、runner PASS，CPU2401.620/2378.087ms，中位2389.8535ms比fixed107慢16.165%，性能FAIL，假设退役。provider/consumer专项及9相关回归各自PASS，旧FAIL和源码阶段保留，不合并跨源码全PASS。研究五生产文件已逐字节恢复stock107；主树生产/HEAD215f0b2/index未动。实际线性push审阅cfc1094ac，候选仅档案，Pro新轮分析中。原生ABI基础保留未接生产；继续固定计数器紧凑backend独立实验，收益未知，不降采样。入口docs/review/crowd_grid_research_20261008/FORMAL_SPATIAL_READ_LANE_RESULT_20261009.md、outputs/crowd_formal_spatial_read_lane_20261009/final_evidence/、docs/superpowers/plans/2026-10-09-fixed-diagnostic-counter-backend.md。50%目标仍未达成，无新APK，DEVICE TEST: NOT_RUN。
+
+2026-10-09 01:12：Pro第三轮已完整读取并保全PRO_RESPONSE_ROUND3_20261009.md，第四轮已派发。profile完整性复核：642帧/每帧210–601函数，未触1024容量，离线coverage仅作归因。同步读值原型静态FAIL已归档并撤除，未跑无价值原生测试。因果observer正式同负载对照：full2160.993ms与frame_only1850.120ms、均10200callbacks，单对约14.386%细计数开销，仅诊断、不作优化或50%收益；首轮漏34callback FAIL完整保留。研究Enemy/GameRoot/index/diagnostics/runner已恢复stock，当前验证官方godot-cpp4.7串行typed近战内核的ABI/数值/接口成本，尚未接入生产。设计与执行计划：docs/review/crowd_grid_research_20261008/NATIVE_KERNEL_DESIGN_20261009.md、docs/superpowers/plans/2026-10-09-crowd-native-kernel.md。目标仍未达成，DEVICE TEST: NOT_RUN，无新APK，主树107后续修复及原dirty继续保全。
+
+2026-10-09 00:38：继续用户授权的群怪≥50%同负载优化。主树codex/integration/HEAD215f0b2f651a51e6855ee813ddd99221690311a1及原混合dirty保全；研究树crowd-v107-comparison仍固定107 edae6fde，正式封装staging保留。5项独立小候选实际总CPU中位均未有意义改善（局部池+1.92%、重复guard1.03%、typed投影1.60%、P1单轮约0.31%、P2约0.42%），目标FAIL，未接入主树。Pro项目助手工作线程两轮实际结果已读并原文保全，研究审阅分支codex/crowd-pro-review-20261008已push341854c，仅供审阅。新原生引擎Profiler诊断300physics/34怪/30入战/48loot，完整3927包解码PASS；官方五字段离线解析修复后642processframes完整，原错误解析归档invalid_01。原生退出0但runner FAIL：legacy --profiling退场no profiler scripts；仅用于热点归因，不作收益证据。反复分类/投影证明/观察/移动推进成本分散，下一候选为Pro建议的同步片段显式读值传递，原生移动、回退、攻击回调和身份变化断开旧值，不冻整帧。入口docs/review/crowd_grid_research_20261008/PRACTICE_RESULT_20261009.md、PRO_RESPONSE_ROUND2_20261009.md及outputs/crowd_native_profile_20261009/PROFILE_ANALYSIS.md。DEVICE TEST: NOT_RUN，无新APK，后107Loading/掉落/首次攻击/受击修复保持。
+
+2026-10-08 23:10：用户停止格子方案，改为先查参战数量增加时的真实消耗。主树已精确撤除格子挂钩，保留已确认的107后续修复；研究树使用封装107固定SHA edae6fdef6a6551a951fab1ea8c6ade43359d603。相同34怪/48掉落/300真实physics tick，0/10/20参战专项PASS，30复用同条件完整窗口（一轮PASS、一轮末尾队列检查FAIL，失败保全）。怪物CPU均值依次0.349/2.316/4.329/6.858ms/tick；10→30身体检查4960→27656次，约5.6倍，总CPU约3倍。移动步推进包含原生移动/环境/攻击资格检查，约占30怪CPU38%，不能与嵌套计时相加；仅移除成对碰撞不支持50%总耗时目标。一次细分计时确认重复目标观察、运动清空等调用量，诊断包装增加约30%开销，仅用于调用图，不冒充生产性能；包装已撤除并核验原107字节。全局候选池失效与玩家移动使阻塞等待失效为待量化机制，尚未修改算法。结果见docs/review/crowd_grid_research_20261008/V107_COST_GROWTH.md、FORMAL_COMPARISON.md及outputs/crowd_v107_growth_20261008/VERIFICATION.json。格子整体提升目标FAIL；手机掉帧归因未闭合，GPU/DEVICE TEST: NOT_RUN，无新commit/push/APK，原混合dirty保留。
+
+2026-10-08 19:37：怪物首次攻击与攻击/施法/受击交叉时序修复完成源码专项。移动中受击原地播放，人物保留RUN/输入/助跑衔接，怪物保留原移动步；完整已提交攻击后再hit，实际动画时间等值暂停剩余冷却，不重置进度；人物800ms保护不免疫HP；火墙/毒素不插入hit。修正首次攻击等待移动cadence、怪物创建时未绑定时钟/幽灵默认攻击、暂停帧吞移动许可、排队人物移动锁及800ms数值边界。19相关原生场景及2专项模式PASS，命令/指纹/完整receipt/失败保全与复用见docs/review/first_attack_latency_20261008/RESULT.md、VERIFICATION.json。codex/integration、HEAD215f0b2f651a51e6855ee813ddd99221690311a1及原混合dirty保留，无新commit/push/APK。同负载群怪进一步改善至少50%尚未测量，DEVICE TEST: NOT_RUN；不将动作专项PASS作为性能或全架构验收。
+
+2026-10-08 17:57：用户搁置新的共表/加权/按强度抽取设计，现有掉落规则保持：全表逐槽判定，再保护/优先级筛选，普通6/精英9/Boss12地面上限。零掉落与Loading首帧条字同步/实际2px边框已修源码；9相关文件和引擎指纹与已验证结果一致，复用严格provider、6/9/12、Loading、角色进入、32真实死亡地面产物、遮罩PASS证据，不重复检测。见docs/review/v107_feedback_20261008/CLOSEOUT_REUSE.json。未封装新APK，DEVICE TEST: NOT_RUN；接下来集中群怪残余卡顿与首次攻击迟钝。桌面掉落设计初稿保留但不实施。
+
+2026-10-08 16:07：用户要求将掉落初期表放桌面后停止。已交付 HardCore_怪物分类与平均掉落收益_初稿_20261008.xlsx，166391字节，SHA256 5572633d960d228b46df64bfee30cd643d0b037149006a18b0c3bba17d67b655。4页包含分类/待定收益目标、126怪物理论平均收益、2504条按类合并的旧候选、数学口径和可重算例子。正式Boss18逐个独立表，暗之牛魔王另登记；普通14和精英12类为待讨论初稿。新策划前提：6/9/12次有放回抽取、允许重复、取消保护与截断、成功多少出多少，以平均收益定权重；这些尚未写入游戏。黄色目标留空，未伪造新概率或完整金币出售收益。证据outputs/v107_feedback_20261008/workbook/DELIVERY.json。用户回来后继续数学讨论；群怪残余卡顿和首次攻击迟钝保持开放，本次按要求停止，不继续施工或封装。
+
+2026-10-08 15:47：v107用户反馈Loading首帧缺条及全部零掉落已修源码。正式生成摘要sheet_row5831、总6083恢复严格LootRuntime；概率/保护/6/9/12不变。Loading首帧条/字同步、准备0%、实际屏幕2px边框。Python4项、相关原生UI/地面分组/角色进入/32真实死亡产物/遮罩专项最新PASS；失败及正式目录再生成证据见docs/review/v107_feedback_20261008/RESULT.md、VERIFICATION.json。群怪手机体感有改善但仍未解决，首次攻击迟钝开放；共表抽取次数精简方案仅讨论，独立于群怪。原dirty与HEAD保持，无新提交/push/APK。DEVICE TEST: NOT_RUN。
+
+2026-10-08 14:53：v107完整本轮改动已交付桌面。固定构建SHA edae6fdef6a6551a951fab1ea8c6ade43359d603，主树HEAD仍215f0b2f651a51e6855ee813ddd99221690311a1，原暂存/未暂存工作保留；仅隔离构建引用，无主分支commit/push。桌面HardCore-v107-upgrade-debug.apk，versionCode107，499861534字节，SHA256 963e66b9ce6f3e4928103e585682f2f402647a85c0cb9add4609c71349f9b2d9。同包名com.personal.mafaoffline/同签名，两遍封装及包身份/资源/启动检查PASS；37变动脚本、全部本轮JSON/材质、PCM/药水/血条导入资源实际包核对PASS。用户已确认最终UI并授权完整封装；特殊属性面板实际入口/说明已确认。复用未变证据，最终特装真实主线/actor政策两项必要复验PASS。入口docs/review/release_v107_20261008/DELIVERY.md、CONTENT_CHECKLIST.md及APK_STATIC_CHECK.json。DEVICE TEST: NOT_RUN，手机体验由用户亲自验收。临时构建树清理BLOCKED：自动审批策略拒绝且未给具体理由，正式构建树仍保留，详见BUILD_STAGE_RETIREMENT.json；旧主树/第二树及历史临时树未恢复。历史未闭合项继续保持，不能作为全架构全量PASS。
+
+## 2026-10-08 13:47：主界面触控/尺寸、两种超级药水与血条修正，等待截图确认
+
+当前唯一integration主树，HEAD215f0b2f651a51e6855ee813ddd99221690311a1，保留混合dirty。六技能按钮/图标+20%、攻击-15%、换敌/交互+20%并向南、摇杆+20%向北16已实现；四槽按外框登记点击范围、独立触点/实时坐标变换、槽内轻微漂移不吞点击，系统取消不耗药。只对超级金创药hc.item.920017/超级魔法药hc.item.920042清理各5个独立杂点并按视觉中心摆放，原图和其它物品保持。目标血条补完整不透明内孔底色和精确源框掩膜；文字普通400字重、18字号、居中、无描边阴影。
+
+入口docs/review/hud_touch_20261008/RESULT.md与VERIFICATION.json。最终同生产源码的两次原生调用覆盖6专项，最新各PASS/退出0；仅修正夹具后复测失败3项，不重复已PASS项。实际GPU预览1598×720正常退出0，完整及药水/血条局部截图在outputs/visual_acceptance/hud_runtime/hud_20261008_final*.png，视觉确认待用户。没有新commit/push/APK/安装；DEVICE TEST: NOT_RUN。音频/拾取/特装/群怪未变边界复用旧证据，手机体验仍开放。
+
+## 2026-10-08：群怪源码改造与本地同条件对照完成，手机体验待验收
+
+当前codex/integration，HEAD仍215f0b2f651a51e6855ee813ddd99221690311a1，混合暂存/未暂存现场保留，没有新commit/push/APK。用户手机v106的同一诊断窗口已采集、记录并关闭监测；末段34总怪/27入战/27移动，怪物physics803.8CPU ms/墙钟秒，手机原证据在docs/review/phone_crowd_20261008/BASELINE.md。
+
+普通近战取消每tick目标相对站位重选，保留八向短段、真实绕障和身体碰撞；合法攻击范围内站定，完整已提交动作结束再追击。延后观察/局部绕行按现有cadence及真实physics epoch分批、最多5owner，失效队中请求剔除而不重置FIFO年龄。空间桶1GU，接触recovery margin仍保留完整候选。用户最新伤害合同只有真实飞行投射物可移动躲避；直线及124/180/195等瞬时AOE发动同步结算，后续表现无二次HP，火墙每跳单独结算。锁定法术保存发动位置，不按玩家后续位置重瞄。
+
+同地图913203、seed、34正式怪（30自然入战+4背景）、48掉落、正式角色属性和300真实physics ticks的最终两个实验均PASS、30实际移动者/34存活。正常转向怪物总CPU2980.520→1974.776ms（降低33.74%），P95 14.135→9.100ms；频繁转向2879.397→2089.986ms（降低27.42%），P95 13.231→9.776ms。实际攻击、HP、药品和轨迹输出差异透明记录，不冒称完全相同结果；CPU数据不是手机FPS。
+
+入口docs/review/phone_crowd_20261008/LOCAL_COMPARISON.md、ARCHITECTURE_DIAGNOSIS.md和VERIFICATION.json。71个独立原生receipt及原FAIL保留；预算、范围发动/一次结算、九类正式投射物专项最新PASS，修正过的夹具均另留原失败。旧natural30全员径向/五CLEAR保证仍FAIL，新四象限持续包围为另一个用户授权合同，不合并为一轮全量绿。音频/拾取/特装相关未变边界复用旧证据，不重新测试。
+
+v106临时基线树33份原始证据已按哈希保全并通过托管可恢复归档，Git工作树现在仅integration。GPU MISSING；本候选APK及DEVICE TEST: NOT_RUN，手机群怪体感最终验收和整体架构剩余工作仍开放。
+
+## 2026-10-08 01:24：指定特装及HUD居中实现完成，专项分阶段PASS
+
+当前codex/integration，HEAD仍215f0b2f651a51e6855ee813ddd99221690311a1；保留混合暂存/未暂存现场，没有新commit/push/APK。当前入口：docs/review/special_equipment_20261008/FINAL_RESULT.md、FINAL_RECEIPTS.json、WORK_LOG.md。麻痹普通5秒/精英Boss2.5秒，自动复活300秒且仅戒指复活免经验惩罚，隐身穿戴/破隐/真实脱战恢复，三个戒指赋予独立可绑定技能/物品图标/撤销，技巧17技能池随机+1，探测唯一掉落UID移除，神秘主资料库随机属性/对应需求及详情均已接入。战士开关漏接true-center校正已修；目标怪物血条文字原居中继承正确，真实主世界几何检查PASS。
+
+最后新增UI绑定复验special_panel_identity_boundary_012136_862376 1PASS；真实特装主线/隐身/三类神秘穿戴需求special_last_stealth_wear_root_011445_830645 3PASS；魔血/虹魔/三个装备技能相关phase2在special_panel_set_fixture_repair_012027_695403中PASS，该epoch另一UI夹具FAIL保留并由上述单场关闭。全部15个本轮独立epoch原始失败保留，17个不同专项最新各自PASS，不合并为同一最终源码全量绿；当前完整source snapshot见FINAL_RECEIPTS.json。
+
+AGENTS.md已加入不要无依据重复检测、每次留证据、必要修复/新增/平台检测仍做的长期规则。原音频/拾取/售价/概率/Loading证据复用。群怪未解决，留至今日用户手机演示并同步监測；整体架构、既有MISSING和设备体验仍开放。DEVICE TEST: NOT_RUN；v106不含这些未封装改动。
+
+## 2026-10-07 23:32：音频、拾取已验证；群怪现场监测放最后
+
+本轮音频、连续拾取已修复且正式链验证PASS，不列为尚未执行：最新5场覆盖canonical药品实际播放、PCM生命周期、发现提示资源退役、21来源真实存档与FIFO、分组掉落。售价19身份报价/5种真实售出、祝福油5倍、小极品3倍及Loading/比奇名称专项亦已有PASS。全部独立源码阶段与失败保留，不能作为全量整合或设备验收。Loading进入专项退出有44 ObjectDB告警。
+
+特殊装备40件/1材料清单已完成，既有特效专项本轮PASS；25件有正式消费者、6件只有数据、祈祷/记忆9件延期，麻痹真实命中→控制完整证据仍MISSING。用户认可加粗金边。入口：docs/audio/20261007/CURRENT_RESULT.md 和 docs/review/monster_system_20261007/SPECIAL_EQUIPMENT_CONNECTION_LIST.md。
+
+群怪问题按用户最新要求放最后，由用户手机演示、同步监测该次数据；新局部算法候选未验收，不提前重复群怪测试或封装。本轮未出新APK；DEVICE TEST: NOT_RUN。下方旧优先级和“待跑”是历史阶段，由本节及上述当前结论覆盖。
+
+## 2026-10-07：连续拾取专项通过，分组掉落接入；继续群怪与指定物品出售
+
+用户再次报告群怪卡顿未解决，已授权连接手机复现；当前安装版本尚未绑定，不将该反馈自动归为v106设备测试。随后用户明确优先修复音频和拾取：吃药音效缺失；主城BGM开始时画面轻微不适、持续一段时间后恢复；连续拾取常出现临时提示并等待，要求一次完成拾取、成功提示依次播放、工作均匀执行。群怪任务保留开放，手机复现暂后置。当前功能回归与v106封装PASS不代表这些体验问题解决。
+
+音频已复现正式canonical药品发出item:920045、音频表仅有service:658路由的FAIL。本轮入口为docs/audio/20261007/CURRENT_RESULT.md；保持原曲、6秒入城延迟、音量、跨图自然播放及真实存档合同。已完成药品路由、PCM播放、连续拾取FIFO和已接受交易、发现/战斗提示退役的专项修复；保留各轮FAIL/复验证据。用户追加角色选择Loading60%跳0和地图“单机重制”文案问题，正按正式加载/地图生成链修复；最终整合源码回归尚未完成，尚未出新APK。
+
+用户明确暂停抢先整合/封装，先完成连续拾取，随后继续群怪。第二轮拾取正式21来源/真实保存边界/单批持久化/FIFO/零误拒绝专项PASS；移除已接受来源的重复terrain查询，旧批次重试保留在新候选之前；管理器和过期/回执生命周期相关回归PASS。掉落槽最新合同ordinary白怪6、elite精英9、boss12，原保护规则/全槽先RNG/概率/金币聚合保持；按稳定monster ID读取正式分类，四项group/生产roll/armor保护/live-map专项4PASS。历史冻结baseline的15仅作旧来源审计，当前正式roll按分组执行。
+
+群怪局部查询/追击包围算法继续施工，不能以这些专项PASS声称手机流畅度解决。用户新增售价（金币）：黑铁90000、圣物碎片100000、合成好的圣物及徽章200000、祖玛雕像1000000；需要接入正式catalog和可售quote/commit，保持其它物品属性、买价、持久化和金币上限。当前未出新APK，DEVICE TEST: NOT_RUN。
+
+## 2026-10-07：v106怪物修复APK已交付
+
+当前 `codex/integration`，施工基线 `aa75c5bc9845b49ee3ce67ce064442cc3fb3c43c`；修复源码已固定于 `c8477058a0c2f67f7a9e39f3523f4ea7693bd5cd`。用户已授权直接魔法受击只延后下一攻击、不得停移动；Boss 基础攻击间隔使用21CQ主属性，祖玛阶段召唤在既有行动时钟有目标8秒/无目标1秒边界消费，保留4–7只/次、15只上限及阶段算法。用户另授权简化群怪追击/包围，允许退休旧axis/corner等待和站位认领，保留真实地形/身体碰撞、怪物数量与伤害结算。
+
+接手先读 `docs/review/monster_system_20261007/CURRENT_RESULT.md`。最新相同源码阶段18项原生功能回归PASS、退出0、无引擎错误；包括自动入战、短墙绕行及真实攻击、窄道、完整已提交路径、30怪2700帧开阔与墙边包围、连续受击、Boss/火墙/main召唤。已修复额外发现的polygon路线过度绕行：全canonical路径确实清晰后再恢复直接追击。完整receipt、较早46/47超时FAIL及特殊行为覆盖缺口保留。用户最终要求停止重复性能采集，群怪流畅度以其实际游玩体感验收。v106已交付桌面，固定构建源码78d0775b4b22f40ad1f54426639d867310dae41a；两遍封装及独立包内容/签名校验PASS；包名/签名/存档合同不变。大小491805682字节，SHA256 895f9fe37cfb28e13570423dcb341fa4307dcc1a61ee5ec070a437f19e247c4a。详见docs/review/monster_system_20261007/APK_DELIVERY.md。四个本任务构建树保全证据后已移除；DEVICE TEST: NOT_RUN，用户体感验收待试玩。
 
 ## 2026-10-07：第三树成为唯一主树
 
@@ -317,3 +407,9 @@ Use annotated tag `standard-20260829-main-tree` for the immutable consolidated s
 ## 2026-09-22 22:20 打包前追加
 
 当前最后6项影响回归PASS，新增三职业自身成长独立审计PASS（765等级行/13005属性/177实际升级及负重接收），数据未改。Debug游戏设置已加入两种30秒本地性能记录。用户明确要求当前优化打包v92实机验证；手机CPU/GPU结论仍NOT_RUN，原始M30性能FAIL/可比性BLOCKED及Windows退出故障均保留。最终产物身份另见docs/repair_v92/APK_HANDOFF.md，未生成前不得声称已交付。
+
+## 2026-10-09 01:46 native feasibility continuation
+
+Task1 bounded Windows ABI/float parity PASS (300 checks) and Task2 raw-buffer transport PASS (36 checks) are archived under outputs/crowd_native_kernel_20261009. These do not establish performance improvement or production integration. Fixed107 target remains 1028.63925 ms / 300 ticks, goal not met. LOCAL/ABI_SHAM full-load diagnostic is being prepared in isolated research source; no main Enemy integration.
+
+Correction to earlier observer attribution: the full/frame-only pair had different actual movement trajectories despite identical input plans and headline counts. The 14.386% elapsed difference cannot be attributed solely to observer overhead; strict causal attribution is UNKNOWN. Pro round5 and CAUSAL_OBSERVER_RESULT_20261009.md record this correction. No repeated pair will be run to force a match.

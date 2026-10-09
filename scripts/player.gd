@@ -1,6 +1,8 @@
 class_name PlayerCharacter
 extends CharacterBody2D
 
+signal passive_wakeup_changed()
+
 const DamageLedgerObserverScript := preload("res://scripts/damage_ledger_observer.gd")
 # Explicit test-only seam; the observer never controls gameplay writes.
 var test_damage_write_hook := Callable()
@@ -105,6 +107,7 @@ var stealth_time := 0.0
 ## PlayerState, but an attack/skill submission suppresses its visibility until
 ## a new runtime stealth application explicitly refreshes the state.
 var _stealth_break_override := false
+var _equipment_stealth_active := false
 var defense_buff := 0
 var defense_buff_time := 0.0
 var mac_buff := 0
@@ -123,6 +126,16 @@ var _skill_cooldown_remaining: Dictionary = {}
 var _struck_lock_remaining := 0.0
 var _struck_reaction_lock_remaining := 0.0
 var _queued_struck_reaction := false
+## Protection begins when the hit presentation actually starts. Damage still
+## applies during the window, but it cannot restart the reaction, refresh the
+## 100ms action lock, or create another cooldown pause.
+const STRUCK_PROTECTION_SECONDS := 0.8
+var _struck_protection_remaining := 0.0
+## Cooldown-only pause owned by the actual player hit presentation.  This is
+## deliberately separate from the 100ms server action lock and from the
+## queued-reaction flag: an accepted attack/cast must finish before this clock
+## starts, while the hit animation itself pauses attack/skill cooldowns.
+var _struck_cooldown_pause_remaining := 0.0
 var _rng := RandomNumberGenerator.new()
 var visual: Node2D
 var health_bar: PlayerHealthBar
@@ -145,8 +158,10 @@ var _pending_combat_action_epoch := 0
 var _pending_combat_action_kind := ""
 var _accepted_release_producers: Dictionary = {}
 var _test_combat_time_ms := -1
+## Formal player action clock advanced only by the owner physics loop.
+var _combat_action_time_s := 0.0
 var _last_temporary_item_buff_revision := -1
-var _last_revival_at_ms := -60000
+var _last_revival_at_ms := -300000
 # HC-MONSTER-COMBAT-R3 W5 (R3-06): the death lifecycle generation. Every
 # formal death opens a new generation; the deferred death notification task
 # captures its own generation and re-checks it after the await, so a revival
@@ -208,6 +223,8 @@ func _exit_tree() -> void:
 	_pending_attack_context.clear()
 	_pending_skill_context.clear()
 	_queued_struck_reaction = false
+	_struck_protection_remaining = 0.0
+	_struck_cooldown_pause_remaining = 0.0
 
 
 func _ready() -> void:
@@ -233,6 +250,7 @@ func _ready() -> void:
 	visual.name = "PlayerVisual"
 	visual.setup(self)
 	add_child(visual)
+	visual._combat_clock_s = Callable(self, "_combat_action_time_getter")
 	if PlayerGroundRuntimeDiagnosticOverlayScript.enabled_for_runtime():
 		ground_runtime_diagnostic_overlay = (
 			PlayerGroundRuntimeDiagnosticOverlayScript.new()
@@ -255,22 +273,22 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	var profile_started_usec := RuntimeDiagnostics.timing_start()
 	var position_before_move := global_position
-	var was_struck_locked := _struck_lock_remaining > 0.0 or _struck_reaction_lock_remaining > 0.0
-	_attack_timer = maxf(0.0, _attack_timer - delta)
+	var was_struck_locked := (
+		_struck_lock_remaining > 0.0
+		or _struck_reaction_lock_remaining > 0.0
+		or _struck_cooldown_pause_remaining > 0.0
+	)
+	_combat_action_time_s += maxf(0.0, delta)
 	_attack_action_timer = maxf(0.0, _attack_action_timer - delta)
+	_struck_protection_remaining = maxf(0.0, _struck_protection_remaining - delta)
+	# Match the existing action-lock roundoff tolerance at an exact boundary.
+	if _struck_protection_remaining < 0.000001:
+		_struck_protection_remaining = 0.0
 	_movement_visual_lock_timer = maxf(
 		0.0,
 		_movement_visual_lock_timer - delta
 	)
-	for stable_skill_id: Variant in _skill_cooldown_remaining.keys():
-		var remaining := maxf(
-			0.0,
-			float(_skill_cooldown_remaining.get(stable_skill_id, 0.0)) - delta
-		)
-		if remaining <= 0.0:
-			_skill_cooldown_remaining.erase(stable_skill_id)
-		else:
-			_skill_cooldown_remaining[stable_skill_id] = remaining
+	var struck_started_this_tick := false
 	if _attack_action_timer <= 0.0 and _pending_combat_action_active and _pending_combat_action_committed:
 		_finish_combat_action(_pending_combat_action_id)
 	# A long frame can expire the physics action clock before the process
@@ -278,12 +296,36 @@ func _physics_process(delta: float) -> void:
 	if _attack_action_timer <= 0.0 and not _pending_combat_action_active and _queued_struck_reaction:
 		_start_queued_struck_reaction()
 		was_struck_locked = true
+		struck_started_this_tick = true
+	# A queued reaction starts at the owner boundary after the current action has
+	# finished. The time before that boundary remains ordinary cooldown time;
+	# only a hit already active at this tick consumes the authored pause window.
+	var cooldown_delta := delta
+	if struck_started_this_tick:
+		cooldown_delta = delta
+	else:
+		var paused_slice := minf(cooldown_delta, _struck_cooldown_pause_remaining)
+		_struck_cooldown_pause_remaining = maxf(0.0, _struck_cooldown_pause_remaining - paused_slice)
+		cooldown_delta -= paused_slice
+	_attack_timer = maxf(0.0, _attack_timer - cooldown_delta)
+	for stable_skill_id: Variant in _skill_cooldown_remaining.keys():
+		var remaining := maxf(
+			0.0,
+			float(_skill_cooldown_remaining.get(stable_skill_id, 0.0)) - cooldown_delta
+		)
+		if remaining <= 0.0:
+			_skill_cooldown_remaining.erase(stable_skill_id)
+		else:
+			_skill_cooldown_remaining[stable_skill_id] = remaining
 	_struck_lock_remaining = maxf(0.0, _struck_lock_remaining - delta)
 	_struck_reaction_lock_remaining = maxf(0.0, _struck_reaction_lock_remaining - delta)
 	if _struck_lock_remaining < 0.000001:
 		_struck_lock_remaining = 0.0
 	shield_time = maxf(0.0, shield_time - delta)
-	stealth_time = maxf(0.0, stealth_time - delta)
+	if stealth_time > 0.0:
+		stealth_time = maxf(0.0, stealth_time - delta)
+		if stealth_time <= 0.0 and not is_stealthed():
+			passive_wakeup_changed.emit()
 	defense_buff_time = maxf(0.0, defense_buff_time - delta)
 	mac_buff_time = maxf(0.0, mac_buff_time - delta)
 	control_time = maxf(0.0, control_time - delta)
@@ -432,7 +474,7 @@ func set_combat_facing(direction: Vector2) -> void:
 
 
 func can_start_attack() -> bool:
-	return not _dead and _attack_timer <= 0.0 and _attack_action_timer <= 0.0 and _struck_lock_remaining <= 0.0 and _struck_reaction_lock_remaining <= 0.0 and control_time <= 0.0
+	return not _dead and _attack_timer <= 0.0 and _attack_action_timer <= 0.0 and _struck_lock_remaining <= 0.0 and _struck_reaction_lock_remaining <= 0.0 and _struck_cooldown_pause_remaining <= 0.0 and control_time <= 0.0
 
 
 func request_attack(has_combat_target := false, locked_target_instance_id := 0, configuration: RefCounted = null) -> bool:
@@ -510,7 +552,7 @@ func can_request_skill(skill_name: String, configuration: RefCounted = null) -> 
 		return false
 	if skill_name.is_empty() or not PlayerState.is_skill_learned(skill_name):
 		return false
-	if _struck_lock_remaining > 0.0 or _struck_reaction_lock_remaining > 0.0 or control_time > 0.0 or _dead or current_hp <= 0 or combat_transition_is_active():
+	if _struck_lock_remaining > 0.0 or _struck_reaction_lock_remaining > 0.0 or _struck_cooldown_pause_remaining > 0.0 or control_time > 0.0 or _dead or current_hp <= 0 or combat_transition_is_active():
 		return false
 	if PlayerState.profession_id == "hc.profession.warrior" and SkillDataLoaderScript.entity_skill_id(skill_name) in WARRIOR_STATE_SKILL_IDS:
 		return true
@@ -1071,7 +1113,7 @@ func _apply_resolved_damage(
 	var committed_death_generation := -1
 	if current_hp == 0:
 		var now_ms := Time.get_ticks_msec()
-		if PlayerState.has_special_effect("revival") and now_ms - _last_revival_at_ms >= 60000:
+		if PlayerState.has_special_effect("revival") and now_ms - _last_revival_at_ms >= EquipmentRulesScript.revival_cooldown_ms():
 			# HC-MONSTER-COMBAT-R2 T5: the automatic revival consumed the ring
 			# charge above, but this physical hit still owes exactly one
 			# incoming-struck durability event. The old early `return` skipped
@@ -1088,6 +1130,8 @@ func _apply_resolved_damage(
 		else:
 			died_this_hit = true
 			_dead = true
+			_struck_protection_remaining = 0.0
+			_struck_cooldown_pause_remaining = 0.0
 			# R3 W5 (R3-06): this formal death opens a new lifecycle
 			# generation; any deferred notification still pending from an
 			# earlier life is thereby voided (second-death case included).
@@ -1132,21 +1176,25 @@ func _apply_resolved_damage(
 		causes_struck
 		and final_damage > 0
 		and hp_after_damage > 0
+		and _struck_protection_remaining <= 0.0
 		and (
 			force_struck_reaction
 			or ProfessionRules.should_player_stagger(final_damage, max_hp)
 		)
 	):
-		_struck_lock_remaining = maxf(_struck_lock_remaining, ProfessionRules.player_struck_action_lock_seconds())
-		velocity = Vector2.ZERO
-		movement_input_active = false
-		# The legacy client only consumes SM_STRUCK while its current action is
-		# idle. Queue the reaction so an attack animation and its hit transaction
-		# remain causally consistent instead of showing a false cancellation.
-		if _attack_action_timer > 0.0 or _pending_combat_action_active:
-			_queued_struck_reaction = true
-		else:
-			_start_struck_reaction()
+		# Repeated hits before the queued reaction starts are collapsed into the
+		# same pending presentation and must not refresh the server action lock.
+		if not _queued_struck_reaction and _struck_reaction_lock_remaining <= 0.0:
+			_struck_lock_remaining = maxf(_struck_lock_remaining, ProfessionRules.player_struck_action_lock_seconds())
+			velocity = Vector2.ZERO
+			movement_input_active = false
+			# The legacy client only consumes SM_STRUCK while its current action is
+			# idle. Queue the reaction so an attack animation and its hit transaction
+			# remain causally consistent instead of showing a false cancellation.
+			if _attack_action_timer > 0.0 or _pending_combat_action_active:
+				_queued_struck_reaction = true
+			else:
+				_start_struck_reaction()
 	stats_changed.emit(current_hp, max_hp)
 	resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
 	queue_redraw()
@@ -1190,6 +1238,8 @@ func complete_death_revival() -> void:
 	current_hp = max_hp
 	current_mp = max_mp
 	_dead = false
+	_struck_protection_remaining = 0.0
+	_struck_cooldown_pause_remaining = 0.0
 	reset_locomotion()
 	velocity = Vector2.ZERO
 	touch_vector = Vector2.ZERO
@@ -1433,6 +1483,8 @@ func _finish_combat_action(action_id: int) -> void:
 func _start_struck_reaction() -> void:
 	var duration := ProfessionRules.player_struck_reaction_seconds(PlayerState.level)
 	_struck_reaction_lock_remaining = maxf(_struck_reaction_lock_remaining, duration)
+	_struck_protection_remaining = STRUCK_PROTECTION_SECONDS
+	_struck_cooldown_pause_remaining = maxf(_struck_cooldown_pause_remaining, duration)
 
 	# Ordinary struck pauses displacement but preserves locomotion state
 	# and walk-to-run progress: RUN stays RUN, a partial 1GU run-up keeps its
@@ -1581,6 +1633,10 @@ func restore_warrior_runtime_state(saved_state: Dictionary) -> bool:
 
 func _combat_time_ms() -> int:
 	return _test_combat_time_ms if _test_combat_time_ms >= 0 else Time.get_ticks_msec()
+
+
+func _combat_action_time_getter() -> float:
+	return _combat_action_time_s
 
 
 func _request_warrior_state_skill(skill_id: String, _level: int) -> bool:
@@ -1793,19 +1849,44 @@ func magic_shield_requires_refresh(
 
 
 func apply_stealth(seconds: float) -> void:
+	var was_hidden := is_stealthed()
 	if seconds > 0.0 and not is_stealthed():
 		status_buff_started_at["stealth"] = Time.get_ticks_usec()
 	_stealth_break_override = false
 	stealth_time = maxf(stealth_time, seconds)
+	if was_hidden != is_stealthed():
+		passive_wakeup_changed.emit()
 	queue_redraw()
 
 
 func break_stealth() -> void:
+	var was_hidden := is_stealthed()
 	## Do not remove or damage equipment effects: this only suppresses the
 	## actor's runtime stealth view after an explicit combat submission.
 	_stealth_break_override = true
 	stealth_time = 0.0
+	if was_hidden != is_stealthed():
+		passive_wakeup_changed.emit()
 	queue_redraw()
+
+
+func recover_equipment_stealth_after_combat_exit() -> bool:
+	var was_hidden := is_stealthed()
+	## Re-arm equipment-derived stealth only at the authoritative combat exit.
+	## Timer expiry never restores a broken ring state.
+	if not PlayerState.has_special_effect("stealth"):
+		_stealth_break_override = false
+		stealth_time = 0.0
+		if was_hidden != is_stealthed():
+			passive_wakeup_changed.emit()
+		queue_redraw()
+		return false
+	_stealth_break_override = false
+	stealth_time = 0.0
+	if was_hidden != is_stealthed():
+		passive_wakeup_changed.emit()
+	queue_redraw()
+	return true
 
 
 func apply_defense_buff(seconds: float, amount: int) -> void:
@@ -1943,6 +2024,14 @@ func _draw() -> void:
 
 
 func _apply_profile_stats() -> void:
+	var equipment_stealth_active := PlayerState.has_special_effect("stealth")
+	if equipment_stealth_active != _equipment_stealth_active:
+		var was_hidden := stealth_time > 0.0 or (_equipment_stealth_active and not _stealth_break_override)
+		_equipment_stealth_active = equipment_stealth_active
+		_stealth_break_override = false
+		if was_hidden != is_stealthed():
+			passive_wakeup_changed.emit()
+		queue_redraw()
 	var old_max := maxi(1, max_hp)
 	var previous_hp := current_hp
 	# A lethal physical hit applies incoming durability before it marks `_dead`.

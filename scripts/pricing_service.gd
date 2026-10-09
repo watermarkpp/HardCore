@@ -143,7 +143,10 @@ static func quote_sell(
 	if not _merchant_accepts_sell_item_resolved(context, price_record, active):
 		rejection["reason"] = "该商人不回收此类物品。"
 		return rejection
-	if str(price_record.get("kind", "unknown")) in sell_policy.get("nonTradableKinds", []):
+	var kind := str(price_record.get("kind", "unknown"))
+	var registered_item := EntityIds.canonical(str(price_record.get("entity_id", "")))
+	var exception_kind := str((sell_policy.get("nonTradableKindExceptions", {}) as Dictionary).get(registered_item, ""))
+	if kind in sell_policy.get("nonTradableKinds", []) and (kind == "currency" or exception_kind != kind):
 		rejection["reason"] = "该物品不能出售。"
 		return rejection
 	if bool(sell_policy.get("rejectBoundItems", true)) and (
@@ -462,6 +465,12 @@ static func _load_policy() -> Dictionary:
 
 static func _import_category_policy(source: Dictionary) -> Dictionary:
 	var result := source.duplicate(true)
+	var exceptions: Variant = result.get("sell", {}).get("nonTradableKindExceptions", {})
+	if not exceptions is Dictionary:
+		return {}
+	for id: Variant in exceptions:
+		if not id is String or EntityIds.resolve(id, "item").is_empty() or exceptions[id] != "quest_item":
+			return {}
 	var modifiers: Variant = result.get("modifiers", {})
 	if not modifiers is Dictionary: return {}
 	var old: Variant = modifiers.get("categoryBps", {})

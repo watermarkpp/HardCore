@@ -45,7 +45,31 @@ func _run() -> void:
 	var finished_requests: Array[Dictionary] = []
 	overlay.transition_covered.connect(func(request: Dictionary) -> void: covered_requests.append(request.duplicate(true)))
 	overlay.transition_finished.connect(func(request: Dictionary) -> void: finished_requests.append(request.duplicate(true)))
+	overlay.begin_loading("stage-only:test", false)
+	if not overlay.progress_track.visible or not overlay.progress_percent.visible:
+		print("FAIL: Loading首帧必须同时显示进度条、百分比与文字")
+		get_tree().quit(1)
+		return
+	assert(overlay.progress_stage.visible, "stage-only Loading必须保留阶段文案")
+	overlay.set_loading_progress("stage-only:test", 0.60, "准备游戏场景")
+	overlay.apply_layout(Vector2(1598, 720))
+	assert(overlay.progress_stage.text == "准备游戏场景")
+	assert(overlay.progress_percent.text == "0%", "前置准备没有世界总量，不能显示60%后再归零")
+	assert(is_zero_approx(overlay.progress_fill.size.x), "前置准备及布局刷新不得填入伪进度")
+	for scale_value: float in [1.0, 1.5, 1200.0 / 720.0, 2.0]:
+		overlay.scale = Vector2.ONE * scale_value
+		overlay.apply_layout(Vector2(1598, 720))
+		var screen_transform: Transform2D = overlay.progress_track.get_screen_transform()
+		var unfilled: Control = overlay.progress_track.get_node("Unfilled")
+		assert(is_equal_approx(unfilled.offset_left * screen_transform.x.length(), 2.0), "Loading左右边框必须保持屏幕2px")
+		assert(is_equal_approx(unfilled.offset_top * screen_transform.y.length(), 2.0), "Loading上下边框必须保持屏幕2px")
+		assert(is_equal_approx(overlay.progress_fill.position.x, unfilled.offset_left))
+		assert(is_equal_approx(overlay.progress_fill.position.y, unfilled.offset_top))
+	overlay.scale = Vector2.ONE
+	overlay.apply_layout(Vector2(1598, 720))
 	overlay.begin_loading("map:test:001")
+	assert(overlay.progress_track.visible and overlay.progress_percent.visible, "普通Loading必须恢复进度条和百分比")
+	assert(overlay.progress_percent.visible, "普通地图Loading默认必须显示真实阶段进度")
 	overlay.set_loading_progress("map:test:001", 0.35, "准备地图")
 	assert(overlay.progress_percent.text == "35%" and overlay.progress_stage.text == "准备地图", "Loading进度未更新")
 	overlay.set_loading_progress("map:stale", 0.95, "错误任务")

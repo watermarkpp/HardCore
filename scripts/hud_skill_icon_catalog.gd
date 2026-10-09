@@ -1,6 +1,10 @@
 class_name HUDSkillIconCatalog
 extends RefCounted
 
+const EquipmentGrantedSkillRulesScript := preload("res://scripts/equipment_granted_skill_rules.gd")
+const UIItemTextureCacheScript := preload("res://scripts/ui_item_texture_cache.gd")
+const SkillDataLoaderScript := preload("res://scripts/skills/skill_data_loader.gd")
+
 const SKILL_TEXTURES := {
 	"基本剑术": preload("res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/warrior_basic_swordsmanship.png"),
 	"攻杀剑术": preload("res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/warrior_slaying_swordsmanship.png"),
@@ -46,12 +50,24 @@ const LEGACY_WARRIOR_SOURCE_IDS := {
 
 
 static func texture_for(skill_name: String) -> Texture2D:
+	var granted := EquipmentGrantedSkillRulesScript.definition(skill_name)
+	if granted.is_empty():
+		granted = EquipmentGrantedSkillRulesScript.definition(SkillDataLoaderScript.entity_skill_id(skill_name))
+	if not granted.is_empty():
+		var item_id := int(granted.get("item_id", -1))
+		var record := GameData.get_entity_record("hc.item.%06d" % item_id)
+		return UIItemTextureCacheScript.texture_for(record, "inventoryIcon")
 	# Every formal skill has a dedicated generated HUD icon. Do not fall back to
 	# combat animation frames or inventory skill-book thumbnails.
 	return SKILL_TEXTURES.get(skill_name) as Texture2D
 
 
 static func source_id_for(skill_name: String) -> String:
+	var granted := EquipmentGrantedSkillRulesScript.definition(skill_name)
+	if granted.is_empty():
+		granted = EquipmentGrantedSkillRulesScript.definition(SkillDataLoaderScript.entity_skill_id(skill_name))
+	if not granted.is_empty():
+		return "ui.item.inventory_icon.hc.item.%06d" % int(granted.get("item_id", -1))
 	if not SKILL_TEXTURES.has(skill_name):
 		return ""
 	if LEGACY_WARRIOR_SOURCE_IDS.has(skill_name):

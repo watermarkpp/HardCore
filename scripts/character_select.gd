@@ -915,7 +915,7 @@ func _enter_selected_character() -> void:
 	)
 	_launch_in_progress = true
 	_launch_code_generation += 1
-	launch_loading_overlay.begin_loading("character:%s" % selected_main_profile_id)
+	launch_loading_overlay.begin_loading("character:%s" % selected_main_profile_id, false)
 	# The existing opaque overlay issues its actual covered handshake. No new
 	# surface, timer, CG duration, or minimum display duration is introduced.
 	await launch_loading_overlay.transition_covered

@@ -12,6 +12,7 @@ const BATTLEFIELD_BACKGROUND := preload(
 	"res://assets/ui/gothic_theme/v1/loading_battlefield_background.jpg"
 )
 const EMBER_COUNT := 14
+const PROGRESS_BORDER_SCREEN_PX := 2.0
 
 var shade: ColorRect
 var battlefield_background: TextureRect
@@ -23,6 +24,7 @@ var loading_label: Label
 var progress_root: Control
 var progress_track: ColorRect
 var progress_fill: ColorRect
+var progress_unfilled: ColorRect
 var progress_stage: Label
 var progress_percent: Label
 var embers: Array[ColorRect] = []
@@ -35,6 +37,7 @@ var _presented_cover_rect := Rect2()
 var _presented_viewport_rect := Rect2()
 var _pulse_time := 0.0
 var _holding_final := false
+var _report_progress := true
 
 
 func _ready() -> void:
@@ -252,6 +255,7 @@ func _build_progress() -> void:
 	progress_track.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	progress_root.add_child(progress_track)
 	var unfilled := ColorRect.new()
+	progress_unfilled = unfilled
 	unfilled.name = "Unfilled"
 	unfilled.color = Color("211a19")
 	unfilled.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -285,17 +289,32 @@ func _build_progress() -> void:
 
 
 func _update_progress_fill() -> void:
-	progress_fill.position = Vector2(2.0, 2.0)
-	progress_fill.size = Vector2(maxf(0.0, (progress_track.size.x - 4.0) * _progress_value), 8.0)
+	# The project stretches logical canvas units on phones. Keep the requested
+	# border at two screen pixels, including parent and window stretch.
+	var screen_transform := progress_track.get_screen_transform()
+	var border := Vector2(
+		PROGRESS_BORDER_SCREEN_PX / maxf(screen_transform.x.length(), 0.001),
+		PROGRESS_BORDER_SCREEN_PX / maxf(screen_transform.y.length(), 0.001)
+	)
+	progress_unfilled.offset_left = border.x
+	progress_unfilled.offset_top = border.y
+	progress_unfilled.offset_right = -border.x
+	progress_unfilled.offset_bottom = -border.y
+	progress_fill.position = border
+	progress_fill.size = Vector2(
+		maxf(0.0, progress_track.size.x - border.x * 2.0) * _progress_value,
+		maxf(0.0, progress_track.size.y - border.y * 2.0)
+	)
 
 
 func set_loading_progress(request_transition_id: String, completed: float, stage: String) -> void:
 	if request_transition_id != transition_id:
 		return
-	_progress_value = maxf(_progress_value, clampf(completed, 0.0, 1.0))
 	progress_stage.text = stage
-	progress_percent.text = "%d%%" % roundi(_progress_value * 100.0)
-	_update_progress_fill()
+	if _report_progress:
+		_progress_value = maxf(_progress_value, clampf(completed, 0.0, 1.0))
+		progress_percent.text = "%d%%" % roundi(_progress_value * 100.0)
+		_update_progress_fill()
 
 
 func _reset_progress() -> void:
@@ -305,10 +324,16 @@ func _reset_progress() -> void:
 	_update_progress_fill()
 
 
-func begin_loading(next_transition_id := "") -> void:
+func begin_loading(next_transition_id := "", report_progress := true) -> void:
 	_coverage_request_serial += 1
 	var request_serial := _coverage_request_serial
 	_holding_final = false
+	_report_progress = bool(report_progress)
+	# Before the world has a measurable total, show the same zero-filled bar
+	# with stage text. Do not hide it or display 60% before the world starts at 0.
+	progress_track.show()
+	progress_percent.show()
+	progress_stage.visible = true
 	transition_id = str(next_transition_id)
 	var request_transition_id := transition_id
 	_pulse_time = 0.0
@@ -322,9 +347,13 @@ func begin_loading(next_transition_id := "") -> void:
 	_emit_covered_after_present(request_serial, request_transition_id)
 
 
-func show_loading_immediately(next_transition_id := "") -> void:
+func show_loading_immediately(next_transition_id := "", report_progress := true) -> void:
 	_coverage_request_serial += 1
 	_holding_final = false
+	_report_progress = bool(report_progress)
+	progress_track.show()
+	progress_percent.show()
+	progress_stage.visible = true
 	transition_id = str(next_transition_id)
 	_pulse_time = 0.0
 	loading_label.text = LOADING_TEXT

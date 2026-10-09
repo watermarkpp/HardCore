@@ -141,6 +141,20 @@ static func begin(category: String, necessary := false) -> int:
 		"child_usec": 0, "necessary": necessary})
 	return _next_token
 
+static func last_denial_reason(category: String) -> String:
+	if not _sync_epoch():
+		return "unknown"
+	var counters: Dictionary = _categories.get(category, {})
+	var last: Dictionary = counters.get("last_denial", {})
+	return str(last.get("reason", "")) if not last.is_empty() else ""
+
+static func last_denial_record(category: String) -> Dictionary:
+	if not _sync_epoch():
+		return {}
+	var counters: Dictionary = _categories.get(category, {})
+	var last: Dictionary = counters.get("last_denial", {})
+	return last.duplicate() if not last.is_empty() else {}
+
 static func end(token: int) -> void:
 	assert(_current_epoch() == _epoch, "frame-budget scope crossed an outer iteration")
 	if _current_epoch() != _epoch:

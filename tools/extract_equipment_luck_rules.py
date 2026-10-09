@@ -47,16 +47,16 @@ def main() -> None:
             {"originalPath": path.relative_to(ROOT).as_posix(), "sha256": hashlib.sha256(path.read_bytes()).hexdigest().upper(), "role": role, "confidence": "A"}
             for path, role in [(OBJ_BASE, "GetAttackPower、WeaptonMakeLuck、MakeWeaponUnlock"), (M2_SHARE, "祝福油默认配置"), (ITM_UNIT, "全部装备基础幸运/诅咒进入人物幸运")]
         ],
-        "defaults": {"unluckyRate": 20, "luckPoints": [1, 3, 7], "point2Rate": 6, "point3Rate": 40, "maxCurse": 10},
+        "defaults": {"unluckyRate": 20, "luckPoints": [1, 3, 7], "point2Rate": 6, "point3Rate": 40, "maxCurse": 10, "successRateMultiplier": 5},
         "probabilityFormula": {
             "spanFactorId": "blessing_span_factor_r_v2", "spanFactor": "R=max(1,floor(abs(DCmax-DCmin)/5))",
             "unlucky": {"denominator": 20, "successRoll": 1, "probability": "1/20"},
             "luck0": {"denominator": 1, "result": "improved"},
-            "luck1To2": {"denominator": "R+6", "successRoll": 1, "onFailure": "independent upper-stage Random(R*40)==1", "unconditionalImproveProbability": "(19/20)*(1/(R+6)+(1-1/(R+6))/(R*40))"},
-            "luck3To6": {"denominator": "R*40", "successRoll": 1},
+            "luck1To2": {"denominator": "R+6", "successRoll": "jointIndex=lower*(R*40)+upper", "onFailure": "always draw upper; accept jointIndex < min((R+6)*(R*40),5*((R*40)+(R+6)-1))", "unconditionalImproveProbability": "(19/20)*min((R+6)*(R*40),5*((R*40)+(R+6)-1))/((R+6)*(R*40))"},
+            "luck3To6": {"denominator": "R*40", "successRoll": "0..min(4,denominator-1)"},
             "luck7": {"denominator": 0, "result": "ineffective"},
         },
-        "blessingOrder": ["1/20失败：有幸运则幸运-1，否则诅咒+1至10", "成功路径优先诅咒-1", "幸运低于1必定+1", "幸运1—2按R+6判定，失败后继续独立R×40判定", "幸运3—6按R×40判定", "其余无效"],
+        "blessingOrder": ["1/20失败：有幸运则幸运-1，否则诅咒+1至10", "成功路径优先诅咒-1", "幸运低于1必定+1", "幸运1—2始终生成R+6与R×40两次抽样，按联合索引扩大总成功概率5倍并封顶100%", "幸运3—6按R×40判定（成功窗口扩大5倍，最高100%）", "其余无效"],
         "damageDistribution": {"positive": "按1/(10-min(9,luck))直接取上限，否则均匀", "negative": "先均匀，再按1/(10-max(0,-luck))强制取下限"},
         "totalLuckFormula": "sum(all_equipped_item.luck)-sum(all_equipped_item.curse)+weapon_instance.weapon_luck-weapon_instance.weapon_curse",
         "compatibility": {"nonWeaponCurseField": "curse", "existingCurseValuesInvented": False, "legacyDualWeaponFields": "preserve effective luck-minus-curse; normalize exclusively on next oil mutation", "display": "show one net luck or curse term; omit zero"},

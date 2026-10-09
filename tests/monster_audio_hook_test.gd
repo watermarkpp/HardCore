@@ -82,13 +82,13 @@ func _assert_rejected_entry_is_one_shot(
 	actor.target = target
 	await get_tree().process_frame
 	assert(
-		probe.prompt_request_count == request_count_before + 1,
-		"%s entry must issue one service request" % case_name,
+		probe.prompt_request_count == request_count_before,
+		"%s retired entry must issue no service request" % case_name,
 	)
 	for _tick in range(120):
 		actor._audio_try_enter_combat_session()
 	assert(
-		probe.prompt_request_count == request_count_before + 1,
+		probe.prompt_request_count == request_count_before,
 		"%s rejection must not retry for 120 ticks" % case_name,
 	)
 	actor._audio_end_combat_session("explicit_disengage")
@@ -125,39 +125,19 @@ func _run() -> void:
 	# existing set_physics_process(true) at the attack section re-enables it.
 	enemy.set_physics_process(false)
 
-	# The target edge is a real gameplay entry even when the service is absent.
-	# Installing a service inside the one-second negative window must not cause a
-	# retry: an audio rejection is not evidence that combat did not begin.
-	assert(
-		EnemyActor.audio_service_lookup_count_for_test() == lookup_before_missing + 1,
-		"first missing service must perform one lookup",
-	)
+	assert(EnemyActor.audio_service_lookup_count_for_test() == lookup_before_missing, "发现玩家不应查找音频服务")
+	# Exercise service-cache behavior through allowed audio discovery only.
+	assert(enemy._audio_service() == null)
+	assert(EnemyActor.audio_service_lookup_count_for_test() == lookup_before_missing + 1)
 	var probe := AudioProbe.new()
 	add_child(probe)
 	await get_tree().process_frame
-	enemy._audio_try_enter_combat_session()
-	assert(probe.calls.is_empty(), "rejected entry must not retry within the same session")
-	enemy._audio_end_combat_session("explicit_disengage")
+	assert(enemy._audio_service() == null, "negative cache must stay closed")
 	EnemyActor.set_audio_service_cache_clock_for_test(2000)
-	# Physics must be processing for the audio listenability gate to accept the
-	# manual one-shot combat entry below. The entry sequence itself stays
-	# synchronous, so no physics tick can interleave and consume the edge.
-	enemy.set_physics_process(true)
-	enemy._audio_try_enter_combat_session()
-
-	# Combat entry is one-shot and uses the runtime integer ID, not display text.
-	enemy._audio_try_enter_combat_session()
-	enemy._audio_try_enter_combat_session()
-	enemy.set_physics_process(false)
-	assert(_count(probe, "combat_prompt") == 1, "combat prompt must emit exactly once per session")
-	assert(
-		int(probe.calls[0].get("monster_id", -1)) == 21,
-		"monster audio must pass the stable runtime monster ID",
-	)
-	assert(
-		str(probe.calls[0].get("context", {}).get("source", "")) == "enemy_actor",
-		"monster audio context must identify the actor hook",
-	)
+	assert(enemy._audio_service() == probe, "allowed attack lookup must recover")
+	for tick in range(120):
+		enemy._audio_try_enter_combat_session()
+	assert(_count(probe, "combat_prompt") == 0, "发现玩家及持续追逐均不得提交关闭的提示")
 
 	# W3's optional property form is probed once per target instance. Repeated
 	# semantic contexts must reuse that result instead of walking the property
@@ -178,7 +158,7 @@ func _run() -> void:
 	enemy.primary_target = null
 	var transient_end := probe.end_monster_combat_session("test-owner", "los_interrupted")
 	assert(transient_end.get("status", "") == "ended", "probe lifecycle hook should accept session transition")
-	assert(_count(probe, "combat_prompt") == 1, "LOS interruption must not reopen a combat prompt")
+	assert(_count(probe, "combat_prompt") == 0, "LOS interruption must not reopen a combat prompt")
 
 	# A cached service removed with an old GameRoot must not poison the next
 	# world. The first semantic lookup after invalidation discovers the new one.

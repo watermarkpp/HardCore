@@ -1,0 +1,18 @@
+{
+  "schema": "hardcore.test.technique_drop_baseline.v1",
+  "source_note": "Frozen immediately before exact item-251 source-policy removal; current authority content supplied all non-target records.",
+  "target_uid": "dpv2.direct.m160.slot_070",
+  "target_monster_id": 160,
+  "target_slot": {
+    "slot_uid": "dpv2.direct.m160.slot_070",
+    "final_numerator": 1,
+    "final_denominator": 80,
+    "overflow_priority": 600,
+    "protected_drop": true,
+    "origin": "sheet_row",
+    "source_sheet_row": 96,
+    "canonical_item_id": 251
+  },
+  "pre_change_total_slots": 6084,
+  "non_target_ordered_sha256": "66b2c194cfc64ba0a6b845900a6e639cdaf638e75471b6b9e95f12f5dc3a8a97"
+}

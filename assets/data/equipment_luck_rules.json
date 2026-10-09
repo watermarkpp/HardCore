@@ -37,7 +37,8 @@
     ],
     "point2Rate": 6,
     "point3Rate": 40,
-    "maxCurse": 10
+    "maxCurse": 10,
+    "successRateMultiplier": 5
   },
   "probabilityFormula": {
     "spanFactorId": "blessing_span_factor_r_v2",
@@ -53,13 +54,13 @@
     },
     "luck1To2": {
       "denominator": "R+6",
-      "successRoll": 1,
-      "onFailure": "independent upper-stage Random(R*40)==1",
-      "unconditionalImproveProbability": "(19/20)*(1/(R+6)+(1-1/(R+6))/(R*40))"
+      "successRoll": "jointIndex=lower*(R*40)+upper",
+      "onFailure": "always draw upper; accept jointIndex < min((R+6)*(R*40),5*((R*40)+(R+6)-1))",
+      "unconditionalImproveProbability": "(19/20)*min((R+6)*(R*40),5*((R*40)+(R+6)-1))/((R+6)*(R*40))"
     },
     "luck3To6": {
       "denominator": "R*40",
-      "successRoll": 1
+      "successRoll": "0..min(4,denominator-1)"
     },
     "luck7": {
       "denominator": 0,
@@ -70,8 +71,8 @@
     "1/20失败：有幸运则幸运-1，否则诅咒+1至10",
     "成功路径优先诅咒-1",
     "幸运低于1必定+1",
-    "幸运1—2按R+6判定，失败后继续独立R×40判定",
-    "幸运3—6按R×40判定",
+    "幸运1—2始终生成R+6与R×40两次抽样，按联合索引扩大总成功概率5倍并封顶100%",
+    "幸运3—6按R×40判定（成功窗口扩大5倍，最高100%）",
     "其余无效"
   ],
   "damageDistribution": {

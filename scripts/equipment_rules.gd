@@ -32,6 +32,7 @@ const JOB_LOCK_DISPLAY_NAMES := {
 	"general": "通用",
 }
 const BLESSING_UNLUCKY_RATE := 20
+const BLESSING_SUCCESS_RATE_MULTIPLIER := 5
 const LUCK_POINT_1 := 1
 const LUCK_POINT_2 := 3
 const LUCK_POINT_3 := 7
@@ -43,16 +44,19 @@ const MALE_WORLD_HELMET_EXTENSION_CONTRACT_ID := "equipment.world_helmet.male.ex
 const PLAYER_VISUAL_HELMET_V2_CONTRACT_ID := "equipment.world_helmet.player_visual_v2"
 const WORLD_HELMET_RUNTIME_POLICY_CONTRACT_ID := "equipment.world_helmet.runtime_visibility.v1"
 const WORLD_HELMET_RUNTIME_POLICY_PATH := "res://assets/data/equipment_world_helmet_runtime_policy.json"
+const SPECIAL_RULES_PATH := "res://assets/data/equipment_special_rules.json"
 const ACTOR_VISUAL_BODY_LAYER := &"body_and_dress"
 const ACTOR_VISUAL_HAIR_LAYER := &"hair"
 const ACTOR_VISUAL_WEAPON_LAYER := &"weapon"
 const ACTOR_VISUAL_HELMET_LAYER := &"helmet"
 static var _world_helmet_runtime_policy: Dictionary = {}
+static var _special_rules_cache: Dictionary = {}
+static var _special_rules_loaded := false
 const SPECIAL_EFFECTS_BY_NAME := {
 	"隐身戒指": {"id": "stealth", "label": "隐身", "source_code": 111, "runtime": true, "confidence": "B"},
 	"传送戒指": {"id": "teleport", "label": "安全传送", "source_code": 112, "runtime": true, "confidence": "B"},
 	"麻痹戒指": {"id": "paralysis", "label": "近战麻痹", "source_code": 113, "runtime": true, "confidence": "B"},
-	"复活戒指": {"id": "revival", "label": "60秒复活", "source_code": 114, "runtime": true, "confidence": "B"},
+	"复活戒指": {"id": "revival", "label": "300秒复活", "source_code": 114, "runtime": true, "confidence": "B"},
 	"火焰戒指": {"id": "flame_skill", "label": "火球技能", "source_code": 115, "runtime": true, "confidence": "B"},
 	"防御戒指": {"id": "recovery_skill", "label": "治愈技能", "source_code": 116, "runtime": true, "confidence": "B"},
 	"护身戒指": {"id": "magic_shield", "label": "魔法值抵伤", "source_code": 118, "runtime": true, "confidence": "B"},
@@ -160,7 +164,12 @@ static func attribute_source_distribution(item: Dictionary) -> String:
 	return str(source)
 
 
-static func requirement_for(item: Dictionary) -> Dictionary:
+static func requirement_for(item: Dictionary, instance: Dictionary = {}) -> Dictionary:
+	var mystery_rules := preload("res://scripts/mystery_equipment_instance_rules.gd")
+	if instance.has("mystery_roll") and mystery_rules.validate_roll(instance, item):
+		var generated := mystery_rules.requirement(instance)
+		var type_id := str({"attack": "max_dc", "magic": "max_mc", "tao": "max_sc"}.get(str(generated.type), generated.type))
+		return {"type": int(REQUIREMENT_TYPE_CODES.get(type_id, -1)), "type_id": type_id, "value": int(generated.value), "source": ATTRIBUTE_MASTER_DISTRIBUTION, "contract_id": mystery_rules.CONTRACT_ID, "confidence": "A"}
 	if item.has("requirementType") and item.has("requirementValue"):
 		var master_type := str(item.get("requirementType", "level"))
 		return {
@@ -202,8 +211,8 @@ static func requirement_for(item: Dictionary) -> Dictionary:
 	}
 
 
-static func requirement_error(item: Dictionary, level: int, stats: Dictionary) -> String:
-	var requirement := requirement_for(item)
+static func requirement_error(item: Dictionary, level: int, stats: Dictionary, instance: Dictionary = {}) -> String:
+	var requirement := requirement_for(item, instance)
 	var need_type := int(requirement.get("type", NEED_LEVEL))
 	var required := int(requirement.get("value", 0))
 	match need_type:
@@ -264,21 +273,38 @@ static func blessing_outcome(luck: int, curse: int, attack_min: int, attack_max:
 	var span_factor := blessing_span_factor(attack_min, attack_max)
 	if next_luck < LUCK_POINT_2:
 		var denominator := span_factor + LUCK_POINT_2_RATE
-		if denominator > 1 and success_roll == 1:
-			return {"result": "improved", "luck": next_luck + 1, "curse": next_curse}
-		# Original WeaptonMakeLuck chains complete conditions with else-if.
-		# A failed lower-stage roll therefore reaches the independent upper roll.
-		if upper_stage_roll == 1:
+		var upper_denominator := span_factor * LUCK_POINT_3_RATE
+		if blessing_luck12_joint_roll_hits(success_roll, upper_stage_roll, denominator, upper_denominator):
 			return {"result": "improved", "luck": next_luck + 1, "curse": next_curse}
 	elif next_luck < LUCK_POINT_3:
 		var denominator := span_factor * LUCK_POINT_3_RATE
-		if denominator > 1 and success_roll == 1:
+		if blessing_success_roll_hits(success_roll, denominator):
 			return {"result": "improved", "luck": next_luck + 1, "curse": next_curse}
 	return {"result": "ineffective", "luck": next_luck, "curse": next_curse}
 
 
 static func blessing_is_unlucky_roll(unlucky_roll: int) -> bool:
 	return unlucky_roll == 1
+
+
+static func blessing_success_roll_hits(roll: int, denominator: int) -> bool:
+	# Luck 3-6 uses one formal draw; accept five values while retaining the
+	# original uniform draw and all failure branches.
+	if denominator <= 0 or roll < 0:
+		return false
+	return roll < mini(BLESSING_SUCCESS_RATE_MULTIPLIER, denominator)
+
+
+static func blessing_luck12_joint_roll_hits(lower_roll: int, upper_roll: int, lower_denominator: int, upper_denominator: int) -> bool:
+	# Luck 1-2 consumes both formal draws. Use one uniform joint space so the
+	# total success probability is exactly five times the original union.
+	if lower_denominator <= 0 or upper_denominator <= 0:
+		return false
+	if lower_roll < 0 or lower_roll >= lower_denominator or upper_roll < 0 or upper_roll >= upper_denominator:
+		return false
+	var joint_index := lower_roll * upper_denominator + upper_roll
+	var target := mini(lower_denominator * upper_denominator, BLESSING_SUCCESS_RATE_MULTIPLIER * (upper_denominator + lower_denominator - 1))
+	return joint_index < target
 
 
 static func blessing_span_factor(attack_min: int, attack_max: int) -> int:
@@ -391,6 +417,32 @@ static func effective_profession(item: Dictionary) -> String:
 
 static func special_action_label(effect_id: String) -> String:
 	return {"teleport": "传送", "flame_skill": "火球", "recovery_skill": "治愈"}.get(effect_id, effect_id)
+
+
+static func _special_rules_source() -> Dictionary:
+	if not _special_rules_loaded:
+		_special_rules_loaded = true
+		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(SPECIAL_RULES_PATH))
+		_special_rules_cache = (parsed as Dictionary).duplicate(true) if parsed is Dictionary else {}
+		_special_rules_cache.make_read_only()
+	return _special_rules_cache
+
+
+static func revival_cooldown_ms() -> int:
+	var rules: Variant = _special_rules_source().get("rules", {})
+	return maxi(0, int((rules as Dictionary).get("revivalCooldownMs", 300000))) if rules is Dictionary else 300000
+
+
+static func paralysis_duration_for_classification(classification: String) -> float:
+	var rules: Variant = _special_rules_source().get("rules", {})
+	if rules is Dictionary:
+		if classification == "boss":
+			return maxf(0.0, float((rules as Dictionary).get("paralysisBossSeconds", 2.5)))
+		if classification == "elite":
+			return maxf(0.0, float((rules as Dictionary).get("paralysisEliteSeconds", 2.5)))
+		if classification == "ordinary":
+			return maxf(0.0, float((rules as Dictionary).get("paralysisOrdinarySeconds", 5.0)))
+	return 0.0
 
 
 static func paralysis_succeeds(target_anti_poison: int, roll: int) -> bool:

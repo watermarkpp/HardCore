@@ -30,7 +30,7 @@ func _run() -> void:
 	var source: Variant = JSON.parse_string(file.get_as_text())
 	assert(source is Dictionary and source.runtimeEffects.size() == 8, "八项特殊效果来源表错误")
 	assert(source.registeredOnly.is_empty() and source.deferredSets.size() == 9, "主动戒指或延期套装边界记录错误")
-	assert(int(source.rules.get("revivalCooldownMs", 0)) == 60000 and float(source.rules.get("magicShieldMpPerDamage", 0)) == 1.5, "复活/护身服务端常量错误")
+	assert(int(source.rules.get("revivalCooldownMs", 0)) == 300000 and float(source.rules.get("magicShieldMpPerDamage", 0)) == 1.5, "复活/护身服务端常量错误")
 
 	var teleport := EquipmentRulesScript.special_effect_for(GameData.get_item("传送戒指"))
 	assert(teleport.get("id", "") == "teleport" and bool(teleport.get("runtime", false)), "传送戒指手机交互没有登记完成")
@@ -72,13 +72,13 @@ func _run() -> void:
 	assert(player.current_hp == player.max_hp and PlayerState.gold == gold_before, "复活戒指首次触发没有原地满血复活")
 	assert(int(revival_ring.get("durability", 0)) == dura_before - 1, "复活触发没有损耗戒指耐久")
 	player.take_damage(999999, true, no_ring_wear)
-	assert(PlayerState.gold < gold_before, "复活戒指60秒冷却没有阻止连续触发")
+	assert(PlayerState.gold < gold_before, "复活戒指300秒冷却没有阻止连续触发")
 	assert(int(revival_ring.get("durability", 0)) == dura_before - 1, "冷却中的复活戒指被再次损耗")
 
 	var panel := InventoryPanel.new()
 	add_child(panel)
 	await get_tree().process_frame
-	assert("60秒复活" in panel.equipment_label.text, "装备面板没有显示特殊效果状态")
+	assert("300秒复活" in panel.equipment_label.text, "装备面板没有显示特殊效果状态")
 
 	print("EQUIPMENT_SPECIAL_EFFECTS_PASS：五项首批效果、零耐久撤销、复活冷却、护身抵伤和未实现边界正常")
 	get_tree().quit(0)

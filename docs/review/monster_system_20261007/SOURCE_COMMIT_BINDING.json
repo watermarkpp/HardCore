@@ -1,0 +1,19 @@
+{
+  "time_utc": "2026-10-07T12:45:46.766528+00:00",
+  "tested_sha": "215f0b2f651a51e6855ee813ddd99221690311a1",
+  "branch": "codex/integration",
+  "dirty": "M PROJECT_CURRENT_STATUS.md\n M docs/WORKSPACE_CURRENT_STATUS.md\n M docs/review/monster_system_20261007/CURRENT_RESULT.md\n M tools/android_seal/export_identity_tool/collector.py\n?? docs/review/monster_system_20261007/APK_CHANGED_SCRIPTS.json\n?? docs/review/monster_system_20261007/APK_DELIVERY.json\n?? docs/review/monster_system_20261007/APK_DELIVERY.md\n?? docs/review/monster_system_20261007/APK_STATIC_CHECK.json\n?? docs/review/monster_system_20261007/BUILD_STAGE_RETIREMENT.json\n?? docs/review/monster_system_20261007/DESKTOP_DELIVERY.json\n?? docs/review/monster_system_20261007/SOURCE_COMMIT_BINDING.json\n?? docs/review/monster_system_20261007/android-export-seal.json\n?? docs/review/monster_system_20261007/final-export-identity-receipt.json\n?? docs/review/monster_system_20261007/two-pass-build-receipt.json\n?? scripts/enemy.gd.applied-draft",
+  "content_set_sha256": "15b63efb24a518f6d008355f14479b802a16fe98989ecc8af4c1b357f3a58666",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "engine_path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+  "engine_version": "4.7.stable.official.5b4e0cb0f",
+  "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+  "native_launcher_path": null,
+  "native_launcher_sha256": null,
+  "shell_path": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+  "shell_version": "5.1.26100.9444",
+  "shell_sha256": "8bb6fa8c283b4d92120b1ef249a9b311b0f804d4cabbe9981159976c8be76a5e",
+  "runtime_change_commit": "c8477058a0c2f67f7a9e39f3523f4ea7693bd5cd",
+  "apk_build_commit": "78d0775b4b22f40ad1f54426639d867310dae41a",
+  "scope": "post-delivery byte binding, not a new native run; same content as 18 recorded native functional scenes"
+}

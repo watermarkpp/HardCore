@@ -33,6 +33,7 @@ func _run() -> void:
 	assert(source is Dictionary and source.get("contractId", "") == "equipment.blessing_luck.v3", "祝福油规则合同错误")
 	assert(source.get("sourcePolicy", {}).get("distribution", "") == "source.original_gameofmir.server_suite", "祝福油没有使用server_rules主源")
 	assert(int(source.defaults.get("unluckyRate", 0)) == 20, "祝福油失败率来源错误")
+	assert(int(source.defaults.get("successRateMultiplier", 0)) == 5, "祝福油成功概率倍率来源错误")
 	var luck_points: Array = source.defaults.get("luckPoints", [])
 	assert(luck_points.size() == 3 and int(luck_points[0]) == 1 and int(luck_points[1]) == 3 and int(luck_points[2]) == 7 and int(source.defaults.get("maxCurse", 0)) == 10, "幸运/诅咒边界错误")
 	assert(source.get("probabilityFormula", {}).get("spanFactor", "") == "R=max(1,floor(abs(DCmax-DCmin)/5))", "R边界公式不可审计")
@@ -46,7 +47,7 @@ func _run() -> void:
 	assert(outcome == {"result": "improved", "luck": 0, "curse": 1}, "成功路径没有优先消除诅咒")
 	outcome = EquipmentRulesScript.blessing_outcome(0, 0, 2, 12, 0, 0)
 	assert(outcome == {"result": "improved", "luck": 1, "curse": 0}, "幸运0没有必定提升到1")
-	outcome = EquipmentRulesScript.blessing_outcome(1, 0, 2, 12, 0, 1)
+	outcome = EquipmentRulesScript.blessing_outcome(1, 0, 2, 12, 0, 1, 1)
 	assert(outcome == {"result": "improved", "luck": 2, "curse": 0}, "幸运1—2阶段成功判定错误")
 	outcome = EquipmentRulesScript.blessing_outcome(3, 0, 12, 16, 0, 1)
 	assert(outcome == {"result": "improved", "luck": 4, "curse": 0}, "命运之刃幸运+3后因R=0边界无法继续")
@@ -73,6 +74,9 @@ func _run() -> void:
 	assert(EquipmentRulesScript.blessing_success_denominator(3, 12, 16) == 40)
 	assert(EquipmentRulesScript.blessing_success_denominator(6, 2, 12) == 80)
 	assert(EquipmentRulesScript.blessing_success_denominator(7, 12, 16) == 0)
+	assert(EquipmentRulesScript.blessing_success_roll_hits(0, 5) and EquipmentRulesScript.blessing_success_roll_hits(4, 5), "五倍窗口边界错误")
+	assert(not EquipmentRulesScript.blessing_success_roll_hits(5, 5), "五倍窗口超界错误")
+	assert(EquipmentRulesScript.blessing_success_roll_hits(0, 2) and EquipmentRulesScript.blessing_success_roll_hits(1, 2), "小分母应封顶100%")
 
 	assert(EquipmentRulesScript.equipment_luck_contribution({"luck": 2, "curse": 3}) == -1, "非武器基础curse没有抵消luck")
 	assert(

@@ -1,0 +1,63 @@
+{
+  "status": "PASS",
+  "scope": "all seven modified production scripts exported as bytecode and different from v105 baseline; not Android runtime proof",
+  "scripts": [
+    {
+      "source": "scripts/enemy.gd",
+      "compiled_member": "assets/scripts/enemy.gdc",
+      "candidate_sha256": "ffa5a25404fc2831e6209bcfae2e1d3bc665d93e092cc1ad52b3baf30effd6f7",
+      "baseline_sha256": "ac5444093d207fcea4585523437c976c98ee6d0948067d8cce4f6fec5f0d0cd4",
+      "candidate_bytes": 230756,
+      "changed": true
+    },
+    {
+      "source": "scripts/layers/runtime/combat_runtime_service.gd",
+      "compiled_member": "assets/scripts/layers/runtime/combat_runtime_service.gdc",
+      "candidate_sha256": "e8d8e036dc84ec24538eb5c865463857c66a40424c18aebf9659372ba04ede65",
+      "baseline_sha256": "e1ec010949aa8dc80b2c86b875faa902d08a01821e5ba00a54e0db75fa167fc4",
+      "candidate_bytes": 9230,
+      "changed": true
+    },
+    {
+      "source": "scripts/monster_crowd_attack_position_policy.gd",
+      "compiled_member": "assets/scripts/monster_crowd_attack_position_policy.gdc",
+      "candidate_sha256": "3eb0638ffdd7a1ee9c1abe53576f5744575bf8b430fb4f32843f2e479c744937",
+      "baseline_sha256": "7c4c5762fa11cfa7e338079d9a826bea81026b0e67b4985c1534b17920c90910",
+      "candidate_bytes": 4504,
+      "changed": true
+    },
+    {
+      "source": "scripts/monster_movement_cadence.gd",
+      "compiled_member": "assets/scripts/monster_movement_cadence.gdc",
+      "candidate_sha256": "51f659aa33d785918787e9b61f21b3d8cf5b6685d44510b73f2ee06ca8c350d8",
+      "baseline_sha256": "62d8186a14a54c1458ac31c87e5108116fe3f727a1b9a853404706f404cfe202",
+      "candidate_bytes": 9752,
+      "changed": true
+    },
+    {
+      "source": "scripts/monster_struck_policy.gd",
+      "compiled_member": "assets/scripts/monster_struck_policy.gdc",
+      "candidate_sha256": "6f36908998785391b7486bc32946c281defcf29ad6b186e1913e57e4cea37cb4",
+      "baseline_sha256": "2f19ea398187a8fd8d4bbe10bfc89f9a21cdfffbff835d9763acede908071f81",
+      "candidate_bytes": 1214,
+      "changed": true
+    },
+    {
+      "source": "scripts/runtime_combat_spatial_index.gd",
+      "compiled_member": "assets/scripts/runtime_combat_spatial_index.gdc",
+      "candidate_sha256": "a5113b030778d124394f30c131cda3c866a12353558fff51b239f33a06d11ef0",
+      "baseline_sha256": "4e91bd9533c661470cc266432646f6a55b675a1379109a561f509b41bbcf9b1b",
+      "candidate_bytes": 17875,
+      "changed": true
+    },
+    {
+      "source": "scripts/runtime_diagnostics.gd",
+      "compiled_member": "assets/scripts/runtime_diagnostics.gdc",
+      "candidate_sha256": "eb8529663312dee70709c936768ff0c0455ad59788ec4ad0341dbb5f4f42b18c",
+      "baseline_sha256": "837c3a87b6790b75aa6daa4ab6d53ad1c5a70096a14c1c27cd78534342da241f",
+      "candidate_bytes": 17241,
+      "changed": true
+    }
+  ],
+  "errors": []
+}

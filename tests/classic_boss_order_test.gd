@@ -71,12 +71,10 @@ func _run() -> void:
 	assert(dragon._burrowed, "触龙神没有按规则以潜伏状态出生")
 	assert(not dragon.visual.visible, "触龙神潜伏时仍显示地表动画")
 	player.global_position = dragon.global_position + Vector2(100, 0)
+	var hp_before := player.current_hp
 	dragon._physics_process(0.01)
 	assert(not dragon._burrowed and dragon.visual.visible and dragon.current_hp == dragon.max_hp, "触龙神近身钻出/满血机制失效")
-	var hp_before := player.current_hp
 	assert(not dragon._boss_skill_enabled, "触龙神不应保留无来源的独立警示圈技能")
-	dragon._attack_timer = 0.0
-	dragon._update_area_magic_delivery(0.01)
 	assert(
 		SkillFootprintSnapshotScript.has_legacy_base_contract(
 			dragon._area_magic_footprint_snapshot
@@ -93,7 +91,11 @@ func _run() -> void:
 		dragon.boss_warning_polygon_px(dragon.boss_rule.get("specialSkill", {})).is_empty(),
 		"触龙神仍生成了没有客户端来源的警示圈",
 	)
+	assert(player.current_hp < hp_before, "触龙神范围攻击必须在释放帧结算主目标伤害")
+	var hp_after_activation := player.current_hp
+	player.global_position = _test_ground_to_screen(OpenTerrainFixture.CENTER_GROUND_GU + Vector2(8.0, 8.0))
 	dragon._update_area_magic_delivery(0.61)
+	assert(player.current_hp == hp_after_activation, "触龙神警告结束不得因目标移动重复或撤销伤害")
 	assert(
 		str(dragon._last_attack_footprint_snapshot.get("range_shape", ""))
 		== "chebyshev_axis_aligned_square_exclusive",
@@ -101,14 +103,13 @@ func _run() -> void:
 	)
 	assert(
 		str(dragon._last_attack_footprint_snapshot.release_id) == warned_release_id,
-		"触龙神释放与600ms延迟伤害没有保留同一release_id",
+		"触龙神释放与警告清理必须保留同一release_id",
 	)
 	assert(
 		str(dragon._last_attack_footprint_snapshot.projection_relationship_id)
 		== EnemyActor.PROJECTION_RELATIONSHIP_GROUND_EXACT,
 		"触龙神方形范围没有声明ground_exact",
 	)
-	assert(player.current_hp < hp_before, "触龙神范围攻击没有结算主目标伤害")
 	assert(str(dragon.last_magic_attack_resolution.get("delivery_kind", "")) == "area_magic")
 	assert(not bool(dragon.last_magic_attack_resolution.get("magic_evaded", true)), "成功命中夹具不能发生魔法闪避")
 	assert(int(dragon.last_magic_attack_resolution.get("applied_damage", 0)) == hp_before - player.current_hp, "真实范围投递与HP变化必须一致")

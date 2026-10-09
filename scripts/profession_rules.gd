@@ -102,6 +102,11 @@ const SKILL_PROFILES := {
 	"群体治疗术": {"profession": "道士", "cast_type": "heal_area", "multiplier": 1.0, "range": 190.0},
 	"召唤神兽": {"profession": "道士", "cast_type": "summon", "multiplier": 1.5, "range": 0.0},
 }
+const EQUIPMENT_GRANTED_SKILLS := {
+	"equipment.ring_teleport": {"display_name": "传送戒指技能", "profession": "wizard", "effect_id": "safe_teleport", "mana_cost": 0, "parent_skill_id": "wizard.teleport"},
+	"equipment.ring_healing": {"display_name": "防御戒指技能", "profession": "taoist", "effect_id": "grant_healing_skill", "mana_cost": 5, "parent_skill_id": "taoist.healing"},
+	"equipment.ring_fireball": {"display_name": "火焰戒指技能", "profession": "wizard", "effect_id": "grant_fireball_skill", "mana_cost": 5, "parent_skill_id": "wizard.fireball"},
+}
 
 # 手机战斗与动画共用时序基线。当前为运行时候选值，后续按可靠资料逐项替换。
 const CASTER_SPELL_ACTION_DURATION := 0.60
@@ -243,11 +248,16 @@ static func skill_id(value: String) -> String:
 	if _skill_ids_by_name.is_empty():
 		for stable_id: String in SKILL_CATALOG:
 			_skill_ids_by_name[SKILL_CATALOG[stable_id]] = stable_id
+		for granted_id: String in EQUIPMENT_GRANTED_SKILLS:
+			_skill_ids_by_name[str(EQUIPMENT_GRANTED_SKILLS[granted_id].get("display_name", ""))] = granted_id
 	return str(_skill_ids_by_name.get(value, ""))
 
 
 static func skill_display_name(value: String) -> String:
-	return str(SKILL_CATALOG.get(skill_id(value), ""))
+	var id := skill_id(value)
+	if EQUIPMENT_GRANTED_SKILLS.has(id):
+		return str(EQUIPMENT_GRANTED_SKILLS[id].get("display_name", ""))
+	return str(SKILL_CATALOG.get(id, ""))
 
 
 static func skill_input_metadata(skill_name_or_id: String) -> Dictionary:
@@ -276,8 +286,26 @@ static func _base_growth_row(profession: String, level: int) -> Dictionary:
 
 
 static func skill_profile(skill_name_or_id: String) -> Dictionary:
-	_data()
 	var stable_id := skill_id(skill_name_or_id)
+	if EQUIPMENT_GRANTED_SKILLS.has(stable_id):
+		var grant: Dictionary = EQUIPMENT_GRANTED_SKILLS[stable_id]
+		var grant_profile := {
+			"skill_id": stable_id,
+			"display_name": str(grant.get("display_name", "")),
+			"profession": str(grant.get("profession", "")),
+			"profession_id": profession_id(str(grant.get("profession", ""))),
+			"equipment_granted": true,
+			"effect_id": str(grant.get("effect_id", "")),
+			"parent_skill_id": str(grant.get("parent_skill_id", "")),
+			"mana_cost": int(grant.get("mana_cost", 0)),
+			"cast_type": "targeted",
+			"activation": "click",
+		}
+		grant_profile.merge(skill_input_metadata(stable_id), true)
+		grant_profile["ui_interaction_mode"] = "click"
+		grant_profile["runtime_activation_mode"] = "press_to_release"
+		return grant_profile
+	_data()
 	var display_name := skill_display_name(stable_id)
 	var profile: Dictionary = _profiles_by_id.get(stable_id, {}).duplicate(true)
 	if profile.is_empty():

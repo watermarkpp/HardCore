@@ -1,0 +1,119 @@
+{
+  "scope": "actual ZIP CRC, metadata, raw identities/media, direct remaps and at least one exported import variant; not all runtime feature selection",
+  "apk": "outputs\\hardcore\\HardCore-v106-monster-fixes-debug.apk",
+  "apk_sha256": "895f9fe37cfb28e13570423dcb341fa4307dcc1a61ee5ec070a437f19e247c4a",
+  "bytes": 491805682,
+  "build_info": {
+    "git_head": "78d0775b4b22f40ad1f54426639d867310dae41a",
+    "version_code": 106,
+    "build_timestamp_utc": "2026-10-07T11:59:00.2418211Z",
+    "git_short_head": "78d0775b",
+    "build_type": "development",
+    "version_name": "hardcore 1.0 正式版",
+    "git_dirty": false,
+    "git_branch": "HEAD"
+  },
+  "member_count": 19435,
+  "identity_sources": [
+    {
+      "path": "res://assets/data/ancient_relic_fragment_v1.json",
+      "expected": "d424f5bd92e61bc9c73ce20e9a31f23e365df54d5b354a4c0465152fd5d00b40",
+      "actual": "d424f5bd92e61bc9c73ce20e9a31f23e365df54d5b354a4c0465152fd5d00b40"
+    },
+    {
+      "path": "res://assets/data/drop/dpv2_21cq_item_mapping_v1.json",
+      "expected": "4fec8ddeca9a835ce144fe2ed2c70a15d837090523824b0647252e96d5a61f6f",
+      "actual": "4fec8ddeca9a835ce144fe2ed2c70a15d837090523824b0647252e96d5a61f6f"
+    },
+    {
+      "path": "res://assets/data/equipment_attribute_master.json",
+      "expected": "223c96df954077aa8970a277efe229d9dbc16609d2503a0033e60197f7e00701",
+      "actual": "223c96df954077aa8970a277efe229d9dbc16609d2503a0033e60197f7e00701"
+    },
+    {
+      "path": "res://assets/data/equipment_enhancement_black_iron_v1.json",
+      "expected": "3ccd9e7e7d774dcc9655f2b6d5edf1eea2d97f50e77880ff07750012d0ba9732",
+      "actual": "3ccd9e7e7d774dcc9655f2b6d5edf1eea2d97f50e77880ff07750012d0ba9732"
+    },
+    {
+      "path": "res://assets/data/features/rune_fixture_items.json",
+      "expected": "ea00bdd36122ae0275f64ee7a73746bbd3866c5fdd174625a7915cb9c885a68d",
+      "actual": "ea00bdd36122ae0275f64ee7a73746bbd3866c5fdd174625a7915cb9c885a68d"
+    },
+    {
+      "path": "res://assets/data/features/socketing_fixture_items.json",
+      "expected": "ae2c7adbcf0ee9ed8e88f4e2dd8d4c4e2c55af6b49a7bcffc0828c8a29e23043",
+      "actual": "ae2c7adbcf0ee9ed8e88f4e2dd8d4c4e2c55af6b49a7bcffc0828c8a29e23043"
+    },
+    {
+      "path": "res://assets/data/identity/entity_registry_source.json",
+      "expected": "4d2c6674fb6c37dda246a10f1ae0f2396298c31e968d40929dc2c86ddf49265a",
+      "actual": "4d2c6674fb6c37dda246a10f1ae0f2396298c31e968d40929dc2c86ddf49265a"
+    },
+    {
+      "path": "res://assets/data/identity/item_categories_v1.json",
+      "expected": "c60d00da6b19047e87ea80b6c973e42a26c01f543d489fdb8b3ab64473adbb8a",
+      "actual": "c60d00da6b19047e87ea80b6c973e42a26c01f543d489fdb8b3ab64473adbb8a"
+    },
+    {
+      "path": "res://assets/data/item_runtime_authority_v1.json",
+      "expected": "4232baf42256fa1ef0e5ab6e53f9b4ae452a4614fc09ca51902e4220d908f1dc",
+      "actual": "4232baf42256fa1ef0e5ab6e53f9b4ae452a4614fc09ca51902e4220d908f1dc"
+    },
+    {
+      "path": "res://assets/data/map_design/map_identity_registry.json",
+      "expected": "7e50073a4a20918e234587af284f009ff92b9d6d845ad46dfc997be60d9128d8",
+      "actual": "7e50073a4a20918e234587af284f009ff92b9d6d845ad46dfc997be60d9128d8"
+    },
+    {
+      "path": "res://assets/data/relic_synthesis_v1.json",
+      "expected": "9d7cb4f2b09c80f7dbe63782d757ce1532a0ce99c7ae32d3cfaf1fe45fbfd5df",
+      "actual": "9d7cb4f2b09c80f7dbe63782d757ce1532a0ce99c7ae32d3cfaf1fe45fbfd5df"
+    },
+    {
+      "path": "res://assets/data/runtime/canonical_monster_catalog.json",
+      "expected": "a46aca4209b3abc0f3f2cd5365b274605cd07886060706e14ef3e984aad8880a",
+      "actual": "a46aca4209b3abc0f3f2cd5365b274605cd07886060706e14ef3e984aad8880a"
+    },
+    {
+      "path": "res://assets/data/service_item_catalog.json",
+      "expected": "db61781ad87853a3169aff491a1af8336884b4be0d34ff13145c703713da44b2",
+      "actual": "db61781ad87853a3169aff491a1af8336884b4be0d34ff13145c703713da44b2"
+    },
+    {
+      "path": "res://assets/data/vanilla_176/maps.json",
+      "expected": "8dfc94db5abc0553fb2189a63893ea22ae2a35d2c9c4c3ee33d4402c36630c46",
+      "actual": "8dfc94db5abc0553fb2189a63893ea22ae2a35d2c9c4c3ee33d4402c36630c46"
+    },
+    {
+      "path": "res://assets/data/vanilla_176/skills_source_of_truth_v1.json",
+      "expected": "7575c45a7bd147f8e60d2efdb15c6c5e9781445ddc2f748e73dd69ed386a62ab",
+      "actual": "7575c45a7bd147f8e60d2efdb15c6c5e9781445ddc2f748e73dd69ed386a62ab"
+    }
+  ],
+  "media_sources": [
+    {
+      "id": "hc.resource.item.healing.inventory",
+      "path": "res://assets/art/items/service/inventory/client.classic_raw_complete/Items_00014.png",
+      "actual": "a3c9fd2de4a79b1fc72f22dc1825142d3837c40e3b5dce7d288f869416411b4f",
+      "expected_source": "a3c9fd2de4a79b1fc72f22dc1825142d3837c40e3b5dce7d288f869416411b4f"
+    },
+    {
+      "id": "hc.resource.sound.fire_sword.attack",
+      "path": "res://assets/audio/sfx/client/137__M26-3.wav",
+      "actual": "6a4a29c45e6d9882dd63d67fd4825c9401481df52383bb74c5ff0644a8ec1b0b",
+      "expected_source": "6a4a29c45e6d9882dd63d67fd4825c9401481df52383bb74c5ff0644a8ec1b0b"
+    },
+    {
+      "id": "hc.resource.sound.ice_storm.effect",
+      "path": "res://assets/audio/sfx/client/10332__M33-3.wav",
+      "actual": "8732dbc4b932c03280682c8bf278c5d28e920d35b60b26ab40c3e9b05aa308f1",
+      "expected_source": "8732dbc4b932c03280682c8bf278c5d28e920d35b60b26ab40c3e9b05aa308f1"
+    }
+  ],
+  "direct_remap_count": 375,
+  "import_variant_count": 8918,
+  "seal_gdc_sha256": "3b23f943aa6f53f5dfbe02d82f0cbb9ef9df9145db3c8f15c09aff33bbf85bba",
+  "errors": [],
+  "status": "PASS"
+}

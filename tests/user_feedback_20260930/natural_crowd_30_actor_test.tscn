@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource path="res://tests/user_feedback_20260930/natural_crowd_30_actor_test.gd" type="Script" id="1"]
+
+[node name="NaturalCrowd30ActorTest" type="Node2D"]
+script = ExtResource("1")

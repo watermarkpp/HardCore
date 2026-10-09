@@ -14,7 +14,7 @@ func _run() -> void:
 	await get_tree().process_frame
 	var prewarm := service.prewarm_runtime_streams()
 	assert(int(prewarm.get("npc_loaded", 0)) == 14, "NPC 14个WAV未在初始化阶段全部预热")
-	assert(int(prewarm.get("event_loaded", 0)) == 525, "精确事件样本未在初始化阶段全部预热")
+	assert(int(prewarm.get("event_loaded", 0)) == 213, "仅正式可播放事件样本应预热，禁用怪物声音不能驻留")
 	assert(int(prewarm.get("missing", 0)) == 0, "运行时音频存在缺失路径")
 	assert(int(prewarm.get("failed", 0)) == 0, "运行时音频预热存在解码失败")
 	assert(service.npc_voice_player != null, "NPC音频缺少唯一播放器")
@@ -22,7 +22,7 @@ func _run() -> void:
 	assert(AudioServer.get_bus_index(&"Music") < 0 or AudioServer.get_bus_index(&"Music") != AudioServer.get_bus_index(&"SFX"), "NPC与BGM不应共用同一总线")
 	var snapshot: Dictionary = service.state_snapshot()
 	assert(int(snapshot.get("event_count", 0)) == 522, "精确事件映射数量漂移")
-	assert(int(snapshot.get("item_route_identity_count", 0)) == 727, "物品稳定身份路由数量漂移")
+	assert(int(snapshot.get("item_route_identity_count", 0)) == 776, "原727物品音频路由加49条正式canonical alias必须完整保留")
 	assert(int(snapshot.get("event_pool_size", 0)) == 24, "事件服务必须使用固定并发池而非每事件一个播放器")
 	var female_slaying: Dictionary = service.play_event("player.skill.slaying", {"gender": "女"})
 	assert(female_slaying.get("status", "") == "played", "女战士攻杀剑术未播放")
@@ -55,31 +55,10 @@ func _run() -> void:
 	service.stop_all_events("w4_contract")
 	service.set_clock_for_test(0)
 	service.reset_metrics_for_test(true)
-	var combat_prompt := service.play_monster_combat_prompt(
-		21,
-		"test-owner",
-		{"source": "test", "session_id": "combat:1"},
-	)
-	assert(combat_prompt.get("status", "") == "played", "真正进入战斗时必须播放一次怪物提示")
-	assert(combat_prompt.get("semantic_event", "") == "combat_prompt", "怪物提示必须标记为combat_prompt")
-	assert(combat_prompt.get("source_semantic_event", "") == "ambient", "无专属提示样本时只能复用同ID ambient样本")
-	var duplicate_prompt := service.play_monster_combat_prompt(
-		21,
-		"test-owner",
-		{"source": "target_refresh", "session_id": "combat:target_refresh"},
-	)
-	assert(duplicate_prompt.get("status", "") == "combat_session_duplicate", "目标刷新不得重复打开战斗提示会话")
-	var transient_los := service.notify_monster_los_interrupted("test-owner")
-	assert(transient_los.get("reason", "") == "transient_los", "短暂LOS中断不得结束音频会话")
-	var duplicate_after_los := service.play_monster_combat_prompt(21, "test-owner", {"session_id": "combat:los_refresh"})
-	assert(duplicate_after_los.get("status", "") == "combat_session_duplicate", "短暂LOS中断后不得重播战斗提示")
-	var ended := service.end_monster_combat_session("test-owner", "explicit_disengage")
-	assert(ended.get("status", "") == "ended", "真正脱离战斗必须关闭音频会话")
-	var rearm_pending := service.play_monster_combat_prompt(21, "test-owner", {"session_id": "combat:2"})
-	assert(rearm_pending.get("status", "") == "combat_session_rearm_pending", "真实脱战后必须经过短暂重入防抖")
-	service.set_clock_for_test(751)
-	var reentered := service.play_monster_combat_prompt(21, "test-owner", {"session_id": "combat:2"})
-	assert(reentered.get("status", "") == "played", "真实脱战后允许重新进入战斗并播放提示")
+	for owner_index in range(30):
+		var combat_prompt := service.play_monster_combat_prompt(21, "retired-owner-%d" % owner_index)
+		assert(combat_prompt.get("reason", "") == "combat_prompt_disabled", "用户移除的发现玩家/战斗提示不能再次播放")
+	assert(service.monster_combat_session_snapshot().is_empty(), "移除的提示不得保留会话")
 	service.stop_all_events("w4_contract")
 	var direct_ambient := service.play_monster_event(21, "ambient", {"source": "walk_frame"})
 	assert(direct_ambient.get("status", "") == "monster_event_not_allowed", "追击/转向环境声不得进入生产事件白名单")

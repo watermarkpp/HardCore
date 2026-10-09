@@ -22,6 +22,8 @@ const EntityRegistry := preload("res://scripts/identity/entity_registry.gd")
 const ItemCategories := preload("res://scripts/identity/item_category_identity.gd")
 const EquipmentIdentity := preload("res://scripts/identity/equipment_identity_codec.gd")
 const ItemExtensionCodec := preload("res://scripts/items/item_extension_codec.gd")
+const EquipmentGrantedSkills := preload("res://scripts/equipment_granted_skill_rules.gd")
+const RandomSpecialRules := preload("res://scripts/equipment_random_special_instance_rules.gd")
 const ItemTransactionJournal := preload("res://scripts/items/item_transaction_journal.gd")
 const ItemTransactionPort := preload("res://scripts/items/item_transaction_port.gd")
 const SaveUpgradeBackup := preload("res://scripts/save_upgrade_backup.gd")
@@ -2549,7 +2551,7 @@ func _blessing_oil_rolls(
 			attack_max
 		)
 		success_roll = rng.randi_range(0, denominator - 1) if denominator > 1 else 0
-		if luck < EquipmentRulesScript.LUCK_POINT_2 and success_roll != 1:
+		if luck < EquipmentRulesScript.LUCK_POINT_2:
 			var upper_denominator := EquipmentRulesScript.blessing_span_factor(attack_min, attack_max) * EquipmentRulesScript.LUCK_POINT_3_RATE
 			upper_stage_roll = rng.randi_range(0, upper_denominator - 1)
 	return {"unlucky_roll": unlucky_roll, "success_roll": success_roll, "upper_stage_roll": upper_stage_roll}
@@ -3080,7 +3082,9 @@ func equip_inventory_index(index: int, preferred_slot := "") -> String:
 	var required_gender := EquipmentRulesScript.required_gender(item)
 	if not required_gender.is_empty() and required_gender != gender:
 		return "该装备仅限%s性角色" % required_gender
-	var requirement_error := EquipmentRulesScript.requirement_error(item, level, computed_stats)
+	if inventory_record.has("mystery_roll") and not preload("res://scripts/mystery_equipment_instance_rules.gd").validate_roll(inventory_record, item):
+		return "装备随机属性无效"
+	var requirement_error := EquipmentRulesScript.requirement_error(item, level, computed_stats, inventory_record)
 	if not requirement_error.is_empty():
 		return requirement_error
 	var item_weight := maxi(0, int(item.get("weight", 0)))
@@ -3102,6 +3106,7 @@ func equip_inventory_index(index: int, preferred_slot := "") -> String:
 	var inventory_before := inventory.duplicate(true)
 	var equipment_before := equipment.duplicate(true)
 	var cursor_before := equip_cycle_cursor.duplicate(true)
+	var bindings_before := skill_button_assignments_snapshot()
 	var inventory_after := inventory.duplicate(true)
 	inventory_after[index] = {}
 	if previous is Dictionary and not previous.is_empty():
@@ -3130,6 +3135,8 @@ func equip_inventory_index(index: int, preferred_slot := "") -> String:
 		equipment = equipment_before
 		equip_cycle_cursor = cursor_before
 		recalculate_stats()
+		_restore_skill_button_assignments(bindings_before, [])
+		skills_changed.emit()
 		_last_equipment_transaction_result["reason"] = "save_failed"
 		return "装备存档失败，装备和背包均未改变"
 	equipment_transaction_revision += 1
@@ -3166,6 +3173,7 @@ func unequip_slot(slot: String, destination_slot := -1) -> String:
 		return str(return_preview.get("message", INVENTORY_SLOT_REJECTION))
 	var inventory_before := inventory.duplicate(true)
 	var equipment_before := equipment.duplicate(true)
+	var bindings_before := skill_button_assignments_snapshot()
 	if destination_slot >= 0:
 		var next_inventory := inventory.duplicate(true)
 		while next_inventory.size() <= destination_slot:
@@ -3180,6 +3188,8 @@ func unequip_slot(slot: String, destination_slot := -1) -> String:
 		inventory = inventory_before
 		equipment = equipment_before
 		recalculate_stats()
+		_restore_skill_button_assignments(bindings_before, [])
+		skills_changed.emit()
 		_last_equipment_transaction_result["reason"] = "save_failed"
 		return "卸装存档失败，装备和背包均未改变"
 	equipment_transaction_revision += 1
@@ -3646,6 +3656,8 @@ func recalculate_stats(emit_profile_change := true, report_failure := true) -> b
 					active_modifiers.append(modifier)
 				affix_input["modifiers"] = active_modifiers
 		skill_level_affix_records.append(affix_input)
+		if equipped_value is Dictionary and RandomSpecialRules.is_technique_necklace(int(item.get("itemId", -1))) and RandomSpecialRules.validate_technique_instance(equipped_value, item):
+			skill_level_affix_records.append({"modifiers": RandomSpecialRules.technique_skill_level_modifiers(equipped_value)})
 		_add_nullable_stat(result, "attack_min", item.get("attackMin", null))
 		_add_nullable_stat(result, "attack_max", item.get("attackMax", null))
 		_add_nullable_stat(result, "magic_min", item.get("magicMin", null))
@@ -3690,6 +3702,11 @@ func recalculate_stats(emit_profile_change := true, report_failure := true) -> b
 			result["cast_speed_percent"] = float(result.get("cast_speed_percent", 0.0)) + float(modifiers.get("castSpeedPercent", 0.0))
 		if not drop_instance_modifiers.is_empty():
 			result = ModifierEffectRuntime.apply_modifiers(result, drop_instance_modifiers, {
+				"profession": profession, "level": level, "slot": slot,
+			})
+		var mystery_rules := preload("res://scripts/mystery_equipment_instance_rules.gd")
+		if equipped_value is Dictionary and equipped_value.has("mystery_roll") and mystery_rules.validate_roll(equipped_value, item):
+			result = ModifierEffectRuntime.apply_modifiers(result, mystery_rules.modifiers(equipped_value), {
 				"profession": profession, "level": level, "slot": slot,
 			})
 		if equipped_value is Dictionary and equipped_value.has("enhancement"):
@@ -3749,6 +3766,7 @@ func recalculate_stats(emit_profile_change := true, report_failure := true) -> b
 		return false
 	result = feature_stats.stats
 	computed_stats = result
+	_prune_unavailable_equipment_skill_bindings()
 	if emit_profile_change:
 		profile_changed.emit()
 	return true
@@ -3927,6 +3945,70 @@ func effective_skill_level(skill_name: String) -> int:
 	)
 
 
+## Equipment grants are derived from currently valid worn instances. They are
+## never inserted into learned progression or taught by the save importer.
+func equipment_granted_skill_ids() -> Array[String]:
+	var result: Array[String] = []
+	for slot: String in equipment:
+		var equipped: Variant = equipment[slot]
+		if not equipped is Dictionary or equipped.is_empty() or not _has_positive_raw_durability(equipped):
+			continue
+		var item := GameData.get_item_rules_record(equipped)
+		if item.is_empty() or (equipped.has("drop_instance_contract_id") and not GameData.validate_item_drop_instance(equipped)):
+			continue
+		if not equipped.has("item_id") or not _is_integral_json_number(equipped.item_id) \
+			or int(equipped.item_id) != int(item.get("itemId", -1)):
+			continue
+		if (equipped.has("itemId") and equipped.itemId != equipped.item_id) \
+			or not _is_integral_json_number(equipped.get("count", 1)) or int(equipped.get("count", 1)) != 1:
+			continue
+		if slot not in EquipmentIdentity.slots_for_category(ItemCategories.category_for_record(item)) \
+			or _validated_persisted_instance_id(equipped) == "#invalid":
+			continue
+		var skill_id := EquipmentGrantedSkills.skill_id_for_item(int(item.get("itemId", -1)))
+		if not skill_id.is_empty() and not result.has(skill_id):
+			result.append(skill_id)
+	result.sort()
+	return result
+
+
+func is_skill_available(skill_name_or_id: String) -> bool:
+	var skill_id := SkillDataLoaderScript.entity_skill_id(skill_name_or_id)
+	if not EquipmentGrantedSkills.definition(skill_id).is_empty():
+		return equipment_granted_skill_ids().has(skill_id)
+	return not skill_id.is_empty() and (is_skill_learned(skill_id) or equipment_granted_skill_ids().has(skill_id))
+
+
+func available_skill_ids() -> Array[String]:
+	var result: Array[String] = []
+	for skill_id: String in learned_skills:
+		result.append(skill_id)
+	for skill_id: String in equipment_granted_skill_ids():
+		if not result.has(skill_id): result.append(skill_id)
+	return result
+
+
+func skill_assignment_roster() -> Dictionary:
+	var result := learned_skills.duplicate(true)
+	for skill_id: String in equipment_granted_skill_ids():
+		result[skill_id] = 0
+	return result
+
+
+func _prune_unavailable_equipment_skill_bindings() -> void:
+	var available := equipment_granted_skill_ids()
+	var changed := false
+	for slots: Array[String] in [attack_skill_slots, attack_ring_slots]:
+		for index in range(slots.size()):
+			var skill_id := slots[index]
+			if not EquipmentGrantedSkills.definition(skill_id).is_empty() and not available.has(skill_id):
+				slots[index] = ""
+				changed = true
+	if changed:
+		_sync_legacy_quick_slots_from_ring()
+		skills_changed.emit()
+
+
 func _equipment_skill_level_bonus(stable_skill_id: String) -> int:
 	var affix: Dictionary = computed_stats.get("skill_level_affix", {})
 	var contributions: Dictionary = affix.get("contributions", {})
@@ -3936,6 +4018,10 @@ func _equipment_skill_level_bonus(stable_skill_id: String) -> int:
 	bonus += maxi(0, int(contributions.get(profession_scope, 0)))
 	var skill_scope := "skill:%s" % stable_skill_id
 	bonus += maxi(0, int(contributions.get(skill_scope, 0)))
+	var entity_skill_id := SkillDataLoaderScript.entity_skill_id(stable_skill_id)
+	var entity_scope := "skill:%s" % entity_skill_id
+	if not entity_skill_id.is_empty() and entity_scope != skill_scope:
+		bonus += maxi(0, int(contributions.get(entity_scope, 0)))
 	for raw_name: Variant in affix.get("legacy", {}):
 		if SkillDataLoaderScript.stable_skill_id(str(raw_name)) == stable_skill_id:
 			bonus += maxi(0, int(affix["legacy"][raw_name]))
@@ -7273,7 +7359,7 @@ func apply_skill_button_assignment(result: Dictionary) -> bool:
 		ATTACK_RING_SKILL_SLOT_COUNT
 	)
 	for skill_name: String in next_attack + next_ring:
-		if not skill_name.is_empty() and not is_skill_learned(skill_name):
+		if not skill_name.is_empty() and not is_skill_available(skill_name):
 			return false
 	var previous_attack := attack_skill_slots.duplicate()
 	var previous_ring := attack_ring_slots.duplicate()
@@ -7344,6 +7430,7 @@ func _restore_skill_button_assignments(assignments_value: Variant, legacy_center
 		ATTACK_RING_SKILL_SLOT_COUNT
 	)
 	_sync_legacy_quick_slots_from_ring()
+	_prune_unavailable_equipment_skill_bindings()
 
 
 func _normalized_skill_button_assignments(assignments_value: Variant, legacy_center: Array) -> Dictionary:

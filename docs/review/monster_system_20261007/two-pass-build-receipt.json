@@ -1,0 +1,63 @@
+﻿{
+    "final_signer":  {
+                         "certificate_sha256":  [
+                                                    "c62d0f8239b926f819038845c302143fd24dcfd75ed8d877ed846c430c6f3fcc"
+                                                ],
+                         "status":  "PASS",
+                         "apk_sha256":  "895f9fe37cfb28e13570423dcb341fa4307dcc1a61ee5ec070a437f19e247c4a",
+                         "apksigner_sha256":  "549dd0028b0314a5112d6b56e2de7800e713f297da4508b513a735546e52ce38"
+                     },
+    "schema_version":  1,
+    "exact_export_receipt_sha256":  "39cf53a05ede5669ae5e56698006b18c5276100092110e7e0ba7c678ff3aeaa0",
+    "runtime_native_image_sha":  "MISSING",
+    "generated_metadata_sha256":  "f9ae55b2727c905fa6f0ba404867cba3b26cbb3c139865c545cecafae9535576",
+    "fixed_inputs":  {
+                         "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64.exe":  "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+                         "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\android_seal\\export_identity_tool\\collector.py":  "684c2df187116bb39b2d684a09732a942d8eb8d4ca640f927b0c4d214c227b5b",
+                         "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\android_seal\\bridge\\verify_final_export.py":  "9cc00d472d88430910c44c118386b7302dafadff1c83cf7209171e4cdef6def5",
+                         "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\android_seal\\bridge\\build_android_seal.py":  "e8862db1f7eb20642cd6d681ebe535af083695b59f7de352074a33d8d0490f71",
+                         "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\78d0775b4b22-20261007-195820-2e3c09ee\\assets\\audio\\sfx\\client\\137__M26-3.wav":  "6a4a29c45e6d9882dd63d67fd4825c9401481df52383bb74c5ff0644a8ec1b0b",
+                         "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\78d0775b4b22-20261007-195820-2e3c09ee\\outputs\\test_logs\\framework\\code_preparation_engine_namespace_capture_test.namespace.json":  "92c0517c3a712d6d934d4cac33330fe424cb485a1e4d9d04f49d11cbeba78d8d",
+                         "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\78d0775b4b22-20261007-195820-2e3c09ee\\.godot\\global_script_class_cache.cfg":  "a88b38c3c9cd43e4e583094ee0720104c540ba6d4e4fd4049e42f5d451ab453b",
+                         "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\78d0775b4b22-20261007-195820-2e3c09ee\\assets\\generated\\build_info.json":  "3f0e710f4fcecd5712854509cc6dc7224459f5156873b1ecbd97b01ee84194ed",
+                         "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\78d0775b4b22-20261007-195820-2e3c09ee\\assets\\art\\items\\service\\inventory\\client.classic_raw_complete\\Items_00014.png":  "a3c9fd2de4a79b1fc72f22dc1825142d3837c40e3b5dce7d288f869416411b4f",
+                         "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\78d0775b4b22-20261007-195820-2e3c09ee\\tools\\compile_code_preparation_inputs.py":  "a993be41b68b47ea20a0944e7ffcf0654585fa22652c33c8dc25ff1b7cdd10a6",
+                         "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\editor_data\\export_templates\\4.7.stable\\android_debug.apk":  "602d5fdf34f2265fd937de87b5c9e4422f2218c13f746171b48eeb92d24c5929",
+                         "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\78d0775b4b22-20261007-195820-2e3c09ee\\assets\\audio\\sfx\\client\\10332__M33-3.wav":  "8732dbc4b932c03280682c8bf278c5d28e920d35b60b26ab40c3e9b05aa308f1",
+                         "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\78d0775b4b22-20261007-195820-2e3c09ee\\export_presets.cfg":  "17a1d2f70edfba4c8110cfef7e5739aacb671c7b79ba509e69c9ab0b4349070a",
+                         "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\78d0775b4b22-20261007-195820-2e3c09ee\\scripts\\features\\generated\\internal_code_preparation_catalog_data.gd":  "8458265a46d2a2ee7ea1d4c50017ece8e3bad167f1efeeccf733a70103bdb234",
+                         "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\seal-evidence-78d0775b4b22-20261007-195820-2e3c09ee-lf-retry\\caster_inputs.json":  "8a7dc88df7f896b88dcb0aedf5f84a0bf88b2455496ec19aaef9fda5f2a2c26c",
+                         "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\android_seal\\bridge\\inject_sources_resign.ps1":  "a2b44c733fcccaaed3500f20e7a81de28cced7da0768d7417302333312a47b00",
+                         "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\78d0775b4b22-20261007-195820-2e3c09ee\\project.godot":  "030f44250ab8d487a5521e56ce3d77ef23dbad7d0290e6db1285d10589c36f92",
+                         "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\android_seal\\bridge\\android_two_pass_export_hook.ps1":  "080a3349c9ae8ca3f05eef9eca698855e041240be99be7a76dae74404eb8c83a"
+                     },
+    "source_commit":  "78d0775b4b22f40ad1f54426639d867310dae41a",
+    "first_signer":  {
+                         "certificate_sha256":  [
+                                                    "c62d0f8239b926f819038845c302143fd24dcfd75ed8d877ed846c430c6f3fcc"
+                                                ],
+                         "status":  "PASS",
+                         "apk_sha256":  "384eb7f79b840170ea28736e02c7097a05bcc482c29290b789f32d7368fc2c6a",
+                         "apksigner_sha256":  "549dd0028b0314a5112d6b56e2de7800e713f297da4508b513a735546e52ce38"
+                     },
+    "native_token_device_acceptance":  "NOT_RUN",
+    "final_export":  {
+                         "engine_sha256":  "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+                         "apk":  "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\78d0775b4b22-20261007-195820-2e3c09ee\\outputs\\hardcore\\HardCore-isolated-debug.apk",
+                         "apk_sha256":  "895f9fe37cfb28e13570423dcb341fa4307dcc1a61ee5ec070a437f19e247c4a",
+                         "native_exit":  0,
+                         "stderr":  "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\seal-evidence-78d0775b4b22-20261007-195820-2e3c09ee-lf-retry\\final.stderr.log",
+                         "stdout":  "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\seal-evidence-78d0775b4b22-20261007-195820-2e3c09ee-lf-retry\\final.stdout.log",
+                         "log":  "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\seal-evidence-78d0775b4b22-20261007-195820-2e3c09ee-lf-retry\\final.engine.log"
+                     },
+    "seal_json_sha256":  "86d7216c674ef31571941f59fd1efae00f6293ec0589cbf41447dcda666a30f4",
+    "first_export":  {
+                         "engine_sha256":  "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+                         "apk":  "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\seal-evidence-78d0775b4b22-20261007-195820-2e3c09ee-lf-retry\\first-unavailable-export.apk",
+                         "apk_sha256":  "384eb7f79b840170ea28736e02c7097a05bcc482c29290b789f32d7368fc2c6a",
+                         "native_exit":  0,
+                         "stderr":  "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\seal-evidence-78d0775b4b22-20261007-195820-2e3c09ee-lf-retry\\first.stderr.log",
+                         "stdout":  "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\seal-evidence-78d0775b4b22-20261007-195820-2e3c09ee-lf-retry\\first.stdout.log",
+                         "log":  "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\seal-evidence-78d0775b4b22-20261007-195820-2e3c09ee-lf-retry\\first.engine.log"
+                     }
+}

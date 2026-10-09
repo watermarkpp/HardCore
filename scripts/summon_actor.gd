@@ -2,6 +2,7 @@ class_name SummonActor
 extends CharacterBody2D
 
 signal summon_state_changed(previous_state: int, current_state: int)
+signal passive_wakeup_changed()
 
 const DamageLedgerObserverScript := preload("res://scripts/damage_ledger_observer.gd")
 
@@ -492,10 +493,9 @@ func _emit_summon_audio(semantic_event: String, allow_death := false) -> bool:
 
 
 func _audio_try_emit_appear() -> void:
-	if _audio_appear_emitted:
-		return
-	if _emit_summon_audio("appear"):
-		_audio_appear_emitted = true
+	# The existing production whitelist disables appear. Seal the old hook
+	# without retries while off-screen or while no audio service exists.
+	_audio_appear_emitted = true
 
 
 func _audio_attack_started() -> void:
@@ -557,6 +557,7 @@ func relocate_after_owner_teleport(final_position_px: Vector2) -> Dictionary:
 		collision_mask = _owner_teleport_saved_collision_mask
 		owner_teleport_pending = false
 		visible = true
+	passive_wakeup_changed.emit()
 	return {
 		"contract_id": OWNER_TELEPORT_RELOCATION_CONTRACT_ID,
 		"relocated": true,
@@ -581,6 +582,7 @@ func defer_owner_teleport_relocation() -> void:
 	collision_layer = 0
 	collision_mask = 0
 	visible = false
+	passive_wakeup_changed.emit()
 
 
 func _reset_combat_after_owner_teleport() -> void:
@@ -717,7 +719,6 @@ func _process(delta: float) -> void:
 
 
 func _physics_process(delta: float) -> void:
-	_audio_try_emit_appear()
 	_update_monster_source_poison(delta)
 	if state == SummonState.DEAD:
 		velocity = Vector2.ZERO
@@ -751,6 +752,7 @@ func _physics_process(delta: float) -> void:
 	if owner_distance_gu >= teleport_range_gu:
 		_set_state(SummonState.RETURN_TO_OWNER)
 		global_position = _owner_formation_anchor_screen_px()
+		passive_wakeup_changed.emit()
 		_rest_formation_moving = false
 		velocity = Vector2.ZERO
 		actual_ground_motion_gu = Vector2.ZERO
@@ -816,6 +818,9 @@ func _physics_process(delta: float) -> void:
 		)
 	)
 
+	if not actual_ground_motion_gu.is_zero_approx():
+		passive_wakeup_changed.emit()
+
 
 func _begin_attack(enemy: EnemyActor) -> void:
 	## Entering an attack breaks group invisibility immediately, rather than
@@ -824,6 +829,7 @@ func _begin_attack(enemy: EnemyActor) -> void:
 		stealth_remaining_seconds = 0.0
 		stealth_buff_id = ""
 		_update_stealth_visual()
+		passive_wakeup_changed.emit()
 	_attack_timer = attack_interval
 	last_attack_type = attack_type
 	_pending_attack_target = enemy
@@ -1592,9 +1598,12 @@ func apply_stealth(seconds: float, buff_id := "buff.taoist.mass_invisibility") -
 	## player stealth contract (player.apply_stealth uses max).
 	if seconds <= 0.0:
 		return
+	var was_hidden := is_stealthed()
 	stealth_remaining_seconds = maxf(stealth_remaining_seconds, seconds)
 	if not buff_id.is_empty():
 		stealth_buff_id = buff_id
+	if not was_hidden:
+		passive_wakeup_changed.emit()
 
 
 func is_stealthed() -> bool:
@@ -1678,6 +1687,7 @@ func _update_support_buff_timers(delta: float) -> void:
 		stealth_remaining_seconds = maxf(0.0, stealth_remaining_seconds - delta)
 		if stealth_remaining_seconds <= 0.0:
 			stealth_buff_id = ""
+			passive_wakeup_changed.emit()
 	if ac_buff_remaining_seconds > 0.0:
 		ac_buff_remaining_seconds = maxf(0.0, ac_buff_remaining_seconds - delta)
 		if ac_buff_remaining_seconds <= 0.0:

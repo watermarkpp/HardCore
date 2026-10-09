@@ -1,0 +1,10 @@
+{
+  "contract": "ui.hud.target_bar.enclosed_fill_mask.v1",
+  "sourceTexture": "assets/ui/gothic_hud/v2/runtime/target_bar_v2.png",
+  "seed": [330, 54],
+  "alphaThresholdExclusive": 200,
+  "expectedSourceSize": [660, 109],
+  "expectedInnerBounds": [99, 33, 464, 39],
+  "outputTexture": "assets/ui/gothic_hud/v2/runtime/target_bar_fill_mask.png",
+  "outputGeometry": "scripts/ui_generated/hud_target_bar_mask_geometry.gd"
+}

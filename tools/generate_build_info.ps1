@@ -33,6 +33,65 @@ $TrackedDirtyExitCode = $LASTEXITCODE
 if ($TrackedDirtyExitCode -notin @(0, 1)) {
     throw "Unable to inspect tracked Git state for build-info (exit $TrackedDirtyExitCode)."
 }
+
+# `git diff-index` applies the repository's clean filter.  A CRLF working
+# file can therefore look dirty even when its raw bytes are exactly the HEAD
+# blob.  Only a modified, regular tracked file whose no-filter hash matches
+# its HEAD blob may be removed from the dirty set.  Deleted files, mode/type
+# changes, unknown paths, and any failed Git/file probe remain dirty.
+$RawByteCheckedTrackedCount = 0
+$RawByteEqualTrackedCount = 0
+$RawByteCheckFailedPaths = @()
+$RawByteDirtyPaths = @()
+if ($TrackedDirtyExitCode -eq 1) {
+    $rawNameStatus = & git diff-index --name-status -z HEAD --
+    $rawNameStatusExitCode = $LASTEXITCODE
+    if ($rawNameStatusExitCode -ne 0) {
+        throw "Unable to enumerate tracked Git changes for raw-byte verification (exit $rawNameStatusExitCode)."
+    }
+    $records = @($rawNameStatus -split "`0" | Where-Object { $_ -ne '' })
+    for ($recordIndex = 0; $recordIndex -lt $records.Count; $recordIndex++) {
+        $status = [string]$records[$recordIndex]
+        if ($status -notmatch '^(M|A|D|T|U|R\d+|C\d+)$' -or
+            $recordIndex + 1 -ge $records.Count) {
+            $RawByteCheckFailedPaths += '<unknown-record>'
+            continue
+        }
+        $relativePath = [string]$records[++$recordIndex]
+        # Rename/copy records have a second path and are not safe to infer
+        # from a single working-tree file hash.
+        if ($status -notmatch '^M$') {
+            $RawByteDirtyPaths += $relativePath
+            if ($status -match '^(R|C)\d+$' -and $recordIndex + 1 -lt $records.Count) {
+                $RawByteDirtyPaths += [string]$records[++$recordIndex]
+            }
+            continue
+        }
+        $file = Get-Item -LiteralPath (Join-Path $ROOT $relativePath) -ErrorAction SilentlyContinue
+        if ($null -eq $file -or $file -isnot [IO.FileInfo]) {
+            $RawByteCheckFailedPaths += $relativePath
+            $RawByteDirtyPaths += $relativePath
+            continue
+        }
+        $RawByteCheckedTrackedCount++
+        $headBlob = (& git rev-parse --verify ("HEAD:" + $relativePath)).Trim()
+        $headBlobExitCode = $LASTEXITCODE
+        $workingBlob = (& git hash-object --no-filters -- $relativePath).Trim()
+        $workingBlobExitCode = $LASTEXITCODE
+        if ($headBlobExitCode -ne 0 -or $workingBlobExitCode -ne 0 -or
+            $headBlob -notmatch '^[0-9a-fA-F]{40}$' -or
+            $workingBlob -notmatch '^[0-9a-fA-F]{40}$') {
+            $RawByteCheckFailedPaths += $relativePath
+            $RawByteDirtyPaths += $relativePath
+            continue
+        }
+        if ($workingBlob.ToLowerInvariant() -eq $headBlob.ToLowerInvariant()) {
+            $RawByteEqualTrackedCount++
+        } else {
+            $RawByteDirtyPaths += $relativePath
+        }
+    }
+}
 $UntrackedPaths = @(& git ls-files --others --exclude-standard)
 if ($LASTEXITCODE -ne 0) {
     throw "Unable to inspect untracked Git state for build-info."
@@ -40,10 +99,14 @@ if ($LASTEXITCODE -ne 0) {
 if ($IgnoreAndroidBuildTemplate) {
     $UntrackedPaths = @($UntrackedPaths | Where-Object { $_ -notmatch '^android/' })
 }
-$dirty = ($TrackedDirtyExitCode -eq 1 -or $UntrackedPaths.Count -gt 0)
+$trackedDirtyAfterRawCheck = ($RawByteDirtyPaths.Count -gt 0 -or $RawByteCheckFailedPaths.Count -gt 0)
+$dirty = ($trackedDirtyAfterRawCheck -or $UntrackedPaths.Count -gt 0)
 
 if ($dirty -and -not $AllowDirty -and -not $SkipDirtyCheck) {
-    Write-Error "Working tree is dirty. Use -AllowDirty for dev builds."
+    Write-Error ("Working tree is dirty. Use -AllowDirty for dev builds. " +
+        "Raw-byte tracked files checked=$RawByteCheckedTrackedCount equal_head=$RawByteEqualTrackedCount " +
+        "remaining=$($RawByteDirtyPaths.Count) failed=$($RawByteCheckFailedPaths.Count) " +
+        "untracked=$($UntrackedPaths.Count).")
     Pop-Location; exit 1
 }
 
@@ -105,4 +168,5 @@ $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
 [System.IO.File]::WriteAllText((Join-Path $dest "build_info.json"), $info + [Environment]::NewLine, $utf8NoBom)
 Write-Host "BUILD_INFO: $head ($buildType)"
 Write-Host "Dirty: $dirty"
+Write-Host "Raw-byte tracked files checked=$RawByteCheckedTrackedCount equal_head=$RawByteEqualTrackedCount remaining=$($RawByteDirtyPaths.Count) failed=$($RawByteCheckFailedPaths.Count)"
 Pop-Location

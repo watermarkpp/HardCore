@@ -9,8 +9,8 @@ const SourceReactionRegistryScript := preload(
 
 ## Monster magic delivery classes retain source-family routing and RNG order.
 ## DIRECT_MAGSTRUCK and MAGSTRUCK_MINE both resolve MAC normally. Positive
-## damage produces ordinary STRUCK presentation and the level-based attack
-## delay; neither delivery postpones autonomous movement. Direct magic keeps
+## direct damage inserts ordinary STRUCK; its authored animation pauses the
+## residual action clock. Ground mine ticks only deal HP damage. Direct magic keeps
 ## its legacy actor RNG draw at the MAC boundary for sequence compatibility.
 ## source176 AUTO (-1) is the migration/compatibility value for generic
 ## call sites that deliver several skills: the kind is resolved through
@@ -154,17 +154,14 @@ func apply_enemy_direct_spell_damage(
 		and bool(resolution.get("enters_magic_defense_stage", false))
 	):
 		_compatibility_draw_direct_magic_actor_rng(target)
-	# Direct magic and mine damage share the ordinary positive-damage STRUCK
-	# path below. A struck may postpone the next attack deadline, but it must
-	# never alter the movement cadence or gate the next autonomous segment.
+	# Resolve both reception families through the same MAC/RNG chain. Only
+	# direct hits insert struck; repeated ground ticks must never hold a pack.
 	var final_damage := int(resolution.get("final_damage", 0))
 	if final_damage > 0:
-		if checked_delivery == EnemyMagicDeliveryKind.MAGSTRUCK_MINE:
-			RuntimeDiagnostics.increment_performance_counter(
-				&"monster_magic_mine_struck_count"
-			)
 		var damage_started_usec := RuntimeDiagnostics.timing_start()
-		if damage_context.is_empty(): target.call("take_damage", final_damage, source_actor)
+		if checked_delivery == EnemyMagicDeliveryKind.MAGSTRUCK_MINE and target.has_method("take_ground_tick_damage"):
+			target.call("take_ground_tick_damage", final_damage, source_actor, damage_context)
+		elif damage_context.is_empty(): target.call("take_damage", final_damage, source_actor)
 		else: target.call("take_damage", final_damage, source_actor, damage_context)
 		RuntimeDiagnostics.record_timing_usec(&"take_damage_usec", damage_started_usec)
 	RuntimeDiagnostics.record_timing_usec(

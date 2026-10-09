@@ -7,9 +7,11 @@ const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
 const HUDResourceOrbScript := preload("res://scripts/hud_resource_orb.gd")
 const HUDSkillIconCatalogScript := preload("res://scripts/hud_skill_icon_catalog.gd")
 const CircularTouchButtonScript := preload("res://scripts/circular_touch_button.gd")
+const HUDUtilityTouchButtonScript := preload("res://scripts/hud_utility_touch_button.gd")
 const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
 const UIItemTextureCacheScript := preload("res://scripts/ui_item_texture_cache.gd")
 const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
+const QuickItemIconLayout := preload("res://scripts/quick_item_icon_layout.gd")
 const ChassisDesignsScript := preload("res://scripts/hud_chassis_designs.gd")
 const DeathRevivalPanelScript := preload("res://scripts/death_revival_panel.gd")
 const LootFeedbackLayerScript := preload("res://scripts/loot_feedback_layer.gd")
@@ -23,6 +25,9 @@ const SKILL_PANEL_SCRIPT_PATH := "res://scripts/skill_panel.gd"
 const QUEST_PANEL_SCRIPT_PATH := "res://scripts/quest_panel.gd"
 const MAP_PANEL_SCRIPT_PATH := "res://scripts/map_panel.gd"
 const WAREHOUSE_PANEL_SCRIPT_PATH := "res://scripts/warehouse_panel.gd"
+const HUDTargetBarMaskTexture := preload("res://assets/ui/gothic_hud/v2/runtime/target_bar_fill_mask.png")
+const HUDTargetBarFillShader := preload("res://assets/ui/gothic_hud/v2/runtime/target_bar_fill.gdshader")
+const HUDTargetBarMaskGeometry := preload("res://scripts/ui_generated/hud_target_bar_mask_geometry.gd")
 const HUDTargetBarTexture := preload("res://assets/ui/gothic_hud/v2/runtime/target_bar_v2.png")
 const HUDUtilityStackTexture := preload("res://assets/ui/gothic_hud/v2/runtime/utility_stack_v2.png")
 const HUDJoystickTexture := preload("res://assets/ui/gothic_hud/v2/runtime/joystick_v2.png")
@@ -65,16 +70,22 @@ const ITEM_QUICK_SLOT_ASSIGNMENT_CONTRACT_ID := "ui.item.quick_slot.assignment.v
 const ITEM_QUICK_SLOT_USE_CONTRACT_ID := "ui.item.quick_slot.use.v1"
 const HUD_ATTACK_CENTER := Vector2(-185, -110)
 const HUD_ATTACK_RING_COUNT := 6
-const HUD_ATTACK_RING_RADIUS := 125.0
+const HUD_ATTACK_RING_RADIUS := 140.0
 const HUD_ATTACK_RING_START_DEGREES := 180.0
 const HUD_ATTACK_RING_STEP_DEGREES := 36.0
-const HUD_ATTACK_RING_BUTTON_SIZE := Vector2(72, 72)
+const HUD_ATTACK_RING_BUTTON_SIZE := Vector2(86.4, 86.4)
 const HUD_ACTION_FRAME_VISIBLE_INNER_MAX_RADIUS_SOURCE := 44.0
-const HUD_ATTACK_RING_BACKDROP_SIZE := Vector2(50, 50)
-const HUD_ATTACK_RING_ICON_SIZE := Vector2(50, 50)
-const HUD_ATTACK_FILL_SIZE := Vector2(90, 90)
-const HUD_ATTACK_ICON_SIZE := Vector2(90, 90)
-const HUD_JOYSTICK_RECT := Rect2(70, -210, 152, 152)
+const HUD_ATTACK_RING_BACKDROP_SIZE := Vector2(60, 60)
+const HUD_ATTACK_RING_ICON_SIZE := Vector2(60, 60)
+const HUD_ATTACK_FILL_SIZE := Vector2(76.5, 76.5)
+const HUD_ATTACK_ICON_SIZE := Vector2(76.5, 76.5)
+const HUD_ATTACK_BUTTON_SIZE := Vector2(102, 102)
+const HUD_ATTACK_FRAME_SIZE := Vector2(108.8, 108.8)
+# Keep the joystick center horizontally; move it 16px north as it grows.
+const HUD_JOYSTICK_RECT := Rect2(54.8, -241.2, 182.4, 182.4)
+const HUD_UTILITY_BUTTON_SIZE := Vector2(91.2, 91.2)
+const HUD_INTERACT_CENTER := Vector2(-215, -337)
+const HUD_SWITCH_TARGET_CENTER := Vector2(-85, -337)
 
 signal movement_changed(value: Vector2)
 signal attack_pressed
@@ -130,7 +141,6 @@ signal loading_transition_covered(request: Dictionary)
 signal loading_transition_finished(request: Dictionary)
 signal target_switch_pressed
 signal auto_target_changed(enabled: bool)
-signal special_action_pressed(effect_id: String)
 
 var hp_label: Label
 var data_label: Label
@@ -148,9 +158,8 @@ var notice_presenter: PlayerNoticePresenter
 var error_label: Label
 var target_panel: Control
 var target_label: Label
-var target_health_fill: ColorRect
+var target_health_fill: TextureRect
 var auto_target_button: Button
-var special_action_button: Button
 var attack_button: Button
 var warrior_state_label: Label
 ## Modal panels stay untyped here on purpose. Referencing their class_name in a
@@ -191,6 +200,7 @@ var _item_quick_slot_menu_candidates: Dictionary = {}
 var _item_quick_slot_menu_scroll: ScrollContainer
 var _item_quick_slot_menu_list: Control
 var _touch_scroll_support: Node
+var _item_slot_presses: Dictionary = {}
 var _item_slot_press_index := -1
 var _item_slot_press_origin := Vector2.ZERO
 var _item_slot_press_touch_index := -1
@@ -211,8 +221,6 @@ var _last_max_hp := 120
 var _last_mp := 40
 var _last_max_mp := 40
 var _warrior_snapshot: Dictionary = {}
-var _special_actions: Array[String] = []
-var _special_action_index := 0
 var _last_target_text := ""
 var _skill_button_assignments: Dictionary = {}
 var _skill_button_modes: Dictionary = {}
@@ -249,6 +257,7 @@ func _process(_delta: float) -> void:
 
 
 func _exit_tree() -> void:
+	_cancel_all_item_slot_presses()
 	_catalog_icon_prewarm_in_progress = false
 	_catalog_icon_prewarm_paths.clear()
 	# Script loaders can still be compiling preloaded textures when the world
@@ -406,7 +415,6 @@ func _build_approved_hud() -> void:
 	PlayerState.profile_changed.connect(update_profile)
 	PlayerState.profile_changed.connect(update_experience_bar)
 	PlayerState.quests_changed.connect(update_quest_tracker)
-	PlayerState.profile_changed.connect(update_special_actions)
 	PlayerState.skills_changed.connect(update_quick_slots)
 	PlayerState.inventory_changed.connect(update_item_quick_slots)
 	if loading_profile_enabled:
@@ -419,7 +427,6 @@ func _build_approved_hud() -> void:
 	update_profile()
 	update_experience_bar()
 	update_quest_tracker()
-	update_special_actions()
 	update_quick_slots()
 	update_item_quick_slots()
 	update_resources(_last_hp, _last_max_hp, _last_mp, _last_max_mp)
@@ -542,13 +549,17 @@ func _build_target_bar(root: Control) -> void:
 	target_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.add_child(target_panel)
 	_register_center_exempt(target_panel)
-	target_health_fill = ColorRect.new()
-	target_health_fill.name = "TargetHealthFill"
-	target_health_fill.position = Vector2(60, 24)
-	target_health_fill.size = Vector2(320, 27)
-	target_health_fill.color = Color(0.42, 0.035, 0.035, 0.88)
-	target_health_fill.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	target_panel.add_child(target_health_fill)
+	# A full opaque track covers the exact enclosed source-pixel hole, even
+	# at zero HP; decorative wings remain transparent. No runtime mask scan.
+	var backdrop := _add_full_texture(target_panel, "TargetHealthBackdrop", HUDTargetBarMaskTexture)
+	backdrop.modulate = Color("180b0b")
+	target_health_fill = _add_full_texture(target_panel, "TargetHealthFill", HUDTargetBarMaskTexture)
+	target_health_fill.modulate = Color(0.42, 0.035, 0.035, 0.88)
+	var fill_material := ShaderMaterial.new()
+	fill_material.shader = HUDTargetBarFillShader
+	var bounds: Rect2i = HUDTargetBarMaskGeometry.INNER_BOUNDS
+	fill_material.set_shader_parameter("fill_x_bounds", Vector2(bounds.position.x, bounds.end.x) / HUDTargetBarMaskGeometry.SOURCE_SIZE.x)
+	target_health_fill.material = fill_material
 	var target_art := _add_full_texture(target_panel, "TargetFrameArt", HUDTargetBarTexture)
 	target_art.set_meta("stable_id", "ui.hud.gothic.v2.target_bar")
 
@@ -558,6 +569,14 @@ func _build_target_bar(root: Control) -> void:
 	target_label.text = "目标：自动锁定待命"
 	target_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	target_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	var regular_font := SystemFont.new()
+	regular_font.font_names = PackedStringArray(["Noto Sans CJK SC", "Noto Sans SC", "Microsoft YaHei", "sans-serif"])
+	regular_font.font_weight = 400
+	regular_font.font_italic = false
+	target_label.add_theme_font_override("font", regular_font)
+	target_label.add_theme_constant_override("outline_size", 0)
+	target_label.add_theme_constant_override("shadow_offset_x", 0)
+	target_label.add_theme_constant_override("shadow_offset_y", 0)
 	target_label.add_theme_font_size_override("font_size", 18)
 	target_label.add_theme_color_override("font_color", Color("e7c38c"))
 	target_panel.add_child(target_label)
@@ -738,6 +757,8 @@ func _build_bottom_chassis(root: Control) -> void:
 	# The fill well is drawn under the frame art and oversized so the opaque
 	# rim masks the anti-aliased well edge; the visible shape is the well.
 	var slot_render_size: Vector2 = chassis_design.get("item_slot_fill_render_size", slot_fill_size)
+	var slot_hit_size := ChassisDesignsScript.source_rect_to_local(chassis_design, Rect2(Vector2.ZERO, chassis_design["item_slot_touch_source_size"])).size
+	var slot_hit_padding := (slot_hit_size - slot_fill_size) * 0.5
 	for index in range(item_slot_centers.size()):
 		var item_fill := Panel.new()
 		item_fill.name = "ItemSlotFill%d" % (index + 1)
@@ -765,7 +786,7 @@ func _build_bottom_chassis(root: Control) -> void:
 		var item_button := Button.new()
 		item_button.name = "ItemSlot%d" % (index + 1)
 		item_button.theme_type_variation = "GothicHUDItemHitButton"
-		item_button.size = slot_fill_size
+		item_button.size = slot_hit_size
 		item_button.position = _chassis_source_to_local(item_slot_centers[index]) - item_button.size * 0.5
 		item_button.text = str(index + 1)
 		item_button.tooltip_text = "快捷物品 %d" % (index + 1)
@@ -805,10 +826,10 @@ func _build_bottom_chassis(root: Control) -> void:
 		quick_count.anchor_top = 1.0
 		quick_count.anchor_right = 1.0
 		quick_count.anchor_bottom = 1.0
-		quick_count.offset_left = -badge_minimum.x - 2.0
-		quick_count.offset_top = -badge_minimum.y
-		quick_count.offset_right = -2.0
-		quick_count.offset_bottom = 0.0
+		quick_count.offset_left = -badge_minimum.x - 2.0 - slot_hit_padding.x
+		quick_count.offset_top = -badge_minimum.y - slot_hit_padding.y
+		quick_count.offset_right = -2.0 - slot_hit_padding.x
+		quick_count.offset_bottom = -slot_hit_padding.y
 		quick_count.grow_horizontal = Control.GROW_DIRECTION_BEGIN
 		quick_count.grow_vertical = Control.GROW_DIRECTION_BEGIN
 		quick_count.add_theme_color_override("font_color", Color("f2c783"))
@@ -1100,41 +1121,97 @@ func update_item_quick_slots() -> void:
 			button.tooltip_text = "快捷物品 %d：长按从背包选择" % (index + 1)
 			continue
 		var texture := UIItemTextureCacheScript.texture_for(record, "inventoryIcon")
+		texture = QuickItemIconLayout.prepare_texture(texture, item_id)
 		button.text = ""
 		if icon != null:
 			icon.texture = texture
 			icon.visible = texture != null
 			icon.modulate = Color(1, 1, 1, 0.45) if count <= 0 else Color.WHITE
 			_layout_native_item_icon(icon, texture, button.size, GameData.get_item_art_display_size(record))
+			if texture != null:
+				icon.position = button.size * 0.5 - QuickItemIconLayout.visible_center(texture) * (icon.size / texture.get_size())
 		if count_label != null:
 			count_label.text = str(count)
 			count_label.visible = true
 		button.tooltip_text = "%s × %d" % [item_name, count] if count > 0 else "%s（暂无库存，补货后恢复）" % item_name
 
 
+# Only pointers whose DOWN was admitted by GUI hit testing are routed here.
+# Convert viewport coordinates with the live Control transform exactly once;
+# held movement/attack pointers neither own nor cancel quick-item pointers.
+func _input(event: InputEvent) -> void:
+	if _item_slot_presses.is_empty() or event.device == InputEvent.DEVICE_ID_EMULATION:
+		return
+	var pointer := -2
+	if event is InputEventScreenTouch:
+		if event.pressed and not event.canceled:
+			return
+		pointer = event.index
+	elif event is InputEventScreenDrag:
+		pointer = event.index
+	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
+		pointer = -1
+	elif event is InputEventMouseMotion and event.button_mask & MOUSE_BUTTON_MASK_LEFT:
+		pointer = -1
+	if not _item_slot_presses.has(pointer):
+		return
+	var slot := int(_item_slot_presses[pointer].slot)
+	var button: Button = hud_item_buttons[slot]
+	var local_event := button.make_input_local(event)
+	_item_slot_input(local_event, slot)
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_APPLICATION_FOCUS_OUT:
+		_cancel_all_item_slot_presses()
+
+
+func _cancel_all_item_slot_presses() -> void:
+	_item_slot_presses.clear()
+	_item_slot_press_index = -1
+	_item_slot_press_touch_index = -1
+	if is_instance_valid(_item_slot_long_press_timer):
+		_item_slot_long_press_timer.stop()
+
+
 func _item_slot_input(event: InputEvent, slot_index: int) -> void:
 	if event.device == InputEvent.DEVICE_ID_EMULATION:
 		return
 	if event is InputEventScreenTouch:
-		var touch := event as InputEventScreenTouch
-		if touch.pressed:
-			_begin_item_slot_press(slot_index, touch.position, touch.index)
-		elif touch.index == _item_slot_press_touch_index:
-			_finish_item_slot_press(slot_index, touch.position, touch.index)
+		if event.canceled:
+			_cancel_item_slot_pointer(event.index)
+		elif event.pressed:
+			_begin_item_slot_press(slot_index, event.position, event.index)
+		else:
+			_finish_item_slot_press(slot_index, event.position, event.index)
 	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
 			_begin_item_slot_press(slot_index, event.position, -1)
-		elif _item_slot_press_touch_index == -1:
+		else:
 			_finish_item_slot_press(slot_index, event.position, -1)
-	elif event is InputEventScreenDrag and event.index == _item_slot_press_touch_index:
-		if event.position.distance_to(_item_slot_press_origin) > ITEM_QUICK_SLOT_CANCEL_DISTANCE:
-			_cancel_item_slot_press()
-	elif event is InputEventMouseMotion and _item_slot_press_touch_index == -1 and event.button_mask & MOUSE_BUTTON_MASK_LEFT:
-		if event.position.distance_to(_item_slot_press_origin) > ITEM_QUICK_SLOT_CANCEL_DISTANCE:
-			_cancel_item_slot_press()
+	elif event is InputEventScreenDrag:
+		_move_item_slot_pointer(event.index, event.position)
+	elif event is InputEventMouseMotion and event.button_mask & MOUSE_BUTTON_MASK_LEFT:
+		_move_item_slot_pointer(-1, event.position)
+
+
+func _move_item_slot_pointer(pointer: int, position: Vector2) -> void:
+	if not _item_slot_presses.has(pointer):
+		return
+	var state: Dictionary = _item_slot_presses[pointer]
+	var button: Button = hud_item_buttons[int(state.slot)]
+	if not Rect2(Vector2.ZERO, button.size).has_point(position):
+		_cancel_item_slot_pointer(pointer)
+	elif pointer == _item_slot_press_touch_index and position.distance_to(state.origin) > ITEM_QUICK_SLOT_CANCEL_DISTANCE:
+		# Drift inside a slot prevents accidental long-press assignment, but
+		# does not discard an otherwise valid tap inside the visible cell.
+		_item_slot_long_press_timer.stop()
 
 
 func _begin_item_slot_press(slot_index: int, origin: Vector2, touch_index: int) -> void:
+	if _item_slot_presses.has(touch_index):
+		return
+	_item_slot_presses[touch_index] = {"slot": slot_index, "origin": origin, "long_press": false}
 	_item_slot_press_index = slot_index
 	_item_slot_press_origin = origin
 	_item_slot_press_touch_index = touch_index
@@ -1143,29 +1220,34 @@ func _begin_item_slot_press(slot_index: int, origin: Vector2, touch_index: int) 
 	_item_slot_long_press_timer.start()
 
 
+func _cancel_item_slot_pointer(pointer: int) -> void:
+	_item_slot_presses.erase(pointer)
+	if pointer == _item_slot_press_touch_index:
+		_item_slot_long_press_timer.stop()
+		_item_slot_press_cancelled = true
+		_item_slot_press_index = -1
+		_item_slot_press_touch_index = -1
+
+
 func _cancel_item_slot_press() -> void:
-	_item_slot_long_press_timer.stop()
-	_item_slot_press_cancelled = true
-	_item_slot_press_touch_index = -1
+	_cancel_item_slot_pointer(_item_slot_press_touch_index)
 
 
 func _finish_item_slot_press(slot_index: int, release_position: Vector2, touch_index := -1) -> void:
-	_item_slot_long_press_timer.stop()
-	if _item_slot_press_index != slot_index:
+	if not _item_slot_presses.has(touch_index):
 		return
-	if _item_slot_press_touch_index != touch_index:
+	var state: Dictionary = _item_slot_presses[touch_index]
+	if int(state.slot) != slot_index:
 		return
-	var long_press_opened := _item_slot_long_press_opened
-	var cancelled := _item_slot_press_cancelled
-	var moved_away := release_position.distance_to(_item_slot_press_origin) > ITEM_QUICK_SLOT_CANCEL_DISTANCE
-	_item_slot_press_index = -1
-	_item_slot_press_touch_index = -1
-	if long_press_opened or cancelled or moved_away:
+	_item_slot_presses.erase(touch_index)
+	if touch_index == _item_slot_press_touch_index:
+		_item_slot_long_press_timer.stop()
+		_item_slot_press_index = -1
+		_item_slot_press_touch_index = -1
+	if bool(state.long_press) or not Rect2(Vector2.ZERO, hud_item_buttons[slot_index].size).has_point(release_position):
 		return
 	var item_id := _item_slot_bound_id(slot_index)
 	if item_id.is_empty():
-		# Tapping an empty quick slot is a failed action: it belongs to the
-		# dedicated error channel, not the general notice lane.
 		show_error_message("快捷物品 %d 为空：长按槽位可从背包选择" % (slot_index + 1))
 		return
 	item_quick_slot_use_requested.emit(slot_index, item_id)
@@ -1186,6 +1268,8 @@ func _open_item_quick_slot_menu() -> void:
 	if slot_index < 0 or slot_index >= ITEM_QUICK_SLOT_COUNT:
 		return
 	_item_slot_long_press_opened = true
+	if _item_slot_presses.has(_item_slot_press_touch_index):
+		_item_slot_presses[_item_slot_press_touch_index].long_press = true
 	_item_quick_slot_menu_slot = slot_index
 	_clear_item_quick_slot_picker()
 	_item_quick_slot_menu_candidates.clear()
@@ -1433,8 +1517,8 @@ func _build_combat_controls(root: Control) -> void:
 	movement_joystick = TouchJoystick.new()
 	var joystick := movement_joystick
 	joystick.name = "TouchJoystick"
-	joystick.radius = 58.0
-	joystick.knob_radius = 24.0
+	joystick.radius = 69.6
+	joystick.knob_radius = 28.8
 	joystick.external_frame = true
 	joystick.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
 	_apply_control_rect(joystick, HUD_JOYSTICK_RECT)
@@ -1443,7 +1527,7 @@ func _build_combat_controls(root: Control) -> void:
 
 	warrior_state_label = Label.new()
 	warrior_state_label.name = "WarriorStateLabel"
-	warrior_state_label.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	warrior_state_label.set_anchors_preset(Control.PRESET_CENTER_TOP)
 	warrior_state_label.offset_left = 350
 	warrior_state_label.offset_top = -250
 	warrior_state_label.offset_right = -350
@@ -1453,50 +1537,41 @@ func _build_combat_controls(root: Control) -> void:
 	warrior_state_label.add_theme_color_override("font_color", Color("efbd70"))
 	root.add_child(warrior_state_label)
 	_anchor_warrior_state_label(root)
+	# The label is positioned from the chassis' true screen-center geometry.
+	# Register it after anchoring so safe-area correction moves it with the
+	# chassis instead of leaving the warrior toggle at the safe-area midpoint.
+	_register_center_exempt(warrior_state_label)
 
-	_add_bottom_right_fill(root, "InteractFill", Rect2(-241, -403, 52, 52), "GothicArtCircleFill")
-	_add_bottom_right_fill(root, "SwitchTargetFill", Rect2(-111, -403, 52, 52), "GothicArtCircleFill")
-	_add_bottom_right_fill(
-		root,
-		"AttackFill",
-		Rect2(HUD_ATTACK_CENTER - HUD_ATTACK_FILL_SIZE * 0.5, HUD_ATTACK_FILL_SIZE),
-		"GothicArtAttackFill",
-	)
-	_add_bottom_right_action_frame(root, "InteractFrame", Rect2(-253, -415, 76, 76), "ui.hud.gothic.v3.interact_frame")
-	_add_bottom_right_action_frame(root, "SwitchTargetFrame", Rect2(-123, -415, 76, 76), "ui.hud.gothic.v3.switch_target_frame")
-
-	var interact_button := Button.new()
-	interact_button.name = "InteractButton"
-	interact_button.theme_type_variation = "GothicTransparentButton"
-	interact_button.text = "交互"
-	interact_button.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-	interact_button.offset_left = -270
-	interact_button.offset_top = -415
-	interact_button.offset_right = -160
-	interact_button.offset_bottom = -339
-	interact_button.add_theme_font_size_override("font_size", 17)
-	interact_button.button_down.connect(func() -> void: interact_pressed.emit())
-	root.add_child(interact_button)
-
-	var switch_target_button := Button.new()
-	switch_target_button.name = "SwitchTargetButton"
-	switch_target_button.theme_type_variation = "GothicTransparentButton"
-	switch_target_button.text = "换敌"
-	switch_target_button.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-	switch_target_button.offset_left = -140
-	switch_target_button.offset_top = -415
-	switch_target_button.offset_right = -30
-	switch_target_button.offset_bottom = -339
-	switch_target_button.add_theme_font_size_override("font_size", 16)
-	switch_target_button.pressed.connect(func() -> void: target_switch_pressed.emit())
-	root.add_child(switch_target_button)
+	_add_bottom_right_fill(root, "AttackFill", Rect2(HUD_ATTACK_CENTER - HUD_ATTACK_FILL_SIZE * 0.5, HUD_ATTACK_FILL_SIZE), "GothicArtAttackFill")
+	# Art and hit testing share exactly the same circle, without the old
+	# invisible 110px-wide rectangular utility hit regions.
+	for utility in [
+		{"name": "Interact", "text": "交互", "center": HUD_INTERACT_CENTER},
+		{"name": "SwitchTarget", "text": "换敌", "center": HUD_SWITCH_TARGET_CENTER},
+	]:
+		var center: Vector2 = utility.center
+		_add_bottom_right_fill(root, utility.name + "Fill", Rect2(center - Vector2(31.2, 31.2), Vector2(62.4, 62.4)), "GothicArtCircleFill")
+		_add_bottom_right_action_frame(root, utility.name + "Frame", Rect2(center - HUD_UTILITY_BUTTON_SIZE * 0.5, HUD_UTILITY_BUTTON_SIZE), "ui.hud.gothic.v3." + ("interact_frame" if utility.name == "Interact" else "switch_target_frame"))
+		var button := HUDUtilityTouchButtonScript.new()
+		button.name = utility.name + "Button"
+		button.theme_type_variation = "GothicTransparentButton"
+		button.text = utility.text
+		button.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+		_apply_control_rect(button, Rect2(center - HUD_UTILITY_BUTTON_SIZE * 0.5, HUD_UTILITY_BUTTON_SIZE))
+		button.add_theme_font_size_override("font_size", 20)
+		button.lifecycle_enabled = true
+		root.add_child(button)
+		if utility.name == "Interact":
+			button.input_started.connect(func(_token: int, _pointer: int, _source: StringName) -> void: interact_pressed.emit())
+		else:
+			button.tap_completed.connect(func() -> void: target_switch_pressed.emit())
 
 	attack_button = CircularTouchButtonScript.new()
 	attack_button.name = "AttackButton"
 	attack_button.theme_type_variation = "GothicTransparentButton"
 	attack_button.text = "攻击"
 	attack_button.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-	_apply_control_rect(attack_button, Rect2(HUD_ATTACK_CENTER - Vector2(60, 60), Vector2(120, 120)))
+	_apply_control_rect(attack_button, Rect2(HUD_ATTACK_CENTER - HUD_ATTACK_BUTTON_SIZE * 0.5, HUD_ATTACK_BUTTON_SIZE))
 	attack_button.add_theme_font_size_override("font_size", 24)
 	attack_button.text = ""
 	attack_button.set("lifecycle_enabled", true)
@@ -1511,7 +1586,7 @@ func _build_combat_controls(root: Control) -> void:
 	attack_button.set_meta("assignment_group", "attack")
 	attack_button.set_meta("assignment_contract", "ui.skill.button_assignment.v3")
 	attack_button.set_meta("circular_touch", true)
-	attack_button.set_meta("touch_radius", 60.0)
+	attack_button.set_meta("touch_radius", HUD_ATTACK_BUTTON_SIZE.x * 0.5)
 	attack_button.set_meta("center_offset", HUD_ATTACK_CENTER)
 	root.add_child(attack_button)
 	attack_slot_icon = TextureRect.new()
@@ -1541,7 +1616,7 @@ func _build_combat_controls(root: Control) -> void:
 	_add_bottom_right_action_frame(
 		root,
 		"AttackFrame",
-		Rect2(HUD_ATTACK_CENTER - Vector2(64, 64), Vector2(128, 128)),
+		Rect2(HUD_ATTACK_CENTER - HUD_ATTACK_FRAME_SIZE * 0.5, HUD_ATTACK_FRAME_SIZE),
 		"ui.hud.gothic.v3.attack_frame",
 	)
 
@@ -1617,8 +1692,8 @@ func _build_combat_controls(root: Control) -> void:
 		ring_skill.add_child(ring_frame)
 		var ring_label := Label.new()
 		ring_label.name = "SkillLabel"
-		ring_label.position = Vector2(4, 4)
-		ring_label.size = Vector2(64, 64)
+		ring_label.position = Vector2(4.8, 4.8)
+		ring_label.size = HUD_ATTACK_RING_BUTTON_SIZE - Vector2(9.6, 9.6)
 		ring_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		ring_label.vertical_alignment = VERTICAL_ALIGNMENT_BOTTOM
 		ring_label.add_theme_font_size_override("font_size", 13)
@@ -1626,17 +1701,6 @@ func _build_combat_controls(root: Control) -> void:
 		ring_skill.add_child(ring_label)
 		attack_ring_skill_labels.append(ring_label)
 
-	special_action_button = Button.new()
-	special_action_button.name = "SpecialActionButton"
-	special_action_button.theme_type_variation = "GothicUtilityButton"
-	special_action_button.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-	special_action_button.offset_left = -354
-	special_action_button.offset_top = -342
-	special_action_button.offset_right = -236
-	special_action_button.offset_bottom = -278
-	special_action_button.visible = false
-	special_action_button.pressed.connect(_on_special_action_button)
-	root.add_child(special_action_button)
 
 
 func cancel_attack_inputs(reason: StringName = &"hud_cancel") -> void:
@@ -1648,6 +1712,12 @@ func cancel_skill_inputs(reason: StringName = &"hud_cancel") -> void:
 	for button: Button in attack_ring_skill_buttons:
 		if is_instance_valid(button) and button.has_method("cancel_all_inputs"):
 			button.call("cancel_all_inputs", reason)
+	var root := get_node_or_null("MobileSafeRoot")
+	if root != null:
+		for name: String in ["InteractButton", "SwitchTargetButton"]:
+			var button := root.get_node_or_null(name)
+			if button != null:
+				button.cancel_all_inputs(reason)
 
 
 func _on_attack_input_started(
@@ -2482,7 +2552,7 @@ func update_target(target_name := "", current_hp := 0, max_hp := 0, manual_lock 
 	)
 	if target_health_fill != null:
 		target_health_fill.visible = not display_target_name.is_empty() and max_hp > 0
-		target_health_fill.size.x = 320.0 * clampf(float(current_hp) / float(maxi(1, max_hp)), 0.0, 1.0)
+		(target_health_fill.material as ShaderMaterial).set_shader_parameter("fill_ratio", clampf(float(current_hp) / float(maxi(1, max_hp)), 0.0, 1.0))
 	var next_text := "目标：自动选敌待命" if auto_enabled else "目标：手动模式待选择"
 	if not display_target_name.is_empty():
 		next_text = "目标［%s］：%s　%d/%d" % ["自动" if auto_enabled else "手动", display_target_name, current_hp, max_hp]
@@ -2537,6 +2607,7 @@ func update_loading_progress(transition_id: String, completed: float, stage: Str
 
 
 func cancel_movement_input() -> void:
+	_cancel_all_item_slot_presses()
 	if movement_joystick != null and is_instance_valid(movement_joystick):
 		movement_joystick.cancel_input()
 	else:
@@ -2572,29 +2643,6 @@ func update_quest_tracker() -> void:
 	var state: Dictionary = PlayerState.quest_states.get(quest_id, {})
 	var marker := "可接" if not accepted else ("可领取" if str(state.get("status", "")) == "ready" else "进行中")
 	quest_tracker_label.text = "任务[%s] %s｜%s" % [marker, quest.get("name", quest_id), "；".join(PlayerState.quest_objective_lines(quest_id))]
-
-
-func update_special_actions() -> void:
-	if special_action_button == null:
-		return
-	_special_actions = PlayerState.available_special_actions()
-	if _special_actions.is_empty():
-		_special_action_index = 0
-		special_action_button.visible = false
-		return
-	_special_action_index = posmod(_special_action_index, _special_actions.size())
-	special_action_button.visible = true
-	special_action_button.text = "特装\n%s" % EquipmentRulesScript.special_action_label(_special_actions[_special_action_index])
-
-
-func _on_special_action_button() -> void:
-	if _special_actions.is_empty():
-		return
-	var effect_id := _special_actions[_special_action_index]
-	special_action_pressed.emit(effect_id)
-	if _special_actions.size() > 1:
-		_special_action_index = (_special_action_index + 1) % _special_actions.size()
-		update_special_actions()
 
 
 func _toggle_inventory() -> void:
@@ -2844,11 +2892,11 @@ func update_quick_slots() -> void:
 		attack_slot_label.text = "攻击" if attack_skill_name.is_empty() else attack_skill_name.left(4)
 		if attack_skill_name.is_empty():
 			attack_slot_label.position = Vector2.ZERO
-			attack_slot_label.size = attack_button.size if attack_button != null else Vector2(120, 120)
+			attack_slot_label.size = attack_button.size if attack_button != null else HUD_ATTACK_BUTTON_SIZE
 			attack_slot_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		else:
-			attack_slot_label.position = Vector2(4, 88)
-			attack_slot_label.size = Vector2(112, 26)
+			attack_slot_label.position = Vector2(3.4, 74.8)
+			attack_slot_label.size = Vector2(95.2, 22.1)
 			attack_slot_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	if attack_button != null:
 		attack_button.tooltip_text = "普通攻击" if attack_skill_name.is_empty() else "攻击键：%s" % attack_skill_name
