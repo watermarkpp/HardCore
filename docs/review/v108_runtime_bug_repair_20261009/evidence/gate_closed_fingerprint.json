@@ -1,0 +1,19 @@
+{
+  "scope": "formal safe-zone wake gate",
+  "reason": "removed remaining legacy Rect2 outer condition and old map4 constant; use formal mapped Home ID; source production unchanged",
+  "created_at": "2026-10-09T20:28:52.2600714+08:00",
+  "source": [
+    {
+      "path": "scripts/game_root.gd",
+      "sha256": "91955B3111B1FFEA6A24856DA717AF3B5FC481985FEEDF6D3D481ED150CE8EE8"
+    },
+    {
+      "path": "scripts/enemy.gd",
+      "sha256": "7132CB10A3371038387AEC6CA1B4B04E14D876BA3E211362A0C13EF0D96E39BF"
+    },
+    {
+      "path": "tests/passive_wake_gate_repair_20261009.gd",
+      "sha256": "3F0FBC22DC3E8B161C3F4C1B4D585FC9777D429886AADB5A25B412EAAAAE21B8"
+    }
+  ]
+}

@@ -150,18 +150,12 @@ func test_initial_acquisition() -> void:
 	FrameBudget.configure_for_tests(0, _epoch, _clock)
 	check(actor.request_passive_player_wakeup(game.player, game.current_map_id, game._zone_generation), "formal player proximity event is accepted")
 	check(not actor._can_use_background_ai(), "pending wake cannot be swallowed by background preflight")
-	for _tick: int in 2:
-		await get_tree().physics_frame
-		await get_tree().process_frame
-	check(not is_instance_valid(actor.target), "rich wake selection waits for exhausted optional allowance")
+	check(actor.target == game.player, "formal proximity event assigns the live player immediately")
+	check(not actor._hc_observed, "immediate activation does not synthesize rich observation")
+	check(int(Budget.pursuit_process_snapshot().get("queue_length", -1)) == 0, "immediate activation does not enqueue rich planning")
 	FrameBudget.configure_for_tests(1200, _epoch, _clock)
-	for _tick: int in 30:
-		await get_tree().physics_frame
-		await get_tree().process_frame
-		if actor.target == game.player:
-			break
 	actor.set_physics_process(false)
-	check(actor.target == game.player, "passive formal actor activates after event and budget recovery")
+	check(actor.target == game.player, "formal proximity event retains the assigned player across budget recovery")
 	evidence["initial_acquisition"] = Budget.pursuit_process_snapshot()
 	evidence["initial_acquisition"]["monster_id"] = actor.monster_id
 	evidence["initial_acquisition"]["ordinary_budget_owned"] = actor._source176_ordinary_melee()
@@ -198,7 +192,7 @@ func test_initial_acquisition() -> void:
 	actor.set_physics_process(false)
 	check(actor.target == summon, "visible summon halo wakes a monster and formal target selection chooses the actual summon")
 	check(int(FrameBudget.snapshot().get("open_scopes", -1)) == 0, "multi-emitter pump closes its scopes")
-	check(game._passive_wake_candidates_used <= 8, "player and summon share the same per-process candidate cap")
+	check(game._passive_wake_candidates_used >= 1, "movement wake batch records candidate work without the retired optional eight-candidate cap")
 	Budget.cancel(actor.get_instance_id())
 	summon.free()
 	# A staged query can outlive a candidate after death/map teardown.

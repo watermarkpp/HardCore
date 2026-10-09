@@ -8,6 +8,7 @@ const FrameBudgetScript := preload("res://scripts/layers/runtime/execution/frame
 const RECEIPT_DIR := "res://outputs/wake_drop_v108_repair_20261009/natural_process"
 
 var _game: Node
+var _diagnostic_samples: Array[Dictionary] = []
 
 
 func _ready() -> void:
@@ -92,6 +93,8 @@ func _run() -> void:
 	for _frame: int in range(DEATH_WAIT_FRAMES):
 		await get_tree().process_frame
 		terminal = _latest_terminal_death()
+		if _frame % 60 == 0:
+			_diagnostic_samples.append(_diagnostic_sample(_frame))
 		if str(terminal.get("state", "")) == "COMMITTED":
 			break
 	_write_receipt({
@@ -100,6 +103,13 @@ func _run() -> void:
 		"terminal": terminal,
 		"manager": _game._loot_pickup_runtime_manager.diagnostics_snapshot(),
 		"frame_budget": FrameBudgetScript.snapshot(),
+		"diagnostic_samples": _diagnostic_samples,
+		"death_pending": _safe_pending_deaths(),
+		"prepared_settlement": _prepared_settlement_snapshot(),
+		"player_background_death": _background_death_snapshot(),
+		"persistence": _persistence_snapshot(),
+		"pipeline_running": bool(_game._enemy_death_pipeline_running),
+		"process_state": _process_state_snapshot(),
 		"player_state": {
 			"active_profile_id": PlayerState.active_profile_id,
 			"world_clock_generation": PlayerState._world_clock_generation,
@@ -107,6 +117,12 @@ func _run() -> void:
 			"last_load_result": PlayerState.last_load_result,
 		},
 	})
+	if str(terminal.get("state", "")) != "COMMITTED":
+		printerr("DEATH_NATURAL_PROCESS_REPAIR_FAIL ", JSON.stringify(terminal))
+		_game.queue_free()
+		await get_tree().process_frame
+		get_tree().quit(1)
+		return
 	assert(
 		str(terminal.get("state", "")) == "COMMITTED",
 		"natural death queue did not commit: %s budget=%s" % [terminal, FrameBudgetScript.snapshot()],
@@ -139,6 +155,105 @@ func _latest_terminal_death() -> Dictionary:
 	if not is_instance_valid(_game) or _game._enemy_death_terminal_jobs.is_empty():
 		return {}
 	return (_game._enemy_death_terminal_jobs[-1] as Dictionary).duplicate(true)
+
+
+func _safe_pending_deaths() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for raw: Variant in _game._pending_enemy_deaths:
+		if raw is Dictionary:
+			result.append((raw as Dictionary).duplicate(true))
+	return result
+
+
+func _job_snapshot(job: Object) -> Dictionary:
+	if job == null:
+		return {}
+	var response: Variant = job.get("response")
+	var preparation: Variant = job.get("preparation")
+	return {
+		"task_id": int(job.get("_task_id")),
+		"stage_complete": bool(job.call("is_stage_complete")),
+		"response_finished": bool(response.get("finished", false)) if response is Dictionary else false,
+		"response_reason": str(response.get("reason", "")) if response is Dictionary else "",
+		"preparation_finished": bool(preparation.get("finished", false)) if preparation is Dictionary else false,
+		"path": str(job.get("path")),
+	}
+
+
+func _persistence_snapshot() -> Dictionary:
+	var service: Object = PlayerState._json_persistence
+	var work: Dictionary = service.call("work_snapshot")
+	var entries: Array[Dictionary] = []
+	var queue: Variant = service.get("_queue")
+	if queue is Array:
+		for raw: Variant in queue:
+			if not raw is Dictionary:
+				continue
+			var entry: Dictionary = raw
+			var job: Object = entry.get("job") as Object
+			entries.append({
+				"phase": str(entry.get("phase", "")),
+				"allow_promotion": bool(entry.get("allow_promotion", false)),
+				"guard_valid": bool(entry.get("guard", Callable()).is_valid()),
+				"job": _job_snapshot(job),
+			})
+	work["entries"] = entries
+	return work
+
+
+func _prepared_settlement_snapshot() -> Dictionary:
+	var prepared: Dictionary = _game._prepared_enemy_death_settlement
+	if prepared.is_empty():
+		return {}
+	var plan: Dictionary = prepared.get("plan", {}) as Dictionary
+	var writer: Object = plan.get("writer") as Object
+	var writer_job: Object = writer.get("job") as Object if writer != null else null
+	return {
+		"batch_size": (prepared.get("batch", []) as Array).size(),
+		"plan_completed": bool(plan.get("completed", false)),
+		"completion": (plan.get("completion", {}) as Dictionary).duplicate(true),
+		"writer": {"path": str(writer.get("path")), "job": _job_snapshot(writer_job)} if writer != null else {},
+	}
+
+
+func _background_death_snapshot() -> Dictionary:
+	var background: Dictionary = PlayerState._background_death
+	if background.is_empty():
+		return {}
+	var writer: Object = background.get("writer") as Object
+	var writer_job: Object = writer.get("job") as Object if writer != null else null
+	return {
+		"completed": bool(background.get("completed", false)),
+		"completion": (background.get("completion", {}) as Dictionary).duplicate(true),
+		"writer": {"path": str(writer.get("path")), "job": _job_snapshot(writer_job)} if writer != null else {},
+	}
+
+
+func _process_state_snapshot() -> Dictionary:
+	return {
+		"game_inside_tree": _game.is_inside_tree(),
+		"game_can_process": _game.can_process(),
+		"game_is_processing": _game.is_processing(),
+		"player_can_process": PlayerState.can_process(),
+		"player_is_processing": PlayerState.is_processing(),
+		"manager_can_process": _game._loot_pickup_runtime_manager.can_process(),
+		"manager_is_processing": _game._loot_pickup_runtime_manager.is_processing(),
+	}
+
+
+func _diagnostic_sample(frame: int) -> Dictionary:
+	return {
+		"frame": frame,
+		"terminal_count": _game._enemy_death_terminal_jobs.size(),
+		"pending_count": _game._pending_enemy_deaths.size(),
+		"death_budget": FrameBudgetScript.snapshot(),
+		"death_pending": _safe_pending_deaths(),
+		"prepared_settlement": _prepared_settlement_snapshot(),
+		"player_background_death": _background_death_snapshot(),
+		"persistence": _persistence_snapshot(),
+		"pipeline_running": bool(_game._enemy_death_pipeline_running),
+		"process_state": _process_state_snapshot(),
+	}
 
 
 func _write_receipt(receipt: Dictionary) -> void:

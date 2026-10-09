@@ -1,0 +1,35 @@
+{
+  "scope": "formal wake rejection gates; menu text collision; retained failing batch/teardown death diagnostics",
+  "reason": "new negative gates, changed footer overlap handling, failure diagnostics without weakening original assertions",
+  "source": [
+    {
+      "sha256": "9BE53398801CCF49A637B90FE0FC1DD8EEE5FD4206697F533B441431A70CC598",
+      "path": "scripts/game_root.gd"
+    },
+    {
+      "sha256": "7132CB10A3371038387AEC6CA1B4B04E14D876BA3E211362A0C13EF0D96E39BF",
+      "path": "scripts/enemy.gd"
+    },
+    {
+      "sha256": "8BAF4C98C8AAE1C3AE0AA665179DB53A4109DB035ACC27BCC5F0DF79F82AE73A",
+      "path": "scripts/system_menu_panel.gd"
+    },
+    {
+      "sha256": "A798A950ECEBE064885767E588463AC4A12A4C172DCB310AB67BDF1A187FAF6E",
+      "path": "tests/passive_wake_gate_repair_20261009.gd"
+    },
+    {
+      "sha256": "CD053C4A673B00452DA98D11980F6BA8A4FF379E39158262E82F4A60070C26E6",
+      "path": "tests/save_exit_menu_feedback_repair_20261009.gd"
+    },
+    {
+      "sha256": "9378060087DBC56F0E736977D0BAC76E3DEC140136EF74DACB10FC1DDF87E9C3",
+      "path": "tests/death_queue_lifecycle_rework_test.gd"
+    },
+    {
+      "sha256": "9BDBAFE9BCFB6F35548A60B197A02ABBC37CFB70640E2A5F4C665FE340962899",
+      "path": "tests/f03_native_death_lifecycle_test.gd"
+    }
+  ],
+  "created_at": "2026-10-09T20:17:35.2358152+08:00"
+}

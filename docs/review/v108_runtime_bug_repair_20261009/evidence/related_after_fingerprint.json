@@ -1,0 +1,39 @@
+{
+  "scope": "30 natural clustered cold monsters; immediate halo and ground damage; zero optional admission; real paused menu signal failure",
+  "source": [
+    {
+      "path": "scripts/game_root.gd",
+      "sha256": "9BE53398801CCF49A637B90FE0FC1DD8EEE5FD4206697F533B441431A70CC598"
+    },
+    {
+      "path": "scripts/enemy.gd",
+      "sha256": "7132CB10A3371038387AEC6CA1B4B04E14D876BA3E211362A0C13EF0D96E39BF"
+    },
+    {
+      "path": "scripts/system_menu_panel.gd",
+      "sha256": "744C5C9388E38699611C4266F2A75DD5477AB139BE21141515DE9DEB1E1F78A0"
+    },
+    {
+      "path": "scripts/audio_preferences.gd",
+      "sha256": "10F3A494464C0B6D3D5A802CE6BBDD3046AF2B3C59B755D9BB70B51B12634AA1"
+    },
+    {
+      "path": "tests/passive_wake_natural_dense_repair_20261009.gd",
+      "sha256": "9131B35E9FE0E95BEB9B973EAFF48932420E8847209389DD7253AB2893CA848E"
+    },
+    {
+      "path": "tests/crowd_owner_optional_budget_contract_20261009.gd",
+      "sha256": "8EBFF392D2DE4112D35F81A037CA5843B59BC5F34CE4E06AA90A0CD682D73A22"
+    },
+    {
+      "path": "tests/crowd_passive_damage_wakeup_contract_20261009.gd",
+      "sha256": "5C71CB4E70FCF995FEACBBE4E7A1C305FE3F6BFA3D26198232B65E9DD4811242"
+    },
+    {
+      "path": "tests/safe_logout_exit_guard_test.gd",
+      "sha256": "EAE407EEF71B75BF31049DE6901D0CAA4AD6C0FB6394E28EC33CDCA7078B1974"
+    }
+  ],
+  "created_at": "2026-10-09T20:11:52.5780782+08:00",
+  "reason": "larger load, strict synchronous assertion, new necessary wake admission and actual GameRoot menu failure coverage"
+}

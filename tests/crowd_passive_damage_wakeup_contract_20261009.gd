@@ -8,6 +8,8 @@ const Spatial := preload("res://scripts/runtime_combat_spatial_index.gd")
 
 var failures: Array[String] = []
 var evidence: Dictionary = {}
+var current_map_id := 1
+var _zone_generation := 1
 
 func check(ok: bool, message: String) -> void:
 	if not ok:
@@ -98,28 +100,20 @@ func _test_remote_physical_damage_wakes_cold_enemy() -> void:
 	check(cold._threat_table.has(attacker.get_instance_id()), "real attacker is retained in the production threat table")
 	check(cold._hc_damage_dirty, "damage wake marks immediate pursuit work dirty")
 	check(cold.is_physics_processing(), "formal damage wake restores physics processing")
-	# Zero optional allowance must defer rich target selection, not discard the
-	# wake or turn the actor inert. The existing target remains null at this
-	# point, but the actor is still a runnable combat participant.
+	# Zero optional allowance still cannot defer the safety-critical cold-target
+	# activation. The attacker is assigned synchronously after positive damage;
+	# rich observation/planning remains independent and unstarted.
 	cold._retarget(1.0 / 60.0)
 	var target_after_denial := is_instance_valid(cold.target)
-	check(not target_after_denial, "optional denial does not invent a target or run rich planning")
+	check(target_after_denial and cold.target == attacker, "positive remote damage assigns the legal attacker immediately")
+	check(not cold._hc_observed, "damage activation does not synthesize rich observation")
 	check(Budget.pursuit_process_snapshot().get("open_turns", -1) == 0, "denied damage wake closes its owner lease")
 	check(cold._hc_owner_optional_budget_runnable(), "damage-woken actor remains runnable while optional planning is denied")
 	var physical_denial_budget := Budget.pursuit_process_snapshot()
 	var physical_denial_frame := FrameBudget.snapshot()
 	FrameBudget.configure_for_tests(1200, _epoch, _clock)
 	var physical_wait_frames := 0
-	for _step: int in 60:
-		await get_tree().physics_frame
-		await get_tree().process_frame
-		physical_wait_frames += 1
-		if cold.target == attacker:
-			break
-		if not is_instance_valid(cold.target):
-			cold._retarget(1.0 / 60.0)
-			cold._owner_optional_budget_end()
-	check(cold.target == attacker, "bounded recovery selects the real PlayerCharacter attacker")
+	check(cold.target == attacker, "budget recovery does not replace the synchronously assigned attacker")
 	cold._owner_optional_budget_end()
 	check(int(FrameBudget.snapshot().get("open_scopes", -1)) == 0, "physical wake closes all frame scopes")
 	evidence["remote_physical"] = {
@@ -172,22 +166,14 @@ func _test_remote_magic_and_ground_damage_wake_cold_enemy() -> void:
 	check(magic_cold._hc_damage_dirty, "remote magic marks immediate pursuit work dirty")
 	check(magic_cold.is_physics_processing(), "formal magic damage wake restores physics processing")
 	magic_cold._retarget(1.0 / 60.0)
-	check(not is_instance_valid(magic_cold.target), "optional denial does not run rich magic retarget")
+	check(magic_cold.target == magic_attacker, "positive remote magic assigns the legal attacker immediately")
+	check(not magic_cold._hc_observed, "magic activation does not synthesize rich observation")
 	check(magic_cold._hc_owner_optional_budget_runnable(), "magic-woken actor remains runnable while optional planning is denied")
 	var magic_denial_budget := Budget.pursuit_process_snapshot()
 	var magic_denial_frame := FrameBudget.snapshot()
 	FrameBudget.configure_for_tests(1200, _epoch, _clock)
 	var magic_wait_frames := 0
-	for _step: int in 60:
-		await get_tree().physics_frame
-		await get_tree().process_frame
-		magic_wait_frames += 1
-		if magic_cold.target == magic_attacker:
-			break
-		if not is_instance_valid(magic_cold.target):
-			magic_cold._retarget(1.0 / 60.0)
-		magic_cold._owner_optional_budget_end()
-	check(magic_cold.target == magic_attacker, "bounded magic recovery selects the real PlayerCharacter attacker")
+	check(magic_cold.target == magic_attacker, "budget recovery retains the synchronously assigned magic attacker")
 	magic_cold._owner_optional_budget_end()
 	check(int(FrameBudget.snapshot().get("open_scopes", -1)) == 0, "magic wake closes all frame scopes")
 	evidence["remote_magic_receiver"] = {
@@ -222,6 +208,7 @@ func _test_remote_magic_and_ground_damage_wake_cold_enemy() -> void:
 	check(dot_cold.current_hp == dot_hp_before - 5, "ground periodic damage commits positive Enemy HP loss")
 	check(not dot_cold._background_deep_sleeping, "ground periodic damage leaves background sleep")
 	check(dot_cold._threat_table.has(dot_attacker.get_instance_id()), "ground periodic damage retains the real attacker")
+	check(dot_cold.target == dot_attacker, "positive ground periodic damage assigns the legal attacker immediately")
 	check(dot_cold.visual == null or not dot_cold.visual.is_struck_action_active(), "ground periodic damage does not create a struck action")
 	check(dot_cold._hc_damage_dirty, "ground periodic damage marks pursuit work dirty")
 	check(dot_cold.is_physics_processing(), "formal ground damage wake restores physics processing")

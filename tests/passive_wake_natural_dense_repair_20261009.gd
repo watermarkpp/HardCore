@@ -2,7 +2,7 @@ extends Node
 
 const FrameBudget := preload("res://scripts/layers/runtime/execution/frame_budget.gd")
 
-const COHORT_SIZE := 12
+const COHORT_SIZE := 30
 const MAX_DAMAGE_FRAMES := 180
 
 var _game: Node
@@ -50,7 +50,7 @@ func _prepare_dense_cold_cohort() -> void:
 		return
 	var candidates: Array[Vector2] = []
 	for radius: float in [2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5]:
-		for axis: Vector2 in [Vector2.RIGHT, Vector2.DOWN, Vector2.LEFT, Vector2.UP]:
+		for axis: Vector2 in [Vector2.RIGHT, Vector2.DOWN, Vector2.LEFT, Vector2.UP, Vector2(1, 1).normalized(), Vector2(-1, 1).normalized(), Vector2(-1, -1).normalized(), Vector2(1, -1).normalized()]:
 			candidates.append(player_ground + axis * radius)
 	var anchor_probe: EnemyActor = null
 	for raw_probe: Variant in _game._active_enemy_cache.values():
@@ -78,7 +78,7 @@ func _prepare_dense_cold_cohort() -> void:
 	player.movement_performed.emit(player.global_position, player.facing)
 	candidates.clear()
 	for radius: float in [2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5]:
-		for axis: Vector2 in [Vector2.RIGHT, Vector2.DOWN, Vector2.LEFT, Vector2.UP]:
+		for axis: Vector2 in [Vector2.RIGHT, Vector2.DOWN, Vector2.LEFT, Vector2.UP, Vector2(1, 1).normalized(), Vector2(-1, 1).normalized(), Vector2(-1, -1).normalized(), Vector2(1, -1).normalized()]:
 			candidates.append(player_ground + axis * radius)
 	var used_points: Dictionary = {}
 	for raw: Variant in _game._active_enemy_cache.values():
@@ -143,9 +143,13 @@ func _trigger_natural_wake() -> void:
 	var started_usec: int = Time.get_ticks_usec()
 	player.global_position = before + Vector2(0.01, 0.0)
 	player.movement_performed.emit(player.global_position, player.facing)
-	# The new contract is immediate activation on the next actual GameRoot
-	# process callback. Await exactly one process signal; do not drain a long
-	# pagination window and call a late PASS equivalent.
+	var immediate_target_count := _target_count()
+	_evidence["wake_callback_elapsed_usec"] = Time.get_ticks_usec() - started_usec
+	_evidence["wake_immediate_target_count"] = immediate_target_count
+	if immediate_target_count != _actors.size():
+		_failures.append("halo_callback_not_immediate:%d/%d" % [immediate_target_count, _actors.size()])
+	# Also retain the next natural frame evidence. A later completion cannot
+	# erase the synchronous movement-event assertion above.
 	await get_tree().process_frame
 	_record_frame(1, "wake")
 	var target_count: int = _target_count()

@@ -23,6 +23,8 @@ var continue_button: Button
 var character_select_button: Button
 var settings_button: Button
 var save_exit_button: Button
+var save_exit_failure_label: Label
+var menu_footer: Label
 var music_slider: HSlider
 var sfx_slider: HSlider
 var loot_filter_slider: HSlider
@@ -120,16 +122,28 @@ func _build_main_page() -> void:
 	save_exit_button.theme_type_variation = "GothicSystemMenuGemButton"
 	save_exit_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	save_exit_button.pressed.connect(_request_save_exit)
-	var footer := Label.new()
-	footer.name = "Footer"
-	footer.text = "ESC / Android 返回键：继续游戏"
-	footer.position = Vector2(60, 486)
-	footer.size = Vector2(380, 28)
-	footer.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	footer.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	footer.theme_type_variation = "GothicMutedLabel"
-	footer.add_theme_font_size_override("font_size", 12)
-	main_page.add_child(footer)
+	save_exit_failure_label = Label.new()
+	save_exit_failure_label.name = "SaveExitFailureLabel"
+	save_exit_failure_label.position = Vector2(72, 478)
+	save_exit_failure_label.size = Vector2(356, 34)
+	save_exit_failure_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	save_exit_failure_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	save_exit_failure_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	save_exit_failure_label.add_theme_font_size_override("font_size", 14)
+	save_exit_failure_label.add_theme_color_override("font_color", Color("ff9a8a"))
+	save_exit_failure_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	save_exit_failure_label.visible = false
+	main_page.add_child(save_exit_failure_label)
+	menu_footer = Label.new()
+	menu_footer.name = "Footer"
+	menu_footer.text = "ESC / Android 返回键：继续游戏"
+	menu_footer.position = Vector2(60, 486)
+	menu_footer.size = Vector2(380, 28)
+	menu_footer.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	menu_footer.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	menu_footer.theme_type_variation = "GothicMutedLabel"
+	menu_footer.add_theme_font_size_override("font_size", 12)
+	main_page.add_child(menu_footer)
 
 
 func _build_settings_page() -> void:
@@ -286,6 +300,7 @@ func _toggle_status(parent: Control, node_name: String, y: float) -> Label:
 
 
 func open_menu() -> void:
+	_clear_save_exit_failure()
 	set_audio_levels(AudioPreferences.music_volume, AudioPreferences.sfx_volume)
 	_clear_action_feedback()
 	show()
@@ -365,6 +380,7 @@ func _emit_audio_setting(setting_id: String, enabled: bool) -> void:
 
 func _request_continue() -> void:
 	_ui_flush_audio()
+	_clear_save_exit_failure()
 	_clear_action_feedback()
 	GothicUIThemeScript.set_button_feedback(continue_button, GothicUIThemeScript.BUTTON_FEEDBACK_TRANSITION, "system_menu.continue")
 	continue_requested.emit()
@@ -372,6 +388,7 @@ func _request_continue() -> void:
 
 func _request_character_select() -> void:
 	_ui_flush_audio()
+	_clear_save_exit_failure()
 	_clear_action_feedback()
 	GothicUIThemeScript.set_button_feedback(character_select_button, GothicUIThemeScript.BUTTON_FEEDBACK_TRANSITION, "system_menu.character_select")
 	return_to_character_select_requested.emit()
@@ -379,9 +396,33 @@ func _request_character_select() -> void:
 
 func _request_save_exit() -> void:
 	_ui_flush_audio()
+	_clear_save_exit_failure()
 	_clear_action_feedback()
 	GothicUIThemeScript.set_button_feedback(save_exit_button, GothicUIThemeScript.BUTTON_FEEDBACK_TRANSITION, "system_menu.save_exit")
 	save_and_exit_requested.emit()
+
+
+## Failure feedback stays in the paused menu layer. HUD notices are below this
+## CanvasLayer and are therefore hidden while the menu owns the pause boundary.
+func show_save_exit_failure(message: String) -> void:
+	if save_exit_failure_label == null:
+		return
+	main_page.show()
+	settings_page.hide()
+	current_page = "main"
+	save_exit_failure_label.text = message.strip_edges()
+	save_exit_failure_label.visible = not save_exit_failure_label.text.is_empty()
+	if menu_footer != null:
+		menu_footer.visible = not save_exit_failure_label.visible
+
+
+func _clear_save_exit_failure() -> void:
+	if save_exit_failure_label == null:
+		return
+	save_exit_failure_label.text = ""
+	save_exit_failure_label.visible = false
+	if menu_footer != null:
+		menu_footer.visible = true
 
 
 func _show_menu_action_result(button: Button, success: bool, group: String) -> void:

@@ -1,5 +1,7 @@
 # v108 handset failures: fixed-source consultation
 
+This initial consultation snapshot is retained as history. Later local repairs and current native evidence are in [CURRENT_RESULT.md](CURRENT_RESULT.md): necessary synchronous halo/damage activation, successful persistence state transition, drop quantum wall-budget servicing, menu-local errors and audio defaults. The existing user-named ChatGPT conversation returned a model quota message for this initial request, not a current analysis. Do not interpret the historical findings below as the current source status.
+
 Date: 2026-10-09. This is an in-progress diagnostic snapshot, not an accepted repair or a new APK.
 
 ## Source binding

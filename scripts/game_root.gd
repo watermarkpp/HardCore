@@ -2980,11 +2980,14 @@ func _handle_safe_logout_failure(action: StringName, result: Dictionary) -> void
 		action,
 		str(result.get("reason", "safe_logout_failed"))
 	)
+	var user_message := UIErrorFeedbackScript.from_result(result, "安全退出失败，请稍后重试。")
+	if is_instance_valid(_system_menu_panel) and _system_menu_panel.visible:
+		_system_menu_panel.show_save_exit_failure(user_message)
 	if is_instance_valid(hud) and hud.has_method("show_error_message"):
 		# Player sees Chinese prose only; the raw reason stays in the
 		# diagnostic above and in push_error via the reporter.
 		hud.show_error_message(
-			UIErrorFeedbackScript.from_result(result, "安全退出失败，请稍后重试。"),
+			user_message,
 			2.0
 		)
 
@@ -6541,6 +6544,7 @@ func _on_player_moved(_position: Vector2, _facing: Vector2) -> void:
 		_loot_pickup_runtime_manager.player_position_changed(_position)
 	_validate_locked_target()
 	_mark_passive_monster_wakeup_dirty()
+	_pump_passive_monster_wakeup()
 
 
 func _passive_wake_emitter_current(emitter: Node2D) -> bool:
@@ -6703,13 +6707,9 @@ func _begin_passive_monster_wakeup_batch() -> bool:
 		_passive_wake_query_pending = false
 		return false
 	var emitter: Node2D = null
-	var queue_checks := 0
-	while (
-		not _passive_wake_emitter_queue.is_empty()
-		and queue_checks < 8
-		and FrameBudget.remaining_usec() > 0
-	):
-		queue_checks += 1
+	# Emitter events are necessary acquisition work, even when optional AI
+	# has spent its allowance. This finite queue is drained up to a live event.
+	while not _passive_wake_emitter_queue.is_empty():
 		var emitter_id: int = int(_passive_wake_emitter_queue.pop_front())
 		var entry: Dictionary = _passive_wake_emitters.get(emitter_id, {})
 		var raw_emitter: Variant = entry.get("ref").get_ref() if entry.has("ref") else null
@@ -6798,8 +6798,8 @@ func _pump_passive_monster_wakeup() -> void:
 	if process_epoch != _passive_wake_pump_epoch:
 		_passive_wake_pump_epoch = process_epoch
 		_passive_wake_candidates_used = 0
-	else:
-		return
+	# A new movement/birth event can arrive after this frame's process pump.
+	# Consume that event too; the dirty queue, not the frame number, dedupes work.
 	if (
 		not _passive_wake_dirty
 		and _passive_wake_active_emitter_id == 0
@@ -6816,10 +6816,20 @@ func _pump_passive_monster_wakeup() -> void:
 		self,
 		false,
 	)
+	# Consume the finite emitter events present at entry. Acquisition cannot
+	# wait behind optional AI or resource work; new events stay for the next
+	# callback, and failed map queries are retried once rather than spun here.
+	var event_count := _passive_wake_emitter_queue.size() + (1 if _passive_wake_active_emitter_id != 0 else 0)
+	for _event: int in maxi(1, event_count):
+		if not _service_passive_monster_wakeup_batch():
+			break
+		if not _passive_wake_query_pending:
+			break
+
+
+func _service_passive_monster_wakeup_batch() -> bool:
 	if _passive_wake_query_pending:
-		var query_token := FrameBudget.begin(PASSIVE_WAKE_BUDGET_CATEGORY, false)
-		if query_token == 0:
-			return
+		var query_token := FrameBudget.begin(PASSIVE_WAKE_BUDGET_CATEGORY, true)
 		if not _begin_passive_monster_wakeup_batch():
 			_passive_wake_dirty = not _passive_wake_emitter_queue.is_empty()
 			_passive_wake_query_pending = _passive_wake_dirty
@@ -6827,23 +6837,16 @@ func _pump_passive_monster_wakeup() -> void:
 			if not _passive_wake_dirty:
 				FrameBudget.mark_pending(PASSIVE_WAKE_BUDGET_CATEGORY, false)
 			FrameBudget.end(query_token)
-			return
+			return false
 		_passive_wake_dirty = false
 		FrameBudget.end(query_token)
 	var processed := 0
-	while (
-		processed < 8 - _passive_wake_candidates_used
-		and _passive_wake_cursor < _passive_wake_candidates.size()
-		and FrameBudget.remaining_usec() > 0
-	):
-		var token := FrameBudget.begin(PASSIVE_WAKE_BUDGET_CATEGORY, false)
-		if token == 0:
-			break
+	var token := FrameBudget.begin(PASSIVE_WAKE_BUDGET_CATEGORY, true)
+	while _passive_wake_cursor < _passive_wake_candidates.size():
 		var raw_enemy: Variant = _passive_wake_candidates[_passive_wake_cursor]
 		_passive_wake_cursor += 1
 		processed += 1
 		if not is_instance_valid(raw_enemy) or not raw_enemy is EnemyActor:
-			FrameBudget.end(token)
 			continue
 		var enemy := raw_enemy as EnemyActor
 		var emitter_entry: Dictionary = _passive_wake_emitters.get(
@@ -6862,7 +6865,7 @@ func _pump_passive_monster_wakeup() -> void:
 				enemy.call("request_passive_target_wakeup", emitter, current_map_id, _zone_generation)
 			elif emitter == player and enemy.has_method("request_passive_player_wakeup"):
 				enemy.call("request_passive_player_wakeup", player, current_map_id, _zone_generation)
-		FrameBudget.end(token)
+	FrameBudget.end(token)
 	_passive_wake_candidates_used += processed
 	if _passive_wake_cursor >= _passive_wake_candidates.size():
 		_passive_wake_candidates.clear()
@@ -6877,6 +6880,7 @@ func _pump_passive_monster_wakeup() -> void:
 		_passive_wake_dirty = _passive_wake_query_pending
 		if not _passive_wake_query_pending:
 			FrameBudget.mark_pending(PASSIVE_WAKE_BUDGET_CATEGORY, false)
+	return true
 
 
 func _on_player_death_requested() -> void:
@@ -13918,7 +13922,7 @@ func _advance_enemy_death_work_slice(force_synchronous: bool, progressed: bool) 
 			if jobs_processed >= jobs_limit:
 				break
 			jobs_processed += 1
-			if _plan_enemy_death_item(death):
+			if _plan_enemy_death_item(death, slice_started_usec, budget_usec):
 				progressed = true
 				continue
 			break
@@ -14307,13 +14311,16 @@ func _finish_enemy_death_settlement_batch(batch: Array[Dictionary], settlement: 
 		return
 	for death: Dictionary in batch:
 		death["transaction_result"] = settlement.duplicate(true)
+		# The durable receipt closes PERSISTING. Resume reward planning through
+		# the same stage used by synchronous settlement, without settling twice.
+		_set_enemy_death_state(death, DEATH_STATE_SETTLING)
 	return
 
 
 var _drop_instance_session_key := Crypto.new().generate_random_bytes(16).hex_encode()
 
 
-func _plan_enemy_death_item(death: Dictionary) -> bool:
+func _plan_enemy_death_item(death: Dictionary, slice_started_usec := 0, budget_usec := 0) -> bool:
 	if not _death_origin_matches_current(death):
 		death["last_error"] = "origin_map_generation_mismatch_before_roll"
 		_set_enemy_death_state(death, DEATH_STATE_CANCELLED)
@@ -14330,6 +14337,15 @@ func _plan_enemy_death_item(death: Dictionary) -> bool:
 			RuntimeDiagnostics.increment_performance_counter(&"drop_roll_count")
 			resumable = LootRuntime.begin_monster_drop_roll_job(monster_id, _rng, false)
 		var advanced := LootRuntime.advance_monster_drop_roll_job(resumable, 1)
+		# A source row is a small resumable quantum, not a whole death job.
+		# Use the admitted slice's existing wall budget for further quanta;
+		# retain the cursor as soon as that budget is spent. RNG order is unchanged.
+		while (
+			not bool(advanced.get("done", false))
+			and budget_usec > 0
+			and Time.get_ticks_usec() - slice_started_usec < budget_usec
+		):
+			advanced = LootRuntime.advance_monster_drop_roll_job(advanced, 1)
 		if not bool(advanced.get("done", false)):
 			death["drop_roll_job"] = advanced
 			RuntimeDiagnostics.increment_performance_counter(&"drop_roll_slice_count")

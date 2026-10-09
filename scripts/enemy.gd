@@ -1726,12 +1726,9 @@ func passive_acquisition_extent_gu() -> float:
 	return float(_target_acquisition_policy.view_range_cells)
 
 
-## Called by the centralized nearby-target coordinator. Within its existing
-## FrameBudget admission this performs the formal static straight-line LOS
-## check, then records only a typed identity witness and exits background sleep;
-## it never assigns target, attacks, or applies HP. Hidden Player/SummonActor
-## instances do not emit an activation halo. Retarget revalidates LOS later
-## against the current position; this entry point adds no per-frame scan.
+## Event-driven acquisition is necessary work, separate from optional pursuit
+## planning. After formal identity/range/static LOS checks, the existing target
+## setter owns activation. Attacks and movement retain their normal gates.
 func request_passive_target_wakeup(
 	candidate: Node2D,
 	expected_map_id: int,
@@ -1767,15 +1764,12 @@ func request_passive_target_wakeup(
 	# helper keeps its runtime-map-disabled compatibility for normal retargeting.
 	if runtime_map_id < 0 or not _initial_acquisition_static_los_clear(candidate):
 		return false
-	_passive_wake_pending = true
-	_passive_wake_candidate_id = candidate.get_instance_id()
-	_passive_wake_candidate_life = _hc_life(candidate)
-	_passive_wake_candidate_map_id = expected_map_id
-	_passive_wake_candidate_generation = expected_generation
+	target = candidate
+	_clear_passive_wake()
 	_retarget_timer = 0.0
 	_passive_mode_active = false
 	_leave_background_deep_sleep()
-	return true
+	return target == candidate
 
 
 func request_passive_player_wakeup(
@@ -7594,6 +7588,7 @@ func _apply_damage_core(
 	if actual_damage > 0 and is_instance_valid(attacker):
 		_wake_dormant_from_received_damage(attacker, actual_damage)
 		_hc_received_damage(attacker, float(actual_damage))
+		_acquire_cold_damage_target(attacker)
 	_refresh_overhead_health()
 	if is_boss and not boss_rule.is_empty():
 		# Rage keeps its existing damage-driven contract. Summon stages are
@@ -10861,6 +10856,28 @@ func _hc_refresh_observation() -> bool:
 	if pursuit_observation_budgeted:
 		_pursuit_process_budget_end()
 	return true
+
+func _acquire_cold_damage_target(source: Node2D) -> void:
+	# A confirmed positive hit supplies its attacker without an optional scan.
+	# Existing focus, threat switching and all rich pursuit decisions stay owned
+	# by retarget. Damage awareness does not require the source to be in the halo.
+	if current_hp <= 0 or not combat_enabled or is_instance_valid(target):
+		return
+	if not (source is PlayerCharacter or source is SummonActor):
+		return
+	if not _target_candidate_is_live(source) or _point_inside_safe_zone(source.global_position):
+		return
+	if not _passive_target_identity_valid(source, runtime_map_id, int(get_meta("zone_generation", -1))):
+		return
+	var offset := _ground_delta_gu_between_screen_positions(global_position, source.global_position)
+	if not offset.is_finite() or offset.length() > aggro_radius_gu * _leash_multiplier:
+		return
+	if _passive_target_is_hidden(source) and not anti_stealth and offset.length() > MonsterUnitAdapterScript.legacy_screen_scalar_px_to_gu(35.0):
+		return
+	target = source
+	_clear_passive_wake()
+	_passive_mode_active = false
+	_retarget_timer = 0.0
 
 func _hc_received_damage(source: Node2D, amount: float) -> void:
 	if not _hc_standard_melee() or amount <= 0.0 or not _target_candidate_is_live(source):

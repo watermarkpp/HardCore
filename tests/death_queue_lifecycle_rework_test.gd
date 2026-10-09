@@ -5,6 +5,9 @@ const SpatialIndexScript := preload("res://scripts/runtime_combat_spatial_index.
 const LootRuntimeScript := preload(
 	"res://scripts/layers/runtime/loot_runtime_service.gd"
 )
+const FrameBudgetScript := preload(
+	"res://scripts/layers/runtime/execution/frame_budget.gd"
+)
 
 class FixtureGameRoot extends GameRootScript:
 	var queue_only := true
@@ -42,6 +45,7 @@ var _in_tree_game: Node
 var _async_game: Node
 var _async_enemies: Array[EnemyActor] = []
 var _saved_persistence: Dictionary = {}
+var _expected_rng_state := -1
 
 
 func _ready() -> void:
@@ -352,6 +356,7 @@ func _test_async_real_deaths_and_rng_parity() -> void:
 						),
 					})
 		expected_requests.append(planned_requests)
+	_expected_rng_state = int(expected_rng.state)
 
 	var pump_frames := 0
 	# This parity contract isolates one GameRoot and deliberately has no other
@@ -527,6 +532,7 @@ func _expect(condition: bool, message: String) -> void:
 
 
 func _finish() -> void:
+	_write_failure_diagnostic()
 	PlayerState._test_force_atomic_write_failure = false
 	for enemy: EnemyActor in _async_enemies:
 		if is_instance_valid(enemy):
@@ -549,3 +555,92 @@ func _finish() -> void:
 		% [_checks, ASYNC_DEATH_COUNT]
 	)
 	get_tree().quit(0)
+
+
+func _write_failure_diagnostic() -> void:
+	var game := _async_game if is_instance_valid(_async_game) else _in_tree_game
+	var payload: Dictionary = {
+		"test": "death_queue_lifecycle_rework",
+		"failure_count": _failures.size(),
+		"failures": _failures.duplicate(),
+		"checks": _checks,
+		"async_death_count": ASYNC_DEATH_COUNT,
+		"expected_rng_state": _expected_rng_state,
+		"actual_rng_state": int(game._rng.state) if is_instance_valid(game) else -1,
+		"frame_budget": FrameBudgetScript.snapshot(),
+		"runtime_diagnostics": RuntimeDiagnostics.performance_counters(),
+		"pending": _death_queue_diagnostic(game),
+		"terminal": _terminal_diagnostic(game),
+	}
+	var directory := "user://death_queue_lifecycle_diagnostics"
+	var result := DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(directory))
+	if result != OK and result != ERR_ALREADY_EXISTS:
+		print("DEATH_QUEUE_DIAGNOSTIC_WRITE_FAIL result=%d" % result)
+		return
+	var path := "%s/receipt_%d_%d.json" % [directory, Time.get_ticks_usec(), OS.get_process_id()]
+	var file: FileAccess = FileAccess.open(path, FileAccess.WRITE)
+	if file == null:
+		print("DEATH_QUEUE_DIAGNOSTIC_WRITE_FAIL path=%s" % path)
+		return
+	file.store_string(JSON.stringify(payload, "\t"))
+	file.close()
+	print("DEATH_QUEUE_DIAGNOSTIC path=%s" % path)
+
+
+func _death_queue_diagnostic(game: Node) -> Dictionary:
+	if not is_instance_valid(game):
+		return {"count": 0, "by_state": {}, "entries": []}
+	var by_state: Dictionary = {}
+	var entries: Array[Dictionary] = []
+	for raw: Variant in game._pending_enemy_deaths:
+		if not raw is Dictionary:
+			continue
+		var death: Dictionary = raw
+		var state := str(death.get("state", ""))
+		by_state[state] = int(by_state.get(state, 0)) + 1
+		entries.append(_death_entry_diagnostic(death))
+	return {"count": game._pending_enemy_deaths.size(), "by_state": by_state, "entries": entries}
+
+
+func _terminal_diagnostic(game: Node) -> Dictionary:
+	if not is_instance_valid(game):
+		return {"count": 0, "total_count": 0, "entries": []}
+	var entries: Array[Dictionary] = []
+	for raw: Variant in game._enemy_death_terminal_jobs:
+		if raw is Dictionary:
+			entries.append(_death_entry_diagnostic(raw))
+	return {
+		"count": game._enemy_death_terminal_jobs.size(),
+		"total_count": int(game._enemy_death_terminal_total_count),
+		"entries": entries,
+	}
+
+
+func _death_entry_diagnostic(death: Dictionary) -> Dictionary:
+	var roll: Variant = death.get("drop_roll_job", {})
+	var roll_summary: Dictionary = {}
+	if roll is Dictionary:
+		var roll_dict: Dictionary = roll
+		var raw_result: Variant = roll_dict.get("result", {})
+		var result_reason := str((raw_result as Dictionary).get("reason", "")) if raw_result is Dictionary else ""
+		roll_summary = {
+			"done": bool(roll_dict.get("done", false)),
+			"phase": str(roll_dict.get("phase", "")),
+			"slot_index": int(roll_dict.get("slot_index", 0)),
+			"reason": result_reason,
+		}
+	return {
+		"state": str(death.get("state", "")),
+		"sequence": int(death.get("sequence", -1)),
+		"death_key": str(death.get("death_key", "")),
+		"retry_count": int(death.get("retry_count", 0)),
+		"retry_at_msec": int(death.get("retry_at_msec", 0)),
+		"drop_roll_job": roll_summary,
+		"drop_roll_count": int(death.get("drop_roll_count", 0)),
+		"next_request_index": int(death.get("next_request_index", 0)),
+		"remaining_request_count": int(death.get("remaining_request_count", 0)),
+		"materialized_node_index": int(death.get("materialized_node_index", 0)),
+		"materialized_node_count": int(death.get("materialized_node_count", 0)),
+		"last_error": str(death.get("last_error", "")),
+		"reward_status": str(death.get("reward_status", "")),
+	}

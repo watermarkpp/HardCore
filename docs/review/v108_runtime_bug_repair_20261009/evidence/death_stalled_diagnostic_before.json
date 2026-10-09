@@ -1,0 +1,3779 @@
+{
+	"death_pending": [
+		{
+			"canonical_monster": {
+				"classification": "boss",
+				"monster_id": 76,
+				"spawn_classification": "<null>"
+			},
+			"configured_respawn": -1.0,
+			"death_key": "death:910001:1:1:834817505029",
+			"death_position": "(800.0, -432.0)",
+			"drop_plan": {},
+			"experience": 2500,
+			"generation": 1,
+			"last_error": "",
+			"materialization_retry_count": 0,
+			"materialized_node_count": 0,
+			"materialized_node_index": 0,
+			"monster_id": 76,
+			"monster_name": "沃玛教主",
+			"monster_snapshot": {
+				"canonical_name": "沃玛教主",
+				"classification": "boss",
+				"experience": 2500,
+				"monster_id": 76,
+				"spawn_classification": "<null>"
+			},
+			"origin": {
+				"generation": 1,
+				"map_id": 910001
+			},
+			"origin_captured": true,
+			"origin_generation": 1,
+			"origin_map_id": 910001,
+			"queued_at_usec": 13901387,
+			"remaining_request_count": 0,
+			"remaining_requests": [],
+			"respawn": {
+				"configured_seconds": -1.0,
+				"enabled": false,
+				"preparation": {
+					"enabled": false,
+					"valid": true
+				},
+				"spawn_context": {},
+				"was_boss": false
+			},
+			"respawn_enabled": false,
+			"respawn_preparation": {
+				"enabled": false,
+				"valid": true
+			},
+			"respawn_scheduled": false,
+			"retry_at_msec": 0,
+			"retry_count": 0,
+			"reward_status": "queued",
+			"sequence": 1,
+			"spawn_context": {},
+			"spawn_position": "(800.0, -432.0)",
+			"state": "PERSISTING",
+			"transaction_result": {
+				"experience_gained": 2500,
+				"kill_count": 1,
+				"quest_changed": false,
+				"reason": "",
+				"save_count": 1,
+				"success": true
+			},
+			"was_boss": false
+		}
+	],
+	"diagnostic_samples": [
+		{
+			"death_budget": {
+				"categories": {},
+				"epoch": 107,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"death_work:334923564655": {
+						"oldest_age_frames": 1,
+						"pending_epoch": 106,
+						"runnable": false,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					},
+					"persistence:-9223371954948405787": {
+						"oldest_age_frames": 1,
+						"pending_epoch": 106,
+						"runnable": false,
+						"runs_when_paused": true,
+						"service_age_frames": 2
+					},
+					"resource_completion:-9223371701645998434": {
+						"oldest_age_frames": 82,
+						"pending_epoch": 25,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					}
+				},
+				"spent_usec": 0
+			},
+			"death_pending": [
+				{
+					"canonical_monster": {
+						"classification": "boss",
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"configured_respawn": -1.0,
+					"death_key": "death:910001:1:1:834817505029",
+					"death_position": "(800.0, -432.0)",
+					"drop_plan": {},
+					"experience": 2500,
+					"generation": 1,
+					"last_error": "",
+					"materialization_retry_count": 0,
+					"materialized_node_count": 0,
+					"materialized_node_index": 0,
+					"monster_id": 76,
+					"monster_name": "沃玛教主",
+					"monster_snapshot": {
+						"canonical_name": "沃玛教主",
+						"classification": "boss",
+						"experience": 2500,
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"origin": {
+						"generation": 1,
+						"map_id": 910001
+					},
+					"origin_captured": true,
+					"origin_generation": 1,
+					"origin_map_id": 910001,
+					"queued_at_usec": 13901387,
+					"remaining_request_count": 0,
+					"remaining_requests": [],
+					"respawn": {
+						"configured_seconds": -1.0,
+						"enabled": false,
+						"preparation": {
+							"enabled": false,
+							"valid": true
+						},
+						"spawn_context": {},
+						"was_boss": false
+					},
+					"respawn_enabled": false,
+					"respawn_preparation": {
+						"enabled": false,
+						"valid": true
+					},
+					"respawn_scheduled": false,
+					"retry_at_msec": 0,
+					"retry_count": 0,
+					"reward_status": "queued",
+					"sequence": 1,
+					"spawn_context": {},
+					"spawn_position": "(800.0, -432.0)",
+					"state": "PERSISTING",
+					"transaction_result": {},
+					"was_boss": false
+				}
+			],
+			"frame": 0,
+			"pending_count": 1,
+			"persistence": {
+				"completed": 3,
+				"entries": [
+					{
+						"allow_promotion": true,
+						"guard_valid": true,
+						"job": {
+							"path": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/wake_drop_20261009_death_diagnostic_before/Godot/app_userdata/HardCore/characters/death_events/1791547114_6669/000000000001.json.request-10636-13901958--9223371200661537525.tmp",
+							"preparation_finished": false,
+							"response_finished": false,
+							"response_reason": "",
+							"stage_complete": false,
+							"task_id": 416
+						},
+						"phase": "PREPARING"
+					}
+				],
+				"maximum_completion_latency_usec": 10255,
+				"oldest_age_usec": 3351,
+				"pending": 1
+			},
+			"pipeline_running": false,
+			"player_background_death": {
+				"completed": false,
+				"completion": {},
+				"writer": {
+					"job": {
+						"path": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/wake_drop_20261009_death_diagnostic_before/Godot/app_userdata/HardCore/characters/death_events/1791547114_6669/000000000001.json.request-10636-13901958--9223371200661537525.tmp",
+						"preparation_finished": false,
+						"response_finished": false,
+						"response_reason": "",
+						"stage_complete": false,
+						"task_id": 416
+					},
+					"path": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/wake_drop_20261009_death_diagnostic_before/Godot/app_userdata/HardCore/characters/death_events/1791547114_6669/000000000001.json.request-10636-13901958--9223371200661537525.tmp"
+				}
+			},
+			"prepared_settlement": {
+				"batch_size": 1,
+				"completion": {},
+				"plan_completed": false,
+				"writer": {
+					"job": {
+						"path": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/wake_drop_20261009_death_diagnostic_before/Godot/app_userdata/HardCore/characters/death_events/1791547114_6669/000000000001.json.request-10636-13901958--9223371200661537525.tmp",
+						"preparation_finished": false,
+						"response_finished": false,
+						"response_reason": "",
+						"stage_complete": false,
+						"task_id": 416
+					},
+					"path": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/wake_drop_20261009_death_diagnostic_before/Godot/app_userdata/HardCore/characters/death_events/1791547114_6669/000000000001.json.request-10636-13901958--9223371200661537525.tmp"
+				}
+			},
+			"process_state": {
+				"game_can_process": true,
+				"game_inside_tree": true,
+				"game_is_processing": true,
+				"manager_can_process": true,
+				"manager_is_processing": true,
+				"player_can_process": true,
+				"player_is_processing": true
+			},
+			"terminal_count": 0
+		},
+		{
+			"death_budget": {
+				"categories": {},
+				"epoch": 167,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"death_work:334923564655": {
+						"oldest_age_frames": 61,
+						"pending_epoch": 106,
+						"runnable": false,
+						"runs_when_paused": false,
+						"service_age_frames": 61
+					},
+					"resource_completion:-9223371701645998434": {
+						"oldest_age_frames": 142,
+						"pending_epoch": 25,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					}
+				},
+				"spent_usec": 0
+			},
+			"death_pending": [
+				{
+					"canonical_monster": {
+						"classification": "boss",
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"configured_respawn": -1.0,
+					"death_key": "death:910001:1:1:834817505029",
+					"death_position": "(800.0, -432.0)",
+					"drop_plan": {},
+					"experience": 2500,
+					"generation": 1,
+					"last_error": "",
+					"materialization_retry_count": 0,
+					"materialized_node_count": 0,
+					"materialized_node_index": 0,
+					"monster_id": 76,
+					"monster_name": "沃玛教主",
+					"monster_snapshot": {
+						"canonical_name": "沃玛教主",
+						"classification": "boss",
+						"experience": 2500,
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"origin": {
+						"generation": 1,
+						"map_id": 910001
+					},
+					"origin_captured": true,
+					"origin_generation": 1,
+					"origin_map_id": 910001,
+					"queued_at_usec": 13901387,
+					"remaining_request_count": 0,
+					"remaining_requests": [],
+					"respawn": {
+						"configured_seconds": -1.0,
+						"enabled": false,
+						"preparation": {
+							"enabled": false,
+							"valid": true
+						},
+						"spawn_context": {},
+						"was_boss": false
+					},
+					"respawn_enabled": false,
+					"respawn_preparation": {
+						"enabled": false,
+						"valid": true
+					},
+					"respawn_scheduled": false,
+					"retry_at_msec": 0,
+					"retry_count": 0,
+					"reward_status": "queued",
+					"sequence": 1,
+					"spawn_context": {},
+					"spawn_position": "(800.0, -432.0)",
+					"state": "PERSISTING",
+					"transaction_result": {
+						"experience_gained": 2500,
+						"kill_count": 1,
+						"quest_changed": false,
+						"reason": "",
+						"save_count": 1,
+						"success": true
+					},
+					"was_boss": false
+				}
+			],
+			"frame": 60,
+			"pending_count": 1,
+			"persistence": {
+				"completed": 4,
+				"entries": [],
+				"maximum_completion_latency_usec": 68854,
+				"oldest_age_usec": 0,
+				"pending": 0
+			},
+			"pipeline_running": false,
+			"player_background_death": {},
+			"prepared_settlement": {},
+			"process_state": {
+				"game_can_process": true,
+				"game_inside_tree": true,
+				"game_is_processing": true,
+				"manager_can_process": true,
+				"manager_is_processing": true,
+				"player_can_process": true,
+				"player_is_processing": true
+			},
+			"terminal_count": 0
+		},
+		{
+			"death_budget": {
+				"categories": {},
+				"epoch": 227,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"death_work:334923564655": {
+						"oldest_age_frames": 121,
+						"pending_epoch": 106,
+						"runnable": false,
+						"runs_when_paused": false,
+						"service_age_frames": 121
+					},
+					"resource_completion:-9223371701645998434": {
+						"oldest_age_frames": 202,
+						"pending_epoch": 25,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					}
+				},
+				"spent_usec": 0
+			},
+			"death_pending": [
+				{
+					"canonical_monster": {
+						"classification": "boss",
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"configured_respawn": -1.0,
+					"death_key": "death:910001:1:1:834817505029",
+					"death_position": "(800.0, -432.0)",
+					"drop_plan": {},
+					"experience": 2500,
+					"generation": 1,
+					"last_error": "",
+					"materialization_retry_count": 0,
+					"materialized_node_count": 0,
+					"materialized_node_index": 0,
+					"monster_id": 76,
+					"monster_name": "沃玛教主",
+					"monster_snapshot": {
+						"canonical_name": "沃玛教主",
+						"classification": "boss",
+						"experience": 2500,
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"origin": {
+						"generation": 1,
+						"map_id": 910001
+					},
+					"origin_captured": true,
+					"origin_generation": 1,
+					"origin_map_id": 910001,
+					"queued_at_usec": 13901387,
+					"remaining_request_count": 0,
+					"remaining_requests": [],
+					"respawn": {
+						"configured_seconds": -1.0,
+						"enabled": false,
+						"preparation": {
+							"enabled": false,
+							"valid": true
+						},
+						"spawn_context": {},
+						"was_boss": false
+					},
+					"respawn_enabled": false,
+					"respawn_preparation": {
+						"enabled": false,
+						"valid": true
+					},
+					"respawn_scheduled": false,
+					"retry_at_msec": 0,
+					"retry_count": 0,
+					"reward_status": "queued",
+					"sequence": 1,
+					"spawn_context": {},
+					"spawn_position": "(800.0, -432.0)",
+					"state": "PERSISTING",
+					"transaction_result": {
+						"experience_gained": 2500,
+						"kill_count": 1,
+						"quest_changed": false,
+						"reason": "",
+						"save_count": 1,
+						"success": true
+					},
+					"was_boss": false
+				}
+			],
+			"frame": 120,
+			"pending_count": 1,
+			"persistence": {
+				"completed": 4,
+				"entries": [],
+				"maximum_completion_latency_usec": 68854,
+				"oldest_age_usec": 0,
+				"pending": 0
+			},
+			"pipeline_running": false,
+			"player_background_death": {},
+			"prepared_settlement": {},
+			"process_state": {
+				"game_can_process": true,
+				"game_inside_tree": true,
+				"game_is_processing": true,
+				"manager_can_process": true,
+				"manager_is_processing": true,
+				"player_can_process": true,
+				"player_is_processing": true
+			},
+			"terminal_count": 0
+		},
+		{
+			"death_budget": {
+				"categories": {},
+				"epoch": 287,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"death_work:334923564655": {
+						"oldest_age_frames": 181,
+						"pending_epoch": 106,
+						"runnable": false,
+						"runs_when_paused": false,
+						"service_age_frames": 181
+					},
+					"resource_completion:-9223371701645998434": {
+						"oldest_age_frames": 262,
+						"pending_epoch": 25,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					}
+				},
+				"spent_usec": 0
+			},
+			"death_pending": [
+				{
+					"canonical_monster": {
+						"classification": "boss",
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"configured_respawn": -1.0,
+					"death_key": "death:910001:1:1:834817505029",
+					"death_position": "(800.0, -432.0)",
+					"drop_plan": {},
+					"experience": 2500,
+					"generation": 1,
+					"last_error": "",
+					"materialization_retry_count": 0,
+					"materialized_node_count": 0,
+					"materialized_node_index": 0,
+					"monster_id": 76,
+					"monster_name": "沃玛教主",
+					"monster_snapshot": {
+						"canonical_name": "沃玛教主",
+						"classification": "boss",
+						"experience": 2500,
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"origin": {
+						"generation": 1,
+						"map_id": 910001
+					},
+					"origin_captured": true,
+					"origin_generation": 1,
+					"origin_map_id": 910001,
+					"queued_at_usec": 13901387,
+					"remaining_request_count": 0,
+					"remaining_requests": [],
+					"respawn": {
+						"configured_seconds": -1.0,
+						"enabled": false,
+						"preparation": {
+							"enabled": false,
+							"valid": true
+						},
+						"spawn_context": {},
+						"was_boss": false
+					},
+					"respawn_enabled": false,
+					"respawn_preparation": {
+						"enabled": false,
+						"valid": true
+					},
+					"respawn_scheduled": false,
+					"retry_at_msec": 0,
+					"retry_count": 0,
+					"reward_status": "queued",
+					"sequence": 1,
+					"spawn_context": {},
+					"spawn_position": "(800.0, -432.0)",
+					"state": "PERSISTING",
+					"transaction_result": {
+						"experience_gained": 2500,
+						"kill_count": 1,
+						"quest_changed": false,
+						"reason": "",
+						"save_count": 1,
+						"success": true
+					},
+					"was_boss": false
+				}
+			],
+			"frame": 180,
+			"pending_count": 1,
+			"persistence": {
+				"completed": 4,
+				"entries": [],
+				"maximum_completion_latency_usec": 68854,
+				"oldest_age_usec": 0,
+				"pending": 0
+			},
+			"pipeline_running": false,
+			"player_background_death": {},
+			"prepared_settlement": {},
+			"process_state": {
+				"game_can_process": true,
+				"game_inside_tree": true,
+				"game_is_processing": true,
+				"manager_can_process": true,
+				"manager_is_processing": true,
+				"player_can_process": true,
+				"player_is_processing": true
+			},
+			"terminal_count": 0
+		},
+		{
+			"death_budget": {
+				"categories": {},
+				"epoch": 347,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"death_work:334923564655": {
+						"oldest_age_frames": 241,
+						"pending_epoch": 106,
+						"runnable": false,
+						"runs_when_paused": false,
+						"service_age_frames": 241
+					},
+					"resource_completion:-9223371701645998434": {
+						"oldest_age_frames": 322,
+						"pending_epoch": 25,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					}
+				},
+				"spent_usec": 0
+			},
+			"death_pending": [
+				{
+					"canonical_monster": {
+						"classification": "boss",
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"configured_respawn": -1.0,
+					"death_key": "death:910001:1:1:834817505029",
+					"death_position": "(800.0, -432.0)",
+					"drop_plan": {},
+					"experience": 2500,
+					"generation": 1,
+					"last_error": "",
+					"materialization_retry_count": 0,
+					"materialized_node_count": 0,
+					"materialized_node_index": 0,
+					"monster_id": 76,
+					"monster_name": "沃玛教主",
+					"monster_snapshot": {
+						"canonical_name": "沃玛教主",
+						"classification": "boss",
+						"experience": 2500,
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"origin": {
+						"generation": 1,
+						"map_id": 910001
+					},
+					"origin_captured": true,
+					"origin_generation": 1,
+					"origin_map_id": 910001,
+					"queued_at_usec": 13901387,
+					"remaining_request_count": 0,
+					"remaining_requests": [],
+					"respawn": {
+						"configured_seconds": -1.0,
+						"enabled": false,
+						"preparation": {
+							"enabled": false,
+							"valid": true
+						},
+						"spawn_context": {},
+						"was_boss": false
+					},
+					"respawn_enabled": false,
+					"respawn_preparation": {
+						"enabled": false,
+						"valid": true
+					},
+					"respawn_scheduled": false,
+					"retry_at_msec": 0,
+					"retry_count": 0,
+					"reward_status": "queued",
+					"sequence": 1,
+					"spawn_context": {},
+					"spawn_position": "(800.0, -432.0)",
+					"state": "PERSISTING",
+					"transaction_result": {
+						"experience_gained": 2500,
+						"kill_count": 1,
+						"quest_changed": false,
+						"reason": "",
+						"save_count": 1,
+						"success": true
+					},
+					"was_boss": false
+				}
+			],
+			"frame": 240,
+			"pending_count": 1,
+			"persistence": {
+				"completed": 4,
+				"entries": [],
+				"maximum_completion_latency_usec": 68854,
+				"oldest_age_usec": 0,
+				"pending": 0
+			},
+			"pipeline_running": false,
+			"player_background_death": {},
+			"prepared_settlement": {},
+			"process_state": {
+				"game_can_process": true,
+				"game_inside_tree": true,
+				"game_is_processing": true,
+				"manager_can_process": true,
+				"manager_is_processing": true,
+				"player_can_process": true,
+				"player_is_processing": true
+			},
+			"terminal_count": 0
+		},
+		{
+			"death_budget": {
+				"categories": {},
+				"epoch": 407,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"death_work:334923564655": {
+						"oldest_age_frames": 301,
+						"pending_epoch": 106,
+						"runnable": false,
+						"runs_when_paused": false,
+						"service_age_frames": 301
+					},
+					"resource_completion:-9223371701645998434": {
+						"oldest_age_frames": 382,
+						"pending_epoch": 25,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					}
+				},
+				"spent_usec": 0
+			},
+			"death_pending": [
+				{
+					"canonical_monster": {
+						"classification": "boss",
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"configured_respawn": -1.0,
+					"death_key": "death:910001:1:1:834817505029",
+					"death_position": "(800.0, -432.0)",
+					"drop_plan": {},
+					"experience": 2500,
+					"generation": 1,
+					"last_error": "",
+					"materialization_retry_count": 0,
+					"materialized_node_count": 0,
+					"materialized_node_index": 0,
+					"monster_id": 76,
+					"monster_name": "沃玛教主",
+					"monster_snapshot": {
+						"canonical_name": "沃玛教主",
+						"classification": "boss",
+						"experience": 2500,
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"origin": {
+						"generation": 1,
+						"map_id": 910001
+					},
+					"origin_captured": true,
+					"origin_generation": 1,
+					"origin_map_id": 910001,
+					"queued_at_usec": 13901387,
+					"remaining_request_count": 0,
+					"remaining_requests": [],
+					"respawn": {
+						"configured_seconds": -1.0,
+						"enabled": false,
+						"preparation": {
+							"enabled": false,
+							"valid": true
+						},
+						"spawn_context": {},
+						"was_boss": false
+					},
+					"respawn_enabled": false,
+					"respawn_preparation": {
+						"enabled": false,
+						"valid": true
+					},
+					"respawn_scheduled": false,
+					"retry_at_msec": 0,
+					"retry_count": 0,
+					"reward_status": "queued",
+					"sequence": 1,
+					"spawn_context": {},
+					"spawn_position": "(800.0, -432.0)",
+					"state": "PERSISTING",
+					"transaction_result": {
+						"experience_gained": 2500,
+						"kill_count": 1,
+						"quest_changed": false,
+						"reason": "",
+						"save_count": 1,
+						"success": true
+					},
+					"was_boss": false
+				}
+			],
+			"frame": 300,
+			"pending_count": 1,
+			"persistence": {
+				"completed": 4,
+				"entries": [],
+				"maximum_completion_latency_usec": 68854,
+				"oldest_age_usec": 0,
+				"pending": 0
+			},
+			"pipeline_running": false,
+			"player_background_death": {},
+			"prepared_settlement": {},
+			"process_state": {
+				"game_can_process": true,
+				"game_inside_tree": true,
+				"game_is_processing": true,
+				"manager_can_process": true,
+				"manager_is_processing": true,
+				"player_can_process": true,
+				"player_is_processing": true
+			},
+			"terminal_count": 0
+		},
+		{
+			"death_budget": {
+				"categories": {},
+				"epoch": 467,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"death_work:334923564655": {
+						"oldest_age_frames": 361,
+						"pending_epoch": 106,
+						"runnable": false,
+						"runs_when_paused": false,
+						"service_age_frames": 361
+					},
+					"resource_completion:-9223371701645998434": {
+						"oldest_age_frames": 442,
+						"pending_epoch": 25,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					}
+				},
+				"spent_usec": 0
+			},
+			"death_pending": [
+				{
+					"canonical_monster": {
+						"classification": "boss",
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"configured_respawn": -1.0,
+					"death_key": "death:910001:1:1:834817505029",
+					"death_position": "(800.0, -432.0)",
+					"drop_plan": {},
+					"experience": 2500,
+					"generation": 1,
+					"last_error": "",
+					"materialization_retry_count": 0,
+					"materialized_node_count": 0,
+					"materialized_node_index": 0,
+					"monster_id": 76,
+					"monster_name": "沃玛教主",
+					"monster_snapshot": {
+						"canonical_name": "沃玛教主",
+						"classification": "boss",
+						"experience": 2500,
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"origin": {
+						"generation": 1,
+						"map_id": 910001
+					},
+					"origin_captured": true,
+					"origin_generation": 1,
+					"origin_map_id": 910001,
+					"queued_at_usec": 13901387,
+					"remaining_request_count": 0,
+					"remaining_requests": [],
+					"respawn": {
+						"configured_seconds": -1.0,
+						"enabled": false,
+						"preparation": {
+							"enabled": false,
+							"valid": true
+						},
+						"spawn_context": {},
+						"was_boss": false
+					},
+					"respawn_enabled": false,
+					"respawn_preparation": {
+						"enabled": false,
+						"valid": true
+					},
+					"respawn_scheduled": false,
+					"retry_at_msec": 0,
+					"retry_count": 0,
+					"reward_status": "queued",
+					"sequence": 1,
+					"spawn_context": {},
+					"spawn_position": "(800.0, -432.0)",
+					"state": "PERSISTING",
+					"transaction_result": {
+						"experience_gained": 2500,
+						"kill_count": 1,
+						"quest_changed": false,
+						"reason": "",
+						"save_count": 1,
+						"success": true
+					},
+					"was_boss": false
+				}
+			],
+			"frame": 360,
+			"pending_count": 1,
+			"persistence": {
+				"completed": 4,
+				"entries": [],
+				"maximum_completion_latency_usec": 68854,
+				"oldest_age_usec": 0,
+				"pending": 0
+			},
+			"pipeline_running": false,
+			"player_background_death": {},
+			"prepared_settlement": {},
+			"process_state": {
+				"game_can_process": true,
+				"game_inside_tree": true,
+				"game_is_processing": true,
+				"manager_can_process": true,
+				"manager_is_processing": true,
+				"player_can_process": true,
+				"player_is_processing": true
+			},
+			"terminal_count": 0
+		},
+		{
+			"death_budget": {
+				"categories": {},
+				"epoch": 527,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"death_work:334923564655": {
+						"oldest_age_frames": 421,
+						"pending_epoch": 106,
+						"runnable": false,
+						"runs_when_paused": false,
+						"service_age_frames": 421
+					},
+					"resource_completion:-9223371701645998434": {
+						"oldest_age_frames": 502,
+						"pending_epoch": 25,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					}
+				},
+				"spent_usec": 0
+			},
+			"death_pending": [
+				{
+					"canonical_monster": {
+						"classification": "boss",
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"configured_respawn": -1.0,
+					"death_key": "death:910001:1:1:834817505029",
+					"death_position": "(800.0, -432.0)",
+					"drop_plan": {},
+					"experience": 2500,
+					"generation": 1,
+					"last_error": "",
+					"materialization_retry_count": 0,
+					"materialized_node_count": 0,
+					"materialized_node_index": 0,
+					"monster_id": 76,
+					"monster_name": "沃玛教主",
+					"monster_snapshot": {
+						"canonical_name": "沃玛教主",
+						"classification": "boss",
+						"experience": 2500,
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"origin": {
+						"generation": 1,
+						"map_id": 910001
+					},
+					"origin_captured": true,
+					"origin_generation": 1,
+					"origin_map_id": 910001,
+					"queued_at_usec": 13901387,
+					"remaining_request_count": 0,
+					"remaining_requests": [],
+					"respawn": {
+						"configured_seconds": -1.0,
+						"enabled": false,
+						"preparation": {
+							"enabled": false,
+							"valid": true
+						},
+						"spawn_context": {},
+						"was_boss": false
+					},
+					"respawn_enabled": false,
+					"respawn_preparation": {
+						"enabled": false,
+						"valid": true
+					},
+					"respawn_scheduled": false,
+					"retry_at_msec": 0,
+					"retry_count": 0,
+					"reward_status": "queued",
+					"sequence": 1,
+					"spawn_context": {},
+					"spawn_position": "(800.0, -432.0)",
+					"state": "PERSISTING",
+					"transaction_result": {
+						"experience_gained": 2500,
+						"kill_count": 1,
+						"quest_changed": false,
+						"reason": "",
+						"save_count": 1,
+						"success": true
+					},
+					"was_boss": false
+				}
+			],
+			"frame": 420,
+			"pending_count": 1,
+			"persistence": {
+				"completed": 4,
+				"entries": [],
+				"maximum_completion_latency_usec": 68854,
+				"oldest_age_usec": 0,
+				"pending": 0
+			},
+			"pipeline_running": false,
+			"player_background_death": {},
+			"prepared_settlement": {},
+			"process_state": {
+				"game_can_process": true,
+				"game_inside_tree": true,
+				"game_is_processing": true,
+				"manager_can_process": true,
+				"manager_is_processing": true,
+				"player_can_process": true,
+				"player_is_processing": true
+			},
+			"terminal_count": 0
+		},
+		{
+			"death_budget": {
+				"categories": {},
+				"epoch": 587,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"death_work:334923564655": {
+						"oldest_age_frames": 481,
+						"pending_epoch": 106,
+						"runnable": false,
+						"runs_when_paused": false,
+						"service_age_frames": 481
+					},
+					"resource_completion:-9223371701645998434": {
+						"oldest_age_frames": 562,
+						"pending_epoch": 25,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					}
+				},
+				"spent_usec": 0
+			},
+			"death_pending": [
+				{
+					"canonical_monster": {
+						"classification": "boss",
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"configured_respawn": -1.0,
+					"death_key": "death:910001:1:1:834817505029",
+					"death_position": "(800.0, -432.0)",
+					"drop_plan": {},
+					"experience": 2500,
+					"generation": 1,
+					"last_error": "",
+					"materialization_retry_count": 0,
+					"materialized_node_count": 0,
+					"materialized_node_index": 0,
+					"monster_id": 76,
+					"monster_name": "沃玛教主",
+					"monster_snapshot": {
+						"canonical_name": "沃玛教主",
+						"classification": "boss",
+						"experience": 2500,
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"origin": {
+						"generation": 1,
+						"map_id": 910001
+					},
+					"origin_captured": true,
+					"origin_generation": 1,
+					"origin_map_id": 910001,
+					"queued_at_usec": 13901387,
+					"remaining_request_count": 0,
+					"remaining_requests": [],
+					"respawn": {
+						"configured_seconds": -1.0,
+						"enabled": false,
+						"preparation": {
+							"enabled": false,
+							"valid": true
+						},
+						"spawn_context": {},
+						"was_boss": false
+					},
+					"respawn_enabled": false,
+					"respawn_preparation": {
+						"enabled": false,
+						"valid": true
+					},
+					"respawn_scheduled": false,
+					"retry_at_msec": 0,
+					"retry_count": 0,
+					"reward_status": "queued",
+					"sequence": 1,
+					"spawn_context": {},
+					"spawn_position": "(800.0, -432.0)",
+					"state": "PERSISTING",
+					"transaction_result": {
+						"experience_gained": 2500,
+						"kill_count": 1,
+						"quest_changed": false,
+						"reason": "",
+						"save_count": 1,
+						"success": true
+					},
+					"was_boss": false
+				}
+			],
+			"frame": 480,
+			"pending_count": 1,
+			"persistence": {
+				"completed": 4,
+				"entries": [],
+				"maximum_completion_latency_usec": 68854,
+				"oldest_age_usec": 0,
+				"pending": 0
+			},
+			"pipeline_running": false,
+			"player_background_death": {},
+			"prepared_settlement": {},
+			"process_state": {
+				"game_can_process": true,
+				"game_inside_tree": true,
+				"game_is_processing": true,
+				"manager_can_process": true,
+				"manager_is_processing": true,
+				"player_can_process": true,
+				"player_is_processing": true
+			},
+			"terminal_count": 0
+		},
+		{
+			"death_budget": {
+				"categories": {},
+				"epoch": 647,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"death_work:334923564655": {
+						"oldest_age_frames": 541,
+						"pending_epoch": 106,
+						"runnable": false,
+						"runs_when_paused": false,
+						"service_age_frames": 541
+					},
+					"resource_completion:-9223371701645998434": {
+						"oldest_age_frames": 622,
+						"pending_epoch": 25,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					}
+				},
+				"spent_usec": 0
+			},
+			"death_pending": [
+				{
+					"canonical_monster": {
+						"classification": "boss",
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"configured_respawn": -1.0,
+					"death_key": "death:910001:1:1:834817505029",
+					"death_position": "(800.0, -432.0)",
+					"drop_plan": {},
+					"experience": 2500,
+					"generation": 1,
+					"last_error": "",
+					"materialization_retry_count": 0,
+					"materialized_node_count": 0,
+					"materialized_node_index": 0,
+					"monster_id": 76,
+					"monster_name": "沃玛教主",
+					"monster_snapshot": {
+						"canonical_name": "沃玛教主",
+						"classification": "boss",
+						"experience": 2500,
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"origin": {
+						"generation": 1,
+						"map_id": 910001
+					},
+					"origin_captured": true,
+					"origin_generation": 1,
+					"origin_map_id": 910001,
+					"queued_at_usec": 13901387,
+					"remaining_request_count": 0,
+					"remaining_requests": [],
+					"respawn": {
+						"configured_seconds": -1.0,
+						"enabled": false,
+						"preparation": {
+							"enabled": false,
+							"valid": true
+						},
+						"spawn_context": {},
+						"was_boss": false
+					},
+					"respawn_enabled": false,
+					"respawn_preparation": {
+						"enabled": false,
+						"valid": true
+					},
+					"respawn_scheduled": false,
+					"retry_at_msec": 0,
+					"retry_count": 0,
+					"reward_status": "queued",
+					"sequence": 1,
+					"spawn_context": {},
+					"spawn_position": "(800.0, -432.0)",
+					"state": "PERSISTING",
+					"transaction_result": {
+						"experience_gained": 2500,
+						"kill_count": 1,
+						"quest_changed": false,
+						"reason": "",
+						"save_count": 1,
+						"success": true
+					},
+					"was_boss": false
+				}
+			],
+			"frame": 540,
+			"pending_count": 1,
+			"persistence": {
+				"completed": 4,
+				"entries": [],
+				"maximum_completion_latency_usec": 68854,
+				"oldest_age_usec": 0,
+				"pending": 0
+			},
+			"pipeline_running": false,
+			"player_background_death": {},
+			"prepared_settlement": {},
+			"process_state": {
+				"game_can_process": true,
+				"game_inside_tree": true,
+				"game_is_processing": true,
+				"manager_can_process": true,
+				"manager_is_processing": true,
+				"player_can_process": true,
+				"player_is_processing": true
+			},
+			"terminal_count": 0
+		},
+		{
+			"death_budget": {
+				"categories": {},
+				"epoch": 707,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"death_work:334923564655": {
+						"oldest_age_frames": 601,
+						"pending_epoch": 106,
+						"runnable": false,
+						"runs_when_paused": false,
+						"service_age_frames": 601
+					},
+					"resource_completion:-9223371701645998434": {
+						"oldest_age_frames": 682,
+						"pending_epoch": 25,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					}
+				},
+				"spent_usec": 0
+			},
+			"death_pending": [
+				{
+					"canonical_monster": {
+						"classification": "boss",
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"configured_respawn": -1.0,
+					"death_key": "death:910001:1:1:834817505029",
+					"death_position": "(800.0, -432.0)",
+					"drop_plan": {},
+					"experience": 2500,
+					"generation": 1,
+					"last_error": "",
+					"materialization_retry_count": 0,
+					"materialized_node_count": 0,
+					"materialized_node_index": 0,
+					"monster_id": 76,
+					"monster_name": "沃玛教主",
+					"monster_snapshot": {
+						"canonical_name": "沃玛教主",
+						"classification": "boss",
+						"experience": 2500,
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"origin": {
+						"generation": 1,
+						"map_id": 910001
+					},
+					"origin_captured": true,
+					"origin_generation": 1,
+					"origin_map_id": 910001,
+					"queued_at_usec": 13901387,
+					"remaining_request_count": 0,
+					"remaining_requests": [],
+					"respawn": {
+						"configured_seconds": -1.0,
+						"enabled": false,
+						"preparation": {
+							"enabled": false,
+							"valid": true
+						},
+						"spawn_context": {},
+						"was_boss": false
+					},
+					"respawn_enabled": false,
+					"respawn_preparation": {
+						"enabled": false,
+						"valid": true
+					},
+					"respawn_scheduled": false,
+					"retry_at_msec": 0,
+					"retry_count": 0,
+					"reward_status": "queued",
+					"sequence": 1,
+					"spawn_context": {},
+					"spawn_position": "(800.0, -432.0)",
+					"state": "PERSISTING",
+					"transaction_result": {
+						"experience_gained": 2500,
+						"kill_count": 1,
+						"quest_changed": false,
+						"reason": "",
+						"save_count": 1,
+						"success": true
+					},
+					"was_boss": false
+				}
+			],
+			"frame": 600,
+			"pending_count": 1,
+			"persistence": {
+				"completed": 4,
+				"entries": [],
+				"maximum_completion_latency_usec": 68854,
+				"oldest_age_usec": 0,
+				"pending": 0
+			},
+			"pipeline_running": false,
+			"player_background_death": {},
+			"prepared_settlement": {},
+			"process_state": {
+				"game_can_process": true,
+				"game_inside_tree": true,
+				"game_is_processing": true,
+				"manager_can_process": true,
+				"manager_is_processing": true,
+				"player_can_process": true,
+				"player_is_processing": true
+			},
+			"terminal_count": 0
+		},
+		{
+			"death_budget": {
+				"categories": {},
+				"epoch": 767,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"death_work:334923564655": {
+						"oldest_age_frames": 661,
+						"pending_epoch": 106,
+						"runnable": false,
+						"runs_when_paused": false,
+						"service_age_frames": 661
+					},
+					"resource_completion:-9223371701645998434": {
+						"oldest_age_frames": 742,
+						"pending_epoch": 25,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					}
+				},
+				"spent_usec": 0
+			},
+			"death_pending": [
+				{
+					"canonical_monster": {
+						"classification": "boss",
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"configured_respawn": -1.0,
+					"death_key": "death:910001:1:1:834817505029",
+					"death_position": "(800.0, -432.0)",
+					"drop_plan": {},
+					"experience": 2500,
+					"generation": 1,
+					"last_error": "",
+					"materialization_retry_count": 0,
+					"materialized_node_count": 0,
+					"materialized_node_index": 0,
+					"monster_id": 76,
+					"monster_name": "沃玛教主",
+					"monster_snapshot": {
+						"canonical_name": "沃玛教主",
+						"classification": "boss",
+						"experience": 2500,
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"origin": {
+						"generation": 1,
+						"map_id": 910001
+					},
+					"origin_captured": true,
+					"origin_generation": 1,
+					"origin_map_id": 910001,
+					"queued_at_usec": 13901387,
+					"remaining_request_count": 0,
+					"remaining_requests": [],
+					"respawn": {
+						"configured_seconds": -1.0,
+						"enabled": false,
+						"preparation": {
+							"enabled": false,
+							"valid": true
+						},
+						"spawn_context": {},
+						"was_boss": false
+					},
+					"respawn_enabled": false,
+					"respawn_preparation": {
+						"enabled": false,
+						"valid": true
+					},
+					"respawn_scheduled": false,
+					"retry_at_msec": 0,
+					"retry_count": 0,
+					"reward_status": "queued",
+					"sequence": 1,
+					"spawn_context": {},
+					"spawn_position": "(800.0, -432.0)",
+					"state": "PERSISTING",
+					"transaction_result": {
+						"experience_gained": 2500,
+						"kill_count": 1,
+						"quest_changed": false,
+						"reason": "",
+						"save_count": 1,
+						"success": true
+					},
+					"was_boss": false
+				}
+			],
+			"frame": 660,
+			"pending_count": 1,
+			"persistence": {
+				"completed": 4,
+				"entries": [],
+				"maximum_completion_latency_usec": 68854,
+				"oldest_age_usec": 0,
+				"pending": 0
+			},
+			"pipeline_running": false,
+			"player_background_death": {},
+			"prepared_settlement": {},
+			"process_state": {
+				"game_can_process": true,
+				"game_inside_tree": true,
+				"game_is_processing": true,
+				"manager_can_process": true,
+				"manager_is_processing": true,
+				"player_can_process": true,
+				"player_is_processing": true
+			},
+			"terminal_count": 0
+		},
+		{
+			"death_budget": {
+				"categories": {},
+				"epoch": 827,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"death_work:334923564655": {
+						"oldest_age_frames": 721,
+						"pending_epoch": 106,
+						"runnable": false,
+						"runs_when_paused": false,
+						"service_age_frames": 721
+					},
+					"resource_completion:-9223371701645998434": {
+						"oldest_age_frames": 802,
+						"pending_epoch": 25,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					}
+				},
+				"spent_usec": 0
+			},
+			"death_pending": [
+				{
+					"canonical_monster": {
+						"classification": "boss",
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"configured_respawn": -1.0,
+					"death_key": "death:910001:1:1:834817505029",
+					"death_position": "(800.0, -432.0)",
+					"drop_plan": {},
+					"experience": 2500,
+					"generation": 1,
+					"last_error": "",
+					"materialization_retry_count": 0,
+					"materialized_node_count": 0,
+					"materialized_node_index": 0,
+					"monster_id": 76,
+					"monster_name": "沃玛教主",
+					"monster_snapshot": {
+						"canonical_name": "沃玛教主",
+						"classification": "boss",
+						"experience": 2500,
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"origin": {
+						"generation": 1,
+						"map_id": 910001
+					},
+					"origin_captured": true,
+					"origin_generation": 1,
+					"origin_map_id": 910001,
+					"queued_at_usec": 13901387,
+					"remaining_request_count": 0,
+					"remaining_requests": [],
+					"respawn": {
+						"configured_seconds": -1.0,
+						"enabled": false,
+						"preparation": {
+							"enabled": false,
+							"valid": true
+						},
+						"spawn_context": {},
+						"was_boss": false
+					},
+					"respawn_enabled": false,
+					"respawn_preparation": {
+						"enabled": false,
+						"valid": true
+					},
+					"respawn_scheduled": false,
+					"retry_at_msec": 0,
+					"retry_count": 0,
+					"reward_status": "queued",
+					"sequence": 1,
+					"spawn_context": {},
+					"spawn_position": "(800.0, -432.0)",
+					"state": "PERSISTING",
+					"transaction_result": {
+						"experience_gained": 2500,
+						"kill_count": 1,
+						"quest_changed": false,
+						"reason": "",
+						"save_count": 1,
+						"success": true
+					},
+					"was_boss": false
+				}
+			],
+			"frame": 720,
+			"pending_count": 1,
+			"persistence": {
+				"completed": 4,
+				"entries": [],
+				"maximum_completion_latency_usec": 68854,
+				"oldest_age_usec": 0,
+				"pending": 0
+			},
+			"pipeline_running": false,
+			"player_background_death": {},
+			"prepared_settlement": {},
+			"process_state": {
+				"game_can_process": true,
+				"game_inside_tree": true,
+				"game_is_processing": true,
+				"manager_can_process": true,
+				"manager_is_processing": true,
+				"player_can_process": true,
+				"player_is_processing": true
+			},
+			"terminal_count": 0
+		},
+		{
+			"death_budget": {
+				"categories": {},
+				"epoch": 887,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"death_work:334923564655": {
+						"oldest_age_frames": 781,
+						"pending_epoch": 106,
+						"runnable": false,
+						"runs_when_paused": false,
+						"service_age_frames": 781
+					},
+					"resource_completion:-9223371701645998434": {
+						"oldest_age_frames": 862,
+						"pending_epoch": 25,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					}
+				},
+				"spent_usec": 0
+			},
+			"death_pending": [
+				{
+					"canonical_monster": {
+						"classification": "boss",
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"configured_respawn": -1.0,
+					"death_key": "death:910001:1:1:834817505029",
+					"death_position": "(800.0, -432.0)",
+					"drop_plan": {},
+					"experience": 2500,
+					"generation": 1,
+					"last_error": "",
+					"materialization_retry_count": 0,
+					"materialized_node_count": 0,
+					"materialized_node_index": 0,
+					"monster_id": 76,
+					"monster_name": "沃玛教主",
+					"monster_snapshot": {
+						"canonical_name": "沃玛教主",
+						"classification": "boss",
+						"experience": 2500,
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"origin": {
+						"generation": 1,
+						"map_id": 910001
+					},
+					"origin_captured": true,
+					"origin_generation": 1,
+					"origin_map_id": 910001,
+					"queued_at_usec": 13901387,
+					"remaining_request_count": 0,
+					"remaining_requests": [],
+					"respawn": {
+						"configured_seconds": -1.0,
+						"enabled": false,
+						"preparation": {
+							"enabled": false,
+							"valid": true
+						},
+						"spawn_context": {},
+						"was_boss": false
+					},
+					"respawn_enabled": false,
+					"respawn_preparation": {
+						"enabled": false,
+						"valid": true
+					},
+					"respawn_scheduled": false,
+					"retry_at_msec": 0,
+					"retry_count": 0,
+					"reward_status": "queued",
+					"sequence": 1,
+					"spawn_context": {},
+					"spawn_position": "(800.0, -432.0)",
+					"state": "PERSISTING",
+					"transaction_result": {
+						"experience_gained": 2500,
+						"kill_count": 1,
+						"quest_changed": false,
+						"reason": "",
+						"save_count": 1,
+						"success": true
+					},
+					"was_boss": false
+				}
+			],
+			"frame": 780,
+			"pending_count": 1,
+			"persistence": {
+				"completed": 4,
+				"entries": [],
+				"maximum_completion_latency_usec": 68854,
+				"oldest_age_usec": 0,
+				"pending": 0
+			},
+			"pipeline_running": false,
+			"player_background_death": {},
+			"prepared_settlement": {},
+			"process_state": {
+				"game_can_process": true,
+				"game_inside_tree": true,
+				"game_is_processing": true,
+				"manager_can_process": true,
+				"manager_is_processing": true,
+				"player_can_process": true,
+				"player_is_processing": true
+			},
+			"terminal_count": 0
+		},
+		{
+			"death_budget": {
+				"categories": {},
+				"epoch": 947,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"death_work:334923564655": {
+						"oldest_age_frames": 841,
+						"pending_epoch": 106,
+						"runnable": false,
+						"runs_when_paused": false,
+						"service_age_frames": 841
+					},
+					"resource_completion:-9223371701645998434": {
+						"oldest_age_frames": 922,
+						"pending_epoch": 25,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					}
+				},
+				"spent_usec": 0
+			},
+			"death_pending": [
+				{
+					"canonical_monster": {
+						"classification": "boss",
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"configured_respawn": -1.0,
+					"death_key": "death:910001:1:1:834817505029",
+					"death_position": "(800.0, -432.0)",
+					"drop_plan": {},
+					"experience": 2500,
+					"generation": 1,
+					"last_error": "",
+					"materialization_retry_count": 0,
+					"materialized_node_count": 0,
+					"materialized_node_index": 0,
+					"monster_id": 76,
+					"monster_name": "沃玛教主",
+					"monster_snapshot": {
+						"canonical_name": "沃玛教主",
+						"classification": "boss",
+						"experience": 2500,
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"origin": {
+						"generation": 1,
+						"map_id": 910001
+					},
+					"origin_captured": true,
+					"origin_generation": 1,
+					"origin_map_id": 910001,
+					"queued_at_usec": 13901387,
+					"remaining_request_count": 0,
+					"remaining_requests": [],
+					"respawn": {
+						"configured_seconds": -1.0,
+						"enabled": false,
+						"preparation": {
+							"enabled": false,
+							"valid": true
+						},
+						"spawn_context": {},
+						"was_boss": false
+					},
+					"respawn_enabled": false,
+					"respawn_preparation": {
+						"enabled": false,
+						"valid": true
+					},
+					"respawn_scheduled": false,
+					"retry_at_msec": 0,
+					"retry_count": 0,
+					"reward_status": "queued",
+					"sequence": 1,
+					"spawn_context": {},
+					"spawn_position": "(800.0, -432.0)",
+					"state": "PERSISTING",
+					"transaction_result": {
+						"experience_gained": 2500,
+						"kill_count": 1,
+						"quest_changed": false,
+						"reason": "",
+						"save_count": 1,
+						"success": true
+					},
+					"was_boss": false
+				}
+			],
+			"frame": 840,
+			"pending_count": 1,
+			"persistence": {
+				"completed": 4,
+				"entries": [],
+				"maximum_completion_latency_usec": 68854,
+				"oldest_age_usec": 0,
+				"pending": 0
+			},
+			"pipeline_running": false,
+			"player_background_death": {},
+			"prepared_settlement": {},
+			"process_state": {
+				"game_can_process": true,
+				"game_inside_tree": true,
+				"game_is_processing": true,
+				"manager_can_process": true,
+				"manager_is_processing": true,
+				"player_can_process": true,
+				"player_is_processing": true
+			},
+			"terminal_count": 0
+		},
+		{
+			"death_budget": {
+				"categories": {},
+				"epoch": 1007,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"death_work:334923564655": {
+						"oldest_age_frames": 901,
+						"pending_epoch": 106,
+						"runnable": false,
+						"runs_when_paused": false,
+						"service_age_frames": 901
+					},
+					"resource_completion:-9223371701645998434": {
+						"oldest_age_frames": 982,
+						"pending_epoch": 25,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					}
+				},
+				"spent_usec": 0
+			},
+			"death_pending": [
+				{
+					"canonical_monster": {
+						"classification": "boss",
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"configured_respawn": -1.0,
+					"death_key": "death:910001:1:1:834817505029",
+					"death_position": "(800.0, -432.0)",
+					"drop_plan": {},
+					"experience": 2500,
+					"generation": 1,
+					"last_error": "",
+					"materialization_retry_count": 0,
+					"materialized_node_count": 0,
+					"materialized_node_index": 0,
+					"monster_id": 76,
+					"monster_name": "沃玛教主",
+					"monster_snapshot": {
+						"canonical_name": "沃玛教主",
+						"classification": "boss",
+						"experience": 2500,
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"origin": {
+						"generation": 1,
+						"map_id": 910001
+					},
+					"origin_captured": true,
+					"origin_generation": 1,
+					"origin_map_id": 910001,
+					"queued_at_usec": 13901387,
+					"remaining_request_count": 0,
+					"remaining_requests": [],
+					"respawn": {
+						"configured_seconds": -1.0,
+						"enabled": false,
+						"preparation": {
+							"enabled": false,
+							"valid": true
+						},
+						"spawn_context": {},
+						"was_boss": false
+					},
+					"respawn_enabled": false,
+					"respawn_preparation": {
+						"enabled": false,
+						"valid": true
+					},
+					"respawn_scheduled": false,
+					"retry_at_msec": 0,
+					"retry_count": 0,
+					"reward_status": "queued",
+					"sequence": 1,
+					"spawn_context": {},
+					"spawn_position": "(800.0, -432.0)",
+					"state": "PERSISTING",
+					"transaction_result": {
+						"experience_gained": 2500,
+						"kill_count": 1,
+						"quest_changed": false,
+						"reason": "",
+						"save_count": 1,
+						"success": true
+					},
+					"was_boss": false
+				}
+			],
+			"frame": 900,
+			"pending_count": 1,
+			"persistence": {
+				"completed": 4,
+				"entries": [],
+				"maximum_completion_latency_usec": 68854,
+				"oldest_age_usec": 0,
+				"pending": 0
+			},
+			"pipeline_running": false,
+			"player_background_death": {},
+			"prepared_settlement": {},
+			"process_state": {
+				"game_can_process": true,
+				"game_inside_tree": true,
+				"game_is_processing": true,
+				"manager_can_process": true,
+				"manager_is_processing": true,
+				"player_can_process": true,
+				"player_is_processing": true
+			},
+			"terminal_count": 0
+		},
+		{
+			"death_budget": {
+				"categories": {},
+				"epoch": 1067,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"death_work:334923564655": {
+						"oldest_age_frames": 961,
+						"pending_epoch": 106,
+						"runnable": false,
+						"runs_when_paused": false,
+						"service_age_frames": 961
+					},
+					"resource_completion:-9223371701645998434": {
+						"oldest_age_frames": 1042,
+						"pending_epoch": 25,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					}
+				},
+				"spent_usec": 0
+			},
+			"death_pending": [
+				{
+					"canonical_monster": {
+						"classification": "boss",
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"configured_respawn": -1.0,
+					"death_key": "death:910001:1:1:834817505029",
+					"death_position": "(800.0, -432.0)",
+					"drop_plan": {},
+					"experience": 2500,
+					"generation": 1,
+					"last_error": "",
+					"materialization_retry_count": 0,
+					"materialized_node_count": 0,
+					"materialized_node_index": 0,
+					"monster_id": 76,
+					"monster_name": "沃玛教主",
+					"monster_snapshot": {
+						"canonical_name": "沃玛教主",
+						"classification": "boss",
+						"experience": 2500,
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"origin": {
+						"generation": 1,
+						"map_id": 910001
+					},
+					"origin_captured": true,
+					"origin_generation": 1,
+					"origin_map_id": 910001,
+					"queued_at_usec": 13901387,
+					"remaining_request_count": 0,
+					"remaining_requests": [],
+					"respawn": {
+						"configured_seconds": -1.0,
+						"enabled": false,
+						"preparation": {
+							"enabled": false,
+							"valid": true
+						},
+						"spawn_context": {},
+						"was_boss": false
+					},
+					"respawn_enabled": false,
+					"respawn_preparation": {
+						"enabled": false,
+						"valid": true
+					},
+					"respawn_scheduled": false,
+					"retry_at_msec": 0,
+					"retry_count": 0,
+					"reward_status": "queued",
+					"sequence": 1,
+					"spawn_context": {},
+					"spawn_position": "(800.0, -432.0)",
+					"state": "PERSISTING",
+					"transaction_result": {
+						"experience_gained": 2500,
+						"kill_count": 1,
+						"quest_changed": false,
+						"reason": "",
+						"save_count": 1,
+						"success": true
+					},
+					"was_boss": false
+				}
+			],
+			"frame": 960,
+			"pending_count": 1,
+			"persistence": {
+				"completed": 4,
+				"entries": [],
+				"maximum_completion_latency_usec": 68854,
+				"oldest_age_usec": 0,
+				"pending": 0
+			},
+			"pipeline_running": false,
+			"player_background_death": {},
+			"prepared_settlement": {},
+			"process_state": {
+				"game_can_process": true,
+				"game_inside_tree": true,
+				"game_is_processing": true,
+				"manager_can_process": true,
+				"manager_is_processing": true,
+				"player_can_process": true,
+				"player_is_processing": true
+			},
+			"terminal_count": 0
+		},
+		{
+			"death_budget": {
+				"categories": {},
+				"epoch": 1127,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"death_work:334923564655": {
+						"oldest_age_frames": 1021,
+						"pending_epoch": 106,
+						"runnable": false,
+						"runs_when_paused": false,
+						"service_age_frames": 1021
+					},
+					"resource_completion:-9223371701645998434": {
+						"oldest_age_frames": 1102,
+						"pending_epoch": 25,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					}
+				},
+				"spent_usec": 0
+			},
+			"death_pending": [
+				{
+					"canonical_monster": {
+						"classification": "boss",
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"configured_respawn": -1.0,
+					"death_key": "death:910001:1:1:834817505029",
+					"death_position": "(800.0, -432.0)",
+					"drop_plan": {},
+					"experience": 2500,
+					"generation": 1,
+					"last_error": "",
+					"materialization_retry_count": 0,
+					"materialized_node_count": 0,
+					"materialized_node_index": 0,
+					"monster_id": 76,
+					"monster_name": "沃玛教主",
+					"monster_snapshot": {
+						"canonical_name": "沃玛教主",
+						"classification": "boss",
+						"experience": 2500,
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"origin": {
+						"generation": 1,
+						"map_id": 910001
+					},
+					"origin_captured": true,
+					"origin_generation": 1,
+					"origin_map_id": 910001,
+					"queued_at_usec": 13901387,
+					"remaining_request_count": 0,
+					"remaining_requests": [],
+					"respawn": {
+						"configured_seconds": -1.0,
+						"enabled": false,
+						"preparation": {
+							"enabled": false,
+							"valid": true
+						},
+						"spawn_context": {},
+						"was_boss": false
+					},
+					"respawn_enabled": false,
+					"respawn_preparation": {
+						"enabled": false,
+						"valid": true
+					},
+					"respawn_scheduled": false,
+					"retry_at_msec": 0,
+					"retry_count": 0,
+					"reward_status": "queued",
+					"sequence": 1,
+					"spawn_context": {},
+					"spawn_position": "(800.0, -432.0)",
+					"state": "PERSISTING",
+					"transaction_result": {
+						"experience_gained": 2500,
+						"kill_count": 1,
+						"quest_changed": false,
+						"reason": "",
+						"save_count": 1,
+						"success": true
+					},
+					"was_boss": false
+				}
+			],
+			"frame": 1020,
+			"pending_count": 1,
+			"persistence": {
+				"completed": 4,
+				"entries": [],
+				"maximum_completion_latency_usec": 68854,
+				"oldest_age_usec": 0,
+				"pending": 0
+			},
+			"pipeline_running": false,
+			"player_background_death": {},
+			"prepared_settlement": {},
+			"process_state": {
+				"game_can_process": true,
+				"game_inside_tree": true,
+				"game_is_processing": true,
+				"manager_can_process": true,
+				"manager_is_processing": true,
+				"player_can_process": true,
+				"player_is_processing": true
+			},
+			"terminal_count": 0
+		},
+		{
+			"death_budget": {
+				"categories": {},
+				"epoch": 1187,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"death_work:334923564655": {
+						"oldest_age_frames": 1081,
+						"pending_epoch": 106,
+						"runnable": false,
+						"runs_when_paused": false,
+						"service_age_frames": 1081
+					},
+					"resource_completion:-9223371701645998434": {
+						"oldest_age_frames": 1162,
+						"pending_epoch": 25,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					}
+				},
+				"spent_usec": 0
+			},
+			"death_pending": [
+				{
+					"canonical_monster": {
+						"classification": "boss",
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"configured_respawn": -1.0,
+					"death_key": "death:910001:1:1:834817505029",
+					"death_position": "(800.0, -432.0)",
+					"drop_plan": {},
+					"experience": 2500,
+					"generation": 1,
+					"last_error": "",
+					"materialization_retry_count": 0,
+					"materialized_node_count": 0,
+					"materialized_node_index": 0,
+					"monster_id": 76,
+					"monster_name": "沃玛教主",
+					"monster_snapshot": {
+						"canonical_name": "沃玛教主",
+						"classification": "boss",
+						"experience": 2500,
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"origin": {
+						"generation": 1,
+						"map_id": 910001
+					},
+					"origin_captured": true,
+					"origin_generation": 1,
+					"origin_map_id": 910001,
+					"queued_at_usec": 13901387,
+					"remaining_request_count": 0,
+					"remaining_requests": [],
+					"respawn": {
+						"configured_seconds": -1.0,
+						"enabled": false,
+						"preparation": {
+							"enabled": false,
+							"valid": true
+						},
+						"spawn_context": {},
+						"was_boss": false
+					},
+					"respawn_enabled": false,
+					"respawn_preparation": {
+						"enabled": false,
+						"valid": true
+					},
+					"respawn_scheduled": false,
+					"retry_at_msec": 0,
+					"retry_count": 0,
+					"reward_status": "queued",
+					"sequence": 1,
+					"spawn_context": {},
+					"spawn_position": "(800.0, -432.0)",
+					"state": "PERSISTING",
+					"transaction_result": {
+						"experience_gained": 2500,
+						"kill_count": 1,
+						"quest_changed": false,
+						"reason": "",
+						"save_count": 1,
+						"success": true
+					},
+					"was_boss": false
+				}
+			],
+			"frame": 1080,
+			"pending_count": 1,
+			"persistence": {
+				"completed": 4,
+				"entries": [],
+				"maximum_completion_latency_usec": 68854,
+				"oldest_age_usec": 0,
+				"pending": 0
+			},
+			"pipeline_running": false,
+			"player_background_death": {},
+			"prepared_settlement": {},
+			"process_state": {
+				"game_can_process": true,
+				"game_inside_tree": true,
+				"game_is_processing": true,
+				"manager_can_process": true,
+				"manager_is_processing": true,
+				"player_can_process": true,
+				"player_is_processing": true
+			},
+			"terminal_count": 0
+		},
+		{
+			"death_budget": {
+				"categories": {},
+				"epoch": 1247,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"death_work:334923564655": {
+						"oldest_age_frames": 1141,
+						"pending_epoch": 106,
+						"runnable": false,
+						"runs_when_paused": false,
+						"service_age_frames": 1141
+					},
+					"resource_completion:-9223371701645998434": {
+						"oldest_age_frames": 1222,
+						"pending_epoch": 25,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					}
+				},
+				"spent_usec": 0
+			},
+			"death_pending": [
+				{
+					"canonical_monster": {
+						"classification": "boss",
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"configured_respawn": -1.0,
+					"death_key": "death:910001:1:1:834817505029",
+					"death_position": "(800.0, -432.0)",
+					"drop_plan": {},
+					"experience": 2500,
+					"generation": 1,
+					"last_error": "",
+					"materialization_retry_count": 0,
+					"materialized_node_count": 0,
+					"materialized_node_index": 0,
+					"monster_id": 76,
+					"monster_name": "沃玛教主",
+					"monster_snapshot": {
+						"canonical_name": "沃玛教主",
+						"classification": "boss",
+						"experience": 2500,
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"origin": {
+						"generation": 1,
+						"map_id": 910001
+					},
+					"origin_captured": true,
+					"origin_generation": 1,
+					"origin_map_id": 910001,
+					"queued_at_usec": 13901387,
+					"remaining_request_count": 0,
+					"remaining_requests": [],
+					"respawn": {
+						"configured_seconds": -1.0,
+						"enabled": false,
+						"preparation": {
+							"enabled": false,
+							"valid": true
+						},
+						"spawn_context": {},
+						"was_boss": false
+					},
+					"respawn_enabled": false,
+					"respawn_preparation": {
+						"enabled": false,
+						"valid": true
+					},
+					"respawn_scheduled": false,
+					"retry_at_msec": 0,
+					"retry_count": 0,
+					"reward_status": "queued",
+					"sequence": 1,
+					"spawn_context": {},
+					"spawn_position": "(800.0, -432.0)",
+					"state": "PERSISTING",
+					"transaction_result": {
+						"experience_gained": 2500,
+						"kill_count": 1,
+						"quest_changed": false,
+						"reason": "",
+						"save_count": 1,
+						"success": true
+					},
+					"was_boss": false
+				}
+			],
+			"frame": 1140,
+			"pending_count": 1,
+			"persistence": {
+				"completed": 4,
+				"entries": [],
+				"maximum_completion_latency_usec": 68854,
+				"oldest_age_usec": 0,
+				"pending": 0
+			},
+			"pipeline_running": false,
+			"player_background_death": {},
+			"prepared_settlement": {},
+			"process_state": {
+				"game_can_process": true,
+				"game_inside_tree": true,
+				"game_is_processing": true,
+				"manager_can_process": true,
+				"manager_is_processing": true,
+				"player_can_process": true,
+				"player_is_processing": true
+			},
+			"terminal_count": 0
+		},
+		{
+			"death_budget": {
+				"categories": {},
+				"epoch": 1307,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"death_work:334923564655": {
+						"oldest_age_frames": 1201,
+						"pending_epoch": 106,
+						"runnable": false,
+						"runs_when_paused": false,
+						"service_age_frames": 1201
+					},
+					"resource_completion:-9223371701645998434": {
+						"oldest_age_frames": 1282,
+						"pending_epoch": 25,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					}
+				},
+				"spent_usec": 0
+			},
+			"death_pending": [
+				{
+					"canonical_monster": {
+						"classification": "boss",
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"configured_respawn": -1.0,
+					"death_key": "death:910001:1:1:834817505029",
+					"death_position": "(800.0, -432.0)",
+					"drop_plan": {},
+					"experience": 2500,
+					"generation": 1,
+					"last_error": "",
+					"materialization_retry_count": 0,
+					"materialized_node_count": 0,
+					"materialized_node_index": 0,
+					"monster_id": 76,
+					"monster_name": "沃玛教主",
+					"monster_snapshot": {
+						"canonical_name": "沃玛教主",
+						"classification": "boss",
+						"experience": 2500,
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"origin": {
+						"generation": 1,
+						"map_id": 910001
+					},
+					"origin_captured": true,
+					"origin_generation": 1,
+					"origin_map_id": 910001,
+					"queued_at_usec": 13901387,
+					"remaining_request_count": 0,
+					"remaining_requests": [],
+					"respawn": {
+						"configured_seconds": -1.0,
+						"enabled": false,
+						"preparation": {
+							"enabled": false,
+							"valid": true
+						},
+						"spawn_context": {},
+						"was_boss": false
+					},
+					"respawn_enabled": false,
+					"respawn_preparation": {
+						"enabled": false,
+						"valid": true
+					},
+					"respawn_scheduled": false,
+					"retry_at_msec": 0,
+					"retry_count": 0,
+					"reward_status": "queued",
+					"sequence": 1,
+					"spawn_context": {},
+					"spawn_position": "(800.0, -432.0)",
+					"state": "PERSISTING",
+					"transaction_result": {
+						"experience_gained": 2500,
+						"kill_count": 1,
+						"quest_changed": false,
+						"reason": "",
+						"save_count": 1,
+						"success": true
+					},
+					"was_boss": false
+				}
+			],
+			"frame": 1200,
+			"pending_count": 1,
+			"persistence": {
+				"completed": 4,
+				"entries": [],
+				"maximum_completion_latency_usec": 68854,
+				"oldest_age_usec": 0,
+				"pending": 0
+			},
+			"pipeline_running": false,
+			"player_background_death": {},
+			"prepared_settlement": {},
+			"process_state": {
+				"game_can_process": true,
+				"game_inside_tree": true,
+				"game_is_processing": true,
+				"manager_can_process": true,
+				"manager_is_processing": true,
+				"player_can_process": true,
+				"player_is_processing": true
+			},
+			"terminal_count": 0
+		},
+		{
+			"death_budget": {
+				"categories": {},
+				"epoch": 1367,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"death_work:334923564655": {
+						"oldest_age_frames": 1261,
+						"pending_epoch": 106,
+						"runnable": false,
+						"runs_when_paused": false,
+						"service_age_frames": 1261
+					},
+					"resource_completion:-9223371701645998434": {
+						"oldest_age_frames": 1342,
+						"pending_epoch": 25,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					}
+				},
+				"spent_usec": 0
+			},
+			"death_pending": [
+				{
+					"canonical_monster": {
+						"classification": "boss",
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"configured_respawn": -1.0,
+					"death_key": "death:910001:1:1:834817505029",
+					"death_position": "(800.0, -432.0)",
+					"drop_plan": {},
+					"experience": 2500,
+					"generation": 1,
+					"last_error": "",
+					"materialization_retry_count": 0,
+					"materialized_node_count": 0,
+					"materialized_node_index": 0,
+					"monster_id": 76,
+					"monster_name": "沃玛教主",
+					"monster_snapshot": {
+						"canonical_name": "沃玛教主",
+						"classification": "boss",
+						"experience": 2500,
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"origin": {
+						"generation": 1,
+						"map_id": 910001
+					},
+					"origin_captured": true,
+					"origin_generation": 1,
+					"origin_map_id": 910001,
+					"queued_at_usec": 13901387,
+					"remaining_request_count": 0,
+					"remaining_requests": [],
+					"respawn": {
+						"configured_seconds": -1.0,
+						"enabled": false,
+						"preparation": {
+							"enabled": false,
+							"valid": true
+						},
+						"spawn_context": {},
+						"was_boss": false
+					},
+					"respawn_enabled": false,
+					"respawn_preparation": {
+						"enabled": false,
+						"valid": true
+					},
+					"respawn_scheduled": false,
+					"retry_at_msec": 0,
+					"retry_count": 0,
+					"reward_status": "queued",
+					"sequence": 1,
+					"spawn_context": {},
+					"spawn_position": "(800.0, -432.0)",
+					"state": "PERSISTING",
+					"transaction_result": {
+						"experience_gained": 2500,
+						"kill_count": 1,
+						"quest_changed": false,
+						"reason": "",
+						"save_count": 1,
+						"success": true
+					},
+					"was_boss": false
+				}
+			],
+			"frame": 1260,
+			"pending_count": 1,
+			"persistence": {
+				"completed": 4,
+				"entries": [],
+				"maximum_completion_latency_usec": 68854,
+				"oldest_age_usec": 0,
+				"pending": 0
+			},
+			"pipeline_running": false,
+			"player_background_death": {},
+			"prepared_settlement": {},
+			"process_state": {
+				"game_can_process": true,
+				"game_inside_tree": true,
+				"game_is_processing": true,
+				"manager_can_process": true,
+				"manager_is_processing": true,
+				"player_can_process": true,
+				"player_is_processing": true
+			},
+			"terminal_count": 0
+		},
+		{
+			"death_budget": {
+				"categories": {},
+				"epoch": 1427,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"death_work:334923564655": {
+						"oldest_age_frames": 1321,
+						"pending_epoch": 106,
+						"runnable": false,
+						"runs_when_paused": false,
+						"service_age_frames": 1321
+					},
+					"resource_completion:-9223371701645998434": {
+						"oldest_age_frames": 1402,
+						"pending_epoch": 25,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					}
+				},
+				"spent_usec": 0
+			},
+			"death_pending": [
+				{
+					"canonical_monster": {
+						"classification": "boss",
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"configured_respawn": -1.0,
+					"death_key": "death:910001:1:1:834817505029",
+					"death_position": "(800.0, -432.0)",
+					"drop_plan": {},
+					"experience": 2500,
+					"generation": 1,
+					"last_error": "",
+					"materialization_retry_count": 0,
+					"materialized_node_count": 0,
+					"materialized_node_index": 0,
+					"monster_id": 76,
+					"monster_name": "沃玛教主",
+					"monster_snapshot": {
+						"canonical_name": "沃玛教主",
+						"classification": "boss",
+						"experience": 2500,
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"origin": {
+						"generation": 1,
+						"map_id": 910001
+					},
+					"origin_captured": true,
+					"origin_generation": 1,
+					"origin_map_id": 910001,
+					"queued_at_usec": 13901387,
+					"remaining_request_count": 0,
+					"remaining_requests": [],
+					"respawn": {
+						"configured_seconds": -1.0,
+						"enabled": false,
+						"preparation": {
+							"enabled": false,
+							"valid": true
+						},
+						"spawn_context": {},
+						"was_boss": false
+					},
+					"respawn_enabled": false,
+					"respawn_preparation": {
+						"enabled": false,
+						"valid": true
+					},
+					"respawn_scheduled": false,
+					"retry_at_msec": 0,
+					"retry_count": 0,
+					"reward_status": "queued",
+					"sequence": 1,
+					"spawn_context": {},
+					"spawn_position": "(800.0, -432.0)",
+					"state": "PERSISTING",
+					"transaction_result": {
+						"experience_gained": 2500,
+						"kill_count": 1,
+						"quest_changed": false,
+						"reason": "",
+						"save_count": 1,
+						"success": true
+					},
+					"was_boss": false
+				}
+			],
+			"frame": 1320,
+			"pending_count": 1,
+			"persistence": {
+				"completed": 4,
+				"entries": [],
+				"maximum_completion_latency_usec": 68854,
+				"oldest_age_usec": 0,
+				"pending": 0
+			},
+			"pipeline_running": false,
+			"player_background_death": {},
+			"prepared_settlement": {},
+			"process_state": {
+				"game_can_process": true,
+				"game_inside_tree": true,
+				"game_is_processing": true,
+				"manager_can_process": true,
+				"manager_is_processing": true,
+				"player_can_process": true,
+				"player_is_processing": true
+			},
+			"terminal_count": 0
+		},
+		{
+			"death_budget": {
+				"categories": {},
+				"epoch": 1487,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"death_work:334923564655": {
+						"oldest_age_frames": 1381,
+						"pending_epoch": 106,
+						"runnable": false,
+						"runs_when_paused": false,
+						"service_age_frames": 1381
+					},
+					"resource_completion:-9223371701645998434": {
+						"oldest_age_frames": 1462,
+						"pending_epoch": 25,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					}
+				},
+				"spent_usec": 0
+			},
+			"death_pending": [
+				{
+					"canonical_monster": {
+						"classification": "boss",
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"configured_respawn": -1.0,
+					"death_key": "death:910001:1:1:834817505029",
+					"death_position": "(800.0, -432.0)",
+					"drop_plan": {},
+					"experience": 2500,
+					"generation": 1,
+					"last_error": "",
+					"materialization_retry_count": 0,
+					"materialized_node_count": 0,
+					"materialized_node_index": 0,
+					"monster_id": 76,
+					"monster_name": "沃玛教主",
+					"monster_snapshot": {
+						"canonical_name": "沃玛教主",
+						"classification": "boss",
+						"experience": 2500,
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"origin": {
+						"generation": 1,
+						"map_id": 910001
+					},
+					"origin_captured": true,
+					"origin_generation": 1,
+					"origin_map_id": 910001,
+					"queued_at_usec": 13901387,
+					"remaining_request_count": 0,
+					"remaining_requests": [],
+					"respawn": {
+						"configured_seconds": -1.0,
+						"enabled": false,
+						"preparation": {
+							"enabled": false,
+							"valid": true
+						},
+						"spawn_context": {},
+						"was_boss": false
+					},
+					"respawn_enabled": false,
+					"respawn_preparation": {
+						"enabled": false,
+						"valid": true
+					},
+					"respawn_scheduled": false,
+					"retry_at_msec": 0,
+					"retry_count": 0,
+					"reward_status": "queued",
+					"sequence": 1,
+					"spawn_context": {},
+					"spawn_position": "(800.0, -432.0)",
+					"state": "PERSISTING",
+					"transaction_result": {
+						"experience_gained": 2500,
+						"kill_count": 1,
+						"quest_changed": false,
+						"reason": "",
+						"save_count": 1,
+						"success": true
+					},
+					"was_boss": false
+				}
+			],
+			"frame": 1380,
+			"pending_count": 1,
+			"persistence": {
+				"completed": 4,
+				"entries": [],
+				"maximum_completion_latency_usec": 68854,
+				"oldest_age_usec": 0,
+				"pending": 0
+			},
+			"pipeline_running": false,
+			"player_background_death": {},
+			"prepared_settlement": {},
+			"process_state": {
+				"game_can_process": true,
+				"game_inside_tree": true,
+				"game_is_processing": true,
+				"manager_can_process": true,
+				"manager_is_processing": true,
+				"player_can_process": true,
+				"player_is_processing": true
+			},
+			"terminal_count": 0
+		},
+		{
+			"death_budget": {
+				"categories": {},
+				"epoch": 1547,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"death_work:334923564655": {
+						"oldest_age_frames": 1441,
+						"pending_epoch": 106,
+						"runnable": false,
+						"runs_when_paused": false,
+						"service_age_frames": 1441
+					},
+					"resource_completion:-9223371701645998434": {
+						"oldest_age_frames": 1522,
+						"pending_epoch": 25,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					}
+				},
+				"spent_usec": 0
+			},
+			"death_pending": [
+				{
+					"canonical_monster": {
+						"classification": "boss",
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"configured_respawn": -1.0,
+					"death_key": "death:910001:1:1:834817505029",
+					"death_position": "(800.0, -432.0)",
+					"drop_plan": {},
+					"experience": 2500,
+					"generation": 1,
+					"last_error": "",
+					"materialization_retry_count": 0,
+					"materialized_node_count": 0,
+					"materialized_node_index": 0,
+					"monster_id": 76,
+					"monster_name": "沃玛教主",
+					"monster_snapshot": {
+						"canonical_name": "沃玛教主",
+						"classification": "boss",
+						"experience": 2500,
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"origin": {
+						"generation": 1,
+						"map_id": 910001
+					},
+					"origin_captured": true,
+					"origin_generation": 1,
+					"origin_map_id": 910001,
+					"queued_at_usec": 13901387,
+					"remaining_request_count": 0,
+					"remaining_requests": [],
+					"respawn": {
+						"configured_seconds": -1.0,
+						"enabled": false,
+						"preparation": {
+							"enabled": false,
+							"valid": true
+						},
+						"spawn_context": {},
+						"was_boss": false
+					},
+					"respawn_enabled": false,
+					"respawn_preparation": {
+						"enabled": false,
+						"valid": true
+					},
+					"respawn_scheduled": false,
+					"retry_at_msec": 0,
+					"retry_count": 0,
+					"reward_status": "queued",
+					"sequence": 1,
+					"spawn_context": {},
+					"spawn_position": "(800.0, -432.0)",
+					"state": "PERSISTING",
+					"transaction_result": {
+						"experience_gained": 2500,
+						"kill_count": 1,
+						"quest_changed": false,
+						"reason": "",
+						"save_count": 1,
+						"success": true
+					},
+					"was_boss": false
+				}
+			],
+			"frame": 1440,
+			"pending_count": 1,
+			"persistence": {
+				"completed": 4,
+				"entries": [],
+				"maximum_completion_latency_usec": 68854,
+				"oldest_age_usec": 0,
+				"pending": 0
+			},
+			"pipeline_running": false,
+			"player_background_death": {},
+			"prepared_settlement": {},
+			"process_state": {
+				"game_can_process": true,
+				"game_inside_tree": true,
+				"game_is_processing": true,
+				"manager_can_process": true,
+				"manager_is_processing": true,
+				"player_can_process": true,
+				"player_is_processing": true
+			},
+			"terminal_count": 0
+		},
+		{
+			"death_budget": {
+				"categories": {},
+				"epoch": 1607,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"death_work:334923564655": {
+						"oldest_age_frames": 1501,
+						"pending_epoch": 106,
+						"runnable": false,
+						"runs_when_paused": false,
+						"service_age_frames": 1501
+					},
+					"resource_completion:-9223371701645998434": {
+						"oldest_age_frames": 1582,
+						"pending_epoch": 25,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					}
+				},
+				"spent_usec": 0
+			},
+			"death_pending": [
+				{
+					"canonical_monster": {
+						"classification": "boss",
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"configured_respawn": -1.0,
+					"death_key": "death:910001:1:1:834817505029",
+					"death_position": "(800.0, -432.0)",
+					"drop_plan": {},
+					"experience": 2500,
+					"generation": 1,
+					"last_error": "",
+					"materialization_retry_count": 0,
+					"materialized_node_count": 0,
+					"materialized_node_index": 0,
+					"monster_id": 76,
+					"monster_name": "沃玛教主",
+					"monster_snapshot": {
+						"canonical_name": "沃玛教主",
+						"classification": "boss",
+						"experience": 2500,
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"origin": {
+						"generation": 1,
+						"map_id": 910001
+					},
+					"origin_captured": true,
+					"origin_generation": 1,
+					"origin_map_id": 910001,
+					"queued_at_usec": 13901387,
+					"remaining_request_count": 0,
+					"remaining_requests": [],
+					"respawn": {
+						"configured_seconds": -1.0,
+						"enabled": false,
+						"preparation": {
+							"enabled": false,
+							"valid": true
+						},
+						"spawn_context": {},
+						"was_boss": false
+					},
+					"respawn_enabled": false,
+					"respawn_preparation": {
+						"enabled": false,
+						"valid": true
+					},
+					"respawn_scheduled": false,
+					"retry_at_msec": 0,
+					"retry_count": 0,
+					"reward_status": "queued",
+					"sequence": 1,
+					"spawn_context": {},
+					"spawn_position": "(800.0, -432.0)",
+					"state": "PERSISTING",
+					"transaction_result": {
+						"experience_gained": 2500,
+						"kill_count": 1,
+						"quest_changed": false,
+						"reason": "",
+						"save_count": 1,
+						"success": true
+					},
+					"was_boss": false
+				}
+			],
+			"frame": 1500,
+			"pending_count": 1,
+			"persistence": {
+				"completed": 4,
+				"entries": [],
+				"maximum_completion_latency_usec": 68854,
+				"oldest_age_usec": 0,
+				"pending": 0
+			},
+			"pipeline_running": false,
+			"player_background_death": {},
+			"prepared_settlement": {},
+			"process_state": {
+				"game_can_process": true,
+				"game_inside_tree": true,
+				"game_is_processing": true,
+				"manager_can_process": true,
+				"manager_is_processing": true,
+				"player_can_process": true,
+				"player_is_processing": true
+			},
+			"terminal_count": 0
+		},
+		{
+			"death_budget": {
+				"categories": {},
+				"epoch": 1667,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"death_work:334923564655": {
+						"oldest_age_frames": 1561,
+						"pending_epoch": 106,
+						"runnable": false,
+						"runs_when_paused": false,
+						"service_age_frames": 1561
+					},
+					"resource_completion:-9223371701645998434": {
+						"oldest_age_frames": 1642,
+						"pending_epoch": 25,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					}
+				},
+				"spent_usec": 0
+			},
+			"death_pending": [
+				{
+					"canonical_monster": {
+						"classification": "boss",
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"configured_respawn": -1.0,
+					"death_key": "death:910001:1:1:834817505029",
+					"death_position": "(800.0, -432.0)",
+					"drop_plan": {},
+					"experience": 2500,
+					"generation": 1,
+					"last_error": "",
+					"materialization_retry_count": 0,
+					"materialized_node_count": 0,
+					"materialized_node_index": 0,
+					"monster_id": 76,
+					"monster_name": "沃玛教主",
+					"monster_snapshot": {
+						"canonical_name": "沃玛教主",
+						"classification": "boss",
+						"experience": 2500,
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"origin": {
+						"generation": 1,
+						"map_id": 910001
+					},
+					"origin_captured": true,
+					"origin_generation": 1,
+					"origin_map_id": 910001,
+					"queued_at_usec": 13901387,
+					"remaining_request_count": 0,
+					"remaining_requests": [],
+					"respawn": {
+						"configured_seconds": -1.0,
+						"enabled": false,
+						"preparation": {
+							"enabled": false,
+							"valid": true
+						},
+						"spawn_context": {},
+						"was_boss": false
+					},
+					"respawn_enabled": false,
+					"respawn_preparation": {
+						"enabled": false,
+						"valid": true
+					},
+					"respawn_scheduled": false,
+					"retry_at_msec": 0,
+					"retry_count": 0,
+					"reward_status": "queued",
+					"sequence": 1,
+					"spawn_context": {},
+					"spawn_position": "(800.0, -432.0)",
+					"state": "PERSISTING",
+					"transaction_result": {
+						"experience_gained": 2500,
+						"kill_count": 1,
+						"quest_changed": false,
+						"reason": "",
+						"save_count": 1,
+						"success": true
+					},
+					"was_boss": false
+				}
+			],
+			"frame": 1560,
+			"pending_count": 1,
+			"persistence": {
+				"completed": 4,
+				"entries": [],
+				"maximum_completion_latency_usec": 68854,
+				"oldest_age_usec": 0,
+				"pending": 0
+			},
+			"pipeline_running": false,
+			"player_background_death": {},
+			"prepared_settlement": {},
+			"process_state": {
+				"game_can_process": true,
+				"game_inside_tree": true,
+				"game_is_processing": true,
+				"manager_can_process": true,
+				"manager_is_processing": true,
+				"player_can_process": true,
+				"player_is_processing": true
+			},
+			"terminal_count": 0
+		},
+		{
+			"death_budget": {
+				"categories": {},
+				"epoch": 1727,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"death_work:334923564655": {
+						"oldest_age_frames": 1621,
+						"pending_epoch": 106,
+						"runnable": false,
+						"runs_when_paused": false,
+						"service_age_frames": 1621
+					},
+					"resource_completion:-9223371701645998434": {
+						"oldest_age_frames": 1702,
+						"pending_epoch": 25,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					}
+				},
+				"spent_usec": 0
+			},
+			"death_pending": [
+				{
+					"canonical_monster": {
+						"classification": "boss",
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"configured_respawn": -1.0,
+					"death_key": "death:910001:1:1:834817505029",
+					"death_position": "(800.0, -432.0)",
+					"drop_plan": {},
+					"experience": 2500,
+					"generation": 1,
+					"last_error": "",
+					"materialization_retry_count": 0,
+					"materialized_node_count": 0,
+					"materialized_node_index": 0,
+					"monster_id": 76,
+					"monster_name": "沃玛教主",
+					"monster_snapshot": {
+						"canonical_name": "沃玛教主",
+						"classification": "boss",
+						"experience": 2500,
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"origin": {
+						"generation": 1,
+						"map_id": 910001
+					},
+					"origin_captured": true,
+					"origin_generation": 1,
+					"origin_map_id": 910001,
+					"queued_at_usec": 13901387,
+					"remaining_request_count": 0,
+					"remaining_requests": [],
+					"respawn": {
+						"configured_seconds": -1.0,
+						"enabled": false,
+						"preparation": {
+							"enabled": false,
+							"valid": true
+						},
+						"spawn_context": {},
+						"was_boss": false
+					},
+					"respawn_enabled": false,
+					"respawn_preparation": {
+						"enabled": false,
+						"valid": true
+					},
+					"respawn_scheduled": false,
+					"retry_at_msec": 0,
+					"retry_count": 0,
+					"reward_status": "queued",
+					"sequence": 1,
+					"spawn_context": {},
+					"spawn_position": "(800.0, -432.0)",
+					"state": "PERSISTING",
+					"transaction_result": {
+						"experience_gained": 2500,
+						"kill_count": 1,
+						"quest_changed": false,
+						"reason": "",
+						"save_count": 1,
+						"success": true
+					},
+					"was_boss": false
+				}
+			],
+			"frame": 1620,
+			"pending_count": 1,
+			"persistence": {
+				"completed": 4,
+				"entries": [],
+				"maximum_completion_latency_usec": 68854,
+				"oldest_age_usec": 0,
+				"pending": 0
+			},
+			"pipeline_running": false,
+			"player_background_death": {},
+			"prepared_settlement": {},
+			"process_state": {
+				"game_can_process": true,
+				"game_inside_tree": true,
+				"game_is_processing": true,
+				"manager_can_process": true,
+				"manager_is_processing": true,
+				"player_can_process": true,
+				"player_is_processing": true
+			},
+			"terminal_count": 0
+		},
+		{
+			"death_budget": {
+				"categories": {},
+				"epoch": 1787,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"death_work:334923564655": {
+						"oldest_age_frames": 1681,
+						"pending_epoch": 106,
+						"runnable": false,
+						"runs_when_paused": false,
+						"service_age_frames": 1681
+					},
+					"resource_completion:-9223371701645998434": {
+						"oldest_age_frames": 1762,
+						"pending_epoch": 25,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					}
+				},
+				"spent_usec": 0
+			},
+			"death_pending": [
+				{
+					"canonical_monster": {
+						"classification": "boss",
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"configured_respawn": -1.0,
+					"death_key": "death:910001:1:1:834817505029",
+					"death_position": "(800.0, -432.0)",
+					"drop_plan": {},
+					"experience": 2500,
+					"generation": 1,
+					"last_error": "",
+					"materialization_retry_count": 0,
+					"materialized_node_count": 0,
+					"materialized_node_index": 0,
+					"monster_id": 76,
+					"monster_name": "沃玛教主",
+					"monster_snapshot": {
+						"canonical_name": "沃玛教主",
+						"classification": "boss",
+						"experience": 2500,
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"origin": {
+						"generation": 1,
+						"map_id": 910001
+					},
+					"origin_captured": true,
+					"origin_generation": 1,
+					"origin_map_id": 910001,
+					"queued_at_usec": 13901387,
+					"remaining_request_count": 0,
+					"remaining_requests": [],
+					"respawn": {
+						"configured_seconds": -1.0,
+						"enabled": false,
+						"preparation": {
+							"enabled": false,
+							"valid": true
+						},
+						"spawn_context": {},
+						"was_boss": false
+					},
+					"respawn_enabled": false,
+					"respawn_preparation": {
+						"enabled": false,
+						"valid": true
+					},
+					"respawn_scheduled": false,
+					"retry_at_msec": 0,
+					"retry_count": 0,
+					"reward_status": "queued",
+					"sequence": 1,
+					"spawn_context": {},
+					"spawn_position": "(800.0, -432.0)",
+					"state": "PERSISTING",
+					"transaction_result": {
+						"experience_gained": 2500,
+						"kill_count": 1,
+						"quest_changed": false,
+						"reason": "",
+						"save_count": 1,
+						"success": true
+					},
+					"was_boss": false
+				}
+			],
+			"frame": 1680,
+			"pending_count": 1,
+			"persistence": {
+				"completed": 4,
+				"entries": [],
+				"maximum_completion_latency_usec": 68854,
+				"oldest_age_usec": 0,
+				"pending": 0
+			},
+			"pipeline_running": false,
+			"player_background_death": {},
+			"prepared_settlement": {},
+			"process_state": {
+				"game_can_process": true,
+				"game_inside_tree": true,
+				"game_is_processing": true,
+				"manager_can_process": true,
+				"manager_is_processing": true,
+				"player_can_process": true,
+				"player_is_processing": true
+			},
+			"terminal_count": 0
+		},
+		{
+			"death_budget": {
+				"categories": {},
+				"epoch": 1847,
+				"inflight_usec": 0,
+				"limit_usec": 1200,
+				"open_scopes": 0,
+				"overrun_usec": 0,
+				"pending": {
+					"death_work:334923564655": {
+						"oldest_age_frames": 1741,
+						"pending_epoch": 106,
+						"runnable": false,
+						"runs_when_paused": false,
+						"service_age_frames": 1741
+					},
+					"resource_completion:-9223371701645998434": {
+						"oldest_age_frames": 1822,
+						"pending_epoch": 25,
+						"runnable": true,
+						"runs_when_paused": false,
+						"service_age_frames": 1
+					}
+				},
+				"spent_usec": 0
+			},
+			"death_pending": [
+				{
+					"canonical_monster": {
+						"classification": "boss",
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"configured_respawn": -1.0,
+					"death_key": "death:910001:1:1:834817505029",
+					"death_position": "(800.0, -432.0)",
+					"drop_plan": {},
+					"experience": 2500,
+					"generation": 1,
+					"last_error": "",
+					"materialization_retry_count": 0,
+					"materialized_node_count": 0,
+					"materialized_node_index": 0,
+					"monster_id": 76,
+					"monster_name": "沃玛教主",
+					"monster_snapshot": {
+						"canonical_name": "沃玛教主",
+						"classification": "boss",
+						"experience": 2500,
+						"monster_id": 76,
+						"spawn_classification": "<null>"
+					},
+					"origin": {
+						"generation": 1,
+						"map_id": 910001
+					},
+					"origin_captured": true,
+					"origin_generation": 1,
+					"origin_map_id": 910001,
+					"queued_at_usec": 13901387,
+					"remaining_request_count": 0,
+					"remaining_requests": [],
+					"respawn": {
+						"configured_seconds": -1.0,
+						"enabled": false,
+						"preparation": {
+							"enabled": false,
+							"valid": true
+						},
+						"spawn_context": {},
+						"was_boss": false
+					},
+					"respawn_enabled": false,
+					"respawn_preparation": {
+						"enabled": false,
+						"valid": true
+					},
+					"respawn_scheduled": false,
+					"retry_at_msec": 0,
+					"retry_count": 0,
+					"reward_status": "queued",
+					"sequence": 1,
+					"spawn_context": {},
+					"spawn_position": "(800.0, -432.0)",
+					"state": "PERSISTING",
+					"transaction_result": {
+						"experience_gained": 2500,
+						"kill_count": 1,
+						"quest_changed": false,
+						"reason": "",
+						"save_count": 1,
+						"success": true
+					},
+					"was_boss": false
+				}
+			],
+			"frame": 1740,
+			"pending_count": 1,
+			"persistence": {
+				"completed": 4,
+				"entries": [],
+				"maximum_completion_latency_usec": 68854,
+				"oldest_age_usec": 0,
+				"pending": 0
+			},
+			"pipeline_running": false,
+			"player_background_death": {},
+			"prepared_settlement": {},
+			"process_state": {
+				"game_can_process": true,
+				"game_inside_tree": true,
+				"game_is_processing": true,
+				"manager_can_process": true,
+				"manager_is_processing": true,
+				"player_can_process": true,
+				"player_is_processing": true
+			},
+			"terminal_count": 0
+		}
+	],
+	"frame_budget": {
+		"categories": {},
+		"epoch": 1906,
+		"inflight_usec": 0,
+		"limit_usec": 1200,
+		"open_scopes": 0,
+		"overrun_usec": 0,
+		"pending": {
+			"death_work:334923564655": {
+				"oldest_age_frames": 1800,
+				"pending_epoch": 106,
+				"runnable": false,
+				"runs_when_paused": false,
+				"service_age_frames": 1800
+			},
+			"resource_completion:-9223371701645998434": {
+				"oldest_age_frames": 1881,
+				"pending_epoch": 25,
+				"runnable": true,
+				"runs_when_paused": false,
+				"service_age_frames": 1
+			}
+		},
+		"spent_usec": 0
+	},
+	"manager": {
+		"candidate_scratch_count": 0,
+		"collection_full_scan_count": 0,
+		"contract_id": "hardcore.loot.runtime_manager.map_scoped.v1",
+		"logout_retry_blocked_count": 0,
+		"logout_retry_blocked_pickup_ids": [],
+		"manager_collection_request_count": 0,
+		"manager_exact_range_check_count": 0,
+		"manager_fail_safe_check_count": 141,
+		"manager_full_scan_count": 0,
+		"manager_player_event_count": 2,
+		"manager_registration_check_count": 0,
+		"manager_retry_check_count": 0,
+		"manager_visual_update_count": 0,
+		"registered_pickup_count": 0,
+		"runtime_map_id": 910001,
+		"spatial_index": {
+			"bucket_size_gu": 4.0,
+			"contract_id": "hardcore.loot.spatial_index.map_ground_gu_buckets.v1",
+			"index_bucket_change_count": 0,
+			"index_candidate_count": 0,
+			"index_full_scan_count": 0,
+			"index_max_candidate_count": 0,
+			"index_query_count": 143,
+			"index_register_count": 0,
+			"index_stale_cleanup_count": 0,
+			"index_unregister_count": 0,
+			"index_update_check_count": 0,
+			"registered_pickup_count": 0
+		},
+		"visual_registry_entry_count": 0,
+		"visual_registry_scan_count": 0,
+		"zone_generation": 1
+	},
+	"persistence": {
+		"completed": 4,
+		"entries": [],
+		"maximum_completion_latency_usec": 68854,
+		"oldest_age_usec": 0,
+		"pending": 0
+	},
+	"pipeline_running": false,
+	"player_background_death": {},
+	"player_state": {
+		"active_profile_id": "1791547114_6669",
+		"last_load_result": {
+			"contract_id": "player_state.save_result.v1",
+			"path": "user://characters/1791547114_6669.json",
+			"reason": "primary",
+			"success": true
+		},
+		"world_clock_generation": "",
+		"world_clock_snapshot_sequence": 0
+	},
+	"prepared_settlement": {},
+	"process_state": {
+		"game_can_process": true,
+		"game_inside_tree": true,
+		"game_is_processing": true,
+		"manager_can_process": true,
+		"manager_is_processing": true,
+		"player_can_process": true,
+		"player_is_processing": true
+	},
+	"status": "FAIL",
+	"terminal": {},
+	"test_mode": false
+}

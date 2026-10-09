@@ -1,0 +1,35 @@
+{
+  "source": [
+    {
+      "sha256": "C43DAA1FA341E2B8172B72913D3189C7CCC1D38F3100299EEE90E311F00B7BA2",
+      "path": "scripts/game_root.gd"
+    },
+    {
+      "sha256": "7132CB10A3371038387AEC6CA1B4B04E14D876BA3E211362A0C13EF0D96E39BF",
+      "path": "scripts/enemy.gd"
+    },
+    {
+      "sha256": "744C5C9388E38699611C4266F2A75DD5477AB139BE21141515DE9DEB1E1F78A0",
+      "path": "scripts/system_menu_panel.gd"
+    },
+    {
+      "sha256": "10F3A494464C0B6D3D5A802CE6BBDD3046AF2B3C59B755D9BB70B51B12634AA1",
+      "path": "scripts/audio_preferences.gd"
+    },
+    {
+      "sha256": "702FF79278F189322D9B8BBBA794CA55A446D01D04C507F46F9EF81DC370C1D9",
+      "path": "tests/passive_wake_natural_dense_repair_20261009.gd"
+    },
+    {
+      "sha256": "7F141CB8548326C76E20F9C3FAF92E306D69F82A8AD7224121EE8CF0D6733D1D",
+      "path": "tests/save_exit_menu_feedback_repair_20261009.gd"
+    },
+    {
+      "sha256": "3FB80FD76891FD0FC83CDC6FDF9211678F8E916A6910DF98800EA07A2A1B2AC9",
+      "path": "tests/ui_r5_audio_config_strict_test.gd"
+    }
+  ],
+  "created_at": "2026-10-09T20:08:41.8572813+08:00",
+  "scope": "direct natural dense wake, canonical fire wall damage wake, paused menu feedback and strict audio defaults",
+  "reason": "production wake and menu changed; strict audio test aligned removed muted-bus inference"
+}

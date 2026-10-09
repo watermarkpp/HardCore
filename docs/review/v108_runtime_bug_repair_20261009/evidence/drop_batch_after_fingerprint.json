@@ -1,0 +1,39 @@
+{
+  "scope": "32-death backlog under unchanged deadline/budget/RNG parity; natural durable death-to-ground; cleanup-only teardown; fixed negative wake fixture",
+  "created_at": "2026-10-09T20:22:15.9128388+08:00",
+  "reason": "confirmed excessive per-row scheduling fixed; teardown assertion aligned user-authorized deferred drop semantics, preserve XP/persistence assertions; parser and missing-case repair",
+  "source": [
+    {
+      "sha256": "91955B3111B1FFEA6A24856DA717AF3B5FC481985FEEDF6D3D481ED150CE8EE8",
+      "path": "scripts/game_root.gd"
+    },
+    {
+      "sha256": "7132CB10A3371038387AEC6CA1B4B04E14D876BA3E211362A0C13EF0D96E39BF",
+      "path": "scripts/enemy.gd"
+    },
+    {
+      "sha256": "8BAF4C98C8AAE1C3AE0AA665179DB53A4109DB035ACC27BCC5F0DF79F82AE73A",
+      "path": "scripts/system_menu_panel.gd"
+    },
+    {
+      "sha256": "793C5FFEB45B1309C38FC8420C90D41D0E083E5EC271C6817866ACBF69572C9B",
+      "path": "scripts/layers/runtime/loot_runtime_service.gd"
+    },
+    {
+      "sha256": "3053E26DE212DA9EB1BE0FAA67635AA27C4AA11A8E7BC2BE4FD248228D3E94F7",
+      "path": "tests/passive_wake_gate_repair_20261009.gd"
+    },
+    {
+      "sha256": "2D22AB3DC6E68394CD6C31F6417D011608446A28AE7B0ABEEA674C4946227C05",
+      "path": "tests/death_natural_process_repair_20261009.gd"
+    },
+    {
+      "sha256": "9378060087DBC56F0E736977D0BAC76E3DEC140136EF74DACB10FC1DDF87E9C3",
+      "path": "tests/death_queue_lifecycle_rework_test.gd"
+    },
+    {
+      "sha256": "BD617800F47F2593E04BD6D23DC172275D61640A66B35ACA1F44AE4EE9F7FAA0",
+      "path": "tests/f03_native_death_lifecycle_test.gd"
+    }
+  ]
+}
