@@ -1,0 +1,228 @@
+extends Node
+
+const BuildService := preload(
+	"res://scripts/map_editor/map_editor_build_runtime_service.gd"
+)
+const Bridge := preload(
+	"res://scripts/layers/runtime/map_editor_runtime_bridge.gd"
+)
+const Fixtures := preload(
+	"res://tests/helpers/map_runtime_transaction_test_fixtures.gd"
+)
+const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
+
+const MAP_KEY: String = "b06_recovery_map"
+const MAP_ID: int = 991064
+const REGISTRY_PATH: String = "user://b06_release_recovery_registry.json"
+const FORMAL_ROOT: String = "user://b06_release_recovery_formal/"
+
+var _failures: Array[String] = []
+var _checks: int = 0
+var _proof := Proof.new()
+
+
+func _ready() -> void:
+	await _run()
+
+
+func _check(condition: bool, message: String) -> void:
+	_checks += 1
+	_proof.record(condition, message)
+	if not condition:
+		_failures.append(message)
+
+
+func _run() -> void:
+	Fixtures.reset_seams()
+	BuildService.test_formal_runtime_root_override = FORMAL_ROOT
+	var document: Dictionary = Fixtures.make_document(
+		MAP_KEY, MAP_ID, "B06 Recovery Map"
+	)
+	var approval: Dictionary = BuildService.approve_for_runtime(document)
+	_check(bool(approval.get("ok", false)), "fixture approval failed")
+	var candidate_a: Dictionary = BuildService.build_candidate(document)
+	_check(bool(candidate_a.get("ok", false)), "candidate A failed")
+	Fixtures.write_registry(REGISTRY_PATH, [])
+	Bridge.test_override_release_registry_path(REGISTRY_PATH)
+	var first: Dictionary = BuildService.publish_runtime_release(
+		str(candidate_a.get("candidate_path", "")),
+		MAP_ID,
+		BuildService.document_binding(document),
+		REGISTRY_PATH,
+		MAP_KEY
+	)
+	_check(bool(first.get("success", false)), "initial release failed: %s" % str(first))
+	var formal_path: String = BuildService.default_runtime_path(MAP_KEY)
+	var old_runtime_file_hash: String = Fixtures.file_sha256(formal_path)
+	var old_registry_bytes: PackedByteArray = _read_bytes(REGISTRY_PATH)
+
+	Fixtures.mutate_and_bake(document)
+	var candidate_b: Dictionary = BuildService.build_candidate(document)
+	_check(bool(candidate_b.get("ok", false)), "candidate B failed")
+	var hash_b: String = str(candidate_b.get("build_sha256", ""))
+	var candidate_b_file_hash: String = Fixtures.file_sha256(
+		str(candidate_b.get("candidate_path", ""))
+	)
+	_check(candidate_b_file_hash != old_runtime_file_hash, "candidate B did not change runtime bytes")
+	_check(not candidate_b_file_hash.is_empty(), "candidate B file hash missing")
+	var unrelated_before: Dictionary = {
+		"runtime_map_id": 991065,
+		"map_key": "b06_unrelated",
+		"display_name": "B06 unrelated",
+		"runtime_path": "user://b06_unrelated.runtime.json",
+		"release_state": "implemented_staging",
+		"approved_build_sha256": "b06-unrelated-hash",
+		"approval_source": "fixture",
+		"approval_revision": 4,
+	}
+	var old_registry: Dictionary = Fixtures.read_json(REGISTRY_PATH)
+	old_registry["maps"].append(unrelated_before)
+	Fixtures.write_json(REGISTRY_PATH, old_registry)
+	Bridge.invalidate_release_registry()
+	var registry_before_crash: PackedByteArray = _read_bytes(REGISTRY_PATH)
+
+	# Crash window A: runtime was promoted, registry was still old.
+	BuildService.test_crash_after_runtime_promote = true
+	var crashed_runtime: Dictionary = BuildService.publish_runtime_release(
+		str(candidate_b.get("candidate_path", "")), MAP_ID,
+		BuildService.document_binding(document), REGISTRY_PATH, MAP_KEY
+	)
+	BuildService.test_crash_after_runtime_promote = false
+	_check(
+		str(crashed_runtime.get("reason", ""))
+			== "injected_process_crash_after_runtime_promote",
+		"runtime crash seam did not leave its boundary"
+	)
+	var cross_map_recovery: Dictionary = BuildService._recover_pending_publish_intent(
+		REGISTRY_PATH, MAP_ID + 1, MAP_KEY, hash_b
+	)
+	_check(
+		not bool(cross_map_recovery.get("ok", false)),
+		"cross-map recovery request must not claim the pending publish"
+	)
+	var intent_path: String = _absolute(REGISTRY_PATH) + ".publish_intent.json"
+	var intent_bytes: PackedByteArray = _read_bytes(intent_path)
+	var intent_variant: Variant = JSON.parse_string(intent_bytes.get_string_from_utf8())
+	_check(intent_variant is Dictionary, "crash intent must be parseable")
+	if intent_variant is Dictionary:
+		var unknown_target: Dictionary = intent_variant
+		unknown_target["formal_path"] = _absolute("user://unknown_target.runtime.json")
+		_write_bytes(intent_path, JSON.stringify(unknown_target).to_utf8_buffer())
+		var unknown_path_recovery: Dictionary = BuildService._recover_pending_publish_intent(
+			REGISTRY_PATH, MAP_ID, MAP_KEY, hash_b
+		)
+		_check(
+			str(unknown_path_recovery.get("reason", "")) == "publish_recovery_target_mismatch",
+			"unknown formal path must block recovery"
+		)
+		_write_bytes(intent_path, intent_bytes)
+	_write_bytes(REGISTRY_PATH, PackedByteArray())
+	var empty_registry_recovery: Dictionary = BuildService._recover_pending_publish_intent(
+		REGISTRY_PATH, MAP_ID, MAP_KEY, hash_b
+	)
+	_check(
+		str(empty_registry_recovery.get("reason", "")) == "publish_recovery_registry_empty",
+		"existing empty registry must not be treated as missing"
+	)
+	_write_bytes(REGISTRY_PATH, registry_before_crash)
+	var third_registry_bytes: PackedByteArray = JSON.stringify(
+		{"schema_version": 1, "registry_contract_id": "manual.third.version", "maps": []}
+	).to_utf8_buffer()
+	_write_bytes(REGISTRY_PATH, third_registry_bytes)
+	var third_version_recovery: Dictionary = BuildService._recover_pending_publish_intent(
+		REGISTRY_PATH, MAP_ID, MAP_KEY, hash_b
+	)
+	_check(
+		str(third_version_recovery.get("reason", "")) == "publish_recovery_ambiguous_pair",
+		"third registry version must block recovery"
+	)
+	_check(
+		_read_bytes(REGISTRY_PATH) == third_registry_bytes,
+		"third registry bytes must remain untouched"
+	)
+	_write_bytes(REGISTRY_PATH, registry_before_crash)
+	var recovered_runtime: Dictionary = BuildService.publish_runtime_release(
+		str(candidate_b.get("candidate_path", "")), MAP_ID,
+		BuildService.document_binding(document), REGISTRY_PATH, MAP_KEY
+	)
+	_check(bool(recovered_runtime.get("success", false)), "runtime recovery failed: %s" % str(recovered_runtime))
+	_check(Bridge.is_formal_playable(MAP_ID), "recovered runtime is not playable")
+	_check(Fixtures.file_sha256(formal_path) == candidate_b_file_hash, "runtime recovery file hash mismatch")
+
+	var recovered_registry: Dictionary = Fixtures.read_json(REGISTRY_PATH)
+	_check(
+		recovered_registry.get("maps", []).size() == 2,
+		"recovery changed unrelated map count"
+	)
+	_check(
+		str(recovered_registry.get("maps", [])[1].get("map_key", "")) == "b06_unrelated",
+		"recovery changed unrelated map identity"
+	)
+
+	# Recreate A and B so the registry-backup interruption is independent.
+	_write_bytes(REGISTRY_PATH, old_registry_bytes)
+	Bridge.invalidate_release_registry()
+	BuildService.test_crash_after_registry_backup = true
+	var crashed_registry: Dictionary = BuildService.publish_runtime_release(
+		str(candidate_b.get("candidate_path", "")), MAP_ID,
+		BuildService.document_binding(document), REGISTRY_PATH, MAP_KEY
+	)
+	BuildService.test_crash_after_registry_backup = false
+	_check(
+		str(crashed_registry.get("reason", ""))
+			== "injected_process_crash_after_registry_backup",
+		"registry crash seam did not leave its boundary"
+	)
+	var recovered_registry_commit: Dictionary = BuildService.publish_runtime_release(
+		str(candidate_b.get("candidate_path", "")), MAP_ID,
+		BuildService.document_binding(document), REGISTRY_PATH, MAP_KEY
+	)
+	_check(bool(recovered_registry_commit.get("success", false)), "registry recovery failed: %s" % str(recovered_registry_commit))
+	_check(Bridge.is_formal_playable(MAP_ID), "registry recovery is not playable")
+	_check(
+		Fixtures.file_sha256(formal_path) == candidate_b_file_hash,
+		"registry recovery changed runtime unexpectedly"
+	)
+
+	# A third, manually changed registry is never overwritten by recovery.
+	_check(not FileAccess.file_exists(intent_path), "successful recovery left intent")
+	Fixtures.reset_seams()
+	Bridge.reset_release_registry_override()
+	BuildService.test_formal_runtime_root_override = ""
+	var receipt_ok: bool = _proof.write_receipt(
+		"map_editor_release_recovery_20261010_test",
+		_checks,
+		_failures.size()
+	)
+	if _failures.is_empty() and receipt_ok:
+		print("MAP_EDITOR_RELEASE_RECOVERY_CONTRACT_PASS checks=%d" % _checks)
+	else:
+		if not receipt_ok:
+			_failures.append("framework receipt write or validation failed")
+		for failure: String in _failures:
+			push_error("B06_RELEASE_RECOVERY: " + failure)
+		print("MAP_EDITOR_RELEASE_RECOVERY_CONTRACT_FAIL checks=%d failures=%d" % [_checks, _failures.size()])
+	get_tree().quit(0 if _failures.is_empty() else 1)
+
+
+func _read_bytes(path: String) -> PackedByteArray:
+	var file: FileAccess = FileAccess.open(path, FileAccess.READ)
+	_check(file != null, "cannot read bytes: %s" % path)
+	if file == null:
+		return PackedByteArray()
+	var bytes: PackedByteArray = file.get_buffer(file.get_length())
+	file.close()
+	return bytes
+
+
+func _write_bytes(path: String, bytes: PackedByteArray) -> void:
+	var file: FileAccess = FileAccess.open(path, FileAccess.WRITE)
+	_check(file != null, "cannot write bytes: %s" % path)
+	if file == null:
+		return
+	file.store_buffer(bytes)
+	file.close()
+
+
+func _absolute(path: String) -> String:
+	return ProjectSettings.globalize_path(path) if path.begins_with("res://") or path.begins_with("user://") else path

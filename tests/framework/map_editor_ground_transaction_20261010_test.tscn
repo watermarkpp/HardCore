@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/framework/map_editor_ground_transaction_20261010_test.gd" id="1"]
+
+[node name="MapEditorGroundTransaction20261010" type="Node"]
+script = ExtResource("1")

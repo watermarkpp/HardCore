@@ -1,0 +1,1602 @@
+{
+  "status": "PASS",
+  "scope": "Retained B06 evidence ledger. Per-case FAIL and missing acceptance are not promoted to PASS.",
+  "stages": [
+    {
+      "stage": "v109_direct42_map_transactions",
+      "freeze": "docs/review/full_project_audit_v109_20261009/evidence/B06/freezes/B06_SOURCE_FREEZE_42.json",
+      "freeze_sha256": "2d69eb3780967bd7645459ce03ad0d2282b9caf278a28b9920bc7d2aa2ed5be3",
+      "candidate_tree": "319f77792989fb1afb227788578680c3d5ad3b6c",
+      "engine": {
+        "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+        "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+        "bytes": 198152
+      },
+      "retained_changed_source": [
+        {
+          "path": "scripts/layers/runtime/map_editor_runtime_bridge.gd",
+          "sha256": "57f08eb855ef0e7a908587828e51e2ea285a18b933e35761d448198fa68d3d6f",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/57f08eb855ef0e7a908587828e51e2ea285a18b933e35761d448198fa68d3d6f.txt"
+        },
+        {
+          "path": "scripts/map_editor/map_editor_app.gd",
+          "sha256": "42b079e82214deacd37fc094bfd290c8faf0bbc93207a499d352634c1b3390f1",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/42b079e82214deacd37fc094bfd290c8faf0bbc93207a499d352634c1b3390f1.txt"
+        },
+        {
+          "path": "scripts/map_editor/map_editor_build_runtime_service.gd",
+          "sha256": "9547e60fbd721c0d0b648754eeb47c1fa70777640c2a4adfd702cdaaba49a4f9",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/9547e60fbd721c0d0b648754eeb47c1fa70777640c2a4adfd702cdaaba49a4f9.txt"
+        },
+        {
+          "path": "scripts/map_editor/map_editor_ground_service.gd",
+          "sha256": "304b8c8fd4cf3d635851d65ecce3443481d30170afc459301d90a88b35005a95",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/304b8c8fd4cf3d635851d65ecce3443481d30170afc459301d90a88b35005a95.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_ground_transaction_20261010_test.gd",
+          "sha256": "c65dee06c108e2dea57c83b5e064a14595c506588a9249c323431bfe0e9b29e0",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/c65dee06c108e2dea57c83b5e064a14595c506588a9249c323431bfe0e9b29e0.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_ground_transaction_20261010_test.tscn",
+          "sha256": "c7a62cd428009f0bf7dc6e83626112463b3a3792baea614d5d6471df4178cc8c",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/c7a62cd428009f0bf7dc6e83626112463b3a3792baea614d5d6471df4178cc8c.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_release_recovery_20261010_test.gd",
+          "sha256": "cb7cc15e5d487f55a04f7a1ea1ce73f80c13b1f851d0a8ec2f0d49fdb96090a3",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/cb7cc15e5d487f55a04f7a1ea1ce73f80c13b1f851d0a8ec2f0d49fdb96090a3.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_release_recovery_20261010_test.tscn",
+          "sha256": "c98d45051cfa319b2f1d745d72bf932d21bd65321a2ed9941b4b78f8be833938",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/c98d45051cfa319b2f1d745d72bf932d21bd65321a2ed9941b4b78f8be833938.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_runtime_numeric_identity_20261010_test.gd",
+          "sha256": "9d1763595efa81d6b5b8a1269f6770f3b5e56574e177dfb0f58bb4644f0ebbdd",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/9d1763595efa81d6b5b8a1269f6770f3b5e56574e177dfb0f58bb4644f0ebbdd.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_runtime_numeric_identity_20261010_test.tscn",
+          "sha256": "2755398f2e6589850a31a6069775614d523788af33c0e185c39665e78e62f948",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/2755398f2e6589850a31a6069775614d523788af33c0e185c39665e78e62f948.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_saved_publish_boundary_20261010_test.gd",
+          "sha256": "fdab92f662aa5693cd311cc47d81fe0a48943851ea95c12f6a0df2c9973d1beb",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/fdab92f662aa5693cd311cc47d81fe0a48943851ea95c12f6a0df2c9973d1beb.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_saved_publish_boundary_20261010_test.tscn",
+          "sha256": "203db29b23210b786c774dcc5d1450e97d282e11da920ae558a70a0d98990e1d",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/203db29b23210b786c774dcc5d1450e97d282e11da920ae558a70a0d98990e1d.txt"
+        }
+      ],
+      "runner_receipt": "outputs/test_logs/v109_direct42_map_transactions/logs/runner_results_adhoc_20261010_023919_545_6428.json",
+      "actual_command": {
+        "script": "tools/run_godot_tests.ps1",
+        "TestPaths": [
+          "tests/framework/map_editor_ground_transaction_20261010_test.tscn",
+          "tests/framework/map_editor_release_recovery_20261010_test.tscn",
+          "tests/framework/map_editor_saved_publish_boundary_20261010_test.tscn",
+          "tests/framework/map_editor_runtime_numeric_identity_20261010_test.tscn"
+        ],
+        "TimeoutSeconds": 30,
+        "Verbose": true
+      },
+      "environment": {
+        "GIT_INDEX_FILE": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\wake_drop_v108_review_followup_20261009\\B06_SOURCE_FREEZE_42.index",
+        "HARDCORE_R3_CONTENT_SHA256": "2d69eb3780967bd7645459ce03ad0d2282b9caf278a28b9920bc7d2aa2ed5be3",
+        "HARDCORE_AUDIT_LOG_ROOT": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct42_map_transactions\\logs",
+        "HARDCORE_AUDIT_RUNTIME_APPDATA": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct42_map_transactions",
+        "HARDCORE_AUDIT_EVIDENCE_ROOT": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct42_map_transactions\\raw"
+      },
+      "invocation_id": "f2a5f84b-b70a-4fae-ab96-b45cdefc149d",
+      "runtime_environment": {
+        "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+        "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct42_map_transactions",
+        "runner_process_id": 6428
+      },
+      "results": [
+        {
+          "test_name": "map_editor_ground_transaction_20261010_test",
+          "test_path": "tests/framework/map_editor_ground_transaction_20261010_test.tscn",
+          "wrapper_process_id": 7756,
+          "wrapper_started_utc": "2026-10-09T18:38:43.9898270Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct42_map_transactions",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-09T18:39:14.0036065Z",
+          "native_exit_observed_utc": "2026-10-09T18:38:49.9792178Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "10e7cacc-f191-45b7-ac09-3327d4c3b347",
+          "framework_receipt_valid": true,
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "map_editor_release_recovery_20261010_test",
+          "test_path": "tests/framework/map_editor_release_recovery_20261010_test.tscn",
+          "wrapper_process_id": 1260,
+          "wrapper_started_utc": "2026-10-09T18:38:51.5798429Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct42_map_transactions",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-09T18:39:21.5879289Z",
+          "native_exit_observed_utc": "2026-10-09T18:38:57.9778768Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 1,
+          "engine_log_failure_count": 1,
+          "framework_run_id": "468e5dab-f048-416e-9188-f193e58fb061",
+          "framework_receipt_valid": true,
+          "result": "FAIL",
+          "reason": "stderr_failures_1;engine_log_failures_1"
+        },
+        {
+          "test_name": "map_editor_saved_publish_boundary_20261010_test",
+          "test_path": "tests/framework/map_editor_saved_publish_boundary_20261010_test.tscn",
+          "wrapper_process_id": 2036,
+          "wrapper_started_utc": "2026-10-09T18:38:59.5482719Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct42_map_transactions",
+          "fixed_fps": 0,
+          "pass_marker_found": false,
+          "process_exited": false,
+          "wrapper_exit_code": -1,
+          "child_process_exit_state": "forced_termination",
+          "execution_deadline_utc": "2026-10-09T18:39:29.5566009Z",
+          "native_exit_observed_utc": null,
+          "effective_exit_code": -1,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 2,
+          "engine_log_failure_count": 2,
+          "framework_run_id": "bcd2be38-7e5d-4ea9-a5ee-1f4ae8089757",
+          "framework_receipt_valid": false,
+          "result": "FAIL",
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2;framework_receipt_missing"
+        },
+        {
+          "test_name": "map_editor_runtime_numeric_identity_20261010_test",
+          "test_path": "tests/framework/map_editor_runtime_numeric_identity_20261010_test.tscn",
+          "wrapper_process_id": 20300,
+          "wrapper_started_utc": "2026-10-09T18:39:03.2440302Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct42_map_transactions",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-09T18:39:33.2521320Z",
+          "native_exit_observed_utc": "2026-10-09T18:39:17.9762334Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "7168d330-4144-47fa-b32c-b08d5cb03a9d",
+          "framework_receipt_valid": true,
+          "result": "PASS",
+          "reason": ""
+        }
+      ],
+      "framework_checks": [
+        {
+          "path": "outputs/test_logs/v109_direct42_map_transactions/raw/10e7cacc-f191-45b7-ac09-3327d4c3b347/map_editor_ground_transaction_20261010_test.result.json",
+          "run_id": "10e7cacc-f191-45b7-ac09-3327d4c3b347",
+          "scene_id": "map_editor_ground_transaction_20261010_test",
+          "count": 29,
+          "passed": 29,
+          "failed": 0,
+          "status": "PASS",
+          "source_content_sha256": "2d69eb3780967bd7645459ce03ad0d2282b9caf278a28b9920bc7d2aa2ed5be3"
+        },
+        {
+          "path": "outputs/test_logs/v109_direct42_map_transactions/raw/468e5dab-f048-416e-9188-f193e58fb061/map_editor_release_recovery_20261010_test.result.json",
+          "run_id": "468e5dab-f048-416e-9188-f193e58fb061",
+          "scene_id": "map_editor_release_recovery_20261010_test",
+          "count": 34,
+          "passed": 34,
+          "failed": 0,
+          "status": "PASS",
+          "source_content_sha256": "2d69eb3780967bd7645459ce03ad0d2282b9caf278a28b9920bc7d2aa2ed5be3"
+        },
+        {
+          "path": "outputs/test_logs/v109_direct42_map_transactions/raw/7168d330-4144-47fa-b32c-b08d5cb03a9d/map_editor_runtime_numeric_identity_20261010_test.result.json",
+          "run_id": "7168d330-4144-47fa-b32c-b08d5cb03a9d",
+          "scene_id": "map_editor_runtime_numeric_identity_20261010_test",
+          "count": 210,
+          "passed": 210,
+          "failed": 0,
+          "status": "PASS",
+          "source_content_sha256": "2d69eb3780967bd7645459ce03ad0d2282b9caf278a28b9920bc7d2aa2ed5be3"
+        }
+      ],
+      "cleanup_status": "NOT_RUN",
+      "cleanup_warnings": [],
+      "original_failures_retained": 2
+    },
+    {
+      "stage": "v109_direct43_map_transactions",
+      "freeze": "docs/review/full_project_audit_v109_20261009/evidence/B06/freezes/B06_SOURCE_FREEZE_43.json",
+      "freeze_sha256": "ba57cc2bc0173e81b646f1c059ee8fdafad0bcf4b1ba7f72d3dfd9df0304f39f",
+      "candidate_tree": "09e7243d217ca044e2ecc91634c9e0c4798753a9",
+      "engine": {
+        "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+        "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+        "bytes": 198152
+      },
+      "retained_changed_source": [
+        {
+          "path": "scripts/layers/runtime/map_editor_runtime_bridge.gd",
+          "sha256": "57f08eb855ef0e7a908587828e51e2ea285a18b933e35761d448198fa68d3d6f",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/57f08eb855ef0e7a908587828e51e2ea285a18b933e35761d448198fa68d3d6f.txt"
+        },
+        {
+          "path": "scripts/map_editor/map_editor_app.gd",
+          "sha256": "42b079e82214deacd37fc094bfd290c8faf0bbc93207a499d352634c1b3390f1",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/42b079e82214deacd37fc094bfd290c8faf0bbc93207a499d352634c1b3390f1.txt"
+        },
+        {
+          "path": "scripts/map_editor/map_editor_build_runtime_service.gd",
+          "sha256": "6235fdaf1d4117f0335c0ec4d82b9b75b6bdfc29acff7e9659070196b26909bf",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/6235fdaf1d4117f0335c0ec4d82b9b75b6bdfc29acff7e9659070196b26909bf.txt"
+        },
+        {
+          "path": "scripts/map_editor/map_editor_ground_service.gd",
+          "sha256": "304b8c8fd4cf3d635851d65ecce3443481d30170afc459301d90a88b35005a95",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/304b8c8fd4cf3d635851d65ecce3443481d30170afc459301d90a88b35005a95.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_ground_transaction_20261010_test.gd",
+          "sha256": "c65dee06c108e2dea57c83b5e064a14595c506588a9249c323431bfe0e9b29e0",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/c65dee06c108e2dea57c83b5e064a14595c506588a9249c323431bfe0e9b29e0.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_ground_transaction_20261010_test.tscn",
+          "sha256": "c7a62cd428009f0bf7dc6e83626112463b3a3792baea614d5d6471df4178cc8c",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/c7a62cd428009f0bf7dc6e83626112463b3a3792baea614d5d6471df4178cc8c.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_release_recovery_20261010_test.gd",
+          "sha256": "cb7cc15e5d487f55a04f7a1ea1ce73f80c13b1f851d0a8ec2f0d49fdb96090a3",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/cb7cc15e5d487f55a04f7a1ea1ce73f80c13b1f851d0a8ec2f0d49fdb96090a3.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_release_recovery_20261010_test.tscn",
+          "sha256": "c98d45051cfa319b2f1d745d72bf932d21bd65321a2ed9941b4b78f8be833938",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/c98d45051cfa319b2f1d745d72bf932d21bd65321a2ed9941b4b78f8be833938.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_runtime_numeric_identity_20261010_test.gd",
+          "sha256": "9d1763595efa81d6b5b8a1269f6770f3b5e56574e177dfb0f58bb4644f0ebbdd",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/9d1763595efa81d6b5b8a1269f6770f3b5e56574e177dfb0f58bb4644f0ebbdd.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_runtime_numeric_identity_20261010_test.tscn",
+          "sha256": "2755398f2e6589850a31a6069775614d523788af33c0e185c39665e78e62f948",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/2755398f2e6589850a31a6069775614d523788af33c0e185c39665e78e62f948.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_saved_publish_boundary_20261010_test.gd",
+          "sha256": "5b760401b644f7dd6cf7e893cac4c534906d964574bc79397ebc8e61f758dc83",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/5b760401b644f7dd6cf7e893cac4c534906d964574bc79397ebc8e61f758dc83.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_saved_publish_boundary_20261010_test.tscn",
+          "sha256": "203db29b23210b786c774dcc5d1450e97d282e11da920ae558a70a0d98990e1d",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/203db29b23210b786c774dcc5d1450e97d282e11da920ae558a70a0d98990e1d.txt"
+        }
+      ],
+      "runner_receipt": "outputs/test_logs/v109_direct43_map_transactions/logs/runner_results_adhoc_20261010_024013_427_9376.json",
+      "actual_command": {
+        "script": "tools/run_godot_tests.ps1",
+        "TestPaths": [
+          "tests/framework/map_editor_release_recovery_20261010_test.tscn",
+          "tests/framework/map_editor_saved_publish_boundary_20261010_test.tscn"
+        ],
+        "TimeoutSeconds": 30,
+        "Verbose": true
+      },
+      "environment": {
+        "GIT_INDEX_FILE": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\wake_drop_v108_review_followup_20261009\\B06_SOURCE_FREEZE_43.index",
+        "HARDCORE_R3_CONTENT_SHA256": "ba57cc2bc0173e81b646f1c059ee8fdafad0bcf4b1ba7f72d3dfd9df0304f39f",
+        "HARDCORE_AUDIT_LOG_ROOT": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct43_map_transactions\\logs",
+        "HARDCORE_AUDIT_RUNTIME_APPDATA": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct43_map_transactions",
+        "HARDCORE_AUDIT_EVIDENCE_ROOT": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct43_map_transactions\\raw"
+      },
+      "invocation_id": "f641c0b6-8161-416f-b40a-4e7582c897ec",
+      "runtime_environment": {
+        "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+        "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct43_map_transactions",
+        "runner_process_id": 9376
+      },
+      "results": [
+        {
+          "test_name": "map_editor_release_recovery_20261010_test",
+          "test_path": "tests/framework/map_editor_release_recovery_20261010_test.tscn",
+          "wrapper_process_id": 15936,
+          "wrapper_started_utc": "2026-10-09T18:39:58.3529940Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct43_map_transactions",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-09T18:40:28.3664128Z",
+          "native_exit_observed_utc": "2026-10-09T18:40:04.5373977Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "1561cc97-203b-48b0-a9f3-1f095baf1121",
+          "framework_receipt_valid": true,
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "map_editor_saved_publish_boundary_20261010_test",
+          "test_path": "tests/framework/map_editor_saved_publish_boundary_20261010_test.tscn",
+          "wrapper_process_id": 7976,
+          "wrapper_started_utc": "2026-10-09T18:40:05.9944206Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct43_map_transactions",
+          "fixed_fps": 0,
+          "pass_marker_found": false,
+          "process_exited": false,
+          "wrapper_exit_code": -1,
+          "child_process_exit_state": "forced_termination",
+          "execution_deadline_utc": "2026-10-09T18:40:36.0032474Z",
+          "native_exit_observed_utc": null,
+          "effective_exit_code": -1,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 1,
+          "engine_log_failure_count": 1,
+          "framework_run_id": "de39c8ab-1285-4801-9558-0c180d64dbd4",
+          "framework_receipt_valid": false,
+          "result": "FAIL",
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1;framework_checks_failed"
+        }
+      ],
+      "framework_checks": [
+        {
+          "path": "outputs/test_logs/v109_direct43_map_transactions/raw/1561cc97-203b-48b0-a9f3-1f095baf1121/map_editor_release_recovery_20261010_test.result.json",
+          "run_id": "1561cc97-203b-48b0-a9f3-1f095baf1121",
+          "scene_id": "map_editor_release_recovery_20261010_test",
+          "count": 34,
+          "passed": 34,
+          "failed": 0,
+          "status": "PASS",
+          "source_content_sha256": "ba57cc2bc0173e81b646f1c059ee8fdafad0bcf4b1ba7f72d3dfd9df0304f39f"
+        },
+        {
+          "path": "outputs/test_logs/v109_direct43_map_transactions/raw/de39c8ab-1285-4801-9558-0c180d64dbd4/map_editor_saved_publish_boundary_20261010_test.result.json",
+          "run_id": "de39c8ab-1285-4801-9558-0c180d64dbd4",
+          "scene_id": "map_editor_saved_publish_boundary_20261010_test",
+          "count": 18,
+          "passed": 15,
+          "failed": 3,
+          "status": "FAIL",
+          "source_content_sha256": "ba57cc2bc0173e81b646f1c059ee8fdafad0bcf4b1ba7f72d3dfd9df0304f39f"
+        }
+      ],
+      "cleanup_status": "NOT_RUN",
+      "cleanup_warnings": [],
+      "original_failures_retained": 1
+    },
+    {
+      "stage": "v109_direct44_saved_publish",
+      "freeze": "docs/review/full_project_audit_v109_20261009/evidence/B06/freezes/B06_SOURCE_FREEZE_44.json",
+      "freeze_sha256": "82b814d4e5128df01a728d235753c166601b8fbae21731f5ec405a95ace3b114",
+      "candidate_tree": "e6ebb4bd4226c1a1b65546ce149204c60f06c2d8",
+      "engine": {
+        "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+        "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+        "bytes": 198152
+      },
+      "retained_changed_source": [
+        {
+          "path": "scripts/layers/runtime/map_editor_runtime_bridge.gd",
+          "sha256": "57f08eb855ef0e7a908587828e51e2ea285a18b933e35761d448198fa68d3d6f",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/57f08eb855ef0e7a908587828e51e2ea285a18b933e35761d448198fa68d3d6f.txt"
+        },
+        {
+          "path": "scripts/map_editor/map_editor_app.gd",
+          "sha256": "42b079e82214deacd37fc094bfd290c8faf0bbc93207a499d352634c1b3390f1",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/42b079e82214deacd37fc094bfd290c8faf0bbc93207a499d352634c1b3390f1.txt"
+        },
+        {
+          "path": "scripts/map_editor/map_editor_build_runtime_service.gd",
+          "sha256": "6235fdaf1d4117f0335c0ec4d82b9b75b6bdfc29acff7e9659070196b26909bf",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/6235fdaf1d4117f0335c0ec4d82b9b75b6bdfc29acff7e9659070196b26909bf.txt"
+        },
+        {
+          "path": "scripts/map_editor/map_editor_ground_service.gd",
+          "sha256": "304b8c8fd4cf3d635851d65ecce3443481d30170afc459301d90a88b35005a95",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/304b8c8fd4cf3d635851d65ecce3443481d30170afc459301d90a88b35005a95.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_ground_transaction_20261010_test.gd",
+          "sha256": "c65dee06c108e2dea57c83b5e064a14595c506588a9249c323431bfe0e9b29e0",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/c65dee06c108e2dea57c83b5e064a14595c506588a9249c323431bfe0e9b29e0.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_ground_transaction_20261010_test.tscn",
+          "sha256": "c7a62cd428009f0bf7dc6e83626112463b3a3792baea614d5d6471df4178cc8c",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/c7a62cd428009f0bf7dc6e83626112463b3a3792baea614d5d6471df4178cc8c.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_release_recovery_20261010_test.gd",
+          "sha256": "cb7cc15e5d487f55a04f7a1ea1ce73f80c13b1f851d0a8ec2f0d49fdb96090a3",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/cb7cc15e5d487f55a04f7a1ea1ce73f80c13b1f851d0a8ec2f0d49fdb96090a3.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_release_recovery_20261010_test.tscn",
+          "sha256": "c98d45051cfa319b2f1d745d72bf932d21bd65321a2ed9941b4b78f8be833938",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/c98d45051cfa319b2f1d745d72bf932d21bd65321a2ed9941b4b78f8be833938.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_runtime_numeric_identity_20261010_test.gd",
+          "sha256": "9d1763595efa81d6b5b8a1269f6770f3b5e56574e177dfb0f58bb4644f0ebbdd",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/9d1763595efa81d6b5b8a1269f6770f3b5e56574e177dfb0f58bb4644f0ebbdd.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_runtime_numeric_identity_20261010_test.tscn",
+          "sha256": "2755398f2e6589850a31a6069775614d523788af33c0e185c39665e78e62f948",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/2755398f2e6589850a31a6069775614d523788af33c0e185c39665e78e62f948.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_saved_publish_boundary_20261010_test.gd",
+          "sha256": "6cb7ee7a4bf5d9a283d3613a3cca459a441882f4c265dc6f474e1a1adafd6929",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/6cb7ee7a4bf5d9a283d3613a3cca459a441882f4c265dc6f474e1a1adafd6929.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_saved_publish_boundary_20261010_test.tscn",
+          "sha256": "203db29b23210b786c774dcc5d1450e97d282e11da920ae558a70a0d98990e1d",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/203db29b23210b786c774dcc5d1450e97d282e11da920ae558a70a0d98990e1d.txt"
+        }
+      ],
+      "runner_receipt": "outputs/test_logs/v109_direct44_saved_publish/logs/runner_results_adhoc_20261010_024146_373_24384.json",
+      "actual_command": {
+        "script": "tools/run_godot_tests.ps1",
+        "TestPaths": [
+          "tests/framework/map_editor_saved_publish_boundary_20261010_test.tscn"
+        ],
+        "TimeoutSeconds": 30,
+        "Verbose": true
+      },
+      "environment": {
+        "GIT_INDEX_FILE": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\wake_drop_v108_review_followup_20261009\\B06_SOURCE_FREEZE_44.index",
+        "HARDCORE_R3_CONTENT_SHA256": "82b814d4e5128df01a728d235753c166601b8fbae21731f5ec405a95ace3b114",
+        "HARDCORE_AUDIT_LOG_ROOT": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct44_saved_publish\\logs",
+        "HARDCORE_AUDIT_RUNTIME_APPDATA": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct44_saved_publish",
+        "HARDCORE_AUDIT_EVIDENCE_ROOT": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct44_saved_publish\\raw"
+      },
+      "invocation_id": "f7cd65e8-fabc-43b1-ae3b-f42e0c954b18",
+      "runtime_environment": {
+        "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+        "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct44_saved_publish",
+        "runner_process_id": 24384
+      },
+      "results": [
+        {
+          "test_name": "map_editor_saved_publish_boundary_20261010_test",
+          "test_path": "tests/framework/map_editor_saved_publish_boundary_20261010_test.tscn",
+          "wrapper_process_id": 4636,
+          "wrapper_started_utc": "2026-10-09T18:41:38.0982073Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct44_saved_publish",
+          "fixed_fps": 0,
+          "pass_marker_found": false,
+          "process_exited": true,
+          "wrapper_exit_code": 1,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-09T18:42:08.1111817Z",
+          "native_exit_observed_utc": "2026-10-09T18:41:45.2784807Z",
+          "effective_exit_code": 1,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "5a8f9385-703f-4153-97e1-533849a1e7f5",
+          "framework_receipt_valid": false,
+          "result": "FAIL",
+          "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+        }
+      ],
+      "framework_checks": [
+        {
+          "path": "outputs/test_logs/v109_direct44_saved_publish/raw/5a8f9385-703f-4153-97e1-533849a1e7f5/map_editor_saved_publish_boundary_20261010_test.result.json",
+          "run_id": "5a8f9385-703f-4153-97e1-533849a1e7f5",
+          "scene_id": "map_editor_saved_publish_boundary_20261010_test",
+          "count": 18,
+          "passed": 16,
+          "failed": 2,
+          "status": "FAIL",
+          "source_content_sha256": "82b814d4e5128df01a728d235753c166601b8fbae21731f5ec405a95ace3b114"
+        }
+      ],
+      "cleanup_status": "PASS",
+      "cleanup_warnings": [],
+      "original_failures_retained": 1
+    },
+    {
+      "stage": "v109_direct45_saved_publish",
+      "freeze": "docs/review/full_project_audit_v109_20261009/evidence/B06/freezes/B06_SOURCE_FREEZE_45.json",
+      "freeze_sha256": "3cf28216887b7fc8fadc879c7db358cc6fefb59edbfc035901af722f85463f5b",
+      "candidate_tree": "eabdc815bf18338f4ab57c507be8066e0bd448c9",
+      "engine": {
+        "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+        "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+        "bytes": 198152
+      },
+      "retained_changed_source": [
+        {
+          "path": "scripts/layers/runtime/map_editor_runtime_bridge.gd",
+          "sha256": "57f08eb855ef0e7a908587828e51e2ea285a18b933e35761d448198fa68d3d6f",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/57f08eb855ef0e7a908587828e51e2ea285a18b933e35761d448198fa68d3d6f.txt"
+        },
+        {
+          "path": "scripts/map_editor/map_editor_app.gd",
+          "sha256": "19fc7a1b7ad50a7731b4d494b4c488d2fa2d78f17b2749e2c182e55a3866035e",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/19fc7a1b7ad50a7731b4d494b4c488d2fa2d78f17b2749e2c182e55a3866035e.txt"
+        },
+        {
+          "path": "scripts/map_editor/map_editor_build_runtime_service.gd",
+          "sha256": "6235fdaf1d4117f0335c0ec4d82b9b75b6bdfc29acff7e9659070196b26909bf",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/6235fdaf1d4117f0335c0ec4d82b9b75b6bdfc29acff7e9659070196b26909bf.txt"
+        },
+        {
+          "path": "scripts/map_editor/map_editor_ground_service.gd",
+          "sha256": "304b8c8fd4cf3d635851d65ecce3443481d30170afc459301d90a88b35005a95",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/304b8c8fd4cf3d635851d65ecce3443481d30170afc459301d90a88b35005a95.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_ground_transaction_20261010_test.gd",
+          "sha256": "c65dee06c108e2dea57c83b5e064a14595c506588a9249c323431bfe0e9b29e0",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/c65dee06c108e2dea57c83b5e064a14595c506588a9249c323431bfe0e9b29e0.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_ground_transaction_20261010_test.tscn",
+          "sha256": "c7a62cd428009f0bf7dc6e83626112463b3a3792baea614d5d6471df4178cc8c",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/c7a62cd428009f0bf7dc6e83626112463b3a3792baea614d5d6471df4178cc8c.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_release_recovery_20261010_test.gd",
+          "sha256": "cb7cc15e5d487f55a04f7a1ea1ce73f80c13b1f851d0a8ec2f0d49fdb96090a3",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/cb7cc15e5d487f55a04f7a1ea1ce73f80c13b1f851d0a8ec2f0d49fdb96090a3.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_release_recovery_20261010_test.tscn",
+          "sha256": "c98d45051cfa319b2f1d745d72bf932d21bd65321a2ed9941b4b78f8be833938",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/c98d45051cfa319b2f1d745d72bf932d21bd65321a2ed9941b4b78f8be833938.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_runtime_numeric_identity_20261010_test.gd",
+          "sha256": "9d1763595efa81d6b5b8a1269f6770f3b5e56574e177dfb0f58bb4644f0ebbdd",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/9d1763595efa81d6b5b8a1269f6770f3b5e56574e177dfb0f58bb4644f0ebbdd.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_runtime_numeric_identity_20261010_test.tscn",
+          "sha256": "2755398f2e6589850a31a6069775614d523788af33c0e185c39665e78e62f948",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/2755398f2e6589850a31a6069775614d523788af33c0e185c39665e78e62f948.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_saved_publish_boundary_20261010_test.gd",
+          "sha256": "6cb7ee7a4bf5d9a283d3613a3cca459a441882f4c265dc6f474e1a1adafd6929",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/6cb7ee7a4bf5d9a283d3613a3cca459a441882f4c265dc6f474e1a1adafd6929.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_saved_publish_boundary_20261010_test.tscn",
+          "sha256": "203db29b23210b786c774dcc5d1450e97d282e11da920ae558a70a0d98990e1d",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/203db29b23210b786c774dcc5d1450e97d282e11da920ae558a70a0d98990e1d.txt"
+        }
+      ],
+      "runner_receipt": "outputs/test_logs/v109_direct45_saved_publish/logs/runner_results_adhoc_20261010_024335_359_19360.json",
+      "actual_command": {
+        "script": "tools/run_godot_tests.ps1",
+        "TestPaths": [
+          "tests/framework/map_editor_saved_publish_boundary_20261010_test.tscn"
+        ],
+        "TimeoutSeconds": 30,
+        "Verbose": true
+      },
+      "environment": {
+        "GIT_INDEX_FILE": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\wake_drop_v108_review_followup_20261009\\B06_SOURCE_FREEZE_45.index",
+        "HARDCORE_R3_CONTENT_SHA256": "3cf28216887b7fc8fadc879c7db358cc6fefb59edbfc035901af722f85463f5b",
+        "HARDCORE_AUDIT_LOG_ROOT": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct45_saved_publish\\logs",
+        "HARDCORE_AUDIT_RUNTIME_APPDATA": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct45_saved_publish",
+        "HARDCORE_AUDIT_EVIDENCE_ROOT": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct45_saved_publish\\raw"
+      },
+      "invocation_id": "abc76038-8eda-4a20-9418-5cd1b044167e",
+      "runtime_environment": {
+        "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+        "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct45_saved_publish",
+        "runner_process_id": 19360
+      },
+      "results": [
+        {
+          "test_name": "map_editor_saved_publish_boundary_20261010_test",
+          "test_path": "tests/framework/map_editor_saved_publish_boundary_20261010_test.tscn",
+          "wrapper_process_id": 7740,
+          "wrapper_started_utc": "2026-10-09T18:43:26.7370884Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct45_saved_publish",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-09T18:43:56.7499253Z",
+          "native_exit_observed_utc": "2026-10-09T18:43:33.9151117Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "10254ef7-c724-4882-a615-86cc77e18dc8",
+          "framework_receipt_valid": true,
+          "result": "PASS",
+          "reason": ""
+        }
+      ],
+      "framework_checks": [
+        {
+          "path": "outputs/test_logs/v109_direct45_saved_publish/raw/10254ef7-c724-4882-a615-86cc77e18dc8/map_editor_saved_publish_boundary_20261010_test.result.json",
+          "run_id": "10254ef7-c724-4882-a615-86cc77e18dc8",
+          "scene_id": "map_editor_saved_publish_boundary_20261010_test",
+          "count": 18,
+          "passed": 18,
+          "failed": 0,
+          "status": "PASS",
+          "source_content_sha256": "3cf28216887b7fc8fadc879c7db358cc6fefb59edbfc035901af722f85463f5b"
+        }
+      ],
+      "cleanup_status": "PASS",
+      "cleanup_warnings": [],
+      "original_failures_retained": 0
+    },
+    {
+      "stage": "v109_related46_map_transactions",
+      "freeze": "docs/review/full_project_audit_v109_20261009/evidence/B06/freezes/B06_SOURCE_FREEZE_46.json",
+      "freeze_sha256": "7acfc4cf71f70d88f6b9264cd822b2ba94a9bf4b7b2171a3ab9883ec01f80367",
+      "candidate_tree": "eabdc815bf18338f4ab57c507be8066e0bd448c9",
+      "engine": {
+        "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+        "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+        "bytes": 198152
+      },
+      "retained_changed_source": [
+        {
+          "path": "scripts/layers/runtime/map_editor_runtime_bridge.gd",
+          "sha256": "57f08eb855ef0e7a908587828e51e2ea285a18b933e35761d448198fa68d3d6f",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/57f08eb855ef0e7a908587828e51e2ea285a18b933e35761d448198fa68d3d6f.txt"
+        },
+        {
+          "path": "scripts/map_editor/map_editor_app.gd",
+          "sha256": "19fc7a1b7ad50a7731b4d494b4c488d2fa2d78f17b2749e2c182e55a3866035e",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/19fc7a1b7ad50a7731b4d494b4c488d2fa2d78f17b2749e2c182e55a3866035e.txt"
+        },
+        {
+          "path": "scripts/map_editor/map_editor_build_runtime_service.gd",
+          "sha256": "6235fdaf1d4117f0335c0ec4d82b9b75b6bdfc29acff7e9659070196b26909bf",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/6235fdaf1d4117f0335c0ec4d82b9b75b6bdfc29acff7e9659070196b26909bf.txt"
+        },
+        {
+          "path": "scripts/map_editor/map_editor_ground_service.gd",
+          "sha256": "304b8c8fd4cf3d635851d65ecce3443481d30170afc459301d90a88b35005a95",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/304b8c8fd4cf3d635851d65ecce3443481d30170afc459301d90a88b35005a95.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_ground_transaction_20261010_test.gd",
+          "sha256": "c65dee06c108e2dea57c83b5e064a14595c506588a9249c323431bfe0e9b29e0",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/c65dee06c108e2dea57c83b5e064a14595c506588a9249c323431bfe0e9b29e0.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_ground_transaction_20261010_test.tscn",
+          "sha256": "c7a62cd428009f0bf7dc6e83626112463b3a3792baea614d5d6471df4178cc8c",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/c7a62cd428009f0bf7dc6e83626112463b3a3792baea614d5d6471df4178cc8c.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_release_recovery_20261010_test.gd",
+          "sha256": "cb7cc15e5d487f55a04f7a1ea1ce73f80c13b1f851d0a8ec2f0d49fdb96090a3",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/cb7cc15e5d487f55a04f7a1ea1ce73f80c13b1f851d0a8ec2f0d49fdb96090a3.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_release_recovery_20261010_test.tscn",
+          "sha256": "c98d45051cfa319b2f1d745d72bf932d21bd65321a2ed9941b4b78f8be833938",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/c98d45051cfa319b2f1d745d72bf932d21bd65321a2ed9941b4b78f8be833938.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_runtime_numeric_identity_20261010_test.gd",
+          "sha256": "9d1763595efa81d6b5b8a1269f6770f3b5e56574e177dfb0f58bb4644f0ebbdd",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/9d1763595efa81d6b5b8a1269f6770f3b5e56574e177dfb0f58bb4644f0ebbdd.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_runtime_numeric_identity_20261010_test.tscn",
+          "sha256": "2755398f2e6589850a31a6069775614d523788af33c0e185c39665e78e62f948",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/2755398f2e6589850a31a6069775614d523788af33c0e185c39665e78e62f948.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_saved_publish_boundary_20261010_test.gd",
+          "sha256": "6cb7ee7a4bf5d9a283d3613a3cca459a441882f4c265dc6f474e1a1adafd6929",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/6cb7ee7a4bf5d9a283d3613a3cca459a441882f4c265dc6f474e1a1adafd6929.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_saved_publish_boundary_20261010_test.tscn",
+          "sha256": "203db29b23210b786c774dcc5d1450e97d282e11da920ae558a70a0d98990e1d",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/203db29b23210b786c774dcc5d1450e97d282e11da920ae558a70a0d98990e1d.txt"
+        }
+      ],
+      "runner_receipt": "outputs/test_logs/v109_related46_map_transactions/logs/runner_results_adhoc_20261010_024540_523_3636.json",
+      "actual_command": {
+        "script": "tools/run_godot_tests.ps1",
+        "TestPaths": [
+          "tests/build_candidate_does_not_mutate_release_test.tscn",
+          "tests/publish_promotes_candidate_test.tscn",
+          "tests/publish_failure_rollback_test.tscn",
+          "tests/map_publish_restart_recovery_test.tscn",
+          "tests/map_candidate_binding_publish_guard_test.tscn",
+          "tests/rv14_multi_map_publish_sibling_invariance_test.tscn",
+          "tests/map_editor_save_path_isolation_test.tscn",
+          "tests/release_registry_consumer_validation_test.tscn",
+          "tests/portal_all_map_authoring_footprint_test.tscn"
+        ],
+        "TimeoutSeconds": 30,
+        "Verbose": true
+      },
+      "environment": {
+        "GIT_INDEX_FILE": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\wake_drop_v108_review_followup_20261009\\B06_SOURCE_FREEZE_46.index",
+        "HARDCORE_R3_CONTENT_SHA256": "7acfc4cf71f70d88f6b9264cd822b2ba94a9bf4b7b2171a3ab9883ec01f80367",
+        "HARDCORE_AUDIT_LOG_ROOT": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_related46_map_transactions\\logs",
+        "HARDCORE_AUDIT_RUNTIME_APPDATA": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_related46_map_transactions",
+        "HARDCORE_AUDIT_EVIDENCE_ROOT": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_related46_map_transactions\\raw"
+      },
+      "invocation_id": "3c5fa358-5f1d-453a-8974-e38f7c371bf9",
+      "runtime_environment": {
+        "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+        "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_related46_map_transactions",
+        "runner_process_id": 3636
+      },
+      "results": [
+        {
+          "test_name": "build_candidate_does_not_mutate_release_test",
+          "test_path": "tests/build_candidate_does_not_mutate_release_test.tscn",
+          "wrapper_process_id": 11884,
+          "wrapper_started_utc": "2026-10-09T18:44:22.5351788Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_related46_map_transactions",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-09T18:44:52.5479396Z",
+          "native_exit_observed_utc": "2026-10-09T18:44:28.7555034Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "",
+          "framework_receipt_valid": null,
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "publish_promotes_candidate_test",
+          "test_path": "tests/publish_promotes_candidate_test.tscn",
+          "wrapper_process_id": 18760,
+          "wrapper_started_utc": "2026-10-09T18:44:30.3262150Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_related46_map_transactions",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-09T18:45:00.3347316Z",
+          "native_exit_observed_utc": "2026-10-09T18:44:36.5203854Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "",
+          "framework_receipt_valid": null,
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "publish_failure_rollback_test",
+          "test_path": "tests/publish_failure_rollback_test.tscn",
+          "wrapper_process_id": 11304,
+          "wrapper_started_utc": "2026-10-09T18:44:37.9083650Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_related46_map_transactions",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-09T18:45:07.9164300Z",
+          "native_exit_observed_utc": "2026-10-09T18:44:44.1260766Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "",
+          "framework_receipt_valid": null,
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "map_publish_restart_recovery_test",
+          "test_path": "tests/map_publish_restart_recovery_test.tscn",
+          "wrapper_process_id": 5604,
+          "wrapper_started_utc": "2026-10-09T18:44:45.6584293Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_related46_map_transactions",
+          "fixed_fps": 0,
+          "pass_marker_found": false,
+          "process_exited": false,
+          "wrapper_exit_code": -1,
+          "child_process_exit_state": "forced_termination",
+          "execution_deadline_utc": "2026-10-09T18:45:15.6667447Z",
+          "native_exit_observed_utc": null,
+          "effective_exit_code": -1,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 2,
+          "engine_log_failure_count": 2,
+          "framework_run_id": "",
+          "framework_receipt_valid": null,
+          "result": "FAIL",
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2"
+        },
+        {
+          "test_name": "map_candidate_binding_publish_guard_test",
+          "test_path": "tests/map_candidate_binding_publish_guard_test.tscn",
+          "wrapper_process_id": 22792,
+          "wrapper_started_utc": "2026-10-09T18:44:52.1692476Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_related46_map_transactions",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-09T18:45:22.1777464Z",
+          "native_exit_observed_utc": "2026-10-09T18:44:58.8423308Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "",
+          "framework_receipt_valid": null,
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "rv14_multi_map_publish_sibling_invariance_test",
+          "test_path": "tests/rv14_multi_map_publish_sibling_invariance_test.tscn",
+          "wrapper_process_id": 23056,
+          "wrapper_started_utc": "2026-10-09T18:45:00.2318577Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_related46_map_transactions",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-09T18:45:30.2403831Z",
+          "native_exit_observed_utc": "2026-10-09T18:45:06.3274204Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "",
+          "framework_receipt_valid": null,
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "map_editor_save_path_isolation_test",
+          "test_path": "tests/map_editor_save_path_isolation_test.tscn",
+          "wrapper_process_id": 8580,
+          "wrapper_started_utc": "2026-10-09T18:45:07.8815358Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_related46_map_transactions",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-09T18:45:37.8895057Z",
+          "native_exit_observed_utc": "2026-10-09T18:45:14.8173349Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "",
+          "framework_receipt_valid": null,
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "release_registry_consumer_validation_test",
+          "test_path": "tests/release_registry_consumer_validation_test.tscn",
+          "wrapper_process_id": 21500,
+          "wrapper_started_utc": "2026-10-09T18:45:16.3759240Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_related46_map_transactions",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-09T18:45:46.3845538Z",
+          "native_exit_observed_utc": "2026-10-09T18:45:22.3939974Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "",
+          "framework_receipt_valid": null,
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "portal_all_map_authoring_footprint_test",
+          "test_path": "tests/portal_all_map_authoring_footprint_test.tscn",
+          "wrapper_process_id": 3996,
+          "wrapper_started_utc": "2026-10-09T18:45:23.9301545Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_related46_map_transactions",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-09T18:45:53.9433389Z",
+          "native_exit_observed_utc": "2026-10-09T18:45:39.1322742Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "",
+          "framework_receipt_valid": null,
+          "result": "PASS",
+          "reason": ""
+        }
+      ],
+      "framework_checks": [],
+      "cleanup_status": "NOT_RUN",
+      "cleanup_warnings": [],
+      "original_failures_retained": 1
+    },
+    {
+      "stage": "v109_direct47_map_release",
+      "freeze": "docs/review/full_project_audit_v109_20261009/evidence/B06/freezes/B06_SOURCE_FREEZE_47.json",
+      "freeze_sha256": "c31472f2bcf3c82532df109a2f4929d68bc72c66c8f6fcd3ff26f80efb731d87",
+      "candidate_tree": "cdd7e1475f80dcb4f6ffa8703286f61144e020b7",
+      "engine": {
+        "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+        "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+        "bytes": 198152
+      },
+      "retained_changed_source": [
+        {
+          "path": "scripts/layers/runtime/map_editor_runtime_bridge.gd",
+          "sha256": "57f08eb855ef0e7a908587828e51e2ea285a18b933e35761d448198fa68d3d6f",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/57f08eb855ef0e7a908587828e51e2ea285a18b933e35761d448198fa68d3d6f.txt"
+        },
+        {
+          "path": "scripts/map_editor/map_editor_app.gd",
+          "sha256": "19fc7a1b7ad50a7731b4d494b4c488d2fa2d78f17b2749e2c182e55a3866035e",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/19fc7a1b7ad50a7731b4d494b4c488d2fa2d78f17b2749e2c182e55a3866035e.txt"
+        },
+        {
+          "path": "scripts/map_editor/map_editor_build_runtime_service.gd",
+          "sha256": "0475c34f9f29ec1a27c5bfafe848982481cb76ab75e87ab879600a9e1a7bfde7",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/0475c34f9f29ec1a27c5bfafe848982481cb76ab75e87ab879600a9e1a7bfde7.txt"
+        },
+        {
+          "path": "scripts/map_editor/map_editor_ground_service.gd",
+          "sha256": "304b8c8fd4cf3d635851d65ecce3443481d30170afc459301d90a88b35005a95",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/304b8c8fd4cf3d635851d65ecce3443481d30170afc459301d90a88b35005a95.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_ground_transaction_20261010_test.gd",
+          "sha256": "c65dee06c108e2dea57c83b5e064a14595c506588a9249c323431bfe0e9b29e0",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/c65dee06c108e2dea57c83b5e064a14595c506588a9249c323431bfe0e9b29e0.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_ground_transaction_20261010_test.tscn",
+          "sha256": "c7a62cd428009f0bf7dc6e83626112463b3a3792baea614d5d6471df4178cc8c",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/c7a62cd428009f0bf7dc6e83626112463b3a3792baea614d5d6471df4178cc8c.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_release_recovery_20261010_test.gd",
+          "sha256": "fcc303780e3c6183c899f7088cc31b2731e54f7c447058cc312fb726657d0935",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/fcc303780e3c6183c899f7088cc31b2731e54f7c447058cc312fb726657d0935.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_release_recovery_20261010_test.tscn",
+          "sha256": "c98d45051cfa319b2f1d745d72bf932d21bd65321a2ed9941b4b78f8be833938",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/c98d45051cfa319b2f1d745d72bf932d21bd65321a2ed9941b4b78f8be833938.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_runtime_numeric_identity_20261010_test.gd",
+          "sha256": "9d1763595efa81d6b5b8a1269f6770f3b5e56574e177dfb0f58bb4644f0ebbdd",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/9d1763595efa81d6b5b8a1269f6770f3b5e56574e177dfb0f58bb4644f0ebbdd.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_runtime_numeric_identity_20261010_test.tscn",
+          "sha256": "2755398f2e6589850a31a6069775614d523788af33c0e185c39665e78e62f948",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/2755398f2e6589850a31a6069775614d523788af33c0e185c39665e78e62f948.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_saved_publish_boundary_20261010_test.gd",
+          "sha256": "6cb7ee7a4bf5d9a283d3613a3cca459a441882f4c265dc6f474e1a1adafd6929",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/6cb7ee7a4bf5d9a283d3613a3cca459a441882f4c265dc6f474e1a1adafd6929.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_saved_publish_boundary_20261010_test.tscn",
+          "sha256": "203db29b23210b786c774dcc5d1450e97d282e11da920ae558a70a0d98990e1d",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/203db29b23210b786c774dcc5d1450e97d282e11da920ae558a70a0d98990e1d.txt"
+        }
+      ],
+      "runner_receipt": "outputs/test_logs/v109_direct47_map_release/logs/runner_results_adhoc_20261010_025126_433_6308.json",
+      "actual_command": {
+        "script": "tools/run_godot_tests.ps1",
+        "TestPaths": [
+          "tests/framework/map_editor_release_recovery_20261010_test.tscn",
+          "tests/map_publish_restart_recovery_test.tscn",
+          "tests/publish_failure_rollback_test.tscn",
+          "tests/framework/map_editor_saved_publish_boundary_20261010_test.tscn"
+        ],
+        "TimeoutSeconds": 30,
+        "Verbose": true
+      },
+      "environment": {
+        "GIT_INDEX_FILE": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\wake_drop_v108_review_followup_20261009\\B06_SOURCE_FREEZE_47.index",
+        "HARDCORE_R3_CONTENT_SHA256": "c31472f2bcf3c82532df109a2f4929d68bc72c66c8f6fcd3ff26f80efb731d87",
+        "HARDCORE_AUDIT_LOG_ROOT": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct47_map_release\\logs",
+        "HARDCORE_AUDIT_RUNTIME_APPDATA": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct47_map_release",
+        "HARDCORE_AUDIT_EVIDENCE_ROOT": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct47_map_release\\raw"
+      },
+      "invocation_id": "8d2b292d-bd3b-4acf-a37e-fe11292ae7ec",
+      "runtime_environment": {
+        "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+        "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct47_map_release",
+        "runner_process_id": 6308
+      },
+      "results": [
+        {
+          "test_name": "map_editor_release_recovery_20261010_test",
+          "test_path": "tests/framework/map_editor_release_recovery_20261010_test.tscn",
+          "wrapper_process_id": 11312,
+          "wrapper_started_utc": "2026-10-09T18:50:55.0288430Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct47_map_release",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-09T18:51:25.0423651Z",
+          "native_exit_observed_utc": "2026-10-09T18:51:01.3782621Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "a8781294-5ffc-4737-9459-b18792a9b95f",
+          "framework_receipt_valid": true,
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "map_publish_restart_recovery_test",
+          "test_path": "tests/map_publish_restart_recovery_test.tscn",
+          "wrapper_process_id": 10748,
+          "wrapper_started_utc": "2026-10-09T18:51:02.9701596Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct47_map_release",
+          "fixed_fps": 0,
+          "pass_marker_found": false,
+          "process_exited": false,
+          "wrapper_exit_code": -1,
+          "child_process_exit_state": "forced_termination",
+          "execution_deadline_utc": "2026-10-09T18:51:32.9785708Z",
+          "native_exit_observed_utc": null,
+          "effective_exit_code": -1,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 1,
+          "engine_log_failure_count": 1,
+          "framework_run_id": "",
+          "framework_receipt_valid": null,
+          "result": "FAIL",
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+        },
+        {
+          "test_name": "publish_failure_rollback_test",
+          "test_path": "tests/publish_failure_rollback_test.tscn",
+          "wrapper_process_id": 19952,
+          "wrapper_started_utc": "2026-10-09T18:51:09.9155185Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct47_map_release",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-09T18:51:39.9239271Z",
+          "native_exit_observed_utc": "2026-10-09T18:51:16.1841955Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "",
+          "framework_receipt_valid": null,
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "map_editor_saved_publish_boundary_20261010_test",
+          "test_path": "tests/framework/map_editor_saved_publish_boundary_20261010_test.tscn",
+          "wrapper_process_id": 2160,
+          "wrapper_started_utc": "2026-10-09T18:51:17.7394163Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct47_map_release",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-09T18:51:47.7476528Z",
+          "native_exit_observed_utc": "2026-10-09T18:51:25.0456697Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "43ed0d77-f6cd-4c9c-8e9b-3aa53225791d",
+          "framework_receipt_valid": true,
+          "result": "PASS",
+          "reason": ""
+        }
+      ],
+      "framework_checks": [
+        {
+          "path": "outputs/test_logs/v109_direct47_map_release/raw/43ed0d77-f6cd-4c9c-8e9b-3aa53225791d/map_editor_saved_publish_boundary_20261010_test.result.json",
+          "run_id": "43ed0d77-f6cd-4c9c-8e9b-3aa53225791d",
+          "scene_id": "map_editor_saved_publish_boundary_20261010_test",
+          "count": 18,
+          "passed": 18,
+          "failed": 0,
+          "status": "PASS",
+          "source_content_sha256": "c31472f2bcf3c82532df109a2f4929d68bc72c66c8f6fcd3ff26f80efb731d87"
+        },
+        {
+          "path": "outputs/test_logs/v109_direct47_map_release/raw/a8781294-5ffc-4737-9459-b18792a9b95f/map_editor_release_recovery_20261010_test.result.json",
+          "run_id": "a8781294-5ffc-4737-9459-b18792a9b95f",
+          "scene_id": "map_editor_release_recovery_20261010_test",
+          "count": 47,
+          "passed": 47,
+          "failed": 0,
+          "status": "PASS",
+          "source_content_sha256": "c31472f2bcf3c82532df109a2f4929d68bc72c66c8f6fcd3ff26f80efb731d87"
+        }
+      ],
+      "cleanup_status": "NOT_RUN",
+      "cleanup_warnings": [],
+      "original_failures_retained": 1
+    },
+    {
+      "stage": "v109_direct48_registry_recovery",
+      "freeze": "docs/review/full_project_audit_v109_20261009/evidence/B06/freezes/B06_SOURCE_FREEZE_48.json",
+      "freeze_sha256": "ffa1658645595b68d3d01758d5d99276b83ac837ce54ab1307ccef803d3d62d7",
+      "candidate_tree": "a3aa1c3408722e9df218b4f64feec898992831f4",
+      "engine": {
+        "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+        "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+        "bytes": 198152
+      },
+      "retained_changed_source": [
+        {
+          "path": "scripts/layers/runtime/map_editor_runtime_bridge.gd",
+          "sha256": "57f08eb855ef0e7a908587828e51e2ea285a18b933e35761d448198fa68d3d6f",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/57f08eb855ef0e7a908587828e51e2ea285a18b933e35761d448198fa68d3d6f.txt"
+        },
+        {
+          "path": "scripts/map_editor/map_editor_app.gd",
+          "sha256": "19fc7a1b7ad50a7731b4d494b4c488d2fa2d78f17b2749e2c182e55a3866035e",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/19fc7a1b7ad50a7731b4d494b4c488d2fa2d78f17b2749e2c182e55a3866035e.txt"
+        },
+        {
+          "path": "scripts/map_editor/map_editor_build_runtime_service.gd",
+          "sha256": "8035c9f709d6da4c66878199849906598ff1f3bac69ae38ba1e46c3ca65ce80b",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/8035c9f709d6da4c66878199849906598ff1f3bac69ae38ba1e46c3ca65ce80b.txt"
+        },
+        {
+          "path": "scripts/map_editor/map_editor_ground_service.gd",
+          "sha256": "304b8c8fd4cf3d635851d65ecce3443481d30170afc459301d90a88b35005a95",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/304b8c8fd4cf3d635851d65ecce3443481d30170afc459301d90a88b35005a95.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_ground_transaction_20261010_test.gd",
+          "sha256": "c65dee06c108e2dea57c83b5e064a14595c506588a9249c323431bfe0e9b29e0",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/c65dee06c108e2dea57c83b5e064a14595c506588a9249c323431bfe0e9b29e0.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_ground_transaction_20261010_test.tscn",
+          "sha256": "c7a62cd428009f0bf7dc6e83626112463b3a3792baea614d5d6471df4178cc8c",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/c7a62cd428009f0bf7dc6e83626112463b3a3792baea614d5d6471df4178cc8c.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_release_recovery_20261010_test.gd",
+          "sha256": "30a0027cabd3893ca27302685f44f18d36c0b2262cab2eb7d81755e5953f1808",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/30a0027cabd3893ca27302685f44f18d36c0b2262cab2eb7d81755e5953f1808.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_release_recovery_20261010_test.tscn",
+          "sha256": "c98d45051cfa319b2f1d745d72bf932d21bd65321a2ed9941b4b78f8be833938",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/c98d45051cfa319b2f1d745d72bf932d21bd65321a2ed9941b4b78f8be833938.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_runtime_numeric_identity_20261010_test.gd",
+          "sha256": "9d1763595efa81d6b5b8a1269f6770f3b5e56574e177dfb0f58bb4644f0ebbdd",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/9d1763595efa81d6b5b8a1269f6770f3b5e56574e177dfb0f58bb4644f0ebbdd.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_runtime_numeric_identity_20261010_test.tscn",
+          "sha256": "2755398f2e6589850a31a6069775614d523788af33c0e185c39665e78e62f948",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/2755398f2e6589850a31a6069775614d523788af33c0e185c39665e78e62f948.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_saved_publish_boundary_20261010_test.gd",
+          "sha256": "6cb7ee7a4bf5d9a283d3613a3cca459a441882f4c265dc6f474e1a1adafd6929",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/6cb7ee7a4bf5d9a283d3613a3cca459a441882f4c265dc6f474e1a1adafd6929.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_saved_publish_boundary_20261010_test.tscn",
+          "sha256": "203db29b23210b786c774dcc5d1450e97d282e11da920ae558a70a0d98990e1d",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/203db29b23210b786c774dcc5d1450e97d282e11da920ae558a70a0d98990e1d.txt"
+        }
+      ],
+      "runner_receipt": "outputs/test_logs/v109_direct48_registry_recovery/logs/runner_results_adhoc_20261010_025517_160_8784.json",
+      "actual_command": {
+        "script": "tools/run_godot_tests.ps1",
+        "TestPaths": [
+          "tests/framework/map_editor_release_recovery_20261010_test.tscn",
+          "tests/map_publish_restart_recovery_test.tscn",
+          "tests/map_registry_restore_entry_test.tscn",
+          "tests/map_registry_restore_source_preserved_test.tscn",
+          "tests/map_registry_fail_closed_transaction_test.tscn",
+          "tests/rv14_registry_review_counterexamples.tscn"
+        ],
+        "TimeoutSeconds": 30,
+        "Verbose": true
+      },
+      "environment": {
+        "GIT_INDEX_FILE": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\wake_drop_v108_review_followup_20261009\\B06_SOURCE_FREEZE_48.index",
+        "HARDCORE_R3_CONTENT_SHA256": "ffa1658645595b68d3d01758d5d99276b83ac837ce54ab1307ccef803d3d62d7",
+        "HARDCORE_AUDIT_LOG_ROOT": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct48_registry_recovery\\logs",
+        "HARDCORE_AUDIT_RUNTIME_APPDATA": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct48_registry_recovery",
+        "HARDCORE_AUDIT_EVIDENCE_ROOT": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct48_registry_recovery\\raw"
+      },
+      "invocation_id": "1c0381ce-e2be-47af-a8dd-a80335dd0e88",
+      "runtime_environment": {
+        "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+        "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct48_registry_recovery",
+        "runner_process_id": 8784
+      },
+      "results": [
+        {
+          "test_name": "map_editor_release_recovery_20261010_test",
+          "test_path": "tests/framework/map_editor_release_recovery_20261010_test.tscn",
+          "wrapper_process_id": 4220,
+          "wrapper_started_utc": "2026-10-09T18:54:31.9954392Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct48_registry_recovery",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-09T18:55:02.0080336Z",
+          "native_exit_observed_utc": "2026-10-09T18:54:38.3731740Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "fffc3087-04c4-4bae-b1ce-bdcd5cfe27b0",
+          "framework_receipt_valid": true,
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "map_publish_restart_recovery_test",
+          "test_path": "tests/map_publish_restart_recovery_test.tscn",
+          "wrapper_process_id": 21468,
+          "wrapper_started_utc": "2026-10-09T18:54:39.9693732Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct48_registry_recovery",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-09T18:55:09.9777801Z",
+          "native_exit_observed_utc": "2026-10-09T18:54:46.4841551Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "",
+          "framework_receipt_valid": null,
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "map_registry_restore_entry_test",
+          "test_path": "tests/map_registry_restore_entry_test.tscn",
+          "wrapper_process_id": 21288,
+          "wrapper_started_utc": "2026-10-09T18:54:47.9029833Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct48_registry_recovery",
+          "fixed_fps": 0,
+          "pass_marker_found": false,
+          "process_exited": true,
+          "wrapper_exit_code": 1,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-09T18:55:17.9113726Z",
+          "native_exit_observed_utc": "2026-10-09T18:54:53.8187251Z",
+          "effective_exit_code": 1,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 1,
+          "engine_log_failure_count": 1,
+          "framework_run_id": "",
+          "framework_receipt_valid": null,
+          "result": "FAIL",
+          "reason": "missing_pass_marker;non_zero_exit_code_1;stderr_failures_1;engine_log_failures_1"
+        },
+        {
+          "test_name": "map_registry_restore_source_preserved_test",
+          "test_path": "tests/map_registry_restore_source_preserved_test.tscn",
+          "wrapper_process_id": 9012,
+          "wrapper_started_utc": "2026-10-09T18:54:55.0116715Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct48_registry_recovery",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-09T18:55:25.0199918Z",
+          "native_exit_observed_utc": "2026-10-09T18:55:00.7345630Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "",
+          "framework_receipt_valid": null,
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "map_registry_fail_closed_transaction_test",
+          "test_path": "tests/map_registry_fail_closed_transaction_test.tscn",
+          "wrapper_process_id": 2036,
+          "wrapper_started_utc": "2026-10-09T18:55:02.2967062Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct48_registry_recovery",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-09T18:55:32.3049147Z",
+          "native_exit_observed_utc": "2026-10-09T18:55:08.5148741Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "",
+          "framework_receipt_valid": null,
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "rv14_registry_review_counterexamples",
+          "test_path": "tests/rv14_registry_review_counterexamples.tscn",
+          "wrapper_process_id": 6892,
+          "wrapper_started_utc": "2026-10-09T18:55:10.0481674Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct48_registry_recovery",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-09T18:55:40.0569129Z",
+          "native_exit_observed_utc": "2026-10-09T18:55:15.7646234Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "",
+          "framework_receipt_valid": null,
+          "result": "PASS",
+          "reason": ""
+        }
+      ],
+      "framework_checks": [
+        {
+          "path": "outputs/test_logs/v109_direct48_registry_recovery/raw/fffc3087-04c4-4bae-b1ce-bdcd5cfe27b0/map_editor_release_recovery_20261010_test.result.json",
+          "run_id": "fffc3087-04c4-4bae-b1ce-bdcd5cfe27b0",
+          "scene_id": "map_editor_release_recovery_20261010_test",
+          "count": 60,
+          "passed": 60,
+          "failed": 0,
+          "status": "PASS",
+          "source_content_sha256": "ffa1658645595b68d3d01758d5d99276b83ac837ce54ab1307ccef803d3d62d7"
+        }
+      ],
+      "cleanup_status": "PASS",
+      "cleanup_warnings": [],
+      "original_failures_retained": 1
+    },
+    {
+      "stage": "v109_direct49_registry_duplicate",
+      "freeze": "docs/review/full_project_audit_v109_20261009/evidence/B06/freezes/B06_SOURCE_FREEZE_49.json",
+      "freeze_sha256": "6e2852a906ec2776a2ad529e2304bc293ffd43fff5468e9e10d909cdebe60906",
+      "candidate_tree": "6f0e68c325cc4256dfdc6d9cb00905afd41ca685",
+      "engine": {
+        "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+        "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+        "bytes": 198152
+      },
+      "retained_changed_source": [
+        {
+          "path": "scripts/layers/runtime/map_editor_runtime_bridge.gd",
+          "sha256": "57f08eb855ef0e7a908587828e51e2ea285a18b933e35761d448198fa68d3d6f",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/57f08eb855ef0e7a908587828e51e2ea285a18b933e35761d448198fa68d3d6f.txt"
+        },
+        {
+          "path": "scripts/map_editor/map_editor_app.gd",
+          "sha256": "19fc7a1b7ad50a7731b4d494b4c488d2fa2d78f17b2749e2c182e55a3866035e",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/19fc7a1b7ad50a7731b4d494b4c488d2fa2d78f17b2749e2c182e55a3866035e.txt"
+        },
+        {
+          "path": "scripts/map_editor/map_editor_build_runtime_service.gd",
+          "sha256": "8aa45021290ff718c0220ce1180d9622ba94fd54884c0beecf3e6d52353afae6",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/8aa45021290ff718c0220ce1180d9622ba94fd54884c0beecf3e6d52353afae6.txt"
+        },
+        {
+          "path": "scripts/map_editor/map_editor_ground_service.gd",
+          "sha256": "304b8c8fd4cf3d635851d65ecce3443481d30170afc459301d90a88b35005a95",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/304b8c8fd4cf3d635851d65ecce3443481d30170afc459301d90a88b35005a95.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_ground_transaction_20261010_test.gd",
+          "sha256": "c65dee06c108e2dea57c83b5e064a14595c506588a9249c323431bfe0e9b29e0",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/c65dee06c108e2dea57c83b5e064a14595c506588a9249c323431bfe0e9b29e0.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_ground_transaction_20261010_test.tscn",
+          "sha256": "c7a62cd428009f0bf7dc6e83626112463b3a3792baea614d5d6471df4178cc8c",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/c7a62cd428009f0bf7dc6e83626112463b3a3792baea614d5d6471df4178cc8c.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_release_recovery_20261010_test.gd",
+          "sha256": "30a0027cabd3893ca27302685f44f18d36c0b2262cab2eb7d81755e5953f1808",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/30a0027cabd3893ca27302685f44f18d36c0b2262cab2eb7d81755e5953f1808.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_release_recovery_20261010_test.tscn",
+          "sha256": "c98d45051cfa319b2f1d745d72bf932d21bd65321a2ed9941b4b78f8be833938",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/c98d45051cfa319b2f1d745d72bf932d21bd65321a2ed9941b4b78f8be833938.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_runtime_numeric_identity_20261010_test.gd",
+          "sha256": "9d1763595efa81d6b5b8a1269f6770f3b5e56574e177dfb0f58bb4644f0ebbdd",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/9d1763595efa81d6b5b8a1269f6770f3b5e56574e177dfb0f58bb4644f0ebbdd.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_runtime_numeric_identity_20261010_test.tscn",
+          "sha256": "2755398f2e6589850a31a6069775614d523788af33c0e185c39665e78e62f948",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/2755398f2e6589850a31a6069775614d523788af33c0e185c39665e78e62f948.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_saved_publish_boundary_20261010_test.gd",
+          "sha256": "6cb7ee7a4bf5d9a283d3613a3cca459a441882f4c265dc6f474e1a1adafd6929",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/6cb7ee7a4bf5d9a283d3613a3cca459a441882f4c265dc6f474e1a1adafd6929.txt"
+        },
+        {
+          "path": "tests/framework/map_editor_saved_publish_boundary_20261010_test.tscn",
+          "sha256": "203db29b23210b786c774dcc5d1450e97d282e11da920ae558a70a0d98990e1d",
+          "retained_blob": "docs/review/full_project_audit_v109_20261009/evidence/B06/source_blobs/203db29b23210b786c774dcc5d1450e97d282e11da920ae558a70a0d98990e1d.txt"
+        }
+      ],
+      "runner_receipt": "outputs/test_logs/v109_direct49_registry_duplicate/logs/runner_results_adhoc_20261010_025709_117_8900.json",
+      "actual_command": {
+        "script": "tools/run_godot_tests.ps1",
+        "TestPaths": [
+          "tests/map_registry_restore_entry_test.tscn"
+        ],
+        "TimeoutSeconds": 30,
+        "Verbose": true
+      },
+      "environment": {
+        "GIT_INDEX_FILE": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\wake_drop_v108_review_followup_20261009\\B06_SOURCE_FREEZE_49.index",
+        "HARDCORE_R3_CONTENT_SHA256": "6e2852a906ec2776a2ad529e2304bc293ffd43fff5468e9e10d909cdebe60906",
+        "HARDCORE_AUDIT_LOG_ROOT": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct49_registry_duplicate\\logs",
+        "HARDCORE_AUDIT_RUNTIME_APPDATA": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct49_registry_duplicate",
+        "HARDCORE_AUDIT_EVIDENCE_ROOT": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct49_registry_duplicate\\raw"
+      },
+      "invocation_id": "d758ea0b-091e-466f-94dd-c602879f5386",
+      "runtime_environment": {
+        "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+        "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct49_registry_duplicate",
+        "runner_process_id": 8900
+      },
+      "results": [
+        {
+          "test_name": "map_registry_restore_entry_test",
+          "test_path": "tests/map_registry_restore_entry_test.tscn",
+          "wrapper_process_id": 20988,
+          "wrapper_started_utc": "2026-10-09T18:57:01.4138140Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct49_registry_duplicate",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-09T18:57:31.4267960Z",
+          "native_exit_observed_utc": "2026-10-09T18:57:07.5507762Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "",
+          "framework_receipt_valid": null,
+          "result": "PASS",
+          "reason": ""
+        }
+      ],
+      "framework_checks": [],
+      "cleanup_status": "PASS",
+      "cleanup_warnings": [],
+      "original_failures_retained": 0
+    }
+  ],
+  "portal_artifact": {
+    "path": "docs/review/full_project_audit_v109_20261009/evidence/B06/portal_all_map_authoring_footprint.json",
+    "maps": 67,
+    "endpoints": 132,
+    "status": "PASS",
+    "scope": "Current authoring footprint terrain/collision check; not 132 actual player traversals or Android acceptance"
+  },
+  "limits": {
+    "whole_project_audit": "MISSING",
+    "B07A_B07B_B08": "NOT_RUN",
+    "Android_editor_or_game_device": "NOT_RUN",
+    "actual_process_kill_or_power_loss": "NOT_RUN",
+    "bake_preview_joint_recovery": "NOT_RUN",
+    "crash_time_ungenerated_unpicked_reward_policy": "MISSING",
+    "formal_109_build": "NOT_RUN"
+  },
+  "reuse_reason": "Ground and raw runtime numeric identity source/fixtures remain unchanged after direct42; later changes are editor save normalization/owner identity and publish recovery. App durable-save/native proof direct45 and direct47 are retained; source48 adds only selected legacy registry-backup consumption and its path/hash guards. Related46 positives on unchanged no-backup publication, save-path isolation, consumers, sibling preservation and current portal geometry are reused by control-flow review. The failed old restart case is rerun after each necessary recovery fix; no assertion or gameplay/data authority was weakened. Source49 changes only cleanup of two legacy registry backups whose selected bytes are identical; direct49 reruns the failed 19-check real registry-restore-entry test, including both protocols, duplicate and conflict cases. Direct48 release-recovery, old restart, source preservation, fail-closed transaction and approval counterexamples remain bound to source48, and are reused for their unchanged branches, not represented as new source49 runs.",
+  "final_source_tree": "6f0e68c325cc4256dfdc6d9cb00905afd41ca685"
+}

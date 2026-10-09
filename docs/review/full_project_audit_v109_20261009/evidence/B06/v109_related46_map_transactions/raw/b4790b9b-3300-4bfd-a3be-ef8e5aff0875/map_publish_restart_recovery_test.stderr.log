@@ -1,0 +1,9 @@
+SCRIPT ERROR: Assertion failed: cannot read user://p0_3r_crash_formal_a/p0_3r_crash_a.runtime.json
+   at: file_sha256 (res://tests/helpers/map_runtime_transaction_test_fixtures.gd:115)
+   GDScript backtrace (most recent call first):
+       [0] file_sha256 (res://tests/helpers/map_runtime_transaction_test_fixtures.gd:115)
+       [1] _run (res://tests/map_publish_restart_recovery_test.gd:99)
+SCRIPT ERROR: Assertion failed: old release must be playable again after the failed retry
+   at: _run (res://tests/map_publish_restart_recovery_test.gd:110)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/map_publish_restart_recovery_test.gd:110)

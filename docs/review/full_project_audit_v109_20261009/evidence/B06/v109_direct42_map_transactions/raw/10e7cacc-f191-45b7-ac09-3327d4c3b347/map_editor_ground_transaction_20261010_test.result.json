@@ -1,0 +1,167 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "initial ground workspace initializes",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "real batch mutation commits the complete ground write set",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "post-batch workspace reopens",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "partial promotion resumes from the committed intent",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "recovery keeps intended manifest",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "recovery promotes intended state",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "completed recovery is idempotent",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "completed intent is removed",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "missing primary recovers from valid intent base",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "missing primary selects intended new state",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "third version returns explicit blocked recovery",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "newer manual bytes remain untouched",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "path traversal intent is rejected before file operations",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "path rejection preserves primary bytes",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "absolute arbitrary temp is rejected",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "arbitrary temp rejection preserves primary bytes",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "changed backup is rejected before promotion",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "changed backup rejection preserves primary bytes",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "dictionary entries intent is rejected",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "valid JSON schema reaches the entries shape guard",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "dictionary entries rejection preserves primary bytes",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "nonnumeric or fractional schema fails the identity guard",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "invalid schema preserves primary bytes",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "nonnumeric or fractional schema fails the identity guard",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "invalid schema preserves primary bytes",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "nonnumeric or fractional schema fails the identity guard",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "invalid schema preserves primary bytes",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "duplicate target intent is rejected before promotion",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "duplicate target rejection preserves primary bytes",
+      "passed": true
+    }
+  ],
+  "count": 29,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "f2a5f84b-b70a-4fae-ab96-b45cdefc149d",
+  "passed": 29,
+  "reported_checks": 29,
+  "reported_failures": 0,
+  "run_id": "10e7cacc-f191-45b7-ac09-3327d4c3b347",
+  "runtime_environment": {
+    "native_process_id": 5684,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct42_map_transactions",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/v109_direct42_map_transactions/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "map_editor_ground_transaction_20261010_test",
+  "schema_version": 1,
+  "source_content_sha256": "2d69eb3780967bd7645459ce03ad0d2282b9caf278a28b9920bc7d2aa2ed5be3",
+  "status": "PASS"
+}

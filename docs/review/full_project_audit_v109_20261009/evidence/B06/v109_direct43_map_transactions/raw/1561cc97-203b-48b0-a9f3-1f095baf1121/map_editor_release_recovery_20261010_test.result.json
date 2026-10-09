@@ -1,0 +1,192 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "fixture approval failed",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "candidate A failed",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "initial release failed: { \"success\": true, \"runtime_map_id\": 991064, \"map_key\": \"b06_recovery_map\", \"approved_build_sha256\": \"efe5da637f1bc5eba8b236acf0fd13175c74cca1f748c7eb62b5fd82a04c867a\", \"release_state\": \"implemented_playable\", \"approval_revision\": 1, \"formal_playable\": true }",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "cannot read bytes: user://b06_release_recovery_registry.json",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "candidate B failed",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "candidate B did not change runtime bytes",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "candidate B file hash missing",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "cannot read bytes: user://b06_release_recovery_registry.json",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "runtime crash seam did not leave its boundary",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "cross-map recovery request must not claim the pending publish",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "cannot read bytes: C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/v109_direct43_map_transactions/Godot/app_userdata/HardCore/b06_release_recovery_registry.json.publish_intent.json",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "crash intent must be parseable",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "cannot write bytes: C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/v109_direct43_map_transactions/Godot/app_userdata/HardCore/b06_release_recovery_registry.json.publish_intent.json",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "unknown formal path must block recovery",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "cannot write bytes: C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/v109_direct43_map_transactions/Godot/app_userdata/HardCore/b06_release_recovery_registry.json.publish_intent.json",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "cannot write bytes: user://b06_release_recovery_registry.json",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "existing empty registry must not be treated as missing",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "cannot write bytes: user://b06_release_recovery_registry.json",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "cannot write bytes: user://b06_release_recovery_registry.json",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "third registry version must block recovery",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "cannot read bytes: user://b06_release_recovery_registry.json",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "third registry bytes must remain untouched",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "cannot write bytes: user://b06_release_recovery_registry.json",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "runtime recovery failed: { \"success\": true, \"recovered\": \"completed_registry_commit\", \"runtime_map_id\": 991064, \"map_key\": \"b06_recovery_map\", \"approved_build_sha256\": \"ac37e7c3b72dd260bb629cdfcf345b1d39f0436ec997530cf8b3dc6de5e13a80\", \"formal_playable\": true, \"approval_revision\": 2 }",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "recovered runtime is not playable",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "runtime recovery file hash mismatch",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "recovery changed unrelated map count",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "recovery changed unrelated map identity",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "cannot write bytes: user://b06_release_recovery_registry.json",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "registry crash seam did not leave its boundary",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "registry recovery failed: { \"success\": true, \"recovered\": \"completed_registry_commit\", \"runtime_map_id\": 991064, \"map_key\": \"b06_recovery_map\", \"approved_build_sha256\": \"ac37e7c3b72dd260bb629cdfcf345b1d39f0436ec997530cf8b3dc6de5e13a80\", \"formal_playable\": true, \"approval_revision\": 2 }",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "registry recovery is not playable",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "registry recovery changed runtime unexpectedly",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "successful recovery left intent",
+      "passed": true
+    }
+  ],
+  "count": 34,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "f641c0b6-8161-416f-b40a-4e7582c897ec",
+  "passed": 34,
+  "reported_checks": 34,
+  "reported_failures": 0,
+  "run_id": "1561cc97-203b-48b0-a9f3-1f095baf1121",
+  "runtime_environment": {
+    "native_process_id": 20492,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct43_map_transactions",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/v109_direct43_map_transactions/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "map_editor_release_recovery_20261010_test",
+  "schema_version": 1,
+  "source_content_sha256": "ba57cc2bc0173e81b646f1c059ee8fdafad0bcf4b1ba7f72d3dfd9df0304f39f",
+  "status": "PASS"
+}

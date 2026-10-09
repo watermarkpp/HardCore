@@ -1,0 +1,1799 @@
+class_name MapEditorBuildRuntimeService
+extends RefCounted
+
+const ConnectionPolicyService := preload(
+	"res://scripts/map_editor/map_editor_connection_policy_service.gd"
+)
+const RuntimeCollisionGeometry := preload(
+	"res://scripts/map_editor/map_editor_runtime_collision_geometry_service.gd"
+)
+const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+const UnitLegacyAdapter := preload(
+	"res://scripts/map_editor/map_editor_unit_legacy_adapter.gd"
+)
+const RuntimeMapService := preload(
+	"res://scripts/map_editor/map_editor_runtime_map_service.gd"
+)
+const RuntimeBridge := preload(
+	"res://scripts/layers/runtime/map_editor_runtime_bridge.gd"
+)
+const JsonCodec := preload("res://scripts/map_editor/map_editor_json_codec.gd")
+const MapUIPresentationProjectionScript := preload(
+	"res://scripts/map_editor/map_ui_presentation_projection.gd"
+)
+const SpawnIdentityService := preload(
+	"res://scripts/map_editor/map_editor_spawn_identity_service.gd"
+)
+
+const LEGACY_RUNTIME_SCHEMA_VERSION := UnitLegacyAdapter.LEGACY_RUNTIME_SCHEMA_VERSION
+const RUNTIME_SCHEMA_VERSION := UnitLegacyAdapter.RUNTIME_SCHEMA_VERSION
+const RUNTIME_ROOT := "res://assets/data/runtime/map_editor/"
+const DEFAULT_RELEASE_REGISTRY_PATH := (
+	"res://assets/data/runtime/map_editor/map_runtime_release_registry.json"
+)
+const FORMAL_IDENTITY_PATH := "res://assets/data/map_design/map_identity_registry.json"
+## FREEZE-P0.3R: Build Candidates are NEVER written to the formal runtime
+## directory. outputs/ is gitignored and candidates are keyed by build hash.
+const CANDIDATE_ROOT := "res://outputs/map_runtime_candidates/"
+const CANDIDATE_BINDING_CONTRACT_ID := "mse.map.runtime.candidate_binding.v1"
+
+## FREEZE-P0.3R test/dev seams only - all false in production.
+static var test_fail_runtime_promote := false
+static var test_fail_registry_commit := false
+static var test_fail_post_publish_verify := false
+## Crash-recovery seams are test-only. They leave the durable intent and
+## filesystem boundary in place so a subsequent invocation can exercise the
+## same recovery path; production never enables them.
+static var test_crash_after_runtime_promote := false
+static var test_crash_after_registry_backup := false
+## FREEZE-P0.3R test/dev seam: redirect formal runtime promotion to a scratch
+## root (e.g. user://) so tests never write the tracked formal runtime dir.
+static var test_formal_runtime_root_override := ""
+
+
+static func _resolve_release_display_name(
+	map_key: String,
+	runtime_map_id: int,
+	authored_display_name: String,
+) -> Dictionary:
+	if not FileAccess.file_exists(FORMAL_IDENTITY_PATH):
+		return {"ok": false, "name": "", "formal": false, "reason": "formal_identity_registry_unavailable"}
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(FORMAL_IDENTITY_PATH))
+	if not parsed is Dictionary or str(parsed.get("contract_id", "")) != "hardcore.formal_map_identity.v1":
+		return {"ok": false, "name": "", "formal": false, "reason": "formal_identity_registry_invalid"}
+	var canonical_range: Variant = parsed.get("canonical_runtime_range", null)
+	if not canonical_range is Array or canonical_range.size() != 2:
+		return {"ok": false, "name": "", "formal": false, "reason": "formal_identity_registry_invalid"}
+	# JSON numbers may be floats; accept only finite, exact integer bounds.
+	for bound: Variant in canonical_range:
+		if not (bound is int or bound is float) or not is_finite(float(bound)) or float(bound) != floorf(float(bound)):
+			return {"ok": false, "name": "", "formal": false, "reason": "formal_identity_registry_invalid"}
+	if int(canonical_range[0]) > int(canonical_range[1]):
+		return {"ok": false, "name": "", "formal": false, "reason": "formal_identity_registry_invalid"}
+	var formal_range := runtime_map_id >= int(canonical_range[0]) and runtime_map_id <= int(canonical_range[1])
+	var found := false
+	var canonical := ""
+	var registered_id := -1
+	var seen_keys := {}
+	var seen_ids := {}
+	var identity_rows: Variant = parsed.get("maps", null)
+	if not identity_rows is Array:
+		return {"ok": false, "name": "", "formal": formal_range, "reason": "formal_identity_registry_invalid"}
+	for raw: Variant in identity_rows:
+		if not raw is Dictionary:
+			return {"ok": false, "name": "", "formal": formal_range, "reason": "formal_identity_registry_invalid"}
+		var row_key := str(raw.get("map_id", "")).strip_edges()
+		var row_id := int(raw.get("runtime_map_id", -1))
+		if row_key.is_empty() or row_id <= 0 or seen_keys.has(row_key) or seen_ids.has(row_id):
+			return {"ok": false, "name": "", "formal": formal_range, "reason": "formal_identity_registry_conflict"}
+		seen_keys[row_key] = true
+		seen_ids[row_id] = true
+		if row_key != map_key:
+			continue
+		found = true
+		canonical = str(raw.get("display_name", "")).strip_edges()
+		registered_id = row_id
+	if not found:
+		return {"ok": not formal_range, "name": authored_display_name, "formal": false, "reason": "formal_identity_row_missing"}
+	if registered_id != runtime_map_id or canonical.is_empty():
+		return {"ok": false, "name": "", "formal": true, "reason": "formal_identity_runtime_or_name_invalid"}
+	if authored_display_name.strip_edges() != canonical:
+		return {"ok": false, "name": "", "formal": true, "reason": "candidate_display_name_conflict"}
+	return {"ok": true, "name": canonical, "formal": true}
+
+
+static func approve_for_runtime(document: Dictionary) -> Dictionary:
+	var validation := validate_for_runtime(document)
+	if not validation.ok:
+		return validation
+	var meta: Dictionary = document.get("editor_meta", {})
+	meta["runtime_approved"] = true
+	meta["runtime_approved_revision"] = int(meta.get("revision", 1))
+	document["editor_meta"] = meta
+	return {"ok": true, "validation": validation}
+
+
+## FREEZE-P0.3R: Publish Runtime Release is a TRANSACTION over the formal
+## runtime artifact + the Release Registry. Input is a Build Candidate file.
+## Flow: load candidate -> validate -> map_key check -> prepare formal temp ->
+## validate formal temp -> prepare registry -> validate registry -> promote
+## formal runtime (backup A) -> commit registry -> invalidate caches ->
+## post-publish verify -> success. Any failure rolls back to A + Registry A.
+static func publish_runtime_release(
+	candidate_runtime_path: String,
+	runtime_map_id: int,
+	expected_document_binding: Dictionary,
+	registry_path := DEFAULT_RELEASE_REGISTRY_PATH,
+	map_key_override := ""
+) -> Dictionary:
+	if runtime_map_id <= 0 or candidate_runtime_path.is_empty():
+		return {"success": false, "reason": "invalid_publish_args"}
+	var loaded := RuntimeMapService.load_runtime(candidate_runtime_path)
+	if not loaded.ok:
+		return {
+			"success": false,
+			"reason": "runtime_invalid",
+			"errors": loaded.errors,
+		}
+	var runtime: Dictionary = loaded.runtime
+	var map_key := str(runtime.get("source", {}).get("map_id", ""))
+	if map_key.is_empty():
+		return {"success": false, "reason": "runtime_map_key_missing"}
+	var spawn_identity_errors := SpawnIdentityService.validate_runtime(
+		runtime,
+		SpawnIdentityService.requires_formal_semantic_ids(map_key)
+	)
+	if not spawn_identity_errors.is_empty():
+		return {
+			"success": false,
+			"reason": "runtime_spawn_identity_invalid",
+			"errors": spawn_identity_errors,
+		}
+	var binding_check := _validate_candidate_binding(
+		runtime,
+		runtime_map_id,
+		expected_document_binding
+	)
+	if not binding_check.ok:
+		return {
+			"success": false,
+			"reason": binding_check.reason,
+			"errors": binding_check.get("errors", []),
+		}
+	if not map_key_override.is_empty() and map_key_override != map_key:
+		return {"success": false, "reason": "runtime_map_key_mismatch"}
+	var approved_hash := str(runtime.get("build_sha256", ""))
+	if approved_hash.is_empty():
+		return {"success": false, "reason": "runtime_build_hash_missing"}
+	var ui_presentation := MapUIPresentationProjectionScript.from_runtime(runtime)
+	var ui_presentation_errors := MapUIPresentationProjectionScript.validate(
+		ui_presentation,
+		approved_hash
+	)
+	if not ui_presentation_errors.is_empty():
+		return {
+			"success": false,
+			"reason": "map_ui_projection_invalid",
+			"errors": ui_presentation_errors,
+		}
+	var authored_display_name := str(
+		runtime.get("source", {}).get("display_name", "")
+	).strip_edges()
+	if authored_display_name.is_empty():
+		return {"success": false, "reason": "candidate_display_name_missing"}
+	var name_resolution := _resolve_release_display_name(
+		map_key,
+		runtime_map_id,
+		authored_display_name,
+	)
+	if not bool(name_resolution.get("ok", false)):
+		return {
+			"success": false,
+			"reason": str(name_resolution.get("reason", "display_name_invalid")),
+		}
+	var verified_display_name := str(name_resolution.get("name", "")).strip_edges()
+	var pending_recovery := _recover_pending_publish_intent(
+		registry_path, runtime_map_id, map_key, approved_hash
+	)
+	if not bool(pending_recovery.get("ok", false)):
+		return {
+			"success": false,
+			"reason": str(pending_recovery.get("reason", "publish_recovery_blocked")),
+			"errors": pending_recovery.get("errors", []),
+		}
+	var recovered_state := str(pending_recovery.get("recovered", ""))
+	if recovered_state == "completed_registry_commit" or recovered_state == "already_committed":
+		RuntimeBridge.invalidate_release_registry()
+		if not RuntimeBridge.is_formal_playable(runtime_map_id):
+			return {"success": false, "reason": "publish_recovery_readiness_failed"}
+		return {
+			"success": true,
+			"recovered": recovered_state,
+			"runtime_map_id": runtime_map_id,
+			"map_key": map_key,
+			"approved_build_sha256": approved_hash,
+			"formal_playable": true,
+			"approval_revision": int(pending_recovery.get("approval_revision", 0)),
+		}
+	var registry_read := _read_registry(registry_path)
+	if not registry_read.ok:
+		return {
+			"success": false,
+			"reason": registry_read.reason,
+			"errors": registry_read.get("errors", []),
+		}
+	var old_registry: Dictionary = registry_read.registry
+	var old_registry_bytes: PackedByteArray = registry_read.raw_bytes
+	var registry: Dictionary = old_registry.duplicate(true)
+	var maps: Array = registry.get("maps", [])
+	var previous_revision := 0
+	var updated := false
+	var formal_path := default_runtime_path(map_key)
+	for i in range(maps.size()):
+		if int(maps[i].get("runtime_map_id", -1)) == runtime_map_id:
+			previous_revision = int(maps[i].get("approval_revision", 0))
+			var existing_display_name := str(maps[i].get("display_name", "")).strip_edges()
+			var release_display_name := (
+				verified_display_name
+				if bool(name_resolution.get("formal", false))
+				else (existing_display_name if not existing_display_name.is_empty() else authored_display_name)
+			)
+			if release_display_name.is_empty():
+				return {
+					"success": false,
+					"reason": "candidate_display_name_missing",
+				}
+			maps[i] = _release_entry(
+				runtime_map_id,
+				map_key,
+				release_display_name,
+				approved_hash,
+				formal_path,
+				previous_revision,
+				ui_presentation
+			)
+			updated = true
+			break
+	if not updated:
+		if authored_display_name.is_empty():
+			return {
+				"success": false,
+				"reason": "candidate_display_name_missing",
+			}
+		maps.append(
+			_release_entry(
+				runtime_map_id,
+				map_key,
+				authored_display_name,
+				approved_hash,
+				formal_path,
+				0,
+				ui_presentation
+			)
+		)
+	registry["maps"] = maps
+	var schema_errors := RuntimeBridge.validate_release_registry(registry)
+	if not schema_errors.is_empty():
+		return {
+			"success": false,
+			"reason": "invalid_release_registry",
+			"errors": schema_errors,
+		}
+	var intent_registry_text := _intent_registry_text(
+		old_registry_bytes,
+		registry,
+		map_key_override,
+		runtime_map_id
+	)
+	if intent_registry_text.is_empty():
+		return {"success": false, "reason": "publish_intent_registry_prepare_failed"}
+	var old_runtime_file_hash := _file_sha256(formal_path)
+	var old_runtime_approved_hash := ""
+	for old_entry: Variant in old_registry.get("maps", []):
+		if old_entry is Dictionary \
+			and int(old_entry.get("runtime_map_id", -1)) == runtime_map_id \
+			and str(old_entry.get("map_key", "")) == map_key:
+			old_runtime_approved_hash = str(old_entry.get("approved_build_sha256", ""))
+			break
+	var candidate_file_hash := _file_sha256(candidate_runtime_path)
+	if candidate_file_hash.is_empty():
+		return {"success": false, "reason": "publish_candidate_file_hash_missing"}
+	var intent := _make_publish_intent(
+		registry_path,
+		formal_path,
+		runtime_map_id,
+		map_key,
+		old_runtime_file_hash,
+		old_runtime_approved_hash,
+		old_registry_bytes,
+		approved_hash,
+		candidate_file_hash,
+		intent_registry_text,
+		previous_revision
+	)
+	var intent_write := _write_publish_intent(intent)
+	if not bool(intent_write.get("success", false)):
+		return intent_write
+	# Promote the formal runtime artifact first (tmp -> verify -> backup -> promote).
+	var promote := _promote_runtime(candidate_runtime_path, formal_path)
+	if not promote.ok:
+		_remove_publish_intent(registry_path)
+		return {
+			"success": false,
+			"reason": "runtime_promote_failed",
+			"errors": promote.errors,
+		}
+	var backup_path := str(promote.get("backup_path", ""))
+	if test_crash_after_runtime_promote:
+		return {"success": false, "reason": "injected_process_crash_after_runtime_promote"}
+	# Commit the registry; on failure roll back the formal artifact.
+	var registry_write_ok := false
+	if test_crash_after_registry_backup:
+		var absolute_registry := _absolute_path(registry_path)
+		if FileAccess.file_exists(absolute_registry):
+			if DirAccess.rename_absolute(
+				absolute_registry,
+				absolute_registry + ".bak"
+			) != OK:
+				return {"success": false, "reason": "injected_registry_backup_failed"}
+		return {"success": false, "reason": "injected_process_crash_after_registry_backup"}
+	if not test_fail_registry_commit:
+		if map_key_override.is_empty():
+			registry_write_ok = _write_registry_atomic(registry_path, registry)
+		else:
+			registry_write_ok = _write_registry_atomic_preserving_existing_entries(
+				registry_path,
+				old_registry_bytes,
+				registry,
+				map_key_override,
+				runtime_map_id
+			)
+	if not registry_write_ok:
+		var runtime_restored := _restore_runtime(formal_path, backup_path)
+		if not bool(runtime_restored.get("ok", false)):
+			return {
+				"success": false,
+				"reason": "registry_write_failed_and_runtime_restore_failed",
+				"errors": [str(runtime_restored.get("reason", "unknown"))],
+			}
+		_remove_publish_intent(registry_path)
+		return {"success": false, "reason": "registry_write_failed"}
+	# Cache invalidate then post-publish verification. Publish never returns
+	# success unless the published build is actually formal playable.
+	RuntimeBridge.invalidate_release_registry()
+	var post_ok := (
+		not test_fail_post_publish_verify
+		and RuntimeBridge.is_formal_playable(runtime_map_id)
+		and str(
+			RuntimeBridge.load_map(runtime_map_id).get("build_sha256", "")
+		) == approved_hash
+	)
+	if not post_ok:
+		var runtime_restored := _restore_runtime(formal_path, backup_path)
+		var registry_restored := _restore_registry_bytes(
+			registry_path, old_registry_bytes
+		)
+		RuntimeBridge.invalidate_release_registry()
+		if not bool(registry_restored.get("ok", false)):
+			return {
+				"success": false,
+				"reason": "post_publish_rollback_failed",
+				"errors": [str(registry_restored.get("reason", "unknown"))],
+			}
+		if not bool(runtime_restored.get("ok", false)):
+			return {
+				"success": false,
+				"reason": "post_publish_runtime_rollback_failed",
+				"errors": [str(runtime_restored.get("reason", "unknown"))],
+			}
+		_remove_publish_intent(registry_path)
+		return {"success": false, "reason": "post_publish_verify_failed"}
+	if (
+		not backup_path.is_empty()
+		and FileAccess.file_exists(backup_path)
+	):
+		DirAccess.remove_absolute(backup_path)
+	_remove_publish_intent(registry_path)
+	return {
+		"success": true,
+		"runtime_map_id": runtime_map_id,
+		"map_key": map_key,
+		"approved_build_sha256": approved_hash,
+		"release_state": "implemented_playable",
+		"approval_revision": previous_revision + 1,
+		"formal_playable": true,
+	}
+
+
+static func _release_entry(
+	runtime_map_id: int,
+	map_key: String,
+	display_name: String,
+	approved_hash: String,
+	runtime_path: String,
+	previous_revision: int,
+	ui_presentation: Dictionary
+) -> Dictionary:
+	return {
+		"runtime_map_id": runtime_map_id,
+		"map_key": map_key,
+		"display_name": display_name,
+		"runtime_path": runtime_path,
+		"release_state": "implemented_playable",
+		"approved_build_sha256": approved_hash,
+		"approval_source": "published_via_publish_runtime_release",
+		"approval_revision": previous_revision + 1,
+		"ui_presentation": ui_presentation.duplicate(true),
+	}
+
+
+## FREEZE-P0.3R: promote a validated candidate into the formal runtime path.
+## tmp -> verify -> backup old -> promote; keeps the .bak until post-publish
+## verification so the caller can roll back.
+static func _promote_runtime(
+	candidate_path: String,
+	formal_path: String
+) -> Dictionary:
+	var absolute_formal := _absolute_path(formal_path)
+	var tmp := absolute_formal + ".publish_tmp"
+	var backup := absolute_formal + ".bak"
+	var candidate_file := FileAccess.open(candidate_path, FileAccess.READ)
+	if candidate_file == null:
+		return {"ok": false, "errors": ["candidate_open_failed"]}
+	var content := candidate_file.get_as_text()
+	candidate_file.close()
+	var mkdir := DirAccess.make_dir_recursive_absolute(
+		absolute_formal.get_base_dir()
+	)
+	if mkdir != OK:
+		return {"ok": false, "errors": ["runtime_mkdir_failed:%d" % mkdir]}
+	var file := FileAccess.open(tmp, FileAccess.WRITE)
+	if file == null:
+		return {"ok": false, "errors": ["formal_temp_open_failed"]}
+	file.store_string(content)
+	file.flush()
+	file.close()
+	# The formal temp must pass the full runtime validator before promotion.
+	var verify := RuntimeMapService.load_runtime(tmp)
+	if not verify.ok:
+		DirAccess.remove_absolute(tmp)
+		return {
+			"ok": false,
+			"errors": ["formal_temp_validation_failed", str(verify.errors)],
+		}
+	if FileAccess.file_exists(backup):
+		# A backup belongs to a prior transaction until the intent sidecar has
+		# proven its exact old file hash. Never restore an unknown backup here.
+		# The recovery path resolves the pair first; a normal retry must stop.
+		return {
+			"ok": false,
+			"errors": ["formal_backup_unresolved"],
+		}
+	if FileAccess.file_exists(absolute_formal):
+		var backup_error := DirAccess.rename_absolute(
+			absolute_formal, backup
+		)
+		if backup_error != OK:
+			DirAccess.remove_absolute(tmp)
+			return {
+				"ok": false,
+				"errors": ["formal_backup_failed:%d" % backup_error],
+			}
+	if test_fail_runtime_promote:
+		if FileAccess.file_exists(backup):
+			DirAccess.rename_absolute(backup, absolute_formal)
+		DirAccess.remove_absolute(tmp)
+		return {"ok": false, "errors": ["injected_runtime_promote_failure"]}
+	var promote_error := DirAccess.rename_absolute(tmp, absolute_formal)
+	if promote_error != OK:
+		if FileAccess.file_exists(backup):
+			DirAccess.rename_absolute(backup, absolute_formal)
+		DirAccess.remove_absolute(tmp)
+		return {
+			"ok": false,
+			"errors": ["formal_promote_failed:%d" % promote_error],
+		}
+	return {
+		"ok": true,
+		"backup_path": (
+			backup
+			if FileAccess.file_exists(backup)
+			else ""
+		),
+	}
+
+
+static func _restore_runtime(formal_path: String, backup_path: String) -> Dictionary:
+	## RV14-02: removal/rename results are reported so the publish caller can
+	## distinguish "publish failed and recovered" from "recovery failed".
+	## RV14-R2 review: an empty backup_path means there was NO prior formal
+	## artifact (first-publish rollback); a non-empty backup_path means there
+	## WAS one, so a missing backup file must fail instead of silently turning
+	## into first-publish cleanup that deletes the formal artifact.
+	var absolute_formal := _absolute_path(formal_path)
+	if not backup_path.is_empty():
+		var absolute_backup := _absolute_path(backup_path)
+		if absolute_backup == absolute_formal:
+			return {"ok": false, "reason": "backup_path_equals_formal"}
+		if not FileAccess.file_exists(absolute_backup):
+			return {"ok": false, "reason": "expected_runtime_backup_missing"}
+		if FileAccess.file_exists(absolute_formal):
+			if DirAccess.remove_absolute(absolute_formal) != OK:
+				return {"ok": false, "reason": "formal_remove_failed"}
+		if DirAccess.rename_absolute(absolute_backup, absolute_formal) != OK:
+			return {"ok": false, "reason": "backup_rename_failed"}
+		return {"ok": true, "reason": ""}
+	if FileAccess.file_exists(absolute_formal):
+		if DirAccess.remove_absolute(absolute_formal) != OK:
+			return {"ok": false, "reason": "formal_remove_failed"}
+	return {"ok": true, "reason": ""}
+
+
+static func _publish_intent_path(registry_path: String) -> String:
+	return _absolute_path(registry_path) + ".publish_intent.json"
+
+
+static func _make_publish_intent(
+	registry_path: String,
+	formal_path: String,
+	runtime_map_id: int,
+	map_key: String,
+	old_runtime_file_hash: String,
+	old_runtime_approved_hash: String,
+	old_registry_bytes: PackedByteArray,
+	new_runtime_approved_hash: String,
+	new_runtime_file_hash: String,
+	new_registry_text: String,
+	previous_revision: int
+) -> Dictionary:
+	return {
+		"schema": "hardcore.runtime_release_intent.v1",
+		"phase": "prepared",
+		"registry_path": _absolute_path(registry_path),
+		"formal_path": _absolute_path(formal_path),
+		"runtime_map_id": runtime_map_id,
+		"map_key": map_key,
+		"old_runtime_exists": not old_runtime_file_hash.is_empty(),
+		"old_runtime_file_sha256": old_runtime_file_hash,
+		"old_runtime_approved_build_sha256": old_runtime_approved_hash,
+		"old_registry_sha256": _sha256_bytes(old_registry_bytes),
+		"old_registry_text": old_registry_bytes.get_string_from_utf8(),
+		"new_approved_build_sha256": new_runtime_approved_hash,
+		"new_runtime_file_sha256": new_runtime_file_hash,
+		"new_registry_sha256": _sha256(new_registry_text),
+		"new_registry_text": new_registry_text,
+		"previous_approval_revision": previous_revision,
+	}
+
+
+static func _write_publish_intent(intent: Dictionary) -> Dictionary:
+	var intent_registry_text := str(intent.get("new_registry_text", ""))
+	if intent_registry_text.is_empty() \
+		or _sha256(intent_registry_text) != str(intent.get("new_registry_sha256", "")):
+		return {"success": false, "reason": "publish_intent_registry_hash_invalid"}
+	if str(intent.get("new_approved_build_sha256", "")).is_empty() \
+		or str(intent.get("new_runtime_file_sha256", "")).is_empty():
+		return {"success": false, "reason": "publish_intent_runtime_hash_missing"}
+	var intent_path := str(intent.get("registry_path", "")) + ".publish_intent.json"
+	var tmp_path := intent_path + ".tmp"
+	var file := FileAccess.open(tmp_path, FileAccess.WRITE)
+	if file == null:
+		return {"success": false, "reason": "publish_intent_open_failed"}
+	file.store_string(JsonCodec.encode(intent))
+	file.flush()
+	file.close()
+	var verified := FileAccess.open(tmp_path, FileAccess.READ)
+	if verified == null:
+		DirAccess.remove_absolute(tmp_path)
+		return {"success": false, "reason": "publish_intent_verify_open_failed"}
+	var parsed: Variant = JSON.parse_string(verified.get_as_text())
+	verified.close()
+	if not parsed is Dictionary:
+		DirAccess.remove_absolute(tmp_path)
+		return {"success": false, "reason": "publish_intent_verify_failed"}
+	if FileAccess.file_exists(intent_path):
+		if DirAccess.remove_absolute(intent_path) != OK:
+			DirAccess.remove_absolute(tmp_path)
+			return {"success": false, "reason": "publish_intent_replace_failed"}
+	if DirAccess.rename_absolute(tmp_path, intent_path) != OK:
+		DirAccess.remove_absolute(tmp_path)
+		return {"success": false, "reason": "publish_intent_promote_failed"}
+	return {"success": true}
+
+
+static func _remove_publish_intent(registry_path: String) -> void:
+	var path := _publish_intent_path(registry_path)
+	if FileAccess.file_exists(path):
+		DirAccess.remove_absolute(path)
+	var tmp := path + ".tmp"
+	if FileAccess.file_exists(tmp):
+		DirAccess.remove_absolute(tmp)
+
+
+static func _read_bytes(path: String) -> PackedByteArray:
+	if not FileAccess.file_exists(path):
+		return PackedByteArray()
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null:
+		return PackedByteArray()
+	var bytes := file.get_buffer(file.get_length())
+	file.close()
+	return bytes
+
+
+static func _sha256_bytes(bytes: PackedByteArray) -> String:
+	var hashing := HashingContext.new()
+	if hashing.start(HashingContext.HASH_SHA256) != OK:
+		return ""
+	hashing.update(bytes)
+	return hashing.finish().hex_encode()
+
+
+static func _intent_registry_text(
+	old_registry_bytes: PackedByteArray,
+	registry: Dictionary,
+	map_key_override: String,
+	runtime_map_id: int
+) -> String:
+	if map_key_override.is_empty():
+		return JsonCodec.encode(registry)
+	var old_text := old_registry_bytes.get_string_from_utf8()
+	var target: Dictionary = {}
+	var matches := 0
+	for raw_entry: Variant in registry.get("maps", []):
+		if raw_entry is Dictionary and str(raw_entry.get("map_key", "")) == map_key_override \
+			and int(raw_entry.get("runtime_map_id", -1)) == runtime_map_id:
+			target = raw_entry
+			matches += 1
+	if matches != 1:
+		return ""
+	var splice: Dictionary = preload(
+		"res://scripts/map_editor/map_registry_entry_splice.gd"
+	).replace_entry(old_text, registry, map_key_override, runtime_map_id, JsonCodec.encode(target))
+	if not bool(splice.get("valid", false)):
+		return ""
+	return str(splice.get("text", ""))
+
+
+static func _recover_pending_publish_intent(
+	registry_path: String,
+	requested_runtime_map_id: int,
+	requested_map_key: String,
+	requested_runtime_hash: String
+) -> Dictionary:
+	var path := _publish_intent_path(registry_path)
+	if not FileAccess.file_exists(path):
+		return {"ok": true}
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null:
+		return {"ok": false, "reason": "publish_recovery_intent_open_failed"}
+	var parsed: Variant = JSON.parse_string(file.get_as_text())
+	file.close()
+	if not parsed is Dictionary:
+		return {"ok": false, "reason": "publish_recovery_intent_invalid"}
+	var intent: Dictionary = parsed
+	if str(intent.get("schema", "")) != "hardcore.runtime_release_intent.v1":
+		return {"ok": false, "reason": "publish_recovery_intent_schema_invalid"}
+	var intent_map_id := int(intent.get("runtime_map_id", -1))
+	var intent_map_key := str(intent.get("map_key", ""))
+	var intent_new_approved_hash := str(intent.get("new_approved_build_sha256", ""))
+	var intent_new_file_hash := str(intent.get("new_runtime_file_sha256", ""))
+	if (
+		intent_map_id != requested_runtime_map_id
+		or intent_map_key != requested_map_key
+		or intent_new_approved_hash != requested_runtime_hash
+	):
+		return {
+			"ok": false,
+			"reason": "publish_recovery_other_transaction_pending",
+			"errors": [
+				"pending_map_id=%d" % intent_map_id,
+				"pending_map_key=%s" % intent_map_key,
+				"pending_runtime_hash=%s" % intent_new_approved_hash,
+			],
+		}
+	var formal_path := str(intent.get("formal_path", ""))
+	var expected_registry_path := str(intent.get("registry_path", ""))
+	var canonical_formal_path := default_runtime_path(intent_map_key)
+	if (
+		formal_path.is_empty()
+		or formal_path != _absolute_path(canonical_formal_path)
+		or expected_registry_path != _absolute_path(registry_path)
+	):
+		return {"ok": false, "reason": "publish_recovery_target_mismatch"}
+	var current_runtime_file_hash := _file_sha256(formal_path)
+	var registry_exists := FileAccess.file_exists(expected_registry_path)
+	var current_registry_bytes := _read_bytes(expected_registry_path)
+	if registry_exists and current_registry_bytes.is_empty():
+		return {"ok": false, "reason": "publish_recovery_registry_empty"}
+	var current_registry_hash := _sha256_bytes(current_registry_bytes)
+	var old_runtime_file_hash := str(intent.get("old_runtime_file_sha256", ""))
+	var old_runtime_approved_hash := str(intent.get("old_runtime_approved_build_sha256", ""))
+	var old_registry_hash := str(intent.get("old_registry_sha256", ""))
+	var new_runtime_approved_hash := intent_new_approved_hash
+	var new_runtime_file_hash := intent_new_file_hash
+	var new_registry_hash := str(intent.get("new_registry_sha256", ""))
+	var new_registry_text := str(intent.get("new_registry_text", ""))
+	if new_runtime_approved_hash.is_empty() or new_runtime_file_hash.is_empty():
+		return {"ok": false, "reason": "publish_recovery_intent_hashes_missing"}
+	if new_registry_text.is_empty() or _sha256(new_registry_text) != new_registry_hash:
+		return {"ok": false, "reason": "publish_recovery_new_registry_hash_invalid"}
+	var old_runtime_matches := current_runtime_file_hash == old_runtime_file_hash
+	var old_registry_matches := registry_exists and current_registry_hash == old_registry_hash
+	var new_runtime_matches := current_runtime_file_hash == new_runtime_file_hash
+	var new_registry_matches := registry_exists and current_registry_hash == new_registry_hash
+	var old_runtime_identity_matches := old_runtime_approved_hash.is_empty()
+	if not old_runtime_approved_hash.is_empty() and old_runtime_matches:
+		var old_runtime_probe := RuntimeMapService.load_runtime(formal_path)
+		old_runtime_identity_matches = old_runtime_probe.ok \
+			and str(old_runtime_probe.runtime.get("build_sha256", "")) == old_runtime_approved_hash
+	if not old_runtime_approved_hash.is_empty() and current_runtime_file_hash.is_empty():
+		var old_backup_probe := RuntimeMapService.load_runtime(formal_path + ".bak")
+		old_runtime_identity_matches = old_backup_probe.ok \
+			and str(old_backup_probe.runtime.get("build_sha256", "")) == old_runtime_approved_hash
+	var old_backup_matches := (
+		FileAccess.file_exists(formal_path + ".bak")
+		and not old_runtime_file_hash.is_empty()
+		and _file_sha256(formal_path + ".bak") == old_runtime_file_hash
+	)
+	if old_registry_matches and old_runtime_identity_matches \
+		and (old_runtime_matches or (current_runtime_file_hash.is_empty() and old_backup_matches)):
+		if current_runtime_file_hash.is_empty() and old_backup_matches:
+			if DirAccess.rename_absolute(formal_path + ".bak", formal_path) != OK:
+				return {"ok": false, "reason": "publish_recovery_runtime_restore_failed"}
+		_remove_publish_intent(registry_path)
+		return {"ok": true, "recovered": "discarded_unpromoted_intent"}
+	var new_registry_parse: Variant = JSON.parse_string(new_registry_text)
+	if not new_registry_parse is Dictionary:
+		return {"ok": false, "reason": "publish_recovery_new_registry_invalid"}
+	var new_registry: Dictionary = new_registry_parse
+	if not RuntimeBridge.validate_release_registry(new_registry).is_empty():
+		return {"ok": false, "reason": "publish_recovery_new_registry_invalid"}
+	var target_entry_ok := false
+	for raw_entry: Variant in new_registry.get("maps", []):
+		if raw_entry is Dictionary \
+			and int(raw_entry.get("runtime_map_id", -1)) == intent_map_id \
+			and str(raw_entry.get("map_key", "")) == intent_map_key \
+			and str(raw_entry.get("runtime_path", "")) == canonical_formal_path \
+			and str(raw_entry.get("approved_build_sha256", "")) == new_runtime_approved_hash \
+			and str(raw_entry.get("release_state", "")) == "implemented_playable" \
+			and int(raw_entry.get("approval_revision", -1)) \
+				== int(intent.get("previous_approval_revision", -1)) + 1:
+			target_entry_ok = true
+			break
+	if not target_entry_ok:
+		return {"ok": false, "reason": "publish_recovery_target_entry_invalid"}
+	var runtime_current := RuntimeMapService.load_runtime(formal_path)
+	if new_runtime_matches and (not runtime_current.ok \
+		or str(runtime_current.runtime.get("source", {}).get("map_id", "")) != intent_map_key \
+		or int(runtime_current.runtime.get("source", {}).get("runtime_map_id", -1)) != intent_map_id \
+		or str(runtime_current.runtime.get("build_sha256", "")) != new_runtime_approved_hash):
+		return {"ok": false, "reason": "publish_recovery_runtime_identity_invalid"}
+	if new_runtime_matches and new_registry_matches:
+		_remove_expected_backup(formal_path + ".bak", old_runtime_file_hash)
+		_remove_expected_backup(expected_registry_path + ".bak", old_registry_hash)
+		_remove_publish_intent(registry_path)
+		return {
+			"ok": true,
+			"recovered": "already_committed",
+			"runtime_map_id": int(intent.get("runtime_map_id", -1)),
+			"map_key": str(intent.get("map_key", "")),
+			"new_approved_build_sha256": new_runtime_approved_hash,
+			"approval_revision": int(intent.get("previous_approval_revision", 0)) + 1,
+		}
+	var old_registry_backup_matches := (
+		FileAccess.file_exists(expected_registry_path + ".bak")
+		and not old_registry_hash.is_empty()
+		and _file_sha256(expected_registry_path + ".bak") == old_registry_hash
+	)
+	var old_registry_restore_backup_matches := (
+		FileAccess.file_exists(expected_registry_path + ".restore_bak")
+		and not old_registry_hash.is_empty()
+		and _file_sha256(expected_registry_path + ".restore_bak") == old_registry_hash
+	)
+	var missing_registry_with_old_backup := (
+		not registry_exists
+		and (old_registry_backup_matches or old_registry_restore_backup_matches)
+	)
+	if new_runtime_matches and (missing_registry_with_old_backup or old_registry_matches):
+		if new_registry_text.is_empty():
+			return {"ok": false, "reason": "publish_recovery_new_registry_missing"}
+		var written := _write_registry_text_atomic(registry_path, new_registry_text)
+		if not written or _sha256_bytes(_read_bytes(expected_registry_path)) != new_registry_hash:
+			return {"ok": false, "reason": "publish_recovery_registry_commit_failed"}
+		_remove_expected_backup(formal_path + ".bak", old_runtime_file_hash)
+		_remove_expected_backup(expected_registry_path + ".bak", old_registry_hash)
+		_remove_expected_backup(expected_registry_path + ".restore_bak", old_registry_hash)
+		_remove_publish_intent(registry_path)
+		return {
+			"ok": true,
+			"recovered": "completed_registry_commit",
+			"runtime_map_id": int(intent.get("runtime_map_id", -1)),
+			"map_key": str(intent.get("map_key", "")),
+			"new_approved_build_sha256": new_runtime_approved_hash,
+			"approval_revision": int(intent.get("previous_approval_revision", 0)) + 1,
+		}
+	return {
+		"ok": false,
+		"reason": "publish_recovery_ambiguous_pair",
+		"errors": [
+			"runtime_file_hash=%s" % current_runtime_file_hash,
+			"registry_hash=%s" % current_registry_hash,
+			"intent_phase=%s" % str(intent.get("phase", "")),
+		],
+	}
+
+
+static func _remove_expected_backup(path: String, expected_hash: String) -> void:
+	if expected_hash.is_empty() or not FileAccess.file_exists(path):
+		return
+	if _file_sha256(path) == expected_hash:
+		DirAccess.remove_absolute(path)
+
+
+static func _absolute_path(path: String) -> String:
+	return (
+		ProjectSettings.globalize_path(path)
+		if path.begins_with("res://") or path.begins_with("user://")
+		else path
+	)
+
+
+static func _read_registry(registry_path: String) -> Dictionary:
+	if not FileAccess.file_exists(registry_path):
+		# R2-W1: a missing registry next to an atomic-write backup is a
+		# crashed previous registry commit. RV14-02: the recovery entry must
+		# recognize BOTH real backup protocols — ".bak" from the whole-registry
+		# atomic writer and ".restore_bak" from the single-map preserving
+		# writer (a crashed single-map publish leaves exactly that state:
+		# main renamed away, temp never promoted). Candidates are validated
+		# before any restore; two valid but conflicting candidates need
+		# reliable transaction/approval-version evidence, otherwise the
+		# publish fails closed with both backups preserved.
+		var absolute_bak := _absolute_path(registry_path) + ".bak"
+		var absolute_restore_bak := _absolute_path(registry_path) + ".restore_bak"
+		var candidates: Array = []
+		for candidate_path: String in [absolute_bak, absolute_restore_bak]:
+			if not FileAccess.file_exists(candidate_path):
+				continue
+			var candidate_file := FileAccess.open(candidate_path, FileAccess.READ)
+			if candidate_file == null:
+				continue
+			var candidate_bytes := candidate_file.get_buffer(
+				candidate_file.get_length()
+			)
+			candidate_file.close()
+			var candidate_parser := JSON.new()
+			if candidate_parser.parse(
+				candidate_bytes.get_string_from_utf8()
+			) != OK or not candidate_parser.data is Dictionary:
+				continue
+			var candidate_registry: Dictionary = candidate_parser.data
+			if not candidate_registry.get("maps", null) is Array:
+				continue
+			if not RuntimeBridge.validate_release_registry(
+				candidate_registry
+			).is_empty():
+				continue
+			candidates.append({
+				"path": candidate_path,
+				"bytes": candidate_bytes,
+				"registry": candidate_registry,
+			})
+		if candidates.size() == 1:
+			var restore := _restore_registry_bytes(
+				registry_path, candidates[0].bytes, candidates[0].path
+			)
+			if not bool(restore.get("ok", false)):
+				var single_restore_errors: Array[String] = [
+					str(restore.get("reason", "unknown"))
+				]
+				for single_rollback_error: String in restore.get(
+					"rollback_errors", []
+				):
+					single_restore_errors.append(single_rollback_error)
+				return {
+					"ok": false,
+					"reason": "release_registry_restore_failed",
+					"errors": single_restore_errors,
+				}
+		elif candidates.size() == 2:
+			var chosen: Dictionary = {}
+			if candidates[0].bytes == candidates[1].bytes:
+				chosen = candidates[0]
+			else:
+				chosen = _select_registry_backup_by_approval_evidence(
+					candidates[0], candidates[1]
+				)
+			if chosen.is_empty():
+				return {
+					"ok": false,
+					"reason": "release_registry_backup_conflict",
+					"errors": ["backup_backups_conflict_no_reliable_evidence"],
+				}
+			var restore := _restore_registry_bytes(
+				registry_path, chosen.bytes, chosen.path
+			)
+			if not bool(restore.get("ok", false)):
+				var restore_errors: Array[String] = [
+					str(restore.get("reason", "unknown"))
+				]
+				for rollback_error: String in restore.get(
+					"rollback_errors", []
+				):
+					restore_errors.append(rollback_error)
+				return {
+					"ok": false,
+					"reason": "release_registry_restore_failed",
+					"errors": restore_errors,
+				}
+		if not FileAccess.file_exists(registry_path):
+			return {"ok": false, "reason": "release_registry_missing"}
+	var file := FileAccess.open(registry_path, FileAccess.READ)
+	if file == null:
+		return {"ok": false, "reason": "release_registry_open_failed"}
+	var raw_bytes := file.get_buffer(file.get_length())
+	file.close()
+	var parser := JSON.new()
+	var parse_error := parser.parse(raw_bytes.get_string_from_utf8())
+	if parse_error != OK:
+		return {"ok": false, "reason": "release_registry_json_invalid"}
+	var parsed: Variant = parser.data
+	if not parsed is Dictionary:
+		return {"ok": false, "reason": "release_registry_json_invalid"}
+	var registry: Dictionary = parsed
+	if not registry.get("maps", null) is Array:
+		return {
+			"ok": false,
+			"reason": "release_registry_invalid",
+			"errors": ["registry_maps_must_be_array"],
+		}
+	var schema_errors := RuntimeBridge.validate_release_registry(registry)
+	if not schema_errors.is_empty():
+		return {
+			"ok": false,
+			"reason": "release_registry_invalid",
+			"errors": schema_errors,
+		}
+	return {
+		"ok": true,
+		"registry": registry,
+		"raw_bytes": raw_bytes,
+	}
+
+
+## RV14-R2 review: resolve two valid but byte-different backups with an
+## all-entries consistent / single-direction version-lead rule. A missing,
+## added or re-identified map is not proven safe by another map's approval
+## revision; unversioned top-level metadata must agree; equal revisions must
+## carry identical payloads. Any tie, crossing lead or evidence gap is a
+## conflict -> return empty (caller fails closed and preserves both backups).
+## Never decide by file name or mtime; never merge or re-serialize.
+static func _select_registry_backup_by_approval_evidence(
+	first: Dictionary,
+	second: Dictionary
+) -> Dictionary:
+	var first_raw: Variant = first.get("registry", null)
+	var second_raw: Variant = second.get("registry", null)
+	if not first_raw is Dictionary or not second_raw is Dictionary:
+		return {}
+	var first_registry: Dictionary = first_raw
+	var second_registry: Dictionary = second_raw
+	var first_checked := _rv14_backup_entry_table(first_registry)
+	var second_checked := _rv14_backup_entry_table(second_registry)
+	if not bool(first_checked.get("valid", false)) or not bool(second_checked.get("valid", false)):
+		return {}
+	var first_entries: Dictionary = first_checked.entries
+	var second_entries: Dictionary = second_checked.entries
+	# A missing/added/reidentified map is not proven safe by another map's
+	# approval revision. An explicit migration/transaction proof is required.
+	if first_entries.size() != second_entries.size():
+		return {}
+	for map_key: String in first_entries:
+		if not second_entries.has(map_key):
+			return {}
+	# Unversioned top-level metadata must agree. Do not infer an ordering.
+	var first_header := first_registry.duplicate(false)
+	var second_header := second_registry.duplicate(false)
+	first_header.erase("maps")
+	second_header.erase("maps")
+	if first_header != second_header:
+		return {}
+	var direction := 0 # +1 first dominates; -1 second dominates.
+	for map_key: String in first_entries:
+		var a: Dictionary = first_entries[map_key]
+		var b: Dictionary = second_entries[map_key]
+		if (
+			_rv14_positive_exact_integer(a.runtime_map_id) != _rv14_positive_exact_integer(b.runtime_map_id)
+			or a.runtime_path != b.runtime_path
+		):
+			return {}
+		var a_revision := _rv14_positive_exact_integer(a.approval_revision)
+		var b_revision := _rv14_positive_exact_integer(b.approval_revision)
+		if a_revision == b_revision:
+			# Identical, unchanged siblings are normal during single-map publish.
+			# Equal revision but different payload is a true conflict.
+			if a != b:
+				return {}
+			continue
+		var next_direction := 1 if a_revision > b_revision else -1
+		if direction != 0 and direction != next_direction:
+			return {}
+		direction = next_direction
+	if direction == 1:
+		return first
+	if direction == -1:
+		return second
+	# All revisions equal: byte-equality belongs to the caller; no guess here.
+	return {}
+
+
+static func _rv14_positive_exact_integer(value: Variant) -> int:
+	# JSON.parse can produce float for integral JSON numbers. Reject bool,
+	# numeric strings, fractions, missing values and integers unsafe in JSON.
+	if not value is int and not value is float:
+		return -1
+	var numeric := float(value)
+	if not is_finite(numeric) or numeric < 1.0 or numeric > 9007199254740991.0 or numeric != floorf(numeric):
+		return -1
+	return int(value)
+
+
+static func _rv14_backup_entry_table(registry: Dictionary) -> Dictionary:
+	if _rv14_positive_exact_integer(registry.get("schema_version", null)) != 1:
+		return {"valid": false}
+	if registry.get("registry_contract_id", null) != "mse.map.runtime.release.v1":
+		return {"valid": false}
+	var rows: Variant = registry.get("maps", null)
+	if not rows is Array:
+		return {"valid": false}
+	var entries: Dictionary = {}
+	var ids: Dictionary = {}
+	for raw: Variant in rows:
+		if not raw is Dictionary:
+			return {"valid": false}
+		var entry: Dictionary = raw
+		var key: Variant = entry.get("map_key", null)
+		var path: Variant = entry.get("runtime_path", null)
+		var mid := _rv14_positive_exact_integer(entry.get("runtime_map_id", null))
+		var revision := _rv14_positive_exact_integer(entry.get("approval_revision", null))
+		if not key is String or not path is String:
+			return {"valid": false}
+		if str(key).is_empty() or str(path).is_empty() or mid < 1 or revision < 1:
+			return {"valid": false}
+		if entries.has(key) or ids.has(mid):
+			return {"valid": false}
+		entries[key] = entry
+		ids[mid] = true
+	# Keep the existing official schema validator as an additional gate.
+	if not RuntimeBridge.validate_release_registry(registry).is_empty():
+		return {"valid": false}
+	return {"valid": true, "entries": entries}
+
+
+## RV14-R2 deterministic failure injection for the restore/promote path.
+## Production always uses real IO (every budget defaults to 0). A test may
+## point a fail-from counter at N so the Nth and every subsequent matching
+## operation inside _restore_registry_bytes fails deterministically,
+## proving the failure-branch control flow without relying on OS lock
+## behaviour. Tests must reset all counters to 0 afterwards.
+static var test_rename_fail_from_call := 0
+static var test_remove_fail_from_call := 0
+static var test_restored_open_fail_from_call := 0
+static var _test_rename_call_count := 0
+static var _test_remove_call_count := 0
+static var _test_restored_open_call_count := 0
+
+
+static func _injected_rename_absolute(from: String, to: String) -> int:
+	_test_rename_call_count += 1
+	if (
+		test_rename_fail_from_call > 0
+		and _test_rename_call_count >= test_rename_fail_from_call
+	):
+		return ERR_FILE_CANT_WRITE
+	return DirAccess.rename_absolute(from, to)
+
+
+static func _injected_remove_absolute(path: String) -> int:
+	_test_remove_call_count += 1
+	if (
+		test_remove_fail_from_call > 0
+		and _test_remove_call_count >= test_remove_fail_from_call
+	):
+		return ERR_FILE_CANT_WRITE
+	return DirAccess.remove_absolute(path)
+
+
+static func _injected_restored_open(path: String) -> FileAccess:
+	_test_restored_open_call_count += 1
+	if (
+		test_restored_open_fail_from_call > 0
+		and _test_restored_open_call_count >= test_restored_open_fail_from_call
+	):
+		return null
+	return FileAccess.open(path, FileAccess.READ)
+
+
+static func _reset_injection_counters() -> void:
+	_test_rename_call_count = 0
+	_test_remove_call_count = 0
+	_test_restored_open_call_count = 0
+
+
+static func _restore_registry_bytes(
+	registry_path: String,
+	raw_bytes: PackedByteArray,
+	preserve_source_absolute := ""
+) -> Dictionary:
+	## RV14-02: restore a validated backup over a missing/corrupt registry.
+	## Every removal/copy/rename/verify result is checked and reported. When
+	## preserve_source_absolute points at the backup this restore reads from,
+	## that source is never removed: it survives until the restored
+	## destination bytes are verified, and a failed restore keeps it for
+	## diagnosis. Returns {"ok": bool, "reason": String}.
+	var absolute_dst := _absolute_path(registry_path)
+	var absolute_tmp := absolute_dst + ".restore_tmp"
+	var file := FileAccess.open(absolute_tmp, FileAccess.WRITE)
+	if file == null:
+		return {"ok": false, "reason": "tmp_write_failed"}
+	file.store_buffer(raw_bytes)
+	file.flush()
+	file.close()
+	var verify := FileAccess.open(absolute_tmp, FileAccess.READ)
+	if verify == null:
+		_injected_remove_absolute(absolute_tmp)
+		return {"ok": false, "reason": "tmp_verify_open_failed"}
+	var verified_bytes := verify.get_buffer(verify.get_length())
+	verify.close()
+	if verified_bytes != raw_bytes:
+		_injected_remove_absolute(absolute_tmp)
+		return {"ok": false, "reason": "tmp_verify_mismatch"}
+	var backup := absolute_dst + ".restore_bak"
+	var staged_old_main := false
+	# RV14-R2 review: the caller may pass the preserved source in either
+	# res://-style or absolute form; normalize before comparing so a relative
+	# spelling can never bypass the source-slot collision guard.
+	var normalized_preserve := _absolute_path(preserve_source_absolute)
+	if FileAccess.file_exists(absolute_dst):
+		if backup == normalized_preserve:
+			# The staging slot collides with the preserved source; refuse
+			# rather than delete the source.
+			_injected_remove_absolute(absolute_tmp)
+			return {"ok": false, "reason": "source_slot_collision"}
+		if FileAccess.file_exists(backup):
+			if _injected_remove_absolute(backup) != OK:
+				_injected_remove_absolute(absolute_tmp)
+				return {"ok": false, "reason": "old_backup_remove_failed"}
+		var backup_error := _injected_rename_absolute(absolute_dst, backup)
+		if backup_error != OK:
+			_injected_remove_absolute(absolute_tmp)
+			return {"ok": false, "reason": "staging_rename_failed"}
+		staged_old_main = true
+	var promote_error := _injected_rename_absolute(absolute_tmp, absolute_dst)
+	if promote_error != OK:
+		# RV14-R2 review: the rollback attempt is reported separately from the
+		# primary error so a caller can distinguish "failed and recovered"
+		# from "failed and the staged copy is still in the backup slot".
+		var rollback_errors: Array[String] = []
+		if staged_old_main:
+			if _injected_rename_absolute(backup, absolute_dst) != OK:
+				rollback_errors.append("rollback_rename_failed")
+		_injected_remove_absolute(absolute_tmp)
+		var promote_result := {"ok": false, "reason": "promote_failed"}
+		if not rollback_errors.is_empty():
+			promote_result["rollback_errors"] = rollback_errors
+		return promote_result
+	# Final destination verification against the source bytes.
+	var restored := _injected_restored_open(absolute_dst)
+	if restored == null:
+		# The promoted artifact cannot be opened; the staged old main is the
+		# only recoverable copy. Attempt the rollback and report it.
+		var open_rollback_errors: Array[String] = []
+		if staged_old_main and FileAccess.file_exists(backup):
+			if _injected_remove_absolute(absolute_dst) != OK:
+				open_rollback_errors.append("rollback_remove_failed")
+			if _injected_rename_absolute(backup, absolute_dst) != OK:
+				open_rollback_errors.append("rollback_rename_failed")
+		var open_result := {"ok": false, "reason": "restored_open_failed"}
+		if not open_rollback_errors.is_empty():
+			open_result["rollback_errors"] = open_rollback_errors
+		return open_result
+	var restored_bytes := restored.get_buffer(restored.get_length())
+	restored.close()
+	if restored_bytes != raw_bytes:
+		var verify_rollback_errors: Array[String] = []
+		if staged_old_main and FileAccess.file_exists(backup):
+			if _injected_remove_absolute(absolute_dst) != OK:
+				verify_rollback_errors.append("rollback_remove_failed")
+			if _injected_rename_absolute(backup, absolute_dst) != OK:
+				verify_rollback_errors.append("rollback_rename_failed")
+		var verify_result := {"ok": false, "reason": "restored_verify_mismatch"}
+		if not verify_rollback_errors.is_empty():
+			verify_result["rollback_errors"] = verify_rollback_errors
+		return verify_result
+	# Success. The preserved source (recovery scenario) is intentionally kept;
+	# the staging backup of an old main (rollback scenario) is consumed only
+	# when it is not the preserved source.
+	if staged_old_main and backup != normalized_preserve:
+		_injected_remove_absolute(backup)
+	return {"ok": true, "reason": ""}
+
+
+static func _write_registry_atomic(
+	registry_path: String,
+	registry: Dictionary
+) -> bool:
+	var absolute_dst := (
+		ProjectSettings.globalize_path(registry_path)
+		if registry_path.begins_with("res://") or registry_path.begins_with("user://")
+		else registry_path
+	)
+	var mkdir_error := DirAccess.make_dir_recursive_absolute(
+		absolute_dst.get_base_dir()
+	)
+	if mkdir_error != OK:
+		return false
+	var absolute_tmp := absolute_dst + ".tmp"
+	var file := FileAccess.open(absolute_tmp, FileAccess.WRITE)
+	if file == null:
+		return false
+	file.store_string(JsonCodec.encode(registry))
+	file.flush()
+	file.close()
+	var verify_file := FileAccess.open(absolute_tmp, FileAccess.READ)
+	var verify_ok := (
+		verify_file != null
+		and JSON.parse_string(verify_file.get_as_text()) is Dictionary
+	)
+	if verify_file != null:
+		verify_file.close()
+	if not verify_ok:
+		DirAccess.remove_absolute(absolute_tmp)
+		return false
+	var backup := absolute_dst + ".bak"
+	if FileAccess.file_exists(backup):
+		if FileAccess.file_exists(absolute_dst):
+			DirAccess.remove_absolute(absolute_tmp)
+			return false
+		else:
+			# R2-W1: same crash-recovery rule as the runtime promote — recover
+			# the old complete registry before any new write.
+			if DirAccess.rename_absolute(backup, absolute_dst) != OK:
+				return false
+	if FileAccess.file_exists(absolute_dst):
+		var backup_error := DirAccess.rename_absolute(absolute_dst, backup)
+		if backup_error != OK:
+			DirAccess.remove_absolute(absolute_tmp)
+			return false
+	var promote_error := DirAccess.rename_absolute(absolute_tmp, absolute_dst)
+	if promote_error != OK:
+		if FileAccess.file_exists(backup):
+			DirAccess.rename_absolute(backup, absolute_dst)
+		return false
+	if FileAccess.file_exists(backup):
+		DirAccess.remove_absolute(backup)
+	return true
+
+
+static func _write_registry_atomic_preserving_existing_entries(
+	registry_path: String,
+	old_registry_bytes: PackedByteArray,
+	registry: Dictionary,
+	map_key: String,
+	runtime_map_id: int
+) -> bool:
+	if old_registry_bytes.is_empty():
+		return _write_registry_atomic(registry_path, registry)
+	var old_text := old_registry_bytes.get_string_from_utf8()
+	if old_text.to_utf8_buffer() != old_registry_bytes:
+		return false # Invalid UTF-8 must not be silently rewritten.
+	var target: Dictionary = {}
+	var matches := 0
+	for raw_entry: Variant in registry.get("maps", []):
+		if raw_entry is Dictionary and str(raw_entry.get("map_key", "")) == map_key and int(raw_entry.get("runtime_map_id", -1)) == runtime_map_id:
+			target = raw_entry
+			matches += 1
+	if matches != 1:
+		return false
+	var splice: Dictionary = preload("res://scripts/map_editor/map_registry_entry_splice.gd").replace_entry(
+		old_text, registry, map_key, runtime_map_id, JsonCodec.encode(target)
+	)
+	if not bool(splice.get("valid", false)):
+		push_error("Single-map registry splice rejected: %s" % str(splice.get("reason", "unknown")))
+		return false
+	var preserved_text := str(splice.get("text", ""))
+	var parsed: Variant = JSON.parse_string(preserved_text)
+	if not parsed is Dictionary:
+		return false
+	if not RuntimeBridge.validate_release_registry(parsed).is_empty():
+		return false
+	return _write_registry_text_atomic(registry_path, preserved_text)
+
+
+
+static func _replace_json_scalar(
+	text: String,
+	marker: String,
+	replacement: String
+) -> String:
+	var marker_index := text.find(marker)
+	if marker_index < 0:
+		return ""
+	var value_start := marker_index + marker.length()
+	while value_start < text.length() and text[value_start] in [" ", "\t"]:
+		value_start += 1
+	if value_start >= text.length():
+		return ""
+	var value_end := value_start
+	if text[value_start] == '"':
+		value_end += 1
+		var escaped := false
+		while value_end < text.length():
+			var character := text[value_end]
+			if character == '"' and not escaped:
+				value_end += 1
+				break
+			if character == "\\" and not escaped:
+				escaped = true
+			else:
+				escaped = false
+			value_end += 1
+	else:
+		while value_end < text.length() and text[value_end] not in [",", "}", "\n", "\r"]:
+			value_end += 1
+		while value_end > value_start and text[value_end - 1] in [" ", "\t"]:
+			value_end -= 1
+	if value_end <= value_start:
+		return ""
+	return text.substr(0, value_start) + replacement + text.substr(value_end)
+
+
+static func _matching_json_object_end(text: String, start: int) -> int:
+	if start < 0 or start >= text.length() or text[start] != "{":
+		return -1
+	var depth := 0
+	var in_string := false
+	var escaped := false
+	for index in range(start, text.length()):
+		var character := text[index]
+		if in_string:
+			if character == '"' and not escaped:
+				in_string = false
+			elif character == "\\" and not escaped:
+				escaped = true
+			else:
+				escaped = false
+			continue
+		if character == '"':
+			in_string = true
+		elif character == "{":
+			depth += 1
+		elif character == "}":
+			depth -= 1
+			if depth == 0:
+				return index
+	return -1
+
+
+static func _write_registry_text_atomic(registry_path: String, text: String) -> bool:
+	var absolute_dst := (
+		ProjectSettings.globalize_path(registry_path)
+		if registry_path.begins_with("res://") or registry_path.begins_with("user://")
+		else registry_path
+	)
+	var mkdir_error := DirAccess.make_dir_recursive_absolute(absolute_dst.get_base_dir())
+	if mkdir_error != OK:
+		return false
+	var absolute_tmp := absolute_dst + ".tmp"
+	var file := FileAccess.open(absolute_tmp, FileAccess.WRITE)
+	if file == null:
+		return false
+	file.store_string(text)
+	file.flush()
+	file.close()
+	var verify_file := FileAccess.open(absolute_tmp, FileAccess.READ)
+	if verify_file == null or verify_file.get_as_text() != text:
+		if verify_file != null:
+			verify_file.close()
+		DirAccess.remove_absolute(absolute_tmp)
+		return false
+	verify_file.close()
+	var backup := absolute_dst + ".restore_bak"
+	if FileAccess.file_exists(backup):
+		if FileAccess.file_exists(absolute_dst):
+			DirAccess.remove_absolute(absolute_tmp)
+			return false
+		else:
+			# R2-W1: same crash-recovery rule — recover the old complete
+			# registry before any new write.
+			if DirAccess.rename_absolute(backup, absolute_dst) != OK:
+				DirAccess.remove_absolute(absolute_tmp)
+				return false
+	if FileAccess.file_exists(absolute_dst):
+		var backup_error := DirAccess.rename_absolute(absolute_dst, backup)
+		if backup_error != OK:
+			DirAccess.remove_absolute(absolute_tmp)
+			return false
+	var promote_error := DirAccess.rename_absolute(absolute_tmp, absolute_dst)
+	if promote_error != OK:
+		if FileAccess.file_exists(backup):
+			DirAccess.rename_absolute(backup, absolute_dst)
+		return false
+	if FileAccess.file_exists(backup):
+		DirAccess.remove_absolute(backup)
+	return true
+
+
+static func validate_for_runtime(document: Dictionary) -> Dictionary:
+	var errors := MapEditorTypes.validate_document(document)
+	errors.append_array(
+		SpawnIdentityService.validate_document(
+			document,
+			SpawnIdentityService.requires_formal_semantic_ids(document)
+		)
+	)
+	var warnings: Array[String] = []
+	var initialized := MapEditorGroundService.initialize(document)
+	if not initialized.ok:
+		errors.append_array(initialized.get("errors", []))
+	else:
+		if not (initialized.state.get("dirty_chunks", []) as Array).is_empty():
+			errors.append("ground_dirty_chunks_must_be_baked")
+		if not (initialized.manifest.get("chunks", []) as Array).all(func(chunk: Dictionary) -> bool: return str(chunk.get("state", "")) != "dirty"):
+			errors.append("ground_manifest_contains_dirty_chunk")
+	var seen_semantic_ids := {}
+	for entry: Dictionary in MapEditorGameplaySemanticService.all_entries(document):
+		var semantic_id := str(entry.get("semantic_id", ""))
+		if semantic_id.is_empty() or seen_semantic_ids.has(semantic_id):
+			errors.append("duplicate_or_missing_semantic_id:%s" % semantic_id)
+		seen_semantic_ids[semantic_id] = true
+		var tile: Array = entry.get("tile", [])
+		if tile.size() != 2:
+			errors.append("semantic_tile_missing:%s" % semantic_id)
+		if str(entry.get("kind", "")) == "door" and str(entry.get("target_map_id", "")).strip_edges().is_empty():
+			errors.append("door_target_map_required:%s" % semantic_id)
+		if str(entry.get("kind", "")) == "map_exit" and str(entry.get("target_map_id", "")).strip_edges().is_empty():
+			errors.append("map_exit_target_map_required:%s" % semantic_id)
+		var entry_kind := str(entry.get("kind", ""))
+		if entry_kind in ["monster_spawn", "boss_spawn"]:
+			var monster_id := int(entry.get("monster_id", -1))
+			if monster_id <= 0:
+				errors.append("monster_id_missing_or_invalid:%s" % semantic_id)
+			else:
+				var catalog_entry := MapEditorContentCatalogService.find_any_monster(monster_id)
+				if catalog_entry.is_empty():
+					errors.append("monster_missing_from_catalog:%d" % monster_id)
+				elif not bool(catalog_entry.get("runtime_ready", false)):
+					errors.append(
+					"monster_not_runtime_ready:%d:%s" % [
+						monster_id,
+						str(catalog_entry.get("runtime_rejection_reason", "runtime待闭环")),
+					]
+				)
+	errors.append_array(
+		ConnectionPolicyService.validate_document(document)
+	)
+	var walkability := MapEditorCollisionService.build_walkability(document)
+	if int(walkability.get("walkable_count", 0)) <= 0:
+		errors.append("map_has_no_walkable_tile")
+	if MapEditorInstanceService.all_instances(document).filter(func(instance: Dictionary) -> bool: return not bool(instance.get("runtime_export", true))).size() > 0:
+		warnings.append("non_runtime_instances_excluded")
+	# HC-POLY-R2: bake only after all existing authoring validators succeed.
+	var hc_polygon_build: Dictionary = {}
+	if HCPPolyGeo.enabled(document):
+		errors.append_array(walkability.get("errors", []))
+		if errors.is_empty():
+			hc_polygon_build = HCPPolyBuild.build(document)
+			errors.append_array(hc_polygon_build.get("errors", []))
+	return {"ok": errors.is_empty(), "errors": errors, "warnings": warnings, "walkability": walkability, "polygon_build": hc_polygon_build}
+
+
+static func document_binding(document: Dictionary) -> Dictionary:
+	var ground: Dictionary = document.get("ground", {})
+	var fingerprint_parts := {
+		"document_sha256": _sha256(MapEditorJsonCodec.encode(document)),
+		"ground_manifest_sha256": _file_sha256(
+			str(ground.get("workspace_manifest", ""))
+		),
+		"ground_state_sha256": _file_sha256(
+			str(ground.get("workspace_state", ""))
+		),
+	}
+	return {
+		"contract_id": CANDIDATE_BINDING_CONTRACT_ID,
+		"map_key": str(document.get("map_id", "")),
+		"runtime_map_id": int(document.get("runtime_map_id", -1)),
+		"document_revision": int(
+			document.get("editor_meta", {}).get("revision", 1)
+		),
+		"document_sha256": fingerprint_parts.document_sha256,
+		"ground_manifest_sha256": fingerprint_parts.ground_manifest_sha256,
+		"ground_state_sha256": fingerprint_parts.ground_state_sha256,
+		"authoring_sha256": _sha256(
+			MapEditorJsonCodec.encode(fingerprint_parts)
+		),
+	}
+
+
+static func candidate_matches_document(
+	candidate: Dictionary,
+	document: Dictionary
+) -> bool:
+	if candidate.is_empty() or document.is_empty():
+		return false
+	return (
+		_normalize_candidate_binding(
+			candidate.get("document_binding", {})
+		)
+		== document_binding(document)
+	)
+
+
+static func _normalize_candidate_binding(binding: Dictionary) -> Dictionary:
+	return {
+		"contract_id": str(binding.get("contract_id", "")),
+		"map_key": str(binding.get("map_key", "")),
+		"runtime_map_id": int(binding.get("runtime_map_id", -1)),
+		"document_revision": int(binding.get("document_revision", -1)),
+		"document_sha256": str(binding.get("document_sha256", "")),
+		"ground_manifest_sha256": str(
+			binding.get("ground_manifest_sha256", "")
+		),
+		"ground_state_sha256": str(
+			binding.get("ground_state_sha256", "")
+		),
+		"authoring_sha256": str(binding.get("authoring_sha256", "")),
+	}
+
+
+static func _validate_candidate_binding(
+	runtime: Dictionary,
+	runtime_map_id: int,
+	expected_document_binding: Dictionary
+) -> Dictionary:
+	var source: Dictionary = runtime.get("source", {})
+	var binding := _normalize_candidate_binding(
+		source.get("candidate_binding", {})
+	)
+	if (
+		str(binding.get("contract_id", ""))
+		!= CANDIDATE_BINDING_CONTRACT_ID
+	):
+		return {"ok": false, "reason": "candidate_binding_missing"}
+	var map_key := str(source.get("map_id", ""))
+	var fingerprint_fields: Array[String] = [
+		"document_sha256",
+		"ground_manifest_sha256",
+		"ground_state_sha256",
+		"authoring_sha256",
+	]
+	if (
+		str(binding.get("map_key", "")) != map_key
+		or int(binding.get("runtime_map_id", -1)) <= 0
+		or int(binding.get("runtime_map_id", -1))
+			!= int(source.get("runtime_map_id", -2))
+		or int(binding.get("document_revision", -1))
+			!= int(source.get("revision", -2))
+	):
+		return {"ok": false, "reason": "candidate_binding_invalid"}
+	for field: String in fingerprint_fields:
+		if str(binding.get(field, "")).length() != 64:
+			return {"ok": false, "reason": "candidate_binding_invalid"}
+	if int(binding.get("runtime_map_id", -1)) != runtime_map_id:
+		return {
+			"ok": false,
+			"reason": "candidate_runtime_map_id_mismatch",
+		}
+	if expected_document_binding.is_empty():
+		return {
+			"ok": false,
+			"reason": "candidate_document_binding_required",
+		}
+	if binding != _normalize_candidate_binding(expected_document_binding):
+		return {
+			"ok": false,
+			"reason": "candidate_document_mismatch",
+		}
+	return {"ok": true, "binding": binding}
+
+
+## FREEZE-P0.3R: Build Candidate. NEVER mutates the formal runtime artifact or
+## the Release Registry; candidates land in outputs/map_runtime_candidates/
+## keyed by build hash and never enter gameplay by themselves.
+static func build_candidate(document: Dictionary) -> Dictionary:
+	if not bool(document.get("editor_meta", {}).get("runtime_approved", false)):
+		return {"ok": false, "errors": ["runtime_approval_required"]}
+	var validation := validate_for_runtime(document)
+	if not validation.ok:
+		return validation
+	var binding := document_binding(document)
+	var runtime := _compile_runtime_with_hash(document, validation, binding)
+	if runtime.is_empty():
+		return {"ok": false, "errors": ["polygon_runtime_compile_failed"]}
+	var map_key := str(document.get("map_id", "unknown"))
+	var build_hash := str(runtime.get("build_sha256", ""))
+	var candidate_path := CANDIDATE_ROOT + map_key + "/" + build_hash + ".runtime.json"
+	var write := _write_atomic(candidate_path, runtime)
+	if not write.ok:
+		return write
+	return {
+		"ok": true,
+		"candidate_path": candidate_path,
+		"map_key": map_key,
+		"build_sha256": build_hash,
+		"document_binding": binding,
+		"validation": validation,
+		"runtime": runtime,
+		"warnings": validation.warnings,
+	}
+
+
+static func build(document: Dictionary, output_path := "") -> Dictionary:
+	## FREEZE-P0.3R: default output is the Build Candidate directory, never the
+	## formal runtime path. Explicit output_path remains only for legacy dev
+	## tools/tests and is never used by the production MSE flow.
+	if output_path.is_empty():
+		return build_candidate(document)
+	if not bool(document.get("editor_meta", {}).get("runtime_approved", false)):
+		return {"ok": false, "errors": ["runtime_approval_required"]}
+	var validation := validate_for_runtime(document)
+	if not validation.ok:
+		return validation
+	var runtime := _compile_runtime_with_hash(
+		document, validation, document_binding(document)
+	)
+	if runtime.is_empty():
+		return {"ok": false, "errors": ["polygon_runtime_compile_failed"]}
+	var write := _write_atomic(output_path, runtime)
+	if not write.ok:
+		return write
+	return {"ok": true, "path": output_path, "runtime": runtime, "warnings": validation.warnings}
+
+
+static func _compile_runtime_with_hash(
+	document: Dictionary,
+	validation: Dictionary,
+	binding: Dictionary
+) -> Dictionary:
+	var runtime := _compile(document, validation.walkability, binding)
+	# Freeze the catalog geometry used for this exact build, before the hash.
+	var hc_visual := HCPVisualSnapshot.capture(runtime.get("instances", []))
+	if not bool(hc_visual.get("ok", false)):
+		push_error("HC-POLY-R2: material snapshot failed: %s" % hc_visual.get("errors", []))
+		return {}
+	runtime["precision_contract_id"] = HCPVisualSnapshot.PRECISION_CONTRACT
+	runtime["visual_asset_snapshot"] = hc_visual.snapshot
+	# HC-POLY-R2: replace the ENTIRE legacy collision payload before hashing.
+	if HCPPolyGeo.enabled(document):
+		var hc_build: Dictionary = validation.get("polygon_build", {})
+		if not bool(hc_build.get("ok", false)) or not hc_build.has("collision"):
+			push_error("HC-POLY-R2: missing validated polygon build")
+			return {}
+		runtime["collision"] = hc_build.collision.duplicate(true)
+	var normalized: Variant = JSON.parse_string(MapEditorJsonCodec.encode(runtime))
+	if normalized is Dictionary:
+		runtime = normalized
+	runtime["build_sha256"] = ""
+	runtime["build_sha256"] = _sha256(MapEditorJsonCodec.encode(runtime))
+	return runtime
+
+
+static func default_runtime_path(map_id: String) -> String:
+	var root := (
+		test_formal_runtime_root_override
+		if not test_formal_runtime_root_override.is_empty()
+		else RUNTIME_ROOT
+	)
+	return root + map_id + ".runtime.json"
+
+
+static func _compile(
+	document: Dictionary,
+	walkability: Dictionary,
+	binding: Dictionary
+) -> Dictionary:
+	var initialized := MapEditorGroundService.initialize(document)
+	var state: Dictionary = initialized.state
+	var semantic_layers := {}
+	for layer: String in [
+		"npc_points", "monster_spawn", "boss_spawn", "door_points",
+		"map_entrance_points", "map_exit_points", "respawn_points",
+		"safe_area", "light", "region_trigger",
+	]:
+		var runtime_entries:Array=[]
+		for source_entry:Dictionary in document.layers.get(layer,[]):
+			var entry:=UnitLegacyAdapter.editor_semantic_to_runtime_v2(source_entry)
+			for editor_key:String in ["placeholder_instance_id","editor_visual_asset_id","editor_visual_only","selection_shape","selectable","movable"]:entry.erase(editor_key)
+			runtime_entries.append(entry)
+		semantic_layers[layer] = runtime_entries
+	var instances: Array = []
+	for instance: Dictionary in MapEditorInstanceService.all_instances(document):
+		if bool(instance.get("runtime_export", true)):
+			var runtime_instance := instance.duplicate(true)
+			runtime_instance.erase(MapEditorInstanceService.MAP_PORTAL_NOTE_FIELD)
+			instances.append(runtime_instance)
+	var blocked: Array = walkability.get("blocked_tiles", {}).keys()
+	blocked.sort()
+	var output := {
+		"runtime_schema_version": RUNTIME_SCHEMA_VERSION,
+		"unit_contract_id": GroundUnitSpaceScript.CONTRACT_ID,
+		"projection_contract_id": GroundUnitSpaceScript.PROJECTION_CONTRACT_ID,
+		"source": {
+			"map_id": document.map_id,
+			"runtime_map_id": int(document.runtime_map_id),
+			"display_name": str(document.display_name).strip_edges(),
+			"editor_schema_version": document.schema_version,
+			"revision": document.editor_meta.get("revision", 1),
+			"content_layer": document.content_layer,
+			"candidate_binding": binding.duplicate(true),
+		},
+		"design": document.design.duplicate(true),
+		"ground": {"ground_mode": document.ground.ground_mode, "default_fill_asset_id": document.ground.blank_fill_asset_id, "tile_overrides": MapEditorGroundService.tile_overrides(state)},
+		"instances": instances,
+		"collision": {
+			"coordinate_contract_id": RuntimeCollisionGeometry.CONTRACT_ID,
+			"physics_source_id": RuntimeCollisionGeometry.PHYSICS_SOURCE_ID,
+			"blocked_tiles": blocked,
+			"blocked_count": blocked.size(),
+			"manual_shapes": document.layers.get("collision", []).duplicate(true),
+			"erased_cells": document.layers.get("collision_erase", []).duplicate(true),
+		},
+		"semantics": semantic_layers,
+	}
+	output["build_sha256"] = ""
+	return output
+
+
+static func _write_atomic(path: String, value: Dictionary) -> Dictionary:
+	var absolute := ProjectSettings.globalize_path(path) if path.begins_with("res://") or path.begins_with("user://") else path
+	var mkdir := DirAccess.make_dir_recursive_absolute(absolute.get_base_dir())
+	if mkdir != OK:
+		return {"ok": false, "errors": ["runtime_mkdir_failed:%d" % mkdir]}
+	var temporary := absolute + ".tmp"
+	var file := FileAccess.open(temporary, FileAccess.WRITE)
+	if file == null:
+		return {"ok": false, "errors": ["runtime_temp_open_failed"]}
+	file.store_string(MapEditorJsonCodec.encode(value))
+	file.flush()
+	file.close()
+	var verify := FileAccess.open(temporary, FileAccess.READ)
+	if verify == null:
+		return {"ok": false, "errors": ["runtime_temp_verify_failed"]}
+	var parsed: Variant = JSON.parse_string(verify.get_as_text())
+	verify.close()
+	if not parsed is Dictionary:
+		return {"ok": false, "errors": ["runtime_temp_verify_failed"]}
+	if FileAccess.file_exists(absolute):
+		DirAccess.remove_absolute(absolute)
+	var promote := DirAccess.rename_absolute(temporary, absolute)
+	return {"ok": promote == OK, "path": path, "errors": [] if promote == OK else ["runtime_promote_failed:%d" % promote]}
+
+
+static func _sha256(text: String) -> String:
+	var hashing := HashingContext.new()
+	hashing.start(HashingContext.HASH_SHA256)
+	hashing.update(text.to_utf8_buffer())
+	return hashing.finish().hex_encode()
+
+
+static func _file_sha256(path: String) -> String:
+	if path.is_empty() or not FileAccess.file_exists(path):
+		return ""
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null:
+		return ""
+	var hashing := HashingContext.new()
+	hashing.start(HashingContext.HASH_SHA256)
+	hashing.update(file.get_buffer(file.get_length()))
+	file.close()
+	return hashing.finish().hex_encode()
+
+
+# HC-POLY-R2 — appended integration adapter
+const HCPPolyGeo := preload("res://scripts/map_editor/polygon/poly_geometry.gd")
+const HCPPolyBuild := preload("res://scripts/map_editor/polygon/poly_build.gd")
+
+
+# HC-POLY-R2 — appended integration adapter
+const HCPVisualSnapshot := preload("res://scripts/map_editor/polygon/poly_visual_snapshot.gd")

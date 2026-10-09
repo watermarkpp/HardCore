@@ -1,0 +1,112 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "save failure is returned",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "failed save does not advance in-memory revision",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "failed save preserves edited document graph",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "failed save leaves durable build proof unavailable",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "formal build approval can be recorded before durable save",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "command stack retains the active document owner before save",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "sandbox save succeeds through MapEditorSaveService",
+      "passed": false
+    },
+    {
+      "id": 8,
+      "label": "successful save records durable proof",
+      "passed": false
+    },
+    {
+      "id": 9,
+      "label": "successful save retains the polygon command document owner",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "preview follows the verified persisted document owner",
+      "passed": false
+    },
+    {
+      "id": 11,
+      "label": "formal build_candidate creates a real candidate from the durable document",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "undo closure still targets the preserved document owner after save",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "redo closure still targets the preserved document owner after save",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "in-memory edit invalidates durable proof",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "build leaves the existing candidate untouched when document is unsaved",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "publish leaves the existing candidate untouched when document is unsaved",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "unsaved publish does not change the formal registry",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "unsaved edit changes formal binding",
+      "passed": true
+    }
+  ],
+  "count": 18,
+  "engine_version": "4.7-stable (official)",
+  "failed": 3,
+  "invocation_id": "f641c0b6-8161-416f-b40a-4e7582c897ec",
+  "passed": 15,
+  "reported_checks": 18,
+  "reported_failures": 3,
+  "run_id": "de39c8ab-1285-4801-9558-0c180d64dbd4",
+  "runtime_environment": {
+    "native_process_id": 23532,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct43_map_transactions",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/v109_direct43_map_transactions/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "map_editor_saved_publish_boundary_20261010_test",
+  "schema_version": 1,
+  "source_content_sha256": "ba57cc2bc0173e81b646f1c059ee8fdafad0bcf4b1ba7f72d3dfd9df0304f39f",
+  "status": "FAIL"
+}

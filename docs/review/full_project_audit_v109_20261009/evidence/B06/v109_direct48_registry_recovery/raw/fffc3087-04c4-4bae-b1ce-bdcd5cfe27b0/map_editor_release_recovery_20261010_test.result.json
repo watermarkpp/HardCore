@@ -1,0 +1,322 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "fixture approval failed",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "candidate A failed",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "initial release failed: { \"success\": true, \"runtime_map_id\": 991064, \"map_key\": \"b06_recovery_map\", \"approved_build_sha256\": \"f1fd4d0f26595a9bd7ac6a11b91544dc5017d80fd81de4de8b7aecf3ebefd038\", \"release_state\": \"implemented_playable\", \"approval_revision\": 1, \"formal_playable\": true }",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "cannot read bytes: user://b06_release_recovery_registry.json",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "cannot write bytes: C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/v109_direct48_registry_recovery/Godot/app_userdata/HardCore/b06_release_recovery_registry.json.unknown",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "cannot read bytes: C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/v109_direct48_registry_recovery/Godot/app_userdata/HardCore/b06_release_recovery_registry.json.unknown",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "registry cleanup must preserve a noncanonical backup",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "cannot write bytes: C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/v109_direct48_registry_recovery/Godot/app_userdata/HardCore/b06_release_recovery_registry.json.bak",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "cannot write bytes: user://b06_release_recovery_registry.json",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "cannot read bytes: C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/v109_direct48_registry_recovery/Godot/app_userdata/HardCore/b06_release_recovery_registry.json.bak",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "registry cleanup must preserve backup when primary differs",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "cannot write bytes: user://b06_release_recovery_registry.json",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "cannot write bytes: C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/v109_direct48_registry_recovery/Godot/app_userdata/HardCore/b06_release_recovery_registry.json.bak",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "cannot read bytes: C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/v109_direct48_registry_recovery/Godot/app_userdata/HardCore/b06_release_recovery_registry.json.bak",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "registry cleanup must preserve changed backup bytes",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "registry negative cleanup failed",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "unknown backup fixture cleanup failed",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "legacy recovery must leave an intact primary untouched",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "legacy recovery must reject a noncanonical formal path",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "legacy positive setup could not move primary to backup",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "exact approved legacy backup must restore the primary",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "legacy primary-plus-backup setup failed",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "legacy recovery must not overwrite an existing primary",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "legacy backup cleanup failed",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "candidate B failed",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "candidate B did not change runtime bytes",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "candidate B file hash missing",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "wrong hash setup failed",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "wrong hash old backup cleanup failed",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "wrong hash backup replacement failed",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "legacy recovery must reject a backup with the wrong approved hash",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "wrong hash backup cleanup failed",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "legacy primary restore for crash setup failed",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "cannot read bytes: user://b06_release_recovery_registry.json",
+      "passed": true
+    },
+    {
+      "id": 35,
+      "label": "runtime crash seam did not leave its boundary",
+      "passed": true
+    },
+    {
+      "id": 36,
+      "label": "cross-map recovery request must not claim the pending publish",
+      "passed": true
+    },
+    {
+      "id": 37,
+      "label": "cannot read bytes: C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/v109_direct48_registry_recovery/Godot/app_userdata/HardCore/b06_release_recovery_registry.json.publish_intent.json",
+      "passed": true
+    },
+    {
+      "id": 38,
+      "label": "crash intent must be parseable",
+      "passed": true
+    },
+    {
+      "id": 39,
+      "label": "cannot write bytes: C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/v109_direct48_registry_recovery/Godot/app_userdata/HardCore/b06_release_recovery_registry.json.publish_intent.json",
+      "passed": true
+    },
+    {
+      "id": 40,
+      "label": "unknown formal path must block recovery",
+      "passed": true
+    },
+    {
+      "id": 41,
+      "label": "cannot write bytes: C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/v109_direct48_registry_recovery/Godot/app_userdata/HardCore/b06_release_recovery_registry.json.publish_intent.json",
+      "passed": true
+    },
+    {
+      "id": 42,
+      "label": "cannot write bytes: user://b06_release_recovery_registry.json",
+      "passed": true
+    },
+    {
+      "id": 43,
+      "label": "existing empty registry must not be treated as missing",
+      "passed": true
+    },
+    {
+      "id": 44,
+      "label": "cannot write bytes: user://b06_release_recovery_registry.json",
+      "passed": true
+    },
+    {
+      "id": 45,
+      "label": "cannot write bytes: user://b06_release_recovery_registry.json",
+      "passed": true
+    },
+    {
+      "id": 46,
+      "label": "third registry version must block recovery",
+      "passed": true
+    },
+    {
+      "id": 47,
+      "label": "cannot read bytes: user://b06_release_recovery_registry.json",
+      "passed": true
+    },
+    {
+      "id": 48,
+      "label": "third registry bytes must remain untouched",
+      "passed": true
+    },
+    {
+      "id": 49,
+      "label": "cannot write bytes: user://b06_release_recovery_registry.json",
+      "passed": true
+    },
+    {
+      "id": 50,
+      "label": "runtime recovery failed: { \"success\": true, \"recovered\": \"completed_registry_commit\", \"runtime_map_id\": 991064, \"map_key\": \"b06_recovery_map\", \"approved_build_sha256\": \"f9e0f118160039a00d6cc4999e1150bd56e5dd563bce75197c5db5593833ff0f\", \"formal_playable\": true, \"approval_revision\": 2 }",
+      "passed": true
+    },
+    {
+      "id": 51,
+      "label": "recovered runtime is not playable",
+      "passed": true
+    },
+    {
+      "id": 52,
+      "label": "runtime recovery file hash mismatch",
+      "passed": true
+    },
+    {
+      "id": 53,
+      "label": "recovery changed unrelated map count",
+      "passed": true
+    },
+    {
+      "id": 54,
+      "label": "recovery changed unrelated map identity",
+      "passed": true
+    },
+    {
+      "id": 55,
+      "label": "cannot write bytes: user://b06_release_recovery_registry.json",
+      "passed": true
+    },
+    {
+      "id": 56,
+      "label": "registry crash seam did not leave its boundary",
+      "passed": true
+    },
+    {
+      "id": 57,
+      "label": "registry recovery failed: { \"success\": true, \"recovered\": \"completed_registry_commit\", \"runtime_map_id\": 991064, \"map_key\": \"b06_recovery_map\", \"approved_build_sha256\": \"f9e0f118160039a00d6cc4999e1150bd56e5dd563bce75197c5db5593833ff0f\", \"formal_playable\": true, \"approval_revision\": 2 }",
+      "passed": true
+    },
+    {
+      "id": 58,
+      "label": "registry recovery is not playable",
+      "passed": true
+    },
+    {
+      "id": 59,
+      "label": "registry recovery changed runtime unexpectedly",
+      "passed": true
+    },
+    {
+      "id": 60,
+      "label": "successful recovery left intent",
+      "passed": true
+    }
+  ],
+  "count": 60,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "1c0381ce-e2be-47af-a8dd-a80335dd0e88",
+  "passed": 60,
+  "reported_checks": 60,
+  "reported_failures": 0,
+  "run_id": "fffc3087-04c4-4bae-b1ce-bdcd5cfe27b0",
+  "runtime_environment": {
+    "native_process_id": 10912,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct48_registry_recovery",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/v109_direct48_registry_recovery/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "map_editor_release_recovery_20261010_test",
+  "schema_version": 1,
+  "source_content_sha256": "ffa1658645595b68d3d01758d5d99276b83ac837ce54ab1307ccef803d3d62d7",
+  "status": "PASS"
+}

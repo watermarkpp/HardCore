@@ -1,0 +1,83 @@
+extends Node
+
+const SaveService := preload("res://scripts/map_editor/map_editor_save_service.gd")
+const BuildService := preload("res://scripts/map_editor/map_editor_build_runtime_service.gd")
+const MapEditorAppScript := preload("res://scripts/map_editor/map_editor_app.gd")
+const Fixtures := preload("res://tests/helpers/map_runtime_transaction_test_fixtures.gd")
+const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
+var proof := Proof.new()
+var errors: Array[String] = []
+var checks := 0
+
+func check(value: bool, label: String) -> void:
+	checks += 1
+	proof.record(value, label)
+	if not value:
+		errors.append(label)
+
+func _ready() -> void:
+	_run.call_deferred()
+
+func _run() -> void:
+	var nonce := Time.get_ticks_usec()
+	var sandbox_root := "user://b06_saved_publish_%d/" % nonce
+	SaveService.test_workspace_root_override = sandbox_root
+	var document := Fixtures.make_document("b06_save_boundary", 991201, "B06 保存边界")
+	document.design["map_type"] = "outdoor_field"
+	var app = MapEditorAppScript.new()
+	app.load_default_workspace_on_ready = false
+	app.persist_last_document_path = false
+	add_child(app)
+	var source_before := document.duplicate(true)
+	var formal_path := "res://map_editor_workspace/b06_save_boundary/b06_save_boundary.editor.json"
+	app._adopt_new_document(document, "B06 fixture", formal_path)
+	var revision_before := int(app.current_document.get("editor_meta", {}).get("revision", 1))
+	SaveService.test_workspace_root_override = sandbox_root
+	var failed := app._save_current_document()
+	check(not bool(failed.get("ok", false)), "save failure is returned")
+	check(int(app.current_document.editor_meta.revision) == revision_before, "failed save does not advance in-memory revision")
+	check(app.current_document.map_id == source_before.map_id and app.current_document.ground == source_before.ground, "failed save preserves edited document graph")
+	check(not app._document_ready_for_build_or_publish(), "failed save leaves durable build proof unavailable")
+	var save_path := str(app.current_document.editor_meta.workspace).path_join("b06_save_boundary.editor.json")
+	app.current_document_path = save_path
+	check(bool(BuildService.approve_for_runtime(app.current_document).get("ok", false)), "formal build approval can be recorded before durable save")
+	var command_owner: Dictionary = app.current_document
+	var command_result: bool = app.command_stack.execute({
+		"do": func():
+			if is_same(command_owner, app.current_document): command_owner["display_name"] = "command edit",
+		"undo": func():
+			if is_same(command_owner, app.current_document): command_owner["display_name"] = "B06 保存边界",
+	})
+	check(command_result and app.command_stack.can_undo(), "command stack retains the active document owner before save")
+	var saved := app._save_current_document()
+	check(bool(saved.get("ok", false)), "sandbox save succeeds through MapEditorSaveService: " + str(saved))
+	check(app._document_ready_for_build_or_publish(), "successful save records durable proof")
+	check(is_same(command_owner, app.current_document), "successful save retains the polygon command document owner")
+	check(is_same(app.preview.document, app.current_document), "preview follows the verified persisted document owner")
+	var candidate := BuildService.build_candidate(app.current_document)
+	check(bool(candidate.get("ok", false)), "formal build_candidate creates a real candidate from the durable document")
+	check(app.command_stack.undo() and app.current_document.display_name == "B06 保存边界", "undo closure still targets the preserved document owner after save")
+	check(app.command_stack.redo() and app.current_document.display_name == "command edit", "redo closure still targets the preserved document owner after save")
+	var original_binding := BuildService.document_binding(app.current_document)
+	var release_registry_path := "res://assets/data/runtime/map_editor/map_runtime_release_registry.json"
+	var release_registry_before := FileAccess.get_sha256(release_registry_path)
+	var retained_candidate: Dictionary = candidate.duplicate(true)
+	app._last_build_candidate = retained_candidate.duplicate(true)
+	app.current_document.display_name = "未保存编辑"
+	check(not app._document_ready_for_build_or_publish(), "in-memory edit invalidates durable proof")
+	app._on_build_candidate_pressed()
+	check(app._last_build_candidate == retained_candidate, "build leaves the existing candidate untouched when document is unsaved")
+	app._on_publish_runtime_pressed()
+	check(app._last_build_candidate == retained_candidate, "publish leaves the existing candidate untouched when document is unsaved")
+	check(FileAccess.get_sha256(release_registry_path) == release_registry_before, "unsaved publish does not change the formal registry")
+	check(BuildService.document_binding(app.current_document) != original_binding, "unsaved edit changes formal binding")
+	app.command_stack.clear()
+	app.queue_free()
+	await get_tree().process_frame
+	await get_tree().process_frame
+	SaveService.test_workspace_root_override = ""
+	var receipt_ok := proof.write_receipt("map_editor_saved_publish_boundary_20261010_test", checks, errors.size())
+	if not receipt_ok:
+		errors.append("receipt write failed")
+	print(("FRAMEWORK_MAP_EDITOR_SAVED_PUBLISH_BOUNDARY_PASS" if errors.is_empty() else "FRAMEWORK_MAP_EDITOR_SAVED_PUBLISH_BOUNDARY_FAIL") + " checks=" + str(checks) + " errors=" + str(errors))
+	get_tree().quit(0 if errors.is_empty() else 1)

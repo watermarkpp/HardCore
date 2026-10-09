@@ -1,0 +1,8 @@
+ERROR: Condition "len == 0" is true. Returning: FAILED
+   at: update (core/crypto/hashing_context.cpp:54)
+   GDScript backtrace (most recent call first):
+       [0] _sha256_bytes (res://scripts/map_editor/map_editor_build_runtime_service.gd:628)
+       [1] _recover_pending_publish_intent (res://scripts/map_editor/map_editor_build_runtime_service.gd:709)
+       [2] publish_runtime_release (res://scripts/map_editor/map_editor_build_runtime_service.gd:195)
+       [3] _run (res://tests/framework/map_editor_release_recovery_20261010_test.gd:176)
+       [4] _ready (res://tests/framework/map_editor_release_recovery_20261010_test.gd:25)

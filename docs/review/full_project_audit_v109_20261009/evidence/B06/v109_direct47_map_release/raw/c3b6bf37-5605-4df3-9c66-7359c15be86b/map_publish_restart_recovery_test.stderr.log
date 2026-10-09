@@ -1,0 +1,4 @@
+SCRIPT ERROR: Assertion failed: publish must recover the crashed registry from .bak and proceed: { "success": false, "reason": "registry_write_failed" }
+   at: _run (res://tests/map_publish_restart_recovery_test.gd:149)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/map_publish_restart_recovery_test.gd:149)

@@ -1,0 +1,51 @@
+[PASS] map_editor_release_recovery_20261010_test
+[FAIL] map_editor_saved_publish_boundary_20261010_test - missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1;framework_checks_failed
+WorkerThreadPool: 12 threads, 3 max low-priority.
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+TextServer: Added interface "Dummy"
+TextServer: Added interface "ICU / HarfBuzz / Graphite (Built-in)"
+Using "default" pen tablet driver...
+
+TextServer: Primary interface set to: "ICU / HarfBuzz / Graphite (Built-in)".
+CORE API HASH: 3472268009
+EDITOR API HASH: 2212757246
+SceneTreeFTI: traversal method DEFAULT
+Loading resource: res://scripts/device_lab_patch_bootstrap.gd remapped: res://scripts/device_lab_patch_bootstrap.gd
+Completed load for: 'res://scripts/device_lab_patch_bootstrap.gd' remapped 'res://scripts/device_lab_patch_bootstrap.gd' at thread -1
+Loading resource: res://scripts/audio_preferences.gd remapped: res://scripts/audio_preferences.gd
+Completed load for: 'res://scripts/audio_preferences.gd' remapped 'res://scripts/audio_preferences.gd' at thread -1
+Loading resource: res://scripts/loot_preferences.gd remapped: res://scripts/loot_preferences.gd
+Completed load for: 'res://scripts/loot_preferences.gd' remapped 'res://scripts/loot_preferences.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/content_layer_registry.gd remapped: res://scripts/layers/runtime/content_layer_registry.gd
+Completed load for: 'res://scripts/layers/runtime/content_layer_registry.gd' remapped 'res://scripts/layers/runtime/content_layer_registry.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/world_content_service.gd remapped: res://scripts/layers/runtime/world_content_service.gd
+Completed load for: 'res://scripts/layers/runtime/world_content_service.gd' remapped 'res://scripts/layers/runtime/world_content_service.gd' at thread -1
+Loading resource: res://scripts/layers/presentation/presentation_registry.gd remapped: res://scripts/layers/presentation/presentation_registry.gd
+Completed load for: 'res://scripts/layers/presentation/presentation_registry.gd' remapped 'res://scripts/layers/presentation/presentation_registry.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/targeting_runtime_service.gd remapped: res://scripts/layers/runtime/targeting_runtime_service.gd
+Completed load for: 'res://scripts/layers/runtime/targeting_runtime_service.gd' remapped 'res://scripts/layers/runtime/targeting_runtime_service.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/loot_runtime_service.gd remapped: res://scripts/layers/runtime/loot_runtime_service.gd
+Completed load for: 'res://scripts/layers/runtime/loot_runtime_service.gd' remapped 'res://scripts/layers/runtime/loot_runtime_service.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/combat_runtime_service.gd remapped: res://scripts/layers/runtime/combat_runtime_service.gd
+Completed load for: 'res://scripts/layers/runtime/combat_runtime_service.gd' remapped 'res://scripts/layers/runtime/combat_runtime_service.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/domain_runtime_services.gd remapped: res://scripts/layers/runtime/domain_runtime_services.gd
+Completed load for: 'res://scripts/layers/runtime/domain_runtime_services.gd' remapped 'res://scripts/layers/runtime/domain_runtime_services.gd' at thread -1
+Loading resource: res://scripts/layers/rules/boss_mechanic_registry.gd remapped: res://scripts/layers/rules/boss_mechanic_registry.gd
+Completed load for: 'res://scripts/layers/rules/boss_mechanic_registry.gd' remapped 'res://scripts/layers/rules/boss_mechanic_registry.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/runtime_service_facade.gd remapped: res://scripts/layers/runtime/runtime_service_facade.gd
+Completed load for: 'res://scripts/layers/runtime/runtime_service_facade.gd' remapped 'res://scripts/layers/runtime/runtime_service_facade.gd' at thread -1
+Loaded system CA certificates
+Loading resource: res://tests/framework/map_editor_saved_publish_boundary_20261010_test.tscn remapped: res://tests/framework/map_editor_saved_publish_boundary_20261010_test.tscn
+Loading resource: res://tests/framework/map_editor_saved_publish_boundary_20261010_test.gd remapped: res://tests/framework/map_editor_saved_publish_boundary_20261010_test.gd
+Completed load for: 'res://tests/framework/map_editor_saved_publish_boundary_20261010_test.gd' remapped 'res://tests/framework/map_editor_saved_publish_boundary_20261010_test.gd' at thread -1
+Completed load for: 'res://tests/framework/map_editor_saved_publish_boundary_20261010_test.tscn' remapped 'res://tests/framework/map_editor_saved_publish_boundary_20261010_test.tscn' at thread -1
+数据库载入完成：地图209 怪物156 Boss20 装备175 技能等级132 掉落槽3424 任务9
+FRAMEWORK_MAP_EDITOR_SAVED_PUBLISH_BOUNDARY_FAIL checks=18 errors=["sandbox save succeeds through MapEditorSaveService", "successful save records durable proof", "preview follows the verified persisted document owner", "receipt write failed"]
+SCRIPT ERROR: Invalid access to property or key 'map_type' on a base object of type 'Dictionary'.
+   at: MapEditorApp._adopt_new_document (res://scripts/map_editor/map_editor_app.gd:1195)
+   GDScript backtrace (most recent call first):
+       [0] _adopt_new_document (res://scripts/map_editor/map_editor_app.gd:1195)
+       [1] _run (res://tests/framework/map_editor_saved_publish_boundary_20261010_test.gd:32)
+RUNNER_RESULTS_JSON=C:\Users\Administrator\Documents\HardCore\outputs\test_logs\v109_direct43_map_transactions\logs\runner_results_adhoc_20261010_024013_427_9376.json
+TEST_SUMMARY suite=adhoc passed=1 failed=1 engine_log_errors=1
+FAILED_TESTS=map_editor_saved_publish_boundary_20261010_test (missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1;framework_checks_failed)
