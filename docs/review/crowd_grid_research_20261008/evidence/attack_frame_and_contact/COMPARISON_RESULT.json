@@ -1,0 +1,173 @@
+{
+  "schema": "crowd_attack_frame_ab.comparison.v2",
+  "status": "PASS_WITH_LIMITATIONS",
+  "revision": "offline correction using retained raw per-process arrays",
+  "method": {
+    "percentile": "nearest-rank, rank=ceil(p*n), one-based",
+    "enemy": "attack_start_frame_ab.observed.enemy_cpu_by_process[*].enemy_physics_usec / 1000",
+    "interval": "attack_start_frame_ab.observed.process_samples[*].interval_ms",
+    "summary_p99": "MISSING for retained summary-only fields"
+  },
+  "runs": [
+    {
+      "name": "immediate_05",
+      "mode": "immediate",
+      "enemy_cpu_total_ms": 2161.96,
+      "per_process_enemy_cpu_ms": {
+        "samples": 299,
+        "p50": 7.02,
+        "p95": 9.458,
+        "p99": 10.99,
+        "max": 13.212
+      },
+      "process_sample_interval_ms": {
+        "samples": 298,
+        "p50": 16.564,
+        "p95": 19.429,
+        "p99": 20.951,
+        "max": 21.341
+      },
+      "summary_p99": {
+        "process_cpu_ms": "MISSING",
+        "whole_physics_cpu": "MISSING",
+        "process_intervals": "MISSING"
+      },
+      "process_counter_alignment": true,
+      "catchup_epochs": 1,
+      "window": {
+        "starts": 18,
+        "settlements": 18,
+        "completed": 16,
+        "damage": 257,
+        "wait_usec": [],
+        "deferred": 0,
+        "budget_denied": 0,
+        "total_starts": 21,
+        "prewindow_starts": 3
+      },
+      "raw_sha256": "abb04843c4c2b807c209fbc850c36ab0e8aded35124c07ecd7b758762e2d7b2b"
+    },
+    {
+      "name": "queued_01",
+      "mode": "queued",
+      "enemy_cpu_total_ms": 2170.136,
+      "per_process_enemy_cpu_ms": {
+        "samples": 299,
+        "p50": 7.004,
+        "p95": 9.495,
+        "p99": 10.89,
+        "max": 12.944
+      },
+      "process_sample_interval_ms": {
+        "samples": 298,
+        "p50": 16.629,
+        "p95": 19.059,
+        "p99": 20.778,
+        "max": 21.699
+      },
+      "summary_p99": {
+        "process_cpu_ms": "MISSING",
+        "whole_physics_cpu": "MISSING",
+        "process_intervals": "MISSING"
+      },
+      "process_counter_alignment": true,
+      "catchup_epochs": 1,
+      "window": {
+        "starts": 18,
+        "settlements": 18,
+        "completed": 16,
+        "damage": 257,
+        "wait_usec": [
+          15092,
+          14354
+        ],
+        "deferred": 2,
+        "budget_denied": 2,
+        "total_starts": 21,
+        "prewindow_starts": 3
+      },
+      "raw_sha256": "d0abacb458ec5704bb586ba2b4069b2ac1161ef59a94a5499787eb25d9dc64cc"
+    },
+    {
+      "name": "immediate_06",
+      "mode": "immediate",
+      "enemy_cpu_total_ms": 2256.584,
+      "per_process_enemy_cpu_ms": {
+        "samples": 299,
+        "p50": 7.118,
+        "p95": 11.129,
+        "p99": 14.922,
+        "max": 17.299
+      },
+      "process_sample_interval_ms": {
+        "samples": 298,
+        "p50": 16.68,
+        "p95": 19.558,
+        "p99": 21.639,
+        "max": 22.997
+      },
+      "summary_p99": {
+        "process_cpu_ms": "MISSING",
+        "whole_physics_cpu": "MISSING",
+        "process_intervals": "MISSING"
+      },
+      "process_counter_alignment": true,
+      "catchup_epochs": 1,
+      "window": {
+        "starts": 19,
+        "settlements": 19,
+        "completed": 17,
+        "damage": 269,
+        "wait_usec": [],
+        "deferred": 0,
+        "budget_denied": 0,
+        "total_starts": 22,
+        "prewindow_starts": 3
+      },
+      "raw_sha256": "e1409cbf91c6026f4d635fd61ad60114fca723171a7b7423b597b6eac60ada89"
+    }
+  ],
+  "alignment": {
+    "cohort": "34 formal actors, 300 physics ticks",
+    "catchup_epochs": {
+      "immediate_05": 1,
+      "queued_01": 1,
+      "immediate_06": 1
+    },
+    "process_counter_alignment": {
+      "immediate_05": true,
+      "queued_01": true,
+      "immediate_06": true
+    }
+  },
+  "receipts": {
+    "immediate_05": {
+      "file": "immediate_05/native_logs/runner_results_adhoc_20261009_102456_145_14772.json",
+      "sha256": "026dfb2922273744c54806c268664d493b144a1f3c038bedbdad12f764739e70",
+      "effective_exit_code": 0,
+      "result": "PASS",
+      "engine_log_errors": 0,
+      "invocation_id": "44c36ae3-6ce7-4d1b-94af-d143db60e2e3",
+      "full_stdout_engine_logs": "MISSING"
+    },
+    "queued_01": {
+      "file": "native_logs/runner_results_adhoc_20261009_102627_364_8928.json",
+      "effective_exit_code": 0,
+      "result": "PASS",
+      "engine_log_errors": 0
+    },
+    "immediate_06": {
+      "file": "native_logs/runner_results_adhoc_20261009_102928_070_23580.json",
+      "effective_exit_code": 0,
+      "result": "PASS",
+      "engine_log_errors": 0
+    }
+  },
+  "limits": [
+    "A05 runner receipt was recovered from the isolated workspace and copied unchanged; full A05 stdout/engine logs remain MISSING.",
+    "A05 stdout/engine logs MISSING.",
+    "A06 retained as missing-evidence follow-up, not cherry-picked.",
+    "prior immediate_02 parse, immediate_03 import metadata, immediate_04 preload/environment plus grantsource mismatch retained.",
+    "Android/GPU FPS NOT_RUN; no 50% claim."
+  ]
+}

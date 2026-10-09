@@ -1,0 +1,2060 @@
+class_name PlayerCharacter
+extends CharacterBody2D
+
+const DamageLedgerObserverScript := preload("res://scripts/damage_ledger_observer.gd")
+# Explicit test-only seam; the observer never controls gameplay writes.
+var test_damage_write_hook := Callable()
+const PlayerGroundRuntimeDiagnosticOverlayScript := preload(
+	"res://scripts/player_ground_runtime_diagnostic_overlay.gd"
+)
+const SkillDataLoaderScript := preload("res://scripts/skills/skill_data_loader.gd")
+const SkillResourceServiceScript := preload(
+	"res://scripts/skills/skill_resource_service.gd"
+)
+const SkillVisibilityPolicyScript := preload(
+	"res://scripts/skills/skill_visibility_policy.gd"
+)
+const SkillInputPolicyScript := preload("res://scripts/skill_input_policy.gd")
+const CombatReleaseGeometryScript := preload(
+	"res://scripts/skills/combat_release_geometry.gd"
+)
+const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+const LocomotionDirections := preload("res://scripts/monster_neighbor_step_policy.gd")
+const CombatUnitLegacyAdapterScript := preload(
+	"res://scripts/skills/combat_unit_legacy_adapter.gd"
+)
+const CasterSkillVisualRegistryScript := preload(
+	"res://scripts/caster_skill_visual_registry.gd"
+)
+
+const PlayerVisualScript := preload("res://scripts/player_visual.gd")
+const PlayerHealthBarScript := preload("res://scripts/player_health_bar.gd")
+const RelicSynthesisRulesScript := preload("res://scripts/layers/rules/relic_synthesis_rules.gd")
+const EquipmentRulesScript := preload("res://scripts/equipment_rules.gd")
+const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
+const CombatResolutionRules := preload("res://scripts/combat_resolution_rules.gd")
+const MonsterSourcePoisonStateScript := preload("res://scripts/monster_source_poison_state.gd")
+const DIRECT_SPELL_DAMAGE_RUNTIME_ID := "player.direct_spell_damage.openmir2.v1"
+const SOUL_FIRE_TALISMAN_LAUNCH_TIMING_CONTRACT_ID := (
+	"skills.taoist.soul_fire_talisman.body_release_frame_launch.v1"
+)
+const MAGIC_SHIELD_CAPACITY_CONTRACT_ID := (
+	"skills.wizard.magic_shield.absorption_capacity.v1"
+)
+const MAGIC_SHIELD_AUTO_REFRESH_RATIO := 0.20
+const WARRIOR_STATE_SKILL_IDS := [
+	"hc.skill.warrior.basic_swordsmanship",
+	"hc.skill.warrior.slaying_swordsmanship",
+	"hc.skill.warrior.thrusting",
+	"hc.skill.warrior.half_moon",
+	"hc.skill.warrior.fire_sword",
+]
+## Legacy movement speed is the two-ground-unit run cadence (2 GU/600 ms).
+## A fresh directional input performs one 1 GU walk step before entering run.
+const WALK_MOVE_SPEED_GU_PER_SEC := 1.0 / 0.6
+const WALK_TO_RUN_DISTANCE_GU := 1.0
+const LOCOMOTION_WALK := "walk"
+const LOCOMOTION_RUN := "run"
+
+# GameOfMir server evidence:
+# - M2Server/ObjBase.pas RM_STRUCK only records m_dwStruckTick when nPower > 0.
+# - ClientWalkXY/ClientRunXY call CheckActionStatus before moving.
+# - CheckActionStatus rejects the action while dwStruckTime has not elapsed.
+# - M2Server/Mir200/!Setup.txt configures StruckTime=100 (milliseconds).
+# That source identifies itself as a modified 1.5 build, not an exact 1.76 source.
+# HardCore keeps source evidence and its custom balance values in ProfessionRules.
+
+signal stats_changed(current_hp: int, max_hp: int)
+signal attack_requested(origin: Vector2, direction: Vector2, damage: int)
+signal skill_requested(skill_name: String, origin: Vector2, direction: Vector2, damage: int)
+signal skill_cast_started(stable_skill_id: String)
+signal warrior_skill_state_changed(skill_name: String, enabled: bool, message: String)
+signal resources_changed(current_hp: int, max_hp: int, current_mp: int, max_mp: int)
+## R2: fired once when a potion-granted combat buff (ac/mac) fully expires, so
+## the central notice layer can report the end of the effect exactly once.
+signal potion_buff_expired(kind: String)
+signal movement_performed(position: Vector2, facing: Vector2)
+signal death_requested
+
+@export var move_speed_gu_per_sec := (
+	CombatUnitLegacyAdapterScript.PLAYER_MOVE_SPEED_GU_PER_SEC
+)
+@export var max_hp := 120
+@export var attack_min := 2
+@export var attack_max := 5
+@export var attack_cooldown := 0.9
+@export var attack_animation_duration := 0.51
+@export var attack_hit_windup := 0.17
+
+var current_hp := 120
+var max_mp := 40
+var current_mp := 40
+var _badge_recovery_elapsed := 0.0
+var _badge_recovery_item_id := -1
+var _badge_recovery_effect := ""
+var _badge_recovery_equipment_snapshot: Dictionary = {}
+var defense_min := 0
+var defense_max := 0
+var damage_reduction := 0.0
+var shield_time := 0.0
+var shield_initial_duration := 0.0
+var shield_capacity := 0.0
+var shield_capacity_max := 0.0
+var stealth_time := 0.0
+## Runtime stealth break latch. Equipment-derived stealth remains registered in
+## PlayerState, but an attack/skill submission suppresses its visibility until
+## a new runtime stealth application explicitly refreshes the state.
+var _stealth_break_override := false
+var _equipment_stealth_active := false
+var defense_buff := 0
+var defense_buff_time := 0.0
+var mac_buff := 0
+var mac_buff_time := 0.0
+var status_buff_started_at: Dictionary = {}
+var control_time := 0.0
+var poison_time := 0.0
+var _monster_source_poison := MonsterSourcePoisonStateScript.new()
+var poison_damage := 0
+var touch_vector := Vector2.ZERO
+var facing := Vector2.DOWN
+var _attack_timer := 0.0
+var _attack_action_timer := 0.0
+var _movement_visual_lock_timer := 0.0
+var _skill_cooldown_remaining: Dictionary = {}
+var _struck_lock_remaining := 0.0
+var _struck_reaction_lock_remaining := 0.0
+var _queued_struck_reaction := false
+## Protection begins when the hit presentation actually starts. Damage still
+## applies during the window, but it cannot restart the reaction, refresh the
+## 100ms action lock, or create another cooldown pause.
+const STRUCK_PROTECTION_SECONDS := 0.8
+var _struck_protection_remaining := 0.0
+## Cooldown-only pause owned by the actual player hit presentation.  This is
+## deliberately separate from the 100ms server action lock and from the
+## queued-reaction flag: an accepted attack/cast must finish before this clock
+## starts, while the hit animation itself pauses attack/skill cooldowns.
+var _struck_cooldown_pause_remaining := 0.0
+var _rng := RandomNumberGenerator.new()
+var visual: Node2D
+var health_bar: PlayerHealthBar
+var thrusting_enabled := false
+var half_moon_enabled := false
+var fire_sword_enabled := false
+# Read-only presentation mirror; GameRoot owns charge creation, expiry, and consumption.
+var _fire_sword_charge_expires_at_ms := 0
+var _pending_attack_context: Dictionary = {}
+var _pending_skill_context: Dictionary = {}
+var _combat_action_sequence := 0
+var _pending_combat_action_id := 0
+var _pending_combat_action_active := false
+var _pending_combat_action_committed := false
+# RV14-01: lifecycle identity frozen when the action is accepted. A delayed
+# release carries the epoch it was admitted under; transitions, formal death
+# and leaving the tree all advance the epoch, which voids stale releases even
+# when the actor is alive and back inside the tree by the time the timer fires.
+var _pending_combat_action_epoch := 0
+var _pending_combat_action_kind := ""
+var _accepted_release_producers: Dictionary = {}
+var _test_combat_time_ms := -1
+## Formal player action clock advanced only by the owner physics loop.
+var _combat_action_time_s := 0.0
+var _last_temporary_item_buff_revision := -1
+var _last_revival_at_ms := -300000
+# HC-MONSTER-COMBAT-R3 W5 (R3-06): the death lifecycle generation. Every
+# formal death opens a new generation; the deferred death notification task
+# captures its own generation and re-checks it after the await, so a revival
+# (or a later formal death) voids the old life's pending notification.
+var _death_lifecycle_generation := 0
+var _pending_potion_health := 0
+var _pending_potion_mana := 0
+var _potion_tick_remaining := 0.0
+var _attack_speed_tier := 0
+var _cast_speed_multiplier := 1.0
+var _equipment_spell_time_scale := 1.0
+var _dead := false
+var _combat_transition_token := ""
+var combat_epoch := 0
+var hc_world_skill_preflight := Callable()
+var hc_action_configuration_provider := Callable()
+var hc_melee_configuration_provider := Callable()
+var hc_action_configuration_identity := Callable()
+var _preflight_action_configurations: Array = []
+var movement_input_active := false
+var movement_facing := Vector2.DOWN
+var actual_motion_facing := Vector2.DOWN
+var actual_ground_motion_gu := Vector2.ZERO
+## Gameplay locomotion state. This is driven by successful Ground GU motion,
+## never by screen velocity or animation timing.
+var locomotion_state := LOCOMOTION_WALK
+var locomotion_distance_gu := 0.0
+var environment_blocker: Node
+var ground_runtime_diagnostic_overlay: Node2D
+
+const FACING_DIRECTIONS: Array[Vector2] = [
+	Vector2.DOWN, Vector2(-0.70710678, 0.70710678), Vector2.LEFT, Vector2(-0.70710678, -0.70710678),
+	Vector2.UP, Vector2(0.70710678, -0.70710678), Vector2.RIGHT, Vector2(0.70710678, 0.70710678),
+]
+
+
+func approved_ground_footpoint_local_px() -> Vector2:
+	if visual != null and visual.has_method("approved_ground_footpoint_in_actor_px"):
+		var point: Variant = visual.call("approved_ground_footpoint_in_actor_px")
+		if point is Vector2 and point.is_finite():
+			return point
+	return Vector2.ZERO
+
+
+func approved_ground_footpoint_world_px() -> Vector2:
+	return to_global(approved_ground_footpoint_local_px())
+
+
+func _exit_tree() -> void:
+	# RV14-01: leaving the tree ends the lifetime of every pending delayed
+	# release. Re-entering the tree must not re-arm them; a fresh action
+	# freezes a new epoch at acceptance time. The epoch is only compared for
+	# equality by release ownership, so advancing it here has no other effect.
+	combat_epoch += 1
+	_close_accepted_releases()
+	_pending_combat_action_active = false
+	_pending_combat_action_committed = false
+	_pending_combat_action_kind = ""
+	_pending_attack_context.clear()
+	_pending_skill_context.clear()
+	_queued_struck_reaction = false
+	_struck_protection_remaining = 0.0
+	_struck_cooldown_pause_remaining = 0.0
+
+
+func _ready() -> void:
+	add_to_group("player")
+	add_to_group("combat_targets")
+	collision_layer = WorldSpatialRulesScript.PLAYER_LAYER
+	collision_mask = WorldSpatialRulesScript.PLAYER_MASK
+	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
+	safe_margin = 0.35
+	max_slides = 6
+	_rng.randomize()
+	PlayerState.profile_changed.connect(_apply_profile_stats)
+	_apply_profile_stats()
+	current_hp = max_hp
+	current_mp = max_mp
+	var collision := CollisionShape2D.new()
+	collision.name = "CollisionShape2D"
+	collision.shape = WorldSpatialRulesScript.actor_footprint_shape_px(
+		ArtSpec.PLAYER_COLLISION_RADIUS_PX
+	)
+	add_child(collision)
+	visual = PlayerVisualScript.new()
+	visual.name = "PlayerVisual"
+	visual.setup(self)
+	add_child(visual)
+	visual._combat_clock_s = Callable(self, "_combat_action_time_getter")
+	if PlayerGroundRuntimeDiagnosticOverlayScript.enabled_for_runtime():
+		ground_runtime_diagnostic_overlay = (
+			PlayerGroundRuntimeDiagnosticOverlayScript.new()
+		)
+		ground_runtime_diagnostic_overlay.name = "GroundRuntimeDiagnosticOverlay"
+		ground_runtime_diagnostic_overlay.setup(self)
+		add_child(ground_runtime_diagnostic_overlay)
+	health_bar = PlayerHealthBarScript.new()
+	health_bar.name = "HealthBar"
+	health_bar.position = ArtSpec.PLAYER_HEALTH_BAR_OFFSET
+	health_bar.z_index = 20
+	health_bar.setup(current_hp, max_hp)
+	add_child(health_bar)
+	stats_changed.connect(health_bar.set_health)
+	queue_redraw()
+	stats_changed.emit(current_hp, max_hp)
+	resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
+
+
+func _physics_process(delta: float) -> void:
+	var profile_started_usec := RuntimeDiagnostics.timing_start()
+	var position_before_move := global_position
+	var was_struck_locked := (
+		_struck_lock_remaining > 0.0
+		or _struck_reaction_lock_remaining > 0.0
+		or _struck_cooldown_pause_remaining > 0.0
+	)
+	_combat_action_time_s += maxf(0.0, delta)
+	_attack_action_timer = maxf(0.0, _attack_action_timer - delta)
+	_struck_protection_remaining = maxf(0.0, _struck_protection_remaining - delta)
+	# Match the existing action-lock roundoff tolerance at an exact boundary.
+	if _struck_protection_remaining < 0.000001:
+		_struck_protection_remaining = 0.0
+	_movement_visual_lock_timer = maxf(
+		0.0,
+		_movement_visual_lock_timer - delta
+	)
+	var struck_started_this_tick := false
+	if _attack_action_timer <= 0.0 and _pending_combat_action_active and _pending_combat_action_committed:
+		_finish_combat_action(_pending_combat_action_id)
+	# A long frame can expire the physics action clock before the process
+	# timer delivers its accepted release. Finish that transaction first.
+	if _attack_action_timer <= 0.0 and not _pending_combat_action_active and _queued_struck_reaction:
+		_start_queued_struck_reaction()
+		was_struck_locked = true
+		struck_started_this_tick = true
+	# A queued reaction starts at the owner boundary after the current action has
+	# finished. The time before that boundary remains ordinary cooldown time;
+	# only a hit already active at this tick consumes the authored pause window.
+	var cooldown_delta := delta
+	if struck_started_this_tick:
+		cooldown_delta = delta
+	else:
+		var paused_slice := minf(cooldown_delta, _struck_cooldown_pause_remaining)
+		_struck_cooldown_pause_remaining = maxf(0.0, _struck_cooldown_pause_remaining - paused_slice)
+		cooldown_delta -= paused_slice
+	_attack_timer = maxf(0.0, _attack_timer - cooldown_delta)
+	for stable_skill_id: Variant in _skill_cooldown_remaining.keys():
+		var remaining := maxf(
+			0.0,
+			float(_skill_cooldown_remaining.get(stable_skill_id, 0.0)) - cooldown_delta
+		)
+		if remaining <= 0.0:
+			_skill_cooldown_remaining.erase(stable_skill_id)
+		else:
+			_skill_cooldown_remaining[stable_skill_id] = remaining
+	_struck_lock_remaining = maxf(0.0, _struck_lock_remaining - delta)
+	_struck_reaction_lock_remaining = maxf(0.0, _struck_reaction_lock_remaining - delta)
+	if _struck_lock_remaining < 0.000001:
+		_struck_lock_remaining = 0.0
+	shield_time = maxf(0.0, shield_time - delta)
+	stealth_time = maxf(0.0, stealth_time - delta)
+	defense_buff_time = maxf(0.0, defense_buff_time - delta)
+	mac_buff_time = maxf(0.0, mac_buff_time - delta)
+	control_time = maxf(0.0, control_time - delta)
+	_process_potion_restore(delta)
+	_tick_badge_recovery(delta)
+	var previous_poison_second := int(ceil(poison_time))
+	if not combat_transition_is_active():
+		poison_time = maxf(0.0, poison_time - delta)
+	if not combat_transition_is_active() and poison_time > 0.0 and int(ceil(poison_time)) < previous_poison_second:
+		# Periodic poison damage is not an RM_STRUCK hit in the reference server,
+		# so it must not refresh the movement/action lock.
+		take_damage(poison_damage, false)
+	elif poison_time <= 0.0 and poison_damage != 0:
+		# HC-MONSTER-COMBAT-R1 Task 6 (F05): a naturally expired old-channel
+		# poison converges its residual strength to zero, so a later weaker
+		# poison can never inherit the expired stronger tick.
+		poison_damage = 0
+	_update_monster_source_poison(delta)
+	if shield_time == 0.0:
+		damage_reduction = 0.0
+		shield_capacity = 0.0
+		shield_initial_duration = 0.0
+	if defense_buff_time == 0.0:
+		defense_buff = 0
+	if mac_buff_time == 0.0:
+		mac_buff = 0
+	var keyboard := _keyboard_movement_vector()
+	var direction := touch_vector if touch_vector.length() > keyboard.length() else keyboard
+	var has_direction_input := direction.length() > 0.08
+	var movement_locked := (
+		_attack_action_timer > 0.0
+		or _movement_visual_lock_timer > 0.0
+		or was_struck_locked
+	)
+	if _dead or combat_transition_is_active() or control_time > 0.0 or movement_locked:
+		direction = Vector2.ZERO
+	if not has_direction_input or control_time > 0.0:
+		reset_locomotion()
+	movement_input_active = direction.length() > 0.08
+	if movement_locked:
+		velocity = Vector2.ZERO
+	elif direction.length() > 0.08:
+		var direction_ground_gu := (
+			GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(direction)
+		)
+		if direction_ground_gu.length_squared() <= 0.000001:
+			direction_ground_gu = Vector2(1.0, 1.0)
+		direction_ground_gu = LocomotionDirections.desired_ground_direction(
+			LocomotionDirections.neighbor_for_desired_ground_direction(direction_ground_gu)
+		)
+		var direction_screen_px := (
+			GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+				direction_ground_gu
+			).normalized()
+		)
+		facing = FACING_DIRECTIONS[ArtSpec.direction_index(direction_screen_px)]
+		movement_facing = facing
+		var movement_speed := (
+			move_speed_gu_per_sec
+			if locomotion_state == LOCOMOTION_RUN
+			else WALK_MOVE_SPEED_GU_PER_SEC
+		)
+		velocity = GroundUnitSpaceScript.desired_screen_velocity_px_per_sec(
+			direction_ground_gu,
+			movement_speed
+		)
+	else:
+		velocity = Vector2.ZERO
+	# Contact recovery belongs to collision separation, not directional input.
+	# Comparing its normal offset with the selected movement axis rolls recovery
+	# back forever when an actor rests inside another body's safe margin.
+	move_and_collide(Vector2.ZERO, false, safe_margin, true)
+	position_before_move = global_position
+	var intended_motion_ground := GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(velocity)
+	# A single swept segment stops at contact; it never slides along a ninth axis.
+	move_and_collide(velocity * delta, false, safe_margin)
+	var accepted_motion_ground := GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(global_position - position_before_move)
+	if not LocomotionDirections.motion_follows_direction(accepted_motion_ground, intended_motion_ground):
+		# Keep separation already applied above even if contact clips the step.
+		global_position = position_before_move
+		velocity = Vector2.ZERO
+	if WorldSpatialRulesScript.environment_blocks_actor_screen_px(
+		environment_blocker,
+		global_position,
+		ArtSpec.PLAYER_COLLISION_RADIUS_PX
+	):
+		global_position = position_before_move
+		velocity = Vector2.ZERO
+	var actual_motion := global_position - position_before_move
+	actual_ground_motion_gu = (
+		GroundUnitSpaceScript.actual_ground_motion_gu_from_screen_positions(
+			position_before_move,
+			global_position
+		)
+	)
+	if actual_motion.length_squared() > 0.01:
+		# Walking art follows displacement that really happened on screen. This
+		# cannot be overwritten by targeting, stale input, or collision sliding.
+		actual_motion_facing = FACING_DIRECTIONS[ArtSpec.direction_index(actual_motion)]
+		movement_facing = actual_motion_facing
+		facing = actual_motion_facing
+		movement_performed.emit(global_position, facing)
+	if has_direction_input and not movement_locked and control_time <= 0.0 and not _dead:
+		# Accumulate only accepted directional displacement. A blocked
+		# frame therefore contributes zero and cannot manufacture a run transition.
+		locomotion_distance_gu += actual_ground_motion_gu.length()
+		if locomotion_state == LOCOMOTION_WALK and locomotion_distance_gu >= WALK_TO_RUN_DISTANCE_GU:
+			locomotion_state = LOCOMOTION_RUN
+	var elapsed_usec := RuntimeDiagnostics.timing_elapsed_usec(profile_started_usec)
+	if elapsed_usec > 0:
+		RuntimeDiagnostics.record_performance_max(&"player_physics_max_ms", float(elapsed_usec) / 1000.0)
+
+
+func set_touch_vector(value: Vector2) -> void:
+	touch_vector = value.limit_length(1.0)
+
+
+func reset_locomotion() -> void:
+	locomotion_state = LOCOMOTION_WALK
+	locomotion_distance_gu = 0.0
+
+
+func locomotion_snapshot() -> Dictionary:
+	return {
+		"state": locomotion_state,
+		"distance_gu": locomotion_distance_gu,
+		"walk_speed_gu_per_sec": WALK_MOVE_SPEED_GU_PER_SEC,
+		"run_speed_gu_per_sec": move_speed_gu_per_sec,
+	}
+
+
+func _keyboard_movement_vector() -> Vector2:
+	for action: StringName in [&"move_left", &"move_right", &"move_up", &"move_down"]:
+		if not InputMap.has_action(action):
+			return Vector2.ZERO
+	return Input.get_vector("move_left", "move_right", "move_up", "move_down")
+
+
+func set_combat_facing(direction: Vector2) -> void:
+	if direction.length_squared() <= 0.01:
+		return
+	facing = FACING_DIRECTIONS[ArtSpec.direction_index(direction.normalized())]
+	movement_facing = facing
+	actual_motion_facing = facing
+	movement_input_active = false
+
+
+func can_start_attack() -> bool:
+	return not _dead and _attack_timer <= 0.0 and _attack_action_timer <= 0.0 and _struck_lock_remaining <= 0.0 and _struck_reaction_lock_remaining <= 0.0 and _struck_cooldown_pause_remaining <= 0.0 and control_time <= 0.0
+
+
+func request_attack(has_combat_target := false, locked_target_instance_id := 0, configuration: RefCounted = null) -> bool:
+	if _dead or current_hp <= 0 or combat_transition_is_active():
+		return false
+	if configuration == null and hc_melee_configuration_provider.is_valid():
+		configuration = hc_melee_configuration_provider.call()
+		if configuration == null:
+			return false
+	if configuration != null and not _action_configuration_current(configuration):
+		return false
+	## Any attack submission breaks stealth uniformly (user override
+	## 2026-08-09).
+	break_stealth()
+	if not can_start_attack():
+		return false
+	var context := _build_warrior_attack_context(has_combat_target, configuration)
+	if str(context.get("action", "attack")) != "attack":
+		return false
+	if configuration != null:
+		if not configuration.accept(PlayerState.action_configuration_versions(), hc_action_configuration_identity.call()):
+			return false
+		context["action_config_lease"] = configuration
+	var action_duration := attack_animation_duration
+	_attack_timer = attack_cooldown
+	_attack_action_timer = action_duration
+	reset_locomotion()
+	velocity = Vector2.ZERO
+	var action_id := _begin_combat_action("attack")
+	# Freeze the accepted epoch before any visual/signal work: a synchronous
+	# observer may finish a begin/finish transition and bump the live epoch
+	# before the delayed release reads it (RV14-R2 reentry boundary).
+	var accepted_action_epoch := _pending_combat_action_epoch
+	_accepted_release_producers[action_id] = {"epoch": accepted_action_epoch, "configuration": configuration}
+	var animation_name := str(context.get("skill_name", "attack"))
+	visual.play_action(animation_name, action_duration)
+	var attack_stats: Dictionary = (configuration.primary_stats() if configuration != null \
+		and configuration.primary_stat_policy() == preload("res://scripts/features/contracts/action_config_lease.gd").ACCEPTED_PRIMARY_STATS else PlayerState.computed_stats)
+	var accepted_numeric: bool = configuration != null and configuration.primary_stat_policy() == preload("res://scripts/features/contracts/action_config_lease.gd").ACCEPTED_PRIMARY_STATS
+	var damage := WarriorCombatMath.roll_attack_power(int(attack_stats.get("attack_min", attack_min)) if accepted_numeric else attack_min,
+		int(attack_stats.get("attack_max", attack_max)) if accepted_numeric else attack_max, int(attack_stats.get("luck", 0)), _rng)
+	var critical_chance := float(attack_stats.get("critical_chance", 0.0))
+	if critical_chance > 0.0 and EquipmentRulesScript.critical_succeeds(critical_chance, _rng.randf()):
+		damage = EquipmentRulesScript.critical_damage(damage, float(attack_stats.get("critical_damage_multiplier", 1.5)))
+	_emit_attack_after_windup(
+		damage,
+		attack_hit_windup,
+		context,
+		action_id,
+		accepted_action_epoch,
+		facing.normalized(),
+		locked_target_instance_id
+	)
+	return true
+
+
+func request_attack_toward(
+	direction: Vector2,
+	has_combat_target := false,
+	locked_target_instance_id := 0,
+	configuration: RefCounted = null
+) -> bool:
+	if not can_start_attack() or direction.length_squared() <= 0.01:
+		return false
+	if configuration != null and not _action_configuration_current(configuration):
+		return false
+	set_combat_facing(direction)
+	return request_attack(has_combat_target, locked_target_instance_id, configuration)
+
+
+# Pure preflight for callers that must not select targets or change facing
+# unless the request can commit immediately.
+func can_request_skill(skill_name: String, configuration: RefCounted = null) -> bool:
+	if configuration != null and not _action_configuration_current(configuration):
+		return false
+	if skill_name.is_empty() or not PlayerState.is_skill_learned(skill_name):
+		return false
+	if _struck_lock_remaining > 0.0 or _struck_reaction_lock_remaining > 0.0 or _struck_cooldown_pause_remaining > 0.0 or control_time > 0.0 or _dead or current_hp <= 0 or combat_transition_is_active():
+		return false
+	if PlayerState.profession_id == "hc.profession.warrior" and SkillDataLoaderScript.entity_skill_id(skill_name) in WARRIOR_STATE_SKILL_IDS:
+		return true
+	if _attack_timer > 0.0:
+		return false
+	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
+	if not SkillVisibilityPolicyScript.is_skill_castable(stable_skill_id):
+		return false
+	if skill_cooldown_remaining_ms(stable_skill_id) > 0:
+		return false
+	var canonical_definition: Dictionary = (configuration.definition_for(stable_skill_id)
+		if configuration != null else PlayerState.effective_skill_definition(stable_skill_id))
+	if canonical_definition.is_empty():
+		return false
+	var learned_level: int = configuration.rank() if configuration != null else PlayerState.effective_skill_level(skill_name)
+	var resource_context := PlayerState.canonical_skill_resource_context(
+		stable_skill_id,
+		current_mp
+	)
+	_freeze_partner_resource_context(resource_context, configuration)
+	var dual_defense_context: Dictionary = resource_context.get(
+		"dual_defense_context",
+		{}
+	)
+	if not dual_defense_context.is_empty():
+		var partner_skill_id := str(dual_defense_context.get(
+			"partner_skill_id",
+			""
+		))
+		if (
+			not partner_skill_id.is_empty()
+			and skill_cooldown_remaining_ms(partner_skill_id) > 0
+		):
+			return false
+	var quote := SkillResourceServiceScript.quote(
+		canonical_definition,
+		learned_level,
+		resource_context,
+		resource_context
+	)
+	return current_mp >= maxi(0, int(quote.get("mp_cost", 0)))
+
+
+func request_skill(skill_name: String, locked_target_instance_id := 0, configuration: RefCounted = null) -> bool:
+	# Typed API input is translated once for existing display/event consumers.
+	# Gameplay qualification and state dispatch use the registered identity.
+	if skill_name.begins_with("hc."):
+		skill_name = SkillDataLoaderScript.display_name(skill_name)
+		if skill_name.is_empty():
+			return false
+	if configuration == null and hc_action_configuration_provider.is_valid():
+		configuration = hc_action_configuration_provider.call(SkillDataLoaderScript.stable_skill_id(skill_name))
+		if configuration == null:
+			return false
+	if configuration != null and not _action_configuration_current(configuration):
+		return false
+	## Any skill submission breaks stealth uniformly (user override
+	## 2026-08-09); the break happens at submission so a broken state can
+	## never linger into the next combat action.
+	break_stealth()
+	if not can_request_skill(skill_name, configuration):
+		return false
+	var learned_level := PlayerState.effective_skill_level(skill_name)
+	if PlayerState.profession_id == "hc.profession.warrior" and SkillDataLoaderScript.entity_skill_id(skill_name) in WARRIOR_STATE_SKILL_IDS:
+		return _request_warrior_state_skill(SkillDataLoaderScript.entity_skill_id(skill_name), learned_level)
+	return _request_active_skill(skill_name, locked_target_instance_id, configuration)
+
+
+func _request_active_skill(skill_name: String, locked_target_instance_id := 0, configuration: RefCounted = null) -> bool:
+	var learned_level: int = configuration.rank() if configuration != null else PlayerState.effective_skill_level(skill_name)
+	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
+	if hc_world_skill_preflight.is_valid():
+		_preflight_action_configurations.append(configuration)
+		var passed := bool(hc_world_skill_preflight.call(stable_skill_id, locked_target_instance_id))
+		_preflight_action_configurations.pop_back()
+		if not passed:
+			return false
+	elif stable_skill_id == "wizard.lightning":
+		return false
+	var canonical_definition: Dictionary = (configuration.definition_for(stable_skill_id)
+		if configuration != null else PlayerState.effective_skill_definition(stable_skill_id))
+	var canonical_timing: Dictionary = canonical_definition.get("timing", {})
+	var combat_profile := ProfessionRules.skill_combat_profile(skill_name, learned_level)
+	var track_locked_target := CombatReleaseGeometryScript.tracks_locked_target_for_skill(
+		stable_skill_id,
+		str(combat_profile.get("target_mode", "self"))
+	)
+	var body_cast_ms := int(canonical_timing.get(
+		"body_cast_ms",
+		roundi(ProfessionRules.CASTER_SPELL_ACTION_DURATION * 1000.0)
+	))
+	var total_action_lock_ms := int(canonical_timing.get(
+		"total_action_lock_ms",
+		body_cast_ms
+	))
+	var cooldown_ms := int(canonical_timing.get(
+		"cooldown_ms",
+		total_action_lock_ms
+	))
+	var resource_context := PlayerState.canonical_skill_resource_context(
+		stable_skill_id,
+		current_mp
+	)
+	_freeze_partner_resource_context(resource_context, configuration)
+	var dual_defense_context: Dictionary = resource_context.get(
+		"dual_defense_context",
+		{}
+	)
+	var partner_skill_id := str(dual_defense_context.get(
+		"partner_skill_id",
+		""
+	))
+	if not partner_skill_id.is_empty():
+		var partner_definition: Dictionary = (configuration.partner_definition()
+			if configuration != null else PlayerState.effective_skill_definition(partner_skill_id))
+		cooldown_ms = maxi(
+			cooldown_ms,
+			int(partner_definition.get("timing", {}).get(
+				"cooldown_ms",
+				cooldown_ms
+			))
+		)
+	var release_ms := int(canonical_timing.get(
+		"effect_resolve_ms_from_cast_start",
+		body_cast_ms
+	))
+	## An explicit projectile-launch field is independent from effect resolve.
+	## Soul Fire Talisman has a narrower project override: its travelling paper
+	## leaves on the body release frame while its audited 1200 ms effect timing
+	## stays source semantics. Other projectile skills retain their existing
+	## effect-resolve schedule unless they explicitly declare launch timing.
+	var canonical_geometry: Dictionary = canonical_definition.get("geometry", {})
+	if str(canonical_geometry.get("shape", "")) == "projectile":
+		if canonical_timing.has("projectile_launch_ms_from_cast_start"):
+			release_ms = int(canonical_timing.get(
+				"projectile_launch_ms_from_cast_start",
+				release_ms
+			))
+		elif stable_skill_id == "taoist.soul_fire_talisman":
+			release_ms = body_cast_ms
+	var action_lock_seconds := maxf(
+		0.0,
+		float(total_action_lock_ms) / 1000.0
+	) * _equipment_spell_time_scale / _cast_speed_multiplier
+	var cooldown_seconds := maxf(
+		0.0,
+		float(cooldown_ms) / 1000.0
+	) * _equipment_spell_time_scale / _cast_speed_multiplier
+	if configuration != null and not configuration.accept(PlayerState.action_configuration_versions(), hc_action_configuration_identity.call()):
+		return false
+	_attack_timer = action_lock_seconds
+	if cooldown_seconds > 0.0:
+		_skill_cooldown_remaining[stable_skill_id] = cooldown_seconds
+		if not partner_skill_id.is_empty():
+			## Shared dual-defence cooldown: both skill ids enter the same
+			## cooldown from one action so neither button can bypass the gate.
+			_skill_cooldown_remaining[partner_skill_id] = cooldown_seconds
+	var action_duration := maxf(0.0, float(body_cast_ms) / 1000.0) * _equipment_spell_time_scale
+	var release_seconds := maxf(0.0, float(release_ms) / 1000.0) * _equipment_spell_time_scale
+	_attack_action_timer = action_duration
+	reset_locomotion()
+	var primary_visual_duration := (
+		CasterSkillVisualRegistryScript.primary_action_completion_seconds(
+			stable_skill_id
+		)
+	)
+	var explicit_movement_lock_ms := int(canonical_timing.get(
+		"movement_lock_ms", -1
+	))
+	if explicit_movement_lock_ms >= 0:
+		# A long-lived/travelling effect is not automatically a channeled cast.
+		# Hellfire releases once after its six-frame body action; its remaining
+		# FireGun trail and 900ms recast gate do not hold the actor in place.
+		_movement_visual_lock_timer = maxf(
+			_movement_visual_lock_timer,
+			float(explicit_movement_lock_ms) / 1000.0 * _equipment_spell_time_scale
+		)
+	elif primary_visual_duration > 0.0:
+		var movement_contract_seconds := maxf(
+			action_duration,
+			float(total_action_lock_ms) / 1000.0 * _equipment_spell_time_scale
+		)
+		_movement_visual_lock_timer = maxf(
+			_movement_visual_lock_timer,
+			minf(
+				movement_contract_seconds,
+				release_seconds + primary_visual_duration
+			)
+		)
+	velocity = Vector2.ZERO
+	movement_input_active = false
+	var action_id := _begin_combat_action("skill:%s" % skill_name)
+	# Freeze the accepted epoch before visual.play_action/skill_cast_started:
+	# a synchronous observer may complete a begin/finish transition and bump
+	# the live epoch before the delayed release reads it (RV14-R2 boundary).
+	var accepted_action_epoch := _pending_combat_action_epoch
+	_accepted_release_producers[action_id] = {"epoch": accepted_action_epoch, "configuration": configuration}
+	visual.play_action(skill_name if PlayerState.profession_id == "hc.profession.warrior" else "cast", action_duration)
+	skill_cast_started.emit(stable_skill_id)
+	_emit_skill_after_windup(
+		skill_name,
+		0,
+		release_seconds,
+		action_id,
+		accepted_action_epoch,
+		facing.normalized(),
+		locked_target_instance_id,
+		track_locked_target,
+		configuration
+	)
+	return true
+
+
+func _action_configuration_current(configuration: RefCounted) -> bool:
+	return hc_action_configuration_identity.is_valid() and configuration.current_before_accept(
+		PlayerState.action_configuration_versions(), hc_action_configuration_identity.call())
+
+
+func current_preflight_action_configuration() -> RefCounted:
+	return null if _preflight_action_configurations.is_empty() else _preflight_action_configurations.back()
+
+
+func _freeze_partner_resource_context(context: Dictionary, configuration: RefCounted) -> void:
+	if configuration == null:
+		return
+	context.erase("dual_defense_context")
+	var partner: Dictionary = configuration.partner_definition()
+	if not partner.is_empty():
+		context["dual_defense_context"] = {"partner_skill_id":partner.skill_id,"partner_rank":configuration.partner_rank()}
+		context["action_partner_definition"] = partner
+
+
+func apply_confirmed_physical_hit_durability(damage: int, context := {}) -> Dictionary:
+	var event_context: Dictionary = (
+		context.duplicate(true) if context is Dictionary else {}
+	)
+	event_context["confirmed_hit"] = true
+	event_context["damage_type"] = "physical"
+	event_context["damage"] = damage
+	if not event_context.has("rng"):
+		event_context["rng"] = _rng
+	return PlayerState.apply_durability_event(
+		PlayerState.DURABILITY_EVENT_WEAPON_PHYSICAL_HIT,
+		event_context
+	)
+
+
+func combat_transition_is_active() -> bool:
+	return not _combat_transition_token.is_empty()
+
+
+func begin_combat_transition(token: String, allow_dead := false) -> bool:
+	if token.is_empty() or combat_transition_is_active():
+		return false
+	if not allow_dead and (_dead or current_hp <= 0):
+		return false
+	_combat_transition_token = token
+	combat_epoch += 1
+	_close_accepted_releases()
+	_pending_combat_action_active = false
+	_pending_combat_action_committed = false
+	_pending_attack_context.clear()
+	_pending_skill_context.clear()
+	reset_locomotion()
+	velocity = Vector2.ZERO
+	touch_vector = Vector2.ZERO
+	return true
+
+
+func finish_combat_transition(token: String) -> bool:
+	if token.is_empty() or token != _combat_transition_token:
+		return false
+	_combat_transition_token = ""
+	return true
+
+
+func restore_level_up_resources() -> bool:
+	if _dead or current_hp <= 0:
+		return false
+	current_hp = max_hp
+	current_mp = max_mp
+	stats_changed.emit(current_hp, max_hp)
+	resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
+	queue_redraw()
+	return true
+
+
+func take_damage(
+	amount: int,
+	causes_struck: bool = true,
+	durability_context := {},
+	force_struck_reaction := false,
+	delivery_identity: Variant = null,
+) -> void:
+	if _dead or combat_transition_is_active():
+		DamageLedgerObserverScript.record_terminal(delivery_identity, "rejected", "player_combat_isolated")
+		return
+	if amount <= 0:
+		DamageLedgerObserverScript.record_terminal(delivery_identity, "rejected", "non_positive_physical_damage")
+		return
+	var absorbed := (_rng.randi_range(defense_min, defense_max) if defense_max >= defense_min else defense_min) + defense_buff
+	_apply_resolved_damage(
+		maxi(1, amount - absorbed),
+		causes_struck,
+		"physical",
+		durability_context,
+		force_struck_reaction,
+		delivery_identity,
+	)
+
+
+func _resolve_incoming_evasion(amount: int, forced_roll := -1) -> Dictionary:
+	var roll := forced_roll if forced_roll >= 0 else _rng.randi_range(0, 9)
+	return CombatResolutionRules.resolve_magic_damage_for_target_stats("", amount, PlayerState.computed_stats, roll, true)
+
+
+func take_ranged_damage(amount: int, causes_struck := true, force_struck_reaction := false, forced_evasion_roll := -1, delivery_identity: Variant = null) -> Dictionary:
+	if _dead or amount <= 0 or combat_transition_is_active():
+		DamageLedgerObserverScript.record_terminal(delivery_identity, "rejected", "incoming_damage_rejected")
+		return {"applied_damage": 0, "final_damage": 0, "success": false}
+	var result := _resolve_incoming_evasion(amount, forced_evasion_roll)
+	var hp_before := current_hp
+	if not bool(result.magic_evaded):
+		take_damage(amount, causes_struck, {}, force_struck_reaction, delivery_identity)
+	elif DamageLedgerObserverScript.recording_enabled:
+		DamageLedgerObserverScript.record_terminal(delivery_identity, "miss", "ranged_magic_evaded")
+	result["applied_damage"] = maxi(0, hp_before - current_hp)
+	result["final_damage"] = int(result.applied_damage)
+	result["success"] = true
+	return result
+
+
+func take_monster_mixed_damage(
+	physical_raw: int,
+	magic_raw: int,
+	context: Dictionary,
+	delivery_identity: Variant = null,
+) -> Dictionary:
+	# ObjBase.HitMagAttackTarget resolves AC and MAC, sums both channels, then
+	# calls StruckDamage once. Keep the existing common shield/death pipeline
+	# atomic; separate take_damage / take_direct_spell_damage calls are unsafe.
+	if _dead or current_hp <= 0 or combat_transition_is_active():
+		DamageLedgerObserverScript.record_terminal(delivery_identity, "rejected", "incoming_damage_rejected")
+		return {"success": false, "applied_damage": 0, "failure_reason": "player_combat_isolated"}
+	if physical_raw < 0 or magic_raw < 0:
+		DamageLedgerObserverScript.record_terminal(delivery_identity, "rejected", "incoming_damage_rejected")
+		return {"success": false, "applied_damage": 0, "failure_reason": "invalid_mixed_damage"}
+	# This is one incoming release, so avoid both components with one roll.
+	var evasion := _resolve_incoming_evasion(physical_raw + magic_raw)
+	if bool(evasion.magic_evaded):
+		if DamageLedgerObserverScript.recording_enabled:
+			DamageLedgerObserverScript.record_terminal(delivery_identity, "miss", "mixed_magic_evaded")
+		evasion.merge({"success": true, "applied_damage": 0, "pipeline_input": 0, "physical_damage": 0, "magic_damage": 0, "final_damage": 0, "release_id": str(context.get("release_id", ""))})
+		return evasion
+	var ac_roll := (
+		_rng.randi_range(defense_min, defense_max)
+		if defense_max >= defense_min else defense_min
+	) + defense_buff
+	var target_stats: Dictionary = PlayerState.computed_stats
+	var mac_minimum := maxi(0, int(target_stats.get("magic_defense_min", 0)))
+	var mac_maximum := maxi(mac_minimum, int(target_stats.get("magic_defense_max", mac_minimum)))
+	var active_mac_buff := mac_buff if mac_buff_time > 0.0 else 0
+	mac_minimum += active_mac_buff
+	mac_maximum += active_mac_buff
+	var mac_roll := _rng.randi_range(mac_minimum, mac_maximum)
+	var physical_damage := maxi(0, physical_raw - ac_roll)
+	var magic_damage := maxi(0, magic_raw - mac_roll)
+	var total := physical_damage + magic_damage
+	var hp_before := current_hp
+	if total > 0:
+		_apply_resolved_damage(
+			total, true, "physical" if physical_damage > 0 else "magic", context, false, delivery_identity,
+		)
+	elif DamageLedgerObserverScript.recording_enabled:
+		DamageLedgerObserverScript.record_terminal(delivery_identity, "mitigated", "mixed_defense_zero")
+	return {
+		"success": true, "runtime_contract": "monster_mixed_damage.v1",
+		"physical_defense_roll": ac_roll, "magic_defense_roll": mac_roll,
+		"physical_damage": physical_damage, "magic_damage": magic_damage,
+		"pipeline_input": total, "applied_damage": maxi(0, hp_before - current_hp),
+		"release_id": str(context.get("release_id", "")),
+	}
+
+
+func take_direct_spell_damage(
+	skill_id: String,
+	raw_damage: int,
+	anti_magic_roll := -1,
+	magic_defense_roll := -1,
+	causes_struck := true,
+	delivery_identity: Variant = null,
+) -> Dictionary:
+	if _dead or combat_transition_is_active():
+		DamageLedgerObserverScript.record_terminal(delivery_identity, "rejected", "incoming_damage_rejected")
+		return {"applied_damage": 0, "final_damage": 0, "failure_reason": "player_combat_isolated"}
+	var stable_skill_id := ProfessionRules.skill_id(skill_id)
+	var target_stats: Dictionary = PlayerState.computed_stats
+	## MAC buff joins the magic-defence roll range without touching
+	## PlayerState.computed_stats. AC is deliberately excluded here.
+	var adapted_stats := target_stats.duplicate(true)
+	var active_mac_buff := (
+		mac_buff
+		if mac_buff_time > 0.0
+		else 0
+	)
+	## Freeze the base MAC range first, then add the buff exactly once to each
+	## bound. Never compare an already-buffed min against the base max.
+	var base_magic_defense_min := maxi(
+		0,
+		int(target_stats.get("magic_defense_min", 0))
+	)
+	var base_magic_defense_max := maxi(
+		base_magic_defense_min,
+		int(target_stats.get("magic_defense_max", base_magic_defense_min))
+	)
+	if active_mac_buff > 0:
+		adapted_stats["magic_defense_min"] = (
+			base_magic_defense_min + active_mac_buff
+		)
+		adapted_stats["magic_defense_max"] = (
+			base_magic_defense_max + active_mac_buff
+		)
+	var checked_anti_magic_roll := anti_magic_roll
+	if checked_anti_magic_roll < 0:
+		checked_anti_magic_roll = _rng.randi_range(0, CombatResolutionRules.ANTI_MAGIC_ROLL_SIDES - 1)
+	var magic_defense_state := {}
+	var magic_defense_adapter := Callable(
+		self,
+		"_resolve_direct_spell_magic_defense"
+	).bind(magic_defense_roll, magic_defense_state)
+	var resolution := CombatResolutionRules.resolve_direct_spell_damage(
+		stable_skill_id,
+		raw_damage,
+		adapted_stats,
+		checked_anti_magic_roll,
+		magic_defense_adapter,
+		true # User policy: every incoming magic release, including monster AoE.
+	)
+	resolution["runtime_contract"] = DIRECT_SPELL_DAMAGE_RUNTIME_ID
+	resolution["mac_buff_applied"] = active_mac_buff
+	resolution["magic_defense_min"] = maxi(
+		0,
+		int(adapted_stats.get("magic_defense_min", 0))
+	)
+	resolution["magic_defense_max"] = maxi(
+		int(resolution.magic_defense_min),
+		int(adapted_stats.get("magic_defense_max", resolution.magic_defense_min))
+	)
+	resolution["magic_defense_roll"] = int(magic_defense_state.get("roll", -1))
+	resolution["physical_defense_bypassed"] = true
+	var hp_before := current_hp
+	if int(resolution.final_damage) > 0:
+		_apply_resolved_damage(int(resolution.final_damage), causes_struck, "magic", {}, false, delivery_identity)
+	elif DamageLedgerObserverScript.recording_enabled:
+		DamageLedgerObserverScript.record_terminal(delivery_identity, "miss" if bool(resolution.get("magic_evaded", false)) else "mitigated", "direct_spell_evaded" if bool(resolution.get("magic_evaded", false)) else "direct_spell_zero")
+	resolution["player_pipeline_input"] = int(resolution.final_damage)
+	resolution["applied_damage"] = maxi(0, hp_before - current_hp)
+	return resolution
+
+
+func _resolve_direct_spell_magic_defense(
+	_skill_id: String,
+	incoming_damage: int,
+	target_stats: Dictionary,
+	roll_override: int,
+	resolution_state: Dictionary
+) -> int:
+	var minimum := maxi(0, int(target_stats.get("magic_defense_min", 0)))
+	var maximum := maxi(minimum, int(target_stats.get("magic_defense_max", minimum)))
+	var roll := clampi(roll_override, minimum, maximum) if roll_override >= 0 else _rng.randi_range(minimum, maximum)
+	resolution_state["roll"] = roll
+	return maxi(0, incoming_damage - roll)
+
+
+func _commit_observed_hp_write(amount: int, damage_type: String, delivery_identity: Variant, mp_before := -1, mp_after := -1) -> void:
+	var hp_before := current_hp
+	current_hp = maxi(0, current_hp - amount)
+	if DamageLedgerObserverScript.recording_enabled:
+		if hp_before > current_hp:
+			DamageLedgerObserverScript.record_hp_mutation(self, amount, hp_before, current_hp, damage_type, delivery_identity, mp_before, mp_after)
+		else:
+			DamageLedgerObserverScript.record_terminal(delivery_identity, "mitigated", "shield_absorbed_all", hp_before, current_hp, mp_before, mp_after)
+
+
+func _apply_resolved_damage(
+	amount: int,
+	causes_struck: bool,
+	damage_type := "physical",
+	durability_context := {},
+	force_struck_reaction := false,
+	delivery_identity: Variant = null,
+) -> void:
+	# Death is a single lifecycle transition.  Damage arriving while the death
+	# animation/UI selection/respawn transition is active must not repeat
+	# durability, gold loss, signals or schedule another death coroutine.
+	if _dead or combat_transition_is_active():
+		return
+	var incoming_damage := maxi(1, amount)
+	var final_damage := incoming_damage
+	if (
+		shield_time > 0.0
+		and damage_type != "source_poison"
+		and shield_capacity > 0.0
+		and damage_reduction > 0.0
+	):
+		var reduced_amount := maxi(
+			1,
+			int(round(
+				float(incoming_damage)
+				* (1.0 - clampf(damage_reduction, 0.0, 0.8))
+			))
+		)
+		var desired_absorption := maxi(0, incoming_damage - reduced_amount)
+		var absorbed_damage := mini(
+			desired_absorption,
+			maxi(0, int(floor(shield_capacity + 0.0001)))
+		)
+		shield_capacity = maxf(0.0, shield_capacity - float(absorbed_damage))
+		final_damage = maxi(1, incoming_damage - absorbed_damage)
+		if shield_capacity <= 0.0001:
+			shield_time = 0.0
+			damage_reduction = 0.0
+			shield_initial_duration = 0.0
+	var mp_before_damage := current_mp
+	if PlayerState.has_special_effect("magic_shield") and current_mp > 0:
+		var shield_mp_cost := int(round(final_damage * 1.5))
+		if current_mp >= shield_mp_cost:
+			current_mp -= shield_mp_cost
+			final_damage = 0
+		else:
+			var unpaid_mp := shield_mp_cost - current_mp
+			current_mp = 0
+			final_damage = int(round(unpaid_mp / 1.5))
+	var mp_after_damage := current_mp
+	# Faults are actual writes owned by an explicit test fixture, independent
+	# of observation. Production always executes the original single write.
+	var write_count := 1
+	if PlayerState.test_mode and test_damage_write_hook.is_valid():
+		write_count = clampi(int(test_damage_write_hook.call(self, delivery_identity, final_damage)), 0, 2)
+	if write_count == 0:
+		return
+	_commit_observed_hp_write(final_damage, damage_type, delivery_identity, mp_before_damage, mp_after_damage)
+	if write_count == 2:
+		_commit_observed_hp_write(final_damage, damage_type, delivery_identity, mp_after_damage, mp_after_damage)
+	# HC-MONSTER-COMBAT-R1 Task 7 (F08): the lethal outcome is decided and
+	# committed atomically BEFORE any external notification can run. Stats,
+	# resources and durability listeners must observe a consistent dead state:
+	# the old window (HP already 0, _dead still false) allowed a synchronous
+	# listener to reenter take_damage() and commit a second full death
+	# lifecycle (duplicated epoch, gold loss and a second death coroutine).
+	var hp_after_damage := current_hp
+	var died_this_hit := false
+	# R4 T2: the death lifecycle token is FROZEN at the moment the lethal
+	# result commits - before any durability/stats/resources broadcast. A
+	# synchronous listener that revives (or kills again) advances the live
+	# generation, and the deferred tail below must judge against the frozen
+	# value it captured, never against the live one.
+	var committed_death_generation := -1
+	if current_hp == 0:
+		var now_ms := Time.get_ticks_msec()
+		if PlayerState.has_special_effect("revival") and now_ms - _last_revival_at_ms >= EquipmentRulesScript.revival_cooldown_ms():
+			# HC-MONSTER-COMBAT-R2 T5: the automatic revival consumed the ring
+			# charge above, but this physical hit still owes exactly one
+			# incoming-struck durability event. The old early `return` skipped
+			# it, so the lethal hit that triggered the revival silently
+			# ignored equipment durability. Fall through instead: the common
+			# tail applies durability once, keeps the struck stagger
+			# presentation-gated (hp_after_damage was captured pre-revival,
+			# so a revived player does not stagger), and emits the revived
+			# stats exactly once at the end.
+			_last_revival_at_ms = now_ms
+			current_hp = max_hp
+			PlayerState.damage_special_effect_item("revival")
+			queue_redraw()
+		else:
+			died_this_hit = true
+			_dead = true
+			_struck_protection_remaining = 0.0
+			_struck_cooldown_pause_remaining = 0.0
+			# R3 W5 (R3-06): this formal death opens a new lifecycle
+			# generation; any deferred notification still pending from an
+			# earlier life is thereby voided (second-death case included).
+			_death_lifecycle_generation += 1
+			# R4 T2: freeze THIS death's token right here, before any
+			# durability/stats/resources callback can run (a synchronous
+			# listener may revive or kill again inside those callbacks).
+			committed_death_generation = _death_lifecycle_generation
+			_monster_source_poison.clear()
+			# Formal death clears every poison lane: no poison may survive the
+			# revival boundary and keep ticking on the revived actor.
+			poison_time = 0.0
+			poison_damage = 0
+			combat_epoch += 1
+			_close_accepted_releases()
+			reset_locomotion()
+			velocity = Vector2.ZERO
+			touch_vector = Vector2.ZERO
+			_pending_combat_action_active = false
+			_pending_combat_action_committed = false
+			_pending_combat_action_kind = ""
+			_pending_attack_context.clear()
+			_pending_skill_context.clear()
+			_queued_struck_reaction = false
+	if causes_struck and damage_type == "physical" and final_damage > 0:
+		var event_context: Dictionary = (
+			durability_context.duplicate(true)
+			if durability_context is Dictionary
+			else {}
+		)
+		event_context["damage_type"] = "physical"
+		event_context["damage"] = final_damage
+		event_context["causes_struck"] = true
+		event_context["red_poison"] = _incoming_red_poison_active(event_context)
+		if not event_context.has("rng"):
+			event_context["rng"] = _rng
+		PlayerState.apply_durability_event(
+			PlayerState.DURABILITY_EVENT_INCOMING_PHYSICAL_STRUCK,
+			event_context
+		)
+	if (
+		causes_struck
+		and final_damage > 0
+		and hp_after_damage > 0
+		and _struck_protection_remaining <= 0.0
+		and (
+			force_struck_reaction
+			or ProfessionRules.should_player_stagger(final_damage, max_hp)
+		)
+	):
+		# Repeated hits before the queued reaction starts are collapsed into the
+		# same pending presentation and must not refresh the server action lock.
+		if not _queued_struck_reaction and _struck_reaction_lock_remaining <= 0.0:
+			_struck_lock_remaining = maxf(_struck_lock_remaining, ProfessionRules.player_struck_action_lock_seconds())
+			velocity = Vector2.ZERO
+			movement_input_active = false
+			# The legacy client only consumes SM_STRUCK while its current action is
+			# idle. Queue the reaction so an attack animation and its hit transaction
+			# remain causally consistent instead of showing a false cancellation.
+			if _attack_action_timer > 0.0 or _pending_combat_action_active:
+				_queued_struck_reaction = true
+			else:
+				_start_struck_reaction()
+	stats_changed.emit(current_hp, max_hp)
+	resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
+	queue_redraw()
+	if died_this_hit:
+		# R4 T2: the economics of THIS death settle exactly once at the death
+		# boundary, independent of any revival a synchronous listener may
+		# already have performed - cancelling the cancellable presentation
+		# must never skip a committed economic event.
+		PlayerState.lose_gold_percent(0.05)
+		# Re-check the FROZEN token after every synchronous external callback
+		# before touching presentation: a listener that revived inside the
+		# stats broadcast has already advanced the generation, and the death
+		# presentation/notification must never bind to the new life.
+		if committed_death_generation != _death_lifecycle_generation:
+			return
+		# Deferred death presentation and notification only: the lifecycle
+		# decision was already committed atomically above, so this task owns
+		# no HP/durability/epoch responsibility and cannot be reentered.
+		# R3 W5: the notification is generation-stamped. After the await, the
+		# generation re-check voids a notification whose life was revived (or
+		# superseded by a later death) in the meantime.
+		visual.play_death()
+		await get_tree().create_timer(0.8).timeout
+		if not is_inside_tree():
+			return
+		if committed_death_generation != _death_lifecycle_generation:
+			return
+		death_requested.emit()
+
+
+func complete_death_revival() -> void:
+	## The gameplay authority calls this only after a selected revival method
+	## has completed its destination transition.  Formal death stays at 0 HP
+	## and rejects movement/combat until this explicit completion boundary.
+	if not _dead:
+		return
+	# R3 W5 (R3-06): the revival boundary advances the death lifecycle
+	# generation - a deferred notification still pending from the old life
+	# is voided and can never cross the revival boundary.
+	_death_lifecycle_generation += 1
+	current_hp = max_hp
+	current_mp = max_mp
+	_dead = false
+	_struck_protection_remaining = 0.0
+	_struck_cooldown_pause_remaining = 0.0
+	reset_locomotion()
+	velocity = Vector2.ZERO
+	touch_vector = Vector2.ZERO
+	if visual != null:
+		visual.play_action("idle", 0.0)
+	stats_changed.emit(current_hp, max_hp)
+	resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
+	queue_redraw()
+
+
+func _incoming_red_poison_active(context: Dictionary) -> bool:
+	if context.has("red_poison"):
+		return bool(context.get("red_poison", false))
+	if not has_meta("canonical_red_poison"):
+		return false
+	var poison_data: Variant = get_meta("canonical_red_poison")
+	if not poison_data is Dictionary:
+		return false
+	return Time.get_ticks_msec() < int(poison_data.get("expires_at_ms", 0))
+
+
+func _emit_attack_after_windup(
+	damage: int,
+	windup: float,
+	context: Dictionary,
+	action_id: int,
+	action_epoch: int,
+	input_direction: Vector2,
+	locked_target_instance_id: int
+) -> void:
+	var configuration: RefCounted = context.get("action_config_lease")
+	if windup > 0.0:
+		await get_tree().create_timer(windup).timeout
+	# R2-W5: a begun action owns its delayed release. A superseding action
+	# replaces the presentation/action slot but must never void this release:
+	# the cast already charged its cooldown, so the effect still resolves
+	# unless the player died, left the tree, or its lifecycle epoch advanced
+	# (map transition, formal death, explicit teardown). RV14-01: the release
+	# carries the epoch frozen at acceptance and re-checks it here — never a
+	# value read after the await. At most one release per action.
+	if (
+		is_inside_tree()
+		and not is_queued_for_deletion()
+		and not _dead
+		and current_hp > 0
+		and not combat_transition_is_active()
+		and combat_epoch == action_epoch
+	):
+		if configuration != null and (not hc_action_configuration_identity.is_valid() \
+			or not configuration.valid_for_release(hc_action_configuration_identity.call())):
+			_finish_accepted_release(action_id, configuration)
+			return
+		if action_id == _pending_combat_action_id and _pending_combat_action_active:
+			_pending_combat_action_committed = true
+		var release_geometry := _resolve_combat_release_geometry(
+			input_direction,
+			locked_target_instance_id,
+			true,
+			CombatReleaseGeometryScript.FACING_POLICY_LOCKED_INPUT_EIGHT_DIRECTION
+		)
+		release_geometry["release_id"] = "player:%d:action:%d" % [
+			get_instance_id(),
+			action_id,
+		]
+		_pending_attack_context = context.duplicate(true)
+		_pending_attack_context["release_geometry"] = release_geometry
+		var release_signal_payload := combat_release_signal_payload(
+			release_geometry
+		)
+		attack_requested.emit(
+			release_signal_payload.origin_screen_px,
+			release_signal_payload.direction_screen_px,
+			damage
+		)
+		_pending_attack_context.clear()
+	_finish_accepted_release(action_id, configuration)
+
+
+func _emit_skill_after_windup(
+	skill_name: String,
+	damage: int,
+	windup: float,
+	action_id: int,
+	action_epoch: int,
+	input_direction: Vector2,
+	locked_target_instance_id: int,
+	track_locked_target: bool,
+	configuration: RefCounted = null
+) -> void:
+	if windup > 0.0:
+		await get_tree().create_timer(windup).timeout
+	# R2-W5: same release ownership as _emit_attack_after_windup — a superseding
+	# action never voids a pending delayed release; only death, leaving the
+	# tree, or an advanced lifecycle epoch does (RV14-01: map transition,
+	# formal death + revival, exit/re-enter tree). Committed tracking stays
+	# owned by the current action; at most one release per action.
+	if (
+		is_inside_tree()
+		and not is_queued_for_deletion()
+		and not _dead
+		and current_hp > 0
+		and not combat_transition_is_active()
+		and combat_epoch == action_epoch
+	):
+		if action_id == _pending_combat_action_id and _pending_combat_action_active:
+			_pending_combat_action_committed = true
+		var release_geometry := _resolve_combat_release_geometry(
+			input_direction,
+			locked_target_instance_id,
+			track_locked_target
+		)
+		release_geometry["release_id"] = "player:%d:action:%d" % [
+			get_instance_id(),
+			action_id,
+		]
+		var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
+		if (
+			CombatReleaseGeometryScript.tracks_selected_friendly_identity(
+				stable_skill_id
+			)
+		):
+			## Friendly-target skills remember the selected identity and sample
+			## its live footpoint at release. This is a tracking contract only:
+			## it never enters the hostile live-axis/auto-turn path.
+			var friendly_target_position := Vector2.ZERO
+			var friendly_target_valid := false
+			if locked_target_instance_id > 0:
+				var friendly_node := instance_from_id(locked_target_instance_id)
+				if (
+					friendly_node is Node2D
+					and is_instance_valid(friendly_node)
+					and friendly_node.is_inside_tree()
+				):
+					friendly_target_position = friendly_node.global_position
+					friendly_target_valid = true
+			release_geometry["friendly_identity_release"] = (
+				CombatReleaseGeometryScript.friendly_identity_release_tracking(
+					stable_skill_id,
+					locked_target_instance_id,
+					global_position,
+					friendly_target_position,
+					friendly_target_valid
+				)
+			)
+		if configuration != null:
+			if not hc_action_configuration_identity.is_valid() or not configuration.valid_for_release(hc_action_configuration_identity.call()):
+				_finish_accepted_release(action_id, configuration)
+				return
+		_pending_skill_context = {"release_geometry": release_geometry}
+		if configuration != null:
+			_pending_skill_context["action_config_lease"] = configuration
+		var release_signal_payload := combat_release_signal_payload(
+			release_geometry
+		)
+		skill_requested.emit(
+			skill_name,
+			release_signal_payload.origin_screen_px,
+			release_signal_payload.direction_screen_px,
+			damage
+		)
+		_pending_skill_context.clear()
+	_finish_accepted_release(action_id, configuration)
+
+
+static func combat_release_signal_payload(
+	release_geometry: Dictionary
+) -> Dictionary:
+	## The player signal boundary is screen-space only. Compatibility aliases in
+	## CombatReleaseGeometry never participate in the formal runtime path.
+	return {
+		"origin_screen_px": release_geometry.get(
+			"origin_screen_px", Vector2.ZERO
+		),
+		"direction_screen_px": release_geometry.get(
+			"direction_screen_px", Vector2.DOWN
+		),
+	}
+
+
+func _resolve_combat_release_geometry(
+	input_direction: Vector2,
+	locked_target_instance_id: int,
+	track_locked_target: bool,
+	release_facing_policy := CombatReleaseGeometryScript.FACING_POLICY_LIVE_LOCKED_TARGET
+) -> Dictionary:
+	var target_position := Vector2.ZERO
+	var target_valid := false
+	var target_combat_radius_gu := 0.0
+	if track_locked_target and locked_target_instance_id > 0:
+		var candidate := instance_from_id(locked_target_instance_id)
+		if candidate is Node2D and is_instance_valid(candidate) and candidate.is_inside_tree():
+			target_position = candidate.global_position
+			target_valid = true
+			if candidate is EnemyActor:
+				target_combat_radius_gu = maxf(
+					0.0,
+					(candidate as EnemyActor).combat_radius_gu
+				)
+	return CombatReleaseGeometryScript.resolve(
+		global_position,
+		input_direction,
+		locked_target_instance_id,
+		target_position,
+		target_valid,
+		track_locked_target,
+		release_facing_policy,
+		target_combat_radius_gu
+	)
+
+
+func _begin_combat_action(action_kind: String) -> int:
+	_combat_action_sequence += 1
+	_pending_combat_action_id = _combat_action_sequence
+	_pending_combat_action_active = true
+	_pending_combat_action_committed = false
+	_pending_combat_action_kind = action_kind
+	# RV14-01: freeze the lifecycle identity at acceptance time. The pending
+	# release resolves only under this same epoch.
+	_pending_combat_action_epoch = combat_epoch
+	return _pending_combat_action_id
+
+
+func _commit_combat_action(action_id: int) -> bool:
+	if (
+		_dead
+		or not _pending_combat_action_active
+		or action_id != _pending_combat_action_id
+	):
+		return false
+	_pending_combat_action_committed = true
+	return true
+
+
+func _finish_combat_action(action_id: int) -> void:
+	if action_id != _pending_combat_action_id:
+		return
+	_pending_combat_action_active = false
+	_pending_combat_action_kind = ""
+
+
+func _start_struck_reaction() -> void:
+	var duration := ProfessionRules.player_struck_reaction_seconds(PlayerState.level)
+	_struck_reaction_lock_remaining = maxf(_struck_reaction_lock_remaining, duration)
+	_struck_protection_remaining = STRUCK_PROTECTION_SECONDS
+	_struck_cooldown_pause_remaining = maxf(_struck_cooldown_pause_remaining, duration)
+
+	# Ordinary struck pauses displacement but preserves locomotion state
+	# and walk-to-run progress: RUN stays RUN, a partial 1GU run-up keeps its
+	# accumulated distance. Releasing direction input still resets locomotion
+	# through the normal physics path, and a committed combat action still
+	# finishes before the queued reaction plays.
+	visual.play_hit(duration)
+
+
+func _start_queued_struck_reaction() -> void:
+	_queued_struck_reaction = false
+	_start_struck_reaction()
+
+
+func has_pending_combat_release() -> bool:
+	# A newer body action may replace the presentation slot while an older
+	# accepted timer still owns a release. Only its terminal path retires it.
+	return not _accepted_release_producers.is_empty()
+
+
+func _finish_accepted_release(action_id: int, configuration: RefCounted = null) -> void:
+	var producer: Dictionary = _accepted_release_producers.get(action_id, {})
+	_accepted_release_producers.erase(action_id)
+	var lease: RefCounted = producer.get("configuration", configuration)
+	if lease != null:
+		lease.finish_producer()
+
+
+func _close_accepted_releases() -> void:
+	# Advancing the existing lifecycle epoch prevents any old timer from
+	# producing again. Close its capacity owner immediately, even if paused.
+	for action_id: int in _accepted_release_producers.keys():
+		_finish_accepted_release(action_id)
+
+
+func combat_action_snapshot() -> Dictionary:
+	return {
+		"action_id": _pending_combat_action_id,
+		"kind": _pending_combat_action_kind,
+		"active": _pending_combat_action_active,
+		"committed": _pending_combat_action_committed,
+		"epoch": _pending_combat_action_epoch,
+	}
+
+
+func struck_reaction_snapshot() -> Dictionary:
+	return {
+		"policy_id": str(ProfessionRules.COMBAT_REACTION_POLICY.policy_id),
+		"server_action_lock_remaining": _struck_lock_remaining,
+		"reaction_lock_remaining": _struck_reaction_lock_remaining,
+		"queued": _queued_struck_reaction,
+	}
+
+
+func consume_attack_context() -> Dictionary:
+	return _pending_attack_context.duplicate(true)
+
+
+func consume_skill_context() -> Dictionary:
+	return _pending_skill_context.duplicate(true)
+
+
+func set_test_combat_time_ms(value: int) -> void:
+	_test_combat_time_ms = value
+
+
+func set_combat_seed(seed_value: int) -> void:
+	_rng.seed = seed_value
+
+
+func set_fire_sword_charge_display(expires_at_ms: int) -> void:
+	_fire_sword_charge_expires_at_ms = maxi(0, expires_at_ms)
+
+
+func skill_cooldown_remaining_ms(stable_skill_id: String) -> int:
+	return ceili(maxf(
+		0.0,
+		float(_skill_cooldown_remaining.get(stable_skill_id, 0.0))
+	) * 1000.0)
+
+
+func commit_fire_sword_cooldown(configuration: RefCounted = null) -> void:
+	var lease_contract := preload("res://scripts/features/contracts/action_config_lease.gd")
+	var fire_definition: Dictionary = lease_contract.resolve_definition("hc.skill.warrior.fire_sword", configuration)
+	if fire_definition.is_empty(): return
+	var fire_cooldown_ms := int(
+		fire_definition.get("timing", {}).get("cooldown_ms", 8000)
+	)
+	var cast_speed_multiplier := _cast_speed_multiplier
+	if configuration != null and configuration.primary_stat_policy() == lease_contract.ACCEPTED_PRIMARY_STATS:
+		cast_speed_multiplier = clampf(1.0 + float(configuration.primary_stats().get("cast_speed_percent", 0.0)), 0.2, 6.0)
+	_skill_cooldown_remaining["warrior.fire_sword"] = (
+		maxf(0.0, float(fire_cooldown_ms) / 1000.0)
+		/ cast_speed_multiplier
+	)
+
+
+func warrior_state_snapshot() -> Dictionary:
+	var fire_expires_remaining_ms := maxi(
+		0,
+		_fire_sword_charge_expires_at_ms - Time.get_ticks_msec()
+	)
+	return {
+		"contract_id": "gameplay.warrior.skill_runtime.v2",
+		"slaying_auto": PlayerState.is_skill_learned("warrior.slaying_swordsmanship"),
+		"thrusting": thrusting_enabled,
+		"half_moon": half_moon_enabled,
+		"fire_enabled": fire_sword_enabled,
+		"fire_armed": fire_expires_remaining_ms > 0,
+		"fire_expires_remaining_ms": fire_expires_remaining_ms,
+		"fire_cooldown_remaining_ms": skill_cooldown_remaining_ms(
+			"warrior.fire_sword"
+		),
+		# Compatibility keys only. Proc state is resolved exactly once by the
+		# canonical melee-modifier API and is never pre-rolled in Player.
+		"slaying_remaining": 0,
+		"slaying_trigger": -1,
+	}
+
+
+func warrior_runtime_state_for_save() -> Dictionary:
+	return {
+		"contract_id": "gameplay.warrior.skill_runtime.v2",
+		"toggles": {
+			"warrior.thrusting": thrusting_enabled,
+			"warrior.half_moon": half_moon_enabled,
+			# Existing v2 field is re-used, so this interaction update does not
+			# change the persisted contract shape.
+			"warrior.fire_sword.auto_enabled": fire_sword_enabled,
+		},
+		"cooldowns": {},
+	}
+
+
+func restore_warrior_runtime_state(saved_state: Dictionary) -> bool:
+	if str(saved_state.get("contract_id", "")) != "gameplay.warrior.skill_runtime.v2":
+		return false
+	var toggles: Dictionary = saved_state.get("toggles", {})
+	thrusting_enabled = bool(toggles.get("warrior.thrusting", false))
+	half_moon_enabled = bool(toggles.get("warrior.half_moon", false))
+	fire_sword_enabled = bool(toggles.get("warrior.fire_sword.auto_enabled", false))
+	# An in-flight charge never survives a reload; only the input toggle does.
+	set_fire_sword_charge_display(0)
+	return true
+
+
+func _combat_time_ms() -> int:
+	return _test_combat_time_ms if _test_combat_time_ms >= 0 else Time.get_ticks_msec()
+
+
+func _combat_action_time_getter() -> float:
+	return _combat_action_time_s
+
+
+func _request_warrior_state_skill(skill_id: String, _level: int) -> bool:
+	var skill_name := SkillDataLoaderScript.display_name(skill_id)
+	match skill_id:
+		"hc.skill.warrior.basic_swordsmanship":
+			warrior_skill_state_changed.emit(skill_name, true, "基本剑术为被动命中技能")
+			return true
+		"hc.skill.warrior.slaying_swordsmanship":
+			warrior_skill_state_changed.emit(skill_name, true, "攻杀剑术按攻击周期自动触发")
+			return true
+		"hc.skill.warrior.thrusting":
+			thrusting_enabled = not thrusting_enabled
+			warrior_skill_state_changed.emit(skill_name, thrusting_enabled, "刺杀剑术：%s" % ("开启" if thrusting_enabled else "关闭"))
+			return true
+		"hc.skill.warrior.half_moon":
+			half_moon_enabled = not half_moon_enabled
+			warrior_skill_state_changed.emit(skill_name, half_moon_enabled, "半月弯刀：%s" % ("开启" if half_moon_enabled else "关闭"))
+			return true
+		"hc.skill.warrior.fire_sword":
+			fire_sword_enabled = not fire_sword_enabled
+			warrior_skill_state_changed.emit(skill_name, fire_sword_enabled, "烈火剑法：%s" % ("开启" if fire_sword_enabled else "关闭"))
+			return true
+	return false
+
+
+func _build_warrior_attack_context(has_combat_target := false, configuration: RefCounted = null) -> Dictionary:
+	var context := {
+		"policy_id": SkillInputPolicyScript.WARRIOR_ATTACK_POLICY_ID,
+		"action": "attack",
+		"mode": "normal",
+		"skill_name": "attack",
+		"skill_level": 0,
+	}
+	if PlayerState.profession_id != "hc.profession.warrior":
+		return context
+	var fire_remaining_ms := maxi(0, _fire_sword_charge_expires_at_ms - Time.get_ticks_msec())
+	var accepted: Dictionary = configuration.melee_context() if configuration != null else {}
+	var resolution := SkillInputPolicyScript.resolve_warrior_attack({
+		"learned_skills": accepted.learned_skills if not accepted.is_empty() else PlayerState.learned_skills,
+		"toggles": accepted.toggles if not accepted.is_empty() else {
+			"warrior.fire_sword": fire_sword_enabled,
+			"warrior.half_moon": half_moon_enabled,
+			"warrior.thrusting": thrusting_enabled,
+		},
+		"has_combat_target": has_combat_target,
+		"current_mp": current_mp,
+		"fire_armed": fire_remaining_ms > 0,
+		"fire_cooldown_remaining_ms": skill_cooldown_remaining_ms("warrior.fire_sword"),
+		"fire_rank": configuration.rank_for("warrior.fire_sword") if configuration != null else PlayerState.effective_skill_level("warrior.fire_sword"),
+		"half_moon_rank": configuration.rank_for("warrior.half_moon") if configuration != null else PlayerState.effective_skill_level("warrior.half_moon"),
+		"slaying_rank": configuration.rank_for("warrior.slaying_swordsmanship") if configuration != null else PlayerState.effective_skill_level("warrior.slaying_swordsmanship"),
+		"action_config_lease": configuration,
+	})
+	var selected_id := str(resolution.get("skill_id", ""))
+	resolution["skill_level"] = (
+		(configuration.rank_for(selected_id) if configuration != null else PlayerState.effective_skill_level(selected_id))
+		if not selected_id.is_empty()
+		else 0
+	)
+	return resolution
+
+
+func restore_health(amount: int) -> int:
+	# Formal death stays at 0 HP until GameRoot completes an explicit revival.
+	# This also blocks delayed potion/ongoing-heal callbacks from reviving a
+	# dead player at the source-map position.
+	if _dead:
+		return 0
+	var hp_before := current_hp
+	current_hp = mini(max_hp, current_hp + maxi(0, amount))
+	# Freeze this authority's write before synchronous observers may perform
+	# their own independent damage, healing or lifecycle changes.
+	var actual_gain := maxi(0, current_hp - hp_before)
+	stats_changed.emit(current_hp, max_hp)
+	resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
+	queue_redraw()
+	return actual_gain
+
+
+func restore_mana(amount: int) -> void:
+	current_mp = mini(max_mp, current_mp + maxi(0, amount))
+	resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
+
+
+func _tick_badge_recovery(delta: float) -> void:
+	var equipped: Variant = PlayerState.equipment.get("hc.slot.badge", {})
+	var equipped_record: Dictionary = equipped if equipped is Dictionary else {}
+	var item_id := _badge_recovery_item_id
+	if equipped_record != _badge_recovery_equipment_snapshot:
+		_badge_recovery_equipment_snapshot = equipped_record.duplicate(true)
+		item_id = -1
+		var raw_id: Variant = equipped_record.get("item_id", null)
+		if raw_id is int or raw_id is float:
+			var candidate_id := int(raw_id)
+			if RelicSynthesisRulesScript.is_badge(candidate_id) and RelicSynthesisRulesScript.valid_instance(equipped_record, candidate_id):
+				item_id = candidate_id
+	if item_id != _badge_recovery_item_id:
+		_badge_recovery_item_id = item_id
+		_badge_recovery_elapsed = 0.0
+		_badge_recovery_effect = RelicSynthesisRulesScript.effect_for(item_id) if item_id > 0 else ""
+	if _badge_recovery_effect not in ["hp_regen", "mp_regen"] or _dead or current_hp <= 0:
+		_badge_recovery_elapsed = 0.0
+		return
+	_badge_recovery_elapsed += maxf(0.0, delta)
+	var ticks := floori(_badge_recovery_elapsed)
+	if ticks <= 0:
+		return
+	_badge_recovery_elapsed -= float(ticks)
+	if _badge_recovery_effect == "hp_regen":
+		var amount := roundi(float(max_hp) * 0.01) * ticks
+		if amount > 0 and current_hp < max_hp:
+			restore_health(amount)
+	else:
+		var amount := roundi(float(max_mp) * 0.01) * ticks
+		if amount > 0 and current_mp < max_mp:
+			restore_mana(amount)
+
+
+func queue_potion_restore(health_amount: int, mana_amount: int) -> void:
+	_pending_potion_health = mini(65535, _pending_potion_health + maxi(0, health_amount))
+	_pending_potion_mana = mini(65535, _pending_potion_mana + maxi(0, mana_amount))
+
+
+func _process_potion_restore(delta: float) -> void:
+	if _pending_potion_health <= 0 and _pending_potion_mana <= 0:
+		_potion_tick_remaining = 0.0
+		return
+	_potion_tick_remaining -= delta
+	if _potion_tick_remaining > 0.0:
+		return
+	var restore_profile := GameData.potion_recovery_profile(
+		PlayerState.level,
+		1,
+		0,
+		"delayed_restore",
+	)
+	_potion_tick_remaining = float(restore_profile.get("tick_interval_seconds", 0.6))
+	var per_tick := int(restore_profile.get("tick_amount", 5))
+	if _pending_potion_health > 0:
+		var hp_tick := mini(per_tick, _pending_potion_health)
+		_pending_potion_health -= hp_tick
+		restore_health(hp_tick)
+		if current_hp >= max_hp:
+			_pending_potion_health = 0
+	if _pending_potion_mana > 0:
+		var mp_tick := mini(per_tick, _pending_potion_mana)
+		_pending_potion_mana -= mp_tick
+		restore_mana(mp_tick)
+		if current_mp >= max_mp:
+			_pending_potion_mana = 0
+
+
+func spend_mana(amount: int) -> bool:
+	var cost := maxi(0, amount)
+	if current_mp < cost:
+		return false
+	current_mp -= cost
+	resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
+	return true
+
+
+func apply_magic_shield(seconds: float, reduction: float) -> void:
+	var applied_duration := maxf(0.0, seconds)
+	if applied_duration > 0.0 and (shield_time <= 0.0 or shield_capacity <= 0.0):
+		status_buff_started_at["shield"] = Time.get_ticks_usec()
+	shield_time = maxf(shield_time, applied_duration)
+	shield_initial_duration = maxf(shield_initial_duration, applied_duration)
+	damage_reduction = maxf(damage_reduction, clampf(reduction, 0.0, 0.8))
+	shield_capacity_max = maxf(1.0, float(max_mp))
+	shield_capacity = shield_capacity_max
+	queue_redraw()
+
+
+func magic_shield_snapshot() -> Dictionary:
+	var capacity_ratio := (
+		shield_capacity / shield_capacity_max
+		if shield_capacity_max > 0.0
+		else 0.0
+	)
+	return {
+		"contract_id": MAGIC_SHIELD_CAPACITY_CONTRACT_ID,
+		"active": shield_time > 0.0 and shield_capacity > 0.0,
+		"remaining_seconds": shield_time,
+		"initial_duration_seconds": shield_initial_duration,
+		"capacity": shield_capacity,
+		"capacity_max": shield_capacity_max,
+		"capacity_ratio": clampf(capacity_ratio, 0.0, 1.0),
+		"auto_refresh_capacity_ratio": MAGIC_SHIELD_AUTO_REFRESH_RATIO,
+	}
+
+
+func magic_shield_requires_refresh(
+	capacity_ratio_threshold := MAGIC_SHIELD_AUTO_REFRESH_RATIO,
+	expiry_lead_seconds := 0.6
+) -> bool:
+	if shield_time <= 0.0 or shield_capacity <= 0.0:
+		return true
+	var capacity_ratio := (
+		shield_capacity / shield_capacity_max
+		if shield_capacity_max > 0.0
+		else 0.0
+	)
+	var duration_relative_lead := maxf(0.1, shield_initial_duration * 0.2)
+	var refresh_lead := minf(maxf(0.0, expiry_lead_seconds), duration_relative_lead)
+	return (
+		capacity_ratio <= clampf(capacity_ratio_threshold, 0.0, 1.0) + 0.0001
+		or shield_time <= refresh_lead + 0.0001
+	)
+
+
+func apply_stealth(seconds: float) -> void:
+	if seconds > 0.0 and not is_stealthed():
+		status_buff_started_at["stealth"] = Time.get_ticks_usec()
+	_stealth_break_override = false
+	stealth_time = maxf(stealth_time, seconds)
+	queue_redraw()
+
+
+func break_stealth() -> void:
+	## Do not remove or damage equipment effects: this only suppresses the
+	## actor's runtime stealth view after an explicit combat submission.
+	_stealth_break_override = true
+	stealth_time = 0.0
+	queue_redraw()
+
+
+func recover_equipment_stealth_after_combat_exit() -> bool:
+	## Re-arm equipment-derived stealth only at the authoritative combat exit.
+	## Timer expiry never restores a broken ring state.
+	if not PlayerState.has_special_effect("stealth"):
+		_stealth_break_override = false
+		stealth_time = 0.0
+		queue_redraw()
+		return false
+	_stealth_break_override = false
+	stealth_time = 0.0
+	queue_redraw()
+	return true
+
+
+func apply_defense_buff(seconds: float, amount: int) -> void:
+	## Physical AC compatibility alias; AC and MAC stay separate.
+	apply_ac_buff(seconds, amount)
+
+
+func apply_ac_buff(seconds: float, amount: int) -> void:
+	## Reliable refresh: a weaker or shorter refresh never downgrades an
+	## active physical AC buff.
+	if seconds <= 0.0:
+		return
+	var safe_amount := maxi(0, amount)
+	if defense_buff_time <= 0.0:
+		status_buff_started_at["ac"] = Time.get_ticks_usec()
+		defense_buff = safe_amount
+	else:
+		defense_buff = maxi(defense_buff, safe_amount)
+	defense_buff_time = maxf(defense_buff_time, seconds)
+	queue_redraw()
+
+
+func apply_mac_buff(seconds: float, amount: int) -> void:
+	if seconds <= 0.0:
+		return
+	if mac_buff_time <= 0.0:
+		status_buff_started_at["mac"] = Time.get_ticks_usec()
+	mac_buff_time = maxf(mac_buff_time, seconds)
+	mac_buff = maxi(mac_buff, maxi(0, amount))
+	queue_redraw()
+
+
+func defence_buff_snapshot() -> Dictionary:
+	return {
+		"contract_id": "gameplay.player.defence_buff_state.v1",
+		"ac_bonus": defense_buff if defense_buff_time > 0.0 else 0,
+		"ac_remaining_seconds": defense_buff_time,
+		"mac_bonus": mac_buff if mac_buff_time > 0.0 else 0,
+		"mac_remaining_seconds": mac_buff_time,
+	}
+
+
+func apply_control(seconds: float) -> void:
+	# HC-MONSTER-COMBAT-R1 Task 7 (F07): a formally dead actor accepts no new
+	# control state, mirroring the existing apply_monster_poison() boundary.
+	# The full damage-receipt contract stays a separate work package.
+	if _dead or current_hp <= 0 or combat_transition_is_active():
+		return
+	control_time = maxf(control_time, seconds)
+	queue_redraw()
+
+
+func apply_poison(tick_damage: int, seconds: float) -> void:
+	# HC-MONSTER-COMBAT-R1 Task 6 (F05): invalid input is rejected instead of
+	# being floored into a live poison (the old maxi(1, ...) floor created a
+	# damage value with no legal caller and could anchor residual strength).
+	if tick_damage <= 0 or seconds <= 0.0 or not is_finite(seconds):
+		return
+	# HC-MONSTER-COMBAT-R1 Task 7 (F07): a formally dead actor accepts no new
+	# poison, mirroring the existing apply_monster_poison() boundary so the
+	# killing hit cannot re-dirty the poison lanes the death commit just
+	# cleared. The full damage-receipt contract stays a separate work package.
+	if _dead or current_hp <= 0 or combat_transition_is_active():
+		return
+	if poison_time <= 0.0:
+		# The previous cycle expired naturally: the new poison owns its own
+		# strength. Expired strength must never leak into the fresh cycle.
+		poison_damage = tick_damage
+	else:
+		# Both poisons still run: the stronger tick stays authoritative.
+		poison_damage = maxi(poison_damage, tick_damage)
+	poison_time = maxf(poison_time, seconds)
+	queue_redraw()
+
+
+func apply_monster_poison(tick_damage: int, seconds: float, interval_seconds: float) -> bool:
+	if _dead or current_hp <= 0 or combat_transition_is_active():
+		return false
+	var applied: bool = _monster_source_poison.apply(tick_damage, seconds, interval_seconds)
+	if applied:
+		queue_redraw()
+	return applied
+
+
+## Presentation-facing accessor for the unified poison status flag. Reads both
+## poison sources (legacy + monster-source) without mutating any gameplay
+## state. The HUD status strip uses this to show exactly one 中毒 flag.
+func poison_status_remaining() -> float:
+	return maxf(poison_time, _monster_source_poison.remaining_seconds)
+
+
+func _update_monster_source_poison(delta: float) -> void:
+	if _dead or current_hp <= 0:
+		_monster_source_poison.clear()
+		return
+	if combat_transition_is_active():
+		return
+	var was_active: bool = _monster_source_poison.remaining_seconds > 0.0
+	var ticks: int = _monster_source_poison.advance(delta)
+	for _tick in range(ticks):
+		if _dead or current_hp <= 0:
+			_monster_source_poison.clear()
+			break
+		# ObjBase.DamageHealth bypasses AC/MAC and the spell bubble, but retains
+		# the MP magic-shield ring and the target's single death boundary.
+		_apply_resolved_damage(_monster_source_poison.tick_damage, false, "source_poison")
+	if was_active and _monster_source_poison.remaining_seconds <= 0.0:
+		queue_redraw()
+
+
+func is_stealthed() -> bool:
+	return stealth_time > 0.0 or (
+		PlayerState.has_special_effect("stealth")
+		and not _stealth_break_override
+	)
+
+
+func _draw() -> void:
+	# Final MIR2 character frames already contain their own direction-aware
+	# ground shadow. Drawing another ellipse at the actor origin creates two
+	# separated shadows and makes the body look airborne.
+	if visual == null or not visual.uses_final_art():
+		draw_set_transform(Vector2(0, 2), 0.0, Vector2(1.0, 0.36))
+		draw_circle(Vector2.ZERO, 20.0, Color(0, 0, 0, 0.48))
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+	if visual == null or not visual.uses_final_art():
+		draw_circle(Vector2(0, -8), 17.0, Color(0.76, 0.66, 0.46))
+		var profession_color: Color = {"hc.profession.warrior": Color(0.24, 0.34, 0.48), "hc.profession.wizard": Color(0.20, 0.28, 0.56), "hc.profession.taoist": Color(0.36, 0.42, 0.24)}.get(PlayerState.profession_id, Color(0.24, 0.34, 0.48))
+		draw_colored_polygon(PackedVector2Array([Vector2(-17, -5), Vector2(17, -5), Vector2(13, 23), Vector2(-13, 23)]), profession_color)
+		draw_line(Vector2(0, 7), facing * 27.0 + Vector2(0, 7), Color(0.92, 0.86, 0.65), 5.0)
+	# Neither paralysis nor poison draws a ground ring under the character any
+	# more (R1.1). Both states present as fixed-slot dots on the status marker
+	# row under the overhead HP bar (see PlayerStatusMarkerStrip attached by
+	# player_health_bar.gd). Gameplay timers are only read, never changed here.
+
+
+func _apply_profile_stats() -> void:
+	var equipment_stealth_active := PlayerState.has_special_effect("stealth")
+	if equipment_stealth_active != _equipment_stealth_active:
+		_equipment_stealth_active = equipment_stealth_active
+		_stealth_break_override = false
+		queue_redraw()
+	var old_max := maxi(1, max_hp)
+	var previous_hp := current_hp
+	# A lethal physical hit applies incoming durability before it marks `_dead`.
+	# That durability transaction emits profile_changed synchronously. Preserve
+	# an already-zero HP value during that transition; treating zero as a full
+	# health ratio would bypass the formal death branch below the hit transaction
+	# and silently revive the player in place.
+	var hp_was_zero := current_hp <= 0
+	var hp_ratio := float(current_hp) / float(old_max) if not hp_was_zero else 1.0
+	var stats: Dictionary = PlayerState.computed_stats
+	max_hp = int(stats.get("max_hp", 120))
+	max_mp = int(stats.get("max_mp", 40))
+	attack_min = int(stats.get("attack_min", 2))
+	attack_max = int(stats.get("attack_max", 5))
+	_attack_speed_tier = int(stats.get("attack_speed_tier", 0))
+	attack_cooldown = WarriorCombatMath.physical_attack_interval_seconds(_attack_speed_tier)
+	_cast_speed_multiplier = clampf(1.0 + float(stats.get("cast_speed_percent", 0.0)), 0.2, 6.0)
+	_equipment_spell_time_scale = (
+		CombatResolutionRules.equipment_spell_time_scale(_attack_speed_tier)
+		if PlayerState.profession_id in ["hc.profession.wizard", "hc.profession.taoist"] else 1.0
+	)
+	defense_min = int(stats.get("defense_min", 0))
+	defense_max = maxi(defense_min, int(stats.get("defense_max", 0)))
+	# Gold loss and equipment durability can emit profile_changed during the
+	# death transition.  Recalculation must not resurrect HP behind the death
+	# state machine; only the respawn completion owns that transition.
+	current_hp = (
+		0
+		if _dead or hp_was_zero
+		else clampi(int(round(max_hp * hp_ratio)), 1, max_hp)
+	)
+	current_mp = clampi(current_mp, 0, max_mp)
+	# Preserve absolute HP/MP values across temporary buff stat changes.
+	var buff_revision: int = PlayerState.temporary_item_buff_revision
+	if buff_revision != _last_temporary_item_buff_revision:
+		_last_temporary_item_buff_revision = buff_revision
+		# When a buff activates or expires, keep the absolute current values
+		# and only clamp to the new caps.
+		current_hp = 0 if _dead or hp_was_zero else mini(previous_hp, max_hp)
+		current_mp = mini(current_mp, max_mp)
+	stats_changed.emit(current_hp, max_hp)
+	resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
+	if visual != null:
+		visual.refresh_profession()
+	queue_redraw()

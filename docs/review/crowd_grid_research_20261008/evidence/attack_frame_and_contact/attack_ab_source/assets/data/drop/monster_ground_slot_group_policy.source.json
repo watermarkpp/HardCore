@@ -1,0 +1,19 @@
+{
+  "schema": "hardcore.monster_ground_slot_group_policy.source.v1",
+  "authority_id": "monster.ground_slot_groups.source.v1",
+  "status": "AUTHORING_ACTIVE",
+  "identity_key": "canonical_monster_classification",
+  "classification_source": "assets/data/canonical_monster_classification_v1.json",
+  "groups": {
+    "ordinary": {"ground_slot_limit": 6},
+    "elite": {"ground_slot_limit": 9},
+    "boss": {"ground_slot_limit": 12}
+  },
+  "unsupported_classifications": ["special"],
+  "selection_contract": {
+    "stage": "AFTER_ALL_SLOT_RNG",
+    "probability_influence_forbidden": true,
+    "protected_priority_order_unchanged": true,
+    "gold_aggregation_unchanged": true
+  }
+}

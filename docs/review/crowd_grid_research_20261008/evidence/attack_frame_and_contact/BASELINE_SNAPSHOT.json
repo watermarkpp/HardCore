@@ -1,0 +1,751 @@
+{
+  "task": "ATTACK_START_FRAME_AB",
+  "prepared_workspace": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-attack-frame-ab\\HardCore",
+  "main_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+  "main_head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+  "baseline_head": "edae6fdef6a6551a951fab1ea8c6ade43359d603",
+  "main_index_sha256": "ddacea4eed570faed0a6003c87352552e74e902874b5dee61d8863a2316e29d7",
+  "main_status_sha256": "e9f0bb0ccf1f74bf32dd460c99b73702a7b302f54f8eb773ed01a687c14f4648",
+  "main_dirty_status": [
+    "M  .gitattributes",
+    " M AGENTS.md",
+    " M PROJECT_CURRENT_STATUS.md",
+    " M PROJECT_INDEX.md",
+    "A  assets/audio/town/main_city_bgm.pcm.wav.import",
+    " M assets/data/audio/audio_bindings.runtime.json",
+    " M assets/data/audio/audio_bindings.source.json",
+    " M assets/data/audio/audio_requirements.json",
+    " M assets/data/audio/exact_mapping_report.json",
+    " M assets/data/drop/dpv2_user_loot_sheet_authority_v1.json",
+    "A  assets/data/drop/monster_ground_slot_group_policy.runtime.json",
+    "A  assets/data/drop/monster_ground_slot_group_policy.source.json",
+    " M assets/data/equipment_attribute_master.json",
+    " M assets/data/equipment_luck_rules.json",
+    " M assets/data/equipment_price_candidates_v1.json",
+    "M  assets/data/equipment_special_rules.json",
+    " M assets/data/identity/entity_registry_source.json",
+    "A  assets/data/item_drop_affix_wooma_jp_policy.runtime.json",
+    "A  assets/data/item_drop_affix_wooma_jp_policy.source.json",
+    "M  assets/data/map_design/map_identity_registry.json",
+    " M assets/data/pricing_policy_v1.json",
+    "MM assets/data/runtime/entity_registry_v1.json",
+    " M assets/data/runtime/map_editor/map_runtime_release_registry.json",
+    " M assets/data/runtime/map_editor/world_bich_province.runtime.json",
+    " M assets/data/runtime/map_editor/world_bich_province.visual.json",
+    " M assets/data/ui/item_name_rarity_policy_v2.json",
+    " M assets/data/ui/item_name_rarity_v1.json",
+    " M assets/data/vanilla_176/items.json",
+    "A  assets/ui/gothic_hud/v2/runtime/target_bar_fill_mask.png.import",
+    " M docs/WORKSPACE_CURRENT_STATUS.md",
+    " M docs/review/monster_system_20261007/CURRENT_RESULT.md",
+    " M map_editor_workspace/bich_province/bich_province.editor.json",
+    " M map_editor_workspace/world_bich_province/world_bich_province.editor.json",
+    " M scripts/audio_runtime_service.gd",
+    "M  scripts/character_select.gd",
+    "MM scripts/enemy.gd",
+    "AM scripts/equipment_granted_skill_rules.gd",
+    "A  scripts/equipment_random_special_instance_rules.gd",
+    "MM scripts/equipment_rules.gd",
+    " M scripts/features/generated/internal_code_preparation_catalog_data.gd",
+    "MM scripts/game_data.gd",
+    "MM scripts/game_root.gd",
+    " M scripts/hud.gd",
+    " M scripts/hud_chassis_designs.gd",
+    " M scripts/hud_skill_icon_catalog.gd",
+    " M scripts/item_detail_docked_presenter.gd",
+    "MM scripts/item_detail_presenter.gd",
+    "A  scripts/item_drop_affix_v4_rules.gd",
+    " M scripts/item_drop_instance_rules.gd",
+    " M scripts/layers/runtime/combat_runtime_service.gd",
+    "M  scripts/layers/runtime/loot_runtime_service.gd",
+    "MM scripts/loading_transition_overlay.gd",
+    "M  scripts/loot_feedback_layer.gd",
+    "M  scripts/loot_pickup_runtime_manager.gd",
+    " M scripts/map_editor/map_editor_build_runtime_service.gd",
+    "A  scripts/monster_ai_package/decision_budget.gd",
+    "AM scripts/monster_ai_package/grid_occupancy_service.gd",
+    " M scripts/monster_crowd_attack_position_policy.gd",
+    " M scripts/monster_struck_policy.gd",
+    " M scripts/monster_target_magic_effect.gd",
+    " M scripts/monster_visual.gd",
+    " M scripts/player.gd",
+    " M scripts/player_state.gd",
+    " M scripts/player_visual.gd",
+    " M scripts/pricing_service.gd",
+    " M scripts/profession_rules.gd",
+    " M scripts/runtime_combat_spatial_index.gd",
+    " M scripts/runtime_diagnostics.gd",
+    " M scripts/skill_panel.gd",
+    " M scripts/skills/skill_data_loader.gd",
+    " M scripts/skills/skill_progression_service.gd",
+    " M scripts/summon_actor.gd",
+    " M scripts/town_music_controller.gd",
+    " M tests/android_layout_test.gd",
+    "M  tests/armor_single_slot_authority_test.gd",
+    "AM tests/audio_canonical_consumable_test.gd",
+    "A  tests/audio_canonical_consumable_test.tscn",
+    " M tests/audio_runtime_service_test.gd",
+    " M tests/audio_w4_actor_service_test.gd",
+    " M tests/audio_w4_contract_test.gd",
+    "A  tests/blessing_oil_success_multiplier_test.gd",
+    "A  tests/blessing_oil_success_multiplier_test.tscn",
+    "MM tests/character_select_launch_loading_test.gd",
+    " M tests/circular_touch_button_lifecycle_test.gd",
+    " M tests/classic_boss_area_magic_outcomes_test.gd",
+    " M tests/classic_boss_order_test.gd",
+    "A  tests/crowd_engagement_scaling_20261008.gd",
+    "A  tests/crowd_engagement_scaling_20261008.tscn",
+    "AM tests/crowd_formal_grid_comparison_20261008.gd",
+    "A  tests/crowd_formal_grid_comparison_20261008.tscn",
+    "A  tests/crowd_grid_cost_probe_20261008.gd",
+    "A  tests/crowd_grid_cost_probe_20261008.tscn",
+    "A  tests/crowd_grid_near_guidance_20261008.gd",
+    "A  tests/crowd_grid_near_guidance_20261008.tscn",
+    "AM tests/crowd_grid_occupancy_contract_20261008.gd",
+    "A  tests/crowd_grid_occupancy_contract_20261008.tscn",
+    "A  tests/crowd_grid_partial_terrain_20261008.gd",
+    "A  tests/crowd_grid_partial_terrain_20261008.tscn",
+    "A  tests/crowd_grid_simulation_20261008.gd",
+    "A  tests/crowd_grid_simulation_20261008.tscn",
+    "A  tests/crowd_target_cell_comparison_20261008.gd",
+    "A  tests/crowd_target_cell_comparison_20261008.tscn",
+    "A  tests/crowd_v107_cost_growth_20261008.gd",
+    "A  tests/crowd_v107_cost_growth_20261008.tscn",
+    "A  tests/crowd_v107_detailed_cost_20261008.gd",
+    "A  tests/crowd_v107_detailed_cost_20261008.tscn",
+    "MM tests/dpv2_drop_runtime_policy_test.gd",
+    " M tests/enemy_mass_death_batch_pipeline_test.gd",
+    "AM tests/equipment_granted_skill_identity_test.gd",
+    "A  tests/equipment_granted_skill_identity_test.tscn",
+    "AM tests/equipment_granted_skill_panel_lifecycle_test.gd",
+    "A  tests/equipment_granted_skill_panel_lifecycle_test.tscn",
+    "A  tests/equipment_granted_skill_progression_rejection_test.gd",
+    "A  tests/equipment_granted_skill_progression_rejection_test.tscn",
+    "A  tests/equipment_granted_skill_state_test.gd",
+    "A  tests/equipment_granted_skill_state_test.tscn",
+    " M tests/equipment_luck_test.gd",
+    "M  tests/equipment_special_effects_test.gd",
+    " M tests/equipment_special_phase2_test.gd",
+    "M  tests/fixed_area_ground_spike_effect_test.gd",
+    "M  tests/fixed_area_monster_test.gd",
+    "M  tests/fixed_area_release_batch_test.gd",
+    " M tests/framework/pricing_identity_test.gd",
+    " M tests/hc_monster_ai/combat_epoch_delivery_test.gd",
+    "AM tests/hc_monster_ai/committed_melee_action_test.gd",
+    "A  tests/hc_monster_ai/committed_melee_action_test.tscn",
+    "M  tests/hc_monster_ai/w1_special_delivery_runtime_test.gd",
+    "MM tests/hc_monster_combat_r4/async_line_lifecycle_test.gd",
+    "AM tests/hc_monster_combat_r4/boss_aoe_activation_test.gd",
+    "A  tests/hc_monster_combat_r4/boss_aoe_activation_test.tscn",
+    "AM tests/hc_monster_combat_r4/line_motion_evasion_test.gd",
+    "A  tests/hc_monster_combat_r4/line_motion_evasion_test.tscn",
+    "A  tests/helpers/crowd_grid_terrain_cache_probe.gd",
+    "A  tests/helpers/crowd_v107_profile_trace.gd",
+    "AM tests/hud_center_alignment_special_text_test.gd",
+    "A  tests/hud_center_alignment_special_text_test.tscn",
+    " M tests/hud_gothic_runtime_test.gd",
+    "A  tests/hud_multitouch_quick_items_test.gd",
+    "A  tests/hud_multitouch_quick_items_test.tscn",
+    " M tests/hud_runtime_capture.gd",
+    "AM tests/hud_target_and_potion_art_test.gd",
+    "A  tests/hud_target_and_potion_art_test.tscn",
+    "AM tests/hud_touch_layout_20261008_test.gd",
+    "A  tests/hud_touch_layout_20261008_test.tscn",
+    "AM tests/item_drop_affix_v4_test.gd",
+    "A  tests/item_drop_affix_v4_test.tscn",
+    "M  tests/live_map_loot_authority_export_test.gd",
+    "MM tests/loading_transition_ui_test.gd",
+    "A  tests/loot_accepted_movement_test.gd",
+    "A  tests/loot_accepted_movement_test.tscn",
+    "A  tests/loot_continuous_cohorts_test.gd",
+    "A  tests/loot_continuous_cohorts_test.tscn",
+    "A  tests/loot_feedback_fifo_test.gd",
+    "A  tests/loot_feedback_fifo_test.tscn",
+    " M tests/loot_feedback_gothic_ui_test.gd",
+    " M tests/map_release_display_name_test.gd",
+    "M  tests/monster_attack_collision_gate_test.gd",
+    " M tests/monster_attack_los_cache_test.gd",
+    " M tests/monster_audio_hook_test.gd",
+    "AM tests/monster_discovery_audio_retired_test.gd",
+    "A  tests/monster_discovery_audio_retired_test.tscn",
+    "AM tests/monster_ground_slot_group_policy_test.gd",
+    "A  tests/monster_ground_slot_group_policy_test.tscn",
+    " M tests/monster_magic_reaction_continuation_test.gd",
+    "M  tests/monster_physical_projectile_attack_test.gd",
+    " M tests/monster_special_delivery_runtime_test.gd",
+    " M tests/monster_struck_runtime_test.gd",
+    " M tests/monster_target_magic_attack_test.gd",
+    "AM tests/mystery_equipment_formal_flow_test.gd",
+    "A  tests/mystery_equipment_formal_flow_test.tscn",
+    "AM tests/mystery_equipment_instance_test.gd",
+    "A  tests/mystery_equipment_instance_test.tscn",
+    "AM tests/mystery_equipment_wear_requirements_test.gd",
+    "A  tests/mystery_equipment_wear_requirements_test.tscn",
+    "AM tests/phone_crowd_baseline_20261008.gd",
+    "A  tests/phone_crowd_baseline_20261008.tscn",
+    " M tests/player_core_audio_hook_test.gd",
+    " M tests/player_enemy_struck_chain_e2e_test.gd",
+    " M tests/player_hit_reaction_policy_test.gd",
+    " M tests/player_skill_struck_chain_test.gd",
+    " M tests/repair_20260913/blessing_rule_test.gd",
+    " M tests/skills/summon_audio_hook_test.gd",
+    "M  tests/source176_r3/area_parent_admission_test.gd",
+    " M tests/source176_r3/release_lifecycle_test.gd",
+    " M tests/special_actor_target_magic_gap_test.gd",
+    "A  tests/special_equipment_actor_policy_test.gd",
+    "A  tests/special_equipment_actor_policy_test.tscn",
+    "AM tests/special_equipment_detail_contract_test.gd",
+    "A  tests/special_equipment_detail_contract_test.tscn",
+    "AM tests/special_equipment_root_flow_test.gd",
+    "A  tests/special_equipment_root_flow_test.tscn",
+    "AM tests/technique_necklace_formal_flow_test.gd",
+    "A  tests/technique_necklace_formal_flow_test.tscn",
+    "AM tests/technique_necklace_instance_test.gd",
+    "A  tests/technique_necklace_instance_test.tscn",
+    "MM tests/test_dpv2_repair_v5.gd",
+    "A  tests/test_item_drop_affix_wooma_jp_policy.py",
+    "A  tests/test_monster_ground_slot_group_policy.py",
+    " M tests/town_music_controller_test.gd",
+    "A  tests/town_music_pcm_lifecycle_test.gd",
+    "A  tests/town_music_pcm_lifecycle_test.tscn",
+    "AM tests/user_feedback_20260930/crowd_decision_boundary_test.gd",
+    "A  tests/user_feedback_20260930/crowd_decision_boundary_test.tscn",
+    "A  tests/user_feedback_20260930/crowd_local_navigation_contract_test.gd",
+    "A  tests/user_feedback_20260930/crowd_local_navigation_contract_test.tscn",
+    "A  tests/user_feedback_20260930/crowd_nearest_candidate_order_test.gd",
+    "A  tests/user_feedback_20260930/crowd_nearest_candidate_order_test.tscn",
+    " M tests/user_feedback_20260930/crowd_position_candidates_test.gd",
+    "A  tests/user_feedback_20260930/monster_decision_budget_test.gd",
+    "A  tests/user_feedback_20260930/monster_decision_budget_test.tscn",
+    " M tests/user_feedback_20260930/motion_candidate_reuse_test.gd",
+    "AM tests/user_feedback_20260930/natural_crowd_30_actor_test.gd",
+    "A  tests/user_feedback_20260930/natural_crowd_30_actor_test.tscn",
+    "AM tests/user_feedback_20260930/settled_crowd_surround_test.gd",
+    "A  tests/user_feedback_20260930/settled_crowd_surround_test.tscn",
+    " M tests/user_feedback_20260930/surround_target_body_route_test.gd",
+    "AM tests/user_special_sale_pricing_test.gd",
+    "A  tests/user_special_sale_pricing_test.tscn",
+    " M tests/w1_exact_ranged_delivery_test.gd",
+    " M tools/audio/audio_pipeline.py",
+    " M tools/build_entity_registry.py",
+    " M tools/build_equipment_attribute_master.py",
+    "A  tools/build_item_drop_affix_wooma_jp_policy.py",
+    "A  tools/build_monster_ground_slot_group_policy.py",
+    " M tools/extract_equipment_luck_rules.py",
+    " M tools/loot_sheet_compiler/compile_authority.ps1",
+    " M tools/loot_sheet_compiler/evidence/armor_single_slot_directive_v92.json",
+    " M tools/map_editor/promote_current_bich_map.py",
+    "?? assets/audio/town/main_city_bgm.pcm.wav",
+    "?? assets/audio/town/main_city_bgm.playback.json",
+    "?? assets/data/drop/technique_drop_source_policy_v1.json",
+    "?? assets/data/equipment_granted_skills.source.json",
+    "?? assets/data/mystery_equipment_random.source.json",
+    "?? assets/ui/gothic_hud/v2/runtime/target_bar_fill.gdshader",
+    "?? assets/ui/gothic_hud/v2/runtime/target_bar_fill_mask.png",
+    "?? assets/ui/gothic_hud/v2/target_bar_fill_mask.source.json",
+    "?? docs/audio/20261007/",
+    "?? docs/mystery_equipment_random_source_evidence.md",
+    "?? docs/review/crowd_grid_research_20261008/",
+    "?? docs/review/drop_classification_20261008/",
+    "?? docs/review/first_attack_latency_20261008/",
+    "?? docs/review/hud_touch_20261008/",
+    "?? docs/review/monster_system_20261007/APK_CHANGED_SCRIPTS.json",
+    "?? docs/review/monster_system_20261007/APK_DELIVERY.json",
+    "?? docs/review/monster_system_20261007/APK_DELIVERY.md",
+    "?? docs/review/monster_system_20261007/APK_STATIC_CHECK.json",
+    "?? docs/review/monster_system_20261007/BUILD_STAGE_RETIREMENT.json",
+    "?? docs/review/monster_system_20261007/DESKTOP_DELIVERY.json",
+    "?? docs/review/monster_system_20261007/SOURCE_COMMIT_BINDING.json",
+    "?? docs/review/monster_system_20261007/SPECIAL_EQUIPMENT_CONNECTION_LIST.md",
+    "?? docs/review/monster_system_20261007/SPECIAL_RING_CONNECTION_AUDIT.md",
+    "?? docs/review/monster_system_20261007/android-export-seal.json",
+    "?? docs/review/monster_system_20261007/final-export-identity-receipt.json",
+    "?? docs/review/monster_system_20261007/two-pass-build-receipt.json",
+    "?? docs/review/phone_crowd_20261008/",
+    "?? docs/review/release_v107_20261008/",
+    "?? docs/review/special_equipment_20261008/",
+    "?? docs/review/v107_feedback_20261008/",
+    "?? docs/superpowers/plans/2026-10-09-attack-start-frame-ab.md",
+    "?? docs/superpowers/plans/2026-10-09-crowd-native-kernel.md",
+    "?? docs/superpowers/plans/2026-10-09-fixed-diagnostic-counter-backend.md",
+    "?? docs/superpowers/plans/2026-10-09-formal-spatial-read-lane.md",
+    "?? docs/superpowers/plans/2026-10-09-native-live-motion-query.md",
+    "?? docs/superpowers/plans/2026-10-09-no-plan-failure-audit.md",
+    "?? scripts/enemy.gd.applied-draft",
+    "?? scripts/hud_utility_touch_button.gd",
+    "?? scripts/monster_ai_package/grid_crowd_trial.gd",
+    "?? scripts/mystery_equipment_instance_rules.gd",
+    "?? scripts/quick_item_icon_layout.gd",
+    "?? scripts/ui_generated/",
+    "?? tests/audio_alias_route_generation_test.py",
+    "?? tests/crowd_local_cache_contract_20261008.gd",
+    "?? tests/crowd_local_cache_contract_20261008.tscn",
+    "?? tests/fixtures/technique_drop_authority_before.json",
+    "?? tests/test_equipment_current_master_projection.py",
+    "?? tests/test_equipment_granted_registry_closure.py",
+    "?? tests/test_technique_drop_authority.py",
+    "?? tools/audio/prepare_town_music.py",
+    "?? tools/build_hud_target_bar_mask.py"
+  ],
+  "engine": {
+    "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+    "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+    "workspace_junction": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7"
+  },
+  "dev_art_junction": "C:\\Users\\Administrator\\Documents\\HardCore\\dev_art_sources",
+  "overlay_count": 56,
+  "overlay": [
+    {
+      "path": "assets/data/audio/audio_bindings.runtime.json",
+      "kind": "main_dirty_production",
+      "main_sha256": "b8ef6b4fd977dedb4ad73fb117d586749c0bdeacb33d3acbbb14c603141fbe8b",
+      "workspace_sha256": "b8ef6b4fd977dedb4ad73fb117d586749c0bdeacb33d3acbbb14c603141fbe8b"
+    },
+    {
+      "path": "assets/data/audio/audio_bindings.source.json",
+      "kind": "main_dirty_production",
+      "main_sha256": "2afae4608e492a6d59e41fdf2eea2212cddf245a1086537c7f6afe53cca41f1b",
+      "workspace_sha256": "2afae4608e492a6d59e41fdf2eea2212cddf245a1086537c7f6afe53cca41f1b"
+    },
+    {
+      "path": "assets/data/audio/audio_requirements.json",
+      "kind": "main_dirty_production",
+      "main_sha256": "edfab02f85ac636043215543c133df3baae822ed6831986944376e1394ffdff0",
+      "workspace_sha256": "edfab02f85ac636043215543c133df3baae822ed6831986944376e1394ffdff0"
+    },
+    {
+      "path": "assets/data/audio/exact_mapping_report.json",
+      "kind": "main_dirty_production",
+      "main_sha256": "cf781270a8e66fb4b5aaa34b7034b08664c7a28f7f4ece99a0bc4db7f1adf82c",
+      "workspace_sha256": "cf781270a8e66fb4b5aaa34b7034b08664c7a28f7f4ece99a0bc4db7f1adf82c"
+    },
+    {
+      "path": "assets/data/drop/monster_ground_slot_group_policy.runtime.json",
+      "kind": "main_dirty_production",
+      "main_sha256": "8343dd0fb8bc18e2b3ca638211fb2ff2637a6d5e14328deaff7f1f363c4380ad",
+      "workspace_sha256": "8343dd0fb8bc18e2b3ca638211fb2ff2637a6d5e14328deaff7f1f363c4380ad"
+    },
+    {
+      "path": "assets/data/drop/monster_ground_slot_group_policy.source.json",
+      "kind": "main_dirty_production",
+      "main_sha256": "31a518351d253b96bb1cf1194612560eed58195740a358ca371cdbc03997b6f0",
+      "workspace_sha256": "31a518351d253b96bb1cf1194612560eed58195740a358ca371cdbc03997b6f0"
+    },
+    {
+      "path": "assets/data/map_design/map_identity_registry.json",
+      "kind": "main_dirty_production",
+      "main_sha256": "f79d863c8a74e4da22345518350d5be7218ba6d415ff3a2a82f64e390c842de3",
+      "workspace_sha256": "f79d863c8a74e4da22345518350d5be7218ba6d415ff3a2a82f64e390c842de3"
+    },
+    {
+      "path": "assets/data/runtime/map_editor/map_runtime_release_registry.json",
+      "kind": "main_dirty_production",
+      "main_sha256": "9d2700103b63253039210c545f5af08e7e1597394cb8b417b54f59d5bc1ff738",
+      "workspace_sha256": "9d2700103b63253039210c545f5af08e7e1597394cb8b417b54f59d5bc1ff738"
+    },
+    {
+      "path": "assets/data/runtime/map_editor/world_bich_province.runtime.json",
+      "kind": "main_dirty_production",
+      "main_sha256": "e3291b36d88cda019954a85d2ba4e0c7eefc0922b72383ea6bda13c2a370b6b6",
+      "workspace_sha256": "e3291b36d88cda019954a85d2ba4e0c7eefc0922b72383ea6bda13c2a370b6b6"
+    },
+    {
+      "path": "assets/data/runtime/map_editor/world_bich_province.visual.json",
+      "kind": "main_dirty_production",
+      "main_sha256": "d1e98ed4288683a4e6d4efc235274e2eaf244f57111243558aa33662d917021c",
+      "workspace_sha256": "d1e98ed4288683a4e6d4efc235274e2eaf244f57111243558aa33662d917021c"
+    },
+    {
+      "path": "map_editor_workspace/bich_province/bich_province.editor.json",
+      "kind": "main_dirty_production",
+      "main_sha256": "8076c848c72df9f3f194ff04b797b84e0d84abbe1d7eabef3db407a0cae3c9f7",
+      "workspace_sha256": "8076c848c72df9f3f194ff04b797b84e0d84abbe1d7eabef3db407a0cae3c9f7"
+    },
+    {
+      "path": "map_editor_workspace/world_bich_province/world_bich_province.editor.json",
+      "kind": "main_dirty_production",
+      "main_sha256": "d1bbaa8c1808b454c9b154c5b94576165e1044c5443a6794fe36bbd615b232cd",
+      "workspace_sha256": "d1bbaa8c1808b454c9b154c5b94576165e1044c5443a6794fe36bbd615b232cd"
+    },
+    {
+      "path": "scripts/audio_runtime_service.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "bbc4d3425d302efa647c6f6ec18315d328834a4649edb1da87e89099d03c16f5",
+      "workspace_sha256": "bbc4d3425d302efa647c6f6ec18315d328834a4649edb1da87e89099d03c16f5"
+    },
+    {
+      "path": "scripts/character_select.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "ee883605975333d73fefa06c9c22c4937d001be78df70fe2fe3ab286a22daf39",
+      "workspace_sha256": "ee883605975333d73fefa06c9c22c4937d001be78df70fe2fe3ab286a22daf39"
+    },
+    {
+      "path": "scripts/enemy.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "121e33cdadcbc5ebc4abf7796952f2c47eb9bb13fc965d819f6898cd29ece102",
+      "workspace_sha256": "121e33cdadcbc5ebc4abf7796952f2c47eb9bb13fc965d819f6898cd29ece102"
+    },
+    {
+      "path": "scripts/equipment_granted_skill_rules.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "9c26db9f7816063b9b23f7a76e386ecbc9132c935f488c9940d47f84d2949ed4",
+      "workspace_sha256": "9c26db9f7816063b9b23f7a76e386ecbc9132c935f488c9940d47f84d2949ed4"
+    },
+    {
+      "path": "scripts/equipment_random_special_instance_rules.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "63497cf958c1918872667310c8f9bd6a4822f215747072556ad70e60ba8c46a1",
+      "workspace_sha256": "63497cf958c1918872667310c8f9bd6a4822f215747072556ad70e60ba8c46a1"
+    },
+    {
+      "path": "scripts/equipment_rules.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "ac23080828818c09e8e812f3e668a2b2c4b0a533f6db4184dc47d6de2e5eccda",
+      "workspace_sha256": "ac23080828818c09e8e812f3e668a2b2c4b0a533f6db4184dc47d6de2e5eccda"
+    },
+    {
+      "path": "scripts/features/generated/internal_code_preparation_catalog_data.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "e6abda820b98089da64a9b2196d16f4b78e5148304f85688632a8bc85606bd23",
+      "workspace_sha256": "e6abda820b98089da64a9b2196d16f4b78e5148304f85688632a8bc85606bd23"
+    },
+    {
+      "path": "scripts/game_data.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "641e8938f764b0048f3a3176c3d97409798d495db4d606ad58ef90f71246f16b",
+      "workspace_sha256": "641e8938f764b0048f3a3176c3d97409798d495db4d606ad58ef90f71246f16b"
+    },
+    {
+      "path": "scripts/game_root.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "6722bbf070eee37e358ef426cfad25d69eaf4fc35200112f1568752691fbf1ce",
+      "workspace_sha256": "6722bbf070eee37e358ef426cfad25d69eaf4fc35200112f1568752691fbf1ce"
+    },
+    {
+      "path": "scripts/hud.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "f556951c17d71a573db99ac62db5d18f3e3e4172504df2aa58ecb5c4df24f84a",
+      "workspace_sha256": "f556951c17d71a573db99ac62db5d18f3e3e4172504df2aa58ecb5c4df24f84a"
+    },
+    {
+      "path": "scripts/hud_chassis_designs.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "e0a931beff815bc293a01c6d3fa45391a7c32afe1b8fd8576efbac781f6fb015",
+      "workspace_sha256": "e0a931beff815bc293a01c6d3fa45391a7c32afe1b8fd8576efbac781f6fb015"
+    },
+    {
+      "path": "scripts/hud_skill_icon_catalog.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "14a49b14b0d681370fd85c1fc5a7df09bb520c9103ed7c61418bd0f130687c92",
+      "workspace_sha256": "14a49b14b0d681370fd85c1fc5a7df09bb520c9103ed7c61418bd0f130687c92"
+    },
+    {
+      "path": "scripts/item_detail_docked_presenter.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "22da0516bd21329a044aecbe0f045f66b645b147ed78cdb8008800779d22ac7c",
+      "workspace_sha256": "22da0516bd21329a044aecbe0f045f66b645b147ed78cdb8008800779d22ac7c"
+    },
+    {
+      "path": "scripts/item_detail_presenter.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "5f952f7cf7f3fd1ae6a5ff4ebc6157d5db197957d05de1e2234131de28700ed2",
+      "workspace_sha256": "5f952f7cf7f3fd1ae6a5ff4ebc6157d5db197957d05de1e2234131de28700ed2"
+    },
+    {
+      "path": "scripts/item_drop_affix_v4_rules.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "b7e7c92b48b3e77a28d05afea851b9df7f02ff4643eedb9a2416192a110e469a",
+      "workspace_sha256": "b7e7c92b48b3e77a28d05afea851b9df7f02ff4643eedb9a2416192a110e469a"
+    },
+    {
+      "path": "scripts/item_drop_instance_rules.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "e0a4e082932c5fc52702e072bf3681ae3a05153fec030123ca044ee2198c2eba",
+      "workspace_sha256": "e0a4e082932c5fc52702e072bf3681ae3a05153fec030123ca044ee2198c2eba"
+    },
+    {
+      "path": "scripts/layers/runtime/combat_runtime_service.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "36c758ac64bf6cff445997fff758ec44db4bc0ca22e5a49c48c9f8fe00e34ab1",
+      "workspace_sha256": "36c758ac64bf6cff445997fff758ec44db4bc0ca22e5a49c48c9f8fe00e34ab1"
+    },
+    {
+      "path": "scripts/layers/runtime/loot_runtime_service.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "12174c23b169c039b41abd66fd15e9698b57a76f975ad0ba4d9175e7523e5796",
+      "workspace_sha256": "12174c23b169c039b41abd66fd15e9698b57a76f975ad0ba4d9175e7523e5796"
+    },
+    {
+      "path": "scripts/loading_transition_overlay.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "f97c0c33229c3154dab0b7a3a99eebf6edfe5a325d19e13e81b541091980b480",
+      "workspace_sha256": "f97c0c33229c3154dab0b7a3a99eebf6edfe5a325d19e13e81b541091980b480"
+    },
+    {
+      "path": "scripts/loot_feedback_layer.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "7e980083cf160aa57f0df1acd182576fbac26e1bc4bc590d7264a6c513daafab",
+      "workspace_sha256": "7e980083cf160aa57f0df1acd182576fbac26e1bc4bc590d7264a6c513daafab"
+    },
+    {
+      "path": "scripts/loot_pickup_runtime_manager.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "ea5da023eb5a1bbcfa3951edc1b1058a5aae9acd305d958e069402c19b5af36b",
+      "workspace_sha256": "ea5da023eb5a1bbcfa3951edc1b1058a5aae9acd305d958e069402c19b5af36b"
+    },
+    {
+      "path": "scripts/map_editor/map_editor_build_runtime_service.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "6a87066a8dd10c123c2f6b2a1849d9bb35ea479fcba63d03bc7bc7eb226a899e",
+      "workspace_sha256": "6a87066a8dd10c123c2f6b2a1849d9bb35ea479fcba63d03bc7bc7eb226a899e"
+    },
+    {
+      "path": "scripts/monster_ai_package/decision_budget.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "8a5e91dc699f65beb2403d6ccb757c01b74f00a9b6d1103c70a852fca3c67f5e",
+      "workspace_sha256": "8a5e91dc699f65beb2403d6ccb757c01b74f00a9b6d1103c70a852fca3c67f5e"
+    },
+    {
+      "path": "scripts/monster_crowd_attack_position_policy.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "b11dec95143148cfcc45ea10f972838d328233d3c26f5e371f82318dbf37a8a3",
+      "workspace_sha256": "b11dec95143148cfcc45ea10f972838d328233d3c26f5e371f82318dbf37a8a3"
+    },
+    {
+      "path": "scripts/monster_struck_policy.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "11742cf8290edcded3e25988c61b93dcf3ea82facc23aa8f5efd6c4d20a31a40",
+      "workspace_sha256": "11742cf8290edcded3e25988c61b93dcf3ea82facc23aa8f5efd6c4d20a31a40"
+    },
+    {
+      "path": "scripts/monster_target_magic_effect.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "a7d555822e44a655b6c39562a6d2ccb61fa7cdb4c435d11c97b4d0813abd820e",
+      "workspace_sha256": "a7d555822e44a655b6c39562a6d2ccb61fa7cdb4c435d11c97b4d0813abd820e"
+    },
+    {
+      "path": "scripts/monster_visual.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "13d75bfe9434573ff29e441046026fb2d475c55182fea4ec8aa84cbfeb2db8de",
+      "workspace_sha256": "13d75bfe9434573ff29e441046026fb2d475c55182fea4ec8aa84cbfeb2db8de"
+    },
+    {
+      "path": "scripts/player.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "d4b871666380feafc32f0e1933a7597e1963627e8886a0e3177fff1bf84fe749",
+      "workspace_sha256": "d4b871666380feafc32f0e1933a7597e1963627e8886a0e3177fff1bf84fe749"
+    },
+    {
+      "path": "scripts/player_state.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "13cccb4cff55eda54c858c69ea8a0da16c33af44f19ec43b7199cf3ddf4d80a6",
+      "workspace_sha256": "13cccb4cff55eda54c858c69ea8a0da16c33af44f19ec43b7199cf3ddf4d80a6"
+    },
+    {
+      "path": "scripts/player_visual.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "0d872dd209c91825a0b1a725a92d6d84dcdd6a1b6f6142af6be4fa658411f5da",
+      "workspace_sha256": "0d872dd209c91825a0b1a725a92d6d84dcdd6a1b6f6142af6be4fa658411f5da"
+    },
+    {
+      "path": "scripts/pricing_service.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "e3ad5b96a8bdb16c6228ae1c7b4264941b97a43ee273144bf6ff826b9a0dc47b",
+      "workspace_sha256": "e3ad5b96a8bdb16c6228ae1c7b4264941b97a43ee273144bf6ff826b9a0dc47b"
+    },
+    {
+      "path": "scripts/profession_rules.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "7ca9ec466d18c579b148a6ebb2825fc4b1a7fd9efaa4898004d8a12c6ade848d",
+      "workspace_sha256": "7ca9ec466d18c579b148a6ebb2825fc4b1a7fd9efaa4898004d8a12c6ade848d"
+    },
+    {
+      "path": "scripts/runtime_combat_spatial_index.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "1fa26f141042da16fc3cadc15bf329298212bdd5466debe96e282fddb084f081",
+      "workspace_sha256": "1fa26f141042da16fc3cadc15bf329298212bdd5466debe96e282fddb084f081"
+    },
+    {
+      "path": "scripts/runtime_diagnostics.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "af1bc91b86298af2246a3283c9ee3482cec2e863e0a82e2a3c7c717a32baa6e9",
+      "workspace_sha256": "af1bc91b86298af2246a3283c9ee3482cec2e863e0a82e2a3c7c717a32baa6e9"
+    },
+    {
+      "path": "scripts/skill_panel.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "13ca0c09cfda62c86a9f68cbd470eca3b67113bd8bb999a5078c0dc3f4e5c5a3",
+      "workspace_sha256": "13ca0c09cfda62c86a9f68cbd470eca3b67113bd8bb999a5078c0dc3f4e5c5a3"
+    },
+    {
+      "path": "scripts/skills/skill_data_loader.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "d68158a992129eb5f479cdcaf38914aa63a6fff19716c3d3a7674972b9a6389d",
+      "workspace_sha256": "d68158a992129eb5f479cdcaf38914aa63a6fff19716c3d3a7674972b9a6389d"
+    },
+    {
+      "path": "scripts/skills/skill_progression_service.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "12feb8c24ede1a575bce021ee9cd0984ec72d22286a5c5287485894d19d452a4",
+      "workspace_sha256": "12feb8c24ede1a575bce021ee9cd0984ec72d22286a5c5287485894d19d452a4"
+    },
+    {
+      "path": "scripts/summon_actor.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "a07fd3fa656ebdbc5477a71fe7d2abf8eaa16752d7e57ed04baebdaaeb9ddf26",
+      "workspace_sha256": "a07fd3fa656ebdbc5477a71fe7d2abf8eaa16752d7e57ed04baebdaaeb9ddf26"
+    },
+    {
+      "path": "scripts/town_music_controller.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "e3251e7eb3128ac8b6188146894329ffdca20504464c34c0b23ea19b98ad57ac",
+      "workspace_sha256": "e3251e7eb3128ac8b6188146894329ffdca20504464c34c0b23ea19b98ad57ac"
+    },
+    {
+      "path": "scripts/hud_utility_touch_button.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "b0d7738eee2b5a90fd881c348bdc62b32a66ce8f51613b1dc53dcbb8c612a91a",
+      "workspace_sha256": "b0d7738eee2b5a90fd881c348bdc62b32a66ce8f51613b1dc53dcbb8c612a91a"
+    },
+    {
+      "path": "scripts/quick_item_icon_layout.gd",
+      "kind": "main_dirty_production",
+      "main_sha256": "df61d6a727e19b87ff0fac70ceca66d396daed6573a4d498cb3ec17a89beadfa",
+      "workspace_sha256": "df61d6a727e19b87ff0fac70ceca66d396daed6573a4d498cb3ec17a89beadfa"
+    },
+    {
+      "path": "tests/crowd_formal_grid_comparison_20261008.gd",
+      "kind": "named_fixture",
+      "main_sha256": "d26b66a6e048c208c1306e040202098425d2d3c8b8a08ae159b9362f533a4197",
+      "workspace_sha256": "d26b66a6e048c208c1306e040202098425d2d3c8b8a08ae159b9362f533a4197"
+    },
+    {
+      "path": "tests/crowd_engagement_scaling_20261008.gd",
+      "kind": "named_fixture",
+      "main_sha256": "fcb75f90c89f3a6ca9d6c056cc89fc84b3fc6d8a003a1b8e081ea8ce931cfbb4",
+      "workspace_sha256": "fcb75f90c89f3a6ca9d6c056cc89fc84b3fc6d8a003a1b8e081ea8ce931cfbb4"
+    },
+    {
+      "path": "tests/phone_crowd_baseline_20261008.gd",
+      "kind": "named_fixture",
+      "main_sha256": "552e4a150eb726583750a4b854dd20207a088f2d0deed9f80e958ddbd4a7c0de",
+      "workspace_sha256": "552e4a150eb726583750a4b854dd20207a088f2d0deed9f80e958ddbd4a7c0de"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "project.godot",
+      "main_present": true,
+      "workspace_present": true,
+      "main_sha256": "030f44250ab8d487a5521e56ce3d77ef23dbad7d0290e6db1285d10589c36f92",
+      "workspace_sha256": "030f44250ab8d487a5521e56ce3d77ef23dbad7d0290e6db1285d10589c36f92"
+    },
+    {
+      "path": "scenes/main.tscn",
+      "main_present": true,
+      "workspace_present": true,
+      "main_sha256": "c622dd2caa2d673a83fc4edcc0e1ea3a3e4ad98aa3b08686bb8d96d33b9159f1",
+      "workspace_sha256": "c622dd2caa2d673a83fc4edcc0e1ea3a3e4ad98aa3b08686bb8d96d33b9159f1"
+    },
+    {
+      "path": "scripts/enemy.gd",
+      "main_present": true,
+      "workspace_present": true,
+      "main_sha256": "121e33cdadcbc5ebc4abf7796952f2c47eb9bb13fc965d819f6898cd29ece102",
+      "workspace_sha256": "121e33cdadcbc5ebc4abf7796952f2c47eb9bb13fc965d819f6898cd29ece102"
+    },
+    {
+      "path": "scripts/monster_struck_policy.gd",
+      "main_present": true,
+      "workspace_present": true,
+      "main_sha256": "11742cf8290edcded3e25988c61b93dcf3ea82facc23aa8f5efd6c4d20a31a40",
+      "workspace_sha256": "11742cf8290edcded3e25988c61b93dcf3ea82facc23aa8f5efd6c4d20a31a40"
+    },
+    {
+      "path": "scripts/monster_crowd_attack_position_policy.gd",
+      "main_present": true,
+      "workspace_present": true,
+      "main_sha256": "b11dec95143148cfcc45ea10f972838d328233d3c26f5e371f82318dbf37a8a3",
+      "workspace_sha256": "b11dec95143148cfcc45ea10f972838d328233d3c26f5e371f82318dbf37a8a3"
+    },
+    {
+      "path": "scripts/monster_ai_package/decision_budget.gd",
+      "main_present": true,
+      "workspace_present": true,
+      "main_sha256": "8a5e91dc699f65beb2403d6ccb757c01b74f00a9b6d1103c70a852fca3c67f5e",
+      "workspace_sha256": "8a5e91dc699f65beb2403d6ccb757c01b74f00a9b6d1103c70a852fca3c67f5e"
+    },
+    {
+      "path": "scripts/game_root.gd",
+      "main_present": true,
+      "workspace_present": true,
+      "main_sha256": "6722bbf070eee37e358ef426cfad25d69eaf4fc35200112f1568752691fbf1ce",
+      "workspace_sha256": "6722bbf070eee37e358ef426cfad25d69eaf4fc35200112f1568752691fbf1ce"
+    },
+    {
+      "path": "tests/crowd_formal_grid_comparison_20261008.gd",
+      "main_present": true,
+      "workspace_present": true,
+      "main_sha256": "d26b66a6e048c208c1306e040202098425d2d3c8b8a08ae159b9362f533a4197",
+      "workspace_sha256": "d26b66a6e048c208c1306e040202098425d2d3c8b8a08ae159b9362f533a4197"
+    },
+    {
+      "path": "tests/crowd_engagement_scaling_20261008.gd",
+      "main_present": true,
+      "workspace_present": true,
+      "main_sha256": "fcb75f90c89f3a6ca9d6c056cc89fc84b3fc6d8a003a1b8e081ea8ce931cfbb4",
+      "workspace_sha256": "fcb75f90c89f3a6ca9d6c056cc89fc84b3fc6d8a003a1b8e081ea8ce931cfbb4"
+    },
+    {
+      "path": "tests/phone_crowd_baseline_20261008.gd",
+      "main_present": true,
+      "workspace_present": true,
+      "main_sha256": "552e4a150eb726583750a4b854dd20207a088f2d0deed9f80e958ddbd4a7c0de",
+      "workspace_sha256": "552e4a150eb726583750a4b854dd20207a088f2d0deed9f80e958ddbd4a7c0de"
+    }
+  ],
+  "mode": "ordinary_non_grid",
+  "required_env": "HARDCORE_GRID_COMPARISON_MODE=current",
+  "grid_adapter_copied": false,
+  "grid_adapter_status": "absent; fixture supports grid only when explicitly selected",
+  "tests_run": false,
+  "native_tests_run": false,
+  "cache_seed": {
+    "source": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot",
+    "destination": "C:\\Users\\Administrator\\.codex\\worktrees\\crowd-attack-frame-ab\\HardCore\\.godot",
+    "physical_destination": true,
+    "included": [
+      "global_script_class_cache.cfg",
+      "uid_cache.bin",
+      "imported/"
+    ],
+    "excluded": [
+      "editor/",
+      "runtime_appdata/",
+      "saves/"
+    ],
+    "imported_source_count": 19107,
+    "imported_source_bytes": 656983083.0,
+    "imported_destination_count": 19107,
+    "imported_destination_bytes": 656983083.0,
+    "class_cache_sha256_source": "0094e89b8034c37d3c0a5871319331259413ad914bb6a462b2409ef1a21b174d",
+    "class_cache_sha256_destination": "0094e89b8034c37d3c0a5871319331259413ad914bb6a462b2409ef1a21b174d",
+    "uid_cache_sha256_source": "f9d62343e3a8a7c902588388bc173a9905aadccf21fc097a04fcd37353084a1a",
+    "uid_cache_sha256_destination": "f9d62343e3a8a7c902588388bc173a9905aadccf21fc097a04fcd37353084a1a",
+    "staged_entry_digest_before_cache_copy": "MISSING",
+    "staged_entry_digest_after_cache_copy": "b3e7d79aa6065c1fe8e0fd87b110cbaa220dcc1ed34d6cd1c1f15c9625c4cc7f",
+    "staged_entry_digest_note": "Historical pre-copy staged-entry bytes were not captured; after-copy value is raw git ls-files --stage -z bytes. Cache copy did not target MAIN.",
+    "imported_inventory_hash_method": "SHA256 of sorted relative filepath|byte length|LastWriteTimeUtc ticks records; metadata inventory, not content hash",
+    "imported_inventory_metadata_sha256_source": "5ccd3091b9e0a3569555f687866fad30e1fe5daaff6b1654473028cbe0e29143",
+    "imported_inventory_metadata_sha256_destination": "5ccd3091b9e0a3569555f687866fad30e1fe5daaff6b1654473028cbe0e29143"
+  },
+  "main_index_hash_method": "SHA256 of raw bytes at MAIN .git/index",
+  "main_stage_entries": {
+    "sha256_z": "b3e7d79aa6065c1fe8e0fd87b110cbaa220dcc1ed34d6cd1c1f15c9625c4cc7f",
+    "sha256_non_z": "73c0bcec1a36bb9c94fdbbaf9174bc9fc4b8dc8b69b6c5d4b40f262f50242e11",
+    "sha256_previous_artifact_alias": "2568aa31f152cc1e2a864b480d9748ee4828e7b0722540943e049e8b011d9a3b",
+    "method_z": "SHA256 of raw stdout bytes from git ls-files --stage -z",
+    "method_non_z": "SHA256 of raw stdout bytes from git ls-files --stage",
+    "previous_artifact_method": "PowerShell Out-String UTF8 serialization of git ls-files -s, not raw index or raw staged-entry bytes"
+  }
+}

@@ -1,0 +1,539 @@
+class_name SkillDataLoader
+extends RefCounted
+
+const EntityRegistry := preload("res://scripts/identity/entity_registry.gd")
+
+const CombatUnitLegacyAdapter := preload(
+	"res://scripts/skills/combat_unit_legacy_adapter.gd"
+)
+const SkillRankResolverScript := preload(
+	"res://scripts/skills/skill_rank_resolver.gd"
+)
+const SkillRankExtensionPolicyScript := preload(
+	"res://scripts/skills/skill_rank_extension_policy.gd"
+)
+const EquipmentGrantedSkillRulesScript := preload(
+	"res://scripts/equipment_granted_skill_rules.gd"
+)
+
+const SOURCE_OF_TRUTH_PATH := "res://assets/data/vanilla_176/skills_source_of_truth_v1.json"
+const PACKAGE_ROOT := "res://assets/data/vanilla_176/skill_source_package_v1_0_1"
+const PACKAGE_MANIFEST_PATH := PACKAGE_ROOT + "/manifest.json"
+const PACKAGE_TEST_MANIFEST_PATH := PACKAGE_ROOT + "/mir2_176_skill_test_manifest_v1.json"
+## The archived package remains immutable. Project-only test additions live in
+## this explicit overlay and are merged only after each entry is checked
+## against the current primary SOT required_tests list.
+const PROJECT_TEST_MANIFEST_OVERLAY_PATH := (
+	"res://assets/data/vanilla_176/skill_test_manifest_project_overlay_v1.json"
+)
+const PROJECT_TEST_MANIFEST_OVERLAY_CONTRACT_ID := (
+	"skills.project_test_manifest_overlay.v1"
+)
+const SOURCE_OF_TRUTH_SHA256 := "7575c45a7bd147f8e60d2efdb15c6c5e9781445ddc2f748e73dd69ed386a62ab"
+const PACKAGE_ZIP_SHA256 := "2dac78d285dff8d5f1ba36a8b83e0e8f11c70b76ace15a34ee7fbfb802862a22"
+const RULESET_ID := "cn_mir2_176_vanilla_project_canonical_v1"
+const CLASS_COUNTS := {"warrior": 6, "wizard": 14, "taoist": 13}
+const RUNTIME_ALLOWED_STATUS_FRAGMENTS := [
+	"historical_verified",
+	"source_formula_reference",
+	"project_canonical",
+]
+const RUNTIME_FORBIDDEN_STATUS_FRAGMENTS := [
+	"candidate",
+	"unverified",
+	"needs_regression_verification",
+	"selected_service_candidate",
+	"project_adapter_c_candidate",
+	"legacy_project_baseline",
+	"rejected_version_mismatch",
+]
+
+static var _document: Dictionary = {}
+static var _skills_by_id: Dictionary = {}
+static var _ids_by_alias: Dictionary = {}
+static var _configuration_revision := ""
+
+
+static func document() -> Dictionary:
+	if _document.is_empty():
+		var parsed := _read_json(SOURCE_OF_TRUTH_PATH)
+		var validation := validate_document(parsed)
+		if not bool(validation.get("valid", false)):
+			push_error("技能唯一真源无效：%s" % "; ".join(validation.get("errors", [])))
+			return {}
+		_document = parsed
+		_configuration_revision = JSON.stringify(parsed).sha256_text()
+		_build_indexes()
+	return _document
+
+
+static func reload_data() -> Dictionary:
+	_document.clear()
+	_skills_by_id.clear()
+	_ids_by_alias.clear()
+	_configuration_revision = ""
+	var loaded := document()
+	return validate_document(loaded)
+
+
+static func configuration_revision() -> String:
+	document()
+	return _configuration_revision
+
+
+static func skill_ids() -> PackedStringArray:
+	document()
+	var ordered_ids: Array[String] = []
+	for skill_id: String in _skills_by_id:
+		ordered_ids.append(skill_id)
+	ordered_ids.sort_custom(func(left: String, right: String) -> bool:
+		return int(_skills_by_id[left].get("order", 0)) < int(_skills_by_id[right].get("order", 0))
+	)
+	for granted: Dictionary in EquipmentGrantedSkillRulesScript.grant_definitions():
+		ordered_ids.append(str(granted.get("skill_id", "")))
+	return PackedStringArray(ordered_ids)
+
+
+static func skill(skill_name_or_id: String) -> Dictionary:
+	document()
+	var granted := _equipment_granted_definition(skill_name_or_id)
+	if not granted.is_empty():
+		return granted
+	var stable_id := stable_skill_id(skill_name_or_id)
+	var raw_definition: Dictionary = _skills_by_id.get(stable_id, {})
+	if raw_definition.is_empty():
+		return {}
+	var adapted := (
+		CombatUnitLegacyAdapter.adapt_primary_skill_definition_once_to_gu(
+			raw_definition
+		)
+	)
+	if not bool(adapted.get("valid", false)):
+		push_error(
+			"Primary skill spatial GU adapter failed: %s"
+			% "; ".join(adapted.get("errors", []))
+		)
+		return {}
+	var definition_gu: Dictionary = adapted.definition_gu
+	definition_gu["entity_id"] = EntityRegistry.from_legacy("skill", stable_id)
+	if str(definition_gu.entity_id).is_empty():
+		push_error("Skill has no registered formal identity: " + stable_id)
+		return {}
+	definition_gu["combat_unit_adapter"] = {
+		"contract_id": adapted.contract_id,
+		"unit_contract_id": adapted.unit_contract_id,
+		"source_contract_id": adapted.source_contract_id,
+		"adapter_semantics": adapted.adapter_semantics,
+		"topology_semantics": adapted.topology_semantics,
+		"consumed_legacy_fields": adapted.consumed_legacy_fields.duplicate(),
+	}
+	return definition_gu
+
+
+static func stable_skill_id(skill_name_or_id: String) -> String:
+	document()
+	var granted := EquipmentGrantedSkillRulesScript.definition(skill_name_or_id)
+	if not granted.is_empty():
+		var granted_id := str(granted.get("skill_id", ""))
+		var granted_legacy: Variant = EntityRegistry.legacy(granted_id, "skill")
+		return str(granted_legacy) if granted_legacy is String and not str(granted_legacy).is_empty() else granted_id
+	var registry_entry := EntityRegistry.resolve(skill_name_or_id, "skill")
+	if not registry_entry.is_empty() and str(registry_entry.get("legacy_id", "")).begins_with("equipment."):
+		return str(registry_entry.get("legacy_id", ""))
+	if skill_name_or_id.begins_with("hc."):
+		var old: Variant = EntityRegistry.legacy(skill_name_or_id, "skill")
+		return str(old) if old is String and _skills_by_id.has(old) else ""
+	if _skills_by_id.has(skill_name_or_id):
+		return skill_name_or_id
+	return str(_ids_by_alias.get(skill_name_or_id, ""))
+
+
+# Exact UI/legacy-import boundary; runtime tables retain only the returned ID.
+static func entity_skill_id(skill_name_or_id: String) -> String:
+	var granted := _equipment_granted_definition(skill_name_or_id)
+	if not granted.is_empty():
+		return str(granted.get("skill_id", ""))
+	return EntityRegistry.from_legacy("skill", stable_skill_id(skill_name_or_id))
+
+
+static func is_canonical_skill_id(skill_id: String) -> bool:
+	document()
+	return _skills_by_id.has(skill_id) or not EquipmentGrantedSkillRulesScript.definition(skill_id).is_empty()
+
+
+static func display_name(skill_name_or_id: String) -> String:
+	var definition := skill(skill_name_or_id)
+	return str(definition.get("display_name", ""))
+
+
+static func rank_record(skill_name_or_id: String, rank: int) -> Dictionary:
+	var definition := skill(skill_name_or_id)
+	var safe_rank := SkillRankResolverScript.safe_effective_rank(rank)
+	var ranks: Array = definition.get("ranks", [])
+	if ranks.is_empty():
+		return {}
+	var result: Dictionary = {}
+	if safe_rank < ranks.size():
+		result = (ranks[safe_rank] as Dictionary).duplicate(true)
+	else:
+		result = (ranks[ranks.size() - 1] as Dictionary).duplicate(true)
+		result["rank"] = safe_rank
+	result["skill_id"] = str(definition.get("skill_id", ""))
+	result["display_name"] = str(definition.get("display_name", ""))
+	result["class"] = str(definition.get("class", ""))
+	var mp_costs: Array = definition.get("mp_cost_by_rank", [])
+	if safe_rank < ranks.size():
+		result["mp_cost"] = (
+			int(mp_costs[safe_rank]) if safe_rank < mp_costs.size() else 0
+		)
+		return result
+	## Effective ranks above the frozen 0..3 base follow the explicit
+	## skills.rank_extension.v2: equipment ranks never change resource cost.
+	result["mp_cost"] = (
+		maxi(
+			0,
+			SkillRankResolverScript.timing_int(mp_costs, safe_rank)
+		)
+		if not mp_costs.is_empty()
+		else 0
+	)
+	result["player_level_required"] = int(
+		ranks[ranks.size() - 1].get("player_level_required", 1)
+	)
+	result.erase("proficiency_required_to_reach_rank")
+	result["rank_extension"] = {
+		"contract_id": SkillRankExtensionPolicyScript.CONTRACT_ID,
+		"semantics": ["typed_effect_only", "rank3_resource_and_timing"],
+	}
+	return result
+
+
+static func legacy_records() -> Array:
+	var records: Array = []
+	for skill_id: String in skill_ids():
+		var definition := skill(skill_id)
+		for rank in range(4):
+			var rank_data := rank_record(skill_id, rank)
+			var raw_fields: Dictionary = definition.get("magic_db_reference", {}).get("raw_fields", {})
+			records.append({
+				"skillName": str(definition.get("display_name", "")),
+				"profession": _legacy_profession_name(str(definition.get("class", ""))),
+				"skillLevel": rank,
+				"requiredCharacterLevel": int(rank_data.get("player_level_required", 1)),
+				"trainingPoints": int(rank_data.get("proficiency_required_to_reach_rank", 0)),
+				"manaCost": int(rank_data.get("mp_cost", 0)),
+				"legacy_delay": raw_fields.get("legacy_delay"),
+				"contentLayer": "vanilla_core",
+				"profession_id": str(definition.get("class", "")),
+				"skill_id": skill_id,
+				"display_name": str(definition.get("display_name", "")),
+				"source_contract": RULESET_ID,
+				"source_status": {
+					"membership": str(definition.get("membership_status", "")),
+					"progression": str(definition.get("progression_status", "")),
+					"mp": str(definition.get("mp_cost_status", "")),
+				},
+			})
+	return records
+
+
+static func package_test_manifest() -> Dictionary:
+	var archived_manifest := _read_json(PACKAGE_TEST_MANIFEST_PATH)
+	return _merge_project_test_manifest_overlay(archived_manifest)
+
+
+static func source_identity() -> Dictionary:
+	return {
+		"distribution": "project.hardcore.mir2_176_skill_sot.v1.0.1",
+		"ruleset_id": RULESET_ID,
+		"authority": "user_authoritative_override",
+		"source_kind": "explicit_user_primary_override",
+		"runtime_path": SOURCE_OF_TRUTH_PATH,
+		"sot_sha256": SOURCE_OF_TRUTH_SHA256,
+		"package_zip_sha256": PACKAGE_ZIP_SHA256,
+		"package_manifest_path": PACKAGE_MANIFEST_PATH,
+		"project_test_manifest_overlay_path": PROJECT_TEST_MANIFEST_OVERLAY_PATH,
+		"project_test_manifest_overlay_contract_id": PROJECT_TEST_MANIFEST_OVERLAY_CONTRACT_ID,
+	}
+
+
+static func runtime_status_allowed(status: String) -> bool:
+	var errors: Array[String] = []
+	_validate_status_string(status, "status_probe", errors)
+	return errors.is_empty()
+
+
+static func validate_package_integrity() -> Dictionary:
+	var errors: Array[String] = []
+	var manifest := _read_json(PACKAGE_MANIFEST_PATH)
+	var checked := 0
+	for raw_entry: Variant in manifest.get("files", []):
+		if not raw_entry is Dictionary:
+			errors.append("manifest_file_entry_not_dictionary")
+			continue
+		var relative_path := str(raw_entry.get("path", ""))
+		var expected_hash := str(raw_entry.get("sha256", "")).to_lower()
+		var path := PACKAGE_ROOT.path_join(relative_path)
+		if not FileAccess.file_exists(path):
+			errors.append("missing_package_file:%s" % relative_path)
+			continue
+		var actual_hash := FileAccess.get_sha256(path).to_lower()
+		if actual_hash != expected_hash:
+			errors.append("package_hash_mismatch:%s" % relative_path)
+		checked += 1
+	var runtime_hash := FileAccess.get_sha256(SOURCE_OF_TRUTH_PATH).to_lower()
+	if runtime_hash != SOURCE_OF_TRUTH_SHA256:
+		errors.append("runtime_sot_hash_mismatch")
+	var merged_test_manifest := package_test_manifest()
+	if not bool(merged_test_manifest.get("project_overlay_valid", false)):
+		for overlay_error: Variant in merged_test_manifest.get(
+			"project_overlay_errors",
+			[]
+		):
+			errors.append("project_test_manifest_overlay:%s" % str(overlay_error))
+	return {
+		"valid": errors.is_empty() and checked == 10,
+		"checked_files": checked,
+		"errors": errors,
+		"runtime_sot_sha256": runtime_hash,
+	}
+
+
+static func _merge_project_test_manifest_overlay(
+	archived_manifest: Dictionary
+) -> Dictionary:
+	var merged := archived_manifest.duplicate(true)
+	var errors: Array[String] = []
+	var overlay := _read_json(PROJECT_TEST_MANIFEST_OVERLAY_PATH)
+	if overlay.is_empty():
+		errors.append("overlay_missing_or_invalid_json")
+	else:
+		if str(overlay.get("overlay_contract_id", "")) != PROJECT_TEST_MANIFEST_OVERLAY_CONTRACT_ID:
+			errors.append("overlay_contract_id")
+		if str(overlay.get("base_manifest_path", "")) != PACKAGE_TEST_MANIFEST_PATH:
+			errors.append("overlay_base_manifest_path")
+		if str(overlay.get("source_of_truth_path", "")) != SOURCE_OF_TRUTH_PATH:
+			errors.append("overlay_source_of_truth_path")
+		if str(overlay.get("source_of_truth_sha256", "")).to_lower() != SOURCE_OF_TRUTH_SHA256:
+			errors.append("overlay_source_of_truth_sha256")
+		var entries_value: Variant = overlay.get("skill_tests", null)
+		if not entries_value is Array:
+			errors.append("overlay_skill_tests_not_array")
+		else:
+			var existing_ids: Dictionary = {}
+			for archived_value: Variant in merged.get("skill_tests", []):
+				if archived_value is Dictionary:
+					existing_ids[str((archived_value as Dictionary).get("id", ""))] = true
+			for entry_value: Variant in entries_value as Array:
+				if not entry_value is Dictionary:
+					errors.append("overlay_entry_not_dictionary")
+					continue
+				var entry := (entry_value as Dictionary).duplicate(true)
+				var skill_id := str(entry.get("skill_id", ""))
+				var assertion_id := str(entry.get("assert", ""))
+				var contract_id := str(entry.get("id", ""))
+				if str(entry.get("priority", "")) != "P1":
+					errors.append("overlay_entry_priority:%s" % contract_id)
+				if contract_id != "%s::%s" % [skill_id, assertion_id]:
+					errors.append("overlay_entry_id:%s" % contract_id)
+				if existing_ids.has(contract_id):
+					errors.append("overlay_entry_duplicate:%s" % contract_id)
+					continue
+				var definition := skill(skill_id)
+				if definition.is_empty():
+					errors.append("overlay_unknown_skill:%s" % skill_id)
+					continue
+				if assertion_id.is_empty() or not assertion_id in definition.get("required_tests", []):
+					errors.append("overlay_assertion_not_in_sot:%s" % contract_id)
+					continue
+				var replaced_id := str(entry.get("replaces", ""))
+				if not replaced_id.is_empty():
+					var replaced_index := -1
+					var tests: Array = merged.get("skill_tests", [])
+					for index in range(tests.size()):
+						var prior: Dictionary = tests[index]
+						if str(prior.get("id", "")) != replaced_id:
+							continue
+						# Only an obsolete assertion of the exact same skill may
+						# be replaced. The archived source package stays immutable.
+						if str(prior.get("skill_id", "")) == skill_id and str(prior.get("assert", "")) not in definition.get("required_tests", []):
+							replaced_index = index
+					if replaced_index < 0:
+						errors.append("overlay_invalid_replacement:%s" % replaced_id)
+						continue
+					tests.remove_at(replaced_index)
+					existing_ids.erase(replaced_id)
+				(merged.get("skill_tests", []) as Array).append(entry)
+				existing_ids[contract_id] = true
+	var overlay_entry_count := 0
+	var overlay_entries_for_metadata: Variant = overlay.get("skill_tests", null)
+	if overlay_entries_for_metadata is Array:
+		overlay_entry_count = (overlay_entries_for_metadata as Array).size()
+	merged["project_overlay_valid"] = errors.is_empty()
+	merged["project_overlay_errors"] = errors.duplicate()
+	merged["project_overlay"] = {
+		"contract_id": PROJECT_TEST_MANIFEST_OVERLAY_CONTRACT_ID,
+		"path": PROJECT_TEST_MANIFEST_OVERLAY_PATH,
+		"entry_count": overlay_entry_count,
+		"valid": errors.is_empty(),
+	}
+	return merged
+
+
+static func validate_document(value: Variant) -> Dictionary:
+	var errors: Array[String] = []
+	if not value is Dictionary:
+		return {"valid": false, "errors": ["document_not_dictionary"]}
+	var parsed := value as Dictionary
+	if str(parsed.get("document_status", "")) != "project_canonical_source_of_truth":
+		errors.append("document_status")
+	var policy: Dictionary = parsed.get("global_policy", {})
+	if str(policy.get("ruleset_id", "")) != RULESET_ID:
+		errors.append("ruleset_id")
+	if int(policy.get("exact_skill_count", -1)) != 33:
+		errors.append("global_skill_count")
+	var skills: Array = parsed.get("skills", [])
+	if skills.size() != 33:
+		errors.append("skill_count")
+	var ids: Dictionary = {}
+	var orders: Dictionary = {}
+	var counts := {"warrior": 0, "wizard": 0, "taoist": 0}
+	var names: Dictionary = {}
+	var aliases: Dictionary = {}
+	for raw_skill: Variant in skills:
+		if not raw_skill is Dictionary:
+			errors.append("skill_not_dictionary")
+			continue
+		var definition := raw_skill as Dictionary
+		var skill_id := str(definition.get("skill_id", ""))
+		var profession_id := str(definition.get("class", ""))
+		var order := int(definition.get("order", -1))
+		if skill_id.is_empty() or ids.has(skill_id):
+			errors.append("duplicate_or_empty_skill_id:%s" % skill_id)
+		ids[skill_id] = true
+		if order < 1 or order > 33 or orders.has(order):
+			errors.append("duplicate_or_invalid_order:%d" % order)
+		orders[order] = true
+		if not counts.has(profession_id):
+			errors.append("invalid_class:%s" % profession_id)
+		else:
+			counts[profession_id] += 1
+		names[str(definition.get("display_name", ""))] = true
+		var identities: Array = [definition.get("display_name", "")]
+		if not definition.get("aliases", []) is Array:
+			errors.append("invalid_skill_aliases:" + skill_id)
+		else:
+			identities.append_array(definition.get("aliases", []))
+		for identity: Variant in identities:
+			if not identity is String or identity.is_empty():
+				errors.append("invalid_skill_alias:" + skill_id)
+			elif aliases.has(identity) and str(aliases[identity]) != skill_id:
+				errors.append("conflicting_skill_alias:" + identity)
+			else:
+				aliases[identity] = skill_id
+		if str(definition.get("content_layer", "")) != "vanilla":
+			errors.append("non_vanilla_skill:%s" % skill_id)
+		if str(definition.get("version_scope", "")) != "CN_MIR2_1_76":
+			errors.append("invalid_version_scope:%s" % skill_id)
+		var ranks: Array = definition.get("ranks", [])
+		if ranks.size() != 4:
+			errors.append("rank_count:%s" % skill_id)
+		else:
+			for rank in range(4):
+				if int(ranks[rank].get("rank", -1)) != rank:
+					errors.append("rank_order:%s" % skill_id)
+		if definition.get("mp_cost_by_rank", []).size() != 4:
+			errors.append("mp_rank_count:%s" % skill_id)
+		_validate_runtime_status(definition, "membership_status", skill_id, errors)
+		_validate_runtime_status(definition, "progression_status", skill_id, errors)
+		_validate_runtime_status(definition, "mp_cost_status", skill_id, errors)
+		for nested_key: String in ["timing", "geometry", "resource", "mechanics"]:
+			var nested: Variant = definition.get(nested_key, {})
+			if nested is Dictionary and nested.has("status"):
+				_validate_status_string(str(nested.get("status", "")), "%s.%s" % [skill_id, nested_key], errors)
+	for class_id: String in CLASS_COUNTS:
+		if int(counts.get(class_id, 0)) != int(CLASS_COUNTS[class_id]):
+			errors.append("class_count:%s" % class_id)
+	for excluded: Variant in parsed.get("excluded_from_vanilla_core", []):
+		var excluded_name := str(excluded).split("/")[0]
+		if names.has(excluded_name):
+			errors.append("excluded_skill_present:%s" % excluded_name)
+	return {
+		"valid": errors.is_empty(),
+		"errors": errors,
+		"skill_count": skills.size(),
+		"class_counts": counts,
+		"unique_skill_ids": ids.size(),
+	}
+
+
+static func _build_indexes() -> void:
+	_skills_by_id.clear()
+	_ids_by_alias.clear()
+	for raw_skill: Variant in _document.get("skills", []):
+		if not raw_skill is Dictionary:
+			continue
+		var definition := raw_skill as Dictionary
+		var skill_id := str(definition.get("skill_id", ""))
+		_skills_by_id[skill_id] = definition
+		_ids_by_alias[str(definition.get("display_name", ""))] = skill_id
+		for alias: Variant in definition.get("aliases", []):
+			_ids_by_alias[str(alias)] = skill_id
+
+
+static func _equipment_granted_definition(skill_name_or_id: String) -> Dictionary:
+	var record := EquipmentGrantedSkillRulesScript.definition(str(skill_name_or_id))
+	if record.is_empty():
+		var registry_entry := EntityRegistry.resolve(str(skill_name_or_id), "skill")
+		if not registry_entry.is_empty():
+			record = EquipmentGrantedSkillRulesScript.definition(
+				"hc.skill.%s" % str(registry_entry.get("legacy_id", ""))
+			)
+	if record.is_empty():
+		return {}
+	var parent_id := str(record.get("parent_skill_id", ""))
+	var parent := skill(parent_id)
+	if parent.is_empty():
+		return {}
+	var result := parent.duplicate(true)
+	result["skill_id"] = str(record.get("skill_id", ""))
+	result["entity_id"] = str(record.get("skill_id", ""))
+	result["display_name"] = str(record.get("display_name", ""))
+	result["description"] = str(record.get("description", ""))
+	result["equipment_granted"] = true
+	result["effect_id"] = str(record.get("effect_id", ""))
+	result["parent_skill_id"] = parent_id
+	result["activation"] = str(record.get("activation", "click"))
+	var mana_cost := maxi(0, int(record.get("mana_cost", 0)))
+	result["mana_cost"] = mana_cost
+	result["mp_cost_by_rank"] = [mana_cost, mana_cost, mana_cost, mana_cost]
+	result["source_contract"] = EquipmentGrantedSkillRulesScript.CONTRACT_ID
+	return result
+
+
+static func _validate_runtime_status(definition: Dictionary, key: String, skill_id: String, errors: Array[String]) -> void:
+	_validate_status_string(str(definition.get(key, "")), "%s.%s" % [skill_id, key], errors)
+
+
+static func _validate_status_string(status: String, field: String, errors: Array[String]) -> void:
+	var lowered := status.to_lower()
+	for forbidden: String in RUNTIME_FORBIDDEN_STATUS_FRAGMENTS:
+		if lowered.contains(forbidden):
+			errors.append("runtime_forbidden_status:%s:%s" % [field, status])
+			return
+	for allowed: String in RUNTIME_ALLOWED_STATUS_FRAGMENTS:
+		if lowered.contains(allowed):
+			return
+	errors.append("runtime_unknown_status:%s:%s" % [field, status])
+
+
+static func _legacy_profession_name(profession_id: String) -> String:
+	return {"warrior": "战士", "wizard": "法师", "taoist": "道士"}.get(profession_id, "")
+
+
+static func _read_json(path: String) -> Dictionary:
+	if not FileAccess.file_exists(path):
+		return {}
+	var file := FileAccess.open(path, FileAccess.READ)
+	var parsed: Variant = JSON.parse_string(file.get_as_text()) if file != null else null
+	return parsed if parsed is Dictionary else {}

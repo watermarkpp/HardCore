@@ -1,0 +1,3074 @@
+class_name GameHUD
+extends CanvasLayer
+
+const MobileLayoutRules := preload("res://scripts/mobile_layout.gd")
+const EquipmentRulesScript := preload("res://scripts/equipment_rules.gd")
+const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
+const HUDResourceOrbScript := preload("res://scripts/hud_resource_orb.gd")
+const HUDSkillIconCatalogScript := preload("res://scripts/hud_skill_icon_catalog.gd")
+const CircularTouchButtonScript := preload("res://scripts/circular_touch_button.gd")
+const HUDUtilityTouchButtonScript := preload("res://scripts/hud_utility_touch_button.gd")
+const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
+const UIItemTextureCacheScript := preload("res://scripts/ui_item_texture_cache.gd")
+const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
+const QuickItemIconLayout := preload("res://scripts/quick_item_icon_layout.gd")
+const ChassisDesignsScript := preload("res://scripts/hud_chassis_designs.gd")
+const DeathRevivalPanelScript := preload("res://scripts/death_revival_panel.gd")
+const LootFeedbackLayerScript := preload("res://scripts/loot_feedback_layer.gd")
+const UIErrorFeedbackScript := preload("res://scripts/ui_error_feedback.gd")
+const LoadingTransitionOverlayScript := preload("res://scripts/loading_transition_overlay.gd")
+const INVENTORY_PANEL_SCRIPT_PATH := "res://scripts/inventory_panel.gd"
+const ENHANCEMENT_PANEL_SCRIPT_PATH := "res://scripts/enhancement_panel.gd"
+const MonsterDisplayFormatterScript := preload("res://scripts/monster_display_formatter.gd")
+const SHOP_PANEL_SCRIPT_PATH := "res://scripts/shop_panel.gd"
+const SKILL_PANEL_SCRIPT_PATH := "res://scripts/skill_panel.gd"
+const QUEST_PANEL_SCRIPT_PATH := "res://scripts/quest_panel.gd"
+const MAP_PANEL_SCRIPT_PATH := "res://scripts/map_panel.gd"
+const WAREHOUSE_PANEL_SCRIPT_PATH := "res://scripts/warehouse_panel.gd"
+const HUDTargetBarMaskTexture := preload("res://assets/ui/gothic_hud/v2/runtime/target_bar_fill_mask.png")
+const HUDTargetBarFillShader := preload("res://assets/ui/gothic_hud/v2/runtime/target_bar_fill.gdshader")
+const HUDTargetBarMaskGeometry := preload("res://scripts/ui_generated/hud_target_bar_mask_geometry.gd")
+const HUDTargetBarTexture := preload("res://assets/ui/gothic_hud/v2/runtime/target_bar_v2.png")
+const HUDUtilityStackTexture := preload("res://assets/ui/gothic_hud/v2/runtime/utility_stack_v2.png")
+const HUDJoystickTexture := preload("res://assets/ui/gothic_hud/v2/runtime/joystick_v2.png")
+const HUDRoundActionFrameTexture := preload("res://assets/ui/gothic_hud/v2/runtime/round_action_frame_v3.png")
+const HUDCircularIconMaskShader := preload("res://assets/ui/gothic_hud/v2/runtime/circular_icon_mask.gdshader")
+const TaoistDefenseBuffTexture := preload("res://assets/art/characters/taoist/skill_icons/defense.png")
+const TaoistMagicDefenseBuffTexture := preload("res://assets/art/characters/taoist/skill_icons/magic_defense.png")
+## 2026-09-20 user order: chassis shrunk 20% from 820x273 (keep in sync with
+## HUDChassisDesigns.DISPLAY_SIZE).
+const HUD_CHASSIS_SIZE := Vector2(656, 218.4)
+const HUD_CHASSIS_STATE_LABEL_GAP := 8.0
+const TAOIST_BUFF_ICON_SIZE := Vector2(26, 26)
+const TAOIST_BUFF_STRIP_SIZE := Vector2(58, 26)
+const TAOIST_BUFF_STRIP_ITEM_BAR_GAP := 6.0
+const TAOIST_BUFF_STRIP_STABLE_ID := "hud.taoist_buff.status_strip.safe_area.v1"
+const HUD_EXPERIENCE_SEGMENT_COUNT := 10
+const HUD_EXPERIENCE_BAR_STABLE_ID := "ui.hud.experience_bar.10_segments.v1"
+## The width is retained as a calibration reference for the current formal
+## chassis source. Runtime construction uses the actual ItemSlot1..4 outer
+## union below, so a future source-pixel calibration cannot silently drift the
+## bar away from the visible quick-item frame.
+const HUD_EXPERIENCE_BAR_SIZE := Vector2(325.90625, 10)
+const HUD_EXPERIENCE_BAR_HEIGHT := 10.0
+const HUD_EXPERIENCE_BOTTOM_GAP := 7.0
+const HUD_EXPERIENCE_SEGMENT_GAP := 3.0
+const HUD_EXPERIENCE_EMPTY_COLOR := Color("241a16")
+const HUD_EXPERIENCE_FILL_COLOR := Color("b77a31")
+## Backing behind the experience bar when the active chassis design provides a
+## dedicated alpha-hole experience slot: the hole would otherwise show the
+## world between segments.
+const HUD_EXPERIENCE_BACKDROP_COLOR := Color("120d0a")
+const ITEM_QUICK_SLOT_COUNT := 4
+const ITEM_QUICK_SLOT_LONG_PRESS_SECONDS := 0.5
+const ITEM_QUICK_SLOT_CANCEL_DISTANCE := 12.0
+const ITEM_QUICK_SLOT_PICKER_GAP := 8.0
+const ITEM_QUICK_SLOT_PICKER_CARD_SIZE := Vector2(56, 64)
+const ITEM_QUICK_SLOT_PICKER_PADDING := 8.0
+const ITEM_QUICK_SLOT_PICKER_MAX_HEIGHT := 320.0
+const ITEM_QUICK_SLOT_ASSIGNMENT_CONTRACT_ID := "ui.item.quick_slot.assignment.v1"
+const ITEM_QUICK_SLOT_USE_CONTRACT_ID := "ui.item.quick_slot.use.v1"
+const HUD_ATTACK_CENTER := Vector2(-185, -110)
+const HUD_ATTACK_RING_COUNT := 6
+const HUD_ATTACK_RING_RADIUS := 140.0
+const HUD_ATTACK_RING_START_DEGREES := 180.0
+const HUD_ATTACK_RING_STEP_DEGREES := 36.0
+const HUD_ATTACK_RING_BUTTON_SIZE := Vector2(86.4, 86.4)
+const HUD_ACTION_FRAME_VISIBLE_INNER_MAX_RADIUS_SOURCE := 44.0
+const HUD_ATTACK_RING_BACKDROP_SIZE := Vector2(60, 60)
+const HUD_ATTACK_RING_ICON_SIZE := Vector2(60, 60)
+const HUD_ATTACK_FILL_SIZE := Vector2(76.5, 76.5)
+const HUD_ATTACK_ICON_SIZE := Vector2(76.5, 76.5)
+const HUD_ATTACK_BUTTON_SIZE := Vector2(102, 102)
+const HUD_ATTACK_FRAME_SIZE := Vector2(108.8, 108.8)
+# Keep the joystick center horizontally; move it 16px north as it grows.
+const HUD_JOYSTICK_RECT := Rect2(54.8, -241.2, 182.4, 182.4)
+const HUD_UTILITY_BUTTON_SIZE := Vector2(91.2, 91.2)
+const HUD_INTERACT_CENTER := Vector2(-215, -337)
+const HUD_SWITCH_TARGET_CENTER := Vector2(-85, -337)
+
+signal movement_changed(value: Vector2)
+signal attack_pressed
+signal attack_released
+signal attack_input_started(press_token: int, touch_id: int, source: StringName)
+signal attack_input_ended(press_token: int, touch_id: int, source: StringName)
+signal attack_input_cancelled(
+	press_token: int,
+	touch_id: int,
+	source: StringName,
+	reason: StringName
+)
+signal interact_pressed
+signal skill_pressed(slot_index: int)
+signal skill_slot_pressed(slot_group: String, slot_index: int)
+signal skill_input_started(
+	slot_group: String,
+	slot_index: int,
+	press_token: int,
+	touch_id: int,
+	source: StringName
+)
+signal skill_input_ended(
+	slot_group: String,
+	slot_index: int,
+	press_token: int,
+	touch_id: int,
+	source: StringName
+)
+signal skill_input_cancelled(
+	slot_group: String,
+	slot_index: int,
+	press_token: int,
+	touch_id: int,
+	source: StringName,
+	reason: StringName
+)
+signal skill_quick_slot_assignment_requested(request: Dictionary)
+signal skill_button_assignment_requested(request: Dictionary)
+signal item_quick_slot_assignment_requested(slot_index: int, item_name: String)
+signal item_quick_slot_use_requested(slot_index: int, item_name: String)
+signal map_travel_requested(map_id: int)
+signal map_teleport_requested(request: Dictionary)
+signal map_teleport_availability_requested(map_ids: Array)
+signal revival_requested(request: Dictionary)
+signal shop_buy_quotes_requested(stock: Array)
+signal shop_buy_requested(request: Dictionary)
+signal shop_sell_quotes_requested(items: Array)
+signal shop_sell_requested(request: Dictionary)
+signal quest_abandon_requested(quest_id: String)
+signal warehouse_sort_requested
+signal loading_transition_covered(request: Dictionary)
+signal loading_transition_finished(request: Dictionary)
+signal target_switch_pressed
+signal auto_target_changed(enabled: bool)
+
+var hp_label: Label
+var data_label: Label
+var profile_label: Label
+var quest_tracker_label: Label
+var loot_label: Label
+## Unified central notice layer (UNIFIED-PLAYER-NOTICE R2). One presenter
+## owns every transient global notice: same geometry the former error channel
+## used, priority preemption, dedupe and a bounded queue. `error_label` stays
+## as a compatibility alias to the presenter's primary text label so existing
+## error-channel tests and call sites keep working.
+const PlayerNoticePresenterScript := preload("res://scripts/player_notice_presenter.gd")
+const UIPlayerNoticeScript := preload("res://scripts/ui_player_notice.gd")
+var notice_presenter: PlayerNoticePresenter
+var error_label: Label
+var target_panel: Control
+var target_label: Label
+var target_health_fill: TextureRect
+var auto_target_button: Button
+var attack_button: Button
+var warrior_state_label: Label
+## Modal panels stay untyped here on purpose. Referencing their class_name in a
+## member declaration makes Godot pull every panel script into the main scene's
+## script dependency graph even though the panels are only opened on demand.
+var inventory_panel
+var enhancement_panel
+var shop_panel
+var skill_panel
+var quest_panel
+var map_panel
+var warehouse_panel
+var death_revival_panel
+var loot_feedback_layer
+var loading_transition_overlay
+var movement_joystick: TouchJoystick
+var quick_buttons: Array[Button] = []
+var health_orb: Control
+var mana_orb: Control
+var taoist_buff_hint_label: Label
+var taoist_buff_icon_strip: Control
+var _status_buff_icons: Dictionary = {}
+var _status_buff_first_seen: Dictionary = {}
+var taoist_ac_buff_icon: TextureRect
+var taoist_ac_buff_seconds: Label
+var taoist_mac_buff_icon: TextureRect
+var taoist_mac_buff_seconds: Label
+var hud_item_buttons: Array[Button] = []
+var item_quick_slots: Array[String] = ["", "", "", ""]
+var item_quick_slot_icons: Array[TextureRect] = []
+var item_quick_slot_count_labels: Array[Label] = []
+var experience_bar: Control
+var experience_segments: Array[ColorRect] = []
+var item_quick_slot_menu: PopupPanel
+var item_quick_slot_candidate_buttons: Array[Button] = []
+var _item_quick_slot_menu_slot := -1
+var _item_quick_slot_menu_candidates: Dictionary = {}
+var _item_quick_slot_menu_scroll: ScrollContainer
+var _item_quick_slot_menu_list: Control
+var _touch_scroll_support: Node
+var _item_slot_presses: Dictionary = {}
+var _item_slot_press_index := -1
+var _item_slot_press_origin := Vector2.ZERO
+var _item_slot_press_touch_index := -1
+var _item_slot_long_press_opened := false
+var _item_slot_press_cancelled := false
+var _item_slot_long_press_timer: Timer
+var quick_slot_labels: Array[Label] = []
+var quick_slot_icons: Array[TextureRect] = []
+var attack_ring_skill_icons: Array[TextureRect] = []
+var attack_ring_skill_backdrops: Array[Panel] = []
+var attack_ring_skill_labels: Array[Label] = []
+var attack_ring_skill_buttons: Array[Button] = []
+var attack_slot_icon: TextureRect
+var attack_slot_label: Label
+var current_zone_name := "比奇郊外"
+var _last_hp := 120
+var _last_max_hp := 120
+var _last_mp := 40
+var _last_max_mp := 40
+var _warrior_snapshot: Dictionary = {}
+var _last_target_text := ""
+var _skill_button_assignments: Dictionary = {}
+var _skill_button_modes: Dictionary = {}
+var _panel_prewarm_in_progress := false
+var _all_panels_prewarmed := false
+var _panel_prewarm_diagnostic: Dictionary = {}
+var _background_prewarm_requested := false
+var _catalog_icon_prewarm_in_progress := false
+var _catalog_icon_prewarm_complete := false
+var _catalog_icon_prewarm_background_mode := true
+var _catalog_icon_prewarm_paths: Array[String] = []
+var _catalog_icon_prewarm_next_index := 0
+var _catalog_icon_prewarm_poll_frames := 0
+var _panel_prewarm_user_interaction := false
+# Safe-area viewport binding owned by this HUD instance. The connection target
+# is a static-script Callable, so Godot's duplicate-connect check cannot tell
+# two worlds apart; the exact callable is stored so world teardown can release
+# it and re-entry never stacks a dead binding onto the shared viewport.
+var _safe_area_size_changed_callable := Callable()
+## Controls exempted from safe-area horizontal centering (2026-09-20 user
+## order): they must sit on the true screen midline, not the safe-area one.
+var _center_exempt_controls: Array[Control] = []
+var _panel_script_warm_refs: Array[Script] = []
+var _panel_script_pending: Dictionary = {}
+
+
+func _ready() -> void:
+	_build_approved_hud()
+
+
+func _process(_delta: float) -> void:
+	if _catalog_icon_prewarm_in_progress:
+		_advance_catalog_icon_prewarm()
+
+
+func _exit_tree() -> void:
+	_cancel_all_item_slot_presses()
+	_catalog_icon_prewarm_in_progress = false
+	_catalog_icon_prewarm_paths.clear()
+	# Script loaders can still be compiling preloaded textures when the world
+	# exits. Join this HUD's requests before engine/resource teardown; ordinary
+	# background prewarming remains asynchronous and never blocks gameplay.
+	for path: String in _panel_script_pending.keys():
+		var status := ResourceLoader.load_threaded_get_status(path)
+		if status in [ResourceLoader.THREAD_LOAD_IN_PROGRESS, ResourceLoader.THREAD_LOAD_LOADED, ResourceLoader.THREAD_LOAD_FAILED]:
+			var panel_script := ResourceLoader.load_threaded_get(path) as Script
+			if panel_script != null:
+				_panel_script_warm_refs.append(panel_script)
+	_panel_script_pending.clear()
+	if not _safe_area_size_changed_callable.is_valid():
+		return
+	var viewport := get_viewport()
+	if (
+		viewport != null
+		and is_instance_valid(viewport)
+		and viewport.size_changed.is_connected(_safe_area_size_changed_callable)
+	):
+		viewport.size_changed.disconnect(_safe_area_size_changed_callable)
+	_safe_area_size_changed_callable = Callable()
+
+
+func _hud_loading_profile_mark(
+	profile: Dictionary,
+	stage_name: String,
+	stage_started_usec: int,
+	profile_started_usec: int,
+) -> int:
+	var ended_usec := Time.get_ticks_usec()
+	profile["stages_ms"][stage_name] = {
+		"start_ms": float(stage_started_usec - profile_started_usec) / 1000.0,
+		"duration_ms": float(ended_usec - stage_started_usec) / 1000.0,
+	}
+	return ended_usec
+
+
+func _build_approved_hud() -> void:
+	var loading_profile_enabled := OS.is_debug_build()
+	var profile_started_usec := 0
+	if loading_profile_enabled:
+		profile_started_usec = Time.get_ticks_usec()
+	var loading_profile: Dictionary = {}
+	if loading_profile_enabled:
+		loading_profile = {
+			"origin": "GameHUD._ready",
+			"pre_ready_boundary": (
+				"GameHUD_static_script_preloads_before_ready_not_instrumented"
+			),
+			"stages_ms": {},
+		}
+	var stage_started_usec := profile_started_usec
+	var root := Control.new()
+	root.name = "MobileSafeRoot"
+	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root.theme = GothicUIThemeScript.build()
+	add_child(root)
+	if loading_profile_enabled:
+		stage_started_usec = _hud_loading_profile_mark(
+			loading_profile,
+			"root_and_theme",
+			stage_started_usec,
+			profile_started_usec,
+		)
+	MobileLayoutRules.apply_display_safe_area(root, get_viewport())
+	_safe_area_size_changed_callable = (
+		_on_safe_area_size_changed
+		.bind(root, get_viewport())
+	)
+	get_viewport().size_changed.connect(_safe_area_size_changed_callable)
+	if loading_profile_enabled:
+		stage_started_usec = _hud_loading_profile_mark(
+			loading_profile,
+			"safe_area_setup",
+			stage_started_usec,
+			profile_started_usec,
+		)
+
+	_build_hidden_compatibility_info(root)
+	if loading_profile_enabled:
+		stage_started_usec = _hud_loading_profile_mark(
+			loading_profile,
+			"build_hidden_compatibility_info",
+			stage_started_usec,
+			profile_started_usec,
+		)
+	_build_target_bar(root)
+	if loading_profile_enabled:
+		stage_started_usec = _hud_loading_profile_mark(
+			loading_profile,
+			"build_target_bar",
+			stage_started_usec,
+			profile_started_usec,
+		)
+	_build_loot_feedback(root)
+	if loading_profile_enabled:
+		stage_started_usec = _hud_loading_profile_mark(
+			loading_profile,
+			"build_loot_feedback",
+			stage_started_usec,
+			profile_started_usec,
+		)
+	_build_right_utility_stack(root)
+	if loading_profile_enabled:
+		stage_started_usec = _hud_loading_profile_mark(
+			loading_profile,
+			"build_right_utility_stack",
+			stage_started_usec,
+			profile_started_usec,
+		)
+	_build_bottom_chassis(root)
+	if loading_profile_enabled:
+		stage_started_usec = _hud_loading_profile_mark(
+			loading_profile,
+			"build_bottom_chassis",
+			stage_started_usec,
+			profile_started_usec,
+		)
+	_build_combat_controls(root)
+	if loading_profile_enabled:
+		stage_started_usec = _hud_loading_profile_mark(
+			loading_profile,
+			"build_combat_controls",
+			stage_started_usec,
+			profile_started_usec,
+		)
+	_build_item_quick_slot_menu()
+	if loading_profile_enabled:
+		stage_started_usec = _hud_loading_profile_mark(
+			loading_profile,
+			"build_item_quick_slot_menu",
+			stage_started_usec,
+			profile_started_usec,
+		)
+	# P1-C: panels are now lazy-loaded on first open
+	_touch_scroll_support = TouchScrollSupportScript.attach_tree(self)
+	if loading_profile_enabled:
+		stage_started_usec = _hud_loading_profile_mark(
+			loading_profile,
+			"attach_touch_scroll_support",
+			stage_started_usec,
+			profile_started_usec,
+		)
+	_build_loading_transition()
+	if loading_profile_enabled:
+		stage_started_usec = _hud_loading_profile_mark(
+			loading_profile,
+			"build_loading_transition",
+			stage_started_usec,
+			profile_started_usec,
+		)
+
+	PlayerState.profile_changed.connect(update_profile)
+	PlayerState.profile_changed.connect(update_experience_bar)
+	PlayerState.quests_changed.connect(update_quest_tracker)
+	PlayerState.skills_changed.connect(update_quick_slots)
+	PlayerState.inventory_changed.connect(update_item_quick_slots)
+	if loading_profile_enabled:
+		stage_started_usec = _hud_loading_profile_mark(
+			loading_profile,
+			"wire_player_state_signals",
+			stage_started_usec,
+			profile_started_usec,
+		)
+	update_profile()
+	update_experience_bar()
+	update_quest_tracker()
+	update_quick_slots()
+	update_item_quick_slots()
+	update_resources(_last_hp, _last_max_hp, _last_mp, _last_max_mp)
+	_apply_center_alignment()
+	if loading_profile_enabled:
+		stage_started_usec = _hud_loading_profile_mark(
+			loading_profile,
+			"initial_state_sync",
+			stage_started_usec,
+			profile_started_usec,
+		)
+		loading_profile["total_ms"] = (
+			float(Time.get_ticks_usec() - profile_started_usec) / 1000.0
+		)
+		print("[InitialHUDProfile] ", JSON.stringify(loading_profile))
+
+
+## 2026-09-20 user order: the dragon chassis and the top enemy bar must sit
+## on the TRUE screen midline (the vertical line through the camera-centered
+## character), not on the safe-area center. Devices with asymmetric left/right
+## safe insets push the safe-area center sideways; these controls get a
+## horizontal exemption of (right - left) / 2 so their center lands exactly on
+## the viewport center. Desktop insets are 0 -> delta 0, behavior unchanged.
+func _register_center_exempt(control: Control) -> void:
+	if control.has_meta("center_exempt_base_offset_left"):
+		return
+	control.set_meta("center_exempt_base_offset_left", control.offset_left)
+	control.set_meta("center_exempt_base_offset_right", control.offset_right)
+	_center_exempt_controls.append(control)
+
+
+func _apply_center_alignment_delta(delta: float) -> void:
+	for control: Control in _center_exempt_controls:
+		if not is_instance_valid(control):
+			continue
+		control.offset_left = (
+			float(control.get_meta("center_exempt_base_offset_left")) + delta
+		)
+		control.offset_right = (
+			float(control.get_meta("center_exempt_base_offset_right")) + delta
+		)
+	# The buff strip follows the actual first slot after the chassis receives
+	# its viewport-centre correction, including safe-area/size changes.
+	var safe_root := get_node_or_null("MobileSafeRoot") as Control
+	if safe_root != null:
+		_anchor_taoist_buff_strip_above_item_quick_slots(safe_root)
+
+
+func _center_alignment_delta() -> float:
+	var viewport := get_viewport()
+	if viewport == null:
+		return 0.0
+	var margins := MobileLayoutRules.safe_margins(
+		Vector2(DisplayServer.window_get_size()),
+		Rect2(DisplayServer.get_display_safe_area()),
+		viewport.get_visible_rect().size,
+	)
+	return (margins.z - margins.x) * 0.5
+
+
+func _apply_center_alignment() -> void:
+	_apply_center_alignment_delta(_center_alignment_delta())
+
+
+func _on_safe_area_size_changed(root: Control, viewport: Viewport) -> void:
+	MobileLayoutRules.apply_display_safe_area(root, viewport)
+	_apply_center_alignment()
+
+
+func _build_hidden_compatibility_info(root: Control) -> void:
+	var top_panel := Panel.new()
+	top_panel.name = "TopInfoPanel"
+	top_panel.visible = false
+	root.add_child(top_panel)
+
+	hp_label = Label.new()
+	top_panel.add_child(hp_label)
+	data_label = Label.new()
+	data_label.text = GameData.summary_text()
+	top_panel.add_child(data_label)
+	profile_label = Label.new()
+	top_panel.add_child(profile_label)
+	quest_tracker_label = Label.new()
+	quest_tracker_label.name = "QuestTracker"
+	top_panel.add_child(quest_tracker_label)
+
+	loot_label = Label.new()
+	loot_label.name = "LootNotice"
+	loot_label.set_anchors_preset(Control.PRESET_TOP_WIDE)
+	loot_label.offset_left = 360
+	loot_label.offset_top = 132
+	loot_label.offset_right = -360
+	loot_label.offset_bottom = 172
+	loot_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	loot_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	loot_label.add_theme_font_size_override("font_size", 22)
+	loot_label.add_theme_color_override("font_color", Color("ffd06f"))
+	root.add_child(loot_label)
+
+	# Unified central notice overlay copies the former error-channel geometry
+	# and lives on the same absolute layer above every modal panel, including
+	# the docked ItemDetailPresenter at z=4095. All global notices (success,
+	# error, warning, info, item results) render through this single layer.
+	notice_presenter = PlayerNoticePresenterScript.new()
+	notice_presenter.name = "PlayerNoticeOverlay"
+	root.add_child(notice_presenter)
+	_register_center_exempt(notice_presenter)
+	error_label = notice_presenter.prefix_label
+
+
+func _build_target_bar(root: Control) -> void:
+	target_panel = Control.new()
+	target_panel.name = "TargetPanel"
+	target_panel.anchor_left = 0.5
+	target_panel.anchor_right = 0.5
+	target_panel.offset_left = -220
+	target_panel.offset_top = 20
+	target_panel.offset_right = 220
+	target_panel.offset_bottom = 93
+	target_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root.add_child(target_panel)
+	_register_center_exempt(target_panel)
+	# A full opaque track covers the exact enclosed source-pixel hole, even
+	# at zero HP; decorative wings remain transparent. No runtime mask scan.
+	var backdrop := _add_full_texture(target_panel, "TargetHealthBackdrop", HUDTargetBarMaskTexture)
+	backdrop.modulate = Color("180b0b")
+	target_health_fill = _add_full_texture(target_panel, "TargetHealthFill", HUDTargetBarMaskTexture)
+	target_health_fill.modulate = Color(0.42, 0.035, 0.035, 0.88)
+	var fill_material := ShaderMaterial.new()
+	fill_material.shader = HUDTargetBarFillShader
+	var bounds: Rect2i = HUDTargetBarMaskGeometry.INNER_BOUNDS
+	fill_material.set_shader_parameter("fill_x_bounds", Vector2(bounds.position.x, bounds.end.x) / HUDTargetBarMaskGeometry.SOURCE_SIZE.x)
+	target_health_fill.material = fill_material
+	var target_art := _add_full_texture(target_panel, "TargetFrameArt", HUDTargetBarTexture)
+	target_art.set_meta("stable_id", "ui.hud.gothic.v2.target_bar")
+
+	target_label = Label.new()
+	target_label.name = "TargetLabel"
+	target_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_MINSIZE, 8)
+	target_label.text = "目标：自动锁定待命"
+	target_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	target_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	var regular_font := SystemFont.new()
+	regular_font.font_names = PackedStringArray(["Noto Sans CJK SC", "Noto Sans SC", "Microsoft YaHei", "sans-serif"])
+	regular_font.font_weight = 400
+	regular_font.font_italic = false
+	target_label.add_theme_font_override("font", regular_font)
+	target_label.add_theme_constant_override("outline_size", 0)
+	target_label.add_theme_constant_override("shadow_offset_x", 0)
+	target_label.add_theme_constant_override("shadow_offset_y", 0)
+	target_label.add_theme_font_size_override("font_size", 18)
+	target_label.add_theme_color_override("font_color", Color("e7c38c"))
+	target_panel.add_child(target_label)
+
+
+func _build_loot_feedback(root: Control) -> void:
+	loot_feedback_layer = LootFeedbackLayerScript.new()
+	loot_feedback_layer.name = "LootFeedbackLayer"
+	root.add_child(loot_feedback_layer)
+	_register_center_exempt(loot_feedback_layer)
+
+
+func _build_loading_transition() -> void:
+	loading_transition_overlay = LoadingTransitionOverlayScript.new()
+	loading_transition_overlay.name = "LoadingTransitionOverlay"
+	loading_transition_overlay.transition_covered.connect(
+		func(request: Dictionary) -> void: loading_transition_covered.emit(request)
+	)
+	loading_transition_overlay.transition_finished.connect(
+		func(request: Dictionary) -> void: loading_transition_finished.emit(request)
+	)
+	add_child(loading_transition_overlay)
+
+
+func _build_right_utility_stack(root: Control) -> void:
+	_add_top_right_fill(root, "ZoneFill", Rect2(-270, 34, 236, 86), "GothicArtPanelFill")
+	_add_top_right_fill(root, "AutoFill", Rect2(-270, 142, 236, 40), "GothicArtToggleFill")
+	_add_top_right_fill(root, "MapFill", Rect2(-270, 200, 106, 42), "GothicArtNavFill")
+	_add_top_right_fill(root, "MenuFill", Rect2(-140, 200, 106, 42), "GothicArtToggleFill")
+	_add_top_right_fill(root, "BagFill", Rect2(-270, 256, 106, 42), "GothicArtBagFill")
+	_add_top_right_fill(root, "SkillFill", Rect2(-140, 256, 106, 42), "GothicArtBagFill")
+	var stack_art := TextureRect.new()
+	stack_art.name = "UtilityStackArt"
+	stack_art.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	stack_art.offset_left = -284
+	stack_art.offset_top = 18
+	stack_art.offset_right = -20
+	stack_art.offset_bottom = 312
+	stack_art.texture = HUDUtilityStackTexture
+	stack_art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	stack_art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	stack_art.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	stack_art.set_meta("stable_id", "ui.hud.gothic.v2.utility_stack")
+	root.add_child(stack_art)
+
+	var zone_panel := Control.new()
+	zone_panel.name = "ZonePanel"
+	zone_panel.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	zone_panel.offset_left = -274
+	zone_panel.offset_top = 26
+	zone_panel.offset_right = -30
+	zone_panel.offset_bottom = 128
+	root.add_child(zone_panel)
+	var zone_label := Label.new()
+	zone_label.name = "ZoneLabel"
+	zone_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_MINSIZE, 8)
+	zone_label.text = current_zone_name
+	zone_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	zone_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	zone_label.add_theme_font_size_override("font_size", 16)
+	zone_panel.add_child(zone_label)
+
+	auto_target_button = _add_utility_button(root, "AutoTargetButton", "自动锁定：开", Rect2(-274, 136, 244, 52))
+	auto_target_button.toggle_mode = true
+	auto_target_button.button_pressed = true
+	auto_target_button.toggled.connect(func(enabled: bool) -> void:
+		auto_target_button.text = "自动锁定：开" if enabled else "自动锁定：关"
+		auto_target_changed.emit(enabled)
+	)
+
+	var map_button := _add_utility_button(root, "MapButton", "地图", Rect2(-274, 193, 116, 56))
+	map_button.pressed.connect(_toggle_map_panel)
+	var menu_button := _add_utility_button(root, "MenuButton", "菜单", Rect2(-146, 193, 116, 56))
+	menu_button.pressed.connect(_request_system_menu)
+	var inventory_button := _add_utility_button(root, "InventoryButton", "背包", Rect2(-274, 249, 116, 56))
+	inventory_button.pressed.connect(_toggle_inventory)
+	var skill_book_button := _add_utility_button(root, "SkillBookButton", "技能", Rect2(-146, 249, 116, 56))
+	skill_book_button.pressed.connect(_toggle_skill_book)
+
+
+func _build_bottom_chassis(root: Control) -> void:
+	var chassis_root := Control.new()
+	chassis_root.name = "IntegratedHUDChassis"
+	chassis_root.anchor_left = 0.5
+	chassis_root.anchor_top = 1.0
+	chassis_root.anchor_right = 0.5
+	chassis_root.anchor_bottom = 1.0
+	# 2026-09-20 user order: 20% shrink anchored at the bottom spike tip
+	# (alpha-measured source (1085, 705)). The tip keeps its pre-shrink global
+	# position: top = -(273 - 265.84 + 212.67), bottom = top + 218.4, so the
+	# frame bottom stays ~1.4px above the screen edge exactly as the anchor
+	# demands. Horizontal centering is finished by the center-exemption
+	# alignment (true screen midline, not safe-area midline).
+	chassis_root.offset_left = -328
+	chassis_root.offset_top = -219.83
+	chassis_root.offset_right = 328
+	chassis_root.offset_bottom = -1.43
+	chassis_root.custom_minimum_size = HUD_CHASSIS_SIZE
+	chassis_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	chassis_root.set_meta("contents", ["health_orb", "four_item_slots", "mana_orb"])
+	chassis_root.set_meta("geometry_policy", "source_pixel_to_display_fit.v1")
+	root.add_child(chassis_root)
+	_register_center_exempt(chassis_root)
+
+	var chassis_design: Dictionary = ChassisDesignsScript.active_design()
+	var orb_display_size: float = chassis_design["orb_display_size"]
+	var orb_size := Vector2(orb_display_size, orb_display_size)
+	chassis_root.set_meta("active_design", ChassisDesignsScript.ACTIVE_DESIGN_ID)
+	health_orb = HUDResourceOrbScript.new()
+	health_orb.name = "HealthOrb"
+	health_orb.position = (
+		_chassis_source_to_local(chassis_design["health_orb_center_source"]) - orb_size * 0.5
+	)
+	health_orb.size = orb_size
+	health_orb.resource_name = "生命"
+	health_orb.liquid_color = Color("a51422")
+	chassis_root.add_child(health_orb)
+
+	taoist_buff_icon_strip = Control.new()
+	taoist_buff_icon_strip.name = "TaoistDefenseBuffStrip"
+	taoist_buff_icon_strip.anchor_left = 0.5
+	taoist_buff_icon_strip.anchor_top = 1.0
+	taoist_buff_icon_strip.anchor_right = 0.5
+	taoist_buff_icon_strip.anchor_bottom = 1.0
+	taoist_buff_icon_strip.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	taoist_buff_icon_strip.set_meta("stable_id", TAOIST_BUFF_STRIP_STABLE_ID)
+	taoist_buff_icon_strip.set_meta("layout_policy", "safe_root_above_item_quick_slots.v2")
+	root.add_child(taoist_buff_icon_strip)
+
+	taoist_ac_buff_icon = _build_taoist_defence_buff_icon(
+		taoist_buff_icon_strip,
+		"TaoistACBuffIcon",
+		"hud.taoist_buff.ac",
+		TaoistDefenseBuffTexture,
+		Vector2.ZERO
+	)
+	taoist_ac_buff_seconds = taoist_ac_buff_icon.get_node("Seconds") as Label
+	taoist_mac_buff_icon = _build_taoist_defence_buff_icon(
+		taoist_buff_icon_strip,
+		"TaoistMACBuffIcon",
+		"hud.taoist_buff.mac",
+		TaoistMagicDefenseBuffTexture,
+		Vector2(TAOIST_BUFF_ICON_SIZE.x + 6.0, 0.0)
+	)
+	taoist_mac_buff_seconds = taoist_mac_buff_icon.get_node("Seconds") as Label
+	_status_buff_icons = {"ac":taoist_ac_buff_icon, "mac":taoist_mac_buff_icon}
+
+	taoist_buff_hint_label = Label.new()
+	taoist_buff_hint_label.name = "TaoistBuffHint"
+	taoist_buff_hint_label.position = (
+		health_orb.position
+		+ Vector2(10, orb_size.y - 30)
+	)
+	taoist_buff_hint_label.size = Vector2(96, 28)
+	taoist_buff_hint_label.add_theme_font_size_override("font_size", 11)
+	taoist_buff_hint_label.add_theme_color_override(
+		"font_color",
+		Color(0.95, 0.88, 0.55)
+	)
+	taoist_buff_hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	taoist_buff_hint_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	taoist_buff_hint_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	taoist_buff_hint_label.visible = false
+	chassis_root.add_child(taoist_buff_hint_label)
+
+	mana_orb = HUDResourceOrbScript.new()
+	mana_orb.name = "ManaOrb"
+	mana_orb.position = (
+		_chassis_source_to_local(chassis_design["mana_orb_center_source"]) - orb_size * 0.5
+	)
+	mana_orb.size = orb_size
+	mana_orb.resource_name = "魔法"
+	mana_orb.liquid_color = Color("174eaa")
+	chassis_root.add_child(mana_orb)
+
+	var item_slot_centers: Array = chassis_design["item_slot_centers_source"]
+	var slot_fill_size: Vector2 = chassis_design["item_slot_fill_display_size"]
+	# The fill well is drawn under the frame art and oversized so the opaque
+	# rim masks the anti-aliased well edge; the visible shape is the well.
+	var slot_render_size: Vector2 = chassis_design.get("item_slot_fill_render_size", slot_fill_size)
+	var slot_hit_size := ChassisDesignsScript.source_rect_to_local(chassis_design, Rect2(Vector2.ZERO, chassis_design["item_slot_touch_source_size"])).size
+	var slot_hit_padding := (slot_hit_size - slot_fill_size) * 0.5
+	for index in range(item_slot_centers.size()):
+		var item_fill := Panel.new()
+		item_fill.name = "ItemSlotFill%d" % (index + 1)
+		item_fill.theme_type_variation = "GothicArtItemFill"
+		item_fill.size = slot_render_size
+		item_fill.position = _chassis_source_to_local(item_slot_centers[index]) - slot_render_size * 0.5
+		item_fill.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		item_fill.set_meta("stable_id", "ui.hud.item_slot.metal_mask_fill.%d" % (index + 1))
+		item_fill.set_meta("geometry_policy", "source_pixel_center_metal_mask.v1")
+		chassis_root.add_child(item_fill)
+
+	var chassis := TextureRect.new()
+	chassis.name = "DemonChassisArt"
+	chassis.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	# The adopted chassis art ships clean with pre-cut alpha slot wells; no
+	# legacy mask applies and the measured hole geometry lives in the registry.
+	chassis.texture = ChassisDesignsScript.load_texture(chassis_design)
+	chassis.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	chassis.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	chassis.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	chassis.set_meta("stable_id", chassis_design["chassis_stable_id"])
+	chassis_root.add_child(chassis)
+
+	for index in range(4):
+		var item_button := Button.new()
+		item_button.name = "ItemSlot%d" % (index + 1)
+		item_button.theme_type_variation = "GothicHUDItemHitButton"
+		item_button.size = slot_hit_size
+		item_button.position = _chassis_source_to_local(item_slot_centers[index]) - item_button.size * 0.5
+		item_button.text = str(index + 1)
+		item_button.tooltip_text = "快捷物品 %d" % (index + 1)
+		item_button.add_theme_font_size_override("font_size", 15)
+		item_button.set_meta("stable_id", "hud.item_slot.%d" % (index + 1))
+		item_button.set_meta("metal_masked", true)
+		item_button.set_meta("geometry_policy", "source_pixel_center_metal_mask.v1")
+		# ItemSlot buttons never use the Button.pressed signal; activation is
+		# emitted only from the gui_input release handler after long-press and
+		# drag guards, so Button internal pressed can never double-fire use.
+		item_button.gui_input.connect(_item_slot_input.bind(index))
+		chassis_root.add_child(item_button)
+		hud_item_buttons.append(item_button)
+		var quick_icon := TextureRect.new()
+		quick_icon.name = "ItemQuickSlotIcon"
+		quick_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		quick_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		quick_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		quick_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		quick_icon.visible = false
+		item_button.add_child(quick_icon)
+		item_quick_slot_icons.append(quick_icon)
+		var quick_count := Label.new()
+		quick_count.name = "ItemQuickSlotCount"
+		quick_count.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		quick_count.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		# Bottom-right corner badge. Anchor-driven so the badge stays flush with
+		# the slot corner for any font metrics: the v3 candidate slots are only
+		# ~50px wide, the legacy v2 slots 72px, and the label's minimum line
+		# height varies with the theme font.
+		var badge_font_size := 13
+		if item_button.size.x < 64.0:
+			badge_font_size = 11
+		quick_count.add_theme_font_size_override("font_size", badge_font_size)
+		var badge_minimum := quick_count.get_combined_minimum_size()
+		quick_count.anchor_left = 1.0
+		quick_count.anchor_top = 1.0
+		quick_count.anchor_right = 1.0
+		quick_count.anchor_bottom = 1.0
+		quick_count.offset_left = -badge_minimum.x - 2.0 - slot_hit_padding.x
+		quick_count.offset_top = -badge_minimum.y - slot_hit_padding.y
+		quick_count.offset_right = -2.0 - slot_hit_padding.x
+		quick_count.offset_bottom = -slot_hit_padding.y
+		quick_count.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+		quick_count.grow_vertical = Control.GROW_DIRECTION_BEGIN
+		quick_count.add_theme_color_override("font_color", Color("f2c783"))
+		quick_count.add_theme_color_override("font_shadow_color", Color.BLACK)
+		quick_count.add_theme_constant_override("shadow_offset_x", 1)
+		quick_count.add_theme_constant_override("shadow_offset_y", 1)
+		quick_count.visible = false
+		item_button.add_child(quick_count)
+		item_quick_slot_count_labels.append(quick_count)
+	_build_experience_bar(chassis_root)
+	if chassis_design["experience_bar_policy"] == "chassis_design_xp_slot.v1":
+		# The frame art must sit above the oversized bar so the pointed well
+		# shape masks it; interactive buttons keep their higher sibling index.
+		chassis_root.move_child(experience_bar, 0)
+	_anchor_taoist_buff_strip_above_item_quick_slots(root)
+
+
+func _build_experience_bar(chassis_root: Control) -> void:
+	var chassis_design: Dictionary = ChassisDesignsScript.active_design()
+	var experience_size: Vector2
+	var experience_position: Vector2
+	var geometry_policy: String
+	var outer_frame_source: String
+	if chassis_design["experience_bar_policy"] == "chassis_design_xp_slot.v1":
+		# The design art provides a dedicated experience slot: a wide thin alpha
+		# hole inside the bottom plaque. The bar is drawn UNDER the frame art
+		# and oversized so the opaque frame masks its edges; the pointed well
+		# shape is what stays visible.
+		var slot_rect: Rect2 = ChassisDesignsScript.source_rect_to_local(
+			chassis_design,
+			chassis_design["experience_slot_source_rect"],
+		)
+		var render_bleed: Vector2 = chassis_design.get("experience_slot_render_bleed", Vector2.ZERO)
+		experience_size = slot_rect.size + render_bleed
+		experience_position = slot_rect.position - render_bleed * 0.5
+		geometry_policy = "chassis_design_xp_slot.v1"
+		outer_frame_source = chassis_design["chassis_stable_id"]
+	else:
+		var item_slot_bounds := _item_quick_slot_outer_bounds()
+		experience_size = Vector2(
+			item_slot_bounds.size.x if item_slot_bounds.size.x > 0.0 else HUD_EXPERIENCE_BAR_SIZE.x,
+			HUD_EXPERIENCE_BAR_HEIGHT,
+		)
+		experience_position = Vector2(
+			item_slot_bounds.position.x
+				if item_slot_bounds.size.x > 0.0
+				else (HUD_CHASSIS_SIZE.x - experience_size.x) * 0.5,
+			HUD_CHASSIS_SIZE.y - HUD_EXPERIENCE_BOTTOM_GAP - experience_size.y,
+		)
+		geometry_policy = "item_quick_slot_outer_frame_union.v1"
+		outer_frame_source = "ItemSlot1.left_to_ItemSlot4.right"
+	experience_bar = Control.new()
+	experience_bar.name = "ExperienceBar"
+	experience_bar.size = experience_size
+	experience_bar.position = experience_position
+	experience_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	experience_bar.set_meta("stable_id", HUD_EXPERIENCE_BAR_STABLE_ID)
+	experience_bar.set_meta("segment_count", HUD_EXPERIENCE_SEGMENT_COUNT)
+	experience_bar.set_meta("geometry_policy", geometry_policy)
+	experience_bar.set_meta("outer_frame_source", outer_frame_source)
+	experience_bar.set_meta("calibrated_height", experience_size.y)
+	experience_bar.set_meta("data_source", "PlayerState.experience / experience_to_next_level()")
+	chassis_root.add_child(experience_bar)
+	if geometry_policy == "chassis_design_xp_slot.v1":
+		var backdrop := ColorRect.new()
+		backdrop.name = "Backdrop"
+		backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		backdrop.color = HUD_EXPERIENCE_BACKDROP_COLOR
+		backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		backdrop.set_meta("stable_id", "%s.backdrop" % HUD_EXPERIENCE_BAR_STABLE_ID)
+		experience_bar.add_child(backdrop)
+	experience_segments.clear()
+	var gap := HUD_EXPERIENCE_SEGMENT_GAP
+	var segment_width := (experience_bar.size.x - gap * (HUD_EXPERIENCE_SEGMENT_COUNT - 1)) / HUD_EXPERIENCE_SEGMENT_COUNT
+	for index in range(HUD_EXPERIENCE_SEGMENT_COUNT):
+		var segment := ColorRect.new()
+		segment.name = "Segment%02d" % (index + 1)
+		segment.position = Vector2(index * (segment_width + gap), 0)
+		# 2026-09-20 user order: the visible segments must FILL the reserved
+		# experience slot. Height follows the bar control (slot rect + bleed)
+		# instead of the legacy fixed 10px constant; the legacy policy branch
+		# still derives size.y = HUD_EXPERIENCE_BAR_HEIGHT, so it is unchanged.
+		segment.size = Vector2(segment_width, experience_bar.size.y)
+		segment.color = HUD_EXPERIENCE_EMPTY_COLOR
+		segment.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		segment.set_meta("stable_id", "%s.segment.%02d" % [HUD_EXPERIENCE_BAR_STABLE_ID, index + 1])
+		var fill := ColorRect.new()
+		fill.name = "Fill"
+		fill.position = Vector2.ZERO
+		fill.size = Vector2.ZERO
+		fill.color = HUD_EXPERIENCE_FILL_COLOR
+		fill.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		fill.set_meta("stable_id", "%s.fill.%02d" % [HUD_EXPERIENCE_BAR_STABLE_ID, index + 1])
+		segment.add_child(fill)
+		experience_bar.add_child(segment)
+		experience_segments.append(segment)
+
+
+func _item_quick_slot_outer_bounds() -> Rect2:
+	if hud_item_buttons.is_empty():
+		return Rect2()
+	var bounds := Rect2(hud_item_buttons[0].position, hud_item_buttons[0].size)
+	for index in range(1, hud_item_buttons.size()):
+		bounds = bounds.merge(Rect2(hud_item_buttons[index].position, hud_item_buttons[index].size))
+	return bounds
+
+
+static func experience_progress_ratio(experience_value: int, required_value: int) -> float:
+	var required := maxi(1, required_value)
+	return clampf(float(experience_value) / float(required), 0.0, 1.0)
+
+
+func update_experience_bar() -> void:
+	if experience_segments.is_empty():
+		return
+	var required := maxi(1, int(PlayerState.experience_to_next_level()))
+	var progress := experience_progress_ratio(PlayerState.experience, required)
+	for index in range(experience_segments.size()):
+		var segment_progress := clampf(progress * HUD_EXPERIENCE_SEGMENT_COUNT - index, 0.0, 1.0)
+		var segment := experience_segments[index]
+		segment.color = HUD_EXPERIENCE_EMPTY_COLOR
+		var fill := segment.get_node("Fill") as ColorRect
+		fill.size = Vector2(segment.size.x * segment_progress, segment.size.y)
+		segment.set_meta("fill_ratio", segment_progress)
+
+
+func _anchor_taoist_buff_strip_above_item_quick_slots(root: Control) -> void:
+	if taoist_buff_icon_strip == null or hud_item_buttons.is_empty():
+		return
+	# ItemSlot controls are the actual interactive/front-frame rectangles seen
+	# on device. Resolve their global union once, then express the status strip
+	# as bottom/center offsets inside MobileSafeRoot. Both the item chassis and
+	# this strip therefore retain the same relationship on safe-area or aspect
+	# changes without using the much taller transparent chassis bounds.
+	var item_bar_global_rect := hud_item_buttons[0].get_global_rect()
+	for index in range(1, hud_item_buttons.size()):
+		item_bar_global_rect = item_bar_global_rect.merge(
+			hud_item_buttons[index].get_global_rect()
+		)
+	var safe_root_global_rect := root.get_global_rect()
+	var left_offset_x := (
+		hud_item_buttons[0].get_global_rect().position.x
+		- safe_root_global_rect.get_center().x
+	)
+	var item_bar_top_offset_from_safe_bottom := (
+		item_bar_global_rect.position.y
+		- safe_root_global_rect.end.y
+	)
+	taoist_buff_icon_strip.offset_left = (
+		left_offset_x
+	)
+	taoist_buff_icon_strip.offset_right = (
+		taoist_buff_icon_strip.offset_left + TAOIST_BUFF_STRIP_SIZE.x
+	)
+	taoist_buff_icon_strip.offset_bottom = (
+		item_bar_top_offset_from_safe_bottom
+		- TAOIST_BUFF_STRIP_ITEM_BAR_GAP
+	)
+	taoist_buff_icon_strip.offset_top = (
+		taoist_buff_icon_strip.offset_bottom - TAOIST_BUFF_STRIP_SIZE.y
+	)
+
+
+func _anchor_warrior_state_label(root: Control) -> void:
+	var chassis_root := root.get_node_or_null("IntegratedHUDChassis") as Control
+	if warrior_state_label == null or chassis_root == null:
+		return
+	var root_inverse := root.get_global_transform().affine_inverse()
+	var chassis_global := chassis_root.get_global_rect()
+	var peak_source: Vector2 = ChassisDesignsScript.active_design()["center_peak_source"]
+	var peak_global_y: float = (chassis_root.get_global_transform() * _chassis_source_to_local(peak_source)).y
+	var label_width := minf(500.0, chassis_global.size.x)
+	warrior_state_label.position.x = (root_inverse * chassis_global.get_center()).x
+	warrior_state_label.position.x -= Vector2(label_width * 0.5, 0.0).x
+	warrior_state_label.size.x = label_width
+	warrior_state_label.size.y = 28.0
+	var peak_local := root_inverse * Vector2(chassis_global.position.x, peak_global_y)
+	warrior_state_label.position.y = peak_local.y - warrior_state_label.size.y - HUD_CHASSIS_STATE_LABEL_GAP
+	warrior_state_label.set_meta("layout_anchor", "chassis_source_center_peak.v1")
+	warrior_state_label.set_meta("layout_gap", HUD_CHASSIS_STATE_LABEL_GAP)
+
+
+func _build_taoist_defence_buff_icon(
+	parent: Control,
+	node_name: String,
+	stable_id: String,
+	texture: Texture2D,
+	icon_position: Vector2
+) -> TextureRect:
+	var icon := TextureRect.new()
+	icon.name = node_name
+	icon.position = icon_position
+	icon.size = TAOIST_BUFF_ICON_SIZE
+	icon.texture = texture
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon.visible = false
+	icon.set_meta("stable_id", stable_id)
+	parent.add_child(icon)
+	var seconds := Label.new()
+	seconds.name = "Seconds"
+	seconds.position = Vector2(8, 13)
+	seconds.size = Vector2(22, 14)
+	seconds.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	seconds.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	seconds.add_theme_font_size_override("font_size", 10)
+	seconds.add_theme_color_override("font_color", Color.WHITE)
+	seconds.add_theme_color_override("font_shadow_color", Color.BLACK)
+	seconds.add_theme_constant_override("shadow_offset_x", 1)
+	seconds.add_theme_constant_override("shadow_offset_y", 1)
+	seconds.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon.add_child(seconds)
+	return icon
+
+
+func _build_item_quick_slot_menu() -> void:
+	item_quick_slot_menu = PopupPanel.new()
+	item_quick_slot_menu.name = "ItemQuickSlotMenu"
+	var picker_style := StyleBoxFlat.new()
+	picker_style.bg_color = Color("241b16")
+	picker_style.border_color = Color("8f6a38")
+	picker_style.border_width_left = 1
+	picker_style.border_width_top = 1
+	picker_style.border_width_right = 1
+	picker_style.border_width_bottom = 1
+	# Keep the pale cast shadow geometrically centered on the dark panel.
+	picker_style.shadow_color = Color(0.78, 0.72, 0.62, 0.34)
+	picker_style.shadow_size = 4
+	picker_style.shadow_offset = Vector2.ZERO
+	item_quick_slot_menu.add_theme_stylebox_override("panel", picker_style)
+	item_quick_slot_menu.window_input.connect(_on_item_quick_slot_popup_input)
+	add_child(item_quick_slot_menu)
+	_item_quick_slot_menu_scroll = ScrollContainer.new()
+	_item_quick_slot_menu_scroll.name = "ItemQuickSlotScroll"
+	_item_quick_slot_menu_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_item_quick_slot_menu_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	item_quick_slot_menu.add_child(_item_quick_slot_menu_scroll)
+	_item_quick_slot_menu_list = Control.new()
+	_item_quick_slot_menu_list.name = "ItemQuickSlotCandidates"
+	_item_quick_slot_menu_scroll.add_child(_item_quick_slot_menu_list)
+	_item_slot_long_press_timer = Timer.new()
+	_item_slot_long_press_timer.name = "ItemQuickSlotLongPressTimer"
+	_item_slot_long_press_timer.one_shot = true
+	_item_slot_long_press_timer.wait_time = ITEM_QUICK_SLOT_LONG_PRESS_SECONDS
+	_item_slot_long_press_timer.timeout.connect(_open_item_quick_slot_menu)
+	add_child(_item_slot_long_press_timer)
+
+
+func set_item_quick_slots(assignments: Array) -> void:
+	item_quick_slots.clear()
+	for index in range(ITEM_QUICK_SLOT_COUNT):
+		var value: Variant = assignments[index] if index < assignments.size() else ""
+		item_quick_slots.append(_item_slot_assignment_id(value))
+	update_item_quick_slots()
+
+
+func _item_slot_assignment_id(value: Variant) -> String:
+	if value is Dictionary:
+		return str(value.get("entity_id", ""))
+	return str(value) if value is String and value.begins_with("hc.") else ""
+
+
+func update_item_quick_slots() -> void:
+	for index in range(ITEM_QUICK_SLOT_COUNT):
+		var item_id := item_quick_slots[index] if index < item_quick_slots.size() else ""
+		var record := GameData.get_entity_record(item_id)
+		var item_name := str(record.get("name", ""))
+		var count := PlayerState.item_count_by_entity_id(item_id) if not item_id.is_empty() else 0
+		var button: Button = hud_item_buttons[index] if index < hud_item_buttons.size() else null
+		var icon: TextureRect = item_quick_slot_icons[index] if index < item_quick_slot_icons.size() else null
+		var count_label: Label = item_quick_slot_count_labels[index] if index < item_quick_slot_count_labels.size() else null
+		if button == null:
+			continue
+		button.set_meta("item_quick_slot_name", item_name)
+		button.set_meta("item_quick_slot_entity_id", item_id)
+		button.set_meta("item_quick_slot_count", count)
+		button.set_meta("item_quick_slot_available", count > 0)
+		if item_name.is_empty():
+			button.text = str(index + 1)
+			if icon != null:
+				icon.texture = null
+				icon.visible = false
+				icon.modulate = Color.WHITE
+			if count_label != null:
+				count_label.text = ""
+				count_label.visible = false
+			button.tooltip_text = "快捷物品 %d：长按从背包选择" % (index + 1)
+			continue
+		var texture := UIItemTextureCacheScript.texture_for(record, "inventoryIcon")
+		texture = QuickItemIconLayout.prepare_texture(texture, item_id)
+		button.text = ""
+		if icon != null:
+			icon.texture = texture
+			icon.visible = texture != null
+			icon.modulate = Color(1, 1, 1, 0.45) if count <= 0 else Color.WHITE
+			_layout_native_item_icon(icon, texture, button.size, GameData.get_item_art_display_size(record))
+			if texture != null:
+				icon.position = button.size * 0.5 - QuickItemIconLayout.visible_center(texture) * (icon.size / texture.get_size())
+		if count_label != null:
+			count_label.text = str(count)
+			count_label.visible = true
+		button.tooltip_text = "%s × %d" % [item_name, count] if count > 0 else "%s（暂无库存，补货后恢复）" % item_name
+
+
+# Only pointers whose DOWN was admitted by GUI hit testing are routed here.
+# Convert viewport coordinates with the live Control transform exactly once;
+# held movement/attack pointers neither own nor cancel quick-item pointers.
+func _input(event: InputEvent) -> void:
+	if _item_slot_presses.is_empty() or event.device == InputEvent.DEVICE_ID_EMULATION:
+		return
+	var pointer := -2
+	if event is InputEventScreenTouch:
+		if event.pressed and not event.canceled:
+			return
+		pointer = event.index
+	elif event is InputEventScreenDrag:
+		pointer = event.index
+	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
+		pointer = -1
+	elif event is InputEventMouseMotion and event.button_mask & MOUSE_BUTTON_MASK_LEFT:
+		pointer = -1
+	if not _item_slot_presses.has(pointer):
+		return
+	var slot := int(_item_slot_presses[pointer].slot)
+	var button: Button = hud_item_buttons[slot]
+	var local_event := button.make_input_local(event)
+	_item_slot_input(local_event, slot)
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_APPLICATION_FOCUS_OUT:
+		_cancel_all_item_slot_presses()
+
+
+func _cancel_all_item_slot_presses() -> void:
+	_item_slot_presses.clear()
+	_item_slot_press_index = -1
+	_item_slot_press_touch_index = -1
+	if is_instance_valid(_item_slot_long_press_timer):
+		_item_slot_long_press_timer.stop()
+
+
+func _item_slot_input(event: InputEvent, slot_index: int) -> void:
+	if event.device == InputEvent.DEVICE_ID_EMULATION:
+		return
+	if event is InputEventScreenTouch:
+		if event.canceled:
+			_cancel_item_slot_pointer(event.index)
+		elif event.pressed:
+			_begin_item_slot_press(slot_index, event.position, event.index)
+		else:
+			_finish_item_slot_press(slot_index, event.position, event.index)
+	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.pressed:
+			_begin_item_slot_press(slot_index, event.position, -1)
+		else:
+			_finish_item_slot_press(slot_index, event.position, -1)
+	elif event is InputEventScreenDrag:
+		_move_item_slot_pointer(event.index, event.position)
+	elif event is InputEventMouseMotion and event.button_mask & MOUSE_BUTTON_MASK_LEFT:
+		_move_item_slot_pointer(-1, event.position)
+
+
+func _move_item_slot_pointer(pointer: int, position: Vector2) -> void:
+	if not _item_slot_presses.has(pointer):
+		return
+	var state: Dictionary = _item_slot_presses[pointer]
+	var button: Button = hud_item_buttons[int(state.slot)]
+	if not Rect2(Vector2.ZERO, button.size).has_point(position):
+		_cancel_item_slot_pointer(pointer)
+	elif pointer == _item_slot_press_touch_index and position.distance_to(state.origin) > ITEM_QUICK_SLOT_CANCEL_DISTANCE:
+		# Drift inside a slot prevents accidental long-press assignment, but
+		# does not discard an otherwise valid tap inside the visible cell.
+		_item_slot_long_press_timer.stop()
+
+
+func _begin_item_slot_press(slot_index: int, origin: Vector2, touch_index: int) -> void:
+	if _item_slot_presses.has(touch_index):
+		return
+	_item_slot_presses[touch_index] = {"slot": slot_index, "origin": origin, "long_press": false}
+	_item_slot_press_index = slot_index
+	_item_slot_press_origin = origin
+	_item_slot_press_touch_index = touch_index
+	_item_slot_long_press_opened = false
+	_item_slot_press_cancelled = false
+	_item_slot_long_press_timer.start()
+
+
+func _cancel_item_slot_pointer(pointer: int) -> void:
+	_item_slot_presses.erase(pointer)
+	if pointer == _item_slot_press_touch_index:
+		_item_slot_long_press_timer.stop()
+		_item_slot_press_cancelled = true
+		_item_slot_press_index = -1
+		_item_slot_press_touch_index = -1
+
+
+func _cancel_item_slot_press() -> void:
+	_cancel_item_slot_pointer(_item_slot_press_touch_index)
+
+
+func _finish_item_slot_press(slot_index: int, release_position: Vector2, touch_index := -1) -> void:
+	if not _item_slot_presses.has(touch_index):
+		return
+	var state: Dictionary = _item_slot_presses[touch_index]
+	if int(state.slot) != slot_index:
+		return
+	_item_slot_presses.erase(touch_index)
+	if touch_index == _item_slot_press_touch_index:
+		_item_slot_long_press_timer.stop()
+		_item_slot_press_index = -1
+		_item_slot_press_touch_index = -1
+	if bool(state.long_press) or not Rect2(Vector2.ZERO, hud_item_buttons[slot_index].size).has_point(release_position):
+		return
+	var item_id := _item_slot_bound_id(slot_index)
+	if item_id.is_empty():
+		show_error_message("快捷物品 %d 为空：长按槽位可从背包选择" % (slot_index + 1))
+		return
+	item_quick_slot_use_requested.emit(slot_index, item_id)
+
+
+func _item_slot_bound_name(slot_index: int) -> String:
+	return str(GameData.get_entity_record(_item_slot_bound_id(slot_index)).get("name", ""))
+
+
+func _item_slot_bound_id(slot_index: int) -> String:
+	if slot_index >= 0 and slot_index < item_quick_slots.size():
+		return item_quick_slots[slot_index]
+	return ""
+
+
+func _open_item_quick_slot_menu() -> void:
+	var slot_index := _item_slot_press_index
+	if slot_index < 0 or slot_index >= ITEM_QUICK_SLOT_COUNT:
+		return
+	_item_slot_long_press_opened = true
+	if _item_slot_presses.has(_item_slot_press_touch_index):
+		_item_slot_presses[_item_slot_press_touch_index].long_press = true
+	_item_quick_slot_menu_slot = slot_index
+	_clear_item_quick_slot_picker()
+	_item_quick_slot_menu_candidates.clear()
+	var candidates := _item_quick_slot_candidates()
+	for index in range(candidates.size()):
+		var candidate: Dictionary = candidates[index]
+		var id := index + 1
+		_item_quick_slot_menu_candidates[id] = str(candidate.get("entity_id", ""))
+		_add_item_quick_slot_candidate(candidate, id, candidates.size() - 1 - index)
+	var content_size := _item_quick_slot_picker_content_size(candidates.size())
+	if candidates.is_empty():
+		_add_item_quick_slot_empty_state()
+		content_size = Vector2(180, 56)
+	_item_quick_slot_menu_list.custom_minimum_size = content_size
+	_item_quick_slot_menu_list.size = content_size
+	var button: Button = hud_item_buttons[slot_index] if slot_index < hud_item_buttons.size() else null
+	if button != null:
+		_popup_item_quick_slot_picker(button, content_size)
+
+
+func _item_quick_slot_candidates() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	var seen: Dictionary = {}
+	for stack: Variant in PlayerState.inventory:
+		if not stack is Dictionary:
+			continue
+		var item_id := GameData.item_entity_id(stack)
+		if item_id.is_empty() or seen.has(item_id):
+			continue
+		var record := GameData.get_entity_record(item_id)
+		if not _is_quick_slot_candidate(record):
+			continue
+		seen[item_id] = true
+		result.append({"entity_id": item_id, "item_name": str(record.get("name", "")), "count": PlayerState.item_count_by_entity_id(item_id)})
+	return result
+
+
+func _is_quick_slot_candidate(record: Dictionary) -> bool:
+	if record.is_empty():
+		return false
+	var kind := str(record.get("kind", ""))
+	if kind not in ["skill_book", "consumable", "scroll"]:
+		return false
+	return bool(record.get("usable", true))
+
+
+func _on_item_quick_slot_menu_pressed(id: int) -> void:
+	if TouchScrollSupportScript.is_drag_active(get_tree()):
+		return
+	var item_name := str(_item_quick_slot_menu_candidates.get(id, ""))
+	if item_name.is_empty():
+		return
+	item_quick_slot_menu.hide()
+	_assign_item_quick_slot(_item_quick_slot_menu_slot, item_name)
+
+
+func _on_item_quick_slot_popup_input(event: InputEvent) -> void:
+	# PopupPanel owns a separate viewport, so its touch stream does not reach the
+	# SceneTree-root support node automatically. Window input positions are local
+	# to that popup; translate them to screen coordinates before forwarding into
+	# the shared policy. Taps still continue to the candidate Buttons.
+	if (
+		_touch_scroll_support != null
+		and (event is InputEventScreenTouch or event is InputEventScreenDrag)
+	):
+		var screen_event := event.duplicate() as InputEvent
+		if screen_event is InputEventScreenTouch:
+			(screen_event as InputEventScreenTouch).position += Vector2(item_quick_slot_menu.position)
+		else:
+			(screen_event as InputEventScreenDrag).position += Vector2(item_quick_slot_menu.position)
+		_touch_scroll_support.call("_input", screen_event)
+
+
+func _layout_native_item_icon(icon: TextureRect, texture: Texture2D, bounds: Vector2, maximum_size := Vector2.ZERO) -> void:
+	if texture == null:
+		icon.position = bounds * 0.5
+		icon.size = Vector2.ZERO
+		return
+	icon.size = texture.get_size()
+	if maximum_size.x > 0.0 and maximum_size.y > 0.0:
+		icon.size *= minf(maximum_size.x / icon.size.x, maximum_size.y / icon.size.y)
+	icon.position = (bounds - icon.size) * 0.5
+
+
+func _clear_item_quick_slot_picker() -> void:
+	item_quick_slot_candidate_buttons.clear()
+	for child: Node in _item_quick_slot_menu_list.get_children():
+		_item_quick_slot_menu_list.remove_child(child)
+		child.queue_free()
+
+
+func _item_quick_slot_picker_content_size(candidate_count: int) -> Vector2:
+	if candidate_count <= 0:
+		return Vector2.ZERO
+	return Vector2(
+		ITEM_QUICK_SLOT_PICKER_CARD_SIZE.x,
+		ITEM_QUICK_SLOT_PICKER_CARD_SIZE.y * candidate_count
+			+ ITEM_QUICK_SLOT_PICKER_GAP * maxi(0, candidate_count - 1),
+	)
+
+
+func _add_item_quick_slot_candidate(candidate: Dictionary, id: int, visual_row: int) -> void:
+	var item_name := str(candidate.get("item_name", ""))
+	var count := int(candidate.get("count", 0))
+	var card := Button.new()
+	card.name = "ItemQuickSlotCandidate%d" % id
+	card.position = Vector2(0, visual_row * (ITEM_QUICK_SLOT_PICKER_CARD_SIZE.y + ITEM_QUICK_SLOT_PICKER_GAP))
+	card.size = ITEM_QUICK_SLOT_PICKER_CARD_SIZE
+	card.custom_minimum_size = ITEM_QUICK_SLOT_PICKER_CARD_SIZE
+	card.text = ""
+	card.tooltip_text = "%s × %d" % [item_name, count]
+	card.accessibility_name = "%s，数量 %d" % [item_name, count]
+	card.set_meta("accessibility_text", card.tooltip_text)
+	card.set_meta("candidate_id", id)
+	card.set_meta("item_name", item_name)
+	card.set_meta("entity_id", str(candidate.get("entity_id", "")))
+	card.set_meta("count", count)
+	card.pressed.connect(_on_item_quick_slot_menu_pressed.bind(id))
+	_item_quick_slot_menu_list.add_child(card)
+	item_quick_slot_candidate_buttons.append(card)
+	var record := GameData.get_entity_record(str(candidate.get("entity_id", "")))
+	var texture := UIItemTextureCacheScript.texture_for(record, "inventoryIcon")
+	var icon := TextureRect.new()
+	icon.name = "InventoryIcon"
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon.texture = texture
+	icon.visible = texture != null
+	_layout_native_item_icon(icon, texture, card.size, GameData.get_item_art_display_size(record))
+	card.add_child(icon)
+	var count_label := Label.new()
+	count_label.name = "Count"
+	count_label.position = Vector2(card.size.x - 28, card.size.y - 20)
+	count_label.size = Vector2(24, 16)
+	count_label.text = str(count)
+	count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	count_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	count_label.add_theme_font_size_override("font_size", 13)
+	count_label.add_theme_color_override("font_color", Color("f2c783"))
+	count_label.add_theme_color_override("font_shadow_color", Color.BLACK)
+	count_label.add_theme_constant_override("shadow_offset_x", 1)
+	count_label.add_theme_constant_override("shadow_offset_y", 1)
+	card.add_child(count_label)
+
+
+func _add_item_quick_slot_empty_state() -> void:
+	var label := Label.new()
+	label.name = "EmptyState"
+	label.size = Vector2(180, 56)
+	label.text = "暂无可快捷物品"
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_item_quick_slot_menu_list.add_child(label)
+
+
+func _popup_item_quick_slot_picker(button: Button, content_size: Vector2) -> void:
+	var safe_root := get_node_or_null("MobileSafeRoot") as Control
+	if safe_root == null:
+		return
+	var safe_rect := Rect2(safe_root.get_screen_position(), safe_root.size)
+	var slot_rect := Rect2(button.get_screen_position(), button.size)
+	var available_height := maxf(0.0, slot_rect.position.y - ITEM_QUICK_SLOT_PICKER_GAP - safe_rect.position.y)
+	var popup_size := Vector2(
+		content_size.x + ITEM_QUICK_SLOT_PICKER_PADDING * 2.0,
+		minf(content_size.y + ITEM_QUICK_SLOT_PICKER_PADDING * 2.0, minf(ITEM_QUICK_SLOT_PICKER_MAX_HEIGHT, available_height)),
+	)
+	if popup_size.y <= 0.0:
+		return
+	var popup_position := Vector2(
+		slot_rect.get_center().x - popup_size.x * 0.5,
+		slot_rect.position.y - ITEM_QUICK_SLOT_PICKER_GAP - popup_size.y,
+	)
+	popup_position.x = clampf(popup_position.x, safe_rect.position.x, safe_rect.end.x - popup_size.x)
+	popup_position.y = maxf(popup_position.y, safe_rect.position.y)
+	_item_quick_slot_menu_scroll.position = Vector2(ITEM_QUICK_SLOT_PICKER_PADDING, ITEM_QUICK_SLOT_PICKER_PADDING)
+	_item_quick_slot_menu_scroll.size = popup_size - Vector2.ONE * ITEM_QUICK_SLOT_PICKER_PADDING * 2.0
+	# PopupPanel derives its initial window size from child minimum sizes and may
+	# collapse a manually positioned ScrollContainer to the panel border. Apply
+	# the computed safe-area window size after popup so it remains authoritative.
+	item_quick_slot_menu.popup(Rect2i(Vector2i(popup_position.round()), Vector2i(popup_size.round())))
+	item_quick_slot_menu.position = Vector2i(popup_position.round())
+	item_quick_slot_menu.size = Vector2i(popup_size.round())
+	# PopupPanel may reconcile its minimum size after popup() once the themed
+	# panel margins are applied. Re-anchor from the final control rect so the
+	# visible frame remains centered on the held slot and the scroll margins stay
+	# symmetric even when that reconciliation changes width or height.
+	_recenter_item_quick_slot_picker.call_deferred(button)
+	_scroll_item_quick_slot_menu_to_bottom.call_deferred()
+
+
+func _recenter_item_quick_slot_picker(button: Button) -> void:
+	if item_quick_slot_menu == null or not item_quick_slot_menu.visible or button == null:
+		return
+	var safe_root := get_node_or_null("MobileSafeRoot") as Control
+	if safe_root == null:
+		return
+	var safe_rect := Rect2(safe_root.get_screen_position(), safe_root.size)
+	var slot_rect := Rect2(button.get_screen_position(), button.size)
+	var final_size := Vector2(item_quick_slot_menu.size)
+	if final_size.x <= 0.0 or final_size.y <= 0.0:
+		return
+	var final_position := Vector2(
+		slot_rect.get_center().x - final_size.x * 0.5,
+		slot_rect.position.y - ITEM_QUICK_SLOT_PICKER_GAP - final_size.y,
+	)
+	final_position.x = clampf(final_position.x, safe_rect.position.x, safe_rect.end.x - final_size.x)
+	final_position.y = maxf(final_position.y, safe_rect.position.y)
+	item_quick_slot_menu.position = Vector2i(final_position.round())
+	_item_quick_slot_menu_scroll.position = Vector2.ONE * ITEM_QUICK_SLOT_PICKER_PADDING
+	_item_quick_slot_menu_scroll.size = final_size - Vector2.ONE * ITEM_QUICK_SLOT_PICKER_PADDING * 2.0
+
+
+func _scroll_item_quick_slot_menu_to_bottom() -> void:
+	if _item_quick_slot_menu_scroll == null:
+		return
+	_item_quick_slot_menu_scroll.scroll_vertical = int(maxf(
+		0.0,
+		_item_quick_slot_menu_list.size.y - _item_quick_slot_menu_scroll.size.y,
+	))
+
+
+func _assign_item_quick_slot(slot_index: int, item_id: String) -> void:
+	if slot_index < 0 or slot_index >= ITEM_QUICK_SLOT_COUNT or item_id.is_empty():
+		return
+	item_quick_slots[slot_index] = item_id
+	update_item_quick_slots()
+	item_quick_slot_assignment_requested.emit(slot_index, item_id)
+
+
+func _build_combat_controls(root: Control) -> void:
+	var joystick_art := TextureRect.new()
+	joystick_art.name = "JoystickArt"
+	joystick_art.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
+	_apply_control_rect(joystick_art, HUD_JOYSTICK_RECT)
+	joystick_art.texture = HUDJoystickTexture
+	joystick_art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	joystick_art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	joystick_art.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	joystick_art.set_meta("stable_id", "ui.hud.gothic.v2.joystick")
+	root.add_child(joystick_art)
+
+	movement_joystick = TouchJoystick.new()
+	var joystick := movement_joystick
+	joystick.name = "TouchJoystick"
+	joystick.radius = 69.6
+	joystick.knob_radius = 28.8
+	joystick.external_frame = true
+	joystick.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
+	_apply_control_rect(joystick, HUD_JOYSTICK_RECT)
+	joystick.vector_changed.connect(func(value: Vector2) -> void: movement_changed.emit(value))
+	root.add_child(joystick)
+
+	warrior_state_label = Label.new()
+	warrior_state_label.name = "WarriorStateLabel"
+	warrior_state_label.set_anchors_preset(Control.PRESET_CENTER_TOP)
+	warrior_state_label.offset_left = 350
+	warrior_state_label.offset_top = -250
+	warrior_state_label.offset_right = -350
+	warrior_state_label.offset_bottom = -222
+	warrior_state_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	warrior_state_label.add_theme_font_size_override("font_size", 15)
+	warrior_state_label.add_theme_color_override("font_color", Color("efbd70"))
+	root.add_child(warrior_state_label)
+	_anchor_warrior_state_label(root)
+	# The label is positioned from the chassis' true screen-center geometry.
+	# Register it after anchoring so safe-area correction moves it with the
+	# chassis instead of leaving the warrior toggle at the safe-area midpoint.
+	_register_center_exempt(warrior_state_label)
+
+	_add_bottom_right_fill(root, "AttackFill", Rect2(HUD_ATTACK_CENTER - HUD_ATTACK_FILL_SIZE * 0.5, HUD_ATTACK_FILL_SIZE), "GothicArtAttackFill")
+	# Art and hit testing share exactly the same circle, without the old
+	# invisible 110px-wide rectangular utility hit regions.
+	for utility in [
+		{"name": "Interact", "text": "交互", "center": HUD_INTERACT_CENTER},
+		{"name": "SwitchTarget", "text": "换敌", "center": HUD_SWITCH_TARGET_CENTER},
+	]:
+		var center: Vector2 = utility.center
+		_add_bottom_right_fill(root, utility.name + "Fill", Rect2(center - Vector2(31.2, 31.2), Vector2(62.4, 62.4)), "GothicArtCircleFill")
+		_add_bottom_right_action_frame(root, utility.name + "Frame", Rect2(center - HUD_UTILITY_BUTTON_SIZE * 0.5, HUD_UTILITY_BUTTON_SIZE), "ui.hud.gothic.v3." + ("interact_frame" if utility.name == "Interact" else "switch_target_frame"))
+		var button := HUDUtilityTouchButtonScript.new()
+		button.name = utility.name + "Button"
+		button.theme_type_variation = "GothicTransparentButton"
+		button.text = utility.text
+		button.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+		_apply_control_rect(button, Rect2(center - HUD_UTILITY_BUTTON_SIZE * 0.5, HUD_UTILITY_BUTTON_SIZE))
+		button.add_theme_font_size_override("font_size", 20)
+		button.lifecycle_enabled = true
+		root.add_child(button)
+		if utility.name == "Interact":
+			button.input_started.connect(func(_token: int, _pointer: int, _source: StringName) -> void: interact_pressed.emit())
+		else:
+			button.tap_completed.connect(func() -> void: target_switch_pressed.emit())
+
+	attack_button = CircularTouchButtonScript.new()
+	attack_button.name = "AttackButton"
+	attack_button.theme_type_variation = "GothicTransparentButton"
+	attack_button.text = "攻击"
+	attack_button.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+	_apply_control_rect(attack_button, Rect2(HUD_ATTACK_CENTER - HUD_ATTACK_BUTTON_SIZE * 0.5, HUD_ATTACK_BUTTON_SIZE))
+	attack_button.add_theme_font_size_override("font_size", 24)
+	attack_button.text = ""
+	attack_button.set("lifecycle_enabled", true)
+	attack_button.connect("input_started", _on_attack_input_started)
+	attack_button.connect("input_ended", _on_attack_input_ended)
+	attack_button.connect("input_cancelled", _on_attack_input_cancelled)
+	attack_button.set_meta("stable_id", "hud.attack.primary")
+	attack_button.set_meta(
+		"input_lifecycle_contract",
+		CircularTouchButtonScript.INPUT_LIFECYCLE_CONTRACT_ID,
+	)
+	attack_button.set_meta("assignment_group", "attack")
+	attack_button.set_meta("assignment_contract", "ui.skill.button_assignment.v3")
+	attack_button.set_meta("circular_touch", true)
+	attack_button.set_meta("touch_radius", HUD_ATTACK_BUTTON_SIZE.x * 0.5)
+	attack_button.set_meta("center_offset", HUD_ATTACK_CENTER)
+	root.add_child(attack_button)
+	attack_slot_icon = TextureRect.new()
+	attack_slot_icon.name = "AssignedSkillIcon"
+	attack_slot_icon.position = (attack_button.size - HUD_ATTACK_ICON_SIZE) * 0.5
+	attack_slot_icon.size = HUD_ATTACK_ICON_SIZE
+	attack_slot_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	attack_slot_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	attack_slot_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	attack_slot_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	attack_slot_icon.material = _circular_icon_material()
+	attack_slot_icon.set_meta("circular_clip", true)
+	attack_button.add_child(attack_slot_icon)
+	attack_slot_label = Label.new()
+	attack_slot_label.name = "AssignedSkillLabel"
+	attack_slot_label.position = Vector2.ZERO
+	attack_slot_label.size = attack_button.size
+	attack_slot_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	attack_slot_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	attack_slot_label.add_theme_font_size_override("font_size", 13)
+	attack_slot_label.add_theme_color_override("font_color", Color("f4e2bd"))
+	attack_slot_label.add_theme_color_override("font_outline_color", Color("120d0a"))
+	attack_slot_label.add_theme_constant_override("outline_size", 3)
+	attack_slot_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	attack_button.add_child(attack_slot_label)
+
+	_add_bottom_right_action_frame(
+		root,
+		"AttackFrame",
+		Rect2(HUD_ATTACK_CENTER - HUD_ATTACK_FRAME_SIZE * 0.5, HUD_ATTACK_FRAME_SIZE),
+		"ui.hud.gothic.v3.attack_frame",
+	)
+
+	for index in range(HUD_ATTACK_RING_COUNT):
+		var ring_skill := CircularTouchButtonScript.new()
+		ring_skill.name = "AttackRingSkill%d" % (index + 1)
+		ring_skill.theme_type_variation = "GothicTransparentButton"
+		ring_skill.text = ""
+		ring_skill.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+		var ring_center := _attack_ring_center(index)
+		var rect := Rect2(ring_center - HUD_ATTACK_RING_BUTTON_SIZE * 0.5, HUD_ATTACK_RING_BUTTON_SIZE)
+		_apply_control_rect(ring_skill, rect)
+		ring_skill.set("lifecycle_enabled", true)
+		ring_skill.connect(
+			"input_started",
+			_on_skill_input_started.bind("attack_ring", index)
+		)
+		ring_skill.connect(
+			"input_ended",
+			_on_skill_input_ended.bind("attack_ring", index)
+		)
+		ring_skill.connect(
+			"input_cancelled",
+			_on_skill_input_cancelled.bind("attack_ring", index)
+		)
+		ring_skill.set_meta("stable_id", "hud.attack_ring_skill.%d" % (index + 1))
+		ring_skill.set_meta(
+			"input_lifecycle_contract",
+			CircularTouchButtonScript.INPUT_LIFECYCLE_CONTRACT_ID,
+		)
+		ring_skill.set_meta("assignment_contract", "ui.skill.button_assignment.v3")
+		ring_skill.set_meta("circular_touch", true)
+		ring_skill.set_meta("touch_radius", HUD_ATTACK_RING_BUTTON_SIZE.x * 0.5)
+		ring_skill.set_meta("ring_radius", HUD_ATTACK_RING_RADIUS)
+		ring_skill.set_meta("ring_angle_degrees", HUD_ATTACK_RING_START_DEGREES + HUD_ATTACK_RING_STEP_DEGREES * index)
+		ring_skill.set_meta("center_offset", ring_center)
+		root.add_child(ring_skill)
+		attack_ring_skill_buttons.append(ring_skill)
+		var ring_backdrop := Panel.new()
+		ring_backdrop.name = "SkillBackdrop"
+		ring_backdrop.theme_type_variation = "GothicArtCircleFill"
+		ring_backdrop.position = (HUD_ATTACK_RING_BUTTON_SIZE - HUD_ATTACK_RING_BACKDROP_SIZE) * 0.5
+		ring_backdrop.size = HUD_ATTACK_RING_BACKDROP_SIZE
+		ring_backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		ring_skill.add_child(ring_backdrop)
+		attack_ring_skill_backdrops.append(ring_backdrop)
+		var ring_icon := TextureRect.new()
+		ring_icon.name = "SkillIcon"
+		ring_icon.position = (HUD_ATTACK_RING_BUTTON_SIZE - HUD_ATTACK_RING_ICON_SIZE) * 0.5
+		ring_icon.size = HUD_ATTACK_RING_ICON_SIZE
+		ring_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		ring_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		ring_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		ring_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		ring_icon.material = _circular_icon_material()
+		ring_icon.set_meta("icon_source", "quick_slot")
+		ring_icon.set_meta("circular_clip", true)
+		ring_skill.add_child(ring_icon)
+		attack_ring_skill_icons.append(ring_icon)
+		var ring_frame := TextureRect.new()
+		ring_frame.name = "RoundActionFrame"
+		ring_frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		ring_frame.texture = HUDAssetSanitizer.without_action_frame_inner_dark_rim(
+			HUDRoundActionFrameTexture
+		)
+		ring_frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		ring_frame.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		ring_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		ring_frame.set_meta(
+			"visual_inner_rim_mask",
+			HUDAssetSanitizer.ACTION_FRAME_INNER_DARK_RIM_MASK_ID,
+		)
+		ring_skill.add_child(ring_frame)
+		var ring_label := Label.new()
+		ring_label.name = "SkillLabel"
+		ring_label.position = Vector2(4.8, 4.8)
+		ring_label.size = HUD_ATTACK_RING_BUTTON_SIZE - Vector2(9.6, 9.6)
+		ring_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		ring_label.vertical_alignment = VERTICAL_ALIGNMENT_BOTTOM
+		ring_label.add_theme_font_size_override("font_size", 13)
+		ring_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		ring_skill.add_child(ring_label)
+		attack_ring_skill_labels.append(ring_label)
+
+
+
+func cancel_attack_inputs(reason: StringName = &"hud_cancel") -> void:
+	if attack_button != null:
+		attack_button.call("cancel_all_inputs", reason)
+
+
+func cancel_skill_inputs(reason: StringName = &"hud_cancel") -> void:
+	for button: Button in attack_ring_skill_buttons:
+		if is_instance_valid(button) and button.has_method("cancel_all_inputs"):
+			button.call("cancel_all_inputs", reason)
+	var root := get_node_or_null("MobileSafeRoot")
+	if root != null:
+		for name: String in ["InteractButton", "SwitchTargetButton"]:
+			var button := root.get_node_or_null(name)
+			if button != null:
+				button.cancel_all_inputs(reason)
+
+
+func _on_attack_input_started(
+	press_token: int,
+	touch_id: int,
+	source: StringName
+) -> void:
+	attack_input_started.emit(press_token, touch_id, source)
+	attack_pressed.emit()
+
+
+func _on_attack_input_ended(
+	press_token: int,
+	touch_id: int,
+	source: StringName
+) -> void:
+	attack_input_ended.emit(press_token, touch_id, source)
+	attack_released.emit()
+
+
+func _on_attack_input_cancelled(
+	press_token: int,
+	touch_id: int,
+	source: StringName,
+	reason: StringName
+) -> void:
+	attack_input_cancelled.emit(press_token, touch_id, source, reason)
+	# The legacy release signal remains the safety boundary for callers that have
+	# not migrated to token-aware cancellation yet.
+	attack_released.emit()
+
+
+func _on_skill_input_started(
+	press_token: int,
+	touch_id: int,
+	source: StringName,
+	slot_group: String,
+	slot_index: int
+) -> void:
+	skill_input_started.emit(
+		slot_group,
+		slot_index,
+		press_token,
+		touch_id,
+		source
+	)
+
+
+func _on_skill_input_ended(
+	press_token: int,
+	touch_id: int,
+	source: StringName,
+	slot_group: String,
+	slot_index: int
+) -> void:
+	skill_input_ended.emit(
+		slot_group,
+		slot_index,
+		press_token,
+		touch_id,
+		source
+	)
+
+
+func _on_skill_input_cancelled(
+	press_token: int,
+	touch_id: int,
+	source: StringName,
+	reason: StringName,
+	slot_group: String,
+	slot_index: int
+) -> void:
+	skill_input_cancelled.emit(
+		slot_group,
+		slot_index,
+		press_token,
+		touch_id,
+		source,
+		reason
+	)
+
+
+# P1-C: Lazy-loaded modal panels. Each _ensure_*_panel() creates the
+# panel on first access so HUD startup time and memory peak are reduced.
+
+func _ensure_inventory_panel() -> void:
+	if is_instance_valid(inventory_panel):
+		return
+	var panel_script := load(INVENTORY_PANEL_SCRIPT_PATH) as Script
+	if panel_script == null:
+		return
+	inventory_panel = panel_script.new()
+	if inventory_panel == null:
+		return
+	inventory_panel.hide()
+	add_child(inventory_panel)
+
+
+func _ensure_enhancement_panel() -> void:
+	if is_instance_valid(enhancement_panel):
+		return
+	var panel_script := load(ENHANCEMENT_PANEL_SCRIPT_PATH) as Script
+	if panel_script == null:
+		return
+	enhancement_panel = panel_script.new()
+	if enhancement_panel == null:
+		return
+	enhancement_panel.hide()
+	add_child(enhancement_panel)
+	enhancement_panel.visibility_changed.connect(_sync_target_bar_for_forge)
+	_sync_target_bar_for_forge()
+
+
+func _sync_target_bar_for_forge() -> void:
+	if target_panel != null:
+		target_panel.visible = not (is_instance_valid(enhancement_panel) and enhancement_panel.visible)
+
+
+func _ensure_shop_panel() -> void:
+	if is_instance_valid(shop_panel):
+		return
+	var panel_script := load(SHOP_PANEL_SCRIPT_PATH) as Script
+	if panel_script == null:
+		return
+	shop_panel = panel_script.new()
+	if shop_panel == null:
+		return
+	shop_panel.hide()
+	shop_panel.buy_quotes_requested.connect(
+		func(stock: Array) -> void: shop_buy_quotes_requested.emit(stock)
+	)
+	shop_panel.buy_requested.connect(
+		func(request: Dictionary) -> void: shop_buy_requested.emit(request)
+	)
+	shop_panel.sell_quotes_requested.connect(
+		func(items: Array) -> void: shop_sell_quotes_requested.emit(items)
+	)
+	shop_panel.sell_requested.connect(
+		func(request: Dictionary) -> void: shop_sell_requested.emit(request)
+	)
+	add_child(shop_panel)
+
+
+func _ensure_skill_panel() -> void:
+	if is_instance_valid(skill_panel):
+		return
+	var panel_script := load(SKILL_PANEL_SCRIPT_PATH) as Script
+	if panel_script == null:
+		return
+	skill_panel = panel_script.new()
+	if skill_panel == null:
+		return
+	skill_panel.hide()
+	skill_panel.quick_slot_assignment_requested.connect(
+		func(request: Dictionary) -> void: skill_quick_slot_assignment_requested.emit(request)
+	)
+	skill_panel.skill_button_assignment_requested.connect(
+		func(request: Dictionary) -> void: skill_button_assignment_requested.emit(request)
+	)
+	add_child(skill_panel)
+
+
+func start_budgeted_panel_prewarm(system_menu_panel: Control = null) -> void:
+	if _background_prewarm_requested or _all_panels_prewarmed:
+		return
+	_background_prewarm_requested = true
+	_run_panel_prewarm.call_deferred(system_menu_panel, true)
+
+
+func prewarm_all_panels(system_menu_panel: Control = null) -> void:
+	await _run_panel_prewarm(system_menu_panel, false)
+
+
+func _report_panel_prewarm_progress(background_mode: bool, completed: float, stage: String) -> void:
+	if not background_mode and is_instance_valid(loading_transition_overlay):
+		update_loading_progress(loading_transition_overlay.transition_id, completed, stage)
+
+
+func _run_panel_prewarm(system_menu_panel: Control = null, background_mode: bool = false) -> void:
+	if _all_panels_prewarmed:
+		return
+	if _panel_prewarm_in_progress:
+		# Explicit load-time callers must not wait behind an optional UI idle gate.
+		if not background_mode:
+			_ui_l1_finish_explicit_prewarm = true
+		while _panel_prewarm_in_progress and is_inside_tree():
+			await get_tree().process_frame
+		if not background_mode:
+			_ui_l1_finish_explicit_prewarm = false
+		return
+	_panel_prewarm_in_progress = true
+	var prewarm_started_usec := Time.get_ticks_usec()
+	_panel_prewarm_diagnostic = {
+		"started_at_usec": prewarm_started_usec,
+		"completed": false,
+		"construction_ms_by_panel": {},
+		"background_mode": background_mode,
+	}
+	_panel_prewarm_diagnostic["script_prefetch"] = await _prefetch_panel_scripts(background_mode)
+	_report_panel_prewarm_progress(background_mode, 0.84, "界面资源已准备")
+	_start_catalog_icon_prewarm.call_deferred(background_mode)
+	var panel_started_usec := 0
+	if not await _ui_l1_wait_for_background_slot(background_mode):
+		_panel_prewarm_in_progress = false
+		return
+	panel_started_usec = Time.get_ticks_usec()
+	_ensure_inventory_panel()
+	_panel_prewarm_diagnostic["construction_ms_by_panel"]["inventory"] = (
+		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
+	)
+	_report_panel_prewarm_progress(background_mode, 0.86, "背包已准备")
+	await get_tree().process_frame
+	if not await _ui_l1_wait_for_background_slot(background_mode):
+		_panel_prewarm_in_progress = false
+		return
+	panel_started_usec = Time.get_ticks_usec()
+	_ensure_enhancement_panel()
+	_panel_prewarm_diagnostic["construction_ms_by_panel"]["enhancement"] = (
+		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
+	)
+	_report_panel_prewarm_progress(background_mode, 0.88, "强化界面已准备")
+	await get_tree().process_frame
+	if not await _ui_l1_wait_for_background_slot(background_mode):
+		_panel_prewarm_in_progress = false
+		return
+	panel_started_usec = Time.get_ticks_usec()
+	_ensure_shop_panel()
+	_panel_prewarm_diagnostic["construction_ms_by_panel"]["shop"] = (
+		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
+	)
+	_report_panel_prewarm_progress(background_mode, 0.90, "商店已准备")
+	await get_tree().process_frame
+	if not await _ui_l1_wait_for_background_slot(background_mode):
+		_panel_prewarm_in_progress = false
+		return
+	panel_started_usec = Time.get_ticks_usec()
+	_ensure_warehouse_panel()
+	_panel_prewarm_diagnostic["construction_ms_by_panel"]["warehouse"] = (
+		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
+	)
+	_report_panel_prewarm_progress(background_mode, 0.92, "仓库已准备")
+	await get_tree().process_frame
+	if not await _ui_l1_wait_for_background_slot(background_mode):
+		_panel_prewarm_in_progress = false
+		return
+	panel_started_usec = Time.get_ticks_usec()
+	_ensure_map_panel()
+	_panel_prewarm_diagnostic["construction_ms_by_panel"]["map"] = (
+		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
+	)
+	_report_panel_prewarm_progress(background_mode, 0.93, "地图界面已准备")
+	await get_tree().process_frame
+	if not await _ui_l1_wait_for_background_slot(background_mode):
+		_panel_prewarm_in_progress = false
+		return
+	panel_started_usec = Time.get_ticks_usec()
+	_ensure_skill_panel()
+	_panel_prewarm_diagnostic["construction_ms_by_panel"]["skill"] = (
+		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
+	)
+	_report_panel_prewarm_progress(background_mode, 0.94, "技能界面已准备")
+	await get_tree().process_frame
+	if not await _ui_l1_wait_for_background_slot(background_mode):
+		_panel_prewarm_in_progress = false
+		return
+	panel_started_usec = Time.get_ticks_usec()
+	_ensure_quest_panel()
+	_panel_prewarm_diagnostic["construction_ms_by_panel"]["quest"] = (
+		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
+	)
+	_report_panel_prewarm_progress(background_mode, 0.95, "任务界面已准备")
+	await get_tree().process_frame
+	if not await _ui_l1_wait_for_background_slot(background_mode):
+		_panel_prewarm_in_progress = false
+		return
+	panel_started_usec = Time.get_ticks_usec()
+	_ensure_death_revival_panel()
+	_panel_prewarm_diagnostic["construction_ms_by_panel"]["death_revival"] = (
+		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
+	)
+	_report_panel_prewarm_progress(background_mode, 0.96, "交互界面已准备")
+	# SkillPanel intentionally refreshes only when opened. Run the same public
+	# refresh once while hidden so its dynamic cards, icons and saved profile are
+	# ready before the first interaction as well.
+	if not await _ui_l1_wait_for_background_slot(background_mode):
+		_panel_prewarm_in_progress = false
+		return
+	skill_panel.refresh()
+	if inventory_panel.has_method("wait_until_runtime_ready"):
+		await inventory_panel.wait_until_runtime_ready()
+	if enhancement_panel.has_method("wait_until_runtime_ready"):
+		await enhancement_panel.wait_until_runtime_ready()
+	if warehouse_panel.has_method("wait_until_runtime_ready"):
+		await warehouse_panel.wait_until_runtime_ready()
+	_panel_prewarm_diagnostic["construction_ms"] = (
+		(Time.get_ticks_usec() - prewarm_started_usec) / 1000.0
+	)
+	var panels: Array[Control] = [
+		inventory_panel,
+		enhancement_panel,
+		shop_panel,
+		skill_panel,
+		quest_panel,
+		map_panel,
+		warehouse_panel,
+		death_revival_panel,
+	]
+	if is_instance_valid(system_menu_panel):
+		panels.append(system_menu_panel)
+	if not background_mode:
+		for panel: Control in panels:
+			panel.hide()
+	# Each layout profile runs multiple frame-separated passes. Keep every
+	# reusable panel hidden until its initial contract has reached the final
+	# geometry pass, so first-open can only expose the finished frame.
+	var initial_profiles: Array = [
+		[inventory_panel, "inventory"],
+		[enhancement_panel, "forge"],
+		[shop_panel, "shop_buy"],
+		[skill_panel, "skill"],
+		[quest_panel, "quest"],
+		[map_panel, "map"],
+		[warehouse_panel, "warehouse"],
+		[death_revival_panel, "death_revival"],
+	]
+	if is_instance_valid(system_menu_panel):
+		initial_profiles.append([system_menu_panel, "system_menu"])
+	var initial_wait_frames := await _wait_for_layout_profiles(initial_profiles)
+	_panel_prewarm_diagnostic["initial_profiles_wait_frames"] = initial_wait_frames
+	_report_panel_prewarm_progress(background_mode, 0.98, "界面布局已就位")
+	_panel_prewarm_diagnostic["initial_profiles_elapsed_ms"] = (
+		(Time.get_ticks_usec() - prewarm_started_usec) / 1000.0
+	)
+	# The shop owns two independent saved layouts. Warm the sell layout without
+	# requesting quotes or changing its business state, then restore buy.
+	var shop_sell_wait_frames := 0
+	var shop_buy_wait_frames := 0
+	var may_warm_alternate_shop: bool = (
+		not background_mode
+		or (not _panel_prewarm_user_interaction and not shop_panel.visible)
+	)
+	if may_warm_alternate_shop:
+		shop_panel.call("_apply_layout_profile_once", "shop_sell")
+		shop_sell_wait_frames = await _wait_for_layout_profiles([[shop_panel, "shop_sell"]])
+		shop_panel.call("_apply_layout_profile_once", "shop_buy")
+		shop_buy_wait_frames = await _wait_for_layout_profiles([[shop_panel, "shop_buy"]])
+	_panel_prewarm_diagnostic["shop_sell_wait_frames"] = shop_sell_wait_frames
+	_panel_prewarm_diagnostic["shop_buy_wait_frames"] = shop_buy_wait_frames
+	_panel_prewarm_diagnostic["shop_alternate_profile_warmed"] = may_warm_alternate_shop
+	_panel_prewarm_diagnostic["shop_profiles_elapsed_ms"] = (
+		(Time.get_ticks_usec() - prewarm_started_usec) / 1000.0
+	)
+	# Shop and quest already own the reusable public confirmation dialog.
+	var confirmation_profiles: Array = []
+	if is_instance_valid(shop_panel.sell_confirmation):
+		confirmation_profiles.append([shop_panel.sell_confirmation, "confirmation_dialog"])
+	if is_instance_valid(quest_panel.abandon_confirmation):
+		confirmation_profiles.append([quest_panel.abandon_confirmation, "confirmation_dialog"])
+	var confirmation_wait_frames := await _wait_for_layout_profiles(confirmation_profiles)
+	_panel_prewarm_diagnostic["confirmation_wait_frames"] = confirmation_wait_frames
+	# Flush deferred grid/list stabilizers once more while hidden.
+	await get_tree().process_frame
+	if not background_mode:
+		for panel: Control in panels:
+			panel.hide()
+	var readiness_profiles := initial_profiles + confirmation_profiles
+	if may_warm_alternate_shop:
+		readiness_profiles += [[shop_panel, "shop_sell"], [shop_panel, "shop_buy"]]
+	_all_panels_prewarmed = _profiles_are_ready(readiness_profiles)
+	_panel_prewarm_diagnostic["completed"] = _all_panels_prewarmed
+	if _all_panels_prewarmed:
+		_report_panel_prewarm_progress(background_mode, 0.99, "进入游戏")
+	_panel_prewarm_diagnostic["catalog_icon_prewarm_complete"] = _catalog_icon_prewarm_complete
+	_panel_prewarm_diagnostic["catalog_icon_pending"] = UIItemTextureCacheScript.threaded_pending_count()
+	_panel_prewarm_diagnostic["total_ms"] = (
+		(Time.get_ticks_usec() - prewarm_started_usec) / 1000.0
+	)
+	_panel_prewarm_in_progress = false
+	if OS.is_debug_build():
+		print("[UIPanelPrewarmProfile] ", JSON.stringify(_panel_prewarm_diagnostic))
+
+
+func _prefetch_panel_scripts(background_mode := false) -> Dictionary:
+	var paths: Array[String] = [
+		INVENTORY_PANEL_SCRIPT_PATH,
+		ENHANCEMENT_PANEL_SCRIPT_PATH,
+		MAP_PANEL_SCRIPT_PATH,
+		SKILL_PANEL_SCRIPT_PATH,
+		QUEST_PANEL_SCRIPT_PATH,
+		WAREHOUSE_PANEL_SCRIPT_PATH,
+		SHOP_PANEL_SCRIPT_PATH,
+	]
+	var pending := _panel_script_pending
+	var request_failures: Array[String] = []
+	var covered_loads := 0
+	for path: String in paths:
+		# Godot 4.7's threaded GDScript dependency loader can leave zero-ref
+		# objects after every request was collected. Only explicit opaque
+		# Loading admits a main-thread script load; yield between scripts so
+		# the overlay can present. Live/background work keeps the async path.
+		if (
+			not background_mode
+			and is_instance_valid(loading_transition_overlay)
+			and loading_transition_overlay.is_visible_in_tree()
+		):
+			var panel_script := ResourceLoader.load(path) as Script
+			if panel_script != null:
+				_panel_script_warm_refs.append(panel_script)
+			else:
+				request_failures.append("%s:null" % path)
+			covered_loads += 1
+			await get_tree().process_frame
+			if not is_inside_tree():
+				break
+			continue
+		var error := ResourceLoader.load_threaded_request(path)
+		if error == OK:
+			pending[path] = true
+		elif ResourceLoader.load_threaded_get_status(path) == ResourceLoader.THREAD_LOAD_LOADED:
+			pending[path] = true
+		else:
+			request_failures.append("%s:%d" % [path, error])
+	var waited_frames := 0
+	# Seven panels include the forge's large inherited inventory script. Keep
+	# polling while Loading covers construction, with a finite failure bound.
+	while not pending.is_empty() and waited_frames < 300 and is_inside_tree():
+		for path: String in pending.keys().duplicate():
+			var status := ResourceLoader.load_threaded_get_status(path)
+			if status == ResourceLoader.THREAD_LOAD_LOADED:
+				var panel_script := ResourceLoader.load_threaded_get(path) as Script
+				if panel_script != null:
+					_panel_script_warm_refs.append(panel_script)
+				else:
+					request_failures.append("%s:null" % path)
+				pending.erase(path)
+			elif status == ResourceLoader.THREAD_LOAD_FAILED or status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+				if status == ResourceLoader.THREAD_LOAD_FAILED:
+					ResourceLoader.load_threaded_get(path)
+				request_failures.append("%s:%d" % [path, status])
+				pending.erase(path)
+		if not pending.is_empty():
+			await get_tree().process_frame
+			waited_frames += 1
+	return {
+		"requested": paths.size(),
+		"loaded": _panel_script_warm_refs.size(),
+		"covered_main_thread_loads": covered_loads,
+		"pending": pending.keys(),
+		"failures": request_failures,
+		"waited_frames": waited_frames,
+	}
+
+
+func _start_catalog_icon_prewarm(background_mode: bool = true) -> void:
+	if _catalog_icon_prewarm_complete or _catalog_icon_prewarm_in_progress:
+		return
+	_catalog_icon_prewarm_in_progress = true
+	_catalog_icon_prewarm_background_mode = background_mode
+	_catalog_icon_prewarm_paths.clear()
+	_catalog_icon_prewarm_next_index = 0
+	_catalog_icon_prewarm_poll_frames = 0
+	var seen: Dictionary = {}
+	for raw_record: Variant in GameData.item_catalog:
+		if not raw_record is Dictionary:
+			continue
+		var art: Variant = (raw_record as Dictionary).get("art", {})
+		if not art is Dictionary:
+			continue
+		var raw_icon: Variant = (art as Dictionary).get("inventoryIcon", {})
+		var path := str(raw_icon.get("path", "")) if raw_icon is Dictionary else str(raw_icon)
+		if path.is_empty() or seen.has(path):
+			continue
+		seen[path] = true
+		_catalog_icon_prewarm_paths.append(path)
+
+
+func _advance_catalog_icon_prewarm() -> void:
+	# Run one batch per HUD frame. A suspended member coroutine would resume on
+	# a freed HUD when a map transition destroys this scene mid-prewarm.
+	if not is_inside_tree() or (
+		_catalog_icon_prewarm_background_mode
+		and not _ui_l1_finish_explicit_prewarm
+		and _ui_l1_background_blocked()
+	):
+		return
+	const REQUEST_BATCH := 12
+	if _catalog_icon_prewarm_next_index < _catalog_icon_prewarm_paths.size():
+		var batch: Array[String] = []
+		for path_index in range(
+			_catalog_icon_prewarm_next_index,
+			mini(_catalog_icon_prewarm_next_index + REQUEST_BATCH, _catalog_icon_prewarm_paths.size())
+		):
+			batch.append(_catalog_icon_prewarm_paths[path_index])
+		UIItemTextureCacheScript.request_threaded_paths(batch)
+		UIItemTextureCacheScript.poll_threaded_paths()
+		_catalog_icon_prewarm_next_index += REQUEST_BATCH
+		return
+	if _catalog_icon_prewarm_poll_frames < 120:
+		UIItemTextureCacheScript.poll_threaded_paths()
+		_catalog_icon_prewarm_poll_frames += 1
+		if UIItemTextureCacheScript.threaded_pending_count() > 0:
+			return
+	_catalog_icon_prewarm_complete = UIItemTextureCacheScript.threaded_pending_count() == 0
+	_catalog_icon_prewarm_in_progress = false
+	_catalog_icon_prewarm_paths.clear()
+	_panel_prewarm_diagnostic["catalog_icon_prewarm_complete"] = _catalog_icon_prewarm_complete
+	_panel_prewarm_diagnostic["catalog_icon_pending"] = UIItemTextureCacheScript.threaded_pending_count()
+
+
+func _wait_for_layout_profiles(profiles: Array) -> int:
+	var waited_frames := 0
+	for _frame in 30:
+		if _profiles_are_ready(profiles):
+			break
+		await get_tree().process_frame
+		waited_frames += 1
+	return waited_frames
+
+
+func _profiles_are_ready(profiles: Array) -> bool:
+	for raw_item: Variant in profiles:
+		var item := raw_item as Array
+		if not UIRuntimeLayoutOverridesScript.profile_is_ready(item[0] as Control, str(item[1])):
+			return false
+	return true
+
+
+func all_panels_are_prewarmed() -> bool:
+	return _all_panels_prewarmed
+
+
+func panel_prewarm_diagnostic() -> Dictionary:
+	return _panel_prewarm_diagnostic.duplicate(true)
+
+
+func _ensure_quest_panel() -> void:
+	if is_instance_valid(quest_panel):
+		return
+	var panel_script := load(QUEST_PANEL_SCRIPT_PATH) as Script
+	if panel_script == null:
+		return
+	quest_panel = panel_script.new()
+	if quest_panel == null:
+		return
+	quest_panel.hide()
+	quest_panel.abandon_requested.connect(
+		func(quest_id: String) -> void: quest_abandon_requested.emit(quest_id)
+	)
+	add_child(quest_panel)
+
+
+func _ensure_map_panel() -> void:
+	if is_instance_valid(map_panel):
+		return
+	var panel_script := load(MAP_PANEL_SCRIPT_PATH) as Script
+	if panel_script == null:
+		return
+	map_panel = panel_script.new()
+	if map_panel == null:
+		return
+	map_panel.hide()
+	map_panel.map_selected.connect(func(map_id: int) -> void: map_travel_requested.emit(map_id))
+	map_panel.teleport_requested.connect(func(request: Dictionary) -> void: map_teleport_requested.emit(request))
+	map_panel.teleport_availability_requested.connect(
+		func(map_ids: Array) -> void: map_teleport_availability_requested.emit(map_ids)
+	)
+	add_child(map_panel)
+
+
+func _ensure_warehouse_panel() -> void:
+	if is_instance_valid(warehouse_panel):
+		return
+	var panel_script := load(WAREHOUSE_PANEL_SCRIPT_PATH) as Script
+	if panel_script == null:
+		return
+	warehouse_panel = panel_script.new()
+	if warehouse_panel == null:
+		return
+	warehouse_panel.hide()
+	warehouse_panel.warehouse_sort_requested.connect(
+		func() -> void: warehouse_sort_requested.emit()
+	)
+	add_child(warehouse_panel)
+
+
+func _ensure_death_revival_panel() -> void:
+	if is_instance_valid(death_revival_panel):
+		return
+	death_revival_panel = DeathRevivalPanelScript.new()
+	death_revival_panel.hide()
+	death_revival_panel.revival_requested.connect(
+		func(request: Dictionary) -> void: revival_requested.emit(request)
+	)
+	add_child(death_revival_panel)
+
+
+func _chassis_source_to_local(source_point: Vector2) -> Vector2:
+	return ChassisDesignsScript.source_to_local(ChassisDesignsScript.active_design(), source_point)
+
+
+func _apply_control_rect(control: Control, rect: Rect2) -> void:
+	control.offset_left = rect.position.x
+	control.offset_top = rect.position.y
+	control.offset_right = rect.end.x
+	control.offset_bottom = rect.end.y
+
+
+func _attack_ring_center(index: int) -> Vector2:
+	var angle := deg_to_rad(HUD_ATTACK_RING_START_DEGREES + HUD_ATTACK_RING_STEP_DEGREES * index)
+	return HUD_ATTACK_CENTER + Vector2(cos(angle), sin(angle)) * HUD_ATTACK_RING_RADIUS
+
+
+func _circular_icon_material() -> ShaderMaterial:
+	var result := ShaderMaterial.new()
+	result.shader = HUDCircularIconMaskShader
+	return result
+
+
+func _add_bottom_right_action_frame(
+	root: Control,
+	node_name: String,
+	rect: Rect2,
+	stable_id: String,
+) -> TextureRect:
+	var frame := TextureRect.new()
+	frame.name = node_name
+	frame.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+	frame.offset_left = rect.position.x
+	frame.offset_top = rect.position.y
+	frame.offset_right = rect.end.x
+	frame.offset_bottom = rect.end.y
+	frame.texture = HUDAssetSanitizer.without_action_frame_inner_dark_rim(
+		HUDRoundActionFrameTexture
+	)
+	frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	frame.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	frame.set_meta("stable_id", stable_id)
+	frame.set_meta(
+		"visual_inner_rim_mask",
+		HUDAssetSanitizer.ACTION_FRAME_INNER_DARK_RIM_MASK_ID,
+	)
+	root.add_child(frame)
+	return frame
+
+
+func _add_utility_button(root: Control, node_name: String, label_text: String, rect: Rect2) -> Button:
+	var button := Button.new()
+	button.name = node_name
+	button.text = label_text
+	button.theme_type_variation = "GothicTransparentButton"
+	button.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	button.offset_left = rect.position.x
+	button.offset_top = rect.position.y
+	button.offset_right = rect.end.x
+	button.offset_bottom = rect.end.y
+	button.add_theme_font_size_override("font_size", 16)
+	root.add_child(button)
+	return button
+
+
+func _add_full_texture(parent: Control, node_name: String, texture: Texture2D) -> TextureRect:
+	var art := TextureRect.new()
+	art.name = node_name
+	art.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	art.texture = texture
+	art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	art.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	parent.add_child(art)
+	return art
+
+
+func _add_top_right_fill(root: Control, node_name: String, rect: Rect2, variation: StringName) -> Panel:
+	var fill := Panel.new()
+	fill.name = node_name
+	fill.theme_type_variation = variation
+	fill.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	fill.offset_left = rect.position.x
+	fill.offset_top = rect.position.y
+	fill.offset_right = rect.end.x
+	fill.offset_bottom = rect.end.y
+	fill.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root.add_child(fill)
+	return fill
+
+
+func _add_bottom_right_fill(root: Control, node_name: String, rect: Rect2, variation: StringName) -> Panel:
+	var fill := Panel.new()
+	fill.name = node_name
+	fill.theme_type_variation = variation
+	fill.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+	fill.offset_left = rect.position.x
+	fill.offset_top = rect.position.y
+	fill.offset_right = rect.end.x
+	fill.offset_bottom = rect.end.y
+	fill.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root.add_child(fill)
+	return fill
+
+
+func _request_system_menu() -> void:
+	var event := InputEventAction.new()
+	event.action = "ui_cancel"
+	event.pressed = true
+	Input.parse_input_event(event)
+
+
+func _toggle_skill_book() -> void:
+	_panel_prewarm_user_interaction = true
+	_ensure_skill_panel()
+	if skill_panel.visible:
+		skill_panel.hide()
+	else:
+		_close_modal_panels()
+		skill_panel.open_for("技能导师")
+
+
+## Notice timing moved into PlayerNoticePresenter (R2); the HUD itself no
+## longer runs a per-frame callback. The loot label is kept for layout
+## compatibility; global notices no longer write it.
+
+
+func update_hp(current_hp: int, max_hp: int) -> void:
+	_last_hp = current_hp
+	_last_max_hp = max_hp
+	update_resources(_last_hp, _last_max_hp, _last_mp, _last_max_mp)
+
+
+func update_resources(current_hp: int, max_hp: int, current_mp: int, max_mp: int) -> void:
+	_last_hp = current_hp
+	_last_max_hp = max_hp
+	_last_mp = current_mp
+	_last_max_mp = max_mp
+	if hp_label != null:
+		hp_label.text = "%s｜生命 %d/%d　魔法 %d/%d" % [current_zone_name, current_hp, max_hp, current_mp, max_mp]
+	if health_orb != null:
+		health_orb.call("set_values", current_hp, max_hp)
+	if mana_orb != null:
+		mana_orb.call("set_values", current_mp, max_mp)
+
+
+func update_taoist_buff_hints(entries: Array, defence_snapshot := {}) -> void:
+	if taoist_buff_hint_label == null:
+		return
+	taoist_buff_hint_label.visible = not entries.is_empty()
+	taoist_buff_hint_label.text = "｜".join(entries)
+	var snapshot: Dictionary = (
+		defence_snapshot as Dictionary
+		if defence_snapshot is Dictionary
+		else {}
+	)
+	_update_taoist_defence_buff_icon(
+		taoist_ac_buff_icon,
+		taoist_ac_buff_seconds,
+		int(snapshot.get("ac_bonus", 0)),
+		float(snapshot.get("ac_remaining_seconds", 0.0))
+	)
+	_update_taoist_defence_buff_icon(
+		taoist_mac_buff_icon,
+		taoist_mac_buff_seconds,
+		int(snapshot.get("mac_bonus", 0)),
+		float(snapshot.get("mac_remaining_seconds", 0.0))
+	)
+
+func update_status_buffs(entries: Array) -> void:
+	if taoist_buff_icon_strip == null: return
+	taoist_buff_hint_label.hide()
+	for icon: TextureRect in _status_buff_icons.values(): icon.hide()
+	var ordered := entries.duplicate(true)
+	var active: Dictionary = {}
+	for entry: Dictionary in ordered:
+		active[entry.id] = true
+		if not _status_buff_first_seen.has(entry.id): _status_buff_first_seen[entry.id] = Time.get_ticks_usec()
+		if int(entry.started_at) <= 0: entry.started_at = _status_buff_first_seen[entry.id]
+	for id: String in _status_buff_first_seen.keys():
+		if not active.has(id): _status_buff_first_seen.erase(id)
+	ordered.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		if int(a.started_at) != int(b.started_at): return int(a.started_at) < int(b.started_at)
+		return str(a.id) < str(b.id))
+	var index := 0
+	for entry: Dictionary in ordered:
+		var id := str(entry.id)
+		var icon: TextureRect = _status_buff_icons.get(id)
+		if icon == null:
+			icon = _build_taoist_defence_buff_icon(taoist_buff_icon_strip, "StatusBuff_%d" % _status_buff_icons.size(), "hud.buff." + id, null, Vector2.ZERO)
+			_status_buff_icons[id] = icon
+		var item_id := int(entry.get("item_id", -1))
+		var item_entity_id := str(entry.get("entity_id", ""))
+		if not item_entity_id.is_empty():
+			if str(icon.get_meta("item_entity_id", "")) != item_entity_id:
+				icon.texture = UIItemTextureCacheScript.texture_at_path(GameData.get_item_art_path(item_entity_id))
+				icon.set_meta("item_entity_id", item_entity_id)
+				icon.set_meta("item_id", item_id)
+		elif item_id > 0:
+			if int(icon.get_meta("item_id", -1)) != item_id or not str(icon.get_meta("item_entity_id", "")).is_empty():
+				icon.texture = UIItemTextureCacheScript.texture_at_path(GameData.get_item_art_path({"item_id":item_id}))
+				icon.set_meta("item_id", item_id)
+				icon.set_meta("item_entity_id", "")
+		elif entry.has("skill"):
+			icon.texture = HUDSkillIconCatalogScript.SKILL_TEXTURES.get(str(entry.skill))
+			icon.set_meta("item_entity_id", "")
+			icon.set_meta("item_id", -1)
+		icon.position = Vector2(index * (TAOIST_BUFF_ICON_SIZE.x + 6.0), 0)
+		icon.show()
+		var seconds := icon.get_node("Seconds") as Label
+		seconds.text = str(ceili(float(entry.remaining))) if float(entry.remaining) > 0.0 else ""
+		index += 1
+
+
+func _update_taoist_defence_buff_icon(
+	icon: TextureRect,
+	seconds_label: Label,
+	bonus: int,
+	remaining_seconds: float
+) -> void:
+	if icon == null or seconds_label == null:
+		return
+	icon.visible = bonus > 0 and remaining_seconds > 0.0
+	seconds_label.text = str(maxi(0, int(ceil(remaining_seconds))))
+
+
+func update_target(target_name := "", current_hp := 0, max_hp := 0, manual_lock := false, auto_enabled := true, monster_id := -1) -> void:
+	if target_label == null:
+		return
+	# This is the player-facing boundary.  Internal target identity remains the
+	# exact monster name/ID; only confirmed catalog variant suffixes are removed
+	# for the label shown here.
+	var display_target_name := MonsterDisplayFormatterScript.display_name(
+		str(target_name),
+		int(monster_id),
+	)
+	if target_health_fill != null:
+		target_health_fill.visible = not display_target_name.is_empty() and max_hp > 0
+		(target_health_fill.material as ShaderMaterial).set_shader_parameter("fill_ratio", clampf(float(current_hp) / float(maxi(1, max_hp)), 0.0, 1.0))
+	var next_text := "目标：自动选敌待命" if auto_enabled else "目标：手动模式待选择"
+	if not display_target_name.is_empty():
+		next_text = "目标［%s］：%s　%d/%d" % ["自动" if auto_enabled else "手动", display_target_name, current_hp, max_hp]
+	if next_text == _last_target_text:
+		return
+	_last_target_text = next_text
+	target_label.text = next_text
+
+
+func set_auto_target_enabled(enabled: bool) -> void:
+	if auto_target_button == null:
+		return
+	auto_target_button.set_pressed_no_signal(enabled)
+	auto_target_button.text = "自动锁定：开" if enabled else "自动锁定：关"
+
+
+func show_loot(item_name: String) -> void:
+	show_loot_batch([item_name])
+
+
+func show_loot_batch(item_names: Array) -> void:
+	if loot_feedback_layer == null:
+		return
+	var events: Array = []
+	for raw_name: Variant in item_names:
+		var identity: Dictionary = raw_name if raw_name is Dictionary else GameData.get_item_record(str(raw_name))
+		var item_name := str(raw_name.get("item_name", "")) if raw_name is Dictionary else str(raw_name)
+		events.append({
+			"event_type": "pickup_success",
+			"item_name": item_name,
+			"item_id": preload("res://scripts/ui_item_name_style.gd").canonical_id(identity),
+			"count": 1,
+			"item_kind": GameData.get_item_kind(item_name),
+			"emphasis": "normal",
+		})
+	loot_feedback_layer.show_feedback_batch(events)
+
+
+func show_loot_feedback(event: Dictionary) -> void:
+	if loot_feedback_layer != null:
+		loot_feedback_layer.show_feedback(event)
+
+
+func begin_loading_transition(transition_id := "") -> void:
+	if loading_transition_overlay != null:
+		loading_transition_overlay.begin_loading(transition_id)
+
+
+func update_loading_progress(transition_id: String, completed: float, stage: String) -> void:
+	if loading_transition_overlay != null:
+		loading_transition_overlay.set_loading_progress(transition_id, completed, stage)
+
+
+func cancel_movement_input() -> void:
+	_cancel_all_item_slot_presses()
+	if movement_joystick != null and is_instance_valid(movement_joystick):
+		movement_joystick.cancel_input()
+	else:
+		movement_changed.emit(Vector2.ZERO)
+
+
+func finish_loading_transition() -> void:
+	if loading_transition_overlay != null:
+		loading_transition_overlay.finish_loading()
+
+
+func update_profile() -> void:
+	if profile_label == null:
+		return
+	var stats: Dictionary = PlayerState.computed_stats
+	profile_label.text = "%s  等级%d  经验%d/%d  金币%d  攻%d-%d 魔%d-%d 道%d-%d" % [
+		PlayerState.profession, PlayerState.level, PlayerState.experience, PlayerState.experience_to_next_level(), PlayerState.gold,
+		int(stats.get("attack_min", 2)), int(stats.get("attack_max", 5)),
+		int(stats.get("magic_min", 0)), int(stats.get("magic_max", 0)),
+		int(stats.get("tao_min", 0)), int(stats.get("tao_max", 0)),
+	]
+
+
+func update_quest_tracker() -> void:
+	if quest_tracker_label == null:
+		return
+	var quest_id := PlayerState.current_bich_quest_id()
+	if quest_id.is_empty():
+		quest_tracker_label.text = "比奇主线：全部完成"
+		return
+	var quest := GameData.get_bich_quest(quest_id)
+	var accepted := PlayerState.quest_states.has(quest_id)
+	var state: Dictionary = PlayerState.quest_states.get(quest_id, {})
+	var marker := "可接" if not accepted else ("可领取" if str(state.get("status", "")) == "ready" else "进行中")
+	quest_tracker_label.text = "任务[%s] %s｜%s" % [marker, quest.get("name", quest_id), "；".join(PlayerState.quest_objective_lines(quest_id))]
+
+
+func _toggle_inventory() -> void:
+	_panel_prewarm_user_interaction = true
+	_ensure_inventory_panel()
+	if inventory_panel.visible:
+		inventory_panel.hide()
+	else:
+		_close_modal_panels()
+		inventory_panel.show()
+
+
+func _toggle_map_panel() -> void:
+	_panel_prewarm_user_interaction = true
+	_ensure_map_panel()
+	if map_panel.visible:
+		map_panel.hide()
+	else:
+		_close_modal_panels()
+		map_panel.open_panel()
+
+
+func set_map_teleport_availability(rules: Dictionary) -> void:
+	if map_panel != null:
+		map_panel.set_teleport_availability(rules)
+
+
+func set_zone_name(zone_name: String) -> void:
+	current_zone_name = zone_name
+	if hp_label != null:
+		hp_label.text = "%s｜生命" % current_zone_name
+	var safe_root := get_node_or_null("MobileSafeRoot")
+	if safe_root != null:
+		var zone_label := safe_root.get_node_or_null("ZonePanel/ZoneLabel") as Label
+		if zone_label != null:
+			zone_label.text = current_zone_name
+
+
+func open_shop(display_name: String, stock: Array, merchant_context: Dictionary = {}) -> void:
+	_panel_prewarm_user_interaction = true
+	_close_modal_panels()
+	_ensure_shop_panel()
+	shop_panel.open_for(display_name, stock, merchant_context)
+
+
+func set_shop_sell_quotes(quotes: Dictionary) -> void:
+	_ensure_shop_panel()
+	shop_panel.set_sell_quotes(quotes)
+
+
+func set_shop_buy_quotes(quotes: Array) -> void:
+	_ensure_shop_panel()
+	shop_panel.set_buy_quotes(quotes)
+
+
+func apply_shop_buy_result(result: Dictionary) -> void:
+	_ensure_shop_panel()
+	shop_panel.apply_buy_result(result)
+
+
+func apply_shop_sell_result(result: Dictionary) -> void:
+	_ensure_shop_panel()
+	shop_panel.apply_sell_result(result)
+
+
+func open_skill_trainer(display_name: String) -> void:
+	_panel_prewarm_user_interaction = true
+	_close_modal_panels()
+	_ensure_skill_panel()
+	skill_panel.open_for(display_name)
+
+
+func open_enhancement_vendor(_display_name := "") -> void:
+	_panel_prewarm_user_interaction = true
+	_close_modal_panels()
+	_ensure_enhancement_panel()
+	if enhancement_panel != null:
+		enhancement_panel.show()
+		enhancement_panel.refresh()
+
+
+func set_skill_button_assignments(assignments: Dictionary, interaction_modes := {}) -> void:
+	_skill_button_assignments = assignments.duplicate(true)
+	_skill_button_modes = interaction_modes.duplicate(true) if interaction_modes is Dictionary else {}
+	if skill_panel != null:
+		skill_panel.set_skill_button_assignments(assignments, interaction_modes)
+	update_quick_slots()
+
+
+func show_death_screen(context := {}) -> void:
+	_panel_prewarm_user_interaction = true
+	_ensure_death_revival_panel()
+	_close_modal_panels()
+	if death_revival_panel != null:
+		death_revival_panel.open_death_screen(context)
+
+
+func set_revival_options(options: Array) -> void:
+	_ensure_death_revival_panel()
+	if death_revival_panel != null:
+		death_revival_panel.set_revival_options(options)
+
+
+func update_revival_option(option_slot: String, state: Dictionary) -> void:
+	_ensure_death_revival_panel()
+	if death_revival_panel != null:
+		death_revival_panel.update_revival_option(option_slot, state)
+
+
+func apply_revival_result(result: Dictionary) -> void:
+	_ensure_death_revival_panel()
+	if death_revival_panel != null:
+		death_revival_panel.apply_revival_result(result)
+
+
+func close_death_screen() -> void:
+	_ensure_death_revival_panel()
+	if death_revival_panel != null:
+		death_revival_panel.close_death_screen()
+
+
+func open_quest(display_name: String) -> void:
+	_panel_prewarm_user_interaction = true
+	_close_modal_panels()
+	_ensure_quest_panel()
+	quest_panel.open_for(display_name)
+
+
+func apply_quest_abandon_result(result: Dictionary) -> void:
+	_ensure_quest_panel()
+	quest_panel.apply_abandon_result(result)
+
+
+func open_warehouse() -> void:
+	_panel_prewarm_user_interaction = true
+	_close_modal_panels()
+	_ensure_warehouse_panel()
+	warehouse_panel.open_panel()
+
+
+func apply_warehouse_sort_result(result: Dictionary) -> void:
+	_ensure_warehouse_panel()
+	warehouse_panel.apply_sort_result(result)
+
+
+## Unified player-notice entry (UNIFIED-PLAYER-NOTICE R2). Every transient
+## global notice -- success, error, warning, info, item results -- goes
+## through exactly this layer. Business layers report what happened; the
+## presenter decides rendering, priorities, dedupe and queueing.
+func show_notice(notice: Dictionary) -> void:
+	if notice_presenter != null:
+		notice_presenter.present(notice)
+
+
+## Dedicated item notice: renders "prefix + authoritative item name + suffix"
+## as one line where only the item name carries its official UIItemNameStyle
+## color/outline (e.g. "已装备 裁决之杖", "已卸下 井中月").
+func show_item_notice(
+	prefix: String,
+	item: Dictionary,
+	instance: Dictionary = {},
+	suffix := "",
+	kind := "success",
+	seconds := 2.0,
+	dedupe_key := ""
+) -> void:
+	show_notice({
+		"kind": kind,
+		"duration": seconds,
+		"dedupe_key": dedupe_key,
+		"segments": [
+			UIPlayerNoticeScript.text_segment(prefix),
+			UIPlayerNoticeScript.item_segment(item, instance),
+			UIPlayerNoticeScript.text_segment(suffix),
+		],
+	})
+
+
+## ActionResult contract for future player-action services (forge, synth,
+## reinforce...). Services never touch the HUD; the calling layer forwards
+## the authoritative result dictionary here.
+func present_action_result(result: Dictionary) -> void:
+	show_notice(UIPlayerNoticeScript.from_action_result(result))
+
+
+func show_success_message(message: String, seconds := 2.0) -> void:
+	show_notice({"kind": "success", "message": message, "duration": seconds})
+
+
+func show_warning_message(message: String, seconds := 2.0) -> void:
+	show_notice({"kind": "warning", "message": message, "duration": seconds})
+
+
+## General notice lane. Routes into the unified central overlay; the
+## loot_label below stays reserved for layout compatibility only.
+func show_message(message: String, seconds := 2.0) -> void:
+	show_notice({"kind": "info", "message": message, "duration": seconds})
+
+
+## Player-error channel. Machine reasons passed by mistake are replaced by
+## generic Chinese prose at this boundary; raw reasons stay in logs only.
+## Errors carry the highest notice priority and preempt success/info.
+func show_error_message(message: String, seconds := 2.0) -> void:
+	var visible_message := UIErrorFeedbackScript.user_message(message)
+	if visible_message.is_empty():
+		return
+	show_notice({"kind": "error", "message": visible_message, "duration": seconds})
+
+
+func update_quick_slots() -> void:
+	for index in range(quick_buttons.size()):
+		var skill_name := _skill_name_for_slot("center", index)
+		var marker := _warrior_skill_marker(skill_name)
+		var skill_texture := HUDSkillIconCatalogScript.texture_for(skill_name)
+		var skill_icon_id := HUDSkillIconCatalogScript.source_id_for(skill_name)
+		var skill_icon_path := HUDSkillIconCatalogScript.source_path_for(skill_name)
+		# The child SkillLabel is the only visible text layer. Keeping a second
+		# full skill name on the transparent Button leaks black text whenever a
+		# mobile theme state (focus/disabled/hover-pressed) overrides its color.
+		quick_buttons[index].text = ""
+		quick_buttons[index].tooltip_text = skill_name if not skill_name.is_empty() else "空技能槽"
+		quick_buttons[index].set_meta(
+			"display_text",
+			"%d\n%s%s" % [
+				index + 1,
+				skill_name if not skill_name.is_empty() else "空",
+				marker,
+			],
+		)
+		if index < quick_slot_icons.size():
+			quick_slot_icons[index].texture = skill_texture
+			quick_slot_icons[index].visible = skill_texture != null
+			quick_slot_icons[index].set_meta("skill_name", skill_name)
+			quick_slot_icons[index].set_meta("skill_icon_id", skill_icon_id)
+			quick_slot_icons[index].set_meta("skill_icon_path", skill_icon_path)
+		if index < quick_slot_labels.size():
+			quick_slot_labels[index].text = _compact_skill_label(index, skill_name, marker, skill_texture != null)
+	var attack_skill_name := _skill_name_for_slot("attack", 0)
+	var attack_skill_texture := HUDSkillIconCatalogScript.texture_for(attack_skill_name)
+	if attack_slot_icon != null:
+		attack_slot_icon.texture = attack_skill_texture
+		attack_slot_icon.visible = attack_skill_texture != null
+		attack_slot_icon.set_meta("skill_name", attack_skill_name)
+		attack_slot_icon.set_meta("skill_icon_id", HUDSkillIconCatalogScript.source_id_for(attack_skill_name))
+		attack_slot_icon.set_meta("skill_icon_path", HUDSkillIconCatalogScript.source_path_for(attack_skill_name))
+	if attack_slot_label != null:
+		attack_slot_label.text = "攻击" if attack_skill_name.is_empty() else attack_skill_name.left(4)
+		if attack_skill_name.is_empty():
+			attack_slot_label.position = Vector2.ZERO
+			attack_slot_label.size = attack_button.size if attack_button != null else HUD_ATTACK_BUTTON_SIZE
+			attack_slot_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		else:
+			attack_slot_label.position = Vector2(3.4, 74.8)
+			attack_slot_label.size = Vector2(95.2, 22.1)
+			attack_slot_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	if attack_button != null:
+		attack_button.tooltip_text = "普通攻击" if attack_skill_name.is_empty() else "攻击键：%s" % attack_skill_name
+		attack_button.set_meta("bound_skill_name", attack_skill_name)
+	for index in range(attack_ring_skill_icons.size()):
+		var skill_name := _skill_name_for_slot("attack_ring", index)
+		var skill_texture := HUDSkillIconCatalogScript.texture_for(skill_name)
+		var skill_icon_id := HUDSkillIconCatalogScript.source_id_for(skill_name)
+		var skill_icon_path := HUDSkillIconCatalogScript.source_path_for(skill_name)
+		attack_ring_skill_icons[index].texture = skill_texture
+		attack_ring_skill_icons[index].visible = skill_texture != null
+		attack_ring_skill_icons[index].set_meta("skill_name", skill_name)
+		attack_ring_skill_icons[index].set_meta("skill_icon_id", skill_icon_id)
+		attack_ring_skill_icons[index].set_meta("skill_icon_path", skill_icon_path)
+		if index < attack_ring_skill_backdrops.size():
+			attack_ring_skill_backdrops[index].visible = not skill_name.is_empty()
+		if index < attack_ring_skill_labels.size():
+			if skill_name.is_empty():
+				attack_ring_skill_labels[index].text = "空"
+				attack_ring_skill_labels[index].vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+			else:
+				attack_ring_skill_labels[index].text = str(index + 1) if skill_texture != null else skill_name.left(2)
+				attack_ring_skill_labels[index].vertical_alignment = VERTICAL_ALIGNMENT_BOTTOM
+			attack_ring_skill_labels[index].tooltip_text = skill_name
+
+
+func _skill_name_for_slot(slot_group: String, slot_index: int) -> String:
+	if not _skill_button_assignments.is_empty():
+		if _skill_button_assignments.has(slot_group):
+			return _skill_name_from_group(_skill_button_assignments.get(slot_group), slot_index)
+		return ""
+	if PlayerState.has_method("skill_name_for_slot"):
+		return str(PlayerState.call("skill_name_for_slot", slot_group, slot_index))
+	var assignments := _active_skill_button_assignments()
+	if assignments.has(slot_group):
+		return _skill_name_from_group(assignments.get(slot_group), slot_index)
+	if not assignments.is_empty():
+		return ""
+	# Compatibility for builds predating the grouped center[4] + attack_ring[3]
+	# contract. Once the grouped snapshot exists, an intentionally empty attack
+	# ring slot remains empty and is never mirrored from the center group.
+	if slot_index >= 0 and slot_index < PlayerState.quick_slots.size():
+		return str(PlayerState.quick_slots[slot_index])
+	return ""
+
+
+func _active_skill_button_assignments() -> Dictionary:
+	if not _skill_button_assignments.is_empty():
+		return _skill_button_assignments
+	if PlayerState.has_method("skill_button_assignments_snapshot"):
+		var snapshot: Variant = PlayerState.call("skill_button_assignments_snapshot")
+		if snapshot is Dictionary:
+			return snapshot
+	return {}
+
+
+func _skill_name_from_group(group_value: Variant, slot_index: int) -> String:
+	if group_value is Array and slot_index >= 0 and slot_index < group_value.size():
+		var value: Variant = group_value[slot_index]
+		return _skill_name_from_assignment_value(value)
+	if group_value is Dictionary:
+		var value: Variant = group_value.get(slot_index, group_value.get(str(slot_index), ""))
+		return _skill_name_from_assignment_value(value)
+	return ""
+
+
+func _skill_name_from_assignment_value(value: Variant) -> String:
+	if not value is Dictionary:
+		return ProfessionRules.skill_display_name(str(value)) if not str(value).is_empty() else ""
+	return str(
+		value.get(
+			"skill_name",
+			value.get("skillName", value.get("name", value.get("display_name", value.get("displayName", ""))))
+		)
+	)
+
+
+func _compact_skill_label(index: int, skill_name: String, marker: String, has_icon: bool) -> String:
+	var compact_name := "空" if skill_name.is_empty() else skill_name.left(2)
+	var compact_marker := marker.trim_prefix("[").trim_suffix("]")
+	if has_icon:
+		return "%d%s" % [index + 1, "\n%s" % compact_marker if not compact_marker.is_empty() else ""]
+	return "%d\n%s%s" % [index + 1, compact_name, "\n%s" % compact_marker if not compact_marker.is_empty() else ""]
+
+
+func update_warrior_states(snapshot: Dictionary) -> void:
+	_warrior_snapshot = snapshot.duplicate(true)
+	if warrior_state_label == null:
+		return
+	warrior_state_label.visible = PlayerState.profession_id == "hc.profession.warrior"
+	if not warrior_state_label.visible:
+		return
+	var fire_text := _fire_sword_charge_label(snapshot)
+	warrior_state_label.text = "攻杀:%s　刺杀:%s　半月:%s　烈火:%s" % [
+		"几率" if bool(snapshot.get("slaying_auto", false)) else "未学",
+		"开" if bool(snapshot.get("thrusting", false)) else "关",
+		"开" if bool(snapshot.get("half_moon", false)) else "关",
+		fire_text,
+	]
+	update_quick_slots()
+
+
+func _fire_sword_charge_label(snapshot: Dictionary) -> String:
+	if not bool(snapshot.get("fire_enabled", false)):
+		return "关"
+	if bool(snapshot.get("fire_armed", false)) and int(snapshot.get("fire_expires_remaining_ms", 0)) > 0:
+		return "开·充能"
+	if int(snapshot.get("fire_cooldown_remaining_ms", 0)) > 0:
+		return "开·冷却"
+	return "开·就绪"
+
+
+func _warrior_skill_marker(skill_name: String) -> String:
+	match skill_name:
+		"攻杀剑术": return "[几率]" if bool(_warrior_snapshot.get("slaying_auto", false)) else ""
+		"刺杀剑术": return "[开]" if bool(_warrior_snapshot.get("thrusting", false)) else "[关]"
+		"半月弯刀": return "[开]" if bool(_warrior_snapshot.get("half_moon", false)) else "[关]"
+		"烈火剑法":
+			return "[%s]" % _fire_sword_charge_label(_warrior_snapshot)
+	return ""
+
+
+func _on_skill_slot_button(slot_group: String, slot_index: int) -> void:
+	var grouped_connections := skill_slot_pressed.get_connections()
+	skill_slot_pressed.emit(slot_group, slot_index)
+	if grouped_connections.is_empty():
+		skill_pressed.emit(slot_index)
+
+
+func _on_skill_button(index: int) -> void:
+	# Legacy API retained for callers that still expose one four-slot array.
+	_on_skill_slot_button("center", index)
+
+
+func _close_modal_panels() -> void:
+	if item_quick_slot_menu != null:
+		item_quick_slot_menu.hide()
+	if inventory_panel != null:
+		inventory_panel.hide()
+	if enhancement_panel != null:
+		enhancement_panel.hide()
+	if shop_panel != null:
+		shop_panel.hide()
+	if skill_panel != null:
+		skill_panel.hide()
+	if quest_panel != null:
+		quest_panel.hide()
+	if map_panel != null:
+		map_panel.hide()
+	if warehouse_panel != null:
+		warehouse_panel.hide()
+
+# UI-L1 SUPPLEMENT BEGIN -- controlled extra members
+
+# UI-L1: optional background preparation yields to active UI and held input.
+# This is NOT a timer/debounce on a user's action. _ensure_* on demand is unchanged.
+var _ui_l1_finish_explicit_prewarm := false
+
+func _ui_l1_background_blocked() -> bool:
+	if not is_inside_tree():
+		return true
+	if get_tree().paused or Input.is_anything_pressed():
+		return true
+	for panel: Variant in [inventory_panel, enhancement_panel, shop_panel, warehouse_panel, map_panel, skill_panel, quest_panel, death_revival_panel]:
+		if is_instance_valid(panel) and panel is CanvasItem and panel.is_visible_in_tree():
+			return true
+	return false
+
+func _ui_l1_wait_for_background_slot(background_mode: bool) -> bool:
+	if not background_mode:
+		return is_inside_tree()
+	while is_inside_tree() and not _ui_l1_finish_explicit_prewarm and _ui_l1_background_blocked():
+		await get_tree().process_frame
+	return is_inside_tree()
+# UI-L1 SUPPLEMENT END

@@ -1,0 +1,352 @@
+extends Node
+
+const CombatResolutionRulesScript := preload("res://scripts/combat_resolution_rules.gd")
+const MonsterStruckPolicyScript := preload("res://scripts/monster_struck_policy.gd")
+## source176 Task 1: the authoritative 33-skill reception-family table.
+const SourceReactionRegistryScript := preload(
+	"res://scripts/monster_source176/skill_reaction_registry.gd"
+)
+
+## Monster magic delivery classes retain source-family routing and RNG order.
+## DIRECT_MAGSTRUCK and MAGSTRUCK_MINE both resolve MAC normally. Positive
+## direct damage inserts ordinary STRUCK; its authored animation pauses the
+## residual action clock. Ground mine ticks only deal HP damage. Direct magic keeps
+## its legacy actor RNG draw at the MAC boundary for sequence compatibility.
+## source176 AUTO (-1) is the migration/compatibility value for generic
+## call sites that deliver several skills: the kind is resolved through
+## SourceReactionRegistry by stable id. AUTO never grants DIRECT silently -
+## an unknown id, or an explicit kind that contradicts the registry,
+## fails closed before any RNG consumption or damage.
+enum EnemyMagicDeliveryKind {
+	AUTO = -1,
+	DIRECT_MAGSTRUCK,
+	MAGSTRUCK_MINE,
+}
+
+var _direct_spell_stats_scratch: Dictionary = {}
+
+func face_target_screen_px(actor: Node2D, target: Node2D) -> Vector2:
+	if not is_instance_valid(actor) or not is_instance_valid(target):
+		return Vector2.ZERO
+	# This vector only selects the actor's eight-direction presentation row.
+	# Gameplay range and hit geometry are resolved independently in ground GU.
+	var direction_screen_px := actor.global_position.direction_to(target.global_position)
+	if direction_screen_px.length_squared() > 0.01:
+		if actor.has_method("set_combat_facing"):
+			actor.call("set_combat_facing", direction_screen_px)
+		else:
+			actor.set("facing", direction_screen_px)
+	return direction_screen_px
+
+
+func apply_damage(target: Node, amount: int) -> bool:
+	if (
+		not is_instance_valid(target)
+		or not target.has_method("take_damage")
+		or _target_rejects_damage(target)
+	):
+		return false
+	var damage_started_usec := RuntimeDiagnostics.timing_start()
+	target.take_damage(maxi(1, amount))
+	RuntimeDiagnostics.record_timing_usec(&"take_damage_usec", damage_started_usec)
+	return true
+
+
+func apply_enemy_physical_damage(
+	target: Node,
+	amount: int,
+	source_actor: Node2D = null,
+	damage_context: Dictionary = {},
+) -> bool:
+	if (
+		not is_instance_valid(target)
+		or not target.has_method("take_damage")
+		or _target_rejects_damage(target)
+	):
+		return false
+	var damage_started_usec := RuntimeDiagnostics.timing_start()
+	if damage_context.is_empty():
+		target.call("take_damage", maxi(1, amount), source_actor)
+	else:
+		# Only callers with a proven semantic source opt into the third argument.
+		target.call("take_damage", maxi(1, amount), source_actor, damage_context)
+	RuntimeDiagnostics.record_timing_usec(&"take_damage_usec", damage_started_usec)
+	return true
+
+
+func apply_enemy_direct_spell_damage(
+	target: Node,
+	stable_skill_id: String,
+	raw_damage: int,
+	source_actor: Node2D,
+	rng: RandomNumberGenerator = null,
+	magic_defense_adapter := Callable(),
+	anti_magic_roll := -1,
+	target_stats_scratch: Dictionary = {},
+	delivery_kind: EnemyMagicDeliveryKind = EnemyMagicDeliveryKind.DIRECT_MAGSTRUCK,
+	damage_context: Dictionary = {},
+) -> Dictionary:
+	if (
+		not is_instance_valid(target)
+		or not target.has_method("take_damage")
+		or _target_rejects_damage(target)
+	):
+		return {
+			"success": false,
+			"failure_reason": "target_missing_damage_pipeline",
+			"final_damage": 0,
+		}
+	var checked_delivery := _checked_player_spell_delivery(
+		stable_skill_id, delivery_kind
+	)
+	if checked_delivery < 0:
+		# source176 Task 1 (docs/02 C1): a rejected id/kind combination is a
+		# configuration/call failure. It must fail BEFORE any RNG consumption
+		# (anti-magic roll), stats snapshot and damage.
+		return {
+			"success": false,
+			"failure_reason": "source176_delivery_kind_rejected",
+			"final_damage": 0,
+			"stable_skill_id": stable_skill_id,
+		}
+	RuntimeDiagnostics.increment_performance_counter(&"direct_spell_resolution_count")
+	var resolution_started_usec := RuntimeDiagnostics.timing_start()
+	var target_stats: Dictionary = (
+		target_stats_scratch
+		if target_stats_scratch != null
+		else _direct_spell_stats_scratch
+	)
+	if not _target_stats_with_runtime_buffs_into(target, target_stats):
+		RuntimeDiagnostics.record_timing_usec(
+			&"direct_spell_resolution_usec",
+			resolution_started_usec,
+		)
+		return {
+			"success": false,
+			"failure_reason": "target_direct_spell_stats_invalid",
+			"final_damage": 0,
+		}
+	var checked_anti_magic_roll := anti_magic_roll
+	if checked_anti_magic_roll < 0:
+		if rng != null:
+			checked_anti_magic_roll = rng.randi_range(
+				0,
+				CombatResolutionRulesScript.ANTI_MAGIC_ROLL_SIDES - 1,
+			)
+		else:
+			checked_anti_magic_roll = randi_range(
+				0,
+				CombatResolutionRulesScript.ANTI_MAGIC_ROLL_SIDES - 1,
+			)
+	var resolution := CombatResolutionRulesScript.resolve_direct_spell_damage(
+		stable_skill_id,
+		maxi(0, raw_damage),
+		target_stats,
+		checked_anti_magic_roll,
+		magic_defense_adapter
+	)
+	# Keep the legacy actor-RNG draw for the former Lv<50 direct-magic
+	# reception boundary. It is a compatibility draw only: it no longer feeds
+	# movement, damage, or any timing decision. The caller's spell RNG remains
+	# untouched.
+	if (
+		checked_delivery == EnemyMagicDeliveryKind.DIRECT_MAGSTRUCK
+		and bool(resolution.get("enters_magic_defense_stage", false))
+	):
+		_compatibility_draw_direct_magic_actor_rng(target)
+	# Resolve both reception families through the same MAC/RNG chain. Only
+	# direct hits insert struck; repeated ground ticks must never hold a pack.
+	var final_damage := int(resolution.get("final_damage", 0))
+	if final_damage > 0:
+		var damage_started_usec := RuntimeDiagnostics.timing_start()
+		if checked_delivery == EnemyMagicDeliveryKind.MAGSTRUCK_MINE and target.has_method("take_ground_tick_damage"):
+			target.call("take_ground_tick_damage", final_damage, source_actor, damage_context)
+		elif damage_context.is_empty(): target.call("take_damage", final_damage, source_actor)
+		else: target.call("take_damage", final_damage, source_actor, damage_context)
+		RuntimeDiagnostics.record_timing_usec(&"take_damage_usec", damage_started_usec)
+	RuntimeDiagnostics.record_timing_usec(
+		&"direct_spell_resolution_usec",
+		resolution_started_usec,
+	)
+	var result: Dictionary = resolution
+	result["success"] = final_damage > 0
+	return result
+
+
+func apply_feature_source_restore(source_ref: RefCounted, recipient: Dictionary, amount: int) -> Dictionary:
+	if source_ref == null or source_ref.get_script() != preload("res://scripts/features/contracts/actor_ref.gd") \
+		or source_ref.identity() != recipient or amount <= 0:
+		return {"success":false,"reason":"feature_restore_identity","actual_gain":0}
+	var source: Node = source_ref.resolve()
+	if source == null or not source.has_method("restore_health") \
+		or (source.has_method("combat_transition_is_active") and source.combat_transition_is_active()):
+		return {"success":true,"reason":"source_unavailable","actual_gain":0}
+	# Player and Summon authorities return their own committed gain, captured
+	# before observers run. Reading HP here afterwards would mix other writes.
+	var actual_gain: int = source.restore_health(amount)
+	return {"success":true,"reason":"","actual_gain":actual_gain}
+
+func apply_feature_periodic_damage(target: Node, raw_damage: int, source_actor: Node2D,
+	tick_rng: RandomNumberGenerator, historical_credit: Dictionary) -> Dictionary:
+	return _apply_feature_magic_damage(target,raw_damage,source_actor,tick_rng,historical_credit,null,"periodic")
+
+func apply_feature_periodic_chain_damage(target: Node, raw_damage: int, source_actor: Node2D,
+	tick_rng: RandomNumberGenerator, historical_credit: Dictionary, batch: RefCounted) -> Dictionary:
+	if batch == null:
+		return {"success":false,"reason":"periodic_batch_contract","actual_loss":0}
+	return _apply_feature_magic_damage(target,raw_damage,source_actor,tick_rng,historical_credit,batch,"periodic")
+
+func apply_feature_child_damage(target: Node, raw_damage: int, source_actor: Node2D,
+	child_rng: RandomNumberGenerator, historical_credit: Dictionary, batch: RefCounted) -> Dictionary:
+	if batch == null:
+		return {"success":false,"reason":"child_batch_contract","actual_loss":0}
+	return _apply_feature_magic_damage(target,raw_damage,source_actor,child_rng,historical_credit,batch,"child")
+
+func _apply_feature_magic_damage(target: Node, raw_damage: int, source_actor: Node2D,
+	tick_rng: RandomNumberGenerator, historical_credit: Dictionary, batch: RefCounted, source_class: String) -> Dictionary:
+	var method := "take_feature_periodic_damage" if source_class == "periodic" else "take_feature_child_damage"
+	if source_class == "periodic" and batch != null: method = "take_feature_periodic_chain_damage"
+	if not is_instance_valid(target) or _target_rejects_damage(target) or not target.has_method(method) \
+		or not target.has_method("has_actor_capability") or tick_rng == null:
+		return {"success":false,"reason":source_class+"_target_contract","actual_loss":0}
+	if batch != null:
+		if batch.get_script() != preload("res://scripts/features/runtime/damage_batch.gd") or not batch.requires_commit_context():
+			return {"success":false,"reason":source_class+"_batch_contract","actual_loss":0}
+		var prepared: Dictionary = batch.prepare_commit_context(target,{"source_class":source_class,"damage_channel":"magic_defense"})
+		if not bool(prepared.get("success",false)):
+			return {"success":false,"reason":source_class+"_batch_context","actual_loss":0}
+	if raw_damage <= 0 or (source_class == "periodic" and bool(target.call("has_actor_capability","hc.immune.periodic"))):
+		return {"success":true,"reason":"zero_or_immune","actual_loss":0}
+	var stats: Dictionary = {}
+	if not _target_stats_with_runtime_buffs_into(target,stats):
+		return {"success":false,"reason":source_class+"_target_stats","actual_loss":0}
+	var low := int(stats.get("magic_defense_min",-1))
+	var high := int(stats.get("magic_defense_max",-1))
+	if low < 0 or high < low:
+		return {"success":false,"reason":source_class+"_mac_bounds","actual_loss":0}
+	var resolved := maxi(0,raw_damage-tick_rng.randi_range(low,high))
+	var receipt := {"hp_before":0,"hp_after":0,"actual_loss":0}
+	if resolved > 0:
+		if batch == null: target.call(method,resolved,source_actor,historical_credit,receipt)
+		else: target.call(method,resolved,source_actor,historical_credit,receipt,batch)
+	return {"success":true,"reason":"","actual_loss":receipt.actual_loss,"resolved_damage":resolved}
+
+
+## source176 docs/02 C1: resolve/validate the delivery stage of the current
+## 33-skill player pipeline against the reaction registry. Returns the
+## effective EnemyMagicDeliveryKind, or -1 when the combination must fail:
+## - unknown skill id (family neither DIRECT nor MINE in the registry), or
+## - an explicitly declared kind that contradicts the registry family.
+## AUTO (-1) resolves through the registry and is only accepted for real
+## registry ids; this function serves the player-spell pipeline only and
+## must not be used to reject monster attacks or pet internal damage.
+func _checked_player_spell_delivery(stable_id: String, declared: int) -> int:
+	var family: StringName = SourceReactionRegistryScript.family(stable_id)
+	var expected: int = -1
+	if family == &"DIRECT":
+		expected = EnemyMagicDeliveryKind.DIRECT_MAGSTRUCK
+	elif family == &"MINE":
+		expected = EnemyMagicDeliveryKind.MAGSTRUCK_MINE
+	if expected < 0:
+		return -1
+	if declared != -1 and declared != expected:
+		return -1
+	return expected
+
+
+func _target_rejects_damage(target: Node) -> bool:
+	return (
+		target.has_method("can_receive_damage")
+		and not bool(target.call("can_receive_damage"))
+	)
+
+
+func _compatibility_draw_direct_magic_actor_rng(target: Node) -> void:
+	if not target.has_method("consume_direct_magic_compatibility_roll"):
+		return
+	var raw_level: Variant = target.get("level")
+	if raw_level is int and MonsterStruckPolicyScript.direct_magic_compatibility_draw_required(int(raw_level), false):
+		target.call("consume_direct_magic_compatibility_roll")
+
+
+func _target_stats_with_runtime_buffs(target: Node) -> Dictionary:
+	var result: Dictionary = {}
+	_target_stats_with_runtime_buffs_into(target, result)
+	return result
+
+
+func _target_stats_with_runtime_buffs_into(
+	target: Node,
+	output: Dictionary,
+) -> bool:
+	output.clear()
+	if target.has_method("direct_spell_runtime_stats_into"):
+		var raw_result: Variant = target.call(
+			"direct_spell_runtime_stats_into",
+			output,
+		)
+		if not raw_result is bool or not bool(raw_result):
+			return false
+		return true
+	return _legacy_target_stats_with_runtime_buffs_into(target, output)
+
+
+func _legacy_target_stats_with_runtime_buffs_into(
+	target: Node,
+	output: Dictionary,
+) -> bool:
+	RuntimeDiagnostics.increment_performance_counter(&"direct_spell_stats_snapshot_count")
+	var raw_stats: Variant = target.get("monster_data")
+	if raw_stats is Dictionary:
+		RuntimeDiagnostics.increment_performance_counter(&"direct_spell_full_monster_data_duplicates")
+	if raw_stats is Dictionary:
+		output.merge(raw_stats as Dictionary, true)
+	var red_poison: Variant = target.get_meta("canonical_red_poison", {})
+	if not red_poison is Dictionary:
+		return true
+	if Time.get_ticks_msec() >= int(red_poison.get("expires_at_ms", 0)):
+		target.remove_meta("canonical_red_poison")
+		return true
+	var reduction := 0
+	if red_poison.has("flat_mac_reduction"):
+		reduction = maxi(0, int(red_poison.get("flat_mac_reduction", 0)))
+	elif bool(red_poison.get("legacy_metadata_fallback", false)):
+		reduction = maxi(0, int(red_poison.get("flat_reduction", 0)))
+	for field: String in ["magic_defense_min", "magic_defense_max", "mdefMin", "mdefMax", "MinMAC", "MaxMAC"]:
+		if output.has(field):
+			output[field] = maxi(0, int(output[field]) - reduction)
+	output["runtime_buff_contract"] = str(
+		red_poison.get("contract_id", "buff.taoist.red_poison.v1")
+	)
+	return true
+
+
+func apply_player_direct_spell_damage(
+	target: Node,
+	stable_skill_id: String,
+	raw_damage: int,
+	anti_magic_roll := -1,
+	magic_defense_roll := -1
+) -> Dictionary:
+	if not is_instance_valid(target) or not target.has_method("take_direct_spell_damage"):
+		return {
+			"success": false,
+			"failure_reason": "target_missing_direct_spell_pipeline",
+			"final_damage": 0,
+		}
+	var resolution: Variant = target.call(
+		"take_direct_spell_damage",
+		stable_skill_id,
+		maxi(0, raw_damage),
+		anti_magic_roll,
+		magic_defense_roll
+	)
+	if not resolution is Dictionary:
+		return {
+			"success": false,
+			"failure_reason": "invalid_direct_spell_resolution",
+			"final_damage": 0,
+		}
+	var result := (resolution as Dictionary).duplicate(true)
+	result["success"] = true
+	return result

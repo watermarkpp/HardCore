@@ -1,0 +1,1145 @@
+class_name SkillPanel
+extends Panel
+
+const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
+const HUDSkillIconCatalogScript := preload("res://scripts/hud_skill_icon_catalog.gd")
+const SkillDataLoaderScript := preload("res://scripts/skills/skill_data_loader.gd")
+const UIItemTextureCacheScript := preload("res://scripts/ui_item_texture_cache.gd")
+const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
+const GothicFrameFillScript := preload("res://scripts/gothic_frame_fill.gd")
+const GothicFrameFactoryScript := preload("res://scripts/gothic_frame_factory.gd")
+const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
+const SkillVisibilityPolicyScript := preload(
+	"res://scripts/skills/skill_visibility_policy.gd"
+)
+const SkillDescription := preload("res://scripts/skills/skill_player_description.gd")
+const CanonicalSkillData := preload("res://scripts/skills/skill_data_loader.gd")
+
+signal closed
+signal quick_slot_assignment_requested(request: Dictionary)
+signal skill_button_assignment_requested(request: Dictionary)
+
+const PANEL_SIZE := Vector2(1208, 650)
+const MODAL_SURFACE_INSET := Vector4(32, 38, 32, 34)
+const SECTION_VERTICAL_SHIFT := 24.0
+const LONG_PRESS_SECONDS := 0.48
+const ATTACK_SLOT_COUNT := 1
+const ATTACK_RING_SLOT_COUNT := 6
+const SKILL_CARD_TEXT_X_OFFSET := 4.0
+const SKILL_CONFIG_TEXT_X_OFFSET := 2.0
+
+var trainer_title: Label
+var trainer_context_label: Label
+var skill_list: ItemList
+var skill_list_container: VBoxContainer
+var skill_count_label: Label
+var skill_name_label: Label
+var skill_icon: TextureRect
+var detail_label: RichTextLabel
+var description_label: RichTextLabel
+var center_assignment_buttons: Array[Button] = []
+var attack_assignment_buttons: Array[Button] = []
+var attack_ring_assignment_buttons: Array[Button] = []
+var assignment_buttons: Array[Button] = []
+var assignment_popup: Panel
+var assignment_scrim: Panel
+var assignment_popup_title: Label
+var assignment_popup_buttons: Array[Button] = []
+var skill_entries: Array = []
+var skill_buttons: Array[Button] = []
+var selected_skill_index := -1
+var _trainer_name := "技能导师"
+var _long_press_timer: Timer
+var _pressed_skill_index := -1
+var _press_origin := Vector2.ZERO
+var _long_press_opened := false
+var skill_button_assignments: Dictionary = {}
+var skill_button_modes: Dictionary = {}
+var _refresh_pending := false
+var _refresh_execution_count := 0
+var _refresh_scheduled := false
+var _layout_initialized := false
+var _layout_apply_count := 0
+var _action_feedback_serial := 0
+
+
+func _ready() -> void:
+	set_meta("calibration_retired_paths", [
+		"SkillDetailPanel/SkillDetailV3Frame",
+		"SkillDetailPanel/SkillDetailV3Frame/SkillDetailV3FrameDecoration",
+		"SkillDetailPanel/SkillDetailV3Frame/SkillDetailV3FrameDecoration/SkillDetailV3FrameFill",
+		"SkillDetailPanel/SkillDetailV3Frame/SkillDetailV3FrameDecoration/SkillDetailV3FrameFrame",
+		"SkillDetailPanel/LearnButton",
+		"SkillDetailPanel/LegacySkillDetailTitle",
+		"SkillListPanel/SkillCount",
+		"SkillDetailPanel/@Label@451",
+		"AssignmentPanel/AttackSlotTitle",
+		"AssignmentPanel/AttackSkillSlot/Content/InteractionMode",
+		"AssignmentPanel/AttackRingSkillSlot_1/Content/SkillName",
+		"AssignmentPanel/AttackRingSkillSlot_2/Content/SkillName",
+		"AssignmentPanel/AttackRingSkillSlot_3/Content/SkillName",
+		"AssignmentPanel/AttackRingSkillSlot_4/Content/SkillName",
+		"AssignmentPanel/AttackRingSkillSlot_5/Content/SkillName",
+		"AssignmentPanel/AttackRingSkillSlot_6/Content/SkillName",
+	])
+	set_anchors_preset(Control.PRESET_CENTER)
+	offset_left = -PANEL_SIZE.x * 0.5
+	offset_top = -PANEL_SIZE.y * 0.5
+	offset_right = PANEL_SIZE.x * 0.5
+	offset_bottom = PANEL_SIZE.y * 0.5
+	z_index = 60
+	mouse_filter = Control.MOUSE_FILTER_STOP
+	theme = GothicUIThemeScript.build()
+	theme_type_variation = "GothicModalFrame"
+	_build_modal_surface()
+	_build_header()
+	_build_skill_list_section()
+	_build_skill_detail_section()
+	_build_assignment_section()
+	_build_assignment_popup()
+	_build_compatibility_list()
+	_build_long_press_timer()
+	visibility_changed.connect(_on_visibility_changed)
+	PlayerState.skills_changed.connect(_on_panel_data_changed)
+	PlayerState.inventory_changed.connect(_on_panel_data_changed)
+
+
+func _build_modal_surface() -> void:
+	var surface := GothicFrameFillScript.new()
+	surface.name = "ModalSurface"
+	# The large frame has two visible rings. Its source image's regular inner
+	# opening starts at x=46/y=60 and ends 46/65 px before the opposite edges.
+	# This code fill is placed strictly inside that opening and drawn behind the
+	# frame, so neither ring nor the central ornaments can be covered.
+	# The measured inner opening follows a 41 px radius from (83, 60) to
+	# (42, 101). Extend the fill one pixel beneath the inner ring so its
+	# antialiased edge covers the join without ever drawing above the frame.
+	surface.position = Vector2(41, 59)
+	surface.size = PANEL_SIZE - Vector2(82, 123)
+	surface.shape_mode = GothicFrameFillScript.ShapeMode.ROUNDED_INNER
+	surface.corner_radius = 42.0
+	surface.show_behind_parent = true
+	surface.set_meta("calibration_internal_visual", true)
+	add_child(surface)
+
+
+func _build_header() -> void:
+	var title_frame := Panel.new()
+	title_frame.name = "TitleFrame"
+	title_frame.position = Vector2(374, 10)
+	title_frame.size = Vector2(460, 64)
+	title_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	title_frame.theme_type_variation = "GothicTitleBar"
+	add_child(title_frame)
+	trainer_title = Label.new()
+	trainer_title.name = "Title"
+	trainer_title.text = "技能典籍"
+	trainer_title.position = Vector2(30, 15)
+	trainer_title.size = Vector2(400, 32)
+	trainer_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	trainer_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	trainer_title.add_theme_font_size_override("font_size", 24)
+	trainer_title.add_theme_color_override("font_color", Color("f1cc88"))
+	title_frame.add_child(trainer_title)
+	var close_button := Button.new()
+	close_button.name = "CloseButton"
+	close_button.text = "×"
+	close_button.position = Vector2(1128, 8)
+	close_button.size = Vector2(56, 56)
+	close_button.theme_type_variation = "GothicComponentCloseButton"
+	close_button.add_theme_font_size_override("font_size", 24)
+	close_button.tooltip_text = "关闭"
+	close_button.pressed.connect(_close)
+	add_child(close_button)
+
+
+func _build_skill_list_section() -> void:
+	var panel := _section_panel("SkillListPanel", Rect2(20, 76, 310, 548))
+	panel.add_child(_section_title("SkillListTitle", "人物技能", 310))
+	trainer_context_label = Label.new()
+	trainer_context_label.name = "TrainerContext"
+	trainer_context_label.position = Vector2(18, 50)
+	trainer_context_label.size = Vector2(274, 28)
+	trainer_context_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	trainer_context_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	trainer_context_label.theme_type_variation = "GothicMutedLabel"
+	panel.add_child(trainer_context_label)
+	var scroll := ScrollContainer.new()
+	scroll.name = "SkillListScroll"
+	scroll.position = Vector2(18, 86)
+	scroll.size = Vector2(274, 404)
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	panel.add_child(scroll)
+	skill_list_container = VBoxContainer.new()
+	skill_list_container.name = "SkillCards"
+	skill_list_container.custom_minimum_size = Vector2(266, 0)
+	skill_list_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	skill_list_container.add_theme_constant_override("separation", 7)
+	scroll.add_child(skill_list_container)
+
+
+func _build_skill_detail_section() -> void:
+	var panel := _section_panel("SkillDetailPanel", Rect2(342, 76, 460, 548))
+	var icon_frame := Button.new()
+	icon_frame.name = "SkillIconFrame"
+	icon_frame.position = Vector2(24, 58)
+	icon_frame.size = Vector2(112, 112)
+	icon_frame.disabled = true
+	icon_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_frame.theme_type_variation = "GothicComponentSlotButton"
+	panel.add_child(icon_frame)
+	skill_icon = TextureRect.new()
+	skill_icon.name = "SkillIcon"
+	skill_icon.position = Vector2(10, 10)
+	skill_icon.size = Vector2(92, 92)
+	skill_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	skill_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	skill_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	skill_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_frame.add_child(skill_icon)
+	skill_name_label = Label.new()
+	skill_name_label.name = "SkillName"
+	skill_name_label.text = "请选择技能"
+	skill_name_label.position = Vector2(152, 58)
+	skill_name_label.size = Vector2(284, 38)
+	skill_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	skill_name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	skill_name_label.add_theme_font_size_override("font_size", 22)
+	skill_name_label.add_theme_color_override("font_color", Color("f2c783"))
+	panel.add_child(skill_name_label)
+	detail_label = RichTextLabel.new()
+	detail_label.name = "SkillStats"
+	detail_label.position = Vector2(152, 104)
+	detail_label.size = Vector2(284, 190)
+	detail_label.bbcode_enabled = true
+	detail_label.fit_content = false
+	detail_label.scroll_active = true
+	detail_label.theme_type_variation = "GothicDetailText"
+	detail_label.add_theme_font_size_override("normal_font_size", 15)
+	panel.add_child(detail_label)
+	var description_title := Label.new()
+	description_title.name = "DescriptionTitle"
+	description_title.text = "技能说明"
+	description_title.position = Vector2(24, 304)
+	description_title.size = Vector2(412, 28)
+	description_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	description_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	description_title.theme_type_variation = "GothicSectionTitle"
+	panel.add_child(description_title)
+	description_label = RichTextLabel.new()
+	description_label.name = "SkillDescription"
+	description_label.position = Vector2(24, 338)
+	description_label.size = Vector2(412, 116)
+	description_label.bbcode_enabled = true
+	description_label.fit_content = false
+	description_label.scroll_active = true
+	description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	description_label.theme_type_variation = "GothicDetailText"
+	panel.add_child(description_label)
+
+func _build_assignment_section() -> void:
+	var panel := _section_panel("AssignmentPanel", Rect2(814, 76, 374, 548))
+	panel.add_child(_section_title("AssignmentTitle", "技能按钮配置", 374))
+	var attack_slot := Button.new()
+	attack_slot.name = "AttackSkillSlot"
+	attack_slot.position = Vector2(18, 80)
+	attack_slot.size = Vector2(230, 82)
+	attack_slot.text = ""
+	attack_slot.theme_type_variation = "GothicSkillPrimaryPlainButton"
+	attack_slot.pressed.connect(_assign_selected_to_target.bind("attack", 0))
+	attack_slot.set_meta("slot_group", "attack")
+	attack_slot.set_meta("slot_index", 0)
+	attack_slot.set_meta("stable_slot_id", "hud.attack.primary")
+	panel.add_child(attack_slot)
+	attack_assignment_buttons.append(attack_slot)
+	assignment_buttons.append(attack_slot)
+	var clear_attack := Button.new()
+	clear_attack.name = "ClearAttackSkillSlot"
+	clear_attack.text = ""
+	clear_attack.position = Vector2(252, 80)
+	clear_attack.size = Vector2(104, 82)
+	clear_attack.theme_type_variation = "GothicSkillRestorePlainButton"
+	clear_attack.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	clear_attack.set_meta("calibration_runtime_text", true)
+	clear_attack.pressed.connect(_request_clear_target.bind("attack", 0))
+	clear_attack.set_meta("stable_slot_id", "hud.attack.primary")
+	clear_attack.set_meta("assignment_action", "clear")
+	panel.add_child(clear_attack)
+	_add_centered_button_label(clear_attack, "恢复\n普通攻击", 15, SKILL_CONFIG_TEXT_X_OFFSET)
+	var ring_title := Label.new()
+	ring_title.name = "AttackRingSlotsTitle"
+	ring_title.text = "攻击环技能槽 1–6"
+	ring_title.position = Vector2(22, 176)
+	ring_title.size = Vector2(290, 26)
+	ring_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	ring_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	ring_title.theme_type_variation = "GothicMutedLabel"
+	panel.add_child(ring_title)
+	for slot_index in range(ATTACK_RING_SLOT_COUNT):
+		var button := Button.new()
+		button.name = "AttackRingSkillSlot_%d" % (slot_index + 1)
+		button.position = Vector2(18 + (slot_index % 3) * 118, 208 + floori(float(slot_index) / 3.0) * 112)
+		button.size = Vector2(108, 60)
+		button.text = ""
+		button.theme_type_variation = "GothicSkillRingPlainButton"
+		button.pressed.connect(_assign_selected_to_target.bind("attack_ring", slot_index))
+		button.set_meta("slot_group", "attack_ring")
+		button.set_meta("slot_index", slot_index)
+		button.set_meta("stable_slot_id", "hud.attack_ring_skill.%d" % (slot_index + 1))
+		panel.add_child(button)
+		attack_ring_assignment_buttons.append(button)
+		assignment_buttons.append(button)
+		var clear_button := Button.new()
+		clear_button.name = "ClearAttackRingSkillSlot_%d" % (slot_index + 1)
+		clear_button.text = ""
+		clear_button.position = button.position + Vector2(0, 64)
+		clear_button.size = Vector2(108, 40)
+		clear_button.theme_type_variation = "GothicSkillClearPlainButton"
+		clear_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
+		clear_button.set_meta("calibration_runtime_text", true)
+		clear_button.pressed.connect(_request_clear_target.bind("attack_ring", slot_index))
+		clear_button.set_meta("stable_slot_id", "hud.attack_ring_skill.%d" % (slot_index + 1))
+		clear_button.set_meta("assignment_action", "clear")
+		panel.add_child(clear_button)
+		_add_centered_button_label(clear_button, "清空 %d" % (slot_index + 1), 15, SKILL_CONFIG_TEXT_X_OFFSET)
+	var hint := Label.new()
+	hint.name = "AssignmentHint"
+	hint.text = "主动技能可配置到攻击主键或六个环形技能位\n被动技能仅在技能列表中展示"
+	## FREEZE-G0.2-B (FREEZE-B038): word-smart autowrap keeps the hint width
+	## inside the widened 338px slot (parent-derived: 374 - 2*18) and lets the
+	## height grow with the wrapped text. The muted-label variation must be
+	## applied before sizing so the 14pt minimum width never clamps the slot
+	## wider than the parent (previously size was assigned at the 16pt default,
+	## clamping to 320px -> right edge 10px past the parent).
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	hint.theme_type_variation = "GothicMutedLabel"
+	hint.position = Vector2(18, 442)
+	hint.size = Vector2(338, 72)
+	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	panel.add_child(hint)
+
+
+func _build_assignment_popup() -> void:
+	assignment_scrim = Panel.new()
+	assignment_scrim.name = "AssignmentScrim"
+	assignment_scrim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	assignment_scrim.z_index = 100
+	assignment_scrim.mouse_filter = Control.MOUSE_FILTER_STOP
+	# This full-rect node is only an input barrier.  The visible modal background
+	# belongs to PopupSurface and must never expand to the whole skill codex.
+	assignment_scrim.theme_type_variation = "GothicModalScrim"
+	assignment_scrim.visible = false
+	add_child(assignment_scrim)
+	assignment_popup = Panel.new()
+	assignment_popup.name = "SkillAssignmentPopup"
+	assignment_popup.set_anchors_preset(Control.PRESET_CENTER)
+	assignment_popup.offset_left = -310
+	assignment_popup.offset_top = -212
+	assignment_popup.offset_right = 310
+	assignment_popup.offset_bottom = 212
+	assignment_popup.size = Vector2(620, 424)
+	assignment_popup.z_index = 1
+	assignment_popup.mouse_filter = Control.MOUSE_FILTER_STOP
+	assignment_popup.theme_type_variation = "GothicModalFrame"
+	assignment_popup.visible = false
+	assignment_scrim.add_child(assignment_popup)
+	var popup_surface := Panel.new()
+	popup_surface.name = "PopupSurface"
+	popup_surface.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	popup_surface.show_behind_parent = true
+	popup_surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	popup_surface.theme_type_variation = "GothicModalSurface"
+	assignment_popup.add_child(popup_surface)
+	assignment_popup_title = Label.new()
+	assignment_popup_title.name = "PopupTitle"
+	assignment_popup_title.position = Vector2(28, 28)
+	assignment_popup_title.size = Vector2(564, 42)
+	assignment_popup_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	assignment_popup_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	assignment_popup_title.add_theme_font_size_override("font_size", 21)
+	assignment_popup_title.add_theme_color_override("font_color", Color("f1cc88"))
+	assignment_popup.add_child(assignment_popup_title)
+	var hint := Label.new()
+	hint.name = "PopupHint"
+	hint.text = "选择攻击主键或六个攻击环技能槽"
+	hint.position = Vector2(28, 74)
+	hint.size = Vector2(564, 30)
+	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	hint.theme_type_variation = "GothicMutedLabel"
+	assignment_popup.add_child(hint)
+	var attack_slot := Button.new()
+	attack_slot.name = "PopupAttackSlot"
+	attack_slot.text = "攻击主键"
+	attack_slot.position = Vector2(28, 108)
+	attack_slot.size = Vector2(564, 62)
+	attack_slot.theme_type_variation = "GothicComponentSelectedButton"
+	attack_slot.pressed.connect(_assign_selected_to_target.bind("attack", 0))
+	attack_slot.set_meta("slot_group", "attack")
+	attack_slot.set_meta("slot_index", 0)
+	assignment_popup.add_child(attack_slot)
+	assignment_popup_buttons.append(attack_slot)
+	var ring_title := Label.new()
+	ring_title.name = "PopupRingTitle"
+	ring_title.text = "攻击环技能槽"
+	ring_title.position = Vector2(28, 178)
+	ring_title.size = Vector2(564, 26)
+	ring_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	ring_title.theme_type_variation = "GothicSectionTitle"
+	assignment_popup.add_child(ring_title)
+	for slot_index in range(ATTACK_RING_SLOT_COUNT):
+		var button := Button.new()
+		button.name = "PopupAttackRingSlot_%d" % (slot_index + 1)
+		button.text = "攻击环 %d" % (slot_index + 1)
+		button.position = Vector2(28 + (slot_index % 3) * 188, 208 + floori(float(slot_index) / 3.0) * 70)
+		button.size = Vector2(176, 62)
+		button.theme_type_variation = "GothicComponentButton"
+		button.pressed.connect(_assign_selected_to_target.bind("attack_ring", slot_index))
+		button.set_meta("slot_group", "attack_ring")
+		button.set_meta("slot_index", slot_index)
+		assignment_popup.add_child(button)
+		assignment_popup_buttons.append(button)
+	var cancel_button := Button.new()
+	cancel_button.name = "CancelButton"
+	cancel_button.text = "取消"
+	cancel_button.position = Vector2(244, 350)
+	cancel_button.size = Vector2(132, 62)
+	cancel_button.theme_type_variation = "GothicComponentButton"
+	cancel_button.pressed.connect(_hide_assignment_popup)
+	assignment_popup.add_child(cancel_button)
+
+
+func _build_compatibility_list() -> void:
+	skill_list = ItemList.new()
+	skill_list.name = "CompatibilitySkillList"
+	skill_list.visible = false
+	skill_list.item_selected.connect(_on_skill_selected)
+	add_child(skill_list)
+
+
+func _build_long_press_timer() -> void:
+	_long_press_timer = Timer.new()
+	_long_press_timer.name = "SkillLongPressTimer"
+	_long_press_timer.one_shot = true
+	_long_press_timer.wait_time = LONG_PRESS_SECONDS
+	_long_press_timer.timeout.connect(_on_skill_long_press)
+	add_child(_long_press_timer)
+
+
+func open_for(display_name: String) -> void:
+	_trainer_name = display_name
+	var all_entries: Array = GameData.get_profession_skills(
+		PlayerState.profession
+	)
+	## Hidden skills (e.g. taoist.revelation) stay in data/saves but are
+	## filtered from the visible skill system.
+	skill_entries = []
+	for entry: Variant in all_entries:
+		if not entry is Dictionary:
+			continue
+		var entry_name := str((entry as Dictionary).get("skillName", ""))
+		var entry_id := ProfessionRules.skill_id(entry_name)
+		if entry_id.is_empty() or not SkillVisibilityPolicyScript.is_skill_visible(
+			entry_id
+		):
+			continue
+		skill_entries.append(entry)
+	var available_ids: Variant = PlayerState.available_skill_ids() if PlayerState.has_method("available_skill_ids") else []
+	for raw_id: Variant in available_ids:
+		var definition := SkillDataLoaderScript.skill(str(raw_id))
+		if definition.is_empty() or not bool(definition.get("equipment_granted", false)):
+			continue
+		var grant_id := str(definition.get("skill_id", raw_id))
+		if not SkillVisibilityPolicyScript.is_skill_visible(grant_id):
+			continue
+		skill_entries.append({
+			"skillName": str(definition.get("display_name", grant_id)),
+			"skill_id": grant_id,
+			"description": str(definition.get("description", "")),
+			"requiredCharacterLevel": 1,
+			"equipment_granted": true,
+		})
+	selected_skill_index = 0 if not skill_entries.is_empty() else -1
+	refresh()
+	show()
+
+
+func set_skill_button_assignments(assignments: Dictionary, interaction_modes := {}) -> void:
+	skill_button_assignments = assignments.duplicate(true)
+	skill_button_modes = interaction_modes.duplicate(true) if interaction_modes is Dictionary else {}
+	if skill_list != null:
+		_on_panel_data_changed()
+
+
+func _on_panel_data_changed() -> void:
+	if not visible:
+		_refresh_pending = true
+		return
+	_refresh_pending = true
+	if _refresh_scheduled:
+		return
+	_refresh_scheduled = true
+	call_deferred("_flush_queued_refresh")
+
+
+func _on_visibility_changed() -> void:
+	if visible and _refresh_pending:
+		refresh()
+
+
+func refresh() -> void:
+	if skill_list == null:
+		return
+	_refresh_pending = false
+	_refresh_scheduled = false
+	_refresh_execution_count += 1
+	_sync_equipment_granted_entries()
+	skill_list.clear()
+	for entry: Variant in skill_entries:
+		var skill_name := str(entry.get("skillName", "技能"))
+		var learned := PlayerState.is_skill_learned(skill_name)
+		var equipment_granted := bool(entry.get("equipment_granted", false))
+		var has_book := PlayerState.has_item(GameData.skill_book_entity_id(CanonicalSkillData.entity_skill_id(str(entry.get("skill_id", "")))))
+		var marker := "已学会" if learned else ("装备赋予" if equipment_granted else ("可学习" if has_book else "缺少技能书"))
+		skill_list.add_item("%s（%s）　Lv%d" % [skill_name, marker, int(entry.get("requiredCharacterLevel", 1))])
+	_rebuild_skill_cards()
+	_refresh_assignment_slots()
+	trainer_context_label.text = "%s　·　%s" % [_trainer_name, PlayerState.profession]
+	if is_instance_valid(skill_count_label):
+		skill_count_label.text = "%s技能　%d 项" % [PlayerState.profession, skill_entries.size()]
+	if selected_skill_index >= 0 and selected_skill_index < skill_entries.size():
+		skill_list.select(selected_skill_index)
+		_show_skill_detail(selected_skill_index)
+	else:
+		_clear_skill_detail()
+	if not _layout_initialized:
+		_layout_initialized = true
+		_layout_apply_count += 1
+		UIRuntimeLayoutOverridesScript.apply_profile(self, "skill")
+		call_deferred("_ensure_skill_list_bottom_clearance")
+
+
+func _sync_equipment_granted_entries() -> void:
+	## Ordinary profession entries are the stable base list. Grant rows are
+	## rebuilt from current availability on every refresh so equip/unequip and
+	## durability changes are reflected immediately without duplication.
+	var previous_index := selected_skill_index
+	var previous_skill_id := ""
+	if previous_index >= 0 and previous_index < skill_entries.size():
+		previous_skill_id = str(skill_entries[previous_index].get("skill_id", ""))
+	var ordinary_entries: Array = []
+	for raw_entry: Variant in skill_entries:
+		if raw_entry is Dictionary and not bool((raw_entry as Dictionary).get("equipment_granted", false)):
+			ordinary_entries.append(raw_entry)
+	skill_entries = ordinary_entries
+	var seen_grants := {}
+	var available_ids: Variant = PlayerState.available_skill_ids() if PlayerState.has_method("available_skill_ids") else []
+	for raw_id: Variant in available_ids:
+		var definition := SkillDataLoaderScript.skill(str(raw_id))
+		if definition.is_empty() or not bool(definition.get("equipment_granted", false)):
+			continue
+		var grant_id := str(definition.get("skill_id", raw_id))
+		if seen_grants.has(grant_id) or not SkillVisibilityPolicyScript.is_skill_visible(grant_id):
+			continue
+		seen_grants[grant_id] = true
+		skill_entries.append({
+			"skillName": str(definition.get("display_name", grant_id)),
+			"skill_id": grant_id,
+			"description": str(definition.get("description", "")),
+			"requiredCharacterLevel": 1,
+			"equipment_granted": true,
+		})
+	var restored_index := -1
+	if not previous_skill_id.is_empty():
+		for index in range(skill_entries.size()):
+			if str(skill_entries[index].get("skill_id", "")) == previous_skill_id:
+				restored_index = index
+				break
+	if restored_index >= 0:
+		selected_skill_index = restored_index
+	elif skill_entries.is_empty():
+		selected_skill_index = -1
+	else:
+		selected_skill_index = clampi(previous_index, 0, skill_entries.size() - 1)
+
+
+func _flush_queued_refresh() -> void:
+	_refresh_scheduled = false
+	if visible and _refresh_pending:
+		refresh()
+
+
+func _on_runtime_layout_profile_applied(profile_id: String) -> void:
+	if profile_id == "skill":
+		_ensure_skill_list_bottom_clearance()
+		call_deferred("_ensure_skill_list_bottom_clearance")
+
+
+func _ensure_skill_list_bottom_clearance() -> void:
+	if not is_instance_valid(skill_list_container) or not is_instance_valid(skill_list_container.get_parent()):
+		return
+	var scroll := skill_list_container.get_parent() as ScrollContainer
+	if scroll == null:
+		return
+	var content_bottom := 0.0
+	for child: Node in skill_list_container.get_children():
+		if child is Control:
+			var control := child as Control
+			content_bottom = maxf(content_bottom, control.position.y + control.size.y)
+	var separation := float(skill_list_container.get_theme_constant("separation"))
+	var viewport_height := maxf(0.0, scroll.size.y)
+	# Keep enough trailing space for the calibrated card's bottom edge to clear
+	# the viewport clip at max scroll.  The extra separation is layout-relative,
+	# not tied to any profession or skill name.
+	var required_height := maxf(viewport_height, content_bottom + separation * 3.0)
+	skill_list_container.custom_minimum_size.y = required_height
+	skill_list_container.queue_sort()
+
+
+func _rebuild_skill_cards() -> void:
+	# Slots keep their controls, calibrated geometry and input bindings across
+	# refreshes. Only the current profession's excess tail is retired.
+	while skill_buttons.size() > skill_entries.size():
+		var retired: Button = skill_buttons.pop_back()
+		retired.free()
+	for index in range(skill_entries.size()):
+		var entry: Dictionary = skill_entries[index]
+		var skill_name := str(entry.get("skillName", "技能"))
+		var learned := PlayerState.is_skill_learned(skill_name)
+		var equipment_granted := bool(entry.get("equipment_granted", false))
+		var has_book := PlayerState.has_item(GameData.skill_book_entity_id(CanonicalSkillData.entity_skill_id(str(entry.get("skill_id", "")))))
+		var level := PlayerState.effective_skill_level(skill_name)
+		var interaction_label := _skill_presentation_label(skill_name)
+		var status := "已学会" if learned else ("装备赋予" if equipment_granted else "未学会")
+		var detail_status := "Lv.%d · %s" % [level, interaction_label] if learned else ("可用 · %s" % interaction_label if equipment_granted else ("可学习" if has_book else "缺少技能书"))
+		var card_text := "%s（%s）\n%s" % [skill_name, status, detail_status]
+		var button: Button
+		if index < skill_buttons.size():
+			button = skill_buttons[index]
+		else:
+			button = Button.new()
+			button.name = "SkillCard_%d" % index
+			button.set_meta("calibration_layout_revision", 1)
+			button.custom_minimum_size = Vector2(266, 80)
+			button.toggle_mode = true
+			button.alignment = HORIZONTAL_ALIGNMENT_CENTER
+			button.add_theme_font_size_override("font_size", 15)
+			button.set_meta("calibration_runtime_text", true)
+			button.pressed.connect(_on_skill_selected.bind(index))
+			button.gui_input.connect(_skill_card_input.bind(index))
+			skill_list_container.add_child(button)
+			_add_centered_button_label(button, card_text, 15, SKILL_CARD_TEXT_X_OFFSET)
+			skill_buttons.append(button)
+		button.set_pressed_no_signal(index == selected_skill_index)
+		var variation: StringName = &"GothicSkillListSelectedGemButton" if index == selected_skill_index else &"GothicSkillListGemButton"
+		if button.theme_type_variation != variation:
+			button.theme_type_variation = variation
+		(button.get_node("CenteredText") as Label).text = card_text
+		button.set_meta("skill_id", ProfessionRules.skill_id(skill_name))
+		button.set_meta("learned", learned)
+		button.set_meta("assignment_eligible", _skill_interaction_mode(skill_name) != "passive")
+
+
+func _add_centered_button_label(button: Button, text_value: String, font_size: int, horizontal_offset: float) -> void:
+	var label := Label.new()
+	label.name = "CenteredText"
+	label.text = text_value
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", font_size)
+	button.add_child(label)
+	label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	# Move the full label rect, not the text margins, so its accepted vertical
+	# center and wrapping width stay unchanged while each frame family receives
+	# its measured optical horizontal correction.
+	label.offset_left = horizontal_offset
+	label.offset_right = horizontal_offset
+
+
+func _on_skill_selected(index: int) -> void:
+	if index < 0 or index >= skill_entries.size():
+		return
+	if TouchScrollSupportScript.is_drag_active(get_tree()):
+		return
+	selected_skill_index = index
+	skill_list.select(index)
+	for button_index in range(skill_buttons.size()):
+		var button := skill_buttons[button_index]
+		var selected := button_index == index
+		button.set_pressed_no_signal(selected)
+		button.theme_type_variation = "GothicSkillListSelectedGemButton" if selected else "GothicSkillListGemButton"
+	_show_skill_detail(index)
+
+
+func _show_skill_detail(index: int) -> void:
+	var entry: Dictionary = skill_entries[index]
+	var skill_name := str(entry.get("skillName", ""))
+	var learned := PlayerState.is_skill_learned(skill_name)
+	var equipment_granted := bool(entry.get("equipment_granted", false))
+	var learned_level := PlayerState.effective_skill_level(skill_name) if learned else -1
+	var base_level := int(PlayerState.learned_skills.get(preload("res://scripts/skills/skill_data_loader.gd").entity_skill_id(skill_name), 0)) if learned else -1
+	var row := GameData.get_skill(skill_name, maxi(0, base_level))
+	if row.is_empty():
+		row = entry
+	var preview_rank := learned_level if learned else 1
+	var combat := ProfessionRules.skill_combat_profile(skill_name, preview_rank)
+	var definition := SkillDataLoaderScript.skill(str(entry.get("skill_id", skill_name)))
+	var passive := str(definition.get("mechanics", {}).get("runtime_family", "")) in ["passive_stat_modifier", "melee_proc_modifier"]
+	var timing: Dictionary = definition.get("timing", {})
+	var cooldown := float(timing.get("cooldown_ms", timing.get("total_action_lock_ms", 0))) / 1000.0
+	var stable_id := ProfessionRules.skill_id(skill_name)
+	var partner_rank := -1
+	if stable_id in ["taoist.defense", "taoist.magic_defense"]:
+		var partner := "taoist.defense" if stable_id == "taoist.magic_defense" else "taoist.magic_defense"
+		if PlayerState.is_skill_learned(partner):
+			partner_rank = PlayerState.effective_skill_level(partner)
+	var mana_cost := int(definition.get("mana_cost", SkillDescription.mana_cost(stable_id, preview_rank, partner_rank))) if equipment_granted else SkillDescription.mana_cost(stable_id, preview_rank, partner_rank)
+	var upgrade_text := "佩戴对应装备后可用" if equipment_granted else ("基础已满级，装备可继续提升有效等级" if base_level >= 3 else "使用对应技能书提升，基础最高 3 级")
+	var state_text := "装备赋予" if equipment_granted else ("已学会" if learned else ("可学习" if PlayerState.has_item(GameData.skill_book_entity_id(CanonicalSkillData.entity_skill_id(str(entry.get("skill_id", ""))))) else "缺少技能书"))
+	skill_name_label.text = "%s（%s）" % [skill_name, state_text]
+	skill_icon.texture = _skill_texture(skill_name)
+	skill_icon.set_meta("skill_id", ProfessionRules.skill_id(skill_name))
+	skill_icon.set_meta("skill_icon_id", HUDSkillIconCatalogScript.source_id_for(skill_name))
+	skill_icon.set_meta("skill_icon_path", HUDSkillIconCatalogScript.source_path_for(skill_name))
+	detail_label.text = "[color=#ddc9a9]等级：%s\n升级：%s\n类型：%s　　操作：%s\n消耗：%d 点魔法　基础间隔：%.2f 秒\n状态：%s[/color]" % [
+		("%d 级（基础 %d 级）" % [learned_level, base_level]) if learned else "未学习（下方预览初学效果）",
+		upgrade_text,
+		"被动" if passive else "主动",
+		_skill_presentation_label(skill_name),
+		mana_cost,
+		cooldown,
+		state_text,
+	]
+	description_label.text = "[color=#d7c3a3]%s[/color]" % (str(entry.get("description", "")) if equipment_granted else _player_mechanics_description(row, combat))
+
+
+func _player_mechanics_description(row: Dictionary, combat: Dictionary) -> String:
+	var stable_id := str(row.get("skill_id", ProfessionRules.skill_id(str(row.get("skillName", "")))))
+	return SkillDescription.describe(stable_id, maxi(0, int(combat.get("skill_level", 0))), PlayerState.computed_stats, PlayerState.level)
+
+
+func _clear_skill_detail() -> void:
+	skill_name_label.text = "请选择技能"
+	skill_icon.texture = null
+	detail_label.text = "[color=#a99479]从左侧选择技能查看完整资料。[/color]"
+	description_label.text = ""
+
+
+func _refresh_assignment_slots() -> void:
+	for slot_index in range(attack_assignment_buttons.size()):
+		var skill_name := _assignment_skill_name("attack", slot_index)
+		_set_assignment_button_content(attack_assignment_buttons[slot_index], "攻击主键", skill_name)
+		if slot_index < assignment_popup_buttons.size():
+			assignment_popup_buttons[slot_index].text = "攻击主键\n%s [%s]" % [
+				skill_name if not skill_name.is_empty() else "普通攻击",
+				_skill_presentation_label(skill_name),
+			]
+	for slot_index in range(attack_ring_assignment_buttons.size()):
+		var skill_name := _assignment_skill_name("attack_ring", slot_index)
+		_set_assignment_button_content(attack_ring_assignment_buttons[slot_index], "环 %d" % (slot_index + 1), skill_name)
+		var popup_index := ATTACK_SLOT_COUNT + slot_index
+		if popup_index < assignment_popup_buttons.size():
+			assignment_popup_buttons[popup_index].text = "攻击环 %d\n%s [%s]" % [
+				slot_index + 1,
+				skill_name if not skill_name.is_empty() else "空",
+				_skill_presentation_label(skill_name),
+			]
+
+
+func _assignment_skill_name(slot_group: String, slot_index: int) -> String:
+	if not skill_button_assignments.is_empty():
+		if not skill_button_assignments.has(slot_group):
+			return ""
+		var configured: Variant = skill_button_assignments.get(slot_group)
+		if configured is Array and slot_index >= 0 and slot_index < configured.size():
+			var array_value: Variant = configured[slot_index]
+			return _assignment_value_skill_name(array_value)
+		if configured is Dictionary:
+			var dict_value: Variant = configured.get(slot_index, configured.get(str(slot_index), ""))
+			return _assignment_value_skill_name(dict_value)
+		return ""
+	if PlayerState.has_method("skill_name_for_slot"):
+		return str(PlayerState.call("skill_name_for_slot", slot_group, slot_index))
+	# Compatibility for pre-grouped saves only. A grouped contract with an
+	# empty attack-ring slot is intentionally empty and never mirrors center.
+	if slot_index < PlayerState.quick_slots.size():
+		return PlayerState.quick_slots[slot_index]
+	return ""
+
+
+func _assignment_value_skill_name(value: Variant) -> String:
+	if not value is Dictionary:
+		return ProfessionRules.skill_display_name(str(value)) if not str(value).is_empty() else ""
+	return str(
+		value.get(
+			"skill_name",
+			value.get("skillName", value.get("name", value.get("display_name", value.get("displayName", ""))))
+		)
+	)
+
+
+func _set_assignment_button_content(button: Button, slot_label_text: String, skill_name: String) -> void:
+	var old_content := button.get_node_or_null("Content")
+	if old_content != null:
+		# The saved skill profile owns the calibrated geometry of these children.
+		# Rebuilding them after the profile has been applied restores the original
+		# unscaled code offsets, which makes phone refreshes shift every child left
+		# while the calibration workbench still looks correct.  Keep the calibrated
+		# nodes alive and update only their runtime-owned content.
+		var old_icon := old_content.get_node_or_null("SkillIcon") as TextureRect
+		if old_icon != null:
+			old_icon.texture = _skill_texture(skill_name)
+			old_icon.set_meta("skill_icon_id", HUDSkillIconCatalogScript.source_id_for(skill_name))
+			old_icon.set_meta("skill_icon_path", HUDSkillIconCatalogScript.source_path_for(skill_name))
+		var old_slot_label := old_content.get_node_or_null("SlotLabel") as Label
+		if old_slot_label != null:
+			old_slot_label.text = slot_label_text
+		var old_name_label := old_content.get_node_or_null("SkillName") as Label
+		if old_name_label != null:
+			old_name_label.text = skill_name if not skill_name.is_empty() else "空"
+		button.set_meta("skill_name", skill_name)
+		button.set_meta("interaction_mode", _skill_interaction_mode(skill_name))
+		return
+	var content := Control.new()
+	content.name = "Content"
+	content.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	content.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	button.add_child(content)
+	var icon := TextureRect.new()
+	icon.name = "SkillIcon"
+	var compact := button.size.x < 120.0
+	var primary_attack := button.name == "AttackSkillSlot" or str(button.get_meta("stable_slot_id", "")) == "hud.attack.primary"
+	icon.position = Vector2((button.size.x - 40.0) * 0.5, 10) if compact else (Vector2(16, 21) if primary_attack else Vector2(8, 22))
+	icon.size = Vector2(40, 40)
+	icon.texture = _skill_texture(skill_name)
+	icon.set_meta("skill_icon_id", HUDSkillIconCatalogScript.source_id_for(skill_name))
+	icon.set_meta("skill_icon_path", HUDSkillIconCatalogScript.source_path_for(skill_name))
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon.set_meta("alignment_contract", "primary_attack_inset_centered.v2" if primary_attack else "default_assignment_icon.v1")
+	content.add_child(icon)
+	var slot_label := Label.new()
+	slot_label.name = "SlotLabel"
+	slot_label.text = slot_label_text
+	slot_label.position = Vector2(4, 52) if compact else (Vector2(58, 6) if primary_attack else Vector2(52, 6))
+	slot_label.size = Vector2(button.size.x - 8, 18) if compact else (Vector2(button.size.x - 64, 20) if primary_attack else Vector2(button.size.x - 58, 20))
+	slot_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	slot_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	slot_label.theme_type_variation = "GothicMutedLabel"
+	slot_label.add_theme_font_size_override("font_size", 12)
+	content.add_child(slot_label)
+	# These labels were explicitly deleted in the approved skill profile.  They
+	# must not be recreated during assignment refresh, otherwise they are visible
+	# for one frame before the asynchronous layout contract hides them again.
+	if primary_attack:
+		var name_label := Label.new()
+		name_label.name = "SkillName"
+		name_label.text = skill_name if not skill_name.is_empty() else "空"
+		name_label.position = Vector2(58, 28)
+		name_label.size = Vector2(button.size.x - 64, 26)
+		name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		name_label.clip_text = true
+		name_label.add_theme_font_size_override("font_size", 14)
+		name_label.add_theme_color_override("font_color", Color("f0c77f"))
+		content.add_child(name_label)
+	button.set_meta("skill_name", skill_name)
+	button.set_meta("interaction_mode", _skill_interaction_mode(skill_name))
+
+
+func _open_assignment_popup_for_selected() -> void:
+	_open_assignment_popup_for(selected_skill_index)
+
+
+func _open_assignment_popup_for(index: int) -> void:
+	if index < 0 or index >= skill_entries.size():
+		return
+	var skill_name := str(skill_entries[index].get("skillName", ""))
+	if not PlayerState.is_skill_available(skill_name):
+		description_label.text = "[color=#b58b68]请先学习该技能或佩戴对应装备，再配置战斗按钮。[/color]"
+		return
+	if _skill_interaction_mode(skill_name) == "passive":
+		description_label.text = "[color=#b58b68]被动技能始终生效，只在技能列表中展示，不能配置到战斗按钮。[/color]"
+		return
+	_on_skill_selected(index)
+	assignment_popup_title.text = "配置：%s　[%s]" % [skill_name, _skill_presentation_label(skill_name)]
+	assignment_popup.set_meta("skill_name", skill_name)
+	assignment_popup.set_meta("skill_id", ProfessionRules.skill_id(skill_name))
+	assignment_popup.set_meta("interaction_mode", _skill_interaction_mode(skill_name))
+	assignment_scrim.show()
+	assignment_popup.show()
+
+
+func _assign_selected_to_slot(slot_index: int) -> void:
+	_assign_selected_to_target("attack_ring", slot_index)
+
+
+func _assign_selected_to_target(slot_group: String, slot_index: int) -> void:
+	var skill_name := ""
+	if assignment_popup.visible:
+		skill_name = str(assignment_popup.get_meta("skill_name", ""))
+	elif selected_skill_index >= 0 and selected_skill_index < skill_entries.size():
+		skill_name = str(skill_entries[selected_skill_index].get("skillName", ""))
+	if not PlayerState.is_skill_available(skill_name):
+		return
+	if _skill_interaction_mode(skill_name) == "passive":
+		return
+	var maximum := ATTACK_SLOT_COUNT if slot_group == "attack" else ATTACK_RING_SLOT_COUNT
+	if slot_group not in ["attack", "attack_ring"] or slot_index < 0 or slot_index >= maximum:
+		return
+	var stable_slot_id := (
+		"hud.attack.primary"
+		if slot_group == "attack"
+		else "hud.attack_ring_skill.%d" % (slot_index + 1)
+	)
+	var interaction_mode := _skill_interaction_mode(skill_name)
+	var request := {
+		"contract_id": "ui.skill.button_assignment.v3",
+		"profession_id": ProfessionRules.profession_id(PlayerState.profession_id),
+		"skill_id": ProfessionRules.skill_id(skill_name),
+		"skill_name": skill_name,
+		"slot_group": slot_group,
+		"slot_index": slot_index,
+		"slot_id": stable_slot_id,
+		"interaction_mode": interaction_mode,
+	}
+	skill_button_assignment_requested.emit(request.duplicate(true))
+	_clear_assignment_feedback()
+	var feedback_button := _assignment_button_for(slot_group, slot_index, false)
+	if feedback_button != null:
+		GothicUIThemeScript.set_button_feedback(feedback_button, GothicUIThemeScript.BUTTON_FEEDBACK_BUSY, "skill.assignment")
+		_show_assignment_sent(feedback_button, "skill.assignment")
+	_hide_assignment_popup()
+
+
+func _request_clear_target(slot_group: String, slot_index: int) -> void:
+	var maximum := ATTACK_SLOT_COUNT if slot_group == "attack" else ATTACK_RING_SLOT_COUNT
+	if slot_group not in ["attack", "attack_ring"] or slot_index < 0 or slot_index >= maximum:
+		return
+	var stable_slot_id := (
+		"hud.attack.primary"
+		if slot_group == "attack"
+		else "hud.attack_ring_skill.%d" % (slot_index + 1)
+	)
+	skill_button_assignment_requested.emit({
+		"contract_id": "ui.skill.button_assignment.v3",
+		"profession_id": ProfessionRules.profession_id(PlayerState.profession_id),
+		"skill_id": "",
+		"skill_name": "",
+		"slot_group": slot_group,
+		"slot_index": slot_index,
+		"slot_id": stable_slot_id,
+		"interaction_mode": "empty",
+		"clear": true,
+	})
+	_clear_assignment_feedback()
+	var feedback_button := _assignment_button_for(slot_group, slot_index, true)
+	if feedback_button != null:
+		GothicUIThemeScript.set_button_feedback(feedback_button, GothicUIThemeScript.BUTTON_FEEDBACK_BUSY, "skill.assignment.clear")
+		_show_assignment_sent(feedback_button, "skill.assignment.clear")
+
+
+func _assignment_button_for(slot_group: String, slot_index: int, clear: bool) -> Button:
+	for node in find_children("*", "Button", true, false):
+		if not node is Button:
+			continue
+		var button := node as Button
+		if str(button.get_meta("slot_group", "")) != slot_group:
+			continue
+		if int(button.get_meta("slot_index", -1)) != slot_index:
+			continue
+		var is_clear := button.has_meta("assignment_action") and str(button.get_meta("assignment_action", "")) == "clear"
+		if is_clear == clear:
+			return button
+	return null
+
+
+func _show_assignment_sent(button: Button, group: String) -> void:
+	_action_feedback_serial += 1
+	var serial := _action_feedback_serial
+	get_tree().create_timer(GothicUIThemeScript.BUTTON_RESULT_SUCCESS_SECONDS).timeout.connect(func() -> void:
+		if serial == _action_feedback_serial and is_instance_valid(button) and button.is_inside_tree():
+			GothicUIThemeScript.clear_button_feedback(button)
+	)
+
+
+func _clear_assignment_feedback() -> void:
+	_action_feedback_serial += 1
+	for node in find_children("*", "Button", true, false):
+		if node is Button:
+			GothicUIThemeScript.clear_button_feedback(node as Button)
+
+
+func _hide_assignment_popup() -> void:
+	assignment_popup.hide()
+	assignment_scrim.hide()
+
+
+func _skill_card_input(event: InputEvent, index: int) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.pressed:
+			_begin_skill_long_press(index, event.position)
+		else:
+			_cancel_skill_long_press()
+	elif event is InputEventScreenTouch:
+		if event.pressed:
+			_begin_skill_long_press(index, event.position)
+		else:
+			_cancel_skill_long_press()
+	elif event is InputEventMouseMotion or event is InputEventScreenDrag:
+		if _pressed_skill_index == index and event.position.distance_to(_press_origin) > 18.0:
+			_cancel_skill_long_press()
+
+
+func _begin_skill_long_press(index: int, origin: Vector2) -> void:
+	_pressed_skill_index = index
+	_press_origin = origin
+	_long_press_opened = false
+	_long_press_timer.start()
+
+
+func _cancel_skill_long_press() -> void:
+	_long_press_timer.stop()
+	_pressed_skill_index = -1
+
+
+func _on_skill_long_press() -> void:
+	if _pressed_skill_index < 0 or TouchScrollSupportScript.is_drag_active(get_tree()):
+		return
+	_long_press_opened = true
+	_open_assignment_popup_for(_pressed_skill_index)
+	_pressed_skill_index = -1
+
+
+func _skill_interaction_mode(skill_name: String) -> String:
+	if skill_name.is_empty():
+		return "empty"
+	var skill_id := ProfessionRules.skill_id(skill_name)
+	for key: String in [skill_id, skill_name]:
+		if skill_button_modes.has(key):
+			var configured := str(skill_button_modes[key])
+			if configured in ["toggle", "click", "passive"]:
+				return configured
+	var profile := ProfessionRules.skill_profile(skill_name)
+	var explicit_mode := str(profile.get("ui_interaction_mode", ""))
+	if explicit_mode in ["toggle", "click", "passive"]:
+		return explicit_mode
+	var service_mode := str(profile.get("service_mode", ""))
+	var cast_type := str(profile.get("cast_type", ""))
+	if cast_type == "passive" or service_mode == "automatic_proc":
+		return "passive"
+	if service_mode.begins_with("toggle") or service_mode == "arm_next_hit" or cast_type == "shield":
+		return "toggle"
+	return "click"
+
+
+func _skill_presentation_label(skill_name: String) -> String:
+	# Production mode is the canonical explicit click. Its player-facing label
+	# must still describe the one-shot charge instead of the retired auto toggle.
+	if ProfessionRules.skill_id(skill_name) == "warrior.fire_sword":
+		return "主动充能"
+	return _interaction_mode_label(_skill_interaction_mode(skill_name))
+
+
+func _interaction_mode_label(mode: String) -> String:
+	return {
+		"toggle": "开关",
+		"click": "点击",
+		"passive": "被动",
+		"empty": "空",
+	}.get(mode, "点击")
+
+
+func _skill_texture(skill_name: String) -> Texture2D:
+	if skill_name.is_empty():
+		return null
+	var skill_id := SkillDataLoaderScript.entity_skill_id(skill_name)
+	var texture := HUDSkillIconCatalogScript.texture_for(skill_id)
+	if texture != null:
+		return texture
+	texture = HUDSkillIconCatalogScript.texture_for(skill_name)
+	if texture != null:
+		return texture
+	return UIItemTextureCacheScript.texture_for(
+		GameData.get_item_record(skill_name), "inventoryIcon"
+	)
+
+
+func _cast_type_label(cast_type: String) -> String:
+	return {
+		"passive": "被动",
+		"melee": "近战",
+		"line": "直线",
+		"area": "范围",
+		"dash": "冲锋",
+		"projectile": "投射",
+		"summon": "召唤",
+		"shield": "护盾",
+	}.get(cast_type, cast_type)
+
+
+func _target_mode_label(target_mode: String) -> String:
+	return {
+		"self": "自身",
+		"self_area": "自身范围",
+		"single": "单体目标",
+		"direction": "方向",
+		"target_area": "目标区域",
+	}.get(target_mode, target_mode)
+
+
+func _section_panel(node_name: String, rect: Rect2) -> Control:
+	var adjusted_rect := Rect2(rect.position + Vector2(0, -SECTION_VERTICAL_SHIFT), rect.size)
+	var section := Control.new()
+	section.name = node_name
+	section.position = adjusted_rect.position
+	section.size = adjusted_rect.size
+	section.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(section)
+	var decoration := Control.new()
+	decoration.name = "%sDecoration" % node_name
+	decoration.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	decoration.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	decoration.set_meta("calibration_layer", "filled_single_ring_decoration")
+	section.add_child(decoration)
+	var fill := GothicFrameFillScript.new()
+	fill.name = "%sFill" % node_name
+	fill.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	# v3 inset_frame has a transparent centre; use the measured inner opening
+	# rather than the legacy chamfer default so skill-page sections contain
+	# their code-drawn background within the stretched frame.
+	GothicFrameFactoryScript.configure_inset_fill(fill)
+	fill.set_meta("calibration_internal_visual", true)
+	decoration.add_child(fill)
+	var frame := Panel.new()
+	frame.name = "%sFrame" % node_name
+	frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	frame.theme_type_variation = "GothicInsetFrame"
+	frame.set_meta("calibration_internal_visual", true)
+	decoration.add_child(frame)
+	return section
+
+
+func _section_title(node_name: String, text_value: String, width: float) -> Label:
+	var title := Label.new()
+	title.name = node_name
+	title.text = text_value
+	title.position = Vector2(18, 16)
+	title.size = Vector2(width - 36.0, 28)
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	title.theme_type_variation = "GothicSectionTitle"
+	return title
+
+
+func _close() -> void:
+	_clear_assignment_feedback()
+	_cancel_skill_long_press()
+	_hide_assignment_popup()
+	hide()
+	closed.emit()
