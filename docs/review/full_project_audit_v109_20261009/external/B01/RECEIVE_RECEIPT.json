@@ -1,0 +1,50 @@
+{
+  "status": "PASS",
+  "scope": "seven external B01 reports received as exact Git bytes, not production acceptance",
+  "commit": "75371c60addc5d63c37469dff4379d49015c22f6",
+  "baseline": "dbd78d3301c2af6cfd9e070abe8cc847e6353175",
+  "files": [
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B01/COVERAGE.json",
+      "sha256": "0043ac28b7f9721b80f8cd017b77c529320fe89d6fd95ed0e2f0a89bc62959f6",
+      "git_blob": "8d5577579736e3d0aea2dd685621ba58ec81ec8e",
+      "byte_equal": true
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B01/FINDINGS.csv",
+      "sha256": "724eadc2fc5c60fddf8255c156d73188e1e16edb8ac1d9cb90daa48467e9969b",
+      "git_blob": "d6f0a1a480310d262faebe60109f5d6931f49b6f",
+      "byte_equal": true
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B01/FINDINGS.json",
+      "sha256": "b5b7ea5752bcd17526d43e19235c9529cf7b0b411b3bce6dfbc795801e69407c",
+      "git_blob": "74ff1ea2457e217faaab99695d2635838fce07d7",
+      "byte_equal": true
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B01/REDUNDANCY.md",
+      "sha256": "1a2beea84d8e8fccf08e7001c12d08e50040619ad13fb3ee31b1219dbafe4cac",
+      "git_blob": "daed51e9a5ae10af678df5c2476ee28e0149ca1c",
+      "byte_equal": true
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B01/SOURCE_BINDING.json",
+      "sha256": "e58cb98d2501e4fb0679c5913dec778c7934b0c35a40de8b59188b3131b9eec1",
+      "git_blob": "7cd9da05e09acd2918e343700faa5d5a040fcccb",
+      "byte_equal": true
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B01/SUMMARY.md",
+      "sha256": "ea07671f9e310a444b476e632d0401b418e7b3800456b3c623ac29ddbe5e3041",
+      "git_blob": "6c5d1e4f1e978c3829c802ea21ea141fab0b2f47",
+      "byte_equal": true
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B01/VALIDATION_GAPS.md",
+      "sha256": "a372cd097268e2802d03f96a88ffa5c6eddb12653e8ac320674e36fa2ffb1327",
+      "git_blob": "7d7617c2e98f38b025578f67b989017b0a21b8d5",
+      "byte_equal": true
+    }
+  ]
+}
