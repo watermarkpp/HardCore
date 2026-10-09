@@ -1,0 +1,72 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "formal stealth ring item exists",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "formal stealth ring equips",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "peaceful equipped ring activates stealth",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "formal live enemy exists",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "accepted combat submission breaks stealth",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "live combat ring removal succeeds",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "live combat ring re-equips",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "equipment refresh does not re-arm stealth during live combat",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "GameRoot combat gate blocks recovery while enemy targets player",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "GameRoot recovery re-arms stealth after target leaves",
+      "passed": true
+    }
+  ],
+  "count": 10,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "d68e98e0-c84e-49b2-a477-a23d5008e13d",
+  "passed": 10,
+  "reported_checks": 10,
+  "reported_failures": 0,
+  "run_id": "0d1ffaee-b0de-450a-940f-9dc3dda26f0a",
+  "runtime_environment": {
+    "native_process_id": 14032,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\b02_direct17_equipment_stealth_fix",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/b02_direct17_equipment_stealth_fix/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "equipment_stealth_rearm_contract_20261009_test",
+  "schema_version": 1,
+  "source_content_sha256": "",
+  "status": "PASS"
+}

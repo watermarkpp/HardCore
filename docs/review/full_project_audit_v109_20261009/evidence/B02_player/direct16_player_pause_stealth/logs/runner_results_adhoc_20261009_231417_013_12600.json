@@ -1,0 +1,63 @@
+{
+  "passed": 1,
+  "generated_at": "2026-10-09T23:14:17.0141423+08:00",
+  "invocation_id": "6457c8be-d27f-4be7-9ff2-d7a4ef0a4c30",
+  "git_head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+  "engine_log_errors": 2,
+  "suite": "adhoc",
+  "total": 2,
+  "results": [
+    {
+      "test_name": "player_pause_movement_contract_20261009_test",
+      "test_path": "tests/framework/player_pause_movement_contract_20261009_test.tscn",
+      "wrapper_process_id": 13552,
+      "wrapper_started_utc": "2026-10-09T15:13:52.1123034Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\b02_direct16_player_pause_stealth",
+      "fixed_fps": 0,
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-09T15:14:22.1263393Z",
+      "native_exit_observed_utc": "2026-10-09T15:14:11.5978976Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "598af74c-dde7-4c03-9255-9efe581ec7fa",
+      "framework_receipt_valid": true,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "equipment_stealth_rearm_contract_20261009_test",
+      "test_path": "tests/framework/equipment_stealth_rearm_contract_20261009_test.tscn",
+      "wrapper_process_id": 20808,
+      "wrapper_started_utc": "2026-10-09T15:14:13.1619177Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\b02_direct16_player_pause_stealth",
+      "fixed_fps": 0,
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "execution_deadline_utc": "2026-10-09T15:14:43.1705998Z",
+      "native_exit_observed_utc": null,
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 2,
+      "engine_log_failure_count": 2,
+      "framework_run_id": "207234ed-9b88-4c95-a6cd-c5fe454ef45a",
+      "framework_receipt_valid": false,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2;framework_receipt_missing"
+    }
+  ],
+  "runtime_environment": {
+    "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\b02_direct16_player_pause_stealth",
+    "runner_process_id": 12600
+  },
+  "failed": 1
+}

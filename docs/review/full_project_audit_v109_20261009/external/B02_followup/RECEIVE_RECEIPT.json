@@ -1,0 +1,58 @@
+{
+  "status": "PASS",
+  "report_commit": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+  "parent": "3c498eb135ab0a80b7c428436821202361d9a920",
+  "fixed_audit_source": "ed2d87121de80c84caaa3f096c3a5acb71d4946f",
+  "files": [
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B02_followup/SUMMARY.md",
+      "blob": "081fd714035ea729c28e22b1c3e585e14863d631",
+      "sha256": "8ebd3c024e05321f35c83d74d8e2d0f8867fce83a1e90218a88b52b316aa2f2c",
+      "bytes": 6230,
+      "byte_equal": true
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B02_followup/FINDINGS.json",
+      "blob": "dbcc20873bf0b24baa1a4648a61d1b7dd3d1720f",
+      "sha256": "9eb1525171d183db42e5f81ad2455f4b6c2f3df5701f12376efce1d4133c7f9e",
+      "bytes": 9049,
+      "byte_equal": true
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B02_followup/FINDINGS.csv",
+      "blob": "0dc7c121d4a86449e8d06caa799089096f6f46d0",
+      "sha256": "fa9566f851540cbbfd1fcf067c577711ab0796a85d6c9f79fa553b8375dcb402",
+      "bytes": 6908,
+      "byte_equal": true
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B02_followup/COVERAGE.json",
+      "blob": "9d4b128853d453d88a7c237c0316c2d0c8b4a183",
+      "sha256": "8ac7822c1c52b3d7f19b9a008148f5497708dcc88046b9377f057e74485a08c2",
+      "bytes": 77348,
+      "byte_equal": true
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B02_followup/REDUNDANCY.md",
+      "blob": "f455dd28e3ba7b36011740b82d0be80243ba0e71",
+      "sha256": "87dc903abcc79b2b54381da61081c9ac54478d5b009e9a505619bf81d2ff6f9d",
+      "bytes": 2737,
+      "byte_equal": true
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B02_followup/VALIDATION_GAPS.md",
+      "blob": "b20280922891674e81a61a9af0513dd5af7f88b6",
+      "sha256": "05dff9585031788700ab8c6f2206ddb94369b1b96403f2ae3b240883d07a1f41",
+      "bytes": 3298,
+      "byte_equal": true
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B02_followup/SOURCE_BINDING.json",
+      "blob": "a2cbfa746d25272b5a10da7da7a7116b4b769932",
+      "sha256": "3ff3424aa6fd6c35f2fe3e2f9edb89786dcd3408e74158f0db5cee4f22108fb3",
+      "bytes": 31729,
+      "byte_equal": true
+    }
+  ],
+  "scope": "Seven report files byte-identical reception; not production acceptance"
+}

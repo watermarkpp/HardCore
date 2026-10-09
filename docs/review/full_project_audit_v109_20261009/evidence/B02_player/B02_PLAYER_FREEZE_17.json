@@ -1,0 +1,107 @@
+{
+  "parent": "ed2d87121de80c84caaa3f096c3a5acb71d4946f",
+  "candidate_tree": "e999954641acc49b45c1798bb179578e177fb522",
+  "main_head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+  "files": [
+    {
+      "path": "scripts/game_root.gd",
+      "sha256": "706c754bd41d3cf39f5ef2308f7d4dbf2d7a281728c0d08408cf95c1d52a82a0"
+    },
+    {
+      "path": "scripts/world_bootstrap_coordinator.gd",
+      "sha256": "43544704faddcbdcfbf75c59fa9914f9f54ba68a971dd63eac59b36407190db2"
+    },
+    {
+      "path": "scripts/features/runtime/feature_resource_preparation.gd",
+      "sha256": "302338e03ab3ad3d38052469ed65330708047dab8b93876057ac1f770e389493"
+    },
+    {
+      "path": "scripts/layers/runtime/content_layer_registry.gd",
+      "sha256": "fadfdff4772dd5806f6bccc058533d95f13d728bbb284cbe35220e18deedbf33"
+    },
+    {
+      "path": "scripts/monster_visual_streaming_coordinator.gd",
+      "sha256": "70e936b9a64e76361ce624019b08f7df88dcc05d6adf9b68939e523ef4f06319"
+    },
+    {
+      "path": "scripts/monster_source_frames.gd",
+      "sha256": "18299833c62a2eaf231ecd267cc9878ed30eb8c180a667d2bba5cc11a651e917"
+    },
+    {
+      "path": "scripts/startup_loading.gd",
+      "sha256": "25a5d7e789a4ba1797da5b5e73b0c7887ec56fbe824e23944e1a730edeaf5a33"
+    },
+    {
+      "path": "tests/retired_threaded_resource_claims_20261009.gd",
+      "sha256": "e8c3188216f8b1130c292a861f9666d2eab846d1f1254553d6105b42490d17dd"
+    },
+    {
+      "path": "tests/retired_threaded_resource_claims_20261009.tscn",
+      "sha256": "2ff98e695dac39933cb4c9de7c4bc0b2531a63787968247b5d79c8f3b2ed953f"
+    },
+    {
+      "path": "tests/world_bootstrap_generation_prefetch_contract_20261009.gd",
+      "sha256": "f3db3253fc3829cb66371418d10f85e615a7c8f0958cbfb685cf37db8bf70600"
+    },
+    {
+      "path": "tests/world_bootstrap_generation_prefetch_contract_20261009.tscn",
+      "sha256": "ec8cddb3b87e7ccacee3d4b51c84b4acf2792a33e1ba519d8952be2a5a531ed4"
+    },
+    {
+      "path": "tools/run_godot_tests.ps1",
+      "sha256": "7942f83af625a03bd44a3891f627136e2d3299404c44e5e8bf8ed798fee0906b"
+    },
+    {
+      "path": "tests/safe_logout_pending_retry_repair_20261009.gd",
+      "sha256": "87e0776f35be7d02bfc2d0f279f9984d2fbfbeab3a384a8cc42d8ddd57f0bc71"
+    },
+    {
+      "path": "tests/framework/monster_visual_streaming_terminal_get_contract_test.gd",
+      "sha256": "7b7f85bf2c58c308d3827bda06de8332b05f4fe1c6707b2a6ef08189c287434d"
+    },
+    {
+      "path": "tests/framework/monster_visual_streaming_terminal_get_contract_test.tscn",
+      "sha256": "dea024bbb4efb21c03a365a9c37957e78e2e7a097fcbca09a46de18fe7556e2f"
+    },
+    {
+      "path": "tests/framework/monster_source_frames_terminal_get_contract_test.gd",
+      "sha256": "4e548caf14ff02a628f6c6f5c34ddd4292a88d985ed03fdd96496dda58ab5fe0"
+    },
+    {
+      "path": "tests/framework/monster_source_frames_terminal_get_contract_test.tscn",
+      "sha256": "08b830b387d74d310efe3fe48ed1f13ab086956ca8161e3bbfb9b1fafcf17c25"
+    },
+    {
+      "path": "tests/framework/startup_loading_terminal_get_contract_test.gd",
+      "sha256": "6e74b4d8fac408bd2ee6970170cf03a7a68bcfd35cf655fd93c31cbfded1355b"
+    },
+    {
+      "path": "tests/framework/startup_loading_terminal_get_contract_test.tscn",
+      "sha256": "fa6fd6bbefac260d0c84bb1214856b18728734f5ec5501518d5045c3889d2fdc"
+    },
+    {
+      "path": "scripts/player.gd",
+      "sha256": "40ce84d019e1b5770a5749a5384c49572f7f7666a5ff581d3db9b9bd05e718d3"
+    },
+    {
+      "path": "tests/framework/player_pause_movement_contract_20261009_test.gd",
+      "sha256": "38c9388f547b05775bbc8c0837caab05366112fae58feac4c2f72ebc0ef26e38"
+    },
+    {
+      "path": "tests/framework/player_pause_movement_contract_20261009_test.tscn",
+      "sha256": "a0091a5b02501f61a36cb7924d6a4416f4e0dccee43a7258afef5da98022750c"
+    },
+    {
+      "path": "tests/framework/equipment_stealth_rearm_contract_20261009_test.gd",
+      "sha256": "a2fa7aa2b7ba168a2a323a5cf3f81ae8c90c14df64d3826e5b97efb40f653738"
+    },
+    {
+      "path": "tests/framework/equipment_stealth_rearm_contract_20261009_test.tscn",
+      "sha256": "05b2100feda8e150691a3adffabeddd1871527ac8487ec2f267e40f0bb162133"
+    }
+  ],
+  "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+  "native_status": "NOT_RUN",
+  "retest_reason": "direct16 Player pause/movement passed; equipment fixture parse failed inferred Variant, exact fixture type corrected; only failed fixture rerun",
+  "production_parent_tree": "93d989012c55e087fa73486c56120ce01ce9fa8f"
+}

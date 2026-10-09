@@ -1,0 +1,92 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "formal GameRoot creates an input-ready Player",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "formal Player accepts an ordinary attack",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "formal GameRoot menu owns the pause",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "paused tree does not advance accepted attack windup",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "formal GameRoot menu releases the pause",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "resume releases accepted attack exactly once",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "formal skill receiver exists",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "formal Player accepts a legal skill",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "paused tree retains accepted skill windup and HP",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "resume releases legal skill once with real HP mutation",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "zero-input collision recovery produces real displacement",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "recovery displacement is retained in actual ground motion",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "published recovery position is the final position for the physics step",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "recovery displacement publishes one movement event",
+      "passed": true
+    }
+  ],
+  "count": 14,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "6457c8be-d27f-4be7-9ff2-d7a4ef0a4c30",
+  "passed": 14,
+  "reported_checks": 14,
+  "reported_failures": 0,
+  "run_id": "598af74c-dde7-4c03-9255-9efe581ec7fa",
+  "runtime_environment": {
+    "native_process_id": 9468,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\b02_direct16_player_pause_stealth",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/b02_direct16_player_pause_stealth/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "player_pause_movement_contract_20261009_test",
+  "schema_version": 1,
+  "source_content_sha256": "",
+  "status": "PASS"
+}

@@ -1,6 +1,6 @@
 # Full project audit v109 progress
 
-Whole-project coverage: `MISSING`. B01 report reception: `PASS` (exact seven files verified from Git commit `75371c60addc5d63c37469dff4379d49015c22f6`, parent `ba97849bfe3a9fe11f12904bfa26b41fc8c7f06a`). This confirms receipt, not production acceptance. B02 seven original reports have also been received from `ac4c3f285053e10993b20712e7ab99ee107a1512` against fixed source `ed2d87121de80c84caaa3f096c3a5acb71d4946f`; coverage is partial (13 core,15 partial,31 index-only of59). B02 remainder was dispatched in the same xhigh reviewer conversation. B03–B08 remain `NOT_RUN`.
+Whole-project coverage: `MISSING`. B01 report reception: `PASS` (exact seven files verified from Git commit `75371c60addc5d63c37469dff4379d49015c22f6`, parent `ba97849bfe3a9fe11f12904bfa26b41fc8c7f06a`). This confirms receipt, not production acceptance. B02 seven original reports have also been received from `ac4c3f285053e10993b20712e7ab99ee107a1512` against fixed source `ed2d87121de80c84caaa3f096c3a5acb71d4946f`; coverage is partial (13 core,15 partial,31 index-only of59). B02 remainder was received byte-identically from `4e77c619249450b7c33e833c2bb3531f3f120bfc`:46 remaining paths reviewed for their B02 responsibilities,59 coverage entries retained, findings B02-008..010 under disposition. B03 was dispatched against fixed `4e77c619` in the same xhigh reviewer conversation; B04–B08 remain `NOT_RUN`.
 
 B01 audited production: `dbd78d3301c2af6cfd9e070abe8cc847e6353175`. Initial dispatch turn `8161e97e-e6dd-4565-864f-ebd9c7279c43`, assistant `e7955aa8-3599-40d4-ac05-b28a16541b2a`. App returned only a content reference; Pages transport and IAB login attempts failed. Those attempts remain historical failures. User-provided Chrome enabled actual main-reply reception, followed by a report-only GitHub delivery request. Seven original report files now exist in `external/B01/`; `RECEIVE_RECEIPT.json` binds exact Git blob/byte SHA256. Original reports are preserved without retroactive rewriting.
 
@@ -23,8 +23,8 @@ The original B01 baseline findings are not automatically current-source verdicts
 | `bootstrap_runtime` | bootstrap_runtime | `MISSING` | B01 source review received; large-file/functions remain partially covered, see external/B01/COVERAGE.json |
 | `enemy_ai_combat` | enemy_ai_combat | `NOT_RUN` | No current-source audit receipt yet |
 | `spatial_geometry_movement` | spatial_geometry_movement | `NOT_RUN` | No current-source audit receipt yet |
-| `damage_status_control` | damage_status_control | `MISSING` | B02 report received, semantic coverage partial; followup dispatched |
-| `skills_magic_area` | skills_magic_area | `MISSING` | B02 report received, semantic coverage partial; followup dispatched |
+| `damage_status_control` | damage_status_control | `MISSING` | B02 report received, responsibility-level static followup received; finding disposition and dynamic limits retained |
+| `skills_magic_area` | skills_magic_area | `MISSING` | B02 report received, responsibility-level static followup received; finding disposition and dynamic limits retained |
 | `summon_pet_targeting` | summon_pet_targeting | `NOT_RUN` | No current-source audit receipt yet |
 | `death_revival_drops` | death_revival_drops | `NOT_RUN` | No current-source audit receipt yet |
 | `equipment_inventory_identity` | equipment_inventory_identity | `NOT_RUN` | No current-source audit receipt yet |
@@ -34,7 +34,7 @@ The original B01 baseline findings are not automatically current-source verdicts
 | `authoring_generation_build` | authoring_generation_build | `NOT_RUN` | No current-source audit receipt yet |
 | `diagnostics_budget_observability` | diagnostics_budget_observability | `MISSING` | B01 source review received; large-file/functions remain partially covered, see external/B01/COVERAGE.json |
 | `verification_and_tests` | verification_and_tests | `NOT_RUN` | No current-source audit receipt yet |
-| `player_actor_state` | player_actor_state | `MISSING` | B02 report received, semantic coverage partial; followup dispatched |
+| `player_actor_state` | player_actor_state | `MISSING` | B02 report received, responsibility-level static followup received; finding disposition and dynamic limits retained |
 | `source176_skill_packages` | source176_skill_packages | `NOT_RUN` | No current-source audit receipt yet |
 | `resource_streaming` | resource_streaming | `MISSING` | B01 source review received; large-file/functions remain partially covered, see external/B01/COVERAGE.json |
 | `data_authoring_identity` | data_authoring_identity | `NOT_RUN` | No current-source audit receipt yet |
@@ -42,3 +42,7 @@ The original B01 baseline findings are not automatically current-source verdicts
 | `residual_review` | residual_review | `NOT_RUN` | No current-source audit receipt yet |
 
 The manifest inventory is a scope artifact, not coverage evidence. Each batch must bind the final fixed source SHA, relevant engine/input/scene fingerprints, direct contract receipt, and negative evidence. No native, device, performance, or generated-data acceptance is claimed here. `residual_review` paths require explicit path-level review before the full audit can be considered complete.
+
+## B02 Player repair evidence
+
+Player pause-aware attack/skill windup, collision-recovery movement publication (without manufacturing run distance), and equipment stealth rearm ownership passed the new direct checks and five relevant boundaries. See B02_PLAYER_NATIVE_LEDGER.md; original direct16 fixture parse failure retained. This is scoped PC/native evidence. B02 projectile direct20 passed; related21 has9PASS/3FAIL under fixture-contract triage, so projectile related regression remains FAIL. Visual terminal failure repair is still in progress. APK109 and device remain NOT_RUN.

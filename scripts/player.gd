@@ -272,6 +272,11 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	var profile_started_usec := RuntimeDiagnostics.timing_start()
+	# Keep the pre-recovery position as the publication baseline. The zero-motion
+	# collision separation below can produce real displacement even when there is
+	# no directional input; that displacement must be included in one final
+	# movement event after all recovery and directional collision work completes.
+	var position_before_physics := global_position
 	var position_before_move := global_position
 	var was_struck_locked := (
 		_struck_lock_remaining > 0.0
@@ -414,10 +419,10 @@ func _physics_process(delta: float) -> void:
 	):
 		global_position = position_before_move
 		velocity = Vector2.ZERO
-	var actual_motion := global_position - position_before_move
+	var actual_motion := global_position - position_before_physics
 	actual_ground_motion_gu = (
 		GroundUnitSpaceScript.actual_ground_motion_gu_from_screen_positions(
-			position_before_move,
+			position_before_physics,
 			global_position
 		)
 	)
@@ -431,7 +436,14 @@ func _physics_process(delta: float) -> void:
 	if has_direction_input and not movement_locked and control_time <= 0.0 and not _dead:
 		# Accumulate only accepted directional displacement. A blocked
 		# frame therefore contributes zero and cannot manufacture a run transition.
-		locomotion_distance_gu += actual_ground_motion_gu.length()
+		# Collision recovery is published above, but it is not directional input
+		# and must not advance the walk-to-run threshold.
+		var accepted_locomotion_ground := (
+			GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+				global_position - position_before_move
+			)
+		)
+		locomotion_distance_gu += accepted_locomotion_ground.length()
 		if locomotion_state == LOCOMOTION_WALK and locomotion_distance_gu >= WALK_TO_RUN_DISTANCE_GU:
 			locomotion_state = LOCOMOTION_RUN
 	var elapsed_usec := RuntimeDiagnostics.timing_elapsed_usec(profile_started_usec)
@@ -1272,7 +1284,10 @@ func _emit_attack_after_windup(
 ) -> void:
 	var configuration: RefCounted = context.get("action_config_lease")
 	if windup > 0.0:
-		await get_tree().create_timer(windup).timeout
+		# Accepted gameplay windup belongs to the pause-aware SceneTree domain;
+		# menu pause must retain the remaining windup and release exactly once on
+		# resume rather than emitting damage behind the paused UI.
+		await get_tree().create_timer(windup, false).timeout
 	# R2-W5: a begun action owns its delayed release. A superseding action
 	# replaces the presentation/action slot but must never void this release:
 	# the cast already charged its cooldown, so the effect still resolves
@@ -1330,7 +1345,9 @@ func _emit_skill_after_windup(
 	configuration: RefCounted = null
 ) -> void:
 	if windup > 0.0:
-		await get_tree().create_timer(windup).timeout
+		# Keep skill windup on the same pause-aware gameplay time domain as attack
+		# windup. Lifecycle/epoch cancellation remains owned by the release body.
+		await get_tree().create_timer(windup, false).timeout
 	# R2-W5: same release ownership as _emit_attack_after_windup — a superseding
 	# action never voids a pending delayed release; only death, leaving the
 	# tree, or an advanced lifecycle epoch does (RV14-01: map transition,
@@ -2028,7 +2045,10 @@ func _apply_profile_stats() -> void:
 	if equipment_stealth_active != _equipment_stealth_active:
 		var was_hidden := stealth_time > 0.0 or (_equipment_stealth_active and not _stealth_break_override)
 		_equipment_stealth_active = equipment_stealth_active
-		_stealth_break_override = false
+		# An equipment/profile refresh is not the combat-exit boundary. Preserve
+		# an explicit break caused by an accepted attack/skill until GameRoot's
+		# authoritative out-of-combat recovery clears it; otherwise swapping an
+		# equipment profile silently re-arms stealth during the same encounter.
 		if was_hidden != is_stealthed():
 			passive_wakeup_changed.emit()
 		queue_redraw()
