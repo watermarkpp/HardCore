@@ -9,6 +9,10 @@ const Spatial := preload("res://scripts/runtime_combat_spatial_index.gd")
 var failures: Array[String] = []
 var evidence: Dictionary = {}
 var quantum_clock_usec := 0
+# This fixture owns projected R3 Player/Summon actors. Their canonical owner
+# identity must satisfy the same map/generation gate as the formal GameRoot.
+var current_map_id: int = 1
+var _zone_generation: int = 1
 
 class QuantumOwner extends Node:
 	func _hc_pursuit_budget_scope() -> Array:

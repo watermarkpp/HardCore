@@ -1734,6 +1734,14 @@ func request_passive_target_wakeup(
 	expected_map_id: int,
 	expected_generation: int,
 ) -> bool:
+	if is_instance_valid(target):
+		# Existing eligible focus and committed actions are a zero-query reject.
+		# A stale focus is only retired after the new candidate completes its
+		# full acquisition gate below, so rejected events cannot clear combat.
+		if _attack_action_active or _pending_attack_time >= 0.0 or is_instance_valid(_pending_attack_target):
+			return false
+		if _hc_existing_target_activation_valid(target):
+			return false
 	if (
 		candidate == null
 		or not is_instance_valid(candidate)
@@ -1741,7 +1749,6 @@ func request_passive_target_wakeup(
 		or _dying
 		or _death_pending
 		or not combat_enabled
-		or is_instance_valid(target)
 		or not (candidate is PlayerCharacter or candidate is SummonActor)
 	):
 		return false
@@ -1764,6 +1771,18 @@ func request_passive_target_wakeup(
 	# helper keeps its runtime-map-disabled compatibility for normal retargeting.
 	if runtime_map_id < 0 or not _initial_acquisition_static_los_clear(candidate):
 		return false
+	if is_instance_valid(target):
+		# A live Node reference can still be an ineligible combat target after
+		# death, map/generation change or safety invalidation. Never replace a
+		# committed action, but retire a stale focus only after the new candidate
+		# has passed its complete acquisition gate.
+		if _attack_action_active or _pending_attack_time >= 0.0 or is_instance_valid(_pending_attack_target):
+			return false
+		if _hc_existing_target_activation_valid(target):
+			return false
+		_hc_forget(target)
+		target = null
+		_target_stable_remaining_seconds = 0.0
 	target = candidate
 	_clear_passive_wake()
 	_retarget_timer = 0.0
@@ -1790,9 +1809,7 @@ func _passive_target_identity_valid(
 	if candidate is PlayerCharacter:
 		var candidate_owner := candidate.get_parent()
 		return (
-			candidate_owner != null
-			and int(candidate_owner.get("current_map_id")) == expected_map_id
-			and int(candidate_owner.get("_zone_generation")) == expected_generation
+			_passive_target_owner_scope_valid(candidate_owner, expected_map_id, expected_generation)
 		)
 	if candidate is SummonActor:
 		var summon := candidate as SummonActor
@@ -1800,14 +1817,26 @@ func _passive_target_identity_valid(
 		var owner_parent := owner.get_parent() if is_instance_valid(owner) else null
 		return (
 			summon.runtime_map_id == expected_map_id
-			and owner != null
-			and owner_parent != null
+			and is_instance_valid(owner)
 			and owner.current_hp > 0
 			and not owner.combat_transition_is_active()
-			and int(owner_parent.get("current_map_id")) == expected_map_id
-			and int(owner_parent.get("_zone_generation")) == expected_generation
+			and _passive_target_owner_scope_valid(owner_parent, expected_map_id, expected_generation)
 		)
 	return false
+
+
+func _passive_target_owner_scope_valid(
+	owner: Object,
+	expected_map_id: int,
+	expected_generation: int,
+) -> bool:
+	if owner == null or not is_instance_valid(owner):
+		return false
+	var owner_map: Variant = owner.get("current_map_id")
+	var owner_generation: Variant = owner.get("_zone_generation")
+	if typeof(owner_map) != TYPE_INT or typeof(owner_generation) != TYPE_INT:
+		return false
+	return owner_map == expected_map_id and owner_generation == expected_generation
 
 
 func _passive_target_is_hidden(candidate: Node2D) -> bool:
@@ -10861,8 +10890,16 @@ func _acquire_cold_damage_target(source: Node2D) -> void:
 	# A confirmed positive hit supplies its attacker without an optional scan.
 	# Existing focus, threat switching and all rich pursuit decisions stay owned
 	# by retarget. Damage awareness does not require the source to be in the halo.
-	if current_hp <= 0 or not combat_enabled or is_instance_valid(target):
+	if current_hp <= 0 or not combat_enabled:
 		return
+	if is_instance_valid(target):
+		if _attack_action_active or _pending_attack_time >= 0.0 or is_instance_valid(_pending_attack_target):
+			return
+		if _hc_existing_target_activation_valid(target):
+			return
+		_hc_forget(target)
+		target = null
+		_target_stable_remaining_seconds = 0.0
 	if not (source is PlayerCharacter or source is SummonActor):
 		return
 	if not _target_candidate_is_live(source) or _point_inside_safe_zone(source.global_position):
@@ -10878,6 +10915,17 @@ func _acquire_cold_damage_target(source: Node2D) -> void:
 	_clear_passive_wake()
 	_passive_mode_active = false
 	_retarget_timer = 0.0
+
+func _hc_existing_target_activation_valid(candidate: Node2D) -> bool:
+	if not _hc_target_usable(candidate):
+		return false
+	if candidate is PlayerCharacter or candidate is SummonActor:
+		return _passive_target_identity_valid(
+			candidate,
+			runtime_map_id,
+			int(get_meta("zone_generation", -1)),
+		)
+	return true
 
 func _hc_received_damage(source: Node2D, amount: float) -> void:
 	if not _hc_standard_melee() or amount <= 0.0 or not _target_candidate_is_live(source):

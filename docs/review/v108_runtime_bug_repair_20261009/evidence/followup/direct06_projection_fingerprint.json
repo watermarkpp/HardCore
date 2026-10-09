@@ -1,0 +1,25 @@
+{
+  "scope": "projection recovery plus30candidate ten-event callback pressure",
+  "reason": "direct04 fixture sampled after low-level character died; take same-process ordinary GameRoot pump boundary snapshot, no HP/load changes, no physics attack interval in activation-only scope",
+  "created_at": "2026-10-09T21:33:48.2688274+08:00",
+  "engine_sha256": "D8055FB8C7E7F5010D7439EC69BE051554055DAE55A265F8647BD7301C34161C",
+  "source": [
+    {
+      "path": "scripts/game_root.gd",
+      "sha256": "D3ED6E93748C131106E589E84E08E01E22A94C6A8509D5219C283281F071D694"
+    },
+    {
+      "path": "scripts/enemy.gd",
+      "sha256": "6D94B42F6103476240D82D02C05C435B62A7D15639108FD593CDFDC66923C6CC"
+    },
+    {
+      "path": "tests/passive_wake_projection_recovery_20261009.gd",
+      "sha256": "01556777A2892761CC22A3437EEF9A7281C2EE1CDA0AF4121D5B7B85E3FE3BEF"
+    },
+    {
+      "path": "tests/passive_wake_projection_recovery_20261009.tscn",
+      "sha256": "7DCFF23E515C1DF004465AD719BB2748A3E7C295524270B62C6DDBFAA1977F52"
+    }
+  ],
+  "command": "tools/run_godot_tests.ps1 -TestPaths tests/passive_wake_projection_recovery_20261009.tscn -TimeoutSeconds 30"
+}

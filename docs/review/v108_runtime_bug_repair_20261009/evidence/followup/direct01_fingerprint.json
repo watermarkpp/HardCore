@@ -1,0 +1,51 @@
+{
+  "scope": "new review P1 temporary logout pending/retry, formal projection recovery, stale target and same-process activation pressure",
+  "reason": "new independent-review uncovered branches; no repetition of unchanged audio/build/business scopes",
+  "created_at": "2026-10-09T21:03:52.5570228+08:00",
+  "command": "tools/run_godot_tests.ps1 -TestPaths tests/safe_logout_pending_retry_repair_20261009.tscn,tests/passive_wake_stale_target_repair_20261009.tscn,tests/passive_wake_projection_recovery_20261009.tscn -TimeoutSeconds 30",
+  "source": [
+    {
+      "path": "scripts/game_root.gd",
+      "sha256": "D3ED6E93748C131106E589E84E08E01E22A94C6A8509D5219C283281F071D694"
+    },
+    {
+      "path": "scripts/enemy.gd",
+      "sha256": "6D94B42F6103476240D82D02C05C435B62A7D15639108FD593CDFDC66923C6CC"
+    },
+    {
+      "path": "scripts/player_state.gd",
+      "sha256": "13CCCB4CFF55EDA54C858C69EA8A0DA16C33AF44F19EC43B7199CF3DDF4D80A6"
+    },
+    {
+      "path": "scripts/json_persistence_service.gd",
+      "sha256": "581D09246EF6E9991C35BB3563C90FD4F4CF3A098F56BB95D31B5A543DCD06C0"
+    },
+    {
+      "path": "tests/safe_logout_pending_retry_repair_20261009.gd",
+      "sha256": "D84B1B80823440174FA60F87D739E6BF2BDA4957ABE45A0BDA12835937FD1667"
+    },
+    {
+      "path": "tests/safe_logout_pending_retry_repair_20261009.tscn",
+      "sha256": "C9F0C00735A14478C825CF3CE1A793420DAB0949C5166F4C37D3A0BB68D4CE9C"
+    },
+    {
+      "path": "tests/passive_wake_stale_target_repair_20261009.gd",
+      "sha256": "DCF9A6901961C051CEB1405C8ECA301AA12691CCA623436956A1CEB4A2C0EA9E"
+    },
+    {
+      "path": "tests/passive_wake_stale_target_repair_20261009.tscn",
+      "sha256": "7B41DCBE76C54400F067F9C17EA122B34E5F37EB87ECD2ACB0E8FDB42C2F442C"
+    },
+    {
+      "path": "tests/passive_wake_projection_recovery_20261009.gd",
+      "sha256": "3DB44AFB078359E66E8E39B02F11708A310E8413BC64826CF63B873BC6F6198B"
+    },
+    {
+      "path": "tests/passive_wake_projection_recovery_20261009.tscn",
+      "sha256": "7DCFF23E515C1DF004465AD719BB2748A3E7C295524270B62C6DDBFAA1977F52"
+    }
+  ],
+  "source_review_baseline": "61d5b03f0568fee0f9c88fa2c20fbe93861c5095",
+  "head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+  "real_index_sha256": "DDACEA4EED570FAED0A6003C87352552E74E902874B5DEE61D8863A2316E29D7"
+}

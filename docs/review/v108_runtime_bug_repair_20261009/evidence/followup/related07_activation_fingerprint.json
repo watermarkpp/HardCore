@@ -1,0 +1,29 @@
+{
+  "scope": "real30 dense movement/firewall, zerooptional owner, cold real positive damage",
+  "reason": "new stale-target eligibility helper changes activation and damage consumer; rerun only affected activation chain, unchanged audio/menu/death batches reused",
+  "created_at": "2026-10-09T21:35:49.4171046+08:00",
+  "engine_sha256": "D8055FB8C7E7F5010D7439EC69BE051554055DAE55A265F8647BD7301C34161C",
+  "source": [
+    {
+      "path": "scripts/game_root.gd",
+      "sha256": "D3ED6E93748C131106E589E84E08E01E22A94C6A8509D5219C283281F071D694"
+    },
+    {
+      "path": "scripts/enemy.gd",
+      "sha256": "6D94B42F6103476240D82D02C05C435B62A7D15639108FD593CDFDC66923C6CC"
+    },
+    {
+      "path": "tests/passive_wake_natural_dense_repair_20261009.gd",
+      "sha256": "9131B35E9FE0E95BEB9B973EAFF48932420E8847209389DD7253AB2893CA848E"
+    },
+    {
+      "path": "tests/crowd_owner_optional_budget_contract_20261009.gd",
+      "sha256": "8EBFF392D2DE4112D35F81A037CA5843B59BC5F34CE4E06AA90A0CD682D73A22"
+    },
+    {
+      "path": "tests/crowd_passive_damage_wakeup_contract_20261009.gd",
+      "sha256": "5C71CB4E70FCF995FEACBBE4E7A1C305FE3F6BFA3D26198232B65E9DD4811242"
+    }
+  ],
+  "command": "tools/run_godot_tests.ps1 -TestPaths tests/passive_wake_natural_dense_repair_20261009.tscn,tests/crowd_owner_optional_budget_contract_20261009.tscn,tests/crowd_passive_damage_wakeup_contract_20261009.tscn -TimeoutSeconds 30"
+}

@@ -12,6 +12,8 @@
 
 生产只修改 `scripts/enemy.gd`、`scripts/game_root.gd`、`scripts/audio_preferences.gd`、`scripts/system_menu_panel.gd`。全部原 v107/v108 音频、拾取、特殊装备、价格概率、HUD/触控、Loading、受击与 300ms 架构工作保留；没有重做已搁置的加权掉落设计、人物/怪物格子玩法或 Android 环境方案。
 
+独立审查后的补充：临时pending不进入永久退出失败锁存；投影暂时失效保留当前去重事件；活Node但已死亡/异图/旧代际的不合格target不再阻塞完整新候选。有效既有focus和已提交攻击保持。owner身份要求实际整数地图/代际，缺失字段与已释放Summon主人显式拒绝，不做int(null)或猜测fallback。详见 `INDEPENDENT_REVIEW_FOLLOWUP.md`。
+
 ## 验证账本
 
 命令入口均为 `tools/run_godot_tests.ps1 -TestPaths ... -TimeoutSeconds 30`，console/headless；每阶段独立 `HARDCORE_AUDIT_LOG_ROOT`、`HARDCORE_AUDIT_RUNTIME_APPDATA`，新场景仅加入 `outputs/wake_drop_v108_repair_20261009/test.index` 私有索引，未改变真实暂存。实际路径、原生退出、invocation、源码/输入指纹均在下列 receipts 和 fingerprint 文件中。生产在原生运行期间冻结。
@@ -31,7 +33,7 @@
 | 32 实际死亡、240帧期限、RNG/物品/位置/幂等及每帧上限 | PASS | `evidence/death_batch_after.json` 和同 drop_batch runner；此前 17/32 FAIL 在 `evidence/death_batch_before.json` |
 | durable receipt / generation cancellation / root teardown / reload | PASS | 同 drop_batch runner 中 F03 native；旧 `free()` 应 roll1 的断言与已批准的延后掉落合同不符，现严格要求 teardown 不新增 roll，同时保留所有 XP、respawn、receipt 幂等、pending0 和 reload 断言。完整掉落单次由前两项覆盖；旧失败保留，未在 `_exit_tree` 新建地面物品 |
 | 新 APK 构建/安装/设备验收 | NOT_RUN | 这次只完成源码修复，没有修改桌面原 v108 APK，也没有手机当前连接证据；DEVICE TEST: NOT_RUN |
-| 本轮 Pro 外部分析 | BLOCKED | 已在用户指定的“项目助手工作线程”派发并实际读取回复，本轮返回模型使用限额，没有分析内容；旧 Pro 报告不能当本轮审计 |
+| 本轮极高独立审查 | PASS | 用户手动重发后提供完整审查文本，已实际读取并保存为 `INDEPENDENT_REVIEW_XHIGH.md`。该项仅表示收到审查，不表示全项目通过；61d 上的新增发现与后续修复见 `INDEPENDENT_REVIEW_FOLLOWUP.md`。早期配额失败证据保留；用户最新要求仅极高，不再使用 Pro |
 
 各阶段根目录为 `outputs/wake_drop_v108_repair_20261009/`。`*_fingerprint.json` 记录执行理由和实际受测源码/input SHA256；failure 结果不删除，不合并不同源码阶段为一次全项目 PASS。新增加的源码/输入、失败修复及缺失分支才复测；未变的旧业务与已验证 Android Java TEMP/TMP 回环修复不重复执行。
 

@@ -1,0 +1,25 @@
+{
+  "scope": "freed summon owner and existing schema/stale activation gates",
+  "reason": "review found owner!=null could dereference freed owner before strict scope guard; change to is_instance_valid and add exact freed-owner rejection, existing cases unchanged",
+  "created_at": "2026-10-09T21:41:20.6588807+08:00",
+  "engine_sha256": "D8055FB8C7E7F5010D7439EC69BE051554055DAE55A265F8647BD7301C34161C",
+  "source": [
+    {
+      "path": "scripts/enemy.gd",
+      "sha256": "4EB42E585F30C3401366184CD240771ACD9BC25A066BCEC9AE859E38A71DDF2A"
+    },
+    {
+      "path": "scripts/game_root.gd",
+      "sha256": "D3ED6E93748C131106E589E84E08E01E22A94C6A8509D5219C283281F071D694"
+    },
+    {
+      "path": "tests/passive_wake_stale_target_repair_20261009.gd",
+      "sha256": "820C96FAF038E69AFB26682F6C15C56D6637A92BC135ECC7E6BB5B17634D23A5"
+    },
+    {
+      "path": "tests/passive_wake_stale_target_repair_20261009.tscn",
+      "sha256": "7B41DCBE76C54400F067F9C17EA122B34E5F37EB87ECD2ACB0E8FDB42C2F442C"
+    }
+  ],
+  "command": "tools/run_godot_tests.ps1 -TestPaths tests/passive_wake_stale_target_repair_20261009.tscn -TimeoutSeconds 30"
+}

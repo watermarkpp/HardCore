@@ -1,0 +1,24 @@
+{
+  "main_head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+  "main_index_sha256": "DDACEA4EED570FAED0A6003C87352552E74E902874B5DEE61D8863A2316E29D7",
+  "engine_sha256": "D8055FB8C7E7F5010D7439EC69BE051554055DAE55A265F8647BD7301C34161C",
+  "final_production": [
+    {
+      "path": "scripts/game_root.gd",
+      "sha256": "D3ED6E93748C131106E589E84E08E01E22A94C6A8509D5219C283281F071D694"
+    },
+    {
+      "path": "scripts/enemy.gd",
+      "sha256": "4EB42E585F30C3401366184CD240771ACD9BC25A066BCEC9AE859E38A71DDF2A"
+    },
+    {
+      "path": "scripts/audio_preferences.gd",
+      "sha256": "10F3A494464C0B6D3D5A802CE6BBDD3046AF2B3C59B755D9BB70B51B12634AA1"
+    },
+    {
+      "path": "scripts/system_menu_panel.gd",
+      "sha256": "8BAF4C98C8AAE1C3AE0AA665179DB53A4109DB035ACC27BCC5F0DF79F82AE73A"
+    }
+  ],
+  "source_change_since_related08": "enemy: only nonnull->is_instance_valid(owner) on summon identity guard; direct09 exact freed owner plus stale gates verified; valid GameRoot and player/visible summon branch byte-equivalent otherwise"
+}

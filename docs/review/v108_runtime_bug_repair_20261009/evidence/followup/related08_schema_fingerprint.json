@@ -1,0 +1,37 @@
+{
+  "scope": "invalid owner schema rejection and affected activation/damage gates",
+  "reason": "related07 exposed int(null) on R3 fixture owner; strict production typed identity rejection and complete fixtureowner identity, unchanged assertions; new production callee requires affected formal gates retest",
+  "created_at": "2026-10-09T21:38:54.4991455+08:00",
+  "engine_sha256": "D8055FB8C7E7F5010D7439EC69BE051554055DAE55A265F8647BD7301C34161C",
+  "source": [
+    {
+      "path": "scripts/game_root.gd",
+      "sha256": "D3ED6E93748C131106E589E84E08E01E22A94C6A8509D5219C283281F071D694"
+    },
+    {
+      "path": "scripts/enemy.gd",
+      "sha256": "2C249991B5B9CA9747F9AA9435B891DA0FBCF70993AA3496B68533B15007CFC1"
+    },
+    {
+      "path": "tests/passive_wake_stale_target_repair_20261009.gd",
+      "sha256": "5FBF402644BA9C397D5C6B8A6703F57E6640FA63DFF682F6ACF0891C76A8291E"
+    },
+    {
+      "path": "tests/passive_wake_projection_recovery_20261009.gd",
+      "sha256": "01556777A2892761CC22A3437EEF9A7281C2EE1CDA0AF4121D5B7B85E3FE3BEF"
+    },
+    {
+      "path": "tests/passive_wake_natural_dense_repair_20261009.gd",
+      "sha256": "9131B35E9FE0E95BEB9B973EAFF48932420E8847209389DD7253AB2893CA848E"
+    },
+    {
+      "path": "tests/crowd_owner_optional_budget_contract_20261009.gd",
+      "sha256": "A1BA89F73D3D02E561DC586EB2CB665507E2F12E59D7B299A3989C9548BB089E"
+    },
+    {
+      "path": "tests/crowd_passive_damage_wakeup_contract_20261009.gd",
+      "sha256": "5C71CB4E70FCF995FEACBBE4E7A1C305FE3F6BFA3D26198232B65E9DD4811242"
+    }
+  ],
+  "command": "tools/run_godot_tests.ps1 -TestPaths tests/passive_wake_stale_target_repair_20261009.tscn,tests/passive_wake_projection_recovery_20261009.tscn,tests/passive_wake_natural_dense_repair_20261009.tscn,tests/crowd_owner_optional_budget_contract_20261009.tscn,tests/crowd_passive_damage_wakeup_contract_20261009.tscn -TimeoutSeconds 30"
+}

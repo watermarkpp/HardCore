@@ -2907,7 +2907,9 @@ func _drain_enemy_death_queue_for_logout() -> Dictionary:
 			"pending_deaths": _pending_enemy_deaths.size(),
 			"death_queue": death_work_queue_snapshot(),
 		}
-		_last_death_logout_failure = pending_result.duplicate(true)
+		# Pending is the current queue state, not a terminal failure. A later
+		# receipt can finish this work, so the next exit request must drain again.
+		# Only FAILED settlements enter the durable in-session failure latch.
 		return pending_result
 	# A bounded terminal ledger can evict the just-created record when it was
 	# already full.  The failure latch is therefore authoritative for this
@@ -6738,6 +6740,7 @@ func _begin_passive_monster_wakeup_batch() -> bool:
 		return false
 	var emitter_ground := _canonical_screen_px_to_ground_gu(emitter.global_position)
 	if not emitter_ground.is_finite():
+		_retain_passive_wake_active_event()
 		return false
 	var max_extent := _passive_wake_max_extent_gu
 	if (
@@ -6758,32 +6761,34 @@ func _begin_passive_monster_wakeup_batch() -> bool:
 		_passive_wake_candidates.clear()
 		_passive_wake_cursor = 0
 		_passive_wake_query_pending = false
-		var failed_entry: Dictionary = _passive_wake_emitters.get(
-			_passive_wake_active_emitter_id,
-			{},
-		)
-		var failed_raw_emitter: Variant = (
-			failed_entry.get("ref").get_ref()
-			if failed_entry.has("ref")
-			else null
-		)
-		if (
-			is_instance_valid(failed_raw_emitter)
-			and failed_raw_emitter is Node2D
-			and _passive_wake_emitter_current(failed_raw_emitter as Node2D)
-			and int(failed_entry.get("map_id", -1)) == current_map_id
-			and int(failed_entry.get("generation", -1)) == _zone_generation
-		):
-			failed_entry["dirty"] = true
-			_passive_wake_emitters[_passive_wake_active_emitter_id] = failed_entry
-			if not _passive_wake_emitter_queue.has(_passive_wake_active_emitter_id):
-				_passive_wake_emitter_queue.append(_passive_wake_active_emitter_id)
-			_passive_wake_dirty = true
-			_passive_wake_query_pending = true
+		_retain_passive_wake_active_event()
 		return false
 	_passive_wake_cursor = 0
 	_passive_wake_query_pending = false
 	return true
+
+
+func _retain_passive_wake_active_event() -> void:
+	# Projection/query availability may recover while the emitter stands still.
+	# Retain only this current event in the existing deduplicated queue. The
+	# failed service returns immediately; the regular pump can retry later,
+	# without a timer, a world scan, or a tight loop inside this callback.
+	var emitter_id := _passive_wake_active_emitter_id
+	var entry: Dictionary = _passive_wake_emitters.get(emitter_id, {})
+	var raw_emitter: Variant = entry.get("ref").get_ref() if entry.has("ref") else null
+	if (
+		is_instance_valid(raw_emitter)
+		and raw_emitter is Node2D
+		and _passive_wake_emitter_current(raw_emitter as Node2D)
+		and int(entry.get("map_id", -1)) == current_map_id
+		and int(entry.get("generation", -1)) == _zone_generation
+	):
+		entry["dirty"] = true
+		_passive_wake_emitters[emitter_id] = entry
+		if not _passive_wake_emitter_queue.has(emitter_id):
+			_passive_wake_emitter_queue.append(emitter_id)
+		_passive_wake_dirty = true
+		_passive_wake_query_pending = true
 
 
 func _pump_passive_monster_wakeup() -> void:

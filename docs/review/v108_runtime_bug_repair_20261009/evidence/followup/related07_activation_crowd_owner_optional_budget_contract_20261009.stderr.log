@@ -1,0 +1,21 @@
+SCRIPT ERROR: Invalid call. Nonexistent 'int' constructor.
+   at: EnemyActor._passive_target_identity_valid (res://scripts/enemy.gd:1811)
+   GDScript backtrace (most recent call first):
+       [0] _passive_target_identity_valid (res://scripts/enemy.gd:1811)
+       [1] _hc_existing_target_activation_valid (res://scripts/enemy.gd:10913)
+       [2] _acquire_cold_damage_target (res://scripts/enemy.gd:10888)
+       [3] _apply_damage_core (res://scripts/enemy.gd:7610)
+       [4] take_damage (res://scripts/enemy.gd:7479)
+       [5] enemy (res://tests/source176_r3/helpers/runtime_fixture.gd:69)
+       [6] test_denial_and_urgent_attack (res://tests/crowd_owner_optional_budget_contract_20261009.gd:75)
+       [7] _ready (res://tests/crowd_owner_optional_budget_contract_20261009.gd:47)
+SCRIPT ERROR: Invalid call. Nonexistent 'int' constructor.
+   at: EnemyActor._passive_target_identity_valid (res://scripts/enemy.gd:1811)
+   GDScript backtrace (most recent call first):
+       [0] _passive_target_identity_valid (res://scripts/enemy.gd:1811)
+       [1] _acquire_cold_damage_target (res://scripts/enemy.gd:10897)
+       [2] _apply_damage_core (res://scripts/enemy.gd:7610)
+       [3] take_damage (res://scripts/enemy.gd:7479)
+       [4] enemy (res://tests/source176_r3/helpers/runtime_fixture.gd:69)
+       [5] test_denial_and_urgent_attack (res://tests/crowd_owner_optional_budget_contract_20261009.gd:75)
+       [6] _ready (res://tests/crowd_owner_optional_budget_contract_20261009.gd:47)
