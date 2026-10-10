@@ -1,0 +1,711 @@
+{
+  "fixed_source_sha": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+  "status": "PARTIAL_STATIC_NO_FULL_CLOSURE",
+  "prior_cross_batch_gaps": 22,
+  "rows": [
+    {
+      "id": "B01-SEM-BOOTSTRAP-RESIDUAL",
+      "fixed_source_sha": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "original_prior_source_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175",
+      "prior_status": "MISSING",
+      "B08_status": "STATIC_PARTIAL_GAP_RETAINED",
+      "gap_class": "semantic_review",
+      "source_batch": "B01",
+      "paths": [
+        "scripts/game_root.gd"
+      ],
+      "actual_fixed_source_members": [
+        "scripts/game_root.gd"
+      ],
+      "targeted_body_member_paths": [
+        "scripts/game_root.gd"
+      ],
+      "original_responsibility": "Complete non-bootstrap GameRoot consumers and transition/recovery ownership outside the reviewed partial functions.",
+      "remaining_concrete_duty": "Complete non-bootstrap GameRoot consumers and transition/recovery ownership outside the reviewed partial functions.",
+      "verification_needed": "New negative native/Android/physical lifecycle only when source/inputs/contracts have changed or evidence is missing; do not rerun unchanged prior PASS",
+      "does_not_upgrade_to_PASS": true
+    },
+    {
+      "id": "B01-SEM-RESOURCE-FAILURE",
+      "fixed_source_sha": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "original_prior_source_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175",
+      "prior_status": "MISSING",
+      "B08_status": "STATIC_PARTIAL_GAP_RETAINED",
+      "gap_class": "semantic_review",
+      "source_batch": "B01",
+      "paths": [
+        "scripts/features/runtime/feature_resource_preparation.gd",
+        "scripts/layers/runtime/content_layer_registry.gd"
+      ],
+      "actual_fixed_source_members": [
+        "scripts/features/runtime/feature_resource_preparation.gd",
+        "scripts/layers/runtime/content_layer_registry.gd"
+      ],
+      "targeted_body_member_paths": [
+        "scripts/layers/runtime/content_layer_registry.gd"
+      ],
+      "original_responsibility": "FAILED, CANCELLED, ERR_BUSY, owner retirement, and accepted-claim handoff across every caller, including error receipt preservation.",
+      "remaining_concrete_duty": "FAILED, CANCELLED, ERR_BUSY, owner retirement, and accepted-claim handoff across every caller, including error receipt preservation.",
+      "verification_needed": "New negative native/Android/physical lifecycle only when source/inputs/contracts have changed or evidence is missing; do not rerun unchanged prior PASS",
+      "does_not_upgrade_to_PASS": true
+    },
+    {
+      "id": "B01-DYN-STARTUP-FAILURE",
+      "fixed_source_sha": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "original_prior_source_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175",
+      "prior_status": "NOT_RUN",
+      "B08_status": "NOT_RUN",
+      "gap_class": "dynamic_evidence",
+      "source_batch": "B01",
+      "paths": [
+        "scripts/startup_loading.gd",
+        "scripts/character_select.gd"
+      ],
+      "actual_fixed_source_members": [
+        "scripts/startup_loading.gd",
+        "scripts/character_select.gd"
+      ],
+      "targeted_body_member_paths": [
+        "scripts/startup_loading.gd"
+      ],
+      "original_responsibility": "A real startup failure receipt and cancellation/owner-exit behavior are not retained as a complete dynamic scope.",
+      "remaining_concrete_duty": "A real startup failure receipt and cancellation/owner-exit behavior are not retained as a complete dynamic scope.",
+      "verification_needed": "New negative native/Android/physical lifecycle only when source/inputs/contracts have changed or evidence is missing; do not rerun unchanged prior PASS",
+      "does_not_upgrade_to_PASS": true
+    },
+    {
+      "id": "B01-DYN-MANIFEST-OUTSIDE",
+      "fixed_source_sha": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "original_prior_source_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175",
+      "prior_status": "MISSING",
+      "B08_status": "MISSING",
+      "gap_class": "semantic_review",
+      "source_batch": "B01",
+      "paths": [
+        "AUDIT_SCOPE_MANIFEST.json"
+      ],
+      "actual_fixed_source_members": [],
+      "targeted_body_member_paths": [],
+      "original_responsibility": "Seventeen manifest module groups were not semantically audited; their concrete paths are not enumerated in the B01 gap report.",
+      "remaining_concrete_duty": "Seventeen manifest module groups were not semantically audited; their concrete paths are not enumerated in the B01 gap report.",
+      "verification_needed": "New negative native/Android/physical lifecycle only when source/inputs/contracts have changed or evidence is missing; do not rerun unchanged prior PASS",
+      "does_not_upgrade_to_PASS": true
+    },
+    {
+      "id": "B02-SEM-COMBAT-BOUNDARIES",
+      "fixed_source_sha": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "original_prior_source_sha": "ed2d87121de80c84caaa3f096c3a5acb71d4946f",
+      "prior_status": "MISSING",
+      "B08_status": "STATIC_PARTIAL_GAP_RETAINED",
+      "gap_class": "semantic_review",
+      "source_batch": "B02",
+      "paths": [
+        "scripts/enemy.gd",
+        "scripts/player_state.gd"
+      ],
+      "actual_fixed_source_members": [
+        "scripts/enemy.gd",
+        "scripts/player_state.gd"
+      ],
+      "targeted_body_member_paths": [
+        "scripts/enemy.gd",
+        "scripts/player_state.gd"
+      ],
+      "original_responsibility": "Windup pause, projectile contact ordering, movement publication, equipment mutation, submission rejection, MP validation, and incoming-damage lifesteal remain separate semantic responsibilities.",
+      "remaining_concrete_duty": "Windup pause, projectile contact ordering, movement publication, equipment mutation, submission rejection, MP validation, and incoming-damage lifesteal remain separate semantic responsibilities.",
+      "verification_needed": "New negative native/Android/physical lifecycle only when source/inputs/contracts have changed or evidence is missing; do not rerun unchanged prior PASS",
+      "does_not_upgrade_to_PASS": true
+    },
+    {
+      "id": "B02-SEM-VISUAL-FOLLOWUP",
+      "fixed_source_sha": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "original_prior_source_sha": "ed2d87121de80c84caaa3f096c3a5acb71d4946f",
+      "prior_status": "NOT_RUN",
+      "B08_status": "NOT_RUN",
+      "gap_class": "dynamic_evidence",
+      "source_batch": "B02_followup",
+      "paths": [
+        "scripts/caster_skill_visual_registry.gd",
+        "scripts/caster_skill_animation_player.gd",
+        "scripts/caster_skill_visual_effect.gd"
+      ],
+      "actual_fixed_source_members": [],
+      "targeted_body_member_paths": [],
+      "original_responsibility": "Full damaged-resource/accepted-effect E2E through HP/MP/cooldown remains outside the component proof; lease and terminal behavior are only component-scoped.",
+      "remaining_concrete_duty": "Full damaged-resource/accepted-effect E2E through HP/MP/cooldown remains outside the component proof; lease and terminal behavior are only component-scoped.",
+      "verification_needed": "New negative native/Android/physical lifecycle only when source/inputs/contracts have changed or evidence is missing; do not rerun unchanged prior PASS",
+      "does_not_upgrade_to_PASS": true
+    },
+    {
+      "id": "B02-SEM-TARGET-METADATA",
+      "fixed_source_sha": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "original_prior_source_sha": "ed2d87121de80c84caaa3f096c3a5acb71d4946f",
+      "prior_status": "MISSING",
+      "B08_status": "STATIC_PARTIAL_GAP_RETAINED",
+      "gap_class": "semantic_review",
+      "source_batch": "B02_followup",
+      "paths": [
+        "scripts/enemy.gd",
+        "scripts/runtime_combat_spatial_index.gd"
+      ],
+      "actual_fixed_source_members": [
+        "scripts/enemy.gd",
+        "scripts/runtime_combat_spatial_index.gd"
+      ],
+      "targeted_body_member_paths": [
+        "scripts/enemy.gd"
+      ],
+      "original_responsibility": "Unreachable target-position handling and geometry-size drift need named caller coverage after the closed metadata/geometry reports.",
+      "remaining_concrete_duty": "Unreachable target-position handling and geometry-size drift need named caller coverage after the closed metadata/geometry reports.",
+      "verification_needed": "New negative native/Android/physical lifecycle only when source/inputs/contracts have changed or evidence is missing; do not rerun unchanged prior PASS",
+      "does_not_upgrade_to_PASS": true
+    },
+    {
+      "id": "B02-DYN-ANDROID-COMBAT",
+      "fixed_source_sha": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "original_prior_source_sha": "ed2d87121de80c84caaa3f096c3a5acb71d4946f",
+      "prior_status": "NOT_RUN",
+      "B08_status": "NOT_RUN",
+      "gap_class": "dynamic_evidence",
+      "source_batch": "B02",
+      "paths": [
+        "project.godot",
+        "export_presets.cfg",
+        "scripts/game_root.gd"
+      ],
+      "actual_fixed_source_members": [
+        "project.godot",
+        "export_presets.cfg",
+        "scripts/game_root.gd"
+      ],
+      "targeted_body_member_paths": [
+        "scripts/game_root.gd"
+      ],
+      "original_responsibility": "No Android/device or sustained 60-FPS evidence covers the remaining combat consumers.",
+      "remaining_concrete_duty": "No Android/device or sustained 60-FPS evidence covers the remaining combat consumers.",
+      "verification_needed": "New negative native/Android/physical lifecycle only when source/inputs/contracts have changed or evidence is missing; do not rerun unchanged prior PASS",
+      "does_not_upgrade_to_PASS": true
+    },
+    {
+      "id": "B03-SEM-SUMMON-LIFECYCLE",
+      "fixed_source_sha": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "original_prior_source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "prior_status": "MISSING",
+      "B08_status": "MISSING",
+      "gap_class": "semantic_review",
+      "source_batch": "B03",
+      "paths": [
+        "scripts/summon_actor.gd",
+        "scripts/summon_visual_registry.gd"
+      ],
+      "actual_fixed_source_members": [
+        "scripts/summon_actor.gd",
+        "scripts/summon_visual_registry.gd"
+      ],
+      "targeted_body_member_paths": [],
+      "original_responsibility": "Far-follow/blocked-wall landing, same-life serial rejection, summon burst, and state-owner transition contracts are not all closed by the source/fixture audit.",
+      "remaining_concrete_duty": "Far-follow/blocked-wall landing, same-life serial rejection, summon burst, and state-owner transition contracts are not all closed by the source/fixture audit.",
+      "verification_needed": "New negative native/Android/physical lifecycle only when source/inputs/contracts have changed or evidence is missing; do not rerun unchanged prior PASS",
+      "does_not_upgrade_to_PASS": true
+    },
+    {
+      "id": "B03-SEM-PROJECTILE-DAMAGE",
+      "fixed_source_sha": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "original_prior_source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "prior_status": "MISSING",
+      "B08_status": "STATIC_PARTIAL_GAP_RETAINED",
+      "gap_class": "semantic_review",
+      "source_batch": "B03",
+      "paths": [
+        "scripts/enemy.gd",
+        "scripts/player_state.gd"
+      ],
+      "actual_fixed_source_members": [
+        "scripts/enemy.gd",
+        "scripts/player_state.gd"
+      ],
+      "targeted_body_member_paths": [
+        "scripts/enemy.gd",
+        "scripts/player_state.gd"
+      ],
+      "original_responsibility": "ID194 projectile damage timing and accepted attack-to-damage ordering remain a named semantic gap.",
+      "remaining_concrete_duty": "ID194 projectile damage timing and accepted attack-to-damage ordering remain a named semantic gap.",
+      "verification_needed": "New negative native/Android/physical lifecycle only when source/inputs/contracts have changed or evidence is missing; do not rerun unchanged prior PASS",
+      "does_not_upgrade_to_PASS": true
+    },
+    {
+      "id": "B03-DYN-BUDGET-CATCHUP",
+      "fixed_source_sha": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "original_prior_source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "prior_status": "NOT_RUN",
+      "B08_status": "NOT_RUN",
+      "gap_class": "dynamic_evidence",
+      "source_batch": "B03",
+      "paths": [
+        "scripts/monster_ai_package/decision_budget.gd",
+        "scripts/runtime_combat_spatial_index.gd"
+      ],
+      "actual_fixed_source_members": [
+        "scripts/monster_ai_package/decision_budget.gd",
+        "scripts/runtime_combat_spatial_index.gd"
+      ],
+      "targeted_body_member_paths": [],
+      "original_responsibility": "Physics CPU, catch-up, and service fairness require comparable dynamic evidence under the current source.",
+      "remaining_concrete_duty": "Physics CPU, catch-up, and service fairness require comparable dynamic evidence under the current source.",
+      "verification_needed": "New negative native/Android/physical lifecycle only when source/inputs/contracts have changed or evidence is missing; do not rerun unchanged prior PASS",
+      "does_not_upgrade_to_PASS": true
+    },
+    {
+      "id": "B03-DYN-ANDROID-SUMMON",
+      "fixed_source_sha": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "original_prior_source_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "prior_status": "NOT_RUN",
+      "B08_status": "NOT_RUN",
+      "gap_class": "dynamic_evidence",
+      "source_batch": "B03",
+      "paths": [
+        "scripts/summon_actor.gd",
+        "scenes/main.tscn"
+      ],
+      "actual_fixed_source_members": [
+        "scripts/summon_actor.gd"
+      ],
+      "targeted_body_member_paths": [],
+      "original_responsibility": "Android/device validation for summon and visual lifecycle is absent.",
+      "remaining_concrete_duty": "Android/device validation for summon and visual lifecycle is absent.",
+      "verification_needed": "New negative native/Android/physical lifecycle only when source/inputs/contracts have changed or evidence is missing; do not rerun unchanged prior PASS",
+      "does_not_upgrade_to_PASS": true
+    },
+    {
+      "id": "B04-SEM-DROP-PROFILES",
+      "fixed_source_sha": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "original_prior_source_sha": "172125ae99e3c4adf19af82da2720934a52f9537",
+      "prior_status": "MISSING",
+      "B08_status": "MISSING",
+      "gap_class": "semantic_review",
+      "source_batch": "B04",
+      "paths": [
+        "assets/data/source_priority_policy.json",
+        "assets/data/equipment_*",
+        "scripts/identity/entity_registry.gd"
+      ],
+      "actual_fixed_source_members": [
+        "scripts/identity/entity_registry.gd"
+      ],
+      "targeted_body_member_paths": [],
+      "original_responsibility": "Allowed spawn IDs, canonical profiles, missing profiles, and source-priority/authoring ownership are not fully reconciled.",
+      "remaining_concrete_duty": "Allowed spawn IDs, canonical profiles, missing profiles, and source-priority/authoring ownership are not fully reconciled.",
+      "verification_needed": "New negative native/Android/physical lifecycle only when source/inputs/contracts have changed or evidence is missing; do not rerun unchanged prior PASS",
+      "does_not_upgrade_to_PASS": true
+    },
+    {
+      "id": "B04-SEM-PERSISTENCE-RECEIPTS",
+      "fixed_source_sha": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "original_prior_source_sha": "172125ae99e3c4adf19af82da2720934a52f9537",
+      "prior_status": "MISSING",
+      "B08_status": "STATIC_PARTIAL_GAP_RETAINED",
+      "gap_class": "semantic_review",
+      "source_batch": "B04",
+      "paths": [
+        "scripts/loot_runtime_service.gd",
+        "scripts/json_persistence_service.gd",
+        "scripts/json_persistence_job.gd"
+      ],
+      "actual_fixed_source_members": [
+        "scripts/json_persistence_service.gd",
+        "scripts/json_persistence_job.gd"
+      ],
+      "targeted_body_member_paths": [
+        "scripts/json_persistence_service.gd"
+      ],
+      "original_responsibility": "Map loot/pickup receipts, duplicate receipt handling, transition, and transaction ABA boundaries remain incomplete.",
+      "remaining_concrete_duty": "Map loot/pickup receipts, duplicate receipt handling, transition, and transaction ABA boundaries remain incomplete.",
+      "verification_needed": "New negative native/Android/physical lifecycle only when source/inputs/contracts have changed or evidence is missing; do not rerun unchanged prior PASS",
+      "does_not_upgrade_to_PASS": true
+    },
+    {
+      "id": "B04-SEM-ACTIVATION-AUTHORING",
+      "fixed_source_sha": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "original_prior_source_sha": "172125ae99e3c4adf19af82da2720934a52f9537",
+      "prior_status": "BLOCKED",
+      "B08_status": "BLOCKED",
+      "gap_class": "user_decision",
+      "source_batch": "B04",
+      "paths": [
+        "assets/data/*",
+        "tools/loot_sheet_compiler*"
+      ],
+      "actual_fixed_source_members": [],
+      "targeted_body_member_paths": [],
+      "original_responsibility": "PENDING_ACTIVATION metadata, price policy, equipment art, and generated-sheet provenance still have authoring responsibilities without a closed runtime contract.",
+      "remaining_concrete_duty": "PENDING_ACTIVATION metadata, price policy, equipment art, and generated-sheet provenance still have authoring responsibilities without a closed runtime contract.",
+      "verification_needed": "New negative native/Android/physical lifecycle only when source/inputs/contracts have changed or evidence is missing; do not rerun unchanged prior PASS",
+      "does_not_upgrade_to_PASS": true
+    },
+    {
+      "id": "B05-SEM-AUDIO-CARDINALITY",
+      "fixed_source_sha": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "original_prior_source_sha": "dfcfb9cda1b88d71d7cca3b432ba812831d93c23",
+      "prior_status": "MISSING",
+      "B08_status": "STATIC_PARTIAL_GAP_RETAINED",
+      "gap_class": "semantic_review",
+      "source_batch": "B05",
+      "paths": [
+        "scripts/audio_runtime_service.gd",
+        "scripts/enemy.gd"
+      ],
+      "actual_fixed_source_members": [
+        "scripts/audio_runtime_service.gd",
+        "scripts/enemy.gd"
+      ],
+      "targeted_body_member_paths": [
+        "scripts/enemy.gd"
+      ],
+      "original_responsibility": "Current Enemy owner frontier repair is scoped; non-Enemy callers and nonmonotonic release/session identities still need explicit ownership boundaries.",
+      "remaining_concrete_duty": "Current Enemy owner frontier repair is scoped; non-Enemy callers and nonmonotonic release/session identities still need explicit ownership boundaries.",
+      "verification_needed": "New negative native/Android/physical lifecycle only when source/inputs/contracts have changed or evidence is missing; do not rerun unchanged prior PASS",
+      "does_not_upgrade_to_PASS": true
+    },
+    {
+      "id": "B05-SEM-INPUT-POLICY",
+      "fixed_source_sha": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "original_prior_source_sha": "dfcfb9cda1b88d71d7cca3b432ba812831d93c23",
+      "prior_status": "BLOCKED",
+      "B08_status": "STATIC_PARTIAL_GAP_RETAINED",
+      "gap_class": "user_decision",
+      "source_batch": "B05",
+      "paths": [
+        "scripts/system_menu_panel.gd",
+        "scripts/player_state.gd"
+      ],
+      "actual_fixed_source_members": [
+        "scripts/player_state.gd"
+      ],
+      "targeted_body_member_paths": [
+        "scripts/player_state.gd"
+      ],
+      "original_responsibility": "Simultaneous long-press quick-slot policy is a product/semantic decision, beyond the closed cancel and scroll-owner fixes.",
+      "remaining_concrete_duty": "Simultaneous long-press quick-slot policy is a product/semantic decision, beyond the closed cancel and scroll-owner fixes.",
+      "verification_needed": "New negative native/Android/physical lifecycle only when source/inputs/contracts have changed or evidence is missing; do not rerun unchanged prior PASS",
+      "does_not_upgrade_to_PASS": true
+    },
+    {
+      "id": "B05-DYN-ANDROID-AUDIO",
+      "fixed_source_sha": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "original_prior_source_sha": "dfcfb9cda1b88d71d7cca3b432ba812831d93c23",
+      "prior_status": "NOT_RUN",
+      "B08_status": "NOT_RUN",
+      "gap_class": "dynamic_evidence",
+      "source_batch": "B05",
+      "paths": [
+        "scripts/audio_runtime_service.gd",
+        "scripts/features/runtime/feature_resource_preparation.gd"
+      ],
+      "actual_fixed_source_members": [
+        "scripts/audio_runtime_service.gd",
+        "scripts/features/runtime/feature_resource_preparation.gd"
+      ],
+      "targeted_body_member_paths": [],
+      "original_responsibility": "Android startup BGM/SFX loading CPU/memory and 60-FPS evidence is absent.",
+      "remaining_concrete_duty": "Android startup BGM/SFX loading CPU/memory and 60-FPS evidence is absent.",
+      "verification_needed": "New negative native/Android/physical lifecycle only when source/inputs/contracts have changed or evidence is missing; do not rerun unchanged prior PASS",
+      "does_not_upgrade_to_PASS": true
+    },
+    {
+      "id": "B06-SEM-CRASH-DROP",
+      "fixed_source_sha": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "original_prior_source_sha": "d145826b7305ad918893ba0098db2595ae01f53a",
+      "prior_status": "BLOCKED",
+      "B08_status": "STATIC_PARTIAL_GAP_RETAINED",
+      "gap_class": "user_decision",
+      "source_batch": "B06",
+      "paths": [
+        "scripts/layers/runtime/loot_runtime_service.gd",
+        "scripts/json_persistence_service.gd"
+      ],
+      "actual_fixed_source_members": [
+        "scripts/layers/runtime/loot_runtime_service.gd",
+        "scripts/json_persistence_service.gd"
+      ],
+      "targeted_body_member_paths": [
+        "scripts/layers/runtime/loot_runtime_service.gd",
+        "scripts/json_persistence_service.gd"
+      ],
+      "original_responsibility": "Abnormal process kill between XP persistence, roll, materialization, and save remains a user/product contract decision.",
+      "remaining_concrete_duty": "Abnormal process kill between XP persistence, roll, materialization, and save remains a user/product contract decision.",
+      "verification_needed": "New negative native/Android/physical lifecycle only when source/inputs/contracts have changed or evidence is missing; do not rerun unchanged prior PASS",
+      "does_not_upgrade_to_PASS": true
+    },
+    {
+      "id": "B06-SEM-METADATA-DRIFT",
+      "fixed_source_sha": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "original_prior_source_sha": "d145826b7305ad918893ba0098db2595ae01f53a",
+      "prior_status": "MISSING",
+      "B08_status": "MISSING",
+      "gap_class": "semantic_review",
+      "source_batch": "B06",
+      "paths": [
+        "scripts/map_editor/map_editor_app.gd",
+        "tools/publish_formal_map_releases.gd"
+      ],
+      "actual_fixed_source_members": [
+        "scripts/map_editor/map_editor_app.gd"
+      ],
+      "targeted_body_member_paths": [],
+      "original_responsibility": "Visual/source digest disagreements and matching-PNG metadata drift require authoring/generator ownership resolution.",
+      "remaining_concrete_duty": "Visual/source digest disagreements and matching-PNG metadata drift require authoring/generator ownership resolution.",
+      "verification_needed": "New negative native/Android/physical lifecycle only when source/inputs/contracts have changed or evidence is missing; do not rerun unchanged prior PASS",
+      "does_not_upgrade_to_PASS": true
+    },
+    {
+      "id": "B06-DYN-PORTAL-TRAVERSAL",
+      "fixed_source_sha": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "original_prior_source_sha": "d145826b7305ad918893ba0098db2595ae01f53a",
+      "prior_status": "NOT_RUN",
+      "B08_status": "NOT_RUN",
+      "gap_class": "dynamic_evidence",
+      "source_batch": "B06",
+      "paths": [
+        "scripts/map_editor/map_editor_runtime_bridge.gd",
+        "scripts/map_assets/iso_footprint_geometry.gd"
+      ],
+      "actual_fixed_source_members": [],
+      "targeted_body_member_paths": [],
+      "original_responsibility": "Portal footprint/collision actual traversal has not been dynamically established despite aggregate authoring checks.",
+      "remaining_concrete_duty": "Portal footprint/collision actual traversal has not been dynamically established despite aggregate authoring checks.",
+      "verification_needed": "New negative native/Android/physical lifecycle only when source/inputs/contracts have changed or evidence is missing; do not rerun unchanged prior PASS",
+      "does_not_upgrade_to_PASS": true
+    },
+    {
+      "id": "B06-DYN-PROCESS-INTERRUPT",
+      "fixed_source_sha": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "original_prior_source_sha": "d145826b7305ad918893ba0098db2595ae01f53a",
+      "prior_status": "NOT_RUN",
+      "B08_status": "NOT_RUN",
+      "gap_class": "dynamic_evidence",
+      "source_batch": "B06",
+      "paths": [
+        "scripts/map_editor/map_editor_app.gd",
+        "scripts/layers/runtime/content_layer_registry.gd"
+      ],
+      "actual_fixed_source_members": [
+        "scripts/map_editor/map_editor_app.gd",
+        "scripts/layers/runtime/content_layer_registry.gd"
+      ],
+      "targeted_body_member_paths": [
+        "scripts/layers/runtime/content_layer_registry.gd"
+      ],
+      "original_responsibility": "Process interruption/crash-window recovery is distinct from the closed save failure/numeric identity tests.",
+      "remaining_concrete_duty": "Process interruption/crash-window recovery is distinct from the closed save failure/numeric identity tests.",
+      "verification_needed": "New negative native/Android/physical lifecycle only when source/inputs/contracts have changed or evidence is missing; do not rerun unchanged prior PASS",
+      "does_not_upgrade_to_PASS": true
+    },
+    {
+      "id": "B07A-CURRENT-DATA-FAILURE-CONSUMERS",
+      "fixed_source_sha": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "prior_status": "MISSING_OR_NOT_RUN",
+      "B08_status": "STATIC_PARTIAL_GAP_RETAINED",
+      "paths": [
+        "scripts/game_data.gd",
+        "scripts/layers/runtime/game_mode_service.gd",
+        "scripts/layers/runtime/runtime_service_facade.gd",
+        "scripts/player_state.gd"
+      ],
+      "actual_fixed_source_members": [
+        "scripts/game_data.gd",
+        "scripts/layers/runtime/game_mode_service.gd",
+        "scripts/layers/runtime/runtime_service_facade.gd",
+        "scripts/player_state.gd"
+      ],
+      "targeted_body_member_paths": [
+        "scripts/game_data.gd",
+        "scripts/layers/runtime/game_mode_service.gd",
+        "scripts/layers/runtime/runtime_service_facade.gd",
+        "scripts/player_state.gd"
+      ],
+      "remaining_concrete_duty": "GameData failed reload: source-preflight vs ContentLayers/GameModes/PlayerState saved/UI owner/rollback",
+      "does_not_upgrade_to_PASS": true
+    },
+    {
+      "id": "B07A-GENERATOR-DYNAMIC-NONTARGET",
+      "fixed_source_sha": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "prior_status": "MISSING_OR_NOT_RUN",
+      "B08_status": "STATIC_PARTIAL_GAP_RETAINED",
+      "paths": [
+        "tools/build_equipment_attribute_master.py",
+        "tools/loot_sheet_compiler/compile_authority.ps1"
+      ],
+      "actual_fixed_source_members": [
+        "tools/build_equipment_attribute_master.py",
+        "tools/loot_sheet_compiler/compile_authority.ps1"
+      ],
+      "targeted_body_member_paths": [],
+      "remaining_concrete_duty": "Authoring generator exact write sets, 40-function scope, external symlinks and dynamic consumers; prior source-specific unit/native evidence limited",
+      "does_not_upgrade_to_PASS": true
+    },
+    {
+      "id": "B07B-TEST-ENTRYPOINT-SEMANTIC",
+      "fixed_source_sha": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "prior_status": "MISSING_OR_NOT_RUN",
+      "B08_status": "STATIC_PARTIAL_GAP_RETAINED",
+      "paths": [
+        "tests/helpers/formal_world_skill_fixture.gd",
+        "tests/helpers/map_runtime_transaction_test_fixtures.gd",
+        "tests/helpers/loot_runtime_pre_slice_20261009.gd",
+        "tests/source176_r3/helpers/cadence_reference_r2.gd",
+        "tests/hc_monster_ai/m30_sampling_copy.gd",
+        "tests/wall_atomic_foreground_occlusion_runtime_test.gd",
+        "tests/ui_layout_calibration_workbench.gd",
+        "tools/tests/test_suite_registration.ps1"
+      ],
+      "actual_fixed_source_members": [
+        "tests/helpers/formal_world_skill_fixture.gd",
+        "tests/helpers/map_runtime_transaction_test_fixtures.gd",
+        "tests/helpers/loot_runtime_pre_slice_20261009.gd",
+        "tests/source176_r3/helpers/cadence_reference_r2.gd",
+        "tests/hc_monster_ai/m30_sampling_copy.gd",
+        "tests/wall_atomic_foreground_occlusion_runtime_test.gd",
+        "tests/ui_layout_calibration_workbench.gd",
+        "tools/tests/test_suite_registration.ps1"
+      ],
+      "targeted_body_member_paths": [
+        "tests/helpers/formal_world_skill_fixture.gd",
+        "tests/helpers/map_runtime_transaction_test_fixtures.gd",
+        "tests/helpers/loot_runtime_pre_slice_20261009.gd",
+        "tests/source176_r3/helpers/cadence_reference_r2.gd",
+        "tests/hc_monster_ai/m30_sampling_copy.gd",
+        "tests/wall_atomic_foreground_occlusion_runtime_test.gd",
+        "tests/ui_layout_calibration_workbench.gd"
+      ],
+      "remaining_concrete_duty": "Read remaining shared formal_world_skill_fixture, map_runtime_transaction_test_fixtures, old loot and cadence oracles, 75-function m30 and 31-wall/45-calibrator helpers",
+      "does_not_upgrade_to_PASS": true
+    },
+    {
+      "id": "B07B-WINDOWS-JOB-NATIVE-BOUNDARY",
+      "fixed_source_sha": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "prior_status": "MISSING_OR_NOT_RUN",
+      "B08_status": "STATIC_PARTIAL_GAP_RETAINED",
+      "paths": [
+        "tools/run_godot_tests.ps1",
+        "tools/test_framework_receipt.ps1"
+      ],
+      "actual_fixed_source_members": [
+        "tools/run_godot_tests.ps1",
+        "tools/test_framework_receipt.ps1"
+      ],
+      "targeted_body_member_paths": [],
+      "remaining_concrete_duty": "PID reuse, Assign-process failure, Linux ownership, Android external receipt and nonframework formal evidence",
+      "does_not_upgrade_to_PASS": true
+    },
+    {
+      "id": "B08-MODE-TRANSACTION",
+      "fixed_source_sha": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "prior_status": "MISSING_OR_NOT_RUN",
+      "B08_status": "STATIC_PARTIAL_GAP_RETAINED",
+      "paths": [
+        "scripts/layers/runtime/game_mode_service.gd",
+        "scripts/layers/runtime/runtime_service_facade.gd",
+        "scripts/player_state.gd",
+        "scripts/layers/runtime/content_layer_registry.gd"
+      ],
+      "actual_fixed_source_members": [
+        "scripts/layers/runtime/game_mode_service.gd",
+        "scripts/layers/runtime/runtime_service_facade.gd",
+        "scripts/player_state.gd",
+        "scripts/layers/runtime/content_layer_registry.gd"
+      ],
+      "targeted_body_member_paths": [
+        "scripts/layers/runtime/game_mode_service.gd",
+        "scripts/layers/runtime/runtime_service_facade.gd",
+        "scripts/player_state.gd",
+        "scripts/layers/runtime/content_layer_registry.gd"
+      ],
+      "remaining_concrete_duty": "Two-stage mode/expansion publication with profile load, saved mode, UI signal and negative failure identity",
+      "does_not_upgrade_to_PASS": true
+    },
+    {
+      "id": "B08-MONSTER-FAIRNESS",
+      "fixed_source_sha": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "prior_status": "MISSING_OR_NOT_RUN",
+      "B08_status": "STATIC_PARTIAL_GAP_RETAINED",
+      "paths": [
+        "scripts/game_root.gd",
+        "scripts/enemy.gd",
+        "scripts/monster_ai_package/decision_budget.gd"
+      ],
+      "actual_fixed_source_members": [
+        "scripts/game_root.gd",
+        "scripts/enemy.gd",
+        "scripts/monster_ai_package/decision_budget.gd"
+      ],
+      "targeted_body_member_paths": [
+        "scripts/game_root.gd",
+        "scripts/enemy.gd"
+      ],
+      "remaining_concrete_duty": "Production 6/9/12 full activation with static terrain LOS, external positive damage/fwall wake, owner 300ms optional and same 30 monster CPU/service delay",
+      "does_not_upgrade_to_PASS": true
+    },
+    {
+      "id": "B08-DEATH-CRASH-ATOMICITY",
+      "fixed_source_sha": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "prior_status": "MISSING_OR_NOT_RUN",
+      "B08_status": "STATIC_PARTIAL_GAP_RETAINED",
+      "paths": [
+        "scripts/game_root.gd",
+        "scripts/player_state.gd",
+        "scripts/json_persistence_service.gd",
+        "scripts/layers/runtime/loot_runtime_service.gd"
+      ],
+      "actual_fixed_source_members": [
+        "scripts/game_root.gd",
+        "scripts/player_state.gd",
+        "scripts/json_persistence_service.gd",
+        "scripts/layers/runtime/loot_runtime_service.gd"
+      ],
+      "targeted_body_member_paths": [
+        "scripts/game_root.gd",
+        "scripts/player_state.gd",
+        "scripts/json_persistence_service.gd",
+        "scripts/layers/runtime/loot_runtime_service.gd"
+      ],
+      "remaining_concrete_duty": "XP/event commit, later reward roll/materialization, pickup/item receipt/exit crash between durable phases",
+      "does_not_upgrade_to_PASS": true
+    },
+    {
+      "id": "B08-109-ANDROID",
+      "fixed_source_sha": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "prior_status": "MISSING_OR_NOT_RUN",
+      "B08_status": "STATIC_PARTIAL_GAP_RETAINED",
+      "paths": [
+        "tools/build_android_isolated.ps1",
+        "tools/verify_android_build.ps1"
+      ],
+      "actual_fixed_source_members": [
+        "tools/build_android_isolated.ps1",
+        "tools/verify_android_build.ps1"
+      ],
+      "targeted_body_member_paths": [],
+      "remaining_concrete_duty": "No 109 build; actual approved baseline signature, package, installed save compatibility, engine/template/identity/seal source token and device performance",
+      "does_not_upgrade_to_PASS": true
+    },
+    {
+      "id": "B04-BAT127-PRODUCT-DECISION",
+      "fixed_source_sha": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "prior_status": "BLOCKED",
+      "B08_status": "USER_DECISION_PENDING",
+      "paths": [
+        "assets/data/canonical_monster_drop_source_v2.json"
+      ],
+      "remaining_concrete_duty": "ID127 summoned bat loot probability/nonloot role requires explicit user ruling; no fallback or invented probability",
+      "does_not_upgrade_to_PASS": true
+    }
+  ],
+  "fully_closed_by_B08": 0,
+  "user_product_boundaries": [
+    "ID127 bat drop pending",
+    "quick-slot simultaneous press policy",
+    "abnormal XP/drop process kill transaction policy"
+  ],
+  "platform": "ANDROID_NOT_RUN",
+  "total_6083_material_inventory_not_cpu_evidence": true
+}

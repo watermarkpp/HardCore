@@ -1,0 +1,311 @@
+{
+  "fixed_source_sha": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+  "findings": [
+    {
+      "id": "B08-001",
+      "severity": "P1",
+      "classification": "PRODUCTION_CONTROL_FLOW_BUG",
+      "path": "scripts/layers/runtime/game_mode_service.gd",
+      "function": "apply_mode",
+      "lines": [
+        17,
+        29
+      ],
+      "trigger": "Valid saved/runtime mode switches known expansion, GameData rejects merged catalog reload.",
+      "owner": "GameModes.active_mode; ContentLayers enabled/merged; GameData loaded/catalog; PlayerState game_mode_id",
+      "observed": "Commits active_mode, each enabled package and its signal, PlayerState.game_mode_id before GameData.load_database; ignores false, returns true.",
+      "expected": "Success only after accepted catalog; failed reload leaves one coherent previous state or explicit unavailable state.",
+      "chain": [
+        "PlayerState.load_save",
+        "GameModes.apply_mode",
+        "ContentLayers.set_expansion_enabled",
+        "GameData.load_database"
+      ],
+      "evidence": [
+        {
+          "path": "scripts/layers/runtime/game_mode_service.gd",
+          "lines": [
+            17,
+            29
+          ],
+          "fact": "mode and profile commit before ignored catalog result",
+          "url": "https://github.com/watermarkpp/HardCore/blob/dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5/scripts/layers/runtime/game_mode_service.gd"
+        },
+        {
+          "path": "scripts/layers/runtime/content_layer_registry.gd",
+          "lines": [
+            394,
+            402
+          ],
+          "fact": "publishes package signal before reload",
+          "url": "https://github.com/watermarkpp/HardCore/blob/dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5/scripts/layers/runtime/content_layer_registry.gd"
+        },
+        {
+          "path": "scripts/game_data.gd",
+          "lines": [
+            236,
+            245
+          ],
+          "fact": "failure sets unloaded and returns false",
+          "url": "https://github.com/watermarkpp/HardCore/blob/dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5/scripts/game_data.gd"
+        }
+      ],
+      "unproved": "Native fault injection/visual UI impact not run. Premature mutation and masked false are proven by source.",
+      "fix": "Existing owners implement candidate prepare/validate then atomic publish; restore old mode/expansion and avoid emitted signal on failure, or fail closed with save blocked if recovery unavailable.",
+      "tests": "Inject real malformed merged skill/category after valid mode change; assert failure propagation, no early signal, old mode/package/profile preserved, recover later without duplicate save.",
+      "fixed_source_sha": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "native": "NOT_RUN",
+      "android": "NOT_RUN"
+    },
+    {
+      "id": "B08-002",
+      "severity": "P1",
+      "classification": "PRODUCTION_CONTROL_FLOW_BUG",
+      "path": "scripts/layers/runtime/runtime_service_facade.gd",
+      "function": "set_expansion_enabled",
+      "lines": [
+        16,
+        22
+      ],
+      "trigger": "Non-later valid package enable changes merged data; GameData.load_database returns false. Later settings branch must be separately classified.",
+      "owner": "RuntimeServices API, ContentLayers package, GameData publication, PlayerState save",
+      "observed": "Facade mutates ContentLayers first then ignores false for nonlater and returns changed=true. Later branch directly calls PlayerState.set_later_content_enabled which commits signal/save without independent reload gate.",
+      "expected": "Caller's declared success requires correct authoritative consumer acceptance and unambiguous later-only visibility contract.",
+      "chain": [
+        "RuntimeServices.set_expansion_enabled",
+        "ContentLayers.set_expansion_enabled",
+        "GameData.load_database or PlayerState.set_later_content_enabled",
+        "_commit_save"
+      ],
+      "evidence": [
+        {
+          "path": "scripts/layers/runtime/runtime_service_facade.gd",
+          "lines": [
+            16,
+            22
+          ],
+          "fact": "ignores reload status and returns changed",
+          "url": "https://github.com/watermarkpp/HardCore/blob/dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5/scripts/layers/runtime/runtime_service_facade.gd"
+        },
+        {
+          "path": "scripts/player_state.gd",
+          "lines": [
+            784,
+            789
+          ],
+          "fact": "later branch profile change and save",
+          "url": "https://github.com/watermarkpp/HardCore/blob/dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5/scripts/player_state.gd"
+        },
+        {
+          "path": "assets/data/layers/expansion_layer.json",
+          "lines": [
+            1,
+            27
+          ],
+          "fact": "later package settings activation without data resource",
+          "url": "https://github.com/watermarkpp/HardCore/blob/dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5/assets/data/layers/expansion_layer.json"
+        }
+      ],
+      "unproved": "No direct UI caller found under ordinary static grep; dynamic API consumer unknown; later-only reload semantics not settled. Nonlater false masking is source-proven.",
+      "fix": "Return structured accepted/failed result; stage catalog-bearing package before signaling and commit. For later-only visibility explicitly verify profile/save readiness and avoid adding guessed second catalog reload.",
+      "tests": "Isolated nonlater bad data and later before/after READY, save failure, idempotent toggle, clean signal/count and no content drift.",
+      "fixed_source_sha": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "native": "NOT_RUN",
+      "android": "NOT_RUN"
+    },
+    {
+      "id": "B08-003",
+      "severity": "P1",
+      "classification": "PRODUCTION_CONTROL_FLOW_BUG",
+      "path": "scripts/player_state.gd",
+      "function": "load_save / select_character",
+      "lines": [
+        6988,
+        7236,
+        9940,
+        9972
+      ],
+      "trigger": "Previously valid saved profile mode is valid but merged expansion reload fails; invalid saved mode fallback classic also rejects.",
+      "owner": "PlayerState loaded profile and save eligibility; GameModes and GameData own catalog mode",
+      "observed": "last_load_result is marked successful on JSON read; load_save publishes level/profession/mode, ignores apply_mode failure/fallback, mutates experience/inventory/equipment, may call migration _commit_save; select_character trusts last_load_result and returns true.",
+      "expected": "Validate entire profile and catalog before public mutation; return failure, block save and preserve old character/mode on reload refusal.",
+      "chain": [
+        "PlayerState.select_character",
+        "load_save",
+        "GameModes.apply_mode",
+        "GameData.load_database rejected",
+        "later restore and possible migration save"
+      ],
+      "evidence": [
+        {
+          "path": "scripts/player_state.gd",
+          "lines": [
+            6988,
+            7000
+          ],
+          "fact": "sets last_load_result from document read",
+          "url": "https://github.com/watermarkpp/HardCore/blob/dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5/scripts/player_state.gd"
+        },
+        {
+          "path": "scripts/player_state.gd",
+          "lines": [
+            7087,
+            7134
+          ],
+          "fact": "mode failure ignored while restoring fields",
+          "url": "https://github.com/watermarkpp/HardCore/blob/dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5/scripts/player_state.gd"
+        },
+        {
+          "path": "scripts/player_state.gd",
+          "lines": [
+            7212,
+            7236
+          ],
+          "fact": "migration save/late failure occurs",
+          "url": "https://github.com/watermarkpp/HardCore/blob/dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5/scripts/player_state.gd"
+        },
+        {
+          "path": "scripts/player_state.gd",
+          "lines": [
+            9940,
+            9972
+          ],
+          "fact": "caller trusts old success",
+          "url": "https://github.com/watermarkpp/HardCore/blob/dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5/scripts/player_state.gd"
+        },
+        {
+          "path": "scripts/layers/runtime/game_mode_service.gd",
+          "lines": [
+            17,
+            29
+          ],
+          "fact": "mode API masks failed reload",
+          "url": "https://github.com/watermarkpp/HardCore/blob/dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5/scripts/layers/runtime/game_mode_service.gd"
+        }
+      ],
+      "unproved": "No real bad-catalog read execution this B08. Failure propagation gap proven by source.",
+      "fix": "Detached profile/mode/skill preflight with existing unique owners, then commit state and only then optional save; failure sets last_load_result false and save-block, rolls back or keeps old owner safely, never silent classic fallback for transient failure.",
+      "tests": "Valid save + damaged merged catalog, invalid mode and failed classic fallback; inspect memory, save bytes, no early signal, no scene launch, post-repair successful recovery.",
+      "fixed_source_sha": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "native": "NOT_RUN",
+      "android": "NOT_RUN"
+    },
+    {
+      "id": "B08-004",
+      "severity": "P2",
+      "classification": "CONDITIONAL_PRODUCTION_STATE_RISK",
+      "path": "scripts/game_data.gd",
+      "function": "load_database / get_map_by_id / get_item_record",
+      "lines": [
+        236,
+        320,
+        3698,
+        3890
+      ],
+      "trigger": "Reload fails after earlier public database/maps assignments; a consumer invokes getters without checking GameData.is_loaded().",
+      "owner": "GameData sole loader and public index owner",
+      "observed": "load_database clears loaded then assigns maps/database/items/skills before all validation. Getters read current indexes without own readiness guard. Failure can leave partial or mixed cached data accessible if caller ignores readiness.",
+      "expected": "No partially published authority on failed reload; unavailable until fully validated or preserve atomic previous index.",
+      "chain": [
+        "ContentLayers expansion",
+        "GameData partial map publish",
+        "late schema/reward rejection",
+        "UI/get_item_record or map getter"
+      ],
+      "evidence": [
+        {
+          "path": "scripts/game_data.gd",
+          "lines": [
+            236,
+            289
+          ],
+          "fact": "public arrays populated before possible failing authority validation",
+          "url": "https://github.com/watermarkpp/HardCore/blob/dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5/scripts/game_data.gd"
+        },
+        {
+          "path": "scripts/game_data.gd",
+          "lines": [
+            313,
+            320
+          ],
+          "fact": "loaded true only after final validation",
+          "url": "https://github.com/watermarkpp/HardCore/blob/dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5/scripts/game_data.gd"
+        },
+        {
+          "path": "scripts/game_data.gd",
+          "lines": [
+            3698,
+            3714
+          ],
+          "fact": "map getter returns index without ready check",
+          "url": "https://github.com/watermarkpp/HardCore/blob/dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5/scripts/game_data.gd"
+        },
+        {
+          "path": "scripts/game_data.gd",
+          "lines": [
+            3783,
+            3890
+          ],
+          "fact": "item getter reads cache without ready check",
+          "url": "https://github.com/watermarkpp/HardCore/blob/dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5/scripts/game_data.gd"
+        }
+      ],
+      "unproved": "No fixed-source UI call with concurrent failed reload was dynamically demonstrated; native55 proves unloaded, not every getter consumer.",
+      "fix": "Stage new public data in private candidate and atomically promote; or enforce loaded gate on all public readers. Coordinate with single ContentLayers owner, no shadow source.",
+      "tests": "Force every post-map catalog failure, assert no mixed getters, PlayerVisual/feature/UI hold stable, full valid recovery.",
+      "fixed_source_sha": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "native": "NOT_RUN",
+      "android": "NOT_RUN"
+    },
+    {
+      "id": "B08-005",
+      "severity": "P2",
+      "classification": "CONDITIONAL_PRODUCTION_STATE_RISK",
+      "path": "scripts/player_state.gd",
+      "function": "load_save",
+      "lines": [
+        7087,
+        7131
+      ],
+      "trigger": "Valid profile document with bad skill_progression snapshot that rejects after public fields were assigned.",
+      "owner": "PlayerState profile/inventory/equipment save owner",
+      "observed": "Fields level, profession, mode, inventory, equipment and warehouse may mutate before load_snapshot failure; last_load_result false and select_character only resets active_profile_id.",
+      "expected": "Failed character load must not expose partial replacement or allow stale state use/save.",
+      "chain": [
+        "select_character",
+        "load_save restores fields",
+        "_skill_progression.load_snapshot rejects",
+        "active_profile_id reset only"
+      ],
+      "evidence": [
+        {
+          "path": "scripts/player_state.gd",
+          "lines": [
+            7087,
+            7131
+          ],
+          "fact": "skill progression checked after public inventory and equipment mutation",
+          "url": "https://github.com/watermarkpp/HardCore/blob/dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5/scripts/player_state.gd"
+        },
+        {
+          "path": "scripts/player_state.gd",
+          "lines": [
+            9940,
+            9972
+          ],
+          "fact": "failed selection resets profile id only",
+          "url": "https://github.com/watermarkpp/HardCore/blob/dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5/scripts/player_state.gd"
+        }
+      ],
+      "unproved": "The failure can be injected statically but visual exposure in CharacterSelect not demonstrated.",
+      "fix": "Prevalidate skill progression detached from live PlayerState and commit once all hard gates pass; otherwise restore complete previous profile snapshot and blocked status.",
+      "tests": "Disposable valid-profile/invalid-skill identity with existing loaded character, assert old fields unchanged and no save or shared warehouse mutation.",
+      "fixed_source_sha": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "native": "NOT_RUN",
+      "android": "NOT_RUN"
+    }
+  ],
+  "batch": "B08",
+  "godot": "NOT_RUN",
+  "android": "NOT_RUN"
+}
