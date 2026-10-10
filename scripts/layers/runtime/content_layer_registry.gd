@@ -7,6 +7,7 @@ signal feature_catalog_changed
 const FeatureCatalog := preload("res://scripts/features/compilation/feature_catalog.gd")
 const FeatureAuthority := preload("res://scripts/features/adapters/feature_authority.gd")
 const PlainGraph := preload("res://scripts/features/contracts/plain_graph.gd")
+const PreparedContentConfiguration := preload("res://scripts/layers/runtime/prepared_content_configuration.gd")
 const FEATURE_REGISTRY := "res://assets/data/features/module_registry.json"
 const FEATURE_AUTHORING_ROOT := "res://assets/data/features/"
 var _feature_catalog := FeatureCatalog.new()
@@ -36,6 +37,9 @@ var merge_diagnostics: Array[String] = []
 var initial_load_deferred := OS.get_name() == "Android"
 var _initial_load_started := false
 var _initial_load_complete := false
+var last_expansion_error := ""
+var _expansion_commit_in_progress := false
+var configuration_revision := 0
 
 
 func _ready() -> void:
@@ -61,6 +65,7 @@ func ensure_loaded() -> bool:
 
 
 func reload_manifests() -> bool:
+	configuration_revision += 1
 	manifests.clear()
 	enabled_expansions.clear()
 	load_errors.clear()
@@ -143,6 +148,20 @@ func _feature_resources() -> Node:
 		_feature_resource_service = preload("res://scripts/features/runtime/feature_resource_preparation.gd").new()
 		add_child(_feature_resource_service)
 	return _feature_resource_service
+
+## Transfer already-issued threaded ResourceLoader claims from a retiring
+## scene owner into the shared feature service. The service never re-requests
+## the path; it polls and joins the supplied user claims under its retirement
+## budget.
+func retire_threaded_resource_claims(path: String, claim_count: int) -> bool:
+	if path.is_empty() or claim_count <= 0:
+		return false
+	return bool(_feature_resources().retire_threaded_resource_claims(path, claim_count))
+
+func threaded_resource_claim_diagnostics() -> Dictionary:
+	if _feature_resource_service == null:
+		return {"accepted":0, "transferred":0, "get":0, "missing":0, "pending":0}
+	return _feature_resource_service.threaded_claim_diagnostics()
 
 
 func _apply_prepared_feature_candidate(result: Dictionary, resource_lease: RefCounted, sequence: int, profile: String) -> bool:
@@ -382,10 +401,92 @@ func set_expansion_enabled(package_id: String, enabled: bool) -> bool:
 		return false
 	if bool(enabled_expansions.get(package_id, false)) == enabled:
 		return false
-	enabled_expansions[package_id] = enabled
-	merged_database = build_merged_database()
-	expansion_state_changed.emit(package_id, enabled)
+	var requested := enabled_expansions.duplicate()
+	requested[package_id] = enabled
+	return apply_expansion_configuration(requested)
+
+
+func prepare_expansion_configuration(requested: Dictionary) -> RefCounted:
+	last_expansion_error = ""
+	if _expansion_commit_in_progress:
+		last_expansion_error = "content_configuration_commit_in_progress"
+		return null
+	if not is_loaded() or not is_instance_valid(GameData):
+		last_expansion_error = "content_layers_not_ready"
+		return null
+	if requested.size() != enabled_expansions.size():
+		last_expansion_error = "content_configuration_packages_invalid"
+		return null
+	for package_id: Variant in requested:
+		if not package_id is String or not enabled_expansions.has(package_id) or not requested[package_id] is bool:
+			last_expansion_error = "content_configuration_packages_invalid"
+			return null
+	var prepared := PreparedContentConfiguration.new()
+	prepared.owner = weakref(self)
+	prepared.expected_expansions = enabled_expansions.duplicate()
+	prepared.database_revision = GameData.database_revision
+	prepared.database_loaded = GameData.is_loaded()
+	prepared.layer_revision = configuration_revision
+	prepared.requested_expansions = requested.duplicate()
+	if requested == enabled_expansions and GameData.is_loaded():
+		return prepared
+	var merged := _build_merged_configuration(requested)
+	for diagnostic: Variant in merged.diagnostics:
+		if str(diagnostic).begins_with("ERROR:"):
+			last_expansion_error = str(diagnostic).substr(6)
+			return null
+	var database_result := GameData.prepare_database_candidate(merged.database)
+	if not bool(database_result.success):
+		last_expansion_error = str(database_result.error)
+		return null
+	prepared.merged_database = merged.database
+	prepared.merge_diagnostics = merged.diagnostics
+	prepared.database_candidate = database_result.candidate
+	return prepared
+
+
+func apply_prepared_expansion_configuration(prepared: RefCounted, commit_profile: Callable = Callable()) -> bool:
+	last_expansion_error = ""
+	if _expansion_commit_in_progress or not prepared is PreparedContentConfiguration:
+		last_expansion_error = "content_configuration_invalid_or_busy"
+		return false
+	if prepared.consumed or not is_instance_valid(prepared.owner) or prepared.owner.get_ref() != self or not is_loaded() or not is_instance_valid(GameData):
+		last_expansion_error = "content_configuration_stale"
+		return false
+	if prepared.expected_expansions != enabled_expansions or prepared.database_revision != GameData.database_revision or prepared.database_loaded != GameData.is_loaded() or prepared.layer_revision != configuration_revision:
+		last_expansion_error = "content_configuration_stale"
+		return false
+	var previous := enabled_expansions
+	var reload := is_instance_valid(prepared.database_candidate)
+	_expansion_commit_in_progress = true
+	if reload and not GameData.adopt_database_candidate(prepared.database_candidate):
+		_expansion_commit_in_progress = false
+		last_expansion_error = "content_configuration_candidate_invalid"
+		return false
+	if reload:
+		enabled_expansions = prepared.requested_expansions
+		merged_database = prepared.merged_database
+		merge_diagnostics = prepared.merge_diagnostics
+		configuration_revision += 1
+		prepared.database_candidate.free()
+		prepared.database_candidate = null
+	prepared.consumed = true
+	if commit_profile.is_valid():
+		commit_profile.call()
+	# All owners are committed before any observer receives a notification.
+	for package_id: String in enabled_expansions:
+		if bool(previous[package_id]) != bool(enabled_expansions[package_id]):
+			expansion_state_changed.emit(package_id, bool(enabled_expansions[package_id]))
+	if reload:
+		GameData.announce_database_reload()
+	_expansion_commit_in_progress = false
+	last_expansion_error = ""
 	return true
+
+
+func apply_expansion_configuration(requested: Dictionary, commit_profile: Callable = Callable()) -> bool:
+	var prepared := prepare_expansion_configuration(requested)
+	return prepared != null and apply_prepared_expansion_configuration(prepared, commit_profile)
 
 
 func is_expansion_enabled(package_id: String) -> bool:
@@ -398,7 +499,13 @@ func active_skin() -> Dictionary:
 
 
 func build_merged_database(user_override: Dictionary = {}) -> Dictionary:
-	merge_diagnostics.clear()
+	var candidate := _build_merged_configuration(enabled_expansions, user_override)
+	merge_diagnostics = candidate.diagnostics
+	return candidate.database
+
+
+func _build_merged_configuration(expansions: Dictionary, user_override: Dictionary = {}) -> Dictionary:
+	var diagnostics: Array[String] = []
 	var merged := {
 		"schemaVersion": 1,
 		"mergeOrder": ["vanilla_core", "expansion_layer", "user_override"],
@@ -411,30 +518,70 @@ func build_merged_database(user_override: Dictionary = {}) -> Dictionary:
 		if not package is Dictionary:
 			continue
 		var package_id := str(package.get("id", ""))
-		if not is_expansion_enabled(package_id):
+		if not bool(expansions.get(package_id, false)):
 			continue
 		merged["activeExpansions"].append(package_id)
-		_apply_expansion_package(merged, package)
+		_apply_expansion_package(merged, package, diagnostics)
 	_apply_user_override(merged, user_override)
-	return merged
+	return {"database": merged, "diagnostics": diagnostics}
 
 
-func _apply_expansion_package(merged: Dictionary, package: Dictionary) -> void:
+func _apply_expansion_package(merged: Dictionary, package: Dictionary, diagnostics: Variant = null) -> void:
 	var package_path := str(package.get("data", ""))
+	var package_id := str(package.get("id", ""))
+	# A package without a data path is a valid metadata-only declaration (for
+	# example later_176_content). Once a path is declared, however, an enabled
+	# package must prove that its manifest and every declared table are readable.
+	# The old `{}` fallback silently turned a broken active package into a valid
+	# base database, which made the failure appear much later in gameplay.
+	if package_path.is_empty():
+		return
+	if not FileAccess.file_exists(package_path):
+		_append_expansion_error(diagnostics, "content_package_data_missing:" + package_id + ":" + package_path)
+		return
 	var package_manifest := _read_json(package_path)
-	if package_manifest.has("tables"):
-		var base_directory := package_path.get_base_dir()
-		var merge_policy := str(package_manifest.get("mergePolicy", package.get("mergePolicy", "add_only")))
-		for table_id: String in package_manifest.get("tables", {}):
-			if not merged.has(table_id):
+	if package_manifest.is_empty() or str(package_manifest.get("packageId", package_id)) != package_id:
+		_append_expansion_error(diagnostics, "content_package_manifest_invalid:" + package_id)
+		return
+	if not package_manifest.has("tables"):
+		# Only the registered user-equipment authoring document is metadata-only.
+		# Every other data-backed package is a required database contribution; a
+		# missing table declaration must fail closed instead of silently enabling
+		# an empty active expansion.
+		if package_id == "user_equipment" and package_manifest.has("newEquipment") and package_manifest.has("overrides"):
+			return
+		_append_expansion_error(diagnostics, "content_package_tables_missing:" + package_id)
+		return
+	if not package_manifest.tables is Dictionary:
+		_append_expansion_error(diagnostics, "content_package_tables_invalid:" + package_id)
+		return
+	var base_directory := package_path.get_base_dir()
+	var merge_policy := str(package_manifest.get("mergePolicy", package.get("mergePolicy", "add_only")))
+	for table_id: String in package_manifest.tables:
+		if not merged.has(table_id):
+			_append_expansion_error(diagnostics, "content_package_table_unknown:" + package_id + ":" + table_id)
+			continue
+		var table_path := base_directory.path_join(str(package_manifest.tables[table_id]))
+		if not FileAccess.file_exists(table_path):
+			_append_expansion_error(diagnostics, "content_package_table_missing:" + package_id + ":" + table_id)
+			continue
+		var table := _read_json(table_path)
+		if table.is_empty() or not table.get("records", null) is Array:
+			_append_expansion_error(diagnostics, "content_package_table_invalid:" + package_id + ":" + table_id)
+			continue
+		for record: Variant in table.records:
+			if not record is Dictionary:
+				_append_expansion_error(diagnostics, "content_package_record_invalid:%s:%s" % [package_id, table_id])
 				continue
-			var table := _read_json(base_directory.path_join(str(package_manifest.tables[table_id])))
-			for record: Variant in table.get("records", []):
-				if record is Dictionary:
-					_merge_record(merged[table_id], record, table_id, merge_policy, str(package.get("id", "")))
+			_merge_record(merged[table_id], record, table_id, merge_policy, package_id, diagnostics)
 
 
-func _merge_record(target: Array, record: Dictionary, table_id: String, merge_policy: String, package_id: String) -> void:
+func _append_expansion_error(diagnostics: Variant, message: String) -> void:
+	if diagnostics is Array:
+		diagnostics.append("ERROR:" + message)
+
+
+func _merge_record(target: Array, record: Dictionary, table_id: String, merge_policy: String, package_id: String, diagnostics: Variant = null) -> void:
 	var record_id := _record_id(record, table_id)
 	var existing_index := -1
 	for index in range(target.size()):
@@ -445,7 +592,8 @@ func _merge_record(target: Array, record: Dictionary, table_id: String, merge_po
 		target.append(record.duplicate(true))
 		return
 	if merge_policy != "explicit_override" or str(record.get("overrideTargetId", "")) != record_id:
-		merge_diagnostics.append("扩展冲突被拒绝：%s/%s/%s" % [package_id, table_id, record_id])
+		var destination: Array = merge_diagnostics if diagnostics == null else diagnostics
+		destination.append("扩展冲突被拒绝：%s/%s/%s" % [package_id, table_id, record_id])
 		return
 	var combined: Dictionary = target[existing_index].duplicate(true)
 	combined.merge(record, true)

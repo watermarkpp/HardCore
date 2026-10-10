@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "authority_id": "monster.targeting.classification_view_override.v1",
+  "status": "USER_AUTHORIZED_CANDIDATE",
+  "source_priority_policy": "assets/data/source_priority_policy.json",
+  "scope": "first_acquisition_view_range_only",
+  "field": "targeting.view_range_cells",
+  "rule": "classification_override_view_range_cells",
+  "overrides": {
+    "ordinary": {
+      "view_range_cells": 6,
+      "authority": "USER_AUTHORIZED_OVERRIDE",
+      "reason": "User-selected simple aura range for ordinary runtime monsters on 2026-10-09"
+    },
+    "elite": {
+      "view_range_cells": 9,
+      "authority": "USER_AUTHORIZED_OVERRIDE",
+      "reason": "User-selected simple aura range for elite runtime monsters on 2026-10-09"
+    },
+    "boss": {
+      "view_range_cells": 12,
+      "authority": "USER_AUTHORIZED_OVERRIDE",
+      "reason": "User-selected simple aura range for boss runtime monsters on 2026-10-09"
+    }
+  },
+  "preserve": {
+    "class_derived_view_range_cells": true,
+    "special": true,
+    "non_hostile": true,
+    "version_difference": true,
+    "data_hold_missing_targeting": true,
+    "movement": true,
+    "attack_range": true,
+    "focus_timeout": true,
+    "disengage_axis": true,
+    "collision": true,
+    "loot_classification": true
+  }
+}

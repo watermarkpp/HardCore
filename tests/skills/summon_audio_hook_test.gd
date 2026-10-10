@@ -53,6 +53,8 @@ func _run() -> void:
 	# A miss is globally bounded and must recover when a service appears after
 	# the negative-cache interval, without any production reset dependency.
 	skeleton._audio_try_emit_appear()
+	assert(skeleton._audio_appear_emitted, "禁用的appear入口应直接封存")
+	assert(skeleton._audio_service() == null)
 	assert(
 		SummonActor.audio_service_lookup_count_for_test() == lookup_before_missing + 1,
 		"first missing service must perform one lookup",
@@ -65,12 +67,8 @@ func _run() -> void:
 	SummonActor.set_audio_service_cache_clock_for_test(2000)
 	skeleton._audio_try_emit_appear()
 	skeleton._audio_try_emit_appear()
-	assert(_count(probe, 145, "appear") == 1, "skeleton appear must emit once")
-	assert(
-		str(probe.calls[0].get("context", {}).get("source", ""))
-		== "summon_actor",
-		"summon audio context must identify the actor hook",
-	)
+	assert(_count(probe, 145, "appear") == 0, "生产禁用appear不得请求服务")
+	assert(skeleton._audio_service() == probe, "允许的攻击音效仍应恢复服务")
 
 	# Replacing the old GameRoot/service must invalidate the shared positive
 	# cache and discover the new in-tree service immediately.
@@ -113,7 +111,7 @@ func _run() -> void:
 	add_child(divine)
 	await get_tree().process_frame
 	divine._audio_try_emit_appear()
-	assert(_count(probe, 146, "appear") == 1, "divine beast must use monster ID 146")
+	assert(_count(probe, 146, "appear") == 0, "divine beast disabled appear must not submit requests")
 	divine._audio_attack_started()
 	divine._audio_attack_frame()
 	assert(_count(probe, 146, "attack_start") == 1)

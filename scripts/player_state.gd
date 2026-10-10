@@ -22,6 +22,8 @@ const EntityRegistry := preload("res://scripts/identity/entity_registry.gd")
 const ItemCategories := preload("res://scripts/identity/item_category_identity.gd")
 const EquipmentIdentity := preload("res://scripts/identity/equipment_identity_codec.gd")
 const ItemExtensionCodec := preload("res://scripts/items/item_extension_codec.gd")
+const EquipmentGrantedSkills := preload("res://scripts/equipment_granted_skill_rules.gd")
+const RandomSpecialRules := preload("res://scripts/equipment_random_special_instance_rules.gd")
 const ItemTransactionJournal := preload("res://scripts/items/item_transaction_journal.gd")
 const ItemTransactionPort := preload("res://scripts/items/item_transaction_port.gd")
 const SaveUpgradeBackup := preload("res://scripts/save_upgrade_backup.gd")
@@ -513,10 +515,14 @@ func _startup_upgrade_read(path: String, validator := Callable()) -> Dictionary:
 func _startup_upgrade_preflight() -> Dictionary:
 	var ids: Dictionary = {}
 	var has_legacy := false
+	var legacy_migration_consumed := false
+	var explicit_empty_profile_index := false
 	if FileAccess.file_exists(profile_index_path) or FileAccess.file_exists(profile_index_path + ".bak"):
 		var index := _startup_upgrade_read(profile_index_path)
 		if not bool(index.success): return index
+		explicit_empty_profile_index = (index.data.get("profiles", []) as Array).is_empty()
 		for entry: Dictionary in index.data.profiles: ids[entry.id] = true
+		legacy_migration_consumed = bool(index.data.get("legacy_migration_consumed", false))
 	var directory := DirAccess.open(profile_directory)
 	if directory != null:
 		for name: String in directory.get_files():
@@ -548,7 +554,9 @@ func _startup_upgrade_preflight() -> Dictionary:
 		var log := _read_json_document(shared_warehouse_transaction_log_path)
 		if not bool(log.valid) or not _warehouse_transaction_log_is_valid(log.data):
 			return {"success":false, "reason":"invalid_warehouse_transaction_log", "path":shared_warehouse_transaction_log_path}
-	return {"success":true, "ids":ids.keys(), "profiles":all_profiles, "legacy_pending":has_legacy and ids.is_empty()}
+	return {"success":true, "ids":ids.keys(), "profiles":all_profiles,
+		"legacy_pending":has_legacy and ids.is_empty() and not legacy_migration_consumed,
+		"explicit_empty_legacy_account":explicit_empty_profile_index and has_legacy and ids.is_empty() and not legacy_migration_consumed}
 
 
 func _startup_upgrade_fail(reason: String, path := "") -> bool:
@@ -568,16 +576,22 @@ func finish_startup_save_upgrade() -> bool:
 	if not bool(completion.valid): return _startup_upgrade_fail("upgrade_completion_invalid", backup.archive)
 	var preflight := _startup_upgrade_preflight()
 	if not bool(preflight.success): return _startup_upgrade_fail(preflight.reason, str(preflight.get("path", "")))
+	# A valid durable completion proof is the authority for an older build that
+	# already finished migration before the index marker existed. Preserve the
+	# retained legacy source for backup custody, but do not resurrect a profile
+	# from an explicitly empty index. Missing/invalid proof keeps the normal
+	# first-import path (or fails above) and therefore cannot suppress import.
+	var completed_empty_legacy_account := bool(completion.completed) and bool(preflight.get("explicit_empty_legacy_account", false))
 	_startup_save_upgrade_in_progress = true
 	if DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(profile_directory)) != OK:
 		return _startup_upgrade_fail("profile_directory_failed")
-	_migrate_single_save_to_profile()
+	_migrate_single_save_to_profile(not completed_empty_legacy_account)
 	_recover_shared_warehouse_transaction()
 	if _warehouse_transaction_locked or not _initialize_shared_warehouse():
 		return _startup_upgrade_fail("shared_warehouse_unavailable", shared_warehouse_path)
 	var profiles := _profile_ids_for_shared_warehouse()
 	if not bool(profiles.ok): return _startup_upgrade_fail("profile_index_unavailable", profile_index_path)
-	if bool(preflight.legacy_pending) and not profiles.ids.has("legacy_01"):
+	if bool(preflight.legacy_pending) and not completed_empty_legacy_account and not profiles.ids.has("legacy_01"):
 		return _startup_upgrade_fail("legacy_profile_migration_failed")
 	if not bool(completion.completed):
 		var warehouse_document := _read_json(shared_warehouse_path)
@@ -779,12 +793,18 @@ func select_profession(value: String) -> String:
 	return "职业已切换为%s" % profession
 
 
-func set_later_content_enabled(enabled: bool) -> void:
+func set_later_content_enabled(enabled: bool) -> bool:
 	_before_state_transaction()
-	later_content_enabled = enabled
-	ContentLayers.set_expansion_enabled("later_176_content", enabled)
+	var requested := ContentLayers.enabled_expansions.duplicate()
+	requested["later_176_content"] = enabled
+	if not ContentLayers.apply_expansion_configuration(requested, Callable(self, "_commit_later_content_field").bind(enabled)):
+		return false
 	profile_changed.emit()
-	_commit_save()
+	return _commit_save()
+
+
+func _commit_later_content_field(enabled: bool) -> void:
+	later_content_enabled = enabled
 
 
 ## Public inventory entry point. All gameplay paths (loot, shops, quests and
@@ -1461,6 +1481,12 @@ func destroy_inventory_indices(indices: Array) -> Dictionary:
 				and _item_transaction_port.record_reserved(inventory[index]))):
 				return {"success":false, "destroyed":0, "reason":"item_transaction_pending", "message":"物品操作处理中，请稍后再试。"}
 	_before_state_transaction()
+	# A failed retry of an already-accepted item save leaves the previous
+	# durable inventory as the sole authority.  Do not start a second mutation
+	# (discard) until that revision has been durably committed; otherwise the
+	# discard can reach disk while the UI reports the preceding save failure.
+	if _item_save_failed or _item_save_revision > _item_saved_revision:
+		return {"success": false, "destroyed": 0, "reason": "save_failed", "message": "物品存档失败，暂不能丢弃。"}
 	var targets: Array[int] = []
 	for raw_index: Variant in indices:
 		var index := int(raw_index)
@@ -1492,7 +1518,7 @@ func sort_inventory_deterministic() -> Dictionary:
 	for index in range(working_inventory.size()):
 		var record: Variant = working_inventory[index]
 		if record is Dictionary and not (record as Dictionary).is_empty():
-			var item := GameData.get_item_record(str(record.get("name", "")))
+			var item := GameData.get_item_record(record)
 			decorated.append({"record": record, "index": index, "key": "%s|%s|%s|%08d" % [str(item.get("kind", "")), str(item.get("category", "")), str(record.get("name", "")), index]})
 		elif _inventory_slot_is_occupied(record):
 			decorated.append({"record": record, "index": index, "key": "!opaque|%08d" % index})
@@ -1500,10 +1526,42 @@ func sort_inventory_deterministic() -> Dictionary:
 	var sorted_inventory: Array = []
 	for entry: Dictionary in decorated:
 		var record: Variant = entry["record"]
-		if record is Dictionary and not sorted_inventory.is_empty() and sorted_inventory.back() is Dictionary and _inventory_records_mergeable(sorted_inventory.back(), record) and sorted_inventory.back().get("name", "") == record.get("name", ""):
-			sorted_inventory.back()["count"] = int(sorted_inventory.back().get("count", 1)) + int(record.get("count", 1))
-			if record.has("item_id"):
-				sorted_inventory.back()["item_id"] = int(record.get("item_id", -1))
+		if record is Dictionary and not (record as Dictionary).is_empty():
+			var mergeable: bool = (
+				not sorted_inventory.is_empty()
+				and sorted_inventory.back() is Dictionary
+				and _inventory_records_mergeable(sorted_inventory.back(), record)
+				and sorted_inventory.back().get("name", "") == record.get("name", "")
+			)
+			var item := GameData.get_item_record(record)
+			var is_stackable := (
+				bool(item.get("stackable", false))
+				and str(item.get("kind", "")) != "equipment"
+				and _inventory_records_mergeable(record, record)
+			)
+			if is_stackable:
+				var max_stack := _max_stack_for_item(item)
+				var remaining := maxi(1, int(record.get("count", 1)))
+				while remaining > 0:
+					if mergeable and not sorted_inventory.is_empty() and sorted_inventory.back() is Dictionary:
+						var existing := sorted_inventory.back() as Dictionary
+						var available := maxi(0, max_stack - int(existing.get("count", 0)))
+						if available > 0:
+							var moved := mini(available, remaining)
+							existing["count"] = int(existing.get("count", 0)) + moved
+							if record.has("item_id"):
+								existing["item_id"] = int(record.get("item_id", -1))
+							remaining -= moved
+							if remaining <= 0:
+								break
+					var chunk: Dictionary = record.duplicate(true)
+					var moved_new := mini(remaining, max_stack)
+					chunk["count"] = moved_new
+					sorted_inventory.append(chunk)
+					remaining -= moved_new
+					mergeable = true
+			else:
+				sorted_inventory.append(record)
 		else:
 			sorted_inventory.append(record)
 	var changed := sorted_inventory != inventory_before
@@ -2549,7 +2607,7 @@ func _blessing_oil_rolls(
 			attack_max
 		)
 		success_roll = rng.randi_range(0, denominator - 1) if denominator > 1 else 0
-		if luck < EquipmentRulesScript.LUCK_POINT_2 and success_roll != 1:
+		if luck < EquipmentRulesScript.LUCK_POINT_2:
 			var upper_denominator := EquipmentRulesScript.blessing_span_factor(attack_min, attack_max) * EquipmentRulesScript.LUCK_POINT_3_RATE
 			upper_stage_roll = rng.randi_range(0, upper_denominator - 1)
 	return {"unlucky_roll": unlucky_roll, "success_roll": success_roll, "upper_stage_roll": upper_stage_roll}
@@ -3080,7 +3138,9 @@ func equip_inventory_index(index: int, preferred_slot := "") -> String:
 	var required_gender := EquipmentRulesScript.required_gender(item)
 	if not required_gender.is_empty() and required_gender != gender:
 		return "该装备仅限%s性角色" % required_gender
-	var requirement_error := EquipmentRulesScript.requirement_error(item, level, computed_stats)
+	if inventory_record.has("mystery_roll") and not preload("res://scripts/mystery_equipment_instance_rules.gd").validate_roll(inventory_record, item):
+		return "装备随机属性无效"
+	var requirement_error := EquipmentRulesScript.requirement_error(item, level, computed_stats, inventory_record)
 	if not requirement_error.is_empty():
 		return requirement_error
 	var item_weight := maxi(0, int(item.get("weight", 0)))
@@ -3102,6 +3162,7 @@ func equip_inventory_index(index: int, preferred_slot := "") -> String:
 	var inventory_before := inventory.duplicate(true)
 	var equipment_before := equipment.duplicate(true)
 	var cursor_before := equip_cycle_cursor.duplicate(true)
+	var bindings_before := skill_button_assignments_snapshot()
 	var inventory_after := inventory.duplicate(true)
 	inventory_after[index] = {}
 	if previous is Dictionary and not previous.is_empty():
@@ -3130,6 +3191,8 @@ func equip_inventory_index(index: int, preferred_slot := "") -> String:
 		equipment = equipment_before
 		equip_cycle_cursor = cursor_before
 		recalculate_stats()
+		_restore_skill_button_assignments(bindings_before, [])
+		skills_changed.emit()
 		_last_equipment_transaction_result["reason"] = "save_failed"
 		return "装备存档失败，装备和背包均未改变"
 	equipment_transaction_revision += 1
@@ -3166,6 +3229,7 @@ func unequip_slot(slot: String, destination_slot := -1) -> String:
 		return str(return_preview.get("message", INVENTORY_SLOT_REJECTION))
 	var inventory_before := inventory.duplicate(true)
 	var equipment_before := equipment.duplicate(true)
+	var bindings_before := skill_button_assignments_snapshot()
 	if destination_slot >= 0:
 		var next_inventory := inventory.duplicate(true)
 		while next_inventory.size() <= destination_slot:
@@ -3180,6 +3244,8 @@ func unequip_slot(slot: String, destination_slot := -1) -> String:
 		inventory = inventory_before
 		equipment = equipment_before
 		recalculate_stats()
+		_restore_skill_button_assignments(bindings_before, [])
+		skills_changed.emit()
 		_last_equipment_transaction_result["reason"] = "save_failed"
 		return "卸装存档失败，装备和背包均未改变"
 	equipment_transaction_revision += 1
@@ -3312,9 +3378,12 @@ func accept_quest(quest_id: String) -> String:
 	var progress := {}
 	for objective_name: String in quest.get("objectives", {}).get("kills", {}).keys():
 		progress[objective_name] = 0
+	var quest_states_before := quest_states.duplicate(true)
 	quest_states[quest_id] = {"status": "active", "progress": progress}
+	if not _commit_save():
+		quest_states = quest_states_before
+		return "任务存档失败，任务未接受。"
 	quests_changed.emit()
-	_commit_save()
 	return "已接受任务：%s" % quest.get("name", quest_id)
 
 
@@ -3646,6 +3715,8 @@ func recalculate_stats(emit_profile_change := true, report_failure := true) -> b
 					active_modifiers.append(modifier)
 				affix_input["modifiers"] = active_modifiers
 		skill_level_affix_records.append(affix_input)
+		if equipped_value is Dictionary and RandomSpecialRules.is_technique_necklace(int(item.get("itemId", -1))) and RandomSpecialRules.validate_technique_instance(equipped_value, item):
+			skill_level_affix_records.append({"modifiers": RandomSpecialRules.technique_skill_level_modifiers(equipped_value)})
 		_add_nullable_stat(result, "attack_min", item.get("attackMin", null))
 		_add_nullable_stat(result, "attack_max", item.get("attackMax", null))
 		_add_nullable_stat(result, "magic_min", item.get("magicMin", null))
@@ -3690,6 +3761,11 @@ func recalculate_stats(emit_profile_change := true, report_failure := true) -> b
 			result["cast_speed_percent"] = float(result.get("cast_speed_percent", 0.0)) + float(modifiers.get("castSpeedPercent", 0.0))
 		if not drop_instance_modifiers.is_empty():
 			result = ModifierEffectRuntime.apply_modifiers(result, drop_instance_modifiers, {
+				"profession": profession, "level": level, "slot": slot,
+			})
+		var mystery_rules := preload("res://scripts/mystery_equipment_instance_rules.gd")
+		if equipped_value is Dictionary and equipped_value.has("mystery_roll") and mystery_rules.validate_roll(equipped_value, item):
+			result = ModifierEffectRuntime.apply_modifiers(result, mystery_rules.modifiers(equipped_value), {
 				"profession": profession, "level": level, "slot": slot,
 			})
 		if equipped_value is Dictionary and equipped_value.has("enhancement"):
@@ -3749,6 +3825,7 @@ func recalculate_stats(emit_profile_change := true, report_failure := true) -> b
 		return false
 	result = feature_stats.stats
 	computed_stats = result
+	_prune_unavailable_equipment_skill_bindings()
 	if emit_profile_change:
 		profile_changed.emit()
 	return true
@@ -3927,6 +4004,70 @@ func effective_skill_level(skill_name: String) -> int:
 	)
 
 
+## Equipment grants are derived from currently valid worn instances. They are
+## never inserted into learned progression or taught by the save importer.
+func equipment_granted_skill_ids() -> Array[String]:
+	var result: Array[String] = []
+	for slot: String in equipment:
+		var equipped: Variant = equipment[slot]
+		if not equipped is Dictionary or equipped.is_empty() or not _has_positive_raw_durability(equipped):
+			continue
+		var item := GameData.get_item_rules_record(equipped)
+		if item.is_empty() or (equipped.has("drop_instance_contract_id") and not GameData.validate_item_drop_instance(equipped)):
+			continue
+		if not equipped.has("item_id") or not _is_integral_json_number(equipped.item_id) \
+			or int(equipped.item_id) != int(item.get("itemId", -1)):
+			continue
+		if (equipped.has("itemId") and equipped.itemId != equipped.item_id) \
+			or not _is_integral_json_number(equipped.get("count", 1)) or int(equipped.get("count", 1)) != 1:
+			continue
+		if slot not in EquipmentIdentity.slots_for_category(ItemCategories.category_for_record(item)) \
+			or _validated_persisted_instance_id(equipped) == "#invalid":
+			continue
+		var skill_id := EquipmentGrantedSkills.skill_id_for_item(int(item.get("itemId", -1)))
+		if not skill_id.is_empty() and not result.has(skill_id):
+			result.append(skill_id)
+	result.sort()
+	return result
+
+
+func is_skill_available(skill_name_or_id: String) -> bool:
+	var skill_id := SkillDataLoaderScript.entity_skill_id(skill_name_or_id)
+	if not EquipmentGrantedSkills.definition(skill_id).is_empty():
+		return equipment_granted_skill_ids().has(skill_id)
+	return not skill_id.is_empty() and (is_skill_learned(skill_id) or equipment_granted_skill_ids().has(skill_id))
+
+
+func available_skill_ids() -> Array[String]:
+	var result: Array[String] = []
+	for skill_id: String in learned_skills:
+		result.append(skill_id)
+	for skill_id: String in equipment_granted_skill_ids():
+		if not result.has(skill_id): result.append(skill_id)
+	return result
+
+
+func skill_assignment_roster() -> Dictionary:
+	var result := learned_skills.duplicate(true)
+	for skill_id: String in equipment_granted_skill_ids():
+		result[skill_id] = 0
+	return result
+
+
+func _prune_unavailable_equipment_skill_bindings() -> void:
+	var available := equipment_granted_skill_ids()
+	var changed := false
+	for slots: Array[String] in [attack_skill_slots, attack_ring_slots]:
+		for index in range(slots.size()):
+			var skill_id := slots[index]
+			if not EquipmentGrantedSkills.definition(skill_id).is_empty() and not available.has(skill_id):
+				slots[index] = ""
+				changed = true
+	if changed:
+		_sync_legacy_quick_slots_from_ring()
+		skills_changed.emit()
+
+
 func _equipment_skill_level_bonus(stable_skill_id: String) -> int:
 	var affix: Dictionary = computed_stats.get("skill_level_affix", {})
 	var contributions: Dictionary = affix.get("contributions", {})
@@ -3936,6 +4077,10 @@ func _equipment_skill_level_bonus(stable_skill_id: String) -> int:
 	bonus += maxi(0, int(contributions.get(profession_scope, 0)))
 	var skill_scope := "skill:%s" % stable_skill_id
 	bonus += maxi(0, int(contributions.get(skill_scope, 0)))
+	var entity_skill_id := SkillDataLoaderScript.entity_skill_id(stable_skill_id)
+	var entity_scope := "skill:%s" % entity_skill_id
+	if not entity_skill_id.is_empty() and entity_scope != skill_scope:
+		bonus += maxi(0, int(contributions.get(entity_scope, 0)))
 	for raw_name: Variant in affix.get("legacy", {}):
 		if SkillDataLoaderScript.stable_skill_id(str(raw_name)) == stable_skill_id:
 			bonus += maxi(0, int(affix["legacy"][raw_name]))
@@ -5460,39 +5605,59 @@ func _complete_world_clock_import_backup(document: Dictionary) -> bool:
 func _checkpoint_world_clock() -> bool:
 	if test_mode:
 		return true
+	# Consume accepted receipts before capturing the live state and watermarks.
 	if _world_json_persistence.pending_count() > 0:
 		_world_json_persistence.drain()
-	if not _valid_profile_storage_id(active_profile_id):
+	var checkpoint := _checkpoint_world_clock_snapshot(
+		active_profile_id, _world_clock_generation, world_monster_respawn_state,
+		_death_event_sequence, _world_clock_snapshot_sequence,
+		_world_clock_backup_sequence, _world_clock_dirty)
+	if not bool(checkpoint.success):
 		return false
-	if (
-		not _world_clock_dirty
-		and _world_clock_snapshot_sequence == _death_event_sequence
-		and _world_clock_backup_sequence >= _world_clock_snapshot_sequence
-	):
-		return true
-	var clock_path := _world_clock_path(active_profile_id, _world_clock_generation)
-	var directory := clock_path.get_base_dir()
-	if DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(directory)) != OK:
-		return false
-	var compacted := WorldMonsterRespawnStateScript.compact_elapsed(
-		world_monster_respawn_state, Time.get_unix_time_from_system()
-	)
-	var document := WorldMonsterClockLedgerScript.snapshot_document(
-		active_profile_id, _death_event_sequence, compacted, _world_clock_generation
-	)
-	var previous_sequence := _world_clock_snapshot_sequence
-	if not _write_json_atomic(clock_path, document):
-		return false
-	_world_clock_snapshot_sequence = _death_event_sequence
-	_world_clock_backup_sequence = _backup_sequence_after_promotion(
-		clock_path, previous_sequence, _death_event_sequence, "sequence"
-	)
-	_world_clock_dirty = false
-	# The first durable baseline has no older snapshot to replay from.
-	# Later checkpoints must retain unjournaled changes needed by backups.
-	if previous_sequence < 0:
+	_world_clock_snapshot_sequence = int(checkpoint.snapshot_sequence)
+	_world_clock_backup_sequence = int(checkpoint.backup_sequence)
+	_world_clock_dirty = bool(checkpoint.dirty)
+	if bool(checkpoint.first_baseline):
 		_world_clock_changes.clear()
 	return true
+
+
+func _checkpoint_world_clock_snapshot(
+	profile_id: String, generation: String, state: Dictionary,
+	latest_sequence: int, snapshot_sequence: int, backup_sequence: int,
+	dirty: bool,
+) -> Dictionary:
+	# Both gameplay and profile admission use the same writer, validator and
+	# promotion receipt. A profile candidate does not publish live player state.
+	var result := {"success": false, "snapshot_sequence": snapshot_sequence,
+		"backup_sequence": backup_sequence, "dirty": dirty, "first_baseline": false}
+	if test_mode:
+		result["success"] = true
+		return result
+	if not _valid_profile_storage_id(profile_id):
+		return result
+	if not dirty and snapshot_sequence == latest_sequence and backup_sequence >= snapshot_sequence:
+		result["success"] = true
+		return result
+	var clock_path := _world_clock_path(profile_id, generation)
+	if DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(clock_path.get_base_dir())) != OK:
+		return result
+	var compacted := WorldMonsterRespawnStateScript.compact_elapsed(
+		state, Time.get_unix_time_from_system())
+	var document := WorldMonsterClockLedgerScript.snapshot_document(
+		profile_id, latest_sequence, compacted, generation)
+	if not _write_json_atomic(clock_path, document, false,
+		{"profile_id": profile_id, "generation": generation}):
+		return result
+	# Read this exact promotion before any other profile/archive write can
+	# replace _last_json_promotion. Keep the original backup cleanup watermark.
+	result["backup_sequence"] = _backup_sequence_after_promotion(
+		clock_path, snapshot_sequence, latest_sequence, "sequence")
+	result["snapshot_sequence"] = latest_sequence
+	result["dirty"] = false
+	result["first_baseline"] = snapshot_sequence < 0
+	result["success"] = true
+	return result
 
 
 func _queue_world_clock_cleanup() -> void:
@@ -5745,7 +5910,7 @@ func _read_json(path: String) -> Dictionary:
 	return _read_json_with_status(path).get("data", {})
 
 
-func _write_json_atomic(path: String, data: Dictionary, preserve_known_wire := false) -> bool:
+func _write_json_atomic(path: String, data: Dictionary, preserve_known_wire := false, world_clock_identity: Dictionary = {}) -> bool:
 	if _startup_save_upgrade_pending and not _startup_save_upgrade_in_progress:
 		return false
 	_atomic_write_phases = {}
@@ -5759,12 +5924,26 @@ func _write_json_atomic(path: String, data: Dictionary, preserve_known_wire := f
 	if not preserve_known_wire: data = item_document.document
 	if test_mode and _test_force_atomic_write_failure:
 		return false
+	var identity := {"path": path, "profile_id": active_profile_id, "generation": _world_clock_generation}
+	if not world_clock_identity.is_empty():
+		if world_clock_identity.size() != 2 \
+			or not world_clock_identity.has("profile_id") or not world_clock_identity.has("generation") \
+			or not world_clock_identity.profile_id is String or not world_clock_identity.generation is String:
+			return false
+		var target_id: String = world_clock_identity.profile_id
+		var target_generation: String = world_clock_identity.generation
+		if not _valid_profile_storage_id(target_id) \
+			or not WorldMonsterClockLedgerScript.valid_generation(target_generation) \
+			or path != _world_clock_path(target_id, target_generation):
+			return false
+		identity["profile_id"] = target_id
+		identity["generation"] = target_generation
 	var coordinator: RefCounted = (
 		_world_json_persistence if path.begins_with(_world_clock_directory() + "/")
 		else _json_persistence
 	)
 	var request: RefCounted = coordinator.submit(
-		path, {"path": path, "profile_id": active_profile_id, "generation": _world_clock_generation},
+		path, identity,
 		data, _json_validator_for_path(path), Callable(), false,
 		_validated_profile_bytes if path == _validated_profile_path else null,
 		_record_background_json_receipt, false, null, path + ".tmp",
@@ -6927,7 +7106,30 @@ func load_save() -> void:
 		_save_blocked_profile_id = active_profile_id
 		_save_blocked_reason = item_bindings.reason
 		return
-	_clear_pending_durability_runtime()
+	# Validate the complete saved mode and later-content override before any
+	# world-clock/gold migration writes or character hydration. Unknown legacy
+	# modes retain their existing classic fallback; load failure never does.
+	var saved_mode := str(parsed.get("game_mode_id", "classic_176"))
+	if not GameModes.modes.has(saved_mode):
+		saved_mode = "classic_176"
+	var prepared_mode := GameModes.prepare_mode_configuration(
+		saved_mode, bool(parsed.get("later_content_enabled", false)))
+	if not bool(prepared_mode.success):
+		last_load_result["success"] = false
+		last_load_result["reason"] = "content_configuration_failed"
+		last_load_result["catalog_error"] = prepared_mode.get("error", "")
+		_save_blocked_profile_id = active_profile_id
+		_save_blocked_reason = "content_configuration_failed"
+		return
+	var prepared_progression := SkillProgressionServiceScript.new()
+	var progression_load: Dictionary = prepared_progression.load_snapshot(
+		parsed.get("skill_progression", parsed.get("learned_skills", {})))
+	if not bool(progression_load.success):
+		last_load_result["success"] = false
+		last_load_result["reason"] = "invalid_skill_identity"
+		_save_blocked_profile_id = active_profile_id
+		_save_blocked_reason = "invalid_skill_identity"
+		return
 	var imported := _prepare_world_clock_profile(parsed)
 	if not bool(imported.get("ok", false)):
 		last_load_result["success"] = false
@@ -6969,27 +7171,20 @@ func load_save() -> void:
 		profile_directory != PROFILE_DIRECTORY
 		and not _shared_warehouse_test_isolation_enabled()
 	)
-	_active_profile_legacy_warehouse_pending = (
-		not legacy_isolated_profile_fixture and parsed.has("warehouse_inventory")
-	)
-	if legacy_isolated_profile_fixture:
-		# Isolated profile fixtures retain their historical in-memory warehouse
-		# behavior and are forbidden from migrating production account data.
-		warehouse_inventory = (parsed.get("warehouse_inventory", []) as Array).duplicate(true) if parsed.get("warehouse_inventory", []) is Array else []
-	elif not _shared_warehouse_initialized and not _initialize_shared_warehouse():
+	if not legacy_isolated_profile_fixture and not _shared_warehouse_initialized and not _initialize_shared_warehouse():
 		last_load_result["success"] = false
 		last_load_result["reason"] = "shared_warehouse_unavailable"
 		if not active_profile_id.is_empty():
 			_save_blocked_profile_id = active_profile_id
 			_save_blocked_reason = "shared_warehouse_unavailable"
 		return
-	elif not _revalidate_shared_warehouse_authority():
+	elif not legacy_isolated_profile_fixture and not _revalidate_shared_warehouse_authority():
 		last_load_result["success"] = false
 		last_load_result["reason"] = "shared_warehouse_unavailable"
 		_save_blocked_profile_id = active_profile_id
 		_save_blocked_reason = "shared_warehouse_unavailable"
 		return
-	elif not _profile_and_shared_drop_instances_are_disjoint(
+	elif not legacy_isolated_profile_fixture and not _profile_and_shared_drop_instances_are_disjoint(
 		parsed,
 		_read_json(shared_warehouse_path),
 	):
@@ -6998,20 +7193,45 @@ func load_save() -> void:
 		_save_blocked_profile_id = active_profile_id
 		_save_blocked_reason = "duplicate_drop_instance_across_shared"
 		return
+	var loaded_world_state := WorldMonsterRespawnStateScript.compact_elapsed(
+		world_replay.get("world_state", WorldMonsterRespawnStateScript.empty_snapshot()),
+		Time.get_unix_time_from_system())
+	var loaded_sequence := int(world_replay.get("latest_sequence", 0))
+	var loaded_snapshot_sequence := int(world_replay.get("source_world_sequence", 0)) \
+		if bool(world_replay.get("snapshot_present", false)) else -1
+	var loaded_backup_sequence := int(world_replay.get("world_backup_sequence", loaded_snapshot_sequence)) \
+		if bool(world_replay.get("snapshot_present", false)) else -1
+	var loaded_dirty := loaded_snapshot_sequence < loaded_sequence or not bool(world_replay.get("snapshot_present", false))
+	var prepared_checkpoint := _checkpoint_world_clock_snapshot(
+		active_profile_id, str(parsed.get("world_clock_generation", "")), loaded_world_state,
+		loaded_sequence, loaded_snapshot_sequence, loaded_backup_sequence, loaded_dirty)
+	if not bool(prepared_checkpoint.success):
+		last_load_result["success"] = false
+		last_load_result["reason"] = "world_clock_checkpoint_failed"
+		_save_blocked_profile_id = active_profile_id
+		_save_blocked_reason = "world_clock_checkpoint_failed"
+		return
+	if not GameModes.apply_prepared_mode_configuration(prepared_mode):
+		last_load_result["success"] = false
+		last_load_result["reason"] = "content_configuration_failed"
+		last_load_result["catalog_error"] = ContentLayers.last_expansion_error
+		_save_blocked_profile_id = active_profile_id
+		_save_blocked_reason = "content_configuration_failed"
+		return
 	if active_profile_id == _save_blocked_profile_id:
 		_save_blocked_profile_id = ""
 		_save_blocked_reason = ""
+	_clear_pending_durability_runtime()
+	_active_profile_legacy_warehouse_pending = not legacy_isolated_profile_fixture and parsed.has("warehouse_inventory")
+	if legacy_isolated_profile_fixture:
+		# Account warehouse adoption is independent; isolated legacy fixtures
+		# publish their private projection only after character admission.
+		warehouse_inventory = (parsed.get("warehouse_inventory", []) as Array).duplicate(true) if parsed.get("warehouse_inventory", []) is Array else []
 	level = maxi(1, int(world_replay.get("level", parsed.get("level", 1))))
 	set_profession_identity(character_identity.profession_id)
 	gender = str(parsed.get("gender", "男"))
 	if gender not in ["男", "女"]:
 		gender = "男"
-	later_content_enabled = bool(parsed.get("later_content_enabled", false))
-	game_mode_id = str(parsed.get("game_mode_id", "classic_176"))
-	if not GameModes.apply_mode(game_mode_id):
-		game_mode_id = "classic_176"
-		GameModes.apply_mode(game_mode_id)
-	ContentLayers.set_expansion_enabled("later_176_content", later_content_enabled)
 	experience = maxi(0, int(world_replay.get("experience", parsed.get("experience", 0))))
 	gold = int(projected_gold.gold)
 	gold_overflow_records = projected_gold.gold_overflow_records
@@ -7034,15 +7254,7 @@ func load_save() -> void:
 	# Pay the immutable catalog lookup cost during profile loading instead of on
 	# the first combat pickup. Runtime weight checks then read the session cache.
 	_prewarm_loot_inventory_catalog(inventory)
-	var progression_load: Dictionary = _skill_progression.load_snapshot(
-		parsed.get("skill_progression", parsed.get("learned_skills", {}))
-	)
-	if not bool(progression_load.success):
-		last_load_result["success"] = false
-		last_load_result["reason"] = "invalid_skill_identity"
-		_save_blocked_profile_id = active_profile_id
-		_save_blocked_reason = "invalid_skill_identity"
-		return
+	_skill_progression = prepared_progression
 	_refresh_skill_identity_projection()
 	var saved_slots: Array = parsed.get("quick_slots", ["", "", "", ""])
 	_restore_skill_button_assignments(parsed.get("skill_button_assignments", {}), saved_slots)
@@ -7069,32 +7281,17 @@ func load_save() -> void:
 		if not legacy_main_pet.is_empty():
 			var migrated_groups := taoist_main_pet_runtime_states["groups"] as Dictionary
 			migrated_groups[str(legacy_main_pet.get("summon_id", ""))] = [legacy_main_pet]
-		quest_states = world_replay.get("quest_states", parsed.get("quest_states", {}))
-	world_monster_respawn_state = (
-		WorldMonsterRespawnStateScript.compact_elapsed(
-			world_replay.get("world_state", WorldMonsterRespawnStateScript.empty_snapshot()),
-			Time.get_unix_time_from_system()
-		)
-	)
+	quest_states = world_replay.get("quest_states", parsed.get("quest_states", {}))
+	world_monster_respawn_state = loaded_world_state
 	_world_clock_changes.clear()
-	_death_event_sequence = int(world_replay.get("latest_sequence", 0))
+	_death_event_sequence = loaded_sequence
 	_world_clock_generation = str(parsed.get("world_clock_generation", ""))
 	_profile_saved_death_event_sequence = int(world_replay.get("source_profile_sequence", 0))
 	_profile_backup_death_event_sequence = int(world_replay.get(
-		"profile_backup_sequence", _profile_saved_death_event_sequence
-	))
-	_world_clock_snapshot_sequence = (
-		int(world_replay.get("source_world_sequence", 0))
-		if bool(world_replay.get("snapshot_present", false)) else -1
-	)
-	_world_clock_backup_sequence = (
-		int(world_replay.get("world_backup_sequence", _world_clock_snapshot_sequence))
-		if bool(world_replay.get("snapshot_present", false)) else -1
-	)
-	_world_clock_dirty = (
-		_world_clock_snapshot_sequence < _death_event_sequence
-		or not bool(world_replay.get("snapshot_present", false))
-	)
+		"profile_backup_sequence", _profile_saved_death_event_sequence))
+	_world_clock_snapshot_sequence = int(prepared_checkpoint.snapshot_sequence)
+	_world_clock_backup_sequence = int(prepared_checkpoint.backup_sequence)
+	_world_clock_dirty = bool(prepared_checkpoint.dirty)
 	saved_map_id = int(parsed.get("map_id", 910001))
 	var position_data: Variant = parsed.get(
 		"position_screen_px",
@@ -7141,12 +7338,6 @@ func load_save() -> void:
 	if not temporary_item_buffs.is_empty():
 		temporary_item_buffs.clear()
 		temporary_item_buff_revision += 1
-	if not _checkpoint_world_clock():
-		last_load_result["success"] = false
-		last_load_result["reason"] = "world_clock_checkpoint_failed"
-		_save_blocked_profile_id = active_profile_id
-		_save_blocked_reason = "world_clock_checkpoint_failed"
-		return
 	recalculate_stats()
 
 
@@ -7273,7 +7464,7 @@ func apply_skill_button_assignment(result: Dictionary) -> bool:
 		ATTACK_RING_SKILL_SLOT_COUNT
 	)
 	for skill_name: String in next_attack + next_ring:
-		if not skill_name.is_empty() and not is_skill_learned(skill_name):
+		if not skill_name.is_empty() and not is_skill_available(skill_name):
 			return false
 	var previous_attack := attack_skill_slots.duplicate()
 	var previous_ring := attack_ring_slots.duplicate()
@@ -7344,6 +7535,7 @@ func _restore_skill_button_assignments(assignments_value: Variant, legacy_center
 		ATTACK_RING_SKILL_SLOT_COUNT
 	)
 	_sync_legacy_quick_slots_from_ring()
+	_prune_unavailable_equipment_skill_bindings()
 
 
 func _normalized_skill_button_assignments(assignments_value: Variant, legacy_center: Array) -> Dictionary:
@@ -9503,6 +9695,10 @@ func delete_character_profile(profile_id: String) -> Dictionary:
 		result["reason"] = "profile_not_found"
 		return result
 	index["profiles"] = remaining_profiles
+	# An explicitly deleted final character means an intentionally empty
+	# account, even if an older importer never recorded its migration marker.
+	if remaining_profiles.is_empty():
+		index["legacy_migration_consumed"] = true
 	# Commit the authoritative index first.  A failed atomic write therefore
 	# leaves every profile byte untouched and the character fully selectable.
 	if not _write_json_atomic(profile_index_path, index):
@@ -9873,10 +10069,19 @@ func select_character(profile_id: String) -> bool:
 		and not FileAccess.file_exists(profile_path + ".bak")
 	):
 		return false
+	var previous_profile_id := active_profile_id
+	var previous_blocked_id := _save_blocked_profile_id
+	var previous_blocked_reason := _save_blocked_reason
 	active_profile_id = profile_id
 	load_save()
 	if not bool(last_load_result.get("success", false)):
-		active_profile_id = ""
+		active_profile_id = previous_profile_id
+		# An already blocked active A must not become saveable because inactive
+		# B also failed. B's failure remains in last_load_result; a B retry loads
+		# and validates B again before any save eligibility.
+		if not previous_profile_id.is_empty() and previous_blocked_id == previous_profile_id:
+			_save_blocked_profile_id = previous_blocked_id
+			_save_blocked_reason = previous_blocked_reason
 		return false
 	if _enhancement_service != null:
 		_enhancement_service.reset()
@@ -9885,8 +10090,9 @@ func select_character(profile_id: String) -> bool:
 	return true
 
 
-func _update_profile_index() -> bool:
+func _update_profile_index(mark_legacy_migration_consumed := false) -> bool:
 	var profiles: Array[Dictionary] = []
+	var index_document: Dictionary = {"version": 1}
 	if (
 		FileAccess.file_exists(profile_index_path)
 		or FileAccess.file_exists(profile_index_path + ".bak")
@@ -9894,7 +10100,8 @@ func _update_profile_index() -> bool:
 		var index_status := _read_json_with_status(profile_index_path)
 		if not bool(index_status.get("success", false)):
 			return false
-		for raw_entry: Variant in (index_status.get("data", {}) as Dictionary).get("profiles", []):
+		index_document = (index_status.get("data", {}) as Dictionary).duplicate(true)
+		for raw_entry: Variant in index_document.get("profiles", []):
 			if not raw_entry is Dictionary:
 				return false
 			profiles.append((raw_entry as Dictionary).duplicate(true))
@@ -9905,10 +10112,16 @@ func _update_profile_index() -> bool:
 			found = true
 	if not found:
 		profiles.append({"id": active_profile_id, "name": character_name, "profession": profession, "gender": gender, "level": level, "updated_at": int(Time.get_unix_time_from_system())})
-	return _write_json_atomic(profile_index_path, {"version": 1, "profiles": profiles})
+	index_document["version"] = 1
+	index_document["profiles"] = profiles
+	if mark_legacy_migration_consumed:
+		index_document["legacy_migration_consumed"] = true
+	return _write_json_atomic(profile_index_path, index_document)
 
 
-func _migrate_single_save_to_profile() -> void:
+func _migrate_single_save_to_profile(allow_legacy_import := true) -> void:
+	if not allow_legacy_import:
+		return
 	var index_status := _read_json_with_status(profile_index_path)
 	if (
 		FileAccess.file_exists(profile_index_path)
@@ -9916,8 +10129,28 @@ func _migrate_single_save_to_profile() -> void:
 	):
 		if not bool(index_status.get("success", false)):
 			return
-		var indexed_profiles: Variant = (index_status.get("data", {}) as Dictionary).get("profiles", [])
+		var index_document := (index_status.get("data", {}) as Dictionary)
+		# An empty index is ambiguous: it can be a first import, or a user who
+		# deliberately deleted the last profile after the legacy import. Persist
+		# the one-time decision instead of treating an empty roster as pending.
+		if bool(index_document.get("legacy_migration_consumed", false)):
+			return
+		var indexed_profiles: Variant = index_document.get("profiles", [])
 		if indexed_profiles is Array and not (indexed_profiles as Array).is_empty():
+			# Accounts migrated by an older build may have a populated index but
+			# no durable marker yet. Once the authoritative preflight has accepted
+			# the still-present legacy source, seal that already-completed seam so
+			# deleting the final profile cannot re-import the old single save.
+			var has_legacy_profile := false
+			for entry: Variant in indexed_profiles:
+				if entry is Dictionary and str((entry as Dictionary).get("id", "")) == "legacy_01":
+					has_legacy_profile = true
+					break
+			var legacy_root := profile_directory.get_base_dir()
+			var legacy_source_exists := FileAccess.file_exists(legacy_root.path_join(SAVE_PATH.get_file())) or FileAccess.file_exists(legacy_root.path_join(SAVE_PATH.get_file() + ".bak")) or FileAccess.file_exists(legacy_root.path_join(LEGACY_SAVE_PATH.get_file())) or FileAccess.file_exists(legacy_root.path_join(LEGACY_SAVE_PATH.get_file() + ".bak"))
+			if has_legacy_profile and legacy_source_exists and not bool(index_document.get("legacy_migration_consumed", false)):
+				index_document["legacy_migration_consumed"] = true
+				_write_json_atomic(profile_index_path, index_document)
 			return
 	elif not list_characters().is_empty():
 		return
@@ -9941,7 +10174,7 @@ func _migrate_single_save_to_profile() -> void:
 		active_profile_id = ""
 		character_name = ""
 		return
-	if not _update_profile_index():
+	if not _update_profile_index(true):
 		_remove_new_profile_files(active_profile_id)
 	active_profile_id = ""
 	character_name = ""
@@ -10108,7 +10341,13 @@ func _merge_background_profile_index(document: Dictionary, identity: Dictionary)
 			found = true
 	if not found:
 		profiles.append(identity.entry.duplicate(true))
-	return {"version": 1, "profiles": profiles}
+	# Preserve account-level migration state while updating one profile row.
+	# Reconstructing only {version, profiles} would make a later background save
+	# silently reopen the legacy importer after the final profile is deleted.
+	var result := document.duplicate(true)
+	result["version"] = 1
+	result["profiles"] = profiles
+	return result
 
 
 func _complete_background_index(receipt: Dictionary, plan: Dictionary) -> void:

@@ -31,7 +31,7 @@ shutil.copytree(SOURCE, TARGET)
 old_doc = TARGET / "sandbox_64.editor.json"
 doc_path = TARGET / "bich_province.editor.json"
 doc = json.loads(old_doc.read_text(encoding="utf-8"))
-doc.update({"map_id":"bich_province","runtime_map_id":4,"display_name":"比奇省（单机重制）"})
+doc.update({"map_id":"bich_province","runtime_map_id":4,"display_name":"比奇省"})
 doc["design"]["map_type"] = "outdoor_province"
 doc["editor_meta"]["workspace"] = "res://map_editor_workspace/bich_province"
 doc["editor_meta"]["milestone"] = "BICH-USER-MAP-READY"

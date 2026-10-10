@@ -154,9 +154,22 @@ func _install_source_frame() -> void:
 		add_child(_sprite)
 		_update_exact_frame()
 		return
-	var source_texture := load(source_texture_path()) as Texture2D
+	var source_path := source_texture_path()
+	if not ResourceLoader.exists(source_path, "Texture2D"):
+		visible = false
+		if bool(release_descriptor.get("presentation_only", true)):
+			_reject_visual()
+		return
+	var source_texture := load(source_path) as Texture2D
 	if source_texture == null:
-		_reject_visual()
+		# A released gameplay projectile already owns its frozen flight and
+		# collision/damage callback. A missing presentation asset must not turn
+		# that accepted release into a gameplay miss. Keep the authoritative
+		# physics path alive with no Sprite2D; preview-only effects still retire
+		# through the existing visual rejection path.
+		visible = false
+		if bool(release_descriptor.get("presentation_only", true)):
+			_reject_visual()
 		return
 	_sprite = Sprite2D.new()
 	_sprite.name = "SourceFrame"

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/framework/hc_custom_receipt_preservation_20261010_test.gd" id="1"]
+
+[node name="HcCustomReceiptPreservation20261010Test" type="Node"]
+script = ExtResource("1")

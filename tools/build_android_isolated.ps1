@@ -352,8 +352,11 @@ try {
     $PreviousAndroidSdkRoot = $env:ANDROID_SDK_ROOT
     $PortableEditorSettings = Join-Path (Split-Path $GodotConsole -Parent) "editor_data\editor_settings-4.7.tres"
     $PortableEditorSettingsBackup = $null
+    $JavaEnvironment = $null
     try {
         $JavaHome = Get-ChildItem (Join-Path $AndroidRoot "jdk") -Directory | Select-Object -First 1 -ExpandProperty FullName
+        . (Join-Path $PSScriptRoot 'android_java_environment.ps1')
+        $JavaEnvironment = Enter-AndroidJavaEnvironment -ProjectRoot $ProjectRoot -JavaHome $JavaHome -EvidenceRoot (Join-Path $StageProjectPath 'outputs\android_java_preflight')
         $env:APPDATA = $RuntimeAppData
         $env:JAVA_HOME = $JavaHome
         $env:ANDROID_HOME = Join-Path $AndroidRoot "sdk"
@@ -571,6 +574,7 @@ try {
         }
     }
     finally {
+        if ($null -ne $JavaEnvironment) { Restore-AndroidJavaEnvironment $JavaEnvironment }
         if ($null -ne $PortableEditorSettingsBackup) {
             [System.IO.File]::WriteAllBytes($PortableEditorSettings, $PortableEditorSettingsBackup)
         }

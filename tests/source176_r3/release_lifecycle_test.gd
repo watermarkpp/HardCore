@@ -5,6 +5,8 @@ class CaptureEnemy:
 	var captured: Dictionary = {}
 	func _emit_physical_projectile_descriptor(record: Dictionary) -> void:
 		captured = record
+	func _emit_target_magic_descriptor(record: Dictionary) -> void:
+		captured = record
 var errors: Array[String] = []
 var checks := 0
 func _ready() -> void:
@@ -29,7 +31,7 @@ func run() -> void:
 		actor.set_physics_process(false)
 		var parent := actor._allocate_attack_action(.6)
 		check(actor._launch_physical_projectile(victim,20) if id==50 else actor._launch_target_magic(victim,20),"actual delivery creates release")
-		var record: Dictionary = actor.captured if id==50 else actor._pending_attack_release_record
+		var record: Dictionary = actor.captured
 		check(int(record.get("parent_action_id",-1))==parent,"release binds original parent")
 		check(int(record.get("source_life",-1))==actor._hc_life(actor),"release binds original source life")
 		actor._attack_action_active = false

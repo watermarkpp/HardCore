@@ -2,7 +2,7 @@ class_name MonsterTargetMagicEffect
 extends Node2D
 
 ## Presentation-only Race 200 monster magic. EnemyActor owns the immutable
-## release snapshot, delayed magic-defense transaction, and collision gate.
+## release snapshot, activation-time magic-defense transaction, and collision gate.
 ## This node selects the exact source-policy-compliant client presentation by
 ## monster_id. Magic/Magic2 resolve from primary; Mon21 is an evidenced fallback.
 
@@ -253,7 +253,7 @@ func _update_priest_fly_world_occlusion() -> void:
 	if not _world_segment_is_clear(_fly_previous_world_px, next_world_px):
 		_fly_blocked_by_world = true
 		# This node is presentation-only. Stop/hide the mtFly body without
-		# changing EnemyActor's immutable delayed damage transaction.
+		# changing the HP transaction already settled by EnemyActor at activation.
 		_duration_seconds = minf(
 			_duration_seconds,
 			PRIEST_CAST_FRAME_SECONDS * 6.0,

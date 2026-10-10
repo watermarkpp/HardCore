@@ -1,6 +1,8 @@
 extends Node2D
 
 const FrameBudget := preload("res://scripts/layers/runtime/execution/frame_budget.gd")
+const PASSIVE_WAKE_BUDGET_CATEGORY := "monster_passive_wakeup"
+const HCDecisionBudget := preload("res://scripts/monster_ai_package/decision_budget.gd")
 const WorldContext := preload("res://scripts/layers/runtime/execution/world_context.gd")
 const TimeDomains := preload("res://scripts/layers/runtime/execution/time_domains.gd")
 var _death_budget_category := "death_work:%d" % get_instance_id()
@@ -33,6 +35,7 @@ var _player_level_up_effect: Node2D
 var _player_relic_proc_effect: Node2D
 
 const EquipmentRulesScript := preload("res://scripts/equipment_rules.gd")
+const EquipmentGrantedSkills := preload("res://scripts/equipment_granted_skill_rules.gd")
 const UIErrorFeedbackScript := preload("res://scripts/ui_error_feedback.gd")
 const UIPlayerNoticeScript := preload("res://scripts/ui_player_notice.gd")
 const CombatResolutionRulesScript := preload("res://scripts/combat_resolution_rules.gd")
@@ -56,6 +59,7 @@ const MonsterGroundSpikeEffectScript := preload(
 const MonsterVisualStreamingCoordinatorScript := preload(
 	"res://scripts/monster_visual_streaming_coordinator.gd"
 )
+const MonsterSourceFramesScript := preload("res://scripts/monster_source_frames.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 const SystemMenuPanelScript := preload("res://scripts/system_menu_panel.gd")
@@ -329,9 +333,23 @@ var _collecting_staged_actor_plan := false
 var _staged_actor_source_index := 0
 var _staged_actor_spawn_failure_reason := ""
 var _active_enemy_cache: Dictionary = {}
+## Projection of real EnemyActor target edges; no scan or independent timer.
+var _player_combat_enemy_ids: Dictionary = {}
 var _active_boss_cache: Dictionary = {}
 var _safe_zone_enforcement_remaining := 0.0
 var _combat_spatial_index: RuntimeCombatSpatialIndexScript
+var _passive_wake_dirty := true
+var _passive_wake_query_pending := true
+var _passive_wake_candidates: Array[EnemyActor] = []
+var _passive_wake_cursor := 0
+var _passive_wake_max_extent_gu := 0.0
+var _passive_wake_extent_map_id := -1
+var _passive_wake_extent_generation := -1
+var _passive_wake_pump_epoch := -1
+var _passive_wake_candidates_used := 0
+var _passive_wake_emitters: Dictionary = {}
+var _passive_wake_emitter_queue: Array[int] = []
+var _passive_wake_active_emitter_id := 0
 ## R1-B: the shared target-query service fronts every special-geometry
 ## broadphase query (d1d015ba pattern). The service is stateless between
 ## queries; this instance is rebuilt whenever the map id or the index
@@ -373,6 +391,8 @@ var _projection_profile_cache_audit_mode := false
 var _projection_profile_runtime_identity_cache: Dictionary = {}
 var _ground_effect_runtime_serial := 0
 var _portal_guard_state := MapPortalTravelGuardScript.new_state()
+var _active_portal_claim_id := ""
+var _active_portal_claim_transition_serial := -1
 var _map_transition_in_progress := false
 var _map_transition_serial := 0
 var _pending_main_pet_arrivals: Array[SummonActor] = []
@@ -418,6 +438,13 @@ var _death_drop_work_budget_usec_override := -1
 var _last_drop_node_frame := -2
 var _death_jobs_max_per_frame_override := -1
 var _drop_nodes_max_per_frame_override := -1
+var _death_roll_quantum_slicing_enabled := bool(
+	ProjectSettings.get_setting(
+		"hardcore/performance/death_drop_slicing",
+		true,
+	)
+)
+var _death_optional_pump_frame := -1
 var _test_force_loot_materialization_failure_count := 0
 var _pending_loot_collections: Array = []
 var _prepared_loot_collection: Dictionary = {}
@@ -1612,6 +1639,7 @@ func _ready() -> void:
 	PlayerState.temporary_item_buff_expired.connect(_on_temporary_item_buff_expired)
 	player.potion_buff_expired.connect(_on_player_potion_buff_expired)
 	add_child(player)
+	_register_passive_wake_emitter(player)
 	_player_level_up_effect = LevelUpEffectScript.new()
 	_player_level_up_effect.name = "PlayerLevelUpEffect"
 	_player_level_up_effect.z_index = 0
@@ -1685,7 +1713,6 @@ func _ready() -> void:
 	hud.map_teleport_requested.connect(_on_map_teleport_requested)
 	hud.target_switch_pressed.connect(_cycle_target)
 	hud.auto_target_changed.connect(_set_auto_target_enabled)
-	hud.special_action_pressed.connect(_on_special_action_pressed)
 	hud.skill_button_assignment_requested.connect(_on_skill_button_assignment_requested)
 	hud.shop_buy_quotes_requested.connect(_on_shop_buy_quotes_requested)
 	hud.shop_buy_requested.connect(_on_shop_buy_requested)
@@ -1766,9 +1793,16 @@ func _ready() -> void:
 
 
 func _exit_tree() -> void:
+	if not MonsterSourceFramesScript.retire_pending_threaded_claims():
+		push_error("Monster overlay resource claims could not transfer to the persistent owner.")
+	if is_instance_valid(_streaming_coordinator) and not _streaming_coordinator.retire_threaded_resource_claims():
+		push_error("Monster visual resource claims could not transfer to the persistent owner.")
+	if not _world_bootstrap_coordinator.retire_threaded_resource_claims():
+		push_error("World resource claims could not transfer to the persistent owner.")
 	ContentLayers.retire_internal_code_result(_initial_code_retention)
 	_cancel_respawn_wakeups()
 	_retire_pending_warm_textures()
+	_retire_loading_texture_claims()
 	if _feature_effect_runtime != null:
 		_feature_effect_runtime.clear()
 	_poll_prepared_enemy_death_settlement(true)
@@ -1845,6 +1879,7 @@ func _physics_process(delta: float) -> void:
 
 
 func _process(delta: float) -> void:
+	_recover_equipment_stealth_if_out_of_combat()
 	var full_process_started_usec := RuntimeDiagnostics.timing_start()
 	# Real frame pacing (perf-smoothness-r1 Phase A): `_process(delta)` is
 	# clamped by the engine (8/60 = 0.133s default) and was provably blind to
@@ -1886,10 +1921,13 @@ func _process(delta: float) -> void:
 	# thread slices.  The queue is deliberately pumped before ordinary world
 	# presentation so a non-empty queue cannot starve behind unrelated UI work.
 	_pump_enemy_death_work_queue()
+	_pump_passive_monster_wakeup()
 	UIItemTextureCacheScript.poll_threaded_paths()
 	# Q2-D: the single formal MonsterVisual streaming poll (once per frame).
 	if _streaming_coordinator != null:
 		_streaming_coordinator.poll_once(Engine.get_process_frames())
+	if HCDecisionBudget.pursuit_dispatch_enabled():
+		HCDecisionBudget.dispatch_pursuit_process_batch(self)
 	# Effect work participates in the same frame rotation as resource/death
 	# consumers. Physics alone cannot use the turn they release later in this
 	# frame. Pumping here never advances simulation or grants another budget.
@@ -2086,6 +2124,25 @@ func _player_display_extent_world_px() -> Vector3:
 ## requests per frame and retains finished textures back into the registry
 ## cache. Deliberately no-ops while the loading window is active.
 var _frame_texture_threaded: Dictionary = {}
+var _loading_texture_threaded: Dictionary = {}
+
+
+func _retire_loading_texture_claims() -> void:
+	if _loading_texture_threaded.is_empty():
+		return
+	# ResourceLoader threaded requests cannot be cancelled by GameRoot. Transfer
+	# each accepted claim to the existing persistent preparation owner instead of
+	# joining it here. In particular, never call load_threaded_get() for an
+	# IN_PROGRESS request during _exit_tree: that would turn owner retirement
+	# into a synchronous frame hitch.
+	for raw_path: Variant in _loading_texture_threaded.keys():
+		var path := str(raw_path)
+		if ContentLayers.retire_threaded_resource_claims(path, 1):
+			_loading_texture_threaded.erase(path)
+		else:
+			# Keep the local record when the persistent owner rejects the handoff;
+			# silently dropping an accepted native claim would leak ownership.
+			push_error("Caster texture claim handoff rejected: %s" % path)
 
 
 func _retire_pending_warm_textures() -> void:
@@ -2100,6 +2157,12 @@ func _retire_pending_warm_textures() -> void:
 			var texture := ResourceLoader.load_threaded_get(path) as Texture2D
 			if texture != null:
 				CasterSkillVisualRegistry.retain_loaded_texture(path, texture)
+			else:
+				CasterSkillVisualRegistry.mark_frame_texture_terminal_failure(
+					path, "failed" if status == ResourceLoader.THREAD_LOAD_FAILED else "wrong_resource_type"
+				)
+		else:
+			CasterSkillVisualRegistry.mark_frame_texture_terminal_failure(path, "invalid")
 	_frame_texture_threaded.clear()
 	if token != 0:
 		FrameBudget.end(token)
@@ -2115,12 +2178,16 @@ func _pump_pending_warm_textures() -> void:
 			var texture := ResourceLoader.load_threaded_get(path) as Texture2D
 			if texture != null:
 				CasterSkillVisualRegistry.retain_loaded_texture(path, texture)
+			else:
+				CasterSkillVisualRegistry.mark_frame_texture_terminal_failure(path, "wrong_resource_type")
 		elif status == ResourceLoader.THREAD_LOAD_FAILED:
 			_frame_texture_threaded.erase(path)
 			# FAILED is terminal; retrieve once to release this request's token.
 			ResourceLoader.load_threaded_get(path)
+			CasterSkillVisualRegistry.mark_frame_texture_terminal_failure(path, "failed")
 		elif status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
 			_frame_texture_threaded.erase(path)
+			CasterSkillVisualRegistry.mark_frame_texture_terminal_failure(path, "invalid")
 	# Collect admitted results first. A queued world's final notification must
 	# not start new work whose result this retiring owner will never collect.
 	if is_queued_for_deletion():
@@ -2135,8 +2202,17 @@ func _pump_pending_warm_textures() -> void:
 			continue
 		# PERF-R2 R5: combat warm-up must never use sub threads - the main
 		# thread's frame time stability outranks background texture speed.
-		if ResourceLoader.load_threaded_request(path, "Texture2D", false) == OK:
+		var request_error := ResourceLoader.load_threaded_request(path, "Texture2D", false)
+		if request_error == OK:
 			_frame_texture_threaded[path] = true
+		elif request_error == ERR_BUSY:
+			# No accepted claim belongs to this owner. A busy request can become
+			# available later and must not terminate the visual sequence.
+			CasterSkillVisualRegistry.queue_sequence_warm([path], false)
+		else:
+			CasterSkillVisualRegistry.mark_frame_texture_terminal_failure(
+				path, "request_rejected_%d" % request_error
+			)
 
 
 ## perf-smoothness-r1 C-R1 (PERF-R2 R7): the workset priority comes from the
@@ -2172,19 +2248,19 @@ func _prewarm_texture_paths_until(
 	deadline_usec: int
 ) -> Dictionary:
 	var cursor := 0
-	var in_flight: Dictionary = {}
+	_loading_texture_threaded.clear()
 	var loaded := 0
 	var failed := 0
 	# perf(R13-D1): first moment the absolute deadline became true, so the
 	# in-flight drain tail is measurable (diagnostics only, no behavior).
 	var first_deadline_hit_usec := 0
-	while cursor < paths.size() or not in_flight.is_empty():
+	while cursor < paths.size() or not _loading_texture_threaded.is_empty():
 		var deadline_hit := Time.get_ticks_usec() >= deadline_usec
 		if deadline_hit and first_deadline_hit_usec == 0:
 			first_deadline_hit_usec = Time.get_ticks_usec()
 		if not deadline_hit:
 			while (
-				in_flight.size() < FRAME_TEXTURE_WARM_MAX_IN_FLIGHT
+				_loading_texture_threaded.size() < FRAME_TEXTURE_WARM_MAX_IN_FLIGHT
 				and cursor < paths.size()
 			):
 				var path := paths[cursor]
@@ -2196,14 +2272,14 @@ func _prewarm_texture_paths_until(
 					path, "Texture2D", true
 				)
 				if err == OK:
-					in_flight[path] = true
+					_loading_texture_threaded[path] = true
 				else:
 					failed += 1
-		for raw_path: Variant in in_flight.keys():
+		for raw_path: Variant in _loading_texture_threaded.keys():
 			var path := str(raw_path)
 			var status := ResourceLoader.load_threaded_get_status(path)
 			if status == ResourceLoader.THREAD_LOAD_LOADED:
-				in_flight.erase(path)
+				_loading_texture_threaded.erase(path)
 				var texture := ResourceLoader.load_threaded_get(
 					path
 				) as Texture2D
@@ -2212,13 +2288,17 @@ func _prewarm_texture_paths_until(
 					loaded += 1
 				else:
 					failed += 1
-			elif (
-				status == ResourceLoader.THREAD_LOAD_FAILED
-				or status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE
-			):
-				in_flight.erase(path)
+			elif status == ResourceLoader.THREAD_LOAD_FAILED:
+				# FAILED is terminal but still owns one native retrieval claim.
+				# Consume that claim before retiring this local request owner;
+				# otherwise a failed accepted request survives as an orphan.
+				ResourceLoader.load_threaded_get(path)
+				_loading_texture_threaded.erase(path)
 				failed += 1
-		if in_flight.is_empty() and (
+			elif status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+				_loading_texture_threaded.erase(path)
+				failed += 1
+		if _loading_texture_threaded.is_empty() and (
 			cursor >= paths.size() or Time.get_ticks_usec() >= deadline_usec
 		):
 			break
@@ -2233,7 +2313,7 @@ func _prewarm_texture_paths_until(
 		"loaded": loaded,
 		"failed": failed,
 		"not_admitted": paths.size() - cursor,
-		"in_flight_at_deadline": in_flight.size(),
+		"in_flight_at_deadline": _loading_texture_threaded.size(),
 		"deadline_exceeded": first_deadline_hit_usec > 0,
 		"deadline_hit_at_usec": first_deadline_hit_usec,
 		"completed_at_usec": completed_usec,
@@ -2613,6 +2693,7 @@ func _cancel_player_input_boundary(reason: StringName) -> void:
 	if is_instance_valid(hud):
 		hud.cancel_attack_inputs(reason)
 		hud.cancel_skill_inputs(reason)
+		hud.cancel_item_slot_input_boundary(reason)
 	_cancel_map_transition_movement_input()
 	_cancel_all_mobile_attack_inputs(true)
 	_cancel_all_skill_inputs(true)
@@ -2879,7 +2960,9 @@ func _drain_enemy_death_queue_for_logout() -> Dictionary:
 			"pending_deaths": _pending_enemy_deaths.size(),
 			"death_queue": death_work_queue_snapshot(),
 		}
-		_last_death_logout_failure = pending_result.duplicate(true)
+		# Pending is the current queue state, not a terminal failure. A later
+		# receipt can finish this work, so the next exit request must drain again.
+		# Only FAILED settlements enter the durable in-session failure latch.
 		return pending_result
 	# A bounded terminal ledger can evict the just-created record when it was
 	# already full.  The failure latch is therefore authoritative for this
@@ -2952,11 +3035,14 @@ func _handle_safe_logout_failure(action: StringName, result: Dictionary) -> void
 		action,
 		str(result.get("reason", "safe_logout_failed"))
 	)
+	var user_message := UIErrorFeedbackScript.from_result(result, "安全退出失败，请稍后重试。")
+	if is_instance_valid(_system_menu_panel) and _system_menu_panel.visible:
+		_system_menu_panel.show_save_exit_failure(user_message)
 	if is_instance_valid(hud) and hud.has_method("show_error_message"):
 		# Player sees Chinese prose only; the raw reason stays in the
 		# diagnostic above and in push_error via the reporter.
 		hud.show_error_message(
-			UIErrorFeedbackScript.from_result(result, "安全退出失败，请稍后重试。"),
+			user_message,
 			2.0
 		)
 
@@ -3261,10 +3347,14 @@ func travel_via_portal(portal: ZonePortal, fresh_activation := true) -> bool:
 		return false
 	if not MapPortalTravelGuardScript.begin_travel(_portal_guard_state):
 		return false
+	var portal_claim_id := MapPortalTravelGuardScript.active_claim_id(
+		_portal_guard_state
+	)
+	_active_portal_claim_id = portal_claim_id
 	var target_map_id := int(request.get("target_map_id", -1))
 	var map_data := GameData.get_map_by_id(target_map_id)
 	if map_data.is_empty():
-		_portal_guard_state["travel_in_flight"] = false
+		_cancel_portal_travel_claim(portal_claim_id)
 		hud.show_error_message("地图数据不存在：%d" % target_map_id)
 		return false
 	var target_runtime := MapEditorRuntimeBridgeScript.load_map(target_map_id)
@@ -3273,16 +3363,16 @@ func travel_via_portal(portal: ZonePortal, fresh_activation := true) -> bool:
 		target_runtime, target_portal_id
 	)
 	if target_runtime.is_empty() or target_endpoint.is_empty():
-		_portal_guard_state["travel_in_flight"] = false
+		_cancel_portal_travel_claim(portal_claim_id)
 		hud.show_error_message("目标地图或目标门点不可用", 1.5)
 		return false
 	if str(target_runtime.get("source", {}).get("map_id", "")) != str(request.get("target_map_key", "")):
-		_portal_guard_state["travel_in_flight"] = false
+		_cancel_portal_travel_claim(portal_claim_id)
 		hud.show_error_message("目标地图标识不匹配", 1.5)
 		return false
 	var target_tile := _portal_tile(target_endpoint.get("tile", []))
 	if target_tile == Vector2.INF or target_tile != _portal_tile(request.get("target_tile", [])):
-		_portal_guard_state["travel_in_flight"] = false
+		_cancel_portal_travel_claim(portal_claim_id)
 		hud.show_error_message("目标门点坐标不匹配", 1.5)
 		return false
 	map_data = _runtime_named_map_data(map_data)
@@ -3291,12 +3381,13 @@ func travel_via_portal(portal: ZonePortal, fresh_activation := true) -> bool:
 		map_data,
 		target_runtime,
 		target_portal_id,
-		target_tile
+		target_tile,
+		portal_claim_id
 	)
 	if _should_animate_map_transition(false):
-		if _begin_map_transition(operation, target_map_id):
+		if _begin_map_transition(operation, target_map_id, portal_claim_id):
 			return true
-		_portal_guard_state["travel_in_flight"] = false
+		_cancel_portal_travel_claim(portal_claim_id)
 		return false
 	return bool(operation.call())
 
@@ -3306,11 +3397,14 @@ func _complete_portal_travel(
 	map_data: Dictionary,
 	target_runtime: Dictionary,
 	target_portal_id: String,
-	target_tile: Vector2
+	target_tile: Vector2,
+	portal_claim_id: String
 ) -> bool:
+	if portal_claim_id != MapPortalTravelGuardScript.active_claim_id(_portal_guard_state):
+		return false
 	_load_zone(str(map_data.get("name", "未命名地图")), false, map_data)
 	if current_map_id != target_map_id:
-		_portal_guard_state["travel_in_flight"] = false
+		_cancel_portal_travel_claim(portal_claim_id)
 		return false
 	var arrival_ground_gu := MapEditorRuntimeBridgeScript.cell_to_ground_position_gu(
 		[target_tile.x, target_tile.y]
@@ -3331,6 +3425,8 @@ func _complete_portal_travel(
 		Time.get_ticks_msec(),
 		arrival_ground_gu
 	)
+	_active_portal_claim_id = ""
+	_active_portal_claim_transition_serial = -1
 	return true
 
 
@@ -3403,6 +3499,9 @@ func _begin_initial_world_bootstrap() -> void:
 		# A formal map may require substantially more resources than the legacy
 		# 11-map slice. Never release input onto a half-built world when the
 		# bounded bootstrap deadline is exhausted.
+		# Retire the coordinator owner before releasing the transition boundary;
+		# suspended pipeline coroutines must fail closed at their next await.
+		_world_bootstrap_coordinator.revoke_current_generation()
 		_active_map_transition_id = ""
 		_map_transition_in_progress = false
 		_world_bootstrap_coordinator.finish(false, "initial_bootstrap_timeout")
@@ -3422,7 +3521,11 @@ func _begin_initial_world_bootstrap() -> void:
 	_release_gameplay_input_lock(INPUT_LOCK_INITIAL_BOOTSTRAP)
 
 
-func _begin_map_transition(operation: Callable, target_map_id := -1) -> bool:
+func _begin_map_transition(
+	operation: Callable,
+	target_map_id := -1,
+	portal_claim_id := ""
+) -> bool:
 	if _map_transition_in_progress or not operation.is_valid():
 		return false
 	if not is_instance_valid(player):
@@ -3431,6 +3534,8 @@ func _begin_map_transition(operation: Callable, target_map_id := -1) -> bool:
 	if (player._dead or player.current_hp <= 0) and not revival_authorized:
 		return false
 	_map_transition_serial += 1
+	if not portal_claim_id.is_empty():
+		_active_portal_claim_transition_serial = _map_transition_serial
 	var combat_token := "map-combat:%d" % _map_transition_serial
 	if not player.begin_combat_transition(combat_token, revival_authorized):
 		return false
@@ -3875,6 +3980,11 @@ func _maybe_relocate_blocked_arrival() -> void:
 ## never handed to gameplay input.
 func _fail_map_transition(recovery_policy: StringName) -> void:
 	var failed_transition_serial := _map_transition_serial
+	# A portal operation owns its single-flight claim across the whole async
+	# transition. Retire only that claim when the transition fails before the
+	# bound operation reaches _complete_portal_travel.
+	if _active_portal_claim_transition_serial == failed_transition_serial:
+		_cancel_portal_travel_claim(_active_portal_claim_id)
 	# prepare_map_build clears the prior real environment before arrival.
 	# After that boundary a pre-arrival failure cannot keep it playable.
 	if recovery_policy == &"pre_arrival_keep_world" and _map_transition_environment_replaced:
@@ -3965,6 +4075,15 @@ func _fail_map_transition(recovery_policy: StringName) -> void:
 	_release_gameplay_input_lock(INPUT_LOCK_MAP_TRANSITION_LOCAL)
 
 
+func _cancel_portal_travel_claim(claim_id: String) -> void:
+	if claim_id.is_empty():
+		return
+	MapPortalTravelGuardScript.cancel_travel(_portal_guard_state, claim_id)
+	if _active_portal_claim_id == claim_id:
+		_active_portal_claim_id = ""
+		_active_portal_claim_transition_serial = -1
+
+
 ## P0-3: formal production town revival for a dead player - constructs the
 ## revival request and hands it to the production handler, which owns the
 ## home travel, the revival completion boundary and the death-lock release.
@@ -3984,7 +4103,7 @@ func _run_world_build_pipeline(map_id: int, transition_id: String) -> bool:
 	if coordinator == null or not is_instance_valid(background):
 		return false
 	var generation := coordinator.generation
-	if not coordinator.is_generation_current(generation):
+	if not _world_pipeline_owner_current(coordinator, generation, transition_id):
 		return false
 
 	# 1) COLLECT_REQUIREMENTS also clears the old real environment. Record
@@ -3996,6 +4115,8 @@ func _run_world_build_pipeline(map_id: int, transition_id: String) -> bool:
 	if target_map_data.is_empty():
 		target_map_data = {"mapId": map_id, "name": "未命名地图"}
 	_map_transition_environment_replaced = true
+	if not _world_pipeline_owner_current(coordinator, generation, transition_id):
+		return false
 	var prepared := background.prepare_map_build(
 		map_id, coordinator, target_map_data
 	)
@@ -4020,14 +4141,16 @@ func _run_world_build_pipeline(map_id: int, transition_id: String) -> bool:
 			coordinator.finish(false, "prefetch_timeout")
 			return false
 	else:
-		while not coordinator.poll_threaded_prefetch():
-			if not coordinator.is_generation_current(generation):
+		while true:
+			if not _world_pipeline_owner_current(coordinator, generation, transition_id):
 				return false
+			if coordinator.poll_threaded_prefetch():
+				break
 			await get_tree().process_frame
 	if coordinator.has_failed_required_resource():
 		coordinator.finish(false, "prefetch_failed_required_resource")
 		return false
-	if not coordinator.is_generation_current(generation):
+	if not _world_pipeline_owner_current(coordinator, generation, transition_id):
 		return false
 
 	# WALL-P1R C4: the descriptor queue is handed over only after
@@ -4035,6 +4158,8 @@ func _run_world_build_pipeline(map_id: int, transition_id: String) -> bool:
 	# submit_staged_build's optimized/legacy mode selection can verify the
 	# prefetched derived textures. The resource manifest was fully built
 	# during prepare_map_build; nothing needs the queue before this point.
+	if not _world_pipeline_owner_current(coordinator, generation, transition_id):
+		return false
 	background.submit_staged_build()
 
 	# 4) BUILD_MAP: one atomic map unit per queue task, frame-budgeted.
@@ -4045,7 +4170,7 @@ func _run_world_build_pipeline(map_id: int, transition_id: String) -> bool:
 	await coordinator.process_map_queue(
 		Callable(background, "build_one_map_item"), max_items, budget_ms
 	)
-	if not coordinator.is_generation_current(generation):
+	if not _world_pipeline_owner_current(coordinator, generation, transition_id):
 		return false
 	if coordinator.has_unexpected_sync_load():
 		coordinator.finish(false, "unexpected_sync_load_during_build_map")
@@ -4059,7 +4184,7 @@ func _run_world_build_pipeline(map_id: int, transition_id: String) -> bool:
 	await coordinator.process_collision_queue(
 		Callable(background, "build_one_collision"), max_items, budget_ms
 	)
-	if not coordinator.is_generation_current(generation):
+	if not _world_pipeline_owner_current(coordinator, generation, transition_id):
 		return false
 	if coordinator.has_unexpected_sync_load():
 		coordinator.finish(false, "unexpected_sync_load_during_build_collision")
@@ -4075,8 +4200,26 @@ func _run_world_build_pipeline(map_id: int, transition_id: String) -> bool:
 	# descriptors after this pipeline returns. GameRoot then drains that exact
 	# plan with the same frame budget before FINALIZE/READY.
 	coordinator.advance(WorldBootstrapCoordinator.Stage.SPAWN_ACTORS)
+	if not _world_pipeline_owner_current(coordinator, generation, transition_id):
+		return false
 	background.finish_map_build()
 	return true
+
+
+func _world_pipeline_owner_current(
+	coordinator: WorldBootstrapCoordinator,
+	generation: int,
+	transition_id: String
+) -> bool:
+	## Every async resume and environment mutation belongs to both the
+	## transition and the coordinator generation.  Generation alone is not
+	## sufficient: timeout/recovery can retire it before a new generation starts.
+	return (
+		is_instance_valid(coordinator)
+		and coordinator.is_generation_current(generation)
+		and _map_transition_in_progress
+		and _active_map_transition_id == transition_id
+	)
 
 
 func _bootstrap_max_items_per_frame() -> int:
@@ -4406,6 +4549,7 @@ func _load_zone(zone_name: String, initial: bool, map_data: Dictionary) -> void:
 	_active_safe_zones.clear()
 	_active_enemy_cache.clear()
 	_active_boss_cache.clear()
+	_player_combat_enemy_ids.clear()
 	_safe_zone_enforcement_remaining = 0.0
 	_cancel_all_combat_targets()
 	if _combat_spatial_index != null and current_map_id >= 0:
@@ -4427,6 +4571,24 @@ func _load_zone(zone_name: String, initial: bool, map_data: Dictionary) -> void:
 	_clear_fire_wall_field_registry()
 	current_zone = zone_name
 	current_map_data = map_data.duplicate(true)
+	_passive_wake_candidates.clear()
+	_passive_wake_cursor = 0
+	_passive_wake_query_pending = true
+	var retained_player_emitter: Dictionary = {}
+	if is_instance_valid(player):
+		retained_player_emitter = _passive_wake_emitters.get(player.get_instance_id(), {})
+	_passive_wake_emitters.clear()
+	if not retained_player_emitter.is_empty():
+		retained_player_emitter["dirty"] = false
+		retained_player_emitter["map_id"] = current_map_id
+		retained_player_emitter["generation"] = _zone_generation
+		_passive_wake_emitters[player.get_instance_id()] = retained_player_emitter
+	_passive_wake_emitter_queue.clear()
+	_passive_wake_active_emitter_id = 0
+	_passive_wake_dirty = false
+	_passive_wake_max_extent_gu = 0.0
+	_passive_wake_extent_map_id = -1
+	_passive_wake_extent_generation = -1
 	current_map_id = int(map_data.get("mapId", -1)) if not map_data.is_empty() else -1
 	if map_data.is_empty():
 		# Q1-B: legacy zones without a database map entry (for example the
@@ -4434,6 +4596,9 @@ func _load_zone(zone_name: String, initial: bool, map_data: Dictionary) -> void:
 		# map 4). Snapshot consumers receive a formal runtime map id instead of
 		# -1, so STRICT_V2 absolute snapshots stay valid.
 		current_map_id = GameData.service_runtime_map_id(0)
+	if is_instance_valid(player):
+		_register_passive_wake_emitter(player)
+	_mark_passive_monster_wakeup_dirty()
 	if _loot_pickup_runtime_manager != null:
 		_loot_pickup_runtime_manager.configure_map(
 			current_map_id,
@@ -5287,6 +5452,29 @@ func _spawn_enemy(
 	enemy.set_meta("spawn_slot_id", slot_id)
 	enemy.set_meta("spawn_group_id", str(context.get("spawn_group_id", slot_id)))
 	enemy.set_meta("spawn_context", context)
+	if enemy.has_method("passive_acquisition_extent_gu"):
+		var passive_extent := float(enemy.call("passive_acquisition_extent_gu"))
+		if is_finite(passive_extent) and passive_extent >= 0.0:
+			enemy.set_meta("passive_wake_extent_gu", passive_extent)
+			var extent_was_unavailable := (
+				_passive_wake_extent_map_id != current_map_id
+				or _passive_wake_extent_generation != _zone_generation
+				or _passive_wake_max_extent_gu <= 0.0
+			)
+			if (
+				_passive_wake_extent_map_id != current_map_id
+				or _passive_wake_extent_generation != _zone_generation
+			):
+				_passive_wake_max_extent_gu = passive_extent
+				_passive_wake_extent_map_id = current_map_id
+				_passive_wake_extent_generation = _zone_generation
+			else:
+				_passive_wake_max_extent_gu = maxf(
+					_passive_wake_max_extent_gu,
+					passive_extent,
+				)
+			if extent_was_unavailable and _passive_wake_max_extent_gu > 0.0:
+				_mark_passive_wake_emitters_for_extent_availability()
 	enemy.set_meta(
 		"death_runtime_snapshot",
 		_build_enemy_death_runtime_snapshot(canonical_monster)
@@ -5301,6 +5489,8 @@ func _spawn_enemy(
 	enemy.environment_blocker = background
 	enemy.add_to_group("zone_content")
 	enemy.died.connect(_on_enemy_died)
+	enemy.combat_target_changed.connect(_on_enemy_combat_target_changed)
+	_on_enemy_combat_target_changed(enemy, enemy.target)
 	enemy.target_requested.connect(_on_enemy_target_requested)
 	enemy.summon_requested.connect(_on_boss_summon_requested)
 	enemy.relocation_requested.connect(_on_boss_relocation_requested)
@@ -5324,10 +5514,12 @@ func _spawn_enemy(
 	_enforce_enemy_outside_bich_safe_zone(enemy)
 	if clear_persisted_respawn_after_spawn:
 		PlayerState.clear_monster_respawn_slot(current_map_id, slot_id)
+	_mark_passive_monster_wakeup_dirty()
 	return enemy
 
 
 func _on_cached_enemy_tree_exiting(enemy_instance_id: int) -> void:
+	_player_combat_enemy_ids.erase(enemy_instance_id)
 	_active_enemy_cache.erase(enemy_instance_id)
 	_active_boss_cache.erase(enemy_instance_id)
 
@@ -6463,6 +6655,356 @@ func _on_player_moved(_position: Vector2, _facing: Vector2) -> void:
 	if _loot_pickup_runtime_manager != null:
 		_loot_pickup_runtime_manager.player_position_changed(_position)
 	_validate_locked_target()
+	_mark_passive_monster_wakeup_dirty()
+	_pump_passive_monster_wakeup()
+
+
+func _passive_wake_emitter_current(emitter: Node2D) -> bool:
+	if (
+		not is_instance_valid(emitter)
+		or emitter.is_queued_for_deletion()
+		or current_map_id < 0
+	):
+		return false
+	if emitter == player:
+		return not player._dead and player.current_hp > 0 and not player.is_stealthed()
+	if emitter is SummonActor:
+		var summon := emitter as SummonActor
+		return (
+			is_instance_valid(summon.owner_player)
+			and summon.owner_player == player
+			and not summon.owner_player._dead
+			and summon.owner_player.current_hp > 0
+			and summon.runtime_map_id == current_map_id
+			and summon.current_hp > 0
+			and summon.state not in [SummonActor.SummonState.DEAD, SummonActor.SummonState.EXPIRED]
+			and not summon.owner_teleport_pending
+			and not summon.is_stealthed()
+		)
+	return false
+
+
+func _register_passive_wake_emitter(emitter: Node2D) -> void:
+	# Deferred events from a pet leaving the old map must not recreate its
+	# registry entry after the map generation has been replaced.
+	if (
+		not is_instance_valid(emitter)
+		or emitter.is_queued_for_deletion()
+		or not emitter.is_inside_tree()
+		or not is_ancestor_of(emitter)
+		or is_queued_for_deletion()
+	):
+		return
+	var id := emitter.get_instance_id()
+	if _passive_wake_emitters.has(id):
+		_mark_passive_monster_wakeup_dirty(id)
+		return
+	_passive_wake_emitters[id] = {
+		"ref": weakref(emitter),
+		"dirty": true,
+		"map_id": current_map_id,
+		"generation": _zone_generation,
+	}
+	# Connections belong to the live emitter, while the registry belongs to a
+	# map generation. Re-admitting a surviving emitter must reuse its hooks.
+	var changed_callback := _on_passive_wake_emitter_changed.bind(id)
+	if (
+		emitter.has_signal("passive_wakeup_changed")
+		and not emitter.is_connected("passive_wakeup_changed", changed_callback)
+	):
+		emitter.connect("passive_wakeup_changed", changed_callback, CONNECT_DEFERRED)
+	var exiting_callback := _on_passive_wake_emitter_exiting.bind(id)
+	if not emitter.tree_exiting.is_connected(exiting_callback):
+		emitter.tree_exiting.connect(exiting_callback, CONNECT_ONE_SHOT)
+	if emitter is SummonActor:
+		var summon := emitter as SummonActor
+		var state_callback := _on_passive_wake_summon_state_changed.bind(id)
+		if not summon.summon_state_changed.is_connected(state_callback):
+			summon.summon_state_changed.connect(state_callback, CONNECT_DEFERRED)
+	_passive_wake_emitter_queue.append(id)
+	_passive_wake_dirty = true
+	FrameBudget.mark_pending(PASSIVE_WAKE_BUDGET_CATEGORY, true, true, false, self, false)
+
+
+func _on_passive_wake_emitter_changed(emitter_id: int) -> void:
+	_mark_passive_monster_wakeup_dirty(emitter_id)
+
+
+func _on_passive_wake_summon_state_changed(
+	_previous_state: int,
+	_current_state: int,
+	emitter_id: int,
+) -> void:
+	_mark_passive_monster_wakeup_dirty(emitter_id)
+
+
+func _on_passive_wake_emitter_exiting(emitter_id: int) -> void:
+	_passive_wake_emitters.erase(emitter_id)
+	if _passive_wake_active_emitter_id == emitter_id:
+		_passive_wake_candidates.clear()
+		_passive_wake_cursor = 0
+		_passive_wake_query_pending = false
+		_passive_wake_active_emitter_id = 0
+
+
+func _mark_passive_wake_emitters_for_extent_availability() -> void:
+	# A deferred/dynamic first enemy can establish the spawn-time extent after
+	# the initial emitter query. Re-arm the small registered emitter set once;
+	# this is a birth-time event, never a per-frame scan.
+	var emitter_ids: Array = _passive_wake_emitters.keys()
+	for raw_id: Variant in emitter_ids:
+		_mark_passive_monster_wakeup_dirty(int(raw_id))
+
+
+func _mark_passive_monster_wakeup_dirty(emitter_id := 0) -> void:
+	if not is_instance_valid(player) or player._dead or current_map_id < 0:
+		_passive_wake_candidates.clear()
+		_passive_wake_cursor = 0
+		_passive_wake_query_pending = false
+		_passive_wake_active_emitter_id = 0
+		_passive_wake_emitter_queue.clear()
+		_passive_wake_dirty = false
+		FrameBudget.mark_pending(PASSIVE_WAKE_BUDGET_CATEGORY, false)
+		return
+	if emitter_id <= 0:
+		emitter_id = player.get_instance_id()
+	var entry: Dictionary = _passive_wake_emitters.get(emitter_id, {})
+	if entry.is_empty():
+		var emitter := instance_from_id(emitter_id) as Node2D
+		if not is_instance_valid(emitter):
+			return
+		_register_passive_wake_emitter(emitter)
+		return
+	if not bool(entry.get("dirty", false)):
+		entry["dirty"] = true
+		_passive_wake_emitter_queue.append(emitter_id)
+	var raw_emitter: Variant = entry.get("ref").get_ref() if entry.has("ref") else null
+	if is_instance_valid(raw_emitter) and raw_emitter is Node2D and not _passive_wake_emitter_current(raw_emitter as Node2D):
+		entry["dirty"] = false
+		_passive_wake_emitter_queue.erase(emitter_id)
+		if _passive_wake_active_emitter_id == emitter_id:
+			_passive_wake_candidates.clear()
+			_passive_wake_cursor = 0
+			_passive_wake_query_pending = true
+			_passive_wake_active_emitter_id = 0
+	entry["map_id"] = current_map_id
+	entry["generation"] = _zone_generation
+	_passive_wake_emitters[emitter_id] = entry
+	_passive_wake_dirty = true
+	if _passive_wake_active_emitter_id == 0:
+		_passive_wake_query_pending = true
+	FrameBudget.mark_pending(
+		PASSIVE_WAKE_BUDGET_CATEGORY,
+		true,
+		true,
+		false,
+		self,
+		false,
+	)
+
+
+func _passive_wake_candidate_current(enemy: EnemyActor) -> bool:
+	return (
+		is_instance_valid(enemy)
+		and not enemy.is_queued_for_deletion()
+		and not enemy._dying
+		and not enemy._death_pending
+		and enemy.current_hp > 0
+		and enemy.runtime_map_id == current_map_id
+		and int(enemy.get_meta("zone_generation", -1)) == _zone_generation
+	)
+
+
+func _begin_passive_monster_wakeup_batch() -> bool:
+	if (
+		not is_instance_valid(player)
+		or player._dead
+		or current_map_id < 0
+		or _combat_spatial_index == null
+		or not is_instance_valid(_combat_spatial_index)
+	):
+		_passive_wake_candidates.clear()
+		_passive_wake_cursor = 0
+		_passive_wake_query_pending = false
+		return false
+	var emitter: Node2D = null
+	# Emitter events are necessary acquisition work, even when optional AI
+	# has spent its allowance. This finite queue is drained up to a live event.
+	while not _passive_wake_emitter_queue.is_empty():
+		var emitter_id: int = int(_passive_wake_emitter_queue.pop_front())
+		var entry: Dictionary = _passive_wake_emitters.get(emitter_id, {})
+		var raw_emitter: Variant = entry.get("ref").get_ref() if entry.has("ref") else null
+		if not is_instance_valid(raw_emitter) or not raw_emitter is Node2D:
+			_passive_wake_emitters.erase(emitter_id)
+			continue
+		var candidate_emitter := raw_emitter as Node2D
+		if not _passive_wake_emitter_current(candidate_emitter):
+			entry["dirty"] = false
+			_passive_wake_emitters[emitter_id] = entry
+			continue
+		if (
+			int(entry.get("map_id", -1)) != current_map_id
+			or int(entry.get("generation", -1)) != _zone_generation
+		):
+			entry["dirty"] = false
+			_passive_wake_emitters[emitter_id] = entry
+			continue
+		emitter = candidate_emitter
+		_passive_wake_active_emitter_id = emitter_id
+		entry["dirty"] = false
+		_passive_wake_emitters[emitter_id] = entry
+		break
+	if emitter == null:
+		_passive_wake_active_emitter_id = 0
+		return false
+	var emitter_ground := _canonical_screen_px_to_ground_gu(emitter.global_position)
+	if not emitter_ground.is_finite():
+		_retain_passive_wake_active_event()
+		return false
+	var max_extent := _passive_wake_max_extent_gu
+	if (
+		_passive_wake_extent_map_id != current_map_id
+		or _passive_wake_extent_generation != _zone_generation
+	):
+		max_extent = 0.0
+	if max_extent <= 0.0:
+		_passive_wake_candidates.clear()
+		_passive_wake_cursor = 0
+		_passive_wake_query_pending = false
+		return true
+	var bounds := Rect2(
+		emitter_ground - Vector2.ONE * max_extent,
+		Vector2.ONE * (max_extent * 2.0),
+	)
+	if not _target_spatial_query_aabb_into(bounds, _passive_wake_candidates, false):
+		_passive_wake_candidates.clear()
+		_passive_wake_cursor = 0
+		_passive_wake_query_pending = false
+		_retain_passive_wake_active_event()
+		return false
+	_passive_wake_cursor = 0
+	_passive_wake_query_pending = false
+	return true
+
+
+func _retain_passive_wake_active_event() -> void:
+	# Projection/query availability may recover while the emitter stands still.
+	# Retain only this current event in the existing deduplicated queue. The
+	# failed service returns immediately; the regular pump can retry later,
+	# without a timer, a world scan, or a tight loop inside this callback.
+	var emitter_id := _passive_wake_active_emitter_id
+	var entry: Dictionary = _passive_wake_emitters.get(emitter_id, {})
+	var raw_emitter: Variant = entry.get("ref").get_ref() if entry.has("ref") else null
+	if (
+		is_instance_valid(raw_emitter)
+		and raw_emitter is Node2D
+		and _passive_wake_emitter_current(raw_emitter as Node2D)
+		and int(entry.get("map_id", -1)) == current_map_id
+		and int(entry.get("generation", -1)) == _zone_generation
+	):
+		entry["dirty"] = true
+		_passive_wake_emitters[emitter_id] = entry
+		if not _passive_wake_emitter_queue.has(emitter_id):
+			_passive_wake_emitter_queue.append(emitter_id)
+		_passive_wake_dirty = true
+		_passive_wake_query_pending = true
+
+
+func _pump_passive_monster_wakeup() -> void:
+	if not is_instance_valid(player) or player._dead or current_map_id < 0:
+		_passive_wake_candidates.clear()
+		_passive_wake_cursor = 0
+		_passive_wake_dirty = false
+		_passive_wake_query_pending = false
+		FrameBudget.mark_pending(PASSIVE_WAKE_BUDGET_CATEGORY, false)
+		return
+	var process_epoch := Engine.get_process_frames()
+	if process_epoch != _passive_wake_pump_epoch:
+		_passive_wake_pump_epoch = process_epoch
+		_passive_wake_candidates_used = 0
+	# A new movement/birth event can arrive after this frame's process pump.
+	# Consume that event too; the dirty queue, not the frame number, dedupes work.
+	if (
+		not _passive_wake_dirty
+		and _passive_wake_active_emitter_id == 0
+		and not _passive_wake_query_pending
+		and _passive_wake_cursor >= _passive_wake_candidates.size()
+	):
+		FrameBudget.mark_pending(PASSIVE_WAKE_BUDGET_CATEGORY, false)
+		return
+	FrameBudget.mark_pending(
+		PASSIVE_WAKE_BUDGET_CATEGORY,
+		true,
+		true,
+		false,
+		self,
+		false,
+	)
+	# Consume the finite emitter events present at entry. Acquisition cannot
+	# wait behind optional AI or resource work; new events stay for the next
+	# callback, and failed map queries are retried once rather than spun here.
+	var event_count := _passive_wake_emitter_queue.size() + (1 if _passive_wake_active_emitter_id != 0 else 0)
+	for _event: int in maxi(1, event_count):
+		if not _service_passive_monster_wakeup_batch():
+			break
+		if not _passive_wake_query_pending:
+			break
+
+
+func _service_passive_monster_wakeup_batch() -> bool:
+	if _passive_wake_query_pending:
+		var query_token := FrameBudget.begin(PASSIVE_WAKE_BUDGET_CATEGORY, true)
+		if not _begin_passive_monster_wakeup_batch():
+			_passive_wake_dirty = not _passive_wake_emitter_queue.is_empty()
+			_passive_wake_query_pending = _passive_wake_dirty
+			_passive_wake_active_emitter_id = 0
+			if not _passive_wake_dirty:
+				FrameBudget.mark_pending(PASSIVE_WAKE_BUDGET_CATEGORY, false)
+			FrameBudget.end(query_token)
+			return false
+		_passive_wake_dirty = false
+		FrameBudget.end(query_token)
+	var processed := 0
+	var token := FrameBudget.begin(PASSIVE_WAKE_BUDGET_CATEGORY, true)
+	while _passive_wake_cursor < _passive_wake_candidates.size():
+		var raw_enemy: Variant = _passive_wake_candidates[_passive_wake_cursor]
+		_passive_wake_cursor += 1
+		processed += 1
+		if not is_instance_valid(raw_enemy) or not raw_enemy is EnemyActor:
+			continue
+		var enemy := raw_enemy as EnemyActor
+		var emitter_entry: Dictionary = _passive_wake_emitters.get(
+			_passive_wake_active_emitter_id,
+			{}
+		)
+		var raw_emitter: Variant = emitter_entry.get("ref").get_ref() if emitter_entry.has("ref") else null
+		if (
+			_passive_wake_candidate_current(enemy)
+			and is_instance_valid(raw_emitter)
+			and raw_emitter is Node2D
+			and _passive_wake_emitter_current(raw_emitter as Node2D)
+		):
+			var emitter := raw_emitter as Node2D
+			if enemy.has_method("request_passive_target_wakeup"):
+				enemy.call("request_passive_target_wakeup", emitter, current_map_id, _zone_generation)
+			elif emitter == player and enemy.has_method("request_passive_player_wakeup"):
+				enemy.call("request_passive_player_wakeup", player, current_map_id, _zone_generation)
+	FrameBudget.end(token)
+	_passive_wake_candidates_used += processed
+	if _passive_wake_cursor >= _passive_wake_candidates.size():
+		_passive_wake_candidates.clear()
+		_passive_wake_cursor = 0
+		var finished_emitter_id := _passive_wake_active_emitter_id
+		_passive_wake_active_emitter_id = 0
+		var finished_entry: Dictionary = _passive_wake_emitters.get(finished_emitter_id, {})
+		if not finished_entry.is_empty() and not bool(finished_entry.get("dirty", false)):
+			finished_entry["dirty"] = false
+			_passive_wake_emitters[finished_emitter_id] = finished_entry
+		_passive_wake_query_pending = not _passive_wake_emitter_queue.is_empty()
+		_passive_wake_dirty = _passive_wake_query_pending
+		if not _passive_wake_query_pending:
+			FrameBudget.mark_pending(PASSIVE_WAKE_BUDGET_CATEGORY, false)
+	return true
 
 
 func _on_player_death_requested() -> void:
@@ -7045,6 +7587,8 @@ func _use_skill_slot(slot_group: String, slot_index: int) -> void:
 
 
 func _try_release_skill(skill_name: String, show_failure := true) -> StringName:
+	if not EquipmentGrantedSkills.definition(skill_name).is_empty():
+		return _release_equipment_skill(skill_name, show_failure)
 	if skill_name.is_empty() or not PlayerState.is_skill_learned(skill_name):
 		if show_failure:
 			hud.show_error_message("技能尚未学习")
@@ -7287,7 +7831,7 @@ func _on_skill_button_assignment_requested(request: Dictionary) -> void:
 		if bool(request.get("clear", false))
 		else SkillLoadoutRulesScript.assign_button_slot(
 			PlayerState.skill_button_assignments_snapshot(),
-			PlayerState.learned_skills,
+			PlayerState.skill_assignment_roster(),
 			request
 		)
 	)
@@ -7302,6 +7846,7 @@ func _on_skill_button_assignment_requested(request: Dictionary) -> void:
 			)
 		hud.show_error_message("技能栏配置未能保存")
 		return
+	_reset_attack_action_lifecycle(&"skill_assignment_changed")
 	if is_instance_valid(hud):
 		hud.cancel_attack_inputs(&"skill_assignment_changed")
 		hud.cancel_skill_inputs(&"skill_assignment_changed")
@@ -7877,20 +8422,31 @@ func _commit_warrior_melee_modifier_events(modifiers: Dictionary) -> void:
 	pass
 
 
-func _on_special_action_pressed(effect_id: String) -> void:
-	if not PlayerState.has_special_effect(effect_id):
-		hud.show_error_message("特殊装备已失效")
-		return
+func _release_equipment_skill(skill_name_or_id: String, show_failure := true) -> StringName:
+	var grant := EquipmentGrantedSkills.definition(skill_name_or_id)
+	if not gameplay_input_is_enabled() or not is_instance_valid(player) or player._dead or player.current_hp <= 0 or player.combat_transition_is_active():
+		return &"rejected"
+	if grant.is_empty() or not PlayerState.is_skill_available(str(grant.get("skill_id", ""))):
+		if show_failure: hud.show_error_message("装备技能已失效")
+		return &"rejected"
+	if player.control_time > 0.0:
+		return &"busy"
+	var effect_id := str(grant.effect_id)
+	if effect_id == "grant_fireball_skill" and _hostile_skill_blocked_by_safe_zone(SkillDataLoaderScript.skill("wizard.fireball")):
+		if show_failure: hud.show_error_message("安全区内无法对敌人释放技能")
+		return &"rejected"
 	match effect_id:
-		"teleport":
+		"safe_teleport":
 			if _try_safe_ring_teleport():
 				hud.show_message("传送戒指：安全位移")
 			else:
-				hud.show_error_message("前方没有合法传送落点")
-		"flame_skill":
+				if show_failure: hud.show_error_message("前方没有合法传送落点")
+				return &"rejected"
+		"grant_fireball_skill":
 			if not player.spend_mana(5):
-				hud.show_error_message("火球需要5点魔法")
-				return
+				if show_failure: hud.show_error_message("火球需要5点魔法")
+				return &"rejected"
+			player.break_stealth()
 			_skill_cast_target = null
 			_ensure_skill_cast_target(null)
 			var direction := _face_skill_cast_target()
@@ -7915,13 +8471,34 @@ func _on_special_action_pressed(effect_id: String) -> void:
 			)
 			_skill_cast_target = null
 			hud.show_message("火焰戒指：火球")
-		"recovery_skill":
+		"grant_healing_skill":
 			if not player.spend_mana(5):
-				hud.show_error_message("治愈需要5点魔法")
-				return
+				if show_failure: hud.show_error_message("治愈需要5点魔法")
+				return &"rejected"
 			var amount := maxi(12, int(PlayerState.level / 2) + int(PlayerState.computed_stats.get("tao_max", 0)) * 2)
 			player.restore_health(amount)
 			hud.show_message("防御戒指：恢复%d生命" % amount)
+		_: return &"rejected"
+	return &"released"
+
+
+func _on_enemy_combat_target_changed(enemy: EnemyActor, new_target: Node2D) -> void:
+	if not is_instance_valid(enemy): return
+	var id := enemy.get_instance_id()
+	if not enemy._dying and not enemy._death_pending and enemy.current_hp > 0 and is_instance_valid(new_target) and (new_target == player or new_target is SummonActor):
+		_player_combat_enemy_ids[id] = true
+	else:
+		_player_combat_enemy_ids.erase(id)
+		if not is_instance_valid(new_target):
+			_mark_passive_monster_wakeup_dirty()
+
+
+func _recover_equipment_stealth_if_out_of_combat() -> void:
+	if not is_instance_valid(player) or not player._stealth_break_override or not _player_combat_enemy_ids.is_empty():
+		return
+	if not gameplay_input_is_enabled() or player._dead or player._pending_combat_action_active or player._attack_action_timer > 0.0:
+		return
+	player.recover_equipment_stealth_after_combat_exit()
 
 
 func _try_safe_ring_teleport() -> bool:
@@ -8255,6 +8832,20 @@ func _execute_canonical_skill_plan(
 			plan,
 			{"accepted": false}
 		)
+		return result
+	var summon_resource_rejection := _canonical_summon_resource_commit_rejection(plan)
+	if not summon_resource_rejection.is_empty():
+		result["accepted"] = false
+		result["effect_success"] = false
+		result["reason"] = summon_resource_rejection
+		result["execution_result"] = SkillExecutionPlanContractScript.build_result(
+			plan,
+			{
+				"accepted": false,
+				"rejection_reason": summon_resource_rejection,
+			}
+		)
+		_skill_cast_target = null
 		return result
 	var resource_quote: Dictionary = plan.get("resource_cost", {})
 	var needs_resource := (
@@ -9095,6 +9686,35 @@ func _commit_canonical_resources(result: Dictionary) -> bool:
 		return false
 	SkillExecutionPlanContractScript.resource_commit_count += 1
 	return true
+
+
+func _canonical_summon_resource_commit_rejection(plan: Dictionary) -> String:
+	## A release may retain an accepted rank while live equipment has changed.
+	## Recheck only the final summon sink's safety limit before committing MP or
+	## materials; the accepted plan and its rank remain immutable.
+	for raw_descriptor: Variant in plan.get("summon_descriptors", []):
+		if not raw_descriptor is Dictionary:
+			continue
+		var descriptor := raw_descriptor as Dictionary
+		if str(descriptor.get("operation", "")) != "main_pet_spawn":
+			continue
+		if not bool(descriptor.get("spawned", false)):
+			continue
+		var summon_id := str(descriptor.get("template_id", ""))
+		var live_pets := _canonical_main_pets(summon_id)
+		if summon_id == "skeleton":
+			var live_cap := SkillRankResolver.skeleton_count(
+				PlayerState.effective_skill_level(str(plan.get("skill_id", "")))
+			)
+			if live_pets.size() >= live_cap:
+				return "summon_live_cap_changed"
+			var requested_slot := int(descriptor.get("pet_slot_index", 0))
+			for pet: SummonActor in live_pets:
+				if pet.pet_slot_index == requested_slot:
+					return "summon_slot_already_occupied"
+		elif summon_id == "divine_beast" and not live_pets.is_empty():
+			return "summon_live_cap_changed"
+	return ""
 
 
 func _apply_canonical_effects_from_plan(
@@ -10928,9 +11548,8 @@ func _apply_canonical_ground_tick(enemy: EnemyActor, raw_power: int, stable_skil
 	AoeEngagementWindow.on_ground_damage_tick(stable_skill_id)
 	# R1: ground-effect ticks are the RM_MAGSTRUCK_MINE family (the vanilla
 	# TFireBurnEvent.Run sends RM_MAGSTRUCK_MINE, never RM_MAGSTRUCK). They
-	# keep normal MAC/damage and an ordinary STRUCK on positive damage, but
-	# must never postpone the target's walk tick by 800..1799ms - otherwise a
-	# fire wall would freeze a whole pack in place one second at a time.
+	# keep normal MAC/damage, but never insert STRUCK or pause action/movement.
+	# Every ground tick settles the area's current targets once.
 	_combat_runtime.apply_enemy_direct_spell_damage(
 		enemy,
 		stable_skill_id,
@@ -10983,6 +11602,7 @@ func _apply_canonical_player_teleport(destination: Vector2) -> bool:
 
 
 func _apply_canonical_poison(target: EnemyActor, effect: Dictionary) -> void:
+	var now_ms := Time.get_ticks_msec()
 	var duration := float(effect.get("duration_seconds", 1))
 	if str(effect.get("poison_type", "")) == "green_poison":
 		target.apply_poison(
@@ -10992,11 +11612,15 @@ func _apply_canonical_poison(target: EnemyActor, effect: Dictionary) -> void:
 		)
 	else:
 		var previous: Variant = target.get_meta("canonical_red_poison", {})
-		var merged: Dictionary = (
+		var previous_active: Dictionary = (
 			(previous as Dictionary).duplicate(true)
-			if previous is Dictionary
+			if previous is Dictionary and int((previous as Dictionary).get("expires_at_ms", 0)) > now_ms
 			else {}
 		)
+		# An expired red poison contributes no AC/MAC, durability, or duration.
+		# Keep the current cast as the sole new owner, while preserving the
+		# existing max-refresh contract for an active red poison.
+		var merged := previous_active.duplicate(true)
 		for key: Variant in effect:
 			if not merged.has(key):
 				merged[key] = effect[key]
@@ -11024,7 +11648,7 @@ func _apply_canonical_poison(target: EnemyActor, effect: Dictionary) -> void:
 		)
 		merged["expires_at_ms"] = maxi(
 			int(merged.get("expires_at_ms", 0)),
-			Time.get_ticks_msec() + roundi(duration * 1000.0)
+			now_ms + roundi(duration * 1000.0)
 		)
 		target.set_meta("canonical_red_poison", merged)
 		RuntimeDiagnostics.increment_performance_counter(&"actor_redraw_requests")
@@ -11049,11 +11673,27 @@ func _synchronize_main_pet_skill_ranks() -> void:
 	var limit := SkillRankResolver.skeleton_count(PlayerState.effective_skill_level("taoist.summon_skeleton"))
 	for i: int in range(skeletons.size() - 1, limit - 1, -1):
 		skeletons[i].retire_for_rank_cap()
+	# Re-read the canonical live set after retirement callbacks so the stable
+	# slot retention pass does not count actors already leaving the tree.
+	skeletons = _canonical_main_pets("skeleton")
 	var saved_groups: Dictionary = PlayerState.taoist_main_pet_runtime_states_for_restore().get("groups", {})
-	for raw_snapshot: Variant in saved_groups.get("skeleton", []):
+	var retained_slots: Dictionary = {}
+	for summon: SummonActor in skeletons:
+		retained_slots[summon.pet_slot_index] = true
+	var pending_capacity := maxi(0, limit - skeletons.size())
+	var saved_skeletons: Array = (saved_groups.get("skeleton", []) as Array).duplicate(true)
+	saved_skeletons.sort_custom(func(a: Variant, b: Variant) -> bool:
+		return int((a as Dictionary).get("pet_slot_index", 0)) < int((b as Dictionary).get("pet_slot_index", 0))
+	)
+	for raw_snapshot: Variant in saved_skeletons:
 		if raw_snapshot is Dictionary:
 			var slot := int((raw_snapshot as Dictionary).get("pet_slot_index", 0))
-			if slot >= limit:
+			if retained_slots.has(slot):
+				continue
+			if pending_capacity > 0:
+				retained_slots[slot] = true
+				pending_capacity -= 1
+			else:
 				PlayerState.clear_taoist_main_pet_runtime_state("skeleton", slot)
 
 
@@ -11182,6 +11822,22 @@ func _restore_persisted_taoist_main_pet_if_needed(allow_deferred_arrival: bool =
 		PlayerState.taoist_main_pet_runtime_states_for_restore().get("groups", {})
 	)
 	for summon_id: String in ["skeleton", "divine_beast"]:
+		var allowed_skeleton_slots: Dictionary = {}
+		if summon_id == "skeleton":
+			# Slot ids are stable identities, not a dense array index. After a
+			# skill-rank downgrade, preserve the lowest persisted live slots up to
+			# the new count; do not reject a valid sparse slot merely because its
+			# numeric id is >= the count.
+			var candidate_slots: Array[int] = []
+			for candidate_raw: Variant in saved_groups.get(summon_id, []):
+				if candidate_raw is Dictionary and bool((candidate_raw as Dictionary).get("alive", false)):
+					candidate_slots.append(int((candidate_raw as Dictionary).get("pet_slot_index", 0)))
+			candidate_slots.sort()
+			var skeleton_limit := SkillRankResolver.skeleton_count(
+				PlayerState.effective_skill_level("taoist.summon_skeleton")
+			)
+			for candidate_index: int in range(mini(skeleton_limit, candidate_slots.size())):
+				allowed_skeleton_slots[candidate_slots[candidate_index]] = true
 		for raw_snapshot: Variant in saved_groups.get(summon_id, []):
 			if not raw_snapshot is Dictionary:
 				continue
@@ -11189,9 +11845,7 @@ func _restore_persisted_taoist_main_pet_if_needed(allow_deferred_arrival: bool =
 			var slot := int(snapshot.get("pet_slot_index", 0))
 			if not bool(snapshot.get("alive", false)):
 				continue
-			if summon_id == "skeleton" and slot >= SkillRankResolver.skeleton_count(
-				PlayerState.effective_skill_level("taoist.summon_skeleton")
-			):
+			if summon_id == "skeleton" and not allowed_skeleton_slots.has(slot):
 				PlayerState.clear_taoist_main_pet_runtime_state(summon_id, slot)
 				continue
 			var stable_skill_id := str(snapshot.get("skill_id", ""))
@@ -11239,6 +11893,7 @@ func _restore_persisted_taoist_main_pet_if_needed(allow_deferred_arrival: bool =
 			)
 			_wire_canonical_main_pet_persistence(summon)
 			add_child(summon)
+			_register_passive_wake_emitter(summon)
 			if not bool(spawn_plan.get("valid", false)):
 				summon.defer_owner_teleport_relocation()
 			restored_any = true
@@ -11620,10 +12275,23 @@ func _apply_canonical_main_pet(
 	var requested_slot := int(descriptor.get("pet_slot_index", 0))
 	if operation == "recall_existing_main_pet":
 		for pet: SummonActor in _canonical_main_pets(requested_summon_id):
+			if pet.owner_teleport_pending:
+				var pending_generation := int(pet.get_meta("pending_arrival_zone_generation", -1))
+				if pending_generation != _zone_generation:
+					# A late recall descriptor from an older map arrival has no
+					# authority to make a hidden old-generation pet visible again.
+					_pending_main_pet_arrivals.erase(pet)
+					pet.remove_meta("pending_arrival_zone_generation")
+					continue
 			var recall_plan := _canonical_summon_spawn_plan(stable_skill_id, pet, pet.pet_slot_index)
 			if not bool(recall_plan.get("valid", false)):
 				continue
-			pet.global_position = recall_plan.get("position_screen_px") as Vector2
+			var relocation := pet.relocate_after_owner_teleport(
+				recall_plan.get("position_screen_px") as Vector2
+			)
+			if bool(relocation.get("relocated", false)):
+				_pending_main_pet_arrivals.erase(pet)
+				pet.remove_meta("pending_arrival_zone_generation")
 			_synchronize_pet_skill_rank(pet)
 			pet.configure_spawn_release_footprint(release_id)
 		return
@@ -11677,6 +12345,7 @@ func _apply_canonical_main_pet(
 	)
 	_wire_canonical_main_pet_persistence(summon)
 	add_child(summon)
+	_register_passive_wake_emitter(summon)
 	PlayerState.apply_taoist_main_pet_runtime_states(
 		_capture_taoist_main_pet_runtime_states()
 	)
@@ -11715,10 +12384,74 @@ func _relocate_main_pets_after_map_arrival() -> void:
 				pending.erase(summon)
 			else:
 				summon.defer_owner_teleport_relocation()
+				summon.set_meta("pending_arrival_zone_generation", _zone_generation)
 				_pending_main_pet_arrivals.append(summon)
 	if not _pending_main_pet_arrivals.is_empty():
 		_pending_main_pet_retry_tile = _main_pet_owner_tile()
 		_pending_main_pet_retry_tile_valid = true
+
+
+func _main_pet_follow_context_is_current(summon: SummonActor) -> bool:
+	return (
+		is_inside_tree()
+		and not is_queued_for_deletion()
+		and not _map_transition_in_progress
+		and is_instance_valid(player)
+		and player.current_hp > 0
+		and is_instance_valid(background)
+		and is_instance_valid(summon)
+		and not summon.is_queued_for_deletion()
+		and summon.is_inside_tree()
+		and is_ancestor_of(summon)
+		and summon.owner_player == player
+		and bool(summon.get_meta("taoist_main_pet", false))
+		and summon.summon_id in ["skeleton", "divine_beast"]
+		and summon.runtime_map_id == current_map_id
+		and summon.runtime_ground_gu_to_screen_position_px.is_valid()
+		and summon.runtime_screen_to_ground_position_px.is_valid()
+		and summon.current_hp > 0
+		and summon.state not in [SummonActor.SummonState.DEAD, SummonActor.SummonState.EXPIRED]
+	)
+
+
+func _canonical_summon_follow_landing_plan(summon: SummonActor) -> Dictionary:
+	# Follow teleport uses the same map/body placement authority as arrival.
+	# Invalid ownership or a transition cannot authorize relocation or deferral.
+	if not _main_pet_follow_context_is_current(summon):
+		return {"valid": false, "reason": "follow_context_not_current", "defer_allowed": false}
+	var pending: Array[SummonActor] = [summon]
+	var formation_screen_px := summon._owner_formation_anchor_screen_px()
+	var formation_ground_gu := _canonical_screen_px_to_ground_gu(formation_screen_px)
+	if _canonical_summon_position_is_valid(
+		formation_ground_gu, _actor_combat_radius_gu(summon), summon, pending
+	):
+		return {
+			"valid": true,
+			"reason": "",
+			"position_ground_gu": formation_ground_gu,
+			"position_screen_px": formation_screen_px,
+			"defer_allowed": true,
+		}
+	var stable_skill_id := (
+		"taoist.summon_skeleton" if summon.summon_id == "skeleton"
+		else "taoist.summon_divine_beast"
+	)
+	var plan := _canonical_summon_spawn_plan(stable_skill_id, summon, summon.pet_slot_index, pending)
+	if not bool(plan.get("valid", false)):
+		plan = _canonical_summon_teleport_fallback_plan(summon, pending)
+	plan["defer_allowed"] = true
+	return plan
+
+
+func _register_pending_main_pet_arrival(summon: SummonActor) -> bool:
+	if not _main_pet_follow_context_is_current(summon) or not summon.owner_teleport_pending:
+		return false
+	summon.set_meta("pending_arrival_zone_generation", _zone_generation)
+	if not _pending_main_pet_arrivals.has(summon):
+		_pending_main_pet_arrivals.append(summon)
+		_pending_main_pet_retry_tile = _main_pet_owner_tile()
+		_pending_main_pet_retry_tile_valid = true
+	return true
 
 
 func _main_pet_owner_tile() -> Vector2i:
@@ -11739,7 +12472,11 @@ func _retry_pending_main_pet_arrivals() -> void:
 		if not is_instance_valid(summon) or summon.is_queued_for_deletion():
 			_pending_main_pet_arrivals.erase(summon)
 			continue
-		if not summon.owner_teleport_pending:
+		if (
+			not summon.owner_teleport_pending
+			or not _main_pet_follow_context_is_current(summon)
+			or int(summon.get_meta("pending_arrival_zone_generation", -1)) != _zone_generation
+		):
 			_pending_main_pet_arrivals.erase(summon)
 			continue
 		var stable_skill_id := (
@@ -12879,7 +13616,9 @@ func _apply_physical_hit(
 	if recovered >= 2:
 		player.restore_health(recovered)
 	if PlayerState.has_special_effect("paralysis") and EquipmentRulesScript.paralysis_succeeds(enemy.anti_poison, _rng.randi_range(0, maxi(1, enemy.anti_poison + 5) - 1)):
-		enemy.apply_control(5.0)
+		enemy.apply_control(EquipmentRulesScript.paralysis_duration_for_classification(
+			str(enemy.monster_data.get("classification", ""))
+		))
 	return true
 
 
@@ -13156,6 +13895,7 @@ func _show_attack_flash(origin: Vector2, direction: Vector2, hit: bool, color: C
 
 
 func _on_enemy_died(enemy: EnemyActor, monster_data: Dictionary) -> void:
+	_player_combat_enemy_ids.erase(enemy.get_instance_id())
 	var queued_at_usec := Time.get_ticks_usec()
 	if _combat_spatial_index != null:
 		_combat_spatial_index.unregister(
@@ -13363,10 +14103,16 @@ func _pump_enemy_death_work_queue(force_synchronous := false) -> bool:
 	FrameBudget.end(receipt_token)
 	_refresh_death_budget_owner()
 	if not _pending_enemy_deaths.is_empty():
-		var token := FrameBudget.begin(_death_budget_category, force_synchronous)
-		if token > 0:
-			progressed = _advance_enemy_death_work_slice(force_synchronous, progressed)
-			FrameBudget.end(token)
+		var process_frame := Engine.get_process_frames()
+		var optional_allowed := force_synchronous or _death_optional_pump_frame != process_frame
+		if optional_allowed:
+			var token := FrameBudget.begin(_death_budget_category, force_synchronous)
+			if token > 0:
+				var optional_progressed := _advance_enemy_death_work_slice(force_synchronous, false)
+				progressed = optional_progressed or progressed
+				if optional_progressed and not force_synchronous:
+					_death_optional_pump_frame = process_frame
+				FrameBudget.end(token)
 	_enemy_death_pipeline_running = false
 	_refresh_death_budget_owner()
 	return progressed
@@ -13460,7 +14206,7 @@ func _advance_enemy_death_work_slice(force_synchronous: bool, progressed: bool) 
 			if jobs_processed >= jobs_limit:
 				break
 			jobs_processed += 1
-			if _plan_enemy_death_item(death):
+			if _plan_enemy_death_item(death, slice_started_usec, budget_usec):
 				progressed = true
 				continue
 			break
@@ -13570,6 +14316,12 @@ func clear_death_drop_work_limits_for_test() -> void:
 	_death_drop_work_budget_usec_override = -1
 	_death_jobs_max_per_frame_override = -1
 	_drop_nodes_max_per_frame_override = -1
+
+func set_death_roll_quantum_slicing_for_test(enabled: bool) -> bool:
+	if not PlayerState.test_mode:
+		return false
+	_death_roll_quantum_slicing_enabled = enabled
+	return true
 
 
 func set_loot_materialization_failure_count_for_test(count: int) -> bool:
@@ -13843,14 +14595,16 @@ func _finish_enemy_death_settlement_batch(batch: Array[Dictionary], settlement: 
 		return
 	for death: Dictionary in batch:
 		death["transaction_result"] = settlement.duplicate(true)
-		_plan_enemy_death_item(death)
+		# The durable receipt closes PERSISTING. Resume reward planning through
+		# the same stage used by synchronous settlement, without settling twice.
+		_set_enemy_death_state(death, DEATH_STATE_SETTLING)
 	return
 
 
 var _drop_instance_session_key := Crypto.new().generate_random_bytes(16).hex_encode()
 
 
-func _plan_enemy_death_item(death: Dictionary) -> bool:
+func _plan_enemy_death_item(death: Dictionary, slice_started_usec := 0, budget_usec := 0) -> bool:
 	if not _death_origin_matches_current(death):
 		death["last_error"] = "origin_map_generation_mismatch_before_roll"
 		_set_enemy_death_state(death, DEATH_STATE_CANCELLED)
@@ -13860,8 +14614,32 @@ func _plan_enemy_death_item(death: Dictionary) -> bool:
 		return true
 	var started_usec := RuntimeDiagnostics.timing_start()
 	var monster_id := int(death.get("monster_id", -1))
-	RuntimeDiagnostics.increment_performance_counter(&"drop_roll_count")
-	var drop_roll := LootRuntime.roll_monster_drops(monster_id, _rng, false)
+	var drop_roll: Dictionary
+	if _death_roll_quantum_slicing_enabled:
+		var resumable: Dictionary = death.get("drop_roll_job", {})
+		if resumable.is_empty():
+			RuntimeDiagnostics.increment_performance_counter(&"drop_roll_count")
+			resumable = LootRuntime.begin_monster_drop_roll_job(monster_id, _rng, false)
+		var advanced := LootRuntime.advance_monster_drop_roll_job(resumable, 1)
+		# A source row is a small resumable quantum, not a whole death job.
+		# Use the admitted slice's existing wall budget for further quanta;
+		# retain the cursor as soon as that budget is spent. RNG order is unchanged.
+		while (
+			not bool(advanced.get("done", false))
+			and budget_usec > 0
+			and Time.get_ticks_usec() - slice_started_usec < budget_usec
+		):
+			advanced = LootRuntime.advance_monster_drop_roll_job(advanced, 1)
+		if not bool(advanced.get("done", false)):
+			death["drop_roll_job"] = advanced
+			RuntimeDiagnostics.increment_performance_counter(&"drop_roll_slice_count")
+			RuntimeDiagnostics.record_timing_usec(&"drop_roll_usec", started_usec)
+			return true
+		drop_roll = advanced.get("result", {})
+		death.erase("drop_roll_job")
+	else:
+		RuntimeDiagnostics.increment_performance_counter(&"drop_roll_count")
+		drop_roll = LootRuntime.roll_monster_drops(monster_id, _rng, false)
 	var death_position: Vector2 = death.get("death_position", Vector2.ZERO)
 	var requests: Array[Dictionary] = []
 	var raw_items: Variant = drop_roll.get("items", [])
@@ -14135,11 +14913,16 @@ func _schedule_queued_enemy_respawn(death: Dictionary) -> void:
 	var spawn_context: Dictionary = preparation.get(
 		"spawn_context", respawn.get("spawn_context", {})
 	)
+	var world_entry: Dictionary = preparation.get("world_entry", {})
+	var remaining_seconds := maxf(
+		0.0,
+		float(world_entry.get("respawn_at_unix", 0.0)) - Time.get_unix_time_from_system()
+	)
 	_respawn_later(
 		canonical_monster,
 		death.get("spawn_position", death.get("death_position", Vector2.ZERO)),
 		bool(respawn.get("was_boss", death.get("was_boss", false))),
-		float(preparation.get("wait_seconds", 0.0)),
+		remaining_seconds,
 		int(death.get("origin_generation", _zone_generation)),
 		spawn_context,
 	)
@@ -14485,6 +15268,13 @@ func _queue_loot_collection(candidate: Dictionary) -> bool:
 		)
 		pickup_object.reject_collection("拾取来源无效，无法入账。")
 		return false
+	# Reachability decides admission. Once this real source is accepted, its
+	# ordered transaction survives ordinary player movement while IO finishes.
+	if not pickup_object.collection_pending():
+		return false
+	if not _loot_collection_path_is_clear(pickup_object):
+		pickup_object.reject_collection("暂时无法到达该物品。")
+		return false
 	_pending_loot_collections.append(queued_candidate)
 	if not _loot_collection_flush_queued:
 		_loot_collection_flush_queued = true
@@ -14521,9 +15311,7 @@ func _flush_loot_collections(allow_background := false) -> Dictionary:
 			if pickup is LootPickup and is_instance_valid(pickup):
 				(pickup as LootPickup).reject_collection("地图已切换，无法拾取。")
 			continue
-		if not pickup is LootPickup or not _loot_collection_path_is_clear(pickup):
-			if pickup is LootPickup and is_instance_valid(pickup):
-				pickup.reject_collection("暂时无法到达该物品。")
+		if not pickup is LootPickup or not is_instance_valid(pickup) or not pickup.collection_pending():
 			continue
 		transaction_pending.append(candidate)
 		candidates.append(candidate.duplicate(true))
@@ -14565,7 +15353,7 @@ func _poll_prepared_loot_collection(wait := false) -> Dictionary:
 		if (int(candidate.get("origin_map_id", -1)) != current_map_id
 			or int(candidate.get("origin_generation", -1)) != _zone_generation
 			or not pickup is LootPickup or not is_instance_valid(pickup)
-			or not pickup.collection_pending() or not _loot_collection_path_is_clear(pickup)):
+			or not pickup.collection_pending()):
 			valid = false
 			break
 	var result: Dictionary
@@ -14593,7 +15381,13 @@ func _poll_prepared_loot_collection(wait := false) -> Dictionary:
 	if bool(result.get("pending", false)): return result
 	_prepared_loot_collection = {}
 	if bool(result.get("retry", false)):
-		_pending_loot_collections.append_array(cohort.pending)
+		# These sources were accepted before the next cohort. A state barrier
+		# may invalidate preparation, but cannot put older rewards behind new
+		# ones (including when inventory capacity makes order significant).
+		var ordered_pending: Array[Dictionary] = []
+		ordered_pending.assign(cohort.pending)
+		ordered_pending.append_array(_pending_loot_collections)
+		_pending_loot_collections = ordered_pending
 	else:
 		result = _finish_loot_collection_outcomes(cohort.pending, result, int(cohort.candidate_count), int(cohort.stale_count), started_usec)
 	if not _pending_loot_collections.is_empty() and not _loot_collection_flush_queued:
@@ -14631,9 +15425,10 @@ func _finish_loot_collection_outcomes(transaction_pending: Array, result: Dictio
 		# Keep unacknowledged candidates pending for a diagnosable retry instead
 		# of silently dropping them when a malformed/partial transaction result
 		# is returned.
-		_pending_loot_collections.append_array(
-			transaction_pending.slice(processed_count)
-		)
+		var ordered_pending: Array[Dictionary] = []
+		ordered_pending.assign(transaction_pending.slice(processed_count))
+		ordered_pending.append_array(_pending_loot_collections)
+		_pending_loot_collections = ordered_pending
 		if not _pending_loot_collections.is_empty() and not _loot_collection_flush_queued:
 			_loot_collection_flush_queued = true
 			call_deferred("_flush_loot_collections", true)

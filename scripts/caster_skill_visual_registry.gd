@@ -51,6 +51,9 @@ static var _pinned_paths: Dictionary = {}
 static var _pinned_bytes := 0
 static var _loading_window_active := true
 static var _pending_warm_paths: Array[String] = []
+static var _terminal_failed_paths: Dictionary = {}
+static var _terminal_failure_history: Dictionary = {}
+static var _failure_serial := 0
 ## perf-smoothness-r1 C-R1 (PERF-R2 R13): combat-time frame misses. Combat
 ## miss queues async sequence warm; AnimationPlayer waits without
 ## logical-frame advancement. The SUCCESS criterion is zero misses on the
@@ -74,10 +77,12 @@ static func is_loading_window_active() -> bool:
 ## the async warm-up channel and returns null (the animation player skips
 ## the frame instead of hitching the main thread).
 static func request_animation_frame_texture(path: String) -> Texture2D:
-	if _loading_window_active:
-		return load_texture_path(path)
 	if path.is_empty():
 		return null
+	if _terminal_failed_paths.has(path):
+		return null
+	if _loading_window_active:
+		return load_texture_path(path)
 	_frame_texture_serial += 1
 	if _frame_textures.has(path):
 		_frame_texture_use[path] = _frame_texture_serial
@@ -104,11 +109,45 @@ static func clear_pending_warm_paths() -> void:
 	_pending_warm_paths.clear()
 
 
+static func mark_frame_texture_terminal_failure(path: String, reason := "failed") -> void:
+	if path.is_empty():
+		return
+	_pending_warm_paths.erase(path)
+	_failure_serial += 1
+	var failure_reason := str(reason) if not str(reason).is_empty() else "failed"
+	_terminal_failed_paths[path] = failure_reason
+	_terminal_failure_history[path] = {"serial": _failure_serial, "reason": failure_reason}
+
+
+static func frame_texture_terminal_failure(path: String) -> String:
+	return str(_terminal_failed_paths.get(path, ""))
+
+
+static func current_failure_serial() -> int:
+	return _failure_serial
+
+
+static func sequence_terminal_failure(paths: Array[String]) -> String:
+	return sequence_terminal_failure_after(paths, -1)
+
+
+static func sequence_terminal_failure_after(paths: Array[String], baseline_serial: int) -> String:
+	for path: String in paths:
+		var current_reason := frame_texture_terminal_failure(path)
+		if not current_reason.is_empty():
+			return current_reason
+		var history: Variant = _terminal_failure_history.get(path, {})
+		if history is Dictionary and int(history.get("serial", 0)) > baseline_serial:
+			return str(history.get("reason", "failed"))
+	return ""
+
+
 ## Async warm-up completion: the threaded channel hands the loaded texture
 ## back here so the cache and diagnostics stay the single accounting point.
 static func retain_loaded_texture(path: String, texture: Texture2D, forced_bytes := -1) -> void:
 	if texture == null or path.is_empty():
 		return
+	_terminal_failed_paths.erase(path)
 	_retain_frame_texture(path, texture, forced_bytes)
 
 
@@ -301,9 +340,13 @@ static func combat_sequence_requires_wait(paths: Array[String]) -> bool:
 
 ## R14-C2: queue every non-resident path of the sequence for async warm-up
 ## (combat-safe channel; never loads synchronously).
-static func queue_sequence_warm(paths: Array[String]) -> void:
+static func queue_sequence_warm(paths: Array[String], explicit_admission := true) -> void:
 	for path: String in paths:
 		if path.is_empty() or _frame_textures.has(path):
+			continue
+		if explicit_admission:
+			_terminal_failed_paths.erase(path)
+		elif _terminal_failed_paths.has(path):
 			continue
 		if not _pending_warm_paths.has(path):
 			_pending_warm_paths.append(path)
@@ -511,6 +554,7 @@ static func load_texture_path(path: String) -> Texture2D:
 static func _retain_frame_texture(path: String, loaded: Texture2D, forced_bytes := -1) -> bool:
 	if loaded == null or path.is_empty():
 		return false
+	_terminal_failed_paths.erase(path)
 	# Late async completion of an already resident path must not
 	# double-account the same key: touch and return.
 	if _frame_textures.has(path):
@@ -567,6 +611,8 @@ static func clear_frame_texture_cache() -> void:
 	_frame_texture_evictions = 0
 	_sync_decode_calls = 0
 	_sync_decode_usec = 0
+	_terminal_failed_paths.clear()
+	_terminal_failure_history.clear()
 	_sequence_lease_refcounts.clear()
 
 

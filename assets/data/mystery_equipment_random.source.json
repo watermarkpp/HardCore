@@ -1,0 +1,20 @@
+{
+  "contractId": "equipment.mystery_random_stats.v1",
+  "sourcePolicy": "project_registered_canonical_category_mapping",
+  "formulaSource": {
+    "path": "dev_art_sources/reference/original_gameofmir/M2Server/ItmUnit.pas",
+    "randomRangeLines": "88-95",
+    "helmetLines": "389-444",
+    "ringLines": "445-495",
+    "braceletLines": "496-550",
+    "attributeApplicationLines": "142-157",
+    "configPath": "dev_art_sources/reference/original_gameofmir/M2Server/M2Share.pas",
+    "configLines": "1929-1958"
+  },
+  "families": {
+    "helmet": {"catalogItemIds": [218], "canonicalCategory": "头盔", "legacyStdModeFamily": [15], "acMax": 4, "acRate": 20, "macMax": 4, "macRate": 20, "dcMax": 3, "dcRate": 30, "mcMax": 3, "mcRate": 30, "scMax": 3, "scRate": 30, "upgradeThreshold": 3},
+    "bracelet": {"catalogItemIds": [219], "canonicalCategory": "手镯", "legacyStdModeFamily": [24, 26], "acMax": 5, "acRate": 20, "macMax": 5, "macRate": 20, "dcMax": 5, "dcRate": 30, "mcMax": 5, "mcRate": 30, "scMax": 5, "scRate": 30, "upgradeThreshold": 2},
+    "ring": {"catalogItemIds": [220], "canonicalCategory": "戒指", "legacyStdModeFamily": [22, 23], "acMax": 4, "acRate": 20, "macMax": 4, "macRate": 20, "dcMax": 6, "dcRate": 20, "mcMax": 6, "mcRate": 20, "scMax": 6, "scRate": 20, "upgradeThreshold": 3}
+  },
+  "instancePolicy": {"rollAt": "drop_instance_creation", "rerollOnEquip": false, "randomDurability": false, "excludedEffects": ["curse", "equip_lock", "remove_curse"], "legacyMissingRoll": "valid"}
+}

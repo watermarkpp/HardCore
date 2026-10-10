@@ -66,9 +66,9 @@ CORRECTED_EXACT = {
     234: 6,
 }
 CATALOG_PATH = ROOT / "assets/data/runtime/canonical_monster_catalog.json"
-CLASSIFICATION_FLOORS = {"elite": 7, "boss": 9}
-CLASSIFICATION_FLOOR_AUTHORITY = "HUMAN_FROZEN"
-CLASSIFICATION_FLOOR_SOURCE = "user.authority.monster_classification_view_floor.2026-08-30"
+CLASSIFICATION_OVERRIDES = {"ordinary": 6, "elite": 9, "boss": 12}
+CLASSIFICATION_OVERRIDE_AUTHORITY = "USER_AUTHORIZED_OVERRIDE"
+CLASSIFICATION_OVERRIDE_SOURCE = "assets/data/monster_targeting_classification_override_v1.json"
 
 
 def load(path: Path) -> dict:
@@ -99,8 +99,8 @@ for monster_id, movement_record in movement_by_id.items():
     runtime_allowed = bool(canonical_by_id[monster_id]["runtime_allowed"])
     assert authority_record["classification"] == classification
     assert authority_record["runtime_allowed"] == runtime_allowed
-    expected_floor = (
-        CLASSIFICATION_FLOORS.get(classification) if runtime_allowed else None
+    expected_override = (
+        CLASSIFICATION_OVERRIDES.get(classification) if runtime_allowed else None
     )
     detail_record = detail_by_id[monster_id]
     assert not any(key in detail_record for key in ("view_range", "view_range_cells", "viewRange"))
@@ -117,22 +117,17 @@ for monster_id, movement_record in movement_by_id.items():
         assert targeting["server_race"] == race
         assert targeting["pascal_class"] == expected_class
         assert targeting["class_derived_view_range_cells"] == expected_view
-        assert targeting["classification_floor_view_range_cells"] == expected_floor
-        assert targeting["classification_floor_authority"] == (
-            CLASSIFICATION_FLOOR_AUTHORITY if expected_floor is not None else None
+        assert targeting["classification_override_view_range_cells"] == expected_override
+        assert targeting["classification_override_authority"] == (
+            CLASSIFICATION_OVERRIDE_AUTHORITY if expected_override is not None else None
         )
-        assert targeting["classification_floor_source"] == (
-            CLASSIFICATION_FLOOR_SOURCE if expected_floor is not None else None
+        assert targeting["classification_override_source"] == (
+            CLASSIFICATION_OVERRIDE_SOURCE if expected_override is not None else None
         )
-        expected_effective_view = max(
-            expected_view,
-            expected_floor if expected_floor is not None else expected_view,
-        )
+        expected_effective_view = expected_override if expected_override is not None else expected_view
         assert targeting["view_range_cells"] == expected_effective_view
         expected_distribution[str(expected_effective_view)] += 1
-        assert targeting["classification_floor_applied"] == (
-            expected_floor is not None and expected_floor > expected_view
-        )
+        assert targeting["classification_override_applied"] == (expected_override is not None)
         assert targeting["class_binding_status"] == "CANDIDATE"
         assert targeting["class_binding_authority"] == "B_CANDIDATE"
         assert targeting["class_rule_authority"] == "A_LOCKED"
@@ -151,10 +146,10 @@ for monster_id, movement_record in movement_by_id.items():
         assert targeting["view_range_status"] == "DATA_HOLD"
         assert targeting["acquisition_status"] == "DATA_HOLD"
         assert targeting["class_derived_view_range_cells"] is None
-        assert targeting["classification_floor_view_range_cells"] is None
-        assert targeting["classification_floor_authority"] is None
-        assert targeting["classification_floor_source"] is None
-        assert targeting["classification_floor_applied"] is False
+        assert targeting["classification_override_view_range_cells"] is None
+        assert targeting["classification_override_authority"] is None
+        assert targeting["classification_override_source"] is None
+        assert targeting["classification_override_applied"] is False
         assert targeting["class_binding_missing_evidence"]["candidate_reused_server_race"] is not None
 
 assert exact_count == 144
@@ -169,20 +164,23 @@ for monster_id, expected_view in CORRECTED_EXACT.items():
 for monster_id, record in authority_by_id.items():
     if not bool(record["runtime_allowed"]):
         continue
-    minimum = CLASSIFICATION_FLOORS.get(record["classification"])
-    if minimum is None:
+    expected_override = CLASSIFICATION_OVERRIDES.get(record["classification"])
+    if expected_override is None:
         continue
     view = record["targeting"]["view_range_cells"]
     if view is None:
-        # Keep source-row DATA_HOLD fail-closed; a classification floor must
+        # Keep source-row DATA_HOLD fail-closed; a classification override must
         # not manufacture a target-acquisition authority for it.
         continue
-    assert view >= minimum, f"active {record['classification']} below floor: {monster_id}"
+    assert view == expected_override, (
+        f"active {record['classification']} must use exact override: "
+        f"monster_id={monster_id} view={view} expected={expected_override}"
+    )
 
 assert authority_by_id[238]["targeting"]["class_derived_view_range_cells"] == 5
-assert authority_by_id[238]["targeting"]["classification_floor_view_range_cells"] == 9
-assert authority_by_id[238]["targeting"]["view_range_cells"] == 9
-assert authority_by_id[238]["targeting"]["effective_view_range_authority"] == CLASSIFICATION_FLOOR_AUTHORITY
+assert authority_by_id[238]["targeting"]["classification_override_view_range_cells"] == 12
+assert authority_by_id[238]["targeting"]["view_range_cells"] == 12
+assert authority_by_id[238]["targeting"]["effective_view_range_authority"] == CLASSIFICATION_OVERRIDE_AUTHORITY
 
 actual_holds = {
     monster_id

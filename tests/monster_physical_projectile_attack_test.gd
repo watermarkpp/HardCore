@@ -12,7 +12,6 @@ var _descriptors: Array[Dictionary] = []
 var _blocked_world_px := Vector2.INF
 var _case_completed := false
 
-
 func _ready() -> void:
 	_run.call_deferred()
 
@@ -44,8 +43,10 @@ func _assert_actual_actor_delivery(monster_id: int) -> void:
 
 	var player := PlayerCharacter.new()
 	player.global_position = _ground_to_screen(Vector2(4.0, 0.0))
-	player.set_physics_process(false)
+	player.set_meta("runtime_map_id", 1)
+	player.set_meta("safe_zones", [])
 	add_child(player)
+	player.set_physics_process(false)
 	player.max_hp = 1000
 	player.current_hp = 1000
 	player.defense_min = 0
@@ -69,15 +70,16 @@ func _assert_actual_actor_delivery(monster_id: int) -> void:
 	)
 	attacker.configure_terrain_navigation_context(_empty_terrain_context())
 	attacker.environment_blocker = self
+	attacker.set_meta("safe_zones", [])
 	attacker.ranged_projectile_requested.connect(_capture_descriptor)
-	add_child(attacker)
-	attacker.set_physics_process(false)
-	await get_tree().process_frame
-	# This fixture verifies delivery, not target acquisition. Keep the intended
-	# target explicit under the formal terrain-context contract.
+	# Pin all fixture-owned combat inputs before entering the tree. This keeps
+	# the background wake path from committing a first action before the test
+	# target and damage range are installed.
 	attacker.target = player
 	attacker.attack_min = 7
 	attacker.attack_max = 7
+	add_child(attacker)
+	attacker.set_physics_process(false)
 	# Independent body actions must enter a new real physics tick.
 	await get_tree().physics_frame
 	attacker._attack_timer = 0.0
@@ -86,7 +88,7 @@ func _assert_actual_actor_delivery(monster_id: int) -> void:
 	attacker._physics_process(0.01)
 	assert(_descriptors.is_empty(), "projectile must wait for the source attack frame")
 	assert(attacker._pending_attack_release_record.get("kind", "") == "physical_projectile_windup")
-	_advance_release(attacker)
+	await _advance_release(attacker)
 	assert(_descriptors.size() == 1, "monsterId=%d release must emit exactly one projectile" % monster_id)
 	assert(player.current_hp == hp_before, "monsterId=%d projectile must not deal instant melee damage" % monster_id)
 	assert(attacker._pending_attack_release_record.is_empty())
@@ -118,10 +120,11 @@ func _assert_actual_actor_delivery(monster_id: int) -> void:
 	await get_tree().process_frame
 
 	# Independent body actions must enter a new real physics tick.
+	await _await_parent_attack_action(attacker)
 	await get_tree().physics_frame
 	attacker._attack_timer = 0.0
 	attacker._physics_process(0.01)
-	_advance_release(attacker)
+	await _advance_release(attacker)
 	assert(_descriptors.size() == 2)
 	effect = _latest_projectile_effect()
 	assert(effect != null)
@@ -132,14 +135,14 @@ func _assert_actual_actor_delivery(monster_id: int) -> void:
 	effect.call("_physics_process", 0.3)
 	attacker._physics_process(0.001)
 	assert(player.current_hp == hp_before - 7, "one arrow applied damage twice")
-
 	# A target changing maps during flight keeps the visual but cancels damage.
 	player.current_hp = hp_before
+	await _await_parent_attack_action(attacker)
 	# Independent body actions must enter a new real physics tick.
 	await get_tree().physics_frame
 	attacker._attack_timer = 0.0
 	attacker._physics_process(0.01)
-	_advance_release(attacker)
+	await _advance_release(attacker)
 	assert(_descriptors.size() == 3)
 	player.set_meta("runtime_map_id", 2)
 	effect = _latest_projectile_effect()
@@ -150,11 +153,12 @@ func _assert_actual_actor_delivery(monster_id: int) -> void:
 	# Every exact projectile actor freezes the typed player epoch at launch. A complete
 	# Loading transition invalidates the old projectile even after READY resumes.
 	attacker.target = player
+	await _await_parent_attack_action(attacker)
 	# Independent body actions must enter a new real physics tick.
 	await get_tree().physics_frame
 	attacker._attack_timer = 0.0
 	attacker._physics_process(0.01)
-	_advance_release(attacker)
+	await _advance_release(attacker)
 	assert(_descriptors.size() == 4)
 	var transition_token := "projectile-transition-%d" % monster_id
 	assert(player.begin_combat_transition(transition_token))
@@ -164,11 +168,12 @@ func _assert_actual_actor_delivery(monster_id: int) -> void:
 	assert(player.current_hp == hp_before, "monsterId=%d projectile crossed combat_epoch" % monster_id)
 
 	# A wall entering the frozen lane after launch must stop the live flight.
+	await _await_parent_attack_action(attacker)
 	# Independent body actions must enter a new real physics tick.
 	await get_tree().physics_frame
 	attacker._attack_timer = 0.0
 	attacker._physics_process(0.01)
-	_advance_release(attacker)
+	await _advance_release(attacker)
 	assert(_descriptors.size() == 5)
 	effect = _latest_projectile_effect()
 	var wall := StaticBody2D.new()
@@ -196,11 +201,12 @@ func _assert_actual_actor_delivery(monster_id: int) -> void:
 	# this independent exact-sample lane through the formal position writer.
 	attacker.set_combat_position(Vector2.ZERO, &"projectile_fixture_lane")
 	_blocked_world_px = _ground_to_screen(Vector2(2.0, 0.0))
+	await _await_parent_attack_action(attacker)
 	# Independent body actions must enter a new real physics tick.
 	await get_tree().physics_frame
 	attacker._attack_timer = 0.0
 	attacker._physics_process(0.01)
-	_advance_release(attacker)
+	await _advance_release(attacker)
 	assert(_descriptors.size() == 5)
 	assert(attacker._pending_attack_release_record.is_empty())
 	attacker._physics_process(1.0)
@@ -219,12 +225,31 @@ func _assert_actual_actor_delivery(monster_id: int) -> void:
 
 
 func _advance_release(attacker: EnemyActor) -> void:
-	# Advance to this actor's release, without jumping past a faster actor's
-	# next attack interval and accidentally starting a second test action.
-	for step in range(400):
-		attacker._physics_process(0.005)
-		if attacker._pending_attack_release_record.is_empty(): return
+	# Release through real physics epochs. Calling the private physics method
+	# repeatedly in one engine epoch can leave the source-body action mutex
+	# locked for the eventual release frame and suppress the descriptor.
+	attacker.set_physics_process(true)
+	for _step in range(180):
+		await get_tree().physics_frame
+		if attacker._pending_attack_release_record.is_empty():
+			attacker.set_physics_process(false)
+			return
+	attacker.set_physics_process(false)
 	assert(false, "projectile windup did not release")
+
+
+func _await_parent_attack_action(attacker: EnemyActor) -> void:
+	attacker.set_physics_process(true)
+	for _action_step in range(180):
+		# The owner method is the authoritative combat clock. Once the prior
+		# release is already complete, advancing that real method directly avoids
+		# making the regression suite wait wall-clock time between cases.
+		attacker._physics_process(1.0 / 60.0)
+		if not attacker._attack_action_active:
+			attacker.set_physics_process(false)
+			return
+	attacker.set_physics_process(false)
+	assert(false, "parent attack action did not complete before next fixture attack")
 
 
 func _assert_authoritative_archer_profiles() -> void:

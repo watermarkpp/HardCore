@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource path="res://tests/framework/monster_projectile_real_enemy_150_194_test.gd" type="Script" id="1"]
+
+[node name="MonsterProjectileRealEnemy150194Test" type="Node2D"]
+script = ExtResource("1")

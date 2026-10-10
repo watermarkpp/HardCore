@@ -31,17 +31,17 @@ func _run() -> void:
 	var switch_target := root.get_node("SwitchTargetButton") as Button
 	var auto_target := root.get_node("AutoTargetButton") as Button
 	_assert_touch_target(joystick, Vector2(150, 150), "虚拟摇杆")
-	_assert_touch_target(attack, Vector2(120, 120), "攻击按钮")
-	_assert_touch_target(interact, Vector2(110, 76), "交互按钮")
-	_assert_touch_target(switch_target, Vector2(110, 76), "换敌按钮")
+	_assert_touch_target(attack, Vector2(102, 102), "攻击按钮")
+	_assert_touch_target(interact, Vector2(91.2, 91.2), "交互按钮")
+	_assert_touch_target(switch_target, Vector2(91.2, 91.2), "换敌按钮")
 	_assert_touch_target(auto_target, Vector2(120, 48), "自动选怪开关")
 	assert(attack.position + attack.size * 0.5 == root.size + GameHUD.HUD_ATTACK_CENTER, "攻击键没有按统一圆心向屏幕内部移动")
-	assert(joystick.position == Vector2(70, root.size.y - 210), "摇杆没有按统一矩形向屏幕内部移动")
+	assert(joystick.position.is_equal_approx(Vector2(54.8, root.size.y - 241.2)), "摇杆没有按统一矩形向屏幕内部移动")
 	assert(bool(attack.call("_has_point", attack.size * 0.5)) and not bool(attack.call("_has_point", Vector2.ZERO)), "攻击键触控仍为方形")
 	var previous_ring_center := Vector2.ZERO
 	for index in range(6):
 		var ring := root.get_node("AttackRingSkill%d" % (index + 1)) as Button
-		_assert_touch_target(ring, Vector2(72, 72), "环形技能按钮%d" % (index + 1))
+		_assert_touch_target(ring, Vector2(86.4, 86.4), "环形技能按钮%d" % (index + 1))
 		assert(root.get_node_or_null("SkillButton%d" % (index + 1)) == null, "旧中央技能按钮仍在Android HUD")
 		var ring_center := ring.position + ring.size * 0.5
 		assert(is_equal_approx(ring_center.distance_to(attack.position + attack.size * 0.5), GameHUD.HUD_ATTACK_RING_RADIUS), "六技能环半径不统一")
@@ -50,6 +50,12 @@ func _run() -> void:
 			assert(ring_center.distance_to(previous_ring_center) > ring.size.x, "相邻六技能环圆形触控区重叠")
 		previous_ring_center = ring_center
 
+	# Actual GUI events must wait for the production bootstrap overlay to
+	# relinquish input; emitting Button signals bypassed that boundary before.
+	var ready_deadline := Time.get_ticks_msec() + 5000
+	while not game.gameplay_input_is_enabled() or hud.loading_transition_overlay.visible:
+		assert(Time.get_ticks_msec() < ready_deadline, "formal bootstrap did not release input within 5s")
+		await get_tree().process_frame
 	var received := {
 		"movement": Vector2.ZERO,
 		"attack": 0,
@@ -79,8 +85,19 @@ func _run() -> void:
 	attack.call("_gui_input", attack_touch)
 	attack_touch.pressed = false
 	attack.call("_gui_input", attack_touch)
-	interact.button_down.emit()
-	switch_target.pressed.emit()
+	var utility_touch := InputEventScreenTouch.new()
+	utility_touch.index = 12
+	utility_touch.position = interact.get_global_rect().get_center()
+	utility_touch.pressed = true
+	get_viewport().push_input(utility_touch, true)
+	utility_touch.pressed = false
+	get_viewport().push_input(utility_touch, true)
+	utility_touch.index = 13
+	utility_touch.position = switch_target.get_global_rect().get_center()
+	utility_touch.pressed = true
+	get_viewport().push_input(utility_touch, true)
+	utility_touch.pressed = false
+	get_viewport().push_input(utility_touch, true)
 	auto_target.toggled.emit(false)
 	var ring_touch := InputEventScreenTouch.new()
 	ring_touch.index = 6

@@ -75,7 +75,13 @@ func _run() -> void:
 	for key: String in ["_price_by_name", "_price_by_item_id", "_price_by_service_index"]:
 		saved[key] = GameData.get(key).duplicate(true)
 	var candidates: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://assets/data/equipment_price_candidates_v1.json"))
-	check(candidates.records.size() == 31, "all 31 existing candidates remain present")
+	var user_price_count := 0
+	for candidate: Dictionary in candidates.records:
+		var candidate_source: Dictionary = candidate.get("source", {})
+		if str(candidate_source.get("distribution", "")) == "user.pricing_ruling":
+			user_price_count += 1
+	check(candidates.records.size() == 50 and user_price_count == 19,
+		"31 existing candidates and 19 exact user-priced identities remain present")
 	for candidate: Dictionary in candidates.records:
 		var entity_id := str(candidate.get("entity_id", ""))
 		check(Ids.resolve(entity_id).get("kind") in ["item", "service_item"], "candidate has a registered owner: " + str(candidate.name))

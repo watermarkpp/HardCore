@@ -14,13 +14,14 @@ const RelicSynthesisRulesScript := preload("res://scripts/layers/rules/relic_syn
 const EnhancementRules := preload("res://scripts/layers/rules/equipment_enhancement_rules.gd")
 const AttributeHelp := preload("res://scripts/item_attribute_help.gd")
 const ItemCodec := preload("res://scripts/items/item_extension_codec.gd")
+const SPECIAL_RULES_PATH := "res://assets/data/equipment_special_rules.json"
 var attribute_help: Node
 
 const MAX_OUTER_WIDTH := 340.0
 const SAFE_MARGIN := 18.0
 const GAP := 12.0
 const CONTENT_MARGIN := 20.0
-const TITLE_SIZE := 20
+const TITLE_SIZE := 18
 const BODY_SIZE := 14
 const LAYOUT_REVISION := 1
 const MODIFIER_LABELS := {
@@ -49,6 +50,8 @@ const MODIFIER_LABELS := {
 var title_label: Label
 var detail_label: RichTextLabel
 var _last_anchor := Rect2()
+static var _special_rules_cache: Dictionary = {}
+static var _special_rules_loaded := false
 
 
 func _init() -> void:
@@ -429,7 +432,7 @@ static func format_item(item: Dictionary, instance: Dictionary = {}, context: Di
 		var advanced_line := _advanced_stat_line(item, instance)
 		if not advanced_line.is_empty():
 			lines.append(advanced_line)
-		var requirement := _requirement_label(item)
+		var requirement := _requirement_label(item, instance)
 		if not requirement.is_empty():
 			lines.append("穿戴要求：%s" % requirement)
 		var net_luck := EquipmentRulesScript.equipment_luck_contribution(item, instance, ItemCategories.category_for_record(item) == "hc.item_category.weapon")
@@ -438,6 +441,7 @@ static func format_item(item: Dictionary, instance: Dictionary = {}, context: Di
 		var modifier_parts := _instance_modifier_lines(instance)
 		if not modifier_parts.is_empty():
 			lines.append("追加属性：%s" % "　".join(modifier_parts))
+		lines.append_array(_special_property_lines(item, instance))
 	else:
 		if count > 1:
 			lines.append("数量：%d" % count)
@@ -450,6 +454,67 @@ static func format_item(item: Dictionary, instance: Dictionary = {}, context: Di
 		lines.append("暂无可显示属性")
 	lines.append_array(_socket_detail_lines(sockets))
 	return "\n".join(lines)
+
+
+static func _special_rules() -> Dictionary:
+	if not _special_rules_loaded:
+		_special_rules_loaded = true
+		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(SPECIAL_RULES_PATH))
+		_special_rules_cache = (parsed as Dictionary).duplicate(true) if parsed is Dictionary else {}
+		_special_rules_cache.make_read_only()
+	return _special_rules_cache
+
+
+static func _special_property_lines(item: Dictionary, instance: Dictionary = {}) -> Array[String]:
+	var name := str(item.get("name", ""))
+	var rules := _special_rules()
+	var rule_values: Dictionary = rules.get("rules", {})
+	var lines: Array[String] = []
+	if int(item.get("itemId", -1)) == 250:
+		var random_rules := preload("res://scripts/equipment_random_special_instance_rules.gd")
+		if random_rules.validate_technique_instance(instance, item) and instance.has("technique_roll"):
+			lines.append("%s等级 +1（仅提升已学技能；掉落时确定）" % SkillDataLoader.display_name(str(instance.technique_roll.skill_id)))
+		else:
+			lines.append("新掉落时随机一项允许技能等级 +1；不会学习未学技能")
+	match name:
+		"隐身戒指":
+			lines.append(str(rules.get("stealthDescription", "穿戴后立即隐身；攻击时解除，脱离真实战斗后恢复；零耐久或卸下立即失效")))
+		"麻痹戒指":
+			lines.append("Boss/精英麻痹 %s秒；普通怪麻痹 %s秒" % [
+				String.num(float(rule_values.get("paralysisBossSeconds", 2.5))),
+				str(int(rule_values.get("paralysisOrdinarySeconds", 5.0))),
+			])
+			lines.append("命中概率：1/(%d+目标毒物躲避)" % int(rule_values.get("paralysisBaseDenominator", 5)))
+		"复活戒指":
+			lines.append("仅自动复活：冷却%d秒，自动复活不扣经验；正常死亡经验规则照旧" % int(rule_values.get("revivalCooldownMs", 300000) / 1000))
+		"传送戒指", "火焰戒指", "防御戒指":
+			var effect := str(EquipmentRulesScript.special_effect_for(item).get("id", ""))
+			var candidate: Dictionary = rules.get("activeActionCandidates", {}).get(effect, {})
+			if not candidate.is_empty():
+				var label := EquipmentRulesScript.special_action_label(effect)
+				var mana := int(candidate.get("manaCost", 0))
+				lines.append("%s技能：消耗%d点魔法值" % [label, mana])
+				if effect == "recovery_skill":
+					lines.append("治愈量：max(12, 等级/2+道术×2)")
+		"护身戒指":
+			lines.append("每1点伤害消耗%.1f点魔法值" % float(rule_values.get("magicShieldMpPerDamage", 1.5)))
+		"超负载戒指":
+			lines.append("负重上限%d倍" % int(rule_values.get("doubleWeight", 2)))
+		"魔血戒指", "魔血项链", "魔血手镯", "虹魔戒指", "虹魔项链", "虹魔手镯":
+			var piece := EquipmentRulesScript.set_piece_for(item)
+			var set_id := str(piece.get("set", ""))
+			var set_candidate: Dictionary = rules.get("setCandidates", {}).get(
+				"magicBlood" if set_id == "magic_blood" else "rainbowDemon", {}
+			)
+			if not piece.is_empty() and not set_candidate.is_empty():
+				var display_set := "魔血" if set_id == "magic_blood" else "虹魔"
+				if set_id == "magic_blood":
+					lines.append("%s套装：本件将最多%d点最大魔法转为最大生命" % [display_set, int(piece.get("power", 0))])
+					lines.append("三件套额外转换%d点；最大魔法至少保留1点" % int(set_candidate.get("fullSetBonus", 0)))
+				else:
+					lines.append("%s套装：本件近战吸血 +%d%%（按传入伤害计算）" % [display_set, int(piece.get("power", 0))])
+					lines.append("三件套准确 +2")
+	return lines
 
 
 static func _socket_detail_lines(sockets: Array) -> Array[String]:
@@ -505,6 +570,9 @@ static func _stat_line(item: Dictionary, instance: Dictionary = {}) -> String:
 	var containers: Array = [instance.get("modifiers", item.get("modifiers", []))]
 	if instance.has("drop_instance_contract_id"):
 		containers = [item.get("modifiers", []), instance.get("modifiers", [])]
+	var mystery_rules := preload("res://scripts/mystery_equipment_instance_rules.gd")
+	if instance.has("mystery_roll") and mystery_rules.validate_roll(instance, item):
+		containers.append(mystery_rules.modifiers(instance))
 	var enhancement: Variant = instance.get("enhancement", null)
 	if EnhancementRules.validate_enhancement(enhancement, ItemCategories.category_for_record(item)):
 		containers.append((enhancement as Dictionary).get("forge", {}).get("modifiers", []))
@@ -682,8 +750,8 @@ static func _modifier_value_text(stat: String, operation: String, value: float) 
 	return "%+.2f" % value
 
 
-static func _requirement_label(item: Dictionary) -> String:
-	var requirement: Dictionary = EquipmentRulesScript.requirement_for(item)
+static func _requirement_label(item: Dictionary, instance: Dictionary = {}) -> String:
+	var requirement: Dictionary = EquipmentRulesScript.requirement_for(item, instance)
 	if requirement.is_empty():
 		return ""
 	if int(requirement.get("value", 0)) == 0:

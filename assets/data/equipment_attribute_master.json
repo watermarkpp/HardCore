@@ -7849,7 +7849,8 @@
       ],
       "setId": "mystery_set",
       "specialEffectId": "mystery_random_stats",
-      "specialEffectDescription": "实例生成时随机决定能力值；可出现诅咒/无法卸下状态，使用神水解除"
+      "specialEffectDescription": "实例生成时随机决定能力值；HardCore不启用诅咒/无法卸下/神水解除机制",
+      "randomInstanceRule": {"contractId": "equipment.mystery_random_stats.v1", "family": "helmet", "sourcePolicy": "project_registered_canonical_category_mapping", "rollAt": "drop_instance_creation", "rerollOnEquip": false, "randomDurability": false}
     },
     {
       "itemId": 219,
@@ -7908,7 +7909,8 @@
       ],
       "setId": "mystery_set",
       "specialEffectId": "mystery_random_stats",
-      "specialEffectDescription": "实例生成时随机决定能力值；可出现诅咒/无法卸下状态，使用神水解除"
+      "specialEffectDescription": "实例生成时随机决定能力值；HardCore不启用诅咒/无法卸下/神水解除机制",
+      "randomInstanceRule": {"contractId": "equipment.mystery_random_stats.v1", "family": "bracelet", "sourcePolicy": "project_registered_canonical_category_mapping", "rollAt": "drop_instance_creation", "rerollOnEquip": false, "randomDurability": false}
     },
     {
       "itemId": 220,
@@ -7967,7 +7969,8 @@
       ],
       "setId": "mystery_set",
       "specialEffectId": "mystery_random_stats",
-      "specialEffectDescription": "实例生成时随机决定能力值；可出现诅咒/无法卸下状态，使用神水解除"
+      "specialEffectDescription": "实例生成时随机决定能力值；HardCore不启用诅咒/无法卸下/神水解除机制",
+      "randomInstanceRule": {"contractId": "equipment.mystery_random_stats.v1", "family": "ring", "sourcePolicy": "project_registered_canonical_category_mapping", "rollAt": "drop_instance_creation", "rerollOnEquip": false, "randomDurability": false}
     },
     {
       "itemId": 221,
@@ -9842,8 +9845,17 @@
           "role": "workbook_supporting_reference"
         }
       ],
-      "specialEffectId": "skill_training_boost",
-      "specialEffectDescription": "技巧项链：提高技能熟练度/修炼效率；具体倍率需配置，不应写死为普通面板属性"
+    "specialEffectId": "skill_training_boost",
+    "specialEffectDescription": "技巧项链：创建装备实例时从已登记技能池随机固化一项技能等级+1；未装备时不重抽",
+    "specialEffectMetadata": {
+      "contractId": "equipment.technique_necklace_random_skill.v1",
+      "rollAt": "drop_instance_creation",
+      "rerollOnEquip": false,
+      "skillPoolSource": "assets/data/relic_synthesis_v1.json",
+      "skillLevelDelta": 1,
+      "instancePayloadField": "technique_roll",
+      "modifiersWrittenBySpecialRule": false
+    }
     },
     {
       "itemId": 251,

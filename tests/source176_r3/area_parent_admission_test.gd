@@ -34,6 +34,8 @@ func run() -> void:
 			actor._update_area_attack(0.0)
 		var records: Array = actor._area_magic_release_records if id==124 else actor._area_attack_release_records
 		check(actor._attack_logic_serial==parent+1 and not records.is_empty(),"one admitted area parent: "+str(id))
+		var hp_after_admission := victim.current_hp
+		check(hp_after_admission < 1000000,"synchronous area release consumes HP at admission: "+str(id))
 		for record: Dictionary in records:
 			check(int(record.get("parent_action_id",-1))==actor._attack_logic_serial,"release binds already allocated parent")
 			check(int(record.get("source_life",-1))==actor._hc_life(actor),"release binds source life")
@@ -45,6 +47,7 @@ func run() -> void:
 			check(actor._area_magic_release_target_is_valid(victim,record) if id==124 else actor._area_attack_release_target_is_valid(victim,record),"released child outlives pose")
 			actor.set_meta("hc_combat_life_epoch",actor._hc_life(actor)+1)
 			check(not (actor._area_magic_release_target_is_valid(victim,record) if id==124 else actor._area_attack_release_target_is_valid(victim,record)),"released child cannot cross source life")
+		check(victim.current_hp == hp_after_admission,"area pose/lifecycle checks must not duplicate HP: "+str(id))
 		F.dispose(actor,victim)
 	check(F.write_evidence("area_parent_admission",{"checks":checks,"errors":errors}),"write evidence")
 	print(("R3_AREA_PARENT_PASS" if errors.is_empty() else "R3_AREA_PARENT_FAIL")+" checks="+str(checks)+" errors="+str(errors))

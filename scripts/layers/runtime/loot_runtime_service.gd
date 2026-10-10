@@ -34,6 +34,210 @@ var _lean_probability_by_key: Dictionary = {}
 var _lean_reward_by_slot_uid: Dictionary = {}
 var _lean_cache_misses := {"profile": 0, "probability": 0, "reward": 0}
 
+## Resumable death-roll job.  This is an opt-in orchestration API; the legacy
+## roll_monster_drops contract below remains unchanged.  The job owns one
+## RandomNumberGenerator and advances one source slot per call, so callers must
+## keep a death at the head of their queue until done to preserve RNG order.
+func begin_monster_drop_roll_job(monster_id: int, rng: RandomNumberGenerator, include_audit := false) -> Dictionary:
+	include_audit = include_audit or _v5_trace_enabled
+	return {
+		"phase": "resolve",
+		"monster_id": monster_id,
+		"rng": rng,
+		"include_audit": include_audit,
+		"slot_index": 0,
+		"resolved_slots": [],
+		"successful_rewards": [],
+		"diagnostics": {"selection_work_units": 0, "selection_candidate_count": 0},
+		"result": _new_drop_roll_result(monster_id),
+		"done": false,
+	}
+
+func _new_drop_roll_result(monster_id: int) -> Dictionary:
+	return {
+		"contract_id": DROP_CONTRACT_ID,
+		"runtime_authority": {"authority_id": _sheet_authority.authority_id, "schema": "hardcore.dpv2.user_loot_sheet_authority.v1", "effective_probability_authority_id": "dpv2.user_loot_sheet.v1", "effective_probability_schema": "hardcore.dpv2.user_loot_sheet_authority.v1", "identity_key": "canonical_monster_id", "fallback_forbidden": true, "probability_formula": "sheet E column as final pre-RNG per-slot probability; sheet D column as final gold amount; no legacy stages"},
+		"monster_id": monster_id,
+		"canonical_monster_id": -1,
+		"configured": false,
+		"reason": "",
+		"source_slot_gate": GameData.dpv2_source_slot_gate(),
+		"source_entry_count": 0,
+		"resolution_attempted_count": 0,
+		"resolved_entry_count": 0,
+		"resolved_gold_count": 0,
+		"drop_enabled_source_slots": 0,
+		"drop_disabled_source_slots": 0,
+		"reward_resolved_enabled_slots": 0,
+		"probability_resolved_enabled_slots": 0,
+		"rng_eligible_slots": 0,
+		"all_resolved_slots_rng": false,
+		"all_enabled_resolved_slots_rng_before_overflow": false,
+		"ground_output_plus_discarded_equals_successful": true,
+		"items": [], "item_records": [], "gold_drops": [], "overflow_discarded": [],
+		"attempts": [], "slot_attempts": [], "debug": [], "rejected_entries": [],
+		"rng_roll_count": 0, "successful_roll_count": 0, "ground_output_count": 0,
+		"overflow_discarded_count": 0, "protected_overflow_count": 0,
+	}
+
+func advance_monster_drop_roll_job(job: Dictionary, max_slots := 1) -> Dictionary:
+	if bool(job.get("done", false)):
+		return job
+	var result: Dictionary = job.get("result", {})
+	if bool(job.get("initialized", false)):
+		return _advance_monster_drop_roll_job_phase(job, max_slots)
+	var rng: RandomNumberGenerator = job.get("rng")
+	var monster_id := int(job.get("monster_id", -1))
+	if not _sheet_authority.valid:
+		result["reason"] = "user_loot_sheet_authority_unavailable"; job["done"] = true; job["result"] = result; return _finish_drop_roll_job(job)
+	if not GameData.is_dpv2_direct_baseline_loaded():
+		result["reason"] = "dpv2_direct_baseline_unavailable"; job["done"] = true; job["result"] = result; return _finish_drop_roll_job(job)
+	var resolved_id := GameData.canonical_monster_id(monster_id)
+	if resolved_id <= 0:
+		result["reason"] = "invalid_monster_id"; job["done"] = true; job["result"] = result; return _finish_drop_roll_job(job)
+	result["canonical_monster_id"] = resolved_id
+	var include_audit := bool(job.get("include_audit", false))
+	var profile := _production_profile(resolved_id) if include_audit else _lean_profile(resolved_id)
+	if profile.is_empty():
+		result["reason"] = "dpv2_direct_profile_unresolved"; job["done"] = true; job["result"] = result; return _finish_drop_roll_job(job)
+	result["direct_profile"] = {"canonical_monster_id": resolved_id, "drop_profile_id": str(profile.get("drop_profile_id", "")), "baseline_origin": str(profile.get("baseline_origin", ""))}
+	var slots_value: Variant = profile.get("slots", [])
+	if not slots_value is Array:
+		result["reason"] = "dpv2_direct_slots_invalid"; job["done"] = true; job["result"] = result; return _finish_drop_roll_job(job)
+	var slots: Array = slots_value
+	result["configured"] = true
+	result["source_entry_count"] = slots.size()
+	result["ground_slot_group"] = {"classification": GameData.canonical_monster_classification(resolved_id), "ground_slot_limit": GameData.dpv2_ground_slot_limit_for_monster(resolved_id), "policy_authority": "monster.ground_slot_groups.runtime.v1"}
+	job["initialized"] = true
+	job["slots"] = slots
+	job["resolved_id"] = resolved_id
+	if not bool(profile.get("drop_enabled", false)):
+		result["reason"] = "drop_disabled"; result["drop_disabled_source_slots"] = 0; result["all_resolved_slots_rng"] = true; result["all_enabled_resolved_slots_rng_before_overflow"] = true; job["done"] = true; job["result"] = result; return _finish_drop_roll_job(job)
+	result["drop_enabled_source_slots"] = slots.size()
+	if slots.is_empty():
+		result["all_resolved_slots_rng"] = true
+		result["all_enabled_resolved_slots_rng_before_overflow"] = true
+		job["done"] = true
+		job["result"] = result
+		return _finish_drop_roll_job(job)
+	if rng == null:
+		result["reason"] = "rng_missing"; job["done"] = true; job["result"] = result; return _finish_drop_roll_job(job)
+	return _advance_monster_drop_roll_job_phase(job, max_slots)
+
+func _advance_monster_drop_roll_job_phase(job: Dictionary, max_slots := 1) -> Dictionary:
+	var result: Dictionary = job.get("result", {})
+	var rng: RandomNumberGenerator = job.get("rng")
+	var resolved_id := int(job.get("resolved_id", -1))
+	var slots: Array = job.get("slots", [])
+	var include_audit := bool(job.get("include_audit", false))
+	var cursor := int(job.get("slot_index", 0))
+	var work := maxi(1, max_slots)
+	if str(job.get("phase", "resolve")) == "resolve":
+		while cursor < slots.size() and work > 0:
+			var raw_slot: Variant = slots[cursor]
+			result["resolution_attempted_count"] = int(result.get("resolution_attempted_count", 0)) + 1
+			if not raw_slot is Dictionary:
+				_append_rejection(result, {}, "dpv2_direct_slot_invalid"); cursor += 1; work -= 1; continue
+			var slot: Dictionary = raw_slot
+			var probability := _production_probability(resolved_id, str(slot.get("slot_uid", ""))) if include_audit else _lean_probability(resolved_id, str(slot.get("slot_uid", "")))
+			if not bool(probability.get("ok", false)):
+				_append_rejection(result, slot, str(probability.get("reason", "dpv2_direct_probability_invalid"))); cursor += 1; work -= 1; continue
+			result["probability_resolved_enabled_slots"] = int(result.get("probability_resolved_enabled_slots", 0)) + 1
+			var reward := _production_reward(slot) if include_audit else _lean_reward(slot)
+			if not bool(reward.get("ok", false)):
+				_append_rejection(result, slot, str(reward.get("reason", "dpv2_direct_reward_unresolved"))); result["probability_resolved_enabled_slots"] = int(result.get("probability_resolved_enabled_slots", 0)) - 1; cursor += 1; work -= 1; continue
+			result["reward_resolved_enabled_slots"] = int(result.get("reward_resolved_enabled_slots", 0)) + 1
+			var denominator := int(probability.get("final_denominator", 0))
+			var numerator := int(probability.get("final_numerator", 0))
+			if numerator <= 0 or denominator <= 0:
+				_append_rejection(result, slot, "spb_effective_probability_invalid"); result["reward_resolved_enabled_slots"] = int(result.get("reward_resolved_enabled_slots", 0)) - 1; result["probability_resolved_enabled_slots"] = int(result.get("probability_resolved_enabled_slots", 0)) - 1; cursor += 1; work -= 1; continue
+			if str(reward.get("kind", "")) == "gold":
+				var final_gold_amount := int(probability.get("final_gold_amount", 0))
+				if final_gold_amount <= 0:
+					_append_rejection(result, slot, "spb_effective_gold_amount_invalid"); result["reward_resolved_enabled_slots"] = int(result.get("reward_resolved_enabled_slots", 0)) - 1; result["probability_resolved_enabled_slots"] = int(result.get("probability_resolved_enabled_slots", 0)) - 1; cursor += 1; work -= 1; continue
+				reward = reward.duplicate(true); reward["gold_amount"] = final_gold_amount
+			result["resolved_entry_count"] = int(result.get("resolved_entry_count", 0)) + 1; result["rng_eligible_slots"] = int(result.get("rng_eligible_slots", 0)) + 1
+			job["resolved_slots"].append({"slot": slot, "probability": probability, "reward": reward})
+			cursor += 1; work -= 1
+		job["slot_index"] = cursor
+		if cursor < slots.size():
+			job["result"] = result; return job
+		if not result["rejected_entries"].is_empty():
+			result["reason"] = "spb_effective_probability_fail_closed"; job["done"] = true; job["result"] = result; return _finish_drop_roll_job(job)
+		job["phase"] = "roll"; job["slot_index"] = 0; cursor = 0
+		if work <= 0:
+			job["result"] = result; return job
+	var resolved_values: Array = job.get("resolved_slots", [])
+	while str(job.get("phase", "roll")) == "roll" and cursor < resolved_values.size() and work > 0:
+		var resolved: Dictionary = resolved_values[cursor]
+		var slot: Dictionary = resolved.get("slot", {}); var probability: Dictionary = resolved.get("probability", {}); var reward: Dictionary = resolved.get("reward", {})
+		var denominator := int(probability.get("final_denominator", 0))
+		var numerator := int(probability.get("final_numerator", 0))
+		result["rng_roll_count"] = int(result.get("rng_roll_count", 0)) + 1
+		var draw := rng.randi_range(1, denominator)
+		var success := draw <= numerator
+		var attempt: Dictionary = {}
+		if include_audit:
+			attempt = _build_attempt(slot, probability, reward, draw, success); _record_attempt(result, attempt)
+		if success:
+			var candidate := {"slot_uid": str(slot.get("slot_uid", "")), "canonical_item_id": int(probability.get("canonical_item_id", -1)), "reward": reward.duplicate(true), "policy": probability.duplicate(true)}
+			if include_audit: candidate["attempt"] = attempt
+			job["successful_rewards"].append(candidate)
+		cursor += 1; work -= 1
+	if str(job.get("phase", "roll")) != "output":
+		job["slot_index"] = cursor
+		if cursor < resolved_values.size():
+			job["result"] = result; return job
+		job["phase"] = "output"
+	result["all_resolved_slots_rng"] = result["rng_roll_count"] == result["resolved_entry_count"]
+	result["all_enabled_resolved_slots_rng_before_overflow"] = result["all_resolved_slots_rng"] and result["resolved_entry_count"] == slots.size()
+	if not job.has("selection_job"):
+		job["selection_job"] = _begin_resumable_selection(job["successful_rewards"], int(result["ground_slot_group"].get("ground_slot_limit", 0)))
+		job["diagnostics"]["selection_candidate_count"] = job["successful_rewards"].size()
+	var selection_job: Dictionary = job["selection_job"]
+	selection_job = _advance_resumable_selection(selection_job, rng, work)
+	job["selection_job"] = selection_job
+	job["diagnostics"]["selection_work_units"] = int(job["diagnostics"].get("selection_work_units", 0)) + work - int(selection_job.get("work_left", 0))
+	work = int(selection_job.get("work_left", 0))
+	if not bool(selection_job.get("done", false)):
+		job["result"] = result; return job
+	if work <= 0:
+		job["result"] = result; return job
+	var selected_values: Array = selection_job.get("result", {}).get("selected", [])
+	var output_index := int(job.get("output_index", 0))
+	if output_index < selected_values.size():
+		var selected: Dictionary = selected_values[output_index]
+		var selected_reward: Dictionary = selected.get("reward", {})
+		if str(selected_reward.get("kind", "")) == "gold":
+			result["resolved_gold_count"] = int(result.get("resolved_gold_count", 0)) + 1
+			result["gold_drops"].append(int(selected_reward.get("gold_amount", 0)))
+		else:
+			var selected_item_id := int(selected.get("canonical_item_id", -1))
+			var selected_item_name := str(selected_reward.get("item_name", ""))
+			var record := _drop_output_item_record(selected_item_id, selected_item_name, rng)
+			var display_name := str(record.get("item_name", _drop_output_item_name(selected_item_id, selected_item_name)))
+			result["items"].append(display_name)
+			result["item_records"].append(record)
+		job["output_index"] = output_index + 1
+		work -= 1
+		job["result"] = result
+		if work <= 0:
+			return job
+		if job["output_index"] < selected_values.size(): return job
+	var selection_result: Dictionary = selection_job.get("result", {})
+	result["successful_roll_count"] = job["successful_rewards"].size(); result["overflow_discarded"] = selection_result.get("discarded", []); result["overflow_discarded_count"] = result["overflow_discarded"].size(); result["protected_overflow_count"] = int(selection_result.get("protected_discarded_count", 0)); result["ground_output_count"] = result["items"].size() + result["gold_drops"].size(); result["ground_output_plus_discarded_equals_successful"] = result["ground_output_count"] + result["overflow_discarded_count"] == result["successful_roll_count"]; job["done"] = true; job["result"] = result
+	return _finish_drop_roll_job(job)
+
+func _finish_drop_roll_job(job: Dictionary) -> Dictionary:
+	if not bool(job.get("audit_finalized", false)):
+		var result: Dictionary = job.get("result", {})
+		if bool(job.get("include_audit", false)):
+			_sync_attempt_views(result)
+		if _v5_trace_enabled:
+			_v5_write_trace(result)
+		job["audit_finalized"] = true
+	return job
+
 
 func _production_profile(monster_id: int) -> Dictionary:
 	# Compiled sheet profile.  Monsters absent from the sheet (retired baseline
@@ -142,260 +346,10 @@ func roll_monster_drops(
 	rng: RandomNumberGenerator,
 	include_audit := true,
 ) -> Dictionary:
-	include_audit = include_audit or _v5_trace_enabled
-	var result := {
-		"contract_id": DROP_CONTRACT_ID,
-		"runtime_authority": {
-			"authority_id": _sheet_authority.authority_id,
-			"schema": "hardcore.dpv2.user_loot_sheet_authority.v1",
-			"effective_probability_authority_id": "dpv2.user_loot_sheet.v1",
-			"effective_probability_schema": (
-				"hardcore.dpv2.user_loot_sheet_authority.v1"
-			),
-			"identity_key": "canonical_monster_id",
-			"fallback_forbidden": true,
-			"probability_formula": (
-				"sheet E column as final pre-RNG per-slot probability; "
-				+ "sheet D column as final gold amount; no legacy stages"
-			),
-		},
-		"monster_id": monster_id,
-		"canonical_monster_id": -1,
-		"configured": false,
-		"reason": "",
-		"source_entry_count": 0,
-		"resolution_attempted_count": 0,
-		"resolved_entry_count": 0,
-		"resolved_gold_count": 0,
-		"drop_enabled_source_slots": 0,
-		"drop_disabled_source_slots": 0,
-		"reward_resolved_enabled_slots": 0,
-		"probability_resolved_enabled_slots": 0,
-		"rng_eligible_slots": 0,
-		"rng_roll_count": 0,
-		"successful_roll_count": 0,
-		"ground_output_count": 0,
-		"overflow_discarded_count": 0,
-		"protected_overflow_count": 0,
-		"all_resolved_slots_rng": false,
-		"all_enabled_resolved_slots_rng_before_overflow": false,
-		"ground_output_plus_discarded_equals_successful": true,
-		"items": [],
-		# Parallel stable identities for items.  `items` remains the legacy
-		# display-name array consumed by existing callers; this array has the
-		# same order and cardinality for item entries only.
-		"item_records": [],
-		"gold_drops": [],
-		"overflow_discarded": [],
-		"rejected_entries": [],
-		"attempts": [],
-		"slot_attempts": [],
-		"debug": [],
-	}
-	result["source_slot_gate"] = GameData.dpv2_source_slot_gate()
-	if not _sheet_authority.valid:
-		result.reason = "user_loot_sheet_authority_unavailable"
-		return result
-	if not GameData.is_dpv2_direct_baseline_loaded():
-		# The sealed baseline stays the identity map for reward resolution.
-		result.reason = "dpv2_direct_baseline_unavailable"
-		return result
-	# RV15-J3: the legacy SPB probability ledger is history-audit-only and is
-	# deliberately NOT consulted here. The per-slot probabilities below come
-	# from the compiled user loot sheet (sheet E final pre-RNG) via the
-	# provider; the reason strings further down ("spb_effective_*") are kept
-	# historical names for the same sheet-final fail-closed checks.
-	var resolved_id := GameData.canonical_monster_id(monster_id)
-	if resolved_id <= 0:
-		result.reason = "invalid_monster_id"
-		return result
-	result.canonical_monster_id = resolved_id
-
-	# The direct profile is joined by canonical_monster_id. Its display/profile
-	# token is telemetry only and is never used to locate a runtime drop table.
-	var profile := (
-		_production_profile(resolved_id)
-		if include_audit
-		else _lean_profile(resolved_id)
-	)
-	if profile.is_empty():
-		result.reason = "dpv2_direct_profile_unresolved"
-		return result
-	result["direct_profile"] = {
-		"canonical_monster_id": resolved_id,
-		"drop_profile_id": str(profile.get("drop_profile_id", "")),
-		"baseline_origin": str(profile.get("baseline_origin", "")),
-	}
-	var slots_value: Variant = profile.get("slots", [])
-	if not slots_value is Array:
-		result.reason = "dpv2_direct_slots_invalid"
-		return result
-	var slots: Array = slots_value
-	result.configured = true
-	result.source_entry_count = slots.size()
-	if not bool(profile.get("drop_enabled", false)):
-		result.reason = "drop_disabled"
-		result.drop_disabled_source_slots = 0
-		result.all_resolved_slots_rng = true
-		result.all_enabled_resolved_slots_rng_before_overflow = true
-		return result
-	result.drop_enabled_source_slots = slots.size()
-	if slots.is_empty():
-		# An enabled profile with no direct slots is a valid zero-drop profile;
-		# it is not allowed to consult any legacy catalog as a fallback.
-		result.reason = ""
-		result.all_resolved_slots_rng = true
-		result.all_enabled_resolved_slots_rng_before_overflow = true
-		return result
-	if rng == null:
-		result.reason = "rng_missing"
-		return result
-
-	# Resolve every slot before the first RNG draw. A missing/mismatched SPB row
-	# fails the whole monster roll closed and therefore cannot consume a partial
-	# RNG sequence before the error becomes visible.
-	var resolved_slots: Array = []
-	for raw_slot: Variant in slots:
-		result.resolution_attempted_count += 1
-		if not raw_slot is Dictionary:
-			_append_rejection(result, {}, "dpv2_direct_slot_invalid")
-			continue
-		var slot: Dictionary = raw_slot
-		var slot_uid := str(slot.get("slot_uid", ""))
-		var probability := (
-			_production_probability(resolved_id, slot_uid)
-			if include_audit
-			else _lean_probability(resolved_id, slot_uid)
-		)
-		if not bool(probability.get("ok", false)):
-			_append_rejection(
-				result,
-				slot,
-				str(probability.get("reason", "dpv2_direct_probability_invalid")),
-			)
-			continue
-		result.probability_resolved_enabled_slots += 1
-		var reward := (
-			_production_reward(slot)
-			if include_audit
-			else _lean_reward(slot)
-		)
-		if not bool(reward.get("ok", false)):
-			_append_rejection(
-				result,
-				slot,
-				str(reward.get("reason", "dpv2_direct_reward_unresolved")),
-			)
-			continue
-		if str(reward.get("kind", "")) == "gold":
-			var final_gold_amount := int(probability.get("final_gold_amount", 0))
-			if final_gold_amount <= 0:
-				_append_rejection(result, slot, "spb_effective_gold_amount_invalid")
-				continue
-			reward = reward.duplicate(true)
-			reward["gold_amount"] = final_gold_amount
-		result.reward_resolved_enabled_slots += 1
-		result.resolved_entry_count += 1
-		result.rng_eligible_slots += 1
-		var denominator := int(probability.get("final_denominator", 0))
-		var numerator := int(probability.get("final_numerator", 0))
-		if numerator <= 0 or denominator <= 0:
-			_append_rejection(result, slot, "spb_effective_probability_invalid")
-			result.reward_resolved_enabled_slots -= 1
-			result.resolved_entry_count -= 1
-			result.rng_eligible_slots -= 1
-			result.probability_resolved_enabled_slots -= 1
-			continue
-		resolved_slots.append({
-			"slot": slot,
-			"probability": probability,
-			"reward": reward,
-		})
-	if not result.rejected_entries.is_empty() or resolved_slots.size() != slots.size():
-		result.reason = "spb_effective_probability_fail_closed"
-		return result
-
-	var successful_rewards: Array = []
-	for raw_resolved: Variant in resolved_slots:
-		var resolved: Dictionary = raw_resolved
-		var slot: Dictionary = resolved.get("slot", {})
-		var probability: Dictionary = resolved.get("probability", {})
-		var reward: Dictionary = resolved.get("reward", {})
-		var slot_uid := str(slot.get("slot_uid", ""))
-		var denominator := int(probability.get("final_denominator", 0))
-		var numerator := int(probability.get("final_numerator", 0))
-		result.rng_roll_count += 1
-		var draw := rng.randi_range(1, denominator)
-		var success := draw <= numerator
-		var attempt: Dictionary = {}
-		if include_audit:
-			attempt = _build_attempt(slot, probability, reward, draw, success)
-			_record_attempt(result, attempt)
-		if success:
-			var successful_candidate := {
-				"slot_uid": slot_uid,
-				"canonical_item_id": int(probability.get("canonical_item_id", -1)),
-				"reward": reward.duplicate(true),
-				"policy": probability.duplicate(true),
-			}
-			if include_audit:
-				successful_candidate["attempt"] = attempt
-			successful_rewards.append(successful_candidate)
-	result.successful_roll_count = successful_rewards.size()
-	result.all_resolved_slots_rng = (
-		result.rng_roll_count == result.resolved_entry_count
-	)
-	result.all_enabled_resolved_slots_rng_before_overflow = (
-		result.rng_roll_count == result.rng_eligible_slots
-		and result.rng_eligible_slots == result.probability_resolved_enabled_slots
-		and result.probability_resolved_enabled_slots
-			== result.reward_resolved_enabled_slots
-		and result.rng_eligible_slots == result.resolved_entry_count
-		and result.resolved_entry_count == slots.size()
-	)
-	var selection := _select_ground_rewards(
-		successful_rewards,
-		rng,
-		GameData.dpv2_ground_slot_limit(),
-	)
-	for raw_selected: Variant in selection.get("selected", []):
-		if not raw_selected is Dictionary:
-			continue
-		var selected: Dictionary = raw_selected
-		var reward: Dictionary = selected.get("reward", {})
-		if str(reward.get("kind", "")) == "gold":
-			result.resolved_gold_count += 1
-			result.gold_drops.append(int(reward.get("gold_amount", 0)))
-		else:
-			var canonical_item_id := int(selected.get("canonical_item_id", -1))
-			var original_name := str(reward.get("item_name", ""))
-			var item_record := _drop_output_item_record(
-				canonical_item_id,
-				original_name,
-				rng,
-			)
-			# Preserve the old output contract even if an identity row is
-			# unexpectedly unavailable. The parallel record is marked unresolved
-			# and never invents an ID from a display-name/fuzzy lookup.
-			result.items.append(str(item_record.get(
-				"item_name",
-				_drop_output_item_name(canonical_item_id, original_name),
-			)))
-			result.item_records.append(item_record)
-	result.overflow_discarded = selection.get("discarded", [])
-	result.ground_output_count = result.items.size() + result.gold_drops.size()
-	result.overflow_discarded_count = result.overflow_discarded.size()
-	result.protected_overflow_count = int(
-		selection.get("protected_discarded_count", 0)
-	)
-	result.ground_output_plus_discarded_equals_successful = (
-		result.ground_output_count + result.overflow_discarded_count
-		== result.successful_roll_count
-	)
-	if include_audit:
-		_sync_attempt_views(result)
-	if _v5_trace_enabled:
-		_v5_write_trace(result)
+	var job := begin_monster_drop_roll_job(monster_id, rng, include_audit)
+	while not bool(job.get("done", false)):
+		job = advance_monster_drop_roll_job(job, 2147483647)
+	var result: Dictionary = job.get("result", {})
 	return result
 
 
@@ -628,85 +582,117 @@ func _sync_attempt_views(result: Dictionary) -> void:
 			result.debug.append((raw_attempt as Dictionary).duplicate(true))
 
 
+func _begin_resumable_selection(successful_rewards: Array, maximum_ground_slots: int) -> Dictionary:
+	return {
+		"protected_groups": {},
+		"ordinary_groups": {},
+		"priorities": [],
+		"pending_candidates": successful_rewards.duplicate(false),
+		"build_index": 0,
+		"building": true,
+		"priority_index": 0,
+		"ordinary_start": 0,
+		"group": [],
+		"group_index": 0,
+		"shuffle_index": -1,
+		"group_shuffling": false,
+		"remaining": maxi(0, maximum_ground_slots),
+		"result": {"selected": [], "discarded": [], "protected_discarded_count": 0},
+		"done": false,
+		"work_left": 0,
+	}
+
+
+func _advance_resumable_selection(selection: Dictionary, rng: RandomNumberGenerator, work: int) -> Dictionary:
+	var units := maxi(0, work)
+	while units > 0 and bool(selection.get("building", false)):
+		var build_index := int(selection.get("build_index", 0))
+		var pending: Array = selection.get("pending_candidates", [])
+		if build_index < pending.size():
+			var raw_candidate: Variant = pending[build_index]
+			if raw_candidate is Dictionary:
+				var candidate: Dictionary = raw_candidate
+				var policy: Dictionary = candidate.get("policy", {})
+				var priority_value := int(policy.get("overflow_priority", 0))
+				var target_groups: Dictionary = selection["protected_groups"] if bool(policy.get("protected_drop", false)) else selection["ordinary_groups"]
+				if not target_groups.has(priority_value):
+					target_groups[priority_value] = []
+				(target_groups[priority_value] as Array).append(candidate)
+			selection["build_index"] = build_index + 1
+			units -= 1
+			continue
+		var built_protected_groups: Dictionary = selection.get("protected_groups", {})
+		var built_ordinary_groups: Dictionary = selection.get("ordinary_groups", {})
+		var built_priorities: Array = built_protected_groups.keys()
+		built_priorities.sort(); built_priorities.reverse()
+		var ordinary_priorities: Array = built_ordinary_groups.keys()
+		ordinary_priorities.sort(); ordinary_priorities.reverse()
+		for ordinary_priority: Variant in ordinary_priorities:
+			built_priorities.append(ordinary_priority)
+		selection["priorities"] = built_priorities
+		selection["ordinary_start"] = built_protected_groups.keys().size()
+		selection["building"] = false
+		selection["work_left"] = units
+	var priorities: Array = selection.get("priorities", [])
+	var protected_groups: Dictionary = selection.get("protected_groups", {})
+	var ordinary_groups: Dictionary = selection.get("ordinary_groups", {})
+	var result: Dictionary = selection.get("result", {})
+	while units > 0 and not bool(selection.get("done", false)):
+		var group: Array = selection.get("group", [])
+		var group_index := int(selection.get("group_index", 0))
+		if group.is_empty() or group_index >= group.size():
+			var priority_index := int(selection.get("priority_index", 0))
+			if priority_index >= priorities.size():
+				selection["done"] = true
+				break
+			var priority: Variant = priorities[priority_index]
+			var protected_count := int(selection.get("ordinary_start", 0))
+			var groups: Dictionary = protected_groups if priority_index < protected_count else ordinary_groups
+			group = (groups.get(int(priority), []) as Array).duplicate(false)
+			selection["group"] = group
+			selection["group_index"] = 0
+			selection["priority_index"] = priority_index + 1
+			selection["group_shuffling"] = int(selection.get("remaining", 0)) > 0 and group.size() > int(selection.get("remaining", 0))
+			selection["shuffle_index"] = group.size() - 1
+			group_index = 0
+			if group.is_empty():
+				selection["group"] = []
+				continue
+		if bool(selection.get("group_shuffling", false)) and int(selection.get("shuffle_index", -1)) > 0:
+			var shuffle_index := int(selection.get("shuffle_index", -1))
+			var swap_index := rng.randi_range(0, shuffle_index)
+			var temporary: Variant = group[shuffle_index]
+			group[shuffle_index] = group[swap_index]
+			group[swap_index] = temporary
+			selection["group"] = group
+			selection["shuffle_index"] = shuffle_index - 1
+			units -= 1
+			continue
+		if bool(selection.get("group_shuffling", false)):
+			selection["group_shuffling"] = false
+		var candidate: Dictionary = group[group_index]
+		if int(selection.get("remaining", 0)) > 0:
+			result.selected.append(candidate)
+			_mark_selected(candidate)
+			selection["remaining"] = int(selection.get("remaining", 0)) - 1
+		else:
+			_append_discarded(result, candidate)
+		selection["group_index"] = group_index + 1
+		units -= 1
+	selection["result"] = result
+	selection["work_left"] = units
+	return selection
+
+
 func _select_ground_rewards(
 	successful_rewards: Array,
 	rng: RandomNumberGenerator,
 	maximum_ground_slots: int,
 ) -> Dictionary:
-	var result := {
-		"selected": [],
-		"discarded": [],
-		"protected_discarded_count": 0,
-	}
-	var limit := maxi(0, maximum_ground_slots)
-	var protected_groups: Dictionary = {}
-	var ordinary_groups: Dictionary = {}
-	for raw_candidate: Variant in successful_rewards:
-		if not raw_candidate is Dictionary:
-			continue
-		var candidate: Dictionary = raw_candidate
-		var policy: Dictionary = candidate.get("policy", {})
-		var priority := int(policy.get("overflow_priority", 0))
-		var groups: Dictionary = (
-			protected_groups if bool(policy.get("protected_drop", false))
-			else ordinary_groups
-		)
-		if not groups.has(priority):
-			groups[priority] = []
-		(groups[priority] as Array).append(candidate)
-	var protected_priorities: Array = protected_groups.keys()
-	protected_priorities.sort()
-	protected_priorities.reverse()
-	for raw_priority: Variant in protected_priorities:
-		var protected_group: Array = protected_groups.get(int(raw_priority), [])
-		_consume_group(
-			result,
-			protected_group.duplicate(false),
-			rng,
-			limit,
-		)
-	var ordinary_priorities: Array = ordinary_groups.keys()
-	ordinary_priorities.sort()
-	ordinary_priorities.reverse()
-	for raw_priority: Variant in ordinary_priorities:
-		var ordinary_group: Array = ordinary_groups.get(int(raw_priority), [])
-		_consume_group(
-			result,
-			ordinary_group.duplicate(false),
-			rng,
-			limit,
-		)
-	return result
-
-
-func _consume_group(
-	result: Dictionary,
-	group: Array,
-	rng: RandomNumberGenerator,
-	limit: int,
-) -> void:
-	var remaining: int = limit - result.selected.size()
-	if remaining <= 0:
-		_append_discarded_group(result, group)
-		return
-	# Same protected/priority ties are unbiased only when the group crosses the
-	# cap. Fitting groups preserve source order and consume no extra RNG.
-	if group.size() > remaining:
-		_shuffle_candidates(group, rng)
-	for raw_candidate: Variant in group:
-		if not raw_candidate is Dictionary:
-			continue
-		if result.selected.size() < limit:
-			result.selected.append(raw_candidate)
-			_mark_selected(raw_candidate)
-		else:
-			_append_discarded(result, raw_candidate)
-
-
-func _append_discarded_group(result: Dictionary, group: Array) -> void:
-	for raw_candidate: Variant in group:
-		if raw_candidate is Dictionary:
-			_append_discarded(result, raw_candidate)
+	var selection := _begin_resumable_selection(successful_rewards, maximum_ground_slots)
+	while not bool(selection.get("done", false)):
+		selection = _advance_resumable_selection(selection, rng, 2147483647)
+	return selection.get("result", {})
 
 
 func _mark_selected(candidate: Dictionary) -> void:

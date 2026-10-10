@@ -50419,7 +50419,8 @@
     "monster_exact_count": 102,
     "current_item_identity_count": 727,
     "item_exact_route_identity_count": 278,
-    "item_runtime_route_count": 454,
+    "item_runtime_route_count": 503,
+    "canonical_item_alias_route_count": 49,
     "player_core_event_count": 13
   },
   "policy_note": "This is a complete identity/requirement inventory, not permission to guess audio. An object remains unresolved until exact source evidence and an accepted current-project success phase are both recorded.",
@@ -50429,6 +50430,13 @@
     "authority_new_item": "item:<canonical itemId>",
     "currency": "currency:gold",
     "runtime_names_forbidden": true,
+    "canonical_alias_routes": {
+      "alias_count": 49,
+      "canonical_item_route_count": 49,
+      "service_route_count": 49,
+      "source": "assets/data/identity/entity_registry_source.json",
+      "source_sha256": "4d2c6674fb6c37dda246a10f1ae0f2396298c31e968d40929dc2c86ddf49265a"
+    },
     "sources": [
       {
         "scope": "equipment_item_id_and_category",

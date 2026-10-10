@@ -139,15 +139,21 @@ func _assert_touch_dragon_frozen_area_magic() -> void:
 	attacker._update_area_magic_delivery(0.0)
 	assert(attacker._area_magic_release_records.size() == 2)
 	assert(is_equal_approx(attacker._area_magic_warning, 0.6))
-	assert(primary.current_hp == primary_hp_before)
-	assert(second.current_hp == second_hp_before)
+	# The release snapshot is authoritative at activation: damage is settled now,
+	# while the warning remains presentation-only.
+	assert(primary.current_hp < primary_hp_before, "124 must settle its primary target at activation")
+	assert(second.current_hp < second_hp_before, "124 must settle its secondary target at activation")
+	var primary_hp_after_activation := primary.current_hp
+	var second_hp_after_activation := second.current_hp
 
 	primary.global_position = _ground_to_screen(Vector2(8.0, 8.0))
 	second.global_position = _ground_to_screen(Vector2(-8.0, -8.0))
 	entrant.global_position = _ground_to_screen(Vector2(1.0, 1.0))
 	attacker._update_area_magic_delivery(0.61)
-	assert(primary.current_hp < primary_hp_before, "124 lost its frozen primary target")
-	assert(second.current_hp < second_hp_before, "124 lost its frozen secondary target")
+	assert(primary.current_hp == primary_hp_after_activation, "124 warning cleanup must not settle primary twice")
+	assert(second.current_hp == second_hp_after_activation, "124 warning cleanup must not settle secondary twice")
+	assert(primary_hp_after_activation < primary_hp_before, "124 lost its frozen primary target")
+	assert(second_hp_after_activation < second_hp_before, "124 lost its frozen secondary target")
 	assert(boundary.current_hp == boundary_hp_before, "124 included the exclusive six-GU edge")
 	assert(entrant.current_hp == entrant_hp_before, "124 hit a target entering after release")
 	assert(attacker._area_magic_release_records.is_empty())

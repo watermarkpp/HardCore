@@ -307,6 +307,9 @@ func _exercise_physical_case(monster_id: int, expected: Dictionary) -> void:
 	)
 	var effect := _latest_projectile_effect()
 	assert(effect != null)
+	await get_tree().physics_frame
+	await get_tree().process_frame
+	effect = _latest_projectile_effect()
 	effect.call("_physics_process", 0.3)
 	assert(
 		player.current_hp == hp_before - int(descriptor.get("damage", 0)),
@@ -317,6 +320,7 @@ func _exercise_physical_case(monster_id: int, expected: Dictionary) -> void:
 	player.current_hp = hp_before
 	player.global_position = _ground_to_screen(Vector2(4.0, 0.0))
 	_projectile_descriptors.clear()
+	await _finish_committed_action(attacker)
 	attacker._attack_timer = 0.0
 	attacker.target = player
 	attacker._physics_process(0.01)
@@ -338,6 +342,7 @@ func _exercise_physical_case(monster_id: int, expected: Dictionary) -> void:
 	player.current_hp = hp_before
 	player.set_meta("runtime_map_id", 1)
 	_projectile_descriptors.clear()
+	await _finish_committed_action(attacker)
 	attacker._attack_timer = 0.0
 	attacker.target = player
 	attacker._physics_process(0.01)
@@ -357,6 +362,7 @@ func _exercise_physical_case(monster_id: int, expected: Dictionary) -> void:
 
 	player.current_hp = hp_before
 	_projectile_descriptors.clear()
+	await _finish_committed_action(attacker)
 	attacker._attack_timer = 0.0
 	# The body-action reserve is one commit per real engine frame (T06, now
 	# enforced): cross a real physics frame before the independent epoch probe.
@@ -394,6 +400,7 @@ func _assert_physical_world_wall(
 	player: PlayerCharacter,
 	hp_before: int,
 ) -> void:
+	await _finish_committed_action(attacker)
 	# A real WORLD-layer body must veto both sides of the delayed projectile
 	# transaction. The test's environment provider deliberately reports no
 	# block, so these assertions exercise the physics-server ray, not a fake
@@ -429,6 +436,7 @@ func _assert_physical_world_wall(
 	# before release. This catches implementations that only gate the launch.
 	player.current_hp = hp_before
 	_projectile_descriptors.clear()
+	await _finish_committed_action(attacker)
 	attacker._attack_timer = 0.0
 	attacker._physics_process(0.01)
 	attacker._update_pending_attack(0.5)
@@ -460,8 +468,9 @@ func _assert_target_magic_world_wall(
 	player: PlayerCharacter,
 	hp_before: int,
 ) -> void:
-	# Target magic uses the same WORLD contract at launch and at delayed
-	# settlement.  Keep the map id fixed so this isolates real collision.
+	await _finish_committed_action(attacker)
+	# Target magic checks WORLD at activation and settles immediately. Keep the
+	# map id fixed so this isolates the real collision gate.
 	player.set_meta("runtime_map_id", 1)
 	player.global_position = _ground_to_screen(Vector2(2.0, 0.0))
 	player.current_hp = hp_before
@@ -482,8 +491,8 @@ func _assert_target_magic_world_wall(
 	await get_tree().process_frame
 	await get_tree().physics_frame
 
-	# An open cast is valid; inserting a real WORLD body before the 200 ms
-	# release must cancel damage and clear the pending transaction.
+	# An open cast is valid; inserting a real WORLD body after activation cannot
+	# revoke the already settled damage.
 	# The prior blocked-wall case can legitimately start a locomotion leg.
 	# This independent launch fixture begins after cancelling that old leg.
 	attacker._cancel_autonomous_step(true)
@@ -493,12 +502,13 @@ func _assert_target_magic_world_wall(
 	attacker._attack_timer = 0.0
 	attacker._physics_process(0.01)
 	assert(_target_magic_descriptors.size() == 1)
-	assert(attacker._pending_attack_release_record.get("kind", "") == "target_magic")
+	var settled_hp := player.current_hp
+	assert(settled_hp < hp_before, "ID224 open target magic must settle at activation")
+	assert(attacker._pending_attack_release_record.is_empty())
 	var release_wall := _make_world_wall(Vector2.ZERO, Vector2(2.0, 0.0))
 	await get_tree().physics_frame
 	attacker._physics_process(0.21)
-	assert(player.current_hp == hp_before)
-	assert(attacker._pending_attack_release_record.is_empty())
+	assert(player.current_hp == settled_hp)
 	release_wall.queue_free()
 	await get_tree().process_frame
 	await get_tree().physics_frame
@@ -538,15 +548,11 @@ func _run_target_magic_case() -> void:
 		_target_magic_descriptors.size() == 1,
 		"ID224 axis-boundary cast must emit target magic",
 	)
-	assert(
-		player.current_hp == hp_before,
-		"ID224 target magic must retain its delayed damage",
-	)
-	assert(
-		attacker._pending_attack_release_record.get("kind", "") == "target_magic",
-		"ID224 must freeze a target_magic release",
-	)
 	var descriptor: Dictionary = _target_magic_descriptors[0]
+	var release_id := str(descriptor.get("release_id", ""))
+	assert(not release_id.is_empty())
+	assert(player.current_hp < hp_before, "ID224 target magic must settle at activation")
+	assert(attacker._pending_attack_release_record.is_empty())
 	assert(
 		int(descriptor.get("source_monster_id", -1)) == 224,
 		"ID224 target magic must preserve exact source monster_id",
@@ -563,41 +569,43 @@ func _run_target_magic_case() -> void:
 	assert(str(descriptor.get("damage_owner", "")) == "enemy.target_magic_release")
 	assert(
 		is_equal_approx(float(descriptor.get("duration_seconds", 0.0)), 0.2),
-		"ID224 target magic delay must be 0.2 seconds",
+		"ID224 target magic presentation duration must remain 0.2 seconds",
 	)
 	var snapshot: Dictionary = descriptor.get("footprint_snapshot", {})
 	assert(str(snapshot.get("shape_type", "")) == SnapshotScript.SHAPE_CIRCLE)
 	assert(str(snapshot.get("projection_relationship_id", "")) == "ground_exact")
-	attacker._physics_process(0.19)
-	assert(player.current_hp == hp_before)
-	attacker._physics_process(0.02)
+	var hp_after_release := player.current_hp
+	attacker._physics_process(0.21)
+	assert(player.current_hp == hp_after_release)
 	assert(
 		player.current_hp < hp_before,
 		"ID224 target magic did not resolve through magic defense",
 	)
+	assert(str(attacker.last_magic_attack_resolution.get("release_id", "")) == release_id)
 	assert(bool(attacker.last_magic_attack_resolution.get("success", false)))
 	assert(bool(attacker.last_magic_attack_resolution.get("magic_defense_checked", false)))
 	assert(bool(attacker.last_magic_attack_resolution.get("physical_defense_bypassed", false)))
 	assert(str(attacker.last_magic_attack_resolution.get("damage_channel", "")) == "magic_defense")
 
-	# Target identity remains valid when the live player moves inside the same
-	# WORLD during the 200 ms flight.  WORLD obstruction is tested separately.
+	# Target identity remains valid when the live player moves after activation.
+	# This is locked magic, not a flying projectile.
 	player.current_hp = hp_before
 	player.global_position = _ground_to_screen(Vector2(2.0, 0.0))
 	_target_magic_descriptors.clear()
 	# One body action per engine frame (T06): cross a physics frame before
 	# this segment's start.
-	await get_tree().physics_frame
+	await _finish_committed_action(attacker)
 	attacker._attack_timer = 0.0
 	attacker.target = player
 	attacker._physics_process(0.01)
 	assert(_target_magic_descriptors.size() == 1)
+	var moving_cast_hp := player.current_hp
 	player.global_position = _ground_to_screen(Vector2(1.0, 1.0))
 	attacker._physics_process(0.19)
-	assert(player.current_hp == hp_before)
+	assert(player.current_hp == moving_cast_hp)
 	attacker._physics_process(0.02)
 	assert(
-		player.current_hp < hp_before,
+		player.current_hp == moving_cast_hp,
 		"ID224 moving same-WORLD target did not resolve",
 	)
 
@@ -613,6 +621,9 @@ func _run_target_magic_case() -> void:
 	attacker.current_hp = attacker.max_hp
 	await _assert_target_magic_world_wall(attacker, player, hp_before)
 
+	# The open-corridor target-magic fixture above committed a body action;
+	# close that real owner clock before starting this independent map probe.
+	await _finish_committed_action(attacker)
 	player.current_hp = hp_before
 	player.set_meta("runtime_map_id", 1)
 	player.global_position = _ground_to_screen(Vector2(2.0, 0.0))
@@ -621,31 +632,49 @@ func _run_target_magic_case() -> void:
 	attacker.target = player
 	attacker._physics_process(0.01)
 	assert(_target_magic_descriptors.size() == 1)
+	var map_cast_hp := player.current_hp
 	player.set_meta("runtime_map_id", 2)
 	attacker._physics_process(0.21)
-	assert(player.current_hp == hp_before)
+	assert(player.current_hp == map_cast_hp)
+	_target_magic_descriptors.clear()
+	attacker._attack_timer = 0.0
+	assert(not attacker._launch_target_magic(player, 50), "ID224 next cast must reject mismatched runtime map")
+	assert(_target_magic_descriptors.is_empty())
 	player.set_meta("runtime_map_id", 1)
 
 	player.current_hp = hp_before
 	_target_magic_descriptors.clear()
 	# One body action per engine frame (T06): cross a physics frame.
-	await get_tree().physics_frame
+	await _finish_committed_action(attacker)
 	attacker._attack_timer = 0.0
 	attacker.target = player
 	attacker._physics_process(0.01)
 	assert(_target_magic_descriptors.size() == 1)
+	var epoch_cast_hp := player.current_hp
 	var transition_token := "w1-id224-epoch"
 	assert(player.begin_combat_transition(transition_token))
 	assert(player.finish_combat_transition(transition_token))
 	attacker._physics_process(0.21)
-	assert(player.current_hp == hp_before)
+	assert(player.current_hp == epoch_cast_hp)
+
+	# A combat-epoch transition that is still in progress before activation
+	# rejects the new cast; the already settled release above remains intact.
+	player.current_hp = hp_before
+	_target_magic_descriptors.clear()
+	await get_tree().physics_frame
+	attacker._attack_timer = 0.0
+	var pre_epoch_token := "w1-id224-pre-epoch"
+	assert(player.begin_combat_transition(pre_epoch_token))
+	assert(not attacker._launch_target_magic(player, 50))
+	assert(_target_magic_descriptors.is_empty())
+	assert(player.finish_combat_transition(pre_epoch_token))
 
 	player.current_hp = hp_before
 	player.global_position = _ground_to_screen(Vector2(1.0, 0.0))
 	player.set_meta("runtime_map_id", 1)
 	_target_magic_descriptors.clear()
 	# One body action per engine frame (T06): cross a physics frame.
-	await get_tree().physics_frame
+	await _finish_committed_action(attacker)
 	attacker._attack_timer = 0.0
 	attacker.target = player
 	attacker.current_hp = attacker.max_hp
@@ -829,3 +858,15 @@ func _empty_terrain_context() -> Dictionary:
 		},
 		TerrainPolicy.EXPECTED_GROUND_COORDINATE_CONTRACT_ID,
 	)
+
+
+func _finish_committed_action(actor: EnemyActor) -> void:
+	if actor._attack_action_active:
+		var remaining := maxf(
+			0.0,
+			actor._attack_action_start_time_s + actor._attack_action_duration_s
+				- actor._combat_action_time_s,
+		)
+		if remaining > 0.0:
+			actor._physics_process(remaining + 0.001)
+	await get_tree().physics_frame

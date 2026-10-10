@@ -4,14 +4,15 @@
   "source_hashes": {
     "res://assets/data/ancient_relic_fragment_v1.json": "d424f5bd92e61bc9c73ce20e9a31f23e365df54d5b354a4c0465152fd5d00b40",
     "res://assets/data/drop/dpv2_21cq_item_mapping_v1.json": "4fec8ddeca9a835ce144fe2ed2c70a15d837090523824b0647252e96d5a61f6f",
-    "res://assets/data/equipment_attribute_master.json": "223c96df954077aa8970a277efe229d9dbc16609d2503a0033e60197f7e00701",
+    "res://assets/data/equipment_attribute_master.json": "8d692d0f7bc1aeb4295ddd040aa760003e399c633b87876d93e3674fb8ced0b9",
     "res://assets/data/equipment_enhancement_black_iron_v1.json": "3ccd9e7e7d774dcc9655f2b6d5edf1eea2d97f50e77880ff07750012d0ba9732",
+    "res://assets/data/equipment_granted_skills.source.json": "e9b0783fb9eaf9572f38188b5abbbfc0d10f6d1ccf694842fad9d631b6b2b119",
     "res://assets/data/features/rune_fixture_items.json": "ea00bdd36122ae0275f64ee7a73746bbd3866c5fdd174625a7915cb9c885a68d",
     "res://assets/data/features/socketing_fixture_items.json": "ae2c7adbcf0ee9ed8e88f4e2dd8d4c4e2c55af6b49a7bcffc0828c8a29e23043",
-    "res://assets/data/identity/entity_registry_source.json": "4d2c6674fb6c37dda246a10f1ae0f2396298c31e968d40929dc2c86ddf49265a",
+    "res://assets/data/identity/entity_registry_source.json": "01222468a6045949b4e6a515d0ee9cf604f11fc2d02397c279877b7d75f0a98f",
     "res://assets/data/identity/item_categories_v1.json": "c60d00da6b19047e87ea80b6c973e42a26c01f543d489fdb8b3ab64473adbb8a",
     "res://assets/data/item_runtime_authority_v1.json": "4232baf42256fa1ef0e5ab6e53f9b4ae452a4614fc09ca51902e4220d908f1dc",
-    "res://assets/data/map_design/map_identity_registry.json": "7e50073a4a20918e234587af284f009ff92b9d6d845ad46dfc997be60d9128d8",
+    "res://assets/data/map_design/map_identity_registry.json": "f79d863c8a74e4da22345518350d5be7218ba6d415ff3a2a82f64e390c842de3",
     "res://assets/data/relic_synthesis_v1.json": "9d7cb4f2b09c80f7dbe63782d757ce1532a0ce99c7ae32d3cfaf1fe45fbfd5df",
     "res://assets/data/runtime/canonical_monster_catalog.json": "a46aca4209b3abc0f3f2cd5365b274605cd07886060706e14ef3e984aad8880a",
     "res://assets/data/service_item_catalog.json": "db61781ad87853a3169aff491a1af8336884b4be0d34ff13145c703713da44b2",
@@ -5951,7 +5952,7 @@
       "id": "hc.map.910001",
       "kind": "map",
       "legacy_id": 910001,
-      "display_name": "比奇省（单机重制）",
+      "display_name": "比奇省",
       "evidence": [
         {
           "path": "res://assets/data/map_design/map_identity_registry.json",
@@ -15361,6 +15362,42 @@
       ]
     },
     {
+      "id": "hc.skill.equipment.ring_fireball",
+      "kind": "skill",
+      "legacy_id": "equipment.ring_fireball",
+      "display_name": "火焰戒指技能",
+      "evidence": [
+        {
+          "path": "res://assets/data/identity/entity_registry_source.json",
+          "pointer": "/explicit/18"
+        }
+      ]
+    },
+    {
+      "id": "hc.skill.equipment.ring_healing",
+      "kind": "skill",
+      "legacy_id": "equipment.ring_healing",
+      "display_name": "防御戒指技能",
+      "evidence": [
+        {
+          "path": "res://assets/data/identity/entity_registry_source.json",
+          "pointer": "/explicit/17"
+        }
+      ]
+    },
+    {
+      "id": "hc.skill.equipment.ring_teleport",
+      "kind": "skill",
+      "legacy_id": "equipment.ring_teleport",
+      "display_name": "传送戒指技能",
+      "evidence": [
+        {
+          "path": "res://assets/data/identity/entity_registry_source.json",
+          "pointer": "/explicit/16"
+        }
+      ]
+    },
+    {
       "id": "hc.skill.taoist.defense",
       "kind": "skill",
       "legacy_id": "taoist.defense",
@@ -15909,7 +15946,7 @@
     "monster": 156,
     "profession": 3,
     "service_item": 538,
-    "skill": 33,
+    "skill": 36,
     "slot": 12
   }
 }

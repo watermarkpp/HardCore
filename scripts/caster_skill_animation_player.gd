@@ -11,11 +11,14 @@ const AXIS_CROSS_FIT_CONTRACT_ID := (
 )
 signal animation_finished(skill_id: String)
 signal skill_frame_changed(frame_index: int)
+signal animation_terminal_failure(reason: String)
 
 var skill_id := ""
 var phase_id := ""
 var visual_loaded := false
 var playback_complete := false
+var terminal_failure_reason := ""
+var _failure_baseline_serial := 0
 var current_frame_index := 0
 var direction_index := 0
 
@@ -103,6 +106,8 @@ func configure(
 	phase_id = requested_phase_id
 	visual_loaded = false
 	playback_complete = false
+	terminal_failure_reason = ""
+	_failure_baseline_serial = CasterSkillVisualRegistry.current_failure_serial()
 	_waiting_for_residency = false
 	_sequence_lease_held = false
 	texture = null
@@ -278,16 +283,6 @@ func configure(
 		# centreline stable even when the source frame bounds change.
 		_apply_axis_cross_transform(_frames[0])
 	elif (
-		_desired_axis_extent > 0.0
-		and not _fit_axis_world.is_zero_approx()
-	):
-		var fallback_native_forward_extent := _rect_forward_projection_extent(
-			_sequence_bounds, _sequence_anchor_rebase, _source_axis_local
-		)
-		scale = Vector2.ONE * (
-			_desired_axis_extent / maxf(0.001, fallback_native_forward_extent)
-		)
-	elif (
 		_desired_footprint.x > 0.0
 		and _desired_footprint.y > 0.0
 		and _sequence_bounds.size.x > 0.0
@@ -333,7 +328,7 @@ func configure(
 	# makes whole workset sequences resident so the formal Loading->READY
 	# path still reaches the full-resident branch below.
 	if CasterSkillVisualRegistry.combat_sequence_requires_wait(_sequence_paths):
-		CasterSkillVisualRegistry.queue_sequence_warm(_sequence_paths)
+		CasterSkillVisualRegistry.queue_sequence_warm(_sequence_paths, true)
 		_waiting_for_residency = true
 		visual_loaded = false
 		current_frame_index = 0
@@ -350,7 +345,7 @@ func configure(
 		_waiting_for_residency = false
 		set_process(true)
 	else:
-		CasterSkillVisualRegistry.queue_sequence_warm(_sequence_paths)
+		CasterSkillVisualRegistry.queue_sequence_warm(_sequence_paths, true)
 		_waiting_for_residency = true
 		set_process(true)
 	return true
@@ -440,14 +435,22 @@ func _handle_mid_sequence_miss() -> void:
 	# queue the missing path. The frame index is NOT advanced while the
 	# texture is uncommitted; playback resumes at the same index once the
 	# sequence is resident again.
-	CasterSkillVisualRegistry.queue_sequence_warm(_sequence_paths)
+	var terminal_reason := CasterSkillVisualRegistry.sequence_terminal_failure_after(_sequence_paths, _failure_baseline_serial)
+	if not terminal_reason.is_empty():
+		_set_terminal_failure(terminal_reason)
+		return
+	CasterSkillVisualRegistry.queue_sequence_warm(_sequence_paths, false)
 	_waiting_for_residency = true
 	_elapsed = 0.0
 
 
 func _retry_after_warm() -> void:
+	var terminal_reason := CasterSkillVisualRegistry.sequence_terminal_failure_after(_sequence_paths, _failure_baseline_serial)
+	if not terminal_reason.is_empty():
+		_set_terminal_failure(terminal_reason)
+		return
 	if not CasterSkillVisualRegistry.sequence_resident(_sequence_paths):
-		CasterSkillVisualRegistry.queue_sequence_warm(_sequence_paths)
+		CasterSkillVisualRegistry.queue_sequence_warm(_sequence_paths, false)
 		return
 	# R14-C-R1 P0-7: acquire at most once. If _apply_frame below edge-fails
 	# after a successful acquire, the lease is KEPT and the next retry sees
@@ -460,14 +463,32 @@ func _retry_after_warm() -> void:
 	# there without skipping a logical frame.
 	visual_loaded = _apply_frame(current_frame_index)
 	if not visual_loaded:
+		var failed_reason := CasterSkillVisualRegistry.sequence_terminal_failure_after(_sequence_paths, _failure_baseline_serial)
+		if not failed_reason.is_empty():
+			_set_terminal_failure(failed_reason)
+			return
 		# Edge: the sequence was resident a moment ago but the frame still
 		# could not be committed. Never permanently stop the player (C3):
 		# go back to waiting so the next process tick retries.
 		_waiting_for_residency = true
-		CasterSkillVisualRegistry.queue_sequence_warm(_sequence_paths)
+		CasterSkillVisualRegistry.queue_sequence_warm(_sequence_paths, false)
 		set_process(true)
 		return
 	set_process(true)
+
+
+func _set_terminal_failure(reason: String) -> void:
+	if terminal_failure_reason.is_empty():
+		terminal_failure_reason = reason
+		_waiting_for_residency = false
+		visual_loaded = false
+		_release_sequence_lease()
+		set_process(false)
+		animation_terminal_failure.emit(reason)
+
+
+func has_terminal_failure() -> bool:
+	return not terminal_failure_reason.is_empty()
 
 
 func animation_sequence_key() -> String:

@@ -16,7 +16,10 @@ extends RefCounted
 ##   reads prevent stale candidates from producing wrong narrow-phase results.
 
 const BUCKET_SIZE_SETTING := "hardcore/combat/spatial_index_bucket_size_gu"
-const DEFAULT_BUCKET_SIZE_GU := 4.0
+## One movement cell per bucket keeps dense melee broadphases local. Query
+## envelopes still expand by the registered maximum footprint and preserve
+## stable combat order; this partition changes no reach or collision geometry.
+const DEFAULT_BUCKET_SIZE_GU := 1.0
 const CONTRACT_ID := "hardcore.combat.spatial_index.map_ground_gu_buckets.v1"
 
 

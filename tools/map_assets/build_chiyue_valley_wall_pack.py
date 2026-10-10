@@ -489,7 +489,9 @@ def straight_art(
         artwork.alpha_composite(segment, (32 * tile_index, 16 * tile_index))
     if axis == "iso_y":
         artwork = artwork.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
-        layout = tuple(reversed(layout))
+        # split_continuous_parts already reverses its bucket index for iso_y.
+        # Keep the canonical source layout in source/render order so each
+        # emitted part retains the front/cap contributors that produced it.
     return artwork, split_continuous_parts(artwork, length, axis), layout
 
 

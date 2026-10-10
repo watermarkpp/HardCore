@@ -838,17 +838,19 @@ func _reclamp_sell_quantities() -> void:
 func apply_sell_result(result: Dictionary) -> void:
 	var message := str(result.get("message", "出售请求已处理。"))
 	_ui_show_shop_message("[color=#e8c277]%s[/color]" % message)
-	if result.get("quotes", null) is Dictionary:
-		_sell_quotes = result.get("quotes", {}).duplicate(true)
+	var returned_quotes: Variant = result.get("quotes", null)
+	# A failed atomic transaction may omit quotes or carry an empty placeholder.
+	# Keep the current owner-issued quotes in that case so a rejected sale does
+	# not blank the sell page or force the player to lose the valid selection
+	# context. Non-empty quotes remain authoritative and replace the cache.
+	if returned_quotes is Dictionary and not (returned_quotes as Dictionary).is_empty():
+		_sell_quotes = (returned_quotes as Dictionary).duplicate(true)
 	_refresh_gold()
 	if not bool(result.get("success", false)) and _trade_mode == "sell":
 		_selected_sell_index = -1
 		_selected_sell_indices.clear()
 		_sell_quantities.clear()
-		if result.get("quotes", null) is Dictionary:
-			_refresh_sell_card_contents()
-		else:
-			_apply_inventory_change()
+		_refresh_sell_card_contents()
 		_set_sell_actions_enabled(false)
 	if bool(result.get("success", false)) and _trade_mode == "sell":
 		_inventory_refresh_pending = false

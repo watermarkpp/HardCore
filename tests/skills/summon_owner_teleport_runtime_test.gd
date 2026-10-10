@@ -29,23 +29,37 @@ func _run() -> void:
 
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	await preload("res://tests/helpers/formal_world_skill_fixture.gd").wait_for_formal_world(
+		self, game, "summon_owner_teleport"
+	)
+	# Use an enemy already admitted by the formal world publication.  A raw
+	# _spawn_enemy call at an arbitrary point is not a valid birth fixture: the
+	# current map capability, generation and footprint admission all belong to
+	# the published descriptor.  The stale-target contract only needs a live
+	# EnemyActor reference, not a second invented spawn authority.
+	var stale_enemy: EnemyActor
 	for value: Variant in get_tree().get_nodes_in_group("enemies"):
-		if value is EnemyActor:
+		if not value is EnemyActor:
+			continue
+		var candidate := value as EnemyActor
+		if candidate.is_queued_for_deletion() or candidate.is_boss \
+			or candidate.current_hp <= 0 or candidate.runtime_map_id != game.current_map_id:
+			continue
+		if stale_enemy == null or candidate.monster_id == 38:
+			stale_enemy = candidate
+			if candidate.monster_id == 38:
+				break
+	assert(stale_enemy != null, "stale summon-target fixture failed to spawn")
+	# Keep the formally admitted reference stable while the pets are created and
+	# the teleport contract yields to physics.  This is fixture isolation only;
+	# no HP, load, or combat rule is changed.
+	stale_enemy.set_physics_process(false)
+	for value: Variant in get_tree().get_nodes_in_group("enemies"):
+		if value is EnemyActor and value != stale_enemy:
 			(value as EnemyActor).set_combat_position(
 				game.player.global_position + Vector2(4000.0, 4000.0),
 				&"summon_owner_teleport_fixture_clear"
 			)
-
-	var stale_enemy: EnemyActor = game._spawn_enemy(
-		GameData.get_monster_by_id(38),
-		game.player.global_position + Vector2(2000.0, 2000.0),
-		false,
-		-1.0,
-		{"respawn_enabled": false, "spawn_group_id": "summon_owner_teleport_stale_target"}
-	)
-	assert(stale_enemy != null, "stale summon-target fixture failed to spawn")
 	var skeleton := _make_main_pet(
 		game,
 		"骷髅",
@@ -120,10 +134,7 @@ func _run() -> void:
 	divine_beast._physics_process(1.0 / 60.0)
 	assert(divine_beast.remaining_lifetime < lifetime_before_retry)
 	assert(divine_beast.owner_teleport_pending and divine_beast.current_hp == divine_hp)
-	game._pending_main_pet_arrivals.clear()
-	game._pending_main_pet_arrivals.append(divine_beast)
-	game._pending_main_pet_retry_tile = game._main_pet_owner_tile()
-	game._pending_main_pet_retry_tile_valid = true
+	assert(game._register_pending_main_pet_arrival(divine_beast))
 	game.player.global_position = random_destination
 	game._retry_pending_main_pet_arrivals()
 	_assert_relocated_pet(game, divine_beast, divine_hp)

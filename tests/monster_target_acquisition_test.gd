@@ -7,6 +7,8 @@ const NeighborPolicy := preload("res://scripts/monster_neighbor_step_policy.gd")
 const TerrainPolicy := preload("res://scripts/monster_terrain_navigation_policy.gd")
 const PolygonGeometry := preload("res://scripts/map_editor/polygon/poly_geometry.gd")
 const RuntimeBridge := preload("res://scripts/layers/runtime/map_editor_runtime_bridge.gd")
+const RuntimeFixture := preload("res://tests/source176_r3/helpers/runtime_fixture.gd")
+const GameRootScript := preload("res://scripts/game_root.gd")
 const PlayerCharacterScript := preload("res://scripts/player.gd")
 const SkillProjectileScript := preload("res://scripts/skill_projectile.gd")
 
@@ -20,13 +22,34 @@ func _ready() -> void:
 func _run() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
-	var player := PlayerCharacter.new()
-	add_child(player)
+	var owner_budget_snapshot := EnemyActor.pursuit_process_budget_diagnostics()
+	var owner_interval_before := int(owner_budget_snapshot.get("owner_decision_interval_ms", 300))
+	var owner_budget_before := bool(owner_budget_snapshot.get("owner_optional_budget_enabled", true))
+	# This fixture measures acquisition geometry and terrain only. Disable the
+	# separately tested optional owner scheduler so repeated direct retargets do
+	# not become a 300 ms admission experiment.
+	EnemyActor.configure_owner_optional_budget_for_test(false)
+	EnemyActor.configure_owner_decision_interval_for_test(0)
+	# Passive acquisition requires a live player under a real GameRoot parent.
+	# Complete the normal in-tree bootstrap first, then freeze the gameplay
+	# actors so the acquisition checks run against the finished owner lifecycle.
+	var game_owner := GameRootScript.new()
+	add_child(game_owner)
+	var bootstrap_ready := false
+	for _frame in range(240):
+		await get_tree().process_frame
+		if int(game_owner.get("_ready_world_map_id")) >= 0 and int(game_owner.get("_ready_world_zone_generation")) >= 0:
+			bootstrap_ready = true
+			break
+	assert(bootstrap_ready, "normal GameRoot bootstrap did not reach its ready boundary")
+	game_owner.current_map_id = 4
+	var player: PlayerCharacter = game_owner.player
 	player.set_physics_process(false)
+	game_owner.set_process(false)
 
-	await _test_view_five_runtime_boundaries(player)
+	await _test_view_six_runtime_boundaries(player)
 	await _test_exact_special_view_ranges(player)
-	await _test_runtime_classification_floors(player)
+	await _test_runtime_classification_ranges(player)
 	await _test_data_hold_runtime_fail_closed(player)
 	await _test_runtime_map_id_fast_paths(player)
 	await _test_current_center_and_nearest_manhattan(player)
@@ -35,23 +58,27 @@ func _run() -> void:
 	_test_all_released_terrain_contexts()
 	_test_terrain_policy_budget_and_corner_contract()
 	_test_policy_fail_closed_contract()
-
-	player.queue_free()
+	EnemyActor.configure_owner_decision_interval_for_test(owner_interval_before)
+	EnemyActor.configure_owner_optional_budget_for_test(owner_budget_before)
+	# GameRoot owns the player and its runtime services. Queue the parent once
+	# and allow the SceneTree to complete child/service teardown.
+	game_owner.queue_free()
+	await get_tree().process_frame
 	print("MONSTER_TARGET_ACQUISITION_PASS checks=%d" % _checks)
 	get_tree().quit(0)
 
 
-func _test_view_five_runtime_boundaries(player: PlayerCharacter) -> void:
+func _test_view_six_runtime_boundaries(player: PlayerCharacter) -> void:
 	var enemy := await _make_enemy(18, player)
 	assert(not enemy._target_acquisition_authority_failed_closed)
-	assert(enemy._target_acquisition_policy.view_range_cells == 5)
+	assert(enemy._target_acquisition_policy.view_range_cells == 6)
 	_checks += 2
 
-	_assert_acquisition(enemy, player, Vector2(5.0, 0.0), true, "axis boundary 5")
-	_assert_acquisition(enemy, player, Vector2(5.001, 0.0), false, "axis beyond 5")
-	_assert_acquisition(enemy, player, Vector2(5.0, 5.0), true, "square corner 5,5")
-	_assert_acquisition(enemy, player, Vector2(5.001, 5.0), false, "square x beyond 5")
-	_assert_acquisition(enemy, player, Vector2(0.0, 5.001), false, "square y beyond 5")
+	_assert_acquisition(enemy, player, Vector2(6.0, 0.0), true, "axis boundary 6")
+	_assert_acquisition(enemy, player, Vector2(6.001, 0.0), false, "axis beyond 6")
+	_assert_acquisition(enemy, player, Vector2(6.0, 6.0), true, "square corner 6,6")
+	_assert_acquisition(enemy, player, Vector2(6.001, 6.0), false, "square x beyond 6")
+	_assert_acquisition(enemy, player, Vector2(0.0, 6.001), false, "square y beyond 6")
 	_assert_acquisition(enemy, player, Vector2(10.0, 0.0), false, "ordinary 10 rejected")
 
 	# M02A applies only when there is no current target. Existing pursuit and
@@ -59,7 +86,7 @@ func _test_view_five_runtime_boundaries(player: PlayerCharacter) -> void:
 	player.global_position = _ground_position_from_enemy(enemy, Vector2(10.0, 0.0))
 	enemy.target = player
 	enemy._retarget_timer = 0.0
-	enemy._retarget(0.0)
+	_retarget_fixture(enemy)
 	assert(enemy.target == player, "first-acquisition view cleared an existing target")
 	_checks += 1
 
@@ -68,15 +95,15 @@ func _test_view_five_runtime_boundaries(player: PlayerCharacter) -> void:
 
 
 func _test_exact_special_view_ranges(player: PlayerCharacter) -> void:
-	var view_seven_enemy := await _make_enemy(153, player)
-	assert(view_seven_enemy._target_acquisition_policy.view_range_cells == 7)
+	var view_six_enemy := await _make_enemy(153, player)
+	assert(view_six_enemy._target_acquisition_policy.view_range_cells == 6)
 	_assert_acquisition(
-		view_seven_enemy, player, Vector2(7.0, 7.0), true, "exact view 7 corner"
+		view_six_enemy, player, Vector2(6.0, 6.0), true, "exact view 6 corner"
 	)
 	_assert_acquisition(
-		view_seven_enemy, player, Vector2(7.001, 0.0), false, "exact view 7 overflow"
+		view_six_enemy, player, Vector2(6.001, 0.0), false, "exact view 6 overflow"
 	)
-	view_seven_enemy.queue_free()
+	view_six_enemy.queue_free()
 	await get_tree().process_frame
 
 	var view_nine_enemy := await _make_enemy(182, player)
@@ -92,9 +119,9 @@ func _test_exact_special_view_ranges(player: PlayerCharacter) -> void:
 	_checks += 2
 
 
-func _test_runtime_classification_floors(player: PlayerCharacter) -> void:
+func _test_runtime_classification_ranges(player: PlayerCharacter) -> void:
 	var authority_file := FileAccess.open("res://assets/data/monster_runtime_authority_v1.json", FileAccess.READ)
-	assert(authority_file != null, "runtime authority must be readable for classification floors")
+	assert(authority_file != null, "runtime authority must be readable for classification ranges")
 	var payload: Variant = JSON.parse_string(authority_file.get_as_text())
 	assert(payload is Dictionary)
 	var records: Array = (payload as Dictionary).get("records", [])
@@ -104,45 +131,47 @@ func _test_runtime_classification_floors(player: PlayerCharacter) -> void:
 		if not bool(record.get("runtime_allowed", false)):
 			continue
 		var classification := str(record.get("classification", ""))
-		var minimum_view := 0
-		if classification == "elite":
-			minimum_view = 7
+		var expected_view := 0
+		if classification == "ordinary":
+			expected_view = 6
+		elif classification == "elite":
+			expected_view = 9
 		elif classification == "boss":
-			minimum_view = 9
-		if minimum_view <= 0:
+			expected_view = 12
+		if expected_view <= 0:
 			continue
 		var targeting: Dictionary = record.get("targeting", {})
 		if str(targeting.get("acquisition_status", "")) == "DATA_HOLD":
 			continue
 		assert(
-			int(targeting.get("view_range_cells", 0)) >= minimum_view,
-			"active %s must honor classification floor: monster_id=%s view=%s floor=%d"
-			% [classification, record.get("monster_id", -1), targeting.get("view_range_cells"), minimum_view],
+			int(targeting.get("view_range_cells", 0)) == expected_view,
+			"active %s must use exact classification range: monster_id=%s view=%s expected=%d"
+			% [classification, record.get("monster_id", -1), targeting.get("view_range_cells"), expected_view],
 		)
 		_checks += 1
 
 	var dark_skeleton_spirit := await _make_enemy(238, player)
-	assert(dark_skeleton_spirit._target_acquisition_policy.view_range_cells == 9)
+	assert(dark_skeleton_spirit._target_acquisition_policy.view_range_cells == 12)
 	_assert_acquisition(
 		dark_skeleton_spirit,
 		player,
-		Vector2(9.0, 0.0),
+		Vector2(12.0, 0.0),
 		true,
-		"ID 238 boss classification floor axis boundary 9",
+		"ID 238 boss classification range axis boundary 12",
 	)
 	_assert_acquisition(
 		dark_skeleton_spirit,
 		player,
-		Vector2(9.0, 9.0),
+		Vector2(12.0, 12.0),
 		true,
-		"ID 238 boss classification floor square boundary 9",
+		"ID 238 boss classification range square boundary 12",
 	)
 	_assert_acquisition(
 		dark_skeleton_spirit,
 		player,
-		Vector2(9.001, 0.0),
+		Vector2(12.001, 0.0),
 		false,
-		"ID 238 boss classification floor beyond 9",
+		"ID 238 boss classification range beyond 12",
 	)
 	dark_skeleton_spirit.queue_free()
 	await get_tree().process_frame
@@ -161,7 +190,7 @@ func _test_data_hold_runtime_fail_closed(player: PlayerCharacter) -> void:
 	enemy.target = null
 	enemy._threat_table.clear()
 	enemy._retarget_timer = 0.0
-	enemy._retarget(0.0)
+	_retarget_fixture(enemy)
 	assert(enemy.target == null, "ID 228 DATA_HOLD acquired a runtime target")
 	_checks += 4
 	enemy.queue_free()
@@ -175,12 +204,13 @@ func _test_current_center_and_nearest_manhattan(player: PlayerCharacter) -> void
 	enemy.global_position = _ground_position_from_enemy(enemy, Vector2(30.0, 0.0))
 	# This scenario translates the actor 30 GU before round-tripping through the
 	# isometric projection. Stay one float epsilon inside the already-tested
-	# inclusive 5-GU boundary so the assertion measures leash behavior only.
+	# inclusive 6-GU boundary so the assertion measures leash behavior only.
 	player.global_position = _ground_position_from_enemy(enemy, Vector2(4.99999, 0.0))
 	enemy.target = null
 	enemy._threat_table.clear()
+	_request_fixture_wake(enemy, player)
 	enemy._retarget_timer = 0.0
-	enemy._retarget(0.0)
+	_retarget_fixture(enemy)
 	assert(enemy.target == player, "spawn leash narrowed current-cell ViewRange")
 	_checks += 1
 
@@ -192,16 +222,18 @@ func _test_current_center_and_nearest_manhattan(player: PlayerCharacter) -> void
 	alternate.global_position = _ground_position_from_enemy(enemy, Vector2(4.99999, 0.0))
 	enemy.target = null
 	enemy._retarget_timer = 0.0
-	enemy._retarget(0.0)
+	_request_fixture_wake(enemy, player)
+	_retarget_fixture(enemy)
 	assert(enemy.target == alternate, "first acquisition did not choose nearest Manhattan")
 	_checks += 1
 
 	# Equal Manhattan distance preserves candidate order; primary_target is first.
-	player.global_position = _ground_position_from_enemy(enemy, Vector2(2.99999, 2.0))
-	alternate.global_position = _ground_position_from_enemy(enemy, Vector2(4.99999, 0.0))
+	player.global_position = _ground_position_from_enemy(enemy, Vector2(3.0, 2.0))
+	alternate.global_position = _ground_position_from_enemy(enemy, Vector2(5.0, 0.0))
 	enemy.target = null
 	enemy._retarget_timer = 0.0
-	enemy._retarget(0.0)
+	_request_fixture_wake(enemy, player)
+	_retarget_fixture(enemy)
 	assert(enemy.target == player, "equal Manhattan distance changed stable first-seen order")
 	_checks += 1
 
@@ -221,7 +253,7 @@ func _test_target_retention_authority(player: PlayerCharacter) -> void:
 	enemy.target = player
 	enemy._target_focus_tick_ms = 1000
 	enemy._retarget_timer = 0.0
-	enemy._retarget(0.0)
+	_retarget_fixture(enemy)
 	assert(enemy.target == player, "12-GU aggro circle cleared the 15-axis target")
 	assert(not enemy._target_should_disengage(player, 31000), "30-second focus boundary must be inclusive")
 	assert(enemy._target_should_disengage(player, 31001), "focus must expire strictly after 30 seconds")
@@ -231,7 +263,7 @@ func _test_target_retention_authority(player: PlayerCharacter) -> void:
 	enemy._target_focus_tick_ms = Time.get_ticks_msec()
 	player.global_position = _ground_position_from_enemy(enemy, Vector2(16.0, 0.0))
 	enemy._retarget_timer = 0.0
-	enemy._retarget(0.0)
+	_retarget_fixture(enemy)
 	assert(enemy.target == null, "target beyond the 15-axis boundary was retained")
 	_checks += 6
 
@@ -290,11 +322,10 @@ func _test_formal_terrain_los_and_bounded_detour(player: PlayerCharacter) -> voi
 	var enemy := await _make_enemy(18, player)
 	enemy.configure_runtime_map_projection(
 		990001,
-		func(ground_gu: Vector2) -> Vector2:
-			return GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(ground_gu),
-		func(screen_px: Vector2) -> Vector2:
-			return GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(screen_px),
+		Callable(GroundUnitSpaceScript, "ground_delta_gu_to_screen_delta_px"),
+		Callable(GroundUnitSpaceScript, "screen_delta_px_to_ground_delta_gu"),
 	)
+	enemy.runtime_map_id = 990001
 	enemy.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
 		Vector2(2.5, 5.5)
 	)
@@ -304,21 +335,79 @@ func _test_formal_terrain_los_and_bounded_detour(player: PlayerCharacter) -> voi
 	)
 
 	# Missing exact formal terrain identity is fail-closed, and a canonical wall
-	# inside the existing 5-GU square blocks first acquisition.
+	# inside the existing 6-GU square blocks first acquisition.
 	enemy.target = null
 	enemy._retarget_timer = 0.0
-	enemy._retarget(0.0)
+	var missing_woke := _request_fixture_wake(enemy, player)
+	assert(not missing_woke)
+	assert(not enemy._passive_wake_pending)
+	_retarget_fixture(enemy)
 	assert(enemy.target == null)
 	enemy.configure_terrain_navigation_context(_terrain_context(["3,5"]))
 	enemy._retarget_timer = 0.0
-	enemy._retarget(0.0)
+	var blocked_woke := _request_fixture_wake(enemy, player)
+	assert(not blocked_woke, "blocked terrain must reject passive wake on LOS")
+	assert(not enemy._passive_wake_pending)
+	_retarget_fixture(enemy)
 	assert(enemy.target == null)
 	enemy.configure_terrain_navigation_context(_terrain_context([]))
 	enemy._retarget_timer = 0.0
-	enemy._retarget(0.0)
+	var open_woke := _request_fixture_wake(enemy, player)
+	assert(open_woke, "open terrain must accept a fresh passive wake")
+	_retarget_fixture(enemy)
 	assert(enemy.target == player)
 	_checks += 3
+
+	# Partial polygon LOS is distinct from whole-cell blocking: the narrow
+	# rectangle blocks the straight 5.5-GU line, while the raised target line
+	# passes above it without invoking a route-around search.
+	var partial_context := RuntimeFixture.polygon_context(
+		[[[3.2, 5.1], [3.4, 5.1], [3.4, 5.8], [3.2, 5.8]]],
+		0.5,
+	)
+	assert(TerrainPolicy.context_valid(partial_context, 1))
+	assert(partial_context.has("poly_index"))
+	enemy.runtime_map_id = 1
+	enemy.configure_runtime_map_projection(
+		1,
+		Callable(GroundUnitSpaceScript, "ground_delta_gu_to_screen_delta_px"),
+		Callable(GroundUnitSpaceScript, "screen_delta_px_to_ground_delta_gu"),
+	)
+	enemy.configure_terrain_navigation_context(partial_context)
+	enemy.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+		Vector2(2.5, 5.5)
+	)
+	player.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+		Vector2(4.5, 5.5)
+	)
+	enemy.target = null
+	var partial_blocked_wake := _request_fixture_wake(enemy, player)
+	assert(not partial_blocked_wake)
+	assert(not enemy._passive_wake_pending)
+	_retarget_fixture(enemy)
+	assert(enemy.target == null)
+	player.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+		Vector2(4.5, 7.5)
+	)
+	var partial_clear_wake := _request_fixture_wake(enemy, player)
+	assert(partial_clear_wake)
+	_retarget_fixture(enemy)
+	assert(enemy.target == player)
+	_checks += 2
+	# Restore the original map-990001 open-cell context before the legacy
+	# neighbor and bounded-detour assertions below; the partial polygon case
+	# above intentionally leaves a map-1 poly context installed.
+	enemy.runtime_map_id = 990001
+	enemy.configure_runtime_map_projection(
+		990001,
+		Callable(GroundUnitSpaceScript, "ground_delta_gu_to_screen_delta_px"),
+		Callable(GroundUnitSpaceScript, "screen_delta_px_to_ground_delta_gu"),
+	)
+	enemy.configure_terrain_navigation_context(_terrain_context([]))
 	TerrainPolicy.reset_diagnostics()
+	player.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+		Vector2(4.5, 5.5)
+	)
 	var open_neighbor := enemy._terrain_neighbor_for_pursuit(
 		Vector2(2.5, 5.5),
 		player,
@@ -607,17 +696,55 @@ func _terrain_context(blocked_tiles: Array) -> Dictionary:
 	)
 
 
+func _open_fixture_terrain_context() -> Dictionary:
+	return TerrainPolicy.build_context(
+		4,
+		{
+			"build_sha256": "d".repeat(64),
+			"source": {"runtime_map_id": 4},
+			"design": {"design_size": [80, 80]},
+			"collision": {"blocked_tiles": []},
+		},
+		TerrainPolicy.EXPECTED_GROUND_COORDINATE_CONTRACT_ID,
+	)
+
+
 func _make_enemy(monster_id: int, player: PlayerCharacter) -> EnemyActor:
+	# Let the previous queued-free body leave the physics world, and keep the
+	# real player away from the spawn overlap resolver while this actor enters.
+	player.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+		Vector2(70.0, 70.0)
+	)
+	await get_tree().process_frame
 	var enemy := EnemyActor.new()
 	enemy.setup(GameData.get_monster_by_id(monster_id), player, false)
 	assert(enemy.target == null, "setup must not pre-assign primary_target")
 	_checks += 1
-	enemy.global_position = Vector2.ZERO
-	enemy.set_meta("spawn_position", Vector2.ZERO)
+	var fixture_center_gu := Vector2(16.0, 16.0)
+	enemy.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+		Vector2(70.0, 70.0)
+	)
+	enemy.runtime_map_id = 4
+	enemy.configure_runtime_map_projection(
+		4,
+		Callable(GroundUnitSpaceScript, "ground_delta_gu_to_screen_delta_px"),
+		Callable(GroundUnitSpaceScript, "screen_delta_px_to_ground_delta_gu"),
+	)
+	enemy.set_meta("spawn_position", enemy.global_position)
 	enemy.set_meta("safe_zones", [])
+	enemy.set_meta("zone_generation", 1)
+	var open_context := _open_fixture_terrain_context()
+	assert(TerrainPolicy.context_valid(open_context, 4))
+	enemy.configure_terrain_navigation_context(open_context)
 	enemy.set_physics_process(false)
 	add_child(enemy)
+	enemy.set_physics_process(false)
 	await get_tree().process_frame
+	enemy.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(fixture_center_gu)
+	enemy.set_meta("spawn_position", enemy.global_position)
+	enemy.set_physics_process(false)
+	var actual_center_gu := enemy._screen_position_px_to_ground_position_gu_vector2(enemy.global_position)
+	assert(actual_center_gu.distance_to(fixture_center_gu) <= 0.0001)
 	# Runtime scheduling may legitimately perform the first acquisition after
 	# the actor enters the tree. Each scenario starts from an explicit null target.
 	enemy.target = null
@@ -635,13 +762,37 @@ func _assert_acquisition(
 	player.global_position = _ground_position_from_enemy(enemy, delta_ground_gu)
 	enemy.target = null
 	enemy._threat_table.clear()
+	var woke := _request_fixture_wake(enemy, player)
+	assert(woke == expected, "%s passive wake admission expected=%s actual=%s" % [label, expected, woke])
 	enemy._retarget_timer = 0.0
-	enemy._retarget(0.0)
+	_retarget_fixture(enemy)
 	assert(
 		(enemy.target == player) == expected,
 		"%s expected=%s actual_target=%s" % [label, expected, enemy.target],
 	)
 	_checks += 1
+
+
+func _request_fixture_wake(enemy: EnemyActor, player: PlayerCharacter) -> bool:
+	var owner := player.get_parent()
+	var map_id := enemy.runtime_map_id
+	var generation := int(owner.get("_zone_generation"))
+	owner.set("current_map_id", map_id)
+	# GameRoot's production map publication is represented by the player's
+	# runtime-map metadata in the live-target path as well as by the owner
+	# property used by passive admission. Keep both witnesses identical for
+	# this geometry-only fixture; the dedicated map fast-path test removes and
+	# mutates this metadata explicitly afterward.
+	player.set_meta("runtime_map_id", map_id)
+	enemy.set_meta("zone_generation", generation)
+	return enemy.request_passive_target_wakeup(player, map_id, generation)
+
+
+func _retarget_fixture(enemy: EnemyActor) -> void:
+	enemy._retarget(0.0)
+	# A direct fixture retarget is a synchronous boundary; never carry an
+	# optional owner lease into the next scenario or frame.
+	enemy._owner_optional_budget_end()
 
 
 func _ground_position_from_enemy(enemy: EnemyActor, delta_ground_gu: Vector2) -> Vector2:

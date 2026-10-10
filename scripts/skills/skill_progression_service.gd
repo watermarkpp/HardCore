@@ -2,6 +2,7 @@ class_name SkillProgressionService
 extends RefCounted
 
 const SkillDataLoaderScript := preload("res://scripts/skills/skill_data_loader.gd")
+const EquipmentGrantedSkillRulesScript := preload("res://scripts/equipment_granted_skill_rules.gd")
 const EntityRegistry := preload("res://scripts/identity/entity_registry.gd")
 const SkillRankResolverScript := preload(
 	"res://scripts/skills/skill_rank_resolver.gd"
@@ -21,6 +22,8 @@ var _progress: Dictionary = {}
 
 func learn(skill_name_or_id: String, player_level: int) -> Dictionary:
 	var skill_id := SkillDataLoaderScript.entity_skill_id(skill_name_or_id)
+	if not EquipmentGrantedSkillRulesScript.definition(skill_id).is_empty():
+		return _learn_result(false, "equipment_granted_skill", skill_id, 0, 0, "rejected")
 	var rank_zero := SkillDataLoaderScript.rank_record(skill_id, 0)
 	if rank_zero.is_empty():
 		return _learn_result(false, "unknown_skill", skill_id, 0, 0, "")
@@ -157,6 +160,9 @@ func load_snapshot(value: Variant) -> Dictionary:
 			skill_id = SkillDataLoaderScript.entity_skill_id(str(raw_key))
 		if not raw_key is String or skill_id.is_empty():
 			rejected.append(str(raw_key))
+			continue
+		if not EquipmentGrantedSkillRulesScript.definition(skill_id).is_empty():
+			rejected.append("equipment_granted_skill:" + skill_id)
 			continue
 		if candidate.has(skill_id):
 			rejected.append("duplicate_skill_identity:" + skill_id)

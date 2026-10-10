@@ -103,10 +103,14 @@
   ],
   "rules": {
     "zeroDurability": "所有特殊效果立即失效",
-    "revivalCooldownMs": 60000,
+    "revivalCooldownMs": 300000,
     "paralysisBaseDenominator": 5,
+    "paralysisBossSeconds": 2.5,
+    "paralysisEliteSeconds": 2.5,
+    "paralysisOrdinarySeconds": 5.0,
     "magicShieldMpPerDamage": 1.5,
-    "doubleWeight": 2
+    "doubleWeight": 2,
+    "stealthDescription": "穿戴后立即隐身；攻击时解除，脱离真实战斗后恢复；零耐久或卸下立即失效"
   },
   "mappingPolicy": "运行公式来自服务端源码(A)；实际StdItems缺失时，名称到AniCount及套装逐件power保持B，不冒充逐件数据库原值。"
 }

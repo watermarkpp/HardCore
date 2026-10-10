@@ -45,7 +45,8 @@ def image_templates(path: Path) -> list[dict]:
     if base["height"] in (24, 32) and base["width"] >= 64 and base["width"] % 64 == 0:
         return [{**base, "id": f"{base['id']}__tile_{index}", "name": f"{base['name']} {index + 1}",
                  "region": {"x": index * 64, "y": 0, "width": 64, "height": base["height"]},
-                 "width": 64, "layer": "base_ground", "blockMove": False}
+                 "width": 64, "pivot": {"x": 32, "y": max(0, base["height"] - 4)},
+                 "layer": "base_ground", "blockMove": False}
                 for index in range(base["width"] // 64)]
     if base["height"] == 128 and base["width"] >= 96 and base["width"] % 96 == 0:
         return [{**base, "id": f"{base['id']}__prop_{index}", "name": f"{base['name']} 物件 {index + 1}",

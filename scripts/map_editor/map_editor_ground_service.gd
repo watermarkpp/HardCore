@@ -4,6 +4,8 @@ extends RefCounted
 const GROUND_SCHEMA_VERSION := 1
 const MANIFEST_FILE := "ground_manifest.json"
 const STATE_FILE := "ground_state.json"
+const WRITE_SET_SCHEMA_VERSION := 1
+const WRITE_SET_FILE := ".ground_write_set.json"
 static var _normalized_ground_image_cache: Dictionary = {}
 
 
@@ -15,14 +17,29 @@ static func initialize(document: Dictionary) -> Dictionary:
 	_sync_document_ground_contract(document, root)
 	var manifest_path := root.path_join("ground").path_join(MANIFEST_FILE)
 	var state_path := root.path_join("ground").path_join(STATE_FILE)
-	var manifest := _read_json(manifest_path)
+	var recovery := _recover_pending_write_set(root, str(document.get("map_id", "")))
+	if not recovery.ok:
+		return recovery
+	var manifest_read := _read_json_checked(manifest_path)
+	var state_read := _read_json_checked(state_path)
+	var manifest_exists := bool(manifest_read.exists)
+	var state_exists := bool(state_read.exists)
+	if (manifest_exists and not manifest_read.valid) or (state_exists and not state_read.valid):
+		return {"ok": false, "errors": ["ground_primary_corrupt"]}
+	if (manifest_exists and (manifest_read.value as Dictionary).is_empty()) or (state_exists and (state_read.value as Dictionary).is_empty()):
+		return {"ok": false, "errors": ["ground_primary_corrupt"]}
+	if manifest_exists != state_exists:
+		return {"ok": false, "errors": ["ground_primary_pair_incomplete"]}
+	if not manifest_exists and _has_ground_artifacts(root):
+		return {"ok": false, "errors": ["ground_primary_missing_with_artifacts"]}
+	var manifest: Dictionary = manifest_read.value
 	var manifest_changed := false
 	if manifest.is_empty():
 		manifest = _new_manifest(document)
 		manifest_changed = true
 	elif _sync_blank_policy(document, manifest):
 		manifest_changed = true
-	var state := _read_json(state_path)
+	var state: Dictionary = state_read.value
 	var state_changed := false
 	if state.is_empty():
 		state = {"schema_version": GROUND_SCHEMA_VERSION, "map_id": document.map_id, "dirty_chunks": [], "operations_by_chunk": {}}
@@ -32,14 +49,15 @@ static func initialize(document: Dictionary) -> Dictionary:
 	)
 	manifest_changed = manifest_changed or bool(contract_sync.manifest_changed)
 	state_changed = state_changed or bool(contract_sync.state_changed)
-	if manifest_changed:
-		var write_manifest := _write_json_atomic(manifest_path, manifest)
-		if not write_manifest.ok:
-			return write_manifest
-	if state_changed:
-		var write_state := _write_json_atomic(state_path, state)
-		if not write_state.ok:
-			return write_state
+	if manifest_changed or state_changed:
+		var write_set: Array[Dictionary] = []
+		if manifest_changed:
+			write_set.append({"path": manifest_path, "value": manifest})
+		if state_changed:
+			write_set.append({"path": state_path, "value": state})
+		var write_result := _commit_write_set(root, str(document.get("map_id", "")), write_set)
+		if not write_result.ok:
+			return write_result
 	return {"ok": true, "manifest": manifest, "state": state, "manifest_path": manifest_path, "state_path": state_path}
 
 
@@ -102,13 +120,15 @@ static func _record_tile_batch(document: Dictionary, paints: Array[Dictionary]) 
 	manifest.chunks = chunks
 	state.operations_by_chunk = operations_by_chunk
 	var dirty_chunks: Array = state.dirty_chunks
+	var write_set: Array[Dictionary] = []
 	for chunk_id: String in changed_chunks:
 		if not dirty_chunks.has(chunk_id): dirty_chunks.append(chunk_id)
 		var chunk_path := workspace_root(document).path_join("ground/chunks/%s.json" % chunk_id)
-		var write_chunk := _write_json_atomic(chunk_path, {"schema_version": GROUND_SCHEMA_VERSION, "chunk_id": chunk_id, "operations": operations_by_chunk[chunk_id]})
-		if not write_chunk.ok: return write_chunk
+		write_set.append({"path": chunk_path, "value": {"schema_version": GROUND_SCHEMA_VERSION, "chunk_id": chunk_id, "operations": operations_by_chunk[chunk_id]}})
 	dirty_chunks.sort(); state.dirty_chunks = dirty_chunks
-	var save_result := save_manifest_and_state(str(initialized.manifest_path), manifest, str(initialized.state_path), state)
+	write_set.append({"path": str(initialized.manifest_path), "value": manifest})
+	write_set.append({"path": str(initialized.state_path), "value": state})
+	var save_result := _commit_write_set(workspace_root(document), str(document.get("map_id", "")), write_set)
 	if not save_result.ok: return save_result
 	return {"ok": true, "painted_count": paints.size(), "dirty_count": dirty_chunks.size(), "state": state, "manifest": manifest}
 
@@ -157,10 +177,12 @@ static func normalized_ground_image(asset_id: String) -> Image:
 
 
 static func save_manifest_and_state(manifest_path: String, manifest: Dictionary, state_path: String, state: Dictionary) -> Dictionary:
-	var write_manifest := _write_json_atomic(manifest_path, manifest)
-	if not write_manifest.ok:
-		return write_manifest
-	return _write_json_atomic(state_path, state)
+	var root := manifest_path.get_base_dir().get_base_dir()
+	var map_id := str(manifest.get("map_id", state.get("map_id", "")))
+	return _commit_write_set(root, map_id, [
+		{"path": manifest_path, "value": manifest},
+		{"path": state_path, "value": state},
+	])
 
 
 static func _record_operation(document: Dictionary, tile: Vector2i, operation_data: Dictionary) -> Dictionary:
@@ -205,10 +227,12 @@ static func _record_operation(document: Dictionary, tile: Vector2i, operation_da
 	state.dirty_chunks = dirty_chunks
 	var root := workspace_root(document)
 	var chunk_path := root.path_join("ground/chunks/%s.json" % chunk_id)
-	var write_chunk := _write_json_atomic(chunk_path, {"schema_version": GROUND_SCHEMA_VERSION, "chunk_id": chunk_id, "operations": operations})
-	if not write_chunk.ok:
-		return write_chunk
-	var save_result := save_manifest_and_state(str(initialized.manifest_path), manifest, str(initialized.state_path), state)
+	var write_set: Array[Dictionary] = [
+		{"path": chunk_path, "value": {"schema_version": GROUND_SCHEMA_VERSION, "chunk_id": chunk_id, "operations": operations}},
+		{"path": str(initialized.manifest_path), "value": manifest},
+		{"path": str(initialized.state_path), "value": state},
+	]
+	var save_result := _commit_write_set(root, str(document.get("map_id", "")), write_set)
 	if not save_result.ok:
 		return save_result
 	return {"ok": true, "chunk_id": chunk_id, "ground_px": ground_px, "dirty_count": dirty_chunks.size(), "manifest": manifest, "state": state}
@@ -398,14 +422,226 @@ static func _design_size(document: Dictionary) -> Vector2i:
 
 
 static func _read_json(path: String) -> Dictionary:
+	var checked := _read_json_checked(path)
+	return checked.value if checked.valid else {}
+
+
+static func _read_json_checked(path: String) -> Dictionary:
 	var resolved := ProjectSettings.globalize_path(path) if path.begins_with("res://") or path.begins_with("user://") else path
 	if not FileAccess.file_exists(resolved):
-		return {}
+		return {"exists": false, "valid": true, "value": {}}
 	var file := FileAccess.open(resolved, FileAccess.READ)
 	if file == null:
-		return {}
+		return {"exists": true, "valid": false, "value": {}}
 	var parsed: Variant = JSON.parse_string(file.get_as_text())
-	return parsed if parsed is Dictionary else {}
+	return {"exists": true, "valid": parsed is Dictionary, "value": parsed if parsed is Dictionary else {}}
+
+
+static func _file_sha256(path: String) -> String:
+	var resolved := ProjectSettings.globalize_path(path) if path.begins_with("res://") or path.begins_with("user://") else path
+	if not FileAccess.file_exists(resolved):
+		return ""
+	var file := FileAccess.open(resolved, FileAccess.READ)
+	if file == null:
+		return ""
+	var hashing := HashingContext.new()
+	hashing.start(HashingContext.HASH_SHA256)
+	hashing.update(file.get_buffer(file.get_length()))
+	file.close()
+	return hashing.finish().hex_encode()
+
+
+static func _has_ground_artifacts(root: String) -> bool:
+	var ground_dir := ProjectSettings.globalize_path(root.path_join("ground")).replace("\\", "/")
+	var dir := DirAccess.open(ground_dir)
+	if dir == null:
+		return false
+	dir.list_dir_begin()
+	var entry := dir.get_next()
+	while not entry.is_empty():
+		if entry not in [".", "..", WRITE_SET_FILE] and not (entry == "chunks" and dir.current_is_dir() and _directory_is_empty(ground_dir.path_join(entry))):
+			dir.list_dir_end()
+			return true
+		entry = dir.get_next()
+	dir.list_dir_end()
+	return false
+
+
+static func _directory_is_empty(path: String) -> bool:
+	var dir := DirAccess.open(path)
+	if dir == null:
+		return true
+	dir.list_dir_begin()
+	var entry := dir.get_next()
+	var empty := entry.is_empty()
+	dir.list_dir_end()
+	return empty
+
+
+static func _commit_write_set(root: String, map_id: String, write_set: Array[Dictionary]) -> Dictionary:
+	if write_set.is_empty():
+		return {"ok": true}
+	var ground_dir := ProjectSettings.globalize_path(root.path_join("ground")).replace("\\", "/")
+	var mkdir_error := DirAccess.make_dir_recursive_absolute(ground_dir)
+	if mkdir_error != OK:
+		return {"ok": false, "errors": ["ground_mkdir_failed:%d" % mkdir_error]}
+	var journal_path := ground_dir.path_join(WRITE_SET_FILE)
+	if FileAccess.file_exists(journal_path):
+		return {"ok": false, "errors": ["ground_write_set_pending"]}
+	var token := "%d_%d" % [Time.get_ticks_usec(), randi()]
+	var entries: Array[Dictionary] = []
+	for item: Dictionary in write_set:
+		var target := ProjectSettings.globalize_path(str(item.path)).replace("\\", "/")
+		var relative := target.trim_prefix(ground_dir + "/")
+		if not _valid_write_set_relative_path(relative):
+			_cleanup_write_set_entries(entries)
+			return {"ok": false, "errors": ["ground_txn_target_outside_workspace"]}
+		var target_dir_error := DirAccess.make_dir_recursive_absolute(target.get_base_dir())
+		if target_dir_error != OK:
+			_cleanup_write_set_entries(entries)
+			return {"ok": false, "errors": ["ground_txn_target_dir_failed:%d" % target_dir_error]}
+		var temporary := target + ".txn." + token
+		var encoded := JSON.stringify(item.value, "  ", true, true) + "\n"
+		var file := FileAccess.open(temporary, FileAccess.WRITE)
+		if file == null:
+			_cleanup_write_set_entries(entries)
+			return {"ok": false, "errors": ["ground_txn_temp_open_failed"]}
+		file.store_string(encoded); file.flush(); file.close()
+		var checked := _read_json_checked(temporary)
+		if not checked.valid:
+			_cleanup_write_set_entries(entries)
+			DirAccess.remove_absolute(temporary)
+			return {"ok": false, "errors": ["ground_txn_temp_verify_failed"]}
+		entries.append({
+			"relative_path": relative,
+			"temporary_path": temporary,
+			"backup_path": target + ".txnbackup." + token,
+			"base_sha256": _file_sha256_or_missing(target),
+			"new_sha256": _file_sha256(temporary),
+		})
+	var journal := {"schema_version": WRITE_SET_SCHEMA_VERSION, "map_id": map_id, "generation": token, "entries": entries}
+	var journal_file := FileAccess.open(journal_path, FileAccess.WRITE)
+	if journal_file == null:
+		_cleanup_write_set_entries(entries)
+		return {"ok": false, "errors": ["ground_txn_journal_open_failed"]}
+	journal_file.store_string(JSON.stringify(journal, "  ", true, true) + "\n"); journal_file.flush(); journal_file.close()
+	return _recover_pending_write_set(root, map_id)
+
+
+static func _recover_pending_write_set(root: String, map_id: String) -> Dictionary:
+	var ground_dir := ProjectSettings.globalize_path(root.path_join("ground")).replace("\\", "/")
+	var journal_path := ground_dir.path_join(WRITE_SET_FILE)
+	if not FileAccess.file_exists(journal_path):
+		return {"ok": true}
+	var journal_read := _read_json_checked(journal_path)
+	if not journal_read.valid:
+		return {"ok": false, "errors": ["ground_txn_identity_corrupt"]}
+	var journal: Dictionary = journal_read.value
+	var raw_schema: Variant = journal.get("schema_version", null)
+	var raw_map_id: Variant = journal.get("map_id", null)
+	var raw_generation: Variant = journal.get("generation", null)
+	if not (raw_schema is int or raw_schema is float) or typeof(raw_map_id) != TYPE_STRING or typeof(raw_generation) != TYPE_STRING:
+		return {"ok": false, "errors": ["ground_txn_identity_corrupt"]}
+	if not is_finite(float(raw_schema)) or float(raw_schema) != floorf(float(raw_schema)):
+		return {"ok": false, "errors": ["ground_txn_identity_corrupt"]}
+	var generation := str(raw_generation)
+	var generation_pattern := RegEx.new()
+	generation_pattern.compile("^[0-9]+_[0-9]+$")
+	if int(raw_schema) != WRITE_SET_SCHEMA_VERSION or str(raw_map_id) != map_id or generation_pattern.search(generation) == null:
+		return {"ok": false, "errors": ["ground_txn_identity_mismatch"]}
+	var raw_entries: Variant = journal.get("entries", null)
+	if not raw_entries is Array:
+		return {"ok": false, "errors": ["ground_txn_entries_invalid"]}
+	var entries: Array = raw_entries
+	if entries.is_empty():
+		return {"ok": false, "errors": ["ground_txn_empty"]}
+	var seen_paths := {}
+	for raw_entry: Variant in entries:
+		if not raw_entry is Dictionary:
+			return {"ok": false, "errors": ["ground_txn_entry_invalid"]}
+		var entry: Dictionary = raw_entry
+		var relative_path := str(entry.get("relative_path", ""))
+		if not _valid_write_set_relative_path(relative_path) or seen_paths.has(relative_path):
+			return {"ok": false, "errors": ["ground_txn_path_invalid"]}
+		seen_paths[relative_path] = true
+		var target := ground_dir.path_join(relative_path)
+		var expected_temp := target + ".txn." + generation
+		var expected_backup := target + ".txnbackup." + generation
+		if str(entry.get("temporary_path", "")) != expected_temp or str(entry.get("backup_path", "")) != expected_backup:
+			return {"ok": false, "errors": ["ground_txn_path_invalid"]}
+		var current := _file_sha256_or_missing(target)
+		var base := str(entry.get("base_sha256", ""))
+		var intended := str(entry.get("new_sha256", ""))
+		if not _valid_write_set_hash(base, true) or not _valid_write_set_hash(intended, false):
+			return {"ok": false, "errors": ["ground_txn_hash_invalid"]}
+		var temporary := str(entry.get("temporary_path", ""))
+		var backup := str(entry.get("backup_path", ""))
+		if FileAccess.file_exists(temporary) and _file_sha256(temporary) != intended:
+			return {"ok": false, "errors": ["ground_txn_temp_changed"]}
+		if FileAccess.file_exists(backup) and _file_sha256(backup) != base:
+			return {"ok": false, "errors": ["ground_txn_backup_changed"]}
+		if current == intended:
+			continue
+		if current == "MISSING" and _file_sha256(backup) == base:
+			current = base
+		if current != base:
+			return {"ok": false, "errors": ["ground_txn_third_version:%s" % str(entry.get("relative_path", ""))]}
+		if temporary.is_empty() or not FileAccess.file_exists(temporary) or _file_sha256(temporary) != intended:
+			return {"ok": false, "errors": ["ground_txn_intended_missing:%s" % str(entry.get("relative_path", ""))]}
+	for raw_entry: Variant in entries:
+		var entry: Dictionary = raw_entry
+		var target := ground_dir.path_join(str(entry.get("relative_path", "")))
+		if _file_sha256_or_missing(target) == str(entry.get("new_sha256", "")):
+			continue
+		var promote_temp := str(entry.get("temporary_path", ""))
+		var promote_backup := str(entry.get("backup_path", ""))
+		if FileAccess.file_exists(target):
+			var backup_error := DirAccess.rename_absolute(target, promote_backup)
+			if backup_error != OK:
+				return {"ok": false, "errors": ["ground_txn_backup_failed:%d" % backup_error]}
+		var promote_error := DirAccess.rename_absolute(promote_temp, target)
+		if promote_error != OK:
+			if FileAccess.file_exists(promote_backup):
+				DirAccess.rename_absolute(promote_backup, target)
+			return {"ok": false, "errors": ["ground_txn_promote_failed:%d" % promote_error]}
+	for raw_entry: Variant in entries:
+		var cleanup_temp := str((raw_entry as Dictionary).get("temporary_path", ""))
+		if FileAccess.file_exists(cleanup_temp):
+			DirAccess.remove_absolute(cleanup_temp)
+		var cleanup_backup := str((raw_entry as Dictionary).get("backup_path", ""))
+		if FileAccess.file_exists(cleanup_backup):
+			if _file_sha256(cleanup_backup) != str((raw_entry as Dictionary).get("base_sha256", "")):
+				return {"ok": false, "errors": ["ground_txn_backup_changed"]}
+			DirAccess.remove_absolute(cleanup_backup)
+	DirAccess.remove_absolute(journal_path)
+	return {"ok": true}
+
+
+static func _cleanup_write_set_entries(entries: Array) -> void:
+	for raw_entry: Variant in entries:
+		var temporary := str((raw_entry as Dictionary).get("temporary_path", ""))
+		if FileAccess.file_exists(temporary):
+			DirAccess.remove_absolute(temporary)
+
+
+static func _file_sha256_or_missing(path: String) -> String:
+	return _file_sha256(path) if FileAccess.file_exists(ProjectSettings.globalize_path(path)) else "MISSING"
+
+
+static func _valid_write_set_hash(value: String, allow_missing: bool) -> bool:
+	if allow_missing and value == "MISSING":
+		return true
+	return value.length() == 64 and value.is_valid_hex_number()
+
+
+static func _valid_write_set_relative_path(value: String) -> bool:
+	if value.is_empty() or value.begins_with("/") or value.contains("..") or value.contains("\\"):
+		return false
+	if value in [MANIFEST_FILE, STATE_FILE]:
+		return true
+	var chunk_pattern := RegEx.new()
+	chunk_pattern.compile("^chunks/c_-?[0-9]+_-?[0-9]+\\.json$")
+	return chunk_pattern.search(value) != null
 
 
 static func _write_json_atomic(path: String, value: Dictionary) -> Dictionary:

@@ -49,6 +49,9 @@ const DESIGNS := {
 			Vector2(1388.0, 412.5),
 		],
 		"item_slot_fill_display_size": Vector2(50, 51) * DISPLAY_SCALE_RATIO,
+		# The hole is only 132x135 source pixels; the visible bevel extends
+		# around it to a 184px cell. Hit the full frame, not just its black well.
+		"item_slot_touch_source_size": Vector2(184, 184),
 		"item_slot_fill_render_size": Vector2(56, 57) * DISPLAY_SCALE_RATIO,
 		"experience_bar_policy": "chassis_design_xp_slot.v1",
 		"experience_slot_source_rect": Rect2(675, 560, 821, 35),

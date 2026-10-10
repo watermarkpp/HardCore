@@ -1,5 +1,6 @@
 extends Node
 
+const Fixture := preload("res://tests/helpers/formal_world_skill_fixture.gd")
 const GroundUnit := preload("res://scripts/ground_unit_space.gd")
 const RuntimeCombatSpatialIndexScript := preload(
 	"res://scripts/runtime_combat_spatial_index.gd"
@@ -38,8 +39,7 @@ func _run() -> void:
 	PlayerState.recalculate_stats()
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	await Fixture.wait_for_formal_world(self, game, "summon_actor_state_machine")
 	var player: PlayerCharacter = game.player
 
 	var skeleton := SummonActor.new()
@@ -171,6 +171,39 @@ func _run() -> void:
 	var original_attack_facing := player.facing
 	player.movement_facing = Vector2.RIGHT
 	player.facing = Vector2.UP
+	# The single-pet contract must begin on a formally clear owner tile too.
+	# The later dual-pet search cannot repair this earlier 120-step input because
+	# a real move_and_slide() can remain blocked by the initial world footprint.
+	var initial_owner_ground: Vector2 = game._canonical_screen_px_to_ground_gu(
+		player.global_position
+	)
+	var initial_skeleton_offset_px: Vector2 = (
+		skeleton.rest_formation_contract_snapshot().desired_screen_position_px
+		- player.global_position
+	)
+	var initial_single_formation_found := false
+	for initial_offset_y: int in range(-8, 9):
+		for initial_offset_x: int in range(-8, 9):
+			var initial_candidate_px: Vector2 = game._canonical_ground_gu_to_screen_px(
+				initial_owner_ground + Vector2(initial_offset_x, initial_offset_y)
+			)
+			if WorldSpatialRulesScript.environment_blocks_actor_screen_px(
+				game.background, initial_candidate_px, ArtSpec.PLAYER_COLLISION_RADIUS_PX
+			):
+				continue
+			if WorldSpatialRulesScript.environment_blocks_actor_screen_px(
+				game.background,
+				initial_candidate_px + initial_skeleton_offset_px,
+				skeleton.collision_radius_px,
+			):
+				continue
+			player.global_position = initial_candidate_px
+			skeleton.global_position = initial_candidate_px
+			initial_single_formation_found = true
+			break
+		if initial_single_formation_found:
+			break
+	assert(initial_single_formation_found, "single-pet formation fixture needs a legal owner and anchor")
 	skeleton.global_position = player.global_position
 	skeleton._current_target = null
 	skeleton._target_acquire_remaining = 1.0
@@ -350,19 +383,45 @@ func _run() -> void:
 			0.0
 		))
 	)
+	_bind_formal_main_pet_follow_fixture(game, skeleton, 0)
+	_bind_formal_main_pet_follow_fixture(game, formation_beast, 1)
+	var formal_follow_ignored: Array[SummonActor] = [skeleton, formation_beast]
+	# Mirror the production callback order: the first pet must complete its
+	# landing before the second pet's plan is queried.  Precomputing both plans
+	# while both pets still occupy their old positions lets the first plan's
+	# reservation be invisible to the second plan, so the second callback can
+	# legitimately reject or choose a different legal slot.
 	skeleton.global_position = far_recall_position
-	formation_beast.global_position = far_recall_position
 	skeleton._target_acquire_remaining = 1.0
-	formation_beast._target_acquire_remaining = 1.0
+	var skeleton_far_follow_plan: Dictionary = game._canonical_summon_follow_landing_plan(skeleton)
+	assert(bool(skeleton_far_follow_plan.get("valid", false)), "skeleton far-follow uses a formal legal landing plan")
 	skeleton._physics_process(1.0 / 60.0)
+	formation_beast.global_position = far_recall_position
+	formation_beast._target_acquire_remaining = 1.0
+	var beast_far_follow_plan: Dictionary = game._canonical_summon_follow_landing_plan(formation_beast)
+	assert(bool(beast_far_follow_plan.get("valid", false)), "divine-beast far-follow uses a formal legal landing plan")
 	formation_beast._physics_process(1.0 / 60.0)
 	assert(skeleton.global_position.is_equal_approx(
-		skeleton_anchor_before_attack_facing
+		skeleton_far_follow_plan.get("position_screen_px", skeleton_anchor_before_attack_facing)
 	))
 	assert(formation_beast.global_position.is_equal_approx(
-		beast_anchor_before_attack_facing
+		beast_far_follow_plan.get("position_screen_px", beast_anchor_before_attack_facing)
 	))
+	assert(game._canonical_summon_position_is_valid(
+		game._canonical_screen_px_to_ground_gu(skeleton.global_position),
+		skeleton.combat_radius_gu,
+		skeleton,
+		formal_follow_ignored,
+	), "skeleton far-follow landing remains formally legal")
+	assert(game._canonical_summon_position_is_valid(
+		game._canonical_screen_px_to_ground_gu(formation_beast.global_position),
+		formation_beast.combat_radius_gu,
+		formation_beast,
+		formal_follow_ignored,
+	), "divine-beast far-follow landing remains formally legal")
 	assert(skeleton.global_position != formation_beast.global_position)
+	_restore_legacy_projection(skeleton)
+	_restore_legacy_projection(formation_beast)
 	var skeleton_ground_for_formation_combat := (
 		GroundUnit.screen_delta_px_to_ground_delta_gu(skeleton.global_position)
 	)
@@ -596,9 +655,16 @@ func _run() -> void:
 			skeleton.teleport_range_gu + 1.0, 0.0
 		))
 	)
+	_bind_formal_main_pet_follow_fixture(game, skeleton, 0)
+	var attack_follow_plan: Dictionary = game._canonical_summon_follow_landing_plan(skeleton)
+	assert(bool(attack_follow_plan.get("valid", false)), "attack follow uses a formal legal landing plan")
 	skeleton._physics_process(0.016)
+	assert(skeleton.global_position.is_equal_approx(
+		attack_follow_plan.get("position_screen_px", skeleton.global_position)
+	))
 	assert(skeleton.distance_gu_to_screen_position_px(player.global_position) < 2.0)
 	assert(skeleton.state == SummonActor.SummonState.RETURN_TO_OWNER)
+	_restore_legacy_projection(skeleton)
 	skeleton.remaining_lifetime = 0.001
 	skeleton._physics_process(0.016)
 	assert(skeleton.state == SummonActor.SummonState.EXPIRED or skeleton.is_queued_for_deletion())
@@ -618,6 +684,32 @@ func _run() -> void:
 	divine_beast.free()
 	print("SUMMON_ACTOR_STATE_MACHINE_PASS: levels, attacks, ten-day life, owner follow, recall")
 	get_tree().quit(0)
+
+
+func _bind_formal_main_pet_follow_fixture(
+	game: Node,
+	summon: SummonActor,
+	pet_slot: int,
+) -> void:
+	summon.pet_slot_index = pet_slot
+	summon.set_meta("taoist_main_pet", true)
+	summon.set_meta(
+		"taoist_main_pet_contract",
+		PlayerState.TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID,
+	)
+	summon.configure_runtime_map_projection(
+		game.current_map_id,
+		Callable(game, "_canonical_ground_gu_to_screen_px"),
+		Callable(game, "_canonical_screen_px_to_ground_gu"),
+	)
+
+
+func _restore_legacy_projection(summon: SummonActor) -> void:
+	summon.configure_runtime_map_projection(
+		1,
+		Callable(self, "_test_ground_to_screen"),
+		GroundUnit.screen_delta_px_to_ground_delta_gu,
+	)
 
 
 func _make_indexed_enemy(

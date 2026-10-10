@@ -30,7 +30,16 @@ function Test-FrameworkReceipt {
         $reasons.Add('framework_receipt_wrong_run')
     }
     if ($receipt.scene_id -cne $ExpectedSceneId) { $reasons.Add('framework_receipt_wrong_scene') }
-    if ($ExpectedContentSha256 -and $receipt.source_content_sha256 -cne $ExpectedContentSha256) {
+    # An empty expected hash is an evidence gap, never an opt-out from source
+    # binding. Component callers can retain the reason without running Godot.
+    if ($ExpectedContentSha256 -cnotmatch '^[a-f0-9]{64}$') {
+        $reasons.Add('framework_expected_source_unbound')
+    }
+    if ($receipt.source_content_sha256 -isnot [string] -or
+        $receipt.source_content_sha256 -cnotmatch '^[a-f0-9]{64}$') {
+        $reasons.Add('framework_receipt_source_unbound')
+    }
+    if ($receipt.source_content_sha256 -cne $ExpectedContentSha256) {
         $reasons.Add('framework_receipt_wrong_source')
     }
     $checks = @($receipt.checks)

@@ -11,22 +11,53 @@ func _ready() -> void:
 	if parsed is Dictionary:
 		modes = parsed.get("modes", {})
 		active_mode = str(parsed.get("defaultMode", "classic_176"))
-	apply_mode(active_mode)
+	# Android data loading is admitted by StartupLoading after the intro.
+	if ContentLayers.is_loaded() and GameData.is_loaded():
+		ensure_initial_mode()
 
 
-func apply_mode(mode_id: String) -> bool:
+func ensure_initial_mode() -> bool:
+	return apply_mode(active_mode)
+
+
+func prepare_mode_configuration(mode_id: String, later_override: Variant = null) -> Dictionary:
 	if not modes.has(mode_id):
-		return false
-	active_mode = mode_id
+		return {"success": false, "error": "unknown_game_mode"}
+	if later_override != null and not later_override is bool:
+		return {"success": false, "error": "invalid_later_content_override"}
 	var enabled: Array = modes[mode_id].get("enabledPackages", [])
-	var content_changed := false
+	var requested: Dictionary = {}
 	for package_id: String in ContentLayers.enabled_expansions:
-		content_changed = ContentLayers.set_expansion_enabled(package_id, package_id in enabled) or content_changed
+		requested[package_id] = package_id in enabled
+	for package_id: Variant in enabled:
+		if not requested.has(package_id):
+			return {"success": false, "error": "unknown_mode_content_package"}
+	if later_override != null:
+		requested["later_176_content"] = later_override
+	var content := ContentLayers.prepare_expansion_configuration(requested)
+	if content == null:
+		return {"success": false, "error": ContentLayers.last_expansion_error}
+	return {"success": true, "mode_id": mode_id,
+		"later_content_enabled": bool(requested.get("later_176_content", false)), "content": content}
+
+
+func apply_prepared_mode_configuration(prepared: Dictionary) -> bool:
+	if not bool(prepared.get("success", false)):
+		return false
+	return ContentLayers.apply_prepared_expansion_configuration(
+		prepared.content, Callable(self, "_commit_mode_fields").bind(
+			str(prepared.mode_id), bool(prepared.later_content_enabled)))
+
+
+func _commit_mode_fields(mode_id: String, later_enabled: bool) -> void:
+	active_mode = mode_id
 	if is_instance_valid(PlayerState):
 		PlayerState.game_mode_id = mode_id
-	if is_instance_valid(GameData) and (content_changed or GameData.maps.is_empty()):
-		GameData.load_database()
-	return true
+		PlayerState.later_content_enabled = later_enabled
+
+
+func apply_mode(mode_id: String, later_override: Variant = null) -> bool:
+	return apply_prepared_mode_configuration(prepare_mode_configuration(mode_id, later_override))
 
 
 func mode() -> Dictionary:

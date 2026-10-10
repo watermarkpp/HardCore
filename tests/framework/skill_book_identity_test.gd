@@ -1,7 +1,8 @@
 extends Node
 
 const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
-const Ids := preload("res://scripts/identity/entity_registry.gd")
+const CanonicalSkills := preload("res://scripts/skills/skill_data_loader.gd")
+const EquipmentGrantedSkillRules := preload("res://scripts/equipment_granted_skill_rules.gd")
 var proof := Proof.new()
 var failures: Array[String] = []
 
@@ -20,6 +21,8 @@ func _prepare() -> void:
 	PlayerState.inventory = [{"item_id": 920026, "name": "可修改的展示文字", "count": 1}]
 
 func _run() -> void:
+	check(ContentLayers.ensure_loaded(), "formal content-layer catalog reaches component READY")
+	check(GameData.ensure_loaded(), "formal GameData catalog reaches component READY: " + GameData.load_error)
 	_prepare()
 	var typed := GameData.get_skill("hc.skill.wizard.fireball", 0)
 	check(typed.get("skill_id") == "wizard.fireball" and int(typed.get("skillLevel", -1)) == 0,
@@ -73,16 +76,31 @@ func _run() -> void:
 			and GameData.call("skill_book_skill_id", {"item_id": 920026.5, "name": "火球术"}) == ""
 			and GameData.call("skill_book_skill_id", "hc.service_item.000978") == "",
 			"cross-kind, forged-name and unsupported later books cannot enter the relation")
-		var count := 0
-		var books := {}
-		for skill: Dictionary in Ids.document().records:
-			if skill.kind != "skill": continue
-			var book: String = GameData.call("skill_book_entity_id", skill.id)
-			check(not book.is_empty() and not books.has(book) and GameData.call("skill_book_skill_id", book) == skill.id,
-				"actual registered skill has one unambiguous book relation: " + skill.id)
-			books[book] = true
-			count += 1
-		check(count == 33 and books.size() == 33, "all current 33 skill/book relations are complete and distinct")
-	proof.write_receipt("skill_book_identity_test", proof.records.size(), failures.size())
-	print("SKILL_BOOK_IDENTITY_%s checks=%d failures=%s" % ["PASS" if failures.is_empty() else "FAIL", proof.records.size(), str(failures)])
-	get_tree().quit(0 if failures.is_empty() else 1)
+		var canonical_skill_ids := PackedStringArray()
+		for skill_alias: String in CanonicalSkills.skill_ids():
+			canonical_skill_ids.append(CanonicalSkills.entity_skill_id(skill_alias))
+		var equipment_grants := {}
+		for grant: Dictionary in EquipmentGrantedSkillRules.grant_definitions():
+			equipment_grants[str(grant.get("skill_id", ""))] = true
+		var ordinary_count := 0
+		var ordinary_books := {}
+		for skill_id: String in canonical_skill_ids:
+			var book: String = GameData.call("skill_book_entity_id", skill_id)
+			if equipment_grants.has(skill_id):
+				check(book.is_empty(), "equipment-granted skill has no skill-book relation: " + skill_id)
+				continue
+			ordinary_count += 1
+			check(not book.is_empty() and not ordinary_books.has(book)
+				and GameData.call("skill_book_skill_id", book) == skill_id,
+				"ordinary registered skill has one unambiguous book relation: " + skill_id)
+			ordinary_books[book] = true
+		check(ordinary_books.size() == ordinary_count and GameData._skill_books_by_skill.size() == ordinary_count,
+			"book relation count equals the formal ordinary-skill closure")
+	_finish()
+
+func _finish() -> void:
+	var receipt_ok := proof.write_receipt("skill_book_identity_test", proof.records.size(), failures.size())
+	if not receipt_ok:
+		failures.append("framework receipt write failed")
+	print("SKILL_BOOK_IDENTITY_%s checks=%d failures=%s" % ["PASS" if receipt_ok and failures.is_empty() else "FAIL", proof.records.size(), str(failures)])
+	get_tree().quit(0 if receipt_ok and failures.is_empty() else 1)

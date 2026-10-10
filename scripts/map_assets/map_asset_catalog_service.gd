@@ -35,6 +35,7 @@ static var _asset_index: Dictionary = {}
 static var _normalized_ground_by_source_sha: Dictionary = {}
 static var _legacy_ground_index: Dictionary = {}
 static var _v15_asset_index: Dictionary = {}
+static var _override_path_for_test := ""
 
 
 static func load_catalog() -> Dictionary:
@@ -45,7 +46,7 @@ static func load_catalog() -> Dictionary:
 		return {}
 	_ensure_normalized_ground_index()
 	_ensure_v15_asset_index()
-	var override_payload := MapAssetCalibrationService.load_overrides()
+	var override_payload := MapAssetCalibrationService.load_overrides(_override_path_for_test if not _override_path_for_test.is_empty() else MapAssetCalibrationService.OVERRIDE_PATH)
 	var overrides: Dictionary = override_payload.get("overrides", {})
 	var effective_assets: Array = []
 	_asset_index.clear()
@@ -69,6 +70,11 @@ static func load_catalog() -> Dictionary:
 	catalog["extension_catalogs"] = EXTENSION_CATALOG_PATHS.duplicate()
 	_catalog_cache = catalog
 	return catalog
+
+
+static func set_override_path_for_test(path: String) -> void:
+	_override_path_for_test = path
+	invalidate_cache()
 
 
 static func invalidate_cache() -> void:

@@ -19,7 +19,7 @@ func _run() -> void:
 				var outcome := Rules.blessing_outcome(1, 0, 2, 12, unlucky, lower, upper)
 				if outcome.result == "improved": improved += 1
 				if outcome.result == "cursed": cursed += 1
-	assert(improved == 19 * (80 + 7), "original lower-failure fallthrough probability")
+	assert(improved == 19 * 435, "exact fivefold total success probability")
 	assert(cursed == 8 * 80, "exact 1/20 downside")
 	assert(Rules.blessing_outcome(1, 0, 2, 12, 0, 0, 1).luck == 2, "upper-stage success after lower failure")
 	assert(Rules.blessing_outcome(4, 1, 2, 12, 1, 0).luck == 2, "legacy net preserved before mutation")
@@ -46,10 +46,10 @@ func _run() -> void:
 			var r := Rules.blessing_span_factor(int(catalog.attackMin), int(catalog.attackMax))
 			if first != 1 and luck >= 1 and luck < 7:
 				lower = reference.randi_range(0, (r + 6 if luck < 3 else r * 40) - 1)
-				if luck < 3 and lower != 1:
+				if luck < 3:
 					upper = reference.randi_range(0, r * 40 - 1)
 			assert(rolls == {"unlucky_roll":first,"success_roll":lower,"upper_stage_roll":upper})
-			assert(actual.state == reference.state, "conditional RNG consumption matches original")
+			assert(actual.state == reference.state, "formal blessing draws consume expected RNG sequence")
 	weapon.weapon_luck = 1
 	PlayerState.equipment["hc.slot.weapon"] = weapon
 	PlayerState.inventory = [{"name":"祝福油", "count":2}]

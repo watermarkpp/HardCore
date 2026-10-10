@@ -83,45 +83,17 @@ func _run() -> void:
 	)
 	service.prewarm_runtime_streams()
 
-	# Combat prompts use a separate rate budget and still admit after a new
-	# one-second window. Each owner is a distinct real actor session.
-	service.stop_all_events("prompt_rate_setup")
+	# Removed discovery/combat-state prompts cannot consume voices or streams.
+	service.stop_all_events("prompt_retirement_setup")
 	service.reset_metrics_for_test(true)
-	service.set_clock_for_test(4000)
-	for index in range(3):
-		var prompt := service.play_monster_combat_prompt(
-			21,
-			"prompt-owner-%d" % index,
-			{"session_id": "prompt-session-%d" % index},
-		)
-		assert(prompt.get("status", "") == "played", "3/s预算内的战斗提示应播放")
-		service.stop_all_events("prompt_rate_step")
-	var before_prompt_rate_metrics: Dictionary = service.metrics_snapshot()
-	service._stream_cache.clear()
-	var prompt_rejected := service.play_monster_combat_prompt(
-		21,
-		"prompt-owner-3",
-		{"session_id": "prompt-session-3"},
-	)
-	assert(prompt_rejected.get("status", "") == "monster_prompt_rate_limit", "第4个同秒战斗提示必须被速率预算拒绝")
-	assert(
-		int(service.metrics_snapshot().get("stream_lookup_attempts", 0))
-			== int(before_prompt_rate_metrics.get("stream_lookup_attempts", 0)),
-		"战斗提示速率拒绝必须发生在取资源之前",
-	)
-	service.prewarm_runtime_streams()
+	var before_prompt_metrics: Dictionary = service.metrics_snapshot()
+	for index in range(30):
+		var prompt := service.play_monster_combat_prompt(21, "prompt-owner-%d" % index)
+		assert(prompt.get("reason", "") == "combat_prompt_disabled", "发现玩家/战斗提示必须保持关闭")
+	assert(service.metrics_snapshot().get("stream_lookup_attempts", 0) == before_prompt_metrics.get("stream_lookup_attempts", 0), "关闭提示必须发生在取资源之前")
+	assert(service.monster_combat_session_snapshot().is_empty(), "关闭提示不得创建会话")
 
-	# A new window admits again, proving the rate limiter does not permanently
-	# silence an actor after a previous burst.
-	service.set_clock_for_test(5001)
-	var next_window_prompt := service.play_monster_combat_prompt(
-		21,
-		"prompt-owner-next-window",
-		{"session_id": "prompt-session-next-window"},
-	)
-	assert(next_window_prompt.get("status", "") == "played", "新的预算窗口必须恢复战斗提示准入")
-
-	print("AUDIO_W4_CONTRACT_PASS：预算/并发/资源前拒绝、战斗提示速率与新窗口恢复通过")
+	print("AUDIO_W4_CONTRACT_PASS：预算/并发/资源前拒绝、战斗提示退役且不取资源通过")
 	service.stop_all_audio("w4_contract_done")
 	service.clear_clock_override_for_test()
 	get_tree().quit(0)

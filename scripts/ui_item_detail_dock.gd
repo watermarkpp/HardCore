@@ -6,6 +6,8 @@ extends RefCounted
 ## screenshot resolution. Authored/calibrated control geometry stays authoritative.
 const EDGE := 18.0
 const GAP := 12.0
+const EQUIPMENT_LEFT_SLOTS := ["hc.slot.relic", "hc.slot.weapon", "hc.slot.bracelet_left", "hc.slot.ring_left", "hc.slot.badge"]
+const EQUIPMENT_RIGHT_SLOTS := ["hc.slot.necklace", "hc.slot.armor", "hc.slot.bracelet_right", "hc.slot.ring_right"]
 
 static func transformed_rect(transform: Transform2D, rect: Rect2) -> Rect2:
 	var result := Rect2(transform * rect.position, Vector2.ZERO)
@@ -53,16 +55,16 @@ static func equipment_region(owner_control: Control, buttons: Dictionary) -> Dic
 	var frame := rect_in(owner_control, panel).intersection(viewport_in(owner_control))
 	var left := frame.position.x + 12.0
 	var right := frame.end.x - 12.0
-	for slot: String in ["圣物", "武器", "左手镯", "左戒指", "徽章"]:
+	for slot: String in EQUIPMENT_LEFT_SLOTS:
 		var button := buttons.get(slot) as Control
 		if is_instance_valid(button):
 			left = maxf(left, rect_in(owner_control, button).end.x + 8.0)
-	for slot: String in ["项链", "衣服", "右手镯", "右戒指"]:
+	for slot: String in EQUIPMENT_RIGHT_SLOTS:
 		var button := buttons.get(slot) as Control
 		if is_instance_valid(button):
 			right = minf(right, rect_in(owner_control, button).position.x - 8.0)
 	var top := frame.position.y + 120.0
-	var helmet := buttons.get("头盔") as Control
+	var helmet := buttons.get("hc.slot.helmet") as Control
 	if is_instance_valid(helmet):
 		top = maxf(top, rect_in(owner_control, helmet).end.y + 20.0)
 	var bottom := frame.end.y - 24.0

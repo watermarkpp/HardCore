@@ -240,6 +240,12 @@ func _test_start_gate() -> void:
 
 
 func _test_melee_epoch() -> void:
+	# This subcase exercises the retained delayed-release epoch rejection, not
+	# the production instant-contact mode covered by the ordinary attack suite.
+	var prior_instant := EnemyActor._ordinary_contact_instant_settle_enabled
+	var prior_override := EnemyActor._ordinary_attack_visual_move_override_enabled
+	check(prior_instant, "E01-production-mode", "production ordinary contact remains immediate")
+	EnemyActor.configure_attack_visual_policy_for_test(false, prior_override)
 	# docs/02 E: the ordinary start gate is the L-inf box (0.98 GU here).
 	var actor := make_enemy(Vector2(20.98, 20.0))
 	actor.attack_range_gu = 3.0
@@ -260,13 +266,14 @@ func _test_melee_epoch() -> void:
 	check(
 		str(actor._pending_attack_release_record.get("kind", "")) == "hc_standard_melee",
 		"E01-freeze",
-		"melee freezes a typed release record inside 1.5 GU",
+		"explicit delayed-release fixture freezes a typed record inside the 1.0 GU box",
 	)
 	var hp_before := player.current_hp
 	_transition_after_release("epoch-generic")
 	actor._update_pending_attack(0.10)
 	check(player.current_hp == hp_before, "E01-settle", "old generic melee cannot hit after READY")
 	_free_enemy(actor)
+	EnemyActor.configure_attack_visual_policy_for_test(prior_instant, prior_override)
 
 
 func _test_physical_projectile_epoch() -> void:
@@ -288,6 +295,17 @@ func _test_physical_projectile_epoch() -> void:
 
 func _test_target_magic_epoch() -> void:
 	var actor := make_enemy(Vector2(23.0, 20.0))
+	# This case checks a successful locked spell's epoch boundary. Choose a
+	# reproducible real hit branch; evasion remains covered by its own tests.
+	var reference := RandomNumberGenerator.new()
+	var hit_seed := -1
+	for seed_value: int in range(1, 257):
+		reference.seed = seed_value
+		if reference.randi_range(0, 9) == 9:
+			hit_seed = seed_value
+			break
+	check(hit_seed > 0, "E03-hit-seed", "real spell-hit branch has a deterministic seed")
+	player._rng.seed = hit_seed
 	actor.attack_range_gu = 6.0
 	actor.attack_delivery_rule = {
 		"kind": "target_magic",
@@ -298,11 +316,15 @@ func _test_target_magic_epoch() -> void:
 		"hitDelaySeconds": 0.05,
 		"activation": {"hpBelowRatio": 1.1, "orAxisBoundaryTiles": 0.0},
 	}
-	check(actor._launch_target_magic(player, 50), "E03-freeze", "target magic release starts")
 	var hp_before := player.current_hp
+	check(actor._launch_target_magic(player, 50), "E03-freeze", "target magic resolves at activation")
+	var hp_after_activation := player.current_hp
+	check(hp_after_activation < hp_before, "E03-admission", "target magic settles HP at activation")
+	check(actor._pending_attack_time < 0.0 and actor._pending_attack_release_record.is_empty(),
+		"E03-pending", "target magic has no delayed damage release")
 	_transition_after_release("epoch-target-magic")
 	actor._update_pending_attack(1.0)
-	check(player.current_hp == hp_before, "E03-settle", "old target magic cannot hit after READY")
+	check(player.current_hp == hp_after_activation, "E03-settle", "activation damage is not repeated after READY")
 	_free_enemy(actor)
 
 

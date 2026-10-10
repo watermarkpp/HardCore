@@ -7,6 +7,29 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2]
 DATA=ROOT/"assets/data/map_design"
 def read(name): return json.loads((DATA/name).read_text(encoding="utf-8"))
+
+
+def ensure_safe_blank_template_replacement(
+    existing_templates: list[dict], generated_templates: list[dict]
+) -> None:
+    """Refuse a full overwrite until legacy-template migration is explicit."""
+    existing_ids = {
+        str(template.get("template_id", ""))
+        for template in existing_templates
+    }
+    generated_ids = {
+        str(template.get("template_id", ""))
+        for template in generated_templates
+    }
+    if existing_ids and existing_ids != generated_ids:
+        missing = sorted(existing_ids - generated_ids)
+        added = sorted(generated_ids - existing_ids)
+        raise RuntimeError(
+            "refusing to overwrite map_blank_templates.json before explicit "
+            f"template migration; preserved={missing[:8]} added={added[:8]}"
+        )
+
+
 def main():
     templates=read("map_size_templates.json"); overrides=read("map_scale_overrides.json")
     audit_path=DATA/"source_map_audit.json"; audit=read("source_map_audit.json") if audit_path.exists() else {"records":[]}
@@ -46,6 +69,15 @@ def main():
                 "content_policy":"open_existing_workspace_first",
             })
         blank_templates.append(blank_template)
+    existing_blank_templates = []
+    blank_path = DATA / "map_blank_templates.json"
+    if blank_path.exists():
+        existing_blank_templates = read("map_blank_templates.json").get(
+            "templates", []
+        )
+    ensure_safe_blank_template_replacement(
+        existing_blank_templates, blank_templates
+    )
     payload={"schema_version":1,"policy":"single_player_compact_design","scale_policy":scale_policy,"maps":maps}
     (DATA/"map_design_catalog.json").write_text(json.dumps(payload,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
     blank_payload={"schema_version":1,"scale_policy":scale_policy,"templates":blank_templates}

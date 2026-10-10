@@ -100,6 +100,7 @@ func _install_single() -> void:
     _apply_beam_width_scale(sprite)
     sprite.self_modulate = Color(1.0, 1.0, 1.0, 1.0)  # Beam: full opacity; formal core polygon handles low-alpha overlay
     sprite.set_process(true)
+    _bind_animation_failure(sprite)
     if skill_id == "wizard.laser":
         # The animation player rebuilds its transform on every frame. Keep the
         # chest offset on a parent so all six source frames retain one origin.

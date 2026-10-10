@@ -1,7 +1,9 @@
 class_name MonsterStruckPolicy
 extends RefCounted
 
-## Vanilla-1.76 monster struck policy (R1).
+## Authored struck-frame timing and historical source compatibility helpers.
+## Current gameplay pauses movement and residual action timing for the actual
+## struck-animation duration. It does not add the historical attack penalty.
 ##
 ## Evidence chain (server side, Delphi 1.76 family):
 ##   TAnimalObject.Struck(hiter):
@@ -10,19 +12,17 @@ extends RefCounted
 ##     m_dwHitTick := m_dwHitTick + LongWord(150 - _MIN(130, m_Abil.Level * 4));
 ##     // WalkTime := WalkTime + (300 - _MIN(200, (Abil.Level div 5) * 20));
 ##   The WalkTime line is COMMENTED OUT in lzxsz, Diamond and OpenMir2:
-##   an ordinary physical STRUCK must never create a gameplay movement lock.
+##   the historical source did not use ordinary STRUCK as a movement lock.
 ##
-##   Direct magic and ground-mine damage both use the ordinary positive-damage
-##   STRUCK path in the current product. The historical RM_MAGSTRUCK walk
-##   postponement is retired; only its old Lv<50 RNG draw is retained as an
-##   invisible compatibility draw so actor RNG sequences remain stable.
+## Current product: direct hits insert struck; ground mine ticks and poison
+## do not. The historical RM_MAGSTRUCK walk postponement is retired; only
+## its old Lv<50 RNG draw remains for actor RNG sequence compatibility.
 ##
 ## Level-50 note (evidence conflict, resolved R1): two Delphi trees and
 ## OpenMir2 keep the ordinary attack-tick penalty for every level, while one
 ## native-binary rebuild (LyoMir2, 0x71E291) claims a Level<50 gate there.
-## We follow the three directly verifiable source chains: the ordinary
-## struck attack delay applies at every level (Lv33+ saturates at 20ms). This
-## only affects a 20ms per-hit penalty on Lv50+ monsters; no runtime switch.
+## The historical helper below preserves that source formula for fixtures.
+## Production instead pauses for the actual authored animation duration.
 
 const ORDINARY_ATTACK_DELAY_BASE_MS := 150
 const ORDINARY_ATTACK_DELAY_MAX_REDUCTION_MS := 130
@@ -42,7 +42,8 @@ const STRUCK_BACKLOG_ACCELERATION_THRESHOLD := 2
 const MAX_PENDING_STRUCK := 255
 
 
-## Ordinary struck: the next attack deadline slips by
+## Historical source formula retained for compatibility/source unit fixtures;
+## no production damage entry calls this penalty. Ordinary struck used to slip by
 ## 150 - min(130, level * 4) milliseconds (146ms at Lv1, 20ms at Lv33+).
 static func attack_delay_ms(level: int) -> int:
 	var safe_level := maxi(1, level)

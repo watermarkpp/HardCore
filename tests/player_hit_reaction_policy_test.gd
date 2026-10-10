@@ -129,6 +129,8 @@ func _run() -> void:
 	# ---- E: 0.6GU run-up struck -> preserved -> finishes to RUN ----
 	player._struck_lock_remaining = 0.0
 	player._struck_reaction_lock_remaining = 0.0
+	player._struck_protection_remaining = 0.0
+	player._struck_cooldown_pause_remaining = 0.0
 	player.locomotion_state = "walk"
 	player.locomotion_distance_gu = 0.6
 	player.take_damage(threshold)
@@ -159,6 +161,8 @@ func _run() -> void:
 	# ---- F: releasing input during the reaction resets the run-up ----
 	player._struck_lock_remaining = 0.0
 	player._struck_reaction_lock_remaining = 0.0
+	player._struck_protection_remaining = 0.0
+	player._struck_cooldown_pause_remaining = 0.0
 	player.locomotion_state = "walk"
 	player.locomotion_distance_gu = 0.6
 	player.take_damage(threshold)
@@ -187,6 +191,8 @@ func _run() -> void:
 	)
 	player._struck_lock_remaining = 0.0
 	player._struck_reaction_lock_remaining = 0.0
+	player._struck_protection_remaining = 0.0
+	player._struck_cooldown_pause_remaining = 0.0
 	player._attack_timer = 0.0
 	player._attack_action_timer = 0.0
 	assert(player.request_attack(), "攻击预检必须通过")
@@ -209,6 +215,8 @@ func _run() -> void:
 	# ---- H: five threshold hits during one action -> one pending reaction ----
 	player._struck_lock_remaining = 0.0
 	player._struck_reaction_lock_remaining = 0.0
+	player._struck_protection_remaining = 0.0
+	player._struck_cooldown_pause_remaining = 0.0
 	player._queued_struck_reaction = false
 	player._attack_timer = 0.0
 	player._attack_action_timer = 0.0
@@ -233,6 +241,8 @@ func _run() -> void:
 	# ---- I: below-threshold damage ----
 	player._struck_lock_remaining = 0.0
 	player._struck_reaction_lock_remaining = 0.0
+	player._struck_protection_remaining = 0.0
+	player._struck_cooldown_pause_remaining = 0.0
 	player._queued_struck_reaction = false
 	player.locomotion_state = "run"
 	player.locomotion_distance_gu = 1.2
@@ -256,6 +266,85 @@ func _run() -> void:
 		player._struck_lock_remaining <= 0.0 and player._struck_reaction_lock_remaining <= 0.0,
 		"causes_struck=false 的伤害永远不得触发普通硬直"
 	)
+
+	# ---- K: cooldowns pause only while the authored hit action is actually playing ----
+	# The pending reaction must not pause an active attack/cast, and the pause must
+	# preserve the exact residual values instead of resetting either cooldown.
+	player.current_hp = player.max_hp
+	player._struck_lock_remaining = 0.0
+	player._struck_reaction_lock_remaining = 0.0
+	player._queued_struck_reaction = false
+	player._attack_timer = 0.5
+	player._skill_cooldown_remaining = {"wizard.fireball": 0.6}
+	player._attack_action_timer = 0.3
+	player._pending_combat_action_active = true
+	player.take_damage(threshold)
+	assert(bool(player.struck_reaction_snapshot().queued), "活动动作期间受击必须先排队")
+	player._physics_process(0.1)
+	assert(is_equal_approx(player._attack_timer, 0.4), "排队等待期间攻击冷却仍应正常减少")
+	assert(is_equal_approx(float(player._skill_cooldown_remaining["wizard.fireball"]), 0.5), "排队等待期间技能冷却仍应正常减少")
+	player._attack_action_timer = 0.0
+	player._pending_combat_action_active = false
+	player._physics_process(0.001)
+	var protected_hit_start_owner_time := float(player.get("_combat_action_time_s"))
+	var attack_at_hit_start := player._attack_timer
+	var skill_at_hit_start := float(player._skill_cooldown_remaining["wizard.fireball"])
+	assert(attack_at_hit_start > 0.39 and skill_at_hit_start > 0.49, "排队受击消费后必须有明确的剩余冷却")
+	var queued_hit_position := player.global_position
+	var lock_after_first_hit := player._struck_lock_remaining
+	var hp_before_protected_hits := player.current_hp
+	player.take_damage(threshold)
+	player.take_damage(threshold)
+	assert(player.current_hp == hp_before_protected_hits - threshold * 2, "800ms保护窗内每次伤害仍必须正常扣血")
+	assert(is_equal_approx(player._struck_lock_remaining, lock_after_first_hit), "800ms保护窗内不得刷新100ms动作锁")
+	assert(not bool(player.struck_reaction_snapshot().queued), "实际受击播放期间不得积累重复排队受击")
+	player._physics_process(0.1)
+	assert(player.global_position.is_equal_approx(queued_hit_position), "受击动画未完成前人物不得移动")
+	assert(is_equal_approx(player._attack_timer, attack_at_hit_start), "实际受击动画期间攻击冷却必须冻结")
+	assert(is_equal_approx(float(player._skill_cooldown_remaining["wizard.fireball"]), skill_at_hit_start), "实际受击动画期间技能冷却必须冻结")
+	player._physics_process(0.14)
+	assert(player._struck_reaction_lock_remaining <= 0.0, "240ms受击动画结束后才允许恢复冷却")
+	assert(player.global_position.is_equal_approx(queued_hit_position), "受击动画结束边界帧仍不得提前移动")
+	player._physics_process(0.1)
+	assert(is_equal_approx(player._attack_timer, attack_at_hit_start - 0.1), "受击结束后攻击冷却应从原剩余值继续")
+	assert(is_equal_approx(float(player._skill_cooldown_remaining["wizard.fireball"]), skill_at_hit_start - 0.1), "受击结束后技能冷却应从原剩余值继续")
+	assert(player.velocity.x > 0.0, "受击动画结束后的下一物理帧应恢复移动")
+	# 340ms after hit start, then 459ms more reaches 799ms. The gap is
+	# intentionally still protected: damage applies, but cannot refresh hit or
+	# cooldown pause. A ready attack may be admitted during this gap.
+	player._physics_process(0.459)
+	assert(float(player.get("_combat_action_time_s")) - protected_hit_start_owner_time > 0.798, "保护窗口必须沿owner时钟计时")
+	assert(float(player.get("_combat_action_time_s")) - protected_hit_start_owner_time < 0.8, "799ms边界不得提前结束保护")
+	assert(player._attack_timer <= 0.0, "原剩余攻击冷却必须自然结束")
+	assert(player._skill_cooldown_remaining.is_empty(), "原剩余技能冷却必须自然结束")
+	assert(player.can_start_attack(), "保护窗口后半段且自身冷却就绪时允许新的攻击预检")
+	var hp_before_799_hit := player.current_hp
+	var pause_before_799_hit := player._struck_cooldown_pause_remaining
+	player.take_damage(threshold)
+	assert(player.current_hp == hp_before_799_hit - threshold, "799ms保护窗口内伤害仍必须扣血")
+	assert(player._struck_protection_remaining > 0.0 and player._struck_protection_remaining < 0.002, "799ms窗口内不得刷新保护时间")
+	assert(is_equal_approx(player._struck_cooldown_pause_remaining, pause_before_799_hit), "799ms窗口内不得追加冷却暂停")
+	player._physics_process(0.001)
+	assert(player._struck_protection_remaining <= 0.0, "800ms保护窗到期后才允许新的受击")
+	player.take_damage(threshold)
+	assert(player._struck_protection_remaining > 0.0, "800ms边界后新的有效受击必须重新开始")
+
+	# ---- L: production visual timing follows the owner physics clock ----
+	player._struck_protection_remaining = 0.0
+	player._struck_reaction_lock_remaining = 0.0
+	player._struck_cooldown_pause_remaining = 0.0
+	player._attack_timer = 0.5
+	player.visual.play_action("attack", 0.46)
+	var owner_clock_before := float(player.get("_combat_action_time_s"))
+	player.visual._process(5.0)
+	assert(player.visual._action_remaining > 0.0, "大渲染帧不得提前结束owner时钟中的新攻击")
+	player._physics_process(0.01)
+	assert(float(player.get("_combat_action_time_s")) > owner_clock_before, "人物owner时钟必须只由物理帧推进")
+	player.visual.play_hit(0.24)
+	player._struck_cooldown_pause_remaining = 0.24
+	player._physics_process(0.24)
+	assert(player._struck_cooldown_pause_remaining <= 0.000001, "240ms owner受击结束后暂停预算必须同时结束")
+	assert(is_equal_approx(player._attack_timer, 0.49), "240ms受击暂停不得吞掉攻击冷却剩余值")
 
 	print(
 		"PLAYER_HIT_REACTION_POLICY_PASS: v4 ratio=0.03, L1-23 414/360/300ms, L24+ 240ms, locomotion preserved, queued-once, DOT clean"

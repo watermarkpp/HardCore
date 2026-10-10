@@ -37,6 +37,15 @@ func _run() -> void:
 		"滚动条仍会抢占触摸输入，不是纯位置指示器"
 	)
 
+	# Complete the first real pointer stream before starting a separate panel
+	# gesture. A live owner must not be replaced by a different finger DOWN.
+	var initial_up := InputEventScreenTouch.new()
+	initial_up.index = 3
+	initial_up.pressed = false
+	initial_up.position = scroll.get_global_rect().get_center() + Vector2(0, -90)
+	get_viewport().push_input(initial_up, true)
+	assert(int(support.get("_active_touch_index")) == -1, "initial drag release must revoke its owner")
+
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
 	var hud := GameHUD.new()

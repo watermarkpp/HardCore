@@ -27,9 +27,11 @@ func _run() -> void:
 	var hp_before := player.current_hp
 	mage._physics_process(0.01)
 	assert(_descriptors.size() == 1, "Race 200 cast must emit target lightning immediately")
-	assert(player.current_hp == hp_before, "target magic must retain the original 200 ms delay")
-	assert(mage._pending_attack_release_record.get("kind", "") == "target_magic")
+	assert(player.current_hp < hp_before, "target magic must settle HP at activation")
+	assert(mage._pending_attack_release_record.is_empty(), "target magic must not create a pending damage release")
 	var descriptor := _descriptors[0]
+	var release_id := str(descriptor.get("release_id", ""))
+	assert(not release_id.is_empty())
 	assert(str(descriptor.get("effect_id", "")) == MagicEffectScript.EFFECT_ID)
 	assert(str(descriptor.get("damage_channel", "")) == "magic_defense")
 	assert(str(descriptor.get("damage_owner", "")) == "enemy.target_magic_release")
@@ -38,9 +40,10 @@ func _run() -> void:
 	assert(str(snapshot.get("projection_relationship_id", "")) == "ground_exact")
 	assert(_find_magic_effect() != null)
 
-	mage._physics_process(0.19)
-	assert(player.current_hp == hp_before)
-	mage._physics_process(0.02)
+	var hp_after_release := player.current_hp
+	mage._physics_process(0.21)
+	assert(player.current_hp == hp_after_release, "target magic resolved more than once")
+	assert(str(mage.last_magic_attack_resolution.get("release_id", "")) == release_id)
 	assert(player.current_hp < hp_before - 1, "magic attack incorrectly used physical defense")
 	assert(bool(mage.last_magic_attack_resolution.get("physical_defense_bypassed", false)))
 	assert(bool(mage.last_magic_attack_resolution.get("magic_defense_checked", false)))
@@ -58,7 +61,9 @@ func _run() -> void:
 	assert(mage._target_magic_condition_met(Vector2(2.01, 2.01)))
 	assert(not mage._target_magic_condition_met(Vector2(3.0, 3.0)))
 
-	# Target identity is bound at release, but a map transition cancels impact.
+	# Target identity is bound and settled at activation. A later map transition
+	# cannot undo that accepted damage; a new cast in the wrong map is rejected.
+	await _finish_committed_action(mage)
 	player.current_hp = hp_before
 	player.set_meta("runtime_map_id", 1)
 	player.global_position = _ground_to_screen(Vector2(2.0, 0.0))
@@ -69,9 +74,13 @@ func _run() -> void:
 	await get_tree().physics_frame
 	mage._physics_process(0.01)
 	assert(_descriptors.size() == 2)
+	var map_cast_hp := player.current_hp
 	player.set_meta("runtime_map_id", 2)
 	mage._physics_process(0.21)
-	assert(player.current_hp == hp_before)
+	assert(player.current_hp == map_cast_hp)
+	mage._attack_timer = 0.0
+	assert(not mage._launch_target_magic(player, 50), "new target magic must reject a mismatched map")
+	assert(player.current_hp == map_cast_hp)
 	player.set_meta("runtime_map_id", 1)
 
 	# Cow priest healing is based on post-MAC damage, not the raw magic roll.
@@ -85,7 +94,6 @@ func _run() -> void:
 	player.current_hp = hp_before
 	priest._attack_timer = 0.0
 	priest._physics_process(0.01)
-	priest._physics_process(0.21)
 	assert(priest.current_hp > priest_hp_before, "priest hp=%d before=%d ratio=%s pending=%s resolution=%s descriptors=%d" % [priest.current_hp, priest_hp_before, priest.life_steal_ratio, str(priest._pending_attack_release_record), str(priest.last_magic_attack_resolution), _descriptors.size()])
 	assert(priest.current_hp <= priest.max_hp)
 
@@ -97,8 +105,8 @@ func _run() -> void:
 	await get_tree().process_frame
 	print(
 		"MONSTER_TARGET_MAGIC_ATTACK_PASS race200=220,222,224 visual=1 cow_king_frames=20 "
-		+ "delay=0.2 magic_defense=1 physical_defense_bypass=1 "
-		+ "hp_phase=1 boundary=2 cross_map_cancel=1 life_steal=1"
+		+ "activation_settle=1 magic_defense=1 physical_defense_bypass=1 "
+		+ "hp_phase=1 boundary=2 post_release_map_stable=1 life_steal=1"
 	)
 	get_tree().quit(0)
 
@@ -118,12 +126,12 @@ func _assert_cow_king(player: PlayerCharacter) -> void:
 	var hp_before := player.current_hp
 	king._physics_process(0.01)
 	assert(_descriptors.size() == 1)
-	assert(player.current_hp == hp_before)
-	king._physics_process(0.21)
+	assert(player.current_hp < hp_before, "cow king magic must settle at activation")
 	assert(player.current_hp < hp_before - 1, "cow king magic must bypass 999 physical AC")
 	var hp_after := player.current_hp
 	king._physics_process(0.21)
 	assert(player.current_hp == hp_after, "cow king release settled twice")
+	assert(str(king.last_magic_attack_resolution.get("release_id", "")) == str(_descriptors[0].get("release_id", "")))
 	var visual: Node2D
 	for child: Node in get_children():
 		if child.get_script() == MagicEffectScript and int(child.source_monster_id) == 224:
@@ -248,3 +256,15 @@ func _empty_terrain_context() -> Dictionary:
 		},
 		TerrainPolicy.EXPECTED_GROUND_COORDINATE_CONTRACT_ID,
 	)
+
+
+func _finish_committed_action(actor: EnemyActor) -> void:
+	if actor._attack_action_active:
+		var remaining := maxf(
+			0.0,
+			actor._attack_action_start_time_s + actor._attack_action_duration_s
+				- actor._combat_action_time_s,
+		)
+		if remaining > 0.0:
+			actor._physics_process(remaining + 0.001)
+	await get_tree().physics_frame

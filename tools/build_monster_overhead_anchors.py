@@ -22,6 +22,7 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
 CATALOG_PATH = ROOT / "assets/data/runtime/monster_animation_catalog.json"
+CALIBRATION_PATH = ROOT / "assets/data/runtime/monster_ground_contact_calibrations.json"
 OUTPUT_PATH = ROOT / "assets/data/runtime/monster_overhead_anchors.json"
 MANIFEST_PATHS = [
     ROOT / "assets/data/complete_monster_client_art_sources.json",
@@ -128,6 +129,21 @@ def measure_profile(profile: dict[str, Any]) -> dict[str, Any]:
 
 def build() -> dict[str, Any]:
     catalog = load_json(CATALOG_PATH)
+    calibrations = load_json(CALIBRATION_PATH)
+    if calibrations.get("contract") != "monster.ground_contact.calibration.v5":
+        raise ValueError("overhead build requires the approved ground calibration contract")
+    calibration_entries = calibrations.get("entriesByMonsterId", {})
+    if calibrations.get("identityKey") not in (None, "monsterId"):
+        raise ValueError("overhead build calibration identity key mismatch")
+    if not isinstance(calibration_entries, dict) or len(calibration_entries) != 214:
+        raise ValueError("overhead build requires exactly 214 approved monsterIds")
+    expected_ids = set(calibration_entries)
+    previous = load_json(OUTPUT_PATH)
+    if previous.get("contract") != CONTRACT:
+        raise ValueError("full build requires the existing overhead anchor manifest")
+    previous_anchors = previous.get("anchorsByMonsterId", {})
+    if set(previous_anchors) != expected_ids:
+        raise ValueError("existing overhead anchors do not match approved monsterId set")
     manifests = [load_json(path) for path in MANIFEST_PATHS]
     measured_profiles: dict[tuple[Any, ...], dict[str, Any]] = {}
     anchors: dict[str, Any] = {}
@@ -148,10 +164,15 @@ def build() -> dict[str, Any]:
             "actionVisibleTops": measured["actionVisibleTops"],
             "sampledFrames": int(measured["sampledFrames"]),
         }
-    expected_count = int(catalog.get("summary", {}).get("total", 0))
-    if len(anchors) != expected_count or expected_count != 214:
+    # The animation catalog is a measured visual-input subset.  The checked-in
+    # overhead runtime manifest remains the formal 214-ID responsibility set;
+    # preserve approved entries for IDs without a current visual input.
+    for key, entry in previous_anchors.items():
+        if key not in anchors:
+            anchors[key] = entry
+    if set(anchors) != expected_ids:
         raise ValueError(
-            f"anchor count={len(anchors)} catalog total={expected_count}, expected 214"
+            "generated overhead anchors do not match approved monsterId set"
         )
     return {
         "schemaVersion": 1,

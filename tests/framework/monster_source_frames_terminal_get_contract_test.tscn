@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/framework/monster_source_frames_terminal_get_contract_test.gd" id="1"]
+
+[node name="MonsterSourceFramesTerminalGetContract" type="Node"]
+script = ExtResource("1")

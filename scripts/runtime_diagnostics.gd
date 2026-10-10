@@ -70,6 +70,13 @@ const PERFORMANCE_COUNTER_FIELDS: Array[String] = [
 	"enemy_motion_candidate_checks",
 	"enemy_motion_body_checks",
 	"enemy_motion_polygon_checks",
+	"enemy_motion_pool_refills",
+	"enemy_motion_pool_reuses",
+	"enemy_motion_pool_revision_misses",
+	"enemy_motion_pool_candidates",
+	"enemy_observation_calls",
+	"enemy_observation_wait_returns",
+	"enemy_observation_scope_changes",
 	"environment_guard_batches",
 	"environment_point_samples",
 	"environment_query_usec",
@@ -726,6 +733,15 @@ static func performance_counters() -> Dictionary:
 	var result := {}
 	for field: String in PERFORMANCE_COUNTER_FIELDS:
 		result[field] = int(_performance_counters.get(field, 0))
+	# Keep the stable zero-valued schema above, while also exporting counters
+	# registered by runtime producers at a finer bucket granularity (for
+	# example loot_prepare_bucket_N_count). The public increment API accepts
+	# these fields intentionally; dropping them here silently lost death/drop
+	# detail from the Device Lab window.
+	for key: Variant in _performance_counters.keys():
+		var dynamic_field := str(key)
+		if not result.has(dynamic_field):
+			result[dynamic_field] = int(_performance_counters[key])
 	for key: Variant in _performance_values.keys():
 		result[str(key)] = float(_performance_values[key])
 	for key: Variant in _performance_maxima.keys():

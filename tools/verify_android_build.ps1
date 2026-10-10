@@ -72,7 +72,9 @@ $JavaHome = Get-ChildItem (Join-Path $AndroidRoot "jdk") -Directory | Select-Obj
 $BuildTools = Get-ChildItem (Join-Path $AndroidRoot "sdk\build-tools") -Directory | Sort-Object Name -Descending | Select-Object -First 1 -ExpandProperty FullName
 $Aapt = Join-Path $BuildTools "aapt.exe"
 $ApkSigner = Join-Path $BuildTools "apksigner.bat"
-$env:JAVA_HOME = $JavaHome
+$PreviousJavaHome = $env:JAVA_HOME
+try {
+    $env:JAVA_HOME = $JavaHome
 
 $CandidateSignature = (& $ApkSigner verify --verbose --print-certs $ApkPath) -join "`n"
 if ($LASTEXITCODE -ne 0) { throw "APK signature verification failed." }
@@ -134,3 +136,6 @@ Write-Output "APK=$($File.FullName)"
 Write-Output "SIZE=$($File.Length)"
 Write-Output "SHA256=$($Hash.Hash)"
 Write-Output ($Badging -split "`n" | Where-Object { $_ -match "^(package:|sdkVersion:|targetSdkVersion:|application-label:|native-code:)" })
+} finally {
+    $env:JAVA_HOME = $PreviousJavaHome
+}

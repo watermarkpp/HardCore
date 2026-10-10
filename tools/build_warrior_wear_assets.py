@@ -73,6 +73,37 @@ PRIMARY_GAP_NAMES = {"鹤嘴锄", "怒斩", "中型盔甲(男)"}
 FEMALE_ONLY_ARMOR = {"圣战宝甲"}
 USER_CONFIRMED_PRIMARY_WEAPONS = {"炼狱", "屠龙", "命运之刃"}
 PRIMARY_UNRESOLVED_WEAPONS = {"落魄神兵"}
+PRIMARY_WEAPON_MAPPING_TYPES = {
+    "炼狱": "primary_server_image_to_primary_client_pixels",
+    "屠龙": "user_confirmed_semantic_primary_weapon_feature",
+    "命运之刃": "user_confirmed_semantic_primary_weapon_feature",
+}
+
+
+def validate_user_confirmed_primary_mapping(
+    name: str,
+    compatibility_record: dict,
+    formal_mapping: dict,
+    expected_feature: int,
+) -> None:
+    expected_type = PRIMARY_WEAPON_MAPPING_TYPES[name]
+    if (
+        compatibility_record.get("mappingType") != expected_type
+        or int(compatibility_record.get("maleFeature", -1)) != expected_feature
+        or int(formal_mapping.get("weaponAppearance", {}).get(
+            "feature", -1,
+        )) != expected_feature
+        or (
+            name == "炼狱"
+            and not bool(
+                compatibility_record.get("userAtlasReviewEvidence", {}).get(
+                    "confirmed",
+                    False,
+                )
+            )
+        )
+    ):
+        raise ValueError(f"{name} formal primary mapping changed")
 
 
 def sync_primary_weapon_runtime_bridge() -> None:
@@ -89,50 +120,23 @@ def sync_primary_weapon_runtime_bridge() -> None:
 
     purgatory_record = items_by_id.get("99", {})
     purgatory_mapping = formal_mappings.get("炼狱", {})
-    if (
-        purgatory_record.get("mappingType")
-        != "primary_server_image_to_primary_client_pixels"
-        or int(purgatory_record.get("maleFeature", -1)) != 22
-        or not bool(
-            purgatory_record.get("userAtlasReviewEvidence", {}).get(
-                "confirmed",
-                False,
-            )
-        )
-        or int(purgatory_mapping.get("weaponAppearance", {}).get(
-            "feature",
-            -1,
-        )) != 22
-    ):
-        raise ValueError("formal user-confirmed 炼狱 feature 22 mapping is missing")
+    validate_user_confirmed_primary_mapping(
+        "炼狱", purgatory_record, purgatory_mapping, 22
+    )
     mappings["炼狱"] = purgatory_mapping
 
     dragon_record = items_by_id.get("108", {})
     dragon_mapping = formal_mappings.get("屠龙", {})
-    if (
-        dragon_record.get("mappingType")
-        != "user_confirmed_semantic_primary_weapon_feature"
-        or int(dragon_record.get("maleFeature", -1)) != 52
-        or int(dragon_mapping.get("weaponAppearance", {}).get(
-            "feature",
-            -1,
-        )) != 52
-    ):
-        raise ValueError("formal primary 屠龙 feature 52 mapping is missing")
+    validate_user_confirmed_primary_mapping(
+        "屠龙", dragon_record, dragon_mapping, 52
+    )
     mappings["屠龙"] = dragon_mapping
 
     destiny_record = items_by_id.get("110", {})
     destiny_mapping = formal_mappings.get("命运之刃", {})
-    if (
-        destiny_record.get("mappingType")
-        != "user_confirmed_semantic_primary_weapon_feature"
-        or int(destiny_record.get("maleFeature", -1)) != 58
-        or int(destiny_mapping.get("weaponAppearance", {}).get(
-            "feature",
-            -1,
-        )) != 58
-    ):
-        raise ValueError("formal primary 命运之刃 feature 58 mapping is missing")
+    validate_user_confirmed_primary_mapping(
+        "命运之刃", destiny_record, destiny_mapping, 58
+    )
     mappings["命运之刃"] = destiny_mapping
 
     rejected = [
@@ -355,19 +359,12 @@ def main() -> None:
             compatibility_record = primary_items_by_name.get(name, {})
             formal_mapping = formal_weapon_mappings.get(name, {})
             expected_feature = ACCEPTED_BASELINE_SHAPES[name] * 2
-            if (
-                compatibility_record.get("mappingType")
-                != "user_confirmed_semantic_primary_weapon_feature"
-                or int(compatibility_record.get("maleFeature", -1))
-                != expected_feature
-                or int(formal_mapping.get("weaponAppearance", {}).get(
-                    "feature",
-                    -1,
-                )) != expected_feature
-            ):
-                raise ValueError(
-                    f"{name} formal primary semantic mapping changed"
-                )
+            validate_user_confirmed_primary_mapping(
+                name,
+                compatibility_record,
+                formal_mapping,
+                expected_feature,
+            )
             mappings[name] = formal_mapping
             continue
         primary_row = primary_rows.get(name) if name in PRIMARY_GAP_NAMES else None

@@ -19,7 +19,7 @@ func _run() -> void:
 	print(
 		"DPV2_DROP_RUNTIME_POLICY_PASS: user_loot_sheet=1 monsters=126 "
 		+ "sheet_slots=6084 baseline_identity_preserved=1 "
-		+ "baseline_compiled_enabled_slots=7611 ground_limit=15"
+		+ "baseline_compiled_enabled_slots=7611 baseline_ground_limit=15 grouped_caps=6/9/12"
 	)
 	get_tree().quit(0)
 
@@ -94,7 +94,9 @@ func _test_production_roll_is_direct_and_full_slot() -> void:
 	assert(int(roll.get("rng_roll_count", -1)) == sheet_slots.size())
 	assert(bool(roll.get("all_resolved_slots_rng", false)))
 	assert(bool(roll.get("all_enabled_resolved_slots_rng_before_overflow", false)))
-	assert(int(roll.get("ground_output_count", 0)) <= 15)
+	assert(str(roll.get("ground_slot_group", {}).get("classification", "")) == "boss")
+	assert(int(roll.get("ground_slot_group", {}).get("ground_slot_limit", 0)) == 12)
+	assert(int(roll.get("ground_output_count", 0)) <= 12)
 	assert(
 		int(roll.get("ground_output_count", 0))
 			+ int(roll.get("overflow_discarded_count", 0))
@@ -124,6 +126,7 @@ func _test_production_roll_is_direct_and_full_slot() -> void:
 		assert(attempt.has("protected_overflow"))
 		assert(attempt.has("baseline_origin"))
 		assert(attempt.has("source_provenance_id"))
+	service.free()
 
 
 func _test_non_loot_and_zero_slot_profiles_fail_closed_without_fallback() -> void:

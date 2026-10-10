@@ -235,6 +235,7 @@ func _assert_immediate_delivery_reuse() -> void:
     )
     var special_eval := _counter("attack_los_evaluations")
     var special_hp := special_player.current_hp
+    _seed_positive_spell_branch(special_player)
     special._deal_special_magic_melee_hit(special_player, 7)
     assert(special_player.current_hp < special_hp)
     assert(_counter("attack_los_evaluations") == special_eval)
@@ -331,15 +332,36 @@ func _assert_release_rechecks() -> void:
     RuntimeDiagnostics.reset_performance_window()
     assert(magic._attack_world_path_is_clear_for_target(magic_player))
     var magic_eval := _counter("attack_los_evaluations")
+    var magic_hp_before := magic_player.current_hp
+    _seed_positive_spell_branch(magic_player)
     assert(magic._launch_target_magic(magic_player, 7))
+    var magic_hp_after := magic_player.current_hp
+    # Locked target magic is resolved at activation. Its retained duration is
+    # presentation-only, so no pending damage release or later LOS gate exists.
+    assert(magic_hp_after < magic_hp_before)
+    assert(magic._pending_attack_time < 0.0)
+    assert(magic._pending_attack_release_record.is_empty())
     _provider.blocked_world_px = _ground_to_screen(Vector2(1.0, 0.0))
-    var magic_hp := magic_player.current_hp
     magic._update_pending_attack(1.0)
-    assert(magic_player.current_hp == magic_hp)
-    assert(_counter("attack_los_evaluations") == magic_eval + 1)
+    assert(magic_player.current_hp == magic_hp_after)
+    assert(_counter("attack_los_evaluations") == magic_eval)
     magic.queue_free()
     magic_player.queue_free()
     await get_tree().process_frame
+
+
+func _seed_positive_spell_branch(player: PlayerCharacter) -> void:
+    # This LOS test requires a successful real spell hit; random evasion is
+    # covered separately. Seed its successful branch without changing MAC,
+    # evasion rules, damage or the production reception path.
+    var reference := RandomNumberGenerator.new()
+    var seed_value := 1
+    while true:
+        reference.seed = seed_value
+        if reference.randi_range(0, 9) == 9:
+            break
+        seed_value += 1
+    player._rng.seed = seed_value
 
 
 func _make_player(ground_gu: Vector2) -> PlayerCharacter:

@@ -99,6 +99,20 @@ static func qa_v2_profile_for_profession(profession_name_or_id: String) -> Dicti
 			return {}
 		attack_ring_slot_ids.append(stable_id)
 		attack_ring_slots.append(display_name)
+	var formal_ring_ids: Array[String] = []
+	for stable_id: String in center_slot_ids + attack_ring_slot_ids:
+		if stable_id not in formal_ring_ids:
+			formal_ring_ids.append(stable_id)
+	for raw_id: Variant in learned_skill_ids.keys():
+		var learned_id := str(raw_id)
+		if formal_ring_ids.size() >= SkillLoadoutRulesScript.ATTACK_RING_SLOT_COUNT:
+			break
+		if learned_id not in formal_ring_ids:
+			formal_ring_ids.append(learned_id)
+	formal_ring_ids = formal_ring_ids.slice(0, SkillLoadoutRulesScript.ATTACK_RING_SLOT_COUNT)
+	var formal_ring: Array[String] = []
+	for stable_id: String in formal_ring_ids:
+		formal_ring.append(ProfessionRules.skill_display_name(stable_id))
 	return {
 		"contract_id": str(data.get("contract_id", "")),
 		"template_id": str(template.get("template_id", "")),
@@ -111,11 +125,9 @@ static func qa_v2_profile_for_profession(profession_name_or_id: String) -> Dicti
 		"learned_skill_ids": learned_skill_ids,
 		"button_assignments": SkillLoadoutRulesScript.normalize_assignments({
 			"contract_id": SkillLoadoutRulesScript.BUTTON_ASSIGNMENTS_CONTRACT_ID,
-			SkillLoadoutRulesScript.SLOT_GROUP_CENTER: center_slots,
-			SkillLoadoutRulesScript.SLOT_GROUP_ATTACK_RING: attack_ring_slots,
+			SkillLoadoutRulesScript.SLOT_GROUP_ATTACK_RING: formal_ring,
 		}),
-		"center_slot_ids": center_slot_ids,
-		"attack_ring_slot_ids": attack_ring_slot_ids,
+		"attack_ring_slot_ids": formal_ring_ids,
 		"runtime_defaults": template.get("runtime_defaults", {}).duplicate(true),
 		"equipment_tiers": EQUIPMENT_TIERS.duplicate(),
 	}

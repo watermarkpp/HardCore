@@ -152,6 +152,7 @@ func _install_single() -> void:
 		return
 	_apply_fixed_source_profile_scale(sprite)
 	_apply_line_decoration_policy(sprite)
+	_bind_animation_failure(sprite)
 	sprite.visible = false
 	sprite.set_process(false)
 	if _uses_world_footpoint_render_lane():

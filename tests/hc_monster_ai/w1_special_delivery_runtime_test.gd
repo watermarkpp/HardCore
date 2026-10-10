@@ -9,6 +9,13 @@ const ProjectileVisual := preload("res://scripts/monster_ranged_projectile_effec
 var player: PlayerCharacter
 var descriptors: Array[Dictionary] = []
 
+class ObservedEnemy extends EnemyActor:
+	var last_special_release: Dictionary = {}
+
+	func _settle_monster_special_cell_release(release_record: Dictionary) -> void:
+		last_special_release = release_record
+		super._settle_monster_special_cell_release(release_record)
+
 
 func _ready() -> void:
 	_run.call_deferred()
@@ -36,7 +43,7 @@ func _run() -> void:
 	await _test_spit_immediate_and_world()
 	await _test_spit_status_uses_post_defense_damage()
 	await _test_special_accuracy_and_named_fallback_boundaries()
-	await _test_line_delay_duplicate_epoch_and_world()
+	await _test_line_instant_duplicate_epoch_and_world()
 	await _test_mixed_target_tile_atomic()
 	await _test_guard_immediate_visual()
 	await _test_exact_special_family_actors()
@@ -65,7 +72,7 @@ func open_context() -> Dictionary:
 
 
 func make_actor(position_ground_gu: Vector2, rule: Dictionary) -> EnemyActor:
-	var actor := EnemyActor.new()
+	var actor := ObservedEnemy.new()
 	actor.global_position = ground_to_screen(position_ground_gu)
 	actor.setup(GameData.get_monster_by_id(64), player, false)
 	actor.set_meta("spawn_position", actor.global_position)
@@ -341,7 +348,7 @@ func _test_special_accuracy_and_named_fallback_boundaries() -> void:
 	await get_tree().process_frame
 
 
-func _test_line_delay_duplicate_epoch_and_world() -> void:
+func _test_line_instant_duplicate_epoch_and_world() -> void:
 	descriptors.clear()
 	player.global_position = ground_to_screen(Vector2(24.25, 20.25))
 	var actor := make_actor(Vector2(20.25, 20.25), line_rule())
@@ -361,45 +368,38 @@ func _test_line_delay_duplicate_epoch_and_world() -> void:
 	check(
 		actor._launch_monster_special_cell_delivery(player, 20),
 		"W1-line-launch",
-		"line magic freezes a real delayed EnemyActor release",
+		"line magic settles the real EnemyActor snapshot at admission",
 	)
-	var first_release := actor._pending_attack_release_record
 	check(
-		player.current_hp == hp_before and actor._pending_attack_time > 0.0,
-		"W1-line-delay",
-		"line magic does not settle before the source 600ms delay",
-	)
-	actor._update_pending_attack(0.61)
-	check(
-		player.current_hp < hp_before,
-		"W1-line-settle",
-		"line magic settles after the frozen delay",
+		player.current_hp < hp_before and actor._pending_attack_time < 0.0,
+		"W1-line-instant",
+		"line magic settles before presentation delay",
 	)
 	var hp_after_first := player.current_hp
-	actor._settle_monster_special_cell_release(first_release)
+	var observed := actor as ObservedEnemy
+	check(not observed.last_special_release.is_empty(), "W1-line-record", "fixture captured the actual release record")
+	observed._settle_monster_special_cell_release(observed.last_special_release)
 	check(
 		player.current_hp == hp_after_first,
 		"W1-line-once",
 		"one release cannot settle the same victim twice",
 	)
-	check(actor._launch_monster_special_cell_delivery(player, 20), "W1-line-epoch-freeze", "second line release freezes")
 	var epoch_hp := player.current_hp
 	check(player.begin_combat_transition("w1-line-epoch"), "W1-line-epoch-begin", "transition begins")
-	check(player.finish_combat_transition("w1-line-epoch"), "W1-line-epoch-ready", "transition returns READY")
-	actor._update_pending_attack(0.61)
+	check(not actor._launch_monster_special_cell_delivery(player, 20), "W1-line-epoch-reject", "active target transition rejects admission")
 	check(
 		player.current_hp == epoch_hp,
 		"W1-line-epoch-settle",
-		"old line release cannot cross typed combat_epoch after READY",
+		"target transition cannot receive line damage",
 	)
-	check(actor._launch_monster_special_cell_delivery(player, 20), "W1-line-wall-freeze", "third line release freezes")
+	check(player.finish_combat_transition("w1-line-epoch"), "W1-line-epoch-ready", "transition returns READY")
 	var wall_hp := player.current_hp
 	var wall := await add_world_wall(Vector2(22.25, 20.25))
-	actor._update_pending_attack(0.61)
+	check(actor._launch_monster_special_cell_delivery(player, 20), "W1-line-wall-admission", "WORLD case emits the admitted line release")
 	check(
 		player.current_hp == wall_hp,
 		"W1-line-wall-settle",
-		"WORLD added after release blocks delayed line settlement",
+		"WORLD at admission blocks line damage",
 	)
 	wall.queue_free()
 	actor.queue_free()

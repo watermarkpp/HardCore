@@ -84,7 +84,7 @@ static func capture_external_profile(
 		}
 		if _supports_text(control) and not bool(control.get_meta("calibration_runtime_text", false)):
 			entry["text"] = _control_text(control)
-			entry["logicalFontSize"] = control.get_theme_font_size("font_size")
+			entry["logicalFontSize"] = control.get_theme_font_size(_font_theme_key(control))
 		nodes[path] = entry
 	if nodes.is_empty():
 		return {}
@@ -167,7 +167,7 @@ static func apply_external_profile_transaction(
 			return failure
 		var control: Control = item.get("control") as Control
 		var entry: Dictionary = item.get("entry", {}) as Dictionary
-		if entry.has("fontSize") and _supports_text(control):
+		if (entry.has("fontSize") or entry.has("logicalFontSize")) and _supports_text(control):
 			_set_font_size(control, entry, profile, target)
 		_apply_external_properties(control, entry)
 		control.visible = bool(entry.get("visible", true)) and not bool(entry.get("deleted", false))
@@ -246,6 +246,7 @@ static func _transaction_valid(target: Control, plan: Array, token: int) -> bool
 
 
 static func _backup_external_control(control: Control) -> Dictionary:
+	var font_key := _font_theme_key(control)
 	var backup := {
 		"control": control,
 		"position": control.position,
@@ -258,8 +259,9 @@ static func _backup_external_control(control: Control) -> Dictionary:
 		"mouse_filter": control.mouse_filter,
 		"theme_variation": control.theme_type_variation,
 		"text": _control_text(control),
-		"has_font_size": control.has_theme_font_size_override("font_size"),
-		"font_size": control.get_theme_font_size("font_size"),
+		"font_key": font_key,
+		"has_font_size": control.has_theme_font_size_override(font_key),
+		"font_size": control.get_theme_font_size(font_key),
 	}
 	if control is Button:
 		backup["clip_text"] = (control as Button).clip_text
@@ -295,10 +297,11 @@ static func _rollback_external_profile(backups: Array) -> void:
 		control.theme_type_variation = str(backup.get("theme_variation", ""))
 		if _supports_text(control):
 			_set_control_text(control, str(backup.get("text", "")))
-		if control.has_theme_font_size_override("font_size"):
-			control.remove_theme_font_size_override("font_size")
+		var font_key := str(backup.get("font_key", _font_theme_key(control)))
+		if control.has_theme_font_size_override(font_key):
+			control.remove_theme_font_size_override(font_key)
 		if bool(backup.get("has_font_size", false)):
-			control.add_theme_font_size_override("font_size", int(backup.get("font_size", 14)))
+			control.add_theme_font_size_override(font_key, int(backup.get("font_size", 14)))
 		if control is Button:
 			var button := control as Button
 			button.clip_text = bool(backup.get("clip_text", false))
@@ -389,7 +392,7 @@ static func apply_profile(
 		var entry := item["entry"] as Dictionary
 		if not _can_write(target, control):
 			return
-		if entry.has("fontSize") and _supports_text(control):
+		if (entry.has("fontSize") or entry.has("logicalFontSize")) and _supports_text(control):
 			_set_font_size(control, entry, profile, target)
 		if not _can_write(target, control):
 			return
@@ -666,7 +669,11 @@ static func _set_font_size(control: Control, entry: Dictionary, profile: Diction
 		scale = target.size.y / float(logical[1]) if target.size.y > 0.0 else 1.0
 	var logical_size := float(entry.get("logicalFontSize", float(entry.get("fontSize", 14.0)) / maxf(scale, 0.001)))
 	var value := maxi(1, roundi(logical_size * scale))
-	control.add_theme_font_size_override("font_size", value)
+	control.add_theme_font_size_override(_font_theme_key(control), value)
+
+
+static func _font_theme_key(control: Control) -> StringName:
+	return &"normal_font_size" if control is RichTextLabel else &"font_size"
 
 
 static func _supports_text(control: Control) -> bool:

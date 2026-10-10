@@ -106,16 +106,9 @@ static func load_candidate(
 	# page_index hardening (advisor R1.1): unique and an exact 0..N-1
 	# cover - no duplicate, no gap, no negative index ever reaches
 	# page_heights[...] below.
-	var seen_page_indices := {}
-	for record: Dictionary in pages:
-		var page_index := int(record.get("page_index", -1))
-		if page_index < 0 or page_index >= pages.size():
-			return _reject("page index out of range %d" % page_index)
-		if seen_page_indices.has(page_index):
-			return _reject("duplicate page index %d" % page_index)
-		seen_page_indices[page_index] = true
-	if seen_page_indices.size() != pages.size():
-		return _reject("page index coverage mismatch")
+	var page_order_error := _validate_page_order(pages)
+	if page_order_error != "":
+		return _reject(page_order_error)
 	for record: Dictionary in pages:
 		var store_error := _validate_store_record(record)
 		if store_error != "":
@@ -218,6 +211,23 @@ static func load_candidate(
 		if not ResourceLoader.exists(_resource_path(str(record["path"]))):
 			return _reject("chunk resource missing: %s" % str(record["path"]))
 	return {"ok": true, "reason": "", "plan": plan}
+
+
+static func _validate_page_order(pages: Array) -> String:
+	var seen_page_indices := {}
+	for array_index in pages.size():
+		var record: Dictionary = pages[array_index]
+		var page_index := int(record.get("page_index", -1))
+		if page_index < 0 or page_index >= pages.size():
+			return "page index out of range %d" % page_index
+		if page_index != array_index:
+			return "page array order mismatch %d != %d" % [page_index, array_index]
+		if seen_page_indices.has(page_index):
+			return "duplicate page index %d" % page_index
+		seen_page_indices[page_index] = true
+	if seen_page_indices.size() != pages.size():
+		return "page index coverage mismatch"
+	return ""
 
 
 static func _reject(reason: String) -> Dictionary:

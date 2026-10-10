@@ -24,7 +24,9 @@ func _run() -> void:
 	assert(_index.index_register_count == 1)
 
 	# Same-bucket movement must not change buckets.
-	_index.update_actor(1, Vector2(1.5, 0.5))
+	# The production bucket is one ground GU wide. Stay inside bucket (0, 0)
+	# while still exercising the update path.
+	_index.update_actor(1, Vector2(0.5, 0.5))
 	assert(
 		_index.index_bucket_change_count == 0,
 		"same-bucket movement must not re-home the entry"

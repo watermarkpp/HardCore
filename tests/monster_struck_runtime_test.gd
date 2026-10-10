@@ -1,11 +1,9 @@
 extends Node2D
 
-## R1 monster struck runtime: attack-deadline semantics (negative allowed),
-## committed attacks survive ordinary struck, ordinary struck never touches
-## the walk cadence, direct magic also never postpones the walk tick, MAC-zero
-## still postpones, anti-magic evasion postpones nothing, fire wall
-## (MAGSTRUCK_MINE) never postpones, Lv50 immune to the walk delay, and
-## poison ticks damage HP only.
+## R1 monster struck runtime: a positive hit inserts the authored struck
+## presentation into the actor's logical clock.  It pauses the current move
+## or cooldown for exactly the animation duration, preserves elapsed cooldown,
+## never interrupts a committed attack, and is absent from firewall/poison.
 
 const CombatRuntimeServiceScript := preload(
 	"res://scripts/layers/runtime/combat_runtime_service.gd"
@@ -56,6 +54,7 @@ func _run() -> void:
 	await _test_fire_wall_pack_never_walk_locked()
 	await _test_level_fifty_white_boar()
 	await _test_poison_is_hp_only()
+	await _test_struck_pause_preserves_elapsed_progress()
 	await _test_continuous_pursuit_struck_barrier()
 	print("MONSTER_STRUCK_RUNTIME_PASS checks=%d" % _checks)
 	get_tree().quit(0)
@@ -102,6 +101,9 @@ func _make_enemy(monster_id: int, monster_level: int) -> EnemyActor:
 		"frame_counts": {"idle": 4, "walk": 6, "attack": 6, "hit": 2, "death": 4},
 		"direction_mode": "mir2_north_first",
 	}
+	# Production struck ownership is the actor's logical combat clock.  Binding
+	# it here makes this fixture exercise the same pause contract as live actors.
+	visual._combat_clock_s = Callable(enemy, "_combat_action_time_getter")
 	return enemy
 
 
@@ -116,25 +118,16 @@ func _make_player() -> PlayerCharacter:
 	return player
 
 
-## Section 34: the deadline must keep "already overdue" information.
+## Section 34: hit presentation duration is the authored animation duration;
+## the old 20/50ms deadline penalty is no longer a gameplay rule.
 func _test_attack_deadline_allows_negative() -> void:
 	var enemy := await _make_enemy(18, 43)
-	var delay := float(MonsterStruckPolicy.attack_delay_ms(43)) / 1000.0
-	_check(is_equal_approx(delay, 0.02), "Lv43 struck penalty is 20ms")
-
-	enemy._attack_timer = 0.5
-	enemy._apply_source_struck_attack_delay()
-	_check(is_equal_approx(enemy._attack_timer, 0.52), "Case A: 0.500 + 0.020 = 0.520")
-
-	enemy._attack_timer = -0.05
-	enemy._apply_source_struck_attack_delay()
-	_check(is_equal_approx(enemy._attack_timer, -0.03), "Case B: overdue stays overdue")
-	_check(enemy._attack_timer <= 0.0, "Case B: attack still ready")
-
-	enemy._attack_timer = -0.01
-	enemy._apply_source_struck_attack_delay()
-	_check(is_equal_approx(enemy._attack_timer, 0.01), "Case C: -0.010 + 0.020 = +0.010")
-	_check(enemy._attack_timer > 0.0, "Case C: 10ms of genuine wait appears")
+	_check(is_equal_approx(float(MonsterStruckPolicy.struck_frame_ms(43)), 80.0), "Lv43 hit frame is 80ms")
+	_check(is_equal_approx(float(enemy.visual._canonical_struck_frame_count * MonsterStruckPolicy.struck_frame_ms(43)) / 1000.0, 0.16), "Lv43 hit animation is 160ms")
+	enemy._attack_timer = 1.0
+	enemy.take_damage(7, null)
+	_check(is_equal_approx(enemy._attack_timer, 1.0), "hit does not reset or add to attack cooldown")
+	_check(enemy.visual.pending_struck_count() + int(enemy.visual.is_struck_action_active()) == 1, "positive hit owns the authored animation")
 	enemy.free()
 
 
@@ -158,10 +151,7 @@ func _test_committed_attack_survives_struck() -> void:
 		is_equal_approx(enemy._pending_attack_time, 0.2),
 		"pending impact timer untouched by STRUCK"
 	)
-	_check(
-		enemy._attack_timer > deadline_before,
-		"NEXT attack deadline slips by the struck penalty"
-	)
+	_check(is_equal_approx(enemy._attack_timer, deadline_before), "committed hit does not change next attack deadline")
 	enemy._update_pending_attack(0.25)
 	var hp_after_settle := player.current_hp
 	_check(hp_after_settle == 495, "committed attack damage settles exactly once")
@@ -178,17 +168,18 @@ func _test_ordinary_struck_keeps_walk_cadence() -> void:
 	var cadence = enemy._movement_cadence
 	var tick_before: int = cadence.walk_tick_ms
 	var hp_before := enemy.current_hp
+	var cooldown_before := enemy._attack_timer
 	enemy.take_damage(7, player)
 	_check(enemy.current_hp == hp_before - 7, "ordinary damage reduces HP")
 	_check(cadence.walk_tick_ms == tick_before, "walk_tick_ms must not change")
 	_check(not enemy._movement_step_active, "no committed step is cancelled")
-	_check(enemy._attack_timer > 0.0, "attack deadline slips by the struck penalty")
-	_check(enemy.visual.pending_struck_count() == 1, "struck visual event queued")
+	_check(is_equal_approx(enemy._attack_timer, cooldown_before), "ordinary hit does not alter attack cooldown")
+	_check(enemy.visual.pending_struck_count() + int(enemy.visual.is_struck_action_active()) == 1, "struck visual event owned")
 	player.free()
 	enemy.free()
 
 
-## Section 37: direct magic enters the MAC stage -> attack delay only.
+## Section 37: direct magic enters the MAC stage -> authored struck pause.
 ## The spell-resolution RNG must keep its continuation unchanged and the
 ## target's movement cadence must remain untouched for every monster level.
 func _test_direct_magic_walk_delay() -> void:
@@ -213,11 +204,8 @@ func _test_direct_magic_walk_delay() -> void:
 	_check(bool(resolution.get("success", false)), "direct magic dealt damage")
 	_check(cadence.walk_tick_ms == tick_before, "direct magic never postpones walk")
 	_check(enemy.current_hp < hp_before, "positive magic damage reduces HP")
-	_check(
-		enemy._attack_timer > deadline_before,
-		"positive magic damage also slips the attack deadline"
-	)
-	_check(enemy.visual.pending_struck_count() == 1, "positive magic damage queues STRUCK")
+	_check(is_equal_approx(enemy._attack_timer, deadline_before), "positive magic damage does not alter attack cooldown")
+	_check(enemy.visual.pending_struck_count() + int(enemy.visual.is_struck_action_active()) == 1, "positive magic damage owns STRUCK")
 	enemy.free()
 
 
@@ -312,15 +300,12 @@ func _test_fire_wall_is_mine() -> void:
 	_check(bool(resolution.get("success", false)), "fire wall tick dealt positive damage")
 	_check(cadence.walk_tick_ms == tick_before, "MINE must never postpone the walk tick")
 	_check(enemy.current_hp < hp_before, "fire wall damage reduces HP")
-	_check(
-		enemy._attack_timer > deadline_before,
-		"positive fire wall damage slips the attack deadline"
-	)
-	_check(enemy.visual.pending_struck_count() == 1, "positive fire wall damage queues STRUCK")
+	_check(is_equal_approx(enemy._attack_timer, deadline_before), "fire wall does not alter attack cooldown")
+	_check(enemy.visual.pending_struck_count() == 0, "fire wall does not queue STRUCK")
 	_check(
 		RuntimeDiagnosticsScript.performance_counter(&"monster_magic_mine_struck_count")
-			== mine_counter_before + 1,
-		"mine struck counter incremented"
+			== mine_counter_before,
+		"mine damage does not enter the struck path"
 	)
 	enemy.free()
 
@@ -385,14 +370,8 @@ func _test_level_fifty_white_boar() -> void:
 	)
 	_check(bool(resolution.get("success", false)), "Lv50 took positive magic damage")
 	_check(cadence.walk_tick_ms == tick_before, "Lv50 has no walk-tick postponement")
-	_check(
-		is_equal_approx(
-			enemy._attack_timer,
-			deadline_before + float(MonsterStruckPolicy.attack_delay_ms(50)) / 1000.0
-		),
-		"Lv50 keeps the ordinary 20ms attack deadline penalty"
-	)
-	_check(enemy.visual.pending_struck_count() == 1, "Lv50 queues the ordinary STRUCK")
+	_check(is_equal_approx(enemy._attack_timer, deadline_before), "Lv50 hit does not alter attack cooldown")
+	_check(enemy.visual.pending_struck_count() + int(enemy.visual.is_struck_action_active()) == 1, "Lv50 owns the ordinary STRUCK")
 	enemy.free()
 
 
@@ -411,65 +390,79 @@ func _test_poison_is_hp_only() -> void:
 			enemy.visual.pending_struck_count() == 0,
 			"poison tick %d queued no STRUCK" % tick
 		)
-		_check(
-			is_equal_approx(enemy._attack_timer, deadline_before),
-			"poison tick %d did not slip the attack deadline" % tick
-		)
+		_check(is_equal_approx(enemy._attack_timer, deadline_before), "poison tick %d did not alter the attack cooldown" % tick)
 	_check(cadence.walk_tick_ms == tick_before, "poison never touched the walk cadence")
 	enemy.free()
 
 
-## R1.3 P1 acceptance: continuous pursuit must not starve a struck. Step A is
-## committed through the real production step entry; the struck arrives
-## DURING step A; step A completes; step B starts immediately through the
-## same production entry (new epoch, still walking). The struck presentation
-## must be released as soon as ITS step is over - it must not wait for the
-## whole pursuit - while gameplay keeps moving and the walk cadence is
-## untouched.
+## Section 43: the hit animation is a pause overlay, not a cooldown reset.
+## With a 1500ms attack interval represented by its remaining 1000ms after
+## 500ms elapsed, the 160ms hit consumes actor time without changing that
+## remaining cooldown.
+func _test_struck_pause_preserves_elapsed_progress() -> void:
+	var enemy := await _make_enemy(18, 43)
+	enemy.stationary = true
+	enemy._attack_timer = 1.0
+	var cooldown_before := enemy._attack_timer
+	enemy.take_damage(7, null)
+	_check(enemy.visual.pending_struck_count() + int(enemy.visual.is_struck_action_active()) == 1, "pause case owns one hit")
+	# Drive the real Enemy owner in two exact physics slices. During the first
+	# 80ms the hit is active and the cooldown must not advance; after the second
+	# 80ms the hit is complete and the remaining cooldown starts progressing.
+	enemy._physics_process(0.080)
+	_check(enemy.visual.is_struck_action_active(), "hit remains active after first 80ms")
+	_check(is_equal_approx(enemy._attack_timer, cooldown_before), "cooldown is frozen during hit")
+	# Rendering is not the timing authority: a throttled/large render delta must
+	# not consume the authoritative struck interval or cooldown.
+	enemy.visual._process(1.0)
+	_check(enemy.visual.is_struck_action_active(), "render delta does not consume the hit")
+	_check(is_equal_approx(enemy._attack_timer, cooldown_before), "render delta does not consume cooldown")
+	enemy._physics_process(0.080)
+	_check(not enemy.visual.is_struck_action_active(), "160ms hit animation completes")
+	_check(is_equal_approx(enemy._attack_timer, cooldown_before), "full 160ms pause preserves the remaining cooldown")
+	enemy._physics_process(0.080)
+	_check(is_equal_approx(enemy._attack_timer, 0.920), "remaining cooldown progresses after hit")
+	# A second hit starts its own full animation; it never shortens or merges
+	# the first event into a synthetic cooldown penalty.
+	enemy.take_damage(7, null)
+	_check(enemy.visual.pending_struck_count() + int(enemy.visual.is_struck_action_active()) == 1, "second hit remains independently owned")
+	enemy._physics_process(0.080)
+	_check(enemy.visual.is_struck_action_active(), "second hit still has 80ms remaining")
+	enemy.free()
+
+
+## R1.3 P1 acceptance: a struck during a committed pursuit step freezes the
+## actor for exactly its authored duration, then resumes that same step.
 func _test_continuous_pursuit_struck_barrier() -> void:
 	var enemy := await _make_enemy(18, 43)
-	var cadence = enemy._movement_cadence
-	var tick_before: int = cadence.walk_tick_ms
-	# Canonical metadata path (what _ready would load for monster 18): 2 frames.
-	enemy.visual._canonical_struck_frame_count = (
-		enemy.visual._load_canonical_struck_frame_count(18)
-	)
-	# Step A through the production entry point (epoch increments inside).
+	var player := _make_player()
+	player.global_position = enemy.global_position + Vector2(100.0, 0.0)
+	enemy.target = player
+	enemy.stationary = false
 	var step_started := enemy._begin_autonomous_step_without_cadence(
 		Vector2.RIGHT, 1.0, false, &"pursuit", null
 	)
 	_check(step_started, "production step entry commits pursuit step A")
 	var epoch_a := enemy._movement_step_epoch
+	var position_before := enemy.global_position
 	_check(enemy._movement_step_active, "step A is the committed movement")
-	# The struck arrives DURING step A -> barrier = step A's epoch.
 	enemy.visual.queue_struck(43)
-	_check(enemy.visual.pending_struck_count() == 1, "struck queued during step A")
-	enemy.visual._advance_action_timers(0.05)
-	_check(enemy.visual.pending_struck_count() == 1, "step A still holds the struck")
-	_check(enemy.visual._hit_remaining == 0.0, "no background burn behind the barrier")
-	# Step A completes (production clear); the pursuit immediately commits
-	# step B through the same production entry (new epoch, still walking).
-	enemy._clear_autonomous_step_state()
-	enemy._begin_autonomous_step_without_cadence(
-		Vector2.RIGHT, 1.0, false, &"pursuit", null
-	)
-	_check(enemy._movement_step_active, "pursuit continues with step B")
-	_check(
-		enemy._movement_step_epoch == epoch_a + 1,
-		"step B observed a new movement epoch"
-	)
-	# The struck is released NOW, even though step B is walking.
-	enemy.visual._advance_action_timers(0.016)
-	_check(enemy.visual.pending_struck_count() == 0, "struck released once its own step finished")
-	_check(
-		is_equal_approx(enemy.visual._hit_remaining, 0.16),
-		"struck duration = canonical 2 frames x 80ms at level 43"
-	)
-	_check(enemy._movement_step_active, "gameplay step B keeps moving (no hard-stun)")
-	_check(cadence.walk_tick_ms == tick_before, "walk_tick_ms untouched by the barrier release")
-	enemy.visual._update_animation_frame(0.0)
-	_check(enemy.visual.current_state == "hit", "presentation keeps the struck over the walk")
+	_check(enemy.visual.pending_struck_count() + int(enemy.visual.is_struck_action_active()) == 1, "struck queued during step A")
+	enemy._physics_process(0.080)
+	_check(enemy.visual.is_struck_action_active(), "first half of hit consumes actor time")
+	_check(enemy._movement_step_active, "hit does not cancel the committed movement step")
+	_check(enemy.global_position == position_before, "movement owner does not advance while hit is active")
+	enemy._physics_process(0.080)
+	_check(not enemy.visual.is_struck_action_active(), "hit finishes after its exact 160ms")
+	_check(enemy._movement_step_active, "same movement step resumes after hit")
+	_check(enemy._movement_step_epoch == epoch_a, "hit does not create a replacement movement epoch")
+	var resumed_position := enemy.global_position
+	enemy._physics_process(0.080)
+	_check(enemy._movement_step_active, "same movement step remains active after resume")
+	_check(enemy.global_position != resumed_position, "movement advances after the hit pause")
+	_check(enemy._movement_step_epoch == epoch_a, "resumed movement keeps the original epoch")
 	enemy.free()
+	player.free()
 
 
 func _zero_magic_defense(_skill_id: String, damage_after_evasion: int, _stats: Dictionary) -> int:

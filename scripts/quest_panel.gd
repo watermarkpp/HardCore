@@ -35,6 +35,7 @@ var _selected_quest_id := ""
 var _pending_abandon_quest_id := ""
 var _action_request_locked := false
 var _action_feedback_serial := 0
+var _action_failure: Dictionary = {}
 var _refresh_pending := false
 var _refresh_scheduled := false
 var _refresh_execution_count := 0
@@ -274,6 +275,12 @@ func refresh() -> void:
 	current_quest_id = _selected_quest_id
 	_rebuild_quest_cards(active_quest_id)
 	_refresh_selected_quest(active_quest_id)
+	if not _action_failure.is_empty():
+		var state := str(PlayerState.quest_states.get(current_quest_id, {}).get("status", ""))
+		if current_quest_id == str(_action_failure.get("quest_id", "")) and state == str(_action_failure.get("state", "")):
+			status_label.text = str(_action_failure.get("message", ""))
+		else:
+			_action_failure.clear()
 	if not _layout_initialized:
 		_layout_initialized = true
 		_layout_apply_count += 1
@@ -441,6 +448,7 @@ func _refresh_selected_quest(active_quest_id: String) -> void:
 func _select_quest(quest_id: String) -> void:
 	if TouchScrollSupportScript.is_drag_active(get_tree()):
 		return
+	_clear_action_feedback()
 	_selected_quest_id = quest_id
 	current_quest_id = quest_id
 	refresh()
@@ -477,6 +485,8 @@ func _act() -> void:
 	else:
 		status_label.text = PlayerState.claim_quest(current_quest_id)
 	var after_state := str(PlayerState.quest_states.get(current_quest_id, {}).get("status", ""))
+	if after_state == before_state:
+		_action_failure = {"quest_id": current_quest_id, "state": after_state, "message": status_label.text}
 	_action_request_locked = false
 	_show_action_result_feedback(after_state != before_state and not after_state.is_empty())
 	_selected_quest_id = PlayerState.current_bich_quest_id()
@@ -577,6 +587,7 @@ func apply_abandon_result(result: Dictionary) -> void:
 
 func _clear_action_feedback() -> void:
 	_action_feedback_serial += 1
+	_action_failure.clear()
 	GothicUIThemeScript.clear_button_feedback(action_button)
 	GothicUIThemeScript.clear_button_feedback(abandon_button)
 

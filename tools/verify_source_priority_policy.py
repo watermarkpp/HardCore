@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import copy
 from pathlib import Path
 
 from source_priority_guard import active_sources, authorize, load_json
@@ -24,6 +25,9 @@ EXPECTED_LANES = {
     "server_rules",
     "monster_drop_probability",
     "monster_attributes_21cq",
+    "item_categories",
+    "framework_fixture_items",
+    "framework_rune_fixture_items",
 }
 
 MONSTER_ATTRIBUTE_ROUTING_KEY = "monster_attributes_timing_life_flags"
@@ -300,7 +304,17 @@ def main() -> None:
         checks["unprovedFallbackRejected"] = False
     except ValueError:
         checks["unprovedFallbackRejected"] = True
-    example_result = authorize(policy, catalog, "client_assets", "archive_extract.mirfiles_hum.bfae8696c79f", load_json(EXAMPLE_PATH))
+    incompatible_example = load_json(EXAMPLE_PATH)
+    try:
+        authorize(policy, catalog, "client_assets", "archive_extract.mirfiles_hum.bfae8696c79f", incompatible_example)
+        checks["incompatibleFallbackRejected"] = False
+    except ValueError:
+        checks["incompatibleFallbackRejected"] = True
+    missing_only_example = copy.deepcopy(incompatible_example)
+    for check in missing_only_example.get("checks", []):
+        if check.get("status") == "incompatible":
+            check["status"] = "missing"
+    example_result = authorize(policy, catalog, "client_assets", "archive_extract.mirfiles_hum.bfae8696c79f", missing_only_example)
     checks["completeFallbackChainAccepted"] = example_result["authorized"] and len(example_result["higherPriorityRejected"]) == 3
 
     result = {

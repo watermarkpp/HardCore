@@ -35,6 +35,9 @@ var _tail := 0
 var _retirements: Dictionary = {}
 var _retire_head := 0
 var _retire_tail := 0
+var _threaded_claim_diagnostics := {
+	"accepted": 0, "transferred": 0, "get": 0, "missing": 0, "pending": 0
+}
 var _applications: Dictionary = {}
 var _apply_head := 0
 var _apply_tail := 0
@@ -107,6 +110,31 @@ func retire_resources(resources: Dictionary) -> void:
 	_retire_tail += 1
 	_activate()
 
+## Adopt already-issued ResourceLoader user claims after their scene owner exits.
+## This deliberately never calls load_threaded_request: the caller has already
+## paid for the engine claim and this service only polls and later joins it.
+func retire_threaded_resource_claims(path: String, claim_count: int) -> bool:
+	if path.is_empty() or claim_count <= 0:
+		return false
+	_threaded_claim_diagnostics.accepted += claim_count
+	_threaded_claim_diagnostics.transferred += claim_count
+	_retirements[_retire_tail] = {
+		"__threaded_claim__": true, "path": path, "remaining": claim_count
+	}
+	_retire_tail += 1
+	_activate()
+	return true
+
+func threaded_claim_diagnostics() -> Dictionary:
+	var result := _threaded_claim_diagnostics.duplicate(true)
+	var pending := 0
+	for index in _retirements:
+		var entry: Dictionary = _retirements[index]
+		if bool(entry.get("__threaded_claim__", false)):
+			pending += int(entry.get("remaining", 0))
+	result.pending = pending
+	return result
+
 func _activate() -> void:
 	var pending := not _jobs.is_empty() or not _retirements.is_empty() or not _applications.is_empty()
 	set_process(pending)
@@ -171,11 +199,14 @@ func _process(_delta: float) -> void:
 			_applying_request = 0
 			finished.append({"id":application.id, "result":{"success":success, "errors":[], "lease":null}})
 	elif queue == 2:
-		var resources: Dictionary = _retirements[_retire_head]
-		if not resources.is_empty(): resources.erase(resources.keys()[0])
-		if resources.is_empty():
-			_retirements.erase(_retire_head)
-			_retire_head += 1
+		var retirement: Dictionary = _retirements[_retire_head]
+		if bool(retirement.get("__threaded_claim__", false)):
+			_step_threaded_claim_retirement(retirement)
+		else:
+			if not retirement.is_empty(): retirement.erase(retirement.keys()[0])
+			if retirement.is_empty():
+				_retirements.erase(_retire_head)
+				_retire_head += 1
 	_record_code_quantum(code_phase, Time.get_ticks_usec() - code_began)
 	Budget.end(token)
 	_quantum_active = false
@@ -310,7 +341,53 @@ func pending_count() -> int:
 func metrics() -> Dictionary:
 	# Physical calls are service-wide. Per-lease participation diagnostics
 	# describe shared jobs and must not be added across participating leases.
-	return {"request_calls":_request_calls, "get_calls":_get_calls, "jobs":_jobs.size(), "applications":_applications.size(), "retirements":_retirements.size()}
+	return {"request_calls":_request_calls, "get_calls":_get_calls, "jobs":_jobs.size(), "applications":_applications.size(), "retirements":_retirements.size(), "threaded_claims":threaded_claim_diagnostics()}
+
+func _step_threaded_claim_retirement(retirement: Dictionary) -> void:
+	var path := str(retirement.get("path", ""))
+	var remaining := int(retirement.get("remaining", 0))
+	if path.is_empty() or remaining <= 0:
+		_retirements.erase(_retire_head)
+		_retire_head += 1
+		return
+	var status := ResourceLoader.load_threaded_get_status(path)
+	if status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+		_threaded_claim_diagnostics.missing += remaining
+		_retirements.erase(_retire_head)
+		_retire_head += 1
+		return
+	if status == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+		# A pending owner is polled once and rotated, so normal retirement and
+		# other adopted paths retain FIFO/fairness opportunities.
+		_retirements.erase(_retire_head)
+		_retire_head += 1
+		_retirement_requeue(retirement)
+		return
+	if status == ResourceLoader.THREAD_LOAD_LOADED or status == ResourceLoader.THREAD_LOAD_FAILED:
+		# One terminal claim is consumed per granted quantum. FAILED is still
+		# joined: the engine contract requires get() to release that user token.
+		ResourceLoader.load_threaded_get(path)
+		_get_calls += 1
+		_threaded_claim_diagnostics.get += 1
+		remaining -= 1
+		if remaining <= 0:
+			_retirements.erase(_retire_head)
+			_retire_head += 1
+		else:
+			retirement.remaining = remaining
+			_retirements.erase(_retire_head)
+			_retire_head += 1
+			_retirement_requeue(retirement)
+		return
+	# Unknown status is conservatively pending; do not get a token we cannot
+	# prove terminal, and rotate it behind the other retirement entries.
+	_retirements.erase(_retire_head)
+	_retire_head += 1
+	_retirement_requeue(retirement)
+
+func _retirement_requeue(retirement: Dictionary) -> void:
+	_retirements[_retire_tail] = retirement
+	_retire_tail += 1
 
 
 # All work stays in this existing owner/Budget/retirement service. No new cache.
@@ -667,6 +744,23 @@ func _exit_tree() -> void:
 			if status in [ResourceLoader.THREAD_LOAD_IN_PROGRESS, ResourceLoader.THREAD_LOAD_LOADED, ResourceLoader.THREAD_LOAD_FAILED]:
 				ResourceLoader.load_threaded_get(path)
 				_get_calls += 1
+	# Adopted claims are service-owned too. At global service shutdown the
+	# existing join contract applies; ordinary scene retirement never reaches
+	# this path and therefore never blocks on an IN_PROGRESS claim.
+	for index in _retirements:
+		var retirement: Dictionary = _retirements[index]
+		if not bool(retirement.get("__threaded_claim__", false)):
+			continue
+		var claim_path := str(retirement.get("path", ""))
+		var remaining := int(retirement.get("remaining", 0))
+		var claim_status := ResourceLoader.load_threaded_get_status(claim_path)
+		if claim_status in [ResourceLoader.THREAD_LOAD_IN_PROGRESS, ResourceLoader.THREAD_LOAD_LOADED, ResourceLoader.THREAD_LOAD_FAILED]:
+			for _claim in range(remaining):
+				ResourceLoader.load_threaded_get(claim_path)
+				_get_calls += 1
+				_threaded_claim_diagnostics.get += 1
+		elif claim_status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+			_threaded_claim_diagnostics.missing += remaining
 	_jobs.clear()
 	_requests.clear()
 	_retirements.clear()

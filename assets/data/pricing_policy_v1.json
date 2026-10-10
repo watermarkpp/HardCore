@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "contractId": "gameplay.pricing.authority.v1",
-  "policyVersion": "2026-09-20.4",
+  "policyVersion": "2026-10-07.1",
   "currencyId": "gold",
   "source": {
     "distribution": "server.crystal.cjlaaa",
@@ -36,6 +36,8 @@
     "rateBps": 5000,
     "minimumPositivePrice": 1,
     "nonTradableKinds": ["currency", "quest_item"],
+    "nonTradableKindExceptions": {"hc.item.920032": "quest_item"},
+    "nonTradableKindExceptionsAuthority": "user_20261007_zuma_head_sell_price_1000000",
     "rejectBoundItems": true,
     "merchantTypeGate": "all_shop_merchants",
     "projectOverrideReason": "all_shop_npcs_buy_all_tradable_player_items",

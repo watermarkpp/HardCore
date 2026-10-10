@@ -1,0 +1,37 @@
+{
+  "schema": "hardcore.monster_ground_slot_group_policy.runtime.v1",
+  "authority_id": "monster.ground_slot_groups.runtime.v1",
+  "status": "PRODUCTION_ACTIVE",
+  "production_active": true,
+  "identity_key": "canonical_monster_classification",
+  "source_authority": {
+    "path": "assets/data/drop/monster_ground_slot_group_policy.source.json",
+    "schema": "hardcore.monster_ground_slot_group_policy.source.v1",
+    "sha256_lf": "3CABDD216272EB1815C30A88F66285BC803CA8C823A70C4AF8FAD82D32E8D24D"
+  },
+  "classification_source": {
+    "path": "assets/data/canonical_monster_classification_v1.json",
+    "classification_count": 216
+  },
+  "groups": {
+    "ordinary": {
+      "ground_slot_limit": 6
+    },
+    "elite": {
+      "ground_slot_limit": 9
+    },
+    "boss": {
+      "ground_slot_limit": 12
+    }
+  },
+  "unsupported_classifications": [
+    "special"
+  ],
+  "selection_contract": {
+    "stage": "AFTER_ALL_SLOT_RNG",
+    "probability_influence_forbidden": true,
+    "protected_priority_order_unchanged": true,
+    "gold_aggregation_unchanged": true
+  },
+  "generator": "tools/build_monster_ground_slot_group_policy.py"
+}

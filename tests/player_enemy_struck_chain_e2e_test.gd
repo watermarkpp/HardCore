@@ -18,13 +18,16 @@ func _run() -> void:
 	PlayerState.active_profile_id = ""
 	PlayerState.reset_progress(false)
 	PlayerState.select_profession("战士")
-	# Level 40 keeps the fixture on the V4 unified 240ms reaction window the
-	# lock-separation steps below (0.10s + 0.14s + 0.01s) were written against.
+	# Level 40 keeps the fixture on the V4 unified 240ms reaction window; the
+	# lock-separation samples below use 0.10s + 0.06s + 0.08s + 0.01s.
 	PlayerState.level = 40
 	var player := PlayerCharacter.new()
 	add_child(player)
-	player.set_physics_process(false)
-	player.visual.set_process(false)
+	# Keep both authoritative lanes enabled. The fixture invokes the real
+	# callbacks synchronously below so the combat clock, lock timers, movement,
+	# and presentation advance on one timeline without waiting for a frame.
+	player.set_physics_process(true)
+	player.visual.set_process(true)
 	player.max_hp = 500
 	player.current_hp = 500
 	player.max_mp = 0
@@ -90,18 +93,16 @@ func _run() -> void:
 
 	var reaction_seconds := ProfessionRules.player_struck_reaction_seconds(PlayerState.level)
 	var observed_frames: Array[int] = []
-	# The hit action advances its three frames proportionally to the reaction
-	# duration (progress = elapsed / duration). Sample once per frame band while
-	# staying inside the action window.
-	for fraction: float in [0.05, 0.4, 0.4]:
-		player.visual._process(reaction_seconds * fraction)
-		observed_frames.append(player.visual.current_frame)
-	assert(player.visual.current_animation_name() == "hit", "Enemy 命中没有触发 Player hit 动作")
-	assert(player.visual._frame_count_for_action("hit") == 3, "Player hit 动作必须恰好三帧")
-	assert(observed_frames == [0, 1, 2], "三帧 hit 动作时序错误：%s" % [observed_frames])
-
-	var struck_position := player.global_position
+	# Sample the real visual callback at the action start, after the 100ms
+	# server-lock boundary, and at the 160ms third-frame boundary. Player
+	# physics advances the same authoritative combat clock between samples.
+	player.visual._process(0.0)
+	observed_frames.append(player.visual.current_frame)
 	player._physics_process(0.10)
+	player.visual._process(0.10)
+	observed_frames.append(player.visual.current_frame)
+	assert(player.visual.current_animation_name() == "hit", "Enemy 命中没有触发 Player hit 动作")
+	var struck_position := player.global_position
 	assert(
 		player.global_position.is_equal_approx(struck_position)
 		and player.velocity.is_zero_approx()
@@ -109,7 +110,13 @@ func _run() -> void:
 		and player._struck_reaction_lock_remaining > 0.0,
 		"100ms 服务器动作锁与 240ms 表现锁没有独立计时"
 	)
-	player._physics_process(0.14)
+	player._physics_process(0.06)
+	player.visual._process(0.06)
+	observed_frames.append(player.visual.current_frame)
+	assert(player.visual._frame_count_for_action("hit") == 3, "Player hit 动作必须恰好三帧")
+	assert(observed_frames == [0, 1, 2], "三帧 hit 动作时序错误：%s" % [observed_frames])
+	player._physics_process(reaction_seconds - 0.16)
+	player.visual._process(reaction_seconds - 0.16)
 	assert(
 		player.global_position.is_equal_approx(struck_position),
 		"三帧受击表现结束前人物发生位移"

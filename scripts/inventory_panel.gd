@@ -467,7 +467,6 @@ func _on_equipment_data_changed() -> void:
 	if not visible:
 		_refresh_pending = true
 		return
-	_selection_revision += 1
 	_queue_refresh()
 
 
@@ -505,6 +504,7 @@ func refresh() -> void:
 	_refresh_equipment_slots()
 	_refresh_character_stats()
 	_refresh_bag_grid()
+	_refresh_selected_equipment_detail()
 	if character_preview != null:
 		character_preview.refresh()
 	if not _layout_initialized:
@@ -1098,6 +1098,26 @@ func _show_equipment_detail(slot: String) -> void:
 		)
 		return
 	_show_presented_item(item, record, equipment_buttons.get(slot), {"slot": slot, "presentation_zone": "equipment"})
+
+
+func _refresh_selected_equipment_detail() -> void:
+	if selected_equipment_slot.is_empty():
+		return
+	var equipped: Variant = PlayerState.equipment.get(selected_equipment_slot, {})
+	if not equipped is Dictionary or (equipped as Dictionary).is_empty():
+		selected_equipment_slot = ""
+		selected_equipment_ref.clear()
+		_hide_item_detail()
+		_refresh_equipment_slots()
+		return
+	# The slot remains the selection owner while its authoritative instance may
+	# be replaced by a repair/equip transaction. Rebind the ref and rebuild the
+	# formatted snapshot from the current record in one refresh pass.
+	selected_equipment_ref = _equipment_selection_ref(
+		selected_equipment_slot,
+		equipped as Dictionary
+	)
+	_show_equipment_detail(selected_equipment_slot)
 
 
 ## Derived inventory panels can supply another selected-item owner (workbench).

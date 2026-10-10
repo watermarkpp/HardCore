@@ -54,6 +54,8 @@ var _stabilization_left := 0.0
 var _window_left := 0.0
 var _window_label := ""
 var _window_zone := ""
+var _window_identity: Dictionary = {}
+var _window_requires_ready := false
 var _frame_deltas := PackedFloat64Array()
 var _monitor_accum := {}
 var _poll_accum := 0.0
@@ -62,6 +64,7 @@ var _summary_signal_emitted := false
 var _skip_first_frame := false
 
 signal window_finished(summary: Dictionary)
+signal window_cancelled(summary: Dictionary)
 
 
 static func enabled_by_environment() -> bool:
@@ -85,7 +88,9 @@ func configure(
 
 func start_window(label: String, seconds: float) -> void:
 	_window_label = label
-	_window_zone = str(background.get("zone_name")) if background else ""
+	_window_identity = _read_world_identity()
+	_window_zone = str(_window_identity.get("zone", ""))
+	_window_requires_ready = false
 	_begin_measurement(seconds)
 
 
@@ -104,12 +109,15 @@ func _process(delta: float) -> void:
 			_watch_zone_transitions()
 		return
 	if _stabilizing:
+		_check_window_identity()
 		_stabilization_left -= delta
 		if _stabilization_left <= 0.0:
 			_stabilizing = false
 			_begin_measurement(window_seconds)
 		return
 	if not _active:
+		return
+	if _check_window_identity():
 		return
 	# The window-start synchronous tree scan inflates exactly one frame
 	# delta; drop it so percentile stats measure steady state only.
@@ -126,14 +134,17 @@ func _process(delta: float) -> void:
 func _watch_zone_transitions() -> void:
 	if background == null or not is_instance_valid(background):
 		return
-	var zone := str(background.get("zone_name"))
-	if zone.is_empty():
+	var identity := _read_world_identity()
+	if not _identity_is_ready(identity):
 		return
+	var zone := str(identity.get("zone", ""))
 	if _last_zone == "":
 		_last_zone = zone
 		return
 	if zone != _last_zone:
 		_last_zone = zone
+		_window_identity = identity
+		_window_requires_ready = true
 		_stabilizing = true
 		_stabilization_left = stabilization_seconds
 		_window_label = zone
@@ -145,6 +156,14 @@ func _watch_zone_transitions() -> void:
 
 
 func _begin_measurement(seconds: float) -> void:
+	var identity := _read_world_identity()
+	if _window_requires_ready and not _identity_is_ready(identity):
+		_stabilizing = true
+		_stabilization_left = stabilization_seconds
+		return
+	if _window_identity.is_empty():
+		_window_identity = identity
+	_window_zone = str(_window_identity.get("zone", ""))
 	_active = true
 	_window_left = seconds
 	_frame_deltas = PackedFloat64Array()
@@ -161,6 +180,64 @@ func _begin_measurement(seconds: float) -> void:
 	)
 
 
+func _read_world_identity() -> Dictionary:
+	if background == null or not is_instance_valid(background):
+		return {}
+	var identity := {
+		"map_id": int(background.call("_active_map_id")) if background.has_method("_active_map_id") else -1,
+		"generation": int(background.get("_staged_generation")),
+		"zone": str(background.get("zone_name")),
+		"ready": false,
+	}
+	var coordinator = background.get("bootstrap_coordinator")
+	if coordinator != null and is_instance_valid(coordinator) and coordinator.has_method("ready_contract_summary"):
+		var summary: Dictionary = coordinator.ready_contract_summary()
+		identity["map_id"] = int(summary.get("map_id", identity["map_id"]))
+		identity["generation"] = int(summary.get("generation", identity["generation"]))
+		identity["ready"] = str(summary.get("stage", "")) == "READY"
+	else:
+		identity["ready"] = bool(background.get("_staged_build_complete"))
+	return identity
+
+
+func _identity_is_ready(identity: Dictionary) -> bool:
+	return (
+		int(identity.get("map_id", -1)) > 0
+		and int(identity.get("generation", -1)) >= 0
+		and not str(identity.get("zone", "")).is_empty()
+		and bool(identity.get("ready", false))
+	)
+
+
+func _identity_matches(current: Dictionary) -> bool:
+	return (
+		not _window_identity.is_empty()
+		and int(current.get("map_id", -1)) == int(_window_identity.get("map_id", -2))
+		and int(current.get("generation", -1)) == int(_window_identity.get("generation", -2))
+		and str(current.get("zone", "")) == str(_window_identity.get("zone", ""))
+	)
+
+
+func _check_window_identity() -> bool:
+	if _window_identity.is_empty():
+		return false
+	var current := _read_world_identity()
+	if _identity_matches(current):
+		return false
+	var old_identity := _window_identity.duplicate()
+	_window_identity = current
+	_window_zone = str(current.get("zone", ""))
+	if _active:
+		_active = false
+		_frame_deltas = PackedFloat64Array()
+		_monitor_accum = {}
+		print("WALL_PERF_WINDOW_CANCEL reason=identity_changed old=%s new=%s" % [JSON.stringify(old_identity), JSON.stringify(current)])
+		window_cancelled.emit({"reason": "identity_changed", "old": old_identity, "new": current})
+	_stabilizing = auto_mode or _window_requires_ready
+	_stabilization_left = stabilization_seconds if _stabilizing else 0.0
+	return true
+
+
 func _sample_monitors() -> void:
 	for key: String in MONITOR_KEYS:
 		var value := float(Performance.get_monitor(MONITOR_KEYS[key]))
@@ -174,10 +251,15 @@ func _sample_monitors() -> void:
 
 
 func _finish_window() -> void:
+	if _check_window_identity():
+		return
 	_active = false
 	var summary := _collect_counts()
 	summary["label"] = _window_label
 	summary["zone"] = _window_zone
+	summary["map_id"] = int(_window_identity.get("map_id", -1))
+	summary["generation"] = int(_window_identity.get("generation", -1))
+	summary["world_identity"] = _window_identity.duplicate()
 	summary["window_seconds"] = snappedf(
 		_window_label_length(), 0.001
 	)
@@ -305,6 +387,7 @@ func _scan_tree(
 			counts["wrapper_count"] += 1
 			var overlay_count := 0
 			var dynamic_children := 0
+			var visible_dynamic_children := 0
 			var any_visible := false
 			for sprite: Node in child.get_children():
 				if sprite.has_meta("static_authored_wall_bridge"):
@@ -323,12 +406,14 @@ func _scan_tree(
 							sprite, viewport_rect
 						):
 							any_visible = true
+							visible_dynamic_children += 1
 							counts["visible_wall_composite_count"] += 1
 							_track_texture(sprite, counts, true)
 					elif sprite is CanvasItem and _item_visible(
 						sprite, viewport_rect
 					):
 						any_visible = true
+						visible_dynamic_children += 1
 						var pass_index := int(
 							sprite.get_meta("editor_runtime_image_pass", -1)
 						)
@@ -339,9 +424,9 @@ func _scan_tree(
 						_track_texture(sprite, counts, true)
 			counts["bridge_overlay_count"] += overlay_count
 			counts["wrapper_dynamic_children"] += dynamic_children
+			counts["visible_dynamic_children"] += visible_dynamic_children
 			if any_visible:
 				counts["visible_wrappers"] += 1
-				counts["visible_dynamic_children"] += dynamic_children
 			_scan_tree(child, viewport_rect, counts, true)
 		elif not inside_wrapper and child.has_meta("wall_static_chunk"):
 			counts["static_chunk_count"] += 1

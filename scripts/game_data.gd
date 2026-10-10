@@ -7,6 +7,7 @@ const ItemExtensionCodec := preload("res://scripts/items/item_extension_codec.gd
 const SocketGemRules := preload("res://scripts/items/socket_gem_rules.gd")
 const RuneItemRules := preload("res://scripts/items/rune_item_rules.gd")
 const CanonicalSkills := preload("res://scripts/skills/skill_data_loader.gd")
+const EquipmentGrantedSkillRules := preload("res://scripts/equipment_granted_skill_rules.gd")
 
 const EquipmentRulesScript = preload("res://scripts/equipment_rules.gd")
 const PricingServiceScript = preload("res://scripts/pricing_service.gd")
@@ -72,6 +73,9 @@ const DPV2_MONSTER_DROP_SEMANTIC_AUTHORITY_PATH := (
 )
 const DPV2_VERIFIED_PROFILE_AUTHORITY_PATH := (
 	"res://assets/data/drop/dpv2_21cq_verified_profile_authority_v1.json"
+)
+const MONSTER_GROUND_SLOT_GROUP_POLICY_PATH := (
+	"res://assets/data/drop/monster_ground_slot_group_policy.runtime.json"
 )
 
 # These are the user-frozen semantic decisions.  The formal semantic
@@ -150,6 +154,7 @@ var dpv2_global_drop_rate_authority: Dictionary = {}
 var dpv2_direct_baseline_manifest: Dictionary = {}
 var dpv2_direct_baseline: Dictionary = {}
 var dpv2_monster_drop_semantic_authority: Dictionary = {}
+var monster_ground_slot_group_policy: Dictionary = {}
 var dpv2_direct_baseline_loaded := false
 var dpv2_single_player_drop_boost: Dictionary = {}
 var dpv2_single_player_item_boost_classification: Dictionary = {}
@@ -198,6 +203,30 @@ var _dpv2_direct_item_by_id: Dictionary = {}
 var _dpv2_direct_item_by_source_label: Dictionary = {}
 var _dpv2_direct_item_by_name: Dictionary = {}
 
+var database_revision := 0
+var _database_build_in_progress := false
+## Only database-owned data is adopted. Autoload construction, direct-load
+## guards, and the shared immutable rule caches retain their existing owners.
+const DATABASE_STATE_FIELDS := [
+	"database", "service_reference", "equipment_customization", "equipment_client_art",
+	"equipment_visual_catalog", "warrior_wear_art", "warrior_client_art", "bich_quest_chain",
+	"bich_undead_art", "bich_common_art", "boss_service_rules", "bich_community_baseline",
+	"service_item_catalog", "equipment_price_candidates", "merchant_catalog",
+	"canonical_monster_catalog", "item_runtime_authority", "dpv2_global_drop_rate_authority",
+	"dpv2_direct_baseline_manifest", "dpv2_direct_baseline", "dpv2_monster_drop_semantic_authority",
+	"monster_ground_slot_group_policy", "dpv2_direct_baseline_loaded",
+	"dpv2_single_player_drop_boost", "dpv2_single_player_item_boost_classification",
+	"dpv2_single_player_effective_probability", "dpv2_single_player_drop_boost_loaded",
+	"spb_ledger_audit_error", "maps", "monsters", "bosses", "items", "skills", "drops", "tasks",
+	"item_catalog", "load_error", "_item_category_error", "_monsters_by_id",
+	"_monster_runtime_drop_closure", "_items_by_name", "_items_by_id", "_maps_by_id", "_maps_by_name",
+	"_catalog_by_name", "_catalog_by_item_id", "_catalog_by_service_index", "_catalog_by_currency_id",
+	"_skill_books_by_skill", "_price_by_name", "_price_by_item_id", "_price_by_service_index",
+	"_bich_quests_by_id", "_dpv2_global_scale_by_preset", "_dpv2_direct_profile_by_id",
+	"_dpv2_direct_slot_by_uid", "_dpv2_spb_effective_by_uid", "_dpv2_semantic_by_id",
+	"_dpv2_direct_item_by_id", "_dpv2_direct_item_by_source_label", "_dpv2_direct_item_by_name",
+]
+
 const CANONICAL_MONSTER_COUNTS_CONTRACT_ID := (
 	"monster.catalog.runtime_counts.v1"
 )
@@ -229,18 +258,81 @@ func ensure_loaded() -> bool:
 
 
 func load_database() -> bool:
+	# Direct reload callers do not pass through ensure_loaded().  Clear the
+	# published state before any reload work so a failed reload cannot leave a
+	# previous successful database advertised through is_loaded().
+	_initial_load_complete = false
 	# Consumers that run during Android autoload construction must fail closed.
 	# StartupLoading explicitly opens this gate only after the intro has drawn.
 	if not ContentLayers.is_loaded():
-		load_error = "content_layers_not_ready"
+		_discard_database_state("content_layers_not_ready")
 		return false
-	# ContentLayers has already parsed and merged the authoritative tables at
-	# this boundary. Keep GameData's private mutable copy without parsing every
-	# base JSON table a second time during the same startup.
-	var parsed: Variant = ContentLayers.merged_database.duplicate(true)
+	if not _load_database_tables(ContentLayers.merged_database, true):
+		_discard_database_state(load_error)
+		return false
+	database_revision += 1
+	announce_database_reload()
+	return true
+
+
+func prepare_database_candidate(merged: Dictionary) -> Dictionary:
+	if not ContentLayers.is_loaded():
+		return {"success": false, "error": "content_layers_not_ready"}
+	var candidate: Node = get_script().new()
+	# The same formal parsing/validation path builds unpublished data. Its
+	# failure cannot clear the live catalog, loaded flag, or existing indexes.
+	if not candidate._load_database_tables(merged, false):
+		var error: String = candidate.load_error
+		candidate.free()
+		return {"success": false, "error": error}
+	return {"success": true, "candidate": candidate}
+
+
+func adopt_database_candidate(candidate: Node) -> bool:
+	if not is_instance_valid(candidate) or candidate == self or candidate.is_inside_tree():
+		return false
+	if candidate.get_script() != get_script() or not candidate.is_loaded():
+		return false
+	for field: String in DATABASE_STATE_FIELDS:
+		set(field, candidate.get(field))
+	_initial_load_complete = true
+	database_revision += 1
+	return true
+
+
+func _load_database_tables(merged: Dictionary, report_error: bool) -> bool:
+	_database_build_in_progress = true
+	var success := _parse_database_tables(merged, report_error)
+	_database_build_in_progress = false
+	return success
+
+
+func _discard_database_state(error: String) -> void:
+	# A refused direct reload is explicitly unavailable. Drop every published
+	# catalog/index together; no public lookup may observe a partial old/new mix.
+	for field: String in DATABASE_STATE_FIELDS:
+		match typeof(get(field)):
+			TYPE_DICTIONARY:
+				set(field, {})
+			TYPE_ARRAY:
+				set(field, [])
+			TYPE_BOOL:
+				set(field, false)
+			TYPE_STRING:
+				set(field, "")
+	_initial_load_complete = false
+	load_error = error
+
+
+func _parse_database_tables(merged: Dictionary, report_error: bool) -> bool:
+	_initial_load_complete = false
+	# ContentLayers already parsed the source tables; this is one private copy
+	# for the active owner or its short-lived, unpublished preparation.
+	var parsed: Dictionary = merged.duplicate(true)
 	if not parsed is Dictionary or parsed.get("maps", []).is_empty():
 		load_error = "五层内容注册表未能生成Merged Game Database"
-		push_error(load_error)
+		if report_error:
+			push_error(load_error)
 		return false
 
 	database = parsed
@@ -254,6 +346,8 @@ func load_database() -> bool:
 	monsters = []
 	bosses = []
 	if not _load_canonical_monster_catalog():
+		return false
+	if not _load_monster_ground_slot_group_policy():
 		return false
 	_load_bich_community_baseline()
 	items = database.get("items", [])
@@ -306,11 +400,14 @@ func load_database() -> bool:
 		return false
 	load_error = ""
 	_initial_load_complete = true
+	return true
+
+
+func announce_database_reload() -> void:
 	database_reloaded.emit()
 	print("数据库载入完成：地图%d 怪物%d Boss%d 装备%d 技能等级%d 掉落槽%d 任务%d" % [
 		maps.size(), monsters.size(), bosses.size(), items.size(), skills.size(), drops.size(), tasks.size()
 	])
-	return true
 
 
 func _load_canonical_monster_catalog() -> bool:
@@ -333,6 +430,8 @@ func _load_canonical_monster_catalog() -> bool:
 		load_error = "canonical_monster_entries_missing"
 		return false
 	canonical_monster_catalog = parsed
+
+
 	var entries_by_id: Dictionary = entries_value
 	for raw_key: Variant in entries_by_id.keys():
 		var key := str(raw_key)
@@ -356,6 +455,64 @@ func _load_canonical_monster_catalog() -> bool:
 		_monsters_by_id[monster_id] = entry
 	return true
 
+
+func _load_monster_ground_slot_group_policy() -> bool:
+	monster_ground_slot_group_policy = {}
+	if not FileAccess.file_exists(MONSTER_GROUND_SLOT_GROUP_POLICY_PATH):
+		load_error = "monster_ground_slot_group_policy_missing"
+		return false
+	var parsed: Variant = JSON.parse_string(
+		FileAccess.get_file_as_string(MONSTER_GROUND_SLOT_GROUP_POLICY_PATH)
+	)
+	if not parsed is Dictionary:
+		load_error = "monster_ground_slot_group_policy_invalid_json"
+		return false
+	var policy: Dictionary = parsed
+	if (
+		str(policy.get("schema", "")) != "hardcore.monster_ground_slot_group_policy.runtime.v1"
+		or str(policy.get("authority_id", "")) != "monster.ground_slot_groups.runtime.v1"
+		or str(policy.get("status", "")) != "PRODUCTION_ACTIVE"
+		or not bool(policy.get("production_active", false))
+		or str(policy.get("identity_key", "")) != "canonical_monster_classification"
+	):
+		load_error = "monster_ground_slot_group_policy_contract_invalid"
+		return false
+	var groups_value: Variant = policy.get("groups", null)
+	if not groups_value is Dictionary:
+		load_error = "monster_ground_slot_group_policy_groups_invalid"
+		return false
+	var groups: Dictionary = groups_value
+	for expected: Dictionary in [
+		{"name": "ordinary", "limit": 6},
+		{"name": "elite", "limit": 9},
+		{"name": "boss", "limit": 12},
+	]:
+		var group_value: Variant = groups.get(expected.name, null)
+		if (
+			not group_value is Dictionary
+			or _dpv2_json_integer(group_value.get("ground_slot_limit", null)) != expected.limit
+		):
+			load_error = "monster_ground_slot_group_policy_limit_invalid:%s" % expected.name
+			return false
+	if groups.size() != 3:
+		load_error = "monster_ground_slot_group_policy_group_set_invalid"
+		return false
+	var source_authority: Variant = policy.get("source_authority", null)
+	if not source_authority is Dictionary:
+		load_error = "monster_ground_slot_group_policy_source_authority_invalid"
+		return false
+	if (
+		str(source_authority.get("path", ""))
+			!= "assets/data/drop/monster_ground_slot_group_policy.source.json"
+		or str(source_authority.get("schema", ""))
+			!= "hardcore.monster_ground_slot_group_policy.source.v1"
+		or str(source_authority.get("sha256_lf", "")).to_upper()
+			!= _sha256_lf_file("res://assets/data/drop/monster_ground_slot_group_policy.source.json")
+	):
+		load_error = "monster_ground_slot_group_policy_source_hash_invalid"
+		return false
+	monster_ground_slot_group_policy = policy
+	return true
 
 func _load_service_reference() -> void:
 	service_reference.clear()
@@ -2364,6 +2521,16 @@ func _append_formal_map_identities() -> bool:
 
 
 func _build_indexes() -> bool:
+	# Explicit detached index construction uses the same local lookup owner as
+	# the full loader. Public reads remain closed after construction/failure.
+	var previous_build_state := _database_build_in_progress
+	_database_build_in_progress = true
+	var success := _build_database_indexes()
+	_database_build_in_progress = previous_build_state
+	return success
+
+
+func _build_database_indexes() -> bool:
 	_item_category_error = ""
 	if not ItemCategories.ensure_loaded():
 		load_error = "item_category_authority_not_ready:" + ItemCategories.last_error
@@ -2392,7 +2559,23 @@ func _build_indexes() -> bool:
 			var item_id := _stable_item_id(entry)
 			if item_id >= 0:
 				_items_by_id[item_id] = entry
-	_build_item_catalog()
+	if not _build_item_catalog():
+		# A skill-book rejection must not leave the catalog or its lookup maps
+		# visible as a partially published index.  The caller will return the
+		# stable load_error set by _build_skill_book_index().
+		_items_by_name.clear()
+		_items_by_id.clear()
+		item_catalog.clear()
+		_catalog_by_name.clear()
+		_catalog_by_item_id.clear()
+		_catalog_by_service_index.clear()
+		_catalog_by_currency_id.clear()
+		_price_by_name.clear()
+		_price_by_item_id.clear()
+		_price_by_service_index.clear()
+		if load_error.is_empty():
+			load_error = "item_catalog_build_invalid"
+		return false
 	for relic: Dictionary in RelicSynthesisRulesScript.records():
 		if not ItemCategories.attach_source_category(relic):
 			_item_category_error = "unknown_relic_category"
@@ -2519,7 +2702,7 @@ func _apply_item_runtime_authority_overrides(record: Dictionary, _skill_names: D
 					result[key] = override_entry[key]
 
 	return result
-func _build_item_catalog() -> void:
+func _build_item_catalog() -> bool:
 	item_catalog.clear()
 	_catalog_by_name.clear()
 	_catalog_by_item_id.clear()
@@ -2533,7 +2716,7 @@ func _build_item_catalog() -> void:
 	for equipment: Variant in items:
 		if not equipment is Dictionary:
 			continue
-		var record: Dictionary = EquipmentRulesScript.enrich_catalog_record(equipment)
+		var record: Dictionary = EquipmentRulesScript.enrich_catalog_record(equipment, get_item_shop_price)
 		record["kind"] = "equipment"
 		record["stackable"] = false
 		if record.has("maxDurability"):
@@ -2622,28 +2805,53 @@ func _build_item_catalog() -> void:
 			_price_by_name[item_name]["kind"] = str(catalog.get("kind", _price_by_name[item_name].get("kind", "unknown")))
 			_price_by_name[item_name]["category"] = str(catalog.get("category", _price_by_name[item_name].get("category", "")))
 			_price_by_name[item_name]["category_id"] = str(catalog.get("category_id", ""))
-	_build_skill_book_index()
+	return _build_skill_book_index()
 
 
-func _build_skill_book_index() -> void:
+func _skill_book_index_error(code: String, detail: String = "") -> bool:
+	load_error = code if detail.is_empty() else "%s:%s" % [code, detail]
+	return false
+
+
+func _build_skill_book_index() -> bool:
 	_skill_books_by_skill = {}
 	var candidate := {}
+	var canonical_skill_ids := PackedStringArray()
+	for skill_alias: String in CanonicalSkills.skill_ids():
+		var skill_id := CanonicalSkills.entity_skill_id(skill_alias)
+		if skill_id.is_empty() or canonical_skill_ids.has(skill_id):
+			return _skill_book_index_error("skill_book_index_canonical_skill_identity_invalid", skill_alias)
+		canonical_skill_ids.append(skill_id)
+	var validated_equipment_grants := {}
+	for grant: Dictionary in EquipmentGrantedSkillRules.grant_definitions():
+		var grant_id := str(grant.get("skill_id", ""))
+		if grant_id.is_empty() or not canonical_skill_ids.has(grant_id):
+			return _skill_book_index_error("skill_book_index_equipment_grant_invalid", grant_id)
+		if not bool(grant.get("equipment_granted", false)):
+			return _skill_book_index_error("skill_book_index_equipment_grant_marker_invalid", grant_id)
+		validated_equipment_grants[grant_id] = true
 	for item: Dictionary in item_catalog:
 		if str(item.get("kind", "")) != "skill_book" or not item.get("usable", true): continue
 		var target: Variant = item.get("learnSkillId", "")
 		var numeric := _stable_item_id(item)
 		var book := EntityRegistry.canonical(EntityRegistry.from_legacy("item", numeric) if numeric >= 0
 			else EntityRegistry.from_legacy("service_item", _service_index(item)))
-		if not target is String or EntityRegistry.resolve(target, "skill").is_empty() or book.is_empty() \
-			or (candidate.has(target) and candidate[target] != book):
-			push_error("Invalid registered skill book relation")
-			return
+		if not target is String or EntityRegistry.resolve(target, "skill").is_empty() or book.is_empty():
+			return _skill_book_index_error("skill_book_index_relation_invalid")
+		if candidate.has(target) and candidate[target] != book:
+			return _skill_book_index_error("skill_book_index_duplicate_target", target)
 		candidate[target] = book
-	if candidate.size() != CanonicalSkills.skill_ids().size():
-		push_error("Incomplete registered skill book relations")
-		return
+	for target: String in candidate:
+		if not canonical_skill_ids.has(target):
+			return _skill_book_index_error("skill_book_index_unknown_target", target)
+		if validated_equipment_grants.has(target):
+			return _skill_book_index_error("skill_book_index_equipment_grant_conflict", target)
+	var required_book_targets := canonical_skill_ids.size() - validated_equipment_grants.size()
+	if candidate.size() != required_book_targets:
+		return _skill_book_index_error("skill_book_index_incomplete")
 	candidate.make_read_only()
 	_skill_books_by_skill = candidate
+	return true
 
 
 func _build_price_index() -> void:
@@ -2668,6 +2876,43 @@ func _build_price_index() -> void:
 	# primary record.
 	for raw: Variant in equipment_price_candidates.get("records", []):
 		_register_price_record(raw)
+	# User-authorized price rulings may supersede one already-present legacy
+	# quote, but only through an exact stable item identity. Keep the general
+	# primary-first rule unchanged for every other catalog entry.
+	_apply_exact_user_price_override(920032)
+
+
+func _apply_exact_user_price_override(item_id: int) -> void:
+	var service_index := EntityRegistry.service_for_item(EntityRegistry.canonical(EntityRegistry.from_legacy("item", item_id)))
+	var record: Dictionary = {}
+	# Quote lookup prefers the registered service alias, even when a candidate
+	# also populated the item index. Update that real owner and all its aliases.
+	if service_index >= 0 and _price_by_service_index.has(service_index):
+		record = _price_by_service_index[service_index]
+	elif _price_by_item_id.has(item_id):
+		record = _price_by_item_id[item_id]
+	if record.is_empty():
+		return
+	for raw: Variant in equipment_price_candidates.get("records", []):
+		if not raw is Dictionary or str(raw.get("entity_id", "")) != "hc.item.%06d" % item_id:
+			continue
+		var source: Variant = raw.get("source", {})
+		if not source is Dictionary or str(source.get("distribution", "")) != "user.pricing_ruling":
+			return
+		var override_price := maxi(0, int(raw.get("price", 0)))
+		if override_price <= 0:
+			return
+		record["base_price"] = override_price
+		record["source"] = source.duplicate(true)
+		_price_by_item_id[item_id] = record
+		if service_index >= 0:
+			_price_by_service_index[service_index] = record
+		var record_service_index := int(record.get("service_index", service_index))
+		if record_service_index >= 0:
+			_price_by_service_index[record_service_index] = record
+		if str(record.get("item_name", "")) != "":
+			_price_by_name[str(record.item_name)] = record
+		return
 
 
 func _register_price_record(raw: Variant) -> void:
@@ -3449,6 +3694,17 @@ func dpv2_ground_slot_limit() -> int:
 	))
 
 
+func dpv2_ground_slot_limit_for_monster(monster_id: int) -> int:
+	var classification := canonical_monster_classification(monster_id)
+	var groups: Variant = monster_ground_slot_group_policy.get("groups", {})
+	if not groups is Dictionary:
+		return 0
+	var group: Variant = groups.get(classification, null)
+	if not group is Dictionary:
+		return 0
+	return maxi(0, int(group.get("ground_slot_limit", 0)))
+
+
 func dpv2_source_slot_gate() -> Dictionary:
 	if not dpv2_direct_baseline_loaded:
 		return {
@@ -3730,6 +3986,8 @@ func get_item_rules_record(item_ref: Variant) -> Dictionary:
 
 
 func _item_record_for_read(item_ref: Variant) -> Dictionary:
+	if not is_loaded() and not _database_build_in_progress:
+		return {}
 	if not _valid_explicit_item_reference(item_ref):
 		return {}
 	if item_ref is Dictionary and (item_ref.has("format_version") or item_ref.has("base") or item_ref.has("extensions")):
@@ -3818,6 +4076,8 @@ func get_item_shop_price(item_ref: Variant) -> int:
 
 
 func get_item_price_records_by_name(item_names: Array) -> Dictionary:
+	if not is_loaded() and not _database_build_in_progress:
+		return {}
 	# Legacy inventory records have names only. Resolve the existing exact,
 	# ambiguity-rejecting name contract once per batch, never once per row.
 	var requested: Dictionary = {}
@@ -3845,6 +4105,8 @@ func get_item_price_record(item_ref: Variant) -> Dictionary:
 
 
 func _get_item_price_record(item_ref: Variant, name_id_snapshot: Dictionary = {}) -> Dictionary:
+	if not is_loaded() and not _database_build_in_progress:
+		return {}
 	if item_ref is Dictionary:
 		item_ref = item_ref.duplicate()
 		for source_key: String in ["itemId", "serviceIndex"]:

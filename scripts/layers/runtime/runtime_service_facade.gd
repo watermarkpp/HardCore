@@ -14,9 +14,8 @@ func content_status() -> Dictionary:
 
 
 func set_expansion_enabled(package_id: String, enabled: bool) -> bool:
-	var changed := ContentLayers.set_expansion_enabled(package_id, enabled)
-	if changed and package_id == "later_176_content":
-		PlayerState.set_later_content_enabled(enabled)
-	elif changed:
-		GameData.load_database()
-	return changed
+	if not ContentLayers.enabled_expansions.has(package_id) or ContentLayers.is_expansion_enabled(package_id) == enabled:
+		return false
+	if package_id == "later_176_content":
+		return PlayerState.set_later_content_enabled(enabled)
+	return ContentLayers.set_expansion_enabled(package_id, enabled)

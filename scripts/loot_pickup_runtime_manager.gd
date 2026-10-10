@@ -431,6 +431,10 @@ func _check_registered_pickup(
 ) -> void:
 	if not is_instance_valid(pickup) or pickup.is_queued_for_deletion():
 		return
+	# Admission has already accepted this exact source. Its receipt owner
+	# decides completion; movement passes must not repeat terrain queries.
+	if pickup.collection_pending():
+		return
 	var in_range := (
 		pickup_ground_gu.is_finite()
 		and _player_ground_gu.distance_squared_to(pickup_ground_gu)

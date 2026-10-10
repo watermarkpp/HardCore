@@ -142,9 +142,22 @@ def render_source_sheet(source_id: str, records: list[dict]) -> Path:
     draw = ImageDraw.Draw(sheet)
     draw.text((6, 7), source_id, fill=(235, 235, 235, 255))
     for position, record in enumerate(records):
-        cell = record.pop("_cell")
         x0 = position % columns * tile[0]
         y0 = 28 + position // columns * tile[1]
+        cell = record.pop("_cell", None)
+        if cell is None:
+            # Keep the failed decode record in the manifest and render a
+            # visible diagnostic tile instead of turning the whole sheet into
+            # a secondary KeyError.  No pixels are fabricated as a valid
+            # appearance; the placeholder is scratch-report UI only.
+            draw.rectangle(
+                (x0 + 13, y0 + 18, x0 + 13 + CELL[0], y0 + 18 + CELL[1]),
+                outline=(220, 72, 72, 255),
+                width=2,
+            )
+            draw.text((x0 + 18, y0 + 66), "DECODE ERROR", fill=(255, 110, 110, 255))
+            draw.text((x0 + 4, y0 + tile[1] - 14), f"I{record['index']}", fill=(183, 194, 208, 255))
+            continue
         sheet.alpha_composite(cell, (x0 + 13, y0 + 18))
         draw.rectangle(
             (

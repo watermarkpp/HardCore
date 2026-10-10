@@ -11,7 +11,14 @@ func execute(command: Dictionary) -> bool:
 	var undo_action: Callable = command.get("undo", Callable())
 	if not do_action.is_valid() or not undo_action.is_valid():
 		return false
-	do_action.call()
+	var result: Variant = do_action.call()
+	# Commands may return the formal service result.  A rejected service
+	# operation is not an accepted edit and must never become undoable or clear
+	# an existing redo branch.  Legacy void commands remain accepted.
+	if result is bool and not result:
+		return false
+	if result is Dictionary and not bool(result.get("ok", true)):
+		return false
 	_undo_stack.append(command)
 	if _undo_stack.size() > history_limit:
 		_undo_stack.pop_front()

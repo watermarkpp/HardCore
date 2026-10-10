@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/framework/projectile_first_contact_order_20261009_test.gd" id="1"]
+
+[node name="ProjectileFirstContactOrder20261009" type="Node"]
+script = ExtResource("1")

@@ -26,7 +26,7 @@ func _run() -> void:
 	# index entry is current, so the query must still find it.
 	enemy.set_physics_process(false)
 	enemy.set_combat_position(
-		GroundUnit.ground_delta_gu_to_screen_delta_px(Vector2(2.0, 0.0)),
+		GroundUnit.ground_delta_gu_to_screen_delta_px(Vector2(0.6, 0.0)),
 		&"test_position"
 	)
 	_projectile_queries_before_enemy_tick += 1

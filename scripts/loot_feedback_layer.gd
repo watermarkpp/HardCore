@@ -23,6 +23,9 @@ var rare_detail: Label
 var failure_panel: Panel
 var failure_label: Label
 var toast_entries: Array[Dictionary] = []
+var _pending_pickup_feedback: Dictionary = {}
+var _pending_pickup_head := 0
+var _pending_pickup_tail := 0
 var toast_panels: Array[Panel] = []
 var toast_labels: Array[Label] = []
 var rare_remaining := 0.0
@@ -47,6 +50,7 @@ func _process(delta: float) -> void:
 			changed = true
 	if changed:
 		_rebuild_toasts()
+		_start_next_pickup_feedback()
 	rare_remaining = maxf(0.0, rare_remaining - delta)
 	failure_remaining = maxf(0.0, failure_remaining - delta)
 	rare_banner.visible = rare_remaining > 0.0
@@ -140,22 +144,22 @@ func show_feedback(event: Dictionary) -> void:
 
 
 func show_feedback_batch(events: Array) -> void:
-	var pickup_changed := false
 	for raw_event: Variant in events:
 		if not raw_event is Dictionary:
 			continue
 		var event: Dictionary = raw_event
 		if str(event.get("event_type", "pickup_success")) == "pickup_success":
 			_show_pickup_success(event, false)
-			pickup_changed = true
 		else:
 			show_feedback(event)
-	if pickup_changed:
-		_rebuild_toasts()
+	_start_next_pickup_feedback()
 
 
 func clear_feedback() -> void:
 	toast_entries.clear()
+	_pending_pickup_feedback.clear()
+	_pending_pickup_head = 0
+	_pending_pickup_tail = 0
 	_rebuild_toasts()
 	rare_remaining = 0.0
 	failure_remaining = 0.0
@@ -166,11 +170,28 @@ func clear_feedback() -> void:
 func _show_pickup_success(event: Dictionary, rebuild := true) -> void:
 	var entry := event.duplicate(true)
 	entry["remaining"] = maxf(0.5, float(event.get("duration", DEFAULT_DURATION)))
-	toast_entries.push_front(entry)
-	if toast_entries.size() > MAX_TOASTS:
-		toast_entries.resize(MAX_TOASTS)
+	_pending_pickup_feedback[_pending_pickup_tail] = entry
+	_pending_pickup_tail += 1
 	if rebuild:
-		_rebuild_toasts()
+		_start_next_pickup_feedback()
+
+
+func _start_next_pickup_feedback() -> void:
+	if not toast_entries.is_empty() or _pending_pickup_head >= _pending_pickup_tail:
+		return
+	# One visible notice advances independently of pickup/IO. An unusually
+	# long frame never drains unseen notices, allocates controls, or drops the
+	# queue tail. Integer keys keep FIFO order without shifting or periodically
+	# copying the pending tail. Retire each consumed entry immediately; the
+	# visible toast retains its own Dictionary reference until it expires.
+	toast_entries.append(_pending_pickup_feedback[_pending_pickup_head])
+	_pending_pickup_feedback.erase(_pending_pickup_head)
+	_pending_pickup_head += 1
+	if _pending_pickup_head == _pending_pickup_tail:
+		_pending_pickup_feedback.clear()
+		_pending_pickup_head = 0
+		_pending_pickup_tail = 0
+	_rebuild_toasts()
 
 
 func _show_rare_drop(event: Dictionary) -> void:

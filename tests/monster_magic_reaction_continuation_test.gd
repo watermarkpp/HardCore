@@ -1,9 +1,9 @@
 extends Node2D
 
-## Integrated reaction continuation regression for the retired direct-magic movement lock.
+## Integrated reaction continuation regression for the direct-magic struck pause.
 ##   * Lv1/Lv43/Lv50/Lv80 fixtures continue submitting real movement steps
 ##     during repeated positive DIRECT hits;
-##   * three positive hits add the literal level penalty to attack_timer;
+##   * three positive hits leave the attack deadline unchanged;
 ##   * an already accepted attack release remains one release and settles once.
 
 const CombatRuntime := preload("res://scripts/layers/runtime/combat_runtime_service.gd")
@@ -145,6 +145,12 @@ func _run_attack_accumulation_case(service: CombatRuntime, level: int, initial: 
 	player.queue_free()
 
 func _run_committed_release_case(service: CombatRuntime) -> void:
+	# The committed pending-release case deliberately selects the existing
+	# delayed diagnostic mode; ordinary production contact still settles now.
+	var prior_instant := EnemyActor._ordinary_contact_instant_settle_enabled
+	var prior_override := EnemyActor._ordinary_attack_visual_move_override_enabled
+	_check(prior_instant, "production ordinary contact settles immediately")
+	EnemyActor.configure_attack_visual_policy_for_test(false, prior_override)
 	var player := PlayerCharacter.new()
 	player.set_physics_process(false)
 	add_child(player)
@@ -189,6 +195,7 @@ func _run_committed_release_case(service: CombatRuntime) -> void:
 	_check(player.current_hp == hp_after, "committed release does not settle twice")
 	enemy.queue_free()
 	player.queue_free()
+	EnemyActor.configure_attack_visual_policy_for_test(prior_instant, prior_override)
 
 func _ready() -> void:
 	# This is the formal integrated regression; production source remains frozen during its run.
@@ -199,11 +206,12 @@ func _ready() -> void:
 	add_child(service)
 	for level in [1, 43, 50, 80]:
 		await _run_continuation_case(service, level)
-	# Hand-derived literals: Lv1=146ms, Lv43/50/80=20ms, three hits.
-	await _run_attack_accumulation_case(service, 1, -0.05, 0.388)
-	await _run_attack_accumulation_case(service, 43, 0.0, 0.06)
-	await _run_attack_accumulation_case(service, 50, 0.25, 0.31)
-	await _run_attack_accumulation_case(service, 80, -0.01, 0.05)
+	# Three hits are independent presentation pauses; they never add a
+	# synthetic 20/50ms penalty to the attack deadline.
+	await _run_attack_accumulation_case(service, 1, -0.05, -0.05)
+	await _run_attack_accumulation_case(service, 43, 0.0, 0.0)
+	await _run_attack_accumulation_case(service, 50, 0.25, 0.25)
+	await _run_attack_accumulation_case(service, 80, -0.01, -0.01)
 	await _run_committed_release_case(service)
 	print("MONSTER_MAGIC_REACTION_CONTINUATION_%s checks=%d errors=%s" % ["PASS" if _errors.is_empty() else "FAIL", _checks, _errors])
 	get_tree().quit(0 if _errors.is_empty() else 1)

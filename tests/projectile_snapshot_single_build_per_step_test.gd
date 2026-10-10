@@ -18,10 +18,13 @@ func _ready() -> void:
 
 func _run() -> void:
 	_index = SpatialIndexScript.new()
-	# 16 enemies near the lane to produce candidates every step.
-	for i in range(16):
-		_enemies.append(_make_enemy(Vector2(2.0 + i * 0.4, 0.0), 0.25, i + 1))
 	var projectile := _make_projectile(Vector2(0, 0), 8.0)
+	# 16 enemies near the lane to produce broadphase candidates every step while
+	# their runtime body radius plus the projectile radius keeps the swept
+	# projectile from hitting them. The final offset is chosen after _ready has
+	# resolved the canonical body radius.
+	for i in range(16):
+		_enemies.append(_make_enemy(Vector2(i * 0.4, 0.0), 0.25, i + 1, projectile.projectile_radius_gu))
 	var steps := 0
 	for _step in range(40):
 		if not is_instance_valid(projectile) or projectile.is_queued_for_deletion():
@@ -37,6 +40,7 @@ func _run() -> void:
 		"one snapshot per projectile physics step, got %d steps / %d builds"
 		% [steps, build_count]
 	)
+	assert(steps == 40, "snapshot fixture must complete the full 40-step load")
 	assert(
 		query_count == steps,
 		"one broadphase query per step"
@@ -45,6 +49,8 @@ func _run() -> void:
 		candidate_count >= steps,
 		"candidates were present each step"
 	)
+	for enemy: EnemyActor in _enemies:
+		assert(enemy.current_hp == enemy.max_hp, "offset candidates must not be hit")
 	assert(
 		build_count * 4 < candidate_count or build_count == steps,
 		"snapshot builds must never multiply with candidate count"
@@ -61,7 +67,8 @@ func _run() -> void:
 func _make_enemy(
 	center_ground_gu: Vector2,
 	combat_radius_gu: float,
-	serial: int
+	serial: int,
+	projectile_radius_gu: float
 ) -> EnemyActor:
 	var enemy := EnemyActor.new()
 	var canonical_data := GameData.get_monster_by_id(FIXTURE_MONSTER_ID)
@@ -86,6 +93,14 @@ func _make_enemy(
 	)
 	enemy.combat_radius_gu = combat_radius_gu
 	add_child(enemy)
+	var actual_radius_gu := maxf(enemy.combat_radius_gu, 0.0)
+	var safe_lateral_offset_gu := actual_radius_gu + projectile_radius_gu + 0.01
+	enemy.set_combat_position(
+		GroundUnit.ground_delta_gu_to_screen_delta_px(
+			Vector2(center_ground_gu.x, safe_lateral_offset_gu)
+		),
+		&"test_position"
+	)
 	assert(
 		is_instance_valid(enemy)
 		and not enemy.is_queued_for_deletion()
@@ -95,8 +110,8 @@ func _make_enemy(
 	_index.register(
 		serial,
 		1,
-		center_ground_gu,
-		combat_radius_gu,
+		Vector2(center_ground_gu.x, safe_lateral_offset_gu),
+		actual_radius_gu,
 		serial,
 		enemy
 	)

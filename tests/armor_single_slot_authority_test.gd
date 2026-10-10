@@ -100,6 +100,9 @@ func _run() -> void:
 		var rolled: Dictionary = loot.roll_monster_drops(monster_id, rng, true)
 		assert(str(rolled.get("reason", "")).is_empty(), str(rolled))
 		assert(int(rolled.rng_roll_count) == provider.profile(monster_id).slots.size())
+		var group_cap := GameData.dpv2_ground_slot_limit_for_monster(monster_id)
+		assert(int(rolled.get("ground_slot_group", {}).get("ground_slot_limit", 0)) == group_cap)
+		assert(int(rolled.get("ground_output_count", 0)) <= group_cap)
 		var armor_attempts := {}
 		for attempt: Dictionary in rolled.attempts:
 			var source_id := int(attempt.get("canonical_item_id", -1))
@@ -108,7 +111,7 @@ func _run() -> void:
 			var output_id := int(output_by_source[source_id])
 			assert(not armor_attempts.has(output_id), "production RNG rolled armor twice: %d/%d" % [monster_id, output_id])
 			armor_attempts[output_id] = true
-	assert(GameData.dpv2_ground_slot_limit() == 15)
+	assert(GameData.dpv2_ground_slot_limit() == 15, "frozen baseline source cap remains historical only")
 	loot.free()
-	print("ARMOR_SINGLE_SLOT_AUTHORITY_PASS monsters=126 slots=6084 affected=37 groups=102 removed=102 frozen_dark_boss=6 production_rng_single_trial=true ground_limit=15")
+	print("ARMOR_SINGLE_SLOT_AUTHORITY_PASS monsters=126 slots=6084 affected=37 groups=102 removed=102 frozen_dark_boss=6 production_rng_single_trial=true baseline_ground_limit=15 grouped_caps=6/9/12")
 	get_tree().quit(0)

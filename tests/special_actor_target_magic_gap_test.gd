@@ -20,27 +20,25 @@ func _run() -> void:
 		descriptors.clear()
 		var before := target.current_hp
 		assert(caster._launch_target_magic(target, 50))
-		assert(target.current_hp == before)
-		var pending: Dictionary = caster._pending_attack_release_record
-		assert(not pending.is_empty() and bool(pending.is_read_only()))
-		assert(str(pending.get("release_id", "")).contains(":target_magic:release:"))
-		assert(int(pending.get("source_monster_id", -1)) == id)
-		assert(int(pending.get("source_instance_id", -1)) == caster.get_instance_id())
-		assert(int(pending.get("target_instance_id", -1)) == target.get_instance_id())
-		assert(int(pending.get("source_life", -1)) == caster._hc_life(caster))
-		assert(int(pending.get("target_life", -1)) == caster._hc_life(target))
-		assert(int(pending.get("runtime_map_id", -1)) == 1)
-		assert(int(pending.get("source_generation", -1)) == 1 and int(pending.get("target_generation", -1)) == 1)
+		assert(target.current_hp < before, "ID%d target magic must settle HP at activation" % id)
+		assert(caster._pending_attack_release_record.is_empty(), "ID%d target magic created a pending damage release" % id)
 		assert(descriptors.size() == 1)
-		assert(str(descriptors[0].get("release_id", "")) == str(pending.get("release_id", "")))
+		var descriptor := descriptors[0]
+		var release_id := str(descriptor.get("release_id", ""))
+		assert(release_id.contains(":target_magic:release:"))
+		assert(int(descriptor.get("source_monster_id", -1)) == id)
+		assert(int(descriptor.get("source_instance_id", -1)) == caster.get_instance_id())
+		assert(int(descriptor.get("target_instance_id", -1)) == target.get_instance_id())
+		var snapshot: Dictionary = descriptor.get("footprint_snapshot", {})
+		assert(str(snapshot.get("projection_relationship_id", "")) == "ground_exact")
 		caster._update_pending_attack(1.0)
 		assert(target.current_hp < before, "ID%d target magic did not settle" % id)
-		assert(str(caster.last_magic_attack_resolution.get("release_id", "")) == str(pending.get("release_id", "")))
+		assert(str(caster.last_magic_attack_resolution.get("release_id", "")) == release_id)
 		assert(caster.last_magic_attack_resolution.get("damage_channel", "") == "magic_defense")
 		var once_hp := target.current_hp
 		caster._update_pending_attack(1.0)
 		assert(target.current_hp == once_hp, "target magic settled twice")
-		print(JSON.stringify({"id": id,"release": pending,"hp_before":before,"hp_after":once_hp,"resolution":caster.last_magic_attack_resolution}))
+		print(JSON.stringify({"id": id,"release_id": release_id,"hp_before":before,"hp_after":once_hp,"resolution":caster.last_magic_attack_resolution}))
 		caster.queue_free(); await get_tree().process_frame
 	# ID222 actual post-MAC healing positive path.
 	var priest := _make_caster(222, target)
@@ -59,12 +57,14 @@ func _run() -> void:
 	assert(priest.current_hp == priest_before + expected_magic_heal,
 		"ID222 heal was not based on post-MAC committed damage")
 	# Zero raw damage: valid release, no HP loss and no heal.
+	await _finish_committed_action(priest)
 	var zero_heal_before := priest.current_hp
 	var zero_target_before := target.current_hp
 	priest._attack_timer = 0.0; assert(priest._launch_target_magic(target, 0))
 	priest._update_pending_attack(1.0)
 	assert(priest.current_hp == zero_heal_before and target.current_hp == zero_target_before)
 	# Guaranteed magic evade through the real player stat context.
+	await _finish_committed_action(priest)
 	var saved_anti_magic: Variant = PlayerState.computed_stats.get("anti_magic_points", 0)
 	PlayerState.computed_stats["anti_magic_points"] = 10
 	var evade_heal_before := priest.current_hp
@@ -73,17 +73,28 @@ func _run() -> void:
 	priest._update_pending_attack(1.0)
 	assert(priest.current_hp == evade_heal_before and target.current_hp == evade_target_before)
 	PlayerState.computed_stats["anti_magic_points"] = saved_anti_magic
-	# A stale map release cannot heal or damage.
+	# A mismatched map must reject before activation. Once accepted, later map
+	# changes cannot undo the already settled release.
+	await _finish_committed_action(priest)
 	var stale_hp := priest.current_hp; var target_hp := target.current_hp
-	priest._attack_timer = 0.0; assert(priest._launch_target_magic(target, 50))
-	target.set_meta("runtime_map_id", 2); priest._update_pending_attack(1.0)
+	target.set_meta("runtime_map_id", 2)
+	priest._attack_timer = 0.0; assert(not priest._launch_target_magic(target, 50))
 	assert(priest.current_hp == stale_hp and target.current_hp == target_hp)
 	target.set_meta("runtime_map_id", 1)
+	await _finish_committed_action(priest)
+	assert(priest._launch_target_magic(target, 50))
+	var accepted_hp := target.current_hp
+	target.set_meta("runtime_map_id", 2)
+	priest._update_pending_attack(1.0)
+	assert(target.current_hp == accepted_hp, "accepted target magic was revoked after map change")
+	target.set_meta("runtime_map_id", 1)
+	await _finish_committed_action(priest)
+	var accepted_generation_hp := target.current_hp
 	assert(priest._launch_target_magic(target, 50))
 	target.set_meta("zone_generation", 2)
 	priest._update_pending_attack(1.0)
-	assert(priest.current_hp == stale_hp and target.current_hp == target_hp, "stale generation settled")
-	print(JSON.stringify({"id":222,"positive_magic_loss":actual_magic_loss,"expected_heal":expected_magic_heal,"zero":true,"evade":true,"map_rejection":true,"generation_rejection":true}))
+	assert(target.current_hp < accepted_generation_hp, "accepted target magic did not settle at activation")
+	print(JSON.stringify({"id":222,"positive_magic_loss":actual_magic_loss,"expected_heal":expected_magic_heal,"zero":true,"evade":true,"map_rejection":true,"post_activation_generation_stable":true,"activation_settle":true}))
 	priest.queue_free(); target.queue_free(); await get_tree().process_frame
 	print("SPECIAL_TARGET_MAGIC_GAP_PASS descriptors=%d" % descriptors.size())
 	get_tree().quit(0)
@@ -96,3 +107,14 @@ func _make_caster(id: int, target: PlayerCharacter) -> EnemyActor:
 	var a := EnemyActor.new(); a.setup(GameData.get_monster_by_id(id), target, false); a.set_meta("zone_generation", 1); a.configure_runtime_map_projection(1, Callable(self, "_ground_to_screen"), Callable(self, "_screen_to_ground")); a.configure_terrain_navigation_context({}); a.global_position = Vector2.ZERO; add_child(a); a.set_physics_process(false); a.target = target; return a
 func _ground_to_screen(v: Vector2) -> Vector2: return GroundUnit.ground_delta_gu_to_screen_delta_px(v)
 func _screen_to_ground(v: Vector2) -> Vector2: return GroundUnit.screen_delta_px_to_ground_delta_gu(v)
+
+func _finish_committed_action(actor: EnemyActor) -> void:
+	if actor._attack_action_active:
+		var remaining := maxf(
+			0.0,
+			actor._attack_action_start_time_s + actor._attack_action_duration_s
+				- actor._combat_action_time_s,
+		)
+		if remaining > 0.0:
+			actor._physics_process(remaining + 0.001)
+	await get_tree().physics_frame

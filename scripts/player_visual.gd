@@ -56,6 +56,10 @@ var current_frame := 0
 var _elapsed := 0.0
 var _action_remaining := 0.0
 var _action_duration := 0.0
+## Optional formal owner clock. Production actors bind this to the physics
+## action clock; preview fixtures without a binding remain render-delta driven.
+var _combat_clock_s: Callable = Callable()
+var _action_start_game_time_s := -1.0
 var _last_state := ""
 var _action_name := "attack"
 var _action_audio_played := false
@@ -199,7 +203,11 @@ func _process(delta: float) -> void:
 	_update_visibility()
 	if not visible:
 		return
-	_action_remaining = maxf(0.0, _action_remaining - delta)
+	if _combat_clock_s.is_valid() and _action_start_game_time_s >= 0.0:
+		var owner_now := float(_combat_clock_s.call())
+		_action_remaining = maxf(0.0, _action_start_game_time_s + _action_duration - owner_now)
+	else:
+		_action_remaining = maxf(0.0, _action_remaining - delta)
 	# Collision stops displacement, while a held and unlocked movement input
 	# still owns locomotion presentation. Distance/run admission stays in Player.
 	var moving := actor.movement_input_active or actor.velocity.length_squared() > 0.01
@@ -218,7 +226,10 @@ func _process(delta: float) -> void:
 	if current_state != _last_state:
 		_elapsed = 0.0
 		_last_state = current_state
-	_elapsed += delta
+	if _combat_clock_s.is_valid() and _action_start_game_time_s >= 0.0 and current_state == "action":
+		_elapsed = maxf(0.0, float(_combat_clock_s.call()) - _action_start_game_time_s)
+	else:
+		_elapsed += delta
 	var fps := 12.0 if current_state == "action" else (10.0 if current_state == "run" else 6.0)
 	var action_key := _visual_action_key()
 	var frame_count := _frame_count_for_action(action_key)
@@ -345,6 +356,11 @@ func play_action(animation_name: String, duration: float) -> void:
 		_action_remaining = duration
 		_action_duration = duration
 	_elapsed = 0.0
+	_action_start_game_time_s = (
+		float(_combat_clock_s.call())
+		if _combat_clock_s.is_valid()
+		else -1.0
+	)
 	_action_audio_played = false
 	if starts_reaction_action:
 		_dispatch_player_reaction_action_start_audio(animation_name)

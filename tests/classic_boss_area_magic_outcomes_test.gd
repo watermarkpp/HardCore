@@ -81,8 +81,14 @@ func _sample(points: int, seed_value: int) -> void:
 			release_id = str(boss._area_magic_footprint_snapshot.release_id)
 			frozen_records = boss._area_magic_release_records.duplicate(true)
 	boss.set_physics_process(false)
+	var hp_after_activation := player.current_hp
+	player.global_position = _project(Terrain.CENTER_GROUND_GU + Vector2(8.0, 8.0))
+	# The warning is presentation-only after activation settlement. Advance it
+	# once so the test also verifies cleanup does not perform a second HP delivery.
+	boss._update_area_magic_delivery(1.0)
 	var resolution := boss.last_magic_attack_resolution.duplicate(true)
 	var hp_after := player.current_hp
+	_expect(hp_after == hp_after_activation, "points=%d target movement after release must not replay or revoke HP" % points)
 	var snapshot := boss._last_attack_footprint_snapshot.duplicate(true)
 	_expect(not resolution.is_empty(), "points=%d natural delivery must finish" % points)
 	_expect(not release_id.is_empty() and str(snapshot.get("release_id", "")) == release_id, "points=%d release identity" % points)

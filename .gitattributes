@@ -146,3 +146,7 @@ assets/data/features/socketing_fixture_items.json -text
 
 # The Android seal loads this audited collector by its exact LF-byte SHA-256.
 tools/android_seal/export_identity_tool/collector.py text eol=lf
+
+# Map identity raw bytes and generated registry must survive clean build checkouts.
+assets/data/map_design/map_identity_registry.json text eol=crlf
+assets/data/runtime/entity_registry_v1.json text eol=lf

@@ -74,6 +74,54 @@ class SourcePriorityPolicyVerifierTests(unittest.TestCase):
                 mutation,
             )
 
+    def test_fallback_positive_is_missing_only_and_incompatible_is_rejected(self) -> None:
+        catalog = {"distributions": [
+            {"distributionKey": "client.classic_raw_complete"},
+            {"distributionKey": "client.mir2opensource_2013_complete"},
+            {"distributionKey": "archive_extract.mirfiles_new_data.ae702e382cc5"},
+            {"distributionKey": "archive_extract.mirfiles_hum.bfae8696c79f"},
+        ]}
+        evidence = load_json(ROOT / "assets/data/source_priority_fallback_evidence.example.json")
+        with self.assertRaises(ValueError):
+            verifier.authorize(
+                self.policy,
+                catalog,
+                "client_assets",
+                "archive_extract.mirfiles_hum.bfae8696c79f",
+                evidence,
+            )
+        positive = copy.deepcopy(evidence)
+        positive["checks"][-1]["status"] = "missing"
+        result = verifier.authorize(
+            self.policy,
+            catalog,
+            "client_assets",
+            "archive_extract.mirfiles_hum.bfae8696c79f",
+            positive,
+        )
+        self.assertTrue(result["authorized"])
+        self.assertEqual(len(result["higherPriorityRejected"]), 3)
+
+    def test_cli_missing_catalog_is_explicit_failure(self) -> None:
+        import subprocess
+        result = subprocess.run(
+            [
+                sys.executable,
+                str(TOOLS / "source_priority_guard.py"),
+                "--catalog", str(ROOT / "outputs/does-not-exist/catalog.json"),
+                "authorize",
+                "--lane", "client_assets",
+                "--candidate", "client.mir2opensource_2013_complete",
+            ],
+            cwd=ROOT,
+            text=True,
+            capture_output=True,
+            encoding="utf-8",
+        )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('"authorized": false', result.stderr)
+        self.assertIn("No such file", result.stderr)
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

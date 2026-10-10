@@ -16,10 +16,10 @@ var _sfx_services: Array[WeakRef] = []
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	# v1 had runtime bus toggles, not a proven persisted preference file.
-	# Respect an already-muted bus on first migration; do not invent a file.
-	music_volume = _initial_level(&"Music")
-	sfx_volume = _initial_level(&"SFX")
+	# Only a valid preference file expresses user intent. Bus state may belong
+	# to startup or the previous scene and must not become a saved mute choice.
+	music_volume = 1.0
+	sfx_volume = 1.0
 	var saved := _read_valid(storage_path)
 	if saved.is_empty():
 		saved = _read_valid(storage_path + ".bak")
@@ -30,10 +30,6 @@ func _ready() -> void:
 		sfx_volume = float(saved["sfx"])
 	_apply()
 
-func _initial_level(bus: StringName) -> float:
-	var index := AudioServer.get_bus_index(bus)
-	return 0.0 if index >= 0 and AudioServer.is_bus_mute(index) else 1.0
-
 static func valid_level(value: Variant) -> bool:
 	return typeof(value) in [TYPE_INT, TYPE_FLOAT] and is_finite(float(value)) and float(value) >= 0.0 and float(value) <= 1.0
 
@@ -43,6 +39,7 @@ func set_level(channel: String, value: Variant) -> bool:
 	var next_level := float(value)
 	var previous := music_volume if channel == "music" else sfx_volume
 	if is_equal_approx(previous, next_level):
+		_apply()
 		return true
 	if channel == "music":
 		music_volume = next_level

@@ -36,6 +36,7 @@ const BUILD_STAGE_LABELS := {
 
 var stage := Stage.IDLE
 var generation := 0
+var _generation_valid := true
 var map_id := -1
 var mode := ""
 var started_at_usec := 0
@@ -60,6 +61,10 @@ var _actor_descriptor_validator := Callable()
 var resource_manifest: Dictionary = {}
 var _prefetched_resources: Dictionary = {}
 var _consumed_paths: Dictionary = {}
+## Accepted threaded requests whose original generation was retired.  These
+## remain owned until a terminal ResourceLoader state is observed and its
+## retrieval right is consumed; starting a new world never drops them.
+var _retired_threaded_requests: Dictionary = {}
 var _sync_load_recorded: Dictionary = {}
 var target_region := ""
 
@@ -120,7 +125,9 @@ func begin_map_transition(_map_id: int) -> void:
 
 
 func _internal_begin(_map_id: int, _mode: String) -> void:
+	_retire_pending_threaded_requests()
 	generation += 1
+	_generation_valid = true
 	map_id = _map_id
 	mode = _mode
 	stage = Stage.IDLE
@@ -239,11 +246,18 @@ func advance(new_stage: Stage) -> void:
 
 
 func is_generation_current(gen: int) -> bool:
-	return gen == generation
+	return _generation_valid and gen == generation
 
 
 func mark_heavy_work_started(gen: int) -> bool:
-	return gen == generation
+	return is_generation_current(gen)
+
+
+func revoke_current_generation() -> void:
+	## Invalidates every suspended coroutine owned by the current transition.
+	## The numeric generation is retained for diagnostics; the next begin still
+	## advances it and re-arms the owner boundary.
+	_generation_valid = false
 
 
 func loading_barrier_completed() -> void:
@@ -257,6 +271,9 @@ func finish(success: bool, reason: String) -> Dictionary:
 		stage = Stage.READY
 	else:
 		stage = Stage.FAILED
+		# A FAILED owner must not remain eligible for an async resume after the
+		# caller clears its transition lock or starts recovery.
+		revoke_current_generation()
 		# P0-1/P0-3 audit trail: a FAILED bootstrap may be immediately
 		# followed by a chained recovery transition (central failure owner),
 		# which re-runs this coordinator and overwrites stage/diagnostic
@@ -719,7 +736,10 @@ func request_threaded_prefetch() -> int:
 					diagnostic["prefetch_failure_count"] += 1
 			continue
 		var _status := ResourceLoader.load_threaded_request(str(_path))
-		if _status == OK or _status == ERR_ALREADY_IN_USE:
+		if _status == OK:
+			# Every successful request adds one user claim, including a same-path
+			# request that the engine attaches to the existing load token.
+			_entry["claim_count"] = int(_entry.get("claim_count", 0)) + 1
 			_entry["status"] = "requested"
 			_requested += 1
 		else:
@@ -743,7 +763,9 @@ func poll_threaded_prefetch() -> bool:
 		var _status := ResourceLoader.load_threaded_get_status(str(_path), _progress)
 		match _status:
 			ResourceLoader.THREAD_LOAD_LOADED:
-				var _res := ResourceLoader.load_threaded_get(str(_path))
+				var _res := _consume_threaded_claims(
+					str(_path), int(_entry.get("claim_count", 1))
+				)
 				if _res != null:
 					_prefetched_resources[str(_path)] = _res
 					_entry["status"] = "ready"
@@ -752,12 +774,87 @@ func poll_threaded_prefetch() -> bool:
 					if _entry.get("required", true):
 						diagnostic["prefetch_failure_count"] += 1
 			ResourceLoader.THREAD_LOAD_FAILED:
+				# FAILED is terminal and still owns a retrieval token in Godot.
+				_consume_threaded_claims(
+					str(_path), int(_entry.get("claim_count", 1))
+				)
+				_entry["status"] = "load_failed"
+				if _entry.get("required", true):
+					diagnostic["prefetch_failure_count"] += 1
+			ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+				# INVALID_RESOURCE means no user claim remains (or it was already
+				# consumed). Never call get a second time for this status.
+				_entry["claim_count"] = 0
 				_entry["status"] = "load_failed"
 				if _entry.get("required", true):
 					diagnostic["prefetch_failure_count"] += 1
 			_:
 				_pending += 1
 	return _pending == 0
+
+
+func poll_retired_threaded_prefetch() -> void:
+	## Nonblocking lifecycle service for requests whose transition owner ended.
+	## Retired claims are handed to ContentLayers' bounded owner; this method
+	## never calls get() and never blocks a gameplay frame.
+	_transfer_retired_threaded_claims()
+
+
+func retire_threaded_resource_claims() -> bool:
+	## Transfer unresolved accepted claims to the existing ContentLayers
+	## preparation owner before this coordinator is destroyed.  This does not
+	## issue a new request and does not transfer claims already consumed.
+	if not ContentLayers.has_method("retire_threaded_resource_claims"):
+		return false
+	_retire_pending_threaded_requests()
+	return _retired_threaded_requests.is_empty()
+
+
+func _retire_pending_threaded_requests() -> void:
+	var moved_paths: Array[String] = []
+	for _path: Variant in resource_manifest:
+		var _entry: Dictionary = resource_manifest[_path]
+		if str(_entry.get("status", "")) == "requested":
+			var retired_entry: Dictionary = _entry.duplicate(true)
+			var path := str(_path)
+			if _retired_threaded_requests.has(path):
+				var existing: Dictionary = _retired_threaded_requests[path]
+				retired_entry["claim_count"] = (
+					int(existing.get("claim_count", 1))
+					+ int(retired_entry.get("claim_count", 1))
+				)
+			_retired_threaded_requests[path] = retired_entry
+			moved_paths.append(path)
+	for path in moved_paths:
+		resource_manifest.erase(path)
+	_transfer_retired_threaded_claims()
+
+
+func _poll_retired_threaded_requests() -> void:
+	_transfer_retired_threaded_claims()
+
+
+func _transfer_retired_threaded_claims() -> void:
+	if _retired_threaded_requests.is_empty() or not ContentLayers.has_method("retire_threaded_resource_claims"):
+		return
+	for raw_path: Variant in _retired_threaded_requests.keys().duplicate():
+		var path := str(raw_path)
+		var retired: Dictionary = _retired_threaded_requests[path]
+		var count := int(retired.get("claim_count", 0))
+		if count <= 0:
+			_retired_threaded_requests.erase(path)
+			continue
+		if bool(ContentLayers.retire_threaded_resource_claims(path, count)):
+			_retired_threaded_requests.erase(path)
+
+
+func _consume_threaded_claims(path: String, claim_count: int) -> Resource:
+	var result: Resource = null
+	for _claim in range(maxi(0, claim_count)):
+		var candidate: Resource = ResourceLoader.load_threaded_get(path)
+		if candidate != null:
+			result = candidate
+	return result
 
 
 func poll_threaded_prefetch_blocking(timeout_ms := 3000) -> bool:

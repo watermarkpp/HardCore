@@ -30,7 +30,9 @@ def fingerprint():
                 files[p.relative_to(ROOT).as_posix()] = hashlib.sha256(p.read_bytes()).hexdigest()
     for name in ("project.godot", "tools/run_godot_tests.ps1", "tools/source176_r3_validation.py"):
         files[name] = hashlib.sha256((ROOT / name).read_bytes()).hexdigest()
-    for name in ("tools/test_framework_receipt.ps1", "tools/run_godot_tests_request.ps1", "tools/test_cloud_validation.py"):
+    # These helpers are dot-sourced by the formal runner; their bytes are part
+    # of the source contract even though they are not under the main scan set.
+    for name in ("tools/test_windows_process_ownership.ps1", "tools/test_framework_receipt.ps1", "tools/test_native_log_evidence.ps1", "tools/run_godot_tests_request.ps1", "tools/test_cloud_validation.py"):
         if (ROOT / name).is_file():
             files[name] = hashlib.sha256((ROOT / name).read_bytes()).hexdigest()
     engine = engine_path()

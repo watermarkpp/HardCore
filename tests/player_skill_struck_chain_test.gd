@@ -74,6 +74,20 @@ func _run() -> void:
 		reaction > 0.2 and reaction <= 0.24,
 		"消费后的受击表现必须落在240ms窗口内：%f" % reaction
 	)
+	var skill_cooldown_at_hit_start := player.skill_cooldown_remaining_ms("wizard.fireball")
+	assert(skill_cooldown_at_hit_start > 0, "技能受击回归需要存在未完成的技能冷却")
+	player.set_physics_process(false)
+	player._physics_process(0.1)
+	assert(
+		player.skill_cooldown_remaining_ms("wizard.fireball") == skill_cooldown_at_hit_start,
+		"实际受击动画期间技能冷却必须冻结"
+	)
+	player._physics_process(0.141)
+	assert(
+		player.skill_cooldown_remaining_ms("wizard.fireball") < skill_cooldown_at_hit_start,
+		"受击动画结束后技能冷却必须继续减少"
+	)
+	assert(player.visual.get("_combat_clock_s") != null, "正式人物视觉必须绑定owner动作时钟")
 	assert(skill_requests.size() == 1, "硬直消费不得重复释放技能")
 
 	# ---- M: reaction window ends and the mage regains control ----

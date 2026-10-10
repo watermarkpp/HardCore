@@ -82,7 +82,15 @@ var _monster_budget_window_started_msec := -1
 var _monster_prompt_starts_in_window := 0
 var _monster_attack_starts_in_window := 0
 var _monster_sessions: Dictionary = {}
+## Live EnemyActor owner identity, registered lazily on the first accepted
+## attack event. Retired owners are removed; stale contexts fail identity
+## validation instead of relying on an ever-growing tombstone table.
+var _monster_audio_owners: Dictionary = {}
 var _owner_release_seen: Dictionary = {}
+## Monster attack releases are monotonic per owner/event.  Keep one frontier
+## per event instead of one key for every attack serial; other UUID-like
+## release IDs continue to use exact-key de-duplication below.
+var _monster_attack_release_frontier: Dictionary = {}
 var _metrics: Dictionary = {
 	"requests": 0,
 	"played": 0,
@@ -374,7 +382,14 @@ func prewarm_runtime_streams() -> Dictionary:
 	for raw_event: Variant in _events.values():
 		if not raw_event is Dictionary:
 			continue
-		for runtime_path: String in _valid_event_runtime_paths((raw_event as Dictionary).get("runtime_paths", [])):
+		var event := raw_event as Dictionary
+		# Keep archived exact mappings, but load only sounds admitted in production.
+		if str(event.get("owner_kind", "")) == "monster" and (
+			str(event.get("semantic_event", "")) in MONSTER_REJECTED_SEMANTICS
+			or str(event.get("semantic_event", "")) in MONSTER_PROMPT_SEMANTICS
+		):
+			continue
+		for runtime_path: String in _valid_event_runtime_paths(event.get("runtime_paths", [])):
 			_prewarm_one(runtime_path, result, "event")
 	return result
 
@@ -455,17 +470,37 @@ func _play_event_internal(
 		return _reject_event("unresolved_mapping", event_id, context)
 	var owner_kind := str(binding.get("owner_kind", ""))
 	var semantic_event := str(binding.get("semantic_event", ""))
+	if owner_kind == "monster" and (
+		semantic_event in MONSTER_PROMPT_SEMANTICS
+		or requested_semantic_event in MONSTER_PROMPT_SEMANTICS
+	):
+		return _skipped_event("combat_prompt_disabled", event_id, context)
 	if (
 		owner_kind == "monster"
 		and semantic_event in MONSTER_REJECTED_SEMANTICS
-		and not allow_restricted_monster_source
 	):
 		return _reject_event_light("monster_event_not_allowed", event_id, context)
 	if not _sfx_enabled:
 		_metrics["sfx_disabled"] = int(_metrics.get("sfx_disabled", 0)) + 1
 		return _reject_event_light("sfx_disabled", event_id, context)
 	var owner_release_key := _owner_release_key(event_id, context)
-	if not owner_release_key.is_empty() and _owner_release_seen.has(owner_release_key):
+	if owner_kind == "monster" and str(context.get("source", "")) == "enemy_actor" \
+		and semantic_event in MONSTER_ATTACK_SEMANTICS:
+		if not _ensure_live_enemy_audio_owner(context):
+			return _reject_event_light("stale_monster_owner", event_id, context)
+	var attack_frontier_key := _monster_attack_frontier_key(
+		event_id,
+		owner_kind,
+		semantic_event,
+		context,
+	)
+	var duplicate_release := (
+		not attack_frontier_key.is_empty()
+		and int(_monster_attack_release_frontier.get(attack_frontier_key, -1)) >= _attack_release_serial(context)
+	)
+	if attack_frontier_key.is_empty():
+		duplicate_release = not owner_release_key.is_empty() and _owner_release_seen.has(owner_release_key)
+	if duplicate_release:
 		_metrics["owner_release_duplicates"] = int(_metrics.get("owner_release_duplicates", 0)) + 1
 		return _reject_event_light("duplicate_owner_release", event_id, context)
 	var priority := int(binding.get("priority", 50))
@@ -518,8 +553,22 @@ func _play_event_internal(
 		"prepared":prepared_stream != null,
 	}
 	player.play()
-	if not owner_release_key.is_empty():
+	if not attack_frontier_key.is_empty():
+		_monster_attack_release_frontier[attack_frontier_key] = _attack_release_serial(context)
+	elif not owner_release_key.is_empty():
 		_owner_release_seen[owner_release_key] = _now_msec()
+	var tracked_owner_key := str(context.get("audio_owner_key", context.get("owner_key", ""))).strip_edges()
+	if not tracked_owner_key.is_empty() and _monster_audio_owners.has(tracked_owner_key):
+		var owner_record := _monster_audio_owners[tracked_owner_key] as Dictionary
+		var tracked_keys: Array = owner_record.get(
+			"frontier_keys" if not attack_frontier_key.is_empty() else "exact_keys",
+			[],
+		)
+		var tracked_key := attack_frontier_key if not attack_frontier_key.is_empty() else owner_release_key
+		if not tracked_key.is_empty() and not tracked_keys.has(tracked_key):
+			tracked_keys.append(tracked_key)
+			owner_record["frontier_keys" if not attack_frontier_key.is_empty() else "exact_keys"] = tracked_keys
+			_monster_audio_owners[tracked_owner_key] = owner_record
 	if owner_kind == "monster":
 		_refresh_monster_budget_window()
 		if allow_restricted_monster_source and semantic_event == "ambient":
@@ -551,9 +600,8 @@ func _play_event_internal(
 	return event
 
 
-## Exact monster-ID helper. Attack phases use their own source phase. The
-## combat prompt deliberately reuses this ID's original ambient sample and is
-## the only production path that may consume an ambient binding.
+## Exact monster-ID helper. Discovery and combat-state prompts were removed
+## at the user's request; committed attack phases retain their own source.
 func play_monster_event(monster_id: int, semantic_event: String, context: Dictionary = {}) -> Dictionary:
 	if monster_id <= 0 or semantic_event.is_empty():
 		return _reject_event("invalid_event", "", context)
@@ -569,10 +617,8 @@ func play_monster_event(monster_id: int, semantic_event: String, context: Dictio
 	return play_event("monster.%d.%s" % [monster_id, semantic_event], context)
 
 
-## Start one presentation session for a real monster engagement. A session is
-## keyed by the actor owner, so a target refresh or a short LOS interruption
-## cannot replay the prompt. The source event remains `ambient` for an exact
-## stable monster-ID reuse; the returned semantic event is `combat_prompt`.
+## Compatibility entry for removed discovery/combat-state sound. Return before
+## session allocation, sample selection, resource lookup or player admission.
 func play_monster_combat_prompt(
 	monster_id: int,
 	audio_owner_key: String,
@@ -580,45 +626,7 @@ func play_monster_combat_prompt(
 ) -> Dictionary:
 	if monster_id <= 0 or audio_owner_key.strip_edges().is_empty():
 		return _reject_event("invalid_event", "", context)
-	var owner_key := audio_owner_key.strip_edges()
-	var now_msec := _now_msec()
-	var session: Dictionary = _monster_sessions.get(owner_key, {}) as Dictionary
-	if bool(session.get("active", false)) or bool(session.get("entry_attempted", false)):
-		return _reject_event_light(
-			"combat_session_duplicate",
-			"monster.%d.ambient" % monster_id,
-			context,
-		)
-	if now_msec < int(session.get("rearm_after_msec", 0)):
-		return _reject_event_light(
-			"combat_session_rearm_pending",
-			"monster.%d.ambient" % monster_id,
-			context,
-		)
-	var prompt_context := context.duplicate(true)
-	prompt_context["audio_owner_key"] = owner_key
-	prompt_context["release_id"] = str(
-		context.get("session_id", "combat:%s:%d" % [owner_key, now_msec])
-	)
-	prompt_context["monster_combat_session"] = true
-	# Latch the real engagement before playback/admission. A missing sample,
-	# muted SFX bus or exhausted budget is still one completed entry attempt;
-	# only end_monster_combat_session may clear it for a later re-entry.
-	session["active"] = true
-	session["entry_attempted"] = true
-	session["monster_id"] = monster_id
-	session["started_msec"] = now_msec
-	session["last_activity_msec"] = now_msec
-	session["rearm_after_msec"] = 0
-	var result := _play_event_internal(
-		"monster.%d.ambient" % monster_id,
-		prompt_context,
-		true,
-		"combat_prompt",
-	)
-	session["audio_started"] = str(result.get("status", "")) == "played"
-	_monster_sessions[owner_key] = session
-	return result
+	return _skipped_event("combat_prompt_disabled", "monster.%d.ambient" % monster_id, context)
 
 
 func set_monster_combat_session(
@@ -778,6 +786,8 @@ func stop_all_audio(reason := "world_exit") -> void:
 	stop_npc_voice(reason)
 	stop_all_events(reason)
 	_owner_release_seen.clear()
+	_monster_audio_owners.clear()
+	_monster_attack_release_frontier.clear()
 	for owner_key: String in _monster_sessions.keys():
 		var session: Dictionary = _monster_sessions[owner_key]
 		if bool(session.get("active", false)):
@@ -914,6 +924,9 @@ func state_snapshot() -> Dictionary:
 		"active_npc_id": active_npc_id(),
 		"active_runtime_path": _active_runtime_path if is_npc_voice_active() else "",
 		"request_serial": _request_serial,
+		"owner_release_exact_count": _owner_release_seen.size(),
+		"monster_audio_live_owner_count": _monster_audio_owners.size(),
+		"monster_attack_release_frontier_count": _monster_attack_release_frontier.size(),
 		"last_event": _last_event.duplicate(true),
 	}
 
@@ -938,6 +951,8 @@ func reset_metrics_for_test(reset_sessions := false) -> void:
 	_monster_prompt_starts_in_window = 0
 	_monster_attack_starts_in_window = 0
 	_owner_release_seen.clear()
+	_monster_audio_owners.clear()
+	_monster_attack_release_frontier.clear()
 	if reset_sessions:
 		_monster_sessions.clear()
 
@@ -1038,6 +1053,92 @@ func _owner_release_key(event_id: String, context: Dictionary) -> String:
 	if owner_key.is_empty() or release_id.is_empty():
 		return ""
 	return "%s|%s|%s" % [owner_key, event_id, release_id]
+
+
+func _monster_attack_frontier_key(
+	event_id: String,
+	owner_kind: String,
+	semantic_event: String,
+	context: Dictionary,
+) -> String:
+	if owner_kind != "monster" or semantic_event not in MONSTER_ATTACK_SEMANTICS:
+		return ""
+	var release_id := str(context.get("release_id", context.get("session_id", "")))
+	if not release_id.begins_with("attack:"):
+		return ""
+	var serial_text := release_id.trim_prefix("attack:")
+	if serial_text.is_empty() or not serial_text.is_valid_int():
+		return ""
+	if int(serial_text) <= 0:
+		return ""
+	var owner_key := str(context.get("audio_owner_key", context.get("owner_key", ""))).strip_edges()
+	if owner_key.is_empty():
+		return ""
+	return "%s|%s" % [owner_key, event_id]
+
+
+func _ensure_live_enemy_audio_owner(context: Dictionary) -> bool:
+	var owner_key := str(context.get("audio_owner_key", context.get("owner_key", ""))).strip_edges()
+	var source_instance_id: Variant = context.get("source_instance_id", 0)
+	var source_life: Variant = context.get("source_life", -1)
+	if (
+		owner_key.is_empty()
+		or not source_instance_id is int
+		or int(source_instance_id) <= 0
+		or not source_life is int
+		or int(source_life) < 0
+	):
+		return false
+	var source_object: Object = instance_from_id(int(source_instance_id))
+	if not source_object is EnemyActor:
+		return false
+	var source_node := source_object as EnemyActor
+	if not is_instance_valid(source_node) or not source_node.is_inside_tree() or source_node.is_queued_for_deletion():
+		return false
+	if int(context.get("monster_id", -1)) != source_node.monster_id:
+		return false
+	var expected_owner_key := "monster:%d:%d" % [source_node.monster_id, int(source_instance_id)]
+	if owner_key != expected_owner_key:
+		return false
+	var current_life := int(source_node.get_meta("hc_combat_life_epoch", 0))
+	if current_life != int(source_life):
+		return false
+	var existing: Variant = _monster_audio_owners.get(owner_key)
+	if existing is Dictionary:
+		var record := existing as Dictionary
+		return int(record.get("source_instance_id", 0)) == int(source_instance_id) \
+			and int(record.get("source_life", -1)) == int(source_life)
+	_monster_audio_owners[owner_key] = {
+		"source_instance_id": int(source_instance_id),
+		"source_life": int(source_life),
+		"frontier_keys": [],
+		"exact_keys": [],
+	}
+	return true
+
+
+## Called by EnemyActor only through its already-cached audio service reference.
+## Retiring by owner and instance removes the frontier without retaining a
+## stale-owner tombstone; old contexts still fail because the source is gone.
+func retire_monster_audio_owner(owner_key: String, source_instance_id: int) -> bool:
+	var key := owner_key.strip_edges()
+	if key.is_empty() or source_instance_id <= 0:
+		return false
+	var existing: Variant = _monster_audio_owners.get(key)
+	if not existing is Dictionary or int((existing as Dictionary).get("source_instance_id", 0)) != source_instance_id:
+		return false
+	_monster_audio_owners.erase(key)
+	var record := existing as Dictionary
+	for frontier_key: String in record.get("frontier_keys", []):
+		_monster_attack_release_frontier.erase(frontier_key)
+	for exact_key: String in record.get("exact_keys", []):
+		_owner_release_seen.erase(exact_key)
+	return true
+
+
+func _attack_release_serial(context: Dictionary) -> int:
+	var release_id := str(context.get("release_id", context.get("session_id", "")))
+	return int(release_id.trim_prefix("attack:"))
 
 
 func _find_event_player_candidate(new_priority: int) -> int:

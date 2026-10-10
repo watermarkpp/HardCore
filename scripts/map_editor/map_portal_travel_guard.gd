@@ -10,6 +10,8 @@ static func new_state() -> Dictionary:
 	return {
 		"policy_id": POLICY_ID,
 		"travel_in_flight": false,
+		"travel_claim_id": "",
+		"next_claim_serial": 0,
 		"locked_portal_id": "",
 		"arrival_msec": -1,
 		"arrival_ground_gu": [0.0, 0.0],
@@ -20,6 +22,23 @@ static func begin_travel(state: Dictionary) -> bool:
 	if bool(state.get("travel_in_flight", false)):
 		return false
 	state["travel_in_flight"] = true
+	var serial := int(state.get("next_claim_serial", 0)) + 1
+	state["next_claim_serial"] = serial
+	state["travel_claim_id"] = "portal-claim:%d" % serial
+	return true
+
+
+static func active_claim_id(state: Dictionary) -> String:
+	return str(state.get("travel_claim_id", ""))
+
+
+static func cancel_travel(state: Dictionary, claim_id: String) -> bool:
+	if not bool(state.get("travel_in_flight", false)):
+		return false
+	if claim_id.is_empty() or claim_id != active_claim_id(state):
+		return false
+	state["travel_in_flight"] = false
+	state["travel_claim_id"] = ""
 	return true
 
 
@@ -30,6 +49,7 @@ static func finish_arrival(
 	arrival_ground_gu: Vector2
 ) -> void:
 	state["travel_in_flight"] = false
+	state["travel_claim_id"] = ""
 	state["locked_portal_id"] = portal_id
 	state["arrival_msec"] = arrival_msec
 	state["arrival_ground_gu"] = [arrival_ground_gu.x, arrival_ground_gu.y]

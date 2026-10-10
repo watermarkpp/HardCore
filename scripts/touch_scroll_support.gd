@@ -17,6 +17,17 @@ var _button_states_before_gesture: Array[Dictionary] = []
 var _registry_cleanup_queued := false
 
 
+func _notification(what: int) -> void:
+	if what in [NOTIFICATION_PAUSED, NOTIFICATION_APPLICATION_PAUSED, NOTIFICATION_APPLICATION_FOCUS_OUT]:
+		# The owning UP may be lost while the tree/app stops delivering input.
+		# Retire only this helper's gesture; another pointer's controls keep
+		# their own owners and the normal matching-index release rule.
+		_restore_button_states_before_gesture()
+		_end_drag()
+		if get_tree() != null and get_tree().root != null:
+			get_tree().root.remove_meta(DRAG_RELEASE_GUARD_META)
+
+
 func _queue_registry_cleanup() -> void:
 	if _registry_cleanup_queued or is_queued_for_deletion():
 		return
@@ -112,6 +123,8 @@ func register_control(control: Control) -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if _active_touch_index >= 0 and not _active_scroll_owner_is_live():
+		_end_drag()
 	if event is InputEventScreenTouch:
 		if event.pressed:
 			_begin_drag_candidate(event.position, event.index)
@@ -133,15 +146,28 @@ func _input(event: InputEvent) -> void:
 func _begin_drag_candidate(position: Vector2, touch_index: int) -> void:
 	# The same native event can be observed through both SceneTree input and a
 	# local forwarding path. Keep the state captured before GUI handling instead
-	# of replacing it with the button's temporary touch-down state.
-	if touch_index == _active_touch_index and _active_control != null:
-		return
+	# of replacing it with the button's temporary touch-down state. A second
+	# pointer cannot preempt a live scroll owner; it may continue through its
+	# own independent controls while this support node keeps A's drag stream.
+	if _active_touch_index >= 0:
+		if _active_scroll_owner_is_live():
+			return
+		_end_drag()
 	_active_control = _control_at(position)
 	_active_touch_index = touch_index if _active_control != null else -1
 	_press_position = position
 	_dragging = false
 	_capture_button_state_before_gesture(position)
 	_set_drag_active(false)
+
+
+func _active_scroll_owner_is_live() -> bool:
+	if _active_touch_index < 0 or not is_instance_valid(_active_control):
+		return false
+	if not _active_control.is_visible_in_tree():
+		return false
+	var owner_bar: VScrollBar = _vertical_scroll_bar(_active_control)
+	return owner_bar != null and owner_bar.max_value > owner_bar.page
 
 
 func _continue_drag(position: Vector2, relative: Vector2) -> void:

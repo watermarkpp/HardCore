@@ -35,12 +35,25 @@ func _run() -> void:
 		"existing safe-logout fixture record must be saved"
 	)
 
-	# Case 1: Home resolution failure must not quit the game.
+	# Case 1: Drive the real paused menu signal into _exit_game. Home
+	# resolution failure must keep the menu visible with an in-layer message.
+	game.call("_show_system_menu")
+	assert(get_tree().paused, "opening the real system menu must pause the world")
+	assert(game._system_menu_panel.visible, "real system menu must be visible")
 	game._test_force_home_failure = true
-	game._exit_game()
+	game._system_menu_panel.call("_request_save_exit")
 	assert(
 		not get_tree().auto_accept_quit,
 		"exit guard must keep the process alive"
+	)
+	assert(
+		get_tree().paused,
+		"Home failure must retain the pause boundary for retry"
+	)
+	assert(
+		game._system_menu_panel.save_exit_failure_label.is_visible_in_tree()
+			and not game._system_menu_panel.save_exit_failure_label.text.is_empty(),
+		"Home failure must be visible in the paused menu layer"
 	)
 	var diagnostic: Dictionary = game.get_meta(
 		"safe_logout_failure_diagnostic", {}
@@ -49,25 +62,43 @@ func _run() -> void:
 		str(diagnostic.get("action", "")) == "exit_game",
 		"failure diagnostic must record exit_game"
 	)
-
-	# Case 2: save failure with a valid Home must also not quit.
-	game._test_force_home_failure = false
-	PlayerState.active_profile_id = ""
-	var save_result: Dictionary = game._prepare_safe_logout()
 	assert(
-		not bool(save_result.get("success", true))
-		and str(save_result.get("reason", "")) == "safe_logout_save_failed",
-		"save failure must return an explicit failure"
+		PlayerState.saved_position == Vector2(100.0, 120.0),
+		"Home failure must not overwrite the existing save"
 	)
-	game._exit_game()
+	game._system_menu_panel.call("_request_continue")
+	assert(not get_tree().paused, "Continue must close the menu and release pause")
+
+	# Case 2: save failure with a valid Home must follow the same real signal
+	# path and leave the existing record intact.
+	game._test_force_home_failure = false
+	game.call("_show_system_menu")
+	assert(get_tree().paused, "retry menu must reacquire the pause boundary")
+	PlayerState.active_profile_id = ""
+	game._system_menu_panel.call("_request_save_exit")
 	assert(
 		PlayerState.saved_position == Vector2(100.0, 120.0),
 		"existing record must survive a failed save path"
 	)
 	assert(
+		get_tree().paused
+			and game._system_menu_panel.save_exit_failure_label.is_visible_in_tree()
+			and not game._system_menu_panel.save_exit_failure_label.text.is_empty(),
+		"save failure must remain visible in the paused menu layer"
+	)
+	var save_diagnostic: Dictionary = game.get_meta(
+		"safe_logout_failure_diagnostic", {}
+	)
+	assert(
+		str(save_diagnostic.get("reason", "")) == "safe_logout_save_failed",
+		"save failure must retain the explicit failure reason"
+	)
+	assert(
 		_captured_error_reason.contains("exit_game"),
 		"failure must be reported through the injected capture reporter"
 	)
+	game._system_menu_panel.call("_request_continue")
+	assert(not get_tree().paused, "Continue must close the failed-save menu")
 
 	game.queue_free()
 	_restore_persistence()

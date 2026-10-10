@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "contract_id": "audio.town.pcm_playback.v1",
+  "source_path": "res://assets/audio/town/main_city_bgm.ogg",
+  "source_sha256": "c750b7ee2c6a3baaa326d1dbcfaaa6bca853df5c00c6adb6d444b2bbac1e71c6",
+  "source_record_sha256": "6ca8ad7911516c59a6f767827c61dcab105d3dfb727499f9fb0c12da912c7896",
+  "runtime_path": "res://assets/audio/town/main_city_bgm.pcm.wav",
+  "runtime_sha256": "8be6580572b17e28030338cefec9ca0cfce9b0481c48ec650d491ba91430f75b",
+  "runtime_bytes": 8499244,
+  "format": "pcm_s16le",
+  "sample_rate_hz": 44100,
+  "channels": 2,
+  "sample_frames": 2124800,
+  "duration_seconds": 48.18140589569161,
+  "loop": false,
+  "generator": "tools/audio/prepare_town_music.py",
+  "decode_policy": "build_time_only; native uncompressed playback; original OGG preserved"
+}

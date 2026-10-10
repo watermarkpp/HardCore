@@ -94,20 +94,21 @@ function Assert-ChangedFromBaseline {
 
     $CurrentHash = Get-ArchiveEntrySha256 -Archive $CurrentArchive -EntryName $EntryName -ArchiveLabel "current APK"
     if (-not $RequireRuntimeChangesFromBaseline) {
-        return
+        return $false
     }
     $BaselineEntry = $BaselineArchive.GetEntry($EntryName)
     if ($null -eq $BaselineEntry -or $BaselineEntry.Length -le 0) {
-        return
+        return $true
     }
     $BaselineHash = Get-ArchiveEntrySha256 -Archive $BaselineArchive -EntryName $EntryName -ArchiveLabel "baseline APK"
     if ($CurrentHash -eq $BaselineHash) {
         if ($AllowedUnchangedEntries -contains $EntryName) {
-            Write-Output "ALLOWED_UNCHANGED_FROM_BASELINE entry=$EntryName sha256=$CurrentHash"
-            return
+            Write-Host "ALLOWED_UNCHANGED_FROM_BASELINE entry=$EntryName sha256=$CurrentHash"
+            return $false
         }
         throw "Critical APK entry is unchanged from the baseline APK: $EntryName"
     }
+    return $true
 }
 
 function Convert-ResourcePathToArchiveEntry {
@@ -147,8 +148,21 @@ if ($ResolvedApkPath -eq $ResolvedBaselineApkPath) {
     throw "Current APK and baseline APK must be different files."
 }
 
-$CurrentArchive = [System.IO.Compression.ZipFile]::OpenRead($ResolvedApkPath)
-$BaselineArchive = [System.IO.Compression.ZipFile]::OpenRead($ResolvedBaselineApkPath)
+$CurrentArchive = $null
+$BaselineArchive = $null
+try {
+    $CurrentArchive = [System.IO.Compression.ZipFile]::OpenRead($ResolvedApkPath)
+    try {
+        $BaselineArchive = [System.IO.Compression.ZipFile]::OpenRead($ResolvedBaselineApkPath)
+    } catch {
+        $CurrentArchive.Dispose()
+        $CurrentArchive = $null
+        throw
+    }
+} catch {
+    if ($null -ne $BaselineArchive) { $BaselineArchive.Dispose(); $BaselineArchive = $null }
+    throw
+}
 
 try {
     $CompiledScripts = @(
@@ -165,8 +179,11 @@ try {
         "assets/scripts/skills/runtimes/taoist_skill_runtime.gdc",
         "assets/scripts/caster_skill_animation_player.gdc"
     )
+    $CompiledScriptsChangedCount = 0
     foreach ($EntryName in $CompiledScripts) {
-        Assert-ChangedFromBaseline -CurrentArchive $CurrentArchive -BaselineArchive $BaselineArchive -EntryName $EntryName
+        if (Assert-ChangedFromBaseline -CurrentArchive $CurrentArchive -BaselineArchive $BaselineArchive -EntryName $EntryName) {
+            $CompiledScriptsChangedCount++
+        }
     }
 
     $BuildInfoEntry = "assets/assets/generated/build_info.json"
@@ -185,7 +202,7 @@ try {
     }
 
     $WorldHelmetPolicyEntry = "assets/assets/data/equipment_world_helmet_runtime_policy.json"
-    Assert-ChangedFromBaseline -CurrentArchive $CurrentArchive -BaselineArchive $BaselineArchive -EntryName $WorldHelmetPolicyEntry
+    [void](Assert-ChangedFromBaseline -CurrentArchive $CurrentArchive -BaselineArchive $BaselineArchive -EntryName $WorldHelmetPolicyEntry)
     $WorldHelmetPolicy = Read-ArchiveText -Archive $CurrentArchive -EntryName $WorldHelmetPolicyEntry -ArchiveLabel "current APK" | ConvertFrom-Json
     if ($WorldHelmetPolicy.contractId -ne "equipment.world_helmet.runtime_visibility.v1") {
         throw "Unexpected world helmet runtime contract ID."
@@ -209,8 +226,8 @@ try {
             throw "World hair contract is missing action: $Action"
         }
         $TextureEntries = Assert-ImportedTexture -Archive $CurrentArchive -ResourcePath ([string]$ActionNode.path) -ArchiveLabel "current APK"
-        Assert-ChangedFromBaseline -CurrentArchive $CurrentArchive -BaselineArchive $BaselineArchive -EntryName $TextureEntries.ImportEntry
-        Assert-ChangedFromBaseline -CurrentArchive $CurrentArchive -BaselineArchive $BaselineArchive -EntryName $TextureEntries.CompiledEntry
+        [void](Assert-ChangedFromBaseline -CurrentArchive $CurrentArchive -BaselineArchive $BaselineArchive -EntryName $TextureEntries.ImportEntry)
+        [void](Assert-ChangedFromBaseline -CurrentArchive $CurrentArchive -BaselineArchive $BaselineArchive -EntryName $TextureEntries.CompiledEntry)
         $HairTextureCount++
     }
 
@@ -224,7 +241,7 @@ try {
     $PaperDollHair = Assert-ImportedTexture -Archive $CurrentArchive -ResourcePath ([string]$PresentationModes.modes.classic_avatar.avatarOnly.hair.path) -ArchiveLabel "current APK"
 
     $HeadPatchContractEntry = "assets/assets/data/equipment_classic_avatar_head_patches.json"
-    Assert-ChangedFromBaseline -CurrentArchive $CurrentArchive -BaselineArchive $BaselineArchive -EntryName $HeadPatchContractEntry
+    [void](Assert-ChangedFromBaseline -CurrentArchive $CurrentArchive -BaselineArchive $BaselineArchive -EntryName $HeadPatchContractEntry)
     $HeadPatchContract = Read-ArchiveText -Archive $CurrentArchive -EntryName $HeadPatchContractEntry -ArchiveLabel "current APK" | ConvertFrom-Json
     if ($HeadPatchContract.contractId -ne "equipment.paper_doll.classic_flattened_head_patch.v1") {
         throw "Unexpected paper-doll head patch contract ID."
@@ -243,7 +260,7 @@ try {
     }
 
     $SkillVisualContractEntry = "assets/assets/data/caster_skill_visuals.json"
-    Assert-ChangedFromBaseline -CurrentArchive $CurrentArchive -BaselineArchive $BaselineArchive -EntryName $SkillVisualContractEntry
+    [void](Assert-ChangedFromBaseline -CurrentArchive $CurrentArchive -BaselineArchive $BaselineArchive -EntryName $SkillVisualContractEntry)
     $SkillVisualContract = Read-ArchiveText -Archive $CurrentArchive -EntryName $SkillVisualContractEntry -ArchiveLabel "current APK" | ConvertFrom-Json
     if ($SkillVisualContract.animationContract -ne "caster_skill_animation.v1") {
         throw "Unexpected caster skill animation contract ID."
@@ -265,8 +282,8 @@ try {
         [void](Assert-ImportedTexture -Archive $CurrentArchive -ResourcePath $FrameResourcePath -ArchiveLabel "current APK")
     }
     $SkillProbeTexture = Assert-ImportedTexture -Archive $CurrentArchive -ResourcePath "res://assets/art/characters/caster_skill_frames/teleport_arrival/direction_00/frame_00.png" -ArchiveLabel "current APK"
-    Assert-ChangedFromBaseline -CurrentArchive $CurrentArchive -BaselineArchive $BaselineArchive -EntryName $SkillProbeTexture.ImportEntry
-    Assert-ChangedFromBaseline -CurrentArchive $CurrentArchive -BaselineArchive $BaselineArchive -EntryName $SkillProbeTexture.CompiledEntry
+    [void](Assert-ChangedFromBaseline -CurrentArchive $CurrentArchive -BaselineArchive $BaselineArchive -EntryName $SkillProbeTexture.ImportEntry)
+    [void](Assert-ChangedFromBaseline -CurrentArchive $CurrentArchive -BaselineArchive $BaselineArchive -EntryName $SkillProbeTexture.CompiledEntry)
 
     $ApkHash = (Get-FileHash -LiteralPath $ResolvedApkPath -Algorithm SHA256).Hash
     $BaselineHash = (Get-FileHash -LiteralPath $ResolvedBaselineApkPath -Algorithm SHA256).Hash
@@ -285,7 +302,7 @@ try {
     Write-Output "BUILD_INFO_VERSION=$($BuildInfo.version_name)"
     Write-Output "RUNTIME_CHANGE_COMPARISON=$($RequireRuntimeChangesFromBaseline.IsPresent)"
     if ($RequireRuntimeChangesFromBaseline) {
-        Write-Output "COMPILED_SCRIPTS_CHANGED=$($CompiledScripts.Count)"
+        Write-Output "COMPILED_SCRIPTS_CHANGED=$CompiledScriptsChangedCount"
     }
     Write-Output "WORLD_HELMET_VISIBLE=false"
     Write-Output "MALE_HAIR_BLOCK=4"

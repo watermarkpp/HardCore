@@ -162,12 +162,12 @@ func _test_hud_bridge_and_visual_freeze() -> void:
 	var attack := root.get_node("AttackButton") as Button
 
 	assert(GameHUD.HUD_ATTACK_CENTER == Vector2(-185, -110))
-	assert(GameHUD.HUD_ATTACK_FILL_SIZE == Vector2(90, 90))
-	assert(GameHUD.HUD_ATTACK_ICON_SIZE == Vector2(90, 90))
+	assert(GameHUD.HUD_ATTACK_FILL_SIZE == Vector2(76.5, 76.5))
+	assert(GameHUD.HUD_ATTACK_ICON_SIZE == Vector2(76.5, 76.5))
 	assert(GameHUD.HUD_ATTACK_RING_COUNT == 6)
-	assert(is_equal_approx(GameHUD.HUD_ATTACK_RING_RADIUS, 125.0))
-	assert(GameHUD.HUD_ATTACK_RING_BUTTON_SIZE == Vector2(72, 72))
-	assert(attack.size == Vector2(120, 120))
+	assert(is_equal_approx(GameHUD.HUD_ATTACK_RING_RADIUS, 140.0))
+	assert(GameHUD.HUD_ATTACK_RING_BUTTON_SIZE == Vector2(86.4, 86.4))
+	assert(attack.size == Vector2(102, 102))
 	assert(attack.position + attack.size * 0.5 == root.size + GameHUD.HUD_ATTACK_CENTER)
 	assert(attack.theme_type_variation == &"GothicTransparentButton")
 	assert(str(attack.get_meta("stable_id", "")) == "hud.attack.primary")
@@ -176,7 +176,7 @@ func _test_hud_bridge_and_visual_freeze() -> void:
 		== CircularTouchButtonScript.INPUT_LIFECYCLE_CONTRACT_ID
 	)
 	assert(str(attack.get_meta("assignment_contract", "")) == "ui.skill.button_assignment.v3")
-	assert(is_equal_approx(float(attack.get_meta("touch_radius", 0.0)), 60.0))
+	assert(is_equal_approx(float(attack.get_meta("touch_radius", 0.0)), 51.0))
 
 	var counts := {
 		"lifecycle_started": 0,

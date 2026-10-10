@@ -45,6 +45,7 @@ const REASON_RUNTIME_FILE_MISSING := &"runtime_file_missing"
 const REASON_RUNTIME_INVALID := &"runtime_invalid"
 const REASON_RUNTIME_BUILD_NOT_APPROVED := &"runtime_build_not_approved"
 const REASON_RUNTIME_MAP_KEY_MISMATCH := &"runtime_map_key_mismatch"
+const REASON_RUNTIME_SOURCE_MAP_ID_MISMATCH := &"runtime_source_map_id_mismatch"
 const REASON_RUNTIME_RELEASE_REGISTRY_MISSING := (
 	&"runtime_release_registry_missing"
 )
@@ -112,6 +113,19 @@ static func _load_release_registry() -> void:
 				_registry_cache[mid] = raw_entry
 	_registry_load_valid = true
 	_registry_loaded = true
+
+
+static func _runtime_source_map_id(source: Variant) -> int:
+	if not source is Dictionary:
+		return -1
+	var raw_id: Variant = (source as Dictionary).get("runtime_map_id", null)
+	if typeof(raw_id) == TYPE_INT:
+		return int(raw_id) if int(raw_id) > 0 else -1
+	if typeof(raw_id) == TYPE_FLOAT:
+		var numeric_id := float(raw_id)
+		if is_finite(numeric_id) and numeric_id > 0.0 and floor(numeric_id) == numeric_id:
+			return int(numeric_id)
+	return -1
 
 
 static func _release_entry(runtime_map_id: int) -> Dictionary:
@@ -240,9 +254,17 @@ static func _compute_readiness(runtime_map_id: int) -> Dictionary:
 	if approved != current:
 		return {"playable": false, "reason": REASON_RUNTIME_BUILD_NOT_APPROVED}
 	var map_key := str(entry.get("map_key", ""))
-	var source_map_id := str(runtime.get("source", {}).get("map_id", ""))
+	var source: Variant = runtime.get("source", {})
+	if not source is Dictionary:
+		return {"playable": false, "reason": REASON_RUNTIME_SOURCE_MAP_ID_MISMATCH}
+	var source_map_id := str((source as Dictionary).get("map_id", ""))
 	if source_map_id != map_key:
 		return {"playable": false, "reason": REASON_RUNTIME_MAP_KEY_MISMATCH}
+	var source_runtime_id := _runtime_source_map_id(source)
+	if source_runtime_id <= 0:
+		return {"playable": false, "reason": REASON_RUNTIME_SOURCE_MAP_ID_MISMATCH}
+	if source_runtime_id != runtime_map_id:
+		return {"playable": false, "reason": REASON_RUNTIME_SOURCE_MAP_ID_MISMATCH}
 	return {"playable": true, "reason": &""}
 
 
@@ -378,6 +400,10 @@ static func load_map(runtime_map_id: int) -> Dictionary:
 	)
 	var runtime: Dictionary = loaded.runtime if loaded.ok else {}
 	if not runtime.is_empty():
+		var source_runtime_id := _runtime_source_map_id(runtime.get("source", {}))
+		if source_runtime_id != runtime_map_id:
+			_runtime_cache[runtime_map_id] = {}
+			return {}
 		runtime["runtime_map_id"] = runtime_map_id
 	_runtime_cache[runtime_map_id] = runtime
 	return runtime

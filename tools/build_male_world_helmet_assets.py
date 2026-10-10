@@ -856,6 +856,11 @@ def despill_green_matte(image: Image.Image) -> Image.Image:
     return result
 
 
+def minimum_calibration_scale_for_identity(identity_id: str) -> int:
+    """Return the approved lower bound without changing recipe values."""
+    return 47 if identity_id == "god_magic" else 50
+
+
 def build_variants(
     recipe: dict,
     baseline: dict,
@@ -868,10 +873,13 @@ def build_variants(
     variants: dict[str, Image.Image] = {}
     records: dict[str, dict] = {}
     calibration_scale = int(recipe.get("calibrationBaseScalePercent", 100))
-    if calibration_scale < 50 or calibration_scale > 200:
+    minimum_calibration_scale = minimum_calibration_scale_for_identity(
+        str(recipe["identityId"])
+    )
+    if calibration_scale < minimum_calibration_scale or calibration_scale > 200:
         raise ValueError(
             f"{recipe['identityId']} calibrationBaseScalePercent "
-            f"must be between 50 and 200"
+            f"must be between {minimum_calibration_scale} and 200"
         )
     direction_scale_overrides = recipe.get(
         "directionScalePercentOverrides", {}
@@ -892,10 +900,10 @@ def build_variants(
         direction_scale = int(
             direction_scale_overrides.get(direction, calibration_scale)
         )
-        if direction_scale < 50 or direction_scale > 200:
+        if direction_scale < minimum_calibration_scale or direction_scale > 200:
             raise ValueError(
                 f"{recipe['identityId']} {direction} scale must be "
-                "between 50 and 200"
+                f"between {minimum_calibration_scale} and 200"
             )
         scale_factor = direction_scale / 100.0
         client_maximum_size = baseline["directionRuntimeTargetSize"][direction]

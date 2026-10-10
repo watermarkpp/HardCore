@@ -14,11 +14,22 @@ func _ready() -> void:
 	add_child(background)
 	var hud := GameHUD.new()
 	add_child(hud)
+	if OS.get_environment("HUD_CAPTURE_ITEMS") == "1":
+		var item_names := ["超级金创药", "超级魔法药", "太阳水", "回城卷"]
+		var assignments: Array = []
+		for item_name: String in item_names:
+			PlayerState.add_item(item_name, 4)
+			assignments.append(GameData.item_entity_id(item_name))
+		hud.set_item_quick_slots(assignments)
 	var safe_margin_x := int(OS.get_environment("HUD_CAPTURE_SAFE_MARGIN_X"))
 	if safe_margin_x > 0:
 		var safe_root := hud.get_node("MobileSafeRoot") as Control
+		var safe_margin_right := int(OS.get_environment("HUD_CAPTURE_SAFE_MARGIN_RIGHT"))
+		if safe_margin_right <= 0:
+			safe_margin_right = safe_margin_x
 		safe_root.offset_left = safe_margin_x
-		safe_root.offset_right = -safe_margin_x
+		safe_root.offset_right = -safe_margin_right
+		hud._apply_center_alignment_delta((safe_margin_right - safe_margin_x) * 0.5)
 	hud.set_zone_name("比奇省 · 恶魔营地")
 	hud.update_resources(93, 120, 31, 60)
 	hud.update_target("半兽勇士", 386, 520, false, true)
@@ -37,6 +48,7 @@ func _ready() -> void:
 	})
 	await get_tree().process_frame
 	await get_tree().process_frame
+	await RenderingServer.frame_post_draw
 	var output_dir := ProjectSettings.globalize_path("res://outputs/visual_acceptance/hud_runtime")
 	DirAccess.make_dir_recursive_absolute(output_dir)
 	var viewport_size := get_viewport().get_visible_rect().size

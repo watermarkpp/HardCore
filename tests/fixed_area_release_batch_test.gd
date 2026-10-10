@@ -63,8 +63,11 @@ func _run() -> void:
 		% [_descriptors.size(), str(attacker._area_attack_release_records)],
 	)
 	assert(attacker._area_attack_release_records.size() == 4)
-	assert(frozen_mover.current_hp == mover_hp)
-	assert(square_corner.current_hp == corner_hp)
+	# AOE damage is consumed at admission; the warning only owns presentation.
+	assert(frozen_mover.current_hp == mover_hp - 7)
+	assert(square_corner.current_hp == corner_hp - 7)
+	assert(frozen_dead.current_hp == frozen_dead.max_hp - 7)
+	assert(frozen_cross_map.current_hp == cross_map_hp - 7)
 	var snapshot: Dictionary = attacker._area_attack_footprint_snapshot
 	assert(str(snapshot.get("shape_type", "")) == SnapshotScript.SHAPE_DIRECTED_RECTANGLE)
 	assert(str(snapshot.get("range_shape", "")) == "chebyshev_axis_aligned_square")
@@ -86,8 +89,8 @@ func _run() -> void:
 		.is_equal_approx(mover_origin)
 	)
 
-	# Mutations during the 200 ms delay must not change the scheduled universe.
-	# Leaving range still receives the bound hit; entering late never does.
+	# Mutations after the synchronous commit cannot cancel or duplicate the
+	# already-consumed batch; entering late still never receives a hit.
 	frozen_mover.global_position = _ground_to_screen(Vector2(30.0, 0.0))
 	frozen_dead._dead = true
 	frozen_cross_map.set_meta("runtime_map_id", 181)
@@ -96,8 +99,8 @@ func _run() -> void:
 
 	assert(frozen_mover.current_hp == mover_hp - 7)
 	assert(square_corner.current_hp == corner_hp - 7)
-	assert(frozen_dead.current_hp == frozen_dead.max_hp)
-	assert(frozen_cross_map.current_hp == cross_map_hp)
+	assert(frozen_dead.current_hp == frozen_dead.max_hp - 7)
+	assert(frozen_cross_map.current_hp == cross_map_hp - 7)
 	assert(late_entrant.current_hp == late_hp)
 	assert(outside_square.current_hp == outside_hp)
 	assert(safe.current_hp == safe_hp)

@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/framework/player_pause_movement_contract_20261009_test.gd" id="1"]
+
+[node name="PlayerPauseMovementContract20261009" type="Node"]
+process_mode = 3
+script = ExtResource("1")

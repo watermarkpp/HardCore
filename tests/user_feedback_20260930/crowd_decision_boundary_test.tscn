@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource path="res://tests/user_feedback_20260930/crowd_decision_boundary_test.gd" type="Script" id="1"]
+
+[node name="CrowdDecisionBoundaryTest" type="Node"]
+script = ExtResource("1")

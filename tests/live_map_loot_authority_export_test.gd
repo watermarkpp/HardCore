@@ -75,16 +75,21 @@ func _ready() -> void:
 			var lean: Dictionary = service.roll_monster_drops(mid, lean_rng, false)
 			if not audit.configured or not str(audit.reason).is_empty() or not audit.rejected_entries.is_empty():
 				failures.append("production_roll_rejected:%d:%s" % [mid, str(audit.reason)])
-			for field: String in ["items", "item_records", "gold_drops", "rng_roll_count", "ground_output_count", "overflow_discarded_count"]:
+			for field: String in ["items", "item_records", "gold_drops", "rng_roll_count", "ground_output_count", "overflow_discarded_count", "ground_slot_group"]:
 				assert(audit[field] == lean[field], "audit/lean mismatch %d %s" % [mid, field])
 			assert(audit_rng.state == lean_rng.state)
 			assert(audit.ground_output_plus_discarded_equals_successful)
+			assert(int(audit.ground_output_count) <= GameData.dpv2_ground_slot_limit_for_monster(mid))
 		rows.append(row)
 	service.free()
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://outputs/repair_v92"))
 	var file := FileAccess.open("res://outputs/repair_v92/live_map_loot_authority.json", FileAccess.WRITE)
 	file.store_string(JSON.stringify({"map_count": maps.size(), "spawn_points": spawn_count,
-		"monster_count": rows.size(), "slot_count": total_slots, "ground_limit": GameData.dpv2_ground_slot_limit(),
+		"monster_count": rows.size(), "slot_count": total_slots,
+		"ground_limit": GameData.dpv2_ground_slot_limit(),
+		"baseline_ground_limit": GameData.dpv2_ground_slot_limit(),
+		"ground_limit_semantics": "frozen_baseline_source_cap",
+		"ground_slot_group_policy": "monster.ground_slot_groups.runtime.v1",
 		"authority_path": "assets/data/drop/dpv2_user_loot_sheet_authority_v1.json",
 		"monsters": rows, "failures": failures}, "\t"))
 	file.close()

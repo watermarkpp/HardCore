@@ -90,11 +90,15 @@ func _assert_version_type_contract() -> void:
 	var malformed: Array[Variant] = [2.9, "2", true, [2], {"version": 2}]
 	for version: Variant in malformed:
 		_write_cfg(main_path, version, 0.9, 0.9)
+		AudioServer.set_bus_mute(AudioServer.get_bus_index(&"Music"), true)
+		AudioServer.set_bus_mute(AudioServer.get_bus_index(&"SFX"), true)
 		var rejecting := _make_prefs(main_path)
 		assert(
-			is_equal_approx(float(rejecting.music_volume), float(rejecting._initial_level(&"Music")))
-			and is_equal_approx(float(rejecting.sfx_volume), float(rejecting._initial_level(&"SFX"))),
-			"version=%s 必须被整体拒绝，不得截断/转换后放行" % str(version),
+			is_equal_approx(float(rejecting.music_volume), 1.0)
+			and is_equal_approx(float(rejecting.sfx_volume), 1.0)
+			and not AudioServer.is_bus_mute(AudioServer.get_bus_index(&"Music"))
+			and not AudioServer.is_bus_mute(AudioServer.get_bus_index(&"SFX")),
+			"version=%s 必须被整体拒绝并回到冷启动默认，不得截断/转换后放行" % str(version),
 		)
 		assert(rejecting._read_valid(main_path).is_empty(), "version=%s 的 _read_valid 必须返回空" % str(version))
 		rejecting.dirty = false

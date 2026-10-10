@@ -92,8 +92,11 @@ func _run() -> void:
 	var expected_rng := RandomNumberGenerator.new()
 	expected_rng.seed = RNG_SEED
 	var expected_rolls := 0
+	var expected_ground_outputs := 0
 	for _index: int in range(DEATH_COUNT):
 		var roll := loot_runtime.roll_monster_drops(MONSTER_ID, expected_rng, false)
+		_expect(str(roll.get("reason", "")).is_empty(), "production drop authority rejected the real death fixture")
+		expected_ground_outputs += int(roll.get("ground_output_count", 0))
 		expected_rolls += 1
 		var raw_items: Variant = roll.get("items", [])
 		if raw_items is Array:
@@ -107,6 +110,12 @@ func _run() -> void:
 					expected_rng.randf_range(-34.0, 34.0)
 					expected_rng.randf_range(-18.0, 18.0)
 	_game._flush_enemy_deaths(false)
+	_expect(expected_ground_outputs > 0, "real death seed must generate ground rewards, not two equal zero-drop plans")
+	var materialized_ground_outputs := 0
+	for child: Node in _game.get_children():
+		if child is LootPickup:
+			materialized_ground_outputs += 1
+	_expect(materialized_ground_outputs == expected_ground_outputs, "death settlement did not materialize every selected item/gold reward")
 	_expect(_game._pending_enemy_deaths.is_empty(), "death queue did not drain")
 	_expect(
 		_game._enemy_death_terminal_jobs.size() == DEATH_COUNT,
@@ -135,6 +144,9 @@ func _run() -> void:
 		RuntimeDiagnostics.performance_counter(&"death_physics_process_calls_after_begin") == 0,
 		"corpse continued physics callbacks after death begin",
 	)
+	# This independent eager-roll oracle is a Node, outside GameRoot ownership.
+	# Release it after parity checks; the production manager dies with GameRoot.
+	loot_runtime.free()
 	_finish()
 
 
