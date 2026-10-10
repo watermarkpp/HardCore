@@ -1,0 +1,141 @@
+{
+  "fixed_source_sha": "b09ac5c2c41517ed516f11b91d09e435813465f2",
+  "missing_reference_candidates": [
+    {
+      "kind": "MISSING_DIRECT_RESOURCE_PATH",
+      "path": "tests/audio_alias_route_generation_test.py",
+      "resource": "res://assets/data/items.json"
+    },
+    {
+      "kind": "MISSING_DIRECT_RESOURCE_PATH",
+      "path": "tests/audio_alias_route_generation_test.py",
+      "resource": "res://assets/data/service_items.json"
+    },
+    {
+      "kind": "MISSING_DIRECT_RESOURCE_PATH",
+      "path": "tests/build_info_export_contract_test.gd",
+      "resource": "res://assets/generated/build_info.json"
+    },
+    {
+      "kind": "MISSING_DIRECT_RESOURCE_PATH",
+      "path": "tests/canonical_monster_catalog_hash_test.py",
+      "resource": "res://assets/art/monsters/fixture.png"
+    },
+    {
+      "kind": "MISSING_DIRECT_RESOURCE_PATH",
+      "path": "tests/character_select_launch_loading_test.gd",
+      "resource": "res://scenes/__missing_character_launch__.tscn"
+    },
+    {
+      "kind": "MISSING_DIRECT_RESOURCE_PATH",
+      "path": "tests/crowd_pursuit_process_budget_ab_20261009.gd",
+      "resource": "res://tests/crowd_attack_start_frame_ab_20261009.gd"
+    },
+    {
+      "kind": "MISSING_DIRECT_RESOURCE_PATH",
+      "path": "tests/device_lab_patch_bootstrap_test.gd",
+      "resource": "res://assets/generated/build_info.json"
+    },
+    {
+      "kind": "MISSING_DIRECT_RESOURCE_PATH",
+      "path": "tests/diag_activation_probe.tscn",
+      "resource": "res://tests/diag_activation_probe.gd"
+    },
+    {
+      "kind": "MISSING_DIRECT_RESOURCE_PATH",
+      "path": "tests/diag_bounded_probe.tscn",
+      "resource": "res://tests/diag_bounded_probe.gd"
+    },
+    {
+      "kind": "MISSING_DIRECT_RESOURCE_PATH",
+      "path": "tests/fixtures/runtime_release/test_release_registry.json",
+      "resource": "res://tests/fixtures/runtime_release/does_not_exist.runtime.json"
+    },
+    {
+      "kind": "MISSING_DIRECT_RESOURCE_PATH",
+      "path": "tests/framework/component_asset_preparation_lifecycle_test.gd",
+      "resource": "res://assets/shaders/fire_wall_screen_blend_multiply.gd"
+    },
+    {
+      "kind": "MISSING_DIRECT_RESOURCE_PATH",
+      "path": "tests/framework/component_asset_preparation_lifecycle_test.gd",
+      "resource": "res://assets/shaders/trial_magic_screen.gd"
+    },
+    {
+      "kind": "MISSING_DIRECT_RESOURCE_PATH",
+      "path": "tests/framework/feature_registry_publication_test.gd",
+      "resource": "res://assets/data/features/../module_registry.json"
+    },
+    {
+      "kind": "MISSING_DIRECT_RESOURCE_PATH",
+      "path": "tests/framework/feature_registry_publication_test.gd",
+      "resource": "res://assets/data/features/validation/missing.json"
+    },
+    {
+      "kind": "MISSING_DIRECT_RESOURCE_PATH",
+      "path": "tests/framework/feature_registry_publication_test.gd",
+      "resource": "res://assets/data/features/validation/publication_registry.gd"
+    },
+    {
+      "kind": "MISSING_DIRECT_RESOURCE_PATH",
+      "path": "tests/framework/feature_resource_declaration_validation_test.gd",
+      "resource": "res://assets/audio/sfx/client/../client/137__M26-3.wav"
+    },
+    {
+      "kind": "MISSING_DIRECT_RESOURCE_PATH",
+      "path": "tests/framework/fixtures/threaded_shader_constant_ref.gd",
+      "resource": "res://assets/shaders/trial_magic_screen.gd"
+    },
+    {
+      "kind": "MISSING_DIRECT_RESOURCE_PATH",
+      "path": "tests/framework/fixtures/threaded_shader_late_ref.gd",
+      "resource": "res://assets/shaders/trial_magic_screen.gd"
+    },
+    {
+      "kind": "MISSING_DIRECT_RESOURCE_PATH",
+      "path": "tests/framework/threaded_dependency_script_probe_test.gd",
+      "resource": "res://assets/shaders/trial_magic_screen.gd"
+    },
+    {
+      "kind": "MISSING_DIRECT_RESOURCE_PATH",
+      "path": "tests/headless_prefetch_compatibility_test.gd",
+      "resource": "res://assets/missing_headless_prefetch_fixture.png"
+    },
+    {
+      "kind": "MISSING_DIRECT_RESOURCE_PATH",
+      "path": "tests/helpers/legacy_drop_probability_policy.gd",
+      "resource": "res://tests/fixtures/legacy_loot_v80/catalog.json"
+    },
+    {
+      "kind": "MISSING_DIRECT_RESOURCE_PATH",
+      "path": "tests/map_runtime_release_gate_test.gd",
+      "resource": "res://tests/fixtures/runtime_release/missing_registry.json"
+    },
+    {
+      "kind": "MISSING_DIRECT_RESOURCE_PATH",
+      "path": "tests/r2_measure/qa_latency_driver.tscn",
+      "resource": "res://tests/ui_l1_measure/qa_latency_driver.gd"
+    },
+    {
+      "kind": "MISSING_DIRECT_RESOURCE_PATH",
+      "path": "tests/test_evidence_head_binding_test.gd",
+      "resource": "res://assets/generated/build_info.json"
+    },
+    {
+      "kind": "MISSING_DIRECT_RESOURCE_PATH",
+      "path": "tests/retired_threaded_resource_claims_20261009.gd",
+      "resource": "res://scripts/features/runtime/__retired_claim_missing__.gd"
+    }
+  ],
+  "reason": "Most missing direct literals are intentional negative-path fixtures, generated resources, or code string references; only three unregistered dormant scene ext_resources proved stale.",
+  "dormant_stale_resource_scenes": [
+    "tests/diag_activation_probe.tscn",
+    "tests/diag_bounded_probe.tscn",
+    "tests/r2_measure/qa_latency_driver.tscn"
+  ],
+  "registered_literal_test_scenes": 648,
+  "registered_literal_missing": 0,
+  "all_fixed_test_scenes": 1629,
+  "not_literal_in_suite_list": 981,
+  "unregistered_does_not_mean_unused": true
+}

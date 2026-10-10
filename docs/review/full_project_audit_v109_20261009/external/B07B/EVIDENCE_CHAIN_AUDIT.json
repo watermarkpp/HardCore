@@ -1,0 +1,253 @@
+{
+  "fixed_source_sha": "b09ac5c2c41517ed516f11b91d09e435813465f2",
+  "raw_evidence_manifest_source": "docs/review/full_project_audit_v109_20261009/INTEGRATION_REMAINDERS_RAW_MANIFEST.json",
+  "raw_evidence_total": 164,
+  "raw_evidence_byte_sha256_pass": 164,
+  "raw_mismatches": [],
+  "stage_50_51_52_native_ledgers": {
+    "50": {
+      "tested_tree": "15d50727638876e89e67ca7913deaf30d9d53611",
+      "input_fingerprint": "039564d75d763d3445ef9d030b8e1c1b68ef62c09333aaca82c373c162e9aaf7",
+      "pass": 8,
+      "fail": 3,
+      "total": 11,
+      "tests": [
+        {
+          "path": "tests/enemy_mass_death_batch_pipeline_test.tscn",
+          "name": "enemy_mass_death_batch_pipeline_test",
+          "result": "FAIL",
+          "reason": "stderr_failures_1",
+          "framework_receipt_valid": null,
+          "effective_exit_code": 0,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 1,
+          "engine_log_failure_count": 0
+        },
+        {
+          "path": "tests/hc_monster_ai/combat_epoch_delivery_test.tscn",
+          "name": "combat_epoch_delivery_test",
+          "result": "FAIL",
+          "reason": "missing_pass_marker;non_zero_exit_code_1",
+          "framework_receipt_valid": null,
+          "effective_exit_code": 1,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0
+        },
+        {
+          "path": "tests/monster_attack_los_cache_test.tscn",
+          "name": "monster_attack_los_cache_test",
+          "result": "PASS",
+          "reason": "",
+          "framework_receipt_valid": null,
+          "effective_exit_code": 0,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0
+        },
+        {
+          "path": "tests/monster_magic_reaction_continuation_test.tscn",
+          "name": "monster_magic_reaction_continuation_test",
+          "result": "FAIL",
+          "reason": "missing_pass_marker;non_zero_exit_code_1",
+          "framework_receipt_valid": null,
+          "effective_exit_code": 1,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0
+        },
+        {
+          "path": "tests/monster_struck_runtime_test.tscn",
+          "name": "monster_struck_runtime_test",
+          "result": "PASS",
+          "reason": "",
+          "framework_receipt_valid": null,
+          "effective_exit_code": 0,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0
+        },
+        {
+          "path": "tests/monster_target_magic_attack_test.tscn",
+          "name": "monster_target_magic_attack_test",
+          "result": "PASS",
+          "reason": "",
+          "framework_receipt_valid": null,
+          "effective_exit_code": 0,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0
+        },
+        {
+          "path": "tests/player_hit_reaction_policy_test.tscn",
+          "name": "player_hit_reaction_policy_test",
+          "result": "PASS",
+          "reason": "",
+          "framework_receipt_valid": null,
+          "effective_exit_code": 0,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0
+        },
+        {
+          "path": "tests/player_skill_struck_chain_test.tscn",
+          "name": "player_skill_struck_chain_test",
+          "result": "PASS",
+          "reason": "",
+          "framework_receipt_valid": null,
+          "effective_exit_code": 0,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0
+        },
+        {
+          "path": "tests/source176_r3/release_lifecycle_test.tscn",
+          "name": "release_lifecycle_test",
+          "result": "PASS",
+          "reason": "",
+          "framework_receipt_valid": null,
+          "effective_exit_code": 0,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0
+        },
+        {
+          "path": "tests/special_actor_target_magic_gap_test.tscn",
+          "name": "special_actor_target_magic_gap_test",
+          "result": "PASS",
+          "reason": "",
+          "framework_receipt_valid": null,
+          "effective_exit_code": 0,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0
+        },
+        {
+          "path": "tests/w1_exact_ranged_delivery_test.tscn",
+          "name": "w1_exact_ranged_delivery_test",
+          "result": "PASS",
+          "reason": "",
+          "framework_receipt_valid": null,
+          "effective_exit_code": 0,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0
+        }
+      ]
+    },
+    "51": {
+      "tested_tree": "f6c03378f4e610f144a147544352e2ea39b38061",
+      "input_fingerprint": "4935622cf804ce53143bcd710eedb9290af51ee5a2d0b2a3a37ce798a9b2bf04",
+      "pass": 2,
+      "fail": 1,
+      "total": 3,
+      "tests": [
+        {
+          "path": "tests/enemy_mass_death_batch_pipeline_test.tscn",
+          "name": "enemy_mass_death_batch_pipeline_test",
+          "result": "PASS",
+          "reason": "",
+          "framework_receipt_valid": null,
+          "effective_exit_code": 0,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0
+        },
+        {
+          "path": "tests/hc_monster_ai/combat_epoch_delivery_test.tscn",
+          "name": "combat_epoch_delivery_test",
+          "result": "FAIL",
+          "reason": "missing_pass_marker;non_zero_exit_code_1",
+          "framework_receipt_valid": null,
+          "effective_exit_code": 1,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0
+        },
+        {
+          "path": "tests/monster_magic_reaction_continuation_test.tscn",
+          "name": "monster_magic_reaction_continuation_test",
+          "result": "PASS",
+          "reason": "",
+          "framework_receipt_valid": null,
+          "effective_exit_code": 0,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0
+        }
+      ]
+    },
+    "52": {
+      "tested_tree": "2da0be8c8a8de4509a4f0e18b556f49c5f4d2836",
+      "input_fingerprint": "f044916194380ce6e7750863c0bfa714e527c61d9200be6510e43a427b87045c",
+      "pass": 1,
+      "fail": 0,
+      "total": 1,
+      "tests": [
+        {
+          "path": "tests/hc_monster_ai/combat_epoch_delivery_test.tscn",
+          "name": "combat_epoch_delivery_test",
+          "result": "PASS",
+          "reason": "",
+          "framework_receipt_valid": null,
+          "effective_exit_code": 0,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0
+        }
+      ]
+    }
+  },
+  "custom_hc_checks_receipts": {
+    "50": [],
+    "51": [
+      "docs/review/full_project_audit_v109_20261009/evidence/INTEGRATION_REMAINDERS/custom_receipts/B07A_NATIVE51_CUSTOM_COMBAT_RECEIPT.json"
+    ],
+    "52": [
+      "docs/review/full_project_audit_v109_20261009/evidence/INTEGRATION_REMAINDERS/custom_receipts/B07A_NATIVE52_CUSTOM_COMBAT_RECEIPT.json"
+    ]
+  },
+  "stage50_check_list": "MISSING_NOT_RECONSTRUCTED; only native FAIL/stdout preserved",
+  "stage52_candidate_git_tree": "2da0be8c8a8de4509a4f0e18b556f49c5f4d2836",
+  "stage52_fixed_blob_identical": 2528,
+  "stage52_freeze_total": 2531,
+  "stage52_not_git_tracked_in_either_tree": [
+    "scripts/monster_ai_package/grid_crowd_trial.gd",
+    "scripts/monster_ai_package/grid_occupancy_service.gd",
+    "tests/hud_multitouch_quick_items_test.gd.uid"
+  ],
+  "raw_workspace_SHA_not_equal_to_git_blob_due_line_endings_count": 1389,
+  "java_builder_git_sha256": "2f2bcfafe8ec3f086d1bec3d01f4f2789dda363a3d31e5f9acbee63373450dfc",
+  "java_builder_crlf_normalized_sha256": "2aebd1f5c4addbce811c8836b1e3e7a174976a55792668131cfbac316a8a4448",
+  "java_original_windows_sha256": "2aebd1f5c4addbce811c8836b1e3e7a174976a55792668131cfbac316a8a4448",
+  "java_binary_byte_reuse": true,
+  "java_helper_probe_disposition_checks": [
+    {
+      "path": "tools/build_android_isolated.ps1",
+      "status": "DIFFERENT_OR_MISSING",
+      "disposition_sha256": "2aebd1f5c4addbce811c8836b1e3e7a174976a55792668131cfbac316a8a4448",
+      "fixed_sha256": "2f2bcfafe8ec3f086d1bec3d01f4f2789dda363a3d31e5f9acbee63373450dfc"
+    },
+    {
+      "path": "tools/android_java_environment.ps1",
+      "status": "PASS",
+      "disposition_sha256": "55207f47b2794395550867de18c423c58c56435d139f536bddbb92160a8d6837",
+      "fixed_sha256": "55207f47b2794395550867de18c423c58c56435d139f536bddbb92160a8d6837"
+    },
+    {
+      "path": "tools/android_java_loopback_probe.java",
+      "status": "PASS",
+      "disposition_sha256": "aa52874d057b6959bf7e295a72fe40b2998e6e8640759a779e5ff2a69b61a29b",
+      "fixed_sha256": "aa52874d057b6959bf7e295a72fe40b2998e6e8640759a779e5ff2a69b61a29b"
+    },
+    {
+      "path": "docs/ANDROID_BUILD_ENVIRONMENT.md",
+      "status": "PASS",
+      "disposition_sha256": "7a162141af1505605de9bc9028eee716a3d380f42e83050f33f15eb6fa861525",
+      "fixed_sha256": "7a162141af1505605de9bc9028eee716a3d380f42e83050f33f15eb6fa861525"
+    }
+  ],
+  "evidence_classification": "STATIC_BLOB_INTEGRITY_PASS; retained original native status per stage, no engine rerun",
+  "godot_not_run": true,
+  "apk_not_run": true
+}
