@@ -1,0 +1,32 @@
+{
+  "name": "B08_NATIVE_FREEZE_63",
+  "changed_paths": [
+    "scripts/game_data.gd",
+    "scripts/player_state.gd",
+    "scripts/startup_loading.gd",
+    "scripts/layers/runtime/content_layer_registry.gd",
+    "scripts/layers/runtime/prepared_content_configuration.gd",
+    "scripts/layers/runtime/game_mode_service.gd",
+    "scripts/layers/runtime/runtime_service_facade.gd",
+    "tests/framework/mode_reload_transaction_20261010_test.gd",
+    "tests/framework/mode_reload_transaction_20261010_test.tscn",
+    "tests/framework/mode_reload_transaction_input_composed_20261010_test.tscn",
+    "tests/framework/mode_reload_transaction_stale_20261010_test.tscn",
+    "tests/framework/mode_reload_transaction_profile_20261010_test.tscn",
+    "tests/framework/mode_reload_transaction_later_20261010_test.tscn",
+    "tests/framework/mode_reload_transaction_failure_boundary_20261010_test.tscn",
+    "tests/framework/mode_reload_transaction_direct_failure_20261010_test.tscn",
+    "scripts/equipment_rules.gd"
+  ],
+  "additional_inputs": [
+    "tools/godot-4.7/Godot_v4.7-stable_win64.exe",
+    "tools/test_windows_process_ownership.ps1",
+    "tools/test_framework_receipt.ps1",
+    "tools/test_native_log_evidence.ps1"
+  ],
+  "scenes": [
+    "tests/framework/mode_reload_transaction_profile_20261010_test.tscn"
+  ],
+  "fingerprint_scope": "Actual runtime/data/map/test inputs, both Windows engine binaries and complete runner helpers; formal mode/content/profile transaction component",
+  "rerun_reason": "Native62 profile recovery returned success but failed the complete restored-state predicate (59/60). Retain that assertion and all load/save steps; add only expected/current field diagnostics to classify the unresolved difference. The other four partitions are not repeated."
+}

@@ -1,0 +1,135 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+TextServer: Added interface "Dummy"
+TextServer: Added interface "ICU / HarfBuzz / Graphite (Built-in)"
+Using "default" pen tablet driver...
+
+TextServer: Primary interface set to: "ICU / HarfBuzz / Graphite (Built-in)".
+CORE API HASH: 3472268009
+EDITOR API HASH: 2212757246
+SceneTreeFTI: traversal method DEFAULT
+Loading resource: res://scripts/device_lab_patch_bootstrap.gd remapped: res://scripts/device_lab_patch_bootstrap.gd
+Completed load for: 'res://scripts/device_lab_patch_bootstrap.gd' remapped 'res://scripts/device_lab_patch_bootstrap.gd' at thread -1
+Loading resource: res://scripts/audio_preferences.gd remapped: res://scripts/audio_preferences.gd
+Completed load for: 'res://scripts/audio_preferences.gd' remapped 'res://scripts/audio_preferences.gd' at thread -1
+Loading resource: res://scripts/loot_preferences.gd remapped: res://scripts/loot_preferences.gd
+Completed load for: 'res://scripts/loot_preferences.gd' remapped 'res://scripts/loot_preferences.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/content_layer_registry.gd remapped: res://scripts/layers/runtime/content_layer_registry.gd
+Completed load for: 'res://scripts/layers/runtime/content_layer_registry.gd' remapped 'res://scripts/layers/runtime/content_layer_registry.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/world_content_service.gd remapped: res://scripts/layers/runtime/world_content_service.gd
+Completed load for: 'res://scripts/layers/runtime/world_content_service.gd' remapped 'res://scripts/layers/runtime/world_content_service.gd' at thread -1
+Loading resource: res://scripts/layers/presentation/presentation_registry.gd remapped: res://scripts/layers/presentation/presentation_registry.gd
+Completed load for: 'res://scripts/layers/presentation/presentation_registry.gd' remapped 'res://scripts/layers/presentation/presentation_registry.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/targeting_runtime_service.gd remapped: res://scripts/layers/runtime/targeting_runtime_service.gd
+Completed load for: 'res://scripts/layers/runtime/targeting_runtime_service.gd' remapped 'res://scripts/layers/runtime/targeting_runtime_service.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/loot_runtime_service.gd remapped: res://scripts/layers/runtime/loot_runtime_service.gd
+Completed load for: 'res://scripts/layers/runtime/loot_runtime_service.gd' remapped 'res://scripts/layers/runtime/loot_runtime_service.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/combat_runtime_service.gd remapped: res://scripts/layers/runtime/combat_runtime_service.gd
+Completed load for: 'res://scripts/layers/runtime/combat_runtime_service.gd' remapped 'res://scripts/layers/runtime/combat_runtime_service.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/domain_runtime_services.gd remapped: res://scripts/layers/runtime/domain_runtime_services.gd
+Completed load for: 'res://scripts/layers/runtime/domain_runtime_services.gd' remapped 'res://scripts/layers/runtime/domain_runtime_services.gd' at thread -1
+Loading resource: res://scripts/layers/rules/boss_mechanic_registry.gd remapped: res://scripts/layers/rules/boss_mechanic_registry.gd
+Completed load for: 'res://scripts/layers/rules/boss_mechanic_registry.gd' remapped 'res://scripts/layers/rules/boss_mechanic_registry.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/runtime_service_facade.gd remapped: res://scripts/layers/runtime/runtime_service_facade.gd
+Completed load for: 'res://scripts/layers/runtime/runtime_service_facade.gd' remapped 'res://scripts/layers/runtime/runtime_service_facade.gd' at thread -1
+Loaded system CA certificates
+Loading resource: res://tests/framework/mode_reload_transaction_20261010_test.tscn remapped: res://tests/framework/mode_reload_transaction_20261010_test.tscn
+Loading resource: res://tests/framework/mode_reload_transaction_20261010_test.gd remapped: res://tests/framework/mode_reload_transaction_20261010_test.gd
+Completed load for: 'res://tests/framework/mode_reload_transaction_20261010_test.gd' remapped 'res://tests/framework/mode_reload_transaction_20261010_test.gd' at thread -1
+Completed load for: 'res://tests/framework/mode_reload_transaction_20261010_test.tscn' remapped 'res://tests/framework/mode_reload_transaction_20261010_test.tscn' at thread -1
+数据库载入完成：地图209 怪物156 Boss20 装备175 技能等级132 掉落槽3424 任务9
+MODE_TRANSACTION_CHECK 1 PASS transaction fixture uses this runner invocation's independent runtime userdata
+MODE_TRANSACTION_CHECK 2 PASS unique transaction fixture directory is absent before ownership
+MODE_TRANSACTION_CHECK 3 PASS formal content owner reaches READY before transaction component tests
+MODE_TRANSACTION_CHECK 4 PASS all formal GameData load stages and canonical indexes reach READY
+MODE_TRANSACTION_CHECK 5 PASS all real persistence authorities point only inside the owned account directory
+MODE_TRANSACTION_CHECK 6 PASS real profile owner creates a complete legal starter character: 
+MODE_TRANSACTION_CHECK 7 PASS fixture baseline is accepted through the formal composed mode owner
+MODE_TRANSACTION_CHECK 8 PASS owned fault JSON opens only within the unique isolated account
+MODE_TRANSACTION_CHECK 9 PASS exact same complete boolean configuration is an accepted no-change request
+MODE_TRANSACTION_CHECK 10 PASS same configuration preserves all active content flags/merged database/mode
+MODE_TRANSACTION_CHECK 11 PASS same configuration preserves every live GameData script property
+MODE_TRANSACTION_CHECK 12 PASS same configuration preserves player mode/later/level/gold/inventory/equipment/identity
+MODE_TRANSACTION_CHECK 13 PASS same configuration preserves all owned profile/index/shared/backup bytes
+MODE_TRANSACTION_CHECK 14 PASS same configuration emits no successful database/expansion/profile publication
+MODE_TRANSACTION_CHECK 15 PASS facade keeps its no-change false contract
+MODE_TRANSACTION_CHECK 16 PASS no-change facade preserves all active content flags/merged database/mode
+MODE_TRANSACTION_CHECK 17 PASS no-change facade preserves every live GameData script property
+MODE_TRANSACTION_CHECK 18 PASS no-change facade preserves player mode/later/level/gold/inventory/equipment/identity
+MODE_TRANSACTION_CHECK 19 PASS no-change facade preserves all owned profile/index/shared/backup bytes
+MODE_TRANSACTION_CHECK 20 PASS no-change facade emits no successful database/expansion/profile publication
+MODE_TRANSACTION_CHECK 21 PASS unknown mode rejects before publication
+MODE_TRANSACTION_CHECK 22 PASS unknown mode preserves all active content flags/merged database/mode
+MODE_TRANSACTION_CHECK 23 PASS unknown mode preserves every live GameData script property
+MODE_TRANSACTION_CHECK 24 PASS unknown mode preserves player mode/later/level/gold/inventory/equipment/identity
+MODE_TRANSACTION_CHECK 25 PASS unknown mode preserves all owned profile/index/shared/backup bytes
+MODE_TRANSACTION_CHECK 26 PASS unknown mode emits no successful database/expansion/profile publication
+MODE_TRANSACTION_CHECK 27 PASS unknown package rejects the complete candidate
+MODE_TRANSACTION_CHECK 28 PASS unknown package preserves all active content flags/merged database/mode
+MODE_TRANSACTION_CHECK 29 PASS unknown package preserves every live GameData script property
+MODE_TRANSACTION_CHECK 30 PASS unknown package preserves player mode/later/level/gold/inventory/equipment/identity
+MODE_TRANSACTION_CHECK 31 PASS unknown package preserves all owned profile/index/shared/backup bytes
+MODE_TRANSACTION_CHECK 32 PASS unknown package emits no successful database/expansion/profile publication
+MODE_TRANSACTION_CHECK 33 PASS missing known package key rejects incomplete flags
+MODE_TRANSACTION_CHECK 34 PASS missing package key preserves all active content flags/merged database/mode
+MODE_TRANSACTION_CHECK 35 PASS missing package key preserves every live GameData script property
+MODE_TRANSACTION_CHECK 36 PASS missing package key preserves player mode/later/level/gold/inventory/equipment/identity
+MODE_TRANSACTION_CHECK 37 PASS missing package key preserves all owned profile/index/shared/backup bytes
+MODE_TRANSACTION_CHECK 38 PASS missing package key emits no successful database/expansion/profile publication
+MODE_TRANSACTION_CHECK 39 PASS nonboolean package value rejects instead of coercing the identity configuration
+MODE_TRANSACTION_CHECK 40 PASS nonboolean configuration preserves all active content flags/merged database/mode
+MODE_TRANSACTION_CHECK 41 PASS nonboolean configuration preserves every live GameData script property
+MODE_TRANSACTION_CHECK 42 PASS nonboolean configuration preserves player mode/later/level/gold/inventory/equipment/identity
+MODE_TRANSACTION_CHECK 43 PASS nonboolean configuration preserves all owned profile/index/shared/backup bytes
+MODE_TRANSACTION_CHECK 44 PASS nonboolean configuration emits no successful database/expansion/profile publication
+MODE_TRANSACTION_CHECK 45 PASS mode/later preparation validates the complete formal detached catalog
+MODE_TRANSACTION_CHECK 46 PASS successful detached preparation preserves all active content flags/merged database/mode
+MODE_TRANSACTION_CHECK 47 FAIL successful detached preparation preserves every live GameData script property
+MODE_TRANSACTION_CHECK 48 PASS successful detached preparation preserves player mode/later/level/gold/inventory/equipment/identity
+MODE_TRANSACTION_CHECK 49 PASS successful detached preparation preserves all owned profile/index/shared/backup bytes
+MODE_TRANSACTION_CHECK 50 PASS successful detached preparation emits no successful database/expansion/profile publication
+MODE_TRANSACTION_CHECK 51 PASS prepared catalog is a live detached GameData node before publication
+MODE_TRANSACTION_CHECK 52 PASS publication observer reads final mode/later/all flags/formal database: expansion
+MODE_TRANSACTION_CHECK 53 PASS publication observer sees the same composed merged database: expansion
+MODE_TRANSACTION_CHECK 54 PASS publication observer reads final mode/later/all flags/formal database: expansion
+MODE_TRANSACTION_CHECK 55 PASS publication observer sees the same composed merged database: expansion
+MODE_TRANSACTION_CHECK 56 PASS publication observer reads final mode/later/all flags/formal database: expansion
+MODE_TRANSACTION_CHECK 57 PASS publication observer sees the same composed merged database: expansion
+MODE_TRANSACTION_CHECK 58 PASS publication observer reads final mode/later/all flags/formal database: database
+MODE_TRANSACTION_CHECK 59 PASS publication observer sees the same composed merged database: database
+MODE_TRANSACTION_CHECK 60 PASS reentrant mode publication rejects while outer successful publication owns the boundary
+数据库载入完成：地图209 怪物156 Boss20 装备175 技能等级132 掉落槽3424 任务9
+MODE_TRANSACTION_CHECK 61 PASS mode packages and explicit later override commit through one real validated candidate
+MODE_TRANSACTION_CHECK 62 PASS actual live database publication exercised the reentry rejection
+MODE_TRANSACTION_CHECK 63 PASS successful adoption consumes preparation and immediately frees its detached GameData node
+MODE_TRANSACTION_CHECK 64 PASS composed mode/later transaction publishes one live database and exactly its three changed package signals
+MODE_TRANSACTION_CHECK 65 PASS successful transaction retains the complete composed mode/later/formal catalog
+MODE_TRANSACTION_CHECK 66 PASS consumed mode/content preparation rejects a second publication
+MODE_TRANSACTION_CHECK 67 PASS consumed preparation preserves all active content flags/merged database/mode
+MODE_TRANSACTION_CHECK 68 PASS consumed preparation preserves every live GameData script property
+MODE_TRANSACTION_CHECK 69 PASS consumed preparation preserves player mode/later/level/gold/inventory/equipment/identity
+MODE_TRANSACTION_CHECK 70 PASS consumed preparation preserves all owned profile/index/shared/backup bytes
+MODE_TRANSACTION_CHECK 71 PASS consumed preparation emits no successful database/expansion/profile publication
+MODE_TRANSACTION_CHECK 72 PASS same composed mode/later transaction remains accepted
+MODE_TRANSACTION_CHECK 73 PASS same mode/later request preserves all active content flags/merged database/mode
+MODE_TRANSACTION_CHECK 74 PASS same mode/later request preserves every live GameData script property
+MODE_TRANSACTION_CHECK 75 PASS same mode/later request preserves player mode/later/level/gold/inventory/equipment/identity
+MODE_TRANSACTION_CHECK 76 PASS same mode/later request preserves all owned profile/index/shared/backup bytes
+MODE_TRANSACTION_CHECK 77 PASS same mode/later request emits no successful database/expansion/profile publication
+MODE_TRANSACTION_CHECK 78 PASS stale fixture prepares a distinct legal mode through the real catalog validators
+MODE_TRANSACTION_CHECK 79 PASS stale fixture detached preparation preserves all active content flags/merged database/mode
+MODE_TRANSACTION_CHECK 80 FAIL stale fixture detached preparation preserves every live GameData script property
+MODE_TRANSACTION_CHECK 81 PASS stale fixture detached preparation preserves player mode/later/level/gold/inventory/equipment/identity
+MODE_TRANSACTION_CHECK 82 PASS stale fixture detached preparation preserves all owned profile/index/shared/backup bytes
+MODE_TRANSACTION_CHECK 83 PASS stale fixture detached preparation emits no successful database/expansion/profile publication
+MODE_TRANSACTION_CHECK 84 PASS publication observer reads final mode/later/all flags/formal database: database
+MODE_TRANSACTION_CHECK 85 PASS publication observer sees the same composed merged database: database
+数据库载入完成：地图209 怪物156 Boss20 装备175 技能等级132 掉落槽3424 任务9
+MODE_TRANSACTION_CHECK 86 PASS real direct reload advances the live database while a prior candidate is outstanding
+MODE_TRANSACTION_CHECK 87 PASS stale preparation is caused by a genuine live database publication revision
+MODE_TRANSACTION_CHECK 88 PASS real revision change rejects the outstanding stale mode preparation
+MODE_TRANSACTION_CHECK 89 PASS stale rejection exposes the preparation ownership diagnostic
+MODE_TRANSACTION_CHECK 90 PASS stale preparation rejection preserves all active content flags/merged database/mode
+MODE_TRANSACTION_CHECK 91 PASS stale preparation rejection preserves every live GameData script property
+MODE_TRANSACTION_CHECK 92 PASS stale preparation rejection preserves player mode/later/level/gold/inventory/equipment/identity
+MODE_TRANSACTION_CHECK 93 PASS stale preparation rejection preserves all owned profile/index/shared/backup bytes
+MODE_TRANSACTION_CHECK 94 PASS stale preparation rejection emits no successful database/expansion/profile publication

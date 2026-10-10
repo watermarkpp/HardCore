@@ -1,0 +1,10321 @@
+extends Node
+
+const EquipmentRulesScript = preload("res://scripts/equipment_rules.gd")
+const UIErrorFeedbackScript = preload("res://scripts/ui_error_feedback.gd")
+const EquipmentTestLoadoutCatalogScript = preload("res://scripts/equipment_test_loadout_catalog.gd")
+const TestCharacterSkillProfilesScript = preload("res://scripts/test_character_skill_profiles.gd")
+const SkillLoadoutRulesScript = preload("res://scripts/skill_loadout_rules.gd")
+const CombatResolutionRules := preload("res://scripts/combat_resolution_rules.gd")
+const SkillDataLoaderScript := preload("res://scripts/skills/skill_data_loader.gd")
+const FeatureLoadout := preload("res://scripts/features/compilation/feature_loadout.gd")
+const FeatureContributionProvider := preload("res://scripts/features/adapters/contribution_provider.gd")
+var _feature_loadout := FeatureLoadout.new()
+var _feature_base_stats: Dictionary = {}
+var feature_errors: Array = []
+const SkillProgressionServiceScript := preload("res://scripts/skills/skill_progression_service.gd")
+const SkillRngScript := preload("res://scripts/skills/skill_rng.gd")
+const PricingServiceScript := preload("res://scripts/pricing_service.gd")
+const ItemDropInstanceRulesScript := preload("res://scripts/item_drop_instance_rules.gd")
+const CharacterIdentityCodec := preload("res://scripts/identity/character_identity_codec.gd")
+const ItemBindingCodec := preload("res://scripts/identity/item_binding_codec.gd")
+const EntityRegistry := preload("res://scripts/identity/entity_registry.gd")
+const ItemCategories := preload("res://scripts/identity/item_category_identity.gd")
+const EquipmentIdentity := preload("res://scripts/identity/equipment_identity_codec.gd")
+const ItemExtensionCodec := preload("res://scripts/items/item_extension_codec.gd")
+const EquipmentGrantedSkills := preload("res://scripts/equipment_granted_skill_rules.gd")
+const RandomSpecialRules := preload("res://scripts/equipment_random_special_instance_rules.gd")
+const ItemTransactionJournal := preload("res://scripts/items/item_transaction_journal.gd")
+const ItemTransactionPort := preload("res://scripts/items/item_transaction_port.gd")
+const SaveUpgradeBackup := preload("res://scripts/save_upgrade_backup.gd")
+var _startup_save_upgrade_pending := false
+var _startup_save_upgrade_in_progress := false
+var startup_save_upgrade_result: Dictionary = {}
+var _item_transaction_port: RefCounted
+var _item_transaction_journal: Dictionary = {}
+const EquipmentEnhancementRulesScript := preload("res://scripts/layers/rules/equipment_enhancement_rules.gd")
+const EquipmentEnhancementServiceScript := preload("res://scripts/layers/runtime/equipment_enhancement_service.gd")
+const RelicSynthesisRulesScript := preload("res://scripts/layers/rules/relic_synthesis_rules.gd")
+const RelicSynthesisServiceScript := preload("res://scripts/layers/runtime/relic_synthesis_service.gd")
+const WorldMonsterRespawnStateScript := preload(
+	"res://scripts/world_monster_respawn_state.gd"
+)
+const WorldMonsterClockLedgerScript := preload(
+	"res://scripts/world_monster_clock_ledger.gd"
+)
+
+signal profile_changed
+signal inventory_changed
+signal equipment_changed
+signal item_audio_committed(
+	identity_domain: String,
+	identity_id: int,
+	semantic_event: String,
+)
+signal skills_changed
+signal skill_progression_changed(snapshot: Dictionary)
+signal quick_slots_changed(change: Dictionary)
+signal quick_item_slots_changed(change: Dictionary)
+signal warrior_runtime_state_changed(snapshot: Dictionary)
+signal consumable_requested(entity_id: String)
+signal scroll_requested(entity_id: String)
+signal quests_changed
+signal profession_changed(profession: String)
+signal levels_gained(previous_level: int, new_level: int)
+signal relic_proc_started(item_id: int)
+
+const SAVE_VERSION := 10
+const SAVE_PATH := "user://player_save_v03.json"
+const LEGACY_SAVE_PATH := "user://player_save_v02.json"
+const PROFILE_INDEX_PATH := "user://character_profiles.json"
+const PROFILE_DIRECTORY := "user://characters"
+const TEST_ROSTER_RESET_MARKER_PATH := "user://test_roster_v2_reset.json"
+const AUTOSAVE_INTERVAL := 30.0
+const DURABILITY_SAVE_INTERVAL := 2.0
+const DURABILITY_VISUAL_INTERVAL := 0.5
+const WARRIOR_RUNTIME_CONTRACT_ID := "gameplay.warrior.skill_runtime.v2"
+const TAOIST_MAIN_PET_PERSISTENCE_CONTRACT_ID := (
+	"skills.summon.persistence.runtime_state.v1"
+)
+const TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID := (
+	"skills.taoist_main_pets.v3"
+)
+const TEST_CHARACTER_ROSTER_CONTRACT_ID := "test.character.roster.full_equipment_skills.v2"
+const TEST_ROSTER_RESET_CONTRACT_ID := "test.character.roster.reset.v2"
+const CHIYUE_TEST_PROFILE_IDS: Array[String] = [
+	"test.character.warrior.chiyue.v2",
+	"test.character.wizard.chiyue.v2",
+	"test.character.taoist.chiyue.v2",
+]
+const CURRENT_CONTENT_SCHEMA_VERSION := 2
+const CANONICAL_MATERIAL_ITEMS := {
+	"grey_powder": "灰色药粉",
+	"yellow_powder": "黄色药粉",
+	"amulet": "护身符",
+}
+const SKILL_BUTTON_ASSIGNMENTS_CONTRACT_ID := "gameplay.skill.button_assignments.v4"
+const WORLD_POSITION_CONTRACT_ID := (
+	"save.world_position.screen_px_with_ground_gu.v1"
+)
+const SKILL_SLOT_GROUP_CENTER := "center"
+const SKILL_SLOT_GROUP_ATTACK := "attack"
+const SKILL_SLOT_GROUP_ATTACK_RING := "attack_ring"
+const CENTER_SKILL_SLOT_COUNT := 4
+const ATTACK_SKILL_SLOT_COUNT := 1
+const ATTACK_RING_SKILL_SLOT_COUNT := 6
+const QUICK_ITEM_SLOTS_CONTRACT_ID := "gameplay.item.quick_slots.v2"
+const QUICK_ITEM_SLOT_COUNT := 4
+const SAVE_RESULT_CONTRACT_ID := "player_state.save_result.v1"
+const DEVICE_LAB_SAVE_CONTRACT_ID := "device_lab.player_save.v1"
+const DEATH_EXPERIENCE_PENALTY_CONTRACT_ID := "player_state.death_experience_penalty.v1"
+const PRICING_CONTRACT_ID := PricingServiceScript.CONTRACT_ID
+const DURABILITY_CONTRACT_ID := "equipment.durability.raw_authority.v1"
+const DURABILITY_EVENT_WEAPON_PHYSICAL_HIT := (
+	"equipment.durability.weapon_physical_hit.v1"
+)
+const DURABILITY_EVENT_INCOMING_PHYSICAL_STRUCK := (
+	"equipment.durability.incoming_physical_struck.v1"
+)
+const DURABILITY_RAW_UNITS_PER_DISPLAY := 1000
+const DURABILITY_INCOMING_EXTENSION_POLICY := (
+	"project_slots_relic_badge_use_same_one_in_eight_physical_wear.v1"
+)
+const SHOP_SELL_CONTRACT_ID := PRICING_CONTRACT_ID
+const QUEST_ABANDON_CONTRACT_ID := "gameplay.quest.abandon_authority.v1"
+const WAREHOUSE_SORT_CONTRACT_ID := "gameplay.warehouse.sort_authority.v1"
+const WAREHOUSE_CAPACITY := 500
+const WAREHOUSE_PAGE_SIZE := 100
+const INVENTORY_CAPACITY := 100
+const INVENTORY_WEIGHT_CONTRACT_ID := "gameplay.inventory.weight_authority.v1"
+const INVENTORY_WEIGHT_REJECTION := "超过负重，无法拾取。"
+const INVENTORY_SLOT_REJECTION := "背包空间不足。"
+const WAREHOUSE_TRANSFER_CONTRACT_ID := "gameplay.warehouse.transfer_authority.v1"
+const SHARED_WAREHOUSE_SCHEMA_VERSION := 1
+const SHARED_WAREHOUSE_CONTRACT_ID := "player_state.shared_warehouse.v1"
+const SHARED_WAREHOUSE_MIGRATION_CONTRACT_ID := "player_state.shared_warehouse.legacy_merge.v1"
+const SHARED_WAREHOUSE_DEFAULT_PATH := "user://shared_warehouse.json"
+const SHARED_WAREHOUSE_TRANSACTION_LOG_PATH := "user://shared_warehouse.transaction.json"
+const PLAYER_GOLD_CAP := 9990000
+const SHARED_GOLD_CAP := 99990000
+const BANK_TRANSFER_AMOUNT := 100000
+const BANK_CONTRACT_ID := "player_state.shared_gold.v1"
+const BANK_TRANSACTION_HISTORY_LIMIT := 64
+const BANK_TRANSACTION_ID_MAX_LENGTH := 96
+const GOLD_OVERFLOW_RECORD_LIMIT := 8
+const MAX_EXACT_JSON_INTEGER := 9007199254740991
+const MAX_SAFE_WEIGHT := 9223372036854775807
+const SHOP_SELL_HIGH_VALUE_PRICE := 10000
+const EQUIPMENT_SLOTS: Array[String] = EquipmentIdentity.SLOTS
+const STARTER_LOADOUT_CONTRACT_ID := "gameplay.character.starter_loadout.v1"
+const CHARACTER_DELETE_CONTRACT_ID := "player_state.character.delete.v1"
+const STARTER_WEAPON_ITEM_NAME := "木剑"
+const STARTER_ARMOR_BY_GENDER := {"男": "布衣(男)", "女": "布衣(女)"}
+# The service table remains the raw/source authority.  This is the explicit
+# gameplay-only tuning policy: first retain the previous rounded 1/30 threshold,
+# then apply the user's 2026-09-13 70% adjustment, rounded and never below 1.
+const GAMEPLAY_EXPERIENCE_THRESHOLD_SCALE := 1.0 / 30.0
+const GAMEPLAY_EXPERIENCE_CURRENT_THRESHOLD_RATIO := 0.70
+const GAMEPLAY_EXPERIENCE_THRESHOLD_MINIMUM := 1
+const VERIFIED_EXPERIENCE_1_TO_22 := {
+	1: 100, 2: 200, 3: 300, 4: 400, 5: 600, 6: 900, 7: 1200, 8: 1700, 9: 2500,
+	10: 6000, 11: 8000, 12: 10000, 13: 15000, 14: 30000, 15: 40000, 16: 50000,
+	17: 70000, 18: 100000, 19: 120000, 20: 140000, 21: 250000, 22: 300000,
+}
+const TEMPORARY_ITEM_BUFF_CONTRACT_ID := "gameplay.item.temporary_stat_buff.v1"
+const BLESSING_OIL_ENTITY_ID := "hc.item.920033"
+const TEMPORARY_ITEM_BUFF_ALLOWED_STATS := {
+    "max_hp": true, "max_mp": true, "attack_max": true,
+    "magic_max": true, "tao_max": true, "attack_speed_tier": true,
+}
+
+
+var level := 1
+var _profession_id := "hc.profession.warrior"
+var profession_identity_errors: Array[String] = []
+var profession_id: String:
+	get: return _profession_id
+# Explicit old-save/UI import and display projection. Business consumers use
+# profession_id; there is no independently mutable Chinese identity state.
+var profession: String:
+	get: return ProfessionRules.profession_display_name(_profession_id)
+	set(value):
+		var imported := ProfessionRules.import_profession_identity(value)
+		if imported.is_empty():
+			profession_identity_errors = ["unknown_legacy_profession"]
+			return
+		set_profession_identity(imported)
+var gender := "男"
+var later_content_enabled := false
+var game_mode_id := "classic_176"
+var experience := 0
+var gold := 0
+var gold_overflow_records: Array = []
+var inventory: Array = []
+var forge_tray: Array[Dictionary] = []
+var synthesis_tray: Array[Dictionary] = []
+var warehouse_inventory: Array = []
+## The public warehouse is account-scoped, never character-scoped.  The path
+## is overridable only by isolated tests; production always uses the default.
+var shared_warehouse_path := SHARED_WAREHOUSE_DEFAULT_PATH
+var shared_warehouse_transaction_log_path := SHARED_WAREHOUSE_TRANSACTION_LOG_PATH
+var _shared_warehouse_initialized := false
+var _active_profile_legacy_warehouse_pending := false
+var _warehouse_transaction_locked := false
+var _persistence_transaction_in_progress := false
+var _test_fail_shared_write := false
+var _test_fail_profile_write := false
+var _test_fail_warehouse_rollback_write := false
+var equipment: Dictionary = {
+	"hc.slot.weapon": {}, "hc.slot.armor": {}, "hc.slot.helmet": {}, "hc.slot.necklace": {},
+	"hc.slot.bracelet_left": {}, "hc.slot.bracelet_right": {}, "hc.slot.ring_left": {}, "hc.slot.ring_right": {}, "hc.slot.relic": {}, "hc.slot.badge": {},
+}
+var _skill_progression: RefCounted = SkillProgressionServiceScript.new()
+var _learned_skill_ids: Dictionary = {}
+var skill_identity_errors: Array = []
+# Compatibility import boundary for old save/UI callers. Runtime readers see
+# a frozen stable-ID projection of the sole progression authority.
+var learned_skills: Dictionary:
+	get:
+		return _learned_skill_ids
+	set(value):
+		var imported: Dictionary = _skill_progression.load_snapshot(value)
+		skill_identity_errors = imported.rejected
+		if bool(imported.success):
+			_refresh_skill_identity_projection()
+var quick_slots: Array[String] = ["", "", "", ""]
+var quick_item_slots: Array[String] = ["", "", "", ""]
+var equip_cycle_cursor: Dictionary = EquipmentIdentity.default_cycles()
+var equipment_transaction_revision := 0
+var _last_equipment_transaction_result: Dictionary = {}
+var _attack_skill_ids: Array[String] = [""]
+var _attack_ring_ids: Array[String] = ["", "", "", "", "", ""]
+var attack_skill_slots: Array[String]:
+	get:
+		return _attack_skill_ids
+	set(value):
+		var imported := _import_skill_slot_ids(value)
+		if bool(imported.success):
+			_attack_skill_ids.assign(imported.ids)
+		else:
+			skill_identity_errors = imported.errors
+var attack_ring_slots: Array[String]:
+	get:
+		return _attack_ring_ids
+	set(value):
+		var imported := _import_skill_slot_ids(value)
+		if bool(imported.success):
+			_attack_ring_ids.assign(imported.ids)
+		else:
+			skill_identity_errors = imported.errors
+var warrior_runtime_state: Dictionary = {}
+var taoist_main_pet_runtime_states: Dictionary = {
+	"contract_id": TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID,
+	"groups": {"skeleton": [], "divine_beast": []},
+}
+var quest_states: Dictionary = {}
+var world_monster_respawn_state: Dictionary = (
+	WorldMonsterRespawnStateScript.empty_snapshot()
+)
+const WorldClockDelta := preload("res://scripts/world_clock_delta.gd")
+var _world_clock_changes: Dictionary = {}
+var _death_event_sequence := 0
+var _world_clock_generation := ""
+var _profile_saved_death_event_sequence := 0
+var _profile_backup_death_event_sequence := 0
+var _world_clock_snapshot_sequence := -1
+var _world_clock_backup_sequence := -1
+var _world_clock_dirty := true
+var _clock_cleanup_worker: RefCounted
+var _clock_cleanup_pending: Dictionary = {}
+var _clock_cleanup_active: Dictionary = {}
+var _clock_cleanup_completed: Dictionary = {}
+const JsonPersistenceService := preload("res://scripts/json_persistence_service.gd")
+var _json_persistence := JsonPersistenceService.new()
+var _world_json_persistence := JsonPersistenceService.new()
+const JsonPreparedRequest := preload("res://scripts/json_prepared_request.gd")
+var saved_map_id := 910001
+var saved_position := Vector2.ZERO
+var saved_ground_position_gu := Vector2.ZERO
+var saved_ground_position_gu_valid := false
+var base_stats: Dictionary = {}
+var computed_stats: Dictionary = {}
+var computed_special_effects: Dictionary = {}
+var test_mode := false
+var durability_event_commit_count := 0
+var _durability_rng := RandomNumberGenerator.new()
+var _blessing_oil_rng: RandomNumberGenerator
+var active_profile_id := ""
+var _profile_gameplay_owners: Dictionary = {}
+var character_name := ""
+var _autosave_elapsed := 0.0
+var _durability_save_pending := false
+var _durability_save_elapsed := 0.0
+var _durability_mutation_revision := 0
+var _world_mutation_revision := 0
+var _background_save: Dictionary = {}
+var _background_death: Dictionary = {}
+# Live item effects never wait for disk. Only the ordered character writer
+# consumes these revisions; world-clock IO has a separate owner.
+var _item_save_revision := 0
+var _item_saved_revision := 0
+var _item_save_plan: Dictionary = {}
+var _item_save_failed := false
+var _workbench_transfer_pending := false
+signal background_item_save_failed
+var _durability_visual_pending := false
+var _durability_visual_elapsed := 0.0
+var profile_index_path := PROFILE_INDEX_PATH
+var profile_directory := PROFILE_DIRECTORY
+var test_roster_reset_marker_path := TEST_ROSTER_RESET_MARKER_PATH
+var last_save_result: Dictionary = {
+	"contract_id": SAVE_RESULT_CONTRACT_ID,
+	"success": false,
+	"reason": "not_attempted",
+}
+var last_load_result: Dictionary = {
+	"contract_id": SAVE_RESULT_CONTRACT_ID,
+	"success": false,
+	"reason": "not_attempted",
+}
+## A profile which failed validation must not be replaced by defaults through
+## autosave, app suspension, or a later gameplay commit. A successful validated
+## reload of the same profile clears this guard.
+var _save_blocked_profile_id := ""
+var _save_blocked_reason := ""
+var _consumed_shop_sell_quote_ids: Dictionary = {}
+var _enhancement_service
+var _relic_synthesis_service
+var _relic_instance_rng := RandomNumberGenerator.new()
+var _relic_proc_rng := RandomNumberGenerator.new()
+var _relic_proc_state: Dictionary = {}
+var _relic_proc_equipment_snapshot: Dictionary = {}
+var _loot_batch_debug: Dictionary = {
+	"plan_scans": 0,
+	"initial_weight_scans": 0,
+	"occupied_scans": 0,
+	"catalog_lookups": 0,
+	"save_commits": 0,
+}
+var _last_runtime_commit_profile: Dictionary = {}
+const SpecialConsumableStacks = preload("res://scripts/special_consumable_stacks.gd")
+const LootPreparedFile := preload("res://scripts/loot_prepared_file.gd")
+var _atomic_write_generation := 0
+var _validated_profile_path := ""
+var _validated_profile_bytes := PackedByteArray()
+var _atomic_write_phases: Dictionary = {}
+var _last_json_promotion: Dictionary = {}
+var _last_save_phase_profile: Dictionary = {}
+var _last_loot_batch_profile: Dictionary = {}
+var _last_death_settlement_profile: Dictionary = {}
+var _loot_inventory_catalog_cache: Dictionary = {}
+var _item_instance_serial := 0
+var _test_transaction_counters: Dictionary = {"commit_attempts": 0, "profile_signals": 0, "inventory_signals": 0, "quest_signals": 0}
+var _shop_quote_debug: Dictionary = {
+	"merchant_context_lookups": 0,
+	"catalog_lookups": 0,
+	"price_record_lookups": 0,
+	"base_price_lookups": 0,
+	"pricing_quote_calls": 0,
+}
+var _consumed_shop_buy_quote_ids: Dictionary = {}
+var _shop_buy_quote_serial := 0
+var _shop_pricing_session_nonce := ""
+var last_receive_result: Dictionary = {
+	"contract_id": INVENTORY_WEIGHT_CONTRACT_ID,
+	"success": false,
+	"reason": "not_attempted",
+}
+var _taoist_main_pets_persistence_provider := Callable()
+# Test-only failure injection. Production ignores it unless test_mode is true.
+var _test_force_atomic_write_failure := false
+var temporary_item_buffs: Dictionary = {}
+## R2: fired when a timed item buff (神水类) fully expires; carries the item
+## name so the notice layer can report "XX效果结束" exactly once.
+signal temporary_item_buff_expired(entity_id: String)
+var temporary_item_buff_revision := 0
+
+
+
+func _notification(what: int) -> void:
+	if _startup_save_upgrade_pending:
+		return
+	if what == NOTIFICATION_PREDELETE:
+		_before_state_transaction(true)
+		return
+	if what in [NOTIFICATION_APPLICATION_PAUSED, NOTIFICATION_APPLICATION_FOCUS_OUT, NOTIFICATION_WM_CLOSE_REQUEST]:
+		if _warehouse_active_preparation != null: _warehouse_active_preparation.cancel()
+		_commit_save(true, true)
+
+
+func _pump_persistence_receipts() -> void:
+	_json_persistence.pump()
+	_world_json_persistence.pump()
+
+
+func quote_item_transaction(request: Dictionary) -> Dictionary:
+	if _item_transaction_port == null:
+		_item_transaction_port = ItemTransactionPort.new(self)
+	return _item_transaction_port.quote(request)
+
+
+func quote_new_item_transaction(request: Dictionary) -> Dictionary:
+	if _item_transaction_port == null:
+		_item_transaction_port = ItemTransactionPort.new(self)
+	return _item_transaction_port.quote_new(request)
+
+
+func commit_item_transaction(quote: Dictionary) -> Dictionary:
+	if _item_transaction_port == null:
+		return {"success": false, "pending": false, "reason": "item_quote_required"}
+	return _item_transaction_port.commit(quote)
+
+
+func _process(delta: float) -> void:
+	_pump_persistence_receipts()
+	if _startup_save_upgrade_pending:
+		return
+	_start_item_save()
+	_advance_world_clock_cleanup()
+	advance_temporary_item_buffs(delta)
+	_advance_durability_runtime(delta)
+	advance_relic_proc(delta)
+	if test_mode or active_profile_id.is_empty():
+		return
+	_autosave_elapsed += delta
+	if _autosave_elapsed >= AUTOSAVE_INTERVAL:
+		if _start_background_save(true):
+			_autosave_elapsed = 0.0
+
+
+func _advance_durability_runtime(delta: float) -> void:
+	if _durability_visual_pending:
+		_durability_visual_elapsed += delta
+		if _durability_visual_elapsed >= DURABILITY_VISUAL_INTERVAL:
+			_durability_visual_pending = false
+			_durability_visual_elapsed = 0.0
+			equipment_changed.emit()
+			profile_changed.emit()
+	if _durability_save_pending:
+		_durability_save_elapsed += delta
+		if _durability_save_elapsed >= DURABILITY_SAVE_INTERVAL:
+			# A failed write stays pending and is retried; pause/close also flushes it.
+			_durability_save_elapsed = 0.0
+			if test_mode:
+				_commit_save(false)
+			else:
+				_start_background_save(false)
+
+
+func _clear_pending_durability_runtime() -> void:
+	_durability_save_pending = false
+	_durability_save_elapsed = 0.0
+	_durability_visual_pending = false
+	_durability_visual_elapsed = 0.0
+
+
+func _ready() -> void:
+	_json_persistence.configure_process_owner(self)
+	_world_json_persistence.configure_process_owner(self)
+	var receipt_pump := preload("res://scripts/layers/runtime/execution/paused_receipt_pump.gd").new()
+	receipt_pump.configure(self)
+	add_child(receipt_pump)
+	_relic_instance_rng.randomize()
+	_relic_proc_rng.randomize()
+	_shop_pricing_session_nonce = "%d:%d" % [Time.get_ticks_usec(), randi()]
+	if DisplayServer.get_name() != "headless":
+		begin_startup_save_upgrade()
+	if not _startup_save_upgrade_pending:
+		DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(profile_directory))
+		_migrate_single_save_to_profile()
+		_recover_shared_warehouse_transaction()
+		_initialize_shared_warehouse()
+	# Android StartupLoading owns deferred data readiness. Build no feature
+	# configuration from empty pre-ready indexes; the existing upgrade finish
+	# resets/recalculates after GameData has completed its authoritative load.
+	var data_ready := GameData.is_loaded()
+	reset_progress(false, data_ready)
+	if data_ready:
+		recalculate_stats()
+	ContentLayers.feature_catalog_changed.connect(_on_feature_catalog_changed)
+
+
+func begin_startup_save_upgrade() -> void:
+	_startup_save_upgrade_pending = true
+	startup_save_upgrade_result = {"success":false, "reason":"upgrade_pending"}
+
+
+func _startup_upgrade_sources() -> Array[String]:
+	var root := profile_directory.get_base_dir()
+	var paths: Array[String] = [profile_directory, root.path_join("gold_migrations")]
+	for base: String in [profile_index_path, shared_warehouse_path, shared_warehouse_transaction_log_path,
+		root.path_join(SAVE_PATH.get_file()), root.path_join(LEGACY_SAVE_PATH.get_file()),
+		root.path_join("audio_preferences_v2.cfg"), root.path_join("loot_preferences_v1.cfg")]:
+		paths.append(base)
+		var directory := DirAccess.open(base.get_base_dir())
+		if directory == null: continue
+		for name: String in directory.get_files():
+			if name.begins_with(base.get_file() + "."): paths.append(base.get_base_dir().path_join(name))
+	return paths
+
+
+func _startup_upgrade_read(path: String, validator := Callable()) -> Dictionary:
+	if not validator.is_valid(): validator = _json_validator_for_path(path)
+	var primary := _read_json_document(path)
+	var validation := _validate_json_candidate(primary.data, validator) if bool(primary.valid) else _validation_result(false, "invalid_json")
+	if bool(validation.get("terminal", false)):
+		return {"success":false, "reason":validation.reason, "path":path}
+	var backup := _read_json_document(path + ".bak")
+	var backup_validation := _validate_json_candidate(backup.data, validator) if bool(backup.valid) else _validation_result(false, "invalid_json")
+	if bool(backup_validation.get("terminal", false)):
+		return {"success":false, "reason":backup_validation.reason, "path":path + ".bak"}
+	if bool(validation.valid): return {"success":true, "data":primary.data, "path":path}
+	if bool(backup_validation.valid): return {"success":true, "data":backup.data, "path":path}
+	return {"success":false, "reason":validation.reason, "path":path}
+
+
+func _startup_upgrade_preflight() -> Dictionary:
+	var ids: Dictionary = {}
+	var has_legacy := false
+	if FileAccess.file_exists(profile_index_path) or FileAccess.file_exists(profile_index_path + ".bak"):
+		var index := _startup_upgrade_read(profile_index_path)
+		if not bool(index.success): return index
+		for entry: Dictionary in index.data.profiles: ids[entry.id] = true
+	var directory := DirAccess.open(profile_directory)
+	if directory != null:
+		for name: String in directory.get_files():
+			if name.ends_with(".json") or name.ends_with(".json.bak"):
+				var id := name.trim_suffix(".bak").trim_suffix(".json")
+				if not _valid_profile_storage_id(id): return {"success":false, "reason":"invalid_profile_id"}
+				ids[id] = true
+	var shared: Dictionary = {}
+	if FileAccess.file_exists(shared_warehouse_path) or FileAccess.file_exists(shared_warehouse_path + ".bak"):
+		var warehouse := _startup_upgrade_read(shared_warehouse_path)
+		if not bool(warehouse.success): return warehouse
+		shared = warehouse.data
+	var all_profiles: Dictionary = {}
+	for id: String in ids:
+		var profile := _startup_upgrade_read(_profile_path(id))
+		if not bool(profile.success): return profile
+		all_profiles[id] = profile.data
+		if not shared.is_empty() and not _profile_and_shared_drop_instances_are_disjoint(profile.data, shared):
+			return {"success":false, "reason":"duplicate_drop_instance_across_shared", "path":profile.path}
+		if profile.data.has("death_event_sequence"):
+			var replay := _read_world_clock_replay(profile.data)
+			if not bool(replay.get("ok", false)): return {"success":false, "reason":replay.reason, "path":profile.path}
+	for legacy_path: String in [profile_directory.get_base_dir().path_join(SAVE_PATH.get_file()), profile_directory.get_base_dir().path_join(LEGACY_SAVE_PATH.get_file())]:
+		if FileAccess.file_exists(legacy_path) or FileAccess.file_exists(legacy_path + ".bak"):
+			var legacy := _startup_upgrade_read(legacy_path, Callable(self, "_validate_profile_document_status").bind("", true))
+			if not bool(legacy.success): return legacy
+			has_legacy = true
+	if FileAccess.file_exists(shared_warehouse_transaction_log_path):
+		var log := _read_json_document(shared_warehouse_transaction_log_path)
+		if not bool(log.valid) or not _warehouse_transaction_log_is_valid(log.data):
+			return {"success":false, "reason":"invalid_warehouse_transaction_log", "path":shared_warehouse_transaction_log_path}
+	return {"success":true, "ids":ids.keys(), "profiles":all_profiles, "legacy_pending":has_legacy and ids.is_empty()}
+
+
+func _startup_upgrade_fail(reason: String, path := "") -> bool:
+	_startup_save_upgrade_in_progress = false
+	active_profile_id = ""
+	startup_save_upgrade_result = {"success":false, "reason":reason, "path":path}
+	return false
+
+
+func finish_startup_save_upgrade() -> bool:
+	if not _startup_save_upgrade_pending: return true
+	if _startup_save_upgrade_in_progress: return false
+	var backup := SaveUpgradeBackup.new()
+	if not backup.prepare(profile_directory.get_base_dir(), _startup_upgrade_sources()):
+		return _startup_upgrade_fail(backup.reason, backup.archive)
+	var completion := backup.completion_status()
+	if not bool(completion.valid): return _startup_upgrade_fail("upgrade_completion_invalid", backup.archive)
+	var preflight := _startup_upgrade_preflight()
+	if not bool(preflight.success): return _startup_upgrade_fail(preflight.reason, str(preflight.get("path", "")))
+	_startup_save_upgrade_in_progress = true
+	if DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(profile_directory)) != OK:
+		return _startup_upgrade_fail("profile_directory_failed")
+	_migrate_single_save_to_profile()
+	_recover_shared_warehouse_transaction()
+	if _warehouse_transaction_locked or not _initialize_shared_warehouse():
+		return _startup_upgrade_fail("shared_warehouse_unavailable", shared_warehouse_path)
+	var profiles := _profile_ids_for_shared_warehouse()
+	if not bool(profiles.ok): return _startup_upgrade_fail("profile_index_unavailable", profile_index_path)
+	if bool(preflight.legacy_pending) and not profiles.ids.has("legacy_01"):
+		return _startup_upgrade_fail("legacy_profile_migration_failed")
+	if not bool(completion.completed):
+		var warehouse_document := _read_json(shared_warehouse_path)
+		if not _write_shared_warehouse_document_atomic(warehouse_document):
+			return _startup_upgrade_fail("shared_warehouse_identity_upgrade_failed", shared_warehouse_path)
+		for id: String in profiles.ids:
+			if not select_character(id):
+				return _startup_upgrade_fail(str(last_load_result.get("reason", "profile_load_failed")), _profile_path(id))
+			if not save_game(true, true, true):
+				return _startup_upgrade_fail(str(last_save_result.get("reason", "profile_save_failed")), _profile_path(id))
+			var final := _startup_upgrade_read(_profile_path(id))
+			if not bool(final.success): return _startup_upgrade_fail(final.reason, final.path)
+			_before_state_transaction(true)
+		if not backup.complete(profiles.ids): return _startup_upgrade_fail(backup.reason, backup.archive)
+	if OS.is_debug_build() and DisplayServer.get_name() != "headless":
+		if ProjectSettings.get_setting("hardcore/debug/enable_qa_test_roster", false):
+			prepare_qa_test_roster_v2()
+	active_profile_id = ""
+	reset_progress(false)
+	_startup_save_upgrade_in_progress = false
+	_startup_save_upgrade_pending = false
+	startup_save_upgrade_result = {"success":true, "reason":"already_completed" if bool(completion.completed) else "upgraded", "backup_path":backup.archive, "profiles":profiles.ids}
+	return true
+
+
+func reset_progress(emit_updates := true, recompute_stats := true) -> void:
+	_before_state_transaction(true)
+	_clear_pending_durability_runtime()
+	level = 1
+	profession = "战士"
+	gender = "男"
+	later_content_enabled = false
+	game_mode_id = "classic_176"
+	experience = 0
+	gold = 0
+	gold_overflow_records = []
+	_item_transaction_journal = {}
+	inventory = []
+	forge_tray = _empty_workbench_tray()
+	synthesis_tray = _empty_workbench_tray()
+	# reset_progress is character-local.  Never clear the account warehouse.
+	if test_mode and not _shared_warehouse_test_isolation_enabled():
+		warehouse_inventory = []
+	elif _shared_warehouse_initialized:
+		warehouse_inventory = _shared_warehouse_read_inventory()
+	else:
+		warehouse_inventory = []
+	equipment = _empty_equipment()
+	learned_skills = {}
+	_skill_progression.load_snapshot({})
+	quick_slots = ["", "", "", ""]
+	quick_item_slots = ["", "", "", ""]
+	equip_cycle_cursor = _default_equip_cycle_cursor()
+	attack_skill_slots = [""]
+	attack_ring_slots = ["", "", "", "", "", ""]
+	warrior_runtime_state = _default_warrior_runtime_state()
+	taoist_main_pet_runtime_states = _empty_taoist_main_pet_runtime_states()
+	quest_states = {}
+	world_monster_respawn_state = WorldMonsterRespawnStateScript.empty_snapshot()
+	_world_clock_changes.clear()
+	_death_event_sequence = 0
+	_world_clock_generation = ""
+	_profile_saved_death_event_sequence = 0
+	_profile_backup_death_event_sequence = 0
+	_world_clock_snapshot_sequence = -1
+	_world_clock_backup_sequence = -1
+	_world_clock_dirty = true
+	_consumed_shop_sell_quote_ids.clear()
+	_consumed_shop_buy_quote_ids.clear()
+	if _enhancement_service != null:
+		_enhancement_service.reset()
+	if _relic_synthesis_service != null:
+		_relic_synthesis_service.reset()
+	_relic_proc_state.clear()
+	_relic_proc_equipment_snapshot.clear()
+	_shop_buy_quote_serial = 0
+	durability_event_commit_count = 0
+	temporary_item_buffs = {}
+	temporary_item_buff_revision = 0
+	_active_profile_legacy_warehouse_pending = false
+	if _shop_pricing_session_nonce.is_empty():
+		_shop_pricing_session_nonce = "%d:%d" % [Time.get_ticks_usec(), randi()]
+	saved_map_id = 910001
+	saved_position = Vector2.ZERO
+	saved_ground_position_gu = Vector2.ZERO
+	saved_ground_position_gu_valid = false
+	if recompute_stats:
+		recalculate_stats()
+	if emit_updates:
+		profession_changed.emit(profession)
+		inventory_changed.emit()
+		equipment_changed.emit()
+		skills_changed.emit()
+		skill_progression_changed.emit(_skill_progression.snapshot())
+		quick_item_slots_changed.emit({
+			"contract_id": QUICK_ITEM_SLOTS_CONTRACT_ID,
+			"reset": true,
+			"slots": quick_item_slots.duplicate(),
+		})
+		quests_changed.emit()
+		profile_changed.emit()
+
+
+func set_profession_identity(value: String) -> bool:
+	if preload("res://scripts/identity/entity_registry.gd").resolve(value,"profession").is_empty():
+		profession_identity_errors = ["invalid_profession_identity"]
+		return false
+	_profession_id = value
+	profession_identity_errors = []
+	return true
+
+
+func select_profession(value: String) -> String:
+	_before_state_transaction()
+	var requested_id := ProfessionRules.import_profession_identity(value)
+	if requested_id.is_empty():
+		return "无效职业：%s" % value
+	if profession_id == requested_id:
+		return "当前职业已经是%s" % profession
+	# Profession changes can invalidate equipped items. Preflight all returned
+	# instances against the *final* equipment effect set and bag cap before
+	# mutating the character, so a full/overweight bag cannot partially switch
+	# profession or silently delete an item.
+	var incompatible_slots: Array[String] = []
+	var incompatible_records: Array[Dictionary] = []
+	for slot: String in equipment.keys():
+		var equipped_record: Variant = equipment[slot]
+		var equipped_name := str(equipped_record.get("name", "")) if equipped_record is Dictionary else str(equipped_record)
+		if equipped_name.is_empty():
+			continue
+		var item := GameData.get_item(equipped_name)
+		var item_profession := EquipmentRulesScript.effective_profession(item)
+		if item_profession not in ["", "通用"] and ProfessionRules.import_profession_identity(item_profession) != requested_id:
+			incompatible_slots.append(slot)
+			incompatible_records.append(
+				equipped_record.duplicate(true)
+				if equipped_record is Dictionary
+				else _make_item_instance(equipped_name, GameData.get_item_record(equipped_name))
+			)
+	var profession_before := profession_id
+	var equipment_before := equipment.duplicate(true)
+	var stats_before := computed_stats.duplicate(true)
+	var effects_before := computed_special_effects.duplicate(true)
+	var planned_inventory := inventory.duplicate(true)
+	if not incompatible_records.is_empty():
+		set_profession_identity(requested_id)
+		for slot: String in incompatible_slots:
+			equipment[slot] = {}
+		recalculate_stats()
+		for returned_record: Dictionary in incompatible_records:
+			var preview := _build_receive_result_for_record(returned_record, planned_inventory)
+			if not bool(preview.get("success", false)):
+				profession = profession_before
+				equipment = equipment_before
+				computed_stats = stats_before
+				computed_special_effects = effects_before
+				return str(preview.get("message", INVENTORY_WEIGHT_REJECTION))
+			planned_inventory = (preview.get("inventory", planned_inventory) as Array).duplicate(true)
+		profession = profession_before
+		equipment = equipment_before
+		computed_stats = stats_before
+		computed_special_effects = effects_before
+	set_profession_identity(requested_id)
+	var next_skills := learned_skills.duplicate(true)
+	for skill_id: String in next_skills.keys():
+		var profile := ProfessionRules.skill_profile(skill_id)
+		if not profile.is_empty() and str(profile.get("profession_entity_id", "")) != profession_id:
+			next_skills.erase(skill_id)
+	learned_skills = next_skills
+	for index in range(quick_slots.size()):
+		if not is_skill_learned(quick_slots[index]):
+			quick_slots[index] = ""
+	for index in range(attack_skill_slots.size()):
+		if not is_skill_learned(attack_skill_slots[index]):
+			attack_skill_slots[index] = ""
+	for index in range(attack_ring_slots.size()):
+		if not is_skill_learned(attack_ring_slots[index]):
+			attack_ring_slots[index] = ""
+	_sync_legacy_quick_slots_from_ring()
+	if profession_id != "hc.profession.warrior":
+		warrior_runtime_state = _default_warrior_runtime_state()
+	for slot: String in equipment.keys():
+		var equipped_record: Variant = equipment[slot]
+		var equipped_name := str(equipped_record.get("name", "")) if equipped_record is Dictionary else str(equipped_record)
+		if equipped_name.is_empty():
+			continue
+		var item := GameData.get_item(equipped_name)
+		var item_profession := EquipmentRulesScript.effective_profession(item)
+		if item_profession not in ["", "通用"] and ProfessionRules.import_profession_identity(item_profession) != profession_id:
+			equipment[slot] = {}
+	inventory = planned_inventory
+	recalculate_stats()
+	profession_changed.emit(profession)
+	inventory_changed.emit()
+	equipment_changed.emit()
+	skills_changed.emit()
+	profile_changed.emit()
+	_commit_save()
+	return "职业已切换为%s" % profession
+
+
+func set_later_content_enabled(enabled: bool) -> bool:
+	_before_state_transaction()
+	var requested := ContentLayers.enabled_expansions.duplicate()
+	requested["later_176_content"] = enabled
+	if not ContentLayers.apply_expansion_configuration(requested, Callable(self, "_commit_later_content_field").bind(enabled)):
+		return false
+	profile_changed.emit()
+	return _commit_save()
+
+
+func _commit_later_content_field(enabled: bool) -> void:
+	later_content_enabled = enabled
+
+
+## Public inventory entry point. All gameplay paths (loot, shops, quests and
+## warehouse withdrawal) must use this atomic authority instead of appending
+## records directly.
+func add_item(item_name: String, amount := 1) -> Dictionary:
+	return receive(item_name, amount)
+
+
+## A cheap, side-effect-free preflight. The detailed rejection is retained in
+## `last_receive_result` for UI/diagnostics while the boolean keeps old callers
+## source-compatible.
+func can_receive(item_name: String, amount := 1) -> bool:
+	last_receive_result = _build_receive_result(item_name, amount, inventory)
+	return bool(last_receive_result.get("success", false))
+
+
+func can_receive_record(record: Dictionary) -> bool:
+	last_receive_result = _build_receive_result_for_record(record, inventory, true)
+	return bool(last_receive_result.get("success", false))
+
+
+func receive(item_name: String, amount := 1, commit := true) -> Dictionary:
+	_before_state_transaction()
+	var before_inventory := inventory.duplicate(true)
+	var before_gold := gold
+	var result := _build_receive_result(item_name, amount, inventory)
+	if not bool(result.get("success", false)):
+		last_receive_result = result
+		return result
+	_apply_receive_result(result)
+	if commit and not _commit_save():
+		inventory = before_inventory
+		gold = before_gold
+		last_receive_result = _receive_failure("save_failed", "物品和金币均未改变。")
+		return last_receive_result
+	last_receive_result = result
+	if bool(result.get("inventory_changed", false)):
+		inventory_changed.emit()
+	if int(result.get("gold_delta", 0)) != 0:
+		profile_changed.emit()
+	return result
+
+
+## Internal variant used by buy/quest/warehouse transactions. It shares the
+## same preflight and plan builder but defers the enclosing transaction's save.
+func _add_item_without_commit(item_name: String, amount: int) -> bool:
+	var result := receive(item_name, amount, false)
+	return bool(result.get("success", false))
+
+
+func receive_record(record: Dictionary, commit := true) -> Dictionary:
+	_before_state_transaction()
+	var before_inventory := inventory.duplicate(true)
+	var before_gold := gold
+	var result := _build_receive_result_for_record(record, inventory, true)
+	if not bool(result.get("success", false)):
+		last_receive_result = result
+		return result
+	_apply_receive_result(result)
+	if commit and not _commit_save():
+		inventory = before_inventory
+		gold = before_gold
+		last_receive_result = _receive_failure("save_failed", "物品未改变。")
+		return last_receive_result
+	last_receive_result = result
+	if bool(result.get("inventory_changed", false)):
+		inventory_changed.emit()
+	return result
+
+
+func _build_receive_result(item_name: String, amount: int, base_inventory: Array) -> Dictionary:
+	var catalog_item := GameData.get_item_record(item_name)
+	if catalog_item.is_empty():
+		return _receive_failure("unknown_item", "物品无效。")
+	item_name = str(catalog_item.get("name", ""))
+	if amount <= 0:
+		return _receive_failure("invalid_amount", "数量无效。")
+	var kind := str(catalog_item.get("kind", "unknown"))
+	if kind == "currency":
+		var unit_amount := int(catalog_item.get("currencyAmount", 1))
+		if unit_amount < 0 or amount > PLAYER_GOLD_CAP or unit_amount > PLAYER_GOLD_CAP / amount:
+			return _receive_failure("gold_cap", "金币已达上限，奖励未领取。")
+		if not can_credit_gold(unit_amount * amount):
+			return _receive_failure("gold_cap", "金币已达上限，奖励未领取。")
+		return {
+			"contract_id": INVENTORY_WEIGHT_CONTRACT_ID,
+			"success": true,
+			"reason": "",
+			"inventory": base_inventory.duplicate(true),
+			"inventory_changed": false,
+			"gold_delta": int(catalog_item.get("currencyAmount", 1)) * amount,
+			"weight_before": inventory_weight(base_inventory),
+			"weight_after": inventory_weight(base_inventory),
+		}
+	return _build_receive_result_for_template(item_name, amount, catalog_item, base_inventory, {})
+
+
+func _build_receive_result_for_record(
+	record: Dictionary,
+	base_inventory: Array,
+	reject_existing_drop_instance := false,
+	owned_batch_weight := -1,
+) -> Dictionary:
+	var item_runtime := ItemExtensionCodec.normalize_runtime(record)
+	if item_runtime.status != ItemExtensionCodec.KNOWN_VALID:
+		return _receive_failure("invalid_item_instance", "物品扩展数据无效。")
+	record = item_runtime.item
+	var amount := maxi(1, int(record.get("count", 1)))
+	var catalog_item := GameData.get_item_rules_record(record)
+	var item_name := str(catalog_item.get("name", record.get("name", "")))
+	if record.has("item_id") and int(record.get("item_id", -1)) != int(catalog_item.get("itemId", -2)):
+		return _receive_failure("unknown_item", "物品身份无效。")
+	if catalog_item.is_empty() or item_name.is_empty():
+		return _receive_failure("unknown_item", "物品无效。")
+	if (
+		record.has("drop_instance_contract_id")
+		and not GameData.validate_item_drop_instance(record)
+	):
+		return _receive_failure("invalid_item_instance", "掉落实例无效。")
+	# External receipt rejects an existing W7 identity before the legacy opaque
+	# instance split guard. Internal equip/unequip previews retain move semantics.
+	if (
+		reject_existing_drop_instance
+		and (record.has("drop_instance_contract_id") or ItemExtensionCodec.has_extensions(record))
+		and _item_record_ownership_already_present(record, base_inventory)
+	):
+		return _receive_failure("duplicate_item_instance", "掉落实例已入账。")
+	var canonical_record := record.duplicate(true)
+	canonical_record["name"] = item_name
+	_with_item_identity(canonical_record, catalog_item)
+	var relic_id := int(catalog_item.get("itemId", -1))
+	if RelicSynthesisRulesScript.is_synthesis_item(relic_id):
+		if record.has("relic_roll") and not RelicSynthesisRulesScript.valid_instance(record, relic_id):
+			return _receive_failure("invalid_item_instance", "圣物属性无效。")
+		if not record.has("relic_roll"):
+			canonical_record = {}
+	return _build_receive_result_for_template(item_name, amount, catalog_item, base_inventory, canonical_record, owned_batch_weight)
+
+
+func _build_receive_result_for_template(
+	item_name: String,
+	amount: int,
+	catalog_item: Dictionary,
+	base_inventory: Array,
+	template: Dictionary,
+	owned_batch_weight := -1,
+) -> Dictionary:
+	if amount <= 0:
+		return _receive_failure("invalid_amount", "数量无效。")
+	var relic_id := int(catalog_item.get("itemId", -1))
+	if RelicSynthesisRulesScript.is_synthesis_item(relic_id):
+		if template.has("relic_roll") and not RelicSynthesisRulesScript.valid_instance(template, relic_id):
+			return _receive_failure("invalid_item_instance", "圣物属性无效。")
+		if not template.has("relic_roll"):
+			template = {}
+	# An owned warehouse plan may share unchanged records between successive
+	# previews. Changed stacks are copied below; public previews remain defensive.
+	var next_inventory: Array = base_inventory.duplicate(owned_batch_weight < 0)
+	var is_stackable := bool(catalog_item.get("stackable", false)) and str(catalog_item.get("kind", "")) != "equipment"
+	var identity_template := _with_item_identity({"name": item_name, "count": 1}, catalog_item)
+	var max_stack := _max_stack_for_item(catalog_item) if is_stackable else 1
+	var opaque_instance_id := str(template.get("instance_id", ""))
+	if not opaque_instance_id.is_empty():
+		if amount > max_stack:
+			return _receive_failure(
+				"opaque_instance_split_unsupported",
+				"带唯一实例标识的物品无法安全拆分。"
+			)
+		var opaque_existing_count := 0
+		for raw_existing: Variant in next_inventory:
+			if (
+				not raw_existing is Dictionary
+				or str((raw_existing as Dictionary).get("instance_id", ""))
+				!= opaque_instance_id
+			):
+				continue
+			opaque_existing_count += 1
+			if (
+				not is_stackable
+				or not _inventory_records_mergeable(raw_existing, template)
+				or int((raw_existing as Dictionary).get("count", 0)) + amount > max_stack
+			):
+				return _receive_failure(
+					"opaque_instance_split_unsupported",
+					"带唯一实例标识的物品无法安全拆分。"
+				)
+		if opaque_existing_count > 1:
+			return _receive_failure(
+				"opaque_instance_split_unsupported",
+				"带唯一实例标识的物品无法安全拆分。"
+			)
+	var remaining := amount
+	if is_stackable:
+		for index in range(next_inventory.size()):
+			var existing: Variant = next_inventory[index]
+			if not existing is Dictionary or not _inventory_records_mergeable(existing, template if not template.is_empty() else identity_template):
+				continue
+			var available := maxi(0, max_stack - int(existing.get("count", 0)))
+			if available <= 0:
+				continue
+			var moved := mini(available, remaining)
+			if owned_batch_weight >= 0:
+				existing = existing.duplicate(true)
+				next_inventory[index] = existing
+			existing["count"] = int(existing.get("count", 0)) + moved
+			_with_item_identity(existing, catalog_item)
+			remaining -= moved
+			if remaining <= 0:
+				break
+	while remaining > 0:
+		if inventory_occupied_count(next_inventory) >= INVENTORY_CAPACITY:
+			return _receive_failure("inventory_full", INVENTORY_SLOT_REJECTION)
+		var moved := mini(remaining, max_stack) if is_stackable else 1
+		var new_record: Dictionary
+		if RelicSynthesisRulesScript.is_synthesis_item(int(catalog_item.get("itemId", -1))) and template.is_empty():
+			new_record = _make_item_instance(item_name, catalog_item)
+		elif not template.is_empty():
+			new_record = template.duplicate(true)
+			new_record["count"] = moved
+		elif str(catalog_item.get("kind", "")) == "equipment":
+			new_record = _make_item_instance(item_name, catalog_item)
+		else:
+			new_record = _with_item_identity({"name": item_name, "count": moved}, catalog_item)
+		if not _place_inventory_record_in_first_free_slot(next_inventory, new_record):
+			return _receive_failure("inventory_full", INVENTORY_SLOT_REJECTION)
+		remaining -= moved
+	var weight_before := inventory_weight(base_inventory) if owned_batch_weight < 0 else owned_batch_weight
+	var weight_after := inventory_weight(next_inventory) if owned_batch_weight < 0 else mini(MAX_SAFE_WEIGHT, weight_before + inventory_weight([_with_item_identity({"name": item_name, "count": amount}, catalog_item)]))
+	var max_weight := max_inventory_weight()
+	# Compatibility rule: an old save may already exceed the new cap, but no
+	# operation may increase that burden. This also lets a swap/unequip preserve
+	# an existing overweight state when the resulting weight is not higher.
+	if weight_after > max_weight and weight_after > weight_before:
+		return _receive_failure("overweight", INVENTORY_WEIGHT_REJECTION, weight_before, weight_after, max_weight)
+	return {
+		"contract_id": INVENTORY_WEIGHT_CONTRACT_ID,
+		"success": true,
+		"reason": "",
+		"inventory": next_inventory,
+		"inventory_changed": next_inventory != base_inventory,
+		"gold_delta": 0,
+		"weight_before": weight_before,
+		"weight_after": weight_after,
+		"max_weight": max_weight,
+	}
+
+
+func _receive_failure(reason: String, message: String, before := -1, after := -1, maximum := -1) -> Dictionary:
+	return {
+		"contract_id": INVENTORY_WEIGHT_CONTRACT_ID,
+		"success": false,
+		"reason": reason,
+		"message": message,
+		"inventory_changed": false,
+		"gold_delta": 0,
+		"weight_before": before if before >= 0 else inventory_weight(inventory),
+		"weight_after": after if after >= 0 else inventory_weight(inventory),
+		"max_weight": maximum if maximum >= 0 else max_inventory_weight(),
+	}
+
+
+func _apply_receive_result(result: Dictionary) -> void:
+	if result.get("inventory", null) is Array:
+		inventory = (result.get("inventory") as Array).duplicate(true)
+	gold = maxi(0, gold + int(result.get("gold_delta", 0)))
+
+
+func _max_stack_for_item(catalog_item: Dictionary) -> int:
+	return maxi(1, int(catalog_item.get("maxStack", catalog_item.get("max_stack", 1))))
+
+
+func can_receive_batch(rewards: Array) -> bool:
+	var simulation := _build_receive_batch_result(rewards, inventory)
+	last_receive_result = simulation
+	return bool(simulation.get("success", false))
+
+
+func receive_batch(rewards: Array, commit := true) -> Dictionary:
+	_before_state_transaction()
+	var before_inventory := inventory.duplicate(true)
+	var before_gold := gold
+	var result := _build_receive_batch_result(rewards, inventory)
+	if not bool(result.get("success", false)):
+		last_receive_result = result
+		return result
+	_apply_receive_result(result)
+	if commit and not _commit_save():
+		inventory = before_inventory
+		gold = before_gold
+		last_receive_result = _receive_failure("save_failed", "奖励和金币均未改变。")
+		return last_receive_result
+	last_receive_result = result
+	if bool(result.get("inventory_changed", false)):
+		inventory_changed.emit()
+	if int(result.get("gold_delta", 0)) != 0:
+		profile_changed.emit()
+	return result
+
+
+func _build_receive_batch_result(rewards: Array, base_inventory: Array) -> Dictionary:
+	var next_inventory := base_inventory.duplicate(true)
+	var gold_delta := 0
+	for raw_reward: Variant in rewards:
+		if not raw_reward is Dictionary:
+			continue
+		var reward: Dictionary = raw_reward
+		var item_id := str(reward.get("entity_id", "")) if reward.has("entity_id") else GameData.item_entity_id(reward)
+		var amount := maxi(1, int(reward.get("count", reward.get("amount", 1))))
+		var result := _build_receive_result(item_id, amount, next_inventory)
+		if not bool(result.get("success", false)):
+			return result
+		next_inventory = (result.get("inventory", next_inventory) as Array).duplicate(true)
+		gold_delta += int(result.get("gold_delta", 0))
+		if not can_credit_gold(gold_delta):
+			return _receive_failure("gold_cap", "金币已达上限，奖励未领取。")
+	return {
+		"contract_id": INVENTORY_WEIGHT_CONTRACT_ID,
+		"success": true,
+		"reason": "",
+		"inventory": next_inventory,
+		"inventory_changed": next_inventory != base_inventory,
+		"gold_delta": gold_delta,
+		"weight_before": inventory_weight(base_inventory),
+		"weight_after": inventory_weight(next_inventory),
+		"max_weight": max_inventory_weight(),
+	}
+
+
+func can_credit_gold(amount: Variant, balance := -1) -> bool:
+	var current := gold if balance < 0 else balance
+	return (
+		_is_integral_json_number(amount) and float(amount) >= 0.0
+		and current >= 0 and current <= PLAYER_GOLD_CAP
+		and float(amount) <= float(PLAYER_GOLD_CAP - current)
+	)
+
+
+func _gold_load_projection(document: Dictionary) -> Dictionary:
+	var original := int(document.get("gold", 0))
+	var held: Array = document.get("gold_overflow_records", []).duplicate(true)
+	if original > PLAYER_GOLD_CAP:
+		held.append({"contract_id": BANK_CONTRACT_ID, "original_gold": original,
+			"retained_gold": original - PLAYER_GOLD_CAP, "source_digest": _shared_digest(document)})
+	return {"gold": mini(original, PLAYER_GOLD_CAP), "gold_overflow_records": held, "needs_archive": original > PLAYER_GOLD_CAP}
+
+
+func add_gold(amount: Variant) -> bool:
+	_before_state_transaction()
+	if not can_credit_gold(amount):
+		return false
+	var previous := gold
+	gold += int(amount)
+	if not _commit_save():
+		gold = previous
+		return false
+	profile_changed.emit()
+	return true
+
+
+func spend_gold(amount: int) -> bool:
+	_before_state_transaction()
+	if amount < 0 or gold < amount:
+		return false
+	var previous := gold
+	gold -= amount
+	if not _commit_save():
+		gold = previous
+		return false
+	profile_changed.emit()
+	return true
+
+
+func shared_gold_balance() -> int:
+	return int(shared_gold_view_snapshot().get("bank_gold", 0))
+
+
+## A single validated read for the bank view. This is not a transfer authority:
+## every submitted request rechecks the persisted balance and high-water mark.
+func shared_gold_view_snapshot() -> Dictionary:
+	if not _ensure_shared_warehouse_ready():
+		return {}
+	var status := _read_json_with_status(shared_warehouse_path)
+	# The path-routed reader already validates the complete warehouse and its
+	# migration/profile dependencies, including backup recovery.
+	if not bool(status.get("success", false)):
+		return {}
+	var shared: Dictionary = status.get("data", {})
+	return {"bank_gold": int(shared.get("bank_gold", 0)),
+		"next_sequence": int(shared.get("bank_transaction_high_water", 0)) + 1,
+		"profile_id": active_profile_id}
+
+
+func next_shared_gold_transaction_sequence() -> int:
+	return int(shared_gold_view_snapshot().get("next_sequence", -1))
+
+
+## `transaction_sequence` is an account-wide monotonic request identity. The
+## bounded audit history may prune old rows, while the persisted high-water
+## mark continues to reject every replayed old request.
+func _bank_request_preflight(transaction_id: String, transaction_sequence: int) -> Dictionary:
+	var result := {"success": false, "contract_id": BANK_CONTRACT_ID, "reason": "storage_unavailable"}
+	if not _valid_bank_transaction_id(transaction_id):
+		result["reason"] = "invalid_transaction_id"
+		return result
+	if transaction_sequence <= 0 or transaction_sequence > MAX_EXACT_JSON_INTEGER:
+		result["reason"] = "invalid_transaction_sequence"
+		return result
+	if _warehouse_transaction_locked or _persistence_transaction_in_progress or not _ensure_shared_warehouse_ready():
+		return result
+	return {"success": true}
+
+
+func _shared_gold_plan(deposit: bool, transaction_id: String, transaction_sequence: int, shared: Dictionary, profile: Dictionary) -> Dictionary:
+	var result := {"success": false, "contract_id": BANK_CONTRACT_ID, "reason": "storage_unavailable"}
+	if (
+		not _validate_shared_warehouse_document(shared)
+		or not bool(_validate_profile_document_status(profile, active_profile_id, false).get("valid", false))
+		or int(profile.get("gold", 0)) != gold
+	):
+		result["reason"] = "stale_profile"
+		return result
+	var processed: Dictionary = shared.get("bank_transactions", {}).duplicate(true)
+	var high_water := int(shared.get("bank_transaction_high_water", 0))
+	if processed.has(transaction_id) or transaction_sequence <= high_water:
+		result["reason"] = "duplicate_transaction"
+		return result
+	if transaction_sequence != high_water + 1:
+		result["reason"] = "stale_transaction_sequence"
+		return result
+	var bank := int(shared.get("bank_gold", 0))
+	if deposit:
+		if gold < BANK_TRANSFER_AMOUNT or bank > SHARED_GOLD_CAP - BANK_TRANSFER_AMOUNT:
+			result["reason"] = "insufficient_balance_or_cap"
+			return result
+	else:
+		if bank < BANK_TRANSFER_AMOUNT or not can_credit_gold(BANK_TRANSFER_AMOUNT):
+			result["reason"] = "insufficient_balance_or_cap"
+			return result
+	var next_gold := gold + (-BANK_TRANSFER_AMOUNT if deposit else BANK_TRANSFER_AMOUNT)
+	bank += BANK_TRANSFER_AMOUNT if deposit else -BANK_TRANSFER_AMOUNT
+	var transaction_record := {
+		"profile_id": active_profile_id,
+		"sequence": transaction_sequence,
+		"deposit": deposit,
+		"amount": BANK_TRANSFER_AMOUNT,
+	}
+	processed = _bounded_bank_transaction_history(processed, transaction_id, transaction_record)
+	var bank_update := {
+		"bank_gold": bank,
+		"bank_contract_id": BANK_CONTRACT_ID,
+		"bank_transaction_high_water": transaction_sequence,
+		"bank_transactions": processed,
+	}
+	return {"success": true, "_bank_before_profile": profile, "_bank_before_shared": shared,
+		"_next_gold": next_gold, "_gold_before": gold, "_bank_update": bank_update,
+		"_inventory_before": inventory.duplicate(true), "_warehouse_before": warehouse_inventory.duplicate(true),
+		"transaction_id": transaction_id, "transaction_sequence": transaction_sequence}
+
+
+func transfer_shared_gold(deposit: bool, transaction_id: String, transaction_sequence: int = -1) -> Dictionary:
+	_before_state_transaction()
+	var ready := _bank_request_preflight(transaction_id, transaction_sequence)
+	if not bool(ready.success): return ready
+	var plan := _shared_gold_plan(deposit, transaction_id, transaction_sequence, _read_json(shared_warehouse_path), _read_json(_profile_path(active_profile_id)))
+	if not bool(plan.success): return plan
+	if not _bank_transfer_commit(plan._bank_before_profile, plan._bank_before_shared, int(plan._next_gold), plan._bank_update):
+		return {"success": false, "contract_id": BANK_CONTRACT_ID, "reason": "save_failed"}
+	gold = int(plan._next_gold)
+	profile_changed.emit()
+	return {"success": true, "contract_id": BANK_CONTRACT_ID, "reason": "", "player_gold": gold,
+		"shared_gold": int(plan._bank_update.bank_gold), "transaction_id": transaction_id,
+		"transaction_sequence": transaction_sequence}
+
+
+## Freeze one resolved drop identity into the exact equipment instance carried
+## by LootPickup. Non-equipment identities pass through byte-for-byte. Invalid
+## equipment identities retain their source evidence but become unspawnable.
+func create_drop_item_instance(item_record: Dictionary, stable_drop_key: String) -> Dictionary:
+	var result := item_record.duplicate(true)
+	if str(result.get("identity_status", "")) != "resolved":
+		return _invalid_drop_instance_record(result, "unresolved_item_identity")
+	var raw_item_id: Variant = result.get("canonical_item_id", result.get("item_id", null))
+	if not _is_integral_json_number(raw_item_id) or int(raw_item_id) <= 0:
+		return _invalid_drop_instance_record(result, "invalid_item_id")
+	var item_id := int(raw_item_id)
+	for identity_field: String in ["item_id", "canonical_item_id", "output_item_id"]:
+		if not result.has(identity_field):
+			continue
+		var identity_value: Variant = result.get(identity_field)
+		if not _is_integral_json_number(identity_value) or int(identity_value) != item_id:
+			return _invalid_drop_instance_record(result, "conflicting_%s" % identity_field)
+	# The instance rules consume identity, type and durability, never the large
+	# art/provenance payload. Multi-equipment drops should not deep-copy it.
+	var catalog := GameData.get_item_rules_record({"item_id": item_id})
+	if catalog.is_empty() or int(catalog.get("itemId", -1)) != item_id:
+		return _invalid_drop_instance_record(result, "catalog_identity_missing")
+	if RelicSynthesisRulesScript.is_synthesis_item(item_id):
+		if stable_drop_key.is_empty():
+			return _invalid_drop_instance_record(result, "instance_generation_failed")
+		var digest := ("relic:%d:%s" % [item_id, stable_drop_key]).sha256_text()
+		var relic_rng := RandomNumberGenerator.new()
+		relic_rng.seed = ("0x" + digest.substr(0, 15)).hex_to_int()
+		var instance := _make_item_instance(str(catalog.get("name", "")), catalog, 0, false)
+		instance.merge(RelicSynthesisRulesScript.roll_instance(item_id, "", relic_rng), true)
+		instance["instance_id"] = "relic:%d:%s" % [item_id, digest.substr(0, 24)]
+		if not RelicSynthesisRulesScript.valid_instance(instance, item_id):
+			return _invalid_drop_instance_record(result, "relic_roll_failed")
+		result["item_instance_contract_id"] = RelicSynthesisRulesScript.CONTRACT_ID
+		result["item_instance"] = instance
+		return result
+	if str(catalog.get("kind", "")) != "equipment":
+		return result
+	var instance := ItemDropInstanceRulesScript.create_instance(catalog, stable_drop_key)
+	if instance.is_empty():
+		return _invalid_drop_instance_record(result, "instance_generation_failed")
+	result["item_instance_contract_id"] = ItemDropInstanceRulesScript.INSTANCE_CONTRACT_ID
+	result["item_instance"] = instance
+	return result
+
+
+func _invalid_drop_instance_record(item_record: Dictionary, reason: String) -> Dictionary:
+	var result := item_record.duplicate(true)
+	result["identity_status"] = "invalid_instance"
+	result["item_instance_error"] = reason
+	result.erase("item_instance")
+	result.erase("item_instance_contract_id")
+	return result
+
+
+func has_item(item_name: String, amount := 1) -> bool:
+	return item_count(item_name) >= amount
+
+
+func item_count(item_name: String) -> int:
+	return item_count_by_entity_id(GameData.item_entity_id(item_name))
+
+
+## Inventory arrays preserve absolute slot identity. Empty dictionaries are
+## holes, not items; trailing holes are trimmed only to keep saves compact.
+func inventory_occupied_count(records: Array = inventory) -> int:
+	var total := 0
+	for record: Variant in records:
+		if _inventory_slot_is_occupied(record):
+			total += 1
+	return total
+
+
+func warehouse_occupied_count(records: Array = warehouse_inventory) -> int:
+	var total := 0
+	for record: Variant in records:
+		if _inventory_slot_is_occupied(record):
+			total += 1
+	return total
+
+
+func _inventory_slot_is_occupied(record: Variant) -> bool:
+	if record is Dictionary:
+		return not (record as Dictionary).is_empty()
+	return record != null and not str(record).is_empty()
+
+
+func _first_free_inventory_slot(records: Array) -> int:
+	for index in range(mini(records.size(), INVENTORY_CAPACITY)):
+		if not _inventory_slot_is_occupied(records[index]):
+			return index
+	return records.size() if records.size() < INVENTORY_CAPACITY else -1
+
+
+func _place_inventory_record_in_first_free_slot(records: Array, record: Variant) -> bool:
+	var slot := _first_free_inventory_slot(records)
+	if slot < 0:
+		return false
+	var stored: Variant = record.duplicate(true) if record is Dictionary else record
+	if slot < records.size():
+		records[slot] = stored
+	else:
+		records.append(stored)
+	return true
+
+
+func _clear_inventory_slot(records: Array, index: int) -> void:
+	if index < 0 or index >= records.size():
+		return
+	records[index] = {}
+	_trim_inventory_empty_tail(records)
+
+
+func _trim_inventory_empty_tail(records: Array = inventory) -> void:
+	while not records.is_empty() and not _inventory_slot_is_occupied(records.back()):
+		records.pop_back()
+
+
+func remove_item(item_name: String, amount := 1) -> bool:
+	_before_state_transaction()
+	var entity_id := GameData.item_entity_id(item_name)
+	if amount <= 0 or not has_item(item_name, amount):
+		return false
+	var inventory_before := inventory.duplicate(true)
+	var remaining := amount
+	var index := inventory.size() - 1
+	while index >= 0 and remaining > 0:
+		var raw_stack: Variant = inventory[index]
+		if raw_stack is Dictionary:
+			var stack: Dictionary = raw_stack
+			if not stack.is_empty() and GameData.item_entity_id(stack) == entity_id:
+				if not ItemExtensionCodec.can_release_ownership(stack):
+					inventory = inventory_before
+					return false
+				var count := int(stack.get("count", 0))
+				var consumed := mini(count, remaining)
+				count -= consumed
+				remaining -= consumed
+				if count <= 0:
+					inventory[index] = {}
+				else:
+					stack["count"] = count
+		index -= 1
+	if remaining != 0:
+		inventory = inventory_before
+		return false
+	_trim_inventory_empty_tail()
+	if not _commit_save():
+		inventory = inventory_before
+		return false
+	inventory_changed.emit()
+	return true
+
+
+
+func _consume_inventory_index(index: int, amount := 1, save_in_background := false) -> bool:
+	if not save_in_background:
+		_before_state_transaction()
+	var inventory_before := inventory.duplicate(true)
+	if not _consume_inventory_index_without_commit(index, amount):
+		return false
+	# Consuming a stack changes only the character document; the hall index's
+	# name, profession and level are unchanged. Save once instead of twice.
+	if not _commit_item_use(save_in_background):
+		inventory = inventory_before
+		return false
+	inventory_changed.emit()
+	return true
+
+
+
+func _consume_inventory_index_without_commit(index: int, amount := 1) -> bool:
+	if index < 0 or index >= inventory.size() or amount <= 0:
+		return false
+	var raw_record: Variant = inventory[index]
+	if not raw_record is Dictionary or (raw_record as Dictionary).is_empty():
+		return false
+	var record: Dictionary = raw_record
+	if not ItemExtensionCodec.can_release_ownership(record) or (_item_transaction_port != null and _item_transaction_port.record_reserved(record)):
+		return false
+	var count := maxi(1, int(record.get("count", 1)))
+	if amount > count:
+		return false
+	if amount == count:
+		_clear_inventory_slot(inventory, index)
+	else:
+		record["count"] = count - amount
+	return true
+
+
+func destroy_inventory_indices(indices: Array) -> Dictionary:
+	# Protect both selected identities and promised removal output slots before
+	# the save barrier can publish a new asset into the caller's empty index.
+	if _item_transaction_port != null:
+		for raw_index: Variant in indices:
+			var index := int(raw_index)
+			if index >= 0 and (_item_transaction_port.slot_reserved(index) \
+				or (index < inventory.size() and inventory[index] is Dictionary \
+				and _item_transaction_port.record_reserved(inventory[index]))):
+				return {"success":false, "destroyed":0, "reason":"item_transaction_pending", "message":"物品操作处理中，请稍后再试。"}
+	_before_state_transaction()
+	var targets: Array[int] = []
+	for raw_index: Variant in indices:
+		var index := int(raw_index)
+		if index < 0 or index >= inventory.size() or not _inventory_slot_is_occupied(inventory[index]) or index in targets:
+			return {"success": false, "destroyed": 0, "reason": "invalid_inventory_index"}
+		if not inventory[index] is Dictionary or not ItemExtensionCodec.can_release_ownership(inventory[index]):
+			return {"success": false, "destroyed": 0, "reason": "embedded_item_owned", "message": "请先取出镶嵌物品。"}
+		targets.append(index)
+	if targets.is_empty():
+		return {"success": true, "destroyed": 0, "reason": "empty_selection"}
+	var inventory_before := inventory.duplicate(true)
+	for index: int in targets:
+		inventory[index] = {}
+	_trim_inventory_empty_tail()
+	if not _commit_save():
+		inventory = inventory_before
+		return {"success": false, "destroyed": 0, "reason": "save_failed", "message": "丢弃存档失败，物品未改变。"}
+	# Observers never see a successful removal that subsequently rolls back.
+	inventory_changed.emit()
+	profile_changed.emit()
+	return {"success": true, "destroyed": targets.size(), "reason": ""}
+
+
+func sort_inventory_deterministic() -> Dictionary:
+	_before_state_transaction()
+	var inventory_before := inventory.duplicate(true)
+	var working_inventory := SpecialConsumableStacks.split_available(inventory.duplicate(true), INVENTORY_CAPACITY, INVENTORY_CAPACITY)
+	var decorated: Array = []
+	for index in range(working_inventory.size()):
+		var record: Variant = working_inventory[index]
+		if record is Dictionary and not (record as Dictionary).is_empty():
+			var item := GameData.get_item_record(str(record.get("name", "")))
+			decorated.append({"record": record, "index": index, "key": "%s|%s|%s|%08d" % [str(item.get("kind", "")), str(item.get("category", "")), str(record.get("name", "")), index]})
+		elif _inventory_slot_is_occupied(record):
+			decorated.append({"record": record, "index": index, "key": "!opaque|%08d" % index})
+	decorated.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return str(a["key"]) < str(b["key"]))
+	var sorted_inventory: Array = []
+	for entry: Dictionary in decorated:
+		var record: Variant = entry["record"]
+		if record is Dictionary and not sorted_inventory.is_empty() and sorted_inventory.back() is Dictionary and _inventory_records_mergeable(sorted_inventory.back(), record) and sorted_inventory.back().get("name", "") == record.get("name", ""):
+			sorted_inventory.back()["count"] = int(sorted_inventory.back().get("count", 1)) + int(record.get("count", 1))
+			if record.has("item_id"):
+				sorted_inventory.back()["item_id"] = int(record.get("item_id", -1))
+		else:
+			sorted_inventory.append(record)
+	var changed := sorted_inventory != inventory_before
+	if changed:
+		inventory = sorted_inventory
+		if not _commit_save():
+			inventory = inventory_before
+			return {"success":false,"changed":false,"reason":"save_failed"}
+		inventory_changed.emit()
+		profile_changed.emit()
+	return {"success": true, "changed": changed, "count": inventory_occupied_count()}
+
+
+func _inventory_records_mergeable(a: Dictionary, b: Dictionary) -> bool:
+	for key: Variant in a.keys():
+		if str(key) not in ["name", "count", "item_id", "service_index"]:
+			return false
+	for key: Variant in b.keys():
+		if str(key) not in ["name", "count", "item_id", "service_index"]:
+			return false
+	var entity_id := GameData.item_entity_id(a)
+	var item := GameData.get_entity_record(entity_id)
+	if entity_id.is_empty() or entity_id != GameData.item_entity_id(b) or not bool(item.get("stackable", false)) or str(item.get("kind", "")) == "equipment":
+		return false
+	for key: String in ["instance_id", "durability", "max_durability", "durability_raw", "max_durability_raw", "modifiers", "random_stats", "bind", "bound"]:
+		if a.has(key) or b.has(key):
+			return false
+	return true
+
+
+func shop_sell_quotes(items: Array) -> Dictionary:
+	var quotes: Dictionary = {}
+	var lookup_cache := _new_shop_quote_lookup_cache()
+	# The batch-local price cache is filled by exact item identities below.
+	# A presentation-name prefill would duplicate work and mix different IDs.
+	for raw_item: Variant in items:
+		if not raw_item is Dictionary:
+			continue
+		var request: Dictionary = raw_item
+		var quote := _shop_sell_quote(request, lookup_cache)
+		var quote_key := str(request.get("quote_key", ""))
+		if quote_key.is_empty():
+			quote_key = str(quote.get("quote_key", ""))
+		if not quote_key.is_empty():
+			quotes[quote_key] = quote
+	return quotes
+
+
+func shop_buy_quotes(stock: Array, context := {}) -> Array:
+	_shop_buy_quote_serial += 1
+	return _build_shop_buy_quotes(stock, context, _shop_buy_quote_serial)
+
+
+func _build_shop_buy_quotes(stock: Array, context: Dictionary, quote_serial: int, only_stock_index: int = -1) -> Array:
+	var quotes: Array = []
+	# A transaction validates its requested row; the returned UI quote list stays full.
+	if only_stock_index < -1 or only_stock_index >= stock.size():
+		return quotes
+	var first := only_stock_index if only_stock_index >= 0 else 0
+	var last := only_stock_index + 1 if only_stock_index >= 0 else stock.size()
+	for stock_index in range(first, last):
+		var raw_entry: Variant = stock[stock_index]
+		if not raw_entry is Dictionary:
+			continue
+		_ui_l1_buy_quote_rows += 1
+		var entry: Dictionary = raw_entry
+		var item_name := str(entry.get("name", ""))
+		var entity_id := str(entry.get("entity_id", "")) if entry.has("entity_id") else GameData.item_entity_id(entry)
+		var entry_context: Dictionary = context.duplicate(true)
+		entry_context.merge(entry.get("merchant_context", {}), true)
+		var pack_count := maxi(1, int(entry.get("pack_count", 1)))
+		var pricing_quote := PricingServiceScript.quote_buy(
+			GameData.get_item_price_record(entity_id), pack_count, entry_context
+		)
+		var quote_id := ""
+		if bool(pricing_quote.get("valid", false)):
+			quote_id = "%s:%s" % [PRICING_CONTRACT_ID, JSON.stringify([
+				_shop_pricing_session_nonce, active_profile_id, quote_serial, stock_index, entity_id, pricing_quote,
+			]).sha256_text().substr(0, 24)]
+		var result: Dictionary = pricing_quote.duplicate(true)
+		result.merge({
+			"entity_id": entity_id,
+			"stock_index": stock_index,
+			"stock_key": str(entry.get("offer_id", "stock:%d:%s" % [stock_index, entity_id])),
+			"quote_id": quote_id,
+			"description": str(entry.get("description", "")),
+			"merchant_id": str(entry.get("merchant_id", entry_context.get("merchant_id", ""))),
+			"pack_count": pack_count,
+		}, true)
+		quotes.append(result)
+	return quotes
+
+
+func buy_shop_item(request: Dictionary, stock: Array, context := {}) -> Dictionary:
+	_before_state_transaction()
+	var stock_index := int(request.get("stock_index", -1))
+	if stock_index < 0 or stock_index >= stock.size():
+		return _shop_buy_result(false, "购买商品已经变化，请重新选择。", stock, context)
+	var current_quotes := _build_shop_buy_quotes(stock, context, _shop_buy_quote_serial, stock_index)
+	var quote: Dictionary = {}
+	for candidate: Variant in current_quotes:
+		if candidate is Dictionary and int(candidate.get("stock_index", -1)) == stock_index:
+			quote = candidate
+			break
+	var quote_id := str(request.get("quote_id", ""))
+	if not bool(quote.get("valid", false)) or quote_id.is_empty() or quote_id != str(quote.get("quote_id", "")):
+		return _shop_buy_result(false, "购买报价已失效，请重新选择商品。", stock, context)
+	if (
+		str(request.get("item_name", quote.get("item_name", ""))) != str(quote.get("item_name", ""))
+		or str(request.get("entity_id", quote.get("entity_id", ""))) != str(quote.get("entity_id", ""))
+		or str(request.get("stock_key", quote.get("stock_key", ""))) != str(quote.get("stock_key", ""))
+		or str(request.get("merchant_id", quote.get("merchant_id", ""))) != str(quote.get("merchant_id", ""))
+	):
+		return _shop_buy_result(false, "购买商品已经变化，请重新选择。", stock, context)
+	if _consumed_shop_buy_quote_ids.has(quote_id):
+		return _shop_buy_result(false, "该购买报价已经处理，不能重复提交。", stock, context)
+	var quantity := int(request.get("quantity", 1))
+	if quantity != int(quote.get("pack_count", 1)):
+		return _shop_buy_result(false, "购买数量无效。", stock, context)
+	var total_price := int(quote.get("total_price", 0))
+	if total_price <= 0 or gold < total_price:
+		return _shop_buy_result(false, "金币不足。", stock, context)
+	var inventory_before := inventory.duplicate(true)
+	var gold_before := gold
+	gold -= total_price
+	if not _add_item_without_commit(str(quote.get("entity_id", "")), quantity):
+		gold = gold_before
+		inventory = inventory_before
+		return _shop_buy_result(false, "背包空间不足或者超过最大负重。", stock, context)
+	inventory_changed.emit()
+	profile_changed.emit()
+	if not _commit_save():
+		inventory = inventory_before
+		gold = gold_before
+		inventory_changed.emit()
+		profile_changed.emit()
+		return _shop_buy_result(false, "购买存档失败，物品和金币均未改变。", stock, context)
+	_consumed_shop_buy_quote_ids[quote_id] = true
+	return _shop_buy_result(true, "购买成功：%s" % str(quote.get("item_name", "物品")), stock, context)
+
+
+func _shop_buy_result(success: bool, message: String, stock: Array, context: Dictionary) -> Dictionary:
+	return {
+		"contract_id": PRICING_CONTRACT_ID,
+		"success": success,
+		"message": message,
+		"quotes": shop_buy_quotes(stock, context),
+	}
+
+
+func _forge_service():
+	if _enhancement_service == null:
+		_enhancement_service = EquipmentEnhancementServiceScript.new(self)
+	return _enhancement_service
+
+
+func quote_forge(target_index: int, iron_index: int, accessory_a_index: int, accessory_b_index: int) -> Dictionary:
+	return _forge_service().quote_forge(target_index, iron_index, accessory_a_index, accessory_b_index)
+
+
+func quote_forge_tray() -> Dictionary:
+	return _forge_service().quote_forge_tray()
+
+
+func commit_forge(quote: Dictionary) -> Dictionary:
+	_before_state_transaction()
+	return _forge_service().commit_forge(quote)
+
+
+func _relic_service():
+	if _relic_synthesis_service == null:
+		_relic_synthesis_service = RelicSynthesisServiceScript.new(self)
+	return _relic_synthesis_service
+
+
+func quote_relic_synthesis(item_id: int, material_indices: Array[int], profession := "") -> Dictionary:
+	return _relic_service().quote_synthesis(item_id, material_indices, profession)
+
+
+func commit_relic_synthesis(quote: Dictionary) -> Dictionary:
+	_before_state_transaction()
+	return _relic_service().commit_synthesis(quote)
+
+
+func commit_workbench_immediate(mode: String, quote: Dictionary) -> Dictionary:
+	if mode not in ["forge", "synthesis"]:
+		return {"committed": false, "message": "无效工作台。"}
+	if test_mode:
+		return commit_forge(quote) if mode == "forge" else commit_relic_synthesis(quote)
+	if not await _begin_live_workbench_transaction():
+		return {"committed": false, "message": "物品正在处理中，请重新选择。"}
+	# The service revalidates the exact quote before rolling/consuming anything.
+	var result: Dictionary = (_forge_service().commit_forge(quote, true) if mode == "forge"
+		else _relic_service().commit_synthesis(quote, true))
+	_workbench_transfer_pending = false
+	return result
+
+
+func _empty_workbench_tray() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for _slot in 9:
+		result.append({})
+	return result
+
+
+func _load_workbench_tray(value: Variant) -> Array[Dictionary]:
+	if not value is Array or (value as Array).size() != 9:
+		return _empty_workbench_tray()
+	var result: Array[Dictionary] = []
+	for raw: Variant in value:
+		result.append((raw as Dictionary).duplicate(true) if raw is Dictionary else {})
+	return result
+
+
+func workbench_tray(mode: String) -> Array[Dictionary]:
+	return (forge_tray if mode == "forge" else synthesis_tray).duplicate(true) if mode in ["forge", "synthesis"] else []
+
+
+func place_workbench_item(mode: String, slot: int, inventory_index: int, save_in_background := false) -> Dictionary:
+	if not save_in_background:
+		_before_state_transaction()
+	if mode not in ["forge", "synthesis"] or slot < 0 or slot >= 9:
+		return {"success": false, "message": "无效工作格。"}
+	var tray: Array[Dictionary] = forge_tray if mode == "forge" else synthesis_tray
+	if not tray[slot].is_empty():
+		return {"success": false, "message": "请先取出这个格子里的物品。"}
+	if inventory_index < 0 or inventory_index >= inventory.size() or not inventory[inventory_index] is Dictionary or (inventory[inventory_index] as Dictionary).is_empty():
+		return {"success": false, "message": "请先在背包中选择物品。"}
+	var source: Dictionary = inventory[inventory_index]
+	if _item_transaction_port != null and _item_transaction_port.record_reserved(source):
+		return {"success": false, "reason": "item_inputs_reserved", "message": "物品正在处理中。"}
+	if int(source.get("count", 1)) > 1 and not str(source.get("instance_id", "")).is_empty():
+		return {"success": false, "message": "带唯一标识的整组物品不能拆分，请先整理背包。"}
+	var item := GameData.get_item_record(source)
+	# Placement only moves ownership. The quote decides whether the complete
+	# arrangement is valid; an incorrect item remains available for removal.
+	var inventory_before := inventory.duplicate(true)
+	var tray_before := tray.duplicate(true)
+	var moved := source.duplicate(true)
+	moved["count"] = 1
+	if int(source.get("count", 1)) <= 1:
+		inventory[inventory_index] = {}
+	else:
+		inventory[inventory_index] = source.duplicate(true)
+		inventory[inventory_index]["count"] = int(source.get("count", 1)) - 1
+	tray[slot] = moved
+	# A tray transfer changes neither the character-list summary nor the
+	# world clock. Persist the inventory and tray together in one document.
+	if not _commit_item_use(save_in_background):
+		inventory = inventory_before
+		if mode == "forge": forge_tray = tray_before
+		else: synthesis_tray = tray_before
+		return {"success": false, "message": "保存失败，物品仍在背包。"}
+	inventory_changed.emit()
+	profile_changed.emit()
+	return {"success": true, "message": "已放入%s" % str(item.get("name", "物品"))}
+
+
+func take_workbench_item(mode: String, slot: int, save_in_background := false, destination_slot := -1) -> Dictionary:
+	if not save_in_background:
+		_before_state_transaction()
+	if mode not in ["forge", "synthesis"] or slot < 0 or slot >= 9:
+		return {"success": false, "message": "无效工作格。"}
+	var tray: Array[Dictionary] = forge_tray if mode == "forge" else synthesis_tray
+	if tray[slot].is_empty():
+		return {"success": false, "message": "这个格子里没有物品。"}
+	if destination_slot < -1 or destination_slot >= INVENTORY_CAPACITY:
+		return {"success": false, "message": "无效背包格。"}
+	if _item_transaction_port != null and (
+		_item_transaction_port.record_reserved(tray[slot]) or _item_transaction_port.slot_reserved(destination_slot)):
+		return {"success": false, "reason": "item_inputs_reserved", "message": "物品正在处理中。"}
+	if destination_slot >= 0 and destination_slot < inventory.size() and _inventory_slot_is_occupied(inventory[destination_slot]):
+		return {"success": false, "message": "目标背包格已有物品。"}
+	var output := tray[slot].duplicate(true)
+	# This is a move from our own tray; the source still owns its instance ID
+	# until the same save transaction clears the cell.
+	var preview := _build_receive_result_for_record(output, inventory, false)
+	if not bool(preview.get("success", false)):
+		return {"success": false, "message": str(preview.get("message", "背包空间不足。"))}
+	var inventory_before := inventory.duplicate(true)
+	var tray_before := tray.duplicate(true)
+	if destination_slot >= 0:
+		inventory = inventory.duplicate(true)
+		while inventory.size() <= destination_slot:
+			inventory.append({})
+		inventory[destination_slot] = output
+	else:
+		inventory = (preview.get("inventory", inventory) as Array).duplicate(true)
+	tray[slot] = {}
+	if not _commit_item_use(save_in_background):
+		inventory = inventory_before
+		if mode == "forge": forge_tray = tray_before
+		else: synthesis_tray = tray_before
+		return {"success": false, "message": "保存失败，物品仍在工作格。"}
+	inventory_changed.emit()
+	profile_changed.emit()
+	return {"success": true, "message": "已放入背包：%s" % str(output.get("name", "物品"))}
+
+
+func transfer_workbench_immediate(mode: String, slot: int, inventory_index := -1, destination_slot := -1) -> Dictionary:
+	if test_mode:
+		return take_workbench_item(mode, slot, false, destination_slot) if inventory_index < 0 else place_workbench_item(mode, slot, inventory_index)
+	var selected: Dictionary = inventory[inventory_index].duplicate(true) if inventory_index >= 0 and inventory_index < inventory.size() else {}
+	if not await _begin_live_workbench_transaction():
+		return {"success": false, "message": "物品正在处理中，请重新选择。"}
+	if inventory_index >= 0 and (inventory_index >= inventory.size() or inventory[inventory_index] != selected):
+		_workbench_transfer_pending = false
+		return {"success": false, "message": "所选物品已变化，请重新选择。"}
+	var result := take_workbench_item(mode, slot, true, destination_slot) if inventory_index < 0 else place_workbench_item(mode, slot, inventory_index, true)
+	_workbench_transfer_pending = false
+	return result
+
+
+func _begin_live_workbench_transaction() -> bool:
+	if _workbench_transfer_pending or not _can_accept_immediate_item_use():
+		return false
+	_workbench_transfer_pending = true
+	var owner := active_profile_id
+	var generation := _world_clock_generation
+	# Only pickup receipts can replace the live inventory. Normal profile save
+	# receipts acknowledge bytes and never restore an older live state.
+	_json_persistence.cancel_uncommitted_domain("loot")
+	while _json_persistence.has_pending_domain("loot") or _json_persistence.has_pending_domain("item_transaction"):
+		_json_persistence.pump()
+		if _json_persistence.has_pending_domain("loot") or _json_persistence.has_pending_domain("item_transaction"):
+			await get_tree().process_frame
+	if owner != active_profile_id or generation != _world_clock_generation or not _can_accept_immediate_item_use():
+		_workbench_transfer_pending = false
+		return false
+	return true
+
+
+func configure_relic_roll_rng(rng: RandomNumberGenerator) -> void:
+	_relic_instance_rng = rng
+
+
+func configure_relic_proc_rng(rng: RandomNumberGenerator) -> void:
+	_relic_proc_rng = rng
+
+
+func sell_inventory_item(request: Dictionary) -> Dictionary:
+	_before_state_transaction()
+	if request.get("batch", null) is Array:
+		return sell_inventory_items(request.get("batch", []))
+	var merchant_id := str(request.get("merchant_id", ""))
+	var quote := _shop_sell_quote(request)
+	var quote_id := str(request.get("quote_id", ""))
+	if (
+		not bool(quote.get("sellable", false))
+		or quote_id.is_empty()
+		or quote_id != str(quote.get("quote_id", ""))
+	):
+		return _shop_sell_result(false, "出售报价已失效，请重新选择物品。", merchant_id)
+	if _consumed_shop_sell_quote_ids.has(quote_id):
+		return _shop_sell_result(false, "该出售报价已经处理，不能重复提交。", merchant_id)
+	var inventory_index := int(request.get("inventory_index", -1))
+	var amount := int(request.get("amount", 0))
+	if (
+		inventory_index < 0
+		or inventory_index >= inventory.size()
+		or amount <= 0
+		or amount > int(quote.get("max_quantity", 0))
+	):
+		return _shop_sell_result(false, "出售数量或背包位置无效。", merchant_id)
+	var record: Variant = inventory[inventory_index]
+	if not record is Dictionary or (record as Dictionary).is_empty():
+		return _shop_sell_result(false, "物品状态已变化，出售已取消。", merchant_id)
+	var inventory_before := inventory.duplicate(true)
+	var gold_before := gold
+	var current_count := maxi(1, int((record as Dictionary).get("count", 1)))
+	if amount > current_count:
+		return _shop_sell_result(false, "出售数量超过当前背包库存。", merchant_id)
+	var unit_price := int(quote.get("unit_price", 0))
+	if unit_price < 0 or unit_price > PLAYER_GOLD_CAP / amount or not can_credit_gold(unit_price * amount):
+		return _shop_sell_result(false, "金币已达上限，物品未出售。", merchant_id)
+	if amount >= current_count:
+		_clear_inventory_slot(inventory, inventory_index)
+	else:
+		(record as Dictionary)["count"] = current_count - amount
+	gold = maxi(0, gold + int(quote.get("unit_price", 0)) * amount)
+	if not _commit_save():
+		inventory = inventory_before
+		gold = gold_before
+		return _shop_sell_result(false, "出售存档失败，物品和金币均未改变。", merchant_id)
+	_consumed_shop_sell_quote_ids[quote_id] = true
+	if test_mode:
+		_test_transaction_counters["inventory_signals"] = int(_test_transaction_counters.get("inventory_signals", 0)) + 1
+		_test_transaction_counters["profile_signals"] = int(_test_transaction_counters.get("profile_signals", 0)) + 1
+	inventory_changed.emit()
+	profile_changed.emit()
+	return _shop_sell_result(
+		true,
+		"已出售%s ×%d，获得%d金币。" % [
+			str(quote.get("item_name", "物品")),
+			amount,
+			int(quote.get("unit_price", 0)) * amount,
+		],
+		merchant_id
+	)
+
+
+func sell_inventory_items(requests: Array) -> Dictionary:
+	_before_state_transaction()
+	var result := {"contract_id": SHOP_SELL_CONTRACT_ID, "success": false, "message": "批量出售失败。", "quotes": {}}
+	if requests.is_empty():
+		result["message"] = "没有可出售物品。"
+		return result
+	var ordered := requests.duplicate(true)
+	ordered.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return int(a.get("inventory_index", -1)) > int(b.get("inventory_index", -1)))
+	var merchant_id := str(ordered[0].get("merchant_id", ""))
+	if GameData.merchant_context_by_id(merchant_id).is_empty():
+		result["message"] = "商人状态已变化。"
+		return result
+	var inventory_before := inventory.duplicate(true)
+	var gold_before := gold
+	var consumed_before := _consumed_shop_sell_quote_ids.duplicate(true)
+	var working_inventory := inventory.duplicate(true)
+	var total_gold := 0
+	var used_quotes: Array[String] = []
+	var lookup_cache := _new_shop_quote_lookup_cache()
+	for raw_request: Variant in ordered:
+		if not raw_request is Dictionary:
+			result["message"] = "出售请求无效。"
+			return result
+		var request: Dictionary = raw_request
+		if str(request.get("merchant_id", "")) != merchant_id:
+			result["message"] = "不能跨商人批量出售。"
+			return result
+		var quote := _shop_sell_quote(request, lookup_cache)
+		var quote_id := str(request.get("quote_id", ""))
+		if not bool(quote.get("sellable", false)) or quote_id.is_empty() or quote_id != str(quote.get("quote_id", "")) or _consumed_shop_sell_quote_ids.has(quote_id) or quote_id in used_quotes:
+			result["message"] = "出售报价已失效，请重新选择物品。"
+			return result
+		var index := int(request.get("inventory_index", -1))
+		var amount := int(request.get("amount", 0))
+		if index < 0 or index >= working_inventory.size() or not working_inventory[index] is Dictionary or (working_inventory[index] as Dictionary).is_empty():
+			result["message"] = "出售数量或背包位置无效。"
+			return result
+		var record: Dictionary = working_inventory[index]
+		var current_count := maxi(1, int(record.get("count", 1)))
+		if amount <= 0 or amount > current_count or amount > int(quote.get("max_quantity", 0)):
+			result["message"] = "出售数量超过当前背包库存。"
+			return result
+		var unit_price := int(quote.get("unit_price", 0))
+		if unit_price < 0 or unit_price > PLAYER_GOLD_CAP / amount or not can_credit_gold(total_gold + unit_price * amount):
+			result["message"] = "金币已达上限，物品未出售。"
+			return result
+		if amount >= current_count:
+			working_inventory[index] = {}
+		else:
+			record["count"] = current_count - amount
+		total_gold += int(quote.get("unit_price", 0)) * amount
+		used_quotes.append(quote_id)
+	_trim_inventory_empty_tail(working_inventory)
+	inventory = working_inventory
+	gold = maxi(0, gold + total_gold)
+	if not _commit_save():
+		inventory = inventory_before
+		gold = gold_before
+		_consumed_shop_sell_quote_ids = consumed_before
+		result["message"] = "出售存档失败，物品和金币均未改变。"
+		return result
+	for quote_id: String in used_quotes:
+		_consumed_shop_sell_quote_ids[quote_id] = true
+	if test_mode:
+		_test_transaction_counters["inventory_signals"] = int(_test_transaction_counters.get("inventory_signals", 0)) + 1
+		_test_transaction_counters["profile_signals"] = int(_test_transaction_counters.get("profile_signals", 0)) + 1
+	inventory_changed.emit()
+	profile_changed.emit()
+	result["success"] = true
+	result["message"] = "已批量出售%d项物品，获得%d金币。" % [used_quotes.size(), total_gold]
+	result["quotes"] = shop_sell_quotes(_current_shop_sell_quote_items(merchant_id))
+	return result
+
+
+func test_transaction_debug_reset() -> void:
+	_test_transaction_counters = {"commit_attempts": 0, "profile_signals": 0, "inventory_signals": 0, "quest_signals": 0}
+	_loot_inventory_catalog_cache.clear()
+	_loot_batch_debug = {
+		"plan_scans": 0,
+		"initial_weight_scans": 0,
+		"occupied_scans": 0,
+		"catalog_lookups": 0,
+		"save_commits": 0,
+	}
+
+
+func test_transaction_debug_snapshot() -> Dictionary:
+	return _test_transaction_counters.duplicate(true)
+
+
+func test_shop_quote_debug_reset() -> void:
+	_shop_quote_debug = {
+		"merchant_context_lookups": 0,
+		"catalog_lookups": 0,
+		"price_record_lookups": 0,
+		"base_price_lookups": 0,
+		"pricing_quote_calls": 0,
+	}
+
+
+func test_shop_quote_debug_snapshot() -> Dictionary:
+	return _shop_quote_debug.duplicate(true)
+
+
+func _new_shop_quote_lookup_cache() -> Dictionary:
+	return {
+		"merchant_by_stock": {},
+		"merchant_by_id": {},
+		"catalog_by_name": {},
+		"price_by_name": {},
+		"base_price_by_name": {},
+	}
+
+
+func _shop_sell_merchant_context(
+	request: Dictionary, lookup_cache: Dictionary
+) -> Dictionary:
+	var merchant_stock_key := str(request.get("merchant_stock_key", ""))
+	var merchant_id := str(request.get("merchant_id", ""))
+	var merchant_cache: Dictionary = lookup_cache.get("merchant_by_stock", {})
+	if not merchant_stock_key.is_empty():
+		if merchant_cache.has(merchant_stock_key):
+			return (merchant_cache[merchant_stock_key] as Dictionary).duplicate(true)
+		var by_stock := GameData.merchant_context(merchant_stock_key)
+		if test_mode:
+			_shop_quote_debug["merchant_context_lookups"] = int(_shop_quote_debug.get("merchant_context_lookups", 0)) + 1
+		merchant_cache[merchant_stock_key] = by_stock.duplicate(true)
+		lookup_cache["merchant_by_stock"] = merchant_cache
+		return by_stock
+	var id_cache: Dictionary = lookup_cache.get("merchant_by_id", {})
+	if id_cache.has(merchant_id):
+		return (id_cache[merchant_id] as Dictionary).duplicate(true)
+	var by_id := GameData.merchant_context_by_id(merchant_id)
+	if test_mode:
+		_shop_quote_debug["merchant_context_lookups"] = int(_shop_quote_debug.get("merchant_context_lookups", 0)) + 1
+	id_cache[merchant_id] = by_id.duplicate(true)
+	lookup_cache["merchant_by_id"] = id_cache
+	return by_id
+
+
+func _shop_sell_catalog(item_name: String, lookup_cache: Dictionary) -> Dictionary:
+	var cache: Dictionary = lookup_cache.get("catalog_by_name", {})
+	if cache.has(item_name):
+		return cache[item_name] as Dictionary
+	var catalog := GameData.get_item_rules_record(item_name)
+	if test_mode:
+		_shop_quote_debug["catalog_lookups"] = int(_shop_quote_debug.get("catalog_lookups", 0)) + 1
+	cache[item_name] = catalog
+	lookup_cache["catalog_by_name"] = cache
+	return catalog
+
+
+func _shop_sell_price_record(item_name: String, lookup_cache: Dictionary, item_ref: Variant = null) -> Dictionary:
+	var cache: Dictionary = lookup_cache.get("price_by_name", {})
+	if cache.has(item_name):
+		return (cache[item_name] as Dictionary).duplicate(true)
+	var price_record := GameData.get_item_price_record(item_ref if item_ref != null else item_name)
+	if test_mode:
+		_shop_quote_debug["price_record_lookups"] = int(_shop_quote_debug.get("price_record_lookups", 0)) + 1
+	cache[item_name] = price_record.duplicate(true)
+	lookup_cache["price_by_name"] = cache
+	return price_record
+
+
+func _shop_sell_base_price_cached(
+	item_name: String, price_record: Dictionary, lookup_cache: Dictionary
+) -> int:
+	var cache: Dictionary = lookup_cache.get("base_price_by_name", {})
+	if cache.has(item_name):
+		return int(cache[item_name])
+	var base_price := PricingServiceScript.adjusted_database_price(price_record)
+	if test_mode:
+		_shop_quote_debug["base_price_lookups"] = int(_shop_quote_debug.get("base_price_lookups", 0)) + 1
+	cache[item_name] = base_price
+	lookup_cache["base_price_by_name"] = cache
+	return base_price
+
+
+func _shop_sell_quote(request: Dictionary, lookup_cache := {}) -> Dictionary:
+	var cache: Dictionary = lookup_cache
+	if cache.is_empty():
+		cache = _new_shop_quote_lookup_cache()
+	var inventory_index := int(request.get("inventory_index", -1))
+	var requested_key := str(request.get("quote_key", ""))
+	var rejection := {
+		"contract_id": SHOP_SELL_CONTRACT_ID,
+		"quote_key": requested_key,
+		"quote_id": "",
+		"sellable": false,
+		"unit_price": 0,
+		"max_quantity": 0,
+		"reason": "物品状态已变化。",
+		"requires_confirmation": false,
+		"risk_flags": [],
+		"warning": "",
+	}
+	if inventory_index < 0 or inventory_index >= inventory.size():
+		return rejection
+	var raw_record: Variant = inventory[inventory_index]
+	if not raw_record is Dictionary or (raw_record as Dictionary).is_empty():
+		return rejection
+	var record: Dictionary = raw_record
+	if not ItemExtensionCodec.can_release_ownership(record):
+		rejection["reason"] = "请先取出镶嵌物品。"
+		return rejection
+	var merchant_id := str(request.get("merchant_id", ""))
+	var merchant_stock_key := str(request.get("merchant_stock_key", ""))
+	var merchant_context := _shop_sell_merchant_context(request, cache)
+	if merchant_context.is_empty():
+		merchant_context = _shop_sell_merchant_context({"merchant_id": merchant_id}, cache)
+	var authoritative_merchant_id := str(merchant_context.get("merchant_id", ""))
+	if (
+		merchant_id.is_empty()
+		or merchant_context.is_empty()
+		or authoritative_merchant_id.is_empty()
+		or authoritative_merchant_id != merchant_id
+	):
+		rejection["reason"] = "商人状态已变化。"
+		return rejection
+	var item_name := str(record.get("name", ""))
+	var instance_id := str(record.get("instance_id", ""))
+	var expected_key := (
+		"instance:%s" % instance_id
+		if not instance_id.is_empty()
+		else "inventory:%d" % inventory_index
+	)
+	if (
+		requested_key != expected_key
+		or str(request.get("item_name", item_name)) != item_name
+		or str(request.get("instance_id", instance_id)) != instance_id
+	):
+		return rejection
+	var entity_id := GameData.item_entity_id(record)
+	if entity_id.is_empty(): return rejection
+	var catalog := _shop_sell_catalog(entity_id, cache)
+	var price_record := _shop_sell_price_record(entity_id, cache, record)
+	var base_price := _shop_sell_base_price_cached(entity_id, price_record, cache)
+	var count := maxi(1, int(record.get("count", 1)))
+	if test_mode:
+		_shop_quote_debug["pricing_quote_calls"] = int(_shop_quote_debug.get("pricing_quote_calls", 0)) + 1
+	var pricing_quote := PricingServiceScript.quote_sell(
+		price_record, catalog, record, 1, merchant_context
+	)
+	if not bool(pricing_quote.get("valid", false)):
+		rejection["reason"] = str(pricing_quote.get("reason", "该物品不能出售。"))
+		return rejection
+	var unit_price := int(pricing_quote.get("unit_price", 0))
+	var risk_flags := _shop_sell_risk_flags(record, catalog, base_price)
+	var quote_seed := JSON.stringify([
+		_shop_pricing_session_nonce,
+		active_profile_id,
+		expected_key,
+		inventory_index,
+		instance_id,
+		item_name,
+		count,
+		unit_price,
+		pricing_quote,
+		merchant_context,
+		record,
+	])
+	var quote_id := "%s:%s" % [
+		SHOP_SELL_CONTRACT_ID,
+		quote_seed.sha256_text().substr(0, 24),
+	]
+	return {
+		"contract_id": SHOP_SELL_CONTRACT_ID,
+		"quote_key": expected_key,
+		"quote_id": quote_id,
+		"item_name": item_name,
+		"merchant_id": authoritative_merchant_id,
+		"merchant_stock_key": str(merchant_context.get("stock_key", merchant_stock_key)),
+		"sellable": true,
+		"unit_price": unit_price,
+		"policy_version": str(pricing_quote.get("policy_version", "")),
+		"formula_snapshot": (pricing_quote.get("formula_snapshot", {}) as Dictionary).duplicate(true),
+		"price_source": (pricing_quote.get("source", {}) as Dictionary).duplicate(true),
+		"max_quantity": count,
+		"reason": "",
+		"requires_confirmation": not risk_flags.is_empty(),
+		"risk_flags": risk_flags,
+		"warning": (
+			"该物品具有高价值或特殊实例属性，出售后无法恢复。"
+			if not risk_flags.is_empty()
+			else ""
+		),
+	}
+
+
+func _shop_sell_base_price(item_name: String, _catalog: Dictionary) -> int:
+	return GameData.get_item_shop_price(item_name)
+
+
+func _shop_sell_risk_flags(
+	record: Dictionary,
+	catalog: Dictionary,
+	base_price: int
+) -> Array[String]:
+	var flags: Array[String] = []
+	if base_price >= SHOP_SELL_HIGH_VALUE_PRICE:
+		flags.append("high_value")
+	if (
+		int(record.get("enhancement_level", record.get("upgrade_level", 0))) > 0
+		or int(record.get("refine_level", 0)) > 0
+		or EquipmentEnhancementRulesScript.forge_stage(record) > 0
+	):
+		flags.append("enhanced")
+	if int(record.get("weapon_luck", 0)) != 0 or int(record.get("weapon_curse", 0)) != 0:
+		flags.append("lucky")
+	if (
+		bool(record.get("special", false))
+		or not str(catalog.get("specialRule", "")).is_empty()
+	):
+		flags.append("special")
+	return flags
+
+
+func _shop_sell_result(success: bool, message: String, merchant_id := "") -> Dictionary:
+	return {
+		"contract_id": SHOP_SELL_CONTRACT_ID,
+		"success": success,
+		"message": message,
+		"quotes": shop_sell_quotes(_current_shop_sell_quote_items(merchant_id)),
+	}
+
+
+func _current_shop_sell_quote_items(merchant_id := "") -> Array:
+	var items: Array = []
+	var merchant_stock_key := str(GameData.merchant_context_by_id(merchant_id).get("stock_key", ""))
+	for inventory_index in range(inventory.size()):
+		var raw_record: Variant = inventory[inventory_index]
+		if not raw_record is Dictionary or (raw_record as Dictionary).is_empty():
+			continue
+		var record: Dictionary = raw_record
+		var instance_id := str(record.get("instance_id", ""))
+		items.append({
+			"quote_key": (
+				"instance:%s" % instance_id
+				if not instance_id.is_empty()
+				else "inventory:%d" % inventory_index
+			),
+			"inventory_index": inventory_index,
+			"instance_id": instance_id,
+			"item_name": str(record.get("name", "")),
+			"count": int(record.get("count", 1)),
+			"merchant_id": merchant_id,
+			"merchant_stock_key": merchant_stock_key,
+		})
+	return items
+
+
+func _item_audio_identity(item_ref: Variant) -> Dictionary:
+	var catalog_item := GameData.get_item_record(item_ref)
+	if catalog_item.is_empty():
+		return {}
+	# The catalog fields are the only identity authority here.  In particular,
+	# do not derive a service/item namespace from a numeric range or display
+	# name; audio_runtime_service performs the final route/fail-closed check.
+	for key: String in ["itemId", "item_id"]:
+		var item_id := _item_audio_nonnegative_integer(catalog_item.get(key, null))
+		if item_id >= 0:
+			return {"identity_domain": "item", "identity_id": item_id}
+	for key: String in ["serviceIndex", "service_index"]:
+		var service_id := _item_audio_nonnegative_integer(catalog_item.get(key, null))
+		if service_id >= 0:
+			return {
+				"identity_domain": "service",
+				"identity_id": service_id,
+			}
+	return {}
+
+
+func _item_audio_nonnegative_integer(value: Variant) -> int:
+	if value is int:
+		return int(value) if int(value) >= 0 else -1
+	if value is float:
+		var numeric := float(value)
+		if is_finite(numeric) and numeric >= 0.0 and numeric == floorf(numeric):
+			return int(numeric)
+	return -1
+
+
+func _emit_item_audio_committed(item_ref: Variant, semantic_event: String) -> void:
+	var identity := _item_audio_identity(item_ref)
+	if identity.is_empty():
+		return
+	item_audio_committed.emit(
+		str(identity.get("identity_domain", "")),
+		int(identity.get("identity_id", -1)),
+		semantic_event,
+	)
+
+
+func _last_item_commit_succeeded() -> bool:
+	return bool(_last_runtime_commit_profile.get("success", false))
+
+
+func _use_item_success(message: String) -> Dictionary:
+	return {"success": true, "reason": "", "message": message}
+
+
+func _use_item_failure(reason: String, message: String) -> Dictionary:
+	return {"success": false, "reason": reason, "message": message}
+
+
+func use_inventory_index(index: int) -> String:
+	return str(use_inventory_index_result(index).get("message", ""))
+
+
+## Structured use contract (R1.1 closure): {"success", "reason", "message"}.
+## "message" is always player-readable Chinese; "reason" is a machine token
+## for diagnostics only and never reaches the player UI.
+func use_inventory_index_result(index: int, save_in_background := false) -> Dictionary:
+	if not save_in_background:
+		_before_state_transaction()
+	elif not _can_accept_immediate_item_use():
+		return _use_item_failure("save_unavailable", "角色存档尚未就绪，暂不能使用物品")
+	if index < 0 or index >= inventory.size() or not inventory[index] is Dictionary or (inventory[index] as Dictionary).is_empty():
+		return _use_item_failure("no_item_selected", "请先选择物品")
+	var item := GameData.get_item_record(inventory[index])
+	var entity_id := GameData.item_entity_id(inventory[index])
+	if item.is_empty() or entity_id.is_empty():
+		return _use_item_failure("item_identity_invalid", "物品身份无效，暂不能使用")
+	var item_name := str(item.get("name", ""))
+	var kind := str(item.get("kind", ""))
+	var effect := str(item.get("useEffect", ""))
+	if kind == "skill_book":
+		var skill_id: String = GameData.skill_book_skill_id(inventory[index])
+		return _learn_skill_result(skill_id, index, save_in_background)
+	if item.get("usable", true) == false:
+		return _use_item_failure("no_local_rule", "%s当前没有可执行的本地规则" % item_name)
+	if kind == "scroll":
+		if effect in ["blessing_oil", "repair_oil", "war_god_oil"]:
+			var weapon_value: Variant = equipment.get("hc.slot.weapon", {})
+			if not weapon_value is Dictionary or weapon_value.is_empty():
+				return _use_item_failure("weapon_required", "需要先装备武器")
+			if effect == "blessing_oil":
+				if entity_id != BLESSING_OIL_ENTITY_ID:
+					return _use_item_failure("effect_config_invalid", "%s效果配置无效" % item_name)
+				if _blessing_oil_rng == null:
+					return _use_item_failure("blessing_rng_not_ready", "祝福油随机源尚未就绪")
+				var blessing_result := use_blessing_oil_inventory_index(
+					index,
+					_blessing_oil_rng, save_in_background
+				)
+				if bool(blessing_result.get("ok", false)):
+					scroll_requested.emit(entity_id)
+					return _use_item_success(str(blessing_result.get("message", "祝福油使用成功")))
+				return _use_item_failure(
+					str(blessing_result.get("reason", "blessing_failed")),
+					str(blessing_result.get("message", "祝福油使用失败"))
+				)
+			if effect in ["repair_oil", "war_god_oil"]:
+				return _use_weapon_repair_oil_item_result(index, effect == "war_god_oil", save_in_background)
+		if _consume_inventory_index(index, 1, save_in_background):
+			scroll_requested.emit(entity_id)
+			if _last_item_commit_succeeded():
+				_emit_item_audio_committed(item, "use_success")
+			return _use_item_success("使用：%s" % item_name)
+		return _use_item_failure("insufficient_items", "物品数量不足")
+	if kind != "consumable":
+		return _use_item_failure("not_usable", "%s当前不可使用" % item_name)
+	if effect == "blessing_oil":
+		if entity_id != BLESSING_OIL_ENTITY_ID:
+			return _use_item_failure("effect_config_invalid", "祝福油效果配置无效")
+		var weapon_value: Variant = equipment.get("hc.slot.weapon", {})
+		if not weapon_value is Dictionary or weapon_value.is_empty():
+			return _use_item_failure("weapon_required", "需要先装备武器")
+		if _blessing_oil_rng == null:
+			return _use_item_failure("blessing_rng_not_ready", "祝福油随机源尚未就绪")
+		var blessing_result := use_blessing_oil_inventory_index(index, _blessing_oil_rng, save_in_background)
+		if bool(blessing_result.get("ok", false)):
+			consumable_requested.emit(entity_id)
+			return _use_item_success(str(blessing_result.get("message", "祝福油使用成功")))
+		return _use_item_failure(
+			str(blessing_result.get("reason", "blessing_failed")),
+			str(blessing_result.get("message", "祝福油使用失败"))
+		)
+	if effect == "temporary_stat_buff":
+		var profile: Variant = item.get("effectProfile", {})
+		if not profile is Dictionary:
+			return _use_item_failure("effect_config_invalid", "%s效果配置无效" % item_name)
+		var buffs_before := temporary_item_buffs.duplicate(true)
+		var revision_before := temporary_item_buff_revision
+		var inventory_before := inventory.duplicate(true)
+		var buff_result := apply_temporary_item_buff(GameData.item_entity_id(inventory[index]), profile, false)
+		if not bool(buff_result.get("ok", false)):
+			var buff_reason := str(buff_result.get("reason", "buff_apply_failed"))
+			return _use_item_failure(
+				buff_reason,
+				UIErrorFeedbackScript.from_reason(buff_reason, "增益效果应用失败")
+			)
+		if not _consume_inventory_index_without_commit(index) or not _commit_item_use(save_in_background):
+			inventory = inventory_before
+			temporary_item_buffs = buffs_before
+			temporary_item_buff_revision = revision_before
+			recalculate_stats(false)
+			return _use_item_failure("save_failed", "使用失败，物品和原有效果已保留")
+		recalculate_stats()
+		inventory_changed.emit()
+		_emit_item_audio_committed(item, "use_success")
+		return _use_item_success("使用：%s" % item_name)
+	if _consume_inventory_index(index, 1, save_in_background):
+		consumable_requested.emit(entity_id)
+		if _last_item_commit_succeeded():
+			_emit_item_audio_committed(item, "use_success")
+		return _use_item_success("使用：%s" % item_name)
+	return _use_item_failure("insufficient_items", "物品数量不足")
+
+
+func _use_weapon_repair_oil_item_result(index: int, full_repair: bool, save_in_background := false) -> Dictionary:
+	if not save_in_background:
+		_before_state_transaction()
+	if index < 0 or index >= inventory.size() or not inventory[index] is Dictionary or (inventory[index] as Dictionary).is_empty():
+		return _use_item_failure("insufficient_items", "物品数量不足")
+	var weapon_value: Variant = equipment.get("hc.slot.weapon", {})
+	if not weapon_value is Dictionary or weapon_value.is_empty():
+		return _use_item_failure("weapon_required", "需要先装备武器")
+	_ensure_raw_durability_fields(weapon_value)
+	var current := int(weapon_value.get("durability_raw", 0))
+	var maximum := maxi(1, int(weapon_value.get("max_durability_raw", 1)))
+	if current >= maximum:
+		return _use_item_failure("weapon_not_damaged", "武器无需修复")
+	var inventory_before := inventory.duplicate(true)
+	var equipment_before := equipment.duplicate(true)
+	var record: Dictionary = inventory[index]
+	var item_audio_ref := record.duplicate(true)
+	var count := maxi(1, int(record.get("count", 1)))
+	if count <= 1:
+		_clear_inventory_slot(inventory, index)
+	else:
+		record["count"] = count - 1
+	_apply_weapon_repair_oil_without_commit(weapon_value, full_repair)
+	if not _commit_item_use(save_in_background):
+		inventory = inventory_before
+		equipment = equipment_before
+		recalculate_stats(false)
+		return _use_item_failure("save_failed", "修复油存档失败，物品和装备均未改变")
+	inventory_changed.emit()
+	equipment_changed.emit()
+	profile_changed.emit()
+	_emit_item_audio_committed(item_audio_ref, "use_success")
+	return _use_item_success("武器已完全修复" if full_repair else "武器已部分修复")
+
+
+func apply_weapon_repair_oil(full_repair: bool) -> String:
+	return str(apply_weapon_repair_oil_result(full_repair).get("message", ""))
+
+
+## Structured repair-oil contract (R1.1 closure): {"success", "reason",
+## "message"} with a player-readable Chinese message in every branch.
+func apply_weapon_repair_oil_result(full_repair: bool) -> Dictionary:
+	_before_state_transaction()
+	var weapon_value: Variant = equipment.get("hc.slot.weapon", {})
+	if not weapon_value is Dictionary or weapon_value.is_empty():
+		return _use_item_failure("weapon_required", "需要先装备武器")
+	_ensure_raw_durability_fields(weapon_value)
+	var current := int(weapon_value.get("durability_raw", 0))
+	var maximum := maxi(1, int(weapon_value.get("max_durability_raw", 1)))
+	if current >= maximum:
+		return _use_item_failure("weapon_not_damaged", "武器无需修复")
+	var equipment_before := equipment.duplicate(true)
+	_apply_weapon_repair_oil_without_commit(weapon_value, full_repair)
+	if not _commit_save(false, false):
+		equipment = equipment_before
+		recalculate_stats(false)
+		return _use_item_failure("save_failed", "武器修复存档失败")
+	equipment_changed.emit()
+	profile_changed.emit()
+	return _use_item_success("武器已完全修复" if full_repair else "武器已部分修复")
+
+
+func _apply_weapon_repair_oil_without_commit(
+	weapon_value: Dictionary, full_repair: bool
+) -> void:
+	var current := int(weapon_value.get("durability_raw", 0))
+	var maximum := maxi(1, int(weapon_value.get("max_durability_raw", 1)))
+	if full_repair:
+		weapon_value["durability_raw"] = maximum
+	else:
+		# ObjBase uses raw durability units: ordinary repair oil restores at most
+		# 5000 while reducing the maximum by missing durability / 30.
+		var maximum_loss := maxi(0, int((maximum - current) / 30))
+		maximum = maxi(1, maximum - maximum_loss)
+		weapon_value["max_durability_raw"] = maximum
+		weapon_value["durability_raw"] = mini(maximum, current + 5000)
+	_sync_durability_compatibility_fields(weapon_value)
+	recalculate_stats(false)
+
+
+func _make_item_instance(item_name: String, catalog_item: Dictionary, instance_serial := -1, roll_relic := true) -> Dictionary:
+	var instance := _with_item_identity({"name": str(catalog_item.get("name", item_name)), "count": 1}, catalog_item)
+	if str(catalog_item.get("kind", "")) == "equipment":
+		var maximum := maxi(1, int(catalog_item.get("maxDurability", 1)))
+		instance["durability"] = maximum
+		instance["max_durability"] = maximum
+		instance["durability_raw"] = maximum * DURABILITY_RAW_UNITS_PER_DISPLAY
+		instance["max_durability_raw"] = maximum * DURABILITY_RAW_UNITS_PER_DISPLAY
+		instance["durability_contract_id"] = DURABILITY_CONTRACT_ID
+		if instance_serial < 0:
+			_item_instance_serial += 1
+			instance_serial = _item_instance_serial
+		instance["instance_id"] = "%d_%d" % [Time.get_ticks_usec(), instance_serial]
+		if ItemCategories.category_for_record(catalog_item) == "hc.item_category.weapon":
+			instance["weapon_luck"] = 0
+			instance["weapon_curse"] = 0
+		var item_id := int(catalog_item.get("itemId", -1))
+		if roll_relic and RelicSynthesisRulesScript.is_synthesis_item(item_id):
+			var rolled := RelicSynthesisRulesScript.roll_instance(item_id, profession, _relic_instance_rng)
+			instance.merge(rolled, true)
+	return instance
+
+
+func _with_item_identity(record: Dictionary, catalog: Dictionary) -> Dictionary:
+	var identity := EntityRegistry.resolve(GameData.item_entity_id(catalog))
+	if identity.get("kind") in ["item", "service_item"]:
+		record.erase("service_index" if identity.kind == "item" else "item_id")
+		record["item_id" if identity.kind == "item" else "service_index"] = int(identity.legacy_id)
+	return record
+
+
+func configure_blessing_oil_rng(rng: RandomNumberGenerator) -> void:
+	_blessing_oil_rng = rng
+
+
+func _blessing_oil_rolls(
+	weapon_value: Dictionary,
+	rng: RandomNumberGenerator
+) -> Dictionary:
+	var item := GameData.get_item_record(weapon_value)
+	var attack_min := int(item.get("attackMin", 0) if item.get("attackMin", null) != null else 0)
+	var attack_max := int(item.get("attackMax", attack_min) if item.get("attackMax", null) != null else attack_min)
+	var state := EquipmentRulesScript.weapon_luck_state(weapon_value)
+	var luck := int(state.luck)
+	var unlucky_roll := rng.randi_range(0, EquipmentRulesScript.BLESSING_UNLUCKY_RATE - 1)
+	var success_roll := 0
+	var upper_stage_roll := -1
+	if unlucky_roll != 1 and int(state.curse) == 0 and luck >= EquipmentRulesScript.LUCK_POINT_1:
+		var denominator := EquipmentRulesScript.blessing_success_denominator(
+			luck,
+			attack_min,
+			attack_max
+		)
+		success_roll = rng.randi_range(0, denominator - 1) if denominator > 1 else 0
+		if luck < EquipmentRulesScript.LUCK_POINT_2:
+			var upper_denominator := EquipmentRulesScript.blessing_span_factor(attack_min, attack_max) * EquipmentRulesScript.LUCK_POINT_3_RATE
+			upper_stage_roll = rng.randi_range(0, upper_denominator - 1)
+	return {"unlucky_roll": unlucky_roll, "success_roll": success_roll, "upper_stage_roll": upper_stage_roll}
+
+
+func _apply_blessing_oil_effect_with_rolls(
+	unlucky_roll: int,
+	success_roll: int,
+	upper_stage_roll := -1
+) -> Dictionary:
+	var weapon_value: Variant = equipment.get("hc.slot.weapon", {})
+	if not weapon_value is Dictionary or weapon_value.is_empty():
+		return {"ok": false, "message": "需要先装备武器"}
+	var item := GameData.get_item_record(weapon_value)
+	if item.is_empty():
+		return {"ok": false, "reason": "invalid_weapon", "message": "武器数据无效"}
+	var attack_min := int(item.get("attackMin", 0) if item.get("attackMin", null) != null else 0)
+	var attack_max := int(item.get("attackMax", attack_min) if item.get("attackMax", null) != null else attack_min)
+	var luck := int(weapon_value.get("weapon_luck", 0))
+	var curse := int(weapon_value.get("weapon_curse", 0))
+	var outcome := EquipmentRulesScript.blessing_outcome(
+		luck,
+		curse,
+		attack_min,
+		attack_max,
+		unlucky_roll,
+		success_roll,
+		upper_stage_roll
+	)
+	weapon_value["weapon_luck"] = int(outcome.get("luck", luck))
+	weapon_value["weapon_curse"] = int(outcome.get("curse", curse))
+	var message := "祝福油无效"
+	match str(outcome.get("result", "ineffective")):
+		"cursed": message = "祝福油失败：武器受到诅咒"
+		"improved": message = "祝福油生效：武器幸运改善"
+	return {"ok": true, "message": message, "outcome": outcome}
+
+
+func apply_blessing_oil(rng: RandomNumberGenerator) -> String:
+	_before_state_transaction()
+	if rng == null:
+		return "祝福油随机源尚未就绪"
+	var weapon_value: Variant = equipment.get("hc.slot.weapon", {})
+	if not weapon_value is Dictionary or weapon_value.is_empty():
+		return "需要先装备武器"
+	if GameData.get_item_record(weapon_value).is_empty():
+		return "武器数据无效"
+	var rolls := _blessing_oil_rolls(weapon_value, rng)
+	return apply_blessing_oil_with_rolls(
+		int(rolls.get("unlucky_roll", 0)),
+		int(rolls.get("success_roll", 0)),
+		int(rolls.get("upper_stage_roll", -1))
+	)
+
+
+func apply_blessing_oil_with_rolls(unlucky_roll: int, success_roll: int, upper_stage_roll := -1) -> String:
+	_before_state_transaction()
+	var equipment_before := equipment.duplicate(true)
+	var effect_result := _apply_blessing_oil_effect_with_rolls(unlucky_roll, success_roll, upper_stage_roll)
+	if not bool(effect_result.get("ok", false)):
+		return str(effect_result.get("message", "祝福油使用失败"))
+	recalculate_stats(false)
+	if not _commit_save(false, false):
+		equipment = equipment_before
+		recalculate_stats(false)
+		return "祝福油效果未能保存"
+	equipment_changed.emit()
+	profile_changed.emit()
+	return str(effect_result.get("message", "祝福油无效"))
+
+
+func use_blessing_oil_inventory_index(
+	index: int,
+	rng: RandomNumberGenerator,
+	save_in_background := false
+) -> Dictionary:
+	if not save_in_background:
+		_before_state_transaction()
+	if rng == null:
+		return {"ok": false, "reason": "rng_unavailable", "message": "祝福油随机源尚未就绪"}
+	if (
+		index < 0
+		or index >= inventory.size()
+		or not inventory[index] is Dictionary
+		or GameData.item_entity_id(inventory[index]) != BLESSING_OIL_ENTITY_ID
+	):
+		return {"ok": false, "reason": "invalid_oil", "message": "物品数量不足"}
+	var weapon_value: Variant = equipment.get("hc.slot.weapon", {})
+	if not weapon_value is Dictionary or weapon_value.is_empty():
+		return {"ok": false, "reason": "no_weapon", "message": "需要先装备武器"}
+	if _item_transaction_port != null and _item_transaction_port.record_reserved(weapon_value):
+		return {"ok": false, "reason": "item_inputs_reserved", "message": "武器正在处理中。"}
+	if GameData.get_item_record(weapon_value).is_empty():
+		return {"ok": false, "reason": "invalid_weapon", "message": "武器数据无效"}
+	var rolls := _blessing_oil_rolls(weapon_value, rng)
+	return use_blessing_oil_inventory_index_with_rolls(
+		index,
+		int(rolls.get("unlucky_roll", 0)),
+		int(rolls.get("success_roll", 0)),
+		int(rolls.get("upper_stage_roll", -1)), save_in_background
+	)
+
+
+func use_blessing_oil_inventory_index_with_rolls(
+	index: int,
+	unlucky_roll: int,
+	success_roll: int,
+	upper_stage_roll := -1,
+	save_in_background := false
+) -> Dictionary:
+	if not save_in_background:
+		_before_state_transaction()
+	var oil_catalog := GameData.get_entity_record(BLESSING_OIL_ENTITY_ID)
+	if (
+		str(oil_catalog.get("useEffect", "")) != "blessing_oil"
+		or str(oil_catalog.get("kind", "")) not in ["scroll", "consumable"]
+	):
+		return {"ok": false, "reason": "invalid_oil", "message": "祝福油效果配置无效"}
+	if (
+		index < 0
+		or index >= inventory.size()
+		or not inventory[index] is Dictionary
+		or GameData.item_entity_id(inventory[index]) != BLESSING_OIL_ENTITY_ID
+	):
+		return {"ok": false, "reason": "invalid_oil", "message": "物品数量不足"}
+	var weapon_value: Variant = equipment.get("hc.slot.weapon", {})
+	if not weapon_value is Dictionary or weapon_value.is_empty():
+		return {"ok": false, "reason": "no_weapon", "message": "需要先装备武器"}
+	if _item_transaction_port != null and _item_transaction_port.record_reserved(weapon_value):
+		return {"ok": false, "reason": "item_inputs_reserved", "message": "武器正在处理中。"}
+	var inventory_before := inventory.duplicate(true)
+	var equipment_before := equipment.duplicate(true)
+	if not _consume_inventory_index_without_commit(index):
+		return {"ok": false, "reason": "invalid_oil", "message": "物品数量不足"}
+	var effect_result := _apply_blessing_oil_effect_with_rolls(unlucky_roll, success_roll, upper_stage_roll)
+	if not bool(effect_result.get("ok", false)):
+		inventory = inventory_before
+		equipment = equipment_before
+		return effect_result
+	recalculate_stats(false)
+	if not _commit_item_use(save_in_background):
+		inventory = inventory_before
+		equipment = equipment_before
+		recalculate_stats(false)
+		return {"ok": false, "reason": "save_failed", "message": "祝福油使用未能保存"}
+	inventory_changed.emit()
+	equipment_changed.emit()
+	profile_changed.emit()
+	_emit_item_audio_committed(oil_catalog, "use_success")
+	return {
+		"ok": true,
+		"reason": "",
+		"message": "使用：祝福油；%s" % str(effect_result.get("message", "祝福油无效")),
+		"outcome": effect_result.get("outcome", {}).duplicate(true),
+	}
+
+
+func lose_gold_percent(rate: float) -> int:
+	_before_state_transaction()
+	var lost := mini(gold, int(round(gold * clampf(rate, 0.0, 1.0))))
+	gold -= lost
+	profile_changed.emit()
+	_commit_save()
+	return lost
+
+
+func add_experience(amount: int) -> void:
+	_before_state_transaction()
+	var gained := maxi(0, amount)
+	if gained <= 0:
+		return
+	var previous_level := level
+	var previous_experience := experience
+	experience += gained
+	while experience >= experience_to_next_level():
+		experience -= experience_to_next_level()
+		level += 1
+		recalculate_stats(false)
+	var leveled_up := level != previous_level
+	if not _commit_save():
+		experience = previous_experience
+		level = previous_level
+		if leveled_up:
+			recalculate_stats(false)
+		return
+	profile_changed.emit()
+	if leveled_up:
+		levels_gained.emit(previous_level, level)
+
+
+## Compatibility entrypoint for one death. Runtime callers should batch every
+## death emitted in the same frame through record_kills_and_experience_batch so
+## AOE kills never multiply synchronous save commits.
+func record_kill_and_experience(monster_name: String, amount: int) -> Dictionary:
+	return record_kills_and_experience_batch([{
+		"monster_name": monster_name,
+		"experience": amount,
+	}])
+
+
+## Atomic same-frame death settlement: every kill advances quests in stable
+## event order, all experience is applied, and the complete result is persisted
+## by exactly one save commit.
+func _plan_kill_rewards(kills: Array) -> Dictionary:
+	var quests_after := quest_states.duplicate(true)
+	var quest_changed := false
+	var gained := 0
+	var accepted_kill_count := 0
+	for raw_kill: Variant in kills:
+		if not raw_kill is Dictionary:
+			continue
+		var kill: Dictionary = raw_kill
+		var monster_name := str(kill.get("monster_name", ""))
+		var kill_experience := maxi(0, int(kill.get("experience", 0)))
+		if monster_name.is_empty() and kill_experience <= 0:
+			continue
+		accepted_kill_count += 1
+		gained += kill_experience
+		for quest_id: String in quests_after.keys():
+			var state: Dictionary = quests_after[quest_id]
+			if str(state.get("status", "")) != "active":
+				continue
+			var quest := GameData.get_bich_quest(quest_id)
+			if quest.is_empty():
+				continue
+			var progress: Dictionary = state.get("progress", {})
+			var requirements: Dictionary = quest.get("objectives", {}).get("kills", {})
+			for objective_name: String in requirements.keys():
+				if not _quest_monster_matches(monster_name, objective_name):
+					continue
+				progress[objective_name] = mini(int(requirements[objective_name]), int(progress.get(objective_name, 0)) + 1)
+				quest_changed = true
+			state["progress"] = progress
+			if _quest_objectives_complete(quest, state):
+				state["status"] = "ready"
+	var next_level := level
+	var next_experience := experience + gained
+	var transitions: Array[Dictionary] = []
+	if gained > 0:
+		while next_experience >= _experience_to_next_level_for_level(next_level):
+			next_experience -= _experience_to_next_level_for_level(next_level)
+			next_level += 1
+			transitions.append({"level": next_level, "experience": next_experience})
+	return {"quests_after": quests_after, "quest_changed": quest_changed,
+		"experience_gained": gained, "kill_count": accepted_kill_count,
+		"level_after": next_level, "experience_after": next_experience, "transitions": transitions}
+
+
+func _apply_kill_reward_plan(plan: Dictionary) -> void:
+	quest_states = plan.quests_after
+	for transition: Dictionary in plan.transitions:
+		experience = int(transition.experience)
+		level = int(transition.level)
+		recalculate_stats(false)
+	experience = int(plan.experience_after)
+	level = int(plan.level_after)
+
+
+func prepare_death_settlement(kills: Array, world_upserts: Dictionary, origin_guard := Callable()) -> Dictionary:
+	# No mutation, RNG or filesystem IO before submitting this detached event.
+	if not _background_death.is_empty() or _json_persistence.pending_count() > 0:
+		return {"pending": true, "reason": "prior_persistence_request"}
+	if test_mode or not _valid_profile_storage_id(active_profile_id) or active_profile_id == _save_blocked_profile_id or _world_clock_snapshot_sequence < 0:
+		return {"immediate": {"success": false, "reason": "death_baseline_unavailable"}}
+	for key: Variant in world_upserts:
+		if not key is String or not WorldClockDelta.valid_world_entry(key, world_upserts[key]):
+			return {"immediate": {"success": false, "reason": "invalid_respawn_delta"}}
+	var plan := _plan_kill_rewards(kills)
+	plan["quests_before"] = quest_states.duplicate(true)
+	plan["experience_before"] = experience
+	plan["level_before"] = level
+	plan["captured_changes"] = _world_clock_changes.duplicate(true)
+	plan["upserts"] = world_upserts.duplicate(true)
+	var affected_before: Dictionary = {}
+	var entries: Dictionary = world_monster_respawn_state.get("entries", {})
+	for key: String in world_upserts:
+		affected_before[key] = entries.get(key, null).duplicate(true) if entries.get(key, null) is Dictionary else null
+	plan["affected_before"] = affected_before
+	plan["origin_guard"] = origin_guard
+	plan["requires_origin_guard"] = origin_guard.is_valid()
+	plan["completed"] = false
+	plan["completion"] = {}
+	plan["started_usec"] = Time.get_ticks_usec()
+	var next_sequence := _death_event_sequence + 1
+	var path := _death_event_path(active_profile_id, next_sequence, _world_clock_generation)
+	var identity := {"path": path, "profile_id": active_profile_id, "world_clock_generation": _world_clock_generation,
+		"sequence": next_sequence, "required_file": ProjectSettings.globalize_path(_world_clock_path(active_profile_id, _world_clock_generation))}
+	plan["identity"] = identity
+	var changes: Dictionary = plan.captured_changes.duplicate(true)
+	changes.merge(world_upserts, true)
+	var document := WorldMonsterClockLedgerScript.delta_death_event_document(active_profile_id, next_sequence,
+		int(plan.level_after), int(plan.experience_after), plan.quests_after, changes, _world_clock_generation)
+	_background_death = plan
+	var job := _json_persistence.submit(path, identity, document, _json_validator_for_path(path),
+		_death_request_context_matches.bind(plan), true, null, _complete_background_death.bind(plan))
+	if job == null:
+		_background_death = {}
+		return {"immediate": {"success": false, "reason": "death_request_rejected"}}
+	var writer := JsonPreparedRequest.new()
+	writer.configure(_json_persistence, job)
+	plan["writer"] = writer
+	return plan
+
+
+func _death_request_context_matches(identity: Dictionary, plan: Dictionary) -> bool:
+	return (_background_save_context_matches(identity) and int(identity.sequence) == _death_event_sequence + 1
+		and level == int(plan.level_before) and experience == int(plan.experience_before) and quest_states == plan.quests_before
+		and (not bool(plan.requires_origin_guard) or (plan.origin_guard.is_valid() and bool(plan.origin_guard.call()))))
+
+
+func finish_prepared_death_settlement(plan: Dictionary, wait := false) -> Dictionary:
+	if bool(plan.get("completed", false)):
+		return plan.completion
+	_json_persistence.finish(plan.writer.job, wait)
+	return plan.completion if bool(plan.get("completed", false)) else {"pending": true}
+
+
+func _complete_background_death(receipt: Dictionary, plan: Dictionary) -> void:
+	var success := bool(receipt.get("success", false))
+	plan["completed"] = true
+	plan["completion"] = {"success": success, "reason": str(receipt.get("reason", "")),
+		"quest_changed": bool(plan.quest_changed) if success else false,
+		"experience_gained": int(plan.experience_gained) if success else 0,
+		"kill_count": int(plan.kill_count), "save_count": 1}
+	if _background_death == plan:
+		_background_death = {}
+	if not success:
+		return # No live reward or respawn state was applied speculatively.
+	_record_background_json_receipt(receipt)
+	if not _background_save_context_matches(plan.identity):
+		plan.completion["active_state_applied"] = false
+		plan.completion["saved_profile_id"] = plan.identity.profile_id
+		return # A durable old-role receipt must never mutate a different role.
+	_death_event_sequence = int(plan.identity.sequence)
+	var entries: Dictionary = world_monster_respawn_state.get("entries", {})
+	for key: String in plan.upserts:
+		if entries.get(key, null) == plan.affected_before[key]:
+			entries[key] = (plan.upserts[key] as Dictionary).duplicate(true)
+			RuntimeDiagnostics.increment_performance_counter(&"respawn_state_updates")
+	world_monster_respawn_state["entries"] = entries
+	for key: Variant in plan.captured_changes:
+		if _world_clock_changes.has(key) and _world_clock_changes[key] == plan.captured_changes[key]:
+			_world_clock_changes.erase(key)
+	_world_clock_dirty = true
+	_world_mutation_revision += 1
+	_apply_kill_reward_plan(plan)
+	last_save_result = {"contract_id": SAVE_RESULT_CONTRACT_ID, "success": true, "reason": "", "path": plan.identity.path}
+	_last_death_settlement_profile = {"total_ms": float(Time.get_ticks_usec() - int(plan.started_usec)) / 1000.0,
+		"success": true, "background": true, "kill_count": int(plan.kill_count)}
+	# Entire receipt is consumed before any potentially reentrant signal.
+	if bool(plan.quest_changed):
+		quests_changed.emit()
+	if int(plan.experience_gained) > 0:
+		profile_changed.emit()
+	if int(plan.level_before) != level:
+		levels_gained.emit(int(plan.level_before), level)
+
+
+func record_kills_and_experience_batch(
+	kills: Array,
+	force_save := false,
+) -> Dictionary:
+	_before_state_transaction()
+	var profile_started_usec := Time.get_ticks_usec()
+	var quests_before := quest_states.duplicate(true)
+	var experience_before := experience
+	var level_before := level
+	var reward_plan := _plan_kill_rewards(kills)
+	var quest_changed := bool(reward_plan.quest_changed)
+	var gained := int(reward_plan.experience_gained)
+	var accepted_kill_count := int(reward_plan.kill_count)
+	_apply_kill_reward_plan(reward_plan)
+	if not quest_changed and gained <= 0 and not force_save:
+		return {
+			"success": true,
+			"quest_changed": false,
+			"experience_gained": 0,
+			"kill_count": accepted_kill_count,
+			"save_count": 0,
+		}
+	var save_started_usec := Time.get_ticks_usec()
+	var save_committed := (
+		_commit_save(level != level_before)
+		if test_mode else _commit_death_event()
+	)
+	_record_runtime_save_phases("death_save", save_started_usec)
+	if not save_committed:
+		_last_death_settlement_profile = {
+			"total_ms": float(Time.get_ticks_usec() - profile_started_usec) / 1000.0,
+			"save_ms": float(Time.get_ticks_usec() - save_started_usec) / 1000.0,
+			"success": false,
+		}
+		quest_states = quests_before
+		experience = experience_before
+		level = level_before
+		recalculate_stats(false)
+		return {
+			"success": false,
+			"quest_changed": false,
+			"experience_gained": 0,
+			"kill_count": accepted_kill_count,
+			"save_count": 1,
+			"reason": "save_failed",
+		}
+	if quest_changed:
+		if test_mode:
+			_test_transaction_counters["quest_signals"] = int(_test_transaction_counters.get("quest_signals", 0)) + 1
+		quests_changed.emit()
+	if gained > 0:
+		if test_mode:
+			_test_transaction_counters["profile_signals"] = int(_test_transaction_counters.get("profile_signals", 0)) + 1
+		profile_changed.emit()
+	if level != level_before:
+		levels_gained.emit(level_before, level)
+	_last_death_settlement_profile = {
+		"total_ms": float(Time.get_ticks_usec() - profile_started_usec) / 1000.0,
+		"save_ms": float(_last_runtime_commit_profile.get("duration_ms", 0.0)),
+		"success": true,
+		"quest_changed": quest_changed,
+		"experience_gained": gained,
+		"kill_count": accepted_kill_count,
+		"save_count": 1,
+	}
+	return {
+		"success": true,
+		"quest_changed": quest_changed,
+		"experience_gained": gained,
+		"kill_count": accepted_kill_count,
+		"save_count": 1,
+	}
+
+
+## Applies the formal-death experience penalty exactly as a level-local
+## experience mutation.  The current level's scaled requirement is the loss
+## basis; existing progress only caps the loss at zero.  floor() gives
+## deterministic integer behaviour and the clamp prevents negative values.
+## The caller must invoke this once per formal death.
+func apply_death_experience_penalty() -> int:
+	_before_state_transaction()
+	var previous_experience := experience
+	var current_experience := maxi(0, int(experience))
+	var level_requirement := maxi(1, int(experience_to_next_level()))
+	var loss_from_level_requirement := int(floor(float(level_requirement) * 0.10))
+	var lost := mini(current_experience, maxi(0, loss_from_level_requirement))
+	if lost <= 0:
+		return 0
+	experience = current_experience - lost
+	if not _commit_save():
+		experience = previous_experience
+		return 0
+	profile_changed.emit()
+	return lost
+
+
+func experience_to_next_level() -> int:
+	return _experience_to_next_level_for_level(level)
+
+
+func _experience_to_next_level_for_level(target_level: int) -> int:
+	var source_experience: int
+	if GameData != null and not GameData.service_reference.is_empty():
+		source_experience = GameData.service_exp_to_next_level(target_level)
+	elif VERIFIED_EXPERIENCE_1_TO_22.has(target_level):
+		source_experience = int(VERIFIED_EXPERIENCE_1_TO_22[target_level])
+	else:
+		# 23级以上尚未完成多源核验，暂沿用保守占位曲线并在验收报告中标记。
+		source_experience = 300000 + maxi(0, target_level - 22) * 100000
+	return _gameplay_experience_threshold(source_experience)
+
+
+func _gameplay_experience_threshold(source_experience: int) -> int:
+	var previous_threshold := maxi(
+		GAMEPLAY_EXPERIENCE_THRESHOLD_MINIMUM,
+		roundi(float(maxi(0, source_experience)) * GAMEPLAY_EXPERIENCE_THRESHOLD_SCALE),
+	)
+	return maxi(
+		GAMEPLAY_EXPERIENCE_THRESHOLD_MINIMUM,
+		roundi(float(previous_threshold) * GAMEPLAY_EXPERIENCE_CURRENT_THRESHOLD_RATIO),
+	)
+
+
+func equip_inventory_index_result(index: int, preferred_slot := "", expected_instance_id := "") -> Dictionary:
+	if not expected_instance_id.is_empty() and (
+		index < 0 or index >= inventory.size() or not inventory[index] is Dictionary
+		or str(inventory[index].get("instance_id", "")) != expected_instance_id
+	):
+		return {"success": false, "reason": "stale_instance", "message": "所选装备已变化", "revision": equipment_transaction_revision}
+	var message := equip_inventory_index(index, preferred_slot)
+	var result := _last_equipment_transaction_result.duplicate(true)
+	result["message"] = message
+	return result
+
+
+func unequip_to_inventory_slot(slot: String, inventory_slot: int, expected_instance_id := "") -> Dictionary:
+	var current: Variant = equipment.get(slot, {})
+	if not expected_instance_id.is_empty() and (
+		not current is Dictionary or str(current.get("instance_id", "")) != expected_instance_id
+	):
+		return {"success": false, "reason": "stale_instance", "message": "所选装备已变化", "revision": equipment_transaction_revision}
+	var message := unequip_slot(slot, inventory_slot)
+	var result := _last_equipment_transaction_result.duplicate(true)
+	result["message"] = message
+	return result
+
+
+func equip_inventory_index(index: int, preferred_slot := "") -> String:
+	_before_state_transaction()
+	_last_equipment_transaction_result = {"success": false, "reason": "rejected", "revision": equipment_transaction_revision}
+	if index < 0 or index >= inventory.size() or not inventory[index] is Dictionary or (inventory[index] as Dictionary).is_empty():
+		return "请先选择物品"
+	var inventory_record: Dictionary = inventory[index]
+	var incoming_audio_ref := inventory_record.duplicate(true)
+	var item_name := str(inventory_record.get("name", ""))
+	var item := GameData.get_item_record(inventory_record)
+	if item.is_empty():
+		return "%s不是可穿戴装备" % item_name
+	var category := ItemCategories.category_for_record(item)
+	var explicit_slot := (
+		not preferred_slot.is_empty()
+		and preferred_slot in _slots_for_category(category)
+	)
+	var slot := _choose_equipment_slot(category, preferred_slot)
+	if slot.is_empty():
+		return "当前版本尚未开放该装备槽"
+	var item_profession := EquipmentRulesScript.effective_profession(item)
+	if item_profession not in ["", "通用", profession]:
+		return "%s只能由%s装备" % [item_name, item_profession]
+	var required_gender := EquipmentRulesScript.required_gender(item)
+	if not required_gender.is_empty() and required_gender != gender:
+		return "该装备仅限%s性角色" % required_gender
+	if inventory_record.has("mystery_roll") and not preload("res://scripts/mystery_equipment_instance_rules.gd").validate_roll(inventory_record, item):
+		return "装备随机属性无效"
+	var requirement_error := EquipmentRulesScript.requirement_error(item, level, computed_stats, inventory_record)
+	if not requirement_error.is_empty():
+		return requirement_error
+	var item_weight := maxi(0, int(item.get("weight", 0)))
+	if category == "hc.item_category.weapon":
+		var max_hand := EquipmentRulesScript.max_hand_weight(profession_id, level)
+		if item_weight > max_hand:
+			return "手持重量不足：需要%d，上限%d" % [item_weight, max_hand]
+	else:
+		var prospective_wear := current_wear_weight(slot) + item_weight
+		var max_wear := EquipmentRulesScript.max_wear_weight(profession_id, level)
+		if prospective_wear > max_wear:
+			return "穿戴重量不足：需要%d，上限%d" % [prospective_wear, max_wear]
+	var previous: Variant = equipment.get(slot, {})
+	var previous_audio_ref: Variant = null
+	if previous is Dictionary and not (previous as Dictionary).is_empty():
+		previous_audio_ref = (previous as Dictionary).duplicate(true)
+	elif not previous is Dictionary and not str(previous).is_empty():
+		previous_audio_ref = str(previous)
+	var inventory_before := inventory.duplicate(true)
+	var equipment_before := equipment.duplicate(true)
+	var cursor_before := equip_cycle_cursor.duplicate(true)
+	var bindings_before := skill_button_assignments_snapshot()
+	var inventory_after := inventory.duplicate(true)
+	inventory_after[index] = {}
+	if previous is Dictionary and not previous.is_empty():
+		var return_preview := _build_receive_result_for_record(previous, inventory_after)
+		if not bool(return_preview.get("success", false)):
+			return str(return_preview.get("message", INVENTORY_SLOT_REJECTION))
+		# Preserve the selected slot during a replacement. Besides keeping the
+		# inventory deterministic, this prevents the old item from jumping to the
+		# tail and breaking the two-slot equip-cycle contract.
+		inventory_after[index] = previous.duplicate(true)
+	elif not previous is Dictionary and not str(previous).is_empty():
+		var legacy_previous := _make_item_instance(str(previous), GameData.get_item_record(str(previous)))
+		var return_preview := _build_receive_result_for_record(legacy_previous, inventory_after)
+		if not bool(return_preview.get("success", false)):
+			return str(return_preview.get("message", INVENTORY_SLOT_REJECTION))
+		inventory_after[index] = legacy_previous
+	else:
+		_trim_inventory_empty_tail(inventory_after)
+	inventory = inventory_after
+	equipment[slot] = inventory_record.duplicate(true)
+	recalculate_stats()
+	if not explicit_slot:
+		_advance_equip_cycle_cursor(category, slot)
+	if not _commit_save():
+		inventory = inventory_before
+		equipment = equipment_before
+		equip_cycle_cursor = cursor_before
+		recalculate_stats()
+		_restore_skill_button_assignments(bindings_before, [])
+		skills_changed.emit()
+		_last_equipment_transaction_result["reason"] = "save_failed"
+		return "装备存档失败，装备和背包均未改变"
+	equipment_transaction_revision += 1
+	_last_equipment_transaction_result = {
+		"success": true, "reason": "", "revision": equipment_transaction_revision,
+		"instance_id": str(inventory_record.get("instance_id", "")),
+		"source": {"container": "inventory", "slot": index},
+		"destination": {"container": "equipment", "slot": slot},
+	}
+	inventory_changed.emit()
+	equipment_changed.emit()
+	profile_changed.emit()
+	if previous_audio_ref != null:
+		_emit_item_audio_committed(previous_audio_ref, "unequip_success")
+	_emit_item_audio_committed(incoming_audio_ref, "equip_success")
+	return "已装备：%s" % item_name
+
+
+func unequip_slot(slot: String, destination_slot := -1) -> String:
+	_before_state_transaction()
+	_last_equipment_transaction_result = {"success": false, "reason": "rejected", "revision": equipment_transaction_revision}
+	if slot not in EQUIPMENT_SLOTS:
+		return "无效装备槽"
+	var equipped_value: Variant = equipment.get(slot, {})
+	if not equipped_value is Dictionary or equipped_value.is_empty():
+		return "%s为空" % EquipmentIdentity.display_name(slot)
+	if destination_slot < -1 or destination_slot >= INVENTORY_CAPACITY:
+		return "无效背包格"
+	if destination_slot >= 0 and destination_slot < inventory.size() and _inventory_slot_is_occupied(inventory[destination_slot]):
+		return "目标背包格已有物品"
+	var item_audio_ref := (equipped_value as Dictionary).duplicate(true)
+	var return_preview := _build_receive_result_for_record(equipped_value, inventory)
+	if not bool(return_preview.get("success", false)):
+		return str(return_preview.get("message", INVENTORY_SLOT_REJECTION))
+	var inventory_before := inventory.duplicate(true)
+	var equipment_before := equipment.duplicate(true)
+	var bindings_before := skill_button_assignments_snapshot()
+	if destination_slot >= 0:
+		var next_inventory := inventory.duplicate(true)
+		while next_inventory.size() <= destination_slot:
+			next_inventory.append({})
+		next_inventory[destination_slot] = (equipped_value as Dictionary).duplicate(true)
+		inventory = next_inventory
+	else:
+		inventory = (return_preview.get("inventory", inventory) as Array).duplicate(true)
+	equipment[slot] = {}
+	recalculate_stats()
+	if not _commit_save():
+		inventory = inventory_before
+		equipment = equipment_before
+		recalculate_stats()
+		_restore_skill_button_assignments(bindings_before, [])
+		skills_changed.emit()
+		_last_equipment_transaction_result["reason"] = "save_failed"
+		return "卸装存档失败，装备和背包均未改变"
+	equipment_transaction_revision += 1
+	_last_equipment_transaction_result = {
+		"success": true, "reason": "", "revision": equipment_transaction_revision,
+		"instance_id": str(equipped_value.get("instance_id", "")),
+		"source": {"container": "equipment", "slot": slot},
+		"destination": {"container": "inventory", "slot": destination_slot},
+	}
+	inventory_changed.emit()
+	equipment_changed.emit()
+	profile_changed.emit()
+	_emit_item_audio_committed(item_audio_ref, "unequip_success")
+	return "已卸下：%s" % str(equipped_value.get("name", ""))
+
+
+func learn_skill(skill_name: String, inventory_index := -1) -> String:
+	return str(_learn_skill_result(skill_name, inventory_index).get("message", ""))
+
+
+## Structured learn contract (R1.1 closure): {"success", "reason", "message"}.
+## "message" is always player-readable Chinese; "reason" is a machine token
+## for diagnostics only and never reaches the player UI.
+func _learn_skill_result(skill_ref: String, inventory_index := -1, save_in_background := false) -> Dictionary:
+	if not save_in_background:
+		_before_state_transaction()
+	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_ref)
+	if stable_skill_id.is_empty():
+		return _use_item_failure("skill_data_missing", "技能数据不存在")
+	var skill_id := SkillDataLoaderScript.entity_skill_id(stable_skill_id)
+	var skill_name := SkillDataLoaderScript.display_name(stable_skill_id)
+	var book_id: String = GameData.skill_book_entity_id(skill_id)
+	var skill := GameData.get_skill(skill_id, 0)
+	if skill.is_empty():
+		return _use_item_failure("skill_data_missing", "技能数据不存在")
+	var skill_profession := str(skill.get("profession", ""))
+	if not skill_profession.is_empty() and ProfessionRules.import_profession_identity(str(skill.get("profession_id", ""))) != profession_id:
+		return _use_item_failure("profession_mismatch", "%s只能由%s学习" % [skill_name, skill_profession])
+	if book_id.is_empty() or not has_item(book_id):
+		return _use_item_failure("book_missing", "背包中缺少《%s》技能书" % skill_name)
+	var book_index := inventory_index
+	if (
+		book_index < 0 or book_index >= inventory.size()
+		or not inventory[book_index] is Dictionary
+		or GameData.item_entity_id(inventory[book_index]) != book_id
+	):
+		book_index = -1
+		for index in range(inventory.size()):
+			if inventory[index] is Dictionary and GameData.item_entity_id(inventory[index]) == book_id:
+				book_index = index
+				break
+	if book_index < 0:
+		return _use_item_failure("book_missing", "背包中缺少《%s》技能书" % skill_name)
+	var book_audio_ref := (inventory[book_index] as Dictionary).duplicate(true)
+	var progress_before: Dictionary = _skill_progression.snapshot()
+	var inventory_before := inventory.duplicate(true)
+	var ring_before := attack_ring_slots.duplicate()
+	var quick_before := quick_slots.duplicate()
+	var learn_result: Dictionary = _skill_progression.learn(stable_skill_id, level)
+	if not bool(learn_result.get("accepted", false)):
+		match str(learn_result.get("outcome", "")):
+			"max":
+				return _use_item_failure("skill_max_rank", "%s已达到最高等级" % skill_name)
+			"level_requirement":
+				return _use_item_failure(
+					"level_requirement",
+					"需要人物等级%d" % int(learn_result.get("required_level", 1))
+				)
+			_:
+				# Player-readable Chinese only; the raw progression reason stays
+				# in diagnostics, never concatenated into the player message.
+				return _use_item_failure(
+					str(learn_result.get("reason", "learn_failed")),
+					UIErrorFeedbackScript.from_result(
+						learn_result,
+						"技能学习失败，请稍后重试。"
+					)
+				)
+	if not _consume_inventory_index_without_commit(book_index):
+		_skill_progression.load_snapshot(progress_before)
+		return _use_item_failure("book_consume_failed", "技能书消耗失败")
+	var base_rank := int(learn_result.get("base_rank", 0))
+	_refresh_skill_identity_projection()
+	var outcome := str(learn_result.get("outcome", ""))
+	if outcome == "learned" and SkillLoadoutRulesScript.assignment_candidate(stable_skill_id).get(
+		"bindable_to_skill_slot",
+		false
+	):
+		for index in range(attack_ring_slots.size()):
+			if attack_ring_slots[index].is_empty():
+				attack_ring_slots[index] = SkillDataLoaderScript.entity_skill_id(stable_skill_id)
+				break
+		_sync_legacy_quick_slots_from_ring()
+	recalculate_stats(false)
+	if not _commit_item_use(save_in_background):
+		inventory = inventory_before
+		attack_ring_slots.assign(ring_before)
+		quick_slots.assign(quick_before)
+		_skill_progression.load_snapshot(progress_before)
+		_refresh_skill_identity_projection()
+		recalculate_stats(false)
+		return _use_item_failure("save_failed", "技能学习存档失败，技能书和技能均未改变")
+	inventory_changed.emit()
+	skills_changed.emit()
+	skill_progression_changed.emit(_skill_progression.snapshot())
+	profile_changed.emit()
+	_emit_item_audio_committed(book_audio_ref, "use_success")
+	match outcome:
+		"upgraded":
+			return _use_item_success("技能提升：%s（当前%d级）" % [skill_name, base_rank])
+		_:
+			return _use_item_success("已学会：%s" % skill_name)
+
+
+func is_skill_learned(skill_name: String) -> bool:
+	return _skill_progression.is_learned(SkillDataLoaderScript.stable_skill_id(skill_name))
+
+
+func accept_quest(quest_id: String) -> String:
+	_before_state_transaction()
+	var quest := GameData.get_bich_quest(quest_id)
+	if quest.is_empty():
+		return "未知任务"
+	if quest_states.has(quest_id):
+		var existing_status := str(quest_states[quest_id].get("status", ""))
+		return "任务奖励已经领取" if existing_status == "claimed" else "任务已经接受"
+	var prerequisite := str(quest.get("prerequisite", ""))
+	if not prerequisite.is_empty() and str(quest_states.get(prerequisite, {}).get("status", "")) != "claimed":
+		return "前置任务尚未完成"
+	var progress := {}
+	for objective_name: String in quest.get("objectives", {}).get("kills", {}).keys():
+		progress[objective_name] = 0
+	quest_states[quest_id] = {"status": "active", "progress": progress}
+	quests_changed.emit()
+	_commit_save()
+	return "已接受任务：%s" % quest.get("name", quest_id)
+
+
+func abandon_quest(quest_id: String) -> Dictionary:
+	_before_state_transaction()
+	var result := {
+		"contract_id": QUEST_ABANDON_CONTRACT_ID,
+		"quest_id": quest_id,
+		"success": false,
+		"message": "当前任务不能放弃。",
+	}
+	if not quest_states.has(quest_id):
+		return result
+	var state: Variant = quest_states.get(quest_id, {})
+	if not state is Dictionary or str((state as Dictionary).get("status", "")) not in ["active", "ready"]:
+		return result
+	var states_before := quest_states.duplicate(true)
+	quest_states.erase(quest_id)
+	quests_changed.emit()
+	if not _commit_save():
+		quest_states = states_before
+		quests_changed.emit()
+		result["message"] = "任务存档失败，放弃操作已取消。"
+		return result
+	result["success"] = true
+	result["message"] = "已放弃任务，当前进度已清除。"
+	return result
+
+
+func sort_warehouse(page := 0) -> Dictionary:
+	_before_state_transaction()
+	var result := {
+		"contract_id": WAREHOUSE_SORT_CONTRACT_ID,
+		"success": false,
+		"message": "仓库整理失败。",
+	}
+	var legacy_test_memory := test_mode and not _shared_warehouse_test_isolation_enabled()
+	if page < 0 or page >= 5:
+		result["message"] = "仓库页码无效。"
+		return result
+	if not legacy_test_memory and not _ensure_shared_warehouse_ready():
+		result["message"] = "公共仓库不可用，已拒绝整理。"
+		return result
+	if warehouse_inventory.size() > WAREHOUSE_CAPACITY:
+		result["message"] = "仓库数据超过容量，已拒绝整理以避免丢失物品。"
+		return result
+	var records: Array[Dictionary] = []
+	var first_slot := page * 100
+	var page_end := mini(first_slot + 100, warehouse_inventory.size())
+	for index in range(first_slot, page_end):
+		var raw_record: Variant = warehouse_inventory[index]
+		if raw_record is Dictionary and not (raw_record as Dictionary).is_empty():
+			records.append((raw_record as Dictionary).duplicate(true))
+	records.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		var a_name := str(a.get("name", ""))
+		var b_name := str(b.get("name", ""))
+		if a_name == b_name:
+			return str(a.get("instance_id", "")) < str(b.get("instance_id", ""))
+		return a_name < b_name
+	)
+	var warehouse_before := warehouse_inventory.duplicate(true)
+	for index in range(first_slot, page_end):
+		var local_index := index - first_slot
+		warehouse_inventory[index] = records[local_index] if local_index < records.size() else {}
+	inventory_changed.emit()
+	if not legacy_test_memory and not _write_shared_warehouse(warehouse_inventory):
+		warehouse_inventory = warehouse_before
+		inventory_changed.emit()
+		result["message"] = "仓库存档失败，原有顺序已恢复。"
+		return result
+	result["success"] = true
+	result["page"] = page
+	result["message"] = "第%d页已整理，共%d件物品。" % [page + 1, records.size()]
+	return result
+
+
+func record_kill(monster_name: String) -> void:
+	_before_state_transaction()
+	var changed := false
+	for quest_id: String in quest_states.keys():
+		var state: Dictionary = quest_states[quest_id]
+		if str(state.get("status", "")) != "active":
+			continue
+		var quest := GameData.get_bich_quest(quest_id)
+		if quest.is_empty():
+			continue
+		var progress: Dictionary = state.get("progress", {})
+		var requirements: Dictionary = quest.get("objectives", {}).get("kills", {})
+		for objective_name: String in requirements.keys():
+			if not _quest_monster_matches(monster_name, objective_name):
+				continue
+			var required := int(requirements[objective_name])
+			progress[objective_name] = mini(required, int(progress.get(objective_name, 0)) + 1)
+			changed = true
+		state["progress"] = progress
+		if _quest_objectives_complete(quest, state):
+			state["status"] = "ready"
+	if changed:
+		quests_changed.emit()
+		_commit_save()
+
+
+func claim_quest(quest_id: String) -> String:
+	_before_state_transaction()
+	if not quest_states.has(quest_id):
+		return "尚未接受任务"
+	var state: Dictionary = quest_states[quest_id]
+	if state.get("status", "") == "claimed":
+		return "奖励已经领取"
+	var quest := GameData.get_bich_quest(quest_id)
+	if quest.is_empty() or not _quest_objectives_complete(quest, state):
+		return "任务尚未完成"
+	var rewards: Dictionary = quest.get("rewards", {})
+	var reward_items: Array = []
+	for reward: Variant in rewards.get("items", []):
+		if reward is Dictionary:
+			reward_items.append(reward)
+	var reward_preview := _build_receive_batch_result(reward_items, inventory)
+	if not bool(reward_preview.get("success", false)):
+		return str(reward_preview.get("message", "超过负重，无法领取任务奖励。"))
+	var quest_gold: Variant = rewards.get("gold", 0)
+	if not can_credit_gold(quest_gold) or not can_credit_gold(int(quest_gold) + int(reward_preview.get("gold_delta", 0))):
+		return "金币已达上限，任务奖励未领取。"
+	var inventory_before := inventory.duplicate(true)
+	var gold_before := gold
+	var state_before := quest_states.duplicate(true)
+	_apply_receive_result(reward_preview)
+	state["status"] = "claimed"
+	state["claimed_at_unix"] = int(Time.get_unix_time_from_system())
+	gold = maxi(0, gold + int(rewards.get("gold", 0)))
+	if not _commit_save():
+		inventory = inventory_before
+		gold = gold_before
+		quest_states = state_before
+		return "任务奖励存档失败，奖励未发放。"
+	inventory_changed.emit()
+	profile_changed.emit()
+	quests_changed.emit()
+	return "已领取：%s" % quest_reward_label(quest_id)
+
+
+func quest_progress(quest_id: String) -> int:
+	var progress: Variant = quest_states.get(quest_id, {}).get("progress", {})
+	if progress is Dictionary:
+		var total := 0
+		for value: Variant in progress.values():
+			total += int(value)
+		return total
+	return int(progress)
+
+
+func current_bich_quest_id() -> String:
+	for value: Variant in GameData.get_bich_quests():
+		if not value is Dictionary:
+			continue
+		var quest_id := str(value.get("id", ""))
+		var status := str(quest_states.get(quest_id, {}).get("status", ""))
+		if status in ["active", "ready"]:
+			return quest_id
+		if status == "claimed":
+			continue
+		var prerequisite := str(value.get("prerequisite", ""))
+		if prerequisite.is_empty() or str(quest_states.get(prerequisite, {}).get("status", "")) == "claimed":
+			return quest_id
+	return ""
+
+
+func quest_objective_lines(quest_id: String) -> Array[String]:
+	var result: Array[String] = []
+	var quest := GameData.get_bich_quest(quest_id)
+	var state: Dictionary = quest_states.get(quest_id, {})
+	var progress: Dictionary = state.get("progress", {}) if state.get("progress", {}) is Dictionary else {}
+	for objective_name: String in quest.get("objectives", {}).get("kills", {}).keys():
+		result.append("消灭%s %d/%d" % [objective_name.trim_suffix("*"), int(progress.get(objective_name, 0)), int(quest.get("objectives", {}).get("kills", {})[objective_name])])
+	return result
+
+
+func quest_reward_label(quest_id: String) -> String:
+	var rewards: Dictionary = GameData.get_bich_quest(quest_id).get("rewards", {})
+	var parts: Array[String] = []
+	if int(rewards.get("gold", 0)) > 0:
+		parts.append("%d金币" % int(rewards.get("gold", 0)))
+	for reward: Variant in rewards.get("items", []):
+		if reward is Dictionary:
+			parts.append("%s×%d" % [reward.get("name", ""), int(reward.get("count", 1))])
+	return "、".join(parts)
+
+
+func _quest_monster_matches(monster_name: String, objective_name: String) -> bool:
+	return monster_name.begins_with(objective_name.trim_suffix("*")) if objective_name.ends_with("*") else monster_name == objective_name
+
+
+func _quest_objectives_complete(quest: Dictionary, state: Dictionary) -> bool:
+	var progress: Dictionary = state.get("progress", {}) if state.get("progress", {}) is Dictionary else {}
+	for objective_name: String in quest.get("objectives", {}).get("kills", {}).keys():
+		if int(progress.get(objective_name, 0)) < int(quest.get("objectives", {}).get("kills", {})[objective_name]):
+			return false
+	return not quest.get("objectives", {}).get("kills", {}).is_empty()
+
+
+func _grant_quest_item_without_commit(item_name: String, amount: int) -> void:
+	if item_name.is_empty() or amount <= 0:
+		return
+	var catalog_item := GameData.get_item_record(item_name)
+	var entity_id := GameData.item_entity_id(catalog_item)
+	if entity_id.is_empty(): return
+	item_name = str(catalog_item.get("name", ""))
+	if str(catalog_item.get("kind", "")) == "equipment" or not bool(catalog_item.get("stackable", true)):
+		for count in range(amount):
+			_place_inventory_record_in_first_free_slot(inventory, _make_item_instance(item_name, catalog_item))
+		return
+	for stack: Variant in inventory:
+		if stack is Dictionary and GameData.item_entity_id(stack) == entity_id:
+			stack["count"] = int(stack.get("count", 0)) + amount
+			_with_item_identity(stack, catalog_item)
+			return
+	_place_inventory_record_in_first_free_slot(inventory, _with_item_identity({"name": item_name, "count": amount}, catalog_item))
+
+
+func _migrate_quest_states() -> void:
+	if quest_states.has("beginner_gear") and not quest_states.has("bich_beginner_gear"):
+		var legacy: Dictionary = quest_states["beginner_gear"]
+		var legacy_progress := mini(3, int(legacy.get("progress", 0)))
+		var legacy_status := str(legacy.get("status", "active"))
+		quest_states["bich_beginner_gear"] = {
+			"status": "claimed" if legacy_status == "claimed" else ("ready" if legacy_progress >= 3 else "active"),
+			"progress": {"稻草人": legacy_progress},
+		}
+		quest_states.erase("beginner_gear")
+	for quest_id: String in quest_states.keys():
+		var quest := GameData.get_bich_quest(quest_id)
+		if quest.is_empty():
+			continue
+		var state: Dictionary = quest_states[quest_id]
+		if not state.get("progress", {}) is Dictionary:
+			var first_objective := str(quest.get("objectives", {}).get("kills", {}).keys()[0]) if not quest.get("objectives", {}).get("kills", {}).is_empty() else ""
+			state["progress"] = {first_objective: int(state.get("progress", 0))} if not first_objective.is_empty() else {}
+		if str(state.get("status", "")) == "active" and _quest_objectives_complete(quest, state):
+			state["status"] = "ready"
+
+
+func recalculate_stats(emit_profile_change := true, report_failure := true) -> bool:
+	_sync_relic_proc_equipment()
+	var base := ProfessionRules.stats_for_level(profession_id, level)
+	base_stats = base.duplicate(true)
+	computed_special_effects = {}
+	var set_powers := {"magic_blood": 0, "rainbow_demon": 0}
+	var set_pieces := {"magic_blood": {}, "rainbow_demon": {}}
+	var result := {
+		"max_hp": int(base.get("max_hp", 120)),
+		"max_mp": int(base.get("max_mp", 40)),
+		"attack_min": int(base.get("attack_min", 2)),
+		"attack_max": int(base.get("attack_max", 5)),
+		"magic_min": int(base["magic_min"]),
+		"magic_max": int(base["magic_max"]),
+		"tao_min": int(base["tao_min"]),
+		"tao_max": int(base["tao_max"]),
+		"defense_min": int(base["defense_min"]),
+		"defense_max": int(base["defense_max"]),
+		"magic_defense_min": int(base["magic_defense_min"]),
+		"magic_defense_max": int(base["magic_defense_max"]),
+		"accuracy": int(base["accuracy"]),
+		"agility": int(base["agility"]),
+		"luck": 0,
+		"max_wear_weight": EquipmentRulesScript.max_wear_weight(profession_id, level),
+		"max_hand_weight": EquipmentRulesScript.max_hand_weight(profession_id, level),
+		"max_bag_weight": EquipmentRulesScript.max_bag_weight(profession_id, level),
+		"bag_weight": inventory_weight(inventory),
+		"wear_weight": current_wear_weight(),
+		"critical_chance": 0.0,
+		"critical_damage_multiplier": 1.5,
+		"anti_magic_points": CombatResolutionRules.BASE_CHARACTER_ANTI_MAGIC_POINTS,
+		"anti_poison": 0,
+		"magic_evasion_percent": CombatResolutionRules.anti_magic_display_percent(CombatResolutionRules.BASE_CHARACTER_ANTI_MAGIC_POINTS),
+		"attack_speed_tier": 0,
+		"attack_speed_percent": 0.0,
+		"cast_speed_percent": 0.0,
+		"skill_level_bonuses": {},
+		"skill_level_affix": {},
+	}
+	var skill_level_affix_records: Array = []
+	for slot: String in equipment.keys():
+		var equipped_value: Variant = equipment[slot]
+		var item_name := str(equipped_value.get("name", "")) if equipped_value is Dictionary else str(equipped_value)
+		if item_name.is_empty():
+			continue
+		if equipped_value is Dictionary and not _has_positive_raw_durability(equipped_value):
+			continue
+		var item := (
+			GameData.get_item_record(equipped_value)
+			if equipped_value is Dictionary
+			else GameData.get_item(item_name)
+		)
+		if item.is_empty():
+			continue
+		var is_drop_instance := (
+			equipped_value is Dictionary
+			and (equipped_value as Dictionary).has("drop_instance_contract_id")
+		)
+		if (
+			is_drop_instance
+			and not GameData.validate_item_drop_instance(equipped_value as Dictionary)
+		):
+			continue
+		## Legacy instance modifiers remain a full catalog override. W7 drop
+		## modifiers are a separate additive layer, so pre-existing catalog
+		## modifier semantics are applied once before the frozen instance affix.
+		var affix_input := item.duplicate(true)
+		var instance_modifiers: Variant = (
+			equipped_value.get("modifiers")
+			if equipped_value is Dictionary
+			else null
+		)
+		var drop_instance_modifiers: Array = []
+		if is_drop_instance:
+			drop_instance_modifiers = (instance_modifiers as Array).duplicate(true)
+		elif instance_modifiers != null:
+			if instance_modifiers is Dictionary or instance_modifiers is Array:
+				affix_input["modifiers"] = instance_modifiers.duplicate(true)
+			else:
+				affix_input["modifiers"] = instance_modifiers
+		if equipped_value is Dictionary and RelicSynthesisRulesScript.is_synthesis_item(int(item.get("itemId", -1))):
+			var roll: Dictionary = (equipped_value as Dictionary).get("relic_roll", {})
+			if not RelicSynthesisRulesScript.skill_ids_for(profession_id).has(str(roll.get("skill_id", ""))):
+				var active_modifiers: Array = []
+				for modifier: Variant in affix_input.get("modifiers", []):
+					if modifier is Dictionary and str(modifier.get("stat", "")) == "skill_level":
+						continue
+					active_modifiers.append(modifier)
+				affix_input["modifiers"] = active_modifiers
+		skill_level_affix_records.append(affix_input)
+		if equipped_value is Dictionary and RandomSpecialRules.is_technique_necklace(int(item.get("itemId", -1))) and RandomSpecialRules.validate_technique_instance(equipped_value, item):
+			skill_level_affix_records.append({"modifiers": RandomSpecialRules.technique_skill_level_modifiers(equipped_value)})
+		_add_nullable_stat(result, "attack_min", item.get("attackMin", null))
+		_add_nullable_stat(result, "attack_max", item.get("attackMax", null))
+		_add_nullable_stat(result, "magic_min", item.get("magicMin", null))
+		_add_nullable_stat(result, "magic_max", item.get("magicMax", null))
+		_add_nullable_stat(result, "tao_min", item.get("taoMin", null))
+		_add_nullable_stat(result, "tao_max", item.get("taoMax", null))
+		_add_nullable_stat(result, "defense_min", item.get("defenseMin", null))
+		_add_nullable_stat(result, "defense_max", item.get("defenseMax", null))
+		_add_nullable_stat(result, "magic_defense_min", item.get("mdefMin", null))
+		_add_nullable_stat(result, "magic_defense_max", item.get("mdefMax", null))
+		_add_nullable_stat(result, "accuracy", item.get("accuracy", null))
+		_add_nullable_stat(result, "agility", item.get("agility", null))
+		result["luck"] = int(result.get("luck", 0)) + EquipmentRulesScript.equipment_luck_contribution(
+			item,
+			equipped_value if equipped_value is Dictionary else {},
+			slot == "hc.slot.weapon",
+		)
+		_add_nullable_stat(result, "max_hp", item.get("hpBonus", null))
+		_add_nullable_stat(result, "max_mp", item.get("mpBonus", null))
+		_add_nullable_stat(result, "life_steal_percent", item.get("lifeStealPercent", null))
+		if item.has("magicEvasionPoints"):
+			_add_nullable_stat(result, "anti_magic_points", item.get("magicEvasionPoints", null))
+		elif item.has("magicEvasionPercent"):
+			_add_nullable_stat(
+				result,
+				"anti_magic_points",
+				CombatResolutionRules.anti_magic_points_from_display_percent(int(item.magicEvasionPercent))
+			)
+		_add_nullable_stat(result, "attack_speed_tier", item.get("attackSpeedTier", null))
+		var modifiers: Variant = affix_input.get("modifiers", null)
+		if modifiers is Array:
+			result = ModifierEffectRuntime.apply_modifiers(result, modifiers, {
+				"profession": profession, "level": level, "slot": slot,
+			})
+		if modifiers is Dictionary:
+			result["critical_chance"] = float(result.get("critical_chance", 0.0)) + float(modifiers.get("criticalChance", 0.0))
+			result["critical_damage_multiplier"] = float(result.get("critical_damage_multiplier", 1.5)) + float(modifiers.get("criticalDamageBonus", 0.0))
+			result["anti_magic_points"] = int(result.get("anti_magic_points", 0)) + int(modifiers.get("antiMagicPoints", 0))
+			result["anti_magic_points"] = int(result.get("anti_magic_points", 0)) + CombatResolutionRules.anti_magic_points_from_display_percent(int(modifiers.get("magicEvasionPercent", 0)))
+			result["attack_speed_tier"] = int(result.get("attack_speed_tier", 0)) + int(modifiers.get("attackSpeedTier", 0))
+			result["attack_speed_percent"] = float(result.get("attack_speed_percent", 0.0)) + float(modifiers.get("attackSpeedPercent", 0.0))
+			result["cast_speed_percent"] = float(result.get("cast_speed_percent", 0.0)) + float(modifiers.get("castSpeedPercent", 0.0))
+		if not drop_instance_modifiers.is_empty():
+			result = ModifierEffectRuntime.apply_modifiers(result, drop_instance_modifiers, {
+				"profession": profession, "level": level, "slot": slot,
+			})
+		var mystery_rules := preload("res://scripts/mystery_equipment_instance_rules.gd")
+		if equipped_value is Dictionary and equipped_value.has("mystery_roll") and mystery_rules.validate_roll(equipped_value, item):
+			result = ModifierEffectRuntime.apply_modifiers(result, mystery_rules.modifiers(equipped_value), {
+				"profession": profession, "level": level, "slot": slot,
+			})
+		if equipped_value is Dictionary and equipped_value.has("enhancement"):
+			var enhancement: Variant = equipped_value.enhancement
+			if EquipmentEnhancementRulesScript.validate_enhancement(enhancement, ItemCategories.category_for_record(item)):
+				result = ModifierEffectRuntime.apply_modifiers(result, enhancement.forge.modifiers, {
+					"profession": profession, "level": level, "slot": slot,
+				})
+		var special := EquipmentRulesScript.special_effect_for(item)
+		if not special.is_empty() and bool(special.get("runtime", false)):
+			var effect_id := str(special.get("id", ""))
+			computed_special_effects[effect_id] = {"slot": slot, "item": item_name, "label": special.get("label", effect_id)}
+		var set_piece := EquipmentRulesScript.set_piece_for(item)
+		if not set_piece.is_empty():
+			var set_id := str(set_piece.get("set", ""))
+			set_powers[set_id] = int(set_powers.get(set_id, 0)) + int(set_piece.get("power", 0))
+			set_pieces[set_id][str(set_piece.get("piece", ""))] = true
+	result["skill_level_affix"] = EquipmentRulesScript.aggregate_skill_level_affix_records(
+		skill_level_affix_records
+	)
+	if computed_special_effects.has("double_weight"):
+		result["max_wear_weight"] = int(result.get("max_wear_weight", 0)) * 2
+		result["max_hand_weight"] = int(result.get("max_hand_weight", 0)) * 2
+		result["max_bag_weight"] = int(result.get("max_bag_weight", 0)) * 2
+	var magic_blood_power := int(set_powers.get("magic_blood", 0))
+	if set_pieces["magic_blood"].size() == 3:
+		magic_blood_power += 50
+	if magic_blood_power > 0:
+		magic_blood_power = mini(magic_blood_power, maxi(0, int(result.get("max_mp", 0)) - 1))
+		result["max_mp"] = int(result.get("max_mp", 0)) - magic_blood_power
+		result["max_hp"] = int(result.get("max_hp", 0)) + magic_blood_power
+		computed_special_effects["magic_blood"] = {"power": magic_blood_power, "pieces": set_pieces["magic_blood"].size()}
+	var rainbow_power := int(set_powers.get("rainbow_demon", 0))
+	if rainbow_power > 0:
+		result["life_steal_percent"] = int(result.get("life_steal_percent", 0)) + rainbow_power
+		computed_special_effects["rainbow_demon"] = {"power": rainbow_power, "pieces": set_pieces["rainbow_demon"].size()}
+	if set_pieces["rainbow_demon"].size() == 3:
+		result["accuracy"] = int(result.get("accuracy", 0)) + 2
+	result["anti_magic_points"] = clampi(int(result.get("anti_magic_points", CombatResolutionRules.BASE_CHARACTER_ANTI_MAGIC_POINTS)), 0, CombatResolutionRules.ANTI_MAGIC_ROLL_SIDES)
+	result["magic_evasion_percent"] = CombatResolutionRules.anti_magic_display_percent(int(result.anti_magic_points))
+	result["attack_speed_tier"] = int(result.get("attack_speed_tier", 0))
+	_apply_temporary_item_stat_modifiers(result)
+	_apply_relic_proc_stats(result)
+	# Preserve the actual pre-feature result of the existing stat authority.
+	# Publication previews consume this snapshot; they do not recalculate stats
+	# through a second formula or expose a candidate to the current player.
+	_feature_base_stats = result.duplicate(true)
+	if not _synchronize_feature_loadout(result):
+		if report_failure:
+			push_error("Feature loadout rejected: " + JSON.stringify(feature_errors))
+		return false
+	var feature_stats := _feature_loadout.apply_stats(result)
+	if not bool(feature_stats.success):
+		feature_errors = [feature_stats.reason]
+		if report_failure:
+			push_error("Feature stats rejected: " + str(feature_stats.reason))
+		return false
+	result = feature_stats.stats
+	computed_stats = result
+	_prune_unavailable_equipment_skill_bindings()
+	if emit_profile_change:
+		profile_changed.emit()
+	return true
+
+
+func _on_feature_catalog_changed() -> void:
+	recalculate_stats()
+
+
+func _prepare_feature_configuration(configuration: Dictionary) -> Dictionary:
+	var resource_contract := preload("res://scripts/features/contracts/feature_resource_lease.gd")
+	var requirements := resource_contract.requirements(configuration.catalog, configuration.enabled_modules)
+	if not bool(requirements.success):
+		return {"success":false, "errors":requirements.errors}
+	var lease: Variant = configuration.get("resource_lease")
+	if not requirements.paths.is_empty() and (not lease is RefCounted or lease.get_script() != resource_contract \
+		or not lease.valid_for(configuration.catalog, configuration.enabled_modules)):
+		return {"success":false, "errors":["feature_resource_preparation_required"]}
+	if _feature_base_stats.is_empty():
+		return {"success":false, "errors":["feature_player_base_not_ready"]}
+	var collected := FeatureContributionProvider.collect(configuration.bindings, configuration.enabled_modules,
+		equipment, active_profile_id, GameData.get_item_record, _feature_item_eligible, is_skill_learned)
+	if not bool(collected.success):
+		return {"success":false, "errors":collected.errors}
+	var candidate: RefCounted = _feature_loadout.candidate_copy()
+	candidate.set_resource_lease(lease)
+	if not candidate.synchronize(configuration.catalog, collected.sources, configuration.authority, _feature_base_stats):
+		return {"success":false, "errors":candidate.last_errors}
+	var preview: Dictionary = candidate.apply_stats(_feature_base_stats)
+	if not bool(preview.success):
+		return {"success":false, "errors":[preview.reason]}
+	return {"success":true, "loadout":candidate, "stats":preview.stats, "errors":[]}
+
+
+func _commit_feature_configuration(prepared: Dictionary) -> void:
+	# Called synchronously by ContentLayers before any publication observer.
+	_feature_loadout = prepared.loadout
+	computed_stats = prepared.stats
+	feature_errors = []
+
+
+func _feature_item_eligible(instance: Dictionary) -> bool:
+	if str(instance.get("name", "")).is_empty() or not _has_positive_raw_durability(instance):
+		return false
+	var record := GameData.get_item_record(instance)
+	if record.is_empty():
+		return false
+	return not instance.has("drop_instance_contract_id") or GameData.validate_item_drop_instance(instance)
+
+
+func _synchronize_feature_loadout(base_stats: Dictionary) -> bool:
+	var configuration := ContentLayers.feature_configuration()
+	if configuration.is_empty():
+		feature_errors = ContentLayers.feature_load_errors.duplicate()
+		return false
+	var collected := FeatureContributionProvider.collect(configuration.bindings, configuration.enabled_modules,
+		equipment, active_profile_id, GameData.get_item_record, _feature_item_eligible, is_skill_learned)
+	if not bool(collected.success):
+		feature_errors = collected.errors
+		return false
+	if not _feature_loadout.synchronize(configuration.catalog, collected.sources, configuration.authority, base_stats):
+		feature_errors = _feature_loadout.last_errors
+		return false
+	feature_errors = []
+	return true
+
+
+func feature_bundle() -> Dictionary:
+	return _feature_loadout.bundle()
+
+
+func effective_skill_definition(skill_name_or_id: String) -> Dictionary:
+	var result := _feature_loadout.effective_definition(SkillDataLoaderScript.skill(skill_name_or_id))
+	if not bool(result.success):
+		feature_errors = [result.reason]
+		return {}
+	return result.definition
+
+
+func action_configuration_versions() -> Dictionary:
+	return {"base_revision":(SkillDataLoaderScript.configuration_revision() + JSON.stringify([level, learned_skills, computed_stats])).sha256_text(),
+		"loadout_revision":str(feature_bundle().get("revision", "empty"))}
+
+
+func _sync_relic_proc_equipment() -> bool:
+	var equipped: Variant = equipment.get("hc.slot.relic", {})
+	var equipped_record: Dictionary = equipped if equipped is Dictionary else {}
+	if _relic_proc_state.has("item_id") and equipped_record == _relic_proc_equipment_snapshot:
+		return false
+	_relic_proc_equipment_snapshot = equipped_record.duplicate(true)
+	var was_active := float(_relic_proc_state.get("remaining", 0.0)) > 0.0
+	var identity := ""
+	var item_id := -1
+	if not equipped_record.is_empty():
+		var raw_id: Variant = equipped_record.get("item_id", null)
+		if raw_id is int or raw_id is float:
+			item_id = int(raw_id)
+		if RelicSynthesisRulesScript.is_relic(item_id) and RelicSynthesisRulesScript.valid_instance(equipped_record, item_id):
+			identity = str(equipped_record.get("instance_id", ""))
+	if identity.is_empty():
+		item_id = -1
+	if identity == str(_relic_proc_state.get("instance_id", "")) and item_id == int(_relic_proc_state.get("item_id", -1)):
+		return false
+	_relic_proc_state = {
+		"instance_id": identity, "item_id": item_id,
+		"remaining": 0.0, "cooldown": 0.0, "started_at_usec": 0,
+	}
+	return was_active
+
+
+func try_trigger_relic_proc() -> bool:
+	if _sync_relic_proc_equipment():
+		recalculate_stats()
+	var item_id := int(_relic_proc_state.get("item_id", -1))
+	if item_id < 0 or float(_relic_proc_state.get("remaining", 0.0)) > 0.0 or float(_relic_proc_state.get("cooldown", 0.0)) > 0.0:
+		return false
+	if _relic_proc_rng.randi_range(0, 99) >= RelicSynthesisRulesScript.PROC_CHANCE_PERCENT:
+		return false
+	_relic_proc_state["remaining"] = RelicSynthesisRulesScript.PROC_DURATION_SECONDS
+	_relic_proc_state["started_at_usec"] = Time.get_ticks_usec()
+	recalculate_stats()
+	relic_proc_started.emit(item_id)
+	return true
+
+
+func advance_relic_proc(delta: float) -> void:
+	if delta <= 0.0:
+		return
+	if _sync_relic_proc_equipment():
+		recalculate_stats()
+	var remaining := float(_relic_proc_state.get("remaining", 0.0))
+	if remaining > 0.0:
+		var after := remaining - delta
+		_relic_proc_state["remaining"] = maxf(0.0, after)
+		if after <= 0.0:
+			_relic_proc_state["cooldown"] = maxf(0.0, RelicSynthesisRulesScript.PROC_COOLDOWN_SECONDS + after)
+			recalculate_stats()
+		return
+	if float(_relic_proc_state.get("cooldown", 0.0)) > 0.0:
+		_relic_proc_state["cooldown"] = maxf(0.0, float(_relic_proc_state.cooldown) - delta)
+
+
+func relic_proc_status() -> Dictionary:
+	if _sync_relic_proc_equipment():
+		recalculate_stats()
+	return _relic_proc_state.duplicate(true)
+
+
+func _apply_relic_proc_stats(result: Dictionary) -> void:
+	if float(_relic_proc_state.get("remaining", 0.0)) <= 0.0:
+		return
+	match RelicSynthesisRulesScript.effect_for(int(_relic_proc_state.get("item_id", -1))):
+		"speed":
+			result["attack_speed_tier"] = int(result.get("attack_speed_tier", 0)) + 2
+		"luck":
+			result["luck"] = int(result.get("luck", 0)) + 2
+		"damage":
+			for stat: String in ["attack_min", "attack_max", "magic_min", "magic_max", "tao_min", "tao_max"]:
+				result[stat] = roundi(float(result.get(stat, 0)) * 1.15)
+
+
+func has_special_effect(effect_id: String) -> bool:
+	return computed_special_effects.has(effect_id)
+
+
+func effective_skill_level(skill_name: String) -> int:
+	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
+	if not _skill_progression.is_learned(stable_skill_id):
+		## Equipment can never enable an unlearned skill.
+		return 0
+	return _skill_progression.effective_rank(
+		stable_skill_id,
+		_equipment_skill_level_bonus(stable_skill_id)
+		if SkillRankExtensionPolicy.can_extend(stable_skill_id)
+		else 0
+	)
+
+
+## Equipment grants are derived from currently valid worn instances. They are
+## never inserted into learned progression or taught by the save importer.
+func equipment_granted_skill_ids() -> Array[String]:
+	var result: Array[String] = []
+	for slot: String in equipment:
+		var equipped: Variant = equipment[slot]
+		if not equipped is Dictionary or equipped.is_empty() or not _has_positive_raw_durability(equipped):
+			continue
+		var item := GameData.get_item_rules_record(equipped)
+		if item.is_empty() or (equipped.has("drop_instance_contract_id") and not GameData.validate_item_drop_instance(equipped)):
+			continue
+		if not equipped.has("item_id") or not _is_integral_json_number(equipped.item_id) \
+			or int(equipped.item_id) != int(item.get("itemId", -1)):
+			continue
+		if (equipped.has("itemId") and equipped.itemId != equipped.item_id) \
+			or not _is_integral_json_number(equipped.get("count", 1)) or int(equipped.get("count", 1)) != 1:
+			continue
+		if slot not in EquipmentIdentity.slots_for_category(ItemCategories.category_for_record(item)) \
+			or _validated_persisted_instance_id(equipped) == "#invalid":
+			continue
+		var skill_id := EquipmentGrantedSkills.skill_id_for_item(int(item.get("itemId", -1)))
+		if not skill_id.is_empty() and not result.has(skill_id):
+			result.append(skill_id)
+	result.sort()
+	return result
+
+
+func is_skill_available(skill_name_or_id: String) -> bool:
+	var skill_id := SkillDataLoaderScript.entity_skill_id(skill_name_or_id)
+	if not EquipmentGrantedSkills.definition(skill_id).is_empty():
+		return equipment_granted_skill_ids().has(skill_id)
+	return not skill_id.is_empty() and (is_skill_learned(skill_id) or equipment_granted_skill_ids().has(skill_id))
+
+
+func available_skill_ids() -> Array[String]:
+	var result: Array[String] = []
+	for skill_id: String in learned_skills:
+		result.append(skill_id)
+	for skill_id: String in equipment_granted_skill_ids():
+		if not result.has(skill_id): result.append(skill_id)
+	return result
+
+
+func skill_assignment_roster() -> Dictionary:
+	var result := learned_skills.duplicate(true)
+	for skill_id: String in equipment_granted_skill_ids():
+		result[skill_id] = 0
+	return result
+
+
+func _prune_unavailable_equipment_skill_bindings() -> void:
+	var available := equipment_granted_skill_ids()
+	var changed := false
+	for slots: Array[String] in [attack_skill_slots, attack_ring_slots]:
+		for index in range(slots.size()):
+			var skill_id := slots[index]
+			if not EquipmentGrantedSkills.definition(skill_id).is_empty() and not available.has(skill_id):
+				slots[index] = ""
+				changed = true
+	if changed:
+		_sync_legacy_quick_slots_from_ring()
+		skills_changed.emit()
+
+
+func _equipment_skill_level_bonus(stable_skill_id: String) -> int:
+	var affix: Dictionary = computed_stats.get("skill_level_affix", {})
+	var contributions: Dictionary = affix.get("contributions", {})
+	var bonus := 0
+	bonus += maxi(0, int(contributions.get("all", 0)))
+	var profession_scope := "profession:%s" % ProfessionRules.profession_id(profession_id)
+	bonus += maxi(0, int(contributions.get(profession_scope, 0)))
+	var skill_scope := "skill:%s" % stable_skill_id
+	bonus += maxi(0, int(contributions.get(skill_scope, 0)))
+	var entity_skill_id := SkillDataLoaderScript.entity_skill_id(stable_skill_id)
+	var entity_scope := "skill:%s" % entity_skill_id
+	if not entity_skill_id.is_empty() and entity_scope != skill_scope:
+		bonus += maxi(0, int(contributions.get(entity_scope, 0)))
+	for raw_name: Variant in affix.get("legacy", {}):
+		if SkillDataLoaderScript.stable_skill_id(str(raw_name)) == stable_skill_id:
+			bonus += maxi(0, int(affix["legacy"][raw_name]))
+	return bonus
+
+
+func skill_progression_snapshot() -> Dictionary:
+	return _skill_progression.snapshot()
+
+
+func apply_skill_proficiency_event(skill_name_or_id: String, event_id: String, seed_value: int) -> Dictionary:
+	## HardCore v2: proficiency is disabled. This compatibility entry point is a
+	## pure no-op: it never mutates progression, emits growth signals or writes
+	## the save.
+	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name_or_id)
+	return _skill_progression.apply_proficiency_event(
+		stable_skill_id,
+		event_id,
+		level,
+		SkillRngScript.new(seed_value)
+	)
+
+
+func canonical_skill_resource_context(stable_skill_id: String, current_mana: int) -> Dictionary:
+	var materials := {}
+	for material_id: String in CANONICAL_MATERIAL_ITEMS:
+		materials[material_id] = item_count(str(CANONICAL_MATERIAL_ITEMS[material_id]))
+	var definition := SkillDataLoaderScript.skill(stable_skill_id)
+	var selected_material := str(definition.get("resource", {}).get("item", ""))
+	if stable_skill_id == "taoist.poison":
+		selected_material = (
+			"grey_powder"
+			if int(materials.get("grey_powder", 0)) > 0
+			else "yellow_powder"
+		)
+	var result := {
+		"mana": maxi(0, int(current_mana)),
+		"materials": materials,
+		"selected_material": selected_material,
+	}
+	var requested_main_pet_summon_id := ""
+	match stable_skill_id:
+		"taoist.summon_skeleton":
+			requested_main_pet_summon_id = "skeleton"
+		"taoist.summon_divine_beast":
+			requested_main_pet_summon_id = "divine_beast"
+	if not requested_main_pet_summon_id.is_empty():
+		result["requested_main_pet_summon_id"] = requested_main_pet_summon_id
+		result["active_main_pet_summon_ids"] = (
+			_taoist_main_pet_runtime_state_slots().keys()
+		)
+		if requested_main_pet_summon_id == "skeleton":
+			var pet_groups: Dictionary = taoist_main_pet_runtime_states.get("groups", {})
+			result["active_skeleton_count"] = (pet_groups.get("skeleton", []) as Array).size()
+			result["effective_skill_rank"] = effective_skill_level(stable_skill_id)
+	## Dual defence: when both taoist.defense and taoist.magic_defense are
+	## learned (base rank 0 counts as learned in HardCore v2), any
+	## preflight/release quote must price the combination in one transaction
+	## with each skill's currently-effective rank (0 or equipment-extended).
+	## Equipment can never enable an unlearned partner.
+	if stable_skill_id in ["taoist.defense", "taoist.magic_defense"]:
+		var partner_skill_id := (
+			"taoist.magic_defense"
+			if stable_skill_id == "taoist.defense"
+			else "taoist.defense"
+		)
+		if is_skill_learned(partner_skill_id):
+			result["dual_defense_context"] = {
+				"partner_skill_id": partner_skill_id,
+				"partner_rank": effective_skill_level(partner_skill_id),
+			}
+	return result
+
+
+func canonical_material_item_name(material_id: String) -> String:
+	return str(CANONICAL_MATERIAL_ITEMS.get(material_id, ""))
+
+
+func _refresh_skill_identity_projection() -> void:
+	var canonical_skills: Dictionary = _skill_progression.snapshot().get("skills", {})
+	var migrated: Dictionary = {}
+	for stable_skill_id: Variant in canonical_skills:
+		var entry: Dictionary = canonical_skills[stable_skill_id]
+		migrated[str(stable_skill_id)] = int(entry.base_rank)
+	migrated.make_read_only()
+	_learned_skill_ids = migrated
+
+
+func available_special_actions() -> Array[String]:
+	var actions: Array[String] = []
+	for effect_id: String in ["teleport", "flame_skill", "recovery_skill"]:
+		if has_special_effect(effect_id):
+			actions.append(effect_id)
+	return actions
+
+
+func damage_special_effect_item(effect_id: String, amount := 1) -> void:
+	var source: Dictionary = computed_special_effects.get(effect_id, {})
+	var slot := str(source.get("slot", ""))
+	if not slot.is_empty():
+		damage_equipment_durability(slot, amount)
+
+
+func _add_nullable_stat(target: Dictionary, key: String, value: Variant) -> void:
+	if value != null:
+		target[key] = int(target.get(key, 0)) + int(value)
+
+
+func current_wear_weight(excluded_slot := "") -> int:
+	var total := 0
+	for slot: String in equipment.keys():
+		if slot == excluded_slot or slot == "hc.slot.weapon":
+			continue
+		var equipped_value: Variant = equipment.get(slot, {})
+		var item_name := str(equipped_value.get("name", "")) if equipped_value is Dictionary else str(equipped_value)
+		if item_name.is_empty():
+			continue
+		total += maxi(0, int(GameData.get_item(item_name).get("weight", 0)))
+	return total
+
+
+## Weight is derived from the primary item catalog on every query. Currency
+## records intentionally contribute zero so picking up gold never gets blocked
+## by a full or legacy-overweight bag.
+func _loot_inventory_catalog_record(item_ref: Variant) -> Dictionary:
+	var cache_key := EntityRegistry.canonical(EntityRegistry.from_legacy("item", item_ref)) \
+		if item_ref is int or item_ref is float else GameData.item_entity_id(item_ref)
+	if cache_key.is_empty():
+		return {}
+	if _loot_inventory_catalog_cache.has(cache_key):
+		return _loot_inventory_catalog_cache.get(cache_key, {})
+	var catalog := GameData.get_entity_record(cache_key)
+	_loot_inventory_catalog_cache[cache_key] = catalog
+	_loot_batch_debug["catalog_lookups"] = int(
+		_loot_batch_debug.get("catalog_lookups", 0)
+	) + 1
+	return catalog
+
+
+func _prewarm_loot_inventory_catalog(records: Array) -> void:
+	for raw_record: Variant in records:
+		if not raw_record is Dictionary or (raw_record as Dictionary).is_empty():
+			continue
+		var record: Dictionary = raw_record
+		_loot_inventory_catalog_record(record)
+
+
+func inventory_weight(records: Array = inventory) -> int:
+	var total := 0
+	for raw_record: Variant in records:
+		if not raw_record is Dictionary:
+			continue
+		var record: Dictionary = raw_record
+		if record.is_empty():
+			continue
+		var item: Dictionary = _loot_inventory_catalog_record(record)
+		if item.is_empty() or str(item.get("kind", "")) == "currency":
+			continue
+		var unit_weight := maxi(0, int(item.get("weight", 0)))
+		var count := maxi(1, int(record.get("count", 1)))
+		if unit_weight > 0 and count > MAX_SAFE_WEIGHT / unit_weight:
+			return MAX_SAFE_WEIGHT
+		var contribution := unit_weight * count
+		if total > MAX_SAFE_WEIGHT - contribution:
+			return MAX_SAFE_WEIGHT
+		total += contribution
+	return total
+
+
+func max_inventory_weight() -> int:
+	var maximum := EquipmentRulesScript.max_bag_weight(profession_id, level)
+	if _active_double_weight_effect():
+		maximum *= 2
+	return maximum
+
+
+func _active_double_weight_effect() -> bool:
+	for value: Variant in equipment.values():
+		if not value is Dictionary or value.is_empty() or not _has_positive_raw_durability(value):
+			continue
+		var item := GameData.get_item_record(value)
+		var special := EquipmentRulesScript.special_effect_for(item)
+		if str(special.get("id", "")) == "double_weight" and bool(special.get("runtime", false)):
+			return true
+	return false
+
+
+func _slots_for_category(category: String) -> Array[String]:
+	return EquipmentIdentity.slots_for_category(ItemCategories.import_legacy_category(category))
+
+
+func _choose_equipment_slot(category: String, preferred_slot := "") -> String:
+	var slots := _slots_for_category(category)
+	if not preferred_slot.is_empty() and preferred_slot in slots:
+		return preferred_slot
+	for slot: String in slots:
+		var value: Variant = equipment.get(slot, {})
+		if value is Dictionary and value.is_empty():
+			return slot
+	if slots.is_empty():
+		return ""
+	var cursor_slot := str(equip_cycle_cursor.get(slots[0], slots[0]))
+	return cursor_slot if cursor_slot in slots else slots[0]
+
+
+func _default_equip_cycle_cursor() -> Dictionary:
+	return EquipmentIdentity.default_cycles()
+
+
+func _normalized_equip_cycle_cursor(saved_value: Variant) -> Dictionary:
+	var result := _default_equip_cycle_cursor()
+	if saved_value is Dictionary:
+		for group: String in result.keys():
+			var saved_slot := str(saved_value.get(group, ""))
+			if saved_slot in EquipmentIdentity.CYCLES[group]:
+				result[group] = saved_slot
+	return result
+
+
+func _advance_equip_cycle_cursor(category: String, equipped_slot: String) -> void:
+	var slots := _slots_for_category(category)
+	if slots.size() < 2:
+		return
+	var equipped_index := slots.find(equipped_slot)
+	if equipped_index < 0:
+		return
+	equip_cycle_cursor[slots[0]] = slots[(equipped_index + 1) % slots.size()]
+
+
+func _empty_equipment() -> Dictionary:
+	var result := {}
+	for slot: String in EQUIPMENT_SLOTS:
+		result[slot] = {}
+	return result
+
+
+func _equipment_instance_from_saved(saved_value: Variant) -> Dictionary:
+	if saved_value is Dictionary:
+		var restored: Dictionary = saved_value.duplicate(true)
+		_ensure_raw_durability_fields(restored)
+		return restored
+	if not str(saved_value).is_empty():
+		return _make_item_instance(str(saved_value), GameData.get_item_record(str(saved_value)))
+	return {}
+
+
+func _ensure_raw_durability_fields(instance: Dictionary) -> bool:
+	if instance.is_empty():
+		return false
+	var catalog := GameData.get_item_record(instance)
+	var catalog_maximum := maxi(1, int(catalog.get("maxDurability", 1)))
+	var migrated := false
+	if not instance.has("max_durability_raw"):
+		instance["max_durability_raw"] = (
+			maxi(1, int(instance.get("max_durability", catalog_maximum)))
+			* DURABILITY_RAW_UNITS_PER_DISPLAY
+		)
+		migrated = true
+	var maximum_raw := maxi(1, int(instance.get("max_durability_raw", 1)))
+	instance["max_durability_raw"] = maximum_raw
+	if not instance.has("durability_raw"):
+		instance["durability_raw"] = (
+			clampi(
+				int(instance.get("durability", instance.get("max_durability", catalog_maximum))),
+				0,
+				maxi(1, int(instance.get("max_durability", catalog_maximum)))
+			)
+			* DURABILITY_RAW_UNITS_PER_DISPLAY
+		)
+		migrated = true
+	instance["durability_raw"] = clampi(
+		int(instance.get("durability_raw", 0)), 0, maximum_raw
+	)
+	instance["durability_contract_id"] = DURABILITY_CONTRACT_ID
+	_sync_durability_compatibility_fields(instance)
+	return migrated
+
+
+func _adopt_legacy_durability_compatibility_override(instance: Dictionary) -> void:
+	if not instance.has("durability_raw") or not instance.has("max_durability_raw"):
+		return
+	var maximum_raw := maxi(1, int(instance.get("max_durability_raw", 1)))
+	var current_raw := clampi(int(instance.get("durability_raw", 0)), 0, maximum_raw)
+	var expected_maximum := maxi(
+		1,
+		int(ceil(float(maximum_raw) / float(DURABILITY_RAW_UNITS_PER_DISPLAY)))
+	)
+	var expected_current := (
+		0
+		if current_raw <= 0
+		else int(ceil(float(current_raw) / float(DURABILITY_RAW_UNITS_PER_DISPLAY)))
+	)
+	var display_maximum := maxi(1, int(instance.get("max_durability", expected_maximum)))
+	var display_current := clampi(
+		int(instance.get("durability", expected_current)), 0, display_maximum
+	)
+	if display_maximum != expected_maximum:
+		maximum_raw = display_maximum * DURABILITY_RAW_UNITS_PER_DISPLAY
+		instance["max_durability_raw"] = maximum_raw
+	if display_current != expected_current:
+		instance["durability_raw"] = mini(
+			maximum_raw, display_current * DURABILITY_RAW_UNITS_PER_DISPLAY
+		)
+
+
+func _sync_durability_compatibility_fields(instance: Dictionary) -> void:
+	var maximum_raw := maxi(1, int(instance.get("max_durability_raw", 1)))
+	var current_raw := clampi(int(instance.get("durability_raw", 0)), 0, maximum_raw)
+	instance["max_durability_raw"] = maximum_raw
+	instance["durability_raw"] = current_raw
+	# Existing UI and pricing contracts remain whole display points. Ceiling is
+	# intentional: a positive raw remainder is usable and must not look broken.
+	instance["max_durability"] = maxi(
+		1,
+		int(ceil(float(maximum_raw) / float(DURABILITY_RAW_UNITS_PER_DISPLAY)))
+	)
+	instance["durability"] = (
+		0
+		if current_raw <= 0
+		else int(ceil(float(current_raw) / float(DURABILITY_RAW_UNITS_PER_DISPLAY)))
+	)
+
+
+func _has_positive_raw_durability(instance: Dictionary) -> bool:
+	_adopt_legacy_durability_compatibility_override(instance)
+	_ensure_raw_durability_fields(instance)
+	return int(instance.get("durability_raw", 0)) > 0
+
+
+func _migrate_item_collection_durability(records: Array) -> bool:
+	var migrated := false
+	for value: Variant in records:
+		if value is Dictionary and not value.is_empty():
+			var catalog := GameData.get_item_record(value)
+			if str(catalog.get("kind", "")) == "equipment":
+				migrated = _ensure_raw_durability_fields(value) or migrated
+	return migrated
+
+
+func migrate_equipment_slots(saved_equipment: Dictionary) -> Dictionary:
+	var imported := EquipmentIdentity.normalize_slots(saved_equipment, true)
+	if imported.status != ItemExtensionCodec.KNOWN_VALID:
+		return {}
+	var migrated := _empty_equipment()
+	for slot: String in EQUIPMENT_SLOTS:
+		if imported.value.has(slot):
+			migrated[slot] = _equipment_instance_from_saved(imported.value[slot])
+	return migrated
+
+
+func damage_equipment_durability(slot: String, amount := 1) -> void:
+	_damage_equipment_durability_raw(
+		slot,
+		maxi(0, amount) * DURABILITY_RAW_UNITS_PER_DISPLAY,
+		true
+	)
+
+
+func _damage_equipment_durability_raw(
+	slot: String,
+	amount_raw: int,
+	commit_individually := false
+) -> bool:
+	var equipped: Variant = equipment.get(slot, {})
+	if not equipped is Dictionary or equipped.is_empty():
+		return false
+	if RelicSynthesisRulesScript.is_synthesis_item(int((equipped as Dictionary).get("item_id", -1))):
+		return false
+	_ensure_raw_durability_fields(equipped)
+	var old_value := int(equipped.get("durability_raw", 0))
+	var new_value := maxi(0, old_value - maxi(0, amount_raw))
+	if new_value == old_value:
+		return false
+	equipped["durability_raw"] = new_value
+	_sync_durability_compatibility_fields(equipped)
+	if commit_individually:
+		if new_value == 0:
+			recalculate_stats(false)
+		equipment_changed.emit()
+		profile_changed.emit()
+		_commit_save()
+	return true
+
+
+func apply_durability_event(event_id: String, context := {}) -> Dictionary:
+	var result := {
+		"contract_id": DURABILITY_CONTRACT_ID,
+		"event_id": event_id,
+		"applied": false,
+		"changed_slots": {},
+		"raw_loss": 0,
+		"signal_batches": 0,
+		"save_commits": 0,
+		"extension_policy": DURABILITY_INCOMING_EXTENSION_POLICY,
+	}
+	if not context is Dictionary:
+		result["reason"] = "invalid_context"
+		return result
+	var event_context: Dictionary = context
+	if str(event_context.get("damage_type", "physical")) != "physical":
+		result["reason"] = "non_physical"
+		return result
+	if int(event_context.get("damage", 1)) <= 0:
+		result["reason"] = "non_positive_damage"
+		return result
+	var crossed_zero := false
+	match event_id:
+		DURABILITY_EVENT_WEAPON_PHYSICAL_HIT:
+			if not bool(event_context.get("confirmed_hit", false)):
+				result["reason"] = "unconfirmed_hit"
+				return result
+			var weapon: Variant = equipment.get("hc.slot.weapon", {})
+			if not weapon is Dictionary or weapon.is_empty():
+				result["reason"] = "weapon_missing"
+				return result
+			_ensure_raw_durability_fields(weapon)
+			var weapon_roll := _durability_roll(event_context, "weapon_roll", 0, 4)
+			var weapon_strong := _weapon_strong(weapon, event_context)
+			var weapon_loss := maxi(0, weapon_roll + 2 - weapon_strong)
+			result["raw_loss"] = weapon_loss
+			result["weapon_roll"] = weapon_roll
+			result["weapon_strong"] = weapon_strong
+			if weapon_loss > 0:
+				var old_weapon_raw := int(weapon.get("durability_raw", 0))
+				if _damage_equipment_durability_raw("hc.slot.weapon", weapon_loss):
+					(result["changed_slots"] as Dictionary)["hc.slot.weapon"] = weapon_loss
+					crossed_zero = old_weapon_raw > 0 and int(weapon.get("durability_raw", 0)) == 0
+		DURABILITY_EVENT_INCOMING_PHYSICAL_STRUCK:
+			if not bool(event_context.get("causes_struck", true)):
+				result["reason"] = "not_struck_damage"
+				return result
+			var incoming_roll := _durability_roll(event_context, "armor_roll", 0, 9)
+			var incoming_loss := incoming_roll + 5
+			if bool(event_context.get("red_poison", false)):
+				incoming_loss = maxi(1, roundi(float(incoming_loss) * 1.2))
+			result["raw_loss"] = incoming_loss
+			result["armor_roll"] = incoming_roll
+			var armor: Variant = equipment.get("hc.slot.armor", {})
+			if armor is Dictionary and not armor.is_empty():
+				_ensure_raw_durability_fields(armor)
+				var old_armor_raw := int(armor.get("durability_raw", 0))
+				if _damage_equipment_durability_raw("hc.slot.armor", incoming_loss):
+					(result["changed_slots"] as Dictionary)["hc.slot.armor"] = incoming_loss
+					crossed_zero = crossed_zero or (
+						old_armor_raw > 0 and int(armor.get("durability_raw", 0)) == 0
+					)
+			var slot_rolls: Dictionary = event_context.get("slot_rolls", {})
+			for slot: String in EQUIPMENT_SLOTS:
+				var slot_roll := (
+					clampi(int(slot_rolls.get(slot, 0)), 0, 7)
+					if slot_rolls.has(slot)
+					else _durability_roll(event_context, "", 0, 7)
+				)
+				if slot_roll != 0:
+					continue
+				var equipped: Variant = equipment.get(slot, {})
+				if not equipped is Dictionary or equipped.is_empty():
+					continue
+				_ensure_raw_durability_fields(equipped)
+				var old_slot_raw := int(equipped.get("durability_raw", 0))
+				if _damage_equipment_durability_raw(slot, incoming_loss):
+					var previous_loss := int((result["changed_slots"] as Dictionary).get(slot, 0))
+					(result["changed_slots"] as Dictionary)[slot] = previous_loss + incoming_loss
+					crossed_zero = crossed_zero or (
+						old_slot_raw > 0 and int(equipped.get("durability_raw", 0)) == 0
+					)
+		_:
+			result["reason"] = "unknown_event"
+			return result
+	if (result["changed_slots"] as Dictionary).is_empty():
+		result["reason"] = "no_durability_change"
+		return result
+	if crossed_zero:
+		recalculate_stats(false)
+	# Several physical hits may arrive during one combat interval. Keep the raw
+	# durability and broken-equipment stats authoritative immediately, but write
+	# one complete profile after the bounded interval or any other save boundary.
+	_durability_save_pending = true
+	_durability_mutation_revision += 1
+	if crossed_zero:
+		_durability_visual_pending = false
+		_durability_visual_elapsed = 0.0
+		equipment_changed.emit()
+		profile_changed.emit()
+		result["signal_batches"] = 1
+	else:
+		_durability_visual_pending = true
+	result["applied"] = true
+	result["save_pending"] = true
+	result["reason"] = ""
+	return result
+
+
+func _durability_roll(context: Dictionary, key: String, minimum: int, maximum: int) -> int:
+	if not key.is_empty() and context.has(key):
+		return clampi(int(context.get(key, minimum)), minimum, maximum)
+	var rng_value: Variant = context.get("rng", null)
+	if rng_value is RandomNumberGenerator:
+		return (rng_value as RandomNumberGenerator).randi_range(minimum, maximum)
+	return _durability_rng.randi_range(minimum, maximum)
+
+
+func _weapon_strong(weapon: Dictionary, context: Dictionary) -> int:
+	if context.has("weapon_strong"):
+		return maxi(0, int(context.get("weapon_strong", 0)))
+	var catalog := GameData.get_item_rules_record(weapon)
+	var added := 0
+	if weapon.has("drop_instance_contract_id"):
+		if not GameData.validate_item_drop_instance(weapon):
+			return 0
+		for modifier: Dictionary in weapon.get("modifiers", []):
+			if str(modifier.get("stat", "")) == "weapon_strong":
+				added += int(modifier.value)
+	for key: String in ["weapon_strong", "WeaponStrong", "strong", "Strong"]:
+		if weapon.has(key):
+			return maxi(0, int(weapon.get(key, 0)) + added)
+	for key: String in ["weaponStrong", "WeaponStrong", "strong", "Strong"]:
+		if catalog.has(key):
+			return maxi(0, int(catalog.get(key, 0)) + added)
+	return added
+
+
+func repair_cost(context := {}) -> int:
+	var authoritative_context := _authoritative_merchant_context(context)
+	if not PricingServiceScript.merchant_supports_full_equipment_repair(authoritative_context):
+		return 0
+	return int(_repair_plan(authoritative_context).get("total_price", 0))
+
+
+func _repair_plan(context := {}) -> Dictionary:
+	if not PricingServiceScript.merchant_supports_full_equipment_repair(context):
+		return {"valid": false, "total_price": 0, "slots": [], "entries": []}
+	var priority_slots := PricingServiceScript.repair_batch_slot_order()
+	if priority_slots != EQUIPMENT_SLOTS:
+		return {"valid": false, "total_price": 0, "slots": [], "entries": []}
+	var total := 0
+	var slots: Array[String] = []
+	var entries: Array[Dictionary] = []
+	for slot: String in priority_slots:
+		var equipped: Variant = equipment.get(slot, {})
+		if not equipped is Dictionary or equipped.is_empty():
+			continue
+		# Planning must never mutate live equipment. Raw durability is authoritative;
+		# display compatibility fields are not allowed to overwrite it here.
+		var quote_instance: Dictionary = (equipped as Dictionary).duplicate(true)
+		_ensure_raw_durability_fields(quote_instance)
+		var quote := PricingServiceScript.quote_repair(
+			GameData.get_item_price_record(quote_instance),
+			GameData.get_item_record(quote_instance),
+			quote_instance,
+			context
+		)
+		var quoted_cost := int(quote.get("total_price", 0))
+		if not bool(quote.get("valid", false)) or quoted_cost <= 0:
+			continue
+		total += quoted_cost
+		slots.append(slot)
+		entries.append({"slot": slot, "quote": quote})
+	return {
+		"valid": true,
+		"contract_id": "gameplay.repair.batch_all_equipment.v1",
+		"total_price": total,
+		"slots": slots,
+		"entries": entries,
+	}
+
+
+func repair_all_equipment(context := {}) -> String:
+	_before_state_transaction()
+	context = _authoritative_merchant_context(context)
+	if not PricingServiceScript.merchant_supports_full_equipment_repair(context):
+		return "该商人不提供维修服务"
+	var plan := _repair_plan(context)
+	if not bool(plan.get("valid", false)):
+		return "维修规则无效，未改变装备和金币"
+	var full_cost := int(plan.get("total_price", 0))
+	if full_cost <= 0:
+		return "装备无需维修"
+	var equipment_before := equipment.duplicate(true)
+	var gold_before := gold
+	var remaining_gold := gold
+	var spent := 0
+	var repaired_slots := 0
+	for raw_entry: Variant in plan.get("entries", []):
+		if not raw_entry is Dictionary:
+			continue
+		var entry: Dictionary = raw_entry
+		var slot := str(entry.get("slot", ""))
+		var equipped: Variant = equipment.get(slot, {})
+		if not equipped is Dictionary or equipped.is_empty():
+			continue
+		_ensure_raw_durability_fields(equipped)
+		var price_record := GameData.get_item_price_record(equipped)
+		var catalog := GameData.get_item_record(equipped)
+		var current_raw := int(equipped.get("durability_raw", 0))
+		var maximum_raw := maxi(1, int(equipped.get("max_durability_raw", 1)))
+		var missing_raw := maximum_raw - clampi(current_raw, 0, maximum_raw)
+		if missing_raw <= 0 or remaining_gold <= 0:
+			continue
+		var planned_quote: Dictionary = entry.get("quote", {})
+		var chosen_quote: Dictionary = planned_quote.duplicate(true)
+		if not bool(chosen_quote.get("valid", false)):
+			continue
+		if int(chosen_quote.get("total_price", 0)) > remaining_gold:
+			chosen_quote = _maximum_affordable_repair_raw_quote(
+				price_record, catalog, equipped, missing_raw, remaining_gold, context
+			)
+		if not bool(chosen_quote.get("valid", false)):
+			continue
+		var slot_cost := int(chosen_quote.get("total_price", 0))
+		var target_raw := int(chosen_quote.get("formula_snapshot", {}).get("target_durability_raw", current_raw))
+		if slot_cost <= 0 or slot_cost > remaining_gold or target_raw <= current_raw:
+			continue
+		equipped["durability_raw"] = mini(maximum_raw, target_raw)
+		_sync_durability_compatibility_fields(equipped)
+		remaining_gold -= slot_cost
+		spent += slot_cost
+		repaired_slots += 1
+	if repaired_slots <= 0:
+		return "金币不足，未能维修任何装备"
+	gold = remaining_gold
+	recalculate_stats()
+	if not _commit_save():
+		equipment = equipment_before
+		gold = gold_before
+		recalculate_stats()
+		return "维修存档失败，装备和金币均未改变"
+	equipment_changed.emit()
+	profile_changed.emit()
+	if spent >= full_cost:
+		return "全部装备维修完成，花费%d金币" % spent
+	return "金币不足，已优先维修%d件装备，花费%d金币" % [repaired_slots, spent]
+
+
+func _authoritative_merchant_context(context: Variant) -> Dictionary:
+	if not context is Dictionary:
+		return {}
+	var merchant_id := str((context as Dictionary).get("merchant_id", ""))
+	if merchant_id.is_empty():
+		return (context as Dictionary).duplicate(true)
+	var authoritative := GameData.merchant_context_by_id(merchant_id)
+	if not authoritative.is_empty():
+		return authoritative
+	# An unknown merchant id must never fall back to PricingService's legacy
+	# context defaults, otherwise a forged request could regain repair access.
+	return {
+		"merchant_id": merchant_id,
+		"types": [],
+		"supports_repair": false,
+	}
+
+
+func _maximum_affordable_repair_raw_quote(
+	price_record: Dictionary,
+	catalog: Dictionary,
+	instance: Dictionary,
+	maximum_amount_raw: int,
+	budget: int,
+	context: Dictionary
+) -> Dictionary:
+	var low := 1
+	var high := maxi(0, maximum_amount_raw)
+	var best: Dictionary = {}
+	while low <= high:
+		var amount := int((low + high) / 2)
+		var quote := PricingServiceScript.quote_repair_raw_delta(
+			price_record, catalog, instance, amount, context
+		)
+		if bool(quote.get("valid", false)) and int(quote.get("total_price", 0)) <= budget:
+			best = quote
+			low = amount + 1
+		else:
+			high = amount - 1
+	return best
+
+
+func _profile_path(profile_id: String) -> String:
+	return "%s/%s.json" % [profile_directory, profile_id]
+
+
+func _world_clock_directory() -> String:
+	return profile_directory.path_join("world_clocks")
+
+
+func _world_clock_path(profile_id: String, generation := "") -> String:
+	if not generation.is_empty():
+		return _world_clock_directory().path_join(profile_id).path_join(generation + ".json")
+	return _world_clock_directory().path_join(profile_id + ".json")
+
+
+func _death_event_root() -> String:
+	return profile_directory.path_join("death_events")
+
+
+func _death_event_directory(profile_id: String, generation := "") -> String:
+	if not generation.is_empty():
+		return _death_event_root().path_join(profile_id).path_join(generation)
+	return _death_event_root().path_join(profile_id)
+
+
+func _death_event_path(profile_id: String, sequence: int, generation := "") -> String:
+	return _death_event_directory(profile_id, generation).path_join("%012d.json" % sequence)
+
+
+var _json_parse_snapshots: Dictionary = {}
+
+func _read_json_document(path: String) -> Dictionary:
+	if not FileAccess.file_exists(path):
+		return {"exists": false, "valid": false, "data": {}}
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null:
+		return {"exists": true, "valid": false, "data": {}}
+	var serialized := file.get_as_text()
+	file.close()
+	# Always read current bytes; neither timestamps nor file size prove identity.
+	# Only JSON parsing is reused. Business validators still run on every read.
+	var content_hash := serialized.sha256_text()
+	var cached: Dictionary = _json_parse_snapshots.get(path, {})
+	if not cached.is_empty() and str(cached.hash) == content_hash:
+		return {"exists": true, "valid": true, "data": (cached.data as Dictionary).duplicate(true)}
+	var parser := JSON.new()
+	var parse_error := parser.parse(serialized)
+	var parsed: Variant = parser.data if parse_error == OK else null
+	if parsed is Dictionary and serialized.length() <= 2097152:
+		if _json_parse_snapshots.size() >= 16: _json_parse_snapshots.clear()
+		_json_parse_snapshots[path] = {"hash": content_hash, "data": (parsed as Dictionary).duplicate(true)}
+	return {
+		"exists": true,
+		"valid": parsed is Dictionary,
+		"data": parsed if parsed is Dictionary else {},
+	}
+
+
+func _validation_result(valid: bool, reason := "", terminal := false) -> Dictionary:
+	return {"valid": valid, "reason": reason, "terminal": terminal}
+
+
+func _is_json_number(value: Variant) -> bool:
+	return value is int or value is float
+
+
+func _is_integral_json_number(value: Variant) -> bool:
+	return _is_json_number(value) and is_finite(float(value)) and float(value) == floor(float(value))
+
+
+func _valid_bank_transaction_id(transaction_id: String) -> bool:
+	if transaction_id.is_empty() or transaction_id.length() > BANK_TRANSACTION_ID_MAX_LENGTH:
+		return false
+	for index in range(transaction_id.length()):
+		var code := transaction_id.unicode_at(index)
+		if not (
+			(code >= 48 and code <= 57)
+			or (code >= 65 and code <= 90)
+			or (code >= 97 and code <= 122)
+			or code in [45, 46, 58, 95]
+		):
+			return false
+	return true
+
+
+func _valid_sha256_text(value: Variant) -> bool:
+	if not value is String or str(value).length() != 64:
+		return false
+	for index in range(str(value).length()):
+		var code := str(value).unicode_at(index)
+		if not ((code >= 48 and code <= 57) or (code >= 97 and code <= 102)):
+			return false
+	return true
+
+
+func _bounded_bank_transaction_history(
+	current: Dictionary,
+	transaction_id: String,
+	record: Dictionary,
+) -> Dictionary:
+	var result := current.duplicate(true)
+	result[transaction_id] = record.duplicate(true)
+	while result.size() > BANK_TRANSACTION_HISTORY_LIMIT:
+		var oldest_id := ""
+		var oldest_sequence := MAX_EXACT_JSON_INTEGER
+		for raw_id: Variant in result.keys():
+			var candidate: Variant = result.get(raw_id)
+			var sequence := (
+				int((candidate as Dictionary).get("sequence", MAX_EXACT_JSON_INTEGER))
+				if candidate is Dictionary
+				else MAX_EXACT_JSON_INTEGER
+			)
+			if sequence < oldest_sequence or (sequence == oldest_sequence and str(raw_id) < oldest_id):
+				oldest_id = str(raw_id)
+				oldest_sequence = sequence
+		if oldest_id.is_empty():
+			return {}
+		result.erase(oldest_id)
+	return result
+
+
+func _validate_bank_transaction_history(document: Dictionary) -> bool:
+	var high_water_value: Variant = document.get("bank_transaction_high_water", 0)
+	if (
+		not _is_integral_json_number(high_water_value)
+		or float(high_water_value) < 0.0
+		or float(high_water_value) > MAX_EXACT_JSON_INTEGER
+	):
+		return false
+	var high_water := int(high_water_value)
+	var history_value: Variant = document.get("bank_transactions", {})
+	if not history_value is Dictionary or (history_value as Dictionary).size() > BANK_TRANSACTION_HISTORY_LIMIT:
+		return false
+	var seen_sequences: Dictionary = {}
+	for raw_id: Variant in (history_value as Dictionary).keys():
+		if not raw_id is String or not _valid_bank_transaction_id(str(raw_id)):
+			return false
+		var raw_record: Variant = (history_value as Dictionary).get(raw_id)
+		if not raw_record is Dictionary:
+			return false
+		var record: Dictionary = raw_record
+		if record.keys().size() != 4:
+			return false
+		for required_key: String in ["profile_id", "sequence", "deposit", "amount"]:
+			if not record.has(required_key):
+				return false
+		if not record.get("profile_id") is String or not _valid_profile_storage_id(str(record.profile_id)):
+			return false
+		var amount_value: Variant = record.get("amount")
+		if (
+			not record.get("deposit") is bool
+			or not _is_integral_json_number(amount_value)
+			or int(amount_value) != BANK_TRANSFER_AMOUNT
+		):
+			return false
+		var sequence_value: Variant = record.get("sequence")
+		if (
+			not _is_integral_json_number(sequence_value)
+			or int(sequence_value) <= 0
+			or int(sequence_value) > high_water
+			or seen_sequences.has(int(sequence_value))
+		):
+			return false
+		seen_sequences[int(sequence_value)] = true
+	return true
+
+
+func _validate_gold_overflow_records(document: Dictionary) -> bool:
+	var overflow: Variant = document.get("gold_overflow_records", [])
+	if not overflow is Array or (overflow as Array).size() > GOLD_OVERFLOW_RECORD_LIMIT:
+		return false
+	var seen_sources: Dictionary = {}
+	for raw_entry: Variant in overflow:
+		if not raw_entry is Dictionary:
+			return false
+		var entry: Dictionary = raw_entry
+		if entry.keys().size() != 4:
+			return false
+		for required_key: String in ["contract_id", "original_gold", "retained_gold", "source_digest"]:
+			if not entry.has(required_key):
+				return false
+		if str(entry.contract_id) != BANK_CONTRACT_ID or not _valid_sha256_text(entry.source_digest):
+			return false
+		if (
+			not _is_integral_json_number(entry.original_gold)
+			or not _is_integral_json_number(entry.retained_gold)
+			or int(entry.original_gold) <= PLAYER_GOLD_CAP
+			or float(entry.original_gold) > MAX_EXACT_JSON_INTEGER
+			or int(entry.retained_gold) != int(entry.original_gold) - PLAYER_GOLD_CAP
+			or seen_sources.has(str(entry.source_digest))
+		):
+			return false
+		seen_sources[str(entry.source_digest)] = true
+	return true
+
+
+func _valid_saved_position(value: Variant) -> bool:
+	return (
+		value is Array
+		and (value as Array).size() >= 2
+		and _is_json_number((value as Array)[0])
+		and _is_json_number((value as Array)[1])
+		and is_finite(float((value as Array)[0]))
+		and is_finite(float((value as Array)[1]))
+	)
+
+
+func _validate_saved_item_records(value: Variant, capacity: int) -> bool:
+	# Reuse only inside one synchronous transaction: the catalog and rule authority
+	# cannot change mid-call. File reads and migration dependencies are NOT cached.
+	if not _warehouse_validation_scope or not value is Array:
+		return _validate_saved_item_records_uncached(value, capacity)
+	var key := hash([capacity, value])
+	var cached: Dictionary = _warehouse_validated_collections.get(key, {})
+	if not cached.is_empty() and cached.capacity == capacity and cached.value == value:
+		return true
+	if not _validate_saved_item_records_uncached(value, capacity):
+		return false
+	_warehouse_validated_collections[key] = {"capacity": capacity, "value": value.duplicate(true)}
+	return true
+
+
+func _validate_saved_item_records_uncached(value: Variant, capacity: int) -> bool:
+	if not value is Array or (value as Array).size() > capacity:
+		return false
+	var seen_item_instance_ids: Dictionary = {}
+	for raw_record: Variant in value:
+		if not raw_record is Dictionary:
+			return false
+		var record: Dictionary = raw_record
+		if record.is_empty():
+			continue
+		if record.has("drop_instance_contract_id") or RelicSynthesisRulesScript.is_synthesis_item(int(record.get("item_id", -1))):
+			var instance_id := _validated_persisted_instance_id(record)
+			if instance_id == "#invalid" or seen_item_instance_ids.has(instance_id):
+				return false
+			seen_item_instance_ids[instance_id] = true
+		if not record.has("count"):
+			continue
+		var count_value: Variant = record.get("count")
+		if not _is_integral_json_number(count_value) or int(count_value) <= 0:
+			return false
+	return true
+
+
+func _validate_saved_equipment(value: Variant) -> bool:
+	if not value is Dictionary:
+		return false
+	var allowed_slots: Dictionary = {}
+	for slot: String in EQUIPMENT_SLOTS:
+		allowed_slots[slot] = true
+	for raw_slot: Variant in (value as Dictionary).keys():
+		var slot := str(raw_slot)
+		if not allowed_slots.has(slot):
+			return false
+		var equipped: Variant = (value as Dictionary).get(raw_slot)
+		if equipped is String:
+			continue # v02-v09 stored some equipment as its display name.
+		if not equipped is Dictionary:
+			return false
+		if (equipped as Dictionary).has("count"):
+			var count_value: Variant = (equipped as Dictionary).get("count")
+			if not _is_integral_json_number(count_value) or int(count_value) <= 0:
+				return false
+		if _validated_persisted_instance_id(equipped as Dictionary) == "#invalid":
+			return false
+	return true
+
+
+func _validated_drop_instance_id(record: Dictionary) -> String:
+	if not record.has("drop_instance_contract_id"):
+		return ""
+	var raw_item_id: Variant = record.get("item_id", null)
+	if not _is_integral_json_number(raw_item_id) or int(raw_item_id) <= 0:
+		return "#invalid"
+	if not GameData.validate_item_drop_instance(record):
+		return "#invalid"
+	return str(record.get("instance_id", ""))
+
+
+func _validated_persisted_instance_id(record: Dictionary) -> String:
+	if ItemExtensionCodec.has_extensions(record):
+		var base := ItemExtensionCodec.base_record(record)
+		return "#invalid" if base.is_empty() else str(base.get("instance_id", ""))
+	if record.has("drop_instance_contract_id"):
+		return _validated_drop_instance_id(record)
+	var item_id := int(record.get("item_id", -1))
+	if not RelicSynthesisRulesScript.is_synthesis_item(item_id):
+		return ""
+	if not RelicSynthesisRulesScript.valid_instance(record, item_id):
+		return "#invalid"
+	var instance_id := str(record.get("instance_id", ""))
+	return "#invalid" if instance_id.is_empty() else instance_id
+
+
+func _validate_profile_drop_instance_uniqueness(document: Dictionary) -> bool:
+	if not _validate_extended_item_ownership(document):
+		return false
+	var seen: Dictionary = {}
+	for array_field: String in ["inventory", "warehouse_inventory", "forge_tray", "synthesis_tray"]:
+		var records: Variant = document.get(array_field, [])
+		if not records is Array:
+			continue
+		for raw_record: Variant in records:
+			if not raw_record is Dictionary:
+				continue
+			var instance_id := _validated_persisted_instance_id(raw_record as Dictionary)
+			if instance_id in ["", "#invalid"]:
+				continue
+			if seen.has(instance_id):
+				return false
+			seen[instance_id] = true
+	var saved_equipment: Variant = document.get("equipment", {})
+	if saved_equipment is Dictionary:
+		for raw_equipped: Variant in (saved_equipment as Dictionary).values():
+			if not raw_equipped is Dictionary:
+				continue
+			var instance_id := _validated_persisted_instance_id(raw_equipped as Dictionary)
+			if instance_id in ["", "#invalid"]:
+				continue
+			if seen.has(instance_id):
+				return false
+			seen[instance_id] = true
+	return true
+
+
+func _profile_and_shared_drop_instances_are_disjoint(
+	profile_document: Dictionary,
+	shared_document: Dictionary,
+) -> bool:
+	var combined := {"inventory": ItemExtensionCodec.document_items(profile_document),
+		"warehouse_inventory": ItemExtensionCodec.document_items(shared_document)}
+	if not _validate_extended_item_ownership(combined):
+		return false
+	var profile_ids: Dictionary = {}
+	for field: String in ["inventory", "forge_tray", "synthesis_tray"]:
+		var records: Variant = profile_document.get(field, [])
+		if not records is Array:
+			continue
+		for raw_record: Variant in records:
+			if not raw_record is Dictionary:
+				continue
+			var instance_id := _validated_persisted_instance_id(raw_record as Dictionary)
+			if instance_id not in ["", "#invalid"]:
+				profile_ids[instance_id] = true
+	var equipment_value: Variant = profile_document.get("equipment", {})
+	if equipment_value is Dictionary:
+		for raw_equipped: Variant in (equipment_value as Dictionary).values():
+			if not raw_equipped is Dictionary:
+				continue
+			var equipment_instance_id := _validated_persisted_instance_id(raw_equipped as Dictionary)
+			if equipment_instance_id not in ["", "#invalid"]:
+				profile_ids[equipment_instance_id] = true
+	var shared_records: Variant = shared_document.get("warehouse_inventory", [])
+	if shared_records is Array:
+		for raw_record: Variant in shared_records:
+			if not raw_record is Dictionary:
+				continue
+			var shared_instance_id := _validated_persisted_instance_id(raw_record as Dictionary)
+			if shared_instance_id not in ["", "#invalid"] and profile_ids.has(shared_instance_id):
+				return false
+	return true
+
+
+func _validate_extended_item_ownership(document: Dictionary) -> bool:
+	var records := ItemExtensionCodec.document_items(document)
+	var owned_ids: Dictionary = {}
+	var extension_ids: Dictionary = {}
+	var has_extended := false
+	for record: Dictionary in records:
+		if ItemExtensionCodec.has_extensions(record):
+			has_extended = true
+			for identity: String in ItemExtensionCodec.ownership_ids(record):
+				extension_ids[identity] = true
+	if not has_extended:
+		return true
+	for record: Dictionary in records:
+		for identity: String in ItemExtensionCodec.ownership_ids(record):
+			if owned_ids.has(identity) and extension_ids.has(identity):
+				return false
+			owned_ids[identity] = true
+	return true
+
+
+func _validate_profile_document_status(
+	document: Dictionary,
+	expected_profile_id: String,
+	allow_missing_identity: bool
+) -> Dictionary:
+	# Recognize every aggregate owner before classifying known corruption.
+	# A malformed item sibling cannot authorize backup recovery over a future
+	# character, binding, outer profile or economic journal contract.
+	if _is_integral_json_number(document.get("save_version")) and document.save_version > SAVE_VERSION:
+		return _validation_result(false, "future_save_version", true)
+	if _world_state_owner_is_unsupported(document.get("world_monster_respawn_state")):
+		return _validation_result(false, "unsupported_world_state", true)
+	var character_identity := CharacterIdentityCodec.decode(document)
+	if not bool(character_identity.success):
+		return _validation_result(false, character_identity.reason, true)
+	var item_bindings := ItemBindingCodec.decode(document)
+	if not bool(item_bindings.success):
+		return _validation_result(false, item_bindings.reason, true)
+	var journal_status := ItemTransactionJournal.validate_document(document)
+	var item_document := ItemExtensionCodec.decode_document(document)
+	if bool(journal_status.terminal):
+		return journal_status
+	if item_document.status != ItemExtensionCodec.KNOWN_VALID:
+		return _validation_result(false, item_document.reason,
+			item_document.status == ItemExtensionCodec.OPAQUE_UNSUPPORTED)
+	if not bool(journal_status.valid):
+		return journal_status
+	document = item_document.document
+	var document_version := -1
+	if not WorldMonsterClockLedgerScript.valid_generation(document.get("world_clock_generation", "")):
+		return _validation_result(false, "invalid_world_clock_generation")
+	if document.has("world_clock_generation") and not document.has("death_event_sequence"):
+		return _validation_result(false, "world_clock_generation_without_sequence")
+	if document.has("death_event_sequence"):
+		var sequence: Variant = document.death_event_sequence
+		if not _is_integral_json_number(sequence) or int(sequence) < 0:
+			return _validation_result(false, "invalid_death_event_sequence")
+	if document.has("save_version"):
+		var version_value: Variant = document.get("save_version")
+		if not _is_integral_json_number(version_value) or int(version_value) < 0:
+			return _validation_result(false, "invalid_save_version")
+		document_version = int(version_value)
+		if document_version > SAVE_VERSION:
+			return _validation_result(false, "future_save_version", true)
+	if not allow_missing_identity:
+		if (
+			not document.get("profile_id", null) is String
+			or str(document.get("profile_id", "")) != expected_profile_id
+			or not _valid_profile_storage_id(expected_profile_id)
+		):
+			return _validation_result(false, "profile_id_mismatch")
+	elif document.has("profile_id") and not document.get("profile_id") is String:
+		return _validation_result(false, "invalid_profile_id")
+	# Every v10 document produced by save_game contains these identity and core
+	# gameplay containers. Older versions remain sparse-compatible and are
+	# normalized by load_save before being rewritten.
+	if document_version == SAVE_VERSION:
+		for required_field: String in [
+			"character_name", "level", "profession", "gender", "inventory",
+			"equipment", "learned_skills", "quest_states",
+		]:
+			if not document.has(required_field):
+				return _validation_result(false, "missing_%s" % required_field)
+	# Historical v02-v09 saves do not share one complete required-field set.
+	# Require credible player data, then validate every known field that exists.
+	var has_player_payload := false
+	for key: String in [
+		"character_name", "level", "profession", "gender", "inventory",
+		"warehouse_inventory", "equipment", "learned_skills", "map_id",
+		"position", "position_screen_px", "position_ground_gu",
+	]:
+		if document.has(key):
+			has_player_payload = true
+			break
+	if not has_player_payload:
+		return _validation_result(false, "missing_player_payload")
+	for string_field: String in [
+		"character_name", "profession", "gender", "game_mode_id",
+		"warehouse_storage_contract_id", "position_space_contract_id",
+	]:
+		if document.has(string_field) and not document.get(string_field) is String:
+			return _validation_result(false, "invalid_%s" % string_field)
+	if document.has("later_content_enabled") and not document.get("later_content_enabled") is bool:
+		return _validation_result(false, "invalid_later_content_enabled")
+	if document.has("content_packages") and not document.get("content_packages") is Array:
+		return _validation_result(false, "invalid_content_packages")
+	for array_field: String in ["inventory"]:
+		if document.has(array_field) and not _validate_saved_item_records(document.get(array_field), INVENTORY_CAPACITY):
+			return _validation_result(false, "invalid_%s" % array_field)
+	if document.has("warehouse_inventory") and not _validate_saved_item_records(document.get("warehouse_inventory"), WAREHOUSE_CAPACITY):
+		return _validation_result(false, "invalid_warehouse_inventory")
+	if document.has("equipment") and not _validate_saved_equipment(document.get("equipment")):
+		return _validation_result(false, "invalid_equipment")
+	for tray_field: String in ["forge_tray", "synthesis_tray"]:
+		if document.has(tray_field):
+			var tray_value: Variant = document.get(tray_field)
+			if not _validate_saved_item_records(tray_value, 9) or (tray_value as Array).size() != 9:
+				return _validation_result(false, "invalid_" + tray_field)
+	if not _validate_profile_drop_instance_uniqueness(document):
+		return _validation_result(false, "duplicate_drop_instance")
+	for object_field: String in [
+		"learned_skills", "skill_progression", "skill_button_assignments",
+		"equip_cycle_cursor", "warrior_runtime_state", "quest_states",
+		"world_monster_respawn_state", "taoist_main_pet_runtime_state",
+		"taoist_main_pet_runtime_states",
+	]:
+		if document.has(object_field) and not document.get(object_field) is Dictionary:
+			return _validation_result(false, "invalid_%s" % object_field)
+	var skill_validation := SkillProgressionServiceScript.new().load_snapshot(
+		document.get("skill_progression", document.get("learned_skills", {})))
+	if not bool(skill_validation.success):
+		return _validation_result(false, "invalid_skill_identity", true)
+	var saved_bindings: Variant = document.get("skill_button_assignments", {})
+	if saved_bindings is Dictionary and saved_bindings.get("contract_id") == SKILL_BUTTON_ASSIGNMENTS_CONTRACT_ID:
+		if not bool(SkillLoadoutRulesScript.validate_assignments(saved_bindings).valid):
+			return _validation_result(false, "invalid_skill_binding_identity", true)
+	for slots_field: String in ["quick_slots", "quick_item_slots"]:
+		if document.has(slots_field) and not document.get(slots_field) is Array:
+			return _validation_result(false, "invalid_%s" % slots_field)
+	for position_field: String in ["position", "position_screen_px", "position_ground_gu"]:
+		if document.has(position_field):
+			var position_value: Variant = document.get(position_field)
+			if position_field == "position_ground_gu" and position_value is Array and (position_value as Array).is_empty():
+				continue
+			if not _valid_saved_position(position_value):
+				return _validation_result(false, "invalid_%s" % position_field)
+	if (
+		document.has("position_ground_gu")
+		and document.get("position_ground_gu") is Array
+		and not (document.get("position_ground_gu") as Array).is_empty()
+		and str(document.get("position_space_contract_id", "")) != WORLD_POSITION_CONTRACT_ID
+	):
+		return _validation_result(false, "invalid_position_space_contract_id")
+	if document.has("level"):
+		var level_value: Variant = document.get("level")
+		if not _is_integral_json_number(level_value) or int(level_value) < 1:
+			return _validation_result(false, "invalid_level")
+	for nonnegative_integer_field: String in [
+		"experience", "gold", "updated_at", "content_schema_version",
+		"death_event_sequence",
+	]:
+		if document.has(nonnegative_integer_field):
+			var integer_value: Variant = document.get(nonnegative_integer_field)
+			if not _is_integral_json_number(integer_value) or int(integer_value) < 0:
+				return _validation_result(false, "invalid_%s" % nonnegative_integer_field)
+	if float(document.get("gold", 0)) > MAX_EXACT_JSON_INTEGER:
+		return _validation_result(false, "gold_not_exact_json_integer")
+	if not _validate_gold_overflow_records(document):
+		return _validation_result(false, "invalid_gold_overflow_records")
+	if int(document.get("gold", 0)) > PLAYER_GOLD_CAP and not (document.get("gold_overflow_records", []) as Array).is_empty():
+		return _validation_result(false, "repeated_gold_overflow_migration")
+	if document.has("map_id"):
+		var map_value: Variant = document.get("map_id")
+		if not _is_integral_json_number(map_value) or int(map_value) <= 0:
+			return _validation_result(false, "invalid_map_id")
+	return _validation_result(true)
+
+
+func _validate_profile_index_document_status(document: Dictionary) -> Dictionary:
+	var version_value: Variant = document.get("version", null)
+	if not _is_integral_json_number(version_value) or int(version_value) < 1:
+		return _validation_result(false, "invalid_profile_index_version")
+	if int(version_value) > 1:
+		return _validation_result(false, "future_profile_index_version", true)
+	var profiles_value: Variant = document.get("profiles", null)
+	if not profiles_value is Array:
+		return _validation_result(false, "invalid_profile_index_profiles")
+	var seen: Dictionary = {}
+	for raw_entry: Variant in profiles_value:
+		if not raw_entry is Dictionary:
+			return _validation_result(false, "invalid_profile_index_entry")
+		var profile_id_value: Variant = (raw_entry as Dictionary).get("id", null)
+		if not profile_id_value is String:
+			return _validation_result(false, "invalid_profile_index_id")
+		var profile_id := str(profile_id_value)
+		if not _valid_profile_storage_id(profile_id) or seen.has(profile_id):
+			return _validation_result(false, "invalid_profile_index_id")
+		for string_field: String in ["name", "profession", "gender"]:
+			if (raw_entry as Dictionary).has(string_field) and not (raw_entry as Dictionary).get(string_field) is String:
+				return _validation_result(false, "invalid_profile_index_%s" % string_field)
+		if (raw_entry as Dictionary).has("level"):
+			var level_value: Variant = (raw_entry as Dictionary).get("level")
+			if not _is_integral_json_number(level_value) or int(level_value) < 1:
+				return _validation_result(false, "invalid_profile_index_level")
+		if (raw_entry as Dictionary).has("updated_at"):
+			var updated_at_value: Variant = (raw_entry as Dictionary).get("updated_at")
+			if not _is_integral_json_number(updated_at_value) or int(updated_at_value) < 0:
+				return _validation_result(false, "invalid_profile_index_updated_at")
+		seen[profile_id] = true
+	return _validation_result(true)
+
+
+func _validate_shared_warehouse_document_status(document: Dictionary) -> Dictionary:
+	var schema_value: Variant = document.get("schema_version", null)
+	# A future aggregate owns all its children, including ones today's item
+	# codec considers corrupt. Never recover a backup over that owner.
+	if _is_integral_json_number(schema_value) and schema_value > SHARED_WAREHOUSE_SCHEMA_VERSION:
+		return _validation_result(false, "future_shared_warehouse_version", true)
+	var item_document := ItemExtensionCodec.decode_document(document)
+	if item_document.status != ItemExtensionCodec.KNOWN_VALID:
+		return _validation_result(false, item_document.reason,
+			item_document.status == ItemExtensionCodec.OPAQUE_UNSUPPORTED)
+	if not _is_integral_json_number(schema_value) or int(schema_value) < 1:
+		return _validation_result(false, "invalid_shared_warehouse_version")
+	if document.has("revision"):
+		var revision_value: Variant = document.get("revision")
+		if not _is_integral_json_number(revision_value) or int(revision_value) < 0:
+			return _validation_result(false, "invalid_shared_warehouse_revision")
+	return _validation_result(
+		_validate_shared_warehouse_document(document),
+		"invalid_shared_warehouse"
+	)
+
+
+func _json_validator_for_path(path: String) -> Callable:
+	if path == profile_index_path:
+		return Callable(self, "_validate_profile_index_document_status")
+	if path == shared_warehouse_path:
+		return Callable(self, "_validate_shared_warehouse_document_status")
+	if path in [SAVE_PATH, LEGACY_SAVE_PATH]:
+		return Callable(self, "_validate_profile_document_status").bind("", true)
+	if path.get_base_dir().get_base_dir() == _world_clock_directory() and path.ends_with(".json"):
+		return Callable(self, "_validate_world_clock_document_status").bind(
+			path.get_base_dir().get_file(), path.get_file().get_basename()
+		)
+	if path.get_base_dir().get_base_dir().get_base_dir() == _death_event_root() and path.ends_with(".json"):
+		return Callable(self, "_validate_death_event_document_status").bind(
+			path.get_base_dir().get_base_dir().get_file(), path.get_file().get_basename(), path.get_base_dir().get_file()
+		)
+	if path.get_base_dir() == _world_clock_directory() and path.ends_with(".json"):
+		return Callable(self, "_validate_world_clock_document_status").bind(path.get_file().get_basename())
+	if path.get_base_dir().get_base_dir() == _death_event_root() and path.ends_with(".json"):
+		return Callable(self, "_validate_death_event_document_status").bind(
+			path.get_base_dir().get_file(), path.get_file().get_basename()
+		)
+	if path.get_base_dir() == profile_directory and path.ends_with(".json"):
+		var expected_profile_id := path.get_file().get_basename()
+		return Callable(self, "_validate_profile_document_status").bind(expected_profile_id, false)
+	if path.get_base_dir() == profile_directory and path.ends_with(".json.bak"):
+		return Callable(self, "_validate_profile_document_status").bind(path.get_file().trim_suffix(".json.bak"), false)
+	return Callable()
+
+
+func _world_state_owner_is_unsupported(value: Variant) -> bool:
+	if not value is Dictionary: return false
+	var contract: Variant = value.get("contract_id")
+	if contract is String and not contract.is_empty() and contract != WorldMonsterRespawnStateScript.CONTRACT_ID:
+		return true
+	var version: Variant = value.get("schema_version")
+	return _is_integral_json_number(version) and version > WorldMonsterRespawnStateScript.SCHEMA_VERSION
+
+
+func _validate_world_clock_document_status(document: Dictionary, profile_id: String, generation := "") -> Dictionary:
+	var contract: Variant = document.get("contract_id")
+	if contract is String and not contract.is_empty() and contract != WorldMonsterClockLedgerScript.SNAPSHOT_CONTRACT_ID:
+		return _validation_result(false, "unsupported_world_clock_snapshot", true)
+	if _world_state_owner_is_unsupported(document.get("world_state")):
+		return _validation_result(false, "unsupported_world_state", true)
+	return _validation_result(
+		_valid_profile_storage_id(profile_id)
+		and WorldMonsterClockLedgerScript.valid_snapshot(document, profile_id, generation),
+		"invalid_world_clock_snapshot",
+	)
+
+
+func _validate_death_event_document_status(
+	document: Dictionary,
+	profile_id: String,
+	sequence_text: String,
+	generation := "",
+) -> Dictionary:
+	var contract: Variant = document.get("contract_id")
+	if contract is String and not contract.is_empty() and contract not in [WorldMonsterClockLedgerScript.EVENT_CONTRACT_ID, WorldMonsterClockLedgerScript.DELTA_EVENT_CONTRACT_ID]:
+		return _validation_result(false, "unsupported_death_event", true)
+	if _world_state_owner_is_unsupported(document.get("world_state")):
+		return _validation_result(false, "unsupported_world_state", true)
+	return _validation_result(
+		_valid_profile_storage_id(profile_id)
+		and sequence_text.is_valid_int()
+		and WorldMonsterClockLedgerScript.valid_death_event(
+			document, profile_id, int(sequence_text), generation
+		),
+		"invalid_death_event",
+	)
+
+
+func _read_world_clock_replay(profile_document: Dictionary) -> Dictionary:
+	var profile_id := str(profile_document.get("profile_id", ""))
+	if not _valid_profile_storage_id(profile_id):
+		return {"ok": false, "reason": "invalid_profile_id"}
+	var snapshot: Dictionary = {}
+	var generation := str(profile_document.get("world_clock_generation", ""))
+	var clock_path := _world_clock_path(profile_id, generation)
+	if FileAccess.file_exists(clock_path) or FileAccess.file_exists(clock_path + ".bak"):
+		var clock_read := _read_json_with_status(clock_path)
+		if not bool(clock_read.get("success", false)):
+			return {"ok": false, "reason": "world_clock_unavailable"}
+		snapshot = clock_read.get("data", {})
+	var profile_sequence := int(profile_document.get("death_event_sequence", 0))
+	var world_sequence := int(snapshot.get("sequence", 0))
+	var minimum_sequence := mini(profile_sequence, world_sequence)
+	var events: Array = []
+	var event_directory := _death_event_directory(profile_id, generation)
+	if DirAccess.dir_exists_absolute(ProjectSettings.globalize_path(event_directory)):
+		var directory := DirAccess.open(event_directory)
+		if directory == null:
+			return {"ok": false, "reason": "death_event_directory_unavailable"}
+		var sequences: Array[int] = []
+		directory.list_dir_begin()
+		var name := directory.get_next()
+		while not name.is_empty():
+			if not directory.current_is_dir() and name.ends_with(".json"):
+				var sequence_text := name.get_basename()
+				if not sequence_text.is_valid_int() or int(sequence_text) <= 0:
+					directory.list_dir_end()
+					return {"ok": false, "reason": "invalid_death_event_name"}
+				if int(sequence_text) > minimum_sequence:
+					sequences.append(int(sequence_text))
+			name = directory.get_next()
+		directory.list_dir_end()
+		sequences.sort()
+		for sequence: int in sequences:
+			var event_read := _read_json_with_status(_death_event_path(profile_id, sequence, generation))
+			if not bool(event_read.get("success", false)):
+				return {"ok": false, "reason": "death_event_unavailable"}
+			events.append(event_read.get("data", {}))
+	var replay: Dictionary = WorldMonsterClockLedgerScript.replay(
+		profile_document, snapshot, events
+	)
+	if not bool(replay.get("ok", false)):
+		return replay
+	var profile_backup_sequence := profile_sequence
+	var profile_backup := _read_json_document(_profile_path(profile_id) + ".bak")
+	if (
+		bool(profile_backup.get("valid", false))
+		and bool(_validate_profile_document_status(
+			profile_backup.get("data", {}), profile_id, false
+		).get("valid", false))
+		and profile_backup.data.get("world_clock_generation", "") == generation
+	):
+		profile_backup_sequence = int(
+			(profile_backup.get("data", {}) as Dictionary).get("death_event_sequence", 0)
+		)
+	var world_backup_sequence := world_sequence
+	var world_backup := _read_json_document(clock_path + ".bak")
+	if (
+		bool(world_backup.get("valid", false))
+		and WorldMonsterClockLedgerScript.valid_snapshot(
+			world_backup.get("data", {}), profile_id, generation
+		)
+	):
+		world_backup_sequence = int(
+			(world_backup.get("data", {}) as Dictionary).get("sequence", 0)
+		)
+	replay["profile_backup_sequence"] = profile_backup_sequence
+	replay["world_backup_sequence"] = world_backup_sequence
+	return replay
+
+
+func _archive_legacy_world_clock_profile(profile_document: Dictionary) -> String:
+	if test_mode or profile_document.has("death_event_sequence"):
+		return ""
+	var profile_id := str(profile_document.get("profile_id", ""))
+	if not _valid_profile_storage_id(profile_id):
+		return ""
+	var directory := profile_directory.path_join("clock_import_backups")
+	if DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(directory)) != OK:
+		return ""
+	var digest := _shared_digest(profile_document)
+	var path := directory.path_join("%s-%s.json" % [profile_id, digest])
+	if FileAccess.file_exists(path):
+		var prior := _read_json_document(path)
+		return path if bool(prior.get("valid", false)) and _shared_digest(prior.get("data", {})) == digest else ""
+	# This archive owns the source digest. Validate supported legacy ownership
+	# without applying the writer's forward identity conversion to its before-image.
+	return path if _write_json_atomic(path, profile_document, true) else ""
+
+
+func _prepare_world_clock_profile(document: Dictionary) -> Dictionary:
+	if test_mode:
+		return {"ok": true, "data": document}
+	if document.has("death_event_sequence"):
+		# An interrupted import may have promoted the primary but not its backup.
+		# Finish that boundary before any new death may commit to this generation.
+		if document.has("world_clock_import_source") and not _complete_world_clock_import_backup(document):
+			return {"ok": false, "reason": "world_clock_import_backup_failed"}
+		return {"ok": true, "data": document}
+	var profile_id := str(document.get("profile_id", ""))
+	var digest := _shared_digest(document)
+	var replay := WorldMonsterClockLedgerScript.replay(document, {}, [])
+	# The first clock implementation archived a legacy source but left the
+	# primary unmarked until the next save. Preserve any committed events from
+	# that exact, evidenced forward migration. New imports use a different
+	# archive directory so retrying a failed import cannot manufacture this proof.
+	var prior_archive_path := profile_directory.path_join("clock_migration_backups").path_join("%s-%s.json" % [profile_id, digest])
+	if FileAccess.file_exists(prior_archive_path):
+		var prior := _read_json_document(prior_archive_path)
+		if not bool(prior.get("valid", false)) or _shared_digest(prior.get("data", {})) != digest:
+			return {"ok": false, "reason": "legacy_clock_archive_invalid"}
+		replay = _read_world_clock_replay(document)
+	if not bool(replay.get("ok", false)):
+		return replay
+	var archive := _archive_legacy_world_clock_profile(document)
+	if archive.is_empty():
+		return {"ok": false, "reason": "world_clock_migration_archive_failed"}
+	# A distinct namespace prevents an old writer's sequence-less checkpoint
+	# from being joined to previous (possibly already compacted) death events.
+	var generation := Crypto.new().generate_random_bytes(16).hex_encode()
+	var clock_path := _world_clock_path(profile_id, generation)
+	if FileAccess.file_exists(clock_path):
+		return {"ok": false, "reason": "world_clock_import_identity_collision"}
+	if DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(clock_path.get_base_dir())) != OK:
+		return {"ok": false, "reason": "world_clock_import_directory_failed"}
+	var clock := WorldMonsterClockLedgerScript.snapshot_document(profile_id, 0, replay.world_state, generation)
+	if not _write_json_atomic(clock_path, clock):
+		return {"ok": false, "reason": "world_clock_import_snapshot_failed"}
+	var converted := document.duplicate(true)
+	converted.erase("world_monster_respawn_state")
+	converted["level"] = replay.level
+	converted["experience"] = replay.experience
+	converted["quest_states"] = replay.quest_states
+	converted["death_event_sequence"] = 0
+	converted["world_clock_generation"] = generation
+	converted["world_clock_import_source"] = digest
+	# World first, then primary, then matching recovery checkpoint. No gameplay
+	# runs until all three succeed. Original character data remains archived.
+	# This intermediate clock import retains validated legacy item shapes.
+	# Runtime equipment/identity import follows before the normal formal save.
+	if not _write_json_atomic(_profile_path(profile_id), converted, true):
+		return {"ok": false, "reason": "world_clock_import_profile_failed"}
+	if not _complete_world_clock_import_backup(converted):
+		return {"ok": false, "reason": "world_clock_import_backup_failed"}
+	return {"ok": true, "data": converted, "archive": archive}
+
+
+func _complete_world_clock_import_backup(document: Dictionary) -> bool:
+	var profile_id := str(document.get("profile_id", ""))
+	var generation := str(document.get("world_clock_generation", ""))
+	if generation.is_empty() or not WorldMonsterClockLedgerScript.valid_generation(generation):
+		return false
+	var clock := _read_json_with_status(_world_clock_path(profile_id, generation))
+	if not bool(clock.get("success", false)):
+		return false
+	var backup_path := _profile_path(profile_id) + ".bak"
+	var backup := _read_json_document(backup_path)
+	if bool(backup.get("valid", false)):
+		var prior: Dictionary = backup.data
+		if not bool(_validate_profile_document_status(prior, profile_id, false).valid):
+			return false
+		if prior.has("death_event_sequence"):
+			return prior.get("world_clock_generation", "") == generation
+		if _shared_digest(prior) != str(document.get("world_clock_import_source", "")):
+			return false
+	elif bool(backup.get("exists", false)):
+		return false
+	# This is only the import's sequence-zero backup conversion. Never promote
+	# an arbitrary older checkpoint to a later cleanup watermark.
+	if int(document.get("death_event_sequence", -1)) != 0:
+		return false
+	return _write_json_atomic(backup_path, document, true)
+
+
+func _checkpoint_world_clock() -> bool:
+	if test_mode:
+		return true
+	# Consume accepted receipts before capturing the live state and watermarks.
+	if _world_json_persistence.pending_count() > 0:
+		_world_json_persistence.drain()
+	var checkpoint := _checkpoint_world_clock_snapshot(
+		active_profile_id, _world_clock_generation, world_monster_respawn_state,
+		_death_event_sequence, _world_clock_snapshot_sequence,
+		_world_clock_backup_sequence, _world_clock_dirty)
+	if not bool(checkpoint.success):
+		return false
+	_world_clock_snapshot_sequence = int(checkpoint.snapshot_sequence)
+	_world_clock_backup_sequence = int(checkpoint.backup_sequence)
+	_world_clock_dirty = bool(checkpoint.dirty)
+	if bool(checkpoint.first_baseline):
+		_world_clock_changes.clear()
+	return true
+
+
+func _checkpoint_world_clock_snapshot(
+	profile_id: String, generation: String, state: Dictionary,
+	latest_sequence: int, snapshot_sequence: int, backup_sequence: int,
+	dirty: bool,
+) -> Dictionary:
+	# Both gameplay and profile admission use the same writer, validator and
+	# promotion receipt. A profile candidate does not publish live player state.
+	var result := {"success": false, "snapshot_sequence": snapshot_sequence,
+		"backup_sequence": backup_sequence, "dirty": dirty, "first_baseline": false}
+	if test_mode:
+		result["success"] = true
+		return result
+	if not _valid_profile_storage_id(profile_id):
+		return result
+	if not dirty and snapshot_sequence == latest_sequence and backup_sequence >= snapshot_sequence:
+		result["success"] = true
+		return result
+	var clock_path := _world_clock_path(profile_id, generation)
+	if DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(clock_path.get_base_dir())) != OK:
+		return result
+	var compacted := WorldMonsterRespawnStateScript.compact_elapsed(
+		state, Time.get_unix_time_from_system())
+	var document := WorldMonsterClockLedgerScript.snapshot_document(
+		profile_id, latest_sequence, compacted, generation)
+	if not _write_json_atomic(clock_path, document, false,
+		{"profile_id": profile_id, "generation": generation}):
+		return result
+	# Read this exact promotion before any other profile/archive write can
+	# replace _last_json_promotion. Keep the original backup cleanup watermark.
+	result["backup_sequence"] = _backup_sequence_after_promotion(
+		clock_path, snapshot_sequence, latest_sequence, "sequence")
+	result["snapshot_sequence"] = latest_sequence
+	result["dirty"] = false
+	result["first_baseline"] = snapshot_sequence < 0
+	result["success"] = true
+	return result
+
+
+func _queue_world_clock_cleanup() -> void:
+	# A completed worker can be waiting for the next _process tick. Reconcile
+	# its receipt before another same-frame transaction compares watermarks.
+	if _clock_cleanup_worker != null and bool(_clock_cleanup_worker.result().finished):
+		_advance_world_clock_cleanup()
+	var through_sequence := mini(
+		mini(
+			_profile_saved_death_event_sequence,
+			_profile_backup_death_event_sequence,
+		),
+		mini(_world_clock_snapshot_sequence, _world_clock_backup_sequence),
+	)
+	if through_sequence <= 0 or not _valid_profile_storage_id(active_profile_id):
+		return
+	var request := {
+		"profile_id": active_profile_id,
+		"generation": _world_clock_generation,
+		"through_sequence": through_sequence,
+	}
+	if _clock_cleanup_covers(_clock_cleanup_completed, request):
+		return
+	if _clock_cleanup_worker != null and not bool(_clock_cleanup_worker.result().finished):
+		if _clock_cleanup_covers(_clock_cleanup_active, request):
+			return
+		if _clock_cleanup_covers(_clock_cleanup_pending, request):
+			return
+		_clock_cleanup_pending = request
+		return
+	_start_world_clock_cleanup(request)
+
+
+func _clock_cleanup_covers(existing: Dictionary, request: Dictionary) -> bool:
+	return (
+		not existing.is_empty()
+		and str(existing.get("profile_id", "")) == str(request.get("profile_id", ""))
+		and str(existing.get("generation", "")) == str(request.get("generation", ""))
+		and int(existing.get("through_sequence", 0)) >= int(request.get("through_sequence", 0))
+	)
+
+
+func _start_world_clock_cleanup(request: Dictionary) -> void:
+	var profile_id := str(request.get("profile_id", ""))
+	var generation: Variant = request.get("generation", "")
+	if not _valid_profile_storage_id(profile_id) or not WorldMonsterClockLedgerScript.valid_generation(generation):
+		return
+	var job := _json_persistence.submit_cleanup(
+		_death_event_directory(profile_id, generation),
+		request,
+		int(request.get("through_sequence", 0)),
+	)
+	if job == null:
+		_clock_cleanup_pending = request
+		return
+	_clock_cleanup_worker = JsonPreparedRequest.new()
+	_clock_cleanup_worker.configure(_json_persistence, job)
+	_clock_cleanup_worker.terminal_result = true
+	_clock_cleanup_active = request.duplicate(true)
+
+
+func _advance_world_clock_cleanup() -> void:
+	if _clock_cleanup_worker != null and not bool(_clock_cleanup_worker.result().finished):
+		return
+	if _clock_cleanup_worker != null and bool(_clock_cleanup_worker.result().get("success", false)):
+		_clock_cleanup_completed = _clock_cleanup_active.duplicate(true)
+	_clock_cleanup_worker = null
+	_clock_cleanup_active.clear()
+	if not _clock_cleanup_pending.is_empty():
+		var request := _clock_cleanup_pending
+		_clock_cleanup_pending = {}
+		if not _clock_cleanup_covers(_clock_cleanup_completed, request):
+			_start_world_clock_cleanup(request)
+
+
+func _commit_death_event() -> bool:
+	var started_usec := Time.get_ticks_usec()
+	_last_save_phase_profile = {}
+	if (
+		active_profile_id.is_empty()
+		or active_profile_id == _save_blocked_profile_id
+		or _world_clock_snapshot_sequence < 0
+		or not FileAccess.file_exists(_world_clock_path(active_profile_id, _world_clock_generation))
+	):
+		return false
+	var next_sequence := _death_event_sequence + 1
+	var path := _death_event_path(active_profile_id, next_sequence, _world_clock_generation)
+	if FileAccess.file_exists(path):
+		return false
+	if DirAccess.make_dir_recursive_absolute(
+		ProjectSettings.globalize_path(_death_event_directory(active_profile_id, _world_clock_generation))
+	) != OK:
+		return false
+	var document := WorldMonsterClockLedgerScript.delta_death_event_document(
+		active_profile_id, next_sequence, level, experience, quest_states,
+		_world_clock_changes, _world_clock_generation,
+	)
+	_last_save_phase_profile["runtime_snapshot_ms"] = (
+		float(Time.get_ticks_usec() - started_usec) / 1000.0
+	)
+	var write_started_usec := Time.get_ticks_usec()
+	var success := _write_json_atomic(path, document)
+	_last_save_phase_profile["atomic_write_ms"] = (
+		float(Time.get_ticks_usec() - write_started_usec) / 1000.0
+	)
+	_last_save_phase_profile["atomic_detail"] = _atomic_write_phases.duplicate()
+	if not success:
+		last_save_result = {
+			"contract_id": SAVE_RESULT_CONTRACT_ID,
+			"success": false,
+			"reason": "death_event_write_failed",
+			"path": path,
+		}
+		return false
+	_death_event_sequence = next_sequence
+	_world_clock_changes.clear()
+	_world_clock_dirty = true
+	last_save_result = {
+		"contract_id": SAVE_RESULT_CONTRACT_ID,
+		"success": true,
+		"reason": "",
+		"path": path,
+		"save_phases": _last_save_phase_profile.duplicate(),
+	}
+	_last_runtime_commit_profile = {
+		"duration_ms": float(Time.get_ticks_usec() - started_usec) / 1000.0,
+		"success": true,
+		"profile_index_skipped": true,
+	}
+	return true
+
+
+func _validate_json_candidate(document: Dictionary, validator: Callable) -> Dictionary:
+	if not validator.is_valid():
+		return _validation_result(true)
+	var result: Variant = validator.call(document)
+	if not result is Dictionary:
+		return _validation_result(false, "invalid_validator_result")
+	return result
+
+
+func _next_quarantine_path(path: String) -> String:
+	var candidate := "%s.quarantine.%d" % [path, Time.get_ticks_usec()]
+	var serial := 0
+	while FileAccess.file_exists(candidate):
+		serial += 1
+		candidate = "%s.quarantine.%d.%d" % [path, Time.get_ticks_usec(), serial]
+	return candidate
+
+
+func _restore_json_backup(path: String, validator := Callable()) -> Dictionary:
+	var backup := path + ".bak"
+	var backup_document := _read_json_document(backup)
+	if not bool(backup_document.get("valid", false)):
+		return {
+			"success": false,
+			"reason": "backup_missing_or_invalid",
+			"data": {},
+		}
+	var backup_validation := _validate_json_candidate(backup_document.get("data", {}), validator)
+	if not bool(backup_validation.get("valid", false)):
+		return {
+			"success": false,
+			"reason": str(backup_validation.get("reason", "backup_business_invalid")),
+			"terminal": bool(backup_validation.get("terminal", false)),
+			"data": {},
+		}
+	var restored: Dictionary = backup_document.get("data", {}).duplicate(true)
+	var profile_document := path in [SAVE_PATH,LEGACY_SAVE_PATH] or (path.get_base_dir() == profile_directory and path.ends_with(".json"))
+	if profile_document and ItemTransactionJournal.is_sequenced(restored.get(ItemTransactionJournal.FIELD,{})):
+		var journal := ItemTransactionJournal.recovered(restored[ItemTransactionJournal.FIELD])
+		if journal.is_empty():
+			return {"success":false,"reason":"backup_item_epoch_recovery_failed","data":{}}
+		restored[ItemTransactionJournal.FIELD] = journal
+		if not bool(_validate_json_candidate(restored,validator).get("valid",false)):
+			return {"success":false,"reason":"backup_item_epoch_recovery_invalid","data":{}}
+	var temporary := path + ".tmp"
+	var file := FileAccess.open(temporary, FileAccess.WRITE)
+	if file == null:
+		return {"success": false, "reason": "backup_restore_temp_open_failed", "data": {}}
+	var serialized := JSON.stringify(restored, "\t")
+	file.store_string(serialized)
+	file.flush()
+	var write_error := file.get_error()
+	file.close()
+	if write_error != OK:
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(temporary))
+		return {"success":false,"reason":"backup_restore_temp_write_failed","data":{}}
+	var temporary_document := _read_json_document(temporary)
+	if (
+		not bool(temporary_document.get("valid", false))
+		or FileAccess.get_file_as_string(temporary) != serialized
+		or not bool(_validate_json_candidate(temporary_document.get("data", {}), validator).get("valid", false))
+	):
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(temporary))
+		return {"success": false, "reason": "backup_restore_temp_invalid", "data": {}}
+	var absolute_path := ProjectSettings.globalize_path(path)
+	var absolute_temp := ProjectSettings.globalize_path(temporary)
+	var quarantine_path := ""
+	if FileAccess.file_exists(path):
+		quarantine_path = _next_quarantine_path(path)
+		if DirAccess.rename_absolute(absolute_path, ProjectSettings.globalize_path(quarantine_path)) != OK:
+			DirAccess.remove_absolute(absolute_temp)
+			return {"success": false, "reason": "backup_restore_quarantine_failed", "data": {}}
+	if DirAccess.rename_absolute(absolute_temp, absolute_path) != OK:
+		if not quarantine_path.is_empty():
+			DirAccess.rename_absolute(ProjectSettings.globalize_path(quarantine_path), absolute_path)
+		return {"success": false, "reason": "backup_restore_promote_failed", "data": {}}
+	return {
+		"success": true,
+		"reason": "recovered_from_backup",
+		"data": temporary_document.get("data", {}).duplicate(true),
+		"quarantine_path": quarantine_path,
+	}
+
+
+func _read_json_with_status(path: String, validator := Callable()) -> Dictionary:
+	if _startup_save_upgrade_pending and not _startup_save_upgrade_in_progress:
+		return _startup_upgrade_read(path, validator)
+	if not validator.is_valid():
+		validator = _json_validator_for_path(path)
+	var primary := _read_json_document(path)
+	if bool(primary.get("valid", false)):
+		var validation := _validate_json_candidate(primary.get("data", {}), validator)
+		if bool(validation.get("valid", false)):
+			return {
+				"success": true,
+				"reason": "primary",
+				"data": primary.get("data", {}),
+			}
+		if bool(validation.get("terminal", false)):
+			return {
+				"success": false,
+				"reason": str(validation.get("reason", "primary_business_invalid")),
+				"data": {},
+				"terminal": true,
+			}
+	var recovered := _restore_json_backup(path, validator)
+	if bool(recovered.get("success", false)):
+		return recovered
+	return {
+		"success": false,
+		"reason": str(recovered.get("reason", "")) if bool(primary.get("exists", false)) else "primary_missing",
+		"data": {},
+		"terminal": bool(recovered.get("terminal", false)),
+	}
+
+
+func _read_json(path: String) -> Dictionary:
+	return _read_json_with_status(path).get("data", {})
+
+
+func _write_json_atomic(path: String, data: Dictionary, preserve_known_wire := false, world_clock_identity: Dictionary = {}) -> bool:
+	if _startup_save_upgrade_pending and not _startup_save_upgrade_in_progress:
+		return false
+	_atomic_write_phases = {}
+	_last_json_promotion = {}
+	# Rollback and migration before-images retain their source digest. Check
+	# supported ownership without applying a forward identity conversion; the
+	# normal aggregate validator still verifies their full business contract.
+	var item_document := ItemExtensionCodec.decode_document(data) if preserve_known_wire else ItemExtensionCodec.encode_document(data)
+	if item_document.status != ItemExtensionCodec.KNOWN_VALID:
+		return false
+	if not preserve_known_wire: data = item_document.document
+	if test_mode and _test_force_atomic_write_failure:
+		return false
+	var identity := {"path": path, "profile_id": active_profile_id, "generation": _world_clock_generation}
+	if not world_clock_identity.is_empty():
+		var target_id: String = str(world_clock_identity.get("profile_id", ""))
+		var target_generation: String = str(world_clock_identity.get("generation", ""))
+		if world_clock_identity.size() != 2 or not _valid_profile_storage_id(target_id) \
+			or not WorldMonsterClockLedgerScript.valid_generation(target_generation) \
+			or path != _world_clock_path(target_id, target_generation):
+			return false
+		identity["profile_id"] = target_id
+		identity["generation"] = target_generation
+	var coordinator: RefCounted = (
+		_world_json_persistence if path.begins_with(_world_clock_directory() + "/")
+		else _json_persistence
+	)
+	var request: RefCounted = coordinator.submit(
+		path, identity,
+		data, _json_validator_for_path(path), Callable(), false,
+		_validated_profile_bytes if path == _validated_profile_path else null,
+		_record_background_json_receipt, false, null, path + ".tmp",
+	)
+	if request == null:
+		return false
+	return bool(coordinator.finish(request, true).get("success", false))
+
+
+func _promote_verified_json(path: String, temporary: String, expected_bytes: PackedByteArray, validated_previous_bytes: Variant = null) -> bool:
+	_last_json_promotion = {}
+	var request := _json_persistence.submit(
+		path, {"path": path, "profile_id": active_profile_id, "generation": _world_clock_generation},
+		{}, _json_validator_for_path(path), Callable(), false,
+		validated_previous_bytes if validated_previous_bytes != null else (
+			_validated_profile_bytes if path == _validated_profile_path else null
+		), _record_background_json_receipt, false, expected_bytes, temporary,
+		validated_previous_bytes is PackedByteArray,
+	)
+	if request == null:
+		return false
+	return bool(_json_persistence.finish(request, true).get("success", false))
+
+
+func _record_background_json_receipt(receipt: Dictionary) -> void:
+	assert(OS.get_thread_caller_id() == OS.get_main_thread_id())
+	if not bool(receipt.get("success", false)):
+		return
+	var path := str(receipt.identity.path)
+	var previous: Dictionary = receipt.get("previous_document", {})
+	_last_json_promotion = {
+		"path": path, "backup_rotated": bool(receipt.backup_rotated),
+		"backup_exists": bool(receipt.backup_exists),
+		"backup_valid": bool(receipt.backup_valid),
+		"backup_document": receipt.get("backup_document", {}),
+		"previous_sequence": previous.get("sequence", -1),
+		"previous_death_sequence": previous.get("death_event_sequence", -1),
+		"previous_generation": previous.get("world_clock_generation", ""),
+	}
+	var phases: Dictionary = receipt.get("worker_stage_usec", {})
+	_atomic_write_phases = {
+		"worker_prepare_ms": float(phases.get("PREPARE", 0)) / 1000.0,
+		"worker_previous_read_ms": float(phases.get("READ_PREVIOUS", 0)) / 1000.0,
+		"worker_promote_ms": float(phases.get("PROMOTE", 0)) / 1000.0,
+	}
+	if not path.begins_with(_world_clock_directory() + "/"):
+		_atomic_write_generation += 1
+	if path.get_base_dir() == profile_directory and path.ends_with(".json"):
+		_validated_profile_path = path
+		_validated_profile_bytes = receipt.bytes
+
+
+func _backup_sequence_after_promotion(path: String, previous_sequence: int, current_sequence: int, field: String) -> int:
+	# A corrupt primary is quarantined without rotating the valid old backup.
+	# Only a verified rotation can advance its cleanup watermark to the previous
+	# primary. The byte-validated profile fast path already owns that sequence.
+	if str(_last_json_promotion.get("path", "")) != path:
+		return -1
+	if not bool(_last_json_promotion.get("backup_exists", false)):
+		return current_sequence
+	if bool(_last_json_promotion.get("backup_rotated", false)):
+		# The byte-validated fast path does not parse the prior generation. Null
+		# is unknown, not the legacy namespace: retain its known older watermark.
+		var recorded_generation: Variant = _last_json_promotion.get("previous_generation")
+		if field == "death_event_sequence" and recorded_generation != null and recorded_generation != _world_clock_generation:
+			return current_sequence # Another generation retains its own journal.
+		var key := "previous_sequence" if field == "sequence" else "previous_death_sequence"
+		var recorded := int(_last_json_promotion.get(key, -1))
+		return recorded if recorded >= 0 else previous_sequence
+	# Exceptional recovery path only: inspect the backup actually preserved.
+	# Unknown/invalid backups hold back cleanup instead of deleting evidence.
+	if not bool(_last_json_promotion.get("backup_valid", false)):
+		return -1
+	var document: Dictionary = _last_json_promotion.get("backup_document", {})
+	if field == "death_event_sequence" and document.get("world_clock_generation", "") != _world_clock_generation:
+		return current_sequence
+	var sequence: Variant = document.get(field, 0 if field == "death_event_sequence" else -1)
+	return int(sequence) if _is_integral_json_number(sequence) and int(sequence) >= 0 else -1
+
+
+func _file_matches_validated_bytes(path: String, expected: PackedByteArray) -> bool:
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null:
+		return false
+	var matches := file.get_length() == expected.size() and file.get_buffer(expected.size()) == expected
+	file.close()
+	return matches
+
+
+func _shared_warehouse_empty_document() -> Dictionary:
+	return {
+		"schema_version": SHARED_WAREHOUSE_SCHEMA_VERSION,
+		"contract_id": SHARED_WAREHOUSE_CONTRACT_ID,
+		"revision": 0,
+		"warehouse_inventory": [],
+		"legacy_migration": {
+			"completed": false,
+			"contract_id": SHARED_WAREHOUSE_MIGRATION_CONTRACT_ID,
+			"sources": {},
+		},
+	}
+
+
+var _shared_digest_cache: Dictionary = {}
+var _shared_digest_snapshots: Dictionary = {}
+
+func _shared_digest(value: Variant) -> String:
+	# Preserve the persisted JSON-round-trip hash contract. Repeated WAL and
+	# readback comparisons share the normalization of identical serialized input;
+	# changed fields produce a different SHA-256 key and are normalized anew.
+	var is_container := value is Array or value is Dictionary
+	var snapshot_key := hash(value) if is_container else 0
+	if is_container:
+		var cached: Dictionary = _shared_digest_snapshots.get(snapshot_key, {})
+		if not cached.is_empty() and typeof(cached.value) == typeof(value) and cached.value == value:
+			return str(cached.digest)
+	var serialized := JSON.stringify(value)
+	var input_hash := serialized.sha256_text()
+	if _shared_digest_cache.has(input_hash):
+		var known_digest := str(_shared_digest_cache[input_hash])
+		if is_container:
+			if _shared_digest_snapshots.size() >= 16: _shared_digest_snapshots.clear()
+			_shared_digest_snapshots[snapshot_key] = {"value": value.duplicate(true), "digest": known_digest}
+		return known_digest
+	var normalized: Variant = JSON.parse_string(serialized)
+	var digest := JSON.stringify(normalized).sha256_text()
+	if _shared_digest_cache.size() >= 256: _shared_digest_cache.clear()
+	_shared_digest_cache[input_hash] = digest
+	if is_container:
+		if _shared_digest_snapshots.size() >= 16: _shared_digest_snapshots.clear()
+		_shared_digest_snapshots[snapshot_key] = {"value": value.duplicate(true), "digest": digest}
+	return digest
+
+
+func _shared_warehouse_read_inventory() -> Array:
+	var document := _read_json(shared_warehouse_path)
+	var item_document := ItemExtensionCodec.decode_document(document)
+	if item_document.status != ItemExtensionCodec.KNOWN_VALID:
+		return []
+	document = item_document.document
+	var records: Variant = document.get("warehouse_inventory", null)
+	return (records as Array).duplicate(true) if records is Array else []
+
+
+func _shared_warehouse_test_isolation_enabled() -> bool:
+	return (
+		profile_directory != PROFILE_DIRECTORY
+		and shared_warehouse_path != SHARED_WAREHOUSE_DEFAULT_PATH
+		and shared_warehouse_transaction_log_path != SHARED_WAREHOUSE_TRANSACTION_LOG_PATH
+	)
+
+
+func _valid_profile_storage_id(profile_id: String) -> bool:
+	return (
+		not profile_id.is_empty()
+		and not profile_id.contains("/")
+		and not profile_id.contains("\\")
+		and profile_id not in [".", ".."]
+	)
+
+
+func _profile_ids_for_shared_warehouse() -> Dictionary:
+	var ids: Dictionary = {}
+	var index_status := _read_json_with_status(profile_index_path)
+	if FileAccess.file_exists(profile_index_path) and not bool(index_status.get("success", false)):
+		return {"ok": false, "ids": []}
+	var profiles: Variant = (index_status.get("data", {}) as Dictionary).get("profiles", [])
+	if not profiles is Array:
+		return {"ok": false, "ids": []}
+	for entry: Variant in profiles:
+		if not entry is Dictionary:
+			return {"ok": false, "ids": []}
+		var profile_id := str((entry as Dictionary).get("id", ""))
+		if not _valid_profile_storage_id(profile_id) or ids.has(profile_id):
+			return {"ok": false, "ids": []}
+		ids[profile_id] = true
+	var directory := DirAccess.open(profile_directory)
+	if directory != null:
+		for file_name: String in directory.get_files():
+			if not file_name.ends_with(".json"):
+				continue
+			var profile_id := file_name.left(file_name.length() - 5)
+			if not _valid_profile_storage_id(profile_id):
+				return {"ok": false, "ids": []}
+			ids[profile_id] = true
+	var sorted_ids: Array = ids.keys()
+	sorted_ids.sort()
+	return {"ok": true, "ids": sorted_ids}
+
+
+func _legacy_warehouse_source(document: Dictionary) -> Dictionary:
+	var item_document := ItemExtensionCodec.decode_document(document)
+	if item_document.status != ItemExtensionCodec.KNOWN_VALID:
+		return {"ok": false, "records": []}
+	document = item_document.document
+	var legacy: Variant = document.get("warehouse_inventory", [])
+	if not _validate_saved_item_records(legacy, WAREHOUSE_CAPACITY):
+		return {"ok": false, "records": []}
+	var records: Array = []
+	for raw_record: Variant in legacy:
+		if not (raw_record as Dictionary).is_empty():
+			records.append((raw_record as Dictionary).duplicate(true))
+	return {"ok": true, "records": records}
+
+
+func _validate_shared_warehouse_document(document: Dictionary) -> bool:
+	var item_document := ItemExtensionCodec.decode_document(document)
+	if item_document.status != ItemExtensionCodec.KNOWN_VALID:
+		return false
+	document = item_document.document
+	if not _validate_extended_item_ownership(document):
+		return false
+	if int(document.get("schema_version", 0)) != SHARED_WAREHOUSE_SCHEMA_VERSION:
+		return false
+	if str(document.get("contract_id", "")) != SHARED_WAREHOUSE_CONTRACT_ID:
+		return false
+	var bank_value: Variant = document.get("bank_gold", 0)
+	if not _is_integral_json_number(bank_value) or float(bank_value) < 0.0 or float(bank_value) > SHARED_GOLD_CAP:
+		return false
+	var has_bank_state := (
+		document.has("bank_gold")
+		or document.has("bank_contract_id")
+		or document.has("bank_transaction_high_water")
+		or document.has("bank_transactions")
+	)
+	if has_bank_state and str(document.get("bank_contract_id", "")) != BANK_CONTRACT_ID:
+		return false
+	if not _validate_bank_transaction_history(document):
+		return false
+	var records: Variant = document.get("warehouse_inventory", null)
+	if not _validate_saved_item_records(records, WAREHOUSE_CAPACITY):
+		return false
+	# The warehouse is a fixed 5 x 100-slot surface. Empty dictionaries are
+	# valid holes and must survive page-specific deposits and non-tail withdraws.
+	var ledger: Variant = document.get("legacy_migration", null)
+	if (
+		not ledger is Dictionary
+		or not (ledger as Dictionary).get("completed", null) is bool
+		or not bool((ledger as Dictionary).get("completed", false))
+	):
+		return false
+	if str((ledger as Dictionary).get("contract_id", "")) != SHARED_WAREHOUSE_MIGRATION_CONTRACT_ID:
+		return false
+	var sources: Variant = (ledger as Dictionary).get("sources", null)
+	if not sources is Dictionary:
+		return false
+	for raw_profile_id: Variant in (sources as Dictionary).keys():
+		var profile_id := str(raw_profile_id)
+		var ledger_source: Variant = (sources as Dictionary).get(profile_id, null)
+		if not _valid_profile_storage_id(profile_id) or not ledger_source is Dictionary:
+			return false
+		var source_complete: Variant = (ledger_source as Dictionary).get("complete", null)
+		var occupied_count: Variant = (ledger_source as Dictionary).get("occupied_count", null)
+		if (
+			not source_complete is bool
+			or not bool(source_complete)
+			or str((ledger_source as Dictionary).get("contract_id", "")) != SHARED_WAREHOUSE_MIGRATION_CONTRACT_ID
+			or str((ledger_source as Dictionary).get("digest", "")).is_empty()
+			or not _is_integral_json_number(occupied_count)
+			or int(occupied_count) < 0
+		):
+			return false
+		var source_path := _profile_path(profile_id)
+		if not FileAccess.file_exists(source_path):
+			continue # deletion is allowed; the shared ledger remains authoritative.
+		var source := _read_json_with_status(source_path)
+		if not bool(source.get("success", false)):
+			return false
+		var legacy: Variant = (source.get("data", {}) as Dictionary).get("warehouse_inventory", null)
+		if legacy == null:
+			continue # migrated sources may be naturally retired by a later save.
+		var normalized := _legacy_warehouse_source(source.get("data", {}) as Dictionary)
+		if not bool(normalized.get("ok", false)):
+			return false
+		var occupied: Array = normalized.get("records", [])
+		if (
+			_shared_digest(occupied) != str((ledger_source as Dictionary).get("digest", ""))
+			or occupied.size() != int((ledger_source as Dictionary).get("occupied_count", -1))
+		):
+			return false
+	var profile_ids_result := _profile_ids_for_shared_warehouse()
+	if not bool(profile_ids_result.get("ok", false)):
+		return false
+	for raw_profile_id: Variant in profile_ids_result.get("ids", []):
+		var profile_id := str(raw_profile_id)
+		var source := _read_json_with_status(_profile_path(profile_id))
+		if not bool(source.get("success", false)):
+			return false
+		var source_document: Dictionary = source.get("data", {})
+		if source_document.has("warehouse_inventory") and not (sources as Dictionary).has(profile_id):
+			return false
+	return true
+
+
+func _occupied_records(records: Array) -> Array:
+	var result: Array = []
+	for record: Variant in records:
+		if record is Dictionary and not (record as Dictionary).is_empty():
+			result.append((record as Dictionary).duplicate(true))
+	return result
+
+
+func _initialize_shared_warehouse() -> bool:
+	var existing := _read_json_with_status(shared_warehouse_path)
+	if bool(existing.get("success", false)):
+		var item_document := ItemExtensionCodec.decode_document(existing.get("data", {}))
+		if item_document.status != ItemExtensionCodec.KNOWN_VALID:
+			return false
+		warehouse_inventory = item_document.document.get("warehouse_inventory", []).duplicate(true)
+		_shared_warehouse_initialized = true
+		return true
+	if (
+		FileAccess.file_exists(shared_warehouse_path)
+		or FileAccess.file_exists(shared_warehouse_path + ".bak")
+	):
+		_shared_warehouse_initialized = false
+		return false
+	var profile_ids_result := _profile_ids_for_shared_warehouse()
+	if not bool(profile_ids_result.get("ok", false)):
+		_shared_warehouse_initialized = false
+		return false
+	var merged: Array = []
+	var sources: Dictionary = {}
+	for raw_profile_id: Variant in profile_ids_result.get("ids", []):
+		var profile_id := str(raw_profile_id)
+		var source := _read_json_with_status(_profile_path(profile_id))
+		if not bool(source.get("success", false)):
+			_shared_warehouse_initialized = false
+			return false
+		var normalized := _legacy_warehouse_source(source.get("data", {}) as Dictionary)
+		if not bool(normalized.get("ok", false)):
+			_shared_warehouse_initialized = false
+			return false
+		var occupied: Array = normalized.get("records", [])
+		for record: Variant in occupied:
+			merged.append(record.duplicate(true))
+			if merged.size() > WAREHOUSE_CAPACITY:
+				_shared_warehouse_initialized = false
+				return false
+		sources[profile_id] = {
+			"digest": _shared_digest(occupied),
+			"occupied_count": occupied.size(),
+			"complete": true,
+			"contract_id": SHARED_WAREHOUSE_MIGRATION_CONTRACT_ID,
+		}
+	var document := _shared_warehouse_empty_document()
+	document["revision"] = 1
+	document["warehouse_inventory"] = merged
+	(document["legacy_migration"] as Dictionary)["completed"] = true
+	(document["legacy_migration"] as Dictionary)["sources"] = sources
+	if not _write_shared_warehouse_document_atomic(document):
+		_shared_warehouse_initialized = false
+		return false
+	_shared_warehouse_initialized = true
+	warehouse_inventory = merged.duplicate(true)
+	return true
+
+
+func _ensure_shared_warehouse_ready() -> bool:
+	if _warehouse_transaction_locked:
+		return false
+	if profile_directory != PROFILE_DIRECTORY and not _shared_warehouse_test_isolation_enabled():
+		return true
+	if _shared_warehouse_initialized:
+		return true
+	return _initialize_shared_warehouse()
+
+
+func _revalidate_shared_warehouse_authority() -> bool:
+	return bool(_read_json_with_status(shared_warehouse_path).get("success", false))
+
+
+func _bank_fields_snapshot(document: Dictionary) -> Dictionary:
+	return {
+		"bank_gold": int(document.get("bank_gold", 0)),
+		"bank_contract_id": str(document.get("bank_contract_id", "")),
+		"bank_transaction_high_water": int(document.get("bank_transaction_high_water", 0)),
+		"bank_transactions": document.get("bank_transactions", {}).duplicate(true),
+	}
+
+
+func _bank_transaction_transition_is_valid(
+	profile_id: String,
+	before_profile: Dictionary,
+	after_profile: Dictionary,
+	before_shared: Dictionary,
+	after_shared: Dictionary,
+) -> bool:
+	# Only remove top-level transaction fields. Nested records are immutable
+	# during this check; structural equality avoids re-encoding 500 items just
+	# to prove that a gold-only transaction preserved them.
+	var before_profile_fixed := before_profile.duplicate()
+	var after_profile_fixed := after_profile.duplicate()
+	for field: String in ["gold", "updated_at", "warehouse_storage_contract_id", "warehouse_inventory"]:
+		before_profile_fixed.erase(field)
+		after_profile_fixed.erase(field)
+	if before_profile_fixed != after_profile_fixed:
+		if not _same_item_identity_upgrade(before_profile_fixed, after_profile_fixed): return false
+	var before_shared_fixed := before_shared.duplicate()
+	var after_shared_fixed := after_shared.duplicate()
+	for field: String in [
+		"revision", "bank_gold", "bank_contract_id",
+		"bank_transaction_high_water", "bank_transactions",
+	]:
+		before_shared_fixed.erase(field)
+		after_shared_fixed.erase(field)
+	if before_shared_fixed != after_shared_fixed:
+		if not _same_item_identity_upgrade(before_shared_fixed, after_shared_fixed): return false
+	if int(after_shared.get("revision", -1)) != int(before_shared.get("revision", -1)) + 1:
+		return false
+	var player_delta := int(after_profile.get("gold", 0)) - int(before_profile.get("gold", 0))
+	var bank_delta := int(after_shared.get("bank_gold", 0)) - int(before_shared.get("bank_gold", 0))
+	if absi(player_delta) != BANK_TRANSFER_AMOUNT or player_delta + bank_delta != 0:
+		return false
+	var before_high_water := int(before_shared.get("bank_transaction_high_water", 0))
+	var after_high_water := int(after_shared.get("bank_transaction_high_water", 0))
+	if after_high_water != before_high_water + 1:
+		return false
+	var before_history: Dictionary = before_shared.get("bank_transactions", {})
+	var after_history: Dictionary = after_shared.get("bank_transactions", {})
+	var new_transaction_id := ""
+	var new_record: Dictionary = {}
+	for raw_id: Variant in after_history.keys():
+		var candidate: Variant = after_history.get(raw_id)
+		if candidate is Dictionary and int((candidate as Dictionary).get("sequence", -1)) == after_high_water:
+			if not new_transaction_id.is_empty():
+				return false
+			new_transaction_id = str(raw_id)
+			new_record = (candidate as Dictionary).duplicate(true)
+	if (
+		new_transaction_id.is_empty()
+		or before_history.has(new_transaction_id)
+		or str(new_record.get("profile_id", "")) != profile_id
+		or bool(new_record.get("deposit", false)) != (player_delta < 0)
+		or int(new_record.get("amount", 0)) != BANK_TRANSFER_AMOUNT
+	):
+		return false
+	var expected_history := _bounded_bank_transaction_history(
+		before_history,
+		new_transaction_id,
+		new_record,
+	)
+	return (
+		str(after_shared.get("bank_contract_id", "")) == BANK_CONTRACT_ID
+		and _shared_digest(expected_history) == _shared_digest(after_history)
+	)
+
+
+func _same_item_identity_upgrade(before: Dictionary, after: Dictionary) -> bool:
+	# Fast structural comparison above remains the normal gold-only path. Only
+	# a first identity upgrade reaches this bounded canonical comparison. The
+	# codec changes declared identity lanes only; any other difference rejects.
+	var normalized_before := ItemExtensionCodec.encode_document(before)
+	var normalized_after := ItemExtensionCodec.encode_document(after)
+	return normalized_before.status == ItemExtensionCodec.KNOWN_VALID \
+		and normalized_after.status == ItemExtensionCodec.KNOWN_VALID \
+		and normalized_before.document == normalized_after.document
+
+
+func _warehouse_transaction_log_is_valid(log: Dictionary) -> bool:
+	var allowed_fields := {
+		"contract_id": true, "state": true, "operation_kind": true,
+		"profile_id": true, "profile_path": true,
+		"before_profile": true, "after_profile": true,
+		"before_shared": true, "after_shared": true,
+		"before_profile_hash": true, "after_profile_hash": true,
+		"before_shared_hash": true, "after_shared_hash": true,
+	}
+	for raw_field: Variant in log.keys():
+		if not allowed_fields.has(str(raw_field)):
+			return false
+	var profile_id := str(log.get("profile_id", ""))
+	var profile_path_value: Variant = log.get("profile_path", null)
+	var before_profile_value: Variant = log.get("before_profile", null)
+	var after_profile_value: Variant = log.get("after_profile", null)
+	var before_shared_value: Variant = log.get("before_shared", null)
+	var after_shared_value: Variant = log.get("after_shared", null)
+	if (
+		str(log.get("contract_id", "")) != WAREHOUSE_TRANSFER_CONTRACT_ID
+		or str(log.get("state", "")) != "PREPARED"
+		or not profile_path_value is String
+		or not _valid_profile_storage_id(profile_id)
+		or str(profile_path_value) != _profile_path(profile_id)
+		or not before_profile_value is Dictionary
+		or not after_profile_value is Dictionary
+		or not before_shared_value is Dictionary
+		or not after_shared_value is Dictionary
+	):
+		return false
+	var before_profile: Dictionary = before_profile_value
+	var after_profile: Dictionary = after_profile_value
+	var before_shared: Dictionary = before_shared_value
+	var after_shared: Dictionary = after_shared_value
+	if (
+		str(before_profile.get("profile_id", "")) != profile_id
+		or str(after_profile.get("profile_id", "")) != profile_id
+		or _shared_digest(before_profile) != str(log.get("before_profile_hash", ""))
+		or _shared_digest(after_profile) != str(log.get("after_profile_hash", ""))
+		or _shared_digest(before_shared) != str(log.get("before_shared_hash", ""))
+		or _shared_digest(after_shared) != str(log.get("after_shared_hash", ""))
+		or not bool(_validate_profile_document_status(before_profile, profile_id, false).get("valid", false))
+		or not bool(_validate_profile_document_status(after_profile, profile_id, false).get("valid", false))
+		or not _validate_shared_warehouse_document(before_shared)
+		or not _validate_shared_warehouse_document(after_shared)
+		or not _profile_and_shared_drop_instances_are_disjoint(before_profile, before_shared)
+		or not _profile_and_shared_drop_instances_are_disjoint(after_profile, after_shared)
+	):
+		return false
+	var operation_kind := str(log.get("operation_kind", "warehouse_items"))
+	if operation_kind == "bank":
+		return _bank_transaction_transition_is_valid(
+			profile_id, before_profile, after_profile, before_shared, after_shared
+		)
+	if operation_kind != "warehouse_items":
+		return false
+	return (
+		int(before_profile.get("gold", 0)) == int(after_profile.get("gold", 0))
+		and _shared_digest(_bank_fields_snapshot(before_shared))
+		== _shared_digest(_bank_fields_snapshot(after_shared))
+		and int(after_shared.get("revision", -1))
+		== int(before_shared.get("revision", -1)) + 1
+	)
+
+
+func _recover_shared_warehouse_transaction() -> void:
+	var log_document := _read_json_document(shared_warehouse_transaction_log_path)
+	if not bool(log_document.get("exists", false)):
+		return
+	if not bool(log_document.get("valid", false)):
+		_warehouse_transaction_locked = true
+		return
+	var log: Dictionary = log_document.get("data", {})
+	if not _warehouse_transaction_log_is_valid(log):
+		_warehouse_transaction_locked = true
+		return
+	var profile_id := str(log.get("profile_id", ""))
+	var profile_path := str(log.get("profile_path", ""))
+	var before_profile: Dictionary = log.get("before_profile", {})
+	var after_profile: Dictionary = log.get("after_profile", {})
+	var before_shared: Dictionary = log.get("before_shared", {})
+	var after_shared: Dictionary = log.get("after_shared", {})
+	var current_profile := _read_json(profile_path)
+	var current_shared := _read_json(shared_warehouse_path)
+	if _shared_digest(current_profile) == _shared_digest(after_profile) and _shared_digest(current_shared) == _shared_digest(after_shared):
+		_warehouse_transaction_locked = not _remove_persistence_file(shared_warehouse_transaction_log_path)
+		_shared_warehouse_initialized = false
+		return
+	var profile_restored := _write_json_atomic(profile_path, before_profile, true)
+	var shared_restored := _write_json_atomic(shared_warehouse_path, before_shared, true)
+	if (
+		not profile_restored
+		or not shared_restored
+		or _shared_digest(_read_json(profile_path)) != _shared_digest(before_profile)
+		or _shared_digest(_read_json(shared_warehouse_path)) != _shared_digest(before_shared)
+	):
+		_warehouse_transaction_locked = true
+		return
+	_warehouse_transaction_locked = not _remove_persistence_file(shared_warehouse_transaction_log_path)
+	_shared_warehouse_initialized = false
+
+
+func _remove_persistence_file(path: String) -> bool:
+	if not FileAccess.file_exists(path):
+		return true
+	return DirAccess.remove_absolute(ProjectSettings.globalize_path(path)) == OK
+
+
+func _shared_document_for_records(records: Array, current_snapshot: Dictionary = {}) -> Dictionary:
+	var current := _read_json(shared_warehouse_path) if current_snapshot.is_empty() else current_snapshot
+	var document := _shared_warehouse_empty_document()
+	document["revision"] = int(current.get("revision", 0)) + 1
+	document["warehouse_inventory"] = records.duplicate(true)
+	for bank_field: String in ["bank_gold", "bank_contract_id", "bank_transaction_high_water", "bank_transactions"]:
+		if current.has(bank_field):
+			document[bank_field] = current[bank_field]
+	document["legacy_migration"] = current.get("legacy_migration", {
+		"completed": true,
+		"contract_id": SHARED_WAREHOUSE_MIGRATION_CONTRACT_ID,
+		"sources": {},
+	})
+	var item_document := ItemExtensionCodec.encode_document(document)
+	return item_document.document if item_document.status == ItemExtensionCodec.KNOWN_VALID else {}
+
+
+func _write_shared_warehouse_document_atomic(document: Dictionary) -> bool:
+	if test_mode and _test_fail_shared_write:
+		return false
+	return _write_json_atomic(shared_warehouse_path, document)
+
+
+func _write_shared_warehouse(records: Array) -> bool:
+	# Legacy unit tests exercise the in-memory authority without booting the
+	# profile service.  Never let those fixtures touch production user:// data.
+	if (
+		profile_directory != PROFILE_DIRECTORY
+		and not _shared_warehouse_test_isolation_enabled()
+		and not _shared_warehouse_initialized
+	):
+		return true
+	if records.size() > WAREHOUSE_CAPACITY:
+		return false
+	var current := _read_json(shared_warehouse_path)
+	if not _validate_shared_warehouse_document(current):
+		return false
+	var revision := int(current.get("revision", 0)) + 1
+	var migration: Dictionary = current.get("legacy_migration", {
+		"completed": true,
+		"contract_id": SHARED_WAREHOUSE_MIGRATION_CONTRACT_ID,
+		"sources": {},
+	})
+	var document := _shared_warehouse_empty_document()
+	document["revision"] = revision
+	document["warehouse_inventory"] = records.duplicate(true)
+	document["legacy_migration"] = migration.duplicate(true)
+	for bank_field: String in ["bank_gold", "bank_contract_id", "bank_transaction_high_water", "bank_transactions"]:
+		if current.has(bank_field):
+			document[bank_field] = current[bank_field]
+	return _write_shared_warehouse_document_atomic(document)
+
+
+func _prepare_character_save_payload(checkpoint_world := true) -> Dictionary:
+	if _warehouse_transaction_locked and not _persistence_transaction_in_progress:
+		last_save_result = {"contract_id": SAVE_RESULT_CONTRACT_ID, "success": false, "reason": "warehouse_transaction_locked"}
+		return {}
+	if active_profile_id.is_empty():
+		last_save_result = {
+			"contract_id": SAVE_RESULT_CONTRACT_ID,
+			"success": false,
+			"reason": "active_profile_missing",
+		}
+		return {}
+	if not _valid_profile_storage_id(active_profile_id):
+		last_save_result = {
+			"contract_id": SAVE_RESULT_CONTRACT_ID,
+			"success": false,
+			"reason": "invalid_profile_id",
+		}
+		return {}
+	if active_profile_id == _save_blocked_profile_id:
+		last_save_result = {
+			"contract_id": SAVE_RESULT_CONTRACT_ID,
+			"success": false,
+			"reason": "profile_save_blocked_after_invalid_load",
+			"load_failure_reason": _save_blocked_reason,
+		}
+		return {}
+	if (checkpoint_world or _world_clock_snapshot_sequence < 0) and not _checkpoint_world_clock():
+		last_save_result = {
+			"contract_id": SAVE_RESULT_CONTRACT_ID,
+			"success": false,
+			"reason": "world_clock_checkpoint_failed",
+		}
+		return {}
+	_refresh_taoist_main_pet_runtime_states_for_save()
+	var legacy_isolated_profile_fixture := (
+		profile_directory != PROFILE_DIRECTORY
+		and not _shared_warehouse_test_isolation_enabled()
+	)
+	if legacy_isolated_profile_fixture:
+		# Existing save tests redirect the profile root; never touch production
+		# shared storage from such an isolated fixture.
+		_shared_warehouse_initialized = false
+	elif not _shared_warehouse_initialized and not _initialize_shared_warehouse():
+		last_save_result = {
+			"contract_id": SAVE_RESULT_CONTRACT_ID,
+			"success": false,
+			"reason": "shared_warehouse_unavailable",
+		}
+		return {}
+	if (
+		not legacy_isolated_profile_fixture
+		and _active_profile_legacy_warehouse_pending
+		and not _revalidate_shared_warehouse_authority()
+	):
+		last_save_result = {
+			"contract_id": SAVE_RESULT_CONTRACT_ID,
+			"success": false,
+			"reason": "shared_warehouse_legacy_source_changed",
+		}
+		return {}
+	var payload := {
+		"save_version": SAVE_VERSION,
+		"profile_id": active_profile_id,
+		"character_identity": CharacterIdentityCodec.encode(profession_id),
+		"character_name": character_name,
+		"updated_at": int(Time.get_unix_time_from_system()),
+		"level": level,
+		"profession": profession,
+		"gender": gender,
+		"later_content_enabled": later_content_enabled,
+		"game_mode_id": game_mode_id,
+		"experience": experience,
+		"gold": gold,
+		"gold_overflow_records": gold_overflow_records.duplicate(true),
+		"inventory": inventory,
+		"forge_tray": forge_tray.duplicate(true),
+		"synthesis_tray": synthesis_tray.duplicate(true),
+		"warehouse_storage_contract_id": SHARED_WAREHOUSE_CONTRACT_ID,
+		"equipment": equipment,
+		"learned_skills": learned_skills,
+		"skill_progression": _skill_progression.snapshot(),
+		"quick_slots": quick_slots,
+		"quick_item_slots": quick_item_slots,
+		"item_button_assignments": ItemBindingCodec.encode(quick_item_slots),
+		"equip_cycle_cursor": equip_cycle_cursor,
+		"skill_button_assignments": skill_button_assignments_snapshot(),
+		"warrior_runtime_state": warrior_runtime_state,
+		"quest_states": quest_states,
+		"death_event_sequence": _death_event_sequence,
+		"world_clock_generation": _world_clock_generation,
+		"content_packages": ContentLayers.enabled_package_ids(),
+		"content_schema_version": CURRENT_CONTENT_SCHEMA_VERSION,
+		"map_id": saved_map_id,
+		"position": [saved_position.x, saved_position.y],
+		"position_space_contract_id": WORLD_POSITION_CONTRACT_ID,
+		"position_screen_px": [saved_position.x, saved_position.y],
+		"position_ground_gu": (
+			[saved_ground_position_gu.x, saved_ground_position_gu.y]
+			if saved_ground_position_gu_valid
+			else []
+		),
+	}
+	if test_mode:
+		payload["world_monster_respawn_state"] = (
+			WorldMonsterRespawnStateScript.compact_elapsed(
+				world_monster_respawn_state, Time.get_unix_time_from_system()
+			)
+		)
+	if legacy_isolated_profile_fixture:
+		payload["warehouse_inventory"] = warehouse_inventory
+	if not _item_transaction_journal.is_empty():
+		payload[ItemTransactionJournal.FIELD] = _item_transaction_journal.duplicate(true)
+	if not _taoist_main_pet_runtime_state_slots().is_empty():
+		payload["taoist_main_pet_runtime_states"] = (
+			taoist_main_pet_runtime_states.duplicate(true)
+		)
+	var item_document := ItemExtensionCodec.encode_document(payload)
+	if item_document.status != ItemExtensionCodec.KNOWN_VALID:
+		last_save_result = {"success": false, "reason": item_document.reason}
+		return {}
+	return item_document.document
+
+
+func save_game(update_profile_index := true, finalize_pending_durability := true, checkpoint_world := true) -> bool:
+	_before_state_transaction(checkpoint_world)
+	var save_started_usec := Time.get_ticks_usec()
+	_last_save_phase_profile = {}
+	var payload := _prepare_character_save_payload(checkpoint_world)
+	if payload.is_empty(): return false
+	_last_save_phase_profile["runtime_snapshot_ms"] = float(Time.get_ticks_usec() - save_started_usec) / 1000.0
+	var profile_path := _profile_path(active_profile_id)
+	var write_started_usec := Time.get_ticks_usec()
+	var write_success := _write_json_atomic(profile_path, payload)
+	_last_save_phase_profile["atomic_write_ms"] = float(Time.get_ticks_usec() - write_started_usec) / 1000.0
+	_last_save_phase_profile["atomic_detail"] = _atomic_write_phases.duplicate()
+	if not write_success:
+		last_save_result = {
+			"contract_id": SAVE_RESULT_CONTRACT_ID,
+			"success": false,
+			"reason": "atomic_profile_write_failed",
+			"path": profile_path,
+		}
+		return false
+	_profile_backup_death_event_sequence = _backup_sequence_after_promotion(
+		profile_path, _profile_saved_death_event_sequence, _death_event_sequence, "death_event_sequence"
+	)
+	_profile_saved_death_event_sequence = _death_event_sequence
+	_active_profile_legacy_warehouse_pending = false
+	_item_saved_revision = _item_save_revision
+	_item_save_failed = false
+	_queue_world_clock_cleanup()
+	var index_updated := _update_profile_index() if update_profile_index else true
+	last_save_result = {
+		"contract_id": SAVE_RESULT_CONTRACT_ID,
+		"success": true,
+		"reason": "",
+		"path": profile_path,
+		"profile_index_updated": index_updated,
+		"profile_index_skipped": not update_profile_index,
+		"save_phases": _last_save_phase_profile.duplicate(),
+	}
+	if not index_updated:
+		push_warning("角色存档已写入，但角色索引更新失败：%s" % active_profile_id)
+	if finalize_pending_durability:
+		_finish_pending_durability_save(save_started_usec)
+	return true
+
+
+## Debug-lab export of the complete active character document.  This uses the
+## same schema and normalization path as production saves so a device snapshot
+## can be edited on the host and applied back without a parallel save format.
+func device_lab_active_save_document() -> Dictionary:
+	if not OS.is_debug_build() and not test_mode:
+		return {}
+	if active_profile_id.is_empty():
+		return {}
+	# Persist volatile runtime fields before exporting the experiment state.
+	if not save_game():
+		return {}
+	return _read_json(_profile_path(active_profile_id)).duplicate(true)
+
+
+## Atomically replaces the active experimental character and immediately
+## reloads every normalized runtime field.  A failed write/load restores the
+## complete previous document before returning.
+func device_lab_apply_save_document(document: Dictionary) -> Dictionary:
+	_before_state_transaction(true)
+	var result := {
+		"ok": false,
+		"contractId": DEVICE_LAB_SAVE_CONTRACT_ID,
+		"profileId": active_profile_id,
+		"rolledBack": false,
+		"error": "",
+	}
+	if not OS.is_debug_build() and not test_mode:
+		result["error"] = "debug_only"
+		return result
+	var validation := _validate_device_lab_save_document(document)
+	if not bool(validation.get("ok", false)):
+		result["error"] = str(validation.get("error", "invalid_document"))
+		return result
+	var path := _profile_path(active_profile_id)
+	var previous := _read_json(path).duplicate(true)
+	if previous.is_empty():
+		result["error"] = "previous_save_missing"
+		return result
+	var character_document := document.duplicate(true)
+	# DeviceLab edits one character only. An older exported character document
+	# may still carry the former private warehouse field; it must never replace
+	# or recreate the account-wide public warehouse authority.
+	character_document.erase("warehouse_inventory")
+	if not _write_json_atomic(path, character_document):
+		result["error"] = "atomic_write_failed"
+		return result
+	load_save()
+	if not bool(last_load_result.get("success", false)):
+		result["rolledBack"] = _write_json_atomic(path, previous)
+		if bool(result["rolledBack"]):
+			load_save()
+		result["error"] = "reload_failed"
+		return result
+	_emit_device_lab_state_changed()
+	result["ok"] = true
+	result["saveVersion"] = SAVE_VERSION
+	result["inventoryCount"] = inventory_occupied_count()
+	result["warehouseCount"] = warehouse_occupied_count()
+	return result
+
+
+func deposit_to_warehouse(inventory_index: int, warehouse_slot: int) -> Dictionary:
+	var result := deposit_to_warehouse_batch([inventory_index], [warehouse_slot])
+	if bool(result.get("complete", false)):
+		result["message"] = "已存入仓库。"
+	return result
+
+
+## Moves one selected batch with one two-file persistence transaction.
+func deposit_to_warehouse_batch(inventory_indices: Array, warehouse_slots: Array, prepare_only := false) -> Dictionary:
+	_before_state_transaction()
+	var requested := inventory_indices.size()
+	var result := {
+		"contract_id": WAREHOUSE_TRANSFER_CONTRACT_ID,
+		"operation": "deposit",
+		"success": false,
+		"complete": false,
+		"requested": requested,
+		"transferred": 0,
+		"remaining": requested,
+		"completed_source_indices": [],
+		"completed_warehouse_slots": [],
+		"message": "仓库存取失败。",
+	}
+	if not (test_mode and not _shared_warehouse_test_isolation_enabled()) and not _ensure_shared_warehouse_ready():
+		result["message"] = "公共仓库不可用，物品未改变。"
+		return result
+	if requested <= 0:
+		result["message"] = "存入位置无效。"
+		return result
+	var normalized_indices: Array[int] = []
+	var seen_indices: Dictionary = {}
+	for raw_index: Variant in inventory_indices:
+		var inventory_index := int(raw_index)
+		if (
+			inventory_index < 0
+			or inventory_index >= inventory.size()
+			or not _inventory_slot_is_occupied(inventory[inventory_index])
+			or seen_indices.has(inventory_index)
+		):
+			result["message"] = "存入位置无效。"
+			return result
+		seen_indices[inventory_index] = true
+		normalized_indices.append(inventory_index)
+	var transfer_count := mini(requested, warehouse_slots.size())
+	if transfer_count <= 0:
+		result["message"] = "当前仓库页空间不足。"
+		return result
+	var normalized_slots: Array[int] = []
+	var seen_slots: Dictionary = {}
+	for slot_offset in range(transfer_count):
+		var warehouse_slot := int(warehouse_slots[slot_offset])
+		if (
+			warehouse_slot < 0
+			or warehouse_slot >= WAREHOUSE_CAPACITY
+			or seen_slots.has(warehouse_slot)
+			or (
+				warehouse_slot < warehouse_inventory.size()
+				and _inventory_slot_is_occupied(warehouse_inventory[warehouse_slot])
+			)
+		):
+			result["message"] = "仓库位置已被占用。"
+			return result
+		seen_slots[warehouse_slot] = true
+		normalized_slots.append(warehouse_slot)
+	var inventory_before := inventory.duplicate(true)
+	var warehouse_before := warehouse_inventory.duplicate(true)
+	var working_inventory := inventory_before.duplicate(true)
+	var working_warehouse := warehouse_before.duplicate(true)
+	var records_to_move: Array = []
+	for source_offset in range(transfer_count):
+		var source_index := normalized_indices[source_offset]
+		var source_record: Variant = working_inventory[source_index]
+		records_to_move.append(source_record.duplicate(true) if source_record is Dictionary else source_record)
+	for target_slot: int in normalized_slots:
+		while working_warehouse.size() <= target_slot:
+			working_warehouse.append({})
+	for move_offset in range(transfer_count):
+		working_warehouse[normalized_slots[move_offset]] = records_to_move[move_offset]
+	for source_offset in range(transfer_count - 1, -1, -1):
+		_clear_inventory_slot(working_inventory, normalized_indices[source_offset])
+	if prepare_only:
+		result["_inventory_before"] = inventory_before
+		result["_warehouse_before"] = warehouse_before
+		result["_prepared_inventory"] = working_inventory
+		result["_prepared_warehouse"] = working_warehouse
+	else:
+		inventory = working_inventory
+		warehouse_inventory = working_warehouse
+		if not _warehouse_transfer_commit(inventory_before, warehouse_before):
+			inventory = inventory_before
+			warehouse_inventory = warehouse_before
+			result["message"] = "仓库存档失败，物品未改变。"
+			return result
+		inventory_changed.emit()
+	result["success"] = true
+	result["complete"] = transfer_count == requested
+	result["transferred"] = transfer_count
+	result["remaining"] = requested - transfer_count
+	result["completed_source_indices"] = normalized_indices.slice(0, transfer_count)
+	result["completed_warehouse_slots"] = normalized_slots.duplicate()
+	result["message"] = (
+		"已存入仓库，共%d件物品。" % transfer_count
+		if transfer_count == requested
+		else "已存入%d件；当前仓库页空间不足。" % transfer_count
+	)
+	return result
+
+
+func withdraw_from_warehouse(warehouse_slot: int) -> Dictionary:
+	var result := withdraw_from_warehouse_batch([warehouse_slot])
+	if bool(result.get("complete", false)):
+		result["message"] = "已取出仓库物品。"
+	return result
+
+
+## Moves the largest valid prefix with one two-file persistence transaction.
+func withdraw_from_warehouse_batch(warehouse_slots: Array, prepare_only := false) -> Dictionary:
+	_before_state_transaction()
+	var requested := warehouse_slots.size()
+	var result := {
+		"contract_id": WAREHOUSE_TRANSFER_CONTRACT_ID,
+		"operation": "withdraw",
+		"success": false,
+		"complete": false,
+		"requested": requested,
+		"transferred": 0,
+		"remaining": requested,
+		"completed_warehouse_slots": [],
+		"message": "仓库存取失败。",
+	}
+	if not (test_mode and not _shared_warehouse_test_isolation_enabled()) and not _ensure_shared_warehouse_ready():
+		result["message"] = "公共仓库不可用，物品未改变。"
+		return result
+	if requested <= 0:
+		result["message"] = "仓库位置无效。"
+		return result
+	var normalized_slots: Array[int] = []
+	var seen_slots: Dictionary = {}
+	for raw_slot: Variant in warehouse_slots:
+		var warehouse_slot := int(raw_slot)
+		if (
+			warehouse_slot < 0
+			or warehouse_slot >= warehouse_inventory.size()
+			or not _inventory_slot_is_occupied(warehouse_inventory[warehouse_slot])
+			or seen_slots.has(warehouse_slot)
+		):
+			result["message"] = "仓库位置无效。"
+			return result
+		seen_slots[warehouse_slot] = true
+		normalized_slots.append(warehouse_slot)
+	var inventory_before := inventory.duplicate(true)
+	var warehouse_before := warehouse_inventory.duplicate(true)
+	var working_inventory := inventory_before.duplicate(true)
+	var working_warehouse := warehouse_before.duplicate(true)
+	var completed_slots: Array[int] = []
+	var failure_message := ""
+	var failure_reason := ""
+	var working_weight := inventory_weight(working_inventory)
+	for warehouse_slot: int in normalized_slots:
+		var record: Dictionary = working_warehouse[warehouse_slot]
+		var preview := _build_receive_result_for_record(record, working_inventory, false, working_weight)
+		if not bool(preview.get("success", false)):
+			failure_message = str(preview.get("message", INVENTORY_WEIGHT_REJECTION))
+			failure_reason = str(preview.get("reason", "rejected"))
+			break
+		working_inventory = preview.get("inventory", working_inventory) as Array
+		working_weight = int(preview.weight_after)
+		working_warehouse[warehouse_slot] = {}
+		completed_slots.append(warehouse_slot)
+	if completed_slots.is_empty():
+		result["message"] = failure_message if not failure_message.is_empty() else "仓库存取失败。"
+		if not failure_reason.is_empty():
+			result["reason"] = failure_reason
+		return result
+	while not working_warehouse.is_empty() and not _inventory_slot_is_occupied(working_warehouse.back()):
+		working_warehouse.pop_back()
+	if prepare_only:
+		result["_inventory_before"] = inventory_before
+		result["_warehouse_before"] = warehouse_before
+		result["_prepared_inventory"] = working_inventory
+		result["_prepared_warehouse"] = working_warehouse
+	else:
+		inventory = working_inventory
+		warehouse_inventory = working_warehouse
+		if not _warehouse_transfer_commit(inventory_before, warehouse_before):
+			inventory = inventory_before
+			warehouse_inventory = warehouse_before
+			result["message"] = "仓库存档失败，物品未改变。"
+			return result
+		inventory_changed.emit()
+	result["success"] = true
+	result["complete"] = completed_slots.size() == requested
+	result["transferred"] = completed_slots.size()
+	result["remaining"] = requested - completed_slots.size()
+	result["completed_warehouse_slots"] = completed_slots.duplicate()
+	if not failure_reason.is_empty():
+		result["reason"] = failure_reason
+	result["message"] = (
+		"已取出仓库物品，共%d件。" % completed_slots.size()
+		if completed_slots.size() == requested
+		else "已取出%d件；%s" % [completed_slots.size(), failure_message]
+	)
+	return result
+
+
+func _trim_warehouse_empty_tail() -> void:
+	while not warehouse_inventory.is_empty():
+		var tail: Variant = warehouse_inventory.back()
+		if tail is Dictionary and not tail.is_empty():
+			break
+		warehouse_inventory.pop_back()
+
+
+func _validate_device_lab_save_document(document: Dictionary) -> Dictionary:
+	if document.is_empty():
+		return {"ok": false, "error": "empty_document"}
+	var journal_status := ItemTransactionJournal.validate_document(document)
+	if not bool(journal_status.valid):
+		return {"ok": false, "error": journal_status.reason}
+	var item_document := ItemExtensionCodec.decode_document(document)
+	if item_document.status != ItemExtensionCodec.KNOWN_VALID:
+		return {"ok": false, "error": item_document.reason}
+	if active_profile_id.is_empty() or str(document.get("profile_id", "")) != active_profile_id:
+		return {"ok": false, "error": "profile_id"}
+	if int(document.get("save_version", 0)) != SAVE_VERSION:
+		return {"ok": false, "error": "save_version"}
+	if not document.get("inventory", null) is Array or (document.get("inventory") as Array).size() > 100:
+		return {"ok": false, "error": "inventory"}
+	if not document.get("equipment", null) is Dictionary:
+		return {"ok": false, "error": "equipment"}
+	if int(document.get("level", 0)) < 1 or int(document.get("level", 0)) > 255:
+		return {"ok": false, "error": "level"}
+	var character_identity := CharacterIdentityCodec.decode(document)
+	if not bool(character_identity.success):
+		return {"ok": false, "error": character_identity.reason}
+	var item_bindings := ItemBindingCodec.decode(document)
+	if not bool(item_bindings.success):
+		return {"ok": false, "error": item_bindings.reason}
+	if str(document.get("gender", "")) not in ["男", "女"]:
+		return {"ok": false, "error": "gender"}
+	for required_object: String in ["learned_skills", "quest_states"]:
+		if not document.get(required_object, null) is Dictionary:
+			return {"ok": false, "error": required_object}
+	var validated := SkillProgressionServiceScript.new().load_snapshot(
+		document.get("skill_progression", document.get("learned_skills", {})))
+	if not bool(validated.success):
+		return {"ok":false,"error":"invalid_skill_identity"}
+	return {"ok": true}
+
+
+func _emit_device_lab_state_changed() -> void:
+	profile_changed.emit()
+	profession_changed.emit(profession)
+	inventory_changed.emit()
+	equipment_changed.emit()
+	skills_changed.emit()
+	quests_changed.emit()
+	quick_slots_changed.emit({"source": "device_lab"})
+	quick_item_slots_changed.emit({"source": "device_lab"})
+
+
+func load_save() -> void:
+	_before_state_transaction(true)
+	if _item_save_revision > _item_saved_revision:
+		last_load_result = {"success": false, "reason": "pending_item_save_failed"}
+		return
+	if active_profile_id.is_empty():
+		last_load_result = {
+			"contract_id": SAVE_RESULT_CONTRACT_ID,
+			"success": false,
+			"reason": "active_profile_missing",
+			"path": "",
+		}
+		return
+	if not _valid_profile_storage_id(active_profile_id):
+		last_load_result = {
+			"contract_id": SAVE_RESULT_CONTRACT_ID,
+			"success": false,
+			"reason": "invalid_profile_id",
+			"path": "",
+		}
+		return
+	_recover_shared_warehouse_transaction()
+	var load_path := _profile_path(active_profile_id)
+	var load_result := _read_json_with_status(load_path)
+	last_load_result = {
+		"contract_id": SAVE_RESULT_CONTRACT_ID,
+		"success": bool(load_result.get("success", false)),
+		"reason": str(load_result.get("reason", "")),
+		"path": load_path,
+	}
+	if load_result.has("quarantine_path"):
+		last_load_result["quarantine_path"] = str(load_result.get("quarantine_path", ""))
+	if not bool(load_result.get("success", false)):
+		if not active_profile_id.is_empty():
+			_save_blocked_profile_id = active_profile_id
+			_save_blocked_reason = str(load_result.get("reason", "invalid_profile"))
+		return
+	var parsed: Dictionary = load_result.get("data", {})
+	var character_identity := CharacterIdentityCodec.decode(parsed)
+	if not bool(character_identity.success):
+		last_load_result["success"] = false
+		last_load_result["reason"] = character_identity.reason
+		_save_blocked_profile_id = active_profile_id
+		_save_blocked_reason = character_identity.reason
+		return
+	var item_bindings := ItemBindingCodec.decode(parsed)
+	if not bool(item_bindings.success):
+		last_load_result["success"] = false
+		last_load_result["reason"] = item_bindings.reason
+		_save_blocked_profile_id = active_profile_id
+		_save_blocked_reason = item_bindings.reason
+		return
+	# Validate the complete saved mode and later-content override before any
+	# world-clock/gold migration writes or character hydration. Unknown legacy
+	# modes retain their existing classic fallback; load failure never does.
+	var saved_mode := str(parsed.get("game_mode_id", "classic_176"))
+	if not GameModes.modes.has(saved_mode):
+		saved_mode = "classic_176"
+	var prepared_mode := GameModes.prepare_mode_configuration(
+		saved_mode, bool(parsed.get("later_content_enabled", false)))
+	if not bool(prepared_mode.success):
+		last_load_result["success"] = false
+		last_load_result["reason"] = "content_configuration_failed"
+		last_load_result["catalog_error"] = prepared_mode.get("error", "")
+		_save_blocked_profile_id = active_profile_id
+		_save_blocked_reason = "content_configuration_failed"
+		return
+	var prepared_progression := SkillProgressionServiceScript.new()
+	var progression_load: Dictionary = prepared_progression.load_snapshot(
+		parsed.get("skill_progression", parsed.get("learned_skills", {})))
+	if not bool(progression_load.success):
+		last_load_result["success"] = false
+		last_load_result["reason"] = "invalid_skill_identity"
+		_save_blocked_profile_id = active_profile_id
+		_save_blocked_reason = "invalid_skill_identity"
+		return
+	var imported := _prepare_world_clock_profile(parsed)
+	if not bool(imported.get("ok", false)):
+		last_load_result["success"] = false
+		last_load_result["reason"] = str(imported.get("reason", "world_clock_import_failed"))
+		_save_blocked_profile_id = active_profile_id
+		_save_blocked_reason = str(last_load_result.reason)
+		return
+	parsed = imported.get("data", parsed)
+	if imported.has("archive"):
+		last_load_result["world_clock_migration_archive"] = imported.archive
+	var world_replay := _read_world_clock_replay(parsed)
+	if not bool(world_replay.get("ok", false)):
+		last_load_result["success"] = false
+		last_load_result["reason"] = str(world_replay.get("reason", "world_clock_replay_failed"))
+		_save_blocked_profile_id = active_profile_id
+		_save_blocked_reason = str(last_load_result["reason"])
+		return
+	var projected_gold := _gold_load_projection(parsed)
+	if bool(projected_gold.needs_archive):
+		var archive_root := profile_directory.get_base_dir().path_join("gold_migrations")
+		DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(archive_root))
+		var archive_path := archive_root.path_join(active_profile_id + "-" + _shared_digest(parsed) + ".json")
+		if not FileAccess.file_exists(archive_path) and not _write_json_atomic(archive_path, parsed, true):
+			last_load_result["success"] = false
+			last_load_result["reason"] = "gold_migration_archive_failed"
+			_save_blocked_profile_id = active_profile_id
+			_save_blocked_reason = "gold_migration_archive_failed"
+			return
+		last_load_result["gold_migration_archive"] = archive_path
+	var item_document := ItemExtensionCodec.decode_document(parsed)
+	if item_document.status != ItemExtensionCodec.KNOWN_VALID:
+		last_load_result["success"] = false
+		last_load_result["reason"] = item_document.reason
+		_save_blocked_profile_id = active_profile_id
+		_save_blocked_reason = item_document.reason
+		return
+	parsed = item_document.document
+	var legacy_isolated_profile_fixture := (
+		profile_directory != PROFILE_DIRECTORY
+		and not _shared_warehouse_test_isolation_enabled()
+	)
+	if not legacy_isolated_profile_fixture and not _shared_warehouse_initialized and not _initialize_shared_warehouse():
+		last_load_result["success"] = false
+		last_load_result["reason"] = "shared_warehouse_unavailable"
+		if not active_profile_id.is_empty():
+			_save_blocked_profile_id = active_profile_id
+			_save_blocked_reason = "shared_warehouse_unavailable"
+		return
+	elif not legacy_isolated_profile_fixture and not _revalidate_shared_warehouse_authority():
+		last_load_result["success"] = false
+		last_load_result["reason"] = "shared_warehouse_unavailable"
+		_save_blocked_profile_id = active_profile_id
+		_save_blocked_reason = "shared_warehouse_unavailable"
+		return
+	elif not legacy_isolated_profile_fixture and not _profile_and_shared_drop_instances_are_disjoint(
+		parsed,
+		_read_json(shared_warehouse_path),
+	):
+		last_load_result["success"] = false
+		last_load_result["reason"] = "duplicate_drop_instance_across_shared"
+		_save_blocked_profile_id = active_profile_id
+		_save_blocked_reason = "duplicate_drop_instance_across_shared"
+		return
+	var loaded_world_state := WorldMonsterRespawnStateScript.compact_elapsed(
+		world_replay.get("world_state", WorldMonsterRespawnStateScript.empty_snapshot()),
+		Time.get_unix_time_from_system())
+	var loaded_sequence := int(world_replay.get("latest_sequence", 0))
+	var loaded_snapshot_sequence := int(world_replay.get("source_world_sequence", 0)) \
+		if bool(world_replay.get("snapshot_present", false)) else -1
+	var loaded_backup_sequence := int(world_replay.get("world_backup_sequence", loaded_snapshot_sequence)) \
+		if bool(world_replay.get("snapshot_present", false)) else -1
+	var loaded_dirty := loaded_snapshot_sequence < loaded_sequence or not bool(world_replay.get("snapshot_present", false))
+	var prepared_checkpoint := _checkpoint_world_clock_snapshot(
+		active_profile_id, str(parsed.get("world_clock_generation", "")), loaded_world_state,
+		loaded_sequence, loaded_snapshot_sequence, loaded_backup_sequence, loaded_dirty)
+	if not bool(prepared_checkpoint.success):
+		last_load_result["success"] = false
+		last_load_result["reason"] = "world_clock_checkpoint_failed"
+		_save_blocked_profile_id = active_profile_id
+		_save_blocked_reason = "world_clock_checkpoint_failed"
+		return
+	if not GameModes.apply_prepared_mode_configuration(prepared_mode):
+		last_load_result["success"] = false
+		last_load_result["reason"] = "content_configuration_failed"
+		last_load_result["catalog_error"] = ContentLayers.last_expansion_error
+		_save_blocked_profile_id = active_profile_id
+		_save_blocked_reason = "content_configuration_failed"
+		return
+	if active_profile_id == _save_blocked_profile_id:
+		_save_blocked_profile_id = ""
+		_save_blocked_reason = ""
+	_clear_pending_durability_runtime()
+	_active_profile_legacy_warehouse_pending = not legacy_isolated_profile_fixture and parsed.has("warehouse_inventory")
+	if legacy_isolated_profile_fixture:
+		# Account warehouse adoption is independent; isolated legacy fixtures
+		# publish their private projection only after character admission.
+		warehouse_inventory = (parsed.get("warehouse_inventory", []) as Array).duplicate(true) if parsed.get("warehouse_inventory", []) is Array else []
+	level = maxi(1, int(world_replay.get("level", parsed.get("level", 1))))
+	set_profession_identity(character_identity.profession_id)
+	gender = str(parsed.get("gender", "男"))
+	if gender not in ["男", "女"]:
+		gender = "男"
+	experience = maxi(0, int(world_replay.get("experience", parsed.get("experience", 0))))
+	gold = int(projected_gold.gold)
+	gold_overflow_records = projected_gold.gold_overflow_records
+	var loaded_inventory: Variant = parsed.get("inventory", [])
+	inventory = (loaded_inventory as Array).duplicate(true) if loaded_inventory is Array else []
+	_item_transaction_journal = parsed.get(ItemTransactionJournal.FIELD, {}).duplicate(true)
+	forge_tray = _load_workbench_tray(parsed.get("forge_tray", []))
+	synthesis_tray = _load_workbench_tray(parsed.get("synthesis_tray", []))
+	if not legacy_isolated_profile_fixture:
+		warehouse_inventory = _shared_warehouse_read_inventory()
+	_trim_inventory_empty_tail()
+	var saved_equipment: Dictionary = parsed.get("equipment", {})
+	equipment = migrate_equipment_slots(saved_equipment)
+	_migrate_item_collection_durability(inventory)
+	_migrate_item_collection_durability(warehouse_inventory)
+	inventory = SpecialConsumableStacks.split_available(inventory, INVENTORY_CAPACITY, INVENTORY_CAPACITY)
+	var split_warehouse := SpecialConsumableStacks.split_available(warehouse_inventory, WAREHOUSE_CAPACITY, WAREHOUSE_PAGE_SIZE)
+	if split_warehouse != warehouse_inventory and (legacy_isolated_profile_fixture or _write_shared_warehouse(split_warehouse)):
+		warehouse_inventory = split_warehouse
+	# Pay the immutable catalog lookup cost during profile loading instead of on
+	# the first combat pickup. Runtime weight checks then read the session cache.
+	_prewarm_loot_inventory_catalog(inventory)
+	_skill_progression = prepared_progression
+	_refresh_skill_identity_projection()
+	var saved_slots: Array = parsed.get("quick_slots", ["", "", "", ""])
+	_restore_skill_button_assignments(parsed.get("skill_button_assignments", {}), saved_slots)
+	quick_item_slots.assign(item_bindings.slots)
+	equip_cycle_cursor = _normalized_equip_cycle_cursor(parsed.get("equip_cycle_cursor", {}))
+	warrior_runtime_state = _normalized_warrior_runtime_state(parsed.get("warrior_runtime_state", {}))
+	if parsed.has("taoist_main_pet_runtime_states"):
+		var loaded_main_pet_states := _normalized_taoist_main_pet_runtime_states(
+			parsed.get("taoist_main_pet_runtime_states", {})
+		)
+		taoist_main_pet_runtime_states = (
+			loaded_main_pet_states
+			if not loaded_main_pet_states.is_empty()
+			else _empty_taoist_main_pet_runtime_states()
+		)
+	else:
+		# Compatibility for the short-lived singular save emitted by the faulty
+		# device build. Migrate its typed snapshot into the matching plural slot;
+		# every subsequent save writes only the plural field.
+		var legacy_main_pet := _normalized_taoist_main_pet_runtime_state(
+			parsed.get("taoist_main_pet_runtime_state", {})
+		)
+		taoist_main_pet_runtime_states = _empty_taoist_main_pet_runtime_states()
+		if not legacy_main_pet.is_empty():
+			var migrated_groups := taoist_main_pet_runtime_states["groups"] as Dictionary
+			migrated_groups[str(legacy_main_pet.get("summon_id", ""))] = [legacy_main_pet]
+	quest_states = world_replay.get("quest_states", parsed.get("quest_states", {}))
+	world_monster_respawn_state = loaded_world_state
+	_world_clock_changes.clear()
+	_death_event_sequence = loaded_sequence
+	_world_clock_generation = str(parsed.get("world_clock_generation", ""))
+	_profile_saved_death_event_sequence = int(world_replay.get("source_profile_sequence", 0))
+	_profile_backup_death_event_sequence = int(world_replay.get(
+		"profile_backup_sequence", _profile_saved_death_event_sequence))
+	_world_clock_snapshot_sequence = int(prepared_checkpoint.snapshot_sequence)
+	_world_clock_backup_sequence = int(prepared_checkpoint.backup_sequence)
+	_world_clock_dirty = bool(prepared_checkpoint.dirty)
+	saved_map_id = int(parsed.get("map_id", 910001))
+	var position_data: Variant = parsed.get(
+		"position_screen_px",
+		parsed.get("position", [0.0, 0.0])
+	)
+	if position_data is Array and position_data.size() >= 2:
+		saved_position = Vector2(float(position_data[0]), float(position_data[1]))
+	else:
+		saved_position = Vector2.ZERO
+	var ground_position_data: Variant = parsed.get("position_ground_gu", [])
+	saved_ground_position_gu_valid = (
+		str(parsed.get("position_space_contract_id", ""))
+		== WORLD_POSITION_CONTRACT_ID
+		and ground_position_data is Array
+		and ground_position_data.size() >= 2
+	)
+	if saved_ground_position_gu_valid:
+		saved_ground_position_gu = Vector2(
+			float(ground_position_data[0]),
+			float(ground_position_data[1])
+		)
+	else:
+		# Version 6 and older store only screen PX. Their value remains valid for
+		# rendering and map restoration; GameRoot supplies the matching absolute
+		# ground GU coordinate after the map runtime is loaded.
+		saved_ground_position_gu = Vector2.ZERO
+	character_name = str(parsed.get("character_name", character_name))
+	_migrate_quest_states()
+	if (
+		load_path == LEGACY_SAVE_PATH
+		or not parsed.has("skill_progression")
+		or not parsed.has("skill_button_assignments")
+		or int(parsed.get("save_version", 0)) < SAVE_VERSION
+		or str(
+			parsed.get("skill_button_assignments", {}).get("contract_id", "")
+			if parsed.get("skill_button_assignments", {}) is Dictionary
+			else ""
+		) != SKILL_BUTTON_ASSIGNMENTS_CONTRACT_ID
+		or int(parsed.get("content_schema_version", 0)) < CURRENT_CONTENT_SCHEMA_VERSION
+	):
+		_commit_save(true, true)
+	# Buffs are session-local and never persisted. Loading another character
+	# must not inherit the previous character's unexpired divine-water effect.
+	if not temporary_item_buffs.is_empty():
+		temporary_item_buffs.clear()
+		temporary_item_buff_revision += 1
+	recalculate_stats()
+
+
+func monster_respawn_state_for_restore() -> Dictionary:
+	return world_monster_respawn_state.duplicate(true)
+
+
+func monster_respawn_entry(
+	runtime_map_id: int,
+	spawn_slot_id: String
+) -> Dictionary:
+	var key := WorldMonsterRespawnStateScript.slot_key(runtime_map_id, spawn_slot_id)
+	var entries: Dictionary = world_monster_respawn_state.get("entries", {})
+	var raw: Variant = entries.get(key, {})
+	return (raw as Dictionary).duplicate(true) if WorldClockDelta.valid_world_entry(key, raw) else {}
+
+
+func mark_monster_respawn_dead(
+	runtime_map_id: int, spawn_slot_id: String, monster_id: int,
+	policy_id: String, respawn_at_unix: float,
+) -> bool:
+	var key := WorldMonsterRespawnStateScript.slot_key(runtime_map_id, spawn_slot_id)
+	var entry := {
+		"runtime_map_id": runtime_map_id, "spawn_slot_id": spawn_slot_id.strip_edges(),
+		"monster_id": monster_id, "policy_id": policy_id, "respawn_at_unix": respawn_at_unix,
+	}
+	if key.is_empty() or not WorldClockDelta.valid_world_entry(key, entry):
+		return false
+	# Loaded states are normalized at the persistence boundary. Mutations own
+	# one validated slot; they do not rebuild the full historical table.
+	var entries: Dictionary = world_monster_respawn_state.get("entries", {})
+	entries[key] = entry
+	world_monster_respawn_state["entries"] = entries
+	_world_clock_changes[key] = entry.duplicate(true)
+	_world_clock_dirty = true
+	_world_mutation_revision += 1
+	return true
+
+
+func clear_monster_respawn_slot(runtime_map_id: int, spawn_slot_id: String) -> void:
+	var key := WorldMonsterRespawnStateScript.slot_key(runtime_map_id, spawn_slot_id)
+	var entries: Dictionary = world_monster_respawn_state.get("entries", {})
+	if not key.is_empty() and entries.has(key):
+		entries.erase(key)
+		_world_clock_changes[key] = null
+		_world_clock_dirty = true
+		_world_mutation_revision += 1
+
+
+func world_clock_mutation_snapshot() -> Dictionary:
+	return {"state": world_monster_respawn_state.duplicate(true),
+		"changes": _world_clock_changes.duplicate(true), "dirty": _world_clock_dirty}
+
+
+func restore_world_clock_mutation(snapshot: Dictionary) -> void:
+	world_monster_respawn_state = (snapshot["state"] as Dictionary).duplicate(true)
+	_world_clock_changes = (snapshot["changes"] as Dictionary).duplicate(true)
+	_world_clock_dirty = bool(snapshot["dirty"])
+	_world_mutation_revision += 1
+
+
+
+func apply_quick_slot_assignment(result: Dictionary) -> bool:
+	_before_state_transaction()
+	if not bool(result.get("ok", false)):
+		return false
+	if result.get("assignments", null) is Dictionary:
+		return apply_skill_button_assignment(result)
+	var change: Dictionary = result.get("change", {})
+	if str(change.get("contract_id", "")) != "gameplay.skill.quick_slot_assignment.v1":
+		return false
+	var slots_value: Variant = result.get("slots", [])
+	if not slots_value is Array or slots_value.size() != quick_slots.size():
+		return false
+	var next_slots: Array[String] = []
+	for value: Variant in slots_value:
+		var skill_name := str(value)
+		if not skill_name.is_empty() and not is_skill_learned(skill_name):
+			return false
+		next_slots.append(skill_name)
+	var previous_attack := attack_skill_slots.duplicate()
+	var previous_ring := attack_ring_slots.duplicate()
+	var previous_quick := quick_slots.duplicate()
+	var migrated := SkillLoadoutRulesScript.normalize_assignments({}, next_slots)
+	attack_skill_slots = _normalized_skill_slot_array(
+		migrated.get(SKILL_SLOT_GROUP_ATTACK, []),
+		ATTACK_SKILL_SLOT_COUNT
+	)
+	attack_ring_slots = _normalized_skill_slot_array(
+		migrated.get(SKILL_SLOT_GROUP_ATTACK_RING, []),
+		ATTACK_RING_SKILL_SLOT_COUNT
+	)
+	_sync_legacy_quick_slots_from_ring()
+	if not _commit_save():
+		attack_skill_slots = previous_attack
+		attack_ring_slots = previous_ring
+		quick_slots = previous_quick
+		return false
+	quick_slots_changed.emit(change.duplicate(true))
+	skills_changed.emit()
+	profile_changed.emit()
+	return true
+
+
+func apply_skill_button_assignment(result: Dictionary) -> bool:
+	_before_state_transaction()
+	if not bool(result.get("ok", false)):
+		return false
+	var change: Dictionary = result.get("change", {})
+	if str(change.get("contract_id", "")) != SKILL_BUTTON_ASSIGNMENTS_CONTRACT_ID:
+		return false
+	var assignments_value: Variant = result.get("assignments", {})
+	if not assignments_value is Dictionary:
+		return false
+	var normalized := _normalized_skill_button_assignments(assignments_value, quick_slots)
+	if not bool(normalized.get("valid", false)):
+		return false
+	var next_attack := _normalized_skill_slot_array(
+		normalized.get(SKILL_SLOT_GROUP_ATTACK, []),
+		ATTACK_SKILL_SLOT_COUNT
+	)
+	var next_ring := _normalized_skill_slot_array(
+		normalized.get(SKILL_SLOT_GROUP_ATTACK_RING, []),
+		ATTACK_RING_SKILL_SLOT_COUNT
+	)
+	for skill_name: String in next_attack + next_ring:
+		if not skill_name.is_empty() and not is_skill_available(skill_name):
+			return false
+	var previous_attack := attack_skill_slots.duplicate()
+	var previous_ring := attack_ring_slots.duplicate()
+	var previous_quick := quick_slots.duplicate()
+	attack_skill_slots = next_attack
+	attack_ring_slots = next_ring
+	_sync_legacy_quick_slots_from_ring()
+	if not _commit_save():
+		attack_skill_slots = previous_attack
+		attack_ring_slots = previous_ring
+		quick_slots = previous_quick
+		return false
+	quick_slots_changed.emit(change.duplicate(true))
+	skills_changed.emit()
+	profile_changed.emit()
+	return true
+
+
+func skill_button_assignments_snapshot() -> Dictionary:
+	return {
+		"contract_id": SKILL_BUTTON_ASSIGNMENTS_CONTRACT_ID,
+		SKILL_SLOT_GROUP_ATTACK: attack_skill_slots.duplicate(),
+		SKILL_SLOT_GROUP_ATTACK_RING: attack_ring_slots.duplicate(),
+		"migration": "native_v4",
+	}
+
+
+func skill_slots_for_group(slot_group: String) -> Array[String]:
+	if slot_group == SKILL_SLOT_GROUP_ATTACK:
+		return attack_skill_slots.duplicate()
+	if slot_group == SKILL_SLOT_GROUP_ATTACK_RING:
+		return attack_ring_slots.duplicate()
+	# Read-only compatibility for old keyboard skill_1..skill_4 callers.
+	return quick_slots.duplicate()
+
+
+func skill_name_for_slot(slot_group: String, slot_index: int) -> String:
+	var slots := skill_slots_for_group(slot_group)
+	if slot_index < 0 or slot_index >= slots.size():
+		return ""
+	return SkillDataLoaderScript.display_name(slots[slot_index]) if not slots[slot_index].is_empty() else ""
+
+
+func skill_id_for_slot(slot_group: String, slot_index: int) -> String:
+	var slots := skill_slots_for_group(slot_group)
+	return SkillDataLoaderScript.entity_skill_id(slots[slot_index]) if slot_index >= 0 and slot_index < slots.size() else ""
+
+
+func _import_skill_slot_ids(source: Array[String]) -> Dictionary:
+	var result: Array[String] = []
+	var errors: Array[String] = []
+	for identity: String in source:
+		var id := SkillDataLoaderScript.entity_skill_id(identity) if not identity.is_empty() else ""
+		if not identity.is_empty() and id.is_empty():
+			errors.append("unknown_skill_binding:" + identity)
+		result.append(id)
+	return {"success":errors.is_empty(),"ids":result,"errors":errors}
+
+
+func _restore_skill_button_assignments(assignments_value: Variant, legacy_center: Array) -> void:
+	var normalized := _normalized_skill_button_assignments(assignments_value, legacy_center)
+	attack_skill_slots = _normalized_skill_slot_array(
+		normalized.get(SKILL_SLOT_GROUP_ATTACK, []),
+		ATTACK_SKILL_SLOT_COUNT
+	)
+	attack_ring_slots = _normalized_skill_slot_array(
+		normalized.get(SKILL_SLOT_GROUP_ATTACK_RING, []),
+		ATTACK_RING_SKILL_SLOT_COUNT
+	)
+	_sync_legacy_quick_slots_from_ring()
+	_prune_unavailable_equipment_skill_bindings()
+
+
+func _normalized_skill_button_assignments(assignments_value: Variant, legacy_center: Array) -> Dictionary:
+	var source := SkillLoadoutRulesScript.normalize_assignments(assignments_value, legacy_center)
+	return {
+		"contract_id": SKILL_BUTTON_ASSIGNMENTS_CONTRACT_ID,
+		SKILL_SLOT_GROUP_ATTACK: _normalized_skill_slot_array(
+			source.get(SKILL_SLOT_GROUP_ATTACK, []),
+			ATTACK_SKILL_SLOT_COUNT
+		),
+		SKILL_SLOT_GROUP_ATTACK_RING: _normalized_skill_slot_array(
+			source.get(SKILL_SLOT_GROUP_ATTACK_RING, []),
+			ATTACK_RING_SKILL_SLOT_COUNT
+		),
+		"migration": str(source.get("migration", "native_v4")),
+		"valid": bool(source.get("valid", false)),
+	}
+
+
+func _normalized_skill_slot_array(value: Variant, expected_size: int) -> Array[String]:
+	var result: Array[String] = []
+	var source: Array = value if value is Array else []
+	for index in range(expected_size):
+		result.append(str(source[index]) if index < source.size() else "")
+	return result
+
+
+func _sync_legacy_quick_slots_from_ring() -> void:
+	quick_slots = ["", "", "", ""]
+	for index in range(mini(quick_slots.size(), attack_ring_slots.size())):
+		quick_slots[index] = attack_ring_slots[index]
+
+
+func is_quick_item_candidate(item_name: String) -> bool:
+	if item_name.is_empty():
+		return false
+	var item := GameData.get_item_record(item_name)
+	if item.is_empty():
+		return false
+	if str(item.get("kind", "")) not in ["skill_book", "consumable", "scroll"]:
+		return false
+	return item.get("usable", true) != false
+
+
+func quick_item_slots_snapshot() -> Array:
+	return quick_item_slots.duplicate()
+
+
+func quick_item_slot_name(slot_index: int) -> String:
+	if slot_index < 0 or slot_index >= quick_item_slots.size():
+		return ""
+	return str(GameData.get_entity_record(quick_item_slots[slot_index]).get("name", ""))
+
+
+func assign_quick_item_slot(index: int, item_id: String) -> Dictionary:
+	if not item_id.is_empty(): item_id = EntityRegistry.canonical(item_id) if not EntityRegistry.resolve(item_id).is_empty() else item_id
+	var item_name := str(GameData.get_entity_record(item_id).get("name", ""))
+	if index < 0 or index >= QUICK_ITEM_SLOT_COUNT:
+		return {
+			"ok": false,
+			"contract_id": QUICK_ITEM_SLOTS_CONTRACT_ID,
+			"slot_index": index,
+			"item_name": item_name,
+			"reason": "slot_index_out_of_range",
+			"message": "快捷物品槽位无效",
+		}
+	if not item_id.is_empty() and not ItemBindingCodec.is_candidate(item_id):
+		return {
+			"ok": false,
+			"contract_id": QUICK_ITEM_SLOTS_CONTRACT_ID,
+			"slot_index": index,
+			"item_name": item_name,
+			"reason": "not_quick_item_candidate",
+			"message": "%s不能绑定到快捷物品槽" % item_name,
+		}
+	if not item_id.is_empty() and item_count_by_entity_id(item_id) <= 0:
+		return {
+			"ok": false,
+			"contract_id": QUICK_ITEM_SLOTS_CONTRACT_ID,
+			"slot_index": index,
+			"item_name": item_name,
+			"reason": "no_inventory",
+			"message": "背包中没有%s" % item_name,
+		}
+	var previous := quick_item_slots[index]
+	quick_item_slots[index] = item_id
+	if not _commit_save():
+		quick_item_slots[index] = previous
+		return {
+			"ok": false,
+			"contract_id": QUICK_ITEM_SLOTS_CONTRACT_ID,
+			"slot_index": index,
+			"item_name": item_name,
+			"reason": "save_failed",
+			"message": "快捷物品绑定未能保存",
+		}
+	var change := {
+		"contract_id": QUICK_ITEM_SLOTS_CONTRACT_ID,
+		"slot_index": index,
+		"item_name": item_name,
+		"entity_id": item_id,
+		"previous_entity_id": previous,
+		"previous_item_name": str(GameData.get_entity_record(previous).get("name", "")),
+		"slots": quick_item_slots.duplicate(),
+	}
+	quick_item_slots_changed.emit(change.duplicate(true))
+	profile_changed.emit()
+	var message := "快捷物品槽%d已清空" % (index + 1) if item_name.is_empty() else (
+		"已将%s绑定到快捷物品槽%d" % [item_name, index + 1]
+	)
+	return {
+		"ok": true,
+		"contract_id": QUICK_ITEM_SLOTS_CONTRACT_ID,
+		"slot_index": index,
+		"item_name": item_name,
+		"change": change,
+		"message": message,
+	}
+
+
+func use_quick_item_slot(index: int, expected_item_id := "") -> Dictionary:
+	if index < 0 or index >= QUICK_ITEM_SLOT_COUNT:
+		return {
+			"ok": false,
+			"contract_id": QUICK_ITEM_SLOTS_CONTRACT_ID,
+			"slot_index": index,
+			"item_name": "",
+			"reason": "slot_index_out_of_range",
+			"message": "快捷物品槽位无效",
+		}
+	var bound_id := quick_item_slots[index]
+	var bound_name := str(GameData.get_entity_record(bound_id).get("name", ""))
+	if bound_id.is_empty():
+		return {
+			"ok": false,
+			"contract_id": QUICK_ITEM_SLOTS_CONTRACT_ID,
+			"slot_index": index,
+			"item_name": "",
+			"reason": "slot_empty",
+			"message": "快捷物品槽%d为空" % (index + 1),
+		}
+	if not expected_item_id.is_empty() and expected_item_id != bound_id:
+		return {
+			"ok": false,
+			"contract_id": QUICK_ITEM_SLOTS_CONTRACT_ID,
+			"slot_index": index,
+			"item_name": bound_name,
+			"expected_entity_id": expected_item_id,
+			"reason": "expected_identity_mismatch",
+			"message": "快捷物品槽已变更，请重试",
+		}
+	# Resolve the exact bound identity afresh; an index is never durable identity.
+	var inventory_index := _inventory_index_by_entity_id(bound_id)
+	if inventory_index < 0:
+		return {
+			"ok": false,
+			"contract_id": QUICK_ITEM_SLOTS_CONTRACT_ID,
+			"slot_index": index,
+			"item_name": bound_name,
+			"reason": "no_inventory",
+			"message": "背包中没有%s" % bound_name,
+		}
+	var use_result := use_inventory_index_result(inventory_index, not test_mode)
+	# The structured use contract is authoritative: a declared success consumed
+	# the item, every failure keeps it. The former count-delta heuristic cannot
+	# distinguish "rejected" from "no-op" and is no longer needed.
+	var ok := bool(use_result.get("success", false))
+	var item := GameData.get_entity_record(bound_id)
+	var kind := str(item.get("kind", ""))
+	return {
+		"ok": ok,
+		"contract_id": QUICK_ITEM_SLOTS_CONTRACT_ID,
+		"slot_index": index,
+		"item_name": bound_name,
+		"kind": kind,
+		"entity_id": bound_id,
+		"message": str(use_result.get("message", "")),
+		"reason": str(use_result.get("reason", "")) if not ok else "used",
+	}
+
+
+func _normalized_quick_item_slots(value: Variant) -> Array[String]:
+	return ItemBindingCodec.import_legacy(value)
+
+
+func _inventory_index_by_entity_id(item_id: String) -> int:
+	item_id = EntityRegistry.canonical(item_id)
+	if not ItemBindingCodec.is_candidate(item_id):
+		return -1
+	for index in range(inventory.size()):
+		if inventory[index] is Dictionary and not inventory[index].is_empty() \
+			and GameData.item_entity_id(inventory[index]) == item_id:
+			return index
+	return -1
+
+
+func item_count_by_entity_id(item_id: String) -> int:
+	item_id = EntityRegistry.canonical(item_id)
+	if GameData.get_entity_record(item_id).is_empty():
+		return 0
+	var count := 0
+	for record: Variant in inventory:
+		if record is Dictionary and not record.is_empty() and GameData.item_entity_id(record) == item_id:
+			count += int(record.get("count", 0))
+	return count
+
+
+func _inventory_index_by_item_name(item_name: String) -> int:
+	return _inventory_index_by_entity_id(GameData.item_entity_id(item_name))
+
+
+func apply_warrior_runtime_state(snapshot: Dictionary, persist := false) -> bool:
+	var normalized := _normalized_warrior_runtime_state(snapshot)
+	if normalized.is_empty():
+		return false
+	warrior_runtime_state = normalized
+	warrior_runtime_state_changed.emit(warrior_runtime_state.duplicate(true))
+	if persist:
+		# A mode toggle changes no attributes or equipment. Persist the character
+		# revision on the existing background lane, just like immediate item use;
+		# the input callback must not drain older receipts or write profile/index.
+		return _commit_save(false, false) if test_mode else _queue_character_snapshot_save()
+	return true
+
+
+func warrior_runtime_state_for_restore() -> Dictionary:
+	return warrior_runtime_state.duplicate(true)
+
+
+func configure_taoist_main_pets_persistence_provider(provider: Callable) -> void:
+	_taoist_main_pets_persistence_provider = provider
+
+
+func clear_taoist_main_pets_persistence_provider() -> void:
+	_taoist_main_pets_persistence_provider = Callable()
+
+
+func apply_taoist_main_pet_runtime_states(states: Dictionary) -> bool:
+	var normalized := _normalized_taoist_main_pet_runtime_states(states)
+	if (
+		normalized.is_empty()
+		or str(normalized.get("contract_id", ""))
+		!= TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID
+	):
+		return false
+	taoist_main_pet_runtime_states = normalized
+	return true
+
+
+func clear_taoist_main_pet_runtime_state(summon_id: String, pet_slot_index: int = -1) -> void:
+	if summon_id not in ["skeleton", "divine_beast"]:
+		return
+	var groups := taoist_main_pet_runtime_states.get("groups", {}).duplicate(true) as Dictionary
+	var retained: Array = []
+	if pet_slot_index >= 0:
+		for snapshot: Variant in groups.get(summon_id, []):
+			if int((snapshot as Dictionary).get("pet_slot_index", 0)) != pet_slot_index:
+				retained.append(snapshot)
+	groups[summon_id] = retained
+	taoist_main_pet_runtime_states = {"contract_id": TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID, "groups": groups}
+
+
+func taoist_main_pet_runtime_states_for_restore() -> Dictionary:
+	return taoist_main_pet_runtime_states.duplicate(true)
+
+
+func taoist_main_pet_runtime_state_for_restore(summon_id: String) -> Dictionary:
+	var groups: Dictionary = taoist_main_pet_runtime_states.get("groups", {})
+	var snapshots: Array = groups.get(summon_id, [])
+	var snapshot: Variant = snapshots[0] if not snapshots.is_empty() else {}
+	return (snapshot as Dictionary).duplicate(true) if snapshot is Dictionary else {}
+
+
+func _refresh_taoist_main_pet_runtime_states_for_save() -> void:
+	if not _taoist_main_pets_persistence_provider.is_valid():
+		return
+	var captured: Variant = _taoist_main_pets_persistence_provider.call()
+	if not captured is Dictionary:
+		return
+	# The provider merges live actors with valid saved slots still waiting for a
+	# legal map birth tile. Invalid captured state fails closed to an empty
+	# document rather than retaining corrupt pets.
+	var normalized := _normalized_taoist_main_pet_runtime_states(
+		captured
+	)
+	taoist_main_pet_runtime_states = (
+		normalized
+		if not normalized.is_empty()
+		else _empty_taoist_main_pet_runtime_states()
+	)
+
+
+func _empty_taoist_main_pet_runtime_states() -> Dictionary:
+	return {
+		"contract_id": TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID,
+		"groups": {"skeleton": [], "divine_beast": []},
+	}
+
+
+func _taoist_main_pet_runtime_state_slots() -> Dictionary:
+	var groups: Dictionary = taoist_main_pet_runtime_states.get("groups", {})
+	var slots := {}
+	for summon_id: String in ["skeleton", "divine_beast"]:
+		var snapshots: Array = groups.get(summon_id, [])
+		if not snapshots.is_empty():
+			slots[summon_id] = snapshots[0]
+	return slots
+
+
+func _normalized_taoist_main_pet_runtime_states(states: Variant) -> Dictionary:
+	if not states is Dictionary:
+		return {}
+	var source := states as Dictionary
+	var contract_id := str(source.get("contract_id", ""))
+	if contract_id not in [TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID, "skills.summon.persistence.runtime_states.v1", "skills.taoist_main_pet.v2"]:
+		return {}
+	var result := _empty_taoist_main_pet_runtime_states()
+	var groups := result["groups"] as Dictionary
+	var raw_groups: Variant = source.get("groups", {})
+	var raw_slots: Variant = source.get("slots", {})
+	for summon_id: String in ["skeleton", "divine_beast"]:
+		var candidates: Array = []
+		if contract_id == TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID and raw_groups is Dictionary:
+			var entries: Variant = (raw_groups as Dictionary).get(summon_id, [])
+			if entries is Array:
+				candidates = entries
+		elif raw_slots is Dictionary:
+			candidates = [(raw_slots as Dictionary).get(summon_id, {})]
+		var seen := {}
+		for candidate: Variant in candidates:
+			var normalized := _normalized_taoist_main_pet_runtime_state(candidate)
+			var slot := int(normalized.get("pet_slot_index", 0))
+			if normalized.is_empty() or str(normalized.get("summon_id", "")) != summon_id or seen.has(slot) or slot < 0 or slot >= (8 if summon_id == "skeleton" else 1):
+				continue
+			normalized["pet_slot_index"] = slot
+			seen[slot] = true
+			(groups[summon_id] as Array).append(normalized)
+		(groups[summon_id] as Array).sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+			return int(a.get("pet_slot_index", 0)) < int(b.get("pet_slot_index", 0))
+		)
+	return result
+
+
+func _normalized_taoist_main_pet_runtime_state(snapshot: Variant) -> Dictionary:
+	if not snapshot is Dictionary:
+		return {}
+	var source := snapshot as Dictionary
+	if (
+		str(source.get("contract_id", ""))
+		!= TAOIST_MAIN_PET_PERSISTENCE_CONTRACT_ID
+		or not bool(source.get("alive", false))
+	):
+		return {}
+	var summon_id := str(source.get("summon_id", ""))
+	var skill_id := str(source.get("skill_id", ""))
+	if (
+		(summon_id == "skeleton" and skill_id != "taoist.summon_skeleton")
+		or (
+			summon_id == "divine_beast"
+			and skill_id != "taoist.summon_divine_beast"
+		)
+		or summon_id not in ["skeleton", "divine_beast"]
+	):
+		return {}
+	var runtime_state := str(source.get("runtime_state", ""))
+	if runtime_state not in [
+		"FOLLOW_OWNER",
+		"ACQUIRE_TARGET",
+		"CHASE_TARGET",
+		"ATTACK_TARGET",
+		"RETURN_TO_OWNER",
+	]:
+		return {}
+	var skill_rank := int(source.get("skill_rank", -1))
+	var pet_slot_index := int(source.get("pet_slot_index", 0))
+	var effective_rank := int(source.get("effective_skill_rank", skill_rank))
+	var owner_level := int(source.get("owner_level", 0))
+	var current_hp := int(source.get("current_hp", 0))
+	var max_hp := int(source.get("max_hp", 0))
+	var remaining_lifetime := float(source.get("remaining_lifetime", 0.0))
+	var summon_exp_level := int(source.get("summon_exp_level", -1))
+	var maximum_pet_level := int(source.get("maximum_pet_level", -1))
+	var pet_growth_exp := int(source.get("pet_growth_exp", -1))
+	if (
+		skill_rank < 0
+		or skill_rank > 7
+		or pet_slot_index < 0
+		or effective_rank < 0
+		or effective_rank > 1000000
+		or owner_level <= 0
+		or current_hp <= 0
+		or max_hp <= 0
+		or current_hp > max_hp
+		or not is_finite(remaining_lifetime)
+		or remaining_lifetime <= 0.0
+		or summon_exp_level < 0
+		or summon_exp_level > 7
+		or maximum_pet_level < summon_exp_level
+		or maximum_pet_level > 7
+		or pet_growth_exp < 0
+	):
+		return {}
+	return source.duplicate(true)
+
+
+func _normalized_warrior_runtime_state(snapshot: Variant) -> Dictionary:
+	if not snapshot is Dictionary or str(snapshot.get("contract_id", "")) != WARRIOR_RUNTIME_CONTRACT_ID:
+		return _default_warrior_runtime_state()
+	var toggles: Dictionary = snapshot.get("toggles", {})
+	return {
+		"contract_id": WARRIOR_RUNTIME_CONTRACT_ID,
+		"toggles": {
+			"warrior.thrusting": bool(toggles.get("warrior.thrusting", false)),
+			"warrior.half_moon": bool(toggles.get("warrior.half_moon", false)),
+			"warrior.fire_sword.auto_enabled": bool(
+				toggles.get("warrior.fire_sword.auto_enabled", false)
+			),
+		},
+		# Only the user's toggle is persisted. An in-flight charge and cooldown
+		# are still discarded so loading never creates a free prepared hit.
+		"cooldowns": {},
+	}
+
+
+func _default_warrior_runtime_state() -> Dictionary:
+	return {
+		"contract_id": WARRIOR_RUNTIME_CONTRACT_ID,
+		"toggles": {
+			"warrior.thrusting": false,
+			"warrior.half_moon": false,
+			"warrior.fire_sword.auto_enabled": false,
+		},
+		"cooldowns": {},
+	}
+
+
+func update_world_location(
+	map_id: int,
+	screen_position_px: Vector2,
+	ground_position_gu: Variant = null
+) -> void:
+	if active_profile_id.is_empty():
+		return
+	saved_map_id = map_id
+	saved_position = screen_position_px
+	if ground_position_gu is Vector2:
+		saved_ground_position_gu = ground_position_gu
+		saved_ground_position_gu_valid = true
+	else:
+		saved_ground_position_gu = Vector2.ZERO
+		saved_ground_position_gu_valid = false
+
+
+func save_safe_logout(
+	home_map_id: int,
+	home_screen_position_px: Vector2,
+	home_ground_position_gu: Variant = null
+) -> bool:
+	if active_profile_id.is_empty():
+		return false
+	var previous_map_id := saved_map_id
+	var previous_position := saved_position
+	var previous_ground_position_gu := saved_ground_position_gu
+	var previous_ground_position_gu_valid := saved_ground_position_gu_valid
+	saved_map_id = home_map_id
+	saved_position = home_screen_position_px
+	if home_ground_position_gu is Vector2:
+		saved_ground_position_gu = home_ground_position_gu
+		saved_ground_position_gu_valid = true
+	else:
+		saved_ground_position_gu = Vector2.ZERO
+		saved_ground_position_gu_valid = false
+	if save_game():
+		return true
+	# The safe-location record is one transaction in memory and on disk. A
+	# failed write must not leave a fake successful Home location in memory.
+	saved_map_id = previous_map_id
+	saved_position = previous_position
+	saved_ground_position_gu = previous_ground_position_gu
+	saved_ground_position_gu_valid = previous_ground_position_gu_valid
+	last_save_result["memory_rolled_back"] = true
+	return false
+
+
+func list_characters() -> Array[Dictionary]:
+	var index_status := _read_json_with_status(profile_index_path)
+	if not bool(index_status.get("success", false)):
+		return []
+	var index: Dictionary = index_status.get("data", {})
+	var result: Array[Dictionary] = []
+	for entry: Variant in index.get("profiles", []):
+		if not entry is Dictionary:
+			continue
+		var profile_id := str((entry as Dictionary).get("id", ""))
+		if bool(_read_json_with_status(_profile_path(profile_id)).get("success", false)):
+			result.append((entry as Dictionary).duplicate(true))
+	result.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return int(a.get("updated_at", 0)) > int(b.get("updated_at", 0)))
+	return result
+
+
+func prepare_qa_test_roster_v2() -> Dictionary:
+	var marker := _read_json(test_roster_reset_marker_path)
+	var reset_performed := false
+	var archive_path := ""
+	if str(marker.get("contract_id", "")) != TEST_ROSTER_RESET_CONTRACT_ID:
+		var archive_result := _archive_current_test_profiles()
+		if not bool(archive_result.get("ok", false)):
+			return {
+				"ok": false,
+				"contract_id": TEST_CHARACTER_ROSTER_CONTRACT_ID,
+				"reason": str(archive_result.get("reason", "archive_failed")),
+			}
+		reset_performed = true
+		archive_path = str(archive_result.get("archive_path", ""))
+	var roster_result := ensure_equipment_skill_test_roster()
+	var profiles := list_characters()
+	var ready := profiles.size() == 9 and int(roster_result.get("total", 0)) == 9
+	if ready:
+		_write_json_atomic(test_roster_reset_marker_path, {
+			"contract_id": TEST_ROSTER_RESET_CONTRACT_ID,
+			"roster_contract_id": TEST_CHARACTER_ROSTER_CONTRACT_ID,
+			"reset_at": int(Time.get_unix_time_from_system()),
+			"archive_path": archive_path if reset_performed else str(marker.get("archive_path", "")),
+			"profile_count": profiles.size(),
+		})
+	roster_result["ok"] = ready
+	roster_result["reset_performed"] = reset_performed
+	roster_result["archive_path"] = archive_path
+	return roster_result
+
+
+func _archive_current_test_profiles() -> Dictionary:
+	var timestamp := "%d_%d" % [int(Time.get_unix_time_from_system()), Time.get_ticks_usec()]
+	var archive_root := profile_directory.get_base_dir().path_join("test_roster_archives").path_join(timestamp)
+	var archive_characters := archive_root.path_join("characters")
+	var archive_absolute := ProjectSettings.globalize_path(archive_characters)
+	if DirAccess.make_dir_recursive_absolute(archive_absolute) != OK:
+		return {"ok": false, "reason": "archive_directory_failed"}
+	var source_absolute := ProjectSettings.globalize_path(profile_directory)
+	if DirAccess.dir_exists_absolute(source_absolute):
+		var source_directory := DirAccess.open(profile_directory)
+		if source_directory == null:
+			return {"ok": false, "reason": "profile_directory_open_failed"}
+		for file_name: String in source_directory.get_files():
+			var source_path := source_absolute.path_join(file_name)
+			var target_path := archive_absolute.path_join(file_name)
+			if DirAccess.rename_absolute(source_path, target_path) != OK:
+				return {"ok": false, "reason": "profile_archive_failed", "file": file_name}
+		DirAccess.remove_absolute(source_absolute)
+	for root_path: String in [
+		profile_index_path,
+		profile_index_path + ".bak",
+		profile_index_path + ".tmp",
+		SAVE_PATH,
+		SAVE_PATH + ".bak",
+		SAVE_PATH + ".tmp",
+		LEGACY_SAVE_PATH,
+		LEGACY_SAVE_PATH + ".bak",
+		LEGACY_SAVE_PATH + ".tmp",
+	]:
+		if not FileAccess.file_exists(root_path):
+			continue
+		var target_name := root_path.get_file()
+		var target_path := ProjectSettings.globalize_path(archive_root.path_join(target_name))
+		if DirAccess.rename_absolute(ProjectSettings.globalize_path(root_path), target_path) != OK:
+			return {"ok": false, "reason": "root_save_archive_failed", "file": root_path}
+	DirAccess.make_dir_recursive_absolute(source_absolute)
+	active_profile_id = ""
+	character_name = ""
+	_clear_pending_durability_runtime()
+	return {
+		"ok": true,
+		"archive_path": archive_root,
+	}
+
+
+func ensure_equipment_skill_test_roster() -> Dictionary:
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(profile_directory))
+	var index := _read_json(profile_index_path)
+	var profiles: Array = index.get("profiles", [])
+	var existing_index_ids := {}
+	for profile_value: Variant in profiles:
+		if profile_value is Dictionary:
+			existing_index_ids[str(profile_value.get("id", ""))] = true
+	var created := 0
+	var indexed := 0
+	var now := int(Time.get_unix_time_from_system())
+	for loadout_value: Variant in EquipmentTestLoadoutCatalogScript.loadouts():
+		if not loadout_value is Dictionary:
+			continue
+		var loadout: Dictionary = loadout_value
+		var skill_tier := _skill_tier_for_equipment_tier(str(loadout.get("tierId", "")))
+		var skill_profile := TestCharacterSkillProfilesScript.qa_v2_profile_for_character(
+			str(loadout.get("profession", "")),
+			skill_tier
+		)
+		if skill_profile.is_empty():
+			continue
+		var profile_id := str(skill_profile.get("character_profile_id", ""))
+		if profile_id.is_empty():
+			continue
+		var character_level := maxi(
+			int(loadout.get("level", 1)),
+			int(skill_profile.get("minimum_character_level", 1))
+		)
+		var profile_entry := {
+			"id": profile_id,
+			"name": str(skill_profile.get("character_name", profile_id)),
+			"profession": str(loadout.get("profession", "")),
+			"gender": str(loadout.get("gender", "男")),
+			"level": character_level,
+			"updated_at": now,
+		}
+		if not FileAccess.file_exists(_profile_path(profile_id)):
+			var payload := _test_character_payload(loadout, skill_profile, profile_entry, now)
+			if _write_json_atomic(_profile_path(profile_id), payload):
+				created += 1
+		if not existing_index_ids.has(profile_id) and FileAccess.file_exists(_profile_path(profile_id)):
+			profiles.append(profile_entry)
+			existing_index_ids[profile_id] = true
+			indexed += 1
+	if indexed > 0:
+		_write_json_atomic(profile_index_path, {"version": 1, "profiles": profiles})
+	return {
+		"contract_id": TEST_CHARACTER_ROSTER_CONTRACT_ID,
+		"created": created,
+		"indexed": indexed,
+		"total": EquipmentTestLoadoutCatalogScript.loadouts().size(),
+	}
+
+
+## Debug-lab fixture entry that appends only the three canonical QA v2 Chiyue
+## profiles. Existing profile documents are validated but never rewritten;
+## existing index rows are preserved verbatim and missing rows are appended.
+func ensure_chiyue_test_roster() -> Dictionary:
+	var result := {
+		"ok": false,
+		"contract_id": TEST_CHARACTER_ROSTER_CONTRACT_ID,
+		"created": 0,
+		"indexed": 0,
+		"existing": 0,
+		"total": CHIYUE_TEST_PROFILE_IDS.size(),
+		"profile_ids": CHIYUE_TEST_PROFILE_IDS.duplicate(),
+		"reason": "",
+	}
+	var directory_absolute := ProjectSettings.globalize_path(profile_directory)
+	if (
+		not DirAccess.dir_exists_absolute(directory_absolute)
+		and DirAccess.make_dir_recursive_absolute(directory_absolute) != OK
+	):
+		result["reason"] = "profile_directory_failed"
+		return result
+
+	var index_status := _read_json_document(profile_index_path)
+	if bool(index_status.get("exists", false)) and not bool(index_status.get("valid", false)):
+		result["reason"] = "profile_index_invalid"
+		return result
+	if (
+		not bool(index_status.get("exists", false))
+		and FileAccess.file_exists(profile_index_path + ".bak")
+	):
+		result["reason"] = "profile_index_primary_missing"
+		return result
+	var index: Dictionary = (
+		(index_status.get("data", {}) as Dictionary).duplicate(true)
+		if bool(index_status.get("exists", false))
+		else {"version": 1, "profiles": []}
+	)
+
+
+	if not index.get("profiles", null) is Array:
+		result["reason"] = "profile_index_profiles_invalid"
+		return result
+	var profiles: Array = (index.get("profiles", []) as Array).duplicate(true)
+	var index_id_counts := {}
+	for value: Variant in profiles:
+		if not value is Dictionary:
+			result["reason"] = "profile_index_entry_invalid"
+			return result
+		var indexed_id := str((value as Dictionary).get("id", ""))
+		if indexed_id.is_empty():
+			result["reason"] = "profile_index_id_missing"
+			return result
+		index_id_counts[indexed_id] = int(index_id_counts.get(indexed_id, 0)) + 1
+	for target_id: String in CHIYUE_TEST_PROFILE_IDS:
+		if int(index_id_counts.get(target_id, 0)) > 1:
+			result["reason"] = "duplicate_target_index:%s" % target_id
+			return result
+
+	var fixture_specs: Array[Dictionary] = []
+	var now := int(Time.get_unix_time_from_system())
+	for profession_id: String in ["warrior", "wizard", "taoist"]:
+		var profession_name := ProfessionRules.profession_display_name(profession_id)
+		var loadout := EquipmentTestLoadoutCatalogScript.get_loadout(
+			profession_name,
+			"chiyue"
+		)
+		var skill_profile := TestCharacterSkillProfilesScript.qa_v2_profile_for_character(
+			profession_id,
+			"chiyue"
+		)
+		var expected_profile_id := "test.character.%s.chiyue.v2" % profession_id
+		if (
+			loadout.is_empty()
+			or skill_profile.is_empty()
+			or str(loadout.get("tierId", "")) != "chiyue"
+			or str(loadout.get("profession", "")) != profession_name
+			or str(skill_profile.get("equipment_tier", "")) != "chiyue"
+			or str(skill_profile.get("character_profile_id", "")) != expected_profile_id
+			or expected_profile_id not in CHIYUE_TEST_PROFILE_IDS
+		):
+			result["reason"] = "fixture_authority_invalid:%s" % profession_id
+			return result
+		var character_level := maxi(
+			int(loadout.get("level", 1)),
+			int(skill_profile.get("minimum_character_level", 1))
+		)
+		var profile_entry := {
+			"id": expected_profile_id,
+			"name": str(skill_profile.get("character_name", expected_profile_id)),
+			"profession": profession_name,
+			"gender": str(loadout.get("gender", "男")),
+			"level": character_level,
+			"updated_at": now,
+		}
+		var payload := _test_character_payload(
+			loadout,
+			skill_profile,
+			profile_entry,
+			now
+		)
+		if not _valid_chiyue_test_profile_document(
+			payload,
+			expected_profile_id,
+			profession_name,
+			str(loadout.get("loadoutId", "")),
+			str(skill_profile.get("template_id", ""))
+		):
+			result["reason"] = "fixture_payload_invalid:%s" % profession_id
+			return result
+		fixture_specs.append({
+			"profile_id": expected_profile_id,
+			"profession": profession_name,
+			"loadout_id": str(loadout.get("loadoutId", "")),
+			"skill_template_id": str(skill_profile.get("template_id", "")),
+			"entry": profile_entry,
+			"payload": payload,
+		})
+
+	var created_profile_ids: Array[String] = []
+	for spec: Dictionary in fixture_specs:
+		var profile_id := str(spec.get("profile_id", ""))
+		var profile_path := _profile_path(profile_id)
+		if FileAccess.file_exists(profile_path):
+			var existing_status := _read_json_document(profile_path)
+			if (
+				not bool(existing_status.get("valid", false))
+				or not _valid_chiyue_test_profile_document(
+					existing_status.get("data", {}) as Dictionary,
+					profile_id,
+					str(spec.get("profession", "")),
+					str(spec.get("loadout_id", "")),
+					str(spec.get("skill_template_id", ""))
+				)
+			):
+				_rollback_new_chiyue_test_profiles(created_profile_ids)
+				result["reason"] = "existing_profile_invalid:%s" % profile_id
+				return result
+			result["existing"] = int(result["existing"]) + 1
+			continue
+		if (
+			FileAccess.file_exists(profile_path + ".bak")
+			or FileAccess.file_exists(profile_path + ".tmp")
+			or FileAccess.file_exists(profile_path + ".corrupt.tmp")
+		):
+			_rollback_new_chiyue_test_profiles(created_profile_ids)
+			result["reason"] = "existing_profile_primary_missing:%s" % profile_id
+			return result
+		if not _write_json_atomic(profile_path, spec.get("payload", {}) as Dictionary):
+			_rollback_new_chiyue_test_profiles(created_profile_ids)
+			result["reason"] = "profile_write_failed:%s" % profile_id
+			return result
+		created_profile_ids.append(profile_id)
+
+	var indexed := 0
+	for spec: Dictionary in fixture_specs:
+		var profile_id := str(spec.get("profile_id", ""))
+		if int(index_id_counts.get(profile_id, 0)) == 0:
+			profiles.append((spec.get("entry", {}) as Dictionary).duplicate(true))
+			index_id_counts[profile_id] = 1
+			indexed += 1
+	if indexed > 0:
+		index["profiles"] = profiles
+		if not _write_json_atomic(profile_index_path, index):
+			_rollback_new_chiyue_test_profiles(created_profile_ids)
+			result["reason"] = "profile_index_write_failed"
+			return result
+
+	for target_id: String in CHIYUE_TEST_PROFILE_IDS:
+		if (
+			not FileAccess.file_exists(_profile_path(target_id))
+			or int(index_id_counts.get(target_id, 0)) != 1
+		):
+			result["reason"] = "postcondition_failed:%s" % target_id
+			return result
+	result["created"] = created_profile_ids.size()
+	result["indexed"] = indexed
+	result["ok"] = true
+	return result
+
+
+func _commit_warehouse_transaction_snapshots(
+	before_profile: Dictionary,
+	after_profile: Dictionary,
+	before_shared: Dictionary,
+	after_shared: Dictionary,
+	operation_kind: String,
+) -> bool:
+	var item_profile := ItemExtensionCodec.encode_document(after_profile)
+	var item_shared := ItemExtensionCodec.encode_document(after_shared)
+	if item_profile.status != ItemExtensionCodec.KNOWN_VALID or item_shared.status != ItemExtensionCodec.KNOWN_VALID:
+		return false
+	after_profile = item_profile.document
+	after_shared = item_shared.document
+	var profile_path := _profile_path(active_profile_id)
+	if (
+		FileAccess.file_exists(shared_warehouse_transaction_log_path)
+		or _shared_digest(_read_json(profile_path)) != _shared_digest(before_profile)
+		or _shared_digest(_read_json(shared_warehouse_path)) != _shared_digest(before_shared)
+	):
+		return false
+	var prepared := {
+		"contract_id": WAREHOUSE_TRANSFER_CONTRACT_ID,
+		"state": "PREPARED",
+		"operation_kind": operation_kind,
+		"profile_id": active_profile_id,
+		"profile_path": profile_path,
+		"before_profile": before_profile,
+		"after_profile": after_profile,
+		"before_shared": before_shared,
+		"after_shared": after_shared,
+		"before_profile_hash": _shared_digest(before_profile),
+		"after_profile_hash": _shared_digest(after_profile),
+		"before_shared_hash": _shared_digest(before_shared),
+		"after_shared_hash": _shared_digest(after_shared),
+	}
+	if not _warehouse_transaction_log_is_valid(prepared):
+		return false
+	if not _write_json_atomic(shared_warehouse_transaction_log_path, prepared):
+		return false
+	_warehouse_transaction_locked = true
+	_persistence_transaction_in_progress = true
+	var after_shared_ok := _write_shared_warehouse_document_atomic(after_shared)
+	var after_profile_ok := false
+	if after_shared_ok and not (test_mode and _test_fail_profile_write):
+		after_profile_ok = _write_json_atomic(profile_path, after_profile)
+	_persistence_transaction_in_progress = false
+	var after_verified := (
+		after_shared_ok
+		and after_profile_ok
+		and _shared_digest(_read_json(profile_path)) == _shared_digest(after_profile)
+		and _shared_digest(_read_json(shared_warehouse_path)) == _shared_digest(after_shared)
+	)
+	if after_verified:
+		_warehouse_transaction_locked = not _remove_persistence_file(
+			shared_warehouse_transaction_log_path
+		)
+		return true
+	var shared_restored := false
+	var profile_restored := false
+	if not (test_mode and _test_fail_warehouse_rollback_write):
+		shared_restored = _write_json_atomic(shared_warehouse_path, before_shared, true)
+		profile_restored = _write_json_atomic(profile_path, before_profile, true)
+	var rollback_verified := (
+		shared_restored
+		and profile_restored
+		and _shared_digest(_read_json(profile_path)) == _shared_digest(before_profile)
+		and _shared_digest(_read_json(shared_warehouse_path)) == _shared_digest(before_shared)
+	)
+	if rollback_verified:
+		_warehouse_transaction_locked = not _remove_persistence_file(
+			shared_warehouse_transaction_log_path
+		)
+	return false
+
+
+var _warehouse_preparation_pending := false
+var _warehouse_active_preparation: RefCounted
+
+
+func transfer_shared_gold_prepared(deposit: bool, transaction_id: String, transaction_sequence: int) -> Dictionary:
+	if _warehouse_preparation_pending:
+		return {"success": false, "contract_id": BANK_CONTRACT_ID, "reason": "storage_unavailable"}
+	_warehouse_preparation_pending = true
+	var result: Dictionary = await _prepare_shared_gold_request(deposit, transaction_id, transaction_sequence)
+	_warehouse_preparation_pending = false
+	_warehouse_active_preparation = null
+	if not bool(result.get("success", false)) and not result.has("reason"):
+		result = {"success": false, "contract_id": BANK_CONTRACT_ID, "reason": "save_failed"}
+	return result
+
+
+func _prepare_shared_gold_request(deposit: bool, transaction_id: String, transaction_sequence: int) -> Dictionary:
+	if not await _await_character_writes_for_ui():
+		return {"success": false, "contract_id": BANK_CONTRACT_ID, "reason": "save_failed"}
+	var ready := _bank_request_preflight(transaction_id, transaction_sequence)
+	if not bool(ready.success): return ready
+	var profile_id := active_profile_id
+	var profile_path := _profile_path(profile_id)
+	var shared_path := shared_warehouse_path
+	var generation := _atomic_write_generation
+	var previous_gold := gold
+	# Each authority read/validation gets its own frame; the following identity
+	# and generation check rejects interleaving changes before planning.
+	await get_tree().process_frame
+	var shared := _read_json(shared_path)
+	await get_tree().process_frame
+	var profile := _read_json(profile_path)
+	await get_tree().process_frame
+	if (active_profile_id != profile_id or _profile_path(profile_id) != profile_path
+		or shared_warehouse_path != shared_path or _atomic_write_generation != generation
+		or gold != previous_gold or _warehouse_transaction_locked or _persistence_transaction_in_progress):
+		return {"success": false, "contract_id": BANK_CONTRACT_ID, "reason": "stale_profile"}
+	var plan := _shared_gold_plan(deposit, transaction_id, transaction_sequence, shared, profile)
+	if not bool(plan.success): return plan
+	return await _prepare_warehouse_transfer("bank", [], [], plan)
+
+
+func transfer_warehouse_prepared(operation: String, source_indices: Array, target_slots: Array = []) -> Dictionary:
+	if test_mode and not _shared_warehouse_test_isolation_enabled():
+		return deposit_to_warehouse_batch(source_indices, target_slots) if operation == "deposit" else withdraw_from_warehouse_batch(source_indices)
+	if _warehouse_preparation_pending:
+		return _warehouse_preparation_failure("仓库存取正在处理中。")
+	_warehouse_preparation_pending = true
+	var result: Dictionary = await _prepare_warehouse_transfer(operation, source_indices, target_slots)
+	_warehouse_preparation_pending = false
+	_warehouse_active_preparation = null
+	return result
+
+
+func _warehouse_preparation_failure(message: String) -> Dictionary:
+	return {"success": false, "complete": false, "transferred": 0, "message": message}
+
+
+func _captured_json_matches_document(path: String, bytes: PackedByteArray, document: Dictionary) -> bool:
+	var serialized := bytes.get_string_from_utf8()
+	var cached: Dictionary = _json_parse_snapshots.get(path, {})
+	if not cached.is_empty() and str(cached.hash) == serialized.sha256_text():
+		return cached.data == document
+	var parsed: Variant = JSON.parse_string(serialized)
+	return parsed is Dictionary and parsed == document
+
+
+# Leave most of the 16.7ms frame to world simulation/render preparation. A
+# completed small check need not impose another whole frame of input latency.
+const UI_WORK_SLICE_BUDGET_USEC := 2000
+
+func _continue_ui_work_slice(started_usec: int) -> int:
+	if Time.get_ticks_usec() - started_usec >= UI_WORK_SLICE_BUDGET_USEC:
+		await get_tree().process_frame
+		return Time.get_ticks_usec()
+	return started_usec
+
+
+func _prepare_warehouse_transfer(operation: String, source_indices: Array, target_slots: Array, bank_plan: Dictionary = {}) -> Dictionary:
+	if operation not in ["deposit", "withdraw", "bank"]:
+		return _warehouse_preparation_failure("仓库存取操作无效。")
+	if not await _await_character_writes_for_ui():
+		return _warehouse_preparation_failure("人物存档尚未保存成功，请稍后重试。")
+	var is_bank := operation == "bank"
+	var plan := bank_plan if is_bank else (deposit_to_warehouse_batch(source_indices, target_slots, true) if operation == "deposit" else withdraw_from_warehouse_batch(source_indices, true))
+	if not bool(plan.get("success", false)):
+		return plan
+	if not is_bank:
+		plan._prepared_inventory = SpecialConsumableStacks.split_available(plan._prepared_inventory, INVENTORY_CAPACITY, INVENTORY_CAPACITY)
+		plan._prepared_warehouse = SpecialConsumableStacks.split_available(plan._prepared_warehouse, WAREHOUSE_CAPACITY, WAREHOUSE_PAGE_SIZE)
+	var profile_id := active_profile_id
+	var generation := _atomic_write_generation
+	var paths := {"profile": _profile_path(profile_id), "shared": shared_warehouse_path, "journal": shared_warehouse_transaction_log_path}
+	await get_tree().process_frame
+	var ui_slice_started := Time.get_ticks_usec()
+	var before_profile := _read_json(str(paths.profile))
+	ui_slice_started = await _continue_ui_work_slice(ui_slice_started)
+	var before_shared := _read_json(str(paths.shared))
+	ui_slice_started = await _continue_ui_work_slice(ui_slice_started)
+	var previous_profile_bytes := FileAccess.get_file_as_bytes(paths.profile)
+	var previous_shared_bytes := FileAccess.get_file_as_bytes(paths.shared)
+	# Bind the validated snapshots to the exact disk bytes, including file edits
+	# made between reading / validating and capturing the preparation input.
+	if (before_profile.is_empty() or before_shared.is_empty()
+		or not _captured_json_matches_document(paths.profile, previous_profile_bytes, before_profile)
+		or not _captured_json_matches_document(paths.shared, previous_shared_bytes, before_shared)):
+		return _warehouse_preparation_failure("仓库存档已变化，物品未改变。")
+	ui_slice_started = await _continue_ui_work_slice(ui_slice_started)
+	var after_profile := before_profile.duplicate()
+	if is_bank:
+		if before_profile != plan._bank_before_profile or before_shared != plan._bank_before_shared:
+			return {"success": false, "contract_id": BANK_CONTRACT_ID, "reason": "stale_profile"}
+		after_profile["gold"] = int(plan._next_gold)
+	else:
+		after_profile["inventory"] = plan._prepared_inventory
+	after_profile["warehouse_storage_contract_id"] = SHARED_WAREHOUSE_CONTRACT_ID
+	after_profile["updated_at"] = int(Time.get_unix_time_from_system())
+	after_profile.erase("warehouse_inventory")
+	var after_shared := before_shared.duplicate() if is_bank else _shared_document_for_records(plan._prepared_warehouse, before_shared)
+	if is_bank:
+		after_shared["revision"] = int(before_shared.get("revision", 0)) + 1
+		after_shared.merge(plan._bank_update, true)
+	var item_profile := ItemExtensionCodec.encode_document(after_profile)
+	var item_shared := ItemExtensionCodec.encode_document(after_shared)
+	if item_profile.status != ItemExtensionCodec.KNOWN_VALID or item_shared.status != ItemExtensionCodec.KNOWN_VALID:
+		return _warehouse_preparation_failure("物品扩展数据校验失败，物品未改变。")
+	after_profile = item_profile.document
+	after_shared = item_shared.document
+	var job := preload("res://scripts/warehouse_prepared_transaction.gd").new()
+	_warehouse_active_preparation = job
+	job.start(paths, {"before_profile": before_profile, "after_profile": after_profile, "before_shared": before_shared, "after_shared": after_shared}, WAREHOUSE_TRANSFER_CONTRACT_ID, profile_id, "bank" if is_bank else "warehouse_items")
+	while not bool(job.result().finished):
+		await get_tree().process_frame
+	if not bool(job.result().success):
+		job.cancel()
+		return _warehouse_preparation_failure("仓库存档准备失败，物品未改变。")
+	ui_slice_started = Time.get_ticks_usec()
+	# Validate the actual normalized JSON which the worker wrote, on the main
+	# thread. Separate document checks keep a 500-item transaction responsive.
+	for key: String in ["before_profile", "after_profile"]:
+		ui_slice_started = await _continue_ui_work_slice(ui_slice_started)
+		if not bool(_validate_profile_document_status(job.documents[key], profile_id, false).valid):
+			job.cancel()
+			return _warehouse_preparation_failure("角色存档校验失败，物品未改变。")
+	for key: String in ["before_shared", "after_shared"]:
+		ui_slice_started = await _continue_ui_work_slice(ui_slice_started)
+		if not _validate_shared_warehouse_document(job.documents[key]):
+			job.cancel()
+			return _warehouse_preparation_failure("仓库存档校验失败，物品未改变。")
+	for prefix: String in ["before_", "after_"]:
+		ui_slice_started = await _continue_ui_work_slice(ui_slice_started)
+		if not _profile_and_shared_drop_instances_are_disjoint(job.documents[prefix + "profile"], job.documents[prefix + "shared"]):
+			job.cancel()
+			return _warehouse_preparation_failure("物品实例校验失败，物品未改变。")
+	ui_slice_started = await _continue_ui_work_slice(ui_slice_started)
+	var current: bool = (active_profile_id == profile_id and _profile_path(profile_id) == paths.profile
+		and shared_warehouse_path == paths.shared and shared_warehouse_transaction_log_path == paths.journal
+		and _atomic_write_generation == generation and not _warehouse_transaction_locked
+		and not _persistence_transaction_in_progress and not FileAccess.file_exists(paths.journal)
+		and inventory == plan._inventory_before and warehouse_inventory == plan._warehouse_before
+		and (not is_bank or gold == int(plan._gold_before))
+		and _file_matches_validated_bytes(paths.profile, previous_profile_bytes)
+		and _file_matches_validated_bytes(paths.shared, previous_shared_bytes))
+	if not current or not bool(job.result().success):
+		job.cancel()
+		return _warehouse_preparation_failure("物品或存档已变化，请重新操作。")
+	# The journal was constructed from these four normalized snapshots. The
+	# operation cannot change either gold authority or skip the revision step.
+	if is_bank:
+		if not _bank_transaction_transition_is_valid(profile_id, job.documents.before_profile, job.documents.after_profile, job.documents.before_shared, job.documents.after_shared):
+			job.cancel()
+			return {"success": false, "contract_id": BANK_CONTRACT_ID, "reason": "save_failed"}
+	elif (int(job.documents.before_profile.get("gold", 0)) != int(job.documents.after_profile.get("gold", 0))
+		or _bank_fields_snapshot(job.documents.before_shared) != _bank_fields_snapshot(job.documents.after_shared)
+		or int(job.documents.after_shared.get("revision", -1)) != int(job.documents.before_shared.get("revision", -1)) + 1):
+		job.cancel()
+		return _warehouse_preparation_failure("仓库交易校验失败，物品未改变。")
+	# From this point the receipt owner, not the coroutine/UI, owns promotion
+	# and live-state handoff. A normal lifecycle drain consumes the same owner.
+	var commit := {"finished": false, "success": false, "owner": profile_id,
+		"generation": _world_clock_generation, "plan": plan, "bank": is_bank, "job": job}
+	_warehouse_transaction_locked = true
+	var operation_owner := preload("res://scripts/warehouse_commit_operation.gd").new()
+	operation_owner.start(_json_persistence, job,
+		{"profile": previous_profile_bytes, "shared": previous_shared_bytes},
+		{"profile": _json_validator_for_path(paths.profile), "shared": _json_validator_for_path(paths.shared)},
+		_record_background_json_receipt, _complete_prepared_warehouse.bind(commit),
+		{"journal": test_mode and _test_force_atomic_write_failure,
+			"shared": test_mode and _test_fail_shared_write,
+			"profile": test_mode and _test_fail_profile_write,
+			"rollback": test_mode and _test_fail_warehouse_rollback_write})
+	while not bool(commit.finished):
+		_json_persistence.pump()
+		if not bool(commit.finished):
+			await get_tree().process_frame
+	if not bool(commit.success):
+		return _warehouse_preparation_failure("仓库存档失败，物品未改变。")
+	return commit.result
+
+
+func _await_character_writes_for_ui() -> bool:
+	var owner := active_profile_id
+	var generation := _world_clock_generation
+	# Use the same ordering as the synchronous boundary, without waiting for a
+	# worker on the render thread. Unapproved pickup preparations can be retried
+	# by their owner; already-promoting receipts must finish and apply first.
+	_json_persistence.cancel_uncommitted_domain("loot")
+	var retried_failed_save := false
+	while true:
+		if owner != active_profile_id or generation != _world_clock_generation:
+			return false
+		_json_persistence.pump()
+		if _json_persistence.pending_count() == 0:
+			if _item_save_revision <= _item_saved_revision:
+				return true
+			if _item_save_failed and retried_failed_save:
+				return false
+			retried_failed_save = true
+			if not _start_item_save(true):
+				return false
+		await get_tree().process_frame
+	return false
+
+
+func _complete_prepared_warehouse(success: bool, can_remove_journal: bool, journal_written: bool, commit: Dictionary) -> void:
+	var job: RefCounted = commit.job
+	if can_remove_journal:
+		_warehouse_transaction_locked = not _remove_persistence_file(job.paths.journal)
+	elif not journal_written:
+		_warehouse_transaction_locked = false
+	# If rollback failed, retain the existing recovery journal and lock.
+	job.cancel()
+	commit.finished = true
+	commit.success = success
+	if not success:
+		return
+	var plan: Dictionary = commit.plan
+	if active_profile_id != str(commit.owner) or _world_clock_generation != str(commit.generation):
+		commit.success = false
+		return # Never apply an old role's receipt to another active role.
+	if bool(commit.bank):
+		gold = int(plan._next_gold)
+		commit.result = {"success": true, "contract_id": BANK_CONTRACT_ID, "reason": "", "player_gold": gold,
+			"shared_gold": int(plan._bank_update.bank_gold), "transaction_id": plan.transaction_id,
+			"transaction_sequence": plan.transaction_sequence}
+		profile_changed.emit()
+		return
+	inventory = plan._prepared_inventory
+	warehouse_inventory = plan._prepared_warehouse
+	for key: String in ["_inventory_before", "_warehouse_before", "_prepared_inventory", "_prepared_warehouse"]:
+		plan.erase(key)
+	commit.result = plan
+	inventory_changed.emit()
+
+
+func _bank_transfer_commit(
+	before_profile: Dictionary,
+	before_shared: Dictionary,
+	next_gold: int,
+	bank_update: Dictionary,
+) -> bool:
+	var allowed_bank_fields := {
+		"bank_gold": true,
+		"bank_contract_id": true,
+		"bank_transaction_high_water": true,
+		"bank_transactions": true,
+	}
+	if bank_update.size() != allowed_bank_fields.size():
+		return false
+	for raw_field: Variant in bank_update.keys():
+		if not allowed_bank_fields.has(str(raw_field)):
+			return false
+	var after_profile := before_profile.duplicate(true)
+	after_profile["gold"] = next_gold
+	after_profile["warehouse_storage_contract_id"] = SHARED_WAREHOUSE_CONTRACT_ID
+	after_profile["updated_at"] = int(Time.get_unix_time_from_system())
+	after_profile.erase("warehouse_inventory")
+	var after_shared := before_shared.duplicate(true)
+	after_shared["revision"] = int(before_shared.get("revision", 0)) + 1
+	for field: String in allowed_bank_fields.keys():
+		after_shared[field] = bank_update[field]
+	return _commit_warehouse_transaction_snapshots(
+		before_profile,
+		after_profile,
+		before_shared,
+		after_shared,
+		"bank",
+	)
+
+
+var _warehouse_validation_scope := false
+var _warehouse_validated_collections: Dictionary = {}
+
+func _warehouse_transfer_commit(_inventory_before: Array, _warehouse_before: Array) -> bool:
+	inventory = SpecialConsumableStacks.split_available(inventory, INVENTORY_CAPACITY, INVENTORY_CAPACITY)
+	warehouse_inventory = SpecialConsumableStacks.split_available(warehouse_inventory, WAREHOUSE_CAPACITY, WAREHOUSE_PAGE_SIZE)
+	_warehouse_validation_scope = true
+	_warehouse_validated_collections.clear()
+	var result := _warehouse_transfer_commit_validated(_inventory_before, _warehouse_before)
+	_warehouse_validation_scope = false
+	_warehouse_validated_collections.clear()
+	return result
+
+
+func _warehouse_transfer_commit_validated(_inventory_before: Array, _warehouse_before: Array) -> bool:
+	if test_mode and not _shared_warehouse_test_isolation_enabled():
+		return _commit_save()
+	if not _ensure_shared_warehouse_ready():
+		return false
+	if (
+		profile_directory != PROFILE_DIRECTORY
+		and not _shared_warehouse_test_isolation_enabled()
+		and not _shared_warehouse_initialized
+	):
+		return _commit_save()
+	var profile_path := _profile_path(active_profile_id)
+	var before_profile := _read_json(profile_path)
+	var before_shared := _read_json(shared_warehouse_path)
+	if (
+		before_profile.is_empty()
+		or str(before_profile.get("profile_id", "")) != active_profile_id
+		or not _validate_shared_warehouse_document(before_shared)
+	):
+		return false
+	var after_profile := before_profile.duplicate(true)
+	after_profile["inventory"] = inventory.duplicate(true)
+	after_profile["warehouse_storage_contract_id"] = SHARED_WAREHOUSE_CONTRACT_ID
+	after_profile["updated_at"] = int(Time.get_unix_time_from_system())
+	after_profile.erase("warehouse_inventory")
+	var after_shared := _shared_document_for_records(warehouse_inventory, before_shared)
+	if not _validate_shared_warehouse_document(after_shared):
+		return false
+	return _commit_warehouse_transaction_snapshots(
+		before_profile,
+		after_profile,
+		before_shared,
+		after_shared,
+		"warehouse_items",
+	)
+
+
+## Partial atomic pickup transaction. Each candidate is simulated in order;
+## failures do not prevent later candidates from being attempted.
+func receive_loot_batch_partial(candidates: Array, prepare_only := false) -> Dictionary:
+	if not prepare_only:
+		_before_state_transaction()
+	var profile_started_usec := Time.get_ticks_usec()
+	var gold_only := not candidates.is_empty()
+	for raw_candidate: Variant in candidates:
+		if not raw_candidate is Dictionary or not bool((raw_candidate as Dictionary).get("gold", false)):
+			gold_only = false
+			break
+	# working_inventory is the only copy mutated during planning. Keep the live
+	# array itself as the rollback snapshot; it remains untouched until commit.
+	var inventory_before := inventory
+	var gold_before := gold
+	var working_inventory := inventory if gold_only else inventory.duplicate(true)
+	var working_gold := gold
+	var initial_weight := 0 if gold_only else inventory_weight(inventory)
+	_loot_batch_debug["plan_scans"] = int(_loot_batch_debug.get("plan_scans", 0)) + 1
+	if not gold_only:
+		_loot_batch_debug["initial_weight_scans"] = int(_loot_batch_debug.get("initial_weight_scans", 0)) + 1
+	var working_weight := initial_weight
+	var maximum_weight := 0 if gold_only else max_inventory_weight()
+	var occupied_count := 0 if gold_only else inventory_occupied_count(working_inventory)
+	if not gold_only:
+		_loot_batch_debug["occupied_scans"] = int(_loot_batch_debug.get("occupied_scans", 0)) + 1
+	var free_slots: Array[int] = []
+	if not gold_only:
+		for slot_index in range(mini(working_inventory.size(), INVENTORY_CAPACITY)):
+			if not _inventory_slot_is_occupied(working_inventory[slot_index]):
+				free_slots.append(slot_index)
+	var free_slot_cursor := 0
+	var merge_slots_by_identity: Dictionary = {}
+	var outcomes: Array = []
+	var changed := false
+	for raw_candidate: Variant in candidates:
+		if not raw_candidate is Dictionary:
+			continue
+		var candidate: Dictionary = raw_candidate
+		if bool(candidate.get("gold", false)):
+			var raw_amount: Variant = candidate.get("amount", 0)
+			if not can_credit_gold(raw_amount, working_gold) or float(raw_amount) <= 0.0:
+				outcomes.append({"success": false, "gold": true, "reason": "gold_cap_or_invalid_amount"})
+				continue
+			var amount := int(raw_amount)
+			working_gold += amount
+			changed = true
+			outcomes.append({"success": true, "gold": true, "amount": amount})
+			continue
+		var item_name := str(candidate.get("item_name", ""))
+		var explicit_item_id := int(candidate.get("item_id", -1))
+		if candidate.has("item_id") and (
+			not candidate.get("item_id") is int or explicit_item_id < 0
+		):
+			outcomes.append({"success": false, "item_name": item_name, "message": "物品身份无效。", "reason": "unknown_item"})
+			continue
+		var catalog: Dictionary = (
+			_loot_inventory_catalog_record(explicit_item_id) if explicit_item_id >= 0
+			else _loot_inventory_catalog_record(item_name)
+		)
+		if explicit_item_id >= 0 and int(catalog.get("itemId", -1)) != explicit_item_id:
+			catalog = {}
+		if catalog.is_empty():
+			outcomes.append({"success": false, "item_name": item_name, "message": "物品无效。", "reason": "unknown_item"})
+			continue
+		item_name = str(catalog.get("name", item_name))
+		var canonical_item_id := int(catalog.get("itemId", -1))
+		var merge_key := GameData.item_entity_id(catalog)
+		var identity_template := _with_item_identity({"name": item_name, "count": 1}, catalog)
+		var item_weight := maxi(0, int(catalog.get("weight", 0)))
+		var kind := str(catalog.get("kind", ""))
+		var provided_instance: Dictionary = {}
+		if candidate.has("item_instance"):
+			var instance_value: Variant = candidate.get("item_instance", null)
+			if instance_value is Dictionary:
+				var item_runtime := ItemExtensionCodec.normalize_runtime(instance_value)
+				instance_value = item_runtime.item if item_runtime.status == ItemExtensionCodec.KNOWN_VALID else null
+			if (
+				kind != "equipment"
+				or not instance_value is Dictionary
+				or int((instance_value as Dictionary).get("item_id", -1)) != canonical_item_id
+				or (
+					RelicSynthesisRulesScript.is_synthesis_item(canonical_item_id)
+					and not RelicSynthesisRulesScript.valid_instance(instance_value as Dictionary, canonical_item_id)
+				)
+				or (
+					not RelicSynthesisRulesScript.is_synthesis_item(canonical_item_id)
+					and not GameData.validate_item_drop_instance(instance_value as Dictionary)
+				)
+			):
+				outcomes.append({
+					"success": false,
+					"item_name": item_name,
+					"message": "掉落实例无效。",
+					"reason": "invalid_item_instance",
+				})
+				continue
+			provided_instance = (instance_value as Dictionary).duplicate(true)
+			if _item_record_ownership_already_present(provided_instance, working_inventory):
+				outcomes.append({
+					"success": false,
+					"item_name": item_name,
+					"message": "掉落实例已入账。",
+					"reason": "duplicate_item_instance",
+				})
+				continue
+		var stackable := bool(catalog.get("stackable", false)) and kind != "equipment"
+		var prospective_weight := working_weight + item_weight
+		if prospective_weight > maximum_weight and prospective_weight > initial_weight:
+			outcomes.append({"success": false, "item_name": item_name, "message": INVENTORY_WEIGHT_REJECTION, "reason": "overweight"})
+			continue
+		var merged := false
+		if stackable:
+			var max_stack := _max_stack_for_item(catalog)
+			if not merge_slots_by_identity.has(merge_key):
+				var merge_slots: Array[int] = []
+				for existing_index in range(working_inventory.size()):
+					var existing_value: Variant = working_inventory[existing_index]
+					if not existing_value is Dictionary:
+						continue
+					var existing: Dictionary = existing_value
+					if (
+						_inventory_records_mergeable(existing, identity_template)
+						and int(existing.get("count", 0)) < max_stack
+					):
+						merge_slots.append(existing_index)
+				merge_slots_by_identity[merge_key] = merge_slots
+			var merge_slots: Array = merge_slots_by_identity.get(merge_key, [])
+			while not merge_slots.is_empty():
+				var merge_index := int(merge_slots[0])
+				var existing: Dictionary = working_inventory[merge_index]
+				if int(existing.get("count", 0)) >= max_stack:
+					merge_slots.pop_front()
+					continue
+				existing["count"] = int(existing.get("count", 0)) + 1
+				_with_item_identity(existing, catalog)
+				if int(existing.get("count", 0)) >= max_stack:
+					merge_slots.pop_front()
+				merged = true
+				break
+		if not merged:
+			if occupied_count >= INVENTORY_CAPACITY:
+				outcomes.append({"success": false, "item_name": item_name, "message": INVENTORY_SLOT_REJECTION, "reason": "inventory_full"})
+				continue
+			var new_record: Dictionary = (
+				provided_instance
+				if not provided_instance.is_empty()
+				else (
+					_make_item_instance(
+						item_name,
+						catalog,
+						Time.get_ticks_usec() + working_inventory.size() + outcomes.size(),
+					)
+					if kind == "equipment"
+					else identity_template.duplicate()
+				)
+			)
+			_with_item_identity(new_record, catalog)
+			var placed_slot := -1
+			if free_slot_cursor < free_slots.size():
+				placed_slot = free_slots[free_slot_cursor]
+				free_slot_cursor += 1
+				working_inventory[placed_slot] = new_record
+			elif working_inventory.size() < INVENTORY_CAPACITY:
+				placed_slot = working_inventory.size()
+				working_inventory.append(new_record)
+			if placed_slot < 0:
+				outcomes.append({"success": false, "item_name": item_name, "message": INVENTORY_SLOT_REJECTION, "reason": "inventory_full"})
+				continue
+			occupied_count += 1
+			if stackable and int(new_record.get("count", 1)) < _max_stack_for_item(catalog):
+				var merge_slots: Array = merge_slots_by_identity.get(merge_key, [])
+				merge_slots.append(placed_slot)
+				merge_slots_by_identity[merge_key] = merge_slots
+		working_weight = prospective_weight
+		changed = true
+		outcomes.append({"success": true, "item_name": item_name})
+	if not changed:
+		return {"success": true, "saved": false, "outcomes": outcomes, "success_count": 0}
+	if prepare_only:
+		return {"prepared": true, "inventory_before": inventory.duplicate(true), "gold_before": gold, "inventory_after": working_inventory, "gold_after": working_gold, "outcomes": outcomes}
+	var planning_finished_usec := Time.get_ticks_usec()
+	inventory = working_inventory
+	gold = working_gold
+	_loot_batch_debug["save_commits"] = int(_loot_batch_debug.get("save_commits", 0)) + 1
+	if not _commit_save(false):
+		_last_loot_batch_profile = {
+			"candidate_count": candidates.size(),
+			"plan_ms": float(planning_finished_usec - profile_started_usec) / 1000.0,
+			"save_ms": float(_last_runtime_commit_profile.get("duration_ms", 0.0)),
+			"total_ms": float(Time.get_ticks_usec() - profile_started_usec) / 1000.0,
+			"success": false,
+		}
+		inventory = inventory_before
+		gold = gold_before
+		for outcome: Dictionary in outcomes:
+			if bool(outcome.get("success", false)):
+				outcome["success"] = false
+				outcome["reason"] = "save_failed"
+				outcome["message"] = "拾取存档失败，物品和金币均未改变。"
+		return {"success": false, "saved": false, "outcomes": outcomes, "success_count": 0, "reason": "save_failed"}
+	last_receive_result = {"success": true, "outcomes": outcomes}
+	if inventory != inventory_before:
+		if test_mode:
+			_test_transaction_counters["inventory_signals"] = int(_test_transaction_counters.get("inventory_signals", 0)) + 1
+		inventory_changed.emit()
+	if gold != gold_before:
+		if test_mode:
+			_test_transaction_counters["profile_signals"] = int(_test_transaction_counters.get("profile_signals", 0)) + 1
+		profile_changed.emit()
+	var success_count := 0
+	for outcome: Dictionary in outcomes:
+		if bool(outcome.get("success", false)):
+			success_count += 1
+	_last_loot_batch_profile = {
+		"candidate_count": candidates.size(),
+		"success_count": success_count,
+		"plan_ms": float(planning_finished_usec - profile_started_usec) / 1000.0,
+		"save_ms": float(_last_runtime_commit_profile.get("duration_ms", 0.0)),
+		"total_ms": float(Time.get_ticks_usec() - profile_started_usec) / 1000.0,
+		"success": true,
+	}
+	return {"success": true, "saved": true, "outcomes": outcomes, "success_count": success_count}
+
+
+func prepare_loot_save(candidates: Array) -> Dictionary:
+	var plan := receive_loot_batch_partial(candidates, true)
+	if not bool(plan.get("prepared", false)):
+		return {"immediate": plan}
+	var payload := _prepare_character_save_payload(false)
+	if payload.is_empty():
+		return {"immediate": _loot_save_failure(plan.outcomes)}
+	plan.inventory_after = plan.inventory_after.duplicate(true)
+	payload["inventory"] = plan.inventory_after
+	payload["gold"] = plan.gold_after
+	var item_document := ItemExtensionCodec.encode_document(payload)
+	if item_document.status != ItemExtensionCodec.KNOWN_VALID:
+		return {"immediate": _loot_save_failure(plan.outcomes)}
+	payload = item_document.document
+	var path := _profile_path(active_profile_id)
+	plan["profile_id"] = active_profile_id
+	plan["write_generation"] = _atomic_write_generation
+	plan["death_event_sequence"] = _death_event_sequence
+	plan["world_clock_generation"] = _world_clock_generation
+	plan["path"] = path
+	plan["completed"] = false
+	plan["completion"] = {}
+	var identity := {
+		"profile_id": active_profile_id, "path": path,
+		"domain": "loot",
+		"world_clock_generation": _world_clock_generation,
+		"sequence": _death_event_sequence, "write_generation": _atomic_write_generation,
+		"inventory_before": plan.inventory_before.duplicate(true), "gold_before": plan.gold_before,
+	}
+	var request := _json_persistence.submit(
+		path, identity, payload, _json_validator_for_path(path), _loot_request_context_matches,
+		false, _validated_profile_bytes if path == _validated_profile_path else null,
+		_complete_background_loot.bind(plan), true,
+	)
+	if request == null:
+		return {"immediate": _loot_save_failure(plan.outcomes)}
+	var writer := JsonPreparedRequest.new()
+	writer.configure(_json_persistence, request)
+	plan["writer"] = writer
+	return plan
+
+
+func _loot_request_context_matches(identity: Dictionary) -> bool:
+	return (
+		str(identity.profile_id) == active_profile_id
+		and str(identity.world_clock_generation) == _world_clock_generation
+		and int(identity.write_generation) == _atomic_write_generation
+		and inventory == identity.inventory_before and gold == int(identity.gold_before)
+	)
+
+
+func finish_prepared_loot_save(plan: Dictionary, wait := false) -> Dictionary:
+	if bool(plan.get("completed", false)):
+		return plan.completion
+	var request: RefCounted = plan.writer.job
+	_json_persistence.finish(request, wait)
+	return plan.completion if bool(plan.get("completed", false)) else {"pending": true}
+
+
+func _complete_background_loot(receipt: Dictionary, plan: Dictionary) -> void:
+	assert(OS.get_thread_caller_id() == OS.get_main_thread_id())
+	if bool(plan.get("completed", false)):
+		return
+	if not bool(receipt.get("success", false)):
+		var reason := str(receipt.get("reason", ""))
+		plan["completion"] = (
+			{"retry": true, "reason": "newer_character_state"}
+			if reason in ["request_context_changed", "unapproved_preparation_cancelled_at_barrier", "cancelled"]
+			else _loot_save_failure(plan.outcomes)
+		)
+		plan["completed"] = true
+		return
+	# Promotion has an irreversible durable receipt. All state/watermarks must
+	# be committed before signals can reenter another inventory transaction.
+	_record_background_json_receipt(receipt)
+	plan["bytes"] = receipt.bytes
+	if (str(receipt.identity.profile_id) != active_profile_id
+		or str(receipt.identity.world_clock_generation) != _world_clock_generation):
+		# A durable receipt belongs to the frozen role. Unexpected external
+		# lifecycle changes must never apply its reward or watermarks to another.
+		var old_owner_successes := 0
+		for outcome: Dictionary in plan.outcomes:
+			if bool(outcome.get("success", false)):
+				old_owner_successes += 1
+		plan["completion"] = {"success": true, "saved": true, "outcomes": plan.outcomes,
+			"success_count": old_owner_successes, "active_state_applied": false,
+			"saved_profile_id": receipt.identity.profile_id}
+		plan["completed"] = true
+		return
+	_profile_backup_death_event_sequence = _backup_sequence_after_promotion(
+		str(plan.path), _profile_saved_death_event_sequence, int(receipt.identity.sequence), "death_event_sequence"
+	)
+	_profile_saved_death_event_sequence = int(receipt.identity.sequence)
+	var received_inventory := _loot_inventory_after_immediate_uses(plan.inventory_before, plan.inventory_after)
+	var inventory_changed_value: bool = inventory != received_inventory
+	var gold_changed: bool = gold != int(plan.gold_after)
+	inventory = received_inventory
+	gold = int(plan.gold_after)
+	_active_profile_legacy_warehouse_pending = false
+	last_save_result = {"contract_id": SAVE_RESULT_CONTRACT_ID, "success": true, "reason": "", "path": plan.path, "profile_index_updated": true, "profile_index_skipped": true}
+	last_receive_result = {"success": true, "outcomes": plan.outcomes}
+	var successes := 0
+	for outcome: Dictionary in plan.outcomes:
+		if bool(outcome.get("success", false)):
+			successes += 1
+	_loot_batch_debug["save_commits"] = int(_loot_batch_debug.get("save_commits", 0)) + 1
+	plan["completion"] = {"success": true, "saved": true, "outcomes": plan.outcomes, "success_count": successes}
+	plan["completed"] = true
+	_queue_world_clock_cleanup()
+	if inventory_changed_value:
+		inventory_changed.emit()
+	if gold_changed:
+		profile_changed.emit()
+
+
+func _loot_inventory_after_immediate_uses(before: Array, after: Array) -> Array:
+	if inventory == before:
+		return after
+	# Other inventory mutations still cross the transaction barrier. The only
+	# changes allowed during an irreversible loot promotion are item consumption:
+	# same slots/identities, lower counts. Apply that exact delta to the receipt,
+	# including a newly collected stack whose last OLD unit was just consumed.
+	var result := after.duplicate(true)
+	for index in maxi(before.size(), inventory.size()):
+		var original: Dictionary = before[index] if index < before.size() else {}
+		var live: Dictionary = inventory[index] if index < inventory.size() else {}
+		if original == live:
+			continue
+		assert(not original.is_empty(), "only consumption may overlap a loot receipt")
+		var original_identity := original.duplicate(true)
+		original_identity.erase("count")
+		var live_identity := live.duplicate(true)
+		live_identity.erase("count")
+		assert(live.is_empty() or original_identity == live_identity,
+			"an inventory identity changed without its transaction barrier")
+		var consumed := int(original.get("count", 1)) - (0 if live.is_empty() else int(live.get("count", 1)))
+		assert(consumed >= 0 and index < result.size())
+		var remaining := int(result[index].get("count", 1)) - consumed
+		assert(remaining >= 0)
+		if remaining == 0:
+			result[index] = {}
+		else:
+			result[index]["count"] = remaining
+	_trim_inventory_empty_tail(result)
+	return result
+
+
+func _can_accept_immediate_item_use() -> bool:
+	if test_mode:
+		return not _test_force_atomic_write_failure
+	return (_valid_profile_storage_id(active_profile_id)
+		and active_profile_id != _save_blocked_profile_id
+		and not _warehouse_transaction_locked and _world_clock_snapshot_sequence >= 0)
+
+
+func _commit_item_use(save_in_background: bool) -> bool:
+	if not save_in_background or test_mode:
+		return _commit_save(false, false)
+	return _queue_character_snapshot_save()
+
+
+func _queue_character_snapshot_save() -> bool:
+	if not _can_accept_immediate_item_use():
+		return false
+	_item_save_revision += 1
+	_item_save_failed = false
+	_last_runtime_commit_profile = {"success": true, "background": true, "pending": true}
+	# Capture on the normal process pump, after the immediate effect callback.
+	# Uses and mode toggles coalesce; no serialization/IO in this call.
+	return true
+
+
+func _start_item_save(retry_failed := false) -> bool:
+	if (_item_save_revision <= _item_saved_revision or not _item_save_plan.is_empty()
+		or _json_persistence.pending_count() > 0 or (_item_save_failed and not retry_failed)):
+		return false
+	var plan := _capture_background_character_plan(false)
+	if plan.is_empty():
+		_item_save_failed = true
+		background_item_save_failed.emit()
+		return false
+	plan.world_finished = true
+	plan.world_success = true
+	_item_save_plan = plan
+	if not _submit_background_profile(plan):
+		_finish_background_save(plan, false, false)
+		return false
+	return true
+
+
+func _before_state_transaction(include_world := false) -> void:
+	# Explicit transaction/lifecycle boundaries consume already-committing
+	# receipts and cancel unapproved preparations BEFORE taking a rollback copy.
+	# Normal hot-path polling does not invoke this synchronous compatibility gate.
+	if _json_persistence.pending_count() > 0 or (include_world and _world_json_persistence.pending_count() > 0):
+		var started_usec := Time.get_ticks_usec() if RuntimeDiagnostics.performance_detail_enabled() else 0
+		_json_persistence.drain()
+		if include_world:
+			_world_json_persistence.drain()
+			# The final world receipt can schedule a cleanup after the first
+			# character drain. Complete that dependency at lifecycle barriers.
+			_json_persistence.drain()
+		if started_usec > 0:
+			RuntimeDiagnostics.record_performance_max(
+				&"state_transaction_wait_max_ms",
+				float(Time.get_ticks_usec() - started_usec) / 1000.0
+			)
+
+	if _item_save_revision > _item_saved_revision:
+		_start_item_save(true)
+		_json_persistence.drain()
+
+
+func _loot_save_failure(outcomes: Array) -> Dictionary:
+	var rejected := outcomes.duplicate(true)
+	for outcome: Dictionary in rejected:
+		if bool(outcome.get("success", false)):
+			outcome["success"] = false
+			outcome["reason"] = "save_failed"
+			outcome["message"] = "拾取存档失败，物品和金币均未改变。"
+	return {"success": false, "saved": false, "outcomes": rejected, "success_count": 0, "reason": "save_failed"}
+
+
+func _drop_instance_id_already_present(instance_id: String, working_inventory: Array) -> bool:
+	if instance_id.is_empty():
+		return true
+	for records: Array in [working_inventory, warehouse_inventory, forge_tray, synthesis_tray, equipment.values()]:
+		for raw: Variant in records:
+			if not raw is Dictionary: continue
+			if not ItemExtensionCodec.has_extensions(raw):
+				if raw.get("instance_id", "") == instance_id: return true
+			elif instance_id in ItemExtensionCodec.ownership_ids(raw): return true
+	return false
+
+
+func _item_record_ownership_already_present(record: Dictionary, working_inventory: Array) -> bool:
+	for instance_id: String in ItemExtensionCodec.ownership_ids(record):
+		if _drop_instance_id_already_present(instance_id, working_inventory): return true
+	return false
+
+
+func loot_batch_debug_snapshot() -> Dictionary:
+	return _loot_batch_debug.duplicate(true)
+
+
+func _valid_chiyue_test_profile_document(
+	document: Dictionary,
+	expected_profile_id: String,
+	expected_profession: String,
+	expected_loadout_id: String,
+	expected_skill_template_id: String
+) -> bool:
+	if (
+		str(document.get("profile_id", "")) != expected_profile_id
+		or str(document.get("profession", "")) != expected_profession
+		or int(document.get("save_version", 0)) != SAVE_VERSION
+		or int(document.get("level", 0)) < 50
+		or not document.get("equipment", null) is Dictionary
+		or not document.get("learned_skills", null) is Dictionary
+	):
+		return false
+	var contracts: Variant = document.get("test_contracts", null)
+	return (
+		contracts is Dictionary
+		and str((contracts as Dictionary).get("roster", ""))
+		== TEST_CHARACTER_ROSTER_CONTRACT_ID
+		and str((contracts as Dictionary).get("equipment", ""))
+		== expected_loadout_id
+		and str((contracts as Dictionary).get("skills", ""))
+		== expected_skill_template_id
+	)
+
+
+func _rollback_new_chiyue_test_profiles(profile_ids: Array[String]) -> void:
+	for profile_id: String in profile_ids:
+		_remove_new_profile_files(profile_id)
+
+
+func _skill_tier_for_equipment_tier(equipment_tier: String) -> String:
+	return "woma" if equipment_tier == "wooma" else equipment_tier
+
+
+func _test_character_payload(loadout: Dictionary, skill_profile: Dictionary, profile_entry: Dictionary, now: int) -> Dictionary:
+	var equipment_data := {}
+	var equipment_names := EquipmentTestLoadoutCatalogScript.equipment_names(loadout)
+	for slot: String in EQUIPMENT_SLOTS:
+		var item_name := str(equipment_names.get(slot, ""))
+		# Unconfigured slots have no item instance or identity to encode.
+		if item_name.is_empty():
+			equipment_data[slot] = {}
+			continue
+		equipment_data[slot] = _developer_item(
+			item_name,
+			"%s.%s" % [str(skill_profile.get("character_profile_id", "")), slot]
+		)
+	var runtime_defaults: Dictionary = skill_profile.get("runtime_defaults", {})
+	var warrior_state := _default_warrior_runtime_state()
+	if str(runtime_defaults.get("contract_id", "")) == WARRIOR_RUNTIME_CONTRACT_ID:
+		warrior_state = _normalized_warrior_runtime_state(runtime_defaults)
+	var assignments := SkillLoadoutRulesScript.normalize_assignments(
+		skill_profile.get("button_assignments", {})
+	)
+	var ring_slots: Array = assignments.get(SKILL_SLOT_GROUP_ATTACK_RING, [])
+	var legacy_slots: Array = []
+	for index in range(CENTER_SKILL_SLOT_COUNT):
+		legacy_slots.append(str(ring_slots[index]) if index < ring_slots.size() else "")
+	return {
+		"save_version": SAVE_VERSION,
+		"profile_id": str(profile_entry.get("id", "")),
+		"character_identity": CharacterIdentityCodec.encode(ProfessionRules.import_profession_identity(str(profile_entry.get("profession", "")))),
+		"item_button_assignments": ItemBindingCodec.encode(["", "", "", ""]),
+		"character_name": str(profile_entry.get("name", "")),
+		"updated_at": now,
+		"level": int(profile_entry.get("level", 1)),
+		"profession": str(profile_entry.get("profession", "")),
+		"gender": str(profile_entry.get("gender", "男")),
+		"later_content_enabled": false,
+		"game_mode_id": "classic_176",
+		"experience": 0,
+		"gold": 1000000,
+		"inventory": [
+			{"name": "强效太阳水", "count": 99},
+			{"name": "魔法药(中量)", "count": 99},
+		],
+		"equipment": equipment_data,
+		"learned_skills": skill_profile.get("learned_skills", {}).duplicate(true),
+		"quick_slots": legacy_slots,
+		"quick_item_slots": ["", "", "", ""],
+		"equip_cycle_cursor": _default_equip_cycle_cursor(),
+		"skill_button_assignments": assignments.duplicate(true),
+		"warrior_runtime_state": warrior_state,
+		"test_runtime_defaults": runtime_defaults.duplicate(true),
+		"test_contracts": {
+			"roster": TEST_CHARACTER_ROSTER_CONTRACT_ID,
+			"equipment": str(loadout.get("loadoutId", "")),
+			"skills": str(skill_profile.get("template_id", "")),
+		},
+		"quest_states": {},
+		"content_packages": ContentLayers.enabled_package_ids(),
+		"content_schema_version": CURRENT_CONTENT_SCHEMA_VERSION,
+		"map_id": 910001,
+		"position": [0.0, 0.0],
+		"position_space_contract_id": WORLD_POSITION_CONTRACT_ID,
+		"position_screen_px": [0.0, 0.0],
+		"position_ground_gu": [],
+	}
+
+
+func ensure_developer_test_character()->void:
+	var profile_id:="developer_warrior_30"
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(profile_directory))
+	var equipment_data:={
+		"hc.slot.weapon":_developer_item("木剑","dev_weapon"),"hc.slot.armor":_developer_item("布衣(男)","dev_armor"),
+		"hc.slot.helmet":_developer_item("精灵头盔","dev_helmet"),"hc.slot.necklace":_developer_item("传统项链","dev_necklace"),
+		"hc.slot.bracelet_left":_developer_item("铁手镯","dev_bracelet_l"),"hc.slot.bracelet_right":_developer_item("铁手镯","dev_bracelet_r"),
+		"hc.slot.ring_left":_developer_item("古铜戒指","dev_ring_l"),"hc.slot.ring_right":_developer_item("古铜戒指","dev_ring_r"),
+	}
+	var all_skills:={}
+	for skill:Variant in GameData.get_profession_skills("战士"):
+		if skill is Dictionary:all_skills[str(skill.get("skillName",""))]=3
+	var slots:Array[String]=["攻杀剑术","刺杀剑术","半月弯刀","烈火剑法"]
+	var now:=int(Time.get_unix_time_from_system())
+	var payload:={"save_version":SAVE_VERSION,"profile_id":profile_id,"character_name":"测试战士30级","updated_at":now,"level":30,"profession":"战士","gender":"男","later_content_enabled":false,"game_mode_id":"classic_176","experience":0,"gold":100000,"inventory":[],"equipment":equipment_data,"learned_skills":all_skills,"quick_slots":slots,"quick_item_slots":["", "", "", ""],"equip_cycle_cursor":_default_equip_cycle_cursor(),"quest_states":{},"content_packages":ContentLayers.enabled_package_ids(),"content_schema_version":CURRENT_CONTENT_SCHEMA_VERSION,"map_id":910001,"position":[0.0,0.0]}
+	payload["character_identity"] = CharacterIdentityCodec.encode("hc.profession.warrior")
+	payload["item_button_assignments"] = ItemBindingCodec.encode(["", "", "", ""])
+	payload.merge(_default_world_position_fields(), true)
+	if not _write_json_atomic(_profile_path(profile_id),payload):return
+	var index:=_read_json(profile_index_path);var profiles:Array=index.get("profiles",[])
+	var replaced:=false
+	for profile_offset in profiles.size():
+		if str(profiles[profile_offset].get("id",""))==profile_id:profiles[profile_offset]={"id":profile_id,"name":"测试战士30级","profession":"战士","gender":"男","level":30,"updated_at":now};replaced=true;break
+	if not replaced:profiles.append({"id":profile_id,"name":"测试战士30级","profession":"战士","gender":"男","level":30,"updated_at":now})
+	_write_json_atomic(profile_index_path,{"version":1,"profiles":profiles})
+
+
+func _developer_item(item_name:String,instance_id:String)->Dictionary:
+	var item:=GameData.get_item_record(item_name);var maximum:=maxi(1,int(item.get("maxDurability",1)))
+	var result:={"name":item_name,"count":1,"durability":maximum,"max_durability":maximum,"durability_raw":maximum*DURABILITY_RAW_UNITS_PER_DISPLAY,"max_durability_raw":maximum*DURABILITY_RAW_UNITS_PER_DISPLAY,"durability_contract_id":DURABILITY_CONTRACT_ID,"instance_id":instance_id}
+	if ItemCategories.category_for_record(item)=="hc.item_category.weapon":result.merge({"weapon_luck":0,"weapon_curse":0})
+	return result
+
+
+func ensure_zuma_test_character() -> void:
+	var profile_id := "developer_zuma_warrior_40"
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(profile_directory))
+	var equipment_data := {
+		"hc.slot.weapon": _developer_item("裁决之杖", "zuma_weapon"),
+		"hc.slot.armor": _developer_item("战神盔甲(男)", "zuma_armor"),
+		"hc.slot.helmet": _developer_item("黑铁头盔", "zuma_helmet"),
+		"hc.slot.necklace": _developer_item("绿色项链", "zuma_necklace"),
+		"hc.slot.bracelet_left": _developer_item("骑士手镯", "zuma_bracelet_l"),
+		"hc.slot.bracelet_right": _developer_item("骑士手镯", "zuma_bracelet_r"),
+		"hc.slot.ring_left": _developer_item("力量戒指", "zuma_ring_l"),
+		"hc.slot.ring_right": _developer_item("力量戒指", "zuma_ring_r"),
+	}
+	var all_skills := {}
+	for skill: Variant in GameData.get_profession_skills("战士"):
+		if skill is Dictionary:
+			all_skills[str(skill.get("skillName", ""))] = 3
+	var now := int(Time.get_unix_time_from_system())
+	var payload := {
+		"save_version": SAVE_VERSION, "profile_id": profile_id, "character_name": "祖玛套装测试号",
+		"character_identity": CharacterIdentityCodec.encode("hc.profession.warrior"),
+		"item_button_assignments": ItemBindingCodec.encode(["", "", "", ""]),
+		"updated_at": now, "level": 40, "profession": "战士", "gender": "男",
+		"later_content_enabled": false, "game_mode_id": "classic_176", "experience": 0,
+		"gold": 100000, "inventory": [{"name": "太阳水", "count": 10}],
+		"equipment": equipment_data, "learned_skills": all_skills,
+		"quick_slots": ["攻杀剑术", "刺杀剑术", "半月弯刀", "烈火剑法"],
+		"quick_item_slots": ["", "", "", ""],
+		"equip_cycle_cursor": _default_equip_cycle_cursor(), "quest_states": {},
+		"content_packages": ContentLayers.enabled_package_ids(), "content_schema_version": CURRENT_CONTENT_SCHEMA_VERSION,
+		"map_id": 910001, "position": [0.0, 0.0],
+	}
+	payload.merge(_default_world_position_fields(), true)
+	if not _write_json_atomic(_profile_path(profile_id), payload):
+		return
+	var index := _read_json(profile_index_path)
+	var profiles: Array = index.get("profiles", [])
+	var entry := {"id": profile_id, "name": "祖玛套装测试号", "profession": "战士", "gender": "男", "level": 40, "updated_at": now}
+	var replaced := false
+	for profile_offset in profiles.size():
+		if str(profiles[profile_offset].get("id", "")) == profile_id:
+			profiles[profile_offset] = entry
+			replaced = true
+			break
+	if not replaced:
+		profiles.append(entry)
+	_write_json_atomic(profile_index_path, {"version": 1, "profiles": profiles})
+
+
+
+
+func apply_temporary_item_buff(item_id: String, effect_profile: Dictionary, emit_updates := true) -> Dictionary:
+	if effect_profile.is_empty() or item_id.is_empty():
+		return {"ok": false, "reason": "invalid_arguments"}
+	var entity_id := EntityRegistry.canonical(item_id)
+	var identity := EntityRegistry.resolve(entity_id)
+	if identity.get("kind") not in ["item", "service_item"]:
+		return {"ok": false, "reason": "item_identity_invalid"}
+	var item := GameData.get_entity_record(entity_id)
+	if item.is_empty():
+		return {"ok": false, "reason": "item_identity_invalid"}
+	var item_name := str(item.get("name", ""))
+	if str(effect_profile.get("contractId", "")) != "item.temporary_stat_buff.v1":
+		return {"ok": false, "reason": "contract_mismatch"}
+	var duration_seconds: float = maxf(0.0, float(effect_profile.get("durationSeconds", 0.0)))
+	if duration_seconds <= 0.0:
+		return {"ok": false, "reason": "duration_invalid"}
+	var buff_group := str(effect_profile.get("buffGroup", ""))
+	if buff_group.is_empty():
+		return {"ok": false, "reason": "buff_group_missing"}
+	var modifiers: Variant = effect_profile.get("modifiers", {})
+	if not modifiers is Dictionary or (modifiers as Dictionary).is_empty():
+		return {"ok": false, "reason": "modifiers_missing"}
+	var allowed: Dictionary = TEMPORARY_ITEM_BUFF_ALLOWED_STATS.duplicate(true)
+	for stat_name: String in modifiers:
+		if not allowed.has(stat_name):
+			return {"ok": false, "reason": "stat_not_allowed", "stat": stat_name}
+	# Same buffGroup: refresh duration, do not stack.
+	# Different buffGroup: add as separate entry.
+	var started_at := Time.get_ticks_usec()
+	for existing_key: String in temporary_item_buffs:
+		var existing: Dictionary = temporary_item_buffs[existing_key]
+		if str(existing.get("buffGroup", "")) == buff_group:
+			started_at = int(existing.get("started_at_usec", started_at))
+			temporary_item_buffs.erase(existing_key)
+			break
+	temporary_item_buffs[entity_id] = {
+		"contract_id": TEMPORARY_ITEM_BUFF_CONTRACT_ID,
+		"entity_id": entity_id,
+		"item_name": item_name,
+		"item_id": int(identity.legacy_id) if identity.kind == "item" else -1,
+		"service_index": int(identity.legacy_id) if identity.kind == "service_item" else -1,
+		"started_at_usec": started_at,
+		"buffGroup": buff_group,
+		"modifiers": (modifiers as Dictionary).duplicate(true),
+		"duration": duration_seconds,
+		"remaining": duration_seconds,
+	}
+	temporary_item_buff_revision += 1
+	recalculate_stats(emit_updates)
+	return {"ok": true, "entity_id": entity_id, "item_name": item_name, "revision": temporary_item_buff_revision}
+
+
+func advance_temporary_item_buffs(delta: float) -> void:
+	if temporary_item_buffs.is_empty():
+		return
+	var expired: Array[String] = []
+	for entity_id: String in temporary_item_buffs:
+		var entry: Dictionary = temporary_item_buffs[entity_id]
+		var remaining: float = maxf(0.0, float(entry.get("remaining", 0.0)) - delta)
+		entry["remaining"] = remaining
+		if remaining <= 0.0:
+			expired.append(entity_id)
+	if expired.is_empty():
+		return
+	for entity_id: String in expired:
+		temporary_item_buffs.erase(entity_id)
+		# The central notice layer projects display text from this sole ID owner.
+		temporary_item_buff_expired.emit(entity_id)
+	temporary_item_buff_revision += 1
+	recalculate_stats()
+
+
+func _apply_temporary_item_stat_modifiers(result: Dictionary) -> void:
+	for entry: Variant in temporary_item_buffs.values():
+		if not entry is Dictionary:
+			continue
+		var modifiers: Dictionary = (entry as Dictionary).get("modifiers", {})
+		for stat_name: String in modifiers:
+			var value: Variant = modifiers[stat_name]
+			if value is int:
+				result[stat_name] = int(result.get(stat_name, 0)) + int(value)
+			elif value is float:
+				result[stat_name] = float(result.get(stat_name, 0.0)) + float(value)
+
+
+func _default_world_position_fields() -> Dictionary:
+	return {
+		"position": [0.0, 0.0],
+		"position_space_contract_id": WORLD_POSITION_CONTRACT_ID,
+		"position_screen_px": [0.0, 0.0],
+		"position_ground_gu": [],
+	}
+
+
+func register_profile_gameplay_owner(owner: Node) -> void:
+	# Even an unsaved profile's live world owns accepted callbacks and package
+	# lifecycle. An empty persistence identity must not bypass that boundary.
+	if is_instance_valid(owner) and owner.is_inside_tree():
+		_profile_gameplay_owners[owner.get_instance_id()] = weakref(owner)
+
+
+func unregister_profile_gameplay_owner(owner: Node) -> void:
+	if is_instance_valid(owner):
+		_profile_gameplay_owners.erase(owner.get_instance_id())
+
+
+func feature_publication_context() -> Dictionary:
+	# Delegate readiness to the same registered worlds that own profile
+	# replacement. No second world clock, identity or lifecycle coordinator.
+	var active := false
+	var ready := not get_tree().paused
+	var scopes := {}
+	var scope_ready := true
+	for runtime_id: int in _profile_gameplay_owners.keys():
+		var owner: Node = (_profile_gameplay_owners[runtime_id] as WeakRef).get_ref() as Node
+		if not is_instance_valid(owner) or not owner.is_inside_tree():
+			_profile_gameplay_owners.erase(runtime_id)
+			continue
+		active = true
+		if owner.has_method("feature_publication_scope"):
+			scopes[runtime_id] = owner.call("feature_publication_scope")
+		else:
+			scope_ready = false
+		if owner.is_queued_for_deletion() or not owner.has_method("gameplay_input_is_enabled") \
+			or not bool(owner.call("gameplay_input_is_enabled")):
+			ready = false
+			continue
+		var actor: Variant = owner.get("player")
+		if not is_instance_valid(actor) or not actor.has_method("combat_action_snapshot") \
+			or not actor.has_method("has_pending_combat_release") \
+			or bool(actor.call("has_pending_combat_release")) \
+			or bool(actor.call("combat_action_snapshot").get("active", true)):
+			ready = false
+	return {"world_active":active, "world_ready":ready, "scope_ready":scope_ready,
+		"scope":{"profile_id":active_profile_id, "owners":scopes}}
+
+
+func _profile_is_owned_by_gameplay() -> bool:
+	# CharacterSelect may replace profile state only after the old world has
+	# finished its logout barrier and left the tree. A queued deletion still
+	# owns deferred deaths and persistence completions until _exit_tree ends.
+	for runtime_id: int in _profile_gameplay_owners.keys():
+		var owner: Node = (_profile_gameplay_owners[runtime_id] as WeakRef).get_ref() as Node
+		if is_instance_valid(owner) and owner.is_inside_tree():
+			return true
+		_profile_gameplay_owners.erase(runtime_id)
+	return false
+
+
+func create_character(new_name: String, new_profession := "战士", new_gender := "男") -> String:
+	if _profile_is_owned_by_gameplay():
+		return "请先返回角色选择界面，再创建角色"
+	_before_state_transaction(true)
+	if _item_save_revision > _item_saved_revision:
+		return "当前角色尚未保存，请稍后重试"
+	if _warehouse_transaction_locked:
+		return "仓库事务恢复中，暂不能创建角色"
+	if not _ensure_shared_warehouse_ready():
+		return "公共仓库不可用，角色未创建"
+	var clean_name := new_name.strip_edges().substr(0, 12)
+	if clean_name.is_empty():
+		return "角色名不能为空"
+	if not ProfessionRules.is_valid_profession(new_profession):
+		return "职业无效"
+	if new_gender not in ["男", "女"]:
+		return "性别无效"
+	if _character_name_exists(clean_name):
+		return "角色名已存在"
+
+	# Character creation is one transaction.  Build and validate the starter
+	# loadout before exposing the new profile or writing anything to disk.  This
+	# keeps a missing primary item record from producing a half-created profile.
+	var new_profile_id := _new_profile_id()
+	if new_profile_id.is_empty():
+		return "角色存档ID生成失败"
+	if _durability_save_pending and not _commit_save(true, true):
+		return "当前角色耐久存档失败，暂不能创建角色"
+	var previous_runtime := _creation_runtime_snapshot()
+	# Compile the candidate character independently; rollback retains the old
+	# immutable bundle, derived inputs and compilation generation as one state.
+	_feature_loadout = _feature_loadout.candidate_copy()
+	active_profile_id = new_profile_id
+	character_name = clean_name
+	# Reset transaction data without publishing the intermediate default class.
+	reset_progress(false, false)
+	profession = new_profession
+	gender = new_gender
+	if not recalculate_stats(false, false):
+		return _reject_character_creation_stats(previous_runtime)
+	var starter_result := _build_starter_loadout(new_profession, new_gender, new_profile_id)
+	if not bool(starter_result.get("ok", false)):
+		_restore_creation_runtime(previous_runtime)
+		return str(starter_result.get("error", "初始装备数据缺失，角色创建失败"))
+	equipment = (starter_result.get("equipment", {}) as Dictionary).duplicate(true)
+	# Keep圣物/徽章 empty for the future new-player rewards.  The helper already
+	# returns the complete canonical slot map; this assertion also makes a future
+	# loadout edit fail closed instead of silently filling those reserved slots.
+	if not equipment.has("hc.slot.relic") or not equipment.has("hc.slot.badge"):
+		_restore_creation_runtime(previous_runtime)
+		return "初始装备槽位数据不完整，角色创建失败"
+	if not recalculate_stats(false, false):
+		return _reject_character_creation_stats(previous_runtime)
+	if not save_game() or not bool(last_save_result.get("profile_index_updated", false)):
+		_remove_new_profile_files(new_profile_id)
+		_restore_creation_runtime(previous_runtime)
+		last_save_result = {
+			"contract_id": SAVE_RESULT_CONTRACT_ID,
+			"success": false,
+			"reason": "atomic_character_creation_failed",
+		}
+		return "角色存档失败，角色未创建"
+	return ""
+
+
+func _reject_character_creation_stats(previous_runtime: Dictionary) -> String:
+	var errors := feature_errors.duplicate()
+	_restore_creation_runtime(previous_runtime)
+	last_save_result = {"contract_id":SAVE_RESULT_CONTRACT_ID, "success":false,
+		"reason":"character_stats_rejected", "validation_errors":errors}
+	return "角色属性配置无效，角色未创建"
+
+
+func delete_character_profile(profile_id: String) -> Dictionary:
+	if _profile_is_owned_by_gameplay():
+		return {"contract_id": CHARACTER_DELETE_CONTRACT_ID, "success": false, "reason": "profile_gameplay_owner_active", "profile_id": profile_id}
+	_before_state_transaction(true)
+	if _warehouse_transaction_locked:
+		return {"contract_id": CHARACTER_DELETE_CONTRACT_ID, "success": false, "reason": "warehouse_transaction_locked", "profile_id": profile_id}
+	if not _ensure_shared_warehouse_ready():
+		return {"contract_id": CHARACTER_DELETE_CONTRACT_ID, "success": false, "reason": "shared_warehouse_unavailable", "profile_id": profile_id}
+	if (
+		(profile_directory == PROFILE_DIRECTORY or _shared_warehouse_test_isolation_enabled())
+		and not _revalidate_shared_warehouse_authority()
+	):
+		return {"contract_id": CHARACTER_DELETE_CONTRACT_ID, "success": false, "reason": "shared_warehouse_validation_failed", "profile_id": profile_id}
+	var result := {
+		"contract_id": CHARACTER_DELETE_CONTRACT_ID,
+		"success": false,
+		"reason": "",
+		"profile_id": profile_id,
+		"deleted_files": [],
+		"cleanup_failures": [],
+		"cleanup_complete": false,
+		"active_profile_cleared": false,
+	}
+	if (
+		profile_id.is_empty()
+		or profile_id.contains("/")
+		or profile_id.contains("\\")
+		or profile_id == "."
+		or profile_id == ".."
+	):
+		result["reason"] = "invalid_profile_id"
+		return result
+	var index_status := _read_json_with_status(profile_index_path)
+	if not bool(index_status.get("success", false)):
+		result["reason"] = "profile_index_unavailable"
+		return result
+	var index: Dictionary = (index_status.get("data", {}) as Dictionary).duplicate(true)
+	var indexed_profiles: Variant = index.get("profiles", null)
+	if not indexed_profiles is Array:
+		result["reason"] = "profile_index_invalid"
+		return result
+	var remaining_profiles: Array = []
+	var found := false
+	for value: Variant in indexed_profiles:
+		if value is Dictionary and str((value as Dictionary).get("id", "")) == profile_id:
+			found = true
+			continue
+		remaining_profiles.append(value.duplicate(true) if value is Dictionary else value)
+	if not found:
+		result["reason"] = "profile_not_found"
+		return result
+	index["profiles"] = remaining_profiles
+	# Commit the authoritative index first.  A failed atomic write therefore
+	# leaves every profile byte untouched and the character fully selectable.
+	if not _write_json_atomic(profile_index_path, index):
+		result["reason"] = "profile_index_write_failed"
+		return result
+	var base_path := _profile_path(profile_id)
+	for suffix: String in ["", ".bak", ".tmp", ".corrupt.tmp", ".bak.bak", ".bak.tmp"]:
+		var path := base_path + suffix
+		if not FileAccess.file_exists(path):
+			continue
+		if DirAccess.remove_absolute(ProjectSettings.globalize_path(path)) != OK:
+			(result["cleanup_failures"] as Array).append(path)
+			continue
+		(result["deleted_files"] as Array).append(path)
+	_remove_profile_world_clock_files(
+		profile_id, result["deleted_files"], result["cleanup_failures"]
+	)
+	if active_profile_id == profile_id:
+		active_profile_id = ""
+		character_name = ""
+		_autosave_elapsed = 0.0
+		_clear_pending_durability_runtime()
+		result["active_profile_cleared"] = true
+		profile_changed.emit()
+	result["cleanup_complete"] = (result["cleanup_failures"] as Array).is_empty()
+	if not bool(result["cleanup_complete"]):
+		# The profile index is authoritative: after its atomic commit succeeds the
+		# deletion is logically complete even if an OS-level sidecar cleanup needs
+		# a later retry.  Returning success keeps the hall in sync with that truth.
+		result["reason"] = "profile_sidecar_cleanup_incomplete"
+	result["success"] = true
+	return result
+
+
+func _character_name_exists(candidate: String) -> bool:
+	for entry: Dictionary in list_characters():
+		if str(entry.get("name", "")) == candidate:
+			return true
+	# A stale index must not allow a duplicate name.  Read only canonical profile
+	# JSON files; backups and temporary files are deliberately excluded.
+	var directory := DirAccess.open(profile_directory)
+	if directory == null:
+		return false
+	for file_name: String in directory.get_files():
+		if not file_name.ends_with(".json") or file_name.ends_with(".bak"):
+			continue
+		var document := _read_json(profile_directory.path_join(file_name))
+		if str(document.get("character_name", "")) == candidate:
+			return true
+	return false
+
+
+func _new_profile_id() -> String:
+	for _attempt in range(16):
+		var candidate := "%d_%d" % [int(Time.get_unix_time_from_system()), randi_range(1000, 9999)]
+		if (
+			not FileAccess.file_exists(_profile_path(candidate))
+			and not FileAccess.file_exists(_profile_path(candidate) + ".bak")
+		):
+			return candidate
+	# A hostile fixture may occupy every generated id.  Never overwrite a
+	# profile in that case; creation fails closed instead.
+	return ""
+
+
+func _build_starter_loadout(starter_profession: String, starter_gender: String, profile_id: String) -> Dictionary:
+	var result := {
+		"contract_id": STARTER_LOADOUT_CONTRACT_ID,
+		"ok": false,
+		"equipment": _empty_equipment(),
+		"error": "初始装备数据缺失，角色创建失败",
+	}
+	var starter_items := {
+		"hc.slot.weapon": STARTER_WEAPON_ITEM_NAME,
+		"hc.slot.armor": str(STARTER_ARMOR_BY_GENDER.get(starter_gender, "")),
+	}
+	for slot: String in starter_items.keys():
+		var item_name := str(starter_items.get(slot, ""))
+		var runtime_item := GameData.get_item(item_name)
+		var catalog_item := GameData.get_item_record(item_name)
+		if runtime_item.is_empty() or catalog_item.is_empty():
+			return result
+		if str(runtime_item.get("itemId", "")) != str(catalog_item.get("itemId", "")):
+			result["error"] = "初始装备主数据不一致，角色创建失败"
+			return result
+		if str(catalog_item.get("kind", "")) != "equipment":
+			result["error"] = "初始装备不是合法装备，角色创建失败"
+			return result
+		var category := ItemCategories.category_for_record(runtime_item)
+		if slot not in _slots_for_category(category):
+			result["error"] = "初始装备槽位不匹配，角色创建失败"
+			return result
+		var item_profession := EquipmentRulesScript.effective_profession(runtime_item)
+		if item_profession not in ["", "通用", starter_profession]:
+			result["error"] = "%s不适合当前职业，角色创建失败" % item_name
+			return result
+		var required_gender := EquipmentRulesScript.required_gender(runtime_item)
+		if not required_gender.is_empty() and required_gender != starter_gender:
+			result["error"] = "%s不适合当前性别，角色创建失败" % item_name
+			return result
+		var requirement_error := EquipmentRulesScript.requirement_error(runtime_item, 1, computed_stats)
+		if not requirement_error.is_empty():
+			result["error"] = "%s，角色创建失败" % requirement_error
+			return result
+		var item_weight := maxi(0, int(runtime_item.get("weight", 0)))
+		if category == "hc.item_category.weapon":
+			if item_weight > EquipmentRulesScript.max_hand_weight(starter_profession, 1):
+				result["error"] = "%s超出初始手持负重，角色创建失败" % item_name
+				return result
+		elif item_weight > EquipmentRulesScript.max_wear_weight(starter_profession, 1):
+			result["error"] = "%s超出初始穿戴负重，角色创建失败" % item_name
+			return result
+		var instance := _make_item_instance(item_name, catalog_item)
+		if instance.is_empty() or str(instance.get("instance_id", "")).is_empty():
+			result["error"] = "初始装备实例化失败，角色创建失败"
+			return result
+		# Slot and profile are part of the instance identity, so the two starter
+		# pieces can never collapse into one another even on the same microsecond.
+		instance["instance_id"] = "%s:starter:%s:%s" % [profile_id, slot, str(runtime_item.get("itemId", item_name))]
+		(result["equipment"] as Dictionary)[slot] = instance
+	result["ok"] = true
+	return result
+
+
+func _remove_new_profile_files(profile_id: String) -> void:
+	for suffix: String in ["", ".bak", ".tmp", ".corrupt.tmp"]:
+		var path := _profile_path(profile_id) + suffix
+		if FileAccess.file_exists(path):
+			DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
+	_remove_profile_world_clock_files(profile_id, [], [])
+
+
+func _remove_profile_world_clock_files(
+	profile_id: String, removed: Array, failures: Array
+) -> void:
+	if not _valid_profile_storage_id(profile_id):
+		return
+	var generations: Dictionary = {}
+	var clock_directory := _world_clock_directory().path_join(profile_id)
+	var clocks := DirAccess.open(clock_directory)
+	if clocks != null:
+		for name: String in clocks.get_files():
+			var generation := name.trim_suffix(".corrupt.tmp").trim_suffix(".tmp").trim_suffix(".bak").trim_suffix(".json")
+			if not generation.is_empty() and WorldMonsterClockLedgerScript.valid_generation(generation):
+				generations[generation] = true
+	var events := DirAccess.open(_death_event_directory(profile_id))
+	if events != null:
+		for generation: String in events.get_directories():
+			if WorldMonsterClockLedgerScript.valid_generation(generation):
+				generations[generation] = true
+	for generation: String in generations:
+		_remove_profile_clock_generation_files(profile_id, generation, removed, failures)
+	if clocks != null and DirAccess.remove_absolute(ProjectSettings.globalize_path(clock_directory)) != OK:
+		failures.append(clock_directory)
+	_remove_profile_clock_generation_files(profile_id, "", removed, failures)
+
+
+func _remove_profile_clock_generation_files(
+	profile_id: String, generation: String, removed: Array, failures: Array
+) -> void:
+	for suffix: String in ["", ".bak", ".tmp", ".corrupt.tmp"]:
+		var path := _world_clock_path(profile_id, generation) + suffix
+		if not FileAccess.file_exists(path):
+			continue
+		if DirAccess.remove_absolute(ProjectSettings.globalize_path(path)) == OK:
+			removed.append(path)
+		elif FileAccess.file_exists(path):
+			failures.append(path)
+	var event_path := _death_event_directory(profile_id, generation)
+	var directory := DirAccess.open(event_path)
+	if directory == null:
+		return
+	directory.list_dir_begin()
+	var name := directory.get_next()
+	while not name.is_empty():
+		if not directory.current_is_dir():
+			var stem := name.trim_suffix(".tmp").trim_suffix(".bak").trim_suffix(".json")
+			if stem.is_valid_int() and int(stem) > 0 and name.begins_with(
+				"%012d.json" % int(stem)
+			) and name in [
+				"%012d.json" % int(stem),
+				"%012d.json.bak" % int(stem),
+				"%012d.json.tmp" % int(stem),
+			]:
+				var path := event_path.path_join(name)
+				if DirAccess.remove_absolute(ProjectSettings.globalize_path(path)) == OK:
+					removed.append(path)
+				elif FileAccess.file_exists(path):
+					failures.append(path)
+		name = directory.get_next()
+	directory.list_dir_end()
+	if DirAccess.remove_absolute(ProjectSettings.globalize_path(event_path)) != OK:
+		failures.append(event_path)
+
+
+func _creation_runtime_snapshot() -> Dictionary:
+	return {
+		ItemTransactionJournal.FIELD: _item_transaction_journal.duplicate(true),
+		"level": level,
+		"character_identity": CharacterIdentityCodec.encode(profession_id),
+		"profession": profession,
+		"gender": gender,
+		"later_content_enabled": later_content_enabled,
+		"game_mode_id": game_mode_id,
+		"experience": experience,
+		"gold": gold,
+		"inventory": inventory.duplicate(true),
+		"forge_tray": forge_tray.duplicate(true),
+		"synthesis_tray": synthesis_tray.duplicate(true),
+		"gold_overflow_records": gold_overflow_records.duplicate(true),
+		"warehouse_inventory": warehouse_inventory.duplicate(true),
+		"equipment": equipment.duplicate(true),
+		"learned_skills": learned_skills.duplicate(true),
+		"skill_progression": _skill_progression.snapshot(),
+		"quick_slots": quick_slots.duplicate(),
+		"quick_item_slots": quick_item_slots.duplicate(),
+		"item_button_assignments": ItemBindingCodec.encode(quick_item_slots),
+		"equip_cycle_cursor": equip_cycle_cursor.duplicate(true),
+		"attack_skill_slots": attack_skill_slots.duplicate(),
+		"attack_ring_slots": attack_ring_slots.duplicate(),
+		"warrior_runtime_state": warrior_runtime_state.duplicate(true),
+		"taoist_main_pet_runtime_states": taoist_main_pet_runtime_states.duplicate(true),
+		"quest_states": quest_states.duplicate(true),
+		"world_monster_respawn_state": world_monster_respawn_state.duplicate(true),
+		"death_event_sequence": _death_event_sequence,
+		"world_clock_generation": _world_clock_generation,
+		"profile_saved_death_event_sequence": _profile_saved_death_event_sequence,
+		"profile_backup_death_event_sequence": _profile_backup_death_event_sequence,
+		"world_clock_snapshot_sequence": _world_clock_snapshot_sequence,
+		"world_clock_backup_sequence": _world_clock_backup_sequence,
+		"world_clock_dirty": _world_clock_dirty,
+		"world_clock_changes": _world_clock_changes.duplicate(true),
+		"saved_map_id": saved_map_id,
+		"saved_position": saved_position,
+		"saved_ground_position_gu": saved_ground_position_gu,
+		"saved_ground_position_gu_valid": saved_ground_position_gu_valid,
+		"base_stats": base_stats.duplicate(true),
+		"computed_stats": computed_stats.duplicate(true),
+		"feature_base_stats": _feature_base_stats.duplicate(true),
+		"feature_loadout": _feature_loadout,
+		"feature_errors": feature_errors.duplicate(),
+		"temporary_item_buffs": temporary_item_buffs.duplicate(true),
+		"temporary_item_buff_revision": temporary_item_buff_revision,
+		"computed_special_effects": computed_special_effects.duplicate(true),
+		"durability_event_commit_count": durability_event_commit_count,
+		"active_profile_id": active_profile_id,
+		"character_name": character_name,
+		"autosave_elapsed": _autosave_elapsed,
+		"consumed_shop_sell_quote_ids": _consumed_shop_sell_quote_ids.duplicate(true),
+		"consumed_shop_buy_quote_ids": _consumed_shop_buy_quote_ids.duplicate(true),
+		"shop_buy_quote_serial": _shop_buy_quote_serial,
+		"shop_pricing_session_nonce": _shop_pricing_session_nonce,
+		"last_receive_result": last_receive_result.duplicate(true),
+		"last_save_result": last_save_result.duplicate(true),
+		"last_load_result": last_load_result.duplicate(true),
+	}
+
+
+func _restore_creation_runtime(snapshot: Dictionary) -> void:
+	# This transaction-only reference is never an item/save wire field.
+	var feature_loadout: Variant = snapshot.get("feature_loadout")
+	if not feature_loadout is RefCounted or feature_loadout.get_script() != FeatureLoadout \
+		or not snapshot.get("feature_base_stats") is Dictionary or not snapshot.get("feature_errors") is Array:
+		return
+	snapshot = snapshot.duplicate(false)
+	snapshot.erase("feature_loadout")
+	if snapshot.get(ItemTransactionJournal.FIELD, {}).is_empty():
+		snapshot = snapshot.duplicate(false)
+		snapshot.erase(ItemTransactionJournal.FIELD)
+	var journal_document := snapshot.duplicate(false)
+	journal_document["profile_id"] = snapshot.get("active_profile_id", "")
+	if not bool(ItemTransactionJournal.validate_document(journal_document).valid):
+		return
+	var item_wire := ItemExtensionCodec.encode_document(snapshot)
+	if item_wire.status != ItemExtensionCodec.KNOWN_VALID:
+		return
+	var item_document := ItemExtensionCodec.decode_document(item_wire.document)
+	if item_document.status != ItemExtensionCodec.KNOWN_VALID:
+		return
+	snapshot = item_document.document
+	var character_identity := CharacterIdentityCodec.decode(snapshot)
+	if not bool(character_identity.success):
+		profession_identity_errors = [character_identity.reason]
+		return
+	var item_bindings := ItemBindingCodec.decode(snapshot)
+	if not bool(item_bindings.success):
+		return
+	level = int(snapshot.get("level", 1))
+	set_profession_identity(character_identity.profession_id)
+	gender = str(snapshot.get("gender", "男"))
+	later_content_enabled = bool(snapshot.get("later_content_enabled", false))
+	game_mode_id = str(snapshot.get("game_mode_id", "classic_176"))
+	experience = int(snapshot.get("experience", 0))
+	gold = int(snapshot.get("gold", 0))
+	gold_overflow_records = snapshot.get("gold_overflow_records", []).duplicate(true)
+	inventory = (snapshot.get("inventory", []) as Array).duplicate(true)
+	_item_transaction_journal = snapshot.get(ItemTransactionJournal.FIELD, {}).duplicate(true)
+	forge_tray = _load_workbench_tray(snapshot.get("forge_tray", []))
+	synthesis_tray = _load_workbench_tray(snapshot.get("synthesis_tray", []))
+	warehouse_inventory = (snapshot.get("warehouse_inventory", []) as Array).duplicate(true)
+	equipment = (snapshot.get("equipment", {}) as Dictionary).duplicate(true)
+	learned_skills = (snapshot.get("learned_skills", {}) as Dictionary).duplicate(true)
+	_skill_progression.load_snapshot(snapshot.get("skill_progression", {}))
+	_refresh_skill_identity_projection()
+	quick_slots = (snapshot.get("quick_slots", []) as Array).duplicate()
+	quick_item_slots.assign(item_bindings.slots)
+	equip_cycle_cursor = (snapshot.get("equip_cycle_cursor", {}) as Dictionary).duplicate(true)
+	attack_skill_slots = (snapshot.get("attack_skill_slots", []) as Array).duplicate()
+	attack_ring_slots = (snapshot.get("attack_ring_slots", []) as Array).duplicate()
+	warrior_runtime_state = (snapshot.get("warrior_runtime_state", {}) as Dictionary).duplicate(true)
+	taoist_main_pet_runtime_states = (snapshot.get("taoist_main_pet_runtime_states", {}) as Dictionary).duplicate(true)
+	quest_states = (snapshot.get("quest_states", {}) as Dictionary).duplicate(true)
+	world_monster_respawn_state = (snapshot.get("world_monster_respawn_state", WorldMonsterRespawnStateScript.empty_snapshot()) as Dictionary).duplicate(true)
+	_death_event_sequence = int(snapshot.get("death_event_sequence", 0))
+	_world_clock_generation = str(snapshot.get("world_clock_generation", ""))
+	_profile_saved_death_event_sequence = int(snapshot.get("profile_saved_death_event_sequence", 0))
+	_profile_backup_death_event_sequence = int(snapshot.get("profile_backup_death_event_sequence", 0))
+	_world_clock_snapshot_sequence = int(snapshot.get("world_clock_snapshot_sequence", -1))
+	_world_clock_backup_sequence = int(snapshot.get("world_clock_backup_sequence", -1))
+	_world_clock_dirty = bool(snapshot.get("world_clock_dirty", true))
+	_world_clock_changes = (snapshot.get("world_clock_changes", {}) as Dictionary).duplicate(true)
+	saved_map_id = int(snapshot.get("saved_map_id", 910001))
+	saved_position = snapshot.get("saved_position", Vector2.ZERO)
+	saved_ground_position_gu = snapshot.get("saved_ground_position_gu", Vector2.ZERO)
+	saved_ground_position_gu_valid = bool(snapshot.get("saved_ground_position_gu_valid", false))
+	base_stats = (snapshot.get("base_stats", {}) as Dictionary).duplicate(true)
+	computed_stats = (snapshot.get("computed_stats", {}) as Dictionary).duplicate(true)
+	_feature_base_stats = snapshot.feature_base_stats.duplicate(true)
+	_feature_loadout = feature_loadout
+	feature_errors = snapshot.feature_errors.duplicate()
+	temporary_item_buffs = (snapshot.get("temporary_item_buffs", {}) as Dictionary).duplicate(true)
+	temporary_item_buff_revision = int(snapshot.get("temporary_item_buff_revision", 0))
+	computed_special_effects = (snapshot.get("computed_special_effects", {}) as Dictionary).duplicate(true)
+	durability_event_commit_count = int(snapshot.get("durability_event_commit_count", 0))
+	active_profile_id = str(snapshot.get("active_profile_id", ""))
+	character_name = str(snapshot.get("character_name", ""))
+	_autosave_elapsed = float(snapshot.get("autosave_elapsed", 0.0))
+	_consumed_shop_sell_quote_ids = (snapshot.get("consumed_shop_sell_quote_ids", {}) as Dictionary).duplicate(true)
+	_consumed_shop_buy_quote_ids = (snapshot.get("consumed_shop_buy_quote_ids", {}) as Dictionary).duplicate(true)
+	_shop_buy_quote_serial = int(snapshot.get("shop_buy_quote_serial", 0))
+	_shop_pricing_session_nonce = str(snapshot.get("shop_pricing_session_nonce", ""))
+	last_receive_result = (snapshot.get("last_receive_result", {}) as Dictionary).duplicate(true)
+	last_save_result = (snapshot.get("last_save_result", {}) as Dictionary).duplicate(true)
+	last_load_result = (snapshot.get("last_load_result", {}) as Dictionary).duplicate(true)
+
+
+func select_character(profile_id: String) -> bool:
+	if _profile_is_owned_by_gameplay():
+		last_load_result = {"contract_id": SAVE_RESULT_CONTRACT_ID, "success": false,
+			"reason": "profile_gameplay_owner_active", "path": _profile_path(profile_id)}
+		return false
+	if _startup_save_upgrade_pending and not _startup_save_upgrade_in_progress:
+		return false
+	_before_state_transaction(true)
+	if _item_save_revision > _item_saved_revision:
+		return false
+	if _warehouse_transaction_locked:
+		return false
+	if _durability_save_pending and not _commit_save(true, true):
+		return false
+	if not _valid_profile_storage_id(profile_id):
+		return false
+	if not _ensure_shared_warehouse_ready():
+		return false
+	var profile_path := _profile_path(profile_id)
+	if (
+		not FileAccess.file_exists(profile_path)
+		and not FileAccess.file_exists(profile_path + ".bak")
+	):
+		return false
+	var previous_profile_id := active_profile_id
+	var previous_blocked_id := _save_blocked_profile_id
+	var previous_blocked_reason := _save_blocked_reason
+	active_profile_id = profile_id
+	load_save()
+	if not bool(last_load_result.get("success", false)):
+		active_profile_id = previous_profile_id
+		# An already blocked active A must not become saveable because inactive
+		# B also failed. B's failure remains in last_load_result; a B retry loads
+		# and validates B again before any save eligibility.
+		if not previous_profile_id.is_empty() and previous_blocked_id == previous_profile_id:
+			_save_blocked_profile_id = previous_blocked_id
+			_save_blocked_reason = previous_blocked_reason
+		return false
+	if _enhancement_service != null:
+		_enhancement_service.reset()
+	_autosave_elapsed = 0.0
+	_clear_pending_durability_runtime()
+	return true
+
+
+func _update_profile_index() -> bool:
+	var profiles: Array[Dictionary] = []
+	if (
+		FileAccess.file_exists(profile_index_path)
+		or FileAccess.file_exists(profile_index_path + ".bak")
+	):
+		var index_status := _read_json_with_status(profile_index_path)
+		if not bool(index_status.get("success", false)):
+			return false
+		for raw_entry: Variant in (index_status.get("data", {}) as Dictionary).get("profiles", []):
+			if not raw_entry is Dictionary:
+				return false
+			profiles.append((raw_entry as Dictionary).duplicate(true))
+	var found := false
+	for entry: Dictionary in profiles:
+		if str(entry.get("id", "")) == active_profile_id:
+			entry.merge({"name": character_name, "profession": profession, "gender": gender, "level": level, "updated_at": int(Time.get_unix_time_from_system())}, true)
+			found = true
+	if not found:
+		profiles.append({"id": active_profile_id, "name": character_name, "profession": profession, "gender": gender, "level": level, "updated_at": int(Time.get_unix_time_from_system())})
+	return _write_json_atomic(profile_index_path, {"version": 1, "profiles": profiles})
+
+
+func _migrate_single_save_to_profile() -> void:
+	var index_status := _read_json_with_status(profile_index_path)
+	if (
+		FileAccess.file_exists(profile_index_path)
+		or FileAccess.file_exists(profile_index_path + ".bak")
+	):
+		if not bool(index_status.get("success", false)):
+			return
+		var indexed_profiles: Variant = (index_status.get("data", {}) as Dictionary).get("profiles", [])
+		if indexed_profiles is Array and not (indexed_profiles as Array).is_empty():
+			return
+	elif not list_characters().is_empty():
+		return
+	var current_legacy_path := profile_directory.get_base_dir().path_join(SAVE_PATH.get_file())
+	var legacy_path := current_legacy_path if FileAccess.file_exists(current_legacy_path) or FileAccess.file_exists(current_legacy_path + ".bak") else profile_directory.get_base_dir().path_join(LEGACY_SAVE_PATH.get_file())
+	if not FileAccess.file_exists(legacy_path) and not FileAccess.file_exists(legacy_path + ".bak"):
+		return
+	# Missing profile identity is accepted only at this explicit one-time seam;
+	# every document under characters/<id>.json uses exact path identity.
+	var legacy_validator := Callable(self, "_validate_profile_document_status").bind("", true)
+	var legacy_status := _read_json_with_status(legacy_path, legacy_validator)
+	if not bool(legacy_status.get("success", false)):
+		return
+	var old_data: Dictionary = (legacy_status.get("data", {}) as Dictionary).duplicate(true)
+	active_profile_id = "legacy_01"
+	character_name = str(old_data.get("character_name", "旧角色"))
+	old_data["profile_id"] = active_profile_id
+	old_data["character_name"] = character_name
+	old_data["updated_at"] = int(Time.get_unix_time_from_system())
+	if not _write_json_atomic(_profile_path(active_profile_id), old_data, true):
+		active_profile_id = ""
+		character_name = ""
+		return
+	if not _update_profile_index():
+		_remove_new_profile_files(active_profile_id)
+	active_profile_id = ""
+	character_name = ""
+
+
+## Opt-in Device Lab timings at the actual save boundary; ordinary play skips
+## phase sampling even when a durability event has been queued for later write.
+func _record_runtime_save_phases(prefix: String, started_usec: int) -> void:
+	if not RuntimeDiagnostics.performance_detail_enabled():
+		return
+	RuntimeDiagnostics.record_performance_max(
+		StringName("%s_max_ms" % prefix),
+		float(Time.get_ticks_usec() - started_usec) / 1000.0
+	)
+	for phase_name: String in ["runtime_snapshot_ms", "atomic_write_ms"]:
+		RuntimeDiagnostics.record_performance_max(
+			StringName("%s_%s_max" % [prefix, phase_name]),
+			float(_last_save_phase_profile.get(phase_name, 0.0))
+		)
+	for phase_name: String in [
+		"serialize_validate_ms", "temp_write_flush_read_ms",
+		"previous_read_validate_ms", "rotate_promote_read_ms",
+	]:
+		RuntimeDiagnostics.record_performance_max(
+			StringName("%s_%s_max" % [prefix, phase_name]),
+			float((_last_save_phase_profile.get("atomic_detail", {}) as Dictionary).get(phase_name, 0.0))
+		)
+
+
+func _finish_pending_durability_save(started_usec: int) -> void:
+	if not _durability_save_pending:
+		return
+	_durability_save_pending = false
+	_durability_save_elapsed = 0.0
+	durability_event_commit_count += 1
+	RuntimeDiagnostics.increment_performance_counter(&"durability_event_commits")
+	_record_runtime_save_phases("durability_save", started_usec)
+
+
+func _background_save_context_matches(identity: Dictionary) -> bool:
+	return str(identity.profile_id) == active_profile_id and str(identity.world_clock_generation) == _world_clock_generation
+
+
+func _start_background_save(update_profile_index := true) -> bool:
+	if not _background_save.is_empty():
+		_background_save.update_index = bool(_background_save.update_index) or update_profile_index
+		return true # One immutable save in flight; later wear remains pending.
+	if _json_persistence.pending_count() > 0:
+		return false # Do not snapshot ahead of another owner's accepted receipt.
+	var plan := _capture_background_character_plan(update_profile_index)
+	if plan.is_empty():
+		return false
+	var identity: Dictionary = plan.identity
+	_background_save = plan
+	# Submit the captured character state immediately to its sole ordered writer.
+	# A later item transaction drains that writer, never a pending world snapshot.
+	if not _submit_background_profile(plan):
+		_finish_background_save(plan, false, false)
+		return false
+	if _world_clock_dirty or _world_clock_snapshot_sequence != _death_event_sequence or _world_clock_backup_sequence < _world_clock_snapshot_sequence:
+		var clock_path := _world_clock_path(active_profile_id, _world_clock_generation)
+		var clock_identity := identity.duplicate(true)
+		clock_identity.path = clock_path
+		clock_identity["compact_world_at_unix"] = Time.get_unix_time_from_system()
+		var document := WorldMonsterClockLedgerScript.snapshot_document(active_profile_id, _death_event_sequence, world_monster_respawn_state, _world_clock_generation)
+		var job := _world_json_persistence.submit(clock_path, clock_identity, document, _json_validator_for_path(clock_path), _background_save_context_matches,
+			false, null, _complete_background_checkpoint.bind(plan))
+		if job == null:
+			plan.world_finished = true
+			_finish_background_save_if_ready(plan)
+	else:
+		plan.world_finished = true
+		plan.world_success = true
+		_finish_background_save_if_ready(plan)
+	return true
+
+
+func _capture_background_character_plan(update_profile_index: bool) -> Dictionary:
+	var started_usec := Time.get_ticks_usec()
+	var payload := _prepare_character_save_payload(false)
+	if payload.is_empty():
+		return {}
+	var path := _profile_path(active_profile_id)
+	var identity := {"path": path, "profile_id": active_profile_id,
+		"world_clock_generation": _world_clock_generation, "sequence": _death_event_sequence}
+	var plan := {"identity": identity, "payload": payload.duplicate(true),
+		"index_path": profile_index_path, "update_index": update_profile_index,
+		"index_entry": {"id": active_profile_id, "name": character_name, "profession": profession,
+			"gender": gender, "level": level, "updated_at": int(Time.get_unix_time_from_system())},
+		"durability_revision": _durability_mutation_revision, "world_revision": _world_mutation_revision,
+		"inventory_before": inventory.duplicate(true), "started_usec": started_usec,
+		"profile_written": false, "completed": false, "item_revision": _item_save_revision,
+		"profile_finished": false, "profile_success": false, "index_updated": false,
+		"world_finished": false, "world_success": false}
+	plan.payload.inventory = SpecialConsumableStacks.split_available(plan.payload.inventory, INVENTORY_CAPACITY, INVENTORY_CAPACITY)
+	return plan
+
+
+func _complete_background_checkpoint(receipt: Dictionary, plan: Dictionary) -> void:
+	if not bool(receipt.get("success", false)) or not _background_save_context_matches(plan.identity):
+		plan.world_finished = true
+		_finish_background_save_if_ready(plan)
+		return
+	_record_background_json_receipt(receipt)
+	var sequence := int(plan.identity.sequence)
+	_world_clock_backup_sequence = _backup_sequence_after_promotion(str(receipt.identity.path), _world_clock_snapshot_sequence, sequence, "sequence")
+	_world_clock_snapshot_sequence = sequence
+	if sequence == _death_event_sequence and int(plan.world_revision) == _world_mutation_revision:
+		_world_clock_dirty = false
+	plan.world_finished = true
+	plan.world_success = true
+	_finish_background_save_if_ready(plan)
+
+
+func _submit_background_profile(plan: Dictionary) -> bool:
+	var path := str(plan.identity.path)
+	var job := _json_persistence.submit(path, plan.identity, plan.payload, _json_validator_for_path(path), _background_save_context_matches,
+		false, _validated_profile_bytes if path == _validated_profile_path else null, _complete_background_profile.bind(plan))
+	return job != null
+
+
+func _complete_background_profile(receipt: Dictionary, plan: Dictionary) -> void:
+	if not bool(receipt.get("success", false)) or not _background_save_context_matches(plan.identity):
+		plan.profile_finished = true
+		_finish_background_save_if_ready(plan)
+		return
+	_record_background_json_receipt(receipt)
+	var sequence := int(plan.identity.sequence)
+	_profile_backup_death_event_sequence = _backup_sequence_after_promotion(str(plan.identity.path), _profile_saved_death_event_sequence, sequence, "death_event_sequence")
+	_profile_saved_death_event_sequence = sequence
+	_active_profile_legacy_warehouse_pending = false
+	plan.profile_written = true
+	_item_saved_revision = maxi(_item_saved_revision, int(plan.item_revision))
+	_item_save_failed = false
+	if inventory == plan.inventory_before:
+		var decoded := ItemExtensionCodec.decode_document(plan.payload)
+		if decoded.status == ItemExtensionCodec.KNOWN_VALID:
+			inventory = decoded.document.inventory
+	if int(plan.durability_revision) == _durability_mutation_revision:
+		_finish_pending_durability_save(int(plan.started_usec))
+	plan.profile_success = true
+	if not bool(plan.update_index):
+		plan.profile_finished = true
+		plan.index_updated = true
+		_finish_background_save_if_ready(plan)
+		return
+	var identity: Dictionary = plan.identity.duplicate(true)
+	identity.path = plan.index_path
+	identity["entry"] = plan.index_entry
+	var job := _json_persistence.submit(str(plan.index_path), identity, {}, _json_validator_for_path(str(plan.index_path)),
+		_background_save_context_matches, false, null, _complete_background_index.bind(plan), false, null, "", false, _merge_background_profile_index)
+	if job == null:
+		plan.index_failure = "index_request_rejected"
+		plan.profile_finished = true
+		_finish_background_save_if_ready(plan)
+
+
+func _merge_background_profile_index(document: Dictionary, identity: Dictionary) -> Dictionary:
+	var profiles: Array = document.get("profiles", []).duplicate(true)
+	var found := false
+	for entry: Dictionary in profiles:
+		if str(entry.id) == str(identity.profile_id):
+			entry.merge(identity.entry, true)
+			found = true
+	if not found:
+		profiles.append(identity.entry.duplicate(true))
+	return {"version": 1, "profiles": profiles}
+
+
+func _complete_background_index(receipt: Dictionary, plan: Dictionary) -> void:
+	plan.index_failure = str(receipt.get("reason", ""))
+	if bool(receipt.get("success", false)) and _background_save_context_matches(plan.identity):
+		_record_background_json_receipt(receipt)
+		plan.index_updated = true
+	plan.profile_finished = true
+	_finish_background_save_if_ready(plan)
+
+
+func _finish_background_save_if_ready(plan: Dictionary) -> void:
+	if not bool(plan.profile_finished) or not bool(plan.world_finished):
+		return
+	_finish_background_save(plan, bool(plan.profile_success) and bool(plan.world_success), bool(plan.index_updated))
+
+
+func _finish_background_save(plan: Dictionary, success: bool, index_updated: bool) -> void:
+	plan.completed = true
+	plan.success = success
+	if _background_save == plan:
+		_background_save = {}
+	var is_item_save := _item_save_plan == plan
+	if is_item_save:
+		_item_save_plan = {}
+	if not _background_save_context_matches(plan.identity):
+		return
+	last_save_result = {"contract_id": SAVE_RESULT_CONTRACT_ID, "success": success,
+		"reason": "" if success else "background_save_failed", "path": plan.identity.path,
+		"profile_index_updated": index_updated, "profile_index_skipped": not bool(plan.update_index),
+		"profile_index_failure": str(plan.get("index_failure", ""))}
+	if success:
+		_queue_world_clock_cleanup()
+	_last_runtime_commit_profile = {"duration_ms": float(Time.get_ticks_usec() - int(plan.started_usec)) / 1000.0,
+		"success": success, "profile_index_skipped": not bool(plan.update_index), "background": true}
+	if is_item_save and not success:
+		_item_save_failed = true
+		background_item_save_failed.emit()
+
+
+# Character transactions use the already-durable death-event journal. World
+# snapshots belong to background checkpoints and explicit lifecycle saves.
+func _commit_save(update_profile_index := true, checkpoint_world := false) -> bool:
+	var started_usec := Time.get_ticks_usec()
+	var before_split := inventory
+	inventory = SpecialConsumableStacks.split_available(inventory, INVENTORY_CAPACITY, INVENTORY_CAPACITY)
+	if test_mode:
+		_test_transaction_counters["commit_attempts"] = int(_test_transaction_counters.get("commit_attempts", 0)) + 1
+	var success := save_game(update_profile_index, false, checkpoint_world) if not test_mode else not _test_force_atomic_write_failure
+	if not success:
+		inventory = before_split
+	else:
+		_finish_pending_durability_save(started_usec)
+	if success:
+		_autosave_elapsed = 0.0
+	_last_runtime_commit_profile = {
+		"duration_ms": float(Time.get_ticks_usec() - started_usec) / 1000.0,
+		"success": success,
+		"profile_index_skipped": not update_profile_index,
+	}
+	return success
+
+# UI-L1 SUPPLEMENT BEGIN -- controlled extra members
+
+var _ui_l1_buy_quote_rows := 0
+# UI-L1 SUPPLEMENT END

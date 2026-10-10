@@ -1,0 +1,80 @@
+{
+  "test_name": "skill_progression_save_integration_test",
+  "test_path": "tests/skill_progression_save_integration_test.tscn",
+  "wrapper_process_id": 17104,
+  "wrapper_started_utc": "2026-10-10T03:48:37.5209176Z",
+  "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct68_mode_transaction\\runner_8b73d71f-8412-46d8-abc3-ddfb783d7b9d",
+  "fixed_fps": 0,
+  "pass_marker_found": true,
+  "process_exited": true,
+  "wrapper_exit_code": 0,
+  "child_process_exit_state": "exited",
+  "execution_deadline_utc": "2026-10-10T03:49:07.5210015Z",
+  "native_exit_observed_utc": "2026-10-10T03:48:43.1284842Z",
+  "effective_exit_code": 0,
+  "timeout": false,
+  "stdout_failure_count": 0,
+  "stderr_failure_count": 0,
+  "engine_log_failure_count": 0,
+  "cleanup_warning_evidence": {
+    "status": "PASS",
+    "allowlisted_errors": {
+      "string_formatting": {
+        "count": 0,
+        "lines": []
+      },
+      "resources_in_use": {
+        "count": 0,
+        "lines": []
+      },
+      "rid_leak": {
+        "count": 0,
+        "lines": []
+      },
+      "null_parameter": {
+        "count": 0,
+        "lines": []
+      }
+    },
+    "unknown_error_lines": [],
+    "unknown_error_count": 0,
+    "objectdb_leak_warning_lines": [],
+    "objectdb_leak_warning_count": 0,
+    "functional_marker_observed": true,
+    "formal_evidence_status": "MISSING",
+    "formal_evidence_reason": "legacy_run_bound_checks_missing",
+    "receipt_validation_reasons": [
+      "framework_receipt_missing"
+    ],
+    "candidate_receipt_correlation": false,
+    "upstream_result": "NOT_RUN",
+    "raw_log_paths": [
+      "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct68_mode_transaction\\logs\\skill_progression_save_integration_test.stdout.log",
+      "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct68_mode_transaction\\logs\\skill_progression_save_integration_test.stderr.log",
+      "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct68_mode_transaction\\logs\\skill_progression_save_integration_test.godot.log"
+    ],
+    "receipt_path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\framework\\skill_progression_save_integration_test.result.json",
+    "expected_scene_id": "skill_progression_save_integration_test",
+    "expected_invocation_id": "8b73d71f-8412-46d8-abc3-ddfb783d7b9d"
+  },
+  "framework_run_id": "",
+  "framework_receipt_valid": null,
+  "source_content_sha256": "fc8ec681d681ac3b12e7135a3eb851c89d1355a2ef55cfa41ca592f0f4a58b74",
+  "source_binding_scope": "External immutable input freeze required; env label alone is not a source scan",
+  "engine_fingerprints": [
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+      "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "bytes": 198152
+    },
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64.exe",
+      "sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+      "bytes": 178485256
+    }
+  ],
+  "formal_evidence_status": "MISSING",
+  "formal_evidence_reason": "Legacy marker has no uniform run-bound nonzero assertion receipt",
+  "result": "PASS",
+  "reason": ""
+}

@@ -1,0 +1,142 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "runner isolates the complete real account before process launch",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "this run's account root is absent before claiming ownership",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "formal content, database and initial mode finish their readiness gates",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "profile, account warehouse and transaction log all use the owned real persistence root",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "owned account profile directory is created",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "A baseline uses the formal classic mode owner",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "formal owner creates real character A",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "A acquires a real registered skill book",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "A learns through the sole skill and book consumption owner",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "formal writer persists complete A and its checkpoint",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "formal owner creates real character B",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "sole writer stages the owned supported legacy clock input",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "formal clock importer creates B's isolated generation",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "B acquires its own real registered skill book",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "B learns a different skill through the same formal owner",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "B accepts the actual prerequisite-free registered quest",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "real ledger settlement records one kill and one durable death event",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "sole writer saves B with plural pets, quest, target mode and sequence-one clock",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "ordinary B save completes import before testing admission",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "aggregate validator accepts the persisted B document",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "real B checkpoint has valid sequence-one primary and preserved sequence-zero backup",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "plural-pet formal profile persists the independent expected active quest progress",
+      "passed": false
+    },
+    {
+      "id": 23,
+      "label": "actual replay accepts B and proves backup zero is behind source one, requiring a checkpoint",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "native producer writes this invocation's complete owned admission trace",
+      "passed": true
+    }
+  ],
+  "count": 24,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "d23de9a1-615b-4ae0-a627-fca3d46dd716",
+  "passed": 23,
+  "reported_checks": 24,
+  "reported_failures": 1,
+  "run_id": "ecce42d6-10c3-472c-aa29-7bc370445cd7",
+  "runtime_environment": {
+    "native_process_id": 9356,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct66_mode_transaction\\runner_d23de9a1-615b-4ae0-a627-fca3d46dd716",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/v109_direct66_mode_transaction/runner_d23de9a1-615b-4ae0-a627-fca3d46dd716/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "profile_load_admission_20261010_test",
+  "schema_version": 1,
+  "source_content_sha256": "881a53a43156a9d22bc443d9549cc89aed3e8f36a012fe992ef1161a334beb5a",
+  "status": "FAIL"
+}

@@ -1,0 +1,14 @@
+diff --git a/outputs/b08_profile_admission_test_20261010/draft_pre_native68/profile_load_admission_20261010_test.gd b/tests/framework/profile_load_admission_20261010_test.gd
+index 12f943cea..9f6c16a5a 100644
+--- a/outputs/b08_profile_admission_test_20261010/draft_pre_native68/profile_load_admission_20261010_test.gd
++++ b/tests/framework/profile_load_admission_20261010_test.gd
+@@ -94,7 +94,8 @@ func _file_hashes(snapshot: Dictionary) -> Dictionary:
+ 		var bytes: PackedByteArray = snapshot[path].bytes
+ 		var context: HashingContext = HashingContext.new()
+ 		context.start(HashingContext.HASH_SHA256)
+-		context.update(bytes)
++		if not bytes.is_empty():
++			context.update(bytes)
+ 		result[path] = {"exists": snapshot[path].exists, "size": bytes.size(), "sha256": context.finish().hex_encode()}
+ 	return result
+ 

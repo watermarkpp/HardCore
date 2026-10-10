@@ -1,0 +1,42 @@
+{
+  "name": "B08_NATIVE_FREEZE_67",
+  "changed_paths": [
+    "scripts/game_data.gd",
+    "scripts/player_state.gd",
+    "scripts/startup_loading.gd",
+    "scripts/layers/runtime/content_layer_registry.gd",
+    "scripts/layers/runtime/prepared_content_configuration.gd",
+    "scripts/layers/runtime/game_mode_service.gd",
+    "scripts/layers/runtime/runtime_service_facade.gd",
+    "tests/framework/mode_reload_transaction_20261010_test.gd",
+    "tests/framework/mode_reload_transaction_20261010_test.tscn",
+    "tests/framework/mode_reload_transaction_input_composed_20261010_test.tscn",
+    "tests/framework/mode_reload_transaction_stale_20261010_test.tscn",
+    "tests/framework/mode_reload_transaction_profile_20261010_test.tscn",
+    "tests/framework/mode_reload_transaction_later_20261010_test.tscn",
+    "tests/framework/mode_reload_transaction_failure_boundary_20261010_test.tscn",
+    "tests/framework/mode_reload_transaction_direct_failure_20261010_test.tscn",
+    "scripts/equipment_rules.gd",
+    "tests/framework/profile_load_admission_20261010_test.gd",
+    "tests/framework/profile_load_admission_20261010_test.tscn",
+    "tests/world_monster_clock_persistence_test.gd",
+    "tests/world_monster_clock_persistence_test.tscn",
+    "tests/world_monster_clock_legacy_migration_test.gd",
+    "tests/world_monster_clock_legacy_migration_test.tscn",
+    "tests/profile_business_validation_recovery_test.gd",
+    "tests/profile_business_validation_recovery_test.tscn"
+  ],
+  "additional_inputs": [
+    "tools/godot-4.7/Godot_v4.7-stable_win64.exe",
+    "tools/test_windows_process_ownership.ps1",
+    "tools/test_framework_receipt.ps1",
+    "tools/test_native_log_evidence.ps1"
+  ],
+  "scenes": [
+    "tests/world_monster_clock_persistence_test.tscn",
+    "tests/world_monster_clock_legacy_migration_test.tscn",
+    "tests/profile_business_validation_recovery_test.tscn"
+  ],
+  "fingerprint_scope": "Actual runtime/data/map/test inputs, both Windows engine binaries and complete runner helpers; formal mode/content/profile transaction component",
+  "rerun_reason": "Required related regressions after checkpoint admission moved and shared writer gained exact candidate identity: existing real IO world/journal backup recovery, legacy clock migration, and profile business validation/recovery. First run unchanged full scenes at ordinary 30s. New profile fixture has not reached the clock fault yet (Native66 stopped at invalid empty-pet fixture premise), so it cannot substitute for these regressions."
+}

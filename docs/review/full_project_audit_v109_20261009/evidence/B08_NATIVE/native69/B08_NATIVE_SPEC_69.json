@@ -1,0 +1,42 @@
+{
+  "name": "B08_NATIVE_FREEZE_69",
+  "changed_paths": [
+    "scripts/game_data.gd",
+    "scripts/player_state.gd",
+    "scripts/startup_loading.gd",
+    "scripts/layers/runtime/content_layer_registry.gd",
+    "scripts/layers/runtime/prepared_content_configuration.gd",
+    "scripts/layers/runtime/game_mode_service.gd",
+    "scripts/layers/runtime/runtime_service_facade.gd",
+    "tests/framework/mode_reload_transaction_20261010_test.gd",
+    "tests/framework/mode_reload_transaction_20261010_test.tscn",
+    "tests/framework/mode_reload_transaction_input_composed_20261010_test.tscn",
+    "tests/framework/mode_reload_transaction_stale_20261010_test.tscn",
+    "tests/framework/mode_reload_transaction_profile_20261010_test.tscn",
+    "tests/framework/mode_reload_transaction_later_20261010_test.tscn",
+    "tests/framework/mode_reload_transaction_failure_boundary_20261010_test.tscn",
+    "tests/framework/mode_reload_transaction_direct_failure_20261010_test.tscn",
+    "scripts/equipment_rules.gd",
+    "tests/framework/profile_load_admission_20261010_test.gd",
+    "tests/framework/profile_load_admission_20261010_test.tscn",
+    "tests/world_monster_clock_persistence_test.gd",
+    "tests/world_monster_clock_persistence_test.tscn",
+    "tests/world_monster_clock_legacy_migration_test.gd",
+    "tests/world_monster_clock_legacy_migration_test.tscn",
+    "tests/profile_business_validation_recovery_test.gd",
+    "tests/profile_business_validation_recovery_test.tscn",
+    "tests/skill_progression_save_integration_test.gd",
+    "tests/skill_progression_save_integration_test.tscn"
+  ],
+  "additional_inputs": [
+    "tools/godot-4.7/Godot_v4.7-stable_win64.exe",
+    "tools/test_windows_process_ownership.ps1",
+    "tools/test_framework_receipt.ps1",
+    "tools/test_native_log_evidence.ps1"
+  ],
+  "scenes": [
+    "tests/framework/profile_load_admission_20261010_test.tscn"
+  ],
+  "fingerprint_scope": "Actual runtime/data/map/test inputs, both Windows engine binaries and complete runner helpers; formal mode/content/profile transaction component",
+  "rerun_reason": "Native68 completed all 52 business checks and natural exit zero, but its diagnostic file-hash helper invoked HashingContext.update on empty buffers, producing 11 real engine errors. Retain that runner FAIL and source preimage. After the minimal diagnostic-only empty-update guard, rerun only this same 52-check admission scene at ordinary 30s. Complete byte/state comparisons, formal TMP IO fault and four identity negatives remain intact. The unchanged skill integration clean PASS from Native68 is reused, not rerun."
+}

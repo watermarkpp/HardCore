@@ -1,0 +1,109 @@
+{
+  "native_run": "Native67",
+  "status": "PASS",
+  "scope": "Original three complete PC real IO scenes at ordinary 30s: retained native/marker/log and input freeze; no full framework receipt inferred",
+  "invocation_id": "77778699-c458-4e31-9eaf-241163d2ecff",
+  "git_head_label": "215f0b2f651a51e6855ee813ddd99221690311a1",
+  "candidate_tree": "f5abae6e2fc6eeb19f094654a94311adb5cc309c",
+  "source_content_sha256": "6f5f698e68069666e47ca55259a25d0fcc1d4ec81d4345fc6927f3919ab92472",
+  "passed": 3,
+  "failed": 0,
+  "engine_log_errors": 0,
+  "results": [
+    {
+      "scene": "tests/world_monster_clock_persistence_test.tscn",
+      "result": "PASS",
+      "effective_exit_code": 0,
+      "process_exited": true,
+      "timeout": false,
+      "wrapper_wall_seconds_to_observed_native_exit": 6.343897,
+      "external_window_seconds": 30.003854,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "formal_evidence_status": "MISSING",
+      "formal_evidence_reason": "Legacy marker has no uniform run-bound nonzero assertion receipt",
+      "framework_receipt_valid": null,
+      "receipt_validation_reasons": [
+        "framework_receipt_missing"
+      ],
+      "framework_run_id": ""
+    },
+    {
+      "scene": "tests/world_monster_clock_legacy_migration_test.tscn",
+      "result": "PASS",
+      "effective_exit_code": 0,
+      "process_exited": true,
+      "timeout": false,
+      "wrapper_wall_seconds_to_observed_native_exit": 6.536362,
+      "external_window_seconds": 30.00011,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "formal_evidence_status": "MISSING",
+      "formal_evidence_reason": "Legacy marker has no uniform run-bound nonzero assertion receipt",
+      "framework_receipt_valid": null,
+      "receipt_validation_reasons": [
+        "framework_receipt_missing"
+      ],
+      "framework_run_id": ""
+    },
+    {
+      "scene": "tests/profile_business_validation_recovery_test.tscn",
+      "result": "PASS",
+      "effective_exit_code": 0,
+      "process_exited": true,
+      "timeout": false,
+      "wrapper_wall_seconds_to_observed_native_exit": 6.811042,
+      "external_window_seconds": 30.000097,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "formal_evidence_status": "MISSING",
+      "formal_evidence_reason": "Legacy marker has no uniform run-bound nonzero assertion receipt",
+      "framework_receipt_valid": null,
+      "receipt_validation_reasons": [
+        "framework_receipt_missing"
+      ],
+      "framework_run_id": ""
+    }
+  ],
+  "postverify": {
+    "status": "PASS",
+    "actual_inputs": 2551,
+    "changed_inputs": [],
+    "engine_unchanged": true,
+    "main_index_sha256": "ddacea4eed570faed0a6003c87352552e74e902874b5dee61d8863a2316e29d7"
+  },
+  "evidence": [
+    {
+      "path": "outputs/test_logs/v109_direct67_mode_transaction/logs/runner_results_adhoc_20261010_113716_770_364.json",
+      "bytes": 12638,
+      "sha256": "da1ff493415ca4ad55d7086252f1b549ef80baf9e9f39d13897d4300f2adc323"
+    },
+    {
+      "path": "outputs/wake_drop_v108_review_followup_20261009/B08_NATIVE_FREEZE_67.json",
+      "bytes": 495486,
+      "sha256": "6f5f698e68069666e47ca55259a25d0fcc1d4ec81d4345fc6927f3919ab92472"
+    },
+    {
+      "path": "outputs/wake_drop_v108_review_followup_20261009/B08_NATIVE_FREEZE_67_POSTVERIFY.json",
+      "bytes": 468,
+      "sha256": "a3c0ed0e51d57080bf06bb53ce2abc134d49e3a9d49527cd39859b2f5100397b"
+    },
+    {
+      "path": "outputs/wake_drop_v108_review_followup_20261009/B08_NATIVE_SPEC_67.json",
+      "bytes": 2554,
+      "sha256": "b0bd39ff2eb12a809cc88e2873d58ad77f00880f2082ead1777580407636b69c"
+    },
+    {
+      "path": "outputs/wake_drop_v108_review_followup_20261009/B08_NATIVE67_DRIVER.txt",
+      "bytes": 376,
+      "sha256": "2aecaf7697bfce553714761677f244cf12be72f5f3e2f6ed2fe764fb54c1e7d7"
+    }
+  ],
+  "formal_assertion_receipt_scope": "MISSING: all three legacy scenes lack uniform run-bound nonzero assertion receipts, exactly as the native runner records",
+  "new_source_acceptance": "NOT_RUN: no prospective review SHA inference",
+  "DEVICE TEST": "NOT_RUN",
+  "performed_by_this_worker": "Read-only evidence inspection and owned plan supplement only; native run was performed by root"
+}

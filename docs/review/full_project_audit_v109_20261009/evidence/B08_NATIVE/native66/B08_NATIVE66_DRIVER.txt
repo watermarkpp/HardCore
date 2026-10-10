@@ -1,0 +1,72 @@
+[FAIL] profile_load_admission_20261010_test - missing_pass_marker;non_zero_exit_code_1;framework_checks_failed
+WorkerThreadPool: 12 threads, 3 max low-priority.
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+TextServer: Added interface "Dummy"
+TextServer: Added interface "ICU / HarfBuzz / Graphite (Built-in)"
+Using "default" pen tablet driver...
+
+TextServer: Primary interface set to: "ICU / HarfBuzz / Graphite (Built-in)".
+CORE API HASH: 3472268009
+EDITOR API HASH: 2212757246
+SceneTreeFTI: traversal method DEFAULT
+Loading resource: res://scripts/device_lab_patch_bootstrap.gd remapped: res://scripts/device_lab_patch_bootstrap.gd
+Completed load for: 'res://scripts/device_lab_patch_bootstrap.gd' remapped 'res://scripts/device_lab_patch_bootstrap.gd' at thread -1
+Loading resource: res://scripts/audio_preferences.gd remapped: res://scripts/audio_preferences.gd
+Completed load for: 'res://scripts/audio_preferences.gd' remapped 'res://scripts/audio_preferences.gd' at thread -1
+Loading resource: res://scripts/loot_preferences.gd remapped: res://scripts/loot_preferences.gd
+Completed load for: 'res://scripts/loot_preferences.gd' remapped 'res://scripts/loot_preferences.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/content_layer_registry.gd remapped: res://scripts/layers/runtime/content_layer_registry.gd
+Completed load for: 'res://scripts/layers/runtime/content_layer_registry.gd' remapped 'res://scripts/layers/runtime/content_layer_registry.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/world_content_service.gd remapped: res://scripts/layers/runtime/world_content_service.gd
+Completed load for: 'res://scripts/layers/runtime/world_content_service.gd' remapped 'res://scripts/layers/runtime/world_content_service.gd' at thread -1
+Loading resource: res://scripts/layers/presentation/presentation_registry.gd remapped: res://scripts/layers/presentation/presentation_registry.gd
+Completed load for: 'res://scripts/layers/presentation/presentation_registry.gd' remapped 'res://scripts/layers/presentation/presentation_registry.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/targeting_runtime_service.gd remapped: res://scripts/layers/runtime/targeting_runtime_service.gd
+Completed load for: 'res://scripts/layers/runtime/targeting_runtime_service.gd' remapped 'res://scripts/layers/runtime/targeting_runtime_service.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/loot_runtime_service.gd remapped: res://scripts/layers/runtime/loot_runtime_service.gd
+Completed load for: 'res://scripts/layers/runtime/loot_runtime_service.gd' remapped 'res://scripts/layers/runtime/loot_runtime_service.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/combat_runtime_service.gd remapped: res://scripts/layers/runtime/combat_runtime_service.gd
+Completed load for: 'res://scripts/layers/runtime/combat_runtime_service.gd' remapped 'res://scripts/layers/runtime/combat_runtime_service.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/domain_runtime_services.gd remapped: res://scripts/layers/runtime/domain_runtime_services.gd
+Completed load for: 'res://scripts/layers/runtime/domain_runtime_services.gd' remapped 'res://scripts/layers/runtime/domain_runtime_services.gd' at thread -1
+Loading resource: res://scripts/layers/rules/boss_mechanic_registry.gd remapped: res://scripts/layers/rules/boss_mechanic_registry.gd
+Completed load for: 'res://scripts/layers/rules/boss_mechanic_registry.gd' remapped 'res://scripts/layers/rules/boss_mechanic_registry.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/runtime_service_facade.gd remapped: res://scripts/layers/runtime/runtime_service_facade.gd
+Completed load for: 'res://scripts/layers/runtime/runtime_service_facade.gd' remapped 'res://scripts/layers/runtime/runtime_service_facade.gd' at thread -1
+Loaded system CA certificates
+Loading resource: res://tests/framework/profile_load_admission_20261010_test.tscn remapped: res://tests/framework/profile_load_admission_20261010_test.tscn
+Loading resource: res://tests/framework/profile_load_admission_20261010_test.gd remapped: res://tests/framework/profile_load_admission_20261010_test.gd
+Completed load for: 'res://tests/framework/profile_load_admission_20261010_test.gd' remapped 'res://tests/framework/profile_load_admission_20261010_test.gd' at thread -1
+Completed load for: 'res://tests/framework/profile_load_admission_20261010_test.tscn' remapped 'res://tests/framework/profile_load_admission_20261010_test.tscn' at thread -1
+数据库载入完成：地图209 怪物156 Boss20 装备175 技能等级132 掉落槽3424 任务9
+PROFILE_ADMISSION_CHECK 1 PASS runner isolates the complete real account before process launch elapsed_usec=550
+PROFILE_ADMISSION_CHECK 2 PASS this run's account root is absent before claiming ownership elapsed_usec=1208
+PROFILE_ADMISSION_CHECK 3 PASS formal content, database and initial mode finish their readiness gates elapsed_usec=1660
+PROFILE_ADMISSION_CHECK 4 PASS profile, account warehouse and transaction log all use the owned real persistence root elapsed_usec=2024
+PROFILE_ADMISSION_CHECK 5 PASS owned account profile directory is created elapsed_usec=4384
+PROFILE_ADMISSION_CHECK 6 PASS A baseline uses the formal classic mode owner elapsed_usec=4788
+PROFILE_ADMISSION_CHECK 7 PASS formal owner creates real character A elapsed_usec=47225
+PROFILE_ADMISSION_CHECK 8 PASS A acquires a real registered skill book elapsed_usec=71165
+PROFILE_ADMISSION_CHECK 9 PASS A learns through the sole skill and book consumption owner elapsed_usec=87609
+PROFILE_ADMISSION_CHECK 10 PASS formal writer persists complete A and its checkpoint elapsed_usec=102301
+PROFILE_ADMISSION_CHECK 11 PASS formal owner creates real character B elapsed_usec=143186
+PROFILE_ADMISSION_CHECK 12 PASS sole writer stages the owned supported legacy clock input elapsed_usec=155442
+PROFILE_ADMISSION_CHECK 13 PASS formal clock importer creates B's isolated generation elapsed_usec=215258
+PROFILE_ADMISSION_CHECK 14 PASS B acquires its own real registered skill book elapsed_usec=240658
+PROFILE_ADMISSION_CHECK 15 PASS B learns a different skill through the same formal owner elapsed_usec=255062
+PROFILE_ADMISSION_CHECK 16 PASS B accepts the actual prerequisite-free registered quest elapsed_usec=275069
+PROFILE_ADMISSION_CHECK 17 PASS real ledger settlement records one kill and one durable death event elapsed_usec=286878
+PROFILE_ADMISSION_CHECK 18 PASS sole writer saves B with plural pets, quest, target mode and sequence-one clock elapsed_usec=319297
+PROFILE_ADMISSION_CHECK 19 PASS ordinary B save completes import before testing admission elapsed_usec=321307
+PROFILE_ADMISSION_CHECK 20 PASS aggregate validator accepts the persisted B document elapsed_usec=322216
+PROFILE_ADMISSION_CHECK 21 PASS real B checkpoint has valid sequence-one primary and preserved sequence-zero backup elapsed_usec=322581
+PROFILE_ADMISSION_CHECK 22 FAIL plural-pet formal profile persists the independent expected active quest progress elapsed_usec=322939
+PROFILE_ADMISSION_CHECK 23 PASS actual replay accepts B and proves backup zero is behind source one, requiring a checkpoint elapsed_usec=326277
+PROFILE_ADMISSION_CHECK 24 PASS native producer writes this invocation's complete owned admission trace elapsed_usec=328153
+PROFILE_LOAD_ADMISSION_20261010_FAIL checks=24 failures=["plural-pet formal profile persists the independent expected active quest progress"]
+XR: Clearing primary interface
+XR: Removed interface "Native mobile"
+XR: Removed interface "OpenXR"
+RUNNER_RESULTS_JSON=C:\Users\Administrator\Documents\HardCore\outputs\test_logs\v109_direct66_mode_transaction\logs\runner_results_adhoc_20261010_113309_551_22876.json
+TEST_SUMMARY suite=adhoc passed=0 failed=1 engine_log_errors=0
+FAILED_TESTS=profile_load_admission_20261010_test (missing_pass_marker;non_zero_exit_code_1;framework_checks_failed)

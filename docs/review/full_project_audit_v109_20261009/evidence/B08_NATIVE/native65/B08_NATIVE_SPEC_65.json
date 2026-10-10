@@ -1,0 +1,34 @@
+{
+  "name": "B08_NATIVE_FREEZE_65",
+  "changed_paths": [
+    "scripts/game_data.gd",
+    "scripts/player_state.gd",
+    "scripts/startup_loading.gd",
+    "scripts/layers/runtime/content_layer_registry.gd",
+    "scripts/layers/runtime/prepared_content_configuration.gd",
+    "scripts/layers/runtime/game_mode_service.gd",
+    "scripts/layers/runtime/runtime_service_facade.gd",
+    "tests/framework/mode_reload_transaction_20261010_test.gd",
+    "tests/framework/mode_reload_transaction_20261010_test.tscn",
+    "tests/framework/mode_reload_transaction_input_composed_20261010_test.tscn",
+    "tests/framework/mode_reload_transaction_stale_20261010_test.tscn",
+    "tests/framework/mode_reload_transaction_profile_20261010_test.tscn",
+    "tests/framework/mode_reload_transaction_later_20261010_test.tscn",
+    "tests/framework/mode_reload_transaction_failure_boundary_20261010_test.tscn",
+    "tests/framework/mode_reload_transaction_direct_failure_20261010_test.tscn",
+    "scripts/equipment_rules.gd",
+    "tests/framework/profile_load_admission_20261010_test.gd",
+    "tests/framework/profile_load_admission_20261010_test.tscn"
+  ],
+  "additional_inputs": [
+    "tools/godot-4.7/Godot_v4.7-stable_win64.exe",
+    "tools/test_windows_process_ownership.ps1",
+    "tools/test_framework_receipt.ps1",
+    "tools/test_native_log_evidence.ps1"
+  ],
+  "scenes": [
+    "tests/framework/profile_load_admission_20261010_test.tscn"
+  ],
+  "fingerprint_scope": "Actual runtime/data/map/test inputs, both Windows engine binaries and complete runner helpers; formal mode/content/profile transaction component",
+  "rerun_reason": "First native test of the newly admitted profile checkpoint transaction: real valid clock primary1/backup0, owned exact TMP-directory write fault, A state and durable bytes preservation, failed-B save guard, same-B recovery, plural-pet quest restoration and exact writer identity rejection. Current identity guard now requires both named String keys; the prior static malformed-key counterexample is retained. Ordinary 30s, real IO, all 52 designed checks retained."
+}

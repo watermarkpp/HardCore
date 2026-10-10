@@ -1,0 +1,97 @@
+WorkerThreadPool: 12 threads, 3 max low-priority.
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+TextServer: Added interface "Dummy"
+TextServer: Added interface "ICU / HarfBuzz / Graphite (Built-in)"
+Using "default" pen tablet driver...
+
+TextServer: Primary interface set to: "ICU / HarfBuzz / Graphite (Built-in)".
+CORE API HASH: 3472268009
+EDITOR API HASH: 2212757246
+SceneTreeFTI: traversal method DEFAULT
+Loading resource: res://scripts/device_lab_patch_bootstrap.gd remapped: res://scripts/device_lab_patch_bootstrap.gd
+Completed load for: 'res://scripts/device_lab_patch_bootstrap.gd' remapped 'res://scripts/device_lab_patch_bootstrap.gd' at thread -1
+Loading resource: res://scripts/audio_preferences.gd remapped: res://scripts/audio_preferences.gd
+Completed load for: 'res://scripts/audio_preferences.gd' remapped 'res://scripts/audio_preferences.gd' at thread -1
+Loading resource: res://scripts/loot_preferences.gd remapped: res://scripts/loot_preferences.gd
+Completed load for: 'res://scripts/loot_preferences.gd' remapped 'res://scripts/loot_preferences.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/content_layer_registry.gd remapped: res://scripts/layers/runtime/content_layer_registry.gd
+Completed load for: 'res://scripts/layers/runtime/content_layer_registry.gd' remapped 'res://scripts/layers/runtime/content_layer_registry.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/world_content_service.gd remapped: res://scripts/layers/runtime/world_content_service.gd
+Completed load for: 'res://scripts/layers/runtime/world_content_service.gd' remapped 'res://scripts/layers/runtime/world_content_service.gd' at thread -1
+Loading resource: res://scripts/layers/presentation/presentation_registry.gd remapped: res://scripts/layers/presentation/presentation_registry.gd
+Completed load for: 'res://scripts/layers/presentation/presentation_registry.gd' remapped 'res://scripts/layers/presentation/presentation_registry.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/targeting_runtime_service.gd remapped: res://scripts/layers/runtime/targeting_runtime_service.gd
+Completed load for: 'res://scripts/layers/runtime/targeting_runtime_service.gd' remapped 'res://scripts/layers/runtime/targeting_runtime_service.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/loot_runtime_service.gd remapped: res://scripts/layers/runtime/loot_runtime_service.gd
+Completed load for: 'res://scripts/layers/runtime/loot_runtime_service.gd' remapped 'res://scripts/layers/runtime/loot_runtime_service.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/combat_runtime_service.gd remapped: res://scripts/layers/runtime/combat_runtime_service.gd
+Completed load for: 'res://scripts/layers/runtime/combat_runtime_service.gd' remapped 'res://scripts/layers/runtime/combat_runtime_service.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/domain_runtime_services.gd remapped: res://scripts/layers/runtime/domain_runtime_services.gd
+Completed load for: 'res://scripts/layers/runtime/domain_runtime_services.gd' remapped 'res://scripts/layers/runtime/domain_runtime_services.gd' at thread -1
+Loading resource: res://scripts/layers/rules/boss_mechanic_registry.gd remapped: res://scripts/layers/rules/boss_mechanic_registry.gd
+Completed load for: 'res://scripts/layers/rules/boss_mechanic_registry.gd' remapped 'res://scripts/layers/rules/boss_mechanic_registry.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/runtime_service_facade.gd remapped: res://scripts/layers/runtime/runtime_service_facade.gd
+Completed load for: 'res://scripts/layers/runtime/runtime_service_facade.gd' remapped 'res://scripts/layers/runtime/runtime_service_facade.gd' at thread -1
+Loaded system CA certificates
+Loading resource: res://tests/framework/profile_load_admission_20261010_test.tscn remapped: res://tests/framework/profile_load_admission_20261010_test.tscn
+Loading resource: res://tests/framework/profile_load_admission_20261010_test.gd remapped: res://tests/framework/profile_load_admission_20261010_test.gd
+Completed load for: 'res://tests/framework/profile_load_admission_20261010_test.gd' remapped 'res://tests/framework/profile_load_admission_20261010_test.gd' at thread -1
+Completed load for: 'res://tests/framework/profile_load_admission_20261010_test.tscn' remapped 'res://tests/framework/profile_load_admission_20261010_test.tscn' at thread -1
+数据库载入完成：地图209 怪物156 Boss20 装备175 技能等级132 掉落槽3424 任务9
+PROFILE_ADMISSION_CHECK 1 PASS runner isolates the complete real account before process launch elapsed_usec=520
+PROFILE_ADMISSION_CHECK 2 PASS this run's account root is absent before claiming ownership elapsed_usec=1201
+PROFILE_ADMISSION_CHECK 3 PASS formal content, database and initial mode finish their readiness gates elapsed_usec=1576
+PROFILE_ADMISSION_CHECK 4 PASS profile, account warehouse and transaction log all use the owned real persistence root elapsed_usec=1955
+PROFILE_ADMISSION_CHECK 5 PASS owned account profile directory is created elapsed_usec=4089
+PROFILE_ADMISSION_CHECK 6 PASS A baseline uses the formal classic mode owner elapsed_usec=4520
+PROFILE_ADMISSION_CHECK 7 PASS formal owner creates real character A elapsed_usec=47798
+PROFILE_ADMISSION_CHECK 8 PASS A acquires a real registered skill book elapsed_usec=74478
+PROFILE_ADMISSION_CHECK 9 PASS A learns through the sole skill and book consumption owner elapsed_usec=91479
+PROFILE_ADMISSION_CHECK 10 PASS formal writer persists complete A and its checkpoint elapsed_usec=106374
+PROFILE_ADMISSION_CHECK 11 PASS formal owner creates real character B elapsed_usec=147573
+PROFILE_ADMISSION_CHECK 12 PASS sole writer stages the owned supported legacy clock input elapsed_usec=159990
+PROFILE_ADMISSION_CHECK 13 PASS formal clock importer creates B's isolated generation elapsed_usec=221746
+PROFILE_ADMISSION_CHECK 14 PASS B acquires its own real registered skill book elapsed_usec=247516
+PROFILE_ADMISSION_CHECK 15 PASS B learns a different skill through the same formal owner and admits one complete legal nonempty plural pet elapsed_usec=262850
+PROFILE_ADMISSION_CHECK 16 PASS B accepts the actual prerequisite-free registered quest elapsed_usec=283323
+PROFILE_ADMISSION_CHECK 17 PASS real ledger settlement records one kill and one durable death event elapsed_usec=295410
+PROFILE_ADMISSION_CHECK 18 PASS sole writer saves B with plural pets, quest, target mode and sequence-one clock elapsed_usec=328608
+PROFILE_ADMISSION_CHECK 19 PASS ordinary B save completes import before testing admission elapsed_usec=330594
+PROFILE_ADMISSION_CHECK 20 PASS aggregate validator accepts the persisted B document elapsed_usec=331483
+PROFILE_ADMISSION_CHECK 21 PASS real B checkpoint has valid sequence-one primary and preserved sequence-zero backup elapsed_usec=331856
+PROFILE_ADMISSION_CHECK 22 PASS plural-pet formal profile persists the independent expected active quest progress elapsed_usec=332352
+PROFILE_ADMISSION_CHECK 23 PASS actual replay accepts B and proves backup zero is behind source one, requiring a checkpoint elapsed_usec=335886
+PROFILE_ADMISSION_CHECK 24 PASS formal selection restores real A before the B failure probe elapsed_usec=352143
+PROFILE_ADMISSION_CHECK 25 PASS A is distinguishable from B by real identity, skills and empty quests elapsed_usec=352529
+PROFILE_ADMISSION_CHECK 26 PASS accepted writer callbacks drain before capturing A and creating the fault elapsed_usec=352891
+PROFILE_ADMISSION_CHECK 27 PASS writer identity negatives retain a real valid owned A empty-generation snapshot elapsed_usec=353807
+PROFILE_ADMISSION_CHECK 28 PASS formal writer rejects missing generation plus extra key before submission and preserves A snapshot bytes elapsed_usec=356194
+PROFILE_ADMISSION_CHECK 29 PASS formal writer rejects more than two identity keys before submission and preserves A snapshot bytes elapsed_usec=357519
+PROFILE_ADMISSION_CHECK 30 PASS formal writer rejects non-String generation before submission and preserves A snapshot bytes elapsed_usec=358848
+PROFILE_ADMISSION_CHECK 31 PASS formal writer rejects wrong target path before submission and preserves A snapshot bytes elapsed_usec=360255
+PROFILE_ADMISSION_CHECK 32 PASS only the exact absent B clock TMP inside this account is claimed for the directory fault elapsed_usec=371712
+PROFILE_ADMISSION_CHECK 33 PASS owned directory occupies the exact formal clock temporary-file path elapsed_usec=373985
+PROFILE_ADMISSION_CHECK 34 PASS fault ownership marker opens inside the exact TMP directory elapsed_usec=374719
+PROFILE_ADMISSION_CHECK 35 PASS directory at TMP preserves the accepted real replay and its required checkpoint watermarks elapsed_usec=378341
+PROFILE_ADMISSION_CHECK 36 PASS real B selection reaches the necessary checkpoint and fails with its exact load diagnostic elapsed_usec=2891466
+PROFILE_ADMISSION_CHECK 37 PASS the same world persistence owner completes exactly one failed request, proving actual IO admission elapsed_usec=2891809
+PROFILE_ADMISSION_CHECK 38 PASS checkpoint rejection preserves A identity, basic fields, complete skill owner and world watermarks elapsed_usec=2892220
+PROFILE_ADMISSION_CHECK 39 PASS checkpoint rejection preserves A effective feature object and compilation generation elapsed_usec=2892561
+PROFILE_ADMISSION_CHECK 40 PASS checkpoint rejection preserves catalog revisions, mode and expansion flags without publication signals elapsed_usec=2892970
+PROFILE_ADMISSION_CHECK 41 PASS failed target B retains its save block while valid old A remains active elapsed_usec=2893328
+PROFILE_ADMISSION_CHECK 42 PASS failed admission leaves every captured profile, account, index and clock byte unchanged and keeps the owned blocker elapsed_usec=2897681
+PROFILE_ADMISSION_CHECK 43 PASS formal failed-B save gate rejects stale A fields before any profile or shared warehouse overwrite elapsed_usec=2901776
+PROFILE_ADMISSION_CHECK 44 PASS remove only this run's ownership marker and empty exact TMP directory elapsed_usec=2902873
+数据库载入完成：地图209 怪物156 Boss20 装备175 技能等级132 掉落槽3424 任务9
+PROFILE_ADMISSION_CHECK 45 PASS same formal B selection succeeds immediately after removing only the owned TMP fault elapsed_usec=5074573
+PROFILE_ADMISSION_CHECK 46 PASS successful B admission clears its previous load failure save guard elapsed_usec=5074914
+PROFILE_ADMISSION_CHECK 47 PASS recovered B adopts its own stored fields and sole skill progression elapsed_usec=5075275
+PROFILE_ADMISSION_CHECK 48 PASS plural-pet formal profile restores B's independently expected quest progress outside the legacy singular branch elapsed_usec=5075721
+PROFILE_ADMISSION_CHECK 49 PASS recovery performs one required checkpoint and adopts primary and backup watermarks without duplicate world IO elapsed_usec=5076045
+PROFILE_ADMISSION_CHECK 50 PASS recovered B publishes its composed saved configuration exactly once through the formal owners elapsed_usec=5076381
+PROFILE_ADMISSION_CHECK 51 PASS ordinary recovery changes only the necessary world checkpoint and never rewrites character or shared account files elapsed_usec=5079485
+PROFILE_ADMISSION_CHECK 52 PASS native producer writes this invocation's complete owned admission trace elapsed_usec=5081560
+PROFILE_LOAD_ADMISSION_20261010_PASS checks=52 failures=[]
+XR: Clearing primary interface
+XR: Removed interface "Native mobile"
+XR: Removed interface "OpenXR"

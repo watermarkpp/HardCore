@@ -1,0 +1,97 @@
+diff --git a/outputs/b08_profile_admission_test_20261010/draft_pre_native66/profile_load_admission_20261010_test.gd b/tests/framework/profile_load_admission_20261010_test.gd
+index 9ca2457af..12f943cea 100644
+--- a/outputs/b08_profile_admission_test_20261010/draft_pre_native66/profile_load_admission_20261010_test.gd
++++ b/tests/framework/profile_load_admission_20261010_test.gd
+@@ -231,7 +231,7 @@ func _run() -> void:
+ 	check(bool(PlayerState.add_item("基本剑术", 1).get("success", false)), "A acquires a real registered skill book")
+ 	check(PlayerState.learn_skill("基本剑术").begins_with("已学会"), "A learns through the sole skill and book consumption owner")
+ 	check(PlayerState.save_game(true, true, true), "formal writer persists complete A and its checkpoint")
+-	check(PlayerState.create_character("AdmissionB", "hc.profession.wizard", "女").is_empty(),
++	check(PlayerState.create_character("AdmissionB", "hc.profession.taoist", "女").is_empty(),
+ 		"formal owner creates real character B")
+ 	if not failures.is_empty():
+ 		_finish()
+@@ -252,11 +252,32 @@ func _run() -> void:
+ 	if not failures.is_empty():
+ 		_finish()
+ 		return
+-	PlayerState.level = 11
++	PlayerState.level = 19
+ 	PlayerState.experience = 2
+ 	PlayerState.gold = 5678
+-	check(bool(PlayerState.add_item("火球术", 1).get("success", false)), "B acquires its own real registered skill book")
+-	check(PlayerState.learn_skill("火球术").begins_with("已学会"), "B learns a different skill through the same formal owner")
++	# The plural payload is written only when a valid nonempty pet slot exists.
++	# One book learns rank one at the canonical character-level gate of 19.
++	var expected_pets: Dictionary = {
++		"contract_id": PlayerState.TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID,
++		"groups": {"skeleton": [{
++			"contract_id": PlayerState.TAOIST_MAIN_PET_PERSISTENCE_CONTRACT_ID,
++			"alive": true, "runtime_state": "FOLLOW_OWNER",
++			"summon_id": "skeleton", "skill_id": "taoist.summon_skeleton",
++			"skill_rank": 1, "effective_skill_rank": 1, "pet_slot_index": 0,
++			"owner_level": 19, "current_hp": 150, "max_hp": 196,
++			"summon_exp_level": 1, "maximum_pet_level": 3,
++			"pet_growth_exp": 7, "remaining_lifetime": 60.0,
++			"stealth": {"remaining_seconds": 0.0, "buff_id": ""},
++			"physical_defence": {"bonus": 0, "remaining_seconds": 0.0, "buff_id": ""},
++			"magic_defence": {"bonus": 0, "remaining_seconds": 0.0, "buff_id": ""},
++		}], "divine_beast": []},
++	}
++	trace["expected_plural_pet_states"] = expected_pets.duplicate(true)
++	check(bool(PlayerState.add_item("召唤骷髅", 1).get("success", false)), "B acquires its own real registered skill book")
++	check(PlayerState.learn_skill("召唤骷髅").begins_with("已学会")
++		and PlayerState.apply_taoist_main_pet_runtime_states(expected_pets)
++		and _wire_equal(PlayerState.taoist_main_pet_runtime_states_for_restore(), expected_pets),
++		"B learns a different skill through the same formal owner and admits one complete legal nonempty plural pet")
+ 	check(PlayerState.accept_quest(QUEST_ID).begins_with("已接受任务"), "B accepts the actual prerequisite-free registered quest")
+ 	var settlement: Dictionary = PlayerState.record_kill_and_experience("稻草人", 1)
+ 	check(bool(settlement.get("success", false)) and int(settlement.get("save_count", 0)) == 1,
+@@ -277,6 +298,9 @@ func _run() -> void:
+ 	var primary_clock: Dictionary = _read(clock_path)
+ 	var backup_clock: Dictionary = _read(clock_path + ".bak")
+ 	var expected_quest: Dictionary = {"status": "active", "progress": {"稻草人": 1}}
++	trace["persisted_fixture"] = {"quest": b_document.get("quest_states", {}).get(QUEST_ID, {}),
++		"plural_pet_states": b_document.get("taoist_main_pet_runtime_states", {}),
++		"profession_id": PlayerState.profession_id, "level": PlayerState.level}
+ 	check(not generation.is_empty() and not b_document.has("world_clock_import_source"),
+ 		"ordinary B save completes import before testing admission")
+ 	check(bool(PlayerState._validate_profile_document_status(b_document, b_id, false).get("valid", false)),
+@@ -285,7 +309,9 @@ func _run() -> void:
+ 		and int(primary_clock.get("sequence", -1)) == 1 and int(backup_clock.get("sequence", -1)) == 0,
+ 		"real B checkpoint has valid sequence-one primary and preserved sequence-zero backup")
+ 	check(_wire_equal(b_document.get("quest_states", {}).get(QUEST_ID, {}), expected_quest)
+-		and b_document.get("taoist_main_pet_runtime_states", {}).get("contract_id", "") == PlayerState.TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID,
++		and b_document.has("taoist_main_pet_runtime_states")
++		and b_document.get("taoist_main_pet_runtime_states", {}).get("contract_id", "") == PlayerState.TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID
++		and _wire_equal(b_document.get("taoist_main_pet_runtime_states", {}), expected_pets),
+ 		"plural-pet formal profile persists the independent expected active quest progress")
+ 	var replay_before: Dictionary = PlayerState._read_world_clock_replay(b_document)
+ 	check(bool(replay_before.get("ok", false)) and bool(replay_before.get("snapshot_present", false))
+@@ -299,7 +325,7 @@ func _run() -> void:
+ 	check(PlayerState.select_character(a_id), "formal selection restores real A before the B failure probe")
+ 	PlayerState._before_state_transaction(true)
+ 	check(PlayerState.active_profile_id == a_id and PlayerState.is_skill_learned("基本剑术")
+-		and not PlayerState.is_skill_learned("火球术") and PlayerState.quest_states.is_empty(),
++		and not PlayerState.is_skill_learned("召唤骷髅") and PlayerState.quest_states.is_empty(),
+ 		"A is distinguishable from B by real identity, skills and empty quests")
+ 	check(PlayerState._json_persistence.pending_count() == 0 and PlayerState._world_json_persistence.pending_count() == 0,
+ 		"accepted writer callbacks drain before capturing A and creating the fault")
+@@ -403,12 +429,13 @@ func _run() -> void:
+ 		"same formal B selection succeeds immediately after removing only the owned TMP fault")
+ 	check(PlayerState._save_blocked_profile_id.is_empty() and PlayerState._save_blocked_reason.is_empty(),
+ 		"successful B admission clears its previous load failure save guard")
+-	check(PlayerState.character_name == "AdmissionB" and PlayerState.level == 11 and PlayerState.gold == 5678
+-		and PlayerState.profession_id == "hc.profession.wizard" and PlayerState.gender == "女"
+-		and PlayerState.is_skill_learned("火球术") and not PlayerState.is_skill_learned("基本剑术"),
++	check(PlayerState.character_name == "AdmissionB" and PlayerState.level == 19 and PlayerState.gold == 5678
++		and PlayerState.profession_id == "hc.profession.taoist" and PlayerState.gender == "女"
++		and PlayerState.is_skill_learned("召唤骷髅") and not PlayerState.is_skill_learned("基本剑术"),
+ 		"recovered B adopts its own stored fields and sole skill progression")
+ 	check(_wire_equal(PlayerState.quest_states.get(QUEST_ID, {}), expected_quest)
+-		and PlayerState.taoist_main_pet_runtime_states.get("contract_id", "") == PlayerState.TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID,
++		and PlayerState.taoist_main_pet_runtime_states.get("contract_id", "") == PlayerState.TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID
++		and _wire_equal(PlayerState.taoist_main_pet_runtime_states_for_restore(), expected_pets),
+ 		"plural-pet formal profile restores B's independently expected quest progress outside the legacy singular branch")
+ 	check(PlayerState._world_clock_snapshot_sequence == 1 and PlayerState._world_clock_backup_sequence == 1
+ 		and not PlayerState._world_clock_dirty and PlayerState._world_json_persistence.completed_count == world_jobs_before + 2,

@@ -1,0 +1,64 @@
+{
+  "status": "NOT_RUN",
+  "scope": "Read-only acceptance constraints for future B09 rebound packet and external audit return; fixed successor SHA and generated packet not yet supplied",
+  "responsibility_baseline": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+  "current_rebind_script": {
+    "path": "outputs/b09_residual_audit_plan_20261010/rebind_b09.py",
+    "sha256": "7c8d4089b60851180c75b2064a1ab04db93e61f5ce0eeb0b1dfd22e4b4e3125b",
+    "mutation": "No edit by this followup"
+  },
+  "packet_requirements": [
+    "One full immutable new commit SHA, ancestor relation to dbb1 verified; every packet/source binding refers to the same SHA. Main integration HEAD/index remain untouched by inspection.",
+    "All blob IDs and source SHA256 must equal actual git cat-file bytes at that commit. Do not bind to dirty working files or labels alone.",
+    "B09 startup_loading.gd union must cover every line of its whole new file, every named function, and executable property/global owner contracts; not only changed hunks.",
+    "Preserve original 15 B09 paths and all mapped responsibilities; deletion/duplicate/new-name ambiguity receives explicit disposition rather than guessed matching.",
+    "All changed/new functions in B09 and all admitted mode/profile/skill owner deltas must be assigned. Compare actual immutable Git path delta; unexpected_source_deltas/gaps cannot be ignored.",
+    "Each packet union of scheduled ranges is at most 15000 actual lines. Followup packets are explicit, same SHA, all original/new responsibilities accounted; no prefix truncation or raised cap.",
+    "Function start/end and body hash must correspond to complete current function bodies, not declaration presence; implicit property setters/getters and file imports/constants/signals must have separate executable/authority contract evidence.",
+    "B09_DISPATCH lists all primary/followup files and exact function responsibilities, source hashes, re-review/reuse reasons, output evidence requirements and unresolved cross-batch obligations.",
+    "Original dbb1 B10–B28 plan remains responsibility baseline, not successor semantic acceptance. New owners outside the 372 baseline formal paths must be explicitly added or assigned elsewhere."
+  ],
+  "external_return_requirements": [
+    "Every assigned named function has a separate complete-body evidence record or a narrowly eligible exact-body reuse record. File FULL/PASS or aggregate covered=100 percent alone has no semantic credit.",
+    "Full-body record includes fixed SHA, path, class/qualified function identity, actual full body start/end, blob/source SHA256, body LF SHA256, actual read scope, behavior summary and branch/owner/cleanup facts.",
+    "Analyze actual producer→state owner→consumer effects, normal success, concrete failure, internal/external cancellation, replacement/reentry/repeat, stale generation, release/retirement, and post-return callbacks where applicable. Mark not applicable with a concrete reason per function, not a generic batch claim.",
+    "Existing B01–08 evidence reused only when it names the function and demonstrates complete body scope and exact unchanged body identity. A file declaration/index/byte read, historical partial control flow, or first-101-line prefix is not body completion.",
+    "Unchanged body reuse does not close changed constants/imports/receiver ownership/caller ordering. Retained READY/fail/cancel/claim-retirement cross-edge duties require new actual caller evidence even when callee body is proven.",
+    "Findings name exact current source location, reproducible trigger, first failing boundary and affected authority/cleanup contract. Missing source/access/body/branch/caller evidence remains MISSING/NOT_RUN/BLOCKED; do not manufacture PASS.",
+    "Returned coverage matches packet units exactly: no omitted functions, duplicate renamed credit, extra unsupported file green, or unknown delta silently discarded. Remaining responsibilities are explicit and mapped.",
+    "PC Native67 full original three legacy IO scene results are distinct: native PASS, formal assertion receipts MISSING. External static audit cannot turn those into framework receipts, native reruns, Android or device PASS."
+  ],
+  "known_successor_delta_watchlist": [
+    {
+      "path": "scripts/skills/skill_progression_service.gd",
+      "current_local_sha256": "12feb8c24ede1a575bce021ee9cd0984ec72d22286a5c5287485894d19d452a4",
+      "reason": "The current rebind expected owner allowlist is the earlier eight mode/admission paths; this newer skill delta will be unexpected/MISSING if in successor SHA. Assign its changed/new body and profile-admission consumers explicitly, potentially B09 owner followup, rather than dropping it."
+    }
+  ],
+  "body_evidence_record_template": {
+    "fixed_source_sha": "<NEW_FIXED_REVIEW_SHA>",
+    "path": "<formal source path>",
+    "qualified_function": "<class/global>::<name>",
+    "git_blob": "<actual blob OID>",
+    "file_sha256": "<actual source bytes SHA256>",
+    "body_range": {
+      "start": 0,
+      "end": 0
+    },
+    "body_lf_sha256": "<complete body LF normalized SHA256>",
+    "actual_read_scope": "FULL_BODY or exact unchanged-body prior evidence with explicit reference",
+    "prior_evidence_ref": "<only if eligible body reuse>",
+    "behavior_summary": "<specific state/control flow>",
+    "producer_owner_consumers": [
+      "<real caller/receiver names with current source ranges>"
+    ],
+    "branch_and_cleanup_evidence": [
+      "<specific normal/fail/cancel/stale/reentry/retirement facts>"
+    ],
+    "status": "PASS|FAIL|BLOCKED|NOT_RUN|MISSING",
+    "remaining_scope": [
+      "<explicit unresolved branch/caller/product/platform responsibilities>"
+    ]
+  },
+  "future_readonly_verification": "Read only generated SOURCE_BINDING/B09_REBOUND/OWNER_FOLLOWUP/DISPATCH/REBIND_RESULT and their fixed blobs; no project rescan, source/Git/index/runner mutation, native or build."
+}

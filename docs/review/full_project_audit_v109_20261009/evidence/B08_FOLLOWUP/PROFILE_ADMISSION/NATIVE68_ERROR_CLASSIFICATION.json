@@ -1,0 +1,217 @@
+{
+  "native": "Native68",
+  "result": "FAIL",
+  "native_exit": 0,
+  "business": {
+    "status": "PASS",
+    "checks": 52,
+    "passed": 52,
+    "failed": 0
+  },
+  "run_id": "709a6d90-50a3-4d13-9b26-6361770a0ea9",
+  "invocation_id": "8b73d71f-8412-46d8-abc3-ddfb783d7b9d",
+  "source_content_sha256": "fc8ec681d681ac3b12e7135a3eb851c89d1355a2ef55cfa41ca592f0f4a58b74",
+  "source_gd_sha256": "416228627FB770B9146095DD8745E3165036FFDA99C37E45BF00AE898B047420",
+  "source_production_sha256": "A95FE0B6875196B92E60A1E429F2915BFCDEA9DB772399FFE6FD18F18DA90185",
+  "errors": [
+    {
+      "id": 1,
+      "message": "Condition \"len == 0\" is true. Returning: FAILED",
+      "owner": "test fixture _file_hashes",
+      "caller": "writer_identity_negatives before/after hashes",
+      "stack": "   at: update (core/crypto/hashing_context.cpp:54)\r\n   GDScript backtrace (most recent call first):\r\n       [0] _file_hashes (res://tests/framework/profile_load_admission_20261010_test.gd:97)\r\n       [1] _writer_identity_negatives (res://tests/framework/profile_load_admission_20261010_test.gd:135)\r\n       [2] _run (res://tests/framework/profile_load_admission_20261010_test.gd:335)"
+    },
+    {
+      "id": 2,
+      "message": "Condition \"len == 0\" is true. Returning: FAILED",
+      "owner": "test fixture _file_hashes",
+      "caller": "writer_identity_negatives before/after hashes",
+      "stack": "   at: update (core/crypto/hashing_context.cpp:54)\r\n   GDScript backtrace (most recent call first):\r\n       [0] _file_hashes (res://tests/framework/profile_load_admission_20261010_test.gd:97)\r\n       [1] _writer_identity_negatives (res://tests/framework/profile_load_admission_20261010_test.gd:135)\r\n       [2] _run (res://tests/framework/profile_load_admission_20261010_test.gd:335)"
+    },
+    {
+      "id": 3,
+      "message": "Condition \"len == 0\" is true. Returning: FAILED",
+      "owner": "test fixture _file_hashes",
+      "caller": "writer_identity_negatives before/after hashes",
+      "stack": "   at: update (core/crypto/hashing_context.cpp:54)\r\n   GDScript backtrace (most recent call first):\r\n       [0] _file_hashes (res://tests/framework/profile_load_admission_20261010_test.gd:97)\r\n       [1] _writer_identity_negatives (res://tests/framework/profile_load_admission_20261010_test.gd:135)\r\n       [2] _run (res://tests/framework/profile_load_admission_20261010_test.gd:335)"
+    },
+    {
+      "id": 4,
+      "message": "Condition \"len == 0\" is true. Returning: FAILED",
+      "owner": "test fixture _file_hashes",
+      "caller": "writer_identity_negatives before/after hashes",
+      "stack": "   at: update (core/crypto/hashing_context.cpp:54)\r\n   GDScript backtrace (most recent call first):\r\n       [0] _file_hashes (res://tests/framework/profile_load_admission_20261010_test.gd:97)\r\n       [1] _writer_identity_negatives (res://tests/framework/profile_load_admission_20261010_test.gd:135)\r\n       [2] _run (res://tests/framework/profile_load_admission_20261010_test.gd:335)"
+    },
+    {
+      "id": 5,
+      "message": "Condition \"len == 0\" is true. Returning: FAILED",
+      "owner": "test fixture _file_hashes",
+      "caller": "writer_identity_negatives before/after hashes",
+      "stack": "   at: update (core/crypto/hashing_context.cpp:54)\r\n   GDScript backtrace (most recent call first):\r\n       [0] _file_hashes (res://tests/framework/profile_load_admission_20261010_test.gd:97)\r\n       [1] _writer_identity_negatives (res://tests/framework/profile_load_admission_20261010_test.gd:135)\r\n       [2] _run (res://tests/framework/profile_load_admission_20261010_test.gd:335)"
+    },
+    {
+      "id": 6,
+      "message": "Condition \"len == 0\" is true. Returning: FAILED",
+      "owner": "test fixture _file_hashes",
+      "caller": "writer_identity_negatives before/after hashes",
+      "stack": "   at: update (core/crypto/hashing_context.cpp:54)\r\n   GDScript backtrace (most recent call first):\r\n       [0] _file_hashes (res://tests/framework/profile_load_admission_20261010_test.gd:97)\r\n       [1] _writer_identity_negatives (res://tests/framework/profile_load_admission_20261010_test.gd:135)\r\n       [2] _run (res://tests/framework/profile_load_admission_20261010_test.gd:335)"
+    },
+    {
+      "id": 7,
+      "message": "Condition \"len == 0\" is true. Returning: FAILED",
+      "owner": "test fixture _file_hashes",
+      "caller": "writer_identity_negatives before/after hashes",
+      "stack": "   at: update (core/crypto/hashing_context.cpp:54)\r\n   GDScript backtrace (most recent call first):\r\n       [0] _file_hashes (res://tests/framework/profile_load_admission_20261010_test.gd:97)\r\n       [1] _writer_identity_negatives (res://tests/framework/profile_load_admission_20261010_test.gd:135)\r\n       [2] _run (res://tests/framework/profile_load_admission_20261010_test.gd:335)"
+    },
+    {
+      "id": 8,
+      "message": "Condition \"len == 0\" is true. Returning: FAILED",
+      "owner": "test fixture _file_hashes",
+      "caller": "writer_identity_negatives before/after hashes",
+      "stack": "   at: update (core/crypto/hashing_context.cpp:54)\r\n   GDScript backtrace (most recent call first):\r\n       [0] _file_hashes (res://tests/framework/profile_load_admission_20261010_test.gd:97)\r\n       [1] _writer_identity_negatives (res://tests/framework/profile_load_admission_20261010_test.gd:135)\r\n       [2] _run (res://tests/framework/profile_load_admission_20261010_test.gd:335)"
+    },
+    {
+      "id": 9,
+      "message": "Condition \"len == 0\" is true. Returning: FAILED",
+      "owner": "test fixture _file_hashes",
+      "caller": "failed admission before/after hashes",
+      "stack": "   at: update (core/crypto/hashing_context.cpp:54)\r\n   GDScript backtrace (most recent call first):\r\n       [0] _file_hashes (res://tests/framework/profile_load_admission_20261010_test.gd:97)\r\n       [1] _run (res://tests/framework/profile_load_admission_20261010_test.gd:381)"
+    },
+    {
+      "id": 10,
+      "message": "Condition \"len == 0\" is true. Returning: FAILED",
+      "owner": "test fixture _file_hashes",
+      "caller": "failed admission before/after hashes",
+      "stack": "   at: update (core/crypto/hashing_context.cpp:54)\r\n   GDScript backtrace (most recent call first):\r\n       [0] _file_hashes (res://tests/framework/profile_load_admission_20261010_test.gd:97)\r\n       [1] _run (res://tests/framework/profile_load_admission_20261010_test.gd:381)"
+    },
+    {
+      "id": 11,
+      "message": "Condition \"len == 0\" is true. Returning: FAILED",
+      "owner": "test fixture _file_hashes",
+      "caller": "recovery after hashes",
+      "stack": "   at: update (core/crypto/hashing_context.cpp:54)\r\n   GDScript backtrace (most recent call first):\r\n       [0] _file_hashes (res://tests/framework/profile_load_admission_20261010_test.gd:97)\r\n       [1] _run (res://tests/framework/profile_load_admission_20261010_test.gd:424)"
+    }
+  ],
+  "log_counts": [
+    {
+      "kind": "stdout",
+      "error_count": 0,
+      "script_error_count": 0,
+      "sha256": "29BABF4A54AB35D17E30DD0015CEE100EE2FD074BC07F21A8D92DDFDA021E3D6"
+    },
+    {
+      "kind": "stderr",
+      "error_count": 11,
+      "script_error_count": 0,
+      "sha256": "5E65C6FA621DF8651C3E16E6DBDBF9DB6CCE029F11F9252720EE2E4D2A5D1729"
+    },
+    {
+      "kind": "godot",
+      "error_count": 11,
+      "script_error_count": 0,
+      "sha256": "BCA578451DB98DEB92C6B4C4BA47F516D7CB8BA79D033DD5C03410A39782D56E"
+    }
+  ],
+  "zero_byte_trace_groups": [
+    {
+      "label": "writer before",
+      "count": 4,
+      "items": [
+        {
+          "path": "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/characters/world_clocks/1791604110_2364.json.bak",
+          "exists": false,
+          "size": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/characters/world_clocks/1791604110_2364.json.tmp",
+          "exists": false,
+          "size": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/characters/world_clocks/1791604110_2364.json.wrong-target",
+          "exists": false,
+          "size": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/characters/world_clocks/1791604110_2364.json.wrong-target.tmp",
+          "exists": false,
+          "size": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "label": "writer after",
+      "count": 4,
+      "items": [
+        {
+          "path": "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/characters/world_clocks/1791604110_2364.json.bak",
+          "exists": false,
+          "size": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/characters/world_clocks/1791604110_2364.json.tmp",
+          "exists": false,
+          "size": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/characters/world_clocks/1791604110_2364.json.wrong-target",
+          "exists": false,
+          "size": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/characters/world_clocks/1791604110_2364.json.wrong-target.tmp",
+          "exists": false,
+          "size": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "label": "failed selection before",
+      "count": 1,
+      "items": [
+        {
+          "path": "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/shared_warehouse.json.bak",
+          "exists": false,
+          "size": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "label": "failed selection after",
+      "count": 1,
+      "items": [
+        {
+          "path": "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/shared_warehouse.json.bak",
+          "exists": false,
+          "size": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "label": "recovery after",
+      "count": 1,
+      "items": [
+        {
+          "path": "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/shared_warehouse.json.bak",
+          "exists": false,
+          "size": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    }
+  ],
+  "classification": "All eleven unique native ERROR events belong to test diagnostic HashingContext.update(empty); stderr and godot each repeat the same eleven; no script errors; business all52 passed; runner FAIL retained",
+  "repair": "Only call context.update for nonempty bytes; start+finish always retained; exists/size/original byte comparisons unchanged",
+  "repair_source_comparison": "PASS exact guard-only",
+  "new_candidate_native": "NOT_RUN"
+}

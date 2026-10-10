@@ -1,0 +1,2761 @@
+{
+  "scope": "B08 native evidence; component scope only, no aggregate APK/device acceptance",
+  "stages": [
+    {
+      "number": 57,
+      "candidate_tree": "ca339e6c2f725f901a77087221625c853be5e12b",
+      "actual_input_fingerprint": "bf35743b3dea7991c6851c499cb206a0068f16adef95b03607d5f0d4f627f069",
+      "input_count": 2537,
+      "engine": {
+        "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+        "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+        "bytes": 198152
+      },
+      "main_index_sha256": "ddacea4eed570faed0a6003c87352552e74e902874b5dee61d8863a2316e29d7",
+      "postverification": "PASS",
+      "actual_command": {
+        "script": "tools/run_godot_tests.ps1",
+        "TestPaths": [
+          "tests/framework/mode_reload_transaction_20261010_test.tscn"
+        ],
+        "TimeoutSeconds": 30,
+        "Verbose": true
+      },
+      "environment": {
+        "GIT_INDEX_FILE": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\wake_drop_v108_review_followup_20261009\\B08_NATIVE_FREEZE_57.index",
+        "HARDCORE_R3_CONTENT_SHA256": "bf35743b3dea7991c6851c499cb206a0068f16adef95b03607d5f0d4f627f069",
+        "HARDCORE_AUDIT_LOG_ROOT": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct57_mode_transaction\\logs",
+        "HARDCORE_AUDIT_EVIDENCE_ROOT": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct57_mode_transaction\\raw",
+        "HARDCORE_AUDIT_RUNTIME_APPDATA": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct57_mode_transaction"
+      },
+      "rerun_reason": "New coordinated content preparation/adoption and profile load admission need real success/failure, persistent bytes, signal and candidate ownership evidence; no unchanged whole-suite repetition",
+      "invocation_id": "f0870f7b-9d3c-48c9-b985-706f57bcc0c1",
+      "runtime_environment": {
+        "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+        "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct57_mode_transaction\\runner_f0870f7b-9d3c-48c9-b985-706f57bcc0c1",
+        "runner_process_id": 10056
+      },
+      "runner": {
+        "total": 1,
+        "passed": 0,
+        "failed": 1,
+        "engine_log_errors": 0
+      },
+      "native_results": [
+        {
+          "test_name": "mode_reload_transaction_20261010_test",
+          "test_path": "tests/framework/mode_reload_transaction_20261010_test.tscn",
+          "wrapper_process_id": 7448,
+          "wrapper_started_utc": "2026-10-10T02:42:32.1720180Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct57_mode_transaction\\runner_f0870f7b-9d3c-48c9-b985-706f57bcc0c1",
+          "fixed_fps": 0,
+          "pass_marker_found": false,
+          "process_exited": false,
+          "wrapper_exit_code": 1,
+          "child_process_exit_state": "forced_termination",
+          "execution_deadline_utc": "2026-10-10T02:43:02.1761311Z",
+          "native_exit_observed_utc": null,
+          "effective_exit_code": 1,
+          "timeout": true,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "cleanup_warning_evidence": {
+            "status": "PASS",
+            "allowlisted_errors": {
+              "string_formatting": {
+                "count": 0,
+                "lines": []
+              },
+              "resources_in_use": {
+                "count": 0,
+                "lines": []
+              },
+              "rid_leak": {
+                "count": 0,
+                "lines": []
+              },
+              "null_parameter": {
+                "count": 0,
+                "lines": []
+              }
+            },
+            "unknown_error_lines": [],
+            "unknown_error_count": 0,
+            "objectdb_leak_warning_lines": [],
+            "objectdb_leak_warning_count": 0,
+            "functional_marker_observed": false,
+            "formal_evidence_status": "MISSING",
+            "formal_evidence_reason": "legacy_run_bound_checks_missing",
+            "receipt_validation_reasons": [
+              "framework_receipt_missing"
+            ],
+            "candidate_receipt_correlation": false,
+            "upstream_result": "NOT_RUN",
+            "raw_log_paths": [
+              "outputs\\test_logs\\v109_direct57_mode_transaction\\logs\\mode_reload_transaction_20261010_test.stdout.log",
+              "outputs\\test_logs\\v109_direct57_mode_transaction\\logs\\mode_reload_transaction_20261010_test.stderr.log",
+              "outputs\\test_logs\\v109_direct57_mode_transaction\\logs\\mode_reload_transaction_20261010_test.godot.log"
+            ],
+            "receipt_path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\framework\\mode_reload_transaction_20261010_test.result.json",
+            "expected_scene_id": "mode_reload_transaction_20261010_test",
+            "expected_invocation_id": "f0870f7b-9d3c-48c9-b985-706f57bcc0c1"
+          },
+          "framework_run_id": "cb3ba97d-32aa-48ef-a38c-01813e327f2e",
+          "framework_receipt_valid": false,
+          "source_content_sha256": "bf35743b3dea7991c6851c499cb206a0068f16adef95b03607d5f0d4f627f069",
+          "source_binding_scope": "External immutable input freeze required; env label alone is not a source scan",
+          "engine_fingerprints": [
+            {
+              "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+              "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+              "bytes": 198152
+            },
+            {
+              "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64.exe",
+              "sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+              "bytes": 178485256
+            }
+          ],
+          "formal_evidence_status": "MISSING",
+          "formal_evidence_reason": "Requires matching external source/input freeze and this native result",
+          "result": "FAIL",
+          "reason": "missing_pass_marker;process_did_not_exit;timeout_30s;non_zero_exit_code_1;framework_receipt_missing"
+        }
+      ],
+      "receipts": [
+        {
+          "scene": "tests/framework/mode_reload_transaction_20261010_test.tscn",
+          "run_id": "cb3ba97d-32aa-48ef-a38c-01813e327f2e",
+          "receipt": "MISSING",
+          "count": 0,
+          "passed": 0,
+          "failed": 0
+        }
+      ],
+      "source_blob_artifacts": [
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native57/source_git_blobs/scripts/game_data.gd",
+          "sha256": "074963983e834a1c1ca7e2f02205b96fc8240f851f6d114f9ad08abf40c42ac7",
+          "bytes": 180641
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native57/source_git_blobs/scripts/player_state.gd",
+          "sha256": "e0667eab0dd54dc33a4555c4b9c2ba11c2db4c7d27a8bece4b5255b8ce645ac2",
+          "bytes": 447352
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native57/source_git_blobs/scripts/startup_loading.gd",
+          "sha256": "7d382a0a0ae640dad6d8e069609453b9600ec25a91f5c6661b423434f047b295",
+          "bytes": 35951
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native57/source_git_blobs/scripts/layers/runtime/content_layer_registry.gd",
+          "sha256": "9bc46367b0c89e2383f561b2b3571ecc39cae74640bf60158d3be18dc8bb7d80",
+          "bytes": 39031
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native57/source_git_blobs/scripts/layers/runtime/prepared_content_configuration.gd",
+          "sha256": "cf9cb0b72a9fa37635caa91237492e7221c4965ff400b548b29b7396b07a725e",
+          "bytes": 606
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native57/source_git_blobs/scripts/layers/runtime/game_mode_service.gd",
+          "sha256": "caafed85b8ef0310cb5148388e42ee03b9e3ccf12f33e30a299d3ab5c1f25093",
+          "bytes": 2477
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native57/source_git_blobs/scripts/layers/runtime/runtime_service_facade.gd",
+          "sha256": "a1ecefadd311fffb27cedd63b8ebb2c350fca4c494436c019aa10f20814325ea",
+          "bytes": 685
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native57/source_git_blobs/tests/framework/mode_reload_transaction_20261010_test.gd",
+          "sha256": "1e88051e2afcd41c544bf6471c0a7245e615d03f5c445002fa07cce06f23c595",
+          "bytes": 28407
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native57/source_git_blobs/tests/framework/mode_reload_transaction_20261010_test.tscn",
+          "sha256": "696a43c4cd6f237d742366a661f2c6a971cf1d08ccbe352d87e2197e4a13598f",
+          "bytes": 227
+        }
+      ]
+    },
+    {
+      "number": 58,
+      "candidate_tree": "945bef8c85032cac02d59b9d929cfcfdaa426ec9",
+      "actual_input_fingerprint": "b594dbb9d8cbc316297917a14cac40aa55c7361196e2f4313b113d9bbc7a534c",
+      "input_count": 2537,
+      "engine": {
+        "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+        "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+        "bytes": 198152
+      },
+      "main_index_sha256": "ddacea4eed570faed0a6003c87352552e74e902874b5dee61d8863a2316e29d7",
+      "postverification": "PASS",
+      "actual_command": {
+        "script": "tools/run_godot_tests.ps1",
+        "TestPaths": [
+          "tests/framework/mode_reload_transaction_20261010_test.tscn"
+        ],
+        "TimeoutSeconds": 30,
+        "Verbose": true
+      },
+      "environment": {
+        "GIT_INDEX_FILE": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\wake_drop_v108_review_followup_20261009\\B08_NATIVE_FREEZE_58.index",
+        "HARDCORE_R3_CONTENT_SHA256": "b594dbb9d8cbc316297917a14cac40aa55c7361196e2f4313b113d9bbc7a534c",
+        "HARDCORE_AUDIT_LOG_ROOT": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct58_mode_transaction\\logs",
+        "HARDCORE_AUDIT_EVIDENCE_ROOT": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct58_mode_transaction\\raw",
+        "HARDCORE_AUDIT_RUNTIME_APPDATA": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct58_mode_transaction"
+      },
+      "rerun_reason": "Native57 timed out with no complete receipt or ERROR. Add per-check native breadcrumbs, preserving every assertion and 30s deadline, to localize the real blocking stage; production unchanged.",
+      "invocation_id": "e2067bc6-5540-4b33-ba57-63fe360fa171",
+      "runtime_environment": {
+        "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+        "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct58_mode_transaction\\runner_e2067bc6-5540-4b33-ba57-63fe360fa171",
+        "runner_process_id": 17588
+      },
+      "runner": {
+        "total": 1,
+        "passed": 0,
+        "failed": 1,
+        "engine_log_errors": 0
+      },
+      "native_results": [
+        {
+          "test_name": "mode_reload_transaction_20261010_test",
+          "test_path": "tests/framework/mode_reload_transaction_20261010_test.tscn",
+          "wrapper_process_id": 16248,
+          "wrapper_started_utc": "2026-10-10T02:45:46.7864279Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct58_mode_transaction\\runner_e2067bc6-5540-4b33-ba57-63fe360fa171",
+          "fixed_fps": 0,
+          "pass_marker_found": false,
+          "process_exited": false,
+          "wrapper_exit_code": 1,
+          "child_process_exit_state": "forced_termination",
+          "execution_deadline_utc": "2026-10-10T02:46:16.7904026Z",
+          "native_exit_observed_utc": null,
+          "effective_exit_code": 1,
+          "timeout": true,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "cleanup_warning_evidence": {
+            "status": "PASS",
+            "allowlisted_errors": {
+              "string_formatting": {
+                "count": 0,
+                "lines": []
+              },
+              "resources_in_use": {
+                "count": 0,
+                "lines": []
+              },
+              "rid_leak": {
+                "count": 0,
+                "lines": []
+              },
+              "null_parameter": {
+                "count": 0,
+                "lines": []
+              }
+            },
+            "unknown_error_lines": [],
+            "unknown_error_count": 0,
+            "objectdb_leak_warning_lines": [],
+            "objectdb_leak_warning_count": 0,
+            "functional_marker_observed": false,
+            "formal_evidence_status": "MISSING",
+            "formal_evidence_reason": "legacy_run_bound_checks_missing",
+            "receipt_validation_reasons": [
+              "framework_receipt_missing"
+            ],
+            "candidate_receipt_correlation": false,
+            "upstream_result": "NOT_RUN",
+            "raw_log_paths": [
+              "outputs\\test_logs\\v109_direct58_mode_transaction\\logs\\mode_reload_transaction_20261010_test.stdout.log",
+              "outputs\\test_logs\\v109_direct58_mode_transaction\\logs\\mode_reload_transaction_20261010_test.stderr.log",
+              "outputs\\test_logs\\v109_direct58_mode_transaction\\logs\\mode_reload_transaction_20261010_test.godot.log"
+            ],
+            "receipt_path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\framework\\mode_reload_transaction_20261010_test.result.json",
+            "expected_scene_id": "mode_reload_transaction_20261010_test",
+            "expected_invocation_id": "e2067bc6-5540-4b33-ba57-63fe360fa171"
+          },
+          "framework_run_id": "375c0f8c-7233-43d8-aac7-06a64e914d33",
+          "framework_receipt_valid": false,
+          "source_content_sha256": "b594dbb9d8cbc316297917a14cac40aa55c7361196e2f4313b113d9bbc7a534c",
+          "source_binding_scope": "External immutable input freeze required; env label alone is not a source scan",
+          "engine_fingerprints": [
+            {
+              "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+              "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+              "bytes": 198152
+            },
+            {
+              "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64.exe",
+              "sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+              "bytes": 178485256
+            }
+          ],
+          "formal_evidence_status": "MISSING",
+          "formal_evidence_reason": "Requires matching external source/input freeze and this native result",
+          "result": "FAIL",
+          "reason": "missing_pass_marker;process_did_not_exit;timeout_30s;non_zero_exit_code_1;framework_receipt_missing"
+        }
+      ],
+      "receipts": [
+        {
+          "scene": "tests/framework/mode_reload_transaction_20261010_test.tscn",
+          "run_id": "375c0f8c-7233-43d8-aac7-06a64e914d33",
+          "receipt": "MISSING",
+          "count": 0,
+          "passed": 0,
+          "failed": 0
+        }
+      ],
+      "source_blob_artifacts": [
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native58/source_git_blobs/scripts/game_data.gd",
+          "sha256": "074963983e834a1c1ca7e2f02205b96fc8240f851f6d114f9ad08abf40c42ac7",
+          "bytes": 180641
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native58/source_git_blobs/scripts/player_state.gd",
+          "sha256": "e0667eab0dd54dc33a4555c4b9c2ba11c2db4c7d27a8bece4b5255b8ce645ac2",
+          "bytes": 447352
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native58/source_git_blobs/scripts/startup_loading.gd",
+          "sha256": "7d382a0a0ae640dad6d8e069609453b9600ec25a91f5c6661b423434f047b295",
+          "bytes": 35951
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native58/source_git_blobs/scripts/layers/runtime/content_layer_registry.gd",
+          "sha256": "9bc46367b0c89e2383f561b2b3571ecc39cae74640bf60158d3be18dc8bb7d80",
+          "bytes": 39031
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native58/source_git_blobs/scripts/layers/runtime/prepared_content_configuration.gd",
+          "sha256": "cf9cb0b72a9fa37635caa91237492e7221c4965ff400b548b29b7396b07a725e",
+          "bytes": 606
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native58/source_git_blobs/scripts/layers/runtime/game_mode_service.gd",
+          "sha256": "caafed85b8ef0310cb5148388e42ee03b9e3ccf12f33e30a299d3ab5c1f25093",
+          "bytes": 2477
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native58/source_git_blobs/scripts/layers/runtime/runtime_service_facade.gd",
+          "sha256": "a1ecefadd311fffb27cedd63b8ebb2c350fca4c494436c019aa10f20814325ea",
+          "bytes": 685
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native58/source_git_blobs/tests/framework/mode_reload_transaction_20261010_test.gd",
+          "sha256": "5c18edf7934a45004cdfbd3016ddc46bee843a1a4289439af1bb7be726b1b2a3",
+          "bytes": 28647
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native58/source_git_blobs/tests/framework/mode_reload_transaction_20261010_test.tscn",
+          "sha256": "696a43c4cd6f237d742366a661f2c6a971cf1d08ccbe352d87e2197e4a13598f",
+          "bytes": 227
+        }
+      ]
+    },
+    {
+      "number": 59,
+      "candidate_tree": "d198b391778f4ce1cd62d15772dfc487e31d8099",
+      "actual_input_fingerprint": "2714abc8d8d1bbb50394747b0ad40758cb092dda40522e1195002d79ede84971",
+      "input_count": 2543,
+      "engine": {
+        "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+        "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+        "bytes": 198152
+      },
+      "main_index_sha256": "ddacea4eed570faed0a6003c87352552e74e902874b5dee61d8863a2316e29d7",
+      "postverification": "PASS",
+      "actual_command": {
+        "script": "tools/run_godot_tests.ps1",
+        "TestPaths": [
+          "tests/framework/mode_reload_transaction_input_composed_20261010_test.tscn"
+        ],
+        "TimeoutSeconds": 30,
+        "Verbose": true
+      },
+      "environment": {
+        "GIT_INDEX_FILE": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\wake_drop_v108_review_followup_20261009\\B08_NATIVE_FREEZE_59.index",
+        "HARDCORE_R3_CONTENT_SHA256": "2714abc8d8d1bbb50394747b0ad40758cb092dda40522e1195002d79ede84971",
+        "HARDCORE_AUDIT_LOG_ROOT": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct59_mode_transaction\\logs",
+        "HARDCORE_AUDIT_EVIDENCE_ROOT": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct59_mode_transaction\\raw",
+        "HARDCORE_AUDIT_RUNTIME_APPDATA": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct59_mode_transaction"
+      },
+      "rerun_reason": "Native58 timed out and retained detached-preparation property differences. Keep every original assertion in independent ordinary 30s partitions; run the input/composed partition first to obtain exact changed properties and measured operation costs. Direct reload catalog visibility was also repaired; actual inputs are frozen before execution.",
+      "invocation_id": "a2be2071-1d5b-4682-b758-9232d3bf2197",
+      "runtime_environment": {
+        "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+        "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct59_mode_transaction\\runner_a2be2071-1d5b-4682-b758-9232d3bf2197",
+        "runner_process_id": 2128
+      },
+      "runner": {
+        "total": 1,
+        "passed": 0,
+        "failed": 1,
+        "engine_log_errors": 2
+      },
+      "native_results": [
+        {
+          "test_name": "mode_reload_transaction_input_composed_20261010_test",
+          "test_path": "tests/framework/mode_reload_transaction_input_composed_20261010_test.tscn",
+          "wrapper_process_id": 9296,
+          "wrapper_started_utc": "2026-10-10T03:01:43.8990586Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct59_mode_transaction\\runner_a2be2071-1d5b-4682-b758-9232d3bf2197",
+          "fixed_fps": 0,
+          "pass_marker_found": false,
+          "process_exited": false,
+          "wrapper_exit_code": 1,
+          "child_process_exit_state": "forced_termination",
+          "execution_deadline_utc": "2026-10-10T03:02:13.9035206Z",
+          "native_exit_observed_utc": null,
+          "effective_exit_code": 1,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 2,
+          "engine_log_failure_count": 2,
+          "cleanup_warning_evidence": {
+            "status": "FAIL",
+            "allowlisted_errors": {
+              "string_formatting": {
+                "count": 0,
+                "lines": []
+              },
+              "resources_in_use": {
+                "count": 0,
+                "lines": []
+              },
+              "rid_leak": {
+                "count": 0,
+                "lines": []
+              },
+              "null_parameter": {
+                "count": 0,
+                "lines": []
+              }
+            },
+            "unknown_error_lines": [
+              "ERROR: Failed to load script \"res://tests/framework/mode_reload_transaction_20261010_test.gd\" with error \"Parse error\".",
+              "ERROR: Failed to load script \"res://tests/framework/mode_reload_transaction_20261010_test.gd\" with error \"Parse error\"."
+            ],
+            "unknown_error_count": 2,
+            "objectdb_leak_warning_lines": [],
+            "objectdb_leak_warning_count": 0,
+            "functional_marker_observed": false,
+            "formal_evidence_status": "MISSING",
+            "formal_evidence_reason": "legacy_run_bound_checks_missing",
+            "receipt_validation_reasons": [
+              "framework_receipt_missing"
+            ],
+            "candidate_receipt_correlation": false,
+            "upstream_result": "NOT_RUN",
+            "raw_log_paths": [
+              "outputs\\test_logs\\v109_direct59_mode_transaction\\logs\\mode_reload_transaction_input_composed_20261010_test.stdout.log",
+              "outputs\\test_logs\\v109_direct59_mode_transaction\\logs\\mode_reload_transaction_input_composed_20261010_test.stderr.log",
+              "outputs\\test_logs\\v109_direct59_mode_transaction\\logs\\mode_reload_transaction_input_composed_20261010_test.godot.log"
+            ],
+            "receipt_path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\framework\\mode_reload_transaction_input_composed_20261010_test.result.json",
+            "expected_scene_id": "mode_reload_transaction_input_composed_20261010_test",
+            "expected_invocation_id": "a2be2071-1d5b-4682-b758-9232d3bf2197"
+          },
+          "framework_run_id": "d5f8ea35-7cb2-41f7-bc43-aa7c57d3105b",
+          "framework_receipt_valid": false,
+          "source_content_sha256": "2714abc8d8d1bbb50394747b0ad40758cb092dda40522e1195002d79ede84971",
+          "source_binding_scope": "External immutable input freeze required; env label alone is not a source scan",
+          "engine_fingerprints": [
+            {
+              "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+              "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+              "bytes": 198152
+            },
+            {
+              "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64.exe",
+              "sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+              "bytes": 178485256
+            }
+          ],
+          "formal_evidence_status": "MISSING",
+          "formal_evidence_reason": "Requires matching external source/input freeze and this native result",
+          "result": "FAIL",
+          "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_1;stderr_failures_2;engine_log_failures_2;framework_receipt_missing"
+        }
+      ],
+      "receipts": [
+        {
+          "scene": "tests/framework/mode_reload_transaction_input_composed_20261010_test.tscn",
+          "run_id": "d5f8ea35-7cb2-41f7-bc43-aa7c57d3105b",
+          "receipt": "MISSING",
+          "count": 0,
+          "passed": 0,
+          "failed": 0
+        }
+      ],
+      "source_blob_artifacts": [
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native59/source_git_blobs/scripts/game_data.gd",
+          "sha256": "92c1dc2d4dd498d359135c7cd2d3de90164589ec1deefbccf97a948dbd1b7c76",
+          "bytes": 181646
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native59/source_git_blobs/scripts/player_state.gd",
+          "sha256": "e0667eab0dd54dc33a4555c4b9c2ba11c2db4c7d27a8bece4b5255b8ce645ac2",
+          "bytes": 447352
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native59/source_git_blobs/scripts/startup_loading.gd",
+          "sha256": "7d382a0a0ae640dad6d8e069609453b9600ec25a91f5c6661b423434f047b295",
+          "bytes": 35951
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native59/source_git_blobs/scripts/layers/runtime/content_layer_registry.gd",
+          "sha256": "9bc46367b0c89e2383f561b2b3571ecc39cae74640bf60158d3be18dc8bb7d80",
+          "bytes": 39031
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native59/source_git_blobs/scripts/layers/runtime/prepared_content_configuration.gd",
+          "sha256": "cf9cb0b72a9fa37635caa91237492e7221c4965ff400b548b29b7396b07a725e",
+          "bytes": 606
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native59/source_git_blobs/scripts/layers/runtime/game_mode_service.gd",
+          "sha256": "caafed85b8ef0310cb5148388e42ee03b9e3ccf12f33e30a299d3ab5c1f25093",
+          "bytes": 2477
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native59/source_git_blobs/scripts/layers/runtime/runtime_service_facade.gd",
+          "sha256": "a1ecefadd311fffb27cedd63b8ebb2c350fca4c494436c019aa10f20814325ea",
+          "bytes": 685
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native59/source_git_blobs/tests/framework/mode_reload_transaction_20261010_test.gd",
+          "sha256": "91727b4c07cb83d75d608de9747f75b46e4044e4ea0a94deeeceac1c99299c9e",
+          "bytes": 44970
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native59/source_git_blobs/tests/framework/mode_reload_transaction_20261010_test.tscn",
+          "sha256": "696a43c4cd6f237d742366a661f2c6a971cf1d08ccbe352d87e2197e4a13598f",
+          "bytes": 227
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native59/source_git_blobs/tests/framework/mode_reload_transaction_input_composed_20261010_test.tscn",
+          "sha256": "85db5e3e182278f0c80bcc20eee27b4e3f81834f6fde1836a30854b25c6351f3",
+          "bytes": 274
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native59/source_git_blobs/tests/framework/mode_reload_transaction_stale_20261010_test.tscn",
+          "sha256": "1137dc8b15fdd8976d1f5f04d4697d90a3daf73da66341138b3a06556901811d",
+          "bytes": 257
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native59/source_git_blobs/tests/framework/mode_reload_transaction_profile_20261010_test.tscn",
+          "sha256": "5178db2b93864c5424531b9b3d5d75589c0a0437b868896ed46bbb54544966d6",
+          "bytes": 261
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native59/source_git_blobs/tests/framework/mode_reload_transaction_later_20261010_test.tscn",
+          "sha256": "05df3c7efe99708230d5e345752a187034f4f91dafae4374c16163654e89a098",
+          "bytes": 257
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native59/source_git_blobs/tests/framework/mode_reload_transaction_failure_boundary_20261010_test.tscn",
+          "sha256": "aa8bb1700d680f9b925fc53f1b0ec48658d1e7c44de5d674d544562f5c1970f1",
+          "bytes": 278
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native59/source_git_blobs/tests/framework/mode_reload_transaction_direct_failure_20261010_test.tscn",
+          "sha256": "214cd702c40720e3862c912198e3820fe7bace4956ea78cf15bd896f2f42da44",
+          "bytes": 274
+        }
+      ]
+    },
+    {
+      "number": 60,
+      "candidate_tree": "1c0467da2598dad5ea36ea5e2cb6a90690e69bc3",
+      "actual_input_fingerprint": "0f9395487d95600838160b1e5fd75d503fb0b042d327dd4749b2024fc87f83d7",
+      "input_count": 2543,
+      "engine": {
+        "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+        "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+        "bytes": 198152
+      },
+      "main_index_sha256": "ddacea4eed570faed0a6003c87352552e74e902874b5dee61d8863a2316e29d7",
+      "postverification": "PASS",
+      "actual_command": {
+        "script": "tools/run_godot_tests.ps1",
+        "TestPaths": [
+          "tests/framework/mode_reload_transaction_input_composed_20261010_test.tscn"
+        ],
+        "TimeoutSeconds": 30,
+        "Verbose": true
+      },
+      "environment": {
+        "GIT_INDEX_FILE": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\wake_drop_v108_review_followup_20261009\\B08_NATIVE_FREEZE_60.index",
+        "HARDCORE_R3_CONTENT_SHA256": "0f9395487d95600838160b1e5fd75d503fb0b042d327dd4749b2024fc87f83d7",
+        "HARDCORE_AUDIT_LOG_ROOT": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct60_mode_transaction\\logs",
+        "HARDCORE_AUDIT_EVIDENCE_ROOT": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct60_mode_transaction\\raw",
+        "HARDCORE_AUDIT_RUNTIME_APPDATA": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct60_mode_transaction"
+      },
+      "rerun_reason": "Native59 rejected test instrumentation at parse time (Variant large type inference). Test-only explicit types repaired; all predicates and 30s partitions unchanged. Run input/composed first to obtain the actual live property difference.",
+      "invocation_id": "45f7da91-2b32-4e7a-be25-690718d90c5b",
+      "runtime_environment": {
+        "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+        "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct60_mode_transaction\\runner_45f7da91-2b32-4e7a-be25-690718d90c5b",
+        "runner_process_id": 22204
+      },
+      "runner": {
+        "total": 1,
+        "passed": 0,
+        "failed": 1,
+        "engine_log_errors": 0
+      },
+      "native_results": [
+        {
+          "test_name": "mode_reload_transaction_input_composed_20261010_test",
+          "test_path": "tests/framework/mode_reload_transaction_input_composed_20261010_test.tscn",
+          "wrapper_process_id": 13568,
+          "wrapper_started_utc": "2026-10-10T03:02:54.3372249Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct60_mode_transaction\\runner_45f7da91-2b32-4e7a-be25-690718d90c5b",
+          "fixed_fps": 0,
+          "pass_marker_found": false,
+          "process_exited": true,
+          "wrapper_exit_code": 1,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-10T03:03:24.3426589Z",
+          "native_exit_observed_utc": "2026-10-10T03:03:18.8108876Z",
+          "effective_exit_code": 1,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "cleanup_warning_evidence": {
+            "status": "PASS",
+            "allowlisted_errors": {
+              "string_formatting": {
+                "count": 0,
+                "lines": []
+              },
+              "resources_in_use": {
+                "count": 0,
+                "lines": []
+              },
+              "rid_leak": {
+                "count": 0,
+                "lines": []
+              },
+              "null_parameter": {
+                "count": 0,
+                "lines": []
+              }
+            },
+            "unknown_error_lines": [],
+            "unknown_error_count": 0,
+            "objectdb_leak_warning_lines": [],
+            "objectdb_leak_warning_count": 0,
+            "functional_marker_observed": false,
+            "formal_evidence_status": "MISSING",
+            "formal_evidence_reason": "legacy_run_bound_checks_missing",
+            "receipt_validation_reasons": [
+              "framework_receipt_not_pass"
+            ],
+            "candidate_receipt_correlation": false,
+            "upstream_result": "NOT_RUN",
+            "raw_log_paths": [
+              "outputs\\test_logs\\v109_direct60_mode_transaction\\logs\\mode_reload_transaction_input_composed_20261010_test.stdout.log",
+              "outputs\\test_logs\\v109_direct60_mode_transaction\\logs\\mode_reload_transaction_input_composed_20261010_test.stderr.log",
+              "outputs\\test_logs\\v109_direct60_mode_transaction\\logs\\mode_reload_transaction_input_composed_20261010_test.godot.log"
+            ],
+            "receipt_path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\framework\\mode_reload_transaction_input_composed_20261010_test.result.json",
+            "expected_scene_id": "mode_reload_transaction_input_composed_20261010_test",
+            "expected_invocation_id": "45f7da91-2b32-4e7a-be25-690718d90c5b"
+          },
+          "framework_run_id": "7b42c598-35f8-4c4a-b933-2d3f132bb452",
+          "framework_receipt_valid": false,
+          "source_content_sha256": "0f9395487d95600838160b1e5fd75d503fb0b042d327dd4749b2024fc87f83d7",
+          "source_binding_scope": "External immutable input freeze required; env label alone is not a source scan",
+          "engine_fingerprints": [
+            {
+              "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+              "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+              "bytes": 198152
+            },
+            {
+              "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64.exe",
+              "sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+              "bytes": 178485256
+            }
+          ],
+          "formal_evidence_status": "MISSING",
+          "formal_evidence_reason": "Requires matching external source/input freeze and this native result",
+          "result": "FAIL",
+          "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+        }
+      ],
+      "receipts": [
+        {
+          "scene": "tests/framework/mode_reload_transaction_input_composed_20261010_test.tscn",
+          "run_id": "7b42c598-35f8-4c4a-b933-2d3f132bb452",
+          "receipt": "outputs/test_logs/v109_direct60_mode_transaction/raw/7b42c598-35f8-4c4a-b933-2d3f132bb452/mode_reload_transaction_input_composed_20261010_test.result.json",
+          "count": 81,
+          "passed": 80,
+          "failed": 1,
+          "status": "FAIL",
+          "failed_checks": [
+            {
+              "id": 47,
+              "label": "successful detached preparation preserves every live GameData script property",
+              "passed": false
+            }
+          ]
+        }
+      ],
+      "source_blob_artifacts": [
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native60/source_git_blobs/scripts/game_data.gd",
+          "sha256": "92c1dc2d4dd498d359135c7cd2d3de90164589ec1deefbccf97a948dbd1b7c76",
+          "bytes": 181646
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native60/source_git_blobs/scripts/player_state.gd",
+          "sha256": "e0667eab0dd54dc33a4555c4b9c2ba11c2db4c7d27a8bece4b5255b8ce645ac2",
+          "bytes": 447352
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native60/source_git_blobs/scripts/startup_loading.gd",
+          "sha256": "7d382a0a0ae640dad6d8e069609453b9600ec25a91f5c6661b423434f047b295",
+          "bytes": 35951
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native60/source_git_blobs/scripts/layers/runtime/content_layer_registry.gd",
+          "sha256": "9bc46367b0c89e2383f561b2b3571ecc39cae74640bf60158d3be18dc8bb7d80",
+          "bytes": 39031
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native60/source_git_blobs/scripts/layers/runtime/prepared_content_configuration.gd",
+          "sha256": "cf9cb0b72a9fa37635caa91237492e7221c4965ff400b548b29b7396b07a725e",
+          "bytes": 606
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native60/source_git_blobs/scripts/layers/runtime/game_mode_service.gd",
+          "sha256": "caafed85b8ef0310cb5148388e42ee03b9e3ccf12f33e30a299d3ab5c1f25093",
+          "bytes": 2477
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native60/source_git_blobs/scripts/layers/runtime/runtime_service_facade.gd",
+          "sha256": "a1ecefadd311fffb27cedd63b8ebb2c350fca4c494436c019aa10f20814325ea",
+          "bytes": 685
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native60/source_git_blobs/tests/framework/mode_reload_transaction_20261010_test.gd",
+          "sha256": "69319011b42ddcbbdd9a98a97b424a0f42db99fdf6b99df9e48179bb15f18de2",
+          "bytes": 45080
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native60/source_git_blobs/tests/framework/mode_reload_transaction_20261010_test.tscn",
+          "sha256": "696a43c4cd6f237d742366a661f2c6a971cf1d08ccbe352d87e2197e4a13598f",
+          "bytes": 227
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native60/source_git_blobs/tests/framework/mode_reload_transaction_input_composed_20261010_test.tscn",
+          "sha256": "85db5e3e182278f0c80bcc20eee27b4e3f81834f6fde1836a30854b25c6351f3",
+          "bytes": 274
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native60/source_git_blobs/tests/framework/mode_reload_transaction_stale_20261010_test.tscn",
+          "sha256": "1137dc8b15fdd8976d1f5f04d4697d90a3daf73da66341138b3a06556901811d",
+          "bytes": 257
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native60/source_git_blobs/tests/framework/mode_reload_transaction_profile_20261010_test.tscn",
+          "sha256": "5178db2b93864c5424531b9b3d5d75589c0a0437b868896ed46bbb54544966d6",
+          "bytes": 261
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native60/source_git_blobs/tests/framework/mode_reload_transaction_later_20261010_test.tscn",
+          "sha256": "05df3c7efe99708230d5e345752a187034f4f91dafae4374c16163654e89a098",
+          "bytes": 257
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native60/source_git_blobs/tests/framework/mode_reload_transaction_failure_boundary_20261010_test.tscn",
+          "sha256": "aa8bb1700d680f9b925fc53f1b0ec48658d1e7c44de5d674d544562f5c1970f1",
+          "bytes": 278
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native60/source_git_blobs/tests/framework/mode_reload_transaction_direct_failure_20261010_test.tscn",
+          "sha256": "214cd702c40720e3862c912198e3820fe7bace4956ea78cf15bd896f2f42da44",
+          "bytes": 274
+        }
+      ]
+    },
+    {
+      "number": 61,
+      "candidate_tree": "ed85a6eb825e5959655229e20bc4380ba1c8576e",
+      "actual_input_fingerprint": "e47bf109f6f9bf93b8fe9df09949070074f444aea0699b17803d3c9e7bd648ba",
+      "input_count": 2543,
+      "engine": {
+        "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+        "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+        "bytes": 198152
+      },
+      "main_index_sha256": "ddacea4eed570faed0a6003c87352552e74e902874b5dee61d8863a2316e29d7",
+      "postverification": "PASS",
+      "actual_command": {
+        "script": "tools/run_godot_tests.ps1",
+        "TestPaths": [
+          "tests/framework/mode_reload_transaction_input_composed_20261010_test.tscn"
+        ],
+        "TimeoutSeconds": 30,
+        "Verbose": true
+      },
+      "environment": {
+        "GIT_INDEX_FILE": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\wake_drop_v108_review_followup_20261009\\B08_NATIVE_FREEZE_61.index",
+        "HARDCORE_R3_CONTENT_SHA256": "e47bf109f6f9bf93b8fe9df09949070074f444aea0699b17803d3c9e7bd648ba",
+        "HARDCORE_AUDIT_LOG_ROOT": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct61_mode_transaction\\logs",
+        "HARDCORE_AUDIT_EVIDENCE_ROOT": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct61_mode_transaction\\raw",
+        "HARDCORE_AUDIT_RUNTIME_APPDATA": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct61_mode_transaction"
+      },
+      "rerun_reason": "Native60 exposed live GameData price-cache counter mutation from detached candidate enrichment. Pricing now resolves through the candidate owner; all original properties and predicates remain in the input/composed test. B08 profile checkpoint admission and plural-pet quest hydration also changed; their dedicated native coverage is pending and is not inferred from this scene.",
+      "invocation_id": "161f5e5a-8858-4413-bea1-0301a32cc292",
+      "runtime_environment": {
+        "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+        "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct61_mode_transaction\\runner_161f5e5a-8858-4413-bea1-0301a32cc292",
+        "runner_process_id": 24336
+      },
+      "runner": {
+        "total": 1,
+        "passed": 1,
+        "failed": 0,
+        "engine_log_errors": 0
+      },
+      "native_results": [
+        {
+          "test_name": "mode_reload_transaction_input_composed_20261010_test",
+          "test_path": "tests/framework/mode_reload_transaction_input_composed_20261010_test.tscn",
+          "wrapper_process_id": 5028,
+          "wrapper_started_utc": "2026-10-10T03:12:53.3710740Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct61_mode_transaction\\runner_161f5e5a-8858-4413-bea1-0301a32cc292",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-10T03:13:23.3751492Z",
+          "native_exit_observed_utc": "2026-10-10T03:13:18.0474586Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "cleanup_warning_evidence": {
+            "status": "PASS",
+            "allowlisted_errors": {
+              "string_formatting": {
+                "count": 0,
+                "lines": []
+              },
+              "resources_in_use": {
+                "count": 0,
+                "lines": []
+              },
+              "rid_leak": {
+                "count": 0,
+                "lines": []
+              },
+              "null_parameter": {
+                "count": 0,
+                "lines": []
+              }
+            },
+            "unknown_error_lines": [],
+            "unknown_error_count": 0,
+            "objectdb_leak_warning_lines": [],
+            "objectdb_leak_warning_count": 0,
+            "functional_marker_observed": true,
+            "formal_evidence_status": "MISSING",
+            "formal_evidence_reason": "upstream_native_and_full_receipt_validation_required",
+            "receipt_validation_reasons": [],
+            "candidate_receipt_correlation": true,
+            "upstream_result": "NOT_RUN",
+            "raw_log_paths": [
+              "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct61_mode_transaction\\logs\\mode_reload_transaction_input_composed_20261010_test.stdout.log",
+              "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct61_mode_transaction\\logs\\mode_reload_transaction_input_composed_20261010_test.stderr.log",
+              "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct61_mode_transaction\\logs\\mode_reload_transaction_input_composed_20261010_test.godot.log"
+            ],
+            "receipt_path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\framework\\mode_reload_transaction_input_composed_20261010_test.result.json",
+            "expected_scene_id": "mode_reload_transaction_input_composed_20261010_test",
+            "expected_invocation_id": "161f5e5a-8858-4413-bea1-0301a32cc292"
+          },
+          "framework_run_id": "e2157b87-df6a-47ba-a463-2a902db0f886",
+          "framework_receipt_valid": true,
+          "source_content_sha256": "e47bf109f6f9bf93b8fe9df09949070074f444aea0699b17803d3c9e7bd648ba",
+          "source_binding_scope": "External immutable input freeze required; env label alone is not a source scan",
+          "engine_fingerprints": [
+            {
+              "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+              "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+              "bytes": 198152
+            },
+            {
+              "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64.exe",
+              "sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+              "bytes": 178485256
+            }
+          ],
+          "formal_evidence_status": "PASS",
+          "formal_evidence_reason": "Requires matching external source/input freeze and this native result",
+          "result": "PASS",
+          "reason": ""
+        }
+      ],
+      "receipts": [
+        {
+          "scene": "tests/framework/mode_reload_transaction_input_composed_20261010_test.tscn",
+          "run_id": "e2157b87-df6a-47ba-a463-2a902db0f886",
+          "receipt": "outputs/test_logs/v109_direct61_mode_transaction/raw/e2157b87-df6a-47ba-a463-2a902db0f886/mode_reload_transaction_input_composed_20261010_test.result.json",
+          "count": 81,
+          "passed": 81,
+          "failed": 0,
+          "status": "PASS",
+          "failed_checks": []
+        }
+      ],
+      "source_blob_artifacts": [
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native61/source_git_blobs/scripts/game_data.gd",
+          "sha256": "ba1b7a6067962f29687d5558f62f0587a4cf795034ffac56610a74c628a0c20c",
+          "bytes": 182063
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native61/source_git_blobs/scripts/player_state.gd",
+          "sha256": "7c8d840f32ddb148eb1f703e72d64fa570a1dc6bcb9c6c040f7a7e8714813f3e",
+          "bytes": 450243
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native61/source_git_blobs/scripts/startup_loading.gd",
+          "sha256": "7d382a0a0ae640dad6d8e069609453b9600ec25a91f5c6661b423434f047b295",
+          "bytes": 35951
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native61/source_git_blobs/scripts/layers/runtime/content_layer_registry.gd",
+          "sha256": "9bc46367b0c89e2383f561b2b3571ecc39cae74640bf60158d3be18dc8bb7d80",
+          "bytes": 39031
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native61/source_git_blobs/scripts/layers/runtime/prepared_content_configuration.gd",
+          "sha256": "cf9cb0b72a9fa37635caa91237492e7221c4965ff400b548b29b7396b07a725e",
+          "bytes": 606
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native61/source_git_blobs/scripts/layers/runtime/game_mode_service.gd",
+          "sha256": "caafed85b8ef0310cb5148388e42ee03b9e3ccf12f33e30a299d3ab5c1f25093",
+          "bytes": 2477
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native61/source_git_blobs/scripts/layers/runtime/runtime_service_facade.gd",
+          "sha256": "a1ecefadd311fffb27cedd63b8ebb2c350fca4c494436c019aa10f20814325ea",
+          "bytes": 685
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native61/source_git_blobs/tests/framework/mode_reload_transaction_20261010_test.gd",
+          "sha256": "ef985717250842ee8ac564fff9efcd02422f9342e51b9aa881003c21c1bb7eef",
+          "bytes": 45105
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native61/source_git_blobs/tests/framework/mode_reload_transaction_20261010_test.tscn",
+          "sha256": "696a43c4cd6f237d742366a661f2c6a971cf1d08ccbe352d87e2197e4a13598f",
+          "bytes": 227
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native61/source_git_blobs/tests/framework/mode_reload_transaction_input_composed_20261010_test.tscn",
+          "sha256": "85db5e3e182278f0c80bcc20eee27b4e3f81834f6fde1836a30854b25c6351f3",
+          "bytes": 274
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native61/source_git_blobs/tests/framework/mode_reload_transaction_stale_20261010_test.tscn",
+          "sha256": "1137dc8b15fdd8976d1f5f04d4697d90a3daf73da66341138b3a06556901811d",
+          "bytes": 257
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native61/source_git_blobs/tests/framework/mode_reload_transaction_profile_20261010_test.tscn",
+          "sha256": "5178db2b93864c5424531b9b3d5d75589c0a0437b868896ed46bbb54544966d6",
+          "bytes": 261
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native61/source_git_blobs/tests/framework/mode_reload_transaction_later_20261010_test.tscn",
+          "sha256": "05df3c7efe99708230d5e345752a187034f4f91dafae4374c16163654e89a098",
+          "bytes": 257
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native61/source_git_blobs/tests/framework/mode_reload_transaction_failure_boundary_20261010_test.tscn",
+          "sha256": "aa8bb1700d680f9b925fc53f1b0ec48658d1e7c44de5d674d544562f5c1970f1",
+          "bytes": 278
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native61/source_git_blobs/tests/framework/mode_reload_transaction_direct_failure_20261010_test.tscn",
+          "sha256": "214cd702c40720e3862c912198e3820fe7bace4956ea78cf15bd896f2f42da44",
+          "bytes": 274
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native61/source_git_blobs/scripts/equipment_rules.gd",
+          "sha256": "589e729fbd5c553daa575b467bc5912440bec411a4c32e58f4838a2bd0033933",
+          "bytes": 34659
+        }
+      ]
+    },
+    {
+      "number": 62,
+      "candidate_tree": "ed85a6eb825e5959655229e20bc4380ba1c8576e",
+      "actual_input_fingerprint": "06ec5c76010b87dd05a282ca1817d4dad7130177b737c23ac075e266ecf68169",
+      "input_count": 2543,
+      "engine": {
+        "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+        "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+        "bytes": 198152
+      },
+      "main_index_sha256": "ddacea4eed570faed0a6003c87352552e74e902874b5dee61d8863a2316e29d7",
+      "postverification": "PASS",
+      "actual_command": {
+        "script": "tools/run_godot_tests.ps1",
+        "TestPaths": [
+          "tests/framework/mode_reload_transaction_stale_20261010_test.tscn",
+          "tests/framework/mode_reload_transaction_profile_20261010_test.tscn",
+          "tests/framework/mode_reload_transaction_later_20261010_test.tscn",
+          "tests/framework/mode_reload_transaction_failure_boundary_20261010_test.tscn",
+          "tests/framework/mode_reload_transaction_direct_failure_20261010_test.tscn"
+        ],
+        "TimeoutSeconds": 30,
+        "Verbose": true
+      },
+      "environment": {
+        "GIT_INDEX_FILE": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\wake_drop_v108_review_followup_20261009\\B08_NATIVE_FREEZE_62.index",
+        "HARDCORE_R3_CONTENT_SHA256": "06ec5c76010b87dd05a282ca1817d4dad7130177b737c23ac075e266ecf68169",
+        "HARDCORE_AUDIT_LOG_ROOT": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct62_mode_transaction\\logs",
+        "HARDCORE_AUDIT_EVIDENCE_ROOT": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct62_mode_transaction\\raw",
+        "HARDCORE_AUDIT_RUNTIME_APPDATA": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct62_mode_transaction"
+      },
+      "rerun_reason": "Native61 input/composed passed on the repaired candidate-price owner. Run only the remaining previously unverified partitions on exactly the same production/test bytes. Direct-failure exercises official push_error rejection and its runner classification must be retained separately from business checks.",
+      "invocation_id": "f1002d88-e778-4ad1-a83d-613e1773eec7",
+      "runtime_environment": {
+        "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+        "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct62_mode_transaction\\runner_f1002d88-e778-4ad1-a83d-613e1773eec7",
+        "runner_process_id": 21984
+      },
+      "runner": {
+        "total": 5,
+        "passed": 3,
+        "failed": 2,
+        "engine_log_errors": 1
+      },
+      "native_results": [
+        {
+          "test_name": "mode_reload_transaction_stale_20261010_test",
+          "test_path": "tests/framework/mode_reload_transaction_stale_20261010_test.tscn",
+          "wrapper_process_id": 7940,
+          "wrapper_started_utc": "2026-10-10T03:14:02.8910707Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct62_mode_transaction\\runner_f1002d88-e778-4ad1-a83d-613e1773eec7",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-10T03:14:32.8949012Z",
+          "native_exit_observed_utc": "2026-10-10T03:14:28.2628706Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "cleanup_warning_evidence": {
+            "status": "PASS",
+            "allowlisted_errors": {
+              "string_formatting": {
+                "count": 0,
+                "lines": []
+              },
+              "resources_in_use": {
+                "count": 0,
+                "lines": []
+              },
+              "rid_leak": {
+                "count": 0,
+                "lines": []
+              },
+              "null_parameter": {
+                "count": 0,
+                "lines": []
+              }
+            },
+            "unknown_error_lines": [],
+            "unknown_error_count": 0,
+            "objectdb_leak_warning_lines": [],
+            "objectdb_leak_warning_count": 0,
+            "functional_marker_observed": true,
+            "formal_evidence_status": "MISSING",
+            "formal_evidence_reason": "upstream_native_and_full_receipt_validation_required",
+            "receipt_validation_reasons": [],
+            "candidate_receipt_correlation": true,
+            "upstream_result": "NOT_RUN",
+            "raw_log_paths": [
+              "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct62_mode_transaction\\logs\\mode_reload_transaction_stale_20261010_test.stdout.log",
+              "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct62_mode_transaction\\logs\\mode_reload_transaction_stale_20261010_test.stderr.log",
+              "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct62_mode_transaction\\logs\\mode_reload_transaction_stale_20261010_test.godot.log"
+            ],
+            "receipt_path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\framework\\mode_reload_transaction_stale_20261010_test.result.json",
+            "expected_scene_id": "mode_reload_transaction_stale_20261010_test",
+            "expected_invocation_id": "f1002d88-e778-4ad1-a83d-613e1773eec7"
+          },
+          "framework_run_id": "0fc2f246-56d3-47c7-8fdb-1fce08bd2c13",
+          "framework_receipt_valid": true,
+          "source_content_sha256": "06ec5c76010b87dd05a282ca1817d4dad7130177b737c23ac075e266ecf68169",
+          "source_binding_scope": "External immutable input freeze required; env label alone is not a source scan",
+          "engine_fingerprints": [
+            {
+              "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+              "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+              "bytes": 198152
+            },
+            {
+              "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64.exe",
+              "sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+              "bytes": 178485256
+            }
+          ],
+          "formal_evidence_status": "PASS",
+          "formal_evidence_reason": "Requires matching external source/input freeze and this native result",
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "mode_reload_transaction_profile_20261010_test",
+          "test_path": "tests/framework/mode_reload_transaction_profile_20261010_test.tscn",
+          "wrapper_process_id": 11284,
+          "wrapper_started_utc": "2026-10-10T03:14:29.9170130Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct62_mode_transaction\\runner_f1002d88-e778-4ad1-a83d-613e1773eec7",
+          "fixed_fps": 0,
+          "pass_marker_found": false,
+          "process_exited": true,
+          "wrapper_exit_code": 1,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-10T03:14:59.9171669Z",
+          "native_exit_observed_utc": "2026-10-10T03:14:49.8660747Z",
+          "effective_exit_code": 1,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "cleanup_warning_evidence": {
+            "status": "PASS",
+            "allowlisted_errors": {
+              "string_formatting": {
+                "count": 0,
+                "lines": []
+              },
+              "resources_in_use": {
+                "count": 0,
+                "lines": []
+              },
+              "rid_leak": {
+                "count": 0,
+                "lines": []
+              },
+              "null_parameter": {
+                "count": 0,
+                "lines": []
+              }
+            },
+            "unknown_error_lines": [],
+            "unknown_error_count": 0,
+            "objectdb_leak_warning_lines": [],
+            "objectdb_leak_warning_count": 0,
+            "functional_marker_observed": false,
+            "formal_evidence_status": "MISSING",
+            "formal_evidence_reason": "legacy_run_bound_checks_missing",
+            "receipt_validation_reasons": [
+              "framework_receipt_not_pass"
+            ],
+            "candidate_receipt_correlation": false,
+            "upstream_result": "NOT_RUN",
+            "raw_log_paths": [
+              "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct62_mode_transaction\\logs\\mode_reload_transaction_profile_20261010_test.stdout.log",
+              "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct62_mode_transaction\\logs\\mode_reload_transaction_profile_20261010_test.stderr.log",
+              "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct62_mode_transaction\\logs\\mode_reload_transaction_profile_20261010_test.godot.log"
+            ],
+            "receipt_path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\framework\\mode_reload_transaction_profile_20261010_test.result.json",
+            "expected_scene_id": "mode_reload_transaction_profile_20261010_test",
+            "expected_invocation_id": "f1002d88-e778-4ad1-a83d-613e1773eec7"
+          },
+          "framework_run_id": "10929fbd-9288-437f-b1c5-3f1752bc7e7d",
+          "framework_receipt_valid": false,
+          "source_content_sha256": "06ec5c76010b87dd05a282ca1817d4dad7130177b737c23ac075e266ecf68169",
+          "source_binding_scope": "External immutable input freeze required; env label alone is not a source scan",
+          "engine_fingerprints": [
+            {
+              "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+              "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+              "bytes": 198152
+            },
+            {
+              "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64.exe",
+              "sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+              "bytes": 178485256
+            }
+          ],
+          "formal_evidence_status": "MISSING",
+          "formal_evidence_reason": "Requires matching external source/input freeze and this native result",
+          "result": "FAIL",
+          "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+        },
+        {
+          "test_name": "mode_reload_transaction_later_20261010_test",
+          "test_path": "tests/framework/mode_reload_transaction_later_20261010_test.tscn",
+          "wrapper_process_id": 24564,
+          "wrapper_started_utc": "2026-10-10T03:14:51.0644102Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct62_mode_transaction\\runner_f1002d88-e778-4ad1-a83d-613e1773eec7",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-10T03:15:21.0644930Z",
+          "native_exit_observed_utc": "2026-10-10T03:15:07.0859816Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "cleanup_warning_evidence": {
+            "status": "PASS",
+            "allowlisted_errors": {
+              "string_formatting": {
+                "count": 0,
+                "lines": []
+              },
+              "resources_in_use": {
+                "count": 0,
+                "lines": []
+              },
+              "rid_leak": {
+                "count": 0,
+                "lines": []
+              },
+              "null_parameter": {
+                "count": 0,
+                "lines": []
+              }
+            },
+            "unknown_error_lines": [],
+            "unknown_error_count": 0,
+            "objectdb_leak_warning_lines": [],
+            "objectdb_leak_warning_count": 0,
+            "functional_marker_observed": true,
+            "formal_evidence_status": "MISSING",
+            "formal_evidence_reason": "upstream_native_and_full_receipt_validation_required",
+            "receipt_validation_reasons": [],
+            "candidate_receipt_correlation": true,
+            "upstream_result": "NOT_RUN",
+            "raw_log_paths": [
+              "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct62_mode_transaction\\logs\\mode_reload_transaction_later_20261010_test.stdout.log",
+              "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct62_mode_transaction\\logs\\mode_reload_transaction_later_20261010_test.stderr.log",
+              "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct62_mode_transaction\\logs\\mode_reload_transaction_later_20261010_test.godot.log"
+            ],
+            "receipt_path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\framework\\mode_reload_transaction_later_20261010_test.result.json",
+            "expected_scene_id": "mode_reload_transaction_later_20261010_test",
+            "expected_invocation_id": "f1002d88-e778-4ad1-a83d-613e1773eec7"
+          },
+          "framework_run_id": "1dbf322a-7fe0-4477-acca-ab9f8abf60f3",
+          "framework_receipt_valid": true,
+          "source_content_sha256": "06ec5c76010b87dd05a282ca1817d4dad7130177b737c23ac075e266ecf68169",
+          "source_binding_scope": "External immutable input freeze required; env label alone is not a source scan",
+          "engine_fingerprints": [
+            {
+              "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+              "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+              "bytes": 198152
+            },
+            {
+              "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64.exe",
+              "sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+              "bytes": 178485256
+            }
+          ],
+          "formal_evidence_status": "PASS",
+          "formal_evidence_reason": "Requires matching external source/input freeze and this native result",
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "mode_reload_transaction_failure_boundary_20261010_test",
+          "test_path": "tests/framework/mode_reload_transaction_failure_boundary_20261010_test.tscn",
+          "wrapper_process_id": 9020,
+          "wrapper_started_utc": "2026-10-10T03:15:08.5967801Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct62_mode_transaction\\runner_f1002d88-e778-4ad1-a83d-613e1773eec7",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-10T03:15:38.5968730Z",
+          "native_exit_observed_utc": "2026-10-10T03:15:35.8777807Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "cleanup_warning_evidence": {
+            "status": "PASS",
+            "allowlisted_errors": {
+              "string_formatting": {
+                "count": 0,
+                "lines": []
+              },
+              "resources_in_use": {
+                "count": 0,
+                "lines": []
+              },
+              "rid_leak": {
+                "count": 0,
+                "lines": []
+              },
+              "null_parameter": {
+                "count": 0,
+                "lines": []
+              }
+            },
+            "unknown_error_lines": [],
+            "unknown_error_count": 0,
+            "objectdb_leak_warning_lines": [],
+            "objectdb_leak_warning_count": 0,
+            "functional_marker_observed": true,
+            "formal_evidence_status": "MISSING",
+            "formal_evidence_reason": "upstream_native_and_full_receipt_validation_required",
+            "receipt_validation_reasons": [],
+            "candidate_receipt_correlation": true,
+            "upstream_result": "NOT_RUN",
+            "raw_log_paths": [
+              "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct62_mode_transaction\\logs\\mode_reload_transaction_failure_boundary_20261010_test.stdout.log",
+              "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct62_mode_transaction\\logs\\mode_reload_transaction_failure_boundary_20261010_test.stderr.log",
+              "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct62_mode_transaction\\logs\\mode_reload_transaction_failure_boundary_20261010_test.godot.log"
+            ],
+            "receipt_path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\framework\\mode_reload_transaction_failure_boundary_20261010_test.result.json",
+            "expected_scene_id": "mode_reload_transaction_failure_boundary_20261010_test",
+            "expected_invocation_id": "f1002d88-e778-4ad1-a83d-613e1773eec7"
+          },
+          "framework_run_id": "53bf35c5-d97a-4116-aae6-13e01e7642c3",
+          "framework_receipt_valid": true,
+          "source_content_sha256": "06ec5c76010b87dd05a282ca1817d4dad7130177b737c23ac075e266ecf68169",
+          "source_binding_scope": "External immutable input freeze required; env label alone is not a source scan",
+          "engine_fingerprints": [
+            {
+              "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+              "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+              "bytes": 198152
+            },
+            {
+              "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64.exe",
+              "sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+              "bytes": 178485256
+            }
+          ],
+          "formal_evidence_status": "PASS",
+          "formal_evidence_reason": "Requires matching external source/input freeze and this native result",
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "mode_reload_transaction_direct_failure_20261010_test",
+          "test_path": "tests/framework/mode_reload_transaction_direct_failure_20261010_test.tscn",
+          "wrapper_process_id": 22308,
+          "wrapper_started_utc": "2026-10-10T03:15:37.4681132Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct62_mode_transaction\\runner_f1002d88-e778-4ad1-a83d-613e1773eec7",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-10T03:16:07.4682158Z",
+          "native_exit_observed_utc": "2026-10-10T03:15:57.7091344Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 1,
+          "engine_log_failure_count": 1,
+          "cleanup_warning_evidence": {
+            "status": "FAIL",
+            "allowlisted_errors": {
+              "string_formatting": {
+                "count": 0,
+                "lines": []
+              },
+              "resources_in_use": {
+                "count": 0,
+                "lines": []
+              },
+              "rid_leak": {
+                "count": 0,
+                "lines": []
+              },
+              "null_parameter": {
+                "count": 0,
+                "lines": []
+              }
+            },
+            "unknown_error_lines": [
+              "ERROR: 五层内容注册表未能生成Merged Game Database",
+              "ERROR: 五层内容注册表未能生成Merged Game Database"
+            ],
+            "unknown_error_count": 2,
+            "objectdb_leak_warning_lines": [],
+            "objectdb_leak_warning_count": 0,
+            "functional_marker_observed": true,
+            "formal_evidence_status": "MISSING",
+            "formal_evidence_reason": "upstream_native_and_full_receipt_validation_required",
+            "receipt_validation_reasons": [],
+            "candidate_receipt_correlation": true,
+            "upstream_result": "NOT_RUN",
+            "raw_log_paths": [
+              "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct62_mode_transaction\\logs\\mode_reload_transaction_direct_failure_20261010_test.stdout.log",
+              "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct62_mode_transaction\\logs\\mode_reload_transaction_direct_failure_20261010_test.stderr.log",
+              "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct62_mode_transaction\\logs\\mode_reload_transaction_direct_failure_20261010_test.godot.log"
+            ],
+            "receipt_path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\framework\\mode_reload_transaction_direct_failure_20261010_test.result.json",
+            "expected_scene_id": "mode_reload_transaction_direct_failure_20261010_test",
+            "expected_invocation_id": "f1002d88-e778-4ad1-a83d-613e1773eec7"
+          },
+          "framework_run_id": "3cd59bb2-c548-4648-bcdd-1989471311d7",
+          "framework_receipt_valid": true,
+          "source_content_sha256": "06ec5c76010b87dd05a282ca1817d4dad7130177b737c23ac075e266ecf68169",
+          "source_binding_scope": "External immutable input freeze required; env label alone is not a source scan",
+          "engine_fingerprints": [
+            {
+              "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+              "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+              "bytes": 198152
+            },
+            {
+              "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64.exe",
+              "sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+              "bytes": 178485256
+            }
+          ],
+          "formal_evidence_status": "MISSING",
+          "formal_evidence_reason": "Requires matching external source/input freeze and this native result",
+          "result": "FAIL",
+          "reason": "stderr_failures_1;engine_log_failures_1"
+        }
+      ],
+      "receipts": [
+        {
+          "scene": "tests/framework/mode_reload_transaction_stale_20261010_test.tscn",
+          "run_id": "0fc2f246-56d3-47c7-8fdb-1fce08bd2c13",
+          "receipt": "outputs/test_logs/v109_direct62_mode_transaction/raw/0fc2f246-56d3-47c7-8fdb-1fce08bd2c13/mode_reload_transaction_stale_20261010_test.result.json",
+          "count": 51,
+          "passed": 51,
+          "failed": 0,
+          "status": "PASS",
+          "failed_checks": []
+        },
+        {
+          "scene": "tests/framework/mode_reload_transaction_profile_20261010_test.tscn",
+          "run_id": "10929fbd-9288-437f-b1c5-3f1752bc7e7d",
+          "receipt": "outputs/test_logs/v109_direct62_mode_transaction/raw/10929fbd-9288-437f-b1c5-3f1752bc7e7d/mode_reload_transaction_profile_20261010_test.result.json",
+          "count": 60,
+          "passed": 59,
+          "failed": 1,
+          "status": "FAIL",
+          "failed_checks": [
+            {
+              "id": 53,
+              "label": "complete successful reload restores the writer's mode/later/level/gold/inventory/equipment/identity",
+              "passed": false
+            }
+          ]
+        },
+        {
+          "scene": "tests/framework/mode_reload_transaction_later_20261010_test.tscn",
+          "run_id": "1dbf322a-7fe0-4477-acca-ab9f8abf60f3",
+          "receipt": "outputs/test_logs/v109_direct62_mode_transaction/raw/1dbf322a-7fe0-4477-acca-ab9f8abf60f3/mode_reload_transaction_later_20261010_test.result.json",
+          "count": 39,
+          "passed": 39,
+          "failed": 0,
+          "status": "PASS",
+          "failed_checks": []
+        },
+        {
+          "scene": "tests/framework/mode_reload_transaction_failure_boundary_20261010_test.tscn",
+          "run_id": "53bf35c5-d97a-4116-aae6-13e01e7642c3",
+          "receipt": "outputs/test_logs/v109_direct62_mode_transaction/raw/53bf35c5-d97a-4116-aae6-13e01e7642c3/mode_reload_transaction_failure_boundary_20261010_test.result.json",
+          "count": 95,
+          "passed": 95,
+          "failed": 0,
+          "status": "PASS",
+          "failed_checks": []
+        },
+        {
+          "scene": "tests/framework/mode_reload_transaction_direct_failure_20261010_test.tscn",
+          "run_id": "3cd59bb2-c548-4648-bcdd-1989471311d7",
+          "receipt": "outputs/test_logs/v109_direct62_mode_transaction/raw/3cd59bb2-c548-4648-bcdd-1989471311d7/mode_reload_transaction_direct_failure_20261010_test.result.json",
+          "count": 173,
+          "passed": 173,
+          "failed": 0,
+          "status": "PASS",
+          "failed_checks": []
+        }
+      ],
+      "source_blob_artifacts": [
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/source_git_blobs/scripts/game_data.gd",
+          "sha256": "ba1b7a6067962f29687d5558f62f0587a4cf795034ffac56610a74c628a0c20c",
+          "bytes": 182063
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/source_git_blobs/scripts/player_state.gd",
+          "sha256": "7c8d840f32ddb148eb1f703e72d64fa570a1dc6bcb9c6c040f7a7e8714813f3e",
+          "bytes": 450243
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/source_git_blobs/scripts/startup_loading.gd",
+          "sha256": "7d382a0a0ae640dad6d8e069609453b9600ec25a91f5c6661b423434f047b295",
+          "bytes": 35951
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/source_git_blobs/scripts/layers/runtime/content_layer_registry.gd",
+          "sha256": "9bc46367b0c89e2383f561b2b3571ecc39cae74640bf60158d3be18dc8bb7d80",
+          "bytes": 39031
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/source_git_blobs/scripts/layers/runtime/prepared_content_configuration.gd",
+          "sha256": "cf9cb0b72a9fa37635caa91237492e7221c4965ff400b548b29b7396b07a725e",
+          "bytes": 606
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/source_git_blobs/scripts/layers/runtime/game_mode_service.gd",
+          "sha256": "caafed85b8ef0310cb5148388e42ee03b9e3ccf12f33e30a299d3ab5c1f25093",
+          "bytes": 2477
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/source_git_blobs/scripts/layers/runtime/runtime_service_facade.gd",
+          "sha256": "a1ecefadd311fffb27cedd63b8ebb2c350fca4c494436c019aa10f20814325ea",
+          "bytes": 685
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/source_git_blobs/tests/framework/mode_reload_transaction_20261010_test.gd",
+          "sha256": "ef985717250842ee8ac564fff9efcd02422f9342e51b9aa881003c21c1bb7eef",
+          "bytes": 45105
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/source_git_blobs/tests/framework/mode_reload_transaction_20261010_test.tscn",
+          "sha256": "696a43c4cd6f237d742366a661f2c6a971cf1d08ccbe352d87e2197e4a13598f",
+          "bytes": 227
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/source_git_blobs/tests/framework/mode_reload_transaction_input_composed_20261010_test.tscn",
+          "sha256": "85db5e3e182278f0c80bcc20eee27b4e3f81834f6fde1836a30854b25c6351f3",
+          "bytes": 274
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/source_git_blobs/tests/framework/mode_reload_transaction_stale_20261010_test.tscn",
+          "sha256": "1137dc8b15fdd8976d1f5f04d4697d90a3daf73da66341138b3a06556901811d",
+          "bytes": 257
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/source_git_blobs/tests/framework/mode_reload_transaction_profile_20261010_test.tscn",
+          "sha256": "5178db2b93864c5424531b9b3d5d75589c0a0437b868896ed46bbb54544966d6",
+          "bytes": 261
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/source_git_blobs/tests/framework/mode_reload_transaction_later_20261010_test.tscn",
+          "sha256": "05df3c7efe99708230d5e345752a187034f4f91dafae4374c16163654e89a098",
+          "bytes": 257
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/source_git_blobs/tests/framework/mode_reload_transaction_failure_boundary_20261010_test.tscn",
+          "sha256": "aa8bb1700d680f9b925fc53f1b0ec48658d1e7c44de5d674d544562f5c1970f1",
+          "bytes": 278
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/source_git_blobs/tests/framework/mode_reload_transaction_direct_failure_20261010_test.tscn",
+          "sha256": "214cd702c40720e3862c912198e3820fe7bace4956ea78cf15bd896f2f42da44",
+          "bytes": 274
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/source_git_blobs/scripts/equipment_rules.gd",
+          "sha256": "589e729fbd5c553daa575b467bc5912440bec411a4c32e58f4838a2bd0033933",
+          "bytes": 34659
+        }
+      ]
+    },
+    {
+      "number": 63,
+      "candidate_tree": "e4fc5f1585d8040a83f02250657fea9ee1a55f3d",
+      "actual_input_fingerprint": "70a063165afac9d81a624ada293c3d2afd7d1ccb2e0c9f3a68c688d1e7a5c58d",
+      "input_count": 2543,
+      "engine": {
+        "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+        "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+        "bytes": 198152
+      },
+      "main_index_sha256": "ddacea4eed570faed0a6003c87352552e74e902874b5dee61d8863a2316e29d7",
+      "postverification": "PASS",
+      "actual_command": {
+        "script": "tools/run_godot_tests.ps1",
+        "TestPaths": [
+          "tests/framework/mode_reload_transaction_profile_20261010_test.tscn"
+        ],
+        "TimeoutSeconds": 30,
+        "Verbose": true
+      },
+      "environment": {
+        "GIT_INDEX_FILE": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\wake_drop_v108_review_followup_20261009\\B08_NATIVE_FREEZE_63.index",
+        "HARDCORE_R3_CONTENT_SHA256": "70a063165afac9d81a624ada293c3d2afd7d1ccb2e0c9f3a68c688d1e7a5c58d",
+        "HARDCORE_AUDIT_LOG_ROOT": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct63_mode_transaction\\logs",
+        "HARDCORE_AUDIT_EVIDENCE_ROOT": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct63_mode_transaction\\raw",
+        "HARDCORE_AUDIT_RUNTIME_APPDATA": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct63_mode_transaction"
+      },
+      "rerun_reason": "Native62 profile recovery returned success but failed the complete restored-state predicate (59/60). Retain that assertion and all load/save steps; add only expected/current field diagnostics to classify the unresolved difference. The other four partitions are not repeated.",
+      "invocation_id": "e4206557-5f7d-4c76-9a40-eb0eca18261d",
+      "runtime_environment": {
+        "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+        "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct63_mode_transaction\\runner_e4206557-5f7d-4c76-9a40-eb0eca18261d",
+        "runner_process_id": 13792
+      },
+      "runner": {
+        "total": 1,
+        "passed": 0,
+        "failed": 1,
+        "engine_log_errors": 0
+      },
+      "native_results": [
+        {
+          "test_name": "mode_reload_transaction_profile_20261010_test",
+          "test_path": "tests/framework/mode_reload_transaction_profile_20261010_test.tscn",
+          "wrapper_process_id": 22504,
+          "wrapper_started_utc": "2026-10-10T03:17:56.1263209Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct63_mode_transaction\\runner_e4206557-5f7d-4c76-9a40-eb0eca18261d",
+          "fixed_fps": 0,
+          "pass_marker_found": false,
+          "process_exited": true,
+          "wrapper_exit_code": 1,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-10T03:18:26.1300854Z",
+          "native_exit_observed_utc": "2026-10-10T03:18:15.6821722Z",
+          "effective_exit_code": 1,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "cleanup_warning_evidence": {
+            "status": "PASS",
+            "allowlisted_errors": {
+              "string_formatting": {
+                "count": 0,
+                "lines": []
+              },
+              "resources_in_use": {
+                "count": 0,
+                "lines": []
+              },
+              "rid_leak": {
+                "count": 0,
+                "lines": []
+              },
+              "null_parameter": {
+                "count": 0,
+                "lines": []
+              }
+            },
+            "unknown_error_lines": [],
+            "unknown_error_count": 0,
+            "objectdb_leak_warning_lines": [],
+            "objectdb_leak_warning_count": 0,
+            "functional_marker_observed": false,
+            "formal_evidence_status": "MISSING",
+            "formal_evidence_reason": "legacy_run_bound_checks_missing",
+            "receipt_validation_reasons": [
+              "framework_receipt_not_pass"
+            ],
+            "candidate_receipt_correlation": false,
+            "upstream_result": "NOT_RUN",
+            "raw_log_paths": [
+              "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct63_mode_transaction\\logs\\mode_reload_transaction_profile_20261010_test.stdout.log",
+              "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct63_mode_transaction\\logs\\mode_reload_transaction_profile_20261010_test.stderr.log",
+              "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct63_mode_transaction\\logs\\mode_reload_transaction_profile_20261010_test.godot.log"
+            ],
+            "receipt_path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\framework\\mode_reload_transaction_profile_20261010_test.result.json",
+            "expected_scene_id": "mode_reload_transaction_profile_20261010_test",
+            "expected_invocation_id": "e4206557-5f7d-4c76-9a40-eb0eca18261d"
+          },
+          "framework_run_id": "a9f5302d-4dc1-482a-b4fb-bc1a09d83637",
+          "framework_receipt_valid": false,
+          "source_content_sha256": "70a063165afac9d81a624ada293c3d2afd7d1ccb2e0c9f3a68c688d1e7a5c58d",
+          "source_binding_scope": "External immutable input freeze required; env label alone is not a source scan",
+          "engine_fingerprints": [
+            {
+              "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+              "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+              "bytes": 198152
+            },
+            {
+              "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64.exe",
+              "sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+              "bytes": 178485256
+            }
+          ],
+          "formal_evidence_status": "MISSING",
+          "formal_evidence_reason": "Requires matching external source/input freeze and this native result",
+          "result": "FAIL",
+          "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+        }
+      ],
+      "receipts": [
+        {
+          "scene": "tests/framework/mode_reload_transaction_profile_20261010_test.tscn",
+          "run_id": "a9f5302d-4dc1-482a-b4fb-bc1a09d83637",
+          "receipt": "outputs/test_logs/v109_direct63_mode_transaction/raw/a9f5302d-4dc1-482a-b4fb-bc1a09d83637/mode_reload_transaction_profile_20261010_test.result.json",
+          "count": 60,
+          "passed": 59,
+          "failed": 1,
+          "status": "FAIL",
+          "failed_checks": [
+            {
+              "id": 53,
+              "label": "complete successful reload restores the writer's mode/later/level/gold/inventory/equipment/identity",
+              "passed": false
+            }
+          ]
+        }
+      ],
+      "source_blob_artifacts": [
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native63/source_git_blobs/scripts/game_data.gd",
+          "sha256": "ba1b7a6067962f29687d5558f62f0587a4cf795034ffac56610a74c628a0c20c",
+          "bytes": 182063
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native63/source_git_blobs/scripts/player_state.gd",
+          "sha256": "7c8d840f32ddb148eb1f703e72d64fa570a1dc6bcb9c6c040f7a7e8714813f3e",
+          "bytes": 450243
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native63/source_git_blobs/scripts/startup_loading.gd",
+          "sha256": "7d382a0a0ae640dad6d8e069609453b9600ec25a91f5c6661b423434f047b295",
+          "bytes": 35951
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native63/source_git_blobs/scripts/layers/runtime/content_layer_registry.gd",
+          "sha256": "9bc46367b0c89e2383f561b2b3571ecc39cae74640bf60158d3be18dc8bb7d80",
+          "bytes": 39031
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native63/source_git_blobs/scripts/layers/runtime/prepared_content_configuration.gd",
+          "sha256": "cf9cb0b72a9fa37635caa91237492e7221c4965ff400b548b29b7396b07a725e",
+          "bytes": 606
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native63/source_git_blobs/scripts/layers/runtime/game_mode_service.gd",
+          "sha256": "caafed85b8ef0310cb5148388e42ee03b9e3ccf12f33e30a299d3ab5c1f25093",
+          "bytes": 2477
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native63/source_git_blobs/scripts/layers/runtime/runtime_service_facade.gd",
+          "sha256": "a1ecefadd311fffb27cedd63b8ebb2c350fca4c494436c019aa10f20814325ea",
+          "bytes": 685
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native63/source_git_blobs/tests/framework/mode_reload_transaction_20261010_test.gd",
+          "sha256": "3068f87df3b2baf0482017a74edb244e7b6ce58371538341a2c4e312a4eccb3f",
+          "bytes": 45472
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native63/source_git_blobs/tests/framework/mode_reload_transaction_20261010_test.tscn",
+          "sha256": "696a43c4cd6f237d742366a661f2c6a971cf1d08ccbe352d87e2197e4a13598f",
+          "bytes": 227
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native63/source_git_blobs/tests/framework/mode_reload_transaction_input_composed_20261010_test.tscn",
+          "sha256": "85db5e3e182278f0c80bcc20eee27b4e3f81834f6fde1836a30854b25c6351f3",
+          "bytes": 274
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native63/source_git_blobs/tests/framework/mode_reload_transaction_stale_20261010_test.tscn",
+          "sha256": "1137dc8b15fdd8976d1f5f04d4697d90a3daf73da66341138b3a06556901811d",
+          "bytes": 257
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native63/source_git_blobs/tests/framework/mode_reload_transaction_profile_20261010_test.tscn",
+          "sha256": "5178db2b93864c5424531b9b3d5d75589c0a0437b868896ed46bbb54544966d6",
+          "bytes": 261
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native63/source_git_blobs/tests/framework/mode_reload_transaction_later_20261010_test.tscn",
+          "sha256": "05df3c7efe99708230d5e345752a187034f4f91dafae4374c16163654e89a098",
+          "bytes": 257
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native63/source_git_blobs/tests/framework/mode_reload_transaction_failure_boundary_20261010_test.tscn",
+          "sha256": "aa8bb1700d680f9b925fc53f1b0ec48658d1e7c44de5d674d544562f5c1970f1",
+          "bytes": 278
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native63/source_git_blobs/tests/framework/mode_reload_transaction_direct_failure_20261010_test.tscn",
+          "sha256": "214cd702c40720e3862c912198e3820fe7bace4956ea78cf15bd896f2f42da44",
+          "bytes": 274
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native63/source_git_blobs/scripts/equipment_rules.gd",
+          "sha256": "589e729fbd5c553daa575b467bc5912440bec411a4c32e58f4838a2bd0033933",
+          "bytes": 34659
+        }
+      ]
+    },
+    {
+      "number": 64,
+      "candidate_tree": "8a6fc0cade1338605e0378f625774111bd88a9ed",
+      "actual_input_fingerprint": "2df0cca1f1309653b0f8a75a08011b02d64c8459b0254aa7837e4bc9e8b5b95e",
+      "input_count": 2543,
+      "engine": {
+        "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+        "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+        "bytes": 198152
+      },
+      "main_index_sha256": "ddacea4eed570faed0a6003c87352552e74e902874b5dee61d8863a2316e29d7",
+      "postverification": "PASS",
+      "actual_command": {
+        "script": "tools/run_godot_tests.ps1",
+        "TestPaths": [
+          "tests/framework/mode_reload_transaction_profile_20261010_test.tscn"
+        ],
+        "TimeoutSeconds": 30,
+        "Verbose": true
+      },
+      "environment": {
+        "GIT_INDEX_FILE": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\wake_drop_v108_review_followup_20261009\\B08_NATIVE_FREEZE_64.index",
+        "HARDCORE_R3_CONTENT_SHA256": "2df0cca1f1309653b0f8a75a08011b02d64c8459b0254aa7837e4bc9e8b5b95e",
+        "HARDCORE_AUDIT_LOG_ROOT": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct64_mode_transaction\\logs",
+        "HARDCORE_AUDIT_EVIDENCE_ROOT": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct64_mode_transaction\\raw",
+        "HARDCORE_AUDIT_RUNTIME_APPDATA": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct64_mode_transaction"
+      },
+      "rerun_reason": "Native63 isolated the sole restored-state difference to JSON integral number int/float representation in inventory/equipment. The successful wire restoration predicate now compares every original field in the formal JSON numeric domain; no field, assertion, failed-load exact comparison or production input was removed. Retain Native62/63 FAIL evidence; rerun only this profile partition.",
+      "invocation_id": "4670d65d-0f63-4b58-9995-a30d144a5df9",
+      "runtime_environment": {
+        "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+        "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct64_mode_transaction\\runner_4670d65d-0f63-4b58-9995-a30d144a5df9",
+        "runner_process_id": 18376
+      },
+      "runner": {
+        "total": 1,
+        "passed": 1,
+        "failed": 0,
+        "engine_log_errors": 0
+      },
+      "native_results": [
+        {
+          "test_name": "mode_reload_transaction_profile_20261010_test",
+          "test_path": "tests/framework/mode_reload_transaction_profile_20261010_test.tscn",
+          "wrapper_process_id": 6696,
+          "wrapper_started_utc": "2026-10-10T03:19:48.4997548Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct64_mode_transaction\\runner_4670d65d-0f63-4b58-9995-a30d144a5df9",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-10T03:20:18.5037194Z",
+          "native_exit_observed_utc": "2026-10-10T03:20:07.8732436Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "cleanup_warning_evidence": {
+            "status": "PASS",
+            "allowlisted_errors": {
+              "string_formatting": {
+                "count": 0,
+                "lines": []
+              },
+              "resources_in_use": {
+                "count": 0,
+                "lines": []
+              },
+              "rid_leak": {
+                "count": 0,
+                "lines": []
+              },
+              "null_parameter": {
+                "count": 0,
+                "lines": []
+              }
+            },
+            "unknown_error_lines": [],
+            "unknown_error_count": 0,
+            "objectdb_leak_warning_lines": [],
+            "objectdb_leak_warning_count": 0,
+            "functional_marker_observed": true,
+            "formal_evidence_status": "MISSING",
+            "formal_evidence_reason": "upstream_native_and_full_receipt_validation_required",
+            "receipt_validation_reasons": [],
+            "candidate_receipt_correlation": true,
+            "upstream_result": "NOT_RUN",
+            "raw_log_paths": [
+              "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct64_mode_transaction\\logs\\mode_reload_transaction_profile_20261010_test.stdout.log",
+              "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct64_mode_transaction\\logs\\mode_reload_transaction_profile_20261010_test.stderr.log",
+              "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct64_mode_transaction\\logs\\mode_reload_transaction_profile_20261010_test.godot.log"
+            ],
+            "receipt_path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\framework\\mode_reload_transaction_profile_20261010_test.result.json",
+            "expected_scene_id": "mode_reload_transaction_profile_20261010_test",
+            "expected_invocation_id": "4670d65d-0f63-4b58-9995-a30d144a5df9"
+          },
+          "framework_run_id": "70ff651c-dc98-4158-be79-603a9cfffccc",
+          "framework_receipt_valid": true,
+          "source_content_sha256": "2df0cca1f1309653b0f8a75a08011b02d64c8459b0254aa7837e4bc9e8b5b95e",
+          "source_binding_scope": "External immutable input freeze required; env label alone is not a source scan",
+          "engine_fingerprints": [
+            {
+              "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+              "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+              "bytes": 198152
+            },
+            {
+              "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64.exe",
+              "sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+              "bytes": 178485256
+            }
+          ],
+          "formal_evidence_status": "PASS",
+          "formal_evidence_reason": "Requires matching external source/input freeze and this native result",
+          "result": "PASS",
+          "reason": ""
+        }
+      ],
+      "receipts": [
+        {
+          "scene": "tests/framework/mode_reload_transaction_profile_20261010_test.tscn",
+          "run_id": "70ff651c-dc98-4158-be79-603a9cfffccc",
+          "receipt": "outputs/test_logs/v109_direct64_mode_transaction/raw/70ff651c-dc98-4158-be79-603a9cfffccc/mode_reload_transaction_profile_20261010_test.result.json",
+          "count": 60,
+          "passed": 60,
+          "failed": 0,
+          "status": "PASS",
+          "failed_checks": []
+        }
+      ],
+      "source_blob_artifacts": [
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native64/source_git_blobs/scripts/game_data.gd",
+          "sha256": "ba1b7a6067962f29687d5558f62f0587a4cf795034ffac56610a74c628a0c20c",
+          "bytes": 182063
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native64/source_git_blobs/scripts/player_state.gd",
+          "sha256": "7c8d840f32ddb148eb1f703e72d64fa570a1dc6bcb9c6c040f7a7e8714813f3e",
+          "bytes": 450243
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native64/source_git_blobs/scripts/startup_loading.gd",
+          "sha256": "7d382a0a0ae640dad6d8e069609453b9600ec25a91f5c6661b423434f047b295",
+          "bytes": 35951
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native64/source_git_blobs/scripts/layers/runtime/content_layer_registry.gd",
+          "sha256": "9bc46367b0c89e2383f561b2b3571ecc39cae74640bf60158d3be18dc8bb7d80",
+          "bytes": 39031
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native64/source_git_blobs/scripts/layers/runtime/prepared_content_configuration.gd",
+          "sha256": "cf9cb0b72a9fa37635caa91237492e7221c4965ff400b548b29b7396b07a725e",
+          "bytes": 606
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native64/source_git_blobs/scripts/layers/runtime/game_mode_service.gd",
+          "sha256": "caafed85b8ef0310cb5148388e42ee03b9e3ccf12f33e30a299d3ab5c1f25093",
+          "bytes": 2477
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native64/source_git_blobs/scripts/layers/runtime/runtime_service_facade.gd",
+          "sha256": "a1ecefadd311fffb27cedd63b8ebb2c350fca4c494436c019aa10f20814325ea",
+          "bytes": 685
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native64/source_git_blobs/tests/framework/mode_reload_transaction_20261010_test.gd",
+          "sha256": "24d712dbadf25472b1e050109bdbf5d711b515e4b5d346b66439335069817260",
+          "bytes": 45914
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native64/source_git_blobs/tests/framework/mode_reload_transaction_20261010_test.tscn",
+          "sha256": "696a43c4cd6f237d742366a661f2c6a971cf1d08ccbe352d87e2197e4a13598f",
+          "bytes": 227
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native64/source_git_blobs/tests/framework/mode_reload_transaction_input_composed_20261010_test.tscn",
+          "sha256": "85db5e3e182278f0c80bcc20eee27b4e3f81834f6fde1836a30854b25c6351f3",
+          "bytes": 274
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native64/source_git_blobs/tests/framework/mode_reload_transaction_stale_20261010_test.tscn",
+          "sha256": "1137dc8b15fdd8976d1f5f04d4697d90a3daf73da66341138b3a06556901811d",
+          "bytes": 257
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native64/source_git_blobs/tests/framework/mode_reload_transaction_profile_20261010_test.tscn",
+          "sha256": "5178db2b93864c5424531b9b3d5d75589c0a0437b868896ed46bbb54544966d6",
+          "bytes": 261
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native64/source_git_blobs/tests/framework/mode_reload_transaction_later_20261010_test.tscn",
+          "sha256": "05df3c7efe99708230d5e345752a187034f4f91dafae4374c16163654e89a098",
+          "bytes": 257
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native64/source_git_blobs/tests/framework/mode_reload_transaction_failure_boundary_20261010_test.tscn",
+          "sha256": "aa8bb1700d680f9b925fc53f1b0ec48658d1e7c44de5d674d544562f5c1970f1",
+          "bytes": 278
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native64/source_git_blobs/tests/framework/mode_reload_transaction_direct_failure_20261010_test.tscn",
+          "sha256": "214cd702c40720e3862c912198e3820fe7bace4956ea78cf15bd896f2f42da44",
+          "bytes": 274
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native64/source_git_blobs/scripts/equipment_rules.gd",
+          "sha256": "589e729fbd5c553daa575b467bc5912440bec411a4c32e58f4838a2bd0033933",
+          "bytes": 34659
+        }
+      ]
+    }
+  ],
+  "retained_files": [
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native57/B08_NATIVE_FREEZE_57.json",
+      "sha256": "bf35743b3dea7991c6851c499cb206a0068f16adef95b03607d5f0d4f627f069",
+      "bytes": 491460
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native57/B08_NATIVE_SPEC_57.json",
+      "sha256": "2a1b7363999cad6c265517b5125be605d3d7cbbeaa016a806d59b8643231ac64",
+      "bytes": 1217
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native57/B08_NATIVE_FREEZE_57_POSTVERIFY.json",
+      "sha256": "cb78054b1d66b90a2ffe9cac2e92a9ac4b7d5d2e3a58bb9f0002d8816164aa78",
+      "bytes": 468
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native57/B08_NATIVE57_DRIVER.txt",
+      "sha256": "4e78cfcea962d6405d11e358becd7714c35229209568a6169345384cfb54022b",
+      "bytes": 5286
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native57/logs/mode_reload_transaction_20261010_test.godot.log",
+      "sha256": "42ff3aa2cab39b3136dbc6915eaa6fbba5a810427decf35d4c1f586b18cda3bc",
+      "bytes": 4701
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native57/logs/mode_reload_transaction_20261010_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native57/logs/mode_reload_transaction_20261010_test.stdout.log",
+      "sha256": "76713037804c9b29b508fab79ba92ef30aa4585458718e15fbce05af58d3e700",
+      "bytes": 4793
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native57/logs/runner_results_adhoc_20261010_104302_389_10056.json",
+      "sha256": "1b7f2de6b701b9899b9e57173a80b35713cce9243daf6d72d3cab3a927580385",
+      "bytes": 5077
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native57/raw/cb3ba97d-32aa-48ef-a38c-01813e327f2e/mode_reload_transaction_20261010_test.godot.log",
+      "sha256": "42ff3aa2cab39b3136dbc6915eaa6fbba5a810427decf35d4c1f586b18cda3bc",
+      "bytes": 4701
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native57/raw/cb3ba97d-32aa-48ef-a38c-01813e327f2e/mode_reload_transaction_20261010_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native57/raw/cb3ba97d-32aa-48ef-a38c-01813e327f2e/mode_reload_transaction_20261010_test.stdout.log",
+      "sha256": "76713037804c9b29b508fab79ba92ef30aa4585458718e15fbce05af58d3e700",
+      "bytes": 4793
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native57/raw/cb3ba97d-32aa-48ef-a38c-01813e327f2e/native_handoffs.json",
+      "sha256": "60cbbf7e850ead3cc5ad3c811778e467ae0be2c8cfca123b6f98bb1a22c04ec7",
+      "bytes": 514
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native57/raw/cb3ba97d-32aa-48ef-a38c-01813e327f2e/native_result.json",
+      "sha256": "e6c0206ca6ba75074ee4c9a39fff01ad6d5e7a6937df724128938cf86d2e4a2a",
+      "bytes": 3432
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native58/B08_NATIVE_FREEZE_58.json",
+      "sha256": "b594dbb9d8cbc316297917a14cac40aa55c7361196e2f4313b113d9bbc7a534c",
+      "bytes": 491458
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native58/B08_NATIVE_SPEC_58.json",
+      "sha256": "ac06d7ec8217556d33bbd98315317ccb796ed507e06e235ac4dd52c8e66e79a2",
+      "bytes": 1215
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native58/B08_NATIVE_FREEZE_58_POSTVERIFY.json",
+      "sha256": "0f973f8f3b7f284f953ac45b5fdd1bf42561d52226c52b5f6d7ece7b4f5f4ce7",
+      "bytes": 468
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native58/B08_NATIVE58_DRIVER.txt",
+      "sha256": "daccdff058205d45115ae40c74e7d0d5ed342c80ac00b801e17f03c7ccc186cd",
+      "bytes": 15433
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native58/logs/mode_reload_transaction_20261010_test.godot.log",
+      "sha256": "705cee031af39375d86b8d0b931c6257a79a6a94ef1b4399ef20f7559eaadc92",
+      "bytes": 14754
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native58/logs/mode_reload_transaction_20261010_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native58/logs/mode_reload_transaction_20261010_test.stdout.log",
+      "sha256": "29e10c0db3d3e5ba158e6a4bb3e6dc098d61054e7c5fee90584fb81242bb1a41",
+      "bytes": 14940
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native58/logs/runner_results_adhoc_20261010_104617_031_17588.json",
+      "sha256": "206dbd2f14d893ab01a304d5be437922fe64c28c59bdced984370c4dd2e4e1e7",
+      "bytes": 5078
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native58/raw/375c0f8c-7233-43d8-aac7-06a64e914d33/mode_reload_transaction_20261010_test.godot.log",
+      "sha256": "705cee031af39375d86b8d0b931c6257a79a6a94ef1b4399ef20f7559eaadc92",
+      "bytes": 14754
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native58/raw/375c0f8c-7233-43d8-aac7-06a64e914d33/mode_reload_transaction_20261010_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native58/raw/375c0f8c-7233-43d8-aac7-06a64e914d33/mode_reload_transaction_20261010_test.stdout.log",
+      "sha256": "29e10c0db3d3e5ba158e6a4bb3e6dc098d61054e7c5fee90584fb81242bb1a41",
+      "bytes": 14940
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native58/raw/375c0f8c-7233-43d8-aac7-06a64e914d33/native_handoffs.json",
+      "sha256": "8384981ad772968bd69dac130f58fdf422d0cdbf3013ad27bb938c813b5c4914",
+      "bytes": 514
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native58/raw/375c0f8c-7233-43d8-aac7-06a64e914d33/native_result.json",
+      "sha256": "f91d32068339440943fa48cad096bcb39fc9b0ecc82cf99078f48e0fd4647522",
+      "bytes": 3433
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native59/B08_NATIVE_FREEZE_59.json",
+      "sha256": "2714abc8d8d1bbb50394747b0ad40758cb092dda40522e1195002d79ede84971",
+      "bytes": 493307
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native59/B08_NATIVE_SPEC_59.json",
+      "sha256": "c38f9d4dee268a5b74a0a7935325c7d14529603af8b202c2edb37b789c825b05",
+      "bytes": 1851
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native59/B08_NATIVE_FREEZE_59_POSTVERIFY.json",
+      "sha256": "aca261518df19e4178f17422903f24f77400ecabe728978c1c030b4c5effe836",
+      "bytes": 468
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native59/B08_NATIVE59_DRIVER.txt",
+      "sha256": "7740c3ed1db1f5b3c4d4455d4a218dc51735fa5691164df5955d551a4a8da59f",
+      "bytes": 5561
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native59/logs/mode_reload_transaction_input_composed_20261010_test.godot.log",
+      "sha256": "af5afba449b08ded52a58d744e44ca45d3c607b9294d1e0629395f6d62361177",
+      "bytes": 4852
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native59/logs/mode_reload_transaction_input_composed_20261010_test.stderr.log",
+      "sha256": "ede7b0036b589d30db95300936f48b68709e342e74630a42f5592e58827de307",
+      "bytes": 392
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native59/logs/mode_reload_transaction_input_composed_20261010_test.stdout.log",
+      "sha256": "8b5b92edd33d8ef3b20275ec94edc2a9cddcb831ce2e5f0c13d803c5f0fe5aa5",
+      "bytes": 4553
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native59/logs/runner_results_adhoc_20261010_110146_919_2128.json",
+      "sha256": "0b723653304bbf724a96fa8dc6956a2e0855990916f9a20263c81252ba9c6b97",
+      "bytes": 5514
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native59/raw/d5f8ea35-7cb2-41f7-bc43-aa7c57d3105b/mode_reload_transaction_input_composed_20261010_test.godot.log",
+      "sha256": "af5afba449b08ded52a58d744e44ca45d3c607b9294d1e0629395f6d62361177",
+      "bytes": 4852
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native59/raw/d5f8ea35-7cb2-41f7-bc43-aa7c57d3105b/mode_reload_transaction_input_composed_20261010_test.stderr.log",
+      "sha256": "ede7b0036b589d30db95300936f48b68709e342e74630a42f5592e58827de307",
+      "bytes": 392
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native59/raw/d5f8ea35-7cb2-41f7-bc43-aa7c57d3105b/mode_reload_transaction_input_composed_20261010_test.stdout.log",
+      "sha256": "8b5b92edd33d8ef3b20275ec94edc2a9cddcb831ce2e5f0c13d803c5f0fe5aa5",
+      "bytes": 4553
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native59/raw/d5f8ea35-7cb2-41f7-bc43-aa7c57d3105b/native_handoffs.json",
+      "sha256": "52639bdd0100bada35131be0e8eab126f4c7103b7c1a59661a9e14c5db31199c",
+      "bytes": 513
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native59/raw/d5f8ea35-7cb2-41f7-bc43-aa7c57d3105b/native_result.json",
+      "sha256": "bbdcbc4faa025f54c21db1ca17a1c69af961c06715a86b8af45de6743d5b1bf4",
+      "bytes": 3858
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native60/B08_NATIVE_FREEZE_60.json",
+      "sha256": "0f9395487d95600838160b1e5fd75d503fb0b042d327dd4749b2024fc87f83d7",
+      "bytes": 493200
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native60/B08_NATIVE_SPEC_60.json",
+      "sha256": "b77c6288a1569ae6b52f0b3802edec595ef80b4c5eb46188ed5406293bca0aa8",
+      "bytes": 1744
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native60/B08_NATIVE_FREEZE_60_POSTVERIFY.json",
+      "sha256": "a37e994f4a037c7d14a4bc86775fc73d0faa5cde36c86788d16ee79e12fb39a6",
+      "bytes": 468
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native60/B08_NATIVE60_DRIVER.txt",
+      "sha256": "a1dfe995427d03121541ced8680ebed3477cb414943e3a902bbf4ce421d93e9e",
+      "bytes": 121244
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native60/logs/mode_reload_transaction_input_composed_20261010_test.godot.log",
+      "sha256": "94d0367dd6d147b2faf986ed453759562ea076a90f409c80c0c26ae79c3ea772",
+      "bytes": 120155
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native60/logs/mode_reload_transaction_input_composed_20261010_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native60/logs/mode_reload_transaction_input_composed_20261010_test.stdout.log",
+      "sha256": "af6721f2a06767ed0abf7b3a4954bfc17ea65a166919a127cecb125d3e96f86b",
+      "bytes": 120791
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native60/logs/runner_results_adhoc_20261010_110320_129_22204.json",
+      "sha256": "077547bf55a7cebe422030b0b6e72d8303466c3273d005e13b9aac8d59a145fd",
+      "bytes": 5163
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native60/raw/7b42c598-35f8-4c4a-b933-2d3f132bb452/mode_reload_transaction_input_composed_20261010_test.godot.log",
+      "sha256": "94d0367dd6d147b2faf986ed453759562ea076a90f409c80c0c26ae79c3ea772",
+      "bytes": 120155
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native60/raw/7b42c598-35f8-4c4a-b933-2d3f132bb452/mode_reload_transaction_input_composed_20261010_test.result.json",
+      "sha256": "7c0f523b88fb8bcb60d086330597d02790dc7dfc8c7f310c4884c33f0b01ef7f",
+      "bytes": 12528
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native60/raw/7b42c598-35f8-4c4a-b933-2d3f132bb452/mode_reload_transaction_input_composed_20261010_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native60/raw/7b42c598-35f8-4c4a-b933-2d3f132bb452/mode_reload_transaction_input_composed_20261010_test.stdout.log",
+      "sha256": "af6721f2a06767ed0abf7b3a4954bfc17ea65a166919a127cecb125d3e96f86b",
+      "bytes": 120791
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native60/raw/7b42c598-35f8-4c4a-b933-2d3f132bb452/native_handoffs.json",
+      "sha256": "a452e52fa81342e045ee7cced8215a64f5aa6afff5f5abe4b33d3fdceab78ebf",
+      "bytes": 514
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native60/raw/7b42c598-35f8-4c4a-b933-2d3f132bb452/native_result.json",
+      "sha256": "5a62eb21d1aa6fdb84be3d8f1c12de7cf94223b44529a5ba7080c446731c9db1",
+      "bytes": 3518
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native61/B08_NATIVE_FREEZE_61.json",
+      "sha256": "e47bf109f6f9bf93b8fe9df09949070074f444aea0699b17803d3c9e7bd648ba",
+      "bytes": 493375
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native61/B08_NATIVE_SPEC_61.json",
+      "sha256": "9a89dd0a384c2bc8d70e900d3fd8cdba0278f306e5bde3101682888f4f7449b5",
+      "bytes": 1920
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native61/B08_NATIVE_FREEZE_61_POSTVERIFY.json",
+      "sha256": "fb130f15904f08c5bb33db655604d75d6166a8b019d3870c8947d3c095b9abdf",
+      "bytes": 468
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native61/B08_NATIVE61_DRIVER.txt",
+      "sha256": "ea7d0d02b19e914c1c5741dd3869839e9b35bb9f6cfde43f610c86a78e753f20",
+      "bytes": 294
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native61/logs/mode_reload_transaction_input_composed_20261010_test.godot.log",
+      "sha256": "dec0e514d4f85e1e322b0a2399032ade0b04a7e5d5f09e8f1697723846a555ca",
+      "bytes": 119900
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native61/logs/mode_reload_transaction_input_composed_20261010_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native61/logs/mode_reload_transaction_input_composed_20261010_test.stdout.log",
+      "sha256": "1713e407dc6969b992b159b61ca01a0a751648a3b74111122ccbf0be8d098309",
+      "bytes": 120536
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native61/logs/runner_results_adhoc_20261010_111319_720_24336.json",
+      "sha256": "af80ecabc8443f8f42bd743bfee0843c656fbde7a10b02997a42e619ec5cd081",
+      "bytes": 5203
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native61/raw/e2157b87-df6a-47ba-a463-2a902db0f886/mode_reload_transaction_input_composed_20261010_test.godot.log",
+      "sha256": "dec0e514d4f85e1e322b0a2399032ade0b04a7e5d5f09e8f1697723846a555ca",
+      "bytes": 119900
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native61/raw/e2157b87-df6a-47ba-a463-2a902db0f886/mode_reload_transaction_input_composed_20261010_test.result.json",
+      "sha256": "8538a942b6c54d9c6908ee7bcac20934f2a7ec0ad3bd90fac095d2b5978e1a3f",
+      "bytes": 12528
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native61/raw/e2157b87-df6a-47ba-a463-2a902db0f886/mode_reload_transaction_input_composed_20261010_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native61/raw/e2157b87-df6a-47ba-a463-2a902db0f886/mode_reload_transaction_input_composed_20261010_test.stdout.log",
+      "sha256": "1713e407dc6969b992b159b61ca01a0a751648a3b74111122ccbf0be8d098309",
+      "bytes": 120536
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native61/raw/e2157b87-df6a-47ba-a463-2a902db0f886/native_handoffs.json",
+      "sha256": "e788655b29d0d2c3a1baf583909975b22d10c9b76fea1b384a32eb4ce1c3f886",
+      "bytes": 1001
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native61/raw/e2157b87-df6a-47ba-a463-2a902db0f886/native_result.json",
+      "sha256": "5072fb78854a1dfead43163b901ac56aa15c38c88b53fdb7a47551187077822d",
+      "bytes": 3566
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/B08_NATIVE_FREEZE_62.json",
+      "sha256": "06ec5c76010b87dd05a282ca1817d4dad7130177b737c23ac075e266ecf68169",
+      "bytes": 493602
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/B08_NATIVE_SPEC_62.json",
+      "sha256": "12709b10f825f67004526b5562219527c05a66e6b7b511498665857cd072c0be",
+      "bytes": 2151
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/B08_NATIVE_FREEZE_62_POSTVERIFY.json",
+      "sha256": "13819d5b2ad9d033115d9ded94156e036c954d0ff6504424ff9d864199b65500",
+      "bytes": 468
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/B08_NATIVE62_DRIVER.txt",
+      "sha256": "10e63eed60f3aac219b9b37fa7bc0a3d8038c64dd4394bf95676a87d26a5fa0d",
+      "bytes": 188460
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/logs/mode_reload_transaction_direct_failure_20261010_test.godot.log",
+      "sha256": "3149fa100fe2b0df2d31a8222575aac292a9a5a1ad4e494b4180d351582787fe",
+      "bytes": 104768
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/logs/mode_reload_transaction_direct_failure_20261010_test.stderr.log",
+      "sha256": "2d9bf5821bf7f8098af5bc3b5963cce5af230c09d07b4e18599f3624a7465348",
+      "bytes": 659
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/logs/mode_reload_transaction_direct_failure_20261010_test.stdout.log",
+      "sha256": "45bacd473d8c20e1a051eaf5ccc2d70aa6b2c1d817319a107ddbe163bfd986d6",
+      "bytes": 104657
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/logs/mode_reload_transaction_failure_boundary_20261010_test.godot.log",
+      "sha256": "8a6737add47ddd2bbbe103a205bd4673c5a170ecaa766bd7320723077b430e20",
+      "bytes": 129158
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/logs/mode_reload_transaction_failure_boundary_20261010_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/logs/mode_reload_transaction_failure_boundary_20261010_test.stdout.log",
+      "sha256": "e2be6173e4c4004d37a7f664e051fe1e9df1f8fb405b8929bc12b97cc57274c3",
+      "bytes": 129848
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/logs/mode_reload_transaction_later_20261010_test.godot.log",
+      "sha256": "6b88c1f593cdfcf0f88da51c1fcfe32d5496a83d08cc95b66d2481de17d93e97",
+      "bytes": 65194
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/logs/mode_reload_transaction_later_20261010_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/logs/mode_reload_transaction_later_20261010_test.stdout.log",
+      "sha256": "feb4459432f1244dd805d8c288cca3883089b56b4ae46328cea53b4ce248fa4a",
+      "bytes": 65490
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/logs/mode_reload_transaction_profile_20261010_test.godot.log",
+      "sha256": "0c12ff2876f85d701c9c9cf44ced0e95c68b1711ff86fffa59c3c6e54d6d0ebf",
+      "bytes": 81896
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/logs/mode_reload_transaction_profile_20261010_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/logs/mode_reload_transaction_profile_20261010_test.stdout.log",
+      "sha256": "68792fef477f8400d449c26f8471c998aaa40430dd30fe725bb74818780744cb",
+      "bytes": 82297
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/logs/mode_reload_transaction_stale_20261010_test.godot.log",
+      "sha256": "0a823d8274320fe02880e551ebac6a2dc405fa7d675d64c40923b222154a03a3",
+      "bytes": 96261
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/logs/mode_reload_transaction_stale_20261010_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/logs/mode_reload_transaction_stale_20261010_test.stdout.log",
+      "sha256": "668eee9052adb95eac5b6bbdb58a4d7b27c20950eb0fc26dc4d3536353af5c23",
+      "bytes": 96746
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/logs/runner_results_adhoc_20261010_111559_283_21984.json",
+      "sha256": "8361236dd199bbe01fd5a68ff7b3a172df71f9f1d4b4e432b2d929798a87a066",
+      "bytes": 20862
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/raw/0fc2f246-56d3-47c7-8fdb-1fce08bd2c13/mode_reload_transaction_stale_20261010_test.godot.log",
+      "sha256": "0a823d8274320fe02880e551ebac6a2dc405fa7d675d64c40923b222154a03a3",
+      "bytes": 96261
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/raw/0fc2f246-56d3-47c7-8fdb-1fce08bd2c13/mode_reload_transaction_stale_20261010_test.result.json",
+      "sha256": "17435268d1accc5454c6971479db63c2c191522c91251c8a4c57927485b4d718",
+      "bytes": 8539
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/raw/0fc2f246-56d3-47c7-8fdb-1fce08bd2c13/mode_reload_transaction_stale_20261010_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/raw/0fc2f246-56d3-47c7-8fdb-1fce08bd2c13/mode_reload_transaction_stale_20261010_test.stdout.log",
+      "sha256": "668eee9052adb95eac5b6bbdb58a4d7b27c20950eb0fc26dc4d3536353af5c23",
+      "bytes": 96746
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/raw/0fc2f246-56d3-47c7-8fdb-1fce08bd2c13/native_handoffs.json",
+      "sha256": "ccf29e7e111dd53dda59932af20f7cf9942a70de6a29db78c08a2461ea9cff90",
+      "bytes": 983
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/raw/0fc2f246-56d3-47c7-8fdb-1fce08bd2c13/native_result.json",
+      "sha256": "2b94d2f267d85211b6415f540f871cfbaf30d445be6a8d6073d947619f39f5e2",
+      "bytes": 3503
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/raw/10929fbd-9288-437f-b1c5-3f1752bc7e7d/mode_reload_transaction_profile_20261010_test.godot.log",
+      "sha256": "0c12ff2876f85d701c9c9cf44ced0e95c68b1711ff86fffa59c3c6e54d6d0ebf",
+      "bytes": 81896
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/raw/10929fbd-9288-437f-b1c5-3f1752bc7e7d/mode_reload_transaction_profile_20261010_test.result.json",
+      "sha256": "3d2212f624f2d9ce885aacf500aca8b04aaa6caaa8b15f73f98a76ed93ad06a2",
+      "bytes": 9761
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/raw/10929fbd-9288-437f-b1c5-3f1752bc7e7d/mode_reload_transaction_profile_20261010_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/raw/10929fbd-9288-437f-b1c5-3f1752bc7e7d/mode_reload_transaction_profile_20261010_test.stdout.log",
+      "sha256": "68792fef477f8400d449c26f8471c998aaa40430dd30fe725bb74818780744cb",
+      "bytes": 82297
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/raw/10929fbd-9288-437f-b1c5-3f1752bc7e7d/native_handoffs.json",
+      "sha256": "ccf29e7e111dd53dda59932af20f7cf9942a70de6a29db78c08a2461ea9cff90",
+      "bytes": 983
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/raw/10929fbd-9288-437f-b1c5-3f1752bc7e7d/native_result.json",
+      "sha256": "847df49fd00f0ce9c44862975b969245a3089bd4b58bc6552e19ddc037133d17",
+      "bytes": 3610
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/raw/1dbf322a-7fe0-4477-acca-ab9f8abf60f3/mode_reload_transaction_later_20261010_test.godot.log",
+      "sha256": "6b88c1f593cdfcf0f88da51c1fcfe32d5496a83d08cc95b66d2481de17d93e97",
+      "bytes": 65194
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/raw/1dbf322a-7fe0-4477-acca-ab9f8abf60f3/mode_reload_transaction_later_20261010_test.result.json",
+      "sha256": "f6143da4d3a93ee14928dd4515bd8ffb7152ca31a9870a66d9417af4f6a4c775",
+      "bytes": 6537
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/raw/1dbf322a-7fe0-4477-acca-ab9f8abf60f3/mode_reload_transaction_later_20261010_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/raw/1dbf322a-7fe0-4477-acca-ab9f8abf60f3/mode_reload_transaction_later_20261010_test.stdout.log",
+      "sha256": "feb4459432f1244dd805d8c288cca3883089b56b4ae46328cea53b4ce248fa4a",
+      "bytes": 65490
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/raw/1dbf322a-7fe0-4477-acca-ab9f8abf60f3/native_handoffs.json",
+      "sha256": "820e7e00aa45cd2731eeb90a6a8ec53a3c27e57fa6f657600c332eed6142fb55",
+      "bytes": 1449
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/raw/1dbf322a-7fe0-4477-acca-ab9f8abf60f3/native_result.json",
+      "sha256": "6312d84e890123cba30d0ad4d6d2a88a54615fac474d4a7d9cf5cd12a0c2fefc",
+      "bytes": 3504
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/raw/3cd59bb2-c548-4648-bcdd-1989471311d7/mode_reload_transaction_direct_failure_20261010_test.godot.log",
+      "sha256": "3149fa100fe2b0df2d31a8222575aac292a9a5a1ad4e494b4180d351582787fe",
+      "bytes": 104768
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/raw/3cd59bb2-c548-4648-bcdd-1989471311d7/mode_reload_transaction_direct_failure_20261010_test.result.json",
+      "sha256": "13a2534ac1e60da5dca04d1600a93983aa0cfdf81e01cd03e9d32ffe40ebc86b",
+      "bytes": 28856
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/raw/3cd59bb2-c548-4648-bcdd-1989471311d7/mode_reload_transaction_direct_failure_20261010_test.stderr.log",
+      "sha256": "2d9bf5821bf7f8098af5bc3b5963cce5af230c09d07b4e18599f3624a7465348",
+      "bytes": 659
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/raw/3cd59bb2-c548-4648-bcdd-1989471311d7/mode_reload_transaction_direct_failure_20261010_test.stdout.log",
+      "sha256": "45bacd473d8c20e1a051eaf5ccc2d70aa6b2c1d817319a107ddbe163bfd986d6",
+      "bytes": 104657
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/raw/3cd59bb2-c548-4648-bcdd-1989471311d7/native_handoffs.json",
+      "sha256": "ed716863b5b4b0102458a38e9e4bd9282a56172ad297ac4a7e503bb37e0f218d",
+      "bytes": 1937
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/raw/3cd59bb2-c548-4648-bcdd-1989471311d7/native_result.json",
+      "sha256": "699e69813a2560f085f7718a3e807f73c3afee0f1b9e691355b10de779e472fe",
+      "bytes": 3756
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/raw/53bf35c5-d97a-4116-aae6-13e01e7642c3/mode_reload_transaction_failure_boundary_20261010_test.godot.log",
+      "sha256": "8a6737add47ddd2bbbe103a205bd4673c5a170ecaa766bd7320723077b430e20",
+      "bytes": 129158
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/raw/53bf35c5-d97a-4116-aae6-13e01e7642c3/mode_reload_transaction_failure_boundary_20261010_test.result.json",
+      "sha256": "7c7e45c71089ce51900aa18beb6958d1e3b4a60e3dd3dcd838db6cc9ac824bc8",
+      "bytes": 14770
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/raw/53bf35c5-d97a-4116-aae6-13e01e7642c3/mode_reload_transaction_failure_boundary_20261010_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/raw/53bf35c5-d97a-4116-aae6-13e01e7642c3/mode_reload_transaction_failure_boundary_20261010_test.stdout.log",
+      "sha256": "e2be6173e4c4004d37a7f664e051fe1e9df1f8fb405b8929bc12b97cc57274c3",
+      "bytes": 129848
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/raw/53bf35c5-d97a-4116-aae6-13e01e7642c3/native_handoffs.json",
+      "sha256": "ed716863b5b4b0102458a38e9e4bd9282a56172ad297ac4a7e503bb37e0f218d",
+      "bytes": 1937
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/raw/53bf35c5-d97a-4116-aae6-13e01e7642c3/native_result.json",
+      "sha256": "97d9689923a1c377cf357fed0cf2eb983378e72c71f34690da4a104ab1baf87c",
+      "bytes": 3580
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native63/B08_NATIVE_FREEZE_63.json",
+      "sha256": "70a063165afac9d81a624ada293c3d2afd7d1ccb2e0c9f3a68c688d1e7a5c58d",
+      "bytes": 493265
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native63/B08_NATIVE_SPEC_63.json",
+      "sha256": "3a0954a5478ca87c6cc2be6883dd3c00567561d42afc6e8477e855e33d3dff39",
+      "bytes": 1810
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native63/B08_NATIVE_FREEZE_63_POSTVERIFY.json",
+      "sha256": "2b6610bb3d3627d36ab3d92672da20922c0acf4b6c595415ac903d0810c52441",
+      "bytes": 468
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native63/B08_NATIVE63_DRIVER.txt",
+      "sha256": "d775638f7229c75cab817eee3876869b31162fe90d41afcea1740ae7b492d4cd",
+      "bytes": 84569
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native63/logs/mode_reload_transaction_profile_20261010_test.godot.log",
+      "sha256": "d5b3d61f21edc0c82f8973913bfb7c48ca33cbb1fb51b7ea52c0483c50bf82a3",
+      "bytes": 83685
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native63/logs/mode_reload_transaction_profile_20261010_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native63/logs/mode_reload_transaction_profile_20261010_test.stdout.log",
+      "sha256": "ec6cd522d96e79b341c259116d84f8638a6fee7d520e52412a52978058bcf0f0",
+      "bytes": 84088
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native63/logs/runner_results_adhoc_20261010_111816_985_13792.json",
+      "sha256": "18cffecda479bd798efbc79b7345815751af8e8aa0f2e4a6cf9925c1a9f97f6a",
+      "bytes": 5255
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native63/raw/a9f5302d-4dc1-482a-b4fb-bc1a09d83637/mode_reload_transaction_profile_20261010_test.godot.log",
+      "sha256": "d5b3d61f21edc0c82f8973913bfb7c48ca33cbb1fb51b7ea52c0483c50bf82a3",
+      "bytes": 83685
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native63/raw/a9f5302d-4dc1-482a-b4fb-bc1a09d83637/mode_reload_transaction_profile_20261010_test.result.json",
+      "sha256": "5420319d5ff753de4beee6af1186e7a161e2401515f6127b8ca72eb7c03c94b1",
+      "bytes": 9762
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native63/raw/a9f5302d-4dc1-482a-b4fb-bc1a09d83637/mode_reload_transaction_profile_20261010_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native63/raw/a9f5302d-4dc1-482a-b4fb-bc1a09d83637/mode_reload_transaction_profile_20261010_test.stdout.log",
+      "sha256": "ec6cd522d96e79b341c259116d84f8638a6fee7d520e52412a52978058bcf0f0",
+      "bytes": 84088
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native63/raw/a9f5302d-4dc1-482a-b4fb-bc1a09d83637/native_handoffs.json",
+      "sha256": "eb96b284f57ba294e65fe290355715a28c208c85ca8b041d29c97a82b4cfa24a",
+      "bytes": 514
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native63/raw/a9f5302d-4dc1-482a-b4fb-bc1a09d83637/native_result.json",
+      "sha256": "32667b2ec49f74c0d9342a70d03e757d2561aea2fe01dc5c6cae9370a38fd542",
+      "bytes": 3610
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native64/B08_NATIVE_FREEZE_64.json",
+      "sha256": "2df0cca1f1309653b0f8a75a08011b02d64c8459b0254aa7837e4bc9e8b5b95e",
+      "bytes": 493379
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native64/B08_NATIVE_SPEC_64.json",
+      "sha256": "ecd0a9c0ecf7b710f3ae9776b34c8a81472aaa2d1881cfa3eacc0d08257b7274",
+      "bytes": 1924
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native64/B08_NATIVE_FREEZE_64_POSTVERIFY.json",
+      "sha256": "8e6f2cd29e3e0c26f38f71e269b067838c0162e757a5f8577dda54d818894da8",
+      "bytes": 468
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native64/B08_NATIVE64_DRIVER.txt",
+      "sha256": "5918ef1eb0ee663ce68295e517b5e11eb921db9fdaeaefbfb70637770cafb44d",
+      "bytes": 287
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native64/logs/mode_reload_transaction_profile_20261010_test.godot.log",
+      "sha256": "7c1d74954b5223c41c90e9444d94df7928661bbad50a96e6f0979b3efa182e84",
+      "bytes": 83585
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native64/logs/mode_reload_transaction_profile_20261010_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native64/logs/mode_reload_transaction_profile_20261010_test.stdout.log",
+      "sha256": "bdef3fb95e82627532ccc04ba98573b3757808bfdc770b86f908445eaf1ae441",
+      "bytes": 83988
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native64/logs/runner_results_adhoc_20261010_112009_477_18376.json",
+      "sha256": "f5c57a6c379ee2ffebb871e72ec14343a09bec7cf877de522ccb1144a1e57e72",
+      "bytes": 5154
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native64/raw/70ff651c-dc98-4158-be79-603a9cfffccc/mode_reload_transaction_profile_20261010_test.godot.log",
+      "sha256": "7c1d74954b5223c41c90e9444d94df7928661bbad50a96e6f0979b3efa182e84",
+      "bytes": 83585
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native64/raw/70ff651c-dc98-4158-be79-603a9cfffccc/mode_reload_transaction_profile_20261010_test.result.json",
+      "sha256": "2f75c46f7810e5ad09fefda1f82296c99d58ed8459af619f45db5cb2cbc04953",
+      "bytes": 9761
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native64/raw/70ff651c-dc98-4158-be79-603a9cfffccc/mode_reload_transaction_profile_20261010_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native64/raw/70ff651c-dc98-4158-be79-603a9cfffccc/mode_reload_transaction_profile_20261010_test.stdout.log",
+      "sha256": "bdef3fb95e82627532ccc04ba98573b3757808bfdc770b86f908445eaf1ae441",
+      "bytes": 83988
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native64/raw/70ff651c-dc98-4158-be79-603a9cfffccc/native_handoffs.json",
+      "sha256": "c9a4b936506b4370deeea237472589cbea73dec65962c20435b352389b28c257",
+      "bytes": 987
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native64/raw/70ff651c-dc98-4158-be79-603a9cfffccc/native_result.json",
+      "sha256": "8f9f90b1be79cfa82c21e8bd025f56349f9d6eb41fc0264fc40cc5a854e633ec",
+      "bytes": 3517
+    }
+  ],
+  "whole_project_audit": "MISSING",
+  "APK109": "NOT_RUN",
+  "DEVICE TEST": "NOT_RUN"
+}

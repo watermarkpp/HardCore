@@ -1,0 +1,80 @@
+{
+  "test_name": "mode_reload_transaction_profile_20261010_test",
+  "test_path": "tests/framework/mode_reload_transaction_profile_20261010_test.tscn",
+  "wrapper_process_id": 11284,
+  "wrapper_started_utc": "2026-10-10T03:14:29.9170130Z",
+  "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct62_mode_transaction\\runner_f1002d88-e778-4ad1-a83d-613e1773eec7",
+  "fixed_fps": 0,
+  "pass_marker_found": false,
+  "process_exited": true,
+  "wrapper_exit_code": 1,
+  "child_process_exit_state": "exited",
+  "execution_deadline_utc": "2026-10-10T03:14:59.9171669Z",
+  "native_exit_observed_utc": "2026-10-10T03:14:49.8660747Z",
+  "effective_exit_code": 1,
+  "timeout": false,
+  "stdout_failure_count": 0,
+  "stderr_failure_count": 0,
+  "engine_log_failure_count": 0,
+  "cleanup_warning_evidence": {
+    "status": "PASS",
+    "allowlisted_errors": {
+      "string_formatting": {
+        "count": 0,
+        "lines": []
+      },
+      "resources_in_use": {
+        "count": 0,
+        "lines": []
+      },
+      "rid_leak": {
+        "count": 0,
+        "lines": []
+      },
+      "null_parameter": {
+        "count": 0,
+        "lines": []
+      }
+    },
+    "unknown_error_lines": [],
+    "unknown_error_count": 0,
+    "objectdb_leak_warning_lines": [],
+    "objectdb_leak_warning_count": 0,
+    "functional_marker_observed": false,
+    "formal_evidence_status": "MISSING",
+    "formal_evidence_reason": "legacy_run_bound_checks_missing",
+    "receipt_validation_reasons": [
+      "framework_receipt_not_pass"
+    ],
+    "candidate_receipt_correlation": false,
+    "upstream_result": "NOT_RUN",
+    "raw_log_paths": [
+      "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct62_mode_transaction\\logs\\mode_reload_transaction_profile_20261010_test.stdout.log",
+      "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct62_mode_transaction\\logs\\mode_reload_transaction_profile_20261010_test.stderr.log",
+      "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct62_mode_transaction\\logs\\mode_reload_transaction_profile_20261010_test.godot.log"
+    ],
+    "receipt_path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\framework\\mode_reload_transaction_profile_20261010_test.result.json",
+    "expected_scene_id": "mode_reload_transaction_profile_20261010_test",
+    "expected_invocation_id": "f1002d88-e778-4ad1-a83d-613e1773eec7"
+  },
+  "framework_run_id": "10929fbd-9288-437f-b1c5-3f1752bc7e7d",
+  "framework_receipt_valid": false,
+  "source_content_sha256": "06ec5c76010b87dd05a282ca1817d4dad7130177b737c23ac075e266ecf68169",
+  "source_binding_scope": "External immutable input freeze required; env label alone is not a source scan",
+  "engine_fingerprints": [
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+      "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "bytes": 198152
+    },
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64.exe",
+      "sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+      "bytes": 178485256
+    }
+  ],
+  "formal_evidence_status": "MISSING",
+  "formal_evidence_reason": "Requires matching external source/input freeze and this native result",
+  "result": "FAIL",
+  "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+}

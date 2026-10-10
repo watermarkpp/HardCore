@@ -1,0 +1,4 @@
+SCRIPT ERROR: Parse Error: Cannot infer the type of "large" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/framework/mode_reload_transaction_20261010_test.gd:128)
+ERROR: Failed to load script "res://tests/framework/mode_reload_transaction_20261010_test.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)

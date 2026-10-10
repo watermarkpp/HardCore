@@ -1,0 +1,9 @@
+ERROR: 五层内容注册表未能生成Merged Game Database
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _parse_database_tables (res://scripts/game_data.gd:335)
+       [1] _load_database_tables (res://scripts/game_data.gd:305)
+       [2] load_database (res://scripts/game_data.gd:270)
+       [3] _test_direct_loaded_catalog_failure (res://tests/framework/mode_reload_transaction_20261010_test.gd:657)
+       [4] _run_group (res://tests/framework/mode_reload_transaction_20261010_test.gd:391)
+       [5] _run (res://tests/framework/mode_reload_transaction_20261010_test.gd:381)

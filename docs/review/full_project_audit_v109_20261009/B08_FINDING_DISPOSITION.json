@@ -1,0 +1,1890 @@
+{
+  "schema_version": 1,
+  "kind": "B08_disposition_draft_for_root_reviewbranch_commit",
+  "generated_at_utc": "2026-10-10T03:58:16.831104+00:00",
+  "authoring_scope": "Only two new draft files; evidence organization only; no production/test/index mutation or new test execution",
+  "workspace_head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+  "workspace_branch": "codex/integration",
+  "fixed_external_review": {
+    "commit": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+    "tree": "fef3e786da2a7462abdc069f48615215407f6a11",
+    "report_commit": "2d95b21cfe148b09ead5bba5ea7786dfa70e92e4",
+    "report_parent": "e3de5f54d0ce237c9bf0159ecc2d89c1a2c2a1de",
+    "receive_status": "PASS",
+    "receive_scope": "Byte-identical report reception only; no gameplay acceptance",
+    "eight_original_report_files": [
+      {
+        "path": "docs/review/full_project_audit_v109_20261009/external/B08/COVERAGE.json",
+        "original_git_path": "docs/review/full_project_audit_v109_20261009/external/B08/COVERAGE.json",
+        "bytes": 839570,
+        "sha256": "b846779952deb9e2d52fafba91bfedbeef1249c5d15c6784a27e79931d51ef0b",
+        "git_blob": "8e853fe33c2215c3d857b069f1c57efe9268187c"
+      },
+      {
+        "path": "docs/review/full_project_audit_v109_20261009/external/B08/CROSS_BATCH_CLOSURE.json",
+        "original_git_path": "docs/review/full_project_audit_v109_20261009/external/B08/CROSS_BATCH_CLOSURE.json",
+        "bytes": 35732,
+        "sha256": "18adfaa9530196d2bce7c45217d67ee7a177d966d5a77647ec6bc10018286b65",
+        "git_blob": "580282af8821bc4ee048d9787b71c6556d924b55"
+      },
+      {
+        "path": "docs/review/full_project_audit_v109_20261009/external/B08/FINDINGS.csv",
+        "original_git_path": "docs/review/full_project_audit_v109_20261009/external/B08/FINDINGS.csv",
+        "bytes": 11160,
+        "sha256": "9486e57d52d8c796cbe8cf0140ea3c4bab6f8f6739547e1d78751e2eb89bab65",
+        "git_blob": "7946ede167876448c451b601188c069d9702a9b2"
+      },
+      {
+        "path": "docs/review/full_project_audit_v109_20261009/external/B08/FINDINGS.json",
+        "original_git_path": "docs/review/full_project_audit_v109_20261009/external/B08/FINDINGS.json",
+        "bytes": 14966,
+        "sha256": "4e8c10daa06b9d71ee7c38083b44ac1c159ac1a964239d896f47c628c884f4ce",
+        "git_blob": "0ab943efaf68e2088c5cbb2e61245663fa5e436d"
+      },
+      {
+        "path": "docs/review/full_project_audit_v109_20261009/external/B08/REDUNDANCY.md",
+        "original_git_path": "docs/review/full_project_audit_v109_20261009/external/B08/REDUNDANCY.md",
+        "bytes": 2042,
+        "sha256": "f817c67281748022a655ed697df57ced0c63d7cbb3f38788f3ed78c1abe290f2",
+        "git_blob": "33054afe03baeb23045a490b7018b27058a64cbb"
+      },
+      {
+        "path": "docs/review/full_project_audit_v109_20261009/external/B08/SOURCE_BINDING.json",
+        "original_git_path": "docs/review/full_project_audit_v109_20261009/external/B08/SOURCE_BINDING.json",
+        "bytes": 32408,
+        "sha256": "8b49e3b877653b79eecc4ff939837666b50e88f1b9cd38c541149c88f2b5f479",
+        "git_blob": "a6806f482a8b30c31866ed757330c1d39a24da65"
+      },
+      {
+        "path": "docs/review/full_project_audit_v109_20261009/external/B08/SUMMARY.md",
+        "original_git_path": "docs/review/full_project_audit_v109_20261009/external/B08/SUMMARY.md",
+        "bytes": 10768,
+        "sha256": "3ec6341328e987b0606d368ee4be688a5811fc336a7319fe4fa3bf577b49f901",
+        "git_blob": "96adcbf3045d1f71f0ff3dcbdfb41c7c4e5a341a"
+      },
+      {
+        "path": "docs/review/full_project_audit_v109_20261009/external/B08/VALIDATION_GAPS.md",
+        "original_git_path": "docs/review/full_project_audit_v109_20261009/external/B08/VALIDATION_GAPS.md",
+        "bytes": 3980,
+        "sha256": "fe6dfd42275b1bc5b9fbc7b071b68cf83b873a57c376c4e176ca251c5b6cad6f",
+        "git_blob": "df9ae6f9a6d221c91f34815fad470b673727bfb5"
+      }
+    ],
+    "receive_receipt_binding": {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B08/RECEIVE_RECEIPT.json",
+      "bytes": 3438,
+      "sha256": "288e004d6ab47303497769e152f3d0437cc70af0f1f2278825b0e2c3b54cac90"
+    },
+    "original_reports_preserved": true,
+    "coverage": {
+      "read_fixed_git_sources": 71,
+      "recorded_function_declarations": 3201,
+      "targeted_function_bodies": 93,
+      "remaining_full_project_semantics": "MISSING"
+    },
+    "cross_batch_fully_closed_by_external_B08": 0
+  },
+  "local_candidate": {
+    "label": "LOCAL B08 remediation candidate, not applied external dbb1 report source",
+    "latest_observed_native_candidate_tree": "1180b2a65b445192d73704fadfc629554590f337",
+    "native68_actual_input_fingerprint": "fc8ec681d681ac3b12e7135a3eb851c89d1355a2ef55cfa41ca592f0f4a58b74",
+    "source_files_from_native68_raw_input_freeze": [
+      {
+        "path": "scripts/equipment_rules.gd",
+        "sha256": "5c3676412d0c490fdab0d78e7b8b63a5dbc88117193d3a8bde3b63d9a2cf21f8",
+        "bytes": 35491
+      },
+      {
+        "path": "scripts/game_data.gd",
+        "sha256": "dd452fdb61e07c60b7d187b1a3e48bfd98d2fe03fdc36b39345d214a06c9d7f3",
+        "bytes": 186489
+      },
+      {
+        "path": "scripts/layers/runtime/content_layer_registry.gd",
+        "sha256": "cf3042e27a4247311d79a7453f1357697d3056975d7f50a8714f5ecbf492cdc5",
+        "bytes": 39812
+      },
+      {
+        "path": "scripts/layers/runtime/game_mode_service.gd",
+        "sha256": "f7644b5358963a1a469db756bb6e3933c314b1173a3a6a766c88c669e5710d0a",
+        "bytes": 2541
+      },
+      {
+        "path": "scripts/layers/runtime/prepared_content_configuration.gd",
+        "sha256": "cf9cb0b72a9fa37635caa91237492e7221c4965ff400b548b29b7396b07a725e",
+        "bytes": 606
+      },
+      {
+        "path": "scripts/layers/runtime/runtime_service_facade.gd",
+        "sha256": "72f4629cd27ffca2eb4f36c82be989dc99f2c6ca56e29496513566582f7b0c37",
+        "bytes": 706
+      },
+      {
+        "path": "scripts/player_state.gd",
+        "sha256": "a95fe0b6875196b92e60a1e429f2915bfcdea9db772399ffe6fd18f18da90185",
+        "bytes": 460755
+      },
+      {
+        "path": "scripts/startup_loading.gd",
+        "sha256": "605eae695b3b1d297b43710894023e2b4a0f692b0edbbe00b2a7e70c18fc0c62",
+        "bytes": 36857
+      }
+    ],
+    "source_blob_warning": "Git normalized source blob hashes and workspace raw SHA256 are different bindings; do not interchange them",
+    "native69_actual_input_fingerprint": "c777d9d737e8b2588deb6084d67cf2ec25e0b2afb1bfa0efe536d23f703b5611",
+    "native69_input_count": 2553,
+    "source_files_from_native69_raw_input_freeze": [
+      {
+        "path": "scripts/equipment_rules.gd",
+        "sha256": "5c3676412d0c490fdab0d78e7b8b63a5dbc88117193d3a8bde3b63d9a2cf21f8",
+        "bytes": 35491
+      },
+      {
+        "path": "scripts/game_data.gd",
+        "sha256": "dd452fdb61e07c60b7d187b1a3e48bfd98d2fe03fdc36b39345d214a06c9d7f3",
+        "bytes": 186489
+      },
+      {
+        "path": "scripts/layers/runtime/content_layer_registry.gd",
+        "sha256": "cf3042e27a4247311d79a7453f1357697d3056975d7f50a8714f5ecbf492cdc5",
+        "bytes": 39812
+      },
+      {
+        "path": "scripts/layers/runtime/game_mode_service.gd",
+        "sha256": "f7644b5358963a1a469db756bb6e3933c314b1173a3a6a766c88c669e5710d0a",
+        "bytes": 2541
+      },
+      {
+        "path": "scripts/layers/runtime/prepared_content_configuration.gd",
+        "sha256": "cf9cb0b72a9fa37635caa91237492e7221c4965ff400b548b29b7396b07a725e",
+        "bytes": 606
+      },
+      {
+        "path": "scripts/layers/runtime/runtime_service_facade.gd",
+        "sha256": "72f4629cd27ffca2eb4f36c82be989dc99f2c6ca56e29496513566582f7b0c37",
+        "bytes": 706
+      },
+      {
+        "path": "scripts/player_state.gd",
+        "sha256": "a95fe0b6875196b92e60a1e429f2915bfcdea9db772399ffe6fd18f18da90185",
+        "bytes": 460755
+      },
+      {
+        "path": "scripts/startup_loading.gd",
+        "sha256": "605eae695b3b1d297b43710894023e2b4a0f692b0edbbe00b2a7e70c18fc0c62",
+        "bytes": 36857
+      }
+    ],
+    "native68_to69_production_file_bytes_unchanged": "PASS"
+  },
+  "read_only_admission_review": {
+    "document": {
+      "path": "outputs/b08_admission_review_20261010/ADMISSION_REVIEW.md",
+      "bytes": 19045,
+      "sha256": "b7f21a01ee5c2352562fa79b7b80b2441ef313273c8639ea6f068199c0a47282"
+    },
+    "receipt": {
+      "path": "outputs/b08_admission_review_20261010/SOURCE_REVIEW_RECEIPT.json",
+      "bytes": 18849,
+      "sha256": "d16762783a2549cea36cb92b9baa6af8036c76f6e40ff17a50e3466c817d5653"
+    },
+    "source_binding_status": "PASS",
+    "guard_fix_delta": {
+      "old_normalized_git_blob_bytes_sha256": "7c8d840f32ddb148eb1f703e72d64fa570a1dc6bcb9c6c040f7a7e8714813f3e",
+      "old_normalized_git_blob_object_id": "980cd7bc4c13e0c0aa15820a4ab3ab193ce520ae",
+      "old_workspace_raw_file_entry_from_freeze": {
+        "path": "scripts/player_state.gd",
+        "sha256": "166f791b306289c9b3c717cec59a757bbb60e7184848d001bc0ee2159e7eeebb",
+        "bytes": 460564
+      },
+      "old_source_binding_status": "PASS",
+      "freeze_index": {
+        "path": "outputs/wake_drop_v108_review_followup_20261009/B08_NATIVE_FREEZE_63.index",
+        "bytes": 9331353,
+        "sha256": "786f2d48409933163e37979a9a113347f4876a33ec9329281ae947717336cbf5"
+      },
+      "freeze_file_metadata": {
+        "path": "outputs/wake_drop_v108_review_followup_20261009/B08_NATIVE_FREEZE_63.json",
+        "bytes": 493265,
+        "sha256": "70a063165afac9d81a624ada293c3d2afd7d1ccb2e0c9f3a68c688d1e7a5c58d"
+      },
+      "old_source_collection_command": "git show :scripts/player_state.gd with read-only GIT_INDEX_FILE=B08_NATIVE_FREEZE_63.index",
+      "minimal_delta": {
+        "path": "outputs/b08_admission_review_20261010/IDENTITY_GUARD_MINIMAL_DELTA.diff",
+        "bytes": 1282,
+        "sha256": "e9d543f6bf46fc5b4c575e41b805d29f3ebd88529203ad1862c65397c9860074"
+      },
+      "minimal_delta_exit": 0,
+      "whole_file_delta_hunk_count": 1,
+      "current_guard_static_review": "PASS",
+      "native_execution_by_this_review": "NOT_RUN"
+    },
+    "found_writer_identity_bug": "166f79 version allowed missing generation plus unknown extra key in legacy namespace",
+    "current_guard_disposition": "Parent a95fe0 fix statically reviewed PASS; Native68 checks28-31 business PASS with runner FAIL retained; Native69 same four real writer rejection checks clean PASS within52/52, runner PASS/natural0/engine0",
+    "existing_scope_risk": "Late migration _commit_save and recalculate_stats return values still ignored as in fixed dbb1; this draft does not claim all late fallibility is transactional"
+  },
+  "findings": [
+    {
+      "id": "B08-001",
+      "severity": "P1",
+      "external_classification": "PRODUCTION_CONTROL_FLOW_BUG",
+      "fixed_source_commit": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "fixed_path": "scripts/layers/runtime/game_mode_service.gd",
+      "fixed_function": "apply_mode",
+      "fixed_lines": [
+        17,
+        29
+      ],
+      "fixed_observed": "Commits active_mode, each enabled package and its signal, PlayerState.game_mode_id before GameData.load_database; ignores false, returns true.",
+      "original_unproved": "Native fault injection/visual UI impact not run. Premature mutation and masked false are proven by source.",
+      "current_owner_change": "Existing ContentLayers/GameData prepare, full formal catalog validate, prepared adoption and GameModes callback commit together; READY startup boundary retained",
+      "source_files": [
+        "scripts/game_data.gd",
+        "scripts/player_state.gd",
+        "scripts/startup_loading.gd",
+        "scripts/layers/runtime/content_layer_registry.gd",
+        "scripts/layers/runtime/prepared_content_configuration.gd",
+        "scripts/layers/runtime/game_mode_service.gd",
+        "scripts/layers/runtime/runtime_service_facade.gd"
+      ],
+      "source_review_status": "PASS",
+      "component_evidence": [
+        "Native61 input/composed81/81 runner PASS",
+        "Native62 stale51/51 and failure_boundary95/95 runner PASS"
+      ],
+      "component_result": "PASS",
+      "remaining": "Scoped transaction components only; current complete same-source integration, every UI caller and Android are not established",
+      "aggregate_acceptance_status": "MISSING"
+    },
+    {
+      "id": "B08-002",
+      "severity": "P1",
+      "external_classification": "PRODUCTION_CONTROL_FLOW_BUG",
+      "fixed_source_commit": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "fixed_path": "scripts/layers/runtime/runtime_service_facade.gd",
+      "fixed_function": "set_expansion_enabled",
+      "fixed_lines": [
+        16,
+        22
+      ],
+      "fixed_observed": "Facade mutates ContentLayers first then ignores false for nonlater and returns changed=true. Later branch directly calls PlayerState.set_later_content_enabled which commits signal/save without independent reload gate.",
+      "original_unproved": "No direct UI caller found under ordinary static grep; dynamic API consumer unknown; later-only reload semantics not settled. Nonlater false masking is source-proven.",
+      "current_owner_change": "RuntimeServices propagates rejected expansion result; later setting uses real coordinated ContentLayers commit and PlayerState boolean save result; no redundant second database reload",
+      "source_files": [
+        "scripts/layers/runtime/runtime_service_facade.gd",
+        "scripts/player_state.gd",
+        "scripts/layers/runtime/content_layer_registry.gd"
+      ],
+      "source_review_status": "PASS",
+      "component_evidence": [
+        "Native62 later39/39 and failure_boundary95/95 runner PASS"
+      ],
+      "component_result": "PASS",
+      "remaining": "Later-only facade and API scope; external UI/dynamic caller coverage remains bounded",
+      "aggregate_acceptance_status": "MISSING"
+    },
+    {
+      "id": "B08-003",
+      "severity": "P1",
+      "external_classification": "PRODUCTION_CONTROL_FLOW_BUG",
+      "fixed_source_commit": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "fixed_path": "scripts/player_state.gd",
+      "fixed_function": "load_save / select_character",
+      "fixed_lines": [
+        6988,
+        7236,
+        9940,
+        9972
+      ],
+      "fixed_observed": "last_load_result is marked successful on JSON read; load_save publishes level/profession/mode, ignores apply_mode failure/fallback, mutates experience/inventory/equipment, may call migration _commit_save; select_character trusts last_load_result and returns true.",
+      "original_unproved": "No real bad-catalog read execution this B08. Failure propagation gap proven by source.",
+      "current_owner_change": "load_save prepares composed mode before migration/hydration, checkpoints detached B through the same writer before commit, blocks refusal and select_character restores A ID and prior A block",
+      "source_files": [
+        "scripts/player_state.gd",
+        "scripts/layers/runtime/game_mode_service.gd",
+        "scripts/layers/runtime/content_layer_registry.gd"
+      ],
+      "source_review_status": "PASS",
+      "component_evidence": [
+        "Native64 profile60/60 clean runner PASS",
+        "Native68 admission52/52 complete business receipt; runner FAIL engine11",
+        "Native69 admission52/52 complete receipt and full producer trace; clean runner PASS/natural0/engine0; real TMP IO fault, same-writer refusal, A/state/bytes/watermarks retention and immediate B retry"
+      ],
+      "component_result": "PASS",
+      "remaining": "Scoped profile admission component PASS; Native68 fixture engine FAIL remains independently retained. Complete current same-source B08 integration and all late fallible migration actions are not established",
+      "aggregate_acceptance_status": "MISSING"
+    },
+    {
+      "id": "B08-004",
+      "severity": "P2",
+      "external_classification": "CONDITIONAL_PRODUCTION_STATE_RISK",
+      "fixed_source_commit": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "fixed_path": "scripts/game_data.gd",
+      "fixed_function": "load_database / get_map_by_id / get_item_record",
+      "fixed_lines": [
+        236,
+        320,
+        3698,
+        3890
+      ],
+      "fixed_observed": "load_database clears loaded then assigns maps/database/items/skills before all validation. Getters read current indexes without own readiness guard. Failure can leave partial or mixed cached data accessible if caller ignores readiness.",
+      "original_unproved": "No fixed-source UI call with concurrent failed reload was dynamically demonstrated; native55 proves unloaded, not every getter consumer.",
+      "current_owner_change": "Candidate failure leaves live catalog unchanged; direct load rejection sets unloaded, clears all61 catalog fields, retains error and prevents price/item readers from lazy rebuilding",
+      "source_files": [
+        "scripts/game_data.gd",
+        "scripts/equipment_rules.gd",
+        "scripts/layers/runtime/prepared_content_configuration.gd"
+      ],
+      "source_review_status": "PASS",
+      "component_evidence": [
+        "Native62 direct_failure173/173 receipt PASS, natural exit0, runner FAIL for one explicit formal production negative ERROR",
+        "Native61 detached preparation live property isolation81/81 clean PASS"
+      ],
+      "component_result": "FAIL",
+      "negative_disposition": "EXPECTED_PRODUCTION_REJECTION",
+      "remaining": "Keep runner FAIL and raw error distinct; 173 checks validate direct unavailable catalog contract, not every post-map failure or real visual consumer",
+      "aggregate_acceptance_status": "MISSING"
+    },
+    {
+      "id": "B08-005",
+      "severity": "P2",
+      "external_classification": "CONDITIONAL_PRODUCTION_STATE_RISK",
+      "fixed_source_commit": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+      "fixed_path": "scripts/player_state.gd",
+      "fixed_function": "load_save",
+      "fixed_lines": [
+        7087,
+        7131
+      ],
+      "fixed_observed": "Fields level, profession, mode, inventory, equipment and warehouse may mutate before load_snapshot failure; last_load_result false and select_character only resets active_profile_id.",
+      "original_unproved": "The failure can be injected statically but visual exposure in CharacterSelect not demonstrated.",
+      "current_owner_change": "Private prepared SkillProgressionService validates before player fields; adopt same successful object once; no external production old-service references; plural/singular branches both restore quest",
+      "source_files": [
+        "scripts/player_state.gd"
+      ],
+      "source_review_status": "PASS",
+      "component_evidence": [
+        "Read-only ADMISSION_REVIEW and fingerprint receipt",
+        "Native68 admission52/52 business PASS with actual B skill/plural quest recovery, runner FAIL engine11",
+        "Native68 legacy skill_progression_save_integration runner PASS/exit0/engine0; receipt/count MISSING",
+        "Native69 admission52/52 clean runner PASS/natural0/engine0; B sole skill owner and legal nonempty plural-pet independent quest recovery, exact writer guards, full producer trace"
+      ],
+      "component_result": "PASS",
+      "remaining": "Scoped skill/profile admission component PASS; legacy skill integration receipt/count MISSING and quick-slot migration branch bounded by retained modern assignments; cannot claim all skill/late failure routes covered",
+      "aggregate_acceptance_status": "MISSING"
+    }
+  ],
+  "canonical_native57_67": {
+    "ledger_binding": {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/NATIVE57_67_EVIDENCE_LEDGER.json",
+      "bytes": 216235,
+      "sha256": "c0c2e562af62b354d27b446a4c77fcf58e3d4d6e469c9d8e66710977107cb4e6"
+    },
+    "scope": "B08 native evidence; component scope only, no aggregate APK/device acceptance",
+    "stages": [
+      {
+        "native": 57,
+        "candidate_tree": "ca339e6c2f725f901a77087221625c853be5e12b",
+        "actual_input_fingerprint": "bf35743b3dea7991c6851c499cb206a0068f16adef95b03607d5f0d4f627f069",
+        "input_count": 2537,
+        "invocation_id": "f0870f7b-9d3c-48c9-b985-706f57bcc0c1",
+        "postverification": "PASS",
+        "runner": {
+          "total": 1,
+          "passed": 0,
+          "failed": 1,
+          "engine_log_errors": 0
+        },
+        "actual_command": {
+          "script": "tools/run_godot_tests.ps1",
+          "TestPaths": [
+            "tests/framework/mode_reload_transaction_20261010_test.tscn"
+          ],
+          "TimeoutSeconds": 30,
+          "Verbose": true
+        },
+        "classification": "30s timeout; complete receipt MISSING; original full scene retained",
+        "scenes": [
+          {
+            "scene": "tests/framework/mode_reload_transaction_20261010_test.tscn",
+            "runner_result": "FAIL",
+            "runner_reason": "missing_pass_marker;process_did_not_exit;timeout_30s;non_zero_exit_code_1;framework_receipt_missing",
+            "process_exited": false,
+            "exit_code": 1,
+            "timeout": true,
+            "engine_log_failure_count": 0,
+            "framework_run_id": "cb3ba97d-32aa-48ef-a38c-01813e327f2e",
+            "framework_receipt_valid": false,
+            "framework_receipt_status": "MISSING",
+            "assertion_count_status": "MISSING",
+            "assertion_count": null,
+            "passed_checks": null,
+            "failed_checks": null,
+            "failed_check_records": [],
+            "original_receipt_reference": "MISSING",
+            "canonical_receipt_reference": null,
+            "count_note": "Ledger zero is a missing-receipt sentinel, not a measured zero-assertion total"
+          }
+        ]
+      },
+      {
+        "native": 58,
+        "candidate_tree": "945bef8c85032cac02d59b9d929cfcfdaa426ec9",
+        "actual_input_fingerprint": "b594dbb9d8cbc316297917a14cac40aa55c7361196e2f4313b113d9bbc7a534c",
+        "input_count": 2537,
+        "invocation_id": "e2067bc6-5540-4b33-ba57-63fe360fa171",
+        "postverification": "PASS",
+        "runner": {
+          "total": 1,
+          "passed": 0,
+          "failed": 1,
+          "engine_log_errors": 0
+        },
+        "actual_command": {
+          "script": "tools/run_godot_tests.ps1",
+          "TestPaths": [
+            "tests/framework/mode_reload_transaction_20261010_test.tscn"
+          ],
+          "TimeoutSeconds": 30,
+          "Verbose": true
+        },
+        "classification": "30s timeout after CHECK94; live preparation checks47/80 failed in partial stdout; complete receipt MISSING",
+        "scenes": [
+          {
+            "scene": "tests/framework/mode_reload_transaction_20261010_test.tscn",
+            "runner_result": "FAIL",
+            "runner_reason": "missing_pass_marker;process_did_not_exit;timeout_30s;non_zero_exit_code_1;framework_receipt_missing",
+            "process_exited": false,
+            "exit_code": 1,
+            "timeout": true,
+            "engine_log_failure_count": 0,
+            "framework_run_id": "375c0f8c-7233-43d8-aac7-06a64e914d33",
+            "framework_receipt_valid": false,
+            "framework_receipt_status": "MISSING",
+            "assertion_count_status": "MISSING",
+            "assertion_count": null,
+            "passed_checks": null,
+            "failed_checks": null,
+            "failed_check_records": [],
+            "original_receipt_reference": "MISSING",
+            "canonical_receipt_reference": null,
+            "count_note": "Ledger zero is a missing-receipt sentinel, not a measured zero-assertion total"
+          }
+        ]
+      },
+      {
+        "native": 59,
+        "candidate_tree": "d198b391778f4ce1cd62d15772dfc487e31d8099",
+        "actual_input_fingerprint": "2714abc8d8d1bbb50394747b0ad40758cb092dda40522e1195002d79ede84971",
+        "input_count": 2543,
+        "invocation_id": "a2be2071-1d5b-4682-b758-9232d3bf2197",
+        "postverification": "PASS",
+        "runner": {
+          "total": 1,
+          "passed": 0,
+          "failed": 1,
+          "engine_log_errors": 2
+        },
+        "actual_command": {
+          "script": "tools/run_godot_tests.ps1",
+          "TestPaths": [
+            "tests/framework/mode_reload_transaction_input_composed_20261010_test.tscn"
+          ],
+          "TimeoutSeconds": 30,
+          "Verbose": true
+        },
+        "classification": "test parse error: diagnostic large needs explicit bool; engine2; receipt MISSING",
+        "scenes": [
+          {
+            "scene": "tests/framework/mode_reload_transaction_input_composed_20261010_test.tscn",
+            "runner_result": "FAIL",
+            "runner_reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_1;stderr_failures_2;engine_log_failures_2;framework_receipt_missing",
+            "process_exited": false,
+            "exit_code": 1,
+            "timeout": false,
+            "engine_log_failure_count": 2,
+            "framework_run_id": "d5f8ea35-7cb2-41f7-bc43-aa7c57d3105b",
+            "framework_receipt_valid": false,
+            "framework_receipt_status": "MISSING",
+            "assertion_count_status": "MISSING",
+            "assertion_count": null,
+            "passed_checks": null,
+            "failed_checks": null,
+            "failed_check_records": [],
+            "original_receipt_reference": "MISSING",
+            "canonical_receipt_reference": null,
+            "count_note": "Ledger zero is a missing-receipt sentinel, not a measured zero-assertion total"
+          }
+        ]
+      },
+      {
+        "native": 60,
+        "candidate_tree": "1c0467da2598dad5ea36ea5e2cb6a90690e69bc3",
+        "actual_input_fingerprint": "0f9395487d95600838160b1e5fd75d503fb0b042d327dd4749b2024fc87f83d7",
+        "input_count": 2543,
+        "invocation_id": "45f7da91-2b32-4e7a-be25-690718d90c5b",
+        "postverification": "PASS",
+        "runner": {
+          "total": 1,
+          "passed": 0,
+          "failed": 1,
+          "engine_log_errors": 0
+        },
+        "actual_command": {
+          "script": "tools/run_godot_tests.ps1",
+          "TestPaths": [
+            "tests/framework/mode_reload_transaction_input_composed_20261010_test.tscn"
+          ],
+          "TimeoutSeconds": 30,
+          "Verbose": true
+        },
+        "classification": "81 checks, one actual detached-candidate live price-counter mutation failure; later fixed with candidate-local price resolver",
+        "scenes": [
+          {
+            "scene": "tests/framework/mode_reload_transaction_input_composed_20261010_test.tscn",
+            "runner_result": "FAIL",
+            "runner_reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+            "process_exited": true,
+            "exit_code": 1,
+            "timeout": false,
+            "engine_log_failure_count": 0,
+            "framework_run_id": "7b42c598-35f8-4c4a-b933-2d3f132bb452",
+            "framework_receipt_valid": false,
+            "framework_receipt_status": "FAIL",
+            "assertion_count_status": "PASS",
+            "assertion_count": 81,
+            "passed_checks": 80,
+            "failed_checks": 1,
+            "failed_check_records": [
+              {
+                "id": 47,
+                "label": "successful detached preparation preserves every live GameData script property",
+                "passed": false
+              }
+            ],
+            "original_receipt_reference": "outputs/test_logs/v109_direct60_mode_transaction/raw/7b42c598-35f8-4c4a-b933-2d3f132bb452/mode_reload_transaction_input_composed_20261010_test.result.json",
+            "canonical_receipt_reference": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native60/raw/7b42c598-35f8-4c4a-b933-2d3f132bb452/mode_reload_transaction_input_composed_20261010_test.result.json",
+            "count_note": "Measured complete receipt; no stage totals combined"
+          }
+        ]
+      },
+      {
+        "native": 61,
+        "candidate_tree": "ed85a6eb825e5959655229e20bc4380ba1c8576e",
+        "actual_input_fingerprint": "e47bf109f6f9bf93b8fe9df09949070074f444aea0699b17803d3c9e7bd648ba",
+        "input_count": 2543,
+        "invocation_id": "161f5e5a-8858-4413-bea1-0301a32cc292",
+        "postverification": "PASS",
+        "runner": {
+          "total": 1,
+          "passed": 1,
+          "failed": 0,
+          "engine_log_errors": 0
+        },
+        "actual_command": {
+          "script": "tools/run_godot_tests.ps1",
+          "TestPaths": [
+            "tests/framework/mode_reload_transaction_input_composed_20261010_test.tscn"
+          ],
+          "TimeoutSeconds": 30,
+          "Verbose": true
+        },
+        "classification": "input/composed81 clean component PASS; includes publication coherence, unchanged request/input/reentry/consumed checks",
+        "scenes": [
+          {
+            "scene": "tests/framework/mode_reload_transaction_input_composed_20261010_test.tscn",
+            "runner_result": "PASS",
+            "runner_reason": "",
+            "process_exited": true,
+            "exit_code": 0,
+            "timeout": false,
+            "engine_log_failure_count": 0,
+            "framework_run_id": "e2157b87-df6a-47ba-a463-2a902db0f886",
+            "framework_receipt_valid": true,
+            "framework_receipt_status": "PASS",
+            "assertion_count_status": "PASS",
+            "assertion_count": 81,
+            "passed_checks": 81,
+            "failed_checks": 0,
+            "failed_check_records": [],
+            "original_receipt_reference": "outputs/test_logs/v109_direct61_mode_transaction/raw/e2157b87-df6a-47ba-a463-2a902db0f886/mode_reload_transaction_input_composed_20261010_test.result.json",
+            "canonical_receipt_reference": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native61/raw/e2157b87-df6a-47ba-a463-2a902db0f886/mode_reload_transaction_input_composed_20261010_test.result.json",
+            "count_note": "Measured complete receipt; no stage totals combined"
+          }
+        ]
+      },
+      {
+        "native": 62,
+        "candidate_tree": "ed85a6eb825e5959655229e20bc4380ba1c8576e",
+        "actual_input_fingerprint": "06ec5c76010b87dd05a282ca1817d4dad7130177b737c23ac075e266ecf68169",
+        "input_count": 2543,
+        "invocation_id": "f1002d88-e778-4ad1-a83d-613e1773eec7",
+        "postverification": "PASS",
+        "runner": {
+          "total": 5,
+          "passed": 3,
+          "failed": 2,
+          "engine_log_errors": 1
+        },
+        "actual_command": {
+          "script": "tools/run_godot_tests.ps1",
+          "TestPaths": [
+            "tests/framework/mode_reload_transaction_stale_20261010_test.tscn",
+            "tests/framework/mode_reload_transaction_profile_20261010_test.tscn",
+            "tests/framework/mode_reload_transaction_later_20261010_test.tscn",
+            "tests/framework/mode_reload_transaction_failure_boundary_20261010_test.tscn",
+            "tests/framework/mode_reload_transaction_direct_failure_20261010_test.tscn"
+          ],
+          "TimeoutSeconds": 30,
+          "Verbose": true
+        },
+        "classification": "five separate scenes: stale51, later39, boundary95 clean PASS; profile59/60 FAIL; direct173 business PASS but expected production engine error makes runner FAIL",
+        "scenes": [
+          {
+            "scene": "tests/framework/mode_reload_transaction_stale_20261010_test.tscn",
+            "runner_result": "PASS",
+            "runner_reason": "",
+            "process_exited": true,
+            "exit_code": 0,
+            "timeout": false,
+            "engine_log_failure_count": 0,
+            "framework_run_id": "0fc2f246-56d3-47c7-8fdb-1fce08bd2c13",
+            "framework_receipt_valid": true,
+            "framework_receipt_status": "PASS",
+            "assertion_count_status": "PASS",
+            "assertion_count": 51,
+            "passed_checks": 51,
+            "failed_checks": 0,
+            "failed_check_records": [],
+            "original_receipt_reference": "outputs/test_logs/v109_direct62_mode_transaction/raw/0fc2f246-56d3-47c7-8fdb-1fce08bd2c13/mode_reload_transaction_stale_20261010_test.result.json",
+            "canonical_receipt_reference": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/raw/0fc2f246-56d3-47c7-8fdb-1fce08bd2c13/mode_reload_transaction_stale_20261010_test.result.json",
+            "count_note": "Measured complete receipt; no stage totals combined"
+          },
+          {
+            "scene": "tests/framework/mode_reload_transaction_profile_20261010_test.tscn",
+            "runner_result": "FAIL",
+            "runner_reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+            "process_exited": true,
+            "exit_code": 1,
+            "timeout": false,
+            "engine_log_failure_count": 0,
+            "framework_run_id": "10929fbd-9288-437f-b1c5-3f1752bc7e7d",
+            "framework_receipt_valid": false,
+            "framework_receipt_status": "FAIL",
+            "assertion_count_status": "PASS",
+            "assertion_count": 60,
+            "passed_checks": 59,
+            "failed_checks": 1,
+            "failed_check_records": [
+              {
+                "id": 53,
+                "label": "complete successful reload restores the writer's mode/later/level/gold/inventory/equipment/identity",
+                "passed": false
+              }
+            ],
+            "original_receipt_reference": "outputs/test_logs/v109_direct62_mode_transaction/raw/10929fbd-9288-437f-b1c5-3f1752bc7e7d/mode_reload_transaction_profile_20261010_test.result.json",
+            "canonical_receipt_reference": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/raw/10929fbd-9288-437f-b1c5-3f1752bc7e7d/mode_reload_transaction_profile_20261010_test.result.json",
+            "count_note": "Measured complete receipt; no stage totals combined"
+          },
+          {
+            "scene": "tests/framework/mode_reload_transaction_later_20261010_test.tscn",
+            "runner_result": "PASS",
+            "runner_reason": "",
+            "process_exited": true,
+            "exit_code": 0,
+            "timeout": false,
+            "engine_log_failure_count": 0,
+            "framework_run_id": "1dbf322a-7fe0-4477-acca-ab9f8abf60f3",
+            "framework_receipt_valid": true,
+            "framework_receipt_status": "PASS",
+            "assertion_count_status": "PASS",
+            "assertion_count": 39,
+            "passed_checks": 39,
+            "failed_checks": 0,
+            "failed_check_records": [],
+            "original_receipt_reference": "outputs/test_logs/v109_direct62_mode_transaction/raw/1dbf322a-7fe0-4477-acca-ab9f8abf60f3/mode_reload_transaction_later_20261010_test.result.json",
+            "canonical_receipt_reference": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/raw/1dbf322a-7fe0-4477-acca-ab9f8abf60f3/mode_reload_transaction_later_20261010_test.result.json",
+            "count_note": "Measured complete receipt; no stage totals combined"
+          },
+          {
+            "scene": "tests/framework/mode_reload_transaction_failure_boundary_20261010_test.tscn",
+            "runner_result": "PASS",
+            "runner_reason": "",
+            "process_exited": true,
+            "exit_code": 0,
+            "timeout": false,
+            "engine_log_failure_count": 0,
+            "framework_run_id": "53bf35c5-d97a-4116-aae6-13e01e7642c3",
+            "framework_receipt_valid": true,
+            "framework_receipt_status": "PASS",
+            "assertion_count_status": "PASS",
+            "assertion_count": 95,
+            "passed_checks": 95,
+            "failed_checks": 0,
+            "failed_check_records": [],
+            "original_receipt_reference": "outputs/test_logs/v109_direct62_mode_transaction/raw/53bf35c5-d97a-4116-aae6-13e01e7642c3/mode_reload_transaction_failure_boundary_20261010_test.result.json",
+            "canonical_receipt_reference": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/raw/53bf35c5-d97a-4116-aae6-13e01e7642c3/mode_reload_transaction_failure_boundary_20261010_test.result.json",
+            "count_note": "Measured complete receipt; no stage totals combined"
+          },
+          {
+            "scene": "tests/framework/mode_reload_transaction_direct_failure_20261010_test.tscn",
+            "runner_result": "FAIL",
+            "runner_reason": "stderr_failures_1;engine_log_failures_1",
+            "process_exited": true,
+            "exit_code": 0,
+            "timeout": false,
+            "engine_log_failure_count": 1,
+            "framework_run_id": "3cd59bb2-c548-4648-bcdd-1989471311d7",
+            "framework_receipt_valid": true,
+            "framework_receipt_status": "PASS",
+            "assertion_count_status": "PASS",
+            "assertion_count": 173,
+            "passed_checks": 173,
+            "failed_checks": 0,
+            "failed_check_records": [],
+            "original_receipt_reference": "outputs/test_logs/v109_direct62_mode_transaction/raw/3cd59bb2-c548-4648-bcdd-1989471311d7/mode_reload_transaction_direct_failure_20261010_test.result.json",
+            "canonical_receipt_reference": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native62/raw/3cd59bb2-c548-4648-bcdd-1989471311d7/mode_reload_transaction_direct_failure_20261010_test.result.json",
+            "count_note": "Measured complete receipt; no stage totals combined"
+          }
+        ]
+      },
+      {
+        "native": 63,
+        "candidate_tree": "e4fc5f1585d8040a83f02250657fea9ee1a55f3d",
+        "actual_input_fingerprint": "70a063165afac9d81a624ada293c3d2afd7d1ccb2e0c9f3a68c688d1e7a5c58d",
+        "input_count": 2543,
+        "invocation_id": "e4206557-5f7d-4c76-9a40-eb0eca18261d",
+        "postverification": "PASS",
+        "runner": {
+          "total": 1,
+          "passed": 0,
+          "failed": 1,
+          "engine_log_errors": 0
+        },
+        "actual_command": {
+          "script": "tools/run_godot_tests.ps1",
+          "TestPaths": [
+            "tests/framework/mode_reload_transaction_profile_20261010_test.tscn"
+          ],
+          "TimeoutSeconds": 30,
+          "Verbose": true
+        },
+        "classification": "profile59/60 FAIL; full differences limited to8 equal int/float wire representation changes; original FAIL retained",
+        "scenes": [
+          {
+            "scene": "tests/framework/mode_reload_transaction_profile_20261010_test.tscn",
+            "runner_result": "FAIL",
+            "runner_reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+            "process_exited": true,
+            "exit_code": 1,
+            "timeout": false,
+            "engine_log_failure_count": 0,
+            "framework_run_id": "a9f5302d-4dc1-482a-b4fb-bc1a09d83637",
+            "framework_receipt_valid": false,
+            "framework_receipt_status": "FAIL",
+            "assertion_count_status": "PASS",
+            "assertion_count": 60,
+            "passed_checks": 59,
+            "failed_checks": 1,
+            "failed_check_records": [
+              {
+                "id": 53,
+                "label": "complete successful reload restores the writer's mode/later/level/gold/inventory/equipment/identity",
+                "passed": false
+              }
+            ],
+            "original_receipt_reference": "outputs/test_logs/v109_direct63_mode_transaction/raw/a9f5302d-4dc1-482a-b4fb-bc1a09d83637/mode_reload_transaction_profile_20261010_test.result.json",
+            "canonical_receipt_reference": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native63/raw/a9f5302d-4dc1-482a-b4fb-bc1a09d83637/mode_reload_transaction_profile_20261010_test.result.json",
+            "count_note": "Measured complete receipt; no stage totals combined"
+          }
+        ]
+      },
+      {
+        "native": 64,
+        "candidate_tree": "8a6fc0cade1338605e0378f625774111bd88a9ed",
+        "actual_input_fingerprint": "2df0cca1f1309653b0f8a75a08011b02d64c8459b0254aa7837e4bc9e8b5b95e",
+        "input_count": 2543,
+        "invocation_id": "4670d65d-0f63-4b58-9995-a30d144a5df9",
+        "postverification": "PASS",
+        "runner": {
+          "total": 1,
+          "passed": 1,
+          "failed": 0,
+          "engine_log_errors": 0
+        },
+        "actual_command": {
+          "script": "tools/run_godot_tests.ps1",
+          "TestPaths": [
+            "tests/framework/mode_reload_transaction_profile_20261010_test.tscn"
+          ],
+          "TimeoutSeconds": 30,
+          "Verbose": true
+        },
+        "classification": "profile60/60 clean PASS after success-only full JSON roundtrip comparison; failure unchanged assertions remain strict",
+        "scenes": [
+          {
+            "scene": "tests/framework/mode_reload_transaction_profile_20261010_test.tscn",
+            "runner_result": "PASS",
+            "runner_reason": "",
+            "process_exited": true,
+            "exit_code": 0,
+            "timeout": false,
+            "engine_log_failure_count": 0,
+            "framework_run_id": "70ff651c-dc98-4158-be79-603a9cfffccc",
+            "framework_receipt_valid": true,
+            "framework_receipt_status": "PASS",
+            "assertion_count_status": "PASS",
+            "assertion_count": 60,
+            "passed_checks": 60,
+            "failed_checks": 0,
+            "failed_check_records": [],
+            "original_receipt_reference": "outputs/test_logs/v109_direct64_mode_transaction/raw/70ff651c-dc98-4158-be79-603a9cfffccc/mode_reload_transaction_profile_20261010_test.result.json",
+            "canonical_receipt_reference": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native64/raw/70ff651c-dc98-4158-be79-603a9cfffccc/mode_reload_transaction_profile_20261010_test.result.json",
+            "count_note": "Measured complete receipt; no stage totals combined"
+          }
+        ]
+      },
+      {
+        "native": 65,
+        "candidate_tree": "681af307c4a3002b70017d6e4e06e091931f337d",
+        "actual_input_fingerprint": "fce6b1ba399a89bb21ca18e25e45dae3fd8e63c8779b68f4d610eecb1c5083c1",
+        "input_count": 2545,
+        "invocation_id": "8a0e1649-1d27-449d-861e-aca2881d2fcb",
+        "postverification": "PASS",
+        "runner": {
+          "total": 1,
+          "passed": 0,
+          "failed": 1,
+          "engine_log_errors": 2
+        },
+        "actual_command": {
+          "script": "tools/run_godot_tests.ps1",
+          "TestPaths": [
+            "tests/framework/profile_load_admission_20261010_test.tscn"
+          ],
+          "TimeoutSeconds": 30,
+          "Verbose": true
+        },
+        "classification": "admission test parse error on unchanged inference; engine2; receipt MISSING",
+        "scenes": [
+          {
+            "scene": "tests/framework/profile_load_admission_20261010_test.tscn",
+            "runner_result": "FAIL",
+            "runner_reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_1;stderr_failures_2;engine_log_failures_2;framework_receipt_missing",
+            "process_exited": false,
+            "exit_code": 1,
+            "timeout": false,
+            "engine_log_failure_count": 2,
+            "framework_run_id": "3bd18f6d-2e1f-435a-8f3b-bd1715660f43",
+            "framework_receipt_valid": false,
+            "framework_receipt_status": "MISSING",
+            "assertion_count_status": "MISSING",
+            "assertion_count": null,
+            "passed_checks": null,
+            "failed_checks": null,
+            "failed_check_records": [],
+            "original_receipt_reference": "MISSING",
+            "canonical_receipt_reference": null,
+            "count_note": "Ledger zero is a missing-receipt sentinel, not a measured zero-assertion total"
+          }
+        ]
+      },
+      {
+        "native": 66,
+        "candidate_tree": "b052a06982285b6ae8bf9fe3eefa7a1695d4a95e",
+        "actual_input_fingerprint": "881a53a43156a9d22bc443d9549cc89aed3e8f36a012fe992ef1161a334beb5a",
+        "input_count": 2545,
+        "invocation_id": "d23de9a1-615b-4ae0-a627-fca3d46dd716",
+        "postverification": "PASS",
+        "runner": {
+          "total": 1,
+          "passed": 0,
+          "failed": 1,
+          "engine_log_errors": 0
+        },
+        "actual_command": {
+          "script": "tools/run_godot_tests.ps1",
+          "TestPaths": [
+            "tests/framework/profile_load_admission_20261010_test.tscn"
+          ],
+          "TimeoutSeconds": 30,
+          "Verbose": true
+        },
+        "classification": "admission23/24 FAIL CHECK22: fixture did not yet persist a legal nonempty plural pet profile; real TMP fault not reached",
+        "scenes": [
+          {
+            "scene": "tests/framework/profile_load_admission_20261010_test.tscn",
+            "runner_result": "FAIL",
+            "runner_reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+            "process_exited": true,
+            "exit_code": 1,
+            "timeout": false,
+            "engine_log_failure_count": 0,
+            "framework_run_id": "ecce42d6-10c3-472c-aa29-7bc370445cd7",
+            "framework_receipt_valid": false,
+            "framework_receipt_status": "FAIL",
+            "assertion_count_status": "PASS",
+            "assertion_count": 24,
+            "passed_checks": 23,
+            "failed_checks": 1,
+            "failed_check_records": [
+              {
+                "id": 22,
+                "label": "plural-pet formal profile persists the independent expected active quest progress",
+                "passed": false
+              }
+            ],
+            "original_receipt_reference": "outputs/test_logs/v109_direct66_mode_transaction/raw/ecce42d6-10c3-472c-aa29-7bc370445cd7/profile_load_admission_20261010_test.result.json",
+            "canonical_receipt_reference": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native66/raw/ecce42d6-10c3-472c-aa29-7bc370445cd7/profile_load_admission_20261010_test.result.json",
+            "count_note": "Measured complete receipt; no stage totals combined"
+          }
+        ]
+      },
+      {
+        "native": 67,
+        "candidate_tree": "f5abae6e2fc6eeb19f094654a94311adb5cc309c",
+        "actual_input_fingerprint": "6f5f698e68069666e47ca55259a25d0fcc1d4ec81d4345fc6927f3919ab92472",
+        "input_count": 2551,
+        "invocation_id": "77778699-c458-4e31-9eaf-241163d2ecff",
+        "postverification": "PASS",
+        "runner": {
+          "total": 3,
+          "passed": 3,
+          "failed": 0,
+          "engine_log_errors": 0
+        },
+        "actual_command": {
+          "script": "tools/run_godot_tests.ps1",
+          "TestPaths": [
+            "tests/world_monster_clock_persistence_test.tscn",
+            "tests/world_monster_clock_legacy_migration_test.tscn",
+            "tests/profile_business_validation_recovery_test.tscn"
+          ],
+          "TimeoutSeconds": 30,
+          "Verbose": true
+        },
+        "classification": "three legacy IO scenes runner PASS/exit0/engine0; framework receipts and assertion counts MISSING",
+        "scenes": [
+          {
+            "scene": "tests/world_monster_clock_persistence_test.tscn",
+            "runner_result": "PASS",
+            "runner_reason": "",
+            "process_exited": true,
+            "exit_code": 0,
+            "timeout": false,
+            "engine_log_failure_count": 0,
+            "framework_run_id": null,
+            "framework_receipt_valid": null,
+            "framework_receipt_status": "MISSING",
+            "assertion_count_status": "MISSING",
+            "assertion_count": null,
+            "passed_checks": null,
+            "failed_checks": null,
+            "failed_check_records": [],
+            "original_receipt_reference": "MISSING",
+            "canonical_receipt_reference": null,
+            "count_note": "Ledger zero is a missing-receipt sentinel, not a measured zero-assertion total"
+          },
+          {
+            "scene": "tests/world_monster_clock_legacy_migration_test.tscn",
+            "runner_result": "PASS",
+            "runner_reason": "",
+            "process_exited": true,
+            "exit_code": 0,
+            "timeout": false,
+            "engine_log_failure_count": 0,
+            "framework_run_id": null,
+            "framework_receipt_valid": null,
+            "framework_receipt_status": "MISSING",
+            "assertion_count_status": "MISSING",
+            "assertion_count": null,
+            "passed_checks": null,
+            "failed_checks": null,
+            "failed_check_records": [],
+            "original_receipt_reference": "MISSING",
+            "canonical_receipt_reference": null,
+            "count_note": "Ledger zero is a missing-receipt sentinel, not a measured zero-assertion total"
+          },
+          {
+            "scene": "tests/profile_business_validation_recovery_test.tscn",
+            "runner_result": "PASS",
+            "runner_reason": "",
+            "process_exited": true,
+            "exit_code": 0,
+            "timeout": false,
+            "engine_log_failure_count": 0,
+            "framework_run_id": null,
+            "framework_receipt_valid": null,
+            "framework_receipt_status": "MISSING",
+            "assertion_count_status": "MISSING",
+            "assertion_count": null,
+            "passed_checks": null,
+            "failed_checks": null,
+            "failed_check_records": [],
+            "original_receipt_reference": "MISSING",
+            "canonical_receipt_reference": null,
+            "count_note": "Ledger zero is a missing-receipt sentinel, not a measured zero-assertion total"
+          }
+        ]
+      }
+    ],
+    "do_not_combine_different_source_stages_into_final_pass": true
+  },
+  "native68_supplement": {
+    "included_in_canonical57_67_ledger": false,
+    "candidate_tree": "864a66a0f93f7e983166b47098ccdf1611b48fce",
+    "actual_input_fingerprint": "fc8ec681d681ac3b12e7135a3eb851c89d1355a2ef55cfa41ca592f0f4a58b74",
+    "input_count": 2553,
+    "postverification": "PASS",
+    "invocation_id": "8b73d71f-8412-46d8-abc3-ddfb783d7b9d",
+    "engine": {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+      "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "bytes": 198152
+    },
+    "runner": {
+      "total": 2,
+      "passed": 1,
+      "failed": 1,
+      "engine_log_errors": 11
+    },
+    "scenes": [
+      {
+        "scene": "tests/framework/profile_load_admission_20261010_test.tscn",
+        "runner_result": "FAIL",
+        "runner_reason": "stderr_failures_11;engine_log_failures_11",
+        "process_exited": true,
+        "exit_code": 0,
+        "timeout": false,
+        "engine_log_failure_count": 11,
+        "framework_run_id": "709a6d90-50a3-4d13-9b26-6361770a0ea9",
+        "framework_receipt_valid": true,
+        "framework_receipt_status": "PASS",
+        "assertion_count_status": "PASS",
+        "assertion_count": 52,
+        "passed_checks": 52,
+        "failed_checks": 0,
+        "receipt_reference": "outputs\\test_logs\\v109_direct68_mode_transaction\\raw\\709a6d90-50a3-4d13-9b26-6361770a0ea9\\profile_load_admission_20261010_test.result.json",
+        "acceptance_status": "FAIL",
+        "scope_note": "52 business checks PASS; fixture empty-byte HashingContext.update causes11 engine errors, so clean native acceptance FAIL"
+      },
+      {
+        "scene": "tests/skill_progression_save_integration_test.tscn",
+        "runner_result": "PASS",
+        "runner_reason": "",
+        "process_exited": true,
+        "exit_code": 0,
+        "timeout": false,
+        "engine_log_failure_count": 0,
+        "framework_run_id": null,
+        "framework_receipt_valid": null,
+        "framework_receipt_status": "MISSING",
+        "assertion_count_status": "MISSING",
+        "assertion_count": null,
+        "passed_checks": null,
+        "failed_checks": null,
+        "receipt_reference": null,
+        "acceptance_status": "PASS",
+        "scope_note": "Legacy runner-only clean PASS; framework receipt/count MISSING; modern skill assignments limit legacy quick-slot migration branch coverage"
+      }
+    ],
+    "admission_checks_27_52": [
+      {
+        "id": 27,
+        "label": "writer identity negatives retain a real valid owned A empty-generation snapshot",
+        "passed": true
+      },
+      {
+        "id": 28,
+        "label": "formal writer rejects missing generation plus extra key before submission and preserves A snapshot bytes",
+        "passed": true
+      },
+      {
+        "id": 29,
+        "label": "formal writer rejects more than two identity keys before submission and preserves A snapshot bytes",
+        "passed": true
+      },
+      {
+        "id": 30,
+        "label": "formal writer rejects non-String generation before submission and preserves A snapshot bytes",
+        "passed": true
+      },
+      {
+        "id": 31,
+        "label": "formal writer rejects wrong target path before submission and preserves A snapshot bytes",
+        "passed": true
+      },
+      {
+        "id": 32,
+        "label": "only the exact absent B clock TMP inside this account is claimed for the directory fault",
+        "passed": true
+      },
+      {
+        "id": 33,
+        "label": "owned directory occupies the exact formal clock temporary-file path",
+        "passed": true
+      },
+      {
+        "id": 34,
+        "label": "fault ownership marker opens inside the exact TMP directory",
+        "passed": true
+      },
+      {
+        "id": 35,
+        "label": "directory at TMP preserves the accepted real replay and its required checkpoint watermarks",
+        "passed": true
+      },
+      {
+        "id": 36,
+        "label": "real B selection reaches the necessary checkpoint and fails with its exact load diagnostic",
+        "passed": true
+      },
+      {
+        "id": 37,
+        "label": "the same world persistence owner completes exactly one failed request, proving actual IO admission",
+        "passed": true
+      },
+      {
+        "id": 38,
+        "label": "checkpoint rejection preserves A identity, basic fields, complete skill owner and world watermarks",
+        "passed": true
+      },
+      {
+        "id": 39,
+        "label": "checkpoint rejection preserves A effective feature object and compilation generation",
+        "passed": true
+      },
+      {
+        "id": 40,
+        "label": "checkpoint rejection preserves catalog revisions, mode and expansion flags without publication signals",
+        "passed": true
+      },
+      {
+        "id": 41,
+        "label": "failed target B retains its save block while valid old A remains active",
+        "passed": true
+      },
+      {
+        "id": 42,
+        "label": "failed admission leaves every captured profile, account, index and clock byte unchanged and keeps the owned blocker",
+        "passed": true
+      },
+      {
+        "id": 43,
+        "label": "formal failed-B save gate rejects stale A fields before any profile or shared warehouse overwrite",
+        "passed": true
+      },
+      {
+        "id": 44,
+        "label": "remove only this run's ownership marker and empty exact TMP directory",
+        "passed": true
+      },
+      {
+        "id": 45,
+        "label": "same formal B selection succeeds immediately after removing only the owned TMP fault",
+        "passed": true
+      },
+      {
+        "id": 46,
+        "label": "successful B admission clears its previous load failure save guard",
+        "passed": true
+      },
+      {
+        "id": 47,
+        "label": "recovered B adopts its own stored fields and sole skill progression",
+        "passed": true
+      },
+      {
+        "id": 48,
+        "label": "plural-pet formal profile restores B's independently expected quest progress outside the legacy singular branch",
+        "passed": true
+      },
+      {
+        "id": 49,
+        "label": "recovery performs one required checkpoint and adopts primary and backup watermarks without duplicate world IO",
+        "passed": true
+      },
+      {
+        "id": 50,
+        "label": "recovered B publishes its composed saved configuration exactly once through the formal owners",
+        "passed": true
+      },
+      {
+        "id": 51,
+        "label": "ordinary recovery changes only the necessary world checkpoint and never rewrites character or shared account files",
+        "passed": true
+      },
+      {
+        "id": 52,
+        "label": "native producer writes this invocation's complete owned admission trace",
+        "passed": true
+      }
+    ],
+    "evidence_bindings": [
+      {
+        "path": "outputs/wake_drop_v108_review_followup_20261009/B08_NATIVE_FREEZE_68.json",
+        "bytes": 496161,
+        "sha256": "fc8ec681d681ac3b12e7135a3eb851c89d1355a2ef55cfa41ca592f0f4a58b74"
+      },
+      {
+        "path": "outputs/wake_drop_v108_review_followup_20261009/B08_NATIVE_FREEZE_68_POSTVERIFY.json",
+        "bytes": 468,
+        "sha256": "0146411236925a33a3d15b6c65009c7cdd79067f5b322ed9f3a5e052feae3185"
+      },
+      {
+        "path": "outputs/wake_drop_v108_review_followup_20261009/B08_NATIVE68_DRIVER.txt",
+        "bytes": 16563,
+        "sha256": "89903f1974822b0b35bb44f24f52b7061b74877af5655effcd45c2a2f6c52637"
+      },
+      {
+        "path": "outputs/test_logs/v109_direct68_mode_transaction/logs/runner_results_adhoc_20261010_114844_607_22100.json",
+        "bytes": 10480,
+        "sha256": "980ea6ecbba7ced55b04c5a7f6b8ff619aca275efdcd0048985d3e9a6479a04c"
+      },
+      {
+        "path": "outputs/test_logs/v109_direct68_mode_transaction/raw/709a6d90-50a3-4d13-9b26-6361770a0ea9/profile_load_admission_20261010_test.result.json",
+        "bytes": 8464,
+        "sha256": "3b9e1e9f360693c58b08e9648590db3cc2bd8c6d53df51d872677bc0a940b022"
+      }
+    ],
+    "disposition": "FAIL: fixture _file_hashes updates empty byte arrays;11 len==0 engine errors retained; complete business52/52 PASS is not final native PASS"
+  },
+  "acceptance_boundaries": {
+    "whole_project_audit": "MISSING",
+    "APK109": "NOT_RUN",
+    "DEVICE TEST": "NOT_RUN",
+    "B08_current_same_source_aggregate_native": "MISSING",
+    "BAT127_drop_policy": "BLOCKED",
+    "BAT127_note": "User product decision pending; do not invent drop probability or restore fallback",
+    "legacy_framework_receipts": "MISSING for Native67 three IO scenes and Native68 skill integration; assertion counts null, no inference",
+    "native62_direct_business": "PASS173/173",
+    "native62_direct_runner": "FAIL",
+    "native62_direct_classification": "EXPECTED_PRODUCTION_REJECTION",
+    "native68_admission_business": "PASS52/52",
+    "native68_admission_runner": "FAIL",
+    "native69_profile": "PASS52/52 clean runner PASS/natural0/engine0; scoped admission only",
+    "combat_performance_android_crash_ui_full_consumers": "Existing cross-batch MISSING/NOT_RUN/BLOCKED remain unchanged",
+    "B08_external_review_of_current_candidate": "NOT_RUN; pending B09 fixed-current-source external review"
+  },
+  "root_integration_notes": [
+    "Draft does not commit, push, merge or change an index; root owns reviewbranch integration",
+    "Do not rewrite external fixed-source findings to pretend they audited the local remediation",
+    "Retain all Native57-68 FAIL/MISSING source/engine/scene/run/invocation identities; no cherry-picking or assertion weakening",
+    "Native69 own freeze, matching result, complete52-check receipt, full producer trace and postverification were read and bound here; scoped admission PASS does not replace prior FAIL/MISSING or current-source external B09 review"
+  ],
+  "canonical_native57_69": {
+    "ledger_binding": {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/NATIVE57_69_EVIDENCE_LEDGER.json",
+      "bytes": 272201,
+      "sha256": "41f9a25e5bb0c333ccde4a9c241593679b656e1b56c14520e1f420cabe64fc77"
+    },
+    "scope": "B08 native evidence; component scope only, no aggregate APK/device acceptance",
+    "stage_numbers": [
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69
+    ],
+    "preserves_prior_failures": true,
+    "do_not_combine_different_source_stages_as_final_same_source_pass": true
+  },
+  "native69_supplement": {
+    "status": "PASS",
+    "scope": "Only profile_load_admission_20261010_test after diagnostic empty-hash guard; all52 original checks, full formal IO/content and ordinary30s retained",
+    "executed_by": "root",
+    "executed_by_this_draft": false,
+    "canonical_stage": {
+      "number": 69,
+      "candidate_tree": "1180b2a65b445192d73704fadfc629554590f337",
+      "actual_input_fingerprint": "c777d9d737e8b2588deb6084d67cf2ec25e0b2afb1bfa0efe536d23f703b5611",
+      "input_count": 2553,
+      "engine": {
+        "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+        "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+        "bytes": 198152
+      },
+      "main_index_sha256": "ddacea4eed570faed0a6003c87352552e74e902874b5dee61d8863a2316e29d7",
+      "postverification": "PASS",
+      "actual_command": {
+        "script": "tools/run_godot_tests.ps1",
+        "TestPaths": [
+          "tests/framework/profile_load_admission_20261010_test.tscn"
+        ],
+        "TimeoutSeconds": 30,
+        "Verbose": true
+      },
+      "environment": {
+        "GIT_INDEX_FILE": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\wake_drop_v108_review_followup_20261009\\B08_NATIVE_FREEZE_69.index",
+        "HARDCORE_R3_CONTENT_SHA256": "c777d9d737e8b2588deb6084d67cf2ec25e0b2afb1bfa0efe536d23f703b5611",
+        "HARDCORE_AUDIT_LOG_ROOT": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct69_mode_transaction\\logs",
+        "HARDCORE_AUDIT_EVIDENCE_ROOT": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct69_mode_transaction\\raw",
+        "HARDCORE_AUDIT_RUNTIME_APPDATA": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct69_mode_transaction"
+      },
+      "rerun_reason": "Native68 completed all 52 business checks and natural exit zero, but its diagnostic file-hash helper invoked HashingContext.update on empty buffers, producing 11 real engine errors. Retain that runner FAIL and source preimage. After the minimal diagnostic-only empty-update guard, rerun only this same 52-check admission scene at ordinary 30s. Complete byte/state comparisons, formal TMP IO fault and four identity negatives remain intact. The unchanged skill integration clean PASS from Native68 is reused, not rerun.",
+      "invocation_id": "9ace50c6-f38d-402a-87f6-66059dc1cfe8",
+      "runtime_environment": {
+        "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+        "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct69_mode_transaction\\runner_9ace50c6-f38d-402a-87f6-66059dc1cfe8",
+        "runner_process_id": 8988
+      },
+      "runner": {
+        "total": 1,
+        "passed": 1,
+        "failed": 0,
+        "engine_log_errors": 0
+      },
+      "native_results": [
+        {
+          "test_name": "profile_load_admission_20261010_test",
+          "test_path": "tests/framework/profile_load_admission_20261010_test.tscn",
+          "wrapper_process_id": 11080,
+          "wrapper_started_utc": "2026-10-10T03:52:41.9510569Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct69_mode_transaction\\runner_9ace50c6-f38d-402a-87f6-66059dc1cfe8",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-10T03:53:11.9551842Z",
+          "native_exit_observed_utc": "2026-10-10T03:52:52.9704300Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "cleanup_warning_evidence": {
+            "status": "PASS",
+            "allowlisted_errors": {
+              "string_formatting": {
+                "count": 0,
+                "lines": []
+              },
+              "resources_in_use": {
+                "count": 0,
+                "lines": []
+              },
+              "rid_leak": {
+                "count": 0,
+                "lines": []
+              },
+              "null_parameter": {
+                "count": 0,
+                "lines": []
+              }
+            },
+            "unknown_error_lines": [],
+            "unknown_error_count": 0,
+            "objectdb_leak_warning_lines": [],
+            "objectdb_leak_warning_count": 0,
+            "functional_marker_observed": true,
+            "formal_evidence_status": "MISSING",
+            "formal_evidence_reason": "upstream_native_and_full_receipt_validation_required",
+            "receipt_validation_reasons": [],
+            "candidate_receipt_correlation": true,
+            "upstream_result": "NOT_RUN",
+            "raw_log_paths": [
+              "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct69_mode_transaction\\logs\\profile_load_admission_20261010_test.stdout.log",
+              "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct69_mode_transaction\\logs\\profile_load_admission_20261010_test.stderr.log",
+              "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct69_mode_transaction\\logs\\profile_load_admission_20261010_test.godot.log"
+            ],
+            "receipt_path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\framework\\profile_load_admission_20261010_test.result.json",
+            "expected_scene_id": "profile_load_admission_20261010_test",
+            "expected_invocation_id": "9ace50c6-f38d-402a-87f6-66059dc1cfe8"
+          },
+          "framework_run_id": "e04d3793-dbff-4ada-a16d-5df22da4f212",
+          "framework_receipt_valid": true,
+          "source_content_sha256": "c777d9d737e8b2588deb6084d67cf2ec25e0b2afb1bfa0efe536d23f703b5611",
+          "source_binding_scope": "External immutable input freeze required; env label alone is not a source scan",
+          "engine_fingerprints": [
+            {
+              "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+              "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+              "bytes": 198152
+            },
+            {
+              "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64.exe",
+              "sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+              "bytes": 178485256
+            }
+          ],
+          "formal_evidence_status": "PASS",
+          "formal_evidence_reason": "Requires matching external source/input freeze and this native result",
+          "result": "PASS",
+          "reason": ""
+        }
+      ],
+      "receipts": [
+        {
+          "scene": "tests/framework/profile_load_admission_20261010_test.tscn",
+          "run_id": "e04d3793-dbff-4ada-a16d-5df22da4f212",
+          "receipt": "outputs/test_logs/v109_direct69_mode_transaction/raw/e04d3793-dbff-4ada-a16d-5df22da4f212/profile_load_admission_20261010_test.result.json",
+          "count": 52,
+          "passed": 52,
+          "failed": 0,
+          "status": "PASS",
+          "failed_checks": [],
+          "producer_traces": [
+            {
+              "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native69/producer_traces/e04d3793-dbff-4ada-a16d-5df22da4f212_9ace50c6-f38d-402a-87f6-66059dc1cfe8/PROFILE_ADMISSION_TRACE.json",
+              "sha256": "3bc458bc49508600b137a9cf60f6e60c1a8068f28d91d6ccc6b09009479732de",
+              "bytes": 18444
+            }
+          ]
+        }
+      ],
+      "source_blob_artifacts": [
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native69/source_git_blobs/scripts/game_data.gd",
+          "sha256": "ba1b7a6067962f29687d5558f62f0587a4cf795034ffac56610a74c628a0c20c",
+          "bytes": 182063
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native69/source_git_blobs/scripts/player_state.gd",
+          "sha256": "2a40aab8da3c637cc75d9a95c670f70ef30d643f052911abb2f61b7238b482fb",
+          "bytes": 450430
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native69/source_git_blobs/scripts/startup_loading.gd",
+          "sha256": "7d382a0a0ae640dad6d8e069609453b9600ec25a91f5c6661b423434f047b295",
+          "bytes": 35951
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native69/source_git_blobs/scripts/layers/runtime/content_layer_registry.gd",
+          "sha256": "9bc46367b0c89e2383f561b2b3571ecc39cae74640bf60158d3be18dc8bb7d80",
+          "bytes": 39031
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native69/source_git_blobs/scripts/layers/runtime/prepared_content_configuration.gd",
+          "sha256": "cf9cb0b72a9fa37635caa91237492e7221c4965ff400b548b29b7396b07a725e",
+          "bytes": 606
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native69/source_git_blobs/scripts/layers/runtime/game_mode_service.gd",
+          "sha256": "caafed85b8ef0310cb5148388e42ee03b9e3ccf12f33e30a299d3ab5c1f25093",
+          "bytes": 2477
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native69/source_git_blobs/scripts/layers/runtime/runtime_service_facade.gd",
+          "sha256": "a1ecefadd311fffb27cedd63b8ebb2c350fca4c494436c019aa10f20814325ea",
+          "bytes": 685
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native69/source_git_blobs/tests/framework/mode_reload_transaction_20261010_test.gd",
+          "sha256": "24d712dbadf25472b1e050109bdbf5d711b515e4b5d346b66439335069817260",
+          "bytes": 45914
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native69/source_git_blobs/tests/framework/mode_reload_transaction_20261010_test.tscn",
+          "sha256": "696a43c4cd6f237d742366a661f2c6a971cf1d08ccbe352d87e2197e4a13598f",
+          "bytes": 227
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native69/source_git_blobs/tests/framework/mode_reload_transaction_input_composed_20261010_test.tscn",
+          "sha256": "85db5e3e182278f0c80bcc20eee27b4e3f81834f6fde1836a30854b25c6351f3",
+          "bytes": 274
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native69/source_git_blobs/tests/framework/mode_reload_transaction_stale_20261010_test.tscn",
+          "sha256": "1137dc8b15fdd8976d1f5f04d4697d90a3daf73da66341138b3a06556901811d",
+          "bytes": 257
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native69/source_git_blobs/tests/framework/mode_reload_transaction_profile_20261010_test.tscn",
+          "sha256": "5178db2b93864c5424531b9b3d5d75589c0a0437b868896ed46bbb54544966d6",
+          "bytes": 261
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native69/source_git_blobs/tests/framework/mode_reload_transaction_later_20261010_test.tscn",
+          "sha256": "05df3c7efe99708230d5e345752a187034f4f91dafae4374c16163654e89a098",
+          "bytes": 257
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native69/source_git_blobs/tests/framework/mode_reload_transaction_failure_boundary_20261010_test.tscn",
+          "sha256": "aa8bb1700d680f9b925fc53f1b0ec48658d1e7c44de5d674d544562f5c1970f1",
+          "bytes": 278
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native69/source_git_blobs/tests/framework/mode_reload_transaction_direct_failure_20261010_test.tscn",
+          "sha256": "214cd702c40720e3862c912198e3820fe7bace4956ea78cf15bd896f2f42da44",
+          "bytes": 274
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native69/source_git_blobs/scripts/equipment_rules.gd",
+          "sha256": "589e729fbd5c553daa575b467bc5912440bec411a4c32e58f4838a2bd0033933",
+          "bytes": 34659
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native69/source_git_blobs/tests/framework/profile_load_admission_20261010_test.gd",
+          "sha256": "a379cb981e29299aa9d449d55e303acc9dc166948620a6a539ade48bb200f9f4",
+          "bytes": 30376
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native69/source_git_blobs/tests/framework/profile_load_admission_20261010_test.tscn",
+          "sha256": "6e3ecd66ae594f9b6fbe613e072056c62b4afceb4173dd772d361c95700e3d54",
+          "bytes": 225
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native69/source_git_blobs/tests/world_monster_clock_persistence_test.gd",
+          "sha256": "3b49dafc8b72041c857011007049b80a4a699122d7f9f04af825fc215ce5d135",
+          "bytes": 7497
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native69/source_git_blobs/tests/world_monster_clock_persistence_test.tscn",
+          "sha256": "aab707b8cd0d228899dd8332c751ff55a0d50ecbbfedd55dcfc8ab413db6b5de",
+          "bytes": 215
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native69/source_git_blobs/tests/world_monster_clock_legacy_migration_test.gd",
+          "sha256": "4deeaf48f5408dbcd623612c6e5bc6a84eb0895bb7a26300804d12b2900d4afd",
+          "bytes": 12936
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native69/source_git_blobs/tests/world_monster_clock_legacy_migration_test.tscn",
+          "sha256": "46c84effa2823a70a42abbc6b618926e250ec0edc255498c87d88acfbe8693f1",
+          "bytes": 238
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native69/source_git_blobs/tests/profile_business_validation_recovery_test.gd",
+          "sha256": "7557da4c371d24b55befe4669982301058cf58faae541bbe1ec4e445e42dbd48",
+          "bytes": 28147
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native69/source_git_blobs/tests/profile_business_validation_recovery_test.tscn",
+          "sha256": "30e3055b79592e5be0511ba011141b5232e15a50907a860e3bfc11ed9b89aed1",
+          "bytes": 225
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native69/source_git_blobs/tests/skill_progression_save_integration_test.gd",
+          "sha256": "a4504b5247e27838d32e45aa200c2cccc472754499a2df8ec673531d92cc2265",
+          "bytes": 8605
+        },
+        {
+          "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native69/source_git_blobs/tests/skill_progression_save_integration_test.tscn",
+          "sha256": "ad661f06d13f4abcce9cd0462b7bb64d69d541e93b7fa68db2ea64c872ad5000",
+          "bytes": 221
+        }
+      ]
+    },
+    "actual_complete_receipt": {
+      "checks": [
+        {
+          "id": 1,
+          "label": "runner isolates the complete real account before process launch",
+          "passed": true
+        },
+        {
+          "id": 2,
+          "label": "this run's account root is absent before claiming ownership",
+          "passed": true
+        },
+        {
+          "id": 3,
+          "label": "formal content, database and initial mode finish their readiness gates",
+          "passed": true
+        },
+        {
+          "id": 4,
+          "label": "profile, account warehouse and transaction log all use the owned real persistence root",
+          "passed": true
+        },
+        {
+          "id": 5,
+          "label": "owned account profile directory is created",
+          "passed": true
+        },
+        {
+          "id": 6,
+          "label": "A baseline uses the formal classic mode owner",
+          "passed": true
+        },
+        {
+          "id": 7,
+          "label": "formal owner creates real character A",
+          "passed": true
+        },
+        {
+          "id": 8,
+          "label": "A acquires a real registered skill book",
+          "passed": true
+        },
+        {
+          "id": 9,
+          "label": "A learns through the sole skill and book consumption owner",
+          "passed": true
+        },
+        {
+          "id": 10,
+          "label": "formal writer persists complete A and its checkpoint",
+          "passed": true
+        },
+        {
+          "id": 11,
+          "label": "formal owner creates real character B",
+          "passed": true
+        },
+        {
+          "id": 12,
+          "label": "sole writer stages the owned supported legacy clock input",
+          "passed": true
+        },
+        {
+          "id": 13,
+          "label": "formal clock importer creates B's isolated generation",
+          "passed": true
+        },
+        {
+          "id": 14,
+          "label": "B acquires its own real registered skill book",
+          "passed": true
+        },
+        {
+          "id": 15,
+          "label": "B learns a different skill through the same formal owner and admits one complete legal nonempty plural pet",
+          "passed": true
+        },
+        {
+          "id": 16,
+          "label": "B accepts the actual prerequisite-free registered quest",
+          "passed": true
+        },
+        {
+          "id": 17,
+          "label": "real ledger settlement records one kill and one durable death event",
+          "passed": true
+        },
+        {
+          "id": 18,
+          "label": "sole writer saves B with plural pets, quest, target mode and sequence-one clock",
+          "passed": true
+        },
+        {
+          "id": 19,
+          "label": "ordinary B save completes import before testing admission",
+          "passed": true
+        },
+        {
+          "id": 20,
+          "label": "aggregate validator accepts the persisted B document",
+          "passed": true
+        },
+        {
+          "id": 21,
+          "label": "real B checkpoint has valid sequence-one primary and preserved sequence-zero backup",
+          "passed": true
+        },
+        {
+          "id": 22,
+          "label": "plural-pet formal profile persists the independent expected active quest progress",
+          "passed": true
+        },
+        {
+          "id": 23,
+          "label": "actual replay accepts B and proves backup zero is behind source one, requiring a checkpoint",
+          "passed": true
+        },
+        {
+          "id": 24,
+          "label": "formal selection restores real A before the B failure probe",
+          "passed": true
+        },
+        {
+          "id": 25,
+          "label": "A is distinguishable from B by real identity, skills and empty quests",
+          "passed": true
+        },
+        {
+          "id": 26,
+          "label": "accepted writer callbacks drain before capturing A and creating the fault",
+          "passed": true
+        },
+        {
+          "id": 27,
+          "label": "writer identity negatives retain a real valid owned A empty-generation snapshot",
+          "passed": true
+        },
+        {
+          "id": 28,
+          "label": "formal writer rejects missing generation plus extra key before submission and preserves A snapshot bytes",
+          "passed": true
+        },
+        {
+          "id": 29,
+          "label": "formal writer rejects more than two identity keys before submission and preserves A snapshot bytes",
+          "passed": true
+        },
+        {
+          "id": 30,
+          "label": "formal writer rejects non-String generation before submission and preserves A snapshot bytes",
+          "passed": true
+        },
+        {
+          "id": 31,
+          "label": "formal writer rejects wrong target path before submission and preserves A snapshot bytes",
+          "passed": true
+        },
+        {
+          "id": 32,
+          "label": "only the exact absent B clock TMP inside this account is claimed for the directory fault",
+          "passed": true
+        },
+        {
+          "id": 33,
+          "label": "owned directory occupies the exact formal clock temporary-file path",
+          "passed": true
+        },
+        {
+          "id": 34,
+          "label": "fault ownership marker opens inside the exact TMP directory",
+          "passed": true
+        },
+        {
+          "id": 35,
+          "label": "directory at TMP preserves the accepted real replay and its required checkpoint watermarks",
+          "passed": true
+        },
+        {
+          "id": 36,
+          "label": "real B selection reaches the necessary checkpoint and fails with its exact load diagnostic",
+          "passed": true
+        },
+        {
+          "id": 37,
+          "label": "the same world persistence owner completes exactly one failed request, proving actual IO admission",
+          "passed": true
+        },
+        {
+          "id": 38,
+          "label": "checkpoint rejection preserves A identity, basic fields, complete skill owner and world watermarks",
+          "passed": true
+        },
+        {
+          "id": 39,
+          "label": "checkpoint rejection preserves A effective feature object and compilation generation",
+          "passed": true
+        },
+        {
+          "id": 40,
+          "label": "checkpoint rejection preserves catalog revisions, mode and expansion flags without publication signals",
+          "passed": true
+        },
+        {
+          "id": 41,
+          "label": "failed target B retains its save block while valid old A remains active",
+          "passed": true
+        },
+        {
+          "id": 42,
+          "label": "failed admission leaves every captured profile, account, index and clock byte unchanged and keeps the owned blocker",
+          "passed": true
+        },
+        {
+          "id": 43,
+          "label": "formal failed-B save gate rejects stale A fields before any profile or shared warehouse overwrite",
+          "passed": true
+        },
+        {
+          "id": 44,
+          "label": "remove only this run's ownership marker and empty exact TMP directory",
+          "passed": true
+        },
+        {
+          "id": 45,
+          "label": "same formal B selection succeeds immediately after removing only the owned TMP fault",
+          "passed": true
+        },
+        {
+          "id": 46,
+          "label": "successful B admission clears its previous load failure save guard",
+          "passed": true
+        },
+        {
+          "id": 47,
+          "label": "recovered B adopts its own stored fields and sole skill progression",
+          "passed": true
+        },
+        {
+          "id": 48,
+          "label": "plural-pet formal profile restores B's independently expected quest progress outside the legacy singular branch",
+          "passed": true
+        },
+        {
+          "id": 49,
+          "label": "recovery performs one required checkpoint and adopts primary and backup watermarks without duplicate world IO",
+          "passed": true
+        },
+        {
+          "id": 50,
+          "label": "recovered B publishes its composed saved configuration exactly once through the formal owners",
+          "passed": true
+        },
+        {
+          "id": 51,
+          "label": "ordinary recovery changes only the necessary world checkpoint and never rewrites character or shared account files",
+          "passed": true
+        },
+        {
+          "id": 52,
+          "label": "native producer writes this invocation's complete owned admission trace",
+          "passed": true
+        }
+      ],
+      "count": 52,
+      "engine_version": "4.7-stable (official)",
+      "failed": 0,
+      "invocation_id": "9ace50c6-f38d-402a-87f6-66059dc1cfe8",
+      "passed": 52,
+      "reported_checks": 52,
+      "reported_failures": 0,
+      "run_id": "e04d3793-dbff-4ada-a16d-5df22da4f212",
+      "runtime_environment": {
+        "native_process_id": 2220,
+        "project_root": "C:/Users/Administrator/Documents/HardCore/",
+        "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct69_mode_transaction\\runner_9ace50c6-f38d-402a-87f6-66059dc1cfe8",
+        "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/v109_direct69_mode_transaction/runner_9ace50c6-f38d-402a-87f6-66059dc1cfe8/Godot/app_userdata/HardCore"
+      },
+      "scene_id": "profile_load_admission_20261010_test",
+      "schema_version": 1,
+      "source_content_sha256": "c777d9d737e8b2588deb6084d67cf2ec25e0b2afb1bfa0efe536d23f703b5611",
+      "status": "PASS"
+    },
+    "bindings": {
+      "runner": {
+        "path": "outputs/test_logs/v109_direct69_mode_transaction/logs/runner_results_adhoc_20261010_115254_546_8988.json",
+        "bytes": 5091,
+        "sha256": "b0cdf124fb01c749805386cd7f89364610217a5fb7dacd2f9dfd569a747bda82"
+      },
+      "raw_receipt": {
+        "path": "outputs/test_logs/v109_direct69_mode_transaction/raw/e04d3793-dbff-4ada-a16d-5df22da4f212/profile_load_admission_20261010_test.result.json",
+        "bytes": 8463,
+        "sha256": "139d162a96d0e6c000e1dfc2c980e58ce3c72cf030abece2da01fc287e2d18d9"
+      },
+      "freeze": {
+        "path": "outputs/wake_drop_v108_review_followup_20261009/B08_NATIVE_FREEZE_69.json",
+        "bytes": 495940,
+        "sha256": "c777d9d737e8b2588deb6084d67cf2ec25e0b2afb1bfa0efe536d23f703b5611"
+      },
+      "postverification": {
+        "path": "outputs/wake_drop_v108_review_followup_20261009/B08_NATIVE_FREEZE_69_POSTVERIFY.json",
+        "bytes": 468,
+        "sha256": "4296d886f5f8b79a5a285078a3c06720ce1b3b342d7f221c322a45d18c8377f2"
+      },
+      "producer_trace": {
+        "path": "docs/review/full_project_audit_v109_20261009/evidence/B08_NATIVE/native69/producer_traces/e04d3793-dbff-4ada-a16d-5df22da4f212_9ace50c6-f38d-402a-87f6-66059dc1cfe8/PROFILE_ADMISSION_TRACE.json",
+        "bytes": 18444,
+        "sha256": "3bc458bc49508600b137a9cf60f6e60c1a8068f28d91d6ccc6b09009479732de"
+      }
+    },
+    "production_files_equal_native68": "PASS",
+    "unchanged_native68_skill_regression_reused_without_rerun": true,
+    "changes_prior_native68_runner_failure": false
+  }
+}

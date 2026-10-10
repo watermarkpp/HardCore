@@ -1,0 +1,428 @@
+{
+  "status": "PASS",
+  "scope": "Read-only regression selection and fixture/wrapper planning; native acceptance NOT_RUN",
+  "main_head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+  "local_fixed_source": {
+    "scripts/player_state.gd": "a95fe0b6875196b92e60a1e429f2915bfcdea9db772399ffe6fd18f18da90185",
+    "scripts/game_data.gd": "dd452fdb61e07c60b7d187b1a3e48bfd98d2fe03fdc36b39345d214a06c9d7f3"
+  },
+  "responsibility_predecessor": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+  "first_round_required_real_io": [
+    "tests/world_monster_clock_persistence_test.tscn",
+    "tests/world_monster_clock_legacy_migration_test.tscn",
+    "tests/profile_business_validation_recovery_test.tscn"
+  ],
+  "runtime_only_supplement": "tests/framework/profile_identity_generation_test.tscn",
+  "ordinary_timeout_seconds": 30,
+  "required_retest_reason": "Relevant checkpoint writer/identity, prepare-before-hydration admission and detached skill adoption changed; previous fixed-source native evidence cannot cover these new bodies. Unchanged isolated function evidence can still be reused for unrelated identity checks.",
+  "entries": [
+    {
+      "scene": "tests/world_monster_clock_persistence_test.tscn",
+      "script": "tests/world_monster_clock_persistence_test.gd",
+      "status": "PASS",
+      "recommendation": "ROUND1_REQUIRED_REAL_IO",
+      "timeout_seconds": 30,
+      "script_lines": 156,
+      "static_assert_statement_count": 63,
+      "static_check_predicates": null,
+      "functions": [
+        {
+          "name": "_ready",
+          "start": 6,
+          "end": 75
+        },
+        {
+          "name": "_drain_cleanup",
+          "start": 76,
+          "end": 83
+        },
+        {
+          "name": "_corrupt",
+          "start": 84,
+          "end": 90
+        },
+        {
+          "name": "_test_preserved_backup_recovery",
+          "start": 91,
+          "end": 128
+        },
+        {
+          "name": "_test_creation_runtime_rollback",
+          "start": 129,
+          "end": 156
+        }
+      ],
+      "required_reading": "_ready 6–73; _test_preserved_backup_recovery 91–126; _test_creation_runtime_rollback 129–156",
+      "real_path_and_reason": "PlayerState save_game → checkpoint snapshot/atomic world identity → character writer; real kill journal replay; profile/world/pickup backup watermark; cleanup retention; creation rollback",
+      "fixture_contract_risks_and_limits": "All lifecycle calls remain test_mode=false; unique private profile root; 2s cleanup predicate retained. It does not select B through public select_character or deliberately fault admission TMP.",
+      "receipt_scope": "Legacy scene marker/native natural exit/log failure gate; requires external source/input freeze, not a uniform nonzero assertion receipt",
+      "native_result_evidence": "NATIVE67_RECORDED_RESULT.json",
+      "formal_evidence_status": "MISSING",
+      "formal_evidence_reason": "Legacy marker has no uniform run-bound nonzero assertion receipt",
+      "duration_observed_seconds": 6.343897,
+      "native_source_binding": "6f5f698e68069666e47ca55259a25d0fcc1d4ec81d4345fc6927f3919ab92472"
+    },
+    {
+      "scene": "tests/world_monster_clock_legacy_migration_test.tscn",
+      "script": "tests/world_monster_clock_legacy_migration_test.gd",
+      "status": "PASS",
+      "recommendation": "ROUND1_REQUIRED_REAL_IO",
+      "timeout_seconds": 30,
+      "script_lines": 249,
+      "static_assert_statement_count": 83,
+      "static_check_predicates": null,
+      "functions": [
+        {
+          "name": "_ready",
+          "start": 8,
+          "end": 97
+        },
+        {
+          "name": "_drain_cleanup",
+          "start": 98,
+          "end": 105
+        },
+        {
+          "name": "_test_old_writer_roundtrip",
+          "start": 106,
+          "end": 173
+        },
+        {
+          "name": "_legacy_fixture",
+          "start": 174,
+          "end": 189
+        },
+        {
+          "name": "_test_interrupted_import",
+          "start": 190,
+          "end": 224
+        },
+        {
+          "name": "_test_pre_generation_migration_replay",
+          "start": 225,
+          "end": 249
+        }
+      ],
+      "required_reading": "_ready 8–95; _test_old_writer_roundtrip 106–171; _test_interrupted_import 190–222; _test_pre_generation_migration_replay 225–249",
+      "real_path_and_reason": "Legacy inline clock import/archive/rewrite; old writer return; sequence-zero backup replay; actual .tmp/.bak.tmp directory faults; migration resume; original-generation journal retention",
+      "fixture_contract_risks_and_limits": "Explicit empty-string pre-generation ledger is supported, not numeric. Actual initial legacy fixture erases both identity headers and converts slot names; preserve this seam. Later old-writer samples retain other writer headers and therefore do not cover every pre-identity variant.",
+      "receipt_scope": "Legacy scene marker/native natural exit/log failure gate; requires external source/input freeze, not a uniform nonzero assertion receipt",
+      "native_result_evidence": "NATIVE67_RECORDED_RESULT.json",
+      "formal_evidence_status": "MISSING",
+      "formal_evidence_reason": "Legacy marker has no uniform run-bound nonzero assertion receipt",
+      "duration_observed_seconds": 6.536362,
+      "native_source_binding": "6f5f698e68069666e47ca55259a25d0fcc1d4ec81d4345fc6927f3919ab92472"
+    },
+    {
+      "scene": "tests/profile_business_validation_recovery_test.tscn",
+      "script": "tests/profile_business_validation_recovery_test.gd",
+      "status": "PASS",
+      "recommendation": "ROUND1_REQUIRED_REAL_IO",
+      "timeout_seconds": 30,
+      "script_lines": 610,
+      "static_assert_statement_count": 109,
+      "static_check_predicates": null,
+      "functions": [
+        {
+          "name": "_ready",
+          "start": 9,
+          "end": 12
+        },
+        {
+          "name": "_run",
+          "start": 13,
+          "end": 30
+        },
+        {
+          "name": "_test_profile_primary_backup_matrix",
+          "start": 31,
+          "end": 107
+        },
+        {
+          "name": "_test_future_profile_blocks_fallback_and_save",
+          "start": 108,
+          "end": 133
+        },
+        {
+          "name": "_test_cached_profile_write_detects_external_change",
+          "start": 134,
+          "end": 158
+        },
+        {
+          "name": "_test_profile_index_validation_and_recovery",
+          "start": 159,
+          "end": 198
+        },
+        {
+          "name": "_test_profile_index_update_preserves_unloadable_entries",
+          "start": 199,
+          "end": 256
+        },
+        {
+          "name": "_test_profile_scalar_validation_and_high_level_compatibility",
+          "start": 257,
+          "end": 306
+        },
+        {
+          "name": "_test_invalid_profile_id_cannot_escape_profile_directory",
+          "start": 307,
+          "end": 332
+        },
+        {
+          "name": "_test_shared_warehouse_validation_and_recovery",
+          "start": 333,
+          "end": 375
+        },
+        {
+          "name": "_test_legacy_versions_and_shapes_migrate",
+          "start": 376,
+          "end": 436
+        },
+        {
+          "name": "_configure_case",
+          "start": 437,
+          "end": 457
+        },
+        {
+          "name": "_load_fixture",
+          "start": 458,
+          "end": 472
+        },
+        {
+          "name": "_minimal_legacy",
+          "start": 473,
+          "end": 489
+        },
+        {
+          "name": "_valid_profile",
+          "start": 490,
+          "end": 495
+        },
+        {
+          "name": "_valid_shared",
+          "start": 496,
+          "end": 509
+        },
+        {
+          "name": "_legacy_pet_snapshot",
+          "start": 510,
+          "end": 527
+        },
+        {
+          "name": "_write_index",
+          "start": 528,
+          "end": 534
+        },
+        {
+          "name": "_index_entry",
+          "start": 535,
+          "end": 541
+        },
+        {
+          "name": "_write_raw",
+          "start": 542,
+          "end": 549
+        },
+        {
+          "name": "_quarantine_paths",
+          "start": 550,
+          "end": 562
+        },
+        {
+          "name": "_assert_one_quarantine_with_bytes",
+          "start": 563,
+          "end": 568
+        },
+        {
+          "name": "_clear_profile_files",
+          "start": 569,
+          "end": 574
+        },
+        {
+          "name": "_capture_state",
+          "start": 575,
+          "end": 594
+        },
+        {
+          "name": "_restore_state",
+          "start": 595,
+          "end": 610
+        }
+      ],
+      "required_reading": "_run 13–28; all nine _test_* methods 31–434; case setup 437–470",
+      "real_path_and_reason": "Business admission rejection before hydration; valid backup and future terminal contracts; external cache-byte changes; profile index preservation; malformed fields; unsafe IDs; real account warehouse recovery; v6–v9 migrations",
+      "fixture_contract_risks_and_limits": "All four persistence paths are case-local and test_mode=false. Registered item_id 80 owns renamed historical records; unknown display names alone are not unknown IDs. _valid_profile is intentionally sparse with current required fields and legacy profession seam; do not silently add newer headers that conceal migration coverage.",
+      "receipt_scope": "Legacy scene marker/native natural exit/log failure gate; requires external source/input freeze, not a uniform nonzero assertion receipt",
+      "native_result_evidence": "NATIVE67_RECORDED_RESULT.json",
+      "formal_evidence_status": "MISSING",
+      "formal_evidence_reason": "Legacy marker has no uniform run-bound nonzero assertion receipt",
+      "duration_observed_seconds": 6.811042,
+      "native_source_binding": "6f5f698e68069666e47ca55259a25d0fcc1d4ec81d4345fc6927f3919ab92472"
+    },
+    {
+      "scene": "tests/skill_progression_save_integration_test.tscn",
+      "script": "tests/skill_progression_save_integration_test.gd",
+      "status": "NOT_RUN",
+      "recommendation": "REQUIRED_SKILL_COMPATIBILITY_REAL_PROFILE_IO_WITH_LIMIT_FIRST_OR_SECOND_ROUND",
+      "timeout_seconds": 30,
+      "script_lines": 155,
+      "static_assert_statement_count": 28,
+      "static_check_predicates": null,
+      "functions": [
+        {
+          "name": "_ready",
+          "start": 4,
+          "end": 71
+        },
+        {
+          "name": "_assert_legacy_chinese_migration",
+          "start": 72,
+          "end": 97
+        },
+        {
+          "name": "_assert_v1_canonical_migration",
+          "start": 98,
+          "end": 128
+        },
+        {
+          "name": "_assert_base_rank_bounds",
+          "start": 129,
+          "end": 142
+        },
+        {
+          "name": "_cleanup_isolated_persistence",
+          "start": 143,
+          "end": 155
+        }
+      ],
+      "required_reading": "_ready 4–69; legacy Chinese 72–95; canonical v1 98–126; bounds 129–140",
+      "real_path_and_reason": "Current v3 skill snapshot/profile write; false-mode load via prepared private progression; old names/v1 rank conversion; proficiency removal; integral rank clamp; persisted rewrite",
+      "fixture_contract_risks_and_limits": "Initial save uses test_mode=true and skips world checkpoint, although save_game/_write_json_atomic still writes real profile and load_save switches false. Existing modern skill_button_assignments remain in old samples, so button assertions do not establish legacy quick_slots migration. SAVE_VERSION assertions use the constant; v8/v2 messages are stale labels.",
+      "receipt_scope": "Legacy scene marker/native natural exit/log failure gate; requires external source/input freeze, not a uniform nonzero assertion receipt"
+    },
+    {
+      "scene": "tests/framework/profile_identity_generation_test.tscn",
+      "script": "tests/framework/profile_identity_generation_test.gd",
+      "status": "NOT_RUN",
+      "recommendation": "SUPPLEMENT_RUNTIME_IDENTITY_NOT_PROFILE_IO",
+      "timeout_seconds": 30,
+      "script_lines": 36,
+      "static_assert_statement_count": 0,
+      "static_check_predicates": 6,
+      "functions": [
+        {
+          "name": "check",
+          "start": 9,
+          "end": 11
+        },
+        {
+          "name": "_ready",
+          "start": 12,
+          "end": 36
+        }
+      ],
+      "required_reading": "_ready 12–36; six check predicates",
+      "real_path_and_reason": "Actual PlayerState creation snapshot/restore plus WorldContext capture/match profile/world generation boundaries; exact String generation retained",
+      "fixture_contract_risks_and_limits": "test_mode=true, no profile save/read, no public select_character. Valid fixture uses 32 lowercase hex Strings a/b; do not revive numeric generation fixtures. Reuse same-body/WorldContext/Ledger contract evidence if already source-bound and unchanged; otherwise this small supplement is NOT_RUN.",
+      "receipt_scope": "Framework explicit checks/receipt"
+    }
+  ],
+  "wrapper_proposals": [
+    {
+      "family": "profile_business_validation_recovery",
+      "preferred_action": "Keep original full scene first; wrapper only if current fixed-source duration/timeout evidence requires it",
+      "existing_test_edit_required": false,
+      "new_owned_files": [
+        "tests/framework/profile_business_validation_recovery_partitions_20261010.gd",
+        "tests/framework/profile_business_primary_cache_20261010_test.tscn",
+        "tests/framework/profile_business_future_index_scalar_20261010_test.tscn",
+        "tests/framework/profile_business_shared_legacy_20261010_test.tscn"
+      ],
+      "implementation": "New script extends original test script; override _run (original _ready defers dynamically to _run). Capture state, unique run root, test_mode=false, invoke complete inherited methods, restore state, per-wrapper explicit receipt and natural exit. Keep original files untouched.",
+      "groups": {
+        "primary_cache": [
+          "_test_profile_primary_backup_matrix",
+          "_test_cached_profile_write_detects_external_change"
+        ],
+        "future_index_scalar": [
+          "_test_future_profile_blocks_fallback_and_save",
+          "_test_profile_index_validation_and_recovery",
+          "_test_profile_index_update_preserves_unloadable_entries",
+          "_test_profile_scalar_validation_and_high_level_compatibility",
+          "_test_invalid_profile_id_cannot_escape_profile_directory"
+        ],
+        "shared_legacy": [
+          "_test_shared_warehouse_validation_and_recovery",
+          "_test_legacy_versions_and_shapes_migrate"
+        ]
+      },
+      "invariants": "Union contains all nine original methods and all helpers/predicates; no reduced cases, IO, fields or time limits. Do not share runtime appdata or run these processes concurrently in the same tree."
+    },
+    {
+      "family": "world_monster_clock_persistence",
+      "preferred_action": "156 lines, keep whole original; no measured reason yet to split",
+      "existing_test_edit_required": "Only future authorized refactor if measured timeout; original inline _ready must become a callable unchanged assertion group",
+      "future_ownership": [
+        "tests/world_monster_clock_persistence_test.gd",
+        "tests/framework/world_clock_persistence_partitions_20261010.gd",
+        "new exact persistence wrapper .tscn files"
+      ],
+      "groups": [
+        "Original inline roundtrip/journal/corrupt profile+clock/cleanup group",
+        "_test_preserved_backup_recovery for every profile/world/pickup mode",
+        "_test_creation_runtime_rollback"
+      ],
+      "invariants": "Keep all three recovery modes, every corruption and two-second cleanup predicate. Each group establishes real save/journal preconditions in its own owned root; extraction must preserve all 63 static assert statements and exact predicates."
+    },
+    {
+      "family": "world_monster_clock_legacy_migration",
+      "preferred_action": "249 lines, keep original whole; split only with measured evidence",
+      "existing_test_edit_required": "Future authorized minimal extraction of initial inline migration block for reuse",
+      "future_ownership": [
+        "tests/world_monster_clock_legacy_migration_test.gd",
+        "tests/framework/world_clock_legacy_partitions_20261010.gd",
+        "new exact legacy wrapper .tscn files"
+      ],
+      "groups": [
+        "Original initial old-inline import/archive/content/backup/reload block",
+        "_test_old_writer_roundtrip complete two-round loop",
+        "_test_interrupted_import both .tmp and .bak.tmp modes",
+        "_test_pre_generation_migration_replay"
+      ],
+      "invariants": "Preserve all 83 static assertion statements, original byte/digest checks, both physical faults, both writer-return rounds, generation namespace and 2s cleanup; full initial writer/fixture setup per independent process."
+    },
+    {
+      "family": "skill_progression_save_integration",
+      "preferred_action": "155 lines, keep whole scene; no evidence-based need to partition",
+      "future_ownership": [
+        "tests/skill_progression_save_integration_test.gd",
+        "new exact skill wrapper script/scenes only if later required"
+      ],
+      "groups": [
+        "Original current snapshot/profile IO/binding block",
+        "_assert_legacy_chinese_migration",
+        "_assert_v1_canonical_migration",
+        "_assert_base_rank_bounds"
+      ],
+      "invariants": "If partitioned later, each helper receives a freshly written identical original base profile and all four persistence paths; retain all 28 static assertions and proficiency/rank/ID cases. Address fixture coverage separately; do not set test_mode=true to evade IO admission."
+    }
+  ],
+  "cost_status": "PASS for observed Native67 original three: 6.343897/6.536362/6.811042 seconds wrapper-start to observed native exit, ordinary 30s windows. No reason to split these three at this source. Skill and identity current run cost MISSING here.",
+  "not_covered_by_these_five": [
+    "Public A→failed B checkpoint admission with previous A blocked/unblocked and same-B retry requires the dedicated profile_load_admission_20261010_test current-source evidence; old scenes mostly call load_save directly.",
+    "Failed/new mode catalog preparation, single signal publication and public later setters require the six mode transaction partitions; old IO regression does not substitute for that scope.",
+    "Device/GPU/Android crash durability remains NOT_RUN here."
+  ],
+  "forbidden_workarounds": [
+    "No mock writer, test_mode shortcut for required real IO, reduced load/cases/assertions, wider cleanup/business/scene timeout, early PASS, copied historical receipt or lower numeric-generation surrogate"
+  ],
+  "wrapper_tracking_gate": "New wrapper scenes must enter the authorized fixed review tree via tracked-path process before native runner; this planning task performs no Git/index mutation.",
+  "native": "PASS for Native67 three-scene scope only; other scopes retain NOT_RUN/MISSING",
+  "DEVICE TEST": "NOT_RUN",
+  "required_skill_compatibility_followup": "tests/skill_progression_save_integration_test.tscn",
+  "recommended_fourth_first_round_scene": "tests/skill_progression_save_integration_test.tscn",
+  "actual_native_followup": {
+    "Native67": "PASS: original three scene results, engine errors 0, postverify2551 PASS; formal framework receipts MISSING",
+    "Native68": "NOT_RUN in this evidence supplement: root announced pending old skill plus legal Taoist new admission run; result not inspected here"
+  }
+}

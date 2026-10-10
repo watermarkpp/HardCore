@@ -1,0 +1,114 @@
+{
+  "engine_fingerprints": [
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+      "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "bytes": 198152
+    },
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64.exe",
+      "sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+      "bytes": 178485256
+    }
+  ],
+  "source_binding_scope": "External immutable input freeze required; env label alone is not a source scan",
+  "runtime_environment": {
+    "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct65_mode_transaction\\runner_8a0e1649-1d27-449d-861e-aca2881d2fcb",
+    "runner_process_id": 22008
+  },
+  "invocation_id": "8a0e1649-1d27-449d-861e-aca2881d2fcb",
+  "total": 1,
+  "engine_log_errors": 2,
+  "generated_at": "2026-10-10T11:30:00.7205373+08:00",
+  "git_head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+  "passed": 0,
+  "suite": "adhoc",
+  "source_content_sha256": "fce6b1ba399a89bb21ca18e25e45dae3fd8e63c8779b68f4d610eecb1c5083c1",
+  "results": [
+    {
+      "test_name": "profile_load_admission_20261010_test",
+      "test_path": "tests/framework/profile_load_admission_20261010_test.tscn",
+      "wrapper_process_id": 18156,
+      "wrapper_started_utc": "2026-10-10T03:29:57.7385750Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct65_mode_transaction\\runner_8a0e1649-1d27-449d-861e-aca2881d2fcb",
+      "fixed_fps": 0,
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": 1,
+      "child_process_exit_state": "forced_termination",
+      "execution_deadline_utc": "2026-10-10T03:30:27.7425863Z",
+      "native_exit_observed_utc": null,
+      "effective_exit_code": 1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 2,
+      "engine_log_failure_count": 2,
+      "cleanup_warning_evidence": {
+        "status": "FAIL",
+        "allowlisted_errors": {
+          "string_formatting": {
+            "count": 0,
+            "lines": []
+          },
+          "resources_in_use": {
+            "count": 0,
+            "lines": []
+          },
+          "rid_leak": {
+            "count": 0,
+            "lines": []
+          },
+          "null_parameter": {
+            "count": 0,
+            "lines": []
+          }
+        },
+        "unknown_error_lines": [
+          "ERROR: Failed to load script \"res://tests/framework/profile_load_admission_20261010_test.gd\" with error \"Parse error\".",
+          "ERROR: Failed to load script \"res://tests/framework/profile_load_admission_20261010_test.gd\" with error \"Parse error\"."
+        ],
+        "unknown_error_count": 2,
+        "objectdb_leak_warning_lines": [],
+        "objectdb_leak_warning_count": 0,
+        "functional_marker_observed": false,
+        "formal_evidence_status": "MISSING",
+        "formal_evidence_reason": "legacy_run_bound_checks_missing",
+        "receipt_validation_reasons": [
+          "framework_receipt_missing"
+        ],
+        "candidate_receipt_correlation": false,
+        "upstream_result": "NOT_RUN",
+        "raw_log_paths": [
+          "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct65_mode_transaction\\logs\\profile_load_admission_20261010_test.stdout.log",
+          "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct65_mode_transaction\\logs\\profile_load_admission_20261010_test.stderr.log",
+          "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\v109_direct65_mode_transaction\\logs\\profile_load_admission_20261010_test.godot.log"
+        ],
+        "receipt_path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\framework\\profile_load_admission_20261010_test.result.json",
+        "expected_scene_id": "profile_load_admission_20261010_test",
+        "expected_invocation_id": "8a0e1649-1d27-449d-861e-aca2881d2fcb"
+      },
+      "framework_run_id": "3bd18f6d-2e1f-435a-8f3b-bd1715660f43",
+      "framework_receipt_valid": false,
+      "source_content_sha256": "fce6b1ba399a89bb21ca18e25e45dae3fd8e63c8779b68f4d610eecb1c5083c1",
+      "source_binding_scope": "External immutable input freeze required; env label alone is not a source scan",
+      "engine_fingerprints": [
+        {
+          "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+          "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+          "bytes": 198152
+        },
+        {
+          "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64.exe",
+          "sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+          "bytes": 178485256
+        }
+      ],
+      "formal_evidence_status": "MISSING",
+      "formal_evidence_reason": "Requires matching external source/input freeze and this native result",
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_1;stderr_failures_2;engine_log_failures_2;framework_receipt_missing"
+    }
+  ],
+  "failed": 1
+}

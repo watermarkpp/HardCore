@@ -1,0 +1,246 @@
+{
+  "main_head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+  "source_kind": "Assigned fixed local working-file hashes, not HEAD-as-current-source",
+  "sources": [
+    {
+      "path": "scripts/player_state.gd",
+      "sha256": "a95fe0b6875196b92e60a1e429f2915bfcdea9db772399ffe6fd18f18da90185",
+      "bytes": 460755,
+      "lines": 10325,
+      "tracked_in_real_index": true
+    },
+    {
+      "path": "scripts/game_data.gd",
+      "sha256": "dd452fdb61e07c60b7d187b1a3e48bfd98d2fe03fdc36b39345d214a06c9d7f3",
+      "bytes": 186489,
+      "lines": 4426,
+      "tracked_in_real_index": true
+    },
+    {
+      "path": "tests/world_monster_clock_persistence_test.gd",
+      "sha256": "6a69c405021c7850149bde6b24862229c90502bb8cd785d83e8be9c67d96d6b2",
+      "bytes": 7653,
+      "lines": 156,
+      "tracked_in_real_index": true
+    },
+    {
+      "path": "tests/world_monster_clock_persistence_test.tscn",
+      "sha256": "05992dd46a22cc87673c7bd340bb80ac0ea1ebb5d582af62a25125555f40158b",
+      "bytes": 221,
+      "lines": 6,
+      "tracked_in_real_index": true
+    },
+    {
+      "path": "tests/world_monster_clock_legacy_migration_test.gd",
+      "sha256": "3fa6eb7c44d2fd156d9cd8dac77afe39618338e9ceb7d74f554a43aab9cd4909",
+      "bytes": 13185,
+      "lines": 249,
+      "tracked_in_real_index": true
+    },
+    {
+      "path": "tests/world_monster_clock_legacy_migration_test.tscn",
+      "sha256": "d07b5cc6920718999134ea9ad2c9952c5cec9208255d609892a6027edeadb97c",
+      "bytes": 244,
+      "lines": 6,
+      "tracked_in_real_index": true
+    },
+    {
+      "path": "tests/profile_business_validation_recovery_test.gd",
+      "sha256": "f71a8fa0f2cfca602641aeb4b7e6b194b39db0ac042cab671df09f6b000f52b3",
+      "bytes": 28757,
+      "lines": 610,
+      "tracked_in_real_index": true
+    },
+    {
+      "path": "tests/profile_business_validation_recovery_test.tscn",
+      "sha256": "43e2a055eee1c54636c90ab1abd819eac7fa374202c6aaefc8f9033593f6e87a",
+      "bytes": 231,
+      "lines": 6,
+      "tracked_in_real_index": true
+    },
+    {
+      "path": "tests/skill_progression_save_integration_test.gd",
+      "sha256": "7ea722d834494baddf1d4f3558d94b88908915593680dec5565b329aafec9765",
+      "bytes": 8760,
+      "lines": 155,
+      "tracked_in_real_index": true
+    },
+    {
+      "path": "tests/skill_progression_save_integration_test.tscn",
+      "sha256": "444f61897312fd4819ace04bfb5b233b64b96740097385681ee7a5797fb34bf2",
+      "bytes": 227,
+      "lines": 6,
+      "tracked_in_real_index": true
+    },
+    {
+      "path": "tests/framework/profile_identity_generation_test.gd",
+      "sha256": "efcc745d04fb3f09cdd0d3b644bea10d028bfeeaffdbe447117bd9d8f895cdb0",
+      "bytes": 2473,
+      "lines": 36,
+      "tracked_in_real_index": true
+    },
+    {
+      "path": "tests/framework/profile_identity_generation_test.tscn",
+      "sha256": "41dc4b8398f42f31df986c8dbfe0972472889db965a802da78331f10e3fa6fad",
+      "bytes": 224,
+      "lines": 6,
+      "tracked_in_real_index": true
+    },
+    {
+      "path": "scripts/world_monster_clock_ledger.gd",
+      "sha256": "367357800956835d4be83b294674d6bec5f8110cc0d37d0f22e610a08453127c",
+      "bytes": 8002,
+      "lines": 201,
+      "tracked_in_real_index": true
+    },
+    {
+      "path": "scripts/world_monster_respawn_state.gd",
+      "sha256": "40dd173199cdefb711005686907a5a7c2b90153e103043b64a7cb39635a681b1",
+      "bytes": 4392,
+      "lines": 144,
+      "tracked_in_real_index": true
+    },
+    {
+      "path": "scripts/skills/skill_progression_service.gd",
+      "sha256": "12feb8c24ede1a575bce021ee9cd0984ec72d22286a5c5287485894d19d452a4",
+      "bytes": 7856,
+      "lines": 235,
+      "tracked_in_real_index": true
+    },
+    {
+      "path": "scripts/skill_loadout_rules.gd",
+      "sha256": "bbedb6cbc327bb3ac9453d4f67a6984e7b2ac097f99b0c70bab17d28d2528d33",
+      "bytes": 16349,
+      "lines": 395,
+      "tracked_in_real_index": true
+    },
+    {
+      "path": "scripts/skills/skill_data_loader.gd",
+      "sha256": "d68158a992129eb5f479cdcaf38914aa63a6fff19716c3d3a7674972b9a6389d",
+      "bytes": 22228,
+      "lines": 539,
+      "tracked_in_real_index": true
+    },
+    {
+      "path": "scripts/equipment_granted_skill_rules.gd",
+      "sha256": "9c26db9f7816063b9b23f7a76e386ecbc9132c935f488c9940d47f84d2949ed4",
+      "bytes": 3096,
+      "lines": 77,
+      "tracked_in_real_index": true
+    },
+    {
+      "path": "scripts/identity/character_identity_codec.gd",
+      "sha256": "6561a911b61bd75ad1466ce83e2fd9af1c09b2506fc5cb304c64dd69e53747f1",
+      "bytes": 2292,
+      "lines": 46,
+      "tracked_in_real_index": true
+    },
+    {
+      "path": "scripts/identity/entity_registry.gd",
+      "sha256": "1dd47525e5779fa77236483bb41638252908617a5b2ae72f7881b6ace6ad7e56",
+      "bytes": 6686,
+      "lines": 152,
+      "tracked_in_real_index": true
+    },
+    {
+      "path": "scripts/layers/runtime/execution/world_context.gd",
+      "sha256": "6bcb54757b29543b7c4569cd3b1edf4b60b1074a0249a68cd2965b7ac9b44ba2",
+      "bytes": 2027,
+      "lines": 46,
+      "tracked_in_real_index": true
+    },
+    {
+      "path": "scripts/layers/runtime/game_mode_service.gd",
+      "sha256": "f7644b5358963a1a469db756bb6e3933c314b1173a3a6a766c88c669e5710d0a",
+      "bytes": 2541,
+      "lines": 64,
+      "tracked_in_real_index": true
+    },
+    {
+      "path": "scripts/layers/runtime/content_layer_registry.gd",
+      "sha256": "cf3042e27a4247311d79a7453f1357697d3056975d7f50a8714f5ecbf492cdc5",
+      "bytes": 39812,
+      "lines": 781,
+      "tracked_in_real_index": true
+    },
+    {
+      "path": "scripts/layers/runtime/prepared_content_configuration.gd",
+      "sha256": "cf9cb0b72a9fa37635caa91237492e7221c4965ff400b548b29b7396b07a725e",
+      "bytes": 606,
+      "lines": 18,
+      "tracked_in_real_index": false
+    },
+    {
+      "path": "tools/run_godot_tests.ps1",
+      "sha256": "f3ce13fc95135108d9962e385b1e00997aedcb1c794d379a9e23bfd186cca15a",
+      "bytes": 98156,
+      "lines": 1817,
+      "tracked_in_real_index": true
+    },
+    {
+      "path": "tools/test_framework_receipt.ps1",
+      "sha256": "051599d2bdde515411701d2d2c52b5c54690c012867070b017504e0572015349",
+      "bytes": 3401,
+      "lines": 67,
+      "tracked_in_real_index": true
+    },
+    {
+      "path": "tools/test_native_log_evidence.ps1",
+      "sha256": "0ab9fe0772239b85b24c5f05fbcbe79fa6cfc51437823b096bae2f1877fd6ea1",
+      "bytes": 4502,
+      "lines": 80,
+      "tracked_in_real_index": false
+    },
+    {
+      "path": "tools/test_windows_process_ownership.ps1",
+      "sha256": "a982f23a54b51c8e5f0da45b6245bb43321a5d5b6e45040714c2a1f0a0947952",
+      "bytes": 11432,
+      "lines": 198,
+      "tracked_in_real_index": false
+    },
+    {
+      "path": "tests/framework/helpers/check_receipt.gd",
+      "sha256": "ea0d6cee9986ec8e379db005cfe70ba21e9130dd5a0d536b4d027af4c17ea59f",
+      "bytes": 1750,
+      "lines": 34,
+      "tracked_in_real_index": true
+    },
+    {
+      "path": "scripts/identity/item_binding_codec.gd",
+      "sha256": "6db9b651f7abad9cc539c7fb47ebeafd424f01c19ccbe9feb61cba9bcb1f4fcb",
+      "bytes": 2483,
+      "lines": 51,
+      "tracked_in_real_index": true
+    },
+    {
+      "path": "scripts/identity/equipment_identity_codec.gd",
+      "sha256": "df686ecf03253ae7de781fd0471d4b2b50906ba289c6bae0d84e7d50e964c770",
+      "bytes": 5452,
+      "lines": 98,
+      "tracked_in_real_index": true
+    },
+    {
+      "path": "scripts/items/item_extension_codec.gd",
+      "sha256": "bfaad2a8f7c811e8696ca4416a721a65b32c8309c5d9006c7313fc5a3bb4c005",
+      "bytes": 19792,
+      "lines": 363,
+      "tracked_in_real_index": true
+    },
+    {
+      "path": "scripts/items/item_transaction_journal.gd",
+      "sha256": "d92b00422f4a03562f3049c378c2e0ea640e16a8f010d8ce08c7320a0625fad6",
+      "bytes": 9697,
+      "lines": 171,
+      "tracked_in_real_index": true
+    },
+    {
+      "path": "scripts/json_persistence_job.gd",
+      "sha256": "8c016948356196ec7d777585b1e303f431aeac84f58f25a16cc44cb742757242",
+      "bytes": 14154,
+      "lines": 352,
+      "tracked_in_real_index": true
+    }
+  ],
+  "not_read": "No caches or actual user saves; only exact formal test/source/script entrypoints and prior named review docs",
+  "scope_limit": "Exact related file identities only; this is not a complete native source/data/engine freeze. Runner owner must retain full accepted input manifest before running."
+}

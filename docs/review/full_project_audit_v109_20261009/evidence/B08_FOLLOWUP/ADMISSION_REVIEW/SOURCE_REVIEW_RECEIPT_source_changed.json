@@ -1,0 +1,299 @@
+{
+  "review_kind": "read_only_static_admission_review",
+  "generated_at_utc": "2026-10-10T03:24:15.467968+00:00",
+  "workspace": "C:\\Users\\Administrator\\Documents\\HardCore",
+  "head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+  "branch": "codex/integration",
+  "baseline_commit": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+  "source_binding_status": "FAIL",
+  "sources": [
+    {
+      "path": "scripts/player_state.gd",
+      "bytes": 460755,
+      "sha256": "a95fe0b6875196b92e60a1e429f2915bfcdea9db772399ffe6fd18f18da90185",
+      "expected_sha256": "166f791b306289c9b3c717cec59a757bbb60e7184848d001bc0ee2159e7eeebb",
+      "binding_status": "FAIL",
+      "baseline_blob": "2ad1baffc398deeb02930d1d05fd85bf32391446"
+    },
+    {
+      "path": "scripts/game_data.gd",
+      "bytes": 186489,
+      "sha256": "dd452fdb61e07c60b7d187b1a3e48bfd98d2fe03fdc36b39345d214a06c9d7f3",
+      "expected_sha256": "dd452fdb61e07c60b7d187b1a3e48bfd98d2fe03fdc36b39345d214a06c9d7f3",
+      "binding_status": "PASS",
+      "baseline_blob": "dff1878839f46bd3efe7da3639f450c9cefebc24"
+    },
+    {
+      "path": "scripts/equipment_rules.gd",
+      "bytes": 35491,
+      "sha256": "5c3676412d0c490fdab0d78e7b8b63a5dbc88117193d3a8bde3b63d9a2cf21f8",
+      "expected_sha256": "5c3676412d0c490fdab0d78e7b8b63a5dbc88117193d3a8bde3b63d9a2cf21f8",
+      "binding_status": "PASS",
+      "baseline_blob": "0fe2606fef5f0b83c5e6abec23c6c89493785ffe"
+    },
+    {
+      "path": "scripts/json_persistence_service.gd",
+      "bytes": 14710,
+      "sha256": "581d09246ef6e9991c35bb3563c90fd4f4cf3a098f56bb95d31b5a543dcd06c0",
+      "expected_sha256": "581d09246ef6e9991c35bb3563c90fd4f4cf3a098f56bb95d31b5a543dcd06c0",
+      "binding_status": "PASS",
+      "baseline_blob": "8a5e1bb81408a6fb973a1560f5d1cfffee3cf53a"
+    },
+    {
+      "path": "scripts/json_persistence_job.gd",
+      "bytes": 14154,
+      "sha256": "8c016948356196ec7d777585b1e303f431aeac84f58f25a16cc44cb742757242",
+      "expected_sha256": "8c016948356196ec7d777585b1e303f431aeac84f58f25a16cc44cb742757242",
+      "binding_status": "PASS",
+      "baseline_blob": "54edc135359589e5d2d5f85b6da547f74f045534"
+    },
+    {
+      "path": "scripts/skills/skill_progression_service.gd",
+      "bytes": 7856,
+      "sha256": "12feb8c24ede1a575bce021ee9cd0984ec72d22286a5c5287485894d19d452a4",
+      "expected_sha256": "12feb8c24ede1a575bce021ee9cd0984ec72d22286a5c5287485894d19d452a4",
+      "binding_status": "PASS",
+      "baseline_blob": "ef32443552e8d0e72d765ae57d09197059ce6525"
+    },
+    {
+      "path": "scripts/world_monster_clock_ledger.gd",
+      "bytes": 8002,
+      "sha256": "367357800956835d4be83b294674d6bec5f8110cc0d37d0f22e610a08453127c",
+      "expected_sha256": "367357800956835d4be83b294674d6bec5f8110cc0d37d0f22e610a08453127c",
+      "binding_status": "PASS",
+      "baseline_blob": "53400b8b7d0d89e37a0876fc05d6d8150e5b7c99"
+    },
+    {
+      "path": "scripts/layers/runtime/game_mode_service.gd",
+      "bytes": 2541,
+      "sha256": "f7644b5358963a1a469db756bb6e3933c314b1173a3a6a766c88c669e5710d0a",
+      "expected_sha256": "f7644b5358963a1a469db756bb6e3933c314b1173a3a6a766c88c669e5710d0a",
+      "binding_status": "PASS",
+      "baseline_blob": "ac1113cbfb504baa7ce790c95a7c16669308c01b"
+    },
+    {
+      "path": "scripts/layers/runtime/content_layer_registry.gd",
+      "bytes": 39812,
+      "sha256": "cf3042e27a4247311d79a7453f1357697d3056975d7f50a8714f5ecbf492cdc5",
+      "expected_sha256": "cf3042e27a4247311d79a7453f1357697d3056975d7f50a8714f5ecbf492cdc5",
+      "binding_status": "PASS",
+      "baseline_blob": "bbe1bbc36f93b8b9434b1f4453847938823f9cd1"
+    }
+  ],
+  "focused_player_diff_numstat": {
+    "exit_code": 0,
+    "stdout": "151\t90\tscripts/player_state.gd\n",
+    "stderr": ""
+  },
+  "raw_diff_check": {
+    "exit_code": 2,
+    "stdout": "scripts/equipment_rules.gd:167: trailing whitespace.\n+static func requirement_for(item: Dictionary, instance: Dictionary = {}) -> Dictionary:\nscripts/equipment_rules.gd:168: trailing whitespace.\n+\tvar mystery_rules := preload(\"res://scripts/mystery_equipment_instance_rules.gd\")\nscripts/equipment_rules.gd:169: trailing whitespace.\n+\tif instance.has(\"mystery_roll\") and mystery_rules.validate_roll(instance, item):\nscripts/equipment_rules.gd:170: trailing whitespace.\n+\t\tvar generated := mystery_rules.requirement(instance)\nscripts/equipment_rules.gd:171: trailing whitespace.\n+\t\tvar type_id := str({\"attack\": \"max_dc\", \"magic\": \"max_mc\", \"tao\": \"max_sc\"}.get(str(generated.type), generated.type))\nscripts/equipment_rules.gd:172: trailing whitespace.\n+\t\treturn {\"type\": int(REQUIREMENT_TYPE_CODES.get(type_id, -1)), \"type_id\": type_id, \"value\": int(generated.value), \"source\": ATTRIBUTE_MASTER_DISTRIBUTION, \"contract_id\": mystery_rules.CONTRACT_ID, \"confidence\": \"A\"}\nscripts/equipment_rules.gd:214: trailing whitespace.\n+static func requirement_error(item: Dictionary, level: int, stats: Dictionary, instance: Dictionary = {}) -> String:\nscripts/equipment_rules.gd:215: trailing whitespace.\n+\tvar requirement := requirement_for(item, instance)\nscripts/equipment_rules.gd:508: trailing whitespace.\n+static func enrich_catalog_record(item: Dictionary, price_lookup: Callable = Callable()) -> Dictionary:\nscripts/equipment_rules.gd:513: trailing whitespace.\n+\t# Database candidates must resolve against their own prepared indexes;\nscripts/equipment_rules.gd:514: trailing whitespace.\n+\t# normal callers keep the same active GameData price authority.\nscripts/equipment_rules.gd:515: trailing whitespace.\n+\tresult[\"referencePrice\"] = int(price_lookup.call(result)) if price_lookup.is_valid() else reference_price(result)\nscripts/layers/runtime/game_mode_service.gd:14: trailing whitespace.\n+\t# Android data loading is admitted by StartupLoading after the intro.\nscripts/layers/runtime/game_mode_service.gd:15: trailing whitespace.\n+\tif ContentLayers.is_loaded() and GameData.is_loaded():\nscripts/layers/runtime/game_mode_service.gd:16: trailing whitespace.\n+\t\tensure_initial_mode()\nscripts/layers/runtime/game_mode_service.gd:19: trailing whitespace.\n+func ensure_initial_mode() -> bool:\nscripts/layers/runtime/game_mode_service.gd:20: trailing whitespace.\n+\treturn apply_mode(active_mode)\nscripts/layers/runtime/game_mode_service.gd:21: trailing whitespace.\n+\nscripts/layers/runtime/game_mode_service.gd:22: trailing whitespace.\n+\nscripts/layers/runtime/game_mode_service.gd:23: trailing whitespace.\n+func prepare_mode_configuration(mode_id: String, later_override: Variant = null) -> Dictionary:\nscripts/layers/runtime/game_mode_service.gd:25: trailing whitespace.\n+\t\treturn {\"success\": false, \"error\": \"unknown_game_mode\"}\nscripts/layers/runtime/game_mode_service.gd:26: trailing whitespace.\n+\tif later_override != null and not later_override is bool:\nscripts/layers/runtime/game_mode_service.gd:27: trailing whitespace.\n+\t\treturn {\"success\": false, \"error\": \"invalid_later_content_override\"}\nscripts/layers/runtime/game_mode_service.gd:29: trailing whitespace.\n+\tvar requested: Dictionary = {}\nscripts/layers/runtime/game_mode_service.gd:31: trailing whitespace.\n+\t\trequested[package_id] = package_id in enabled\nscripts/layers/runtime/game_mode_service.gd:32: trailing whitespace.\n+\tfor package_id: Variant in enabled:\nscripts/layers/runtime/game_mode_service.gd:33: trailing whitespace.\n+\t\tif not requested.has(package_id):\nscripts/layers/runtime/game_mode_service.gd:34: trailing whitespace.\n+\t\t\treturn {\"success\": false, \"error\": \"unknown_mode_content_package\"}\nscripts/layers/runtime/game_mode_service.gd:35: trailing whitespace.\n+\tif later_override != null:\nscripts/layers/runtime/game_mode_service.gd:36: trailing whitespace.\n+\t\trequested[\"later_176_content\"] = later_override\nscripts/layers/runtime/game_mode_service.gd:37: trailing whitespace.\n+\tvar content := ContentLayers.prepare_expansion_configuration(requested)\nscripts/layers/runtime/game_mode_service.gd:38: trailing whitespace.\n+\tif content == null:\nscripts/layers/runtime/game_mode_service.gd:39: trailing whitespace.\n+\t\treturn {\"success\": false, \"error\": ContentLayers.last_expansion_error}\nscripts/layers/runtime/game_mode_service.gd:40: trailing whitespace.\n+\treturn {\"success\": true, \"mode_id\": mode_id,\nscripts/layers/runtime/game_mode_service.gd:41: trailing whitespace.\n+\t\t\"later_content_enabled\": bool(requested.get(\"later_176_content\", false)), \"content\": content}\nscripts/layers/runtime/game_mode_service.gd:42: trailing whitespace.\n+\nscripts/layers/runtime/game_mode_service.gd:43: trailing whitespace.\n+\nscripts/layers/runtime/game_mode_service.gd:44: trailing whitespace.\n+func apply_prepared_mode_configuration(prepared: Dictionary) -> bool:\nscripts/layers/runtime/game_mode_service.gd:45: trailing whitespace.\n+\tif not bool(prepared.get(\"success\", false)):\nscripts/layers/runtime/game_mode_service.gd:46: trailing whitespace.\n+\t\treturn false\nscripts/layers/runtime/game_mode_service.gd:47: trailing whitespace.\n+\treturn ContentLayers.apply_prepared_expansion_configuration(\nscripts/layers/runtime/game_mode_service.gd:48: trailing whitespace.\n+\t\tprepared.content, Callable(self, \"_commit_mode_fields\").bind(\nscripts/layers/runtime/game_mode_service.gd:49: trailing whitespace.\n+\t\t\tstr(prepared.mode_id), bool(prepared.later_content_enabled)))\nscripts/layers/runtime/game_mode_service.gd:50: trailing whitespace.\n+\nscripts/layers/runtime/game_mode_service.gd:51: trailing whitespace.\n+\nscripts/layers/runtime/game_mode_service.gd:52: trailing whitespace.\n+func _commit_mode_fields(mode_id: String, later_enabled: bool) -> void:\nscripts/layers/runtime/game_mode_service.gd:53: trailing whitespace.\n+\tactive_mode = mode_id\nscripts/layers/runtime/game_mode_service.gd:56: trailing whitespace.\n+\t\tPlayerState.later_content_enabled = later_enabled\nscripts/layers/runtime/game_mode_service.gd:57: trailing whitespace.\n+\nscripts/layers/runtime/game_mode_service.gd:58: trailing whitespace.\n+\nscripts/layers/runtime/game_mode_service.gd:59: trailing whitespace.\n+func apply_mode(mode_id: String, later_override: Variant = null) -> bool:\nscripts/layers/runtime/game_mode_service.gd:60: trailing whitespace.\n+\treturn apply_prepared_mode_configuration(prepare_mode_configuration(mode_id, later_override))\nscripts/skills/skill_progression_service.gd:5: trailing whitespace.\n+const EquipmentGrantedSkillRulesScript := preload(\"res://scripts/equipment_granted_skill_rules.gd\")\nscripts/skills/skill_progression_service.gd:25: trailing whitespace.\n+\tif not EquipmentGrantedSkillRulesScript.definition(skill_id).is_empty():\nscripts/skills/skill_progression_service.gd:26: trailing whitespace.\n+\t\treturn _learn_result(false, \"equipment_granted_skill\", skill_id, 0, 0, \"rejected\")\nscripts/skills/skill_progression_service.gd:164: trailing whitespace.\n+\t\tif not EquipmentGrantedSkillRulesScript.definition(skill_id).is_empty():\nscripts/skills/skill_progression_service.gd:165: trailing whitespace.\n+\t\t\trejected.append(\"equipment_granted_skill:\" + skill_id)\nscripts/skills/skill_progression_service.gd:166: trailing whitespace.\n+\t\t\tcontinue\n",
+    "stderr": ""
+  },
+  "cr_at_eol_diff_check": {
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "skill_progression_live_source_hits": [
+    {
+      "path": "scripts/player_state.gd",
+      "line": 211
+    },
+    {
+      "path": "scripts/player_state.gd",
+      "line": 220
+    },
+    {
+      "path": "scripts/player_state.gd",
+      "line": 632
+    },
+    {
+      "path": "scripts/player_state.gd",
+      "line": 676
+    },
+    {
+      "path": "scripts/player_state.gd",
+      "line": 3253
+    },
+    {
+      "path": "scripts/player_state.gd",
+      "line": 3257
+    },
+    {
+      "path": "scripts/player_state.gd",
+      "line": 3278
+    },
+    {
+      "path": "scripts/player_state.gd",
+      "line": 3297
+    },
+    {
+      "path": "scripts/player_state.gd",
+      "line": 3303
+    },
+    {
+      "path": "scripts/player_state.gd",
+      "line": 3314
+    },
+    {
+      "path": "scripts/player_state.gd",
+      "line": 3943
+    },
+    {
+      "path": "scripts/player_state.gd",
+      "line": 3946
+    },
+    {
+      "path": "scripts/player_state.gd",
+      "line": 4038
+    },
+    {
+      "path": "scripts/player_state.gd",
+      "line": 4046
+    },
+    {
+      "path": "scripts/player_state.gd",
+      "line": 4110
+    },
+    {
+      "path": "scripts/player_state.gd",
+      "line": 6594
+    },
+    {
+      "path": "scripts/player_state.gd",
+      "line": 7204
+    },
+    {
+      "path": "scripts/player_state.gd",
+      "line": 9858
+    },
+    {
+      "path": "scripts/player_state.gd",
+      "line": 9947
+    }
+  ],
+  "skill_service_external_reference_status": "PASS",
+  "native_execution_by_this_review": "NOT_RUN",
+  "production_or_existing_test_mutation_by_this_review": false,
+  "findings": [
+    {
+      "classification": "BUG",
+      "title": "explicit world_clock_identity accepts missing generation with unknown second key",
+      "source": "scripts/player_state.gd:5875",
+      "source_sha256": "166f791b306289c9b3c717cec59a757bbb60e7184848d001bc0ee2159e7eeebb",
+      "static_evidence": "size=2 does not require generation key; get defaults to empty generation; valid_generation('') and exact legacy A path both pass",
+      "counterexample_identity": {
+        "profile_id": "A",
+        "extra": true
+      },
+      "counterexample_generation": "",
+      "normal_helper_caller_affected": false,
+      "native_reproduction": "NOT_RUN",
+      "requested_fix": "require both exact identity keys while retaining explicit empty generation compatibility"
+    }
+  ],
+  "native63": {
+    "evidence": [
+      {
+        "path": "outputs/wake_drop_v108_review_followup_20261009/B08_NATIVE63_DRIVER.txt",
+        "bytes": 84569,
+        "sha256": "d775638f7229c75cab817eee3876869b31162fe90d41afcea1740ae7b492d4cd"
+      },
+      {
+        "path": "outputs/test_logs/v109_direct63_mode_transaction/logs/runner_results_adhoc_20261010_111816_985_13792.json",
+        "bytes": 5255,
+        "sha256": "18cffecda479bd798efbc79b7345815751af8e8aa0f2e4a6cf9925c1a9f97f6a"
+      }
+    ],
+    "result": "FAIL",
+    "invocation_id": "e4206557-5f7d-4c76-9a40-eb0eca18261d",
+    "framework_run_id": "a9f5302d-4dc1-482a-b4fb-bc1a09d83637",
+    "source_content_sha256": "70a063165afac9d81a624ada293c3d2afd7d1ccb2e0c9f3a68c688d1e7a5c58d",
+    "process_exited": true,
+    "exit_code": 1,
+    "timeout": false,
+    "engine_log_errors": 0,
+    "checks": 60,
+    "passes": 59,
+    "failures": [
+      {
+        "check": 53,
+        "label": "complete successful reload restores the writer's mode/later/level/gold/inventory/equipment/identity elapsed_usec=10790229"
+      }
+    ],
+    "complete_structure_difference_analysis": [
+      {
+        "key": "inventory",
+        "equal_numeric_representation_changes": [
+          {
+            "path": "inventory[0].item_id",
+            "actual": 920001.0,
+            "expected": 920001,
+            "actual_type": "float",
+            "expected_type": "int"
+          },
+          {
+            "path": "inventory[0].count",
+            "actual": 2.0,
+            "expected": 2,
+            "actual_type": "float",
+            "expected_type": "int"
+          },
+          {
+            "path": "inventory[2].count",
+            "actual": 1.0,
+            "expected": 1,
+            "actual_type": "float",
+            "expected_type": "int"
+          },
+          {
+            "path": "inventory[2].weapon_luck",
+            "actual": 0.0,
+            "expected": 0,
+            "actual_type": "float",
+            "expected_type": "int"
+          },
+          {
+            "path": "inventory[2].item_id",
+            "actual": 80.0,
+            "expected": 80,
+            "actual_type": "float",
+            "expected_type": "int"
+          },
+          {
+            "path": "inventory[2].weapon_curse",
+            "actual": 0.0,
+            "expected": 0,
+            "actual_type": "float",
+            "expected_type": "int"
+          }
+        ],
+        "other_changes": []
+      },
+      {
+        "key": "equipment",
+        "equal_numeric_representation_changes": [
+          {
+            "path": "equipment.hc.slot.armor.count",
+            "actual": 1.0,
+            "expected": 1,
+            "actual_type": "float",
+            "expected_type": "int"
+          },
+          {
+            "path": "equipment.hc.slot.armor.item_id",
+            "actual": 116.0,
+            "expected": 116,
+            "actual_type": "float",
+            "expected_type": "int"
+          }
+        ],
+        "other_changes": []
+      }
+    ],
+    "numeric_only_equal_value_difference_status": "PASS",
+    "original_fail_retained": true,
+    "classification": "success_wire_comparison_type_difference; native result remains FAIL"
+  }
+}

@@ -1,0 +1,404 @@
+{
+  "a_id": "1791604110_2364",
+  "b_id": "1791604110_3891",
+  "checks_before_trace_write": 51,
+  "elapsed_usec": 5079898,
+  "expected_plural_pet_states": {
+    "contract_id": "skills.taoist_main_pets.v3",
+    "groups": {
+      "divine_beast": [],
+      "skeleton": [
+        {
+          "alive": true,
+          "contract_id": "skills.summon.persistence.runtime_state.v1",
+          "current_hp": 150,
+          "effective_skill_rank": 1,
+          "magic_defence": {
+            "bonus": 0,
+            "buff_id": "",
+            "remaining_seconds": 0.0
+          },
+          "max_hp": 196,
+          "maximum_pet_level": 3,
+          "owner_level": 19,
+          "pet_growth_exp": 7,
+          "pet_slot_index": 0,
+          "physical_defence": {
+            "bonus": 0,
+            "buff_id": "",
+            "remaining_seconds": 0.0
+          },
+          "remaining_lifetime": 60.0,
+          "runtime_state": "FOLLOW_OWNER",
+          "skill_id": "taoist.summon_skeleton",
+          "skill_rank": 1,
+          "stealth": {
+            "buff_id": "",
+            "remaining_seconds": 0.0
+          },
+          "summon_exp_level": 1,
+          "summon_id": "skeleton"
+        }
+      ]
+    }
+  },
+  "failure": {
+    "admitted": false,
+    "catalog_reference_or_scalar_differences": [],
+    "files_after_failure": {
+      "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/character_profiles.json": {
+        "exists": true,
+        "sha256": "5b9c35b591a3d026c262e88593c66e63018496be067cc08ba22b185abe8d4ffd",
+        "size": 263
+      },
+      "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/characters/1791604110_2364.json": {
+        "exists": true,
+        "sha256": "261496a6c3f6f223ef21a6845823d32c3b8024500ef479ab37c9a086a6c0d36d",
+        "size": 2606
+      },
+      "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/characters/1791604110_2364.json.bak": {
+        "exists": true,
+        "sha256": "261496a6c3f6f223ef21a6845823d32c3b8024500ef479ab37c9a086a6c0d36d",
+        "size": 2606
+      },
+      "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/characters/1791604110_3891.json": {
+        "exists": true,
+        "sha256": "6fc4eccca4fbcea4c936c02ba5d3bb94647ff365859e261e390331e6a6e7b33e",
+        "size": 3430
+      },
+      "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/characters/1791604110_3891.json.bak": {
+        "exists": true,
+        "sha256": "746fa9914ba5095b4374cc5401cb3182290758aa9e0d271c2336b32c466f7426",
+        "size": 3429
+      },
+      "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/characters/world_clocks/1791604110_3891/4945dda27ab4cc0b36073acee01a5a19.json": {
+        "exists": true,
+        "sha256": "c2dab9bba30d5898dd9e6ede9f9bcc938ef542162365f48168ff51e49ffb4641",
+        "size": 262
+      },
+      "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/characters/world_clocks/1791604110_3891/4945dda27ab4cc0b36073acee01a5a19.json.bak": {
+        "exists": true,
+        "sha256": "f12ffdf58d5e08cfc1c4dbdda397fee95bbb0df0d407b04e9cbfffe04d760b04",
+        "size": 264
+      },
+      "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/shared_warehouse.json": {
+        "exists": true,
+        "sha256": "5fd50edda8c723d0b9aee788005da41722ec8db94855f932410391c8569d41b6",
+        "size": 299
+      },
+      "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/shared_warehouse.json.bak": {
+        "exists": false,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      }
+    },
+    "files_before": {
+      "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/character_profiles.json": {
+        "exists": true,
+        "sha256": "5b9c35b591a3d026c262e88593c66e63018496be067cc08ba22b185abe8d4ffd",
+        "size": 263
+      },
+      "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/characters/1791604110_2364.json": {
+        "exists": true,
+        "sha256": "261496a6c3f6f223ef21a6845823d32c3b8024500ef479ab37c9a086a6c0d36d",
+        "size": 2606
+      },
+      "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/characters/1791604110_2364.json.bak": {
+        "exists": true,
+        "sha256": "261496a6c3f6f223ef21a6845823d32c3b8024500ef479ab37c9a086a6c0d36d",
+        "size": 2606
+      },
+      "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/characters/1791604110_3891.json": {
+        "exists": true,
+        "sha256": "6fc4eccca4fbcea4c936c02ba5d3bb94647ff365859e261e390331e6a6e7b33e",
+        "size": 3430
+      },
+      "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/characters/1791604110_3891.json.bak": {
+        "exists": true,
+        "sha256": "746fa9914ba5095b4374cc5401cb3182290758aa9e0d271c2336b32c466f7426",
+        "size": 3429
+      },
+      "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/characters/world_clocks/1791604110_3891/4945dda27ab4cc0b36073acee01a5a19.json": {
+        "exists": true,
+        "sha256": "c2dab9bba30d5898dd9e6ede9f9bcc938ef542162365f48168ff51e49ffb4641",
+        "size": 262
+      },
+      "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/characters/world_clocks/1791604110_3891/4945dda27ab4cc0b36073acee01a5a19.json.bak": {
+        "exists": true,
+        "sha256": "f12ffdf58d5e08cfc1c4dbdda397fee95bbb0df0d407b04e9cbfffe04d760b04",
+        "size": 264
+      },
+      "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/shared_warehouse.json": {
+        "exists": true,
+        "sha256": "5fd50edda8c723d0b9aee788005da41722ec8db94855f932410391c8569d41b6",
+        "size": 299
+      },
+      "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/shared_warehouse.json.bak": {
+        "exists": false,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      }
+    },
+    "last_load_result": {
+      "contract_id": "player_state.save_result.v1",
+      "path": "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/characters/1791604110_3891.json",
+      "reason": "world_clock_checkpoint_failed",
+      "success": false
+    },
+    "player_state_differences": {},
+    "replay": {
+      "experience": 3,
+      "latest_sequence": 1,
+      "level": 19,
+      "ok": true,
+      "profile_backup_sequence": 0,
+      "profile_sequence": 1,
+      "quest_states": {
+        "bich_beginner_gear": {
+          "progress": {
+            "稻草人": 1.0
+          },
+          "status": "active"
+        }
+      },
+      "snapshot_present": true,
+      "source_profile_sequence": 1,
+      "source_world_sequence": 1,
+      "world_backup_sequence": 0,
+      "world_sequence": 1,
+      "world_state": {
+        "contract_id": "monster.world_respawn_state.absolute_unix.v1",
+        "entries": {},
+        "schema_version": 1.0
+      }
+    },
+    "save_blocked_id": "1791604110_3891",
+    "save_blocked_reason": "world_clock_checkpoint_failed",
+    "signals": {
+      "database": 0,
+      "expansion": 0,
+      "profile": 0
+    },
+    "world_jobs_after": 5,
+    "world_jobs_before": 4
+  },
+  "failures_before_trace_write": [],
+  "fault_path": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/v109_direct68_mode_transaction/runner_8b73d71f-8412-46d8-abc3-ddfb783d7b9d/Godot/app_userdata/HardCore/profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/characters/world_clocks/1791604110_3891/4945dda27ab4cc0b36073acee01a5a19.json.tmp",
+  "generation": "4945dda27ab4cc0b36073acee01a5a19",
+  "invocation_id": "8b73d71f-8412-46d8-abc3-ddfb783d7b9d",
+  "native_process_id": 18332,
+  "owned_root": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/v109_direct68_mode_transaction/runner_8b73d71f-8412-46d8-abc3-ddfb783d7b9d/Godot/app_userdata/HardCore/profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332",
+  "persisted_fixture": {
+    "level": 19,
+    "plural_pet_states": {
+      "contract_id": "skills.taoist_main_pets.v3",
+      "groups": {
+        "divine_beast": [],
+        "skeleton": [
+          {
+            "alive": true,
+            "contract_id": "skills.summon.persistence.runtime_state.v1",
+            "current_hp": 150.0,
+            "effective_skill_rank": 1.0,
+            "magic_defence": {
+              "bonus": 0.0,
+              "buff_id": "",
+              "remaining_seconds": 0.0
+            },
+            "max_hp": 196.0,
+            "maximum_pet_level": 3.0,
+            "owner_level": 19.0,
+            "pet_growth_exp": 7.0,
+            "pet_slot_index": 0.0,
+            "physical_defence": {
+              "bonus": 0.0,
+              "buff_id": "",
+              "remaining_seconds": 0.0
+            },
+            "remaining_lifetime": 60.0,
+            "runtime_state": "FOLLOW_OWNER",
+            "skill_id": "taoist.summon_skeleton",
+            "skill_rank": 1.0,
+            "stealth": {
+              "buff_id": "",
+              "remaining_seconds": 0.0
+            },
+            "summon_exp_level": 1.0,
+            "summon_id": "skeleton"
+          }
+        ]
+      }
+    },
+    "profession_id": "hc.profession.taoist",
+    "quest": {
+      "progress": {
+        "稻草人": 1.0
+      },
+      "status": "active"
+    }
+  },
+  "recovery": {
+    "admitted": true,
+    "backup_sequence": 1,
+    "files_after": {
+      "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/character_profiles.json": {
+        "exists": true,
+        "sha256": "5b9c35b591a3d026c262e88593c66e63018496be067cc08ba22b185abe8d4ffd",
+        "size": 263
+      },
+      "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/characters/1791604110_2364.json": {
+        "exists": true,
+        "sha256": "261496a6c3f6f223ef21a6845823d32c3b8024500ef479ab37c9a086a6c0d36d",
+        "size": 2606
+      },
+      "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/characters/1791604110_2364.json.bak": {
+        "exists": true,
+        "sha256": "261496a6c3f6f223ef21a6845823d32c3b8024500ef479ab37c9a086a6c0d36d",
+        "size": 2606
+      },
+      "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/characters/1791604110_3891.json": {
+        "exists": true,
+        "sha256": "6fc4eccca4fbcea4c936c02ba5d3bb94647ff365859e261e390331e6a6e7b33e",
+        "size": 3430
+      },
+      "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/characters/1791604110_3891.json.bak": {
+        "exists": true,
+        "sha256": "746fa9914ba5095b4374cc5401cb3182290758aa9e0d271c2336b32c466f7426",
+        "size": 3429
+      },
+      "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/characters/world_clocks/1791604110_3891/4945dda27ab4cc0b36073acee01a5a19.json": {
+        "exists": true,
+        "sha256": "c2dab9bba30d5898dd9e6ede9f9bcc938ef542162365f48168ff51e49ffb4641",
+        "size": 262
+      },
+      "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/characters/world_clocks/1791604110_3891/4945dda27ab4cc0b36073acee01a5a19.json.bak": {
+        "exists": true,
+        "sha256": "c2dab9bba30d5898dd9e6ede9f9bcc938ef542162365f48168ff51e49ffb4641",
+        "size": 262
+      },
+      "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/shared_warehouse.json": {
+        "exists": true,
+        "sha256": "5fd50edda8c723d0b9aee788005da41722ec8db94855f932410391c8569d41b6",
+        "size": 299
+      },
+      "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/shared_warehouse.json.bak": {
+        "exists": false,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      }
+    },
+    "last_load_result": {
+      "contract_id": "player_state.save_result.v1",
+      "path": "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/characters/1791604110_3891.json",
+      "reason": "primary",
+      "success": true
+    },
+    "quests": {
+      "bich_beginner_gear": {
+        "progress": {
+          "稻草人": 1.0
+        },
+        "status": "active"
+      }
+    },
+    "signals": {
+      "database": 1,
+      "expansion": 2,
+      "profile": 1
+    },
+    "snapshot_sequence": 1,
+    "world_jobs_after": 6
+  },
+  "run_id": "709a6d90-50a3-4d13-9b26-6361770a0ea9",
+  "scope": "formal test_mode=false profile admission; real ledger watermark and exact clock TMP directory fault",
+  "source_content_sha256": "fc8ec681d681ac3b12e7135a3eb851c89d1355a2ef55cfa41ca592f0f4a58b74",
+  "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/v109_direct68_mode_transaction/runner_8b73d71f-8412-46d8-abc3-ddfb783d7b9d/Godot/app_userdata/HardCore",
+  "writer_identity_negatives": {
+    "bytes_after": {
+      "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/characters/world_clocks/1791604110_2364.json": {
+        "exists": true,
+        "sha256": "47ae1a41a690e9ad9b9ac92805d4249f72be1033dadd4abea4db0561aac6345b",
+        "size": 230
+      },
+      "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/characters/world_clocks/1791604110_2364.json.bak": {
+        "exists": false,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/characters/world_clocks/1791604110_2364.json.tmp": {
+        "exists": false,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/characters/world_clocks/1791604110_2364.json.wrong-target": {
+        "exists": false,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/characters/world_clocks/1791604110_2364.json.wrong-target.tmp": {
+        "exists": false,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      }
+    },
+    "bytes_before": {
+      "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/characters/world_clocks/1791604110_2364.json": {
+        "exists": true,
+        "sha256": "47ae1a41a690e9ad9b9ac92805d4249f72be1033dadd4abea4db0561aac6345b",
+        "size": 230
+      },
+      "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/characters/world_clocks/1791604110_2364.json.bak": {
+        "exists": false,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/characters/world_clocks/1791604110_2364.json.tmp": {
+        "exists": false,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/characters/world_clocks/1791604110_2364.json.wrong-target": {
+        "exists": false,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "user://profile_load_admission_20261010_709a6d90-50a3-4d13-9b26-6361770a0ea9_8b73d71f-8412-46d8-abc3-ddfb783d7b9d_18332/characters/world_clocks/1791604110_2364.json.wrong-target.tmp": {
+        "exists": false,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      }
+    },
+    "cases": [
+      {
+        "bytes_unchanged": true,
+        "case": "missing generation plus extra key",
+        "profile_completed": 23,
+        "result": false,
+        "world_completed": 4
+      },
+      {
+        "bytes_unchanged": true,
+        "case": "more than two identity keys",
+        "profile_completed": 23,
+        "result": false,
+        "world_completed": 4
+      },
+      {
+        "bytes_unchanged": true,
+        "case": "non-String generation",
+        "profile_completed": 23,
+        "result": false,
+        "world_completed": 4
+      },
+      {
+        "bytes_unchanged": true,
+        "case": "wrong target path",
+        "profile_completed": 23,
+        "result": false,
+        "world_completed": 4
+      }
+    ],
+    "profile_completed_before": 23,
+    "world_completed_before": 4
+  }
+}

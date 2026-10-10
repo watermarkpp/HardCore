@@ -1,0 +1,302 @@
+{
+  "status": "NOT_RUN",
+  "native": "NOT_RUN",
+  "engine_parse": "NOT_RUN",
+  "fixture_stage": "EMPTY_BYTE_HASH_GUARD_PAIR_LANDED_FOR_NATIVE69",
+  "branch": "codex/integration",
+  "head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+  "dirty_count": 425,
+  "worktrees": [
+    "worktree C:/Users/Administrator/Documents/HardCore",
+    "HEAD 215f0b2f651a51e6855ee813ddd99221690311a1",
+    "branch refs/heads/codex/integration",
+    "",
+    "worktree C:/Users/Administrator/.codex/worktrees/crowd-attack-frame-ab/HardCore",
+    "HEAD edae6fdef6a6551a951fab1ea8c6ade43359d603",
+    "detached",
+    "",
+    "worktree C:/Users/Administrator/.codex/worktrees/crowd-v107-comparison/HardCore",
+    "HEAD edae6fdef6a6551a951fab1ea8c6ade43359d603",
+    "detached",
+    "",
+    "worktree C:/Users/Administrator/Documents/HardCore-android-staging/75ea78270334-20261009-182100-c764f8d5",
+    "HEAD 75ea782703345f717b287aad5903d02d9799f45f",
+    "detached",
+    "",
+    "worktree C:/Users/Administrator/Documents/HardCore-android-staging/92c6eeb93af9-20261009-182927-97b781f2",
+    "HEAD 92c6eeb93af9546b891ea0a1a15dd4f8c600502b",
+    "detached",
+    "",
+    "worktree C:/Users/Administrator/Documents/HardCore-android-staging/edae6fdef6a6-20261008-142553-01f37098",
+    "HEAD edae6fdef6a6551a951fab1ea8c6ade43359d603",
+    "detached",
+    ""
+  ],
+  "symbols": [
+    {
+      "name": "_before_state_transaction",
+      "declared": true
+    },
+    {
+      "name": "_shared_warehouse_test_isolation_enabled",
+      "declared": true
+    },
+    {
+      "name": "_write_json_atomic",
+      "declared": true
+    },
+    {
+      "name": "_read_world_clock_replay",
+      "declared": true
+    },
+    {
+      "name": "_validate_profile_document_status",
+      "declared": true
+    },
+    {
+      "name": "_world_clock_path",
+      "declared": true
+    },
+    {
+      "name": "_profile_path",
+      "declared": true
+    },
+    {
+      "name": "create_character",
+      "declared": true
+    },
+    {
+      "name": "add_item",
+      "declared": true
+    },
+    {
+      "name": "learn_skill",
+      "declared": true
+    },
+    {
+      "name": "accept_quest",
+      "declared": true
+    },
+    {
+      "name": "record_kill_and_experience",
+      "declared": true
+    },
+    {
+      "name": "save_game",
+      "declared": true
+    },
+    {
+      "name": "select_character",
+      "declared": true
+    },
+    {
+      "name": "skill_progression_snapshot",
+      "declared": true
+    },
+    {
+      "name": "skill_button_assignments_snapshot",
+      "declared": true
+    },
+    {
+      "name": "is_skill_learned",
+      "declared": true
+    }
+  ],
+  "hashes": [
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tests\\framework\\profile_load_admission_20261010_test.gd",
+      "sha256": "A379CB981E29299AA9D449D55E303ACC9DC166948620A6A539ADE48BB200F9F4",
+      "size": 30376
+    },
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tests\\framework\\profile_load_admission_20261010_test.tscn",
+      "sha256": "6E3ECD66AE594F9B6FBE613E072056C62B4AFCEB4173DD772D361C95700E3D54",
+      "size": 225
+    },
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\b08_profile_admission_test_20261010\\draft\\profile_load_admission_20261010_test.gd",
+      "sha256": "A379CB981E29299AA9D449D55E303ACC9DC166948620A6A539ADE48BB200F9F4",
+      "size": 30376
+    },
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\b08_profile_admission_test_20261010\\draft\\profile_load_admission_20261010_test.tscn",
+      "sha256": "6E3ECD66AE594F9B6FBE613E072056C62B4AFCEB4173DD772D361C95700E3D54",
+      "size": 225
+    },
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore\\scripts\\player_state.gd",
+      "sha256": "A95FE0B6875196B92E60A1E429F2915BFCDEA9DB772399FFE6FD18F18DA90185",
+      "size": 460755
+    },
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore\\scripts\\world_monster_clock_ledger.gd",
+      "sha256": "367357800956835D4BE83B294674D6BEC5F8110CC0D37D0F22E610A08453127C",
+      "size": 8002
+    },
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore\\scripts\\json_persistence_job.gd",
+      "sha256": "8C016948356196EC7D777585B1E303F431AEAC84F58F25A16CC44CB742757242",
+      "size": 14154
+    },
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore\\scripts\\json_persistence_service.gd",
+      "sha256": "581D09246EF6E9991C35BB3563C90FD4F4CF3A098F56BB95D31B5A543DCD06C0",
+      "size": 14710
+    },
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\b08_profile_admission_test_20261010\\draft_pre_native65\\profile_load_admission_20261010_test.gd",
+      "sha256": "F822135CB48C206E3829408EBEC53B8C77FD9FB10DDAECD8F0BD6A115A66169E",
+      "size": 28361
+    },
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\b08_profile_admission_test_20261010\\draft_pre_native65\\profile_load_admission_20261010_test.tscn",
+      "sha256": "6E3ECD66AE594F9B6FBE613E072056C62B4AFCEB4173DD772D361C95700E3D54",
+      "size": 225
+    },
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\b08_profile_admission_test_20261010\\draft_pre_native66\\profile_load_admission_20261010_test.gd",
+      "sha256": "51FDE3647F05C8670D8427B5C34DB7C7FA25971BA4EED265FB3D3DE990480B7A",
+      "size": 28638
+    },
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\b08_profile_admission_test_20261010\\draft_pre_native66\\profile_load_admission_20261010_test.tscn",
+      "sha256": "6E3ECD66AE594F9B6FBE613E072056C62B4AFCEB4173DD772D361C95700E3D54",
+      "size": 225
+    },
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\b08_profile_admission_test_20261010\\draft_pre_native68\\profile_load_admission_20261010_test.gd",
+      "sha256": "416228627FB770B9146095DD8745E3165036FFDA99C37E45BF00AE898B047420",
+      "size": 30348
+    },
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\b08_profile_admission_test_20261010\\draft_pre_native68\\profile_load_admission_20261010_test.tscn",
+      "sha256": "6E3ECD66AE594F9B6FBE613E072056C62B4AFCEB4173DD772D361C95700E3D54",
+      "size": 225
+    }
+  ],
+  "assertion_call_count": 52,
+  "production_fault_switches": 0,
+  "test_mode_true": 0,
+  "recursive_delete_calls": 0,
+  "framework_pair_exists": [
+    true,
+    true
+  ],
+  "framework_pair_tracked": [],
+  "bootstrap": "equivalent read-only preflight; global bootstrap/latest.json belongs outside this worker ownership",
+  "whitespace_checks": [
+    {
+      "path": "tests/framework/profile_load_admission_20261010_test.gd",
+      "exit": 1,
+      "output": [],
+      "status": "PASS"
+    },
+    {
+      "path": "tests/framework/profile_load_admission_20261010_test.tscn",
+      "exit": 1,
+      "output": [],
+      "status": "PASS"
+    }
+  ],
+  "run_command": "& .\\tools\\run_godot_tests.ps1 -TestPaths @('tests/framework/profile_load_admission_20261010_test.tscn') -TimeoutSeconds 30",
+  "original_assertions_preserved": 47,
+  "writer_identity_negative_case_count": 4,
+  "writer_identity_fixture_preconditions": "owned real empty-generation A snapshot; Ledger valid; ItemCodec KNOWN_VALID; startup admission gate clear",
+  "receipt_failure_diagnostics": "receipt false only adds write/validation diagnostic when original business failures are empty",
+  "native65_history": {
+    "source": "controller reported",
+    "status": "FAIL",
+    "phase": "PARSE",
+    "line": 70,
+    "reason": "Cannot infer type unchanged",
+    "engine_errors": 2,
+    "business_assertions_reached": 0,
+    "postverify_input_count": 2545,
+    "postverify": "PASS",
+    "preimage_directory": "outputs/b08_profile_admission_test_20261010/draft_pre_native65",
+    "original_failure_logs": "retained by controller"
+  },
+  "declaration_only_source_comparison": "PASS - historical Native65 to Native66 parse repair only; current Native68 includes the authorized legal nonempty Taoist fixture changes",
+  "local_inferred_declarations_remaining": 0,
+  "pending_native_retest": "Native69: controller-owned single corrected profile fixture retest, original 30s deadline; clean old skill scene not repeated",
+  "native66_history": {
+    "source": "controller reported",
+    "status": "FAIL",
+    "phase": "BUSINESS",
+    "native_exit": 1,
+    "checks": 24,
+    "passed": 23,
+    "failed": 1,
+    "failed_check_id": 22,
+    "engine_errors": 0,
+    "reason": "formal writer omits plural field when main pet groups empty; actual quest correct",
+    "postverify_input_count": 2545,
+    "postverify": "PASS",
+    "preimage_directory": "outputs/b08_profile_admission_test_20261010/draft_pre_native66",
+    "original_failure_logs": "retained by controller"
+  },
+  "check_callsites_before_and_after_plural_fix": [
+    50,
+    50
+  ],
+  "plural_fixture": {
+    "profession_id": "hc.profession.taoist",
+    "level": 19,
+    "skill": "taoist.summon_skeleton",
+    "base_rank": 1,
+    "summon_id": "skeleton",
+    "pet_slot_index": 0,
+    "pet_level": 1,
+    "maximum_pet_level": 3,
+    "hp": 150,
+    "max_hp": 196,
+    "lifetime_seconds": 60,
+    "public_admission": "apply_taoist_main_pet_runtime_states",
+    "complete_saved_and_restored_pet_equality": "required within original checks",
+    "status": "PASS - Native68 all52 business receipt; runner FAIL retained for unrelated fixture empty-hash diagnostic; Native69 candidate NOT_RUN"
+  },
+  "native67_write_release": {
+    "source": "controller reported",
+    "status": "PASS",
+    "real_io_scenes": 3,
+    "engine_errors": 0,
+    "postverify_input_count": 2551,
+    "postverify": "PASS",
+    "framework_write_window": "released"
+  },
+  "landing_preservation_checks": {
+    "four_writer_negatives": "PASS - exact source region unchanged",
+    "full_A_snapshot": "PASS - exact source region unchanged",
+    "real_TMP_fault_and_capture": "PASS - exact source region unchanged",
+    "checkpoint_rejection_and_failed_B_save_gate": "PASS - exact source region unchanged",
+    "check_callsites": [
+      50,
+      50
+    ],
+    "normal_check_count": 52,
+    "scene": "byte-identical",
+    "draft_and_framework": "byte-identical"
+  },
+  "native68_history": {
+    "source": "original logs/receipt/native_result/trace directly read; postverify controller reported",
+    "result": "FAIL",
+    "native_exit": 0,
+    "timeout": false,
+    "business_status": "PASS",
+    "checks": 52,
+    "passed": 52,
+    "failed": 0,
+    "unique_native_errors": 11,
+    "stderr_errors": 11,
+    "engine_log_errors": 11,
+    "script_errors": 0,
+    "classification": "test diagnostic _file_hashes HashingContext.update(empty), eight writer traces + two failure traces + one recovery trace",
+    "postverify_input_count": 2553,
+    "postverify": "PASS",
+    "preimage_directory": "outputs/b08_profile_admission_test_20261010/draft_pre_native68",
+    "copied_original_evidence": "outputs/b08_profile_admission_test_20261010/native68_fail_evidence",
+    "full_classification": "outputs/b08_profile_admission_test_20261010/NATIVE68_ERROR_CLASSIFICATION.json"
+  },
+  "native69_repair_source_comparison": "PASS - exact full-source comparison: only guard context.update with not bytes.is_empty; 52 checks and all actual byte evidence intact",
+  "native69_repair_diff": "outputs/b08_profile_admission_test_20261010/NATIVE68_TO_NATIVE69_HASH_GUARD.diff"
+}

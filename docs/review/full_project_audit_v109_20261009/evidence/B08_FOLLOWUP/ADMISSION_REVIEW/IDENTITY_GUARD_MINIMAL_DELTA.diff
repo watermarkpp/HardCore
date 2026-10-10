@@ -1,0 +1,21 @@
+diff --git a/scripts/player_state.gd b/scripts/player_state.gd
+index 980cd7bc4..85867fa2f 100644
+--- a/scripts/player_state.gd
++++ b/scripts/player_state.gd
+@@ -5873,9 +5873,13 @@ func _write_json_atomic(path: String, data: Dictionary, preserve_known_wire := f
+ 		return false
+ 	var identity := {"path": path, "profile_id": active_profile_id, "generation": _world_clock_generation}
+ 	if not world_clock_identity.is_empty():
+-		var target_id: String = str(world_clock_identity.get("profile_id", ""))
+-		var target_generation: String = str(world_clock_identity.get("generation", ""))
+-		if world_clock_identity.size() != 2 or not _valid_profile_storage_id(target_id) \
++		if world_clock_identity.size() != 2 \
++			or not world_clock_identity.has("profile_id") or not world_clock_identity.has("generation") \
++			or not world_clock_identity.profile_id is String or not world_clock_identity.generation is String:
++			return false
++		var target_id: String = world_clock_identity.profile_id
++		var target_generation: String = world_clock_identity.generation
++		if not _valid_profile_storage_id(target_id) \
+ 			or not WorldMonsterClockLedgerScript.valid_generation(target_generation) \
+ 			or path != _world_clock_path(target_id, target_generation):
+ 			return false
