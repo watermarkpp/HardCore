@@ -1,0 +1,59 @@
+{
+  "status": "PASS",
+  "input_freeze_status": "PASS",
+  "scope": "Input freeze and individual native results; failed/missing checks remain explicit. Android/GPU/performance NOT_RUN",
+  "candidate_tree": "607d5e487ce523ca448542117c49a4791c1a064a",
+  "source_fingerprint": "d4f236d0dfc32e4f20bb01696f787cbfbbb27a8f6628b307485c7d04d6cb8927",
+  "checked_inputs": 2607,
+  "runner": "outputs\\dot_remote_audit_20261010\\native\\b18_b20_followup\\runner_results_adhoc_20261010_155810_153_11476.json",
+  "invocation_id": "70705c19-9525-446b-8ea6-36adc861a907",
+  "engine_log_errors": 0,
+  "main_index_unchanged": true,
+  "results": [
+    {
+      "test_path": "tests/framework/v109_map_editor_cleanup_retry_test.tscn",
+      "result": "PASS",
+      "reason": "",
+      "timeout": false,
+      "effective_exit_code": 0,
+      "native_exit_observed_utc": "2026-10-10T07:57:48.4811757Z",
+      "framework_run_id": "26238866-1111-4256-93a9-6d038b1e26b0",
+      "framework_receipt_valid": true,
+      "formal_evidence_status": "PASS",
+      "check_count": 25,
+      "failed_checks": 0,
+      "receipt": "outputs\\dot_remote_audit_20261010\\native\\b18_b20_followup\\v109_map_editor_cleanup_retry_test.result.json",
+      "receipt_sha256": "992cba4d8337829bfc8af0747585e8522ea1329e776b217c4c076d379bd874dc"
+    },
+    {
+      "test_path": "tests/framework/v109_wall_page_order_contract_test.tscn",
+      "result": "PASS",
+      "reason": "",
+      "timeout": false,
+      "effective_exit_code": 0,
+      "native_exit_observed_utc": "2026-10-10T07:57:57.4243726Z",
+      "framework_run_id": "cd15c525-fa52-4bbd-b0b6-e4a8c852bfa4",
+      "framework_receipt_valid": true,
+      "formal_evidence_status": "PASS",
+      "check_count": 6,
+      "failed_checks": 0,
+      "receipt": "outputs\\dot_remote_audit_20261010\\native\\b18_b20_followup\\v109_wall_page_order_contract_test.result.json",
+      "receipt_sha256": "f94f4638d87b0cb0bd23d1000d90c9464d0fb42b88be0ad9bf1ed31a00410131"
+    },
+    {
+      "test_path": "tests/framework/v109_shop_failed_empty_quotes_contract_test.tscn",
+      "result": "PASS",
+      "reason": "",
+      "timeout": false,
+      "effective_exit_code": 0,
+      "native_exit_observed_utc": "2026-10-10T07:58:08.7084653Z",
+      "framework_run_id": "3c5feecd-743e-49c1-8210-8afde702f5ef",
+      "framework_receipt_valid": true,
+      "formal_evidence_status": "PASS",
+      "check_count": 7,
+      "failed_checks": 0,
+      "receipt": "outputs\\dot_remote_audit_20261010\\native\\b18_b20_followup\\v109_shop_failed_empty_quotes_contract_test.result.json",
+      "receipt_sha256": "a64410aa8627f805c131422a0aef3ab6fa6ebe1b2e4b89de8941257bb9941c03"
+    }
+  ]
+}

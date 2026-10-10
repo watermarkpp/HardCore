@@ -1,0 +1,107 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "actual Root reaches READY",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "real quest UI offers completed first reward",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "formal claim rejects actual gold cap",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "deferred refresh preserves claim failure reason",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "failed real claim changes no gold or items",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "failed real claim keeps reward claimable",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "new user selection clears previous action failure",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "second actual rejection remains visible",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "new quest session starts with current owner state",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "actual skill panel has formally learned assignable skill",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "actual configuration popup opens",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "formal HUD death route hides skill panel",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "death closes transient popup and scrim",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "death retires long press intent",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "revival reentry does not resurrect configuration popup",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "hide cleanup preserves persistent skill bindings",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "normal close also ends transient configuration session",
+      "passed": true
+    }
+  ],
+  "count": 17,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "49fe6485-eed9-48b4-aaf1-7ac1cdc7ce1e",
+  "passed": 17,
+  "reported_checks": 17,
+  "reported_failures": 0,
+  "run_id": "c5c68f80-d2b6-4738-8056-f8a87c22df1d",
+  "runtime_environment": {
+    "native_process_id": 20528,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\b20_quest_skill_green\\runner_49fe6485-eed9-48b4-aaf1-7ac1cdc7ce1e",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/b20_quest_skill_green/runner_49fe6485-eed9-48b4-aaf1-7ac1cdc7ce1e/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "v109_quest_skill_session_ui_test",
+  "schema_version": 1,
+  "source_content_sha256": "9c157227b54f6dd91ac543c4d8ecd678984c7689b0eb6142211d79e3d2b79c08",
+  "status": "PASS"
+}

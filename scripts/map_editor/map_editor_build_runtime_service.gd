@@ -46,6 +46,7 @@ static var test_fail_post_publish_verify := false
 ## same recovery path; production never enables them.
 static var test_crash_after_runtime_promote := false
 static var test_crash_after_registry_backup := false
+static var test_fail_registry_backup_cleanup := false
 ## FREEZE-P0.3R test/dev seam: redirect formal runtime promotion to a scratch
 ## root (e.g. user://) so tests never write the tracked formal runtime dir.
 static var test_formal_runtime_root_override := ""
@@ -297,6 +298,7 @@ static func publish_runtime_release(
 	if intent_registry_text.is_empty():
 		return {"success": false, "reason": "publish_intent_registry_prepare_failed"}
 	var old_runtime_file_hash := _file_sha256(formal_path)
+	var old_registry_hash := _sha256_bytes(old_registry_bytes)
 	var old_runtime_approved_hash := ""
 	for old_entry: Variant in old_registry.get("maps", []):
 		if old_entry is Dictionary \
@@ -397,11 +399,30 @@ static func publish_runtime_release(
 			}
 		_remove_publish_intent(registry_path)
 		return {"success": false, "reason": "post_publish_verify_failed"}
-	if (
-		not backup_path.is_empty()
-		and FileAccess.file_exists(backup_path)
-	):
-		DirAccess.remove_absolute(backup_path)
+	var backup_cleanup := {"ok": true}
+	if not backup_path.is_empty():
+		backup_cleanup = _remove_expected_backup(backup_path, old_runtime_file_hash)
+	var registry_backup_cleanup := _remove_expected_backup(
+		_absolute_path(registry_path) + ".bak", old_registry_hash
+	)
+	var registry_restore_cleanup := _remove_expected_backup(
+		_absolute_path(registry_path) + ".restore_bak", old_registry_hash
+	)
+	if not bool(backup_cleanup.get("ok", false)) \
+		or not bool(registry_backup_cleanup.get("ok", false)) \
+		or not bool(registry_restore_cleanup.get("ok", false)):
+		# The new runtime and registry are already committed. Keep the intent
+		# durable when cleanup fails so the next invocation can retry the exact
+		# hash-checked deletion instead of treating the pair as fully retired.
+		return {
+			"success": false,
+			"reason": "publish_cleanup_failed",
+			"errors": [
+				str(backup_cleanup.get("reason", "")),
+				str(registry_backup_cleanup.get("reason", "")),
+				str(registry_restore_cleanup.get("reason", "")),
+			],
+		}
 	_remove_publish_intent(registry_path)
 	return {
 		"success": true,
@@ -844,8 +865,17 @@ static func _recover_pending_publish_intent(
 		or str(runtime_current.runtime.get("build_sha256", "")) != new_runtime_approved_hash):
 		return {"ok": false, "reason": "publish_recovery_runtime_identity_invalid"}
 	if new_runtime_matches and new_registry_matches:
-		_remove_expected_backup(formal_path + ".bak", old_runtime_file_hash)
-		_remove_expected_backup(expected_registry_path + ".bak", old_registry_hash)
+		var runtime_cleanup := _remove_expected_backup(formal_path + ".bak", old_runtime_file_hash)
+		var registry_cleanup := _remove_expected_backup(expected_registry_path + ".bak", old_registry_hash)
+		var restore_cleanup := _remove_expected_backup(expected_registry_path + ".restore_bak", old_registry_hash)
+		if not bool(runtime_cleanup.get("ok", false)) \
+			or not bool(registry_cleanup.get("ok", false)) \
+			or not bool(restore_cleanup.get("ok", false)):
+			return {
+				"ok": false,
+				"reason": "publish_recovery_cleanup_failed",
+				"errors": [str(runtime_cleanup.get("reason", "")), str(registry_cleanup.get("reason", "")), str(restore_cleanup.get("reason", ""))],
+			}
 		_remove_publish_intent(registry_path)
 		return {
 			"ok": true,
@@ -875,9 +905,15 @@ static func _recover_pending_publish_intent(
 		var written := _write_registry_text_atomic(registry_path, new_registry_text)
 		if not written or _sha256_bytes(_read_bytes(expected_registry_path)) != new_registry_hash:
 			return {"ok": false, "reason": "publish_recovery_registry_commit_failed"}
-		_remove_expected_backup(formal_path + ".bak", old_runtime_file_hash)
-		_remove_expected_backup(expected_registry_path + ".bak", old_registry_hash)
-		_remove_expected_backup(expected_registry_path + ".restore_bak", old_registry_hash)
+		var runtime_cleanup := _remove_expected_backup(formal_path + ".bak", old_runtime_file_hash)
+		var registry_cleanup := _remove_expected_backup(expected_registry_path + ".bak", old_registry_hash)
+		var restore_cleanup := _remove_expected_backup(expected_registry_path + ".restore_bak", old_registry_hash)
+		if not bool(runtime_cleanup.get("ok", false)) or not bool(registry_cleanup.get("ok", false)) or not bool(restore_cleanup.get("ok", false)):
+			return {
+				"ok": false,
+				"reason": "publish_recovery_cleanup_failed",
+				"errors": [str(runtime_cleanup.get("reason", "")), str(registry_cleanup.get("reason", "")), str(restore_cleanup.get("reason", ""))],
+			}
 		_remove_publish_intent(registry_path)
 		return {
 			"ok": true,
@@ -898,11 +934,19 @@ static func _recover_pending_publish_intent(
 	}
 
 
-static func _remove_expected_backup(path: String, expected_hash: String) -> void:
-	if expected_hash.is_empty() or not FileAccess.file_exists(path):
-		return
+static func _remove_expected_backup(path: String, expected_hash: String) -> Dictionary:
+	if expected_hash.is_empty():
+		if FileAccess.file_exists(path):
+			return {"ok": false, "reason": "expected_backup_hash_missing"}
+		return {"ok": true, "removed": false}
+	if not FileAccess.file_exists(path):
+		return {"ok": true, "removed": false}
 	if _file_sha256(path) == expected_hash:
-		DirAccess.remove_absolute(path)
+		var error := _injected_remove_absolute(path)
+		if error != OK:
+			return {"ok": false, "reason": "expected_backup_remove_failed:%d" % error}
+		return {"ok": true, "removed": true}
+	return {"ok": false, "reason": "expected_backup_hash_mismatch"}
 
 
 static func _absolute_path(path: String) -> String:
@@ -1401,7 +1445,7 @@ static func _write_registry_atomic(
 		if FileAccess.file_exists(backup):
 			DirAccess.rename_absolute(backup, absolute_dst)
 		return false
-	if FileAccess.file_exists(backup):
+	if FileAccess.file_exists(backup) and not test_fail_registry_backup_cleanup:
 		DirAccess.remove_absolute(backup)
 	return true
 
@@ -1550,7 +1594,7 @@ static func _write_registry_text_atomic(registry_path: String, text: String) -> 
 		if FileAccess.file_exists(backup):
 			DirAccess.rename_absolute(backup, absolute_dst)
 		return false
-	if FileAccess.file_exists(backup):
+	if FileAccess.file_exists(backup) and not test_fail_registry_backup_cleanup:
 		DirAccess.remove_absolute(backup)
 	return true
 

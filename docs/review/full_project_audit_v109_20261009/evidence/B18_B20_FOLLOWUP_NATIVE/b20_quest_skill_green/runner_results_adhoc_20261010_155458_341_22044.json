@@ -1,0 +1,109 @@
+{
+  "generated_at": "2026-10-10T15:54:58.3417349+08:00",
+  "engine_fingerprints": [
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+      "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "bytes": 198152
+    },
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64.exe",
+      "sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+      "bytes": 178485256
+    }
+  ],
+  "git_head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+  "failed": 0,
+  "suite": "adhoc",
+  "passed": 1,
+  "source_content_sha256": "9c157227b54f6dd91ac543c4d8ecd678984c7689b0eb6142211d79e3d2b79c08",
+  "source_binding_scope": "External immutable input freeze required; env label alone is not a source scan",
+  "results": [
+    {
+      "test_name": "v109_quest_skill_session_ui_test",
+      "test_path": "tests/framework/v109_quest_skill_session_ui_test.tscn",
+      "wrapper_process_id": 6052,
+      "wrapper_started_utc": "2026-10-10T07:54:35.6055564Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\b20_quest_skill_green\\runner_49fe6485-eed9-48b4-aaf1-7ac1cdc7ce1e",
+      "fixed_fps": 0,
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-10T07:55:05.6106279Z",
+      "native_exit_observed_utc": "2026-10-10T07:54:56.8178202Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "cleanup_warning_evidence": {
+        "status": "PASS",
+        "allowlisted_errors": {
+          "string_formatting": {
+            "count": 0,
+            "lines": []
+          },
+          "resources_in_use": {
+            "count": 0,
+            "lines": []
+          },
+          "rid_leak": {
+            "count": 0,
+            "lines": []
+          },
+          "null_parameter": {
+            "count": 0,
+            "lines": []
+          }
+        },
+        "unknown_error_lines": [],
+        "unknown_error_count": 0,
+        "objectdb_leak_warning_lines": [],
+        "objectdb_leak_warning_count": 0,
+        "functional_marker_observed": true,
+        "formal_evidence_status": "MISSING",
+        "formal_evidence_reason": "upstream_native_and_full_receipt_validation_required",
+        "receipt_validation_reasons": [],
+        "candidate_receipt_correlation": true,
+        "upstream_result": "NOT_RUN",
+        "raw_log_paths": [
+          "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\dot_remote_audit_20261010\\native\\b20_quest_skill_green\\v109_quest_skill_session_ui_test.stdout.log",
+          "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\dot_remote_audit_20261010\\native\\b20_quest_skill_green\\v109_quest_skill_session_ui_test.stderr.log",
+          "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\dot_remote_audit_20261010\\native\\b20_quest_skill_green\\v109_quest_skill_session_ui_test.godot.log"
+        ],
+        "receipt_path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\framework\\v109_quest_skill_session_ui_test.result.json",
+        "expected_scene_id": "v109_quest_skill_session_ui_test",
+        "expected_invocation_id": "49fe6485-eed9-48b4-aaf1-7ac1cdc7ce1e"
+      },
+      "framework_run_id": "c5c68f80-d2b6-4738-8056-f8a87c22df1d",
+      "framework_receipt_valid": true,
+      "source_content_sha256": "9c157227b54f6dd91ac543c4d8ecd678984c7689b0eb6142211d79e3d2b79c08",
+      "source_binding_scope": "External immutable input freeze required; env label alone is not a source scan",
+      "engine_fingerprints": [
+        {
+          "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+          "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+          "bytes": 198152
+        },
+        {
+          "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64.exe",
+          "sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+          "bytes": 178485256
+        }
+      ],
+      "formal_evidence_status": "PASS",
+      "formal_evidence_reason": "Requires matching external source/input freeze and this native result",
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "invocation_id": "49fe6485-eed9-48b4-aaf1-7ac1cdc7ce1e",
+  "runtime_environment": {
+    "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\b20_quest_skill_green\\runner_49fe6485-eed9-48b4-aaf1-7ac1cdc7ce1e",
+    "runner_process_id": 22044
+  },
+  "total": 1,
+  "engine_log_errors": 0
+}

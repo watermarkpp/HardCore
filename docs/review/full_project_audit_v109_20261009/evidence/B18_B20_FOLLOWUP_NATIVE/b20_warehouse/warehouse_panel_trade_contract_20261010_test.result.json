@@ -1,0 +1,162 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "stackable non-equipment fixture exists",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "equipment fixture exists",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "full 100-slot bag allows a same-stack warehouse withdrawal",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "real owner merges 19 plus 1 into the existing stack",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "merged withdrawal consumes the warehouse source",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "new B selection survives old A receipt",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "accepted A transfer settles exactly once",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "old accepted transaction releases pending state",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "prepared fixture creates isolated shared authority",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "prepared fixture creates isolated profile authority",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "prepared withdraw fixture persists profile before submit",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "prepared withdraw fixture persists warehouse before submit",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "prepared withdraw remains pending before async receipt",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "prepared withdraw shows B detail during pending A receipt",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "prepared withdraw preserves B selection after A receipt",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "prepared withdraw keeps B detail after A receipt",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "prepared withdraw settles A once",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "prepared withdraw consumes A source only",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "prepared withdraw releases pending after receipt",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "prepared deposit fixture persists profile before submit",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "prepared deposit fixture persists warehouse before submit",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "prepared deposit remains pending before async receipt",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "prepared deposit shows B detail after close and reopen",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "prepared deposit preserves B selection after C receipt",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "prepared deposit keeps B detail after C receipt",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "prepared deposit settles C once",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "prepared deposit writes C and preserves B source",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "prepared deposit releases pending after receipt",
+      "passed": true
+    }
+  ],
+  "count": 28,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "b3293cef-22aa-4cc0-8240-05b435f99e37",
+  "passed": 28,
+  "reported_checks": 28,
+  "reported_failures": 0,
+  "run_id": "fcc7de92-f86c-4aca-86d6-93f5d66c607a",
+  "runtime_environment": {
+    "native_process_id": 8172,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\b20_warehouse\\runner_b3293cef-22aa-4cc0-8240-05b435f99e37",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/b20_warehouse/runner_b3293cef-22aa-4cc0-8240-05b435f99e37/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "warehouse_panel_trade_contract_20261010_test",
+  "schema_version": 1,
+  "source_content_sha256": "4e415d711144d828c03c7eb3e6e2155ef3a65aad491f6632ce4b97b8f2300aef",
+  "status": "PASS"
+}

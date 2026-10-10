@@ -1,0 +1,52 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "formal load_candidate accepts the real ordered plan",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "formal load_candidate accepts a real-input scratch plan with ordered pages",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "formal load_candidate rejects reordered pages before entry consumption",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "scratch pages retain real published store resources",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "ordered pages retain exact indices",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "reordered pages are fail-closed",
+      "passed": true
+    }
+  ],
+  "count": 6,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "70705c19-9525-446b-8ea6-36adc861a907",
+  "passed": 6,
+  "reported_checks": 6,
+  "reported_failures": 0,
+  "run_id": "cd15c525-fa52-4bbd-b0b6-e4a8c852bfa4",
+  "runtime_environment": {
+    "native_process_id": 1692,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\b18_b20_followup\\runner_70705c19-9525-446b-8ea6-36adc861a907",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/b18_b20_followup/runner_70705c19-9525-446b-8ea6-36adc861a907/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "v109_wall_page_order_contract_test",
+  "schema_version": 1,
+  "source_content_sha256": "d4f236d0dfc32e4f20bb01696f787cbfbbb27a8f6628b307485c7d04d6cb8927",
+  "status": "PASS"
+}

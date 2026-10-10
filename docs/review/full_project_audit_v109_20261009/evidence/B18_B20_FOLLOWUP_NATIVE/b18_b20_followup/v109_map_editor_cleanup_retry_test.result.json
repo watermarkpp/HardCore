@@ -1,0 +1,147 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "cleanup fixture approval succeeds",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "cleanup fixture candidate A builds",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "baseline release A succeeds",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "cleanup fixture candidate B builds",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "cleanup failure is reported",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "cleanup failure has precise reason",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "formal cleanup completes before registry failure",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "registry restore backup remains after failed cleanup",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "publish intent remains after failed cleanup",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "recovery cleanup failure is reported",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "recovery cleanup failure has precise reason",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "recovery failure preserves registry backup and intent",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "backup bytes readable",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "backup bytes writable",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "wrong registry backup hash is rejected",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "wrong registry backup reports cleanup failure",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "wrong registry backup preserves intent",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "backup bytes writable",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "retry completes committed pair",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "retry uses durable pair recovery",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "retry leaves no formal backup",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "retry removes verified registry backup",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "retry retires intent only after cleanup",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "normal publish remains idempotent",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "normal publish leaves no recovery residue",
+      "passed": true
+    }
+  ],
+  "count": 25,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "70705c19-9525-446b-8ea6-36adc861a907",
+  "passed": 25,
+  "reported_checks": 25,
+  "reported_failures": 0,
+  "run_id": "26238866-1111-4256-93a9-6d038b1e26b0",
+  "runtime_environment": {
+    "native_process_id": 21320,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\b18_b20_followup\\runner_70705c19-9525-446b-8ea6-36adc861a907",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/b18_b20_followup/runner_70705c19-9525-446b-8ea6-36adc861a907/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "v109_map_editor_cleanup_retry_test",
+  "schema_version": 1,
+  "source_content_sha256": "d4f236d0dfc32e4f20bb01696f787cbfbbb27a8f6628b307485c7d04d6cb8927",
+  "status": "PASS"
+}

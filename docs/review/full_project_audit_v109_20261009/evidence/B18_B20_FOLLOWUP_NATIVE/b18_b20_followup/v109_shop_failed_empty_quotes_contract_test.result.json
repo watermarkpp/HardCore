@@ -1,0 +1,57 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "owner quote refresh populates the sell page",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "real owner batch rejects at gold cap with empty quotes",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "rejected owner transaction preserves inventory and gold",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "empty failure quotes preserve current owner quotes and sell cards",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "same owner batch can complete a later legal sale",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "legal batch sale mutates owner atomically",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "successful sale clears selection through normal UI path",
+      "passed": true
+    }
+  ],
+  "count": 7,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "70705c19-9525-446b-8ea6-36adc861a907",
+  "passed": 7,
+  "reported_checks": 7,
+  "reported_failures": 0,
+  "run_id": "3c5feecd-743e-49c1-8210-8afde702f5ef",
+  "runtime_environment": {
+    "native_process_id": 10136,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\b18_b20_followup\\runner_70705c19-9525-446b-8ea6-36adc861a907",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/b18_b20_followup/runner_70705c19-9525-446b-8ea6-36adc861a907/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "v109_shop_failed_empty_quotes_contract_test",
+  "schema_version": 1,
+  "source_content_sha256": "d4f236d0dfc32e4f20bb01696f787cbfbbb27a8f6628b307485c7d04d6cb8927",
+  "status": "PASS"
+}

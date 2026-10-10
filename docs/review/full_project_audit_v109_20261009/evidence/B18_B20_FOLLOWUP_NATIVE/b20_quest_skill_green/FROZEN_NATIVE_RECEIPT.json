@@ -1,0 +1,29 @@
+{
+  "status": "PASS",
+  "input_freeze_status": "PASS",
+  "scope": "Input freeze and individual native results; failed/missing checks remain explicit. Android/GPU/performance NOT_RUN",
+  "candidate_tree": "a2b995665a05c75ecc83dbc006a1abaa81de8746",
+  "source_fingerprint": "9c157227b54f6dd91ac543c4d8ecd678984c7689b0eb6142211d79e3d2b79c08",
+  "checked_inputs": 2601,
+  "runner": "outputs\\dot_remote_audit_20261010\\native\\b20_quest_skill_green\\runner_results_adhoc_20261010_155458_341_22044.json",
+  "invocation_id": "49fe6485-eed9-48b4-aaf1-7ac1cdc7ce1e",
+  "engine_log_errors": 0,
+  "main_index_unchanged": true,
+  "results": [
+    {
+      "test_path": "tests/framework/v109_quest_skill_session_ui_test.tscn",
+      "result": "PASS",
+      "reason": "",
+      "timeout": false,
+      "effective_exit_code": 0,
+      "native_exit_observed_utc": "2026-10-10T07:54:56.8178202Z",
+      "framework_run_id": "c5c68f80-d2b6-4738-8056-f8a87c22df1d",
+      "framework_receipt_valid": true,
+      "formal_evidence_status": "PASS",
+      "check_count": 17,
+      "failed_checks": 0,
+      "receipt": "outputs\\dot_remote_audit_20261010\\native\\b20_quest_skill_green\\v109_quest_skill_session_ui_test.result.json",
+      "receipt_sha256": "1d180c82908f1cae6297a29e8e6c6f0d6521a59d413fb1d33b829a6ae8384e56"
+    }
+  ]
+}

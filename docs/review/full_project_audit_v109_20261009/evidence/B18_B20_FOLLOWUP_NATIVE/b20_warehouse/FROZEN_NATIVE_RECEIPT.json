@@ -1,0 +1,29 @@
+{
+  "status": "PASS",
+  "input_freeze_status": "PASS",
+  "scope": "Input freeze and individual native results; failed/missing checks remain explicit. Android/GPU/performance NOT_RUN",
+  "candidate_tree": "65e4f9115bd8f2ab0b934be2be792757924e1621",
+  "source_fingerprint": "4e415d711144d828c03c7eb3e6e2155ef3a65aad491f6632ce4b97b8f2300aef",
+  "checked_inputs": 2609,
+  "runner": "outputs\\dot_remote_audit_20261010\\native\\b20_warehouse\\runner_results_adhoc_20261010_161208_200_20908.json",
+  "invocation_id": "b3293cef-22aa-4cc0-8240-05b435f99e37",
+  "engine_log_errors": 0,
+  "main_index_unchanged": true,
+  "results": [
+    {
+      "test_path": "tests/framework/warehouse_panel_trade_contract_20261010_test.tscn",
+      "result": "PASS",
+      "reason": "",
+      "timeout": false,
+      "effective_exit_code": 0,
+      "native_exit_observed_utc": "2026-10-10T08:12:06.6324222Z",
+      "framework_run_id": "fcc7de92-f86c-4aca-86d6-93f5d66c607a",
+      "framework_receipt_valid": true,
+      "formal_evidence_status": "PASS",
+      "check_count": 28,
+      "failed_checks": 0,
+      "receipt": "outputs\\dot_remote_audit_20261010\\native\\b20_warehouse\\warehouse_panel_trade_contract_20261010_test.result.json",
+      "receipt_sha256": "af4ba508f5fd7d1e2ff3f3fa776f33be1c3f3a9c700df24e45730f11292bd12b"
+    }
+  ]
+}

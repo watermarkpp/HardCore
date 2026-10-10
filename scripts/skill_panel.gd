@@ -484,6 +484,11 @@ func _on_panel_data_changed() -> void:
 
 
 func _on_visibility_changed() -> void:
+	if not is_visible_in_tree():
+		_clear_assignment_feedback()
+		_cancel_skill_long_press()
+		_hide_assignment_popup()
+		return
 	if visible and _refresh_pending:
 		refresh()
 
@@ -1138,8 +1143,5 @@ func _section_title(node_name: String, text_value: String, width: float) -> Labe
 
 
 func _close() -> void:
-	_clear_assignment_feedback()
-	_cancel_skill_long_press()
-	_hide_assignment_popup()
 	hide()
 	closed.emit()

@@ -1,0 +1,209 @@
+{
+  "status": "PASS",
+  "scope": "Distinct source-bound stages; not one final-source combined run. Android and APK NOT_RUN.",
+  "stages": [
+    {
+      "stage": "b20_quest_skill_red",
+      "status": "FAIL",
+      "tree": "9ac054738784d5e22dffb35a0d59a6b0029e92c9",
+      "fingerprint": "9530c4efa54635f6cd540b7c03382169689ba9e60669646171d8861c613fb5a0",
+      "results": [
+        {
+          "test_path": "tests/framework/v109_quest_skill_session_ui_test.tscn",
+          "result": "FAIL",
+          "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+          "timeout": false,
+          "effective_exit_code": 1,
+          "native_exit_observed_utc": "2026-10-10T07:52:43.7892000Z",
+          "framework_run_id": "83306117-b0dd-4a75-a8e0-0a3ad0c1a0cd",
+          "framework_receipt_valid": false,
+          "formal_evidence_status": "MISSING",
+          "check_count": 17,
+          "failed_checks": 5,
+          "receipt": "outputs\\dot_remote_audit_20261010\\native\\b20_quest_skill_red\\v109_quest_skill_session_ui_test.result.json",
+          "receipt_sha256": "4d6085303565188e4258dd86f995f938fd2cd00a02c546f9bad6d9277d8740d2"
+        }
+      ]
+    },
+    {
+      "stage": "b20_quest_skill_green",
+      "status": "PASS",
+      "tree": "a2b995665a05c75ecc83dbc006a1abaa81de8746",
+      "fingerprint": "9c157227b54f6dd91ac543c4d8ecd678984c7689b0eb6142211d79e3d2b79c08",
+      "results": [
+        {
+          "test_path": "tests/framework/v109_quest_skill_session_ui_test.tscn",
+          "result": "PASS",
+          "reason": "",
+          "timeout": false,
+          "effective_exit_code": 0,
+          "native_exit_observed_utc": "2026-10-10T07:54:56.8178202Z",
+          "framework_run_id": "c5c68f80-d2b6-4738-8056-f8a87c22df1d",
+          "framework_receipt_valid": true,
+          "formal_evidence_status": "PASS",
+          "check_count": 17,
+          "failed_checks": 0,
+          "receipt": "outputs\\dot_remote_audit_20261010\\native\\b20_quest_skill_green\\v109_quest_skill_session_ui_test.result.json",
+          "receipt_sha256": "1d180c82908f1cae6297a29e8e6c6f0d6521a59d413fb1d33b829a6ae8384e56"
+        }
+      ]
+    },
+    {
+      "stage": "b18_b20_followup",
+      "status": "PASS",
+      "tree": "607d5e487ce523ca448542117c49a4791c1a064a",
+      "fingerprint": "d4f236d0dfc32e4f20bb01696f787cbfbbb27a8f6628b307485c7d04d6cb8927",
+      "results": [
+        {
+          "test_path": "tests/framework/v109_map_editor_cleanup_retry_test.tscn",
+          "result": "PASS",
+          "reason": "",
+          "timeout": false,
+          "effective_exit_code": 0,
+          "native_exit_observed_utc": "2026-10-10T07:57:48.4811757Z",
+          "framework_run_id": "26238866-1111-4256-93a9-6d038b1e26b0",
+          "framework_receipt_valid": true,
+          "formal_evidence_status": "PASS",
+          "check_count": 25,
+          "failed_checks": 0,
+          "receipt": "outputs\\dot_remote_audit_20261010\\native\\b18_b20_followup\\v109_map_editor_cleanup_retry_test.result.json",
+          "receipt_sha256": "992cba4d8337829bfc8af0747585e8522ea1329e776b217c4c076d379bd874dc"
+        },
+        {
+          "test_path": "tests/framework/v109_wall_page_order_contract_test.tscn",
+          "result": "PASS",
+          "reason": "",
+          "timeout": false,
+          "effective_exit_code": 0,
+          "native_exit_observed_utc": "2026-10-10T07:57:57.4243726Z",
+          "framework_run_id": "cd15c525-fa52-4bbd-b0b6-e4a8c852bfa4",
+          "framework_receipt_valid": true,
+          "formal_evidence_status": "PASS",
+          "check_count": 6,
+          "failed_checks": 0,
+          "receipt": "outputs\\dot_remote_audit_20261010\\native\\b18_b20_followup\\v109_wall_page_order_contract_test.result.json",
+          "receipt_sha256": "f94f4638d87b0cb0bd23d1000d90c9464d0fb42b88be0ad9bf1ed31a00410131"
+        },
+        {
+          "test_path": "tests/framework/v109_shop_failed_empty_quotes_contract_test.tscn",
+          "result": "PASS",
+          "reason": "",
+          "timeout": false,
+          "effective_exit_code": 0,
+          "native_exit_observed_utc": "2026-10-10T07:58:08.7084653Z",
+          "framework_run_id": "3c5feecd-743e-49c1-8210-8afde702f5ef",
+          "framework_receipt_valid": true,
+          "formal_evidence_status": "PASS",
+          "check_count": 7,
+          "failed_checks": 0,
+          "receipt": "outputs\\dot_remote_audit_20261010\\native\\b18_b20_followup\\v109_shop_failed_empty_quotes_contract_test.result.json",
+          "receipt_sha256": "a64410aa8627f805c131422a0aef3ab6fa6ebe1b2e4b89de8941257bb9941c03"
+        }
+      ]
+    },
+    {
+      "stage": "b20_warehouse",
+      "status": "PASS",
+      "tree": "65e4f9115bd8f2ab0b934be2be792757924e1621",
+      "fingerprint": "4e415d711144d828c03c7eb3e6e2155ef3a65aad491f6632ce4b97b8f2300aef",
+      "results": [
+        {
+          "test_path": "tests/framework/warehouse_panel_trade_contract_20261010_test.tscn",
+          "result": "PASS",
+          "reason": "",
+          "timeout": false,
+          "effective_exit_code": 0,
+          "native_exit_observed_utc": "2026-10-10T08:12:06.6324222Z",
+          "framework_run_id": "fcc7de92-f86c-4aca-86d6-93f5d66c607a",
+          "framework_receipt_valid": true,
+          "formal_evidence_status": "PASS",
+          "check_count": 28,
+          "failed_checks": 0,
+          "receipt": "outputs\\dot_remote_audit_20261010\\native\\b20_warehouse\\warehouse_panel_trade_contract_20261010_test.result.json",
+          "receipt_sha256": "af4ba508f5fd7d1e2ff3f3fa776f33be1c3f3a9c700df24e45730f11292bd12b"
+        }
+      ]
+    }
+  ],
+  "qualifications": [
+    "Quest/skill actual Root/HUD and QuestPanel gold cap components17. Original RED17/5 FAIL retained. PlayerState test mode, no physical IO fault.",
+    "Cleanup25 actual scratch durable intent/pair recovery with controlled registry backup removal seam. Not OS-specific physical fault.",
+    "Wall plan6 actual load_candidate admission: two-page array duplicates a real page resource, not a naturally published multi-texture artifact/device appearance.",
+    "Shop7 actual panel quotes and owner gold-cap refusal, then successful legitimate sale. No mock quotes or disk-failure claim.",
+    "Warehouse28 includes8 synchronous capacity components and20 actual prepared disk transaction checks. Withdraw pending same-window reselection; deposit pending hide/reopen. New choice and detail retained before/after receipt, accepted transfer settles exactly once. Does not claim every direction/lifecycle cross-product.",
+    "Earlier worker synchronous8 alone and weak/mocked/unimported stages not promoted. No unchanged source-stable tests repeated.",
+    "Only test EOF blanks trimmed for publication; actual raw native fingerprints retained."
+  ],
+  "source_paths": [
+    {
+      "path": "scripts/quest_panel.gd",
+      "sha256": "472bb24a88e43865159692e56469214294e66eda937526df5cd48ad04e2d9d4b"
+    },
+    {
+      "path": "scripts/skill_panel.gd",
+      "sha256": "23f58d18e994b19b987d3cb76e8982637c87351a575c3c205d2e547b10c24973"
+    },
+    {
+      "path": "scripts/map_editor/map_editor_build_runtime_service.gd",
+      "sha256": "06106930c17a6e31503c855ae9dbb3a876cd0e88c286d3c8f6f9c26cface2970"
+    },
+    {
+      "path": "scripts/map_editor/map_editor_wall_render_plan_runtime_service.gd",
+      "sha256": "c789cc009af48a7749a1b376f0e542466ccfd11b6bbb1aff278ad29b848ac92b"
+    },
+    {
+      "path": "scripts/shop_panel.gd",
+      "sha256": "a2998258506a4c6963f288068b2dec9cb68287cab8c8700d32783a7d9d73febf"
+    },
+    {
+      "path": "scripts/warehouse_panel.gd",
+      "sha256": "bfa4cb45edb5a4fa4b9c6b8139283806aaf9ba1f304ce7a7430c5783a212a285"
+    },
+    {
+      "path": "tests/framework/v109_quest_skill_session_ui_test.gd",
+      "sha256": "161f6f378a43dffc03dadfb0954d73d79801ea34d4d2b0bc42fba72a6bbfc603"
+    },
+    {
+      "path": "tests/framework/v109_quest_skill_session_ui_test.tscn",
+      "sha256": "ecb423a109e99b6dc1d30e2b17821ac9a621fc06dd064cc1faf7cec5c2172f00"
+    },
+    {
+      "path": "tests/framework/v109_map_editor_cleanup_retry_test.gd",
+      "sha256": "6326a71576497c4597cba311faaa1ac7997b23ea1935ff3e5747ea598d34a57d"
+    },
+    {
+      "path": "tests/framework/v109_map_editor_cleanup_retry_test.tscn",
+      "sha256": "f96b9814823a0ee6d2905959be9808fd8be940a8ae0a091b69050c6940ba59b0"
+    },
+    {
+      "path": "tests/framework/v109_wall_page_order_contract_test.gd",
+      "sha256": "5754ce49ca1c5c87271b63c7b1ad417ca81eed53e16d9d3d14aa8dc30d2ee8f3"
+    },
+    {
+      "path": "tests/framework/v109_wall_page_order_contract_test.tscn",
+      "sha256": "bf23514f43ec1949bda75a0cb8254f14a109cedab98b86d2a12d1743e1baa7e0"
+    },
+    {
+      "path": "tests/framework/v109_shop_failed_empty_quotes_contract_test.gd",
+      "sha256": "944be578594242d446110721a2239a66b647951d30f54f455adf90661797d1a8"
+    },
+    {
+      "path": "tests/framework/v109_shop_failed_empty_quotes_contract_test.tscn",
+      "sha256": "1b971ff34fe589b4e91e2d3caede235e8cfb66ad3659c7fd5ae9c230fe278369"
+    },
+    {
+      "path": "tests/framework/warehouse_panel_trade_contract_20261010_test.gd",
+      "sha256": "f16b1ab133835bbd332b8c37056f950120f0dc602b50af6358ca9a411bb3baa8"
+    },
+    {
+      "path": "tests/framework/warehouse_panel_trade_contract_20261010_test.tscn",
+      "sha256": "b390e6b2f54d824d44e3557863f1c3a4244cf3fc6dda598d9fc1c7fc2275842e"
+    }
+  ],
+  "pending": [
+    "B21-B28 fine audit",
+    "Fixed-source independent delta review",
+    "Controlled integration commit/index preservation",
+    "APK109 identity/sign/content/install/device"
+  ]
+}

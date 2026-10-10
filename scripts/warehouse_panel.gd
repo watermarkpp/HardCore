@@ -83,6 +83,11 @@ var selected_bag_refs: Array[Dictionary] = []
 var selected_stash_refs: Array[Dictionary] = []
 var selected_ref: Dictionary = {}
 var _selection_revision := 0
+## Presentation-only selection generation.  Inventory revision is owned by the
+## data source and changes during a successful transfer; this generation only
+## invalidates a pending receipt when the user changes the visible selection
+## or closes/reopens the panel.
+var _selection_version := 0
 var item_detail_presenter
 var bank_balance_label: Label
 var bank_deposit_button: Button
@@ -662,6 +667,7 @@ func _select_item(side: String, index: int) -> void:
 	if selection.is_empty():
 		_active_selection_side = ""
 	selected_ref = refs.back() if not refs.is_empty() else {}
+	_selection_version += 1
 	_sync_primary_selection_indices()
 	_refresh_transfer_selection_visuals()
 	_refresh_transfer_action_states()
@@ -730,7 +736,10 @@ var _transfer_pending := false
 
 func _refresh_transfer_action_states() -> void:
 	deposit_button.disabled = _transfer_pending or _bank_transfer_pending or selected_bag_indices.is_empty() or _first_free_slot_on_current_page() < 0
-	withdraw_button.disabled = _transfer_pending or _bank_transfer_pending or selected_stash_indices.is_empty() or PlayerState.inventory_occupied_count() >= BAG_CAPACITY
+	# PlayerState owns capacity and same-stack merge admission.  A full bag can
+	# still accept a selected warehouse item when the owner merges it into an
+	# existing stack, so the panel must not reject on occupied-slot count alone.
+	withdraw_button.disabled = _transfer_pending or _bank_transfer_pending or selected_stash_indices.is_empty()
 	# Item selection does not mutate gold. Bank refresh belongs to the actual
 	# visibility/data/transaction boundary, not every selection cleanup pass.
 
@@ -885,6 +894,7 @@ func _change_warehouse_page(delta: int) -> void:
 	selected_ref = {}
 	if _active_selection_side == "stash":
 		_active_selection_side = ""
+	_selection_version += 1
 	_sync_primary_selection_indices()
 	refresh()
 
@@ -894,8 +904,6 @@ func _refresh_transfer_detail() -> void:
 		transfer_detail_label.text = "已选择 %d 件背包物品" % selected_bag_indices.size()
 	elif selected_bag_index >= 0:
 		transfer_detail_label.text = str(_bag_record(selected_bag_index).get("name", "未知物品"))
-	elif not selected_stash_indices.is_empty() and PlayerState.inventory_occupied_count() >= BAG_CAPACITY:
-		transfer_detail_label.text = "已选择 %d 件；背包已满" % selected_stash_indices.size()
 	elif selected_stash_indices.size() > 1:
 		transfer_detail_label.text = "已选择 %d 件仓库物品" % selected_stash_indices.size()
 	elif selected_stash_index >= 0:
@@ -967,10 +975,15 @@ func _deposit() -> void:
 	_refresh_transfer_action_states()
 	bank_deposit_button.disabled = true
 	bank_withdraw_button.disabled = true
+	var transfer_epoch := _selection_lifecycle_epoch()
+	var transfer_selection_version := _selection_version
 	var result: Dictionary = await PlayerState.transfer_warehouse_prepared("deposit", source_indices, target_slots)
 	_transfer_pending = false
 	if not is_visible_in_tree():
 		_ui_l1_bank_dirty = true
+		return
+	if not _transfer_presentation_matches(transfer_epoch, transfer_selection_version):
+		refresh()
 		return
 	var transferred := int(result.get("transferred", 0))
 	var failure_message := "" if bool(result.get("complete", false)) else str(result.get("message", "仓库存取失败。"))
@@ -1002,10 +1015,15 @@ func _withdraw() -> void:
 	_refresh_transfer_action_states()
 	bank_deposit_button.disabled = true
 	bank_withdraw_button.disabled = true
+	var transfer_epoch := _selection_lifecycle_epoch()
+	var transfer_selection_version := _selection_version
 	var result: Dictionary = await PlayerState.transfer_warehouse_prepared("withdraw", source_indices)
 	_transfer_pending = false
 	if not is_visible_in_tree():
 		_ui_l1_bank_dirty = true
+		return
+	if not _transfer_presentation_matches(transfer_epoch, transfer_selection_version):
+		refresh()
 		return
 	var transferred := int(result.get("transferred", 0))
 	var failure_message := "" if bool(result.get("complete", false)) else str(result.get("message", "仓库存取失败。"))
@@ -1405,6 +1423,15 @@ func _ui_detail_region(context: Dictionary) -> Dictionary:
 	var path := "StashSection/StashScroll" if side == "stash" else "BagSection/BagScroll"
 	return UIItemDetailDockScript.side_region(self, get_node_or_null(path) as Control, "left" if side == "stash" else "right")
 
+func _selection_lifecycle_epoch() -> int:
+	var session := get_node_or_null("R3SelectionLifecycle")
+	return int(session.get("epoch")) if session != null else 0
+
+
+func _transfer_presentation_matches(epoch: int, selection_version: int) -> bool:
+	return is_visible_in_tree() and _selection_lifecycle_epoch() == epoch and _selection_version == selection_version
+
+
 func _ui_selection_token() -> Array:
 	return [selected_bag_refs.duplicate(true), selected_stash_refs.duplicate(true), selected_ref.duplicate(true), warehouse_page, _selection_revision, _bank_status_message, item_detail_presenter.content_epoch() if item_detail_presenter != null else -1]
 
@@ -1417,6 +1444,7 @@ func _ui_dismiss_selection() -> void:
 	selected_bag_index = -1
 	selected_stash_index = -1
 	_active_selection_side = ""
+	_selection_version += 1
 	_bank_status_message = ""
 	_clear_transfer_feedback()
 	_refresh_transfer_selection_visuals()
