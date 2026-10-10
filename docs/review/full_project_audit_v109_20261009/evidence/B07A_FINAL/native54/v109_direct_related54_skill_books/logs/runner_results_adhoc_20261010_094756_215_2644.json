@@ -1,0 +1,63 @@
+{
+  "runtime_environment": {
+    "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct_related54_skill_books",
+    "runner_process_id": 2644
+  },
+  "generated_at": "2026-10-10T09:47:56.2154884+08:00",
+  "results": [
+    {
+      "test_name": "skill_book_load_rejection_20261010_test",
+      "test_path": "tests/framework/skill_book_load_rejection_20261010_test.tscn",
+      "wrapper_process_id": 23460,
+      "wrapper_started_utc": "2026-10-10T01:47:37.6818214Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct_related54_skill_books",
+      "fixed_fps": 0,
+      "pass_marker_found": false,
+      "process_exited": true,
+      "wrapper_exit_code": 1,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-10T01:48:07.6955715Z",
+      "native_exit_observed_utc": "2026-10-10T01:47:47.6986340Z",
+      "effective_exit_code": 1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "23dcb411-9e89-4ee3-b708-721d23cde2cb",
+      "framework_receipt_valid": false,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+    },
+    {
+      "test_name": "skill_book_identity_test",
+      "test_path": "tests/framework/skill_book_identity_test.tscn",
+      "wrapper_process_id": 11580,
+      "wrapper_started_utc": "2026-10-10T01:47:48.9388543Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct_related54_skill_books",
+      "fixed_fps": 0,
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-10T01:48:18.9468702Z",
+      "native_exit_observed_utc": "2026-10-10T01:47:54.6590907Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "4916e681-be77-4380-8336-a0ac2a2c8385",
+      "framework_receipt_valid": true,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "engine_log_errors": 0,
+  "failed": 1,
+  "git_head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+  "total": 2,
+  "passed": 1,
+  "suite": "adhoc",
+  "invocation_id": "b76557ef-2b01-49e0-a505-90d8d9cd00df"
+}

@@ -1,0 +1,161 @@
+{
+  "status": "FAIL",
+  "freeze_sha256": "20f5f16844f8ea479030412676f837ac757d914a50a5e5123ca138b124e80f32",
+  "source_tree": "7d056dc2218fa383d37e638380bed6c6406fafee",
+  "runtime_inputs_unchanged_excluding_post_run_fixture_repairs": true,
+  "post_run_fixture_changes": [
+    "tests/framework/skill_book_identity_test.gd",
+    "tests/framework/skill_book_load_rejection_20261010_test.gd"
+  ],
+  "original_fixture_bytes_recoverable_from_tested_tree_with_matching_CRLF_sha256": [
+    "tests/framework/skill_book_identity_test.gd",
+    "tests/framework/skill_book_load_rejection_20261010_test.gd"
+  ],
+  "runner_results": "outputs/test_logs/v109_direct_related53_skill_books/logs/runner_results_adhoc_20261010_094438_607_7740.json",
+  "results": [
+    {
+      "test_name": "skill_book_load_rejection_20261010_test",
+      "test_path": "tests/framework/skill_book_load_rejection_20261010_test.tscn",
+      "wrapper_process_id": 4492,
+      "wrapper_started_utc": "2026-10-10T01:44:02.2037012Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct_related53_skill_books",
+      "fixed_fps": 0,
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "execution_deadline_utc": "2026-10-10T01:44:32.2189447Z",
+      "native_exit_observed_utc": null,
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 3,
+      "engine_log_failure_count": 3,
+      "framework_run_id": "a27a6c51-7eb4-408b-967a-912ee736816e",
+      "framework_receipt_valid": false,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_3;engine_log_failures_3;framework_receipt_missing"
+    },
+    {
+      "test_name": "skill_book_identity_test",
+      "test_path": "tests/framework/skill_book_identity_test.tscn",
+      "wrapper_process_id": 4500,
+      "wrapper_started_utc": "2026-10-10T01:44:07.5180502Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct_related53_skill_books",
+      "fixed_fps": 0,
+      "pass_marker_found": true,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "execution_deadline_utc": "2026-10-10T01:44:37.5286090Z",
+      "native_exit_observed_utc": null,
+      "effective_exit_code": -1,
+      "timeout": true,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "e943ea66-0bf7-42ba-9f86-eeb742489058",
+      "framework_receipt_valid": true,
+      "result": "FAIL",
+      "reason": "process_did_not_exit;timeout_30s;non_zero_exit_code_-1"
+    }
+  ],
+  "raw_files": [
+    {
+      "path": "outputs/test_logs/v109_direct_related53_skill_books/logs/runner_results_adhoc_20261010_094438_607_7740.json",
+      "sha256": "9f884622c8e0e8ce526246c7a5ab6a3fc5cea62f4ecbb5ade488714c0b1b820d",
+      "bytes": 2726
+    },
+    {
+      "path": "outputs/test_logs/v109_direct_related53_skill_books/logs/skill_book_identity_test.godot.log",
+      "sha256": "8a6f2315e548949a5ddd0d1a2ca4360fbbbe6de205eb8fe932a3e7af71c41556",
+      "bytes": 367187
+    },
+    {
+      "path": "outputs/test_logs/v109_direct_related53_skill_books/logs/skill_book_identity_test.stderr.log",
+      "sha256": "5fac9a5ccaff7838ed744fde76e18daff21b55221e91da741bfae9b65b5630ed",
+      "bytes": 767
+    },
+    {
+      "path": "outputs/test_logs/v109_direct_related53_skill_books/logs/skill_book_identity_test.stdout.log",
+      "sha256": "d3ef9817eac6ef606cb6bbe6ec10e60ab243ce9ca6a6c7852df6783673fba66f",
+      "bytes": 368609
+    },
+    {
+      "path": "outputs/test_logs/v109_direct_related53_skill_books/logs/skill_book_load_rejection_20261010_test.godot.log",
+      "sha256": "0230fee304885c401edb25cd1057bf063ff4dc43735aa921877b393399e4b0f4",
+      "bytes": 4989
+    },
+    {
+      "path": "outputs/test_logs/v109_direct_related53_skill_books/logs/skill_book_load_rejection_20261010_test.stderr.log",
+      "sha256": "c0ea8debd561963633527533e3ae0c3eb695dd89c23b6d8263ba3191ff40984e",
+      "bytes": 575
+    },
+    {
+      "path": "outputs/test_logs/v109_direct_related53_skill_books/logs/skill_book_load_rejection_20261010_test.stdout.log",
+      "sha256": "3852b358456ed0cd275637fb1ecab2797a3e90442a7fd4284993e3d387ce6915",
+      "bytes": 4509
+    },
+    {
+      "path": "outputs/test_logs/v109_direct_related53_skill_books/raw/a27a6c51-7eb4-408b-967a-912ee736816e/native_handoffs.json",
+      "sha256": "c459288420746739398aa093c4f3d3c3468eed98a5b1c7ba88a81c3d10f9eae7",
+      "bytes": 471
+    },
+    {
+      "path": "outputs/test_logs/v109_direct_related53_skill_books/raw/a27a6c51-7eb4-408b-967a-912ee736816e/native_result.json",
+      "sha256": "34aaf1d7ea040dccdb21c8dfc78b930e061d32b90dbd3811fc09e9301f1adc82",
+      "bytes": 1051
+    },
+    {
+      "path": "outputs/test_logs/v109_direct_related53_skill_books/raw/a27a6c51-7eb4-408b-967a-912ee736816e/skill_book_load_rejection_20261010_test.godot.log",
+      "sha256": "0230fee304885c401edb25cd1057bf063ff4dc43735aa921877b393399e4b0f4",
+      "bytes": 4989
+    },
+    {
+      "path": "outputs/test_logs/v109_direct_related53_skill_books/raw/a27a6c51-7eb4-408b-967a-912ee736816e/skill_book_load_rejection_20261010_test.stderr.log",
+      "sha256": "c0ea8debd561963633527533e3ae0c3eb695dd89c23b6d8263ba3191ff40984e",
+      "bytes": 575
+    },
+    {
+      "path": "outputs/test_logs/v109_direct_related53_skill_books/raw/a27a6c51-7eb4-408b-967a-912ee736816e/skill_book_load_rejection_20261010_test.stdout.log",
+      "sha256": "3852b358456ed0cd275637fb1ecab2797a3e90442a7fd4284993e3d387ce6915",
+      "bytes": 4509
+    },
+    {
+      "path": "outputs/test_logs/v109_direct_related53_skill_books/raw/e943ea66-0bf7-42ba-9f86-eeb742489058/native_handoffs.json",
+      "sha256": "c459288420746739398aa093c4f3d3c3468eed98a5b1c7ba88a81c3d10f9eae7",
+      "bytes": 471
+    },
+    {
+      "path": "outputs/test_logs/v109_direct_related53_skill_books/raw/e943ea66-0bf7-42ba-9f86-eeb742489058/native_result.json",
+      "sha256": "9d5eb2b8aa83da3c85e145ae26c15ca8ecb0115b32dc75e616548530774dbb9f",
+      "bytes": 925
+    },
+    {
+      "path": "outputs/test_logs/v109_direct_related53_skill_books/raw/e943ea66-0bf7-42ba-9f86-eeb742489058/skill_book_identity_test.godot.log",
+      "sha256": "8a6f2315e548949a5ddd0d1a2ca4360fbbbe6de205eb8fe932a3e7af71c41556",
+      "bytes": 367187
+    },
+    {
+      "path": "outputs/test_logs/v109_direct_related53_skill_books/raw/e943ea66-0bf7-42ba-9f86-eeb742489058/skill_book_identity_test.result.json",
+      "sha256": "b9bb6b6ee9c2c4483a3f638235eb20be5b6096e1a0314d63eadffab124334bd0",
+      "bytes": 9350
+    },
+    {
+      "path": "outputs/test_logs/v109_direct_related53_skill_books/raw/e943ea66-0bf7-42ba-9f86-eeb742489058/skill_book_identity_test.stderr.log",
+      "sha256": "5fac9a5ccaff7838ed744fde76e18daff21b55221e91da741bfae9b65b5630ed",
+      "bytes": 767
+    },
+    {
+      "path": "outputs/test_logs/v109_direct_related53_skill_books/raw/e943ea66-0bf7-42ba-9f86-eeb742489058/skill_book_identity_test.stdout.log",
+      "sha256": "d3ef9817eac6ef606cb6bbe6ec10e60ab243ce9ca6a6c7852df6783673fba66f",
+      "bytes": 368609
+    }
+  ],
+  "classification": {
+    "direct": "Fixture parse failure introduced by root substring replacement of captured variable; no direct business proof. Original error retained.",
+    "related": "Actual58checks functional PASS and valid run-bound receipt; native process did not naturally exit and was forced at30s; headless texture error during unrelated fullworldprewarm retained. Not clean PASS.",
+    "preflight": "First invocation incorrectly supplied res://TestPaths and was rejected before engine launch; corrected relativepath command samefrozeninputs preserved separately."
+  },
+  "next_reason": "Correct parse and bootstrap actualContentLayers/GameData owners directly for catalog/index/book scoped verification. Fullworldlifecycle not acceptance of these tests; no businessassertion/load/data/timeout relaxation."
+}

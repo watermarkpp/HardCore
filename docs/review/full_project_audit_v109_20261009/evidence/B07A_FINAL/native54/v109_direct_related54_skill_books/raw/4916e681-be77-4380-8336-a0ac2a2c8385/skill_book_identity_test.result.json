@@ -1,0 +1,312 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "formal content-layer catalog reaches component READY",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "formal GameData catalog reaches component READY: ",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "fixture enters the actual registered wizard owner",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "actual rank query accepts the registered skill identity",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "legacy UI entrance consumes a real book by item ID despite changed display",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "real book consumption and actual progression commit exactly once",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "actual progression has only formal skill ownership",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "fixture enters the actual registered wizard owner",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "real inventory-use entry routes the book ID into the same skill owner",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "fixture enters the actual registered wizard owner",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "formal learning command uses the same real book identity",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "fixture enters the actual registered wizard owner",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "a potion forged with the book display name cannot consume or learn",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "fixture enters the actual registered wizard owner",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "stale requested index relocates the actual book without consuming a similarly named potion",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "fixture enters the actual registered wizard owner",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "actual writer rejection restores the same typed book and original progression",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "production publishes an explicit ID relation for book queries",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "actual source relation returns the hand-verified canonical fireball book",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "the existing service alias reaches the same registered skill",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "cross-kind, forged-name and unsupported later books cannot enter the relation",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "ordinary registered skill has one unambiguous book relation: hc.skill.warrior.basic_swordsmanship",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "ordinary registered skill has one unambiguous book relation: hc.skill.warrior.slaying_swordsmanship",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "ordinary registered skill has one unambiguous book relation: hc.skill.warrior.thrusting",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "ordinary registered skill has one unambiguous book relation: hc.skill.warrior.half_moon",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "ordinary registered skill has one unambiguous book relation: hc.skill.warrior.wild_rush",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "ordinary registered skill has one unambiguous book relation: hc.skill.warrior.fire_sword",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "ordinary registered skill has one unambiguous book relation: hc.skill.wizard.fireball",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "ordinary registered skill has one unambiguous book relation: hc.skill.wizard.repulsion_ring",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "ordinary registered skill has one unambiguous book relation: hc.skill.wizard.temptation_light",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "ordinary registered skill has one unambiguous book relation: hc.skill.wizard.hellfire",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "ordinary registered skill has one unambiguous book relation: hc.skill.wizard.lightning",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "ordinary registered skill has one unambiguous book relation: hc.skill.wizard.great_fireball",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "ordinary registered skill has one unambiguous book relation: hc.skill.wizard.teleport",
+      "passed": true
+    },
+    {
+      "id": 35,
+      "label": "ordinary registered skill has one unambiguous book relation: hc.skill.wizard.exploding_flame",
+      "passed": true
+    },
+    {
+      "id": 36,
+      "label": "ordinary registered skill has one unambiguous book relation: hc.skill.wizard.fire_wall",
+      "passed": true
+    },
+    {
+      "id": 37,
+      "label": "ordinary registered skill has one unambiguous book relation: hc.skill.wizard.laser",
+      "passed": true
+    },
+    {
+      "id": 38,
+      "label": "ordinary registered skill has one unambiguous book relation: hc.skill.wizard.hell_lightning",
+      "passed": true
+    },
+    {
+      "id": 39,
+      "label": "ordinary registered skill has one unambiguous book relation: hc.skill.wizard.magic_shield",
+      "passed": true
+    },
+    {
+      "id": 40,
+      "label": "ordinary registered skill has one unambiguous book relation: hc.skill.wizard.holy_word",
+      "passed": true
+    },
+    {
+      "id": 41,
+      "label": "ordinary registered skill has one unambiguous book relation: hc.skill.wizard.ice_storm",
+      "passed": true
+    },
+    {
+      "id": 42,
+      "label": "ordinary registered skill has one unambiguous book relation: hc.skill.taoist.healing",
+      "passed": true
+    },
+    {
+      "id": 43,
+      "label": "ordinary registered skill has one unambiguous book relation: hc.skill.taoist.spiritual_warfare",
+      "passed": true
+    },
+    {
+      "id": 44,
+      "label": "ordinary registered skill has one unambiguous book relation: hc.skill.taoist.poison",
+      "passed": true
+    },
+    {
+      "id": 45,
+      "label": "ordinary registered skill has one unambiguous book relation: hc.skill.taoist.soul_fire_talisman",
+      "passed": true
+    },
+    {
+      "id": 46,
+      "label": "ordinary registered skill has one unambiguous book relation: hc.skill.taoist.summon_skeleton",
+      "passed": true
+    },
+    {
+      "id": 47,
+      "label": "ordinary registered skill has one unambiguous book relation: hc.skill.taoist.invisibility",
+      "passed": true
+    },
+    {
+      "id": 48,
+      "label": "ordinary registered skill has one unambiguous book relation: hc.skill.taoist.mass_invisibility",
+      "passed": true
+    },
+    {
+      "id": 49,
+      "label": "ordinary registered skill has one unambiguous book relation: hc.skill.taoist.magic_defense",
+      "passed": true
+    },
+    {
+      "id": 50,
+      "label": "ordinary registered skill has one unambiguous book relation: hc.skill.taoist.defense",
+      "passed": true
+    },
+    {
+      "id": 51,
+      "label": "ordinary registered skill has one unambiguous book relation: hc.skill.taoist.revelation",
+      "passed": true
+    },
+    {
+      "id": 52,
+      "label": "ordinary registered skill has one unambiguous book relation: hc.skill.taoist.entrapment",
+      "passed": true
+    },
+    {
+      "id": 53,
+      "label": "ordinary registered skill has one unambiguous book relation: hc.skill.taoist.mass_healing",
+      "passed": true
+    },
+    {
+      "id": 54,
+      "label": "ordinary registered skill has one unambiguous book relation: hc.skill.taoist.summon_divine_beast",
+      "passed": true
+    },
+    {
+      "id": 55,
+      "label": "equipment-granted skill has no skill-book relation: hc.skill.equipment.ring_teleport",
+      "passed": true
+    },
+    {
+      "id": 56,
+      "label": "equipment-granted skill has no skill-book relation: hc.skill.equipment.ring_healing",
+      "passed": true
+    },
+    {
+      "id": 57,
+      "label": "equipment-granted skill has no skill-book relation: hc.skill.equipment.ring_fireball",
+      "passed": true
+    },
+    {
+      "id": 58,
+      "label": "book relation count equals the formal ordinary-skill closure",
+      "passed": true
+    }
+  ],
+  "count": 58,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "b76557ef-2b01-49e0-a505-90d8d9cd00df",
+  "passed": 58,
+  "reported_checks": 58,
+  "reported_failures": 0,
+  "run_id": "4916e681-be77-4380-8336-a0ac2a2c8385",
+  "runtime_environment": {
+    "native_process_id": 21352,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct_related54_skill_books",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/v109_direct_related54_skill_books/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "skill_book_identity_test",
+  "schema_version": 1,
+  "source_content_sha256": "266b263f0db24bc8dec795a2a20f7cb819f301c6293a2a89a9cece561937ad4a",
+  "status": "PASS"
+}

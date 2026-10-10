@@ -1,0 +1,54 @@
+{
+  "batch": "B07A-003",
+  "scope": "formal equipment generator coupled authority write set",
+  "fixedBaselineCommit": "684824ac7bb59ac903054b26b3435441b8a2f152",
+  "fixedBaselineSourceSha256": "7D17B93D945A54BEBE482094B88A89EB5288C3C0BA0B6BF838326AAD12C5A152",
+  "currentSourceSha256": "048D042A712CC5B55E821233743AA8B473963058977EC86CBA258F80C444BB1B",
+  "productionFile": "tools/build_equipment_attribute_master.py",
+  "authorityOutputs": [
+    "assets/data/equipment_attribute_master.json",
+    "assets/data/vanilla_176/items.json"
+  ],
+  "oldFailureEvidence": "outputs/wake_drop_v108_review_followup_20261009/b07a_equipment_writeset/OLD_ENTRYPOINT_FAILURE_EVIDENCE.json",
+  "oldFailureResult": "FAIL: baseline corrected MASTER before ITEMS; injected second write failure left a changed MASTER and unchanged ITEMS",
+  "implementation": {
+    "status": "PASS",
+    "details": [
+      "build and bounded female correction serialize and validate both documents before publication",
+      "each authority is staged beside its target and fsynced",
+      "original bytes are checked before each replace",
+      "later replacement failure restores earlier replacements only when they still contain this operation's bytes",
+      "intervening manual edits are preserved and cause fail-closed failure",
+      "missing originals are restored to missing state",
+      "projection remains a single-output operation with its existing bounded behavior"
+    ]
+  },
+  "verification": {
+    "status": "PASS",
+    "command": "python -m unittest tests.equipment_generator_publish_failure_test tests.equipment_correction_check_only_test tests.test_equipment_current_master_projection -v",
+    "testCount": 15,
+    "exitCode": 0,
+    "receipt": "outputs/wake_drop_v108_review_followup_20261009/b07a_equipment_writeset/TEST_RECEIPT.json",
+    "stdoutStderr": "outputs/wake_drop_v108_review_followup_20261009/b07a_equipment_writeset/equipment_generator_publish_failure_test.stdout-stderr.v3.txt",
+    "receiptV3": "outputs/wake_drop_v108_review_followup_20261009/b07a_equipment_writeset/TEST_RECEIPT_v3.json",
+    "coveredCases": [
+      "normal two-output publish",
+      "second replacement I/O failure with first-output rollback",
+      "first replacement I/O failure with both outputs unchanged",
+      "missing second output restored to missing",
+      "first originally missing output removed again after second replacement failure",
+      "intervening manual edit preserved and fail-closed",
+      "rollback replacement failure retains the original backup and does not overwrite the current bytes",
+      "rollback read failure retains the original backup and continues the remaining rollback loop",
+      "real apply_female_armor_correction_only() second replacement failure on complete temporary authority JSON",
+      "real apply_female_armor_correction_only() normal complete temporary authority success",
+      "existing check-only and bounded projection regressions"
+    ]
+  },
+  "notRun": [
+    "actual process termination or power-loss durability",
+    "Godot native tests",
+    "Android export/device acceptance"
+  ],
+  "gitStatus": "not committed or pushed by subagent"
+}

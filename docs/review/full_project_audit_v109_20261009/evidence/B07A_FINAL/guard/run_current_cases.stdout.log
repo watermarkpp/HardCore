@@ -1,0 +1,24 @@
+{
+  "outside_output": {
+    "exit": 2,
+    "stdout": "",
+    "stderr": "{\"authorized\": false, \"error\": \"output must stay inside the project outputs directory\"}\n"
+  },
+  "owned_first": {
+    "exit": 0,
+    "stdout": "{\n  \"authorized\": true,\n  \"lane\": \"item_categories\",\n  \"selected\": \"hardcore.identity.categories\",\n  \"tier\": \"primary\",\n  \"weight\": 100,\n  \"fallbackUsed\": false,\n  \"higherPriorityRejected\": [],\n  \"outputDisposition\": \"created\"\n}\n",
+    "stderr": ""
+  },
+  "owned_first_sha": "1dd0af6e7a038be3869c38573b66bc7c6d712d5007a0638b668737b19f3b8007",
+  "owned_same_reuse": {
+    "exit": 0,
+    "stdout": "{\n  \"authorized\": true,\n  \"lane\": \"item_categories\",\n  \"selected\": \"hardcore.identity.categories\",\n  \"tier\": \"primary\",\n  \"weight\": 100,\n  \"fallbackUsed\": false,\n  \"higherPriorityRejected\": [],\n  \"outputDisposition\": \"reused\"\n}\n",
+    "stderr": ""
+  },
+  "owned_different_reject": {
+    "exit": 2,
+    "stdout": "",
+    "stderr": "{\"authorized\": false, \"error\": \"refusing to overwrite existing output with different content\"}\n"
+  },
+  "owned_final_sha": "1dd0af6e7a038be3869c38573b66bc7c6d712d5007a0638b668737b19f3b8007"
+}

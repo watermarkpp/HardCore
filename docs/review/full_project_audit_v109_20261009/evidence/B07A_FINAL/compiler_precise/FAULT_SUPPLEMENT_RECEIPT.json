@@ -1,0 +1,50 @@
+{
+  "schema": "hardcore.loot.compiler.write_set_fault_supplement.v1",
+  "compiler_sha256": "6f021a6bf741174675fdfb04fb77ea0b99e2516a021bd04ce443a1d56b1685b3",
+  "fixture": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\wake_drop_v108_review_scope3\\success",
+  "input_hashes": {
+    "armor_single_slot_audit.json": "b71e42c72067b468f8309a0afdaf2987fd2c55f9dceb5e172ed6a7364350705c",
+    "compile_disambiguation.json": "cae2e67d86c7a119fa24b6b0a7804a0f31e984fae2f34d813395f0e460de6182",
+    "dpv2_user_loot_sheet_authority_v1.json": "3c371628c2d0f51023a5c059439020f756a3762c88c3ae6ea4fa4a5790c99aff"
+  },
+  "cases": [
+    {
+      "name": "readback_failure_after_first_move",
+      "status": "PASS",
+      "actual_move_count": 2,
+      "injected_fault": true,
+      "exception": "WRITE_SET_ABORTED: INJECTED_COMMITTED_READBACK_FAILURE",
+      "first_after_fault_sha": "cbaf2b3c2cedd424912efe6e950e6726f1bbc8109a02279951cd57beb24b0ff3",
+      "first_old_sha": "cbaf2b3c2cedd424912efe6e950e6726f1bbc8109a02279951cd57beb24b0ff3",
+      "all_old_bytes_restored": true
+    },
+    {
+      "name": "rollback_snapshot_failure_retains_backup",
+      "status": "PASS",
+      "actual_move_count": 4,
+      "exception": "WRITE_SET_ABORTED: INJECTED_THIRD_MOVE_FAILURE; rollback-preserved-or-failed=outputs\\wake_drop_v108_fault_supplement_precise\\rollback_snapshot_failure_retains_backup\\compile_disambiguation.json:INJECTED_ROLLBACK_READ_FAILURE",
+      "rollback_read_fault_injected": true,
+      "second_backup_path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\wake_drop_v108_fault_supplement_precise\\rollback_snapshot_failure_retains_backup\\compile_disambiguation.json.txnbackup.20261010_020240_702_6fb0434a425e4e7ca6392d18ced4f839",
+      "second_backup_sha256": "51636079aaa0f272a627e58e553de42e2f41851e681ac8fd8cfb70d3659f5bde",
+      "second_old_sha256": "51636079aaa0f272a627e58e553de42e2f41851e681ac8fd8cfb70d3659f5bde",
+      "second_current_new_sha256": "cae2e67d86c7a119fa24b6b0a7804a0f31e984fae2f34d813395f0e460de6182",
+      "first_restored": true,
+      "third_unpublished_old": true,
+      "rollback_loop_continued": true
+    },
+    {
+      "name": "positive_full_compiler",
+      "status": "PASS",
+      "exit_code": 0,
+      "stdout": "outputs\\wake_drop_v108_fault_supplement_precise\\positive_full_compiler.stdout.log",
+      "output_sha256": {
+        "armor_single_slot_audit.json": "b71e42c72067b468f8309a0afdaf2987fd2c55f9dceb5e172ed6a7364350705c",
+        "compile_disambiguation.json": "cae2e67d86c7a119fa24b6b0a7804a0f31e984fae2f34d813395f0e460de6182",
+        "dpv2_user_loot_sheet_authority_v1.json": "3c371628c2d0f51023a5c059439020f756a3762c88c3ae6ea4fa4a5790c99aff"
+      },
+      "source_input_rows": "126 sheets/4876 named rows"
+    }
+  ],
+  "process_kill": "NOT_RUN",
+  "power_loss": "NOT_RUN"
+}

@@ -1,0 +1,134 @@
+{
+  "batch": "B07A-004",
+  "status": "PARTIAL_SEMANTIC_REVIEW",
+  "baselineCommit": "b09ac5c2c41517ed516f11b91d09e435813465f2",
+  "sourceBinding": {
+    "scripts/game_data.gd": {
+      "sha256": "641E8938F764B0048F3A3176C3D97409798D495DB4D606AD58EF90F71246F16B",
+      "lineCount": 4304
+    },
+    "scripts/inventory_panel.gd": "391A52AE236769A188A3673353C95A1E5A9B70713C565443235951EFA734F392",
+    "scripts/item_detail_presenter.gd": "5F952F7CF7F3FD1AE6A5FF4EBC6157D5DB197957D05DE1E2234131DE28700ED2",
+    "scripts/player_state.gd": "13CCCB4CFF55EDA54C858C69EA8A0DA16C33AF44F19EC43B7199CF3DDF4D80A6",
+    "scripts/layers/runtime/loot_runtime_service.gd": "793C5FFEB45B1309C38FC8420C90D41D0E083E5EC271C6817866ACBF69572C9B",
+    "scripts/loot_pickup.gd": "945E0A8A924237B5D6CCA1CA65352B914BAD27095E252713F72843C5A616CED2",
+    "scripts/identity/item_identity_codec.gd": "BD5470A9A04EB635E9CC53CD807415057B399491F93C105E1E57547C6370ED93"
+  },
+  "functions": [
+    {
+      "id": "GD-001",
+      "function": "_load_item_runtime_authority",
+      "file": "scripts/game_data.gd",
+      "lines": "456-514",
+      "caller": "scripts/game_data.gd:285-286",
+      "controls_verified": [
+        "missing/invalid JSON fails with load_error and false",
+        "contractId is exact",
+        "aliases count is exactly 5",
+        "newItems count is exactly 13",
+        "new item stable IDs and names are unique and positive",
+        "new item IDs are checked against service runtime item IDs",
+        "failure resets item_runtime_authority before loading"
+      ],
+      "cross_consumer_chain": "load_database -> _build_indexes -> _build_item_catalog:2636-2639 -> _register_catalog_item:2870-2898 -> _item_record_for_read:3872-3914 -> inventory_panel/item_detail_presenter/player_state/loot_runtime_service",
+      "unreviewed_responsibilities": [
+        "schemaVersion and full policy/newItem field schema are not checked here",
+        "alias targets are not proven against the final canonical catalog in this loader",
+        "newItems are not explicitly checked for collisions with database items, relics, black-iron records, or each other by stable ID at this boundary; _register_catalog_item can retain a name entry while leaving an existing ID index owner"
+      ],
+      "finding": "MISSING_SEMANTIC_COVERAGE; malformed-but-ID-valid authority records and cross-source identity collision behavior need a focused failure test before PASS"
+    },
+    {
+      "id": "GD-002",
+      "function": "_load_dpv2_direct_baseline",
+      "file": "scripts/game_data.gd",
+      "lines": "517-1073",
+      "caller": "scripts/game_data.gd:291-292",
+      "controls_verified": [
+        "all six required files must exist",
+        "JSON root types and manifest/baseline/global/mapping schemas are checked",
+        "manifest artifact paths, LF hashes, and production bindings are checked",
+        "baseline/global policies and exact count closures are checked",
+        "mapping IDs, source labels, names, reward kinds, and conflicts are checked",
+        "profile IDs, semantic linkage, slot uniqueness, reward identity, origins, and 7611-slot closure are checked",
+        "runtime indexes are cleared at entry and loaded flag remains false until final assignment"
+      ],
+      "cross_consumer_chain": "load_database -> _load_dpv2_direct_baseline -> loot_runtime_service:93-110/278-294 -> GameData.dpv2_direct_resolve_slot_reward:3216-3335 and dpv2_direct_item_identity:3208-3213 -> loot_runtime_service:375-430 -> PlayerState inventory identity",
+      "unreviewed_responsibilities": [
+        "verified_profile_authority is required and hash-bound but not parsed for semantic parity in this function",
+        "failure leaves partially populated private indexes until the next call; public DPV2 readers gate on loaded=false, but direct private-state lifecycle has no isolated repeated-load/failed-reload proof",
+        "manifest tracked logical source metadata is consumed later by dpv2_source_slot_gate and is not fully cross-checked against all compiled counters here"
+      ],
+      "finding": "MISSING_SEMANTIC_COVERAGE; no confirmed production defect from static chain, but repeated failed reload and verified-profile semantic parity require focused tests"
+    },
+    {
+      "id": "GD-003",
+      "function": "_validate_dpv2_semantic_authority",
+      "file": "scripts/game_data.gd",
+      "lines": "1551-1916",
+      "caller": "scripts/game_data.gd:602",
+      "controls_verified": [
+        "schema, authority ID, status, production_active, and canonical identity key",
+        "policy forbids name/fuzzy fallback and preserves excluded source rows",
+        "summary totals and source-accounting totals are exact",
+        "frozen direct, explicit non-loot, disabled, and project-extension decisions are exact",
+        "156 records are checked for canonical ID/name, runtime state, status, source count, reason, and decision metadata"
+      ],
+      "cross_consumer_chain": "_load_dpv2_direct_baseline -> semantic authority -> _build_canonical_monster_runtime_drop_closure:2487-2553 -> loot_runtime_service profile/slot APIs and runtime drop gate",
+      "unreviewed_responsibilities": [
+        "semantic summary counts are hard-coded and checked, but no independently declared summary digest is compared at this function boundary",
+        "record validation does not itself prove every downstream slot reward resolves through the final item catalog; that occurs later during drop resolution"
+      ],
+      "finding": "MISSING_SEMANTIC_COVERAGE; authority validation is substantial, but summary-to-consumer and summary-digest binding remains unproven"
+    },
+    {
+      "id": "GD-004",
+      "function": "_build_item_catalog",
+      "file": "scripts/game_data.gd",
+      "lines": "2589-2692",
+      "caller": "scripts/game_data.gd:2462",
+      "controls_verified": [
+        "all catalog indexes are cleared before construction",
+        "equipment, service items, specials, authority newItems, black iron, relic fragment, relics, drop names, and skill names feed the catalog",
+        "category failures are recorded and _build_indexes clears catalog/index state and returns false",
+        "price index is built before catalog registration and skill-book indexing follows catalog construction"
+      ],
+      "cross_consumer_chain": "_build_indexes -> _build_item_catalog -> inventory_panel/item_detail_presenter/equipment_rules/loot_runtime_service/player_state and save identity codec",
+      "unreviewed_responsibilities": [
+        "duplicate-name records are silently skipped",
+        "duplicate stable IDs do not set a fatal catalog error in _register_catalog_item; the first ID owner remains while a second record can remain name-addressable",
+        "partial catalog can exist while _build_skill_book_index reports only push_error"
+      ],
+      "finding": "LIKELY_LOGIC_GAP; identity collisions should be explicitly fatal or have an audited precedence contract; no production data corruption was proven in this read-only pass"
+    },
+    {
+      "id": "GD-005",
+      "function": "_build_skill_book_index",
+      "file": "scripts/game_data.gd",
+      "lines": "2695-2738",
+      "caller": "scripts/game_data.gd:2692; _build_indexes:2433-2488",
+      "controls_verified": [
+        "canonical skill IDs are unique",
+        "equipment-granted skills must be explicitly marked",
+        "skill-book targets must resolve to canonical skills",
+        "one book identity per target and no book relation for equipment-granted skills",
+        "candidate size must equal canonical skills minus equipment grants"
+      ],
+      "cross_consumer_chain": "_build_item_catalog -> _build_skill_book_index -> PlayerState.use_inventory_index_result:2322-2338 -> skill_book_skill_id:4195-4204 -> learn skill and save transaction; PlayerState learn path also uses skill_book_entity_id:3224",
+      "confirmed_bug": "On any validation failure this function only push_error() and returns void. _build_indexes does not inspect a skill-index failure and can return true, allowing load_database to mark initialization complete with an empty or partial _skill_books_by_skill index.",
+      "minimal_fix": "Return bool, set a stable load_error, and make _build_indexes fail closed before database_reloaded/initial_load_complete. Add malformed target, duplicate target, missing target, and incomplete-index regression cases.",
+      "finding": "CONFIRMED_STATIC_LOGIC_BUG"
+    }
+  ],
+  "consumer_summary": {
+    "equipment_panel": "inventory_panel.gd representative calls 574,1016,1093,1164,1315,1640; item_detail_presenter.gd:523; all resolve through GameData.get_item_record",
+    "skill_books": "player_state.gd:2322-2338 and 3224-3241; depends on _skill_books_by_skill and typed item_entity_id",
+    "loot": "loot_runtime_service.gd:93-110,278-294,375-430; direct baseline loaded gate then canonical item mapping and catalog resolution",
+    "saved_identity": "item_identity_codec.gd:17-36 and player_state.gd identity creation/use paths; malformed or unknown item identities fail closed through GameData.item_entity_id"
+  },
+  "scope_limits": [
+    "fixed Git object only; no current working tree bytes used",
+    "no real saves, credentials, Godot, Android, or device execution",
+    "not a whole-project PASS and does not repeat closed equipment-field/hash checks"
+  ]
+}

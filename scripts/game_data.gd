@@ -234,6 +234,10 @@ func ensure_loaded() -> bool:
 
 
 func load_database() -> bool:
+	# Direct reload callers do not pass through ensure_loaded().  Clear the
+	# published state before any reload work so a failed reload cannot leave a
+	# previous successful database advertised through is_loaded().
+	_initial_load_complete = false
 	# Consumers that run during Android autoload construction must fail closed.
 	# StartupLoading explicitly opens this gate only after the intro has drawn.
 	if not ContentLayers.is_loaded():
@@ -2459,7 +2463,23 @@ func _build_indexes() -> bool:
 			var item_id := _stable_item_id(entry)
 			if item_id >= 0:
 				_items_by_id[item_id] = entry
-	_build_item_catalog()
+	if not _build_item_catalog():
+		# A skill-book rejection must not leave the catalog or its lookup maps
+		# visible as a partially published index.  The caller will return the
+		# stable load_error set by _build_skill_book_index().
+		_items_by_name.clear()
+		_items_by_id.clear()
+		item_catalog.clear()
+		_catalog_by_name.clear()
+		_catalog_by_item_id.clear()
+		_catalog_by_service_index.clear()
+		_catalog_by_currency_id.clear()
+		_price_by_name.clear()
+		_price_by_item_id.clear()
+		_price_by_service_index.clear()
+		if load_error.is_empty():
+			load_error = "item_catalog_build_invalid"
+		return false
 	for relic: Dictionary in RelicSynthesisRulesScript.records():
 		if not ItemCategories.attach_source_category(relic):
 			_item_category_error = "unknown_relic_category"
@@ -2586,7 +2606,7 @@ func _apply_item_runtime_authority_overrides(record: Dictionary, _skill_names: D
 					result[key] = override_entry[key]
 
 	return result
-func _build_item_catalog() -> void:
+func _build_item_catalog() -> bool:
 	item_catalog.clear()
 	_catalog_by_name.clear()
 	_catalog_by_item_id.clear()
@@ -2689,28 +2709,30 @@ func _build_item_catalog() -> void:
 			_price_by_name[item_name]["kind"] = str(catalog.get("kind", _price_by_name[item_name].get("kind", "unknown")))
 			_price_by_name[item_name]["category"] = str(catalog.get("category", _price_by_name[item_name].get("category", "")))
 			_price_by_name[item_name]["category_id"] = str(catalog.get("category_id", ""))
-	_build_skill_book_index()
+	return _build_skill_book_index()
 
 
-func _build_skill_book_index() -> void:
+func _skill_book_index_error(code: String, detail: String = "") -> bool:
+	load_error = code if detail.is_empty() else "%s:%s" % [code, detail]
+	return false
+
+
+func _build_skill_book_index() -> bool:
 	_skill_books_by_skill = {}
 	var candidate := {}
 	var canonical_skill_ids := PackedStringArray()
 	for skill_alias: String in CanonicalSkills.skill_ids():
 		var skill_id := CanonicalSkills.entity_skill_id(skill_alias)
 		if skill_id.is_empty() or canonical_skill_ids.has(skill_id):
-			push_error("Invalid canonical skill registry identity: %s" % skill_alias)
-			return
+			return _skill_book_index_error("skill_book_index_canonical_skill_identity_invalid", skill_alias)
 		canonical_skill_ids.append(skill_id)
 	var validated_equipment_grants := {}
 	for grant: Dictionary in EquipmentGrantedSkillRules.grant_definitions():
 		var grant_id := str(grant.get("skill_id", ""))
 		if grant_id.is_empty() or not canonical_skill_ids.has(grant_id):
-			push_error("Invalid equipment granted skill registry relation: %s" % grant_id)
-			return
+			return _skill_book_index_error("skill_book_index_equipment_grant_invalid", grant_id)
 		if not bool(grant.get("equipment_granted", false)):
-			push_error("Equipment granted skill missing explicit marker: %s" % grant_id)
-			return
+			return _skill_book_index_error("skill_book_index_equipment_grant_marker_invalid", grant_id)
 		validated_equipment_grants[grant_id] = true
 	for item: Dictionary in item_catalog:
 		if str(item.get("kind", "")) != "skill_book" or not item.get("usable", true): continue
@@ -2718,24 +2740,22 @@ func _build_skill_book_index() -> void:
 		var numeric := _stable_item_id(item)
 		var book := EntityRegistry.canonical(EntityRegistry.from_legacy("item", numeric) if numeric >= 0
 			else EntityRegistry.from_legacy("service_item", _service_index(item)))
-		if not target is String or EntityRegistry.resolve(target, "skill").is_empty() or book.is_empty() \
-			or (candidate.has(target) and candidate[target] != book):
-			push_error("Invalid registered skill book relation")
-			return
+		if not target is String or EntityRegistry.resolve(target, "skill").is_empty() or book.is_empty():
+			return _skill_book_index_error("skill_book_index_relation_invalid")
+		if candidate.has(target) and candidate[target] != book:
+			return _skill_book_index_error("skill_book_index_duplicate_target", target)
 		candidate[target] = book
 	for target: String in candidate:
 		if not canonical_skill_ids.has(target):
-			push_error("Unknown registered skill book target: %s" % target)
-			return
+			return _skill_book_index_error("skill_book_index_unknown_target", target)
 		if validated_equipment_grants.has(target):
-			push_error("Equipment granted skill must not have a skill book relation: %s" % target)
-			return
+			return _skill_book_index_error("skill_book_index_equipment_grant_conflict", target)
 	var required_book_targets := canonical_skill_ids.size() - validated_equipment_grants.size()
 	if candidate.size() != required_book_targets:
-		push_error("Incomplete registered skill book relations")
-		return
+		return _skill_book_index_error("skill_book_index_incomplete")
 	candidate.make_read_only()
 	_skill_books_by_skill = candidate
+	return true
 
 
 func _build_price_index() -> void:

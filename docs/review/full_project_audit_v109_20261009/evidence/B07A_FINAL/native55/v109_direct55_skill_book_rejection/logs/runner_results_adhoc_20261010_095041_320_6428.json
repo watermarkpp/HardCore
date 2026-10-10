@@ -1,0 +1,40 @@
+{
+  "engine_log_errors": 0,
+  "generated_at": "2026-10-10T09:50:41.3204617+08:00",
+  "git_head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+  "total": 1,
+  "results": [
+    {
+      "test_name": "skill_book_load_rejection_20261010_test",
+      "test_path": "tests/framework/skill_book_load_rejection_20261010_test.tscn",
+      "wrapper_process_id": 19540,
+      "wrapper_started_utc": "2026-10-10T01:50:30.3711717Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct55_skill_book_rejection",
+      "fixed_fps": 0,
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-10T01:51:00.3839415Z",
+      "native_exit_observed_utc": "2026-10-10T01:50:39.8642713Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "6954ad78-d375-4440-9fc9-78267a19c971",
+      "framework_receipt_valid": true,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "passed": 1,
+  "suite": "adhoc",
+  "failed": 0,
+  "invocation_id": "58f3de36-bee4-492a-bae4-1a4dcea41cac",
+  "runtime_environment": {
+    "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct55_skill_book_rejection",
+    "runner_process_id": 6428
+  }
+}

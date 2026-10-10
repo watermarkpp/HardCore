@@ -1,0 +1,20 @@
+{
+  "name": "B07A_SKILL_BOOK_NATIVE_FREEZE_54",
+  "changed_paths": [
+    "scripts/game_data.gd",
+    "tests/framework/skill_book_load_rejection_20261010_test.gd",
+    "tests/framework/skill_book_load_rejection_20261010_test.tscn",
+    "tests/framework/skill_book_identity_test.gd"
+  ],
+  "additional_inputs": [
+    "tests/framework/skill_book_identity_test.tscn",
+    "tests/framework/helpers/check_receipt.gd",
+    "tests/helpers/formal_initial_ready.gd"
+  ],
+  "scenes": [
+    "res://tests/framework/skill_book_load_rejection_20261010_test.tscn",
+    "res://tests/framework/skill_book_identity_test.tscn"
+  ],
+  "fingerprint_scope": "Actual runtime/map inputs from source52, unchanged GameData repair and corrected direct/related component-catalog fixtures; formal full ContentLayers and GameData loading, all book identity/consumer assertions. PC headless only; no full-world/UI/portal acceptance.",
+  "rerun_reason": "Source53 direct fixture parse FAIL was introduced by root variable replacement; related58checks were functional PASS but native forced30s during unrelated full-world async resource shutdown. Correct parse and use actual ContentLayers.ensure_loaded/GameData.ensure_loaded directly for the index/book component scope. Keep every business assertion, all formal catalog inputs, failure records and30sdeadline; no runtime production change."
+}

@@ -1,0 +1,342 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "formal content-layer catalog reaches component READY",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "formal GameData catalog reaches component READY: ",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "component READY catalog contains skill-book records",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "complete detached catalog builds through the unique index owner",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "complete detached index preserves component READY target count",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "complete detached index preserves target identity: hc.skill.warrior.basic_swordsmanship",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "complete detached index preserves target identity: hc.skill.warrior.slaying_swordsmanship",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "complete detached index preserves target identity: hc.skill.warrior.thrusting",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "complete detached index preserves target identity: hc.skill.warrior.half_moon",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "complete detached index preserves target identity: hc.skill.warrior.wild_rush",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "complete detached index preserves target identity: hc.skill.warrior.fire_sword",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "complete detached index preserves target identity: hc.skill.wizard.fireball",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "complete detached index preserves target identity: hc.skill.wizard.repulsion_ring",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "complete detached index preserves target identity: hc.skill.wizard.temptation_light",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "complete detached index preserves target identity: hc.skill.wizard.great_fireball",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "complete detached index preserves target identity: hc.skill.wizard.hellfire",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "complete detached index preserves target identity: hc.skill.wizard.lightning",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "complete detached index preserves target identity: hc.skill.wizard.teleport",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "complete detached index preserves target identity: hc.skill.wizard.exploding_flame",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "complete detached index preserves target identity: hc.skill.wizard.fire_wall",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "complete detached index preserves target identity: hc.skill.wizard.laser",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "complete detached index preserves target identity: hc.skill.wizard.hell_lightning",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "complete detached index preserves target identity: hc.skill.wizard.magic_shield",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "complete detached index preserves target identity: hc.skill.wizard.holy_word",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "complete detached index preserves target identity: hc.skill.wizard.ice_storm",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "complete detached index preserves target identity: hc.skill.taoist.healing",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "complete detached index preserves target identity: hc.skill.taoist.spiritual_warfare",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "complete detached index preserves target identity: hc.skill.taoist.poison",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "complete detached index preserves target identity: hc.skill.taoist.soul_fire_talisman",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "complete detached index preserves target identity: hc.skill.taoist.summon_skeleton",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "complete detached index preserves target identity: hc.skill.taoist.invisibility",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "complete detached index preserves target identity: hc.skill.taoist.mass_invisibility",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "complete detached index preserves target identity: hc.skill.taoist.magic_defense",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "complete detached index preserves target identity: hc.skill.taoist.revelation",
+      "passed": true
+    },
+    {
+      "id": 35,
+      "label": "complete detached index preserves target identity: hc.skill.taoist.defense",
+      "passed": true
+    },
+    {
+      "id": 36,
+      "label": "complete detached index preserves target identity: hc.skill.taoist.entrapment",
+      "passed": true
+    },
+    {
+      "id": 37,
+      "label": "complete detached index preserves target identity: hc.skill.taoist.mass_healing",
+      "passed": true
+    },
+    {
+      "id": 38,
+      "label": "complete detached index preserves target identity: hc.skill.taoist.summon_divine_beast",
+      "passed": true
+    },
+    {
+      "id": 39,
+      "label": "complete index has the expected book target closure",
+      "passed": true
+    },
+    {
+      "id": 40,
+      "label": "invalid fixture selects an actual skill-book service index",
+      "passed": true
+    },
+    {
+      "id": 41,
+      "label": "invalid target rejects through the unique index owner",
+      "passed": true
+    },
+    {
+      "id": 42,
+      "label": "runtime importer rejects sanitized unknown target as stable incomplete load_error",
+      "passed": true
+    },
+    {
+      "id": 43,
+      "label": "invalid relation publishes no partial catalog or skill-book index",
+      "passed": true
+    },
+    {
+      "id": 44,
+      "label": "failed index build publishes no database_reloaded signal",
+      "passed": true
+    },
+    {
+      "id": 45,
+      "label": "invalid relation publishes no partial price projection",
+      "passed": true
+    },
+    {
+      "id": 46,
+      "label": "direct usable unknown target rejects the skill-book index",
+      "passed": true
+    },
+    {
+      "id": 47,
+      "label": "direct usable unknown target exposes stable relation load_error",
+      "passed": true
+    },
+    {
+      "id": 48,
+      "label": "duplicate fixture has two distinct books",
+      "passed": true
+    },
+    {
+      "id": 49,
+      "label": "duplicate fixture changes a second book target",
+      "passed": true
+    },
+    {
+      "id": 50,
+      "label": "duplicate target rejects the skill-book index",
+      "passed": true
+    },
+    {
+      "id": 51,
+      "label": "duplicate target exposes stable duplicate load_error",
+      "passed": true
+    },
+    {
+      "id": 52,
+      "label": "missing fixture removes one actual book",
+      "passed": true
+    },
+    {
+      "id": 53,
+      "label": "missing target rejects the skill-book index",
+      "passed": true
+    },
+    {
+      "id": 54,
+      "label": "missing target exposes stable incomplete load_error",
+      "passed": true
+    },
+    {
+      "id": 55,
+      "label": "equipment-granted fixture has a registered target",
+      "passed": true
+    },
+    {
+      "id": 56,
+      "label": "equipment-granted skill relation rejects the index",
+      "passed": true
+    },
+    {
+      "id": 57,
+      "label": "equipment-granted relation exposes stable conflict load_error",
+      "passed": true
+    },
+    {
+      "id": 58,
+      "label": "direct reload rejects an unavailable content owner",
+      "passed": true
+    },
+    {
+      "id": 59,
+      "label": "direct reload failure clears the loaded state",
+      "passed": true
+    },
+    {
+      "id": 60,
+      "label": "direct reload reports its unavailable content owner",
+      "passed": true
+    },
+    {
+      "id": 61,
+      "label": "direct reload failure publishes no success signal",
+      "passed": true
+    },
+    {
+      "id": 62,
+      "label": "formal merged database restores successfully",
+      "passed": true
+    },
+    {
+      "id": 63,
+      "label": "restored direct reload publishes one success signal",
+      "passed": true
+    },
+    {
+      "id": 64,
+      "label": "restored direct reload publishes loaded state",
+      "passed": true
+    }
+  ],
+  "count": 64,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "58f3de36-bee4-492a-bae4-1a4dcea41cac",
+  "passed": 64,
+  "reported_checks": 64,
+  "reported_failures": 0,
+  "run_id": "6954ad78-d375-4440-9fc9-78267a19c971",
+  "runtime_environment": {
+    "native_process_id": 24044,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct55_skill_book_rejection",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/v109_direct55_skill_book_rejection/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "skill_book_load_rejection_20261010_test",
+  "schema_version": 1,
+  "source_content_sha256": "1db4355851570c4a9a5e0c47038ed87bf5ab2e25affd9f8c628a52733c7ce948",
+  "status": "PASS"
+}

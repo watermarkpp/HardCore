@@ -1,0 +1,95 @@
+{
+  "status": "PASS",
+  "scope": "PC headless GameData full catalog/index rejection and failed directreloadloaded-state owner; no world/UI/Android scope",
+  "candidate_tree": "63eeb911e0ab9d50d91233369aeca304f938c0cc",
+  "freeze_sha256": "1db4355851570c4a9a5e0c47038ed87bf5ab2e25affd9f8c628a52733c7ce948",
+  "source_inputs_unchanged": true,
+  "results": [
+    {
+      "test_name": "skill_book_load_rejection_20261010_test",
+      "test_path": "tests/framework/skill_book_load_rejection_20261010_test.tscn",
+      "wrapper_process_id": 19540,
+      "wrapper_started_utc": "2026-10-10T01:50:30.3711717Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct55_skill_book_rejection",
+      "fixed_fps": 0,
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-10T01:51:00.3839415Z",
+      "native_exit_observed_utc": "2026-10-10T01:50:39.8642713Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "6954ad78-d375-4440-9fc9-78267a19c971",
+      "framework_receipt_valid": true,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "custom_checks": 64,
+  "raw_files": [
+    {
+      "path": "outputs/test_logs/v109_direct55_skill_book_rejection/logs/runner_results_adhoc_20261010_095041_320_6428.json",
+      "sha256": "69245164c86f115bbfc38a90765e816db915689d8b0b69886d0fc0cd73f7b280",
+      "bytes": 1573
+    },
+    {
+      "path": "outputs/test_logs/v109_direct55_skill_book_rejection/logs/skill_book_load_rejection_20261010_test.godot.log",
+      "sha256": "508af2517f50b46a113602c172ffe2e23fa33c75f3a406ffb2bfb227e4ad0b63",
+      "bytes": 4669
+    },
+    {
+      "path": "outputs/test_logs/v109_direct55_skill_book_rejection/logs/skill_book_load_rejection_20261010_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "outputs/test_logs/v109_direct55_skill_book_rejection/logs/skill_book_load_rejection_20261010_test.stdout.log",
+      "sha256": "41407f9bf6238e2421a07a5b47ec829640f8f92ee423f107dd79148547fada19",
+      "bytes": 4864
+    },
+    {
+      "path": "outputs/test_logs/v109_direct55_skill_book_rejection/raw/6954ad78-d375-4440-9fc9-78267a19c971/native_handoffs.json",
+      "sha256": "b1d2af7b2cd1291ead8916bf006458fc86d4c244c242ce1cc4ca426080868ad9",
+      "bytes": 933
+    },
+    {
+      "path": "outputs/test_logs/v109_direct55_skill_book_rejection/raw/6954ad78-d375-4440-9fc9-78267a19c971/native_result.json",
+      "sha256": "cca1619b8c97581862593e9033d4d355097e57f9c715aa9c33ae5b01b4156d6a",
+      "bytes": 915
+    },
+    {
+      "path": "outputs/test_logs/v109_direct55_skill_book_rejection/raw/6954ad78-d375-4440-9fc9-78267a19c971/skill_book_load_rejection_20261010_test.godot.log",
+      "sha256": "508af2517f50b46a113602c172ffe2e23fa33c75f3a406ffb2bfb227e4ad0b63",
+      "bytes": 4669
+    },
+    {
+      "path": "outputs/test_logs/v109_direct55_skill_book_rejection/raw/6954ad78-d375-4440-9fc9-78267a19c971/skill_book_load_rejection_20261010_test.result.json",
+      "sha256": "703a8f1ee8853ac2e104db99bc1cf722b0f3027423e8f6edcc01912953cecd7b",
+      "bytes": 9528
+    },
+    {
+      "path": "outputs/test_logs/v109_direct55_skill_book_rejection/raw/6954ad78-d375-4440-9fc9-78267a19c971/skill_book_load_rejection_20261010_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "outputs/test_logs/v109_direct55_skill_book_rejection/raw/6954ad78-d375-4440-9fc9-78267a19c971/skill_book_load_rejection_20261010_test.stdout.log",
+      "sha256": "41407f9bf6238e2421a07a5b47ec829640f8f92ee423f107dd79148547fada19",
+      "bytes": 4864
+    }
+  ],
+  "related_reused": "B07A_NATIVE54_RECEIPT.json skill_book_identity_test58checks cleanPASS on unchangedproduction andrelatedfixture",
+  "original_failures": [
+    "B07A_NATIVE53_RECEIPT.json",
+    "B07A_NATIVE54_RECEIPT.json"
+  ],
+  "not_run": [
+    "Android/device",
+    "completeworldprewarm/shutdown",
+    "mode/expansioncaller rejectiontransaction"
+  ]
+}

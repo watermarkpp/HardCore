@@ -1,0 +1,24 @@
+test_catalog_required_auxiliary_missing_is_explicit_failure (tests.source_priority_guard_authority_test.SourcePriorityGuardAuthorityTest.test_catalog_required_auxiliary_missing_is_explicit_failure) ... {"authorized": false, "error": "[Errno 2] No such file or directory: 'C:\\\\Users\\\\Administrator\\\\Documents\\\\HardCore\\\\does-not-exist-catalog.json'"}
+ok
+test_illegal_policy_is_rejected_before_lane_use (tests.source_priority_guard_authority_test.SourcePriorityGuardAuthorityTest.test_illegal_policy_is_rejected_before_lane_use) ... ok
+test_output_is_contained_and_non_destructive (tests.source_priority_guard_authority_test.SourcePriorityGuardAuthorityTest.test_output_is_contained_and_non_destructive) ... ok
+test_policy_authority_input_is_unchanged (tests.source_priority_guard_authority_test.SourcePriorityGuardAuthorityTest.test_policy_authority_input_is_unchanged) ... ok
+test_policy_statuses_are_fail_closed (tests.source_priority_guard_authority_test.SourcePriorityGuardAuthorityTest.test_policy_statuses_are_fail_closed) ... ok
+test_primary_catalog_false_cli_does_not_read_missing_catalog (tests.source_priority_guard_authority_test.SourcePriorityGuardAuthorityTest.test_primary_catalog_false_cli_does_not_read_missing_catalog) ... ok
+test_unknown_and_ineligible_candidates_are_rejected (tests.source_priority_guard_authority_test.SourcePriorityGuardAuthorityTest.test_unknown_and_ineligible_candidates_are_rejected) ... {"authorized": false, "error": "candidate is not eligible in server_data: not-a-source"}
+{"authorized": false, "error": "candidate is not eligible in server_data: server.crystal.NightWolf"}
+ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.063s
+
+OK
+{
+  "authorized": true,
+  "lane": "item_categories",
+  "selected": "hardcore.identity.categories",
+  "tier": "primary",
+  "weight": 100,
+  "fallbackUsed": false,
+  "higherPriorityRejected": []
+}

@@ -1,0 +1,63 @@
+{
+  "status": "PASS",
+  "finding": "B07A-006",
+  "classification": "CONDITIONAL_STATIC_RISK_PROVEN_BY_DISPOSABLE_LOCK_INJECTION",
+  "review_source_sha": "684824ac7bb59ac903054b26b3435441b8a2f152",
+  "local_producer_git_head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+  "producer": {
+    "path": "tools/loot_sheet_compiler/compile_authority.ps1",
+    "sha256": "c0f110f15febabf13aa8a297f1969bd0597411104d91e8cd77cf7bfd4693cf7e",
+    "write_lines": [630, 631, 632],
+    "outputs": ["dpv2_user_loot_sheet_authority_v1.json", "compile_disambiguation.json", "armor_single_slot_audit.json"]
+  },
+  "isolated_root": "outputs/wake_drop_v108_review_followup_20261009/b07a_compiler_writeset",
+  "normal_replay": {
+    "status": "PASS",
+    "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File <isolated-project>/tools/loot_sheet_compiler/compile_authority.ps1 -ProjectRoot <isolated-project> -OutputDir <isolated-output>",
+    "exit_code": 0,
+    "source_mode": "archived_parsed_rows",
+    "workbook_sha256": "bc234fca54286547b07f64731c9d0e3674aa19a703863c393c356caf97005251",
+    "sheets": 126,
+    "named_rows": 4876,
+    "compiled_slot_rows": 5831,
+    "monsters": 126,
+    "outputs": {
+      "dpv2_user_loot_sheet_authority_v1.json": "3c371628c2d0f51023a5c059439020f756a3762c88c3ae6ea4fa4a5790c99aff",
+      "compile_disambiguation.json": "cae2e67d86c7a119fa24b6b0a7804a0f31e984fae2f34d813395f0e460de6182",
+      "armor_single_slot_audit.json": "b71e42c72067b468f8309a0afdaf2987fd2c55f9dceb5e172ed6a7364350705c"
+    }
+  },
+  "failure_injections": [
+    {
+      "status": "PASS",
+      "case": "lock_first_output",
+      "exit_code": 1,
+      "lock_target": "dpv2_user_loot_sheet_authority_v1.json",
+      "target_before_sha256": "6383933fcc55c70ae28574b628b256d7b1b939181a0fa4db90f955557d20150f",
+      "target_after_sha256": "6383933fcc55c70ae28574b628b256d7b1b939181a0fa4db90f955557d20150f",
+      "first_output_published": false,
+      "second_output_published": false,
+      "third_output_published": false,
+      "interpretation": "fail_closed_before_first_live write"
+    },
+    {
+      "status": "PASS",
+      "case": "lock_second_output",
+      "exit_code": 1,
+      "lock_target": "compile_disambiguation.json",
+      "target_before_sha256": "21f4c834e8e609cdea61f23ef7d6afa425435f880b794ca444a3663161cb80a7",
+      "target_after_sha256": "21f4c834e8e609cdea61f23ef7d6afa425435f880b794ca444a3663161cb80a7",
+      "first_output_published": true,
+      "second_output_published": false,
+      "third_output_published": false,
+      "interpretation": "proven partial publish: new authority paired with old second and absent third"
+    }
+  ],
+  "process_termination_injection": "NOT_RUN",
+  "python_transaction_reuse": {
+    "status": "MISSING",
+    "finding": "existing equipment generator uses sequential write_text calls; no reusable multi-file transaction authority was found in the inspected direct tools"
+  },
+  "recommendation": "stage and validate all three outputs, publish with a generation journal and rollback/recovery; preserve existing authority and probability semantics",
+  "actions_performed": ["isolated copy", "real compiler replay", "real Windows file-lock injections", "no production/source/Git/engine mutation"]
+}

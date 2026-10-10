@@ -1,0 +1,12 @@
+{
+  "command": "python -m unittest tests.equipment_generator_publish_failure_test tests.equipment_correction_check_only_test tests.test_equipment_current_master_projection -v",
+  "exitCode": 0,
+  "testCount": 13,
+  "currentSourceSha256": "048D042A712CC5B55E821233743AA8B473963058977EC86CBA258F80C444BB1B",
+  "formalAuthorityBeforeAfter": "unchanged by fault-injection tests",
+  "currentMasterAuthoritySha256": "8D692D0F7BC1AEB4295DDD040AA760003E399C633B87876D93E3674FB8CED0B9",
+  "currentItemsAuthoritySha256": "236C88D075BE409682AE77D5A51A775550E4FB192E3D0233EDC1D3C38D0F226E",
+  "output": "outputs\\wake_drop_v108_review_followup_20261009\\b07a_equipment_writeset\\equipment_generator_publish_failure_test.stdout-stderr.v2.txt",
+  "processTermination": "NOT_RUN",
+  "nativeAndroid": "NOT_RUN"
+}

@@ -16,7 +16,9 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import re
+import tempfile
 import xml.etree.ElementTree as ET
 import zipfile
 from collections import Counter
@@ -135,6 +137,136 @@ def sha256_file(path: Path) -> str:
         for block in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(block)
     return digest.hexdigest().upper()
+
+
+def validate_audit_output_path(audit_output: Path | None) -> None:
+    """Never let an audit report path overwrite an authority output."""
+    if audit_output is None:
+        return
+    target = audit_output.resolve()
+    for authority in (MASTER_PATH, ITEMS_PATH):
+        authority_path = authority.resolve()
+        if target == authority_path:
+            raise ValueError("audit output must not target an authority file")
+        if target.exists() and authority_path.exists() and os.path.samefile(target, authority_path):
+            raise ValueError("audit output must not alias an authority file")
+
+
+def _write_staged_bytes(path: Path, payload: bytes, *, label: str) -> Path:
+    """Write and fsync one staged output beside its final authority file."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    descriptor, staged_name = tempfile.mkstemp(
+        prefix=f".{path.name}.{label}-", suffix=".tmp", dir=path.parent
+    )
+    staged = Path(staged_name)
+    try:
+        with os.fdopen(descriptor, "wb") as handle:
+            handle.write(payload)
+            handle.flush()
+            os.fsync(handle.fileno())
+    except BaseException:
+        try:
+            staged.unlink()
+        except FileNotFoundError:
+            pass
+        raise
+    return staged
+
+
+def publish_equipment_write_set(outputs: dict[Path, bytes]) -> None:
+    """Publish the coupled authority files as one guarded write set.
+
+    JSON generation happens entirely before this function is called. Each
+    target is staged and fsynced beside its authority, then every original
+    byte sequence is rechecked immediately before replacement. If a later
+    replacement fails, already-replaced targets are restored only while they
+    still contain the bytes this operation wrote; an intervening manual edit
+    is preserved and the operation fails closed.
+    """
+    if not outputs:
+        raise ValueError("equipment write set must contain at least one output")
+    ordered = list(outputs.items())
+    originals = {
+        path: path.read_bytes() if path.exists() else None for path, _ in ordered
+    }
+    staged: dict[Path, Path] = {}
+    rollback: dict[Path, Path] = {}
+    replaced: list[Path] = []
+    preserve_rollback: set[Path] = set()
+    try:
+        for path, payload in ordered:
+            staged[path] = _write_staged_bytes(path, payload, label="writeset")
+            original = originals[path]
+            if original is not None:
+                rollback[path] = _write_staged_bytes(
+                    path, original, label="rollback"
+                )
+
+        for path, _ in ordered:
+            current = path.read_bytes() if path.exists() else None
+            if current != originals[path]:
+                raise RuntimeError(
+                    f"equipment authority changed during staging: {path}"
+                )
+
+        try:
+            for path, _ in ordered:
+                current = path.read_bytes() if path.exists() else None
+                if current != originals[path]:
+                    raise RuntimeError(
+                        f"equipment authority changed before replace: {path}"
+                    )
+                os.replace(staged[path], path)
+                replaced.append(path)
+        except BaseException as publish_error:
+            rollback_errors: list[str] = []
+            for path in reversed(replaced):
+                try:
+                    current = path.read_bytes() if path.exists() else None
+                except BaseException as rollback_error:
+                    preserve_rollback.add(path)
+                    rollback_errors.append(
+                        f"rollback read failed at {path}: {rollback_error}; "
+                        f"original backup retained at {rollback.get(path)}"
+                    )
+                    continue
+                expected = outputs[path]
+                if current != expected:
+                    # This is a newer manual version. Preserve it and do not
+                    # overwrite it with the rollback bytes.
+                    rollback_errors.append(
+                        f"manual change preserved at {path}"
+                    )
+                    continue
+                try:
+                    if originals[path] is None:
+                        path.unlink()
+                    else:
+                        os.replace(rollback[path], path)
+                except BaseException as rollback_error:
+                    preserve_rollback.add(path)
+                    rollback_errors.append(
+                        f"rollback failed at {path}: {rollback_error}; "
+                        f"original backup retained at {rollback.get(path)}"
+                    )
+            detail = "; ".join(rollback_errors)
+            message = f"equipment write set publish failed: {publish_error}"
+            if detail:
+                message += f"; {detail}"
+            raise RuntimeError(message) from publish_error
+    finally:
+        for path in list(staged.values()):
+            try:
+                path.unlink()
+            except FileNotFoundError:
+                pass
+        for authority, backup in rollback.items():
+            if authority in preserve_rollback:
+                continue
+            try:
+                backup.unlink()
+            except FileNotFoundError:
+                pass
 
 
 def column_number(cell_reference: str) -> int:
@@ -804,6 +936,7 @@ def build(
     write_outputs: bool,
     audit_output: Path | None,
 ) -> dict[str, Any]:
+    validate_audit_output_path(audit_output)
     _, workbook_records, audit = validate_review_workbook(workbook_path)
     catalog = json.loads(ITEMS_PATH.read_text(encoding="utf-8"))
     previous_master = json.loads(MASTER_PATH.read_text(encoding="utf-8"))
@@ -978,13 +1111,15 @@ def build(
         "records": master_records,
     }
     if write_outputs:
-        MASTER_PATH.write_text(
-            json.dumps(master, ensure_ascii=False, indent=2) + "\n",
-            encoding="utf-8",
-        )
-        ITEMS_PATH.write_text(
-            json.dumps(catalog, ensure_ascii=False, indent=2) + "\n",
-            encoding="utf-8",
+        publish_equipment_write_set(
+            {
+                MASTER_PATH: (
+                    json.dumps(master, ensure_ascii=False, indent=2) + "\n"
+                ).encode("utf-8"),
+                ITEMS_PATH: (
+                    json.dumps(catalog, ensure_ascii=False, indent=2) + "\n"
+                ).encode("utf-8"),
+            }
         )
     if audit_output is not None:
         audit_output.parent.mkdir(parents=True, exist_ok=True)
@@ -995,8 +1130,11 @@ def build(
     return audit
 
 
-def apply_female_armor_correction_only() -> dict[str, Any]:
+def apply_female_armor_correction_only(
+    *, write_outputs: bool, audit_output: Path | None = None
+) -> dict[str, Any]:
     """Apply the bounded 12-record correction without rebuilding the workbook."""
+    validate_audit_output_path(audit_output)
     master = json.loads(MASTER_PATH.read_text(encoding="utf-8"))
     catalog = json.loads(ITEMS_PATH.read_text(encoding="utf-8"))
     existing_ids = {int(record["itemId"]) for record in master["records"]}
@@ -1046,24 +1184,37 @@ def apply_female_armor_correction_only() -> dict[str, Any]:
         sync_runtime_record(
             catalog_by_id[int(female_record["itemId"])], female_record
         )
-    MASTER_PATH.write_text(
-        json.dumps(master, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
-    ITEMS_PATH.write_text(
-        json.dumps(catalog, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
-    return {
+    audit = {
+        "mode": "female_armor_correction_only",
+        "writeOutputs": write_outputs,
         "femaleArmorCorrectionCount": len(female_records),
         "masterRecordCount": len(master["records"]),
     }
+    if write_outputs:
+        publish_equipment_write_set(
+            {
+                MASTER_PATH: (
+                    json.dumps(master, ensure_ascii=False, indent=2) + "\n"
+                ).encode("utf-8"),
+                ITEMS_PATH: (
+                    json.dumps(catalog, ensure_ascii=False, indent=2) + "\n"
+                ).encode("utf-8"),
+            }
+        )
+    if audit_output is not None:
+        audit_output.parent.mkdir(parents=True, exist_ok=True)
+        audit_output.write_text(
+            json.dumps(audit, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+    return audit
 
 
 def project_current_master_items(
     item_ids: list[int], *, write_outputs: bool, audit_output: Path | None
 ) -> dict[str, Any]:
     """Synchronize only explicitly named master records into vanilla runtime."""
+    validate_audit_output_path(audit_output)
     if not item_ids or len(item_ids) != len(set(item_ids)):
         raise RuntimeError("--project-current-master-items requires unique explicit IDs")
     master = json.loads(MASTER_PATH.read_text(encoding="utf-8"))
@@ -1161,7 +1312,10 @@ def main() -> None:
         )
         return
     if args.female_armor_correction_only:
-        audit = apply_female_armor_correction_only()
+        audit = apply_female_armor_correction_only(
+            write_outputs=not args.check_only,
+            audit_output=args.audit_output.resolve() if args.audit_output else None,
+        )
         print(
             "EQUIPMENT_FEMALE_ARMOR_CORRECTION_PASS: "
             f"{audit['femaleArmorCorrectionCount']} restored records, "

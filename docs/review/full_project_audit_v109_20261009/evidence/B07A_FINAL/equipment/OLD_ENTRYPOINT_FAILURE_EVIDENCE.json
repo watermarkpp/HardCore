@@ -1,0 +1,14 @@
+{
+  "sourceCommit": "684824ac7bb59ac903054b26b3435441b8a2f152",
+  "sourceSha256": "7D17B93D945A54BEBE482094B88A89EB5288C3C0BA0B6BF838326AAD12C5A152",
+  "command": "load exact baseline blob; apply_female_armor_correction_only(); inject failure only at second Path.write_text sink",
+  "businessPath": "real apply_female_armor_correction_only with copied complete authority JSON",
+  "error": "OSError: simulated second authority write failure",
+  "masterBeforeSha256": "8D692D0F7BC1AEB4295DDD040AA760003E399C633B87876D93E3674FB8CED0B9",
+  "masterAfterSha256": "6A0A7F13BBD1FECA64D5EF8D7A940FEC297C354E94238BCD4C9881469D9EC34B",
+  "itemsBeforeSha256": "236C88D075BE409682AE77D5A51A775550E4FB192E3D0233EDC1D3C38D0F226E",
+  "itemsAfterSha256": "236C88D075BE409682AE77D5A51A775550E4FB192E3D0233EDC1D3C38D0F226E",
+  "partialMasterChanged": true,
+  "itemsUnchanged": true,
+  "result": "FAIL: baseline writes MASTER before ITEMS and leaves partial new MASTER"
+}

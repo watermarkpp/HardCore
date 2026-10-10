@@ -1,0 +1,20 @@
+{
+  "name": "B07A_SKILL_BOOK_NATIVE_FREEZE_53",
+  "changed_paths": [
+    "scripts/game_data.gd",
+    "tests/framework/skill_book_load_rejection_20261010_test.gd",
+    "tests/framework/skill_book_load_rejection_20261010_test.tscn",
+    "tests/framework/skill_book_identity_test.gd"
+  ],
+  "additional_inputs": [
+    "tests/framework/skill_book_identity_test.tscn",
+    "tests/framework/helpers/check_receipt.gd",
+    "tests/helpers/formal_initial_ready.gd"
+  ],
+  "scenes": [
+    "res://tests/framework/skill_book_load_rejection_20261010_test.tscn",
+    "res://tests/framework/skill_book_identity_test.tscn"
+  ],
+  "fingerprint_scope": "Actual runtime/map inputs from source52, exact GameData load rejection repair and the direct/related skill-book fixtures. Frozen before native; PC headless only.",
+  "rerun_reason": "New failure propagation and loaded-state reset in GameData invalidate loading/book-consumer proof. Run new direct rejection plus actual identity/learning/consumption/save-failure chain. Existing old fixture now waits formal READY and explicitly excludes equipment-only skills from book closure, preserving all consumption assertions. No unchanged combat/performance rerun."
+}

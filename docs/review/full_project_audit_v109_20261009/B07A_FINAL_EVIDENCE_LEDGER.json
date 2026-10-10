@@ -1,0 +1,602 @@
+{
+  "scope": "B07A actual component/tool evidence; not whole-project acceptance",
+  "sources": [
+    {
+      "path": "scripts/game_data.gd",
+      "sha256_raw": "56f77940dc2994bccee1257ef3e1aff21016d6b68ba0844755071bae60ccdd8a",
+      "sha256_utf8_lf": "6170f4f7ddaccfd5d8eed6069f26fc4041b98843993b455e69e647d1c4769c05"
+    },
+    {
+      "path": "tests/framework/skill_book_identity_test.gd",
+      "sha256_raw": "61f4a878d646bec62fcd37e4b812c0466b47e4236414cd1c36d46163f52210b6",
+      "sha256_utf8_lf": "a82d6280e27b7987159333baeab512f446d34ef90e74dc5e5b3c3bb224ee1c55"
+    },
+    {
+      "path": "tests/framework/skill_book_load_rejection_20261010_test.gd",
+      "sha256_raw": "48de85b12c1ad07a74b013c9aec896e921fb81c7de7d2f69d8c74a3741ec09c3",
+      "sha256_utf8_lf": "6efe8a80376198101b58f08c2ad0ebe507343cc706a070941afb2b59811c9756"
+    },
+    {
+      "path": "tests/framework/skill_book_load_rejection_20261010_test.tscn",
+      "sha256_raw": "2e084a54fa91016d085e4aadd1f92f50ba58d92dfd4d1985d6d1120861b564d9",
+      "sha256_utf8_lf": "2e084a54fa91016d085e4aadd1f92f50ba58d92dfd4d1985d6d1120861b564d9"
+    },
+    {
+      "path": "tools/build_equipment_attribute_master.py",
+      "sha256_raw": "048d042a712cc5b55e821233743aa8b473963058977ec86cba258f80c444bb1b",
+      "sha256_utf8_lf": "ad4547953371a8f7cfdc8b2c98c9ef71b404019bea7a9aeefdc082a3f2bbb332"
+    },
+    {
+      "path": "tests/equipment_generator_publish_failure_test.py",
+      "sha256_raw": "040baedf8d4653d45b946aac03a3cf2cc61f33f4a118450e4b62e32f480256ba",
+      "sha256_utf8_lf": "040baedf8d4653d45b946aac03a3cf2cc61f33f4a118450e4b62e32f480256ba"
+    },
+    {
+      "path": "tests/equipment_correction_check_only_test.py",
+      "sha256_raw": "d5e1898a4bd27b6909cce628323f82835c3001d021873b417a8764cbe5b7fc7b",
+      "sha256_utf8_lf": "d5e1898a4bd27b6909cce628323f82835c3001d021873b417a8764cbe5b7fc7b"
+    },
+    {
+      "path": "tools/source_priority_guard.py",
+      "sha256_raw": "d517894e85e31cd09075c730c87e52098681793f37135edfe503550ae5fa04a2",
+      "sha256_utf8_lf": "7cc49a9a72e0e0f5978efcb6564141399be794e18d4390223860590d221cb42b"
+    },
+    {
+      "path": "tests/source_priority_guard_authority_test.py",
+      "sha256_raw": "b5d36408dea4bb72a97b3e1ce5f77a3d867fe3204799adf15c16109c390567ba",
+      "sha256_utf8_lf": "b5d36408dea4bb72a97b3e1ce5f77a3d867fe3204799adf15c16109c390567ba"
+    },
+    {
+      "path": "tools/loot_sheet_compiler/compile_authority.ps1",
+      "sha256_raw": "6f021a6bf741174675fdfb04fb77ea0b99e2516a021bd04ce443a1d56b1685b3",
+      "sha256_utf8_lf": "c57cc691f4b823aeb0162704a34e9a11c3a408decc3df6eb3419b6d312c456df"
+    },
+    {
+      "path": "tools/loot_sheet_compiler/test_write_set_repair.ps1",
+      "sha256_raw": "d337043ff17f0aa5152ff70043e0458c37453706553ac2a4227ec9f87578397c",
+      "sha256_utf8_lf": "d337043ff17f0aa5152ff70043e0458c37453706553ac2a4227ec9f87578397c"
+    },
+    {
+      "path": "tools/loot_sheet_compiler/test_write_set_fault_injection.ps1",
+      "sha256_raw": "815236090abfe51209405cc9011146f46f9740b192ff9e717c9d210edd0c8dd9",
+      "sha256_utf8_lf": "815236090abfe51209405cc9011146f46f9740b192ff9e717c9d210edd0c8dd9"
+    },
+    {
+      "path": "tools/loot_sheet_compiler/test_write_set_fault_supplement.ps1",
+      "sha256_raw": "d2582e79e24f0c1db2387c1b60d4930834c5399f23af566b649c176be61af962",
+      "sha256_utf8_lf": "d2582e79e24f0c1db2387c1b60d4930834c5399f23af566b649c176be61af962"
+    }
+  ],
+  "skill_book": {
+    "direct_stage55": "PASS",
+    "direct_checks": 64,
+    "related_stage54": "PASS",
+    "related_checks": 58,
+    "original_stage53": "FAIL",
+    "original_stage54_direct": "FAIL",
+    "related_reuse_reason": "Production GameData and related fixture unchanged after native54; only direct expected error corrected.",
+    "world_ui_shutdown": "NOT_RUN",
+    "android_device": "NOT_RUN"
+  },
+  "equipment": {
+    "final_tests": 15,
+    "status": "PASS",
+    "receipt": "equipment/TEST_RECEIPT_v3.json"
+  },
+  "guard": {
+    "full_component_tests": 9,
+    "extra_io_fault_tests": 3,
+    "runs_are_separate": true,
+    "status": "PASS",
+    "full_policy_local_catalog": "MISSING",
+    "old_git_raw_sha256": "60f8dda1127bbb6ad26f201a4398f0e951df4cad5bfcbed0fb0ee9c6718f9d11",
+    "retained_crlf_copy_sha256": "3445c735ac0fb470440de50fd228cd000a2364c6bccc72be2a15e37ea235025b"
+  },
+  "compiler": {
+    "current_precise_cases": 2,
+    "current_positive_full_compile": "PASS",
+    "full_sheets": 126,
+    "full_named_rows": 4876,
+    "prior_four_cases_source_sha256": "425817e2e7f9c54abc7cf7a8a5abee2aeeeca89affb30ad9e62cdf665fd0524a",
+    "prior_four_cases_are_historical": true,
+    "current_process_kill": "NOT_RUN",
+    "current_power_loss": "NOT_RUN",
+    "stage_cleanup_failure_can_mask_original_error": "MISSING"
+  },
+  "raw_files": [
+    {
+      "original_path": "outputs/wake_drop_v108_review_followup_20261009/B07A_NATIVE53_RECEIPT.json",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native53/B07A_NATIVE53_RECEIPT.json",
+      "sha256": "2534fbe897e0e0263b722b4f8904716117d81155ecd6d86350e4dd0561e711c6",
+      "bytes": 8391
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct_related53_skill_books/logs/runner_results_adhoc_20261010_094438_607_7740.json",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native53/v109_direct_related53_skill_books/logs/runner_results_adhoc_20261010_094438_607_7740.json",
+      "sha256": "9f884622c8e0e8ce526246c7a5ab6a3fc5cea62f4ecbb5ade488714c0b1b820d",
+      "bytes": 2726
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct_related53_skill_books/logs/skill_book_identity_test.godot.log",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native53/v109_direct_related53_skill_books/logs/skill_book_identity_test.godot.log",
+      "sha256": "8a6f2315e548949a5ddd0d1a2ca4360fbbbe6de205eb8fe932a3e7af71c41556",
+      "bytes": 367187
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct_related53_skill_books/logs/skill_book_identity_test.stderr.log",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native53/v109_direct_related53_skill_books/logs/skill_book_identity_test.stderr.log",
+      "sha256": "5fac9a5ccaff7838ed744fde76e18daff21b55221e91da741bfae9b65b5630ed",
+      "bytes": 767
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct_related53_skill_books/logs/skill_book_identity_test.stdout.log",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native53/v109_direct_related53_skill_books/logs/skill_book_identity_test.stdout.log",
+      "sha256": "d3ef9817eac6ef606cb6bbe6ec10e60ab243ce9ca6a6c7852df6783673fba66f",
+      "bytes": 368609
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct_related53_skill_books/logs/skill_book_load_rejection_20261010_test.godot.log",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native53/v109_direct_related53_skill_books/logs/skill_book_load_rejection_20261010_test.godot.log",
+      "sha256": "0230fee304885c401edb25cd1057bf063ff4dc43735aa921877b393399e4b0f4",
+      "bytes": 4989
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct_related53_skill_books/logs/skill_book_load_rejection_20261010_test.stderr.log",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native53/v109_direct_related53_skill_books/logs/skill_book_load_rejection_20261010_test.stderr.log",
+      "sha256": "c0ea8debd561963633527533e3ae0c3eb695dd89c23b6d8263ba3191ff40984e",
+      "bytes": 575
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct_related53_skill_books/logs/skill_book_load_rejection_20261010_test.stdout.log",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native53/v109_direct_related53_skill_books/logs/skill_book_load_rejection_20261010_test.stdout.log",
+      "sha256": "3852b358456ed0cd275637fb1ecab2797a3e90442a7fd4284993e3d387ce6915",
+      "bytes": 4509
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct_related53_skill_books/raw/a27a6c51-7eb4-408b-967a-912ee736816e/native_handoffs.json",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native53/v109_direct_related53_skill_books/raw/a27a6c51-7eb4-408b-967a-912ee736816e/native_handoffs.json",
+      "sha256": "c459288420746739398aa093c4f3d3c3468eed98a5b1c7ba88a81c3d10f9eae7",
+      "bytes": 471
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct_related53_skill_books/raw/a27a6c51-7eb4-408b-967a-912ee736816e/native_result.json",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native53/v109_direct_related53_skill_books/raw/a27a6c51-7eb4-408b-967a-912ee736816e/native_result.json",
+      "sha256": "34aaf1d7ea040dccdb21c8dfc78b930e061d32b90dbd3811fc09e9301f1adc82",
+      "bytes": 1051
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct_related53_skill_books/raw/a27a6c51-7eb4-408b-967a-912ee736816e/skill_book_load_rejection_20261010_test.godot.log",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native53/v109_direct_related53_skill_books/raw/a27a6c51-7eb4-408b-967a-912ee736816e/skill_book_load_rejection_20261010_test.godot.log",
+      "sha256": "0230fee304885c401edb25cd1057bf063ff4dc43735aa921877b393399e4b0f4",
+      "bytes": 4989
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct_related53_skill_books/raw/a27a6c51-7eb4-408b-967a-912ee736816e/skill_book_load_rejection_20261010_test.stderr.log",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native53/v109_direct_related53_skill_books/raw/a27a6c51-7eb4-408b-967a-912ee736816e/skill_book_load_rejection_20261010_test.stderr.log",
+      "sha256": "c0ea8debd561963633527533e3ae0c3eb695dd89c23b6d8263ba3191ff40984e",
+      "bytes": 575
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct_related53_skill_books/raw/a27a6c51-7eb4-408b-967a-912ee736816e/skill_book_load_rejection_20261010_test.stdout.log",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native53/v109_direct_related53_skill_books/raw/a27a6c51-7eb4-408b-967a-912ee736816e/skill_book_load_rejection_20261010_test.stdout.log",
+      "sha256": "3852b358456ed0cd275637fb1ecab2797a3e90442a7fd4284993e3d387ce6915",
+      "bytes": 4509
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct_related53_skill_books/raw/e943ea66-0bf7-42ba-9f86-eeb742489058/native_handoffs.json",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native53/v109_direct_related53_skill_books/raw/e943ea66-0bf7-42ba-9f86-eeb742489058/native_handoffs.json",
+      "sha256": "c459288420746739398aa093c4f3d3c3468eed98a5b1c7ba88a81c3d10f9eae7",
+      "bytes": 471
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct_related53_skill_books/raw/e943ea66-0bf7-42ba-9f86-eeb742489058/native_result.json",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native53/v109_direct_related53_skill_books/raw/e943ea66-0bf7-42ba-9f86-eeb742489058/native_result.json",
+      "sha256": "9d5eb2b8aa83da3c85e145ae26c15ca8ecb0115b32dc75e616548530774dbb9f",
+      "bytes": 925
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct_related53_skill_books/raw/e943ea66-0bf7-42ba-9f86-eeb742489058/skill_book_identity_test.godot.log",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native53/v109_direct_related53_skill_books/raw/e943ea66-0bf7-42ba-9f86-eeb742489058/skill_book_identity_test.godot.log",
+      "sha256": "8a6f2315e548949a5ddd0d1a2ca4360fbbbe6de205eb8fe932a3e7af71c41556",
+      "bytes": 367187
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct_related53_skill_books/raw/e943ea66-0bf7-42ba-9f86-eeb742489058/skill_book_identity_test.result.json",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native53/v109_direct_related53_skill_books/raw/e943ea66-0bf7-42ba-9f86-eeb742489058/skill_book_identity_test.result.json",
+      "sha256": "b9bb6b6ee9c2c4483a3f638235eb20be5b6096e1a0314d63eadffab124334bd0",
+      "bytes": 9350
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct_related53_skill_books/raw/e943ea66-0bf7-42ba-9f86-eeb742489058/skill_book_identity_test.stderr.log",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native53/v109_direct_related53_skill_books/raw/e943ea66-0bf7-42ba-9f86-eeb742489058/skill_book_identity_test.stderr.log",
+      "sha256": "5fac9a5ccaff7838ed744fde76e18daff21b55221e91da741bfae9b65b5630ed",
+      "bytes": 767
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct_related53_skill_books/raw/e943ea66-0bf7-42ba-9f86-eeb742489058/skill_book_identity_test.stdout.log",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native53/v109_direct_related53_skill_books/raw/e943ea66-0bf7-42ba-9f86-eeb742489058/skill_book_identity_test.stdout.log",
+      "sha256": "d3ef9817eac6ef606cb6bbe6ec10e60ab243ce9ca6a6c7852df6783673fba66f",
+      "bytes": 368609
+    },
+    {
+      "original_path": "outputs/wake_drop_v108_review_followup_20261009/B07A_SKILL_BOOK_NATIVE_FREEZE_53.json",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native53/B07A_SKILL_BOOK_NATIVE_FREEZE_53.json",
+      "sha256": "20f5f16844f8ea479030412676f837ac757d914a50a5e5123ca138b124e80f32",
+      "bytes": 491312
+    },
+    {
+      "original_path": "outputs/wake_drop_v108_review_followup_20261009/B07A_SKILL_BOOK_NATIVE_SPEC_53.json",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native53/B07A_SKILL_BOOK_NATIVE_SPEC_53.json",
+      "sha256": "ec0f8a5f5aaf478395a78cbc861468e58fd2c12e51a35afb11374878adc07476",
+      "bytes": 1195
+    },
+    {
+      "original_path": "outputs/wake_drop_v108_review_followup_20261009/B07A_NATIVE54_RECEIPT.json",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native54/B07A_NATIVE54_RECEIPT.json",
+      "sha256": "85439e9b80cacf67915e9fe1525736ce1aad387d89baa6781b4431fbce7f364d",
+      "bytes": 7934
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct_related54_skill_books/logs/runner_results_adhoc_20261010_094756_215_2644.json",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native54/v109_direct_related54_skill_books/logs/runner_results_adhoc_20261010_094756_215_2644.json",
+      "sha256": "34f7e0e3a480b31bd12ca88109dc3b824f2a963b66f1d43d509316ca0fe3dc25",
+      "bytes": 2614
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct_related54_skill_books/logs/skill_book_identity_test.godot.log",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native54/v109_direct_related54_skill_books/logs/skill_book_identity_test.godot.log",
+      "sha256": "d15a7a9daa8c9f3a7709f621560fe4bc1b176bfaf7e60f081769e7885b848b5f",
+      "bytes": 4446
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct_related54_skill_books/logs/skill_book_identity_test.stderr.log",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native54/v109_direct_related54_skill_books/logs/skill_book_identity_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct_related54_skill_books/logs/skill_book_identity_test.stdout.log",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native54/v109_direct_related54_skill_books/logs/skill_book_identity_test.stdout.log",
+      "sha256": "c5b09016aa1fb2bdae8fd6b09f1cad26b10f248f5442b9ec1760bd31c822a05c",
+      "bytes": 4640
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct_related54_skill_books/logs/skill_book_load_rejection_20261010_test.godot.log",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native54/v109_direct_related54_skill_books/logs/skill_book_load_rejection_20261010_test.godot.log",
+      "sha256": "d34123b1d7f15b10498ddf64e5689d54f1d6860f6f4cf13a6b5cfe48587b9922",
+      "bytes": 4754
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct_related54_skill_books/logs/skill_book_load_rejection_20261010_test.stderr.log",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native54/v109_direct_related54_skill_books/logs/skill_book_load_rejection_20261010_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct_related54_skill_books/logs/skill_book_load_rejection_20261010_test.stdout.log",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native54/v109_direct_related54_skill_books/logs/skill_book_load_rejection_20261010_test.stdout.log",
+      "sha256": "b1e1b4f9cd3bd6131d57593241f6a84f3d64ebc00e0a71201aa5cc7b75cf5004",
+      "bytes": 4949
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct_related54_skill_books/raw/23dcb411-9e89-4ee3-b708-721d23cde2cb/native_handoffs.json",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native54/v109_direct_related54_skill_books/raw/23dcb411-9e89-4ee3-b708-721d23cde2cb/native_handoffs.json",
+      "sha256": "b81638793bedf84498e6f416ccb50fa0a2b6467a9dda9e11c05afdc73df18918",
+      "bytes": 471
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct_related54_skill_books/raw/23dcb411-9e89-4ee3-b708-721d23cde2cb/native_result.json",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native54/v109_direct_related54_skill_books/raw/23dcb411-9e89-4ee3-b708-721d23cde2cb/native_result.json",
+      "sha256": "e7f89f01b71dad8b767820d73590867ec80266621debe1696b4631451965ab18",
+      "bytes": 980
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct_related54_skill_books/raw/23dcb411-9e89-4ee3-b708-721d23cde2cb/skill_book_load_rejection_20261010_test.godot.log",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native54/v109_direct_related54_skill_books/raw/23dcb411-9e89-4ee3-b708-721d23cde2cb/skill_book_load_rejection_20261010_test.godot.log",
+      "sha256": "d34123b1d7f15b10498ddf64e5689d54f1d6860f6f4cf13a6b5cfe48587b9922",
+      "bytes": 4754
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct_related54_skill_books/raw/23dcb411-9e89-4ee3-b708-721d23cde2cb/skill_book_load_rejection_20261010_test.result.json",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native54/v109_direct_related54_skill_books/raw/23dcb411-9e89-4ee3-b708-721d23cde2cb/skill_book_load_rejection_20261010_test.result.json",
+      "sha256": "ab2de70a2770ed57b6dd5d77017499d94a219aac9c9557838aaa0a1c5ceeca97",
+      "bytes": 9236
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct_related54_skill_books/raw/23dcb411-9e89-4ee3-b708-721d23cde2cb/skill_book_load_rejection_20261010_test.stderr.log",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native54/v109_direct_related54_skill_books/raw/23dcb411-9e89-4ee3-b708-721d23cde2cb/skill_book_load_rejection_20261010_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct_related54_skill_books/raw/23dcb411-9e89-4ee3-b708-721d23cde2cb/skill_book_load_rejection_20261010_test.stdout.log",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native54/v109_direct_related54_skill_books/raw/23dcb411-9e89-4ee3-b708-721d23cde2cb/skill_book_load_rejection_20261010_test.stdout.log",
+      "sha256": "b1e1b4f9cd3bd6131d57593241f6a84f3d64ebc00e0a71201aa5cc7b75cf5004",
+      "bytes": 4949
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct_related54_skill_books/raw/4916e681-be77-4380-8336-a0ac2a2c8385/native_handoffs.json",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native54/v109_direct_related54_skill_books/raw/4916e681-be77-4380-8336-a0ac2a2c8385/native_handoffs.json",
+      "sha256": "a19450f0dfb8484283b73c37c8e0b9b9fe01849ca5ff1e3159fee10eace723e6",
+      "bytes": 902
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct_related54_skill_books/raw/4916e681-be77-4380-8336-a0ac2a2c8385/native_result.json",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native54/v109_direct_related54_skill_books/raw/4916e681-be77-4380-8336-a0ac2a2c8385/native_result.json",
+      "sha256": "e76c2417c09c720db100c080b3d972ad3e12571916c1ee04b07a0023de417fb6",
+      "bytes": 884
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct_related54_skill_books/raw/4916e681-be77-4380-8336-a0ac2a2c8385/skill_book_identity_test.godot.log",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native54/v109_direct_related54_skill_books/raw/4916e681-be77-4380-8336-a0ac2a2c8385/skill_book_identity_test.godot.log",
+      "sha256": "d15a7a9daa8c9f3a7709f621560fe4bc1b176bfaf7e60f081769e7885b848b5f",
+      "bytes": 4446
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct_related54_skill_books/raw/4916e681-be77-4380-8336-a0ac2a2c8385/skill_book_identity_test.result.json",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native54/v109_direct_related54_skill_books/raw/4916e681-be77-4380-8336-a0ac2a2c8385/skill_book_identity_test.result.json",
+      "sha256": "6a7444f9f93421d749d2aef7c4e527f5ba94450d44ed1f0006cedf7a5e48a423",
+      "bytes": 9378
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct_related54_skill_books/raw/4916e681-be77-4380-8336-a0ac2a2c8385/skill_book_identity_test.stderr.log",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native54/v109_direct_related54_skill_books/raw/4916e681-be77-4380-8336-a0ac2a2c8385/skill_book_identity_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct_related54_skill_books/raw/4916e681-be77-4380-8336-a0ac2a2c8385/skill_book_identity_test.stdout.log",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native54/v109_direct_related54_skill_books/raw/4916e681-be77-4380-8336-a0ac2a2c8385/skill_book_identity_test.stdout.log",
+      "sha256": "c5b09016aa1fb2bdae8fd6b09f1cad26b10f248f5442b9ec1760bd31c822a05c",
+      "bytes": 4640
+    },
+    {
+      "original_path": "outputs/wake_drop_v108_review_followup_20261009/B07A_SKILL_BOOK_NATIVE_FREEZE_54.json",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native54/B07A_SKILL_BOOK_NATIVE_FREEZE_54.json",
+      "sha256": "266b263f0db24bc8dec795a2a20f7cb819f301c6293a2a89a9cece561937ad4a",
+      "bytes": 491478
+    },
+    {
+      "original_path": "outputs/wake_drop_v108_review_followup_20261009/B07A_SKILL_BOOK_NATIVE_SPEC_54.json",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native54/B07A_SKILL_BOOK_NATIVE_SPEC_54.json",
+      "sha256": "dbb750abcacf7dc5b09dad16124f846d997f34b4fb29d1a510d0bd2bf8664756",
+      "bytes": 1381
+    },
+    {
+      "original_path": "outputs/wake_drop_v108_review_followup_20261009/B07A_NATIVE55_RECEIPT.json",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native55/B07A_NATIVE55_RECEIPT.json",
+      "sha256": "6408b30c2bc142f52c5ae50939d86fc793c152fa07d41057bee00f41c3ca0820",
+      "bytes": 4418
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct55_skill_book_rejection/logs/runner_results_adhoc_20261010_095041_320_6428.json",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native55/v109_direct55_skill_book_rejection/logs/runner_results_adhoc_20261010_095041_320_6428.json",
+      "sha256": "69245164c86f115bbfc38a90765e816db915689d8b0b69886d0fc0cd73f7b280",
+      "bytes": 1573
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct55_skill_book_rejection/logs/skill_book_load_rejection_20261010_test.godot.log",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native55/v109_direct55_skill_book_rejection/logs/skill_book_load_rejection_20261010_test.godot.log",
+      "sha256": "508af2517f50b46a113602c172ffe2e23fa33c75f3a406ffb2bfb227e4ad0b63",
+      "bytes": 4669
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct55_skill_book_rejection/logs/skill_book_load_rejection_20261010_test.stderr.log",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native55/v109_direct55_skill_book_rejection/logs/skill_book_load_rejection_20261010_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct55_skill_book_rejection/logs/skill_book_load_rejection_20261010_test.stdout.log",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native55/v109_direct55_skill_book_rejection/logs/skill_book_load_rejection_20261010_test.stdout.log",
+      "sha256": "41407f9bf6238e2421a07a5b47ec829640f8f92ee423f107dd79148547fada19",
+      "bytes": 4864
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct55_skill_book_rejection/raw/6954ad78-d375-4440-9fc9-78267a19c971/native_handoffs.json",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native55/v109_direct55_skill_book_rejection/raw/6954ad78-d375-4440-9fc9-78267a19c971/native_handoffs.json",
+      "sha256": "b1d2af7b2cd1291ead8916bf006458fc86d4c244c242ce1cc4ca426080868ad9",
+      "bytes": 933
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct55_skill_book_rejection/raw/6954ad78-d375-4440-9fc9-78267a19c971/native_result.json",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native55/v109_direct55_skill_book_rejection/raw/6954ad78-d375-4440-9fc9-78267a19c971/native_result.json",
+      "sha256": "cca1619b8c97581862593e9033d4d355097e57f9c715aa9c33ae5b01b4156d6a",
+      "bytes": 915
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct55_skill_book_rejection/raw/6954ad78-d375-4440-9fc9-78267a19c971/skill_book_load_rejection_20261010_test.godot.log",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native55/v109_direct55_skill_book_rejection/raw/6954ad78-d375-4440-9fc9-78267a19c971/skill_book_load_rejection_20261010_test.godot.log",
+      "sha256": "508af2517f50b46a113602c172ffe2e23fa33c75f3a406ffb2bfb227e4ad0b63",
+      "bytes": 4669
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct55_skill_book_rejection/raw/6954ad78-d375-4440-9fc9-78267a19c971/skill_book_load_rejection_20261010_test.result.json",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native55/v109_direct55_skill_book_rejection/raw/6954ad78-d375-4440-9fc9-78267a19c971/skill_book_load_rejection_20261010_test.result.json",
+      "sha256": "703a8f1ee8853ac2e104db99bc1cf722b0f3027423e8f6edcc01912953cecd7b",
+      "bytes": 9528
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct55_skill_book_rejection/raw/6954ad78-d375-4440-9fc9-78267a19c971/skill_book_load_rejection_20261010_test.stderr.log",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native55/v109_direct55_skill_book_rejection/raw/6954ad78-d375-4440-9fc9-78267a19c971/skill_book_load_rejection_20261010_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "original_path": "outputs/test_logs/v109_direct55_skill_book_rejection/raw/6954ad78-d375-4440-9fc9-78267a19c971/skill_book_load_rejection_20261010_test.stdout.log",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native55/v109_direct55_skill_book_rejection/raw/6954ad78-d375-4440-9fc9-78267a19c971/skill_book_load_rejection_20261010_test.stdout.log",
+      "sha256": "41407f9bf6238e2421a07a5b47ec829640f8f92ee423f107dd79148547fada19",
+      "bytes": 4864
+    },
+    {
+      "original_path": "outputs/wake_drop_v108_review_followup_20261009/B07A_SKILL_BOOK_NATIVE_FREEZE_55.json",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native55/B07A_SKILL_BOOK_NATIVE_FREEZE_55.json",
+      "sha256": "1db4355851570c4a9a5e0c47038ed87bf5ab2e25affd9f8c628a52733c7ce948",
+      "bytes": 491329
+    },
+    {
+      "original_path": "outputs/wake_drop_v108_review_followup_20261009/B07A_SKILL_BOOK_NATIVE_SPEC_55.json",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/native55/B07A_SKILL_BOOK_NATIVE_SPEC_55.json",
+      "sha256": "ad39dc81167417406a89a2a09c98004a2c688027791c1597d8f88cae3cbbaa03",
+      "bytes": 1231
+    },
+    {
+      "original_path": "outputs/wake_drop_v108_review_followup_20261009/b07a_equipment_writeset/equipment_generator_publish_failure_test.stdout-stderr.txt",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/equipment/equipment_generator_publish_failure_test.stdout-stderr.txt",
+      "sha256": "b00e0e3344b3f3ac123275ab7aeac834058992e6bceb97a8461cc49ac5f608f2",
+      "bytes": 2154
+    },
+    {
+      "original_path": "outputs/wake_drop_v108_review_followup_20261009/b07a_equipment_writeset/equipment_generator_publish_failure_test.stdout-stderr.v2.txt",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/equipment/equipment_generator_publish_failure_test.stdout-stderr.v2.txt",
+      "sha256": "ec4d068f657429073eb075cbcf7c223a0bf32843e746fb1249c29fea065d96ef",
+      "bytes": 2775
+    },
+    {
+      "original_path": "outputs/wake_drop_v108_review_followup_20261009/b07a_equipment_writeset/equipment_generator_publish_failure_test.stdout-stderr.v3.txt",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/equipment/equipment_generator_publish_failure_test.stdout-stderr.v3.txt",
+      "sha256": "8615bd80fe8ab58e558b4a24a138628d486b68a1279d0e98a48e01951392f575",
+      "bytes": 3221
+    },
+    {
+      "original_path": "outputs/wake_drop_v108_review_followup_20261009/b07a_equipment_writeset/old_builder_684.py",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/equipment/old_builder_684.py",
+      "sha256": "7d17b93d945a54bebe482094b88a89eb5288c3c0ba0b6bf838326aad12c5a152",
+      "bytes": 47100
+    },
+    {
+      "original_path": "outputs/wake_drop_v108_review_followup_20261009/b07a_equipment_writeset/OLD_ENTRYPOINT_FAILURE_EVIDENCE.json",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/equipment/OLD_ENTRYPOINT_FAILURE_EVIDENCE.json",
+      "sha256": "2c04777fb9067adba212dafc7b6b2712d970951b990e3696ede833cd8354df6a",
+      "bytes": 966
+    },
+    {
+      "original_path": "outputs/wake_drop_v108_review_followup_20261009/b07a_equipment_writeset/TEST_RECEIPT.json",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/equipment/TEST_RECEIPT.json",
+      "sha256": "2a033c6db893a3650ecea51a4812f5fb6c9a60cc2bd259f5f0746d75e72a7394",
+      "bytes": 595
+    },
+    {
+      "original_path": "outputs/wake_drop_v108_review_followup_20261009/b07a_equipment_writeset/TEST_RECEIPT_v2.json",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/equipment/TEST_RECEIPT_v2.json",
+      "sha256": "4fe608f405a8a8bab6d5e000687f19aafc1feee61d29de94b020ad50c65326ef",
+      "bytes": 809
+    },
+    {
+      "original_path": "outputs/wake_drop_v108_review_followup_20261009/b07a_equipment_writeset/TEST_RECEIPT_v3.json",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/equipment/TEST_RECEIPT_v3.json",
+      "sha256": "6a0aef1d45d53d293913cd3a76f5e42d3f7ca0f50061a4d6bf11f712a1913278",
+      "bytes": 736
+    },
+    {
+      "original_path": "outputs/wake_drop_v108_review_followup_20261009/b07a_guard_output_catalog/current_exit_codes.txt",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/guard/current_exit_codes.txt",
+      "sha256": "08f28873e7dcd08db48a47a059fa4d322650552979fc97a9308ed7c4b3bb335e",
+      "bytes": 24
+    },
+    {
+      "original_path": "outputs/wake_drop_v108_review_followup_20261009/b07a_guard_output_catalog/current_owned.json",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/guard/current_owned.json",
+      "sha256": "1dd0af6e7a038be3869c38573b66bc7c6d712d5007a0638b668737b19f3b8007",
+      "bytes": 195
+    },
+    {
+      "original_path": "outputs/wake_drop_v108_review_followup_20261009/b07a_guard_output_catalog/current_unittest.stdout.log",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/guard/current_unittest.stdout.log",
+      "sha256": "af7a719e42bba1f32066465f8ed540a4640d66d678893d9143b902eb4ec98e65",
+      "bytes": 1948
+    },
+    {
+      "original_path": "outputs/wake_drop_v108_review_followup_20261009/b07a_guard_output_catalog/empty_catalog.json",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/guard/empty_catalog.json",
+      "sha256": "1d99db185d3e94370ef87557489f7d323ce5a280cdb8009c52e8e14a205989b4",
+      "bytes": 21
+    },
+    {
+      "original_path": "outputs/wake_drop_v108_review_followup_20261009/b07a_guard_output_catalog/io_fault_injection.receipt.txt",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/guard/io_fault_injection.receipt.txt",
+      "sha256": "837794d0139869a3a660e8d7905646fe4d040ddc7e757cd0a740fc433b054503",
+      "bytes": 92
+    },
+    {
+      "original_path": "outputs/wake_drop_v108_review_followup_20261009/b07a_guard_output_catalog/io_fault_injection.stdout.log",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/guard/io_fault_injection.stdout.log",
+      "sha256": "c8fd68980465687cd4b4e90e89bdb09585ef7d6aa03bd2b0af4ced312e54f480",
+      "bytes": 691
+    },
+    {
+      "original_path": "outputs/wake_drop_v108_review_followup_20261009/b07a_guard_output_catalog/race_exit_codes.txt",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/guard/race_exit_codes.txt",
+      "sha256": "c4257eea8da98e1fc119a2469703415a7b832154b8b098bb18fd65bb374267c0",
+      "bytes": 46
+    },
+    {
+      "original_path": "outputs/wake_drop_v108_review_followup_20261009/b07a_guard_output_catalog/race_unittest.stdout.log",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/guard/race_unittest.stdout.log",
+      "sha256": "fbc320371e45498c0dd3867c197d0fc96b0ab6148ac5026a59f4c0ff8229c1fd",
+      "bytes": 2326
+    },
+    {
+      "original_path": "outputs/wake_drop_v108_review_followup_20261009/b07a_guard_output_catalog/run_current_cases.py",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/guard/run_current_cases.py",
+      "sha256": "2aa575dcaa40d62809b4384bde315570d1f49f6d3acb6e971238d387645e38f7",
+      "bytes": 1704
+    },
+    {
+      "original_path": "outputs/wake_drop_v108_review_followup_20261009/b07a_guard_output_catalog/run_current_cases.runner_exit.txt",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/guard/run_current_cases.runner_exit.txt",
+      "sha256": "62ebf2c65b169e12bd3b413598194d52e40f1e7e8d97cd5f24884bc58914fde7",
+      "bytes": 15
+    },
+    {
+      "original_path": "outputs/wake_drop_v108_review_followup_20261009/b07a_guard_output_catalog/run_current_cases.stdout.log",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/guard/run_current_cases.stdout.log",
+      "sha256": "c8ad2ea99dce2c2b4c8ff4d36555b44f3445168d1102a81a2c3dbc2702c36b0b",
+      "bytes": 1242
+    },
+    {
+      "original_path": "outputs/wake_drop_v108_review_followup_20261009/b07a_guard_output_catalog/run_old_blob.py",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/guard/run_old_blob.py",
+      "sha256": "6e1e09679fc702e319c760757fef5ba7ea5db1348fc5129266b42fc6599a5cb8",
+      "bytes": 2202
+    },
+    {
+      "original_path": "outputs/wake_drop_v108_review_followup_20261009/b07a_guard_output_catalog/run_old_blob.stdout.log",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/guard/run_old_blob.stdout.log",
+      "sha256": "261456056a979ef1ffea5e02d1a7b4984ee9a44ff0bda752d87dd673184a4aa8",
+      "bytes": 1201
+    },
+    {
+      "original_path": "outputs/wake_drop_v108_review_followup_20261009/b07a_guard_output_catalog/runner_exit.txt",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/guard/runner_exit.txt",
+      "sha256": "62ebf2c65b169e12bd3b413598194d52e40f1e7e8d97cd5f24884bc58914fde7",
+      "bytes": 15
+    },
+    {
+      "original_path": "outputs/wake_drop_v108_review_followup_20261009/b07a_guard_output_catalog/source_priority_guard_684.py",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/guard/source_priority_guard_684.py",
+      "sha256": "3445c735ac0fb470440de50fd228cd000a2364c6bccc72be2a15e37ea235025b",
+      "bytes": 7447
+    },
+    {
+      "original_path": "outputs/wake_drop_v108_fault_injection3/FAULT_INJECTION_RECEIPT.json",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/compiler_prior_four/FAULT_INJECTION_RECEIPT.json",
+      "sha256": "b65a1ce0ff19dad7254ab7d650dcc4424b74bfe21e8ccf6d657097d3de2098ce",
+      "bytes": 1087
+    },
+    {
+      "original_path": "outputs/wake_drop_v108_fault_supplement_precise/FAULT_SUPPLEMENT_RECEIPT.json",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/compiler_precise/FAULT_SUPPLEMENT_RECEIPT.json",
+      "sha256": "9f99fe967ccdc3f161cd7e76227b01a57b6566ca171c86a3572454235c6dc191",
+      "bytes": 2895
+    },
+    {
+      "original_path": "outputs/wake_drop_v108_fault_supplement_precise/positive_full_compiler.stdout.log",
+      "archive_path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_FINAL/compiler_precise/positive_full_compiler.stdout.log",
+      "sha256": "089330fe8c12b07c6d31072c7b476a2ed450a9bfbe6b8b3a5fc88b497cd0d00b",
+      "bytes": 861
+    }
+  ],
+  "main_head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+  "device_test": "NOT_RUN"
+}

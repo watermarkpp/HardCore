@@ -3,13 +3,14 @@
 
 This tool never searches source content.  It enforces which already-cataloged
 distribution may be consulted after a higher-priority distribution has been
-proved missing, unusable or incompatible for one concrete requirement.
+proved missing for one concrete requirement under the authority policy.
 """
 
 from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -17,11 +18,101 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_POLICY = ROOT / "assets/data/source_priority_policy.json"
 DEFAULT_CATALOG = ROOT / "outputs/resource_catalog/complete_local_mir_sources/manifest.json"
-ALLOWED_FAILURES = {"missing", "unusable", "incompatible"}
+OUTPUT_ROOT = ROOT / "outputs"
+KNOWN_FAILURES = {"missing", "unusable", "incompatible"}
 
 
 def load_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _is_reparse_or_link(path: Path) -> bool:
+    # is_symlink() also detects a broken link; do not gate this on exists().
+    if path.is_symlink():
+        return True
+    try:
+        attributes = os.stat(path, follow_symlinks=False).st_file_attributes
+    except (AttributeError, OSError):
+        return False
+    return bool(attributes & 0x400)  # FILE_ATTRIBUTE_REPARSE_POINT
+
+
+def write_owned_output(path: Path, content: bytes) -> str:
+    """Write only inside the physical project outputs tree, without clobbering."""
+    raw = Path(os.path.abspath(path))
+    probe = raw
+    while True:
+        if _is_reparse_or_link(probe):
+            raise ValueError("output path must not contain a reparse point or link")
+        if probe.parent == probe:
+            break
+        probe = probe.parent
+    outputs_root = OUTPUT_ROOT.resolve()
+    output = path.resolve(strict=False)
+    try:
+        output.relative_to(outputs_root)
+    except ValueError as exc:
+        raise ValueError("output must stay inside the project outputs directory") from exc
+    if _is_reparse_or_link(outputs_root):
+        raise ValueError("project outputs directory is a reparse point or link")
+    current = outputs_root
+    for part in output.relative_to(outputs_root).parts[:-1]:
+        current /= part
+        if current.exists() and _is_reparse_or_link(current):
+            raise ValueError("output parent must not be a reparse point or link")
+    output.parent.mkdir(parents=True, exist_ok=True)
+    # Re-check after creating the parent: another process may have introduced
+    # a link or reparse point between the first walk and mkdir.
+    probe = Path(os.path.abspath(path))
+    while True:
+        if _is_reparse_or_link(probe):
+            raise ValueError("output path must not contain a reparse point or link")
+        if probe.parent == probe:
+            break
+        probe = probe.parent
+    try:
+        with output.open("xb") as handle:
+            handle.write(content)
+            handle.flush()
+            os.fsync(handle.fileno())
+    except FileExistsError:
+        try:
+            existing = output.read_bytes()
+        except OSError as exc:
+            raise ValueError(f"existing output cannot be read safely: {output}") from exc
+        if existing == content:
+            return "reused"
+        raise ValueError("refusing to overwrite existing output with different content")
+    except OSError as exc:
+        # Leave any partial file in place; it is safer than deleting a path
+        # after ownership may have changed. The next call will fail closed.
+        raise ValueError(f"owned output write failed: {output}") from exc
+    try:
+        written = output.read_bytes()
+    except OSError as exc:
+        raise ValueError(f"owned output readback failed: {output}") from exc
+    if written != content:
+        raise ValueError("owned output readback differs from requested bytes")
+    return "created"
+
+
+def validate_policy(policy: dict) -> dict:
+    """Validate the fail-closed policy controls before using any lane."""
+    if not isinstance(policy, dict):
+        raise ValueError("source-priority policy must be an object")
+    rules = policy.get("rules")
+    if not isinstance(rules, dict):
+        raise ValueError("source-priority policy is missing rules")
+    statuses = rules.get("fallbackStatuses")
+    if not isinstance(statuses, list) or not statuses:
+        raise ValueError("source-priority policy fallbackStatuses must be a non-empty list")
+    if any(not isinstance(status, str) or status not in KNOWN_FAILURES for status in statuses):
+        raise ValueError("source-priority policy contains an illegal fallback status")
+    if rules.get("fallbackRequiresEvidence") is not True:
+        raise ValueError("source-priority policy must require fallback evidence")
+    if rules.get("fallbackMustRejectEveryHigherPrioritySource") is not True:
+        raise ValueError("source-priority policy must reject every higher source")
+    return rules
 
 
 def active_sources(policy: dict, lane: str) -> list[dict]:
@@ -55,6 +146,7 @@ def list_lane(policy: dict, lane: str) -> dict:
 
 
 def authorize(policy: dict, catalog: dict, lane: str, candidate_key: str, evidence: dict | None) -> dict:
+    rules = validate_policy(policy)
     sources = active_sources(policy, lane)
     candidate = next((source for source in sources if source.get("distribution") == candidate_key), None)
     if candidate is None:
@@ -105,7 +197,7 @@ def authorize(policy: dict, catalog: dict, lane: str, candidate_key: str, eviden
         if not check:
             raise ValueError(f"missing higher-priority check: {key}")
         status = str(check.get("status", ""))
-        if status not in ALLOWED_FAILURES:
+        if status not in rules["fallbackStatuses"]:
             raise ValueError(f"invalid fallback status for {key}: {status}")
         if not str(check.get("query", "")).strip():
             raise ValueError(f"missing query description for {key}")
@@ -145,18 +237,25 @@ def main() -> int:
     args = parser.parse_args()
     try:
         policy = load_json(args.policy)
+        validate_policy(policy)
         if args.command == "list":
             payload = list_lane(policy, args.lane)
         else:
-            catalog = load_json(args.catalog)
+            candidate = next(
+                (source for source in active_sources(policy, args.lane)
+                 if source.get("distribution") == args.candidate),
+                None,
+            )
+            catalog = (
+                {}
+                if candidate is None or candidate.get("catalogRequired", True) is False
+                else load_json(args.catalog)
+            )
             evidence = load_json(args.evidence) if args.evidence else None
             payload = authorize(policy, catalog, args.lane, args.candidate, evidence)
             if args.output:
-                output = args.output.resolve()
-                if not output.is_relative_to(ROOT):
-                    raise ValueError("output must stay inside the project")
-                output.parent.mkdir(parents=True, exist_ok=True)
-                output.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+                serialized = json.dumps(payload, ensure_ascii=False, indent=2).encode("utf-8") + b"\n"
+                payload["outputDisposition"] = write_owned_output(args.output, serialized)
         print(json.dumps(payload, ensure_ascii=False, indent=2))
         return 0
     except (OSError, ValueError, KeyError, json.JSONDecodeError) as exc:

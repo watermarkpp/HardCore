@@ -1,0 +1,8 @@
+test_exclusive_create_race_preserves_other_writer (tests.source_priority_guard_authority_test.SourcePriorityGuardAuthorityTest.test_exclusive_create_race_preserves_other_writer) ... ok
+test_fsync_failure_leaves_created_path_and_fails_closed (tests.source_priority_guard_authority_test.SourcePriorityGuardAuthorityTest.test_fsync_failure_leaves_created_path_and_fails_closed) ... ok
+test_readback_failure_leaves_written_path_and_fails_closed (tests.source_priority_guard_authority_test.SourcePriorityGuardAuthorityTest.test_readback_failure_leaves_written_path_and_fails_closed) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.057s
+
+OK

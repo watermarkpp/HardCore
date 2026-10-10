@@ -1,0 +1,199 @@
+{
+  "schema": "B07A_GUARD_AND_CHECK_ONLY_DISPOSITION.v1",
+  "baseline": "684824ac7bb59ac903054b26b3435441b8a2f152",
+  "reproductions": [
+    {
+      "case": "source_priority_unusable_status",
+      "before": "FAIL",
+      "observed": {
+        "expected": "reject unusable",
+        "observed": {
+          "authorized": true,
+          "lane": "server_data",
+          "requirement": "exact isolated B07A regression",
+          "scope": "server_data",
+          "selected": "server.angelk727_full",
+          "tier": "auxiliary_1",
+          "weight": 70,
+          "fallbackUsed": true,
+          "higherPriorityRejected": [
+            {
+              "distribution": "server.crystal.cjlaaa",
+              "status": "unusable",
+              "query": "exact unavailable primary",
+              "proof": [
+                "test-owned isolated proof"
+              ]
+            }
+          ]
+        },
+        "contract_status": "FAIL"
+      },
+      "scope": "Actual authorize() loaded from exact684 Git blob; current unchanged policy and isolated catalog/evidence"
+    },
+    {
+      "case": "female_armor_check_only",
+      "before": "FAIL",
+      "observed": {
+        "entry": "main -> parse_args -> correction-only",
+        "argv": [
+          "--female-armor-correction-only",
+          "--check-only"
+        ],
+        "copy_before": [
+          "2fcc018fb0783435a532547b7dd29c65535e22ddd0acec3c8f888e773afb3c83",
+          "8e43ae4466425d4b5ab91b3c47fd560b079be8e8620cb8e1b7c8f26c9d6ac5db"
+        ],
+        "copy_after": [
+          "6a0a7f13bbd1feca64d5ef8d7a940fec297c354e94238bcd4c9881469d9ec34b",
+          "236c88d075be409682ae77d5a51a775550e4fb192e3d0233edc1d3c38d0f226e"
+        ],
+        "actual_both_files_rewritten": true,
+        "contract_status": "FAIL"
+      },
+      "scope": "Actual main()/parse_args from exact684 Git blob; valid temporary authority copies; both real rewrites proven by byte changes"
+    }
+  ],
+  "post_fix_validation": {
+    "command": "python -m py_compile tools/source_priority_guard.py tools/build_equipment_attribute_master.py tests/source_priority_guard_authority_test.py tests/equipment_correction_check_only_test.py && python -m unittest -v tests/source_priority_guard_authority_test.py tests/equipment_correction_check_only_test.py",
+    "exit": 0,
+    "tests_passed": 7,
+    "authority_inputs_untouched": {
+      "source_priority_policy.json": "58adf6e75eea5549c4a535098e568505408efa621901a1dadb868798739ac3c7",
+      "equipment_attribute_master.json": "8d692d0f7bc1aeb4295ddd040aa760003e399c633b87876d93e3674fb8ced0b9",
+      "vanilla_176/items.json": "236c88d075be409682ae77d5a51a775550e4fb192e3d0233edc1d3c38d0f226e"
+    }
+  },
+  "source_binding": {
+    "baseline_fixed_sha": "684824ac7bb59ac903054b26b3435441b8a2f152",
+    "pre_fix_source_bytes": [
+      {
+        "path": "tools/source_priority_guard.py",
+        "fixed_sha": "684824ac7bb59ac903054b26b3435441b8a2f152",
+        "sha256": "60f8dda1127bbb6ad26f201a4398f0e951df4cad5bfcbed0fb0ee9c6718f9d11",
+        "retained": "outputs\\wake_drop_v108_review_followup_20261009\\b07a_guard_check_only\\baseline_source_priority_guard.py"
+      },
+      {
+        "path": "tools/build_equipment_attribute_master.py",
+        "fixed_sha": "684824ac7bb59ac903054b26b3435441b8a2f152",
+        "sha256": "7d17b93d945a54bebe482094b88a89eb5288c3c0ba0b6bf838326aad12c5a152",
+        "retained": "outputs\\wake_drop_v108_review_followup_20261009\\b07a_guard_check_only\\baseline_build_equipment_attribute_master.py"
+      }
+    ],
+    "final_source_sha256": {
+      "tools/source_priority_guard.py": "e89c99e8bb9b59c19ab9945c9d3419c3c7fb0c3795891514ab00f7f0d393fb54",
+      "tools/build_equipment_attribute_master.py": "522d3c16304a7734ef25d58e8a3df1995bc0da991a3c9a78e3bcff4ae5eb4ea0",
+      "tests/source_priority_guard_authority_test.py": "a6b3fdf4357f7459c491e5c15e49bf734ba8f02e0eb6a24870c115efcef99473",
+      "tests/equipment_correction_check_only_test.py": "d5e1898a4bd27b6909cce628323f82835c3001d021873b417a8764cbe5b7fc7b"
+    },
+    "unit_test_scope_reuse": "Seven actual post-fix tests retained. Guard final change is module docstring only; exact non-docstring AST equals the tested version. Builder and tests are unchanged from those tests."
+  },
+  "raw_evidence": {
+    "root": "outputs/wake_drop_v108_review_followup_20261009/b07a_guard_check_only",
+    "files": {
+      "pre_fix_replay.py": {
+        "sha256": "b4e0298f596d29c43286c762af0eb940f1bb334a742699511903f9a14ec5aeb7",
+        "bytes": 1235
+      },
+      "pre_fix_replay.stdout.log": {
+        "sha256": "16539d8f2d080def026194db2935ea745c60d9d39c966471f04e696fd8d04156",
+        "bytes": 692
+      },
+      "unittest.stdout.log": {
+        "sha256": "a7bb9a34a6b1c441b619c4363e6bc373d036d040532349ce3c884026869a7a1c",
+        "bytes": 1441
+      },
+      "exit_codes.txt": {
+        "sha256": "fc02a06b045cf6900a72e2eeae4c6afca105e6c46cee7c00db3bdc6d20012643",
+        "bytes": 29
+      }
+    },
+    "missing_files": [
+      "py_compile.stdout.log (no compiler output was emitted; exit is retained in exit_codes.txt)"
+    ],
+    "commands": {
+      "pre_fix_replay": "python outputs/wake_drop_v108_review_followup_20261009/b07a_guard_check_only/pre_fix_replay.py",
+      "post_fix_compile_and_tests": "python -m py_compile tools/source_priority_guard.py tools/build_equipment_attribute_master.py tests/source_priority_guard_authority_test.py tests/equipment_correction_check_only_test.py; python -m unittest -v tests/source_priority_guard_authority_test.py tests/equipment_correction_check_only_test.py"
+    },
+    "exit_codes": {
+      "pre_fix_replay": 0,
+      "post_fix_compile": 0,
+      "tests": 0,
+      "tests_passed": 7
+    }
+  },
+  "controller_review": {
+    "status": "PASS",
+    "rejected_evidence": {
+      "pre_fix_replay.py": "NOT_RUN for actual baseline behavior: literal-set calculation and manually listed write calls; preserved as static simulation only"
+    },
+    "actual_baseline_reproduction": {
+      "command": "python outputs/wake_drop_v108_review_followup_20261009/b07a_guard_check_only/actual_fixed_git_reproduction.py",
+      "native_exit": 0,
+      "receipt": "actual_fixed_git_reproduction.receipt.json"
+    },
+    "boundaries": "No authority writes, probability changes, Godot/Android or unrelated regression. The audit-path alias protection is an additional confirmed tool boundary."
+  },
+  "retained_raw_evidence": [
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_TOOLS/actual_fixed_git_reproduction.exit.txt",
+      "sha256": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354",
+      "bytes": 3
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_TOOLS/actual_fixed_git_reproduction.log",
+      "sha256": "869943709dbbd9fa7cef6b8482064fa7cde4a87e3d13eaf5b4e1f07591e9c4c9",
+      "bytes": 227
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_TOOLS/actual_fixed_git_reproduction.py",
+      "sha256": "cbecdeaa8bcdf570b8f23d8640d3fd9891019169a42b44604f6d7d7873834835",
+      "bytes": 4122
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_TOOLS/actual_fixed_git_reproduction.receipt.json",
+      "sha256": "c860790dff27c2ebe0b2d6b57bad2d69a3ab7914f296932483301edfc56bdad9",
+      "bytes": 2733
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_TOOLS/agent_disposition_before_controller_review.json",
+      "sha256": "d1ddbdd1b95eecf6bcef4fa8b0258995942e42f809a6179cab6b9bcce364df4c",
+      "bytes": 3425
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_TOOLS/agent_disposition_before_controller_review.md",
+      "sha256": "6387255619d08682944534c5c6a3f896b550c9237c59d47c061626a4ac532f74",
+      "bytes": 3786
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_TOOLS/baseline_build_equipment_attribute_master.py",
+      "sha256": "7d17b93d945a54bebe482094b88a89eb5288c3c0ba0b6bf838326aad12c5a152",
+      "bytes": 47100
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_TOOLS/baseline_source_priority_guard.py",
+      "sha256": "60f8dda1127bbb6ad26f201a4398f0e951df4cad5bfcbed0fb0ee9c6718f9d11",
+      "bytes": 7279
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_TOOLS/exit_codes.txt",
+      "sha256": "fc02a06b045cf6900a72e2eeae4c6afca105e6c46cee7c00db3bdc6d20012643",
+      "bytes": 29
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_TOOLS/pre_fix_replay.py",
+      "sha256": "b4e0298f596d29c43286c762af0eb940f1bb334a742699511903f9a14ec5aeb7",
+      "bytes": 1235
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_TOOLS/pre_fix_replay.stdout.log",
+      "sha256": "16539d8f2d080def026194db2935ea745c60d9d39c966471f04e696fd8d04156",
+      "bytes": 692
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/B07A_TOOLS/unittest.stdout.log",
+      "sha256": "a7bb9a34a6b1c441b619c4363e6bc373d036d040532349ce3c884026869a7a1c",
+      "bytes": 1441
+    }
+  ]
+}

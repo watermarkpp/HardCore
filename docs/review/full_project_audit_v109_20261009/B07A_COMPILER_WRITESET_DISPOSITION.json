@@ -1,0 +1,51 @@
+{
+  "schema": "hardcore.audit.b07a.compiler_writeset.v2",
+  "status": "PASS",
+  "source": {
+    "compiler_sha256": "6f021a6bf741174675fdfb04fb77ea0b99e2516a021bd04ce443a1d56b1685b3",
+    "test_tool_sha256": "d337043ff17f0aa5152ff70043e0458c37453706553ac2a4227ec9f87578397c",
+    "baseline_head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+    "external_audit": "684824ac7bb59ac903054b26b3435441b8a2f152",
+    "compiler_input_binding_sha256": "bc234fca54286547b07f64731c9d0e3674aa19a703863c393c356caf97005251",
+    "parsed_rows_sha256": "c361a3dcbabacedb0cd93cf9b35abac9d7284d75dede0b3e23538e0ddcaa32b8",
+    "slot_uid_map_sha256": "ad91e747f3e1f92d16581c93d7fb381e0f3f91559a731380ddd2100ea228511d"
+  },
+  "fault_supplement": {
+    "tool_sha256": "d2582e79e24f0c1db2387c1b60d4930834c5399f23af566b649c176be61af962",
+    "receipt": "outputs/wake_drop_v108_fault_supplement_precise/FAULT_SUPPLEMENT_RECEIPT.json",
+    "status": "PASS",
+    "cases": [
+      "readback failure after first real move restores exact old bytes",
+      "rollback read failure retains the exact second-target old backup path/hash while continuing the rollback loop",
+      "positive full compiler invocation preserves all three output hashes"
+    ]
+  },
+  "compile_contract": {
+    "sheets": 126,
+    "named_rows": 4876,
+    "compiler_slot_rows": 5831,
+    "formal_source_total": 6083,
+    "note": "5831 is the compiler's slotRows field after its approved exclusions/additions; it is not the formal source total and no roll load was reduced."
+  },
+  "outputs_sha256": {
+    "dpv2_user_loot_sheet_authority_v1.json": "3c371628c2d0f51023a5c059439020f756a3762c88c3ae6ea4fa4a5790c99aff",
+    "compile_disambiguation.json": "cae2e67d86c7a119fa24b6b0a7804a0f31e984fae2f34d813395f0e460de6182",
+    "armor_single_slot_audit.json": "b71e42c72067b468f8309a0afdaf2987fd2c55f9dceb5e172ed6a7364350705c"
+  },
+  "evidence": {
+    "receipt": "outputs/wake_drop_v108_review_scope3/WRITE_SET_REPAIR_RECEIPT.json",
+    "normal_replay": "PASS",
+    "first_target_lock": "PASS",
+    "second_target_lock_with_rollback": "NOT_RUN",
+    "manual_third_version": "NOT_RUN",
+    "process_kill": "NOT_RUN",
+    "power_loss": "NOT_RUN"
+  },
+  "implementation": [
+    "All three JSON documents are parsed and schema-validated before publication.",
+    "Each staged file is written as a same-directory sibling with Flush(true) and read-back hash verification.",
+    "The original existence and bytes are snapshotted; every uncommitted target is rechecked before each replacement.",
+    "A failed publication rolls back already-published targets while preserving a third-version/manual edit.",
+    "Missing original outputs remain missing after rollback; successful output bytes match the prior correct replay."
+  ]
+}

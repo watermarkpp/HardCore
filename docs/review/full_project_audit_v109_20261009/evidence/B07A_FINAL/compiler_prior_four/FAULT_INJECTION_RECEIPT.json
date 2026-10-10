@@ -1,0 +1,37 @@
+{
+  "schema": "hardcore.loot.compiler.write_set_fault_injection.v1",
+  "compiler_sha256": "425817e2e7f9c54abc7cf7a8a5abee2aeeeca89affb30ad9e62cdf665fd0524a",
+  "fixture": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\wake_drop_v108_review_scope3\\success",
+  "cases": [
+    {
+      "name": "existing-second-failure",
+      "status": "PASS",
+      "fault": "second-failure",
+      "published_moves": 1,
+      "original_missing": false
+    },
+    {
+      "name": "missing-first-second-failure",
+      "status": "PASS",
+      "fault": "second-failure",
+      "published_moves": 1,
+      "original_missing": true
+    },
+    {
+      "name": "manual-third-at-second-sink",
+      "status": "PASS",
+      "fault": "manual-third",
+      "published_moves": 1,
+      "original_missing": false
+    },
+    {
+      "name": "rollback-move-failure-retains-backup",
+      "status": "PASS",
+      "fault": "second-and-rollback",
+      "published_moves": 1,
+      "original_missing": false
+    }
+  ],
+  "process_kill": "NOT_RUN",
+  "power_loss": "NOT_RUN"
+}

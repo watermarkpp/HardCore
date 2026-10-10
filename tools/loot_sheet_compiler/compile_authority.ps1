@@ -625,11 +625,117 @@ if (-not [string]::IsNullOrWhiteSpace($VerifyAgainstAuthority)) {
     Write-Output "COMPILE_AUTHORITY_VERIFY_PASS sheet_compiled=$($newSheet.Count) identical_to_reference"
 }
 
+function Get-BytesSha256([byte[]]$Bytes) {
+    $sha = [System.Security.Cryptography.SHA256]::Create()
+    try { return ([System.BitConverter]::ToString($sha.ComputeHash($Bytes))).Replace('-', '').ToLowerInvariant() }
+    finally { $sha.Dispose() }
+}
+function Get-WriteSetSnapshot([string]$Path) {
+    $exists = [System.IO.File]::Exists($Path)
+    $bytes = if ($exists) { [System.IO.File]::ReadAllBytes($Path) } else { [byte[]]@() }
+    return [pscustomobject]@{ path = $Path; exists = $exists; sha256 = if ($exists) { Get-BytesSha256 $bytes } else { '' }; bytes = $bytes }
+}
+function Assert-WriteSetSnapshot($Snapshot, [string]$Context) {
+    $now = Get-WriteSetSnapshot $Snapshot.path
+    if ($now.exists -ne $Snapshot.exists -or ($now.exists -and $now.sha256 -ne $Snapshot.sha256)) {
+        throw "WRITE_SET_CONFLICT: $Context target changed: $($Snapshot.path)"
+    }
+}
+function Move-WriteSetFile([string]$Source, [string]$Destination, [bool]$Overwrite) {
+    if ($Overwrite) { [System.IO.File]::Move($Source, $Destination, $true) }
+    else { [System.IO.File]::Move($Source, $Destination) }
+}
+function Write-ValidatedStage([string]$Path, [string]$Text, [string]$ExpectedSchema) {
+    $value = $null
+    try { $value = $Text | ConvertFrom-Json -ErrorAction Stop } catch { throw "WRITE_SET_REJECTED: invalid serialized JSON for $Path" }
+    if ([string]::IsNullOrWhiteSpace($ExpectedSchema) -eq $false -and [string]$value.schema -ne $ExpectedSchema) {
+        throw "WRITE_SET_REJECTED: schema mismatch for $Path"
+    }
+    $tmp = "$Path.txn.$([guid]::NewGuid().ToString('N'))"
+    $stream = $null
+    $complete = $false
+    try {
+        $stream = [System.IO.File]::Open($tmp, [System.IO.FileMode]::CreateNew, [System.IO.FileAccess]::Write, [System.IO.FileShare]::None)
+        $bytes = [System.Text.UTF8Encoding]::new($false).GetBytes($Text)
+        $stream.Write($bytes, 0, $bytes.Length)
+        $stream.Flush($true)
+        $stream.Dispose(); $stream = $null
+        if ((Get-BytesSha256 ([System.IO.File]::ReadAllBytes($tmp))) -ne (Get-BytesSha256 $bytes)) { throw "WRITE_SET_REJECTED: staged bytes changed for $Path" }
+        $complete = $true
+        return $tmp
+    } finally {
+        if ($null -ne $stream) { $stream.Dispose() }
+        if (-not $complete -and [System.IO.File]::Exists($tmp)) { Remove-Item -LiteralPath $tmp -Force -ErrorAction SilentlyContinue }
+    }
+}
+function Publish-ValidatedWriteSet([string]$Directory, $Entries) {
+    New-Item -ItemType Directory -Path $Directory -Force | Out-Null
+    $generation = (Get-Date).ToUniversalTime().ToString('yyyyMMdd_HHmmss_fff') + '_' + [guid]::NewGuid().ToString('N')
+    $prepared = @(); $published = @(); $backups = @(); $backupByTarget = @{}; $committed = $false; $rollbackFailed = $false
+    try {
+        foreach ($entry in $Entries) {
+            $target = Join-Path $Directory ([string]$entry.name)
+            $snapshot = Get-WriteSetSnapshot $target
+            $stage = Write-ValidatedStage "$target.txn.$generation" ([string]$entry.text) ([string]$entry.schema)
+            try {
+                $expected = Get-BytesSha256 ([System.IO.File]::ReadAllBytes($stage))
+                $prepared += [pscustomobject]@{ target = $target; stage = $stage; expected_sha256 = $expected; snapshot = $snapshot }
+            } catch {
+                if ([System.IO.File]::Exists($stage)) { Remove-Item -LiteralPath $stage -Force -ErrorAction SilentlyContinue }
+                throw
+            }
+        }
+        foreach ($item in $prepared) {
+            Assert-WriteSetSnapshot $item.snapshot 'before-backup'
+            if ($item.snapshot.exists) {
+                $backup = "$($item.target).txnbackup.$generation"
+                $backupStream = [System.IO.File]::Open($backup, [System.IO.FileMode]::CreateNew, [System.IO.FileAccess]::Write, [System.IO.FileShare]::None)
+                try { $backupStream.Write($item.snapshot.bytes, 0, $item.snapshot.bytes.Length); $backupStream.Flush($true) } finally { $backupStream.Dispose() }
+                $backups += [pscustomobject]@{ item = $item; path = $backup }
+                $backupByTarget[[string]$item.target] = $backup
+            }
+        }
+        foreach ($item in $prepared) {
+            Assert-WriteSetSnapshot $item.snapshot 'before-publish'
+            Move-WriteSetFile $item.stage $item.target $item.snapshot.exists
+            $published += $item
+            $after = Get-WriteSetSnapshot $item.target 'committed readback'
+            if (-not $after.exists -or $after.sha256 -ne $item.expected_sha256) { throw "WRITE_SET_ABORTED: committed readback mismatch $($item.target)" }
+        }
+        $committed = $true
+        return $true
+    } catch {
+        $failure = $_.Exception.Message
+        for ($i = $published.Count - 1; $i -ge 0; $i--) {
+            $item = $published[$i]
+            try {
+                $now = Get-WriteSetSnapshot $item.target 'rollback'
+                if ($now.exists -and $now.sha256 -eq $item.expected_sha256) {
+                    $backup = if ($backupByTarget.ContainsKey([string]$item.target)) { [string]$backupByTarget[[string]$item.target] } else { '' }
+                    if ($item.snapshot.exists -and $backup -and [System.IO.File]::Exists($backup)) { Move-WriteSetFile $backup $item.target $true }
+                    elseif (-not $item.snapshot.exists) { Remove-Item -LiteralPath $item.target -Force }
+                    else { throw "missing rollback backup" }
+                } else { throw "third-version preserved" }
+            } catch { $rollbackFailed = $true; $failure += "; rollback-preserved-or-failed=$($item.target):$($_.Exception.Message)" }
+        }
+        throw "WRITE_SET_ABORTED: $failure"
+    } finally {
+        foreach ($item in $prepared) { if ([System.IO.File]::Exists($item.stage)) { Remove-Item -LiteralPath $item.stage -Force } }
+        if ($committed -or -not $rollbackFailed) {
+            foreach ($backup in $backups) { if ([System.IO.File]::Exists($backup.path)) { Remove-Item -LiteralPath $backup.path -Force -ErrorAction SilentlyContinue } }
+        }
+    }
+}
+
 New-Item -ItemType Directory -Path $OutputDir -Force | Out-Null
 $JsonOut = $out | ConvertTo-Json -Depth 8
-[System.IO.File]::WriteAllText((Join-Path $OutputDir 'dpv2_user_loot_sheet_authority_v1.json'), $JsonOut, [System.Text.UTF8Encoding]::new($false))
-[System.IO.File]::WriteAllText((Join-Path $OutputDir 'compile_disambiguation.json'), ($disambiguated | ConvertTo-Json -Depth 4), [System.Text.UTF8Encoding]::new($false))
-[System.IO.File]::WriteAllText((Join-Path $OutputDir 'armor_single_slot_audit.json'), ($armorAudit | ConvertTo-Json -Depth 4), [System.Text.UTF8Encoding]::new($false))
+$writeEntries = @(
+    [pscustomobject]@{ name = 'dpv2_user_loot_sheet_authority_v1.json'; text = $JsonOut; schema = 'hardcore.dpv2.user_loot_sheet_authority.v1' },
+    [pscustomobject]@{ name = 'compile_disambiguation.json'; text = ($disambiguated | ConvertTo-Json -Depth 4); schema = '' },
+    [pscustomobject]@{ name = 'armor_single_slot_audit.json'; text = ($armorAudit | ConvertTo-Json -Depth 4); schema = '' }
+)
+try { Publish-ValidatedWriteSet $OutputDir $writeEntries | Out-Null }
+catch { Write-Output "COMPILE_AUTHORITY_REJECTED"; Write-Output "  REJECT: $($_.Exception.Message)"; exit 1 }
 Write-Output "ARMOR_SINGLE_SLOT_DIRECTIVE_PASS before=$armorBeforeTotal after=$armorAfterTotal removed=$armorRemoved groups=$($armorGroupKeys.Count) frozen=$($armorExceptions.Count) non_armor_unchanged=$($nonArmorBeforeSha -eq $nonArmorAfterSha)"
 Write-Output "TECHNIQUE_SOURCE_POLICY_PASS removed=$techniqueRemoved policy_sha=$($techniquePolicySha.Substring(0,16))... owned_instances=preserved"
 Write-Output "source_mode=$sourceMode sheet_sha=$($xlsxSha.ToLower().Substring(0,16))..."

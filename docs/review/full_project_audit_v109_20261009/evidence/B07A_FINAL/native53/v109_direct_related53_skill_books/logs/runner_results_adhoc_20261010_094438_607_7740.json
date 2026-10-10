@@ -1,0 +1,63 @@
+{
+  "total": 2,
+  "suite": "adhoc",
+  "engine_log_errors": 3,
+  "git_head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+  "invocation_id": "61b7bfa0-de6d-4836-80d2-5b51342ba34c",
+  "failed": 2,
+  "passed": 0,
+  "results": [
+    {
+      "test_name": "skill_book_load_rejection_20261010_test",
+      "test_path": "tests/framework/skill_book_load_rejection_20261010_test.tscn",
+      "wrapper_process_id": 4492,
+      "wrapper_started_utc": "2026-10-10T01:44:02.2037012Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct_related53_skill_books",
+      "fixed_fps": 0,
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "execution_deadline_utc": "2026-10-10T01:44:32.2189447Z",
+      "native_exit_observed_utc": null,
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 3,
+      "engine_log_failure_count": 3,
+      "framework_run_id": "a27a6c51-7eb4-408b-967a-912ee736816e",
+      "framework_receipt_valid": false,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_3;engine_log_failures_3;framework_receipt_missing"
+    },
+    {
+      "test_name": "skill_book_identity_test",
+      "test_path": "tests/framework/skill_book_identity_test.tscn",
+      "wrapper_process_id": 4500,
+      "wrapper_started_utc": "2026-10-10T01:44:07.5180502Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct_related53_skill_books",
+      "fixed_fps": 0,
+      "pass_marker_found": true,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "execution_deadline_utc": "2026-10-10T01:44:37.5286090Z",
+      "native_exit_observed_utc": null,
+      "effective_exit_code": -1,
+      "timeout": true,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "e943ea66-0bf7-42ba-9f86-eeb742489058",
+      "framework_receipt_valid": true,
+      "result": "FAIL",
+      "reason": "process_did_not_exit;timeout_30s;non_zero_exit_code_-1"
+    }
+  ],
+  "generated_at": "2026-10-10T09:44:38.6075562+08:00",
+  "runtime_environment": {
+    "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct_related53_skill_books",
+    "runner_process_id": 7740
+  }
+}

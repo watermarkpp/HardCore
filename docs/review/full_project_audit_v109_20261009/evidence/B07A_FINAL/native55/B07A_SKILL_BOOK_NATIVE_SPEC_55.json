@@ -1,0 +1,19 @@
+{
+  "name": "B07A_SKILL_BOOK_NATIVE_FREEZE_55",
+  "changed_paths": [
+    "scripts/game_data.gd",
+    "tests/framework/skill_book_load_rejection_20261010_test.gd",
+    "tests/framework/skill_book_load_rejection_20261010_test.tscn",
+    "tests/framework/skill_book_identity_test.gd"
+  ],
+  "additional_inputs": [
+    "tests/framework/skill_book_identity_test.tscn",
+    "tests/framework/helpers/check_receipt.gd",
+    "tests/helpers/formal_initial_ready.gd"
+  ],
+  "scenes": [
+    "res://tests/framework/skill_book_load_rejection_20261010_test.tscn"
+  ],
+  "fingerprint_scope": "Actual runtime/map inputs from source52, unchanged GameData repair and corrected direct/related component-catalog fixtures; formal full ContentLayers and GameData loading, all book identity/consumer assertions. PC headless only; no full-world/UI/portal acceptance.",
+  "rerun_reason": "Native54 related58checks cleanPASS reused unchanged. Direct62checks had exacterror expectation mismatch because real importer disables unsupported book before relation checker. Correct expectedincomplete code and add explicit usableinvalidtarget catalogrelation branch. ProductionGameData/input/timeout unchanged, only new directfixture changed."
+}

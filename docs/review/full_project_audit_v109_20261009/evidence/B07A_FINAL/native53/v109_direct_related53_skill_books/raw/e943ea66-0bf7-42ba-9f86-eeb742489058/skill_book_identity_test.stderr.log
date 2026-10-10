@@ -1,0 +1,12 @@
+ERROR: Parameter "t" is null.
+   at: texture_2d_initialize (./servers/rendering/dummy/storage/texture_storage.h:85)
+   GDScript backtrace (most recent call first):
+       [0] _poll_admitted (res://scripts/monster_visual_streaming_coordinator.gd:678)
+       [1] poll_once (res://scripts/monster_visual_streaming_coordinator.gd:563)
+       [2] _run_map_transition (res://scripts/game_root.gd:3595)
+WARNING: Loading ended with item icons still prewarming in background
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _run_map_transition (res://scripts/game_root.gd:3750)
+       [1] prewarm_all_panels (res://scripts/hud.gd:1891)
+       [2] _run_panel_prewarm (res://scripts/hud.gd:2100)

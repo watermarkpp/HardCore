@@ -1,0 +1,156 @@
+{
+  "status": "FAIL",
+  "freeze_sha256": "266b263f0db24bc8dec795a2a20f7cb819f301c6293a2a89a9cece561937ad4a",
+  "candidate_tree": "87850951d86eedbb805112b2a3045a7d1c11e4de",
+  "runtime_inputs_unchanged": true,
+  "results": [
+    {
+      "test_name": "skill_book_load_rejection_20261010_test",
+      "test_path": "tests/framework/skill_book_load_rejection_20261010_test.tscn",
+      "wrapper_process_id": 23460,
+      "wrapper_started_utc": "2026-10-10T01:47:37.6818214Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct_related54_skill_books",
+      "fixed_fps": 0,
+      "pass_marker_found": false,
+      "process_exited": true,
+      "wrapper_exit_code": 1,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-10T01:48:07.6955715Z",
+      "native_exit_observed_utc": "2026-10-10T01:47:47.6986340Z",
+      "effective_exit_code": 1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "23dcb411-9e89-4ee3-b708-721d23cde2cb",
+      "framework_receipt_valid": false,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+    },
+    {
+      "test_name": "skill_book_identity_test",
+      "test_path": "tests/framework/skill_book_identity_test.tscn",
+      "wrapper_process_id": 11580,
+      "wrapper_started_utc": "2026-10-10T01:47:48.9388543Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct_related54_skill_books",
+      "fixed_fps": 0,
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-10T01:48:18.9468702Z",
+      "native_exit_observed_utc": "2026-10-10T01:47:54.6590907Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "4916e681-be77-4380-8336-a0ac2a2c8385",
+      "framework_receipt_valid": true,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "raw_files": [
+    {
+      "path": "outputs/test_logs/v109_direct_related54_skill_books/logs/runner_results_adhoc_20261010_094756_215_2644.json",
+      "sha256": "34f7e0e3a480b31bd12ca88109dc3b824f2a963b66f1d43d509316ca0fe3dc25",
+      "bytes": 2614
+    },
+    {
+      "path": "outputs/test_logs/v109_direct_related54_skill_books/logs/skill_book_identity_test.godot.log",
+      "sha256": "d15a7a9daa8c9f3a7709f621560fe4bc1b176bfaf7e60f081769e7885b848b5f",
+      "bytes": 4446
+    },
+    {
+      "path": "outputs/test_logs/v109_direct_related54_skill_books/logs/skill_book_identity_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "outputs/test_logs/v109_direct_related54_skill_books/logs/skill_book_identity_test.stdout.log",
+      "sha256": "c5b09016aa1fb2bdae8fd6b09f1cad26b10f248f5442b9ec1760bd31c822a05c",
+      "bytes": 4640
+    },
+    {
+      "path": "outputs/test_logs/v109_direct_related54_skill_books/logs/skill_book_load_rejection_20261010_test.godot.log",
+      "sha256": "d34123b1d7f15b10498ddf64e5689d54f1d6860f6f4cf13a6b5cfe48587b9922",
+      "bytes": 4754
+    },
+    {
+      "path": "outputs/test_logs/v109_direct_related54_skill_books/logs/skill_book_load_rejection_20261010_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "outputs/test_logs/v109_direct_related54_skill_books/logs/skill_book_load_rejection_20261010_test.stdout.log",
+      "sha256": "b1e1b4f9cd3bd6131d57593241f6a84f3d64ebc00e0a71201aa5cc7b75cf5004",
+      "bytes": 4949
+    },
+    {
+      "path": "outputs/test_logs/v109_direct_related54_skill_books/raw/23dcb411-9e89-4ee3-b708-721d23cde2cb/native_handoffs.json",
+      "sha256": "b81638793bedf84498e6f416ccb50fa0a2b6467a9dda9e11c05afdc73df18918",
+      "bytes": 471
+    },
+    {
+      "path": "outputs/test_logs/v109_direct_related54_skill_books/raw/23dcb411-9e89-4ee3-b708-721d23cde2cb/native_result.json",
+      "sha256": "e7f89f01b71dad8b767820d73590867ec80266621debe1696b4631451965ab18",
+      "bytes": 980
+    },
+    {
+      "path": "outputs/test_logs/v109_direct_related54_skill_books/raw/23dcb411-9e89-4ee3-b708-721d23cde2cb/skill_book_load_rejection_20261010_test.godot.log",
+      "sha256": "d34123b1d7f15b10498ddf64e5689d54f1d6860f6f4cf13a6b5cfe48587b9922",
+      "bytes": 4754
+    },
+    {
+      "path": "outputs/test_logs/v109_direct_related54_skill_books/raw/23dcb411-9e89-4ee3-b708-721d23cde2cb/skill_book_load_rejection_20261010_test.result.json",
+      "sha256": "ab2de70a2770ed57b6dd5d77017499d94a219aac9c9557838aaa0a1c5ceeca97",
+      "bytes": 9236
+    },
+    {
+      "path": "outputs/test_logs/v109_direct_related54_skill_books/raw/23dcb411-9e89-4ee3-b708-721d23cde2cb/skill_book_load_rejection_20261010_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "outputs/test_logs/v109_direct_related54_skill_books/raw/23dcb411-9e89-4ee3-b708-721d23cde2cb/skill_book_load_rejection_20261010_test.stdout.log",
+      "sha256": "b1e1b4f9cd3bd6131d57593241f6a84f3d64ebc00e0a71201aa5cc7b75cf5004",
+      "bytes": 4949
+    },
+    {
+      "path": "outputs/test_logs/v109_direct_related54_skill_books/raw/4916e681-be77-4380-8336-a0ac2a2c8385/native_handoffs.json",
+      "sha256": "a19450f0dfb8484283b73c37c8e0b9b9fe01849ca5ff1e3159fee10eace723e6",
+      "bytes": 902
+    },
+    {
+      "path": "outputs/test_logs/v109_direct_related54_skill_books/raw/4916e681-be77-4380-8336-a0ac2a2c8385/native_result.json",
+      "sha256": "e76c2417c09c720db100c080b3d972ad3e12571916c1ee04b07a0023de417fb6",
+      "bytes": 884
+    },
+    {
+      "path": "outputs/test_logs/v109_direct_related54_skill_books/raw/4916e681-be77-4380-8336-a0ac2a2c8385/skill_book_identity_test.godot.log",
+      "sha256": "d15a7a9daa8c9f3a7709f621560fe4bc1b176bfaf7e60f081769e7885b848b5f",
+      "bytes": 4446
+    },
+    {
+      "path": "outputs/test_logs/v109_direct_related54_skill_books/raw/4916e681-be77-4380-8336-a0ac2a2c8385/skill_book_identity_test.result.json",
+      "sha256": "6a7444f9f93421d749d2aef7c4e527f5ba94450d44ed1f0006cedf7a5e48a423",
+      "bytes": 9378
+    },
+    {
+      "path": "outputs/test_logs/v109_direct_related54_skill_books/raw/4916e681-be77-4380-8336-a0ac2a2c8385/skill_book_identity_test.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "outputs/test_logs/v109_direct_related54_skill_books/raw/4916e681-be77-4380-8336-a0ac2a2c8385/skill_book_identity_test.stdout.log",
+      "sha256": "c5b09016aa1fb2bdae8fd6b09f1cad26b10f248f5442b9ec1760bd31c822a05c",
+      "bytes": 4640
+    }
+  ],
+  "classification": {
+    "direct": "62checks, one expectederror code mismatch. Catalog importer marks an unknown skill-book override unusable first; relation index therefore returns skill_book_index_incomplete. Actualfalse/cleanup/signals/loadedstate behavior passed. Do not rewriteFAIL.",
+    "related": "58checksPASS, valid fullreceipt, observednaturalnative0, cleanstderr. Source54 componentContentLayers/GameData catalogandactuallearning-consumption-save-failure closure only. Reuseifruntimeinputs unchanged."
+  },
+  "next_reason": "Correct only directfixture expected incomplete error for importer-sanitized invalidtarget, plus add actualinvalidreadycatalog relation codecase. No production/relatedfixture/input/data/timeout change."
+}

@@ -1,0 +1,114 @@
+{
+  "schema": "B07A_GUARD_OUTPUT_CATALOG_DISPOSITION.v1",
+  "finding_ids": [
+    "B07A-004",
+    "B07A-005"
+  ],
+  "baseline_fixed_sha": "684824ac7bb59ac903054b26b3435441b8a2f152",
+  "source_binding": {
+    "old_blob_sha256": "3445c735ac0fb470440de50fd228cd000a2364c6bccc72be2a15e37ea235025b",
+    "current_source_sha256": "d517894e85e31cd09075c730c87e52098681793f37135edfe503550ae5fa04a2",
+    "old_blob_origin": "git show 684824ac7bb59ac903054b26b3435441b8a2f152:tools/source_priority_guard.py",
+    "current_source_preimage": "MISSING (current source was already repaired when this task began)"
+  },
+  "raw_evidence_root": "outputs/wake_drop_v108_review_followup_20261009/b07a_guard_output_catalog",
+  "raw_files": {
+    "current_exit_codes.txt": {
+      "sha256": "08f28873e7dcd08db48a47a059fa4d322650552979fc97a9308ed7c4b3bb335e",
+      "bytes": 24
+    },
+    "current_owned.json": {
+      "sha256": "1dd0af6e7a038be3869c38573b66bc7c6d712d5007a0638b668737b19f3b8007",
+      "bytes": 195
+    },
+    "current_unittest.stdout.log": {
+      "sha256": "af7a719e42bba1f32066465f8ed540a4640d66d678893d9143b902eb4ec98e65",
+      "bytes": 1948
+    },
+    "empty_catalog.json": {
+      "sha256": "1d99db185d3e94370ef87557489f7d323ce5a280cdb8009c52e8e14a205989b4",
+      "bytes": 21
+    },
+    "io_fault_injection.receipt.txt": {
+      "sha256": "837794d0139869a3a660e8d7905646fe4d040ddc7e757cd0a740fc433b054503",
+      "bytes": 92
+    },
+    "io_fault_injection.stdout.log": {
+      "sha256": "c8fd68980465687cd4b4e90e89bdb09585ef7d6aa03bd2b0af4ced312e54f480",
+      "bytes": 691
+    },
+    "race_exit_codes.txt": {
+      "sha256": "c4257eea8da98e1fc119a2469703415a7b832154b8b098bb18fd65bb374267c0",
+      "bytes": 46
+    },
+    "race_unittest.stdout.log": {
+      "sha256": "fbc320371e45498c0dd3867c197d0fc96b0ab6148ac5026a59f4c0ff8229c1fd",
+      "bytes": 2326
+    },
+    "runner_exit.txt": {
+      "sha256": "62ebf2c65b169e12bd3b413598194d52e40f1e7e8d97cd5f24884bc58914fde7",
+      "bytes": 15
+    },
+    "run_current_cases.py": {
+      "sha256": "2aa575dcaa40d62809b4384bde315570d1f49f6d3acb6e971238d387645e38f7",
+      "bytes": 1704
+    },
+    "run_current_cases.runner_exit.txt": {
+      "sha256": "62ebf2c65b169e12bd3b413598194d52e40f1e7e8d97cd5f24884bc58914fde7",
+      "bytes": 15
+    },
+    "run_current_cases.stdout.log": {
+      "sha256": "c8ad2ea99dce2c2b4c8ff4d36555b44f3445168d1102a81a2c3dbc2702c36b0b",
+      "bytes": 1242
+    },
+    "run_old_blob.py": {
+      "sha256": "6e1e09679fc702e319c760757fef5ba7ea5db1348fc5129266b42fc6599a5cb8",
+      "bytes": 2202
+    },
+    "run_old_blob.stdout.log": {
+      "sha256": "261456056a979ef1ffea5e02d1a7b4984ee9a44ff0bda752d87dd673184a4aa8",
+      "bytes": 1201
+    },
+    "source_priority_guard_684.py": {
+      "sha256": "3445c735ac0fb470440de50fd228cd000a2364c6bccc72be2a15e37ea235025b",
+      "bytes": 7447
+    }
+  },
+  "old_blob_actual_runs": {
+    "command": "python outputs/wake_drop_v108_review_followup_20261009/b07a_guard_output_catalog/run_old_blob.py",
+    "exit": 0,
+    "primary_catalog_false_without_catalog_exit": 2,
+    "output_first_exit": 0,
+    "output_second_different_payload_exit": 0,
+    "different_output_sha": true,
+    "result": "OLD_FAIL_CONFIRMED"
+  },
+  "current_actual_runs": {
+    "command": "python outputs/wake_drop_v108_review_followup_20261009/b07a_guard_output_catalog/run_current_cases.py",
+    "exit": 0,
+    "outside_output_rejected": true,
+    "same_owned_output_reused": true,
+    "different_existing_owned_output_rejected": true,
+    "primary_catalog_false_without_catalog_exit": 0,
+    "result": "CURRENT_SCOPED_PASS",
+    "focused_test_command": "python -m py_compile tools/source_priority_guard.py tests/source_priority_guard_authority_test.py; python -m unittest -v tests/source_priority_guard_authority_test.py",
+    "focused_test_exit": 0,
+    "race_closeout_command": "python -m py_compile tools/source_priority_guard.py tests/source_priority_guard_authority_test.py; python -m unittest -v tests/source_priority_guard_authority_test.py",
+    "race_closeout_exit": 0,
+    "race_closeout_tests": 9,
+    "exclusive_create_readback": "PASS",
+    "symlink_boundary": "PASS"
+  },
+  "scope_limits": [
+    "No authoring or generated data was modified.",
+    "The old blob run used a temporary empty catalog only to exercise main output and catalog loading; primary catalogRequired=false used the real policy contract path.",
+    "No Android/Godot/native run."
+  ],
+  "closeout_io_fault_injection": {
+    "command": "python -m unittest -v tests.source_priority_guard_authority_test.SourcePriorityGuardAuthorityTest.test_exclusive_create_race_preserves_other_writer tests.source_priority_guard_authority_test.SourcePriorityGuardAuthorityTest.test_fsync_failure_leaves_created_path_and_fails_closed tests.source_priority_guard_authority_test.SourcePriorityGuardAuthorityTest.test_readback_failure_leaves_written_path_and_fails_closed",
+    "exit": 0,
+    "tests": 3,
+    "guard_sha_before_after": "d517894e85e31cd09075c730c87e52096076f8ea6b405e7331a5a811c159fe0b3",
+    "authority_inputs_unchanged": true
+  }
+}

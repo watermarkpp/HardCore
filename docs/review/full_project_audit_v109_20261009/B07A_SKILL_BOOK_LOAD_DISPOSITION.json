@@ -1,0 +1,61 @@
+{
+  "audit_id": "B07A-GD-005",
+  "title": "GameData skill-book index load rejection",
+  "baseline_commit": "b09ac5c2c41517ed516f11b91d09e435813465f2",
+  "scope": "scripts/game_data.gd and detached fixture test only",
+  "source_sha256_lf_after_patch": "6170f4f7ddaccfd5d8eed6069f26fc4041b98843993b455e69e647d1c4769c05",
+  "status": "PASS",
+  "findings": [
+    {
+      "id": "GD-005",
+      "before": "_build_skill_book_index() returned void; validation failures only returned from the helper and _build_item_catalog/_build_indexes continued as success.",
+      "after": "The validator returns bool and stable load_error codes; _build_item_catalog propagates false and _build_indexes clears the partial catalog/index maps and returns false.",
+      "error_codes": [
+        "skill_book_index_canonical_skill_identity_invalid",
+        "skill_book_index_equipment_grant_invalid",
+        "skill_book_index_equipment_grant_marker_invalid",
+        "skill_book_index_relation_invalid",
+        "skill_book_index_duplicate_target",
+        "skill_book_index_unknown_target",
+        "skill_book_index_equipment_grant_conflict",
+        "skill_book_index_incomplete"
+      ]
+    },
+    {
+      "id": "GD-006",
+      "before": "A direct load_database() failure after a successful load left _initial_load_complete true because only ensure_loaded() reset it.",
+      "after": "load_database() clears _initial_load_complete before any reload work; a failed direct reload is no longer advertised through is_loaded().",
+      "direct_consumers": [
+        "scripts/layers/runtime/runtime_service_facade.gd:set_expansion_enabled",
+        "scripts/layers/runtime/game_mode_service.gd:apply_mode"
+      ]
+    }
+  ],
+  "test": {
+    "path": "tests/framework/skill_book_load_rejection_20261010_test.gd",
+    "scene": "tests/framework/skill_book_load_rejection_20261010_test.tscn",
+    "related_consumer_scene": "tests/framework/skill_book_identity_test.gd",
+    "coverage": [
+      "component catalog READY via ContentLayers.ensure_loaded and GameData.ensure_loaded",
+      "normal complete index via _build_indexes",
+      "unknown target sanitized by runtime importer through _build_indexes",
+      "direct usable unknown target relation rejection",
+      "duplicate target",
+      "missing target",
+      "equipment-granted skill misbinding",
+      "partial projection cleanup",
+      "direct reload loaded-state reset and signal suppression"
+    ],
+    "native_status": "PASS",
+    "direct_checks": 64,
+    "related_checks": 58,
+    "evidence_ledger": "B07A_FINAL_EVIDENCE_LEDGER.json"
+  },
+  "constraints": [
+    "No formal data, registry, item, or skill authority files changed.",
+    "Detached fixtures duplicate component-READY runtime catalog; the direct reload check temporarily toggles only in-memory loaded flags and restores them before the formal reload. Full world/portal/UI READY is outside this component test and remains covered by separate B01 evidence.",
+    "PC headless component native55 direct and native54 related PASS; complete world/UI and Android/device NOT_RUN."
+  ],
+  "open_boundary": "Mode/expansion callers still ignore the bool return from load_database(); caller-level user-facing failure handling is outside this minimal state-ownership repair.",
+  "source_sha256_raw_after_patch": "56f77940dc2994bccee1257ef3e1aff21016d6b68ba0844755071bae60ccdd8a"
+}

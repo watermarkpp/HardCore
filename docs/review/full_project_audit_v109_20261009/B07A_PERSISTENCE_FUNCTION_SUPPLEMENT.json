@@ -1,0 +1,370 @@
+{
+  "schema": "B07A_PERSISTENCE_FUNCTION_SUPPLEMENT.v1",
+  "fixed_source_sha": "b09ac5c2c41517ed516f11b91d09e435813465f2",
+  "scope": "Static function/control-flow review of shared persistence coordinator, detached job and prepared handle",
+  "status": "PASS",
+  "files": [
+    {
+      "path": "scripts/json_persistence_service.gd",
+      "git_blob": "8a5e1bb81408a6fb973a1560f5d1cfffee3cf53a",
+      "sha256": "10864ad2d05bb7982216ae71ca9a3e9f6572c3deb6eb5a50f2bf99950760421f",
+      "functions": [
+        {
+          "name": "work_snapshot",
+          "line": 15,
+          "static_review_status": "PASS",
+          "duty_group": "diagnostics_and_owner",
+          "control_flow_review": "FIFO head alone advertises runnable state. PREPARED requires authorization/cancel, completed worker phases require task completion; owner is weak and pending is removed on predelete."
+        },
+        {
+          "name": "configure_process_owner",
+          "line": 22,
+          "static_review_status": "PASS",
+          "duty_group": "diagnostics_and_owner",
+          "control_flow_review": "FIFO head alone advertises runnable state. PREPARED requires authorization/cancel, completed worker phases require task completion; owner is weak and pending is removed on predelete."
+        },
+        {
+          "name": "_notification",
+          "line": 26,
+          "static_review_status": "PASS",
+          "duty_group": "diagnostics_and_owner",
+          "control_flow_review": "FIFO head alone advertises runnable state. PREPARED requires authorization/cancel, completed worker phases require task completion; owner is weak and pending is removed on predelete."
+        },
+        {
+          "name": "_refresh_budget_owner",
+          "line": 31,
+          "static_review_status": "PASS",
+          "duty_group": "diagnostics_and_owner",
+          "control_flow_review": "FIFO head alone advertises runnable state. PREPARED requires authorization/cancel, completed worker phases require task completion; owner is weak and pending is removed on predelete."
+        },
+        {
+          "name": "submit",
+          "line": 44,
+          "static_review_status": "PASS",
+          "duty_group": "submission_and_cancellation",
+          "control_flow_review": "Main-thread submission rejects queue >=64 and non-JSON/cyclic/deep graphs. Job gets detached snapshot and identity; callbacks remain on main. Cancellation is refused after promotion begins; cleanup requires a positive sequence."
+        },
+        {
+          "name": "pending_count",
+          "line": 73,
+          "static_review_status": "PASS",
+          "duty_group": "diagnostics_and_owner",
+          "control_flow_review": "FIFO head alone advertises runnable state. PREPARED requires authorization/cancel, completed worker phases require task completion; owner is weak and pending is removed on predelete."
+        },
+        {
+          "name": "has_pending_domain",
+          "line": 77,
+          "static_review_status": "PASS",
+          "duty_group": "diagnostics_and_owner",
+          "control_flow_review": "FIFO head alone advertises runnable state. PREPARED requires authorization/cancel, completed worker phases require task completion; owner is weak and pending is removed on predelete."
+        },
+        {
+          "name": "cancel_uncommitted_domain",
+          "line": 84,
+          "static_review_status": "PASS",
+          "duty_group": "submission_and_cancellation",
+          "control_flow_review": "Main-thread submission rejects queue >=64 and non-JSON/cyclic/deep graphs. Job gets detached snapshot and identity; callbacks remain on main. Cancellation is refused after promotion begins; cleanup requires a positive sequence."
+        },
+        {
+          "name": "submit_cleanup",
+          "line": 92,
+          "static_review_status": "PASS",
+          "duty_group": "submission_and_cancellation",
+          "control_flow_review": "Main-thread submission rejects queue >=64 and non-JSON/cyclic/deep graphs. Job gets detached snapshot and identity; callbacks remain on main. Cancellation is refused after promotion begins; cleanup requires a positive sequence."
+        },
+        {
+          "name": "pump",
+          "line": 104,
+          "static_review_status": "PASS",
+          "duty_group": "state_machine",
+          "control_flow_review": "Reentry is rejected before queue work. One step per ordinary pump and FrameBudget token brackets coordinator work. NEW_UPDATE reads previous+backup, validates source and updates detached JSON; NEW prepares; PREPARING validates and freezes candidate; PREPARED rechecks guard; READING rechecks context/known bytes/update before-image and passes approval; PROMOTING/DISPOSING/PRUNING consume actual worker completion. Failed stages route through DISCARD before completion."
+        },
+        {
+          "name": "_pump_once",
+          "line": 125,
+          "static_review_status": "PASS",
+          "duty_group": "state_machine",
+          "control_flow_review": "Reentry is rejected before queue work. One step per ordinary pump and FrameBudget token brackets coordinator work. NEW_UPDATE reads previous+backup, validates source and updates detached JSON; NEW prepares; PREPARING validates and freezes candidate; PREPARED rechecks guard; READING rechecks context/known bytes/update before-image and passes approval; PROMOTING/DISPOSING/PRUNING consume actual worker completion. Failed stages route through DISCARD before completion."
+        },
+        {
+          "name": "finish",
+          "line": 251,
+          "static_review_status": "PASS",
+          "duty_group": "barriers_and_completion",
+          "control_flow_review": "Only explicit wait/drain joins workers. Reentrant wait returns pending. A prepared unapproved predecessor is cancelled at lifecycle barrier; preparation-only wait reports an earlier unapproved request instead of spinning. Completion pops FIFO and commits job receipt before callback; callback cannot pump the next job while pump_active. Immutable document graph is shared with separate receipt roots and copied identity."
+        },
+        {
+          "name": "drain",
+          "line": 266,
+          "static_review_status": "PASS",
+          "duty_group": "barriers_and_completion",
+          "control_flow_review": "Only explicit wait/drain joins workers. Reentrant wait returns pending. A prepared unapproved predecessor is cancelled at lifecycle barrier; preparation-only wait reports an earlier unapproved request instead of spinning. Completion pops FIFO and commits job receipt before callback; callback cannot pump the next job while pump_active. Immutable document graph is shared with separate receipt roots and copied identity."
+        },
+        {
+          "name": "authorize",
+          "line": 276,
+          "static_review_status": "PASS",
+          "duty_group": "submission_and_cancellation",
+          "control_flow_review": "Main-thread submission rejects queue >=64 and non-JSON/cyclic/deep graphs. Job gets detached snapshot and identity; callbacks remain on main. Cancellation is refused after promotion begins; cleanup requires a positive sequence."
+        },
+        {
+          "name": "finish_preparation",
+          "line": 284,
+          "static_review_status": "PASS",
+          "duty_group": "barriers_and_completion",
+          "control_flow_review": "Only explicit wait/drain joins workers. Reentrant wait returns pending. A prepared unapproved predecessor is cancelled at lifecycle barrier; preparation-only wait reports an earlier unapproved request instead of spinning. Completion pops FIFO and commits job receipt before callback; callback cannot pump the next job while pump_active. Immutable document graph is shared with separate receipt roots and copied identity."
+        },
+        {
+          "name": "cancel",
+          "line": 296,
+          "static_review_status": "PASS",
+          "duty_group": "submission_and_cancellation",
+          "control_flow_review": "Main-thread submission rejects queue >=64 and non-JSON/cyclic/deep graphs. Job gets detached snapshot and identity; callbacks remain on main. Cancellation is refused after promotion begins; cleanup requires a positive sequence."
+        },
+        {
+          "name": "_guard_allows",
+          "line": 300,
+          "static_review_status": "PASS",
+          "duty_group": "barriers_and_completion",
+          "control_flow_review": "Only explicit wait/drain joins workers. Reentrant wait returns pending. A prepared unapproved predecessor is cancelled at lifecycle barrier; preparation-only wait reports an earlier unapproved request instead of spinning. Completion pops FIFO and commits job receipt before callback; callback cannot pump the next job while pump_active. Immutable document graph is shared with separate receipt roots and copied identity."
+        },
+        {
+          "name": "_fail",
+          "line": 305,
+          "static_review_status": "PASS",
+          "duty_group": "barriers_and_completion",
+          "control_flow_review": "Only explicit wait/drain joins workers. Reentrant wait returns pending. A prepared unapproved predecessor is cancelled at lifecycle barrier; preparation-only wait reports an earlier unapproved request instead of spinning. Completion pops FIFO and commits job receipt before callback; callback cannot pump the next job while pump_active. Immutable document graph is shared with separate receipt roots and copied identity."
+        },
+        {
+          "name": "_complete",
+          "line": 311,
+          "static_review_status": "PASS",
+          "duty_group": "barriers_and_completion",
+          "control_flow_review": "Only explicit wait/drain joins workers. Reentrant wait returns pending. A prepared unapproved predecessor is cancelled at lifecycle barrier; preparation-only wait reports an earlier unapproved request instead of spinning. Completion pops FIFO and commits job receipt before callback; callback cannot pump the next job while pump_active. Immutable document graph is shared with separate receipt roots and copied identity."
+        },
+        {
+          "name": "_validate",
+          "line": 338,
+          "static_review_status": "PASS",
+          "duty_group": "validation",
+          "control_flow_review": "Validator receives a private mutable deep copy and must return a bool valid field. Snapshot supports finite JSON primitives/string keys only; Objects/Callable and depth>64 are rejected before thread transfer."
+        },
+        {
+          "name": "_plain_json_value",
+          "line": 347,
+          "static_review_status": "PASS",
+          "duty_group": "validation",
+          "control_flow_review": "Validator receives a private mutable deep copy and must return a bool valid field. Snapshot supports finite JSON primitives/string keys only; Objects/Callable and depth>64 are rejected before thread transfer."
+        }
+      ]
+    },
+    {
+      "path": "scripts/json_persistence_job.gd",
+      "git_blob": "54edc135359589e5d2d5f85b6da547f74f045534",
+      "sha256": "67d653bceec89656af3b59638774cb9fb50d1b8917c6ed77d84f637ec2590e79",
+      "functions": [
+        {
+          "name": "configure",
+          "line": 35,
+          "static_review_status": "PASS",
+          "duty_group": "detached_configuration",
+          "control_flow_review": "Unique private prefix combines target/process/ticks/instance. Worker has one active task. Preencoded bytes and caller-selected temporary belong to explicit production caller ownership; no gameplay RNG/Node/domain callback enters worker."
+        },
+        {
+          "name": "run_stage",
+          "line": 45,
+          "static_review_status": "PASS",
+          "duty_group": "detached_configuration",
+          "control_flow_review": "Unique private prefix combines target/process/ticks/instance. Worker has one active task. Preencoded bytes and caller-selected temporary belong to explicit production caller ownership; no gameplay RNG/Node/domain callback enters worker."
+        },
+        {
+          "name": "configure_preencoded",
+          "line": 53,
+          "static_review_status": "PASS",
+          "duty_group": "detached_configuration",
+          "control_flow_review": "Unique private prefix combines target/process/ticks/instance. Worker has one active task. Preencoded bytes and caller-selected temporary belong to explicit production caller ownership; no gameplay RNG/Node/domain callback enters worker."
+        },
+        {
+          "name": "configure_temporary",
+          "line": 63,
+          "static_review_status": "PASS",
+          "duty_group": "detached_configuration",
+          "control_flow_review": "Unique private prefix combines target/process/ticks/instance. Worker has one active task. Preencoded bytes and caller-selected temporary belong to explicit production caller ownership; no gameplay RNG/Node/domain callback enters worker."
+        },
+        {
+          "name": "configure_snapshot",
+          "line": 69,
+          "static_review_status": "PASS",
+          "duty_group": "detached_configuration",
+          "control_flow_review": "Unique private prefix combines target/process/ticks/instance. Worker has one active task. Preencoded bytes and caller-selected temporary belong to explicit production caller ownership; no gameplay RNG/Node/domain callback enters worker."
+        },
+        {
+          "name": "stage_result",
+          "line": 74,
+          "static_review_status": "PASS",
+          "duty_group": "thread_completion_and_cancel",
+          "control_flow_review": "Normal poll checks actual WorkerThreadPool completion before joining. Explicit barriers join and reclaim task; result graph freezes before mutex publication. Promotion-start and cancellation transition under mutex; supported stages and failures are explicit."
+        },
+        {
+          "name": "is_stage_complete",
+          "line": 90,
+          "static_review_status": "PASS",
+          "duty_group": "thread_completion_and_cancel",
+          "control_flow_review": "Normal poll checks actual WorkerThreadPool completion before joining. Explicit barriers join and reclaim task; result graph freezes before mutex publication. Promotion-start and cancellation transition under mutex; supported stages and failures are explicit."
+        },
+        {
+          "name": "request_cancel",
+          "line": 94,
+          "static_review_status": "PASS",
+          "duty_group": "thread_completion_and_cancel",
+          "control_flow_review": "Normal poll checks actual WorkerThreadPool completion before joining. Explicit barriers join and reclaim task; result graph freezes before mutex publication. Promotion-start and cancellation transition under mutex; supported stages and failures are explicit."
+        },
+        {
+          "name": "_cancelled",
+          "line": 104,
+          "static_review_status": "PASS",
+          "duty_group": "thread_completion_and_cancel",
+          "control_flow_review": "Normal poll checks actual WorkerThreadPool completion before joining. Explicit barriers join and reclaim task; result graph freezes before mutex publication. Promotion-start and cancellation transition under mutex; supported stages and failures are explicit."
+        },
+        {
+          "name": "_perform",
+          "line": 111,
+          "static_review_status": "PASS",
+          "duty_group": "thread_completion_and_cancel",
+          "control_flow_review": "Normal poll checks actual WorkerThreadPool completion before joining. Explicit barriers join and reclaim task; result graph freezes before mutex publication. Promotion-start and cancellation transition under mutex; supported stages and failures are explicit."
+        },
+        {
+          "name": "_prepare",
+          "line": 150,
+          "static_review_status": "PASS",
+          "duty_group": "prepare_and_promote",
+          "control_flow_review": "Prepare parses serialized/preencoded JSON and verifies exact temporary bytes. Promotion rechecks required baseline, temporary and previous+backup bytes, create-only and terminal predecessor. Existing valid primary rotates to backup while old backup is held; rejected primary is quarantined. Failed promote/readback attempts rollback and reports its completeness; unknown/rejected output is preserved. Successful readback owns returned bytes/document before old backup-hold cleanup."
+        },
+        {
+          "name": "_promote",
+          "line": 187,
+          "static_review_status": "PASS",
+          "duty_group": "prepare_and_promote",
+          "control_flow_review": "Prepare parses serialized/preencoded JSON and verifies exact temporary bytes. Promotion rechecks required baseline, temporary and previous+backup bytes, create-only and terminal predecessor. Existing valid primary rotates to backup while old backup is held; rejected primary is quarantined. Failed promote/readback attempts rollback and reports its completeness; unknown/rejected output is preserved. Successful readback owns returned bytes/document before old backup-hold cleanup."
+        },
+        {
+          "name": "_read_document",
+          "line": 269,
+          "static_review_status": "PASS",
+          "duty_group": "file_primitives_and_cleanup",
+          "control_flow_review": "Reads distinguish missing/unreadable/syntax invalid. Exact bytes/length gate promotion; parser returns data instead of engine errors for expected corruption. Temporary removal is limited by owns_temporary. Clock pruning deletes only canonical 12-digit positive sequences <= committed watermark in owner-supplied directory. Worker freezes nested arrays/dictionaries iteratively."
+        },
+        {
+          "name": "_same_document_bytes",
+          "line": 282,
+          "static_review_status": "PASS",
+          "duty_group": "file_primitives_and_cleanup",
+          "control_flow_review": "Reads distinguish missing/unreadable/syntax invalid. Exact bytes/length gate promotion; parser returns data instead of engine errors for expected corruption. Temporary removal is limited by owns_temporary. Clock pruning deletes only canonical 12-digit positive sequences <= committed watermark in owner-supplied directory. Worker freezes nested arrays/dictionaries iteratively."
+        },
+        {
+          "name": "_matches_bytes",
+          "line": 286,
+          "static_review_status": "PASS",
+          "duty_group": "file_primitives_and_cleanup",
+          "control_flow_review": "Reads distinguish missing/unreadable/syntax invalid. Exact bytes/length gate promotion; parser returns data instead of engine errors for expected corruption. Temporary removal is limited by owns_temporary. Clock pruning deletes only canonical 12-digit positive sequences <= committed watermark in owner-supplied directory. Worker freezes nested arrays/dictionaries iteratively."
+        },
+        {
+          "name": "_remove_temporary",
+          "line": 295,
+          "static_review_status": "PASS",
+          "duty_group": "file_primitives_and_cleanup",
+          "control_flow_review": "Reads distinguish missing/unreadable/syntax invalid. Exact bytes/length gate promotion; parser returns data instead of engine errors for expected corruption. Temporary removal is limited by owns_temporary. Clock pruning deletes only canonical 12-digit positive sequences <= committed watermark in owner-supplied directory. Worker freezes nested arrays/dictionaries iteratively."
+        },
+        {
+          "name": "cancellation_requested",
+          "line": 299,
+          "static_review_status": "PASS",
+          "duty_group": "thread_completion_and_cancel",
+          "control_flow_review": "Normal poll checks actual WorkerThreadPool completion before joining. Explicit barriers join and reclaim task; result graph freezes before mutex publication. Promotion-start and cancellation transition under mutex; supported stages and failures are explicit."
+        },
+        {
+          "name": "_parse_document",
+          "line": 303,
+          "static_review_status": "PASS",
+          "duty_group": "file_primitives_and_cleanup",
+          "control_flow_review": "Reads distinguish missing/unreadable/syntax invalid. Exact bytes/length gate promotion; parser returns data instead of engine errors for expected corruption. Temporary removal is limited by owns_temporary. Clock pruning deletes only canonical 12-digit positive sequences <= committed watermark in owner-supplied directory. Worker freezes nested arrays/dictionaries iteratively."
+        },
+        {
+          "name": "_prune_checkpointed_events",
+          "line": 311,
+          "static_review_status": "PASS",
+          "duty_group": "file_primitives_and_cleanup",
+          "control_flow_review": "Reads distinguish missing/unreadable/syntax invalid. Exact bytes/length gate promotion; parser returns data instead of engine errors for expected corruption. Temporary removal is limited by owns_temporary. Clock pruning deletes only canonical 12-digit positive sequences <= committed watermark in owner-supplied directory. Worker freezes nested arrays/dictionaries iteratively."
+        },
+        {
+          "name": "_freeze_transfer_graph",
+          "line": 331,
+          "static_review_status": "PASS",
+          "duty_group": "file_primitives_and_cleanup",
+          "control_flow_review": "Reads distinguish missing/unreadable/syntax invalid. Exact bytes/length gate promotion; parser returns data instead of engine errors for expected corruption. Temporary removal is limited by owns_temporary. Clock pruning deletes only canonical 12-digit positive sequences <= committed watermark in owner-supplied directory. Worker freezes nested arrays/dictionaries iteratively."
+        }
+      ]
+    },
+    {
+      "path": "scripts/json_prepared_request.gd",
+      "git_blob": "18d1dbdaadf4f30589cb16adb09adc7db60f9d4f",
+      "sha256": "7aa720d4193ff6ee3f6faa1da9e2ddc0efe402e8cccec2227c7dfa1026a95052",
+      "functions": [
+        {
+          "name": "configure",
+          "line": 11,
+          "static_review_status": "PASS",
+          "duty_group": "main_thread_handle",
+          "control_flow_review": "Handle owns service/job; ordinary result asks for preparation without approval, terminal/cancel result drains the request; cancellation result determines handle state. Handle is never handed to worker."
+        },
+        {
+          "name": "result",
+          "line": 16,
+          "static_review_status": "PASS",
+          "duty_group": "main_thread_handle",
+          "control_flow_review": "Handle owns service/job; ordinary result asks for preparation without approval, terminal/cancel result drains the request; cancellation result determines handle state. Handle is never handed to worker."
+        },
+        {
+          "name": "cancel",
+          "line": 19,
+          "static_review_status": "PASS",
+          "duty_group": "main_thread_handle",
+          "control_flow_review": "Handle owns service/job; ordinary result asks for preparation without approval, terminal/cancel result drains the request; cancellation result determines handle state. Handle is never handed to worker."
+        }
+      ]
+    }
+  ],
+  "call_chain_checks": [
+    {
+      "path": "scripts/player_state.gd",
+      "functions": [
+        "_write_json_atomic",
+        "_promote_verified_json",
+        "prepare_loot_save",
+        "_loot_request_context_matches",
+        "finish_prepared_loot_save",
+        "_complete_background_loot",
+        "_merge_background_profile_index",
+        "_complete_background_index"
+      ],
+      "reviewed_scope": "Inspected actual submit/validator/guard/prepare-only receipt boundaries at lines5837-5893,8900-8982,10155-10208; not the entire PlayerState implementation. Loot live state is applied by receipt owner and foreign profile/generation receipt never applies reward to active role."
+    },
+    {
+      "path": "tests/framework/persistence_owned_transfer_test.gd",
+      "reviewed_scope": "Static real 10000-row worker/immutable ownership fixture and exact persisted-byte/caller mutation assertions. No new engine execution."
+    },
+    {
+      "path": "tests/framework/persistence_completion_boundary_test.gd",
+      "reviewed_scope": "Static finite worker publish-before-exit and callback reentry fixture. Distinguishes published result from actual worker return; no new engine execution."
+    }
+  ],
+  "findings": [],
+  "limits": {
+    "new_native_test": "NOT_RUN",
+    "android_device": "NOT_RUN",
+    "kill_or_power_loss": "NOT_RUN",
+    "all_PlayerState_and_warehouse_control_flow": "MISSING",
+    "concurrent_external_filesystem_mutation_or_process_crash": "MISSING"
+  },
+  "limits_explanation": "This supplement closes static duties of these three files only. Atomic multi-file or power-loss recovery is not proved by sequential rename/readback. Directory/temporary ownership relies on the actual domain callers; full warehouse/upgrade/clock consumers remain in B08. No existing runtime evidence is rerun or upgraded to device PASS."
+}
