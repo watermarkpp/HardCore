@@ -1,0 +1,4513 @@
+{
+  "batch": "B16",
+  "responsibility_group": "06_save_catalog_player_remaining",
+  "group_part": 2,
+  "group_parts": 3,
+  "status": "NOT_RUN",
+  "fixed_commit": "267890c88477c0b1afaaaea612780c131c86736d",
+  "scheduled_lines": 14922,
+  "line_cap": 15000,
+  "callable_count": 617,
+  "files": [
+    {
+      "path": "scripts/game_root.gd",
+      "file_total_lines": 15974,
+      "file_total_functions": 495,
+      "existing_named_body_reuse": 10,
+      "scheduled_lines": 4680,
+      "named_functions": 165,
+      "ranges": [
+        {
+          "start": 10906,
+          "end": 11084,
+          "function": "_spawn_canonical_ground_field",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11085,
+          "end": 11098,
+          "function": "_fire_wall_registry_controller_is_active",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11099,
+          "end": 11113,
+          "function": "_fire_wall_registry_center_cell",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11114,
+          "end": 11128,
+          "function": "_fire_wall_registry_key",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11129,
+          "end": 11136,
+          "function": "_fire_wall_registry_caster_prefix",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11137,
+          "end": 11147,
+          "function": "_fire_wall_max_active_fields",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11148,
+          "end": 11154,
+          "function": "_fire_wall_cap_policy",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11155,
+          "end": 11178,
+          "function": "_fire_wall_cap_allows_new_field",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11179,
+          "end": 11194,
+          "function": "_fire_wall_prune_invalid_registry_entries",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11195,
+          "end": 11207,
+          "function": "_on_fire_wall_field_tree_exited",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11208,
+          "end": 11260,
+          "function": "_debug_validate_fire_wall_registry",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11261,
+          "end": 11273,
+          "function": "_fire_wall_evict_oldest_field_for_caster",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11274,
+          "end": 11283,
+          "function": "_clear_fire_wall_field_registry",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11284,
+          "end": 11347,
+          "function": "_spawn_canonical_ground_effect",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11348,
+          "end": 11402,
+          "function": "_register_manager_ground_effect",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11403,
+          "end": 11407,
+          "function": "_manager_ground_effect_ended",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11408,
+          "end": 11421,
+          "function": "_canonical_ground_cell_contains_enemy",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11422,
+          "end": 11437,
+          "function": "_ground_field_snapshot_contains_enemy",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11438,
+          "end": 11444,
+          "function": "_ignore_canonical_ground_visual_tick",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11445,
+          "end": 11465,
+          "function": "_apply_canonical_ground_tick",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11466,
+          "end": 11493,
+          "function": "_apply_canonical_displacement_screen_px",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11494,
+          "end": 11503,
+          "function": "_apply_canonical_player_teleport",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11504,
+          "end": 11552,
+          "function": "_apply_canonical_poison",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11553,
+          "end": 11562,
+          "function": "_apply_canonical_temptation",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11563,
+          "end": 11578,
+          "function": "_synchronize_main_pet_skill_ranks",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11579,
+          "end": 11584,
+          "function": "_synchronize_pet_skill_rank",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11585,
+          "end": 11589,
+          "function": "_canonical_main_pet",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11590,
+          "end": 11612,
+          "function": "_canonical_main_pets",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11613,
+          "end": 11623,
+          "function": "_owned_skeleton_slots",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11624,
+          "end": 11630,
+          "function": "_next_skeleton_slot_index",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11648,
+          "end": 11672,
+          "function": "_capture_taoist_main_pet_runtime_states",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11673,
+          "end": 11689,
+          "function": "_on_canonical_main_pet_state_changed",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11690,
+          "end": 11695,
+          "function": "_wire_canonical_main_pet_persistence",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11696,
+          "end": 11771,
+          "function": "_restore_persisted_taoist_main_pet_if_needed",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11772,
+          "end": 11784,
+          "function": "_canonical_friendly_actor",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11785,
+          "end": 11796,
+          "function": "_apply_canonical_friendly_heal",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11797,
+          "end": 11814,
+          "function": "_register_ongoing_heal",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11815,
+          "end": 11847,
+          "function": "_tick_ongoing_heals",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11848,
+          "end": 11855,
+          "function": "_ongoing_heal_remaining_ticks",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11856,
+          "end": 11876,
+          "function": "_set_actor_stealth_alpha",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11877,
+          "end": 11891,
+          "function": "_update_stealth_alpha",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11892,
+          "end": 11904,
+          "function": "_update_taoist_buff_hints",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11905,
+          "end": 11933,
+          "function": "_status_buff_entries",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11934,
+          "end": 11970,
+          "function": "_canonical_friendly_candidates",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11971,
+          "end": 11978,
+          "function": "_select_taoist_heal_target",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 11979,
+          "end": 12039,
+          "function": "_resolve_release_friendly_target",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 12040,
+          "end": 12068,
+          "function": "_apply_friendly_defence_buff_to_actor",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 12069,
+          "end": 12084,
+          "function": "_apply_friendly_stealth_to_actor",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 12085,
+          "end": 12205,
+          "function": "_apply_canonical_main_pet",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 12206,
+          "end": 12245,
+          "function": "_relocate_main_pets_after_map_arrival",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 12298,
+          "end": 12308,
+          "function": "_register_pending_main_pet_arrival",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 12309,
+          "end": 12313,
+          "function": "_main_pet_owner_tile",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 12314,
+          "end": 12348,
+          "function": "_retry_pending_main_pet_arrivals",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 12572,
+          "end": 12612,
+          "function": "_spawn_canonical_teleport_arrival",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 12613,
+          "end": 12629,
+          "function": "_record_player_world_location",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 12630,
+          "end": 12654,
+          "function": "_ground_position_gu_for_map",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 12655,
+          "end": 12685,
+          "function": "_canonical_screen_px_to_grid_cell",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 12686,
+          "end": 12726,
+          "function": "_resolve_projection_profile_for_map",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 12727,
+          "end": 12771,
+          "function": "_try_canonical_screen_px_to_ground_gu",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 12772,
+          "end": 12812,
+          "function": "_try_canonical_ground_gu_to_screen_px",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 12813,
+          "end": 12819,
+          "function": "_canonical_screen_px_to_ground_gu",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 12820,
+          "end": 12826,
+          "function": "_canonical_ground_gu_to_screen_px",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 12827,
+          "end": 12849,
+          "function": "_canonical_grid_cell_to_screen_px",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 12850,
+          "end": 12863,
+          "function": "_canonical_snapshot_absolute_context",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 12864,
+          "end": 12871,
+          "function": "_canonical_snapshot_validation_context",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 12872,
+          "end": 12882,
+          "function": "_snapshot_strict_ok",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 12883,
+          "end": 12888,
+          "function": "_canonical_facing",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 12889,
+          "end": 12898,
+          "function": "_canonical_facing_for_skill",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 12899,
+          "end": 12907,
+          "function": "_canonical_primary_stat_roll",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 12908,
+          "end": 12912,
+          "function": "_next_canonical_seed",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 12913,
+          "end": 12921,
+          "function": "_next_skill_footprint_release_id",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 12922,
+          "end": 12925,
+          "function": "_skill_needs_target",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 12926,
+          "end": 12989,
+          "function": "_spawn_projectile",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 12990,
+          "end": 13069,
+          "function": "_damage_enemies",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 13070,
+          "end": 13087,
+          "function": "_resolve_magic_defense",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 13088,
+          "end": 13104,
+          "function": "_combat_release_target",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 13105,
+          "end": 13162,
+          "function": "_create_melee_release_footprint_snapshot",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 13163,
+          "end": 13185,
+          "function": "_physical_primary_target",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 13186,
+          "end": 13257,
+          "function": "_physical_primary_targets",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 13258,
+          "end": 13302,
+          "function": "_sort_melee_targets",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 13303,
+          "end": 13381,
+          "function": "_is_primary_melee_candidate",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 13382,
+          "end": 13476,
+          "function": "_apply_physical_hit",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 13477,
+          "end": 13548,
+          "function": "_aoe_collect_thrust_secondary_candidates",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 13549,
+          "end": 13593,
+          "function": "_aoe_collect_half_moon_secondary_candidates",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 13594,
+          "end": 13661,
+          "function": "_thrust_secondary_targets",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 13662,
+          "end": 13723,
+          "function": "_half_moon_secondary_targets",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 13724,
+          "end": 13741,
+          "function": "_execute_wild_rush",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 13742,
+          "end": 13748,
+          "function": "_show_attack_flash",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 13749,
+          "end": 13906,
+          "function": "_on_enemy_died",
+          "reason": "Prior named responsibility or 101-line prefix remains partial; complete omitted branches/body and caller chain",
+          "evidence_refs": [
+            "docs/review/full_project_audit_v109_20261009/external/B04/COVERAGE.json#/additional_consumers/0/functions/0",
+            "docs/review/full_project_audit_v109_20261009/external/B08/COVERAGE.json#/paths/14/functions/411"
+          ]
+        },
+        {
+          "start": 13907,
+          "end": 13913,
+          "function": "_schedule_enemy_death_work",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 13983,
+          "end": 14117,
+          "function": "_advance_enemy_death_work_slice",
+          "reason": "Prior named responsibility or 101-line prefix remains partial; complete omitted branches/body and caller chain",
+          "evidence_refs": [
+            "docs/review/full_project_audit_v109_20261009/external/B08/COVERAGE.json#/paths/14/functions/416"
+          ]
+        },
+        {
+          "start": 14130,
+          "end": 14141,
+          "function": "_death_jobs_max_per_frame",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 14142,
+          "end": 14153,
+          "function": "_drop_nodes_max_per_frame",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 14154,
+          "end": 14166,
+          "function": "set_death_drop_work_limits_for_test",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 14167,
+          "end": 14171,
+          "function": "clear_death_drop_work_limits_for_test",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 14172,
+          "end": 14178,
+          "function": "set_death_roll_quantum_slicing_for_test",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 14179,
+          "end": 14185,
+          "function": "set_loot_materialization_failure_count_for_test",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 14186,
+          "end": 14192,
+          "function": "set_loot_legacy_reference_fallback_for_test",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 14193,
+          "end": 14210,
+          "function": "death_work_queue_snapshot",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 14211,
+          "end": 14214,
+          "function": "_death_retry_ready",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 14215,
+          "end": 14224,
+          "function": "_set_enemy_death_state",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 14225,
+          "end": 14250,
+          "function": "_compact_enemy_death_queue",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 14251,
+          "end": 14259,
+          "function": "_death_origin_matches_current",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 14260,
+          "end": 14281,
+          "function": "_cancel_pending_enemy_deaths_for_generation_change",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 14282,
+          "end": 14288,
+          "function": "_first_unsettled_death_index",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 14289,
+          "end": 14295,
+          "function": "_death_settlement_origins_valid",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 14296,
+          "end": 14311,
+          "function": "_poll_prepared_enemy_death_settlement",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 14312,
+          "end": 14414,
+          "function": "_settle_pending_enemy_death_batch",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 14415,
+          "end": 14458,
+          "function": "_finish_enemy_death_settlement_batch",
+          "reason": "Prior named responsibility or 101-line prefix remains partial; complete omitted branches/body and caller chain",
+          "evidence_refs": [
+            "docs/review/full_project_audit_v109_20261009/external/B04/COVERAGE.json#/additional_consumers/0/functions/2"
+          ]
+        },
+        {
+          "start": 14459,
+          "end": 14580,
+          "function": "_plan_enemy_death_item",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 14581,
+          "end": 14742,
+          "function": "_materialize_enemy_death_nodes",
+          "reason": "Prior named responsibility or 101-line prefix remains partial; complete omitted branches/body and caller chain",
+          "evidence_refs": [
+            "docs/review/full_project_audit_v109_20261009/external/B04/COVERAGE.json#/additional_consumers/0/functions/3"
+          ]
+        },
+        {
+          "start": 14743,
+          "end": 14754,
+          "function": "_commit_enemy_death_item",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 14755,
+          "end": 14778,
+          "function": "_schedule_queued_enemy_respawn",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 14779,
+          "end": 14820,
+          "function": "_resolve_queued_enemy_death",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 14821,
+          "end": 14879,
+          "function": "_prepare_queued_enemy_respawn",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 14880,
+          "end": 14903,
+          "function": "_loot_world_segment_clear",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 14904,
+          "end": 14922,
+          "function": "_loot_ground_point_clear",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 14923,
+          "end": 14930,
+          "function": "_resolve_loot_ground_position",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 14931,
+          "end": 14981,
+          "function": "_advance_loot_ground_position",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 14982,
+          "end": 14993,
+          "function": "_loot_collection_path_is_clear",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 14994,
+          "end": 15030,
+          "function": "_spawn_loot",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15031,
+          "end": 15058,
+          "function": "_spawn_gold_loot",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15059,
+          "end": 15062,
+          "function": "_on_gold_loot_collected",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15063,
+          "end": 15076,
+          "function": "_on_loot_collected",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15077,
+          "end": 15131,
+          "function": "_queue_loot_collection",
+          "reason": "Prior named responsibility or 101-line prefix remains partial; complete omitted branches/body and caller chain",
+          "evidence_refs": [
+            "docs/review/full_project_audit_v109_20261009/external/B04/COVERAGE.json#/additional_consumers/0/functions/4"
+          ]
+        },
+        {
+          "start": 15132,
+          "end": 15192,
+          "function": "_flush_loot_collections",
+          "reason": "Prior named responsibility or 101-line prefix remains partial; complete omitted branches/body and caller chain",
+          "evidence_refs": [
+            "docs/review/full_project_audit_v109_20261009/external/B04/COVERAGE.json#/additional_consumers/0/functions/5"
+          ]
+        },
+        {
+          "start": 15193,
+          "end": 15245,
+          "function": "_poll_prepared_loot_collection",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15246,
+          "end": 15312,
+          "function": "_finish_loot_collection_outcomes",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15313,
+          "end": 15319,
+          "function": "_on_loot_collection_rejected",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15320,
+          "end": 15324,
+          "function": "_on_player_stats_changed",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15325,
+          "end": 15331,
+          "function": "_sync_player_runtime_snapshot_to_hud",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15332,
+          "end": 15336,
+          "function": "_on_background_item_save_failed",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15337,
+          "end": 15363,
+          "function": "_on_consumable_used",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15364,
+          "end": 15389,
+          "function": "_on_scroll_used",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15390,
+          "end": 15401,
+          "function": "_report_repair_oil_result",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15402,
+          "end": 15410,
+          "function": "_skill_teleport_destination_is_valid",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15411,
+          "end": 15433,
+          "function": "_teleport_destination_is_clear",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15434,
+          "end": 15446,
+          "function": "_find_valid_skill_teleport_position",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15447,
+          "end": 15510,
+          "function": "_find_valid_random_teleport_position",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15511,
+          "end": 15554,
+          "function": "_respawn_later",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15555,
+          "end": 15564,
+          "function": "_cancel_respawn_wakeups",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15565,
+          "end": 15578,
+          "function": "_spawn_slot_is_alive",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15579,
+          "end": 15582,
+          "function": "_hc_lightning_clear",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15583,
+          "end": 15599,
+          "function": "_combat_target_world_clear",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15600,
+          "end": 15617,
+          "function": "_hc_skill_preflight",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15618,
+          "end": 15622,
+          "function": "_action_configuration_identity",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15623,
+          "end": 15628,
+          "function": "feature_publication_scope",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15629,
+          "end": 15633,
+          "function": "feature_world_capacity_bound",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15634,
+          "end": 15658,
+          "function": "_capture_action_configuration",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15659,
+          "end": 15673,
+          "function": "_reserve_feature_action",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15674,
+          "end": 15693,
+          "function": "_reserve_feature_bindings",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15694,
+          "end": 15707,
+          "function": "_capture_melee_configuration",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15708,
+          "end": 15717,
+          "function": "_canonical_action_primary_stats",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15718,
+          "end": 15747,
+          "function": "_begin_feature_damage_batch",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15748,
+          "end": 15772,
+          "function": "_finish_feature_damage_batch",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15773,
+          "end": 15816,
+          "function": "_execute_feature_child_action",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15817,
+          "end": 15829,
+          "function": "_ordinary_attack_owner_matches",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15830,
+          "end": 15841,
+          "function": "_process_ordinary_attack_input",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15842,
+          "end": 15869,
+          "function": "_reconcile_ordinary_attack_button_owners",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15870,
+          "end": 15886,
+          "function": "_try_ordinary_attack_intent",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15894,
+          "end": 15903,
+          "function": "_hc_m30_probe_landing",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15904,
+          "end": 15941,
+          "function": "_hc_m30_landing_clear",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15942,
+          "end": 15945,
+          "function": "_hc_m30_materialize",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15955,
+          "end": 15962,
+          "function": "_hc_m30_resolve_monster",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 15963,
+          "end": 15974,
+          "function": "hc_m30_stable_enemy_ground_point",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        }
+      ],
+      "existing_file_evidence": [
+        "docs/review/full_project_audit_v109_20261009/external/B01/COVERAGE.json#/files/11",
+        "docs/review/full_project_audit_v109_20261009/external/B03/COVERAGE.json#/additional_consumers/0",
+        "docs/review/full_project_audit_v109_20261009/external/B04/COVERAGE.json#/additional_consumers/0",
+        "docs/review/full_project_audit_v109_20261009/external/B05/COVERAGE.json#/extra_actual_source_consumers/9",
+        "docs/review/full_project_audit_v109_20261009/external/B08/COVERAGE.json#/paths/14"
+      ]
+    },
+    {
+      "path": "scripts/player.gd",
+      "file_total_lines": 2099,
+      "file_total_functions": 86,
+      "existing_named_body_reuse": 9,
+      "scheduled_lines": 1735,
+      "named_functions": 77,
+      "ranges": [
+        {
+          "start": 1,
+          "end": 200,
+          "function": null,
+          "reason": "Review constants/imports/class/signal/scene/script/resource/connection authority outside explicit named body evidence",
+          "evidence_refs": [
+            "docs/review/full_project_audit_v109_20261009/external/B02/COVERAGE.json#/module_files/19",
+            "docs/review/full_project_audit_v109_20261009/external/B02_followup/COVERAGE.json#/module_files/19",
+            "docs/review/full_project_audit_v109_20261009/external/B04/COVERAGE.json#/additional_consumers/2",
+            "docs/review/full_project_audit_v109_20261009/external/B08/COVERAGE.json#/paths/37"
+          ]
+        },
+        {
+          "start": 201,
+          "end": 208,
+          "function": "approved_ground_footpoint_local_px",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 209,
+          "end": 212,
+          "function": "approved_ground_footpoint_world_px",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 213,
+          "end": 229,
+          "function": "_exit_tree",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 230,
+          "end": 272,
+          "function": "_ready",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 273,
+          "end": 453,
+          "function": "_physics_process",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 454,
+          "end": 457,
+          "function": "set_touch_vector",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 458,
+          "end": 462,
+          "function": "reset_locomotion",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 463,
+          "end": 471,
+          "function": "locomotion_snapshot",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 472,
+          "end": 478,
+          "function": "_keyboard_movement_vector",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 479,
+          "end": 487,
+          "function": "set_combat_facing",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 488,
+          "end": 491,
+          "function": "can_start_attack",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 546,
+          "end": 561,
+          "function": "request_attack_toward",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 562,
+          "end": 610,
+          "function": "can_request_skill",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 636,
+          "end": 780,
+          "function": "_request_active_skill",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 781,
+          "end": 785,
+          "function": "_action_configuration_current",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 786,
+          "end": 789,
+          "function": "current_preflight_action_configuration",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 790,
+          "end": 799,
+          "function": "_freeze_partner_resource_context",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 800,
+          "end": 814,
+          "function": "apply_confirmed_physical_hit_durability",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 815,
+          "end": 818,
+          "function": "combat_transition_is_active",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 819,
+          "end": 836,
+          "function": "begin_combat_transition",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 837,
+          "end": 843,
+          "function": "finish_combat_transition",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 844,
+          "end": 854,
+          "function": "restore_level_up_resources",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 879,
+          "end": 883,
+          "function": "_resolve_incoming_evasion",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 884,
+          "end": 899,
+          "function": "take_ranged_damage",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 900,
+          "end": 951,
+          "function": "take_monster_mixed_damage",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1028,
+          "end": 1041,
+          "function": "_resolve_direct_spell_magic_defense",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1042,
+          "end": 1051,
+          "function": "_commit_observed_hp_write",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1052,
+          "end": 1239,
+          "function": "_apply_resolved_damage",
+          "reason": "Prior named responsibility or 101-line prefix remains partial; complete omitted branches/body and caller chain",
+          "evidence_refs": [
+            "docs/review/full_project_audit_v109_20261009/external/B08/COVERAGE.json#/paths/37/functions/31"
+          ]
+        },
+        {
+          "start": 1240,
+          "end": 1264,
+          "function": "complete_death_revival",
+          "reason": "Prior named responsibility or 101-line prefix remains partial; complete omitted branches/body and caller chain",
+          "evidence_refs": [
+            "docs/review/full_project_audit_v109_20261009/external/B04/COVERAGE.json#/additional_consumers/2/functions/1"
+          ]
+        },
+        {
+          "start": 1265,
+          "end": 1275,
+          "function": "_incoming_red_poison_active",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1424,
+          "end": 1438,
+          "function": "combat_release_signal_payload",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1439,
+          "end": 1469,
+          "function": "_resolve_combat_release_geometry",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1493,
+          "end": 1499,
+          "function": "_finish_combat_action",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1514,
+          "end": 1518,
+          "function": "_start_queued_struck_reaction",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1519,
+          "end": 1524,
+          "function": "has_pending_combat_release",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1525,
+          "end": 1532,
+          "function": "_finish_accepted_release",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1533,
+          "end": 1539,
+          "function": "_close_accepted_releases",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1540,
+          "end": 1549,
+          "function": "combat_action_snapshot",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1550,
+          "end": 1558,
+          "function": "struck_reaction_snapshot",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1559,
+          "end": 1562,
+          "function": "consume_attack_context",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1563,
+          "end": 1566,
+          "function": "consume_skill_context",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1567,
+          "end": 1570,
+          "function": "set_test_combat_time_ms",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1571,
+          "end": 1574,
+          "function": "set_combat_seed",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1575,
+          "end": 1578,
+          "function": "set_fire_sword_charge_display",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1579,
+          "end": 1585,
+          "function": "skill_cooldown_remaining_ms",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1586,
+          "end": 1601,
+          "function": "commit_fire_sword_cooldown",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1602,
+          "end": 1624,
+          "function": "warrior_state_snapshot",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1625,
+          "end": 1638,
+          "function": "warrior_runtime_state_for_save",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1639,
+          "end": 1650,
+          "function": "restore_warrior_runtime_state",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1651,
+          "end": 1654,
+          "function": "_combat_time_ms",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1655,
+          "end": 1658,
+          "function": "_combat_action_time_getter",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1659,
+          "end": 1682,
+          "function": "_request_warrior_state_skill",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1683,
+          "end": 1719,
+          "function": "_build_warrior_attack_context",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1720,
+          "end": 1736,
+          "function": "restore_health",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1737,
+          "end": 1741,
+          "function": "restore_mana",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1742,
+          "end": 1775,
+          "function": "_tick_badge_recovery",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1776,
+          "end": 1780,
+          "function": "queue_potion_restore",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1781,
+          "end": 1809,
+          "function": "_process_potion_restore",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1810,
+          "end": 1818,
+          "function": "spend_mana",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1819,
+          "end": 1830,
+          "function": "apply_magic_shield",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1831,
+          "end": 1848,
+          "function": "magic_shield_snapshot",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1849,
+          "end": 1867,
+          "function": "magic_shield_requires_refresh",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1868,
+          "end": 1878,
+          "function": "apply_stealth",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1879,
+          "end": 1889,
+          "function": "break_stealth",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1890,
+          "end": 1908,
+          "function": "recover_equipment_stealth_after_combat_exit",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1909,
+          "end": 1913,
+          "function": "apply_defense_buff",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1914,
+          "end": 1928,
+          "function": "apply_ac_buff",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1929,
+          "end": 1938,
+          "function": "apply_mac_buff",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1939,
+          "end": 1948,
+          "function": "defence_buff_snapshot",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1949,
+          "end": 1958,
+          "function": "apply_control",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1959,
+          "end": 1981,
+          "function": "apply_poison",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1982,
+          "end": 1993,
+          "function": "apply_monster_poison",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1994,
+          "end": 1997,
+          "function": "poison_status_remaining",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1998,
+          "end": 2016,
+          "function": "_update_monster_source_poison",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2017,
+          "end": 2023,
+          "function": "is_stealthed",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2024,
+          "end": 2042,
+          "function": "_draw",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2043,
+          "end": 2099,
+          "function": "_apply_profile_stats",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        }
+      ],
+      "existing_file_evidence": [
+        "docs/review/full_project_audit_v109_20261009/external/B02/COVERAGE.json#/module_files/19",
+        "docs/review/full_project_audit_v109_20261009/external/B02_followup/COVERAGE.json#/module_files/19",
+        "docs/review/full_project_audit_v109_20261009/external/B04/COVERAGE.json#/additional_consumers/2",
+        "docs/review/full_project_audit_v109_20261009/external/B08/COVERAGE.json#/paths/37"
+      ]
+    },
+    {
+      "path": "scripts/player_ground_runtime_diagnostic_overlay.gd",
+      "file_total_lines": 26,
+      "file_total_functions": 3,
+      "existing_named_body_reuse": 3,
+      "scheduled_lines": 6,
+      "named_functions": 0,
+      "ranges": [
+        {
+          "start": 1,
+          "end": 6,
+          "function": null,
+          "reason": "Review constants/imports/class/signal/scene/script/resource/connection authority outside explicit named body evidence",
+          "evidence_refs": [
+            "docs/review/full_project_audit_v109_20261009/external/B02/COVERAGE.json#/module_files/20",
+            "docs/review/full_project_audit_v109_20261009/external/B02_followup/COVERAGE.json#/module_files/20"
+          ]
+        }
+      ],
+      "existing_file_evidence": [
+        "docs/review/full_project_audit_v109_20261009/external/B02/COVERAGE.json#/module_files/20",
+        "docs/review/full_project_audit_v109_20261009/external/B02_followup/COVERAGE.json#/module_files/20"
+      ]
+    },
+    {
+      "path": "scripts/player_health_bar.gd",
+      "file_total_lines": 114,
+      "file_total_functions": 8,
+      "existing_named_body_reuse": 5,
+      "scheduled_lines": 74,
+      "named_functions": 3,
+      "ranges": [
+        {
+          "start": 1,
+          "end": 28,
+          "function": null,
+          "reason": "Review constants/imports/class/signal/scene/script/resource/connection authority outside explicit named body evidence",
+          "evidence_refs": [
+            "docs/review/full_project_audit_v109_20261009/external/B02/COVERAGE.json#/module_files/21",
+            "docs/review/full_project_audit_v109_20261009/external/B02_followup/COVERAGE.json#/module_files/21"
+          ]
+        },
+        {
+          "start": 53,
+          "end": 69,
+          "function": "_refresh_level_label",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 76,
+          "end": 79,
+          "function": "level_label_text",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 80,
+          "end": 104,
+          "function": "layout_snapshot",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        }
+      ],
+      "existing_file_evidence": [
+        "docs/review/full_project_audit_v109_20261009/external/B02/COVERAGE.json#/module_files/21",
+        "docs/review/full_project_audit_v109_20261009/external/B02_followup/COVERAGE.json#/module_files/21"
+      ]
+    },
+    {
+      "path": "scripts/player_notice_presenter.gd",
+      "file_total_lines": 250,
+      "file_total_functions": 17,
+      "existing_named_body_reuse": 8,
+      "scheduled_lines": 95,
+      "named_functions": 9,
+      "ranges": [
+        {
+          "start": 1,
+          "end": 29,
+          "function": null,
+          "reason": "Review constants/imports/class/signal/scene/script/resource/connection authority outside explicit named body evidence",
+          "evidence_refs": [
+            "docs/review/full_project_audit_v109_20261009/external/B02/COVERAGE.json#/module_files/22",
+            "docs/review/full_project_audit_v109_20261009/external/B02_followup/COVERAGE.json#/module_files/22"
+          ]
+        },
+        {
+          "start": 73,
+          "end": 86,
+          "function": "_apply_plain_style",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 165,
+          "end": 170,
+          "function": "_render_plain",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 171,
+          "end": 182,
+          "function": "_render_item",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 183,
+          "end": 187,
+          "function": "_set_text",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 222,
+          "end": 232,
+          "function": "full_text",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 233,
+          "end": 236,
+          "function": "current_notice",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 237,
+          "end": 240,
+          "function": "queue_size",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 241,
+          "end": 247,
+          "function": "queue_dedupe_keys",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 248,
+          "end": 250,
+          "function": "clear_for_test",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        }
+      ],
+      "existing_file_evidence": [
+        "docs/review/full_project_audit_v109_20261009/external/B02/COVERAGE.json#/module_files/22",
+        "docs/review/full_project_audit_v109_20261009/external/B02_followup/COVERAGE.json#/module_files/22"
+      ]
+    },
+    {
+      "path": "scripts/player_state.gd",
+      "file_total_lines": 10264,
+      "file_total_functions": 415,
+      "existing_named_body_reuse": 29,
+      "scheduled_lines": 8332,
+      "named_functions": 363,
+      "ranges": [
+        {
+          "start": 1,
+          "end": 377,
+          "function": null,
+          "reason": "Review constants/imports/class/signal/scene/script/resource/connection authority outside explicit named body evidence",
+          "evidence_refs": [
+            "docs/review/full_project_audit_v109_20261009/external/B02/COVERAGE.json#/module_files/23",
+            "docs/review/full_project_audit_v109_20261009/external/B02_followup/COVERAGE.json#/module_files/23",
+            "docs/review/full_project_audit_v109_20261009/external/B04/COVERAGE.json#/additional_consumers/1",
+            "docs/review/full_project_audit_v109_20261009/external/B05/COVERAGE.json#/extra_actual_source_consumers/11",
+            "docs/review/full_project_audit_v109_20261009/external/B08/COVERAGE.json#/paths/38"
+          ]
+        },
+        {
+          "start": 378,
+          "end": 388,
+          "function": "_notification",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 389,
+          "end": 393,
+          "function": "_pump_persistence_receipts",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 394,
+          "end": 399,
+          "function": "quote_item_transaction",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 400,
+          "end": 405,
+          "function": "quote_new_item_transaction",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 429,
+          "end": 447,
+          "function": "_advance_durability_runtime",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 448,
+          "end": 454,
+          "function": "_clear_pending_durability_runtime",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 481,
+          "end": 485,
+          "function": "begin_startup_save_upgrade",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 486,
+          "end": 499,
+          "function": "_startup_upgrade_sources",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 500,
+          "end": 514,
+          "function": "_startup_upgrade_read",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 515,
+          "end": 555,
+          "function": "_startup_upgrade_preflight",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 556,
+          "end": 562,
+          "function": "_startup_upgrade_fail",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 563,
+          "end": 607,
+          "function": "finish_startup_save_upgrade",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 795,
+          "end": 801,
+          "function": "add_item",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 802,
+          "end": 806,
+          "function": "can_receive",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 807,
+          "end": 811,
+          "function": "can_receive_record",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 812,
+          "end": 835,
+          "function": "receive",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 836,
+          "end": 840,
+          "function": "_add_item_without_commit",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 841,
+          "end": 860,
+          "function": "receive_record",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 861,
+          "end": 887,
+          "function": "_build_receive_result",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 888,
+          "end": 929,
+          "function": "_build_receive_result_for_record",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 930,
+          "end": 1037,
+          "function": "_build_receive_result_for_template",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1038,
+          "end": 1051,
+          "function": "_receive_failure",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1052,
+          "end": 1057,
+          "function": "_apply_receive_result",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1058,
+          "end": 1061,
+          "function": "_max_stack_for_item",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1062,
+          "end": 1067,
+          "function": "can_receive_batch",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1068,
+          "end": 1089,
+          "function": "receive_batch",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1090,
+          "end": 1118,
+          "function": "_build_receive_batch_result",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1119,
+          "end": 1127,
+          "function": "can_credit_gold",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1128,
+          "end": 1136,
+          "function": "_gold_load_projection",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1137,
+          "end": 1149,
+          "function": "add_gold",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1150,
+          "end": 1162,
+          "function": "spend_gold",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1163,
+          "end": 1168,
+          "function": "shared_gold_balance",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1169,
+          "end": 1182,
+          "function": "shared_gold_view_snapshot",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1183,
+          "end": 1189,
+          "function": "next_shared_gold_transaction_sequence",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1190,
+          "end": 1202,
+          "function": "_bank_request_preflight",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1203,
+          "end": 1249,
+          "function": "_shared_gold_plan",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1250,
+          "end": 1267,
+          "function": "transfer_shared_gold",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1268,
+          "end": 1310,
+          "function": "create_drop_item_instance",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1311,
+          "end": 1319,
+          "function": "_invalid_drop_instance_record",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1320,
+          "end": 1323,
+          "function": "has_item",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1324,
+          "end": 1329,
+          "function": "item_count",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1330,
+          "end": 1337,
+          "function": "inventory_occupied_count",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1338,
+          "end": 1345,
+          "function": "warehouse_occupied_count",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1346,
+          "end": 1351,
+          "function": "_inventory_slot_is_occupied",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1352,
+          "end": 1358,
+          "function": "_first_free_inventory_slot",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1359,
+          "end": 1370,
+          "function": "_place_inventory_record_in_first_free_slot",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1371,
+          "end": 1377,
+          "function": "_clear_inventory_slot",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1378,
+          "end": 1382,
+          "function": "_trim_inventory_empty_tail",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1383,
+          "end": 1419,
+          "function": "remove_item",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1420,
+          "end": 1435,
+          "function": "_consume_inventory_index",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1436,
+          "end": 1454,
+          "function": "_consume_inventory_index_without_commit",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1455,
+          "end": 1488,
+          "function": "destroy_inventory_indices",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1489,
+          "end": 1521,
+          "function": "sort_inventory_deterministic",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1522,
+          "end": 1538,
+          "function": "_inventory_records_mergeable",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1539,
+          "end": 1556,
+          "function": "shop_sell_quotes",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1557,
+          "end": 1561,
+          "function": "shop_buy_quotes",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1562,
+          "end": 1601,
+          "function": "_build_shop_buy_quotes",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1602,
+          "end": 1649,
+          "function": "buy_shop_item",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1650,
+          "end": 1658,
+          "function": "_shop_buy_result",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1659,
+          "end": 1664,
+          "function": "_forge_service",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1665,
+          "end": 1668,
+          "function": "quote_forge",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1669,
+          "end": 1672,
+          "function": "quote_forge_tray",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1673,
+          "end": 1677,
+          "function": "commit_forge",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1678,
+          "end": 1683,
+          "function": "_relic_service",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1684,
+          "end": 1687,
+          "function": "quote_relic_synthesis",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1688,
+          "end": 1692,
+          "function": "commit_relic_synthesis",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1693,
+          "end": 1706,
+          "function": "commit_workbench_immediate",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1707,
+          "end": 1713,
+          "function": "_empty_workbench_tray",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1714,
+          "end": 1722,
+          "function": "_load_workbench_tray",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1723,
+          "end": 1726,
+          "function": "workbench_tray",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1727,
+          "end": 1766,
+          "function": "place_workbench_item",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1767,
+          "end": 1807,
+          "function": "take_workbench_item",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1808,
+          "end": 1821,
+          "function": "transfer_workbench_immediate",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1822,
+          "end": 1840,
+          "function": "_begin_live_workbench_transaction",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1841,
+          "end": 1844,
+          "function": "configure_relic_roll_rng",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1845,
+          "end": 1848,
+          "function": "configure_relic_proc_rng",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1849,
+          "end": 1909,
+          "function": "sell_inventory_item",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1910,
+          "end": 1983,
+          "function": "sell_inventory_items",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1984,
+          "end": 1995,
+          "function": "test_transaction_debug_reset",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 1996,
+          "end": 1999,
+          "function": "test_transaction_debug_snapshot",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2000,
+          "end": 2009,
+          "function": "test_shop_quote_debug_reset",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2010,
+          "end": 2013,
+          "function": "test_shop_quote_debug_snapshot",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2014,
+          "end": 2023,
+          "function": "_new_shop_quote_lookup_cache",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2024,
+          "end": 2049,
+          "function": "_shop_sell_merchant_context",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2050,
+          "end": 2061,
+          "function": "_shop_sell_catalog",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2062,
+          "end": 2073,
+          "function": "_shop_sell_price_record",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2074,
+          "end": 2087,
+          "function": "_shop_sell_base_price_cached",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2088,
+          "end": 2198,
+          "function": "_shop_sell_quote",
+          "reason": "Prior named responsibility or 101-line prefix remains partial; complete omitted branches/body and caller chain",
+          "evidence_refs": [
+            "docs/review/full_project_audit_v109_20261009/external/B04/COVERAGE.json#/additional_consumers/1/functions/5"
+          ]
+        },
+        {
+          "start": 2199,
+          "end": 2202,
+          "function": "_shop_sell_base_price",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2203,
+          "end": 2226,
+          "function": "_shop_sell_risk_flags",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2227,
+          "end": 2235,
+          "function": "_shop_sell_result",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2236,
+          "end": 2260,
+          "function": "_current_shop_sell_quote_items",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2261,
+          "end": 2281,
+          "function": "_item_audio_identity",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2282,
+          "end": 2291,
+          "function": "_item_audio_nonnegative_integer",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2292,
+          "end": 2302,
+          "function": "_emit_item_audio_committed",
+          "reason": "Prior named responsibility or 101-line prefix remains partial; complete omitted branches/body and caller chain",
+          "evidence_refs": [
+            "docs/review/full_project_audit_v109_20261009/external/B05/COVERAGE.json#/extra_actual_source_consumers/11/functions/0"
+          ]
+        },
+        {
+          "start": 2303,
+          "end": 2306,
+          "function": "_last_item_commit_succeeded",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2307,
+          "end": 2310,
+          "function": "_use_item_success",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2311,
+          "end": 2314,
+          "function": "_use_item_failure",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2315,
+          "end": 2321,
+          "function": "use_inventory_index",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2322,
+          "end": 2419,
+          "function": "use_inventory_index_result",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2420,
+          "end": 2454,
+          "function": "_use_weapon_repair_oil_item_result",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2455,
+          "end": 2460,
+          "function": "apply_weapon_repair_oil",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2461,
+          "end": 2481,
+          "function": "apply_weapon_repair_oil_result",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2482,
+          "end": 2499,
+          "function": "_apply_weapon_repair_oil_without_commit",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2500,
+          "end": 2522,
+          "function": "_make_item_instance",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2523,
+          "end": 2530,
+          "function": "_with_item_identity",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2531,
+          "end": 2534,
+          "function": "configure_blessing_oil_rng",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2535,
+          "end": 2559,
+          "function": "_blessing_oil_rolls",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2560,
+          "end": 2592,
+          "function": "_apply_blessing_oil_effect_with_rolls",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2593,
+          "end": 2609,
+          "function": "apply_blessing_oil",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2610,
+          "end": 2625,
+          "function": "apply_blessing_oil_with_rolls",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2626,
+          "end": 2657,
+          "function": "use_blessing_oil_inventory_index",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2658,
+          "end": 2711,
+          "function": "use_blessing_oil_inventory_index_with_rolls",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2712,
+          "end": 2720,
+          "function": "lose_gold_percent",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2721,
+          "end": 2747,
+          "function": "add_experience",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2748,
+          "end": 2757,
+          "function": "record_kill_and_experience",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2758,
+          "end": 2802,
+          "function": "_plan_kill_rewards",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2803,
+          "end": 2812,
+          "function": "_apply_kill_reward_plan",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2859,
+          "end": 2864,
+          "function": "_death_request_context_matches",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2872,
+          "end": 2912,
+          "function": "_complete_background_death",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2913,
+          "end": 2991,
+          "function": "record_kills_and_experience_batch",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 2992,
+          "end": 3008,
+          "function": "apply_death_experience_penalty",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 3009,
+          "end": 3012,
+          "function": "experience_to_next_level",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 3013,
+          "end": 3024,
+          "function": "_experience_to_next_level_for_level",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 3025,
+          "end": 3035,
+          "function": "_gameplay_experience_threshold",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 3036,
+          "end": 3047,
+          "function": "equip_inventory_index_result",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 3048,
+          "end": 3059,
+          "function": "unequip_to_inventory_slot",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 3060,
+          "end": 3157,
+          "function": "equip_inventory_index",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 3158,
+          "end": 3208,
+          "function": "unequip_slot",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 3209,
+          "end": 3215,
+          "function": "learn_skill",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 3311,
+          "end": 3330,
+          "function": "accept_quest",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 3331,
+          "end": 3356,
+          "function": "abandon_quest",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 3357,
+          "end": 3403,
+          "function": "sort_warehouse",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 3404,
+          "end": 3429,
+          "function": "record_kill",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 3430,
+          "end": 3468,
+          "function": "claim_quest",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 3469,
+          "end": 3478,
+          "function": "quest_progress",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 3479,
+          "end": 3494,
+          "function": "current_bich_quest_id",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 3495,
+          "end": 3504,
+          "function": "quest_objective_lines",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 3505,
+          "end": 3515,
+          "function": "quest_reward_label",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 3516,
+          "end": 3519,
+          "function": "_quest_monster_matches",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 3520,
+          "end": 3527,
+          "function": "_quest_objectives_complete",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 3528,
+          "end": 3546,
+          "function": "_grant_quest_item_without_commit",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 3547,
+          "end": 3568,
+          "function": "_migrate_quest_states",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 3775,
+          "end": 3778,
+          "function": "_on_feature_catalog_changed",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 3779,
+          "end": 3803,
+          "function": "_prepare_feature_configuration",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 3804,
+          "end": 3810,
+          "function": "_commit_feature_configuration",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 3811,
+          "end": 3819,
+          "function": "_feature_item_eligible",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 3820,
+          "end": 3836,
+          "function": "_synchronize_feature_loadout",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 3837,
+          "end": 3840,
+          "function": "feature_bundle",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 3854,
+          "end": 3879,
+          "function": "_sync_relic_proc_equipment",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 3880,
+          "end": 3894,
+          "function": "try_trigger_relic_proc",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 3895,
+          "end": 3911,
+          "function": "advance_relic_proc",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 3912,
+          "end": 3917,
+          "function": "relic_proc_status",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 3918,
+          "end": 3930,
+          "function": "_apply_relic_proc_stats",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 3931,
+          "end": 3934,
+          "function": "has_special_effect",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 3982,
+          "end": 3990,
+          "function": "available_skill_ids",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 3991,
+          "end": 3997,
+          "function": "skill_assignment_roster",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 3998,
+          "end": 4011,
+          "function": "_prune_unavailable_equipment_skill_bindings",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4012,
+          "end": 4030,
+          "function": "_equipment_skill_level_bonus",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4031,
+          "end": 4034,
+          "function": "skill_progression_snapshot",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4099,
+          "end": 4102,
+          "function": "canonical_material_item_name",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4113,
+          "end": 4120,
+          "function": "available_special_actions",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4121,
+          "end": 4127,
+          "function": "damage_special_effect_item",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4128,
+          "end": 4132,
+          "function": "_add_nullable_stat",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4133,
+          "end": 4148,
+          "function": "current_wear_weight",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4149,
+          "end": 4163,
+          "function": "_loot_inventory_catalog_record",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4164,
+          "end": 4171,
+          "function": "_prewarm_loot_inventory_catalog",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4172,
+          "end": 4193,
+          "function": "inventory_weight",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4194,
+          "end": 4200,
+          "function": "max_inventory_weight",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4201,
+          "end": 4211,
+          "function": "_active_double_weight_effect",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4212,
+          "end": 4215,
+          "function": "_slots_for_category",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4216,
+          "end": 4229,
+          "function": "_choose_equipment_slot",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4230,
+          "end": 4233,
+          "function": "_default_equip_cycle_cursor",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4234,
+          "end": 4243,
+          "function": "_normalized_equip_cycle_cursor",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4244,
+          "end": 4253,
+          "function": "_advance_equip_cycle_cursor",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4254,
+          "end": 4260,
+          "function": "_empty_equipment",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4261,
+          "end": 4270,
+          "function": "_equipment_instance_from_saved",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4271,
+          "end": 4302,
+          "function": "_ensure_raw_durability_fields",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4303,
+          "end": 4329,
+          "function": "_adopt_legacy_durability_compatibility_override",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4330,
+          "end": 4347,
+          "function": "_sync_durability_compatibility_fields",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4348,
+          "end": 4353,
+          "function": "_has_positive_raw_durability",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4354,
+          "end": 4363,
+          "function": "_migrate_item_collection_durability",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4364,
+          "end": 4374,
+          "function": "migrate_equipment_slots",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4375,
+          "end": 4382,
+          "function": "damage_equipment_durability",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4383,
+          "end": 4408,
+          "function": "_damage_equipment_durability_raw",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4409,
+          "end": 4517,
+          "function": "apply_durability_event",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4518,
+          "end": 4526,
+          "function": "_durability_roll",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4527,
+          "end": 4546,
+          "function": "_weapon_strong",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4547,
+          "end": 4553,
+          "function": "repair_cost",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4554,
+          "end": 4591,
+          "function": "_repair_plan",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4592,
+          "end": 4658,
+          "function": "repair_all_equipment",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4659,
+          "end": 4676,
+          "function": "_authoritative_merchant_context",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4677,
+          "end": 4700,
+          "function": "_maximum_affordable_repair_raw_quote",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4701,
+          "end": 4704,
+          "function": "_profile_path",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4705,
+          "end": 4708,
+          "function": "_world_clock_directory",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4709,
+          "end": 4714,
+          "function": "_world_clock_path",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4715,
+          "end": 4718,
+          "function": "_death_event_root",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4719,
+          "end": 4724,
+          "function": "_death_event_directory",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4725,
+          "end": 4730,
+          "function": "_death_event_path",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4731,
+          "end": 4757,
+          "function": "_read_json_document",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4758,
+          "end": 4761,
+          "function": "_validation_result",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4762,
+          "end": 4765,
+          "function": "_is_json_number",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4766,
+          "end": 4769,
+          "function": "_is_integral_json_number",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4770,
+          "end": 4784,
+          "function": "_valid_bank_transaction_id",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4785,
+          "end": 4794,
+          "function": "_valid_sha256_text",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4795,
+          "end": 4820,
+          "function": "_bounded_bank_transaction_history",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4821,
+          "end": 4866,
+          "function": "_validate_bank_transaction_history",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4867,
+          "end": 4895,
+          "function": "_validate_gold_overflow_records",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4896,
+          "end": 4906,
+          "function": "_valid_saved_position",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4907,
+          "end": 4921,
+          "function": "_validate_saved_item_records",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4922,
+          "end": 4944,
+          "function": "_validate_saved_item_records_uncached",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4945,
+          "end": 4968,
+          "function": "_validate_saved_equipment",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4969,
+          "end": 4979,
+          "function": "_validated_drop_instance_id",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4980,
+          "end": 4994,
+          "function": "_validated_persisted_instance_id",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 4995,
+          "end": 5025,
+          "function": "_validate_profile_drop_instance_uniqueness",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 5026,
+          "end": 5063,
+          "function": "_profile_and_shared_drop_instances_are_disjoint",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 5064,
+          "end": 5083,
+          "function": "_validate_extended_item_ownership",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 5084,
+          "end": 5241,
+          "function": "_validate_profile_document_status",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 5242,
+          "end": 5275,
+          "function": "_validate_profile_index_document_status",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 5276,
+          "end": 5297,
+          "function": "_validate_shared_warehouse_document_status",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 5298,
+          "end": 5326,
+          "function": "_json_validator_for_path",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 5327,
+          "end": 5335,
+          "function": "_world_state_owner_is_unsupported",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 5336,
+          "end": 5348,
+          "function": "_validate_world_clock_document_status",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 5349,
+          "end": 5369,
+          "function": "_validate_death_event_document_status",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 5370,
+          "end": 5442,
+          "function": "_read_world_clock_replay",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 5443,
+          "end": 5461,
+          "function": "_archive_legacy_world_clock_profile",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 5462,
+          "end": 5518,
+          "function": "_prepare_world_clock_profile",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 5519,
+          "end": 5545,
+          "function": "_complete_world_clock_import_backup",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 5546,
+          "end": 5583,
+          "function": "_checkpoint_world_clock",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 5584,
+          "end": 5614,
+          "function": "_queue_world_clock_cleanup",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 5615,
+          "end": 5623,
+          "function": "_clock_cleanup_covers",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 5624,
+          "end": 5642,
+          "function": "_start_world_clock_cleanup",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 5643,
+          "end": 5656,
+          "function": "_advance_world_clock_cleanup",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 5714,
+          "end": 5722,
+          "function": "_validate_json_candidate",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 5723,
+          "end": 5731,
+          "function": "_next_quarantine_path",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 5732,
+          "end": 5797,
+          "function": "_restore_json_backup",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 5798,
+          "end": 5829,
+          "function": "_read_json_with_status",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 5830,
+          "end": 5833,
+          "function": "_read_json",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 5834,
+          "end": 5862,
+          "function": "_write_json_atomic",
+          "reason": "Prior named responsibility or 101-line prefix remains partial; complete omitted branches/body and caller chain",
+          "evidence_refs": [
+            "docs/review/full_project_audit_v109_20261009/B07A_PERSISTENCE_FUNCTION_SUPPLEMENT.json#/call_chain_checks/0/functions/0"
+          ]
+        },
+        {
+          "start": 5863,
+          "end": 5877,
+          "function": "_promote_verified_json",
+          "reason": "Prior named responsibility or 101-line prefix remains partial; complete omitted branches/body and caller chain",
+          "evidence_refs": [
+            "docs/review/full_project_audit_v109_20261009/B07A_PERSISTENCE_FUNCTION_SUPPLEMENT.json#/call_chain_checks/0/functions/1"
+          ]
+        },
+        {
+          "start": 5878,
+          "end": 5905,
+          "function": "_record_background_json_receipt",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 5906,
+          "end": 5933,
+          "function": "_backup_sequence_after_promotion",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 5934,
+          "end": 5942,
+          "function": "_file_matches_validated_bytes",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 5943,
+          "end": 5959,
+          "function": "_shared_warehouse_empty_document",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 5960,
+          "end": 5987,
+          "function": "_shared_digest",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 5988,
+          "end": 5997,
+          "function": "_shared_warehouse_read_inventory",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 5998,
+          "end": 6005,
+          "function": "_shared_warehouse_test_isolation_enabled",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 6006,
+          "end": 6014,
+          "function": "_valid_profile_storage_id",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 6015,
+          "end": 6043,
+          "function": "_profile_ids_for_shared_warehouse",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 6044,
+          "end": 6058,
+          "function": "_legacy_warehouse_source",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 6059,
+          "end": 6147,
+          "function": "_validate_shared_warehouse_document",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 6148,
+          "end": 6155,
+          "function": "_occupied_records",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 6156,
+          "end": 6211,
+          "function": "_initialize_shared_warehouse",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 6212,
+          "end": 6221,
+          "function": "_ensure_shared_warehouse_ready",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 6222,
+          "end": 6225,
+          "function": "_revalidate_shared_warehouse_authority",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 6226,
+          "end": 6234,
+          "function": "_bank_fields_snapshot",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 6235,
+          "end": 6301,
+          "function": "_bank_transaction_transition_is_valid",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 6302,
+          "end": 6312,
+          "function": "_same_item_identity_upgrade",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 6313,
+          "end": 6377,
+          "function": "_warehouse_transaction_log_is_valid",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 6378,
+          "end": 6414,
+          "function": "_recover_shared_warehouse_transaction",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 6415,
+          "end": 6420,
+          "function": "_remove_persistence_file",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 6421,
+          "end": 6437,
+          "function": "_shared_document_for_records",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 6438,
+          "end": 6443,
+          "function": "_write_shared_warehouse_document_atomic",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 6444,
+          "end": 6473,
+          "function": "_write_shared_warehouse",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 6474,
+          "end": 6596,
+          "function": "_prepare_character_save_payload",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 6645,
+          "end": 6658,
+          "function": "device_lab_active_save_document",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 6659,
+          "end": 6702,
+          "function": "device_lab_apply_save_document",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 6703,
+          "end": 6710,
+          "function": "deposit_to_warehouse",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 6711,
+          "end": 6810,
+          "function": "deposit_to_warehouse_batch",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 6811,
+          "end": 6818,
+          "function": "withdraw_from_warehouse",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 6819,
+          "end": 6907,
+          "function": "withdraw_from_warehouse_batch",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 6908,
+          "end": 6915,
+          "function": "_trim_warehouse_empty_tail",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 6916,
+          "end": 6952,
+          "function": "_validate_device_lab_save_document",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 6953,
+          "end": 6963,
+          "function": "_emit_device_lab_state_changed",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7239,
+          "end": 7242,
+          "function": "monster_respawn_state_for_restore",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7243,
+          "end": 7252,
+          "function": "monster_respawn_entry",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7253,
+          "end": 7274,
+          "function": "mark_monster_respawn_dead",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7275,
+          "end": 7284,
+          "function": "clear_monster_respawn_slot",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7285,
+          "end": 7289,
+          "function": "world_clock_mutation_snapshot",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7290,
+          "end": 7297,
+          "function": "restore_world_clock_mutation",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7298,
+          "end": 7339,
+          "function": "apply_quick_slot_assignment",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7340,
+          "end": 7380,
+          "function": "apply_skill_button_assignment",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7381,
+          "end": 7389,
+          "function": "skill_button_assignments_snapshot",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7390,
+          "end": 7398,
+          "function": "skill_slots_for_group",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7399,
+          "end": 7405,
+          "function": "skill_name_for_slot",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7406,
+          "end": 7410,
+          "function": "skill_id_for_slot",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7411,
+          "end": 7421,
+          "function": "_import_skill_slot_ids",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7422,
+          "end": 7435,
+          "function": "_restore_skill_button_assignments",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7436,
+          "end": 7452,
+          "function": "_normalized_skill_button_assignments",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7453,
+          "end": 7460,
+          "function": "_normalized_skill_slot_array",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7461,
+          "end": 7466,
+          "function": "_sync_legacy_quick_slots_from_ring",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7467,
+          "end": 7477,
+          "function": "is_quick_item_candidate",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7478,
+          "end": 7481,
+          "function": "quick_item_slots_snapshot",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7482,
+          "end": 7487,
+          "function": "quick_item_slot_name",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7488,
+          "end": 7553,
+          "function": "assign_quick_item_slot",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7554,
+          "end": 7614,
+          "function": "use_quick_item_slot",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7615,
+          "end": 7618,
+          "function": "_normalized_quick_item_slots",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7619,
+          "end": 7629,
+          "function": "_inventory_index_by_entity_id",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7630,
+          "end": 7640,
+          "function": "item_count_by_entity_id",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7641,
+          "end": 7644,
+          "function": "_inventory_index_by_item_name",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7645,
+          "end": 7658,
+          "function": "apply_warrior_runtime_state",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7659,
+          "end": 7662,
+          "function": "warrior_runtime_state_for_restore",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7663,
+          "end": 7666,
+          "function": "configure_taoist_main_pets_persistence_provider",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7667,
+          "end": 7670,
+          "function": "clear_taoist_main_pets_persistence_provider",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7671,
+          "end": 7682,
+          "function": "apply_taoist_main_pet_runtime_states",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7683,
+          "end": 7695,
+          "function": "clear_taoist_main_pet_runtime_state",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7696,
+          "end": 7699,
+          "function": "taoist_main_pet_runtime_states_for_restore",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7700,
+          "end": 7706,
+          "function": "taoist_main_pet_runtime_state_for_restore",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7707,
+          "end": 7725,
+          "function": "_refresh_taoist_main_pet_runtime_states_for_save",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7726,
+          "end": 7732,
+          "function": "_empty_taoist_main_pet_runtime_states",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7733,
+          "end": 7742,
+          "function": "_taoist_main_pet_runtime_state_slots",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7743,
+          "end": 7776,
+          "function": "_normalized_taoist_main_pet_runtime_states",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7777,
+          "end": 7838,
+          "function": "_normalized_taoist_main_pet_runtime_state",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7839,
+          "end": 7857,
+          "function": "_normalized_warrior_runtime_state",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7858,
+          "end": 7869,
+          "function": "_default_warrior_runtime_state",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7870,
+          "end": 7886,
+          "function": "update_world_location",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7918,
+          "end": 7933,
+          "function": "list_characters",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7934,
+          "end": 7964,
+          "function": "prepare_qa_test_roster_v2",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 7965,
+          "end": 8009,
+          "function": "_archive_current_test_profiles",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 8010,
+          "end": 8067,
+          "function": "ensure_equipment_skill_test_roster",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 8068,
+          "end": 8244,
+          "function": "ensure_chiyue_test_roster",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 8245,
+          "end": 8323,
+          "function": "_commit_warehouse_transaction_snapshots",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 8324,
+          "end": 8335,
+          "function": "transfer_shared_gold_prepared",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 8336,
+          "end": 8361,
+          "function": "_prepare_shared_gold_request",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 8362,
+          "end": 8373,
+          "function": "transfer_warehouse_prepared",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 8374,
+          "end": 8377,
+          "function": "_warehouse_preparation_failure",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 8378,
+          "end": 8390,
+          "function": "_captured_json_matches_document",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 8391,
+          "end": 8397,
+          "function": "_continue_ui_work_slice",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 8398,
+          "end": 8519,
+          "function": "_prepare_warehouse_transfer",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 8520,
+          "end": 8543,
+          "function": "_await_character_writes_for_ui",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 8544,
+          "end": 8574,
+          "function": "_complete_prepared_warehouse",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 8575,
+          "end": 8612,
+          "function": "_bank_transfer_commit",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 8613,
+          "end": 8623,
+          "function": "_warehouse_transfer_commit",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 8624,
+          "end": 8662,
+          "function": "_warehouse_transfer_commit_validated",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 8663,
+          "end": 8885,
+          "function": "receive_loot_batch_partial",
+          "reason": "Prior named responsibility or 101-line prefix remains partial; complete omitted branches/body and caller chain",
+          "evidence_refs": [
+            "docs/review/full_project_audit_v109_20261009/external/B08/COVERAGE.json#/paths/38/functions/358"
+          ]
+        },
+        {
+          "start": 8928,
+          "end": 8936,
+          "function": "_loot_request_context_matches",
+          "reason": "Prior named responsibility or 101-line prefix remains partial; complete omitted branches/body and caller chain",
+          "evidence_refs": [
+            "docs/review/full_project_audit_v109_20261009/B07A_PERSISTENCE_FUNCTION_SUPPLEMENT.json#/call_chain_checks/0/functions/3"
+          ]
+        },
+        {
+          "start": 8945,
+          "end": 9000,
+          "function": "_complete_background_loot",
+          "reason": "Prior named responsibility or 101-line prefix remains partial; complete omitted branches/body and caller chain",
+          "evidence_refs": [
+            "docs/review/full_project_audit_v109_20261009/B07A_PERSISTENCE_FUNCTION_SUPPLEMENT.json#/call_chain_checks/0/functions/5"
+          ]
+        },
+        {
+          "start": 9001,
+          "end": 9032,
+          "function": "_loot_inventory_after_immediate_uses",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 9033,
+          "end": 9040,
+          "function": "_can_accept_immediate_item_use",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 9041,
+          "end": 9046,
+          "function": "_commit_item_use",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 9047,
+          "end": 9057,
+          "function": "_queue_character_snapshot_save",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 9058,
+          "end": 9075,
+          "function": "_start_item_save",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 9099,
+          "end": 9108,
+          "function": "_loot_save_failure",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 9109,
+          "end": 9120,
+          "function": "_drop_instance_id_already_present",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 9121,
+          "end": 9126,
+          "function": "_item_record_ownership_already_present",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 9127,
+          "end": 9130,
+          "function": "loot_batch_debug_snapshot",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 9131,
+          "end": 9158,
+          "function": "_valid_chiyue_test_profile_document",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 9159,
+          "end": 9163,
+          "function": "_rollback_new_chiyue_test_profiles",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 9164,
+          "end": 9167,
+          "function": "_skill_tier_for_equipment_tier",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 9168,
+          "end": 9233,
+          "function": "_test_character_payload",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 9234,
+          "end": 9260,
+          "function": "ensure_developer_test_character",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 9261,
+          "end": 9267,
+          "function": "_developer_item",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 9268,
+          "end": 9318,
+          "function": "ensure_zuma_test_character",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 9319,
+          "end": 9370,
+          "function": "apply_temporary_item_buff",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 9371,
+          "end": 9390,
+          "function": "advance_temporary_item_buffs",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 9391,
+          "end": 9403,
+          "function": "_apply_temporary_item_stat_modifiers",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 9404,
+          "end": 9412,
+          "function": "_default_world_position_fields",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 9413,
+          "end": 9419,
+          "function": "register_profile_gameplay_owner",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 9420,
+          "end": 9424,
+          "function": "unregister_profile_gameplay_owner",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 9425,
+          "end": 9455,
+          "function": "feature_publication_context",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 9456,
+          "end": 9467,
+          "function": "_profile_is_owned_by_gameplay",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 9468,
+          "end": 9532,
+          "function": "create_character",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        },
+        {
+          "start": 9533,
+          "end": 9540,
+          "function": "_reject_character_creation_stats",
+          "reason": "Declaration/byte/structure index is not body semantics; no matched explicit semantic callable evidence",
+          "evidence_refs": []
+        }
+      ],
+      "existing_file_evidence": [
+        "docs/review/full_project_audit_v109_20261009/external/B02/COVERAGE.json#/module_files/23",
+        "docs/review/full_project_audit_v109_20261009/external/B02_followup/COVERAGE.json#/module_files/23",
+        "docs/review/full_project_audit_v109_20261009/external/B04/COVERAGE.json#/additional_consumers/1",
+        "docs/review/full_project_audit_v109_20261009/external/B05/COVERAGE.json#/extra_actual_source_consumers/11",
+        "docs/review/full_project_audit_v109_20261009/external/B08/COVERAGE.json#/paths/38"
+      ]
+    }
+  ],
+  "scope": "Exact fixed source ranges and remaining obligations; no source semantics/native/build/device completion claimed",
+  "responsibility_plan_origin_commit": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+  "current_scope_rule": "Historical scheduling only. Match functions against fixed267890; subtract actual completed semantic coverage from B09 remainder/addendum/B10. Line numbers are historical, not current source evidence."
+}
