@@ -370,10 +370,10 @@ func valid_asset(path: String, resource: Resource) -> bool:
 	if not is_verified() or path not in _paths or not resource is Shader or resource.resource_path != path:
 		return false
 	if _export_verifier != null: return bool(_export_verifier.valid_shader(path, resource))
-	if FileAccess.get_sha256(path) != _payload.nodes[path].sha256:
+	if not _checkout_bytes_match_fingerprint(_read_source_bytes(path), _payload.nodes[path]):
 		return false
 	var shader: Shader = resource as Shader
-	return shader.code == FileAccess.get_file_as_string(path)
+	return _normalized_lf_text(shader.code) == _normalized_lf_text(FileAccess.get_file_as_string(path))
 
 func valid_target(resource: Resource) -> bool:
 	if not is_verified() or not resource is Script or resource.resource_path != target_path():
@@ -381,7 +381,21 @@ func valid_target(resource: Resource) -> bool:
 	if _export_verifier != null:
 		return bool(_export_verifier.valid_script(target_path(), resource)) and is_same(ResourceLoader.get_cached_ref(target_path()), resource)
 	var script: Script = resource as Script
-	return FileAccess.get_sha256(target_path()) == _payload.nodes[target_path()].sha256 and script.source_code == FileAccess.get_file_as_string(target_path())
+	var cached: Resource = ResourceLoader.get_cached_ref(target_path())
+	return cached != null and is_same(cached, resource) \
+		and _checkout_bytes_match_fingerprint(_read_source_bytes(target_path()), _payload.nodes[target_path()]) \
+		and _normalized_lf_text(script.source_code) == _normalized_lf_text(FileAccess.get_file_as_string(target_path()))
+
+static func _normalized_lf_text(value: String) -> String:
+	return value.replace("\r\n", "\n").replace("\r", "\n")
+
+static func _read_source_bytes(path: String) -> PackedByteArray:
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null:
+		return PackedByteArray()
+	var bytes := file.get_buffer(file.get_length())
+	file.close()
+	return bytes
 
 
 func transfer_loaded_retention_context(previous: Node, next_consumer: Node, service: Node) -> bool:

@@ -1,0 +1,117 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "required package data failure is explicit",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "metadata-only expansion declarations remain valid",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "required package without tables is rejected",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "required table invalid record is explicit",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "required expansion data failure rejects public prepare",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "public prepare reports required data failure",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "failed expansion prepare preserves active state",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "required manifest without tables rejects public prepare",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "public prepare reports missing table declaration",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "missing table rejection preserves active state",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "LF source matches its published fingerprint",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "CRLF checkout matches the normalized published fingerprint",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "normalized content edits remain rejected",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "formal code envelope prepares through ContentLayers",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "formal target Script is admitted",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "valid_target accepts an autocrlf Script with identical content",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "valid_target rejects normalized content tampering",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "valid_asset accepts resident Shader: res://assets/shaders/fire_wall_screen_blend_multiply.gdshader",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "valid_asset accepts resident Shader: res://assets/shaders/trial_magic_screen.gdshader",
+      "passed": true
+    }
+  ],
+  "count": 19,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "92b73c89-f2f5-4eae-b952-51919d590e19",
+  "passed": 19,
+  "reported_checks": 19,
+  "reported_failures": 0,
+  "run_id": "cade99ad-7eb5-4ef8-a604-78d826b355b3",
+  "runtime_environment": {
+    "native_process_id": 24552,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\dot_integrated_b11\\runner_92b73c89-f2f5-4eae-b952-51919d590e19",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/dot_integrated_b11/runner_92b73c89-f2f5-4eae-b952-51919d590e19/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "content_layer_validation_contract_test",
+  "schema_version": 1,
+  "source_content_sha256": "c25ff0c8fbdc8ba0393c7eb855680a56df7dda2e6189c9a052bfcd89d31f0b6d",
+  "status": "PASS"
+}

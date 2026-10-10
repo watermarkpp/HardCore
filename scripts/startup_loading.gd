@@ -334,6 +334,15 @@ func _on_failure_retry_pressed() -> void:
 
 
 func _on_failure_exit_pressed() -> void:
+	_request_application_quit()
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		_request_application_quit()
+
+
+func _request_application_quit() -> void:
 	if _startup_state == STARTUP_STATE_EXITING:
 		return
 	_exit_requested = true
@@ -348,10 +357,12 @@ func _on_failure_exit_pressed() -> void:
 	_target_load_generation += 1
 	_target_load_attempt_in_progress = false
 	_load_requested = false
-	_target_native_request_owned = false
-	_target_native_request_unresolved = false
 	_target_prepare_started = false
 	_transition_started = false
+	# Keep accepted native claims represented until the existing non-blocking
+	# retirement ledger receives them.  Clearing ownership here would make the
+	# later _exit_tree handoff impossible and strand the engine claim.
+	retire_threaded_resource_claims()
 	if failure_retry_button != null:
 		failure_retry_button.disabled = true
 	if failure_exit_button != null:

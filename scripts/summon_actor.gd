@@ -593,6 +593,8 @@ func _reset_combat_after_owner_teleport() -> void:
 	_attack_timer = 0.0
 	_attack_visual_remaining = 0.0
 	_fire_visual_remaining = 0.0
+	if _fire_sprite != null:
+		_fire_sprite.visible = false
 	velocity = Vector2.ZERO
 	actual_ground_motion_gu = Vector2.ZERO
 	_set_state(SummonState.FOLLOW_OWNER)

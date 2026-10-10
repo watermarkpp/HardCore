@@ -391,6 +391,8 @@ var _projection_profile_cache_audit_mode := false
 var _projection_profile_runtime_identity_cache: Dictionary = {}
 var _ground_effect_runtime_serial := 0
 var _portal_guard_state := MapPortalTravelGuardScript.new_state()
+var _active_portal_claim_id := ""
+var _active_portal_claim_transition_serial := -1
 var _map_transition_in_progress := false
 var _map_transition_serial := 0
 var _pending_main_pet_arrivals: Array[SummonActor] = []
@@ -1800,6 +1802,7 @@ func _exit_tree() -> void:
 	ContentLayers.retire_internal_code_result(_initial_code_retention)
 	_cancel_respawn_wakeups()
 	_retire_pending_warm_textures()
+	_retire_loading_texture_claims()
 	if _feature_effect_runtime != null:
 		_feature_effect_runtime.clear()
 	_poll_prepared_enemy_death_settlement(true)
@@ -2121,6 +2124,25 @@ func _player_display_extent_world_px() -> Vector3:
 ## requests per frame and retains finished textures back into the registry
 ## cache. Deliberately no-ops while the loading window is active.
 var _frame_texture_threaded: Dictionary = {}
+var _loading_texture_threaded: Dictionary = {}
+
+
+func _retire_loading_texture_claims() -> void:
+	if _loading_texture_threaded.is_empty():
+		return
+	# ResourceLoader threaded requests cannot be cancelled by GameRoot. Transfer
+	# each accepted claim to the existing persistent preparation owner instead of
+	# joining it here. In particular, never call load_threaded_get() for an
+	# IN_PROGRESS request during _exit_tree: that would turn owner retirement
+	# into a synchronous frame hitch.
+	for raw_path: Variant in _loading_texture_threaded.keys():
+		var path := str(raw_path)
+		if ContentLayers.retire_threaded_resource_claims(path, 1):
+			_loading_texture_threaded.erase(path)
+		else:
+			# Keep the local record when the persistent owner rejects the handoff;
+			# silently dropping an accepted native claim would leak ownership.
+			push_error("Caster texture claim handoff rejected: %s" % path)
 
 
 func _retire_pending_warm_textures() -> void:
@@ -2226,19 +2248,19 @@ func _prewarm_texture_paths_until(
 	deadline_usec: int
 ) -> Dictionary:
 	var cursor := 0
-	var in_flight: Dictionary = {}
+	_loading_texture_threaded.clear()
 	var loaded := 0
 	var failed := 0
 	# perf(R13-D1): first moment the absolute deadline became true, so the
 	# in-flight drain tail is measurable (diagnostics only, no behavior).
 	var first_deadline_hit_usec := 0
-	while cursor < paths.size() or not in_flight.is_empty():
+	while cursor < paths.size() or not _loading_texture_threaded.is_empty():
 		var deadline_hit := Time.get_ticks_usec() >= deadline_usec
 		if deadline_hit and first_deadline_hit_usec == 0:
 			first_deadline_hit_usec = Time.get_ticks_usec()
 		if not deadline_hit:
 			while (
-				in_flight.size() < FRAME_TEXTURE_WARM_MAX_IN_FLIGHT
+				_loading_texture_threaded.size() < FRAME_TEXTURE_WARM_MAX_IN_FLIGHT
 				and cursor < paths.size()
 			):
 				var path := paths[cursor]
@@ -2250,14 +2272,14 @@ func _prewarm_texture_paths_until(
 					path, "Texture2D", true
 				)
 				if err == OK:
-					in_flight[path] = true
+					_loading_texture_threaded[path] = true
 				else:
 					failed += 1
-		for raw_path: Variant in in_flight.keys():
+		for raw_path: Variant in _loading_texture_threaded.keys():
 			var path := str(raw_path)
 			var status := ResourceLoader.load_threaded_get_status(path)
 			if status == ResourceLoader.THREAD_LOAD_LOADED:
-				in_flight.erase(path)
+				_loading_texture_threaded.erase(path)
 				var texture := ResourceLoader.load_threaded_get(
 					path
 				) as Texture2D
@@ -2266,13 +2288,17 @@ func _prewarm_texture_paths_until(
 					loaded += 1
 				else:
 					failed += 1
-			elif (
-				status == ResourceLoader.THREAD_LOAD_FAILED
-				or status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE
-			):
-				in_flight.erase(path)
+			elif status == ResourceLoader.THREAD_LOAD_FAILED:
+				# FAILED is terminal but still owns one native retrieval claim.
+				# Consume that claim before retiring this local request owner;
+				# otherwise a failed accepted request survives as an orphan.
+				ResourceLoader.load_threaded_get(path)
+				_loading_texture_threaded.erase(path)
 				failed += 1
-		if in_flight.is_empty() and (
+			elif status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+				_loading_texture_threaded.erase(path)
+				failed += 1
+		if _loading_texture_threaded.is_empty() and (
 			cursor >= paths.size() or Time.get_ticks_usec() >= deadline_usec
 		):
 			break
@@ -2287,7 +2313,7 @@ func _prewarm_texture_paths_until(
 		"loaded": loaded,
 		"failed": failed,
 		"not_admitted": paths.size() - cursor,
-		"in_flight_at_deadline": in_flight.size(),
+		"in_flight_at_deadline": _loading_texture_threaded.size(),
 		"deadline_exceeded": first_deadline_hit_usec > 0,
 		"deadline_hit_at_usec": first_deadline_hit_usec,
 		"completed_at_usec": completed_usec,
@@ -3321,10 +3347,14 @@ func travel_via_portal(portal: ZonePortal, fresh_activation := true) -> bool:
 		return false
 	if not MapPortalTravelGuardScript.begin_travel(_portal_guard_state):
 		return false
+	var portal_claim_id := MapPortalTravelGuardScript.active_claim_id(
+		_portal_guard_state
+	)
+	_active_portal_claim_id = portal_claim_id
 	var target_map_id := int(request.get("target_map_id", -1))
 	var map_data := GameData.get_map_by_id(target_map_id)
 	if map_data.is_empty():
-		_portal_guard_state["travel_in_flight"] = false
+		_cancel_portal_travel_claim(portal_claim_id)
 		hud.show_error_message("地图数据不存在：%d" % target_map_id)
 		return false
 	var target_runtime := MapEditorRuntimeBridgeScript.load_map(target_map_id)
@@ -3333,16 +3363,16 @@ func travel_via_portal(portal: ZonePortal, fresh_activation := true) -> bool:
 		target_runtime, target_portal_id
 	)
 	if target_runtime.is_empty() or target_endpoint.is_empty():
-		_portal_guard_state["travel_in_flight"] = false
+		_cancel_portal_travel_claim(portal_claim_id)
 		hud.show_error_message("目标地图或目标门点不可用", 1.5)
 		return false
 	if str(target_runtime.get("source", {}).get("map_id", "")) != str(request.get("target_map_key", "")):
-		_portal_guard_state["travel_in_flight"] = false
+		_cancel_portal_travel_claim(portal_claim_id)
 		hud.show_error_message("目标地图标识不匹配", 1.5)
 		return false
 	var target_tile := _portal_tile(target_endpoint.get("tile", []))
 	if target_tile == Vector2.INF or target_tile != _portal_tile(request.get("target_tile", [])):
-		_portal_guard_state["travel_in_flight"] = false
+		_cancel_portal_travel_claim(portal_claim_id)
 		hud.show_error_message("目标门点坐标不匹配", 1.5)
 		return false
 	map_data = _runtime_named_map_data(map_data)
@@ -3351,12 +3381,13 @@ func travel_via_portal(portal: ZonePortal, fresh_activation := true) -> bool:
 		map_data,
 		target_runtime,
 		target_portal_id,
-		target_tile
+		target_tile,
+		portal_claim_id
 	)
 	if _should_animate_map_transition(false):
-		if _begin_map_transition(operation, target_map_id):
+		if _begin_map_transition(operation, target_map_id, portal_claim_id):
 			return true
-		_portal_guard_state["travel_in_flight"] = false
+		_cancel_portal_travel_claim(portal_claim_id)
 		return false
 	return bool(operation.call())
 
@@ -3366,11 +3397,14 @@ func _complete_portal_travel(
 	map_data: Dictionary,
 	target_runtime: Dictionary,
 	target_portal_id: String,
-	target_tile: Vector2
+	target_tile: Vector2,
+	portal_claim_id: String
 ) -> bool:
+	if portal_claim_id != MapPortalTravelGuardScript.active_claim_id(_portal_guard_state):
+		return false
 	_load_zone(str(map_data.get("name", "未命名地图")), false, map_data)
 	if current_map_id != target_map_id:
-		_portal_guard_state["travel_in_flight"] = false
+		_cancel_portal_travel_claim(portal_claim_id)
 		return false
 	var arrival_ground_gu := MapEditorRuntimeBridgeScript.cell_to_ground_position_gu(
 		[target_tile.x, target_tile.y]
@@ -3391,6 +3425,8 @@ func _complete_portal_travel(
 		Time.get_ticks_msec(),
 		arrival_ground_gu
 	)
+	_active_portal_claim_id = ""
+	_active_portal_claim_transition_serial = -1
 	return true
 
 
@@ -3485,7 +3521,11 @@ func _begin_initial_world_bootstrap() -> void:
 	_release_gameplay_input_lock(INPUT_LOCK_INITIAL_BOOTSTRAP)
 
 
-func _begin_map_transition(operation: Callable, target_map_id := -1) -> bool:
+func _begin_map_transition(
+	operation: Callable,
+	target_map_id := -1,
+	portal_claim_id := ""
+) -> bool:
 	if _map_transition_in_progress or not operation.is_valid():
 		return false
 	if not is_instance_valid(player):
@@ -3494,6 +3534,8 @@ func _begin_map_transition(operation: Callable, target_map_id := -1) -> bool:
 	if (player._dead or player.current_hp <= 0) and not revival_authorized:
 		return false
 	_map_transition_serial += 1
+	if not portal_claim_id.is_empty():
+		_active_portal_claim_transition_serial = _map_transition_serial
 	var combat_token := "map-combat:%d" % _map_transition_serial
 	if not player.begin_combat_transition(combat_token, revival_authorized):
 		return false
@@ -3938,6 +3980,11 @@ func _maybe_relocate_blocked_arrival() -> void:
 ## never handed to gameplay input.
 func _fail_map_transition(recovery_policy: StringName) -> void:
 	var failed_transition_serial := _map_transition_serial
+	# A portal operation owns its single-flight claim across the whole async
+	# transition. Retire only that claim when the transition fails before the
+	# bound operation reaches _complete_portal_travel.
+	if _active_portal_claim_transition_serial == failed_transition_serial:
+		_cancel_portal_travel_claim(_active_portal_claim_id)
 	# prepare_map_build clears the prior real environment before arrival.
 	# After that boundary a pre-arrival failure cannot keep it playable.
 	if recovery_policy == &"pre_arrival_keep_world" and _map_transition_environment_replaced:
@@ -4026,6 +4073,15 @@ func _fail_map_transition(recovery_policy: StringName) -> void:
 	# pre_arrival_keep_world (and future title-return): the current world is
 	# safe to hand back to gameplay input, so the transition lock goes away.
 	_release_gameplay_input_lock(INPUT_LOCK_MAP_TRANSITION_LOCAL)
+
+
+func _cancel_portal_travel_claim(claim_id: String) -> void:
+	if claim_id.is_empty():
+		return
+	MapPortalTravelGuardScript.cancel_travel(_portal_guard_state, claim_id)
+	if _active_portal_claim_id == claim_id:
+		_active_portal_claim_id = ""
+		_active_portal_claim_transition_serial = -1
 
 
 ## P0-3: formal production town revival for a dead player - constructs the
@@ -11502,6 +11558,7 @@ func _apply_canonical_player_teleport(destination: Vector2) -> bool:
 
 
 func _apply_canonical_poison(target: EnemyActor, effect: Dictionary) -> void:
+	var now_ms := Time.get_ticks_msec()
 	var duration := float(effect.get("duration_seconds", 1))
 	if str(effect.get("poison_type", "")) == "green_poison":
 		target.apply_poison(
@@ -11511,11 +11568,15 @@ func _apply_canonical_poison(target: EnemyActor, effect: Dictionary) -> void:
 		)
 	else:
 		var previous: Variant = target.get_meta("canonical_red_poison", {})
-		var merged: Dictionary = (
+		var previous_active: Dictionary = (
 			(previous as Dictionary).duplicate(true)
-			if previous is Dictionary
+			if previous is Dictionary and int((previous as Dictionary).get("expires_at_ms", 0)) > now_ms
 			else {}
 		)
+		# An expired red poison contributes no AC/MAC, durability, or duration.
+		# Keep the current cast as the sole new owner, while preserving the
+		# existing max-refresh contract for an active red poison.
+		var merged := previous_active.duplicate(true)
 		for key: Variant in effect:
 			if not merged.has(key):
 				merged[key] = effect[key]
@@ -11543,7 +11604,7 @@ func _apply_canonical_poison(target: EnemyActor, effect: Dictionary) -> void:
 		)
 		merged["expires_at_ms"] = maxi(
 			int(merged.get("expires_at_ms", 0)),
-			Time.get_ticks_msec() + roundi(duration * 1000.0)
+			now_ms + roundi(duration * 1000.0)
 		)
 		target.set_meta("canonical_red_poison", merged)
 		RuntimeDiagnostics.increment_performance_counter(&"actor_redraw_requests")
@@ -11568,11 +11629,27 @@ func _synchronize_main_pet_skill_ranks() -> void:
 	var limit := SkillRankResolver.skeleton_count(PlayerState.effective_skill_level("taoist.summon_skeleton"))
 	for i: int in range(skeletons.size() - 1, limit - 1, -1):
 		skeletons[i].retire_for_rank_cap()
+	# Re-read the canonical live set after retirement callbacks so the stable
+	# slot retention pass does not count actors already leaving the tree.
+	skeletons = _canonical_main_pets("skeleton")
 	var saved_groups: Dictionary = PlayerState.taoist_main_pet_runtime_states_for_restore().get("groups", {})
-	for raw_snapshot: Variant in saved_groups.get("skeleton", []):
+	var retained_slots: Dictionary = {}
+	for summon: SummonActor in skeletons:
+		retained_slots[summon.pet_slot_index] = true
+	var pending_capacity := maxi(0, limit - skeletons.size())
+	var saved_skeletons: Array = (saved_groups.get("skeleton", []) as Array).duplicate(true)
+	saved_skeletons.sort_custom(func(a: Variant, b: Variant) -> bool:
+		return int((a as Dictionary).get("pet_slot_index", 0)) < int((b as Dictionary).get("pet_slot_index", 0))
+	)
+	for raw_snapshot: Variant in saved_skeletons:
 		if raw_snapshot is Dictionary:
 			var slot := int((raw_snapshot as Dictionary).get("pet_slot_index", 0))
-			if slot >= limit:
+			if retained_slots.has(slot):
+				continue
+			if pending_capacity > 0:
+				retained_slots[slot] = true
+				pending_capacity -= 1
+			else:
 				PlayerState.clear_taoist_main_pet_runtime_state("skeleton", slot)
 
 
@@ -11701,6 +11778,22 @@ func _restore_persisted_taoist_main_pet_if_needed(allow_deferred_arrival: bool =
 		PlayerState.taoist_main_pet_runtime_states_for_restore().get("groups", {})
 	)
 	for summon_id: String in ["skeleton", "divine_beast"]:
+		var allowed_skeleton_slots: Dictionary = {}
+		if summon_id == "skeleton":
+			# Slot ids are stable identities, not a dense array index. After a
+			# skill-rank downgrade, preserve the lowest persisted live slots up to
+			# the new count; do not reject a valid sparse slot merely because its
+			# numeric id is >= the count.
+			var candidate_slots: Array[int] = []
+			for candidate_raw: Variant in saved_groups.get(summon_id, []):
+				if candidate_raw is Dictionary and bool((candidate_raw as Dictionary).get("alive", false)):
+					candidate_slots.append(int((candidate_raw as Dictionary).get("pet_slot_index", 0)))
+			candidate_slots.sort()
+			var skeleton_limit := SkillRankResolver.skeleton_count(
+				PlayerState.effective_skill_level("taoist.summon_skeleton")
+			)
+			for candidate_index: int in range(mini(skeleton_limit, candidate_slots.size())):
+				allowed_skeleton_slots[candidate_slots[candidate_index]] = true
 		for raw_snapshot: Variant in saved_groups.get(summon_id, []):
 			if not raw_snapshot is Dictionary:
 				continue
@@ -11708,9 +11801,7 @@ func _restore_persisted_taoist_main_pet_if_needed(allow_deferred_arrival: bool =
 			var slot := int(snapshot.get("pet_slot_index", 0))
 			if not bool(snapshot.get("alive", false)):
 				continue
-			if summon_id == "skeleton" and slot >= SkillRankResolver.skeleton_count(
-				PlayerState.effective_skill_level("taoist.summon_skeleton")
-			):
+			if summon_id == "skeleton" and not allowed_skeleton_slots.has(slot):
 				PlayerState.clear_taoist_main_pet_runtime_state(summon_id, slot)
 				continue
 			var stable_skill_id := str(snapshot.get("skill_id", ""))
@@ -12140,10 +12231,23 @@ func _apply_canonical_main_pet(
 	var requested_slot := int(descriptor.get("pet_slot_index", 0))
 	if operation == "recall_existing_main_pet":
 		for pet: SummonActor in _canonical_main_pets(requested_summon_id):
+			if pet.owner_teleport_pending:
+				var pending_generation := int(pet.get_meta("pending_arrival_zone_generation", -1))
+				if pending_generation != _zone_generation:
+					# A late recall descriptor from an older map arrival has no
+					# authority to make a hidden old-generation pet visible again.
+					_pending_main_pet_arrivals.erase(pet)
+					pet.remove_meta("pending_arrival_zone_generation")
+					continue
 			var recall_plan := _canonical_summon_spawn_plan(stable_skill_id, pet, pet.pet_slot_index)
 			if not bool(recall_plan.get("valid", false)):
 				continue
-			pet.global_position = recall_plan.get("position_screen_px") as Vector2
+			var relocation := pet.relocate_after_owner_teleport(
+				recall_plan.get("position_screen_px") as Vector2
+			)
+			if bool(relocation.get("relocated", false)):
+				_pending_main_pet_arrivals.erase(pet)
+				pet.remove_meta("pending_arrival_zone_generation")
 			_synchronize_pet_skill_rank(pet)
 			pet.configure_spawn_release_footprint(release_id)
 		return

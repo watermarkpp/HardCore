@@ -1,0 +1,42 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "fixture starts a real pursuit leg before struck tail",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "exactly one real physics callback is observed",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "real physics callback observes a partial struck tail",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "partial struck callback spends only usable movement budget",
+      "passed": true
+    }
+  ],
+  "count": 4,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "92b73c89-f2f5-4eae-b952-51919d590e19",
+  "passed": 4,
+  "reported_checks": 4,
+  "reported_failures": 0,
+  "run_id": "",
+  "runtime_environment": {
+    "native_process_id": 1052,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\dot_integrated_b11\\runner_92b73c89-f2f5-4eae-b952-51919d590e19",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/dot_integrated_b11/runner_92b73c89-f2f5-4eae-b952-51919d590e19/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "b11_struck_partial_physics_motion_contract_20261010",
+  "schema_version": 1,
+  "source_content_sha256": "c25ff0c8fbdc8ba0393c7eb855680a56df7dda2e6189c9a052bfcd89d31f0b6d",
+  "status": "FAIL"
+}

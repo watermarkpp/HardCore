@@ -96,6 +96,9 @@ var _launch_code_generation := 0
 var _launch_code_result: Dictionary = {}
 var _launch_code_previous: WeakRef
 var _launch_code_diagnostic: Dictionary = {"state": "not_started"}
+var _quit_requested := false
+var suppress_quit_for_test := false
+var quit_requested_for_test := false
 
 
 func _ready() -> void:
@@ -124,19 +127,44 @@ func _ready() -> void:
 func _exit_tree() -> void:
 	ContentLayers.cancel_internal_code_owner(self, _launch_code_generation)
 	_launch_code_generation += 1
-	# ResourceLoader requests cannot be cancelled. Close the real ownership
-	# boundary before the scene or engine can release its resource filesystem.
-	# Includes older requested paths and timed-out monitors, not only the current
-	# display state; no normal interaction frame performs this lifecycle join.
 	_launch_scene_preload_generation += 1
-	for requested_path: String in _launch_scene_preload_requests:
-		var status := ResourceLoader.load_threaded_get_status(requested_path)
-		if status != ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
-			ResourceLoader.load_threaded_get(requested_path)
-	_launch_scene_preload_requests.clear()
+	_retire_launch_scene_preload_claims()
 	_launch_scene_preload_resource = null
 	_launch_scene_preload_state = LAUNCH_PRELOAD_IDLE
 	ContentLayers.retire_internal_code_result(_launch_code_result)
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		_request_application_quit()
+
+
+func _request_application_quit() -> void:
+	if _quit_requested:
+		return
+	_quit_requested = true
+	quit_requested_for_test = true
+	_launch_in_progress = false
+	ContentLayers.cancel_internal_code_owner(self, _launch_code_generation)
+	_launch_code_generation += 1
+	_launch_scene_preload_generation += 1
+	_retire_launch_scene_preload_claims()
+	if not suppress_quit_for_test:
+		get_tree().quit(0)
+
+
+func _retire_launch_scene_preload_claims() -> bool:
+	var complete := true
+	for requested_path: String in _launch_scene_preload_requests.keys():
+		var status := ResourceLoader.load_threaded_get_status(requested_path)
+		if status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+			_launch_scene_preload_requests.erase(requested_path)
+			continue
+		if ContentLayers.has_method("retire_threaded_resource_claims") and bool(ContentLayers.retire_threaded_resource_claims(requested_path, 1)):
+			_launch_scene_preload_requests.erase(requested_path)
+		else:
+			complete = false
+	return complete and _launch_scene_preload_requests.is_empty()
 
 
 func _request_launch_scene_preload() -> void:

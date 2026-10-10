@@ -1,0 +1,72 @@
+{
+  "audited_source": "267890c88477c0b1afaaaea612780c131c86736d",
+  "archive_receipt": "outputs/dot_remote_audit_20261010/DOT_B11_B12_ZIP_RECEIVE_RECEIPT.json",
+  "scope": "Actual archive receipt and current finding disposition; static coverage is not native/APK acceptance",
+  "findings": [
+    {
+      "id": "B11-SPATIAL-R01",
+      "status": "STATIC_MATH_CONFIRMED_FORMAL_PRODUCER_NOT_BOUND",
+      "owner": "root",
+      "native": "NOT_RUN",
+      "decision": "Conditional evidence retained; no gameplay policy silently changed"
+    },
+    {
+      "id": "B11-TERRAIN-R01",
+      "status": "OPEN_CONDITIONAL_REQUIRES_FORMAL_TIMELINE",
+      "owner": "root",
+      "native": "NOT_RUN",
+      "decision": "Conditional evidence retained; no gameplay policy silently changed"
+    },
+    {
+      "id": "B11-TERRAIN-R02",
+      "status": "OPEN_CONDITIONAL_REQUIRES_PROFILE",
+      "owner": "root",
+      "native": "NOT_RUN",
+      "decision": "Conditional evidence retained; no gameplay policy silently changed"
+    },
+    {
+      "id": "B11-MOVE-001",
+      "status": "STATIC_CONFIRMED_RUNTIME_NOT_RUN",
+      "owner": "v109_content_validation_repair",
+      "native": "NOT_RUN",
+      "decision": "Confirmed scoped bug: real reproduction and minimal correction underway"
+    },
+    {
+      "id": "B11-VIS-R01",
+      "status": "STATIC_CONTINUATION_PROVEN_EXPECTED_CANCELLATION_UNRESOLVED_NATIVE_NOT_RUN",
+      "owner": "root",
+      "native": "NOT_RUN",
+      "decision": "Conditional evidence retained; no gameplay policy silently changed"
+    },
+    {
+      "id": "B11-REM-001",
+      "status": "OPEN_RUNTIME_NOT_RUN",
+      "owner": "v109_world_owner_repair",
+      "native": "NOT_RUN",
+      "decision": "Confirmed scoped bug: real reproduction and minimal correction underway"
+    },
+    {
+      "id": "B11-H-R001",
+      "status": "CONDITIONAL_NOT_PRODUCTION_DEFECT",
+      "owner": "root",
+      "native": "NOT_RUN",
+      "decision": "Conditional evidence retained; no gameplay policy silently changed"
+    },
+    {
+      "id": "B11-H-R002",
+      "status": "CONDITIONAL_NOT_HP_DEFECT",
+      "owner": "root",
+      "native": "NOT_RUN",
+      "decision": "Conditional evidence retained; no gameplay policy silently changed"
+    }
+  ],
+  "B10_M_002_regen_followup": {
+    "status": "PASS",
+    "native_receipt": "outputs/dot_remote_audit_20261010/native/sleep_regen_green/FROZEN_NATIVE_RECEIPT.json",
+    "candidate_tree": "80c53abe2202e2c822d543541b48c8836b13ae66",
+    "fingerprint": "271a004cb931e01226310b1e9ae3fde23f31703f50a6057330b0d9667a45a2f0",
+    "checks": 56,
+    "android": "NOT_RUN",
+    "scope": "Sleep cooldown/continuous regen handoff 35 and named contact budget service/attack 21; natural native exits 0, engine errors 0, 2540 inputs verified unchanged"
+  }
+}

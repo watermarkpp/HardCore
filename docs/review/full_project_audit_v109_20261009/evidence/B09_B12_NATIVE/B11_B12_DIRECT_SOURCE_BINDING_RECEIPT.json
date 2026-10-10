@@ -1,0 +1,748 @@
+{
+  "status": "PASS",
+  "scope": "81 declared fixed-source Git blob references from partition file arrays and remaining/helper sources/support/data arrays; bounded identity verification, not complete caller semantics or runtime acceptance",
+  "source": "267890c88477c0b1afaaaea612780c131c86736d",
+  "unique_bindings": 81,
+  "gaps": [],
+  "records": [
+    {
+      "path": "scripts/runtime_combat_spatial_index.gd",
+      "claimed_blob": "1f851f96d0ae5cd5aa95d7f1e817d35d389e2659",
+      "actual_blob": "1f851f96d0ae5cd5aa95d7f1e817d35d389e2659",
+      "status": "PASS",
+      "partitions": [
+        "b11_spatial",
+        "b11_movement"
+      ]
+    },
+    {
+      "path": "scripts/world_spatial_rules.gd",
+      "claimed_blob": "08ad59d6e8a0d328f0e146d3b083a93dee99580b",
+      "actual_blob": "08ad59d6e8a0d328f0e146d3b083a93dee99580b",
+      "status": "PASS",
+      "partitions": [
+        "b11_spatial"
+      ]
+    },
+    {
+      "path": "scripts/ground_unit_space.gd",
+      "claimed_blob": "c3e3fe991c09ee716ebbf9a509d4b7bae8f8f770",
+      "actual_blob": "c3e3fe991c09ee716ebbf9a509d4b7bae8f8f770",
+      "status": "PASS",
+      "partitions": [
+        "b11_spatial"
+      ]
+    },
+    {
+      "path": "scripts/actor_body_policy.gd",
+      "claimed_blob": "bd8cb69bb4bea32a27db5f19943515a6ec2fc1c6",
+      "actual_blob": "bd8cb69bb4bea32a27db5f19943515a6ec2fc1c6",
+      "status": "PASS",
+      "partitions": [
+        "b11_spatial"
+      ]
+    },
+    {
+      "path": "scripts/game_root.gd",
+      "claimed_blob": "5c6130342470cc207f250b188fd0ec93aa1973cb",
+      "actual_blob": "5c6130342470cc207f250b188fd0ec93aa1973cb",
+      "status": "PASS",
+      "partitions": [
+        "b11_spatial",
+        "b11_visual",
+        "b11_enemy_audio"
+      ]
+    },
+    {
+      "path": "scripts/enemy.gd",
+      "claimed_blob": "e06773f37a07ab7625077e0f9f4d86dc04adaf00",
+      "actual_blob": "e06773f37a07ab7625077e0f9f4d86dc04adaf00",
+      "status": "PASS",
+      "partitions": [
+        "b11_spatial",
+        "b11_terrain",
+        "b11_movement",
+        "b11_visual",
+        "b11_enemy_audio"
+      ]
+    },
+    {
+      "path": "scripts/layers/runtime/combat_target_query_service.gd",
+      "claimed_blob": "bd846621d8406b80e3cb8e7566f868d789e17d73",
+      "actual_blob": "bd846621d8406b80e3cb8e7566f868d789e17d73",
+      "status": "PASS",
+      "partitions": [
+        "b11_spatial"
+      ]
+    },
+    {
+      "path": "scripts/world_background.gd",
+      "claimed_blob": "a947c6f85e016139279882da0db31b3c5c640796",
+      "actual_blob": "a947c6f85e016139279882da0db31b3c5c640796",
+      "status": "PASS",
+      "partitions": [
+        "b11_spatial"
+      ]
+    },
+    {
+      "path": "scripts/summon_actor.gd",
+      "claimed_blob": "440538dbcbc795bfb4ad42a7e7c2c17473027609",
+      "actual_blob": "440538dbcbc795bfb4ad42a7e7c2c17473027609",
+      "status": "PASS",
+      "partitions": [
+        "b11_spatial"
+      ]
+    },
+    {
+      "path": "assets/data/actor_body_policy_v1.json",
+      "claimed_blob": "7b695fade49b6f9f1bea2bdf781b6a19bfdc413f",
+      "actual_blob": "7b695fade49b6f9f1bea2bdf781b6a19bfdc413f",
+      "status": "PASS",
+      "partitions": [
+        "b11_spatial"
+      ]
+    },
+    {
+      "path": "scripts/monster_unit_adapter.gd",
+      "claimed_blob": "8d8e3ed5241a98be446a17ce004cda7574784f2c",
+      "actual_blob": "8d8e3ed5241a98be446a17ce004cda7574784f2c",
+      "status": "PASS",
+      "partitions": [
+        "b11_spatial"
+      ]
+    },
+    {
+      "path": "scripts/map_coordinate_mapper.gd",
+      "claimed_blob": "fe2896d60928a85ef507fd5e715ab9cd4d671df6",
+      "actual_blob": "fe2896d60928a85ef507fd5e715ab9cd4d671df6",
+      "status": "PASS",
+      "partitions": [
+        "b11_spatial"
+      ]
+    },
+    {
+      "path": "scripts/skill_projectile.gd",
+      "claimed_blob": "e06406f592c73b5e74365241dce6769dd5c053b3",
+      "actual_blob": "e06406f592c73b5e74365241dce6769dd5c053b3",
+      "status": "PASS",
+      "partitions": [
+        "b11_spatial"
+      ]
+    },
+    {
+      "path": "scripts/monster_ai_package/path_search.gd",
+      "claimed_blob": "716fcc8cea2eca31bc6dddf1c4ad97af51ea326b",
+      "actual_blob": "716fcc8cea2eca31bc6dddf1c4ad97af51ea326b",
+      "status": "PASS",
+      "partitions": [
+        "b11_terrain"
+      ]
+    },
+    {
+      "path": "scripts/monster_terrain_navigation_policy.gd",
+      "claimed_blob": "59baa868de8a5d336dd2f5b979f6643b2b55dcc5",
+      "actual_blob": "59baa868de8a5d336dd2f5b979f6643b2b55dcc5",
+      "status": "PASS",
+      "partitions": [
+        "b11_terrain"
+      ]
+    },
+    {
+      "path": "scripts/map_editor/polygon/poly_runtime.gd",
+      "claimed_blob": "c1dc75034759ea36355de25451d98e188c33092c",
+      "actual_blob": "c1dc75034759ea36355de25451d98e188c33092c",
+      "status": "PASS",
+      "partitions": [
+        "b11_terrain"
+      ]
+    },
+    {
+      "path": "scripts/map_editor/polygon/poly_index.gd",
+      "claimed_blob": "36d25332dd5bd8e18017ad45145b6dbe843c7044",
+      "actual_blob": "36d25332dd5bd8e18017ad45145b6dbe843c7044",
+      "status": "PASS",
+      "partitions": [
+        "b11_terrain"
+      ]
+    },
+    {
+      "path": "scripts/map_editor/polygon/poly_geometry.gd",
+      "claimed_blob": "7a09060a0ae311cbf69c162c870429160c1bd9a9",
+      "actual_blob": "7a09060a0ae311cbf69c162c870429160c1bd9a9",
+      "status": "PASS",
+      "partitions": [
+        "b11_terrain"
+      ]
+    },
+    {
+      "path": "scripts/map_editor/polygon/poly_nav_graph.gd",
+      "claimed_blob": "00eaaf6676e43b6d36109668870acddf41cc1ab7",
+      "actual_blob": "00eaaf6676e43b6d36109668870acddf41cc1ab7",
+      "status": "PASS",
+      "partitions": [
+        "b11_terrain"
+      ]
+    },
+    {
+      "path": "scripts/map_editor/polygon/poly_path_search.gd",
+      "claimed_blob": "2c8ddd6fca461b48bfc2d6471b6efb132838db6a",
+      "actual_blob": "2c8ddd6fca461b48bfc2d6471b6efb132838db6a",
+      "status": "PASS",
+      "partitions": [
+        "b11_terrain"
+      ]
+    },
+    {
+      "path": "scripts/map_editor/polygon/poly_pursuit_driver.gd",
+      "claimed_blob": "3e63524906ed1eed92691f947ac2c6619497cf3b",
+      "actual_blob": "3e63524906ed1eed92691f947ac2c6619497cf3b",
+      "status": "PASS",
+      "partitions": [
+        "b11_terrain"
+      ]
+    },
+    {
+      "path": "scripts/monster_ai_package/m30/context_token.gd",
+      "claimed_blob": "76c4049f0a53556827dba3e047052ad2015386ab",
+      "actual_blob": "76c4049f0a53556827dba3e047052ad2015386ab",
+      "status": "PASS",
+      "partitions": [
+        "b11_terrain"
+      ]
+    },
+    {
+      "path": "scripts/map_editor/map_editor_runtime_map_service.gd",
+      "claimed_blob": "bee3aa6833295c55f52a253d4440cf425e7567b5",
+      "actual_blob": "bee3aa6833295c55f52a253d4440cf425e7567b5",
+      "status": "PASS",
+      "partitions": [
+        "b11_terrain"
+      ]
+    },
+    {
+      "path": "scripts/player.gd",
+      "claimed_blob": "595077ed1c15e5946ce70d9668e7c4269ad768fc",
+      "actual_blob": "595077ed1c15e5946ce70d9668e7c4269ad768fc",
+      "status": "PASS",
+      "partitions": [
+        "b11_terrain",
+        "b11_enemy_audio"
+      ]
+    },
+    {
+      "path": "scripts/monster_ai_package/path_scheduler.gd",
+      "claimed_blob": "9cc6aea89b4c736873eff10f9996e451e85cdb8d",
+      "actual_blob": "9cc6aea89b4c736873eff10f9996e451e85cdb8d",
+      "status": "PASS",
+      "partitions": [
+        "b11_terrain"
+      ]
+    },
+    {
+      "path": "scripts/monster_crowd_attack_position_policy.gd",
+      "claimed_blob": "4787b3041c1c9fcf4b9fa1a717b51248835cdacb",
+      "actual_blob": "4787b3041c1c9fcf4b9fa1a717b51248835cdacb",
+      "status": "PASS",
+      "partitions": [
+        "b11_movement"
+      ]
+    },
+    {
+      "path": "scripts/monster_neighbor_step_policy.gd",
+      "claimed_blob": "d99267c12dc5282807d9b1f0180bb24f1a261d05",
+      "actual_blob": "d99267c12dc5282807d9b1f0180bb24f1a261d05",
+      "status": "PASS",
+      "partitions": [
+        "b11_movement"
+      ]
+    },
+    {
+      "path": "scripts/monster_movement_cadence.gd",
+      "claimed_blob": "a50f000b7dd2c0b49799edf9df112850e7a63dc9",
+      "actual_blob": "a50f000b7dd2c0b49799edf9df112850e7a63dc9",
+      "status": "PASS",
+      "partitions": [
+        "b11_movement"
+      ]
+    },
+    {
+      "path": "scripts/monster_visual.gd",
+      "claimed_blob": "de18c84e031fcca0ea9220567102529227af6bc1",
+      "actual_blob": "de18c84e031fcca0ea9220567102529227af6bc1",
+      "status": "PASS",
+      "partitions": [
+        "b11_movement",
+        "b11_visual",
+        "b11_enemy_audio"
+      ]
+    },
+    {
+      "path": "scripts/monster_source176/source_step_plan.gd",
+      "claimed_blob": "af5c06f525b523bd36acfe87ff853d9f041b0aaa",
+      "actual_blob": "af5c06f525b523bd36acfe87ff853d9f041b0aaa",
+      "status": "PASS",
+      "partitions": [
+        "b11_movement"
+      ]
+    },
+    {
+      "path": "scripts/monster_ai_package/policy.gd",
+      "claimed_blob": "9c68cdf33fc16e73dc6846904c787a33ec9db5d2",
+      "actual_blob": "9c68cdf33fc16e73dc6846904c787a33ec9db5d2",
+      "status": "PASS",
+      "partitions": [
+        "b11_movement"
+      ]
+    },
+    {
+      "path": "project.godot",
+      "claimed_blob": "a6db0873d7fb56eea170fd97ea972816b517a091",
+      "actual_blob": "a6db0873d7fb56eea170fd97ea972816b517a091",
+      "status": "PASS",
+      "partitions": [
+        "b11_movement"
+      ]
+    },
+    {
+      "path": "scripts/monster_overhead.gd",
+      "claimed_blob": "e59cdc869b02ed0c998fc9f33b2bd2f89ed683e3",
+      "actual_blob": "e59cdc869b02ed0c998fc9f33b2bd2f89ed683e3",
+      "status": "PASS",
+      "partitions": [
+        "b11_visual"
+      ]
+    },
+    {
+      "path": "scripts/monster_source_frames.gd",
+      "claimed_blob": "18a1f6db87bd85933ddb55f055b76ed9017aa916",
+      "actual_blob": "18a1f6db87bd85933ddb55f055b76ed9017aa916",
+      "status": "PASS",
+      "partitions": [
+        "b11_visual"
+      ]
+    },
+    {
+      "path": "scripts/monster_attack_source_overlay.gd",
+      "claimed_blob": "34a4319cbdb5f27a73384b61a3573cb5e2053ac0",
+      "actual_blob": "34a4319cbdb5f27a73384b61a3573cb5e2053ac0",
+      "status": "PASS",
+      "partitions": [
+        "b11_visual"
+      ]
+    },
+    {
+      "path": "scripts/monster_attack_timing.gd",
+      "claimed_blob": "d94c7b47fb23d06910ea4de67d1073320d102d20",
+      "actual_blob": "d94c7b47fb23d06910ea4de67d1073320d102d20",
+      "status": "PASS",
+      "partitions": [
+        "b11_visual"
+      ]
+    },
+    {
+      "path": "scripts/monster_target_ring_geometry.gd",
+      "claimed_blob": "ca60249d2ffd755bdb74ec6b863b691d771d87b7",
+      "actual_blob": "ca60249d2ffd755bdb74ec6b863b691d771d87b7",
+      "status": "PASS",
+      "partitions": [
+        "b11_visual"
+      ]
+    },
+    {
+      "path": "scripts/monster_display_formatter.gd",
+      "claimed_blob": "810641c565b4f162a4cd5c62792599b1ddd12f52",
+      "actual_blob": "810641c565b4f162a4cd5c62792599b1ddd12f52",
+      "status": "PASS",
+      "partitions": [
+        "b11_visual"
+      ]
+    },
+    {
+      "path": "scripts/monster_ground_alignment_draft.gd",
+      "claimed_blob": "6bda126fd7e3972c90884079384874e74080ccfa",
+      "actual_blob": "6bda126fd7e3972c90884079384874e74080ccfa",
+      "status": "PASS",
+      "partitions": [
+        "b11_visual"
+      ]
+    },
+    {
+      "path": "scripts/monster_ground_runtime_diagnostic_overlay.gd",
+      "claimed_blob": "111ae2d5551a2e4be8383d7c9ccee14cdf774cf6",
+      "actual_blob": "111ae2d5551a2e4be8383d7c9ccee14cdf774cf6",
+      "status": "PASS",
+      "partitions": [
+        "b11_visual"
+      ]
+    },
+    {
+      "path": "tools/visual_acceptance_lab/visual_acceptance_lab.gd",
+      "claimed_blob": "07a17b5b02ad303da0c3dbfdbc3285689920be2a",
+      "actual_blob": "07a17b5b02ad303da0c3dbfdbc3285689920be2a",
+      "status": "PASS",
+      "partitions": [
+        "b11_visual"
+      ]
+    },
+    {
+      "path": "tools/visual_acceptance_lab/visual_acceptance_lab.tscn",
+      "claimed_blob": "47c7fe4924b57937e1784257e990749a68de8b37",
+      "actual_blob": "47c7fe4924b57937e1784257e990749a68de8b37",
+      "status": "PASS",
+      "partitions": [
+        "b11_visual"
+      ]
+    },
+    {
+      "path": "tools/run_visual_acceptance_lab.ps1",
+      "claimed_blob": "c5d5dcdcaeb3f2e6b8aad13e3bbcd3a9fe719e22",
+      "actual_blob": "c5d5dcdcaeb3f2e6b8aad13e3bbcd3a9fe719e22",
+      "status": "PASS",
+      "partitions": [
+        "b11_visual"
+      ]
+    },
+    {
+      "path": "assets/data/monster_attack_overlay_sources_v2.json",
+      "claimed_blob": "142293a80eeaed3c0ba19d8bff0fd224a5450a2a",
+      "actual_blob": "142293a80eeaed3c0ba19d8bff0fd224a5450a2a",
+      "status": "PASS",
+      "partitions": [
+        "b11_visual"
+      ]
+    },
+    {
+      "path": "assets/data/monster_target_ring_profiles.json",
+      "claimed_blob": "181946342b89bafedb90bd84b65fffde42966a90",
+      "actual_blob": "181946342b89bafedb90bd84b65fffde42966a90",
+      "status": "PASS",
+      "partitions": [
+        "b11_visual"
+      ]
+    },
+    {
+      "path": "scripts/audio_runtime_service.gd",
+      "claimed_blob": "8c580d14c80bb076a6558265df6b080e312f4717",
+      "actual_blob": "8c580d14c80bb076a6558265df6b080e312f4717",
+      "status": "PASS",
+      "partitions": [
+        "b11_enemy_audio"
+      ]
+    },
+    {
+      "path": "scripts/combat_resolution_rules.gd",
+      "claimed_blob": "66d3b90cb898be47bc8793a5db623af7289bee78",
+      "actual_blob": "66d3b90cb898be47bc8793a5db623af7289bee78",
+      "status": "PASS",
+      "partitions": [
+        "b11_enemy_remaining"
+      ]
+    },
+    {
+      "path": "scripts/entrapment_boundary_controller.gd",
+      "claimed_blob": "cf74f482c7ed4bc78bf8b05892d94627a7174773",
+      "actual_blob": "cf74f482c7ed4bc78bf8b05892d94627a7174773",
+      "status": "PASS",
+      "partitions": [
+        "b11_enemy_remaining"
+      ]
+    },
+    {
+      "path": "scripts/features/contracts/published_monster_inputs.gd",
+      "claimed_blob": "3e08914d3465264761827d12805bf8241af19254",
+      "actual_blob": "3e08914d3465264761827d12805bf8241af19254",
+      "status": "PASS",
+      "partitions": [
+        "b11_enemy_remaining"
+      ]
+    },
+    {
+      "path": "scripts/features/runtime/actor_capability_set.gd",
+      "claimed_blob": "3d436afa609fb808561f11d7111e5c9157ae07fd",
+      "actual_blob": "3d436afa609fb808561f11d7111e5c9157ae07fd",
+      "status": "PASS",
+      "partitions": [
+        "b11_enemy_remaining"
+      ]
+    },
+    {
+      "path": "scripts/layers/runtime/combat_runtime_service.gd",
+      "claimed_blob": "1b382d4b354fe85097202864d8465fc89c19c3e8",
+      "actual_blob": "1b382d4b354fe85097202864d8465fc89c19c3e8",
+      "status": "PASS",
+      "partitions": [
+        "b11_enemy_remaining"
+      ]
+    },
+    {
+      "path": "scripts/monster_natural_regen_policy.gd",
+      "claimed_blob": "4c5a0c70113ebd13efb031738a3ea62dad5ef246",
+      "actual_blob": "4c5a0c70113ebd13efb031738a3ea62dad5ef246",
+      "status": "PASS",
+      "partitions": [
+        "b11_enemy_remaining"
+      ]
+    },
+    {
+      "path": "scripts/monster_struck_policy.gd",
+      "claimed_blob": "b99c53e408df0cd69f157d96911d9a75c581876f",
+      "actual_blob": "b99c53e408df0cd69f157d96911d9a75c581876f",
+      "status": "PASS",
+      "partitions": [
+        "b11_enemy_remaining"
+      ]
+    },
+    {
+      "path": "scripts/skills/runtimes/taoist_skill_runtime.gd",
+      "claimed_blob": "c30c09f156315cc3210d408ab57c189a824d16bd",
+      "actual_blob": "c30c09f156315cc3210d408ab57c189a824d16bd",
+      "status": "PASS",
+      "partitions": [
+        "b11_enemy_remaining"
+      ]
+    },
+    {
+      "path": "scripts/warrior_combat_math.gd",
+      "claimed_blob": "f879b84af56f6efa8c2f46cc0c491b309270b3e9",
+      "actual_blob": "f879b84af56f6efa8c2f46cc0c491b309270b3e9",
+      "status": "PASS",
+      "partitions": [
+        "b11_enemy_remaining"
+      ]
+    },
+    {
+      "path": "tests/crowd_pursuit_process_budget_ab_20261009.gd",
+      "claimed_blob": "405213bf6b934f1735bd1fea4ef5dc23d77c0c77",
+      "actual_blob": "405213bf6b934f1735bd1fea4ef5dc23d77c0c77",
+      "status": "PASS",
+      "partitions": [
+        "b11_enemy_remaining"
+      ]
+    },
+    {
+      "path": "tests/direct_spell_compiled_stats_parity_test.gd",
+      "claimed_blob": "70d760609b2a91a077596137e5573c40f91ca94a",
+      "actual_blob": "70d760609b2a91a077596137e5573c40f91ca94a",
+      "status": "PASS",
+      "partitions": [
+        "b11_enemy_remaining"
+      ]
+    },
+    {
+      "path": "tests/monster_accuracy_runtime_test.gd",
+      "claimed_blob": "063c0cb447f0a06404af5b7a5903c2afcf79ba4a",
+      "actual_blob": "063c0cb447f0a06404af5b7a5903c2afcf79ba4a",
+      "status": "PASS",
+      "partitions": [
+        "b11_enemy_remaining"
+      ]
+    },
+    {
+      "path": "tests/monster_natural_regen_policy_test.gd",
+      "claimed_blob": "65f6a6c4c793f3bf39c3fa1d58b3a98690462efd",
+      "actual_blob": "65f6a6c4c793f3bf39c3fa1d58b3a98690462efd",
+      "status": "PASS",
+      "partitions": [
+        "b11_enemy_remaining"
+      ]
+    },
+    {
+      "path": "scripts/monster_ai_package/delivery_geometry.gd",
+      "claimed_blob": "2f7271cfe3a51af1115ed31fee2db8cd1392481a",
+      "actual_blob": "2f7271cfe3a51af1115ed31fee2db8cd1392481a",
+      "status": "PASS",
+      "partitions": [
+        "b11_helpers"
+      ]
+    },
+    {
+      "path": "scripts/monster_ai_package/m30/summon_queue.gd",
+      "claimed_blob": "606dff9560a2300ff1d5a84e63bcec3d846b5418",
+      "actual_blob": "606dff9560a2300ff1d5a84e63bcec3d846b5418",
+      "status": "PASS",
+      "partitions": [
+        "b11_helpers"
+      ]
+    },
+    {
+      "path": "scripts/monster_ai_package/m30/walk_phase.gd",
+      "claimed_blob": "994e29fab1f07ea1140073400be4405dc1cea228",
+      "actual_blob": "994e29fab1f07ea1140073400be4405dc1cea228",
+      "status": "PASS",
+      "partitions": [
+        "b11_helpers"
+      ]
+    },
+    {
+      "path": "scripts/monster_ground_spike_effect.gd",
+      "claimed_blob": "051eed320b6b8d6593b228b5016dbb9bfaafe8de",
+      "actual_blob": "051eed320b6b8d6593b228b5016dbb9bfaafe8de",
+      "status": "PASS",
+      "partitions": [
+        "b11_helpers"
+      ]
+    },
+    {
+      "path": "scripts/monster_identity.gd",
+      "claimed_blob": "a50f2b7e09dac4da455ae6eaba987c41ca1e1362",
+      "actual_blob": "a50f2b7e09dac4da455ae6eaba987c41ca1e1362",
+      "status": "PASS",
+      "partitions": [
+        "b11_helpers"
+      ]
+    },
+    {
+      "path": "scripts/monster_ranged_projectile_effect.gd",
+      "claimed_blob": "b6221fb52ae8cfbd5f2a2ebad35e0fef9d18f369",
+      "actual_blob": "b6221fb52ae8cfbd5f2a2ebad35e0fef9d18f369",
+      "status": "PASS",
+      "partitions": [
+        "b11_helpers"
+      ]
+    },
+    {
+      "path": "scripts/monster_respawn_policy.gd",
+      "claimed_blob": "9fbaf904692f35dc52b63c1865b83f96cdb44359",
+      "actual_blob": "9fbaf904692f35dc52b63c1865b83f96cdb44359",
+      "status": "PASS",
+      "partitions": [
+        "b11_helpers"
+      ]
+    },
+    {
+      "path": "scripts/monster_source176/action_boundary.gd",
+      "claimed_blob": "046a31ee94394c09535343bfe11f9e26888b7c76",
+      "actual_blob": "046a31ee94394c09535343bfe11f9e26888b7c76",
+      "status": "PASS",
+      "partitions": [
+        "b11_helpers"
+      ]
+    },
+    {
+      "path": "scripts/monster_source176/frame_cursor.gd",
+      "claimed_blob": "8bc9448e70c259822319fc69259c1c7aa4e6456e",
+      "actual_blob": "8bc9448e70c259822319fc69259c1c7aa4e6456e",
+      "status": "PASS",
+      "partitions": [
+        "b11_helpers"
+      ]
+    },
+    {
+      "path": "scripts/monster_source176/reaction_policy.gd",
+      "claimed_blob": "046c1a80801dc52dab7ddd2b9ef46199563c9dd3",
+      "actual_blob": "046c1a80801dc52dab7ddd2b9ef46199563c9dd3",
+      "status": "PASS",
+      "partitions": [
+        "b11_helpers"
+      ]
+    },
+    {
+      "path": "scripts/monster_source176/skill_reaction_registry.gd",
+      "claimed_blob": "531cec2225bacc58396e169a97cad34a505e2961",
+      "actual_blob": "531cec2225bacc58396e169a97cad34a505e2961",
+      "status": "PASS",
+      "partitions": [
+        "b11_helpers"
+      ]
+    },
+    {
+      "path": "scripts/monster_source176/source_melee_geometry.gd",
+      "claimed_blob": "e07ef6eb363e9d4bdf8819804b0587f072b7ac95",
+      "actual_blob": "e07ef6eb363e9d4bdf8819804b0587f072b7ac95",
+      "status": "PASS",
+      "partitions": [
+        "b11_helpers"
+      ]
+    },
+    {
+      "path": "scripts/monster_source176/step_budget.gd",
+      "claimed_blob": "602bff7281811751b026f6713191de74920e03bf",
+      "actual_blob": "602bff7281811751b026f6713191de74920e03bf",
+      "status": "PASS",
+      "partitions": [
+        "b11_helpers"
+      ]
+    },
+    {
+      "path": "scripts/monster_source_poison_state.gd",
+      "claimed_blob": "cb038868f4735337b7f8ba23d87fba80edefbc70",
+      "actual_blob": "cb038868f4735337b7f8ba23d87fba80edefbc70",
+      "status": "PASS",
+      "partitions": [
+        "b11_helpers"
+      ]
+    },
+    {
+      "path": "scripts/monster_target_acquisition_policy.gd",
+      "claimed_blob": "a4a7a8eb30d9429661b58fce2c0923a0c2c10589",
+      "actual_blob": "a4a7a8eb30d9429661b58fce2c0923a0c2c10589",
+      "status": "PASS",
+      "partitions": [
+        "b11_helpers"
+      ]
+    },
+    {
+      "path": "scripts/monster_target_magic_effect.gd",
+      "claimed_blob": "9e958fb432e8a3709776f76cb566ebdf6622cb85",
+      "actual_blob": "9e958fb432e8a3709776f76cb566ebdf6622cb85",
+      "status": "PASS",
+      "partitions": [
+        "b11_helpers"
+      ]
+    },
+    {
+      "path": "scripts/features/adapters/world_target_bound.gd",
+      "claimed_blob": "bdeece297884cd53c70fe3783c15a1bdc0d4b599",
+      "actual_blob": "bdeece297884cd53c70fe3783c15a1bdc0d4b599",
+      "status": "PASS",
+      "partitions": [
+        "b11_helpers"
+      ]
+    },
+    {
+      "path": "scripts/game_data.gd",
+      "claimed_blob": "b36ac24f121bea1afdc53291fb648a6946d9d6c8",
+      "actual_blob": "b36ac24f121bea1afdc53291fb648a6946d9d6c8",
+      "status": "PASS",
+      "partitions": [
+        "b11_helpers"
+      ]
+    },
+    {
+      "path": "scripts/skills/combat_direction_space.gd",
+      "claimed_blob": "b40232b15905d9c81bee6eeb4e49f079f24f1507",
+      "actual_blob": "b40232b15905d9c81bee6eeb4e49f079f24f1507",
+      "status": "PASS",
+      "partitions": [
+        "b11_helpers"
+      ]
+    },
+    {
+      "path": "scripts/skills/skill_footprint_snapshot.gd",
+      "claimed_blob": "a0ec51e20d5a5b816bd946b4919f449c989db9dd",
+      "actual_blob": "a0ec51e20d5a5b816bd946b4919f449c989db9dd",
+      "status": "PASS",
+      "partitions": [
+        "b11_helpers"
+      ]
+    },
+    {
+      "path": "scripts/world_effect_render_order.gd",
+      "claimed_blob": "48b75918f5fa6f7430256222d1f0159bb79b26ca",
+      "actual_blob": "48b75918f5fa6f7430256222d1f0159bb79b26ca",
+      "status": "PASS",
+      "partitions": [
+        "b11_helpers"
+      ]
+    },
+    {
+      "path": "assets/data/monster_target_magic_sources_v1.json",
+      "claimed_blob": "63e5f22aff76258b3ca9f38657d060757877f1cb",
+      "actual_blob": "63e5f22aff76258b3ca9f38657d060757877f1cb",
+      "status": "PASS",
+      "partitions": [
+        "b11_helpers"
+      ]
+    }
+  ]
+}

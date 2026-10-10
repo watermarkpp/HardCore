@@ -1,0 +1,172 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "formal GameRoot reaches READY",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "touch route is rejected by the owner lock",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "keyboard route is rejected by the owner lock",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "portal claim is accepted",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "owned transition failure retires its portal claim",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "new portal claim is accepted after failure",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "stale transition failure preserves newer claim",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "pending summon relocation restores body state",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "owner teleport reset clears stale fire sprite",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "expired red AC does not max-merge",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "expired red MAC does not max-merge",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "expired red durability does not max-merge",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "expired red duration is retired",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "active red AC keeps max refresh",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "active red MAC keeps max refresh",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "green poison coexists with red poison",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "red poison reaches direct spell stats consumer",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "red poison consumer applies AC reduction",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "red poison consumer applies MAC reduction",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "effective skeleton rank permits two stable slots",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "persisted sparse snapshots pass the formal normalizer",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "GameRoot restores persisted sparse summon group",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "sparse restore keeps both permitted skeleton instances",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "sparse restore preserves stable slot ids",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "sparse restore preserves current HP",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "sparse restore preserves growth XP",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "current-generation recall restores pet body",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "successful recall clears GameRoot pending arrival",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "stale-generation recall cannot revive pet",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "stale recall retires pending entry and generation metadata",
+      "passed": true
+    }
+  ],
+  "count": 30,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "92b73c89-f2f5-4eae-b952-51919d590e19",
+  "passed": 30,
+  "reported_checks": 30,
+  "reported_failures": 0,
+  "run_id": "eae8bb0d-c946-4249-b900-113502c03888",
+  "runtime_environment": {
+    "native_process_id": 18316,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\dot_integrated_b11\\runner_92b73c89-f2f5-4eae-b952-51919d590e19",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/dot_integrated_b11/runner_92b73c89-f2f5-4eae-b952-51919d590e19/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "v109_world_owner_formal_test",
+  "schema_version": 1,
+  "source_content_sha256": "c25ff0c8fbdc8ba0393c7eb855680a56df7dda2e6189c9a052bfcd89d31f0b6d",
+  "status": "PASS"
+}

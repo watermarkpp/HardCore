@@ -2127,7 +2127,7 @@ func _begin_autonomous_step_without_cadence(
 	):
 		_pursuit_process_stat("new_step_due_wait")
 		return false
-	var pursuit_process_budgeted := _source176_ordinary_melee() and reason == &"pursuit"
+	var pursuit_process_budgeted := _hc_optional_pursuit_melee() and reason == &"pursuit"
 	if pursuit_process_budgeted and not _pursuit_process_budget_begin(&"new_step"):
 		return false
 	if new_step_frequency_applies:
@@ -3561,6 +3561,16 @@ func _background_wakeup_phase_slot() -> int:
 func _leave_background_deep_sleep() -> void:
 	if not _background_deep_sleeping:
 		return
+	# Physics kept the one action clock advancing while maintenance owned the
+	# existing cooldown and continuous natural-regen cadence. Consume only the
+	# unserviced slice; the damage entry wakes BEFORE subtracting new HP, so old
+	# full-HP regen ticks cannot heal damage which has not happened yet. Status
+	# and struck are applied after this handoff and must not receive old delta.
+	var elapsed_seconds := maxf(0.0, _combat_action_time_s - _background_last_wakeup_game_s)
+	_attack_timer -= elapsed_seconds
+	_background_last_wakeup_game_s = _combat_action_time_s
+	if not _dying and not _death_pending and current_hp > 0:
+		_update_natural_regen(elapsed_seconds)
 	_background_deep_sleeping = false
 	_background_ai_timer = 0.0
 	if _background_wakeup_timer != null:
@@ -3573,13 +3583,15 @@ func _on_background_wakeup_timeout() -> void:
 		return
 	_record_performance_counter(&"background_deep_sleep_wakeups")
 	var elapsed_seconds := maxf(0.0, _combat_action_time_s - _background_last_wakeup_game_s)
-	_background_last_wakeup_game_s = _combat_action_time_s
 	if _death_pending or current_hp <= 0:
 		_leave_background_deep_sleep()
 		return
 	if not _can_use_background_ai():
 		_leave_background_deep_sleep()
 		return
+	# This maintenance callback now consumes the slice. Any reentrant wake or
+	# later foreground handoff sees the updated anchor and cannot deduct twice.
+	_background_last_wakeup_game_s = _combat_action_time_s
 	_crowd_steering_timer = maxf(0.0, _crowd_steering_timer - elapsed_seconds)
 	_spatial_index_update()
 	# Same negative-allowed deadline as the foreground tick: an overdue attack
@@ -8289,7 +8301,7 @@ func _owner_optional_budget_end() -> void:
 func _owner_decision_window_due() -> bool:
 	var tick := Engine.get_physics_frames()
 	var owner_window_applies := (
-		_source176_ordinary_melee()
+		_hc_standard_melee()
 		or (is_boss and _owner_optional_budget_enabled)
 	)
 	if _owner_decision_interval_ms <= 0 or not owner_window_applies:
@@ -8325,7 +8337,7 @@ func _owner_decision_commit_deadline() -> void:
 
 func _owner_decision_record_served() -> void:
 	var owner_window_applies := (
-		_source176_ordinary_melee()
+		_hc_standard_melee()
 		or (is_boss and _owner_optional_budget_enabled)
 	)
 	if _owner_decision_interval_ms <= 0 or not owner_window_applies:
@@ -8647,7 +8659,7 @@ func _retarget_internal(delta := 0.0, safe_checked_player: Node2D = null) -> voi
 	# denial never reaches this point and therefore never advances the window.
 	if boss_owner_window_applies and not boss_stage_search and not is_instance_valid(target):
 		_owner_decision_record_boss_stage_served()
-	if _source176_ordinary_melee() and owner_decision_due and not is_instance_valid(target):
+	if _hc_standard_melee() and owner_decision_due and not is_instance_valid(target):
 		# A due target-selection body that legitimately finds no target is still
 		# a completed owner service; commit its 300 ms deadline once, without
 		# inventing an attack or delaying the next live acquisition.
@@ -9597,6 +9609,12 @@ func _hc_standard_melee() -> bool:
 		)
 	)
 
+func _hc_optional_pursuit_melee() -> bool:
+	# Optional planning coverage is independent of the attack's source geometry
+	# and damage delivery. Named contact monsters use the same process allowance
+	# as ordinary contact monsters; Boss maintenance keeps its separate owner.
+	return not is_boss and _hc_standard_melee()
+
 func _hc_exclusion_reason() -> String:
 	if _hc_standard_melee():
 		return ""
@@ -10225,7 +10243,7 @@ func _hc_tick_melee(delta: float, physics_delta: float) -> void:
 	# Ordinary pursuit follows adjacent steps toward the observed target.
 	# It need not continuously assign an ideal target-relative attack station;
 	# blocked steps already use the existing eight-neighbor flank navigator.
-	var surround_goal := _hc_crowd_position_goal(target) if not source176_ordinary else Vector2.INF
+	var surround_goal := _hc_surround_goal if not source176_ordinary else Vector2.INF
 	# A previously admitted detour keeps its destination until its boundary;
 	# abandoning it here can reverse a lawful outward step into the same jam.
 	if source176_ordinary and _hc_surround_goal.is_finite():
@@ -10263,7 +10281,7 @@ func _hc_tick_melee(delta: float, physics_delta: float) -> void:
 		# through to the pursue leg reusing this tick's shared permission.
 	if distance <= HCPolicy.START_GU + GroundUnitSpace.EPSILON_GU and str(attack_delivery_rule.get("kind", "")) != "" and _hc_try_start(target):
 		return
-	if source176_ordinary and not _owner_decision_window_due():
+	if _hc_optional_pursuit_melee() and not _owner_decision_window_due():
 		# The attack lane above is intentionally per-physics.  Only rich pursuit
 		# work is deferred; an admitted movement leg still advances with the
 		# current physics delta and collision/index publication.
@@ -10272,7 +10290,7 @@ func _hc_tick_melee(delta: float, physics_delta: float) -> void:
 			var before_ground := _screen_position_px_to_ground_position_gu(global_position)
 			var previous_owned_movement_call := _hc_owned_movement_call
 			_hc_owned_movement_call = true
-			_advance_autonomous_step(physics_delta, physics_delta)
+			_advance_autonomous_step(physics_delta, physics_delta + _struck_pause_in_tick_s)
 			_hc_owned_movement_call = previous_owned_movement_call
 			var after_ground := _screen_position_px_to_ground_position_gu(global_position)
 			if before_ground.is_finite() and after_ground.is_finite():
@@ -10290,9 +10308,12 @@ func _hc_tick_melee(delta: float, physics_delta: float) -> void:
 			if (
 				after_ground.is_finite()
 				and _attack_timer <= 0.0
-				and _source176_melee_reach_ok(
-					_ground_delta_gu_between_screen_positions(global_position, target.global_position),
-					0.0,
+				and (
+					_source176_melee_reach_ok(
+						_ground_delta_gu_between_screen_positions(global_position, target.global_position), 0.0
+					) if source176_ordinary else _ground_delta_gu_between_screen_positions(
+						global_position, target.global_position
+					).length() <= HCPolicy.START_GU + GroundUnitSpace.EPSILON_GU
 				)
 			):
 				if _hc_try_start(target):
@@ -10301,6 +10322,8 @@ func _hc_tick_melee(delta: float, physics_delta: float) -> void:
 			velocity = Vector2.ZERO
 		_hc_last_reason = "OWNER_DECISION_WAIT"
 		return
+	if not source176_ordinary:
+		surround_goal = _hc_crowd_position_goal(target)
 	var observation_served := _hc_refresh_observation()
 	if observation_served:
 		_owner_decision_record_served()
@@ -10399,7 +10422,7 @@ func _hc_tick_melee(delta: float, physics_delta: float) -> void:
 		_owner_optional_budget_suspend()
 		var speed := move_speed_gu_per_sec * _movement_step_speed_scale
 		_hc_owned_movement_call = true
-		_advance_autonomous_step(remaining_budget, physics_delta)
+		_advance_autonomous_step(remaining_budget, physics_delta + _struck_pause_in_tick_s)
 		_hc_owned_movement_call = false
 		var leg_end := _screen_position_px_to_ground_position_gu(global_position)
 		var distance_moved := leg_start.distance_to(leg_end) if leg_end.is_finite() else 0.0
@@ -10708,7 +10731,7 @@ func _hc_pursuit_budget_kind_runnable(kind: StringName) -> bool:
 	return false
 
 func _pursuit_process_budget_begin(kind: StringName) -> bool:
-	if not _source176_ordinary_melee() or is_boss:
+	if not _hc_optional_pursuit_melee():
 		return true
 	if _pursuit_process_budget_mode == "immediate":
 		return true
@@ -10858,7 +10881,7 @@ func _hc_refresh_observation() -> bool:
 			if pending_token != 0:
 				HCDecisionBudget.end(pending_token)
 		return true
-	var pursuit_observation_budgeted := _source176_ordinary_melee() and not is_boss
+	var pursuit_observation_budgeted := _hc_optional_pursuit_melee()
 	if pursuit_observation_budgeted and not _pursuit_process_budget_begin(&"observation"):
 		return false
 	if not _hc_target_usable(target):
@@ -11418,7 +11441,7 @@ func _hc_neighbor_internal(current: Vector2, hit_target: Node2D, direct: Vector2
 			if Time.get_ticks_msec() < _hc_next_side_retry_ms:
 				return Vector2i.ZERO
 			var decision_token := 0
-			if _source176_ordinary_melee():
+			if _hc_standard_melee():
 				decision_token = HCDecisionBudget.begin(self, _hc_decision_scope(), &"neighbor")
 				if decision_token == 0:
 					_hc_last_reason = "DECISION_BUDGET_WAIT"

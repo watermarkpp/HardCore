@@ -1,0 +1,44 @@
+{
+  "status": "PASS",
+  "input_freeze_status": "PASS",
+  "scope": "Input freeze and individual native results; failed/missing checks remain explicit. Android/GPU/performance NOT_RUN",
+  "candidate_tree": "802e2c191a119f16f6f06eb261e2e68f95ee4624",
+  "source_fingerprint": "a952ad174143d5afbf328639733eda8141241b978bb98705b10a4ea0ff9a0121",
+  "checked_inputs": 2556,
+  "runner": "outputs\\dot_remote_audit_20261010\\native\\integrated_b11_fixture_green\\runner_results_adhoc_20261010_140539_591_16896.json",
+  "invocation_id": "dbd91cd4-e9d8-413c-8939-91ce7015ecf8",
+  "engine_log_errors": 0,
+  "main_index_unchanged": true,
+  "results": [
+    {
+      "test_path": "tests/framework/b11_struck_partial_physics_motion_contract_20261010.tscn",
+      "result": "PASS",
+      "reason": "",
+      "timeout": false,
+      "effective_exit_code": 0,
+      "native_exit_observed_utc": "2026-10-10T06:05:28.0145276Z",
+      "framework_run_id": "c3c5e93a-7831-44c1-9179-ebeca4a2ecd1",
+      "framework_receipt_valid": true,
+      "formal_evidence_status": "PASS",
+      "check_count": 4,
+      "failed_checks": 0,
+      "receipt": "outputs\\dot_remote_audit_20261010\\native\\integrated_b11_fixture_green\\b11_struck_partial_physics_motion_contract_20261010.result.json",
+      "receipt_sha256": "3be9de2428af8c013ff0c04f6a09f3114fdd178161dadd3b9fae9eb0c7107517"
+    },
+    {
+      "test_path": "tests/framework/crowd_named_melee_optional_budget_20261010_test.tscn",
+      "result": "PASS",
+      "reason": "",
+      "timeout": false,
+      "effective_exit_code": 0,
+      "native_exit_observed_utc": "2026-10-10T06:05:38.1038684Z",
+      "framework_run_id": "6376942b-5b38-4036-aa71-aa981a5829fd",
+      "framework_receipt_valid": true,
+      "formal_evidence_status": "PASS",
+      "check_count": 21,
+      "failed_checks": 0,
+      "receipt": "outputs\\dot_remote_audit_20261010\\native\\integrated_b11_fixture_green\\crowd_named_melee_optional_budget_20261010_test.result.json",
+      "receipt_sha256": "5478a66ebcc9f8c71545bd1fa2e2c58eb65b37ff23114b5b61b83d136de54382"
+    }
+  ]
+}

@@ -3,6 +3,7 @@ extends Node
 const Enemy := preload("res://scripts/enemy.gd")
 const RuntimeFixture := preload("res://tests/source176_r3/helpers/runtime_fixture.gd")
 const SpatialRules := preload("res://scripts/world_spatial_rules.gd")
+const MonsterTerrainNavigationPolicyScript := preload("res://scripts/monster_terrain_navigation_policy.gd")
 
 var _failures: Array[String] = []
 
@@ -254,11 +255,20 @@ func _test_collision_wall_and_late_clock() -> void:
 	await get_tree().physics_frame
 	await get_tree().process_frame
 	for actor: EnemyActor in [wall_actor, open_actor]:
+		var actor_target: PlayerCharacter = wall_victim if actor == wall_actor else open_victim
 		if actor.visual != null:
 			actor.visual.advance_struck_action(5.0)
 		actor._hc_owned_movement_call = true
 		actor._combat_action_time_s = 0.0
-		var started: bool = actor._begin_autonomous_step_without_cadence(Vector2.RIGHT, 1.0, false, &"pursuit", actor.target)
+		# Bind the real target identity before supplying a positive hit. The
+		# production damage path records the attacker's last-known ground even
+		# when a wall blocks current LOS; no observation state is fabricated.
+		actor.target = actor_target
+		actor._hc_received_damage(actor_target, 1.0)
+		actor._retarget_internal(0.0)
+		_check(actor._hc_known_ground.is_finite(), "wall fixture primes finite observed ground")
+		_check(MonsterTerrainNavigationPolicyScript.context_valid(actor._terrain_navigation_context, actor.runtime_map_id), "wall fixture context is valid before admission")
+		var started: bool = actor._begin_autonomous_step_without_cadence(Vector2.RIGHT, 1.0, false, &"pursuit", actor_target)
 		_check(started if actor == open_actor else not started, "formal movement admission accepts open leg and rejects wall-crossing leg")
 	var wall_before: Vector2 = RuntimeFixture.to_ground(wall_actor.global_position)
 	var open_before: Vector2 = RuntimeFixture.to_ground(open_actor.global_position)

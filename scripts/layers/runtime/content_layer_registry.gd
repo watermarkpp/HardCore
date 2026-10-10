@@ -431,6 +431,10 @@ func prepare_expansion_configuration(requested: Dictionary) -> RefCounted:
 	if requested == enabled_expansions and GameData.is_loaded():
 		return prepared
 	var merged := _build_merged_configuration(requested)
+	for diagnostic: Variant in merged.diagnostics:
+		if str(diagnostic).begins_with("ERROR:"):
+			last_expansion_error = str(diagnostic).substr(6)
+			return null
 	var database_result := GameData.prepare_database_candidate(merged.database)
 	if not bool(database_result.success):
 		last_expansion_error = str(database_result.error)
@@ -524,17 +528,57 @@ func _build_merged_configuration(expansions: Dictionary, user_override: Dictiona
 
 func _apply_expansion_package(merged: Dictionary, package: Dictionary, diagnostics: Variant = null) -> void:
 	var package_path := str(package.get("data", ""))
+	var package_id := str(package.get("id", ""))
+	# A package without a data path is a valid metadata-only declaration (for
+	# example later_176_content). Once a path is declared, however, an enabled
+	# package must prove that its manifest and every declared table are readable.
+	# The old `{}` fallback silently turned a broken active package into a valid
+	# base database, which made the failure appear much later in gameplay.
+	if package_path.is_empty():
+		return
+	if not FileAccess.file_exists(package_path):
+		_append_expansion_error(diagnostics, "content_package_data_missing:" + package_id + ":" + package_path)
+		return
 	var package_manifest := _read_json(package_path)
-	if package_manifest.has("tables"):
-		var base_directory := package_path.get_base_dir()
-		var merge_policy := str(package_manifest.get("mergePolicy", package.get("mergePolicy", "add_only")))
-		for table_id: String in package_manifest.get("tables", {}):
-			if not merged.has(table_id):
+	if package_manifest.is_empty() or str(package_manifest.get("packageId", package_id)) != package_id:
+		_append_expansion_error(diagnostics, "content_package_manifest_invalid:" + package_id)
+		return
+	if not package_manifest.has("tables"):
+		# Only the registered user-equipment authoring document is metadata-only.
+		# Every other data-backed package is a required database contribution; a
+		# missing table declaration must fail closed instead of silently enabling
+		# an empty active expansion.
+		if package_id == "user_equipment" and package_manifest.has("newEquipment") and package_manifest.has("overrides"):
+			return
+		_append_expansion_error(diagnostics, "content_package_tables_missing:" + package_id)
+		return
+	if not package_manifest.tables is Dictionary:
+		_append_expansion_error(diagnostics, "content_package_tables_invalid:" + package_id)
+		return
+	var base_directory := package_path.get_base_dir()
+	var merge_policy := str(package_manifest.get("mergePolicy", package.get("mergePolicy", "add_only")))
+	for table_id: String in package_manifest.tables:
+		if not merged.has(table_id):
+			_append_expansion_error(diagnostics, "content_package_table_unknown:" + package_id + ":" + table_id)
+			continue
+		var table_path := base_directory.path_join(str(package_manifest.tables[table_id]))
+		if not FileAccess.file_exists(table_path):
+			_append_expansion_error(diagnostics, "content_package_table_missing:" + package_id + ":" + table_id)
+			continue
+		var table := _read_json(table_path)
+		if table.is_empty() or not table.get("records", null) is Array:
+			_append_expansion_error(diagnostics, "content_package_table_invalid:" + package_id + ":" + table_id)
+			continue
+		for record: Variant in table.records:
+			if not record is Dictionary:
+				_append_expansion_error(diagnostics, "content_package_record_invalid:%s:%s" % [package_id, table_id])
 				continue
-			var table := _read_json(base_directory.path_join(str(package_manifest.tables[table_id])))
-			for record: Variant in table.get("records", []):
-				if record is Dictionary:
-					_merge_record(merged[table_id], record, table_id, merge_policy, str(package.get("id", "")), diagnostics)
+			_merge_record(merged[table_id], record, table_id, merge_policy, package_id, diagnostics)
+
+
+func _append_expansion_error(diagnostics: Variant, message: String) -> void:
+	if diagnostics is Array:
+		diagnostics.append("ERROR:" + message)
 
 
 func _merge_record(target: Array, record: Dictionary, table_id: String, merge_policy: String, package_id: String, diagnostics: Variant = null) -> void:

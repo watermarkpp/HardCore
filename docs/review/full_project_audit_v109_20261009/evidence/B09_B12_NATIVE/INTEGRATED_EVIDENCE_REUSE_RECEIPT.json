@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "scope": "Evidence reuse only: all production/data/engine input hashes identical across the two combined stages; no same-run aggregate claim.",
+  "changed_input_paths": [
+    "tests/b11_struck_partial_physics_motion_contract_20261010.tscn",
+    "tests/framework/b11_struck_partial_physics_motion_contract_20261010.tscn",
+    "tests/framework/crowd_named_melee_optional_budget_20261010_test.gd"
+  ],
+  "first_tree": "c66f5532e3193b3f8d56f0557375b8d7967eeffa",
+  "second_tree": "802e2c191a119f16f6f06eb261e2e68f95ee4624"
+}

@@ -470,6 +470,16 @@ func locomotion_snapshot() -> Dictionary:
 
 
 func _keyboard_movement_vector() -> Vector2:
+	# Keyboard movement passes through the same GameRoot-owned gate as touch
+	# input. A terminal map failure can therefore retain the existing gameplay
+	# lock without leaving a keyboard-only path into an unsafe world.
+	var gameplay_owner := get_parent()
+	if (
+		is_instance_valid(gameplay_owner)
+		and gameplay_owner.has_method("gameplay_input_is_enabled")
+		and not bool(gameplay_owner.call("gameplay_input_is_enabled"))
+	):
+		return Vector2.ZERO
 	for action: StringName in [&"move_left", &"move_right", &"move_up", &"move_down"]:
 		if not InputMap.has_action(action):
 			return Vector2.ZERO

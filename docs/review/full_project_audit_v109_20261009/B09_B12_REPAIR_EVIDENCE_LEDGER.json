@@ -1,0 +1,120 @@
+{
+  "ledger_id": "v109_b09_b12_repair_evidence_ledger",
+  "status": "MISSING",
+  "created_at": "2026-10-10",
+  "scope": "B09/B12 repair evidence only; no tests executed while assembling this ledger",
+  "stage_policy": {
+    "do_not_merge_stages": true,
+    "native_android_gpu_performance_are_separate": true,
+    "android": "NOT_RUN",
+    "gpu_device": "NOT_RUN",
+    "performance": "NOT_RUN",
+    "preserve_failures_and_missing": true
+  },
+  "primary_combined_native": {
+    "status": "FAIL",
+    "receipt": "C:/Users/Administrator/Documents/HardCore/outputs/dot_remote_audit_20261010/native/integrated_b11/FROZEN_NATIVE_RECEIPT.json",
+    "runner": "outputs/dot_remote_audit_20261010/native/integrated_b11/runner_results_adhoc_20261010_140207_686_8988.json",
+    "candidate_tree": "c66f5532e3193b3f8d56f0557375b8d7967eeffa",
+    "source_fingerprint": "c25ff0c8fbdc8ba0393c7eb855680a56df7dda2e6189c9a052bfcd89d31f0b6d",
+    "checked_inputs": 2556,
+    "engine_log_errors": 0,
+    "main_index_unchanged": true,
+    "formal_scenes": {
+      "status": "PASS",
+      "check_count": 65,
+      "scenes": [
+        "tests/framework/content_layer_validation_contract_test.tscn",
+        "tests/framework/v109_world_owner_formal_test.tscn",
+        "tests/framework/monster_projectile_real_enemy_150_194_test.tscn",
+        "tests/framework/startup_character_quit_route_contract_test.tscn"
+      ],
+      "scope_note": "Individual receipts in the frozen receipt are the authority for the 19/30/9/7 checks."
+    },
+    "retained_failures": [
+      {
+        "scene": "tests/b11_struck_partial_physics_motion_contract_20261010.tscn",
+        "status": "FAIL",
+        "formal_evidence_status": "MISSING",
+        "reason": "missing_pass_marker; non_zero_exit_code_1",
+        "check_count": 4,
+        "receipt": "outputs/dot_remote_audit_20261010/native/integrated_b11/b11_struck_partial_physics_motion_contract_20261010.result.json",
+        "receipt_sha256": "91d89ac52e37201eac8ea5e62b7931ed875e42fdbc230e52c84d5b32b95b1fd8",
+        "interpretation": "First combined stage failure; do not relabel as fixed by later fixture stage."
+      },
+      {
+        "scene": "tests/framework/crowd_named_melee_optional_budget_20261010_test.tscn",
+        "status": "FAIL",
+        "formal_evidence_status": "MISSING",
+        "reason": "missing_pass_marker; non_zero_exit_code_1; framework_checks_failed",
+        "failed_checks": 2,
+        "check_count": 21,
+        "receipt": "outputs/dot_remote_audit_20261010/native/integrated_b11/crowd_named_melee_optional_budget_20261010_test.result.json",
+        "receipt_sha256": "7171aff73f17d4b89ca24e26133d6ca03a1a9430d35c371ed5496afcdf4e682d",
+        "interpretation": "First combined stage retained failure; later fixture metadata/seed stage is a distinct input stage."
+      }
+    ]
+  },
+  "second_fixture_stage": {
+    "status": "PASS",
+    "receipt": "C:/Users/Administrator/Documents/HardCore/outputs/dot_remote_audit_20261010/native/integrated_b11_fixture_green/FROZEN_NATIVE_RECEIPT.json",
+    "candidate_tree": "802e2c191a119f16f6f06eb261e2e68f95ee4624",
+    "source_content_sha256": "a952ad174143d5afbf328639733eda8141241b978bb98705b10a4ea0ff9a0121",
+    "invocation_id": "dbd91cd4-e9d8-413c-8939-91ce7015ecf8",
+    "scope": "Fixture metadata/seed correction only; production source was unchanged.",
+    "wrapper_observation": {
+      "status": "PASS",
+      "scenes": [
+        "tests/framework/b11_struck_partial_physics_motion_contract_20261010.tscn",
+        "tests/framework/crowd_named_melee_optional_budget_20261010_test.tscn"
+      ],
+      "checks": "4 movement + 21 named-melee checks; natural exit 0; engine errors 0",
+      "anti_magic_observation": "seed=1; anti_magic_roll=7; probability_points_1=10%; observed HP loss=25"
+    },
+    "formal_evidence_status": "PASS",
+    "formal_evidence_reason": "Frozen native receipt validates both scene receipts with matching input freeze and source fingerprint.",
+    "interpretation": "This is a separate corrected-fixture production/input stage. It closes the two fixture failures for this candidate only; it must not be combined with the first 65-check receipt into one same-run claim.",
+    "checked_inputs": 2556,
+    "engine_log_errors": 0
+  },
+  "reusable_prior_evidence": {
+    "sleep_and_regen": {
+      "status": "PASS",
+      "receipt": "C:/Users/Administrator/Documents/HardCore/outputs/dot_remote_audit_20261010/native/sleep_regen_green/FROZEN_NATIVE_RECEIPT.json",
+      "candidate_tree": "80c53abe2202e2c822d543541b48c8836b13ae66",
+      "source_fingerprint": "271a004cb931e01226310b1e9ae3fde23f31703f50a6057330b0d9667a45a2f0",
+      "checks": 56,
+      "breakdown": {
+        "monster_sleep_cooldown_handoff_20261010_test.tscn": 35,
+        "crowd_named_melee_optional_budget_20261010_test.tscn": 21
+      },
+      "scope": "Native only; Android/GPU/performance NOT_RUN. Reusable only while source/input contract remains unchanged."
+    },
+    "streaming": {
+      "status": "PASS",
+      "receipt": "C:/Users/Administrator/Documents/HardCore/outputs/dot_remote_audit_20261010/native/stream_overlap_green/runner_results_adhoc_20261010_131237_670_14008.json",
+      "scope": "Previously recorded streaming receipt; exact aggregate/check count is not asserted here because no frozen summary receipt was present in this tree.",
+      "android_gpu_performance": "NOT_RUN"
+    }
+  },
+  "negative_controls": {
+    "worker_world_negative_runner": {
+      "status": "FAIL",
+      "meaning": "Native malformed texture fault emits expected resource error; runner not relaxed.",
+      "receipt": "outputs\\dot_remote_audit_20261010\\native\\world_negative_retained\\runner_results_adhoc_20261010_135636_048_18600.json"
+    },
+    "worker_world_proof": {
+      "status": "PASS",
+      "meaning": "Four scoped owner retirement assertions, single-file input label only; complete source freeze MISSING.",
+      "receipt": "outputs\\dot_remote_audit_20261010\\native\\world_negative_retained\\v109_world_owner_negative_test.result.json",
+      "sha256": "1cf0dad12d33f5999fa40f74eb8c6ff3cc8c9f55c6953a407f5c6f5c24ce7b22"
+    },
+    "source_freeze": "MISSING"
+  },
+  "known_gaps": [
+    "No Android APK/device evidence.",
+    "No GPU/device performance evidence.",
+    "Different candidate trees/source fingerprints are intentionally not merged into one final PASS."
+  ],
+  "remaining_scope": "Full-project B13-B28 audit and APK109/device acceptance"
+}

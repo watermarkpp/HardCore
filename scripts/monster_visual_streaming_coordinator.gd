@@ -694,10 +694,8 @@ func _commit_loaded_profiles() -> void:
 		if _map_prefetch_completed_keys.has(cache_key):
 			continue
 		var job: Dictionary = _threaded_profile_requests.get(cache_key, {})
-		if str(job.get("lane", JOB_LANE_MAP_PREFETCH)) != JOB_LANE_MAP_PREFETCH:
-			continue
 		var state := str(job.get("state", ""))
-		if state == "failed":
+		if state in ["failed", "permanent_failed"]:
 			continue
 		if state != "loaded":
 			break
@@ -710,6 +708,12 @@ func _commit_loaded_profiles() -> void:
 	for cache_key: String in _threaded_profile_requests.keys():
 		var job: Dictionary = _threaded_profile_requests[cache_key]
 		if str(job.get("lane", JOB_LANE_RUNTIME_DEMAND)) != JOB_LANE_RUNTIME_DEMAND:
+			continue
+		# A new map can require an already accepted runtime request. Keep its
+		# original lane/generation provenance, but satisfy the current map's
+		# initial pin/completion in the ordered loop above. Completed keys still
+		# reload through runtime delivery without reopening the prefetch lane.
+		if _map_prefetch_keys.has(cache_key) and not _map_prefetch_completed_keys.has(cache_key):
 			continue
 		runtime_keys.append(cache_key)
 	runtime_keys.sort_custom(

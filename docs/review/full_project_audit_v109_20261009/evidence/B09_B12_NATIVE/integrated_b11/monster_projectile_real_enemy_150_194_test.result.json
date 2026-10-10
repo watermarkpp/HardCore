@@ -1,0 +1,67 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "ID150 accepted descriptor released",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "ID150 accepted flight created",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "ID150 missing visual is hidden",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "ID150 movement dodge prevents flight damage",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "ID194 formal guard delivery dispatches",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "ID194 accepted guard descriptor released",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "ID194 missing visual is hidden",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "ID194 guard flight settles real HP",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "ID194 presentation flight cannot double settle HP",
+      "passed": true
+    }
+  ],
+  "count": 9,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "92b73c89-f2f5-4eae-b952-51919d590e19",
+  "passed": 9,
+  "reported_checks": 9,
+  "reported_failures": 0,
+  "run_id": "39ee27bf-af26-493a-82aa-cd1da15bdf9e",
+  "runtime_environment": {
+    "native_process_id": 1384,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\dot_integrated_b11\\runner_92b73c89-f2f5-4eae-b952-51919d590e19",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/dot_integrated_b11/runner_92b73c89-f2f5-4eae-b952-51919d590e19/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "monster_projectile_real_enemy_150_194_test",
+  "schema_version": 1,
+  "source_content_sha256": "c25ff0c8fbdc8ba0393c7eb855680a56df7dda2e6189c9a052bfcd89d31f0b6d",
+  "status": "PASS"
+}
