@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "run_id": "owned-run",
+  "scene_id": "foreign_scene",
+  "source_content_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "count": 1,
+  "passed": 1,
+  "failed": 0,
+  "reported_checks": 1,
+  "reported_failures": 0,
+  "status": "PASS",
+  "checks": [
+    {
+      "id": 1,
+      "passed": true,
+      "label": "Actual component check"
+    }
+  ]
+}

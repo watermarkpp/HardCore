@@ -1,0 +1,72 @@
+{
+  "schema": "B07B_RUNNER_OWNERSHIP_DISPOSITION.v1",
+  "baseline": "b09ac5c2c41517ed516f11b91d09e435813465f2",
+  "current_head": "215f0b2",
+  "scope": "Windows ownership/path boundary only",
+  "godot_run": "NOT_RUN",
+  "files": [
+    {
+      "path": "tools/run_godot_tests.ps1",
+      "bytes": 95459,
+      "sha256": "ad7d56e1a7219053c68c9d46c21050175100dfbace86fbe078b14eba31608b0a"
+    },
+    {
+      "path": "tools/test_windows_process_ownership.ps1",
+      "bytes": 11432,
+      "sha256": "a982f23a54b51c8e5f0da45b6245bb43321a5d5b6e45040714c2a1f0a0947952"
+    },
+    {
+      "path": "tools/tests/runner_windows_ownership_20261010_test.ps1",
+      "bytes": 4982,
+      "sha256": "e7631f412f2a6dbec8ef758bf56b808d610baebc0dbcafbc9b534bc78f899b5d"
+    }
+  ],
+  "evidence": {
+    "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File tools/tests/runner_windows_ownership_20261010_test.ps1",
+    "exit_code": 0,
+    "receipt": "outputs/wake_drop_v108_review_followup_20261009/b07b_runner_ownership/runner_windows_ownership_test.json",
+      "receipt_sha256": "34bebe66eb104a93d5d600c7aef354f94be914ec655c51ad4ac47e2704300434",
+    "cases": [
+      {
+        "case": "same_executable_foreign_peer",
+        "ownership": true,
+        "foreign_alive": true,
+        "owned_active": true
+      },
+      {
+        "case": "owned_termination_foreign_survives",
+        "owned_active": false,
+        "foreign_alive": true
+      },
+      {
+        "case": "wrapper_early_exit_child_retained",
+        "wrapper_exited": true,
+        "job_active": true
+      },
+      {
+        "case": "owned_job_kill_on_timeout",
+        "job_active": false,
+        "foreign_alive": true
+      },
+      {
+        "case": "create_process_failure_closes_handles",
+        "status": "PASS"
+      },
+      {
+        "case": "path_escape_rejected",
+        "status": "PASS"
+      },
+      {
+        "case": "junction_escape_rejected",
+        "status": "PASS"
+      }
+    ]
+  },
+  "conclusion": "PASS for the controlled Windows helper scope; native Godot still NOT_RUN. Foreign same-executable peer survived owned cleanup; wrapper-early-exit child remained in owned job; invalid CreateProcess failed closed; path escape and junction traversal were rejected.",
+  "limits": [
+    "No Windows PID reuse was forced in this run; the Job Object boundary removes PID/path ownership inference but PID-reuse behavior remains NOT_RUN.",
+    "AssignProcessToJobObject failure injection was not run; the invalid CreateProcess case exercised startup failure cleanup and passed.",
+    "No Godot process was launched.",
+    "Linux branch was not executed."
+  ]
+}

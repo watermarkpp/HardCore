@@ -1,0 +1,102 @@
+{
+  "scope": "Actual Test-FrameworkReceipt, no native run",
+  "checks": [
+    {
+      "name": "valid-bound-source",
+      "passed": true,
+      "actual_valid": true,
+      "actual_reasons": [],
+      "expected_valid": true,
+      "expected_reason": ""
+    },
+    {
+      "name": "missing-expected-source",
+      "passed": true,
+      "actual_valid": false,
+      "actual_reasons": [
+        "framework_expected_source_unbound",
+        "framework_receipt_wrong_source"
+      ],
+      "expected_valid": false,
+      "expected_reason": "framework_expected_source_unbound"
+    },
+    {
+      "name": "malformed-expected-source",
+      "passed": true,
+      "actual_valid": false,
+      "actual_reasons": [
+        "framework_expected_source_unbound",
+        "framework_receipt_wrong_source"
+      ],
+      "expected_valid": false,
+      "expected_reason": "framework_expected_source_unbound"
+    },
+    {
+      "name": "missing-receipt-source",
+      "passed": true,
+      "actual_valid": false,
+      "actual_reasons": [
+        "framework_receipt_source_unbound",
+        "framework_receipt_wrong_source"
+      ],
+      "expected_valid": false,
+      "expected_reason": "framework_receipt_source_unbound"
+    },
+    {
+      "name": "malformed-receipt-source",
+      "passed": true,
+      "actual_valid": false,
+      "actual_reasons": [
+        "framework_receipt_source_unbound",
+        "framework_receipt_wrong_source"
+      ],
+      "expected_valid": false,
+      "expected_reason": "framework_receipt_source_unbound"
+    },
+    {
+      "name": "mismatched-source",
+      "passed": true,
+      "actual_valid": false,
+      "actual_reasons": [
+        "framework_receipt_wrong_source"
+      ],
+      "expected_valid": false,
+      "expected_reason": "framework_receipt_wrong_source"
+    },
+    {
+      "name": "bound-source-does-not-hide-failed-check",
+      "passed": true,
+      "actual_valid": false,
+      "actual_reasons": [
+        "framework_check_counts_mismatch",
+        "framework_checks_failed"
+      ],
+      "expected_valid": false,
+      "expected_reason": "framework_checks_failed"
+    },
+    {
+      "name": "bound-source-does-not-hide-wrong-run",
+      "passed": true,
+      "actual_valid": false,
+      "actual_reasons": [
+        "framework_receipt_wrong_run"
+      ],
+      "expected_valid": false,
+      "expected_reason": "framework_receipt_wrong_run"
+    },
+    {
+      "name": "bound-source-does-not-hide-wrong-scene",
+      "passed": true,
+      "actual_valid": false,
+      "actual_reasons": [
+        "framework_receipt_wrong_scene"
+      ],
+      "expected_valid": false,
+      "expected_reason": "framework_receipt_wrong_scene"
+    }
+  ],
+  "source_sha256": "051599D2BDDE515411701D2D2C52B5C54690C012867070B017504E0572015349",
+  "test_sha256": "5F2B48781B386F01D7885F6AA32A03800555024314E4092A22EC9C252F04CC98",
+  "godot": "NOT_RUN",
+  "device": "NOT_RUN"
+}

@@ -1,0 +1,87 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "PASS support writes its owned custom receipt",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "FAIL support writes its owned custom receipt",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "same support identity rejects a second write",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "failed support identity rejects a second write",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "different support instance collision fails closed",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "independent support instances receive distinct owned paths",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "PASS receipt retains its status and identity",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "FAIL receipt retains its status and identity",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "PASS receipt retains every original check and label",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "FAIL receipt retains every original check and label",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "custom receipt retains non-empty source, engine, scene, run, invocation and native metadata",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "custom receipt retains non-empty source, engine, scene, run, invocation and native metadata",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "failed repeated writes preserve both original receipt byte streams",
+      "passed": true
+    }
+  ],
+  "count": 13,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "4791faf5-477d-4a14-b0c2-4a8acdbab8ff",
+  "passed": 13,
+  "reported_checks": 13,
+  "reported_failures": 0,
+  "run_id": "30b3fe13-9d6a-4628-9d06-1d6fd7f8125d",
+  "runtime_environment": {
+    "native_process_id": 20244,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct56_custom_receipt\\runner_4791faf5-477d-4a14-b0c2-4a8acdbab8ff",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/v109_direct56_custom_receipt/runner_4791faf5-477d-4a14-b0c2-4a8acdbab8ff/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "hc_custom_receipt_preservation_20261010_test",
+  "schema_version": 1,
+  "source_content_sha256": "8f973127cc4113d61abb98c04197cfebf1769278d5833332616207bd519d2e53",
+  "status": "PASS"
+}

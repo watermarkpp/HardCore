@@ -1,0 +1,33 @@
+{
+  "audit_id": "B07B-003",
+  "title": "hc_monster_ai custom receipt preservation",
+  "baseline": "native53/native54 freezes retained; production helper pre-fix",
+  "scope": [
+    "tests/hc_monster_ai/test_support.gd",
+    "tests/framework/hc_custom_receipt_preservation_20261010_test.gd",
+    "tests/framework/hc_custom_receipt_preservation_20261010_test.tscn"
+  ],
+  "status": "PASS",
+  "finding": "finish() wrote a constant outputs/hc_monster_ai_package/name.json with WRITE, allowing later runs to truncate the original full checks and omitting run/source/engine/scene metadata.",
+  "disposition": "Added separate_write_receipt(name) with per-support immutable nonce directory, atomic directory ownership, safe name filtering, collision rejection, complete business checks and source/engine/scene/run/invocation/native PID metadata; finish() reuses the same writer and still owns print/quit.",
+  "test": {
+    "path": "tests/framework/hc_custom_receipt_preservation_20261010_test.gd",
+    "scene": "tests/framework/hc_custom_receipt_preservation_20261010_test.tscn",
+    "coverage": [
+      "independent PASS and FAIL support instances",
+      "complete original checks and labels",
+      "metadata retention",
+      "same-identity second write rejected",
+      "original bytes preserved",
+      "attached support cleanup"
+    ],
+    "native_status": "PASS",
+    "checks": 13,
+    "ledger": "B07B_FINAL_EVIDENCE_LEDGER.json"
+  },
+  "constraints": [
+    "No production gameplay code or runner/compiler changed.",
+    "Legacy constant output path is no longer used by finish; no normal consumer was found requiring it.",
+    "Framework receipt remains separate from custom support receipts."
+  ]
+}

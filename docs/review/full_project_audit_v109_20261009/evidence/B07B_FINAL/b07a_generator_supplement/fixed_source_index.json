@@ -1,0 +1,35 @@
+{
+  "fixed_commit": "b09ac5c2c41517ed516f11b91d09e435813465f2",
+  "files": [
+    {
+      "path": "tools/build_monster_runtime_authority.py",
+      "module": "runtime_monster_authority",
+      "sha256": "ec68bba29e8a036329170a0348cdbf3540d1dfe9690cefc96f12e73276573cfd",
+      "bytes": 70009,
+      "line_count": 1406
+    },
+    {
+      "path": "tools/build_entity_registry.py",
+      "module": "entity_registry",
+      "sha256": "13f820c3a2c610f1b15d5873c7cc2492fd2a5df0072f35e6d6eb10d0a9e7d084",
+      "bytes": 17734,
+      "line_count": 324
+    },
+    {
+      "path": "tools/build_item_drop_affix_wooma_jp_policy.py",
+      "module": "jp_affix_policy",
+      "sha256": "524ff4e199f110ab9f59da8f18be6a9ed594a3553fec2365b5a8e7447291f29b",
+      "bytes": 7571,
+      "line_count": 116
+    },
+    {
+      "path": "tools/build_monster_ground_slot_group_policy.py",
+      "module": "ground_slot_policy",
+      "sha256": "83726211d73463e8b394b07418e46f722904dac7689abc98dfcf983cba8c2f32",
+      "bytes": 4828,
+      "line_count": 110
+    }
+  ],
+  "function_count": 40,
+  "note": "Static source capture only; no generator/test execution."
+}

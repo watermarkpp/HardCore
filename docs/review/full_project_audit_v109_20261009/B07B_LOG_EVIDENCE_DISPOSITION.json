@@ -1,0 +1,28 @@
+{
+  "schema": "B07B_LOG_EVIDENCE_DISPOSITION.v1",
+  "scope": "standalone engine-log classification and formal-evidence gate helper; runner not integrated",
+  "godot_run": "NOT_RUN",
+  "upstream_formal_decision": "NOT_GRANTED",
+  "files": [
+    { "path": "tools/test_native_log_evidence.ps1", "bytes": 4232, "sha256": "503f1762b2f8f8294c4239f137a88851b5c33e5ab97003a8cbe2fdc4792ee568" },
+    { "path": "tools/tests/native_log_evidence_20261010_test.ps1", "bytes": 3727, "sha256": "2b2284dbc4c795eecc03bb079ff70af69f706760b24513a5e08d10f01ed52a9e" }
+  ],
+  "evidence": {
+    "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File tools/tests/native_log_evidence_20261010_test.ps1",
+    "exit_code": 0,
+    "output_directory": "outputs/wake_drop_v108_review_followup_20261009/b07b_log_evidence/9758cf87c20642088bf6795b23a045b5",
+    "receipt": "outputs/wake_drop_v108_review_followup_20261009/b07b_log_evidence/9758cf87c20642088bf6795b23a045b5/native_log_evidence_test.json",
+    "receipt_sha256": "477de873238fedd18677eea9c1d2061aa23084638beefd3237cd841d7063d56c",
+    "cases": [
+      { "case": "four_allowlist_categories_and_objectdb_warning", "status": "PASS", "counts": { "string_formatting": 1, "resources_in_use": 1, "rid_leak": 1, "null_parameter": 1, "objectdb_warning": 1 } },
+      { "case": "unknown_error_and_legacy_marker", "status": "PASS", "formal_evidence_status": "MISSING", "reason": "legacy_run_bound_checks_missing" },
+      { "case": "foreign_pass_receipt_is_formal_missing", "status": "PASS", "formal_evidence_status": "MISSING" }
+    ]
+  },
+  "limits": [
+    "Fixtures exercise the helper classification and gate; no Godot process or real runner scene was launched.",
+    "The helper does not grant upstream framework PASS and reports upstream_formal_decision NOT_GRANTED.",
+    "Legacy PASS text without a scene-and-invocation-bound receipt with nonzero checks remains formal evidence MISSING.",
+    "This helper does not alter prior raw logs or prior runner failure counts."
+  ]
+}

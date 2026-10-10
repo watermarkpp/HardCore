@@ -94,7 +94,9 @@ if (-not $RunnerIsLinux) {
     [Environment]::SetEnvironmentVariable('Path', $ProcessPath, 'Process')
 }
 $ProjectRoot = Split-Path -Parent $PSScriptRoot
+. (Join-Path $PSScriptRoot 'test_windows_process_ownership.ps1')
 . (Join-Path $PSScriptRoot 'test_framework_receipt.ps1')
+. (Join-Path $PSScriptRoot 'test_native_log_evidence.ps1')
 $PreviousFrameworkRunId = [Environment]::GetEnvironmentVariable('HARDCORE_FRAMEWORK_RUN_ID', 'Process')
 $PreviousFrameworkInvocationId = [Environment]::GetEnvironmentVariable('HARDCORE_FRAMEWORK_INVOCATION_ID', 'Process')
 $FrameworkEnvironmentCaptured = $true
@@ -103,8 +105,26 @@ if ($RunnerIsLinux -and ([string]::IsNullOrEmpty($Godot) -or -not (Test-Path -Li
     throw 'Linux requires an explicit existing HARDCORE_GODOT executable.'
 }
 $GodotDirectory = Split-Path -Parent $Godot
+# Record the actual Windows console wrapper and native engine independently.
+# The externally verified freeze ledger owns the dirty source/input manifest.
+$EngineFingerprint = @()
+if (-not $RunnerIsLinux) {
+    foreach ($enginePath in @($Godot, $Godot.Replace('_console.exe', '.exe')) | Select-Object -Unique) {
+        if (-not (Test-Path -LiteralPath $enginePath -PathType Leaf)) { throw "Engine component missing: $enginePath" }
+        $EngineFingerprint += [ordered]@{ path = $enginePath; sha256 = (Get-FileHash -LiteralPath $enginePath -Algorithm SHA256).Hash.ToLowerInvariant(); bytes = (Get-Item -LiteralPath $enginePath).Length }
+    }
+}
 $LogRoot = if ($env:HARDCORE_AUDIT_LOG_ROOT) { $env:HARDCORE_AUDIT_LOG_ROOT } else { Join-Path $ProjectRoot 'outputs\test_logs' }
 $RuntimeAppData = if ($env:HARDCORE_AUDIT_RUNTIME_APPDATA) { $env:HARDCORE_AUDIT_RUNTIME_APPDATA } else { Join-Path $ProjectRoot '.godot\runtime_appdata' }
+$WindowsOwnedProcess = $null
+if (-not $RunnerIsLinux) {
+    Assert-WindowsOwnedPath $RuntimeAppData (Join-Path $ProjectRoot '.godot\runtime_appdata') 'HARDCORE_AUDIT_RUNTIME_APPDATA' $ProjectRoot
+    Assert-WindowsOwnedPath $LogRoot (Join-Path $ProjectRoot 'outputs') 'HARDCORE_AUDIT_LOG_ROOT' $ProjectRoot
+    if ($env:HARDCORE_AUDIT_EVIDENCE_ROOT) {
+        Assert-WindowsOwnedPath $env:HARDCORE_AUDIT_EVIDENCE_ROOT (Join-Path $ProjectRoot 'outputs') 'HARDCORE_AUDIT_EVIDENCE_ROOT' $ProjectRoot
+    }
+    $RuntimeAppData = Join-Path $RuntimeAppData "runner_$RunnerInvocationId"
+}
 if ($RunnerIsLinux) {
     $LinuxLauncher = @(Get-Command setsid -CommandType Application -ErrorAction Stop)[0].Source
     Add-Type -TypeDefinition 'using System.Runtime.InteropServices; public static class HardCoreNativeSignals { [DllImport("libc", SetLastError=true)] public static extern int kill(int pid, int signal); [DllImport("libc", SetLastError=true)] public static extern int prctl(int option, ulong arg2, ulong arg3, ulong arg4, ulong arg5); [DllImport("libc", SetLastError=true)] public static extern int waitpid(int pid, out int status, int options); }'
@@ -168,6 +188,9 @@ if ($TestPaths.Count -gt 0) {
 # engine can shut down cleanly without an application-error dialog.
 New-Item -ItemType Directory -Path $RuntimeAppData -Force | Out-Null
 if ($RunnerIsLinux) { Assert-PhysicalRuntimeDirectory $RuntimeAppData }
+else {
+    Assert-WindowsOwnedPath $RuntimeAppData (Join-Path $ProjectRoot '.godot\runtime_appdata') 'runtime appdata' $ProjectRoot
+}
 $RuntimeAppData = (Get-Item -LiteralPath $RuntimeAppData).FullName
 [Environment]::SetEnvironmentVariable('APPDATA', $RuntimeAppData, 'Process')
 if ($RunnerIsLinux) { [Environment]::SetEnvironmentVariable('XDG_DATA_HOME', $RuntimeAppData, 'Process') }
@@ -1148,6 +1171,9 @@ $Source176R3CriticalEvidence = [ordered]@{
 	full_critical_members = @($Suites.critical | Sort-Object)
 }
 $Source176R3EvidenceDir = Join-Path (Split-Path $PSScriptRoot -Parent) 'outputs/test_logs/source176_r3'
+if (-not $RunnerIsLinux) {
+    Assert-WindowsOwnedPath $Source176R3EvidenceDir (Join-Path $ProjectRoot 'outputs') 'source176 evidence root' $ProjectRoot
+}
 New-Item -ItemType Directory -Force -Path $Source176R3EvidenceDir | Out-Null
 $Source176R3CriticalEvidence | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath (Join-Path $Source176R3EvidenceDir 'critical_members.json') -Encoding UTF8
 
@@ -1245,11 +1271,9 @@ function Stop-TestProcessTree([int]$ProcessId) {
         }
         return
     }
-    $children = @(Get-CimInstance Win32_Process -Filter "ParentProcessId=$ProcessId" -ErrorAction SilentlyContinue)
-    foreach ($child in $children) {
-        Stop-TestProcessTree -ProcessId ([int]$child.ProcessId)
+    if ($null -ne $WindowsOwnedProcess -and $ProcessId -eq $WindowsOwnedProcess.ProcessId) {
+        $WindowsOwnedProcess.Terminate(1)
     }
-    Stop-Process -Id $ProcessId -Force -ErrorAction SilentlyContinue
 }
 
 if (-not (Test-Path -LiteralPath $Godot)) {
@@ -1258,31 +1282,12 @@ if (-not (Test-Path -LiteralPath $Godot)) {
 # Test scenes write structured reports to the project-local report directory.
 # Keep it available even when console/engine evidence is routed externally.
 $ProjectReportRoot = Join-Path $ProjectRoot 'outputs\test_logs'
+if (-not $RunnerIsLinux) {
+    Assert-WindowsOwnedPath $ProjectReportRoot (Join-Path $ProjectRoot 'outputs') 'project report root' $ProjectRoot
+    Assert-WindowsOwnedPath $LogRoot (Join-Path $ProjectRoot 'outputs') 'log root' $ProjectRoot
+}
 New-Item -ItemType Directory -Path $ProjectReportRoot -Force | Out-Null
 New-Item -ItemType Directory -Path $LogRoot -Force | Out-Null
-
-function Get-WorktreeGodotProcesses {
-    if ($RunnerIsLinux) { return @() }
-    return @(Get-Process -ErrorAction SilentlyContinue | Where-Object {
-        if ($_.ProcessName -notlike 'Godot*') {
-            return $false
-        }
-        # A process can exit between enumeration and Path access. Snapshot the
-        # value once so Split-Path never receives a raced null value.
-        $candidatePath = $null
-        try {
-            $candidatePath = $_.Path
-        } catch {
-            return $false
-        }
-        if ([string]::IsNullOrWhiteSpace($candidatePath)) {
-            return $false
-        }
-        return [System.IO.Path]::GetDirectoryName($candidatePath) -eq $GodotDirectory
-    })
-}
-
-$BaselineGodotIds = @(Get-WorktreeGodotProcesses | Select-Object -ExpandProperty Id)
 
 function Stop-NewGodotProcesses([int]$GraceMilliseconds = 0) {
     if ($GraceMilliseconds -gt 0) {
@@ -1301,9 +1306,14 @@ function Stop-NewGodotProcesses([int]$GraceMilliseconds = 0) {
             Start-Sleep -Milliseconds 100
         }
     }
-    $newProcesses = @(Get-NewGodotProcesses)
-    foreach ($newProcess in $newProcesses) {
-        Stop-TestProcessTree -ProcessId $newProcess.Id
+    if ($RunnerIsLinux) {
+        foreach ($newProcess in @(Get-NewGodotProcesses)) {
+            Stop-TestProcessTree -ProcessId $newProcess.Id
+        }
+        return
+    }
+    if ($null -ne $WindowsOwnedProcess -and $WindowsOwnedProcess.HasActiveProcesses) {
+        $WindowsOwnedProcess.Terminate(1)
     }
 }
 
@@ -1311,7 +1321,11 @@ function Get-NewGodotProcesses {
     if ($RunnerIsLinux) {
         return @(Get-LinuxOwnedGroupProcesses)
     }
-    return @(Get-WorktreeGodotProcesses | Where-Object { $_.Id -notin $BaselineGodotIds })
+    if ($null -eq $WindowsOwnedProcess -or -not $WindowsOwnedProcess.OwnershipEstablished) { return @() }
+    if ($WindowsOwnedProcess.HasActiveProcesses) {
+        return @([pscustomobject]@{ Id = $WindowsOwnedProcess.ProcessId })
+    }
+    return @()
 }
 
 $SelectedTests = if ($TestPaths.Count -gt 0) { $TestPaths } else { $Suites[$Suite] }
@@ -1434,9 +1448,12 @@ foreach ($testPath in $SelectedTests) {
         $LinuxStdoutTask = $process.StandardOutput.BaseStream.CopyToAsync($LinuxStdoutStream)
         $LinuxStderrTask = $process.StandardError.BaseStream.CopyToAsync($LinuxStderrStream)
     } else {
-        $process = Start-Process -FilePath 'cmd.exe' `
-            -ArgumentList @('/c', $launchCommand) `
-            -WorkingDirectory $ProjectRoot -WindowStyle Hidden -PassThru
+        $windowsCommandLine = 'cmd.exe /c ' + $launchCommand
+        $WindowsOwnedProcess = Start-WindowsOwnedProcess $env:ComSpec $windowsCommandLine $ProjectRoot
+        if (-not $WindowsOwnedProcess.OwnershipEstablished) {
+            throw 'Windows runner could not establish invocation-owned process ownership.'
+        }
+        $process = $WindowsOwnedProcess
     }
     $wrapperStartedUtc = $process.StartTime.ToUniversalTime().ToString('o')
     # Natural cadence scenes observe six real 4-second attack windows plus
@@ -1605,13 +1622,26 @@ foreach ($testPath in $SelectedTests) {
     if ($engineLogFailureCount -gt 0) { $reasons += "engine_log_failures_$engineLogFailureCount" }
 
     $frameworkReceipt = $null
+    $frameworkReceiptPath = Join-Path $ProjectReportRoot ('framework\' + $testName + '.result.json')
     if ($isFramework) {
-        $frameworkReceiptPath = Join-Path $ProjectReportRoot ('framework\' + $testName + '.result.json')
         $frameworkReceipt = Test-FrameworkReceipt -Path $frameworkReceiptPath -ExpectedRunId $frameworkRunId `
             -ExpectedSceneId $testName -ExpectedContentSha256 $env:HARDCORE_R3_CONTENT_SHA256
         if (-not $frameworkReceipt.valid) { $reasons += $frameworkReceipt.reasons }
         elseif ((Get-Content -LiteralPath $frameworkReceiptPath -Raw -Encoding UTF8 | ConvertFrom-Json).invocation_id -ne $env:HARDCORE_FRAMEWORK_INVOCATION_ID) {
             $reasons += 'framework_invocation_mismatch'
+        }
+        if (-not $RunnerIsLinux -and $frameworkReceipt.valid) {
+            $nativeReceipt = Get-Content -LiteralPath $frameworkReceiptPath -Raw -Encoding UTF8 | ConvertFrom-Json
+            $receiptRuntime = $nativeReceipt.runtime_environment
+            if ($nativeReceipt.engine_version -cne '4.7-stable (official)' -or
+                $receiptRuntime.runtime_appdata -cne $RuntimeAppData -or
+                $receiptRuntime.native_process_id -le 0 -or
+                [string]::IsNullOrEmpty($receiptRuntime.project_root) -or
+                [IO.Path]::GetFullPath($receiptRuntime.project_root).TrimEnd('\', '/') -ine $ProjectRoot.TrimEnd('\', '/')) {
+                $reasons += 'framework_runtime_environment_mismatch'
+            }
+            try { Assert-WindowsOwnedPath ([string]$receiptRuntime.user_data_directory) $RuntimeAppData 'framework user data' $ProjectRoot }
+            catch { $reasons += 'framework_runtime_directory_unconfined' }
         }
         if ($RunnerIsLinux -and $frameworkReceipt.valid) {
             $nativeReceipt = Get-Content -LiteralPath $frameworkReceiptPath -Raw -Encoding UTF8 | ConvertFrom-Json
@@ -1632,6 +1662,8 @@ foreach ($testPath in $SelectedTests) {
     if ($reasons.Count -gt 0) {
         $result = 'FAIL'
     }
+    $logEvidence = Get-NativeLogEvidence -RawLogPaths @($stdout, $stderr, $engineLog) `
+        -ReceiptPath $frameworkReceiptPath -ExpectedSceneId $testName -ExpectedInvocationId $RunnerInvocationId
     $StructuredResults += [ordered]@{
         test_name = $testName
         test_path = $testPath
@@ -1650,8 +1682,14 @@ foreach ($testPath in $SelectedTests) {
         stdout_failure_count = $stdoutFailureCount
         stderr_failure_count = $stderrFailureCount
         engine_log_failure_count = $engineLogFailureCount
+        cleanup_warning_evidence = $logEvidence
         framework_run_id = $frameworkRunId
         framework_receipt_valid = if ($isFramework) { $frameworkReceipt.valid } else { $null }
+        source_content_sha256 = $env:HARDCORE_R3_CONTENT_SHA256
+        source_binding_scope = 'External immutable input freeze required; env label alone is not a source scan'
+        engine_fingerprints = $EngineFingerprint
+        formal_evidence_status = if ($isFramework -and $reasons.Count -eq 0) { 'PASS' } else { 'MISSING' }
+        formal_evidence_reason = if ($isFramework) { 'Requires matching external source/input freeze and this native result' } else { 'Legacy marker has no uniform run-bound nonzero assertion receipt' }
         result = $result
         reason = ($reasons -join ';')
     }
@@ -1709,6 +1747,18 @@ foreach ($testPath in $SelectedTests) {
         }
     }
     if ($RunnerIsLinux) { $process.Dispose(); $LinuxNativeProcess = $null }
+    else {
+        if ($null -ne $WindowsOwnedProcess) {
+            try {
+                if ($WindowsOwnedProcess.HasActiveProcesses) {
+                    $WindowsOwnedProcess.Terminate(1)
+                }
+            } finally {
+                $WindowsOwnedProcess.Dispose()
+                $WindowsOwnedProcess = $null
+            }
+        }
+    }
 }
 
 $passedCount = @($StructuredResults | Where-Object { $_.result -eq 'PASS' }).Count
@@ -1724,6 +1774,9 @@ $resultsFilePath = Join-Path $LogRoot ("runner_results_{0}_{1}_{2}.json" -f $Eff
     runtime_environment = $RuntimeEnvironmentRecord
     generated_at = (Get-Date -Format o)
     git_head = (& git -C $ProjectRoot rev-parse HEAD 2>$null | Out-String).Trim()
+    source_content_sha256 = $env:HARDCORE_R3_CONTENT_SHA256
+    source_binding_scope = 'External immutable input freeze required; env label alone is not a source scan'
+    engine_fingerprints = $EngineFingerprint
     total = $StructuredResults.Count
     passed = $passedCount
     failed = $failedCount
@@ -1747,6 +1800,14 @@ exit 0
     }
     if ($null -ne $LinuxStdoutStream) { $LinuxStdoutStream.Dispose() }
     if ($null -ne $LinuxStderrStream) { $LinuxStderrStream.Dispose() }
+    if ($null -ne $WindowsOwnedProcess) {
+        try {
+            if ($WindowsOwnedProcess.HasActiveProcesses) { $WindowsOwnedProcess.Terminate(1) }
+        } finally {
+            $WindowsOwnedProcess.Dispose()
+            $WindowsOwnedProcess = $null
+        }
+    }
     if ($FrameworkEnvironmentCaptured) {
         [Environment]::SetEnvironmentVariable('HARDCORE_FRAMEWORK_RUN_ID', $PreviousFrameworkRunId, 'Process')
         [Environment]::SetEnvironmentVariable('HARDCORE_FRAMEWORK_INVOCATION_ID', $PreviousFrameworkInvocationId, 'Process')

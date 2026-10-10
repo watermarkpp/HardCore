@@ -1,0 +1,27 @@
+{
+	"checks": [
+		{
+			"id": "fixture-fail-preserved",
+			"message": "FAIL business check is retained",
+			"passed": false
+		},
+		{
+			"id": "fixture-fail-second-check",
+			"message": "second FAIL receipt check is retained",
+			"passed": true
+		}
+	],
+	"engine_version": "4.7-stable (official)",
+	"invocation_id": "4791faf5-477d-4a14-b0c2-4a8acdbab8ff",
+	"invocation_id_source": "environment",
+	"native_process_id": 20244,
+	"passed": false,
+	"receipt_nonce": "ed1e45730b3d14f69d2dd3b2",
+	"run_id": "30b3fe13-9d6a-4628-9d06-1d6fd7f8125d",
+	"run_id_source": "environment",
+	"scene": "res://tests/framework/hc_custom_receipt_preservation_20261010_test.tscn",
+	"schema_version": 2,
+	"source_content_sha256": "8f973127cc4113d61abb98c04197cfebf1769278d5833332616207bd519d2e53",
+	"source_content_sha256_source": "environment",
+	"test": "hc_custom_receipt_fail_20261010"
+}

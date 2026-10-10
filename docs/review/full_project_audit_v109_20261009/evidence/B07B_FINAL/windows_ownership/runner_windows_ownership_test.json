@@ -1,0 +1,40 @@
+﻿{
+    "status":  "PASS",
+    "cases":  [
+                  {
+                      "case":  "same_executable_foreign_peer",
+                      "ownership":  true,
+                      "foreign_alive":  true,
+                      "owned_active":  true
+                  },
+                  {
+                      "case":  "owned_termination_foreign_survives",
+                      "owned_active":  false,
+                      "foreign_alive":  true
+                  },
+                  {
+                      "case":  "wrapper_early_exit_child_retained",
+                      "wrapper_exited":  true,
+                      "job_active":  true
+                  },
+                  {
+                      "case":  "owned_job_kill_on_timeout",
+                      "job_active":  false,
+                      "foreign_alive":  true
+                  },
+                  {
+                      "case":  "create_process_failure_closes_handles",
+                      "status":  "PASS"
+                  },
+                  {
+                      "case":  "path_escape_rejected",
+                      "status":  "PASS"
+                  },
+                  {
+                      "case":  "junction_escape_rejected",
+                      "status":  "PASS"
+                  }
+              ],
+    "source":  "tools/test_windows_process_ownership.ps1",
+    "godot_run":  "NOT_RUN"
+}

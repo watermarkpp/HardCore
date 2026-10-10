@@ -1,0 +1,20 @@
+{
+  "name": "B07B_NATIVE_FREEZE_56",
+  "changed_paths": [
+    "tools/run_godot_tests.ps1",
+    "tools/test_windows_process_ownership.ps1",
+    "tools/test_framework_receipt.ps1",
+    "tools/test_native_log_evidence.ps1",
+    "tests/hc_monster_ai/test_support.gd",
+    "tests/framework/hc_custom_receipt_preservation_20261010_test.gd",
+    "tests/framework/hc_custom_receipt_preservation_20261010_test.tscn"
+  ],
+  "additional_inputs": [
+    "tools/godot-4.7/Godot_v4.7-stable_win64.exe"
+  ],
+  "scenes": [
+    "tests/framework/hc_custom_receipt_preservation_20261010_test.tscn"
+  ],
+  "fingerprint_scope": "actual runtime/data/map/test inputs, Windows console and native engine, runner/receipt/ownership helper; one new component receipt scene",
+  "rerun_reason": "New immutable custom writer and new Windows native process ownership/metadata need direct native proof; no old unchanged gameplay suite repetition"
+}

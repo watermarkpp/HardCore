@@ -1,0 +1,48 @@
+﻿{
+    "status":  "PASS",
+    "cases":  [
+                  {
+                      "case":  "four_allowlist_categories_and_objectdb_warning",
+                      "status":  "PASS",
+                      "counts":  {
+                                     "string_formatting":  {
+                                                               "count":  1,
+                                                               "lines":  [
+                                                                             "ERROR: String formatting error: not all arguments converted during string formatting."
+                                                                         ]
+                                                           },
+                                     "resources_in_use":  {
+                                                              "count":  1,
+                                                              "lines":  [
+                                                                            "ERROR: 2 resources still in use at exit"
+                                                                        ]
+                                                          },
+                                     "rid_leak":  {
+                                                      "count":  1,
+                                                      "lines":  [
+                                                                    "ERROR: 1 RID allocations of type \u0027PNRendererDummyTextureE\u0027 were leaked at exit."
+                                                                ]
+                                                  },
+                                     "null_parameter":  {
+                                                            "count":  1,
+                                                            "lines":  [
+                                                                          "ERROR: Parameter \"t\" is null."
+                                                                      ]
+                                                        }
+                                 }
+                  },
+                  {
+                      "case":  "unknown_error_and_legacy_marker",
+                      "status":  "PASS",
+                      "formal":  "MISSING"
+                  },
+                  {
+                      "case":  "foreign_pass_receipt_is_formal_missing",
+                      "status":  "PASS",
+                      "formal":  "MISSING"
+                  }
+              ],
+    "helper":  "tools/test_native_log_evidence.ps1",
+    "godot_run":  "NOT_RUN",
+    "upstream_formal_decision":  "NOT_GRANTED"
+}

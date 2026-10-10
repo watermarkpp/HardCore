@@ -103,3 +103,12 @@ No drop probabilities, manual authoring/art, generated maps or portal endpoints 
 ## Authorized new GPT continuation
 
 User directly requested a new GPT thread. Created same-project conversation 项目助手工作线程2 (`6ac98ae4-67cc-83ea-8ad0-c1dc7789c5f8`), selected UI extreme and submitted full2959-character B07A fixed-source/context prompt. Initial GPT reply says it will read actual GitHub objects; this is not source-access or coverage proof. Await original reports/verified commit. B07A dispatch PASS; review receipt MISSING; B07B/B08 NOT_RUN. Browser screenshots remain local only.
+
+
+## B07A/B07B final controller checkpoint (2026-10-10)
+
+B07A and B07B official GPT reports are received and verified. B07A scoped catalog/generator repairs published at 2baa715ca0cb0da84dc9a6d74040f03214d07d55; B07A_FINAL_EVIDENCE_LEDGER retains native53/54 failures, native55 64 checks clean PASS and unchanged related native54 58 checks, equipment15 and guard9 plus separate3 scoped tests, current compiler two precise I/O failures and complete126-sheet positive. Four older compiler cases remain historical, source425817.
+
+B07B test-tool repairs now have native56 component13 checks clean PASS with two immutable custom PASS/FAIL receipts, real native0, no cleanup warnings, and2537 unchanged actual inputs. Windows Job Object helper7, receipt source binding9, final log classifier4 scoped cases have independent receipts; source/env labels are not standalone input-fingerprint proof. Legacy nonframework marker-only outcomes remain formal MISSING. Two missing diagnostic scripts remain dormant historical MISSING; no placeholder or evidence deletion. See B07B_FINAL_DISPOSITION and FINAL_EVIDENCE_LEDGER; B07B's original report at d531 remains unchanged.
+
+Both batches still have real responsibility gaps. Read B07A persistence/world/targeting/generator/GameData supplements and B08_MODE_RELOAD_CONSUMER_TRACE rather than calling signature/blob counts semantic coverage. Mode/expansion/read-load caller failure propagation is still unmodified and must be reviewed in B08. B08 official dispatch is the next fixed-source batch. Do not repeat unchanged native scopes. Formal109 build and DEVICE TEST: NOT_RUN. Whole-project semantic closure: MISSING.

@@ -1,0 +1,90 @@
+{
+  "audit_id": "B08-MODE-RELOAD-CONSUMER-TRACE",
+  "status": "READ_ONLY_AUDIT",
+  "source_hashes_sha256": {
+    "scripts/layers/runtime/runtime_service_facade.gd": "79042E7E3C5D9048FED91FCCBEDACF03146A8D570F1C37B501E9FF6F0BCFBCEB",
+    "scripts/layers/runtime/game_mode_service.gd": "C33A4BBFD306CF0164BBCC4943E9F3C54388DC88013F53F3F7ECE982D00CC840",
+    "scripts/layers/runtime/content_layer_registry.gd": "FADFDFF4772DD5806F6BCCC058533D95F13D728BBB284CBE35220E18DEEDBF33",
+    "scripts/game_data.gd": "56F77940DC2994BCCEE1257EF3E1AFF21016D6B68BA0844755071BAE60CCDD8A",
+    "scripts/player_state.gd": "13CCCB4CFF55EDA54C858C69EA8A0DA16C33AF44F19EC43B7199CF3DDF4D80A6"
+  },
+  "facts": [
+    {
+      "id": "B08-F01",
+      "path": "scripts/layers/runtime/runtime_service_facade.gd",
+      "lines": "16-22",
+      "chain": "set_expansion_enabled -> ContentLayers.set_expansion_enabled -> GameData.load_database",
+      "fact": "ContentLayers commits enabled_expansions and merged_database and emits expansion_state_changed before GameData reload. The facade ignores GameData.load_database() and returns only ContentLayers changed.",
+      "failure_trigger": "Any reload failure after an accepted expansion change, including content_layers_not_ready or a malformed merged/catalog authority.",
+      "impact": "Caller reports changed=true while GameData.is_loaded() is false after the current state-owner fix; there is no facade-level failure result or rollback of the expansion commit.",
+      "classification": "STATIC_RISK_CONFIRMED_BY_SOURCE"
+    },
+    {
+      "id": "B08-F02",
+      "path": "scripts/layers/runtime/game_mode_service.gd",
+      "lines": "17-29",
+      "chain": "apply_mode -> ContentLayers.set_expansion_enabled (loop) -> PlayerState.game_mode_id assignment -> GameData.load_database",
+      "fact": "The mode ID is assigned before GameData reload and the bool is ignored. apply_mode returns true after a valid mode even when the reload fails.",
+      "failure_trigger": "A content package change followed by any GameData load failure.",
+      "impact": "mode state and ContentLayers expansion set can remain committed while GameData is unloaded; no save is performed here, but later profile/UI reads can observe the new mode.",
+      "classification": "STATIC_RISK_CONFIRMED_BY_SOURCE"
+    },
+    {
+      "id": "B08-F03",
+      "path": "scripts/startup_loading.gd",
+      "lines": "154-168",
+      "chain": "authoritative startup attempt -> ContentLayers.ensure_loaded -> ... -> GameData.ensure_loaded",
+      "fact": "Startup has an explicit ordered boundary and checks each bool. This is the legal Android/autoload-before-ready path and is separate from mode reload callers.",
+      "classification": "FACT_NO_DEFECT"
+    },
+    {
+      "id": "B08-F04",
+      "path": "scripts/game_data.gd",
+      "lines": "220-245, 313-320",
+      "chain": "ensure_loaded/load_database",
+      "fact": "GameData refuses to load before ContentLayers is ready, clears _initial_load_complete at direct reload entry, and emits database_reloaded only after complete index/drop preparation succeeds.",
+      "classification": "FACT_FIXED_STATE_OWNER"
+    },
+    {
+      "id": "B08-F05",
+      "path": "scripts/player_state.gd",
+      "lines": "7096-7100",
+      "chain": "profile restore -> GameModes.apply_mode -> ContentLayers.set_expansion_enabled",
+      "fact": "Profile restore assigns mode fields, invokes GameModes.apply_mode without inspecting a reload failure, then applies the later-content expansion directly. Inventory/equipment restore continues after these calls.",
+      "failure_trigger": "A saved mode/package selection that causes GameData reload failure.",
+      "impact": "Restore has no explicit catalog-readiness gate before applying downstream saved inventory/equipment; the load result path must be checked by the caller before presenting the profile as usable.",
+      "classification": "STATIC_RISK_CONFIRMED_BY_SOURCE"
+    },
+    {
+      "id": "B08-F06",
+      "path": "scripts/layers/runtime/content_layer_registry.gd",
+      "lines": "394-401",
+      "chain": "set_expansion_enabled",
+      "fact": "Expansion mutation is the single ContentLayers state owner, but it has no transaction/rollback token tied to GameData load success.",
+      "classification": "STATIC_GAP"
+    }
+  ],
+  "signals_and_commit_order": [
+    "ContentLayers.set_expansion_enabled mutates enabled_expansions and merged_database, then emits expansion_state_changed.",
+    "PlayerState.game_mode_id is assigned before GameData.load_database in GameModes.apply_mode.",
+    "GameData.load_database clears its loaded flag at entry and emits database_reloaded only on success.",
+    "PlayerState feature_catalog_changed is unrelated to these expansion/mode commits; it recalculates stats for feature publication only."
+  ],
+  "single_owner_recommendation": {
+    "owner": "ContentLayers + GameData coordinated reload boundary, with GameData load result as the admission result",
+    "minimal_complete_fix": [
+      "Make GameModes.apply_mode return false unless every changed ContentLayers package is followed by a successful GameData.load_database; retain the prior mode ID until success or restore it on failure.",
+      "Make RuntimeServiceFacade return false for non-later expansion changes when GameData reload fails; either do not expose the expansion change or perform a ContentLayers rollback through its existing state owner.",
+      "During PlayerState profile restore, treat apply_mode failure as a load failure before applying inventory/equipment, preserving the existing save/load error owner rather than creating another catalog state.",
+      "Keep startup's ordered ContentLayers -> GameData bool gate unchanged."
+    ],
+    "do_not_do": ["Do not add a second GameData registry or PlayerState catalog cache.", "Do not call arbitrary reset/retry loops to hide failure."]
+  },
+  "evidence_reuse": [
+    "B07A GameData skill-book load rejection scene proves GameData false/load_error, partial index cleanup and direct reload loaded-state reset; it does not prove caller rollback.",
+    "StartupLoading's existing authoritative step checks are reusable for startup readiness only.",
+    "No native mode-reload negative test was added in this read-only audit."
+  ],
+  "native_status": "NOT_RUN",
+  "implementation_status": "NO_PRODUCTION_CHANGE"
+}
