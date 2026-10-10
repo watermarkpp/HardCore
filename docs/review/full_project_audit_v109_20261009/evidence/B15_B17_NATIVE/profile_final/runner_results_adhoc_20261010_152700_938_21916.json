@@ -1,0 +1,109 @@
+{
+  "failed": 0,
+  "generated_at": "2026-10-10T15:27:00.9390151+08:00",
+  "results": [
+    {
+      "test_name": "v109_profile_legacy_empty_account_test",
+      "test_path": "tests/framework/v109_profile_legacy_empty_account_test.tscn",
+      "wrapper_process_id": 17412,
+      "wrapper_started_utc": "2026-10-10T07:26:53.3881920Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\profile_final\\runner_2339dca2-0324-4772-924e-035f7a91a8f3",
+      "fixed_fps": 0,
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-10T07:27:23.3927886Z",
+      "native_exit_observed_utc": "2026-10-10T07:26:59.4003823Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "cleanup_warning_evidence": {
+        "status": "PASS",
+        "allowlisted_errors": {
+          "string_formatting": {
+            "count": 0,
+            "lines": []
+          },
+          "resources_in_use": {
+            "count": 0,
+            "lines": []
+          },
+          "rid_leak": {
+            "count": 0,
+            "lines": []
+          },
+          "null_parameter": {
+            "count": 0,
+            "lines": []
+          }
+        },
+        "unknown_error_lines": [],
+        "unknown_error_count": 0,
+        "objectdb_leak_warning_lines": [],
+        "objectdb_leak_warning_count": 0,
+        "functional_marker_observed": true,
+        "formal_evidence_status": "MISSING",
+        "formal_evidence_reason": "upstream_native_and_full_receipt_validation_required",
+        "receipt_validation_reasons": [],
+        "candidate_receipt_correlation": true,
+        "upstream_result": "NOT_RUN",
+        "raw_log_paths": [
+          "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\dot_remote_audit_20261010\\native\\profile_final\\v109_profile_legacy_empty_account_test.stdout.log",
+          "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\dot_remote_audit_20261010\\native\\profile_final\\v109_profile_legacy_empty_account_test.stderr.log",
+          "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\dot_remote_audit_20261010\\native\\profile_final\\v109_profile_legacy_empty_account_test.godot.log"
+        ],
+        "receipt_path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\framework\\v109_profile_legacy_empty_account_test.result.json",
+        "expected_scene_id": "v109_profile_legacy_empty_account_test",
+        "expected_invocation_id": "2339dca2-0324-4772-924e-035f7a91a8f3"
+      },
+      "framework_run_id": "5b2598a8-a765-479e-95a6-71b7c5ae3ff8",
+      "framework_receipt_valid": true,
+      "source_content_sha256": "19cee0eb926169b96150b1a15bed3f8ea92516ff52314ca1f8db757159c1c801",
+      "source_binding_scope": "External immutable input freeze required; env label alone is not a source scan",
+      "engine_fingerprints": [
+        {
+          "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+          "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+          "bytes": 198152
+        },
+        {
+          "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64.exe",
+          "sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+          "bytes": 178485256
+        }
+      ],
+      "formal_evidence_status": "PASS",
+      "formal_evidence_reason": "Requires matching external source/input freeze and this native result",
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "engine_log_errors": 0,
+  "source_binding_scope": "External immutable input freeze required; env label alone is not a source scan",
+  "source_content_sha256": "19cee0eb926169b96150b1a15bed3f8ea92516ff52314ca1f8db757159c1c801",
+  "total": 1,
+  "invocation_id": "2339dca2-0324-4772-924e-035f7a91a8f3",
+  "engine_fingerprints": [
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+      "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "bytes": 198152
+    },
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64.exe",
+      "sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+      "bytes": 178485256
+    }
+  ],
+  "passed": 1,
+  "git_head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+  "suite": "adhoc",
+  "runtime_environment": {
+    "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\profile_final\\runner_2339dca2-0324-4772-924e-035f7a91a8f3",
+    "runner_process_id": 21916
+  }
+}

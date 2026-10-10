@@ -1,0 +1,147 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "real legacy fixture opened",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "first real startup imports valid legacy profile",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "first import publishes legacy_01",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "migration decision is durable in authoritative index",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "normal profile save succeeds before final deletion",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "normal index update preserves migration marker",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "formal delete removes final imported character",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "legacy source remains byte-identical for backup custody",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "empty account keeps consumed marker after delete",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "second real startup accepts intentionally empty migrated account",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "restart does not resurrect deleted legacy_01",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "restart creates no deleted profile file",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "restart preserves original legacy source",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "real legacy fixture opened",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "compatibility fixture imports legacy profile",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "real legacy fixture opened",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "older completed migration reopens",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "older populated legacy index is sealed",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "background index merge retains account marker",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "real legacy fixture opened",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "failed final delete rejects at atomic index barrier",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "failed final delete preserves index and character bytes",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "compatibility fixture deletes final profile",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "compatibility empty account reopens",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "older migrated account does not resurrect after final delete",
+      "passed": true
+    }
+  ],
+  "count": 25,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "2339dca2-0324-4772-924e-035f7a91a8f3",
+  "passed": 25,
+  "reported_checks": 25,
+  "reported_failures": 0,
+  "run_id": "5b2598a8-a765-479e-95a6-71b7c5ae3ff8",
+  "runtime_environment": {
+    "native_process_id": 1816,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\profile_final\\runner_2339dca2-0324-4772-924e-035f7a91a8f3",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/profile_final/runner_2339dca2-0324-4772-924e-035f7a91a8f3/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "v109_profile_legacy_empty_account_test",
+  "schema_version": 1,
+  "source_content_sha256": "19cee0eb926169b96150b1a15bed3f8ea92516ff52314ca1f8db757159c1c801",
+  "status": "PASS"
+}

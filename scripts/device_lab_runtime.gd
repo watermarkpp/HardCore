@@ -183,6 +183,7 @@ func _ready() -> void:
 		return
 	_ensure_mailbox_dirs()
 	_load_nonce_history()
+	_retire_interrupted_processing_claim()
 	_prune_outbox()
 	if _game_root == null:
 		_game_root = get_parent()
@@ -261,6 +262,36 @@ func _external_mirror_pending_path() -> String:
 	return "/sdcard/Android/data/%s/files/device_lab/inbox/pending.json" % pkg
 
 
+func _retire_interrupted_processing_claim() -> void:
+	# A processing claim can survive a process death. Retire it once at
+	# startup instead of replaying a possibly non-idempotent command.
+	if not FileAccess.file_exists(PROCESSING_PATH):
+		return
+	var bytes := FileAccess.get_file_as_bytes(PROCESSING_PATH)
+	var parsed: Variant = JSON.parse_string(bytes.get_string_from_utf8())
+	if not parsed is Dictionary:
+		return
+	var nonce := str((parsed as Dictionary).get("nonce", ""))
+	if not _is_safe_token(nonce):
+		return
+	var history_durable := _nonce_history_contains(nonce)
+	if not history_durable:
+		history_durable = _remember_nonce(nonce)
+	var result_published := _has_published_result(nonce)
+	if not result_published and not history_durable:
+		return
+	if not result_published:
+		result_published = _write_result(nonce, {
+			"ok": false,
+			"error": "interrupted",
+			"claimState": "interrupted",
+		})
+	if not result_published:
+		return
+	# Keep an already published result byte-for-byte intact.
+	DirAccess.remove_absolute(PROCESSING_PATH)
+
+
 func _process_command_bytes(bytes: PackedByteArray) -> void:
 	_busy = true
 	var command := _parse_command(bytes)
@@ -269,7 +300,7 @@ func _process_command_bytes(bytes: PackedByteArray) -> void:
 		nonce = "invalid_%d" % Time.get_ticks_msec()
 	_last_command_nonce = nonce
 	var result: Dictionary
-	if bool(command.get("ok", false)) and _processed_nonces.has(nonce):
+	if bool(command.get("ok", false)) and (_processed_nonces.has(nonce) or _has_published_result(nonce)):
 		result = _error_result({"error": "nonce_replay"})
 		# A replay must never replace the first result for this nonce.
 		_write_result(nonce, result)
@@ -325,9 +356,9 @@ func _load_nonce_history() -> void:
 			break
 
 
-func _remember_nonce(nonce: String) -> void:
+func _remember_nonce(nonce: String) -> bool:
 	if _processed_nonces.has(nonce):
-		return
+		return _nonce_history_contains(nonce)
 	_processed_nonces[nonce] = true
 	_processed_nonce_order.append(nonce)
 	while _processed_nonce_order.size() > MAX_PROCESSED_NONCES:
@@ -336,13 +367,29 @@ func _remember_nonce(nonce: String) -> void:
 	var temporary := NONCE_HISTORY_PATH + ".tmp"
 	var file := FileAccess.open(temporary, FileAccess.WRITE)
 	if file == null:
-		return
+		return false
 	file.store_string(JSON.stringify(_processed_nonce_order))
 	file.flush()
 	file.close()
 	var root_dir := DirAccess.open("user://device_lab")
-	if root_dir != null:
-		root_dir.rename("nonce_history.json.tmp", "nonce_history.json")
+	if root_dir == null or root_dir.rename("nonce_history.json.tmp", "nonce_history.json") != OK:
+		return false
+	return _nonce_history_contains(nonce)
+
+
+func _nonce_history_contains(nonce: String) -> bool:
+	if not FileAccess.file_exists(NONCE_HISTORY_PATH):
+		return false
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(NONCE_HISTORY_PATH))
+	return parsed is Array and nonce in (parsed as Array)
+
+
+func _has_published_result(nonce: String) -> bool:
+	var path := OUTBOX_DIR + "/result_%s.json" % nonce
+	if not FileAccess.file_exists(path):
+		return false
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+	return parsed is Dictionary and str((parsed as Dictionary).get("nonce", "")) == nonce and int((parsed as Dictionary).get("protocolVersion", 0)) == PROTOCOL_VERSION
 
 
 ## Pure protocol validation used by the runtime and headless tests.
@@ -788,7 +835,9 @@ func _find_profile_target(profile_id: String, requested_path: String) -> Control
 		for candidate: Control in candidates:
 			if str(_game_root.get_path_to(candidate)) == requested_path:
 				return candidate
-	return candidates[0] if not candidates.is_empty() else null
+	# An explicit target is an exact request.  Never silently apply the
+	# profile to another matching panel when that path is absent.
+	return null if not requested_path.is_empty() else (candidates[0] if not candidates.is_empty() else null)
 
 
 func _collect_profile_candidates(node: Node, profile_id: String, result: Array[Control], depth: int) -> void:

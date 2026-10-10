@@ -1,0 +1,177 @@
+{
+  "status": "PASS",
+  "scope": "Separate source-bound stages. No combined same-source all-checks claim. Final audit/APK/device pending.",
+  "stages": [
+    {
+      "stage": "respawn_deadline_red",
+      "status": "FAIL",
+      "tree": "c4a3291c66eef2cc74d26fc1fbb162e074a0314c",
+      "fingerprint": "0fd6b1be99bfb547208bdac43ac9aab42abf06c1b9054e79109f59112f87e07b",
+      "results": [
+        {
+          "test_path": "tests/framework/v109_respawn_deadline_handoff_test.tscn",
+          "result": "FAIL",
+          "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+          "timeout": false,
+          "effective_exit_code": 1,
+          "native_exit_observed_utc": "2026-10-10T07:16:21.2965187Z",
+          "framework_run_id": "1aab0319-5c3e-4bbd-8eb8-f08364c32f4a",
+          "framework_receipt_valid": false,
+          "formal_evidence_status": "MISSING",
+          "check_count": 11,
+          "failed_checks": 2,
+          "receipt": "outputs\\dot_remote_audit_20261010\\native\\respawn_deadline_red\\v109_respawn_deadline_handoff_test.result.json",
+          "receipt_sha256": "0abb4bacde1ce2bc18c07be9e15fa8aba14d878bcb66c0f2a0e8a58476bb7967"
+        }
+      ]
+    },
+    {
+      "stage": "respawn_deadline_green",
+      "status": "PASS",
+      "tree": "a063c54964740f412b11c45175658b73356acff0",
+      "fingerprint": "bb86975ce70f141e48572e77c4affd56c3c27c43f6d9fdcc9f48431c3e7c8fce",
+      "results": [
+        {
+          "test_path": "tests/framework/v109_respawn_deadline_handoff_test.tscn",
+          "result": "PASS",
+          "reason": "",
+          "timeout": false,
+          "effective_exit_code": 0,
+          "native_exit_observed_utc": "2026-10-10T07:21:54.4491645Z",
+          "framework_run_id": "7646664b-73de-4111-978f-dcdc2a937abc",
+          "framework_receipt_valid": true,
+          "formal_evidence_status": "PASS",
+          "check_count": 11,
+          "failed_checks": 0,
+          "receipt": "outputs\\dot_remote_audit_20261010\\native\\respawn_deadline_green\\v109_respawn_deadline_handoff_test.result.json",
+          "receipt_sha256": "f965628354bce25b16e3a443bf62b7896bfc7fff350f0de63dfaea712659ee6d"
+        }
+      ]
+    },
+    {
+      "stage": "quest_debug",
+      "status": "PASS",
+      "tree": "7e4b39db7c7e0fd0e5bd227b8490412c9ffb66cf",
+      "fingerprint": "49366cb5fad77f874f57838bbdab456afe4f6579b1bd6e8ab9a4515dccd6052a",
+      "results": [
+        {
+          "test_path": "tests/framework/v109_accept_quest_save_failure_test.tscn",
+          "result": "PASS",
+          "reason": "",
+          "timeout": false,
+          "effective_exit_code": 0,
+          "native_exit_observed_utc": "2026-10-10T07:23:48.6288959Z",
+          "framework_run_id": "86cc290d-aeda-4388-8d52-e4874e741a03",
+          "framework_receipt_valid": true,
+          "formal_evidence_status": "PASS",
+          "check_count": 10,
+          "failed_checks": 0,
+          "receipt": "outputs\\dot_remote_audit_20261010\\native\\quest_debug\\v109_accept_quest_save_failure_test.result.json",
+          "receipt_sha256": "59095b3a47cc2549443d4d302cd7b4e7ef932bdb7d08a903d513e7c950e0813d"
+        },
+        {
+          "test_path": "tests/framework/v109_device_lab_recovery_test.tscn",
+          "result": "PASS",
+          "reason": "",
+          "timeout": false,
+          "effective_exit_code": 0,
+          "native_exit_observed_utc": "2026-10-10T07:23:57.4015225Z",
+          "framework_run_id": "683b93ec-63bd-4d36-a4ad-0f66af1a80a2",
+          "framework_receipt_valid": true,
+          "formal_evidence_status": "PASS",
+          "check_count": 14,
+          "failed_checks": 0,
+          "receipt": "outputs\\dot_remote_audit_20261010\\native\\quest_debug\\v109_device_lab_recovery_test.result.json",
+          "receipt_sha256": "d4b83e127df6123fb34ba89a50ed22c3b4be587595f397f2bafb81d2a4e50a56"
+        }
+      ]
+    },
+    {
+      "stage": "profile_final",
+      "status": "PASS",
+      "tree": "500875dbe6e5179c80e8ac7c17af6fb74752a852",
+      "fingerprint": "19cee0eb926169b96150b1a15bed3f8ea92516ff52314ca1f8db757159c1c801",
+      "results": [
+        {
+          "test_path": "tests/framework/v109_profile_legacy_empty_account_test.tscn",
+          "result": "PASS",
+          "reason": "",
+          "timeout": false,
+          "effective_exit_code": 0,
+          "native_exit_observed_utc": "2026-10-10T07:26:59.4003823Z",
+          "framework_run_id": "5b2598a8-a765-479e-95a6-71b7c5ae3ff8",
+          "framework_receipt_valid": true,
+          "formal_evidence_status": "PASS",
+          "check_count": 25,
+          "failed_checks": 0,
+          "receipt": "outputs\\dot_remote_audit_20261010\\native\\profile_final\\v109_profile_legacy_empty_account_test.result.json",
+          "receipt_sha256": "8083f264f6799f068023b7eeaa3d72c21f0908129eb503487a5c410c5cfbda81"
+        }
+      ]
+    }
+  ],
+  "publication_normalization": "Only profile test trailing blank lines trimmed in Git publication; tested actual source/fingerprints and native evidence unchanged. No native replay for whitespace-only publication.",
+  "source_paths": [
+    {
+      "path": "scripts/device_lab_runtime.gd",
+      "sha256": "a16dc155ca2f4031a710bbede8c60eb931ea334e93aea88050060466eb690eba"
+    },
+    {
+      "path": "scripts/game_root.gd",
+      "sha256": "fdd779b32f1f46dfbd233d8ca6919326477086fdca9eeac66a8c8d7c3d959cfb"
+    },
+    {
+      "path": "scripts/player_state.gd",
+      "sha256": "f11c2d648614763dcd8f6045543b770fb4f695626fdadf5ad04a3c0eb53f806a"
+    },
+    {
+      "path": "tests/framework/inventory_panel.gd",
+      "sha256": "a0ba93083ab6bd73ba5b8dc5125125979b13a2fb98920e742bae5bbc8b731d3d"
+    },
+    {
+      "path": "tests/framework/v109_device_lab_recovery_test.gd",
+      "sha256": "57ffeda5dc710a713c6e7cdfd05961d36c6e9b551447fc5520e4e9defd0aed75"
+    },
+    {
+      "path": "tests/framework/v109_device_lab_recovery_test.tscn",
+      "sha256": "54d57744d0ab0ef003980f869e8598fd68b75ad33249dac5d7a7d30b4be25d1f"
+    },
+    {
+      "path": "tests/framework/v109_accept_quest_save_failure_test.gd",
+      "sha256": "ed5c2d4d9927b9b7a1d253243d412f85352fe0ac706ef771efb016a717512b79"
+    },
+    {
+      "path": "tests/framework/v109_accept_quest_save_failure_test.tscn",
+      "sha256": "aafce53a7be5095d514196715a63c6f7ee9ecc1738dab1e962734d385f9c3d41"
+    },
+    {
+      "path": "tests/framework/v109_respawn_deadline_handoff_test.gd",
+      "sha256": "ddf1f86d9a7fa682a77f7936f5d119cde7ec4bfaa648998eb4420fb522a7c61a"
+    },
+    {
+      "path": "tests/framework/v109_respawn_deadline_handoff_test.tscn",
+      "sha256": "a025dc79567820622579b1a570749fe41b2f293fe277ead29eae73433488ec2b"
+    },
+    {
+      "path": "tests/framework/v109_profile_legacy_empty_account_test.gd",
+      "sha256": "47ae6923bed7bec54fe9555a33fcb9d71f0c90b8b2b93593a9b1483c3ff8c6ca"
+    },
+    {
+      "path": "tests/framework/v109_profile_legacy_empty_account_test.tscn",
+      "sha256": "c829ad0d174f942a168b376d2c9cf8ad6f3449163362290131c6abed82d3dad3"
+    }
+  ],
+  "qualifications": [
+    "Respawn actual timer handoff, not full natural death/300s birth or device.",
+    "Quest failure uses existing synchronous atomic writer seam, success real files/reload.",
+    "Debug real mailbox files and valid replay; exact-target matcher fixture, not real business Inventory UI.",
+    "Profile actual real-file migrations/last-delete/restart; failed index seam and background merge component, not asynchronous physical IO failure proof.",
+    "Previous worker profile claim14 does not bind latest25-check root source and is not promoted."
+  ],
+  "pending": [
+    "B18-B28 remaining external audit",
+    "Fixed-source difference review",
+    "Controlled final main source commit",
+    "APK109 identity/sign/content/install/device"
+  ]
+}

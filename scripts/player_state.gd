@@ -515,10 +515,12 @@ func _startup_upgrade_read(path: String, validator := Callable()) -> Dictionary:
 func _startup_upgrade_preflight() -> Dictionary:
 	var ids: Dictionary = {}
 	var has_legacy := false
+	var legacy_migration_consumed := false
 	if FileAccess.file_exists(profile_index_path) or FileAccess.file_exists(profile_index_path + ".bak"):
 		var index := _startup_upgrade_read(profile_index_path)
 		if not bool(index.success): return index
 		for entry: Dictionary in index.data.profiles: ids[entry.id] = true
+		legacy_migration_consumed = bool(index.data.get("legacy_migration_consumed", false))
 	var directory := DirAccess.open(profile_directory)
 	if directory != null:
 		for name: String in directory.get_files():
@@ -550,7 +552,8 @@ func _startup_upgrade_preflight() -> Dictionary:
 		var log := _read_json_document(shared_warehouse_transaction_log_path)
 		if not bool(log.valid) or not _warehouse_transaction_log_is_valid(log.data):
 			return {"success":false, "reason":"invalid_warehouse_transaction_log", "path":shared_warehouse_transaction_log_path}
-	return {"success":true, "ids":ids.keys(), "profiles":all_profiles, "legacy_pending":has_legacy and ids.is_empty()}
+	return {"success":true, "ids":ids.keys(), "profiles":all_profiles,
+		"legacy_pending":has_legacy and ids.is_empty() and not legacy_migration_consumed}
 
 
 func _startup_upgrade_fail(reason: String, path := "") -> bool:
@@ -3366,9 +3369,12 @@ func accept_quest(quest_id: String) -> String:
 	var progress := {}
 	for objective_name: String in quest.get("objectives", {}).get("kills", {}).keys():
 		progress[objective_name] = 0
+	var quest_states_before := quest_states.duplicate(true)
 	quest_states[quest_id] = {"status": "active", "progress": progress}
+	if not _commit_save():
+		quest_states = quest_states_before
+		return "任务存档失败，任务未接受。"
 	quests_changed.emit()
-	_commit_save()
 	return "已接受任务：%s" % quest.get("name", quest_id)
 
 
@@ -9680,6 +9686,10 @@ func delete_character_profile(profile_id: String) -> Dictionary:
 		result["reason"] = "profile_not_found"
 		return result
 	index["profiles"] = remaining_profiles
+	# An explicitly deleted final character means an intentionally empty
+	# account, even if an older importer never recorded its migration marker.
+	if remaining_profiles.is_empty():
+		index["legacy_migration_consumed"] = true
 	# Commit the authoritative index first.  A failed atomic write therefore
 	# leaves every profile byte untouched and the character fully selectable.
 	if not _write_json_atomic(profile_index_path, index):
@@ -10071,8 +10081,9 @@ func select_character(profile_id: String) -> bool:
 	return true
 
 
-func _update_profile_index() -> bool:
+func _update_profile_index(mark_legacy_migration_consumed := false) -> bool:
 	var profiles: Array[Dictionary] = []
+	var index_document: Dictionary = {"version": 1}
 	if (
 		FileAccess.file_exists(profile_index_path)
 		or FileAccess.file_exists(profile_index_path + ".bak")
@@ -10080,7 +10091,8 @@ func _update_profile_index() -> bool:
 		var index_status := _read_json_with_status(profile_index_path)
 		if not bool(index_status.get("success", false)):
 			return false
-		for raw_entry: Variant in (index_status.get("data", {}) as Dictionary).get("profiles", []):
+		index_document = (index_status.get("data", {}) as Dictionary).duplicate(true)
+		for raw_entry: Variant in index_document.get("profiles", []):
 			if not raw_entry is Dictionary:
 				return false
 			profiles.append((raw_entry as Dictionary).duplicate(true))
@@ -10091,7 +10103,11 @@ func _update_profile_index() -> bool:
 			found = true
 	if not found:
 		profiles.append({"id": active_profile_id, "name": character_name, "profession": profession, "gender": gender, "level": level, "updated_at": int(Time.get_unix_time_from_system())})
-	return _write_json_atomic(profile_index_path, {"version": 1, "profiles": profiles})
+	index_document["version"] = 1
+	index_document["profiles"] = profiles
+	if mark_legacy_migration_consumed:
+		index_document["legacy_migration_consumed"] = true
+	return _write_json_atomic(profile_index_path, index_document)
 
 
 func _migrate_single_save_to_profile() -> void:
@@ -10102,8 +10118,28 @@ func _migrate_single_save_to_profile() -> void:
 	):
 		if not bool(index_status.get("success", false)):
 			return
-		var indexed_profiles: Variant = (index_status.get("data", {}) as Dictionary).get("profiles", [])
+		var index_document := (index_status.get("data", {}) as Dictionary)
+		# An empty index is ambiguous: it can be a first import, or a user who
+		# deliberately deleted the last profile after the legacy import. Persist
+		# the one-time decision instead of treating an empty roster as pending.
+		if bool(index_document.get("legacy_migration_consumed", false)):
+			return
+		var indexed_profiles: Variant = index_document.get("profiles", [])
 		if indexed_profiles is Array and not (indexed_profiles as Array).is_empty():
+			# Accounts migrated by an older build may have a populated index but
+			# no durable marker yet. Once the authoritative preflight has accepted
+			# the still-present legacy source, seal that already-completed seam so
+			# deleting the final profile cannot re-import the old single save.
+			var has_legacy_profile := false
+			for entry: Variant in indexed_profiles:
+				if entry is Dictionary and str((entry as Dictionary).get("id", "")) == "legacy_01":
+					has_legacy_profile = true
+					break
+			var legacy_root := profile_directory.get_base_dir()
+			var legacy_source_exists := FileAccess.file_exists(legacy_root.path_join(SAVE_PATH.get_file())) or FileAccess.file_exists(legacy_root.path_join(SAVE_PATH.get_file() + ".bak")) or FileAccess.file_exists(legacy_root.path_join(LEGACY_SAVE_PATH.get_file())) or FileAccess.file_exists(legacy_root.path_join(LEGACY_SAVE_PATH.get_file() + ".bak"))
+			if has_legacy_profile and legacy_source_exists and not bool(index_document.get("legacy_migration_consumed", false)):
+				index_document["legacy_migration_consumed"] = true
+				_write_json_atomic(profile_index_path, index_document)
 			return
 	elif not list_characters().is_empty():
 		return
@@ -10127,7 +10163,7 @@ func _migrate_single_save_to_profile() -> void:
 		active_profile_id = ""
 		character_name = ""
 		return
-	if not _update_profile_index():
+	if not _update_profile_index(true):
 		_remove_new_profile_files(active_profile_id)
 	active_profile_id = ""
 	character_name = ""
@@ -10294,7 +10330,13 @@ func _merge_background_profile_index(document: Dictionary, identity: Dictionary)
 			found = true
 	if not found:
 		profiles.append(identity.entry.duplicate(true))
-	return {"version": 1, "profiles": profiles}
+	# Preserve account-level migration state while updating one profile row.
+	# Reconstructing only {version, profiles} would make a later background save
+	# silently reopen the legacy importer after the final profile is deleted.
+	var result := document.duplicate(true)
+	result["version"] = 1
+	result["profiles"] = profiles
+	return result
 
 
 func _complete_background_index(receipt: Dictionary, plan: Dictionary) -> void:

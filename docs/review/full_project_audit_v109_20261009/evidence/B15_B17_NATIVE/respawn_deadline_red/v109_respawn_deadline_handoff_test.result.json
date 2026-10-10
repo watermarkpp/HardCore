@@ -1,0 +1,77 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "formal Root reaches READY",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "actual published world has a respawn-enabled base actor",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "formal preparation accepts the published slot",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "canonical respawn policy duration is preserved",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "published birth authority accepts unchanged base policy",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "handoff acquires one real SceneTreeTimer owner",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "queue elapsed time is subtracted rather than restarted",
+      "passed": false
+    },
+    {
+      "id": 8,
+      "label": "actual timer matches captured absolute deadline",
+      "passed": false
+    },
+    {
+      "id": 9,
+      "label": "canonical base duration remains the admission value",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "repeat scheduling cannot duplicate the owner",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "world retirement revokes timer ownership",
+      "passed": true
+    }
+  ],
+  "count": 11,
+  "engine_version": "4.7-stable (official)",
+  "failed": 2,
+  "invocation_id": "898a38cb-b675-485a-aeef-6c1ca7bf96f0",
+  "passed": 9,
+  "reported_checks": 11,
+  "reported_failures": 2,
+  "run_id": "1aab0319-5c3e-4bbd-8eb8-f08364c32f4a",
+  "runtime_environment": {
+    "native_process_id": 18844,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\respawn_deadline_red\\runner_898a38cb-b675-485a-aeef-6c1ca7bf96f0",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/respawn_deadline_red/runner_898a38cb-b675-485a-aeef-6c1ca7bf96f0/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "v109_respawn_deadline_handoff_test",
+  "schema_version": 1,
+  "source_content_sha256": "0fd6b1be99bfb547208bdac43ac9aab42abf06c1b9054e79109f59112f87e07b",
+  "status": "FAIL"
+}

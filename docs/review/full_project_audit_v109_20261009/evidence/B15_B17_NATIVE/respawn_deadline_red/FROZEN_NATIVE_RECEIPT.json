@@ -1,0 +1,29 @@
+{
+  "status": "FAIL",
+  "input_freeze_status": "PASS",
+  "scope": "Input freeze and individual native results; failed/missing checks remain explicit. Android/GPU/performance NOT_RUN",
+  "candidate_tree": "c4a3291c66eef2cc74d26fc1fbb162e074a0314c",
+  "source_fingerprint": "0fd6b1be99bfb547208bdac43ac9aab42abf06c1b9054e79109f59112f87e07b",
+  "checked_inputs": 2584,
+  "runner": "outputs\\dot_remote_audit_20261010\\native\\respawn_deadline_red\\runner_results_adhoc_20261010_151622_536_21372.json",
+  "invocation_id": "898a38cb-b675-485a-aeef-6c1ca7bf96f0",
+  "engine_log_errors": 0,
+  "main_index_unchanged": true,
+  "results": [
+    {
+      "test_path": "tests/framework/v109_respawn_deadline_handoff_test.tscn",
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+      "timeout": false,
+      "effective_exit_code": 1,
+      "native_exit_observed_utc": "2026-10-10T07:16:21.2965187Z",
+      "framework_run_id": "1aab0319-5c3e-4bbd-8eb8-f08364c32f4a",
+      "framework_receipt_valid": false,
+      "formal_evidence_status": "MISSING",
+      "check_count": 11,
+      "failed_checks": 2,
+      "receipt": "outputs\\dot_remote_audit_20261010\\native\\respawn_deadline_red\\v109_respawn_deadline_handoff_test.result.json",
+      "receipt_sha256": "0abb4bacde1ce2bc18c07be9e15fa8aba14d878bcb66c0f2a0e8a58476bb7967"
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "baseline profile is durably saved",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "failed accept reports save failure",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "failed accept restores quest state",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "failed accept emits no quest notification",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "failed accept leaves durable profile unchanged",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "successful accept reports acceptance",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "successful accept publishes active state",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "successful accept emits exactly once",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "successful accept changes the real profile bytes",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "successful accept survives real reload",
+      "passed": true
+    }
+  ],
+  "count": 10,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "89c69b33-1046-43fd-a247-3eb0e0cfd18c",
+  "passed": 10,
+  "reported_checks": 10,
+  "reported_failures": 0,
+  "run_id": "86cc290d-aeda-4388-8d52-e4874e741a03",
+  "runtime_environment": {
+    "native_process_id": 23124,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\quest_debug\\runner_89c69b33-1046-43fd-a247-3eb0e0cfd18c",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/quest_debug/runner_89c69b33-1046-43fd-a247-3eb0e0cfd18c/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "v109_accept_quest_save_failure_test",
+  "schema_version": 1,
+  "source_content_sha256": "49366cb5fad77f874f57838bbdab456afe4f6579b1bd6e8ab9a4515dccd6052a",
+  "status": "PASS"
+}

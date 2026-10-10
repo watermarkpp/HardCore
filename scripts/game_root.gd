@@ -14913,11 +14913,16 @@ func _schedule_queued_enemy_respawn(death: Dictionary) -> void:
 	var spawn_context: Dictionary = preparation.get(
 		"spawn_context", respawn.get("spawn_context", {})
 	)
+	var world_entry: Dictionary = preparation.get("world_entry", {})
+	var remaining_seconds := maxf(
+		0.0,
+		float(world_entry.get("respawn_at_unix", 0.0)) - Time.get_unix_time_from_system()
+	)
 	_respawn_later(
 		canonical_monster,
 		death.get("spawn_position", death.get("death_position", Vector2.ZERO)),
 		bool(respawn.get("was_boss", death.get("was_boss", false))),
-		float(preparation.get("wait_seconds", 0.0)),
+		remaining_seconds,
 		int(death.get("origin_generation", _zone_generation)),
 		spawn_context,
 	)
