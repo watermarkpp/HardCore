@@ -304,6 +304,7 @@ var target: Node2D:
 		var changed := target != value
 		target = value
 		if changed:
+			_source176_pursuit_permission.clear()
 			_clear_attack_los_cache()
 			_reset_terrain_navigation_state()
 			_target_stable_remaining_seconds = (
@@ -336,14 +337,17 @@ var poison_tick_elapsed_seconds := 0.0
 var control_time := 0.0:
 	set(value):
 		if value > 0.0 and control_time <= 0.0:
+			_source176_pursuit_permission.clear()
 			_control_anchor_ground_gu = _screen_position_px_to_ground_position_gu(global_position)
 			if _movement_step_active:
 				_cancel_autonomous_step(true)
 		control_time = value
 var charm_time := 0.0:
 	set(value):
-		if value > 0.0 and charm_time <= 0.0 and _movement_step_active:
-			_cancel_autonomous_step(true)
+		if value > 0.0 and charm_time <= 0.0:
+			_source176_pursuit_permission.clear()
+			if _movement_step_active:
+				_cancel_autonomous_step(true)
 		charm_time = value
 var dormant := false
 var life_steal_ratio := 0.0
@@ -476,6 +480,9 @@ var _attack_action_active := false
 # decision. The serial counts source permissions, not animation segments.
 # The cache projects the owner's combat clock to cadence milliseconds.
 var _source176_decision_serial: int = 0
+# A source movement grant is an event, not a same-frame optional-budget poll.
+# One identity-bound pending permission; no extra clock, tokens or work debt.
+var _source176_pursuit_permission: Array = []
 var _source176_decision_now_ms: int = -1
 var _source176_decision_tick: int = -1
 var _source176_decision_generation: int = -1
@@ -2047,7 +2054,18 @@ func _request_autonomous_step(
 	)
 	var now_ms := _source176_decision_now_ms
 	var cadence_result: Dictionary
-	if shared_decision:
+	var retained_pursuit := (
+		_hc_owned_movement_call and _source176_ordinary_melee()
+		and reason == &"pursuit" and engagement_target == target
+		and _source176_pursuit_permission_valid()
+	)
+	if retained_pursuit:
+		# This permission was already issued by the source cadence. Consuming it
+		# later must not evaluate the cadence again or require phase coincidence.
+		_source176_pursuit_permission.clear()
+		now_ms = _movement_action_time_ms()
+		cadence_result = {"granted": true, "authority_contract_violation": false}
+	elif shared_decision:
 		# R02: one source permission per physics tick. A pursue leg entered
 		# after this tick's decision gate already consumed the evaluate call,
 		# so it reuses that result instead of evaluating a second time.
@@ -2512,6 +2530,7 @@ func _clear_autonomous_step_state() -> void:
 
 
 func _cancel_autonomous_step(preserve_current_position := true) -> void:
+	_source176_pursuit_permission.clear()
 	_hc_pursuit_session = false
 	_hc_m30_attack_pose_remaining = 0.0
 	velocity = Vector2.ZERO
@@ -3512,6 +3531,7 @@ func _handle_safe_zone_target_return(physics_delta: float) -> bool:
 
 
 func _hold_pursuit_at_current_position() -> void:
+	_source176_pursuit_permission.clear()
 	if _movement_step_active:
 		_cancel_autonomous_step(true)
 	_clear_continuous_pursuit_intent()
@@ -10150,6 +10170,39 @@ func _source176_take_tick_decision() -> bool:
 	return _source176_decision_granted
 
 
+func _source176_pursuit_permission_valid() -> bool:
+	if _source176_pursuit_permission.is_empty():
+		return false
+	if (
+		not is_instance_valid(target) or target.is_queued_for_deletion()
+		or _source176_pursuit_permission[0] != runtime_map_id
+		or _source176_pursuit_permission[1] != int(get_meta("zone_generation", -1))
+		or _source176_pursuit_permission[2] != _hc_life(self)
+		or _source176_pursuit_permission[3] != target.get_instance_id()
+		or _source176_pursuit_permission[4] != _hc_life(target)
+	):
+		_source176_pursuit_permission.clear()
+		return false
+	return true
+
+
+func _retain_source176_pursuit_permission() -> void:
+	if (
+		_hc_pursuit_session or _movement_step_active or is_boss
+		or stationary or _movement_authority_failed_closed or not _source176_ordinary_melee()
+		or not _source176_decision_granted
+		or _source176_decision_tick != Engine.get_physics_frames()
+		or _source176_decision_generation != int(get_meta("zone_generation", -1))
+		or _source176_decision_life != _hc_life(self)
+		or not is_instance_valid(target) or target.is_queued_for_deletion()
+		or control_time > 0.0 or charm_time > 0.0 or dormant
+	):
+		return
+	if not _source176_pursuit_permission_valid():
+		_source176_pursuit_permission = [runtime_map_id, int(get_meta("zone_generation", -1)),
+			_hc_life(self), target.get_instance_id(), _hc_life(target)]
+
+
 func _hc_tick_melee(delta: float, physics_delta: float) -> void:
 	if visual != null:
 		visual.hc_m30_begin_melee_tick()
@@ -10242,6 +10295,7 @@ func _hc_tick_melee(delta: float, physics_delta: float) -> void:
 	# inside the same reach must not trigger another surrounding-point search.
 	# A body or WORLD blocker still falls through to local navigation below.
 	if source176_ordinary and source176_in_zone and _hc_access(target) == "CLEAR":
+		_source176_pursuit_permission.clear()
 		HCDecisionBudget.cancel(get_instance_id())
 		_clear_autonomous_step_state()
 		_hc_publish_crowd_goal(_hc_surround_goal, Vector2.INF)
@@ -10263,6 +10317,10 @@ func _hc_tick_melee(delta: float, physics_delta: float) -> void:
 		else:
 			_hc_publish_crowd_goal(_hc_surround_goal, Vector2.INF)
 	var align_surround := surround_goal.is_finite() and spatial_index_position().distance_squared_to(surround_goal) > GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU
+	# Observe the real source grant before any optional-owner early return.
+	# Visibility/route work may run later; no destination or movement is invented.
+	_retain_source176_pursuit_permission()
+	var retained_source_pursuit := _source176_pursuit_permission_valid()
 	if source176_ordinary and source176_in_zone:
 		var source176_decision_granted := _source176_take_tick_decision()
 		if _attack_timer > 0.0:
@@ -10273,11 +10331,11 @@ func _hc_tick_melee(delta: float, physics_delta: float) -> void:
 				velocity = Vector2.ZERO
 				_hc_last_reason = "COOLDOWN_HOLD"
 				return
-			if not source176_decision_granted and not (align_surround and _hc_pursuit_session):
+			if not source176_decision_granted and not retained_source_pursuit and not (align_surround and _hc_pursuit_session):
 				velocity = Vector2.ZERO
 				_hc_last_reason = "SOURCE_DECISION_WAIT"
 				return
-		elif not source176_decision_granted and not (align_surround and _hc_pursuit_session):
+		elif not source176_decision_granted and not retained_source_pursuit and not (align_surround and _hc_pursuit_session):
 			velocity = Vector2.ZERO
 			_hc_last_reason = "SOURCE_DECISION_WAIT"
 			return
@@ -10996,6 +11054,7 @@ func _hc_received_damage(source: Node2D, amount: float) -> void:
 	_leave_background_deep_sleep()
 
 func _hc_forget(candidate: Node2D) -> void:
+	_source176_pursuit_permission.clear()
 	HCDecisionBudget.cancel(get_instance_id())
 	if is_instance_valid(candidate):
 		_threat_table.erase(candidate.get_instance_id())

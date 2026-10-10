@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/framework/v110_aura_species_motion_test.gd" id="1"]
+
+[node name="v110_aura_mobile_batch04_test" type="Node"]
+script = ExtResource("1")
+scene_id = "v110_aura_mobile_batch04_test"
+monster_ids = Array[int]([136, 137, 138, 140, 141, 142, 144, 147, 148, 153, 155, 156, 157, 158, 159, 161, 164, 166, 170, 172])
+require_mobile_ordinary = true
