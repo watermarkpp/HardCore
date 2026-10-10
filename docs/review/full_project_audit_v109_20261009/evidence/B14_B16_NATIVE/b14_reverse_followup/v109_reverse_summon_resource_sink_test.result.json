@@ -1,0 +1,112 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "formal legal relic and badge instances are generated",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "initial legal equipment establishes rank four",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "formal GameRoot reaches READY",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "initial ActionLease captures rank four",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "initial ActionLease is accepted",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "formal rank-four summon release is accepted",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "formal rank-four release creates the first live skeleton",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "initial spawn commits its canonical MP cost",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "legal badge raises the live rank to five before acceptance",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "ActionLease captures accepted rank five",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "rank-five ActionLease is accepted",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "removing the badge lowers live rank to four before release",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "accepted rank-five plan reaches the formal release chain",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "rank-five spawn plan carries its normal MP quote",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "live-cap change rejects the spawn before resource commit",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "live-cap rejection does not consume MP",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "live-cap rejection does not create a summon beyond the live cap",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "release reports the live-cap handoff reason",
+      "passed": true
+    }
+  ],
+  "count": 18,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "0adc6c99-32a2-439d-9e88-e8828f8a2a7c",
+  "passed": 18,
+  "reported_checks": 18,
+  "reported_failures": 0,
+  "run_id": "38939d55-b069-4dfe-955a-3a4442641fe3",
+  "runtime_environment": {
+    "native_process_id": 20352,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\dot_b14_reverse_followup\\runner_0adc6c99-32a2-439d-9e88-e8828f8a2a7c",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/dot_b14_reverse_followup/runner_0adc6c99-32a2-439d-9e88-e8828f8a2a7c/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "v109_reverse_summon_resource_sink_test",
+  "schema_version": 1,
+  "source_content_sha256": "582059e25a8093907590790b74faaba61a2bdf39cf1e9640fed1eb22014066d2",
+  "status": "PASS"
+}

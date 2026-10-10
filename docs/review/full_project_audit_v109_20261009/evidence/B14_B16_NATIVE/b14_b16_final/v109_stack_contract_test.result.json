@@ -1,0 +1,162 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "registered 太阳水 identity is stable",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "registered 太阳水 maxStack is 20",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "official receive accepts 20 and 1",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "receive leaves a full stack and remainder",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "official auto-organize succeeds",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "auto-organize never merges beyond maxStack",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "20+1 preserves total quantity",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "each organized stack keeps the registered identity",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "organized stack counts survive profile serialization",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "official receive accepts a 50 item batch",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "50 receives as three bounded stacks",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "organize of three bounded stacks succeeds",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "50 remains three bounded stacks without amount loss",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "organize preserves total inventory weight",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "each 50-item stack keeps the registered identity",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "official receive accepts first positive partial stack",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "official receive accepts second positive partial stack",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "organize of positive partial stacks succeeds",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "2+3 merges to one legal stack",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "first durable equipment receive succeeds",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "second durable equipment receive succeeds",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "two nonstackable equipment instances occupy two slots",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "equipment instance identities are independent before organize",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "organize of durable equipment succeeds",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "organize keeps both nonstackable equipment slots",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "organize preserves independent equipment identities",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "organize preserves durable equipment values",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "serialized profile keeps both equipment records",
+      "passed": true
+    }
+  ],
+  "count": 28,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "42075164-8241-4596-8231-c6f7771f319c",
+  "passed": 28,
+  "reported_checks": 28,
+  "reported_failures": 0,
+  "run_id": "14622215-d5d8-44a2-829b-48691451b1f3",
+  "runtime_environment": {
+    "native_process_id": 5112,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\dot_b14_b16_final\\runner_42075164-8241-4596-8231-c6f7771f319c",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/dot_b14_b16_final/runner_42075164-8241-4596-8231-c6f7771f319c/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "v109_stack_contract_test",
+  "schema_version": 1,
+  "source_content_sha256": "14ceb3b76b110110b84f622551e9931d70ee4993ec7bc1a3a440846a320cbf3e",
+  "status": "PASS"
+}

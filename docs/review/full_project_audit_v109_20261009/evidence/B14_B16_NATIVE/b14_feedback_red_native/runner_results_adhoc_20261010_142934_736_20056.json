@@ -1,0 +1,111 @@
+{
+  "source_binding_scope": "External immutable input freeze required; env label alone is not a source scan",
+  "engine_log_errors": 0,
+  "engine_fingerprints": [
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+      "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "bytes": 198152
+    },
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64.exe",
+      "sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+      "bytes": 178485256
+    }
+  ],
+  "suite": "adhoc",
+  "git_head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+  "failed": 1,
+  "passed": 0,
+  "source_content_sha256": "1a20231e1c6d4acdaac2382b4c2981d05136cbf78a8a875f5bd1cebc069e2ba1",
+  "results": [
+    {
+      "test_name": "v109_loot_feedback_retention_test",
+      "test_path": "tests/framework/v109_loot_feedback_retention_test.tscn",
+      "wrapper_process_id": 15304,
+      "wrapper_started_utc": "2026-10-10T06:29:25.9191335Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\dot_b14_feedback_red_native\\runner_d5847215-cd72-4654-95cc-bd47b1f307dd",
+      "fixed_fps": 0,
+      "pass_marker_found": false,
+      "process_exited": true,
+      "wrapper_exit_code": 1,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-10T06:29:55.9243770Z",
+      "native_exit_observed_utc": "2026-10-10T06:29:33.4771011Z",
+      "effective_exit_code": 1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "cleanup_warning_evidence": {
+        "status": "PASS",
+        "allowlisted_errors": {
+          "string_formatting": {
+            "count": 0,
+            "lines": []
+          },
+          "resources_in_use": {
+            "count": 0,
+            "lines": []
+          },
+          "rid_leak": {
+            "count": 0,
+            "lines": []
+          },
+          "null_parameter": {
+            "count": 0,
+            "lines": []
+          }
+        },
+        "unknown_error_lines": [],
+        "unknown_error_count": 0,
+        "objectdb_leak_warning_lines": [],
+        "objectdb_leak_warning_count": 0,
+        "functional_marker_observed": false,
+        "formal_evidence_status": "MISSING",
+        "formal_evidence_reason": "legacy_run_bound_checks_missing",
+        "receipt_validation_reasons": [
+          "framework_receipt_not_pass"
+        ],
+        "candidate_receipt_correlation": false,
+        "upstream_result": "NOT_RUN",
+        "raw_log_paths": [
+          "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\dot_remote_audit_20261010\\native\\b14_feedback_red_native\\v109_loot_feedback_retention_test.stdout.log",
+          "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\dot_remote_audit_20261010\\native\\b14_feedback_red_native\\v109_loot_feedback_retention_test.stderr.log",
+          "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\dot_remote_audit_20261010\\native\\b14_feedback_red_native\\v109_loot_feedback_retention_test.godot.log"
+        ],
+        "receipt_path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\framework\\v109_loot_feedback_retention_test.result.json",
+        "expected_scene_id": "v109_loot_feedback_retention_test",
+        "expected_invocation_id": "d5847215-cd72-4654-95cc-bd47b1f307dd"
+      },
+      "framework_run_id": "5e5fd8ed-5c22-4d6e-8717-f2c1470839f3",
+      "framework_receipt_valid": false,
+      "source_content_sha256": "1a20231e1c6d4acdaac2382b4c2981d05136cbf78a8a875f5bd1cebc069e2ba1",
+      "source_binding_scope": "External immutable input freeze required; env label alone is not a source scan",
+      "engine_fingerprints": [
+        {
+          "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+          "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+          "bytes": 198152
+        },
+        {
+          "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64.exe",
+          "sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+          "bytes": 178485256
+        }
+      ],
+      "formal_evidence_status": "MISSING",
+      "formal_evidence_reason": "Requires matching external source/input freeze and this native result",
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+    }
+  ],
+  "invocation_id": "d5847215-cd72-4654-95cc-bd47b1f307dd",
+  "runtime_environment": {
+    "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\dot_b14_feedback_red_native\\runner_d5847215-cd72-4654-95cc-bd47b1f307dd",
+    "runner_process_id": 20056
+  },
+  "generated_at": "2026-10-10T14:29:34.7369825+08:00",
+  "total": 1
+}

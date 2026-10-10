@@ -1,0 +1,153 @@
+{
+  "authority": {
+    "cpp_token_extractor_sha256": "a4cc3d3d59f4fabd4cc1a4128bace674b7af08af410c67a1a1931740e0ad01d8",
+    "extractor_sha256": "f01184c0ba4ef881ccc779f0d285d825a11e7d1167a5ccc75533bfcfa0b71d32",
+    "kind": "fixed_engine_source_generated",
+    "source_files": [
+      {
+        "binary_availability": "NOT_RUN",
+        "bytes": 66081.0,
+        "commit": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+        "constant_fold_contract": "NOT_RUN",
+        "git_blob_sha1": "5f048ed4568def6fba77409edcd610b1f66872ea",
+        "relative_source_path": "core/variant/variant_utility.cpp",
+        "retrieved_utc": "2026-10-05T07:11:27.170735+00:00",
+        "sha256": "e6129c2817999436f678e3902adc8f5acf6dfbd6f3e0faf08e761ea9a4c2fdae",
+        "status": "PASS",
+        "url": "https://raw.githubusercontent.com/godotengine/godot/5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88/core/variant/variant_utility.cpp"
+      },
+      {
+        "binary_availability": "NOT_RUN",
+        "bytes": 26599.0,
+        "commit": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+        "git_blob_sha1": "43e4aac4ebf7d24e9a031df9c8e40dd367b49153",
+        "relative_source_path": "core/math/math_funcs.h",
+        "retrieved_utc": "2026-10-05T07:14:32.098269+00:00",
+        "sha256": "944eac1e6c84b9ebf4ea51af604af129c6f1dc1117c6ef57fe6a62e34ddbbb49",
+        "status": "PASS",
+        "url": "https://raw.githubusercontent.com/godotengine/godot/5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88/core/math/math_funcs.h"
+      }
+    ]
+  },
+  "binary_availability": "PASS",
+  "candidate_artifact_sha256": "fe65e52a28b3d5f0951e34b2736a11558003004321f376692199fdd5386fa2b4",
+  "candidate_producer_id": "hc.code_preparation.scalar_math_fold_candidates.v1",
+  "constant_fold_cases": [
+    {
+      "constant_name": "ISO_AREA_EQUIVALENT_PX_PER_GU",
+      "expression": "sqrt ( 64.0 * 32.0 )",
+      "expression_sha256": "e0dd986e6aa2684552b43db590b70dc9ca4a882cc38ae7f8b3de42ecac12d716",
+      "expression_tokens": [
+        "sqrt",
+        "(",
+        "64.0",
+        "*",
+        "32.0",
+        ")"
+      ],
+      "line": 132.0,
+      "method_invocations": 0,
+      "native_functions": [
+        "sqrt"
+      ],
+      "owner_path": "res://scripts/skills/combat_unit_legacy_adapter.gd",
+      "owner_source_sha256": "08e5247f02fe3a0f052c9da10573cb3234968cc70c00aece4bdbeddace553669",
+      "reload_error": 0,
+      "result_type": "float",
+      "result_value": 45.254833995939,
+      "source_code_sha256": "82ace0607e7b3820c0721e3561b78e94629d6da5e29eddac1169a8fbb2a78b1e",
+      "source_current": true,
+      "status": "PASS"
+    }
+  ],
+  "constant_fold_contract": "PASS",
+  "engine": {
+    "binary_sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+    "executable_path": "C:/Users/Administrator/.codex/worktrees/v109-content-validation-repair/HardCore/tools/godot-4.7/Godot_v4.7-stable_win64.exe",
+    "version": {
+      "build": "official",
+      "hash": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+      "hex": 263936,
+      "major": 4,
+      "minor": 7,
+      "patch": 0,
+      "status": "stable",
+      "string": "4.7-stable (official)",
+      "timestamp": 0
+    }
+  },
+  "engine_commit": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+  "global_constants": [],
+  "global_functions": [
+    "sqrt"
+  ],
+  "gpu_first_draw": "NOT_RUN",
+  "invocation_id": "561a90ec-c89e-4fff-9ffa-76daf2e0750a",
+  "probe_results": [
+    {
+      "kind": "global_function",
+      "method_invocations": 0,
+      "name": "sqrt",
+      "registration": {
+        "argument_type": "double",
+        "callee": "Math::sqrt",
+        "implementation_line": 95.0,
+        "implementation_tokens": [
+          "return",
+          "Math",
+          ":",
+          ":",
+          "sqrt",
+          "(",
+          "x",
+          ")",
+          ";"
+        ],
+        "kind": "global_function",
+        "line": 1650.0,
+        "math_forwarder": {
+          "argument_type": "double",
+          "callee": "std::sqrt",
+          "implementation_tokens": [
+            "return",
+            "std",
+            ":",
+            ":",
+            "sqrt",
+            "(",
+            "p_x",
+            ")",
+            ";"
+          ],
+          "line": 150.0,
+          "name": "sqrt",
+          "return_type": "double",
+          "source_file": "math_funcs.h"
+        },
+        "mechanism": "FUNCBINDR",
+        "name": "sqrt",
+        "resource_materialization_policy": "scalar_direct_math_forwarder",
+        "return_type": "double",
+        "source_file": "variant_utility.cpp",
+        "utility_category": "UTILITY_FUNC_TYPE_MATH"
+      },
+      "reload_error": 0,
+      "source_code_sha256": "0269975f4d58f43e8c971bd9253d435a0bd477aa27de837bf82a0213a9a0bf3d",
+      "status": "PASS"
+    }
+  ],
+  "producer_id": "hc.code_preparation.native_symbols.compile_probe.candidate.v1",
+  "resource_readiness": "NOT_RUN",
+  "run_id": "6bd50fb9-d612-4ce9-ad94-c8fb06fd5de1",
+  "schema_version": 1,
+  "source_content_sha256": "4ce3a1b878453d3885f350a2c82d631d6ae2de2fcfe581e8747173ec21999590",
+  "target_observation": {
+    "cached_after": false,
+    "cached_before": false,
+    "fixture_target_get_calls": 0,
+    "fixture_target_request_calls": 0,
+    "path": "res://scripts/caster_skill_animation_player.gd",
+    "target_method_invocations": 0
+  },
+  "whole_gdscript_namespace": "MISSING"
+}

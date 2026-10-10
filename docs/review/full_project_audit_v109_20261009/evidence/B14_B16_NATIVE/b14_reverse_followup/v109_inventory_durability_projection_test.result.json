@@ -1,0 +1,177 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "formal inventory panel is visible",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "ordinary stack is selected",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "selected stack has no opaque instance identity",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "physical hit changes authoritative armor durability",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "coalesced durability refresh preserves ordinary stack selection",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "coalesced durability refresh preserves multi-select index",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "equipment-only refresh does not advance inventory topology revision",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "equipped armor slot is selected",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "physical hit crosses armor durability zero through authority",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "cross-zero refresh keeps selected equipment slot",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "cross-zero equipment refresh rebuilds open detail snapshot",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "rebuilt equipment detail still presents durability",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "equipment authority is zero after cross-zero hit",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "normal Root reaches READY without test mode",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "normal HUD exposes the production inventory button",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "normal HUD opens the production inventory panel",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "normal HUD selects the legal ordinary stack",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "normal HUD stack has no opaque instance identity",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "normal Player physical hit resolves non-lethal damage",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "normal Player physical hit reduces authoritative armor durability",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "normal HUD coalesced durability preserves ordinary stack selection",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "normal HUD equipment-only durability keeps topology revision",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "normal HUD coalesced durability emits equipment_changed",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "normal HUD selects equipped armor",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "normal Player second physical hit resolves",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "normal HUD cross-zero refresh preserves equipment slot",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "normal HUD cross-zero refresh rebuilds open detail snapshot",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "normal HUD detail shows exact current durability/max",
+      "passed": false
+    },
+    {
+      "id": 29,
+      "label": "normal HUD authority reaches zero durability",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "normal inventory topology change retires stale no-id selection",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "normal inventory topology change clears stale refs",
+      "passed": true
+    }
+  ],
+  "count": 31,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "0adc6c99-32a2-439d-9e88-e8828f8a2a7c",
+  "passed": 30,
+  "reported_checks": 31,
+  "reported_failures": 1,
+  "run_id": "72bf5967-5ef9-4d7a-9ddc-31bc940a46b4",
+  "runtime_environment": {
+    "native_process_id": 4208,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\dot_b14_reverse_followup\\runner_0adc6c99-32a2-439d-9e88-e8828f8a2a7c",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/dot_b14_reverse_followup/runner_0adc6c99-32a2-439d-9e88-e8828f8a2a7c/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "v109_inventory_durability_projection_test",
+  "schema_version": 1,
+  "source_content_sha256": "582059e25a8093907590790b74faaba61a2bdf39cf1e9640fed1eb22014066d2",
+  "status": "FAIL"
+}

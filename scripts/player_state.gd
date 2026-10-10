@@ -1469,6 +1469,12 @@ func destroy_inventory_indices(indices: Array) -> Dictionary:
 				and _item_transaction_port.record_reserved(inventory[index]))):
 				return {"success":false, "destroyed":0, "reason":"item_transaction_pending", "message":"物品操作处理中，请稍后再试。"}
 	_before_state_transaction()
+	# A failed retry of an already-accepted item save leaves the previous
+	# durable inventory as the sole authority.  Do not start a second mutation
+	# (discard) until that revision has been durably committed; otherwise the
+	# discard can reach disk while the UI reports the preceding save failure.
+	if _item_save_failed or _item_save_revision > _item_saved_revision:
+		return {"success": false, "destroyed": 0, "reason": "save_failed", "message": "物品存档失败，暂不能丢弃。"}
 	var targets: Array[int] = []
 	for raw_index: Variant in indices:
 		var index := int(raw_index)
@@ -1500,7 +1506,7 @@ func sort_inventory_deterministic() -> Dictionary:
 	for index in range(working_inventory.size()):
 		var record: Variant = working_inventory[index]
 		if record is Dictionary and not (record as Dictionary).is_empty():
-			var item := GameData.get_item_record(str(record.get("name", "")))
+			var item := GameData.get_item_record(record)
 			decorated.append({"record": record, "index": index, "key": "%s|%s|%s|%08d" % [str(item.get("kind", "")), str(item.get("category", "")), str(record.get("name", "")), index]})
 		elif _inventory_slot_is_occupied(record):
 			decorated.append({"record": record, "index": index, "key": "!opaque|%08d" % index})
@@ -1508,10 +1514,42 @@ func sort_inventory_deterministic() -> Dictionary:
 	var sorted_inventory: Array = []
 	for entry: Dictionary in decorated:
 		var record: Variant = entry["record"]
-		if record is Dictionary and not sorted_inventory.is_empty() and sorted_inventory.back() is Dictionary and _inventory_records_mergeable(sorted_inventory.back(), record) and sorted_inventory.back().get("name", "") == record.get("name", ""):
-			sorted_inventory.back()["count"] = int(sorted_inventory.back().get("count", 1)) + int(record.get("count", 1))
-			if record.has("item_id"):
-				sorted_inventory.back()["item_id"] = int(record.get("item_id", -1))
+		if record is Dictionary and not (record as Dictionary).is_empty():
+			var mergeable: bool = (
+				not sorted_inventory.is_empty()
+				and sorted_inventory.back() is Dictionary
+				and _inventory_records_mergeable(sorted_inventory.back(), record)
+				and sorted_inventory.back().get("name", "") == record.get("name", "")
+			)
+			var item := GameData.get_item_record(record)
+			var is_stackable := (
+				bool(item.get("stackable", false))
+				and str(item.get("kind", "")) != "equipment"
+				and _inventory_records_mergeable(record, record)
+			)
+			if is_stackable:
+				var max_stack := _max_stack_for_item(item)
+				var remaining := maxi(1, int(record.get("count", 1)))
+				while remaining > 0:
+					if mergeable and not sorted_inventory.is_empty() and sorted_inventory.back() is Dictionary:
+						var existing := sorted_inventory.back() as Dictionary
+						var available := maxi(0, max_stack - int(existing.get("count", 0)))
+						if available > 0:
+							var moved := mini(available, remaining)
+							existing["count"] = int(existing.get("count", 0)) + moved
+							if record.has("item_id"):
+								existing["item_id"] = int(record.get("item_id", -1))
+							remaining -= moved
+							if remaining <= 0:
+								break
+					var chunk: Dictionary = record.duplicate(true)
+					var moved_new := mini(remaining, max_stack)
+					chunk["count"] = moved_new
+					sorted_inventory.append(chunk)
+					remaining -= moved_new
+					mergeable = true
+			else:
+				sorted_inventory.append(record)
 		else:
 			sorted_inventory.append(record)
 	var changed := sorted_inventory != inventory_before

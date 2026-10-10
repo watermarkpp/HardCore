@@ -1,0 +1,59 @@
+{
+  "status": "FAIL",
+  "input_freeze_status": "PASS",
+  "scope": "Input freeze and individual native results; failed/missing checks remain explicit. Android/GPU/performance NOT_RUN",
+  "candidate_tree": "123494b5675c7f5df078b4ed4724274ec7b68464",
+  "source_fingerprint": "f0c9e278337feabd54aa7c2e1a86f0b0b4701f8410fb3b65cac24ee512d29d4a",
+  "checked_inputs": 2568,
+  "runner": "outputs\\dot_remote_audit_20261010\\native\\b14_sleep_integrated\\runner_results_adhoc_20261010_144317_160_5560.json",
+  "invocation_id": "cff11c10-e677-4403-b44e-47889e676510",
+  "engine_log_errors": 0,
+  "main_index_unchanged": true,
+  "results": [
+    {
+      "test_path": "tests/framework/v109_inventory_durability_projection_test.tscn",
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+      "timeout": false,
+      "effective_exit_code": 1,
+      "native_exit_observed_utc": "2026-10-10T06:42:54.9873377Z",
+      "framework_run_id": "43afc63e-adb7-4c0a-b529-a60d9bf934a0",
+      "framework_receipt_valid": false,
+      "formal_evidence_status": "MISSING",
+      "check_count": 31,
+      "failed_checks": 1,
+      "receipt": "outputs\\dot_remote_audit_20261010\\native\\b14_sleep_integrated\\v109_inventory_durability_projection_test.result.json",
+      "receipt_sha256": "dcc5374d5950a74d719f7ad63f590f71efed9859e32090955295d4d1b6665cf8"
+    },
+    {
+      "test_path": "tests/framework/v109_sleep_foreground_reentry_test.tscn",
+      "result": "PASS",
+      "reason": "",
+      "timeout": false,
+      "effective_exit_code": 0,
+      "native_exit_observed_utc": "2026-10-10T06:43:04.3923953Z",
+      "framework_run_id": "0d55183f-58eb-4169-9a13-06136a7817e3",
+      "framework_receipt_valid": true,
+      "formal_evidence_status": "PASS",
+      "check_count": 11,
+      "failed_checks": 0,
+      "receipt": "outputs\\dot_remote_audit_20261010\\native\\b14_sleep_integrated\\v109_sleep_foreground_reentry_test.result.json",
+      "receipt_sha256": "3b72142f69307dc0db44327441fb0f0812f926f68fe0d5e10c23e75f1594f8d0"
+    },
+    {
+      "test_path": "tests/framework/monster_sleep_cooldown_handoff_20261010_test.tscn",
+      "result": "PASS",
+      "reason": "",
+      "timeout": false,
+      "effective_exit_code": 0,
+      "native_exit_observed_utc": "2026-10-10T06:43:15.6841518Z",
+      "framework_run_id": "c346ce04-c297-4d0a-a3ff-a6d2761c4543",
+      "framework_receipt_valid": true,
+      "formal_evidence_status": "PASS",
+      "check_count": 35,
+      "failed_checks": 0,
+      "receipt": "outputs\\dot_remote_audit_20261010\\native\\b14_sleep_integrated\\monster_sleep_cooldown_handoff_20261010_test.result.json",
+      "receipt_sha256": "bcb5af7cfa3aad47cd77934224d527d83fec4a7287ef143e9e036a54a3093a7d"
+    }
+  ]
+}

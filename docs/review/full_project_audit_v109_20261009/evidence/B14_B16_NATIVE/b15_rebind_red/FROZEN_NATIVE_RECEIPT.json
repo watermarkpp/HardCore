@@ -1,0 +1,29 @@
+{
+  "status": "FAIL",
+  "input_freeze_status": "PASS",
+  "scope": "Input freeze and individual native results; failed/missing checks remain explicit. Android/GPU/performance NOT_RUN",
+  "candidate_tree": "f8aaa1e3cdf7fb5377261bbb9c73d045266e5c00",
+  "source_fingerprint": "589bc0359a10bba41a2c39ed0bb9dca8044c6dfc62412633b15e061a28087435",
+  "checked_inputs": 2572,
+  "runner": "outputs\\dot_remote_audit_20261010\\native\\b15_rebind_red\\runner_results_adhoc_20261010_144935_863_22912.json",
+  "invocation_id": "2e8d0ba7-4501-48a3-b803-69c26c94def6",
+  "engine_log_errors": 0,
+  "main_index_unchanged": true,
+  "results": [
+    {
+      "test_path": "tests/framework/v109_skill_rebind_keyboard_owner_test.tscn",
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+      "timeout": false,
+      "effective_exit_code": 1,
+      "native_exit_observed_utc": "2026-10-10T06:49:34.6061407Z",
+      "framework_run_id": "6b40262b-7613-411b-aedc-f0086db6f72c",
+      "framework_receipt_valid": false,
+      "formal_evidence_status": "MISSING",
+      "check_count": 15,
+      "failed_checks": 6,
+      "receipt": "outputs\\dot_remote_audit_20261010\\native\\b15_rebind_red\\v109_skill_rebind_keyboard_owner_test.result.json",
+      "receipt_sha256": "f57dc2cda07c3bb00624731e1fe550f3ccb63b0e5dae1db7f04ad065b46e2232"
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "baseline profile is durably saved",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "official item save is accepted",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "failed item-save retry is retained",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "failed item-save revision remains outstanding",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "discard rejects after failed prior save retry",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "discard guard preserves in-memory inventory",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "discard guard preserves the durable profile",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "failed item save can be recovered by its owner",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "recovered item revision is durably closed",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "discard succeeds after the prior revision is durable",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "successful discard changes the real profile bytes",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "successful discard removes the target from the real profile",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "successful discard survives real reload",
+      "passed": true
+    }
+  ],
+  "count": 13,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "ae6f5758-282f-4799-9ac5-98e43e2e492f",
+  "passed": 13,
+  "reported_checks": 13,
+  "reported_failures": 0,
+  "run_id": "9d1d89ff-4b9e-43e6-b29a-404fd1f71f4f",
+  "runtime_environment": {
+    "native_process_id": 1928,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\dot_b16_discard_admission\\runner_ae6f5758-282f-4799-9ac5-98e43e2e492f",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/dot_b16_discard_admission/runner_ae6f5758-282f-4799-9ac5-98e43e2e492f/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "v109_discard_failed_retry_guard_test",
+  "schema_version": 1,
+  "source_content_sha256": "6fcc4b70a225db1af050c704719c37a953ea9e33d4320880d7e804bad50d739c",
+  "status": "PASS"
+}

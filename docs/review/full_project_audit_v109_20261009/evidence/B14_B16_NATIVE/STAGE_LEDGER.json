@@ -1,0 +1,379 @@
+{
+  "status": "PASS",
+  "scope": "Separate native scopes; historical failed Inventory assertions remain failed. Current Inventory31 and stack28 PASS. Four exact LF input admission18 PASS. Full audit/debug recovery/discard transaction/new APK not complete.",
+  "stages": [
+    {
+      "stage": "b14_feedback_red_native",
+      "status": "FAIL",
+      "source_fingerprint": "1a20231e1c6d4acdaac2382b4c2981d05136cbf78a8a875f5bd1cebc069e2ba1",
+      "tree": "d08ae202cedb62fe196b72b779ffed7a0372ed22",
+      "results": [
+        {
+          "test_path": "tests/framework/v109_loot_feedback_retention_test.tscn",
+          "result": "FAIL",
+          "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+          "timeout": false,
+          "effective_exit_code": 1,
+          "native_exit_observed_utc": "2026-10-10T06:29:33.4771011Z",
+          "framework_run_id": "5e5fd8ed-5c22-4d6e-8717-f2c1470839f3",
+          "framework_receipt_valid": false,
+          "formal_evidence_status": "MISSING",
+          "check_count": 14,
+          "failed_checks": 1,
+          "receipt": "outputs\\dot_remote_audit_20261010\\native\\b14_feedback_red_native\\v109_loot_feedback_retention_test.result.json",
+          "receipt_sha256": "86b013e749af2d54ebb76f305e910d6d1a74287cf1ebb1d72ebc21d0061a29b0"
+        }
+      ]
+    },
+    {
+      "stage": "b14_feedback_green",
+      "status": "PASS",
+      "source_fingerprint": "bfa8954cc908e9682ca21d196a796d8907edd7f12095202c8971a0605654c501",
+      "tree": "68014a4f400550ab85ebdbc2f719510d9f050810",
+      "results": [
+        {
+          "test_path": "tests/framework/v109_loot_feedback_retention_test.tscn",
+          "result": "PASS",
+          "reason": "",
+          "timeout": false,
+          "effective_exit_code": 0,
+          "native_exit_observed_utc": "2026-10-10T06:31:07.8706425Z",
+          "framework_run_id": "70e2ac16-fbaf-41aa-91bc-5b656aa266f0",
+          "framework_receipt_valid": true,
+          "formal_evidence_status": "PASS",
+          "check_count": 14,
+          "failed_checks": 0,
+          "receipt": "outputs\\dot_remote_audit_20261010\\native\\b14_feedback_green\\v109_loot_feedback_retention_test.result.json",
+          "receipt_sha256": "6a9a78605d0ebd6b819178952278e893f75ef77aa6a53b0c8b5550685e59f7b7"
+        }
+      ]
+    },
+    {
+      "stage": "b14_sleep_integrated",
+      "status": "FAIL",
+      "source_fingerprint": "f0c9e278337feabd54aa7c2e1a86f0b0b4701f8410fb3b65cac24ee512d29d4a",
+      "tree": "123494b5675c7f5df078b4ed4724274ec7b68464",
+      "results": [
+        {
+          "test_path": "tests/framework/v109_inventory_durability_projection_test.tscn",
+          "result": "FAIL",
+          "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+          "timeout": false,
+          "effective_exit_code": 1,
+          "native_exit_observed_utc": "2026-10-10T06:42:54.9873377Z",
+          "framework_run_id": "43afc63e-adb7-4c0a-b529-a60d9bf934a0",
+          "framework_receipt_valid": false,
+          "formal_evidence_status": "MISSING",
+          "check_count": 31,
+          "failed_checks": 1,
+          "receipt": "outputs\\dot_remote_audit_20261010\\native\\b14_sleep_integrated\\v109_inventory_durability_projection_test.result.json",
+          "receipt_sha256": "dcc5374d5950a74d719f7ad63f590f71efed9859e32090955295d4d1b6665cf8"
+        },
+        {
+          "test_path": "tests/framework/v109_sleep_foreground_reentry_test.tscn",
+          "result": "PASS",
+          "reason": "",
+          "timeout": false,
+          "effective_exit_code": 0,
+          "native_exit_observed_utc": "2026-10-10T06:43:04.3923953Z",
+          "framework_run_id": "0d55183f-58eb-4169-9a13-06136a7817e3",
+          "framework_receipt_valid": true,
+          "formal_evidence_status": "PASS",
+          "check_count": 11,
+          "failed_checks": 0,
+          "receipt": "outputs\\dot_remote_audit_20261010\\native\\b14_sleep_integrated\\v109_sleep_foreground_reentry_test.result.json",
+          "receipt_sha256": "3b72142f69307dc0db44327441fb0f0812f926f68fe0d5e10c23e75f1594f8d0"
+        },
+        {
+          "test_path": "tests/framework/monster_sleep_cooldown_handoff_20261010_test.tscn",
+          "result": "PASS",
+          "reason": "",
+          "timeout": false,
+          "effective_exit_code": 0,
+          "native_exit_observed_utc": "2026-10-10T06:43:15.6841518Z",
+          "framework_run_id": "c346ce04-c297-4d0a-a3ff-a6d2761c4543",
+          "framework_receipt_valid": true,
+          "formal_evidence_status": "PASS",
+          "check_count": 35,
+          "failed_checks": 0,
+          "receipt": "outputs\\dot_remote_audit_20261010\\native\\b14_sleep_integrated\\monster_sleep_cooldown_handoff_20261010_test.result.json",
+          "receipt_sha256": "bcb5af7cfa3aad47cd77934224d527d83fec4a7287ef143e9e036a54a3093a7d"
+        }
+      ]
+    },
+    {
+      "stage": "b14_reverse_followup",
+      "status": "FAIL",
+      "source_fingerprint": "582059e25a8093907590790b74faaba61a2bdf39cf1e9640fed1eb22014066d2",
+      "tree": "8a481f5972a92315a627bf31d2239460d3e9f38e",
+      "results": [
+        {
+          "test_path": "tests/framework/v109_inventory_durability_projection_test.tscn",
+          "result": "FAIL",
+          "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+          "timeout": false,
+          "effective_exit_code": 1,
+          "native_exit_observed_utc": "2026-10-10T06:46:01.7626389Z",
+          "framework_run_id": "72bf5967-5ef9-4d7a-9ddc-31bc940a46b4",
+          "framework_receipt_valid": false,
+          "formal_evidence_status": "MISSING",
+          "check_count": 31,
+          "failed_checks": 1,
+          "receipt": "outputs\\dot_remote_audit_20261010\\native\\b14_reverse_followup\\v109_inventory_durability_projection_test.result.json",
+          "receipt_sha256": "b1525ab3cad98a0ff693eb10f3611097a1ee92514f09da858b860e4a37d07ba7"
+        },
+        {
+          "test_path": "tests/framework/v109_reverse_summon_resource_sink_test.tscn",
+          "result": "PASS",
+          "reason": "",
+          "timeout": false,
+          "effective_exit_code": 0,
+          "native_exit_observed_utc": "2026-10-10T06:46:19.5403528Z",
+          "framework_run_id": "38939d55-b069-4dfe-955a-3a4442641fe3",
+          "framework_receipt_valid": true,
+          "formal_evidence_status": "PASS",
+          "check_count": 18,
+          "failed_checks": 0,
+          "receipt": "outputs\\dot_remote_audit_20261010\\native\\b14_reverse_followup\\v109_reverse_summon_resource_sink_test.result.json",
+          "receipt_sha256": "4d1ecb67ca28d7115ef40e23250e48c87e0a8d084ffaa51da1b72907a5a10a5a"
+        }
+      ]
+    },
+    {
+      "stage": "b15_rebind_red",
+      "status": "FAIL",
+      "source_fingerprint": "589bc0359a10bba41a2c39ed0bb9dca8044c6dfc62412633b15e061a28087435",
+      "tree": "f8aaa1e3cdf7fb5377261bbb9c73d045266e5c00",
+      "results": [
+        {
+          "test_path": "tests/framework/v109_skill_rebind_keyboard_owner_test.tscn",
+          "result": "FAIL",
+          "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+          "timeout": false,
+          "effective_exit_code": 1,
+          "native_exit_observed_utc": "2026-10-10T06:49:34.6061407Z",
+          "framework_run_id": "6b40262b-7613-411b-aedc-f0086db6f72c",
+          "framework_receipt_valid": false,
+          "formal_evidence_status": "MISSING",
+          "check_count": 15,
+          "failed_checks": 6,
+          "receipt": "outputs\\dot_remote_audit_20261010\\native\\b15_rebind_red\\v109_skill_rebind_keyboard_owner_test.result.json",
+          "receipt_sha256": "f57dc2cda07c3bb00624731e1fe550f3ccb63b0e5dae1db7f04ad065b46e2232"
+        }
+      ]
+    },
+    {
+      "stage": "b15_rebind_green",
+      "status": "PASS",
+      "source_fingerprint": "647be2447cff03081075a0372692d55e12cb7786ae1ee4214534614b7fe61174",
+      "tree": "243355c4a819469f2a8cc99c997df5527132f754",
+      "results": [
+        {
+          "test_path": "tests/framework/v109_skill_rebind_keyboard_owner_test.tscn",
+          "result": "PASS",
+          "reason": "",
+          "timeout": false,
+          "effective_exit_code": 0,
+          "native_exit_observed_utc": "2026-10-10T06:50:44.6601144Z",
+          "framework_run_id": "8054ac88-e0b7-4881-ae22-bacb3f021ba1",
+          "framework_receipt_valid": true,
+          "formal_evidence_status": "PASS",
+          "check_count": 15,
+          "failed_checks": 0,
+          "receipt": "outputs\\dot_remote_audit_20261010\\native\\b15_rebind_green\\v109_skill_rebind_keyboard_owner_test.result.json",
+          "receipt_sha256": "adfcffcb0ab147559816158cd279577201c789435879c0f42f58f28f9b4f6b40"
+        }
+      ]
+    },
+    {
+      "stage": "catalogue_lf_admission",
+      "status": "PASS",
+      "source_fingerprint": "5302a9175c56f175274eac9b6d30d5d3557e8417b79b4d9d5f01852436dfbc21",
+      "tree": "e6a7b510dbd070571b001cbe2058844dec9f5463",
+      "results": [
+        {
+          "test_path": "tests/framework/v109_code_catalog_lf_admission_test.tscn",
+          "result": "PASS",
+          "reason": "",
+          "timeout": false,
+          "effective_exit_code": 0,
+          "native_exit_observed_utc": "2026-10-10T06:57:33.2908458Z",
+          "framework_run_id": "5a7de6b2-d425-4908-b7b7-f0f143da0ad1",
+          "framework_receipt_valid": true,
+          "formal_evidence_status": "PASS",
+          "check_count": 18,
+          "failed_checks": 0,
+          "receipt": "outputs\\dot_remote_audit_20261010\\native\\catalogue_lf_admission\\v109_code_catalog_lf_admission_test.result.json",
+          "receipt_sha256": "934f9e2c5026e10fd6bdd5a94bc03eb04badf00d7950c21d75804e538684eedf"
+        }
+      ]
+    },
+    {
+      "stage": "b14_b16_final",
+      "status": "PASS",
+      "source_fingerprint": "14ceb3b76b110110b84f622551e9931d70ee4993ec7bc1a3a440846a320cbf3e",
+      "tree": "18ceaa8cfd533d855e359d25e303729b8ce3b0fa",
+      "results": [
+        {
+          "test_path": "tests/framework/v109_inventory_durability_projection_test.tscn",
+          "result": "PASS",
+          "reason": "",
+          "timeout": false,
+          "effective_exit_code": 0,
+          "native_exit_observed_utc": "2026-10-10T07:06:45.2726573Z",
+          "framework_run_id": "a162a90e-77ba-435e-b0c5-fcf9b1710e6d",
+          "framework_receipt_valid": true,
+          "formal_evidence_status": "PASS",
+          "check_count": 31,
+          "failed_checks": 0,
+          "receipt": "outputs\\dot_remote_audit_20261010\\native\\b14_b16_final\\v109_inventory_durability_projection_test.result.json",
+          "receipt_sha256": "126a28a04567c6c476b32d3b8242a2b1879ba15b89c02512c7574cef003de642"
+        },
+        {
+          "test_path": "tests/framework/v109_stack_contract_test.tscn",
+          "result": "PASS",
+          "reason": "",
+          "timeout": false,
+          "effective_exit_code": 0,
+          "native_exit_observed_utc": "2026-10-10T07:06:53.9641828Z",
+          "framework_run_id": "14622215-d5d8-44a2-829b-48691451b1f3",
+          "framework_receipt_valid": true,
+          "formal_evidence_status": "PASS",
+          "check_count": 28,
+          "failed_checks": 0,
+          "receipt": "outputs\\dot_remote_audit_20261010\\native\\b14_b16_final\\v109_stack_contract_test.result.json",
+          "receipt_sha256": "6b056dc6ae6f7335f1bdb18f0cabaeaa9587eaefcf02a01e1e2e8879987b6f7d"
+        }
+      ]
+    },
+    {
+      "stage": "b16_discard_admission",
+      "status": "PASS",
+      "source_fingerprint": "6fcc4b70a225db1af050c704719c37a953ea9e33d4320880d7e804bad50d739c",
+      "tree": "805bf49a519001b5b9914125abd6acfa58bc60d1",
+      "results": [
+        {
+          "test_path": "tests/framework/v109_discard_failed_retry_guard_test.tscn",
+          "result": "PASS",
+          "reason": "",
+          "timeout": false,
+          "effective_exit_code": 0,
+          "native_exit_observed_utc": "2026-10-10T07:11:15.5865583Z",
+          "framework_run_id": "9d1d89ff-4b9e-43e6-b29a-404fd1f71f4f",
+          "framework_receipt_valid": true,
+          "formal_evidence_status": "PASS",
+          "check_count": 13,
+          "failed_checks": 0,
+          "receipt": "outputs\\dot_remote_audit_20261010\\native\\b16_discard_admission\\v109_discard_failed_retry_guard_test.result.json",
+          "receipt_sha256": "5476274260bc4d42686105d6325fb4a4d8db1930bc0d00b12d1f54b879f430dc"
+        }
+      ]
+    }
+  ],
+  "source_paths": [
+    {
+      "path": "scripts/enemy.gd",
+      "sha256": "dcb3cf4cc7cfdcc47eb8eea454776aa2a5f345088560f0da382ac2ddd03c981a"
+    },
+    {
+      "path": "scripts/game_root.gd",
+      "sha256": "a8a97fc20c7e06cd176443b563a5a56210e8cc1a9bf2739ad837a77906c6c369"
+    },
+    {
+      "path": "scripts/inventory_panel.gd",
+      "sha256": "ea073961ac6f4e139ac54c0f811eb925b50e1e61b7ccba92600771a3892bfe34"
+    },
+    {
+      "path": "scripts/player_state.gd",
+      "sha256": "3e7d8af068e274193a152df822ac20f11eab5ec6f11dd8f4a380a8c722356cee"
+    },
+    {
+      "path": "scripts/loot_feedback_layer.gd",
+      "sha256": "5e8a439497f885828ba3207944c2252cd9f437710d8e7b0111c33612aa1ee08b"
+    },
+    {
+      "path": "scripts/features/generated/internal_code_preparation_catalog_data.gd",
+      "sha256": "a0e46a47c57fbb43ea5d99d34b77bf46058d54e5b61f2a5b7c2fbeebbaccb0f5"
+    },
+    {
+      "path": "tools/compile_code_preparation_inputs.py",
+      "sha256": "5f79d7c23ca902f8c85bdba6265a62fb26aa90e7fa6cf681ec4202fcaf46b31f"
+    },
+    {
+      "path": "tools/test_compile_code_preparation_inputs.py",
+      "sha256": "f99fd1946c354c3b57cec4f6560f65af8f6c2d21db9c50f3aad2904231d8b05b"
+    },
+    {
+      "path": "tests/framework/v109_inventory_durability_projection_test.gd",
+      "sha256": "78f21899ef806a583c9045d6571ac37024418f59bf3d19ff2d00a2df4c235f6d"
+    },
+    {
+      "path": "tests/framework/v109_inventory_durability_projection_test.tscn",
+      "sha256": "9f1de25be2448dfae6388cc306aa1f6a825985af2ed6d8b6f2cc5caf789431e7"
+    },
+    {
+      "path": "tests/framework/v109_loot_feedback_retention_test.gd",
+      "sha256": "37580ad632ad9405ded759a68b1130dd0cb9f870cd3ff0c6a04bb19dbdc54af6"
+    },
+    {
+      "path": "tests/framework/v109_loot_feedback_retention_test.tscn",
+      "sha256": "7a9b7dba674d664f59f7903d443a772997cb3383a4d802e965a616e2bf869bff"
+    },
+    {
+      "path": "tests/framework/v109_sleep_foreground_reentry_test.gd",
+      "sha256": "f7d4828cf26e8e11c2c533d7056044bc7c21da6c2827417570a8656bc6b1222f"
+    },
+    {
+      "path": "tests/framework/v109_sleep_foreground_reentry_test.tscn",
+      "sha256": "06712b8ca9a219b86fffad5408088d2bbb2664b1d6b5857ab7bf4d037ad7194c"
+    },
+    {
+      "path": "tests/framework/v109_reverse_summon_resource_sink_test.gd",
+      "sha256": "07d69c8290276735bccf9582ab7ac8a32a59e3b8161c34a6bd03b870a49972f4"
+    },
+    {
+      "path": "tests/framework/v109_reverse_summon_resource_sink_test.tscn",
+      "sha256": "c17c374cd6417747b27fc8a227fa2e94590f1655bb66e8510161660284596dbb"
+    },
+    {
+      "path": "tests/framework/v109_skill_rebind_keyboard_owner_test.gd",
+      "sha256": "d3dd1eda08ba91165060ff5badfdcdaf33451ab26655c8a4cea787f2b9a9d301"
+    },
+    {
+      "path": "tests/framework/v109_skill_rebind_keyboard_owner_test.tscn",
+      "sha256": "9b33e946483814087ad50b282a7ffa71dd78dce0ce2ad493aaa9597c6b729cda"
+    },
+    {
+      "path": "tests/framework/v109_code_catalog_lf_admission_test.gd",
+      "sha256": "22af3d49daedd6e5e93571788d2137499b277643ae9259b82cfc7678691e0854"
+    },
+    {
+      "path": "tests/framework/v109_code_catalog_lf_admission_test.tscn",
+      "sha256": "c7e282a440b0110560ccf8e58fd657435e677d7c417889e4dcf9c4152666be58"
+    },
+    {
+      "path": "tests/framework/v109_stack_contract_test.gd",
+      "sha256": "09bf0192bda0a77a962cc5a5fe0c5fee0ef69cff48412db90b9a1036304a0515"
+    },
+    {
+      "path": "tests/framework/v109_stack_contract_test.tscn",
+      "sha256": "49a5e9080204fe3fbf98ef2245f45426b249e9c61363a345c56cab35fd6a529e"
+    },
+    {
+      "path": "tests/framework/v109_discard_failed_retry_guard_test.gd",
+      "sha256": "0c2ff3c18e12a5358ed40732d990caf23bebeaa0ed6ab09b5e7b92a98bd983d4"
+    },
+    {
+      "path": "tests/framework/v109_discard_failed_retry_guard_test.tscn",
+      "sha256": "96df2c268b4afdf46eee98b15f3c0a11976421aaea374d90de91155fbeb0205f"
+    }
+  ],
+  "catalogue_boundary": "Runtime Script/Shader/resident fingerprints canonical LF; native probe owners and project/cache/producer self binding remain raw. Generator old artifact failure retained, corrected boundary regenerated without replay/rehash of native artifacts.",
+  "inventory_correction": "Official kind=equipment exists; failed assertion was BBCode tags within durability text. Final test strips markup then matches exact actual current/max. Unnecessary kind fallback rejected.",
+  "pending": [
+    "B15 Debug recovery and explicit target admission",
+    "B16 failed retry discard transaction exact fault scope",
+    "B16-B28 remaining dots audit",
+    "Fixed final difference review/integration/APK109/device"
+  ]
+}

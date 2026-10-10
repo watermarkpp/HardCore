@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "scope": "Formal integrated producer and catalogue generator; native evidence reused with exact unchanged engine artifacts, combined runtime NOT_RUN",
+  "producer_sha256": "5f79d7c23ca902f8c85bdba6265a62fb26aa90e7fa6cf681ec4202fcaf46b31f",
+  "plan_sha256": "3672edf9cdab91013fffdb4f67095fff2f63c6a4a01afdeab9348261dd5c7977",
+  "runtime_before_sha256": "3a29bfae73c3d1854ce025f19a59132d1ba3ee420caedf4f165432bc7ed32d1b",
+  "runtime_after_sha256": "a0e46a47c57fbb43ea5d99d34b77bf46058d54e5b61f2a5b7c2fbeebbaccb0f5",
+  "artifact_origins": {
+    "namespace": [
+      "code_preparation_engine_namespace_capture_test.namespace.json",
+      "f4885bb59746d25697b2cacb9c3eb9ff0ef94c80847cab2d6c1331ae68dcfb2d"
+    ],
+    "symbols": [
+      "code_preparation_native_symbol_probe_test.symbols.json",
+      "31921b1c41554c874f74be61df3625d7f764cbf90f72e311dd5ae3d84f1244ad"
+    ],
+    "fold": [
+      "code_preparation_scalar_math_probe_test.symbols.json",
+      "6748ce8eb2c2b48bc0cd4e0bff8d365d33b13b6d72395c0dbf0dba797af20dc8"
+    ]
+  }
+}

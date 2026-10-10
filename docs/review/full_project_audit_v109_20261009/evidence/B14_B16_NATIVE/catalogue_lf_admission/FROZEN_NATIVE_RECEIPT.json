@@ -1,0 +1,29 @@
+{
+  "status": "PASS",
+  "input_freeze_status": "PASS",
+  "scope": "Input freeze and individual native results; failed/missing checks remain explicit. Android/GPU/performance NOT_RUN",
+  "candidate_tree": "e6a7b510dbd070571b001cbe2058844dec9f5463",
+  "source_fingerprint": "5302a9175c56f175274eac9b6d30d5d3557e8417b79b4d9d5f01852436dfbc21",
+  "checked_inputs": 2578,
+  "runner": "outputs\\dot_remote_audit_20261010\\native\\catalogue_lf_admission\\runner_results_adhoc_20261010_145734_862_24116.json",
+  "invocation_id": "9cbffd07-7ac1-4caf-9c0c-de00e12afcdc",
+  "engine_log_errors": 0,
+  "main_index_unchanged": true,
+  "results": [
+    {
+      "test_path": "tests/framework/v109_code_catalog_lf_admission_test.tscn",
+      "result": "PASS",
+      "reason": "",
+      "timeout": false,
+      "effective_exit_code": 0,
+      "native_exit_observed_utc": "2026-10-10T06:57:33.2908458Z",
+      "framework_run_id": "5a7de6b2-d425-4908-b7b7-f0f143da0ad1",
+      "framework_receipt_valid": true,
+      "formal_evidence_status": "PASS",
+      "check_count": 18,
+      "failed_checks": 0,
+      "receipt": "outputs\\dot_remote_audit_20261010\\native\\catalogue_lf_admission\\v109_code_catalog_lf_admission_test.result.json",
+      "receipt_sha256": "934f9e2c5026e10fd6bdd5a94bc03eb04badf00d7950c21d75804e538684eedf"
+    }
+  ]
+}

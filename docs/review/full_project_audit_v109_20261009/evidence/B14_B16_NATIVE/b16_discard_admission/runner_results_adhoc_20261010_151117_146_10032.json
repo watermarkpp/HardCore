@@ -1,0 +1,109 @@
+{
+  "failed": 0,
+  "source_binding_scope": "External immutable input freeze required; env label alone is not a source scan",
+  "source_content_sha256": "6fcc4b70a225db1af050c704719c37a953ea9e33d4320880d7e804bad50d739c",
+  "engine_fingerprints": [
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+      "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "bytes": 198152
+    },
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64.exe",
+      "sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+      "bytes": 178485256
+    }
+  ],
+  "passed": 1,
+  "invocation_id": "ae6f5758-282f-4799-9ac5-98e43e2e492f",
+  "suite": "adhoc",
+  "runtime_environment": {
+    "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\dot_b16_discard_admission\\runner_ae6f5758-282f-4799-9ac5-98e43e2e492f",
+    "runner_process_id": 10032
+  },
+  "results": [
+    {
+      "test_name": "v109_discard_failed_retry_guard_test",
+      "test_path": "tests/framework/v109_discard_failed_retry_guard_test.tscn",
+      "wrapper_process_id": 23580,
+      "wrapper_started_utc": "2026-10-10T07:11:09.8738933Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\dot_b16_discard_admission\\runner_ae6f5758-282f-4799-9ac5-98e43e2e492f",
+      "fixed_fps": 0,
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-10T07:11:39.8781035Z",
+      "native_exit_observed_utc": "2026-10-10T07:11:15.5865583Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "cleanup_warning_evidence": {
+        "status": "PASS",
+        "allowlisted_errors": {
+          "string_formatting": {
+            "count": 0,
+            "lines": []
+          },
+          "resources_in_use": {
+            "count": 0,
+            "lines": []
+          },
+          "rid_leak": {
+            "count": 0,
+            "lines": []
+          },
+          "null_parameter": {
+            "count": 0,
+            "lines": []
+          }
+        },
+        "unknown_error_lines": [],
+        "unknown_error_count": 0,
+        "objectdb_leak_warning_lines": [],
+        "objectdb_leak_warning_count": 0,
+        "functional_marker_observed": true,
+        "formal_evidence_status": "MISSING",
+        "formal_evidence_reason": "upstream_native_and_full_receipt_validation_required",
+        "receipt_validation_reasons": [],
+        "candidate_receipt_correlation": true,
+        "upstream_result": "NOT_RUN",
+        "raw_log_paths": [
+          "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\dot_remote_audit_20261010\\native\\b16_discard_admission\\v109_discard_failed_retry_guard_test.stdout.log",
+          "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\dot_remote_audit_20261010\\native\\b16_discard_admission\\v109_discard_failed_retry_guard_test.stderr.log",
+          "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\dot_remote_audit_20261010\\native\\b16_discard_admission\\v109_discard_failed_retry_guard_test.godot.log"
+        ],
+        "receipt_path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\framework\\v109_discard_failed_retry_guard_test.result.json",
+        "expected_scene_id": "v109_discard_failed_retry_guard_test",
+        "expected_invocation_id": "ae6f5758-282f-4799-9ac5-98e43e2e492f"
+      },
+      "framework_run_id": "9d1d89ff-4b9e-43e6-b29a-404fd1f71f4f",
+      "framework_receipt_valid": true,
+      "source_content_sha256": "6fcc4b70a225db1af050c704719c37a953ea9e33d4320880d7e804bad50d739c",
+      "source_binding_scope": "External immutable input freeze required; env label alone is not a source scan",
+      "engine_fingerprints": [
+        {
+          "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+          "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+          "bytes": 198152
+        },
+        {
+          "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64.exe",
+          "sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+          "bytes": 178485256
+        }
+      ],
+      "formal_evidence_status": "PASS",
+      "formal_evidence_reason": "Requires matching external source/input freeze and this native result",
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "git_head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+  "engine_log_errors": 0,
+  "total": 1,
+  "generated_at": "2026-10-10T15:11:17.1464763+08:00"
+}

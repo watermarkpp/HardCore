@@ -1,0 +1,197 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "formal cold actor meets sleep gates",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "real background owner entered sleep",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "sleep advances owner clock while maintenance has not consumed cooldown",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "formal halo accepts legal player",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "halo wakes the existing owner",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "halo handoff preserves elapsed existing cooldown",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "duplicate wake and stale timeout cannot consume twice",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "formal cold actor meets sleep gates",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "real background owner entered sleep",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "sleep advances owner clock while maintenance has not consumed cooldown",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "normal maintenance consumes elapsed cooldown once",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "Timer-to-foreground handoff does not double deduct",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "formal cold actor meets sleep gates",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "real background owner entered sleep",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "sleep advances owner clock while maintenance has not consumed cooldown",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "early Timer foreground handoff preserves elapsed cooldown",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "formal cold actor meets sleep gates",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "real background owner entered sleep",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "sleep advances owner clock while maintenance has not consumed cooldown",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "damage wake preserves the old regen phase",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "old full-HP regen cannot offset the new waking damage",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "duplicate wake cannot consume regen twice",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "formal cold actor meets sleep gates",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "real background owner entered sleep",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "sleep advances owner clock while maintenance has not consumed cooldown",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "regen handoff uses the formal halo receiver",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "halo wake preserves continuous regen phase",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "formal cold actor meets sleep gates",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "real background owner entered sleep",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "sleep advances owner clock while maintenance has not consumed cooldown",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "maintenance then foreground does not consume regen twice",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "formal cold actor meets sleep gates",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "real background owner entered sleep",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "sleep advances owner clock while maintenance has not consumed cooldown",
+      "passed": true
+    },
+    {
+      "id": 35,
+      "label": "death handoff never resurrects the actor through regen",
+      "passed": true
+    }
+  ],
+  "count": 35,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "cff11c10-e677-4403-b44e-47889e676510",
+  "passed": 35,
+  "reported_checks": 35,
+  "reported_failures": 0,
+  "run_id": "c346ce04-c297-4d0a-a3ff-a6d2761c4543",
+  "runtime_environment": {
+    "native_process_id": 12000,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\dot_b14_sleep_integrated\\runner_cff11c10-e677-4403-b44e-47889e676510",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/dot_b14_sleep_integrated/runner_cff11c10-e677-4403-b44e-47889e676510/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "monster_sleep_cooldown_handoff_20261010_test",
+  "schema_version": 1,
+  "source_content_sha256": "f0c9e278337feabd54aa7c2e1a86f0b0b4701f8410fb3b65cac24ee512d29d4a",
+  "status": "PASS"
+}

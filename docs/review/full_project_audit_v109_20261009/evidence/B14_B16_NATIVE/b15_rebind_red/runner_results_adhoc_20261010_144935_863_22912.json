@@ -1,0 +1,111 @@
+{
+  "passed": 0,
+  "source_content_sha256": "589bc0359a10bba41a2c39ed0bb9dca8044c6dfc62412633b15e061a28087435",
+  "invocation_id": "2e8d0ba7-4501-48a3-b803-69c26c94def6",
+  "engine_log_errors": 0,
+  "engine_fingerprints": [
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+      "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+      "bytes": 198152
+    },
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64.exe",
+      "sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+      "bytes": 178485256
+    }
+  ],
+  "source_binding_scope": "External immutable input freeze required; env label alone is not a source scan",
+  "suite": "adhoc",
+  "git_head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+  "total": 1,
+  "failed": 1,
+  "runtime_environment": {
+    "project_root": "C:\\Users\\Administrator\\Documents\\HardCore",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\dot_b15_rebind_red\\runner_2e8d0ba7-4501-48a3-b803-69c26c94def6",
+    "runner_process_id": 22912
+  },
+  "results": [
+    {
+      "test_name": "v109_skill_rebind_keyboard_owner_test",
+      "test_path": "tests/framework/v109_skill_rebind_keyboard_owner_test.tscn",
+      "wrapper_process_id": 18676,
+      "wrapper_started_utc": "2026-10-10T06:49:15.4815921Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\dot_b15_rebind_red\\runner_2e8d0ba7-4501-48a3-b803-69c26c94def6",
+      "fixed_fps": 0,
+      "pass_marker_found": false,
+      "process_exited": true,
+      "wrapper_exit_code": 1,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-10T06:49:45.4869646Z",
+      "native_exit_observed_utc": "2026-10-10T06:49:34.6061407Z",
+      "effective_exit_code": 1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "cleanup_warning_evidence": {
+        "status": "PASS",
+        "allowlisted_errors": {
+          "string_formatting": {
+            "count": 0,
+            "lines": []
+          },
+          "resources_in_use": {
+            "count": 0,
+            "lines": []
+          },
+          "rid_leak": {
+            "count": 0,
+            "lines": []
+          },
+          "null_parameter": {
+            "count": 0,
+            "lines": []
+          }
+        },
+        "unknown_error_lines": [],
+        "unknown_error_count": 0,
+        "objectdb_leak_warning_lines": [],
+        "objectdb_leak_warning_count": 0,
+        "functional_marker_observed": false,
+        "formal_evidence_status": "MISSING",
+        "formal_evidence_reason": "legacy_run_bound_checks_missing",
+        "receipt_validation_reasons": [
+          "framework_receipt_not_pass"
+        ],
+        "candidate_receipt_correlation": false,
+        "upstream_result": "NOT_RUN",
+        "raw_log_paths": [
+          "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\dot_remote_audit_20261010\\native\\b15_rebind_red\\v109_skill_rebind_keyboard_owner_test.stdout.log",
+          "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\dot_remote_audit_20261010\\native\\b15_rebind_red\\v109_skill_rebind_keyboard_owner_test.stderr.log",
+          "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\dot_remote_audit_20261010\\native\\b15_rebind_red\\v109_skill_rebind_keyboard_owner_test.godot.log"
+        ],
+        "receipt_path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\test_logs\\framework\\v109_skill_rebind_keyboard_owner_test.result.json",
+        "expected_scene_id": "v109_skill_rebind_keyboard_owner_test",
+        "expected_invocation_id": "2e8d0ba7-4501-48a3-b803-69c26c94def6"
+      },
+      "framework_run_id": "6b40262b-7613-411b-aedc-f0086db6f72c",
+      "framework_receipt_valid": false,
+      "source_content_sha256": "589bc0359a10bba41a2c39ed0bb9dca8044c6dfc62412633b15e061a28087435",
+      "source_binding_scope": "External immutable input freeze required; env label alone is not a source scan",
+      "engine_fingerprints": [
+        {
+          "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+          "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+          "bytes": 198152
+        },
+        {
+          "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64.exe",
+          "sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+          "bytes": 178485256
+        }
+      ],
+      "formal_evidence_status": "MISSING",
+      "formal_evidence_reason": "Requires matching external source/input freeze and this native result",
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+    }
+  ],
+  "generated_at": "2026-10-10T14:49:35.8640337+08:00"
+}

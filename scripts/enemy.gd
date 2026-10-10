@@ -3105,6 +3105,15 @@ func _physics_process_internal(delta: float) -> void:
 	if _dying:
 		_record_performance_counter(&"death_physics_process_calls_after_begin")
 		return
+	# A sleeping actor can become foreground solely because its existing target
+	# moved across the activation threshold. Retire the maintenance owner before
+	# this physics tick advances the combat clock; otherwise this tick consumes
+	# the interval and the stale wake callback consumes it a second time.
+	var foreground_sleep_handoff := (
+		_background_deep_sleeping and not _can_use_background_ai()
+	)
+	if foreground_sleep_handoff:
+		_leave_background_deep_sleep()
 	# HC-MONSTER-COMBAT-R3 W1: the single combat action clock. Advanced by
 	# exactly one physics delta per Actor tick - including background
 	# fast-path ticks (their accumulated delta resumes to the same total),
@@ -3112,6 +3121,8 @@ func _physics_process_internal(delta: float) -> void:
 	# Every combat consumer (pending damage timing, presentation age, audio
 	# phase) reads this time; the wall clock is not a combat time source.
 	_advance_combat_action_clock(delta)
+	if foreground_sleep_handoff:
+		_background_last_wakeup_game_s = _combat_action_time_s
 	_boss_warning_advanced_this_tick = false
 	_record_performance_counter(&"active_enemy_physics_count")
 	# Match the original server's object-cycle boundary: damage may reduce HP to

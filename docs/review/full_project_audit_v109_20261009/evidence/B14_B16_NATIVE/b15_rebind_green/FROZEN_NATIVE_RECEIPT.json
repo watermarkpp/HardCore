@@ -1,0 +1,29 @@
+{
+  "status": "PASS",
+  "input_freeze_status": "PASS",
+  "scope": "Input freeze and individual native results; failed/missing checks remain explicit. Android/GPU/performance NOT_RUN",
+  "candidate_tree": "243355c4a819469f2a8cc99c997df5527132f754",
+  "source_fingerprint": "647be2447cff03081075a0372692d55e12cb7786ae1ee4214534614b7fe61174",
+  "checked_inputs": 2572,
+  "runner": "outputs\\dot_remote_audit_20261010\\native\\b15_rebind_green\\runner_results_adhoc_20261010_145046_241_11744.json",
+  "invocation_id": "e88cff8a-f34b-476c-99d4-b7b07b73fdc0",
+  "engine_log_errors": 0,
+  "main_index_unchanged": true,
+  "results": [
+    {
+      "test_path": "tests/framework/v109_skill_rebind_keyboard_owner_test.tscn",
+      "result": "PASS",
+      "reason": "",
+      "timeout": false,
+      "effective_exit_code": 0,
+      "native_exit_observed_utc": "2026-10-10T06:50:44.6601144Z",
+      "framework_run_id": "8054ac88-e0b7-4881-ae22-bacb3f021ba1",
+      "framework_receipt_valid": true,
+      "formal_evidence_status": "PASS",
+      "check_count": 15,
+      "failed_checks": 0,
+      "receipt": "outputs\\dot_remote_audit_20261010\\native\\b15_rebind_green\\v109_skill_rebind_keyboard_owner_test.result.json",
+      "receipt_sha256": "adfcffcb0ab147559816158cd279577201c789435879c0f42f58f28f9b4f6b40"
+    }
+  ]
+}

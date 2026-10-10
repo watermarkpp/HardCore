@@ -7846,6 +7846,7 @@ func _on_skill_button_assignment_requested(request: Dictionary) -> void:
 			)
 		hud.show_error_message("技能栏配置未能保存")
 		return
+	_reset_attack_action_lifecycle(&"skill_assignment_changed")
 	if is_instance_valid(hud):
 		hud.cancel_attack_inputs(&"skill_assignment_changed")
 		hud.cancel_skill_inputs(&"skill_assignment_changed")
@@ -8832,6 +8833,20 @@ func _execute_canonical_skill_plan(
 			{"accepted": false}
 		)
 		return result
+	var summon_resource_rejection := _canonical_summon_resource_commit_rejection(plan)
+	if not summon_resource_rejection.is_empty():
+		result["accepted"] = false
+		result["effect_success"] = false
+		result["reason"] = summon_resource_rejection
+		result["execution_result"] = SkillExecutionPlanContractScript.build_result(
+			plan,
+			{
+				"accepted": false,
+				"rejection_reason": summon_resource_rejection,
+			}
+		)
+		_skill_cast_target = null
+		return result
 	var resource_quote: Dictionary = plan.get("resource_cost", {})
 	var needs_resource := (
 		int(resource_quote.get("mp_cost", 0)) > 0
@@ -9671,6 +9686,35 @@ func _commit_canonical_resources(result: Dictionary) -> bool:
 		return false
 	SkillExecutionPlanContractScript.resource_commit_count += 1
 	return true
+
+
+func _canonical_summon_resource_commit_rejection(plan: Dictionary) -> String:
+	## A release may retain an accepted rank while live equipment has changed.
+	## Recheck only the final summon sink's safety limit before committing MP or
+	## materials; the accepted plan and its rank remain immutable.
+	for raw_descriptor: Variant in plan.get("summon_descriptors", []):
+		if not raw_descriptor is Dictionary:
+			continue
+		var descriptor := raw_descriptor as Dictionary
+		if str(descriptor.get("operation", "")) != "main_pet_spawn":
+			continue
+		if not bool(descriptor.get("spawned", false)):
+			continue
+		var summon_id := str(descriptor.get("template_id", ""))
+		var live_pets := _canonical_main_pets(summon_id)
+		if summon_id == "skeleton":
+			var live_cap := SkillRankResolver.skeleton_count(
+				PlayerState.effective_skill_level(str(plan.get("skill_id", "")))
+			)
+			if live_pets.size() >= live_cap:
+				return "summon_live_cap_changed"
+			var requested_slot := int(descriptor.get("pet_slot_index", 0))
+			for pet: SummonActor in live_pets:
+				if pet.pet_slot_index == requested_slot:
+					return "summon_slot_already_occupied"
+		elif summon_id == "divine_beast" and not live_pets.is_empty():
+			return "summon_live_cap_changed"
+	return ""
 
 
 func _apply_canonical_effects_from_plan(

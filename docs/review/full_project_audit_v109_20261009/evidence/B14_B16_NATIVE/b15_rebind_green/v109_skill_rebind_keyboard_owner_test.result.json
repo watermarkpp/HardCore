@@ -1,0 +1,97 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "actual Root reaches READY",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "formal assignment binds attack skill",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "fresh attack down owns keyboard action before rebind",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "actual HUD creates skill panel",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "real panel restore button clears saved attack binding",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "successful rebinding retires keyboard lifecycle exactly once",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "old held key loses action ownership at rebind",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "held old key cannot start ordinary attack after restore",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "boundary does not manufacture a physical key release",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "continued old hold stays retired 0",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "continued old hold stays retired 1",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "continued old hold stays retired 2",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "new physical down acquires ordinary attack ownership",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "rejected assignment leaves current input ownership intact",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "valid new hold remains active after rejected configuration",
+      "passed": true
+    }
+  ],
+  "count": 15,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "e88cff8a-f34b-476c-99d4-b7b07b73fdc0",
+  "passed": 15,
+  "reported_checks": 15,
+  "reported_failures": 0,
+  "run_id": "8054ac88-e0b7-4881-ae22-bacb3f021ba1",
+  "runtime_environment": {
+    "native_process_id": 22116,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\dot_b15_rebind_green\\runner_e88cff8a-f34b-476c-99d4-b7b07b73fdc0",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/dot_b15_rebind_green/runner_e88cff8a-f34b-476c-99d4-b7b07b73fdc0/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "v109_skill_rebind_keyboard_owner_test",
+  "schema_version": 1,
+  "source_content_sha256": "647be2447cff03081075a0372692d55e12cb7786ae1ee4214534614b7fe61174",
+  "status": "PASS"
+}

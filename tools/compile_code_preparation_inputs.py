@@ -40,6 +40,15 @@ def sha(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
 
+def canonical_source_bytes(data: bytes) -> bytes:
+    """Fingerprint repository LF bytes, independent of Windows checkout EOL."""
+    return data.replace(b"\r\n", b"\n")
+
+def fold_owner_matches_source(expected_sha256: str, source_bytes: bytes) -> bool:
+    """Fold evidence is bound to the exact source bytes used by the native probe."""
+    return expected_sha256 == sha(source_bytes)
+
+
 def identifier_start(c: str) -> bool:
     return c == "_" or c.isalpha()
 
@@ -675,17 +684,18 @@ def compile_entry(root: Path, entry: str, class_cache: Path, native: dict[str, A
             errors.append("source_file_byte_capacity:" + path)
             continue
         data = disk.read_bytes()
+        fingerprint_data = canonical_source_bytes(data)
         if suffix == ".gdshader":
             # Include syntax needs a shader-specific producer. Fail closed on
             # any directive marker, including comments, rather than miss it.
             if "#" in data.decode("utf-8-sig"):
                 errors.append("unsupported_shader_preprocessor:" + path)
-            nodes[path] = {"kind": "asset", "type": "Shader", "sha256": sha(data), "bytes": len(data)}
+            nodes[path] = {"kind": "asset", "type": "Shader", "sha256": sha(fingerprint_data), "bytes": len(fingerprint_data)}
             continue
-        nodes[path] = {"kind": "script", "type": "GDScript", "sha256": sha(data), "bytes": len(data)}
+        nodes[path] = {"kind": "script", "type": "GDScript", "sha256": sha(fingerprint_data), "bytes": len(fingerprint_data)}
         try:
             for key, case in approved_folds.items():
-                if key.startswith(path + "#") and case["owner_source_sha256"] != sha(data):
+                if key.startswith(path + "#") and not fold_owner_matches_source(case["owner_source_sha256"], data):
                     raise Refusal("eager_fold_owner_source_changed")
             observation = extract(data.decode("utf-8-sig"), path, classes, native_names, autoloads, approved_folds)
         except (Refusal, UnicodeError) as error:
@@ -707,7 +717,8 @@ def compile_entry(root: Path, entry: str, class_cache: Path, native: dict[str, A
                 if resident_disk.stat().st_size > MAX_FILE_BYTES:
                     errors.append("resident_source_file_byte_capacity:" + resident_path)
                     continue
-                digest = sha(resident_disk.read_bytes())
+                resident_fingerprint_bytes = canonical_source_bytes(resident_disk.read_bytes())
+                digest = sha(resident_fingerprint_bytes)
                 name = edge["class_name"]
                 # This is a required live consumer check, not readiness granted
                 # by an offline cache/metadata boolean. Do not recurse through
@@ -715,7 +726,7 @@ def compile_entry(root: Path, entry: str, class_cache: Path, native: dict[str, A
                 residency[name] = {"kind":"autoload_residency", "autoload_name":name, "script_path":resident_path,
                                    "source_sha256":digest, "stage":"before_code_request", "readiness":"NOT_RUN"}
                 if resident_path not in nodes:
-                    nodes[resident_path] = {"kind":"resident_script", "type":"GDScript", "sha256":digest, "bytes": resident_disk.stat().st_size}
+                    nodes[resident_path] = {"kind":"resident_script", "type":"GDScript", "sha256":digest, "bytes": len(resident_fingerprint_bytes)}
             else:
                 pending.append(edge["to"])
     exact_assets = sorted(path for path, node in nodes.items() if node["kind"] == "asset")

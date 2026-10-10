@@ -1,0 +1,240 @@
+{
+  "authority": {
+    "extractor_sha256": "a7f287f75b1267ae76b50f2494b60d3ba6998c9d1a18d52c6b1e53a34bde12cf",
+    "kind": "fixed_engine_source_generated",
+    "source_files": [
+      {
+        "bytes": 44030.0,
+        "commit": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+        "git_blob_sha1": "3a43ea0139694eb5cade3a5b403ad96019b5ded9",
+        "path": "outputs\\framework_v2\\loading_preparation_contract_20261005\\engine_api\\core_constants.cpp",
+        "scope": "Public fixed-commit source retrieval; not native symbol availability",
+        "sha256": "31cf8ee6d7d418894cc6ca40dfcd3334324473e1777fff43f422e3e5977dc5d4",
+        "status": "PASS",
+        "url": "https://raw.githubusercontent.com/godotengine/godot/5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88/core/core_constants.cpp"
+      },
+      {
+        "bytes": 24050.0,
+        "commit": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+        "git_blob_sha1": "5241295c56f6dfff7e4745760a6c9d25ebcb5ecb",
+        "path": "outputs\\framework_v2\\loading_preparation_contract_20261005\\engine_api\\gdscript_utility_functions.cpp",
+        "scope": "Public fixed-commit source retrieval; not native symbol availability",
+        "sha256": "d893fcb2ce43e141bb740ddaf9c474e3455bfc8691d1a1070ddd5f21246916bc",
+        "status": "PASS",
+        "url": "https://raw.githubusercontent.com/godotengine/godot/5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88/modules/gdscript/gdscript_utility_functions.cpp"
+      },
+      {
+        "bytes": 43387.0,
+        "commit": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+        "git_blob_sha1": "bd080c9076a05c0fde40462a3d9d4266772905de",
+        "path": "outputs\\framework_v2\\loading_preparation_contract_20261005\\engine_api\\gdscript_tokenizer.cpp",
+        "scope": "Public fixed-commit source retrieval; not native symbol availability",
+        "sha256": "6d956bc85ad7455110977974ce62f24ba5a2e864968296c7d65cde67bfa634a8",
+        "status": "PASS",
+        "url": "https://raw.githubusercontent.com/godotengine/godot/5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88/modules/gdscript/gdscript_tokenizer.cpp"
+      }
+    ]
+  },
+  "binary_availability": "PASS",
+  "candidate_artifact_sha256": "fa94a4bbf78aa9831719194a175eae0303615db96d68e33835691a5e34564c41",
+  "candidate_producer_id": "hc.code_preparation.fixed_engine_symbol_candidates.v1",
+  "engine": {
+    "binary_sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+    "executable_path": "C:/Users/Administrator/.codex/worktrees/v109-content-validation-repair/HardCore/tools/godot-4.7/Godot_v4.7-stable_win64.exe",
+    "version": {
+      "build": "official",
+      "hash": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+      "hex": 263936,
+      "major": 4,
+      "minor": 7,
+      "patch": 0,
+      "status": "stable",
+      "string": "4.7-stable (official)",
+      "timestamp": 0
+    }
+  },
+  "engine_commit": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+  "global_constants": [
+    "INF",
+    "OK",
+    "TAU",
+    "TYPE_ARRAY",
+    "TYPE_BOOL",
+    "TYPE_DICTIONARY",
+    "TYPE_FLOAT",
+    "TYPE_INT",
+    "TYPE_NIL",
+    "TYPE_STRING"
+  ],
+  "global_functions": [],
+  "gpu_first_draw": "NOT_RUN",
+  "invocation_id": "7c5c4375-aa15-46de-838b-f57013a557bb",
+  "probe_results": [
+    {
+      "kind": "global_constant",
+      "method_invocations": 0,
+      "name": "INF",
+      "registration": {
+        "kind": "global_constant",
+        "line": 149.0,
+        "mechanism": "token_names_constant_with_semantic_token_use",
+        "name": "INF",
+        "source_file": "gdscript_tokenizer.cpp",
+        "token": "CONST_INF"
+      },
+      "reload_error": 0,
+      "source_code_sha256": "8c1f193c0234ec9a670aba4e35f44b24f50c965eadf85875186bc091e0bd2f6d",
+      "status": "PASS"
+    },
+    {
+      "kind": "global_constant",
+      "method_invocations": 0,
+      "name": "OK",
+      "registration": {
+        "kind": "global_constant",
+        "line": 594.0,
+        "mechanism": "BIND_CORE_ENUM_CONSTANT",
+        "name": "OK",
+        "source_file": "core_constants.cpp"
+      },
+      "reload_error": 0,
+      "source_code_sha256": "6d1602ac0a3333beae7e4f8617bb026c999a6a1502b272b7091441993be3dfd0",
+      "status": "PASS"
+    },
+    {
+      "kind": "global_constant",
+      "method_invocations": 0,
+      "name": "TAU",
+      "registration": {
+        "kind": "global_constant",
+        "line": 148.0,
+        "mechanism": "token_names_constant_with_semantic_token_use",
+        "name": "TAU",
+        "source_file": "gdscript_tokenizer.cpp",
+        "token": "CONST_TAU"
+      },
+      "reload_error": 0,
+      "source_code_sha256": "a8e9b865756deb5d48acecb8e466060c51c08922565a4eeeeed2587aa3fd3820",
+      "status": "PASS"
+    },
+    {
+      "kind": "global_constant",
+      "method_invocations": 0,
+      "name": "TYPE_ARRAY",
+      "registration": {
+        "kind": "global_constant",
+        "line": 779.0,
+        "mechanism": "BIND_CORE_ENUM_CONSTANT_CUSTOM",
+        "name": "TYPE_ARRAY",
+        "source_file": "core_constants.cpp"
+      },
+      "reload_error": 0,
+      "source_code_sha256": "cdcd20024c0cabdc74d19f5b7978c9256488a91a11d6ac526a32949c6c3cdc0d",
+      "status": "PASS"
+    },
+    {
+      "kind": "global_constant",
+      "method_invocations": 0,
+      "name": "TYPE_BOOL",
+      "registration": {
+        "kind": "global_constant",
+        "line": 752.0,
+        "mechanism": "BIND_CORE_ENUM_CONSTANT_CUSTOM",
+        "name": "TYPE_BOOL",
+        "source_file": "core_constants.cpp"
+      },
+      "reload_error": 0,
+      "source_code_sha256": "b399978b564696db085e5bc501b4a343592dbb86d442a6faa9c7365090d7f45c",
+      "status": "PASS"
+    },
+    {
+      "kind": "global_constant",
+      "method_invocations": 0,
+      "name": "TYPE_DICTIONARY",
+      "registration": {
+        "kind": "global_constant",
+        "line": 778.0,
+        "mechanism": "BIND_CORE_ENUM_CONSTANT_CUSTOM",
+        "name": "TYPE_DICTIONARY",
+        "source_file": "core_constants.cpp"
+      },
+      "reload_error": 0,
+      "source_code_sha256": "ed7d1e59212e1b160b100cd79d5570a2ce8d59e847937b76dbe6fd037cf87697",
+      "status": "PASS"
+    },
+    {
+      "kind": "global_constant",
+      "method_invocations": 0,
+      "name": "TYPE_FLOAT",
+      "registration": {
+        "kind": "global_constant",
+        "line": 754.0,
+        "mechanism": "BIND_CORE_ENUM_CONSTANT_CUSTOM",
+        "name": "TYPE_FLOAT",
+        "source_file": "core_constants.cpp"
+      },
+      "reload_error": 0,
+      "source_code_sha256": "c06b09bba5f1da05cbd9806766db4837f5000eb98c4a2356af03fe28dab22748",
+      "status": "PASS"
+    },
+    {
+      "kind": "global_constant",
+      "method_invocations": 0,
+      "name": "TYPE_INT",
+      "registration": {
+        "kind": "global_constant",
+        "line": 753.0,
+        "mechanism": "BIND_CORE_ENUM_CONSTANT_CUSTOM",
+        "name": "TYPE_INT",
+        "source_file": "core_constants.cpp"
+      },
+      "reload_error": 0,
+      "source_code_sha256": "47d02fbc1dc258cfcab8f200805f98d05071deed9df5fda5a673637671056a0a",
+      "status": "PASS"
+    },
+    {
+      "kind": "global_constant",
+      "method_invocations": 0,
+      "name": "TYPE_NIL",
+      "registration": {
+        "kind": "global_constant",
+        "line": 751.0,
+        "mechanism": "BIND_CORE_ENUM_CONSTANT_CUSTOM",
+        "name": "TYPE_NIL",
+        "source_file": "core_constants.cpp"
+      },
+      "reload_error": 0,
+      "source_code_sha256": "286456c10a102e2ac91163658448e16f75c1da0b371e3427eee311ba6ce74b34",
+      "status": "PASS"
+    },
+    {
+      "kind": "global_constant",
+      "method_invocations": 0,
+      "name": "TYPE_STRING",
+      "registration": {
+        "kind": "global_constant",
+        "line": 755.0,
+        "mechanism": "BIND_CORE_ENUM_CONSTANT_CUSTOM",
+        "name": "TYPE_STRING",
+        "source_file": "core_constants.cpp"
+      },
+      "reload_error": 0,
+      "source_code_sha256": "9fbca01262dc9c54bfdd1108b4cab263ee742fad22d1fec1c1fa554fb2589359",
+      "status": "PASS"
+    }
+  ],
+  "producer_id": "hc.code_preparation.native_symbols.compile_probe.candidate.v1",
+  "resource_readiness": "NOT_RUN",
+  "run_id": "58a01717-3ff9-49e3-a702-e9b0a782a3fb",
+  "schema_version": 1,
+  "source_content_sha256": "4ce3a1b878453d3885f350a2c82d631d6ae2de2fcfe581e8747173ec21999590",
+  "target_observation": {
+    "cached_after": false,
+    "cached_before": false,
+    "fixture_target_get_calls": 0,
+    "fixture_target_request_calls": 0,
+    "path": "res://scripts/caster_skill_animation_player.gd",
+    "target_method_invocations": 0
+  },
+  "whole_gdscript_namespace": "MISSING"
+}

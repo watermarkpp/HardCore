@@ -305,6 +305,44 @@ class ProducerCases(unittest.TestCase):
             self.assertEqual(result["prepared_inputs"], [])
             self.assertTrue(any("missing_exact_dependency" in error for error in result["errors"]))
 
+    def test_fold_owner_evidence_keeps_exact_probe_bytes(self):
+        lf = b"const Value = 64.0 * 32.0\n"
+        crlf = lf.replace(b"\n", b"\r\n")
+        approved_raw = MODULE.sha(crlf)
+        self.assertTrue(MODULE.fold_owner_matches_source(approved_raw, crlf))
+        self.assertFalse(MODULE.fold_owner_matches_source(approved_raw, lf))
+        self.assertFalse(MODULE.fold_owner_matches_source(approved_raw, crlf.replace(b"32.0", b"33.0")))
+
+    def test_crlf_checkout_has_same_canonical_source_fingerprints(self):
+        with tempfile.TemporaryDirectory(prefix="producer_eol_", dir=OWNED) as directory:
+            root = Path(directory)
+            (root / "scripts").mkdir()
+            (root / "assets/shaders").mkdir(parents=True)
+            (root / "project.godot").write_bytes(b"[autoload]\nGameData=\"res://scripts/peer.gd\"\n")
+            cache = root / "class_cache.cfg"
+            cache.write_bytes(b"list=[{\"class\":&\"Peer\",\"path\":\"res://scripts/peer.gd\",\"language\":&\"GDScript\"}]\n")
+            entry = root / "scripts/entry.gd"
+            peer = root / "scripts/peer.gd"
+            shader = root / "assets/shaders/example.gdshader"
+            lf_entry = b"extends RefCounted\nconst Asset=preload(\"res://assets/shaders/example.gdshader\")\nfunc action():\n\tGameData.lookup()\n\tPeer.work()\n"
+            lf_peer = b"class_name Peer\nextends RefCounted\nfunc work():\n\tpass\n"
+            lf_shader = b"shader_type canvas_item;\n"
+            entry.write_bytes(lf_entry)
+            peer.write_bytes(lf_peer)
+            shader.write_bytes(lf_shader)
+            env = {"schema_version": 1, "engine": {"binary_sha256": "TEST_ONLY"}, "run_id": "TEST_ONLY", "invocation_id": "TEST_ONLY", "source_content_sha256": "TEST_ONLY", "object_classes": ["RefCounted"], "variant_type_names": [], "singletons": []}
+            env["global_script_class_cache_sha256"] = MODULE.sha(cache.read_bytes())
+            env["project_godot_sha256"] = MODULE.sha((root / "project.godot").read_bytes())
+            lf_result = MODULE.compile_entry(root, OWNER, cache, env, "TEST_ONLY", 8)
+            self.assertEqual(lf_result["status"], "PASS", lf_result)
+            entry.write_bytes(lf_entry.replace(b"\n", b"\r\n"))
+            peer.write_bytes(lf_peer.replace(b"\n", b"\r\n"))
+            shader.write_bytes(lf_shader.replace(b"\n", b"\r\n"))
+            crlf_result = MODULE.compile_entry(root, OWNER, cache, env, "TEST_ONLY", 8)
+            self.assertEqual(crlf_result["status"], "PASS", crlf_result)
+            self.assertEqual(crlf_result["nodes"], lf_result["nodes"])
+            self.assertEqual(crlf_result["source_fingerprints"], lf_result["source_fingerprints"])
+
 
 if __name__ == "__main__":
     OWNED.mkdir(parents=True, exist_ok=True)

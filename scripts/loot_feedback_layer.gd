@@ -23,8 +23,9 @@ var rare_detail: Label
 var failure_panel: Panel
 var failure_label: Label
 var toast_entries: Array[Dictionary] = []
-var _pending_pickup_feedback: Array[Dictionary] = []
+var _pending_pickup_feedback: Dictionary = {}
 var _pending_pickup_head := 0
+var _pending_pickup_tail := 0
 var toast_panels: Array[Panel] = []
 var toast_labels: Array[Label] = []
 var rare_remaining := 0.0
@@ -158,6 +159,7 @@ func clear_feedback() -> void:
 	toast_entries.clear()
 	_pending_pickup_feedback.clear()
 	_pending_pickup_head = 0
+	_pending_pickup_tail = 0
 	_rebuild_toasts()
 	rare_remaining = 0.0
 	failure_remaining = 0.0
@@ -168,22 +170,27 @@ func clear_feedback() -> void:
 func _show_pickup_success(event: Dictionary, rebuild := true) -> void:
 	var entry := event.duplicate(true)
 	entry["remaining"] = maxf(0.5, float(event.get("duration", DEFAULT_DURATION)))
-	_pending_pickup_feedback.append(entry)
+	_pending_pickup_feedback[_pending_pickup_tail] = entry
+	_pending_pickup_tail += 1
 	if rebuild:
 		_start_next_pickup_feedback()
 
 
 func _start_next_pickup_feedback() -> void:
-	if not toast_entries.is_empty() or _pending_pickup_head >= _pending_pickup_feedback.size():
+	if not toast_entries.is_empty() or _pending_pickup_head >= _pending_pickup_tail:
 		return
 	# One visible notice advances independently of pickup/IO. An unusually
 	# long frame never drains unseen notices, allocates controls, or drops the
-	# queue tail. Use a cursor rather than shifting the whole FIFO on each item.
+	# queue tail. Integer keys keep FIFO order without shifting or periodically
+	# copying the pending tail. Retire each consumed entry immediately; the
+	# visible toast retains its own Dictionary reference until it expires.
 	toast_entries.append(_pending_pickup_feedback[_pending_pickup_head])
+	_pending_pickup_feedback.erase(_pending_pickup_head)
 	_pending_pickup_head += 1
-	if _pending_pickup_head == _pending_pickup_feedback.size():
+	if _pending_pickup_head == _pending_pickup_tail:
 		_pending_pickup_feedback.clear()
 		_pending_pickup_head = 0
+		_pending_pickup_tail = 0
 	_rebuild_toasts()
 
 

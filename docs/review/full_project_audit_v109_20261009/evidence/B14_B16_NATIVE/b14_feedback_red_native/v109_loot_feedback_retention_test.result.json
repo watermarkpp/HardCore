@@ -1,0 +1,92 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "120 consumer cycles preserve exactly-once FIFO with constant pending tail",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "each newly displayed notice retains default 2.4 seconds",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "arrival preserves current visible reference and remaining time",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "consumed prefix retires while tail stays 3; peak backing records=124",
+      "passed": false
+    },
+    {
+      "id": 5,
+      "label": "fixed UI controls survive sustained queue",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "failure notice does not reorder successful pickups",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "drain pending sequence 120",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "drain pending sequence 121",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "drain pending sequence 122",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "drain pending sequence 123",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "complete drain releases every queue record",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "explicit clear retires visible and pending records",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "next session has no stale prefix",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "layer destruction retires queue owner",
+      "passed": true
+    }
+  ],
+  "count": 14,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "d5847215-cd72-4654-95cc-bd47b1f307dd",
+  "passed": 13,
+  "reported_checks": 14,
+  "reported_failures": 1,
+  "run_id": "5e5fd8ed-5c22-4d6e-8717-f2c1470839f3",
+  "runtime_environment": {
+    "native_process_id": 12096,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\dot_b14_feedback_red_native\\runner_d5847215-cd72-4654-95cc-bd47b1f307dd",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/dot_b14_feedback_red_native/runner_d5847215-cd72-4654-95cc-bd47b1f307dd/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "v109_loot_feedback_retention_test",
+  "schema_version": 1,
+  "source_content_sha256": "1a20231e1c6d4acdaac2382b4c2981d05136cbf78a8a875f5bd1cebc069e2ba1",
+  "status": "FAIL"
+}

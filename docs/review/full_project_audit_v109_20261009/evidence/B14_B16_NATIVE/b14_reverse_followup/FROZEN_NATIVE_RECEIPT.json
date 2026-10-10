@@ -1,0 +1,44 @@
+{
+  "status": "FAIL",
+  "input_freeze_status": "PASS",
+  "scope": "Input freeze and individual native results; failed/missing checks remain explicit. Android/GPU/performance NOT_RUN",
+  "candidate_tree": "8a481f5972a92315a627bf31d2239460d3e9f38e",
+  "source_fingerprint": "582059e25a8093907590790b74faaba61a2bdf39cf1e9640fed1eb22014066d2",
+  "checked_inputs": 2570,
+  "runner": "outputs\\dot_remote_audit_20261010\\native\\b14_reverse_followup\\runner_results_adhoc_20261010_144621_049_16708.json",
+  "invocation_id": "0adc6c99-32a2-439d-9e88-e8828f8a2a7c",
+  "engine_log_errors": 0,
+  "main_index_unchanged": true,
+  "results": [
+    {
+      "test_path": "tests/framework/v109_inventory_durability_projection_test.tscn",
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+      "timeout": false,
+      "effective_exit_code": 1,
+      "native_exit_observed_utc": "2026-10-10T06:46:01.7626389Z",
+      "framework_run_id": "72bf5967-5ef9-4d7a-9ddc-31bc940a46b4",
+      "framework_receipt_valid": false,
+      "formal_evidence_status": "MISSING",
+      "check_count": 31,
+      "failed_checks": 1,
+      "receipt": "outputs\\dot_remote_audit_20261010\\native\\b14_reverse_followup\\v109_inventory_durability_projection_test.result.json",
+      "receipt_sha256": "b1525ab3cad98a0ff693eb10f3611097a1ee92514f09da858b860e4a37d07ba7"
+    },
+    {
+      "test_path": "tests/framework/v109_reverse_summon_resource_sink_test.tscn",
+      "result": "PASS",
+      "reason": "",
+      "timeout": false,
+      "effective_exit_code": 0,
+      "native_exit_observed_utc": "2026-10-10T06:46:19.5403528Z",
+      "framework_run_id": "38939d55-b069-4dfe-955a-3a4442641fe3",
+      "framework_receipt_valid": true,
+      "formal_evidence_status": "PASS",
+      "check_count": 18,
+      "failed_checks": 0,
+      "receipt": "outputs\\dot_remote_audit_20261010\\native\\b14_reverse_followup\\v109_reverse_summon_resource_sink_test.result.json",
+      "receipt_sha256": "4d1ecb67ca28d7115ef40e23250e48c87e0a8d084ffaa51da1b72907a5a10a5a"
+    }
+  ]
+}

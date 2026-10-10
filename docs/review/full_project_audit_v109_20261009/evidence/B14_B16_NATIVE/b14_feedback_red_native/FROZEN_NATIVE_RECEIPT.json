@@ -1,0 +1,29 @@
+{
+  "status": "FAIL",
+  "input_freeze_status": "PASS",
+  "scope": "Input freeze and individual native results; failed/missing checks remain explicit. Android/GPU/performance NOT_RUN",
+  "candidate_tree": "d08ae202cedb62fe196b72b779ffed7a0372ed22",
+  "source_fingerprint": "1a20231e1c6d4acdaac2382b4c2981d05136cbf78a8a875f5bd1cebc069e2ba1",
+  "checked_inputs": 2564,
+  "runner": "outputs\\dot_remote_audit_20261010\\native\\b14_feedback_red_native\\runner_results_adhoc_20261010_142934_736_20056.json",
+  "invocation_id": "d5847215-cd72-4654-95cc-bd47b1f307dd",
+  "engine_log_errors": 0,
+  "main_index_unchanged": true,
+  "results": [
+    {
+      "test_path": "tests/framework/v109_loot_feedback_retention_test.tscn",
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+      "timeout": false,
+      "effective_exit_code": 1,
+      "native_exit_observed_utc": "2026-10-10T06:29:33.4771011Z",
+      "framework_run_id": "5e5fd8ed-5c22-4d6e-8717-f2c1470839f3",
+      "framework_receipt_valid": false,
+      "formal_evidence_status": "MISSING",
+      "check_count": 14,
+      "failed_checks": 1,
+      "receipt": "outputs\\dot_remote_audit_20261010\\native\\b14_feedback_red_native\\v109_loot_feedback_retention_test.result.json",
+      "receipt_sha256": "86b013e749af2d54ebb76f305e910d6d1a74287cf1ebb1d72ebc21d0061a29b0"
+    }
+  ]
+}

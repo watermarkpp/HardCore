@@ -1,0 +1,112 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "formal generated catalogue contains the registered entry",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "actual input is repository LF: res://assets/shaders/trial_magic_screen.gdshader",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "formal source fingerprint exactly matches actual LF bytes: res://assets/shaders/trial_magic_screen.gdshader",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "same canonical content admits CRLF checkout bytes: res://assets/shaders/trial_magic_screen.gdshader",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "actual input is repository LF: res://assets/shaders/fire_wall_screen_blend_multiply.gdshader",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "formal source fingerprint exactly matches actual LF bytes: res://assets/shaders/fire_wall_screen_blend_multiply.gdshader",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "same canonical content admits CRLF checkout bytes: res://assets/shaders/fire_wall_screen_blend_multiply.gdshader",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "actual input is repository LF: res://scripts/identity/entity_registry.gd",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "formal source fingerprint exactly matches actual LF bytes: res://scripts/identity/entity_registry.gd",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "same canonical content admits CRLF checkout bytes: res://scripts/identity/entity_registry.gd",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "actual input is repository LF: res://scripts/features/contracts/plain_graph.gd",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "formal source fingerprint exactly matches actual LF bytes: res://scripts/features/contracts/plain_graph.gd",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "same canonical content admits CRLF checkout bytes: res://scripts/features/contracts/plain_graph.gd",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "actual ContentLayers publication and source envelope admit LF inputs",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "actual registered target Script is requested and admitted",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "actual shader lease validates normalized source: res://assets/shaders/fire_wall_screen_blend_multiply.gdshader",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "actual shader lease validates normalized source: res://assets/shaders/trial_magic_screen.gdshader",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "original preparation owner has no pending code job after retirement",
+      "passed": true
+    }
+  ],
+  "count": 18,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "9cbffd07-7ac1-4caf-9c0c-de00e12afcdc",
+  "passed": 18,
+  "reported_checks": 18,
+  "reported_failures": 0,
+  "run_id": "5a7de6b2-d425-4908-b7b7-f0f143da0ad1",
+  "runtime_environment": {
+    "native_process_id": 16176,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\dot_catalogue_lf_admission\\runner_9cbffd07-7ac1-4caf-9c0c-de00e12afcdc",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/dot_catalogue_lf_admission/runner_9cbffd07-7ac1-4caf-9c0c-de00e12afcdc/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "v109_code_catalog_lf_admission_test",
+  "schema_version": 1,
+  "source_content_sha256": "5302a9175c56f175274eac9b6d30d5d3557e8417b79b4d9d5f01852436dfbc21",
+  "status": "PASS"
+}
