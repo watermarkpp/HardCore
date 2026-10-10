@@ -95,7 +95,8 @@ static func _quote_single(
 	var main_pet_recall := _requested_main_pet_is_active(
 		definition,
 		resource_context,
-		cast_context
+		cast_context,
+		safe_rank
 	)
 	if material_free and skill_id == DOUBLE_MP_SKILL_ID:
 		mp_cost *= 2
@@ -193,7 +194,8 @@ static func _quote_single(
 static func _requested_main_pet_is_active(
 	definition: Dictionary,
 	resource_context: Dictionary,
-	cast_context: Dictionary
+	cast_context: Dictionary,
+	accepted_rank: int
 ) -> bool:
 	if (
 		str(definition.get("mechanics", {}).get("runtime_family", ""))
@@ -219,7 +221,10 @@ static func _requested_main_pet_is_active(
 		var active_ids: Variant = resource_context.get("active_main_pet_summon_ids", cast_context.get("active_main_pet_summon_ids", []))
 		var legacy_single_count := 1 if active_ids is Array and (active_ids as Array).has("skeleton") else 0
 		var active_count := int(resource_context.get("active_skeleton_count", cast_context.get("active_skeleton_count", legacy_single_count)))
-		var group_limit := SkillRankResolverScript.skeleton_count(resource_context.get("effective_skill_rank", cast_context.get("effective_skill_rank", 3)))
+		# The action request already carries the accepted ActionLease rank. Live
+		# context remains authoritative for actor count, but must never replace
+		# the rank frozen for this quote and the matching runtime plan.
+		var group_limit := SkillRankResolverScript.skeleton_count(accepted_rank)
 		return active_count >= group_limit
 	var active_ids: Variant = resource_context.get(
 		"active_main_pet_summon_ids",

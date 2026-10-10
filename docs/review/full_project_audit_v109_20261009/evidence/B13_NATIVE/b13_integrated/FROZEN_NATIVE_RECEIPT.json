@@ -1,0 +1,44 @@
+{
+  "status": "PASS",
+  "input_freeze_status": "PASS",
+  "scope": "Input freeze and individual native results; failed/missing checks remain explicit. Android/GPU/performance NOT_RUN",
+  "candidate_tree": "4392f8c49a6c1a48cf0a019cd7d6d536985b44d2",
+  "source_fingerprint": "c6c84e8429fa92f0bb7c913d5a9dddd921146a73ad812c661e0210b0a9fca54a",
+  "checked_inputs": 2562,
+  "runner": "outputs\\dot_remote_audit_20261010\\native\\b13_integrated\\runner_results_adhoc_20261010_142254_901_8172.json",
+  "invocation_id": "950c1470-cdef-4f1d-b216-5f842860a942",
+  "engine_log_errors": 0,
+  "main_index_unchanged": true,
+  "results": [
+    {
+      "test_path": "tests/framework/v109_accepted_summon_rank_resource_test.tscn",
+      "result": "PASS",
+      "reason": "",
+      "timeout": false,
+      "effective_exit_code": 0,
+      "native_exit_observed_utc": "2026-10-10T06:22:33.0741394Z",
+      "framework_run_id": "ec84fbcd-f62d-459d-958f-d325e1313304",
+      "framework_receipt_valid": true,
+      "formal_evidence_status": "PASS",
+      "check_count": 9,
+      "failed_checks": 0,
+      "receipt": "outputs\\dot_remote_audit_20261010\\native\\b13_integrated\\v109_accepted_summon_rank_resource_test.result.json",
+      "receipt_sha256": "a2e6c02f644305151c395ca0314eaa3189ade1e6677955ee8718403689988644"
+    },
+    {
+      "test_path": "tests/framework/v109_caster_subclass_terminal_failure_test.tscn",
+      "result": "PASS",
+      "reason": "",
+      "timeout": false,
+      "effective_exit_code": 0,
+      "native_exit_observed_utc": "2026-10-10T06:22:53.3991697Z",
+      "framework_run_id": "e6515e05-4067-485a-be9a-590074be08fd",
+      "framework_receipt_valid": true,
+      "formal_evidence_status": "PASS",
+      "check_count": 28,
+      "failed_checks": 0,
+      "receipt": "outputs\\dot_remote_audit_20261010\\native\\b13_integrated\\v109_caster_subclass_terminal_failure_test.result.json",
+      "receipt_sha256": "d064b7050dbba5ba3a0ad11dc48a49cc1704b2959d872f098b94f8609622f4fd"
+    }
+  ]
+}

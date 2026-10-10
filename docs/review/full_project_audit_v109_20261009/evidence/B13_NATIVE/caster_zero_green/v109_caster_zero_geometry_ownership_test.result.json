@@ -1,0 +1,132 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "wizard.hellfire formal registry READY",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "wizard.hellfire/skills.visual.geometry_grid_steps.screen_px_projection.v2 explicit zero geometry rejected",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "wizard.hellfire/skills.visual.geometry_grid_steps.screen_px_projection.v2 rejected calls keep orphan count 0 -> 0",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "wizard.hellfire/skills.visual.geometry_grid_steps.screen_px_projection.v2 nonempty geometry creates effect",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "wizard.hellfire canonical offsets preserved",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "wizard.hellfire normal effect frees completely",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "wizard.hellfire/skills.visual.geometry_cells.world_projection.v1 explicit zero geometry rejected",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "wizard.hellfire/skills.visual.geometry_cells.world_projection.v1 rejected calls keep orphan count 0 -> 0",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "wizard.hellfire/skills.visual.geometry_cells.world_projection.v1 nonempty geometry creates effect",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "wizard.hellfire canonical offsets preserved",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "wizard.hellfire normal effect frees completely",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "wizard.laser formal registry READY",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "wizard.laser/skills.visual.geometry_grid_steps.screen_px_projection.v2 explicit zero geometry rejected",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "wizard.laser/skills.visual.geometry_grid_steps.screen_px_projection.v2 rejected calls keep orphan count 0 -> 0",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "wizard.laser/skills.visual.geometry_grid_steps.screen_px_projection.v2 nonempty geometry creates effect",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "wizard.laser canonical offsets preserved",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "wizard.laser normal effect frees completely",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "wizard.laser/skills.visual.geometry_cells.world_projection.v1 explicit zero geometry rejected",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "wizard.laser/skills.visual.geometry_cells.world_projection.v1 rejected calls keep orphan count 0 -> 0",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "wizard.laser/skills.visual.geometry_cells.world_projection.v1 nonempty geometry creates effect",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "wizard.laser canonical offsets preserved",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "wizard.laser normal effect frees completely",
+      "passed": true
+    }
+  ],
+  "count": 22,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "2a43eba1-ab8a-4926-8d34-ef271f215202",
+  "passed": 22,
+  "reported_checks": 22,
+  "reported_failures": 0,
+  "run_id": "a7c6ff22-4c51-46c9-bc24-c91a40272ac3",
+  "runtime_environment": {
+    "native_process_id": 2308,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\dot_b13_caster_zero_green\\runner_2a43eba1-ab8a-4926-8d34-ef271f215202",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/dot_b13_caster_zero_green/runner_2a43eba1-ab8a-4926-8d34-ef271f215202/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "v109_caster_zero_geometry_ownership_test",
+  "schema_version": 1,
+  "source_content_sha256": "fbc76c8c21b61e4287c61d5ef012d6188849c778a18e4986b96914f4afee6d86",
+  "status": "PASS"
+}

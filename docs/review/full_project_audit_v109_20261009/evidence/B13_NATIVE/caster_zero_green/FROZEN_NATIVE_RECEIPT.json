@@ -1,0 +1,29 @@
+{
+  "status": "PASS",
+  "input_freeze_status": "PASS",
+  "scope": "Input freeze and individual native results; failed/missing checks remain explicit. Android/GPU/performance NOT_RUN",
+  "candidate_tree": "3172a7e2b31c6c95a1c03d2f9142c7fd4835cee8",
+  "source_fingerprint": "fbc76c8c21b61e4287c61d5ef012d6188849c778a18e4986b96914f4afee6d86",
+  "checked_inputs": 2558,
+  "runner": "outputs\\dot_remote_audit_20261010\\native\\caster_zero_green\\runner_results_adhoc_20261010_141907_290_6308.json",
+  "invocation_id": "2a43eba1-ab8a-4926-8d34-ef271f215202",
+  "engine_log_errors": 0,
+  "main_index_unchanged": true,
+  "results": [
+    {
+      "test_path": "tests/framework/v109_caster_zero_geometry_ownership_test.tscn",
+      "result": "PASS",
+      "reason": "",
+      "timeout": false,
+      "effective_exit_code": 0,
+      "native_exit_observed_utc": "2026-10-10T06:19:05.7279286Z",
+      "framework_run_id": "a7c6ff22-4c51-46c9-bc24-c91a40272ac3",
+      "framework_receipt_valid": true,
+      "formal_evidence_status": "PASS",
+      "check_count": 22,
+      "failed_checks": 0,
+      "receipt": "outputs\\dot_remote_audit_20261010\\native\\caster_zero_green\\v109_caster_zero_geometry_ownership_test.result.json",
+      "receipt_sha256": "97ddceec5e376b493ff93c4c5b52e50e97a5b8015b297154d044edb61c10bb76"
+    }
+  ]
+}

@@ -1,0 +1,162 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "subclass terminal fixture owns isolated production user data",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "ordinary startup reaches a distinct mapped profile",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "ordinary Root reaches READY",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "ordinary Root exposes production player owner",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "beam installs one normal animation child",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "beam normal visual loads once",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "beam normal visual remains live",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "sky strike installs one normal animation child",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "sky strike normal visual loads once",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "sky strike normal visual remains live",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "test-owned frame resource writes valid bytes",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "test-owned frame reaches resident state",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "beam installs one failure candidate child",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "beam owns one selected failure sequence lease",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "beam child sees historical terminal failure before retry",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "beam child is bound to parent terminal cleanup",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "beam child enters terminal failure",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "beam parent receives terminal failure and retires",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "beam terminal failure releases lease once",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "sky strike installs one failure candidate child",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "sky strike owns one selected failure sequence lease",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "sky strike child sees historical terminal failure before retry",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "sky strike child is bound to parent terminal cleanup",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "sky strike child enters terminal failure",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "sky strike parent receives terminal failure and retires",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "sky strike terminal failure releases lease once",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "Root retirement releases its own retrieval claims",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "retired subclass visuals leave no sequence lease claims",
+      "passed": true
+    }
+  ],
+  "count": 28,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "950c1470-cdef-4f1d-b216-5f842860a942",
+  "passed": 28,
+  "reported_checks": 28,
+  "reported_failures": 0,
+  "run_id": "e6515e05-4067-485a-be9a-590074be08fd",
+  "runtime_environment": {
+    "native_process_id": 18628,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\dot_b13_integrated\\runner_950c1470-cdef-4f1d-b216-5f842860a942",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/dot_b13_integrated/runner_950c1470-cdef-4f1d-b216-5f842860a942/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "v109_caster_subclass_terminal_failure_test",
+  "schema_version": 1,
+  "source_content_sha256": "c6c84e8429fa92f0bb7c913d5a9dddd921146a73ad812c661e0210b0a9fca54a",
+  "status": "PASS"
+}

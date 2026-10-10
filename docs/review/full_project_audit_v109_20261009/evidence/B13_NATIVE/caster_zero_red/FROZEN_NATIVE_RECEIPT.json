@@ -1,0 +1,29 @@
+{
+  "status": "FAIL",
+  "input_freeze_status": "PASS",
+  "scope": "Input freeze and individual native results; failed/missing checks remain explicit. Android/GPU/performance NOT_RUN",
+  "candidate_tree": "1a0cecc0f92b056dfb805b8a201d71c4433177ca",
+  "source_fingerprint": "6dc25409d22c714ff0b3de483579baacb0d1fb8e5aa058f67fdd6e57431eed9e",
+  "checked_inputs": 2558,
+  "runner": "outputs\\dot_remote_audit_20261010\\native\\caster_zero_red\\runner_results_adhoc_20261010_141804_985_15692.json",
+  "invocation_id": "c7408d7b-bcde-43e9-bb0b-91f6ee1b1343",
+  "engine_log_errors": 0,
+  "main_index_unchanged": true,
+  "results": [
+    {
+      "test_path": "tests/framework/v109_caster_zero_geometry_ownership_test.tscn",
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed",
+      "timeout": false,
+      "effective_exit_code": 1,
+      "native_exit_observed_utc": "2026-10-10T06:18:03.7847463Z",
+      "framework_run_id": "dd1fc5a1-59e1-406f-8655-8f0314865f21",
+      "framework_receipt_valid": false,
+      "formal_evidence_status": "MISSING",
+      "check_count": 22,
+      "failed_checks": 4,
+      "receipt": "outputs\\dot_remote_audit_20261010\\native\\caster_zero_red\\v109_caster_zero_geometry_ownership_test.result.json",
+      "receipt_sha256": "ae5a1e17ac2004210b8317ac497d4c01d7f6329f6588be5f8e940e4f3a117755"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "scope": "Explicit zero-canonical-line ownership branch and nonempty control; natural map reachability NOT_RUN",
+  "green": "outputs/dot_remote_audit_20261010/native/caster_zero_green/FROZEN_NATIVE_RECEIPT.json",
+  "status": "PASS",
+  "fix": "Defer factory allocation until existing geometry admission completes",
+  "red_failed_checks": 4,
+  "gameplay_changed": false,
+  "red": "outputs/dot_remote_audit_20261010/native/caster_zero_red/FROZEN_NATIVE_RECEIPT.json",
+  "device": "NOT_RUN",
+  "red_orphans": 12,
+  "production": "scripts/caster_skill_runtime.gd",
+  "finding": "B13-CASTER-001",
+  "green_checks": 22,
+  "note": "RED preserves cleanup RID/ObjectDB/resource warnings caused by reproduced orphan nodes. GREEN natural exit 0, no timeout, runner engine errors 0. Formal whole-project result pending."
+}

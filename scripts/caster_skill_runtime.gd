@@ -43,7 +43,6 @@ static func create_visual(
 		CasterSkillVisualRegistry.ROLE_SUMMON_ACTOR,
 	]:
 		return null
-	var effect := CasterSkillVisualFactory.create(profile)
 	var visual_geometry_context := CasterSpellGeometryScript.visual_context_from_plan(
 		skill_id,
 		plan,
@@ -107,6 +106,9 @@ static func create_visual(
 			float(plan.area_radius_grid_steps)
 			* CombatUnitLegacyAdapterScript.ISO_AREA_EQUIVALENT_PX_PER_GU
 		)
+	# Allocate only after geometry admission: an explicit empty canonical line
+	# must not leave an unparented visual behind when it is rejected above.
+	var effect := CasterSkillVisualFactory.create(profile)
 	effect.setup(
 		position,
 		skill_id,

@@ -1,0 +1,67 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "formal legal relic and badge instances are generated",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "legal relic recompute raises live skeleton rank to four",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "formal GameRoot reaches READY",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "ActionLease captures accepted rank four",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "formal ActionLease accepts the summon configuration",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "legal badge recompute changes live rank after acceptance",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "accepted summon request survives live rank change through the formal router",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "rank-four accepted recall is free despite live rank-five context",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "taoist runtime consumes the same accepted rank and chooses recall",
+      "passed": true
+    }
+  ],
+  "count": 9,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "950c1470-cdef-4f1d-b216-5f842860a942",
+  "passed": 9,
+  "reported_checks": 9,
+  "reported_failures": 0,
+  "run_id": "ec84fbcd-f62d-459d-958f-d325e1313304",
+  "runtime_environment": {
+    "native_process_id": 13656,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\dot_b13_integrated\\runner_950c1470-cdef-4f1d-b216-5f842860a942",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/dot_b13_integrated/runner_950c1470-cdef-4f1d-b216-5f842860a942/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "v109_accepted_summon_rank_resource_test",
+  "schema_version": 1,
+  "source_content_sha256": "c6c84e8429fa92f0bb7c913d5a9dddd921146a73ad812c661e0210b0a9fca54a",
+  "status": "PASS"
+}
