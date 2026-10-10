@@ -970,6 +970,7 @@ func _deposit() -> void:
 			moving_refs.append(_selection_ref("bag", int(raw_index), record))
 	_clear_transfer_feedback()
 	GothicUIThemeScript.set_button_feedback(deposit_button, GothicUIThemeScript.BUTTON_FEEDBACK_BUSY, "warehouse.deposit")
+	var feedback_serial := _action_feedback_serial
 	var target_slots := _free_slots_on_current_page(source_indices.size())
 	_transfer_pending = true
 	_refresh_transfer_action_states()
@@ -984,6 +985,7 @@ func _deposit() -> void:
 		return
 	if not _transfer_presentation_matches(transfer_epoch, transfer_selection_version):
 		refresh()
+		_retire_transfer_feedback(deposit_button, feedback_serial)
 		return
 	var transferred := int(result.get("transferred", 0))
 	var failure_message := "" if bool(result.get("complete", false)) else str(result.get("message", "仓库存取失败。"))
@@ -1011,6 +1013,7 @@ func _withdraw() -> void:
 			moving_refs.append(_selection_ref("stash", int(raw_index), record))
 	_clear_transfer_feedback()
 	GothicUIThemeScript.set_button_feedback(withdraw_button, GothicUIThemeScript.BUTTON_FEEDBACK_BUSY, "warehouse.withdraw")
+	var feedback_serial := _action_feedback_serial
 	_transfer_pending = true
 	_refresh_transfer_action_states()
 	bank_deposit_button.disabled = true
@@ -1024,6 +1027,7 @@ func _withdraw() -> void:
 		return
 	if not _transfer_presentation_matches(transfer_epoch, transfer_selection_version):
 		refresh()
+		_retire_transfer_feedback(withdraw_button, feedback_serial)
 		return
 	var transferred := int(result.get("transferred", 0))
 	var failure_message := "" if bool(result.get("complete", false)) else str(result.get("message", "仓库存取失败。"))
@@ -1183,6 +1187,14 @@ func _show_transfer_result(button: Button, success: bool, group: String) -> void
 		if serial == _action_feedback_serial and is_instance_valid(button) and button.is_inside_tree():
 			GothicUIThemeScript.clear_button_feedback(button)
 	)
+
+
+func _retire_transfer_feedback(button: Button, feedback_serial: int) -> void:
+	# A stale receipt owns only the feedback it installed. If another request
+	# advanced the serial, leave that newer button state untouched.
+	if feedback_serial != _action_feedback_serial or not is_instance_valid(button):
+		return
+	GothicUIThemeScript.clear_button_feedback(button)
 
 
 func _clear_transfer_feedback() -> void:

@@ -733,6 +733,15 @@ static func performance_counters() -> Dictionary:
 	var result := {}
 	for field: String in PERFORMANCE_COUNTER_FIELDS:
 		result[field] = int(_performance_counters.get(field, 0))
+	# Keep the stable zero-valued schema above, while also exporting counters
+	# registered by runtime producers at a finer bucket granularity (for
+	# example loot_prepare_bucket_N_count). The public increment API accepts
+	# these fields intentionally; dropping them here silently lost death/drop
+	# detail from the Device Lab window.
+	for key: Variant in _performance_counters.keys():
+		var dynamic_field := str(key)
+		if not result.has(dynamic_field):
+			result[dynamic_field] = int(_performance_counters[key])
 	for key: Variant in _performance_values.keys():
 		result[str(key)] = float(_performance_values[key])
 	for key: Variant in _performance_maxima.keys():

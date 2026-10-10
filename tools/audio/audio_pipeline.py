@@ -180,7 +180,7 @@ def parse_sound_index(path: Path) -> dict[str, Any]:
         text = raw.decode(INDEX_ENCODING)
         encoding_status = "cp949"
     except UnicodeDecodeError:
-        text = raw.decode("replace")
+        text = raw.decode(INDEX_ENCODING, errors="replace")
         encoding_status = "cp949_decode_error"
 
     entries: list[dict[str, Any]] = []
@@ -1346,6 +1346,15 @@ def command_inventory(args: argparse.Namespace) -> int:
     user_index = Path(args.user_index).resolve() if args.user_index else user_root / "sound.lst"
     primary = source_inventory(primary_root, args.primary_distribution, primary_index)
     user = source_inventory(user_root, args.user_distribution, user_index)
+    primary_sound_index = primary.get("sound_index")
+    user_sound_index = user.get("sound_index")
+    same_index_sha256 = bool(
+        isinstance(primary_sound_index, dict)
+        and isinstance(user_sound_index, dict)
+        and primary_sound_index.get("sha256")
+        and user_sound_index.get("sha256")
+        and primary_sound_index["sha256"] == user_sound_index["sha256"]
+    )
     out_dir = Path(args.out_dir)
     write_json(out_dir / "source_inventory.json", {"schema_version": 1, "base_sha": args.base_sha, "sources": [public_inventory(primary), public_inventory(user)]})
     write_json(out_dir / "source_comparison.json", source_comparison(primary, user))
@@ -1354,9 +1363,9 @@ def command_inventory(args: argparse.Namespace) -> int:
         {
             "schema_version": 1,
             "authoritative_source": primary["source_distribution"],
-            "primary": primary.get("sound_index"),
-            "user_extract": user.get("sound_index"),
-            "same_index_sha256": primary["sound_index"]["sha256"] == user["sound_index"]["sha256"],
+            "primary": primary_sound_index,
+            "user_extract": user_sound_index,
+            "same_index_sha256": same_index_sha256,
         },
     )
     write_json(out_dir / "source_anomalies.json", anomalies(primary))

@@ -1,0 +1,77 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "debug performance diagnostics gate enabled",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "dynamic death preparation counter is exported at window top level",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "dynamic death counter agrees across window, counters and getter",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "stable death counter remains exported",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "stable drop counter remains exported",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "dynamic drop slice counter is exported",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "dynamic loot prepare bucket is exported",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "dynamic loot commit bucket is exported",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "stable schema keeps an unincremented zero-valued field",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "frame_only rejects detailed dynamic counters",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "frame_only retains stable zero schema",
+      "passed": true
+    }
+  ],
+  "count": 11,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "6c0ba27b-c73a-4e68-9ab1-19eff2f4888f",
+  "passed": 11,
+  "reported_checks": 11,
+  "reported_failures": 0,
+  "run_id": "e1a79f2a-bb9e-4e46-b55d-1207ef2672ce",
+  "runtime_environment": {
+    "native_process_id": 21600,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\b22_b23_batch\\runner_6c0ba27b-c73a-4e68-9ab1-19eff2f4888f",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/b22_b23_batch/runner_6c0ba27b-c73a-4e68-9ab1-19eff2f4888f/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "v109_diagnostics_dynamic_counter_export_test",
+  "schema_version": 1,
+  "source_content_sha256": "b9756d676ac29d6f53029d529b5a5e4e6064872d92dad4d3a79ab75b4417d181",
+  "status": "PASS"
+}

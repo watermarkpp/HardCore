@@ -1,0 +1,72 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "debug performance gate opens",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "frame-only detail mode accepted",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "producer no-overflow frame count",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "producer no-overflow dropped count",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "producer no-overflow flag",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "producer no-overflow exact flag",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "producer overflow frame count",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "producer overflow dropped count",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "producer overflow flag",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "producer overflow exact flag",
+      "passed": true
+    }
+  ],
+  "count": 10,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "6c0ba27b-c73a-4e68-9ab1-19eff2f4888f",
+  "passed": 10,
+  "reported_checks": 10,
+  "reported_failures": 0,
+  "run_id": "5e3b54cb-4cf4-445b-88b6-28a40a8a8765",
+  "runtime_environment": {
+    "native_process_id": 24180,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\b22_b23_batch\\runner_6c0ba27b-c73a-4e68-9ab1-19eff2f4888f",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/b22_b23_batch/runner_6c0ba27b-c73a-4e68-9ab1-19eff2f4888f/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "r14_frame_sampling_snapshot_test",
+  "schema_version": 1,
+  "source_content_sha256": "b9756d676ac29d6f53029d529b5a5e4e6064872d92dad4d3a79ab75b4417d181",
+  "status": "PASS"
+}

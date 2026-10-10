@@ -1,0 +1,152 @@
+{
+  "status": "PASS",
+  "scope": "Source-bound diagnostics11/window capacity10/warehouse14, actual strict host consumer2 and audio Python2; APK/GPU/device NOT_RUN. Verifier actual JAVA_HOME restoration remains required at final APK109.",
+  "native": {
+    "status": "PASS",
+    "input_freeze_status": "PASS",
+    "scope": "Input freeze and individual native results; failed/missing checks remain explicit. Android/GPU/performance NOT_RUN",
+    "candidate_tree": "44d4ffe01b68db02c5e3609095afe230b01f3ea5",
+    "source_fingerprint": "b9756d676ac29d6f53029d529b5a5e4e6064872d92dad4d3a79ab75b4417d181",
+    "checked_inputs": 2621,
+    "runner": "outputs\\dot_remote_audit_20261010\\native\\b22_b23_batch\\runner_results_adhoc_20261010_163957_846_10224.json",
+    "invocation_id": "6c0ba27b-c73a-4e68-9ab1-19eff2f4888f",
+    "engine_log_errors": 0,
+    "main_index_unchanged": true,
+    "results": [
+      {
+        "test_path": "tests/framework/v109_diagnostics_dynamic_counter_export_test.tscn",
+        "result": "PASS",
+        "reason": "",
+        "timeout": false,
+        "effective_exit_code": 0,
+        "native_exit_observed_utc": "2026-10-10T08:39:38.9084547Z",
+        "framework_run_id": "e1a79f2a-bb9e-4e46-b55d-1207ef2672ce",
+        "framework_receipt_valid": true,
+        "formal_evidence_status": "PASS",
+        "check_count": 11,
+        "failed_checks": 0,
+        "receipt": "outputs\\dot_remote_audit_20261010\\native\\b22_b23_batch\\v109_diagnostics_dynamic_counter_export_test.result.json",
+        "receipt_sha256": "025a739226fe8dd9b25540f6a24676c33c85cc514e090edefd0fe3353000376e"
+      },
+      {
+        "test_path": "tests/framework/r14_frame_sampling_snapshot_test.tscn",
+        "result": "PASS",
+        "reason": "",
+        "timeout": false,
+        "effective_exit_code": 0,
+        "native_exit_observed_utc": "2026-10-10T08:39:46.3237540Z",
+        "framework_run_id": "5e3b54cb-4cf4-445b-88b6-28a40a8a8765",
+        "framework_receipt_valid": true,
+        "formal_evidence_status": "PASS",
+        "check_count": 10,
+        "failed_checks": 0,
+        "receipt": "outputs\\dot_remote_audit_20261010\\native\\b22_b23_batch\\r14_frame_sampling_snapshot_test.result.json",
+        "receipt_sha256": "eb2365667076c6f657d7c8ee79bec4b9e3034da6a0ef67ab24daa6b59837ebca"
+      },
+      {
+        "test_path": "tests/framework/v109_warehouse_feedback_generation_test.tscn",
+        "result": "PASS",
+        "reason": "",
+        "timeout": false,
+        "effective_exit_code": 0,
+        "native_exit_observed_utc": "2026-10-10T08:39:56.3634103Z",
+        "framework_run_id": "d32bff19-270f-4c91-b494-2e58c2d87ba5",
+        "framework_receipt_valid": true,
+        "formal_evidence_status": "PASS",
+        "check_count": 14,
+        "failed_checks": 0,
+        "receipt": "outputs\\dot_remote_audit_20261010\\native\\b22_b23_batch\\v109_warehouse_feedback_generation_test.result.json",
+        "receipt_sha256": "aaa1c3e5c93844ded8be7576780f2d61cc225519d0cd6df30f7631bbe2de16ec"
+      }
+    ]
+  },
+  "commands": [
+    {
+      "command": "tools/run_godot_tests.ps1 -TestPaths three explicit framework scenes -TimeoutSeconds 30",
+      "exit_code": 0,
+      "evidence": "FROZEN_NATIVE_RECEIPT.json"
+    },
+    {
+      "command": "tests/framework/r14_quiet_consumer_schema_test.ps1 -SnapshotPath each of two real serialized producer snapshots",
+      "exit_code": 0,
+      "evidence": "host_consumer.log"
+    },
+    {
+      "command": "python -m pytest tests/test_audio_pipeline_b23.py -q --disable-warnings",
+      "exit_code": 0,
+      "evidence": "audio_pytest.log"
+    },
+    {
+      "command": "PowerShell Parser.ParseFile tools/verify_android_build.ps1",
+      "exit_code": 0,
+      "evidence": "verifier_parse.log"
+    }
+  ],
+  "qualifications": [
+    "Frame samples16/17/18ms are schema capacity inputs, not a game performance benchmark.",
+    "Warehouse14 uses actual prepared disk transfer, same-name distinct-attribute instances, stale BUSY retirement and close/reopen. It does not submit a newer pending transaction in the same branch; serial guard source review covers ownership, no full lifecycle cross-product claim.",
+    "Diagnostic public API accepts dynamic death/drop/loot counters; actual natural death/pickup paths are not executed by this scene.",
+    "Audio two scratch tests retain corrupt CP949 line evidence and optional-index absence through actual inventory CLI. No formal audio assets generated.",
+    "Bich source index metadata corrected; approved props PNG unchanged. No art regeneration.",
+    "Verifier try/finally parsed/reviewed only here; old108 verifier success not rerun.",
+    "Prior worker unbound14 and weak copied-schema tests not promoted; unchanged passed scopes reused."
+  ],
+  "source": [
+    {
+      "path": "scripts/runtime_diagnostics.gd",
+      "sha256": "b66c687b9eed2dd5f2ec9272538fd2d2d520ecca962e3bf0701f6246aabe4c39"
+    },
+    {
+      "path": "tests/framework/v109_diagnostics_dynamic_counter_export_test.gd",
+      "sha256": "490d753d66545cf82a45fcff17040a8658fad874cbb8806f4202917a791f706d"
+    },
+    {
+      "path": "tests/framework/v109_diagnostics_dynamic_counter_export_test.tscn",
+      "sha256": "efbde11dfaf3db00e73ee758e083c93355f97c21665c70ef2a38f03ce912e9cb"
+    },
+    {
+      "path": "tools/collect_r14_quiet.ps1",
+      "sha256": "50c5378ef860516f01e05a4a2ed02be22b3e9e4bed84d6f2593df7c89d5fc8aa"
+    },
+    {
+      "path": "tests/framework/r14_frame_sampling_snapshot_test.gd",
+      "sha256": "c72f86866bfd29edf6a599f5a2d4fad5ee29e8c545ae5216412115de1a5aeb0e"
+    },
+    {
+      "path": "tests/framework/r14_frame_sampling_snapshot_test.tscn",
+      "sha256": "4eb8370a9c06aa840f78647b16c314fd60020ba15947a0aed37c9a7677c22636"
+    },
+    {
+      "path": "tests/framework/r14_quiet_consumer_schema_test.ps1",
+      "sha256": "90a506f0dc799199d5604205fd665d7a90623f4b94e5b06469e9ece4644f36a2"
+    },
+    {
+      "path": "tools/audio/audio_pipeline.py",
+      "sha256": "efeba0aa341f18cf5109e82c11317936bd47f52ea3a80b82cfbb8287a17af256"
+    },
+    {
+      "path": "tests/test_audio_pipeline_b23.py",
+      "sha256": "dc0e3540a67b0667d44d123392a40613c9eb51546bc0cf621051f7f2845445cd"
+    },
+    {
+      "path": "tools/verify_android_build.ps1",
+      "sha256": "555d5e9bfc8995a0e2db9f9b3244e72ad667022cbd8abf267cfaf1fabc6687e2"
+    },
+    {
+      "path": "scripts/warehouse_panel.gd",
+      "sha256": "6a28f5bd69c5ac7290319dc74dd2f90f4f5f8f40ae6884d6c58ffc928fcdcb14"
+    },
+    {
+      "path": "tests/framework/v109_warehouse_feedback_generation_test.gd",
+      "sha256": "e00554dd6e56fea138f0acbfcaa1df677fb2fb8821a2fe78b27b9749f6743ea9"
+    },
+    {
+      "path": "tests/framework/v109_warehouse_feedback_generation_test.tscn",
+      "sha256": "676e55a4dde0eb9a41b4a17ba27e8eee3ba0906dd28d128f418e90e946e56da4"
+    },
+    {
+      "path": "tools/build_bich_environment_assets.py",
+      "sha256": "608fa155099c8972ab016fdf7a40233bd547ccd52718072391a632fe5bb57355"
+    }
+  ]
+}

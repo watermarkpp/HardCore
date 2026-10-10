@@ -94,7 +94,7 @@ def source_part(index: int, maximum: tuple[int, int] = (84, 112)) -> Image.Image
 
 def build_props() -> list[int]:
     # 这些编号均由0.map实际引用。原图按地图格保存为碎片，因此在96×128手机图集中重组轮廓。
-    indices = [1376, 1386, 1402, 1408, 1412, 1370, 5885, 5884]
+    indices = [1376, 1386, 1402, 1397, 1408, 1412, 1370, 1388, 5885, 5884]
     atlas = Image.new("RGBA", (PROP_SIZE[0] * 4, PROP_SIZE[1]), (0, 0, 0, 0))
     draw = ImageDraw.Draw(atlas)
     trunk = (67, 43, 24, 255)

@@ -1,0 +1,92 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "feedback fixture has equipment catalog",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "feedback fixture creates shared authority",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "feedback fixture has same-name instances with distinct attributes",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "feedback fixture persists profile",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "feedback fixture persists warehouse",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "accepted A withdrawal remains pending",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "B detail is instance-specific and rejects stale A body",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "stale A receipt retires only its own busy feedback",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "B selection survives A receipt",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "B detail remains after stale A receipt",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "reopen fixture persists profile",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "reopen fixture persists warehouse",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "accepted C withdrawal remains pending",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "close/reopen receipt leaves withdrawal feedback non-busy",
+      "passed": true
+    }
+  ],
+  "count": 14,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "6c0ba27b-c73a-4e68-9ab1-19eff2f4888f",
+  "passed": 14,
+  "reported_checks": 14,
+  "reported_failures": 0,
+  "run_id": "d32bff19-270f-4c91-b494-2e58c2d87ba5",
+  "runtime_environment": {
+    "native_process_id": 5748,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\b22_b23_batch\\runner_6c0ba27b-c73a-4e68-9ab1-19eff2f4888f",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/b22_b23_batch/runner_6c0ba27b-c73a-4e68-9ab1-19eff2f4888f/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "v109_warehouse_feedback_generation_test",
+  "schema_version": 1,
+  "source_content_sha256": "b9756d676ac29d6f53029d529b5a5e4e6064872d92dad4d3a79ab75b4417d181",
+  "status": "PASS"
+}

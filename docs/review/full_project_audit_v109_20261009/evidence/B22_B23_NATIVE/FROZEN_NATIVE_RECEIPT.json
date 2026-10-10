@@ -1,0 +1,59 @@
+{
+  "status": "PASS",
+  "input_freeze_status": "PASS",
+  "scope": "Input freeze and individual native results; failed/missing checks remain explicit. Android/GPU/performance NOT_RUN",
+  "candidate_tree": "44d4ffe01b68db02c5e3609095afe230b01f3ea5",
+  "source_fingerprint": "b9756d676ac29d6f53029d529b5a5e4e6064872d92dad4d3a79ab75b4417d181",
+  "checked_inputs": 2621,
+  "runner": "outputs\\dot_remote_audit_20261010\\native\\b22_b23_batch\\runner_results_adhoc_20261010_163957_846_10224.json",
+  "invocation_id": "6c0ba27b-c73a-4e68-9ab1-19eff2f4888f",
+  "engine_log_errors": 0,
+  "main_index_unchanged": true,
+  "results": [
+    {
+      "test_path": "tests/framework/v109_diagnostics_dynamic_counter_export_test.tscn",
+      "result": "PASS",
+      "reason": "",
+      "timeout": false,
+      "effective_exit_code": 0,
+      "native_exit_observed_utc": "2026-10-10T08:39:38.9084547Z",
+      "framework_run_id": "e1a79f2a-bb9e-4e46-b55d-1207ef2672ce",
+      "framework_receipt_valid": true,
+      "formal_evidence_status": "PASS",
+      "check_count": 11,
+      "failed_checks": 0,
+      "receipt": "outputs\\dot_remote_audit_20261010\\native\\b22_b23_batch\\v109_diagnostics_dynamic_counter_export_test.result.json",
+      "receipt_sha256": "025a739226fe8dd9b25540f6a24676c33c85cc514e090edefd0fe3353000376e"
+    },
+    {
+      "test_path": "tests/framework/r14_frame_sampling_snapshot_test.tscn",
+      "result": "PASS",
+      "reason": "",
+      "timeout": false,
+      "effective_exit_code": 0,
+      "native_exit_observed_utc": "2026-10-10T08:39:46.3237540Z",
+      "framework_run_id": "5e3b54cb-4cf4-445b-88b6-28a40a8a8765",
+      "framework_receipt_valid": true,
+      "formal_evidence_status": "PASS",
+      "check_count": 10,
+      "failed_checks": 0,
+      "receipt": "outputs\\dot_remote_audit_20261010\\native\\b22_b23_batch\\r14_frame_sampling_snapshot_test.result.json",
+      "receipt_sha256": "eb2365667076c6f657d7c8ee79bec4b9e3034da6a0ef67ab24daa6b59837ebca"
+    },
+    {
+      "test_path": "tests/framework/v109_warehouse_feedback_generation_test.tscn",
+      "result": "PASS",
+      "reason": "",
+      "timeout": false,
+      "effective_exit_code": 0,
+      "native_exit_observed_utc": "2026-10-10T08:39:56.3634103Z",
+      "framework_run_id": "d32bff19-270f-4c91-b494-2e58c2d87ba5",
+      "framework_receipt_valid": true,
+      "formal_evidence_status": "PASS",
+      "check_count": 14,
+      "failed_checks": 0,
+      "receipt": "outputs\\dot_remote_audit_20261010\\native\\b22_b23_batch\\v109_warehouse_feedback_generation_test.result.json",
+      "receipt_sha256": "aaa1c3e5c93844ded8be7576780f2d61cc225519d0cd6df30f7631bbe2de16ec"
+    }
+  ]
+}
