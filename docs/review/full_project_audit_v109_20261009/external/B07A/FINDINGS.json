@@ -1,0 +1,344 @@
+{
+  "fixed_source_sha": "684824ac7bb59ac903054b26b3435441b8a2f152",
+  "batch": "B07A",
+  "findings": [
+    {
+      "id": "B07A-001",
+      "severity": "HIGH",
+      "classification": "PROVEN_STATIC_BUG",
+      "fixed_source_sha": "684824ac7bb59ac903054b26b3435441b8a2f152",
+      "file": "tools/source_priority_guard.py",
+      "function": "authorize",
+      "lines": [
+        20,
+        108,
+        120
+      ],
+      "trigger": "authorize an auxiliary source with proof status unusable/incompatible under the client/server policy",
+      "observed_behavior": "ALLOWED_FAILURES accepts missing, unusable, incompatible and returns authorized true",
+      "expected_behavior": "source priority fallbackStatuses allows only missing and unusable/incompatible must be repaired",
+      "owner": "source priority guard",
+      "short_call_chain": [
+        "main",
+        "authorize",
+        "ALLOWED_FAILURES"
+      ],
+      "evidence": [
+        {
+          "path": "assets/data/source_priority_policy.json",
+          "lines": [
+            14,
+            20
+          ],
+          "fact": "rules mandate only missing fallback",
+          "url": "https://github.com/watermarkpp/HardCore/blob/684824ac7bb59ac903054b26b3435441b8a2f152/assets/data/source_priority_policy.json"
+        },
+        {
+          "path": "tools/source_priority_guard.py",
+          "lines": [
+            20,
+            20
+          ],
+          "fact": "tool accepts extra statuses",
+          "url": "https://github.com/watermarkpp/HardCore/blob/684824ac7bb59ac903054b26b3435441b8a2f152/tools/source_priority_guard.py"
+        },
+        {
+          "path": "tools/source_priority_guard.py",
+          "lines": [
+            102,
+            120
+          ],
+          "fact": "tool authorizes qualifying extra-status evidence",
+          "url": "https://github.com/watermarkpp/HardCore/blob/684824ac7bb59ac903054b26b3435441b8a2f152/tools/source_priority_guard.py"
+        }
+      ],
+      "established_facts": [
+        "rules mandate only missing fallback",
+        "tool accepts extra statuses",
+        "tool authorizes qualifying extra-status evidence"
+      ],
+      "hypothesis_and_unproved": "",
+      "minimal_fix": "derive and enforce allowed failures from policy; no broad fallback",
+      "minimum_validation": "read-only negative cases of invalid status and valid missing evidence",
+      "confidence": "HIGH",
+      "native_validation": "NOT_RUN"
+    },
+    {
+      "id": "B07A-002",
+      "severity": "HIGH",
+      "classification": "PROVEN_STATIC_BUG",
+      "fixed_source_sha": "684824ac7bb59ac903054b26b3435441b8a2f152",
+      "file": "tools/build_equipment_attribute_master.py",
+      "function": "main / apply_female_armor_correction_only",
+      "lines": [
+        1049,
+        1055,
+        1163,
+        1172
+      ],
+      "trigger": "both --female-armor-correction-only and --check-only are passed",
+      "observed_behavior": "main takes correction path which unconditionally writes MASTER_PATH and ITEMS_PATH",
+      "expected_behavior": "check-only must never alter source authority nor runtime item table",
+      "owner": "equipment CLI",
+      "short_call_chain": [
+        "main",
+        "apply_female_armor_correction_only",
+        "two write_text calls"
+      ],
+      "evidence": [
+        {
+          "path": "tools/build_equipment_attribute_master.py",
+          "lines": [
+            1127,
+            1135
+          ],
+          "fact": "CLI declares both flags",
+          "url": "https://github.com/watermarkpp/HardCore/blob/684824ac7bb59ac903054b26b3435441b8a2f152/tools/build_equipment_attribute_master.py"
+        },
+        {
+          "path": "tools/build_equipment_attribute_master.py",
+          "lines": [
+            1163,
+            1172
+          ],
+          "fact": "check-only ignored in correction branch",
+          "url": "https://github.com/watermarkpp/HardCore/blob/684824ac7bb59ac903054b26b3435441b8a2f152/tools/build_equipment_attribute_master.py"
+        },
+        {
+          "path": "tools/build_equipment_attribute_master.py",
+          "lines": [
+            1049,
+            1055
+          ],
+          "fact": "source and runtime files written",
+          "url": "https://github.com/watermarkpp/HardCore/blob/684824ac7bb59ac903054b26b3435441b8a2f152/tools/build_equipment_attribute_master.py"
+        }
+      ],
+      "established_facts": [
+        "CLI declares both flags",
+        "check-only ignored in correction branch",
+        "source and runtime files written"
+      ],
+      "hypothesis_and_unproved": "",
+      "minimal_fix": "implement read-only correction validation or reject incompatible flag combination",
+      "minimum_validation": "isolated input byte hashes before/after combined flags",
+      "confidence": "HIGH",
+      "native_validation": "NOT_RUN"
+    },
+    {
+      "id": "B07A-003",
+      "severity": "MEDIUM",
+      "classification": "CONDITIONAL_STATIC_RISK",
+      "fixed_source_sha": "684824ac7bb59ac903054b26b3435441b8a2f152",
+      "file": "tools/build_equipment_attribute_master.py",
+      "function": "build / apply_female_armor_correction_only",
+      "lines": [
+        980,
+        989,
+        1049,
+        1055
+      ],
+      "trigger": "second output write fails or process terminates between the two writes",
+      "observed_behavior": "master file and runtime items are written in sequence without common atomic publish/recovery",
+      "expected_behavior": "avoid leaving inconsistent generations on failure",
+      "owner": "equipment generator",
+      "short_call_chain": [
+        "build",
+        "MASTER_PATH.write_text",
+        "ITEMS_PATH.write_text"
+      ],
+      "evidence": [
+        {
+          "path": "tools/build_equipment_attribute_master.py",
+          "lines": [
+            980,
+            989
+          ],
+          "fact": "two serial writes in full build",
+          "url": "https://github.com/watermarkpp/HardCore/blob/684824ac7bb59ac903054b26b3435441b8a2f152/tools/build_equipment_attribute_master.py"
+        },
+        {
+          "path": "tools/build_equipment_attribute_master.py",
+          "lines": [
+            1049,
+            1055
+          ],
+          "fact": "two serial writes in bounded correction",
+          "url": "https://github.com/watermarkpp/HardCore/blob/684824ac7bb59ac903054b26b3435441b8a2f152/tools/build_equipment_attribute_master.py"
+        }
+      ],
+      "established_facts": [
+        "two serial writes in full build",
+        "two serial writes in bounded correction"
+      ],
+      "hypothesis_and_unproved": "Actual interruption and inconsistency NOT_OBSERVED",
+      "minimal_fix": "stage/validate outputs with recoverable journal and fail-closed rollback",
+      "minimum_validation": "isolate and inject second-write failure; confirm previous bytes",
+      "confidence": "HIGH",
+      "native_validation": "NOT_RUN"
+    },
+    {
+      "id": "B07A-004",
+      "severity": "MEDIUM",
+      "classification": "CONDITIONAL_STATIC_RISK",
+      "fixed_source_sha": "684824ac7bb59ac903054b26b3435441b8a2f152",
+      "file": "tools/source_priority_guard.py",
+      "function": "main",
+      "lines": [
+        143,
+        159
+      ],
+      "trigger": "caller supplies --output pointing at existing project authoring file",
+      "observed_behavior": "the only output guard is project-root containment, then write_text overwrites existing file",
+      "expected_behavior": "only explicitly owned outputs may be written, without following links or clobbering dirty human data",
+      "owner": "authoring evidence report writer",
+      "short_call_chain": [
+        "main",
+        "resolve",
+        "is_relative_to(ROOT)",
+        "write_text"
+      ],
+      "evidence": [
+        {
+          "path": "tools/source_priority_guard.py",
+          "lines": [
+            143,
+            143
+          ],
+          "fact": "arbitrary output Path accepted",
+          "url": "https://github.com/watermarkpp/HardCore/blob/684824ac7bb59ac903054b26b3435441b8a2f152/tools/source_priority_guard.py"
+        },
+        {
+          "path": "tools/source_priority_guard.py",
+          "lines": [
+            154,
+            159
+          ],
+          "fact": "no existing/dirty or exact namespace gate",
+          "url": "https://github.com/watermarkpp/HardCore/blob/684824ac7bb59ac903054b26b3435441b8a2f152/tools/source_priority_guard.py"
+        }
+      ],
+      "established_facts": [
+        "arbitrary output Path accepted",
+        "no existing/dirty or exact namespace gate"
+      ],
+      "hypothesis_and_unproved": "Requires unsafe user-supplied path; no observed real overwrite",
+      "minimal_fix": "restrict output to owned directory; no-clobber and link checks; staged atomic write",
+      "minimum_validation": "dummy owned path and existing-human-file negative cases",
+      "confidence": "HIGH",
+      "native_validation": "NOT_RUN"
+    },
+    {
+      "id": "B07A-005",
+      "severity": "MEDIUM",
+      "classification": "CONDITIONAL_STATIC_RISK",
+      "fixed_source_sha": "684824ac7bb59ac903054b26b3435441b8a2f152",
+      "file": "tools/source_priority_guard.py",
+      "function": "main / authorize",
+      "lines": [
+        60,
+        75,
+        150,
+        153
+      ],
+      "trigger": "authorize catalogRequired=false master source where default generated resource catalog is absent",
+      "observed_behavior": "main loads catalog unconditionally before authorize considers the exception",
+      "expected_behavior": "primary tracked master must be validatable without unrelated generated outputs",
+      "owner": "source priority guard input dependency",
+      "short_call_chain": [
+        "main",
+        "load_json(catalog)",
+        "authorize"
+      ],
+      "evidence": [
+        {
+          "path": "tools/source_priority_guard.py",
+          "lines": [
+            18,
+            20
+          ],
+          "fact": "default catalog under outputs",
+          "url": "https://github.com/watermarkpp/HardCore/blob/684824ac7bb59ac903054b26b3435441b8a2f152/tools/source_priority_guard.py"
+        },
+        {
+          "path": "tools/source_priority_guard.py",
+          "lines": [
+            60,
+            75
+          ],
+          "fact": "catalogRequired false primary exception",
+          "url": "https://github.com/watermarkpp/HardCore/blob/684824ac7bb59ac903054b26b3435441b8a2f152/tools/source_priority_guard.py"
+        },
+        {
+          "path": "tools/source_priority_guard.py",
+          "lines": [
+            150,
+            153
+          ],
+          "fact": "unconditional catalog read",
+          "url": "https://github.com/watermarkpp/HardCore/blob/684824ac7bb59ac903054b26b3435441b8a2f152/tools/source_priority_guard.py"
+        }
+      ],
+      "established_facts": [
+        "default catalog under outputs",
+        "catalogRequired false primary exception",
+        "unconditional catalog read"
+      ],
+      "hypothesis_and_unproved": "Catalog absence on operator machine NOT_PROVED",
+      "minimal_fix": "load catalog lazily when needed; keep all primary identity checks",
+      "minimum_validation": "clean checkout with omitted external catalog and primary candidate",
+      "confidence": "HIGH",
+      "native_validation": "NOT_RUN"
+    },
+    {
+      "id": "B07A-006",
+      "severity": "MEDIUM",
+      "classification": "CONDITIONAL_STATIC_RISK",
+      "fixed_source_sha": "684824ac7bb59ac903054b26b3435441b8a2f152",
+      "file": "tools/loot_sheet_compiler/compile_authority.ps1",
+      "function": "top-level compiler",
+      "lines": [
+        572,
+        632
+      ],
+      "trigger": "storage write fails/termination between three generated outputs",
+      "observed_behavior": "after full acceptance compiler writes authority, disambiguation, and armor audit sequentially, without transaction",
+      "expected_behavior": "partial publish should preserve previous valid collection",
+      "owner": "user loot authority compiler",
+      "short_call_chain": [
+        "validate directives",
+        "acceptance gate",
+        "WriteAllText x3"
+      ],
+      "evidence": [
+        {
+          "path": "tools/loot_sheet_compiler/compile_authority.ps1",
+          "lines": [
+            572,
+            585
+          ],
+          "fact": "fail-closed checks run before write",
+          "url": "https://github.com/watermarkpp/HardCore/blob/684824ac7bb59ac903054b26b3435441b8a2f152/tools/loot_sheet_compiler/compile_authority.ps1"
+        },
+        {
+          "path": "tools/loot_sheet_compiler/compile_authority.ps1",
+          "lines": [
+            630,
+            632
+          ],
+          "fact": "three sequential live writes",
+          "url": "https://github.com/watermarkpp/HardCore/blob/684824ac7bb59ac903054b26b3435441b8a2f152/tools/loot_sheet_compiler/compile_authority.ps1"
+        }
+      ],
+      "established_facts": [
+        "fail-closed checks run before write",
+        "three sequential live writes"
+      ],
+      "hypothesis_and_unproved": "Current generated data corruption NOT_PROVED",
+      "minimal_fix": "staged outputs plus readback and rollback journal/transaction",
+      "minimum_validation": "only on disposable copies, inject failure after first write",
+      "confidence": "HIGH",
+      "native_validation": "NOT_RUN"
+    }
+  ]
+}

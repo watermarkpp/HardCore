@@ -1,0 +1,175 @@
+{
+  "status": "PASS",
+  "scope": "Read-only triage of 15 tracked differences from the integration planning inventory; build_android_isolated.ps1 excluded and owned by root",
+  "review_head": "a4ae5fc89f0f6dba6820e44da303db7a3cd659ff",
+  "main_head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+  "inventory": "outputs/wake_drop_v108_review_followup_20261009/INTEGRATION_PLANNING_CURRENT_DIFF.json",
+  "verification_source": "docs/review/first_attack_latency_20261008/VERIFICATION.json",
+  "engine_run": "NOT_RUN",
+  "items": [
+    {
+      "path": "assets/data/map_design/map_identity_registry.json",
+      "status": "PASS",
+      "review_sha256": "f79d863c8a74e4da22345518350d5be7218ba6d415ff3a2a82f64e390c842de3",
+      "current_sha256": "f79d863c8a74e4da22345518350d5be7218ba6d415ff3a2a82f64e390c842de3",
+      "role": "human map identity source",
+      "change": "byte-identical; parsed JSON identical",
+      "authorization_or_evidence": "current human source retained",
+      "recommendation": "PRESERVE_CURRENT"
+    },
+    {
+      "path": "map_editor_workspace/bich_province/bich_province.editor.json",
+      "status": "PASS",
+      "review_sha256": "8076c848c72df9f3f194ff04b797b84e0d84abbe1d7eabef3db407a0cae3c9f7",
+      "current_sha256": "8076c848c72df9f3f194ff04b797b84e0d84abbe1d7eabef3db407a0cae3c9f7",
+      "role": "editor-authored map source",
+      "change": "byte-identical; parsed JSON identical",
+      "authorization_or_evidence": "current editor source retained",
+      "recommendation": "PRESERVE_CURRENT"
+    },
+    {
+      "path": "map_editor_workspace/world_bich_province/world_bich_province.editor.json",
+      "status": "PASS",
+      "review_sha256": "d1bbaa8c1808b454c9b154c5b94576165e1044c5443a6794fe36bbd615b232cd",
+      "current_sha256": "d1bbaa8c1808b454c9b154c5b94576165e1044c5443a6794fe36bbd615b232cd",
+      "role": "editor-authored world source",
+      "change": "byte-identical; parsed JSON identical",
+      "authorization_or_evidence": "current editor source retained",
+      "recommendation": "PRESERVE_CURRENT"
+    },
+    {
+      "path": "tests/enemy_mass_death_batch_pipeline_test.gd",
+      "status": "NOT_RUN",
+      "review_sha256": "24682c3a15cfad66601cd5abd6af315907bd0d8ffa40971c19d1e6e089e52884",
+      "current_sha256": "c18c9c774d24e24c75d57b3061aa6fdd247fd6a30fe818125ccede74d0256ef3",
+      "role": "death/drop integration test",
+      "change": "adds real roll reason, positive ground output, and materialized LootPickup count checks",
+      "authorization_or_evidence": "current-hash native receipt not found; no rerun performed",
+      "recommendation": "RUN_OR_ARCHIVE_EXPLICITLY"
+    },
+    {
+      "path": "tests/hc_monster_ai/combat_epoch_delivery_test.gd",
+      "status": "PASS",
+      "review_sha256": "d7c8b8aef54efbc98c8ab72429f65508ee12dde99314fe85933e216bf6e19728",
+      "current_sha256": "52426012cbfa60062f6e29530a9fff717c5530109e31e94dbf713c2010fb7f28",
+      "role": "combat delivery regression",
+      "change": "target magic settles at activation and cannot repeat after transition",
+      "authorization_or_evidence": "final_monster_related receipt PASS; current hash bound",
+      "recommendation": "PRESERVE_CURRENT"
+    },
+    {
+      "path": "tests/monster_attack_los_cache_test.gd",
+      "status": "PASS",
+      "review_sha256": "75fe2b3c2b99f7e626c5092bb85b22a2e3b9adc11ac32aa0ad7a595511caafbc",
+      "current_sha256": "5199817b112d692a4f238e9cf6a505c5a4472f1d17804def8911fd9effe474e4",
+      "role": "LOS/magic regression",
+      "change": "positive spell branch and immediate-settlement/no-later-LOS assertions",
+      "authorization_or_evidence": "struck_cadence_and_los receipt PASS; current hash bound",
+      "recommendation": "PRESERVE_CURRENT"
+    },
+    {
+      "path": "tests/monster_magic_reaction_continuation_test.gd",
+      "status": "PASS",
+      "review_sha256": "8f1e474926aec7040b23333f020455686484efd96cde9a7355947ee2bbb02114",
+      "current_sha256": "da7ac0274e82c18e5ea26e95944d0959fb39bddcf885745f19d128d2725b889a",
+      "role": "struck cadence regression",
+      "change": "removes literal attack-delay penalty; preserves authored struck pause",
+      "authorization_or_evidence": "struck_cadence_and_los receipt PASS; current hash bound",
+      "recommendation": "PRESERVE_CURRENT"
+    },
+    {
+      "path": "tests/monster_struck_runtime_test.gd",
+      "status": "PASS",
+      "review_sha256": "46974cd72dff3483b5fd675f716a50b986c159554171eb289c5a2e6f51588a8a",
+      "current_sha256": "3b27b70b3f5566d32e470363f126e7c04377fffbd52540a394096885657acd9d",
+      "role": "struck runtime regression",
+      "change": "authored visual pause/logical clock semantics; committed and firewall/poison boundaries retained",
+      "authorization_or_evidence": "final_monster_related receipt PASS; current hash bound",
+      "recommendation": "PRESERVE_CURRENT"
+    },
+    {
+      "path": "tests/monster_target_magic_attack_test.gd",
+      "status": "PASS",
+      "review_sha256": "133e7cbebab9f4d5df22c2bce87ca29312ea46abe94b91f0d301986c456dc422",
+      "current_sha256": "d662be1cc5b5f32696fe5ecb589ee23447abad36bcf957fd1bceb9fb42da986b",
+      "role": "target magic regression",
+      "change": "activation settlement, release identity, pre-activation map rejection, post-acceptance stability",
+      "authorization_or_evidence": "final_monster_related receipt PASS; current hash bound",
+      "recommendation": "PRESERVE_CURRENT"
+    },
+    {
+      "path": "tests/player_hit_reaction_policy_test.gd",
+      "status": "PASS",
+      "review_sha256": "c4a20d9138f146efbd024e3bea86d35cbe11d3852ea1a91bff9a88d9820f5de8",
+      "current_sha256": "2455add9feb93dc720a62354499ae9fff55dd38f319908ab6653554367513206",
+      "role": "player struck/cooldown regression",
+      "change": "explicit state reset plus queued-hit and exact protection/cooldown boundary checks",
+      "authorization_or_evidence": "final_player_related receipt PASS; current hash bound",
+      "recommendation": "PRESERVE_CURRENT"
+    },
+    {
+      "path": "tests/player_skill_struck_chain_test.gd",
+      "status": "PASS",
+      "review_sha256": "ac23c432b640d2ee61cda861a01cbe3983f4a08458444b3b7bbb75483e9f2ebc",
+      "current_sha256": "a060f9c9e67503a6dc74fd938cc1c905bec3b6af2f0e4a39cb61dfed4f25d9c9",
+      "role": "player skill struck regression",
+      "change": "cooldown freeze/resume and visual combat clock binding",
+      "authorization_or_evidence": "final_player_related receipt PASS; current hash bound",
+      "recommendation": "PRESERVE_CURRENT"
+    },
+    {
+      "path": "tests/source176_r3/release_lifecycle_test.gd",
+      "status": "PASS",
+      "review_sha256": "8e0ea248dd9b4aeca2dcb2d94c7b456bce3546a37560336c612167deb2bfd073",
+      "current_sha256": "3703500be20d59175b45682350e29cb572815bac897ca090395ae9a70788c39c",
+      "role": "source176 delivery lifecycle regression",
+      "change": "captures physical and target-magic descriptors through actual emission and checks parent identity",
+      "authorization_or_evidence": "final_monster_related receipt PASS; current hash bound",
+      "recommendation": "PRESERVE_CURRENT"
+    },
+    {
+      "path": "tests/special_actor_target_magic_gap_test.gd",
+      "status": "PASS",
+      "review_sha256": "f98aaaa3db84e3aa6d936eb5fb3e3af7b50077953e2f7e9dcf3396efe7923e6b",
+      "current_sha256": "5b79744cf3080a41be836c4d120487875bd39a2fbf2d947af490376cec1c0c89",
+      "role": "special actor target magic regression",
+      "change": "activation settlement, footprint identity, map/generation rejection and accepted-cast stability",
+      "authorization_or_evidence": "final_monster_related receipt PASS; current hash bound",
+      "recommendation": "PRESERVE_CURRENT"
+    },
+    {
+      "path": "tests/w1_exact_ranged_delivery_test.gd",
+      "status": "PASS",
+      "review_sha256": "208a07f6a61839d9d858f376139346ac11964a4289a34d3ee8041983d0e5e3ac",
+      "current_sha256": "f6c001de73de8be11a879ef7b330230dc6a93b97b9295201a2b07592e38274a6",
+      "role": "exact ranged delivery regression",
+      "change": "real frame registration, committed-action cleanup, and locked-magic versus projectile timing boundaries",
+      "authorization_or_evidence": "final_monster_related receipt PASS; current hash bound",
+      "recommendation": "PRESERVE_CURRENT"
+    },
+    {
+      "path": "tools/loot_sheet_compiler/evidence/armor_single_slot_directive_v92.json",
+      "status": "PASS",
+      "review_sha256": "2122a9721e49b20086a4de85fe107eb75629db1508d0ad5a289e53df0b35e207",
+      "current_sha256": "2122a9721e49b20086a4de85fe107eb75629db1508d0ad5a289e53df0b35e207",
+      "role": "historical armor directive evidence",
+      "change": "byte-identical; parsed JSON identical",
+      "authorization_or_evidence": "evidence source unchanged",
+      "recommendation": "PRESERVE_EVIDENCE"
+    }
+  ],
+  "excluded": [
+    {
+      "path": "tools/build_android_isolated.ps1",
+      "reason": "root-owned integration/build scope"
+    }
+  ],
+  "unresolved": [
+    "enemy_mass_death_batch_pipeline_test.gd current revision has no matching current-hash run in the reviewed ledger; do not claim it PASS."
+  ],
+  "actions_performed": [
+    "read-only comparison",
+    "no engine/native run",
+    "no build/stage/index/commit mutation"
+  ]
+}

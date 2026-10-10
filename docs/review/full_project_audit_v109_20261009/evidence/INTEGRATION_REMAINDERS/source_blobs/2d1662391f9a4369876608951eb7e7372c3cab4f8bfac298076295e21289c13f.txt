@@ -1,0 +1,210 @@
+extends Node2D
+
+## Integrated reaction continuation regression for the direct-magic struck pause.
+##   * Lv1/Lv43/Lv50/Lv80 fixtures continue submitting real movement steps
+##     during repeated positive DIRECT hits;
+##   * three positive hits leave the attack deadline unchanged;
+##   * an already accepted attack release remains one release and settles once.
+
+const CombatRuntime := preload("res://scripts/layers/runtime/combat_runtime_service.gd")
+const GroundUnitSpace := preload("res://scripts/ground_unit_space.gd")
+const OpenTerrain := preload("res://tests/helpers/monster_open_terrain_test_fixture.gd")
+const SpatialIndex := preload("res://scripts/runtime_combat_spatial_index.gd")
+const RUNTIME_MAP_ID := 1
+const CENTER_GROUND_GU := OpenTerrain.CENTER_GROUND_GU
+
+var _errors: Array[String] = []
+var _checks := 0
+var _spatial_index: RuntimeCombatSpatialIndex
+var _spawn_serial := 1000
+
+func _ground_to_screen(value: Vector2) -> Vector2:
+	return GroundUnitSpace.ground_delta_gu_to_screen_delta_px(value)
+
+func _check(condition: bool, label: String) -> void:
+	_checks += 1
+	if not condition:
+		_errors.append(label)
+
+func _enemy_fixture(player: PlayerCharacter, level: int) -> EnemyActor:
+	var enemy := EnemyActor.new()
+	# Monster 64 is the canonical ordinary mobile melee body used by the HC
+	# runtime fixture; level is varied independently to cover struck policy.
+	enemy.setup(GameData.get_monster_by_id(64), player, false)
+	enemy.level = level # one canonical mobile body; level is the boundary fixture.
+	enemy.configure_runtime_map_projection(
+		RUNTIME_MAP_ID,
+		Callable(self, "_ground_to_screen"),
+		GroundUnitSpace.screen_delta_px_to_ground_delta_gu,
+	)
+	enemy.configure_terrain_navigation_context(OpenTerrain.build(RUNTIME_MAP_ID))
+	enemy.global_position = _ground_to_screen(CENTER_GROUND_GU)
+	enemy.set_meta("spawn_position", enemy.global_position)
+	add_child(enemy)
+	# Keep the fixture from consuming the first physics tick before each case
+	# explicitly enables the production physics loop.
+	enemy.set_physics_process(false)
+	_spawn_serial += 1
+	enemy.configure_spatial_index(_spatial_index, _spawn_serial)
+	_spatial_index.register(
+		_spawn_serial, RUNTIME_MAP_ID, CENTER_GROUND_GU,
+		enemy.combat_radius_gu, _spawn_serial, enemy,
+	)
+	await get_tree().physics_frame
+	# Apply fixture HP and anti-magic after _ready has loaded canonical data.
+	enemy.max_hp = 1000000
+	enemy.current_hp = enemy.max_hp
+	enemy.direct_spell_anti_magic_points = 0
+	enemy.attack_min = 100
+	enemy.attack_max = 100
+	enemy.stationary = false
+	# Mirror the live target/cadence readiness used by the HC runtime fixture:
+	# this leaves the real physics and admission branches intact while removing
+	# only the initial spawn wait from a 30-frame observation window.
+	player.set_meta("runtime_map_id", RUNTIME_MAP_ID)
+	player.set_meta("zone_generation", 1)
+	enemy.set_meta("zone_generation", 1)
+	enemy.target = player
+	enemy._retarget_timer = 999.0
+	enemy.set_combat_position(enemy.global_position, &"continuation_fixture")
+	var cadence = enemy._movement_cadence
+	var now_ms := int(enemy._combat_action_time_s * 1000.0)
+	if now_ms < int(cadence.walk_interval_ms) + 2:
+		now_ms = int(cadence.walk_interval_ms) + 2
+		enemy._combat_action_time_s = float(now_ms) / 1000.0
+	cadence.walk_wait_locked = false
+	cadence.walk_tick_ms = now_ms - cadence.walk_interval_ms - 1
+	cadence.walk_wait_tick_ms = 0
+	cadence.last_evaluated_ms = now_ms - 1
+	return enemy
+
+func _direct_hit(service: CombatRuntime, enemy: EnemyActor) -> Dictionary:
+	return service.apply_enemy_direct_spell_damage(
+		enemy,
+		"wizard.lightning",
+		1000,
+		null,
+		null,
+		Callable(),
+		0,
+		{},
+		CombatRuntime.EnemyMagicDeliveryKind.AUTO,
+	)
+
+func _run_continuation_case(service: CombatRuntime, level: int) -> void:
+	var player := PlayerCharacter.new()
+	player.set_physics_process(false)
+	add_child(player)
+	await get_tree().physics_frame
+	# 8 GU is outside melee contact but remains inside the canonical 12 GU aggro radius.
+	player.global_position = _ground_to_screen(CENTER_GROUND_GU + Vector2(8, 0))
+	player.max_hp = 500
+	player.current_hp = 500
+	player.defense_min = 0
+	player.defense_max = 0
+	var enemy := await _enemy_fixture(player, level)
+	enemy.set_physics_process(true)
+	var hit_count := 0
+	var previous_epoch := enemy._movement_step_epoch
+	var previous_position := enemy.global_position
+	for frame in range(240):
+		if frame % 30 == 0:
+			var result := _direct_hit(service, enemy)
+			_check(bool(result.get("success", false)), "Lv%d positive DIRECT hit %d" % [level, hit_count])
+			hit_count += 1
+		await get_tree().physics_frame
+		if frame % 30 == 29:
+			_check(
+				enemy._movement_step_epoch > previous_epoch
+				or enemy.global_position.distance_to(previous_position) > 0.0,
+				"Lv%d real movement progress in hit window %d" % [level, frame / 30],
+			)
+			previous_epoch = enemy._movement_step_epoch
+			previous_position = enemy.global_position
+	enemy.queue_free()
+	player.queue_free()
+
+func _run_attack_accumulation_case(service: CombatRuntime, level: int, initial: float, expected: float) -> void:
+	var player := PlayerCharacter.new()
+	player.set_physics_process(false)
+	add_child(player)
+	await get_tree().physics_frame
+	player.global_position = _ground_to_screen(CENTER_GROUND_GU + Vector2(8, 0))
+	player.max_hp = 500
+	player.current_hp = 500
+	player.defense_min = 0
+	player.defense_max = 0
+	var enemy := await _enemy_fixture(player, level)
+	enemy.set_physics_process(false)
+	enemy._attack_timer = initial
+	for _hit in range(3):
+		var result := _direct_hit(service, enemy)
+		_check(bool(result.get("success", false)), "Lv%d accumulation hit" % level)
+	_check(is_equal_approx(enemy._attack_timer, expected), "Lv%d literal attack accumulation" % level)
+	enemy.queue_free()
+	player.queue_free()
+
+func _run_committed_release_case(service: CombatRuntime) -> void:
+	var player := PlayerCharacter.new()
+	player.set_physics_process(false)
+	add_child(player)
+	await get_tree().physics_frame
+	# Source176 ordinary melee admission uses a 1.0 GU L-infinity box;
+	# 0.98 GU is the existing legal post-movement opportunity fixture.
+	player.global_position = _ground_to_screen(CENTER_GROUND_GU + Vector2(8, 0))
+	player.max_hp = 500
+	player.current_hp = 500
+	player.defense_min = 0
+	player.defense_max = 0
+	var enemy := await _enemy_fixture(player, 43)
+	# Bind the close target to the enemy's actual indexed ground position after
+	# both nodes have completed _ready; this exercises real projection and range.
+	var close_ground := enemy.spatial_index_position() + Vector2(0.98, 0)
+	player.global_position = _ground_to_screen(close_ground)
+	enemy.set_physics_process(false)
+	enemy._attack_timer = 0.0
+	enemy._attack_hit_delay = 0.1
+	_check(enemy._hc_standard_melee(), "formal fixture uses ordinary melee")
+	# Use the actual production admission point so the formal release record,
+	# parent action and damage roll are generated by EnemyActor.
+	var admission_ok := enemy._hc_try_start(player)
+	_check(admission_ok, "formal melee admission accepted: %s" % enemy._hc_last_reason)
+	var accepted_record: Dictionary = enemy._pending_attack_release_record.duplicate(true)
+	var accepted_release_id := str(accepted_record.get("release_id", ""))
+	_check(not accepted_record.is_empty(), "formal accepted record is nonempty")
+	_check(accepted_release_id != "", "formal accepted release has release_id")
+	_check(int(accepted_record.get("damage", 0)) > 0, "formal accepted damage is positive")
+	_check(float(enemy._pending_attack_time) > 0.0, "formal accepted release has pending delay")
+	var hp_before := player.current_hp
+	for _hit in range(3):
+		_direct_hit(service, enemy)
+		_check(
+			str(enemy._pending_attack_release_record.get("release_id", "")) == accepted_release_id,
+			"formal committed release identity survives STRUCK",
+		)
+	enemy._update_pending_attack(0.25)
+	var hp_after := player.current_hp
+	_check(hp_after == hp_before - int(accepted_record.get("damage", 0)), "formal release settles once")
+	enemy._update_pending_attack(0.25)
+	_check(player.current_hp == hp_after, "committed release does not settle twice")
+	enemy.queue_free()
+	player.queue_free()
+
+func _ready() -> void:
+	# This is the formal integrated regression; production source remains frozen during its run.
+	PlayerState.test_mode = true
+	PlayerState.reset_progress()
+	_spatial_index = SpatialIndex.new()
+	var service := CombatRuntime.new()
+	add_child(service)
+	for level in [1, 43, 50, 80]:
+		await _run_continuation_case(service, level)
+	# Three hits are independent presentation pauses; they never add a
+	# synthetic 20/50ms penalty to the attack deadline.
+	await _run_attack_accumulation_case(service, 1, -0.05, -0.05)
+	await _run_attack_accumulation_case(service, 43, 0.0, 0.0)
+	await _run_attack_accumulation_case(service, 50, 0.25, 0.25)
+	await _run_attack_accumulation_case(service, 80, -0.01, -0.01)
+	await _run_committed_release_case(service)
+	print("MONSTER_MAGIC_REACTION_CONTINUATION_%s checks=%d errors=%s" % ["PASS" if _errors.is_empty() else "FAIL", _checks, _errors])
+	get_tree().quit(0 if _errors.is_empty() else 1)

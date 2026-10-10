@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "scope": "Read-only diagnosis of v109 related50 integration remainders",
+  "runtime_tree": "15d50727638876e89e67ca7913deaf30d9d53611",
+  "engine": "Godot 4.7.stable.official.5b4e0cb0f",
+  "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_related50_integration_remainders",
+  "evidence_root": "outputs/test_logs/v109_related50_integration_remainders",
+  "rerun": "NOT_RUN",
+  "scenarios": [
+    {"name":"enemy_mass_death_batch_pipeline_test","status":"FAIL","classification":"cleanup_only","run_id":"0892fc4e-982f-40e7-99f7-f01c39d7515f","receipt_sha256":"d0a9dcb784a13d09b4049ddd1cdf889813766c1247954ed31580a37bd9797bd8","functional_marker":"ENEMY_MASS_DEATH_BATCH_PASS deaths=32 checks=235 rng_parity=1 save_commits=1","failure":"stderr: 8 ObjectDB leaks, node get_path outside scene tree, 3 resources still in use","root_cause":"fixture teardown/ownership; concrete first suspect is unused LootRuntimeScript.new() at line 48; full leak set unproven","recommendation":"focused verbose cleanup pass; do not weaken functional checks"},
+    {"name":"combat_epoch_delivery_test","status":"FAIL","classification":"fixture_contract_mode_mismatch","run_id":"3db83563-54ab-4df8-9edd-320980ee9df2","receipt_sha256":"7eab5f99577e3d1f3c837940b3968f37c5c92f890224288a0d04fd5ff750eab4","failure":"E01-freeze expects hc_standard_melee pending record","control_flow":"Enemy._ordinary_contact_instant_settle defaults true; _hc_try_start sets source176 ordinary hit_delay to 0, then _hc_settle clears the pending path","source_evidence":"scripts/enemy.gd lines 510-513 and 9891-9896/9970; fixture lines 251-263","recommendation":"select explicit delayed-contact test policy for this subcase or rewrite it for immediate settlement; do not change production default"},
+    {"name":"monster_magic_reaction_continuation_test","status":"FAIL","classification":"fixture_contract_mode_mismatch","run_id":"b8a2f496-c19f-4cd3-b6cd-fbbcea6bafe8","receipt_sha256":"c911f7bcb2e6c7f7e7ddb80a9ebc1cbfd423087f0f25dbb75d78e27c4c1da03a","failure":"formal accepted record empty, release_id/damage/pending delay absent","control_flow":"fixture sets _attack_hit_delay=0.1 but source176 ordinary instant-settle branch overrides gameplay delay and settles immediately","source_evidence":"scripts/enemy.gd lines 510-513 and 9891-9896/9970; fixture lines 166-177","recommendation":"use explicit delayed-contact policy around committed-release case or test a genuinely delayed delivery kind"},
+    {"name":"player_hit_reaction_policy_test","status":"PASS","run_id":"24e87113-4a17-4b0b-aeeb-dff60dfd300c","receipt_sha256":"00f1a0c7b9094fa8b932ddd33546d78c24b963764995c07b1da2eea823cafacb"},
+    {"name":"release_lifecycle_test","status":"PASS","run_id":"2b3286ad-4b56-4d09-9cce-9d677ddab091","receipt_sha256":"11ebd6161dc69afd0c9ccca80915a1c5c5f6a0cdce42766ef27c223cbfa8b82c"},
+    {"name":"player_skill_struck_chain_test","status":"PASS","run_id":"6de722fd-0e64-455c-8610-cfa5f76918ad","receipt_sha256":"5a4e1be7d3a6005728ffb38e7621d54c802738e26147057adc41ccb66d26c3bb"},
+    {"name":"monster_attack_los_cache_test","status":"PASS","run_id":"856b35ab-a502-46f8-876e-e1094f6565e6","receipt_sha256":"ddb8f57d0b797e881c7217ef5cd3fd90454ca1e52bccbd3eea4ab90d4817c70f"},
+    {"name":"monster_struck_runtime_test","status":"PASS","run_id":"9bc4cd13-3ad7-4407-a54a-3f3ef68470c5","receipt_sha256":"68a38e18cf312ef6b1a412d46e0d05e9e346e41f69ecb2ca53bf73ac6bfe0b94"},
+    {"name":"special_actor_target_magic_gap_test","status":"PASS","run_id":"bf0527c0-a42d-4e12-b907-8d480864fc39","receipt_sha256":"461036fbd1ad7fb79008bc031dec2843b4ad5c3218c2bd4bd6a1135d0632cf55"},
+    {"name":"w1_exact_ranged_delivery_test","status":"PASS","run_id":"d3758bb7-39ce-4c76-9e0d-ab92f20b491c","receipt_sha256":"b05837f46f84573eeaa59396d15fa875a373f2c2ad8e8c40ad46245c218d8d1d"},
+    {"name":"monster_target_magic_attack_test","status":"PASS","run_id":"fdb926d3-5ee5-499e-ab27-9e698f2dd240","receipt_sha256":"97177092a9d49ff3e3736506d5ffbdad39b12758ed06e1919948a38127fdd176"}
+  ],
+  "actions_performed": ["read receipts and retained logs", "read current fixture and production control flow", "no source/test/data/Git mutation", "no rerun"]
+}

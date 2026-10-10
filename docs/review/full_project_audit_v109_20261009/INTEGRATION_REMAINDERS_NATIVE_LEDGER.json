@@ -1,0 +1,628 @@
+{
+  "status": "PASS",
+  "scope": "Retained selected contract-alignment fixture evidence; original failures preserved, not whole suite or device acceptance",
+  "stages": [
+    {
+      "number": 50,
+      "stage": "v109_related50_integration_remainders",
+      "tested_tree": "15d50727638876e89e67ca7913deaf30d9d53611",
+      "input_fingerprint": "039564d75d763d3445ef9d030b8e1c1b68ef62c09333aaca82c373c162e9aaf7",
+      "engine": {
+        "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+        "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+        "bytes": 198152
+      },
+      "runner_receipt": "outputs/test_logs/v109_related50_integration_remainders/logs/runner_results_adhoc_20261010_090106_892_24408.json",
+      "invocation_id": "e8395180-9e55-46ef-9d8a-004fb3ff22f2",
+      "passed": 8,
+      "failed": 3,
+      "results": [
+        {
+          "test_name": "enemy_mass_death_batch_pipeline_test",
+          "test_path": "tests/enemy_mass_death_batch_pipeline_test.tscn",
+          "wrapper_process_id": 4748,
+          "wrapper_started_utc": "2026-10-10T00:58:46.2879404Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_related50_integration_remainders",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-10T00:59:16.3017737Z",
+          "native_exit_observed_utc": "2026-10-10T00:59:03.7393682Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 1,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "",
+          "framework_receipt_valid": null,
+          "result": "FAIL",
+          "reason": "stderr_failures_1"
+        },
+        {
+          "test_name": "combat_epoch_delivery_test",
+          "test_path": "tests/hc_monster_ai/combat_epoch_delivery_test.tscn",
+          "wrapper_process_id": 14412,
+          "wrapper_started_utc": "2026-10-10T00:59:05.2576282Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_related50_integration_remainders",
+          "fixed_fps": 0,
+          "pass_marker_found": false,
+          "process_exited": true,
+          "wrapper_exit_code": 1,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-10T00:59:35.2666273Z",
+          "native_exit_observed_utc": "2026-10-10T00:59:14.0657899Z",
+          "effective_exit_code": 1,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "",
+          "framework_receipt_valid": null,
+          "result": "FAIL",
+          "reason": "missing_pass_marker;non_zero_exit_code_1"
+        },
+        {
+          "test_name": "monster_attack_los_cache_test",
+          "test_path": "tests/monster_attack_los_cache_test.tscn",
+          "wrapper_process_id": 7048,
+          "wrapper_started_utc": "2026-10-10T00:59:15.1338801Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_related50_integration_remainders",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-10T00:59:45.1432796Z",
+          "native_exit_observed_utc": "2026-10-10T00:59:24.3435670Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "",
+          "framework_receipt_valid": null,
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "monster_magic_reaction_continuation_test",
+          "test_path": "tests/monster_magic_reaction_continuation_test.tscn",
+          "wrapper_process_id": 7996,
+          "wrapper_started_utc": "2026-10-10T00:59:25.9112837Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_related50_integration_remainders",
+          "fixed_fps": 0,
+          "pass_marker_found": false,
+          "process_exited": true,
+          "wrapper_exit_code": 1,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-10T00:59:55.9208193Z",
+          "native_exit_observed_utc": "2026-10-10T00:59:50.9163570Z",
+          "effective_exit_code": 1,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "",
+          "framework_receipt_valid": null,
+          "result": "FAIL",
+          "reason": "missing_pass_marker;non_zero_exit_code_1"
+        },
+        {
+          "test_name": "monster_struck_runtime_test",
+          "test_path": "tests/monster_struck_runtime_test.tscn",
+          "wrapper_process_id": 22228,
+          "wrapper_started_utc": "2026-10-10T00:59:52.1128756Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_related50_integration_remainders",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-10T01:00:22.1228644Z",
+          "native_exit_observed_utc": "2026-10-10T01:00:00.7717559Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "",
+          "framework_receipt_valid": null,
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "monster_target_magic_attack_test",
+          "test_path": "tests/monster_target_magic_attack_test.tscn",
+          "wrapper_process_id": 12000,
+          "wrapper_started_utc": "2026-10-10T01:00:02.3053146Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_related50_integration_remainders",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-10T01:00:32.3147766Z",
+          "native_exit_observed_utc": "2026-10-10T01:00:11.4645408Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "",
+          "framework_receipt_valid": null,
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "player_hit_reaction_policy_test",
+          "test_path": "tests/player_hit_reaction_policy_test.tscn",
+          "wrapper_process_id": 24540,
+          "wrapper_started_utc": "2026-10-10T01:00:13.0412941Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_related50_integration_remainders",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-10T01:00:43.0540325Z",
+          "native_exit_observed_utc": "2026-10-10T01:00:22.1722898Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "",
+          "framework_receipt_valid": null,
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "player_skill_struck_chain_test",
+          "test_path": "tests/player_skill_struck_chain_test.tscn",
+          "wrapper_process_id": 19564,
+          "wrapper_started_utc": "2026-10-10T01:00:23.7394573Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_related50_integration_remainders",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-10T01:00:53.7482621Z",
+          "native_exit_observed_utc": "2026-10-10T01:00:32.2543174Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "",
+          "framework_receipt_valid": null,
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "release_lifecycle_test",
+          "test_path": "tests/source176_r3/release_lifecycle_test.tscn",
+          "wrapper_process_id": 15004,
+          "wrapper_started_utc": "2026-10-10T01:00:33.7771539Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_related50_integration_remainders",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-10T01:01:03.7868819Z",
+          "native_exit_observed_utc": "2026-10-10T01:00:42.4669745Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "",
+          "framework_receipt_valid": null,
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "special_actor_target_magic_gap_test",
+          "test_path": "tests/special_actor_target_magic_gap_test.tscn",
+          "wrapper_process_id": 8148,
+          "wrapper_started_utc": "2026-10-10T01:00:44.0129799Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_related50_integration_remainders",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-10T01:01:14.0220053Z",
+          "native_exit_observed_utc": "2026-10-10T01:00:52.8439195Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "",
+          "framework_receipt_valid": null,
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "w1_exact_ranged_delivery_test",
+          "test_path": "tests/w1_exact_ranged_delivery_test.tscn",
+          "wrapper_process_id": 8804,
+          "wrapper_started_utc": "2026-10-10T01:00:54.3996912Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_related50_integration_remainders",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-10T01:01:24.4086863Z",
+          "native_exit_observed_utc": "2026-10-10T01:01:05.4237667Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "",
+          "framework_receipt_valid": null,
+          "result": "PASS",
+          "reason": ""
+        }
+      ],
+      "changed_fixture_blobs": [
+        {
+          "path": "tests/enemy_mass_death_batch_pipeline_test.gd",
+          "sha256": "3635c2e33f2f4f328e84bd2c4e217bd1908d0e5b9752ddfb3344e3cb23f4e9f4",
+          "retained": "docs/review/full_project_audit_v109_20261009/evidence/INTEGRATION_REMAINDERS/source_blobs/3635c2e33f2f4f328e84bd2c4e217bd1908d0e5b9752ddfb3344e3cb23f4e9f4.txt"
+        },
+        {
+          "path": "tests/hc_monster_ai/combat_epoch_delivery_test.gd",
+          "sha256": "d41196081d039062bd372976bf0eefe97f0fac75619946468fa0934faf5f3c67",
+          "retained": "docs/review/full_project_audit_v109_20261009/evidence/INTEGRATION_REMAINDERS/source_blobs/d41196081d039062bd372976bf0eefe97f0fac75619946468fa0934faf5f3c67.txt"
+        },
+        {
+          "path": "tests/monster_attack_los_cache_test.gd",
+          "sha256": "3c2e160cb38cbe5232c05aab07e14adab19e2dcf6fd433393a57332d4bc23d07",
+          "retained": "docs/review/full_project_audit_v109_20261009/evidence/INTEGRATION_REMAINDERS/source_blobs/3c2e160cb38cbe5232c05aab07e14adab19e2dcf6fd433393a57332d4bc23d07.txt"
+        },
+        {
+          "path": "tests/monster_magic_reaction_continuation_test.gd",
+          "sha256": "2d1662391f9a4369876608951eb7e7372c3cab4f8bfac298076295e21289c13f",
+          "retained": "docs/review/full_project_audit_v109_20261009/evidence/INTEGRATION_REMAINDERS/source_blobs/2d1662391f9a4369876608951eb7e7372c3cab4f8bfac298076295e21289c13f.txt"
+        },
+        {
+          "path": "tests/monster_struck_runtime_test.gd",
+          "sha256": "df1309de48aa0ce3fd375d429690391fcc93a5e2799977f0d4bd67c9b237cbcf",
+          "retained": "docs/review/full_project_audit_v109_20261009/evidence/INTEGRATION_REMAINDERS/source_blobs/df1309de48aa0ce3fd375d429690391fcc93a5e2799977f0d4bd67c9b237cbcf.txt"
+        },
+        {
+          "path": "tests/monster_target_magic_attack_test.gd",
+          "sha256": "7392da66eb708fff6f9dad1bbb3147fb2fa6d8de40d0c3d30931a6c1c17d3434",
+          "retained": "docs/review/full_project_audit_v109_20261009/evidence/INTEGRATION_REMAINDERS/source_blobs/7392da66eb708fff6f9dad1bbb3147fb2fa6d8de40d0c3d30931a6c1c17d3434.txt"
+        },
+        {
+          "path": "tests/player_hit_reaction_policy_test.gd",
+          "sha256": "c9ebb475c9dca16c5a852cc1fbbeb64436d300de105a07a722016e3ece44db4c",
+          "retained": "docs/review/full_project_audit_v109_20261009/evidence/INTEGRATION_REMAINDERS/source_blobs/c9ebb475c9dca16c5a852cc1fbbeb64436d300de105a07a722016e3ece44db4c.txt"
+        },
+        {
+          "path": "tests/player_skill_struck_chain_test.gd",
+          "sha256": "cbfaac49965a3b24b10646e1201dd84e256bbd5e3118dfd52b0e57c6a970362e",
+          "retained": "docs/review/full_project_audit_v109_20261009/evidence/INTEGRATION_REMAINDERS/source_blobs/cbfaac49965a3b24b10646e1201dd84e256bbd5e3118dfd52b0e57c6a970362e.txt"
+        },
+        {
+          "path": "tests/source176_r3/release_lifecycle_test.gd",
+          "sha256": "c86b7d263710d3adeb9ca5921888fd804d0466c09107dc543fb1cf6eeb271919",
+          "retained": "docs/review/full_project_audit_v109_20261009/evidence/INTEGRATION_REMAINDERS/source_blobs/c86b7d263710d3adeb9ca5921888fd804d0466c09107dc543fb1cf6eeb271919.txt"
+        },
+        {
+          "path": "tests/special_actor_target_magic_gap_test.gd",
+          "sha256": "6877977971e2e7a68b8edd92594a09e5157516791a3c79db1afb2a33f6bd3acc",
+          "retained": "docs/review/full_project_audit_v109_20261009/evidence/INTEGRATION_REMAINDERS/source_blobs/6877977971e2e7a68b8edd92594a09e5157516791a3c79db1afb2a33f6bd3acc.txt"
+        },
+        {
+          "path": "tests/w1_exact_ranged_delivery_test.gd",
+          "sha256": "5b3aeae0ab382de9955dff10c1b2e4ef19a7d0d582f06756e4236bef1d1acc8f",
+          "retained": "docs/review/full_project_audit_v109_20261009/evidence/INTEGRATION_REMAINDERS/source_blobs/5b3aeae0ab382de9955dff10c1b2e4ef19a7d0d582f06756e4236bef1d1acc8f.txt"
+        }
+      ],
+      "actual_command": {
+        "script": "tools/run_godot_tests.ps1",
+        "TestPaths": [
+          "tests/enemy_mass_death_batch_pipeline_test.tscn",
+          "tests/hc_monster_ai/combat_epoch_delivery_test.tscn",
+          "tests/monster_attack_los_cache_test.tscn",
+          "tests/monster_magic_reaction_continuation_test.tscn",
+          "tests/monster_struck_runtime_test.tscn",
+          "tests/monster_target_magic_attack_test.tscn",
+          "tests/player_hit_reaction_policy_test.tscn",
+          "tests/player_skill_struck_chain_test.tscn",
+          "tests/source176_r3/release_lifecycle_test.tscn",
+          "tests/special_actor_target_magic_gap_test.tscn",
+          "tests/w1_exact_ranged_delivery_test.tscn"
+        ],
+        "TimeoutSeconds": 30,
+        "Verbose": true
+      },
+      "custom_check_receipt": "MISSING for50: sequential fixture output was overwritten; original native FAIL receipt/stdout retained. Explicit51 snapshot and52 producer are retained below."
+    },
+    {
+      "number": 51,
+      "stage": "v109_direct51_integration_remainders",
+      "tested_tree": "f6c03378f4e610f144a147544352e2ea39b38061",
+      "input_fingerprint": "4935622cf804ce53143bcd710eedb9290af51ee5a2d0b2a3a37ce798a9b2bf04",
+      "engine": {
+        "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+        "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+        "bytes": 198152
+      },
+      "runner_receipt": "outputs/test_logs/v109_direct51_integration_remainders/logs/runner_results_adhoc_20261010_090625_899_9980.json",
+      "invocation_id": "8727afe0-e428-4819-91c5-00dd7c0936cd",
+      "passed": 2,
+      "failed": 1,
+      "results": [
+        {
+          "test_name": "enemy_mass_death_batch_pipeline_test",
+          "test_path": "tests/enemy_mass_death_batch_pipeline_test.tscn",
+          "wrapper_process_id": 8224,
+          "wrapper_started_utc": "2026-10-10T01:05:37.6714278Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct51_integration_remainders",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-10T01:06:07.6845409Z",
+          "native_exit_observed_utc": "2026-10-10T01:05:49.9014876Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "",
+          "framework_receipt_valid": null,
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "combat_epoch_delivery_test",
+          "test_path": "tests/hc_monster_ai/combat_epoch_delivery_test.tscn",
+          "wrapper_process_id": 22548,
+          "wrapper_started_utc": "2026-10-10T01:05:51.3842542Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct51_integration_remainders",
+          "fixed_fps": 0,
+          "pass_marker_found": false,
+          "process_exited": true,
+          "wrapper_exit_code": 1,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-10T01:06:21.3959750Z",
+          "native_exit_observed_utc": "2026-10-10T01:05:59.2252443Z",
+          "effective_exit_code": 1,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "",
+          "framework_receipt_valid": null,
+          "result": "FAIL",
+          "reason": "missing_pass_marker;non_zero_exit_code_1"
+        },
+        {
+          "test_name": "monster_magic_reaction_continuation_test",
+          "test_path": "tests/monster_magic_reaction_continuation_test.tscn",
+          "wrapper_process_id": 11936,
+          "wrapper_started_utc": "2026-10-10T01:06:00.4077753Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct51_integration_remainders",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-10T01:06:30.4165547Z",
+          "native_exit_observed_utc": "2026-10-10T01:06:24.3393560Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "",
+          "framework_receipt_valid": null,
+          "result": "PASS",
+          "reason": ""
+        }
+      ],
+      "changed_fixture_blobs": [
+        {
+          "path": "tests/enemy_mass_death_batch_pipeline_test.gd",
+          "sha256": "e26dda07493acba46f6b65399cd9c36e0f38759f9f1173c0aaca28676907229f",
+          "retained": "docs/review/full_project_audit_v109_20261009/evidence/INTEGRATION_REMAINDERS/source_blobs/e26dda07493acba46f6b65399cd9c36e0f38759f9f1173c0aaca28676907229f.txt"
+        },
+        {
+          "path": "tests/hc_monster_ai/combat_epoch_delivery_test.gd",
+          "sha256": "1088950459dc3b3af1864a2aa8eb66ca4d0ed6c51a31bc5b96528a797a8e97dc",
+          "retained": "docs/review/full_project_audit_v109_20261009/evidence/INTEGRATION_REMAINDERS/source_blobs/1088950459dc3b3af1864a2aa8eb66ca4d0ed6c51a31bc5b96528a797a8e97dc.txt"
+        },
+        {
+          "path": "tests/monster_attack_los_cache_test.gd",
+          "sha256": "3c2e160cb38cbe5232c05aab07e14adab19e2dcf6fd433393a57332d4bc23d07",
+          "retained": "docs/review/full_project_audit_v109_20261009/evidence/INTEGRATION_REMAINDERS/source_blobs/3c2e160cb38cbe5232c05aab07e14adab19e2dcf6fd433393a57332d4bc23d07.txt"
+        },
+        {
+          "path": "tests/monster_magic_reaction_continuation_test.gd",
+          "sha256": "b4ed25652b8bac24b4a80b00b560bcb38eab76fe3099ea92c6fbb48850500bed",
+          "retained": "docs/review/full_project_audit_v109_20261009/evidence/INTEGRATION_REMAINDERS/source_blobs/b4ed25652b8bac24b4a80b00b560bcb38eab76fe3099ea92c6fbb48850500bed.txt"
+        },
+        {
+          "path": "tests/monster_struck_runtime_test.gd",
+          "sha256": "df1309de48aa0ce3fd375d429690391fcc93a5e2799977f0d4bd67c9b237cbcf",
+          "retained": "docs/review/full_project_audit_v109_20261009/evidence/INTEGRATION_REMAINDERS/source_blobs/df1309de48aa0ce3fd375d429690391fcc93a5e2799977f0d4bd67c9b237cbcf.txt"
+        },
+        {
+          "path": "tests/monster_target_magic_attack_test.gd",
+          "sha256": "7392da66eb708fff6f9dad1bbb3147fb2fa6d8de40d0c3d30931a6c1c17d3434",
+          "retained": "docs/review/full_project_audit_v109_20261009/evidence/INTEGRATION_REMAINDERS/source_blobs/7392da66eb708fff6f9dad1bbb3147fb2fa6d8de40d0c3d30931a6c1c17d3434.txt"
+        },
+        {
+          "path": "tests/player_hit_reaction_policy_test.gd",
+          "sha256": "c9ebb475c9dca16c5a852cc1fbbeb64436d300de105a07a722016e3ece44db4c",
+          "retained": "docs/review/full_project_audit_v109_20261009/evidence/INTEGRATION_REMAINDERS/source_blobs/c9ebb475c9dca16c5a852cc1fbbeb64436d300de105a07a722016e3ece44db4c.txt"
+        },
+        {
+          "path": "tests/player_skill_struck_chain_test.gd",
+          "sha256": "cbfaac49965a3b24b10646e1201dd84e256bbd5e3118dfd52b0e57c6a970362e",
+          "retained": "docs/review/full_project_audit_v109_20261009/evidence/INTEGRATION_REMAINDERS/source_blobs/cbfaac49965a3b24b10646e1201dd84e256bbd5e3118dfd52b0e57c6a970362e.txt"
+        },
+        {
+          "path": "tests/source176_r3/release_lifecycle_test.gd",
+          "sha256": "c86b7d263710d3adeb9ca5921888fd804d0466c09107dc543fb1cf6eeb271919",
+          "retained": "docs/review/full_project_audit_v109_20261009/evidence/INTEGRATION_REMAINDERS/source_blobs/c86b7d263710d3adeb9ca5921888fd804d0466c09107dc543fb1cf6eeb271919.txt"
+        },
+        {
+          "path": "tests/special_actor_target_magic_gap_test.gd",
+          "sha256": "6877977971e2e7a68b8edd92594a09e5157516791a3c79db1afb2a33f6bd3acc",
+          "retained": "docs/review/full_project_audit_v109_20261009/evidence/INTEGRATION_REMAINDERS/source_blobs/6877977971e2e7a68b8edd92594a09e5157516791a3c79db1afb2a33f6bd3acc.txt"
+        },
+        {
+          "path": "tests/w1_exact_ranged_delivery_test.gd",
+          "sha256": "5b3aeae0ab382de9955dff10c1b2e4ef19a7d0d582f06756e4236bef1d1acc8f",
+          "retained": "docs/review/full_project_audit_v109_20261009/evidence/INTEGRATION_REMAINDERS/source_blobs/5b3aeae0ab382de9955dff10c1b2e4ef19a7d0d582f06756e4236bef1d1acc8f.txt"
+        }
+      ],
+      "actual_command": {
+        "script": "tools/run_godot_tests.ps1",
+        "TestPaths": [
+          "tests/enemy_mass_death_batch_pipeline_test.tscn",
+          "tests/hc_monster_ai/combat_epoch_delivery_test.tscn",
+          "tests/monster_magic_reaction_continuation_test.tscn"
+        ],
+        "TimeoutSeconds": 30,
+        "Verbose": true
+      },
+      "custom_check_receipt": "retained below"
+    },
+    {
+      "number": 52,
+      "stage": "v109_direct52_combat_epoch",
+      "tested_tree": "2da0be8c8a8de4509a4f0e18b556f49c5f4d2836",
+      "input_fingerprint": "f044916194380ce6e7750863c0bfa714e527c61d9200be6510e43a427b87045c",
+      "engine": {
+        "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+        "sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+        "bytes": 198152
+      },
+      "runner_receipt": "outputs/test_logs/v109_direct52_combat_epoch/logs/runner_results_adhoc_20261010_090921_479_16552.json",
+      "invocation_id": "70bcfcd9-ae89-4c01-b238-30729ce4de61",
+      "passed": 1,
+      "failed": 0,
+      "results": [
+        {
+          "test_name": "combat_epoch_delivery_test",
+          "test_path": "tests/hc_monster_ai/combat_epoch_delivery_test.tscn",
+          "wrapper_process_id": 11072,
+          "wrapper_started_utc": "2026-10-10T01:09:11.3119758Z",
+          "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\v109_direct52_combat_epoch",
+          "fixed_fps": 0,
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-10T01:09:41.3258500Z",
+          "native_exit_observed_utc": "2026-10-10T01:09:20.0231361Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "",
+          "framework_receipt_valid": null,
+          "result": "PASS",
+          "reason": ""
+        }
+      ],
+      "changed_fixture_blobs": [
+        {
+          "path": "tests/enemy_mass_death_batch_pipeline_test.gd",
+          "sha256": "e26dda07493acba46f6b65399cd9c36e0f38759f9f1173c0aaca28676907229f",
+          "retained": "docs/review/full_project_audit_v109_20261009/evidence/INTEGRATION_REMAINDERS/source_blobs/e26dda07493acba46f6b65399cd9c36e0f38759f9f1173c0aaca28676907229f.txt"
+        },
+        {
+          "path": "tests/hc_monster_ai/combat_epoch_delivery_test.gd",
+          "sha256": "e07870d62c99066ca30c1210c37d591256cae9bb6d561e6be99712840cf1ebb3",
+          "retained": "docs/review/full_project_audit_v109_20261009/evidence/INTEGRATION_REMAINDERS/source_blobs/e07870d62c99066ca30c1210c37d591256cae9bb6d561e6be99712840cf1ebb3.txt"
+        },
+        {
+          "path": "tests/monster_attack_los_cache_test.gd",
+          "sha256": "3c2e160cb38cbe5232c05aab07e14adab19e2dcf6fd433393a57332d4bc23d07",
+          "retained": "docs/review/full_project_audit_v109_20261009/evidence/INTEGRATION_REMAINDERS/source_blobs/3c2e160cb38cbe5232c05aab07e14adab19e2dcf6fd433393a57332d4bc23d07.txt"
+        },
+        {
+          "path": "tests/monster_magic_reaction_continuation_test.gd",
+          "sha256": "b4ed25652b8bac24b4a80b00b560bcb38eab76fe3099ea92c6fbb48850500bed",
+          "retained": "docs/review/full_project_audit_v109_20261009/evidence/INTEGRATION_REMAINDERS/source_blobs/b4ed25652b8bac24b4a80b00b560bcb38eab76fe3099ea92c6fbb48850500bed.txt"
+        },
+        {
+          "path": "tests/monster_struck_runtime_test.gd",
+          "sha256": "df1309de48aa0ce3fd375d429690391fcc93a5e2799977f0d4bd67c9b237cbcf",
+          "retained": "docs/review/full_project_audit_v109_20261009/evidence/INTEGRATION_REMAINDERS/source_blobs/df1309de48aa0ce3fd375d429690391fcc93a5e2799977f0d4bd67c9b237cbcf.txt"
+        },
+        {
+          "path": "tests/monster_target_magic_attack_test.gd",
+          "sha256": "7392da66eb708fff6f9dad1bbb3147fb2fa6d8de40d0c3d30931a6c1c17d3434",
+          "retained": "docs/review/full_project_audit_v109_20261009/evidence/INTEGRATION_REMAINDERS/source_blobs/7392da66eb708fff6f9dad1bbb3147fb2fa6d8de40d0c3d30931a6c1c17d3434.txt"
+        },
+        {
+          "path": "tests/player_hit_reaction_policy_test.gd",
+          "sha256": "c9ebb475c9dca16c5a852cc1fbbeb64436d300de105a07a722016e3ece44db4c",
+          "retained": "docs/review/full_project_audit_v109_20261009/evidence/INTEGRATION_REMAINDERS/source_blobs/c9ebb475c9dca16c5a852cc1fbbeb64436d300de105a07a722016e3ece44db4c.txt"
+        },
+        {
+          "path": "tests/player_skill_struck_chain_test.gd",
+          "sha256": "cbfaac49965a3b24b10646e1201dd84e256bbd5e3118dfd52b0e57c6a970362e",
+          "retained": "docs/review/full_project_audit_v109_20261009/evidence/INTEGRATION_REMAINDERS/source_blobs/cbfaac49965a3b24b10646e1201dd84e256bbd5e3118dfd52b0e57c6a970362e.txt"
+        },
+        {
+          "path": "tests/source176_r3/release_lifecycle_test.gd",
+          "sha256": "c86b7d263710d3adeb9ca5921888fd804d0466c09107dc543fb1cf6eeb271919",
+          "retained": "docs/review/full_project_audit_v109_20261009/evidence/INTEGRATION_REMAINDERS/source_blobs/c86b7d263710d3adeb9ca5921888fd804d0466c09107dc543fb1cf6eeb271919.txt"
+        },
+        {
+          "path": "tests/special_actor_target_magic_gap_test.gd",
+          "sha256": "6877977971e2e7a68b8edd92594a09e5157516791a3c79db1afb2a33f6bd3acc",
+          "retained": "docs/review/full_project_audit_v109_20261009/evidence/INTEGRATION_REMAINDERS/source_blobs/6877977971e2e7a68b8edd92594a09e5157516791a3c79db1afb2a33f6bd3acc.txt"
+        },
+        {
+          "path": "tests/w1_exact_ranged_delivery_test.gd",
+          "sha256": "5b3aeae0ab382de9955dff10c1b2e4ef19a7d0d582f06756e4236bef1d1acc8f",
+          "retained": "docs/review/full_project_audit_v109_20261009/evidence/INTEGRATION_REMAINDERS/source_blobs/5b3aeae0ab382de9955dff10c1b2e4ef19a7d0d582f06756e4236bef1d1acc8f.txt"
+        }
+      ],
+      "actual_command": {
+        "script": "tools/run_godot_tests.ps1",
+        "TestPaths": [
+          "tests/hc_monster_ai/combat_epoch_delivery_test.tscn"
+        ],
+        "TimeoutSeconds": 30,
+        "Verbose": true
+      },
+      "custom_check_receipt": "retained below"
+    }
+  ],
+  "final_input_freeze_check": {
+    "status": "PASS",
+    "files": 2531,
+    "changed": []
+  },
+  "final_scoped_disposition": {
+    "eight_unmodified_fixtures": "PASS reused from50: their fixture/runtime inputs remain unchanged; not rerun",
+    "mass_death": "PASS235 from51: real32 deaths, positive real roll/materialized count, RNG parity and one commit; independent eager-roll Node is explicitly freed",
+    "monster_magic_continuation": "PASS92 from51: explicit delayed-release diagnostic subcase, production immediate default asserted and restored",
+    "combat_epoch": "PASS40 from52: explicit delayed epoch case and seeded actual positive spell hit, real evade/defense authority unchanged",
+    "original_failures": "FAIL50 three; FAIL51 one retained; never overwritten by final selected scopes",
+    "unproven_triage_claims": "The eager-roll Node is used, not unused. get_path occurred alongside verbose leak diagnostics; exact caller ownership is MISSING, and a deferred production cleanup fault is not established. Freeing the owned oracle removed the entire eight-object/three-resource leak group.",
+    "DEVICE_TEST": "NOT_RUN",
+    "performance": "NOT_RUN",
+    "whole_project_audit": "MISSING"
+  }
+}

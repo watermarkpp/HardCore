@@ -1,0 +1,376 @@
+{
+  "schema": "hardcore.cross_batch_responsibility_gaps.v1",
+  "baseline": "684824ac7bb59ac903054b26b3435441b8a2f152",
+  "generated_scope": "read-only extraction from existing B01-B06 artifacts; B07A/B07B/B08 not audited here",
+  "source_materials": [
+    {
+      "batch": "B01",
+      "fixed_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175",
+      "coverage": "external/B01/COVERAGE.json",
+      "binding": "external/B01/SOURCE_BINDING.json",
+      "gaps": "external/B01/VALIDATION_GAPS.md"
+    },
+    {
+      "batch": "B02",
+      "fixed_sha": "ed2d87121de80c84caaa3f096c3a5acb71d4946f",
+      "coverage": "external/B02/COVERAGE.json",
+      "binding": "external/B02/SOURCE_BINDING.json",
+      "gaps": "external/B02/VALIDATION_GAPS.md"
+    },
+    {
+      "batch": "B02_followup",
+      "fixed_sha": "ed2d87121de80c84caaa3f096c3a5acb71d4946f",
+      "coverage": "external/B02_followup/COVERAGE.json",
+      "binding": "external/B02_followup/SOURCE_BINDING.json",
+      "gaps": "external/B02_followup/VALIDATION_GAPS.md"
+    },
+    {
+      "batch": "B03",
+      "fixed_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "coverage": "external/B03/COVERAGE.json",
+      "binding": "external/B03/SOURCE_BINDING.json",
+      "gaps": "external/B03/VALIDATION_GAPS.md"
+    },
+    {
+      "batch": "B04",
+      "fixed_sha": "172125ae99e3c4adf19af82da2720934a52f9537",
+      "coverage": "external/B04/COVERAGE.json",
+      "binding": "external/B04/SOURCE_BINDING.json",
+      "gaps": "external/B04/VALIDATION_GAPS.md"
+    },
+    {
+      "batch": "B05",
+      "fixed_sha": "dfcfb9cda1b88d71d7cca3b432ba812831d93c23",
+      "coverage": "external/B05/COVERAGE.json",
+      "binding": "external/B05/SOURCE_BINDING.json",
+      "gaps": "external/B05/VALIDATION_GAPS.md"
+    },
+    {
+      "batch": "B06",
+      "fixed_sha": "d145826b7305ad918893ba0098db2595ae01f53a",
+      "coverage": "external/B06/COVERAGE.json",
+      "binding": "external/B06/SOURCE_BINDING.json",
+      "gaps": "external/B06/VALIDATION_GAPS.md"
+    }
+  ],
+  "gaps": [
+    {
+      "gap_id": "B01-SEM-BOOTSTRAP-RESIDUAL",
+      "path": "scripts/game_root.gd",
+      "module": "bootstrap/runtime",
+      "responsibility": "Complete non-bootstrap GameRoot consumers and transition/recovery ownership outside the reviewed partial functions.",
+      "source_batch": "B01",
+      "fixed_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175",
+      "report_location": "external/B01/VALIDATION_GAPS.md#V-B01-01",
+      "status": "MISSING",
+      "gap_class": "semantic_review",
+      "reuse_or_next_action": "B07/B08 must name the remaining entrypoints before claiming closure; do not rerun the reviewed bootstrap slice."
+    },
+    {
+      "gap_id": "B01-SEM-RESOURCE-FAILURE",
+      "path": "scripts/features/runtime/feature_resource_preparation.gd; scripts/layers/runtime/content_layer_registry.gd",
+      "module": "resource preparation/claims",
+      "responsibility": "FAILED, CANCELLED, ERR_BUSY, owner retirement, and accepted-claim handoff across every caller, including error receipt preservation.",
+      "source_batch": "B01",
+      "fixed_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175",
+      "report_location": "external/B01/VALIDATION_GAPS.md#V-B01-02; external/B01/VALIDATION_GAPS.md#V-B01-04",
+      "status": "MISSING",
+      "gap_class": "semantic_review",
+      "reuse_or_next_action": "Reuse B01/B01-native evidence for the reviewed service; B07/B08 should cover only unreviewed callers and the retained negative cases."
+    },
+    {
+      "gap_id": "B01-DYN-STARTUP-FAILURE",
+      "path": "scripts/startup_loading.gd; scripts/character_select.gd",
+      "module": "startup/resource loading",
+      "responsibility": "A real startup failure receipt and cancellation/owner-exit behavior are not retained as a complete dynamic scope.",
+      "source_batch": "B01",
+      "fixed_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175",
+      "report_location": "external/B01/VALIDATION_GAPS.md#V-B01-03; external/B01/VALIDATION_GAPS.md#V-B01-05",
+      "status": "NOT_RUN",
+      "gap_class": "dynamic_evidence",
+      "reuse_or_next_action": "Run only an isolated accepted failure/exit receipt when a later batch owns it; preserve ObjectDB cleanup warnings as separate evidence."
+    },
+    {
+      "gap_id": "B01-DYN-MANIFEST-OUTSIDE",
+      "path": "AUDIT_SCOPE_MANIFEST.json",
+      "module": "audit boundary",
+      "responsibility": "Seventeen manifest module groups were not semantically audited; their concrete paths are not enumerated in the B01 gap report.",
+      "source_batch": "B01",
+      "fixed_sha": "dbd78d3301c2af6cfd9e070abe8cc847e6353175",
+      "report_location": "external/B01/COVERAGE.json#limitations",
+      "status": "MISSING",
+      "gap_class": "semantic_review",
+      "reuse_or_next_action": "B07/B08 must resolve names from the manifest before assigning a reviewer; do not treat the count as function coverage."
+    },
+    {
+      "gap_id": "B02-SEM-COMBAT-BOUNDARIES",
+      "path": "scripts/enemy.gd; scripts/player_state.gd",
+      "module": "combat/targeting",
+      "responsibility": "Windup pause, projectile contact ordering, movement publication, equipment mutation, submission rejection, MP validation, and incoming-damage lifesteal remain separate semantic responsibilities.",
+      "source_batch": "B02",
+      "fixed_sha": "ed2d87121de80c84caaa3f096c3a5acb71d4946f",
+      "report_location": "external/B02/VALIDATION_GAPS.md#B02-001..B02-007",
+      "status": "MISSING",
+      "gap_class": "semantic_review",
+      "reuse_or_next_action": "Retain the already closed geometry/visual slices; assign each named consumer to a later semantic review or mark it explicitly out of scope."
+    },
+    {
+      "gap_id": "B02-SEM-VISUAL-FOLLOWUP",
+      "path": "scripts/caster_skill_visual_registry.gd; scripts/caster_skill_animation_player.gd; scripts/caster_skill_visual_effect.gd",
+      "module": "skill visual lifecycle",
+      "responsibility": "Full damaged-resource/accepted-effect E2E through HP/MP/cooldown remains outside the component proof; lease and terminal behavior are only component-scoped.",
+      "source_batch": "B02_followup",
+      "fixed_sha": "ed2d87121de80c84caaa3f096c3a5acb71d4946f",
+      "report_location": "external/B02_followup/VALIDATION_GAPS.md#B02-008",
+      "status": "NOT_RUN",
+      "gap_class": "dynamic_evidence",
+      "reuse_or_next_action": "Reuse the direct25/related26 component evidence; only a true malformed production frame path with gameplay state is a new test, not a rerun of the component contract."
+    },
+    {
+      "gap_id": "B02-SEM-TARGET-METADATA",
+      "path": "scripts/enemy.gd; scripts/runtime_combat_spatial_index.gd",
+      "module": "combat geometry",
+      "responsibility": "Unreachable target-position handling and geometry-size drift need named caller coverage after the closed metadata/geometry reports.",
+      "source_batch": "B02_followup",
+      "fixed_sha": "ed2d87121de80c84caaa3f096c3a5acb71d4946f",
+      "report_location": "external/B02_followup/VALIDATION_GAPS.md#B02-009; external/B02_followup/VALIDATION_GAPS.md#B02-010",
+      "status": "MISSING",
+      "gap_class": "semantic_review",
+      "reuse_or_next_action": "B07/B08 should bind the exact target/geometry consumers and reuse the fixed source fingerprints."
+    },
+    {
+      "gap_id": "B02-DYN-ANDROID-COMBAT",
+      "path": "project.godot; export_presets.cfg; scripts/game_root.gd",
+      "module": "combat/native delivery",
+      "responsibility": "No Android/device or sustained 60-FPS evidence covers the remaining combat consumers.",
+      "source_batch": "B02",
+      "fixed_sha": "ed2d87121de80c84caaa3f096c3a5acb71d4946f",
+      "report_location": "external/B02/COVERAGE.json#device",
+      "status": "NOT_RUN",
+      "gap_class": "dynamic_evidence",
+      "reuse_or_next_action": "Do not rerun PC evidence as a substitute; this is a separate device scope only if release acceptance requires it."
+    },
+    {
+      "gap_id": "B03-SEM-SUMMON-LIFECYCLE",
+      "path": "scripts/summon_actor.gd; scripts/summon_visual_registry.gd",
+      "module": "summon/state machine",
+      "responsibility": "Far-follow/blocked-wall landing, same-life serial rejection, summon burst, and state-owner transition contracts are not all closed by the source/fixture audit.",
+      "source_batch": "B03",
+      "fixed_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "report_location": "external/B03/VALIDATION_GAPS.md#B03-002; external/B03/VALIDATION_GAPS.md#B03-004",
+      "status": "MISSING",
+      "gap_class": "semantic_review",
+      "reuse_or_next_action": "Use the retained direct32/related33 functional evidence; remaining cleanup and lifecycle failures stay distinct from target-state semantics."
+    },
+    {
+      "gap_id": "B03-SEM-PROJECTILE-DAMAGE",
+      "path": "scripts/enemy.gd; scripts/player_state.gd",
+      "module": "projectile/damage",
+      "responsibility": "ID194 projectile damage timing and accepted attack-to-damage ordering remain a named semantic gap.",
+      "source_batch": "B03",
+      "fixed_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "report_location": "external/B03/VALIDATION_GAPS.md#B03-001",
+      "status": "MISSING",
+      "gap_class": "semantic_review",
+      "reuse_or_next_action": "Assign a focused contract review; do not infer from B02 projectile boundary work."
+    },
+    {
+      "gap_id": "B03-DYN-BUDGET-CATCHUP",
+      "path": "scripts/monster_ai_package/decision_budget.gd; scripts/runtime_combat_spatial_index.gd",
+      "module": "AI budget/physics",
+      "responsibility": "Physics CPU, catch-up, and service fairness require comparable dynamic evidence under the current source.",
+      "source_batch": "B03",
+      "fixed_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "report_location": "external/B03/VALIDATION_GAPS.md#B03-003",
+      "status": "NOT_RUN",
+      "gap_class": "dynamic_evidence",
+      "reuse_or_next_action": "Use same-load measurements with queue/service latency; the earlier reports do not establish Android performance."
+    },
+    {
+      "gap_id": "B03-DYN-ANDROID-SUMMON",
+      "path": "scripts/summon_actor.gd; scenes/main.tscn",
+      "module": "summon/native delivery",
+      "responsibility": "Android/device validation for summon and visual lifecycle is absent.",
+      "source_batch": "B03",
+      "fixed_sha": "4e77c619249450b7c33e833c2bb3531f3f120bfc",
+      "report_location": "external/B03/COVERAGE.json#native; external/B03/COVERAGE.json#device",
+      "status": "NOT_RUN",
+      "gap_class": "dynamic_evidence",
+      "reuse_or_next_action": "Only required for a release/device claim; do not convert the PC fixture PASS into device coverage."
+    },
+    {
+      "gap_id": "B04-SEM-DROP-PROFILES",
+      "path": "assets/data/source_priority_policy.json; assets/data/equipment_*; scripts/identity/entity_registry.gd",
+      "module": "drop/equipment authority",
+      "responsibility": "Allowed spawn IDs, canonical profiles, missing profiles, and source-priority/authoring ownership are not fully reconciled.",
+      "source_batch": "B04",
+      "fixed_sha": "172125ae99e3c4adf19af82da2720934a52f9537",
+      "report_location": "external/B04/VALIDATION_GAPS.md#B04-001; external/B04/VALIDATION_GAPS.md#B04-003",
+      "status": "MISSING",
+      "gap_class": "semantic_review",
+      "reuse_or_next_action": "Keep missing/conflicting identities fail-closed; a later review must cite exact source rows and the formal generator."
+    },
+    {
+      "gap_id": "B04-SEM-PERSISTENCE-RECEIPTS",
+      "path": "scripts/loot_runtime_service.gd; scripts/json_persistence_service.gd; scripts/json_persistence_job.gd",
+      "module": "loot/persistence",
+      "responsibility": "Map loot/pickup receipts, duplicate receipt handling, transition, and transaction ABA boundaries remain incomplete.",
+      "source_batch": "B04",
+      "fixed_sha": "172125ae99e3c4adf19af82da2720934a52f9537",
+      "report_location": "external/B04/VALIDATION_GAPS.md#B04-002",
+      "status": "MISSING",
+      "gap_class": "semantic_review",
+      "reuse_or_next_action": "Cross-reference B06 persistence work but do not assume map-loot durability was covered by the map editor tests."
+    },
+    {
+      "gap_id": "B04-SEM-ACTIVATION-AUTHORING",
+      "path": "assets/data/*; tools/loot_sheet_compiler*",
+      "module": "authoring/compiler",
+      "responsibility": "PENDING_ACTIVATION metadata, price policy, equipment art, and generated-sheet provenance still have authoring responsibilities without a closed runtime contract.",
+      "source_batch": "B04",
+      "fixed_sha": "172125ae99e3c4adf19af82da2720934a52f9537",
+      "report_location": "external/B04/VALIDATION_GAPS.md#B04-003; external/B04/VALIDATION_GAPS.md#B04-004",
+      "status": "BLOCKED",
+      "gap_class": "user_decision",
+      "reuse_or_next_action": "Requires authoritative authoring/product decision or a named compiler owner; no fallback or hand-edited generated data."
+    },
+    {
+      "gap_id": "B05-SEM-AUDIO-CARDINALITY",
+      "path": "scripts/audio_runtime_service.gd; scripts/enemy.gd",
+      "module": "audio owner lifecycle",
+      "responsibility": "Current Enemy owner frontier repair is scoped; non-Enemy callers and nonmonotonic release/session identities still need explicit ownership boundaries.",
+      "source_batch": "B05",
+      "fixed_sha": "dfcfb9cda1b88d71d7cca3b432ba812831d93c23",
+      "report_location": "external/B05/VALIDATION_GAPS.md#B05-003; docs/review/full_project_audit_v109_20261009/B05_NONMONOTONIC_AUDIO_SCOPE.md",
+      "status": "MISSING",
+      "gap_class": "semantic_review",
+      "reuse_or_next_action": "Reuse B05 source/native ledger for Enemy callers; next review must name any reachable non-Enemy producer before changing the service."
+    },
+    {
+      "gap_id": "B05-SEM-INPUT-POLICY",
+      "path": "scripts/system_menu_panel.gd; scripts/player_state.gd",
+      "module": "input/quick-slot",
+      "responsibility": "Simultaneous long-press quick-slot policy is a product/semantic decision, beyond the closed cancel and scroll-owner fixes.",
+      "source_batch": "B05",
+      "fixed_sha": "dfcfb9cda1b88d71d7cca3b432ba812831d93c23",
+      "report_location": "external/B05/VALIDATION_GAPS.md#B05-004",
+      "status": "BLOCKED",
+      "gap_class": "user_decision",
+      "reuse_or_next_action": "Obtain the intended precedence and then add a focused contract; do not change the existing input cancellation behavior."
+    },
+    {
+      "gap_id": "B05-DYN-ANDROID-AUDIO",
+      "path": "scripts/audio_runtime_service.gd; scripts/features/runtime/feature_resource_preparation.gd",
+      "module": "audio startup/performance",
+      "responsibility": "Android startup BGM/SFX loading CPU/memory and 60-FPS evidence is absent.",
+      "source_batch": "B05",
+      "fixed_sha": "dfcfb9cda1b88d71d7cca3b432ba812831d93c23",
+      "report_location": "external/B05/VALIDATION_GAPS.md#B05-005",
+      "status": "NOT_RUN",
+      "gap_class": "dynamic_evidence",
+      "reuse_or_next_action": "The PC startup lifecycle audit and native component tests are reusable source evidence, not Android performance proof."
+    },
+    {
+      "gap_id": "B06-SEM-CRASH-DROP",
+      "path": "scripts/layers/runtime/loot_runtime_service.gd; scripts/json_persistence_service.gd",
+      "module": "death/drop persistence",
+      "responsibility": "Abnormal process kill between XP persistence, roll, materialization, and save remains a user/product contract decision.",
+      "source_batch": "B06",
+      "fixed_sha": "d145826b7305ad918893ba0098db2595ae01f53a",
+      "report_location": "external/B06/VALIDATION_GAPS.md#B06-005; docs/review/full_project_audit_v109_20261009/B06_FINAL_DISPOSITION.md",
+      "status": "BLOCKED",
+      "gap_class": "user_decision",
+      "reuse_or_next_action": "User must choose crash durability semantics before implementation; do not silently add a second persistence authority."
+    },
+    {
+      "gap_id": "B06-SEM-METADATA-DRIFT",
+      "path": "scripts/map_editor/map_editor_app.gd; tools/publish_formal_map_releases.gd",
+      "module": "map authoring provenance",
+      "responsibility": "Visual/source digest disagreements and matching-PNG metadata drift require authoring/generator ownership resolution.",
+      "source_batch": "B06",
+      "fixed_sha": "d145826b7305ad918893ba0098db2595ae01f53a",
+      "report_location": "external/B06/VALIDATION_GAPS.md#B06-006",
+      "status": "MISSING",
+      "gap_class": "semantic_review",
+      "reuse_or_next_action": "Trace the formal generator and source priority policy; do not repair generated JSON by hand."
+    },
+    {
+      "gap_id": "B06-DYN-PORTAL-TRAVERSAL",
+      "path": "scripts/map_editor/map_editor_runtime_bridge.gd; scripts/map_assets/iso_footprint_geometry.gd",
+      "module": "map runtime traversal",
+      "responsibility": "Portal footprint/collision actual traversal has not been dynamically established despite aggregate authoring checks.",
+      "source_batch": "B06",
+      "fixed_sha": "d145826b7305ad918893ba0098db2595ae01f53a",
+      "report_location": "external/B06/VALIDATION_GAPS.md#B06-007",
+      "status": "NOT_RUN",
+      "gap_class": "dynamic_evidence",
+      "reuse_or_next_action": "A focused runtime traversal case is needed only for this contract; reuse B06 aggregate map/source checks."
+    },
+    {
+      "gap_id": "B06-DYN-PROCESS-INTERRUPT",
+      "path": "scripts/map_editor/map_editor_app.gd; scripts/layers/runtime/content_layer_registry.gd",
+      "module": "map save/publish recovery",
+      "responsibility": "Process interruption/crash-window recovery is distinct from the closed save failure/numeric identity tests.",
+      "source_batch": "B06",
+      "fixed_sha": "d145826b7305ad918893ba0098db2595ae01f53a",
+      "report_location": "external/B06/VALIDATION_GAPS.md#B06-001; #B06-002",
+      "status": "NOT_RUN",
+      "gap_class": "dynamic_evidence",
+      "reuse_or_next_action": "Do not rerun B06-003/004; preserve their native evidence and add only an isolated interruption/recovery proof if release scope requires it."
+    }
+  ],
+  "reused_closed_scopes": [
+    {
+      "batch": "B06",
+      "items": [
+        "B06-003 save failure then build/publish gate",
+        "B06-004 runtime numeric identity"
+      ],
+      "evidence": "B06_FINAL_DISPOSITION.md; B06_NATIVE_VERIFICATION_LEDGER.md",
+      "action": "REUSED_CLOSED; related source and native evidence are already bound; no rerun."
+    },
+    {
+      "batch": "B02_followup",
+      "items": [
+        "B02-008 component visual terminal/lease contract",
+        "B02-010 geometry metadata"
+      ],
+      "evidence": "B02_VISUAL_NATIVE_LEDGER.md; B02_GEOMETRY_METADATA_FINAL_DISPOSITION.md",
+      "action": "REUSED_CLOSED at the component/metadata scope only; the E2E malformed production-frame scope remains separate above."
+    },
+    {
+      "batch": "B05",
+      "items": [
+        "B05-003 Enemy audio owner frontier",
+        "B05 input cancel/scroll owner"
+      ],
+      "evidence": "B05_AUDIO_LEDGER_DISPOSITION.md; B05_INPUT_CANCEL_DISPOSITION.md; B05_SCROLL_OWNER_DISPOSITION.md",
+      "action": "REUSED_CLOSED for the tested producers and source stage; do not broaden to unreviewed callers."
+    }
+  ],
+  "future_batches": {
+    "B07A": "NOT_RUN_REPORT_MISSING",
+    "B07B": "NOT_RUN",
+    "B08": "NOT_RUN"
+  },
+  "status_vocabulary": [
+    "PASS",
+    "FAIL",
+    "BLOCKED",
+    "NOT_RUN",
+    "MISSING"
+  ],
+  "main_audit_materials": [
+    "AUDIT_PROGRESS.md",
+    "B01_FINAL_SOURCE_REVIEW.md",
+    "B01_NATIVE_VERIFICATION_LEDGER.md",
+    "B02_VISUAL_FINAL_SOURCE_REVIEW.md",
+    "B02_VISUAL_NATIVE_LEDGER.md",
+    "B03_NATIVE_VERIFICATION_LEDGER.json",
+    "B04_DROP_COVERAGE_DISPOSITION.md",
+    "B05_AUDIO_LEDGER_DISPOSITION.md",
+    "B05_NATIVE_VERIFICATION_LEDGER.json",
+    "B06_FINAL_DISPOSITION.md",
+    "B06_NATIVE_VERIFICATION_LEDGER.md"
+  ]
+}

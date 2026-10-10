@@ -1,0 +1,74 @@
+{
+  "status": "PASS",
+  "scope": "Byte-identical report reception only; no gameplay acceptance",
+  "batch": "B07A",
+  "report_commit": "7335825e127e3056d1f2b5b65b41e04bd989946a",
+  "report_parent": "3fda44b4cdff29ce2c3b7526315670defc5c2533",
+  "audited_source_commit": "684824ac7bb59ac903054b26b3435441b8a2f152",
+  "files": [
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B07A/COVERAGE.json",
+      "original_git_path": "external/B07A/COVERAGE.json",
+      "bytes": 1829681,
+      "sha256": "e00aa70606ec7dd4d7d4637b5770920ea6985330c3dcb78dd71d57ccf46eae4a",
+      "git_blob": "7233246c2349bec937967f752e033388c01c8ad3"
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B07A/FINDINGS.csv",
+      "original_git_path": "external/B07A/FINDINGS.csv",
+      "bytes": 8901,
+      "sha256": "735d7343f49e1152c24321d282fe5ef08cf96f1b4aa01f09c1ab246cb943c5ee",
+      "git_blob": "310a6bf00d49910385edf8c4dd18fda7348edcaf"
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B07A/FINDINGS.json",
+      "original_git_path": "external/B07A/FINDINGS.json",
+      "bytes": 13638,
+      "sha256": "0a394acd812ff34e7ab2ac25514be9dad8a86cdb8d46c4c853c47920831b2ab4",
+      "git_blob": "1fde171aed6895e9501bcd2adfdbced428abd777"
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B07A/FIXED_DATA_CHECKS.json",
+      "original_git_path": "external/B07A/FIXED_DATA_CHECKS.json",
+      "bytes": 11781,
+      "sha256": "4a09056651cd65244321ffdf3ce3092688c45943c4387969e803bcab481b53b8",
+      "git_blob": "6449a752bf5e1df8302b6744f803c9ce0bebe727"
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B07A/REDUNDANCY.md",
+      "original_git_path": "external/B07A/REDUNDANCY.md",
+      "bytes": 28952,
+      "sha256": "66735958d12e9ea0b4fcd5a176053733636497c5af63c4305a0120c9c33bf770",
+      "git_blob": "5cdbbac45e261834d480b41ea385136a50b26242"
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B07A/RESIDUAL_REFERENCE_GRAPH.json",
+      "original_git_path": "external/B07A/RESIDUAL_REFERENCE_GRAPH.json",
+      "bytes": 152310,
+      "sha256": "63fa4d23f02cda91654482c170203256e560f403e7f852fa684fa98631115fde",
+      "git_blob": "2ed9ac28d9e91410e869eac838069af484563d6f"
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B07A/SOURCE_BINDING.json",
+      "original_git_path": "external/B07A/SOURCE_BINDING.json",
+      "bytes": 296874,
+      "sha256": "1f86f7e551bb3846bcf29ab5c4badc793f052d650fb02d8ae3ae979da55190ff",
+      "git_blob": "fcbf5a46e25e22bdaba8da6660edbd5b66fcba11"
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B07A/SUMMARY.md",
+      "original_git_path": "external/B07A/SUMMARY.md",
+      "bytes": 3062,
+      "sha256": "d62c95b3defb63ce4c3560b5ccc0b0afd2ee1db15b7fde4fd5cba9702dbbb77d",
+      "git_blob": "48737a87bb52ae4b9eb001c349b5814e997f1de2"
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B07A/VALIDATION_GAPS.md",
+      "original_git_path": "external/B07A/VALIDATION_GAPS.md",
+      "bytes": 1889,
+      "sha256": "fbd533da9dbd5949c181297124e35ca07aa5a418114f5fd9238a8a518024257b",
+      "git_blob": "3e6fa310c92bf64eabf1abc3e85aa2e742367716"
+    }
+  ],
+  "original_reports_preserved": true
+}

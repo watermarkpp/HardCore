@@ -1,0 +1,206 @@
+{
+	"checks": [
+		{
+			"id": "E-COMBAT-default",
+			"message": "A profile without combatEnabled preserves existing combat behavior",
+			"passed": true
+		},
+		{
+			"id": "E-COMBAT-profile",
+			"message": "Explicit canonical false disables combat while retaining stationary movement",
+			"passed": true
+		},
+		{
+			"id": "E-COMBAT-autonomous",
+			"message": "Disabled actor cannot start, release or move toward its target",
+			"passed": true
+		},
+		{
+			"id": "E-COMBAT-audio",
+			"message": "Disabled actor cannot emit an attack-audio action edge",
+			"passed": true
+		},
+		{
+			"id": "E-COMBAT-projectile",
+			"message": "Disabled actor rejects physical projectile delivery",
+			"passed": true
+		},
+		{
+			"id": "E-COMBAT-target-magic",
+			"message": "Disabled actor rejects target magic delivery",
+			"passed": true
+		},
+		{
+			"id": "E-COMBAT-area-magic",
+			"message": "Disabled actor rejects area magic delivery",
+			"passed": true
+		},
+		{
+			"id": "E-COMBAT-area-attack",
+			"message": "Disabled actor rejects fixed area delivery",
+			"passed": true
+		},
+		{
+			"id": "E-COMBAT-summon",
+			"message": "Disabled actor cannot start a summon combat action",
+			"passed": true
+		},
+		{
+			"id": "E-COMBAT-direct-delivery",
+			"message": "Disabled actor rejects direct melee delivery",
+			"passed": true
+		},
+		{
+			"id": "E-COMBAT-damageable",
+			"message": "Combat-disabled entity remains damageable",
+			"passed": true
+		},
+		{
+			"id": "E-COMBAT-death",
+			"message": "Combat-disabled entity keeps the normal death signal for drop ownership",
+			"passed": true
+		},
+		{
+			"id": "E00-begin",
+			"message": "transition fixture begins",
+			"passed": true
+		},
+		{
+			"id": "E00-hc-start",
+			"message": "HC start rejects an active transition",
+			"passed": true
+		},
+		{
+			"id": "E00-generic-start",
+			"message": "generic delayed start rejects an active transition",
+			"passed": true
+		},
+		{
+			"id": "E00-ready",
+			"message": "transition fixture returns READY",
+			"passed": true
+		},
+		{
+			"id": "E01-production-mode",
+			"message": "production ordinary contact remains immediate",
+			"passed": true
+		},
+		{
+			"id": "E01-freeze",
+			"message": "explicit delayed-release fixture freezes a typed record inside the 1.0 GU box",
+			"passed": true
+		},
+		{
+			"id": "epoch-generic-begin",
+			"message": "transition increments combat epoch",
+			"passed": true
+		},
+		{
+			"id": "epoch-generic-ready",
+			"message": "transition returns READY before settle",
+			"passed": true
+		},
+		{
+			"id": "E01-settle",
+			"message": "old generic melee cannot hit after READY",
+			"passed": true
+		},
+		{
+			"id": "E02-freeze",
+			"message": "physical projectile release starts",
+			"passed": true
+		},
+		{
+			"id": "epoch-projectile-begin",
+			"message": "transition increments combat epoch",
+			"passed": true
+		},
+		{
+			"id": "epoch-projectile-ready",
+			"message": "transition returns READY before settle",
+			"passed": true
+		},
+		{
+			"id": "E02-settle",
+			"message": "old projectile cannot hit after READY",
+			"passed": true
+		},
+		{
+			"id": "E03-hit-seed",
+			"message": "real spell-hit branch has a deterministic seed",
+			"passed": true
+		},
+		{
+			"id": "E03-freeze",
+			"message": "target magic resolves at activation",
+			"passed": true
+		},
+		{
+			"id": "E03-admission",
+			"message": "target magic settles HP at activation",
+			"passed": true
+		},
+		{
+			"id": "E03-pending",
+			"message": "target magic has no delayed damage release",
+			"passed": true
+		},
+		{
+			"id": "epoch-target-magic-begin",
+			"message": "transition increments combat epoch",
+			"passed": true
+		},
+		{
+			"id": "epoch-target-magic-ready",
+			"message": "transition returns READY before settle",
+			"passed": true
+		},
+		{
+			"id": "E03-settle",
+			"message": "activation damage is not repeated after READY",
+			"passed": true
+		},
+		{
+			"id": "E04-freeze",
+			"message": "area magic freezes target records",
+			"passed": true
+		},
+		{
+			"id": "epoch-area-magic-begin",
+			"message": "transition increments combat epoch",
+			"passed": true
+		},
+		{
+			"id": "epoch-area-magic-ready",
+			"message": "transition returns READY before settle",
+			"passed": true
+		},
+		{
+			"id": "E04-settle",
+			"message": "old area magic cannot hit after READY",
+			"passed": true
+		},
+		{
+			"id": "E05-freeze",
+			"message": "area attack freezes target records",
+			"passed": true
+		},
+		{
+			"id": "epoch-area-attack-begin",
+			"message": "transition increments combat epoch",
+			"passed": true
+		},
+		{
+			"id": "epoch-area-attack-ready",
+			"message": "transition returns READY before settle",
+			"passed": true
+		},
+		{
+			"id": "E05-settle",
+			"message": "old area attack cannot hit after READY",
+			"passed": true
+		}
+	],
+	"passed": true,
+	"test": "combat_epoch_delivery"
+}

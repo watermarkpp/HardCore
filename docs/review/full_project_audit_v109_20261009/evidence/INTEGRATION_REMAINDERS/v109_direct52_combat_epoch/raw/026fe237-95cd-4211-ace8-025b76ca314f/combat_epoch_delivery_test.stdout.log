@@ -1,0 +1,118 @@
+WorkerThreadPool: 12 threads, 3 max low-priority.
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+TextServer: Added interface "Dummy"
+TextServer: Added interface "ICU / HarfBuzz / Graphite (Built-in)"
+Using "default" pen tablet driver...
+
+TextServer: Primary interface set to: "ICU / HarfBuzz / Graphite (Built-in)".
+CORE API HASH: 3472268009
+EDITOR API HASH: 2212757246
+SceneTreeFTI: traversal method DEFAULT
+Loading resource: res://scripts/device_lab_patch_bootstrap.gd remapped: res://scripts/device_lab_patch_bootstrap.gd
+Completed load for: 'res://scripts/device_lab_patch_bootstrap.gd' remapped 'res://scripts/device_lab_patch_bootstrap.gd' at thread -1
+Loading resource: res://scripts/audio_preferences.gd remapped: res://scripts/audio_preferences.gd
+Completed load for: 'res://scripts/audio_preferences.gd' remapped 'res://scripts/audio_preferences.gd' at thread -1
+Loading resource: res://scripts/loot_preferences.gd remapped: res://scripts/loot_preferences.gd
+Completed load for: 'res://scripts/loot_preferences.gd' remapped 'res://scripts/loot_preferences.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/content_layer_registry.gd remapped: res://scripts/layers/runtime/content_layer_registry.gd
+Completed load for: 'res://scripts/layers/runtime/content_layer_registry.gd' remapped 'res://scripts/layers/runtime/content_layer_registry.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/world_content_service.gd remapped: res://scripts/layers/runtime/world_content_service.gd
+Completed load for: 'res://scripts/layers/runtime/world_content_service.gd' remapped 'res://scripts/layers/runtime/world_content_service.gd' at thread -1
+Loading resource: res://scripts/layers/presentation/presentation_registry.gd remapped: res://scripts/layers/presentation/presentation_registry.gd
+Completed load for: 'res://scripts/layers/presentation/presentation_registry.gd' remapped 'res://scripts/layers/presentation/presentation_registry.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/targeting_runtime_service.gd remapped: res://scripts/layers/runtime/targeting_runtime_service.gd
+Completed load for: 'res://scripts/layers/runtime/targeting_runtime_service.gd' remapped 'res://scripts/layers/runtime/targeting_runtime_service.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/loot_runtime_service.gd remapped: res://scripts/layers/runtime/loot_runtime_service.gd
+Completed load for: 'res://scripts/layers/runtime/loot_runtime_service.gd' remapped 'res://scripts/layers/runtime/loot_runtime_service.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/combat_runtime_service.gd remapped: res://scripts/layers/runtime/combat_runtime_service.gd
+Completed load for: 'res://scripts/layers/runtime/combat_runtime_service.gd' remapped 'res://scripts/layers/runtime/combat_runtime_service.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/domain_runtime_services.gd remapped: res://scripts/layers/runtime/domain_runtime_services.gd
+Completed load for: 'res://scripts/layers/runtime/domain_runtime_services.gd' remapped 'res://scripts/layers/runtime/domain_runtime_services.gd' at thread -1
+Loading resource: res://scripts/layers/rules/boss_mechanic_registry.gd remapped: res://scripts/layers/rules/boss_mechanic_registry.gd
+Completed load for: 'res://scripts/layers/rules/boss_mechanic_registry.gd' remapped 'res://scripts/layers/rules/boss_mechanic_registry.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/runtime_service_facade.gd remapped: res://scripts/layers/runtime/runtime_service_facade.gd
+Completed load for: 'res://scripts/layers/runtime/runtime_service_facade.gd' remapped 'res://scripts/layers/runtime/runtime_service_facade.gd' at thread -1
+Loaded system CA certificates
+Loading resource: res://tests/hc_monster_ai/combat_epoch_delivery_test.tscn remapped: res://tests/hc_monster_ai/combat_epoch_delivery_test.tscn
+Loading resource: res://tests/hc_monster_ai/combat_epoch_delivery_test.gd remapped: res://tests/hc_monster_ai/combat_epoch_delivery_test.gd
+Loading resource: res://assets/shaders/trial_magic_screen.gdshader remapped: res://assets/shaders/trial_magic_screen.gdshader
+Completed load for: 'res://assets/shaders/trial_magic_screen.gdshader' remapped 'res://assets/shaders/trial_magic_screen.gdshader' at thread -1
+Loading resource: res://assets/art/monsters/effects/monster_target_magic/cow_mage_thunder_magic2.png remapped: res://assets/art/monsters/effects/monster_target_magic/cow_mage_thunder_magic2.png
+Loading resource: res://.godot/imported/cow_mage_thunder_magic2.png-f1ada7cfae9bb41578ecd7be36fbb1ee.ctex remapped: res://.godot/imported/cow_mage_thunder_magic2.png-f1ada7cfae9bb41578ecd7be36fbb1ee.ctex
+Completed load for: 'res://assets/art/monsters/effects/monster_target_magic/cow_mage_thunder_magic2.png' remapped 'res://assets/art/monsters/effects/monster_target_magic/cow_mage_thunder_magic2.png' at thread -1
+Loading resource: res://assets/art/monsters/effects/monster_target_magic/cow_priest_cast_wmon21.png remapped: res://assets/art/monsters/effects/monster_target_magic/cow_priest_cast_wmon21.png
+Loading resource: res://.godot/imported/cow_priest_cast_wmon21.png-541f8f113f1635cd0f77bea1759fddb7.ctex remapped: res://.godot/imported/cow_priest_cast_wmon21.png-541f8f113f1635cd0f77bea1759fddb7.ctex
+Completed load for: 'res://assets/art/monsters/effects/monster_target_magic/cow_priest_cast_wmon21.png' remapped 'res://assets/art/monsters/effects/monster_target_magic/cow_priest_cast_wmon21.png' at thread -1
+Loading resource: res://assets/art/monsters/effects/monster_target_magic/cow_priest_fly_magic.png remapped: res://assets/art/monsters/effects/monster_target_magic/cow_priest_fly_magic.png
+Loading resource: res://.godot/imported/cow_priest_fly_magic.png-4b64792ab4d2f6c6884e9ad1021249a0.ctex remapped: res://.godot/imported/cow_priest_fly_magic.png-4b64792ab4d2f6c6884e9ad1021249a0.ctex
+Completed load for: 'res://assets/art/monsters/effects/monster_target_magic/cow_priest_fly_magic.png' remapped 'res://assets/art/monsters/effects/monster_target_magic/cow_priest_fly_magic.png' at thread -1
+Completed load for: 'res://tests/hc_monster_ai/combat_epoch_delivery_test.gd' remapped 'res://tests/hc_monster_ai/combat_epoch_delivery_test.gd' at thread -1
+Completed load for: 'res://tests/hc_monster_ai/combat_epoch_delivery_test.tscn' remapped 'res://tests/hc_monster_ai/combat_epoch_delivery_test.tscn' at thread -1
+数据库载入完成：地图209 怪物156 Boss20 装备175 技能等级132 掉落槽3424 任务9
+Loading resource: res://assets/art/characters/warrior/male/warrior_idle.png remapped: res://assets/art/characters/warrior/male/warrior_idle.png
+Loading resource: res://.godot/imported/warrior_idle.png-c6644f1287a1424593c1c5309d13bd56.ctex remapped: res://.godot/imported/warrior_idle.png-c6644f1287a1424593c1c5309d13bd56.ctex
+Completed load for: 'res://assets/art/characters/warrior/male/warrior_idle.png' remapped 'res://assets/art/characters/warrior/male/warrior_idle.png' at thread -1
+Loading resource: res://assets/art/items/client/world_wear/dress/male/dress_000_idle.png remapped: res://assets/art/items/client/world_wear/dress/male/dress_000_idle.png
+Loading resource: res://.godot/imported/dress_000_idle.png-f52939ffb3e5a03c3079fa48dd7b6f1b.ctex remapped: res://.godot/imported/dress_000_idle.png-f52939ffb3e5a03c3079fa48dd7b6f1b.ctex
+Completed load for: 'res://assets/art/items/client/world_wear/dress/male/dress_000_idle.png' remapped 'res://assets/art/items/client/world_wear/dress/male/dress_000_idle.png' at thread -1
+Loading resource: res://assets/art/items/client/world_wear/dress/male/dress_000_walk.png remapped: res://assets/art/items/client/world_wear/dress/male/dress_000_walk.png
+Loading resource: res://.godot/imported/dress_000_walk.png-f5b031c298b577c615d8fb47f140fc77.ctex remapped: res://.godot/imported/dress_000_walk.png-f5b031c298b577c615d8fb47f140fc77.ctex
+Completed load for: 'res://assets/art/items/client/world_wear/dress/male/dress_000_walk.png' remapped 'res://assets/art/items/client/world_wear/dress/male/dress_000_walk.png' at thread -1
+Loading resource: res://assets/art/items/client/world_wear/dress/male/dress_000_attack.png remapped: res://assets/art/items/client/world_wear/dress/male/dress_000_attack.png
+Loading resource: res://.godot/imported/dress_000_attack.png-11556c252c9408a330d48e96ebd82b93.ctex remapped: res://.godot/imported/dress_000_attack.png-11556c252c9408a330d48e96ebd82b93.ctex
+Completed load for: 'res://assets/art/items/client/world_wear/dress/male/dress_000_attack.png' remapped 'res://assets/art/items/client/world_wear/dress/male/dress_000_attack.png' at thread -1
+Loading resource: res://assets/art/items/client/world_wear/dress/male/dress_000_cast.png remapped: res://assets/art/items/client/world_wear/dress/male/dress_000_cast.png
+Loading resource: res://.godot/imported/dress_000_cast.png-701fa78992c1ca9d8a4b54d8d2013791.ctex remapped: res://.godot/imported/dress_000_cast.png-701fa78992c1ca9d8a4b54d8d2013791.ctex
+Completed load for: 'res://assets/art/items/client/world_wear/dress/male/dress_000_cast.png' remapped 'res://assets/art/items/client/world_wear/dress/male/dress_000_cast.png' at thread -1
+Loading resource: res://assets/art/items/client/world_wear/dress/male/dress_000_hit.png remapped: res://assets/art/items/client/world_wear/dress/male/dress_000_hit.png
+Loading resource: res://.godot/imported/dress_000_hit.png-97b8efbfe96320878ce66bcdef35c781.ctex remapped: res://.godot/imported/dress_000_hit.png-97b8efbfe96320878ce66bcdef35c781.ctex
+Completed load for: 'res://assets/art/items/client/world_wear/dress/male/dress_000_hit.png' remapped 'res://assets/art/items/client/world_wear/dress/male/dress_000_hit.png' at thread -1
+Loading resource: res://assets/art/items/client/world_wear/dress/male/dress_000_death.png remapped: res://assets/art/items/client/world_wear/dress/male/dress_000_death.png
+Loading resource: res://.godot/imported/dress_000_death.png-878664a61d85f34e25a175a3131ecd54.ctex remapped: res://.godot/imported/dress_000_death.png-878664a61d85f34e25a175a3131ecd54.ctex
+Completed load for: 'res://assets/art/items/client/world_wear/dress/male/dress_000_death.png' remapped 'res://assets/art/items/client/world_wear/dress/male/dress_000_death.png' at thread -1
+Loading resource: res://assets/art/items/client/world_wear/dress/male/dress_000_run.png remapped: res://assets/art/items/client/world_wear/dress/male/dress_000_run.png
+Loading resource: res://.godot/imported/dress_000_run.png-48d93702c1470c3571fa42d59bbee857.ctex remapped: res://.godot/imported/dress_000_run.png-48d93702c1470c3571fa42d59bbee857.ctex
+Completed load for: 'res://assets/art/items/client/world_wear/dress/male/dress_000_run.png' remapped 'res://assets/art/items/client/world_wear/dress/male/dress_000_run.png' at thread -1
+Loading resource: res://assets/art/items/client/world_wear/helmet/male/runtime_hair_002/hair_002_idle.png remapped: res://assets/art/items/client/world_wear/helmet/male/runtime_hair_002/hair_002_idle.png
+Loading resource: res://.godot/imported/hair_002_idle.png-be2bf0c4deb3b1c8963a22a87fa4e579.ctex remapped: res://.godot/imported/hair_002_idle.png-be2bf0c4deb3b1c8963a22a87fa4e579.ctex
+Completed load for: 'res://assets/art/items/client/world_wear/helmet/male/runtime_hair_002/hair_002_idle.png' remapped 'res://assets/art/items/client/world_wear/helmet/male/runtime_hair_002/hair_002_idle.png' at thread -1
+Loading resource: res://assets/art/items/client/world_wear/helmet/male/runtime_hair_002/hair_002_walk.png remapped: res://assets/art/items/client/world_wear/helmet/male/runtime_hair_002/hair_002_walk.png
+Loading resource: res://.godot/imported/hair_002_walk.png-083b6d6ad71728f7ebc899d832d865e0.ctex remapped: res://.godot/imported/hair_002_walk.png-083b6d6ad71728f7ebc899d832d865e0.ctex
+Completed load for: 'res://assets/art/items/client/world_wear/helmet/male/runtime_hair_002/hair_002_walk.png' remapped 'res://assets/art/items/client/world_wear/helmet/male/runtime_hair_002/hair_002_walk.png' at thread -1
+Loading resource: res://assets/art/items/client/world_wear/helmet/male/runtime_hair_002/hair_002_attack.png remapped: res://assets/art/items/client/world_wear/helmet/male/runtime_hair_002/hair_002_attack.png
+Loading resource: res://.godot/imported/hair_002_attack.png-32611c53ff3ee5ce63e0d08f524e1d0b.ctex remapped: res://.godot/imported/hair_002_attack.png-32611c53ff3ee5ce63e0d08f524e1d0b.ctex
+Completed load for: 'res://assets/art/items/client/world_wear/helmet/male/runtime_hair_002/hair_002_attack.png' remapped 'res://assets/art/items/client/world_wear/helmet/male/runtime_hair_002/hair_002_attack.png' at thread -1
+Loading resource: res://assets/art/items/client/world_wear/helmet/male/runtime_hair_002/hair_002_cast.png remapped: res://assets/art/items/client/world_wear/helmet/male/runtime_hair_002/hair_002_cast.png
+Loading resource: res://.godot/imported/hair_002_cast.png-c8984487a4f826b91cad6d667f0f5aa7.ctex remapped: res://.godot/imported/hair_002_cast.png-c8984487a4f826b91cad6d667f0f5aa7.ctex
+Completed load for: 'res://assets/art/items/client/world_wear/helmet/male/runtime_hair_002/hair_002_cast.png' remapped 'res://assets/art/items/client/world_wear/helmet/male/runtime_hair_002/hair_002_cast.png' at thread -1
+Loading resource: res://assets/art/items/client/world_wear/helmet/male/runtime_hair_002/hair_002_hit.png remapped: res://assets/art/items/client/world_wear/helmet/male/runtime_hair_002/hair_002_hit.png
+Loading resource: res://.godot/imported/hair_002_hit.png-135a8df33c8bd646b87419a282a42941.ctex remapped: res://.godot/imported/hair_002_hit.png-135a8df33c8bd646b87419a282a42941.ctex
+Completed load for: 'res://assets/art/items/client/world_wear/helmet/male/runtime_hair_002/hair_002_hit.png' remapped 'res://assets/art/items/client/world_wear/helmet/male/runtime_hair_002/hair_002_hit.png' at thread -1
+Loading resource: res://assets/art/items/client/world_wear/helmet/male/runtime_hair_002/hair_002_death.png remapped: res://assets/art/items/client/world_wear/helmet/male/runtime_hair_002/hair_002_death.png
+Loading resource: res://.godot/imported/hair_002_death.png-ebb5fe8639c7903cb40a69067a3c6b33.ctex remapped: res://.godot/imported/hair_002_death.png-ebb5fe8639c7903cb40a69067a3c6b33.ctex
+Completed load for: 'res://assets/art/items/client/world_wear/helmet/male/runtime_hair_002/hair_002_death.png' remapped 'res://assets/art/items/client/world_wear/helmet/male/runtime_hair_002/hair_002_death.png' at thread -1
+Loading resource: res://assets/art/items/client/world_wear/helmet/male/runtime_hair_002/hair_002_run.png remapped: res://assets/art/items/client/world_wear/helmet/male/runtime_hair_002/hair_002_run.png
+Loading resource: res://.godot/imported/hair_002_run.png-3b2f339eca8427f13f01ba038afda2bb.ctex remapped: res://.godot/imported/hair_002_run.png-3b2f339eca8427f13f01ba038afda2bb.ctex
+Completed load for: 'res://assets/art/items/client/world_wear/helmet/male/runtime_hair_002/hair_002_run.png' remapped 'res://assets/art/items/client/world_wear/helmet/male/runtime_hair_002/hair_002_run.png' at thread -1
+Loading resource: res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_idle.png remapped: res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_idle.png
+Loading resource: res://.godot/imported/wooma_soldier_idle.png-928c7b6a5aee55e89a710b2c051025ef.ctex remapped: res://.godot/imported/wooma_soldier_idle.png-928c7b6a5aee55e89a710b2c051025ef.ctex
+Completed load for: 'res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_idle.png' remapped 'res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_idle.png' at thread -1
+Loading resource: res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_walk.png remapped: res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_walk.png
+Loading resource: res://.godot/imported/wooma_soldier_walk.png-f955ffca9cb6f9f913c3d40d8e552349.ctex remapped: res://.godot/imported/wooma_soldier_walk.png-f955ffca9cb6f9f913c3d40d8e552349.ctex
+Completed load for: 'res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_walk.png' remapped 'res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_walk.png' at thread -1
+Loading resource: res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_attack.png remapped: res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_attack.png
+Loading resource: res://.godot/imported/wooma_soldier_attack.png-9a18671fa88ac70d47d94db92df93abd.ctex remapped: res://.godot/imported/wooma_soldier_attack.png-9a18671fa88ac70d47d94db92df93abd.ctex
+Completed load for: 'res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_attack.png' remapped 'res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_attack.png' at thread -1
+Loading resource: res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_hit.png remapped: res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_hit.png
+Loading resource: res://.godot/imported/wooma_soldier_hit.png-f19230be8d9a85cc472c60feaf0025a2.ctex remapped: res://.godot/imported/wooma_soldier_hit.png-f19230be8d9a85cc472c60feaf0025a2.ctex
+Completed load for: 'res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_hit.png' remapped 'res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_hit.png' at thread -1
+Loading resource: res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_death.png remapped: res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_death.png
+Loading resource: res://.godot/imported/wooma_soldier_death.png-fe9fb4079b8a96433f20c5c3725ce7e2.ctex remapped: res://.godot/imported/wooma_soldier_death.png-fe9fb4079b8a96433f20c5c3725ce7e2.ctex
+Completed load for: 'res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_death.png' remapped 'res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_death.png' at thread -1
+Loading resource: res://assets/art/monsters/effects/monster_physical_arrow_v1/Effect_00285.png remapped: res://assets/art/monsters/effects/monster_physical_arrow_v1/Effect_00285.png
+Loading resource: res://.godot/imported/Effect_00285.png-ee3705a0c826f81b94c2668eec359179.ctex remapped: res://.godot/imported/Effect_00285.png-ee3705a0c826f81b94c2668eec359179.ctex
+Completed load for: 'res://assets/art/monsters/effects/monster_physical_arrow_v1/Effect_00285.png' remapped 'res://assets/art/monsters/effects/monster_physical_arrow_v1/Effect_00285.png' at thread -1
+HC_COMBAT_EPOCH_DELIVERY_PASS checks=40
+XR: Clearing primary interface
+XR: Removed interface "Native mobile"
+XR: Removed interface "OpenXR"
