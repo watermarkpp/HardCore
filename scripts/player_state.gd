@@ -516,9 +516,11 @@ func _startup_upgrade_preflight() -> Dictionary:
 	var ids: Dictionary = {}
 	var has_legacy := false
 	var legacy_migration_consumed := false
+	var explicit_empty_profile_index := false
 	if FileAccess.file_exists(profile_index_path) or FileAccess.file_exists(profile_index_path + ".bak"):
 		var index := _startup_upgrade_read(profile_index_path)
 		if not bool(index.success): return index
+		explicit_empty_profile_index = (index.data.get("profiles", []) as Array).is_empty()
 		for entry: Dictionary in index.data.profiles: ids[entry.id] = true
 		legacy_migration_consumed = bool(index.data.get("legacy_migration_consumed", false))
 	var directory := DirAccess.open(profile_directory)
@@ -553,7 +555,8 @@ func _startup_upgrade_preflight() -> Dictionary:
 		if not bool(log.valid) or not _warehouse_transaction_log_is_valid(log.data):
 			return {"success":false, "reason":"invalid_warehouse_transaction_log", "path":shared_warehouse_transaction_log_path}
 	return {"success":true, "ids":ids.keys(), "profiles":all_profiles,
-		"legacy_pending":has_legacy and ids.is_empty() and not legacy_migration_consumed}
+		"legacy_pending":has_legacy and ids.is_empty() and not legacy_migration_consumed,
+		"explicit_empty_legacy_account":explicit_empty_profile_index and has_legacy and ids.is_empty() and not legacy_migration_consumed}
 
 
 func _startup_upgrade_fail(reason: String, path := "") -> bool:
@@ -573,16 +576,22 @@ func finish_startup_save_upgrade() -> bool:
 	if not bool(completion.valid): return _startup_upgrade_fail("upgrade_completion_invalid", backup.archive)
 	var preflight := _startup_upgrade_preflight()
 	if not bool(preflight.success): return _startup_upgrade_fail(preflight.reason, str(preflight.get("path", "")))
+	# A valid durable completion proof is the authority for an older build that
+	# already finished migration before the index marker existed. Preserve the
+	# retained legacy source for backup custody, but do not resurrect a profile
+	# from an explicitly empty index. Missing/invalid proof keeps the normal
+	# first-import path (or fails above) and therefore cannot suppress import.
+	var completed_empty_legacy_account := bool(completion.completed) and bool(preflight.get("explicit_empty_legacy_account", false))
 	_startup_save_upgrade_in_progress = true
 	if DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(profile_directory)) != OK:
 		return _startup_upgrade_fail("profile_directory_failed")
-	_migrate_single_save_to_profile()
+	_migrate_single_save_to_profile(not completed_empty_legacy_account)
 	_recover_shared_warehouse_transaction()
 	if _warehouse_transaction_locked or not _initialize_shared_warehouse():
 		return _startup_upgrade_fail("shared_warehouse_unavailable", shared_warehouse_path)
 	var profiles := _profile_ids_for_shared_warehouse()
 	if not bool(profiles.ok): return _startup_upgrade_fail("profile_index_unavailable", profile_index_path)
-	if bool(preflight.legacy_pending) and not profiles.ids.has("legacy_01"):
+	if bool(preflight.legacy_pending) and not completed_empty_legacy_account and not profiles.ids.has("legacy_01"):
 		return _startup_upgrade_fail("legacy_profile_migration_failed")
 	if not bool(completion.completed):
 		var warehouse_document := _read_json(shared_warehouse_path)
@@ -10110,7 +10119,9 @@ func _update_profile_index(mark_legacy_migration_consumed := false) -> bool:
 	return _write_json_atomic(profile_index_path, index_document)
 
 
-func _migrate_single_save_to_profile() -> void:
+func _migrate_single_save_to_profile(allow_legacy_import := true) -> void:
+	if not allow_legacy_import:
+		return
 	var index_status := _read_json_with_status(profile_index_path)
 	if (
 		FileAccess.file_exists(profile_index_path)

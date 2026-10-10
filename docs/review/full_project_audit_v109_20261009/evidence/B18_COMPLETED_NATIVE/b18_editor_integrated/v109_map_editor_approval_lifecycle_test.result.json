@@ -1,0 +1,72 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "real editor save creates durable document proof",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "saved document is admitted before approval",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "runtime approval validates saved document",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "approval does not invalidate saved proof",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "approved document builds a real candidate",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "candidate binding matches approved document",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "saved approval candidate publishes successfully",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "unsaved authoring edit rejects build and publish",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "invalid save target is rejected",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "failed save keeps publish gate closed",
+      "passed": true
+    }
+  ],
+  "count": 10,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "a81b6de8-e14d-4aa9-9e13-6ecd56b6203b",
+  "passed": 10,
+  "reported_checks": 10,
+  "reported_failures": 0,
+  "run_id": "3bc99c8c-3c80-4da9-9718-4af0c61d074c",
+  "runtime_environment": {
+    "native_process_id": 4308,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\b18_editor_integrated\\runner_a81b6de8-e14d-4aa9-9e13-6ecd56b6203b",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/b18_editor_integrated/runner_a81b6de8-e14d-4aa9-9e13-6ecd56b6203b/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "v109_map_editor_approval_lifecycle_test",
+  "schema_version": 1,
+  "source_content_sha256": "276d7187b78fd25ab8066a3ebe944da06148bd963e0a3fbd90d921214995c5b2",
+  "status": "PASS"
+}

@@ -70,7 +70,13 @@ static func save_override(asset_id: String, draft: Dictionary, path := OVERRIDE_
 	allowed["content_layer"] = "personal_expansion"
 	overrides[asset_id] = allowed
 	payload["overrides"] = overrides
-	return _write_atomic(path, payload)
+	var result := _write_atomic(path, payload)
+	if result.get("ok", false):
+		# The override is the source of the effective catalog. Drop every
+		# derived index only after the atomic promotion succeeds; failed saves
+		# leave the previous cache and source untouched.
+		MapAssetCatalogService.invalidate_cache()
+	return result
 
 
 static func delete_from_palette(asset_id: String, path := OVERRIDE_PATH) -> Dictionary:

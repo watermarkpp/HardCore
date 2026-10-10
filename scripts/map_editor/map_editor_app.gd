@@ -1237,6 +1237,18 @@ func _refresh_asset_tree() -> void:
 		item.set_metadata(0, {"asset_id": str(asset.get("asset_id", "")), "thumbnail": image_path})
 
 
+func _refresh_asset_tree_after_calibration(asset_id: String) -> void:
+	_refresh_asset_tree()
+	var item := _first_asset_tree_item()
+	while item != null:
+		var metadata: Variant = item.get_metadata(0)
+		if metadata is Dictionary and str(metadata.get("asset_id", "")) == asset_id:
+			item.select(0)
+			_activate_asset_tree_item(item)
+			return
+		item = item.get_next_in_tree()
+
+
 func _ensure_asset_tree_item_icon(item: TreeItem) -> void:
 	if item == null or item.get_icon(0) != null:
 		return
@@ -1811,12 +1823,14 @@ func _on_ground_paint_requested(tile: Vector2i, asset_id: String) -> void:
 			status_label.text = "放置拒绝：%s" % placed.get("errors", [])
 		return
 	var paint_result := {}
-	var erase_result := {}
+	var paint_holder := {"value": {}}
 	var command := {
-		"do": func(): paint_result = MapEditorGroundService.record_tile_paint(current_document, tile, asset_id),
-		"undo": func(): erase_result = MapEditorGroundService.record_tile_erase(current_document, tile),
+		"do": func(): return _record_ground_paint_command(paint_holder, tile, asset_id),
+		"undo": func(): return MapEditorGroundService.record_tile_erase(current_document, tile),
 	}
-	if command_stack.execute(command) and paint_result.get("ok", false):
+	var command_accepted := command_stack.execute(command)
+	paint_result = paint_holder["value"]
+	if command_accepted and paint_result.get("ok", false):
 		preview.set_ground_state(paint_result.state)
 		status_label.text = "绘制 %s @ (%d,%d)，dirty=%d" % [asset_id, tile.x, tile.y, paint_result.dirty_count]
 	else:
@@ -2031,6 +2045,14 @@ func _on_update_selected_semantic_pressed() -> void:
 		return
 	var properties := {"display_name": semantic_display_name.text.strip_edges()}
 	var kind := str(entry.get("kind", ""))
+	if kind in ["safe_area", "light", "region_trigger", "monster_spawn", "boss_spawn"]:
+		properties["radius_gu"] = float(semantic_radius.value)
+	if kind in ["monster_spawn", "boss_spawn"]:
+		properties["count"] = int(semantic_count.value)
+		properties["respawn_seconds"] = int(semantic_respawn.value)
+		properties["max_alive"] = int(semantic_max_alive.value)
+	if kind == "npc":
+		properties["facing"] = str(semantic_facing.get_item_metadata(semantic_facing.selected))
 	if kind in ["map_exit", "door"]:
 		properties["target_map_id"] = semantic_target_map.text.strip_edges()
 	if kind == "map_exit":
@@ -2103,12 +2125,22 @@ func _on_selectable_move_requested(selectable_id:String,delta:Vector2i)->void:
 		})
 	else:
 		command_stack.execute({
-			"do": func(): result_holder["value"] = MapEditorGameplaySemanticService.move_entry(current_document, selectable_id, delta),
+			"do": func(): return _move_semantic_command(result_holder, selectable_id, delta),
 			"undo": func(): MapEditorGameplaySemanticService.move_entry(current_document, selectable_id, -delta),
 		})
 	var result: Dictionary = result_holder["value"]
 	preview.set_document(current_document)
 	status_label.text="移动成功" if result.get("ok", false) else "移动失败：%s"%result.get("errors",[])
+
+
+func _record_ground_paint_command(holder: Dictionary, tile: Vector2i, asset_id: String) -> Dictionary:
+	holder["value"] = MapEditorGroundService.record_tile_paint(current_document, tile, asset_id)
+	return holder["value"]
+
+
+func _move_semantic_command(holder: Dictionary, selectable_id: String, delta: Vector2i) -> Dictionary:
+	holder["value"] = MapEditorGameplaySemanticService.move_entry(current_document, selectable_id, delta)
+	return holder["value"]
 
 
 func _on_selectable_delete_requested(selectable_id:String)->void:
@@ -3259,7 +3291,11 @@ func _on_save_calibration_pressed() -> void:
 		"calibration_status": "placeable", "placeable": true,
 	}
 	var result := MapAssetCalibrationService.save_override(selected_asset_id, draft)
-	status_label.text = "校准覆盖已保存：%s" % selected_asset_id if result.ok else "校准未保存：%s" % result.get("errors", [])
+	if result.get("ok", false):
+		_refresh_asset_tree_after_calibration(selected_asset_id)
+		status_label.text = "校准覆盖已保存：%s" % selected_asset_id
+	else:
+		status_label.text = "校准未保存：%s" % result.get("errors", [])
 
 
 func _unhandled_key_input(event: InputEvent) -> void:

@@ -1,0 +1,117 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "fixture file opened",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "seed migration completes",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "seed profile is deleted",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "fixture file opened",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "completed empty account starts successfully",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "completed empty account is not resurrected",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "completed proof blocks legacy profile publication",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "completed empty account preserves legacy source",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "fixture file opened",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "fixture file opened",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "missing proof performs first import",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "missing proof publishes legacy profile",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "fixture file opened",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "invalid boundary seed completes",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "invalid boundary seed deletes profile",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "fixture file opened",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "fixture file opened",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "invalid proof fails closed",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "invalid proof does not import before rejection",
+      "passed": true
+    }
+  ],
+  "count": 19,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "40d5a56d-3570-43db-92ab-2a6a3c62ec65",
+  "passed": 19,
+  "reported_checks": 19,
+  "reported_failures": 0,
+  "run_id": "ffe6c610-1ba6-47a7-900c-869df754f95c",
+  "runtime_environment": {
+    "native_process_id": 22340,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\b17_completed_empty\\runner_40d5a56d-3570-43db-92ab-2a6a3c62ec65",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/b17_completed_empty/runner_40d5a56d-3570-43db-92ab-2a6a3c62ec65/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "v109_profile_completed_empty_preupgrade_test",
+  "schema_version": 1,
+  "source_content_sha256": "61e655513dec1e4da3f325ff50c75c2b1212c576e16e3ec60e9b0052af9bd4ca",
+  "status": "PASS"
+}

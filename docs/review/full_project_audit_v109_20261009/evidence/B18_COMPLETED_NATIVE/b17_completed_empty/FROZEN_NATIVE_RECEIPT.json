@@ -1,0 +1,29 @@
+{
+  "status": "PASS",
+  "input_freeze_status": "PASS",
+  "scope": "Input freeze and individual native results; failed/missing checks remain explicit. Android/GPU/performance NOT_RUN",
+  "candidate_tree": "5f4c4ce072a45470a3db531dba12d476b2fad4ef",
+  "source_fingerprint": "61e655513dec1e4da3f325ff50c75c2b1212c576e16e3ec60e9b0052af9bd4ca",
+  "checked_inputs": 2599,
+  "runner": "outputs\\dot_remote_audit_20261010\\native\\b17_completed_empty\\runner_results_adhoc_20261010_154503_114_5736.json",
+  "invocation_id": "40d5a56d-3570-43db-92ab-2a6a3c62ec65",
+  "engine_log_errors": 0,
+  "main_index_unchanged": true,
+  "results": [
+    {
+      "test_path": "tests/framework/v109_profile_completed_empty_preupgrade_test.tscn",
+      "result": "PASS",
+      "reason": "",
+      "timeout": false,
+      "effective_exit_code": 0,
+      "native_exit_observed_utc": "2026-10-10T07:45:01.5402413Z",
+      "framework_run_id": "ffe6c610-1ba6-47a7-900c-869df754f95c",
+      "framework_receipt_valid": true,
+      "formal_evidence_status": "PASS",
+      "check_count": 19,
+      "failed_checks": 0,
+      "receipt": "outputs\\dot_remote_audit_20261010\\native\\b17_completed_empty\\v109_profile_completed_empty_preupgrade_test.result.json",
+      "receipt_sha256": "e718d02a49d8aafd922951314081f0e45fe092e8b5ec2d7835b7ab2a0eec37e0"
+    }
+  ]
+}

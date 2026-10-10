@@ -1,0 +1,122 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "ground workspace initializes",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "formal ground brush is available",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "ground write result reaches App success path",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "successful ground write is undoable",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "successful ground write refreshes preview override",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "light semantic fixture is created",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "accepted move changes semantic tile",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "accepted move can be undone",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "undo leaves an accepted redo branch",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "rejected move leaves semantic tile unchanged",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "rejected move is absent from undo history",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "rejected move preserves the accepted redo branch",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "preserved redo branch remains executable",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "redo reapplies only the accepted move",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "light radius updates from selected editor",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "monster semantic fixture is created",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "monster count respawn and max_alive update",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "monster radius updates",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "npc semantic fixture is created",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "npc facing updates from selected editor",
+      "passed": true
+    }
+  ],
+  "count": 20,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "a81b6de8-e14d-4aa9-9e13-6ecd56b6203b",
+  "passed": 20,
+  "reported_checks": 20,
+  "reported_failures": 0,
+  "run_id": "816fd54e-6914-4a46-bc65-af99bb30c398",
+  "runtime_environment": {
+    "native_process_id": 24276,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\b18_editor_integrated\\runner_a81b6de8-e14d-4aa9-9e13-6ecd56b6203b",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/b18_editor_integrated/runner_a81b6de8-e14d-4aa9-9e13-6ecd56b6203b/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "map_editor_semantic_command_contract_20261010_test",
+  "schema_version": 1,
+  "source_content_sha256": "276d7187b78fd25ab8066a3ebe944da06148bd963e0a3fbd90d921214995c5b2",
+  "status": "PASS"
+}

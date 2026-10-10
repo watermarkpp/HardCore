@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource path="res://tests/framework/v109_map_editor_approval_lifecycle_test.gd" type="Script" id="1"]
+
+[node name="V109MapEditorApprovalLifecycleTest" type="Node"]
+script = ExtResource("1")

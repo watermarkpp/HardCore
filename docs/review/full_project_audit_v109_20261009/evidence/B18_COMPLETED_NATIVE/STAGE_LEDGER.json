@@ -1,0 +1,170 @@
+{
+  "status": "PASS",
+  "scope": "Two distinct source-bound stages, not one combined final-source run. APK/device NOT_RUN.",
+  "stages": [
+    {
+      "stage": "b18_editor_integrated",
+      "status": "PASS",
+      "tree": "63a6b05230c7f29b31715ea2a7bf1cf5c26f24ba",
+      "fingerprint": "276d7187b78fd25ab8066a3ebe944da06148bd963e0a3fbd90d921214995c5b2",
+      "results": [
+        {
+          "test_path": "tests/framework/v109_map_asset_catalog_recovery_test.tscn",
+          "result": "PASS",
+          "reason": "",
+          "timeout": false,
+          "effective_exit_code": 0,
+          "native_exit_observed_utc": "2026-10-10T07:38:15.3793649Z",
+          "framework_run_id": "64a3f937-8bcc-4494-9ef5-6c50329b5dc2",
+          "framework_receipt_valid": true,
+          "formal_evidence_status": "PASS",
+          "check_count": 8,
+          "failed_checks": 0,
+          "receipt": "outputs\\dot_remote_audit_20261010\\native\\b18_editor_integrated\\v109_map_asset_catalog_recovery_test.result.json",
+          "receipt_sha256": "cf76025eec21d37492e71c7bd3642356f0c5de309619a69e4b4f2008f3a41361"
+        },
+        {
+          "test_path": "tests/framework/map_editor_semantic_command_contract_20261010_test.tscn",
+          "result": "PASS",
+          "reason": "",
+          "timeout": false,
+          "effective_exit_code": 0,
+          "native_exit_observed_utc": "2026-10-10T07:38:24.0108748Z",
+          "framework_run_id": "816fd54e-6914-4a46-bc65-af99bb30c398",
+          "framework_receipt_valid": true,
+          "formal_evidence_status": "PASS",
+          "check_count": 20,
+          "failed_checks": 0,
+          "receipt": "outputs\\dot_remote_audit_20261010\\native\\b18_editor_integrated\\map_editor_semantic_command_contract_20261010_test.result.json",
+          "receipt_sha256": "43a68e5f3c5f86092a11c319e8d7dbb1279fa9be4cb79510168fd4e4754b9045"
+        },
+        {
+          "test_path": "tests/framework/v109_map_editor_approval_lifecycle_test.tscn",
+          "result": "PASS",
+          "reason": "",
+          "timeout": false,
+          "effective_exit_code": 0,
+          "native_exit_observed_utc": "2026-10-10T07:38:32.3360150Z",
+          "framework_run_id": "3bc99c8c-3c80-4da9-9718-4af0c61d074c",
+          "framework_receipt_valid": true,
+          "formal_evidence_status": "PASS",
+          "check_count": 10,
+          "failed_checks": 0,
+          "receipt": "outputs\\dot_remote_audit_20261010\\native\\b18_editor_integrated\\v109_map_editor_approval_lifecycle_test.result.json",
+          "receipt_sha256": "30406877040f3b1f0a1157a13df4c695267e8d3b0fa425246c832b74ebe24919"
+        },
+        {
+          "test_path": "tests/framework/map_editor_saved_publish_boundary_20261010_test.tscn",
+          "result": "PASS",
+          "reason": "",
+          "timeout": false,
+          "effective_exit_code": 0,
+          "native_exit_observed_utc": "2026-10-10T07:38:40.7849082Z",
+          "framework_run_id": "3968fd03-2411-44b4-a7a6-e4fb4859c408",
+          "framework_receipt_valid": true,
+          "formal_evidence_status": "PASS",
+          "check_count": 18,
+          "failed_checks": 0,
+          "receipt": "outputs\\dot_remote_audit_20261010\\native\\b18_editor_integrated\\map_editor_saved_publish_boundary_20261010_test.result.json",
+          "receipt_sha256": "2ec966c8b6fdaab01fecf99dc25ba6e20a2f520a7f4385c8ed14f9c0326cea89"
+        }
+      ]
+    },
+    {
+      "stage": "b17_completed_empty",
+      "status": "PASS",
+      "tree": "5f4c4ce072a45470a3db531dba12d476b2fad4ef",
+      "fingerprint": "61e655513dec1e4da3f325ff50c75c2b1212c576e16e3ec60e9b0052af9bd4ca",
+      "results": [
+        {
+          "test_path": "tests/framework/v109_profile_completed_empty_preupgrade_test.tscn",
+          "result": "PASS",
+          "reason": "",
+          "timeout": false,
+          "effective_exit_code": 0,
+          "native_exit_observed_utc": "2026-10-10T07:45:01.5402413Z",
+          "framework_run_id": "ffe6c610-1ba6-47a7-900c-869df754f95c",
+          "framework_receipt_valid": true,
+          "formal_evidence_status": "PASS",
+          "check_count": 19,
+          "failed_checks": 0,
+          "receipt": "outputs\\dot_remote_audit_20261010\\native\\b17_completed_empty\\v109_profile_completed_empty_preupgrade_test.result.json",
+          "receipt_sha256": "e718d02a49d8aafd922951314081f0e45fe092e8b5ec2d7835b7ab2a0eec37e0"
+        }
+      ]
+    }
+  ],
+  "qualifications": [
+    "Catalogue real override file/cache/new instance; actual UI save button and physical atomic IO fault not run.",
+    "Editor actual App semantic/ground commands, retained redo branch, form fields; no redesign of legacy undo/redo results.",
+    "Approval actual App durable save then service build/publish scratch registry. Existing18 affected durable-save checks rerun; App publish button positive not run.",
+    "Completed-empty actual main startup proof/retained legacy/index files, missing proof first-import, invalid proof rejection19; old marker25 evidence remains separate unchanged-method reuse.",
+    "Worker completed-empty full PlayerState was older in unrelated methods. Integrated only reviewed startup/import hunks, preserving main stack/discard/quest/final-delete.",
+    "Test EOF blanks only trimmed in Git publication; native fingerprints and actual tested bytes retained; no whitespace-only native replay."
+  ],
+  "source_paths": [
+    {
+      "path": "scripts/map_assets/map_asset_calibration_service.gd",
+      "sha256": "fcee87355153a93d8c62a9867a4803a5dac85feee75ffcad80c0ff62ec8d22ff"
+    },
+    {
+      "path": "scripts/map_assets/map_asset_catalog_service.gd",
+      "sha256": "002c68da1781d3a071cc178b86b1d3c161a93e5400c6f8c4f1bc29f418446f4d"
+    },
+    {
+      "path": "scripts/map_editor/map_editor_app.gd",
+      "sha256": "a855d802d7f378e138e6365ec36ed5fac0b2dcf1f0b7ed383f88adc0426d5004"
+    },
+    {
+      "path": "scripts/map_editor/map_editor_command_stack.gd",
+      "sha256": "331ad9fc8b075da3c93deacf6a2ad02d2c44e7dd63f7f69a1ac3ac3485e25acf"
+    },
+    {
+      "path": "scripts/map_editor/map_editor_build_runtime_service.gd",
+      "sha256": "48db4c8728c0e50f943049c6274e74f857bdb43ebb12fd5beb977463454cd2b9"
+    },
+    {
+      "path": "scripts/player_state.gd",
+      "sha256": "f5c93de50567fecb507f62d0b531fb8097a96249ef57ccac96c5b7a29a41d840"
+    },
+    {
+      "path": "tests/framework/v109_map_asset_catalog_recovery_test.gd",
+      "sha256": "2d9674144d3f125046984237a4e8964ae15a8671f90efb60c17829568059b330"
+    },
+    {
+      "path": "tests/framework/v109_map_asset_catalog_recovery_test.tscn",
+      "sha256": "636f42e0b9480920dcbac86d4acfff06d0deb659fbb853b55076093a25401093"
+    },
+    {
+      "path": "tests/framework/map_editor_semantic_command_contract_20261010_test.gd",
+      "sha256": "ceea29156a05290e54c4766a92444d203bc8ce9ab38c0f8a98f14884312ad1f3"
+    },
+    {
+      "path": "tests/framework/map_editor_semantic_command_contract_20261010_test.tscn",
+      "sha256": "b3dc05185a3a6ffe202ec530395f4cc4c4c331e514c8de9037b7f85d877cf89d"
+    },
+    {
+      "path": "tests/framework/v109_map_editor_approval_lifecycle_test.gd",
+      "sha256": "40bed80d555ba514f540c87131aff41f64a7a00ef61e30487fee1138f9dea41a"
+    },
+    {
+      "path": "tests/framework/v109_map_editor_approval_lifecycle_test.tscn",
+      "sha256": "5ab9afe2e61fe72806a8afe6da827b363bb36f09670aea4f69f5087e246fd369"
+    },
+    {
+      "path": "tests/framework/v109_profile_completed_empty_preupgrade_test.gd",
+      "sha256": "c1688411cc045a9e84beb108c966419552a2b97302ac7f42ae0c7366e322cf97"
+    },
+    {
+      "path": "tests/framework/v109_profile_completed_empty_preupgrade_test.tscn",
+      "sha256": "835876ee1bb704a608f22a099285ae0d87016216f993b88e7a1b445dade12e10"
+    }
+  ],
+  "pending": [
+    "B20-B28 fine audit",
+    "Conditional cleanup and atlas index followups",
+    "Stable spawn identity migration review",
+    "Fixed-source difference review",
+    "Controlled main commit and APK109/sign/content/install/device"
+  ]
+}

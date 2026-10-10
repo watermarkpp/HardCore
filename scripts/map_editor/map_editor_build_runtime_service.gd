@@ -1620,9 +1620,17 @@ static func validate_for_runtime(document: Dictionary) -> Dictionary:
 
 
 static func document_binding(document: Dictionary) -> Dictionary:
+	# Approval is a build-time admission fact, not authoring content. Keep it
+	# out of the durable authoring fingerprint so approve_for_runtime can stamp
+	# the candidate without invalidating the proof of the saved document.
+	var authoring_document := document.duplicate(true)
+	var editor_meta: Dictionary = authoring_document.get("editor_meta", {})
+	editor_meta.erase("runtime_approved")
+	editor_meta.erase("runtime_approved_revision")
+	authoring_document["editor_meta"] = editor_meta
 	var ground: Dictionary = document.get("ground", {})
 	var fingerprint_parts := {
-		"document_sha256": _sha256(MapEditorJsonCodec.encode(document)),
+		"document_sha256": _sha256(MapEditorJsonCodec.encode(authoring_document)),
 		"ground_manifest_sha256": _file_sha256(
 			str(ground.get("workspace_manifest", ""))
 		),

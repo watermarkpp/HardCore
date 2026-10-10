@@ -1,0 +1,62 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "base catalog asset resolves",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "valid calibration override saves",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "new catalog lookup reads anchor and footprint",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "new instance resolves refreshed catalog",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "new instance uses refreshed placement anchor",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "new instance uses refreshed footprint and manual collision authority",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "invalid calibration is rejected",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "failed calibration preserves previous override",
+      "passed": true
+    }
+  ],
+  "count": 8,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "a81b6de8-e14d-4aa9-9e13-6ecd56b6203b",
+  "passed": 8,
+  "reported_checks": 8,
+  "reported_failures": 0,
+  "run_id": "64a3f937-8bcc-4494-9ef5-6c50329b5dc2",
+  "runtime_environment": {
+    "native_process_id": 2284,
+    "project_root": "C:/Users/Administrator/Documents/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\Documents\\HardCore\\.godot\\runtime_appdata\\b18_editor_integrated\\runner_a81b6de8-e14d-4aa9-9e13-6ecd56b6203b",
+    "user_data_directory": "C:/Users/Administrator/Documents/HardCore/.godot/runtime_appdata/b18_editor_integrated/runner_a81b6de8-e14d-4aa9-9e13-6ecd56b6203b/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "v109_map_asset_catalog_recovery_test",
+  "schema_version": 1,
+  "source_content_sha256": "276d7187b78fd25ab8066a3ebe944da06148bd963e0a3fbd90d921214995c5b2",
+  "status": "PASS"
+}
