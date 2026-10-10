@@ -11,7 +11,7 @@ from pathlib import Path
 import re
 import sys
 
-COLLECTOR_SHA = '684c2df187116bb39b2d684a09732a942d8eb8d4ca640f927b0c4d214c227b5b'
+COLLECTOR_SHA = 'f9ad58890730f4fc1952bf1ef7230cd21f5c4be496e5b60cba273bb334d4c2ee'
 MAX_SEAL_BYTES = 65536
 
 

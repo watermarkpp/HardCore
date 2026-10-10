@@ -152,9 +152,26 @@ def verify_source_files(plan, source_root):
     for path_name, record in sorted(records.items()):
         candidate = (root / path_name[6:]).resolve(strict=True)
         demand(candidate.is_relative_to(root) and candidate.is_file(), 'source_path_escape:' + path_name)
-        demand(candidate.stat().st_size == record['bytes'] and digest_file(candidate) == record['sha256'],
+        # Match the producer's explicit Script/Shader LF fingerprint, without
+        # rewriting disk inputs or normalizing project/class-cache/JSON bytes.
+        typed_source = path_name in plan['nodes'] and (
+            (record.get('kind') in ('script', 'resident_script')
+             and record.get('type') == 'GDScript' and path_name.endswith('.gd')) or
+            (record.get('kind') == 'asset' and record.get('type') == 'Shader'
+             and path_name.endswith('.gdshader')))
+        raw_size = candidate.stat().st_size
+        demand(0 < raw_size <= record['bytes'] * (2 if typed_source else 1),
+               'source_bytes_mismatch:' + path_name)
+        raw = candidate.read_bytes()
+        demand(len(raw) == raw_size, 'source_snapshot_changed:' + path_name)
+        fingerprint = raw.replace(b'\r\n', b'\n') if typed_source else raw
+        demand(len(fingerprint) == record['bytes']
+               and hashlib.sha256(fingerprint).hexdigest() == record['sha256'],
                'source_bytes_mismatch:' + path_name)
         source[path_name] = {'sha256': record['sha256'], 'bytes': record['bytes']}
+        # Canonical equality does not hide a raw-byte change between captures.
+        if raw != fingerprint:
+            source[path_name].update(raw_sha256=hashlib.sha256(raw).hexdigest(), raw_bytes=len(raw))
     canonical = json.dumps(source, separators=(',', ':'), sort_keys=True).encode()
     return hashlib.sha256(canonical).hexdigest()
 
@@ -237,7 +254,11 @@ def map_node(archive, path_name, source_record):
         demand(logical_member + '.remap' not in archive.entries and logical_member + '.import' not in archive.entries,
                'unsupported_shader_remap:' + path_name)
         exported, _ = archive.record(logical_member)
-        demand(exported['sha256'] == source_record['sha256'] and exported['bytes'] == source_record['bytes'],
+        # record() already bounded and hashed the actual ZIP member. Preserve
+        # that raw export identity; compare the producer's source LF separately.
+        fingerprint = archive.archive.read(logical_member).replace(b'\r\n', b'\n')
+        demand(hashlib.sha256(fingerprint).hexdigest() == source_record['sha256']
+               and len(fingerprint) == source_record['bytes'],
                'shader_source_export_mismatch:' + path_name)
         result.update(representation='shader_utf8_source', mapped_path=path_name, export=exported)
     return result
