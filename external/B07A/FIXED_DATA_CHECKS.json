@@ -1,0 +1,352 @@
+{
+  "fixed_source_sha": "684824ac7bb59ac903054b26b3435441b8a2f152",
+  "checks": [
+    {
+      "topic": "entity_source_sha256",
+      "path": "assets/data/ancient_relic_fragment_v1.json",
+      "status": "PASS",
+      "expected_sha256": "d424f5bd92e61bc9c73ce20e9a31f23e365df54d5b354a4c0465152fd5d00b40",
+      "actual_sha256": "d424f5bd92e61bc9c73ce20e9a31f23e365df54d5b354a4c0465152fd5d00b40",
+      "byte_count": 555
+    },
+    {
+      "topic": "entity_source_sha256",
+      "path": "assets/data/drop/dpv2_21cq_item_mapping_v1.json",
+      "status": "PASS",
+      "expected_sha256": "4fec8ddeca9a835ce144fe2ed2c70a15d837090523824b0647252e96d5a61f6f",
+      "actual_sha256": "4fec8ddeca9a835ce144fe2ed2c70a15d837090523824b0647252e96d5a61f6f",
+      "byte_count": 68329
+    },
+    {
+      "topic": "entity_source_sha256",
+      "path": "assets/data/equipment_attribute_master.json",
+      "status": "PASS",
+      "expected_sha256": "8d692d0f7bc1aeb4295ddd040aa760003e399c633b87876d93e3674fb8ced0b9",
+      "actual_sha256": "8d692d0f7bc1aeb4295ddd040aa760003e399c633b87876d93e3674fb8ced0b9",
+      "byte_count": 351910
+    },
+    {
+      "topic": "entity_source_sha256",
+      "path": "assets/data/equipment_enhancement_black_iron_v1.json",
+      "status": "PASS",
+      "expected_sha256": "3ccd9e7e7d774dcc9655f2b6d5edf1eea2d97f50e77880ff07750012d0ba9732",
+      "actual_sha256": "3ccd9e7e7d774dcc9655f2b6d5edf1eea2d97f50e77880ff07750012d0ba9732",
+      "byte_count": 479
+    },
+    {
+      "topic": "entity_source_sha256",
+      "path": "assets/data/equipment_granted_skills.source.json",
+      "status": "PASS",
+      "expected_sha256": "e9b0783fb9eaf9572f38188b5abbbfc0d10f6d1ccf694842fad9d631b6b2b119",
+      "actual_sha256": "e9b0783fb9eaf9572f38188b5abbbfc0d10f6d1ccf694842fad9d631b6b2b119",
+      "byte_count": 1116
+    },
+    {
+      "topic": "entity_source_sha256",
+      "path": "assets/data/features/rune_fixture_items.json",
+      "status": "PASS",
+      "expected_sha256": "ea00bdd36122ae0275f64ee7a73746bbd3866c5fdd174625a7915cb9c885a68d",
+      "actual_sha256": "ea00bdd36122ae0275f64ee7a73746bbd3866c5fdd174625a7915cb9c885a68d",
+      "byte_count": 659
+    },
+    {
+      "topic": "entity_source_sha256",
+      "path": "assets/data/features/socketing_fixture_items.json",
+      "status": "PASS",
+      "expected_sha256": "ae2c7adbcf0ee9ed8e88f4e2dd8d4c4e2c55af6b49a7bcffc0828c8a29e23043",
+      "actual_sha256": "ae2c7adbcf0ee9ed8e88f4e2dd8d4c4e2c55af6b49a7bcffc0828c8a29e23043",
+      "byte_count": 410
+    },
+    {
+      "topic": "entity_source_sha256",
+      "path": "assets/data/identity/entity_registry_source.json",
+      "status": "PASS",
+      "expected_sha256": "01222468a6045949b4e6a515d0ee9cf604f11fc2d02397c279877b7d75f0a98f",
+      "actual_sha256": "01222468a6045949b4e6a515d0ee9cf604f11fc2d02397c279877b7d75f0a98f",
+      "byte_count": 22688
+    },
+    {
+      "topic": "entity_source_sha256",
+      "path": "assets/data/identity/item_categories_v1.json",
+      "status": "PASS",
+      "expected_sha256": "c60d00da6b19047e87ea80b6c973e42a26c01f543d489fdb8b3ab64473adbb8a",
+      "actual_sha256": "c60d00da6b19047e87ea80b6c973e42a26c01f543d489fdb8b3ab64473adbb8a",
+      "byte_count": 4025
+    },
+    {
+      "topic": "entity_source_sha256",
+      "path": "assets/data/item_runtime_authority_v1.json",
+      "status": "PASS",
+      "expected_sha256": "4232baf42256fa1ef0e5ab6e53f9b4ae452a4614fc09ca51902e4220d908f1dc",
+      "actual_sha256": "4232baf42256fa1ef0e5ab6e53f9b4ae452a4614fc09ca51902e4220d908f1dc",
+      "byte_count": 24368
+    },
+    {
+      "topic": "entity_source_sha256",
+      "path": "assets/data/map_design/map_identity_registry.json",
+      "status": "PASS",
+      "expected_sha256": "f79d863c8a74e4da22345518350d5be7218ba6d415ff3a2a82f64e390c842de3",
+      "actual_sha256": "f79d863c8a74e4da22345518350d5be7218ba6d415ff3a2a82f64e390c842de3",
+      "byte_count": 16352
+    },
+    {
+      "topic": "entity_source_sha256",
+      "path": "assets/data/relic_synthesis_v1.json",
+      "status": "PASS",
+      "expected_sha256": "9d7cb4f2b09c80f7dbe63782d757ce1532a0ce99c7ae32d3cfaf1fe45fbfd5df",
+      "actual_sha256": "9d7cb4f2b09c80f7dbe63782d757ce1532a0ce99c7ae32d3cfaf1fe45fbfd5df",
+      "byte_count": 2492
+    },
+    {
+      "topic": "entity_source_sha256",
+      "path": "assets/data/runtime/canonical_monster_catalog.json",
+      "status": "PASS",
+      "expected_sha256": "a46aca4209b3abc0f3f2cd5365b274605cd07886060706e14ef3e984aad8880a",
+      "actual_sha256": "a46aca4209b3abc0f3f2cd5365b274605cd07886060706e14ef3e984aad8880a",
+      "byte_count": 13762166
+    },
+    {
+      "topic": "entity_source_sha256",
+      "path": "assets/data/service_item_catalog.json",
+      "status": "PASS",
+      "expected_sha256": "db61781ad87853a3169aff491a1af8336884b4be0d34ff13145c703713da44b2",
+      "actual_sha256": "db61781ad87853a3169aff491a1af8336884b4be0d34ff13145c703713da44b2",
+      "byte_count": 4310206
+    },
+    {
+      "topic": "entity_source_sha256",
+      "path": "assets/data/vanilla_176/maps.json",
+      "status": "PASS",
+      "expected_sha256": "8dfc94db5abc0553fb2189a63893ea22ae2a35d2c9c4c3ee33d4402c36630c46",
+      "actual_sha256": "8dfc94db5abc0553fb2189a63893ea22ae2a35d2c9c4c3ee33d4402c36630c46",
+      "byte_count": 89372
+    },
+    {
+      "topic": "entity_source_sha256",
+      "path": "assets/data/vanilla_176/skills_source_of_truth_v1.json",
+      "status": "PASS",
+      "expected_sha256": "7575c45a7bd147f8e60d2efdb15c6c5e9781445ddc2f748e73dd69ed386a62ab",
+      "actual_sha256": "7575c45a7bd147f8e60d2efdb15c6c5e9781445ddc2f748e73dd69ed386a62ab",
+      "byte_count": 143864
+    },
+    {
+      "topic": "entity_unique_stable_ids",
+      "status": "PASS",
+      "records": 1246,
+      "unique": 1246,
+      "duplicate_examples": []
+    },
+    {
+      "topic": "entity_registry_counts",
+      "status": "PASS",
+      "expected": {
+        "currency": 1,
+        "item": 258,
+        "item_category": 33,
+        "map": 209,
+        "monster": 156,
+        "profession": 3,
+        "service_item": 538,
+        "skill": 36,
+        "slot": 12
+      },
+      "actual": {
+        "currency": 1,
+        "item": 258,
+        "item_category": 33,
+        "map": 209,
+        "monster": 156,
+        "profession": 3,
+        "service_item": 538,
+        "skill": 36,
+        "slot": 12
+      }
+    },
+    {
+      "topic": "equipment_id_bijection",
+      "status": "PASS",
+      "master": 175,
+      "runtime": 175,
+      "missing_runtime": [],
+      "unowned_runtime": []
+    },
+    {
+      "topic": "equipment_runtime_authority_fields",
+      "status": "PASS",
+      "checked_records": 175,
+      "fields": 26,
+      "mismatch_count": 0,
+      "examples": []
+    },
+    {
+      "topic": "priority_policy_v2",
+      "status": "PASS",
+      "lanes": [
+        "item_categories",
+        "framework_rune_fixture_items",
+        "framework_fixture_items",
+        "monster_attributes_21cq",
+        "monster_drop_probability",
+        "combat_units",
+        "skills",
+        "equipment_attributes",
+        "client_assets",
+        "client_rules",
+        "server_data",
+        "server_rules"
+      ],
+      "fallback_states": [
+        "missing"
+      ]
+    },
+    {
+      "topic": "support_data_contract_inventory",
+      "path": "assets/data/canonical_monster_drop_source_v2.json",
+      "status": "PARSED",
+      "sha256": "59338a7e5caaccc82661e942908caea0a4a06cf56402961e4c3e55fb123e4013",
+      "bytes": 6900095,
+      "top_keys": [
+        "schema",
+        "authority",
+        "source",
+        "workbook_sha256",
+        "worksheet",
+        "monster_record_count",
+        "slot_count",
+        "crystal_status",
+        "records"
+      ],
+      "fields": {
+        "schema": "canonical_monster_drop_source_excel_v1",
+        "authority": "user_locked",
+        "source": "热血传奇1.76_217怪物_完整掉落槽版.xlsx",
+        "records": 217
+      }
+    },
+    {
+      "topic": "support_data_contract_inventory",
+      "path": "assets/data/vanilla_176/skills.json",
+      "status": "PARSED",
+      "sha256": "ebe747187948253c30fcafcc534eb634573f62b924034f38c2f66932b773ce35",
+      "bytes": 449795,
+      "top_keys": [
+        "schemaVersion",
+        "layer",
+        "table",
+        "records"
+      ],
+      "fields": {
+        "schemaVersion": 2,
+        "table": "skills",
+        "records": 132
+      }
+    },
+    {
+      "topic": "support_data_contract_inventory",
+      "path": "assets/data/vanilla_176/monsters.json",
+      "status": "PARSED",
+      "sha256": "56d7d80ee94be3ad4555b60bf837814bccf623907aca2dbf58cb44a4652a9421",
+      "bytes": 161981,
+      "top_keys": [
+        "schemaVersion",
+        "layer",
+        "table",
+        "records"
+      ],
+      "fields": {
+        "schemaVersion": 1,
+        "table": "monsters",
+        "records": 217
+      }
+    },
+    {
+      "topic": "support_data_contract_inventory",
+      "path": "assets/data/vanilla_176/regional_drops.json",
+      "status": "PARSED",
+      "sha256": "de679266483c8ffb33dd70db34d6881bb96e7ef6739ff3ef98f942e59c8e53c7",
+      "bytes": 15421,
+      "top_keys": [
+        "confidence",
+        "editable",
+        "layer",
+        "records",
+        "schemaVersion",
+        "source",
+        "table"
+      ],
+      "fields": {
+        "records": 49,
+        "schemaVersion": 1,
+        "source": "legacy_verified_adapter",
+        "table": "regional_drops"
+      }
+    },
+    {
+      "topic": "support_data_contract_inventory",
+      "path": "assets/data/vanilla_176/skills_source_of_truth_v1.json",
+      "status": "PARSED",
+      "sha256": "7575c45a7bd147f8e60d2efdb15c6c5e9781445ddc2f748e73dd69ed386a62ab",
+      "bytes": 143864,
+      "top_keys": [
+        "schema_version",
+        "document_status",
+        "generated_for_project_commit",
+        "title",
+        "scope",
+        "provenance_status_definitions",
+        "sources",
+        "global_policy",
+        "formula_library",
+        "excluded_from_vanilla_core",
+        "skills"
+      ],
+      "fields": {
+        "schema_version": "1.0.0",
+        "skills": 33
+      }
+    },
+    {
+      "topic": "support_data_contract_inventory",
+      "path": "assets/data/monster_runtime_authority_v1.json",
+      "status": "PARSED",
+      "sha256": "cfcbe9998634ec98839477d815efe6e0a9598f1457f82900dc957d7fc68bf071",
+      "bytes": 1732714,
+      "top_keys": [
+        "schema_version",
+        "authority_id",
+        "stage",
+        "identity_key",
+        "monster_base_sha",
+        "m00_final_sha",
+        "generated_date",
+        "stage_gate",
+        "status_vocabulary",
+        "source_policy",
+        "spatial_contract",
+        "global_rules",
+        "classic_db_candidate_metadata",
+        "summary",
+        "records"
+      ],
+      "fields": {
+        "schema_version": 1,
+        "summary": 20,
+        "records": 156
+      }
+    }
+  ],
+  "initial_duplicate_candidates_resolved": [
+    {
+      "path": "assets/data/vanilla_176/skills.json",
+      "fact": "33 skills * 4 skill levels = 132 distinct composite identities, no collision"
+    },
+    {
+      "path": "tools/loot_sheet_compiler/evidence/user_directive_overlay_slots.json",
+      "fact": "168 slot_uid unique; multiple per-monster slots intentional"
+    }
+  ],
+  "excluded_guess_not_scope": [
+    "assets/data/runtime/dpv2_user_loot_sheet_authority_v1.json",
+    "assets/data/runtime/dpv2_direct_baseline_v1.json"
+  ]
+}
