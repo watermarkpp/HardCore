@@ -277,8 +277,6 @@ def automatic_initials(monster_ids: set[int] | None = None) -> tuple[list[dict[s
         rows.append(row)
     if monster_ids is not None and set(map(int, initials)) != monster_ids:
         raise ValueError("requested monsterId is not in the active catalog")
-    if monster_ids is None and len(initials) != 214:
-        raise ValueError(f"ground projection count={len(initials)}, expected 214")
     return rows, initials
 
 
@@ -326,7 +324,8 @@ def load_calibrations(initials: dict[str, dict[str, Any]], targeted: bool = Fals
         raise ValueError("monster manual alignment aggregate hash missing")
     entries = calibrations.get("entriesByMonsterId", {})
     if not isinstance(entries, dict) or (
-        not set(entries).issuperset(initials) if targeted else set(entries) != set(initials)
+        (targeted and not set(entries).issuperset(initials))
+        or (not targeted and len(entries) != 214)
     ):
         raise ValueError(
             "monster ground calibrations must explicitly cover exactly 214 monsterIds"
@@ -410,6 +409,31 @@ def load_calibrations(initials: dict[str, dict[str, Any]], targeted: bool = Fals
     }:
         raise ValueError(f"unexpected calibration source counts: {source_counts}")
     return entries
+
+
+def _calibration_fields_match_runtime_entry(
+    monster_id: str,
+    runtime_entry: dict[str, Any],
+    calibration: dict[str, Any],
+) -> None:
+    """Reject a stale preserved runtime record before it can shadow calibration."""
+    fields = (
+        "projectionStrategy",
+        "visualRootOffset",
+        "visualFootOffset",
+        "ringCenterOffset",
+        "ringEllipseRadii",
+        "ringVerticalSquash",
+        "calibrationSource",
+        "review",
+        "manualAlignmentEvidence",
+    )
+    for field in fields:
+        if runtime_entry.get(field) != calibration.get(field):
+            raise ValueError(
+                f"preserved ground contact {monster_id} does not match "
+                f"current calibration field {field}"
+            )
 
 
 def build(monster_ids: set[int] | None = None) -> tuple[dict[str, Any], dict[str, dict[str, Any]]]:
@@ -502,6 +526,53 @@ def build(monster_ids: set[int] | None = None) -> tuple[dict[str, Any], dict[str
         "entriesByMonsterId": entries,
         "legacyNameToMonsterId": legacy_name_to_monster_id,
     }
+    if monster_ids is None:
+        # The animation catalog is a measured visual-input subset (currently
+        # 156 IDs).  The approved runtime/calibration catalog is the formal
+        # 214-ID responsibility set.  IDs without current visual inputs must
+        # survive a full rebuild byte-for-byte; only a targeted ID may be
+        # regenerated from fresh measured input.
+        previous = load_json(OUTPUT_PATH)
+        if previous.get("contract") != CONTRACT:
+            raise ValueError("full build requires the existing v5 runtime manifest")
+        previous_entries = previous.get("entriesByMonsterId", {})
+        previous_aliases = previous.get("legacyNameToMonsterId", {})
+        if not isinstance(previous_aliases, dict):
+            raise ValueError("full build requires the legacy monster alias map")
+        for key, entry in previous_entries.items():
+            if key not in output["entriesByMonsterId"]:
+                calibration = calibrations.get(key)
+                if not isinstance(calibration, dict):
+                    raise ValueError(
+                        f"preserved ground contact {key} has no current calibration"
+                    )
+                _calibration_fields_match_runtime_entry(key, entry, calibration)
+                output["entriesByMonsterId"][key] = entry
+                name = str(entry.get("name", ""))
+                if name and name not in output["legacyNameToMonsterId"]:
+                    output["legacyNameToMonsterId"][name] = int(key)
+        for alias, raw_monster_id in previous_aliases.items():
+            try:
+                key = str(int(raw_monster_id))
+            except (TypeError, ValueError) as error:
+                raise ValueError(f"legacy monster alias {alias!r} has invalid ID") from error
+            if key not in previous_entries:
+                raise ValueError(f"legacy monster alias {alias!r} references unknown ID")
+            # The complete 214-ID legacy map is compatibility authority.  A
+            # 156-ID animation subset may derive a display name that collides
+            # with an older alias; it must not take ownership of that alias.
+            output["legacyNameToMonsterId"][alias] = int(key)
+        output["summary"]["monsterCount"] = len(output["entriesByMonsterId"])
+        output["summary"]["explicitCalibrationCount"] = len(calibrations)
+        output["summary"]["projectionStrategyCounts"] = {
+            strategy: sum(
+                1 for entry in output["entriesByMonsterId"].values()
+                if entry.get("projectionStrategy") == strategy
+            )
+            for strategy in PROJECTION_STRATEGIES
+        }
+        if set(output["entriesByMonsterId"]) != set(calibrations):
+            raise ValueError("full build must preserve the complete approved 214-ID catalog")
     if monster_ids is not None:
         # Preserve every unselected record (including historical IDs), metadata
         # and names. Only the exact approved ID is regenerated from its inputs.

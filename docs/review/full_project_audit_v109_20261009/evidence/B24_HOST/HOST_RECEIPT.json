@@ -1,0 +1,13 @@
+{
+  "status": "FAIL",
+  "input_freeze": "PASS",
+  "changed": [],
+  "source_fingerprint": "9c799a333b47b26d1ad4c65f417e13896669c23852fc6d61ade57c8645146f77",
+  "command": "isolated b24_python_env python -m pytest tests/test_helmet_builders_b24.py tests/test_b24_world_visual_generators.py -q --disable-warnings",
+  "exit_code": 1,
+  "passed": 5,
+  "failed": 1,
+  "failure": "ground full build wrongly rejects approved 214 alias because 156 subset recomputes first-match ID49 as50",
+  "log_sha256": "9c2156d2b5d2f311b5542e437b74bee38d2a99957752ddb7e1268aea6b7eecbe",
+  "scope": "Scratch tools on real data/images; no formal artifacts generated; device NOT_RUN"
+}

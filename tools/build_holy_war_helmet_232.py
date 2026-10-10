@@ -346,29 +346,36 @@ def premultiplied_lanczos_resize(
     source = image.convert("RGBA")
     alpha = source.getchannel("A")
     red, green, blue, _ = source.split()
-    premultiplied = Image.merge(
-        "RGBA",
+    premultiplied_rgb = Image.merge(
+        "RGB",
         (
             ImageChops.multiply(red, alpha),
             ImageChops.multiply(green, alpha),
             ImageChops.multiply(blue, alpha),
-            alpha,
         ),
-    ).resize(size, Image.Resampling.LANCZOS)
+    )
+    # Resize premultiplied colour and alpha as separate planes. Passing an
+    # already-premultiplied RGBA image through an RGBA resize can apply a second
+    # alpha association in some Pillow paths; never feed that representation
+    # back through an RGBA filter.
+    premultiplied = premultiplied_rgb.resize(size, Image.Resampling.LANCZOS)
+    resized_alpha = alpha.resize(size, Image.Resampling.LANCZOS)
     output = Image.new("RGBA", size, (0, 0, 0, 0))
-    source_pixels = premultiplied.load()
+    colour_pixels = premultiplied.load()
+    alpha_pixels = resized_alpha.load()
     target_pixels = output.load()
     for y in range(size[1]):
         for x in range(size[0]):
-            red, green, blue, alpha = source_pixels[x, y]
-            if alpha <= 1:
+            red, green, blue = colour_pixels[x, y]
+            pixel_alpha = alpha_pixels[x, y]
+            if pixel_alpha <= 1:
                 target_pixels[x, y] = (0, 0, 0, 0)
                 continue
             target_pixels[x, y] = (
-                min(255, round(red * 255 / alpha)),
-                min(255, round(green * 255 / alpha)),
-                min(255, round(blue * 255 / alpha)),
-                alpha,
+                min(255, round(red * 255 / pixel_alpha)),
+                min(255, round(green * 255 / pixel_alpha)),
+                min(255, round(blue * 255 / pixel_alpha)),
+                pixel_alpha,
             )
     return crop_alpha(output)
 

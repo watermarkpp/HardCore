@@ -1,0 +1,72 @@
+{
+  "status": "PASS",
+  "scope": "Reviewed tool-only integration; source-bound scratch verification pending, approved images/runtime/calibrations unchanged",
+  "paths": [
+    "tools/build_holy_war_helmet_232.py",
+    "tools/build_heavenly_taoist_helmet_240.py",
+    "tools/build_male_world_helmet_assets.py",
+    "tests/test_helmet_builders_b24.py",
+    "tools/build_monster_ground_contacts.py",
+    "tools/build_monster_overhead_anchors.py",
+    "tools/build_mir2_cross_category_appearance_catalog.py",
+    "tools/build_map_editor_catalog.py",
+    "tests/test_b24_world_visual_generators.py"
+  ],
+  "records": [
+    {
+      "path": "tools/build_holy_war_helmet_232.py",
+      "before_sha256": "59c0e6a10843853cd3db9aecaebb9abc7383610c2e66d59d383ecdaa43ce8cf3",
+      "after_sha256": "dbc24753d26ab0ddcf055f64d9f3019bac18ee02be51448747d797946d1f8ecc",
+      "commit": "ccd20a272"
+    },
+    {
+      "path": "tools/build_heavenly_taoist_helmet_240.py",
+      "before_sha256": "f1c23cdbaa5801c63db3537d25165c4b3bec5eb79ceec9e6ff0d8ecf974dd449",
+      "after_sha256": "008aee78d4a31f6c44ecbb8f44b71721aeff67f33e27f69e4c064844ed6c6d89",
+      "commit": "ccd20a272"
+    },
+    {
+      "path": "tools/build_male_world_helmet_assets.py",
+      "before_sha256": "3b38ef8201ade60a3c02fab20f356b5d8a8ccf4a817b8d7a878cd4a11d6f5eda",
+      "after_sha256": "97b9766a8a1191396d6540aaf28400c5732f40ff85c27307f7f4b10684743ee2",
+      "commit": "ccd20a272"
+    },
+    {
+      "path": "tests/test_helmet_builders_b24.py",
+      "before_sha256": null,
+      "after_sha256": "5c447e545dc60e04a46a4532b16700c887e5fffa0283cdfb38a914a6be8745c0",
+      "commit": "ccd20a272"
+    },
+    {
+      "path": "tools/build_monster_ground_contacts.py",
+      "before_sha256": "e589c39a63fd65dcefcf4906c034da0ca9320f949e613ef65450eaa4087b7c0e",
+      "after_sha256": "0b10d78b462deb9cdffa25575087d10171a87affc2593781c35885fb5013ae04",
+      "commit": "b5bbc2a78a166e4697f69dbe08c2d8c14d7f02be"
+    },
+    {
+      "path": "tools/build_monster_overhead_anchors.py",
+      "before_sha256": "4639ef1f8e33256ff0c46a45e849a4f56fd6a4c6f433b5c63110ba9cce3379c6",
+      "after_sha256": "b5a13a92c1cce699c538dc1f59c10dc77c065791cf221eb5cca9480a783543f6",
+      "commit": "b5bbc2a78a166e4697f69dbe08c2d8c14d7f02be"
+    },
+    {
+      "path": "tools/build_mir2_cross_category_appearance_catalog.py",
+      "before_sha256": "4dd82e7c4d5c486b4bd2374fcc4036fda150a710ba6ff0f15ecbc32f844350dd",
+      "after_sha256": "9ad445aa85bf9f43b622bc0a37ceb0c94698b1e51836f394158e9497f5bcbffe",
+      "commit": "b5bbc2a78a166e4697f69dbe08c2d8c14d7f02be"
+    },
+    {
+      "path": "tools/build_map_editor_catalog.py",
+      "before_sha256": "4f2eee83586e6987c8ea8c32872964c41384462e16f2903b5115e93c2af70c39",
+      "after_sha256": "e2a955741e5a1c2b937639154015e0e87f8d0007b977cbf93b5a348e5cf7f28d",
+      "commit": "b5bbc2a78a166e4697f69dbe08c2d8c14d7f02be"
+    },
+    {
+      "path": "tests/test_b24_world_visual_generators.py",
+      "before_sha256": null,
+      "after_sha256": "ffe7102293b363fffe4db37015effe1493615d622eab97ce349a744d1ab703b1",
+      "commit": "b5bbc2a78a166e4697f69dbe08c2d8c14d7f02be"
+    }
+  ],
+  "main_index_unchanged": true
+}

@@ -1,0 +1,83 @@
+{
+  "status": "PASS",
+  "scope": "Bounded staged host verification; NOT one final-source six-test run. Gameplay native/APK/device NOT_RUN here.",
+  "initial": {
+    "status": "FAIL",
+    "input_freeze": "PASS",
+    "changed": [],
+    "source_fingerprint": "9c799a333b47b26d1ad4c65f417e13896669c23852fc6d61ade57c8645146f77",
+    "command": "isolated b24_python_env python -m pytest tests/test_helmet_builders_b24.py tests/test_b24_world_visual_generators.py -q --disable-warnings",
+    "exit_code": 1,
+    "passed": 5,
+    "failed": 1,
+    "failure": "ground full build wrongly rejects approved 214 alias because 156 subset recomputes first-match ID49 as50",
+    "log_sha256": "9c2156d2b5d2f311b5542e437b74bee38d2a99957752ddb7e1268aea6b7eecbe",
+    "scope": "Scratch tools on real data/images; no formal artifacts generated; device NOT_RUN"
+  },
+  "followup": {
+    "status": "PASS",
+    "input_freeze": "PASS",
+    "changed": [],
+    "source_fingerprint": "3488157ba8b5f25866ad083e5dd20c64d4d50bce79116f5b9543edd05b17824e",
+    "command": "outputs/dot_remote_audit_20261010/b24_python_env/Scripts/python.exe -m pytest tests/test_b24_world_visual_generators.py::B24WorldVisualGenerators::test_ground_real_catalog_preserves_unmeasured_ids_and_rejects_stale_records -q --disable-warnings",
+    "exit_code": 0,
+    "passed": 1,
+    "log_sha256": "8015f7f383bb5f2dd2e4627b87c61db24ffdc2bbb6a65fbd3f79102db8be9062",
+    "scope": "Real214 calibration/runtime IDs and156 animation IDs; real atlas measurement,58 records preserved, all9 calibration fields, legacy compatibility map, targeted213 untouched, stale record and unknown alias rejected. Scratch output only.",
+    "python": "3.11.15",
+    "packages": {
+      "Pillow": "12.3.0",
+      "numpy": "2.4.6",
+      "opencv-python-headless": "5.0.0.93",
+      "pytest": "9.1.1"
+    }
+  },
+  "reused_tests": 5,
+  "reuse_reason": "Only ground production and its test method changed. Other five test bodies and their production/input dependencies remain identical to the original669-file freeze.",
+  "source": [
+    {
+      "path": "tools/build_holy_war_helmet_232.py",
+      "sha256": "dbc24753d26ab0ddcf055f64d9f3019bac18ee02be51448747d797946d1f8ecc"
+    },
+    {
+      "path": "tools/build_heavenly_taoist_helmet_240.py",
+      "sha256": "008aee78d4a31f6c44ecbb8f44b71721aeff67f33e27f69e4c064844ed6c6d89"
+    },
+    {
+      "path": "tools/build_male_world_helmet_assets.py",
+      "sha256": "97b9766a8a1191396d6540aaf28400c5732f40ff85c27307f7f4b10684743ee2"
+    },
+    {
+      "path": "tests/test_helmet_builders_b24.py",
+      "sha256": "5c447e545dc60e04a46a4532b16700c887e5fffa0283cdfb38a914a6be8745c0"
+    },
+    {
+      "path": "tools/build_monster_ground_contacts.py",
+      "sha256": "5417b02ec1530f64019e06b7542ef10f495076442dd930fb7c71d21b474214bc"
+    },
+    {
+      "path": "tools/build_monster_overhead_anchors.py",
+      "sha256": "b5a13a92c1cce699c538dc1f59c10dc77c065791cf221eb5cca9480a783543f6"
+    },
+    {
+      "path": "tools/build_mir2_cross_category_appearance_catalog.py",
+      "sha256": "9ad445aa85bf9f43b622bc0a37ceb0c94698b1e51836f394158e9497f5bcbffe"
+    },
+    {
+      "path": "tools/build_map_editor_catalog.py",
+      "sha256": "e2a955741e5a1c2b937639154015e0e87f8d0007b977cbf93b5a348e5cf7f28d"
+    },
+    {
+      "path": "tests/test_b24_world_visual_generators.py",
+      "sha256": "571b6a7967d2577755dc8156965cae0fe02ef10beba4364173c10605afa01e4b"
+    }
+  ],
+  "qualifications": [
+    "Original batch5PASS1FAIL retained; ground alias rejection corrected in a separate source stage.",
+    "Missing58 animation profiles not manufactured or remeasured; existing approved runtime records retained and exact current calibration checked.",
+    "No formal artwork, runtime manifest or manual calibration regenerated.",
+    "Helmet47 test exercises actual build_variants on formal recipe/source and scratch Pillow target; generated sink redirected. Actual validator reads formal catalog. Full identity CLI rebuild NOT_RUN.",
+    "Map legacy pivot checked with real cv2 and scratch PNG; current formal editor generator unchanged.",
+    "No phone visual/FPS claim."
+  ]
+}

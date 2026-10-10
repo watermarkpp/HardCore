@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "input_freeze": "PASS",
+  "changed": [],
+  "source_fingerprint": "3488157ba8b5f25866ad083e5dd20c64d4d50bce79116f5b9543edd05b17824e",
+  "command": "outputs/dot_remote_audit_20261010/b24_python_env/Scripts/python.exe -m pytest tests/test_b24_world_visual_generators.py::B24WorldVisualGenerators::test_ground_real_catalog_preserves_unmeasured_ids_and_rejects_stale_records -q --disable-warnings",
+  "exit_code": 0,
+  "passed": 1,
+  "log_sha256": "8015f7f383bb5f2dd2e4627b87c61db24ffdc2bbb6a65fbd3f79102db8be9062",
+  "scope": "Real214 calibration/runtime IDs and156 animation IDs; real atlas measurement,58 records preserved, all9 calibration fields, legacy compatibility map, targeted213 untouched, stale record and unknown alias rejected. Scratch output only.",
+  "python": "3.11.15",
+  "packages": {
+    "Pillow": "12.3.0",
+    "numpy": "2.4.6",
+    "opencv-python-headless": "5.0.0.93",
+    "pytest": "9.1.1"
+  }
+}

@@ -1,0 +1,174 @@
+...F..                                                                   [100%]
+================================== FAILURES ===================================
+_ B24WorldVisualGenerators.test_ground_real_catalog_preserves_unmeasured_ids_and_rejects_stale_records _
+
+self = <test_b24_world_visual_generators.B24WorldVisualGenerators testMethod=test_ground_real_catalog_preserves_unmeasured_ids_and_rejects_stale_records>
+
+    def test_ground_real_catalog_preserves_unmeasured_ids_and_rejects_stale_records(self):
+        tool = load_tool("build_monster_ground_contacts.py")
+        calibration_path = ROOT / "assets/data/runtime/monster_ground_contact_calibrations.json"
+        runtime_path = ROOT / "assets/data/runtime/monster_ground_contacts.json"
+        animation_path = ROOT / "assets/data/runtime/monster_animation_catalog.json"
+        calibrations = read_json(calibration_path)["entriesByMonsterId"]
+        previous_runtime = read_json(runtime_path)
+        animation_ids = {
+            str(row["monster_id"]) for row in read_json(animation_path)["monsters"]
+        }
+        calibration_ids = set(calibrations)
+        self.assertEqual(len(calibration_ids), 214)
+        self.assertEqual(len(animation_ids), 156)
+        self.assertEqual(set(previous_runtime["entriesByMonsterId"]), calibration_ids)
+        preserved_ids = calibration_ids - animation_ids
+        self.assertEqual(len(preserved_ids), 58)
+    
+        with tempfile.TemporaryDirectory() as directory:
+            output = pathlib.Path(directory) / "ground.json"
+            output.write_text(runtime_path.read_text(encoding="utf-8"), encoding="utf-8")
+            tool.OUTPUT_PATH = output
+            stale_id = min(preserved_ids, key=int)
+            stale = read_json(output)
+            stale["entriesByMonsterId"][stale_id]["ringCenterOffset"] = [999, 999]
+            output.write_text(json.dumps(stale), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "current calibration field ringCenterOffset"):
+                tool.build()
+    
+            output.write_text(runtime_path.read_text(encoding="utf-8"), encoding="utf-8")
+>           generated, _ = tool.build()
+                           ^^^^^^^^^^^^
+
+tests\test_b24_world_visual_generators.py:59: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+monster_ids = None
+
+    def build(monster_ids: set[int] | None = None) -> tuple[dict[str, Any], dict[str, dict[str, Any]]]:
+        rows, initials = automatic_initials(monster_ids)
+        calibrations = load_calibrations(initials, targeted=monster_ids is not None)
+        entries: dict[str, Any] = {}
+        legacy_name_to_monster_id: dict[str, int] = {}
+        strategy_counts = {strategy: 0 for strategy in PROJECTION_STRATEGIES}
+        for row in rows:
+            monster_id = int(row["monster_id"])
+            key = str(monster_id)
+            initial = initials[key]
+            calibration = calibrations[key]
+            strategy = str(calibration["projectionStrategy"])
+            strategy_counts[strategy] += 1
+            visual_root = [float(value) for value in calibration["visualRootOffset"]]
+            visual_foot = [float(value) for value in calibration["visualFootOffset"]]
+            ring_center = [float(value) for value in calibration["ringCenterOffset"]]
+            ring_radii = [int(round(value)) for value in calibration["ringEllipseRadii"]]
+            review = dict(calibration["review"])
+            entries[key] = {
+                "monsterId": monster_id,
+                "name": str(row["name"]),
+                "sourceLookup": initial["sourceLookup"],
+                "projectionStrategy": strategy,
+                "visualRootOffset": visual_root,
+                "visualFootOffset": visual_foot,
+                "ringCenterOffset": ring_center,
+                "ringEllipseRadii": ring_radii,
+                "ringVerticalSquash": float(calibration["ringVerticalSquash"]),
+                "hoverHeightPx": max(0, ring_center[1] - visual_foot[1]),
+                "stableAcrossActions": list(REQUIRED_ACTIONS),
+                "stableAcrossDirections": 8,
+                "calibrationSource": str(calibration["calibrationSource"]),
+                "review": review,
+                "manualAlignmentEvidence": dict(
+                    calibration["manualAlignmentEvidence"]
+                ),
+                "automaticInitial": {
+                    "visualFootOffset": initial["visualFootOffset"],
+                    "ringCenterOffset": initial["ringCenterOffset"],
+                    "ringEllipseRadii": initial["ringEllipseRadii"],
+                    "neutralSampleSpread": initial["neutralSampleSpread"],
+                    "sampledFrames": initial["sampledFrames"],
+                },
+            }
+            for field in ("name", "base_name", "resource_lookup"):
+                legacy_name = str(row.get(field, ""))
+                if legacy_name and legacy_name not in legacy_name_to_monster_id:
+                    legacy_name_to_monster_id[legacy_name] = monster_id
+        output = {
+            "schemaVersion": 5,
+            "contract": CONTRACT,
+            "calibrationContract": CALIBRATION_CONTRACT,
+            "manualAlignmentContract": MANUAL_ALIGNMENT_CONTRACT,
+            "identityKey": "monsterId",
+            "coordinateSpace": (
+                "Runtime starts from the normal/boss MonsterVisual origin, adds "
+                "visualRootOffset exactly once, then adds ringCenterOffset exactly "
+                "once. Ellipse radii are unscaled screen pixels."
+            ),
+            "clientActorGroundOffset": list(CLIENT_ACTOR_GROUND_OFFSET),
+            "measurementPolicy": (
+                "idle/walk alpha contacts are diagnostic evidence only; each monsterId "
+                "is approved from four runtime-coordinate composites, with authored "
+                "actor origin, body foot and ground projection reviewed separately"
+            ),
+            "runtimeStabilityPolicy": (
+                "one immutable center and ellipse per monsterId across every action, "
+                "direction and frame; no animation-pose target-ring drift"
+            ),
+            "summary": {
+                "monsterCount": len(entries),
+                "explicitCalibrationCount": len(calibrations),
+                "userAlignmentCount": sum(
+                    1
+                    for entry in calibrations.values()
+                    if entry.get("calibrationSource") == USER_CALIBRATION_SOURCE
+                ),
+                "preservedAirborneCount": sum(
+                    1
+                    for entry in calibrations.values()
+                    if entry.get("calibrationSource")
+                    == PRESERVED_CALIBRATION_SOURCE
+                ),
+                "requiredActions": list(REQUIRED_ACTIONS),
+                "requiredDirections": 8,
+                "projectionStrategyCounts": strategy_counts,
+            },
+            "entriesByMonsterId": entries,
+            "legacyNameToMonsterId": legacy_name_to_monster_id,
+        }
+        if monster_ids is None:
+            # The animation catalog is a measured visual-input subset (currently
+            # 156 IDs).  The approved runtime/calibration catalog is the formal
+            # 214-ID responsibility set.  IDs without current visual inputs must
+            # survive a full rebuild byte-for-byte; only a targeted ID may be
+            # regenerated from fresh measured input.
+            previous = load_json(OUTPUT_PATH)
+            if previous.get("contract") != CONTRACT:
+                raise ValueError("full build requires the existing v5 runtime manifest")
+            previous_entries = previous.get("entriesByMonsterId", {})
+            previous_aliases = previous.get("legacyNameToMonsterId", {})
+            if not isinstance(previous_aliases, dict):
+                raise ValueError("full build requires the legacy monster alias map")
+            for key, entry in previous_entries.items():
+                if key not in output["entriesByMonsterId"]:
+                    calibration = calibrations.get(key)
+                    if not isinstance(calibration, dict):
+                        raise ValueError(
+                            f"preserved ground contact {key} has no current calibration"
+                        )
+                    _calibration_fields_match_runtime_entry(key, entry, calibration)
+                    output["entriesByMonsterId"][key] = entry
+                    name = str(entry.get("name", ""))
+                    if name and name not in output["legacyNameToMonsterId"]:
+                        output["legacyNameToMonsterId"][name] = int(key)
+            for alias, raw_monster_id in previous_aliases.items():
+                try:
+                    key = str(int(raw_monster_id))
+                except (TypeError, ValueError) as error:
+                    raise ValueError(f"legacy monster alias {alias!r} has invalid ID") from error
+                if key not in previous_entries:
+                    raise ValueError(f"legacy monster alias {alias!r} references unknown ID")
+                current = output["legacyNameToMonsterId"].get(alias)
+                if current is not None and int(current) != int(key):
+>                   raise ValueError(f"legacy monster alias conflict for {alias!r}")
+E                   ValueError: legacy monster alias conflict for '��������'
+
+tools\build_monster_ground_contacts.py:563: ValueError
+=========================== short test summary info ===========================
+FAILED tests/test_b24_world_visual_generators.py::B24WorldVisualGenerators::test_ground_real_catalog_preserves_unmeasured_ids_and_rejects_stale_records
+1 failed, 5 passed in 28.07s
