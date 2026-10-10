@@ -1,0 +1,94 @@
+{
+  "status": "PASS",
+  "scope": "Integration completeness and retained native evidence; no new export or Java probe",
+  "review_before": "a4ae5fc89f0f6dba6820e44da303db7a3cd659ff",
+  "retained_source_commit": "e8167ddb55372b1190e95a5ef2d9851b83a8629b",
+  "problem": "The Java helper and probe reached the review branch, but the four-line formal build consumer hook and its documentation remained local.",
+  "change": "Preserve the already authorized formal build Enter/Restore consumer and fixed build documentation in the final candidate.",
+  "files": [
+    {
+      "path": "tools/build_android_isolated.ps1",
+      "sha256": "2aebd1f5c4addbce811c8836b1e3e7a174976a55792668131cfbac316a8a4448",
+      "unchanged_from_native_evidence": true
+    },
+    {
+      "path": "tools/android_java_environment.ps1",
+      "sha256": "55207f47b2794395550867de18c423c58c56435d139f536bddbb92160a8d6837",
+      "unchanged_from_native_evidence": true
+    },
+    {
+      "path": "tools/android_java_loopback_probe.java",
+      "sha256": "aa52874d057b6959bf7e295a72fe40b2998e6e8640759a779e5ff2a69b61a29b",
+      "unchanged_from_native_evidence": true
+    },
+    {
+      "path": "docs/ANDROID_BUILD_ENVIRONMENT.md",
+      "sha256": "7a162141af1505605de9bc9028eee716a3d380f42e83050f33f15eb6fa861525",
+      "unchanged_from_native_evidence": true
+    }
+  ],
+  "raw_evidence": [
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/JAVA_BUILD_ENTRY/JAVA_REPAIR_SOURCE_SNAPSHOT.json",
+      "sha256": "f162b890c398e3c22a1e0d0a5f49f9ba41be79cf68a9b9b28b9e095db1997bce",
+      "bytes": 1421
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/JAVA_BUILD_ENTRY/JAVA_ENVIRONMENT_REPAIR.json",
+      "sha256": "99258dd7920fc177f0c6aab554718e771f43f2c2ccb9247aa410ae68d0919f8e",
+      "bytes": 5140
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/JAVA_BUILD_ENTRY/JAVA_FAILURE_RESTORE.json",
+      "sha256": "5dc0cf78ca1484a60b7d17de534f583e2ab5de1fa3b480e1570a382d0562edbc",
+      "bytes": 470
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/JAVA_BUILD_ENTRY/java_default_selector.log",
+      "sha256": "0e5b88674a4bcd4e196dbf60bbf5960d2685f9af97c8f675f7c041986f602734",
+      "bytes": 2441
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/JAVA_BUILD_ENTRY/java_long_selector.log",
+      "sha256": "f085d83554121395336d0c7ec373b06f7264f9c900be7a14289f16797655a240",
+      "bytes": 2446
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/JAVA_BUILD_ENTRY/java_project_selector.log",
+      "sha256": "121e41856b3db15fd81dcd4c70bea2de25f6e4ab6d4d94db4b91a47dfd9244da",
+      "bytes": 132
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/JAVA_BUILD_ENTRY/java_project_unix.log",
+      "sha256": "e669ac30324d3117ca5b566634115c044a7d3925c691dbcc78ffc2139486e213",
+      "bytes": 119
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/JAVA_BUILD_ENTRY/java_fixed_preflight/java-loopback.json",
+      "sha256": "01045c4fe0e23a99c025d0b696b5714b06b3d67d9129ab6aabb36eb65cc1021a",
+      "bytes": 500
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/JAVA_BUILD_ENTRY/java_fixed_preflight/java-loopback.stdout.log",
+      "sha256": "fba5a2b2b9d4fdccf4c091a2109b0bad0fb53daa7cbde40cbe132c37e5ae5c5f",
+      "bytes": 51
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/evidence/JAVA_BUILD_ENTRY/java_fixed_preflight/java-loopback.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  ],
+  "verification_reuse": {
+    "native_selector_pipe_32_rounds": "PASS: same helper/probe/Java fingerprint; original native exit zero and full marker retained",
+    "success_and_failure_environment_restore": "PASS: retained original evidence and unchanged source",
+    "powershell_syntax": "PASS: retained original AST parse and identical builder/helper bytes",
+    "rerun_reason": "No repeated test: source and contract unchanged. The next actual 109 build must still preflight its own process environment."
+  },
+  "limits": {
+    "system_wide_windows_cause": "MISSING",
+    "v109_export": "NOT_RUN",
+    "DEVICE_TEST": "NOT_RUN",
+    "B07A_review_of_this_hook": "MISSING: fixed684 lacked hook; later final-source review required"
+  }
+}

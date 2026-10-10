@@ -1,0 +1,32 @@
+{
+  "status": "PASS",
+  "scope": "Durable build-tool-only archive; APK gameplay source remains fixed92; MAIN branch and real index unchanged",
+  "source_commit": "e8167ddb55372b1190e95a5ef2d9851b83a8629b",
+  "base_commit": "92c6eeb93af9546b891ea0a1a15dd4f8c600502b",
+  "durable_ref": "refs/builds/hardcore/android-java-environment/20261009",
+  "tree": "d3fd64c5500df78a369cb20ba72a61829acee7f6",
+  "files": [
+    {
+      "path": "tools/build_android_isolated.ps1",
+      "sha256": "2aebd1f5c4addbce811c8836b1e3e7a174976a55792668131cfbac316a8a4448",
+      "blob": "4d0b77f57600377e97ea54981c883b0bb2985ac0"
+    },
+    {
+      "path": "tools/android_java_environment.ps1",
+      "sha256": "55207f47b2794395550867de18c423c58c56435d139f536bddbb92160a8d6837",
+      "blob": "b0531cadd5f2da12ea99b59a0e42daa658f1ea4a"
+    },
+    {
+      "path": "tools/android_java_loopback_probe.java",
+      "sha256": "aa52874d057b6959bf7e295a72fe40b2998e6e8640759a779e5ff2a69b61a29b",
+      "blob": "9179da8dec5cb6808722697569d7848cf15d34cf"
+    },
+    {
+      "path": "docs/ANDROID_BUILD_ENVIRONMENT.md",
+      "sha256": "7a162141af1505605de9bc9028eee716a3d380f42e83050f33f15eb6fa861525",
+      "blob": "2093743769bf3c086049c15968c8948960dc1b25"
+    }
+  ],
+  "main_head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+  "main_index_sha256": "ddacea4eed570faed0a6003c87352552e74e902874b5dee61d8863a2316e29d7"
+}

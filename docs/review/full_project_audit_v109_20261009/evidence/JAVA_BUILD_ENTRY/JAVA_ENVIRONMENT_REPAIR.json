@@ -1,0 +1,87 @@
+{
+  "status": "PASS",
+  "scope": "Persistent formal Android build environment repair and native preflight; APK export outcome recorded separately",
+  "root_cause": "Local Java Windows AF_UNIX failure under the user Temp directory; repeated manual process-local fixes were absent from the formal build entry",
+  "system_level_cause": "MISSING: underlying Windows per-directory mechanism not established; this repair covers the HardCore build process tree",
+  "environment_change": "Process-local TEMP/TMP set to an existing project-owned directory and restored on success/failure; no global environment/network/JDK change",
+  "baseline": {
+    "java_default_selector.log": {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\release_v108_20261009\\java_default_selector.log",
+      "sha256": "0e5b88674a4bcd4e196dbf60bbf5960d2685f9af97c8f675f7c041986f602734"
+    },
+    "java_long_selector.log": {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\release_v108_20261009\\java_long_selector.log",
+      "sha256": "f085d83554121395336d0c7ec373b06f7264f9c900be7a14289f16797655a240"
+    }
+  },
+  "directory_positive_control": {
+    "java_project_selector.log": {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\release_v108_20261009\\java_project_selector.log",
+      "sha256": "121e41856b3db15fd81dcd4c70bea2de25f6e4ab6d4d94db4b91a47dfd9244da"
+    },
+    "java_project_unix.log": {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\release_v108_20261009\\java_project_unix.log",
+      "sha256": "e669ac30324d3117ca5b566634115c044a7d3925c691dbcc78ffc2139486e213"
+    }
+  },
+  "production_probe": {
+    "status": "PASS",
+    "native_exit": 0,
+    "temp_root": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\android_java_temp",
+    "scope": "Process-local TEMP/TMP; actual Selector readiness and Pipe byte transfer, 32 rounds",
+    "java_sha256": "7efce5caf5306bc4b3f6134a6147e3bfd80c5fec9162708d6a3ae02f37c69782",
+    "probe_sha256": "aa52874d057b6959bf7e295a72fe40b2998e6e8640759a779e5ff2a69b61a29b",
+    "helper_sha256": "55207f47b2794395550867de18c423c58c56435d139f536bddbb92160a8d6837"
+  },
+  "failure_restoration": {
+    "actual_error": "Exception calling \"Start\" with \"0\" argument(s): \"An error occurred trying to start process 'C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\release_v108_20261009\\intentionally_missing_jdk\\bin\\java.exe' with working directory 'C:\\Users\\Administrator\\Documents\\HardCore'. 系统找不到指定的文件。\"",
+    "scope": "Preflight cannot start Java: exception propagated and original TEMP/TMP restored",
+    "status": "PASS"
+  },
+  "normal_restoration": "PASS: actual original TEMP/TMP equality checked after successful Enter/Restore",
+  "syntax": "PASS: PowerShell AST parse of build entry, helper and resume wrapper",
+  "review": "PASS: independent read-only agent review, no blocking defect; inherited Java options deliberately preserved and validated by real preflight",
+  "changed_files": [
+    {
+      "path": "tools/build_android_isolated.ps1",
+      "sha256": "2aebd1f5c4addbce811c8836b1e3e7a174976a55792668131cfbac316a8a4448"
+    },
+    {
+      "path": "tools/android_java_environment.ps1",
+      "sha256": "55207f47b2794395550867de18c423c58c56435d139f536bddbb92160a8d6837"
+    },
+    {
+      "path": "tools/android_java_loopback_probe.java",
+      "sha256": "aa52874d057b6959bf7e295a72fe40b2998e6e8640759a779e5ff2a69b61a29b"
+    },
+    {
+      "path": "docs/ANDROID_BUILD_ENVIRONMENT.md",
+      "sha256": "7a162141af1505605de9bc9028eee716a3d380f42e83050f33f15eb6fa861525"
+    }
+  ],
+  "original_build_failure": {
+    "status": "FAIL",
+    "error": "Native export failed: first exit=1",
+    "source_commit": "92c6eeb93af9546b891ea0a1a15dd4f8c600502b",
+    "DEVICE_TEST": "NOT_RUN"
+  },
+  "resume_export": {
+    "status": "PASS",
+    "source_commit": "92c6eeb93af9546b891ea0a1a15dd4f8c600502b",
+    "stage": "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\92c6eeb93af9-20261009-182927-97b781f2",
+    "evidence": "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\seal-evidence-92c6eeb93af9-20261009-182927-97b781f2-resume01",
+    "command": {
+      "baseline_apk": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\hardcore\\HardCore-v107-upgrade-debug.apk",
+      "output_apk": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\hardcore\\HardCore-v108-upgrade-debug.apk",
+      "tool": "resume_v108.ps1",
+      "version_code": 108
+    },
+    "apk_sha256": "3652f72c6fffe1d27ef9a08acc21dc3a3550bd2f878a616bfe3d540c28d32753",
+    "apk_bytes": 499939472,
+    "started_utc": "2026-10-09T10:53:26.2622494Z",
+    "completed_utc": "2026-10-09T11:09:09.3499696Z",
+    "scope": "Same frozen stage and official two-pass export; process-local Java temp repair; captures/import reused",
+    "original_failed_result": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\release_v108_20261009\\FORMAL_BUILD_RESULT.json",
+    "DEVICE_TEST": "NOT_RUN"
+  }
+}
