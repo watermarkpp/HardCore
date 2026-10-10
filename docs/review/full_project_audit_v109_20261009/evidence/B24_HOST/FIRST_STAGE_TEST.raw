@@ -1,0 +1,156 @@
+"""B24 world-visual generator checks against real authoring/runtime inputs."""
+import importlib.util
+import json
+import pathlib
+import sys
+import tempfile
+import unittest
+
+from PIL import Image
+
+ROOT = pathlib.Path(__file__).resolve().parents[1]
+
+
+def load_tool(name):
+    if name == "build_monster_ground_contacts.py":
+        overhead = load_tool("build_monster_overhead_anchors.py")
+        sys.modules["build_monster_overhead_anchors"] = overhead
+    path = ROOT / "tools" / name
+    spec = importlib.util.spec_from_file_location(name[:-3], path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def read_json(path):
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+class B24WorldVisualGenerators(unittest.TestCase):
+    def test_ground_real_catalog_preserves_unmeasured_ids_and_rejects_stale_records(self):
+        tool = load_tool("build_monster_ground_contacts.py")
+        calibration_path = ROOT / "assets/data/runtime/monster_ground_contact_calibrations.json"
+        runtime_path = ROOT / "assets/data/runtime/monster_ground_contacts.json"
+        animation_path = ROOT / "assets/data/runtime/monster_animation_catalog.json"
+        calibrations = read_json(calibration_path)["entriesByMonsterId"]
+        previous_runtime = read_json(runtime_path)
+        animation_ids = {
+            str(row["monster_id"]) for row in read_json(animation_path)["monsters"]
+        }
+        calibration_ids = set(calibrations)
+        self.assertEqual(len(calibration_ids), 214)
+        self.assertEqual(len(animation_ids), 156)
+        self.assertEqual(set(previous_runtime["entriesByMonsterId"]), calibration_ids)
+        preserved_ids = calibration_ids - animation_ids
+        self.assertEqual(len(preserved_ids), 58)
+
+        with tempfile.TemporaryDirectory() as directory:
+            output = pathlib.Path(directory) / "ground.json"
+            output.write_text(runtime_path.read_text(encoding="utf-8"), encoding="utf-8")
+            tool.OUTPUT_PATH = output
+            stale_id = min(preserved_ids, key=int)
+            stale = read_json(output)
+            stale["entriesByMonsterId"][stale_id]["ringCenterOffset"] = [999, 999]
+            output.write_text(json.dumps(stale), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "current calibration field ringCenterOffset"):
+                tool.build()
+
+            output.write_text(runtime_path.read_text(encoding="utf-8"), encoding="utf-8")
+            generated, _ = tool.build()
+            generated_entries = generated["entriesByMonsterId"]
+            self.assertEqual(set(generated_entries), calibration_ids)
+            self.assertEqual(
+                generated["legacyNameToMonsterId"],
+                previous_runtime["legacyNameToMonsterId"],
+            )
+            for monster_id in preserved_ids:
+                self.assertEqual(generated_entries[monster_id], previous_runtime["entriesByMonsterId"][monster_id])
+            for monster_id, calibration in calibrations.items():
+                for field in (
+                    "projectionStrategy", "visualRootOffset", "visualFootOffset",
+                    "ringCenterOffset", "ringEllipseRadii", "ringVerticalSquash",
+                    "calibrationSource", "review", "manualAlignmentEvidence",
+                ):
+                    self.assertEqual(generated_entries[monster_id][field], calibration[field])
+
+            target = min(animation_ids, key=int)
+            targeted, _ = tool.build({int(target)})
+            for monster_id in calibration_ids - {target}:
+                self.assertEqual(
+                    targeted["entriesByMonsterId"][monster_id],
+                    previous_runtime["entriesByMonsterId"][monster_id],
+                )
+
+            conflict = read_json(output)
+            conflict["legacyNameToMonsterId"] = dict(previous_runtime["legacyNameToMonsterId"])
+            alias = next(iter(conflict["legacyNameToMonsterId"]))
+            conflict["legacyNameToMonsterId"][alias] = max(calibration_ids, key=int)
+            output.write_text(json.dumps(conflict), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "legacy monster alias conflict"):
+                tool.build()
+
+    def test_overhead_real_catalog_preserves_unmeasured_approved_ids(self):
+        tool = load_tool("build_monster_overhead_anchors.py")
+        runtime_path = ROOT / "assets/data/runtime/monster_overhead_anchors.json"
+        animation_path = ROOT / "assets/data/runtime/monster_animation_catalog.json"
+        previous = read_json(runtime_path)
+        previous_ids = set(previous["anchorsByMonsterId"])
+        animation_ids = {
+            str(row["monster_id"]) for row in read_json(animation_path)["monsters"]
+        }
+        self.assertEqual(len(previous_ids), 214)
+        self.assertEqual(len(animation_ids), 156)
+        preserved_ids = previous_ids - animation_ids
+        self.assertEqual(len(preserved_ids), 58)
+        with tempfile.TemporaryDirectory() as directory:
+            output = pathlib.Path(directory) / "overhead.json"
+            output.write_text(runtime_path.read_text(encoding="utf-8"), encoding="utf-8")
+            tool.OUTPUT_PATH = output
+            generated = tool.build()
+            self.assertEqual(set(generated["anchorsByMonsterId"]), previous_ids)
+            for monster_id in preserved_ids:
+                self.assertEqual(generated["anchorsByMonsterId"][monster_id], previous["anchorsByMonsterId"][monster_id])
+
+            malformed = dict(previous)
+            malformed["anchorsByMonsterId"] = dict(previous["anchorsByMonsterId"])
+            removed_id = min(previous_ids, key=int)
+            del malformed["anchorsByMonsterId"][removed_id]
+            malformed["anchorsByMonsterId"]["999999"] = {"stableBodyTop": 0}
+            output.write_text(json.dumps(malformed), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "approved monsterId set"):
+                tool.build()
+
+    def test_cross_category_valid_and_error_records_render_without_losing_error(self):
+        tool = load_tool("build_mir2_cross_category_appearance_catalog.py")
+        with tempfile.TemporaryDirectory() as directory:
+            tool.OUTPUT_DIR = pathlib.Path(directory)
+            valid_cell = Image.new("RGBA", tool.CELL, (20, 20, 20, 255))
+            records = [
+                {
+                    "appearance": 0,
+                    "index": 4,
+                    "sourceSize": [32, 32],
+                    "drawOffset": [0, 0],
+                    "_cell": valid_cell,
+                },
+                {"appearance": 0, "index": 5, "error": "bad sample"},
+            ]
+            target = tool.render_source_sheet("test/source", records)
+            self.assertTrue(target.is_file())
+            self.assertEqual(records[1]["error"], "bad sample")
+            self.assertNotIn("_cell", records[1])
+
+    def test_map_tiles_get_local_pivot_with_real_cv2(self):
+        import cv2  # noqa: F401
+        tool = load_tool("build_map_editor_catalog.py")
+        scratch_root = ROOT / "outputs"
+        scratch_root.mkdir(parents=True, exist_ok=True)
+        with tempfile.TemporaryDirectory(dir=scratch_root) as directory:
+            image_path = pathlib.Path(directory) / "ground.png"
+            Image.new("RGBA", (128, 32), (255, 255, 255, 255)).save(image_path)
+            parts = tool.image_templates(image_path)
+            self.assertEqual([part["pivot"]["x"] for part in parts], [32, 32])
+
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)

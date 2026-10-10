@@ -1,0 +1,20 @@
+F...                                                                     [100%]
+================================== FAILURES ===================================
+__________ test_raw_equal_content_exemption_preserves_unchanged_mode __________
+
+tmp_path = WindowsPath('C:/Users/Administrator/AppData/Local/Temp/pytest-of-Administrator/pytest-95/test_raw_equal_content_exempti0')
+
+    def test_raw_equal_content_exemption_preserves_unchanged_mode(tmp_path):
+        git=fixture(tmp_path)
+        # HEAD stores CRLF, while the clean filter now maps working CRLF to LF.
+        git('config','core.autocrlf','true')
+>       assert subprocess.run(['git','diff-index','--quiet','HEAD','--'],cwd=tmp_path).returncode==1
+E       AssertionError: assert 0 == 1
+E        +  where 0 = CompletedProcess(args=['git', 'diff-index', '--quiet', 'HEAD', '--'], returncode=0).returncode
+E        +    where CompletedProcess(args=['git', 'diff-index', '--quiet', 'HEAD', '--'], returncode=0) = <function run at 0x000001C8211A99E0>(['git', 'diff-index', '--quiet', 'HEAD', '--'], cwd=WindowsPath('C:/Users/Administrator/AppData/Local/Temp/pytest-of-Administrator/pytest-95/test_raw_equal_content_exempti0'))
+E        +      where <function run at 0x000001C8211A99E0> = subprocess.run
+
+tests\test_b25_build_info_modes.py:28: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_b25_build_info_modes.py::test_raw_equal_content_exemption_preserves_unchanged_mode
+1 failed, 3 passed in 6.22s

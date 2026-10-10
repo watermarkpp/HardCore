@@ -6,30 +6,66 @@ param(
     [switch]$ConflictWatcher,
     [string]$LockPath = '',
     [string]$ReadyPath = '',
-    [string]$ReleasePath = ''
+    [string]$ReleasePath = '',
+    [ValidateRange(1,60000)][int]$DeadlineMilliseconds = 30000
 )
 $ErrorActionPreference = 'Stop'
+
+function Quote-ProcessArg([string]$Value) {
+    return '"' + $Value.Replace('"', '\"') + '"'
+}
+
+function Wait-ForPath([string]$Path, [int]$TimeoutMilliseconds, [System.Diagnostics.Process]$Process = $null) {
+    $watch = [System.Diagnostics.Stopwatch]::StartNew()
+    while (-not [System.IO.File]::Exists($Path)) {
+        if ($null -ne $Process -and $Process.HasExited) {
+            throw "WRITE_SET_HARNESS_FAILURE: helper exited $($Process.ExitCode) before $Path"
+        }
+        if ($watch.ElapsedMilliseconds -ge $TimeoutMilliseconds) {
+            throw "WRITE_SET_HARNESS_TIMEOUT: waiting for $Path after ${TimeoutMilliseconds}ms"
+        }
+        Start-Sleep -Milliseconds ([Math]::Min(20, [Math]::Max(1, $TimeoutMilliseconds - $watch.ElapsedMilliseconds)))
+    }
+}
+
+function Stop-Child([System.Diagnostics.Process]$Process) {
+    if ($null -eq $Process) { return }
+    try {
+        if (-not $Process.HasExited) {
+            try { $Process.Kill($true) } catch { $Process.Kill() }
+            if (-not $Process.WaitForExit(1000)) { throw 'WRITE_SET_HARNESS_FAILURE: child did not exit after kill' }
+        }
+    } finally { $Process.Dispose() }
+}
 
 if ($LockOnly) {
     $lockStream = [System.IO.File]::Open($LockPath, [System.IO.FileMode]::OpenOrCreate, [System.IO.FileAccess]::ReadWrite, [System.IO.FileShare]::None)
     try {
         [System.IO.File]::WriteAllText($ReadyPath, 'LOCK_READY')
-        while (-not [System.IO.File]::Exists($ReleasePath)) { Start-Sleep -Milliseconds 50 }
+        Wait-ForPath $ReleasePath $DeadlineMilliseconds
     } finally { $lockStream.Dispose() }
     exit 0
 }
 if ($BoundaryLock) {
-    while (@(Get-ChildItem -LiteralPath $OutputRoot -Force -File -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '\.txn\.' }).Count -lt 3) { Start-Sleep -Milliseconds 2 }
+    $watch = [System.Diagnostics.Stopwatch]::StartNew()
+    while (@(Get-ChildItem -LiteralPath $OutputRoot -Force -File -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '\.txn\.' }).Count -lt 3) {
+        if ($watch.ElapsedMilliseconds -ge $DeadlineMilliseconds) { throw "WRITE_SET_HARNESS_TIMEOUT: boundary stage after ${DeadlineMilliseconds}ms" }
+        Start-Sleep -Milliseconds 2
+    }
     $lockStream = [System.IO.File]::Open($LockPath, [System.IO.FileMode]::Open, [System.IO.FileAccess]::ReadWrite, [System.IO.FileShare]::None)
     try {
         [System.IO.File]::WriteAllText($ReadyPath, 'BOUNDARY_LOCK_READY')
-        while (-not [System.IO.File]::Exists($ReleasePath)) { Start-Sleep -Milliseconds 20 }
+        Wait-ForPath $ReleasePath $DeadlineMilliseconds
     } finally { $lockStream.Dispose() }
     exit 0
 }
 if ($ConflictWatcher) {
     $watchDir = $OutputRoot
-    while (@(Get-ChildItem -LiteralPath $watchDir -Force -File -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '\.txn\.' }).Count -eq 0) { Start-Sleep -Milliseconds 2 }
+    $watch = [System.Diagnostics.Stopwatch]::StartNew()
+    while (@(Get-ChildItem -LiteralPath $watchDir -Force -File -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '\.txn\.' }).Count -eq 0) {
+        if ($watch.ElapsedMilliseconds -ge $DeadlineMilliseconds) { throw "WRITE_SET_HARNESS_TIMEOUT: conflict stage after ${DeadlineMilliseconds}ms" }
+        Start-Sleep -Milliseconds 2
+    }
     [System.IO.File]::WriteAllText($LockPath, 'MANUAL_CONFLICT')
     exit 0
 }
@@ -38,8 +74,26 @@ $compiler = Join-Path $ProjectRoot 'tools/loot_sheet_compiler/compile_authority.
 $pwsh = (Get-Command pwsh).Source
 $names = @('dpv2_user_loot_sheet_authority_v1.json', 'compile_disambiguation.json', 'armor_single_slot_audit.json')
 function Invoke-Compiler([string]$OutputDir) {
-    $out = & $pwsh -NoProfile -ExecutionPolicy Bypass -File $compiler -ProjectRoot $ProjectRoot -OutputDir $OutputDir 2>&1
-    return [pscustomobject]@{ exit_code = $LASTEXITCODE; output = @($out | ForEach-Object { [string]$_ }) }
+    New-Item -ItemType Directory -Path $OutputDir -Force | Out-Null
+    $stdoutPath = Join-Path $OutputDir ('.harness.stdout.' + [Guid]::NewGuid().ToString('N'))
+    $stderrPath = Join-Path $OutputDir ('.harness.stderr.' + [Guid]::NewGuid().ToString('N'))
+    $process = $null
+    try {
+        $process = Start-Process -FilePath $pwsh -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', (Quote-ProcessArg $compiler), '-ProjectRoot', (Quote-ProcessArg $ProjectRoot), '-OutputDir', (Quote-ProcessArg $OutputDir)) -RedirectStandardOutput $stdoutPath -RedirectStandardError $stderrPath -PassThru -WindowStyle Hidden
+        if (-not $process.WaitForExit($DeadlineMilliseconds)) {
+            Stop-Child $process
+            $process = $null
+            return [pscustomobject]@{ exit_code = 124; output = @("WRITE_SET_HARNESS_TIMEOUT: compiler after ${DeadlineMilliseconds}ms") }
+        }
+        $code = $process.ExitCode
+        $text = @()
+        if ([System.IO.File]::Exists($stdoutPath)) { $text += Get-Content -LiteralPath $stdoutPath }
+        if ([System.IO.File]::Exists($stderrPath)) { $text += Get-Content -LiteralPath $stderrPath }
+        return [pscustomobject]@{ exit_code = $code; output = @($text | ForEach-Object { [string]$_ }) }
+    } finally {
+        if ($null -ne $process) { Stop-Child $process }
+        Remove-Item -LiteralPath $stdoutPath, $stderrPath -Force -ErrorAction SilentlyContinue
+    }
 }
 function Get-Sha([string]$Path) {
     if (-not [System.IO.File]::Exists($Path)) { return '' }
@@ -78,11 +132,17 @@ foreach ($kind in @('lock-first', 'lock-second')) {
     $lockName = if ($kind -eq 'lock-first') { $names[0] } else { $names[1] }
     $lockPath = Join-Path $case $lockName
     $ready = "$lockPath.ready"; $release = "$lockPath.release"
-    $locker = Start-Process -FilePath $pwsh -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $PSCommandPath, '-ProjectRoot', $ProjectRoot, '-OutputRoot', $case, '-BoundaryLock', '-LockPath', $lockPath, '-ReadyPath', $ready, '-ReleasePath', $release) -PassThru -WindowStyle Hidden
-    $run = Invoke-Compiler $case
-    while (-not [System.IO.File]::Exists($ready)) { Start-Sleep -Milliseconds 20 }
-    [System.IO.File]::WriteAllText($release, 'RELEASE')
-    $locker.WaitForExit()
+    $locker = Start-Process -FilePath $pwsh -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', (Quote-ProcessArg $PSCommandPath), '-ProjectRoot', (Quote-ProcessArg $ProjectRoot), '-OutputRoot', (Quote-ProcessArg $case), '-BoundaryLock', '-LockPath', (Quote-ProcessArg $lockPath), '-ReadyPath', (Quote-ProcessArg $ready), '-ReleasePath', (Quote-ProcessArg $release), '-DeadlineMilliseconds', $DeadlineMilliseconds) -PassThru -WindowStyle Hidden
+    try {
+        $run = Invoke-Compiler $case
+        Wait-ForPath $ready $DeadlineMilliseconds $locker
+        [System.IO.File]::WriteAllText($release, 'RELEASE')
+        if (-not $locker.WaitForExit($DeadlineMilliseconds)) { Stop-Child $locker; $locker = $null; throw "WRITE_SET_HARNESS_TIMEOUT: locker cleanup" }
+    if ($locker.ExitCode -ne 0) { throw "WRITE_SET_HARNESS_FAILURE: locker exited $($locker.ExitCode)" }
+    } finally {
+        if ($null -ne $locker) { Stop-Child $locker }
+    }
+    if ($run.exit_code -eq 124) { throw "WRITE_SET_HARNESS_FAILURE: $kind compiler timed out; transaction result is rejected" }
     if ($run.exit_code -eq 0) { throw "WRITE_SET_TEST_FAIL: $kind unexpectedly succeeded" }
     foreach ($name in $names) {
         $expectedOld = Get-TextSha "OLD_SENTINEL_$name"
@@ -95,11 +155,18 @@ foreach ($kind in @('lock-first', 'lock-second')) {
 $conflictCase = Join-Path $OutputRoot 'manual-conflict'
 Copy-Outputs $baseline $conflictCase
 $conflictTarget = Join-Path $conflictCase $names[2]
-$watcher = Start-Process -FilePath $pwsh -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $PSCommandPath, '-ProjectRoot', $ProjectRoot, '-OutputRoot', $conflictCase, '-LockPath', $conflictTarget, '-ConflictWatcher') -PassThru -WindowStyle Hidden
-$env:B07A_WRITE_SET_TEST_PAUSE_MS = '1000'
-$conflictRun = Invoke-Compiler $conflictCase
-$env:B07A_WRITE_SET_TEST_PAUSE_MS = $null
-$watcher.WaitForExit()
+$watcher = Start-Process -FilePath $pwsh -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', (Quote-ProcessArg $PSCommandPath), '-ProjectRoot', (Quote-ProcessArg $ProjectRoot), '-OutputRoot', (Quote-ProcessArg $conflictCase), '-LockPath', (Quote-ProcessArg $conflictTarget), '-ConflictWatcher', '-DeadlineMilliseconds', $DeadlineMilliseconds) -PassThru -WindowStyle Hidden
+$oldPause = [Environment]::GetEnvironmentVariable('B07A_WRITE_SET_TEST_PAUSE_MS')
+try {
+    [Environment]::SetEnvironmentVariable('B07A_WRITE_SET_TEST_PAUSE_MS', '1000', 'Process')
+    $conflictRun = Invoke-Compiler $conflictCase
+    if (-not $watcher.WaitForExit($DeadlineMilliseconds)) { throw 'WRITE_SET_HARNESS_TIMEOUT: conflict watcher cleanup' }
+    if ($watcher.ExitCode -ne 0) { throw "WRITE_SET_HARNESS_FAILURE: conflict watcher exited $($watcher.ExitCode)" }
+} finally {
+    [Environment]::SetEnvironmentVariable('B07A_WRITE_SET_TEST_PAUSE_MS', $oldPause, 'Process')
+    if (-not $watcher.HasExited) { Stop-Child $watcher } else { $watcher.Dispose() }
+}
+if ($conflictRun.exit_code -eq 124) { throw 'WRITE_SET_HARNESS_FAILURE: compiler timed out; conflict transaction rejected' }
 if ($conflictRun.exit_code -eq 0) {
     $receipt.cases += [ordered]@{ name = 'manual-conflict'; status = 'NOT_RUN'; compiler_exit = 0; preserved_third_version = $false; note = 'Concurrent edit watcher did not win the bounded pre-publish race; production guard remains statically covered.' }
 } else {

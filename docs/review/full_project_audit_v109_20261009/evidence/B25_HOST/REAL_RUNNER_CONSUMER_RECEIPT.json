@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "scope": "Read-only current consumer on real previously validated native B22 receipt/logs; no native test rerun, no new gameplay result.",
+  "runner_sha256": "7eee8b72e1b0b0d871912e75bd9a20e400677ccf848657e69052d258d0ff0b7d",
+  "freeze_receipt_sha256": "56d5f0e8ff313d64bfb650ca28bbc4234f614ce2efa87529c4321e069e27d7f6",
+  "tool_sha256": "fc2a7b699a52babc35ce2acd10fda8ed280c4b0d057e9cc5e73d2788cc377fd2",
+  "original_invocation_id": "6c0ba27b-c73a-4e68-9ab1-19eff2f4888f",
+  "cases": [
+    [
+      "pass",
+      "V109_DIAGNOSTICS_DYNAMIC_COUNTER_PASS"
+    ],
+    [
+      "fail",
+      "current runner result failed"
+    ],
+    [
+      "not_run",
+      "CURRENT_RUN_LOG_HASH_MISMATCH"
+    ]
+  ]
+}

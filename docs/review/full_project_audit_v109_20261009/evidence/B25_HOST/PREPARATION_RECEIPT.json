@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "scope": "Recovery preparation only. Main HEAD/index/worktree not changed. Final fixed candidate integration pending.",
+  "head": "215f0b2f651a51e6855ee813ddd99221690311a1",
+  "index_sha256": "ddacea4eed570faed0a6003c87352552e74e902874b5dee61d8863a2316e29d7",
+  "index_tree": "c875abe509b0cd69fb4d8829af994a76252a9545",
+  "recovery_commit": "a8c4c33d9bc3336f95853708e759043688f0073c",
+  "recovery_ref": "refs/codex-backups/v109-original-main-index-20261010",
+  "stage_manifest_sha256": "b3e7d79aa6065c1fe8e0fd87b110cbaa220dcc1ed34d6cd1c1f15c9625c4cc7f",
+  "experimental_files": [
+    {
+      "path": "scripts/monster_ai_package/grid_occupancy_service.gd",
+      "sha256": "eb117134f1d6957a65215814c518a547fd3561f5ee34ae470d1802b07ab87e75",
+      "bytes": 9586
+    },
+    {
+      "path": "scripts/monster_ai_package/grid_crowd_trial.gd",
+      "sha256": "796564da82804745f25873af30c98f1e8b698ae682d8bd8e800723a3a13a7878",
+      "bytes": 13661
+    },
+    {
+      "path": "scripts/enemy.gd.applied-draft",
+      "sha256": "bbd9311794bf487357b4da0f530877efa08376838025584c3aaca2a20314ee7e",
+      "bytes": 424653
+    }
+  ]
+}

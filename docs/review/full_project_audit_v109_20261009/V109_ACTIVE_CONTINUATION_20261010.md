@@ -79,3 +79,7 @@ Update 2026-10-10 16:44 +08:00: B21/B22 original ZIP2006196/SHA68e7564171f0ea216
 ### B24 tool source stages 2026-10-10
 
 Seven tool files repaired; approved artwork/runtime/calibration unchanged. Initial root host batch:5PASS1FAIL. Legitimate full legacy alias map rejection corrected; only failed ground test rerun:1PASS. Other5 reused with unchanged scope/dependencies. Both669-input source freezes and original failure retained in evidence/B24_HOST/STAGE_LEDGER.json. No six-test same-source claim; APK/device NOT_RUN. B25 downloaded, B26-B28 pending external audit.
+
+### B25 bounded host stages 2026-10-10
+
+Eight new host checks PASS on675 frozen inputs; build-info3PASS1FAIL then only failed fixture1PASS; seed guard3PASS; real runner consumer read-only PASS. Full workbook import and old WIL rebuild retain NOT_RUN/DATA_MISSING. See evidence/B25_HOST/STAGE_LEDGER.json. Earlier154-file inventory claim withdrawn; actual bounded163-file inventory preserved. Main original index/recovery ref protected; user explicitly retires failed grid experiment, precise cleanup in progress. APK109/device NOT_RUN.

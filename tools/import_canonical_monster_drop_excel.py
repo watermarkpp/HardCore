@@ -240,7 +240,8 @@ SLOT_COMPARE_FIELDS = [
 
 RECORD_COMPARE_FIELDS = [
     "stable_monster_id", "name", "display_name", "status", "line_count",
-    "source_sha256", "source_summary_kind", "source_summary_ref",
+    "source_distribution", "source_path", "source_sha256",
+    "source_summary_kind", "source_summary_ref",
     "source_summary_note", "rate_policy", "unique_item_count", "rows",
 ]
 
@@ -303,6 +304,11 @@ def _slot_index(expected: dict, actual: dict) -> tuple[dict, dict, dict, dict]:
     return exp_slots, act_slots, exp_by_mon, act_by_mon
 
 
+def _compare_record(expected: dict, actual: dict) -> list[str]:
+    """Return authoritative record fields that differ, including provenance."""
+    return [field for field in RECORD_COMPARE_FIELDS if expected.get(field) != actual.get(field)]
+
+
 def _check(wb: Workbook, expected: dict, actual: dict) -> int:
     ident = _identity_metrics()
     name_to_id = ident["name_to_id"]
@@ -338,12 +344,7 @@ def _check(wb: Workbook, expected: dict, actual: dict) -> int:
         if e is None or a is None:
             per_monster_fail += 1
             continue
-        ok = True
-        for k in RECORD_COMPARE_FIELDS:
-            if e.get(k) != a.get(k):
-                ok = False
-                break
-        if ok:
+        if not _compare_record(e, a):
             per_monster_pass += 1
         else:
             per_monster_fail += 1

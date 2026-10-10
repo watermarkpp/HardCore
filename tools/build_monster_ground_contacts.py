@@ -735,13 +735,10 @@ def main() -> None:
     if monster_ids is not None and args.seed_calibrations:
         parser.error("targeted promotion cannot seed/replace manual calibrations")
     if args.seed_calibrations:
-        _, initials = automatic_initials()
-        CALIBRATION_PATH.write_text(
-            json.dumps(seed_calibrations(initials), ensure_ascii=False, indent=2)
-            + "\n",
-            encoding="utf-8",
+        parser.error(
+            "--seed-calibrations is retired: pending seeds cannot replace "
+            "the approved manual calibration authority"
         )
-        print(f"wrote {CALIBRATION_PATH.relative_to(ROOT)}")
     generated_data, initials = build(monster_ids)
     generated = json.dumps(generated_data, ensure_ascii=False, indent=2) + "\n"
     if args.check:

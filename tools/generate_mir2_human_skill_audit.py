@@ -8,6 +8,7 @@ does not change gameplay data, formulas, actions, cooldowns, or visual assets.
 from __future__ import annotations
 
 import csv
+import argparse
 import hashlib
 import json
 import re
@@ -23,6 +24,7 @@ ROOT = Path(__file__).resolve().parents[1]
 REPORTS = ROOT / "reports"
 DOCS = ROOT / "docs" / "audit"
 TEST_LOGS = ROOT / "outputs" / "skill_audit_20260724"
+CURRENT_RUN_MANIFEST = TEST_LOGS / "CURRENT_RUN.json"
 
 SKILLS_PATH = ROOT / "assets/data/vanilla_176/skills.json"
 MAGIC_INFO_PATH = ROOT / "assets/data/vanilla_176/profession_magic_info.json"
@@ -265,6 +267,12 @@ def read_paradox_magic_db() -> tuple[list[dict[str, Any]], dict[str, Any]]:
 
 
 def main() -> None:
+    global CURRENT_RUN_MANIFEST
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--test-evidence", type=Path, help="explicit binding of test names to existing runner/freeze receipts; missing bindings are NOT_RUN")
+    args = parser.parse_args()
+    if args.test_evidence is not None:
+        CURRENT_RUN_MANIFEST = args.test_evidence.resolve()
     REPORTS.mkdir(parents=True, exist_ok=True)
     DOCS.mkdir(parents=True, exist_ok=True)
 
@@ -1114,19 +1122,75 @@ def build_magic_numbers(common: dict[str, Any]) -> dict[str, Any]:
 
 
 def test_marker(name: str) -> tuple[str, str | None]:
-    candidates = sorted(TEST_LOGS.glob(f"{name}*.stdout.log"), key=lambda path: path.stat().st_mtime, reverse=True)
-    for path in candidates:
-        raw = path.read_bytes()
-        if raw.startswith((b"\xff\xfe", b"\xfe\xff")):
-            text = raw.decode("utf-16", errors="replace")
-        else:
-            text = raw.decode("utf-8", errors="replace")
-        match = re.search(r"([A-Z0-9_]+_PASS[^\r\n]*)", text)
-        if match:
-            return "pass", match.group(1)
-    if name in KNOWN_FAILED_RUNS:
-        return "fail", KNOWN_FAILED_RUNS[name]
-    return "not_run", None
+    try:
+        return _test_marker_from_receipts(name)
+    except (OSError, ValueError, TypeError, KeyError):
+        return "not_run", "CURRENT_RUN_RECEIPT_INVALID"
+
+
+def _test_marker_from_receipts(name: str) -> tuple[str, str | None]:
+    """Consume one explicit runner-results/freeze binding, never old logs."""
+    if not CURRENT_RUN_MANIFEST.exists():
+        return "not_run", "CURRENT_RUN_MANIFEST_MISSING"
+    try:
+        manifest = read_json(CURRENT_RUN_MANIFEST)
+    except (OSError, ValueError):
+        return "not_run", "CURRENT_RUN_BINDING_INVALID"
+    if not isinstance(manifest, dict):
+        return "not_run", "CURRENT_RUN_BINDING_INVALID"
+    binding = manifest.get("tests", {}).get(name) if "tests" in manifest else manifest
+    if not isinstance(binding, dict):
+        return "not_run", "CURRENT_RUN_TARGET_MISSING"
+    if binding.get("test_name") != name:
+        return "not_run", "CURRENT_RUN_TARGET_MISMATCH"
+    runner_path = Path(str(binding.get("runner_results_path", ""))).resolve()
+    freeze_path = Path(str(binding.get("freeze_receipt_path", ""))).resolve()
+    if not runner_path.is_file() or not freeze_path.is_file():
+        return "not_run", "CURRENT_RUN_RECEIPT_MISSING"
+    try:
+        runner = read_json(runner_path)
+        freeze = read_json(freeze_path)
+    except (OSError, ValueError):
+        return "not_run", "CURRENT_RUN_RECEIPT_INVALID"
+    if not isinstance(runner, dict) or not isinstance(freeze, dict):
+        return "not_run", "CURRENT_RUN_RECEIPT_INVALID"
+    if freeze.get("status") != "PASS" or freeze.get("input_freeze_status") != "PASS":
+        return "not_run", "CURRENT_RUN_FREEZE_NOT_PASS"
+    if not runner.get("invocation_id") or runner.get("invocation_id") != freeze.get("invocation_id"):
+        return "not_run", "CURRENT_RUN_INVOCATION_MISMATCH"
+    if not re.fullmatch(r"[0-9a-f]{64}", str(runner.get("source_content_sha256", ""))) or runner.get("source_content_sha256") != freeze.get("source_fingerprint"):
+        return "not_run", "CURRENT_RUN_SOURCE_FINGERPRINT_MISMATCH"
+    records = [row for row in runner.get("results", []) if isinstance(row, dict) and row.get("test_path") == binding.get("test_path")]
+    if len(records) != 1:
+        return "not_run", "CURRENT_RUN_TARGET_RESULT_MISSING"
+    record = records[0]
+    log_hashes = binding.get("raw_log_sha256", {})
+    raw_names = record.get("cleanup_warning_evidence", {}).get("raw_log_paths", [])
+    if not isinstance(log_hashes, dict) or not isinstance(raw_names, list) or not raw_names:
+        return "not_run", "CURRENT_RUN_RAW_LOGS_MISSING"
+    texts = []
+    for raw_name in raw_names:
+        raw_path = Path(raw_name)
+        if not raw_path.is_file() or hashlib.sha256(raw_path.read_bytes()).hexdigest() != log_hashes.get(raw_name):
+            return "not_run", "CURRENT_RUN_LOG_HASH_MISMATCH"
+        raw = raw_path.read_bytes()
+        texts.append(raw.decode("utf-16", errors="replace") if raw.startswith((b"\xff\xfe", b"\xfe\xff")) else raw.decode("utf-8", errors="replace"))
+    expected_marker = str(binding.get("expected_marker", ""))
+    if not expected_marker:
+        return "not_run", "CURRENT_RUN_EXPECTED_MARKER_MISSING"
+    marker_present = any(line.strip() == expected_marker for text in texts for line in text.splitlines())
+    failure_present = any(re.search(r"(?m)^\s*(?:[A-Z0-9_]+_)?FAIL(?:\s|$|[:=])", text) for text in texts)
+    result_pass = record.get("effective_exit_code") == 0 and record.get("pass_marker_found") is True and record.get("process_exited") is True
+    result_fail = record.get("effective_exit_code") != 0 or record.get("pass_marker_found") is not True or record.get("process_exited") is not True
+    freeze_results = [row for row in freeze.get("results", []) if isinstance(row, dict) and row.get("test_path") == binding.get("test_path")]
+    freeze_result = freeze_results[0] if len(freeze_results) == 1 else None
+    if not isinstance(freeze_result, dict) or freeze_result.get("result") not in {"PASS", "FAIL"}:
+        return "not_run", "CURRENT_RUN_FREEZE_RESULT_MISSING"
+    if result_pass and marker_present and not failure_present and freeze_result.get("result") == "PASS" and freeze_result.get("effective_exit_code") == 0:
+        return "pass", expected_marker
+    if result_fail or not marker_present or failure_present or freeze_result.get("result") == "FAIL":
+        return "fail", str(freeze_result.get("reason") or "current runner result failed")[:240]
+    return "not_run", "CURRENT_RUN_RESULT_INCONSISTENT"
 
 
 def build_test_results(common: dict[str, Any]) -> dict[str, Any]:
@@ -1191,9 +1255,19 @@ def build_unresolved(
         ]
         if consumption_by_id[skill_id]["item_requirement"]:
             issues.append("required item/amulet is metadata-only and is not consumed")
-        if visual_by_id[skill_id]["visual_status"] not in {
-            "formal_primary_client_pixel", "no_runtime_visual"
-        }:
+        visual_status = visual_by_id[skill_id]["visual_status"]
+        allowed_visual_statuses = {
+            "formal_primary_client_pixel",
+            "formal_primary_client_animation",
+            "formal_primary_client_warrior_action_effect",
+            "no_runtime_visual",
+            "no_runtime_visual_passive",
+            "missing_catalog_entry",
+            "missing_formal_skill_effect",
+        }
+        if visual_status not in allowed_visual_statuses:
+            issues.append("unknown visual status: %s" % visual_status)
+        elif visual_status in {"missing_catalog_entry", "missing_formal_skill_effect"}:
             issues.append("formal per-skill visual binding is absent")
         records.append({
             "skill_id": skill_id,
@@ -1203,7 +1277,9 @@ def build_unresolved(
                 "MISSING_SOURCE_EVIDENCE", "SKILL_PROTOCOL_ERROR",
                 "SERVER_AUTHORITY_ERROR", "PROFICIENCY_ERROR",
                 "EFFECT_BINDING_ERROR",
-            } | ({"RESOURCE_CONSUMPTION_ERROR"} if consumption_by_id[skill_id]["item_requirement"] else set())),
+            }
+            | ({"UNKNOWN_VISUAL_STATUS"} if visual_status not in allowed_visual_statuses else set())
+            | ({"RESOURCE_CONSUMPTION_ERROR"} if consumption_by_id[skill_id]["item_requirement"] else set())),
         })
     return {**common, "unresolved_skill_count": len(records), "records": records}
 

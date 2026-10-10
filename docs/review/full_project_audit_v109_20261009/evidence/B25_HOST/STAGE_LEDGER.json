@@ -1,0 +1,94 @@
+{
+  "status": "PASS",
+  "scope": "Tool host checks only; NOT gameplay/performance/APK/device acceptance",
+  "input_freeze": "PASS",
+  "input_count": 675,
+  "source_fingerprint": "6b284b02e42688c21adff5fd12d74be82c746a074cc001a17b451029303b47df",
+  "batch": {
+    "command": "outputs/dot_remote_audit_20261010/b24_python_env/Scripts/python.exe -m pytest tests/test_b25_character_generators.py tests/test_b25_chiyue_provenance.py tests/test_b25_audit_provenance.py tests/test_b25_write_set_harness.py -q --disable-warnings",
+    "exit_code": 0,
+    "passed": 8,
+    "log_sha256": "c8aaa541fbd23f769cf66cd684b83966146d3f8bf95ddab2bca7fe7b379e80f9"
+  },
+  "other_stages": [
+    {
+      "scope": "build info modes",
+      "initial": "3PASS1FAIL retained",
+      "followup": "only failed CRLF fixture corrected;1PASS; production unchanged"
+    },
+    {
+      "scope": "retired seed CLI prewrite guard",
+      "result": "3PASS; approved calibration/runtime hashes unchanged"
+    },
+    {
+      "scope": "actual existing B22 runner evidence consumed read-only",
+      "result": "PASS; wrong marker rejected FAIL; hash drift NOT_RUN; no native replay"
+    }
+  ],
+  "qualifications": [
+    "Original paper-doll WIL authority unavailable; complete legacy rebuild BLOCKED/DATA_MISSING. Wrong final-calibration source refused before writing.",
+    "Original217-row workbook unavailable; full import reconciliation NOT_RUN. Real217 runtime provenance field comparison positive/negative covered.",
+    "Write-set tests use scratch compiler stub for helper lifecycle, not production compiler transaction acceptance.",
+    "B24 first-stage test raw7581 bytes restored without rerunning tests.",
+    "Earlier unsubstantiated154-file inventory statement withdrawn. Actual163-input inventory at15e381:122EXACT36EOL3ABSENT2known Root edits; not a final current inventory.",
+    "Original stage/index and retired experiments have recoverable local backups. User now authorizes precise retirement deletion; main integration still pending."
+  ],
+  "files": [
+    {
+      "path": "tools/build_warrior_wear_assets.py",
+      "sha256": "ec9f6a3add6108d89ba1c6277fdabd466534d6da676cec69262abc5e3467389c"
+    },
+    {
+      "path": "tools/build_original_client_paper_doll_stage.py",
+      "sha256": "cd7e17cef4c388c3fac56030cb286fe763bd962cbfd0fb281f78be8d75fe50d9"
+    },
+    {
+      "path": "tests/test_b25_character_generators.py",
+      "sha256": "e014861b3555c53273d72b2e0d8049298e4bc42f38ad9872f01560393ff898bc"
+    },
+    {
+      "path": "tools/map_assets/build_chiyue_valley_wall_pack.py",
+      "sha256": "3a62632b0f21162e0c4b3347229fcbebd57459ac40298599b80f2f531005330f"
+    },
+    {
+      "path": "tests/test_b25_chiyue_provenance.py",
+      "sha256": "c68d9f404c68e7b37f3def8915ee306649a68a4018495c75b6b4f2b4ab2a5db1"
+    },
+    {
+      "path": "tools/generate_mir2_human_skill_audit.py",
+      "sha256": "fc2a7b699a52babc35ce2acd10fda8ed280c4b0d057e9cc5e73d2788cc377fd2"
+    },
+    {
+      "path": "tools/import_canonical_monster_drop_excel.py",
+      "sha256": "b5239b8f6650c6bb60edfc09bb6793aefadf022b545bd6379f50ff40856004e8"
+    },
+    {
+      "path": "tests/test_b25_audit_provenance.py",
+      "sha256": "ae19d9e9ef3032f2049160254bd87d1bc35f6718ddd7baf8405e4c7ddca934b6"
+    },
+    {
+      "path": "tools/loot_sheet_compiler/test_write_set_repair.ps1",
+      "sha256": "0ad7202609a72b420192adff4500a67e0b7068c6057b92ba49af9b2665d7648d"
+    },
+    {
+      "path": "tests/test_b25_write_set_harness.py",
+      "sha256": "6daf627282c359538da25cf1c69b98ed09b2d02398dc95ea7a86deb4c24043d2"
+    },
+    {
+      "path": "tools/generate_build_info.ps1",
+      "sha256": "088d1b248e808e2aa46cf60f00ce960eb0f2836a1e2488e5d4ae81544b63c8ea"
+    },
+    {
+      "path": "tools/build_monster_ground_contacts.py",
+      "sha256": "4707d7778801623e7f39297367c5e8e080833274adf4033a939c41204e3a1092"
+    },
+    {
+      "path": "tests/test_b25_build_info_modes.py",
+      "sha256": "2246f97c522a74a558e61e77717e79d26277863ca876007eab7fd5aba932c8a3"
+    },
+    {
+      "path": "tests/test_b24_seed_calibration_guard.py",
+      "sha256": "0d4c857760f8130af1fdae63265bd16fb4cad4746217949d32cc8633aeef1e9e"
+    }
+  ]
+}

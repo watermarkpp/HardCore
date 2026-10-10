@@ -1,0 +1,3382 @@
+{
+  "status": "PASS",
+  "scope": "B25 tool/test inputs plus B24 approved asset freeze, not game performance evidence",
+  "source_fingerprint": "6b284b02e42688c21adff5fd12d74be82c746a074cc001a17b451029303b47df",
+  "files": [
+    {
+      "path": "assets/art/characters/warrior/wear/helmet/black_iron_helmet_attack.png",
+      "sha256": "427855f0a799fd8cc442071255861e6a22456532facb3801e9774c4236f069ca",
+      "bytes": 28610
+    },
+    {
+      "path": "assets/art/characters/warrior/wear/helmet/black_iron_helmet_cast.png",
+      "sha256": "92fc7557bad923e567183c7ae6590a2066e4a42389367ff21142e248b0a588f4",
+      "bytes": 18598
+    },
+    {
+      "path": "assets/art/characters/warrior/wear/helmet/black_iron_helmet_death.png",
+      "sha256": "f99492398eadb01b1b7e50f1f7c5bb347b42994054a165e3318922fd5599beec",
+      "bytes": 10439
+    },
+    {
+      "path": "assets/art/characters/warrior/wear/helmet/black_iron_helmet_hit.png",
+      "sha256": "605d12ebd303bbc9be5ee3da645145ad53f9077d28e0fff83ac5d95970575cf7",
+      "bytes": 15157
+    },
+    {
+      "path": "assets/art/characters/warrior/wear/helmet/black_iron_helmet_idle.png",
+      "sha256": "8a78c841d88b47946ef6f559f731cbbe9c08313e11c7ef48e5457d12d839e052",
+      "bytes": 11944
+    },
+    {
+      "path": "assets/art/characters/warrior/wear/helmet/black_iron_helmet_walk.png",
+      "sha256": "8b32472b1dd8ebe2723b34cb1fd2d5d73d151891c7372dfc4f93a4f5d3ceb4a6",
+      "bytes": 16423
+    },
+    {
+      "path": "assets/art/characters/warrior/wear/helmet/source/black_iron_helmet_approved_meteoric_narrow_jaw_20260717.png",
+      "sha256": "520a37d6b8ca40544ffbfbdb41de13009485d6799d96d434098028d305e8a70c",
+      "bytes": 1447760
+    },
+    {
+      "path": "assets/art/items/client/original_paper_doll_stage/stateitem/item_00149_stateitem_00106.png",
+      "sha256": "4e31775daec87374b54f5668e88d02f622ba0e4aca91ea7581e5d48a00c5cf8f",
+      "bytes": 1745
+    },
+    {
+      "path": "assets/art/items/client/original_paper_doll_stage/stateitem/item_00150_stateitem_00103.png",
+      "sha256": "50f92b328ba48808d14871b09ae529fd3a162505b8d7e4cfcc5701dab4991be6",
+      "bytes": 2552
+    },
+    {
+      "path": "assets/art/items/client/paper_doll/classic_flattened_head/item_00228_head.png",
+      "sha256": "7c05f80c3567f3f8a520ada3e37b92e112b2b6613b0ededd81ead17f1b321b57",
+      "bytes": 1213
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/acceptance/black_iron_direction_mapping.png",
+      "sha256": "a985db8e985140777fb80ea58858fca38cd7ac28f2645d87cef30adc04fc7417",
+      "bytes": 104542
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/acceptance/bronze_magic_direction_mapping.png",
+      "sha256": "71d97bbda35515c212071eb2db5ad4759642b717946eb1c2b28722db67d9964c",
+      "bytes": 95911
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/acceptance/elf_direction_mapping.png",
+      "sha256": "7c484e0a492c90ac10a4ea34dbb45398938c944d6cd429c28b8dbcf2f599e8e2",
+      "bytes": 126424
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/acceptance/god_magic_direction_mapping.png",
+      "sha256": "4f3e52ede346e054a1511020708fda4b35b187403266d9731242623aa51e6c4a",
+      "bytes": 105469
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/acceptance/heavenly_taoist_direction_mapping.png",
+      "sha256": "bbb05ee181e240afae2ca25680ea7b57f95ad903ed24bb07d1560d6a4108dfb9",
+      "bytes": 89891
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/acceptance/holy_war_direction_mapping.png",
+      "sha256": "1cb70a8a41e1c7b89d68a11b3db8d516a7e52b92bdfe3a5ea51769b4107ef403",
+      "bytes": 93826
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/acceptance/memory_direction_mapping.png",
+      "sha256": "5feb08582a53e4a7dd99438230e72bd2b0e3c6e93a75bb700cd609ae078ce8cb",
+      "bytes": 104842
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/acceptance/mystery_direction_mapping.png",
+      "sha256": "22f277a1823e8ef9648602eab79043ecc25a7dfe93aa615e1b8b65fbd385c931",
+      "bytes": 110381
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/acceptance/prayer_direction_mapping.png",
+      "sha256": "a76d5c997caf8ed37b718a4520efd19e1be66f9f25743401d62028022430cf8a",
+      "bytes": 132244
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/acceptance/skeleton_direction_mapping.png",
+      "sha256": "e139086fe9571231bd2d6223b8902160c14cb898773fa225be1b40799c753cbf",
+      "bytes": 59223
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/acceptance/taoist_direction_mapping.png",
+      "sha256": "88584d15b711470a8822ef62f088b9f1b204b8f1d882b7164ef6385c825a8d87",
+      "bytes": 134129
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_attack.png",
+      "sha256": "bf099428a54ef5743de474147b2759ce3fcb061f18a08f0801b14b4984cf9ca8",
+      "bytes": 22014
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_cast.png",
+      "sha256": "a32f7377dc21369fbb46a3e5543916cc40fbecdce619afabbf3784337f08cbd1",
+      "bytes": 14939
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_death.png",
+      "sha256": "343c0bf95dfb7eb6307cb35a445f70a8d3499e410b3fa0ae31553c11997d52f5",
+      "bytes": 18920
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_hit.png",
+      "sha256": "b55e90d7a25e9c091712e6efe8c7a0e28367fcdd67568ace61d6b39408e21b70",
+      "bytes": 11397
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_idle.png",
+      "sha256": "725ba4db91370479dd63cc5425d99a89fe87a3a370b23dd91098b62b7c15d053",
+      "bytes": 10120
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_walk.png",
+      "sha256": "eb08be22c3dcb2302f7158a1d18572559630ac73e9d525e0d37b866687ae5455",
+      "bytes": 14089
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/elf_helmet_attack.png",
+      "sha256": "212844b23f1424c00550d256410392870dbfc5dc9d7da7c2cd889d2007988d62",
+      "bytes": 28065
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/elf_helmet_cast.png",
+      "sha256": "beec777415c87889ef9f2fb00a92c572f9a38460430f820bc8525d143301d5f4",
+      "bytes": 18898
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/elf_helmet_death.png",
+      "sha256": "a457b418c3bd74cbd2c911ac3e1961645f78817a52fc2d8bc8acda784f2fd089",
+      "bytes": 24175
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/elf_helmet_hit.png",
+      "sha256": "5aa60afeb7307fd954737153e76e8356f9ab60f7e7862959b49abd3187f15b44",
+      "bytes": 14497
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/elf_helmet_idle.png",
+      "sha256": "d198680e4cace4df28a888451ff5fb43ebd080d3723dd03785f6a4995c816680",
+      "bytes": 11841
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/elf_helmet_walk.png",
+      "sha256": "e026b7696a9a7b96d6fe350bace83a5e4bf23ec073ba5ff94d606a49375246bd",
+      "bytes": 16565
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/god_magic_helmet_attack.png",
+      "sha256": "8a40cff083b6481a93633c5f1e9ebeabf4a6a2f0968e73e86238ee24bca2d626",
+      "bytes": 27178
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/god_magic_helmet_cast.png",
+      "sha256": "40e02b152c15997c1ae41ff510a0e125b793c819b1975b95ec002c2b0db5f21a",
+      "bytes": 18180
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/god_magic_helmet_death.png",
+      "sha256": "f6e58e5a6fe462312bfea4dd68ace5222e5b9d24cc1ebda2b8e850eabee005d7",
+      "bytes": 23767
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/god_magic_helmet_hit.png",
+      "sha256": "a2ebc69c2374b4ce7e99ea042c3d403a9680bd3743fbcc583337ee69c9b7182a",
+      "bytes": 13973
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/god_magic_helmet_idle.png",
+      "sha256": "c5f77ca64c823cedab3d95578b9874f9bd8e8e482ed9d723d0f6f188c815799f",
+      "bytes": 11684
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/god_magic_helmet_walk.png",
+      "sha256": "ec339bd71740fc712666bd7ac3097970dcac7e240475b0c7ccf6718e8956147f",
+      "bytes": 15814
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_attack.png",
+      "sha256": "b5a32c5c24b5d1d8b50949f80f806862357428ea41333e9652c221a2466484b6",
+      "bytes": 29581
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_cast.png",
+      "sha256": "8658d90f240857c038832d272872f3b61c8dc52772d2f05fb7838e77e57f8c16",
+      "bytes": 18802
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_death.png",
+      "sha256": "1b33c0ff195d78ee05cb2044dbdf87941045ec4958ead1d55f4ba0a9add492c7",
+      "bytes": 25576
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_hit.png",
+      "sha256": "7adaa6f5e533b9cad97efea643385ad9edbf11e03c35737917d30b75f42be6bb",
+      "bytes": 14993
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
+      "sha256": "cd5c255f226343f2d4bb6119ff33bdbc89d1b0817ddcf3013f2dfd5353ab43b3",
+      "bytes": 12893
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_walk.png",
+      "sha256": "e1030c5a53ae4066d96226401f11f498a8c422e20c1129aa979b7b58ff5d8487",
+      "bytes": 17388
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/holy_war_helmet_attack.png",
+      "sha256": "0e079079c04fc8e0aa9c4b965a7ce8a506cd459e2b0b998aa9eab303bc77c314",
+      "bytes": 35573
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/holy_war_helmet_cast.png",
+      "sha256": "6b4011b209ec50f00cb3a638f4c1688a35d636ff4054b0cbeb6d34e656af575d",
+      "bytes": 22142
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/holy_war_helmet_death.png",
+      "sha256": "2e3b471eb80b92869babd9ce9663d3cfa2763ae9d82ce02beedbecea69d1cc74",
+      "bytes": 31363
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/holy_war_helmet_hit.png",
+      "sha256": "6be7a53491e623a856eab1f4858ce83fec79f797473dcfbdee0c31171349af13",
+      "bytes": 17788
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/holy_war_helmet_idle.png",
+      "sha256": "3379be9725838e8f9965f93074ccf1e66916459f65fc79e836e157ae2d342355",
+      "bytes": 14757
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/holy_war_helmet_walk.png",
+      "sha256": "575899c1dcc036ea54717707dbc36862a3a36b9a21d3c2c40b4781f7f0106ffb",
+      "bytes": 19947
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/memory_helmet_attack.png",
+      "sha256": "8b437f10416af84ca9ffde136227081ded37930f624be82816f440a024ec9e1a",
+      "bytes": 28257
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/memory_helmet_cast.png",
+      "sha256": "f3cf01031fdf5c8c5d9009d7f3ec0e2c8614e36a1a6414e6ef9d6c2d68ad28a9",
+      "bytes": 18327
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/memory_helmet_death.png",
+      "sha256": "ad0c21d9cfcf39d2a03f57a84f81bf520996bf5b76d9d0dfc8503374be81988d",
+      "bytes": 24168
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/memory_helmet_hit.png",
+      "sha256": "c2a3805259e6d7eee620ee09dd679c2a83de93274abee065925c8e6ed5eb9549",
+      "bytes": 14191
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/memory_helmet_idle.png",
+      "sha256": "05173ae4ad4dcfaaec72ab4bb728d364cbcc8b8189c5870e0af08bceb5588a9a",
+      "bytes": 12382
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/memory_helmet_walk.png",
+      "sha256": "99dbf26a32a8c39be2400dcc7920730de4025c5366bfb7b9bb53e3ff8884032c",
+      "bytes": 17115
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/mystery_helmet_attack.png",
+      "sha256": "942cde53d75cac1234d0797d8c57df7608b7fa65f2b9d21b06078a727d9b8f3e",
+      "bytes": 34888
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/mystery_helmet_cast.png",
+      "sha256": "92f9ea8f9cd3c4095320cbc6b9e88ef2a54cee5152178d04cffbe5947f2f37ad",
+      "bytes": 21979
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/mystery_helmet_death.png",
+      "sha256": "2228a5e8f21e8a650ecb431e125334d4646fcb9f339d8e630e70002f82d24ce4",
+      "bytes": 30074
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/mystery_helmet_hit.png",
+      "sha256": "0e6a714ea1fa51dcd82aaaf9ae1c85626c1fb511443fb3bfdbe1edc1c3aa7589",
+      "bytes": 17828
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/mystery_helmet_idle.png",
+      "sha256": "b8d9658de50325291fded0e1c31f17a59d5fa3b23915332e0822b2f8aef0c741",
+      "bytes": 14358
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/mystery_helmet_walk.png",
+      "sha256": "a7988e47368e6f3945c9730a145c26585be72e466491ab72f1fb0e255d27fe94",
+      "bytes": 19911
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/prayer_helmet_attack.png",
+      "sha256": "e7390493dc9b6830a9d876d7d05fdac362e362fab41af0e3e01b8f0cbbba4421",
+      "bytes": 26965
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/prayer_helmet_cast.png",
+      "sha256": "bb44e65f62f699b58b8a3621582d137138f4b3cde970fefe9edbc6df7be3f741",
+      "bytes": 17329
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/prayer_helmet_death.png",
+      "sha256": "4f8d34ddadb47b60b7c176e32e208bbb9267b9eca49c7f0419f597ffa7de9af6",
+      "bytes": 24187
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/prayer_helmet_hit.png",
+      "sha256": "985eaf3f1308646deac11d2a06ea638f37739b97ecf79f3aedfacda857dc4b10",
+      "bytes": 14415
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/prayer_helmet_idle.png",
+      "sha256": "18aab75a74b57b6cf87500f13f07548a3a3bec6e05a337f1a0c72eb0b09aafa4",
+      "bytes": 11990
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/prayer_helmet_walk.png",
+      "sha256": "1567249f8de1066e683ef007d3148a014021b7cf35687edd0ccab27d4ff1891b",
+      "bytes": 15951
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/skeleton_helmet_attack.png",
+      "sha256": "d0976052d548a6adc7a47f3f6b4a37d0ead0875c9b22dd5e71f8a28664556be9",
+      "bytes": 35599
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/skeleton_helmet_cast.png",
+      "sha256": "21058ba7b06b2bfb0e4b7f5b401403aa65f00210135c181a5d6d13429c14f7cd",
+      "bytes": 22025
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/skeleton_helmet_death.png",
+      "sha256": "a0a7b46d964f2fcdf82ae7c02c40ccc5bf5e8db05876f0e085b70d4782cfa4a7",
+      "bytes": 31887
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/skeleton_helmet_hit.png",
+      "sha256": "ca0974187389c9cf3ca7948aaba75a0f35ae14c5c8ca024e2e13d9da63767a10",
+      "bytes": 17852
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/skeleton_helmet_idle.png",
+      "sha256": "f7c7e59ff4757e915997225778b7933142d26976c455292748ca0cd27c891fbe",
+      "bytes": 14949
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/skeleton_helmet_walk.png",
+      "sha256": "373af3c58dfdab4f9dc615b151ea65887f5df214af21c6fe708b1f96e8f73ca3",
+      "bytes": 20495
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/source/bronze_magic_helmet_8dir.png",
+      "sha256": "a1cb935c1c00f13ae2ccae2c5cea1706f4f549ffef66607574be2c67bd370f82",
+      "bytes": 1294273
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/source/bronze_magic_helmet_8dir_transparent.png",
+      "sha256": "8d5b9b4af6e28947cb4437d5f09ea8f26fd8822b4d589d619a8153eda37504ee",
+      "bytes": 602994
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/source/elf_helmet_8dir.png",
+      "sha256": "e19b4b820208a4e3b779ad1e66c71f5ad3a6d4928f7a2ccf0d0ad55b56928cb5",
+      "bytes": 1133084
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/source/god_magic_helmet_8dir.png",
+      "sha256": "9357cf92601980651c5bb678ab68c4c12887b55e8276b7860f1996343cd96990",
+      "bytes": 1511302
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/source/god_magic_helmet_approved_20260727.png",
+      "sha256": "b676e30dbb335c55df10ac89aac4636f5a7b557cbd978f0edfd8a419c12afa14",
+      "bytes": 2007549
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/source/heavenly_taoist_helmet_8dir.png",
+      "sha256": "e558252316ba2bfa1f0c17497bf0c894e667f6046a58ff3881d0540d6167f9e4",
+      "bytes": 1520326
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/source/heavenly_taoist_helmet_approved_20260727.png",
+      "sha256": "a5e474da3c081ad2f5dd0926bd9dd1358e4179737e6b8d5614a77cf7b2ba9e8e",
+      "bytes": 2128757
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/source/holy_war_helmet_8dir.png",
+      "sha256": "59ff1834783d16f6f2c70b5c1072a259ce933fe624455ce16b23314c136b070f",
+      "bytes": 1576767
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/source/holy_war_helmet_approved_20260727.png",
+      "sha256": "93307c79e0d5d697d269eec3ba2c318385be96130026e1dbe1b67779437b583b",
+      "bytes": 2441247
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/source/memory_helmet_8dir.png",
+      "sha256": "770778d6cdb5eee2346eb2b4c873de55a5bf73aa2112a6cefeb5742d5aa5b40a",
+      "bytes": 1317090
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/source/memory_helmet_full_profiles_generated_reference.png",
+      "sha256": "c7f7babb2d20e151b47e411a770539152ea322dff8a7279a5f7d45aa8ca59a19",
+      "bytes": 559074
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/source/mystery_helmet_8dir.png",
+      "sha256": "b4de70dab171c83869bc55fba20e64aadc5d69d2b591a82eeaf2489e5898c597",
+      "bytes": 1607632
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/source/mystery_helmet_8dir_transparent.png",
+      "sha256": "00c5aef3cff85d449423a060eeefbe7586919729541cd35dae4a6ad7cd97a39d",
+      "bytes": 983547
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
+      "sha256": "d4c9c6db204f9c4735b91c68e778e2a64e38e16f8fc95f29ab3201c2273cfcd4",
+      "bytes": 1374934
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_ne_nw_generated_reference.png",
+      "sha256": "fcf6ed6d455eb818027846e30dbcb05346097cb4ee46b29ffda6ad5aa9540a8c",
+      "bytes": 1409551
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/source/skeleton_helmet_8dir.png",
+      "sha256": "2f026a9ae556ca5e47266db002fffd8bc55963227cc695b41f070578839ed5f7",
+      "bytes": 1265741
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/source/taoist_helmet_8dir.png",
+      "sha256": "75d28f98149909846ae39a49770b3e672ac3295d584d33e635f26f49d399a858",
+      "bytes": 1697106
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/taoist_helmet_attack.png",
+      "sha256": "8190630956f72be2b9cee768aa9553cc787c91d4aa7322314f2c1154bfa189d0",
+      "bytes": 26519
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/taoist_helmet_cast.png",
+      "sha256": "3016c204c37d84c36e7c3c5843ff182efaac06b564c26b5056ab0a4d6ef6fbea",
+      "bytes": 17665
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/taoist_helmet_death.png",
+      "sha256": "4456892985df33ce4bc1094231df618bb982f569c94296ab8ea1a989bc629203",
+      "bytes": 23595
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/taoist_helmet_hit.png",
+      "sha256": "c20b884e659328c4cdb8fba252f713e9a7cf5d7d51beaaf74f73968501f36dae",
+      "bytes": 13695
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/taoist_helmet_idle.png",
+      "sha256": "a479e6a4ff8ce028a47959c6e7b4677efb9c360ee2dc9ced6cb3c3930fb47f89",
+      "bytes": 11745
+    },
+    {
+      "path": "assets/art/items/client/world_wear/helmet/male/taoist_helmet_walk.png",
+      "sha256": "4207bbc6bc0f4d79aabe756f1b79140f3030a697310cab2960212eefcc9c815b",
+      "bytes": 16033
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/cannibal_flower/cannibal_flower_attack.png",
+      "sha256": "9bd9ae6a2b59c013976908357b8256afeed1c14888b050b35f60a880031297d3",
+      "bytes": 293994
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/cannibal_flower/cannibal_flower_death.png",
+      "sha256": "8728ff3dd1e78e825373e45884bc8fa008eda10b593be72eb22f9d76e2844863",
+      "bytes": 441159
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/cannibal_flower/cannibal_flower_hit.png",
+      "sha256": "2dda5c6fe9689ac41c68695ecd8bd99ff0e1c8b1a2a7fbb51afa324bc045a331",
+      "bytes": 106067
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/cannibal_flower/cannibal_flower_idle.png",
+      "sha256": "c9b7a58bb6c3f63030a6a908561a389331489afe17ef6330a6ee2cd847ef8686",
+      "bytes": 195313
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/cannibal_flower/cannibal_flower_walk.png",
+      "sha256": "7a0575021dd9280f3e439a6ffc1e506209a9a8eb769ec60ee259c31687aecd57",
+      "bytes": 329542
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/cave_bat/cave_bat_attack.png",
+      "sha256": "da29ec67e7ca57e0051c5c64e91b874c26c01a9faa6e02c8253bb19cec075601",
+      "bytes": 73769
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/cave_bat/cave_bat_death.png",
+      "sha256": "08befab3f64fea9ddd13cc8699ed994a3ef440e52a314865eeacb5e51664cdf9",
+      "bytes": 147561
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/cave_bat/cave_bat_hit.png",
+      "sha256": "fde44b622c1dbdff0f315108a9a506e9d826b938b074ae20663fe4e83f7fc51f",
+      "bytes": 26831
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/cave_bat/cave_bat_idle.png",
+      "sha256": "5dfa159282d2db3c76a2079aa70cbe7cbcbef63b4443531d6836af5ffd9ccfc4",
+      "bytes": 52317
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/cave_bat/cave_bat_walk.png",
+      "sha256": "8c12e1a6323cb07571fb6e59083d8ecead2f261084630e9e98d318894e89d02d",
+      "bytes": 74659
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/cave_maggot/cave_maggot_attack.png",
+      "sha256": "dfadeaecf1dcdb815169362242f8b17d11c1bc1328b93ee14ccbeba01464f6af",
+      "bytes": 59359
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/cave_maggot/cave_maggot_death.png",
+      "sha256": "199fa1f76d145882858ebbe0e14cf6d6dfdadd50e4bd4a917c090257372923ac",
+      "bytes": 43361
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/cave_maggot/cave_maggot_hit.png",
+      "sha256": "529080a209b083f445f6e72924a5372f43f6facd0200fb33590a14a0cf6ab9f6",
+      "bytes": 21211
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/cave_maggot/cave_maggot_idle.png",
+      "sha256": "c8dbae39b1cd35dab9774e439c3fa1a2cb2e822a2a849b030e61efd20df61ba6",
+      "bytes": 39573
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/cave_maggot/cave_maggot_walk.png",
+      "sha256": "69831004fbfe9397477b577884b1fd577a63b3dfa109218c566311b0272c9981",
+      "bytes": 61222
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/dark_warrior/dark_warrior_attack.png",
+      "sha256": "6a58b463c5822215c977e20db128b6a9b2fdab5c530acb7b48c64f7757884bd8",
+      "bytes": 150762
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/dark_warrior/dark_warrior_death.png",
+      "sha256": "48b1d641931b697780fdf6f894cc842869cf5bfc75e622801741582704c6aff1",
+      "bytes": 311082
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/dark_warrior/dark_warrior_hit.png",
+      "sha256": "ab402a5ee4e3fabfdf930ce6cb74bf05dfc8e38fb64201b2a96cea35d1b89e10",
+      "bytes": 52610
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/dark_warrior/dark_warrior_idle.png",
+      "sha256": "d25edeea1c52fb8a8447547a33ed213b78d3585cce64f69d3e02b4825b6d146b",
+      "bytes": 93354
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/dark_warrior/dark_warrior_walk.png",
+      "sha256": "20ccdd57de23c62e6bf3c188619c9e95e5c442f7c91c6d986b81fb81677685f7",
+      "bytes": 163896
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/dung/dung_attack.png",
+      "sha256": "ce8df53d6dc250d3f1c3fc5405cdfb6ab8edf841dc8180ea1a1e47a878e6449a",
+      "bytes": 185243
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/dung/dung_death.png",
+      "sha256": "5aa4767b7b59acc36a1c8d35ecab099c0f9abcf752ae91e5d6bafd1d8951fab2",
+      "bytes": 335557
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/dung/dung_hit.png",
+      "sha256": "ed03ed75aff089a0633d87513dda616303935ca7de95646558f8efd806d7cfc4",
+      "bytes": 65989
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/dung/dung_idle.png",
+      "sha256": "9b6b90e495d1deb46867f4dea06af3b317f5b8f7b303327da464b74d41a57c6a",
+      "bytes": 119796
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/dung/dung_walk.png",
+      "sha256": "51161fd0b230852676e5d17afb68ee8e088642ffeb0022f4200cbef17e9fbb97",
+      "bytes": 186547
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/flaming_wooma/flaming_wooma_attack.png",
+      "sha256": "affab1183aed7a1c0ba3e34a7efdd3964c75b19e82a781974c39da5df53b9185",
+      "bytes": 459680
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/flaming_wooma/flaming_wooma_death.png",
+      "sha256": "413c4b72e68c245780eb0c71590b15f05a19642f7ab24b2fc5d92095ee148e9e",
+      "bytes": 811735
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/flaming_wooma/flaming_wooma_hit.png",
+      "sha256": "df8cde96ef544294892f2a0745df69463298fd6fc8a5affc0fe5d2b057df05aa",
+      "bytes": 154091
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/flaming_wooma/flaming_wooma_idle.png",
+      "sha256": "c3d1129f41e93ff1dc82bdf93537b01838fbfa5a704694774920ee70cda7202c",
+      "bytes": 286148
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/flaming_wooma/flaming_wooma_walk.png",
+      "sha256": "45a348259fa41a81665aa0c594f95acfc160d4ecf5c33bc638665be96be0fc90",
+      "bytes": 435161
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/forest_yeti/forest_yeti_attack.png",
+      "sha256": "04d26debe53121862cc3c9e6aa68125dea8fea3f98a0e64249a522272b5b3df3",
+      "bytes": 383224
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/forest_yeti/forest_yeti_death.png",
+      "sha256": "c0a24da718c97b2ae23e2024bb49e6f4b9cb78bb2bf60512bbbe09c893c1325a",
+      "bytes": 326475
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/forest_yeti/forest_yeti_hit.png",
+      "sha256": "d740654565616fae1ab3b152ddece09e839b3e194946646e70e176bda4e3dc28",
+      "bytes": 127149
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/forest_yeti/forest_yeti_idle.png",
+      "sha256": "aa4c143cd0bd5de228e91654b6635479251cf5a60c0111027950767ce00844dc",
+      "bytes": 201771
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/forest_yeti/forest_yeti_walk.png",
+      "sha256": "1369297df620cee21374194587f85ba031a7780ed94e0b3001e446da5957c491",
+      "bytes": 305352
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/half_orc/half_orc_attack.png",
+      "sha256": "df9b4547ee4dfe9880f81bcbfb4e2fb95c5dfba493a08c65385ee8184d12e5a3",
+      "bytes": 271561
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/half_orc/half_orc_death.png",
+      "sha256": "69452a09bfa0ad3e758979c9d793e02fddb6c8a978f4ce62f07ea30c1b0d007a",
+      "bytes": 493250
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/half_orc/half_orc_hit.png",
+      "sha256": "d7a0b1a7994bb22398ebfc608a62562154fc6c5670e7781e870d7b5e3f475fa0",
+      "bytes": 90030
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/half_orc/half_orc_idle.png",
+      "sha256": "5da22de8a424a8a4ae039e2e0cf976206a1516bd0a8feb29cb3ec86396844350",
+      "bytes": 164494
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/half_orc/half_orc_walk.png",
+      "sha256": "ae18117896473a5c4b853d2b8e2c8bc6b732f50f252efb4a9197741db48044d7",
+      "bytes": 242027
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/hook_cat/hook_cat_attack.png",
+      "sha256": "fb00b896d64836106d491b5f6a45279fcee2e0c88f77314fdf4cfed76a95d034",
+      "bytes": 169384
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/hook_cat/hook_cat_death.png",
+      "sha256": "b58ec8a6ee48f954907f2558a6aea8cfa7e2aa973bc15346a03e4b8da1276d6a",
+      "bytes": 306240
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/hook_cat/hook_cat_hit.png",
+      "sha256": "a76983c89024bda36c76c0862e33b66e7c293e492b5d0c901930fc762a63986f",
+      "bytes": 55362
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/hook_cat/hook_cat_idle.png",
+      "sha256": "3a0806c373580a9e6a2e10df6668ce1019ad7d02b866b18069d8ac3bc6d8b5bb",
+      "bytes": 84740
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/hook_cat/hook_cat_walk.png",
+      "sha256": "ca44bdcfdbb1b94775014acf7179b57066449332032f380a26598a8eac703214",
+      "bytes": 141690
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/oma_fighter/oma_fighter_attack.png",
+      "sha256": "c1b07edcc42d4cad9c17c22a8f865bab42d8151ff0862c4aba43b81265d0952c",
+      "bytes": 291994
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/oma_fighter/oma_fighter_death.png",
+      "sha256": "1c57c846385a144cf22181fc90709e205fc68f81c97ad9a60b7da0a5a0aa5097",
+      "bytes": 521798
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/oma_fighter/oma_fighter_hit.png",
+      "sha256": "158226705fd08fdd2c91a09c46994de6287ce7a61f14f2be24335835da958a10",
+      "bytes": 95756
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/oma_fighter/oma_fighter_idle.png",
+      "sha256": "1085e2c26b27b01c03d9a282a9fd391958b9203d6222e22d68c594d5d341b8c5",
+      "bytes": 175380
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/oma_fighter/oma_fighter_walk.png",
+      "sha256": "56f587abe9bd2508da840d4d2fd0b89701ccc465a16169386a9cc289daf8b223",
+      "bytes": 254036
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/oma_warrior/oma_warrior_attack.png",
+      "sha256": "26faa865690152bc4c4bfe4b6789967f90a023f7c9f51af327b03c03426a556c",
+      "bytes": 368053
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/oma_warrior/oma_warrior_death.png",
+      "sha256": "456a68b9101c32e7af5aca64986941371d886f3fc82136c97bfe6f9521c7e497",
+      "bytes": 661540
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/oma_warrior/oma_warrior_hit.png",
+      "sha256": "42e4365b6a0e2f5a19baa95558ff95d2a6b5b63e96e17c9d70c127da382001be",
+      "bytes": 122024
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/oma_warrior/oma_warrior_idle.png",
+      "sha256": "098cfe55d1b78572197a21ef4cdd4b0896c36ea6b19473f82286841b4ccf73d1",
+      "bytes": 222938
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/oma_warrior/oma_warrior_walk.png",
+      "sha256": "3e7bef3bc45b43e57c850d981a78776c13f26b2e877aaef368861ebb6fdae686",
+      "bytes": 329902
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/rake_cat/rake_cat_attack.png",
+      "sha256": "fcc8e6af49ecf1d0be02464815201e82848560e43690f94dde313be1f8234d38",
+      "bytes": 185175
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/rake_cat/rake_cat_death.png",
+      "sha256": "4ea94fd3cf27b750e9728c024d74227a4484e47fd9ceb9da37b4ff7b777389ee",
+      "bytes": 341225
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/rake_cat/rake_cat_hit.png",
+      "sha256": "2628b26c51ce88acfd97d441fe96eab99b4c4b19d53636076415d20e7a53a522",
+      "bytes": 64567
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/rake_cat/rake_cat_idle.png",
+      "sha256": "1a88c902fe2bfa6b41185e8fa4e5632c8201cb1704dc935c2732a79daa965106",
+      "bytes": 91274
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/rake_cat/rake_cat_walk.png",
+      "sha256": "34035bfacdf7577c8bd4927919fe13efa644eff3ab659ee251bb6ad30912671f",
+      "bytes": 167232
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/red_snake/red_snake_attack.png",
+      "sha256": "01539b3784f25fc16fb36a4e7be20f93ba720bf45a6399245336de15c957bf70",
+      "bytes": 135684
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/red_snake/red_snake_death.png",
+      "sha256": "c3a9d7554f5164f78f99feb0c240e5e3c22924ea86a326b89a8a9f63fd8a5f04",
+      "bytes": 252215
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/red_snake/red_snake_hit.png",
+      "sha256": "08fbbe502770a5874163e1036622b22a0c9086fc18c8c4e0a2e08f3c1268d8d2",
+      "bytes": 45377
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/red_snake/red_snake_idle.png",
+      "sha256": "6d4d5f633b709425e98383947955f079c45182e950f97ed1f9e275f52b2fe035",
+      "bytes": 85869
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/red_snake/red_snake_walk.png",
+      "sha256": "da30b902f306c7c956c9b54162e006136f42619264cbd3aaa26b4cb14f9588ab",
+      "bytes": 134133
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/scorpion/scorpion_attack.png",
+      "sha256": "1ab0bf0ae4a330ccacfc3865fceb9edcb3c68d7215815d8f898ef42fba367589",
+      "bytes": 236979
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/scorpion/scorpion_death.png",
+      "sha256": "9dce889449e40f155f78e455435ef1d15a89108cf459ade7d9a0c164ce29191f",
+      "bytes": 424012
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/scorpion/scorpion_hit.png",
+      "sha256": "933f53b3e11525cdf46a9d8041601bcbaabff42df2f0a539f57034b1d4f7e5d7",
+      "bytes": 84564
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/scorpion/scorpion_idle.png",
+      "sha256": "141b0a71328a57c769905000fcb159f3ecd9b3a473d4b0e854e75717a067af81",
+      "bytes": 154643
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/scorpion/scorpion_walk.png",
+      "sha256": "632dec3232dc376047349c592f5e881705df2028a36bb26e8484d9063cf82002",
+      "bytes": 231304
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/spitting_spider/spitting_spider_attack.png",
+      "sha256": "95be593fad4b2bafeeb21bd271beea527708f22e5a41574e5a4e48f8b99bec1a",
+      "bytes": 546828
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/spitting_spider/spitting_spider_death.png",
+      "sha256": "b6abf6863c85109433a5f6cdb01502ffe2216b211878fc376ff7b5a493e5de7c",
+      "bytes": 930865
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/spitting_spider/spitting_spider_hit.png",
+      "sha256": "6960f96508f6caf8984533cf57bb69e40a5f77cbfe30b68b42b6f260a3b5c8b0",
+      "bytes": 178717
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/spitting_spider/spitting_spider_idle.png",
+      "sha256": "57fe5735d2ad0ae6ab6decd2b14a93bbb0fcd87450f7e848af85fa9edf6cd36b",
+      "bytes": 332209
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/spitting_spider/spitting_spider_walk.png",
+      "sha256": "31aee9d3ebc2a75d7e7542bbf43f6a1387845e6ed461b4eba21609beea6296a9",
+      "bytes": 522609
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/strawman/strawman_attack.png",
+      "sha256": "2cac5235553cac906555b4854a87e9dd38c2c58674b82857b8f7c4366d7224b7",
+      "bytes": 160493
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/strawman/strawman_death.png",
+      "sha256": "dfae8865fcaaece35d7b9d3e5b21fea24eece79970c9c4327323740ca059f42c",
+      "bytes": 228306
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/strawman/strawman_hit.png",
+      "sha256": "e02ea58b075c52759c8f7c7d804c27876f4670fbcf8f353330ade12e2eb1de27",
+      "bytes": 54164
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/strawman/strawman_idle.png",
+      "sha256": "3df7b56881742365571f01d2cc92d8ac44f761a69937fdc2e26c830059ccbd99",
+      "bytes": 98613
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/strawman/strawman_walk.png",
+      "sha256": "dc7ce67b57f270caa34809603689956e4c6165d1e6c1d7f2ead6e9177b76d661",
+      "bytes": 155890
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/tiger_snake/tiger_snake_attack.png",
+      "sha256": "3af7553f746d7ad104bec596e5223e168934b859ccdb1d6b29bd9a6792bb0ffd",
+      "bytes": 150359
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/tiger_snake/tiger_snake_death.png",
+      "sha256": "8bf57cb5476294d1543234c809163e2bd0d5169490ad12d00f13c3d30fbf5d98",
+      "bytes": 271526
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/tiger_snake/tiger_snake_hit.png",
+      "sha256": "ae26155547ef2bdb336bd78a017fbcf0b1ce474df16bb189f2e8de9d376d0169",
+      "bytes": 50873
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/tiger_snake/tiger_snake_idle.png",
+      "sha256": "37b9308471034f60bcda0c3b92b4f46d396beffd46691cd88ad137575c65d21d",
+      "bytes": 95568
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/tiger_snake/tiger_snake_walk.png",
+      "sha256": "39ca56f0fcf1ef3b6c8c90b1b86ab9130937207278dcbd8f0adc4d80f6a29a1b",
+      "bytes": 148432
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/wooma_fighter/wooma_fighter_attack.png",
+      "sha256": "436c6025df75f494a97de4887be066c6b934d89087486bd73e718bc70f90c662",
+      "bytes": 416073
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/wooma_fighter/wooma_fighter_death.png",
+      "sha256": "e4b9f3bf2727e1a629da802fb5eafff0e9a5ed00b75e29856721a0ddde4590ac",
+      "bytes": 699863
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/wooma_fighter/wooma_fighter_hit.png",
+      "sha256": "7505e404831f52a7d4d52ddf0eddaea96b36ac54b6662457ff68c9de091310ab",
+      "bytes": 131620
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/wooma_fighter/wooma_fighter_idle.png",
+      "sha256": "8b1bdc18a0262c00c0470ac604e3a3eaaa12c7203c89f4f73a93bcf3b8511bf0",
+      "bytes": 239075
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/wooma_fighter/wooma_fighter_walk.png",
+      "sha256": "43a6c6678e98031229bab1c637040847972b6bceb70fda23384d6904ffca56a1",
+      "bytes": 370481
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/wooma_guardian/wooma_guardian_attack.png",
+      "sha256": "5d74d547db7700b705493e6fc9daa75a16054dba708e768123594fdf6e6df5b8",
+      "bytes": 470288
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/wooma_guardian/wooma_guardian_death.png",
+      "sha256": "d7849abea9a6ed48e29b1ef1135971c61fd586a580c941ec0649748a4c6c994e",
+      "bytes": 829354
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/wooma_guardian/wooma_guardian_hit.png",
+      "sha256": "473a6c945467650e9ce204e21ba2f39dcb3f382447a53220223c64881940b754",
+      "bytes": 144180
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/wooma_guardian/wooma_guardian_idle.png",
+      "sha256": "c904f22ab19fa7e7bfe12cfb1ac94eefbc30c2c13d51bf6d29125612480223cd",
+      "bytes": 267187
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/wooma_guardian/wooma_guardian_walk.png",
+      "sha256": "37aa8ec9f35f49e0dd451e950d8f6722636611674aa2386e7cdb0215ffb40a52",
+      "bytes": 414825
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_attack.png",
+      "sha256": "c217fe76285f19c6f7a1ca6c2802e93f9e41af5a061645ac0f709da95207d19a",
+      "bytes": 290484
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_death.png",
+      "sha256": "a40a1424810a64aec5dc9ec1e612fc00970489deb3f4377a086d3c334752c981",
+      "bytes": 491607
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_hit.png",
+      "sha256": "0b86d9c516964968bda45a2ecf1fcbf96d2f62a19162cd4a1906bb1935dde004",
+      "bytes": 95679
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_idle.png",
+      "sha256": "3b0c7239d4eb8e6d88c387624cde3cecd4103a565002ae9d1bb7d2393994de98",
+      "bytes": 168066
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_walk.png",
+      "sha256": "212b8cb71580c343f7852ffca4ba8c426ad71bbbc7ce3a9d0edb2cd42dee0e90",
+      "bytes": 267114
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/wooma_warrior/wooma_warrior_attack.png",
+      "sha256": "14d49a584a00ddeeeea3fe456ad645e58a8c2f46333ee4027524eaf1a89c08c9",
+      "bytes": 402519
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/wooma_warrior/wooma_warrior_death.png",
+      "sha256": "ec7cc1509fcb4f7739094ddee7d6ef60c954e01ade34b41dd9391312251c933e",
+      "bytes": 672865
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/wooma_warrior/wooma_warrior_hit.png",
+      "sha256": "e72f069d284d7a1de2493ccf3a0f3bdbf9a1814e9ce4a6bb19ff92f1f0b231ad",
+      "bytes": 129870
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/wooma_warrior/wooma_warrior_idle.png",
+      "sha256": "17e98d1ccc3df303cbfb1043884f37200966b4d41d14453b80182034951a82b2",
+      "bytes": 235797
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/wooma_warrior/wooma_warrior_walk.png",
+      "sha256": "b9d914aa0252e7aa785c4ad0d133489c5806258db1d7a0a4b2cd20efbdf99e5e",
+      "bytes": 364249
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/yob/yob_attack.png",
+      "sha256": "fd6f9bdff7c1678fac69369a0a69947c08bc6c506afe08649fdce7fba92d9e56",
+      "bytes": 142402
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/yob/yob_death.png",
+      "sha256": "7983526a1e048e31521db5c07ac6966d9bb8cd14ed551b8ac9c5934c47cb2c96",
+      "bytes": 307351
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/yob/yob_hit.png",
+      "sha256": "4b12f9262771a7f649b46d4e2c5602962274cce1d853af3385b78810af8f8434",
+      "bytes": 48084
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/yob/yob_idle.png",
+      "sha256": "1c2e4e9f505f06ee5231703285bbcfc82a22ed29739918a4a873b9f1754a4ae0",
+      "bytes": 78826
+    },
+    {
+      "path": "assets/art/monsters/client_bich_common/yob/yob_walk.png",
+      "sha256": "c9bd69925c5cfb5faca038d6f47a66cffade1021999d6c6542334e1739d846b4",
+      "bytes": 136097
+    },
+    {
+      "path": "assets/art/monsters/client_classic_bosses/evil_centipede/evil_centipede_attack.png",
+      "sha256": "3edf687949edbdbd58f690643b4c7e3b82eab1fb7749703d4d7e51fb300f7eb0",
+      "bytes": 746405
+    },
+    {
+      "path": "assets/art/monsters/client_classic_bosses/evil_centipede/evil_centipede_death.png",
+      "sha256": "383b58308c2a3240567386668a2c197ac9261394d542687baba6924afc0b615c",
+      "bytes": 1119041
+    },
+    {
+      "path": "assets/art/monsters/client_classic_bosses/evil_centipede/evil_centipede_hit.png",
+      "sha256": "804a05981884dd4f95316f2a277bcb3cca0f5bebffd5d10f2402967bbfc820e5",
+      "bytes": 244412
+    },
+    {
+      "path": "assets/art/monsters/client_classic_bosses/evil_centipede/evil_centipede_idle.png",
+      "sha256": "4cc5a209fd2e76dd01f2152622ff145b425e4883e10b56d03a0b57849a97bd11",
+      "bytes": 486728
+    },
+    {
+      "path": "assets/art/monsters/client_classic_bosses/evil_centipede/evil_centipede_walk.png",
+      "sha256": "4cc5a209fd2e76dd01f2152622ff145b425e4883e10b56d03a0b57849a97bd11",
+      "bytes": 486728
+    },
+    {
+      "path": "assets/art/monsters/client_classic_bosses/wooma_taurus/wooma_taurus_attack.png",
+      "sha256": "ef92bccdc8987e145e6be6d3c5481b69e8f66eb15624351c917d1f1be88bf372",
+      "bytes": 539763
+    },
+    {
+      "path": "assets/art/monsters/client_classic_bosses/wooma_taurus/wooma_taurus_death.png",
+      "sha256": "a1e07673fdeed895be7b02162f9288887a114b06bd3b36e17a0a908eeb4641a7",
+      "bytes": 889220
+    },
+    {
+      "path": "assets/art/monsters/client_classic_bosses/wooma_taurus/wooma_taurus_hit.png",
+      "sha256": "9c379d13b3831b074083e163ab906eb707dc4f2a8972020119527a98aa8a3fd9",
+      "bytes": 170409
+    },
+    {
+      "path": "assets/art/monsters/client_classic_bosses/wooma_taurus/wooma_taurus_idle.png",
+      "sha256": "44d69c2f9300c09062dd985e1327e4be9e8b2e0553ce8dd9dc76005b10e8c9b4",
+      "bytes": 320403
+    },
+    {
+      "path": "assets/art/monsters/client_classic_bosses/wooma_taurus/wooma_taurus_walk.png",
+      "sha256": "6e19a0b411d1ec1a1df1cd5922ca067befb6f53f960057bd3ae2f3a50c5de9af",
+      "bytes": 490221
+    },
+    {
+      "path": "assets/art/monsters/client_classic_bosses/zuma_taurus/zuma_taurus_attack.png",
+      "sha256": "3ceef142f2a28d3276fc0737e192a69a63d81c4d4f6d093f3bbc1a80eff3f831",
+      "bytes": 473085
+    },
+    {
+      "path": "assets/art/monsters/client_classic_bosses/zuma_taurus/zuma_taurus_death.png",
+      "sha256": "5497b47e4e0e32eb85d78a351fc9eb48faa4e9ae02c44a50f981c877c766cbdd",
+      "bytes": 962024
+    },
+    {
+      "path": "assets/art/monsters/client_classic_bosses/zuma_taurus/zuma_taurus_hit.png",
+      "sha256": "f6135fed6ac857c0c0a6862961cb8de61ee55a767f5980da2d5bb5d1a0ee3a91",
+      "bytes": 150201
+    },
+    {
+      "path": "assets/art/monsters/client_classic_bosses/zuma_taurus/zuma_taurus_idle.png",
+      "sha256": "7e51abc07747c1532fb5c9943bee9d1d86916bcd384f6ec8585edc55aa8cd6e8",
+      "bytes": 302546
+    },
+    {
+      "path": "assets/art/monsters/client_classic_bosses/zuma_taurus/zuma_taurus_walk.png",
+      "sha256": "f5b10b173cb364daf0cfef90f0e2813c43132feec60bdcd437d03490cebb2e41",
+      "bytes": 446926
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_001_race_10/appearance_001_race_10_attack.png",
+      "sha256": "9c4332283b960c3b26f5a0d438dcc2dc920567711babd3c1d5bd5187560e18d7",
+      "bytes": 90524
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_001_race_10/appearance_001_race_10_death.png",
+      "sha256": "9be2d31041b6083dba00230e942060a2b148c3ca8624d5f1a83426f096f2330c",
+      "bytes": 113775
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_001_race_10/appearance_001_race_10_hit.png",
+      "sha256": "22c12b7c8c62f8b2b66b5e026b304013e90c4eadbdc3787a004b583e8515a544",
+      "bytes": 44928
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_001_race_10/appearance_001_race_10_idle.png",
+      "sha256": "6990df9029d816882465f731eb32b59d32f76c19bd9dc4d823ef39f889f07af5",
+      "bytes": 71912
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_001_race_10/appearance_001_race_10_walk.png",
+      "sha256": "02c4f1844ea57c410234228b24c8450ac5637875084ac23ed1974269a147e7e1",
+      "bytes": 108663
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_003_race_09/appearance_003_race_09_attack.png",
+      "sha256": "fac79b93ff24277a0421de29ec2240e1f84a751ea28949a490df58ba1c33dee6",
+      "bytes": 17705
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_003_race_09/appearance_003_race_09_death.png",
+      "sha256": "d7c9b24e2bc611af45c80af1d2358d88edba6fb86be079b85d9e096032fdab2b",
+      "bytes": 3827
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_003_race_09/appearance_003_race_09_hit.png",
+      "sha256": "fac79b93ff24277a0421de29ec2240e1f84a751ea28949a490df58ba1c33dee6",
+      "bytes": 17705
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_003_race_09/appearance_003_race_09_idle.png",
+      "sha256": "d7c9b24e2bc611af45c80af1d2358d88edba6fb86be079b85d9e096032fdab2b",
+      "bytes": 3827
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_003_race_09/appearance_003_race_09_walk.png",
+      "sha256": "fac79b93ff24277a0421de29ec2240e1f84a751ea28949a490df58ba1c33dee6",
+      "bytes": 17705
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_025_race_17/appearance_025_race_17_attack.png",
+      "sha256": "b1132141ccc5e8bfe125275542a6963a39af5f3899405573ea786f13c4cbd6cb",
+      "bytes": 56171
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_025_race_17/appearance_025_race_17_death.png",
+      "sha256": "a526568c8630493419f6ffa18404cdcdc481edd185701eb5b84a18bfabc4590f",
+      "bytes": 101873
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_025_race_17/appearance_025_race_17_hit.png",
+      "sha256": "e8828267bf3bfe136a926d2e2c30bc96ce3e5bae47aab090bcd7e5e3ff7b8da6",
+      "bytes": 18681
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_025_race_17/appearance_025_race_17_idle.png",
+      "sha256": "4ebb4d1f422ef5f1ad0fc6e4d7bcc407da7ddbe49d2a60ebd6853c2ea4711431",
+      "bytes": 26844
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_025_race_17/appearance_025_race_17_walk.png",
+      "sha256": "2295fb6f6f1bf4dd7607d7077af4c6c7a987910d135bed1b4932f64704f00663",
+      "bytes": 47140
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_026_race_17/appearance_026_race_17_attack.png",
+      "sha256": "0d966919ea7af4becc602cea2934735554fe42e62a96e6c92412f26977b802cf",
+      "bytes": 61520
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_026_race_17/appearance_026_race_17_death.png",
+      "sha256": "7443704a8300c32522c66434ce89c8be91a4452799dc8950cc847414db7a4779",
+      "bytes": 113555
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_026_race_17/appearance_026_race_17_hit.png",
+      "sha256": "594461f18593ab93648f86f8d4dd3646c4d84e10d1d931272f7f2d3994adda46",
+      "bytes": 21908
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_026_race_17/appearance_026_race_17_idle.png",
+      "sha256": "09d8a25915016556da2253ddbbeb3974a82938fe51409f950b2273ff3d8dbc06",
+      "bytes": 28324
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_026_race_17/appearance_026_race_17_walk.png",
+      "sha256": "8be780338611eb67bcd884dc6720f31fc23fed5a2f08b8056f31ed4adb0de70f",
+      "bytes": 55980
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_034_race_21/appearance_034_race_21_attack.png",
+      "sha256": "587462f552f72eba4376890566358b4e92aa6e6414456755454913a01189d26d",
+      "bytes": 177978
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_034_race_21/appearance_034_race_21_death.png",
+      "sha256": "e2ebb2cad513abc799e504cc6ef9d7668e5af9f142ef1a1a541e334a4ebada67",
+      "bytes": 861557
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_034_race_21/appearance_034_race_21_hit.png",
+      "sha256": "4ebaa27a451e55175277da2bbeb23e2df2da14cbdf8338a4513e8e00f15fa84e",
+      "bytes": 57966
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_034_race_21/appearance_034_race_21_idle.png",
+      "sha256": "ddc412c3b8fde9c8890e11a0a6c619aa6bf3b738b6831dcf9e6412c15ade0c60",
+      "bytes": 107858
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_034_race_21/appearance_034_race_21_walk.png",
+      "sha256": "e3953f1da260b14099af8dcc9a73760471a32fe54b21a280f2136bee91cb8522",
+      "bytes": 474188
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_037_race_15/appearance_037_race_15_attack.png",
+      "sha256": "f282be2f1159b9a9472ea15b1721c1650fe0c16c2902ac34ad83da1bf7c56085",
+      "bytes": 43594
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_037_race_15/appearance_037_race_15_death.png",
+      "sha256": "f6165a44f9ac925863b88a27c1acf807d71d9528633dddacb03660a87ad83f06",
+      "bytes": 71141
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_037_race_15/appearance_037_race_15_hit.png",
+      "sha256": "e587ebd19d8d6b97d52bf4a17f67d1653ed17ee9b015da37a984a9af32cad16c",
+      "bytes": 15019
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_037_race_15/appearance_037_race_15_idle.png",
+      "sha256": "19508bb05390f75efba1d510e2c4dfb4fe1929dd6a1e3d5e86a6ab2a64350c61",
+      "bytes": 20745
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_037_race_15/appearance_037_race_15_walk.png",
+      "sha256": "d8ac63ae1f3206cd3a947102cc7a04d1be115374626efd7fc9a423c0e8b38f64",
+      "bytes": 39249
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_039_race_52/appearance_039_race_52_attack.png",
+      "sha256": "bf6cc12346d71f136d416f789d104ec7603eebe11c9a6b8e0ffc6cc519140aa9",
+      "bytes": 50691
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_039_race_52/appearance_039_race_52_death.png",
+      "sha256": "901bb48654708e55401a6ee1efa23f6fd29edc2958fc8c1b4d3d78ccb70d2a2a",
+      "bytes": 83914
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_039_race_52/appearance_039_race_52_hit.png",
+      "sha256": "77c7671ca4c2cdb6770ab6d08f556b0d7c4c99921949278a6fb262e4a99ac47e",
+      "bytes": 17995
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_039_race_52/appearance_039_race_52_idle.png",
+      "sha256": "680de2c25621b74d8fa90ff8d0064858f5a5c30f63cf0f45805a8ce6b47e4237",
+      "bytes": 32039
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_039_race_52/appearance_039_race_52_walk.png",
+      "sha256": "0e870b3e7e5eeac34b68f0c52359d3fb3881948b138a7b6985e9744d9ec9bd03",
+      "bytes": 49104
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_041_race_43/appearance_041_race_43_attack.png",
+      "sha256": "9b0b598608bb8d1ca22daec46b7dd906201a82042f24210c3a6493f6039391ca",
+      "bytes": 89821
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_041_race_43/appearance_041_race_43_death.png",
+      "sha256": "76cc8cc3f556a296fc8f3d3fe137b9e007e6b1fd044d11d99d383162f4d99257",
+      "bytes": 162125
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_041_race_43/appearance_041_race_43_hit.png",
+      "sha256": "a3d0b1f21fd33e008e4a9aa36718473fb2874a4bcae7dcd1fba406da465af506",
+      "bytes": 27459
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_041_race_43/appearance_041_race_43_idle.png",
+      "sha256": "7d6764159b78b6820eeda59eb45e9ba96219279877d4100d6444ee0faf8d2494",
+      "bytes": 53597
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_041_race_43/appearance_041_race_43_walk.png",
+      "sha256": "7d6764159b78b6820eeda59eb45e9ba96219279877d4100d6444ee0faf8d2494",
+      "bytes": 53597
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_042_race_19/appearance_042_race_19_attack.png",
+      "sha256": "4909439ba5d31cd4eee7584a7c1dcb4701c459bb9694fdea865a7d88b9727780",
+      "bytes": 26591
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_042_race_19/appearance_042_race_19_death.png",
+      "sha256": "d10f2bc3236a9193f373803025d19d794c0134b440ac1778728add6dfa152c9b",
+      "bytes": 49759
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_042_race_19/appearance_042_race_19_hit.png",
+      "sha256": "666cb3aff3bcae9569523eab670910e914ba9fd95db43f93d7bfe427ad5697e5",
+      "bytes": 8548
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_042_race_19/appearance_042_race_19_idle.png",
+      "sha256": "b35f7440d0353582f4a671b59ab3c6169c4ce3a6b9a42d23f1a899856bcc2a98",
+      "bytes": 16993
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_042_race_19/appearance_042_race_19_walk.png",
+      "sha256": "a9f1fbc55d0a1621055cf6da923c77f687bd40ef34c5259bbc01296f1d8549fc",
+      "bytes": 24858
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_042_race_31/appearance_042_race_31_attack.png",
+      "sha256": "4909439ba5d31cd4eee7584a7c1dcb4701c459bb9694fdea865a7d88b9727780",
+      "bytes": 26591
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_042_race_31/appearance_042_race_31_death.png",
+      "sha256": "d10f2bc3236a9193f373803025d19d794c0134b440ac1778728add6dfa152c9b",
+      "bytes": 49759
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_042_race_31/appearance_042_race_31_hit.png",
+      "sha256": "666cb3aff3bcae9569523eab670910e914ba9fd95db43f93d7bfe427ad5697e5",
+      "bytes": 8548
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_042_race_31/appearance_042_race_31_idle.png",
+      "sha256": "b35f7440d0353582f4a671b59ab3c6169c4ce3a6b9a42d23f1a899856bcc2a98",
+      "bytes": 16993
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_042_race_31/appearance_042_race_31_walk.png",
+      "sha256": "a9f1fbc55d0a1621055cf6da923c77f687bd40ef34c5259bbc01296f1d8549fc",
+      "bytes": 24858
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_043_race_19/appearance_043_race_19_attack.png",
+      "sha256": "3a3d8e75da749eefc071b3de0f8063277076f1f98ecafcb7cfc542661e240c63",
+      "bytes": 40715
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_043_race_19/appearance_043_race_19_death.png",
+      "sha256": "b320ad25778d1ed06108d5eb346651ebde34be7fd4bb815d35c75c9a8566f507",
+      "bytes": 68745
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_043_race_19/appearance_043_race_19_hit.png",
+      "sha256": "ec4dd401aaacecfb9788c08e004705ddb138f56eb1b34fa114b7a96fec7bd8c3",
+      "bytes": 14607
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_043_race_19/appearance_043_race_19_idle.png",
+      "sha256": "4fff96719507b12c30eda44274a2fb64934e1fcdc7465ba47115125406a70c97",
+      "bytes": 25825
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_043_race_19/appearance_043_race_19_walk.png",
+      "sha256": "d10ac2a39a2fea385b4d2fe22a87d02420055a3be9f5a76c1ef4080293e0ade3",
+      "bytes": 39517
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_044_race_19/appearance_044_race_19_attack.png",
+      "sha256": "8e34e5fb95ca6149c8edfa44cf27de6611f064c47335ab75e1c7cdfc918c52dc",
+      "bytes": 116102
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_044_race_19/appearance_044_race_19_death.png",
+      "sha256": "f856fd06956e8fa617f2be0ba514e1e5c3933406425520fcf6a2dc1e42a5cd56",
+      "bytes": 157033
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_044_race_19/appearance_044_race_19_hit.png",
+      "sha256": "85a344199861680cf9d0c932d30989557a9d402ebd18e9e778caf0d7f517468f",
+      "bytes": 33674
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_044_race_19/appearance_044_race_19_idle.png",
+      "sha256": "812e11040caf596b05d5f3686cfc725fe96a50aa88842683c4254a1b9772463b",
+      "bytes": 89008
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_044_race_19/appearance_044_race_19_walk.png",
+      "sha256": "9990c8b9efa479dc00e486e5d313c72f0629dfcb909c622c86a3bff94831510f",
+      "bytes": 123712
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_045_race_19/appearance_045_race_19_attack.png",
+      "sha256": "e243af30d376e35ac167c93b1c0dd79d4573e65cef90a360d7cb03026b760765",
+      "bytes": 79225
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_045_race_19/appearance_045_race_19_death.png",
+      "sha256": "aba0bfdf4d8f35126e4db104d614ad357a46731613a6c964400df9ad64406d5c",
+      "bytes": 120969
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_045_race_19/appearance_045_race_19_hit.png",
+      "sha256": "60252eb221f33e08d9d55f1c28e4adaaaa21a9df2a5657e27660f4e08be4573d",
+      "bytes": 27566
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_045_race_19/appearance_045_race_19_idle.png",
+      "sha256": "50df2f332330698cc4f06059c1c155d9fa00365ce4b374c289d803ffbf312afe",
+      "bytes": 52721
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_045_race_19/appearance_045_race_19_walk.png",
+      "sha256": "bbfce9f7b4bdf0762f17bb073c3c416fcc409e0c7e17a41ce0a45f1edf6732f8",
+      "bytes": 76944
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_046_race_19/appearance_046_race_19_attack.png",
+      "sha256": "8225254fa727a815899bcdb9687da6eb3f7965223cbf11bdf60f09671adcc655",
+      "bytes": 56033
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_046_race_19/appearance_046_race_19_death.png",
+      "sha256": "256356a534f9c36bf9eb1456ba2e75c66ede3e202b3d03d0e80e92c579a7c520",
+      "bytes": 105031
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_046_race_19/appearance_046_race_19_hit.png",
+      "sha256": "ee81229973add0dbaacd336830b7ce21449b8b7b4ee76cf3ec0448258d1a990f",
+      "bytes": 19631
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_046_race_19/appearance_046_race_19_idle.png",
+      "sha256": "ec7ec0788bd2953b098ffa4c8e01f41fd4ba58032a789c112f514dd6d7c65149",
+      "bytes": 34333
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_046_race_19/appearance_046_race_19_walk.png",
+      "sha256": "930ab63135cdc46a0a2ffde568cfc5133ec43834ad520b364b2ca0c6754f6510",
+      "bytes": 49022
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_047_race_45/appearance_047_race_45_attack.png",
+      "sha256": "c593f4665bd8eae58fb5350faa0fa28edaebafa8aed37a4a0fde25ec215fcd88",
+      "bytes": 95391
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_047_race_45/appearance_047_race_45_death.png",
+      "sha256": "aa710e74efc8c772b8d397d3e7b94a378c7d218bc6b3133a05d4ab13a587b170",
+      "bytes": 179028
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_047_race_45/appearance_047_race_45_hit.png",
+      "sha256": "867f317399bf7de6e8679e310b56ca443c9bdb320cfba31f0d96efda5978c387",
+      "bytes": 33025
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_047_race_45/appearance_047_race_45_idle.png",
+      "sha256": "e50214f5d0c4bc044e0186db1cc05b1448ad4505ae06b74fa092bdd7becdecef",
+      "bytes": 57222
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_047_race_45/appearance_047_race_45_walk.png",
+      "sha256": "e6025333073832d9252b93820e97cef79c64fede4695338c0e4b49a33e32586d",
+      "bytes": 86258
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_048_race_19/appearance_048_race_19_attack.png",
+      "sha256": "0d18d375c00dd624e4007119b903dcdd2fb1a30af4fe0cbb3162878901f89131",
+      "bytes": 59945
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_048_race_19/appearance_048_race_19_death.png",
+      "sha256": "dea7a86e7929b3d2dd49664ad405afce92b65ff00882df7ef1faf944e116543b",
+      "bytes": 88593
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_048_race_19/appearance_048_race_19_hit.png",
+      "sha256": "1faa8b930b54b332525d073aafc192b803096dd5a6c30e3002f4b159d32734a3",
+      "bytes": 18181
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_048_race_19/appearance_048_race_19_idle.png",
+      "sha256": "9d49898d1b0491a0652ae76a9b63e2a8a8897922267b95d8ecf0e7497d294792",
+      "bytes": 37498
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_048_race_19/appearance_048_race_19_walk.png",
+      "sha256": "b6b342e9dc12071042e33281db550d60f59e833cca136cebc7798ef2e158d5e7",
+      "bytes": 56708
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_049_race_19/appearance_049_race_19_attack.png",
+      "sha256": "9f7578a7b97d0615cca6b9c6ec6baed764d3fa4e8a450156a615684f61cf0a1a",
+      "bytes": 61851
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_049_race_19/appearance_049_race_19_death.png",
+      "sha256": "de9b7754e96097d80936e6845660e671c075ecf1c09a763c0fe3b28149470137",
+      "bytes": 90834
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_049_race_19/appearance_049_race_19_hit.png",
+      "sha256": "a4043fb7019a849476cb73cfd66bd88b45cbcffc5e013dbc93a50daf8a8232c2",
+      "bytes": 18484
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_049_race_19/appearance_049_race_19_idle.png",
+      "sha256": "309669c5bb611587e969f101fa8659edf693014a39ce245fd7b9218998cf9320",
+      "bytes": 39143
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_049_race_19/appearance_049_race_19_walk.png",
+      "sha256": "18efbf612b6aae7a512716dc3a21fff4ba3f61fb7bdada4189081bd931897b27",
+      "bytes": 58959
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_050_race_41/appearance_050_race_41_attack.png",
+      "sha256": "ec54d7727e7f5104fdf63f4ce0cd66e787667a9816b10604f27dea33041a895e",
+      "bytes": 64291
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_050_race_41/appearance_050_race_41_death.png",
+      "sha256": "6377915caede350407ec2b40950aa2d42c165f21290ce34ed93f1f3b4e1e3d2e",
+      "bytes": 108587
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_050_race_41/appearance_050_race_41_hit.png",
+      "sha256": "4bde539dfcc6a078a65c0a5118593b64f270b698fe583e7e53b5409e4b86ba03",
+      "bytes": 20695
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_050_race_41/appearance_050_race_41_idle.png",
+      "sha256": "9f3b10bcfbb45568060b316900a9b7ad286b6bec73967b9b0c19f9e1d0106ec3",
+      "bytes": 41147
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_050_race_41/appearance_050_race_41_walk.png",
+      "sha256": "4793cbe3853e04405ce2799f4ff4f5401dc6c87275e99bbe940ed54c4c0db5f4",
+      "bytes": 61216
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_061_race_47/appearance_061_race_47_attack.png",
+      "sha256": "62c32044ca1690d9c0508b0ef1098405315221c2542e8d3fc0a5431e0d7b4c1b",
+      "bytes": 116927
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_061_race_47/appearance_061_race_47_death.png",
+      "sha256": "0a89bd4e0bc75a0eb0301504a5db20e98c8fa5843ddee472e2a57ee6b12849b8",
+      "bytes": 209126
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_061_race_47/appearance_061_race_47_hit.png",
+      "sha256": "f800e75aca2c3589e3bc01977cf0e951749f5eb668573d85dc5762bade5eb40c",
+      "bytes": 40073
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_061_race_47/appearance_061_race_47_idle.png",
+      "sha256": "48eed5a0f225049ffea539835de24f12702ab34e8f8445b84b42486d09a95b31",
+      "bytes": 67235
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_061_race_47/appearance_061_race_47_walk.png",
+      "sha256": "3fd75d0fcfae586fc1180ba0356a80fc465b977145c4a5f60a4a91d80ec1f5a4",
+      "bytes": 103446
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_062_race_47/appearance_062_race_47_attack.png",
+      "sha256": "96b0f1478bb4f823eb538db0279d35098d783b3d70de16b1674be5533b275af7",
+      "bytes": 108960
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_062_race_47/appearance_062_race_47_death.png",
+      "sha256": "d67065e962acd2b092ae655643fe3d2ab176fc7d40304afbc3d178b39662656a",
+      "bytes": 200960
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_062_race_47/appearance_062_race_47_hit.png",
+      "sha256": "7c6e80f883c96682f1fc72e200ec7b1b663ca2eddcc660a8b26ce3dedbb2beb3",
+      "bytes": 36142
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_062_race_47/appearance_062_race_47_idle.png",
+      "sha256": "17a460d80ef9d15579dabe1cba51d4626dc4a1bd97fb9823ccfbbda5a38c0e7e",
+      "bytes": 61971
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_062_race_47/appearance_062_race_47_walk.png",
+      "sha256": "1a59f1b58683c790dee126288d8eaf1387a6c82143cc7dae6084e29c58da7710",
+      "bytes": 98011
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_070_race_19/appearance_070_race_19_attack.png",
+      "sha256": "675a561696c0ef105a211600204b574265f37480ebc125b5329806675fc9c849",
+      "bytes": 30062
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_070_race_19/appearance_070_race_19_death.png",
+      "sha256": "92a82bcde1fed738206f5a0a19c3e0355c1b58c3232683ceb0407475c21cd28a",
+      "bytes": 55478
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_070_race_19/appearance_070_race_19_hit.png",
+      "sha256": "0f46f1a7d0e1ccdc3237c52fa6e5da19e899d2c7b2c02e113877a2418d8a75a2",
+      "bytes": 11280
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_070_race_19/appearance_070_race_19_idle.png",
+      "sha256": "bd1f5df2e9131affea1cdc823bc8be7de96f8a3f883edc9ee245fb818f093080",
+      "bytes": 18515
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_070_race_19/appearance_070_race_19_walk.png",
+      "sha256": "b616aa43d28a2f8089cc9c183830025db40cad686b849930fbd8e72e559b4214",
+      "bytes": 31592
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_071_race_45/appearance_071_race_45_attack.png",
+      "sha256": "55657a9d64f0778fa70701971b432d977bf92696482f679530072109fa6dd310",
+      "bytes": 64860
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_071_race_45/appearance_071_race_45_death.png",
+      "sha256": "54d34fca248da4acdb95352f107cde9f9a22822047a5d3ae88a6e8e8ed8f79ec",
+      "bytes": 127087
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_071_race_45/appearance_071_race_45_hit.png",
+      "sha256": "5109a4aaa553288440887448a685e340a0b22ac6a9d3aa065d305ac1f8c69038",
+      "bytes": 23853
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_071_race_45/appearance_071_race_45_idle.png",
+      "sha256": "5e326dbe5985f5713d44d8361852a3328fc2ea2fbab8f8f4a9462dc5ea1f3bfe",
+      "bytes": 39520
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_071_race_45/appearance_071_race_45_walk.png",
+      "sha256": "e9668d5ec6c8e50a63856116c80462691f202b8ecc364028cb1b650073731503",
+      "bytes": 60637
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_072_race_19/appearance_072_race_19_attack.png",
+      "sha256": "e78b28b1b4021881f21b3d28629a2b71ec4b639e170c46edda22bc5fac0839fc",
+      "bytes": 66520
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_072_race_19/appearance_072_race_19_death.png",
+      "sha256": "ded6fcc46894e412cb08392954e7abc263dac44d98f69ef2c5e9701151b791bd",
+      "bytes": 92926
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_072_race_19/appearance_072_race_19_hit.png",
+      "sha256": "20a3815580b5b304d861d727bbbfb2374686d71ed38aaf4cd46dc4d554ca2f74",
+      "bytes": 21800
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_072_race_19/appearance_072_race_19_idle.png",
+      "sha256": "54669f53e380d511add56afc4c7d70c05bb7c0a2a0d676cbdeb6d1c06ee6a101",
+      "bytes": 25813
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_072_race_19/appearance_072_race_19_walk.png",
+      "sha256": "45ef7d75cd77a8405280337b7414a8f492c6b2835f1e4da8067de98fd19438a3",
+      "bytes": 55793
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_073_race_19/appearance_073_race_19_attack.png",
+      "sha256": "695f176dacd3f4a9482724577f91a9dcc1820be2b86b42a0bbe90b82bd223cbc",
+      "bytes": 58681
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_073_race_19/appearance_073_race_19_death.png",
+      "sha256": "84f5e4315af0b9f20ec1de611997ede069b2e61c1096a8c4590ce0b6dd499207",
+      "bytes": 99613
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_073_race_19/appearance_073_race_19_hit.png",
+      "sha256": "d8e87f830dadcc3a1ad8380e1d42cb94f3202ea8e9ac8d528aa0a56ff4cb5a19",
+      "bytes": 20728
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_073_race_19/appearance_073_race_19_idle.png",
+      "sha256": "fcc1f387d1377b418baddeb453c52a8a0ff6ca1759b11a7e980f99045fb7e2c8",
+      "bytes": 36644
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_073_race_19/appearance_073_race_19_walk.png",
+      "sha256": "02d0d481b000c8448a85dabb8dfedff07db9890cc0fa6f07e5dfa58ed86e209d",
+      "bytes": 64083
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_074_race_19/appearance_074_race_19_attack.png",
+      "sha256": "d84751d1390d8c23839527295d0895aa4d385f22556d3e9b1198692c3410b3f3",
+      "bytes": 40584
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_074_race_19/appearance_074_race_19_death.png",
+      "sha256": "f25e3dc5bd0b9a5dbd83ab27e2dd77c239f60a0bfc919dd6685371cc11bc1b73",
+      "bytes": 110609
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_074_race_19/appearance_074_race_19_hit.png",
+      "sha256": "4d5f1d3f625b8c7b54149b6d04c7823f3f67a2b08f8079c63d9ab9da51d6a820",
+      "bytes": 14222
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_074_race_19/appearance_074_race_19_idle.png",
+      "sha256": "18601640c92c739a4b405ce30ab0b7ae3dabef5efc2f41bb23e9482ef7753153",
+      "bytes": 26472
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_074_race_19/appearance_074_race_19_walk.png",
+      "sha256": "5a4d59f1b875dd371ef5a919eb011adeb3e75565281a556e342c7b254d5ad266",
+      "bytes": 37548
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_081_race_19/appearance_081_race_19_attack.png",
+      "sha256": "e6ce5390dbe690387f651685115e8d9448df450b67134d957762f2378ec60eaa",
+      "bytes": 59606
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_081_race_19/appearance_081_race_19_death.png",
+      "sha256": "f3b6d0ceb4cc3dcbb70f594883ae3f51ed03ad850d894e5ce0dd140209c2293c",
+      "bytes": 98316
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_081_race_19/appearance_081_race_19_hit.png",
+      "sha256": "991ed9283d66ca51787aec234e4a83a5736e42d3db8026f698f0e96b152512d3",
+      "bytes": 20976
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_081_race_19/appearance_081_race_19_idle.png",
+      "sha256": "abf14526440954ce926f91f02ad7a5f90800c96ce3a314f7a7be9b75f16cc6c5",
+      "bytes": 39813
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_081_race_19/appearance_081_race_19_walk.png",
+      "sha256": "17eaade215fd1f8d3517db5609917ecbafcc38f8083bf831805d03cefa62f8f1",
+      "bytes": 56625
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_082_race_19/appearance_082_race_19_attack.png",
+      "sha256": "d0cdad5906d9607708b2087f189a4b22e0e05e54cf934e267a421f747e5c39a2",
+      "bytes": 71688
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_082_race_19/appearance_082_race_19_death.png",
+      "sha256": "90d8920e480b87792df670699a30ac5884977b1795d024cd9764484d3b226ee2",
+      "bytes": 129953
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_082_race_19/appearance_082_race_19_hit.png",
+      "sha256": "cabf40091372b419badd2aba19811620990d35c094b6469c6e39ca34e8ac223c",
+      "bytes": 25221
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_082_race_19/appearance_082_race_19_idle.png",
+      "sha256": "1ca48d196c70bb6a99896a82023f217eca018f5355f17094bff1fcc97828139e",
+      "bytes": 49346
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_082_race_19/appearance_082_race_19_walk.png",
+      "sha256": "83784ee850a488d26fd5df01aeb1961534cacfff72cc25406692342b23768f0a",
+      "bytes": 74098
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_090_race_19/appearance_090_race_19_attack.png",
+      "sha256": "30299b0d3cf5473d19977f063910178219f1cefef8c437373a65490d72db3616",
+      "bytes": 77501
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_090_race_19/appearance_090_race_19_death.png",
+      "sha256": "ee11c2b98646c4c65a76b82ce1b91bb4601466b34632d4ee38f9d4979426e94f",
+      "bytes": 123266
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_090_race_19/appearance_090_race_19_hit.png",
+      "sha256": "47c6c3c54d9f1bcacbf8e7eca64e3a4c888ba20dd30e4b90d17dfe5281f41e44",
+      "bytes": 23687
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_090_race_19/appearance_090_race_19_idle.png",
+      "sha256": "ad2fe9e0db192690e2987b418ccf949f2ea1356325b4bcab11840e2a5852ee2e",
+      "bytes": 42494
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_090_race_19/appearance_090_race_19_walk.png",
+      "sha256": "ba69526b0c604289b1852800b51e31c658bacbcf08ad5cca42c96707bea30b15",
+      "bytes": 64206
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_091_race_19/appearance_091_race_19_attack.png",
+      "sha256": "76e86096e91e0b4bb4acefaee0da52b9f9ad2089dda9a712a8a7842ca089267a",
+      "bytes": 108893
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_091_race_19/appearance_091_race_19_death.png",
+      "sha256": "fa0559d94db8a9deb6a9856e4b7670a8ab82fd67705229ebd8a86d81334afaf7",
+      "bytes": 175002
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_091_race_19/appearance_091_race_19_hit.png",
+      "sha256": "b2abff81f5348f6f2e1b3b7ab3be0fbb0dad32065dd074b4781e5aef37c279e7",
+      "bytes": 33772
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_091_race_19/appearance_091_race_19_idle.png",
+      "sha256": "b9d742d9a3d6613aa871a503ba47ea90839033605cc6df384e94d7e8051d89f2",
+      "bytes": 62065
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_091_race_19/appearance_091_race_19_walk.png",
+      "sha256": "3f456261aa5f2722dfa0a868765a9c7a9f097b9875da7f1dfdab0492eda6fa39",
+      "bytes": 94216
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_092_race_21/appearance_092_race_21_attack.png",
+      "sha256": "fad27ab092c51a4c16d5bfda1f28ae34534d147048faf03689907e508adab9b3",
+      "bytes": 162132
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_092_race_21/appearance_092_race_21_death.png",
+      "sha256": "2186e7f4a4e874e13a7d80eca97c668be5e041498097bbf18fa18590f9d91f9b",
+      "bytes": 352176
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_092_race_21/appearance_092_race_21_hit.png",
+      "sha256": "ad9e245a045e9912e35e3a12f9f824949113a97678b110a55c4899f44d6eca40",
+      "bytes": 52394
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_092_race_21/appearance_092_race_21_idle.png",
+      "sha256": "4741ee21f9a3bc99c93ff996741c3187aa5338bde2bef849c52491832991511e",
+      "bytes": 218920
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_092_race_21/appearance_092_race_21_walk.png",
+      "sha256": "8349e453d23b3fd537ea2dec4472be38d4bd2dab838467772b508c47f1de189d",
+      "bytes": 155156
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_093_race_21/appearance_093_race_21_attack.png",
+      "sha256": "b0073dfc56ee0b353e2959a5e06369f8acb5ccd2b61675f910ea69e236fb3ff8",
+      "bytes": 186792
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_093_race_21/appearance_093_race_21_death.png",
+      "sha256": "eddc9cddf63c5f72519b7b7b40f6abdce8113a1da341d3f3c90c980b9bd47420",
+      "bytes": 391478
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_093_race_21/appearance_093_race_21_hit.png",
+      "sha256": "3213374afe4212c88fb55ace1e112a90af06da630fbc7ffd1013b7a5b73f5b04",
+      "bytes": 61251
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_093_race_21/appearance_093_race_21_idle.png",
+      "sha256": "9360547f69e0e661458fdfc33a2ed30c32e83c25add7bf52da059e20398fd4a5",
+      "bytes": 98805
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_093_race_21/appearance_093_race_21_walk.png",
+      "sha256": "538a8b2ce317876d6c5c278f4f97f5bcd85eee7c63a674c83411b885ebcabeba",
+      "bytes": 182808
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_102_race_15/appearance_102_race_15_attack.png",
+      "sha256": "5600b92e575a5b6fe3c0d597ecf7803f443213ce03558bafd207c644cd9b65f8",
+      "bytes": 121423
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_102_race_15/appearance_102_race_15_death.png",
+      "sha256": "32e04e4f95531a865e48b039e6623287501851948c6baacc71f5529a4f51977e",
+      "bytes": 216567
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_102_race_15/appearance_102_race_15_hit.png",
+      "sha256": "7e67ab197a13bd3ad0df713c4bc0965565f5aa46fa7226ff74b2ba8128634926",
+      "bytes": 40800
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_102_race_15/appearance_102_race_15_idle.png",
+      "sha256": "b271b678000a5f635130bd2ebeddeebde0b470a92807bb288e4e664233723efa",
+      "bytes": 73367
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_102_race_15/appearance_102_race_15_walk.png",
+      "sha256": "3f07b517c50dca1cba0a412820d9c091f5bdb0da34fd5c3c3eec6a4150a6acec",
+      "bytes": 108653
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_103_race_19/appearance_103_race_19_attack.png",
+      "sha256": "5afa7d2b251b555d505b61f7e5c24af236dcd17aa9affb4b1219163b5081e114",
+      "bytes": 528951
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_103_race_19/appearance_103_race_19_death.png",
+      "sha256": "d8e11da98aca5a15c49fe800fbfce2f58f93d6eead40db1839a054cedbba8492",
+      "bytes": 957345
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_103_race_19/appearance_103_race_19_hit.png",
+      "sha256": "69842278d1fe396c60a75161fb48abd9849f3eec40106bfc528055eb7c1652d1",
+      "bytes": 60107
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_103_race_19/appearance_103_race_19_idle.png",
+      "sha256": "c6dafda0538c1c864e865e283ad9b915d91f8b1f71ec1d2dbde8c4664153d7a4",
+      "bytes": 109822
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_103_race_19/appearance_103_race_19_walk.png",
+      "sha256": "8b7c43c827b9971004ad4a8be23b5687d337139c54dbecfc72b30ff3358f70af",
+      "bytes": 161655
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_110_race_19/appearance_110_race_19_attack.png",
+      "sha256": "c4996854b6026b48f38751db111292e65554a44602c06a7b6c3fead25b7490ad",
+      "bytes": 88735
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_110_race_19/appearance_110_race_19_death.png",
+      "sha256": "5966025955e9de607b79a23d9374550cd4f0a69f6098b38332c9b2536f4f0362",
+      "bytes": 170396
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_110_race_19/appearance_110_race_19_hit.png",
+      "sha256": "4f782a54765066933e238915d97311517613a17e3148e6ad796539bf0139b9d7",
+      "bytes": 28420
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_110_race_19/appearance_110_race_19_idle.png",
+      "sha256": "d471afc7dd9d537d9dbb389ccbcf29b7f3618a82d87e1d2d50d4299b4e757a54",
+      "bytes": 50494
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_110_race_19/appearance_110_race_19_walk.png",
+      "sha256": "7c6b1ef16742ee5e8f85d49045b7c5c60afe15efe1b5252b6b942e6359ffddaa",
+      "bytes": 75260
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_111_race_19/appearance_111_race_19_attack.png",
+      "sha256": "d9f4003d9ba2612be7470569a0c260b9bb10c1f3bea51ebd88330909299b3d88",
+      "bytes": 89262
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_111_race_19/appearance_111_race_19_death.png",
+      "sha256": "c0f3b5b6a1b72b69183cd18a945c9338d960ed3161957432a74ed2757a3dc373",
+      "bytes": 168625
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_111_race_19/appearance_111_race_19_hit.png",
+      "sha256": "3fe982dbeb2aa8ed4289f0450ad8c4178fdb519250ddf90bea17f5f1a63072ee",
+      "bytes": 28335
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_111_race_19/appearance_111_race_19_idle.png",
+      "sha256": "ae44c84879987b813479f7deb88c54cbb2eb5eabfad8877609414493affd44d1",
+      "bytes": 50936
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_111_race_19/appearance_111_race_19_walk.png",
+      "sha256": "83f03127a77ffcf13a32b65c4c134cf137b07af85a9b164aeffb8516a3a23205",
+      "bytes": 75702
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_112_race_19/appearance_112_race_19_attack.png",
+      "sha256": "13b170be47451600b4bec3e05ad5024c92f769b1d3bdb628cd2e3edeef1b5f11",
+      "bytes": 119132
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_112_race_19/appearance_112_race_19_death.png",
+      "sha256": "efe1aa7af71d492495341650887c153a2c9e0adcd0741302293da7621574cc2f",
+      "bytes": 222166
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_112_race_19/appearance_112_race_19_hit.png",
+      "sha256": "6d49953be60dc06bc26aa2a2c666fc7143bb61279f16660e553e71333cd1aa81",
+      "bytes": 38328
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_112_race_19/appearance_112_race_19_idle.png",
+      "sha256": "ad1f6d4c5e87fd79c14768ab5c9f8c740faea7fe54727e67fa770f0760744a4a",
+      "bytes": 71278
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_112_race_19/appearance_112_race_19_walk.png",
+      "sha256": "7cfa7eba09d03d87d56a466ab67538e972ba08b9babbb1b7fd40be3fcb995758",
+      "bytes": 104635
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_113_race_19/appearance_113_race_19_attack.png",
+      "sha256": "981ada4fc69159f44ae82cd38e9a79ab4d8f0c67c4ecc76caa94bee011f49efb",
+      "bytes": 81068
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_113_race_19/appearance_113_race_19_death.png",
+      "sha256": "edf8e2c77d485554b89ad192145b191856671559fea0a4df140e56f0d8252bef",
+      "bytes": 174327
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_113_race_19/appearance_113_race_19_hit.png",
+      "sha256": "15ac6e163db30f7a99810d1352159155ab79f978e36b163a95577912389b3493",
+      "bytes": 22268
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_113_race_19/appearance_113_race_19_idle.png",
+      "sha256": "08925aa96088170c7954700355c216e7fa068c6da0e0911995cdde38e6a24c2d",
+      "bytes": 48347
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_113_race_19/appearance_113_race_19_walk.png",
+      "sha256": "2feb8f63d2323bd155c37dfde73fbc1045dfa0d9ca8585a8999cec0770251911",
+      "bytes": 69591
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_114_race_19/appearance_114_race_19_attack.png",
+      "sha256": "64f298aea5899d4679fdb7a6271cf717e04f42c42fc0af4299cacf384cd89c11",
+      "bytes": 113333
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_114_race_19/appearance_114_race_19_death.png",
+      "sha256": "a7e10e269feeedbf36dc51c1977ed4088664a9204d2cce070a8f2eb874bd8af4",
+      "bytes": 195931
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_114_race_19/appearance_114_race_19_hit.png",
+      "sha256": "ad09e20baaf0cd65dc875b3650e1999641b6e9d7b8d2bff91320c48d93924b49",
+      "bytes": 38283
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_114_race_19/appearance_114_race_19_idle.png",
+      "sha256": "4857bbb43eb5c2e788e1c4bd51b0c2d6d2e4e29a94e08684b541cb72f8079732",
+      "bytes": 69544
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_114_race_19/appearance_114_race_19_walk.png",
+      "sha256": "ea9aff2536d6c0bfc4f0bfe18bf833eb5483a28d2c9c8421856641493009d4f6",
+      "bytes": 111024
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_114_race_22/appearance_114_race_22_attack.png",
+      "sha256": "64f298aea5899d4679fdb7a6271cf717e04f42c42fc0af4299cacf384cd89c11",
+      "bytes": 113333
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_114_race_22/appearance_114_race_22_death.png",
+      "sha256": "a7e10e269feeedbf36dc51c1977ed4088664a9204d2cce070a8f2eb874bd8af4",
+      "bytes": 195931
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_114_race_22/appearance_114_race_22_hit.png",
+      "sha256": "ad09e20baaf0cd65dc875b3650e1999641b6e9d7b8d2bff91320c48d93924b49",
+      "bytes": 38283
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_114_race_22/appearance_114_race_22_idle.png",
+      "sha256": "4857bbb43eb5c2e788e1c4bd51b0c2d6d2e4e29a94e08684b541cb72f8079732",
+      "bytes": 69544
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_114_race_22/appearance_114_race_22_walk.png",
+      "sha256": "ea9aff2536d6c0bfc4f0bfe18bf833eb5483a28d2c9c8421856641493009d4f6",
+      "bytes": 111024
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_115_race_19/appearance_115_race_19_attack.png",
+      "sha256": "988aceb03bb40c6e50ff7d602f2e420280c979debec6be60cc3b717188a4727b",
+      "bytes": 131138
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_115_race_19/appearance_115_race_19_death.png",
+      "sha256": "3ad4690ad922f364d60843573f79f37bb812c0b613437c15ff50426aa4cd6505",
+      "bytes": 750263
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_115_race_19/appearance_115_race_19_hit.png",
+      "sha256": "83ba61b6dad35526d223f30fd683a634686803138814da476f78f4ccf501062f",
+      "bytes": 43642
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_115_race_19/appearance_115_race_19_idle.png",
+      "sha256": "2b08479cfa99b61392fb688bee9fc018945eab8173d701ef34c157e278164ccd",
+      "bytes": 61965
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_115_race_19/appearance_115_race_19_walk.png",
+      "sha256": "f82f9c10cee08e3c9b848786a583afd0876c68cb546f0b04badb9288285fd7a1",
+      "bytes": 109634
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_115_race_42/appearance_115_race_42_attack.png",
+      "sha256": "988aceb03bb40c6e50ff7d602f2e420280c979debec6be60cc3b717188a4727b",
+      "bytes": 131138
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_115_race_42/appearance_115_race_42_death.png",
+      "sha256": "3ad4690ad922f364d60843573f79f37bb812c0b613437c15ff50426aa4cd6505",
+      "bytes": 750263
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_115_race_42/appearance_115_race_42_hit.png",
+      "sha256": "83ba61b6dad35526d223f30fd683a634686803138814da476f78f4ccf501062f",
+      "bytes": 43642
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_115_race_42/appearance_115_race_42_idle.png",
+      "sha256": "2b08479cfa99b61392fb688bee9fc018945eab8173d701ef34c157e278164ccd",
+      "bytes": 61965
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_115_race_42/appearance_115_race_42_walk.png",
+      "sha256": "f82f9c10cee08e3c9b848786a583afd0876c68cb546f0b04badb9288285fd7a1",
+      "bytes": 109634
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_117_race_19/appearance_117_race_19_attack.png",
+      "sha256": "55bdf6414622cbd3124c2a5aba843ce20987ff4946825784b5c4a9cf6c52ede1",
+      "bytes": 166273
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_117_race_19/appearance_117_race_19_death.png",
+      "sha256": "45d833b55d37678e7b70ba9368e712b58af41268ba962bbfebd1cee6cdafe0d8",
+      "bytes": 351123
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_117_race_19/appearance_117_race_19_hit.png",
+      "sha256": "8ccaf79f4c0c1fb4a16daa5c622c39d206f062eec470c4185c64177b66f658d7",
+      "bytes": 55893
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_117_race_19/appearance_117_race_19_idle.png",
+      "sha256": "379b2d53beb1907eb48f3102817410eb04b367c02715ed50052619f1d770a6cf",
+      "bytes": 98375
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_117_race_19/appearance_117_race_19_walk.png",
+      "sha256": "9cd2adb993a8e028935ba8d9f6fad5410e589f81f306a4d51eaec48bc02d28b6",
+      "bytes": 153710
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_118_race_19/appearance_118_race_19_attack.png",
+      "sha256": "a9dd7f90e7475ab1cfd766a0e2405617d2e56202c7855b809735d5bdbb3050de",
+      "bytes": 130105
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_118_race_19/appearance_118_race_19_death.png",
+      "sha256": "3aee5ea7ab23e91676893286f009d676dc410f6a7c260b17d15d2e66ab7fc502",
+      "bytes": 213675
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_118_race_19/appearance_118_race_19_hit.png",
+      "sha256": "c97ce04efb9d27333e4868e8af5669a455f18583426f4381d5526c9538cec89d",
+      "bytes": 42823
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_118_race_19/appearance_118_race_19_idle.png",
+      "sha256": "647ef5b61efdb81541821bfe66fe2f1b2abd1d80c6ef4119486c52f0d9597b38",
+      "bytes": 79839
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_118_race_19/appearance_118_race_19_walk.png",
+      "sha256": "94b19d641b7a788bdf8cddef5488bac1b622ccd3845d0f7b8622c66240dab509",
+      "bytes": 125876
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_119_race_19/appearance_119_race_19_attack.png",
+      "sha256": "0ff25cf64de357dad38a47df5abc6cd6c0617efb3b4c09072b6f6e8108d4b4d5",
+      "bytes": 108855
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_119_race_19/appearance_119_race_19_death.png",
+      "sha256": "c00e678ae85ea66288141397700d59cbee33611316ba879b8b0f6308d9b1acc3",
+      "bytes": 167029
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_119_race_19/appearance_119_race_19_hit.png",
+      "sha256": "c38d7431bbd1cf75afbef02f8ac4a5b3a54296709c2048239802ccfefdb77102",
+      "bytes": 34776
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_119_race_19/appearance_119_race_19_idle.png",
+      "sha256": "3e2b16c7af55cd491cea97be39428f599ed594f98e63cef656e740bd763cc39e",
+      "bytes": 59072
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_119_race_19/appearance_119_race_19_walk.png",
+      "sha256": "936e18e5ca18d6936319a5b52289c14d35b54c5b5cf6e84569f5da5eee5f7d0e",
+      "bytes": 99833
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_120_race_19/appearance_120_race_19_attack.png",
+      "sha256": "76c707844b3486ed6870bbbf7de9d6561d49792761100e60859cf0c89684010a",
+      "bytes": 80510
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_120_race_19/appearance_120_race_19_death.png",
+      "sha256": "65b822f16b6e8efa6709746a163fa15f988677a080fc99ad516ffdd8c275ef4c",
+      "bytes": 154668
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_120_race_19/appearance_120_race_19_hit.png",
+      "sha256": "cb6282dba03ac290de95139b42c92627f6dcdb5070bfba5823c1042a3a231e7c",
+      "bytes": 29094
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_120_race_19/appearance_120_race_19_idle.png",
+      "sha256": "efeb8cdd8791e204b0768fc18ddce2c071a5891596dabace0a57ed7cbe4202a1",
+      "bytes": 55224
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_120_race_19/appearance_120_race_19_walk.png",
+      "sha256": "79ecb42e64b39ac54978ee2f0edc2caf5814c2ddb5b2d5b04cd4d777734c3cbb",
+      "bytes": 77564
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_121_race_19/appearance_121_race_19_attack.png",
+      "sha256": "a58e188ec552d4b7f78bc69b58b4ef166c69cc96a2f5b91bfa55beca7d0eb759",
+      "bytes": 145228
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_121_race_19/appearance_121_race_19_death.png",
+      "sha256": "f8184b7786ff0fddf61fad33e357abd87e9b9c5b69cb5f9111a1671008a1490b",
+      "bytes": 793583
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_121_race_19/appearance_121_race_19_hit.png",
+      "sha256": "e22c78d76bda3fb22146efd9354187e7c5280f45b24a3a53f8a781cd54bdb276",
+      "bytes": 51644
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_121_race_19/appearance_121_race_19_idle.png",
+      "sha256": "980d86cc66da4587f355a6d1330a5a44476c2d297cbc1a491882dbc59ea1f554",
+      "bytes": 98601
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_121_race_19/appearance_121_race_19_walk.png",
+      "sha256": "976c71c3a2db4af445cac23d7d0b6f8b6738e90056700f26f47a8fd0f457ae21",
+      "bytes": 141405
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_130_race_19/appearance_130_race_19_attack.png",
+      "sha256": "d6c30d488ea0253cf4529a8f4dea674286597cf62dadc04c024bcf58ce25c1ab",
+      "bytes": 108424
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_130_race_19/appearance_130_race_19_death.png",
+      "sha256": "462eccd217fd41e099d38ba5d09dc445177b484d4233a66a969d714ecc8708f0",
+      "bytes": 166761
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_130_race_19/appearance_130_race_19_hit.png",
+      "sha256": "de790dee78c187030d7c92f9fcef7c326e21a2c5e2ac6fc0c0dce033bb506960",
+      "bytes": 37628
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_130_race_19/appearance_130_race_19_idle.png",
+      "sha256": "3a67b897a9a4d41f86ada5951202a35c7f6c44d47e79a258ccd23e01c836bd81",
+      "bytes": 68935
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_130_race_19/appearance_130_race_19_walk.png",
+      "sha256": "138b4a1a25e54554548a96b70a72f6dee681ffbf77e07bc7403a6121e4e375d7",
+      "bytes": 111815
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_131_race_34/appearance_131_race_34_attack.png",
+      "sha256": "69148830baaf850177e0d993755dfcffde37d9a916f0556cef0e453c8e859c16",
+      "bytes": 607824
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_131_race_34/appearance_131_race_34_death.png",
+      "sha256": "cf488bee2bd4a35a760e6deeea70850864986ca0e5e4960630dd5eea48983901",
+      "bytes": 1097726
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_131_race_34/appearance_131_race_34_hit.png",
+      "sha256": "cb86385ed0096ff0d07bd3503d8c5a46b930a5506210b86fb4938f35355dc268",
+      "bytes": 174864
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_131_race_34/appearance_131_race_34_idle.png",
+      "sha256": "91325e3bda7bdab91e09a8456ecfc2cad7906551cbd78104e19247382975d6ad",
+      "bytes": 333310
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_131_race_34/appearance_131_race_34_walk.png",
+      "sha256": "91325e3bda7bdab91e09a8456ecfc2cad7906551cbd78104e19247382975d6ad",
+      "bytes": 333310
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_132_race_35/appearance_132_race_35_attack.png",
+      "sha256": "438d5e9871dc8f5146841102e9ac0f2323085927082f11d2607cc141db9c11e2",
+      "bytes": 400084
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_132_race_35/appearance_132_race_35_death.png",
+      "sha256": "31cdb87c0596123f10e34b1ec1baeb6252eda89f62ba385c29b5af5dabaf3abe",
+      "bytes": 829897
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_132_race_35/appearance_132_race_35_hit.png",
+      "sha256": "110b35742010f43ccc6ff75b7fd40a63e731cfec04f08f2f657b4e02792cb265",
+      "bytes": 161492
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_132_race_35/appearance_132_race_35_idle.png",
+      "sha256": "0e4494a5915d1698712349811e36fbb4f9ee569cbb14114abd74c132e4efbe9d",
+      "bytes": 250870
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_132_race_35/appearance_132_race_35_walk.png",
+      "sha256": "0e4494a5915d1698712349811e36fbb4f9ee569cbb14114abd74c132e4efbe9d",
+      "bytes": 250870
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_133_race_36/appearance_133_race_36_attack.png",
+      "sha256": "84b7156abab00fb7bd8df6bf7c79d048573a0aac1dfb5efd26bf2014475ea1db",
+      "bytes": 26387
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_133_race_36/appearance_133_race_36_death.png",
+      "sha256": "526af962c692af808a08e8c4d6ed2b335c230012f0e8ff444f8b6cd7adc63773",
+      "bytes": 152208
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_133_race_36/appearance_133_race_36_hit.png",
+      "sha256": "eabf380276b52114a4f5cd6c49a1845ff2de297d5dab0280c9f2f614c05a65f3",
+      "bytes": 9807
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_133_race_36/appearance_133_race_36_idle.png",
+      "sha256": "3a5ca90ce96a4dd994031fde62f552bfedfd87197506d1c537bdf77df87fe2e4",
+      "bytes": 5555
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_133_race_36/appearance_133_race_36_walk.png",
+      "sha256": "84b7156abab00fb7bd8df6bf7c79d048573a0aac1dfb5efd26bf2014475ea1db",
+      "bytes": 26387
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_141_race_34/appearance_141_race_34_attack.png",
+      "sha256": "44ecb18f8178308167839f61aa311fdef1330b19d7189b914a1f1bb2958fd387",
+      "bytes": 1067688
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_141_race_34/appearance_141_race_34_death.png",
+      "sha256": "b81bf10cbd651cd92cab944b5192f5b9c4793eaae83a945853c4625f5c5a29be",
+      "bytes": 2157519
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_141_race_34/appearance_141_race_34_hit.png",
+      "sha256": "480a70ac106a616d86b2d97e8af4efaa0e6580af97f6c6631e275cb54bd8e430",
+      "bytes": 463707
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_141_race_34/appearance_141_race_34_idle.png",
+      "sha256": "23b84ada8c1be6e560539bf6ea5d3ffbcdfdf08f91a8a8f42bdbee9523f2734b",
+      "bytes": 673096
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_141_race_34/appearance_141_race_34_walk.png",
+      "sha256": "23b84ada8c1be6e560539bf6ea5d3ffbcdfdf08f91a8a8f42bdbee9523f2734b",
+      "bytes": 673096
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_150_race_19/appearance_150_race_19_attack.png",
+      "sha256": "ea99cb8cc637993bc2edc37af597db4fb77fdb7f6b9114a1e6f53d5055af501a",
+      "bytes": 137623
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_150_race_19/appearance_150_race_19_death.png",
+      "sha256": "dd0fef4dbc42c2486065065bc1f0de93e4b1a55bcfa6c2e4eee4bea64978245e",
+      "bytes": 580804
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_150_race_19/appearance_150_race_19_hit.png",
+      "sha256": "99a5ade8a976b62db50500ff2ec80e7d939504e1ccbac94eb6871a5890b96389",
+      "bytes": 44657
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_150_race_19/appearance_150_race_19_idle.png",
+      "sha256": "3759fff0120d52d267b7e8e200bbde52070199c447fe721e8ede61af5b7f94b7",
+      "bytes": 70660
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_150_race_19/appearance_150_race_19_walk.png",
+      "sha256": "52bbcbdb060f2aa6d3bb88073e3ac79aaca19b86bcc90496f2161f117cce0bd4",
+      "bytes": 122450
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_163_race_19/appearance_163_race_19_attack.png",
+      "sha256": "16fb5c59e382b5dd8e672efd5043ab205f48568316c3fcce1addff93cc3e451f",
+      "bytes": 189967
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_163_race_19/appearance_163_race_19_death.png",
+      "sha256": "c326994443c6b2fcffe05bc007a47555a987e8f8ff6e9c97e80b10951709de98",
+      "bytes": 314104
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_163_race_19/appearance_163_race_19_hit.png",
+      "sha256": "4033a3da1a76c7f65605315ab12f27deecb0b8b3a1f6d9a5ea7192c540a08af1",
+      "bytes": 60665
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_163_race_19/appearance_163_race_19_idle.png",
+      "sha256": "0a6225dac041d257ee21a1d52ef37438c004584efce15a4f6f17e919f2690b5c",
+      "bytes": 111723
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_163_race_19/appearance_163_race_19_walk.png",
+      "sha256": "f56987cbfff82f1cada03458747e7eb459425da8ee36f9855356ddfccf6dadac",
+      "bytes": 178305
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_164_race_19/appearance_164_race_19_attack.png",
+      "sha256": "7990dfee8101fe509604230769eb678f07411bba7fc877cbab904cd1dbe46c0c",
+      "bytes": 141151
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_164_race_19/appearance_164_race_19_death.png",
+      "sha256": "514da3200801aa8efa1b88a236ec604bd002de9ff481f67a665403feb1b4da1e",
+      "bytes": 762105
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_164_race_19/appearance_164_race_19_hit.png",
+      "sha256": "1cc09d8351cd54efdbd6e400303b78fd7abcd7c68e7d08a60cd4189b45213c94",
+      "bytes": 49407
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_164_race_19/appearance_164_race_19_idle.png",
+      "sha256": "1850b1ae13444a31f09277e1c0cbfa9483b09bbaa119d118a2085d796057a4e4",
+      "bytes": 89084
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_164_race_19/appearance_164_race_19_walk.png",
+      "sha256": "d91c89f59c7f80c4b745a0f72d09ffcaa2582d119e3949aefcdfbe1900688f4b",
+      "bytes": 147804
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_166_race_19/appearance_166_race_19_attack.png",
+      "sha256": "15487042374f1dfa57d22fe5d82dd204e05d4fc452dc5985c76604b27edae605",
+      "bytes": 1864
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_166_race_19/appearance_166_race_19_death.png",
+      "sha256": "68fcca6947f36cabb326c6ca1280e950c9f709d7781b8ef790b89253740dcda2",
+      "bytes": 2133
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_166_race_19/appearance_166_race_19_hit.png",
+      "sha256": "a323bd6858415d7a89f39e7f14818031cc6456ed90ee831aef501eab5566c36e",
+      "bytes": 1482
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_166_race_19/appearance_166_race_19_idle.png",
+      "sha256": "4721bb94d12b6d461ce3ab296a386d4e1242dfe5a5a3eba9629d66feab681bde",
+      "bytes": 1706
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_166_race_19/appearance_166_race_19_walk.png",
+      "sha256": "15487042374f1dfa57d22fe5d82dd204e05d4fc452dc5985c76604b27edae605",
+      "bytes": 1864
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_171_race_55/appearance_171_race_55_attack.png",
+      "sha256": "9e7be1a48e0c0227fe133ac72e7b1a1e2c269b18fff20f6842d6f8bc1b605ad8",
+      "bytes": 109971
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_171_race_55/appearance_171_race_55_death.png",
+      "sha256": "89f8499150b2382669e43a91fd093673a9caf855e37810f9cebe8a17c0ab440c",
+      "bytes": 218526
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_171_race_55/appearance_171_race_55_hit.png",
+      "sha256": "762a163a0b664bd6b32d60747357c98adcf33d8494802caa5f92073dcdf46aea",
+      "bytes": 41736
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_171_race_55/appearance_171_race_55_idle.png",
+      "sha256": "03afdcff5cf16354d49b462d02ec32688dbc4ddb5f5f815ae65b666e050c0b7e",
+      "bytes": 70536
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_171_race_55/appearance_171_race_55_walk.png",
+      "sha256": "6ad12c905c20c2d7c18e8926d00973abe230f7fff9bc799df42dfddd4759357f",
+      "bytes": 105626
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_180_race_60/appearance_180_race_60_attack.png",
+      "sha256": "f10ecc584e6103778a6384cecd298c3f66917b6186a2f816bb17d68bb2b65f54",
+      "bytes": 208728
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_180_race_60/appearance_180_race_60_death.png",
+      "sha256": "e467c93c2273f51de900cef8c39eeb0b95a9e4e0bede6eefea682f3f87172177",
+      "bytes": 337445
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_180_race_60/appearance_180_race_60_hit.png",
+      "sha256": "fd2aff6addbbb75bd6de8f48efe5d36a6b7ef4cb573737eb430837612aee4420",
+      "bytes": 66066
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_180_race_60/appearance_180_race_60_idle.png",
+      "sha256": "6a20d60cf54a935f92c5c94df8f62b68e68ae3cf73ea7632b302e2113aca97a0",
+      "bytes": 126328
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_180_race_60/appearance_180_race_60_walk.png",
+      "sha256": "8d281f12e735db0e8005c1b5522033cbe970e1fe035c144fb802732f404f416e",
+      "bytes": 585951
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_181_race_61/appearance_181_race_61_attack.png",
+      "sha256": "91018d033392f86cc105ca75612628cb853903c4c52dcf681a45a75c70ebd3ae",
+      "bytes": 529929
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_181_race_61/appearance_181_race_61_death.png",
+      "sha256": "1a47b849600bf2416df807a694df7882995fbf5fa0880efacd07215a5fd7ca44",
+      "bytes": 957901
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_181_race_61/appearance_181_race_61_hit.png",
+      "sha256": "3db60da4e4307853ca0b28f1829a55b1caa1b88af919175df4c667e76c72188a",
+      "bytes": 60316
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_181_race_61/appearance_181_race_61_idle.png",
+      "sha256": "4a72386171655c92354cdaf74f6df218264090d306cfd191cd112a4ea8e3edc2",
+      "bytes": 110091
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_181_race_61/appearance_181_race_61_walk.png",
+      "sha256": "b9a048833c594b33e3382e3c225ec4458a22107b2cec6aab42424168ff1a24d3",
+      "bytes": 162174
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_182_race_62/appearance_182_race_62_attack.png",
+      "sha256": "cc07b90046fe287ced7f55f38a6c5f5f649fa5db469fa367478ac547efc9bea1",
+      "bytes": 632898
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_182_race_62/appearance_182_race_62_death.png",
+      "sha256": "1e2a9d4841cb3bdb231acbef35bac9797cb85d4e50c2bf13d5f8334ec42f3ec3",
+      "bytes": 326051
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_182_race_62/appearance_182_race_62_hit.png",
+      "sha256": "bb291f877d847cc135da4d2ca9cbd5b81c739261a1c2ff1e9224bb17632829b8",
+      "bytes": 75128
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_182_race_62/appearance_182_race_62_idle.png",
+      "sha256": "518ba28d86e0be5e6f0c1c839b2bccade44b38d3f2b0dc4c4ab7cb53d7042c1e",
+      "bytes": 396153
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_182_race_62/appearance_182_race_62_walk.png",
+      "sha256": "2daa5579f9a5601c7974316f7821037518e1bfb724f96cd51a81ef65612d1c84",
+      "bytes": 596838
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_190_race_64/appearance_190_race_64_attack.png",
+      "sha256": "bec451b095004688d8a426ca5175744dc79d20f03decdcad14cb26f22bba86b0",
+      "bytes": 74986
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_190_race_64/appearance_190_race_64_death.png",
+      "sha256": "6458bd4cbf99fd9a843a3dfde9cf9eb6fdd3fac89b64cc9715de8415857fd430",
+      "bytes": 149398
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_190_race_64/appearance_190_race_64_hit.png",
+      "sha256": "fa4dd32729538288f1cf19e99d46d07960aa496c09a21c1f6454fc4f918b8a10",
+      "bytes": 25538
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_190_race_64/appearance_190_race_64_idle.png",
+      "sha256": "9fdecfa2d96fe88a526e6f3619f07d29585340948b6e99ae7fe16c7c56726626",
+      "bytes": 42031
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_190_race_64/appearance_190_race_64_walk.png",
+      "sha256": "14a8660faff8578a34aab69d43919c4c3f252b66823c140dd4dbbd8cd68f77a9",
+      "bytes": 65957
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_191_race_65/appearance_191_race_65_attack.png",
+      "sha256": "0aa75d57d82ebf6e0cc8f803d432f8adf521cddc8607c206883d48349ae5ace7",
+      "bytes": 64504
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_191_race_65/appearance_191_race_65_death.png",
+      "sha256": "a9e49fa7455b8e083421c73f65bf3c08285cd6f48a72910a17655c6b4479278d",
+      "bytes": 138197
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_191_race_65/appearance_191_race_65_hit.png",
+      "sha256": "4fe26fa204e43ebead7bbe91e080be4a9cef1d03ad15491d121c149e059de4a1",
+      "bytes": 21392
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_191_race_65/appearance_191_race_65_idle.png",
+      "sha256": "4d42a6e3e089148f4f81c6c542d788d206cb8247c4f8b240adcbcd1fdd33f3de",
+      "bytes": 38182
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_191_race_65/appearance_191_race_65_walk.png",
+      "sha256": "c7eb1822e3cb37a1631637da83f925699db9889893ac75c4cac6f437fe6918aa",
+      "bytes": 62582
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_192_race_66/appearance_192_race_66_attack.png",
+      "sha256": "c28fa6c135a995f8669c3f280b0a0e28fe17ced4101348f4d2c57c9c77578950",
+      "bytes": 182962
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_192_race_66/appearance_192_race_66_death.png",
+      "sha256": "525a18f70e6e71f3baa09a150c723cf543c3c2a8a0fed79baec793823a86b559",
+      "bytes": 256414
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_192_race_66/appearance_192_race_66_hit.png",
+      "sha256": "438b207837589be2de5ebfe7a7fc5b3564289d75115ff928944417ebdb0acf6d",
+      "bytes": 49725
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_192_race_66/appearance_192_race_66_idle.png",
+      "sha256": "10204e8635f7cc4c5eb2382304c42fe6cfbe46fd74e7cb70ae14281404d17e36",
+      "bytes": 97758
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_192_race_66/appearance_192_race_66_walk.png",
+      "sha256": "f55551cedea727755e51c871570e9b9bceab56fe80cd314749642fe0dc1e7c4a",
+      "bytes": 147127
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_193_race_67/appearance_193_race_67_attack.png",
+      "sha256": "53631dcc4a9ede4dd2c2e86e05986c685ee888fdf9c07236bbf37ccc9161b532",
+      "bytes": 101813
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_193_race_67/appearance_193_race_67_death.png",
+      "sha256": "6dc134ec4dc5ea3fa18833d4b782c8d119dab8aaafd0bf2924f2e764636af305",
+      "bytes": 169194
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_193_race_67/appearance_193_race_67_hit.png",
+      "sha256": "47eea667a28d05382e0828395d085a097b6ce9a386e0c6df031c67255934e192",
+      "bytes": 36001
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_193_race_67/appearance_193_race_67_idle.png",
+      "sha256": "6331a49422cbf0de20340de38965e1a37061791243a2c1995c907ec84d651681",
+      "bytes": 52957
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_193_race_67/appearance_193_race_67_walk.png",
+      "sha256": "7b451a1166ab2bd2ff20b429311b05a9fc3e0d1da4f25788da9b65a1ff19bd95",
+      "bytes": 100833
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_194_race_67/appearance_194_race_67_attack.png",
+      "sha256": "3c48cd95745be1025dc660f41378a3c5b01d9c75d194a9d952551152034a42ba",
+      "bytes": 98323
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_194_race_67/appearance_194_race_67_death.png",
+      "sha256": "c2d15a5fc59dc2441d7613e98a8ab0e647ef59ef56ff621514eedbfe84adf0ec",
+      "bytes": 153703
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_194_race_67/appearance_194_race_67_hit.png",
+      "sha256": "41e3f8ada2ad8d201472f414a6788460f931512dbaf39b036ade6129e2550c5f",
+      "bytes": 30689
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_194_race_67/appearance_194_race_67_idle.png",
+      "sha256": "77d1ef469da596f8f8120b69c69010836688c42dc7f64b0e0eb9d200447fe83b",
+      "bytes": 47098
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_194_race_67/appearance_194_race_67_walk.png",
+      "sha256": "b85cef1a37f4454930002dea665ad8262de9133c6780123e811de528f0142e2c",
+      "bytes": 92259
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_195_race_45/appearance_195_race_45_attack.png",
+      "sha256": "0a3e91136387ca6c3abe2ba002ab8fe99f14359ea4a8c89fac63d3d8eb7c1927",
+      "bytes": 97346
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_195_race_45/appearance_195_race_45_death.png",
+      "sha256": "c6083e3e9f9dbee3baab3f5f0df8470e3674a066fd41d3aef832b39bbddfa1c6",
+      "bytes": 161298
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_195_race_45/appearance_195_race_45_hit.png",
+      "sha256": "45e97879938b9ab85261ce3dd244f46ddba16e267983698ffff703bb80ef8b4f",
+      "bytes": 33262
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_195_race_45/appearance_195_race_45_idle.png",
+      "sha256": "3298bde2427e643d2ef4402188ae91476a6e53ba7016b38926dde3af9b3d63c4",
+      "bytes": 48053
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_195_race_45/appearance_195_race_45_walk.png",
+      "sha256": "4e24d254204224331a68ea9904be77f0bc5f925e3b554838da6dd99792f9cff9",
+      "bytes": 91300
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_196_race_63/appearance_196_race_63_attack.png",
+      "sha256": "6c665f914e60bb238e2fc2eff0df0248f375d297354d2cf894babb10f2dd3530",
+      "bytes": 247469
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_196_race_63/appearance_196_race_63_death.png",
+      "sha256": "358287634f09bffaac60845f521975527c7e42ea158f8e1d2bdd0194a024b3e6",
+      "bytes": 819535
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_196_race_63/appearance_196_race_63_hit.png",
+      "sha256": "84899502e21a3a7fdbc2783d59e8216718d9146330d06cbc8241a739a04b6f11",
+      "bytes": 84083
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_196_race_63/appearance_196_race_63_idle.png",
+      "sha256": "b9f6881d60a1349217083990efb801e0000c44b206fc79928d2d51ca6057eafd",
+      "bytes": 143521
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_196_race_63/appearance_196_race_63_walk.png",
+      "sha256": "680efb503499abe29a8cfb350d5cd4b65d7f1d16bcddfc22e04d69acc8263329",
+      "bytes": 240686
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_200_race_19/appearance_200_race_19_attack.png",
+      "sha256": "3e2a6c9f59e05dddf1a331c77ac144ba460b50804d691f47d5ab4498f6e670eb",
+      "bytes": 97698
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_200_race_19/appearance_200_race_19_death.png",
+      "sha256": "a5288a18bbdebfc94704a3e1bedc59a868222463eb748e1177c8b9561b757d71",
+      "bytes": 223207
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_200_race_19/appearance_200_race_19_hit.png",
+      "sha256": "0407ad0cb868334ca883da4cd146d3696a3fd8d642544f81c1e9116213784d1e",
+      "bytes": 31527
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_200_race_19/appearance_200_race_19_idle.png",
+      "sha256": "05c03b4483dd764494a219eeba8763dee121887c76dd479fa069286a0cf282e0",
+      "bytes": 52941
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_200_race_19/appearance_200_race_19_walk.png",
+      "sha256": "49bd0518052bc5514582f0400d3af46b26e4e746aa8c4e73a0a9e86bd3ff6627",
+      "bytes": 85893
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_201_race_19/appearance_201_race_19_attack.png",
+      "sha256": "00d679ee6b503a5d7d04e405e16cd84bfd8a97b4d79cf5cedb4f2de7a46b7ae1",
+      "bytes": 117237
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_201_race_19/appearance_201_race_19_death.png",
+      "sha256": "a538f959ce6c720fc8e6621b32b02b73ed9ab22420d547e7ad0e9f833d15d98e",
+      "bytes": 246350
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_201_race_19/appearance_201_race_19_hit.png",
+      "sha256": "359b447ab9bf74d2bd90891f6d41081b637e4ab6ba701ef016086a58c126d217",
+      "bytes": 38372
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_201_race_19/appearance_201_race_19_idle.png",
+      "sha256": "2c016d62df6dcb278b8a485f4582200f7d9e4ea8ea3481e1a784876db157812b",
+      "bytes": 65379
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_201_race_19/appearance_201_race_19_walk.png",
+      "sha256": "d4e3fdea3ce99b599cecc8fdeb4c335e74c594c19916c1a33f15bb809a9211e2",
+      "bytes": 101231
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_202_race_19/appearance_202_race_19_attack.png",
+      "sha256": "9213eac217380acb02cd90761e0d5dce59856baad66c6b8d05b9680f4dac49a5",
+      "bytes": 107907
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_202_race_19/appearance_202_race_19_death.png",
+      "sha256": "3d13554197d9cbb6ceaf5296cf9dc59af2585364620eafcbdb7138ef8c3477bc",
+      "bytes": 226373
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_202_race_19/appearance_202_race_19_hit.png",
+      "sha256": "25ffc4977e555fc4c8f2fb2da6e33b39ef0cffb45e169cccca030356c9b9a1dc",
+      "bytes": 34875
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_202_race_19/appearance_202_race_19_idle.png",
+      "sha256": "f058c86cc618bb97d1f122716678eacdfc57ecdc5bfc344bb6fd22e0439571ac",
+      "bytes": 59777
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_202_race_19/appearance_202_race_19_walk.png",
+      "sha256": "725aa6795a4880f59d0b4998136ee10b366545c939821bc239141c354e0c3683",
+      "bytes": 93800
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_203_race_19/appearance_203_race_19_attack.png",
+      "sha256": "99c0d2ed70a4021d0fb1d7ccc674c5a250d4a7cc18d226ad2317cafe22365aef",
+      "bytes": 101948
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_203_race_19/appearance_203_race_19_death.png",
+      "sha256": "2e77a41a72e5f360d4a6b1ce9e6fdb76c711f51780ba52756763c976e5c0d66e",
+      "bytes": 228707
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_203_race_19/appearance_203_race_19_hit.png",
+      "sha256": "d125f9075e763f5468a0df2ce55b20f0c5786bec6881ca946e25c2baf6972685",
+      "bytes": 35038
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_203_race_19/appearance_203_race_19_idle.png",
+      "sha256": "00cd62a3c8549b37ca10177ed2ff89d00dcfb8b6cf2f34ab7cc9176b790283c0",
+      "bytes": 62777
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_203_race_19/appearance_203_race_19_walk.png",
+      "sha256": "f4fa952a000afafea01bb6afc241ace3910ab411f10eba6addaa07e3fb451435",
+      "bytes": 97521
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_204_race_19/appearance_204_race_19_attack.png",
+      "sha256": "426dce54d604bfb03bb27e2907cc4e6700e0d4cc47140c0055f967f9d605c596",
+      "bytes": 104269
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_204_race_19/appearance_204_race_19_death.png",
+      "sha256": "79a55f11711b0112f7fbdfea3a4f05908f68d839a403112dc851aca508226734",
+      "bytes": 227114
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_204_race_19/appearance_204_race_19_hit.png",
+      "sha256": "e11174794f5a44160f497156e35c0a208b576a836a43ae9090820d840fba981b",
+      "bytes": 34492
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_204_race_19/appearance_204_race_19_idle.png",
+      "sha256": "d8456a6b2c9ccdbe7a8d3e8ac6f56847a6f94f8348dd1d7b38f57fad76410a75",
+      "bytes": 61317
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_204_race_19/appearance_204_race_19_walk.png",
+      "sha256": "4ced9f9aae0177eda7c1836c700d641b1effd8bcd2ce91cd2ca3af4b8d764077",
+      "bytes": 95488
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_205_race_70/appearance_205_race_70_attack.png",
+      "sha256": "da96843bb790eb398f6e849ba37e11bac415efa1cd1c4347165fba662a0b097d",
+      "bytes": 119045
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_205_race_70/appearance_205_race_70_death.png",
+      "sha256": "d395a6789b135fac670df01553730ec9c0cd72a2bffcd2bbab3d4c8a3f0bbfb5",
+      "bytes": 210788
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_205_race_70/appearance_205_race_70_hit.png",
+      "sha256": "8eb9ce198ccacf66113152cf944d92306ce9ac9d81b0fef6c6ed39b9888bc5f8",
+      "bytes": 40283
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_205_race_70/appearance_205_race_70_idle.png",
+      "sha256": "9f3f59730f07f0bef296b394182237bc801d0f1aa8e014cdd7f39321db7bdf95",
+      "bytes": 67926
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_205_race_70/appearance_205_race_70_walk.png",
+      "sha256": "61bf95332f88246d8267f0e217cc935c89c5766877bb4f32c073039d5dd00fba",
+      "bytes": 110260
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_206_race_71/appearance_206_race_71_attack.png",
+      "sha256": "d6a355cddde46fc542ed04e6254bf8bb3341735ca3d68b4a324472ba9afb269d",
+      "bytes": 130549
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_206_race_71/appearance_206_race_71_death.png",
+      "sha256": "392ea6966b3922293ef90a72416accb59980e1248a9e5ff5fc552e49265a9ec1",
+      "bytes": 213115
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_206_race_71/appearance_206_race_71_hit.png",
+      "sha256": "12f49cf8b12eca8b9734d70695e95f8fb5d1b70557dcba969954292de447898e",
+      "bytes": 42126
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_206_race_71/appearance_206_race_71_idle.png",
+      "sha256": "3b1acb8cbe9cfc0e0afa14dc46f0c6be34bf66b7769994b3713aacbfdab99261",
+      "bytes": 70872
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_206_race_71/appearance_206_race_71_walk.png",
+      "sha256": "b174af144994e0c0084228e577d1d65e425f006dc5c76dbb17a834eccbda6093",
+      "bytes": 122938
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_207_race_72/appearance_207_race_72_attack.png",
+      "sha256": "02d8b236593a81e85b771859cf7a151e7ce75cd6c1abfd2782ae138ea30cdd6a",
+      "bytes": 258959
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_207_race_72/appearance_207_race_72_death.png",
+      "sha256": "25348ecd633a58e75b606a140bf976fe4185f6722185b549580f77b6dbca867f",
+      "bytes": 591615
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_207_race_72/appearance_207_race_72_hit.png",
+      "sha256": "351d452a3a68855f6bc781217053c633160853261ede5bb947963ccecab99961",
+      "bytes": 85726
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_207_race_72/appearance_207_race_72_idle.png",
+      "sha256": "b4aff6280b92b9f75351f3d96877cb0fec93aece109cf19a081861a9dff1b0fa",
+      "bytes": 162766
+    },
+    {
+      "path": "assets/art/monsters/client_complete/appearance_207_race_72/appearance_207_race_72_walk.png",
+      "sha256": "a01063eaa1225b9c0b8bbfc5a82ef448e9ab08446ae8703b6d4f76745a581f4c",
+      "bytes": 240261
+    },
+    {
+      "path": "assets/art/monsters/client_undead/axe_skeleton/axe_skeleton_attack.png",
+      "sha256": "16adc0d1cc5269eaa53369196feffd9753ce41818244707457d3e1b4613614a6",
+      "bytes": 274229
+    },
+    {
+      "path": "assets/art/monsters/client_undead/axe_skeleton/axe_skeleton_death.png",
+      "sha256": "f0abd733c3fe303fb07fc961720dea77c200106287596e6b25f70d95966af4fc",
+      "bytes": 441153
+    },
+    {
+      "path": "assets/art/monsters/client_undead/axe_skeleton/axe_skeleton_hit.png",
+      "sha256": "6397a4286a6afd0d84996e0a1ff93f8d48f6675ad831e7ad50e4dcec1e95d8dc",
+      "bytes": 96120
+    },
+    {
+      "path": "assets/art/monsters/client_undead/axe_skeleton/axe_skeleton_idle.png",
+      "sha256": "907e1642d4f5f38f7fc3da4c4655a32556022322a2782fc5582e1aff3867bd75",
+      "bytes": 144519
+    },
+    {
+      "path": "assets/art/monsters/client_undead/axe_skeleton/axe_skeleton_walk.png",
+      "sha256": "ed98dce2d53ce8ff0591675e2a20efd608328510b090b727c51f6147d5242577",
+      "bytes": 237768
+    },
+    {
+      "path": "assets/art/monsters/client_undead/cl_zombie/cl_zombie_attack.png",
+      "sha256": "0be19763a45247e6ce9fcf8572609ee132a182db60e066b911e11e2801383ebe",
+      "bytes": 151253
+    },
+    {
+      "path": "assets/art/monsters/client_undead/cl_zombie/cl_zombie_death.png",
+      "sha256": "1d5084161a34593abe845fe65c9b4724e9282ef35f2d6b15ade202ae3839bf05",
+      "bytes": 282552
+    },
+    {
+      "path": "assets/art/monsters/client_undead/cl_zombie/cl_zombie_hit.png",
+      "sha256": "f59c33a42f0d05839ea22d4a1c436485cb517f77ed6cf35a95fe5d01902846fc",
+      "bytes": 53616
+    },
+    {
+      "path": "assets/art/monsters/client_undead/cl_zombie/cl_zombie_idle.png",
+      "sha256": "4ef127e8cba7001780a0d1eb542a1a8f29b3f950735e5aa546b7b29420fba9d5",
+      "bytes": 95507
+    },
+    {
+      "path": "assets/art/monsters/client_undead/cl_zombie/cl_zombie_walk.png",
+      "sha256": "4e96517c76f80967d29aca2294f7871020c27d3ebc470e25205d807950847488",
+      "bytes": 145617
+    },
+    {
+      "path": "assets/art/monsters/client_undead/corpse_king/corpse_king_attack.png",
+      "sha256": "be4db277f52ea6d42c5ebf1c31deb8dbd2dadf65b828cebb028e143e40c36e87",
+      "bytes": 281011
+    },
+    {
+      "path": "assets/art/monsters/client_undead/corpse_king/corpse_king_death.png",
+      "sha256": "2f75945e803b98bbe629185c8922b13323b84481701a7a6944995c06b2335565",
+      "bytes": 515437
+    },
+    {
+      "path": "assets/art/monsters/client_undead/corpse_king/corpse_king_hit.png",
+      "sha256": "e85fdc91b32d33b89f0173860f43f56fce35ec263fefb11ab0caa9de4e4cba67",
+      "bytes": 94479
+    },
+    {
+      "path": "assets/art/monsters/client_undead/corpse_king/corpse_king_idle.png",
+      "sha256": "0db71b4fca52496cd42f66e35aa588d994678996996062a1fee58badedf1005a",
+      "bytes": 170558
+    },
+    {
+      "path": "assets/art/monsters/client_undead/corpse_king/corpse_king_walk.png",
+      "sha256": "e690c5234341121a29fe7547019ee46cad5f7500759d71cb04032859a1697a11",
+      "bytes": 266677
+    },
+    {
+      "path": "assets/art/monsters/client_undead/crawler_zombie/crawler_zombie_attack.png",
+      "sha256": "6d31f01d608cf4579599c150541595c9a729b0ce4a24ea8efd34ecb057bb88fd",
+      "bytes": 119451
+    },
+    {
+      "path": "assets/art/monsters/client_undead/crawler_zombie/crawler_zombie_death.png",
+      "sha256": "e928ff6468acfb72d068cdc76cd583b3e508b19de7559ed21c4e454c106a6281",
+      "bytes": 194182
+    },
+    {
+      "path": "assets/art/monsters/client_undead/crawler_zombie/crawler_zombie_hit.png",
+      "sha256": "386f3eca9f698db72918dd0566842990846cf2ed534664944e1b4ae3f3fe48b4",
+      "bytes": 40637
+    },
+    {
+      "path": "assets/art/monsters/client_undead/crawler_zombie/crawler_zombie_idle.png",
+      "sha256": "832ab49c88ef5ddf1d20134208c76a59125dcb3d4c2a90f08fa21fff57069fa1",
+      "bytes": 74990
+    },
+    {
+      "path": "assets/art/monsters/client_undead/crawler_zombie/crawler_zombie_walk.png",
+      "sha256": "4eb45a2c9869837359c0b22d1c8ce5d0b93bc1e390cd97efb1b43aa831e5bee9",
+      "bytes": 116956
+    },
+    {
+      "path": "assets/art/monsters/client_undead/digout_zombie/digout_zombie_attack.png",
+      "sha256": "163113ecc4e632e980d6cbaef070ea59e8d13ec5d205ccba6256e2210a39fecb",
+      "bytes": 185100
+    },
+    {
+      "path": "assets/art/monsters/client_undead/digout_zombie/digout_zombie_death.png",
+      "sha256": "9126e52e1d304d485d4dc6f6321c99d8fa562fa0e1a10d9bff985a7822247ff2",
+      "bytes": 322479
+    },
+    {
+      "path": "assets/art/monsters/client_undead/digout_zombie/digout_zombie_hit.png",
+      "sha256": "8aeba6a0bb1437c93f2275ccb9845aa7c91d6dcc660ced1df49810ac9de3dafb",
+      "bytes": 61509
+    },
+    {
+      "path": "assets/art/monsters/client_undead/digout_zombie/digout_zombie_idle.png",
+      "sha256": "1ce1f2df80e944e9b45650f8ac62c2e1e0810c13494097bd417f34bd799b7bf4",
+      "bytes": 117624
+    },
+    {
+      "path": "assets/art/monsters/client_undead/digout_zombie/digout_zombie_walk.png",
+      "sha256": "a26146551e0537b47fa383fc960f181f0371a83ad04ec4e88e24701cf4bcb13e",
+      "bytes": 175947
+    },
+    {
+      "path": "assets/art/monsters/client_undead/nd_zombie/nd_zombie_attack.png",
+      "sha256": "b6e94a6abf5dd15de7a315ffdb8530a008a4a610e3d7f1d0c02dff69c0c7a050",
+      "bytes": 139732
+    },
+    {
+      "path": "assets/art/monsters/client_undead/nd_zombie/nd_zombie_death.png",
+      "sha256": "10c2c0af439cb46bb9e7a6ae94ad81489ada5c36d2c1a17f3fe8c927bbc7e3ed",
+      "bytes": 245256
+    },
+    {
+      "path": "assets/art/monsters/client_undead/nd_zombie/nd_zombie_hit.png",
+      "sha256": "5d8c58b4abd3ce4fa03b837c2b94a22293efe4151fd07d2d04bac174d6ee13e1",
+      "bytes": 49376
+    },
+    {
+      "path": "assets/art/monsters/client_undead/nd_zombie/nd_zombie_idle.png",
+      "sha256": "802e49338c442d9e974d6bb02097868ad313ba2d2dfe8a8093d3c3e294b5f211",
+      "bytes": 87025
+    },
+    {
+      "path": "assets/art/monsters/client_undead/nd_zombie/nd_zombie_walk.png",
+      "sha256": "92b3e7005eee0afb4a460d2da61f73f49992908b9218f2e942821367d5a85d40",
+      "bytes": 133893
+    },
+    {
+      "path": "assets/art/monsters/client_undead/shaman_zombie/shaman_zombie_attack.png",
+      "sha256": "d492a3a9fb96e9b95e4a8d1c56a59ef6294c6c04c289cb06c2e75696c2c631d7",
+      "bytes": 181147
+    },
+    {
+      "path": "assets/art/monsters/client_undead/shaman_zombie/shaman_zombie_death.png",
+      "sha256": "758c070b9c84c6d9ac328fc493869ec5fb0a493d1545cd47e88d6775c8eaaa13",
+      "bytes": 308493
+    },
+    {
+      "path": "assets/art/monsters/client_undead/shaman_zombie/shaman_zombie_hit.png",
+      "sha256": "bcf32b91a7fefed89c522f92a74d64a3d4759a41086e75565fa1a06b1713b2a9",
+      "bytes": 61199
+    },
+    {
+      "path": "assets/art/monsters/client_undead/shaman_zombie/shaman_zombie_idle.png",
+      "sha256": "8bfb959d3fc74c45289f0a3b2b001e62bc1fccc369401bfde9ad32c622eacc2d",
+      "bytes": 96679
+    },
+    {
+      "path": "assets/art/monsters/client_undead/shaman_zombie/shaman_zombie_walk.png",
+      "sha256": "3c7f452a389d634720d8251f0281eb7b19d2f63b68a44aeeeb08a7ab67b9c6f5",
+      "bytes": 154116
+    },
+    {
+      "path": "assets/art/monsters/client_undead/skeleton/skeleton_attack.png",
+      "sha256": "dcfe50835d3bf8432478522e690f542914d7010277e6b3c3fa4a17e13b341a16",
+      "bytes": 255329
+    },
+    {
+      "path": "assets/art/monsters/client_undead/skeleton/skeleton_death.png",
+      "sha256": "d84827fb21354de509ca2bd693f659e06adfcfb9cd1a65419dc34222aa9608dc",
+      "bytes": 422869
+    },
+    {
+      "path": "assets/art/monsters/client_undead/skeleton/skeleton_hit.png",
+      "sha256": "545d2814d4f501d79a198c45fee13d551263a5a471c916b08cef7f06701d2813",
+      "bytes": 92475
+    },
+    {
+      "path": "assets/art/monsters/client_undead/skeleton/skeleton_idle.png",
+      "sha256": "c49668124af92ecb0477102538787ec0477bf2a1898826478731af121e1666f1",
+      "bytes": 141451
+    },
+    {
+      "path": "assets/art/monsters/client_undead/skeleton/skeleton_walk.png",
+      "sha256": "75d7b8ac83f7d501376b6b8c7776481a09cc38c558ab5a319c7ceb8fc036e89b",
+      "bytes": 232689
+    },
+    {
+      "path": "assets/art/monsters/client_undead/skeleton_fighter/skeleton_fighter_attack.png",
+      "sha256": "d64ec76df824c3fcb0cd4f123bac1ce73053f1f946dbef4ebf611d829914e73a",
+      "bytes": 312988
+    },
+    {
+      "path": "assets/art/monsters/client_undead/skeleton_fighter/skeleton_fighter_death.png",
+      "sha256": "5066768da61e7221474da88010b5c7659fc339a62ce7073052eda78fdbe7b1fd",
+      "bytes": 450901
+    },
+    {
+      "path": "assets/art/monsters/client_undead/skeleton_fighter/skeleton_fighter_hit.png",
+      "sha256": "1a68e74b3918c79aa2bba9da29ae9c58dd6e309f85442943bb4b9c8e692b7eef",
+      "bytes": 113218
+    },
+    {
+      "path": "assets/art/monsters/client_undead/skeleton_fighter/skeleton_fighter_idle.png",
+      "sha256": "4079e9effee86d09d1e74c5a88b27c91918a20ef5134bfbf96574b953e1d4d59",
+      "bytes": 171648
+    },
+    {
+      "path": "assets/art/monsters/client_undead/skeleton_fighter/skeleton_fighter_walk.png",
+      "sha256": "c6a45b94b679ab7a9d9d9e49143ec76c37bd19554d299c5f30f03147da1bd977",
+      "bytes": 286067
+    },
+    {
+      "path": "assets/art/monsters/client_undead/skeleton_spirit/skeleton_spirit_attack.png",
+      "sha256": "cdc42a4b04cd9d02c8288606d107e32d5ebef843a09b4bc7697360a390507326",
+      "bytes": 385315
+    },
+    {
+      "path": "assets/art/monsters/client_undead/skeleton_spirit/skeleton_spirit_death.png",
+      "sha256": "972c89d7adf0bd8c1dc917be5723252fa800af1a6940590f0e3f2a1e1bac3e25",
+      "bytes": 590105
+    },
+    {
+      "path": "assets/art/monsters/client_undead/skeleton_spirit/skeleton_spirit_hit.png",
+      "sha256": "278c78af2d686d78c35ee92f3d6520f7ad17723a10f9fa9865b9960108506a02",
+      "bytes": 125551
+    },
+    {
+      "path": "assets/art/monsters/client_undead/skeleton_spirit/skeleton_spirit_idle.png",
+      "sha256": "00b2054b15fc46c79145fe586e6e74e744e8ca2662677129a07b032190ba3679",
+      "bytes": 191725
+    },
+    {
+      "path": "assets/art/monsters/client_undead/skeleton_spirit/skeleton_spirit_walk.png",
+      "sha256": "94e67b512ab1663b312233d840de9bf216cf609410d713b35659c9f94420bb46",
+      "bytes": 334876
+    },
+    {
+      "path": "assets/art/monsters/client_undead/skeleton_warrior/skeleton_warrior_attack.png",
+      "sha256": "e6394bbc29e92cdba4839ea0f3d482d4a10a5934cdde932da34be0a3adab3cc2",
+      "bytes": 306244
+    },
+    {
+      "path": "assets/art/monsters/client_undead/skeleton_warrior/skeleton_warrior_death.png",
+      "sha256": "e0b24a2ea58ffebf607a7188bd065d03d1297e24a1f4bdc9485112e4a1853311",
+      "bytes": 450303
+    },
+    {
+      "path": "assets/art/monsters/client_undead/skeleton_warrior/skeleton_warrior_hit.png",
+      "sha256": "f00c33ecf9f58ec5a886f3fe0c45aa3bc18bfd16c3ea6f9b687144e053ce346c",
+      "bytes": 112596
+    },
+    {
+      "path": "assets/art/monsters/client_undead/skeleton_warrior/skeleton_warrior_idle.png",
+      "sha256": "f37c16f9354912d59e0b49e9e8e0affd709790b92c7736fb270957ad1298ae48",
+      "bytes": 160746
+    },
+    {
+      "path": "assets/art/monsters/client_undead/skeleton_warrior/skeleton_warrior_walk.png",
+      "sha256": "90c6e2ab514821fa3217e856dc10f64b523c6ef22bba772b30f1cfa5d74b4d77",
+      "bytes": 280984
+    },
+    {
+      "path": "assets/data/bich_common_client_art_sources.json",
+      "sha256": "1edb3cc38675e65a0910ff072469c9d42bb62ce0b90dbf44fef28434987d309d",
+      "bytes": 1080572
+    },
+    {
+      "path": "assets/data/bich_undead_client_art_sources.json",
+      "sha256": "a0a3d21f30544f40791e2b7bec8d72e5052fc6b8f1fec35cad1833a557796ea6",
+      "bytes": 542158
+    },
+    {
+      "path": "assets/data/classic_boss_client_art_sources.json",
+      "sha256": "8cfda8c0d91b1fcfd7ac43d50c2fa62000dba51b0857bb2a49141eb0eb7dfb89",
+      "bytes": 166942
+    },
+    {
+      "path": "assets/data/complete_monster_client_art_sources.json",
+      "sha256": "070d78ff620fbbf5e33d34cf224829fa81c14e77e73399bb26e4be901621aed3",
+      "bytes": 976241
+    },
+    {
+      "path": "assets/data/equipment_male_world_helmet.json",
+      "sha256": "21369241d3bc53b65dff3895860089aa4d9089488e26866410b009040c7cb6b8",
+      "bytes": 4767954
+    },
+    {
+      "path": "assets/data/equipment_male_world_helmet_recipes.json",
+      "sha256": "66e97ef052a98a66c49f83b72e1fb0ceb3c88557a7450e4ed2870377d45e66c3",
+      "bytes": 25133
+    },
+    {
+      "path": "assets/data/legend176_data.json",
+      "sha256": "dd5d9d11462ad83e56d4b48c4db4d4741c4facb9fdd5cfdbffb2864aa26faf09",
+      "bytes": 2576485
+    },
+    {
+      "path": "assets/data/runtime/monster_animation_catalog.json",
+      "sha256": "237ff7655b17a31c5daf1119c114ae5663960198aefaad3a0945a9d2c8986517",
+      "bytes": 97892
+    },
+    {
+      "path": "assets/data/runtime/monster_ground_contact_calibrations.json",
+      "sha256": "c784bad60afc82b2fa5e4bd5af466f4a38adfccbb35ea0d3b733ecb6a717407c",
+      "bytes": 258098
+    },
+    {
+      "path": "assets/data/runtime/monster_ground_contacts.json",
+      "sha256": "bc06134052121d7e62a4c146d536ae8a1c250585c52e43607f023b7baea319bb",
+      "bytes": 401349
+    },
+    {
+      "path": "assets/data/runtime/monster_overhead_anchors.json",
+      "sha256": "658817ecc2b8091740a6cf177f90e81944da86ae9d74ef66d84e26e30e71cf33",
+      "bytes": 75022
+    },
+    {
+      "path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Magic.DB",
+      "sha256": "3cff6c5e9d422dc473f10f349344ce0ee2c7ec1e3d318d8b10d2e356bf37e112",
+      "bytes": 8192
+    },
+    {
+      "path": "reports/skill_resource_consumption.json",
+      "sha256": "1264881fccb258f4cc39d1d55e3cf97d1b37db7735ed67a9b6e7df7bf29b5577",
+      "bytes": 24106
+    },
+    {
+      "path": "tests/test_b24_seed_calibration_guard.py",
+      "sha256": "0d4c857760f8130af1fdae63265bd16fb4cad4746217949d32cc8633aeef1e9e",
+      "bytes": 861
+    },
+    {
+      "path": "tests/test_b25_audit_provenance.py",
+      "sha256": "ae19d9e9ef3032f2049160254bd87d1bc35f6718ddd7baf8405e4c7ddca934b6",
+      "bytes": 8493
+    },
+    {
+      "path": "tests/test_b25_build_info_modes.py",
+      "sha256": "2246f97c522a74a558e61e77717e79d26277863ca876007eab7fd5aba932c8a3",
+      "bytes": 2523
+    },
+    {
+      "path": "tests/test_b25_character_generators.py",
+      "sha256": "e014861b3555c53273d72b2e0d8049298e4bc42f38ad9872f01560393ff898bc",
+      "bytes": 4758
+    },
+    {
+      "path": "tests/test_b25_chiyue_provenance.py",
+      "sha256": "c68d9f404c68e7b37f3def8915ee306649a68a4018495c75b6b4f2b4ab2a5db1",
+      "bytes": 2628
+    },
+    {
+      "path": "tests/test_b25_write_set_harness.py",
+      "sha256": "6daf627282c359538da25cf1c69b98ed09b2d02398dc95ea7a86deb4c24043d2",
+      "bytes": 5260
+    },
+    {
+      "path": "tools/build_monster_ground_contacts.py",
+      "sha256": "4707d7778801623e7f39297367c5e8e080833274adf4033a939c41204e3a1092",
+      "bytes": 32609
+    },
+    {
+      "path": "tools/build_original_client_paper_doll_stage.py",
+      "sha256": "cd7e17cef4c388c3fac56030cb286fe763bd962cbfd0fb281f78be8d75fe50d9",
+      "bytes": 14613
+    },
+    {
+      "path": "tools/build_warrior_wear_assets.py",
+      "sha256": "ec9f6a3add6108d89ba1c6277fdabd466534d6da676cec69262abc5e3467389c",
+      "bytes": 21688
+    },
+    {
+      "path": "tools/generate_build_info.ps1",
+      "sha256": "088d1b248e808e2aa46cf60f00ce960eb0f2836a1e2488e5d4ae81544b63c8ea",
+      "bytes": 8696
+    },
+    {
+      "path": "tools/generate_mir2_human_skill_audit.py",
+      "sha256": "fc2a7b699a52babc35ce2acd10fda8ed280c4b0d057e9cc5e73d2788cc377fd2",
+      "bytes": 75695
+    },
+    {
+      "path": "tools/import_canonical_monster_drop_excel.py",
+      "sha256": "b5239b8f6650c6bb60edfc09bb6793aefadf022b545bd6379f50ff40856004e8",
+      "bytes": 18428
+    },
+    {
+      "path": "tools/loot_sheet_compiler/test_write_set_repair.ps1",
+      "sha256": "0ad7202609a72b420192adff4500a67e0b7068c6057b92ba49af9b2665d7648d",
+      "bytes": 11625
+    },
+    {
+      "path": "tools/map_assets/build_chiyue_valley_wall_pack.py",
+      "sha256": "3a62632b0f21162e0c4b3347229fcbebd57459ac40298599b80f2f531005330f",
+      "bytes": 38017
+    }
+  ]
+}

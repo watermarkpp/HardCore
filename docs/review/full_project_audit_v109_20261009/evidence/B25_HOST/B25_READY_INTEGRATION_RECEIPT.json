@@ -1,0 +1,46 @@
+{
+  "status": "PASS",
+  "scope": "Reviewed tool source integration only; Root final marker hardening and frozen tests pending",
+  "rows": [
+    {
+      "path": "tools/build_warrior_wear_assets.py",
+      "sha256": "ec9f6a3add6108d89ba1c6277fdabd466534d6da676cec69262abc5e3467389c",
+      "commit": "90692f4f5"
+    },
+    {
+      "path": "tools/build_original_client_paper_doll_stage.py",
+      "sha256": "cd7e17cef4c388c3fac56030cb286fe763bd962cbfd0fb281f78be8d75fe50d9",
+      "commit": "90692f4f5"
+    },
+    {
+      "path": "tests/test_b25_character_generators.py",
+      "sha256": "e014861b3555c53273d72b2e0d8049298e4bc42f38ad9872f01560393ff898bc",
+      "commit": "90692f4f5"
+    },
+    {
+      "path": "tools/map_assets/build_chiyue_valley_wall_pack.py",
+      "sha256": "3a62632b0f21162e0c4b3347229fcbebd57459ac40298599b80f2f531005330f",
+      "commit": "ed53e5adece4943bd0c28d73bca713dc09f0605a"
+    },
+    {
+      "path": "tests/test_b25_chiyue_provenance.py",
+      "sha256": "c68d9f404c68e7b37f3def8915ee306649a68a4018495c75b6b4f2b4ab2a5db1",
+      "commit": "ed53e5adece4943bd0c28d73bca713dc09f0605a"
+    },
+    {
+      "path": "tools/generate_mir2_human_skill_audit.py",
+      "sha256": "08b657d40fa75ef8de61b083842b44977135660bf2dba53ae63d3b3fd55d54cd",
+      "commit": "7c6db2421b15c901e3475d31e2b03e3ee40c7c8f"
+    },
+    {
+      "path": "tools/import_canonical_monster_drop_excel.py",
+      "sha256": "b5239b8f6650c6bb60edfc09bb6793aefadf022b545bd6379f50ff40856004e8",
+      "commit": "7c6db2421b15c901e3475d31e2b03e3ee40c7c8f"
+    },
+    {
+      "path": "tests/test_b25_audit_provenance.py",
+      "sha256": "728b2b2ae14ef7fac9233bbb3341b938df4780649ef6fdf7a40ac645bc43402d",
+      "commit": "7c6db2421b15c901e3475d31e2b03e3ee40c7c8f"
+    }
+  ]
+}

@@ -95,6 +95,36 @@ def selected_male_items(catalog: dict) -> list[tuple[int, dict, dict]]:
     return selected
 
 
+def validate_original_source_mapping(item_id: int, source_mapping: dict) -> None:
+    """Reject final presentation calibration data at the original-client boundary."""
+    source = str(source_mapping.get("source", ""))
+    if source != "stateitem.wil":
+        raise ValueError(
+            f"item {item_id} paper-doll source domain {source!r} is not "
+            "an original stateitem.wil record"
+        )
+    source_index = source_mapping.get("sourceIndex")
+    if isinstance(source_index, bool) or not isinstance(source_index, int) or source_index < 0:
+        raise ValueError(f"item {item_id} original sourceIndex is invalid")
+    raw_offset = source_mapping.get("rawDrawOffset")
+    if (
+        not isinstance(raw_offset, list)
+        or len(raw_offset) != 2
+        or any(
+            isinstance(value, bool) or not isinstance(value, int)
+            for value in raw_offset
+        )
+    ):
+        raise ValueError(
+            f"item {item_id} requires integer rawDrawOffset from original "
+            "stateitem.wil metadata"
+        )
+    if source_mapping.get("status") != "exact_client_record":
+        raise ValueError(
+            f"item {item_id} source mapping is not an exact original record"
+        )
+
+
 def write_record(image: Image.Image, target: Path) -> None:
     target.parent.mkdir(parents=True, exist_ok=True)
     image.save(target, format="PNG", optimize=False)
@@ -107,6 +137,10 @@ def main() -> None:
 
     catalog = json.loads(VISUAL_CATALOG.read_text(encoding="utf-8"))
     selected = selected_male_items(catalog)
+    # Validate the source domain for every selected item before writing any
+    # stage output. Final calibration records are not original WIL records.
+    for item_id, _item, source_mapping in selected:
+        validate_original_source_mapping(item_id, source_mapping)
 
     prguse_data, prguse_palette, prguse_offsets, prguse_info = read_library(PRGUSE)
     base_image, base_meta = decode_record(
@@ -138,7 +172,7 @@ def main() -> None:
         ),
     ]
     for item_id, item, source_mapping in selected:
-        source_index = int(source_mapping.get("sourceIndex", -1))
+        source_index = int(source_mapping["sourceIndex"])
         image, metadata = decode_record(
             state_data, state_palette, state_offsets, source_index
         )

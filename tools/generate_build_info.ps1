@@ -73,6 +73,21 @@ if ($TrackedDirtyExitCode -eq 1) {
             $RawByteDirtyPaths += $relativePath
             continue
         }
+        # Equal content does not erase a Git mode change. Inspect the same
+        # HEAD-to-worktree diff, including index modes, before granting the
+        # narrow raw-byte exemption.
+        $modeRecords = @((& git diff-index --raw --no-abbrev -z HEAD -- $relativePath) -split "`0" | Where-Object { $_ -ne '' })
+        $modeExitCode = $LASTEXITCODE
+        if ($modeExitCode -ne 0 -or $modeRecords.Count -ne 2 -or
+            $modeRecords[0] -notmatch '^:(100644|100755) (100644|100755) [0-9a-f]{40} [0-9a-f]{40} M$') {
+            $RawByteCheckFailedPaths += $relativePath
+            $RawByteDirtyPaths += $relativePath
+            continue
+        }
+        if ($Matches[1] -ne $Matches[2]) {
+            $RawByteDirtyPaths += $relativePath
+            continue
+        }
         $RawByteCheckedTrackedCount++
         $headBlob = (& git rev-parse --verify ("HEAD:" + $relativePath)).Trim()
         $headBlobExitCode = $LASTEXITCODE

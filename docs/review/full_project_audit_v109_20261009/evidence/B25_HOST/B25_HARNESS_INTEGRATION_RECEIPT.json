@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "scope": "Reviewed tool source integration only; Root final marker hardening and frozen tests pending",
+  "rows": [
+    {
+      "path": "tools/loot_sheet_compiler/test_write_set_repair.ps1",
+      "sha256": "eb67c91b189a48f829f4cb476f5465d91a2013b4f73adf0e95ccaa5b5673dfd6",
+      "commit": "c1a6ddd44b5cb4f4a23dc830788ec8cbeecd1550"
+    },
+    {
+      "path": "tests/test_b25_write_set_harness.py",
+      "sha256": "6daf627282c359538da25cf1c69b98ed09b2d02398dc95ea7a86deb4c24043d2",
+      "commit": "c1a6ddd44b5cb4f4a23dc830788ec8cbeecd1550"
+    }
+  ]
+}
