@@ -1,0 +1,11 @@
+# B09 冗余候选与安全删除边界
+
+source_commit: 267890c88477c0b1afaaaea612780c131c86736d
+
+本批没有证明可安全删除的生产、数据或测试文件，也没有改动任何工程源码。单纯grep没有普通直接调用不是冗余证据；项目存在project.godot autoload、scenes/main.tscn、class_name、preload/ResourceLoader、signals、Callable、has_method/call、编译器发布、反射式资源访问、编辑器和老存档兼容。
+
+FeatureResourcePreparation已有全局调度/retire服务，CodeInputAcquisitionQuantum只在服务内部执行且无第二队列，FeatureResourceLease/LoadingPreparationScope持有不同强ref/弱ref及覆盖witness，不视为可删重复模块。WorldBootstrapCoordinator只管代际/READY，GameRoot负责地图/输入/人物scene owner。MonsterVisualStreamingCoordinator只管理atlas资源，MonsterVisual处理动画表现、GameRoot是唯一poll owner。
+
+ContentLayers掌握enabled_expansions/merge，GameData掌握正式索引，GameModes掌握active_mode，PlayerState拥有资料/存档。需要修正必需源缺失的失败传播而非删除第二套状态owner。FeatureResourceRegistry static declarations缓存缺少DatabaseRevision关联是条件性审查缺口，当前resource_registry.art项和已有新包new_items空records未证明存在实际换源错误，不把缓存当冗余或删除。
+
+此前退役的26个网格实验文件、旧完整失败receipt、原人工地图/素材/概率/装备表、root B07A报告与B07B/B08镜像均不能清理。所有用户玩法保持原状。若主控今后清理具体候选，须先证明autoload/scene/serialization/脚本动态调用/retention holder/producer/Android来源身份均无消费者，再经主控单独授权。B09未找到具备此证据的删除候选。

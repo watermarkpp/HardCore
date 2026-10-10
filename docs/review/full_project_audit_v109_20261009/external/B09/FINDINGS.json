@@ -1,0 +1,262 @@
+{
+  "source_commit": "267890c88477c0b1afaaaea612780c131c86736d",
+  "scope": "B09_FIXED_SOURCE_ONLY",
+  "native": "NOT_RUN",
+  "full_project_semantic": "MISSING",
+  "findings": [
+    {
+      "id": "B09-001",
+      "severity": "P1",
+      "category": "PRODUCTION_CODE_BUG",
+      "source_commit": "267890c88477c0b1afaaaea612780c131c86736d",
+      "file": "scripts/layers/runtime/content_layer_registry.gd",
+      "function": "_build_merged_configuration/_apply_expansion_package/_read_json",
+      "lines": [
+        503,
+        524,
+        525,
+        539,
+        606,
+        610
+      ],
+      "formal_trigger": "启用具有必须data资源的扩展包，正式package manifest缺失、JSON损坏或其所声明表文件缺失/不可解析，同时vanilla基础目录合法使GameData候选通过。",
+      "state_owner": "ContentLayers是单一启用/merge owner；GameData是候选数据库/loaded owner；GameModes与PlayerState分别管理模式和角色。",
+      "short_call_chain": [
+        "PlayerState.load_save→GameModes.prepare_mode_configuration",
+        "ContentLayers.prepare_expansion_configuration",
+        "_build_merged_configuration→_apply_expansion_package→_read_json",
+        "GameData.prepare_database_candidate→ContentLayers.apply_prepared_expansion_configuration"
+      ],
+      "observed": "先将包ID加入activeExpansions；读取错误映射为{}，_apply_expansion_package在has('tables')为false时静默跳过；未设置失败状态；随后基础数据通过候选时可标记该扩展已启用。",
+      "expected": "声明外部数据源的扩展必须验证源文件、格式与所列必需表文件，失败阻断candidate/模式/角色发布；合法settings-only包不应被误拒。",
+      "facts": [
+        {
+          "file": "scripts/layers/runtime/content_layer_registry.gd",
+          "lines": [
+            503,
+            539
+          ],
+          "evidence": "append activeExpansions后忽略data解析失败，返回void",
+          "source_url": "https://github.com/watermarkpp/HardCore/blob/267890c88477c0b1afaaaea612780c131c86736d/scripts/layers/runtime/content_layer_registry.gd"
+        },
+        {
+          "file": "scripts/layers/runtime/content_layer_registry.gd",
+          "lines": [
+            606,
+            610
+          ],
+          "evidence": "_read_json缺失或非法返回{}",
+          "source_url": "https://github.com/watermarkpp/HardCore/blob/267890c88477c0b1afaaaea612780c131c86736d/scripts/layers/runtime/content_layer_registry.gd"
+        },
+        {
+          "file": "scripts/layers/runtime/content_layer_registry.gd",
+          "lines": [
+            409,
+            482
+          ],
+          "evidence": "准备和提交仅校验GameData candidate，未确认扩展源读取成功",
+          "source_url": "https://github.com/watermarkpp/HardCore/blob/267890c88477c0b1afaaaea612780c131c86736d/scripts/layers/runtime/content_layer_registry.gd"
+        },
+        {
+          "file": "assets/data/layers/expansion_layer.json",
+          "lines": [
+            1,
+            34
+          ],
+          "evidence": "personal_expansion_001声明manifest数据路径；later_176_content故意无data且settings-only",
+          "source_url": "https://github.com/watermarkpp/HardCore/blob/267890c88477c0b1afaaaea612780c131c86736d/assets/data/layers/expansion_layer.json"
+        },
+        {
+          "file": "assets/data/expansions/personal_expansion_001/manifest.json",
+          "lines": [
+            1,
+            17
+          ],
+          "evidence": "声明需加载的items/maps/drops等表文件",
+          "source_url": "https://github.com/watermarkpp/HardCore/blob/267890c88477c0b1afaaaea612780c131c86736d/assets/data/expansions/personal_expansion_001/manifest.json"
+        }
+      ],
+      "unproven_boundary": "未运行损坏/丢失文件故障注入；真实APK或用户环境有无丢失文件未知。`user_equipment.json`有效元数据无tables，不能把所有无tables的文件判坏。",
+      "minimal_fix": "在ContentLayers单一owner内使声明data的每个被启用包精确解析/验证成功并把failed origin作为candidate拒绝原因；逐个核验personal_expansion真实table文件；保留user_equipment纯元数据和later_176_content无data两类合法schema，不增加fallback、忽略错误或自动改表。",
+      "required_validation": "隔离测试输入：移除/损坏personal_expansion manifest或其一个声明的table，GameModes.prepare/apply、RuntimeServices、PlayerState.load_save须拒绝；新模式、activeExpansions、signal、profile/save bytes均不变；合法settings-only later和有效user_equipment仍通过；原生receipt/natural exit后主控验证。",
+      "native": "NOT_RUN",
+      "android": "NOT_RUN",
+      "status": "STATIC_SOURCE_PROVEN_TRIGGER_CONDITIONAL"
+    },
+    {
+      "id": "B09-002",
+      "severity": "P2",
+      "category": "CONDITIONAL_PLATFORM_CODE_RISK",
+      "source_commit": "267890c88477c0b1afaaaea612780c131c86736d",
+      "file": "scripts/features/compilation/code_preparation_envelope_guard.gd",
+      "function": "_checkout_bytes_match_fingerprint/valid_asset/valid_target",
+      "lines": [
+        233,
+        258,
+        283,
+        318,
+        369,
+        386
+      ],
+      "formal_trigger": "Windows core.autocrlf工作区将Git LF源码转CRLF，而已登记source fingerprints仍是Git LF原始hash。前置验证成功后准备Shader和Script请求。",
+      "state_owner": "CodeGuard已有唯一源码fingerprint/admission owner，FeatureResourcePreparation唯一ResourceLoader job/lease owner。",
+      "short_call_chain": [
+        "CodeGuard.verify_next_source（支持规范化）",
+        "FeatureResourcePreparation._step_code_inputs→CodeInputAcquisitionQuantum.acquire_shader",
+        "CodeGuard.valid_asset（原始SHA）",
+        "FeatureResourcePreparation._step_code_target→CodeGuard.valid_target（原始SHA）"
+      ],
+      "observed": "前置校验允许CRLF规范化后与Git LF SHA一致，最终valid_asset/valid_target却用FileAccess.get_sha256(path)比较未规范化原始字节；因此条件成立时相同语义源被后置拒绝，正式scene code prep可能失败。",
+      "expected": "同一受授权原始source字节/规范化contract应贯穿initial verification、admission、asset和target release；必须保持任何真实内容变化拒绝。",
+      "facts": [
+        {
+          "file": "scripts/features/compilation/code_preparation_envelope_guard.gd",
+          "lines": [
+            180,
+            224
+          ],
+          "evidence": "preflight使用_checkout_bytes_match_fingerprint",
+          "source_url": "https://github.com/watermarkpp/HardCore/blob/267890c88477c0b1afaaaea612780c131c86736d/scripts/features/compilation/code_preparation_envelope_guard.gd"
+        },
+        {
+          "file": "scripts/features/compilation/code_preparation_envelope_guard.gd",
+          "lines": [
+            233,
+            258
+          ],
+          "evidence": "LF normalizer接受CRLF折叠后的字节/hash",
+          "source_url": "https://github.com/watermarkpp/HardCore/blob/267890c88477c0b1afaaaea612780c131c86736d/scripts/features/compilation/code_preparation_envelope_guard.gd"
+        },
+        {
+          "file": "scripts/features/compilation/code_preparation_envelope_guard.gd",
+          "lines": [
+            369,
+            386
+          ],
+          "evidence": "末端valid_asset与valid_target比较FileAccess原始SHA而不复用normalizer",
+          "source_url": "https://github.com/watermarkpp/HardCore/blob/267890c88477c0b1afaaaea612780c131c86736d/scripts/features/compilation/code_preparation_envelope_guard.gd"
+        },
+        {
+          "file": "scripts/features/runtime/code_input_acquisition_quantum.gd",
+          "lines": [
+            8,
+            36
+          ],
+          "evidence": "acquire_shader调用plan.valid_asset",
+          "source_url": "https://github.com/watermarkpp/HardCore/blob/267890c88477c0b1afaaaea612780c131c86736d/scripts/features/runtime/code_input_acquisition_quantum.gd"
+        },
+        {
+          "file": "scripts/features/runtime/feature_resource_preparation.gd",
+          "lines": [
+            629,
+            715
+          ],
+          "evidence": "_step_code_target调用plan.valid_target",
+          "source_url": "https://github.com/watermarkpp/HardCore/blob/267890c88477c0b1afaaaea612780c131c86736d/scripts/features/runtime/feature_resource_preparation.gd"
+        },
+        {
+          "file": ".gitattributes",
+          "lines": [
+            1,
+            7
+          ],
+          "evidence": "只显式固定.import等路径的行尾；脚本不受统一eol=lf硬约束",
+          "source_url": "https://github.com/watermarkpp/HardCore/blob/267890c88477c0b1afaaaea612780c131c86736d/.gitattributes"
+        }
+      ],
+      "unproven_boundary": "真实Windows CRLF checkout是否存在、Godot Script/Shader内存源码行尾是否归一，当前没有原生验证；不把该条件风险当设备失败。",
+      "minimal_fix": "复用CodeGuard已审核的byte+normalized-LF hash predicate到valid_asset/valid_target；同时校验实际Resource身份、resident Script源/Shader.code而不放宽恶意变更；保持所有请求/租约/退出owner不变。",
+      "required_validation": "同一正式入口在LF Git/CRLF Windows checkout上用未改真实Script和Shader验证；负例分别改内容、错type、失效generation、外部claim和cancel，检查完整source/engine/scene/run/receipt、无阻塞和无误PASS；不改超时。",
+      "native": "NOT_RUN",
+      "android": "NOT_RUN",
+      "status": "STATIC_CONDITIONAL_RISK_UNVERIFIED"
+    },
+    {
+      "id": "B09-003",
+      "severity": "P2",
+      "category": "EVIDENCE_GAP",
+      "source_commit": "267890c88477c0b1afaaaea612780c131c86736d",
+      "file": "scripts/player_state.gd",
+      "function": "load_save / GameModes.apply_prepared_mode_configuration / recalculate_stats",
+      "lines": [
+        7004,
+        7290,
+        7161,
+        7167
+      ],
+      "formal_trigger": "角色B读档模式/扩展改变导致GameData.database_reloaded在B的装备/inventory hydration前同步发出，且旧角色A的可视接收者仍存活。",
+      "state_owner": "ContentLayers负责内容提交信号；PlayerState负责角色hydration；PlayerVisual负责装备外观。",
+      "short_call_chain": [
+        "select_character→load_save",
+        "GameModes.apply_prepared_mode_configuration",
+        "ContentLayers.database_reloaded.emit",
+        "PlayerVisual._on_database_reloaded→_refresh_equipment_visuals",
+        "load_save后续equipment赋值/recalculate_stats"
+      ],
+      "observed": "顺序确实是7161数据库提交/通知、7193–7205角色B装备/技能再hydration；PlayerVisual消费数据库通知时可读旧A装备，但正式大厅选择通常无存活GameRoot/PlayerVisual，设备实验load_save成功后另发送equipment_changed。",
+      "expected": "不能据顺序直接宣布永久用户可见BUG；若存在真实能够在同一个旧PlayerVisual存活窗口切角色的caller，则需证明最终重绘与数据一致。",
+      "facts": [
+        {
+          "file": "scripts/player_state.gd",
+          "lines": [
+            7161,
+            7205
+          ],
+          "evidence": "数据库通知早于inventory/equipment hydration",
+          "source_url": "https://github.com/watermarkpp/HardCore/blob/267890c88477c0b1afaaaea612780c131c86736d/scripts/player_state.gd"
+        },
+        {
+          "file": "scripts/player_visual.gd",
+          "lines": [
+            193,
+            195
+          ],
+          "evidence": "GameData.database_reloaded正式PlayerVisual接线",
+          "source_url": "https://github.com/watermarkpp/HardCore/blob/267890c88477c0b1afaaaea612780c131c86736d/scripts/player_visual.gd"
+        },
+        {
+          "file": "scripts/player_visual.gd",
+          "lines": [
+            754,
+            785
+          ],
+          "evidence": "_refresh_equipment_visuals读PlayerState装备并刷新纹理",
+          "source_url": "https://github.com/watermarkpp/HardCore/blob/267890c88477c0b1afaaaea612780c131c86736d/scripts/player_visual.gd"
+        },
+        {
+          "file": "scripts/character_select.gd",
+          "lines": [
+            905,
+            981
+          ],
+          "evidence": "角色大厅选择/启动分段不保留真实GameRoot PlayerVisual",
+          "source_url": "https://github.com/watermarkpp/HardCore/blob/267890c88477c0b1afaaaea612780c131c86736d/scripts/character_select.gd"
+        },
+        {
+          "file": "scripts/player_state.gd",
+          "lines": [
+            6690,
+            6740
+          ],
+          "evidence": "设备实验调用load_save后在成功路径补发全状态signals",
+          "source_url": "https://github.com/watermarkpp/HardCore/blob/267890c88477c0b1afaaaea612780c131c86736d/scripts/player_state.gd"
+        },
+        {
+          "file": "scripts/player_state.gd",
+          "lines": [
+            9991,
+            10035
+          ],
+          "evidence": "已有gameplay owner时拒绝select_character",
+          "source_url": "https://github.com/watermarkpp/HardCore/blob/267890c88477c0b1afaaaea612780c131c86736d/scripts/player_state.gd"
+        }
+      ],
+      "unproven_boundary": "没有找到普通正式caller在旧PlayerVisual存活时选角色；可观察永久错误尚未证明。不建议现阶段为了想象路径改signal时序。",
+      "minimal_fix": "先验证真实UI/DeviceLab/单实例角色切换caller及重绘顺序；如后续确认同步listener遇半提交，则使用现有PlayerState成功hydration末端受控统一通知，不增加第二套视觉/资料owner。",
+      "required_validation": "主控用隔离profile A/B、监听GameData.database_reloaded、PlayerState.equipment_changed与最终真实PlayerVisual frame；查A/B切换和DeviceLab成功/失败、旧scene ready/epoch与完整receipt；若无可触发正式路径，维持证据缺口而非产品BUG。",
+      "native": "NOT_RUN",
+      "android": "NOT_RUN",
+      "status": "STATIC_CONDITIONAL_RISK_UNVERIFIED"
+    }
+  ]
+}

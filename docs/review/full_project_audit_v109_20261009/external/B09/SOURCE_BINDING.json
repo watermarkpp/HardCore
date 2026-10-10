@@ -1,0 +1,357 @@
+{
+  "source_commit": "267890c88477c0b1afaaaea612780c131c86736d",
+  "fixed_git_tree": "bbe01513f1f561cd8d0a0b1f76de95dd06499018",
+  "review_branch": "codex/v108-runtime-bug-review-20261009",
+  "repository": "watermarkpp/HardCore",
+  "git_method": "git cat-file --batch for 22 dispatched blobs, git rev-parse FIXED:path, SHA256 raw bytes and exact user intervals; extra safe source/docs via git show FIXED:path; independent connected Github fetch_file",
+  "bound_dispatch_files": [
+    {
+      "path": "project.godot",
+      "git_blob_sha": "a6db0873d7fb56eea170fd97ea972816b517a091",
+      "sha256": "1b2b18ef00474f04d307a4d4d18f153152d8da171edc24a609f34d5620e9b950",
+      "bytes": 3219,
+      "total_source_lines": 85,
+      "covered_dispatch_units": 1
+    },
+    {
+      "path": "scenes/main.tscn",
+      "git_blob_sha": "3ae56747b8c02eb33abcb3c77ba81431846a61ad",
+      "sha256": "c622dd2caa2d673a83fc4edcc0e1ea3a3e4ad98aa3b08686bb8d96d33b9159f1",
+      "bytes": 186,
+      "total_source_lines": 7,
+      "covered_dispatch_units": 1
+    },
+    {
+      "path": "scripts/character_select.gd",
+      "git_blob_sha": "1767a16864b410da3efa638d105dac919ff51f54",
+      "sha256": "ee883605975333d73fefa06c9c22c4937d001be78df70fe2fe3ab286a22daf39",
+      "bytes": 47016,
+      "total_source_lines": 1089,
+      "covered_dispatch_units": 6
+    },
+    {
+      "path": "scripts/equipment_rules.gd",
+      "git_blob_sha": "288ccf54215ddae7410aaf70ec479766662f48b0",
+      "sha256": "589e729fbd5c553daa575b467bc5912440bec411a4c32e58f4838a2bd0033933",
+      "bytes": 34659,
+      "total_source_lines": 832,
+      "covered_dispatch_units": 2
+    },
+    {
+      "path": "scripts/features/compilation/android_export_representation_verifier.gd",
+      "git_blob_sha": "d99e8efd3eaff56e01d59f3f75567e7c514f60b4",
+      "sha256": "7617041fd21ae105dc4d29a93a67cb2b4e5dab17d46060556a671839999033c9",
+      "bytes": 7900,
+      "total_source_lines": 155,
+      "covered_dispatch_units": 10
+    },
+    {
+      "path": "scripts/features/compilation/code_preparation_envelope_guard.gd",
+      "git_blob_sha": "a536be08e893da68c4dbad3e508dcd6aac970bcf",
+      "sha256": "094b7535aaefe61308994b2471a776f7ef7d405f255855b0355c89d64ca2ed86",
+      "bytes": 22625,
+      "total_source_lines": 398,
+      "covered_dispatch_units": 20
+    },
+    {
+      "path": "scripts/features/compilation/feature_resource_registry.gd",
+      "git_blob_sha": "806aa3ebcf60ef2254781b7993efde69f9778996",
+      "sha256": "7c6ef603c563ec1d0220a3291d2dd8ec37be67ddc66463d2c765276ab5e1eda1",
+      "bytes": 7044,
+      "total_source_lines": 125,
+      "covered_dispatch_units": 9
+    },
+    {
+      "path": "scripts/features/contracts/feature_resource_lease.gd",
+      "git_blob_sha": "7c3ca038ccf1cae4d0931fe79376e6cd8783fcf0",
+      "sha256": "fcd2bd2ff12d722e6c24d077ae977fddece6dbbb8b01168d6342ad58fde6f14e",
+      "bytes": 7583,
+      "total_source_lines": 152,
+      "covered_dispatch_units": 14
+    },
+    {
+      "path": "scripts/features/contracts/loading_preparation_scope.gd",
+      "git_blob_sha": "5392f649e9324ff9738bb0592aff1de26e607011",
+      "sha256": "d3ab256e09f818966e973dd62097141a3fa7585b19021afcd91f4c612ab9c581",
+      "bytes": 3274,
+      "total_source_lines": 67,
+      "covered_dispatch_units": 6
+    },
+    {
+      "path": "scripts/features/runtime/code_input_acquisition_quantum.gd",
+      "git_blob_sha": "a5302bda3c8364ee1af16e008c346eab935ea044",
+      "sha256": "d646845adaab918f03350c8128eefa08002773a098df6a1398c35f82646e775c",
+      "bytes": 3392,
+      "total_source_lines": 42,
+      "covered_dispatch_units": 3
+    },
+    {
+      "path": "scripts/features/runtime/feature_resource_preparation.gd",
+      "git_blob_sha": "eaf85de855c44448a80d81cbae8834857f636363",
+      "sha256": "32ea180bbcae9f386d3a306c5163db7dc588b9d402b97ccb3b1b6db49500e61f",
+      "bytes": 43258,
+      "total_source_lines": 898,
+      "covered_dispatch_units": 44
+    },
+    {
+      "path": "scripts/game_data.gd",
+      "git_blob_sha": "b36ac24f121bea1afdc53291fb648a6946d9d6c8",
+      "sha256": "ba1b7a6067962f29687d5558f62f0587a4cf795034ffac56610a74c628a0c20c",
+      "bytes": 182063,
+      "total_source_lines": 4426,
+      "covered_dispatch_units": 14
+    },
+    {
+      "path": "scripts/game_root.gd",
+      "git_blob_sha": "5c6130342470cc207f250b188fd0ec93aa1973cb",
+      "sha256": "b1dbd187310d5764289ba266e0948bbcc2b6eefee254bf1e1d51c242f4e28eac",
+      "bytes": 616874,
+      "total_source_lines": 15974,
+      "covered_dispatch_units": 28
+    },
+    {
+      "path": "scripts/layers/runtime/content_layer_registry.gd",
+      "git_blob_sha": "fae79d0f12a0c9a1e671cf70638fd4eb45033687",
+      "sha256": "9bc46367b0c89e2383f561b2b3571ecc39cae74640bf60158d3be18dc8bb7d80",
+      "bytes": 39031,
+      "total_source_lines": 781,
+      "covered_dispatch_units": 14
+    },
+    {
+      "path": "scripts/layers/runtime/game_mode_service.gd",
+      "git_blob_sha": "784781e2463ee20a3f7594f3ab523aa7dff441c2",
+      "sha256": "caafed85b8ef0310cb5148388e42ee03b9e3ccf12f33e30a299d3ab5c1f25093",
+      "bytes": 2477,
+      "total_source_lines": 64,
+      "covered_dispatch_units": 7
+    },
+    {
+      "path": "scripts/layers/runtime/prepared_content_configuration.gd",
+      "git_blob_sha": "913f76e8bb8237ba3850bd15d530ae4971a653b5",
+      "sha256": "cf9cb0b72a9fa37635caa91237492e7221c4965ff400b548b29b7396b07a725e",
+      "bytes": 606,
+      "total_source_lines": 18,
+      "covered_dispatch_units": 2
+    },
+    {
+      "path": "scripts/layers/runtime/runtime_service_facade.gd",
+      "git_blob_sha": "808b5c6a65f628e1032d3475dd270c3b4ff9331d",
+      "sha256": "a1ecefadd311fffb27cedd63b8ebb2c350fca4c494436c019aa10f20814325ea",
+      "bytes": 685,
+      "total_source_lines": 21,
+      "covered_dispatch_units": 2
+    },
+    {
+      "path": "scripts/loading_transition_overlay.gd",
+      "git_blob_sha": "2dceaa717dad217a7bfeee61db1dca33ad4107e6",
+      "sha256": "f97c0c33229c3154dab0b7a3a99eebf6edfe5a325d19e13e81b541091980b480",
+      "bytes": 19975,
+      "total_source_lines": 475,
+      "covered_dispatch_units": 24
+    },
+    {
+      "path": "scripts/monster_visual_streaming_coordinator.gd",
+      "git_blob_sha": "30e9cbf4d69b075c1b272a373025464c69927292",
+      "sha256": "70e936b9a64e76361ce624019b08f7df88dcc05d6adf9b68939e523ef4f06319",
+      "bytes": 67886,
+      "total_source_lines": 1769,
+      "covered_dispatch_units": 82
+    },
+    {
+      "path": "scripts/player_state.gd",
+      "git_blob_sha": "85867fa2f398129cfada9e0434b23acaa01dc7ba",
+      "sha256": "2a40aab8da3c637cc75d9a95c670f70ef30d643f052911abb2f61b7238b482fb",
+      "bytes": 450430,
+      "total_source_lines": 10325,
+      "covered_dispatch_units": 8
+    },
+    {
+      "path": "scripts/startup_loading.gd",
+      "git_blob_sha": "ab158051ece973b5513d6987a6894888b2de3859",
+      "sha256": "7d382a0a0ae640dad6d8e069609453b9600ec25a91f5c6661b423434f047b295",
+      "bytes": 35951,
+      "total_source_lines": 906,
+      "covered_dispatch_units": 35
+    },
+    {
+      "path": "scripts/world_bootstrap_coordinator.gd",
+      "git_blob_sha": "c8d16ee4fdb9903c56941e6e168c990816215d14",
+      "sha256": "43544704faddcbdcfbf75c59fa9914f9f54ba68a971dd63eac59b36407190db2",
+      "bytes": 29831,
+      "total_source_lines": 888,
+      "covered_dispatch_units": 51
+    }
+  ],
+  "bound_additional_consumers_and_prior_evidence": [
+    {
+      "path": "assets/data/layers/expansion_layer.json",
+      "blob_sha": "30a43d06aa013b47ec29d6a18f12a77725f23c9c",
+      "sha256": "374433974bca397a4d1fe3c050e34bd9934e28dd3d1987b43ed6c119272b69d4",
+      "bytes": 1018,
+      "reading": "selected fixed-source consumer or historical evidence; not exhaustive"
+    },
+    {
+      "path": "assets/data/expansions/personal_expansion_001/manifest.json",
+      "blob_sha": "79fc8078ad9325741bedf97c63c231e36e85e9ca",
+      "sha256": "d4299bd1f327179d473a9e5d6fa41f00b05935f6052ab7f8f9a29b010d02c04a",
+      "bytes": 438,
+      "reading": "selected fixed-source consumer or historical evidence; not exhaustive"
+    },
+    {
+      "path": "assets/data/expansions/personal_expansion_001/new_items.json",
+      "blob_sha": "b9b8251ae03bb47938c494aafe8b6c30ec61fbf2",
+      "sha256": "3376ddc48c0f49cce722243dea93213770997aece077ec1aa3621f989b12adc9",
+      "bytes": 67,
+      "reading": "selected fixed-source consumer or historical evidence; not exhaustive"
+    },
+    {
+      "path": "assets/data/expansions/user_equipment.json",
+      "blob_sha": "ed053694481a6dadbb770bb6580e92cb1055cc9b",
+      "sha256": "3c31cec7d992861440d0f514781e029ad29ec36e6a79a1731adf10df43d8c9d5",
+      "bytes": 198,
+      "reading": "selected fixed-source consumer or historical evidence; not exhaustive"
+    },
+    {
+      "path": "assets/data/features/resource_registry.json",
+      "blob_sha": "52a3a2588ca627517e3ebd5bee11f3081ec8bbd1",
+      "sha256": "083bb0ab131b47715bb0fb11b5144d750fb849634eb4bb0158bccc5368658f59",
+      "bytes": 882,
+      "reading": "selected fixed-source consumer or historical evidence; not exhaustive"
+    },
+    {
+      "path": ".gitattributes",
+      "blob_sha": "5f2c355b43b72f98b7efb6d38ef21e05ac7affad",
+      "sha256": "dab84cec2ca33b0f591f60a463251db8a4bf8fab73086526352461da15997a13",
+      "bytes": 11114,
+      "reading": "selected fixed-source consumer or historical evidence; not exhaustive"
+    },
+    {
+      "path": "scripts/player_visual.gd",
+      "blob_sha": "72450792fffcca357f7421951f8f319bc5b7ebae",
+      "sha256": "0d872dd209c91825a0b1a725a92d6d84dcdd6a1b6f6142af6be4fa658411f5da",
+      "bytes": 46439,
+      "reading": "selected fixed-source consumer or historical evidence; not exhaustive"
+    },
+    {
+      "path": "scripts/hud.gd",
+      "blob_sha": "22f013b4e56a61173df19ebe00c158e0bafd2d52",
+      "sha256": "b3847e5764b7b7ea82b3455c8e9663f96f5caa4745ebe765b836ed7d91cc79e3",
+      "bytes": 127957,
+      "reading": "selected fixed-source consumer or historical evidence; not exhaustive"
+    },
+    {
+      "path": "scripts/equipment_character_preview.gd",
+      "blob_sha": "a2fb2106e991de132373fd79a46d5c91b9d589d8",
+      "sha256": "b049b1bd29b75be199c0da41a4837360b76a53b458a2dea8c8aab5fe5de41df9",
+      "bytes": 47612,
+      "reading": "selected fixed-source consumer or historical evidence; not exhaustive"
+    },
+    {
+      "path": "scripts/inventory_panel.gd",
+      "blob_sha": "136baeae2045621bff5207d48a3ce21ffb9a446b",
+      "sha256": "391a52ae236769a188a3673353c95a1e5a9b70713c565443235951efa734f392",
+      "bytes": 79197,
+      "reading": "selected fixed-source consumer or historical evidence; not exhaustive"
+    },
+    {
+      "path": "scripts/shop_panel.gd",
+      "blob_sha": "ca46e58464c5ed2966734195a43bf93d3be1699b",
+      "sha256": "91a6578f940bc4677f51fb0235a8ea3c7d27b35afb6a5bd54e87208b1026b4dd",
+      "bytes": 59090,
+      "reading": "selected fixed-source consumer or historical evidence; not exhaustive"
+    },
+    {
+      "path": "tests/framework/mode_reload_transaction_20261010_test.gd",
+      "blob_sha": "e12040ef6c30f5150e2f06089c477095638ea6cd",
+      "sha256": "24d712dbadf25472b1e050109bdbf5d711b515e4b5d346b66439335069817260",
+      "bytes": 45914,
+      "reading": "selected fixed-source consumer or historical evidence; not exhaustive"
+    },
+    {
+      "path": "tests/framework/profile_load_admission_20261010_test.gd",
+      "blob_sha": "9f6c16a5ab6f0a8f9dac3082556ca8a43359078a",
+      "sha256": "a379cb981e29299aa9d449d55e303acc9dc166948620a6a539ade48bb200f9f4",
+      "bytes": 30376,
+      "reading": "selected fixed-source consumer or historical evidence; not exhaustive"
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/B08_FINDING_DISPOSITION.md",
+      "blob_sha": "45fb2aa421b08245d47ba27d01b4dce6eff161e5",
+      "sha256": "6b933675954a5705c621b91c2011befb7b10775caa9f5bebd014b958b1cc4939",
+      "bytes": 14930,
+      "reading": "selected fixed-source consumer or historical evidence; not exhaustive"
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/B08_MODE_TRANSACTION_DESIGN.md",
+      "blob_sha": "1c6d8d8bd05e238764de640c3dd4eaeef9f95f98",
+      "sha256": "b044124a8d16e29487117654987259a6ecfaf750c168a46e796342fcaa0361be",
+      "bytes": 10180,
+      "reading": "selected fixed-source consumer or historical evidence; not exhaustive"
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/B07A_WORLD_TARGETING_FUNCTION_SUPPLEMENT.json",
+      "blob_sha": "48a9cedd0cb0c453e8d77cbb1bea8c040c0d3e4e",
+      "sha256": "91f24c2e6c1c51414d3cddd191181b12efb3b9c932083854c88267b1c66cfb7e",
+      "bytes": 63828,
+      "reading": "selected fixed-source consumer or historical evidence; not exhaustive"
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B08/COVERAGE.json",
+      "blob_sha": "8e853fe33c2215c3d857b069f1c57efe9268187c",
+      "sha256": "b846779952deb9e2d52fafba91bfedbeef1249c5d15c6784a27e79931d51ef0b",
+      "bytes": 839570,
+      "reading": "selected fixed-source consumer or historical evidence; not exhaustive"
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B03/COVERAGE.json",
+      "blob_sha": "64986021ae0432ba1ad9d168000c2cc2cbc78e6e",
+      "sha256": "28b83a1fed79428d25c22bae0929730eb8d2195ff3e3fc47f142227880f40efa",
+      "bytes": 48122,
+      "reading": "selected fixed-source consumer or historical evidence; not exhaustive"
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/external/B02_followup/COVERAGE.json",
+      "blob_sha": "9d4b128853d453d88a7c237c0316c2d0c8b4a183",
+      "sha256": "8ac7822c1c52b3d7f19b9a008148f5497708dcc88046b9377f057e74485a08c2",
+      "bytes": 77348,
+      "reading": "selected fixed-source consumer or historical evidence; not exhaustive"
+    },
+    {
+      "path": "AGENTS.md",
+      "blob_sha": "a93ce3863ae8c6ce7b476015745dbbb3951a6630",
+      "sha256": "acae12b113d99ac4823f394d268b3e6343bd2f3fe760e48dec691397c2e278cd",
+      "bytes": 7301,
+      "reading": "selected fixed-source consumer or historical evidence; not exhaustive"
+    },
+    {
+      "path": "PROJECT_CORE_CONTRACTS.md",
+      "blob_sha": "7c949aae7ede749fa74ea1d7ac6f1703dcdc9c28",
+      "sha256": "6d54fa50bf1ebb4600b2bc45e8bbb08ee5c8f168a6e9a3036cbdc8cd61fe0f97",
+      "bytes": 3996,
+      "reading": "selected fixed-source consumer or historical evidence; not exhaustive"
+    },
+    {
+      "path": "docs/review/full_project_audit_v109_20261009/STANDARD_AUDIT_PROMPT.md",
+      "blob_sha": "2680700a6962fe10dc1286c72c08e496ee5e9ea2",
+      "sha256": "4d8e20114b05ce2c2fb51b7011913db8e80de869f8501b1c15a312ad10957369",
+      "bytes": 8085,
+      "reading": "selected fixed-source consumer or historical evidence; not exhaustive"
+    }
+  ],
+  "previous_static_full_body_equality": {
+    "prior_source": "dbb1bd0878ab24a4e5bd6a1877d32f304f5623e5",
+    "exact_function_count": 67,
+    "unmatched": [],
+    "reuse_boundary": "Only identical function bodies; current B09 caller/owner must be reviewed separately"
+  },
+  "review_intensity_note": "Current UI 极高 per user; no model UI changes possible from repository source",
+  "did_not_run": [
+    "Godot",
+    "headless",
+    "APK export",
+    "Android device",
+    "real player saves"
+  ],
+  "report_parent": "267890c88477c0b1afaaaea612780c131c86736d",
+  "reports_allowed_only": "docs/review/full_project_audit_v109_20261009/external/B09"
+}
