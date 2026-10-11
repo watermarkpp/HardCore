@@ -74,6 +74,8 @@ performance/owner_optional_budget_enabled=true
 performance/ordinary_contact_instant_settle=true
 performance/ordinary_attack_visual_move_override=true
 performance/frame_optional_budget_usec=1200
+; Independent gameplay-progress opportunity; not a device or whole-game CPU cap.
+performance/frame_progress_budget_usec=6000
 performance/death_drop_slicing=true
 
 [rendering]

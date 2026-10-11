@@ -18,7 +18,7 @@ var maximum_completion_latency_usec := 0
 var _budget_category := "path:%d" % get_instance_id()
 
 func _exit_tree() -> void:
-	FrameBudget.mark_pending(_budget_category, false)
+	FrameBudget.mark_progress_pending(_budget_category, false)
 
 static func for_tree(tree: SceneTree) -> HCMonsterPathScheduler:
 	if tree == null:
@@ -45,7 +45,7 @@ func submit(owner: Node, token: int, search: Search) -> void:
 		"queued_at_usec": int(previous.get("queued_at_usec", Time.get_ticks_usec()))}
 	if not queue.has(id):
 		queue.append(id)
-	FrameBudget.mark_pending(_budget_category, not queue.is_empty(), true, false, self, true)
+	FrameBudget.mark_progress_pending(_budget_category, not queue.is_empty(), true, false, self, true)
 
 func cancel(owner_id: int) -> void:
 	var job: Dictionary = jobs.get(owner_id, {})
@@ -54,24 +54,24 @@ func cancel(owner_id: int) -> void:
 	if jobs.erase(owner_id):
 		cancelled_count += 1
 	queue.erase(owner_id)
-	FrameBudget.mark_pending(_budget_category, not queue.is_empty(), true, false, self, true)
+	FrameBudget.mark_progress_pending(_budget_category, not queue.is_empty(), true, false, self, true)
 
 func _physics_process(_delta: float) -> void:
 	pump()
 
 func pump(soft_budget_usec: int = SOFT_BUDGET_USEC) -> void:
-	FrameBudget.mark_pending(_budget_category, not queue.is_empty(), true, false, self, true)
+	FrameBudget.mark_progress_pending(_budget_category, not queue.is_empty(), true, false, self, true)
 	if queue.is_empty():
 		return
-	var token := FrameBudget.begin(_budget_category)
+	var token := FrameBudget.begin_progress(_budget_category)
 	if token == 0:
 		return
-	var admitted_usec := FrameBudget.remaining_usec()
+	var admitted_usec := FrameBudget.remaining_progress_usec()
 	if soft_budget_usec > 0:
 		admitted_usec = mini(admitted_usec, soft_budget_usec)
 	_pump_slice(admitted_usec)
 	FrameBudget.end(token)
-	FrameBudget.mark_pending(_budget_category, not queue.is_empty(), true, false, self, true)
+	FrameBudget.mark_progress_pending(_budget_category, not queue.is_empty(), true, false, self, true)
 
 func _pump_slice(soft_budget_usec: int) -> void:
 	var pump_started_usec := Time.get_ticks_usec()

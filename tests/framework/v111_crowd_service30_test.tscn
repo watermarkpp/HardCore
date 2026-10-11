@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/framework/v111_crowd_service_test.gd" id="1"]
+
+[node name="CrowdService" type="Node"]
+script = ExtResource("1")
+ID = "v111_crowd_service30_test"
+process_cap = 30
+cohort_target = 30

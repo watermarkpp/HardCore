@@ -373,7 +373,7 @@ static func dispatch_pursuit_process_batch(process_owner: Node = null) -> Dictio
 	_d_epoch_served.clear()
 	_d_dispatches += 1
 	_d_refresh_pending()
-	var frame_token := FrameBudget.begin(PURSUIT_PROCESS_CATEGORY, false)
+	var frame_token := FrameBudget.begin_progress(PURSUIT_PROCESS_CATEGORY)
 	if frame_token == 0:
 		var denial := FrameBudget.last_denial_record(PURSUIT_PROCESS_CATEGORY)
 		var denial_reason := str(denial.get("reason", "budget"))
@@ -387,13 +387,13 @@ static func dispatch_pursuit_process_batch(process_owner: Node = null) -> Dictio
 		return {"status": "FRAME_DENIED", "grants": 0, "queue_length": _d_queue.size()}
 	_d_frame_budget_scopes += 1
 	var frame_scope_started_usec := Time.get_ticks_usec()
-	var frame_remaining_before := FrameBudget.remaining_usec()
+	var frame_remaining_before := FrameBudget.remaining_progress_usec()
 	var grants := 0
 	var considered := 0
 	var visits := 0
 	while considered < PURSUIT_PROCESS_MAX_OWNERS and visits < PURSUIT_PROCESS_MAINTENANCE_MAX and not _d_queue.is_empty():
 		visits += 1
-		if FrameBudget.remaining_usec() <= 0:
+		if FrameBudget.remaining_progress_usec() <= 0:
 			break
 		var id: int = int(_d_queue[0])
 		var entry: Dictionary = _d_requests.get(id, {})
@@ -435,7 +435,7 @@ static func dispatch_pursuit_process_batch(process_owner: Node = null) -> Dictio
 		_d_active_consumed = false
 		_d_active_completed = false
 		_p_active[_d_active_token] = {"dispatch": true, "owner_id": id, "kind": kind,
-			"scope": fresh_scope, "started_usec": Time.get_ticks_usec(), "remaining_before_usec": FrameBudget.remaining_usec()}
+			"scope": fresh_scope, "started_usec": Time.get_ticks_usec(), "remaining_before_usec": FrameBudget.remaining_progress_usec()}
 		var callback_result: bool = bool(owner.call("_hc_dispatch_pursuit_process", kind))
 		var consumed := _d_active_consumed
 		var completed := _d_active_completed
@@ -558,7 +558,7 @@ static func _p_refresh_pending() -> void:
 		runnable = _dispatch_pending_runnable(owner)
 	var background_owner: bool = is_instance_valid(owner) and owner.get("_background_maintenance_running") == true
 	var physics_owner: bool = not _p_queue.is_empty() and not background_owner
-	FrameBudget.mark_pending(PURSUIT_PROCESS_CATEGORY, not _p_queue.is_empty() or not _d_queue.is_empty(), runnable, false, owner, physics_owner)
+	FrameBudget.mark_progress_pending(PURSUIT_PROCESS_CATEGORY, not _p_queue.is_empty() or not _d_queue.is_empty(), runnable, false, owner, physics_owner)
 
 static func begin_pursuit_turn(owner: Node, scope: Array, kind: StringName) -> int:
 	if not _sync_pursuit_epoch():
@@ -591,8 +591,11 @@ static func begin_pursuit_turn(owner: Node, scope: Array, kind: StringName) -> i
 		_p_queue.append(id)
 		_p_queue_peak = maxi(_p_queue_peak, _p_queue.size())
 	else:
-		_p_requests[id].scope = scope.duplicate()
-		_p_validated.erase(id)
+		# Stable repeated requests keep the already-validated witness and age.
+		# Revalidation is required only when the actual scope changed.
+		if _p_requests[id].scope != scope:
+			_p_requests[id].scope = scope.duplicate()
+			_p_validated.erase(id)
 		var pending_kinds: Dictionary = _p_requests[id].get("kinds", {})
 		pending_kinds[kind] = true
 		_p_requests[id].kinds = pending_kinds
@@ -612,13 +615,16 @@ static func begin_pursuit_turn(owner: Node, scope: Array, kind: StringName) -> i
 	# Reservations bound the number of distinct owners, but do not grant a
 	# newer callback permission to overtake the oldest pending request. The
 	# category may get only one pre-idle turn while other real work is due.
-	if _p_queue.is_empty() or int(_p_queue[0]) != id:
+	# A reserved oldest-ready batch may run in actual node callback order.
+	# Requiring only its head stranded the other four after their callbacks.
+	# Legacy single-lane component tests retain the original ordering contract.
+	if not FrameBudget.progress_partition_enabled() and (_p_queue.is_empty() or int(_p_queue[0]) != id):
 		_p_denied[request_key] = true
 		_p_last_denial = "FIFO"
 		_p_fifo_denied += 1
 		return 0
-	var remaining_before: int = FrameBudget.remaining_usec()
-	var frame_token: int = FrameBudget.begin(PURSUIT_PROCESS_CATEGORY, false)
+	var remaining_before: int = FrameBudget.remaining_progress_usec()
+	var frame_token: int = FrameBudget.begin_progress(PURSUIT_PROCESS_CATEGORY)
 	if frame_token == 0:
 		_p_capture_frame_denial()
 		_p_append_denial_trace(owner, kind, request_key)
@@ -723,14 +729,14 @@ static func resume_pursuit_turn(token: int) -> bool:
 	var lease: Dictionary = _p_active[token]
 	if bool(lease.get("dispatch", false)) or int(lease.get("frame_token", 0)) != 0:
 		return true
-	var frame_token: int = FrameBudget.begin(PURSUIT_PROCESS_CATEGORY, false)
+	var frame_token: int = FrameBudget.begin_progress(PURSUIT_PROCESS_CATEGORY)
 	if frame_token == 0:
 		_p_capture_frame_denial()
 		_p_last_denial = "FRAME_%s" % _p_frame_denial_reason
 		return false
 	lease.frame_token = frame_token
 	lease.started_usec = Time.get_ticks_usec()
-	lease.remaining_before_usec = FrameBudget.remaining_usec()
+	lease.remaining_before_usec = FrameBudget.remaining_progress_usec()
 	lease.suspended = false
 	_p_active[token] = lease
 	return true

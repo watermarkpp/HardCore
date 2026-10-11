@@ -4,6 +4,15 @@ extends RefCounted
 ## A scope is synchronous: callers must close it before returning or awaiting.
 ## Necessary work is always admitted and charged, including an overrun.
 const DEFAULT_BUDGET_USEC := 1200 # Existing path/death cap; P0 must measure admission latency.
+# Gameplay progress is not residual background capacity. Both lanes retain
+# bounded admission; necessary work is always charged to the full ledger.
+const DEFAULT_PROGRESS_BUDGET_USEC := 6000
+const LANE_BACKGROUND := 0
+const LANE_PROGRESS := 1
+const LANE_NECESSARY := 2
+static var _partitioned := true
+static var _progress_limit_usec := DEFAULT_PROGRESS_BUDGET_USEC
+static var _lane_spent: Array[int] = [0, 0, 0]
 static var _limit_usec := DEFAULT_BUDGET_USEC
 static var _epoch := -1
 static var _spent_usec := 0
@@ -32,16 +41,56 @@ static func _sync_epoch() -> bool:
 	if _epoch < 0 and not _epoch_provider.is_valid():
 		_limit_usec = maxi(1, int(ProjectSettings.get_setting(
 			"hardcore/performance/frame_optional_budget_usec", DEFAULT_BUDGET_USEC)))
+		_progress_limit_usec = maxi(1, int(ProjectSettings.get_setting(
+			"hardcore/performance/frame_progress_budget_usec", DEFAULT_PROGRESS_BUDGET_USEC)))
 	_epoch = current
 	_spent_usec = 0
+	_lane_spent = [0, 0, 0]
 	_categories.clear()
 	return true
 
 static func remaining_usec() -> int:
 	if not _sync_epoch():
 		return 0
+	if _partitioned:
+		return maxi(0, _limit_usec - _lane_spent[LANE_BACKGROUND] - _lane_inflight_usec(LANE_BACKGROUND))
 	var inflight := 0 if _stack.is_empty() else maxi(0, _now_usec() - int(_stack[0].started_usec))
 	return maxi(0, _limit_usec - _spent_usec - inflight)
+
+static func progress_partition_enabled() -> bool:
+	return _partitioned
+
+static func remaining_progress_usec() -> int:
+	if not _partitioned:
+		return remaining_usec()
+	if not _sync_epoch():
+		return 0
+	return maxi(0, _progress_limit_usec - _lane_spent[LANE_PROGRESS] - _lane_inflight_usec(LANE_PROGRESS))
+
+static func _lane_inflight_usec(lane: int) -> int:
+	# Closed children are in lane_spent already. Remove both closed and live
+	# children from each parent's wall time so cross-lane nesting is exact.
+	var now := _now_usec()
+	var total := 0
+	for index: int in _stack.size():
+		var item: Dictionary = _stack[index]
+		if int(item.lane) != lane:
+			continue
+		var live_child := maxi(0, now - int(_stack[index + 1].started_usec)) if index + 1 < _stack.size() else 0
+		total += maxi(0, now - int(item.started_usec) - int(item.child_usec) - live_child)
+	return total
+
+static func mark_progress_pending(category: String, has_pending: bool, runnable := true, runs_when_paused := false, process_owner: Node = null, physics_owner := false) -> void:
+	mark_pending(category, has_pending, runnable, runs_when_paused, process_owner, physics_owner)
+	if _pending.has(category):
+		_pending[category]["progress"] = true
+
+static func begin_progress(category: String) -> int:
+	if not _partitioned:
+		return begin(category)
+	if _pending.has(category):
+		_pending[category]["progress"] = true
+	return _begin(category, false, LANE_PROGRESS)
 
 static func _category(name: String) -> Dictionary:
 	if not _categories.has(name):
@@ -87,7 +136,7 @@ static func _eligible(item: Dictionary, is_calling_owner := false) -> bool:
 		return owner.is_processing()
 	return true
 
-static func _fair_blocker(category: String) -> Variant:
+static func _fair_blocker(category: String, lane := LANE_BACKGROUND) -> Variant:
 	if not _pending.has(category) or not _stack.is_empty():
 		return null
 	var own: Dictionary = _pending[category]
@@ -97,6 +146,8 @@ static func _fair_blocker(category: String) -> Variant:
 		if other == category:
 			continue
 		var item: Dictionary = _pending[other]
+		if _partitioned and bool(item.get("progress", false)) != (lane == LANE_PROGRESS):
+			continue
 		if not _eligible(item):
 			continue
 		# Every unserved runnable owner retains its oldest-first turn. Once
@@ -116,13 +167,16 @@ static func _fair_blocker(category: String) -> Variant:
 	return null
 
 static func begin(category: String, necessary := false) -> int:
+	return _begin(category, necessary, LANE_NECESSARY if necessary else LANE_BACKGROUND)
+
+static func _begin(category: String, necessary: bool, lane: int) -> int:
 	assert(OS.get_thread_caller_id() == OS.get_main_thread_id(), "frame budget belongs to main")
 	if not _sync_epoch():
 		return 0
 	var counters := _category(category)
 	if not necessary:
-		var remaining := remaining_usec()
-		var blocker: Variant = null if remaining <= 0 else _fair_blocker(category)
+		var remaining := remaining_progress_usec() if lane == LANE_PROGRESS else remaining_usec()
+		var blocker: Variant = null if remaining <= 0 else _fair_blocker(category, lane)
 		if remaining <= 0 or blocker != null:
 			var reason := "budget" if remaining <= 0 else ("unrunnable" if blocker == category else "fairness")
 			counters.denied += 1
@@ -138,7 +192,7 @@ static func begin(category: String, necessary := false) -> int:
 			return 0
 	_next_token += 1
 	_stack.append({"token": _next_token, "category": category, "started_usec": _now_usec(),
-		"child_usec": 0, "necessary": necessary})
+		"child_usec": 0, "necessary": necessary, "lane": lane})
 	return _next_token
 
 static func last_denial_reason(category: String) -> String:
@@ -166,6 +220,7 @@ static func end(token: int) -> void:
 	var scope: Dictionary = _stack.pop_back()
 	var elapsed := maxi(0, _now_usec() - int(scope.started_usec))
 	var counters := _category(str(scope.category))
+	_lane_spent[int(scope.lane)] += maxi(0, elapsed - int(scope.child_usec))
 	counters.inclusive_usec += elapsed
 	counters.self_usec += maxi(0, elapsed - int(scope.child_usec))
 	counters.maximum_quantum_usec = maxi(int(counters.maximum_quantum_usec), elapsed)
@@ -195,11 +250,21 @@ static func snapshot() -> Dictionary:
 			"runnable": _eligible(item), "runs_when_paused": item.get("runs_when_paused", false)}
 	var inflight := 0 if _stack.is_empty() else maxi(0, _now_usec() - int(_stack[0].started_usec))
 	return {"epoch": _epoch, "limit_usec": _limit_usec, "spent_usec": _spent_usec + inflight,
-		"inflight_usec": inflight, "overrun_usec": maxi(0, _spent_usec + inflight - _limit_usec),
+		"inflight_usec": inflight, "overrun_usec": maxi(0, _spent_usec + inflight - _limit_usec - (_progress_limit_usec if _partitioned else 0)),
+		"partitioned": _partitioned, "progress_limit_usec": _progress_limit_usec,
+		"background_spent_usec": _lane_spent[LANE_BACKGROUND] + _lane_inflight_usec(LANE_BACKGROUND),
+		"necessary_spent_usec": _lane_spent[LANE_NECESSARY] + _lane_inflight_usec(LANE_NECESSARY),
+		"progress_spent_usec": _lane_spent[LANE_PROGRESS] + _lane_inflight_usec(LANE_PROGRESS),
+		"progress_overrun_usec": maxi(0, _lane_spent[LANE_PROGRESS] + _lane_inflight_usec(LANE_PROGRESS) - _progress_limit_usec),
 		"categories": _categories.duplicate(true), "pending": pending, "open_scopes": _stack.size()}
 
 static func configure_for_tests(limit_usec: int, epoch_provider: Callable, clock_provider: Callable) -> void:
 	assert(_stack.is_empty())
+	# Existing component tests explicitly model the original one-lane policy.
+	# New policy tests opt into partitioning through configure_progress_for_tests.
+	_partitioned = false
+	_progress_limit_usec = maxi(0, limit_usec)
+	_lane_spent = [0, 0, 0]
 	_limit_usec = maxi(0, limit_usec)
 	_epoch_provider = epoch_provider
 	_clock_provider = clock_provider
@@ -210,8 +275,17 @@ static func configure_for_tests(limit_usec: int, epoch_provider: Callable, clock
 	_pending_sequence = 0
 	_service_sequence = 0
 
+static func configure_progress_for_tests(limit_usec: int) -> void:
+	assert(_stack.is_empty())
+	_partitioned = true
+	_progress_limit_usec = maxi(0, limit_usec)
+
 static func reset_test_configuration() -> void:
 	assert(_stack.is_empty())
+	_partitioned = true
+	_lane_spent = [0, 0, 0]
+	_progress_limit_usec = maxi(1, int(ProjectSettings.get_setting(
+		"hardcore/performance/frame_progress_budget_usec", DEFAULT_PROGRESS_BUDGET_USEC)))
 	_epoch_provider = Callable()
 	_clock_provider = Callable()
 	_limit_usec = maxi(1, int(ProjectSettings.get_setting(
