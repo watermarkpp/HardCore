@@ -9,6 +9,28 @@
     "elite": {"ground_slot_limit": 9},
     "boss": {"ground_slot_limit": 12}
   },
+  "resolution_order": ["canonical_monster_id_override", "canonical_monster_classification"],
+  "exact_id_group_overrides": {
+    "39": "elite",
+    "57": "elite",
+    "74": "elite",
+    "77": "elite",
+    "90": "elite",
+    "121": "elite",
+    "126": "ordinary",
+    "137": "elite",
+    "142": "elite",
+    "144": "ordinary",
+    "226": "ordinary",
+    "227": "ordinary",
+    "228": "ordinary",
+    "229": "ordinary",
+    "230": "ordinary",
+    "231": "ordinary",
+    "232": "ordinary",
+    "233": "ordinary",
+    "234": "ordinary"
+  },
   "unsupported_classifications": ["special"],
   "selection_contract": {
     "stage": "AFTER_ALL_SLOT_RNG",

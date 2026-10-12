@@ -497,6 +497,21 @@ func _load_monster_ground_slot_group_policy() -> bool:
 	if groups.size() != 3:
 		load_error = "monster_ground_slot_group_policy_group_set_invalid"
 		return false
+	if policy.get("resolution_order", null) != ["canonical_monster_id_override", "canonical_monster_classification"]:
+		load_error = "monster_ground_slot_group_policy_resolution_order_invalid"
+		return false
+	var overrides_value: Variant = policy.get("exact_id_group_overrides", null)
+	if not overrides_value is Dictionary:
+		load_error = "monster_ground_slot_group_policy_overrides_invalid"
+		return false
+	for raw_id: Variant in overrides_value:
+		var id_text := str(raw_id)
+		var group_value: Variant = overrides_value[raw_id]
+		if (not raw_id is String or not id_text.is_valid_int()
+			or str(int(id_text)) != id_text or not _monsters_by_id.has(int(id_text))
+			or not group_value is String or not groups.has(group_value)):
+			load_error = "monster_ground_slot_group_policy_override_invalid:%s" % id_text
+			return false
 	var source_authority: Variant = policy.get("source_authority", null)
 	if not source_authority is Dictionary:
 		load_error = "monster_ground_slot_group_policy_source_authority_invalid"
@@ -3695,11 +3710,16 @@ func dpv2_ground_slot_limit() -> int:
 
 
 func dpv2_ground_slot_limit_for_monster(monster_id: int) -> int:
-	var classification := canonical_monster_classification(monster_id)
+	var resolved_id := canonical_monster_id(monster_id)
+	if not _monsters_by_id.has(resolved_id):
+		return 0
+	var classification := canonical_monster_classification(resolved_id)
+	var overrides: Dictionary = monster_ground_slot_group_policy.get("exact_id_group_overrides", {})
+	var group_name := str(overrides.get(str(resolved_id), classification))
 	var groups: Variant = monster_ground_slot_group_policy.get("groups", {})
 	if not groups is Dictionary:
 		return 0
-	var group: Variant = groups.get(classification, null)
+	var group: Variant = groups.get(group_name, null)
 	if not group is Dictionary:
 		return 0
 	return maxi(0, int(group.get("ground_slot_limit", 0)))
