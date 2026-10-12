@@ -19,6 +19,27 @@ spec.loader.exec_module(builder)
 
 
 class MonsterGroundSlotGroupPolicyTest(unittest.TestCase):
+    def test_exact_id_group_overrides_cover_authorized_runtime_ids(self):
+        source = json.loads(SOURCE.read_text(encoding="utf-8"))
+        overrides = source.get("exact_id_group_overrides", {})
+        expected = {
+            **{str(monster_id): "ordinary" for monster_id in range(226, 235)},
+            **{str(monster_id): "elite" for monster_id in (39, 57, 74, 77, 90, 121, 137, 142)},
+            "126": "ordinary",
+            "144": "ordinary",
+        }
+        self.assertEqual(overrides, expected)
+        classes = json.loads(CLASSIFICATION.read_text(encoding="utf-8"))["exact_id_overrides"]
+        self.assertEqual(classes["39"]["classification"], "special")
+        self.assertEqual(classes["57"]["classification"], "special")
+        self.assertEqual(classes["74"]["classification"], "elite")
+        self.assertEqual(classes["77"]["classification"], "special")
+        self.assertEqual(classes["142"]["classification"], "special")
+        runtime = json.loads(RUNTIME.read_text(encoding="utf-8"))
+        self.assertEqual(runtime["exact_id_group_overrides"], expected)
+        self.assertEqual(runtime.get("exact_id_group_overrides", {}).get("225"), None)
+        self.assertEqual(runtime.get("exact_id_group_overrides", {}).get("999999"), None)
+
     def test_generated_policy_matches_authoring_and_canonical_classes(self):
         expected = builder.render(builder.build())
         self.assertEqual(RUNTIME.read_text(encoding="utf-8"), expected)
@@ -51,6 +72,15 @@ class MonsterGroundSlotGroupPolicyTest(unittest.TestCase):
         contract = json.loads(json.dumps(original))
         contract["selection_contract"]["stage"] = "BEFORE_RNG"
         invalid_sources.append(contract)
+        unknown_id = json.loads(json.dumps(original))
+        unknown_id.setdefault("exact_id_group_overrides", {})["999999"] = "ordinary"
+        invalid_sources.append(unknown_id)
+        noncanonical_key = json.loads(json.dumps(original))
+        noncanonical_key.setdefault("exact_id_group_overrides", {})["39.0"] = "elite"
+        invalid_sources.append(noncanonical_key)
+        unsupported_group = json.loads(json.dumps(original))
+        unsupported_group.setdefault("exact_id_group_overrides", {})["39"] = "special"
+        invalid_sources.append(unsupported_group)
         with tempfile.TemporaryDirectory() as temp_dir:
             try:
                 for index, invalid in enumerate(invalid_sources):

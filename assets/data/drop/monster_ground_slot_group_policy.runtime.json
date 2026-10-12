@@ -7,7 +7,7 @@
   "source_authority": {
     "path": "assets/data/drop/monster_ground_slot_group_policy.source.json",
     "schema": "hardcore.monster_ground_slot_group_policy.source.v1",
-    "sha256_lf": "3CABDD216272EB1815C30A88F66285BC803CA8C823A70C4AF8FAD82D32E8D24D"
+    "sha256_lf": "13673D379F9D46F1814AA941478D1D8E49AACA5B623126C4B176EBF958B0ACFB"
   },
   "classification_source": {
     "path": "assets/data/canonical_monster_classification_v1.json",
@@ -23,6 +23,31 @@
     "boss": {
       "ground_slot_limit": 12
     }
+  },
+  "resolution_order": [
+    "canonical_monster_id_override",
+    "canonical_monster_classification"
+  ],
+  "exact_id_group_overrides": {
+    "39": "elite",
+    "57": "elite",
+    "74": "elite",
+    "77": "elite",
+    "90": "elite",
+    "121": "elite",
+    "126": "ordinary",
+    "137": "elite",
+    "142": "elite",
+    "144": "ordinary",
+    "226": "ordinary",
+    "227": "ordinary",
+    "228": "ordinary",
+    "229": "ordinary",
+    "230": "ordinary",
+    "231": "ordinary",
+    "232": "ordinary",
+    "233": "ordinary",
+    "234": "ordinary"
   },
   "unsupported_classifications": [
     "special"

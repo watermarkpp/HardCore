@@ -62,6 +62,19 @@ def build() -> dict[str, Any]:
         seen_classes.add(cls)
     if not set(EXPECTED).issubset(seen_classes):
         raise ValueError(f"classification source missing policy classes: {set(EXPECTED) - seen_classes}")
+    resolution_order = source.get("resolution_order")
+    if resolution_order != ["canonical_monster_id_override", "canonical_monster_classification"]:
+        raise ValueError("invalid ground-slot resolution order")
+    overrides = source.get("exact_id_group_overrides")
+    if not isinstance(overrides, dict):
+        raise ValueError("exact_id_group_overrides must be an object")
+    for key, group in overrides.items():
+        if not isinstance(key, str) or not key.isascii() or not key.isdecimal() or str(int(key)) != key:
+            raise ValueError(f"noncanonical monster ID override: {key}")
+        if int(key) not in seen_ids:
+            raise ValueError(f"unknown monster ID override: {key}")
+        if not isinstance(group, str) or group not in EXPECTED:
+            raise ValueError(f"unsupported ground-slot group for {key}: {group}")
     source_bytes = SOURCE.read_bytes().replace(b"\r\n", b"\n")
     source_sha = hashlib.sha256(source_bytes).hexdigest().upper()
     return {
@@ -80,6 +93,8 @@ def build() -> dict[str, Any]:
             "classification_count": len(records),
         },
         "groups": {name: {"ground_slot_limit": limit} for name, limit in EXPECTED.items()},
+        "resolution_order": resolution_order,
+        "exact_id_group_overrides": overrides,
         "unsupported_classifications": ["special"],
         "selection_contract": source["selection_contract"],
         "generator": "tools/build_monster_ground_slot_group_policy.py",
