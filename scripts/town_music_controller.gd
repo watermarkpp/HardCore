@@ -32,8 +32,15 @@ signal music_stopped(request: Dictionary)
 
 var delay_seconds := DELAY_SECONDS
 var music_player: AudioStreamPlayer
+## A separate silent player primes the native PCM mixer while Loading is still
+## visible. It is never part of the formal town-music lifecycle.
+var warmup_player: AudioStreamPlayer
+var warmup_start_count := 0
+var warmup_completed := false
+var warmup_playback_position_observed := false
 var delay_timer: Timer
 var _delay_callback := Callable()
+var _warmup_process_enabled := false
 
 var _entry_serial := 0
 var _active_map_id := -1
@@ -48,6 +55,7 @@ var _waiting_for_track_finish := false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	set_process(false)
 	set_meta("stable_id", CONTRACT_ID)
 	_ensure_music_bus()
 	_build_audio_nodes()
@@ -74,6 +82,34 @@ func _build_audio_nodes() -> void:
 		music_player.stream = stream
 	music_player.finished.connect(_on_music_finished)
 	add_child(music_player)
+	if stream != null:
+		warmup_player = AudioStreamPlayer.new()
+		warmup_player.name = "TownMusicWarmupPlayer"
+		warmup_player.bus = MUSIC_BUS_NAME
+		warmup_player.volume_db = linear_to_db(0.0)
+		warmup_player.autoplay = false
+		warmup_player.stream = stream
+		add_child(warmup_player)
+		warmup_player.play()
+		warmup_start_count += 1
+		_warmup_process_enabled = true
+		set_process(true)
+
+
+func _process(_delta: float) -> void:
+	if not _warmup_process_enabled or warmup_completed:
+		return
+	if not is_instance_valid(warmup_player):
+		return
+	if warmup_player.get_playback_position() <= 0.0:
+		return
+	warmup_playback_position_observed = true
+	warmup_completed = true
+	_warmup_process_enabled = false
+	warmup_player.stop()
+	warmup_player.queue_free()
+	warmup_player = null
+	set_process(false)
 
 
 func _ensure_music_bus() -> void:
@@ -231,6 +267,7 @@ func cancel(reason := "cancelled") -> void:
 	_delay_armed_for_entry = false
 	_cancel_delay()
 	_stop_music(reason)
+	_cleanup_warmup_player()
 
 
 func is_delay_pending() -> bool:
@@ -341,6 +378,19 @@ func _stop_music(reason: String) -> void:
 		"transition_id": _active_transition_id,
 		"reason": reason,
 	})
+
+
+func _cleanup_warmup_player() -> void:
+	_warmup_process_enabled = false
+	set_process(false)
+	if is_instance_valid(warmup_player):
+		warmup_player.stop()
+		warmup_player.queue_free()
+	warmup_player = null
+
+
+func _exit_tree() -> void:
+	_cleanup_warmup_player()
 
 
 func _on_music_finished() -> void:

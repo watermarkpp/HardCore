@@ -114,6 +114,12 @@ func _ready() -> void:
 	_build_launch_loading_overlay()
 	_build_delete_confirmation()
 	_refresh_profiles()
+	var recovery: Array = PlayerState.startup_save_upgrade_result.get("relic_recovery", [])
+	var recovered_items := 0
+	for role: Dictionary in recovery:
+		recovered_items += (role.get("removed", []) as Array).size()
+	if recovered_items > 0:
+		message_label.text = "存档已恢复，移除了 %d 件损坏的圣物/徽章。正常物品保留，原档已备份。" % recovered_items
 	TouchScrollSupportScript.attach_tree(self)
 	UIRuntimeLayoutOverridesScript.apply_profile(self, "character_hall")
 	_restore_character_action_visual_contract()

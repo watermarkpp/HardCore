@@ -4,6 +4,7 @@ extends Control
 const TARGET_SCENE_PATH := "res://scenes/character_select.tscn"
 const MAIN_SCENE_PREFETCH_PATH := "res://scenes/main.tscn"
 const LOADING_CONTRACT_ID := "startup.loading.character_select.v1"
+const SaveUpgradeDiagnostic := preload("res://scripts/save_upgrade_diagnostic.gd")
 const MAIN_SCENE_PREFETCH_CONTRACT_ID := "startup.loading.main_scene_prefetch.v1"
 const STARTUP_STATE_LOADING := "loading"
 const STARTUP_STATE_READY_TO_HANDOFF := "ready_to_handoff"
@@ -214,7 +215,7 @@ func _authoritative_failure_message(step_id: String) -> String:
 		"game_data":
 			return "正式游戏数据未准备完成，请检查安装后重试。"
 		"save_upgrade":
-			return "存档升级未完成，原始存档已保留。可重试，若仍失败请勿卸载或清除应用数据。"
+			return str(SaveUpgradeDiagnostic.build(PlayerState.startup_save_upgrade_result).message)
 		"intro_missing":
 			return "启动画面初始化失败，请退出并重新启动。"
 	return "启动权威数据准备失败，请检查安装后重试。"
@@ -378,6 +379,7 @@ func startup_diagnostic() -> Dictionary:
 		"failure_code": _failure_code,
 		"failure_message": _failure_message,
 		"failure_retry_kind": _failure_retry_kind,
+		"save_upgrade": SaveUpgradeDiagnostic.build(PlayerState.startup_save_upgrade_result) if _failure_code == "STARTUP_DATA_SAVE_UPGRADE_FAILED" else {},
 		"exit_requested": _exit_requested,
 		"authoritative_data_ready": _authoritative_data_ready,
 		"authoritative_data_failed": _authoritative_data_failed,

@@ -27,9 +27,12 @@ const RandomSpecialRules := preload("res://scripts/equipment_random_special_inst
 const ItemTransactionJournal := preload("res://scripts/items/item_transaction_journal.gd")
 const ItemTransactionPort := preload("res://scripts/items/item_transaction_port.gd")
 const SaveUpgradeBackup := preload("res://scripts/save_upgrade_backup.gd")
+const SaveRelicRecovery := preload("res://scripts/save_relic_recovery.gd")
 var _startup_save_upgrade_pending := false
 var _startup_save_upgrade_in_progress := false
 var startup_save_upgrade_result: Dictionary = {}
+var _startup_save_upgrade_phase := ""
+var _startup_source_backup_verified := false
 var _item_transaction_port: RefCounted
 var _item_transaction_journal: Dictionary = {}
 const EquipmentEnhancementRulesScript := preload("res://scripts/layers/rules/equipment_enhancement_rules.gd")
@@ -480,6 +483,8 @@ func _ready() -> void:
 
 func begin_startup_save_upgrade() -> void:
 	_startup_save_upgrade_pending = true
+	_startup_save_upgrade_phase = "backup"
+	_startup_source_backup_verified = false
 	startup_save_upgrade_result = {"success":false, "reason":"upgrade_pending"}
 
 
@@ -497,7 +502,7 @@ func _startup_upgrade_sources() -> Array[String]:
 	return paths
 
 
-func _startup_upgrade_read(path: String, validator := Callable()) -> Dictionary:
+func _startup_upgrade_read(path: String, validator := Callable(), recover_relics := false) -> Dictionary:
 	if not validator.is_valid(): validator = _json_validator_for_path(path)
 	var primary := _read_json_document(path)
 	var validation := _validate_json_candidate(primary.data, validator) if bool(primary.valid) else _validation_result(false, "invalid_json")
@@ -508,12 +513,28 @@ func _startup_upgrade_read(path: String, validator := Callable()) -> Dictionary:
 	if bool(backup_validation.get("terminal", false)):
 		return {"success":false, "reason":backup_validation.reason, "path":path + ".bak"}
 	if bool(validation.valid): return {"success":true, "data":primary.data, "path":path}
+	if recover_relics and bool(primary.valid):
+		var repair := SaveRelicRecovery.plan(primary.data)
+		if bool(repair.get("blocked", false)):
+			return {"success":false, "reason":repair.reason, "path":path}
+		if bool(repair.changed):
+			# Latest primary data wins. A known broken relic cannot authorize an
+			# older backup to overwrite newer progress, even if another fault also
+			# prevents the proposed repair from passing the complete validator.
+			var candidate_status := _validate_json_candidate(repair.document, validator)
+			if not bool(candidate_status.valid):
+				return {"success":false, "reason":candidate_status.reason, "path":path}
+			return {"success":true, "data":repair.document, "path":path,
+				"recovery":{"path":path, "data":repair.document, "removed":repair.removed,
+					"source_sha256":FileAccess.get_sha256(path),
+					"backup_sha256":FileAccess.get_sha256(path + ".bak") if FileAccess.file_exists(path + ".bak") else ""}}
 	if bool(backup_validation.valid): return {"success":true, "data":backup.data, "path":path}
 	return {"success":false, "reason":validation.reason, "path":path}
 
 
 func _startup_upgrade_preflight() -> Dictionary:
 	var ids: Dictionary = {}
+	var recoveries: Array[Dictionary] = []
 	var has_legacy := false
 	var legacy_migration_consumed := false
 	var explicit_empty_profile_index := false
@@ -532,13 +553,19 @@ func _startup_upgrade_preflight() -> Dictionary:
 				ids[id] = true
 	var shared: Dictionary = {}
 	if FileAccess.file_exists(shared_warehouse_path) or FileAccess.file_exists(shared_warehouse_path + ".bak"):
-		var warehouse := _startup_upgrade_read(shared_warehouse_path)
+		var warehouse := _startup_upgrade_read(shared_warehouse_path, Callable(), true)
 		if not bool(warehouse.success): return warehouse
+		if warehouse.has("recovery"):
+			warehouse.recovery["profile_id"] = ""
+			recoveries.append(warehouse.recovery)
 		shared = warehouse.data
 	var all_profiles: Dictionary = {}
 	for id: String in ids:
-		var profile := _startup_upgrade_read(_profile_path(id))
+		var profile := _startup_upgrade_read(_profile_path(id), Callable(), true)
 		if not bool(profile.success): return profile
+		if profile.has("recovery"):
+			profile.recovery["profile_id"] = id
+			recoveries.append(profile.recovery)
 		all_profiles[id] = profile.data
 		if not shared.is_empty() and not _profile_and_shared_drop_instances_are_disjoint(profile.data, shared):
 			return {"success":false, "reason":"duplicate_drop_instance_across_shared", "path":profile.path}
@@ -554,15 +581,61 @@ func _startup_upgrade_preflight() -> Dictionary:
 		var log := _read_json_document(shared_warehouse_transaction_log_path)
 		if not bool(log.valid) or not _warehouse_transaction_log_is_valid(log.data):
 			return {"success":false, "reason":"invalid_warehouse_transaction_log", "path":shared_warehouse_transaction_log_path}
-	return {"success":true, "ids":ids.keys(), "profiles":all_profiles,
+	return {"success":true, "ids":ids.keys(), "profiles":all_profiles, "relic_recoveries":recoveries,
 		"legacy_pending":has_legacy and ids.is_empty() and not legacy_migration_consumed,
 		"explicit_empty_legacy_account":explicit_empty_profile_index and has_legacy and ids.is_empty() and not legacy_migration_consumed}
+
+
+func _startup_relic_recovery_unchanged(recovery: Dictionary) -> bool:
+	var path: String = recovery.path
+	return FileAccess.get_sha256(path) == recovery.source_sha256 and (
+		FileAccess.get_sha256(path + ".bak") == recovery.backup_sha256
+		if FileAccess.file_exists(path + ".bak") else str(recovery.backup_sha256).is_empty())
+
+
+func _startup_relic_recovery_guard(_identity: Dictionary, recovery: Dictionary) -> bool:
+	return _startup_relic_recovery_unchanged(recovery)
+
+
+func _startup_apply_relic_recoveries(recoveries: Array, backup: RefCounted) -> Dictionary:
+	# This is a bounded import operation. Only the established persistence owner
+	# can promote the fully validated candidate; no alternate save writer exists.
+	var report: Array[Dictionary] = []
+	var root: String = profile_directory.get_base_dir()
+	var prefix := root if root.ends_with("://") else root + "/"
+	for recovery: Dictionary in recoveries:
+		var path: String = recovery.path
+		var relative := path.trim_prefix(prefix)
+		var entry: Dictionary = backup.manifest.files.get(relative, {})
+		if not path.begins_with(prefix) or entry.get("sha256") != recovery.source_sha256 \
+			or FileAccess.get_sha256(backup.archive.path_join("original").path_join(relative)) != recovery.source_sha256:
+			return {"success":false, "reason":"relic_recovery_backup_mismatch", "path":path}
+	# Confirm custody for every proposed change before promoting the first one.
+	for recovery: Dictionary in recoveries:
+		var encoded := ItemExtensionCodec.encode_document(recovery.data)
+		if encoded.status != ItemExtensionCodec.KNOWN_VALID or not _startup_relic_recovery_unchanged(recovery):
+			return {"success":false, "reason":"relic_recovery_source_changed", "path":recovery.path}
+		var request := _json_persistence.submit(recovery.path,
+			{"path":recovery.path, "profile_id":recovery.profile_id, "generation":""},
+			encoded.document, _json_validator_for_path(recovery.path),
+			Callable(self, "_startup_relic_recovery_guard").bind(recovery), false, null,
+			_record_background_json_receipt, false, null, str(recovery.path) + ".tmp")
+		if request == null:
+			return {"success":false, "reason":"relic_recovery_write_failed", "path":recovery.path}
+		var receipt: Dictionary = _json_persistence.finish(request, true)
+		if not bool(receipt.get("success", false)):
+			return {"success":false, "reason":str(receipt.get("reason", "relic_recovery_write_failed")), "path":recovery.path}
+		report.append({"profile_id":recovery.profile_id, "removed":recovery.removed})
+	return {"success":true, "report":report}
 
 
 func _startup_upgrade_fail(reason: String, path := "") -> bool:
 	_startup_save_upgrade_in_progress = false
 	active_profile_id = ""
-	startup_save_upgrade_result = {"success":false, "reason":reason, "path":path}
+	if reason.begins_with("upgrade_backup_") or reason in ["relic_recovery_backup_mismatch", "relic_recovery_source_changed"]:
+		_startup_source_backup_verified = false
+	startup_save_upgrade_result = {"success":false, "reason":reason, "path":path,
+		"phase":_startup_save_upgrade_phase, "source_backup_verified":_startup_source_backup_verified}
 	return false
 
 
@@ -570,10 +643,14 @@ func finish_startup_save_upgrade() -> bool:
 	if not _startup_save_upgrade_pending: return true
 	if _startup_save_upgrade_in_progress: return false
 	var backup := SaveUpgradeBackup.new()
+	_startup_save_upgrade_phase = "backup"
 	if not backup.prepare(profile_directory.get_base_dir(), _startup_upgrade_sources()):
 		return _startup_upgrade_fail(backup.reason, backup.archive)
+	_startup_source_backup_verified = true
+	_startup_save_upgrade_phase = "completion_validation"
 	var completion := backup.completion_status()
 	if not bool(completion.valid): return _startup_upgrade_fail("upgrade_completion_invalid", backup.archive)
+	_startup_save_upgrade_phase = "preflight"
 	var preflight := _startup_upgrade_preflight()
 	if not bool(preflight.success): return _startup_upgrade_fail(preflight.reason, str(preflight.get("path", "")))
 	# A valid durable completion proof is the authority for an older build that
@@ -583,6 +660,11 @@ func finish_startup_save_upgrade() -> bool:
 	# first-import path (or fails above) and therefore cannot suppress import.
 	var completed_empty_legacy_account := bool(completion.completed) and bool(preflight.get("explicit_empty_legacy_account", false))
 	_startup_save_upgrade_in_progress = true
+	_startup_save_upgrade_phase = "relic_recovery"
+	var repaired := _startup_apply_relic_recoveries(preflight.relic_recoveries, backup)
+	if not bool(repaired.success):
+		return _startup_upgrade_fail(repaired.reason, str(repaired.get("path", "")))
+	_startup_save_upgrade_phase = "migration"
 	if DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(profile_directory)) != OK:
 		return _startup_upgrade_fail("profile_directory_failed")
 	_migrate_single_save_to_profile(not completed_empty_legacy_account)
@@ -605,6 +687,7 @@ func finish_startup_save_upgrade() -> bool:
 			var final := _startup_upgrade_read(_profile_path(id))
 			if not bool(final.success): return _startup_upgrade_fail(final.reason, final.path)
 			_before_state_transaction(true)
+		_startup_save_upgrade_phase = "completion"
 		if not backup.complete(profiles.ids): return _startup_upgrade_fail(backup.reason, backup.archive)
 	if OS.is_debug_build() and DisplayServer.get_name() != "headless":
 		if ProjectSettings.get_setting("hardcore/debug/enable_qa_test_roster", false):
@@ -613,7 +696,7 @@ func finish_startup_save_upgrade() -> bool:
 	reset_progress(false)
 	_startup_save_upgrade_in_progress = false
 	_startup_save_upgrade_pending = false
-	startup_save_upgrade_result = {"success":true, "reason":"already_completed" if bool(completion.completed) else "upgraded", "backup_path":backup.archive, "profiles":profiles.ids}
+	startup_save_upgrade_result = {"success":true, "reason":"already_completed" if bool(completion.completed) else "upgraded", "backup_path":backup.archive, "profiles":profiles.ids, "relic_recovery":repaired.report}
 	return true
 
 

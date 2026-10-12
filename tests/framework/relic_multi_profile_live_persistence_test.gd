@@ -114,10 +114,13 @@ func _destroy(entity_id: String) -> String:
 	return instance_id
 
 func _profile(label: String) -> void:
-	var created: String = state.create_character("持久化验证" + label)
+	var profession := "战士" if label == "A" else "法师"
+	var badge_id := 950201 if label == "A" else 950202
+	var created: String = state.create_character("持久化验证" + label, profession)
 	check(created.is_empty(), "production create/switch " + label + " " + created)
 	if not created.is_empty(): return
 	var id: String = state.active_profile_id
+	check(state.profession == profession, "first warrior then wizard use distinct actual professions " + label)
 	state.level = 35
 	state.gold = 2500000
 	state.recalculate_stats()
@@ -127,15 +130,15 @@ func _profile(label: String) -> void:
 	check(state.save_game(true, true, true), "fixture uses real profile/world/index writers " + str(state.last_save_result))
 	var deleted: Array[String] = []
 	await _craft(950101)
-	await _craft(950201)
+	await _craft(badge_id)
 	# Both outputs remain in the backpack while unrelated items are exercised.
 	await _equip_and_return("hc.item.000081", "hc.slot.weapon")
 	await _destroy("hc.item.920017")
-	for pair: Array in [[950101,"hc.slot.relic"],[950201,"hc.slot.badge"]]:
+	for pair: Array in [[950101,"hc.slot.relic"],[badge_id,"hc.slot.badge"]]:
 		await _equip_and_return("hc.item." + str(pair[0]), pair[1])
 		deleted.append(await _destroy("hc.item." + str(pair[0])))
 	var retained := {}
-	for pair: Array in [[950101,"hc.slot.relic"],[950201,"hc.slot.badge"]]:
+	for pair: Array in [[950101,"hc.slot.relic"],[badge_id,"hc.slot.badge"]]:
 		var output: Dictionary = await _craft(int(pair[0]))
 		retained[pair[1]] = output
 		var index := _index("hc.item." + str(pair[0]))
@@ -165,6 +168,7 @@ func _run() -> void:
 		check(state.select_character(expected[label].profile_id), "production directed reload " + label + " " + str(state.last_load_result))
 		for slot: String in expected[label].retained:
 			check(state.equipment[slot].get("instance_id") == expected[label].retained[slot].get("instance_id"), "live reload keeps role-specific instance " + label + "/" + slot)
+	_legacy_relic_upgrade(root + "_legacy")
 	var pointer := {"root":root, "profiles":expected}
 	var file := FileAccess.open("user://relic_multi_profile_live_restart_case.json", FileAccess.WRITE)
 	check(file != null, "cold-process fixture pointer")
@@ -177,3 +181,48 @@ func _run() -> void:
 	if not proof.write_receipt("relic_multi_profile_live_persistence_test", checks, failures.size()): failures.append("receipt")
 	print("FRAMEWORK_RELIC_MULTI_PROFILE_LIVE_PERSISTENCE_%s checks=%d failures=%s" % ["PASS" if failures.is_empty() else "FAIL", checks, str(failures)])
 	get_tree().quit(0 if failures.is_empty() else 1)
+
+func _legacy_relic_upgrade(root: String) -> void:
+	# Controlled old-header/Chinese-slot fixture using the actual items just
+	# crafted above. This is not the user's missing historical failed profile.
+	var slots := {"hc.slot.weapon":"武器", "hc.slot.armor":"衣服", "hc.slot.helmet":"头盔",
+		"hc.slot.necklace":"项链", "hc.slot.bracelet_left":"左手镯", "hc.slot.bracelet_right":"右手镯",
+		"hc.slot.ring_left":"左戒指", "hc.slot.ring_right":"右戒指", "hc.slot.relic":"圣物", "hc.slot.badge":"徽章"}
+	var entries: Array = []
+	var original: Dictionary = {}
+	for label: String in expected:
+		var id: String = expected[label].profile_id
+		check(state.select_character(id), "legacy fixture reads actual retained role " + label)
+		var gear := {}
+		for slot: String in slots: gear[slots[slot]] = state.equipment[slot].duplicate(true)
+		var document := {"save_version":10, "profile_id":id, "character_name":"兼容验证" + label,
+			"profession":state.profession, "gender":state.gender, "level":state.level,
+			"gold":state.gold, "experience":state.experience, "inventory":state.inventory.duplicate(true),
+			"equipment":gear, "learned_skills":{}, "quest_states":{}}
+		var path := root.path_join("characters").path_join(id + ".json")
+		check(DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(path.get_base_dir())) == OK, "owned old-format fixture directory")
+		var file := FileAccess.open(path, FileAccess.WRITE)
+		check(file != null, "owned old-format fixture writer")
+		if file != null: file.store_string(JSON.stringify(document)); file.close()
+		original[id] = FileAccess.get_sha256(path)
+		entries.append({"id":id})
+	var index := FileAccess.open(root.path_join("character_profiles.json"), FileAccess.WRITE)
+	check(index != null, "owned old-format index")
+	if index != null: index.store_string(JSON.stringify({"version":1,"profiles":entries})); index.close()
+	var upgrade := State.new()
+	upgrade.profile_directory = root.path_join("characters")
+	upgrade.profile_index_path = root.path_join("character_profiles.json")
+	upgrade.shared_warehouse_path = root.path_join("shared_warehouse.json")
+	upgrade.shared_warehouse_transaction_log_path = root.path_join("shared_warehouse.transaction.json")
+	upgrade.begin_startup_save_upgrade()
+	add_child(upgrade)
+	check(upgrade.finish_startup_save_upgrade(), "legacy warrior/wizard with real relic rolls upgrade through existing owner " + str(upgrade.startup_save_upgrade_result))
+	for label: String in expected:
+		var id: String = expected[label].profile_id
+		var before_image := root.path_join("save_upgrades/framework_identity_v1/original/characters").path_join(id + ".json")
+		check(FileAccess.get_sha256(before_image) == original[id], "old relic profile original bytes retained " + label)
+		check(upgrade.select_character(id) and upgrade.gold == int(expected[label].gold), "legacy role stays selectable with exact balance " + label)
+		for slot: String in expected[label].retained:
+			check(upgrade.equipment[slot].get("instance_id") == expected[label].retained[slot].get("instance_id") and upgrade.equipment[slot].get("relic_roll") == expected[label].retained[slot].get("relic_roll"), "legacy upgrade keeps exact relic/badge instance and rolls " + label + "/" + slot)
+	upgrade.active_profile_id = ""
+	upgrade.queue_free()
