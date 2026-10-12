@@ -1,5 +1,8 @@
 # 当前主树与工作区
 
+2026-10-12 v113里程碑冻结：源码c178071165078f386ec1e57012c1ce56d0bced95已保留在codex/milestone-v113-frozen及标签milestone-hardcore-1.0-v113，远端已同步。资料片继续在主树codex/integration开发；后续文档提交不改变113打包源。冻结工作树C:\Users\Administrator\.codex\worktrees\milestone-v113-frozen\HardCore，完整留档C:\Users\Administrator\Downloads\HardCore_v113_里程碑留档_20261012；52952项源码只读、worktree锁、逐文件指纹与完整历史bundle。两条旧远端审查分支转为archive/codex标签保全独有历史，历史发布标签保留。主树原index/无关dirty及真实存档保留。留档入口docs/milestones/v113/README.md；APK SHA256 57eac296ef083c9dbc1a736aec6e3ddde40055d3705feb44aa02d667d46c959e。DEVICE TEST: NOT_RUN，同学真实存档MISSING。布局核验UTC 2026-10-12T07:36:42.920482+00:00。
+
+
 核验日期：2026-10-07（Asia/Shanghai）。当前 Git 和实际文件优先于历史报告。
 
 - 唯一工程路径：`C:/Users/Administrator/Documents/HardCore`。

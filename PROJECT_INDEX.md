@@ -1,5 +1,8 @@
 # HardCore Project Index
 
+2026-10-12 v113里程碑冻结：源码c178071165078f386ec1e57012c1ce56d0bced95已保留在codex/milestone-v113-frozen及标签milestone-hardcore-1.0-v113，远端已同步。资料片继续在主树codex/integration开发；后续文档提交不改变113打包源。冻结工作树C:\Users\Administrator\.codex\worktrees\milestone-v113-frozen\HardCore，完整留档C:\Users\Administrator\Downloads\HardCore_v113_里程碑留档_20261012；52952项源码只读、worktree锁、逐文件指纹与完整历史bundle。两条旧远端审查分支转为archive/codex标签保全独有历史，历史发布标签保留。主树原index/无关dirty及真实存档保留。留档入口docs/milestones/v113/README.md；APK SHA256 57eac296ef083c9dbc1a736aec6e3ddde40055d3705feb44aa02d667d46c959e。DEVICE TEST: NOT_RUN，同学真实存档MISSING。布局核验UTC 2026-10-12T07:36:42.920482+00:00。
+
+
 2026-10-09 v108手机反馈修复：冷怪目标获取从optional/300ms队列移到必要事件，同movement30/30、火墙正伤害30/30；真实异步死亡成功回执补PERSISTING→SETTLING，零掉落卡死闭合；掉落小quantum在原wall预算内推进，32死亡53工作帧完成/原240帧期限/RNG及上限保持；菜单层内退出失败反馈及Footer互斥、启动无有效配置默认音量修复。必要原生专项PASS和历史FAIL逐项记录在 docs/review/v108_runtime_bug_repair_20261009/CURRENT_RESULT.md。原HEAD及index保持，已有全部升级内容保留；远端咨询分支codex/v108-runtime-bug-review-20261009。本轮没有新APK、没有修复后手机验收（DEVICE TEST: NOT_RUN），不能用原108封装PASS覆盖用户反馈。用户指定项目助手工作线程已派发，本轮首次返回模型限额，未获得外部分析。
 
 2026-10-09 19:15 最新交付：108正式两遍导出/封装/原签名及APK内容PASS，来源92c6eeb93af9546b891ea0a1a15dd4f8c600502b，桌面HardCore-v108-upgrade-debug.apk，SHA256 3652f72c6fffe1d27ef9a08acc21dc3a3550bd2f878a616bfe3d540c28d32753。Java用户Temp本地套接字故障已用工程TEMP/TMP固定接入正式构建入口，32轮真实预检及成功/失败环境恢复PASS，两遍真实Android导出原生退出0；原始FAIL保留。MAIN codex/integration HEAD及真实index保持。此前完整生产整合、音频/拾取/特殊装备/HUD/Loading/掉落/受击及新被动唤醒/直线LOS/光环外伤害独立唤醒保留，详细证据见 outputs/release_v108_20261009/FINAL_RESULT.json、DELIVERY.md；环境维护入口 docs/ANDROID_BUILD_ENVIRONMENT.md。DEVICE TEST: NOT_RUN，本地CPU53.34%单次窗口不冒称手机60FPS。旧段落为历史阶段。

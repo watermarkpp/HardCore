@@ -1,0 +1,67 @@
+{
+  "status": "PASS",
+  "frozen_utc": "2026-10-12T07:36:42.920482+00:00",
+  "source_commit": "c178071165078f386ec1e57012c1ce56d0bced95",
+  "source_tree": "fc4fa78d79115a40c5d589cc958446aa4a73e45a",
+  "frozen_branch": "codex/milestone-v113-frozen",
+  "milestone_tag": "milestone-hardcore-1.0-v113",
+  "expansion_branch": "codex/integration",
+  "worktree": "C:\\Users\\Administrator\\.codex\\worktrees\\milestone-v113-frozen\\HardCore",
+  "archive_directory": "C:\\Users\\Administrator\\Downloads\\HardCore_v113_里程碑留档_20261012",
+  "tracked_count": 52952,
+  "tracked_bytes": 3994993943,
+  "source_manifest_sha256": "f34c6eed073deeb306d5caf7db6a56993b3232b2229f281d35d62e7762e3b38e",
+  "worktree_locked": true,
+  "freeze_method": "Read-only attributes on every tracked regular file; Git worktree lock; fixed annotated tag and per-file SHA256 manifest. Reversible controls, not a server access restriction.",
+  "fresh_status_classification": {
+    "path": "tools/loot_sheet_compiler/evidence/armor_single_slot_directive_v92.json",
+    "raw_checkout_equals_git_blob": true,
+    "raw_checkout_sha256": "2122a9721e49b20086a4de85fe107eb75629db1508d0ad5a289e53df0b35e207",
+    "reason": "Existing text/eol=crlf attribute clean-filter status anomaly; raw frozen bytes equal the release Git blob and main bytes."
+  },
+  "apk": {
+    "filename": "HardCore-v113-save-recovery-debug.apk",
+    "bytes": 500034259,
+    "sha256": "57eac296ef083c9dbc1a736aec6e3ddde40055d3705feb44aa02d667d46c959e",
+    "version_code": 113,
+    "package": "com.personal.mafaoffline",
+    "signer_sha256": "c62d0f8239b926f819038845c302143fd24dcfd75ed8d877ed846c430c6f3fcc"
+  },
+  "backup_files": [
+    {
+      "file": "V113_SOURCE_AND_RETIRED_REFS.bundle",
+      "bytes": 1556979735,
+      "sha256": "1bf2bb1d691f4621d502d0f918c2a1bb311a3f73a9ca7e8bb090369dab2244d9"
+    },
+    {
+      "file": "MAIN_WORKING_OVERLAY.zip",
+      "bytes": 85661748,
+      "sha256": "8c1cb4fe48ac4acb2a1f648b1fa521edbf5404cfd80f7de23534f8074c9c6e80"
+    },
+    {
+      "file": "MAIN_WORKING_VS_V113.patch",
+      "bytes": 61125,
+      "sha256": "95d9c1a7997d8f8b168fae5ab31c102d1a014b3415022a272882d5135213bee2"
+    },
+    {
+      "file": "V113_VERIFICATION_EVIDENCE.zip",
+      "bytes": 28090510,
+      "sha256": "950c1641de096af1b667dce659af9f308346792b5c0ccc1bb63138d06321916a"
+    },
+    {
+      "file": "MAIN_INDEX_BEFORE.raw",
+      "bytes": 8995560,
+      "sha256": "0507bb7f246d0b5aff0f0bd05e3b4a65fec948c673e3adad2a564a3e8f364bec"
+    }
+  ],
+  "main_index_sha256": "0507bb7f246d0b5aff0f0bd05e3b4a65fec948c673e3adad2a564a3e8f364bec",
+  "device_test": "NOT_RUN",
+  "friend_actual_save": "MISSING",
+  "tests": "Reused fixed v113 release receipts; no duplicate gameplay tests or rebuild for this archive.",
+  "local_archive_receipt_sha256": "0cc92656ef4f4340ed74110bd5c653b9c6e5729bd0b2fef246eecd95f067f185",
+  "portable_release_receipts": {
+    "file": "VERIFIED_RELEASE_RECEIPTS.zip",
+    "bytes": 28175,
+    "sha256": "4b5b4537ed15fefbe1de769ef31a56fb31a09ec10aa894b031d2000110a22852"
+  }
+}
