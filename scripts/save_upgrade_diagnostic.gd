@@ -7,6 +7,8 @@ const PHASES := ["backup", "completion_validation", "preflight", "relic_recovery
 const PHASE_LABELS := {"backup":"备份校验", "completion_validation":"升级记录校验",
 	"preflight":"旧存档校验", "relic_recovery":"损坏物品修复", "migration":"存档转换", "completion":"完成记录写入", "unknown":"待确认"}
 const REASONS := [
+	"atomic_profile_write_failed", "world_clock_import_profile_failed", "world_clock_import_snapshot_failed",
+	"persistence_request_rejected", "writer_reentrant_barrier",
 	"unsupported_relic_roll_contract", "relic_recovery_backup_mismatch", "relic_recovery_source_changed", "relic_recovery_write_failed",
 	"future_save_version", "invalid_json", "profile_id_mismatch",
 	"invalid_character_identity_schema", "unsupported_character_identity_contract",
@@ -14,6 +16,9 @@ const REASONS := [
 	"invalid_legacy_profession_identity", "unknown_legacy_profession_identity",
 	"invalid_item_binding_contract", "invalid_item_binding_identity", "conflicting_item_binding_identity",
 	"invalid_skill_identity", "invalid_skill_binding_identity", "unsupported_world_state",
+	"unsupported_skill_progression_contract", "unsupported_warrior_runtime_state_contract",
+	"unsupported_taoist_main_pet_runtime_state_contract", "unsupported_taoist_main_pet_runtime_states_contract",
+	"unsupported_shared_warehouse_contract", "unsupported_legacy_warehouse_ledger_contract", "legacy_warehouse_recovery_unproven",
 	"unsupported_world_clock_snapshot", "unsupported_death_event", "invalid_world_clock_snapshot",
 	"invalid_world_clock_generation", "world_clock_generation_without_sequence", "invalid_death_event",
 	"duplicate_drop_instance", "duplicate_drop_instance_across_shared",
@@ -67,6 +72,11 @@ const FIELDS := [
 
 static func build(result: Dictionary) -> Dictionary:
 	var raw: String = str(result.get("reason", ""))
+	if raw in ["atomic_profile_write_failed", "world_clock_import_profile_failed", "world_clock_import_snapshot_failed", "shared_warehouse_identity_upgrade_failed"]:
+		var write_reason: String = str(result.get("write_failure_reason", ""))
+		if not write_reason.is_empty():
+			raw = str(result.get("validation_reason", write_reason)) if write_reason == "candidate_business_invalid" else write_reason
+			if raw.is_empty(): raw = write_reason
 	var reason := raw if raw in REASONS else "unclassified_upgrade_failure"
 	for prefix: String in ["invalid_", "missing_"]:
 		if raw.begins_with(prefix) and raw.trim_prefix(prefix) in FIELDS:

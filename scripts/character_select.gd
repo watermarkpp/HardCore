@@ -403,17 +403,54 @@ func _build_header() -> void:
 	content_root.add_child(build_fingerprint_label)
 
 
-func _build_fingerprint_text() -> String:
+func _build_fingerprint_text(build_info_path := "res://assets/generated/build_info.json") -> String:
 	var app_name := str(ProjectSettings.get_setting("application/config/name", "HardCore"))
 	if app_name.is_empty():
 		app_name = "HardCore"
-	var version := str(ProjectSettings.get_setting("application/config/version", "dev"))
-	if version.is_empty():
-		version = "dev"
-	var revision := str(ProjectSettings.get_setting("application/config/build_revision", "local"))
-	if revision.is_empty():
-		revision = "local"
-	return "%s · v%s · %s" % [app_name, version, revision.left(12)]
+	var fallback_version := str(ProjectSettings.get_setting("application/config/version", "dev"))
+	if fallback_version.is_empty():
+		fallback_version = "dev"
+	var fallback_revision := str(ProjectSettings.get_setting("application/config/build_revision", "local"))
+	if fallback_revision.is_empty():
+		fallback_revision = "local"
+	var fallback := "%s · v%s · %s" % [app_name, fallback_version, fallback_revision.left(12)]
+	if not FileAccess.file_exists(build_info_path):
+		return fallback
+	var file := FileAccess.open(build_info_path, FileAccess.READ)
+	if file == null:
+		return fallback
+	var raw := file.get_as_text()
+	file.close()
+	var parser := JSON.new()
+	if parser.parse(raw) != OK or not parser.data is Dictionary:
+		return fallback
+	var build_info: Dictionary = parser.data
+	var version_code_variant: Variant = build_info.get("version_code", null)
+	var version_name_variant: Variant = build_info.get("version_name", null)
+	var version_name := str(version_name_variant).strip_edges()
+	var git_head := str(build_info.get("git_head", "")).strip_edges().to_lower()
+	var git_short_head := str(build_info.get("git_short_head", "")).strip_edges().to_lower()
+	var hex_pattern := RegEx.new()
+	if hex_pattern.compile("^[0-9a-f]+$") != OK:
+		return fallback
+	var valid_version_code := false
+	if typeof(version_code_variant) == TYPE_INT:
+		valid_version_code = int(version_code_variant) > 0 and int(version_code_variant) <= 2147483647
+	elif typeof(version_code_variant) == TYPE_FLOAT:
+		var numeric_version_code := float(version_code_variant)
+		valid_version_code = (
+			is_finite(numeric_version_code)
+			and numeric_version_code >= 1.0
+			and numeric_version_code <= 2147483647.0
+			and numeric_version_code == floorf(numeric_version_code)
+		)
+	var valid_version_name := typeof(version_name_variant) == TYPE_STRING and not version_name.is_empty()
+	var valid_git_head := git_head.length() == 40 and hex_pattern.search(git_head) != null
+	var valid_git_short_head := git_short_head.length() >= 7 and git_short_head.length() <= 12 and hex_pattern.search(git_short_head) != null
+	var valid_short_binding := valid_git_head and valid_git_short_head and git_head.begins_with(git_short_head)
+	if not valid_version_code or not valid_version_name or not valid_short_binding:
+		return fallback
+	return "%s · v%d · %s" % [app_name, int(version_code_variant), git_short_head]
 
 
 func _build_roster_panel() -> void:

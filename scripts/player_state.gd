@@ -346,6 +346,7 @@ var _validated_profile_path := ""
 var _validated_profile_bytes := PackedByteArray()
 var _atomic_write_phases: Dictionary = {}
 var _last_json_promotion: Dictionary = {}
+var _last_atomic_write_failure: Dictionary = {}
 var _last_save_phase_profile: Dictionary = {}
 var _last_loot_batch_profile: Dictionary = {}
 var _last_death_settlement_profile: Dictionary = {}
@@ -502,7 +503,7 @@ func _startup_upgrade_sources() -> Array[String]:
 	return paths
 
 
-func _startup_upgrade_read(path: String, validator := Callable(), recover_relics := false) -> Dictionary:
+func _startup_upgrade_read(path: String, validator := Callable(), recover_relics := false, profile_candidates: Dictionary = {}) -> Dictionary:
 	if not validator.is_valid(): validator = _json_validator_for_path(path)
 	var primary := _read_json_document(path)
 	var validation := _validate_json_candidate(primary.data, validator) if bool(primary.valid) else _validation_result(false, "invalid_json")
@@ -512,12 +513,21 @@ func _startup_upgrade_read(path: String, validator := Callable(), recover_relics
 	var backup_validation := _validate_json_candidate(backup.data, validator) if bool(backup.valid) else _validation_result(false, "invalid_json")
 	if bool(backup_validation.get("terminal", false)):
 		return {"success":false, "reason":backup_validation.reason, "path":path + ".bak"}
-	if bool(validation.valid): return {"success":true, "data":primary.data, "path":path}
 	if recover_relics and bool(primary.valid):
-		var repair := SaveRelicRecovery.plan(primary.data)
+		var standardized := _startup_standardize_noncore_profile(primary.data) if path.begins_with(profile_directory + "/") else {"document":primary.data, "fields":[]}
+		if path == shared_warehouse_path and not profile_candidates.is_empty():
+			standardized = _startup_standardize_shared_ledger(primary.data, profile_candidates)
+			if bool(standardized.get("blocked", false)):
+				return {"success":false, "reason":standardized.reason, "path":path}
+		if bool(validation.valid) and standardized.fields.is_empty():
+			return {"success":true, "data":primary.data, "path":path}
+		var standardized_status := _validate_json_candidate(standardized.document, validator) if not standardized.fields.is_empty() else validation
+		var repair: Dictionary = {"document":standardized.document, "changed":false, "removed":[]}
+		if not bool(standardized_status.valid):
+			repair = SaveRelicRecovery.plan(standardized.document)
 		if bool(repair.get("blocked", false)):
 			return {"success":false, "reason":repair.reason, "path":path}
-		if bool(repair.changed):
+		if bool(repair.changed) or not standardized.fields.is_empty():
 			# Latest primary data wins. A known broken relic cannot authorize an
 			# older backup to overwrite newer progress, even if another fault also
 			# prevents the proposed repair from passing the complete validator.
@@ -526,10 +536,91 @@ func _startup_upgrade_read(path: String, validator := Callable(), recover_relics
 				return {"success":false, "reason":candidate_status.reason, "path":path}
 			return {"success":true, "data":repair.document, "path":path,
 				"recovery":{"path":path, "data":repair.document, "removed":repair.removed,
+					"normalized_fields":standardized.fields,
 					"source_sha256":FileAccess.get_sha256(path),
 					"backup_sha256":FileAccess.get_sha256(path + ".bak") if FileAccess.file_exists(path + ".bak") else ""}}
+	if bool(validation.valid): return {"success":true, "data":primary.data, "path":path}
 	if bool(backup_validation.valid): return {"success":true, "data":backup.data, "path":path}
 	return {"success":false, "reason":validation.reason, "path":path}
+
+
+func _startup_standardize_noncore_profile(document: Dictionary) -> Dictionary:
+	# Only known non-item caches are repaired at this import boundary. Original
+	# terminal/future owners are checked before planning; complete validation
+	# and immutable before-image custody are required before any promotion.
+	var candidate := document.duplicate(true)
+	var fields: Array[String] = []
+	if candidate.has("quest_states"):
+		if not candidate.quest_states is Dictionary:
+			candidate.quest_states = {}
+			fields.append("quest_states")
+		else:
+			for key: Variant in candidate.quest_states.keys():
+				if not candidate.quest_states[key] is Dictionary:
+					candidate.quest_states.erase(key)
+					if "quest_states" not in fields: fields.append("quest_states")
+	for field: String in ["skill_progression", "equip_cycle_cursor", "warrior_runtime_state",
+		"taoist_main_pet_runtime_state", "taoist_main_pet_runtime_states"]:
+		if candidate.has(field) and not candidate[field] is Dictionary:
+			candidate.erase(field)
+			fields.append(field)
+	if candidate.has("skill_progression"):
+		var progression_status := SkillProgressionServiceScript.new().load_snapshot(candidate.skill_progression)
+		var learned_status := SkillProgressionServiceScript.new().load_snapshot(candidate.get("learned_skills", {}))
+		if not bool(progression_status.success) and candidate.has("learned_skills") and bool(learned_status.success):
+			candidate.erase("skill_progression")
+			fields.append("skill_progression")
+	return {"document":candidate, "fields":fields}
+
+
+func _startup_standardize_shared_ledger(document: Dictionary, profiles: Dictionary) -> Dictionary:
+	# A legacy ledger may still refer to a private before-image after known bad
+	# relics are removed. Reconcile only that exact, archived relationship; a
+	# mismatch or unrelated manual warehouse change is never a deletion license.
+	var candidate := document.duplicate(true)
+	var fields: Array[String] = []
+	var ledger: Variant = candidate.get("legacy_migration")
+	if not ledger is Dictionary or ledger.get("contract_id") != SHARED_WAREHOUSE_MIGRATION_CONTRACT_ID or not ledger.get("sources") is Dictionary:
+		return {"document":candidate, "fields":fields}
+	var account_root := profile_directory.get_base_dir()
+	var prefix := account_root if account_root.ends_with("://") else account_root + "/"
+	var archive := account_root.path_join(SaveUpgradeBackup.DIRECTORY)
+	for id: String in profiles:
+		var profile: Dictionary = profiles[id]
+		if not profile.has("warehouse_inventory") or not ledger.sources.has(id): continue
+		var source: Variant = ledger.sources[id]
+		var normalized := _legacy_warehouse_source(profile)
+		if not source is Dictionary or not bool(normalized.ok): continue
+		var digest := _shared_digest(normalized.records)
+		if source.get("digest") == digest and source.get("occupied_count") == normalized.records.size(): continue
+		var relative := _profile_path(id).trim_prefix(prefix)
+		var original_path := archive.path_join("original").path_join(relative)
+		var manifest := _read_json_document(archive.path_join("manifest.json"))
+		var original := _read_json_document(original_path)
+		var entry: Dictionary = (manifest.data.get("files", {}) as Dictionary).get(relative, {}) if bool(manifest.valid) else {}
+		if not bool(original.valid) or manifest.data.get("contract_id") != SaveUpgradeBackup.CONTRACT or entry.get("sha256") != FileAccess.get_sha256(original_path):
+			return {"blocked":true, "reason":"legacy_warehouse_recovery_unproven"}
+		var original_status := _validate_profile_document_status(original.data, id, false)
+		if bool(original_status.get("terminal", false)):
+			return {"blocked":true, "reason":"legacy_warehouse_recovery_unproven"}
+		var raw_records: Variant = original.data.get("warehouse_inventory")
+		if not raw_records is Array or source.get("contract_id") != SHARED_WAREHOUSE_MIGRATION_CONTRACT_ID or source.get("complete") != true:
+			return {"blocked":true, "reason":"legacy_warehouse_recovery_unproven"}
+		var old_records := _occupied_records(raw_records)
+		var previous_normalized := _legacy_warehouse_source(original.data)
+		if bool(previous_normalized.ok): old_records = previous_normalized.records
+		var repair := SaveRelicRecovery.plan(original.data)
+		var removed_warehouse := false
+		for removed: Dictionary in repair.get("removed", []):
+			if str(removed.get("location", "")).begins_with("warehouse_inventory"):
+				removed_warehouse = true
+		var repaired_records := _legacy_warehouse_source(repair.get("document", {}))
+		if bool(repair.get("blocked", false)) or not removed_warehouse or not bool(repaired_records.ok) or source.get("digest") != _shared_digest(old_records) or source.get("occupied_count") != old_records.size() or digest != _shared_digest(repaired_records.records):
+			return {"blocked":true, "reason":"legacy_warehouse_recovery_unproven"}
+		source["digest"] = digest
+		source["occupied_count"] = normalized.records.size()
+		if "legacy_migration" not in fields: fields.append("legacy_migration")
+	return {"document":candidate, "fields":fields}
 
 
 func _startup_upgrade_preflight() -> Dictionary:
@@ -551,14 +642,6 @@ func _startup_upgrade_preflight() -> Dictionary:
 				var id := name.trim_suffix(".bak").trim_suffix(".json")
 				if not _valid_profile_storage_id(id): return {"success":false, "reason":"invalid_profile_id"}
 				ids[id] = true
-	var shared: Dictionary = {}
-	if FileAccess.file_exists(shared_warehouse_path) or FileAccess.file_exists(shared_warehouse_path + ".bak"):
-		var warehouse := _startup_upgrade_read(shared_warehouse_path, Callable(), true)
-		if not bool(warehouse.success): return warehouse
-		if warehouse.has("recovery"):
-			warehouse.recovery["profile_id"] = ""
-			recoveries.append(warehouse.recovery)
-		shared = warehouse.data
 	var all_profiles: Dictionary = {}
 	for id: String in ids:
 		var profile := _startup_upgrade_read(_profile_path(id), Callable(), true)
@@ -567,11 +650,21 @@ func _startup_upgrade_preflight() -> Dictionary:
 			profile.recovery["profile_id"] = id
 			recoveries.append(profile.recovery)
 		all_profiles[id] = profile.data
-		if not shared.is_empty() and not _profile_and_shared_drop_instances_are_disjoint(profile.data, shared):
-			return {"success":false, "reason":"duplicate_drop_instance_across_shared", "path":profile.path}
 		if profile.data.has("death_event_sequence"):
 			var replay := _read_world_clock_replay(profile.data)
 			if not bool(replay.get("ok", false)): return {"success":false, "reason":replay.reason, "path":profile.path}
+	# Warehouse validation and its ledger use these exact fully validated role
+	# candidates; promotion later revalidates against the repaired on-disk roles.
+	if FileAccess.file_exists(shared_warehouse_path) or FileAccess.file_exists(shared_warehouse_path + ".bak"):
+		var warehouse_validator := Callable(self, "_validate_shared_warehouse_document_status").bind(all_profiles)
+		var warehouse := _startup_upgrade_read(shared_warehouse_path, warehouse_validator, true, all_profiles)
+		if not bool(warehouse.success): return warehouse
+		for id: String in all_profiles:
+			if not _profile_and_shared_drop_instances_are_disjoint(all_profiles[id], warehouse.data):
+				return {"success":false, "reason":"duplicate_drop_instance_across_shared", "path":_profile_path(id)}
+		if warehouse.has("recovery"):
+			warehouse.recovery["profile_id"] = ""
+			recoveries.append(warehouse.recovery)
 	for legacy_path: String in [profile_directory.get_base_dir().path_join(SAVE_PATH.get_file()), profile_directory.get_base_dir().path_join(LEGACY_SAVE_PATH.get_file())]:
 		if FileAccess.file_exists(legacy_path) or FileAccess.file_exists(legacy_path + ".bak"):
 			var legacy := _startup_upgrade_read(legacy_path, Callable(self, "_validate_profile_document_status").bind("", true))
@@ -619,13 +712,13 @@ func _startup_apply_relic_recoveries(recoveries: Array, backup: RefCounted) -> D
 			{"path":recovery.path, "profile_id":recovery.profile_id, "generation":""},
 			encoded.document, _json_validator_for_path(recovery.path),
 			Callable(self, "_startup_relic_recovery_guard").bind(recovery), false, null,
-			_record_background_json_receipt, false, null, str(recovery.path) + ".tmp")
+			_record_background_json_receipt)
 		if request == null:
 			return {"success":false, "reason":"relic_recovery_write_failed", "path":recovery.path}
 		var receipt: Dictionary = _json_persistence.finish(request, true)
 		if not bool(receipt.get("success", false)):
 			return {"success":false, "reason":str(receipt.get("reason", "relic_recovery_write_failed")), "path":recovery.path}
-		report.append({"profile_id":recovery.profile_id, "removed":recovery.removed})
+		report.append({"profile_id":recovery.profile_id, "removed":recovery.removed, "normalized_fields":recovery.get("normalized_fields", [])})
 	return {"success":true, "report":report}
 
 
@@ -636,6 +729,9 @@ func _startup_upgrade_fail(reason: String, path := "") -> bool:
 		_startup_source_backup_verified = false
 	startup_save_upgrade_result = {"success":false, "reason":reason, "path":path,
 		"phase":_startup_save_upgrade_phase, "source_backup_verified":_startup_source_backup_verified}
+	if reason in ["atomic_profile_write_failed", "world_clock_import_profile_failed", "world_clock_import_snapshot_failed", "shared_warehouse_identity_upgrade_failed"]:
+		startup_save_upgrade_result["write_failure_reason"] = str(_last_atomic_write_failure.get("reason", ""))
+		startup_save_upgrade_result["validation_reason"] = str(_last_atomic_write_failure.get("validation_reason", ""))
 	return false
 
 
@@ -5235,6 +5331,9 @@ func _validate_profile_document_status(
 		return _validation_result(false, "future_save_version", true)
 	if _world_state_owner_is_unsupported(document.get("world_monster_respawn_state")):
 		return _validation_result(false, "unsupported_world_state", true)
+	var metadata_owner_status := _profile_metadata_owner_status(document)
+	if not bool(metadata_owner_status.valid):
+		return metadata_owner_status
 	var character_identity := CharacterIdentityCodec.decode(document)
 	if not bool(character_identity.success):
 		return _validation_result(false, character_identity.reason, true)
@@ -5334,6 +5433,10 @@ func _validate_profile_document_status(
 	var skill_validation := SkillProgressionServiceScript.new().load_snapshot(
 		document.get("skill_progression", document.get("learned_skills", {})))
 	if not bool(skill_validation.success):
+		if document.has("skill_progression") and document.has("learned_skills"):
+			var learned_validation := SkillProgressionServiceScript.new().load_snapshot(document.learned_skills)
+			if bool(learned_validation.success):
+				return _validation_result(false, "invalid_skill_progression")
 		return _validation_result(false, "invalid_skill_identity", true)
 	var saved_bindings: Variant = document.get("skill_button_assignments", {})
 	if saved_bindings is Dictionary and saved_bindings.get("contract_id") == SKILL_BUTTON_ASSIGNMENTS_CONTRACT_ID:
@@ -5415,12 +5518,17 @@ func _validate_profile_index_document_status(document: Dictionary) -> Dictionary
 	return _validation_result(true)
 
 
-func _validate_shared_warehouse_document_status(document: Dictionary) -> Dictionary:
+func _validate_shared_warehouse_document_status(document: Dictionary, profile_candidates: Dictionary = {}) -> Dictionary:
 	var schema_value: Variant = document.get("schema_version", null)
 	# A future aggregate owns all its children, including ones today's item
 	# codec considers corrupt. Never recover a backup over that owner.
 	if _is_integral_json_number(schema_value) and schema_value > SHARED_WAREHOUSE_SCHEMA_VERSION:
 		return _validation_result(false, "future_shared_warehouse_version", true)
+	if document.get("contract_id") is String and not document.contract_id.is_empty() and document.contract_id != SHARED_WAREHOUSE_CONTRACT_ID:
+		return _validation_result(false, "unsupported_shared_warehouse_contract", true)
+	var ledger: Variant = document.get("legacy_migration")
+	if ledger is Dictionary and ledger.get("contract_id") is String and not ledger.contract_id.is_empty() and ledger.contract_id != SHARED_WAREHOUSE_MIGRATION_CONTRACT_ID:
+		return _validation_result(false, "unsupported_legacy_warehouse_ledger_contract", true)
 	var item_document := ItemExtensionCodec.decode_document(document)
 	if item_document.status != ItemExtensionCodec.KNOWN_VALID:
 		return _validation_result(false, item_document.reason,
@@ -5432,7 +5540,7 @@ func _validate_shared_warehouse_document_status(document: Dictionary) -> Diction
 		if not _is_integral_json_number(revision_value) or int(revision_value) < 0:
 			return _validation_result(false, "invalid_shared_warehouse_revision")
 	return _validation_result(
-		_validate_shared_warehouse_document(document),
+		_validate_shared_warehouse_document(document, profile_candidates),
 		"invalid_shared_warehouse"
 	)
 
@@ -5959,7 +6067,11 @@ func _restore_json_backup(path: String, validator := Callable()) -> Dictionary:
 
 func _read_json_with_status(path: String, validator := Callable()) -> Dictionary:
 	if _startup_save_upgrade_pending and not _startup_save_upgrade_in_progress:
-		return _startup_upgrade_read(path, validator)
+		# Shared-warehouse ledger validation reads its member profiles during
+		# preflight. Use the same fully validated, read-only import candidate so
+		# a known broken noncore cache cannot make intact shared gear unreadable.
+		# finish_startup_save_upgrade still owns custody and every actual write.
+		return _startup_upgrade_read(path, validator, path.begins_with(profile_directory + "/"))
 	if not validator.is_valid():
 		validator = _json_validator_for_path(path)
 	var primary := _read_json_document(path)
@@ -5994,7 +6106,9 @@ func _read_json(path: String) -> Dictionary:
 
 
 func _write_json_atomic(path: String, data: Dictionary, preserve_known_wire := false, world_clock_identity: Dictionary = {}) -> bool:
+	_last_atomic_write_failure = {}
 	if _startup_save_upgrade_pending and not _startup_save_upgrade_in_progress:
+		_last_atomic_write_failure = {"reason":"upgrade_pending"}
 		return false
 	_atomic_write_phases = {}
 	_last_json_promotion = {}
@@ -6003,9 +6117,11 @@ func _write_json_atomic(path: String, data: Dictionary, preserve_known_wire := f
 	# normal aggregate validator still verifies their full business contract.
 	var item_document := ItemExtensionCodec.decode_document(data) if preserve_known_wire else ItemExtensionCodec.encode_document(data)
 	if item_document.status != ItemExtensionCodec.KNOWN_VALID:
+		_last_atomic_write_failure = {"reason":str(item_document.reason)}
 		return false
 	if not preserve_known_wire: data = item_document.document
 	if test_mode and _test_force_atomic_write_failure:
+		_last_atomic_write_failure = {"reason":"test_injected_atomic_write_failure"}
 		return false
 	var identity := {"path": path, "profile_id": active_profile_id, "generation": _world_clock_generation}
 	if not world_clock_identity.is_empty():
@@ -6029,11 +6145,16 @@ func _write_json_atomic(path: String, data: Dictionary, preserve_known_wire := f
 		path, identity,
 		data, _json_validator_for_path(path), Callable(), false,
 		_validated_profile_bytes if path == _validated_profile_path else null,
-		_record_background_json_receipt, false, null, path + ".tmp",
+		_record_background_json_receipt,
 	)
 	if request == null:
+		_last_atomic_write_failure = {"reason":"persistence_request_rejected"}
 		return false
-	return bool(coordinator.finish(request, true).get("success", false))
+	var receipt: Dictionary = coordinator.finish(request, true)
+	if not bool(receipt.get("success", false)):
+		_last_atomic_write_failure = {"reason":str(receipt.get("reason", "atomic_write_failed")),
+			"validation_reason":str((receipt.get("validation", {}) as Dictionary).get("reason", ""))}
+	return bool(receipt.get("success", false))
 
 
 func _promote_verified_json(path: String, temporary: String, expected_bytes: PackedByteArray, validated_previous_bytes: Variant = null) -> bool:
@@ -6232,7 +6353,7 @@ func _legacy_warehouse_source(document: Dictionary) -> Dictionary:
 	return {"ok": true, "records": records}
 
 
-func _validate_shared_warehouse_document(document: Dictionary) -> bool:
+func _validate_shared_warehouse_document(document: Dictionary, profile_candidates: Dictionary = {}) -> bool:
 	var item_document := ItemExtensionCodec.decode_document(document)
 	if item_document.status != ItemExtensionCodec.KNOWN_VALID:
 		return false
@@ -6292,7 +6413,7 @@ func _validate_shared_warehouse_document(document: Dictionary) -> bool:
 		var source_path := _profile_path(profile_id)
 		if not FileAccess.file_exists(source_path):
 			continue # deletion is allowed; the shared ledger remains authoritative.
-		var source := _read_json_with_status(source_path)
+		var source := {"success":true, "data":profile_candidates[profile_id]} if profile_candidates.has(profile_id) else _read_json_with_status(source_path)
 		if not bool(source.get("success", false)):
 			return false
 		var legacy: Variant = (source.get("data", {}) as Dictionary).get("warehouse_inventory", null)
@@ -6312,7 +6433,7 @@ func _validate_shared_warehouse_document(document: Dictionary) -> bool:
 		return false
 	for raw_profile_id: Variant in profile_ids_result.get("ids", []):
 		var profile_id := str(raw_profile_id)
-		var source := _read_json_with_status(_profile_path(profile_id))
+		var source := {"success":true, "data":profile_candidates[profile_id]} if profile_candidates.has(profile_id) else _read_json_with_status(_profile_path(profile_id))
 		if not bool(source.get("success", false)):
 			return false
 		var source_document: Dictionary = source.get("data", {})
@@ -7926,6 +8047,33 @@ func _taoist_main_pet_runtime_state_slots() -> Dictionary:
 		if not snapshots.is_empty():
 			slots[summon_id] = snapshots[0]
 	return slots
+
+
+func _profile_metadata_owner_status(document: Dictionary) -> Dictionary:
+	var owners := {
+		"skill_progression":[SkillProgressionServiceScript.STATE_CONTRACT_ID, SkillProgressionServiceScript.PREVIOUS_STATE_CONTRACT_ID, SkillProgressionServiceScript.LEGACY_STATE_CONTRACT_ID],
+		"warrior_runtime_state":[WARRIOR_RUNTIME_CONTRACT_ID],
+		"taoist_main_pet_runtime_state":[TAOIST_MAIN_PET_PERSISTENCE_CONTRACT_ID],
+		"taoist_main_pet_runtime_states":[TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID, "skills.summon.persistence.runtime_states.v1", "skills.taoist_main_pet.v2"],
+	}
+	for field: String in owners:
+		var value: Variant = document.get(field)
+		if not value is Dictionary or not value.has("contract_id"): continue
+		var contract: Variant = value.contract_id
+		if not contract is String or (not contract.is_empty() and contract not in owners[field]):
+			return _validation_result(false, "unsupported_" + field + "_contract", true)
+	var pets: Variant = document.get("taoist_main_pet_runtime_states")
+	if pets is Dictionary:
+		for raw_container: Variant in [pets.get("groups"), pets.get("slots")]:
+			if not raw_container is Dictionary: continue
+			for raw_entries: Variant in raw_container.values():
+				var entries: Array = raw_entries if raw_entries is Array else [raw_entries]
+				for entry: Variant in entries:
+					if not entry is Dictionary or not entry.has("contract_id"): continue
+					var contract: Variant = entry.contract_id
+					if not contract is String or (not contract.is_empty() and contract != TAOIST_MAIN_PET_PERSISTENCE_CONTRACT_ID):
+						return _validation_result(false, "unsupported_taoist_main_pet_runtime_states_contract", true)
+	return _validation_result(true)
 
 
 func _normalized_taoist_main_pet_runtime_states(states: Variant) -> Dictionary:
