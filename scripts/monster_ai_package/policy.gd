@@ -109,9 +109,8 @@ static func core_crossed(a: Vector2, b: Vector2, c: Vector2, ra: float, rb: floa
 	# occupancy authority for monsters, players, and summons.
 	var r := maxf(0.0, ra + rb)
 	var before := a.distance_squared_to(c)
-	var after := b.distance_squared_to(c)
 	if before < r * r:
 		# Endpoints alone would allow moving through the centre and out again.
-		return (b - a).dot(a - c) < -EPS or after < before - EPS
+		return (b - a).dot(a - c) < -EPS or b.distance_squared_to(c) < before - EPS
 	var q := Geometry2D.get_closest_point_to_segment(c, a, b)
 	return q.distance_squared_to(c) < r * r - EPS

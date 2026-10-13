@@ -1,9 +1,4 @@
-2026-10-12 两条发布线与掉落槽修订：旧游戏维护树codex/milestone-v113-frozen已更新至bd73a256493bf41f9c75c19998c84792f74e2262并重新冻结，52953 tracked只读、worktree锁保持；原113标签/APK/完整留档保留。宝箱226–234、蜜蜂144、角蝇126普通6槽，未知暗殿39/57/74/77/90/121/137/142精英9槽；暗之牛魔王225暂不处理。主树codex/integration转为独立新游戏，包名com.personal.hardcore.next、名称HardCore 新篇、PC存档目录HardCoreNext，不读取或迁移旧游戏存档；旧线保留com.personal.mafaoffline和签名/旧存档兼容，后续版本114/115延续。Python3项及19编号正式掉落专项PASS；两个旧回归在修复前后同样FAIL并保留证据，不作全量PASS。未重新封装APK，DEVICE TEST: NOT_RUN。入口docs/milestones/v113/README.md、outputs/special_monster_loot_slots_20261012/。布局核验UTC 2026-10-12T13:25:52.196716+00:00。
-
 # HardCore Current Status
-
-2026-10-12 v113里程碑冻结：源码c178071165078f386ec1e57012c1ce56d0bced95已保留在codex/milestone-v113-frozen及标签milestone-hardcore-1.0-v113，远端已同步。资料片继续在主树codex/integration开发；后续文档提交不改变113打包源。冻结工作树C:\Users\Administrator\.codex\worktrees\milestone-v113-frozen\HardCore，完整留档C:\Users\Administrator\Downloads\HardCore_v113_里程碑留档_20261012；52952项源码只读、worktree锁、逐文件指纹与完整历史bundle。两条旧远端审查分支转为archive/codex标签保全独有历史，历史发布标签保留。主树原index/无关dirty及真实存档保留。留档入口docs/milestones/v113/README.md；APK SHA256 57eac296ef083c9dbc1a736aec6e3ddde40055d3705feb44aa02d667d46c959e。DEVICE TEST: NOT_RUN，同学真实存档MISSING。布局核验UTC 2026-10-12T07:36:42.920482+00:00。
-
 
 2026-10-09 v108手机反馈修复：冷怪目标获取从optional/300ms队列移到必要事件，同movement30/30、火墙正伤害30/30；真实异步死亡成功回执补PERSISTING→SETTLING，零掉落卡死闭合；掉落小quantum在原wall预算内推进，32死亡53工作帧完成/原240帧期限/RNG及上限保持；菜单层内退出失败反馈及Footer互斥、启动无有效配置默认音量修复。必要原生专项PASS和历史FAIL逐项记录在 docs/review/v108_runtime_bug_repair_20261009/CURRENT_RESULT.md。原HEAD及index保持，已有全部升级内容保留；远端咨询分支codex/v108-runtime-bug-review-20261009。本轮没有新APK、没有修复后手机验收（DEVICE TEST: NOT_RUN），不能用原108封装PASS覆盖用户反馈。用户指定项目助手工作线程已派发，本轮首次返回模型限额，未获得外部分析。
 

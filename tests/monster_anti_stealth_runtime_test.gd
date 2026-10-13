@@ -24,6 +24,8 @@ const MOVEMENT_DELTA_EPSILON_GU := 0.000001
 
 var index := SpatialIndex.new()
 var _next_actor_runtime_id := 0
+var current_map_id := 1
+var _zone_generation := 1
 
 
 func _ready() -> void:
@@ -34,12 +36,16 @@ func _run() -> void:
 	var previous_test_mode := PlayerState.test_mode
 	PlayerState.test_mode = false
 	PlayerState.reset_progress()
+	# Existing-target stealth tracking is independent of optional owner timing.
+	EnemyActor.configure_owner_optional_budget_for_test(false)
+	EnemyActor.configure_owner_decision_interval_for_test(0)
 
 	var player := PlayerCharacter.new()
 	player.name = "AntiStealthRuntimePlayer"
 	player.process_mode = Node.PROCESS_MODE_DISABLED
 	player.set_physics_process(false)
 	add_child(player)
+	player.set_meta("runtime_map_id", current_map_id)
 	await get_tree().process_frame
 	player.max_hp = 1000
 	player.current_hp = player.max_hp
@@ -183,6 +189,7 @@ func _make_enemy(
 	)
 	enemy.configure_terrain_navigation_context(OpenTerrainFixture.build(1))
 	enemy.configure_spatial_index(index, _next_actor_runtime_id)
+	enemy.set_meta("zone_generation", _zone_generation)
 	index.register(
 		_next_actor_runtime_id,
 		1,
@@ -198,11 +205,18 @@ func _make_enemy(
 	enemy._pending_attack_target = null
 	enemy._pending_attack_damage = 0
 	enemy._pending_attack_release_record = {}
-	# M02A setup keeps the current target null. After the fixture has established
-	# its final Ground-GU positions, explicitly drive the production first-search
-	# API without changing the runtime retarget cadence.
+	# Acquire while visible, then restore stealth before testing existing-target
+	# tracking. A cold actor cannot passively acquire an already hidden player.
 	enemy.target = null
 	enemy._threat_table.clear()
+	var saved_stealth_time := player.stealth_time
+	var saved_stealth_override := player._stealth_break_override
+	player.stealth_time = 0.0
+	player._stealth_break_override = true
+	var acquired := enemy.request_passive_target_wakeup(player, current_map_id, _zone_generation)
+	player.stealth_time = saved_stealth_time
+	player._stealth_break_override = saved_stealth_override
+	assert(acquired, "fixture production passive wake failed")
 	enemy._retarget_timer = 0.0
 	enemy._retarget(0.0)
 	assert(enemy.target == player, "fixture failed explicit first target acquisition")

@@ -17,7 +17,6 @@ Set-StrictMode -Version 2.0
 
 $ProjectRoot = Split-Path $PSScriptRoot -Parent
 $ProjectRoot = (Resolve-Path -LiteralPath $ProjectRoot).Path
-. (Join-Path $PSScriptRoot 'android_release_identity.ps1')
 
 if ([string]::IsNullOrWhiteSpace($OutputApk)) {
     $OutputApk = Join-Path $ProjectRoot "outputs\hardcore\HardCore-candidate-debug.apk"
@@ -177,9 +176,6 @@ if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($ExportPresetText)) {
 if ($ExportPresetText -notmatch '(?m)^gradle_build/custom_theme_attributes=\{') {
     throw "Build commit Android preset must use a Dictionary for gradle_build/custom_theme_attributes."
 }
-$ReleaseIdentity = Read-AndroidReleaseIdentityFromExportPreset -Text $ExportPresetText
-$ExpectedPackage = $ReleaseIdentity.Package
-$ExpectedLabel = $ReleaseIdentity.Label
 foreach ($RequiredSplashAttribute in @(
     '"[splash]android:windowSplashScreenBackground": "#000000"',
     '"[splash]windowSplashScreenBackground": "#000000"',
@@ -259,8 +255,6 @@ Write-Output "STAGE=$StagePath"
 Write-Output "OUTPUT_APK=$ResolvedOutputApk"
 Write-Output "BASELINE_APK=$BaselineApkPath"
 Write-Output "EXPECTED_VERSION_CODE=$ExpectedVersionCode"
-Write-Output "EXPECTED_PACKAGE=$ExpectedPackage"
-Write-Output "EXPECTED_LABEL=$ExpectedLabel"
 if (-not [string]::IsNullOrWhiteSpace($ExpectedVersionName)) {
     Write-Output "EXPECTED_VERSION_NAME=$ExpectedVersionName"
 }
@@ -567,9 +561,7 @@ try {
             param($ApkPath, $Commit)
             & (Join-Path $ProjectRoot 'tools\verify_android_build.ps1') -ApkPath $ApkPath -AndroidRoot $AndroidRoot `
                 -BaselineApkPath $BaselineApkPath -ExpectedVersionCode $ExpectedVersionCode `
-                -ExpectedVersionName $ExpectedVersionName -ExpectedCommit $Commit `
-                -ExpectedPackage $ExpectedPackage -ExpectedLabel $ExpectedLabel `
-                -AllowNewPackageInstall:($ExpectedPackage -cne 'com.personal.mafaoffline')
+                -ExpectedVersionName $ExpectedVersionName -ExpectedCommit $Commit
             if ($LASTEXITCODE -ne 0) { throw "Isolated Android APK verification failed." }
         }
         $FinalExport = Invoke-TwoPassAndroidCodeExport -StageRoot $StageProjectPath -GodotConsole $RealEngineExe `
@@ -605,10 +597,7 @@ try {
         -BaselineApkPath $BaselineApkPath `
         -ExpectedVersionCode $ExpectedVersionCode `
         -ExpectedVersionName $ExpectedVersionName `
-        -ExpectedCommit $ResolvedCommit `
-        -ExpectedPackage $ExpectedPackage `
-        -ExpectedLabel $ExpectedLabel `
-        -AllowNewPackageInstall:($ExpectedPackage -cne 'com.personal.mafaoffline')
+        -ExpectedCommit $ResolvedCommit
     if ($LASTEXITCODE -ne 0) {
         throw "Isolated Android APK verification failed."
     }

@@ -6,7 +6,7 @@ func _ready() -> void:
 
 
 func _run() -> void:
-	assert(ProjectSettings.get_setting("application/config/name") == "HardCore 新篇")
+	assert(ProjectSettings.get_setting("application/config/name") == "HardCore")
 	assert(ProjectSettings.get_setting("application/run/main_scene") == "res://scenes/startup_loading.tscn")
 	assert(ProjectSettings.get_setting("application/config/icon") == "res://assets/branding/game_icon.png")
 	assert(ProjectSettings.get_setting("application/boot_splash/image", "") == "res://assets/branding/hardcore_demonic_startup_1598x720_v1.png")
@@ -152,8 +152,8 @@ func _run() -> void:
 	assert(export_preset.contains("\"[splash]android:windowSplashScreenBrandingImage\": \"@null\""), "Android splash branding image must be disabled")
 	assert(export_preset.contains("\"[splash]android:windowSplashScreenBackground\": \"#000000\""), "Android splash background must match BrandIntro's first black frame")
 	assert(export_preset.contains("\"[splash]windowSplashScreenBackground\": \"#000000\""), "AndroidX splash background must match BrandIntro's first black frame")
-	assert(export_preset.contains("package/name=\"HardCore 新篇\""))
-	assert(export_preset.contains("package/unique_name=\"com.personal.hardcore.next\""))
+	assert(export_preset.contains("package/name=\"HardCore\""))
+	assert(export_preset.contains("package/unique_name=\"com.personal.mafaoffline\""))
 	var intro: Control = load("res://scenes/brand_intro.tscn").instantiate()
 	intro.auto_advance = false
 	add_child(intro)

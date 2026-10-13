@@ -157,13 +157,17 @@ static func point_world(snapshot: Dictionary, screen_position_px: Vector2) -> bo
 static func actor_world(snapshot: Dictionary, center_px: Vector2, offsets_px: PackedVector2Array) -> bool:
 	if not snapshot.has("poly_index") or not center_px.is_finite() or offsets_px.is_empty():
 		return true
+	# Preserve rejection before reading design_size for an invalid first point.
+	if not offsets_px[0].is_finite():
+		return true
 	var footprint := PackedVector2Array()
 	var max_offset := 0.0
+	var map_center := (Vector2(snapshot.design_size) - Vector2.ONE) * 0.5
 	for offset: Vector2 in offsets_px:
 		if not offset.is_finite():
 			return true
 		max_offset = maxf(max_offset, offset.length_squared())
-		footprint.append(Coord.screen_position_px_to_ground_position_gu(center_px + offset, snapshot.design_size))
+		footprint.append(map_center + Coord.screen_delta_px_to_ground_delta_gu(center_px + offset))
 	var index: Index = snapshot.poly_index
 	if max_offset <= Geo.EPS * Geo.EPS:
 		return index.point_blocked(footprint[0])

@@ -1,5 +1,5 @@
 {
-  "build_sha256": "ae447e948846e54ac58d4e4daeb626735014eb70e592a000050703a1a20cb56d",
+  "build_sha256": "0511b835c2b029c9025557325205bf370782a91f1427f7817f90f905b28c8a19",
   "collision": {
     "authored_polygons_ground_gu": [
       {
@@ -504,9 +504,29 @@
     "coordinate_contract_id": "hc.map.polygon_ground_gu.v1",
     "ground_coordinate_contract_id": "isometric_cell_center_64x32_v2",
     "navigation": {
-      "canonical_catalog_sha256": "e801fc9dfe9bfa920376872f6ac4ff735073a27a8b5eb05cc922e4ecb19d3099",
+      "body_inventory_sha256": "c429bf1e622f2f611da3154b57884a81a71235faf279128b4299ea27cb5c9f1a",
+      "canonical_catalog_sha256": "a46aca4209b3abc0f3f2cd5365b274605cd07886060706e14ef3e984aad8880a",
       "clearance_gu": 0.025,
       "contract_id": "hc.polygon_nav_faces.v1",
+      "navigation_update_binding": {
+        "authoring_binding": {
+          "authoring_sha256": "c41945e17477dcd4af6a5bca95b9f451e1611e9dfd5cfea2a2dc55c8c517b6bc",
+          "contract_id": "mse.map.runtime.candidate_binding.v1",
+          "document_revision": 11.0,
+          "document_sha256": "be72efe79c1dd711b66f13a3a438fa752086f9b86724afa00cf9a17f8a68d396",
+          "ground_manifest_sha256": "1e3f972cff1a29918466364c2a3f74bd6d43de009be19a8dff464ce058acf4b5",
+          "ground_state_sha256": "88549bac041136217a3ddc9c45ac254ecfcb2824c3194e09c73b1fa10a2b6e51",
+          "map_key": "hidden_hellfire",
+          "runtime_map_id": 918002.0
+        },
+        "authoring_document_sha256": "20c00bd63ad7fc9438f9ce48f16f2d7d1e83b972dcb6b5e3eac4d44a485b2dcc",
+        "baseline_build_sha256": "ae447e948846e54ac58d4e4daeb626735014eb70e592a000050703a1a20cb56d",
+        "baseline_runtime_sha256": "4c51a32e7cb57e8375fc3ed2aeea2eb817b46604598743275554b71380bca08a",
+        "collision_geometry_sha256": "2ad0a54f25a24dcc70366db1dc08420266635531636f83744627de0d19325323",
+        "contract_id": "mse.map.runtime.navigation_update_binding.v1",
+        "navigation_payload_sha256": "f2d6eee3ea8d1e65899dd663180c8edfe29bf3d940f45ba8087b87da0ff31f96",
+        "non_navigation_sha256": "0dd8f64165dbc433f61ebda14db5aecf032d05c654ff5035fe50223339b45114"
+      },
       "profiles": [
         {
           "faces": [
@@ -1673,7 +1693,117 @@
               1.5552978515625
             ]
           ]
+        },
+        {
+          "faces": [
+            [
+              0.0,
+              1.0,
+              2.0
+            ],
+            [
+              0.0,
+              2.0,
+              3.0
+            ],
+            [
+              3.0,
+              4.0,
+              5.0
+            ],
+            [
+              3.0,
+              5.0,
+              6.0
+            ],
+            [
+              0.0,
+              3.0,
+              6.0
+            ],
+            [
+              6.0,
+              7.0,
+              8.0
+            ],
+            [
+              6.0,
+              8.0,
+              9.0
+            ],
+            [
+              0.0,
+              6.0,
+              9.0
+            ],
+            [
+              10.0,
+              0.0,
+              9.0
+            ],
+            [
+              10.0,
+              9.0,
+              11.0
+            ]
+          ],
+          "radius_gu": 0.49999999999999994,
+          "radius_key": "ffffffffffffdf3f",
+          "vertices_ground_gu": [
+            [
+              28.4749755859375,
+              3.5250244140625
+            ],
+            [
+              30.4749755859375,
+              3.5250244140625
+            ],
+            [
+              30.4749755859375,
+              28.4749755859375
+            ],
+            [
+              28.4749755859375,
+              28.4749755859375
+            ],
+            [
+              28.4749755859375,
+              30.4749755859375
+            ],
+            [
+              3.5250244140625,
+              30.4749755859375
+            ],
+            [
+              3.5250244140625,
+              28.4749755859375
+            ],
+            [
+              1.5250244140625,
+              28.4749755859375
+            ],
+            [
+              1.5250244140625,
+              3.5250244140625
+            ],
+            [
+              3.5250244140625,
+              3.5250244140625
+            ],
+            [
+              28.4749755859375,
+              1.5250244140625
+            ],
+            [
+              3.5250244140625,
+              1.5250244140625
+            ]
+          ]
         }
+      ],
+      "required_monster_radius_keys": [
+        "cc3b7f669ea0d63f",
+        "ffffffffffffdf3f"
       ]
     },
     "physics_source_id": "published_convex_polygon_parts_gu.v1"

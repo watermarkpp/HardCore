@@ -36,6 +36,7 @@ const FORMAL_IDENTITY_PATH := "res://assets/data/map_design/map_identity_registr
 ## directory. outputs/ is gitignored and candidates are keyed by build hash.
 const CANDIDATE_ROOT := "res://outputs/map_runtime_candidates/"
 const CANDIDATE_BINDING_CONTRACT_ID := "mse.map.runtime.candidate_binding.v1"
+const NAVIGATION_UPDATE_BINDING_CONTRACT_ID := "mse.map.runtime.navigation_update_binding.v1"
 
 ## FREEZE-P0.3R test/dev seams only - all false in production.
 static var test_fail_runtime_promote := false
@@ -137,9 +138,20 @@ static func publish_runtime_release(
 			"errors": loaded.errors,
 		}
 	var runtime: Dictionary = loaded.runtime
+	if HCPPolyGeo.runtime_enabled(runtime):
+		var navigation_check := HCPPolyBuild.validate_monster_coverage(runtime)
+		if not navigation_check.ok:
+			return {"success": false, "reason": "runtime_monster_navigation_incomplete", "errors": navigation_check.errors}
 	var map_key := str(runtime.get("source", {}).get("map_id", ""))
 	if map_key.is_empty():
 		return {"success": false, "reason": "runtime_map_key_missing"}
+	if runtime.get("collision", {}).get("navigation", {}).has("navigation_update_binding"):
+		if map_key.get_file() != map_key or map_key.contains(".."):
+			return {"success": false, "reason": "navigation_map_key_invalid"}
+		var navigation_binding_check := validate_navigation_candidate_binding(runtime,
+			default_runtime_path(map_key), "res://map_editor_workspace/%s/%s.editor.json" % [map_key, map_key], registry_path)
+		if not navigation_binding_check.ok:
+			return {"success": false, "reason": navigation_binding_check.reason, "errors": navigation_binding_check.get("errors", [])}
 	var spawn_identity_errors := SpawnIdentityService.validate_runtime(
 		runtime,
 		SpawnIdentityService.requires_formal_semantic_ids(map_key)
@@ -202,6 +214,13 @@ static func publish_runtime_release(
 			"reason": str(pending_recovery.get("reason", "publish_recovery_blocked")),
 			"errors": pending_recovery.get("errors", []),
 		}
+	if runtime.get("collision", {}).get("navigation", {}).has("navigation_update_binding"):
+		# Recovery may have restored the exact old .bak after a crash between
+		# the two runtime renames. Recheck the actual primary before continuing.
+		var recovered_binding := validate_navigation_candidate_binding(runtime,
+			default_runtime_path(map_key), "res://map_editor_workspace/%s/%s.editor.json" % [map_key, map_key], registry_path)
+		if not recovered_binding.ok or bool(recovered_binding.get("recovery_pending", false)):
+			return {"success": false, "reason": recovered_binding.get("reason", "navigation_recovery_primary_still_missing"), "errors": recovered_binding.get("errors", [])}
 	var recovered_state := str(pending_recovery.get("recovered", ""))
 	if recovered_state == "completed_registry_commit" or recovered_state == "already_committed":
 		RuntimeBridge.invalidate_release_registry()
@@ -1793,6 +1812,10 @@ static func build_candidate(document: Dictionary) -> Dictionary:
 	var runtime := _compile_runtime_with_hash(document, validation, binding)
 	if runtime.is_empty():
 		return {"ok": false, "errors": ["polygon_runtime_compile_failed"]}
+	if HCPPolyGeo.runtime_enabled(runtime):
+		var navigation_check := HCPPolyBuild.validate_monster_coverage(runtime)
+		if not navigation_check.ok:
+			return navigation_check
 	var map_key := str(document.get("map_id", "unknown"))
 	var build_hash := str(runtime.get("build_sha256", ""))
 	var candidate_path := CANDIDATE_ROOT + map_key + "/" + build_hash + ".runtime.json"
@@ -1809,6 +1832,266 @@ static func build_candidate(document: Dictionary) -> Dictionary:
 		"runtime": runtime,
 		"warnings": validation.warnings,
 	}
+
+
+## Maintenance of an already approved release. The saved authoring collision
+## remains the geometry authority; every other released field is retained.
+## In particular, this must not reproject semantic rows and lose fields that
+## the formal release preparation step added (for example respawn timings).
+static func build_navigation_candidate(
+	source_document_path: String,
+	expected_source_sha256: String,
+	baseline_runtime_path: String,
+	expected_baseline_sha256: String
+) -> Dictionary:
+	if expected_source_sha256.length() != 64 or _file_sha256(source_document_path) != expected_source_sha256:
+		return _navigation_failure("navigation_authoring_source_changed")
+	if expected_baseline_sha256.length() != 64 or _file_sha256(baseline_runtime_path) != expected_baseline_sha256:
+		return _navigation_failure("navigation_baseline_changed")
+	var document := JsonCodec.decode(FileAccess.get_file_as_string(source_document_path))
+	var loaded := RuntimeMapService.load_runtime(baseline_runtime_path)
+	if not loaded.ok:
+		return _navigation_failure("navigation_baseline_invalid", loaded.errors)
+	var baseline: Dictionary = loaded.runtime
+	var geometry := _navigation_authoring_geometry_check(document, baseline)
+	if not geometry.ok:
+		return geometry
+	var released := _navigation_release_check(baseline, expected_baseline_sha256, DEFAULT_RELEASE_REGISTRY_PATH)
+	if not released.ok:
+		return released
+	var authoring_binding := document_binding(document)
+	for field: String in ["ground_manifest_sha256", "ground_state_sha256"]:
+		if str(authoring_binding.get(field, "")).length() != 64:
+			return _navigation_failure("navigation_authoring_ground_binding_missing", [field])
+	# No approval stamp or ground initialization: these inputs are read only.
+	var baked := HCPPolyBuild.build(document)
+	if not baked.ok:
+		return _navigation_failure("navigation_polygon_build_failed", baked.get("errors", []))
+	if not _navigation_equal(_navigation_geometry(baked.collision), _navigation_geometry(baseline.collision)):
+		return _navigation_failure("navigation_authoring_collision_mismatch", ["compiled_collision_without_navigation"])
+	var runtime := _navigation_preserved_runtime(baseline)
+	runtime.collision.navigation = baked.collision.navigation.duplicate(true)
+	var navigation_binding := {
+		"contract_id": NAVIGATION_UPDATE_BINDING_CONTRACT_ID,
+		"baseline_runtime_sha256": expected_baseline_sha256,
+		"baseline_build_sha256": str(baseline.build_sha256),
+		"authoring_document_sha256": expected_source_sha256,
+		"authoring_binding": authoring_binding,
+		"collision_geometry_sha256": _navigation_fingerprint({"design": baseline.design, "collision": _navigation_geometry(baseline.collision)}),
+		"non_navigation_sha256": _navigation_fingerprint(_navigation_preserved_runtime(baseline)),
+		"navigation_payload_sha256": _navigation_fingerprint(runtime.collision.navigation),
+	}
+	runtime.collision.navigation["navigation_update_binding"] = navigation_binding
+	runtime = JsonCodec.decode(JsonCodec.encode(runtime))
+	runtime.build_sha256 = ""
+	runtime.build_sha256 = _sha256(JsonCodec.encode(runtime))
+	var coverage := HCPPolyBuild.validate_monster_coverage(runtime)
+	if not coverage.ok:
+		return _navigation_failure("navigation_monster_coverage_invalid", coverage.errors)
+	var binding_check := validate_navigation_candidate_binding(runtime, baseline_runtime_path, source_document_path)
+	if not binding_check.ok:
+		return binding_check
+	var map_key := str(runtime.source.map_id)
+	var candidate_path := CANDIDATE_ROOT + map_key + "/" + str(runtime.build_sha256) + ".runtime.json"
+	var written := _write_atomic(candidate_path, runtime)
+	if not written.ok:
+		return written
+	# Verify actual bytes through the same checksum/polygon loader used at
+	# publication. Radius keys must survive the full-precision JSON roundtrip.
+	var verified := RuntimeMapService.load_runtime(candidate_path)
+	if not verified.ok:
+		return _navigation_failure("navigation_serialized_candidate_invalid", verified.errors)
+	coverage = HCPPolyBuild.validate_monster_coverage(verified.runtime)
+	if not coverage.ok:
+		return _navigation_failure("navigation_serialized_coverage_invalid", coverage.errors)
+	return {"ok": true, "candidate_path": candidate_path, "map_key": map_key,
+		"build_sha256": runtime.build_sha256, "runtime": verified.runtime,
+		"document_binding": baseline.source.candidate_binding.duplicate(true),
+		"navigation_update_binding": navigation_binding, "warnings": []}
+
+
+## Called again by the formal publication boundary, against the current
+## source and current released file, before any transaction writes.
+static func validate_navigation_candidate_binding(
+	runtime: Dictionary,
+	baseline_runtime_path: String,
+	source_document_path: String,
+	registry_path := DEFAULT_RELEASE_REGISTRY_PATH
+) -> Dictionary:
+	var navigation: Dictionary = runtime.get("collision", {}).get("navigation", {})
+	var binding: Dictionary = navigation.get("navigation_update_binding", {})
+	if str(binding.get("contract_id", "")) != NAVIGATION_UPDATE_BINDING_CONTRACT_ID:
+		return _navigation_failure("navigation_update_binding_missing")
+	if _file_sha256(source_document_path) != str(binding.get("authoring_document_sha256", "")) or not FileAccess.file_exists(source_document_path):
+		return _navigation_failure("navigation_authoring_source_changed")
+	var document := JsonCodec.decode(FileAccess.get_file_as_string(source_document_path))
+	if not _navigation_equal(document_binding(document), binding.get("authoring_binding", {})):
+		return _navigation_failure("navigation_authoring_binding_changed")
+	var baseline_sha := _file_sha256(baseline_runtime_path)
+	var baseline_read_path := baseline_runtime_path
+	var recovery_pending := false
+	# A crash may leave the exact candidate promoted before registry commit.
+	# Accept only that byte-identical state so the existing durable transaction
+	# can recover; unrelated newer releases still fail the baseline check.
+	var already_promoted := not baseline_sha.is_empty() and baseline_sha == _sha256(JsonCodec.encode(runtime))
+	if baseline_sha != str(binding.get("baseline_runtime_sha256", "")) and not already_promoted:
+		var pending := _navigation_pending_backup_check(runtime, baseline_runtime_path, registry_path)
+		if not pending.ok:
+			return pending
+		baseline_read_path = str(pending.backup_path)
+		baseline_sha = _file_sha256(baseline_read_path)
+		recovery_pending = true
+	var loaded := RuntimeMapService.load_runtime(baseline_read_path)
+	if not loaded.ok:
+		return _navigation_failure("navigation_baseline_invalid", loaded.errors)
+	var baseline: Dictionary = loaded.runtime
+	if not already_promoted and str(baseline.build_sha256) != str(binding.get("baseline_build_sha256", "")):
+		return _navigation_failure("navigation_baseline_build_changed")
+	var geometry := _navigation_authoring_geometry_check(document, baseline)
+	if not geometry.ok:
+		return geometry
+	if not _navigation_equal(_navigation_preserved_runtime(runtime), _navigation_preserved_runtime(baseline)):
+		return _navigation_failure("navigation_non_navigation_changed")
+	var expected := {
+		"collision_geometry_sha256": _navigation_fingerprint({"design": baseline.design, "collision": _navigation_geometry(baseline.collision)}),
+		"non_navigation_sha256": _navigation_fingerprint(_navigation_preserved_runtime(baseline)),
+		"navigation_payload_sha256": _navigation_fingerprint(_navigation_payload(navigation)),
+	}
+	for field: String in expected:
+		if str(binding.get(field, "")) != str(expected[field]):
+			return _navigation_failure("navigation_provenance_fingerprint_mismatch", [field])
+	if not already_promoted:
+		var released := _navigation_release_check(baseline, baseline_sha, registry_path,
+			baseline_read_path if recovery_pending else "")
+		if not released.ok:
+			return released
+	return {"ok": true, "already_promoted": already_promoted, "recovery_pending": recovery_pending}
+
+
+## Read-only admission of exactly the prepared transaction's rename gap.
+## This never restores a file: the existing durable recovery owns all writes.
+static func _navigation_pending_backup_check(runtime: Dictionary, formal_path: String, registry_path: String) -> Dictionary:
+	var map_key := str(runtime.get("source", {}).get("map_id", ""))
+	var map_id := int(runtime.get("source", {}).get("runtime_map_id", -1))
+	var canonical_formal := _absolute_path(default_runtime_path(map_key))
+	if _absolute_path(formal_path) != canonical_formal or FileAccess.file_exists(canonical_formal):
+		return _navigation_failure("navigation_baseline_changed")
+	var intent_path := _publish_intent_path(registry_path)
+	if not FileAccess.file_exists(intent_path) or not FileAccess.file_exists(registry_path):
+		return _navigation_failure("navigation_baseline_changed")
+	var intent := JsonCodec.decode(FileAccess.get_file_as_string(intent_path))
+	var binding: Dictionary = runtime.collision.navigation.navigation_update_binding
+	var expected := {
+		"schema": "hardcore.runtime_release_intent.v1", "phase": "prepared",
+		"formal_path": canonical_formal, "registry_path": _absolute_path(registry_path),
+		"runtime_map_id": map_id, "map_key": map_key, "old_runtime_exists": true,
+		"old_runtime_file_sha256": str(binding.get("baseline_runtime_sha256", "")),
+		"old_runtime_approved_build_sha256": str(binding.get("baseline_build_sha256", "")),
+		"new_approved_build_sha256": str(runtime.get("build_sha256", "")),
+		"new_runtime_file_sha256": _sha256(JsonCodec.encode(runtime)),
+	}
+	for field: String in expected:
+		if intent.get(field, null) != expected[field]:
+			return _navigation_failure("navigation_recovery_intent_mismatch", [field])
+	var backup := canonical_formal + ".bak"
+	if str(expected.old_runtime_file_sha256).length() != 64 or _file_sha256(backup) != str(expected.old_runtime_file_sha256):
+		return _navigation_failure("navigation_recovery_backup_mismatch")
+	if _file_sha256(canonical_formal + ".publish_tmp") != str(expected.new_runtime_file_sha256):
+		return _navigation_failure("navigation_recovery_temp_mismatch")
+	var old_text := str(intent.get("old_registry_text", ""))
+	var new_text := str(intent.get("new_registry_text", ""))
+	if old_text.is_empty() or new_text.is_empty() or _sha256(old_text) != str(intent.get("old_registry_sha256", "")) or _file_sha256(registry_path) != _sha256(old_text) or _sha256(new_text) != str(intent.get("new_registry_sha256", "")):
+		return _navigation_failure("navigation_recovery_registry_mismatch")
+	var old_registry := JsonCodec.decode(old_text)
+	var new_registry := JsonCodec.decode(new_text)
+	if not RuntimeBridge.validate_release_registry(old_registry).is_empty() or not RuntimeBridge.validate_release_registry(new_registry).is_empty():
+		return _navigation_failure("navigation_recovery_registry_invalid")
+	var old_target_ok := false
+	var new_target_ok := false
+	for row: Dictionary in old_registry.maps:
+		if int(row.get("runtime_map_id", -1)) == map_id and str(row.get("map_key", "")) == map_key and _absolute_path(str(row.get("runtime_path", ""))) == canonical_formal and str(row.get("release_state", "")) == "implemented_playable" and str(row.get("approved_build_sha256", "")) == str(expected.old_runtime_approved_build_sha256) and int(row.get("approval_revision", -1)) == int(intent.get("previous_approval_revision", -2)):
+			old_target_ok = true
+	for row: Dictionary in new_registry.maps:
+		if int(row.get("runtime_map_id", -1)) == map_id and str(row.get("map_key", "")) == map_key and _absolute_path(str(row.get("runtime_path", ""))) == canonical_formal and str(row.get("release_state", "")) == "implemented_playable" and str(row.get("approved_build_sha256", "")) == str(expected.new_approved_build_sha256) and int(row.get("approval_revision", -1)) == int(intent.get("previous_approval_revision", -2)) + 1:
+			new_target_ok = true
+	if not old_target_ok or not new_target_ok:
+		return _navigation_failure("navigation_recovery_registry_target_mismatch")
+	return {"ok": true, "backup_path": backup}
+
+
+static func _navigation_authoring_geometry_check(document: Dictionary, baseline: Dictionary) -> Dictionary:
+	var errors := MapEditorTypes.validate_document(document)
+	if not errors.is_empty() or MapEditorTypes.upgrade_document(document) != document:
+		return _navigation_failure("navigation_authoring_document_invalid", errors)
+	var map_key := str(document.get("map_id", ""))
+	if map_key.is_empty() or map_key.get_file() != map_key or map_key.contains(".."):
+		return _navigation_failure("navigation_map_key_invalid")
+	if map_key != str(baseline.get("source", {}).get("map_id", "")) or int(document.get("runtime_map_id", -1)) != int(baseline.get("source", {}).get("runtime_map_id", -2)):
+		return _navigation_failure("navigation_source_identity_mismatch")
+	if not HCPPolyGeo.enabled(document) or not HCPPolyGeo.runtime_enabled(baseline):
+		return _navigation_failure("navigation_polygon_contract_required")
+	var prepared := HCPPolyAuthor.prepare(document)
+	if not prepared.ok:
+		return _navigation_failure("navigation_authoring_collision_invalid", prepared.get("errors", []))
+	var expected := {"design": document.design, "entries": prepared.entries, "parts": prepared.parts}
+	var observed := {"design": baseline.get("design", {}),
+		"entries": baseline.get("collision", {}).get("authored_polygons_ground_gu", []),
+		"parts": baseline.get("collision", {}).get("convex_parts_ground_gu", [])}
+	if not _navigation_equal(expected, observed):
+		return _navigation_failure("navigation_authoring_collision_mismatch", ["saved_design_or_authored_polygons_or_convex_parts"])
+	return {"ok": true}
+
+
+static func _navigation_release_check(baseline: Dictionary, baseline_sha: String, registry_path: String, verified_backup_path := "") -> Dictionary:
+	# Do not use _read_registry here: its crash-recovery branch can write files.
+	var registry := JsonCodec.decode(FileAccess.get_file_as_string(registry_path))
+	var errors := RuntimeBridge.validate_release_registry(registry)
+	if not errors.is_empty():
+		return _navigation_failure("navigation_release_registry_invalid", errors)
+	var map_key := str(baseline.source.map_id)
+	var release_file := default_runtime_path(map_key)
+	if not verified_backup_path.is_empty():
+		if verified_backup_path != _absolute_path(release_file) + ".bak" or FileAccess.file_exists(release_file):
+			return _navigation_failure("navigation_recovery_backup_target_mismatch")
+		release_file = verified_backup_path
+	for row: Dictionary in registry.get("maps", []):
+		if int(row.get("runtime_map_id", -1)) != int(baseline.source.runtime_map_id):
+			continue
+		if str(row.get("map_key", "")) == map_key and str(row.get("release_state", "")) == "implemented_playable" and str(row.get("approved_build_sha256", "")) == str(baseline.build_sha256) and str(row.get("runtime_path", "")) == default_runtime_path(map_key) and _file_sha256(release_file) == baseline_sha:
+			return {"ok": true}
+	return _navigation_failure("navigation_baseline_not_current_approved_release")
+
+
+static func _navigation_geometry(collision: Dictionary) -> Dictionary:
+	var preserved := collision.duplicate(false)
+	preserved.erase("navigation")
+	return preserved.duplicate(true)
+
+
+static func _navigation_preserved_runtime(runtime: Dictionary) -> Dictionary:
+	# Exclude the potentially large graphs before deep-copying preserved data.
+	var preserved := runtime.duplicate(false)
+	preserved.erase("build_sha256")
+	preserved.collision = _navigation_geometry(runtime.collision)
+	return preserved.duplicate(true)
+
+
+static func _navigation_payload(navigation: Dictionary) -> Dictionary:
+	var payload := navigation.duplicate(false)
+	payload.erase("navigation_update_binding")
+	return payload
+
+
+static func _navigation_equal(a: Dictionary, b: Dictionary) -> bool:
+	return JsonCodec.decode(JsonCodec.encode(a)) == JsonCodec.decode(JsonCodec.encode(b))
+
+
+static func _navigation_fingerprint(value: Dictionary) -> String:
+	return _sha256(JsonCodec.encode(JsonCodec.decode(JsonCodec.encode(value))))
+
+
+static func _navigation_failure(reason: String, errors: Array = []) -> Dictionary:
+	return {"ok": false, "reason": reason, "errors": errors}
 
 
 static func build(document: Dictionary, output_path := "") -> Dictionary:
@@ -1975,6 +2258,7 @@ static func _file_sha256(path: String) -> String:
 # HC-POLY-R2 — appended integration adapter
 const HCPPolyGeo := preload("res://scripts/map_editor/polygon/poly_geometry.gd")
 const HCPPolyBuild := preload("res://scripts/map_editor/polygon/poly_build.gd")
+const HCPPolyAuthor := preload("res://scripts/map_editor/polygon/poly_authoring.gd")
 
 
 # HC-POLY-R2 — appended integration adapter

@@ -30,7 +30,7 @@
 - 业务使用登记的稳定 ID，名称只作展示；旧名称或数字只在明确导入边界精确转换一次。未知、冲突、重复身份显式失败，身份变更同步消费者、生成链、存档兼容和回归。
 - `assets/data/source_priority_policy.json` 是来源优先级总表；只有精确目标在 `primary` 被证明缺失，才按 `auxiliary_1 → auxiliary_2 → auxiliary_3` 查询并留证。难解析时修解析器；`mirror` 只验哈希，`quarantine` 不进运行时。
 - 装备属性、需求、职业／性别限制和负重以 `assets/data/equipment_attribute_master.json` 为唯一主源。
-- 正式品牌为 `HardCore`。旧游戏维护线（当前 `codex/milestone-v113-frozen`）使用兼容包 ID `com.personal.mafaoffline`，后续114/115保留原签名与旧存档兼容；主树 `codex/integration` 为独立新游戏，使用 `com.personal.hardcore.next` 和独立应用数据，不读取或迁移旧游戏存档，不承担旧游戏存档兼容约束。两条线不得混包或自动互相合入玩法升级。
+- 正式品牌为 `HardCore`；保留兼容包 ID `com.personal.mafaoffline`。新增玩家文案不用旧品牌，不为改名破坏安装或存档兼容。
 
 ## 4. 测试与性能证据
 

@@ -30,21 +30,6 @@ class AndroidBuildWiring(unittest.TestCase):
         self.assertIn('inject_sources_resign.ps1', export)
         self.assertLess(export.index('inject_sources_resign.ps1'), export.index('apk_sha256='))
 
-    def test_build_reads_release_identity_and_passes_it_to_every_verifier(self):
-        source = (ROOT / 'tools/build_android_isolated.ps1').read_text(encoding='utf-8-sig')
-        self.assertIn("Read-AndroidReleaseIdentityFromExportPreset -Text $ExportPresetText", source)
-        self.assertGreaterEqual(source.count('-ExpectedPackage $ExpectedPackage'), 2)
-        self.assertGreaterEqual(source.count('-ExpectedLabel $ExpectedLabel'), 2)
-        self.assertGreaterEqual(source.count('-AllowNewPackageInstall:($ExpectedPackage -cne'), 2)
-
-    def test_verifier_keeps_legacy_defaults_but_accepts_explicit_new_identity(self):
-        source = (ROOT / 'tools/verify_android_build.ps1').read_text(encoding='utf-8-sig')
-        self.assertIn("Resolve-AndroidVerifierIdentityArguments", source)
-        self.assertIn("-ExpectedPackage $ExpectedPackage", source)
-        self.assertIn("-ExpectedLabel $ExpectedLabel", source)
-        self.assertIn("-AllowNewPackageInstall", source)
-        self.assertIn("Test-AndroidReleaseIdentityTransition", source)
-
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

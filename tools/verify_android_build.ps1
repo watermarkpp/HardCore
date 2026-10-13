@@ -4,10 +4,7 @@ param(
     [string]$BaselineApkPath = "",
     [int]$ExpectedVersionCode = 0,
     [string]$ExpectedVersionName = "",
-    [string]$ExpectedCommit = "",
-    [string]$ExpectedPackage = "",
-    [string]$ExpectedLabel = "",
-    [switch]$AllowNewPackageInstall
+    [string]$ExpectedCommit = ""
 )
 
 $ErrorActionPreference = "Stop"
@@ -48,10 +45,6 @@ function Read-AndroidToolUtf8 {
 }
 
 $ProjectRoot = Split-Path $PSScriptRoot -Parent
-. (Join-Path $PSScriptRoot 'android_release_identity.ps1')
-$ExpectedIdentity = Resolve-AndroidVerifierIdentityArguments -ExpectedPackage $ExpectedPackage -ExpectedLabel $ExpectedLabel
-$ExpectedPackage = $ExpectedIdentity.ExpectedPackage
-$ExpectedLabel = $ExpectedIdentity.ExpectedLabel
 
 if ([string]::IsNullOrWhiteSpace($ApkPath)) {
     $ApkPath = Join-Path $ProjectRoot "outputs\hardcore\HardCore-candidate-debug.apk"
@@ -100,29 +93,18 @@ $BaselineBadging = Read-AndroidToolUtf8 -Executable $Aapt -Arguments @('dump','b
 $IdentityPattern = "package: name='([^']+)' versionCode='([0-9]+)'"
 $CandidateIdentity = [regex]::Match($Badging, $IdentityPattern)
 $BaselineIdentity = [regex]::Match($BaselineBadging, $IdentityPattern)
-if (-not $CandidateIdentity.Success -or -not $BaselineIdentity.Success) {
-    throw 'APK badging is missing package identity or version code.'
+if (-not $CandidateIdentity.Success -or -not $BaselineIdentity.Success -or
+    $CandidateIdentity.Groups[1].Value -cne $BaselineIdentity.Groups[1].Value -or
+    [long]$CandidateIdentity.Groups[2].Value -le [long]$BaselineIdentity.Groups[2].Value) {
+    throw 'Direct update requires the same package identity and a higher version code.'
 }
-$null = Test-AndroidReleaseIdentityTransition `
-    -CandidatePackage $CandidateIdentity.Groups[1].Value `
-    -BaselinePackage $BaselineIdentity.Groups[1].Value `
-    -CandidateVersionCode ([long]$CandidateIdentity.Groups[2].Value) `
-    -BaselineVersionCode ([long]$BaselineIdentity.Groups[2].Value) `
-    -AllowNewPackageInstall:$AllowNewPackageInstall
-if ($CandidateIdentity.Groups[1].Value -cne $ExpectedPackage) {
-    throw "APK package identity does not match expected package: $ExpectedPackage"
-}
-if ($CandidateIdentity.Groups[1].Value -ceq $BaselineIdentity.Groups[1].Value) {
-    Write-Output "ANDROID_DIRECT_UPDATE_IDENTITY_PASS certificate_sha256=$($CandidateCertificates -join ',')"
-} else {
-    Write-Output "ANDROID_NEW_INSTALL_IDENTITY_PASS package=$ExpectedPackage certificate_sha256=$($CandidateCertificates -join ',')"
-}
+Write-Output "ANDROID_DIRECT_UPDATE_IDENTITY_PASS certificate_sha256=$($CandidateCertificates -join ',')"
 $Manifest = Read-AndroidToolUtf8 -Executable $Aapt -Arguments @('dump','xmltree',([char]34+$ApkPath+[char]34),'AndroidManifest.xml')
 $ExpectedBadging = @(
-    "name='$ExpectedPackage'",
+    "name='com.personal.mafaoffline'",
     "sdkVersion:'24'",
     "targetSdkVersion:'36'",
-    "application-label:'$ExpectedLabel'",
+    "application-label:'HardCore'",
     "native-code: 'arm64-v8a'"
 )
 if ($ExpectedVersionCode -gt 0) {

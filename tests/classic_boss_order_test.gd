@@ -7,6 +7,8 @@ const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 const OpenTerrainFixture := preload(
 	"res://tests/helpers/monster_open_terrain_test_fixture.gd"
 )
+var current_map_id := 1
+var _zone_generation := 1
 
 
 func _test_ground_to_screen(value: Vector2) -> Vector2:
@@ -19,6 +21,9 @@ func _ready() -> void:
 func _run() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
+	# This fixture checks authored boss stages rather than optional scheduling.
+	EnemyActor.configure_owner_optional_budget_for_test(false)
+	EnemyActor.configure_owner_decision_interval_for_test(0)
 	var rules: Dictionary = GameData.boss_service_rules
 	var activation_order: Array = rules.get("mapActivationOrder", [])
 	assert(activation_order.map(func(value: Variant) -> int: return int(value)) == [76, 124, 160], "Boss施工顺序没有按地图实际启用顺序固化")
@@ -37,6 +42,7 @@ func _run() -> void:
 	)
 	player.global_position = open_field_center_px + Vector2(400, 0)
 	add_child(player)
+	player.set_meta("runtime_map_id", current_map_id)
 	player.set_physics_process(false)
 	# _ready() applies the persisted profile, so pin the combat fixture after it.
 	player.max_hp = 1000
@@ -142,7 +148,16 @@ func _run() -> void:
 		if zuma._combat_action_time_s - first_search_anchor < 8.0:
 			assert(int(summon_result.count) == 0, "positive hit or target maintenance released summon before 8-second boundary")
 			assert(zuma._boss_search_clock_anchor_s == first_search_anchor, "positive damage changed stage search anchor")
-	assert(int(summon_result.count) >= 4 and int(summon_result.count) <= 7, "真实8秒physics受击期间祖玛阶段召唤未按搜索边界释放")
+	# The last real hit may still own a struck action. Keep the authored due
+	# boundary and drain that actual action through physics, without clearing
+	# its queue or forcing a summon across the action gate.
+	for _recovery_frame in range(240):
+		if int(summon_result.count) > 0:
+			break
+		if zuma.visual.is_struck_action_active() or zuma.visual.pending_struck_count() > 0:
+			assert(zuma._boss_search_clock_anchor_s == first_search_anchor, "struck action consumed the due boss search")
+		await get_tree().physics_frame
+	assert(int(summon_result.count) >= 4 and int(summon_result.count) <= 7, "真实8秒physics受击期间祖玛阶段召唤未按搜索边界释放 clock=%s anchor=%s count=%s target=%s hp=%s stage=%s legal=%s due=%s" % [zuma._combat_action_time_s, first_search_anchor, summon_result.count, zuma.target, zuma.current_hp, zuma._boss_health_stage, zuma._boss_stage_search_action_legal(), zuma._boss_stage_search_due()])
 	zuma.set_physics_process(false)
 	# R3 W6: the stage bounds follow the canonical healthStageSummon authority
 	# (minCount 4 / maxCount 7, stages 5).
@@ -168,7 +183,7 @@ func _run() -> void:
 	zuma.queue_free()
 	await get_tree().process_frame
 	player.global_position = Vector2(100000.0, 100000.0)
-	zuma = _boss(160, "祖玛无目标时钟夹具", player)
+	zuma = _boss(160, "祖玛无目标时钟夹具", player, false)
 	await get_tree().process_frame
 	zuma.dormant = false
 	zuma.target = null
@@ -227,7 +242,7 @@ func _run() -> void:
 	get_tree().quit(0)
 
 
-func _boss(monster_id: int, renamed: String, player: PlayerCharacter) -> EnemyActor:
+func _boss(monster_id: int, renamed: String, player: PlayerCharacter, acquire_target := true) -> EnemyActor:
 	var data := GameData.get_monster_by_id(monster_id).duplicate(true)
 	data["name"] = renamed
 	var boss := EnemyActor.new()
@@ -242,4 +257,7 @@ func _boss(monster_id: int, renamed: String, player: PlayerCharacter) -> EnemyAc
 	)
 	add_child(boss)
 	boss.set_physics_process(false)
+	boss.set_meta("zone_generation", _zone_generation)
+	if acquire_target:
+		assert(boss.request_passive_target_wakeup(player, current_map_id, _zone_generation), "boss fixture passive wake failed id=%s hp=%s dead=%s distance=%s" % [monster_id,player.current_hp,player._dead,(player.global_position-boss.global_position).length()])
 	return boss

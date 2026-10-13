@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3]
+[ext_resource type="Script" path="res://tests/framework/footprint_input_capture_v113_20261013.gd" id="1"]
+[node name="FootprintInputCapture" type="Node"]
+script = ExtResource("1")

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/framework/crowd_compute_density_v113_20261013.gd" id="1_density"]
+
+[node name="NativeBatchDensityV11320261012" type="Node"]
+script = ExtResource("1_density")

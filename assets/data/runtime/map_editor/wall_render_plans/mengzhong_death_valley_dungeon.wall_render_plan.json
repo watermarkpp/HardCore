@@ -1,527 +1,527 @@
 {
 	"accounting": {
-		"atlas_commands": 500,
-		"legacy_commands": 53,
-		"shadow_chunk_commands": 250,
-		"total_commands": 803
+		"atlas_commands": 500.0,
+		"legacy_commands": 53.0,
+		"shadow_chunk_commands": 250.0,
+		"total_commands": 803.0
 	},
 	"atlas_command_indices": [
-		3,
-		4,
-		273,
-		275,
-		313,
-		315,
-		396,
-		398,
-		471,
-		473,
-		800,
-		802,
-		6,
-		7,
-		81,
-		82,
-		154,
-		155,
-		199,
-		200,
-		213,
-		215,
-		296,
-		297,
-		333,
-		334,
-		354,
-		356,
-		408,
-		410,
-		413,
-		414,
-		436,
-		438,
-		555,
-		556,
-		568,
-		570,
-		667,
-		668,
-		741,
-		742,
-		9,
-		10,
-		84,
-		85,
-		157,
-		158,
-		189,
-		190,
-		219,
-		221,
-		291,
-		293,
-		361,
-		363,
-		401,
-		403,
-		537,
-		538,
-		546,
-		547,
-		562,
-		564,
-		663,
-		664,
-		738,
-		739,
-		12,
-		13,
-		87,
-		88,
-		160,
-		161,
-		214,
-		216,
-		231,
-		233,
-		303,
-		304,
-		343,
-		344,
-		370,
-		372,
-		420,
-		421,
-		424,
-		425,
-		453,
-		455,
-		573,
-		574,
-		586,
-		588,
-		673,
-		674,
-		747,
-		748,
-		15,
-		16,
-		90,
-		91,
-		163,
-		164,
-		202,
-		203,
-		237,
-		239,
-		300,
-		301,
-		377,
-		379,
-		417,
-		418,
-		549,
-		550,
-		558,
-		559,
-		580,
-		582,
-		670,
-		671,
-		744,
-		745,
-		18,
-		19,
-		93,
-		94,
-		166,
-		167,
-		232,
-		234,
-		250,
-		252,
-		309,
-		310,
-		355,
-		357,
-		386,
-		387,
-		437,
-		439,
-		441,
-		442,
-		464,
-		465,
-		591,
-		592,
-		600,
-		601,
-		679,
-		680,
-		753,
-		754,
-		21,
-		22,
-		96,
-		97,
-		170,
-		171,
-		220,
-		222,
-		256,
-		257,
-		306,
-		307,
-		390,
-		391,
-		430,
-		432,
-		563,
-		565,
-		576,
-		577,
-		597,
-		598,
-		676,
-		677,
-		750,
-		751,
-		24,
-		25,
-		99,
-		100,
-		173,
-		174,
-		251,
-		253,
-		267,
-		269,
-		318,
-		319,
-		371,
-		373,
-		402,
-		404,
-		454,
-		456,
-		458,
-		459,
-		479,
-		481,
-		604,
-		605,
-		612,
-		614,
-		686,
-		687,
-		759,
-		760,
-		27,
-		28,
-		102,
-		103,
-		176,
-		177,
-		238,
-		240,
-		274,
-		276,
-		314,
-		316,
-		409,
-		411,
-		446,
-		448,
-		581,
-		583,
-		594,
-		595,
-		613,
-		615,
-		682,
-		683,
-		756,
-		757,
-		30,
-		31,
-		105,
-		106,
-		179,
-		180,
-		323,
-		324,
-		484,
-		486,
-		617,
-		618,
-		692,
-		693,
-		765,
-		766,
-		34,
-		35,
-		108,
-		109,
-		183,
-		184,
-		429,
-		431,
-		506,
-		508,
-		607,
-		608,
-		689,
-		690,
-		762,
-		763,
-		37,
-		38,
-		111,
-		112,
-		186,
-		187,
-		330,
-		331,
-		491,
-		492,
-		623,
-		624,
-		698,
-		699,
-		771,
-		772,
-		40,
-		41,
-		114,
-		115,
-		192,
-		193,
-		445,
-		447,
-		515,
-		517,
-		620,
-		621,
-		695,
-		696,
-		768,
-		769,
-		43,
-		44,
-		117,
-		118,
-		195,
-		196,
-		340,
-		341,
-		496,
-		497,
-		629,
-		630,
-		704,
-		705,
-		777,
-		778,
-		47,
-		48,
-		120,
-		121,
-		206,
-		207,
-		461,
-		462,
-		524,
-		526,
-		626,
-		627,
-		701,
-		702,
-		774,
-		775,
-		50,
-		51,
-		123,
-		124,
-		209,
-		210,
-		350,
-		351,
-		502,
-		503,
-		635,
-		636,
-		710,
-		711,
-		783,
-		784,
-		53,
-		54,
-		127,
-		128,
-		224,
-		225,
-		472,
-		474,
-		534,
-		535,
-		632,
-		633,
-		707,
-		708,
-		780,
-		781,
-		56,
-		57,
-		130,
-		131,
-		227,
-		228,
-		511,
-		512,
-		540,
-		541,
-		642,
-		643,
-		717,
-		718,
-		60,
-		61,
-		133,
-		134,
-		242,
-		243,
-		337,
-		338,
-		499,
-		500,
-		638,
-		639,
-		713,
-		714,
-		63,
-		64,
-		136,
-		137,
-		245,
-		246,
-		520,
-		521,
-		552,
-		553,
-		648,
-		649,
-		723,
-		724,
-		66,
-		67,
-		139,
-		140,
-		259,
-		260,
-		347,
-		348,
-		507,
-		509,
-		645,
-		646,
-		720,
-		721,
-		69,
-		70,
-		142,
-		143,
-		262,
-		263,
-		531,
-		532,
-		569,
-		571,
-		654,
-		655,
-		729,
-		730,
-		72,
-		73,
-		145,
-		146,
-		279,
-		280,
-		362,
-		364,
-		516,
-		518,
-		651,
-		652,
-		726,
-		727,
-		75,
-		76,
-		148,
-		149,
-		282,
-		283,
-		543,
-		544,
-		587,
-		589,
-		660,
-		661,
-		735,
-		736,
-		78,
-		79,
-		151,
-		152,
-		292,
-		294,
-		378,
-		380,
-		525,
-		527,
-		657,
-		658,
-		732,
-		733,
-		266,
-		268,
-		395,
-		397,
-		478,
-		480,
-		799,
-		801,
-		366,
-		367,
-		467,
-		468,
-		789,
-		790,
-		382,
-		383,
-		485,
-		487,
-		795,
-		796,
-		786,
-		787,
-		792,
-		793
+		3.0,
+		4.0,
+		273.0,
+		275.0,
+		313.0,
+		315.0,
+		396.0,
+		398.0,
+		471.0,
+		473.0,
+		800.0,
+		802.0,
+		6.0,
+		7.0,
+		81.0,
+		82.0,
+		154.0,
+		155.0,
+		199.0,
+		200.0,
+		213.0,
+		215.0,
+		296.0,
+		297.0,
+		333.0,
+		334.0,
+		354.0,
+		356.0,
+		408.0,
+		410.0,
+		413.0,
+		414.0,
+		436.0,
+		438.0,
+		555.0,
+		556.0,
+		568.0,
+		570.0,
+		667.0,
+		668.0,
+		741.0,
+		742.0,
+		9.0,
+		10.0,
+		84.0,
+		85.0,
+		157.0,
+		158.0,
+		189.0,
+		190.0,
+		219.0,
+		221.0,
+		291.0,
+		293.0,
+		361.0,
+		363.0,
+		401.0,
+		403.0,
+		537.0,
+		538.0,
+		546.0,
+		547.0,
+		562.0,
+		564.0,
+		663.0,
+		664.0,
+		738.0,
+		739.0,
+		12.0,
+		13.0,
+		87.0,
+		88.0,
+		160.0,
+		161.0,
+		214.0,
+		216.0,
+		231.0,
+		233.0,
+		303.0,
+		304.0,
+		343.0,
+		344.0,
+		370.0,
+		372.0,
+		420.0,
+		421.0,
+		424.0,
+		425.0,
+		453.0,
+		455.0,
+		573.0,
+		574.0,
+		586.0,
+		588.0,
+		673.0,
+		674.0,
+		747.0,
+		748.0,
+		15.0,
+		16.0,
+		90.0,
+		91.0,
+		163.0,
+		164.0,
+		202.0,
+		203.0,
+		237.0,
+		239.0,
+		300.0,
+		301.0,
+		377.0,
+		379.0,
+		417.0,
+		418.0,
+		549.0,
+		550.0,
+		558.0,
+		559.0,
+		580.0,
+		582.0,
+		670.0,
+		671.0,
+		744.0,
+		745.0,
+		18.0,
+		19.0,
+		93.0,
+		94.0,
+		166.0,
+		167.0,
+		232.0,
+		234.0,
+		250.0,
+		252.0,
+		309.0,
+		310.0,
+		355.0,
+		357.0,
+		386.0,
+		387.0,
+		437.0,
+		439.0,
+		441.0,
+		442.0,
+		464.0,
+		465.0,
+		591.0,
+		592.0,
+		600.0,
+		601.0,
+		679.0,
+		680.0,
+		753.0,
+		754.0,
+		21.0,
+		22.0,
+		96.0,
+		97.0,
+		170.0,
+		171.0,
+		220.0,
+		222.0,
+		256.0,
+		257.0,
+		306.0,
+		307.0,
+		390.0,
+		391.0,
+		430.0,
+		432.0,
+		563.0,
+		565.0,
+		576.0,
+		577.0,
+		597.0,
+		598.0,
+		676.0,
+		677.0,
+		750.0,
+		751.0,
+		24.0,
+		25.0,
+		99.0,
+		100.0,
+		173.0,
+		174.0,
+		251.0,
+		253.0,
+		267.0,
+		269.0,
+		318.0,
+		319.0,
+		371.0,
+		373.0,
+		402.0,
+		404.0,
+		454.0,
+		456.0,
+		458.0,
+		459.0,
+		479.0,
+		481.0,
+		604.0,
+		605.0,
+		612.0,
+		614.0,
+		686.0,
+		687.0,
+		759.0,
+		760.0,
+		27.0,
+		28.0,
+		102.0,
+		103.0,
+		176.0,
+		177.0,
+		238.0,
+		240.0,
+		274.0,
+		276.0,
+		314.0,
+		316.0,
+		409.0,
+		411.0,
+		446.0,
+		448.0,
+		581.0,
+		583.0,
+		594.0,
+		595.0,
+		613.0,
+		615.0,
+		682.0,
+		683.0,
+		756.0,
+		757.0,
+		30.0,
+		31.0,
+		105.0,
+		106.0,
+		179.0,
+		180.0,
+		323.0,
+		324.0,
+		484.0,
+		486.0,
+		617.0,
+		618.0,
+		692.0,
+		693.0,
+		765.0,
+		766.0,
+		34.0,
+		35.0,
+		108.0,
+		109.0,
+		183.0,
+		184.0,
+		429.0,
+		431.0,
+		506.0,
+		508.0,
+		607.0,
+		608.0,
+		689.0,
+		690.0,
+		762.0,
+		763.0,
+		37.0,
+		38.0,
+		111.0,
+		112.0,
+		186.0,
+		187.0,
+		330.0,
+		331.0,
+		491.0,
+		492.0,
+		623.0,
+		624.0,
+		698.0,
+		699.0,
+		771.0,
+		772.0,
+		40.0,
+		41.0,
+		114.0,
+		115.0,
+		192.0,
+		193.0,
+		445.0,
+		447.0,
+		515.0,
+		517.0,
+		620.0,
+		621.0,
+		695.0,
+		696.0,
+		768.0,
+		769.0,
+		43.0,
+		44.0,
+		117.0,
+		118.0,
+		195.0,
+		196.0,
+		340.0,
+		341.0,
+		496.0,
+		497.0,
+		629.0,
+		630.0,
+		704.0,
+		705.0,
+		777.0,
+		778.0,
+		47.0,
+		48.0,
+		120.0,
+		121.0,
+		206.0,
+		207.0,
+		461.0,
+		462.0,
+		524.0,
+		526.0,
+		626.0,
+		627.0,
+		701.0,
+		702.0,
+		774.0,
+		775.0,
+		50.0,
+		51.0,
+		123.0,
+		124.0,
+		209.0,
+		210.0,
+		350.0,
+		351.0,
+		502.0,
+		503.0,
+		635.0,
+		636.0,
+		710.0,
+		711.0,
+		783.0,
+		784.0,
+		53.0,
+		54.0,
+		127.0,
+		128.0,
+		224.0,
+		225.0,
+		472.0,
+		474.0,
+		534.0,
+		535.0,
+		632.0,
+		633.0,
+		707.0,
+		708.0,
+		780.0,
+		781.0,
+		56.0,
+		57.0,
+		130.0,
+		131.0,
+		227.0,
+		228.0,
+		511.0,
+		512.0,
+		540.0,
+		541.0,
+		642.0,
+		643.0,
+		717.0,
+		718.0,
+		60.0,
+		61.0,
+		133.0,
+		134.0,
+		242.0,
+		243.0,
+		337.0,
+		338.0,
+		499.0,
+		500.0,
+		638.0,
+		639.0,
+		713.0,
+		714.0,
+		63.0,
+		64.0,
+		136.0,
+		137.0,
+		245.0,
+		246.0,
+		520.0,
+		521.0,
+		552.0,
+		553.0,
+		648.0,
+		649.0,
+		723.0,
+		724.0,
+		66.0,
+		67.0,
+		139.0,
+		140.0,
+		259.0,
+		260.0,
+		347.0,
+		348.0,
+		507.0,
+		509.0,
+		645.0,
+		646.0,
+		720.0,
+		721.0,
+		69.0,
+		70.0,
+		142.0,
+		143.0,
+		262.0,
+		263.0,
+		531.0,
+		532.0,
+		569.0,
+		571.0,
+		654.0,
+		655.0,
+		729.0,
+		730.0,
+		72.0,
+		73.0,
+		145.0,
+		146.0,
+		279.0,
+		280.0,
+		362.0,
+		364.0,
+		516.0,
+		518.0,
+		651.0,
+		652.0,
+		726.0,
+		727.0,
+		75.0,
+		76.0,
+		148.0,
+		149.0,
+		282.0,
+		283.0,
+		543.0,
+		544.0,
+		587.0,
+		589.0,
+		660.0,
+		661.0,
+		735.0,
+		736.0,
+		78.0,
+		79.0,
+		151.0,
+		152.0,
+		292.0,
+		294.0,
+		378.0,
+		380.0,
+		525.0,
+		527.0,
+		657.0,
+		658.0,
+		732.0,
+		733.0,
+		266.0,
+		268.0,
+		395.0,
+		397.0,
+		478.0,
+		480.0,
+		799.0,
+		801.0,
+		366.0,
+		367.0,
+		467.0,
+		468.0,
+		789.0,
+		790.0,
+		382.0,
+		383.0,
+		485.0,
+		487.0,
+		795.0,
+		796.0,
+		786.0,
+		787.0,
+		792.0,
+		793.0
 	],
 	"atlas_entries": [
 		{
 			"command_indices": [
-				266,
-				268,
-				395,
-				397,
-				478,
-				480,
-				799,
-				801
+				266.0,
+				268.0,
+				395.0,
+				397.0,
+				478.0,
+				480.0,
+				799.0,
+				801.0
 			],
 			"composite_size": [
-				128,
-				192
+				128.0,
+				192.0
 			],
 			"group_keys": [
 				"wall_part:inst_000087:121:0",
@@ -532,61 +532,61 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						266,
-						268
+						266.0,
+						268.0
 					],
 					"group_key": "wall_part:inst_000087:121:0",
-					"representative_command_index": 266
+					"representative_command_index": 266.0
 				},
 				{
 					"command_indices": [
-						395,
-						397
+						395.0,
+						397.0
 					],
 					"group_key": "wall_part:inst_000053:81:0",
-					"representative_command_index": 395
+					"representative_command_index": 395.0
 				},
 				{
 					"command_indices": [
-						478,
-						480
+						478.0,
+						480.0
 					],
 					"group_key": "wall_part:inst_000088:122:0",
-					"representative_command_index": 478
+					"representative_command_index": 478.0
 				},
 				{
 					"command_indices": [
-						799,
-						801
+						799.0,
+						801.0
 					],
 					"group_key": "wall_part:inst_000054:112:0",
-					"representative_command_index": 799
+					"representative_command_index": 799.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l1_v01/part_00_base.png@(-64.0, -160.0)|assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l1_v01/part_00_front.png@(-64.0, -160.0)",
 			"layers": [
 				{
-					"command_index": 266,
+					"command_index": 266.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l1_v01/part_00_base.png",
 					"offset": [
 						-64.0,
 						-160.0
 					],
 					"size": [
-						128,
-						192
+						128.0,
+						192.0
 					]
 				},
 				{
-					"command_index": 268,
+					"command_index": 268.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l1_v01/part_00_front.png",
 					"offset": [
 						-64.0,
 						-160.0
 					],
 					"size": [
-						128,
-						192
+						128.0,
+						192.0
 					]
 				}
 			],
@@ -594,22 +594,22 @@
 				-64.0,
 				-160.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				0,
-				672,
-				128,
-				192
+				0.0,
+				672.0,
+				128.0,
+				192.0
 			]
 		},
 		{
 			"command_indices": [
-				786,
-				787
+				786.0,
+				787.0
 			],
 			"composite_size": [
-				160,
-				192
+				160.0,
+				192.0
 			],
 			"group_keys": [
 				"wall_part:inst_000028:110:0"
@@ -617,37 +617,37 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						786,
-						787
+						786.0,
+						787.0
 					],
 					"group_key": "wall_part:inst_000028:110:0",
-					"representative_command_index": 786
+					"representative_command_index": 786.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l2_v01/part_00_base.png@(-64.0, -144.0)|assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l2_v01/part_00_front.png@(-64.0, -144.0)",
 			"layers": [
 				{
-					"command_index": 786,
+					"command_index": 786.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l2_v01/part_00_base.png",
 					"offset": [
 						-64.0,
 						-144.0
 					],
 					"size": [
-						160,
-						192
+						160.0,
+						192.0
 					]
 				},
 				{
-					"command_index": 787,
+					"command_index": 787.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l2_v01/part_00_front.png",
 					"offset": [
 						-64.0,
 						-144.0
 					],
 					"size": [
-						160,
-						192
+						160.0,
+						192.0
 					]
 				}
 			],
@@ -655,22 +655,22 @@
 				-64.0,
 				-144.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				1344,
-				448,
-				160,
-				192
+				1344.0,
+				448.0,
+				160.0,
+				192.0
 			]
 		},
 		{
 			"command_indices": [
-				792,
-				793
+				792.0,
+				793.0
 			],
 			"composite_size": [
-				160,
-				192
+				160.0,
+				192.0
 			],
 			"group_keys": [
 				"wall_part:inst_000028:110:1"
@@ -678,37 +678,37 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						792,
-						793
+						792.0,
+						793.0
 					],
 					"group_key": "wall_part:inst_000028:110:1",
-					"representative_command_index": 792
+					"representative_command_index": 792.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l2_v01/part_01_base.png@(-64.0, -144.0)|assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l2_v01/part_01_front.png@(-64.0, -144.0)",
 			"layers": [
 				{
-					"command_index": 792,
+					"command_index": 792.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l2_v01/part_01_base.png",
 					"offset": [
 						-64.0,
 						-144.0
 					],
 					"size": [
-						160,
-						192
+						160.0,
+						192.0
 					]
 				},
 				{
-					"command_index": 793,
+					"command_index": 793.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l2_v01/part_01_front.png",
 					"offset": [
 						-64.0,
 						-144.0
 					],
 					"size": [
-						160,
-						192
+						160.0,
+						192.0
 					]
 				}
 			],
@@ -716,46 +716,46 @@
 				-64.0,
 				-144.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				1504,
-				448,
-				160,
-				192
+				1504.0,
+				448.0,
+				160.0,
+				192.0
 			]
 		},
 		{
 			"command_indices": [
-				9,
-				10,
-				84,
-				85,
-				157,
-				158,
-				189,
-				190,
-				219,
-				221,
-				291,
-				293,
-				361,
-				363,
-				401,
-				403,
-				537,
-				538,
-				546,
-				547,
-				562,
-				564,
-				663,
-				664,
-				738,
-				739
+				9.0,
+				10.0,
+				84.0,
+				85.0,
+				157.0,
+				158.0,
+				189.0,
+				190.0,
+				219.0,
+				221.0,
+				291.0,
+				293.0,
+				361.0,
+				363.0,
+				401.0,
+				403.0,
+				537.0,
+				538.0,
+				546.0,
+				547.0,
+				562.0,
+				564.0,
+				663.0,
+				664.0,
+				738.0,
+				739.0
 			],
 			"composite_size": [
-				224,
-				224
+				224.0,
+				224.0
 			],
 			"group_keys": [
 				"wall_part:inst_000005:55:0",
@@ -775,133 +775,133 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						9,
-						10
+						9.0,
+						10.0
 					],
 					"group_key": "wall_part:inst_000005:55:0",
-					"representative_command_index": 9
+					"representative_command_index": 9.0
 				},
 				{
 					"command_indices": [
-						84,
-						85
+						84.0,
+						85.0
 					],
 					"group_key": "wall_part:inst_000008:61:0",
-					"representative_command_index": 84
+					"representative_command_index": 84.0
 				},
 				{
 					"command_indices": [
-						157,
-						158
+						157.0,
+						158.0
 					],
 					"group_key": "wall_part:inst_000011:67:0",
-					"representative_command_index": 157
+					"representative_command_index": 157.0
 				},
 				{
 					"command_indices": [
-						189,
-						190
+						189.0,
+						190.0
 					],
 					"group_key": "wall_part:inst_000082:116:0",
-					"representative_command_index": 189
+					"representative_command_index": 189.0
 				},
 				{
 					"command_indices": [
-						219,
-						221
+						219.0,
+						221.0
 					],
 					"group_key": "wall_part:inst_000064:71:0",
-					"representative_command_index": 219
+					"representative_command_index": 219.0
 				},
 				{
 					"command_indices": [
-						291,
-						293
+						291.0,
+						293.0
 					],
 					"group_key": "wall_part:inst_000014:75:0",
-					"representative_command_index": 291
+					"representative_command_index": 291.0
 				},
 				{
 					"command_indices": [
-						361,
-						363
+						361.0,
+						363.0
 					],
 					"group_key": "wall_part:inst_000067:79:0",
-					"representative_command_index": 361
+					"representative_command_index": 361.0
 				},
 				{
 					"command_indices": [
-						401,
-						403
+						401.0,
+						403.0
 					],
 					"group_key": "wall_part:inst_000068:83:0",
-					"representative_command_index": 401
+					"representative_command_index": 401.0
 				},
 				{
 					"command_indices": [
-						537,
-						538
+						537.0,
+						538.0
 					],
 					"group_key": "wall_part:inst_000071:93:0",
-					"representative_command_index": 537
+					"representative_command_index": 537.0
 				},
 				{
 					"command_indices": [
-						546,
-						547
+						546.0,
+						547.0
 					],
 					"group_key": "wall_part:inst_000020:92:0",
-					"representative_command_index": 546
+					"representative_command_index": 546.0
 				},
 				{
 					"command_indices": [
-						562,
-						564
+						562.0,
+						564.0
 					],
 					"group_key": "wall_part:inst_000080:114:0",
-					"representative_command_index": 562
+					"representative_command_index": 562.0
 				},
 				{
 					"command_indices": [
-						663,
-						664
+						663.0,
+						664.0
 					],
 					"group_key": "wall_part:inst_000023:100:0",
-					"representative_command_index": 663
+					"representative_command_index": 663.0
 				},
 				{
 					"command_indices": [
-						738,
-						739
+						738.0,
+						739.0
 					],
 					"group_key": "wall_part:inst_000026:106:0",
-					"representative_command_index": 738
+					"representative_command_index": 738.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v01/part_00_base.png@(-64.0, -144.0)|assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v01/part_00_front.png@(-64.0, -144.0)",
 			"layers": [
 				{
-					"command_index": 9,
+					"command_index": 9.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v01/part_00_base.png",
 					"offset": [
 						-64.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				},
 				{
-					"command_index": 10,
+					"command_index": 10.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v01/part_00_front.png",
 					"offset": [
 						-64.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				}
 			],
@@ -909,46 +909,46 @@
 				-64.0,
 				-144.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				0,
-				0,
-				224,
-				224
+				0.0,
+				0.0,
+				224.0,
+				224.0
 			]
 		},
 		{
 			"command_indices": [
-				15,
-				16,
-				90,
-				91,
-				163,
-				164,
-				202,
-				203,
-				237,
-				239,
-				300,
-				301,
-				377,
-				379,
-				417,
-				418,
-				549,
-				550,
-				558,
-				559,
-				580,
-				582,
-				670,
-				671,
-				744,
-				745
+				15.0,
+				16.0,
+				90.0,
+				91.0,
+				163.0,
+				164.0,
+				202.0,
+				203.0,
+				237.0,
+				239.0,
+				300.0,
+				301.0,
+				377.0,
+				379.0,
+				417.0,
+				418.0,
+				549.0,
+				550.0,
+				558.0,
+				559.0,
+				580.0,
+				582.0,
+				670.0,
+				671.0,
+				744.0,
+				745.0
 			],
 			"composite_size": [
-				224,
-				224
+				224.0,
+				224.0
 			],
 			"group_keys": [
 				"wall_part:inst_000005:55:1",
@@ -968,133 +968,133 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						15,
-						16
+						15.0,
+						16.0
 					],
 					"group_key": "wall_part:inst_000005:55:1",
-					"representative_command_index": 15
+					"representative_command_index": 15.0
 				},
 				{
 					"command_indices": [
-						90,
-						91
+						90.0,
+						91.0
 					],
 					"group_key": "wall_part:inst_000008:61:1",
-					"representative_command_index": 90
+					"representative_command_index": 90.0
 				},
 				{
 					"command_indices": [
-						163,
-						164
+						163.0,
+						164.0
 					],
 					"group_key": "wall_part:inst_000011:67:1",
-					"representative_command_index": 163
+					"representative_command_index": 163.0
 				},
 				{
 					"command_indices": [
-						202,
-						203
+						202.0,
+						203.0
 					],
 					"group_key": "wall_part:inst_000082:116:1",
-					"representative_command_index": 202
+					"representative_command_index": 202.0
 				},
 				{
 					"command_indices": [
-						237,
-						239
+						237.0,
+						239.0
 					],
 					"group_key": "wall_part:inst_000064:71:1",
-					"representative_command_index": 237
+					"representative_command_index": 237.0
 				},
 				{
 					"command_indices": [
-						300,
-						301
+						300.0,
+						301.0
 					],
 					"group_key": "wall_part:inst_000014:75:1",
-					"representative_command_index": 300
+					"representative_command_index": 300.0
 				},
 				{
 					"command_indices": [
-						377,
-						379
+						377.0,
+						379.0
 					],
 					"group_key": "wall_part:inst_000067:79:1",
-					"representative_command_index": 377
+					"representative_command_index": 377.0
 				},
 				{
 					"command_indices": [
-						417,
-						418
+						417.0,
+						418.0
 					],
 					"group_key": "wall_part:inst_000068:83:1",
-					"representative_command_index": 417
+					"representative_command_index": 417.0
 				},
 				{
 					"command_indices": [
-						549,
-						550
+						549.0,
+						550.0
 					],
 					"group_key": "wall_part:inst_000071:93:1",
-					"representative_command_index": 549
+					"representative_command_index": 549.0
 				},
 				{
 					"command_indices": [
-						558,
-						559
+						558.0,
+						559.0
 					],
 					"group_key": "wall_part:inst_000020:92:1",
-					"representative_command_index": 558
+					"representative_command_index": 558.0
 				},
 				{
 					"command_indices": [
-						580,
-						582
+						580.0,
+						582.0
 					],
 					"group_key": "wall_part:inst_000080:114:1",
-					"representative_command_index": 580
+					"representative_command_index": 580.0
 				},
 				{
 					"command_indices": [
-						670,
-						671
+						670.0,
+						671.0
 					],
 					"group_key": "wall_part:inst_000023:100:1",
-					"representative_command_index": 670
+					"representative_command_index": 670.0
 				},
 				{
 					"command_indices": [
-						744,
-						745
+						744.0,
+						745.0
 					],
 					"group_key": "wall_part:inst_000026:106:1",
-					"representative_command_index": 744
+					"representative_command_index": 744.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v01/part_01_base.png@(-64.0, -144.0)|assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v01/part_01_front.png@(-64.0, -144.0)",
 			"layers": [
 				{
-					"command_index": 15,
+					"command_index": 15.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v01/part_01_base.png",
 					"offset": [
 						-64.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				},
 				{
-					"command_index": 16,
+					"command_index": 16.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v01/part_01_front.png",
 					"offset": [
 						-64.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				}
 			],
@@ -1102,46 +1102,46 @@
 				-64.0,
 				-144.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				224,
-				0,
-				224,
-				224
+				224.0,
+				0.0,
+				224.0,
+				224.0
 			]
 		},
 		{
 			"command_indices": [
-				21,
-				22,
-				96,
-				97,
-				170,
-				171,
-				220,
-				222,
-				256,
-				257,
-				306,
-				307,
-				390,
-				391,
-				430,
-				432,
-				563,
-				565,
-				576,
-				577,
-				597,
-				598,
-				676,
-				677,
-				750,
-				751
+				21.0,
+				22.0,
+				96.0,
+				97.0,
+				170.0,
+				171.0,
+				220.0,
+				222.0,
+				256.0,
+				257.0,
+				306.0,
+				307.0,
+				390.0,
+				391.0,
+				430.0,
+				432.0,
+				563.0,
+				565.0,
+				576.0,
+				577.0,
+				597.0,
+				598.0,
+				676.0,
+				677.0,
+				750.0,
+				751.0
 			],
 			"composite_size": [
-				224,
-				224
+				224.0,
+				224.0
 			],
 			"group_keys": [
 				"wall_part:inst_000005:55:2",
@@ -1161,133 +1161,133 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						21,
-						22
+						21.0,
+						22.0
 					],
 					"group_key": "wall_part:inst_000005:55:2",
-					"representative_command_index": 21
+					"representative_command_index": 21.0
 				},
 				{
 					"command_indices": [
-						96,
-						97
+						96.0,
+						97.0
 					],
 					"group_key": "wall_part:inst_000008:61:2",
-					"representative_command_index": 96
+					"representative_command_index": 96.0
 				},
 				{
 					"command_indices": [
-						170,
-						171
+						170.0,
+						171.0
 					],
 					"group_key": "wall_part:inst_000011:67:2",
-					"representative_command_index": 170
+					"representative_command_index": 170.0
 				},
 				{
 					"command_indices": [
-						220,
-						222
+						220.0,
+						222.0
 					],
 					"group_key": "wall_part:inst_000082:116:2",
-					"representative_command_index": 220
+					"representative_command_index": 220.0
 				},
 				{
 					"command_indices": [
-						256,
-						257
+						256.0,
+						257.0
 					],
 					"group_key": "wall_part:inst_000064:71:2",
-					"representative_command_index": 256
+					"representative_command_index": 256.0
 				},
 				{
 					"command_indices": [
-						306,
-						307
+						306.0,
+						307.0
 					],
 					"group_key": "wall_part:inst_000014:75:2",
-					"representative_command_index": 306
+					"representative_command_index": 306.0
 				},
 				{
 					"command_indices": [
-						390,
-						391
+						390.0,
+						391.0
 					],
 					"group_key": "wall_part:inst_000067:79:2",
-					"representative_command_index": 390
+					"representative_command_index": 390.0
 				},
 				{
 					"command_indices": [
-						430,
-						432
+						430.0,
+						432.0
 					],
 					"group_key": "wall_part:inst_000068:83:2",
-					"representative_command_index": 430
+					"representative_command_index": 430.0
 				},
 				{
 					"command_indices": [
-						563,
-						565
+						563.0,
+						565.0
 					],
 					"group_key": "wall_part:inst_000071:93:2",
-					"representative_command_index": 563
+					"representative_command_index": 563.0
 				},
 				{
 					"command_indices": [
-						576,
-						577
+						576.0,
+						577.0
 					],
 					"group_key": "wall_part:inst_000020:92:2",
-					"representative_command_index": 576
+					"representative_command_index": 576.0
 				},
 				{
 					"command_indices": [
-						597,
-						598
+						597.0,
+						598.0
 					],
 					"group_key": "wall_part:inst_000080:114:2",
-					"representative_command_index": 597
+					"representative_command_index": 597.0
 				},
 				{
 					"command_indices": [
-						676,
-						677
+						676.0,
+						677.0
 					],
 					"group_key": "wall_part:inst_000023:100:2",
-					"representative_command_index": 676
+					"representative_command_index": 676.0
 				},
 				{
 					"command_indices": [
-						750,
-						751
+						750.0,
+						751.0
 					],
 					"group_key": "wall_part:inst_000026:106:2",
-					"representative_command_index": 750
+					"representative_command_index": 750.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v01/part_02_base.png@(-64.0, -144.0)|assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v01/part_02_front.png@(-64.0, -144.0)",
 			"layers": [
 				{
-					"command_index": 21,
+					"command_index": 21.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v01/part_02_base.png",
 					"offset": [
 						-64.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				},
 				{
-					"command_index": 22,
+					"command_index": 22.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v01/part_02_front.png",
 					"offset": [
 						-64.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				}
 			],
@@ -1295,46 +1295,46 @@
 				-64.0,
 				-144.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				448,
-				0,
-				224,
-				224
+				448.0,
+				0.0,
+				224.0,
+				224.0
 			]
 		},
 		{
 			"command_indices": [
-				27,
-				28,
-				102,
-				103,
-				176,
-				177,
-				238,
-				240,
-				274,
-				276,
-				314,
-				316,
-				409,
-				411,
-				446,
-				448,
-				581,
-				583,
-				594,
-				595,
-				613,
-				615,
-				682,
-				683,
-				756,
-				757
+				27.0,
+				28.0,
+				102.0,
+				103.0,
+				176.0,
+				177.0,
+				238.0,
+				240.0,
+				274.0,
+				276.0,
+				314.0,
+				316.0,
+				409.0,
+				411.0,
+				446.0,
+				448.0,
+				581.0,
+				583.0,
+				594.0,
+				595.0,
+				613.0,
+				615.0,
+				682.0,
+				683.0,
+				756.0,
+				757.0
 			],
 			"composite_size": [
-				224,
-				224
+				224.0,
+				224.0
 			],
 			"group_keys": [
 				"wall_part:inst_000005:55:3",
@@ -1354,133 +1354,133 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						27,
-						28
+						27.0,
+						28.0
 					],
 					"group_key": "wall_part:inst_000005:55:3",
-					"representative_command_index": 27
+					"representative_command_index": 27.0
 				},
 				{
 					"command_indices": [
-						102,
-						103
+						102.0,
+						103.0
 					],
 					"group_key": "wall_part:inst_000008:61:3",
-					"representative_command_index": 102
+					"representative_command_index": 102.0
 				},
 				{
 					"command_indices": [
-						176,
-						177
+						176.0,
+						177.0
 					],
 					"group_key": "wall_part:inst_000011:67:3",
-					"representative_command_index": 176
+					"representative_command_index": 176.0
 				},
 				{
 					"command_indices": [
-						238,
-						240
+						238.0,
+						240.0
 					],
 					"group_key": "wall_part:inst_000082:116:3",
-					"representative_command_index": 238
+					"representative_command_index": 238.0
 				},
 				{
 					"command_indices": [
-						274,
-						276
+						274.0,
+						276.0
 					],
 					"group_key": "wall_part:inst_000064:71:3",
-					"representative_command_index": 274
+					"representative_command_index": 274.0
 				},
 				{
 					"command_indices": [
-						314,
-						316
+						314.0,
+						316.0
 					],
 					"group_key": "wall_part:inst_000014:75:3",
-					"representative_command_index": 314
+					"representative_command_index": 314.0
 				},
 				{
 					"command_indices": [
-						409,
-						411
+						409.0,
+						411.0
 					],
 					"group_key": "wall_part:inst_000067:79:3",
-					"representative_command_index": 409
+					"representative_command_index": 409.0
 				},
 				{
 					"command_indices": [
-						446,
-						448
+						446.0,
+						448.0
 					],
 					"group_key": "wall_part:inst_000068:83:3",
-					"representative_command_index": 446
+					"representative_command_index": 446.0
 				},
 				{
 					"command_indices": [
-						581,
-						583
+						581.0,
+						583.0
 					],
 					"group_key": "wall_part:inst_000071:93:3",
-					"representative_command_index": 581
+					"representative_command_index": 581.0
 				},
 				{
 					"command_indices": [
-						594,
-						595
+						594.0,
+						595.0
 					],
 					"group_key": "wall_part:inst_000020:92:3",
-					"representative_command_index": 594
+					"representative_command_index": 594.0
 				},
 				{
 					"command_indices": [
-						613,
-						615
+						613.0,
+						615.0
 					],
 					"group_key": "wall_part:inst_000080:114:3",
-					"representative_command_index": 613
+					"representative_command_index": 613.0
 				},
 				{
 					"command_indices": [
-						682,
-						683
+						682.0,
+						683.0
 					],
 					"group_key": "wall_part:inst_000023:100:3",
-					"representative_command_index": 682
+					"representative_command_index": 682.0
 				},
 				{
 					"command_indices": [
-						756,
-						757
+						756.0,
+						757.0
 					],
 					"group_key": "wall_part:inst_000026:106:3",
-					"representative_command_index": 756
+					"representative_command_index": 756.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v01/part_03_base.png@(-64.0, -144.0)|assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v01/part_03_front.png@(-64.0, -144.0)",
 			"layers": [
 				{
-					"command_index": 27,
+					"command_index": 27.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v01/part_03_base.png",
 					"offset": [
 						-64.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				},
 				{
-					"command_index": 28,
+					"command_index": 28.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v01/part_03_front.png",
 					"offset": [
 						-64.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				}
 			],
@@ -1488,36 +1488,36 @@
 				-64.0,
 				-144.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				672,
-				0,
-				224,
-				224
+				672.0,
+				0.0,
+				224.0,
+				224.0
 			]
 		},
 		{
 			"command_indices": [
-				34,
-				35,
-				108,
-				109,
-				183,
-				184,
-				429,
-				431,
-				506,
-				508,
-				607,
-				608,
-				689,
-				690,
-				762,
-				763
+				34.0,
+				35.0,
+				108.0,
+				109.0,
+				183.0,
+				184.0,
+				429.0,
+				431.0,
+				506.0,
+				508.0,
+				607.0,
+				608.0,
+				689.0,
+				690.0,
+				762.0,
+				763.0
 			],
 			"composite_size": [
-				224,
-				224
+				224.0,
+				224.0
 			],
 			"group_keys": [
 				"wall_part:inst_000006:57:0",
@@ -1532,93 +1532,93 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						34,
-						35
+						34.0,
+						35.0
 					],
 					"group_key": "wall_part:inst_000006:57:0",
-					"representative_command_index": 34
+					"representative_command_index": 34.0
 				},
 				{
 					"command_indices": [
-						108,
-						109
+						108.0,
+						109.0
 					],
 					"group_key": "wall_part:inst_000009:63:0",
-					"representative_command_index": 108
+					"representative_command_index": 108.0
 				},
 				{
 					"command_indices": [
-						183,
-						184
+						183.0,
+						184.0
 					],
 					"group_key": "wall_part:inst_000012:69:0",
-					"representative_command_index": 183
+					"representative_command_index": 183.0
 				},
 				{
 					"command_indices": [
-						429,
-						431
+						429.0,
+						431.0
 					],
 					"group_key": "wall_part:inst_000069:87:0",
-					"representative_command_index": 429
+					"representative_command_index": 429.0
 				},
 				{
 					"command_indices": [
-						506,
-						508
+						506.0,
+						508.0
 					],
 					"group_key": "wall_part:inst_000018:86:0",
-					"representative_command_index": 506
+					"representative_command_index": 506.0
 				},
 				{
 					"command_indices": [
-						607,
-						608
+						607.0,
+						608.0
 					],
 					"group_key": "wall_part:inst_000021:96:0",
-					"representative_command_index": 607
+					"representative_command_index": 607.0
 				},
 				{
 					"command_indices": [
-						689,
-						690
+						689.0,
+						690.0
 					],
 					"group_key": "wall_part:inst_000024:102:0",
-					"representative_command_index": 689
+					"representative_command_index": 689.0
 				},
 				{
 					"command_indices": [
-						762,
-						763
+						762.0,
+						763.0
 					],
 					"group_key": "wall_part:inst_000027:108:0",
-					"representative_command_index": 762
+					"representative_command_index": 762.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v02/part_00_base.png@(-64.0, -144.0)|assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v02/part_00_front.png@(-64.0, -144.0)",
 			"layers": [
 				{
-					"command_index": 34,
+					"command_index": 34.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v02/part_00_base.png",
 					"offset": [
 						-64.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				},
 				{
-					"command_index": 35,
+					"command_index": 35.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v02/part_00_front.png",
 					"offset": [
 						-64.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				}
 			],
@@ -1626,36 +1626,36 @@
 				-64.0,
 				-144.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				896,
-				0,
-				224,
-				224
+				896.0,
+				0.0,
+				224.0,
+				224.0
 			]
 		},
 		{
 			"command_indices": [
-				40,
-				41,
-				114,
-				115,
-				192,
-				193,
-				445,
-				447,
-				515,
-				517,
-				620,
-				621,
-				695,
-				696,
-				768,
-				769
+				40.0,
+				41.0,
+				114.0,
+				115.0,
+				192.0,
+				193.0,
+				445.0,
+				447.0,
+				515.0,
+				517.0,
+				620.0,
+				621.0,
+				695.0,
+				696.0,
+				768.0,
+				769.0
 			],
 			"composite_size": [
-				224,
-				224
+				224.0,
+				224.0
 			],
 			"group_keys": [
 				"wall_part:inst_000006:57:1",
@@ -1670,93 +1670,93 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						40,
-						41
+						40.0,
+						41.0
 					],
 					"group_key": "wall_part:inst_000006:57:1",
-					"representative_command_index": 40
+					"representative_command_index": 40.0
 				},
 				{
 					"command_indices": [
-						114,
-						115
+						114.0,
+						115.0
 					],
 					"group_key": "wall_part:inst_000009:63:1",
-					"representative_command_index": 114
+					"representative_command_index": 114.0
 				},
 				{
 					"command_indices": [
-						192,
-						193
+						192.0,
+						193.0
 					],
 					"group_key": "wall_part:inst_000012:69:1",
-					"representative_command_index": 192
+					"representative_command_index": 192.0
 				},
 				{
 					"command_indices": [
-						445,
-						447
+						445.0,
+						447.0
 					],
 					"group_key": "wall_part:inst_000069:87:1",
-					"representative_command_index": 445
+					"representative_command_index": 445.0
 				},
 				{
 					"command_indices": [
-						515,
-						517
+						515.0,
+						517.0
 					],
 					"group_key": "wall_part:inst_000018:86:1",
-					"representative_command_index": 515
+					"representative_command_index": 515.0
 				},
 				{
 					"command_indices": [
-						620,
-						621
+						620.0,
+						621.0
 					],
 					"group_key": "wall_part:inst_000021:96:1",
-					"representative_command_index": 620
+					"representative_command_index": 620.0
 				},
 				{
 					"command_indices": [
-						695,
-						696
+						695.0,
+						696.0
 					],
 					"group_key": "wall_part:inst_000024:102:1",
-					"representative_command_index": 695
+					"representative_command_index": 695.0
 				},
 				{
 					"command_indices": [
-						768,
-						769
+						768.0,
+						769.0
 					],
 					"group_key": "wall_part:inst_000027:108:1",
-					"representative_command_index": 768
+					"representative_command_index": 768.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v02/part_01_base.png@(-64.0, -144.0)|assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v02/part_01_front.png@(-64.0, -144.0)",
 			"layers": [
 				{
-					"command_index": 40,
+					"command_index": 40.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v02/part_01_base.png",
 					"offset": [
 						-64.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				},
 				{
-					"command_index": 41,
+					"command_index": 41.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v02/part_01_front.png",
 					"offset": [
 						-64.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				}
 			],
@@ -1764,36 +1764,36 @@
 				-64.0,
 				-144.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				1120,
-				0,
-				224,
-				224
+				1120.0,
+				0.0,
+				224.0,
+				224.0
 			]
 		},
 		{
 			"command_indices": [
-				47,
-				48,
-				120,
-				121,
-				206,
-				207,
-				461,
-				462,
-				524,
-				526,
-				626,
-				627,
-				701,
-				702,
-				774,
-				775
+				47.0,
+				48.0,
+				120.0,
+				121.0,
+				206.0,
+				207.0,
+				461.0,
+				462.0,
+				524.0,
+				526.0,
+				626.0,
+				627.0,
+				701.0,
+				702.0,
+				774.0,
+				775.0
 			],
 			"composite_size": [
-				224,
-				224
+				224.0,
+				224.0
 			],
 			"group_keys": [
 				"wall_part:inst_000006:57:2",
@@ -1808,93 +1808,93 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						47,
-						48
+						47.0,
+						48.0
 					],
 					"group_key": "wall_part:inst_000006:57:2",
-					"representative_command_index": 47
+					"representative_command_index": 47.0
 				},
 				{
 					"command_indices": [
-						120,
-						121
+						120.0,
+						121.0
 					],
 					"group_key": "wall_part:inst_000009:63:2",
-					"representative_command_index": 120
+					"representative_command_index": 120.0
 				},
 				{
 					"command_indices": [
-						206,
-						207
+						206.0,
+						207.0
 					],
 					"group_key": "wall_part:inst_000012:69:2",
-					"representative_command_index": 206
+					"representative_command_index": 206.0
 				},
 				{
 					"command_indices": [
-						461,
-						462
+						461.0,
+						462.0
 					],
 					"group_key": "wall_part:inst_000069:87:2",
-					"representative_command_index": 461
+					"representative_command_index": 461.0
 				},
 				{
 					"command_indices": [
-						524,
-						526
+						524.0,
+						526.0
 					],
 					"group_key": "wall_part:inst_000018:86:2",
-					"representative_command_index": 524
+					"representative_command_index": 524.0
 				},
 				{
 					"command_indices": [
-						626,
-						627
+						626.0,
+						627.0
 					],
 					"group_key": "wall_part:inst_000021:96:2",
-					"representative_command_index": 626
+					"representative_command_index": 626.0
 				},
 				{
 					"command_indices": [
-						701,
-						702
+						701.0,
+						702.0
 					],
 					"group_key": "wall_part:inst_000024:102:2",
-					"representative_command_index": 701
+					"representative_command_index": 701.0
 				},
 				{
 					"command_indices": [
-						774,
-						775
+						774.0,
+						775.0
 					],
 					"group_key": "wall_part:inst_000027:108:2",
-					"representative_command_index": 774
+					"representative_command_index": 774.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v02/part_02_base.png@(-64.0, -144.0)|assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v02/part_02_front.png@(-64.0, -144.0)",
 			"layers": [
 				{
-					"command_index": 47,
+					"command_index": 47.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v02/part_02_base.png",
 					"offset": [
 						-64.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				},
 				{
-					"command_index": 48,
+					"command_index": 48.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v02/part_02_front.png",
 					"offset": [
 						-64.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				}
 			],
@@ -1902,36 +1902,36 @@
 				-64.0,
 				-144.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				1344,
-				0,
-				224,
-				224
+				1344.0,
+				0.0,
+				224.0,
+				224.0
 			]
 		},
 		{
 			"command_indices": [
-				53,
-				54,
-				127,
-				128,
-				224,
-				225,
-				472,
-				474,
-				534,
-				535,
-				632,
-				633,
-				707,
-				708,
-				780,
-				781
+				53.0,
+				54.0,
+				127.0,
+				128.0,
+				224.0,
+				225.0,
+				472.0,
+				474.0,
+				534.0,
+				535.0,
+				632.0,
+				633.0,
+				707.0,
+				708.0,
+				780.0,
+				781.0
 			],
 			"composite_size": [
-				224,
-				224
+				224.0,
+				224.0
 			],
 			"group_keys": [
 				"wall_part:inst_000006:57:3",
@@ -1946,93 +1946,93 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						53,
-						54
+						53.0,
+						54.0
 					],
 					"group_key": "wall_part:inst_000006:57:3",
-					"representative_command_index": 53
+					"representative_command_index": 53.0
 				},
 				{
 					"command_indices": [
-						127,
-						128
+						127.0,
+						128.0
 					],
 					"group_key": "wall_part:inst_000009:63:3",
-					"representative_command_index": 127
+					"representative_command_index": 127.0
 				},
 				{
 					"command_indices": [
-						224,
-						225
+						224.0,
+						225.0
 					],
 					"group_key": "wall_part:inst_000012:69:3",
-					"representative_command_index": 224
+					"representative_command_index": 224.0
 				},
 				{
 					"command_indices": [
-						472,
-						474
+						472.0,
+						474.0
 					],
 					"group_key": "wall_part:inst_000069:87:3",
-					"representative_command_index": 472
+					"representative_command_index": 472.0
 				},
 				{
 					"command_indices": [
-						534,
-						535
+						534.0,
+						535.0
 					],
 					"group_key": "wall_part:inst_000018:86:3",
-					"representative_command_index": 534
+					"representative_command_index": 534.0
 				},
 				{
 					"command_indices": [
-						632,
-						633
+						632.0,
+						633.0
 					],
 					"group_key": "wall_part:inst_000021:96:3",
-					"representative_command_index": 632
+					"representative_command_index": 632.0
 				},
 				{
 					"command_indices": [
-						707,
-						708
+						707.0,
+						708.0
 					],
 					"group_key": "wall_part:inst_000024:102:3",
-					"representative_command_index": 707
+					"representative_command_index": 707.0
 				},
 				{
 					"command_indices": [
-						780,
-						781
+						780.0,
+						781.0
 					],
 					"group_key": "wall_part:inst_000027:108:3",
-					"representative_command_index": 780
+					"representative_command_index": 780.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v02/part_03_base.png@(-64.0, -144.0)|assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v02/part_03_front.png@(-64.0, -144.0)",
 			"layers": [
 				{
-					"command_index": 53,
+					"command_index": 53.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v02/part_03_base.png",
 					"offset": [
 						-64.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				},
 				{
-					"command_index": 54,
+					"command_index": 54.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v02/part_03_front.png",
 					"offset": [
 						-64.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				}
 			],
@@ -2040,34 +2040,34 @@
 				-64.0,
 				-144.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				1568,
-				0,
-				224,
-				224
+				1568.0,
+				0.0,
+				224.0,
+				224.0
 			]
 		},
 		{
 			"command_indices": [
-				60,
-				61,
-				133,
-				134,
-				242,
-				243,
-				337,
-				338,
-				499,
-				500,
-				638,
-				639,
-				713,
-				714
+				60.0,
+				61.0,
+				133.0,
+				134.0,
+				242.0,
+				243.0,
+				337.0,
+				338.0,
+				499.0,
+				500.0,
+				638.0,
+				639.0,
+				713.0,
+				714.0
 			],
 			"composite_size": [
-				224,
-				224
+				224.0,
+				224.0
 			],
 			"group_keys": [
 				"wall_part:inst_000007:59:0",
@@ -2081,85 +2081,85 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						60,
-						61
+						60.0,
+						61.0
 					],
 					"group_key": "wall_part:inst_000007:59:0",
-					"representative_command_index": 60
+					"representative_command_index": 60.0
 				},
 				{
 					"command_indices": [
-						133,
-						134
+						133.0,
+						134.0
 					],
 					"group_key": "wall_part:inst_000010:65:0",
-					"representative_command_index": 133
+					"representative_command_index": 133.0
 				},
 				{
 					"command_indices": [
-						242,
-						243
+						242.0,
+						243.0
 					],
 					"group_key": "wall_part:inst_000013:73:0",
-					"representative_command_index": 242
+					"representative_command_index": 242.0
 				},
 				{
 					"command_indices": [
-						337,
-						338
+						337.0,
+						338.0
 					],
 					"group_key": "wall_part:inst_000066:76:0",
-					"representative_command_index": 337
+					"representative_command_index": 337.0
 				},
 				{
 					"command_indices": [
-						499,
-						500
+						499.0,
+						500.0
 					],
 					"group_key": "wall_part:inst_000019:89:0",
-					"representative_command_index": 499
+					"representative_command_index": 499.0
 				},
 				{
 					"command_indices": [
-						638,
-						639
+						638.0,
+						639.0
 					],
 					"group_key": "wall_part:inst_000022:98:0",
-					"representative_command_index": 638
+					"representative_command_index": 638.0
 				},
 				{
 					"command_indices": [
-						713,
-						714
+						713.0,
+						714.0
 					],
 					"group_key": "wall_part:inst_000025:104:0",
-					"representative_command_index": 713
+					"representative_command_index": 713.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v03/part_00_base.png@(-64.0, -144.0)|assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v03/part_00_front.png@(-64.0, -144.0)",
 			"layers": [
 				{
-					"command_index": 60,
+					"command_index": 60.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v03/part_00_base.png",
 					"offset": [
 						-64.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				},
 				{
-					"command_index": 61,
+					"command_index": 61.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v03/part_00_front.png",
 					"offset": [
 						-64.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				}
 			],
@@ -2167,34 +2167,34 @@
 				-64.0,
 				-144.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				1792,
-				0,
-				224,
-				224
+				1792.0,
+				0.0,
+				224.0,
+				224.0
 			]
 		},
 		{
 			"command_indices": [
-				66,
-				67,
-				139,
-				140,
-				259,
-				260,
-				347,
-				348,
-				507,
-				509,
-				645,
-				646,
-				720,
-				721
+				66.0,
+				67.0,
+				139.0,
+				140.0,
+				259.0,
+				260.0,
+				347.0,
+				348.0,
+				507.0,
+				509.0,
+				645.0,
+				646.0,
+				720.0,
+				721.0
 			],
 			"composite_size": [
-				224,
-				224
+				224.0,
+				224.0
 			],
 			"group_keys": [
 				"wall_part:inst_000007:59:1",
@@ -2208,85 +2208,85 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						66,
-						67
+						66.0,
+						67.0
 					],
 					"group_key": "wall_part:inst_000007:59:1",
-					"representative_command_index": 66
+					"representative_command_index": 66.0
 				},
 				{
 					"command_indices": [
-						139,
-						140
+						139.0,
+						140.0
 					],
 					"group_key": "wall_part:inst_000010:65:1",
-					"representative_command_index": 139
+					"representative_command_index": 139.0
 				},
 				{
 					"command_indices": [
-						259,
-						260
+						259.0,
+						260.0
 					],
 					"group_key": "wall_part:inst_000013:73:1",
-					"representative_command_index": 259
+					"representative_command_index": 259.0
 				},
 				{
 					"command_indices": [
-						347,
-						348
+						347.0,
+						348.0
 					],
 					"group_key": "wall_part:inst_000066:76:1",
-					"representative_command_index": 347
+					"representative_command_index": 347.0
 				},
 				{
 					"command_indices": [
-						507,
-						509
+						507.0,
+						509.0
 					],
 					"group_key": "wall_part:inst_000019:89:1",
-					"representative_command_index": 507
+					"representative_command_index": 507.0
 				},
 				{
 					"command_indices": [
-						645,
-						646
+						645.0,
+						646.0
 					],
 					"group_key": "wall_part:inst_000022:98:1",
-					"representative_command_index": 645
+					"representative_command_index": 645.0
 				},
 				{
 					"command_indices": [
-						720,
-						721
+						720.0,
+						721.0
 					],
 					"group_key": "wall_part:inst_000025:104:1",
-					"representative_command_index": 720
+					"representative_command_index": 720.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v03/part_01_base.png@(-64.0, -144.0)|assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v03/part_01_front.png@(-64.0, -144.0)",
 			"layers": [
 				{
-					"command_index": 66,
+					"command_index": 66.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v03/part_01_base.png",
 					"offset": [
 						-64.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				},
 				{
-					"command_index": 67,
+					"command_index": 67.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v03/part_01_front.png",
 					"offset": [
 						-64.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				}
 			],
@@ -2294,34 +2294,34 @@
 				-64.0,
 				-144.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				0,
-				224,
-				224,
-				224
+				0.0,
+				224.0,
+				224.0,
+				224.0
 			]
 		},
 		{
 			"command_indices": [
-				72,
-				73,
-				145,
-				146,
-				279,
-				280,
-				362,
-				364,
-				516,
-				518,
-				651,
-				652,
-				726,
-				727
+				72.0,
+				73.0,
+				145.0,
+				146.0,
+				279.0,
+				280.0,
+				362.0,
+				364.0,
+				516.0,
+				518.0,
+				651.0,
+				652.0,
+				726.0,
+				727.0
 			],
 			"composite_size": [
-				224,
-				224
+				224.0,
+				224.0
 			],
 			"group_keys": [
 				"wall_part:inst_000007:59:2",
@@ -2335,85 +2335,85 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						72,
-						73
+						72.0,
+						73.0
 					],
 					"group_key": "wall_part:inst_000007:59:2",
-					"representative_command_index": 72
+					"representative_command_index": 72.0
 				},
 				{
 					"command_indices": [
-						145,
-						146
+						145.0,
+						146.0
 					],
 					"group_key": "wall_part:inst_000010:65:2",
-					"representative_command_index": 145
+					"representative_command_index": 145.0
 				},
 				{
 					"command_indices": [
-						279,
-						280
+						279.0,
+						280.0
 					],
 					"group_key": "wall_part:inst_000013:73:2",
-					"representative_command_index": 279
+					"representative_command_index": 279.0
 				},
 				{
 					"command_indices": [
-						362,
-						364
+						362.0,
+						364.0
 					],
 					"group_key": "wall_part:inst_000066:76:2",
-					"representative_command_index": 362
+					"representative_command_index": 362.0
 				},
 				{
 					"command_indices": [
-						516,
-						518
+						516.0,
+						518.0
 					],
 					"group_key": "wall_part:inst_000019:89:2",
-					"representative_command_index": 516
+					"representative_command_index": 516.0
 				},
 				{
 					"command_indices": [
-						651,
-						652
+						651.0,
+						652.0
 					],
 					"group_key": "wall_part:inst_000022:98:2",
-					"representative_command_index": 651
+					"representative_command_index": 651.0
 				},
 				{
 					"command_indices": [
-						726,
-						727
+						726.0,
+						727.0
 					],
 					"group_key": "wall_part:inst_000025:104:2",
-					"representative_command_index": 726
+					"representative_command_index": 726.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v03/part_02_base.png@(-64.0, -144.0)|assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v03/part_02_front.png@(-64.0, -144.0)",
 			"layers": [
 				{
-					"command_index": 72,
+					"command_index": 72.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v03/part_02_base.png",
 					"offset": [
 						-64.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				},
 				{
-					"command_index": 73,
+					"command_index": 73.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v03/part_02_front.png",
 					"offset": [
 						-64.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				}
 			],
@@ -2421,34 +2421,34 @@
 				-64.0,
 				-144.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				224,
-				224,
-				224,
-				224
+				224.0,
+				224.0,
+				224.0,
+				224.0
 			]
 		},
 		{
 			"command_indices": [
-				78,
-				79,
-				151,
-				152,
-				292,
-				294,
-				378,
-				380,
-				525,
-				527,
-				657,
-				658,
-				732,
-				733
+				78.0,
+				79.0,
+				151.0,
+				152.0,
+				292.0,
+				294.0,
+				378.0,
+				380.0,
+				525.0,
+				527.0,
+				657.0,
+				658.0,
+				732.0,
+				733.0
 			],
 			"composite_size": [
-				224,
-				224
+				224.0,
+				224.0
 			],
 			"group_keys": [
 				"wall_part:inst_000007:59:3",
@@ -2462,85 +2462,85 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						78,
-						79
+						78.0,
+						79.0
 					],
 					"group_key": "wall_part:inst_000007:59:3",
-					"representative_command_index": 78
+					"representative_command_index": 78.0
 				},
 				{
 					"command_indices": [
-						151,
-						152
+						151.0,
+						152.0
 					],
 					"group_key": "wall_part:inst_000010:65:3",
-					"representative_command_index": 151
+					"representative_command_index": 151.0
 				},
 				{
 					"command_indices": [
-						292,
-						294
+						292.0,
+						294.0
 					],
 					"group_key": "wall_part:inst_000013:73:3",
-					"representative_command_index": 292
+					"representative_command_index": 292.0
 				},
 				{
 					"command_indices": [
-						378,
-						380
+						378.0,
+						380.0
 					],
 					"group_key": "wall_part:inst_000066:76:3",
-					"representative_command_index": 378
+					"representative_command_index": 378.0
 				},
 				{
 					"command_indices": [
-						525,
-						527
+						525.0,
+						527.0
 					],
 					"group_key": "wall_part:inst_000019:89:3",
-					"representative_command_index": 525
+					"representative_command_index": 525.0
 				},
 				{
 					"command_indices": [
-						657,
-						658
+						657.0,
+						658.0
 					],
 					"group_key": "wall_part:inst_000022:98:3",
-					"representative_command_index": 657
+					"representative_command_index": 657.0
 				},
 				{
 					"command_indices": [
-						732,
-						733
+						732.0,
+						733.0
 					],
 					"group_key": "wall_part:inst_000025:104:3",
-					"representative_command_index": 732
+					"representative_command_index": 732.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v03/part_03_base.png@(-64.0, -144.0)|assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v03/part_03_front.png@(-64.0, -144.0)",
 			"layers": [
 				{
-					"command_index": 78,
+					"command_index": 78.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v03/part_03_base.png",
 					"offset": [
 						-64.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				},
 				{
-					"command_index": 79,
+					"command_index": 79.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l4_v03/part_03_front.png",
 					"offset": [
 						-64.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				}
 			],
@@ -2548,32 +2548,32 @@
 				-64.0,
 				-144.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				448,
-				224,
-				224,
-				224
+				448.0,
+				224.0,
+				224.0,
+				224.0
 			]
 		},
 		{
 			"command_indices": [
-				3,
-				4,
-				273,
-				275,
-				313,
-				315,
-				396,
-				398,
-				471,
-				473,
-				800,
-				802
+				3.0,
+				4.0,
+				273.0,
+				275.0,
+				313.0,
+				315.0,
+				396.0,
+				398.0,
+				471.0,
+				473.0,
+				800.0,
+				802.0
 			],
 			"composite_size": [
-				128,
-				192
+				128.0,
+				192.0
 			],
 			"group_keys": [
 				"wall_part:inst_000057:53:0",
@@ -2586,77 +2586,77 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						3,
-						4
+						3.0,
+						4.0
 					],
 					"group_key": "wall_part:inst_000057:53:0",
-					"representative_command_index": 3
+					"representative_command_index": 3.0
 				},
 				{
 					"command_indices": [
-						273,
-						275
+						273.0,
+						275.0
 					],
 					"group_key": "wall_part:inst_000086:120:0",
-					"representative_command_index": 273
+					"representative_command_index": 273.0
 				},
 				{
 					"command_indices": [
-						313,
-						315
+						313.0,
+						315.0
 					],
 					"group_key": "wall_part:inst_000136:124:0",
-					"representative_command_index": 313
+					"representative_command_index": 313.0
 				},
 				{
 					"command_indices": [
-						396,
-						398
+						396.0,
+						398.0
 					],
 					"group_key": "wall_part:inst_000133:123:0",
-					"representative_command_index": 396
+					"representative_command_index": 396.0
 				},
 				{
 					"command_indices": [
-						471,
-						473
+						471.0,
+						473.0
 					],
 					"group_key": "wall_part:inst_000085:119:0",
-					"representative_command_index": 471
+					"representative_command_index": 471.0
 				},
 				{
 					"command_indices": [
-						800,
-						802
+						800.0,
+						802.0
 					],
 					"group_key": "wall_part:inst_000055:113:0",
-					"representative_command_index": 800
+					"representative_command_index": 800.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l1_v01/part_00_base.png@(-64.0, -160.0)|assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l1_v01/part_00_front.png@(-64.0, -160.0)",
 			"layers": [
 				{
-					"command_index": 3,
+					"command_index": 3.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l1_v01/part_00_base.png",
 					"offset": [
 						-64.0,
 						-160.0
 					],
 					"size": [
-						128,
-						192
+						128.0,
+						192.0
 					]
 				},
 				{
-					"command_index": 4,
+					"command_index": 4.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l1_v01/part_00_front.png",
 					"offset": [
 						-64.0,
 						-160.0
 					],
 					"size": [
-						128,
-						192
+						128.0,
+						192.0
 					]
 				}
 			],
@@ -2664,26 +2664,26 @@
 				-64.0,
 				-160.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				128,
-				672,
-				128,
-				192
+				128.0,
+				672.0,
+				128.0,
+				192.0
 			]
 		},
 		{
 			"command_indices": [
-				366,
-				367,
-				467,
-				468,
-				789,
-				790
+				366.0,
+				367.0,
+				467.0,
+				468.0,
+				789.0,
+				790.0
 			],
 			"composite_size": [
-				160,
-				192
+				160.0,
+				192.0
 			],
 			"group_keys": [
 				"wall_part:inst_000040:80:0",
@@ -2693,53 +2693,53 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						366,
-						367
+						366.0,
+						367.0
 					],
 					"group_key": "wall_part:inst_000040:80:0",
-					"representative_command_index": 366
+					"representative_command_index": 366.0
 				},
 				{
 					"command_indices": [
-						467,
-						468
+						467.0,
+						468.0
 					],
 					"group_key": "wall_part:inst_000059:85:0",
-					"representative_command_index": 467
+					"representative_command_index": 467.0
 				},
 				{
 					"command_indices": [
-						789,
-						790
+						789.0,
+						790.0
 					],
 					"group_key": "wall_part:inst_000052:111:0",
-					"representative_command_index": 789
+					"representative_command_index": 789.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l2_v01/part_00_base.png@(-96.0, -144.0)|assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l2_v01/part_00_front.png@(-96.0, -144.0)",
 			"layers": [
 				{
-					"command_index": 366,
+					"command_index": 366.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l2_v01/part_00_base.png",
 					"offset": [
 						-96.0,
 						-144.0
 					],
 					"size": [
-						160,
-						192
+						160.0,
+						192.0
 					]
 				},
 				{
-					"command_index": 367,
+					"command_index": 367.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l2_v01/part_00_front.png",
 					"offset": [
 						-96.0,
 						-144.0
 					],
 					"size": [
-						160,
-						192
+						160.0,
+						192.0
 					]
 				}
 			],
@@ -2747,26 +2747,26 @@
 				-96.0,
 				-144.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				1664,
-				448,
-				160,
-				192
+				1664.0,
+				448.0,
+				160.0,
+				192.0
 			]
 		},
 		{
 			"command_indices": [
-				382,
-				383,
-				485,
-				487,
-				795,
-				796
+				382.0,
+				383.0,
+				485.0,
+				487.0,
+				795.0,
+				796.0
 			],
 			"composite_size": [
-				160,
-				192
+				160.0,
+				192.0
 			],
 			"group_keys": [
 				"wall_part:inst_000040:80:1",
@@ -2776,53 +2776,53 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						382,
-						383
+						382.0,
+						383.0
 					],
 					"group_key": "wall_part:inst_000040:80:1",
-					"representative_command_index": 382
+					"representative_command_index": 382.0
 				},
 				{
 					"command_indices": [
-						485,
-						487
+						485.0,
+						487.0
 					],
 					"group_key": "wall_part:inst_000059:85:1",
-					"representative_command_index": 485
+					"representative_command_index": 485.0
 				},
 				{
 					"command_indices": [
-						795,
-						796
+						795.0,
+						796.0
 					],
 					"group_key": "wall_part:inst_000052:111:1",
-					"representative_command_index": 795
+					"representative_command_index": 795.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l2_v01/part_01_base.png@(-96.0, -144.0)|assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l2_v01/part_01_front.png@(-96.0, -144.0)",
 			"layers": [
 				{
-					"command_index": 382,
+					"command_index": 382.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l2_v01/part_01_base.png",
 					"offset": [
 						-96.0,
 						-144.0
 					],
 					"size": [
-						160,
-						192
+						160.0,
+						192.0
 					]
 				},
 				{
-					"command_index": 383,
+					"command_index": 383.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l2_v01/part_01_front.png",
 					"offset": [
 						-96.0,
 						-144.0
 					],
 					"size": [
-						160,
-						192
+						160.0,
+						192.0
 					]
 				}
 			],
@@ -2830,50 +2830,50 @@
 				-96.0,
 				-144.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				1824,
-				448,
-				160,
-				192
+				1824.0,
+				448.0,
+				160.0,
+				192.0
 			]
 		},
 		{
 			"command_indices": [
-				6,
-				7,
-				81,
-				82,
-				154,
-				155,
-				199,
-				200,
-				213,
-				215,
-				296,
-				297,
-				333,
-				334,
-				354,
-				356,
-				408,
-				410,
-				413,
-				414,
-				436,
-				438,
-				555,
-				556,
-				568,
-				570,
-				667,
-				668,
-				741,
-				742
+				6.0,
+				7.0,
+				81.0,
+				82.0,
+				154.0,
+				155.0,
+				199.0,
+				200.0,
+				213.0,
+				215.0,
+				296.0,
+				297.0,
+				333.0,
+				334.0,
+				354.0,
+				356.0,
+				408.0,
+				410.0,
+				413.0,
+				414.0,
+				436.0,
+				438.0,
+				555.0,
+				556.0,
+				568.0,
+				570.0,
+				667.0,
+				668.0,
+				741.0,
+				742.0
 			],
 			"composite_size": [
-				224,
-				224
+				224.0,
+				224.0
 			],
 			"group_keys": [
 				"wall_part:inst_000029:54:0",
@@ -2895,149 +2895,149 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						6,
-						7
+						6.0,
+						7.0
 					],
 					"group_key": "wall_part:inst_000029:54:0",
-					"representative_command_index": 6
+					"representative_command_index": 6.0
 				},
 				{
 					"command_indices": [
-						81,
-						82
+						81.0,
+						82.0
 					],
 					"group_key": "wall_part:inst_000032:60:0",
-					"representative_command_index": 81
+					"representative_command_index": 81.0
 				},
 				{
 					"command_indices": [
-						154,
-						155
+						154.0,
+						155.0
 					],
 					"group_key": "wall_part:inst_000035:66:0",
-					"representative_command_index": 154
+					"representative_command_index": 154.0
 				},
 				{
 					"command_indices": [
-						199,
-						200
+						199.0,
+						200.0
 					],
 					"group_key": "wall_part:inst_000072:70:0",
-					"representative_command_index": 199
+					"representative_command_index": 199.0
 				},
 				{
 					"command_indices": [
-						213,
-						215
+						213.0,
+						215.0
 					],
 					"group_key": "wall_part:inst_000084:118:0",
-					"representative_command_index": 213
+					"representative_command_index": 213.0
 				},
 				{
 					"command_indices": [
-						296,
-						297
+						296.0,
+						297.0
 					],
 					"group_key": "wall_part:inst_000038:74:0",
-					"representative_command_index": 296
+					"representative_command_index": 296.0
 				},
 				{
 					"command_indices": [
-						333,
-						334
+						333.0,
+						334.0
 					],
 					"group_key": "wall_part:inst_000075:78:0",
-					"representative_command_index": 333
+					"representative_command_index": 333.0
 				},
 				{
 					"command_indices": [
-						354,
-						356
+						354.0,
+						356.0
 					],
 					"group_key": "wall_part:inst_000083:117:0",
-					"representative_command_index": 354
+					"representative_command_index": 354.0
 				},
 				{
 					"command_indices": [
-						408,
-						410
+						408.0,
+						410.0
 					],
 					"group_key": "wall_part:inst_000081:115:0",
-					"representative_command_index": 408
+					"representative_command_index": 408.0
 				},
 				{
 					"command_indices": [
-						413,
-						414
+						413.0,
+						414.0
 					],
 					"group_key": "wall_part:inst_000041:82:0",
-					"representative_command_index": 413
+					"representative_command_index": 413.0
 				},
 				{
 					"command_indices": [
-						436,
-						438
+						436.0,
+						438.0
 					],
 					"group_key": "wall_part:inst_000076:84:0",
-					"representative_command_index": 436
+					"representative_command_index": 436.0
 				},
 				{
 					"command_indices": [
-						555,
-						556
+						555.0,
+						556.0
 					],
 					"group_key": "wall_part:inst_000044:95:0",
-					"representative_command_index": 555
+					"representative_command_index": 555.0
 				},
 				{
 					"command_indices": [
-						568,
-						570
+						568.0,
+						570.0
 					],
 					"group_key": "wall_part:inst_000079:94:0",
-					"representative_command_index": 568
+					"representative_command_index": 568.0
 				},
 				{
 					"command_indices": [
-						667,
-						668
+						667.0,
+						668.0
 					],
 					"group_key": "wall_part:inst_000047:101:0",
-					"representative_command_index": 667
+					"representative_command_index": 667.0
 				},
 				{
 					"command_indices": [
-						741,
-						742
+						741.0,
+						742.0
 					],
 					"group_key": "wall_part:inst_000050:107:0",
-					"representative_command_index": 741
+					"representative_command_index": 741.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v01/part_00_base.png@(-160.0, -144.0)|assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v01/part_00_front.png@(-160.0, -144.0)",
 			"layers": [
 				{
-					"command_index": 6,
+					"command_index": 6.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v01/part_00_base.png",
 					"offset": [
 						-160.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				},
 				{
-					"command_index": 7,
+					"command_index": 7.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v01/part_00_front.png",
 					"offset": [
 						-160.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				}
 			],
@@ -3045,50 +3045,50 @@
 				-160.0,
 				-144.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				672,
-				224,
-				224,
-				224
+				672.0,
+				224.0,
+				224.0,
+				224.0
 			]
 		},
 		{
 			"command_indices": [
-				12,
-				13,
-				87,
-				88,
-				160,
-				161,
-				214,
-				216,
-				231,
-				233,
-				303,
-				304,
-				343,
-				344,
-				370,
-				372,
-				420,
-				421,
-				424,
-				425,
-				453,
-				455,
-				573,
-				574,
-				586,
-				588,
-				673,
-				674,
-				747,
-				748
+				12.0,
+				13.0,
+				87.0,
+				88.0,
+				160.0,
+				161.0,
+				214.0,
+				216.0,
+				231.0,
+				233.0,
+				303.0,
+				304.0,
+				343.0,
+				344.0,
+				370.0,
+				372.0,
+				420.0,
+				421.0,
+				424.0,
+				425.0,
+				453.0,
+				455.0,
+				573.0,
+				574.0,
+				586.0,
+				588.0,
+				673.0,
+				674.0,
+				747.0,
+				748.0
 			],
 			"composite_size": [
-				224,
-				224
+				224.0,
+				224.0
 			],
 			"group_keys": [
 				"wall_part:inst_000029:54:1",
@@ -3110,149 +3110,149 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						12,
-						13
+						12.0,
+						13.0
 					],
 					"group_key": "wall_part:inst_000029:54:1",
-					"representative_command_index": 12
+					"representative_command_index": 12.0
 				},
 				{
 					"command_indices": [
-						87,
-						88
+						87.0,
+						88.0
 					],
 					"group_key": "wall_part:inst_000032:60:1",
-					"representative_command_index": 87
+					"representative_command_index": 87.0
 				},
 				{
 					"command_indices": [
-						160,
-						161
+						160.0,
+						161.0
 					],
 					"group_key": "wall_part:inst_000035:66:1",
-					"representative_command_index": 160
+					"representative_command_index": 160.0
 				},
 				{
 					"command_indices": [
-						214,
-						216
+						214.0,
+						216.0
 					],
 					"group_key": "wall_part:inst_000072:70:1",
-					"representative_command_index": 214
+					"representative_command_index": 214.0
 				},
 				{
 					"command_indices": [
-						231,
-						233
+						231.0,
+						233.0
 					],
 					"group_key": "wall_part:inst_000084:118:1",
-					"representative_command_index": 231
+					"representative_command_index": 231.0
 				},
 				{
 					"command_indices": [
-						303,
-						304
+						303.0,
+						304.0
 					],
 					"group_key": "wall_part:inst_000038:74:1",
-					"representative_command_index": 303
+					"representative_command_index": 303.0
 				},
 				{
 					"command_indices": [
-						343,
-						344
+						343.0,
+						344.0
 					],
 					"group_key": "wall_part:inst_000075:78:1",
-					"representative_command_index": 343
+					"representative_command_index": 343.0
 				},
 				{
 					"command_indices": [
-						370,
-						372
+						370.0,
+						372.0
 					],
 					"group_key": "wall_part:inst_000083:117:1",
-					"representative_command_index": 370
+					"representative_command_index": 370.0
 				},
 				{
 					"command_indices": [
-						420,
-						421
+						420.0,
+						421.0
 					],
 					"group_key": "wall_part:inst_000081:115:1",
-					"representative_command_index": 420
+					"representative_command_index": 420.0
 				},
 				{
 					"command_indices": [
-						424,
-						425
+						424.0,
+						425.0
 					],
 					"group_key": "wall_part:inst_000041:82:1",
-					"representative_command_index": 424
+					"representative_command_index": 424.0
 				},
 				{
 					"command_indices": [
-						453,
-						455
+						453.0,
+						455.0
 					],
 					"group_key": "wall_part:inst_000076:84:1",
-					"representative_command_index": 453
+					"representative_command_index": 453.0
 				},
 				{
 					"command_indices": [
-						573,
-						574
+						573.0,
+						574.0
 					],
 					"group_key": "wall_part:inst_000044:95:1",
-					"representative_command_index": 573
+					"representative_command_index": 573.0
 				},
 				{
 					"command_indices": [
-						586,
-						588
+						586.0,
+						588.0
 					],
 					"group_key": "wall_part:inst_000079:94:1",
-					"representative_command_index": 586
+					"representative_command_index": 586.0
 				},
 				{
 					"command_indices": [
-						673,
-						674
+						673.0,
+						674.0
 					],
 					"group_key": "wall_part:inst_000047:101:1",
-					"representative_command_index": 673
+					"representative_command_index": 673.0
 				},
 				{
 					"command_indices": [
-						747,
-						748
+						747.0,
+						748.0
 					],
 					"group_key": "wall_part:inst_000050:107:1",
-					"representative_command_index": 747
+					"representative_command_index": 747.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v01/part_01_base.png@(-160.0, -144.0)|assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v01/part_01_front.png@(-160.0, -144.0)",
 			"layers": [
 				{
-					"command_index": 12,
+					"command_index": 12.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v01/part_01_base.png",
 					"offset": [
 						-160.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				},
 				{
-					"command_index": 13,
+					"command_index": 13.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v01/part_01_front.png",
 					"offset": [
 						-160.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				}
 			],
@@ -3260,50 +3260,50 @@
 				-160.0,
 				-144.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				896,
-				224,
-				224,
-				224
+				896.0,
+				224.0,
+				224.0,
+				224.0
 			]
 		},
 		{
 			"command_indices": [
-				18,
-				19,
-				93,
-				94,
-				166,
-				167,
-				232,
-				234,
-				250,
-				252,
-				309,
-				310,
-				355,
-				357,
-				386,
-				387,
-				437,
-				439,
-				441,
-				442,
-				464,
-				465,
-				591,
-				592,
-				600,
-				601,
-				679,
-				680,
-				753,
-				754
+				18.0,
+				19.0,
+				93.0,
+				94.0,
+				166.0,
+				167.0,
+				232.0,
+				234.0,
+				250.0,
+				252.0,
+				309.0,
+				310.0,
+				355.0,
+				357.0,
+				386.0,
+				387.0,
+				437.0,
+				439.0,
+				441.0,
+				442.0,
+				464.0,
+				465.0,
+				591.0,
+				592.0,
+				600.0,
+				601.0,
+				679.0,
+				680.0,
+				753.0,
+				754.0
 			],
 			"composite_size": [
-				224,
-				224
+				224.0,
+				224.0
 			],
 			"group_keys": [
 				"wall_part:inst_000029:54:2",
@@ -3325,149 +3325,149 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						18,
-						19
+						18.0,
+						19.0
 					],
 					"group_key": "wall_part:inst_000029:54:2",
-					"representative_command_index": 18
+					"representative_command_index": 18.0
 				},
 				{
 					"command_indices": [
-						93,
-						94
+						93.0,
+						94.0
 					],
 					"group_key": "wall_part:inst_000032:60:2",
-					"representative_command_index": 93
+					"representative_command_index": 93.0
 				},
 				{
 					"command_indices": [
-						166,
-						167
+						166.0,
+						167.0
 					],
 					"group_key": "wall_part:inst_000035:66:2",
-					"representative_command_index": 166
+					"representative_command_index": 166.0
 				},
 				{
 					"command_indices": [
-						232,
-						234
+						232.0,
+						234.0
 					],
 					"group_key": "wall_part:inst_000072:70:2",
-					"representative_command_index": 232
+					"representative_command_index": 232.0
 				},
 				{
 					"command_indices": [
-						250,
-						252
+						250.0,
+						252.0
 					],
 					"group_key": "wall_part:inst_000084:118:2",
-					"representative_command_index": 250
+					"representative_command_index": 250.0
 				},
 				{
 					"command_indices": [
-						309,
-						310
+						309.0,
+						310.0
 					],
 					"group_key": "wall_part:inst_000038:74:2",
-					"representative_command_index": 309
+					"representative_command_index": 309.0
 				},
 				{
 					"command_indices": [
-						355,
-						357
+						355.0,
+						357.0
 					],
 					"group_key": "wall_part:inst_000075:78:2",
-					"representative_command_index": 355
+					"representative_command_index": 355.0
 				},
 				{
 					"command_indices": [
-						386,
-						387
+						386.0,
+						387.0
 					],
 					"group_key": "wall_part:inst_000083:117:2",
-					"representative_command_index": 386
+					"representative_command_index": 386.0
 				},
 				{
 					"command_indices": [
-						437,
-						439
+						437.0,
+						439.0
 					],
 					"group_key": "wall_part:inst_000081:115:2",
-					"representative_command_index": 437
+					"representative_command_index": 437.0
 				},
 				{
 					"command_indices": [
-						441,
-						442
+						441.0,
+						442.0
 					],
 					"group_key": "wall_part:inst_000041:82:2",
-					"representative_command_index": 441
+					"representative_command_index": 441.0
 				},
 				{
 					"command_indices": [
-						464,
-						465
+						464.0,
+						465.0
 					],
 					"group_key": "wall_part:inst_000076:84:2",
-					"representative_command_index": 464
+					"representative_command_index": 464.0
 				},
 				{
 					"command_indices": [
-						591,
-						592
+						591.0,
+						592.0
 					],
 					"group_key": "wall_part:inst_000044:95:2",
-					"representative_command_index": 591
+					"representative_command_index": 591.0
 				},
 				{
 					"command_indices": [
-						600,
-						601
+						600.0,
+						601.0
 					],
 					"group_key": "wall_part:inst_000079:94:2",
-					"representative_command_index": 600
+					"representative_command_index": 600.0
 				},
 				{
 					"command_indices": [
-						679,
-						680
+						679.0,
+						680.0
 					],
 					"group_key": "wall_part:inst_000047:101:2",
-					"representative_command_index": 679
+					"representative_command_index": 679.0
 				},
 				{
 					"command_indices": [
-						753,
-						754
+						753.0,
+						754.0
 					],
 					"group_key": "wall_part:inst_000050:107:2",
-					"representative_command_index": 753
+					"representative_command_index": 753.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v01/part_02_base.png@(-160.0, -144.0)|assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v01/part_02_front.png@(-160.0, -144.0)",
 			"layers": [
 				{
-					"command_index": 18,
+					"command_index": 18.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v01/part_02_base.png",
 					"offset": [
 						-160.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				},
 				{
-					"command_index": 19,
+					"command_index": 19.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v01/part_02_front.png",
 					"offset": [
 						-160.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				}
 			],
@@ -3475,50 +3475,50 @@
 				-160.0,
 				-144.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				1120,
-				224,
-				224,
-				224
+				1120.0,
+				224.0,
+				224.0,
+				224.0
 			]
 		},
 		{
 			"command_indices": [
-				24,
-				25,
-				99,
-				100,
-				173,
-				174,
-				251,
-				253,
-				267,
-				269,
-				318,
-				319,
-				371,
-				373,
-				402,
-				404,
-				454,
-				456,
-				458,
-				459,
-				479,
-				481,
-				604,
-				605,
-				612,
-				614,
-				686,
-				687,
-				759,
-				760
+				24.0,
+				25.0,
+				99.0,
+				100.0,
+				173.0,
+				174.0,
+				251.0,
+				253.0,
+				267.0,
+				269.0,
+				318.0,
+				319.0,
+				371.0,
+				373.0,
+				402.0,
+				404.0,
+				454.0,
+				456.0,
+				458.0,
+				459.0,
+				479.0,
+				481.0,
+				604.0,
+				605.0,
+				612.0,
+				614.0,
+				686.0,
+				687.0,
+				759.0,
+				760.0
 			],
 			"composite_size": [
-				224,
-				224
+				224.0,
+				224.0
 			],
 			"group_keys": [
 				"wall_part:inst_000029:54:3",
@@ -3540,149 +3540,149 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						24,
-						25
+						24.0,
+						25.0
 					],
 					"group_key": "wall_part:inst_000029:54:3",
-					"representative_command_index": 24
+					"representative_command_index": 24.0
 				},
 				{
 					"command_indices": [
-						99,
-						100
+						99.0,
+						100.0
 					],
 					"group_key": "wall_part:inst_000032:60:3",
-					"representative_command_index": 99
+					"representative_command_index": 99.0
 				},
 				{
 					"command_indices": [
-						173,
-						174
+						173.0,
+						174.0
 					],
 					"group_key": "wall_part:inst_000035:66:3",
-					"representative_command_index": 173
+					"representative_command_index": 173.0
 				},
 				{
 					"command_indices": [
-						251,
-						253
+						251.0,
+						253.0
 					],
 					"group_key": "wall_part:inst_000072:70:3",
-					"representative_command_index": 251
+					"representative_command_index": 251.0
 				},
 				{
 					"command_indices": [
-						267,
-						269
+						267.0,
+						269.0
 					],
 					"group_key": "wall_part:inst_000084:118:3",
-					"representative_command_index": 267
+					"representative_command_index": 267.0
 				},
 				{
 					"command_indices": [
-						318,
-						319
+						318.0,
+						319.0
 					],
 					"group_key": "wall_part:inst_000038:74:3",
-					"representative_command_index": 318
+					"representative_command_index": 318.0
 				},
 				{
 					"command_indices": [
-						371,
-						373
+						371.0,
+						373.0
 					],
 					"group_key": "wall_part:inst_000075:78:3",
-					"representative_command_index": 371
+					"representative_command_index": 371.0
 				},
 				{
 					"command_indices": [
-						402,
-						404
+						402.0,
+						404.0
 					],
 					"group_key": "wall_part:inst_000083:117:3",
-					"representative_command_index": 402
+					"representative_command_index": 402.0
 				},
 				{
 					"command_indices": [
-						454,
-						456
+						454.0,
+						456.0
 					],
 					"group_key": "wall_part:inst_000081:115:3",
-					"representative_command_index": 454
+					"representative_command_index": 454.0
 				},
 				{
 					"command_indices": [
-						458,
-						459
+						458.0,
+						459.0
 					],
 					"group_key": "wall_part:inst_000041:82:3",
-					"representative_command_index": 458
+					"representative_command_index": 458.0
 				},
 				{
 					"command_indices": [
-						479,
-						481
+						479.0,
+						481.0
 					],
 					"group_key": "wall_part:inst_000076:84:3",
-					"representative_command_index": 479
+					"representative_command_index": 479.0
 				},
 				{
 					"command_indices": [
-						604,
-						605
+						604.0,
+						605.0
 					],
 					"group_key": "wall_part:inst_000044:95:3",
-					"representative_command_index": 604
+					"representative_command_index": 604.0
 				},
 				{
 					"command_indices": [
-						612,
-						614
+						612.0,
+						614.0
 					],
 					"group_key": "wall_part:inst_000079:94:3",
-					"representative_command_index": 612
+					"representative_command_index": 612.0
 				},
 				{
 					"command_indices": [
-						686,
-						687
+						686.0,
+						687.0
 					],
 					"group_key": "wall_part:inst_000047:101:3",
-					"representative_command_index": 686
+					"representative_command_index": 686.0
 				},
 				{
 					"command_indices": [
-						759,
-						760
+						759.0,
+						760.0
 					],
 					"group_key": "wall_part:inst_000050:107:3",
-					"representative_command_index": 759
+					"representative_command_index": 759.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v01/part_03_base.png@(-160.0, -144.0)|assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v01/part_03_front.png@(-160.0, -144.0)",
 			"layers": [
 				{
-					"command_index": 24,
+					"command_index": 24.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v01/part_03_base.png",
 					"offset": [
 						-160.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				},
 				{
-					"command_index": 25,
+					"command_index": 25.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v01/part_03_front.png",
 					"offset": [
 						-160.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				}
 			],
@@ -3690,36 +3690,36 @@
 				-160.0,
 				-144.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				1344,
-				224,
-				224,
-				224
+				1344.0,
+				224.0,
+				224.0,
+				224.0
 			]
 		},
 		{
 			"command_indices": [
-				30,
-				31,
-				105,
-				106,
-				179,
-				180,
-				323,
-				324,
-				484,
-				486,
-				617,
-				618,
-				692,
-				693,
-				765,
-				766
+				30.0,
+				31.0,
+				105.0,
+				106.0,
+				179.0,
+				180.0,
+				323.0,
+				324.0,
+				484.0,
+				486.0,
+				617.0,
+				618.0,
+				692.0,
+				693.0,
+				765.0,
+				766.0
 			],
 			"composite_size": [
-				224,
-				224
+				224.0,
+				224.0
 			],
 			"group_keys": [
 				"wall_part:inst_000030:56:0",
@@ -3734,93 +3734,93 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						30,
-						31
+						30.0,
+						31.0
 					],
 					"group_key": "wall_part:inst_000030:56:0",
-					"representative_command_index": 30
+					"representative_command_index": 30.0
 				},
 				{
 					"command_indices": [
-						105,
-						106
+						105.0,
+						106.0
 					],
 					"group_key": "wall_part:inst_000033:62:0",
-					"representative_command_index": 105
+					"representative_command_index": 105.0
 				},
 				{
 					"command_indices": [
-						179,
-						180
+						179.0,
+						180.0
 					],
 					"group_key": "wall_part:inst_000036:68:0",
-					"representative_command_index": 179
+					"representative_command_index": 179.0
 				},
 				{
 					"command_indices": [
-						323,
-						324
+						323.0,
+						324.0
 					],
 					"group_key": "wall_part:inst_000039:77:0",
-					"representative_command_index": 323
+					"representative_command_index": 323.0
 				},
 				{
 					"command_indices": [
-						484,
-						486
+						484.0,
+						486.0
 					],
 					"group_key": "wall_part:inst_000042:88:0",
-					"representative_command_index": 484
+					"representative_command_index": 484.0
 				},
 				{
 					"command_indices": [
-						617,
-						618
+						617.0,
+						618.0
 					],
 					"group_key": "wall_part:inst_000045:97:0",
-					"representative_command_index": 617
+					"representative_command_index": 617.0
 				},
 				{
 					"command_indices": [
-						692,
-						693
+						692.0,
+						693.0
 					],
 					"group_key": "wall_part:inst_000048:103:0",
-					"representative_command_index": 692
+					"representative_command_index": 692.0
 				},
 				{
 					"command_indices": [
-						765,
-						766
+						765.0,
+						766.0
 					],
 					"group_key": "wall_part:inst_000051:109:0",
-					"representative_command_index": 765
+					"representative_command_index": 765.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v02/part_00_base.png@(-160.0, -144.0)|assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v02/part_00_front.png@(-160.0, -144.0)",
 			"layers": [
 				{
-					"command_index": 30,
+					"command_index": 30.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v02/part_00_base.png",
 					"offset": [
 						-160.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				},
 				{
-					"command_index": 31,
+					"command_index": 31.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v02/part_00_front.png",
 					"offset": [
 						-160.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				}
 			],
@@ -3828,36 +3828,36 @@
 				-160.0,
 				-144.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				1568,
-				224,
-				224,
-				224
+				1568.0,
+				224.0,
+				224.0,
+				224.0
 			]
 		},
 		{
 			"command_indices": [
-				37,
-				38,
-				111,
-				112,
-				186,
-				187,
-				330,
-				331,
-				491,
-				492,
-				623,
-				624,
-				698,
-				699,
-				771,
-				772
+				37.0,
+				38.0,
+				111.0,
+				112.0,
+				186.0,
+				187.0,
+				330.0,
+				331.0,
+				491.0,
+				492.0,
+				623.0,
+				624.0,
+				698.0,
+				699.0,
+				771.0,
+				772.0
 			],
 			"composite_size": [
-				224,
-				224
+				224.0,
+				224.0
 			],
 			"group_keys": [
 				"wall_part:inst_000030:56:1",
@@ -3872,93 +3872,93 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						37,
-						38
+						37.0,
+						38.0
 					],
 					"group_key": "wall_part:inst_000030:56:1",
-					"representative_command_index": 37
+					"representative_command_index": 37.0
 				},
 				{
 					"command_indices": [
-						111,
-						112
+						111.0,
+						112.0
 					],
 					"group_key": "wall_part:inst_000033:62:1",
-					"representative_command_index": 111
+					"representative_command_index": 111.0
 				},
 				{
 					"command_indices": [
-						186,
-						187
+						186.0,
+						187.0
 					],
 					"group_key": "wall_part:inst_000036:68:1",
-					"representative_command_index": 186
+					"representative_command_index": 186.0
 				},
 				{
 					"command_indices": [
-						330,
-						331
+						330.0,
+						331.0
 					],
 					"group_key": "wall_part:inst_000039:77:1",
-					"representative_command_index": 330
+					"representative_command_index": 330.0
 				},
 				{
 					"command_indices": [
-						491,
-						492
+						491.0,
+						492.0
 					],
 					"group_key": "wall_part:inst_000042:88:1",
-					"representative_command_index": 491
+					"representative_command_index": 491.0
 				},
 				{
 					"command_indices": [
-						623,
-						624
+						623.0,
+						624.0
 					],
 					"group_key": "wall_part:inst_000045:97:1",
-					"representative_command_index": 623
+					"representative_command_index": 623.0
 				},
 				{
 					"command_indices": [
-						698,
-						699
+						698.0,
+						699.0
 					],
 					"group_key": "wall_part:inst_000048:103:1",
-					"representative_command_index": 698
+					"representative_command_index": 698.0
 				},
 				{
 					"command_indices": [
-						771,
-						772
+						771.0,
+						772.0
 					],
 					"group_key": "wall_part:inst_000051:109:1",
-					"representative_command_index": 771
+					"representative_command_index": 771.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v02/part_01_base.png@(-160.0, -144.0)|assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v02/part_01_front.png@(-160.0, -144.0)",
 			"layers": [
 				{
-					"command_index": 37,
+					"command_index": 37.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v02/part_01_base.png",
 					"offset": [
 						-160.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				},
 				{
-					"command_index": 38,
+					"command_index": 38.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v02/part_01_front.png",
 					"offset": [
 						-160.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				}
 			],
@@ -3966,36 +3966,36 @@
 				-160.0,
 				-144.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				1792,
-				224,
-				224,
-				224
+				1792.0,
+				224.0,
+				224.0,
+				224.0
 			]
 		},
 		{
 			"command_indices": [
-				43,
-				44,
-				117,
-				118,
-				195,
-				196,
-				340,
-				341,
-				496,
-				497,
-				629,
-				630,
-				704,
-				705,
-				777,
-				778
+				43.0,
+				44.0,
+				117.0,
+				118.0,
+				195.0,
+				196.0,
+				340.0,
+				341.0,
+				496.0,
+				497.0,
+				629.0,
+				630.0,
+				704.0,
+				705.0,
+				777.0,
+				778.0
 			],
 			"composite_size": [
-				224,
-				224
+				224.0,
+				224.0
 			],
 			"group_keys": [
 				"wall_part:inst_000030:56:2",
@@ -4010,93 +4010,93 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						43,
-						44
+						43.0,
+						44.0
 					],
 					"group_key": "wall_part:inst_000030:56:2",
-					"representative_command_index": 43
+					"representative_command_index": 43.0
 				},
 				{
 					"command_indices": [
-						117,
-						118
+						117.0,
+						118.0
 					],
 					"group_key": "wall_part:inst_000033:62:2",
-					"representative_command_index": 117
+					"representative_command_index": 117.0
 				},
 				{
 					"command_indices": [
-						195,
-						196
+						195.0,
+						196.0
 					],
 					"group_key": "wall_part:inst_000036:68:2",
-					"representative_command_index": 195
+					"representative_command_index": 195.0
 				},
 				{
 					"command_indices": [
-						340,
-						341
+						340.0,
+						341.0
 					],
 					"group_key": "wall_part:inst_000039:77:2",
-					"representative_command_index": 340
+					"representative_command_index": 340.0
 				},
 				{
 					"command_indices": [
-						496,
-						497
+						496.0,
+						497.0
 					],
 					"group_key": "wall_part:inst_000042:88:2",
-					"representative_command_index": 496
+					"representative_command_index": 496.0
 				},
 				{
 					"command_indices": [
-						629,
-						630
+						629.0,
+						630.0
 					],
 					"group_key": "wall_part:inst_000045:97:2",
-					"representative_command_index": 629
+					"representative_command_index": 629.0
 				},
 				{
 					"command_indices": [
-						704,
-						705
+						704.0,
+						705.0
 					],
 					"group_key": "wall_part:inst_000048:103:2",
-					"representative_command_index": 704
+					"representative_command_index": 704.0
 				},
 				{
 					"command_indices": [
-						777,
-						778
+						777.0,
+						778.0
 					],
 					"group_key": "wall_part:inst_000051:109:2",
-					"representative_command_index": 777
+					"representative_command_index": 777.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v02/part_02_base.png@(-160.0, -144.0)|assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v02/part_02_front.png@(-160.0, -144.0)",
 			"layers": [
 				{
-					"command_index": 43,
+					"command_index": 43.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v02/part_02_base.png",
 					"offset": [
 						-160.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				},
 				{
-					"command_index": 44,
+					"command_index": 44.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v02/part_02_front.png",
 					"offset": [
 						-160.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				}
 			],
@@ -4104,36 +4104,36 @@
 				-160.0,
 				-144.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				0,
-				448,
-				224,
-				224
+				0.0,
+				448.0,
+				224.0,
+				224.0
 			]
 		},
 		{
 			"command_indices": [
-				50,
-				51,
-				123,
-				124,
-				209,
-				210,
-				350,
-				351,
-				502,
-				503,
-				635,
-				636,
-				710,
-				711,
-				783,
-				784
+				50.0,
+				51.0,
+				123.0,
+				124.0,
+				209.0,
+				210.0,
+				350.0,
+				351.0,
+				502.0,
+				503.0,
+				635.0,
+				636.0,
+				710.0,
+				711.0,
+				783.0,
+				784.0
 			],
 			"composite_size": [
-				224,
-				224
+				224.0,
+				224.0
 			],
 			"group_keys": [
 				"wall_part:inst_000030:56:3",
@@ -4148,93 +4148,93 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						50,
-						51
+						50.0,
+						51.0
 					],
 					"group_key": "wall_part:inst_000030:56:3",
-					"representative_command_index": 50
+					"representative_command_index": 50.0
 				},
 				{
 					"command_indices": [
-						123,
-						124
+						123.0,
+						124.0
 					],
 					"group_key": "wall_part:inst_000033:62:3",
-					"representative_command_index": 123
+					"representative_command_index": 123.0
 				},
 				{
 					"command_indices": [
-						209,
-						210
+						209.0,
+						210.0
 					],
 					"group_key": "wall_part:inst_000036:68:3",
-					"representative_command_index": 209
+					"representative_command_index": 209.0
 				},
 				{
 					"command_indices": [
-						350,
-						351
+						350.0,
+						351.0
 					],
 					"group_key": "wall_part:inst_000039:77:3",
-					"representative_command_index": 350
+					"representative_command_index": 350.0
 				},
 				{
 					"command_indices": [
-						502,
-						503
+						502.0,
+						503.0
 					],
 					"group_key": "wall_part:inst_000042:88:3",
-					"representative_command_index": 502
+					"representative_command_index": 502.0
 				},
 				{
 					"command_indices": [
-						635,
-						636
+						635.0,
+						636.0
 					],
 					"group_key": "wall_part:inst_000045:97:3",
-					"representative_command_index": 635
+					"representative_command_index": 635.0
 				},
 				{
 					"command_indices": [
-						710,
-						711
+						710.0,
+						711.0
 					],
 					"group_key": "wall_part:inst_000048:103:3",
-					"representative_command_index": 710
+					"representative_command_index": 710.0
 				},
 				{
 					"command_indices": [
-						783,
-						784
+						783.0,
+						784.0
 					],
 					"group_key": "wall_part:inst_000051:109:3",
-					"representative_command_index": 783
+					"representative_command_index": 783.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v02/part_03_base.png@(-160.0, -144.0)|assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v02/part_03_front.png@(-160.0, -144.0)",
 			"layers": [
 				{
-					"command_index": 50,
+					"command_index": 50.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v02/part_03_base.png",
 					"offset": [
 						-160.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				},
 				{
-					"command_index": 51,
+					"command_index": 51.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v02/part_03_front.png",
 					"offset": [
 						-160.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				}
 			],
@@ -4242,34 +4242,34 @@
 				-160.0,
 				-144.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				224,
-				448,
-				224,
-				224
+				224.0,
+				448.0,
+				224.0,
+				224.0
 			]
 		},
 		{
 			"command_indices": [
-				56,
-				57,
-				130,
-				131,
-				227,
-				228,
-				511,
-				512,
-				540,
-				541,
-				642,
-				643,
-				717,
-				718
+				56.0,
+				57.0,
+				130.0,
+				131.0,
+				227.0,
+				228.0,
+				511.0,
+				512.0,
+				540.0,
+				541.0,
+				642.0,
+				643.0,
+				717.0,
+				718.0
 			],
 			"composite_size": [
-				224,
-				224
+				224.0,
+				224.0
 			],
 			"group_keys": [
 				"wall_part:inst_000031:58:0",
@@ -4283,85 +4283,85 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						56,
-						57
+						56.0,
+						57.0
 					],
 					"group_key": "wall_part:inst_000031:58:0",
-					"representative_command_index": 56
+					"representative_command_index": 56.0
 				},
 				{
 					"command_indices": [
-						130,
-						131
+						130.0,
+						131.0
 					],
 					"group_key": "wall_part:inst_000034:64:0",
-					"representative_command_index": 130
+					"representative_command_index": 130.0
 				},
 				{
 					"command_indices": [
-						227,
-						228
+						227.0,
+						228.0
 					],
 					"group_key": "wall_part:inst_000037:72:0",
-					"representative_command_index": 227
+					"representative_command_index": 227.0
 				},
 				{
 					"command_indices": [
-						511,
-						512
+						511.0,
+						512.0
 					],
 					"group_key": "wall_part:inst_000043:91:0",
-					"representative_command_index": 511
+					"representative_command_index": 511.0
 				},
 				{
 					"command_indices": [
-						540,
-						541
+						540.0,
+						541.0
 					],
 					"group_key": "wall_part:inst_000078:90:0",
-					"representative_command_index": 540
+					"representative_command_index": 540.0
 				},
 				{
 					"command_indices": [
-						642,
-						643
+						642.0,
+						643.0
 					],
 					"group_key": "wall_part:inst_000046:99:0",
-					"representative_command_index": 642
+					"representative_command_index": 642.0
 				},
 				{
 					"command_indices": [
-						717,
-						718
+						717.0,
+						718.0
 					],
 					"group_key": "wall_part:inst_000049:105:0",
-					"representative_command_index": 717
+					"representative_command_index": 717.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v03/part_00_base.png@(-160.0, -144.0)|assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v03/part_00_front.png@(-160.0, -144.0)",
 			"layers": [
 				{
-					"command_index": 56,
+					"command_index": 56.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v03/part_00_base.png",
 					"offset": [
 						-160.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				},
 				{
-					"command_index": 57,
+					"command_index": 57.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v03/part_00_front.png",
 					"offset": [
 						-160.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				}
 			],
@@ -4369,34 +4369,34 @@
 				-160.0,
 				-144.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				448,
-				448,
-				224,
-				224
+				448.0,
+				448.0,
+				224.0,
+				224.0
 			]
 		},
 		{
 			"command_indices": [
-				63,
-				64,
-				136,
-				137,
-				245,
-				246,
-				520,
-				521,
-				552,
-				553,
-				648,
-				649,
-				723,
-				724
+				63.0,
+				64.0,
+				136.0,
+				137.0,
+				245.0,
+				246.0,
+				520.0,
+				521.0,
+				552.0,
+				553.0,
+				648.0,
+				649.0,
+				723.0,
+				724.0
 			],
 			"composite_size": [
-				224,
-				224
+				224.0,
+				224.0
 			],
 			"group_keys": [
 				"wall_part:inst_000031:58:1",
@@ -4410,85 +4410,85 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						63,
-						64
+						63.0,
+						64.0
 					],
 					"group_key": "wall_part:inst_000031:58:1",
-					"representative_command_index": 63
+					"representative_command_index": 63.0
 				},
 				{
 					"command_indices": [
-						136,
-						137
+						136.0,
+						137.0
 					],
 					"group_key": "wall_part:inst_000034:64:1",
-					"representative_command_index": 136
+					"representative_command_index": 136.0
 				},
 				{
 					"command_indices": [
-						245,
-						246
+						245.0,
+						246.0
 					],
 					"group_key": "wall_part:inst_000037:72:1",
-					"representative_command_index": 245
+					"representative_command_index": 245.0
 				},
 				{
 					"command_indices": [
-						520,
-						521
+						520.0,
+						521.0
 					],
 					"group_key": "wall_part:inst_000043:91:1",
-					"representative_command_index": 520
+					"representative_command_index": 520.0
 				},
 				{
 					"command_indices": [
-						552,
-						553
+						552.0,
+						553.0
 					],
 					"group_key": "wall_part:inst_000078:90:1",
-					"representative_command_index": 552
+					"representative_command_index": 552.0
 				},
 				{
 					"command_indices": [
-						648,
-						649
+						648.0,
+						649.0
 					],
 					"group_key": "wall_part:inst_000046:99:1",
-					"representative_command_index": 648
+					"representative_command_index": 648.0
 				},
 				{
 					"command_indices": [
-						723,
-						724
+						723.0,
+						724.0
 					],
 					"group_key": "wall_part:inst_000049:105:1",
-					"representative_command_index": 723
+					"representative_command_index": 723.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v03/part_01_base.png@(-160.0, -144.0)|assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v03/part_01_front.png@(-160.0, -144.0)",
 			"layers": [
 				{
-					"command_index": 63,
+					"command_index": 63.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v03/part_01_base.png",
 					"offset": [
 						-160.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				},
 				{
-					"command_index": 64,
+					"command_index": 64.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v03/part_01_front.png",
 					"offset": [
 						-160.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				}
 			],
@@ -4496,34 +4496,34 @@
 				-160.0,
 				-144.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				672,
-				448,
-				224,
-				224
+				672.0,
+				448.0,
+				224.0,
+				224.0
 			]
 		},
 		{
 			"command_indices": [
-				69,
-				70,
-				142,
-				143,
-				262,
-				263,
-				531,
-				532,
-				569,
-				571,
-				654,
-				655,
-				729,
-				730
+				69.0,
+				70.0,
+				142.0,
+				143.0,
+				262.0,
+				263.0,
+				531.0,
+				532.0,
+				569.0,
+				571.0,
+				654.0,
+				655.0,
+				729.0,
+				730.0
 			],
 			"composite_size": [
-				224,
-				224
+				224.0,
+				224.0
 			],
 			"group_keys": [
 				"wall_part:inst_000031:58:2",
@@ -4537,85 +4537,85 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						69,
-						70
+						69.0,
+						70.0
 					],
 					"group_key": "wall_part:inst_000031:58:2",
-					"representative_command_index": 69
+					"representative_command_index": 69.0
 				},
 				{
 					"command_indices": [
-						142,
-						143
+						142.0,
+						143.0
 					],
 					"group_key": "wall_part:inst_000034:64:2",
-					"representative_command_index": 142
+					"representative_command_index": 142.0
 				},
 				{
 					"command_indices": [
-						262,
-						263
+						262.0,
+						263.0
 					],
 					"group_key": "wall_part:inst_000037:72:2",
-					"representative_command_index": 262
+					"representative_command_index": 262.0
 				},
 				{
 					"command_indices": [
-						531,
-						532
+						531.0,
+						532.0
 					],
 					"group_key": "wall_part:inst_000043:91:2",
-					"representative_command_index": 531
+					"representative_command_index": 531.0
 				},
 				{
 					"command_indices": [
-						569,
-						571
+						569.0,
+						571.0
 					],
 					"group_key": "wall_part:inst_000078:90:2",
-					"representative_command_index": 569
+					"representative_command_index": 569.0
 				},
 				{
 					"command_indices": [
-						654,
-						655
+						654.0,
+						655.0
 					],
 					"group_key": "wall_part:inst_000046:99:2",
-					"representative_command_index": 654
+					"representative_command_index": 654.0
 				},
 				{
 					"command_indices": [
-						729,
-						730
+						729.0,
+						730.0
 					],
 					"group_key": "wall_part:inst_000049:105:2",
-					"representative_command_index": 729
+					"representative_command_index": 729.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v03/part_02_base.png@(-160.0, -144.0)|assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v03/part_02_front.png@(-160.0, -144.0)",
 			"layers": [
 				{
-					"command_index": 69,
+					"command_index": 69.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v03/part_02_base.png",
 					"offset": [
 						-160.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				},
 				{
-					"command_index": 70,
+					"command_index": 70.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v03/part_02_front.png",
 					"offset": [
 						-160.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				}
 			],
@@ -4623,34 +4623,34 @@
 				-160.0,
 				-144.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				896,
-				448,
-				224,
-				224
+				896.0,
+				448.0,
+				224.0,
+				224.0
 			]
 		},
 		{
 			"command_indices": [
-				75,
-				76,
-				148,
-				149,
-				282,
-				283,
-				543,
-				544,
-				587,
-				589,
-				660,
-				661,
-				735,
-				736
+				75.0,
+				76.0,
+				148.0,
+				149.0,
+				282.0,
+				283.0,
+				543.0,
+				544.0,
+				587.0,
+				589.0,
+				660.0,
+				661.0,
+				735.0,
+				736.0
 			],
 			"composite_size": [
-				224,
-				224
+				224.0,
+				224.0
 			],
 			"group_keys": [
 				"wall_part:inst_000031:58:3",
@@ -4664,85 +4664,85 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						75,
-						76
+						75.0,
+						76.0
 					],
 					"group_key": "wall_part:inst_000031:58:3",
-					"representative_command_index": 75
+					"representative_command_index": 75.0
 				},
 				{
 					"command_indices": [
-						148,
-						149
+						148.0,
+						149.0
 					],
 					"group_key": "wall_part:inst_000034:64:3",
-					"representative_command_index": 148
+					"representative_command_index": 148.0
 				},
 				{
 					"command_indices": [
-						282,
-						283
+						282.0,
+						283.0
 					],
 					"group_key": "wall_part:inst_000037:72:3",
-					"representative_command_index": 282
+					"representative_command_index": 282.0
 				},
 				{
 					"command_indices": [
-						543,
-						544
+						543.0,
+						544.0
 					],
 					"group_key": "wall_part:inst_000043:91:3",
-					"representative_command_index": 543
+					"representative_command_index": 543.0
 				},
 				{
 					"command_indices": [
-						587,
-						589
+						587.0,
+						589.0
 					],
 					"group_key": "wall_part:inst_000078:90:3",
-					"representative_command_index": 587
+					"representative_command_index": 587.0
 				},
 				{
 					"command_indices": [
-						660,
-						661
+						660.0,
+						661.0
 					],
 					"group_key": "wall_part:inst_000046:99:3",
-					"representative_command_index": 660
+					"representative_command_index": 660.0
 				},
 				{
 					"command_indices": [
-						735,
-						736
+						735.0,
+						736.0
 					],
 					"group_key": "wall_part:inst_000049:105:3",
-					"representative_command_index": 735
+					"representative_command_index": 735.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v03/part_03_base.png@(-160.0, -144.0)|assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v03/part_03_front.png@(-160.0, -144.0)",
 			"layers": [
 				{
-					"command_index": 75,
+					"command_index": 75.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v03/part_03_base.png",
 					"offset": [
 						-160.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				},
 				{
-					"command_index": 76,
+					"command_index": 76.0,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v03/part_03_front.png",
 					"offset": [
 						-160.0,
 						-144.0
 					],
 					"size": [
-						224,
-						224
+						224.0,
+						224.0
 					]
 				}
 			],
@@ -4750,1968 +4750,1968 @@
 				-160.0,
 				-144.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				1120,
-				448,
-				224,
-				224
+				1120.0,
+				448.0,
+				224.0,
+				224.0
 			]
 		}
 	],
 	"atlas_page_heights": [
-		864
+		864.0
 	],
 	"atlas_pages": [
 		{
-			"height": 864,
-			"page_index": 0,
+			"height": 864.0,
+			"page_index": 0.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/f90d2b659cf51c0fc2b27e985ddf32cb4d83e964742118db7cfb2158674db6e4.png",
-			"png_bytes": 320487,
+			"png_bytes": 320487.0,
 			"sha256": "f90d2b659cf51c0fc2b27e985ddf32cb4d83e964742118db7cfb2158674db6e4",
-			"width": 2048
+			"width": 2048.0
 		}
 	],
-	"compiler_version": 2,
+	"compiler_version": 2.0,
 	"contract_id": "hardcore.wall_render_plan.v1",
 	"design_size": [
-		48,
-		48
+		48.0,
+		48.0
 	],
 	"ground_coordinate_contract_id": "isometric_cell_center_64x32_v2",
 	"legacy_command_indices": [
-		0,
-		1,
-		32,
-		45,
-		58,
-		125,
-		168,
-		181,
-		197,
-		204,
-		247,
-		254,
-		270,
-		277,
-		284,
-		285,
-		286,
-		287,
-		288,
-		298,
-		320,
-		321,
-		325,
-		326,
-		327,
-		328,
-		335,
-		345,
-		358,
-		374,
-		384,
-		388,
-		392,
-		405,
-		415,
-		422,
-		426,
-		433,
-		449,
-		450,
-		475,
-		488,
-		489,
-		493,
-		494,
-		528,
-		529,
-		602,
-		609,
-		640,
-		665,
-		684,
-		715
+		0.0,
+		1.0,
+		32.0,
+		45.0,
+		58.0,
+		125.0,
+		168.0,
+		181.0,
+		197.0,
+		204.0,
+		247.0,
+		254.0,
+		270.0,
+		277.0,
+		284.0,
+		285.0,
+		286.0,
+		287.0,
+		288.0,
+		298.0,
+		320.0,
+		321.0,
+		325.0,
+		326.0,
+		327.0,
+		328.0,
+		335.0,
+		345.0,
+		358.0,
+		374.0,
+		384.0,
+		388.0,
+		392.0,
+		405.0,
+		415.0,
+		422.0,
+		426.0,
+		433.0,
+		449.0,
+		450.0,
+		475.0,
+		488.0,
+		489.0,
+		493.0,
+		494.0,
+		528.0,
+		529.0,
+		602.0,
+		609.0,
+		640.0,
+		665.0,
+		684.0,
+		715.0
 	],
 	"map_key": "mengzhong_death_valley_dungeon",
 	"shadow_chunk_command_indices": [
-		2,
-		5,
-		8,
-		11,
-		14,
-		17,
-		20,
-		23,
-		26,
-		29,
-		33,
-		36,
-		39,
-		42,
-		46,
-		49,
-		52,
-		55,
-		59,
-		62,
-		65,
-		68,
-		71,
-		74,
-		77,
-		80,
-		83,
-		86,
-		89,
-		92,
-		95,
-		98,
-		101,
-		104,
-		107,
-		110,
-		113,
-		116,
-		119,
-		122,
-		126,
-		129,
-		132,
-		135,
-		138,
-		141,
-		144,
-		147,
-		150,
-		153,
-		156,
-		159,
-		162,
-		165,
-		169,
-		172,
-		175,
-		178,
-		182,
-		185,
-		188,
-		191,
-		194,
-		198,
-		201,
-		205,
-		208,
-		211,
-		212,
-		217,
-		218,
-		223,
-		226,
-		229,
-		230,
-		235,
-		236,
-		241,
-		244,
-		248,
-		249,
-		255,
-		258,
-		261,
-		264,
-		265,
-		271,
-		272,
-		278,
-		281,
-		289,
-		290,
-		295,
-		299,
-		302,
-		305,
-		308,
-		311,
-		312,
-		317,
-		322,
-		329,
-		332,
-		336,
-		339,
-		342,
-		346,
-		349,
-		352,
-		353,
-		359,
-		360,
-		365,
-		368,
-		369,
-		375,
-		376,
-		381,
-		385,
-		389,
-		393,
-		394,
-		399,
-		400,
-		406,
-		407,
-		412,
-		416,
-		419,
-		423,
-		427,
-		428,
-		434,
-		435,
-		440,
-		443,
-		444,
-		451,
-		452,
-		457,
-		460,
-		463,
-		466,
-		469,
-		470,
-		476,
-		477,
-		482,
-		483,
-		490,
-		495,
-		498,
-		501,
-		504,
-		505,
-		510,
-		513,
-		514,
-		519,
-		522,
-		523,
-		530,
-		533,
-		536,
-		539,
-		542,
-		545,
-		548,
-		551,
-		554,
-		557,
-		560,
-		561,
-		566,
-		567,
-		572,
-		575,
-		578,
-		579,
-		584,
-		585,
-		590,
-		593,
-		596,
-		599,
-		603,
-		606,
-		610,
-		611,
-		616,
-		619,
-		622,
-		625,
-		628,
-		631,
-		634,
-		637,
-		641,
-		644,
-		647,
-		650,
-		653,
-		656,
-		659,
-		662,
-		666,
-		669,
-		672,
-		675,
-		678,
-		681,
-		685,
-		688,
-		691,
-		694,
-		697,
-		700,
-		703,
-		706,
-		709,
-		712,
-		716,
-		719,
-		722,
-		725,
-		728,
-		731,
-		734,
-		737,
-		740,
-		743,
-		746,
-		749,
-		752,
-		755,
-		758,
-		761,
-		764,
-		767,
-		770,
-		773,
-		776,
-		779,
-		782,
-		785,
-		788,
-		791,
-		794,
-		797,
-		798
+		2.0,
+		5.0,
+		8.0,
+		11.0,
+		14.0,
+		17.0,
+		20.0,
+		23.0,
+		26.0,
+		29.0,
+		33.0,
+		36.0,
+		39.0,
+		42.0,
+		46.0,
+		49.0,
+		52.0,
+		55.0,
+		59.0,
+		62.0,
+		65.0,
+		68.0,
+		71.0,
+		74.0,
+		77.0,
+		80.0,
+		83.0,
+		86.0,
+		89.0,
+		92.0,
+		95.0,
+		98.0,
+		101.0,
+		104.0,
+		107.0,
+		110.0,
+		113.0,
+		116.0,
+		119.0,
+		122.0,
+		126.0,
+		129.0,
+		132.0,
+		135.0,
+		138.0,
+		141.0,
+		144.0,
+		147.0,
+		150.0,
+		153.0,
+		156.0,
+		159.0,
+		162.0,
+		165.0,
+		169.0,
+		172.0,
+		175.0,
+		178.0,
+		182.0,
+		185.0,
+		188.0,
+		191.0,
+		194.0,
+		198.0,
+		201.0,
+		205.0,
+		208.0,
+		211.0,
+		212.0,
+		217.0,
+		218.0,
+		223.0,
+		226.0,
+		229.0,
+		230.0,
+		235.0,
+		236.0,
+		241.0,
+		244.0,
+		248.0,
+		249.0,
+		255.0,
+		258.0,
+		261.0,
+		264.0,
+		265.0,
+		271.0,
+		272.0,
+		278.0,
+		281.0,
+		289.0,
+		290.0,
+		295.0,
+		299.0,
+		302.0,
+		305.0,
+		308.0,
+		311.0,
+		312.0,
+		317.0,
+		322.0,
+		329.0,
+		332.0,
+		336.0,
+		339.0,
+		342.0,
+		346.0,
+		349.0,
+		352.0,
+		353.0,
+		359.0,
+		360.0,
+		365.0,
+		368.0,
+		369.0,
+		375.0,
+		376.0,
+		381.0,
+		385.0,
+		389.0,
+		393.0,
+		394.0,
+		399.0,
+		400.0,
+		406.0,
+		407.0,
+		412.0,
+		416.0,
+		419.0,
+		423.0,
+		427.0,
+		428.0,
+		434.0,
+		435.0,
+		440.0,
+		443.0,
+		444.0,
+		451.0,
+		452.0,
+		457.0,
+		460.0,
+		463.0,
+		466.0,
+		469.0,
+		470.0,
+		476.0,
+		477.0,
+		482.0,
+		483.0,
+		490.0,
+		495.0,
+		498.0,
+		501.0,
+		504.0,
+		505.0,
+		510.0,
+		513.0,
+		514.0,
+		519.0,
+		522.0,
+		523.0,
+		530.0,
+		533.0,
+		536.0,
+		539.0,
+		542.0,
+		545.0,
+		548.0,
+		551.0,
+		554.0,
+		557.0,
+		560.0,
+		561.0,
+		566.0,
+		567.0,
+		572.0,
+		575.0,
+		578.0,
+		579.0,
+		584.0,
+		585.0,
+		590.0,
+		593.0,
+		596.0,
+		599.0,
+		603.0,
+		606.0,
+		610.0,
+		611.0,
+		616.0,
+		619.0,
+		622.0,
+		625.0,
+		628.0,
+		631.0,
+		634.0,
+		637.0,
+		641.0,
+		644.0,
+		647.0,
+		650.0,
+		653.0,
+		656.0,
+		659.0,
+		662.0,
+		666.0,
+		669.0,
+		672.0,
+		675.0,
+		678.0,
+		681.0,
+		685.0,
+		688.0,
+		691.0,
+		694.0,
+		697.0,
+		700.0,
+		703.0,
+		706.0,
+		709.0,
+		712.0,
+		716.0,
+		719.0,
+		722.0,
+		725.0,
+		728.0,
+		731.0,
+		734.0,
+		737.0,
+		740.0,
+		743.0,
+		746.0,
+		749.0,
+		752.0,
+		755.0,
+		758.0,
+		761.0,
+		764.0,
+		767.0,
+		770.0,
+		773.0,
+		776.0,
+		779.0,
+		782.0,
+		785.0,
+		788.0,
+		791.0,
+		794.0,
+		797.0,
+		798.0
 	],
 	"shadow_chunks": [
 		{
 			"grid_cell": [
-				-1,
-				-1
+				-1.0,
+				-1.0
 			],
-			"insert_command_index": 2,
+			"insert_command_index": 2.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/730be5a83b0c99633de9fb60dec2c5d0db8c0a45cd343ad61f1980e341f3c2f0.png",
-			"png_bytes": 2663,
+			"png_bytes": 2663.0,
 			"position_px": [
 				-228.0,
 				-723.0
 			],
-			"segment_index": 0,
+			"segment_index": 0.0,
 			"sha256": "730be5a83b0c99633de9fb60dec2c5d0db8c0a45cd343ad61f1980e341f3c2f0",
 			"size_px": [
-				228,
-				137
+				228.0,
+				137.0
 			]
 		},
 		{
 			"grid_cell": [
-				0,
-				-1
+				0.0,
+				-1.0
 			],
-			"insert_command_index": 2,
+			"insert_command_index": 2.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/2aee6e2584622ea5ee2d0e13c50fb417f44f421bf02b6dbfe4714b330b69f965.png",
-			"png_bytes": 3187,
+			"png_bytes": 3187.0,
 			"position_px": [
 				0.0,
 				-739.0
 			],
-			"segment_index": 0,
+			"segment_index": 0.0,
 			"sha256": "2aee6e2584622ea5ee2d0e13c50fb417f44f421bf02b6dbfe4714b330b69f965",
 			"size_px": [
-				207,
-				137
+				207.0,
+				137.0
 			]
 		},
 		{
 			"grid_cell": [
-				0,
-				-1
+				0.0,
+				-1.0
 			],
-			"insert_command_index": 46,
+			"insert_command_index": 46.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/bc394392e06d54e76909d36c2ed668be2f67b54aa116675f2b0d009ec25f9e53.png",
-			"png_bytes": 5132,
+			"png_bytes": 5132.0,
 			"position_px": [
 				187.0,
 				-626.0
 			],
-			"segment_index": 1,
+			"segment_index": 1.0,
 			"sha256": "bc394392e06d54e76909d36c2ed668be2f67b54aa116675f2b0d009ec25f9e53",
 			"size_px": [
-				436,
-				232
+				436.0,
+				232.0
 			]
 		},
 		{
 			"grid_cell": [
-				-1,
-				-1
+				-1.0,
+				-1.0
 			],
-			"insert_command_index": 46,
+			"insert_command_index": 46.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/77010e961ea4aa91e17cb9b7ce6c17d62aabad3eb64bc8c34fdbe06fedec610d.png",
-			"png_bytes": 4871,
+			"png_bytes": 4871.0,
 			"position_px": [
 				-644.0,
 				-611.0
 			],
-			"segment_index": 1,
+			"segment_index": 1.0,
 			"sha256": "77010e961ea4aa91e17cb9b7ce6c17d62aabad3eb64bc8c34fdbe06fedec610d",
 			"size_px": [
-				435,
-				227
+				435.0,
+				227.0
 			]
 		},
 		{
 			"grid_cell": [
-				0,
-				-1
+				0.0,
+				-1.0
 			],
-			"insert_command_index": 126,
+			"insert_command_index": 126.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/f0ab38052a7cb8c2f901c16238e5c5d02a0bc06e545c62171aa9c02fed02351e.png",
-			"png_bytes": 2895,
+			"png_bytes": 2895.0,
 			"position_px": [
 				603.0,
 				-418.0
 			],
-			"segment_index": 2,
+			"segment_index": 2.0,
 			"sha256": "f0ab38052a7cb8c2f901c16238e5c5d02a0bc06e545c62171aa9c02fed02351e",
 			"size_px": [
-				244,
-				136
+				244.0,
+				136.0
 			]
 		},
 		{
 			"grid_cell": [
-				-1,
-				-1
+				-1.0,
+				-1.0
 			],
-			"insert_command_index": 126,
+			"insert_command_index": 126.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/762f344ef8963d9e03b3dfb0bf5d10528e3434070b9034aa03c855f1ad801525.png",
-			"png_bytes": 2861,
+			"png_bytes": 2861.0,
 			"position_px": [
 				-868.0,
 				-403.0
 			],
-			"segment_index": 2,
+			"segment_index": 2.0,
 			"sha256": "762f344ef8963d9e03b3dfb0bf5d10528e3434070b9034aa03c855f1ad801525",
 			"size_px": [
-				243,
-				137
+				243.0,
+				137.0
 			]
 		},
 		{
 			"grid_cell": [
-				0,
-				-1
+				0.0,
+				-1.0
 			],
-			"insert_command_index": 169,
+			"insert_command_index": 169.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/c7efb7f98fda5f74756c7bae3e74abdd1dec227949405a1e5ceaeddf0656a3d5.png",
-			"png_bytes": 7633,
+			"png_bytes": 7633.0,
 			"position_px": [
 				0.0,
 				-306.0
 			],
-			"segment_index": 3,
+			"segment_index": 3.0,
 			"sha256": "c7efb7f98fda5f74756c7bae3e74abdd1dec227949405a1e5ceaeddf0656a3d5",
 			"size_px": [
-				1024,
-				152
+				1024.0,
+				152.0
 			]
 		},
 		{
 			"grid_cell": [
-				-1,
-				-1
+				-1.0,
+				-1.0
 			],
-			"insert_command_index": 169,
+			"insert_command_index": 169.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/322d75595306050bf7204750602adfa54b5345fe218e8e5478f980e85c65ff2a.png",
-			"png_bytes": 9605,
+			"png_bytes": 9605.0,
 			"position_px": [
 				-1024.0,
 				-291.0
 			],
-			"segment_index": 3,
+			"segment_index": 3.0,
 			"sha256": "322d75595306050bf7204750602adfa54b5345fe218e8e5478f980e85c65ff2a",
 			"size_px": [
-				1024,
-				147
+				1024.0,
+				147.0
 			]
 		},
 		{
 			"grid_cell": [
-				-2,
-				-1
+				-2.0,
+				-1.0
 			],
-			"insert_command_index": 169,
+			"insert_command_index": 169.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/b9607730477c99e41bb3e01dd5201ac10309300dd2c2d8910b8ca157bea634b9.png",
-			"png_bytes": 1457,
+			"png_bytes": 1457.0,
 			"position_px": [
 				-1124.0,
 				-211.0
 			],
-			"segment_index": 3,
+			"segment_index": 3.0,
 			"sha256": "b9607730477c99e41bb3e01dd5201ac10309300dd2c2d8910b8ca157bea634b9",
 			"size_px": [
-				100,
-				73
+				100.0,
+				73.0
 			]
 		},
 		{
 			"grid_cell": [
-				1,
-				-1
+				1.0,
+				-1.0
 			],
-			"insert_command_index": 169,
+			"insert_command_index": 169.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/b4cb132b9e73f57d77cf6678ba51d6080f0e59166d5a347282d769fd4a190b8c.png",
-			"png_bytes": 1381,
+			"png_bytes": 1381.0,
 			"position_px": [
 				1024.0,
 				-215.0
 			],
-			"segment_index": 3,
+			"segment_index": 3.0,
 			"sha256": "b4cb132b9e73f57d77cf6678ba51d6080f0e59166d5a347282d769fd4a190b8c",
 			"size_px": [
-				79,
-				61
+				79.0,
+				61.0
 			]
 		},
 		{
 			"grid_cell": [
-				0,
-				-1
+				0.0,
+				-1.0
 			],
-			"insert_command_index": 271,
+			"insert_command_index": 271.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/50256dc1991125bf904a9a0e86674e641038e3d69dc5f70b2707d62759c657b6.png",
-			"png_bytes": 1414,
+			"png_bytes": 1414.0,
 			"position_px": [
 				123.0,
 				-179.0
 			],
-			"segment_index": 4,
+			"segment_index": 4.0,
 			"sha256": "50256dc1991125bf904a9a0e86674e641038e3d69dc5f70b2707d62759c657b6",
 			"size_px": [
-				84,
-				35
+				84.0,
+				35.0
 			]
 		},
 		{
 			"grid_cell": [
-				1,
-				-1
+				1.0,
+				-1.0
 			],
-			"insert_command_index": 271,
+			"insert_command_index": 271.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/0d09f205c03d9cef83f433403017a82fda7bca6fde0796f3dbf79013fd091b5a.png",
-			"png_bytes": 860,
+			"png_bytes": 860.0,
 			"position_px": [
 				1083.0,
 				-178.0
 			],
-			"segment_index": 4,
+			"segment_index": 4.0,
 			"sha256": "0d09f205c03d9cef83f433403017a82fda7bca6fde0796f3dbf79013fd091b5a",
 			"size_px": [
-				52,
-				40
+				52.0,
+				40.0
 			]
 		},
 		{
 			"grid_cell": [
-				-2,
-				-1
+				-2.0,
+				-1.0
 			],
-			"insert_command_index": 271,
+			"insert_command_index": 271.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/faa0c031cd5b448111059fb1454ba275447ac7abef74bab23b78f58e8622b1c6.png",
-			"png_bytes": 851,
+			"png_bytes": 851.0,
 			"position_px": [
 				-1156.0,
 				-163.0
 			],
-			"segment_index": 4,
+			"segment_index": 4.0,
 			"sha256": "faa0c031cd5b448111059fb1454ba275447ac7abef74bab23b78f58e8622b1c6",
 			"size_px": [
-				51,
-				35
+				51.0,
+				35.0
 			]
 		},
 		{
 			"grid_cell": [
-				1,
-				-1
+				1.0,
+				-1.0
 			],
-			"insert_command_index": 289,
+			"insert_command_index": 289.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/9ac13b31bc32a04eb5e3fa8b4aea1cb72205de8b2556d2e9d006aa3ab291af18.png",
-			"png_bytes": 3056,
+			"png_bytes": 3056.0,
 			"position_px": [
 				1115.0,
 				-162.0
 			],
-			"segment_index": 5,
+			"segment_index": 5.0,
 			"sha256": "9ac13b31bc32a04eb5e3fa8b4aea1cb72205de8b2556d2e9d006aa3ab291af18",
 			"size_px": [
-				180,
-				82
+				180.0,
+				82.0
 			]
 		},
 		{
 			"grid_cell": [
-				-2,
-				-1
+				-2.0,
+				-1.0
 			],
-			"insert_command_index": 289,
+			"insert_command_index": 289.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/a4fac2f124aa9188dfc29a6a512bd2e71444b6f34f70c3c078185f08529105f7.png",
-			"png_bytes": 1819,
+			"png_bytes": 1819.0,
 			"position_px": [
 				-1284.0,
 				-147.0
 			],
-			"segment_index": 5,
+			"segment_index": 5.0,
 			"sha256": "a4fac2f124aa9188dfc29a6a512bd2e71444b6f34f70c3c078185f08529105f7",
 			"size_px": [
-				147,
-				83
+				147.0,
+				83.0
 			]
 		},
 		{
 			"grid_cell": [
-				-2,
-				-1
+				-2.0,
+				-1.0
 			],
-			"insert_command_index": 322,
+			"insert_command_index": 322.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/168f5878b1f470cdc4e5ec3d9107d24075ebf85b8c91518fc1ef374166b8145e.png",
-			"png_bytes": 935,
+			"png_bytes": 935.0,
 			"position_px": [
 				-1316.0,
 				-83.0
 			],
-			"segment_index": 6,
+			"segment_index": 6.0,
 			"sha256": "168f5878b1f470cdc4e5ec3d9107d24075ebf85b8c91518fc1ef374166b8145e",
 			"size_px": [
-				51,
-				41
+				51.0,
+				41.0
 			]
 		},
 		{
 			"grid_cell": [
-				-2,
-				-1
+				-2.0,
+				-1.0
 			],
-			"insert_command_index": 329,
+			"insert_command_index": 329.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/168f5878b1f470cdc4e5ec3d9107d24075ebf85b8c91518fc1ef374166b8145e.png",
-			"png_bytes": 935,
+			"png_bytes": 935.0,
 			"position_px": [
 				-1348.0,
 				-67.0
 			],
-			"segment_index": 7,
+			"segment_index": 7.0,
 			"sha256": "168f5878b1f470cdc4e5ec3d9107d24075ebf85b8c91518fc1ef374166b8145e",
 			"size_px": [
-				51,
-				41
+				51.0,
+				41.0
 			]
 		},
 		{
 			"grid_cell": [
-				-1,
-				-1
+				-1.0,
+				-1.0
 			],
-			"insert_command_index": 329,
+			"insert_command_index": 329.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/168f5878b1f470cdc4e5ec3d9107d24075ebf85b8c91518fc1ef374166b8145e.png",
-			"png_bytes": 935,
+			"png_bytes": 935.0,
 			"position_px": [
 				-388.0,
 				-67.0
 			],
-			"segment_index": 7,
+			"segment_index": 7.0,
 			"sha256": "168f5878b1f470cdc4e5ec3d9107d24075ebf85b8c91518fc1ef374166b8145e",
 			"size_px": [
-				51,
-				41
+				51.0,
+				41.0
 			]
 		},
 		{
 			"grid_cell": [
-				0,
-				-1
+				0.0,
+				-1.0
 			],
-			"insert_command_index": 336,
+			"insert_command_index": 336.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/0d09f205c03d9cef83f433403017a82fda7bca6fde0796f3dbf79013fd091b5a.png",
-			"png_bytes": 860,
+			"png_bytes": 860.0,
 			"position_px": [
 				347.0,
 				-66.0
 			],
-			"segment_index": 8,
+			"segment_index": 8.0,
 			"sha256": "0d09f205c03d9cef83f433403017a82fda7bca6fde0796f3dbf79013fd091b5a",
 			"size_px": [
-				52,
-				40
+				52.0,
+				40.0
 			]
 		},
 		{
 			"grid_cell": [
-				-2,
-				-1
+				-2.0,
+				-1.0
 			],
-			"insert_command_index": 336,
+			"insert_command_index": 336.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/168f5878b1f470cdc4e5ec3d9107d24075ebf85b8c91518fc1ef374166b8145e.png",
-			"png_bytes": 935,
+			"png_bytes": 935.0,
 			"position_px": [
 				-1380.0,
 				-51.0
 			],
-			"segment_index": 8,
+			"segment_index": 8.0,
 			"sha256": "168f5878b1f470cdc4e5ec3d9107d24075ebf85b8c91518fc1ef374166b8145e",
 			"size_px": [
-				51,
-				41
+				51.0,
+				41.0
 			]
 		},
 		{
 			"grid_cell": [
-				-1,
-				-1
+				-1.0,
+				-1.0
 			],
-			"insert_command_index": 336,
+			"insert_command_index": 336.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/168f5878b1f470cdc4e5ec3d9107d24075ebf85b8c91518fc1ef374166b8145e.png",
-			"png_bytes": 935,
+			"png_bytes": 935.0,
 			"position_px": [
 				-420.0,
 				-51.0
 			],
-			"segment_index": 8,
+			"segment_index": 8.0,
 			"sha256": "168f5878b1f470cdc4e5ec3d9107d24075ebf85b8c91518fc1ef374166b8145e",
 			"size_px": [
-				51,
-				41
+				51.0,
+				41.0
 			]
 		},
 		{
 			"grid_cell": [
-				-1,
-				0
+				-1.0,
+				0.0
 			],
-			"insert_command_index": 346,
+			"insert_command_index": 346.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/dc8e094381d95b38e0ed85c04eff32b3cf00d8a0d3bea217a4b766971d588b85.png",
-			"png_bytes": 172,
+			"png_bytes": 172.0,
 			"position_px": [
 				-450.0,
 				0.0
 			],
-			"segment_index": 9,
+			"segment_index": 9.0,
 			"sha256": "dc8e094381d95b38e0ed85c04eff32b3cf00d8a0d3bea217a4b766971d588b85",
 			"size_px": [
-				25,
-				6
+				25.0,
+				6.0
 			]
 		},
 		{
 			"grid_cell": [
-				0,
-				-1
+				0.0,
+				-1.0
 			],
-			"insert_command_index": 346,
+			"insert_command_index": 346.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/0d09f205c03d9cef83f433403017a82fda7bca6fde0796f3dbf79013fd091b5a.png",
-			"png_bytes": 860,
+			"png_bytes": 860.0,
 			"position_px": [
 				379.0,
 				-50.0
 			],
-			"segment_index": 9,
+			"segment_index": 9.0,
 			"sha256": "0d09f205c03d9cef83f433403017a82fda7bca6fde0796f3dbf79013fd091b5a",
 			"size_px": [
-				52,
-				40
+				52.0,
+				40.0
 			]
 		},
 		{
 			"grid_cell": [
-				-2,
-				-1
+				-2.0,
+				-1.0
 			],
-			"insert_command_index": 346,
+			"insert_command_index": 346.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/faa0c031cd5b448111059fb1454ba275447ac7abef74bab23b78f58e8622b1c6.png",
-			"png_bytes": 851,
+			"png_bytes": 851.0,
 			"position_px": [
 				-1412.0,
 				-35.0
 			],
-			"segment_index": 9,
+			"segment_index": 9.0,
 			"sha256": "faa0c031cd5b448111059fb1454ba275447ac7abef74bab23b78f58e8622b1c6",
 			"size_px": [
-				51,
-				35
+				51.0,
+				35.0
 			]
 		},
 		{
 			"grid_cell": [
-				-1,
-				-1
+				-1.0,
+				-1.0
 			],
-			"insert_command_index": 346,
+			"insert_command_index": 346.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/2531ca7a76278ed5a86f46ca97d3c1610181700dfff98c87f6847e87116b92db.png",
-			"png_bytes": 1007,
+			"png_bytes": 1007.0,
 			"position_px": [
 				-452.0,
 				-35.0
 			],
-			"segment_index": 9,
+			"segment_index": 9.0,
 			"sha256": "2531ca7a76278ed5a86f46ca97d3c1610181700dfff98c87f6847e87116b92db",
 			"size_px": [
-				51,
-				35
+				51.0,
+				35.0
 			]
 		},
 		{
 			"grid_cell": [
-				-2,
-				0
+				-2.0,
+				0.0
 			],
-			"insert_command_index": 359,
+			"insert_command_index": 359.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/7bd7f546aeb70d942b8340eeead832b61397553acd40cadaeb2e73ffc991f3ea.png",
-			"png_bytes": 582,
+			"png_bytes": 582.0,
 			"position_px": [
 				-1444.0,
 				0.0
 			],
-			"segment_index": 10,
+			"segment_index": 10.0,
 			"sha256": "7bd7f546aeb70d942b8340eeead832b61397553acd40cadaeb2e73ffc991f3ea",
 			"size_px": [
-				50,
-				22
+				50.0,
+				22.0
 			]
 		},
 		{
 			"grid_cell": [
-				0,
-				-1
+				0.0,
+				-1.0
 			],
-			"insert_command_index": 359,
+			"insert_command_index": 359.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/ffdfb6cc4cc0b859359e3f490331a5be8578960dca2e098c9caab1c6e03b289e.png",
-			"png_bytes": 954,
+			"png_bytes": 954.0,
 			"position_px": [
 				411.0,
 				-34.0
 			],
-			"segment_index": 10,
+			"segment_index": 10.0,
 			"sha256": "ffdfb6cc4cc0b859359e3f490331a5be8578960dca2e098c9caab1c6e03b289e",
 			"size_px": [
-				52,
-				34
+				52.0,
+				34.0
 			]
 		},
 		{
 			"grid_cell": [
-				-2,
-				-1
+				-2.0,
+				-1.0
 			],
-			"insert_command_index": 359,
+			"insert_command_index": 359.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/140eab5aa25282f3985cdcbd5100f750d09b0ffa33487d0b4167c3a32443f4d0.png",
-			"png_bytes": 480,
+			"png_bytes": 480.0,
 			"position_px": [
 				-1442.0,
 				-19.0
 			],
-			"segment_index": 10,
+			"segment_index": 10.0,
 			"sha256": "140eab5aa25282f3985cdcbd5100f750d09b0ffa33487d0b4167c3a32443f4d0",
 			"size_px": [
-				49,
-				19
+				49.0,
+				19.0
 			]
 		},
 		{
 			"grid_cell": [
-				-1,
-				-1
+				-1.0,
+				-1.0
 			],
-			"insert_command_index": 359,
+			"insert_command_index": 359.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/e971d0d94a8bb02d3090ba1324433470918af0d519aafb6ce44cc67f5f400f0c.png",
-			"png_bytes": 540,
+			"png_bytes": 540.0,
 			"position_px": [
 				-482.0,
 				-19.0
 			],
-			"segment_index": 10,
+			"segment_index": 10.0,
 			"sha256": "e971d0d94a8bb02d3090ba1324433470918af0d519aafb6ce44cc67f5f400f0c",
 			"size_px": [
-				49,
-				19
+				49.0,
+				19.0
 			]
 		},
 		{
 			"grid_cell": [
-				0,
-				0
+				0.0,
+				0.0
 			],
-			"insert_command_index": 359,
+			"insert_command_index": 359.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/a73981f49c76460acc334e94d4ddade53b077463ca05a0d62e8ed25c80624132.png",
-			"png_bytes": 168,
+			"png_bytes": 168.0,
 			"position_px": [
 				437.0,
 				0.0
 			],
-			"segment_index": 10,
+			"segment_index": 10.0,
 			"sha256": "a73981f49c76460acc334e94d4ddade53b077463ca05a0d62e8ed25c80624132",
 			"size_px": [
-				25,
-				6
+				25.0,
+				6.0
 			]
 		},
 		{
 			"grid_cell": [
-				-1,
-				0
+				-1.0,
+				0.0
 			],
-			"insert_command_index": 359,
+			"insert_command_index": 359.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/c304cece2c1baef70fcb0f4b0b692947bf2cca4a7caf29e134dd71a33822a199.png",
-			"png_bytes": 690,
+			"png_bytes": 690.0,
 			"position_px": [
 				-484.0,
 				0.0
 			],
-			"segment_index": 10,
+			"segment_index": 10.0,
 			"sha256": "c304cece2c1baef70fcb0f4b0b692947bf2cca4a7caf29e134dd71a33822a199",
 			"size_px": [
-				50,
-				22
+				50.0,
+				22.0
 			]
 		},
 		{
 			"grid_cell": [
-				-2,
-				0
+				-2.0,
+				0.0
 			],
-			"insert_command_index": 375,
+			"insert_command_index": 375.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/265d2befb8e5d0cc6bf3688f9ce095d698e9a9e6f474c7e774258d040c427c9d.png",
-			"png_bytes": 827,
+			"png_bytes": 827.0,
 			"position_px": [
 				-1476.0,
 				0.0
 			],
-			"segment_index": 11,
+			"segment_index": 11.0,
 			"sha256": "265d2befb8e5d0cc6bf3688f9ce095d698e9a9e6f474c7e774258d040c427c9d",
 			"size_px": [
-				51,
-				32
+				51.0,
+				32.0
 			]
 		},
 		{
 			"grid_cell": [
-				0,
-				-1
+				0.0,
+				-1.0
 			],
-			"insert_command_index": 375,
+			"insert_command_index": 375.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/f00e93821857cba90878d213186800aad9bbf08263f6a802293de926ed602e8b.png",
-			"png_bytes": 520,
+			"png_bytes": 520.0,
 			"position_px": [
 				443.0,
 				-18.0
 			],
-			"segment_index": 11,
+			"segment_index": 11.0,
 			"sha256": "f00e93821857cba90878d213186800aad9bbf08263f6a802293de926ed602e8b",
 			"size_px": [
-				48,
-				18
+				48.0,
+				18.0
 			]
 		},
 		{
 			"grid_cell": [
-				-2,
-				-1
+				-2.0,
+				-1.0
 			],
-			"insert_command_index": 375,
+			"insert_command_index": 375.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/f7f040f387f4f0231d109f3c19f32e353098f4ed919cb404c37df9c65bd8cd09.png",
-			"png_bytes": 101,
+			"png_bytes": 101.0,
 			"position_px": [
 				-1445.0,
 				-3.0
 			],
-			"segment_index": 11,
+			"segment_index": 11.0,
 			"sha256": "f7f040f387f4f0231d109f3c19f32e353098f4ed919cb404c37df9c65bd8cd09",
 			"size_px": [
-				15,
-				3
+				15.0,
+				3.0
 			]
 		},
 		{
 			"grid_cell": [
-				-1,
-				-1
+				-1.0,
+				-1.0
 			],
-			"insert_command_index": 375,
+			"insert_command_index": 375.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/f7f040f387f4f0231d109f3c19f32e353098f4ed919cb404c37df9c65bd8cd09.png",
-			"png_bytes": 101,
+			"png_bytes": 101.0,
 			"position_px": [
 				-485.0,
 				-3.0
 			],
-			"segment_index": 11,
+			"segment_index": 11.0,
 			"sha256": "f7f040f387f4f0231d109f3c19f32e353098f4ed919cb404c37df9c65bd8cd09",
 			"size_px": [
-				15,
-				3
+				15.0,
+				3.0
 			]
 		},
 		{
 			"grid_cell": [
-				0,
-				0
+				0.0,
+				0.0
 			],
-			"insert_command_index": 375,
+			"insert_command_index": 375.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/58ea4e098adda32412205e52e15ca555e8c7b24e8eba7e414fdd555c6d76f193.png",
-			"png_bytes": 636,
+			"png_bytes": 636.0,
 			"position_px": [
 				446.0,
 				0.0
 			],
-			"segment_index": 11,
+			"segment_index": 11.0,
 			"sha256": "58ea4e098adda32412205e52e15ca555e8c7b24e8eba7e414fdd555c6d76f193",
 			"size_px": [
-				49,
-				22
+				49.0,
+				22.0
 			]
 		},
 		{
 			"grid_cell": [
-				-1,
-				0
+				-1.0,
+				0.0
 			],
-			"insert_command_index": 375,
+			"insert_command_index": 375.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/1d40d82a46121c2d3d62606e7ef3c265686526dfd6c61540d375c58a1ddf50cf.png",
-			"png_bytes": 911,
+			"png_bytes": 911.0,
 			"position_px": [
 				-516.0,
 				0.0
 			],
-			"segment_index": 11,
+			"segment_index": 11.0,
 			"sha256": "1d40d82a46121c2d3d62606e7ef3c265686526dfd6c61540d375c58a1ddf50cf",
 			"size_px": [
-				51,
-				38
+				51.0,
+				38.0
 			]
 		},
 		{
 			"grid_cell": [
-				-2,
-				0
+				-2.0,
+				0.0
 			],
-			"insert_command_index": 389,
+			"insert_command_index": 389.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/50256dc1991125bf904a9a0e86674e641038e3d69dc5f70b2707d62759c657b6.png",
-			"png_bytes": 1414,
+			"png_bytes": 1414.0,
 			"position_px": [
 				-1541.0,
 				13.0
 			],
-			"segment_index": 12,
+			"segment_index": 12.0,
 			"sha256": "50256dc1991125bf904a9a0e86674e641038e3d69dc5f70b2707d62759c657b6",
 			"size_px": [
-				84,
-				35
+				84.0,
+				35.0
 			]
 		},
 		{
 			"grid_cell": [
-				0,
-				-1
+				0.0,
+				-1.0
 			],
-			"insert_command_index": 389,
+			"insert_command_index": 389.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/941f8507354f0dacc9010d8a4410ff9ba0a96ba62b61f059547c98d40a31bdd2.png",
-			"png_bytes": 96,
+			"png_bytes": 96.0,
 			"position_px": [
 				479.0,
 				-2.0
 			],
-			"segment_index": 12,
+			"segment_index": 12.0,
 			"sha256": "941f8507354f0dacc9010d8a4410ff9ba0a96ba62b61f059547c98d40a31bdd2",
 			"size_px": [
-				14,
-				2
+				14.0,
+				2.0
 			]
 		},
 		{
 			"grid_cell": [
-				0,
-				0
+				0.0,
+				0.0
 			],
-			"insert_command_index": 389,
+			"insert_command_index": 389.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/834c925b720a6157d4891715573509641487f5b8425a42d8538490efd312700b.png",
-			"png_bytes": 844,
+			"png_bytes": 844.0,
 			"position_px": [
 				475.0,
 				0.0
 			],
-			"segment_index": 12,
+			"segment_index": 12.0,
 			"sha256": "834c925b720a6157d4891715573509641487f5b8425a42d8538490efd312700b",
 			"size_px": [
-				52,
-				38
+				52.0,
+				38.0
 			]
 		},
 		{
 			"grid_cell": [
-				-1,
-				0
+				-1.0,
+				0.0
 			],
-			"insert_command_index": 389,
+			"insert_command_index": 389.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/8a25887f181f83434fbc5d010714ad12a79fcd0685c1896038cf7aa3d0e88d04.png",
-			"png_bytes": 1500,
+			"png_bytes": 1500.0,
 			"position_px": [
 				-581.0,
 				13.0
 			],
-			"segment_index": 12,
+			"segment_index": 12.0,
 			"sha256": "8a25887f181f83434fbc5d010714ad12a79fcd0685c1896038cf7aa3d0e88d04",
 			"size_px": [
-				84,
-				41
+				84.0,
+				41.0
 			]
 		},
 		{
 			"grid_cell": [
-				-1,
-				0
+				-1.0,
+				0.0
 			],
-			"insert_command_index": 406,
+			"insert_command_index": 406.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/0d09f205c03d9cef83f433403017a82fda7bca6fde0796f3dbf79013fd091b5a.png",
-			"png_bytes": 860,
+			"png_bytes": 860.0,
 			"position_px": [
 				-549.0,
 				30.0
 			],
-			"segment_index": 13,
+			"segment_index": 13.0,
 			"sha256": "0d09f205c03d9cef83f433403017a82fda7bca6fde0796f3dbf79013fd091b5a",
 			"size_px": [
-				52,
-				40
+				52.0,
+				40.0
 			]
 		},
 		{
 			"grid_cell": [
-				0,
-				0
+				0.0,
+				0.0
 			],
-			"insert_command_index": 406,
+			"insert_command_index": 406.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/6ea329838251ce976a5edba6d3ad57f3f85dc01b32c6eb072d35c8d8d97083c7.png",
-			"png_bytes": 1931,
+			"png_bytes": 1931.0,
 			"position_px": [
 				507.0,
 				13.0
 			],
-			"segment_index": 13,
+			"segment_index": 13.0,
 			"sha256": "6ea329838251ce976a5edba6d3ad57f3f85dc01b32c6eb072d35c8d8d97083c7",
 			"size_px": [
-				84,
-				57
+				84.0,
+				57.0
 			]
 		},
 		{
 			"grid_cell": [
-				1,
-				0
+				1.0,
+				0.0
 			],
-			"insert_command_index": 406,
+			"insert_command_index": 406.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/168f5878b1f470cdc4e5ec3d9107d24075ebf85b8c91518fc1ef374166b8145e.png",
-			"png_bytes": 935,
+			"png_bytes": 935.0,
 			"position_px": [
 				1500.0,
 				13.0
 			],
-			"segment_index": 13,
+			"segment_index": 13.0,
 			"sha256": "168f5878b1f470cdc4e5ec3d9107d24075ebf85b8c91518fc1ef374166b8145e",
 			"size_px": [
-				51,
-				41
+				51.0,
+				41.0
 			]
 		},
 		{
 			"grid_cell": [
-				1,
-				0
+				1.0,
+				0.0
 			],
-			"insert_command_index": 423,
+			"insert_command_index": 423.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/168f5878b1f470cdc4e5ec3d9107d24075ebf85b8c91518fc1ef374166b8145e.png",
-			"png_bytes": 935,
+			"png_bytes": 935.0,
 			"position_px": [
 				1468.0,
 				29.0
 			],
-			"segment_index": 14,
+			"segment_index": 14.0,
 			"sha256": "168f5878b1f470cdc4e5ec3d9107d24075ebf85b8c91518fc1ef374166b8145e",
 			"size_px": [
-				51,
-				41
+				51.0,
+				41.0
 			]
 		},
 		{
 			"grid_cell": [
-				-1,
-				0
+				-1.0,
+				0.0
 			],
-			"insert_command_index": 427,
+			"insert_command_index": 427.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/619fae2e354a8976668e956743b594a17517f0399019ee72b3e3fffa3ec1bfa6.png",
-			"png_bytes": 1039,
+			"png_bytes": 1039.0,
 			"position_px": [
 				-517.0,
 				46.0
 			],
-			"segment_index": 15,
+			"segment_index": 15.0,
 			"sha256": "619fae2e354a8976668e956743b594a17517f0399019ee72b3e3fffa3ec1bfa6",
 			"size_px": [
-				52,
-				40
+				52.0,
+				40.0
 			]
 		},
 		{
 			"grid_cell": [
-				-1,
-				0
+				-1.0,
+				0.0
 			],
-			"insert_command_index": 434,
+			"insert_command_index": 434.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/9557ee3579003df745ae6dd3729c554d6029500a1afa2af095fc2e7196f56bfe.png",
-			"png_bytes": 1039,
+			"png_bytes": 1039.0,
 			"position_px": [
 				-485.0,
 				62.0
 			],
-			"segment_index": 16,
+			"segment_index": 16.0,
 			"sha256": "9557ee3579003df745ae6dd3729c554d6029500a1afa2af095fc2e7196f56bfe",
 			"size_px": [
-				52,
-				40
+				52.0,
+				40.0
 			]
 		},
 		{
 			"grid_cell": [
-				0,
-				0
+				0.0,
+				0.0
 			],
-			"insert_command_index": 434,
+			"insert_command_index": 434.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/586f9fb2a2c94b8836e30cf9b64325253fd3edff126d488c229afd43a1971d2c.png",
-			"png_bytes": 1093,
+			"png_bytes": 1093.0,
 			"position_px": [
 				476.0,
 				45.0
 			],
-			"segment_index": 16,
+			"segment_index": 16.0,
 			"sha256": "586f9fb2a2c94b8836e30cf9b64325253fd3edff126d488c229afd43a1971d2c",
 			"size_px": [
-				51,
-				41
+				51.0,
+				41.0
 			]
 		},
 		{
 			"grid_cell": [
-				1,
-				0
+				1.0,
+				0.0
 			],
-			"insert_command_index": 434,
+			"insert_command_index": 434.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/168f5878b1f470cdc4e5ec3d9107d24075ebf85b8c91518fc1ef374166b8145e.png",
-			"png_bytes": 935,
+			"png_bytes": 935.0,
 			"position_px": [
 				1436.0,
 				45.0
 			],
-			"segment_index": 16,
+			"segment_index": 16.0,
 			"sha256": "168f5878b1f470cdc4e5ec3d9107d24075ebf85b8c91518fc1ef374166b8145e",
 			"size_px": [
-				51,
-				41
+				51.0,
+				41.0
 			]
 		},
 		{
 			"grid_cell": [
-				-1,
-				0
+				-1.0,
+				0.0
 			],
-			"insert_command_index": 451,
+			"insert_command_index": 451.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/986e19482584b2b597a07ef96fc69810edbca57cfceb999fa859f97f6e0a55d4.png",
-			"png_bytes": 1994,
+			"png_bytes": 1994.0,
 			"position_px": [
 				-453.0,
 				78.0
 			],
-			"segment_index": 17,
+			"segment_index": 17.0,
 			"sha256": "986e19482584b2b597a07ef96fc69810edbca57cfceb999fa859f97f6e0a55d4",
 			"size_px": [
-				116,
-				50
+				116.0,
+				50.0
 			]
 		},
 		{
 			"grid_cell": [
-				0,
-				0
+				0.0,
+				0.0
 			],
-			"insert_command_index": 451,
+			"insert_command_index": 451.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/a3784f8309a7efddd9bbee5e5e31862c872ab1627aff18cbb9dc654d6073ea97.png",
-			"png_bytes": 1747,
+			"png_bytes": 1747.0,
 			"position_px": [
 				412.0,
 				61.0
 			],
-			"segment_index": 17,
+			"segment_index": 17.0,
 			"sha256": "a3784f8309a7efddd9bbee5e5e31862c872ab1627aff18cbb9dc654d6073ea97",
 			"size_px": [
-				83,
-				57
+				83.0,
+				57.0
 			]
 		},
 		{
 			"grid_cell": [
-				1,
-				0
+				1.0,
+				0.0
 			],
-			"insert_command_index": 451,
+			"insert_command_index": 451.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/262e144d8b92f685e67532d10574ba23d8e3a95655580666c7df1e7f895d7569.png",
-			"png_bytes": 1367,
+			"png_bytes": 1367.0,
 			"position_px": [
 				1372.0,
 				61.0
 			],
-			"segment_index": 17,
+			"segment_index": 17.0,
 			"sha256": "262e144d8b92f685e67532d10574ba23d8e3a95655580666c7df1e7f895d7569",
 			"size_px": [
-				83,
-				57
+				83.0,
+				57.0
 			]
 		},
 		{
 			"grid_cell": [
-				0,
-				0
+				0.0,
+				0.0
 			],
-			"insert_command_index": 476,
+			"insert_command_index": 476.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/50256dc1991125bf904a9a0e86674e641038e3d69dc5f70b2707d62759c657b6.png",
-			"png_bytes": 1414,
+			"png_bytes": 1414.0,
 			"position_px": [
 				347.0,
 				93.0
 			],
-			"segment_index": 18,
+			"segment_index": 18.0,
 			"sha256": "50256dc1991125bf904a9a0e86674e641038e3d69dc5f70b2707d62759c657b6",
 			"size_px": [
-				84,
-				35
+				84.0,
+				35.0
 			]
 		},
 		{
 			"grid_cell": [
-				1,
-				0
+				1.0,
+				0.0
 			],
-			"insert_command_index": 476,
+			"insert_command_index": 476.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/a3784f8309a7efddd9bbee5e5e31862c872ab1627aff18cbb9dc654d6073ea97.png",
-			"png_bytes": 1747,
+			"png_bytes": 1747.0,
 			"position_px": [
 				1308.0,
 				93.0
 			],
-			"segment_index": 18,
+			"segment_index": 18.0,
 			"sha256": "a3784f8309a7efddd9bbee5e5e31862c872ab1627aff18cbb9dc654d6073ea97",
 			"size_px": [
-				83,
-				57
+				83.0,
+				57.0
 			]
 		},
 		{
 			"grid_cell": [
-				-2,
-				0
+				-2.0,
+				0.0
 			],
-			"insert_command_index": 495,
+			"insert_command_index": 495.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/a9dc556b46a2c65a421aa0d426b091e228607597c16f1f116c2defd05bbf81a2.png",
-			"png_bytes": 4025,
+			"png_bytes": 4025.0,
 			"position_px": [
 				-1285.0,
 				142.0
 			],
-			"segment_index": 19,
+			"segment_index": 19.0,
 			"sha256": "a9dc556b46a2c65a421aa0d426b091e228607597c16f1f116c2defd05bbf81a2",
 			"size_px": [
-				261,
-				151
+				261.0,
+				151.0
 			]
 		},
 		{
 			"grid_cell": [
-				1,
-				0
+				1.0,
+				0.0
 			],
-			"insert_command_index": 495,
+			"insert_command_index": 495.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/32723793aef2266b72d6730310ce14cb994a858e3c11f349726a9f448df1b90c.png",
-			"png_bytes": 3770,
+			"png_bytes": 3770.0,
 			"position_px": [
 				1024.0,
 				125.0
 			],
-			"segment_index": 19,
+			"segment_index": 19.0,
 			"sha256": "32723793aef2266b72d6730310ce14cb994a858e3c11f349726a9f448df1b90c",
 			"size_px": [
-				303,
-				169
+				303.0,
+				169.0
 			]
 		},
 		{
 			"grid_cell": [
-				-1,
-				0
+				-1.0,
+				0.0
 			],
-			"insert_command_index": 495,
+			"insert_command_index": 495.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/bd65b73034beb09e5615dd054262d7b76eb46935bc7d03845e7b125c8f0dc3bb.png",
-			"png_bytes": 4807,
+			"png_bytes": 4807.0,
 			"position_px": [
 				-1024.0,
 				206.0
 			],
-			"segment_index": 19,
+			"segment_index": 19.0,
 			"sha256": "bd65b73034beb09e5615dd054262d7b76eb46935bc7d03845e7b125c8f0dc3bb",
 			"size_px": [
-				1007,
-				104
+				1007.0,
+				104.0
 			]
 		},
 		{
 			"grid_cell": [
-				0,
-				0
+				0.0,
+				0.0
 			],
-			"insert_command_index": 495,
+			"insert_command_index": 495.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/27139dd6293b458d0200c770ac3c4259a9e405d91075ccfad2806cc270d7d305.png",
-			"png_bytes": 4891,
+			"png_bytes": 4891.0,
 			"position_px": [
 				28.0,
 				205.0
 			],
-			"segment_index": 19,
+			"segment_index": 19.0,
 			"sha256": "27139dd6293b458d0200c770ac3c4259a9e405d91075ccfad2806cc270d7d305",
 			"size_px": [
-				996,
-				105
+				996.0,
+				105.0
 			]
 		},
 		{
 			"grid_cell": [
-				0,
-				0
+				0.0,
+				0.0
 			],
-			"insert_command_index": 603,
+			"insert_command_index": 603.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/c681c1b00153a5779d5f602d6c68deba3cf60ff84d2fd1ad60e149188565a2fb.png",
-			"png_bytes": 620,
+			"png_bytes": 620.0,
 			"position_px": [
 				988.0,
 				270.0
 			],
-			"segment_index": 20,
+			"segment_index": 20.0,
 			"sha256": "c681c1b00153a5779d5f602d6c68deba3cf60ff84d2fd1ad60e149188565a2fb",
 			"size_px": [
-				36,
-				34
+				36.0,
+				34.0
 			]
 		},
 		{
 			"grid_cell": [
-				1,
-				0
+				1.0,
+				0.0
 			],
-			"insert_command_index": 603,
+			"insert_command_index": 603.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/6204b8d314b901854f8811dc3ec8840a8b469d8ab0fd82784ba12de2b07a5f5c.png",
-			"png_bytes": 355,
+			"png_bytes": 355.0,
 			"position_px": [
 				1024.0,
 				269.0
 			],
-			"segment_index": 20,
+			"segment_index": 20.0,
 			"sha256": "6204b8d314b901854f8811dc3ec8840a8b469d8ab0fd82784ba12de2b07a5f5c",
 			"size_px": [
-				15,
-				31
+				15.0,
+				31.0
 			]
 		},
 		{
 			"grid_cell": [
-				-1,
-				0
+				-1.0,
+				0.0
 			],
-			"insert_command_index": 603,
+			"insert_command_index": 603.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/0d09f205c03d9cef83f433403017a82fda7bca6fde0796f3dbf79013fd091b5a.png",
-			"png_bytes": 860,
+			"png_bytes": 860.0,
 			"position_px": [
 				-997.0,
 				286.0
 			],
-			"segment_index": 20,
+			"segment_index": 20.0,
 			"sha256": "0d09f205c03d9cef83f433403017a82fda7bca6fde0796f3dbf79013fd091b5a",
 			"size_px": [
-				52,
-				40
+				52.0,
+				40.0
 			]
 		},
 		{
 			"grid_cell": [
-				-1,
-				0
+				-1.0,
+				0.0
 			],
-			"insert_command_index": 610,
+			"insert_command_index": 610.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/6c5c0094eb25a2683892a1919d571de84588cb64a01a5813cd4e0b3a2b4e015b.png",
-			"png_bytes": 11851,
+			"png_bytes": 11851.0,
 			"position_px": [
 				-965.0,
 				286.0
 			],
-			"segment_index": 21,
+			"segment_index": 21.0,
 			"sha256": "6c5c0094eb25a2683892a1919d571de84588cb64a01a5813cd4e0b3a2b4e015b",
 			"size_px": [
-				965,
-				296
+				965.0,
+				296.0
 			]
 		},
 		{
 			"grid_cell": [
-				0,
-				0
+				0.0,
+				0.0
 			],
-			"insert_command_index": 610,
+			"insert_command_index": 610.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/dfadacc830a557f73e2dea358ef97e177d5708fcb147572a091a7c0bd407a3f6.png",
-			"png_bytes": 12893,
+			"png_bytes": 12893.0,
 			"position_px": [
 				0.0,
 				285.0
 			],
-			"segment_index": 21,
+			"segment_index": 21.0,
 			"sha256": "dfadacc830a557f73e2dea358ef97e177d5708fcb147572a091a7c0bd407a3f6",
 			"size_px": [
-				1007,
-				275
+				1007.0,
+				275.0
 			]
 		},
 		{
 			"grid_cell": [
-				0,
-				0
+				0.0,
+				0.0
 			],
-			"insert_command_index": 716,
+			"insert_command_index": 716.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/83077a9972648f8cae384f5628928a8af145565a096c0b27a89a819d15fb32e1.png",
-			"png_bytes": 5724,
+			"png_bytes": 5724.0,
 			"position_px": [
 				0.0,
 				541.0
 			],
-			"segment_index": 22,
+			"segment_index": 22.0,
 			"sha256": "83077a9972648f8cae384f5628928a8af145565a096c0b27a89a819d15fb32e1",
 			"size_px": [
-				495,
-				259
+				495.0,
+				259.0
 			]
 		},
 		{
 			"grid_cell": [
-				-1,
-				0
+				-1.0,
+				0.0
 			],
-			"insert_command_index": 716,
+			"insert_command_index": 716.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/8a656d8f3a62ca6c86a6eaaada8f7986ed4263f80f8175cdd78dbc9cb5595dac.png",
-			"png_bytes": 5283,
+			"png_bytes": 5283.0,
 			"position_px": [
 				-453.0,
 				558.0
 			],
-			"segment_index": 22,
+			"segment_index": 22.0,
 			"sha256": "8a656d8f3a62ca6c86a6eaaada8f7986ed4263f80f8175cdd78dbc9cb5595dac",
 			"size_px": [
-				453,
-				242
+				453.0,
+				242.0
 			]
 		}
 	],
 	"shadow_segments": [
 		{
 			"command_indices": [
-				2,
-				5,
-				8,
-				11,
-				14,
-				17,
-				20,
-				23,
-				26,
-				29,
-				33,
-				36,
-				39,
-				42
+				2.0,
+				5.0,
+				8.0,
+				11.0,
+				14.0,
+				17.0,
+				20.0,
+				23.0,
+				26.0,
+				29.0,
+				33.0,
+				36.0,
+				39.0,
+				42.0
 			],
-			"insert_command_index": 2,
-			"segment_index": 0
+			"insert_command_index": 2.0,
+			"segment_index": 0.0
 		},
 		{
 			"command_indices": [
-				46,
-				49,
-				52,
-				55,
-				59,
-				62,
-				65,
-				68,
-				71,
-				74,
-				77,
-				80,
-				83,
-				86,
-				89,
-				92,
-				95,
-				98,
-				101,
-				104,
-				107,
-				110,
-				113,
-				116,
-				119,
-				122
+				46.0,
+				49.0,
+				52.0,
+				55.0,
+				59.0,
+				62.0,
+				65.0,
+				68.0,
+				71.0,
+				74.0,
+				77.0,
+				80.0,
+				83.0,
+				86.0,
+				89.0,
+				92.0,
+				95.0,
+				98.0,
+				101.0,
+				104.0,
+				107.0,
+				110.0,
+				113.0,
+				116.0,
+				119.0,
+				122.0
 			],
-			"insert_command_index": 46,
-			"segment_index": 1
+			"insert_command_index": 46.0,
+			"segment_index": 1.0
 		},
 		{
 			"command_indices": [
-				126,
-				129,
-				132,
-				135,
-				138,
-				141,
-				144,
-				147,
-				150,
-				153,
-				156,
-				159,
-				162,
-				165
+				126.0,
+				129.0,
+				132.0,
+				135.0,
+				138.0,
+				141.0,
+				144.0,
+				147.0,
+				150.0,
+				153.0,
+				156.0,
+				159.0,
+				162.0,
+				165.0
 			],
-			"insert_command_index": 126,
-			"segment_index": 2
+			"insert_command_index": 126.0,
+			"segment_index": 2.0
 		},
 		{
 			"command_indices": [
-				169,
-				172,
-				175,
-				178,
-				182,
-				185,
-				188,
-				191,
-				194,
-				198,
-				201,
-				205,
-				208,
-				211,
-				212,
-				217,
-				218,
-				223,
-				226,
-				229,
-				230,
-				235,
-				236,
-				241,
-				244,
-				248,
-				249,
-				255,
-				258,
-				261,
-				264,
-				265
+				169.0,
+				172.0,
+				175.0,
+				178.0,
+				182.0,
+				185.0,
+				188.0,
+				191.0,
+				194.0,
+				198.0,
+				201.0,
+				205.0,
+				208.0,
+				211.0,
+				212.0,
+				217.0,
+				218.0,
+				223.0,
+				226.0,
+				229.0,
+				230.0,
+				235.0,
+				236.0,
+				241.0,
+				244.0,
+				248.0,
+				249.0,
+				255.0,
+				258.0,
+				261.0,
+				264.0,
+				265.0
 			],
-			"insert_command_index": 169,
-			"segment_index": 3
+			"insert_command_index": 169.0,
+			"segment_index": 3.0
 		},
 		{
 			"command_indices": [
-				271,
-				272,
-				278,
-				281
+				271.0,
+				272.0,
+				278.0,
+				281.0
 			],
-			"insert_command_index": 271,
-			"segment_index": 4
+			"insert_command_index": 271.0,
+			"segment_index": 4.0
 		},
 		{
 			"command_indices": [
-				289,
-				290,
-				295,
-				299,
-				302,
-				305,
-				308,
-				311,
-				312,
-				317
+				289.0,
+				290.0,
+				295.0,
+				299.0,
+				302.0,
+				305.0,
+				308.0,
+				311.0,
+				312.0,
+				317.0
 			],
-			"insert_command_index": 289,
-			"segment_index": 5
+			"insert_command_index": 289.0,
+			"segment_index": 5.0
 		},
 		{
 			"command_indices": [
-				322
+				322.0
 			],
-			"insert_command_index": 322,
-			"segment_index": 6
+			"insert_command_index": 322.0,
+			"segment_index": 6.0
 		},
 		{
 			"command_indices": [
-				329,
-				332
+				329.0,
+				332.0
 			],
-			"insert_command_index": 329,
-			"segment_index": 7
+			"insert_command_index": 329.0,
+			"segment_index": 7.0
 		},
 		{
 			"command_indices": [
-				336,
-				339,
-				342
+				336.0,
+				339.0,
+				342.0
 			],
-			"insert_command_index": 336,
-			"segment_index": 8
+			"insert_command_index": 336.0,
+			"segment_index": 8.0
 		},
 		{
 			"command_indices": [
-				346,
-				349,
-				352,
-				353
+				346.0,
+				349.0,
+				352.0,
+				353.0
 			],
-			"insert_command_index": 346,
-			"segment_index": 9
+			"insert_command_index": 346.0,
+			"segment_index": 9.0
 		},
 		{
 			"command_indices": [
-				359,
-				360,
-				365,
-				368,
-				369
+				359.0,
+				360.0,
+				365.0,
+				368.0,
+				369.0
 			],
-			"insert_command_index": 359,
-			"segment_index": 10
+			"insert_command_index": 359.0,
+			"segment_index": 10.0
 		},
 		{
 			"command_indices": [
-				375,
-				376,
-				381,
-				385
+				375.0,
+				376.0,
+				381.0,
+				385.0
 			],
-			"insert_command_index": 375,
-			"segment_index": 11
+			"insert_command_index": 375.0,
+			"segment_index": 11.0
 		},
 		{
 			"command_indices": [
-				389,
-				393,
-				394,
-				399,
-				400
+				389.0,
+				393.0,
+				394.0,
+				399.0,
+				400.0
 			],
-			"insert_command_index": 389,
-			"segment_index": 12
+			"insert_command_index": 389.0,
+			"segment_index": 12.0
 		},
 		{
 			"command_indices": [
-				406,
-				407,
-				412,
-				416,
-				419
+				406.0,
+				407.0,
+				412.0,
+				416.0,
+				419.0
 			],
-			"insert_command_index": 406,
-			"segment_index": 13
+			"insert_command_index": 406.0,
+			"segment_index": 13.0
 		},
 		{
 			"command_indices": [
-				423
+				423.0
 			],
-			"insert_command_index": 423,
-			"segment_index": 14
+			"insert_command_index": 423.0,
+			"segment_index": 14.0
 		},
 		{
 			"command_indices": [
-				427,
-				428
+				427.0,
+				428.0
 			],
-			"insert_command_index": 427,
-			"segment_index": 15
+			"insert_command_index": 427.0,
+			"segment_index": 15.0
 		},
 		{
 			"command_indices": [
-				434,
-				435,
-				440,
-				443,
-				444
+				434.0,
+				435.0,
+				440.0,
+				443.0,
+				444.0
 			],
-			"insert_command_index": 434,
-			"segment_index": 16
+			"insert_command_index": 434.0,
+			"segment_index": 16.0
 		},
 		{
 			"command_indices": [
-				451,
-				452,
-				457,
-				460,
-				463,
-				466,
-				469,
-				470
+				451.0,
+				452.0,
+				457.0,
+				460.0,
+				463.0,
+				466.0,
+				469.0,
+				470.0
 			],
-			"insert_command_index": 451,
-			"segment_index": 17
+			"insert_command_index": 451.0,
+			"segment_index": 17.0
 		},
 		{
 			"command_indices": [
-				476,
-				477,
-				482,
-				483,
-				490
+				476.0,
+				477.0,
+				482.0,
+				483.0,
+				490.0
 			],
-			"insert_command_index": 476,
-			"segment_index": 18
+			"insert_command_index": 476.0,
+			"segment_index": 18.0
 		},
 		{
 			"command_indices": [
-				495,
-				498,
-				501,
-				504,
-				505,
-				510,
-				513,
-				514,
-				519,
-				522,
-				523,
-				530,
-				533,
-				536,
-				539,
-				542,
-				545,
-				548,
-				551,
-				554,
-				557,
-				560,
-				561,
-				566,
-				567,
-				572,
-				575,
-				578,
-				579,
-				584,
-				585,
-				590,
-				593,
-				596,
-				599
+				495.0,
+				498.0,
+				501.0,
+				504.0,
+				505.0,
+				510.0,
+				513.0,
+				514.0,
+				519.0,
+				522.0,
+				523.0,
+				530.0,
+				533.0,
+				536.0,
+				539.0,
+				542.0,
+				545.0,
+				548.0,
+				551.0,
+				554.0,
+				557.0,
+				560.0,
+				561.0,
+				566.0,
+				567.0,
+				572.0,
+				575.0,
+				578.0,
+				579.0,
+				584.0,
+				585.0,
+				590.0,
+				593.0,
+				596.0,
+				599.0
 			],
-			"insert_command_index": 495,
-			"segment_index": 19
+			"insert_command_index": 495.0,
+			"segment_index": 19.0
 		},
 		{
 			"command_indices": [
-				603,
-				606
+				603.0,
+				606.0
 			],
-			"insert_command_index": 603,
-			"segment_index": 20
+			"insert_command_index": 603.0,
+			"segment_index": 20.0
 		},
 		{
 			"command_indices": [
-				610,
-				611,
-				616,
-				619,
-				622,
-				625,
-				628,
-				631,
-				634,
-				637,
-				641,
-				644,
-				647,
-				650,
-				653,
-				656,
-				659,
-				662,
-				666,
-				669,
-				672,
-				675,
-				678,
-				681,
-				685,
-				688,
-				691,
-				694,
-				697,
-				700,
-				703,
-				706,
-				709,
-				712
+				610.0,
+				611.0,
+				616.0,
+				619.0,
+				622.0,
+				625.0,
+				628.0,
+				631.0,
+				634.0,
+				637.0,
+				641.0,
+				644.0,
+				647.0,
+				650.0,
+				653.0,
+				656.0,
+				659.0,
+				662.0,
+				666.0,
+				669.0,
+				672.0,
+				675.0,
+				678.0,
+				681.0,
+				685.0,
+				688.0,
+				691.0,
+				694.0,
+				697.0,
+				700.0,
+				703.0,
+				706.0,
+				709.0,
+				712.0
 			],
-			"insert_command_index": 610,
-			"segment_index": 21
+			"insert_command_index": 610.0,
+			"segment_index": 21.0
 		},
 		{
 			"command_indices": [
-				716,
-				719,
-				722,
-				725,
-				728,
-				731,
-				734,
-				737,
-				740,
-				743,
-				746,
-				749,
-				752,
-				755,
-				758,
-				761,
-				764,
-				767,
-				770,
-				773,
-				776,
-				779,
-				782,
-				785,
-				788,
-				791,
-				794,
-				797,
-				798
+				716.0,
+				719.0,
+				722.0,
+				725.0,
+				728.0,
+				731.0,
+				734.0,
+				737.0,
+				740.0,
+				743.0,
+				746.0,
+				749.0,
+				752.0,
+				755.0,
+				758.0,
+				761.0,
+				764.0,
+				767.0,
+				770.0,
+				773.0,
+				776.0,
+				779.0,
+				782.0,
+				785.0,
+				788.0,
+				791.0,
+				794.0,
+				797.0,
+				798.0
 			],
-			"insert_command_index": 716,
-			"segment_index": 22
+			"insert_command_index": 716.0,
+			"segment_index": 22.0
 		}
 	],
 	"source_commands_sha256": "e9280930923eb99974e9a7540df00683d6f6e7fcf5a590cf04f2754270f4cf9c",
@@ -6807,6 +6807,6 @@
 		"assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v03/part_03_front.png": "25ca65a2ba255b423e7168f5a779be12e63f9d2020d782992c7eb67a6548a676",
 		"assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v03/part_03_shadow.png": "8cfd67df4da2ef965efa9dedde7712c935631ebe45377ed376c1859c367ddfd8"
 	},
-	"source_runtime_json_sha256": "1f8d3f64ddeaabcfda0bd56cd15207175709ca54b1984fdc8b70671cca53ba99",
+	"source_runtime_json_sha256": "177718361233d7ed273b5fe443b7cdee381042e9e9745b17631c659ba956516f",
 	"visual_geometry_contract_id": "map_editor_runtime_visual_geometry_v6"
 }

@@ -10,10 +10,8 @@ config_version=5
 
 [application]
 
-config/name="HardCore 新篇"
-config/version="hardcore 2.0 开发版"
-config/use_custom_user_dir=true
-config/custom_user_dir_name="HardCoreNext"
+config/name="HardCore"
+config/version="hardcore 1.0 正式版"
 config/build_revision="release.boundary-fix.v39"
 run/main_scene="res://scenes/startup_loading.tscn"
 config/auto_accept_quit=false
